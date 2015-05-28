@@ -5,7 +5,7 @@
 {% else %}
     <div class="cta">
         {% set tippee = participant.username %}
-        {% set tip = user.participant.get_tip_to(tippee) %}
+        {% set tip = user.participant.get_tip_to(participant) %}
         <h2>{{ _('Your Tip') }}</h2>
         <div class="js-edit your-tip {{ 'anon' if user.ANON }}"
              data-tippee="{{ participant.id }}">

@@ -33,28 +33,28 @@ class TestElsewhere(Harness):
 
     def test_opt_in_can_change_username(self):
         account = self.make_elsewhere('twitter', 1, 'alice')
-        expected = 'bob'
-        actual = account.opt_in('bob')[0].participant.username
-        assert actual == expected
+        account.opt_in('bob')
+        assert account.participant.username == 'bob'
 
     def test_opt_in_doesnt_have_to_change_username(self):
         self.make_participant('bob')
         account = self.make_elsewhere('twitter', 1, 'alice')
         expected = account.participant.username # A random one.
-        actual = account.opt_in('bob')[0].participant.username
-        assert actual == expected
+        account.opt_in('bob')
+        assert account.participant.username == expected
 
     def test_opt_in_resets_is_closed_to_false(self):
         alice = self.make_elsewhere('twitter', 1, 'alice')
         alice.participant.update_is_closed(True)
-        user = alice.opt_in('alice')[0]
-        assert not user.participant.is_closed
+        alice.opt_in('alice')
+        assert not alice.participant.is_closed
         assert not Participant.from_username('alice').is_closed
 
     def test_logging_in_doesnt_reset_goal(self):
         self.make_participant('alice', claimed_time='now', elsewhere='twitter', goal=100)
-        alice = AccountElsewhere.from_user_name('twitter', 'alice').opt_in('alice')[0].participant
-        assert alice.goal == 100
+        alice = AccountElsewhere.from_user_name('twitter', 'alice')
+        alice.opt_in('alice')
+        assert alice.participant.goal == 100
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere.Platform.get_user_self_info')

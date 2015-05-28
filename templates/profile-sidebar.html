@@ -48,7 +48,7 @@
     <p>Closed {{ to_age(participant.closed_time, add_direction=True) }}.</p>
     {% else %}
     {% set absorption = website.db.one( "select * from absorptions where archived_as=%s"
-                                      , (participant.username,)
+                                      , (participant.id,)
                                        ) %}
     <p>Formerly {{ absorption.absorbed_was }}.</p>
     <p>Absorbed by <a href="/{{ absorption.absorbed_by }}/">{{ absorption.absorbed_by }}</a>
@@ -60,20 +60,4 @@
 {% if participant != user.participant %}
 {% include "templates/your-tip.html" %}
 {% endif %}
-{% endif %}
-
-{% if participant.username == 'aaronsw' %}
-<ul class="nav">
-    <li><a href="http://news.ycombinator.com/item?id=5046845">RIP :`(</a></li>
-</ul>
-<!--
-
-After following Aaron's career for a decade, I interacted with him for the
-first time three days before he committed suicide:
-
-    https://twitter.com/aaronsw/status/288664016723791873
-
-:`(
-
--->
 {% endif %}

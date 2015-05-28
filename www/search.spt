@@ -53,10 +53,10 @@ if query:
                         LIMIT 10
                    ) s
               JOIN participants p ON p.id = s.participant
-          WHERE p.claimed_time IS NOT NULL
-             AND p.is_searchable
-             AND NOT p.is_closed
-          GROUP BY username
+             WHERE p.claimed_time IS NOT NULL
+               AND p.is_searchable
+               AND NOT p.is_closed
+          GROUP BY p.id
           ORDER BY max_rank DESC
         """, locals())
 

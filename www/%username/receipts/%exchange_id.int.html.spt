@@ -14,7 +14,7 @@ exchange = website.db.one("""
      WHERE id = %s
        AND participant = %s
        AND amount > 0
-""", (request.path['exchange_id'], participant.username))
+""", (request.path['exchange_id'], participant.id))
 if exchange is None:
     raise Response(404)
 

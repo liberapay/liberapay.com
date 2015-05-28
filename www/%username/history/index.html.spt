@@ -135,7 +135,7 @@ else:
         <td class="card"></td>
         <td class="fees"></td>
 
-        {% if event['tippee'] == participant.username %}
+        {% if event['tippee'] == participant.id %}
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         {% else %}
@@ -148,7 +148,7 @@ else:
         <td class="status"></td>
         <td class="notes">
         {% set context = event['context'] %}
-        {% if event['tippee'] == participant.username %}
+        {% if event['tippee'] == participant.id %}
             {% if context in ('take', 'take-over') or admin_override %}
                 {% if context == 'take-over' %}
                     balance from taken-over account

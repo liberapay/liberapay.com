@@ -96,8 +96,8 @@ class TestEmail(EmailHarness):
         self.db.run("""
             UPDATE emails
                SET verification_start = (now() - INTERVAL '25 hours')
-             WHERE participant = 'alice'
-        """)
+             WHERE participant = %s
+        """, (self.alice.id,))
         nonce = self.alice.get_email(address).nonce
         r = self.alice.verify_email(address, nonce)
         assert r == emails.VERIFICATION_EXPIRED

@@ -106,7 +106,8 @@ class TestChartsJson(Harness):
         self.db.run("UPDATE participants SET balance=balance - 4 WHERE username='alice'")
         self.db.run("UPDATE participants SET balance=balance + 4 WHERE username='carl'")
         self.db.run("INSERT INTO transfers (tipper, tippee, amount, context) "
-                    "VALUES ('alice', 'carl', 4, 'tip')")
+                    "VALUES (%s, %s, 4, 'tip')",
+                    (self.alice.id, self.carl.id))
 
         self.run_payday()   # third
 
@@ -162,7 +163,7 @@ class TestChartsJson(Harness):
                          auth_as='carl')
 
         r = self.client.GxT('/carl/charts.json')
-        assert r.code == 401
+        assert r.code == 403
 
         r = self.client.GxT('/carl/charts.json', auth_as='alice')
         assert r.code == 403

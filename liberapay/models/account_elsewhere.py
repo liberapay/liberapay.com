@@ -15,7 +15,6 @@ import xmltodict
 import liberapay
 from liberapay.exceptions import ProblemChangingUsername
 from liberapay.security.crypto import constant_time_compare
-from liberapay.utils.username import safely_reserve_a_username
 
 
 CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
@@ -121,32 +120,30 @@ class AccountElsewhere(Model):
             # We do this with a transaction so that if the insert fails, the
             # participant we reserved for them is rolled back as well.
             with cls.db.get_cursor() as cursor:
-                username = safely_reserve_a_username(cursor)
-                cursor.execute("""
+                id = cursor.one("""
+                    INSERT INTO participants DEFAULT VALUES RETURNING id
+                """)
+                account = cursor.one("""
                     INSERT INTO elsewhere
                                 (participant, {0})
                          VALUES (%s, {1})
-                """.format(cols, placeholders), (username,)+vals)
+                      RETURNING elsewhere.*::elsewhere_with_participant
+                """.format(cols, placeholders), (id,)+vals)
                 # Propagate elsewhere.is_team to participants.number
                 if i.is_team:
-                    cursor.execute("""
-                        UPDATE participants
-                           SET number = 'plural'::participant_number
-                         WHERE username = %s
-                    """, (username,))
+                    account.participant.update_number('plural')
         except IntegrityError:
             # The account is already in the DB, update it instead
-            username = cls.db.one("""
+            account = cls.db.one("""
                 UPDATE elsewhere
                    SET ({0}) = ({1})
                  WHERE platform=%s AND user_id=%s
-             RETURNING participant
+             RETURNING elsewhere.*::elsewhere_with_participant
             """.format(cols, placeholders), vals+(i.platform, i.user_id))
-            if not username:
+            if not account:
                 raise
 
         # Return account after propagating avatar_url to participant
-        account = AccountElsewhere.from_user_id(i.platform, i.user_id)
         account.participant.update_avatar()
         return account
 
@@ -226,24 +223,17 @@ class AccountElsewhere(Model):
         return r
 
     def opt_in(self, desired_username):
-        """Given a desired username, return a User object.
+        """Given a desired username, try to claim it.
         """
-        from liberapay.security.user import User
-        user = User.from_username(self.participant.username)
-        assert not user.ANON, self.participant  # sanity check
-        if self.participant.is_claimed:
-            newly_claimed = False
-        else:
-            newly_claimed = True
-            user.participant.set_as_claimed()
-            user.participant.notify_patrons(self)
+        if not self.participant.is_claimed:
+            self.participant.set_as_claimed()
+            self.participant.notify_patrons(self)
             try:
-                user.participant.change_username(desired_username)
+                self.participant.change_username(desired_username)
             except ProblemChangingUsername:
                 pass
-        if user.participant.is_closed:
-            user.participant.update_is_closed(False)
-        return user, newly_claimed
+        if self.participant.is_closed:
+            self.participant.update_is_closed(False)
 
     def save_token(self, token):
         """Saves the given access token in the database.

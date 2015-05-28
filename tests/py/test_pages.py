@@ -24,7 +24,8 @@ class TestPages(Harness):
         if setup:
             setup(alice)
         i = len(self.client.www_root)
-        for spt in find_files(self.client.www_root, '*.spt'):
+        key = lambda x: x[:x.rfind('/')] if x[x.rfind('/'):].startswith('index.') else x
+        for spt in sorted(find_files(self.client.www_root, '*.spt'), key=key):
             url = spt[i:-4].replace('/%username/', '/alice/') \
                            .replace('/for/%slug/', '/for/wonderland/') \
                            .replace('/%platform/', '/github/') \
@@ -51,10 +52,11 @@ class TestPages(Harness):
     def test_new_participant_can_browse(self):
         self.browse(auth_as='alice')
 
-    def test_on_the_fence_can_browse(self):
+    def test_active_participant_can_browse(self):
         def setup(alice):
             bob = self.make_participant('bob', claimed_time='now', last_bill_result='')
             bob.set_tip_to(alice, D('1.00'))
+            alice.set_tip_to(bob, D('0.50'))
         self.browse(setup, auth_as='alice')
 
     def test_escaping_on_homepage(self):

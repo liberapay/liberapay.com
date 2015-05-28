@@ -89,24 +89,20 @@ class TestAbsorptions(Harness):
 
     def test_alice_gives_to_bob_now(self):
         expected = Decimal('1.00')
-        actual = self.alice.get_tip_to('bob')['amount']
+        actual = self.alice.get_tip_to(self.bob)['amount']
         assert actual == expected
 
     def test_deadbeef_is_archived(self):
-        actual = self.db.one( "SELECT count(*) FROM absorptions "
-                              "WHERE absorbed_by='bob' AND absorbed_was='deadbeef'"
-                             )
+        actual = self.db.one("""
+            SELECT count(*) FROM absorptions
+             WHERE absorbed_by=%s AND absorbed_was='deadbeef'
+        """, (self.bob.id,))
         expected = 1
         assert actual == expected
 
     def test_alice_doesnt_gives_to_deadbeef_anymore(self):
         expected = Decimal('0.00')
-        actual = self.alice.get_tip_to('deadbeef')['amount']
-        assert actual == expected
-
-    def test_alice_doesnt_give_to_whatever_deadbeef_was_archived_as_either(self):
-        expected = Decimal('0.00')
-        actual = self.alice.get_tip_to(self.deadbeef_archived.username)['amount']
+        actual = self.alice.get_tip_to(self.deadbeef_archived)['amount']
         assert actual == expected
 
     def test_there_is_no_more_deadbeef(self):
@@ -122,47 +118,47 @@ class TestAbsorptions(Harness):
 class TestTakeOver(Harness):
 
     def test_cross_tip_doesnt_become_self_tip(self):
-        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
-        bob_twitter   = self.make_elsewhere('twitter', 2, 'bob')
-        alice = alice_twitter.opt_in('alice')[0].participant
-        bob = bob_twitter.opt_in('bob')[0].participant
-        alice.set_tip_to(bob, '1.00')
-        bob.take_over(alice_twitter, have_confirmation=True)
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob = self.make_elsewhere('twitter', 2, 'bob')
+        alice.opt_in('alice')
+        bob.opt_in('bob')
+        alice.participant.set_tip_to(bob, '1.00')
+        bob.participant.take_over(alice, have_confirmation=True)
         self.db.self_check()
 
     def test_zero_cross_tip_doesnt_become_self_tip(self):
-        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
-        bob_twitter   = self.make_elsewhere('twitter', 2, 'bob')
-        alice = alice_twitter.opt_in('alice')[0].participant
-        bob = bob_twitter.opt_in('bob')[0].participant
-        alice.set_tip_to(bob, '1.00')
-        alice.set_tip_to(bob, '0.00')
-        bob.take_over(alice_twitter, have_confirmation=True)
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob = self.make_elsewhere('twitter', 2, 'bob')
+        alice.opt_in('alice')
+        bob.opt_in('bob')
+        alice.participant.set_tip_to(bob, '1.00')
+        alice.participant.set_tip_to(bob, '0.00')
+        bob.participant.take_over(alice, have_confirmation=True)
         self.db.self_check()
 
     def test_do_not_take_over_zero_tips_giving(self):
-        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
-        bob = self.make_elsewhere('twitter', 2, 'bob').opt_in('bob')[0].participant
-        carl_twitter  = self.make_elsewhere('twitter', 3, 'carl')
-        alice = alice_twitter.opt_in('alice')[0].participant
-        carl = carl_twitter.opt_in('carl')[0].participant
-        carl.set_tip_to(bob, '1.00')
-        carl.set_tip_to(bob, '0.00')
-        alice.take_over(carl_twitter, have_confirmation=True)
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob = self.make_participant('bob', claimed_time='now')
+        carl  = self.make_elsewhere('twitter', 3, 'carl')
+        alice.opt_in('alice')
+        carl.opt_in('carl')
+        carl.participant.set_tip_to(bob, '1.00')
+        carl.participant.set_tip_to(bob, '0.00')
+        alice.participant.take_over(carl, have_confirmation=True)
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
         self.db.self_check()
 
     def test_do_not_take_over_zero_tips_receiving(self):
-        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
-        bob_twitter   = self.make_elsewhere('twitter', 2, 'bob')
-        carl_twitter  = self.make_elsewhere('twitter', 3, 'carl')
-        alice = alice_twitter.opt_in('alice')[0].participant
-        bob = bob_twitter.opt_in('bob')[0].participant
-        carl = carl_twitter.opt_in('carl')[0].participant
-        bob.set_tip_to(carl, '1.00')
-        bob.set_tip_to(carl, '0.00')
-        alice.take_over(carl_twitter, have_confirmation=True)
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob = self.make_elsewhere('twitter', 2, 'bob')
+        carl = self.make_elsewhere('twitter', 3, 'carl')
+        alice.opt_in('alice')
+        bob.opt_in('bob')
+        carl.opt_in('carl')
+        bob.participant.set_tip_to(carl, '1.00')
+        bob.participant.set_tip_to(carl, '0.00')
+        alice.participant.take_over(carl, have_confirmation=True)
         ntips = self.db.one("select count(*) from tips")
         assert 2 == ntips
         self.db.self_check()
@@ -181,40 +177,33 @@ class TestTakeOver(Harness):
         self.db.self_check()
 
     def test_take_over_fails_if_it_would_result_in_just_a_team_account(self):
-        alice_github = self.make_elsewhere('github', 2, 'alice')
-        alice = alice_github.opt_in('alice')[0].participant
-
-        a_team_github = self.make_elsewhere('github', 1, 'a_team', is_team=True)
+        alice = self.make_participant('alice', elsewhere='github')
+        a_team_github = self.make_elsewhere('github', 9, 'a_team', is_team=True)
         a_team_github.opt_in('a_team')
-
-        pytest.raises( TeamCantBeOnlyAuth
-                     , alice.take_over
-                     , a_team_github
-                     , have_confirmation=True
-                      )
+        with pytest.raises(TeamCantBeOnlyAuth):
+            alice.take_over(a_team_github, have_confirmation=True)
 
     def test_idempotent(self):
-        alice_twitter = self.make_elsewhere('twitter', 1, 'alice')
-        bob_github    = self.make_elsewhere('github', 2, 'bob')
-        alice = alice_twitter.opt_in('alice')[0].participant
-        alice.take_over(bob_github, have_confirmation=True)
-        alice.take_over(bob_github, have_confirmation=True)
+        alice = self.make_elsewhere('twitter', 1, 'alice')
+        bob = self.make_elsewhere('github', 2, 'bob')
+        alice.opt_in('alice')
+        alice.participant.take_over(bob, have_confirmation=True)
+        alice.participant.take_over(bob, have_confirmation=True)
         self.db.self_check()
 
     @mock.patch.object(Participant, '_mailer')
     def test_email_addresses_merging(self, mailer):
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', claimed_time='now')
         alice.add_email('alice@example.com')
         alice.add_email('alice@example.net')
         alice.add_email('alice@example.org')
         alice.verify_email('alice@example.org', alice.get_email('alice@example.org').nonce)
-        bob_github = self.make_elsewhere('github', 2, 'bob')
-        bob = bob_github.opt_in('bob')[0].participant
+        bob = self.make_participant('bob', elsewhere='github')
         bob.add_email('alice@example.com')
         bob.verify_email('alice@example.com', bob.get_email('alice@example.com').nonce)
         bob.add_email('alice@example.net')
         bob.add_email('bob@example.net')
-        alice.take_over(bob_github, have_confirmation=True)
+        alice.take_over(('github', bob.id), have_confirmation=True)
 
         alice_emails = {e.address: e for e in alice.get_emails()}
         assert len(alice_emails) == 4
@@ -269,7 +258,7 @@ class TestParticipant(Harness):
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
-        actual = self.alice.get_tip_to('bob')['amount']
+        actual = self.alice.get_tip_to(self.bob)['amount']
         assert actual == expected
 
     def test_bob_ends_up_tipping_alice_two_dollars(self):
@@ -277,7 +266,7 @@ class TestParticipant(Harness):
         self.carl.set_tip_to(self.alice, '1.00')
         self.bob.take_over(('twitter', str(self.carl.id)), have_confirmation=True)
         expected = Decimal('2.00')
-        actual = self.bob.get_tip_to('alice')['amount']
+        actual = self.bob.get_tip_to(self.alice)['amount']
         assert actual == expected
 
     def test_ctime_comes_from_the_older_tip(self):
@@ -288,9 +277,8 @@ class TestParticipant(Harness):
         ctimes = self.db.all("""
             SELECT ctime
               FROM tips
-             WHERE tipper = 'alice'
-               AND tippee = 'bob'
-        """)
+             WHERE tippee = %s
+        """, (self.bob.id,))
         assert len(ctimes) == 2
         assert ctimes[0] == ctimes[1]
 
@@ -402,13 +390,13 @@ class Tests(Harness):
         user2 = self.make_participant('user2')
         self.participant.set_as_claimed()
         self.participant.set_tip_to(user2, expected)
-        actual = self.participant.get_tip_to('user2')['amount']
+        actual = self.participant.get_tip_to(user2)['amount']
         assert actual == expected
 
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
-        self.make_participant('user2')
-        actual = self.participant.get_tip_to('user2')['amount']
+        user2 = self.make_participant('user2')
+        actual = self.participant.get_tip_to(user2)['amount']
         assert actual == expected
 
 
@@ -454,7 +442,7 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
 
-        actual = alice.get_tip_to('bob')['amount']
+        actual = alice.get_tip_to(bob)['amount']
         assert actual == Decimal('1.00')
 
     def test_stt_returns_a_dict(self):
@@ -476,16 +464,19 @@ class Tests(Harness):
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        self.assertRaises(NoSelfTipping, alice.set_tip_to, 'alice', '10.00')
+        with pytest.raises(NoSelfTipping):
+            alice.set_tip_to(alice, '10.00')
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        self.make_participant('bob')
-        self.assertRaises(BadAmount, alice.set_tip_to, 'bob', '1000.00')
+        bob = self.make_participant('bob')
+        with pytest.raises(BadAmount):
+            alice.set_tip_to(bob, '1000.00')
 
     def test_stt_fails_to_tip_unknown_people(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        self.assertRaises(NoTippee, alice.set_tip_to, 'bob', '1.00')
+        with pytest.raises(NoTippee):
+            alice.set_tip_to('bob', '1.00')
 
 
     # giving, npatrons and receiving
@@ -668,16 +659,15 @@ class Tests(Harness):
     def test_archive_clears_claimed_time(self):
         alice = self.make_participant('alice')
         with self.db.get_cursor() as cursor:
-            archived_as = alice.archive(cursor)
-        assert Participant.from_username(archived_as).claimed_time is None
+            alice.archive(cursor)
+        assert Participant.from_id(alice.id).claimed_time is None
 
     def test_archive_records_an_event(self):
         alice = self.make_participant('alice')
         with self.db.get_cursor() as cursor:
-            archived_as = alice.archive(cursor)
+            alice.archive(cursor)
         payload = self.db.one("SELECT * FROM events WHERE payload->>'action' = 'archive'").payload
         assert payload['values']['old_username'] == 'alice'
-        assert payload['values']['new_username'] == archived_as
 
 
     # suggested_payment

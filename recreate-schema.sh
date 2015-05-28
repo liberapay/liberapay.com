@@ -13,8 +13,7 @@ echo "==========================================================================
 # whole.
 
 echo "Recreating public schema ... "
-echo "DROP SCHEMA public CASCADE" | psql $DATABASE_URL
-echo "CREATE SCHEMA public" | psql $DATABASE_URL
+psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
 
 
 echo "=============================================================================="

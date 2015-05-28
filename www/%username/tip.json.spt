@@ -34,7 +34,7 @@ else:
         except UserDoesntAcceptTips:
             raise Response(400, "user doesn't accept tips")
     else:
-        out = tipper.get_tip_to(tippee.username)
+        out = tipper.get_tip_to(tippee)
 
     amount = out['amount']
     total_giving = tipper.giving

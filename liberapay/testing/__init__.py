@@ -160,7 +160,7 @@ class Harness(unittest.TestCase):
                 INSERT INTO elsewhere
                             (platform, user_id, user_name, participant)
                      VALUES (%s,%s,%s,%s)
-            """, (platform, participant.id, username, username))
+            """, (platform, participant.id, username, participant.id))
 
         # Insert exchange routes
         if 'last_bill_result' in kw:
@@ -180,9 +180,9 @@ class Harness(unittest.TestCase):
             participant = self.db.one("""
                 UPDATE participants
                    SET ({0}) = ({1})
-                 WHERE username=%s
+                 WHERE id=%s
              RETURNING participants.*::participants
-            """.format(cols, placeholders), vals+(username,))
+            """.format(cols, placeholders), vals+(participant.id,))
 
         return participant
 

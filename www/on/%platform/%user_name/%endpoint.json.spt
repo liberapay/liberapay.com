@@ -54,10 +54,10 @@ out = { "on": request.path['platform']
 #   3.00 - user tips this person this amount
 
 if not user.ANON:
-    if user.participant.username == participant.username:
+    if user.participant == participant:
         my_tip = "self"
     else:
-        my_tip = user.participant.get_tip_to(participant.username)['amount']
+        my_tip = user.participant.get_tip_to(participant)['amount']
     out["my_tip"] = str(my_tip)
 
 

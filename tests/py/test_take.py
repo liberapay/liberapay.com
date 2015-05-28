@@ -29,7 +29,7 @@ class Tests(Harness):
         self.db.run("""
             INSERT INTO transfers (timestamp, tipper, tippee, amount, context)
             VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s, 'take')
-        """, dict(tipper=team.username, tippee=member.username, amount=actual_amount))
+        """, dict(tipper=team.id, tippee=member.id, amount=actual_amount))
         self.db.run("UPDATE paydays SET ts_end=now() WHERE ts_end < ts_start")
 
     def test_we_can_make_a_team(self):
@@ -99,10 +99,10 @@ class Tests(Harness):
         team.set_take_for(alice, D('142.00'), team)
         takes = team.compute_actual_takes().values()
         assert len(takes) == 2
-        assert takes[0]['member'] == 'alice'
+        assert takes[0]['member_name'] == 'alice'
         assert takes[0]['actual_amount'] == 142
         assert takes[0]['balance'] == D('10.31')
-        assert takes[1]['member'] == TEAM
+        assert takes[1]['member_name'] == TEAM
         assert takes[1]['actual_amount'] == 0
         assert takes[1]['balance'] == D('10.31')
 
@@ -113,10 +113,10 @@ class Tests(Harness):
         team.set_take_for(alice, D('86.00'), team)
         takes = team.compute_actual_takes().values()
         assert len(takes) == 2
-        assert takes[0]['member'] == 'alice'
+        assert takes[0]['member_name'] == 'alice'
         assert takes[0]['actual_amount'] == 86
         assert takes[0]['balance'] == D('67.72')
-        assert takes[1]['member'] == TEAM
+        assert takes[1]['member_name'] == TEAM
         assert takes[1]['actual_amount'] == 14
         assert takes[1]['balance'] == D('67.72')
 
@@ -208,6 +208,6 @@ class Tests(Harness):
         assert team.get_take_last_week_for(alice) == 30
         self.db.run("""
             INSERT INTO transfers (timestamp, tipper, tippee, amount, context)
-            VALUES (now(), %(tipper)s, 'alice', %(amount)s, 'take')
-        """, dict(tipper=team.username, amount=take_this_week))
+            VALUES (now(), %(tipper)s, %(id)s, %(amount)s, 'take')
+        """, dict(tipper=team.id, id=alice.id, amount=take_this_week))
         assert team.get_take_last_week_for(alice) == 30

@@ -18,22 +18,14 @@ implementation.
 
 from aspen import Response
 
+from liberapay.utils import get_participant
+
 [---]
 
-username = request.path['username']
+participant = get_participant(state, restrict=False)
 
-anonymous = website.db.one("""
-
-    SELECT anonymous_receiving
-      FROM participants
-     WHERE username = %s
-
-""", (username,))
-
-if anonymous:
-    if user.ANON:
-        raise Response(401)
-    elif user.participant.username != username and not user.ADMIN:
+if participant.anonymous_receiving:
+    if user.participant != participant and not user.ADMIN:
         raise Response(403)
 
 
@@ -60,7 +52,7 @@ transfers = website.db.all("""\
       AND context <> 'take-over'
  ORDER BY timestamp DESC
 
-""", (username,), back_as=dict)
+""", (participant.id,), back_as=dict)
 
 
 if not transfers:

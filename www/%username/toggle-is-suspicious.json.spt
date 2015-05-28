@@ -9,29 +9,31 @@ to = request.body.get('to')
 if not to in ('true', 'false', None):
     raise Response(400)
 
+participant = get_participant(state)
+
 with website.db.get_cursor() as c:
     if to is None:
         is_suspicious = website.db.one("""
 
             UPDATE participants
                SET is_suspicious = (is_suspicious IS NULL) OR (is_suspicious IS false)
-             WHERE username=%s
+             WHERE id=%s
          RETURNING is_suspicious
 
-        """, (request.path['username'],))
+        """, (participant.id,))
     else:
         is_suspicious = website.db.one("""
 
             UPDATE participants
                SET is_suspicious = %s
-             WHERE username=%s
+             WHERE id=%s
          RETURNING is_suspicious
 
-        """, (to == 'true', request.path['username'],))
+        """, (to == 'true', participant.id,))
 
     add_event(c, 'participant', dict(
-        id=get_participant(state).id,
-        recorder=dict(id=user.participant.id, username=user.participant.username),
+        id=participant.id,
+        recorder=dict(id=user.participant.id),
         action='set', values=dict(is_suspicious=is_suspicious)
     ))
 

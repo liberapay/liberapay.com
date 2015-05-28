@@ -47,5 +47,5 @@ class TestIsSuspicious(Harness):
                 ORDER BY ts DESC""",
                 (foo.id,))
         assert actual == ('participant', dict(id=foo.id,
-            recorder=dict(id=self.bar.id, username=self.bar.username), action='set',
+            recorder=dict(id=self.bar.id), action='set',
             values=dict(is_suspicious=True)))

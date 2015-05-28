@@ -5,7 +5,7 @@ from datetime import timedelta
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=True)
-tips, total, unclaimed_tips, unclaimed_total = participant.get_giving_for_profile()
+tips, total, pledges, pledges_total = participant.get_giving_for_profile()
 title = participant.username
 subhead = _("Giving")
 recently = utcnow() - timedelta(days=30)
@@ -20,8 +20,8 @@ CANCELLED = ngettext( "You cancelled {n} tip in the past 30 days"
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
-unclaimed_tips = [t for t in unclaimed_tips if t.amount > 0]
-nunclaimed_tips = len(unclaimed_tips)
+pledges = [t for t in pledges if t.amount > 0]
+npledges = len(pledges)
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -51,7 +51,7 @@ nunclaimed_tips = len(unclaimed_tips)
         <tbody>
         {% for tip in tips %}
         <tr>
-            <td class="recipient"><a href="/{{ tip.tippee }}/">{{ tip.tippee }}</a></td>
+            <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
             <td class="amount">{{ tip.amount }}</td>
             <td class="mtime">{{ to_age(tip.mtime) }}</td>
             <td class="ctime">{{ to_age(tip.ctime) }}</td>
@@ -77,7 +77,7 @@ nunclaimed_tips = len(unclaimed_tips)
         <tbody>
             {% for tip in cancelled_tips %}
             <tr>
-                <td class="recipient"><a href="/{{ tip.tippee }}/">{{ tip.tippee }}</a></td>
+                <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
                 <td class="mtime">{{ to_age(tip.mtime) }}</td>
                 <td class="ctime">{{ to_age(tip.ctime) }}</td>
             </tr>
@@ -87,9 +87,9 @@ nunclaimed_tips = len(unclaimed_tips)
 </div>
 {% endif %}
 
-{% if nunclaimed_tips %}
+{% if npledges %}
 <div class="pane">
-    <h2>{{ _("Unclaimed") }} (N={{ len(unclaimed_tips) }})</h2>
+    <h2>{{ _("Unclaimed") }} (N={{ len(pledges) }})</h2>
     <table>
         <thead>
             <tr>
@@ -102,17 +102,17 @@ nunclaimed_tips = len(unclaimed_tips)
         <tfoot>
             <tr>
                 <th></th>
-                <th class="total">{{ unclaimed_total }}</th>
+                <th class="total">{{ pledges_total }}</th>
                 <th></th>
                 <th></th>
             </tr>
         </tfoot>
         <tbody>
-        {% for tip in unclaimed_tips %}
+        {% for tip in pledges %}
             <tr>
                 <td class="recipient">
                     <img class="platform-icon" src="{{ website.asset('platforms/%s.12.png' % tip.platform) }}" />
-                    <a href="/{{ tip.tippee }}/">{{ tip.user_name }}</a>
+                    <a href="/{{ tip.username }}/">{{ tip.user_name }}</a>
                 </td>
                 <td class="amount">{{ tip.amount }}</td>
                 <td class="mtime">{{ to_age(tip.mtime) }}</td>

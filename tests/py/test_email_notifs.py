@@ -18,9 +18,9 @@ class TestTransactionalEmails(EmailHarness):
                         , auth_as='roy'
                          )
 
-        self.bob.set_tip_to(carl_twitter.participant.username, '100')
-        self.dan.set_tip_to(carl_twitter.participant.username, '100')
-        roy.set_tip_to(carl_twitter.participant.username, '100') # Roy will NOT receive an email.
+        self.bob.set_tip_to(carl_twitter, '100')
+        self.dan.set_tip_to(carl_twitter, '100')
+        roy.set_tip_to(carl_twitter, '100') # Roy will NOT receive an email.
 
         carl_twitter.opt_in('carl')
 
@@ -35,7 +35,7 @@ class TestTransactionalEmails(EmailHarness):
         dan_twitter = self.make_elsewhere('twitter', 1, 'dan')
 
         self.alice.set_tip_to(self.dan, '100') # Alice shouldn't receive an email.
-        self.bob.set_tip_to(dan_twitter.participant.username, '100') # Bob should receive an email.
+        self.bob.set_tip_to(dan_twitter, '100') # Bob should receive an email.
 
         self.dan.take_over(dan_twitter, have_confirmation=True)
 
@@ -49,7 +49,7 @@ class TestTransactionalEmails(EmailHarness):
     def test_opt_in_notification_includes_unsubscribe(self):
         carl_twitter = self.make_elsewhere('twitter', 1, 'carl')
         roy = self.make_participant('roy', claimed_time='now', email_address='roy@example.com', notify_on_opt_in=1)
-        roy.set_tip_to(carl_twitter.participant.username, '100')
+        roy.set_tip_to(carl_twitter, '100')
 
         carl_twitter.opt_in('carl')
 

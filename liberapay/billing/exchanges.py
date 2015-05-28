@@ -287,7 +287,7 @@ def record_exchange(db, route, amount, fee, participant, status, error=None):
                    (amount, fee, participant, status, route, note)
             VALUES (%s, %s, %s, %s, %s, %s)
          RETURNING id
-        """, (amount, fee, participant.username, status, route.id, error))
+        """, (amount, fee, participant.id, status, route.id, error))
 
         if status == 'failed':
             propagate_exchange(cursor, participant, route, error, 0)
@@ -302,7 +302,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
     """Updates the status of an exchange.
     """
     with db.get_cursor() as cursor:
-        amount, fee, username, route = cursor.one("""
+        amount, fee, p_id, route = cursor.one("""
             UPDATE exchanges e
                SET status=%(status)s
                  , note=%(error)s
@@ -314,7 +314,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
                       WHERE r.id = e.route
                    ) AS route
         """, locals())
-        assert participant.username == username
+        assert participant.id == p_id
         assert isinstance(route, ExchangeRoute)
 
         if amount < 0:
@@ -357,7 +357,7 @@ def sync_with_balanced(db):
     """)
     meta_exchange_id = balanced.Transaction.f.meta.exchange_id
     for e in exchanges:
-        p = Participant.from_username(e.participant)
+        p = Participant.from_id(e.participant)
         cls = balanced.Debit if e.amount > 0 else balanced.Credit
         transactions = cls.query.filter(meta_exchange_id == e.id).all()
         assert len(transactions) < 2

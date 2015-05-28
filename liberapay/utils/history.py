@@ -20,32 +20,32 @@ def get_end_of_year_balance(db, participant, year, current_year):
     if balance is not None:
         return balance
 
-    username = participant.username
+    id = participant.id
     start_balance = get_end_of_year_balance(db, participant, year-1, current_year)
     delta = db.one("""
         SELECT (
                   SELECT COALESCE(sum(amount), 0) AS a
                     FROM exchanges
-                   WHERE participant = %(username)s
+                   WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount > 0
                      AND (status is null OR status = 'succeeded')
                ) + (
                   SELECT COALESCE(sum(amount-fee), 0) AS a
                     FROM exchanges
-                   WHERE participant = %(username)s
+                   WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount < 0
                      AND (status is null OR status <> 'failed')
                ) + (
                   SELECT COALESCE(sum(-amount), 0) AS a
                     FROM transfers
-                   WHERE tipper = %(username)s
+                   WHERE tipper = %(id)s
                      AND extract(year from timestamp) = %(year)s
                ) + (
                   SELECT COALESCE(sum(amount), 0) AS a
                     FROM transfers
-                   WHERE tippee = %(username)s
+                   WHERE tippee = %(id)s
                      AND extract(year from timestamp) = %(year)s
                ) AS delta
     """, locals())
@@ -67,17 +67,17 @@ def iter_payday_events(db, participant, year=None):
     current_year = datetime.utcnow().year
     year = year or current_year
 
-    username = participant.username
+    id = participant.id
     exchanges = db.all("""
         SELECT *
           FROM exchanges
-         WHERE participant=%(username)s
+         WHERE participant=%(id)s
            AND extract(year from timestamp) = %(year)s
     """, locals(), back_as=dict)
     transfers = db.all("""
         SELECT *
           FROM transfers
-         WHERE (tipper=%(username)s OR tippee=%(username)s)
+         WHERE (tipper=%(id)s OR tippee=%(id)s)
            AND extract(year from timestamp) = %(year)s
     """, locals(), back_as=dict)
 
@@ -87,8 +87,8 @@ def iter_payday_events(db, participant, year=None):
     if transfers:
         yield dict(
             kind='totals',
-            given=sum(t['amount'] for t in transfers if t['tipper'] == username and t['context'] != 'take'),
-            received=sum(t['amount'] for t in transfers if t['tippee'] == username),
+            given=sum(t['amount'] for t in transfers if t['tipper'] == id and t['context'] != 'take'),
+            received=sum(t['amount'] for t in transfers if t['tippee'] == id),
         )
 
     payday_dates = db.all("""
@@ -130,7 +130,7 @@ def iter_payday_events(db, participant, year=None):
                     balance -= event['amount'] - event['fee']
         else:
             kind = 'transfer'
-            if event['tippee'] == username:
+            if event['tippee'] == id:
                 balance -= event['amount']
             else:
                 balance += event['amount']
@@ -143,20 +143,20 @@ def iter_payday_events(db, participant, year=None):
 
 def export_history(participant, year, mode, key, back_as='namedtuple', require_key=False):
     db = participant.db
-    params = dict(username=participant.username, year=year)
+    params = dict(id=participant.id, year=year)
     out = {}
     if mode == 'aggregate':
         out['given'] = lambda: db.all("""
             SELECT tippee, sum(amount) AS amount
               FROM transfers
-             WHERE tipper = %(username)s
+             WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
           GROUP BY tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
             SELECT tipper AS team, sum(amount) AS amount
               FROM transfers
-             WHERE tippee = %(username)s
+             WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
           GROUP BY tipper
@@ -165,21 +165,21 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
         out['exchanges'] = lambda: db.all("""
             SELECT timestamp, amount, fee, status, note
               FROM exchanges
-             WHERE participant = %(username)s
+             WHERE participant = %(id)s
                AND extract(year from timestamp) = %(year)s
           ORDER BY timestamp ASC
         """, params, back_as=back_as)
         out['given'] = lambda: db.all("""
             SELECT timestamp, tippee, amount, context
               FROM transfers
-             WHERE tipper = %(username)s
+             WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
           ORDER BY timestamp ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
             SELECT timestamp, tipper AS team, amount
               FROM transfers
-             WHERE tippee = %(username)s
+             WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
           ORDER BY timestamp ASC
@@ -187,7 +187,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
         out['received'] = lambda: db.all("""
             SELECT timestamp, amount, context
               FROM transfers
-             WHERE tippee = %(username)s
+             WHERE tippee = %(id)s
                AND context NOT IN ('take', 'take-over')
                AND extract(year from timestamp) = %(year)s
           ORDER BY timestamp ASC

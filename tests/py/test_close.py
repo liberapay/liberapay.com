@@ -32,7 +32,7 @@ class TestClosing(Harness):
 
         alice.close('downstream')
 
-        assert carl.get_tip_to('alice')['amount'] == 0
+        assert carl.get_tip_to(alice)['amount'] == 0
         assert alice.balance == 0
         assert len(team.get_current_takes()) == 1
 
@@ -149,7 +149,7 @@ class TestClosing(Harness):
         alice.set_tip_to(carl, D('2.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
-        assert self.db.one("SELECT count(*) FROM tips WHERE tippee='bob'") == 1
+        assert self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (bob.id,)) == 1
         assert Participant.from_username('bob').balance == D('0.00')
         assert Participant.from_username('carl').balance == D('10.00')
         assert Participant.from_username('alice').balance == D('0.00')
@@ -184,9 +184,10 @@ class TestClosing(Harness):
 
     def test_ctg_clears_tips_giving(self):
         alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        alice.set_tip_to(self.make_participant('bob', claimed_time='now').username, D('1.00'))
+        alice.set_tip_to(self.make_participant('bob', claimed_time='now'), D('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tipper='alice' AND amount > 0")
+                                    "WHERE tipper=%s AND amount > 0",
+                                    (alice.id,))
         assert ntips() == 1
         with self.db.get_cursor() as cursor:
             alice.clear_tips_giving(cursor)
@@ -197,7 +198,7 @@ class TestClosing(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, D('1.00'))
         alice.set_tip_to(bob, D('0.00'))
-        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper='alice'")
+        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper=%s", (alice.id,))
         assert ntips() == 2
         with self.db.get_cursor() as cursor:
             alice.clear_tips_giving(cursor)
@@ -205,7 +206,7 @@ class TestClosing(Harness):
 
     def test_ctg_doesnt_zero_when_theres_no_tip(self):
         alice = self.make_participant('alice')
-        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper='alice'")
+        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper=%s", (alice.id,))
         assert ntips() == 0
         with self.db.get_cursor() as cursor:
             alice.clear_tips_giving(cursor)
@@ -213,13 +214,14 @@ class TestClosing(Harness):
 
     def test_ctg_clears_multiple_tips_giving(self):
         alice = self.make_participant('alice', claimed_time='now')
-        alice.set_tip_to(self.make_participant('bob', claimed_time='now').username, D('1.00'))
-        alice.set_tip_to(self.make_participant('carl', claimed_time='now').username, D('1.00'))
-        alice.set_tip_to(self.make_participant('darcy', claimed_time='now').username, D('1.00'))
-        alice.set_tip_to(self.make_participant('evelyn', claimed_time='now').username, D('1.00'))
-        alice.set_tip_to(self.make_participant('francis', claimed_time='now').username, D('1.00'))
+        alice.set_tip_to(self.make_participant('bob', claimed_time='now'), D('1.00'))
+        alice.set_tip_to(self.make_participant('carl', claimed_time='now'), D('1.00'))
+        alice.set_tip_to(self.make_participant('darcy', claimed_time='now'), D('1.00'))
+        alice.set_tip_to(self.make_participant('evelyn', claimed_time='now'), D('1.00'))
+        alice.set_tip_to(self.make_participant('francis', claimed_time='now'), D('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tipper='alice' AND amount > 0")
+                                    "WHERE tipper=%s AND amount > 0",
+                                    (alice.id,))
         assert ntips() == 5
         with self.db.get_cursor() as cursor:
             alice.clear_tips_giving(cursor)
@@ -232,7 +234,8 @@ class TestClosing(Harness):
         alice = self.make_participant('alice')
         self.make_participant('bob', claimed_time='now').set_tip_to(alice, D('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tippee='alice' AND amount > 0")
+                                    "WHERE tippee=%s AND amount > 0",
+                                    (alice.id,))
         assert ntips() == 1
         with self.db.get_cursor() as cursor:
             alice.clear_tips_receiving(cursor)
@@ -243,7 +246,7 @@ class TestClosing(Harness):
         bob = self.make_participant('bob', claimed_time='now')
         bob.set_tip_to(alice, D('1.00'))
         bob.set_tip_to(alice, D('0.00'))
-        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee='alice'")
+        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (alice.id,))
         assert ntips() == 2
         with self.db.get_cursor() as cursor:
             alice.clear_tips_receiving(cursor)
@@ -251,7 +254,7 @@ class TestClosing(Harness):
 
     def test_ctr_doesnt_zero_when_theres_no_tip(self):
         alice = self.make_participant('alice')
-        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee='alice'")
+        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (alice.id,))
         assert ntips() == 0
         with self.db.get_cursor() as cursor:
             alice.clear_tips_receiving(cursor)
@@ -265,7 +268,8 @@ class TestClosing(Harness):
         self.make_participant('evelyn', claimed_time='now').set_tip_to(alice, D('4.00'))
         self.make_participant('francis', claimed_time='now').set_tip_to(alice, D('5.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tippee='alice' AND amount > 0")
+                                    "WHERE tippee=%s AND amount > 0",
+                                    (alice.id,))
         assert ntips() == 5
         with self.db.get_cursor() as cursor:
             alice.clear_tips_receiving(cursor)

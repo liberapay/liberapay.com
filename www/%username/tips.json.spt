@@ -1,3 +1,5 @@
+from itertools import chain
+
 from aspen import Response
 from liberapay.utils import get_participant
 
@@ -17,7 +19,7 @@ if request.method == 'POST':
             amount = participant.set_tip_to( tip['username']
                                            , parse_decimal(tip['amount'])
                                             )['amount']
-        except Exception, exc:
+        except Exception as exc:
             amount = "error"
             one['error'] = exc.__class__.__name__
         one['amount'] = str(amount)
@@ -26,17 +28,17 @@ if request.method == 'POST':
     if request.qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
         old_tips = participant.get_current_tips()
         for tip in old_tips:
-            if tip['tippee'] not in seen:
-                participant.set_tip_to(tip['tippee'], '0.00')
+            if tip['username'] not in seen:
+                participant.set_tip_to(tip['username'], '0.00')
 
 else:
-    tips, total, unclaimed_tips, unclaimed_total = participant.get_giving_for_profile()
+    tips, total, pledges, pledges_total = participant.get_giving_for_profile()
 
     out = []
-    for tip in tips:
+    for tip in chain(tips, pledges):
         if tip.amount == 0:
             continue
-        out.append({ "username": tip.tippee
+        out.append({ "username": tip.username
                    , "amount": str(tip.amount)
                     })
 
