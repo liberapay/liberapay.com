@@ -15,7 +15,7 @@ nach = db.one("""
        AND r.error = ''
        AND p.is_suspicious IS NOT true
 """)
-npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
+npeople = db.one("SELECT count(*) FROM participants WHERE status = 'active' AND is_suspicious IS NOT true")
 ncc = db.one("""
     SELECT count(*)
       FROM current_exchange_routes r
@@ -33,7 +33,8 @@ tips_stats = db.one("""
       JOIN participants p2 ON p2.id = tippee
      WHERE amount > 0
        AND is_funded
-       AND p2.claimed_time IS NOT NULL
+       AND p.status = 'active'
+       AND p2.status = 'active'
        AND p.is_suspicious IS NOT true
        AND p2.is_suspicious IS NOT true
 """)
@@ -49,7 +50,8 @@ average_tippees = int(db.one("""\
                JOIN participants p2 on p2.id = tippee
               WHERE amount > 0
                 AND is_funded
-                AND p2.claimed_time IS NOT NULL
+                AND p.status = 'active'
+                AND p2.status = 'active'
                 AND p.is_suspicious IS NOT true
                 AND p2.is_suspicious IS NOT true
            GROUP BY tipper
@@ -63,7 +65,8 @@ TIP_DISTRIBUTION = """
       JOIN participants p2 on p2.id = tippee
      WHERE amount > 0
        AND is_funded
-       AND p2.claimed_time IS NOT NULL
+       AND p.status = 'active'
+       AND p2.status = 'active'
        AND p.is_suspicious IS NOT true
        AND p2.is_suspicious IS NOT true
   GROUP BY amount

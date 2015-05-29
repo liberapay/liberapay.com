@@ -99,25 +99,13 @@ def _check_balances(cursor):
 
 
 def _check_orphans(cursor):
-    """
-    Finds participants that
-        * does not have corresponding elsewhere account
-        * have not been absorbed by other participant
-
-    These are broken because new participants arise from elsewhere
-    and elsewhere is detached only by take over which makes a note
-    in absorptions if it removes the last elsewhere account.
-
-    Especially bad case is when also claimed_time is set because
-    there must have been elsewhere account attached and used to sign in.
-
-    https://github.com/gratipay/gratipay.com/issues/617
+    """Finds non-archived participants that don't have an elsewhere account.
     """
     orphans = cursor.all("""
         select username
-           from participants p
-          where not exists (select * from elsewhere e where e.participant=p.id)
-            and not exists (select * from absorptions where archived_as=p.id)
+          from participants p
+         where status != 'archived'
+           and not exists (select * from elsewhere e where e.participant=p.id)
     """)
     assert len(orphans) == 0, "missing elsewheres: {}".format(list(orphans))
 

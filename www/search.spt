@@ -18,9 +18,8 @@ if query:
             SELECT username, avatar_url, similarity(username, %(q)s) AS rank, id
               FROM participants
              WHERE username %% %(q)s
-               AND claimed_time IS NOT NULL
+               AND status = 'active'
                AND is_searchable
-               AND NOT is_closed
           ORDER BY rank DESC, username
              LIMIT 10
         """, locals())
@@ -53,9 +52,8 @@ if query:
                         LIMIT 10
                    ) s
               JOIN participants p ON p.id = s.participant
-             WHERE p.claimed_time IS NOT NULL
+             WHERE p.status = 'active'
                AND p.is_searchable
-               AND NOT p.is_closed
           GROUP BY p.id
           ORDER BY max_rank DESC
         """, locals())

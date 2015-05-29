@@ -42,9 +42,9 @@
         {% endif %}
     </table>
 
-    {% if participant.claimed_time %}
-    <p>{{ _('Joined') }} {{ to_age(participant.claimed_time, add_direction=True) }}.</p>
-    {% elif participant.is_closed %}
+    {% if participant.status == 'active' %}
+    <p>{{ _('Joined') }} {{ to_age(participant.join_time, add_direction=True) }}.</p>
+    {% elif participant.status == 'closed' %}
     <p>Closed {{ to_age(participant.closed_time, add_direction=True) }}.</p>
     {% else %}
     {% set absorption = website.db.one( "select * from absorptions where archived_as=%s"
@@ -56,8 +56,6 @@
     {% endif %}
 </div>
 
-{% if participant.accepts_tips and participant.claimed_time %}
-{% if participant != user.participant %}
+{% if participant.accepts_tips and participant != user.participant %}
 {% include "templates/your-tip.html" %}
-{% endif %}
 {% endif %}

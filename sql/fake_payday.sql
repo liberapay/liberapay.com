@@ -2,7 +2,8 @@
 
 CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
     SELECT id
-         , claimed_time
+         , join_time
+         , status
          , balance AS fake_balance
          , 0::numeric(35,2) AS giving
          , 0::numeric(35,2) AS pledging
@@ -22,13 +23,13 @@ CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
 CREATE UNIQUE INDEX ON temp_participants (id);
 
 CREATE TEMPORARY TABLE temp_tips ON COMMIT DROP AS
-    SELECT t.id, tipper, tippee, amount, (p2.claimed_time IS NOT NULL) AS claimed
+    SELECT t.id, tipper, tippee, amount, (p2.status = 'active') AS active
       FROM current_tips t
       JOIN temp_participants p ON p.id = t.tipper
       JOIN temp_participants p2 ON p2.id = t.tippee
      WHERE t.amount > 0
        AND (p2.goal IS NULL or p2.goal >= 0)
-  ORDER BY p2.claimed_time IS NULL, p.claimed_time ASC, t.ctime ASC;
+  ORDER BY p2.join_time IS NULL, p.join_time ASC, t.ctime ASC;
 
 CREATE INDEX ON temp_tips (tipper);
 CREATE INDEX ON temp_tips (tippee);
@@ -55,7 +56,7 @@ CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
         IF (NEW.amount > tipper.fake_balance AND NOT tipper.credit_card_ok) THEN
             RETURN NULL;
         END IF;
-        IF (NEW.claimed) THEN
+        IF (NEW.active) THEN
             UPDATE temp_participants
                SET fake_balance = (fake_balance - NEW.amount)
                  , giving = (giving + NEW.amount)

@@ -9,7 +9,7 @@ from liberapay.testing import Harness
 class Tests(Harness):
 
     def setUp(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
 
     def change_goal(self, goal, goal_custom="", auth_as="alice", expecting_error=False):
         method = self.client.POST if not expecting_error else self.client.PxST

@@ -25,9 +25,6 @@ from liberapay.models.participant import (
 from liberapay.testing import Harness
 
 
-# TODO: Test that accounts elsewhere are not considered claimed by default
-
-
 class TestNeedConfirmation(Harness):
     def test_need_confirmation1(self):
         assert not NeedConfirmation(False, False, False)
@@ -55,14 +52,14 @@ class TestNeedConfirmation(Harness):
 
 
 class TestAbsorptions(Harness):
-    # TODO: These tests should probably be moved to absorptions tests
+
     def setUp(self):
         Harness.setUp(self)
         now = utcnow()
         hour_ago = now - datetime.timedelta(hours=1)
         for i, username in enumerate(['alice', 'bob', 'carl']):
             p = self.make_participant( username
-                                     , claimed_time=hour_ago
+                                     , join_time=hour_ago
                                      , last_bill_result=''
                                      , balance=Decimal(i)
                                       )
@@ -105,10 +102,6 @@ class TestAbsorptions(Harness):
         actual = self.alice.get_tip_to(self.deadbeef_archived)['amount']
         assert actual == expected
 
-    def test_there_is_no_more_deadbeef(self):
-        actual = Participant.from_username('deadbeef')
-        assert actual is None
-
     def test_balance_was_transferred(self):
         fresh_bob = Participant.from_username('bob')
         assert fresh_bob.balance == self.bob.balance == self.expected_new_balance
@@ -138,7 +131,7 @@ class TestTakeOver(Harness):
 
     def test_do_not_take_over_zero_tips_giving(self):
         alice = self.make_elsewhere('twitter', 1, 'alice')
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         carl  = self.make_elsewhere('twitter', 3, 'carl')
         alice.opt_in('alice')
         carl.opt_in('carl')
@@ -164,7 +157,7 @@ class TestTakeOver(Harness):
         self.db.self_check()
 
     def test_is_funded_is_correct_for_consolidated_tips_receiving(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=1)
+        alice = self.make_participant('alice', balance=1)
         bob = self.make_participant('bob', elsewhere='twitter')
         carl = self.make_participant('carl', elsewhere='github')
         alice.set_tip_to(bob, '1.00')  # funded
@@ -193,7 +186,7 @@ class TestTakeOver(Harness):
 
     @mock.patch.object(Participant, '_mailer')
     def test_email_addresses_merging(self, mailer):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         alice.add_email('alice@example.com')
         alice.add_email('alice@example.net')
         alice.add_email('alice@example.org')
@@ -218,9 +211,8 @@ class TestTakeOver(Harness):
 class TestParticipant(Harness):
     def setUp(self):
         Harness.setUp(self)
-        now = utcnow()
         for username in ['alice', 'bob', 'carl']:
-            p = self.make_participant(username, claimed_time=now, elsewhere='twitter')
+            p = self.make_participant(username, elsewhere='twitter')
             setattr(self, username, p)
 
     def test_bob_is_singular(self):
@@ -329,74 +321,65 @@ class Tests(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-        self.participant = self.make_participant('user1')  # Our protagonist
-
+        self.stub = self.make_stub()  # Our protagonist
 
     def test_claiming_participant(self):
         now = utcnow()
-        self.participant.set_as_claimed()
-        actual = self.participant.claimed_time - now
+        self.stub.update_status('active')
+        actual = self.stub.join_time - now
         expected = datetime.timedelta(seconds=0.1)
         assert actual < expected
 
     def test_changing_username_successfully(self):
-        self.participant.change_username('user2')
+        self.stub.change_username('user2')
         actual = Participant.from_username('user2')
-        assert self.participant == actual
+        assert self.stub == actual
 
     def test_changing_username_to_nothing(self):
         with self.assertRaises(UsernameIsEmpty):
-            self.participant.change_username('')
+            self.stub.change_username('')
 
     def test_changing_username_to_all_spaces(self):
         with self.assertRaises(UsernameIsEmpty):
-            self.participant.change_username('    ')
+            self.stub.change_username('    ')
 
     def test_changing_username_strips_spaces(self):
-        self.participant.change_username('  aaa  ')
+        self.stub.change_username('  aaa  ')
         actual = Participant.from_username('aaa')
-        assert self.participant == actual
+        assert self.stub == actual
 
     def test_changing_username_returns_the_new_username(self):
-        returned = self.participant.change_username('  foo_bar-baz  ')
+        returned = self.stub.change_username('  foo_bar-baz  ')
         assert returned == 'foo_bar-baz'
 
     def test_changing_username_to_too_long(self):
         with self.assertRaises(UsernameTooLong):
-            self.participant.change_username('123456789012345678901234567890123')
+            self.stub.change_username('123456789012345678901234567890123')
 
     def test_changing_username_to_already_taken(self):
         self.make_participant('user2')
         with self.assertRaises(UsernameAlreadyTaken):
-            self.participant.change_username('user2')
+            self.stub.change_username('user2')
 
     def test_changing_username_to_already_taken_is_case_insensitive(self):
         self.make_participant('UsEr2')
         with self.assertRaises(UsernameAlreadyTaken):
-            self.participant.change_username('uSeR2')
+            self.stub.change_username('uSeR2')
 
     def test_changing_username_to_invalid_characters(self):
         with self.assertRaises(UsernameContainsInvalidCharacters):
-            self.participant.change_username(u"\u2603") # Snowman
+            self.stub.change_username(u"\u2603") # Snowman
 
     def test_changing_username_to_restricted_name(self):
         from liberapay import RESTRICTED_USERNAMES
         for name in RESTRICTED_USERNAMES:
             with self.assertRaises(ProblemChangingUsername):
-                self.participant.change_username(name)
-
-    def test_getting_tips_actually_made(self):
-        expected = Decimal('1.00')
-        user2 = self.make_participant('user2')
-        self.participant.set_as_claimed()
-        self.participant.set_tip_to(user2, expected)
-        actual = self.participant.get_tip_to(user2)['amount']
-        assert actual == expected
+                self.stub.change_username(name)
 
     def test_getting_tips_not_made(self):
         expected = Decimal('0.00')
         user2 = self.make_participant('user2')
-        actual = self.participant.get_tip_to(user2)['amount']
+        actual = self.stub.get_tip_to(user2)['amount']
         assert actual == expected
 
 
@@ -410,7 +393,7 @@ class Tests(Harness):
     # number
 
     def test_can_go_singular(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob', number='plural')
         alice.set_tip_to(bob, '100.00')
         bob.update_number('singular')
@@ -418,35 +401,35 @@ class Tests(Harness):
 
     def test_going_singular_clears_takes(self):
         team = self.make_participant('team', number='plural')
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         team.set_take_for(alice, Decimal('10'), alice)
         team.update_number('singular')
         assert Participant.from_username('alice').get_teams() == []
 
     def test_can_go_plural(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '100.00')
         bob.update_number('plural')
         assert Participant.from_username('bob').number == 'plural'
 
     def test_going_plural_forces_public_receiving(self):
-        bob = self.make_participant('bob', claimed_time='now', anonymous_receiving=True)
+        bob = self.make_participant('bob', anonymous_receiving=True)
         bob.update_number('plural')
         assert Participant.from_username('bob').anonymous_receiving == False
 
     # set_tip_to - stt
 
     def test_stt_sets_tip_to(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob')
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_stub()
         alice.set_tip_to(bob, '1.00')
 
         actual = alice.get_tip_to(bob)['amount']
         assert actual == Decimal('1.00')
 
     def test_stt_returns_a_dict(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         actual = alice.set_tip_to(bob, '1.00')
         assert isinstance(actual, dict)
@@ -455,7 +438,7 @@ class Tests(Harness):
         assert actual['first_time_tipper'] is True
 
     def test_stt_returns_False_for_second_time_tipper(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
         actual = alice.set_tip_to(bob, '2.00')
@@ -463,18 +446,18 @@ class Tests(Harness):
         assert actual['first_time_tipper'] is False
 
     def test_stt_doesnt_allow_self_tipping(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         with pytest.raises(NoSelfTipping):
             alice.set_tip_to(alice, '10.00')
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         with pytest.raises(BadAmount):
             alice.set_tip_to(bob, '1000.00')
 
     def test_stt_fails_to_tip_unknown_people(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         with pytest.raises(NoTippee):
             alice.set_tip_to('bob', '1.00')
 
@@ -482,10 +465,10 @@ class Tests(Harness):
     # giving, npatrons and receiving
 
     def test_only_funded_tips_count(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl', claimed_time='now', last_bill_result="Fail!")
-        dana = self.make_participant('dana', claimed_time='now')
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl', last_bill_result="Fail!")
+        dana = self.make_participant('dana')
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
         bob.set_tip_to(alice, '5.00')
@@ -505,9 +488,9 @@ class Tests(Harness):
         assert funded_tips == [3, 6, 5]
 
     def test_only_latest_tip_counts(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now', last_bill_result='')
-        carl = self.make_participant('carl', claimed_time='now')
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob', last_bill_result='')
+        carl = self.make_participant('carl')
         alice.set_tip_to(carl, '12.00')
         alice.set_tip_to(carl, '3.00')
         bob.set_tip_to(carl, '2.00')
@@ -519,11 +502,10 @@ class Tests(Harness):
 
     def test_receiving_includes_tips_from_whitelisted_accounts(self):
         alice = self.make_participant( 'alice'
-                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=False
                                       )
-        bob = self.make_participant('bob')
+        bob = self.make_stub()
         alice.set_tip_to(bob, '3.00')
 
         assert bob.receiving == Decimal('3.00')
@@ -531,11 +513,10 @@ class Tests(Harness):
 
     def test_receiving_includes_tips_from_unreviewed_accounts(self):
         alice = self.make_participant( 'alice'
-                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=None
                                       )
-        bob = self.make_participant('bob')
+        bob = self.make_stub()
         alice.set_tip_to(bob, '3.00')
 
         assert bob.receiving == Decimal('3.00')
@@ -543,25 +524,24 @@ class Tests(Harness):
 
     def test_receiving_ignores_tips_from_blacklisted_accounts(self):
         alice = self.make_participant( 'alice'
-                                     , claimed_time='now'
                                      , last_bill_result=''
                                      , is_suspicious=True
                                       )
-        bob = self.make_participant('bob')
+        bob = self.make_stub()
         alice.set_tip_to(bob, '3.00')
 
         assert bob.receiving == Decimal('0.00')
         assert bob.npatrons == 0
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now', taking=Decimal('42.00'))
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob', taking=Decimal('42.00'))
         alice.set_tip_to(bob, '3.00')
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
 
     def test_receiving_is_zero_for_patrons(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', claimed_time='now')
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
         bob.update_goal(Decimal('-1'))
@@ -574,20 +554,20 @@ class Tests(Harness):
     # pledging
 
     def test_pledging_only_counts_latest_tip(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, '12.00')
         alice.set_tip_to(bob, '3.00')
         assert alice.pledging == Decimal('3.00')
 
     def test_cant_pledge_to_locked_accounts(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        bob = self.make_participant('bob', goal=-1)
+        alice = self.make_participant('alice', last_bill_result='')
+        bob = self.make_stub(goal=-1)
         with self.assertRaises(UserDoesntAcceptTips):
             alice.set_tip_to(bob, '3.00')
 
     def test_pledging_isnt_giving(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, '3.00')
         assert alice.giving == Decimal('0.00')
@@ -596,45 +576,44 @@ class Tests(Harness):
     # get_age_in_seconds - gais
 
     def test_gais_gets_age_in_seconds(self):
-        now = utcnow()
-        alice = self.make_participant('alice', claimed_time=now)
+        alice = self.make_participant('alice')
         actual = alice.get_age_in_seconds()
         assert 0 < actual < 1
 
     def test_gais_returns_negative_one_if_None(self):
-        alice = self.make_participant('alice', claimed_time=None)
+        alice = self.make_stub()
         actual = alice.get_age_in_seconds()
         assert actual == -1
 
 
-    # resolve_unclaimed - ru
+    # resolve_stub - rs
 
-    def test_ru_returns_None_for_orphaned_participant(self):
-        resolved = self.make_participant('alice').resolve_unclaimed()
+    def test_rs_returns_None_for_orphaned_participant(self):
+        resolved = self.make_stub().resolve_stub()
         assert resolved is None, resolved
 
-    def test_ru_returns_bitbucket_url_for_stub_from_bitbucket(self):
+    def test_rs_returns_bitbucket_url_for_stub_from_bitbucket(self):
         unclaimed = self.make_elsewhere('bitbucket', '1234', 'alice')
         stub = Participant.from_username(unclaimed.participant.username)
-        actual = stub.resolve_unclaimed()
+        actual = stub.resolve_stub()
         assert actual == "/on/bitbucket/alice/"
 
-    def test_ru_returns_github_url_for_stub_from_github(self):
+    def test_rs_returns_github_url_for_stub_from_github(self):
         unclaimed = self.make_elsewhere('github', '1234', 'alice')
         stub = Participant.from_username(unclaimed.participant.username)
-        actual = stub.resolve_unclaimed()
+        actual = stub.resolve_stub()
         assert actual == "/on/github/alice/"
 
-    def test_ru_returns_twitter_url_for_stub_from_twitter(self):
+    def test_rs_returns_twitter_url_for_stub_from_twitter(self):
         unclaimed = self.make_elsewhere('twitter', '1234', 'alice')
         stub = Participant.from_username(unclaimed.participant.username)
-        actual = stub.resolve_unclaimed()
+        actual = stub.resolve_stub()
         assert actual == "/on/twitter/alice/"
 
-    def test_ru_returns_openstreetmap_url_for_stub_from_openstreetmap(self):
+    def test_rs_returns_openstreetmap_url_for_stub_from_openstreetmap(self):
         unclaimed = self.make_elsewhere('openstreetmap', '1', 'alice')
         stub = Participant.from_username(unclaimed.participant.username)
-        actual = stub.resolve_unclaimed()
+        actual = stub.resolve_stub()
         assert actual == "/on/openstreetmap/alice/"
 
 
@@ -642,32 +621,19 @@ class Tests(Harness):
 
     def test_archive_fails_if_ctr_not_run(self):
         alice = self.make_participant('alice')
-        self.make_participant('bob', claimed_time='now').set_tip_to(alice, Decimal('1.00'))
+        self.make_participant('bob').set_tip_to(alice, Decimal('1.00'))
         with self.db.get_cursor() as cursor:
-            pytest.raises(alice.StillReceivingTips, alice.archive, cursor)
+            pytest.raises(alice.AccountNotEmpty, alice.archive, cursor)
 
     def test_archive_fails_if_balance_is_positive(self):
         alice = self.make_participant('alice', balance=2)
         with self.db.get_cursor() as cursor:
-            pytest.raises(alice.BalanceIsNotZero, alice.archive, cursor)
+            pytest.raises(alice.AccountNotEmpty, alice.archive, cursor)
 
     def test_archive_fails_if_balance_is_negative(self):
         alice = self.make_participant('alice', balance=-2)
         with self.db.get_cursor() as cursor:
-            pytest.raises(alice.BalanceIsNotZero, alice.archive, cursor)
-
-    def test_archive_clears_claimed_time(self):
-        alice = self.make_participant('alice')
-        with self.db.get_cursor() as cursor:
-            alice.archive(cursor)
-        assert Participant.from_id(alice.id).claimed_time is None
-
-    def test_archive_records_an_event(self):
-        alice = self.make_participant('alice')
-        with self.db.get_cursor() as cursor:
-            alice.archive(cursor)
-        payload = self.db.one("SELECT * FROM events WHERE payload->>'action' = 'archive'").payload
-        assert payload['values']['old_username'] == 'alice'
+            pytest.raises(alice.AccountNotEmpty, alice.archive, cursor)
 
 
     # suggested_payment

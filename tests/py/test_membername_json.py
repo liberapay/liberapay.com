@@ -2,15 +2,14 @@ from __future__ import unicode_literals
 
 import pytest
 from aspen import json
-from aspen.utils import utcnow
 from liberapay.testing import Harness
 
 class TestMembernameJson(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-        self.make_participant("team", claimed_time=utcnow(), number='plural')
-        self.make_participant("alice", claimed_time=utcnow())
+        self.make_participant("team", number='plural')
+        self.make_participant("alice")
 
     def test_post_team_is_not_team_returns_404(self):
         response = self.client.PxST('/alice/members/team.json', auth_as='alice')
@@ -21,7 +20,7 @@ class TestMembernameJson(Harness):
         assert response.code == 404
 
     def test_post_user_is_not_member_or_team_returns_403(self):
-        self.make_participant("bob", claimed_time=utcnow(), number='plural')
+        self.make_participant("bob", number='plural')
         response = self.client.POST('/team/members/alice.json', {'take': '0.01'}, auth_as='team')
         assert response.code == 200
 
@@ -76,7 +75,7 @@ class TestMembernameJson(Harness):
         assert data[0]['username'] == 'team'
 
     def test_post_non_team_member_adds_member_returns_403(self):
-        self.make_participant("bob", claimed_time=utcnow())
+        self.make_participant("bob")
 
         response = self.client.POST('/team/members/alice.json', {'take': '0.01'}, auth_as='team')
         assert response.code == 200
@@ -107,6 +106,6 @@ class TestMembernameJson(Harness):
         assert data['take'] == '0.01'
 
     def test_preclude_adding_stub_participants(self):
-        self.make_participant("stub")
+        self.make_stub(username="stub")
         response = self.client.PxST('/team/members/stub.json', {'take': '0.01'}, auth_as='team')
         assert response.code == 403

@@ -42,18 +42,15 @@ class TestUser(Harness):
     # ANON
 
     def test_unreviewed_user_is_not_ANON(self):
-        self.make_participant('alice', is_suspicious=None)
-        alice = User.from_username('alice')
+        alice = User(self.make_participant('alice', is_suspicious=None))
         assert alice.ANON is False
 
     def test_whitelisted_user_is_not_ANON(self):
-        self.make_participant('alice', is_suspicious=False)
-        alice = User.from_username('alice')
+        alice = User(self.make_participant('alice', is_suspicious=False))
         assert alice.ANON is False
 
     def test_blacklisted_user_is_not_ANON(self):
-        self.make_participant('alice', is_suspicious=True)
-        alice = User.from_username('alice')
+        alice = User(self.make_participant('alice', is_suspicious=True))
         assert alice.ANON is False
 
 
@@ -64,8 +61,7 @@ class TestUser(Harness):
         assert user.ANON
 
     def test_user_from_expired_session_is_anonymous(self):
-        self.make_participant('alice')
-        user = User.from_username('alice')
+        user = User(self.make_participant('alice'))
         user.sign_in(SimpleCookie())
         token = user.participant.session_token
         user.participant.set_session_expires(utcnow())
@@ -73,8 +69,7 @@ class TestUser(Harness):
         assert user.ANON
 
     def test_user_from_None_session_token_is_anonymous(self):
-        self.make_participant('alice')
-        self.make_participant('bob')
+        self.make_stub()
         user = User.from_session_token(None)
         assert user.ANON
 
@@ -91,16 +86,14 @@ class TestUser(Harness):
         liberapay.canonical_scheme = 'https'
         try:
             cookies = SimpleCookie()
-            self.make_participant('alice')
-            user = User.from_username('alice')
+            user = User(self.make_participant('alice'))
             user.sign_in(cookies)
             assert '; secure' in cookies[SESSION].output()
         finally:
             liberapay.canonical_scheme = canonical_scheme
 
     def test_session_is_regularly_refreshed(self):
-        self.make_participant('alice')
-        user = User.from_username('alice')
+        user = User(self.make_participant('alice'))
         user.sign_in(SimpleCookie())
         cookies = SimpleCookie()
         user.keep_signed_in(cookies)
@@ -138,8 +131,7 @@ class TestUser(Harness):
     # sign_out
 
     def test_signed_out_user_is_anonymous(self):
-        self.make_participant('alice')
-        alice = User.from_username('alice')
+        alice = User(self.make_participant('alice'))
         assert not alice.ANON
         alice.sign_out(SimpleCookie())
         assert alice.ANON

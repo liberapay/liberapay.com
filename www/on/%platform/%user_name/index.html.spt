@@ -11,7 +11,7 @@ from liberapay.models.account_elsewhere import *
 platform, account = get_account_elsewhere(website, state)
 participant = account.participant
 
-if participant.is_claimed or participant.is_closed:
+if participant.status != 'stub':
     request.redirect('/%s/' % participant.username)
 
 title = friendly_name = account.friendly_name
@@ -184,7 +184,7 @@ if is_team:
     <tbody>
 
     {% for member in members %}
-        {% set on_liberapay = member.participant.is_claimed %}
+        {% set on_liberapay = member.participant.status != 'stub' %}
         {% set declines_gifts = not member.participant.accepts_tips %}
         <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-liberapay' if not on_liberapay }}">
             {% if on_liberapay %}

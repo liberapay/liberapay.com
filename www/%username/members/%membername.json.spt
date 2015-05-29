@@ -58,8 +58,8 @@ if request.method == 'POST':
                         member.username
                     )
             msg = _("{0} has been removed from the team.", member.username)
-        elif not member.is_claimed:
-            # Attempted to add a stub participant
+        elif member.status != 'active':
+            # Attempted to add an inactive participant
             raise Response(403)
 
         if take == A_PENNY:

@@ -43,7 +43,7 @@ def canonicalize(path, base, canonical, given, arguments=None):
         raise Response(302, headers={"Location": newpath})
 
 
-def get_participant(state, restrict=True, resolve_unclaimed=True):
+def get_participant(state, restrict=True, redirect_stub=True):
     """Given a Request, raise Response or return Participant.
 
     If restrict is True then we'll restrict access to owners and admins.
@@ -67,22 +67,21 @@ def get_participant(state, restrict=True, resolve_unclaimed=True):
 
     canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
 
-    if participant.is_closed:
-        if user.ADMIN:
-            return participant
-        raise Response(410)
-
-    if participant.claimed_time is None and resolve_unclaimed:
-        to = participant.resolve_unclaimed()
-        if to:
-            # This is a stub account (someone on another platform who hasn't
-            # actually registered with Liberapay yet)
-            request.redirect(to)
-        else:
-            # This is an archived account (result of take_over)
+    status = participant.status
+    if status != 'active':
+        if status == 'closed':
             if user.ADMIN:
                 return participant
-            raise Response(404)
+            raise Response(410)
+        elif status == 'archived':
+            if user.ADMIN and 'noredir' in request.qs:
+                return participant
+            request.redirect('/'+participant.absorbed_by+'/')
+        elif status == 'stub':
+            if redirect_stub:
+                to = participant.resolve_stub()
+                assert to
+                request.redirect(to)
 
     if restrict:
         if participant != user.participant:

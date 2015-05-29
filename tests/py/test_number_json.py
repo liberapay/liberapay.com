@@ -8,7 +8,7 @@ from liberapay.testing import Harness
 class Tests(Harness):
 
     def change_number(self, number, auth_as='alice', expecting_error=False):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
 
         method = self.client.POST if not expecting_error else self.client.PxST
         response = method( "/alice/number.json"

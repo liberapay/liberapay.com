@@ -20,7 +20,7 @@ else:
     # ======================
 
     tipper = user.participant
-    tippee = get_participant(state, restrict=False, resolve_unclaimed=False)
+    tippee = get_participant(state, restrict=False, redirect_stub=False)
 
 
     # Get and maybe set amount.

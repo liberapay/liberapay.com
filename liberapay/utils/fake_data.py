@@ -62,7 +62,8 @@ def fake_participant(db, number="singular", is_admin=False):
                    , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
                    , balanced_customer_href=faker.uri()
                    , is_suspicious=False
-                   , claimed_time=faker.date_time_this_year()
+                   , status='active'
+                   , join_time=faker.date_time_this_year()
                    , number=number
                     )
     except IntegrityError:

@@ -8,7 +8,7 @@ from liberapay.models.participant import Participant
 class Tests(Harness):
     def setUp(self):
         Harness.setUp(self)
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
 
     def hit_privacy(self, method='GET', expected_code=200, **kw):
         response = self.client.hit(method, "/alice/privacy.json", auth_as='alice', **kw)
@@ -85,7 +85,7 @@ class Tests(Harness):
     # Related to anonymous-receiving
 
     def test_team_cannot_toggle_anonymous_receiving(self):
-        self.make_participant('team', claimed_time='now', number='plural')
+        self.make_participant('team', number='plural')
         response = self.client.PxST(
             '/team/privacy.json',
             auth_as='team',

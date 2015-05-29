@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 import json
 
-from aspen.utils import utcnow
 from liberapay.models.community import Community
 from liberapay.testing import Harness
 
@@ -19,7 +18,7 @@ class TestCommunitiesJson(Harness):
         assert response.code == 400
 
     def test_joining_and_leaving_community(self):
-        self.make_participant("alice", claimed_time=utcnow())
+        self.make_participant("alice")
 
         response = self.client.GET('/for/communities.json', auth_as='alice')
         assert len(json.loads(response.body)['communities']) == 0
@@ -48,7 +47,7 @@ class TestCommunitiesJson(Harness):
         assert not community
 
     def test_get_can_get_communities_for_user(self):
-        self.make_participant("alice", claimed_time=utcnow())
+        self.make_participant("alice")
         response = self.client.GET('/for/communities.json', auth_as='alice')
         assert len(json.loads(response.body)['communities']) == 0
 

@@ -15,8 +15,8 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 \i sql/enforce-utc.sql
 
 
--- https://github.com/gratipay/gratipay.com/pull/1274
 CREATE TYPE participant_number AS ENUM ('singular', 'plural');
+CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed', 'archived');
 
 
 CREATE TABLE participants
@@ -25,7 +25,8 @@ CREATE TABLE participants
 , session_token         text                        UNIQUE DEFAULT NULL
 , session_expires       timestamp with time zone    DEFAULT (now() + INTERVAL '6 hours')
 , ctime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, claimed_time          timestamp with time zone    DEFAULT NULL
+, join_time             timestamp with time zone    DEFAULT NULL
+, status                participant_status          NOT NULL DEFAULT 'stub'
 , is_admin              boolean                     NOT NULL DEFAULT FALSE
 , balance               numeric(35,2)               NOT NULL DEFAULT 0.0
 , anonymous_giving      boolean                     NOT NULL DEFAULT FALSE
@@ -36,7 +37,6 @@ CREATE TABLE participants
 , number                participant_number          NOT NULL DEFAULT 'singular'
 , anonymous_receiving   boolean                     NOT NULL DEFAULT FALSE
 , avatar_url            text
-, is_closed             boolean                     NOT NULL DEFAULT FALSE
 , giving                numeric(35,2)               NOT NULL DEFAULT 0
 , pledging              numeric(35,2)               NOT NULL DEFAULT 0
 , receiving             numeric(35,2)               NOT NULL DEFAULT 0
@@ -47,15 +47,15 @@ CREATE TABLE participants
 , is_searchable         bool                        NOT NULL DEFAULT TRUE
 , notify_on_opt_in      boolean                     NOT NULL DEFAULT TRUE
 , notifications         text[]                      NOT NULL DEFAULT '{}'
+, CONSTRAINT status_balance CHECK (NOT (status <> 'active' AND balance <> 0))
+, CONSTRAINT status_join_time CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
 
--- https://github.com/gratipay/gratipay.com/pull/1610
-CREATE INDEX participants_claimed_time ON participants (claimed_time DESC)
-  WHERE is_suspicious IS NOT TRUE
-    AND claimed_time IS NOT null;
+CREATE INDEX participants_join_time_idx ON participants (join_time)
+    WHERE join_time IS NOT NULL;
 
 CREATE FUNCTION fill_username() RETURNS trigger AS $$
     BEGIN
@@ -339,7 +339,7 @@ CREATE EXTENSION pg_trgm;
 
 CREATE INDEX username_trgm_idx ON participants
     USING gist(lower(username) gist_trgm_ops)
-    WHERE claimed_time IS NOT NULL AND NOT is_closed;
+    WHERE status = 'active';
 
 CREATE INDEX community_trgm_idx ON communities
     USING gist(name gist_trgm_ops);

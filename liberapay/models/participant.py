@@ -1,11 +1,3 @@
-"""*Participant* is the name we give to people and groups that are known to us.
-We've got a `participants` table in the database, and a `Participant` class
-that we define here. We distinguish two kinds of participants:
-
- - "stub" participants who haven't actually joined yet
- - "real" participants who have signed in
-
-"""
 from __future__ import print_function, unicode_literals
 
 from datetime import timedelta
@@ -161,26 +153,6 @@ class Participant(Model, MixinTeam):
         return self.is_suspicious is False
 
 
-    # Claimed-ness
-    # ============
-
-    @property
-    def is_claimed(self):
-        return self.claimed_time is not None
-
-    @property
-    def closed_time(self):
-        return self.db.one("""
-            SELECT ts AT TIME ZONE 'UTC'
-              FROM events
-             WHERE payload->>'id'=%s
-               AND payload->>'action'='set'
-               AND payload->'values'->>'is_closed'='true'
-          ORDER BY ts DESC
-             LIMIT 1
-        """, (str(self.id),))
-
-
     # Number
     # ======
 
@@ -282,12 +254,10 @@ class Participant(Model, MixinTeam):
         return str(uuid.uuid4())
 
 
-    # Claiming
-    # ========
+    # Stubs
+    # =====
 
-    def resolve_unclaimed(self):
-        """Given a username, return an URL path.
-        """
+    def resolve_stub(self):
         rec = self.db.one("""
             SELECT platform, user_name
               FROM elsewhere
@@ -295,24 +265,29 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         return rec and '/on/%s/%s/' % (rec.platform, rec.user_name)
 
-    def set_as_claimed(self):
-        with self.db.get_cursor() as c:
-            add_event(c, 'participant', dict(id=self.id, action='claim'))
-            claimed_time = c.one("""\
 
-                UPDATE participants
-                   SET claimed_time=CURRENT_TIMESTAMP
-                 WHERE id=%s
-                   AND claimed_time IS NULL
-             RETURNING claimed_time
+    # Archiving/Closing
+    # =================
 
-            """, (self.id,))
-            self.set_attributes(claimed_time=claimed_time)
-        self.update_goal(None)
+    class AccountNotEmpty(Exception): pass
 
+    def final_check(self, cursor):
+        """Sanity-check that balance and tips have been dealt with.
+        """
+        if self.balance != 0:
+            raise self.AccountNotEmpty
+        incoming = cursor.one("""
+            SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0
+        """, (self.id,))
+        if incoming > 0:
+            raise self.AccountNotEmpty
 
-    # Closing
-    # =======
+    def archive(self, cursor):
+        """Given a cursor, use it to archive ourself.
+        """
+        self.final_check(cursor)
+        self.clear_personal_information(cursor)
+        self.update_status('archived', cursor)
 
     class UnknownDisbursementStrategy(Exception): pass
 
@@ -334,8 +309,7 @@ class Participant(Model, MixinTeam):
             self.clear_tips_receiving(cursor)
             self.clear_personal_information(cursor)
             self.final_check(cursor)
-            self.update_is_closed(True, cursor)
-
+            self.update_status('closed', cursor)
 
     class BankWithdrawalFailed(Exception): pass
 
@@ -348,7 +322,6 @@ class Participant(Model, MixinTeam):
                            )
         if error:
             raise self.BankWithdrawalFailed(error)
-
 
     class NoOneToGiveFinalGiftTo(Exception): pass
 
@@ -397,7 +370,6 @@ class Participant(Model, MixinTeam):
         assert balance == 0
         self.set_attributes(balance=balance)
 
-
     def clear_tips_giving(self, cursor):
         """Zero out tips from a given user.
         """
@@ -432,7 +404,6 @@ class Participant(Model, MixinTeam):
         for tipper in tippers:
             tipper.set_tip_to(self, '0.00', update_tippee=False, cursor=cursor)
 
-
     def clear_takes(self, cursor):
         """Leave all teams by zeroing all takes.
         """
@@ -444,7 +415,6 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         for t in teams:
             t.set_take_for(self, Decimal(0), self, cursor)
-
 
     def clear_personal_information(self, cursor):
         """Clear personal information such as statements and goal.
@@ -468,10 +438,8 @@ class Participant(Model, MixinTeam):
                SET goal=NULL
                  , anonymous_giving=False
                  , anonymous_receiving=False
-                 , number='singular'
                  , avatar_url=NULL
                  , email_address=NULL
-                 , claimed_time=NULL
                  , session_token=NULL
                  , session_expires=now()
                  , giving=0
@@ -483,6 +451,18 @@ class Participant(Model, MixinTeam):
 
         """, dict(participant_id=self.id))
         self.set_attributes(**r._asdict())
+
+    @property
+    def closed_time(self):
+        return self.db.one("""
+            SELECT ts AT TIME ZONE 'UTC'
+              FROM events
+             WHERE payload->>'id'=%s
+               AND payload->>'action'='set'
+               AND payload->'values'->>'status'='closed'
+          ORDER BY ts DESC
+             LIMIT 1
+        """, (str(self.id),))
 
 
     # Emails
@@ -890,8 +870,8 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         self.set_attributes(avatar_url=avatar_url)
 
-    def update_goal(self, goal):
-        with self.db.get_cursor() as c:
+    def update_goal(self, goal, cursor=None):
+        with self.db.get_cursor(cursor) as c:
             tmp = goal if goal is None else unicode(goal)
             add_event(c, 'participant', dict(id=self.id, action='set', values=dict(goal=tmp)))
             c.run("UPDATE participants SET goal=%s WHERE id=%s", (goal, self.id))
@@ -900,12 +880,24 @@ class Participant(Model, MixinTeam):
                 self.clear_tips_receiving(c)
                 self.update_receiving(c)
 
-    def update_is_closed(self, is_closed, cursor=None):
+    def update_status(self, status, cursor=None):
         with self.db.get_cursor(cursor) as c:
-            c.run("UPDATE participants SET is_closed=%(is_closed)s WHERE id=%(id)s",
-                  dict(id=self.id, is_closed=is_closed))
-            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(is_closed=is_closed)))
-            self.set_attributes(is_closed=is_closed)
+            r = c.one("""
+                UPDATE participants
+                   SET status = %(status)s
+                     , join_time = COALESCE(join_time, CURRENT_TIMESTAMP)
+                 WHERE id=%(id)s
+                   AND status <> %(status)s
+             RETURNING status, join_time
+            """, dict(id=self.id, status=status))
+            if not r:
+                return
+            self.set_attributes(**r._asdict())
+            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(status=status)))
+            if status == 'closed':
+                self.update_goal(-1, c)
+            elif status == 'active':
+                self.update_goal(None, c)
 
     def update_giving_and_tippees(self):
         with self.db.get_cursor() as cursor:
@@ -931,7 +923,7 @@ class Participant(Model, MixinTeam):
                  WHERE t.tipper = %s
                    AND t.amount > 0
                    AND p2.is_suspicious IS NOT true
-              ORDER BY p2.claimed_time IS NULL, t.ctime ASC
+              ORDER BY p2.join_time IS NULL, t.ctime ASC
             """, (self.id,))
             fake_balance = self.balance + self.receiving
             updated = []
@@ -953,7 +945,7 @@ class Participant(Model, MixinTeam):
         # Update giving and pledging on participant
         giving, pledging = (cursor or self.db).one("""
             WITH our_tips AS (
-                     SELECT amount, p2.claimed_time
+                     SELECT amount, p2.status
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
@@ -965,12 +957,12 @@ class Participant(Model, MixinTeam):
                SET giving = COALESCE((
                        SELECT sum(amount)
                          FROM our_tips
-                        WHERE claimed_time IS NOT NULL
+                        WHERE status = 'active'
                    ), 0)
                  , pledging = COALESCE((
                        SELECT sum(amount)
                          FROM our_tips
-                        WHERE claimed_time IS NULL
+                        WHERE status = 'stub'
                    ), 0)
              WHERE p.id = %(id)s
          RETURNING giving, pledging
@@ -1022,7 +1014,7 @@ class Participant(Model, MixinTeam):
         funnel).
 
         """
-        assert self.is_claimed  # sanity check
+        assert self.status == 'active'  # sanity check
 
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
@@ -1159,14 +1151,14 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , t.mtime
-                     , p.claimed_time
+                     , p.join_time
                      , p.username
                      , p.number
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
                    AND p.is_suspicious IS NOT true
-                   AND p.claimed_time IS NOT NULL
+                   AND p.status = 'active'
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo
@@ -1183,7 +1175,7 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , t.mtime
-                     , p.claimed_time
+                     , p.join_time
                      , p.username
                      , e.platform
                      , e.user_name
@@ -1192,7 +1184,7 @@ class Participant(Model, MixinTeam):
                   JOIN elsewhere e ON e.participant = t.tippee
                  WHERE tipper = %s
                    AND p.is_suspicious IS NOT true
-                   AND p.claimed_time IS NULL
+                   AND p.status = 'stub'
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo
@@ -1233,7 +1225,7 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , p.username
-                     , p.claimed_time
+                     , p.join_time
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
@@ -1247,11 +1239,9 @@ class Participant(Model, MixinTeam):
 
 
     def get_age_in_seconds(self):
-        out = -1
-        if self.claimed_time is not None:
-            now = utcnow()
-            out = (now - self.claimed_time).total_seconds()
-        return out
+        if self.join_time is not None:
+            return (utcnow() - self.join_time).total_seconds()
+        return -1
 
 
     def get_account_elsewhere(self, platform):
@@ -1314,51 +1304,6 @@ class Participant(Model, MixinTeam):
         else:
             customer = balanced.Customer.fetch(self.balanced_customer_href)
         return customer
-
-
-    class StillReceivingTips(Exception): pass
-    class BalanceIsNotZero(Exception): pass
-
-    def final_check(self, cursor):
-        """Sanity-check that balance and tips have been dealt with.
-        """
-        INCOMING = "SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0"
-        if cursor.one(INCOMING, (self.id,)) > 0:
-            raise self.StillReceivingTips
-        if self.balance != 0:
-            raise self.BalanceIsNotZero
-
-    def archive(self, cursor):
-        """Given a cursor, use it to archive ourself.
-
-        Archiving means changing to a random username so the username they were
-        using is released. We also sign them out.
-
-        """
-
-        self.final_check(cursor)
-
-        archived_as = cursor.one("""
-
-            UPDATE participants
-               SET username='~'||id::text
-                 , claimed_time=NULL
-                 , session_token=NULL
-                 , session_expires=now()
-                 , giving = 0
-                 , pledging = 0
-                 , receiving = 0
-                 , taking = 0
-             WHERE id=%s
-         RETURNING username
-
-        """, (self.id,), default=Exception)
-
-        add_event(cursor, 'participant', dict( id=self.id
-                                             , action='archive'
-                                             , values=dict(old_username=self.username)
-                                              ))
-        return archived_as
 
 
     def take_over(self, account, have_confirmation=False):
@@ -1556,7 +1501,7 @@ class Participant(Model, MixinTeam):
                 return
 
             # Save old tips so we can notify patrons that they've been claimed
-            old_tips = None if other.is_claimed else other.get_tips_receiving()
+            old_tips = other.get_tips_receiving() if other.status == 'stub' else None
 
             # Make sure we have user confirmation if needed.
             # ==============================================
@@ -1576,37 +1521,30 @@ class Participant(Model, MixinTeam):
             #       participant
 
             # other_is_a_real_participant
-            other_is_a_real_participant = other.is_claimed
+            other_is_a_real_participant = other.status != 'stub'
 
             # this_is_others_last_login_account
             nelsewhere = len(other.get_elsewhere_logins(cursor))
             this_is_others_last_login_account = (nelsewhere <= 1)
 
             # we_already_have_that_kind_of_account
-            nparticipants = cursor.one( "SELECT count(*) FROM elsewhere "
-                                        "WHERE participant=%s AND platform=%s"
-                                      , (self.id, platform)
-                                       )
-            assert nparticipants in (0, 1)  # sanity check
-            we_already_have_that_kind_of_account = nparticipants == 1
+            we_already_have_that_kind_of_account = cursor.one("""
+                SELECT true
+                  FROM elsewhere
+                 WHERE participant=%s AND platform=%s
+            """, (self.id, platform), default=False)
 
             if elsewhere.is_team and we_already_have_that_kind_of_account:
                 if len(self.get_accounts_elsewhere()) == 1:
                     raise TeamCantBeOnlyAuth
 
-            need_confirmation = NeedConfirmation( other_is_a_real_participant
-                                                , this_is_others_last_login_account
-                                                , we_already_have_that_kind_of_account
-                                                 )
+            need_confirmation = NeedConfirmation(
+                other_is_a_real_participant,
+                this_is_others_last_login_account,
+                we_already_have_that_kind_of_account,
+            )
             if need_confirmation and not have_confirmation:
                 raise need_confirmation
-
-
-            # We have user confirmation. Proceed.
-            # ===================================
-            # There is a race condition here. The last person to call this will
-            # win. XXX: I'm not sure what will happen to the DB and UI for the
-            # loser.
 
 
             # Move any old account out of the way.
@@ -1639,9 +1577,7 @@ class Participant(Model, MixinTeam):
 
                 other.clear_takes(cursor)
 
-                # Take over tips.
-                # ===============
-
+                # Take over tips
                 x, y = self.id, other.id
                 cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
                 cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
@@ -1649,37 +1585,23 @@ class Participant(Model, MixinTeam):
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other.id,))
                 cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other.id,))
 
-                # Take over balance.
-                # ==================
-
+                # Take over balance
                 other_balance = other.balance
                 args = dict(live=x, dead=y, balance=other_balance)
                 archive_balance = cursor.one(TRANSFER_BALANCE_1, args)
                 other.set_attributes(balance=archive_balance)
                 new_balance = cursor.one(TRANSFER_BALANCE_2, args)
 
-                # Take over email addresses.
-                # ==========================
-
+                # Take over email addresses
                 cursor.run(MERGE_EMAIL_ADDRESSES, dict(live=x, dead=y))
 
-                # Disconnect any remaining elsewhere account.
-                # ===========================================
-
+                # Disconnect any remaining elsewhere account
                 cursor.run("DELETE FROM elsewhere WHERE participant=%s", (y,))
 
-                # Archive the old participant.
-                # ============================
-                # We always give them a new, random username. We sign out
-                # the old participant.
-
+                # Archive the old participant
                 other.archive(cursor)
 
-
-                # Record the absorption.
-                # ======================
-                # This is for preservation of history.
-
+                # Record the absorption
                 cursor.run("""
                     INSERT INTO absorptions
                                 (absorbed_was, absorbed_by, archived_as)
@@ -1697,6 +1619,15 @@ class Participant(Model, MixinTeam):
         # Note: the order matters here, receiving needs to be updated before giving
         self.update_receiving()
         self.update_giving()
+
+    @property
+    def absorbed_by(self):
+        return self.db.one("""
+            SELECT p.username
+              FROM absorptions a
+              JOIN participants p ON p.id = a.absorbed_by
+             WHERE archived_as = %s
+        """, (self.id,), default=Exception)
 
     def delete_elsewhere(self, platform, user_id):
         """Deletes account elsewhere unless the user would not be able

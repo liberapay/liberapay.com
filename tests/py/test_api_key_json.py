@@ -26,20 +26,20 @@ class Tests(Harness):
 
 
     def test_participant_starts_out_with_no_api_key(self):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         assert alice.api_key is None
 
     def test_participant_can_create_a_new_api_key(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         assert self.hit_api_key_json() == 'deadbeef0'
 
     def test_participant_attribute_is_updated(self):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         alice.recreate_api_key()
         assert alice.api_key == 'deadbeef0'
 
     def test_participant_can_get_their_api_key(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         self.hit_api_key_json()
         self.hit_api_key_json()
         self.hit_api_key_json()
@@ -49,7 +49,7 @@ class Tests(Harness):
         assert self.hit_api_key_json() == 'deadbeef0'
 
     def test_participant_can_recreate_their_api_key(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         self.hit_api_key_json('POST')
         self.hit_api_key_json('POST')
         self.hit_api_key_json()

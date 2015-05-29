@@ -2,7 +2,6 @@ from __future__ import print_function, unicode_literals
 
 import json
 
-from aspen.utils import utcnow
 from liberapay.testing import Harness
 
 
@@ -13,10 +12,9 @@ class TestTipJson(Harness):
 
         # First, create some test data
         # We need accounts
-        now = utcnow()
-        self.make_participant("test_tippee1", claimed_time=now)
-        self.make_participant("test_tippee2", claimed_time=now)
-        self.make_participant("test_tipper", claimed_time=now, last_bill_result='')
+        self.make_participant("test_tippee1")
+        self.make_participant("test_tippee2")
+        self.make_participant("test_tipper", last_bill_result='')
 
         # Then, add a $1.50 and $3.00 tip
         response1 = self.client.POST( "/test_tippee1/tip.json"
@@ -38,9 +36,8 @@ class TestTipJson(Harness):
         assert second_data['total_giving'] == "4.00"
 
     def test_set_tip_out_of_range(self):
-        now = utcnow()
-        self.make_participant("alice", claimed_time=now)
-        self.make_participant("bob", claimed_time=now)
+        self.make_participant("alice")
+        self.make_participant("bob")
 
         response = self.client.PxST( "/alice/tip.json"
                                    , {'amount': "110.00"}
@@ -57,9 +54,8 @@ class TestTipJson(Harness):
         assert response.code == 400
 
     def test_set_tip_to_patron(self):
-        now = utcnow()
-        self.make_participant("alice", claimed_time=now, goal='-1')
-        self.make_participant("bob", claimed_time=now)
+        self.make_participant("alice", goal='-1')
+        self.make_participant("bob")
 
         response = self.client.PxST( "/alice/tip.json"
                                    , {'amount': "10.00"}
@@ -69,9 +65,8 @@ class TestTipJson(Harness):
         assert response.code == 400
 
     def test_tip_to_unclaimed(self):
-        now = utcnow()
         alice = self.make_elsewhere('twitter', 1, 'alice')
-        self.make_participant("bob", claimed_time=now)
+        self.make_participant("bob")
         response = self.client.POST( "/%s/tip.json" % alice.participant.username
                                    , {'amount': "10.00"}
                                    , auth_as='bob'

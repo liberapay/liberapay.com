@@ -13,7 +13,7 @@ from liberapay.utils.history import get_end_of_year_balance, iter_payday_events
 
 
 def make_history(harness):
-    alice = harness.make_participant('alice', claimed_time=datetime(2001, 1, 1, 0, 0, 0))
+    alice = harness.make_participant('alice', join_time=datetime(2001, 1, 1, 0, 0, 0))
     harness.alice = alice
     harness.make_exchange('balanced-cc', 50, 0, alice)
     harness.make_exchange('balanced-cc', 12, 0, alice, status='failed')
@@ -39,8 +39,8 @@ class TestHistory(Harness):
 
     def test_iter_payday_events(self):
         Payday.start().run()
-        team = self.make_participant('team', number='plural', claimed_time='now')
-        alice = self.make_participant('alice', claimed_time='now')
+        team = self.make_participant('team', number='plural')
+        alice = self.make_participant('alice')
         self.make_exchange('balanced-cc', 10000, 0, team)
         self.make_exchange('balanced-cc', 10000, 0, alice)
         self.make_exchange('balanced-cc', -5000, 0, alice)
@@ -48,8 +48,8 @@ class TestHistory(Harness):
             UPDATE transfers
                SET timestamp = "timestamp" - interval '1 month'
         """)
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl', claimed_time='now')
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
         team.add_member(bob)
         team.set_take_for(bob, Decimal('1.00'), team)
         alice.set_tip_to(bob, Decimal('5.00'))
@@ -93,7 +93,7 @@ class TestHistory(Harness):
         assert len(events) == 0
 
     def test_iter_payday_events_with_failed_exchanges(self):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.make_exchange('balanced-cc', 50, 0, alice)
         self.make_exchange('balanced-cc', 12, 0, alice, status='failed')
         self.make_exchange('balanced-ba', -40, 0, alice, status='failed')

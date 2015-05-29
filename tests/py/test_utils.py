@@ -12,7 +12,7 @@ from liberapay.utils import i18n, markdown
 class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
-        expected = self.make_participant('alice', claimed_time='now')
+        expected = self.make_participant('alice')
         state = self.client.GET( '/alice/'
                                , return_after='dispatch_request_to_filesystem'
                                , want='state'
@@ -21,7 +21,7 @@ class Tests(Harness):
         assert actual == expected
 
     def test_get_participant_canonicalizes(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         state = self.client.GET( '/Alice/'
                                , return_after='dispatch_request_to_filesystem'
                                , want='state'

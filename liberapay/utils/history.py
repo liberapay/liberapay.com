@@ -8,7 +8,7 @@ from psycopg2 import IntegrityError
 def get_end_of_year_balance(db, participant, year, current_year):
     if year == current_year:
         return participant.balance
-    if year < participant.claimed_time.year:
+    if year < participant.join_time.year:
         return Decimal('0.00')
 
     balance = db.one("""

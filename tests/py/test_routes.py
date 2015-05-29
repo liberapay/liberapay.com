@@ -94,19 +94,19 @@ class TestRoutes(BalancedHarness):
         assert expected in actual
 
     def test_bank_account_auth(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         expected = '<em id="status">not connected</em>'
         actual = self.client.GET('/alice/routes/bank-account.html', auth_as='alice').body
         assert expected in actual
 
     def test_credit_card(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         expected = "add or change your credit card"
         actual = self.client.GET('/alice/routes/credit-card.html').body
         assert expected in actual
 
     def test_credit_card_page_shows_card_missing(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         expected = 'Your credit card is <em id="status">missing'
         actual = self.client.GET('/alice/routes/credit-card.html', auth_as='alice').body.decode('utf8')
         assert expected in actual

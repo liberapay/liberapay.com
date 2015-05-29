@@ -9,7 +9,7 @@ from aspen.utils import typecheck
 class MemberLimitReached(Exception): pass
 
 
-class StubParticipantAdded(Exception): pass
+class InactiveParticipantAdded(Exception): pass
 
 
 class MixinTeam(object):
@@ -33,8 +33,8 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         if len(self.get_current_takes()) == 149:
             raise MemberLimitReached
-        if not member.is_claimed:
-            raise StubParticipantAdded
+        if member.status != 'active':
+            raise InactiveParticipantAdded
         self.__set_take_for(member, Decimal('0.01'), self)
 
     def remove_member(self, member):

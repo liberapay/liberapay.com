@@ -15,24 +15,24 @@ class Tests(Harness):
 
 
     def test_team_has_members(self):
-        team = self.make_participant('A-Team', number='plural', claimed_time='now')
-        team.add_member(self.make_participant('alice', claimed_time='now'))
-        team.add_member(self.make_participant('bob', claimed_time='now'))
-        team.add_member(self.make_participant('carl', claimed_time='now'))
+        team = self.make_participant('A-Team', number='plural')
+        team.add_member(self.make_participant('alice'))
+        team.add_member(self.make_participant('bob'))
+        team.add_member(self.make_participant('carl'))
 
         actual = [x['username'] for x in self.hit_members_json()]
         assert actual == ['carl', 'bob', 'alice', 'A-Team']
 
     def test_team_admin_can_get_bare_bones_list(self):
-        self.make_participant('A-Team', number='plural', claimed_time='now')
+        self.make_participant('A-Team', number='plural')
         actual = [x['username'] for x in self.hit_members_json(auth_as='A-Team')]
         assert actual == ['A-Team']
 
     def test_anon_cant_get_bare_bones_list(self):
-        self.make_participant('A-Team', number='plural', claimed_time='now')
+        self.make_participant('A-Team', number='plural')
         assert pytest.raises(Response, self.hit_members_json).value.code == 404
 
     def test_non_admin_cant_get_bare_bones_list(self):
-        self.make_participant('A-Team', number='plural', claimed_time='now')
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('A-Team', number='plural')
+        self.make_participant('alice')
         assert pytest.raises(Response, self.hit_members_json, auth_as='alice').value.code == 404

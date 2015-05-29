@@ -16,10 +16,10 @@ overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
 class TestPages(Harness):
 
     def browse(self, setup=None, **kw):
-        alice = self.make_participant('alice', claimed_time='now', number='plural')
+        alice = self.make_participant('alice', number='plural')
         exchange_id = self.make_exchange('balanced-cc', 19, 0, alice)
         alice.insert_into_communities(True, 'Wonderland', 'wonderland')
-        alan = self.make_participant('alan', claimed_time='now')
+        alan = self.make_participant('alan')
         alice.add_member(alan)
         if setup:
             setup(alice)
@@ -54,31 +54,31 @@ class TestPages(Harness):
 
     def test_active_participant_can_browse(self):
         def setup(alice):
-            bob = self.make_participant('bob', claimed_time='now', last_bill_result='')
+            bob = self.make_participant('bob', last_bill_result='')
             bob.set_tip_to(alice, D('1.00'))
             alice.set_tip_to(bob, D('0.50'))
         self.browse(setup, auth_as='alice')
 
     def test_escaping_on_homepage(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         expected = "<a href='/alice/'>"
         actual = self.client.GET('/', auth_as='alice').body
         assert expected in actual
 
     def test_profile(self):
-        self.make_participant('cheese', claimed_time='now')
+        self.make_participant('cheese')
         expected = "I&#39;m grateful for gifts"
         actual = self.client.GET('/cheese/').body.decode('utf8') # deal with cent sign
         assert expected in actual
 
     def test_username_is_in_button(self):
-        self.make_participant('alice', claimed_time='now')
-        self.make_participant('bob', claimed_time='now')
+        self.make_participant('alice')
+        self.make_participant('bob')
         body = self.client.GET('/alice/', auth_as='bob').body
         assert '<span class="zero">Give to alice</span>' in body
 
     def test_username_is_in_unauth_giving_cta(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         body = self.client.GET('/alice/').body
         assert 'give to alice' in body
 
@@ -111,33 +111,33 @@ class TestPages(Harness):
         assert response.code == 200
 
     def test_settings_page_available_balance(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         self.db.run("UPDATE participants SET balance = 123.00 WHERE username = 'alice'")
         actual = self.client.GET("/alice/settings/", auth_as="alice").body
         expected = "123"
         assert expected in actual
 
     def test_giving_page(self):
-        alice = self.make_participant('alice', claimed_time='now')
-        bob = self.make_participant('bob', claimed_time='now')
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
         alice.set_tip_to(bob, "1.00")
         actual = self.client.GET("/alice/giving/", auth_as="alice").body
         expected = "bob"
         assert expected in actual
 
-    def test_giving_page_shows_unclaimed(self):
-        alice = self.make_participant('alice', claimed_time='now')
+    def test_giving_page_shows_pledges(self):
+        alice = self.make_participant('alice')
         emma = self.make_elsewhere('github', 58946, 'emma').participant
         alice.set_tip_to(emma, "1.00")
         actual = self.client.GET("/alice/giving/", auth_as="alice").body
         expected1 = "emma"
-        expected2 = "Unclaimed"
+        expected2 = "Pledges"
         assert expected1 in actual
         assert expected2 in actual
 
     def test_giving_page_shows_cancelled(self):
-        alice = self.make_participant('alice', claimed_time='now')
-        bob = self.make_participant('bob', claimed_time='now')
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
         alice.set_tip_to(bob, "1.00")
         alice.set_tip_to(bob, "0.00")
         actual = self.client.GET("/alice/giving/", auth_as="alice").body
@@ -145,7 +145,7 @@ class TestPages(Harness):
         assert "Cancelled" in actual
 
     def test_new_participant_can_edit_profile(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         body = self.client.GET("/alice/", auth_as="alice").body
         assert b'Edit' in body
 

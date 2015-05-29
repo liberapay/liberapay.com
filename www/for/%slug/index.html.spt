@@ -47,15 +47,15 @@ new_participants = query_cache.all("""
 
     SELECT username
          , id
-         , claimed_time
+         , join_time
          , avatar_url
          , number
       FROM participants p
       JOIN current_community_members cc ON cc.participant = p.id
-     WHERE p.claimed_time IS NOT null
+     WHERE p.status = 'active'
        AND p.is_suspicious IS NOT true
        AND cc.slug = %s AND cc.is_member
-  ORDER BY p.claimed_time DESC
+  ORDER BY cc.ctime DESC
      LIMIT %s
     OFFSET %s
 
@@ -161,7 +161,7 @@ receivers = query_cache.all("""
                         <span class="avatar"
                             style="background-image: url('{{ avatar_url(participant) }}')">
                         </span>
-                        <span class="age">{{ to_age(participant.claimed_time, add_direction=True) }}</span>
+                        <span class="age">{{ to_age(participant.join_time, add_direction=True) }}</span>
                         <span class="name">{{ participant.username }}</span>
                     </span>
                 </a>

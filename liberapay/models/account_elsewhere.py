@@ -225,15 +225,16 @@ class AccountElsewhere(Model):
     def opt_in(self, desired_username):
         """Given a desired username, try to claim it.
         """
-        if not self.participant.is_claimed:
-            self.participant.set_as_claimed()
-            self.participant.notify_patrons(self)
+        status = self.participant.status
+        if status == 'active':
+            return
+        self.participant.update_status('active')
+        if status == 'stub':
             try:
                 self.participant.change_username(desired_username)
             except ProblemChangingUsername:
                 pass
-        if self.participant.is_closed:
-            self.participant.update_is_closed(False)
+            self.participant.notify_patrons(self)
 
     def save_token(self, token):
         """Saves the given access token in the database.

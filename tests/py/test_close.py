@@ -18,10 +18,10 @@ class TestClosing(Harness):
     # close
 
     def test_close_closes(self):
-        team = self.make_participant('team', claimed_time='now', number='plural', balance=50)
-        alice = self.make_participant('alice', claimed_time='now', balance=D('10.00'))
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl', claimed_time='now')
+        team = self.make_participant('team', number='plural', balance=50)
+        alice = self.make_participant('alice', balance=D('10.00'))
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
 
         alice.set_tip_to(bob, D('3.00'))
         carl.set_tip_to(alice, D('2.00'))
@@ -42,20 +42,20 @@ class TestClosing(Harness):
             alice.close('cheese')
 
     def test_close_page_is_usually_available(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         body = self.client.GET('/alice/settings/close', auth_as='alice').body
         assert 'Personal Information' in body
 
     def test_close_page_is_not_available_during_payday(self):
         Payday.start()
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         body = self.client.GET('/alice/settings/close', auth_as='alice').body
         assert 'Personal Information' not in body
         assert 'Try Again Later' in body
 
     def test_can_post_to_close_page(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=7)
-        bob = self.make_participant('bob', claimed_time='now')
+        alice = self.make_participant('alice', balance=7)
+        bob = self.make_participant('bob')
         alice.set_tip_to(bob, D('10.00'))
 
         data = {'disbursement_strategy': 'downstream'}
@@ -67,14 +67,14 @@ class TestClosing(Harness):
 
     def test_cant_post_to_close_page_during_payday(self):
         Payday.start()
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         body = self.client.POST('/alice/settings/close', auth_as='alice').body
         assert 'Try Again Later' in body
 
     @mock.patch('liberapay.billing.exchanges.ach_credit')
     def test_ach_credit_failure_doesnt_cause_500(self, ach_credit):
         ach_credit.side_effect = 'some error'
-        self.make_participant('alice', claimed_time='now', balance=384)
+        self.make_participant('alice', balance=384)
         data = {'disbursement_strategy': 'bank'}
         r = self.client.POST('/alice/settings/close', auth_as='alice', data=data)
         assert r.code == 200
@@ -105,9 +105,9 @@ class TestClosing(Harness):
     # dbafg - distribute_balance_as_final_gift
 
     def test_dbafg_distributes_balance_as_final_gift(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=D('10.00'))
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl', claimed_time='now')
+        alice = self.make_participant('alice', balance=D('10.00'))
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
         alice.set_tip_to(bob, D('3.00'))
         alice.set_tip_to(carl, D('2.00'))
         with self.db.get_cursor() as cursor:
@@ -117,34 +117,34 @@ class TestClosing(Harness):
         assert Participant.from_username('alice').balance == D('0.00')
 
     def test_dbafg_needs_claimed_tips(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=D('10.00'))
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
+        alice = self.make_participant('alice', balance=D('10.00'))
+        bob = self.make_stub()
+        carl = self.make_stub()
         alice.set_tip_to(bob, D('3.00'))
         alice.set_tip_to(carl, D('2.00'))
         with self.db.get_cursor() as cursor:
             with pytest.raises(alice.NoOneToGiveFinalGiftTo):
                 alice.distribute_balance_as_final_gift(cursor)
-        assert Participant.from_username('bob').balance == D('0.00')
-        assert Participant.from_username('carl').balance == D('0.00')
-        assert Participant.from_username('alice').balance == D('10.00')
+        assert Participant.from_id(bob.id).balance == D('0.00')
+        assert Participant.from_id(carl.id).balance == D('0.00')
+        assert Participant.from_id(alice.id).balance == D('10.00')
 
     def test_dbafg_gives_all_to_claimed(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=D('10.00'))
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl')
+        alice = self.make_participant('alice', balance=D('10.00'))
+        bob = self.make_participant('bob')
+        carl = self.make_stub()
         alice.set_tip_to(bob, D('3.00'))
         alice.set_tip_to(carl, D('2.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
-        assert Participant.from_username('bob').balance == D('10.00')
-        assert Participant.from_username('carl').balance == D('0.00')
-        assert Participant.from_username('alice').balance == D('0.00')
+        assert Participant.from_id(bob.id).balance == D('10.00')
+        assert Participant.from_id(carl.id).balance == D('0.00')
+        assert Participant.from_id(alice.id).balance == D('0.00')
 
     def test_dbafg_skips_zero_tips(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=D('10.00'))
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl', claimed_time='now')
+        alice = self.make_participant('alice', balance=D('10.00'))
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
         alice.set_tip_to(bob, D('0.00'))
         alice.set_tip_to(carl, D('2.00'))
         with self.db.get_cursor() as cursor:
@@ -155,9 +155,9 @@ class TestClosing(Harness):
         assert Participant.from_username('alice').balance == D('0.00')
 
     def test_dbafg_favors_highest_tippee_in_rounding_errors(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=D('10.00'))
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl', claimed_time='now')
+        alice = self.make_participant('alice', balance=D('10.00'))
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
         alice.set_tip_to(bob, D('3.00'))
         alice.set_tip_to(carl, D('6.00'))
         with self.db.get_cursor() as cursor:
@@ -167,9 +167,9 @@ class TestClosing(Harness):
         assert Participant.from_username('alice').balance == D('0.00')
 
     def test_dbafg_with_zero_balance_is_a_noop(self):
-        alice = self.make_participant('alice', claimed_time='now', balance=D('0.00'))
-        bob = self.make_participant('bob', claimed_time='now')
-        carl = self.make_participant('carl', claimed_time='now')
+        alice = self.make_participant('alice', balance=D('0.00'))
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
         alice.set_tip_to(bob, D('3.00'))
         alice.set_tip_to(carl, D('6.00'))
         with self.db.get_cursor() as cursor:
@@ -183,8 +183,8 @@ class TestClosing(Harness):
     # ctg - clear_tips_giving
 
     def test_ctg_clears_tips_giving(self):
-        alice = self.make_participant('alice', claimed_time='now', last_bill_result='')
-        alice.set_tip_to(self.make_participant('bob', claimed_time='now'), D('1.00'))
+        alice = self.make_participant('alice', last_bill_result='')
+        alice.set_tip_to(self.make_participant('bob'), D('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tipper=%s AND amount > 0",
                                     (alice.id,))
@@ -194,8 +194,8 @@ class TestClosing(Harness):
         assert ntips() == 0
 
     def test_ctg_doesnt_duplicate_zero_tips(self):
-        alice = self.make_participant('alice', claimed_time='now')
-        bob = self.make_participant('bob')
+        alice = self.make_participant('alice')
+        bob = self.make_stub()
         alice.set_tip_to(bob, D('1.00'))
         alice.set_tip_to(bob, D('0.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper=%s", (alice.id,))
@@ -213,12 +213,12 @@ class TestClosing(Harness):
         assert ntips() == 0
 
     def test_ctg_clears_multiple_tips_giving(self):
-        alice = self.make_participant('alice', claimed_time='now')
-        alice.set_tip_to(self.make_participant('bob', claimed_time='now'), D('1.00'))
-        alice.set_tip_to(self.make_participant('carl', claimed_time='now'), D('1.00'))
-        alice.set_tip_to(self.make_participant('darcy', claimed_time='now'), D('1.00'))
-        alice.set_tip_to(self.make_participant('evelyn', claimed_time='now'), D('1.00'))
-        alice.set_tip_to(self.make_participant('francis', claimed_time='now'), D('1.00'))
+        alice = self.make_participant('alice')
+        alice.set_tip_to(self.make_participant('bob'), D('1.00'))
+        alice.set_tip_to(self.make_participant('carl'), D('1.00'))
+        alice.set_tip_to(self.make_participant('darcy'), D('1.00'))
+        alice.set_tip_to(self.make_participant('evelyn'), D('1.00'))
+        alice.set_tip_to(self.make_participant('francis'), D('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tipper=%s AND amount > 0",
                                     (alice.id,))
@@ -232,7 +232,7 @@ class TestClosing(Harness):
 
     def test_ctr_clears_tips_receiving(self):
         alice = self.make_participant('alice')
-        self.make_participant('bob', claimed_time='now').set_tip_to(alice, D('1.00'))
+        self.make_participant('bob').set_tip_to(alice, D('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tippee=%s AND amount > 0",
                                     (alice.id,))
@@ -243,7 +243,7 @@ class TestClosing(Harness):
 
     def test_ctr_doesnt_duplicate_zero_tips(self):
         alice = self.make_participant('alice')
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         bob.set_tip_to(alice, D('1.00'))
         bob.set_tip_to(alice, D('0.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (alice.id,))
@@ -261,12 +261,12 @@ class TestClosing(Harness):
         assert ntips() == 0
 
     def test_ctr_clears_multiple_tips_receiving(self):
-        alice = self.make_participant('alice')
-        self.make_participant('bob', claimed_time='now').set_tip_to(alice, D('1.00'))
-        self.make_participant('carl', claimed_time='now').set_tip_to(alice, D('2.00'))
-        self.make_participant('darcy', claimed_time='now').set_tip_to(alice, D('3.00'))
-        self.make_participant('evelyn', claimed_time='now').set_tip_to(alice, D('4.00'))
-        self.make_participant('francis', claimed_time='now').set_tip_to(alice, D('5.00'))
+        alice = self.make_stub()
+        self.make_participant('bob').set_tip_to(alice, D('1.00'))
+        self.make_participant('carl').set_tip_to(alice, D('2.00'))
+        self.make_participant('darcy').set_tip_to(alice, D('3.00'))
+        self.make_participant('evelyn').set_tip_to(alice, D('4.00'))
+        self.make_participant('francis').set_tip_to(alice, D('5.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tippee=%s AND amount > 0",
                                     (alice.id,))
@@ -286,7 +286,6 @@ class TestClosing(Harness):
                                      , anonymous_receiving=True
                                      , avatar_url='img-url'
                                      , email_address='alice@example.com'
-                                     , claimed_time='now'
                                      , session_token='deadbeef'
                                      , session_expires='2000-01-01'
                                      , giving=20
@@ -308,7 +307,6 @@ class TestClosing(Harness):
         assert alice.number == new_alice.number == 'singular'
         assert alice.avatar_url == new_alice.avatar_url == None
         assert alice.email_address == new_alice.email_address == None
-        assert alice.claimed_time == new_alice.claimed_time == None
         assert alice.giving == new_alice.giving == 0
         assert alice.pledging == new_alice.pledging == 0
         assert alice.receiving == new_alice.receiving == 0
@@ -316,12 +314,6 @@ class TestClosing(Harness):
         assert alice.session_token == new_alice.session_token == None
         assert alice.session_expires.year == new_alice.session_expires.year == date.today().year
         assert not alice.get_emails()
-
-        team = self.make_participant('team', number='plural')
-        with self.db.get_cursor() as cursor:
-            team.clear_personal_information(cursor)
-        team2 = Participant.from_username('team')
-        assert team.number == team2.number == 'singular'
 
     def test_cpi_clears_communities(self):
         alice = self.make_participant('alice')
@@ -335,30 +327,3 @@ class TestClosing(Harness):
             alice.clear_personal_information(cursor)
 
         assert Community.from_slug('test').nmembers == 1
-
-
-    # uic = update_is_closed
-
-    def test_uic_updates_is_closed(self):
-        alice = self.make_participant('alice')
-        alice.update_is_closed(True)
-
-        assert alice.is_closed
-        assert Participant.from_username('alice').is_closed
-
-    def test_uic_updates_is_closed_False(self):
-        alice = self.make_participant('alice')
-        alice.update_is_closed(True)
-        alice.update_is_closed(False)
-
-        assert not alice.is_closed
-        assert not Participant.from_username('alice').is_closed
-
-    def test_uic_uses_supplied_cursor(self):
-        alice = self.make_participant('alice')
-
-        with self.db.get_cursor() as cursor:
-            alice.update_is_closed(True, cursor)
-            assert alice.is_closed
-            assert not Participant.from_username('alice').is_closed
-        assert Participant.from_username('alice').is_closed

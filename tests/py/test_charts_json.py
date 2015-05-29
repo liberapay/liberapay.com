@@ -17,12 +17,12 @@ class TestChartsJson(Harness):
     def setUp(self):
         Harness.setUp(self)
 
-        self.alice = self.make_participant('alice', claimed_time='now')
-        self.bob = self.make_participant('bob', claimed_time='now')
-        self.carl = self.make_participant('carl', claimed_time='now')
+        self.alice = self.make_participant('alice')
+        self.bob = self.make_participant('bob')
+        self.carl = self.make_participant('carl')
         self.make_exchange('balanced-cc', 10, 0, self.alice)
         self.make_exchange('balanced-cc', 10, 0, self.bob)
-        self.make_participant('notactive', claimed_time='now')
+        self.make_participant('notactive')
 
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.set_tip_to(self.carl, '2.00')

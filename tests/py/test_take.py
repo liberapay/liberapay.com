@@ -15,7 +15,6 @@ class Tests(Harness):
         team = self.make_participant(username, number='plural', **kw)
         if Participant.from_username('Daddy Warbucks') is None:
             warbucks = self.make_participant( 'Daddy Warbucks'
-                                            , claimed_time='now'
                                             , last_bill_result=''
                                              )
             self.warbucks = warbucks
@@ -43,47 +42,47 @@ class Tests(Harness):
 
     def test_team_member_is_team_member(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         assert alice.member_of(team)
 
     def test_cant_grow_tip_a_lot(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         assert team.set_take_for(alice, D('100.00'), alice) == 80
 
     def test_take_can_double(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         team.set_take_for(alice, D('80.00'), alice)
         assert team.get_take_for(alice) == 80
 
     def test_take_can_double_but_not_a_penny_more(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         actual = team.set_take_for(alice, D('80.01'), alice)
         assert actual == 80
 
     def test_increase_is_based_on_nominal_take_last_week(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '20.00', actual_amount='15.03')
         team._MixinTeam__set_take_for(alice, D('35.00'), team)
         assert team.set_take_for(alice, D('42.00'), alice) == 40
 
     def test_if_last_week_is_less_than_a_dollar_can_increase_to_a_dollar(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '0.01')
         actual = team.set_take_for(alice, D('42.00'), team)
         assert actual == 1
 
     def test_get_members(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         team.set_take_for(alice, D('42.00'), team)
         members = team.get_members(alice)
@@ -94,7 +93,7 @@ class Tests(Harness):
 
     def test_compute_actual_takes_counts_the_team_balance(self):
         team = self.make_team(balance=D('59.46'), giving=D('7.15'))
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '100.00')
         team.set_take_for(alice, D('142.00'), team)
         takes = team.compute_actual_takes().values()
@@ -108,7 +107,7 @@ class Tests(Harness):
 
     def test_compute_actual_takes_gives_correct_final_balance(self):
         team = self.make_team(balance=D('53.72'))
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '100.00')
         team.set_take_for(alice, D('86.00'), team)
         takes = team.compute_actual_takes().values()
@@ -122,7 +121,7 @@ class Tests(Harness):
 
     def test_taking_and_receiving_are_updated_correctly(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         team.set_take_for(alice, D('42.00'), alice)
         assert alice.taking == 42
@@ -136,15 +135,15 @@ class Tests(Harness):
 
     def test_taking_is_zero_for_team(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         team.add_member(alice)
         team = Participant.from_id(team.id)
         assert team.taking == 0
         assert team.receiving == 100
 
     def test_but_team_can_take_from_other_team(self):
-        a_team = self.make_team('A Team', claimed_time='now')
-        b_team = self.make_team('B Team', claimed_time='now')
+        a_team = self.make_team('A Team')
+        b_team = self.make_team('B Team')
         a_team.add_member(b_team)
         a_team.set_take_for(b_team, D('1.00'), b_team)
 
@@ -154,7 +153,7 @@ class Tests(Harness):
 
     def test_changes_to_team_receiving_affect_members_take(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         team.set_take_for(alice, D('42.00'), alice)
 
@@ -165,11 +164,11 @@ class Tests(Harness):
     def test_changes_to_others_take_affects_members_take(self):
         team = self.make_team()
 
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '30.00')
         team.set_take_for(alice, D('42.00'), alice)
 
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         self.take_last_week(team, bob, '50.00')
         team.set_take_for(bob, D('60.00'), bob)
 
@@ -182,11 +181,11 @@ class Tests(Harness):
     def test_changes_to_others_take_can_increase_members_take(self):
         team = self.make_team()
 
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '30.00')
         team.set_take_for(alice, D('42.00'), alice)
 
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         self.take_last_week(team, bob, '60.00')
         team.set_take_for(bob, D('80.00'), bob)
         alice = Participant.from_username('alice')
@@ -200,7 +199,7 @@ class Tests(Harness):
 
     def test_gtlwf_works_during_payday(self):
         team = self.make_team()
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.take_last_week(team, alice, '30.00')
         take_this_week = D('42.00')
         team.set_take_for(alice, take_this_week, alice)
