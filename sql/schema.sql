@@ -24,7 +24,6 @@ CREATE TABLE participants
 , username              text                        NOT NULL
 , session_token         text                        UNIQUE DEFAULT NULL
 , session_expires       timestamp with time zone    DEFAULT (now() + INTERVAL '6 hours')
-, ctime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , join_time             timestamp with time zone    DEFAULT NULL
 , status                participant_status          NOT NULL DEFAULT 'stub'
 , is_admin              boolean                     NOT NULL DEFAULT FALSE

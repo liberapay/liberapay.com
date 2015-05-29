@@ -55,7 +55,6 @@ def fake_participant(db, number="singular", is_admin=False):
         _fake_thing( db
                    , "participants"
                    , username=username
-                   , ctime=faker.date_time_this_year()
                    , is_admin=is_admin
                    , balance=0
                    , anonymous_giving=(random.randrange(5) == 0)
@@ -292,7 +291,7 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         end_date = date + datetime.timedelta(days=7)
         week_tips = filter(lambda x: date < x['ctime'] < end_date, tips)
         week_transfers = filter(lambda x: date < x['timestamp'] < end_date, transfers)
-        week_participants = filter(lambda x: x.ctime.replace(tzinfo=None) < end_date, participants)
+        week_participants = filter(lambda x: x.join_time.replace(tzinfo=None) < end_date, participants)
         for p in week_participants:
             transfers_in = filter(lambda x: x['tippee'] == p.id, week_transfers)
             transfers_out = filter(lambda x: x['tipper'] == p.id, week_transfers)

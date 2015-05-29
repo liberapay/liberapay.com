@@ -156,8 +156,6 @@ class Harness(unittest.TestCase):
         kw.setdefault('status', 'active')
         if not 'join_time' in kw:
             kw['join_time'] = utcnow()
-        if not 'ctime' in kw:
-            kw['ctime'] = kw['join_time']
         if kw.get('balanced_customer_href') == 'new':
             kw['balanced_customer_href'] = self.make_balanced_customer()
         cols, vals = zip(*kw.items())
