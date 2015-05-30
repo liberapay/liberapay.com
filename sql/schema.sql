@@ -9,22 +9,27 @@
 -- numeric(35,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
 
 
+CREATE EXTENSION pg_trgm;
+
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
 COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQL statements executed';
 
 \i sql/enforce-utc.sql
 
+\i sql/enumerate.sql
+
+
+-- participants -- user accounts
 
 CREATE TYPE participant_number AS ENUM ('singular', 'plural');
 CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed', 'archived');
-
 
 CREATE TABLE participants
 ( id                    bigserial                   PRIMARY KEY
 , username              text                        NOT NULL
 , session_token         text                        UNIQUE DEFAULT NULL
-, session_expires       timestamp with time zone    DEFAULT (now() + INTERVAL '6 hours')
-, join_time             timestamp with time zone    DEFAULT NULL
+, session_expires       timestamptz                 DEFAULT (now() + INTERVAL '6 hours')
+, join_time             timestamptz                 DEFAULT NULL
 , status                participant_status          NOT NULL DEFAULT 'stub'
 , is_admin              boolean                     NOT NULL DEFAULT FALSE
 , balance               numeric(35,2)               NOT NULL DEFAULT 0.0
@@ -44,14 +49,19 @@ CREATE TABLE participants
 , email_address         text                        UNIQUE
 , email_lang            text
 , is_searchable         bool                        NOT NULL DEFAULT TRUE
-, notify_on_opt_in      boolean                     NOT NULL DEFAULT TRUE
+, notify_on_opt_in      int                         NOT NULL DEFAULT 1
 , notifications         text[]                      NOT NULL DEFAULT '{}'
+, notify_charge         int                         NOT NULL DEFAULT 3
 , CONSTRAINT status_balance CHECK (NOT (status <> 'active' AND balance <> 0))
 , CONSTRAINT status_join_time CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
+
+CREATE INDEX username_trgm_idx ON participants
+    USING gist(lower(username) gist_trgm_ops)
+    WHERE status = 'active';
 
 CREATE INDEX participants_join_time_idx ON participants (join_time)
     WHERE join_time IS NOT NULL;
@@ -66,6 +76,8 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER fill_username BEFORE INSERT ON participants
     FOR EACH ROW WHEN (NEW.username IS NULL) EXECUTE PROCEDURE fill_username();
 
+
+-- elsewhere -- social network accounts attached to participants
 
 CREATE TABLE elsewhere
 ( id                    serial          PRIMARY KEY
@@ -93,17 +105,19 @@ CREATE UNIQUE INDEX ON elsewhere (lower(user_name), platform);
 
 
 -- tips -- all times a participant elects to tip another
+
 CREATE TABLE tips
-( id                    serial                      PRIMARY KEY
-, ctime                 timestamp with time zone    NOT NULL
-, mtime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, tipper                bigint                      NOT NULL REFERENCES participants
-, tippee                bigint                      NOT NULL REFERENCES participants
-, amount                numeric(35,2)               NOT NULL
-, is_funded             boolean                     NOT NULL DEFAULT false
+( id           serial           PRIMARY KEY
+, ctime        timestamptz      NOT NULL
+, mtime        timestamptz      NOT NULL DEFAULT CURRENT_TIMESTAMP
+, tipper       bigint           NOT NULL REFERENCES participants
+, tippee       bigint           NOT NULL REFERENCES participants
+, amount       numeric(35,2)    NOT NULL
+, is_funded    boolean          NOT NULL DEFAULT false
  );
 
-CREATE INDEX tips_all ON tips USING btree (tipper, tippee, mtime DESC);
+CREATE INDEX tips_tipper_idx ON tips (tipper, mtime DESC);
+CREATE INDEX tips_tippee_idx ON tips (tippee, mtime DESC);
 
 CREATE VIEW current_tips AS
     SELECT DISTINCT ON (tipper, tippee) *
@@ -124,61 +138,55 @@ CREATE TRIGGER update_current_tip INSTEAD OF UPDATE ON current_tips
     FOR EACH ROW EXECUTE PROCEDURE update_tip();
 
 
--- https://github.com/gratipay/gratipay.com/pull/2501
-CREATE TYPE context_type AS ENUM
-    ('tip', 'take', 'final-gift', 'take-over', 'one-off');
-
-
 -- transfers -- balance transfers from one user to another
+
+CREATE TYPE transfer_context AS ENUM
+    ('tip', 'take', 'final-gift', 'take-over');
+
 CREATE TABLE transfers
-( id                    serial                      PRIMARY KEY
-, timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, tipper                bigint                      NOT NULL REFERENCES participants
-, tippee                bigint                      NOT NULL REFERENCES participants
-, amount                numeric(35,2)               NOT NULL
-, context               context_type                NOT NULL
+( id          serial              PRIMARY KEY
+, timestamp   timestamptz         NOT NULL DEFAULT CURRENT_TIMESTAMP
+, tipper      bigint              NOT NULL REFERENCES participants
+, tippee      bigint              NOT NULL REFERENCES participants
+, amount      numeric(35,2)       NOT NULL CHECK (amount > 0)
+, context     transfer_context    NOT NULL
  );
 
--- https://github.com/gratipay/gratipay.com/pull/2723
-ALTER TABLE transfers ADD CONSTRAINT positive CHECK (amount > 0) NOT VALID;
-
--- https://github.com/gratipay/gratipay.com/pull/3040
-CREATE INDEX transfers_timestamp_idx ON transfers (timestamp);
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
 CREATE INDEX transfers_tippee_idx ON transfers (tippee);
 
 
 -- paydays -- payday events, stats about them
+
 CREATE TABLE paydays
-( id                    serial                      PRIMARY KEY
-, ts_start              timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, ts_end                timestamp with time zone    UNIQUE NOT NULL DEFAULT '1970-01-01T00:00:00+00'::timestamptz
-, nparticipants         bigint                      NOT NULL DEFAULT 0
-, ntippers              bigint                      NOT NULL DEFAULT 0
-, ntips                 bigint                      NOT NULL DEFAULT 0
-, ntransfers            bigint                      NOT NULL DEFAULT 0
-, transfer_volume       numeric(35,2)               NOT NULL DEFAULT 0.00
-, ncc_failing           bigint                      NOT NULL DEFAULT 0
-, ncc_missing           bigint                      NOT NULL DEFAULT 0
-, ncharges              bigint                      NOT NULL DEFAULT 0
-, charge_volume         numeric(35,2)               NOT NULL DEFAULT 0.00
-, charge_fees_volume    numeric(35,2)               NOT NULL DEFAULT 0.00
-, nachs                 bigint                      NOT NULL DEFAULT 0
-, ach_volume            numeric(35,2)               NOT NULL DEFAULT 0.00
-, ach_fees_volume       numeric(35,2)               NOT NULL DEFAULT 0.00
-, nach_failing          bigint                      NOT NULL DEFAULT 0
-, npachinko             bigint                      NOT NULL DEFAULT 0
-, pachinko_volume       numeric(35,2)               NOT NULL DEFAULT 0.00
-, nactive               bigint                      NOT NULL DEFAULT 0
-, stage                 integer                     DEFAULT 0
+( id                    serial           PRIMARY KEY
+, ts_start              timestamptz      NOT NULL DEFAULT CURRENT_TIMESTAMP
+, ts_end                timestamptz      UNIQUE NOT NULL DEFAULT '1970-01-01T00:00:00+00'::timestamptz
+, nparticipants         bigint           NOT NULL DEFAULT 0
+, ntippers              bigint           NOT NULL DEFAULT 0
+, ntips                 bigint           NOT NULL DEFAULT 0
+, ntransfers            bigint           NOT NULL DEFAULT 0
+, transfer_volume       numeric(35,2)    NOT NULL DEFAULT 0.00
+, ncc_failing           bigint           NOT NULL DEFAULT 0
+, ncc_missing           bigint           NOT NULL DEFAULT 0
+, ncharges              bigint           NOT NULL DEFAULT 0
+, charge_volume         numeric(35,2)    NOT NULL DEFAULT 0.00
+, charge_fees_volume    numeric(35,2)    NOT NULL DEFAULT 0.00
+, nachs                 bigint           NOT NULL DEFAULT 0
+, ach_volume            numeric(35,2)    NOT NULL DEFAULT 0.00
+, ach_fees_volume       numeric(35,2)    NOT NULL DEFAULT 0.00
+, nach_failing          bigint           NOT NULL DEFAULT 0
+, npachinko             bigint           NOT NULL DEFAULT 0
+, pachinko_volume       numeric(35,2)    NOT NULL DEFAULT 0.00
+, nactive               bigint           NOT NULL DEFAULT 0
+, stage                 integer          DEFAULT 0
  );
 
 
--- https://github.com/gratipay/gratipay.com/pull/3282
+-- exchange routes -- how money moves in and out of Liberapay
 
-CREATE TYPE payment_net AS ENUM (
-    'balanced-ba', 'balanced-cc', 'paypal', 'bitcoin'
-);
+CREATE TYPE payment_net AS ENUM
+    ('balanced-ba', 'balanced-cc', 'paypal', 'bitcoin');
 
 CREATE TABLE exchange_routes
 ( id            serial         PRIMARY KEY
@@ -198,25 +206,27 @@ CREATE VIEW current_exchange_routes AS
 CREATE CAST (current_exchange_routes AS exchange_routes) WITH INOUT;
 
 
--- https://github.com/gratipay/gratipay.com/pull/2579
+-- exchanges -- when a participant moves cash between Liberapay and their bank
+
 CREATE TYPE exchange_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
 
-
--- exchanges -- when a participant moves cash between Liberapay and their bank
 CREATE TABLE exchanges
-( id                    serial                      PRIMARY KEY
-, timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, amount                numeric(35,2)               NOT NULL
-, fee                   numeric(35,2)               NOT NULL
-, participant           bigint                      NOT NULL REFERENCES participants
-, recorder              bigint                      DEFAULT NULL REFERENCES participants
-, note                  text                        DEFAULT NULL
-, status                exchange_status
-, route                 bigint                      REFERENCES exchange_routes
+( id                serial               PRIMARY KEY
+, timestamp         timestamptz          NOT NULL DEFAULT CURRENT_TIMESTAMP
+, amount            numeric(35,2)        NOT NULL
+, fee               numeric(35,2)        NOT NULL
+, participant       bigint               NOT NULL REFERENCES participants
+, recorder          bigint               REFERENCES participants
+, note              text
+, status            exchange_status      NOT NULL
+, route             bigint               REFERENCES exchange_routes
  );
 
+CREATE INDEX exchanges_participant_idx ON exchanges (participant);
 
--- https://github.com/gratipay/gratipay.com/issues/406
+
+-- absorptions -- log of account takeovers
+
 CREATE TABLE absorptions
 ( id           serial         PRIMARY KEY
 , timestamp    timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -224,6 +234,8 @@ CREATE TABLE absorptions
 , absorbed_by  bigint         NOT NULL REFERENCES participants
  );
 
+
+-- communities -- groups of participants
 
 CREATE TABLE community_members
 ( slug          text           NOT NULL
@@ -250,17 +262,21 @@ CREATE TRIGGER upsert_community
     FOR EACH ROW
     EXECUTE PROCEDURE upsert_community();
 
+CREATE INDEX community_trgm_idx ON communities
+    USING gist(name gist_trgm_ops);
 
--- https://github.com/gratipay/gratipay.com/issues/1100
+
+-- takes -- how members of a team share the money it receives
+
 CREATE TABLE takes
-( id                serial                      PRIMARY KEY
-, ctime             timestamp with time zone    NOT NULL
-, mtime             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, member            bigint                      NOT NULL REFERENCES participants
-, team              bigint                      NOT NULL REFERENCES participants
-, amount            numeric(35,2)               NOT NULL DEFAULT 0.0
-, recorder          bigint                      NOT NULL REFERENCES participants
-, CONSTRAINT no_team_recursion CHECK (team != member)
+( id                serial               PRIMARY KEY
+, ctime             timestamptz          NOT NULL
+, mtime             timestamptz          NOT NULL DEFAULT CURRENT_TIMESTAMP
+, member            bigint               NOT NULL REFERENCES participants
+, team              bigint               NOT NULL REFERENCES participants
+, amount            numeric(35,2)        NOT NULL DEFAULT 0.0
+, recorder          bigint               NOT NULL REFERENCES participants
+, CONSTRAINT no_team_recursion CHECK (team <> member)
 , CONSTRAINT not_negative CHECK ((amount >= (0)::numeric))
  );
 
@@ -278,7 +294,8 @@ CREATE VIEW current_takes AS
     ) AS anon WHERE amount > 0;
 
 
--- https://github.com/gratipay/gratipay.com/pull/2006
+-- log of participant events
+
 CREATE TABLE events
 ( id           bigserial     PRIMARY KEY
 , ts           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -291,55 +308,35 @@ CREATE TABLE events
 CREATE INDEX events_participant_idx ON events (participant, type);
 
 
--- https://github.com/gratipay/gratipay.com/pull/2752
-CREATE TABLE emails
-( id                    serial                      PRIMARY KEY
-, address               text                        NOT NULL
-, verified              boolean                     DEFAULT NULL
-                                                      CONSTRAINT verified_cant_be_false
-                                                        -- Only use TRUE and NULL, so that the
-                                                        -- unique constraint below functions
-                                                        -- properly.
-                                                        CHECK (verified IS NOT FALSE)
-, nonce                 text
-, verification_start    timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, verification_end      timestamp with time zone
-, participant           bigint                      NOT NULL REFERENCES participants
+-- email addresses
 
-, UNIQUE (address, verified) -- A verified email address can't be linked to multiple
-                             -- participants. However, an *un*verified address *can*
-                             -- be linked to multiple participants. We implement this
-                             -- by using NULL instead of FALSE for the unverified
-                             -- state, hence the check constraint on verified.
+CREATE TABLE emails
+( id                serial         PRIMARY KEY
+, address           text           NOT NULL
+, verified          boolean        CHECK (verified IS NOT FALSE)
+, nonce             text
+, added_time        timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, verified_time     timestamptz
+, participant       bigint         NOT NULL REFERENCES participants
+, UNIQUE (address, verified)
+    -- A verified email address can't be linked to multiple participants.
+    -- However, an *un*verified address *can* be linked to multiple
+    -- participants. We implement this by using NULL instead of FALSE for the
+    -- unverified state, hence the check constraint on verified.
 , UNIQUE (participant, address)
  );
 
 
--- https://github.com/gratipay/gratipay.com/pull/3010
+-- profile statements
+
 CREATE TABLE statements
-( participant  bigint  NOT NULL REFERENCES participants
-, lang         text    NOT NULL
-, content      text    NOT NULL CHECK (content <> '')
+( participant    bigint      NOT NULL REFERENCES participants
+, lang           text        NOT NULL
+, content        text        NOT NULL CHECK (content <> '')
+, search_vector  tsvector
+, search_conf    regconfig   NOT NULL
 , UNIQUE (participant, lang)
 );
-
-\i sql/enumerate.sql
-
--- Index user and community names
-
-CREATE EXTENSION pg_trgm;
-
-CREATE INDEX username_trgm_idx ON participants
-    USING gist(lower(username) gist_trgm_ops)
-    WHERE status = 'active';
-
-CREATE INDEX community_trgm_idx ON communities
-    USING gist(name gist_trgm_ops);
-
--- Index statements
-
-ALTER TABLE statements ADD COLUMN search_vector tsvector;
-ALTER TABLE statements ADD COLUMN search_conf regconfig NOT NULL;
 
 CREATE INDEX statements_fts_idx ON statements USING gist(search_vector);
 
@@ -349,7 +346,8 @@ CREATE TRIGGER search_vector_update
     tsvector_update_trigger_column(search_vector, search_conf, content);
 
 
--- https://github.com/gratipay/gratipay.com/pull/3136
+-- emails waiting to be sent
+
 CREATE TABLE email_queue
 ( id            serial   PRIMARY KEY
 , participant   bigint   NOT NULL REFERENCES participants
@@ -357,17 +355,12 @@ CREATE TABLE email_queue
 , context       bytea    NOT NULL
 );
 
--- https://github.com/gratipay/gratipay.com/pull/3239
+
+-- cache of participant balances at specific times
+
 CREATE TABLE balances_at
 ( participant  bigint         NOT NULL REFERENCES participants
 , at           timestamptz    NOT NULL
 , balance      numeric(35,2)  NOT NULL
 , UNIQUE (participant, at)
 );
-
--- https://github.com/gratipay/gratipay.com/pull/3301
-ALTER TABLE participants ADD COLUMN notify_charge int DEFAULT 3;
-ALTER TABLE participants
-    ALTER COLUMN notify_on_opt_in DROP DEFAULT,
-    ALTER COLUMN notify_on_opt_in TYPE int USING notify_on_opt_in::int,
-    ALTER COLUMN notify_on_opt_in SET DEFAULT 1;

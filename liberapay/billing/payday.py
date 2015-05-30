@@ -150,7 +150,7 @@ class Payday(object):
             DROP FUNCTION process_take();
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
-            DROP FUNCTION transfer(bigint, bigint, numeric, context_type);
+            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context);
         """)
 
     @staticmethod
@@ -230,13 +230,13 @@ class Payday(object):
         , tipper bigint
         , tippee bigint
         , amount numeric(35,2)
-        , context context_type
+        , context transfer_context
         ) ON COMMIT DROP;
 
 
         -- Prepare a statement that makes and records a transfer
 
-        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, context_type)
+        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context)
         RETURNS void AS $$
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;

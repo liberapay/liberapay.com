@@ -26,7 +26,7 @@ def make_history(harness):
     harness.past_year = int(harness.db.one("""
         SELECT extract(year from timestamp)
           FROM exchanges
-      ORDER BY timestamp ASC
+      ORDER BY id ASC
          LIMIT 1
     """))
     harness.make_exchange('balanced-cc', 35, 0, alice)

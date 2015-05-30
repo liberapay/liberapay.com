@@ -167,14 +167,14 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
               FROM exchanges
              WHERE participant = %(id)s
                AND extract(year from timestamp) = %(year)s
-          ORDER BY timestamp ASC
+          ORDER BY id ASC
         """, params, back_as=back_as)
         out['given'] = lambda: db.all("""
             SELECT timestamp, tippee, amount, context
               FROM transfers
              WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
-          ORDER BY timestamp ASC
+          ORDER BY id ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
             SELECT timestamp, tipper AS team, amount
@@ -182,7 +182,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
-          ORDER BY timestamp ASC
+          ORDER BY id ASC
         """, params, back_as=back_as)
         out['received'] = lambda: db.all("""
             SELECT timestamp, amount, context
@@ -190,7 +190,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context NOT IN ('take', 'take-over')
                AND extract(year from timestamp) = %(year)s
-          ORDER BY timestamp ASC
+          ORDER BY id ASC
         """, params, back_as=back_as)
 
     if key:

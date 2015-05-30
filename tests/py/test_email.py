@@ -95,7 +95,7 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', address)
         self.db.run("""
             UPDATE emails
-               SET verification_start = (now() - INTERVAL '25 hours')
+               SET added_time = (now() - INTERVAL '25 hours')
              WHERE participant = %s
         """, (self.alice.id,))
         nonce = self.alice.get_email(address).nonce

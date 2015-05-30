@@ -482,24 +482,24 @@ class Participant(Model, MixinTeam):
             raise TooManyEmailAddresses(email)
 
         nonce = str(uuid.uuid4())
-        verification_start = utcnow()
+        added_time = utcnow()
         try:
             with self.db.get_cursor() as c:
                 self.add_event(c, 'add_email', email)
                 c.run("""
                     INSERT INTO emails
-                                (address, nonce, verification_start, participant)
+                                (address, nonce, added_time, participant)
                          VALUES (%s, %s, %s, %s)
-                """, (email, nonce, verification_start, self.id))
+                """, (email, nonce, added_time, self.id))
         except IntegrityError:
             nonce = self.db.one("""
                 UPDATE emails
-                   SET verification_start=%s
+                   SET added_time=%s
                  WHERE participant=%s
                    AND address=%s
                    AND verified IS NULL
              RETURNING nonce
-            """, (verification_start, self.id, email))
+            """, (added_time, self.id, email))
             if not nonce:
                 return self.add_email(email)
 
@@ -544,12 +544,12 @@ class Participant(Model, MixinTeam):
             return emails.VERIFICATION_REDUNDANT
         if not constant_time_compare(r.nonce, nonce):
             return emails.VERIFICATION_FAILED
-        if (utcnow() - r.verification_start) > EMAIL_HASH_TIMEOUT:
+        if (utcnow() - r.added_time) > EMAIL_HASH_TIMEOUT:
             return emails.VERIFICATION_EXPIRED
         try:
             self.db.run("""
                 UPDATE emails
-                   SET verified=true, verification_end=now(), nonce=NULL
+                   SET verified=true, verified_time=now(), nonce=NULL
                  WHERE participant=%s
                    AND address=%s
                    AND verified IS NULL
@@ -1471,7 +1471,7 @@ class Participant(Model, MixinTeam):
                      SELECT DISTINCT ON (address) id
                        FROM emails
                       WHERE participant IN (%(dead)s, %(live)s)
-                   ORDER BY address, verification_end, verification_start DESC
+                   ORDER BY address, verified_time, added_time DESC
                  )
             DELETE FROM emails
              WHERE participant IN (%(dead)s, %(live)s)

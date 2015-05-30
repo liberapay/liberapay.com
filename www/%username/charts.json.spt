@@ -50,7 +50,7 @@ transfers = website.db.all("""\
      FROM transfers
     WHERE tippee=%s
       AND context <> 'take-over'
- ORDER BY timestamp DESC
+ ORDER BY id DESC
 
 """, (participant.id,), back_as=dict)
 
