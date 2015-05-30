@@ -39,13 +39,12 @@ class TestIsSuspicious(Harness):
         foo = self.make_participant('foo', is_suspicious=False)
         self.toggle_is_suspicious()
 
-        actual = self.db.one("""\
-                SELECT type, payload
-                FROM events
-                WHERE CAST(payload->>'id' AS INTEGER) = %s
-                  AND (payload->'values'->'is_suspicious')::text != 'null'
-                ORDER BY ts DESC""",
-                (foo.id,))
-        assert actual == ('participant', dict(id=foo.id,
-            recorder=dict(id=self.bar.id), action='set',
-            values=dict(is_suspicious=True)))
+        event = self.db.one("""\
+            SELECT *
+              FROM events
+             WHERE participant = %s
+               AND type = 'is_suspicious'
+          ORDER BY ts DESC
+        """, (foo.id,))
+        assert event.payload == True
+        assert event.recorder == self.bar.id

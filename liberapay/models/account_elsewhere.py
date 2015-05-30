@@ -130,8 +130,8 @@ class AccountElsewhere(Model):
                       RETURNING elsewhere.*::elsewhere_with_participant
                 """.format(cols, placeholders), (id,)+vals)
                 # Propagate elsewhere.is_team to participants.number
-                if i.is_team:
-                    account.participant.update_number('plural')
+            if i.is_team:
+                account.participant.update_number('plural')
         except IntegrityError:
             # The account is already in the DB, update it instead
             account = cls.db.one("""

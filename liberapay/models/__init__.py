@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 
 from postgres import Postgres
-import psycopg2.extras
 
 
 @contextmanager
@@ -206,11 +205,3 @@ def _check_paydays_volumes(cursor):
         where ach_fees_volume != ref
     """)
     assert len(ach_fees_volume) == 0
-
-
-def add_event(c, type, payload):
-    SQL = """
-        INSERT INTO events (type, payload)
-        VALUES (%s, %s)
-    """
-    c.run(SQL, (type, psycopg2.extras.Json(payload)))

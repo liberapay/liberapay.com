@@ -8,11 +8,9 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Events")
 
-SQL = """
-    SELECT * FROM events WHERE type = 'participant' AND payload->>'id' = %s ORDER BY ts DESC
-"""
-
-events = db.all(SQL, (unicode(participant.id),))
+events = db.all("""
+    SELECT * FROM events WHERE participant = %s ORDER BY ts DESC
+""", (participant.id,))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}

@@ -76,9 +76,9 @@ class Tests(Harness):
         self.change_goal("null", "")
         self.change_goal("custom", "400")
         actual = self.db.all("""
-            SELECT (payload->'values'->>'goal')::int AS goal
+            SELECT payload
               FROM events
-             WHERE 'goal' IN (SELECT json_object_keys(payload->'values'))
+             WHERE type = 'set_goal'
           ORDER BY ts DESC
         """)
-        assert actual == [400, None, 300, 200, 100]
+        assert actual == ['400', None, '300', '200', '100']

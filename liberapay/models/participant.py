@@ -13,6 +13,7 @@ from dependency_injection import resolve_dependencies
 from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
+from psycopg2.extras import Json
 
 import liberapay
 from liberapay.exceptions import (
@@ -31,7 +32,6 @@ from liberapay.exceptions import (
     TooManyEmailAddresses,
 )
 
-from liberapay.models import add_event
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
@@ -167,7 +167,7 @@ class Participant(Model, MixinTeam):
     def update_number(self, number):
         assert number in ('singular', 'plural')
         with self.db.get_cursor() as c:
-            add_event(c, 'participant', dict(action='set', id=self.id, values=dict(number=number)))
+            self.add_event(c, 'set_number', number)
             self.remove_all_members(c)
             c.execute("""
                 UPDATE participants
@@ -240,7 +240,7 @@ class Participant(Model, MixinTeam):
     def recreate_api_key(self):
         api_key = self._generate_api_key()
         with self.db.get_cursor() as c:
-            add_event(c, 'participant', dict(action='set', id=self.id, values=dict(api_key=api_key)))
+            self.add_event(c, 'set_api_key', api_key)
             api_key = c.one("""
                 UPDATE participants
                    SET api_key=%s
@@ -451,9 +451,9 @@ class Participant(Model, MixinTeam):
         return self.db.one("""
             SELECT ts AT TIME ZONE 'UTC'
               FROM events
-             WHERE payload->>'id'=%s
-               AND payload->>'action'='set'
-               AND payload->'values'->>'status'='closed'
+             WHERE participant=%s
+               AND type='set_status'
+               AND payload='closed'
           ORDER BY ts DESC
              LIMIT 1
         """, (str(self.id),))
@@ -491,7 +491,7 @@ class Participant(Model, MixinTeam):
         verification_start = utcnow()
         try:
             with self.db.get_cursor() as c:
-                add_event(c, 'participant', dict(id=self.id, action='add', values=dict(email=email)))
+                self.add_event(c, 'add_email', email)
                 c.run("""
                     INSERT INTO emails
                                 (address, nonce, verification_start, participant)
@@ -531,7 +531,7 @@ class Participant(Model, MixinTeam):
             raise EmailNotVerified(email)
         id = self.id
         with self.db.get_cursor() as c:
-            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(primary_email=email)))
+            self.add_event(c, 'set_primary_email', email)
             c.run("""
                 UPDATE participants
                    SET email_address=%(email)s
@@ -587,7 +587,7 @@ class Participant(Model, MixinTeam):
         if address == self.email_address:
             raise CannotRemovePrimaryEmail()
         with self.db.get_cursor() as c:
-            add_event(c, 'participant', dict(id=self.id, action='remove', values=dict(email=address)))
+            self.add_event(c, 'remove_email', address)
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.id, address))
 
@@ -758,6 +758,12 @@ class Participant(Model, MixinTeam):
     # Random Junk
     # ===========
 
+    def add_event(self, c, type, payload, recorder=None):
+        c.run("""
+            INSERT INTO events (participant, type, payload, recorder)
+            VALUES (%s, %s, %s, %s)
+        """, (self.id, type, Json(payload), recorder))
+
     @property
     def profile_url(self):
         scheme = liberapay.canonical_scheme
@@ -846,13 +852,13 @@ class Participant(Model, MixinTeam):
             try:
                 # Will raise IntegrityError if the desired username is taken.
                 with self.db.get_cursor(back_as=tuple) as c:
-                    add_event(c, 'participant', dict(id=self.id, action='set', values=dict(username=suggested)))
                     actual = c.one("""
                         UPDATE participants
                            SET username=%s
                          WHERE id=%s
                      RETURNING username, lower(username)
                     """, (suggested, self.id))
+                    self.add_event(c, 'set_username', suggested)
             except IntegrityError:
                 raise UsernameAlreadyTaken(suggested)
 
@@ -879,8 +885,8 @@ class Participant(Model, MixinTeam):
 
     def update_goal(self, goal, cursor=None):
         with self.db.get_cursor(cursor) as c:
-            tmp = goal if goal is None else unicode(goal)
-            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(goal=tmp)))
+            json = None if goal is None else str(goal)
+            self.add_event(c, 'set_goal', json)
             c.run("UPDATE participants SET goal=%s WHERE id=%s", (goal, self.id))
             self.set_attributes(goal=goal)
             if not self.accepts_tips:
@@ -900,7 +906,7 @@ class Participant(Model, MixinTeam):
             if not r:
                 return
             self.set_attributes(**r._asdict())
-            add_event(c, 'participant', dict(id=self.id, action='set', values=dict(status=status)))
+            self.add_event(c, 'set_status', status)
             if status == 'closed':
                 self.update_goal(-1, c)
             elif status == 'active':
@@ -1653,7 +1659,7 @@ class Participant(Model, MixinTeam):
                 AND user_id=%s
                 RETURNING participant
             """, (self.id, platform, user_id), default=NonexistingElsewhere)
-            add_event(c, 'participant', dict(id=self.id, action='disconnect', values=dict(platform=platform, user_id=user_id)))
+            self.add_event(c, 'delete_elsewhere', dict(platform=platform, user_id=user_id))
         self.update_avatar()
 
     def to_dict(self, details=False, inquirer=None):

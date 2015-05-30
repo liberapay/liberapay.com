@@ -281,14 +281,15 @@ CREATE VIEW current_takes AS
 
 -- https://github.com/gratipay/gratipay.com/pull/2006
 CREATE TABLE events
-( id        serial      PRIMARY KEY
-, ts        timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP
-, type      text        NOT NULL
-, payload   json
+( id           bigserial     PRIMARY KEY
+, ts           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, participant  bigint        NOT NULL REFERENCES participants
+, type         text          NOT NULL
+, payload      json
+, recorder     bigint        REFERENCES participants
  );
 
-CREATE INDEX events_ts ON events(ts ASC);
-CREATE INDEX events_type ON events(type);
+CREATE INDEX events_participant_idx ON events (participant, type);
 
 
 -- https://github.com/gratipay/gratipay.com/pull/2752
