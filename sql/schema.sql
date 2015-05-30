@@ -218,11 +218,10 @@ CREATE TABLE exchanges
 
 -- https://github.com/gratipay/gratipay.com/issues/406
 CREATE TABLE absorptions
-( id                    serial                      PRIMARY KEY
-, timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, absorbed_was          text                        NOT NULL -- Not a foreign key!
-, absorbed_by           bigint                      NOT NULL REFERENCES participants
-, archived_as           bigint                      NOT NULL REFERENCES participants
+( id           serial         PRIMARY KEY
+, timestamp    timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, archived     bigint         UNIQUE NOT NULL REFERENCES participants
+, absorbed_by  bigint         NOT NULL REFERENCES participants
  );
 
 

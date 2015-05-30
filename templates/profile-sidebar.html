@@ -47,12 +47,9 @@
     {% elif participant.status == 'closed' %}
     <p>Closed {{ to_age(participant.closed_time, add_direction=True) }}.</p>
     {% else %}
-    {% set absorption = website.db.one( "select * from absorptions where archived_as=%s"
-                                      , (participant.id,)
-                                       ) %}
-    <p>Formerly {{ absorption.absorbed_was }}.</p>
-    <p>Absorbed by <a href="/{{ absorption.absorbed_by }}/">{{ absorption.absorbed_by }}</a>
-    {{ to_age(absorption.timestamp, add_direction=True) }}.<p>
+    {% set ab = participant.absorbed_by %}
+    <p>Absorbed by <a href="/{{ ab.username }}/">{{ ab.username }}</a>
+    {{ to_age(ab.timestamp, add_direction=True) }}.<p>
     {% endif %}
 </div>
 

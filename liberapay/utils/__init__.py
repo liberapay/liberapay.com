@@ -76,7 +76,7 @@ def get_participant(state, restrict=True, redirect_stub=True):
         elif status == 'archived':
             if user.ADMIN and 'noredir' in request.qs:
                 return participant
-            request.redirect('/'+participant.absorbed_by+'/')
+            request.redirect('/'+participant.absorbed_by.username+'/')
         elif status == 'stub':
             if redirect_stub:
                 to = participant.resolve_stub()

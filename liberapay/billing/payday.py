@@ -502,7 +502,7 @@ class Payday(object):
                 FOR i IN 1..10 LOOP
                     FOR r IN SELECT a.*, (new_balance - old_balance) AS amount
                                FROM absorptions a
-                               JOIN payday_participants p ON a.archived_as = p.id
+                               JOIN payday_participants p ON a.archived = p.id
                               WHERE new_balance <> old_balance
                     LOOP
                         PERFORM 1 FROM payday_participants WHERE id = r.absorbed_by;
@@ -513,7 +513,7 @@ class Payday(object):
                                   FROM participants
                                  WHERE id = r.absorbed_by;
                         END IF;
-                        PERFORM transfer(r.archived_as, r.absorbed_by, r.amount, 'take-over');
+                        PERFORM transfer(r.archived, r.absorbed_by, r.amount, 'take-over');
                         count := count + 1;
                     END LOOP;
                     IF (count = 0) THEN RETURN total; END IF;

@@ -119,9 +119,6 @@ class Participant(Model, MixinTeam):
 
     def update_session(self, new_token, expires):
         """Set ``session_token`` and ``session_expires``.
-
-        :database: One UPDATE, one row
-
         """
         self.db.run("""
             UPDATE participants
@@ -134,9 +131,6 @@ class Participant(Model, MixinTeam):
 
     def set_session_expires(self, expires):
         """Set ``session_expires`` to the given datetime.
-
-        :database: One UPDATE, one row
-
         """
         self.db.run( "UPDATE participants SET session_expires=%s "
                      "WHERE id=%s AND is_suspicious IS NOT true"
@@ -1617,9 +1611,9 @@ class Participant(Model, MixinTeam):
                 # Record the absorption
                 cursor.run("""
                     INSERT INTO absorptions
-                                (absorbed_was, absorbed_by, archived_as)
-                         VALUES (%s, %s, %s)
-                """, (other.username, self.id, other.id))
+                                (archived, absorbed_by)
+                         VALUES (%s, %s)
+                """, (other.id, self.id))
 
         if new_balance is not None:
             self.set_attributes(balance=new_balance)
@@ -1636,10 +1630,10 @@ class Participant(Model, MixinTeam):
     @property
     def absorbed_by(self):
         return self.db.one("""
-            SELECT p.username
+            SELECT p.username, a.timestamp
               FROM absorptions a
               JOIN participants p ON p.id = a.absorbed_by
-             WHERE archived_as = %s
+             WHERE archived = %s
         """, (self.id,), default=Exception)
 
     def delete_elsewhere(self, platform, user_id):

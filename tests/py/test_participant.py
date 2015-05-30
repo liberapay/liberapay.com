@@ -92,7 +92,7 @@ class TestAbsorptions(Harness):
     def test_deadbeef_is_archived(self):
         actual = self.db.one("""
             SELECT count(*) FROM absorptions
-             WHERE absorbed_by=%s AND absorbed_was='deadbeef'
+             WHERE absorbed_by=%s
         """, (self.bob.id,))
         expected = 1
         assert actual == expected
