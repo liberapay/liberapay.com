@@ -1,46 +1,39 @@
 CREATE OR REPLACE FUNCTION upsert_community() RETURNS trigger AS $$
     DECLARE
-        is_member boolean;
-        delta int = CASE WHEN NEW.is_member THEN 1 ELSE -1 END;
+        old_is_member boolean = (CASE WHEN TG_OP = 'INSERT' THEN FALSE ELSE OLD.is_member END);
+        new_is_member boolean = (CASE WHEN TG_OP = 'DELETE' THEN FALSE ELSE NEW.is_member END);
+        delta int = CASE WHEN new_is_member THEN 1 ELSE -1 END;
+        cname text;
+        rec record;
     BEGIN
-        IF (SELECT is_suspicious FROM participants WHERE id = NEW.participant) THEN
-            RETURN NULL;
-        END IF;
-        is_member := (
-            SELECT cur.is_member
-              FROM community_members cur
-             WHERE slug = NEW.slug
-               AND participant = NEW.participant
-          ORDER BY mtime DESC
-             LIMIT 1
-        );
-        IF (is_member IS NULL AND NEW.is_member IS false OR NEW.is_member = is_member) THEN
-            RETURN NULL;
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        IF (new_is_member = old_is_member) THEN
+            RETURN (CASE WHEN TG_OP = 'INSERT' THEN NULL ELSE rec END);
         END IF;
         LOOP
             UPDATE communities
                SET nmembers = nmembers + delta
-             WHERE slug = NEW.slug
+             WHERE slug = rec.slug
                AND nmembers + delta > 0;
             EXIT WHEN FOUND;
-            IF (NEW.is_member) THEN
+            IF (new_is_member) THEN
                 BEGIN
                     INSERT INTO communities
-                         VALUES (NEW.slug, NEW.name, 1, NEW.ctime);
-                EXCEPTION
-                    WHEN unique_violation THEN
-                        IF (CONSTRAINT_NAME = 'communities_slug_pkey') THEN
-                            CONTINUE; -- Try again
-                        ELSE
-                            RAISE;
-                        END IF;
+                         VALUES (rec.slug, rec.name, 1, rec.ctime);
+                EXCEPTION WHEN unique_violation THEN
+                    GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
+                    IF (cname = 'communities_slug_pkey') THEN
+                        CONTINUE; -- Try again
+                    ELSE
+                        RAISE;
+                    END IF;
                 END;
                 EXIT;
             ELSE
-                DELETE FROM communities WHERE slug = NEW.slug AND nmembers = 1;
+                DELETE FROM communities WHERE slug = rec.slug AND nmembers = 1;
                 EXIT WHEN FOUND;
             END IF;
         END LOOP;
-        RETURN NEW;
+        RETURN rec;
     END;
 $$ LANGUAGE plpgsql;

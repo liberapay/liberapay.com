@@ -108,6 +108,8 @@ class Harness(unittest.TestCase):
                 # I tried TRUNCATE but that was way slower for me.
                 self.db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
+                if not tablenames:
+                    raise
                 tablenames.insert(0, tablename)
         self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
 

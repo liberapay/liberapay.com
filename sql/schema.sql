@@ -226,18 +226,15 @@ CREATE TABLE absorptions
  );
 
 
--- https://github.com/gratipay/gratipay.com/pull/2701
 CREATE TABLE community_members
 ( slug          text           NOT NULL
 , participant   bigint         NOT NULL REFERENCES participants
-, ctime         timestamptz    NOT NULL
+, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , name          text           NOT NULL
 , is_member     boolean        NOT NULL
+, UNIQUE (slug, participant)
 );
-
-CREATE INDEX community_members_idx
-    ON community_members (slug, participant, mtime DESC);
 
 CREATE TABLE communities
 ( slug text PRIMARY KEY
@@ -249,14 +246,10 @@ CREATE TABLE communities
 
 \i sql/upsert_community.sql
 
-CREATE TRIGGER upsert_community BEFORE INSERT ON community_members
+CREATE TRIGGER upsert_community
+    BEFORE INSERT OR UPDATE OR DELETE ON community_members
     FOR EACH ROW
     EXECUTE PROCEDURE upsert_community();
-
-CREATE VIEW current_community_members AS
-    SELECT DISTINCT ON (participant, slug) c.*
-      FROM community_members c
-  ORDER BY participant, slug, mtime DESC;
 
 
 -- https://github.com/gratipay/gratipay.com/issues/1100

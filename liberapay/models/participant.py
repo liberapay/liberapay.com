@@ -424,13 +424,7 @@ class Participant(Model, MixinTeam):
         self.clear_takes(cursor)
         r = cursor.one("""
 
-            INSERT INTO community_members (slug, participant, ctime, name, is_member) (
-                SELECT slug, participant, ctime, name, false
-                  FROM community_members
-                 WHERE participant=%(participant_id)s
-                   AND is_member IS true
-            );
-
+            DELETE FROM community_members WHERE participant=%(participant_id)s;
             DELETE FROM emails WHERE participant=%(participant_id)s;
             DELETE FROM statements WHERE participant=%(participant_id)s;
 
@@ -794,20 +788,33 @@ class Participant(Model, MixinTeam):
 
 
     def insert_into_communities(self, is_member, name, slug):
-        participant_id = self.id
+        p_id = self.id
         self.db.run("""
-
-            INSERT INTO community_members
-                        (ctime, name, slug, participant, is_member)
-                 VALUES ( COALESCE (( SELECT ctime
-                                        FROM community_members
-                                       WHERE participant=%(participant_id)s
-                                         AND slug=%(slug)s
-                                       LIMIT 1
-                                      ), CURRENT_TIMESTAMP)
-                        , %(name)s, %(slug)s, %(participant_id)s, %(is_member)s
-                         )
-
+            DO $$
+            DECLARE
+                cname text;
+            BEGIN
+                BEGIN
+                    INSERT INTO community_members
+                                (name, slug, participant, is_member)
+                         VALUES (%(name)s, %(slug)s, %(p_id)s, %(is_member)s);
+                    IF (FOUND) THEN RETURN; END IF;
+                EXCEPTION WHEN unique_violation THEN
+                    GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
+                    IF (cname <> 'community_members_slug_participant_key') THEN
+                        RAISE;
+                    END IF;
+                END;
+                UPDATE community_members
+                   SET is_member = %(is_member)s
+                     , mtime = CURRENT_TIMESTAMP
+                 WHERE slug = %(slug)s
+                   AND participant = %(p_id)s;
+                IF (NOT FOUND) THEN
+                    RAISE 'upsert in community_members failed';
+                END IF;
+            END;
+            $$ LANGUAGE plpgsql;
         """, locals())
 
 
