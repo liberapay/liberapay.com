@@ -2,15 +2,10 @@ from __future__ import print_function, unicode_literals
 
 import json
 
-from aspen.utils import utcnow
 from liberapay.testing import Harness
 
 
 class Tests(Harness):
-
-    def make_participant(self, *a, **kw):
-        kw['claimed_time'] = utcnow()
-        return Harness.make_participant(self, *a, **kw)
 
     def test_anonymous_gets_receiving(self):
         alice = self.make_participant('alice', last_bill_result='')

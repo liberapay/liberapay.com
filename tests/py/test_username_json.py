@@ -10,7 +10,7 @@ class Tests(Harness):
 
     def change_username(self, new_username, auth_as='alice'):
         if auth_as:
-            self.make_participant(auth_as, claimed_time='now')
+            self.make_participant(auth_as)
 
         r = self.client.POST('/alice/username.json', {'username': new_username},
                              auth_as=auth_as, raise_immediately=False)

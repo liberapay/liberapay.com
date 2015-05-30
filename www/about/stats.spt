@@ -15,7 +15,7 @@ nach = db.one("""
        AND r.error = ''
        AND p.is_suspicious IS NOT true
 """)
-npeople = db.one("SELECT count(*) FROM participants WHERE claimed_time IS NOT NULL AND is_suspicious IS NOT true")
+npeople = db.one("SELECT count(*) FROM participants WHERE status = 'active' AND is_suspicious IS NOT true")
 ncc = db.one("""
     SELECT count(*)
       FROM current_exchange_routes r
@@ -29,11 +29,12 @@ transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DE
 tips_stats = db.one("""
     SELECT count(*), avg(amount), sum(amount)
       FROM current_tips
-      JOIN participants p ON p.username = tipper
-      JOIN participants p2 ON p2.username = tippee
+      JOIN participants p ON p.id = tipper
+      JOIN participants p2 ON p2.id = tippee
      WHERE amount > 0
        AND is_funded
-       AND p2.claimed_time IS NOT NULL
+       AND p.status = 'active'
+       AND p2.status = 'active'
        AND p.is_suspicious IS NOT true
        AND p2.is_suspicious IS NOT true
 """)
@@ -45,11 +46,12 @@ average_tippees = int(db.one("""\
     SELECT round(avg(ntippees))
       FROM ( SELECT count(tippee) as NTIPPEES
                FROM current_tips
-               JOIN participants p ON p.username = tipper
-               JOIN participants p2 on p2.username = tippee
+               JOIN participants p ON p.id = tipper
+               JOIN participants p2 on p2.id = tippee
               WHERE amount > 0
                 AND is_funded
-                AND p2.claimed_time IS NOT NULL
+                AND p.status = 'active'
+                AND p2.status = 'active'
                 AND p.is_suspicious IS NOT true
                 AND p2.is_suspicious IS NOT true
            GROUP BY tipper
@@ -59,11 +61,12 @@ average_tippees = int(db.one("""\
 TIP_DISTRIBUTION = """
     SELECT amount, count(amount)
       FROM current_tips
-      JOIN participants p ON p.username = tipper
-      JOIN participants p2 on p2.username = tippee
+      JOIN participants p ON p.id = tipper
+      JOIN participants p2 on p2.id = tippee
      WHERE amount > 0
        AND is_funded
-       AND p2.claimed_time IS NOT NULL
+       AND p.status = 'active'
+       AND p2.status = 'active'
        AND p.is_suspicious IS NOT true
        AND p2.is_suspicious IS NOT true
   GROUP BY amount

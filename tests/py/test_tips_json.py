@@ -2,7 +2,6 @@ from __future__ import print_function, unicode_literals
 
 import json
 
-from aspen.utils import utcnow
 from liberapay.testing import Harness
 
 
@@ -10,10 +9,9 @@ class TestTipsJson(Harness):
 
     def also_prune_variant(self, also_prune, tippees=1):
 
-        now = utcnow()
-        self.make_participant("test_tippee1", claimed_time=now)
-        self.make_participant("test_tippee2", claimed_time=now)
-        self.make_participant("test_tipper", claimed_time=now)
+        self.make_participant("test_tippee1")
+        self.make_participant("test_tippee2")
+        self.make_participant("test_tipper")
 
         data = [
             {'username': 'test_tippee1', 'amount': '1.00'},
@@ -44,8 +42,7 @@ class TestTipsJson(Harness):
         assert len(json.loads(response.body)) == tippees
 
     def test_get_response(self):
-        now = utcnow()
-        self.make_participant("test_tipper", claimed_time=now)
+        self.make_participant("test_tipper")
 
         response = self.client.GET('/test_tipper/tips.json', auth_as='test_tipper')
 
@@ -53,9 +50,8 @@ class TestTipsJson(Harness):
         assert len(json.loads(response.body)) == 0 # empty array
 
     def test_get_response_with_tips(self):
-        now = utcnow()
-        self.make_participant("test_tippee1", claimed_time=now)
-        self.make_participant("test_tipper", claimed_time=now)
+        self.make_participant("test_tippee1")
+        self.make_participant("test_tipper")
 
         response = self.client.POST( '/test_tippee1/tip.json'
                                    , {'amount': '1.00'}

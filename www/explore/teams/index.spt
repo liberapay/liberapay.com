@@ -3,6 +3,7 @@
 teams = website.db.all("""
 
     SELECT t.*
+         , p.username AS name
          , p.receiving
          , p.goal
          , p.receiving / t.nmembers AS dollars_per_member 
@@ -11,13 +12,12 @@ teams = website.db.all("""
            WHEN 0 THEN NULL
            ELSE ((p.receiving / p.goal) * 100)::int
             END                     AS pfunded
-      FROM ( SELECT team            AS name
-                  , count(member)   AS nmembers
+      FROM ( SELECT team AS id, count(member) AS nmembers
                FROM current_takes
            GROUP BY team
             ) AS t
-      JOIN participants p 
-        ON p.username = t.name
+      JOIN participants p
+        ON p.id = t.id
      WHERE (p.goal >= 0 OR p.goal IS NULL)
        AND p.is_searchable
   ORDER BY dollars_per_member DESC, nmembers ASC

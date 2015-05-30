@@ -11,7 +11,6 @@ immediately affect the participant's balance.
 """
 from __future__ import unicode_literals
 
-import itertools
 from multiprocessing.dummy import Pool as ThreadPool
 
 import aspen.utils
@@ -136,6 +135,7 @@ class Payday(object):
             """, (self.ts_start,))
             try:
                 self.settle_card_holds(cursor, holds)
+                self.take_over_balances(cursor)
                 self.update_balances(cursor)
                 check_db(cursor)
             except:
@@ -145,13 +145,12 @@ class Payday(object):
                 with open('%s_transfers.csv' % time(), 'wb') as f:
                     csv.writer(f).writerows(transfers)
                 raise
-        self.take_over_balances()
         # Clean up leftover functions
         self.db.run("""
             DROP FUNCTION process_take();
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
-            DROP FUNCTION transfer(text, text, numeric, context_type);
+            DROP FUNCTION transfer(bigint, bigint, numeric, context_type);
         """)
 
     @staticmethod
@@ -165,7 +164,7 @@ class Payday(object):
         CREATE TEMPORARY TABLE payday_participants ON COMMIT DROP AS
             SELECT id
                  , username
-                 , claimed_time
+                 , join_time
                  , balance AS old_balance
                  , balance AS new_balance
                  , is_suspicious
@@ -178,8 +177,8 @@ class Payday(object):
                    ) > 0 AS has_credit_card
               FROM participants p
              WHERE is_suspicious IS NOT true
-               AND claimed_time < %(ts_start)s
-          ORDER BY claimed_time;
+               AND join_time < %(ts_start)s
+          ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
         CREATE UNIQUE INDEX ON payday_participants (username);
@@ -196,8 +195,8 @@ class Payday(object):
                       WHERE mtime < %(ts_start)s
                    ORDER BY tipper, tippee, mtime DESC
                    ) t
-              JOIN payday_participants p ON p.username = t.tipper
-              JOIN payday_participants p2 ON p2.username = t.tippee
+              JOIN payday_participants p ON p.id = t.tipper
+              JOIN payday_participants p2 ON p2.id = t.tippee
              WHERE t.amount > 0
                AND (p2.goal IS NULL or p2.goal >= 0)
                AND ( SELECT id
@@ -206,30 +205,30 @@ class Payday(object):
                         AND t.tippee = t2.tippee
                         AND context = 'tip'
                    ) IS NULL
-          ORDER BY p.claimed_time ASC, t.ctime ASC;
+          ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
         CREATE INDEX ON payday_tips (tippee);
         ALTER TABLE payday_tips ADD COLUMN is_funded boolean;
 
         ALTER TABLE payday_participants ADD COLUMN giving_today numeric(35,2);
-        UPDATE payday_participants
+        UPDATE payday_participants p
            SET giving_today = COALESCE((
                    SELECT sum(amount)
                      FROM payday_tips
-                    WHERE tipper = username
+                    WHERE tipper = p.id
                ), 0);
 
         CREATE TEMPORARY TABLE payday_takes
-        ( team text
-        , member text
+        ( team bigint
+        , member bigint
         , amount numeric(35,2)
         ) ON COMMIT DROP;
 
         CREATE TEMPORARY TABLE payday_transfers
         ( timestamp timestamptz DEFAULT now()
-        , tipper text
-        , tippee text
+        , tipper bigint
+        , tippee bigint
         , amount numeric(35,2)
         , context context_type
         ) ON COMMIT DROP;
@@ -237,29 +236,21 @@ class Payday(object):
 
         -- Prepare a statement that makes and records a transfer
 
-        CREATE OR REPLACE FUNCTION transfer(text, text, numeric, context_type)
+        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, context_type)
         RETURNS void AS $$
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;
                 UPDATE payday_participants
                    SET new_balance = (new_balance - $3)
-                 WHERE username = $1;
+                 WHERE id = $1;
+                IF (NOT FOUND) THEN RAISE 'tipper not found'; END IF;
                 UPDATE payday_participants
                    SET new_balance = (new_balance + $3)
-                 WHERE username = $2;
+                 WHERE id = $2;
+                IF (NOT FOUND) THEN RAISE 'tippee not found'; END IF;
                 INSERT INTO payday_transfers
                             (tipper, tippee, amount, context)
-                     VALUES ( ( SELECT p.username
-                                  FROM participants p
-                                  JOIN payday_participants p2 ON p.id = p2.id
-                                 WHERE p2.username = $1 )
-                            , ( SELECT p.username
-                                  FROM participants p
-                                  JOIN payday_participants p2 ON p.id = p2.id
-                                 WHERE p2.username = $2 )
-                            , $3
-                            , $4
-                            );
+                     VALUES ($1, $2, $3, $4);
             END;
         $$ LANGUAGE plpgsql;
 
@@ -273,7 +264,7 @@ class Payday(object):
                 tipper := (
                     SELECT p.*::payday_participants
                       FROM payday_participants p
-                     WHERE username = NEW.tipper
+                     WHERE id = NEW.tipper
                 );
                 IF (NEW.amount <= tipper.new_balance OR tipper.card_hold_ok) THEN
                     EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip');
@@ -299,7 +290,7 @@ class Payday(object):
                 team_balance := (
                     SELECT new_balance
                       FROM payday_participants
-                     WHERE username = NEW.team
+                     WHERE id = NEW.team
                 );
                 IF (team_balance <= 0) THEN RETURN NULL; END IF;
                 actual_amount := NEW.amount;
@@ -441,7 +432,7 @@ class Payday(object):
         UPDATE payday_tips t
            SET is_funded = true
           FROM payday_participants p
-         WHERE p.username = t.tipper
+         WHERE p.id = t.tipper
            AND p.card_hold_ok;
 
         SELECT settle_tip_graph();
@@ -461,8 +452,8 @@ class Payday(object):
                    ORDER BY team, member, mtime DESC
                    ) t
              WHERE t.amount > 0
-               AND t.team IN (SELECT username FROM payday_participants)
-               AND t.member IN (SELECT username FROM payday_participants)
+               AND t.team IN (SELECT id FROM payday_participants)
+               AND t.member IN (SELECT id FROM payday_participants)
                AND ( SELECT id
                        FROM payday_transfers_done t2
                       WHERE t.team = t2.tipper
@@ -495,6 +486,50 @@ class Payday(object):
         log("Canceled %i card holds." % len(holds))
 
     @staticmethod
+    def take_over_balances(cursor):
+        """If an account that receives money is taken over during payin we need
+        to transfer the balance to the absorbing account.
+        """
+        count = cursor.one("""
+
+            CREATE OR REPLACE FUNCTION take_over_balances() RETURNS int AS $$
+            DECLARE
+                count int NOT NULL := 0;
+                total int NOT NULL := 0;
+                i int;
+                r record;
+            BEGIN
+                FOR i IN 1..10 LOOP
+                    FOR r IN SELECT a.*, (new_balance - old_balance) AS amount
+                               FROM absorptions a
+                               JOIN payday_participants p ON a.archived = p.id
+                              WHERE new_balance <> old_balance
+                    LOOP
+                        PERFORM 1 FROM payday_participants WHERE id = r.absorbed_by;
+                        IF (NOT FOUND) THEN
+                            INSERT INTO payday_participants
+                                SELECT id, username, join_time, balance, balance
+                                     , is_suspicious, goal, false, false
+                                  FROM participants
+                                 WHERE id = r.absorbed_by;
+                        END IF;
+                        PERFORM transfer(r.archived, r.absorbed_by, r.amount, 'take-over');
+                        count := count + 1;
+                    END LOOP;
+                    IF (count = 0) THEN RETURN total; END IF;
+                    total := total + count;
+                    count := 0;
+                END LOOP;
+                RAISE 'possible infinite loop';
+            END;
+            $$ LANGUAGE plpgsql;
+
+            SELECT take_over_balances();
+
+        """)
+        log("Transferred %i balances of taken over accounts." % count)
+
+    @staticmethod
     def update_balances(cursor):
         participants = cursor.all("""
 
@@ -522,45 +557,6 @@ class Payday(object):
                 SELECT * FROM payday_transfers;
         """)
         log("Updated the balances of %i participants." % len(participants))
-
-    def take_over_balances(self):
-        """If an account that receives money is taken over during payin we need
-        to transfer the balance to the absorbing account.
-        """
-        for i in itertools.count():
-            if i > 10:
-                raise Exception('possible infinite loop')
-            count = self.db.one("""
-
-                DROP TABLE IF EXISTS temp;
-                CREATE TEMPORARY TABLE temp AS
-                    SELECT archived_as, absorbed_by, balance AS archived_balance
-                      FROM absorptions a
-                      JOIN participants p ON a.archived_as = p.username
-                     WHERE balance > 0;
-
-                SELECT count(*) FROM temp;
-
-            """)
-            if not count:
-                break
-            self.db.run("""
-
-                INSERT INTO transfers (tipper, tippee, amount, context)
-                    SELECT archived_as, absorbed_by, archived_balance, 'take-over'
-                      FROM temp;
-
-                UPDATE participants
-                   SET balance = (balance - archived_balance)
-                  FROM temp
-                 WHERE username = archived_as;
-
-                UPDATE participants
-                   SET balance = (balance + archived_balance)
-                  FROM temp
-                 WHERE username = absorbed_by;
-
-            """)
 
     def payout(self):
         """This is the second stage of payday in which we send money out to the
@@ -668,9 +664,9 @@ class Payday(object):
     def notify_participants(self):
         ts_start, ts_end = self.ts_start, self.ts_end
         exchanges = self.db.all("""
-            SELECT e.id, amount, fee, note, status, p.*::participants AS participant
+            SELECT e.id, e.amount, e.fee, e.note, e.status, p.*::participants AS participant
               FROM exchanges e
-              JOIN participants p ON e.participant = p.username
+              JOIN participants p ON e.participant = p.id
              WHERE "timestamp" >= %(ts_start)s
                AND "timestamp" < %(ts_end)s
                AND amount > 0
@@ -684,21 +680,21 @@ class Payday(object):
             p = e.participant
             if p.notify_charge & i == 0:
                 continue
-            username = p.username
+            id = p.id
             ntippees, top_tippee = self.db.one("""
                 WITH tippees AS (
                          SELECT p.username, amount
                            FROM ( SELECT DISTINCT ON (tippee) tippee, amount
                                     FROM tips
                                    WHERE mtime < %(ts_start)s
-                                     AND tipper = %(username)s
+                                     AND tipper = %(id)s
                                 ORDER BY tippee, mtime DESC
                                 ) t
-                           JOIN participants p ON p.username = t.tippee
+                           JOIN participants p ON p.id = t.tippee
                           WHERE t.amount > 0
                             AND (p.goal IS NULL or p.goal >= 0)
                             AND p.is_suspicious IS NOT true
-                            AND p.claimed_time < %(ts_start)s
+                            AND p.join_time < %(ts_start)s
                      )
                 SELECT ( SELECT count(*) FROM tippees ) AS ntippees
                      , ( SELECT username

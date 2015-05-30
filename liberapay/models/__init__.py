@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 
 from postgres import Postgres
-import psycopg2.extras
 
 
 @contextmanager
@@ -60,11 +59,11 @@ def _check_balances(cursor):
     https://github.com/gratipay/gratipay.com/issues/1118
     """
     b = cursor.all("""
-        select p.username, expected, balance as actual
+        select p.id, expected, balance as actual
           from (
-            select username, sum(a) as expected
+            select id, sum(a) as expected
               from (
-                      select participant as username, sum(amount) as a
+                      select participant as id, sum(amount) as a
                         from exchanges
                        where amount > 0
                          and (status is null or status = 'succeeded')
@@ -72,7 +71,7 @@ def _check_balances(cursor):
 
                        union all
 
-                      select participant as username, sum(amount-fee) as a
+                      select participant as id, sum(amount-fee) as a
                         from exchanges
                        where amount < 0
                          and (status is null or status <> 'failed')
@@ -80,44 +79,32 @@ def _check_balances(cursor):
 
                        union all
 
-                      select tipper as username, sum(-amount) as a
+                      select tipper as id, sum(-amount) as a
                         from transfers
                     group by tipper
 
                        union all
 
-                      select tippee as username, sum(amount) as a
+                      select tippee as id, sum(amount) as a
                         from transfers
                     group by tippee
                     ) as foo
-            group by username
+            group by id
           ) as foo2
-        join participants p on p.username = foo2.username
+        join participants p on p.id = foo2.id
         where expected <> p.balance
     """)
     assert len(b) == 0, "conflicting balances: {}".format(b)
 
 
 def _check_orphans(cursor):
-    """
-    Finds participants that
-        * does not have corresponding elsewhere account
-        * have not been absorbed by other participant
-
-    These are broken because new participants arise from elsewhere
-    and elsewhere is detached only by take over which makes a note
-    in absorptions if it removes the last elsewhere account.
-
-    Especially bad case is when also claimed_time is set because
-    there must have been elsewhere account attached and used to sign in.
-
-    https://github.com/gratipay/gratipay.com/issues/617
+    """Finds non-archived participants that don't have an elsewhere account.
     """
     orphans = cursor.all("""
         select username
-           from participants
-          where not exists (select * from elsewhere where elsewhere.participant=username)
-            and not exists (select * from absorptions where archived_as=username)
+          from participants p
+         where status != 'archived'
+           and not exists (select * from elsewhere e where e.participant=p.id)
     """)
     assert len(orphans) == 0, "missing elsewheres: {}".format(list(orphans))
 
@@ -133,11 +120,11 @@ def _check_orphans_no_tips(cursor):
     """
     orphans_with_tips = cursor.all("""
         WITH valid_tips AS (SELECT * FROM current_tips WHERE amount > 0)
-        SELECT username
-          FROM (SELECT tipper AS username FROM valid_tips
+        SELECT id
+          FROM (SELECT tipper AS id FROM valid_tips
                 UNION
-                SELECT tippee AS username FROM valid_tips) foo
-         WHERE NOT EXISTS (SELECT 1 FROM elsewhere WHERE participant=username)
+                SELECT tippee AS id FROM valid_tips) p
+         WHERE NOT EXISTS (SELECT 1 FROM elsewhere WHERE participant=p.id)
     """)
     assert len(orphans_with_tips) == 0, orphans_with_tips
 
@@ -218,11 +205,3 @@ def _check_paydays_volumes(cursor):
         where ach_fees_volume != ref
     """)
     assert len(ach_fees_volume) == 0
-
-
-def add_event(c, type, payload):
-    SQL = """
-        INSERT INTO events (type, payload)
-        VALUES (%s, %s)
-    """
-    c.run(SQL, (type, psycopg2.extras.Json(payload)))

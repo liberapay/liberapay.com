@@ -17,10 +17,10 @@ if request.method == 'POST':
 
         UPDATE participants
            SET {0}=not {0}
-         WHERE username=%s
+         WHERE id=%s
         RETURNING {0}
 
-    """.format(field), (user.participant.username,))
+    """.format(field), (user.participant.id,))
     assert rec is not None
     out = {
         field: rec,
@@ -30,9 +30,9 @@ else:
     rec = website.db.one("""
 
         SELECT is_searchable, anonymous_receiving, anonymous_giving
-        FROM participants WHERE username=%s
+        FROM participants WHERE id=%s
 
-    """, (user.participant.username,), back_as=dict)
+    """, (user.participant.id,), back_as=dict)
     assert rec is not None
     out = rec
 

@@ -17,12 +17,12 @@ class TestChartsJson(Harness):
     def setUp(self):
         Harness.setUp(self)
 
-        self.alice = self.make_participant('alice', claimed_time='now')
-        self.bob = self.make_participant('bob', claimed_time='now')
-        self.carl = self.make_participant('carl', claimed_time='now')
+        self.alice = self.make_participant('alice')
+        self.bob = self.make_participant('bob')
+        self.carl = self.make_participant('carl')
         self.make_exchange('balanced-cc', 10, 0, self.alice)
         self.make_exchange('balanced-cc', 10, 0, self.bob)
-        self.make_participant('notactive', claimed_time='now')
+        self.make_participant('notactive')
 
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.set_tip_to(self.carl, '2.00')
@@ -106,7 +106,8 @@ class TestChartsJson(Harness):
         self.db.run("UPDATE participants SET balance=balance - 4 WHERE username='alice'")
         self.db.run("UPDATE participants SET balance=balance + 4 WHERE username='carl'")
         self.db.run("INSERT INTO transfers (tipper, tippee, amount, context) "
-                    "VALUES ('alice', 'carl', 4, 'tip')")
+                    "VALUES (%s, %s, 4, 'tip')",
+                    (self.alice.id, self.carl.id))
 
         self.run_payday()   # third
 
@@ -162,7 +163,7 @@ class TestChartsJson(Harness):
                          auth_as='carl')
 
         r = self.client.GxT('/carl/charts.json')
-        assert r.code == 401
+        assert r.code == 403
 
         r = self.client.GxT('/carl/charts.json', auth_as='alice')
         assert r.code == 403

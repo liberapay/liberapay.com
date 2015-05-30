@@ -9,7 +9,7 @@ class Tests(Harness):
         Harness.setUp(self)
 
         # Alice joins a community.
-        self.alice = self.make_participant("alice", claimed_time='now', last_bill_result='')
+        self.alice = self.make_participant("alice", last_bill_result='')
         self.client.POST( '/for/communities.json'
                         , {'name': 'something', 'is_member': 'true'}
                         , auth_as='alice'
@@ -22,7 +22,7 @@ class Tests(Harness):
     def test_givers_show_up_on_community_page(self):
 
         # Alice tips bob.
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         self.alice.set_tip_to(bob, '1.00')
 
         html = self.client.GET('/for/something/', want='response.body')
@@ -32,7 +32,7 @@ class Tests(Harness):
     def test_givers_dont_show_up_if_they_give_zero(self):
 
         # Alice tips bob.
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         self.alice.set_tip_to(bob, '1.00')
         self.alice.set_tip_to(bob, '0.00')
 
@@ -43,7 +43,7 @@ class Tests(Harness):
     def test_receivers_show_up_on_community_page(self):
 
         # Bob tips alice.
-        bob = self.make_participant("bob", claimed_time='now', last_bill_result='')
+        bob = self.make_participant("bob", last_bill_result='')
         bob.set_tip_to(self.alice, '1.00')
 
         html = self.client.GET('/for/something/', want='response.body')
@@ -53,7 +53,7 @@ class Tests(Harness):
     def test_receivers_dont_show_up_if_they_receive_zero(self):
 
         # Bob tips alice.
-        bob = self.make_participant("bob", claimed_time='now', last_bill_result='')
+        bob = self.make_participant("bob", last_bill_result='')
         bob.set_tip_to(self.alice, '1.00')
         bob.set_tip_to(self.alice, '0.00')  # zero out bob's tip
 

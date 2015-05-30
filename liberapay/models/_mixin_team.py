@@ -9,7 +9,7 @@ from aspen.utils import typecheck
 class MemberLimitReached(Exception): pass
 
 
-class StubParticipantAdded(Exception): pass
+class InactiveParticipantAdded(Exception): pass
 
 
 class MixinTeam(object):
@@ -33,8 +33,8 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         if len(self.get_current_takes()) == 149:
             raise MemberLimitReached
-        if not member.is_claimed:
-            raise StubParticipantAdded
+        if member.status != 'active':
+            raise InactiveParticipantAdded
         self.__set_take_for(member, Decimal('0.01'), self)
 
     def remove_member(self, member):
@@ -46,28 +46,28 @@ class MixinTeam(object):
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
             INSERT INTO takes (ctime, member, team, amount, recorder) (
-                SELECT ctime, member, %(username)s, 0.00, %(username)s
+                SELECT ctime, member, %(id)s, 0.00, %(id)s
                   FROM current_takes
-                 WHERE team=%(username)s
+                 WHERE team=%(id)s
                    AND amount > 0
             );
-        """, dict(username=self.username))
+        """, dict(id=self.id))
 
     def member_of(self, team):
         """Given a Participant object, return a boolean.
         """
         assert team.IS_PLURAL
-        for take in team.get_current_takes():
-            if take['member'] == self.username:
-                return True
-        return False
+        return self.db.one("""
+            SELECT true
+              FROM current_takes
+             WHERE team=%s AND member=%s
+        """, (team.id, self.id), default=False)
 
     def get_take_last_week_for(self, member):
         """Get the user's nominal take last week. Used in throttling.
         """
         assert self.IS_PLURAL
-        membername = member.username if hasattr(member, 'username') \
-                                                        else member['username']
+        member_id = getattr(member, 'id', None) or member['id']
         return self.db.one("""
 
             SELECT amount
@@ -81,7 +81,7 @@ class MixinTeam(object):
                    )
           ORDER BY mtime DESC LIMIT 1
 
-        """, (self.username, membername), default=Decimal('0.00'))
+        """, (self.id, member_id), default=Decimal('0.00'))
 
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
@@ -89,7 +89,7 @@ class MixinTeam(object):
         assert self.IS_PLURAL
         return self.db.one( "SELECT amount FROM current_takes "
                             "WHERE member=%s AND team=%s"
-                          , (member.username, self.username)
+                          , (member.id, self.id)
                           , default=Decimal('0.00')
                            )
 
@@ -144,8 +144,8 @@ class MixinTeam(object):
                         , %(recorder)s
                          )
 
-            """, dict(member=member.username, team=self.username, amount=amount,
-                      recorder=recorder.username))
+            """, dict(member=member.id, team=self.id, amount=amount,
+                      recorder=recorder.id))
             # Compute the new takes
             new_takes = self.compute_actual_takes(cursor)
             # Update receiving amounts in the participants table
@@ -157,21 +157,21 @@ class MixinTeam(object):
         """Update `taking` amounts based on the difference between `old_takes`
         and `new_takes`.
         """
-        for username in set(old_takes.keys()).union(new_takes.keys()):
-            if username == self.username:
+        for p_id in set(old_takes.keys()).union(new_takes.keys()):
+            if p_id == self.id:
                 continue
-            old = old_takes.get(username, {}).get('actual_amount', Decimal(0))
-            new = new_takes.get(username, {}).get('actual_amount', Decimal(0))
+            old = old_takes.get(p_id, {}).get('actual_amount', Decimal(0))
+            new = new_takes.get(p_id, {}).get('actual_amount', Decimal(0))
             diff = new - old
             if diff != 0:
                 r = (cursor or self.db).one("""
                     UPDATE participants
                        SET taking = (taking + %(diff)s)
                          , receiving = (receiving + %(diff)s)
-                     WHERE username=%(username)s
+                     WHERE id=%(p_id)s
                  RETURNING taking, receiving
-                """, dict(username=username, diff=diff))
-                if member and username == member.username:
+                """, dict(p_id=p_id, diff=diff))
+                if member and p_id == member.id:
                     member.set_attributes(**r._asdict())
 
     def get_current_takes(self, cursor=None):
@@ -179,12 +179,13 @@ class MixinTeam(object):
         """
         assert self.IS_PLURAL
         TAKES = """
-            SELECT member, amount, ctime, mtime
-              FROM current_takes
-             WHERE team=%(team)s
-          ORDER BY ctime DESC
+            SELECT p.id AS member_id, p.username AS member_name, t.amount, t.ctime, t.mtime
+              FROM current_takes t
+              JOIN participants p ON p.id = member
+             WHERE t.team=%(team)s
+          ORDER BY t.ctime DESC
         """
-        records = (cursor or self.db).all(TAKES, dict(team=self.username))
+        records = (cursor or self.db).all(TAKES, dict(team=self.id))
         return [r._asdict() for r in records]
 
     def get_team_take(self, cursor=None):
@@ -192,11 +193,12 @@ class MixinTeam(object):
         """
         assert self.IS_PLURAL
         TAKE = "SELECT sum(amount) FROM current_takes WHERE team=%s"
-        total_take = (cursor or self.db).one(TAKE, (self.username,), default=0)
+        total_take = (cursor or self.db).one(TAKE, (self.id,), default=0)
         team_take = max(self.receiving - total_take, 0)
         membership = { "ctime": None
                      , "mtime": None
-                     , "member": self.username
+                     , "member_id": self.id
+                     , "member_name": self.username
                      , "amount": team_take
                       }
         return membership
@@ -211,11 +213,11 @@ class MixinTeam(object):
         for take in nominal_takes:
             nominal_amount = take['nominal_amount'] = take.pop('amount')
             actual_amount = take['actual_amount'] = min(nominal_amount, balance)
-            if take['member'] != self.username:
+            if take['member_id'] != self.id:
                 balance -= actual_amount
             take['balance'] = balance
             take['percentage'] = (actual_amount / budget) if budget > 0 else 0
-            actual_takes[take['member']] = take
+            actual_takes[take['member_id']] = take
         return actual_takes
 
     @property
@@ -225,7 +227,7 @@ class MixinTeam(object):
             SELECT COUNT(*)
               FROM current_takes
              WHERE team=%s
-        """, (self.username, ))
+        """, (self.id,))
 
     def get_members(self, current_participant=None):
         """Return a list of member dicts.
@@ -235,7 +237,8 @@ class MixinTeam(object):
         members = []
         for take in takes.values():
             member = {}
-            member['username'] = take['member']
+            member['id'] = take['member_id']
+            member['username'] = take['member_name']
             member['take'] = take['nominal_amount']
             member['balance'] = take['balance']
             member['percentage'] = take['percentage']
@@ -244,7 +247,7 @@ class MixinTeam(object):
             member['editing_allowed'] = False
             member['is_current_user'] = False
             if current_participant is not None:
-                if member['username'] == current_participant.username:
+                if member['id'] == current_participant.id:
                     member['is_current_user'] = True
                     if take['ctime'] is not None:
                         # current user, but not the team itself

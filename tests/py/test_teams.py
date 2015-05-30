@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from liberapay.models._mixin_team import StubParticipantAdded
+from liberapay.models._mixin_team import InactiveParticipantAdded
 
 from liberapay.testing import Harness
 from liberapay.security.user import User
@@ -23,19 +23,19 @@ class Tests(Harness):
 
     def test_show_as_team_to_team_member(self):
         self.make_participant('alice')
-        self.team.add_member(self.make_participant('bob', claimed_time='now'))
+        self.team.add_member(self.make_participant('bob'))
         user = User.from_username('bob')
         assert self.team.show_as_team(user)
 
     def test_show_as_team_to_non_team_member(self):
         self.make_participant('alice')
-        self.team.add_member(self.make_participant('bob', claimed_time='now'))
+        self.team.add_member(self.make_participant('bob'))
         user = User.from_username('alice')
         assert self.team.show_as_team(user)
 
     def test_show_as_team_to_anon(self):
         self.make_participant('alice')
-        self.team.add_member(self.make_participant('bob', claimed_time='now'))
+        self.team.add_member(self.make_participant('bob'))
         assert self.team.show_as_team(User())
 
     def test_dont_show_individuals_as_team(self):
@@ -48,28 +48,28 @@ class Tests(Harness):
 
     def test_dont_show_plural_no_members_as_team_to_auth(self):
         group = self.make_participant('Group', number='plural')
-        self.make_participant('alice')
-        assert not group.show_as_team(User.from_username('alice'))
+        alice = self.make_participant('alice')
+        assert not group.show_as_team(User(alice))
 
     def test_show_plural_no_members_as_team_to_self(self):
         group = self.make_participant('Group', number='plural')
-        assert group.show_as_team(User.from_username('Group'))
+        assert group.show_as_team(User(group))
 
     def test_show_plural_no_members_as_team_to_admin(self):
         group = self.make_participant('Group', number='plural')
-        self.make_participant('Admin', is_admin=True)
-        assert group.show_as_team(User.from_username('Admin'))
+        admin = self.make_participant('Admin', is_admin=True)
+        assert group.show_as_team(User(admin))
 
     def test_can_add_members(self):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         expected = True
         self.team.add_member(alice)
         actual = alice.member_of(self.team)
         assert actual == expected
 
     def test_get_teams_for_member(self):
-        alice = self.make_participant('alice', claimed_time='now')
-        bob = self.make_participant('bob', claimed_time='now')
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
         team = self.make_participant('B-Team', number='plural')
         self.team.add_member(alice)
         team.add_member(bob)
@@ -78,14 +78,14 @@ class Tests(Harness):
         assert actual == expected
 
     def test_preclude_adding_stub_participant(self):
-        stub_participant = self.make_participant('stub')
-        with self.assertRaises(StubParticipantAdded):
+        stub_participant = self.make_stub()
+        with self.assertRaises(InactiveParticipantAdded):
             self.team.add_member(stub_participant)
 
     def test_remove_all_members(self):
-        alice = self.make_participant('alice', claimed_time='now')
+        alice = self.make_participant('alice')
         self.team.add_member(alice)
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         self.team.add_member(bob)
 
         assert len(self.team.get_current_takes()) == 2  # sanity check

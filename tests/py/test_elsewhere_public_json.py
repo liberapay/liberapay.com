@@ -7,7 +7,7 @@ from liberapay.testing import Harness
 
 class Tests(Harness):
 
-    def test_returns_json_if_not_opted_in(self, *classes):
+    def test_returns_json_if_not_opted_in(self):
         for platform in self.platforms:
             self.make_elsewhere(platform.name, 1, 'alice')
             response = self.client.GET('/on/%s/alice/public.json' % platform.name)
@@ -17,12 +17,7 @@ class Tests(Harness):
             data = json.loads(response.body)
             assert data['on'] == platform.name
 
-    def test_redirect_if_opted_in(self, *classes):
-        self.make_participant('alice')
-        for platform in self.platforms:
-            account = self.make_elsewhere(platform.name, 1, 'alice')
-            account.opt_in('alice')
-
-            response = self.client.GxT('/on/%s/alice/public.json' % platform.name)
-
-            assert response.code == 302
+    def test_redirect_if_opted_in(self):
+        self.make_participant('alice', elsewhere='github')
+        response = self.client.GxT('/on/github/alice/public.json')
+        assert response.code == 302

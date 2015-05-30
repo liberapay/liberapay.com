@@ -9,7 +9,7 @@ from liberapay.testing import Harness
 class Tests(Harness):
 
     def setUp(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
 
     def change_goal(self, goal, goal_custom="", auth_as="alice", expecting_error=False):
         method = self.client.POST if not expecting_error else self.client.PxST
@@ -76,9 +76,9 @@ class Tests(Harness):
         self.change_goal("null", "")
         self.change_goal("custom", "400")
         actual = self.db.all("""
-            SELECT (payload->'values'->>'goal')::int AS goal
+            SELECT payload
               FROM events
-             WHERE 'goal' IN (SELECT json_object_keys(payload->'values'))
+             WHERE type = 'set_goal'
           ORDER BY ts DESC
         """)
-        assert actual == [400, None, 300, 200, 100]
+        assert actual == ['400', None, '300', '200', '100']

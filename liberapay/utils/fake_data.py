@@ -55,15 +55,14 @@ def fake_participant(db, number="singular", is_admin=False):
         _fake_thing( db
                    , "participants"
                    , username=username
-                   , username_lower=username.lower()
-                   , ctime=faker.date_time_this_year()
                    , is_admin=is_admin
                    , balance=0
                    , anonymous_giving=(random.randrange(5) == 0)
                    , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
                    , balanced_customer_href=faker.uri()
                    , is_suspicious=False
-                   , claimed_time=faker.date_time_this_year()
+                   , status='active'
+                   , join_time=faker.date_time_this_year()
                    , number=number
                     )
     except IntegrityError:
@@ -104,8 +103,8 @@ def fake_tip(db, tipper, tippee):
                       , "tips"
                       , ctime=faker.date_time_this_year()
                       , mtime=faker.date_time_this_month()
-                      , tipper=tipper.username
-                      , tippee=tippee.username
+                      , tipper=tipper.id
+                      , tippee=tippee.id
                       , amount=fake_tip_amount()
                        )
 
@@ -117,8 +116,8 @@ def fake_elsewhere(db, participant, platform):
                , "elsewhere"
                , platform=platform
                , user_id=fake_text_id()
-               , user_name=participant.username
-               , participant=participant.username
+               , user_name=participant.id
+               , participant=participant.id
                , extra_info=None
                 )
 
@@ -127,8 +126,8 @@ def fake_transfer(db, tipper, tippee):
     return _fake_thing( db
            , "transfers"
            , timestamp=faker.date_time_this_year()
-           , tipper=tipper.username
-           , tippee=tippee.username
+           , tipper=tipper.id
+           , tippee=tippee.id
            , amount=fake_tip_amount()
            , context='tip'
             )
@@ -137,7 +136,7 @@ def fake_exchange(db, participant, amount, fee, timestamp):
     return _fake_thing( db
                       , "exchanges"
                       , timestamp=timestamp
-                      , participant=participant.username
+                      , participant=participant.id
                       , amount=amount
                       , fee=fee
                       , status='succeeded'
@@ -149,11 +148,11 @@ def prep_db(db):
             BEGIN
                 UPDATE participants
                    SET balance = balance + NEW.amount
-                 WHERE username = NEW.tippee;
+                 WHERE id = NEW.tippee;
 
                 UPDATE participants
                    SET balance = balance - NEW.amount
-                 WHERE username = NEW.tipper;
+                 WHERE id = NEW.tipper;
 
                 RETURN NULL;
             END;
@@ -167,11 +166,11 @@ def prep_db(db):
                 IF NEW.amount > 0 THEN
                     UPDATE participants
                        SET balance = balance + NEW.amount
-                     WHERE username = NEW.participant;
+                     WHERE id = NEW.participant;
                 ELSE
                     UPDATE participants
                        SET balance = balance + NEW.amount - NEW.fee
-                     WHERE username = NEW.participant;
+                     WHERE id = NEW.participant;
                 END IF;
 
                 RETURN NULL;
@@ -292,10 +291,10 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         end_date = date + datetime.timedelta(days=7)
         week_tips = filter(lambda x: date < x['ctime'] < end_date, tips)
         week_transfers = filter(lambda x: date < x['timestamp'] < end_date, transfers)
-        week_participants = filter(lambda x: x.ctime.replace(tzinfo=None) < end_date, participants)
+        week_participants = filter(lambda x: x.join_time.replace(tzinfo=None) < end_date, participants)
         for p in week_participants:
-            transfers_in = filter(lambda x: x['tippee'] == p.username, week_transfers)
-            transfers_out = filter(lambda x: x['tipper'] == p.username, week_transfers)
+            transfers_in = filter(lambda x: x['tippee'] == p.id, week_transfers)
+            transfers_out = filter(lambda x: x['tipper'] == p.id, week_transfers)
             amount_in = sum([t['amount'] for t in transfers_in])
             amount_out = sum([t['amount'] for t in transfers_out])
             amount = amount_out - amount_in

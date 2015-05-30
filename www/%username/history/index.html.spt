@@ -25,7 +25,9 @@ try:
 except ValueError:
     raise Response(400, "bad year")
 events = iter_payday_events(website.db, participant, year)
-years = list(range(current_year, participant.ctime.year-1, -1))
+years = []
+if participant.join_time:
+    years = list(range(current_year, participant.join_time.year-1, -1))
 
 if participant == user.participant:
     BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
@@ -135,7 +137,7 @@ else:
         <td class="card"></td>
         <td class="fees"></td>
 
-        {% if event['tippee'] == participant.username %}
+        {% if event['tippee'] == participant.id %}
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
         {% else %}
@@ -148,7 +150,7 @@ else:
         <td class="status"></td>
         <td class="notes">
         {% set context = event['context'] %}
-        {% if event['tippee'] == participant.username %}
+        {% if event['tippee'] == participant.id %}
             {% if context in ('take', 'take-over') or admin_override %}
                 {% if context == 'take-over' %}
                     balance from taken-over account

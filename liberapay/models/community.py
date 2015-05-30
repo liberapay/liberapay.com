@@ -20,9 +20,6 @@ def slugize(slug):
 
 def get_list_for(db, participant_id):
     """Return a listing of communities.
-
-    :database: One SELECT, multiple rows
-
     """
     if participant_id is None:
         return db.all("""
@@ -33,9 +30,9 @@ def get_list_for(db, participant_id):
     else:
         return db.all("""
             SELECT c.*
-              FROM current_community_members ccm
-              JOIN communities c ON c.slug = ccm.slug
-             WHERE ccm.is_member AND ccm.participant = %s
+              FROM community_members cm
+              JOIN communities c ON c.slug = cm.slug
+             WHERE cm.is_member AND cm.participant = %s
           ORDER BY c.nmembers ASC, c.slug
         """, (participant_id,))
 
@@ -52,7 +49,7 @@ class Community(Model):
     def get_members(self, limit=None, offset=None):
         return self.db.all("""
             SELECT p.*::participants
-              FROM current_community_members c
+              FROM community_members c
               JOIN participants p ON p.id = c.participant
              WHERE c.slug = %s
                AND c.is_member
@@ -65,6 +62,6 @@ class Community(Model):
     def check_membership(self, participant):
         return self.db.one("""
             SELECT is_member
-              FROM current_community_members
+              FROM community_members
              WHERE slug=%s AND participant=%s
         """, (self.slug, participant.id))

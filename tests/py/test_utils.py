@@ -3,20 +3,16 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import datetime
 from datetime import timedelta
 
-import pytest
 from aspen.http.response import Response
 from liberapay import utils
 from liberapay.testing import Harness
 from liberapay.utils import i18n, markdown
-from liberapay.utils.username import safely_reserve_a_username, FailedToReserveUsername, \
-                                                                           RanOutOfUsernameAttempts
-from psycopg2 import IntegrityError
 
 
 class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
-        expected = self.make_participant('alice', claimed_time='now')
+        expected = self.make_participant('alice')
         state = self.client.GET( '/alice/'
                                , return_after='dispatch_request_to_filesystem'
                                , want='state'
@@ -25,7 +21,7 @@ class Tests(Harness):
         assert actual == expected
 
     def test_get_participant_canonicalizes(self):
-        self.make_participant('alice', claimed_time='now')
+        self.make_participant('alice')
         state = self.client.GET( '/Alice/'
                                , return_after='dispatch_request_to_filesystem'
                                , want='state'
@@ -73,46 +69,6 @@ class Tests(Harness):
         assert actual == expected
 
 
-    # sru - safely_reserve_a_username
-
-    def test_srau_safely_reserves_a_username(self):
-        def gen_test_username():
-            yield 'deadbeef'
-        def reserve(cursor, username):
-            return 'deadbeef'
-        with self.db.get_cursor() as cursor:
-            username = safely_reserve_a_username(cursor, gen_test_username, reserve)
-        assert username == 'deadbeef'
-        assert self.db.one('SELECT username FROM participants') is None
-
-    def test_srau_inserts_a_participant_by_default(self):
-        def gen_test_username():
-            yield 'deadbeef'
-        with self.db.get_cursor() as cursor:
-            username = safely_reserve_a_username(cursor, gen_test_username)
-        assert username == 'deadbeef'
-        assert self.db.one('SELECT username FROM participants') == 'deadbeef'
-
-    def test_srau_wears_a_seatbelt(self):
-        def gen_test_username():
-            for i in range(101):
-                yield 'deadbeef'
-        def reserve(cursor, username):
-            raise IntegrityError
-        with self.db.get_cursor() as cursor:
-            with pytest.raises(FailedToReserveUsername):
-                safely_reserve_a_username(cursor, gen_test_username, reserve)
-
-    def test_srau_seatbelt_goes_to_100(self):
-        def gen_test_username():
-            for i in range(100):
-                yield 'deadbeef'
-        def reserve(cursor, username):
-            raise IntegrityError
-        with self.db.get_cursor() as cursor:
-            with pytest.raises(RanOutOfUsernameAttempts):
-                safely_reserve_a_username(cursor, gen_test_username, reserve)
-
     def test_markdown_render_does_render(self):
         expected = "<p>Example</p>\n"
         actual = markdown.render('Example')
@@ -132,12 +88,3 @@ class Tests(Harness):
         expected = '<p>Examples like this_one and this other_one.</p>\n'
         actual = markdown.render('Examples like this_one and this other_one.')
         assert expected == actual
-
-    def test_srau_retries_work_with_db(self):
-        self.make_participant('deadbeef')
-        def gen_test_username():
-            yield 'deadbeef'
-            yield 'deafbeef'
-        with self.db.get_cursor() as cursor:
-            username = safely_reserve_a_username(cursor, gen_test_username)
-            assert username == 'deafbeef'

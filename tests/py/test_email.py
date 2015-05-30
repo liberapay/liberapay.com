@@ -11,7 +11,7 @@ class TestEmail(EmailHarness):
 
     def setUp(self):
         EmailHarness.setUp(self)
-        self.alice = self.make_participant('alice', claimed_time='now')
+        self.alice = self.make_participant('alice')
 
     def hit_email_spt(self, action, address, user='alice', should_fail=False):
         P = self.client.PxST if should_fail else self.client.POST
@@ -96,8 +96,8 @@ class TestEmail(EmailHarness):
         self.db.run("""
             UPDATE emails
                SET verification_start = (now() - INTERVAL '25 hours')
-             WHERE participant = 'alice'
-        """)
+             WHERE participant = %s
+        """, (self.alice.id,))
         nonce = self.alice.get_email(address).nonce
         r = self.alice.verify_email(address, nonce)
         assert r == emails.VERIFICATION_EXPIRED
@@ -139,7 +139,7 @@ class TestEmail(EmailHarness):
         assert nonce1 == nonce2
 
     def test_cannot_update_email_to_already_verified(self):
-        bob = self.make_participant('bob', claimed_time='now')
+        bob = self.make_participant('bob')
         self.alice.add_email('alice@example.com')
         nonce = self.alice.get_email('alice@example.com').nonce
         r = self.alice.verify_email('alice@example.com', nonce)

@@ -15,29 +15,27 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 \i sql/enforce-utc.sql
 
 
--- https://github.com/gratipay/gratipay.com/pull/1274
 CREATE TYPE participant_number AS ENUM ('singular', 'plural');
+CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed', 'archived');
 
 
 CREATE TABLE participants
-( username              text                        PRIMARY KEY
+( id                    bigserial                   PRIMARY KEY
+, username              text                        NOT NULL
 , session_token         text                        UNIQUE DEFAULT NULL
 , session_expires       timestamp with time zone    DEFAULT (now() + INTERVAL '6 hours')
-, ctime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, claimed_time          timestamp with time zone    DEFAULT NULL
+, join_time             timestamp with time zone    DEFAULT NULL
+, status                participant_status          NOT NULL DEFAULT 'stub'
 , is_admin              boolean                     NOT NULL DEFAULT FALSE
 , balance               numeric(35,2)               NOT NULL DEFAULT 0.0
 , anonymous_giving      boolean                     NOT NULL DEFAULT FALSE
 , goal                  numeric(35,2)               DEFAULT NULL
 , balanced_customer_href  text                      DEFAULT NULL
 , is_suspicious         boolean                     DEFAULT NULL
-, id                    bigserial                   NOT NULL UNIQUE
-, username_lower        text                        NOT NULL UNIQUE
 , api_key               text                        DEFAULT NULL
 , number                participant_number          NOT NULL DEFAULT 'singular'
 , anonymous_receiving   boolean                     NOT NULL DEFAULT FALSE
 , avatar_url            text
-, is_closed             boolean                     NOT NULL DEFAULT FALSE
 , giving                numeric(35,2)               NOT NULL DEFAULT 0
 , pledging              numeric(35,2)               NOT NULL DEFAULT 0
 , receiving             numeric(35,2)               NOT NULL DEFAULT 0
@@ -48,22 +46,34 @@ CREATE TABLE participants
 , is_searchable         bool                        NOT NULL DEFAULT TRUE
 , notify_on_opt_in      boolean                     NOT NULL DEFAULT TRUE
 , notifications         text[]                      NOT NULL DEFAULT '{}'
+, CONSTRAINT status_balance CHECK (NOT (status <> 'active' AND balance <> 0))
+, CONSTRAINT status_join_time CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
  );
 
--- https://github.com/gratipay/gratipay.com/pull/1610
-CREATE INDEX participants_claimed_time ON participants (claimed_time DESC)
-  WHERE is_suspicious IS NOT TRUE
-    AND claimed_time IS NOT null;
+CREATE UNIQUE INDEX ON participants (lower(username));
+
+CREATE INDEX participants_join_time_idx ON participants (join_time)
+    WHERE join_time IS NOT NULL;
+
+CREATE FUNCTION fill_username() RETURNS trigger AS $$
+    BEGIN
+        NEW.username = '~'||NEW.id::text;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER fill_username BEFORE INSERT ON participants
+    FOR EACH ROW WHEN (NEW.username IS NULL) EXECUTE PROCEDURE fill_username();
 
 
 CREATE TABLE elsewhere
 ( id                    serial          PRIMARY KEY
+, participant           bigint          NOT NULL REFERENCES participants
 , platform              text            NOT NULL
 , user_id               text            NOT NULL
-, participant           text            NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
 , user_name             text
--- Note: using "user_name" instead of "username" avoids having the same
+-- Note: we use "user_name" instead of "username" to avoid having the same
 --       column name in the participants and elsewhere tables.
 , display_name          text
 , email                 text
@@ -74,13 +84,12 @@ CREATE TABLE elsewhere
 , connect_token         text
 , connect_expires       timestamptz
 , UNIQUE (platform, user_id)
-, UNIQUE (platform, participant)
+, UNIQUE (participant, platform)
  );
 
 \i sql/elsewhere_with_participant.sql
 
--- https://github.com/gratipay/gratipay.com/issues/951
-CREATE INDEX elsewhere_participant ON elsewhere(participant);
+CREATE UNIQUE INDEX ON elsewhere (lower(user_name), platform);
 
 
 -- tips -- all times a participant elects to tip another
@@ -88,8 +97,8 @@ CREATE TABLE tips
 ( id                    serial                      PRIMARY KEY
 , ctime                 timestamp with time zone    NOT NULL
 , mtime                 timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, tipper                text                        NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
-, tippee                text                        NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
+, tipper                bigint                      NOT NULL REFERENCES participants
+, tippee                bigint                      NOT NULL REFERENCES participants
 , amount                numeric(35,2)               NOT NULL
 , is_funded             boolean                     NOT NULL DEFAULT false
  );
@@ -124,8 +133,8 @@ CREATE TYPE context_type AS ENUM
 CREATE TABLE transfers
 ( id                    serial                      PRIMARY KEY
 , timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, tipper                text                        NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
-, tippee                text                        NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
+, tipper                bigint                      NOT NULL REFERENCES participants
+, tippee                bigint                      NOT NULL REFERENCES participants
 , amount                numeric(35,2)               NOT NULL
 , context               context_type                NOT NULL
  );
@@ -173,7 +182,7 @@ CREATE TYPE payment_net AS ENUM (
 
 CREATE TABLE exchange_routes
 ( id            serial         PRIMARY KEY
-, participant   bigint         NOT NULL REFERENCES participants(id)
+, participant   bigint         NOT NULL REFERENCES participants
 , network       payment_net    NOT NULL
 , address       text           NOT NULL CHECK (address <> '')
 , error         text           NOT NULL
@@ -199,8 +208,8 @@ CREATE TABLE exchanges
 , timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , amount                numeric(35,2)               NOT NULL
 , fee                   numeric(35,2)               NOT NULL
-, participant           text                        NOT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
-, recorder              text                        DEFAULT NULL REFERENCES participants ON UPDATE CASCADE ON DELETE RESTRICT
+, participant           bigint                      NOT NULL REFERENCES participants
+, recorder              bigint                      DEFAULT NULL REFERENCES participants
 , note                  text                        DEFAULT NULL
 , status                exchange_status
 , route                 bigint                      REFERENCES exchange_routes
@@ -209,28 +218,22 @@ CREATE TABLE exchanges
 
 -- https://github.com/gratipay/gratipay.com/issues/406
 CREATE TABLE absorptions
-( id                    serial                      PRIMARY KEY
-, timestamp             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, absorbed_was          text                        NOT NULL -- Not a foreign key!
-, absorbed_by           text                        NOT NULL REFERENCES participants ON DELETE RESTRICT ON UPDATE CASCADE
-, archived_as           text                        NOT NULL REFERENCES participants ON DELETE RESTRICT ON UPDATE RESTRICT
--- Here we actually want ON UPDATE RESTRICT as a sanity check:
--- noone should be changing usernames of absorbed accounts.
+( id           serial         PRIMARY KEY
+, timestamp    timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, archived     bigint         UNIQUE NOT NULL REFERENCES participants
+, absorbed_by  bigint         NOT NULL REFERENCES participants
  );
 
 
--- https://github.com/gratipay/gratipay.com/pull/2701
 CREATE TABLE community_members
 ( slug          text           NOT NULL
-, participant   bigint         NOT NULL REFERENCES participants(id)
-, ctime         timestamptz    NOT NULL
+, participant   bigint         NOT NULL REFERENCES participants
+, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , name          text           NOT NULL
 , is_member     boolean        NOT NULL
+, UNIQUE (slug, participant)
 );
-
-CREATE INDEX community_members_idx
-    ON community_members (slug, participant, mtime DESC);
 
 CREATE TABLE communities
 ( slug text PRIMARY KEY
@@ -242,35 +245,21 @@ CREATE TABLE communities
 
 \i sql/upsert_community.sql
 
-CREATE TRIGGER upsert_community BEFORE INSERT ON community_members
+CREATE TRIGGER upsert_community
+    BEFORE INSERT OR UPDATE OR DELETE ON community_members
     FOR EACH ROW
     EXECUTE PROCEDURE upsert_community();
-
-CREATE VIEW current_community_members AS
-    SELECT DISTINCT ON (participant, slug) c.*
-      FROM community_members c
-  ORDER BY participant, slug, mtime DESC;
 
 
 -- https://github.com/gratipay/gratipay.com/issues/1100
 CREATE TABLE takes
 ( id                serial                      PRIMARY KEY
 , ctime             timestamp with time zone    NOT NULL
-, mtime             timestamp with time zone    NOT NULL
-                                                DEFAULT CURRENT_TIMESTAMP
-, member            text                        NOT NULL
-                                                REFERENCES participants
-                                                ON UPDATE CASCADE
-                                                ON DELETE RESTRICT
-, team              text                        NOT NULL
-                                                REFERENCES participants
-                                                ON UPDATE CASCADE
-                                                ON DELETE RESTRICT
+, mtime             timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, member            bigint                      NOT NULL REFERENCES participants
+, team              bigint                      NOT NULL REFERENCES participants
 , amount            numeric(35,2)               NOT NULL DEFAULT 0.0
-, recorder          text                        NOT NULL
-                                                REFERENCES participants
-                                                ON UPDATE CASCADE
-                                                ON DELETE RESTRICT
+, recorder          bigint                      NOT NULL REFERENCES participants
 , CONSTRAINT no_team_recursion CHECK (team != member)
 , CONSTRAINT not_negative CHECK ((amount >= (0)::numeric))
  );
@@ -279,8 +268,8 @@ CREATE VIEW current_takes AS
     SELECT * FROM (
          SELECT DISTINCT ON (member, team) t.*
            FROM takes t
-           JOIN participants p1 ON p1.username = member
-           JOIN participants p2 ON p2.username = team
+           JOIN participants p1 ON p1.id = member
+           JOIN participants p2 ON p2.id = team
           WHERE p1.is_suspicious IS NOT TRUE
             AND p2.is_suspicious IS NOT TRUE
        ORDER BY member
@@ -291,14 +280,15 @@ CREATE VIEW current_takes AS
 
 -- https://github.com/gratipay/gratipay.com/pull/2006
 CREATE TABLE events
-( id        serial      PRIMARY KEY
-, ts        timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP
-, type      text        NOT NULL
-, payload   json
+( id           bigserial     PRIMARY KEY
+, ts           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, participant  bigint        NOT NULL REFERENCES participants
+, type         text          NOT NULL
+, payload      json
+, recorder     bigint        REFERENCES participants
  );
 
-CREATE INDEX events_ts ON events(ts ASC);
-CREATE INDEX events_type ON events(type);
+CREATE INDEX events_participant_idx ON events (participant, type);
 
 
 -- https://github.com/gratipay/gratipay.com/pull/2752
@@ -312,13 +302,9 @@ CREATE TABLE emails
                                                         -- properly.
                                                         CHECK (verified IS NOT FALSE)
 , nonce                 text
-, verification_start    timestamp with time zone    NOT NULL
-                                                      DEFAULT CURRENT_TIMESTAMP
+, verification_start    timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , verification_end      timestamp with time zone
-, participant           text                        NOT NULL
-                                                      REFERENCES participants
-                                                      ON UPDATE CASCADE
-                                                      ON DELETE RESTRICT
+, participant           bigint                      NOT NULL REFERENCES participants
 
 , UNIQUE (address, verified) -- A verified email address can't be linked to multiple
                              -- participants. However, an *un*verified address *can*
@@ -331,7 +317,7 @@ CREATE TABLE emails
 
 -- https://github.com/gratipay/gratipay.com/pull/3010
 CREATE TABLE statements
-( participant  bigint  NOT NULL REFERENCES participants(id)
+( participant  bigint  NOT NULL REFERENCES participants
 , lang         text    NOT NULL
 , content      text    NOT NULL CHECK (content <> '')
 , UNIQUE (participant, lang)
@@ -344,8 +330,8 @@ CREATE TABLE statements
 CREATE EXTENSION pg_trgm;
 
 CREATE INDEX username_trgm_idx ON participants
-    USING gist(username_lower gist_trgm_ops)
-    WHERE claimed_time IS NOT NULL AND NOT is_closed;
+    USING gist(lower(username) gist_trgm_ops)
+    WHERE status = 'active';
 
 CREATE INDEX community_trgm_idx ON communities
     USING gist(name gist_trgm_ops);
@@ -366,14 +352,14 @@ CREATE TRIGGER search_vector_update
 -- https://github.com/gratipay/gratipay.com/pull/3136
 CREATE TABLE email_queue
 ( id            serial   PRIMARY KEY
-, participant   bigint   NOT NULL REFERENCES participants(id)
+, participant   bigint   NOT NULL REFERENCES participants
 , spt_name      text     NOT NULL
 , context       bytea    NOT NULL
 );
 
 -- https://github.com/gratipay/gratipay.com/pull/3239
 CREATE TABLE balances_at
-( participant  bigint         NOT NULL REFERENCES participants(id)
+( participant  bigint         NOT NULL REFERENCES participants
 , at           timestamptz    NOT NULL
 , balance      numeric(35,2)  NOT NULL
 , UNIQUE (participant, at)

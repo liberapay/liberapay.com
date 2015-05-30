@@ -108,6 +108,8 @@ class Harness(unittest.TestCase):
                 # I tried TRUNCATE but that was way slower for me.
                 self.db.run("DELETE FROM %s CASCADE" % tablename)
             except (IntegrityError, InternalError):
+                if not tablenames:
+                    raise
                 tablenames.insert(0, tablename)
         self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
 
@@ -147,44 +149,55 @@ class Harness(unittest.TestCase):
 
 
     def make_participant(self, username, **kw):
+        platform = kw.pop('elsewhere', 'github')
+        kw2 = {}
+        for key in ('last_ach_result', 'last_bill_result'):
+            if key in kw:
+                kw2[key] = kw.pop(key)
+
+        kw.setdefault('status', 'active')
+        if not 'join_time' in kw:
+            kw['join_time'] = utcnow()
+        if kw.get('balanced_customer_href') == 'new':
+            kw['balanced_customer_href'] = self.make_balanced_customer()
+        cols, vals = zip(*kw.items())
+        cols = ', '.join(cols)
+        placeholders = ', '.join(['%s']*len(vals))
         participant = self.db.one("""
             INSERT INTO participants
-                        (username, username_lower)
-                 VALUES (%s, %s)
+                        (username, {0})
+                 VALUES (%s, {1})
               RETURNING participants.*::participants
-        """, (username, username.lower()))
+        """.format(cols, placeholders), (username,)+vals)
 
-        if 'elsewhere' in kw or 'claimed_time' in kw:
-            platform = kw.pop('elsewhere', 'github')
-            self.db.run("""
-                INSERT INTO elsewhere
-                            (platform, user_id, user_name, participant)
-                     VALUES (%s,%s,%s,%s)
-            """, (platform, participant.id, username, username))
+        self.db.run("""
+            INSERT INTO elsewhere
+                        (platform, user_id, user_name, participant)
+                 VALUES (%s,%s,%s,%s)
+        """, (platform, participant.id, username, participant.id))
 
         # Insert exchange routes
-        if 'last_bill_result' in kw:
-            ExchangeRoute.insert(participant, 'balanced-cc', '/cards/foo', kw.pop('last_bill_result'))
-        if 'last_ach_result' in kw:
-            ExchangeRoute.insert(participant, 'balanced-ba', '/bank_accounts/bar', kw.pop('last_ach_result'))
-
-        # Update participant
-        if kw:
-            if kw.get('claimed_time') == 'now':
-                kw['claimed_time'] = utcnow()
-            if kw.get('balanced_customer_href') == 'new':
-                kw['balanced_customer_href'] = self.make_balanced_customer()
-            cols, vals = zip(*kw.items())
-            cols = ', '.join(cols)
-            placeholders = ', '.join(['%s']*len(vals))
-            participant = self.db.one("""
-                UPDATE participants
-                   SET ({0}) = ({1})
-                 WHERE username=%s
-             RETURNING participants.*::participants
-            """.format(cols, placeholders), vals+(username,))
+        if 'last_bill_result' in kw2:
+            ExchangeRoute.insert(participant, 'balanced-cc', '/cards/foo', kw2['last_bill_result'])
+        if 'last_ach_result' in kw2:
+            ExchangeRoute.insert(participant, 'balanced-ba', '/bank_accounts/bar', kw2['last_ach_result'])
 
         return participant
+
+
+    def make_stub(self, **kw):
+        if not kw:
+            return self.db.one("""
+                INSERT INTO participants DEFAULT VALUES
+                  RETURNING participants.*::participants
+            """)
+        cols, vals = zip(*kw.items())
+        cols = ', '.join(cols)
+        placeholders = ', '.join(['%s']*len(vals))
+        return self.db.one("""
+            INSERT INTO participants ({0}) VALUES ({1})
+              RETURNING participants.*::participants
+        """.format(cols, placeholders), vals)
 
 
     def fetch_payday(self):

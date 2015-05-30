@@ -96,14 +96,16 @@ Liberapay.team = (function() {
 
     function lookup() {
         var query = $('#query').val();
-        if (query === '')
+        if (query.length < 3)
             $('#lookup-results').empty();
         else
-            jQuery.get("/lookup.json", {query: query}).success(drawLookupResults);
+            // TODO throttle
+            jQuery.get("/search.json", {scope: 'usernames', q: query}).success(drawLookupResults);
     }
 
     function drawLookupResults(results) {
         var items = [];
+        var results = results.usernames;
         for (var i=0, len=results.length; i<len; i++) {
             var result = results[i];
             items.push(Liberapay.jsonml(

@@ -36,7 +36,7 @@ AS $$
          , $1.connect_expires
          , participants.*::participants
       FROM participants
-     WHERE participants.username = $1.participant;
+     WHERE participants.id = $1.participant;
 $$ LANGUAGE SQL;
 
 CREATE CAST (elsewhere AS elsewhere_with_participant)

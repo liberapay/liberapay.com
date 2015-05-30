@@ -129,7 +129,7 @@ def make_sentry_teller(env):
                         user = { 'id': user_id
                                , 'is_admin': user.participant.is_admin
                                , 'is_suspicious': user.participant.is_suspicious
-                               , 'claimed_time': user.participant.claimed_time.isoformat()
+                               , 'join_time': user.participant.join_time.isoformat()
                                , 'url': 'https://liberapay.com/{}/'.format(username)
                                 }
 
