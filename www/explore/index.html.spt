@@ -22,8 +22,8 @@ title = _("Explore")
 {% endblock %}
 
 {% block content %}
-<form class="communities">
-    <select data-placeholder="{{ _("Find or add a community ...") }}" tabindex="1">
+<form class="communities" data-add-msg='{{ _("Add a new community") }}'>
+    <select data-placeholder='{{ _("Find or add a community ...") }}'>
         <option></option>
         {% for community in communities %}
         <option value="{{ community.slug }}">{{ community.name }} -
@@ -49,30 +49,25 @@ title = _("Explore")
 
 {% block scripts %}
 <script>
-    $(document).ready(function()
-    {
-
-        var communityChooser = $('.communities select')
-        var communityList = $('.communities ul')
-
-
-        function createOption(term)
-        {
-            success = function () {
-                Liberapay.communities.jumpTo(term);
-            }
-            Liberapay.communities.join(term, success, Liberapay.error);
+    $(document).ready(function() {
+        var communityChooser = $('.communities select');
+        function createOption(term) {
+            jQuery.post({
+                url: '/for/communities.json',
+                data: {name: name, is_member: true},
+                dataType: 'json',
+                success: function (data) {
+                    window.location = '/for/'+data.slug
+                },
+                error: Liberapay.error,
+            });
         }
-        // TODO: in future
-        {% if user.ANON %}
-        var chosenOpts = {};
-        {% else %}
-        var chosenOpts = { create_option: createOption
-                         , create_option_text: "Add a new community"
-                          };
-        {% endif %}
+        var chosenOpts = Liberapay.username ? {
+            create_option: createOption,
+            create_option_text: $('.communities').data('add-msg'),
+        }: {};
         communityChooser.chosen(chosenOpts).change(function() {
-            Liberapay.communities.jumpTo(communityChooser.val());
+            window.location = '/for/'+communityChooser.val()
         });
     });
 </script>

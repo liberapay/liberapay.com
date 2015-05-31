@@ -114,8 +114,8 @@ Liberapay.profile.init = function() {
     // Wire up user_name_prompt
     // ========================
 
-    $('.user_name_prompt').on('click', function () {
-        var user_name = prompt('Please enter the name of the GitHub account you would like to connect:');
+    $('form.user_name_prompt').submit(function () {
+        var user_name = prompt($(this).data('msg'));
         if(!user_name) return false;
         $(this).children('[name="user_name"]').val(user_name);
     });

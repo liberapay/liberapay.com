@@ -49,11 +49,8 @@ subhead = _("Team Members")
         <div id="lookup-container">
           <form>
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <input tabindex="1" id="query"
-                   autocomplete="off"
-                   placeholder="{{ _("Enter a username") }}"
-               />&nbsp;<button type="submit"
-                               tabindex="2">{{ _("Add") }}</button>
+            <input id="query" autocomplete="off" placeholder="{{ _('Enter a username') }}" />
+            <button type="submit">{{ _("Add") }}</button>
             <ul id="lookup-results"></ul>
           </form>
         </div>

@@ -6,7 +6,23 @@ Liberapay.getCookie = function(key) {
 }
 
 Liberapay.init = function() {
-    Liberapay.forms.initCSRF();
+    // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
+    jQuery.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            var safeMethod = (/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type));
+            if (!safeMethod && !settings.crossDomain) {
+                // We have to avoid httponly on the csrf_token cookie because of this.
+                xhr.setRequestHeader("X-CSRF-TOKEN", Liberapay.getCookie('csrf_token'));
+            }
+        }
+    });
+
+    $('#jump').submit(function (e) {
+        e.preventDefault();
+        var platform = $('#jump select').val().trim(),
+            user_name = $('#jump input').val().trim();
+        if (user_name) window.location = '/on/' + platform + '/' + user_name + '/';
+    });
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
@@ -21,41 +37,10 @@ Liberapay.error = function(jqXHR, textStatus, errorThrown) {
     Liberapay.notification(msg, 'error', -1);
 }
 
-
-// each/jsoncss/jsonml
-// ===================
-// yanked from gttp.co/v1/api.js
-
-Liberapay.each = function(a, fn) {
-    for (var i=0; i<a.length; i++)
-        fn(a[i], i, length);
-};
-
-Liberapay.jsoncss = function(jsoncss) {
-    var out = '';
-
-    this.each(jsoncss, function(selector) {
-        if (typeof selector == 'string')
-            return out += selector + ';';
-
-        out += selector[0] + '{';
-
-        for (var i=1; i<selector.length; i++) {
-            for (var prop in selector[i])
-                out += prop + ':' + selector[i][prop] + ';';
-        }
-
-        out += '}';
-    });
-
-    return this.jsonml(['style', out]);
-};
-
 Liberapay.jsonml = function(jsonml) {
-    var node  = document.createElement(jsonml[0]),
-        _     = this;
+    var node  = document.createElement(jsonml[0]);
 
-    _.each(jsonml, function(v, j) {
+    jQuery.each(jsonml, function(j, v) {
         if (j === 0 || typeof v === 'undefined') return;
 
         switch (v.constructor) {
@@ -64,7 +49,7 @@ Liberapay.jsonml = function(jsonml) {
                     node.setAttribute(p, v[p]);
                 break;
 
-            case Array: node.appendChild(_.jsonml(v)); break;
+            case Array: node.appendChild(Liberapay.jsonml(v)); break;
 
             case String: case Number:
                 node.appendChild(document.createTextNode(v));

@@ -9,18 +9,11 @@ if not user.ANON:
 {% block head %}
     <link rel="publisher" href="https://plus.google.com/104524895706770139568">
     <link type="application/opensearchdescription+xml" rel="search" href="/opensearch.osdd" />
-    <meta name="description" content="Weekly payments, motivated by gratitude. Sustainably crowdfund your business, personal projects, or charity, with no extra fees." />
-    <meta name="fb:app_id" content="229465400522758" />
+    <meta name="description" content="Recurrent donations platform" />
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://liberapay.com/" />
     <meta name="og:title" content="Liberapay" />
     <meta name="og:image" content="{{ website.asset('liberapay.png') }}" />
-    {% if user.ANON %}
-    <style>
-        #header, #footer { display: none; }
-        #upgrade_browser .container { display: block; }
-    </style>
-    {% endif %}
 {% endblock %}
 
 {% block sidebar %}

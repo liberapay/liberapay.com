@@ -1,32 +1,4 @@
-// Form Generics
-// =============
-
 Liberapay.forms = {};
-
-Liberapay.forms.initCSRF = function() {   // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
-    jQuery(document).ajaxSend(function(event, xhr, settings) {
-        function sameOrigin(url) {
-            // url could be relative or scheme relative or absolute
-            var host = document.location.host; // host + port
-            var protocol = document.location.protocol;
-            var sr_origin = '//' + host;
-            var origin = protocol + sr_origin;
-            // Allow absolute or scheme relative URLs to same origin
-            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-                // or any other URL that isn't scheme relative or absolute i.e relative.
-                !(/^(\/\/|http:|https:).*/.test(url));
-        }
-        function safeMethod(method) {
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-            // We have to avoid httponly on the csrf_token cookie because of this.
-            xhr.setRequestHeader("X-CSRF-TOKEN", Liberapay.getCookie('csrf_token'));
-        }
-    });
-};
 
 Liberapay.forms.jsEdit = function(params) {
 

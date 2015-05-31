@@ -25,7 +25,6 @@ Liberapay.team = (function() {
                          , ['input', { 'value': take
                                                  , 'data-username': member.username
                                                  , 'data-take': take // useful to reset form
-                                                 , 'tabindex': '1'
                                                     }]
                             ];
 
