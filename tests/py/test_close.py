@@ -18,7 +18,7 @@ class TestClosing(Harness):
     # close
 
     def test_close_closes(self):
-        team = self.make_participant('team', number='plural', balance=50)
+        team = self.make_participant('team', kind='group', balance=50)
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
@@ -42,14 +42,14 @@ class TestClosing(Harness):
             alice.close('cheese')
 
     def test_close_page_is_usually_available(self):
-        self.make_participant('alice')
-        body = self.client.GET('/alice/settings/close', auth_as='alice').body
+        alice = self.make_participant('alice')
+        body = self.client.GET('/alice/settings/close', auth_as=alice).body
         assert 'Personal Information' in body
 
     def test_close_page_is_not_available_during_payday(self):
         Payday.start()
-        self.make_participant('alice')
-        body = self.client.GET('/alice/settings/close', auth_as='alice').body
+        alice = self.make_participant('alice')
+        body = self.client.GET('/alice/settings/close', auth_as=alice).body
         assert 'Personal Information' not in body
         assert 'Try Again Later' in body
 
@@ -59,7 +59,7 @@ class TestClosing(Harness):
         alice.set_tip_to(bob, D('10.00'))
 
         data = {'disbursement_strategy': 'downstream'}
-        response = self.client.PxST('/alice/settings/close', auth_as='alice', data=data)
+        response = self.client.PxST('/alice/settings/close', auth_as=alice, data=data)
         assert response.code == 302
         assert response.headers['Location'] == '/alice/'
         assert Participant.from_username('alice').balance == 0
@@ -67,16 +67,16 @@ class TestClosing(Harness):
 
     def test_cant_post_to_close_page_during_payday(self):
         Payday.start()
-        self.make_participant('alice')
-        body = self.client.POST('/alice/settings/close', auth_as='alice').body
+        alice = self.make_participant('alice')
+        body = self.client.POST('/alice/settings/close', auth_as=alice).body
         assert 'Try Again Later' in body
 
     @mock.patch('liberapay.billing.exchanges.ach_credit')
     def test_ach_credit_failure_doesnt_cause_500(self, ach_credit):
         ach_credit.side_effect = 'some error'
-        self.make_participant('alice', balance=384)
+        alice = self.make_participant('alice', balance=384)
         data = {'disbursement_strategy': 'bank'}
-        r = self.client.POST('/alice/settings/close', auth_as='alice', data=data)
+        r = self.client.POST('/alice/settings/close', auth_as=alice, data=data)
         assert r.code == 200
 
 
@@ -285,7 +285,7 @@ class TestClosing(Harness):
                                      , anonymous_giving=True
                                      , anonymous_receiving=True
                                      , avatar_url='img-url'
-                                     , email_address='alice@example.com'
+                                     , email='alice@example.com'
                                      , session_token='deadbeef'
                                      , session_expires='2000-01-01'
                                      , giving=20
@@ -302,11 +302,10 @@ class TestClosing(Harness):
 
         assert alice.get_statement(['en']) == (None, None)
         assert alice.goal == new_alice.goal == None
-        assert alice.anonymous_giving == new_alice.anonymous_giving == False
-        assert alice.anonymous_receiving == new_alice.anonymous_receiving == False
-        assert alice.number == new_alice.number == 'singular'
+        assert alice.anonymous_giving == new_alice.anonymous_giving == True
+        assert alice.anonymous_receiving == new_alice.anonymous_receiving == True
         assert alice.avatar_url == new_alice.avatar_url == None
-        assert alice.email_address == new_alice.email_address == None
+        assert alice.email == new_alice.email
         assert alice.giving == new_alice.giving == 0
         assert alice.pledging == new_alice.pledging == 0
         assert alice.receiving == new_alice.receiving == 0

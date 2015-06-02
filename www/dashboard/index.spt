@@ -1,7 +1,7 @@
 from aspen import Response
 
 [---]
-if not user.ADMIN:
+if not user.is_admin:
     raise Response(403)
 
 

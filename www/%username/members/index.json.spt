@@ -7,8 +7,8 @@ from liberapay.utils import get_participant
 
 request.allow('GET')
 team = get_participant(state, restrict=False)
-if not team.show_as_team(user):
-    raise Response(404)
+if team.kind != 'group':
+    raise Response(400)
 
 [--------------------] application/json via json_dump
-team.get_members(user.participant)
+team.get_members()

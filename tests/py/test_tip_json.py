@@ -14,17 +14,17 @@ class TestTipJson(Harness):
         # We need accounts
         self.make_participant("test_tippee1")
         self.make_participant("test_tippee2")
-        self.make_participant("test_tipper", last_bill_result='')
+        test_tipper = self.make_participant("test_tipper", last_bill_result='')
 
         # Then, add a $1.50 and $3.00 tip
         response1 = self.client.POST( "/test_tippee1/tip.json"
                                     , {'amount': "1.00"}
-                                    , auth_as='test_tipper'
+                                    , auth_as=test_tipper
                                      )
 
         response2 = self.client.POST( "/test_tippee2/tip.json"
                                     , {'amount': "3.00"}
-                                    , auth_as='test_tipper'
+                                    , auth_as=test_tipper
                                      )
 
         # Confirm we get back the right amounts.
@@ -37,39 +37,42 @@ class TestTipJson(Harness):
 
     def test_set_tip_out_of_range(self):
         self.make_participant("alice")
-        self.make_participant("bob")
+        bob = self.make_participant("bob")
 
-        response = self.client.PxST( "/alice/tip.json"
+        response = self.client.POST( "/alice/tip.json"
                                    , {'amount': "110.00"}
-                                   , auth_as='bob'
+                                   , auth_as=bob
+                                   , raise_immediately=False
                                     )
-        assert "bad amount" in response.body
+        assert "not a valid donation amount" in response.body
         assert response.code == 400
 
-        response = self.client.PxST( "/alice/tip.json"
+        response = self.client.POST( "/alice/tip.json"
                                    , {'amount': "-1.00"}
-                                   , auth_as='bob'
+                                   , auth_as=bob
+                                   , raise_immediately=False
                                     )
-        assert "bad amount" in response.body
+        assert "not a valid donation amount" in response.body
         assert response.code == 400
 
     def test_set_tip_to_patron(self):
         self.make_participant("alice", goal='-1')
-        self.make_participant("bob")
+        bob = self.make_participant("bob")
 
-        response = self.client.PxST( "/alice/tip.json"
+        response = self.client.POST( "/alice/tip.json"
                                    , {'amount': "10.00"}
-                                   , auth_as='bob'
+                                   , auth_as=bob
+                                   , raise_immediately=False
                                     )
-        assert "user doesn't accept tips" in response.body
+        assert "doesn't accept donations" in response.body
         assert response.code == 400
 
     def test_tip_to_unclaimed(self):
         alice = self.make_elsewhere('twitter', 1, 'alice')
-        self.make_participant("bob")
+        bob = self.make_participant("bob")
         response = self.client.POST( "/%s/tip.json" % alice.participant.username
                                    , {'amount': "10.00"}
-                                   , auth_as='bob'
+                                   , auth_as=bob
                                     )
         data = json.loads(response.body)
         assert response.code == 200

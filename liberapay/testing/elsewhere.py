@@ -201,21 +201,6 @@ twitter = lambda: {
     "listed_count": 7
 }
 
-venmo = lambda: {
-    "about": "No Short Bio",
-    "date_joined": "2013-09-11T19:57:53",
-    "display_name": "Thomas Boyt",
-    "email": None,
-    "first_name": "Thomas",
-    "friends_count": 30,
-    "id": "1242868517699584789",
-    "is_friend": False,
-    "last_name": "Boyt",
-    "phone": None,
-    "profile_picture_url": "https://s3.amazonaws.com/venmo/no-image.gif",
-    "username": "thomas-boyt"
-}
-
 facebook = lambda: {
    "id": "187701977",
    "first_name": "Chad",

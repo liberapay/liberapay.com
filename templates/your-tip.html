@@ -1,11 +1,15 @@
 {% if user.ANON %}
     <div class="right">
-        {% include "templates/sign-in-using-to-give.html" %}
+        <div class="sign-in-to">
+            {% include "templates/sign-in.html" %}
+            {% set pledging = request.path.decoded.startswith('/on/') %}
+            {{ _("to pledge to {0}", account.friendly_name) if pledging else _("to give to {0}", participant.username) }}
+        </div>
     </div>
 {% else %}
     <div class="cta">
         {% set tippee = participant.username %}
-        {% set tip = user.participant.get_tip_to(participant) %}
+        {% set tip = user.get_tip_to(participant) %}
         <h2>{{ _('Your Tip') }}</h2>
         <div class="js-edit your-tip {{ 'anon' if user.ANON }}"
              data-tippee="{{ participant.id }}">
@@ -22,8 +26,8 @@
             </div>
             <form class="edit" action="/{{ tippee }}/tip.json">
                 $
-                <input type="text" name="amount" class="amount" value="{{ format_decimal(tip.amount) }}"
-                       min="0" max="{{ '1000' if participant.IS_PLURAL else '100' }}">
+                <input type="number" name="amount" class="amount" value="{{ format_decimal(tip.amount) }}"
+                       min="0" max="{{ constants.MAX_TIP }}">
                 <div class="per-week">{{ _("per week") }}</div>
                 <button class="save">{{ _("Save") }}</button>
                 <button class="cancel">{{ _("Cancel") }}</button>
@@ -34,7 +38,7 @@
         {% if not tip.is_funded %}
         <div id="payment-prompt" class="{{ 'needed' if tip.amount > 0 }}">
             {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
-                 "<a href='/%s/routes/credit-card.html'>"|safe % user.participant.username,
+                 "<a href='/%s/routes/credit-card.html'>"|safe % user.username,
                  "</a>"|safe) }}
         </div>
         {% endif %}

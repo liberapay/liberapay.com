@@ -21,17 +21,17 @@
             <div class="account-type">{{ platform.display_name }}</div>
         </td>
         <td class="account-action">
-            {% if user.participant == participant %}
+            {% if user == participant %}
                 {% if account == None %}
-                    {% set allow_team = participant.IS_PLURAL and platform.is_team_admin %}
+                    {% set allow_team = participant.kind == 'organization' and platform.is_team_admin %}
                     {% set cls = allow_team and 'user_name_prompt' or '' %}
                     {% call auth_button(platform.name, 'connect', class=cls) %}
                         {{ _("+ Add") }}
                     {% endcall %}
                 {% else %}
                     <div class="account-delete" title="{{ _("Disconnect") }}"
-                            data-platform="{{ platform.name }}"
-                            data-user_id="{{ account.user_id }}">
+                         data-platform="{{ platform.name }}"
+                         data-user_id="{{ account.user_id }}">
                     </div>
                 {% endif %}
             {% endif %}

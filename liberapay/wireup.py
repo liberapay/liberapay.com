@@ -26,7 +26,6 @@ from liberapay.elsewhere.facebook import Facebook
 from liberapay.elsewhere.google import Google
 from liberapay.elsewhere.openstreetmap import OpenStreetMap
 from liberapay.elsewhere.twitter import Twitter
-from liberapay.elsewhere.venmo import Venmo
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
@@ -52,6 +51,8 @@ def db(env):
     for model in (AccountElsewhere, Community, ExchangeRoute, Participant):
         db.register_model(model)
     liberapay.billing.payday.Payday.db = db
+
+    Participant._password_rounds = env.password_rounds
 
     return db
 
@@ -116,22 +117,17 @@ def make_sentry_teller(env):
             elif is_anon:
                 username = '| anonymous'
             else:
-                participant = getattr(user, 'participant', None)
-                if participant is None:
-                    username = '| no participant'
+                username = getattr(user, 'username', None)
+                if username is None:
+                    username = '| no username'
                 else:
-                    username = getattr(user.participant, 'username', None)
-                    if username is None:
-                        username = '| no username'
-                    else:
-                        user_id = user.participant.id
-                        username = username.encode('utf8')
-                        user = { 'id': user_id
-                               , 'is_admin': user.participant.is_admin
-                               , 'is_suspicious': user.participant.is_suspicious
-                               , 'join_time': user.participant.join_time.isoformat()
-                               , 'url': 'https://liberapay.com/{}/'.format(username)
-                                }
+                    user_id = user.id
+                    user = { 'id': user_id
+                           , 'is_admin': user.is_admin
+                           , 'is_suspicious': user.is_suspicious
+                           , 'join_time': user.join_time.isoformat()
+                           , 'url': 'https://liberapay.com/{}/'.format(username)
+                            }
 
 
         # Fire off a Sentry call.
@@ -204,26 +200,14 @@ def accounts_elsewhere(website, env):
         env.bountysource_api_host,
         env.bountysource_www_host,
     )
-    venmo = Venmo(
-        env.venmo_client_id,
-        env.venmo_client_secret,
-        env.venmo_callback,
-    )
 
-    signin_platforms = [twitter, github, facebook, google, bitbucket, openstreetmap]
-    website.signin_platforms = PlatformRegistry(signin_platforms)
-    AccountElsewhere.signin_platforms_names = tuple(p.name for p in signin_platforms)
-
-    # For displaying "Connected Accounts"
-    website.social_profiles = [twitter, github, facebook, google, bitbucket, openstreetmap, bountysource]
-
-    all_platforms = signin_platforms + [bountysource, venmo]
-    website.platforms = AccountElsewhere.platforms = PlatformRegistry(all_platforms)
+    platforms = [twitter, github, facebook, google, bitbucket, openstreetmap, bountysource]
+    website.platforms = AccountElsewhere.platforms = PlatformRegistry(platforms)
 
     friends_platforms = [p for p in website.platforms if getattr(p, 'api_friends_path', None)]
     website.friends_platforms = PlatformRegistry(friends_platforms)
 
-    for platform in all_platforms:
+    for platform in platforms:
         platform.icon = website.asset('platforms/%s.16.png' % platform.name)
         platform.logo = website.asset('platforms/%s.png' % platform.name)
 
@@ -331,12 +315,13 @@ def other_stuff(website, env):
 def env():
     env = Environment(
         DATABASE_URL                    = unicode,
+        DATABASE_MAXCONN                = int,
         CANONICAL_HOST                  = unicode,
         CANONICAL_SCHEME                = unicode,
-        DATABASE_MAXCONN                = int,
         ASSET_URL                       = unicode,
         CACHE_STATIC                    = is_yesish,
         COMPRESS_ASSETS                 = is_yesish,
+        PASSWORD_ROUNDS                 = int,
         BALANCED_API_SECRET             = unicode,
         GITHUB_CLIENT_ID                = unicode,
         GITHUB_CLIENT_SECRET            = unicode,
@@ -357,9 +342,6 @@ def env():
         BOUNTYSOURCE_CALLBACK           = unicode,
         BOUNTYSOURCE_API_HOST           = unicode,
         BOUNTYSOURCE_WWW_HOST           = unicode,
-        VENMO_CLIENT_ID                 = unicode,
-        VENMO_CLIENT_SECRET             = unicode,
-        VENMO_CALLBACK                  = unicode,
         OPENSTREETMAP_CONSUMER_KEY      = unicode,
         OPENSTREETMAP_CONSUMER_SECRET   = unicode,
         OPENSTREETMAP_CALLBACK          = unicode,

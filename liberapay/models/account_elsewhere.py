@@ -13,7 +13,6 @@ from psycopg2 import IntegrityError
 import xmltodict
 
 import liberapay
-from liberapay.exceptions import ProblemChangingUsername
 from liberapay.security.crypto import constant_time_compare
 
 
@@ -129,9 +128,6 @@ class AccountElsewhere(Model):
                          VALUES (%s, {1})
                       RETURNING elsewhere.*::elsewhere_with_participant
                 """.format(cols, placeholders), (id,)+vals)
-                # Propagate elsewhere.is_team to participants.number
-            if i.is_team:
-                account.participant.update_number('plural')
         except IntegrityError:
             # The account is already in the DB, update it instead
             account = cls.db.one("""
@@ -221,20 +217,6 @@ class AccountElsewhere(Model):
         if user_name and user_name != r:
             return '%s (%s)' % (r, user_name)
         return r
-
-    def opt_in(self, desired_username):
-        """Given a desired username, try to claim it.
-        """
-        status = self.participant.status
-        if status == 'active':
-            return
-        self.participant.update_status('active')
-        if status == 'stub':
-            try:
-                self.participant.change_username(desired_username)
-            except ProblemChangingUsername:
-                pass
-            self.participant.notify_patrons(self)
 
     def save_token(self, token):
         """Saves the given access token in the database.

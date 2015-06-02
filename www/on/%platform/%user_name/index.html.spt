@@ -34,12 +34,8 @@ if is_team:
                                     "{0} is a team with {n} public members",
                                     nmembers, friendly_name)
     allow_team_connect = platform.allows_team_connect
-    if user.ANON or not user.participant.IS_PLURAL:
+    if user.ANON or user.kind != 'organization':
         allow_team_connect = False
-    if allow_team_connect:
-        user_accounts = user.participant.get_accounts_elsewhere()
-        if len(user_accounts) == 1 and platform.name in user_accounts:
-            allow_team_connect = False
 
 [-----------------------------------------------------------------------------]
 {% from 'templates/avatar-url.html' import avatar_img with context %}
@@ -133,9 +129,7 @@ if is_team:
     {% if platform in website.signin_platforms or not user.ANON %}
         {% if user.ANON %}
             <p>{{ _("Is this you? We never collect money for you unless you join.") }}</p>
-            {% call auth_button(platform.name, 'opt-in', user_id) %}
-                {{ _("Join Liberapay") }}
-            {% endcall %}
+            {% include "templates/sign-in.html" %}
         {% else %}
             <p>{{ _("Is this yours? Connect it to your Liberapay account.") }}</p>
             {% call auth_button(platform.name, 'connect', user_id) %}

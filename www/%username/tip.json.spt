@@ -4,7 +4,6 @@ from decimal import InvalidOperation
 
 from aspen import Response
 from babel.numbers import NumberFormatError
-from liberapay.exceptions import BadAmount, UserDoesntAcceptTips
 from liberapay.models.participant import Participant
 from liberapay.utils import get_participant
 
@@ -19,7 +18,7 @@ else:
     # Get tipper and tippee.
     # ======================
 
-    tipper = user.participant
+    tipper = user
     tippee = get_participant(state, restrict=False, redirect_stub=False)
 
 
@@ -29,10 +28,8 @@ else:
     if request.method == 'POST' and 'amount' in request.body and tippee != tipper:
         try:
             out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
-        except (InvalidOperation, ValueError, BadAmount, NumberFormatError):
+        except (InvalidOperation, ValueError, NumberFormatError):
             raise Response(400, "bad amount")
-        except UserDoesntAcceptTips:
-            raise Response(400, "user doesn't accept tips")
     else:
         out = tipper.get_tip_to(tippee)
 

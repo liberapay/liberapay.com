@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {% if user.ADMIN %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}
+    {% if user.is_admin %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}
     <script>$(document).ready(Liberapay.tips.init)</script>
     <script>$(document).ready(function() {
       $('#goal-custom').on('click change', function() {

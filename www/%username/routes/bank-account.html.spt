@@ -5,6 +5,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
+
 account = None
 bank_account = None
 status = ""
@@ -54,7 +55,7 @@ title = _("Bank Account")
 
 {% block content %}
   {% if user.ANON %}
-    {% include "templates/sign-in-using.html" %}
+    {% include "templates/sign-in.html" %}
     {{ _("and then you'll be able to add or change your bank account.") }}
   {% else %}
 

@@ -17,7 +17,7 @@ accounts = participant.get_accounts_elsewhere()
 
 statement, stmt_lang = participant.get_statement(request.accept_langs)
 long_statement = len(statement or '') > LONG_STATEMENT
-if user.participant == participant:
+if user == participant:
     pref_langs = set(request.accept_langs + participant.get_statement_langs())
     select_langs = OrderedDict((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
     select_langs.update([('', '---')])  # Separator
@@ -26,7 +26,7 @@ if user.participant == participant:
     confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
 communities = community.get_list_for(website.db, participant.id)
 
-if participant.number == 'singular':
+if participant.kind == 'individual':
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
     PATRON = _("I'm here as a patron.")
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
@@ -48,7 +48,7 @@ def with_others(obj):
 {% extends "templates/profile.html" %}
 
 {% block content %}
-{% if user.participant == participant %}
+{% if user == participant %}
     <div id="profile-edit">
         {% include "templates/profile-edit.html" %}
     </div>
@@ -83,7 +83,7 @@ def with_others(obj):
 {% endblock %}
 
 {% block scripts %}
-{% if user.participant == participant %}
+{% if user == participant %}
 <script>$(document).ready(Liberapay.profile.init);</script>
 {% endif %}
 {{ super() }}

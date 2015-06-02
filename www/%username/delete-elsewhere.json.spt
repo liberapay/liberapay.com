@@ -1,5 +1,5 @@
 from aspen import Response
-from liberapay.models.participant import LastElsewhere, NonexistingElsewhere
+from liberapay.models.participant import NonexistingElsewhere
 [-----------------------------------------------------------------------------]
 if user.ANON:
     raise Response(403)
@@ -9,9 +9,7 @@ platform = request.body["platform"]
 user_id = request.body["user_id"]
 
 try:
-    user.participant.delete_elsewhere(platform, user_id)
-except LastElsewhere:
-    raise Response(400, _("Cannot delete last login account. If you want to merge this login account to a different Liberapay account: log out of this account; log into the other account using another method; and then add this authentication provider to it. The two Liberapay accounts will be merged."))
+    user.delete_elsewhere(platform, user_id)
 except NonexistingElsewhere:
     raise Response(400, _("Account does not exist."))
 

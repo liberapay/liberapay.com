@@ -1,0 +1,8 @@
+<form action="/sign-out.html" method="POST">
+    <input name="back_to" type="hidden" value="{{ request.line.uri }}" />
+    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+    <button class="sign-out" type="submit">
+        <span class="icon">&#xe600;</span>
+        <span class="screen-reader-text">{{ _("Sign out") }}</span>
+    </button>
+</form>

@@ -1,13 +1,6 @@
-import datetime
-from decimal import Decimal
+from __future__ import print_function, unicode_literals
 
-
-BIRTHDAY = datetime.date(2015, 5, 22)
-
-MAX_TIP = Decimal('100.00')
-MIN_TIP = Decimal('0.01')
-
-RESTRICTED_IDS = None
+from . import constants
 
 
 # canonizer
@@ -38,3 +31,7 @@ def canonize(request):
             # For non-idempotent methods, redirect to homepage.
             url += '/'
         request.redirect(url)
+
+
+def insert_constants():
+    return {'constants': constants}

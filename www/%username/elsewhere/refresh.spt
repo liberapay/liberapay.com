@@ -4,7 +4,7 @@ from liberapay.utils import get_participant
 
 [---]
 
-if not user.ADMIN:
+if not user.is_admin:
     raise Response(403)
 
 participant = get_participant(state, restrict=True)

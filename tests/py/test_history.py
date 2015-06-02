@@ -39,7 +39,7 @@ class TestHistory(Harness):
 
     def test_iter_payday_events(self):
         Payday.start().run()
-        team = self.make_participant('team', number='plural')
+        team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         self.make_exchange('balanced-cc', 10000, 0, team)
         self.make_exchange('balanced-cc', 10000, 0, alice)
@@ -123,17 +123,17 @@ class TestExport(Harness):
         make_history(self)
 
     def test_export_json(self):
-        r = self.client.GET('/alice/history/export.json', auth_as='alice')
+        r = self.client.GET('/alice/history/export.json', auth_as=self.alice)
         assert json.loads(r.body)
 
     def test_export_json_aggregate(self):
-        r = self.client.GET('/alice/history/export.json?mode=aggregate', auth_as='alice')
+        r = self.client.GET('/alice/history/export.json?mode=aggregate', auth_as=self.alice)
         assert json.loads(r.body)
 
     def test_export_json_past_year(self):
-        r = self.client.GET('/alice/history/export.json?year=%s' % self.past_year, auth_as='alice')
+        r = self.client.GET('/alice/history/export.json?year=%s' % self.past_year, auth_as=self.alice)
         assert len(json.loads(r.body)['exchanges']) == 4
 
     def test_export_csv(self):
-        r = self.client.GET('/alice/history/export.csv?key=exchanges', auth_as='alice')
+        r = self.client.GET('/alice/history/export.csv?key=exchanges', auth_as=self.alice)
         assert r.body.count('\n') == 5

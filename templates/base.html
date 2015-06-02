@@ -19,23 +19,18 @@
             {% set current_page = request.path.raw.split('/')[1] %}
             {% include "templates/nav.html" %}
             {% if user.ANON %}
-                {% include "templates/sign-in-using.html" %}
+                {% include "templates/sign-in.html" %}
             {% else %}
             <ul class="nav you-are">
                 <li>
-                    <a href="/"{% if request.path.raw == '/' or request.path.raw.split('/')[1] == user.participant.username  %} class="selected"{% endif %}>
-                        {{ user.participant.username }}
+                    <a href="/" class="{{ 'selected' if request.path.raw.split('/')[1] == user.username }}">
+                        {{ user.username }}
                         <div class="quick-stats">
-                            <span class="my-total-giving">{{ format_currency(user.participant.giving, "USD") }}</span>/{{ _("wk") }}
+                            <span class="my-total-giving">{{ format_currency(user.giving, "USD") }}</span>/{{ _("wk") }}
                         </div>
                     </a>
                 </li>
-                <li>
-                    <a id="sign-out" href="/sign-out.html">
-                        <span class="icon">&#xe600;</span>
-                        <span class="screen-reader-text">Sign out</span>
-                    </a>
-                </li>
+                <li>{% include "templates/sign-out.html" %}</li>
             </ul>
             {% endif %}
         </div>
@@ -79,9 +74,9 @@
     $(document).ready(function() {
         Liberapay.init();
         {% if not user.ANON %}
-        Liberapay.username = {{ to_javascript(user.participant.username)|safe }};
+        Liberapay.username = {{ to_javascript(user.username)|safe }};
         Liberapay.initNotifications(
-            {{ to_javascript(user.participant.render_notifications(state))|safe }}
+            {{ to_javascript(user.render_notifications(state))|safe }}
         );
         {% endif %}
     });

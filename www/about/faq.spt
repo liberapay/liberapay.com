@@ -1,5 +1,4 @@
 # encoding: utf8
-from liberapay import MIN_TIP, MAX_TIP
 [---]
 title = _("Frequently Asked Questions")
 [---] text/html
@@ -94,13 +93,13 @@ title = _("Frequently Asked Questions")
         "The minimum you can give any user is {0}. To minimize processing fees, "
         "we charge your credit card at least {1} at a time (the money that isn't "
         "donated immediately is stored in your Liberapay wallet)."
-        , format_currency(MIN_TIP, 'USD'), format_currency(10, 'USD')
+        , format_currency(constants.MIN_TIP, 'USD'), format_currency(10, 'USD')
     ) }}</dd>
 
     <dd>{{ _(
         "The maximum you can give any one user is {0} per week. This helps to "
         "stabilize income by reducing how dependent it is on a few large patrons."
-        , format_currency(MAX_TIP, 'USD')
+        , format_currency(constants.MAX_TIP, 'USD')
     ) }}</dd>
 
 

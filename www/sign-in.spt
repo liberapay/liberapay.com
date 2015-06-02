@@ -1,0 +1,90 @@
+from aspen import Response
+
+from liberapay.models.participant import Participant
+
+[---]
+
+action = None
+if request.method == 'POST':
+    body = request.body
+    action = body['action']
+    if action == 'log-in':
+        p = Participant.authenticate('username', 'password',
+                                     body['username'], body['password'])
+        if p and p.status == 'closed':
+            p.update_status('active')
+    elif action == 'sign-in':
+        kind = body['kind']
+        if kind not in ('individual', 'organization'):
+            raise Response(400, 'bad kind')
+        p = Participant.make_active(body['username'], kind, body['password'])
+        try:
+            p.add_email(body['email'])
+        except Exception as e:
+            if website.env.raise_signin_notifications:
+                raise
+            website.tell_sentry(e, state)
+        p.authenticated = True
+    else:
+        raise Response(400, 'bad action')
+    if p:
+        p.sign_in(response.headers.cookie)
+        try:
+            p.add_signin_notifications()
+        except Exception as e:
+            if website.env.raise_signin_notifications:
+                raise
+            website.tell_sentry(e, state)
+        response.redirect(request.qs.get('back_to', '/'))
+
+[---] text/html
+{% extends "templates/base.html" %}
+{% block content %}
+<form class="col1" action="" method="POST">
+
+    <h2>{{ _("Log in") }}</h2>
+
+    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+    <input name="action" type="hidden" value="log-in" />
+
+    {% if action == 'log-in' %}
+        <p class="alert alert-error">{{ _("Bad username or password") }}</p>
+    {% endif %}
+
+    <input name="username" autocomplete="username" required
+           placeholder="{{ _('Username') }}" />
+    <input name="password" type="password" autocomplete="current-password" required
+           placeholder="{{ _('Password') }}" />
+
+    <button type="submit">{{ _("Go") }}</button>
+
+</form>
+<form class="col2" action="" method="POST">
+
+    <h2>{{ _("Sign in") }}</h2>
+
+    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+    <input name="action" type="hidden" value="sign-in" />
+
+    <input name="username" autocomplete="username"
+           required maxlength="{{ constants.USERNAME_MAX_SIZE }}"
+           placeholder="{{ _('Username') }}" />
+    <input name="email" type="email" autocomplete="email"
+           required pattern=".*@.*"
+           placeholder="{{ _('Email') }}" />
+    <input name="password" type="password" autocomplete="new-password"
+           required minlength="{{ constants.PASSWORD_MIN_SIZE }}"
+                    maxlength="{{ constants.PASSWORD_MAX_SIZE }}"
+           placeholder="{{ _('Password') }}" />
+    <label>
+        <span>{{ _("Type") }}</span>
+        <select name="kind">
+            <option value="individual">{{ _("Individual") }}</option>
+            <option value="organization">{{ _("Organization") }}</option>
+        </select>
+    </label>
+
+    <button type="submit">{{ _("Go") }}</button>
+
+</form>
+{% endblock %}

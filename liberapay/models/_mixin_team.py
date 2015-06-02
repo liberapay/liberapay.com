@@ -1,4 +1,4 @@
-"""Teams are plural participants with members.
+"""Teams are groups of participants.
 """
 from collections import OrderedDict
 from decimal import Decimal
@@ -14,23 +14,10 @@ class InactiveParticipantAdded(Exception): pass
 
 class MixinTeam(object):
 
-    def show_as_team(self, user):
-        """Return a boolean, whether to show this participant as a team.
-        """
-        if not self.IS_PLURAL:
-            return False
-        if user.ADMIN:
-            return True
-        if not self.get_current_takes():
-            if self == user.participant:
-                return True
-            return False
-        return True
-
     def add_member(self, member):
         """Add a member to this team.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         if len(self.get_current_takes()) == 149:
             raise MemberLimitReached
         if member.status != 'active':
@@ -40,7 +27,7 @@ class MixinTeam(object):
     def remove_member(self, member):
         """Remove a member from this team.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         self.__set_take_for(member, Decimal('0.00'), self)
 
     def remove_all_members(self, cursor=None):
@@ -56,7 +43,7 @@ class MixinTeam(object):
     def member_of(self, team):
         """Given a Participant object, return a boolean.
         """
-        assert team.IS_PLURAL
+        assert team.kind == 'group'
         return self.db.one("""
             SELECT true
               FROM current_takes
@@ -66,7 +53,7 @@ class MixinTeam(object):
     def get_take_last_week_for(self, member):
         """Get the user's nominal take last week. Used in throttling.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         member_id = getattr(member, 'id', None) or member['id']
         return self.db.one("""
 
@@ -86,7 +73,7 @@ class MixinTeam(object):
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         return self.db.one( "SELECT amount FROM current_takes "
                             "WHERE member=%s AND team=%s"
                           , (member.id, self.id)
@@ -101,15 +88,14 @@ class MixinTeam(object):
     def set_take_for(self, member, take, recorder, cursor=None):
         """Sets member's take from the team pool.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
 
         # lazy import to avoid circular import
-        from liberapay.security.user import User
         from liberapay.models.participant import Participant
 
         typecheck( member, Participant
                  , take, Decimal
-                 , recorder, (Participant, User)
+                 , recorder, Participant
                   )
 
         last_week = self.get_take_last_week_for(member)
@@ -121,7 +107,7 @@ class MixinTeam(object):
         return take
 
     def __set_take_for(self, member, amount, recorder, cursor=None):
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         # XXX Factored out for testing purposes only! :O Use .set_take_for.
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions
@@ -177,7 +163,7 @@ class MixinTeam(object):
     def get_current_takes(self, cursor=None):
         """Return a list of member takes for a team.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         TAKES = """
             SELECT p.id AS member_id, p.username AS member_name, t.amount, t.ctime, t.mtime
               FROM current_takes t
@@ -191,7 +177,7 @@ class MixinTeam(object):
     def get_team_take(self, cursor=None):
         """Return a single take for a team, the team itself's take.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         TAKE = "SELECT sum(amount) FROM current_takes WHERE team=%s"
         total_take = (cursor or self.db).one(TAKE, (self.id,), default=0)
         team_take = max(self.receiving - total_take, 0)
@@ -222,17 +208,17 @@ class MixinTeam(object):
 
     @property
     def nmembers(self):
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         return self.db.one("""
             SELECT COUNT(*)
               FROM current_takes
              WHERE team=%s
         """, (self.id,))
 
-    def get_members(self, current_participant=None):
+    def get_members(self):
         """Return a list of member dicts.
         """
-        assert self.IS_PLURAL
+        assert self.kind == 'group'
         takes = self.compute_actual_takes()
         members = []
         for take in takes.values():
@@ -242,17 +228,6 @@ class MixinTeam(object):
             member['take'] = take['nominal_amount']
             member['balance'] = take['balance']
             member['percentage'] = take['percentage']
-
-            member['removal_allowed'] = current_participant == self
-            member['editing_allowed'] = False
-            member['is_current_user'] = False
-            if current_participant is not None:
-                if member['id'] == current_participant.id:
-                    member['is_current_user'] = True
-                    if take['ctime'] is not None:
-                        # current user, but not the team itself
-                        member['editing_allowed']= True
-
             member['last_week'] = last_week = self.get_take_last_week_for(member)
             member['max_this_week'] = self.compute_max_this_week(last_week)
             members.append(member)

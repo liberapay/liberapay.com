@@ -1,13 +1,15 @@
 # encoding: utf8
 """Show information about a single participant. It might be you!
 """
+from aspen import Response
+
 from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
 participant = team = get_participant(state, restrict=False)
-if not team.show_as_team(user):
-  request.redirect('../')
+if team.kind != 'group':
+    raise Response(400)
 tip_or_pledge = "tip"
 title = team.username
 subhead = _("Team Members")
@@ -41,7 +43,7 @@ subhead = _("Team Members")
       </td>
       <td class="figure percentage"></td>
     </tr>
-    {% if user.participant == team %}
+    {% if user == team %}
     <tr>
       <td colspan="6" class="lookup">
         <div id="lookup-container">

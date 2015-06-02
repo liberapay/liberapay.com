@@ -160,10 +160,10 @@ class TestChartsJson(Harness):
         self.run_payday()
         self.client.POST('/carl/privacy.json',
                          {'toggle': 'anonymous_receiving'},
-                         auth_as='carl')
+                         auth_as=self.carl)
 
         r = self.client.GxT('/carl/charts.json')
         assert r.code == 403
 
-        r = self.client.GxT('/carl/charts.json', auth_as='alice')
+        r = self.client.GxT('/carl/charts.json', auth_as=self.alice)
         assert r.code == 403

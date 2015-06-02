@@ -52,40 +52,6 @@ Liberapay.settings.init = function() {
         },
     });
 
-
-    // Wire up account type knob.
-    // ==========================
-
-    $('.number input').click(function(e) {
-        var $input = $(this);
-
-        e.preventDefault();
-
-        function post(confirmed) {
-            jQuery.ajax({
-                url: '../number.json',
-                type: 'POST',
-                data: {
-                    number: $input.val(),
-                    confirmed: confirmed
-                },
-                success: function(data) {
-                    if (data.confirm) {
-                        if (confirm(data.confirm)) return post(true);
-                        return;
-                    }
-                    if (data.number) {
-                        $input.prop('checked', true);
-                        Liberapay.notification(data.msg || "Success", 'success');
-                        $('li.members').toggleClass('hidden', data.number !== 'plural');
-                    }
-                },
-                error: Liberapay.error,
-            });
-        }
-        post();
-    });
-
     // Wire up privacy settings.
     // =========================
 
@@ -131,34 +97,6 @@ Liberapay.settings.init = function() {
                 function(){ $(e.target).attr('checked', !$(e.target).attr('checked')) },
             ]
         });
-    });
-
-    // Wire up API Key
-    // ===============
-
-    var callback = function(data) {
-        var val = data.api_key || 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
-        $('.api-credentials .key span').text(val);
-
-        if (data.api_key) {
-            $('.api-credentials').data('key', data.api_key);
-            $('.api-credentials .show').hide();
-            $('.api-credentials .hide').show();
-        } else {
-            $('.api-credentials .show').show();
-            $('.api-credentials .hide').hide();
-        }
-    }
-
-    $('.api-credentials').on('click', '.show', function() {
-        if ($('.api-credentials').data('key'))
-            callback({api_key: $('.api-credentials').data('key')});
-        else
-            $.get('../api-key.json', {action: 'show'}, callback);
-    })
-    .on('click', '.hide', callback)
-    .on('click', '.recreate', function() {
-        $.post('../api-key.json', {action: 'show'}, callback);
     });
 
 

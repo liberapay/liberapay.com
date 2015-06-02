@@ -1,4 +1,3 @@
-from liberapay import MAX_TIP
 [---]
 title = _("About")
 [---] text/html
@@ -12,7 +11,7 @@ title = _("About")
         "Payments come with no strings attached. You don't know exactly who is "
         "giving to you, and donations are capped at {0} per week per donor to "
         "dampen undue influence."
-        , format_currency(MAX_TIP, 'USD')
+        , format_currency(constants.MAX_TIP, 'USD')
     ) }}</p>
 
     <p>{{ _(

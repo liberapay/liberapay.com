@@ -8,10 +8,10 @@ from liberapay.models.participant import Participant
 class Tests(Harness):
     def setUp(self):
         Harness.setUp(self)
-        self.make_participant('alice')
+        self.alice = self.make_participant('alice')
 
     def hit_privacy(self, method='GET', expected_code=200, **kw):
-        response = self.client.hit(method, "/alice/privacy.json", auth_as='alice', **kw)
+        response = self.client.hit(method, "/alice/privacy.json", auth_as=self.alice, **kw)
         if response.code != expected_code:
             print(response.body)
         return response
@@ -74,21 +74,22 @@ class Tests(Harness):
 
     def test_team_participant_does_show_up_on_explore_teams(self):
         alice = Participant.from_username('alice')
-        self.make_participant('A-Team', number='plural').add_member(alice)
+        self.make_participant('A-Team', kind='group').add_member(alice)
         assert 'A-Team' in self.client.GET("/explore/teams/").body
 
     def test_team_participant_doesnt_show_up_on_explore_teams(self):
         alice = Participant.from_username('alice')
-        self.make_participant('A-Team', number='plural', is_searchable=False).add_member(alice)
+        self.make_participant('A-Team', kind='group', is_searchable=False).add_member(alice)
         assert 'A-Team' not in self.client.GET("/explore/teams/").body
 
     # Related to anonymous-receiving
 
     def test_team_cannot_toggle_anonymous_receiving(self):
-        self.make_participant('team', number='plural')
+        team = self.make_participant('team', kind='group')
+        team.add_member(self.alice)
         response = self.client.PxST(
             '/team/privacy.json',
-            auth_as='team',
+            auth_as=self.alice,
             data={'toggle': 'anonymous_receiving'}
         )
         actual = response.code

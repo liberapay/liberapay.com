@@ -80,7 +80,7 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '1.00')
 
-        raw = self.client.GET('/bob/public.json', auth_as='alice').body
+        raw = self.client.GET('/bob/public.json', auth_as=alice).body
 
         data = json.loads(raw)
 
@@ -97,7 +97,7 @@ class Tests(Harness):
         bob.set_tip_to(dana, '3.00')
         carl.set_tip_to(dana, '12.00')
 
-        raw = self.client.GET('/dana/public.json', auth_as='alice').body
+        raw = self.client.GET('/dana/public.json', auth_as=alice).body
 
         data = json.loads(raw)
 
@@ -105,13 +105,13 @@ class Tests(Harness):
         assert data['my_tip'] == '1.00'
 
     def test_authenticated_user_gets_zero_if_they_dont_tip(self):
-        self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob', last_bill_result='')
         carl = self.make_participant('carl')
 
         bob.set_tip_to(carl, '3.00')
 
-        raw = self.client.GET('/carl/public.json', auth_as='alice').body
+        raw = self.client.GET('/carl/public.json', auth_as=alice).body
 
         data = json.loads(raw)
 
@@ -124,7 +124,7 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '3.00')
 
-        raw = self.client.GET('/bob/public.json', auth_as='bob').body
+        raw = self.client.GET('/bob/public.json', auth_as=bob).body
 
         data = json.loads(raw)
 
@@ -143,7 +143,7 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '3.00')
 
-        raw = self.client.GET('/bob/public.json?callback=foo', auth_as='bob').body
+        raw = self.client.GET('/bob/public.json?callback=foo', auth_as=bob).body
 
         assert raw == '''\
 /**/ foo({
@@ -159,9 +159,9 @@ class Tests(Harness):
     "giving": "0.00",
     "goal": null,
     "id": %(user_id)s,
+    "kind": "individual",
     "my_tip": "self",
     "npatrons": 1,
-    "number": "singular",
     "receiving": "3.00",
     "username": "bob"
 });''' % dict(user_id=bob.id, elsewhere_id=bob.get_accounts_elsewhere()['github'].id)

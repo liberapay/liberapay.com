@@ -10,8 +10,8 @@ from liberapay.utils.history import iter_payday_events
 participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("History")
-subpath = 'history/' if user.ADMIN else ''
-admin_override = user.ADMIN and (participant != user.participant or 'override' in request.qs)
+subpath = 'history/' if user.is_admin else ''
+admin_override = user.is_admin and (participant != user or 'override' in request.qs)
 translated_status = { None:         ''
                     , 'pre':        _('pre')
                     , 'pending':    _('pending')
@@ -29,7 +29,7 @@ years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
 
-if participant == user.participant:
+if participant == user:
     BALANCE = _("Your balance is {0}.", format_currency(participant.balance, "USD"))
 else:
     BALANCE = _("Their balance is {0}.", format_currency(participant.balance, "USD"))
@@ -39,10 +39,6 @@ else:
 {% block content %}
 
 <p>{{ BALANCE }}</p>
-
-{% if user.ADMIN %}
-<h2><a href="record-an-exchange.html">Record an exchange</a></h2>
-{% endif %}
 
 <h2>{{ _("Account Statement") }}</h2>
 

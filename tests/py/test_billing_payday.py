@@ -102,12 +102,12 @@ class TestPayday(BalancedHarness):
         assert after['ncc_failing'] == 1
 
     def test_update_cached_amounts(self):
-        team = self.make_participant('team', number='plural')
+        team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', last_bill_result='')
         bob = self.make_participant('bob')
         carl = self.make_participant('carl', last_bill_result="Fail!")
         dana = self.make_participant('dana')
-        emma = self.make_stub(username='emma')
+        emma = Participant.make_stub(username='emma')
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
         alice.set_tip_to(emma, '1.00')
@@ -323,8 +323,8 @@ class TestPayin(BalancedHarness):
         self.make_exchange('balanced-cc', 50, 0, alice)
         alice.set_tip_to(self.janet, 50)
         Payday.start().payin()
-        assert log.call_args_list[-4][0] == ("Captured 0 card holds.",)
-        assert log.call_args_list[-3][0] == ("Canceled 1 card holds.",)
+        assert log.call_args_list[-3][0] == ("Captured 0 card holds.",)
+        assert log.call_args_list[-2][0] == ("Canceled 1 card holds.",)
         assert Participant.from_id(alice.id).balance == 0
         assert Participant.from_id(self.janet.id).balance == 8
         assert Participant.from_id(self.homer.id).balance == 42
@@ -371,7 +371,7 @@ class TestPayin(BalancedHarness):
         alice = self.make_participant('alice')
         alice.set_tip_to(self.homer, 1)
         alice.set_tip_to(self.homer, 0)
-        a_team = self.make_participant('a_team', number='plural')
+        a_team = self.make_participant('a_team', kind='group')
         a_team.add_member(alice)
         Payday.start().payin()
         transfers0 = self.db.all("SELECT * FROM transfers WHERE amount = 0")
@@ -420,7 +420,7 @@ class TestPayin(BalancedHarness):
         assert Participant.from_id(self.david.id).balance == D('5')
 
     def test_transfer_takes(self):
-        a_team = self.make_participant('a_team', number='plural', balance=20)
+        a_team = self.make_participant('a_team', kind='group', balance=20)
         alice = self.make_participant('alice')
         a_team.add_member(alice)
         a_team.add_member(self.make_participant('bob'))
@@ -450,40 +450,6 @@ class TestPayin(BalancedHarness):
                 assert p.balance == D('0.01')
             else:
                 assert p.balance == 0
-
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    def test_transfer_takes_doesnt_make_negative_transfers(self, fch):
-        hold = balanced.CardHold(amount=1500, meta={'participant_id': self.janet.id},
-                                 card_href=self.card_href)
-        hold.capture = lambda *a, **kw: None
-        hold.save = lambda *a, **kw: None
-        fch.return_value = {self.janet.id: hold}
-        self.janet.update_number('plural')
-        self.janet.set_tip_to(self.homer, 10)
-        self.janet.add_member(self.david)
-        Payday.start().payin()
-        assert Participant.from_id(self.david.id).balance == 0
-        assert Participant.from_id(self.homer.id).balance == 10
-        assert Participant.from_id(self.janet.id).balance == 0
-
-    def test_take_over_during_payin(self):
-        alice = self.make_participant('alice', balance=50)
-        bob = self.make_participant('bob', elsewhere='twitter')
-        alice.set_tip_to(bob, 18)
-        payday = Payday.start()
-        with self.db.get_cursor() as cursor:
-            payday.prepare(cursor, payday.ts_start)
-            bruce = self.make_participant('bruce')
-            bruce.take_over(('twitter', str(bob.id)), have_confirmation=True)
-            payday.transfer_tips(cursor)
-            bruce.delete_elsewhere('twitter', str(bob.id))
-            billy = self.make_participant('billy')
-            billy.take_over(('github', str(bruce.id)), have_confirmation=True)
-            payday.take_over_balances(cursor)
-            payday.update_balances(cursor)
-        assert Participant.from_id(bob.id).balance == 0
-        assert Participant.from_id(bruce.id).balance == 0
-        assert Participant.from_id(billy.id).balance == 18
 
     @mock.patch.object(Payday, 'fetch_card_holds')
     @mock.patch('liberapay.billing.payday.capture_card_hold')
@@ -533,7 +499,7 @@ class TestNotifyParticipants(EmailHarness):
 
     def test_it_notifies_participants(self):
         kalel = self.make_participant('kalel', is_suspicious=False,
-                                      email_address='kalel@example.net', notify_charge=3)
+                                      email='kalel@example.net', notify_charge=3)
         lily = self.make_participant('lily', is_suspicious=False)
         kalel.set_tip_to(lily, 10)
 

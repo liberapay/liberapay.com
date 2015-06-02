@@ -17,7 +17,7 @@ title = _("Friend Finder")
 
 account = None
 if not user.ANON:
-    account = user.participant.get_account_elsewhere(platform.name)
+    account = user.get_account_elsewhere(platform.name)
 
 sess = None
 if account:
@@ -66,10 +66,12 @@ limited = getattr(platform, 'api_friends_limited', False)
 
 {% block content %}
 
-{% if need_reconnect %}
+{% if user.ANON %}
+<p>{% include "templates/sign-in.html" %}</p>
+{% elif need_reconnect %}
 <div>
     <span style="display: inline-block">
-    {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
+    {% call auth_button(platform.name, 'connect') %}{{
         _("Please refresh your {0} connection", platform.display_name)
     }}{% endcall %}
     </span>
@@ -78,8 +80,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 {% elif not account or not sess %}
 <div>
     <span style="display: inline-block">
-    {% call auth_button(platform.name, 'opt-in' if user.ANON else 'connect') %}{{
-        _("Sign in with {0}", platform.display_name) if user.ANON else
+    {% call auth_button(platform.name, 'connect') %}{{
         _("Connect your {0} account", platform.display_name)
     }}{% endcall %}
     </span>
