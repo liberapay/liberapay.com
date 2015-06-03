@@ -46,7 +46,7 @@ run_:
 	$(env_bin)/$(shell grep -E '^web: ' Procfile | cut -d' ' -f2-)
 
 py: env
-	$(with_local_env) $(env_bin)/python -i liberapay/main.py
+	PYTHONPATH=. $(with_local_env) $(env_bin)/python -i liberapay/main.py
 
 test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test

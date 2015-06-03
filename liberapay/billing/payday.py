@@ -135,7 +135,6 @@ class Payday(object):
             """, (self.ts_start,))
             try:
                 self.settle_card_holds(cursor, holds)
-                self.take_over_balances(cursor)
                 self.update_balances(cursor)
                 check_db(cursor)
             except:
@@ -484,50 +483,6 @@ class Payday(object):
         # Cancel the remaining holds
         threaded_map(cancel_card_hold, holds.values())
         log("Canceled %i card holds." % len(holds))
-
-    @staticmethod
-    def take_over_balances(cursor):
-        """If an account that receives money is taken over during payin we need
-        to transfer the balance to the absorbing account.
-        """
-        count = cursor.one("""
-
-            CREATE OR REPLACE FUNCTION take_over_balances() RETURNS int AS $$
-            DECLARE
-                count int NOT NULL := 0;
-                total int NOT NULL := 0;
-                i int;
-                r record;
-            BEGIN
-                FOR i IN 1..10 LOOP
-                    FOR r IN SELECT a.*, (new_balance - old_balance) AS amount
-                               FROM absorptions a
-                               JOIN payday_participants p ON a.archived = p.id
-                              WHERE new_balance <> old_balance
-                    LOOP
-                        PERFORM 1 FROM payday_participants WHERE id = r.absorbed_by;
-                        IF (NOT FOUND) THEN
-                            INSERT INTO payday_participants
-                                SELECT id, username, join_time, balance, balance
-                                     , is_suspicious, goal, false, false
-                                  FROM participants
-                                 WHERE id = r.absorbed_by;
-                        END IF;
-                        PERFORM transfer(r.archived, r.absorbed_by, r.amount, 'take-over');
-                        count := count + 1;
-                    END LOOP;
-                    IF (count = 0) THEN RETURN total; END IF;
-                    total := total + count;
-                    count := 0;
-                END LOOP;
-                RAISE 'possible infinite loop';
-            END;
-            $$ LANGUAGE plpgsql;
-
-            SELECT take_over_balances();
-
-        """)
-        log("Transferred %i balances of taken over accounts." % count)
 
     @staticmethod
     def update_balances(cursor):

@@ -6,4 +6,4 @@ participant = get_participant(state, restrict=False)
 response.headers["Access-Control-Allow-Origin"] = "*"
 
 [---] application/json via jsonp_dump
-participant.to_dict(details=True, inquirer=user.participant)
+participant.to_dict(details=True, inquirer=user)

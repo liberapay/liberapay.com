@@ -1,7 +1,9 @@
 from __future__ import print_function, unicode_literals
 
-from datetime import timedelta
+from base64 import b64decode, b64encode
 from decimal import Decimal, ROUND_DOWN
+from hashlib import pbkdf2_hmac
+from os import urandom
 import pickle
 from time import sleep
 from urllib import quote
@@ -16,42 +18,44 @@ from psycopg2 import IntegrityError
 from psycopg2.extras import Json
 
 import liberapay
+from liberapay.constants import (
+    ASCII_ALLOWED_IN_USERNAME, EMAIL_RE, EMAIL_VERIFICATION_TIMEOUT, MAX_TIP,
+    MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, SESSION, SESSION_REFRESH,
+    SESSION_TIMEOUT, USERNAME_MAX_SIZE
+)
 from liberapay.exceptions import (
-    UsernameIsEmpty,
-    UsernameTooLong,
-    UsernameContainsInvalidCharacters,
-    UsernameIsRestricted,
-    UsernameAlreadyTaken,
+    BadAmount,
+    BadEmailAddress,
+    BadPasswordSize,
+    CannotRemovePrimaryEmail,
+    EmailAlreadyTaken,
+    EmailNotVerified,
     NoSelfTipping,
     NoTippee,
-    BadAmount,
-    UserDoesntAcceptTips,
-    EmailAlreadyTaken,
-    CannotRemovePrimaryEmail,
-    EmailNotVerified,
     TooManyEmailAddresses,
+    UserDoesntAcceptTips,
+    UsernameAlreadyTaken,
+    UsernameContainsInvalidCharacters,
+    UsernameIsEmpty,
+    UsernameIsRestricted,
+    UsernameTooLong,
 )
 
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
-from liberapay.utils import i18n, is_card_expiring, emails, notifications
-
-
-ASCII_ALLOWED_IN_USERNAME = set("0123456789"
-                                "abcdefghijklmnopqrstuvwxyz"
-                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                "-_")
-
-EMAIL_HASH_TIMEOUT = timedelta(hours=24)
-
-USERNAME_MAX_SIZE = 32
+from liberapay.utils import (
+    erase_cookie, is_card_expiring, set_cookie,
+    emails, i18n, notifications,
+)
 
 
 class Participant(Model, MixinTeam):
 
     typname = 'participants'
+
+    ANON = False
 
     def __eq__(self, other):
         if not isinstance(other, Participant):
@@ -71,14 +75,44 @@ class Participant(Model, MixinTeam):
     # ============
 
     @classmethod
-    def make_stub(cls, cursor=None):
+    def make_stub(cls, cursor=None, **kw):
         """Return a new stub participant.
         """
+        if kw:
+            cols, vals = zip(*kw.items())
+            cols = ', '.join(cols)
+            placeholders = ', '.join(['%s']*len(vals))
+            x = '({0}) VALUES ({1})'.format(cols, placeholders)
+        else:
+            x, vals = 'DEFAULT VALUES', ()
         with cls.db.get_cursor(cursor) as c:
             return c.one("""
-                INSERT INTO participants DEFAULT VALUES
+                INSERT INTO participants {0}
                   RETURNING participants.*::participants
-            """)
+            """.format(x), vals)
+
+    @classmethod
+    def make_active(cls, username, kind, password, cursor=None):
+        """Return a new active participant.
+        """
+        now = utcnow()
+        d = {
+            'kind': kind,
+            'status': 'active',
+            'password': cls.hash_password(password),
+            'password_mtime': now,
+            'join_time': now,
+        }
+        cols, vals = zip(*d.items())
+        cols = ', '.join(cols)
+        placeholders = ', '.join(['%s']*len(vals))
+        with cls.db.get_cursor(cursor) as c:
+            p = c.one("""
+                INSERT INTO participants ({0}) VALUES ({1})
+                  RETURNING participants.*::participants
+            """.format(cols, placeholders), vals)
+            p.change_username(username, c)
+        return p
 
     @classmethod
     def from_id(cls, id):
@@ -93,25 +127,68 @@ class Participant(Model, MixinTeam):
         return cls._from_thing("lower(username)", username.lower())
 
     @classmethod
-    def from_session_token(cls, token):
-        """Return an existing participant based on session token.
-        """
-        participant = cls._from_thing("session_token", token)
-        if participant and participant.session_expires < utcnow():
-            participant = None
-
-        return participant
-
-    @classmethod
     def _from_thing(cls, thing, value):
-        assert thing in ("id", "lower(username)", "session_token", "api_key")
+        assert thing in ("id", "lower(username)")
         return cls.db.one("""
-
             SELECT participants.*::participants
               FROM participants
              WHERE {}=%s
-
         """.format(thing), (value,))
+
+    @classmethod
+    def authenticate(cls, k1, k2, v1=None, v2=None):
+        assert k1 in ('id', 'username')
+        if not (v1 and v2):
+            return
+        p = cls.db.one("""
+            SELECT participants.*::participants
+              FROM participants
+             WHERE {0}=%s
+        """.format(k1), (v1,))
+        if not p:
+            return
+        if k2 == 'session':
+            if not p.session_token:
+                return
+            if constant_time_compare(p.session_token, v2):
+                p.authenticated = True
+                return p
+        elif k2 == 'password':
+            if not p.password:
+                return
+            algo, rounds, salt, hashed = p.password.split('$', 3)
+            rounds = int(rounds)
+            salt, hashed = b64decode(salt), b64decode(hashed)
+            if pbkdf2_hmac(algo, v2, salt, rounds) == hashed:
+                p.authenticated = True
+                return p
+
+
+    # Password Management
+    # ===================
+
+    @classmethod
+    def hash_password(cls, password):
+        l = len(password)
+        if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
+            raise BadPasswordSize
+        algo = 'sha256'
+        salt = urandom(21)
+        rounds = cls._password_rounds
+        hashed = pbkdf2_hmac(algo, password, salt, rounds)
+        hashed = '$'.join((algo, str(rounds), b64encode(salt), b64encode(hashed)))
+        return hashed
+
+    def update_password(self, password, cursor=None):
+        hashed = self.hash_password(password)
+        p_id = self.id
+        with self.db.get_cursor(cursor) as c:
+            c.run("""
+                UPDATE participants
+                   SET password = %(hashed)s
+                     , password_mtime = CURRENT_TIMESTAMP
+                 WHERE id = %(p_id)s;
+            """, locals())
 
 
     # Session Management
@@ -138,6 +215,32 @@ class Participant(Model, MixinTeam):
                     )
         self.set_attributes(session_expires=expires)
 
+    def sign_in(self, cookies):
+        """Start a new session for the user.
+        """
+        assert self.authenticated
+        token = uuid.uuid4().hex
+        expires = utcnow() + SESSION_TIMEOUT
+        self.update_session(token, expires)
+        creds = '%s:%s' % (self.id, token)
+        set_cookie(cookies, SESSION, creds, expires)
+
+    def keep_signed_in(self, cookies):
+        """Extend the user's current session.
+        """
+        new_expires = utcnow() + SESSION_TIMEOUT
+        if new_expires - self.session_expires > SESSION_REFRESH:
+            self.set_session_expires(new_expires)
+            token = self.session_token
+            creds = '%s:%s' % (self.id, token)
+            set_cookie(cookies, SESSION, creds, expires=new_expires)
+
+    def sign_out(self, cookies):
+        """End the user's current session.
+        """
+        self.update_session(None, None)
+        erase_cookie(cookies, SESSION)
+
 
     # Suspiciousness
     # ==============
@@ -145,31 +248,6 @@ class Participant(Model, MixinTeam):
     @property
     def is_whitelisted(self):
         return self.is_suspicious is False
-
-
-    # Number
-    # ======
-
-    @property
-    def IS_SINGULAR(self):
-        return self.number == 'singular'
-
-    @property
-    def IS_PLURAL(self):
-        return self.number == 'plural'
-
-    def update_number(self, number):
-        assert number in ('singular', 'plural')
-        with self.db.get_cursor() as c:
-            self.add_event(c, 'set_number', number)
-            self.remove_all_members(c)
-            c.execute("""
-                UPDATE participants
-                   SET number=%s
-                     , anonymous_receiving=false
-                 WHERE id=%s
-            """, (number, self.id))
-        self.set_attributes(number=number)
 
 
     # Statement
@@ -228,26 +306,6 @@ class Participant(Model, MixinTeam):
         return (self.usage * Decimal('0.05')).quantize(Decimal('.01'))
 
 
-    # API Key
-    # =======
-
-    def recreate_api_key(self):
-        api_key = self._generate_api_key()
-        with self.db.get_cursor() as c:
-            self.add_event(c, 'set_api_key', api_key)
-            api_key = c.one("""
-                UPDATE participants
-                   SET api_key=%s
-                 WHERE id=%s
-             RETURNING api_key
-            """, (api_key, self.id))
-        self.set_attributes(api_key=api_key)
-        return api_key
-
-    def _generate_api_key(self):
-        return str(uuid.uuid4())
-
-
     # Stubs
     # =====
 
@@ -260,8 +318,8 @@ class Participant(Model, MixinTeam):
         return rec and '/on/%s/%s/' % (rec.platform, rec.user_name)
 
 
-    # Archiving/Closing
-    # =================
+    # Closing
+    # =======
 
     class AccountNotEmpty(Exception): pass
 
@@ -275,13 +333,6 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         if incoming > 0:
             raise self.AccountNotEmpty
-
-    def archive(self, cursor):
-        """Given a cursor, use it to archive ourself.
-        """
-        self.final_check(cursor)
-        self.clear_personal_information(cursor)
-        self.update_status('archived', cursor)
 
     class UnknownDisbursementStrategy(Exception): pass
 
@@ -301,6 +352,9 @@ class Participant(Model, MixinTeam):
 
             self.clear_tips_giving(cursor)
             self.clear_tips_receiving(cursor)
+            self.clear_takes(cursor)
+            if self.kind == 'group':
+                self.remove_all_members(cursor)
             self.clear_personal_information(cursor)
             self.final_check(cursor)
             self.update_status('closed', cursor)
@@ -413,31 +467,25 @@ class Participant(Model, MixinTeam):
     def clear_personal_information(self, cursor):
         """Clear personal information such as statements and goal.
         """
-        if self.IS_PLURAL:
-            self.remove_all_members(cursor)
-        self.clear_takes(cursor)
         r = cursor.one("""
 
-            DELETE FROM community_members WHERE participant=%(participant_id)s;
-            DELETE FROM emails WHERE participant=%(participant_id)s;
-            DELETE FROM statements WHERE participant=%(participant_id)s;
+            DELETE FROM community_members WHERE participant=%(id)s;
+            DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
+            DELETE FROM statements WHERE participant=%(id)s;
 
             UPDATE participants
                SET goal=NULL
-                 , anonymous_giving=False
-                 , anonymous_receiving=False
                  , avatar_url=NULL
-                 , email_address=NULL
                  , session_token=NULL
                  , session_expires=now()
                  , giving=0
                  , pledging=0
                  , receiving=0
                  , npatrons=0
-             WHERE id=%(participant_id)s
+             WHERE id=%(id)s
          RETURNING *;
 
-        """, dict(participant_id=self.id))
+        """, dict(id=self.id, email=self.email))
         self.set_attributes(**r._asdict())
 
     @property
@@ -464,6 +512,9 @@ class Participant(Model, MixinTeam):
 
             Returns the number of emails sent.
         """
+
+        if not EMAIL_RE.match(email):
+            raise BadEmailAddress(email)
 
         # Check that this address isn't already verified
         owner = self.db.one("""
@@ -513,7 +564,7 @@ class Participant(Model, MixinTeam):
                         link=link.format(**locals()),
                         include_unsubscribe=False)
         assert r == 1 # Make sure the verification email was sent
-        if self.email_address:
+        if self.email:
             self.send_email('verification_notice',
                             new_email=email,
                             include_unsubscribe=False)
@@ -528,10 +579,10 @@ class Participant(Model, MixinTeam):
             self.add_event(c, 'set_primary_email', email)
             c.run("""
                 UPDATE participants
-                   SET email_address=%(email)s
+                   SET email=%(email)s
                  WHERE id=%(id)s
             """, locals())
-        self.set_attributes(email_address=email)
+        self.set_attributes(email=email)
 
     def verify_email(self, email, nonce):
         if '' in (email, nonce):
@@ -544,7 +595,7 @@ class Participant(Model, MixinTeam):
             return emails.VERIFICATION_REDUNDANT
         if not constant_time_compare(r.nonce, nonce):
             return emails.VERIFICATION_FAILED
-        if (utcnow() - r.added_time) > EMAIL_HASH_TIMEOUT:
+        if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
             return emails.VERIFICATION_EXPIRED
         try:
             self.db.run("""
@@ -557,7 +608,7 @@ class Participant(Model, MixinTeam):
         except IntegrityError:
             return emails.VERIFICATION_STYMIED
 
-        if not self.email_address:
+        if not self.email:
             self.update_email(email)
         return emails.VERIFICATION_SUCCEEDED
 
@@ -578,7 +629,7 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
 
     def remove_email(self, address):
-        if address == self.email_address:
+        if address == self.email:
             raise CannotRemovePrimaryEmail()
         with self.db.get_cursor() as c:
             self.add_event(c, 'remove_email', address)
@@ -594,7 +645,7 @@ class Participant(Model, MixinTeam):
             "font: normal 14px/40px Arial, sans-serif; border-radius: 3px"
         )
         context.setdefault('include_unsubscribe', True)
-        email = context.setdefault('email', self.email_address)
+        email = context.setdefault('email', self.email)
         if not email:
             return 0 # Not Sent
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
@@ -624,7 +675,7 @@ class Participant(Model, MixinTeam):
         tips = self.get_tips_receiving() if tips is None else tips
         for t in tips:
             p = Participant.from_id(t.tipper)
-            if p.email_address and p.notify_on_opt_in:
+            if p.email and p.notify_on_join:
                 p.queue_email(
                     'notify_patron',
                     user_name=elsewhere.user_name,
@@ -685,7 +736,7 @@ class Participant(Model, MixinTeam):
         self.set_attributes(notifications=r)
 
     def add_signin_notifications(self):
-        if not self.get_emails():
+        if not self.email and self.join_time < utcnow() - SESSION_TIMEOUT:
             self.add_notification('email_missing')
         if self.get_bank_account_error():
             self.add_notification('ba_withdrawal_failed')
@@ -818,14 +869,7 @@ class Participant(Model, MixinTeam):
         """, locals())
 
 
-    def change_username(self, suggested):
-        """Raise Response or return None.
-
-        Usernames are limited to alphanumeric characters, plus ".,-_:@ ",
-        and can only be 32 characters long.
-
-        """
-        # TODO: reconsider allowing unicode usernames
+    def change_username(self, suggested, cursor=None):
         suggested = suggested and suggested.strip()
 
         if not suggested:
@@ -843,21 +887,21 @@ class Participant(Model, MixinTeam):
             raise UsernameIsRestricted(suggested)
 
         if suggested != self.username:
-            try:
-                # Will raise IntegrityError if the desired username is taken.
-                with self.db.get_cursor(back_as=tuple) as c:
+            with self.db.get_cursor(cursor) as c:
+                try:
+                    # Will raise IntegrityError if the desired username is taken.
                     actual = c.one("""
                         UPDATE participants
                            SET username=%s
                          WHERE id=%s
                      RETURNING username, lower(username)
                     """, (suggested, self.id))
-                    self.add_event(c, 'set_username', suggested)
-            except IntegrityError:
-                raise UsernameAlreadyTaken(suggested)
+                except IntegrityError:
+                    raise UsernameAlreadyTaken(suggested)
 
-            assert (suggested, lowercased) == actual # sanity check
-            self.set_attributes(username=suggested)
+                self.add_event(c, 'set_username', suggested)
+                assert (suggested, lowercased) == actual # sanity check
+                self.set_attributes(username=suggested)
 
         return suggested
 
@@ -979,7 +1023,7 @@ class Participant(Model, MixinTeam):
         return updated
 
     def update_receiving(self, cursor=None):
-        if self.IS_PLURAL:
+        if self.kind == 'group':
             old_takes = self.compute_actual_takes(cursor=cursor)
         r = (cursor or self.db).one("""
             WITH our_tips AS (
@@ -1001,7 +1045,7 @@ class Participant(Model, MixinTeam):
          RETURNING receiving, npatrons
         """, dict(id=self.id))
         self.set_attributes(receiving=r.receiving, npatrons=r.npatrons)
-        if self.IS_PLURAL:
+        if self.kind == 'group':
             new_takes = self.compute_actual_takes(cursor=cursor)
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
@@ -1034,8 +1078,8 @@ class Participant(Model, MixinTeam):
             raise NoSelfTipping
 
         amount = Decimal(amount)  # May raise InvalidOperation
-        if amount != 0 and amount < liberapay.MIN_TIP or amount > liberapay.MAX_TIP:
-            raise BadAmount
+        if amount != 0 and amount < MIN_TIP or amount > MAX_TIP:
+            raise BadAmount(amount)
 
         if not tippee.accepts_tips and amount != 0:
             raise UserDoesntAcceptTips
@@ -1160,7 +1204,7 @@ class Participant(Model, MixinTeam):
                      , t.mtime
                      , p.join_time
                      , p.username
-                     , p.number
+                     , p.kind
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
@@ -1278,19 +1322,6 @@ class Participant(Model, MixinTeam):
         return accounts_dict
 
 
-    def get_elsewhere_logins(self, cursor):
-        """Return the list of (platform, user_id) tuples that the participant
-        can log in with.
-        """
-        return cursor.all("""
-            SELECT platform, user_id
-              FROM elsewhere
-             WHERE participant=%s
-               AND platform IN %s
-               AND NOT is_team
-        """, (self.id, AccountElsewhere.signin_platforms_names))
-
-
     def get_balanced_account(self):
         """Fetch or create the balanced account for this participant.
         """
@@ -1328,34 +1359,7 @@ class Participant(Model, MixinTeam):
         In certain circumstances, we want to present the user with a
         confirmation before proceeding to transfer the account elsewhere to
         the new Liberapay account; NeedConfirmation is the signal to request
-        confirmation. If it was the last account elsewhere connected to the old
-        Liberapay account, then we absorb the old Liberapay account into the new one,
-        effectively archiving the old account.
-
-        Here's what absorbing means:
-
-            - consolidated tips to and fro are set up for the new participant
-
-                Amounts are summed, so if alice tips bob $1 and carl $1, and
-                then bob absorbs carl, then alice tips bob $2(!) and carl $0.
-
-                And if bob tips alice $1 and carl tips alice $1, and then bob
-                absorbs carl, then bob tips alice $2(!) and carl tips alice $0.
-
-                The ctime of each new consolidated tip is the older of the two
-                tips that are being consolidated.
-
-                If alice tips bob $1, and alice absorbs bob, then alice tips
-                bob $0.
-
-                If alice tips bob $1, and bob absorbs alice, then alice tips
-                bob $0.
-
-            - all tips to and from the other participant are set to zero
-            - the absorbed username is released for reuse
-            - the absorption is recorded in an absorptions table
-
-        This is done in one transaction.
+        confirmation.
         """
 
         if isinstance(account, AccountElsewhere):
@@ -1363,145 +1367,49 @@ class Participant(Model, MixinTeam):
         else:
             platform, user_id = map(str, account)
 
-        CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS = """
-
-        CREATE TEMP TABLE __temp_unique_tips ON COMMIT drop AS
-
-            -- Get all the latest tips from everyone to everyone.
-
-            SELECT ctime, tipper, tippee, amount, is_funded
-              FROM current_tips
-             WHERE amount > 0;
-
+        CREATE_TEMP_TABLE_FOR_TIPS = """
+            CREATE TEMP TABLE temp_tips ON COMMIT drop AS
+                SELECT ctime, tipper, tippee, amount, is_funded
+                  FROM current_tips
+                 WHERE (tippee = %(dead)s OR tippee = %(live)s)
+                   AND amount > 0;
         """
 
         CONSOLIDATE_TIPS_RECEIVING = """
-
             -- Create a new set of tips, one for each current tip *to* either
             -- the dead or the live account. If a user was tipping both the
             -- dead and the live account, then we create one new combined tip
             -- to the live account (via the GROUP BY and sum()).
-
             INSERT INTO tips (ctime, tipper, tippee, amount, is_funded)
-
                  SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount), bool_and(is_funded)
-
-                   FROM __temp_unique_tips
-
+                   FROM temp_tips
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
-
                 AND NOT (tipper = %(dead)s OR tipper = %(live)s)
                         -- Don't include tips *from* the dead or live account,
                         -- lest we convert cross-tipping to self-tipping.
-
                GROUP BY tipper
-
-        """
-
-        CONSOLIDATE_TIPS_GIVING = """
-
-            -- Create a new set of tips, one for each current tip *from* either
-            -- the dead or the live account. If both the dead and the live
-            -- account were tipping a given user, then we create one new
-            -- combined tip from the live account (via the GROUP BY and sum()).
-
-            INSERT INTO tips (ctime, tipper, tippee, amount)
-
-                 SELECT min(ctime), %(live)s AS tipper, tippee, sum(amount)
-
-                   FROM __temp_unique_tips
-
-                  WHERE (tipper = %(dead)s OR tipper = %(live)s)
-                        -- Include tips *from* either the dead or live account.
-
-                AND NOT (tippee = %(dead)s OR tippee = %(live)s)
-                        -- Don't include tips *to* the dead or live account,
-                        -- lest we convert cross-tipping to self-tipping.
-
-               GROUP BY tippee
-
         """
 
         ZERO_OUT_OLD_TIPS_RECEIVING = """
-
             INSERT INTO tips (ctime, tipper, tippee, amount)
-
                 SELECT ctime, tipper, tippee, 0 AS amount
-                  FROM __temp_unique_tips
+                  FROM temp_tips
                  WHERE tippee=%s
-
         """
-
-        ZERO_OUT_OLD_TIPS_GIVING = """
-
-            INSERT INTO tips (ctime, tipper, tippee, amount)
-
-                SELECT ctime, tipper, tippee, 0 AS amount
-                  FROM __temp_unique_tips
-                 WHERE tipper=%s
-
-        """
-
-        TRANSFER_BALANCE_1 = """
-
-            UPDATE participants
-               SET balance = (balance - %(balance)s)
-             WHERE id=%(dead)s
-         RETURNING balance;
-
-        """
-
-        TRANSFER_BALANCE_2 = """
-
-            INSERT INTO transfers (tipper, tippee, amount, context)
-            SELECT %(dead)s, %(live)s, %(balance)s, 'take-over'
-             WHERE %(balance)s > 0;
-
-            UPDATE participants
-               SET balance = (balance + %(balance)s)
-             WHERE id=%(live)s
-         RETURNING balance;
-
-        """
-
-        MERGE_EMAIL_ADDRESSES = """
-
-            WITH emails_to_keep AS (
-                     SELECT DISTINCT ON (address) id
-                       FROM emails
-                      WHERE participant IN (%(dead)s, %(live)s)
-                   ORDER BY address, verified_time, added_time DESC
-                 )
-            DELETE FROM emails
-             WHERE participant IN (%(dead)s, %(live)s)
-               AND id NOT IN (SELECT id FROM emails_to_keep);
-
-            UPDATE emails
-               SET participant = %(live)s
-             WHERE participant = %(dead)s;
-
-        """
-
-        new_balance = None
 
         with self.db.get_cursor() as cursor:
 
-            # Load the existing connection.
-            # =============================
+            # Load the existing connection
             # Every account elsewhere has at least a stub participant account
             # on Liberapay.
-
             elsewhere = cursor.one("""
-
                 SELECT e.*::elsewhere_with_participant
                   FROM elsewhere e
                   JOIN participants p ON p.id = e.participant
                  WHERE e.platform=%s AND e.user_id=%s
-
             """, (platform, user_id), default=Exception)
             other = elsewhere.participant
-
 
             if self.id == other.id:
                 # this is a no op - trying to take over itself
@@ -1512,51 +1420,31 @@ class Participant(Model, MixinTeam):
 
             # Make sure we have user confirmation if needed.
             # ==============================================
-            # We need confirmation in whatever combination of the following
-            # three cases:
+            # We need confirmation if any of these are true:
             #
             #   - the other participant is not a stub; we are taking the
             #       account elsewhere away from another viable participant
-            #
-            #   - the other participant has no other accounts elsewhere; taking
-            #       away the account elsewhere will leave the other participant
-            #       without any means of logging in, and it will be archived
-            #       and its tips absorbed by us
             #
             #   - we already have an account elsewhere connected from the given
             #       platform, and it will be handed off to a new stub
             #       participant
 
-            # other_is_a_real_participant
             other_is_a_real_participant = other.status != 'stub'
 
-            # this_is_others_last_login_account
-            nelsewhere = len(other.get_elsewhere_logins(cursor))
-            this_is_others_last_login_account = (nelsewhere <= 1)
-
-            # we_already_have_that_kind_of_account
             we_already_have_that_kind_of_account = cursor.one("""
                 SELECT true
                   FROM elsewhere
                  WHERE participant=%s AND platform=%s
             """, (self.id, platform), default=False)
 
-            if elsewhere.is_team and we_already_have_that_kind_of_account:
-                if len(self.get_accounts_elsewhere()) == 1:
-                    raise TeamCantBeOnlyAuth
-
             need_confirmation = NeedConfirmation(
                 other_is_a_real_participant,
-                this_is_others_last_login_account,
                 we_already_have_that_kind_of_account,
             )
             if need_confirmation and not have_confirmation:
                 raise need_confirmation
 
-
-            # Move any old account out of the way.
-            # ====================================
-
+            # Move any old account out of the way
             if we_already_have_that_kind_of_account:
                 new_stub = Participant.make_stub(cursor)
                 cursor.run( "UPDATE elsewhere SET participant=%s "
@@ -1564,59 +1452,36 @@ class Participant(Model, MixinTeam):
                           , (new_stub.id, platform, self.id)
                            )
 
-
-            # Do the deal.
-            # ============
-            # If other_is_not_a_stub, then other will have the account
-            # elsewhere taken away from them with this call.
-
+            # Do the deal
             cursor.run( "UPDATE elsewhere SET participant=%s "
                         "WHERE platform=%s AND user_id=%s"
                       , (self.id, platform, user_id)
                        )
 
-
-            # Fold the old participant into the new as appropriate.
-            # =====================================================
-            # We want to do this whether or not other is a stub participant.
-
-            if this_is_others_last_login_account:
-
-                other.clear_takes(cursor)
-
-                # Take over tips
+            # Turn pledges into actual tips
+            if old_tips:
                 x, y = self.id, other.id
-                cursor.run(CREATE_TEMP_TABLE_FOR_UNIQUE_TIPS)
+                cursor.run(CREATE_TEMP_TABLE_FOR_TIPS, dict(live=x, dead=y))
                 cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
-                cursor.run(CONSOLIDATE_TIPS_GIVING, dict(live=x, dead=y))
                 cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other.id,))
-                cursor.run(ZERO_OUT_OLD_TIPS_GIVING, (other.id,))
 
-                # Take over balance
-                other_balance = other.balance
-                args = dict(live=x, dead=y, balance=other_balance)
-                archive_balance = cursor.one(TRANSFER_BALANCE_1, args)
-                other.set_attributes(balance=archive_balance)
-                new_balance = cursor.one(TRANSFER_BALANCE_2, args)
-
-                # Take over email addresses
-                cursor.run(MERGE_EMAIL_ADDRESSES, dict(live=x, dead=y))
-
-                # Disconnect any remaining elsewhere account
-                cursor.run("DELETE FROM elsewhere WHERE participant=%s", (y,))
-
-                # Archive the old participant
-                other.archive(cursor)
-
-                # Record the absorption
+            # Try to delete the stub account, or prevent new pledges to it
+            if not other_is_a_real_participant:
                 cursor.run("""
-                    INSERT INTO absorptions
-                                (archived, absorbed_by)
-                         VALUES (%s, %s)
-                """, (other.id, self.id))
+                    DO $$
+                    BEGIN
+                        DELETE FROM participants WHERE id = %(dead)s;
+                    EXCEPTION WHEN OTHERS THEN
+                        UPDATE participants
+                           SET goal = -1
+                         WHERE id = %(dead)s;
+                    END;
+                    $$ LANGUAGE plpgsql;
+                """, dict(dead=other.id))
 
-        if new_balance is not None:
-            self.set_attributes(balance=new_balance)
+            # Log the event
+            payload = dict(platform=platform, user_id=user_id, owner=other.id)
+            self.add_event(cursor, 'take-over', payload)
 
         if old_tips:
             self.notify_patrons(elsewhere, tips=old_tips)
@@ -1627,25 +1492,12 @@ class Participant(Model, MixinTeam):
         self.update_receiving()
         self.update_giving()
 
-    @property
-    def absorbed_by(self):
-        return self.db.one("""
-            SELECT p.username, a.timestamp
-              FROM absorptions a
-              JOIN participants p ON p.id = a.absorbed_by
-             WHERE archived = %s
-        """, (self.id,), default=Exception)
-
     def delete_elsewhere(self, platform, user_id):
         """Deletes account elsewhere unless the user would not be able
         to log in anymore.
         """
         user_id = unicode(user_id)
         with self.db.get_cursor() as c:
-            accounts = self.get_elsewhere_logins(c)
-            assert len(accounts) > 0
-            if len(accounts) == 1 and accounts[0] == (platform, user_id):
-                raise LastElsewhere()
             c.one("""
                 DELETE FROM elsewhere
                 WHERE participant=%s
@@ -1660,7 +1512,7 @@ class Participant(Model, MixinTeam):
         output = { 'id': self.id
                  , 'username': self.username
                  , 'avatar': self.avatar_url
-                 , 'number': self.number
+                 , 'kind': self.kind
                  }
 
         if not details:
@@ -1735,14 +1587,13 @@ class NeedConfirmation(Exception):
 
     """
 
-    def __init__(self, a, b, c):
+    def __init__(self, a, c):
         self.other_is_a_real_participant = a
-        self.this_is_others_last_login_account = b
         self.we_already_have_that_kind_of_account = c
-        self._all = (a, b, c)
+        self._all = (a, c)
 
     def __repr__(self):
-        return "<NeedConfirmation: %r %r %r>" % self._all
+        return "<NeedConfirmation: %r %r>" % self._all
     __str__ = __repr__
 
     def __eq__(self, other):
@@ -1751,13 +1602,9 @@ class NeedConfirmation(Exception):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def __nonzero__(self):
-        # bool(need_confirmation)
-        A, B, C = self._all
-        return A or C
+    def __bool__(self):
+        return any(self._all)
+    __nonzero__ = __bool__
 
-class LastElsewhere(Exception): pass
 
 class NonexistingElsewhere(Exception): pass
-
-class TeamCantBeOnlyAuth(Exception): pass

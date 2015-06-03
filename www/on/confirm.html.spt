@@ -14,14 +14,14 @@ if not token or not account.check_connect_token(token.value):
     raise Response(400, 'bad connect token "%s"' % token)
 
 other = account.participant
-user_accounts_dict = user.participant.get_accounts_elsewhere()
+user_accounts_dict = user.get_accounts_elsewhere()
 nix = len(user_accounts_dict) == 1
 user_accounts = user_accounts_dict.values()
 other_accounts = other.get_accounts_elsewhere().values()
 abandoned_account = user_accounts_dict.get(account.platform, None)
 
-giving_after = user.participant.giving
-receiving_after = user.participant.receiving
+giving_after = user.giving
+receiving_after = user.receiving
 if nix:
     giving_after += other.giving
     receiving_after += other.receiving
@@ -48,9 +48,9 @@ title = _("Please Confirm")
 
     <div class="scenario">
         <div class="participant">
-            <b>{{ user.participant.username }}</b><br />
-            {{ _("Gives") }} {{ fmt(user.participant.giving) }}<br />
-            {{ _("Receives") }} {{ fmt(user.participant.receiving) }}<br />
+            <b>{{ user.username }}</b><br />
+            {{ _("Gives") }} {{ fmt(user.giving) }}<br />
+            {{ _("Receives") }} {{ fmt(user.receiving) }}<br />
             <br />
 
             {% for account in user_accounts %}
@@ -81,7 +81,7 @@ title = _("Please Confirm")
 
     <div class="scenario">
         <div class="participant">
-            <b>{{ user.participant.username }}</b><br />
+            <b>{{ user.username }}</b><br />
             {{ _("Gives") }} {{ fmt(giving_after) }}<br />
             {{ _("Receives") }} {{ fmt(receiving_after) }}<br />
             <br />

@@ -9,12 +9,12 @@ class Tests(Harness):
 
     def change_statement(self, lang, statement, auth_as='alice',
             expecting_error=False):
-        self.make_participant('alice')
+        alice = self.make_participant('alice')
 
         method = self.client.POST if not expecting_error else self.client.PxST
         response = method( "/alice/statement.json"
                          , {'lang': lang, 'content': statement}
-                         , auth_as=auth_as
+                         , auth_as=alice if auth_as == 'alice' else auth_as
                           )
         return response
 

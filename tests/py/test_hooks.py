@@ -8,8 +8,8 @@ from aspen.http.response import Response
 from environment import Environment
 
 from liberapay import wireup
+from liberapay.constants import SESSION
 from liberapay.security import csrf
-from liberapay.security.user import SESSION
 from liberapay.testing import Harness
 
 
@@ -46,9 +46,9 @@ class Tests(Harness):
         We don't want to send cookies over HTTP, especially not CSRF and
         session cookies, for obvious security reasons.
         """
-        self.make_participant('alice')
+        alice = self.make_participant('alice')
         redirect = self.client.GET( "/"
-                                  , auth_as='alice'
+                                  , auth_as=alice
                                   , HTTP_X_FORWARDED_PROTO=b'http'
                                   , HTTP_HOST=b'example.com'
                                   , raise_immediately=False
@@ -56,11 +56,12 @@ class Tests(Harness):
         assert redirect.code == 302
         assert not redirect.headers.cookie
 
-    def test_session_cookie_not_set_under_API_key_auth(self):
+    def test_session_cookie_not_set_under_basic_auth(self):
         alice = self.make_participant('alice')
-        api_key = alice.recreate_api_key()
+        password = 'password'
+        alice.update_password(password)
 
-        auth_header = b'Basic ' + b64encode(b'%s:%s' % (alice.id, api_key))
+        auth_header = b'Basic ' + b64encode(b'%s:%s' % (alice.id, password))
         response = self.client.GET( '/alice/public.json'
                                   , HTTP_AUTHORIZATION=auth_header
                                   , HTTP_X_FORWARDED_PROTO=b'https'

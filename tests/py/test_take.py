@@ -12,7 +12,7 @@ TEAM = 'A Team'
 class Tests(Harness):
 
     def make_team(self, username=TEAM, **kw):
-        team = self.make_participant(username, number='plural', **kw)
+        team = self.make_participant(username, kind='group', **kw)
         if Participant.from_username('Daddy Warbucks') is None:
             warbucks = self.make_participant( 'Daddy Warbucks'
                                             , last_bill_result=''
@@ -30,10 +30,6 @@ class Tests(Harness):
             VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s, 'take')
         """, dict(tipper=team.id, tippee=member.id, amount=actual_amount))
         self.db.run("UPDATE paydays SET ts_end=now() WHERE ts_end < ts_start")
-
-    def test_we_can_make_a_team(self):
-        team = self.make_team()
-        assert team.IS_PLURAL
 
     def test_random_schmoe_is_not_member_of_team(self):
         team = self.make_team()
@@ -85,7 +81,7 @@ class Tests(Harness):
         alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         team.set_take_for(alice, D('42.00'), team)
-        members = team.get_members(alice)
+        members = team.get_members()
         assert len(members) == 2
         assert members[0]['username'] == 'alice'
         assert members[0]['take'] == 42
@@ -176,7 +172,7 @@ class Tests(Harness):
         assert alice.receiving == alice.taking == 40
 
         # But get_members still uses nominal amount
-        assert [m['take'] for m in  team.get_members(alice)] == [60, 42, 0]
+        assert [m['take'] for m in  team.get_members()] == [60, 42, 0]
 
     def test_changes_to_others_take_can_increase_members_take(self):
         team = self.make_team()

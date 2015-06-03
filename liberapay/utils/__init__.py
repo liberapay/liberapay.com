@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 from aspen import Response, json
 from aspen.utils import to_rfc822, utcnow
-from dependency_injection import resolve_dependencies
 from postgres.cursors import SimpleCursorBase
 
 import liberapay
@@ -68,24 +67,19 @@ def get_participant(state, restrict=True, redirect_stub=True):
     canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
 
     status = participant.status
-    if status != 'active':
-        if status == 'closed':
-            if user.ADMIN:
-                return participant
-            raise Response(410)
-        elif status == 'archived':
-            if user.ADMIN and 'noredir' in request.qs:
-                return participant
-            request.redirect('/'+participant.absorbed_by.username+'/')
-        elif status == 'stub':
-            if redirect_stub:
-                to = participant.resolve_stub()
-                assert to
-                request.redirect(to)
+    if status == 'closed':
+        if user.is_admin:
+            return participant
+        raise Response(410)
+    elif status == 'stub':
+        if redirect_stub:
+            to = participant.resolve_stub()
+            assert to
+            request.redirect(to)
 
     if restrict:
-        if participant != user.participant:
-            if not user.ADMIN:
+        if participant != user:
+            if not user.is_admin:
                 raise Response(403, _("You are not authorized to access this page."))
 
     return participant
@@ -160,9 +154,9 @@ def erase_cookie(cookies, key, **kw):
 def filter_profile_subnav(user, participant, pages):
     out = []
     for foo, bar, show_them, show_others in pages:
-        if (user.participant == participant and show_them) \
-        or (user.participant != participant and show_others) \
-        or user.ADMIN:
+        if (user == participant and show_them) \
+        or (user != participant and show_others) \
+        or user.is_admin:
             out.append((foo, bar, show_them, show_others))
     return out
 
@@ -171,14 +165,3 @@ def to_javascript(obj):
     """For when you want to inject an object into a <script> tag.
     """
     return json.dumps(obj).replace('</', '<\\/')
-
-
-class LazyResponse(Response):
-
-    def __init__(self, code, lazy_body, **kw):
-        Response.__init__(self, code, '', **kw)
-        self.lazy_body = lazy_body
-
-    def render_body(self, state):
-        f = self.lazy_body
-        self.body = f(*resolve_dependencies(f, state).as_args)

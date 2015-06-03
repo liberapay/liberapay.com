@@ -9,6 +9,7 @@ title = participant.username
 subhead = _("Account")
 
 emails = participant.get_emails()
+not_group = participant.kind != 'group'
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
@@ -38,108 +39,110 @@ emails = participant.get_emails()
         </div>
 
         <h2>{{ _("Account type") }}</h2>
-        <form class="number">
-            <label><input type="radio" name="number" value="singular" {{ 'checked' if participant.IS_SINGULAR }} />
-                   {{ _("Individual") }}</label><br>
-            <label><input type="radio" name="number" value="plural" {{ 'checked' if participant.IS_PLURAL }} />
-                   {{ _("Team") }}</label>
+        <p>{{ _(participant.kind.title()) }}</p>
+
+        {% if not_group %}
+        <form class="password" action="edit" method="POST">
+            <h2>{{ _("Password") }}</h2>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="password" name="cur-password" placeholder="{{ _('Current password') }}" />
+            <input type="password" name="new-password" placeholder="{{ _('New password') }}" />
+            <button>{{ _("Change my password") }}</button>
         </form>
 
-        {% if not user.ANON and (user.ADMIN or user.participant == participant) %}
-            <h2>{{ _("Available Money") }}</h2>
-            <table class="accounts" id="account-balance">
-                <tr>
-                    <td class="account-type">
-                        <img src="{{ website.asset('bank_account_icon.jpg') }}" />
-                    </td>
-                    <td class="account-details">
-                        <div class="account-type">{{ _("Available Balance") }}</div>
-                        <span>
-                            <a class="account-username" href="/{{ participant.username }}/history/">{{ format_currency(participant.balance, "USD") }}</a>
-                        </span>
-                    </td>
+        <h2>{{ _("Available Money") }}</h2>
+        <table class="accounts" id="account-balance">
+            <tr>
+                <td class="account-type">
+                    <img src="{{ website.asset('bank_account_icon.jpg') }}" />
                 </td>
-            </table>
-            <h2>{{ _("Adding Money") }}
-                {% if user.ADMIN and participant.balanced_customer_href %}
-                    <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}"
-                       title="Go to Balanced Dashboard">
-                        <span class="payments-by"></span>
-                    </a>
-                {% else %}
+                <td class="account-details">
+                    <div class="account-type">{{ _("Available Balance") }}</div>
+                    <span>
+                        <a class="account-username" href="/{{ participant.username }}/history/">{{ format_currency(participant.balance, "USD") }}</a>
+                    </span>
+                </td>
+            </td>
+        </table>
+        <h2>{{ _("Adding Money") }}
+            {% if user.is_admin and participant.balanced_customer_href %}
+                <a href="https://dashboard.balancedpayments.com/#/{{ participant.balanced_customer_href }}"
+                   title="Go to Balanced Dashboard">
                     <span class="payments-by"></span>
-                {% endif %}
-            </h2>
-            <table class="accounts">
-                <tr>
-                    {% set cc_error = participant.get_credit_card_error() %}
-                    <td class="account-type">
-                        <img src="{{ website.asset('card_icon.jpg') }}" />
-                    </td>
-                    <td class="account-details">
-                        <div class="account-type">{{ _("Credit Card") }}</div>
-                        {% if cc_error == "" %}
-                            {{ _("Your credit card is {0}working{1}", "", "") }}
-                        {% elif cc_error %}
-                            {{ _("Your credit card is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
-                        {% endif %}
-                    </td>
-                    <td class="account-action">
-                        <a class="button auth-button" href="../routes/credit-card.html">{{
-                            _("+ Add") if cc_error is none else _("Edit")
-                        }}</a>
-                    </td>
-                </tr>
-            </table>
+                </a>
+            {% else %}
+                <span class="payments-by"></span>
+            {% endif %}
+        </h2>
+        <table class="accounts">
+            <tr>
+                {% set cc_error = participant.get_credit_card_error() %}
+                <td class="account-type">
+                    <img src="{{ website.asset('card_icon.jpg') }}" />
+                </td>
+                <td class="account-details">
+                    <div class="account-type">{{ _("Credit Card") }}</div>
+                    {% if cc_error == "" %}
+                        {{ _("Your credit card is {0}working{1}", "", "") }}
+                    {% elif cc_error %}
+                        {{ _("Your credit card is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
+                    {% endif %}
+                </td>
+                <td class="account-action">
+                    <a class="button auth-button" href="../routes/credit-card.html">{{
+                        _("+ Add") if cc_error is none else _("Edit")
+                    }}</a>
+                </td>
+            </tr>
+        </table>
 
-            <h2>{{ _("Withdrawing Money") }}
-                {% if user.ADMIN and participant.balanced_customer_href %}
-                    <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
-                       title="Go to Balanced Dashboard">
-                        <div class="payments-by"></div>
-                    </a>
-                {% endif %}
-            </h2>
-            <table class="accounts">
-                <tr>
-                    {% set ba_error = participant.get_bank_account_error() %}
-                    <td class="account-type">
-                        <img src="{{ website.asset('bank_account_icon.jpg') }}" />
-                    </td>
-                    <td class="account-details">
-                        <div class="account-type">{{ _("Bank Account") }}</div>
-                        {% if ba_error == "" %}
-                            {{ _("Your bank account is {0}working{1}", "", "") }}
-                        {% elif ba_error %}
-                            {{ _("Your bank account is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
-                        {% endif %}
-                    </td>
-                    <td class="account-action">
-                        <a class="button auth-button" href="../routes/bank-account.html">{{
-                            _("+ Add") if ba_error is none else _("Edit")
-                        }}</a>
-                    </td>
-                </tr>
-                {% set paypal = ExchangeRoute.from_network(participant, 'paypal') %}
-                {% if paypal %}
-                <tr>
-                    <td class="account-type">
-                        <img src="{{ website.asset('paypal.png') }}" />
-                    </td>
-                    <td colspan="2" class="account-details">
-                        <div class="account-type">Paypal</div>
-                        <span>{{ paypal.address }}</span>
-                    </td>
-                </tr>
-                {% endif %}
-            </table>
-        {% endif %}
+        <h2>{{ _("Withdrawing Money") }}
+            {% if user.is_admin and participant.balanced_customer_href %}
+                <a href="https://dashboard.balancedpayments.com/#/marketplaces/MP12Xw5lL6iaILtqImIoroDL{{ participant.balanced_customer_href }}"
+                   title="Go to Balanced Dashboard">
+                    <div class="payments-by"></div>
+                </a>
+            {% endif %}
+        </h2>
+        <table class="accounts">
+            <tr>
+                {% set ba_error = participant.get_bank_account_error() %}
+                <td class="account-type">
+                    <img src="{{ website.asset('bank_account_icon.jpg') }}" />
+                </td>
+                <td class="account-details">
+                    <div class="account-type">{{ _("Bank Account") }}</div>
+                    {% if ba_error == "" %}
+                        {{ _("Your bank account is {0}working{1}", "", "") }}
+                    {% elif ba_error %}
+                        {{ _("Your bank account is {0}failing{1}", "<b>"|safe, "</b>"|safe) }}
+                    {% endif %}
+                </td>
+                <td class="account-action">
+                    <a class="button auth-button" href="../routes/bank-account.html">{{
+                        _("+ Add") if ba_error is none else _("Edit")
+                    }}</a>
+                </td>
+            </tr>
+            {% set paypal = ExchangeRoute.from_network(participant, 'paypal') %}
+            {% if paypal %}
+            <tr>
+                <td class="account-type">
+                    <img src="{{ website.asset('paypal.png') }}" />
+                </td>
+                <td colspan="2" class="account-details">
+                    <div class="account-type">Paypal</div>
+                    <span>{{ paypal.address }}</span>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
 
         <div id="emails" class="emails">
             <h2>{{ _("Email Addresses (Private)") }}</h2>
             <ul>
             {% for email in emails %}
-                {% set is_primary = email.address == participant.email_address %}
+                {% set is_primary = email.address == participant.email %}
                 <li class="{{ 'primary' if is_primary }} {{ 'verified' if email.verified }}"
                     data-email="{{ email.address }}">
                     {{ email.address }}
@@ -157,19 +160,6 @@ emails = participant.get_emails()
             </form>
         </div>
 
-
-        <div class="api-credentials">
-          <h2>{{ _("API Credentials") }}</h2>
-          <div>{{ _("User ID:") }} <span>{{ participant.id }}</span></div>
-          <div class="key">
-            {{ _("API Key:") }} <span>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span><br>
-            <button class="show">{{ _("Show Key") }}</button>
-            <button class="hide" style="display: none">{{ _("Hide Key") }}</button>
-            <button class="recreate">{{ _("Recreate") }}</button>
-          </div>
-          <a href="https://github.com/liberapay/liberapay.com#api">{{ _("API docs") }}</a>
-        </div>
-
         <h2>{{ _("Privacy") }}</h2>
         <p class="privacy-settings">
             <label>
@@ -178,27 +168,17 @@ emails = participant.get_emails()
                     {{ _("Hide total giving from others.") }}
             </label>
             <br />
-            {% if participant.IS_SINGULAR %}
             <label>
                 <input type="checkbox" data-field="anonymous_receiving"
                     {% if participant.anonymous_receiving %}checked="true"{% endif %} />
                     {{ _("Hide total receiving from others.") }}
             </label>
             <br />
-            {% endif %}
             <label class="is-searchable">
                 <input type="checkbox" data-field="!is_searchable"
                     {% if not participant.is_searchable %}checked="true"{% endif %} />
                     {{ _("Hide myself from search results.") }}
             </label>
-        </p>
-        <p id="dnt">
-            <a href="/about/privacy/#dnt">{{ _("Do Not Track") }}</a>:
-            {% if request.headers.get('DNT') == '1' %}
-                {{ _("On").upper() }}
-            {% else %}
-                {{ _("Off").upper() }}
-            {% endif %}
         </p>
 
         <h2 id="notifications">{{ _("Notifications") }}</h2>
@@ -206,8 +186,8 @@ emails = participant.get_emails()
             <span>{{ _("Send me notifications via email:") }}</span>
             <br />
             <label>
-                <input type="checkbox" data-field="notify_on_opt_in"
-                    {{ 'checked' if participant.notify_on_opt_in }} />
+                <input type="checkbox" data-field="notify_on_join"
+                    {{ 'checked' if participant.notify_on_join }} />
                     {{ _("When people I pledge to join Liberapay") }}
             </label>
             <div>
@@ -233,6 +213,7 @@ emails = participant.get_emails()
             <button class="close-account">{{ _("Close Account") }}</button>
           </div>
         </div>
+        {% endif %}
 
     </div>
 </div>

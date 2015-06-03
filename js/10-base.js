@@ -7,8 +7,6 @@ Liberapay.getCookie = function(key) {
 
 Liberapay.init = function() {
     Liberapay.forms.initCSRF();
-    Liberapay.signIn();
-    Liberapay.signOut();
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
@@ -77,48 +75,4 @@ Liberapay.jsonml = function(jsonml) {
     });
 
     return node;
-};
-
-Liberapay.signIn = function() {
-    $('.sign-in > .dropdown').mouseenter(function(e) {
-        clearTimeout($(this).data('timeoutId'));
-        $(this).addClass('open');
-    }).mouseleave(function(e) {
-        var $this = $(this),
-            timeoutId = setTimeout(function() {
-                $this.removeClass('open');
-            }, 100);
-        $this.data('timeoutId', timeoutId);
-    });
-
-    $('.dropdown-toggle').click(function(e) {
-        if ($('.sign-in > .dropdown').hasClass('open')) {
-            e.preventDefault();
-            return false;
-        }
-        else {
-            $(this).addClass('open');
-        }
-    });
-
-    // disable the tip-changed prompt when trying to sign in
-    $('form.auth-button').submit(function() {
-        $(window).off('beforeunload.tips');
-    });
-};
-
-Liberapay.signOut = function() {
-    $('a#sign-out').click(function(e) {
-        e.preventDefault();
-
-        jQuery.ajax({
-            url: '/sign-out.html',
-            type: 'POST',
-            contentType: 'application/x-www-form-urlencoded', // avoid a 415 response
-            success: function() {
-                window.location.href = window.location.href;
-            },
-            error: Liberapay.error
-        });
-    });
 };

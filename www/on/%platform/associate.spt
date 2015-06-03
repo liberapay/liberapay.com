@@ -7,7 +7,6 @@ from requests_oauthlib.oauth1_session import TokenRequestDenied
 from liberapay import canonical_scheme, canonical_host
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation
-from liberapay.security.user import User
 
 [-----------------------------]
 
@@ -53,26 +52,12 @@ if action_user_id and account.user_id != action_user_id:
 
 log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
-if action == 'opt-in':
-    if platform not in website.signin_platforms or account.is_team:
-        raise Response(400)
-    suggested_username = account.user_name or (account.email or '').split('@')[0] or account.display_name
-    account.opt_in(suggested_username)
-    user = User(participant)
-    user.sign_in(response.headers.cookie)
-    try:
-        participant.add_signin_notifications()
-    except Exception as e:
-        if website.env.raise_signin_notifications:
-            raise
-        website.tell_sentry(e, state)
-
-elif action == 'connect':
+if action == 'connect':
     if user.ANON:
         raise Response(403)
     try:
-        user.participant.take_over((platform.name, account.user_id))
-    except NeedConfirmation, obstacles:
+        user.take_over((platform.name, account.user_id))
+    except NeedConfirmation:
         token, expires = account.make_connect_token()
         response.set_cookie(b'connect_%s' % account.id, token, expires)
         response.redirect('/on/confirm.html?id=%s' % account.id)

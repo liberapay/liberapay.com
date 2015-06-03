@@ -21,40 +21,47 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- participants -- user accounts
 
-CREATE TYPE participant_number AS ENUM ('singular', 'plural');
-CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed', 'archived');
+CREATE TYPE participant_kind AS ENUM ('individual', 'organization', 'group');
+CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed');
 
 CREATE TABLE participants
-( id                    bigserial                   PRIMARY KEY
-, username              text                        NOT NULL
-, session_token         text                        UNIQUE DEFAULT NULL
-, session_expires       timestamptz                 DEFAULT (now() + INTERVAL '6 hours')
-, join_time             timestamptz                 DEFAULT NULL
-, status                participant_status          NOT NULL DEFAULT 'stub'
-, is_admin              boolean                     NOT NULL DEFAULT FALSE
-, balance               numeric(35,2)               NOT NULL DEFAULT 0.0
-, anonymous_giving      boolean                     NOT NULL DEFAULT FALSE
-, goal                  numeric(35,2)               DEFAULT NULL
-, balanced_customer_href  text                      DEFAULT NULL
-, is_suspicious         boolean                     DEFAULT NULL
-, api_key               text                        DEFAULT NULL
-, number                participant_number          NOT NULL DEFAULT 'singular'
-, anonymous_receiving   boolean                     NOT NULL DEFAULT FALSE
-, avatar_url            text
-, giving                numeric(35,2)               NOT NULL DEFAULT 0
-, pledging              numeric(35,2)               NOT NULL DEFAULT 0
-, receiving             numeric(35,2)               NOT NULL DEFAULT 0
-, taking                numeric(35,2)               NOT NULL DEFAULT 0
-, npatrons              integer                     NOT NULL DEFAULT 0
-, email_address         text                        UNIQUE
+( id                    bigserial               PRIMARY KEY
+, username              text                    NOT NULL
+, email                 text                    UNIQUE
 , email_lang            text
-, is_searchable         bool                        NOT NULL DEFAULT TRUE
-, notify_on_opt_in      int                         NOT NULL DEFAULT 1
-, notifications         text[]                      NOT NULL DEFAULT '{}'
-, notify_charge         int                         NOT NULL DEFAULT 3
-, CONSTRAINT status_balance CHECK (NOT (status <> 'active' AND balance <> 0))
-, CONSTRAINT status_join_time CHECK ((status='stub') = (join_time IS NULL))
-, CONSTRAINT team_not_anonymous CHECK (NOT (number='plural' AND anonymous_receiving))
+, password              text
+, password_mtime        timestamptz
+, kind                  participant_kind
+, status                participant_status      NOT NULL DEFAULT 'stub'
+, is_admin              boolean                 NOT NULL DEFAULT FALSE
+, session_token         text
+, session_expires       timestamptz             DEFAULT (now() + INTERVAL '6 hours')
+, join_time             timestamptz             DEFAULT NULL
+
+, balance               numeric(35,2)           NOT NULL DEFAULT 0.0
+, goal                  numeric(35,2)           DEFAULT NULL
+, is_suspicious         boolean                 DEFAULT NULL
+, balanced_customer_href  text                  DEFAULT NULL
+
+, anonymous_giving      boolean                 NOT NULL DEFAULT FALSE
+, anonymous_receiving   boolean                 NOT NULL DEFAULT FALSE
+, is_searchable         bool                    NOT NULL DEFAULT TRUE
+
+, avatar_url            text
+, giving                numeric(35,2)           NOT NULL DEFAULT 0
+, pledging              numeric(35,2)           NOT NULL DEFAULT 0
+, receiving             numeric(35,2)           NOT NULL DEFAULT 0
+, taking                numeric(35,2)           NOT NULL DEFAULT 0
+, npatrons              integer                 NOT NULL DEFAULT 0
+
+, notify_on_join        int                     NOT NULL DEFAULT 1
+, notifications         text[]                  NOT NULL DEFAULT '{}'
+, notify_charge         int                     NOT NULL DEFAULT 3
+
+, CONSTRAINT balance_chk CHECK (NOT (status <> 'active' AND balance <> 0))
+, CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
+, CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
+, CONSTRAINT password_chk CHECK ((status='stub' OR kind='group') = (password IS NULL))
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
@@ -112,7 +119,7 @@ CREATE TABLE tips
 , mtime        timestamptz      NOT NULL DEFAULT CURRENT_TIMESTAMP
 , tipper       bigint           NOT NULL REFERENCES participants
 , tippee       bigint           NOT NULL REFERENCES participants
-, amount       numeric(35,2)    NOT NULL
+, amount       numeric(35,2)    NOT NULL CHECK (amount >= 0)
 , is_funded    boolean          NOT NULL DEFAULT false
  );
 
@@ -223,16 +230,6 @@ CREATE TABLE exchanges
  );
 
 CREATE INDEX exchanges_participant_idx ON exchanges (participant);
-
-
--- absorptions -- log of account takeovers
-
-CREATE TABLE absorptions
-( id           serial         PRIMARY KEY
-, timestamp    timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, archived     bigint         UNIQUE NOT NULL REFERENCES participants
-, absorbed_by  bigint         NOT NULL REFERENCES participants
- );
 
 
 -- communities -- groups of participants

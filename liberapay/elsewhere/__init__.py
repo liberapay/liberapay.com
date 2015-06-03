@@ -16,11 +16,11 @@ from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.elsewhere._extractors import not_available
-from liberapay.utils import LazyResponse
+from liberapay.exceptions import LazyResponse
 
 
-ACTIONS = {'opt-in', 'connect', 'lock', 'unlock'}
-PLATFORMS = 'facebook google bitbucket bountysource github openstreetmap twitter venmo'.split()
+ACTIONS = {'connect', 'lock', 'unlock'}
+PLATFORMS = 'facebook google bitbucket bountysource github openstreetmap twitter'.split()
 
 
 class UnknownAccountElsewhere(Exception): pass

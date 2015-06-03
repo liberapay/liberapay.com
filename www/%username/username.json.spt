@@ -1,15 +1,9 @@
-from aspen import Response
-from liberapay.exceptions import ProblemChangingUsername
 from liberapay.utils import get_participant
 
-[-----------------------------------------------------------------------------]
+[---]
 
 participant = get_participant(state, restrict=True)
-
-try:
-    new_username = participant.change_username(request.body['username'])
-except ProblemChangingUsername, e:
-    raise Response(400, unicode(e))
+new_username = participant.change_username(request.body['username'])
 
 [---] application/json via json_dump
 {"username": new_username}

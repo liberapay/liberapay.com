@@ -30,36 +30,11 @@ class TestElsewhere(Harness):
             assert r.user_id is not None
             assert len(r.user_id) > 0
 
-    def test_opt_in_can_change_username(self):
-        account = self.make_elsewhere('twitter', 1, 'alice')
-        account.opt_in('bob')
-        assert account.participant.username == 'bob'
-
-    def test_opt_in_doesnt_have_to_change_username(self):
-        self.make_participant('bob')
-        account = self.make_elsewhere('twitter', 1, 'alice')
-        expected = account.participant.username # A random one.
-        account.opt_in('bob')
-        assert account.participant.username == expected
-
-    def test_opt_in_resets_status_to_active(self):
-        alice = self.make_elsewhere('twitter', 1, 'alice')
-        alice.opt_in('alice')
-        alice.participant.close(None)
-        alice.opt_in('alice')
-        assert alice.participant.status == 'active'
-
-    def test_logging_in_doesnt_reset_goal(self):
-        self.make_participant('alice', elsewhere='twitter', goal=100)
-        alice = AccountElsewhere.from_user_name('twitter', 'alice')
-        alice.opt_in('alice')
-        assert alice.participant.goal == 100
-
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere.Platform.get_user_self_info')
     @mock.patch('liberapay.elsewhere.Platform.get_user_info')
     def test_connect_might_need_confirmation(self, gui, gusi, ft):
-        self.make_participant('alice')
+        alice = self.make_participant('alice')
         self.make_participant('bob')
 
         gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2})
@@ -68,7 +43,7 @@ class TestElsewhere(Harness):
 
         cookie = b64encode(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT('/on/github/associate?state=deadbeef',
-                                   auth_as='alice',
+                                   auth_as=alice,
                                    cookies={b'github_deadbeef': cookie})
         assert response.code == 302
         assert response.headers['Location'].startswith('/on/confirm.html?id=')
@@ -78,7 +53,7 @@ class TestElsewhere(Harness):
         assert response.code == 405
 
     def test_redirects(self):
-        data = dict(action='opt-in', then='/', user_id='')
+        data = dict(action='connect', then='/', user_id='')
         for platform in self.platforms:
             platform.get_auth_url = lambda *a, **kw: ('', '', '')
             response = self.client.PxST('/on/%s/redirect' % platform.name, data)
@@ -114,9 +89,9 @@ class TestElsewhere(Harness):
             assert expected in r.body
 
     def test_user_name_is_in_button(self):
-        self.make_participant('bob')
+        bob = self.make_participant('bob')
         self.make_elsewhere('twitter', -1, 'alice')
-        body = self.client.GET('/on/twitter/alice/', auth_as='bob').body
+        body = self.client.GET('/on/twitter/alice/', auth_as=bob).body
         assert '<span class="zero">Pledge to alice</span>' in body
 
     def test_user_name_is_in_pledge_cta(self):
@@ -145,11 +120,11 @@ class TestConfirmTakeOver(Harness):
         response = self.client.GxT(url)
         assert response.code == 403
 
-        response = self.client.GxT(url, auth_as='bob')
+        response = self.client.GxT(url, auth_as=self.bob)
         assert response.code == 400
         assert 'bad connect token' in response.body
 
-        response = self.client.GET(url, auth_as='bob', cookies=self.connect_cookie)
+        response = self.client.GET(url, auth_as=self.bob, cookies=self.connect_cookie)
         assert response.code == 200
         assert 'Please Confirm' in response.body
 
@@ -159,11 +134,11 @@ class TestConfirmTakeOver(Harness):
         response = self.client.PxST('/on/take-over.html', data=data)
         assert response.code == 403
 
-        response = self.client.PxST('/on/take-over.html', data=data, auth_as='bob')
+        response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob)
         assert response.code == 400
         assert 'bad connect token' in response.body
 
-        response = self.client.PxST('/on/take-over.html', data=data, auth_as='bob',
+        response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob,
                                     cookies=self.connect_cookie)
         assert response.code == 302
         assert response.headers['Location'] == '/bob/'

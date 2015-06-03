@@ -10,7 +10,7 @@ class TestIsSuspicious(Harness):
         self.bar = self.make_participant('bar', is_admin=True)
 
     def toggle_is_suspicious(self):
-        self.client.GET('/foo/toggle-is-suspicious.json', auth_as='bar')
+        self.client.GET('/foo/toggle-is-suspicious.json', auth_as=self.bar)
 
     def test_that_is_suspicious_defaults_to_None(self):
         foo = self.make_participant('foo')

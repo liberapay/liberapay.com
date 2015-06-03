@@ -1,4 +1,4 @@
-{% if communities or user.participant == participant %}
+{% if communities or user == participant %}
     <h2>{{ _("Communities") }}</h2>
     <ul class="community memberships">
         {% for community in communities %}
@@ -8,7 +8,7 @@
         </li>
         {% endfor %}
     </ul>
-    {% if user.participant == participant %}
+    {% if user == participant %}
         <p><a href="/explore/">{{ _("Join Communities") }}</a></p>
     {% endif %}
 {% endif %}

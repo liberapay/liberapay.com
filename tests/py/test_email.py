@@ -13,20 +13,21 @@ class TestEmail(EmailHarness):
         EmailHarness.setUp(self)
         self.alice = self.make_participant('alice')
 
-    def hit_email_spt(self, action, address, user='alice', should_fail=False):
+    def hit_email_spt(self, action, address, auth_as='alice', should_fail=False):
         P = self.client.PxST if should_fail else self.client.POST
         data = {'action': action, 'address': address}
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en'}
-        return P('/alice/emails/modify.json', data, auth_as=user, **headers)
+        auth_as = self.alice if auth_as == 'alice' else auth_as
+        return P('/alice/emails/modify.json', data, auth_as=auth_as, **headers)
 
-    def verify_email(self, email, nonce, username='alice', should_fail=False):
-        url = '/%s/emails/verify.html?email=%s&nonce=%s' % (username, email, nonce)
+    def verify_email(self, email, nonce, should_fail=False):
+        url = '/alice/emails/verify.html?email=%s&nonce=%s' % (email, nonce)
         G = self.client.GxT if should_fail else self.client.GET
-        return G(url, auth_as=username)
+        return G(url, auth_as=self.alice)
 
-    def verify_and_change_email(self, old_email, new_email, username='alice'):
+    def verify_and_change_email(self, old_email, new_email):
         self.hit_email_spt('add-email', old_email)
-        nonce = Participant.from_username(username).get_email(old_email).nonce
+        nonce = self.alice.get_email(old_email).nonce
         self.verify_email(old_email, nonce)
         self.hit_email_spt('add-email', new_email)
 
@@ -57,7 +58,7 @@ class TestEmail(EmailHarness):
         assert expected in last_email['text']
 
     def test_post_anon_returns_403(self):
-        response = self.hit_email_spt('add-email', 'anon@example.com', user=None, should_fail=True)
+        response = self.hit_email_spt('add-email', 'anon@example.com', auth_as=None, should_fail=True)
         assert response.code == 403
 
     def test_post_with_no_at_symbol_is_400(self):
@@ -79,7 +80,7 @@ class TestEmail(EmailHarness):
         assert r == emails.VERIFICATION_FAILED
         self.verify_email('alice@example.com', nonce)
         expected = None
-        actual = Participant.from_username('alice').email_address
+        actual = Participant.from_username('alice').email
         assert expected == actual
 
     def test_verify_email_a_second_time_returns_redundant(self):
@@ -101,7 +102,7 @@ class TestEmail(EmailHarness):
         nonce = self.alice.get_email(address).nonce
         r = self.alice.verify_email(address, nonce)
         assert r == emails.VERIFICATION_EXPIRED
-        actual = Participant.from_username('alice').email_address
+        actual = Participant.from_username('alice').email
         assert actual == None
 
     def test_verify_email(self):
@@ -109,13 +110,13 @@ class TestEmail(EmailHarness):
         nonce = self.alice.get_email('alice@example.com').nonce
         self.verify_email('alice@example.com', nonce)
         expected = 'alice@example.com'
-        actual = Participant.from_username('alice').email_address
+        actual = Participant.from_username('alice').email
         assert expected == actual
 
     def test_verified_email_is_not_changed_after_update(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
         expected = 'alice@example.com'
-        actual = Participant.from_username('alice').email_address
+        actual = Participant.from_username('alice').email
         assert expected == actual
 
     def test_get_emails(self):
@@ -128,7 +129,7 @@ class TestEmail(EmailHarness):
         nonce = self.alice.get_email('alice@example.net').nonce
         self.verify_email('alice@example.net', nonce)
         expected = 'alice@example.com'
-        actual = Participant.from_username('alice').email_address
+        actual = Participant.from_username('alice').email
         assert expected == actual
 
     def test_nonce_is_reused_when_resending_email(self):
@@ -150,7 +151,7 @@ class TestEmail(EmailHarness):
             nonce = bob.get_email('alice@example.com').nonce
             bob.verify_email('alice@example.com', nonce)
 
-        email_alice = Participant.from_username('alice').email_address
+        email_alice = Participant.from_username('alice').email
         assert email_alice == 'alice@example.com'
 
     def test_cannot_add_too_many_emails(self):
@@ -169,7 +170,7 @@ class TestEmail(EmailHarness):
 
     def test_account_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
-        body = self.client.GET("/alice/settings/", auth_as="alice").body
+        body = self.client.GET("/alice/settings/", auth_as=self.alice).body
         assert 'alice@example.com' in body
         assert 'alice@example.net' in body
 
@@ -203,7 +204,7 @@ class TestEmail(EmailHarness):
         assert '&#39;' not in last_email['text']
 
     def test_can_dequeue_an_email(self):
-        larry = self.make_participant('larry', email_address='larry@example.com')
+        larry = self.make_participant('larry', email='larry@example.com')
         larry.queue_email("verification")
 
         assert self.db.one("SELECT spt_name FROM email_queue") == "verification"

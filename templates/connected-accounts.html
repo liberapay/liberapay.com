@@ -1,12 +1,11 @@
 {% from 'templates/auth.html' import auth_button with context %}
 {% from 'templates/account-row.html' import account_row with context %}
 
-{% set own_account=(user.participant == participant) %}
-<h2>{{ _("Social Profiles") }}</h2>
+{% set own_account=(user == participant) %}
+<h2>{{ _("Accounts Elsewhere") }}</h2>
 <table class="accounts">
 
-    <!-- social profiles -->
-    {% for platform in website.social_profiles %}
+    {% for platform in website.platforms %}
         {% if accounts[platform.name] or own_account %}
             {{ account_row(platform, accounts, auth_button) }}
         {% endif %}
@@ -15,7 +14,7 @@
 </table>
 
 {% set cryptocoins = participant.get_cryptocoin_addresses() %}
-{% if cryptocoins or accounts.venmo or own_account %}
+{% if cryptocoins or own_account %}
 
 {% if not user.ANON and own_account %}
 <h2>{{ _("Other Receiving Options") }}</h2>
@@ -63,9 +62,6 @@
     {% endif %}
     {% endfor %}
 
-    {% if accounts[website.platforms.venmo.name] or own_account %}
-        {% include "templates/venmo-account.html" %}
-    {% endif %}
 </table>
 
 {% endif %}

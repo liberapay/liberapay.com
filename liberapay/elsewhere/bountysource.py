@@ -42,9 +42,9 @@ class Bountysource(Platform):
     def get_auth_url(self, user):
         query_id = hexlify(os.urandom(10))
         time_now = int(time())
-        raw = '%s.%s.%s' % (user.participant.id, time_now, self.api_secret)
+        raw = '%s.%s.%s' % (user.id, time_now, self.api_secret)
         h = hashlib.md5(raw).hexdigest()
-        token = '%s.%s.%s' % (user.participant.id, time_now, h)
+        token = '%s.%s.%s' % (user.id, time_now, h)
         params = dict(
             redirect_url=self.callback_url+'?query_id='+query_id,
             external_access_token=token

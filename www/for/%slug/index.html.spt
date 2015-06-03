@@ -49,7 +49,6 @@ new_participants = query_cache.all("""
          , id
          , join_time
          , avatar_url
-         , number
       FROM participants p
       JOIN community_members cc ON cc.participant = p.id AND cc.slug = %s
      WHERE p.is_suspicious IS NOT true
@@ -68,7 +67,6 @@ givers = query_cache.all("""
          , anonymous_giving AS anonymous
          , giving AS amount
          , avatar_url
-         , number
       FROM participants p
       JOIN community_members cc ON cc.participant = p.id AND cc.slug = %s
      WHERE is_suspicious IS NOT true
@@ -88,7 +86,6 @@ receivers = query_cache.all("""
          , anonymous_receiving AS anonymous
          , receiving AS amount
          , avatar_url
-         , number
       FROM participants p
       JOIN community_members cc ON cc.participant = p.id AND cc.slug = %s
      WHERE is_suspicious IS NOT true
@@ -126,12 +123,12 @@ receivers = query_cache.all("""
 
     {% if user.ANON %}
         <div class="sign-in-to">
-            {% include "templates/sign-in-using.html" %}
-            {{ _("{0} to join the {1} community on Liberapay.", "", community.name) }}
+            {% include "templates/sign-in.html" %}
+            {{ _("to join the {0} community on Liberapay.", community.name) }}
         </div>
     {% else %}
         <div class="cta">
-            {% set is_member = community.check_membership(user.participant) %}
+            {% set is_member = community.check_membership(user) %}
             <button class="join-leave {{ 'leave' if is_member else 'join' }}"
                     data-name="{{ community.name }}"
                     data-is-member="{{ 'true' if is_member else 'false' }}">
@@ -173,7 +170,7 @@ receivers = query_cache.all("""
         <ul class="clearfix">
             {% for i, giver in enumerate(givers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                {% if giver.anonymous and not user.ADMIN %}
+                {% if giver.anonymous and not user.is_admin %}
                 <span class="mini-user">
                     <span class="inner">
                         <span class="avatar">
@@ -202,7 +199,7 @@ receivers = query_cache.all("""
         <ul class="clearfix">
             {% for i, receiver in enumerate(receivers, start=1) %}
             <li{% if i > LUXURY %} class="luxury"{% endif %}>
-                {% if receiver.anonymous and not user.ADMIN %}
+                {% if receiver.anonymous and not user.is_admin %}
                 <span class="mini-user">
                     <span class="inner">
                         <span class="avatar">

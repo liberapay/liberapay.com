@@ -1,7 +1,7 @@
 [---]
 
 if not user.ANON:
-    participant = user.participant
+    participant = user
     title = participant.username
 
 [---]
@@ -50,22 +50,7 @@ if not user.ANON:
              "<h1>"|safe, "</h1>"|safe, "<p>"|safe, "</p>"|safe) }}
         {% from 'templates/auth.html' import auth_button with context %}
 
-        <div class="twitter">
-        {% call auth_button('twitter', 'opt-in') %}
-        {{ _("Sign in with {0}", "Twitter") }}
-        {% endcall %}
-        </div>
-
-        <div class="other">
-            <div class="or">{{ _("Or sign in with:") }}</div>
-            <span>
-            {% call auth_button('google', 'opt-in') %}Google{% endcall %}
-            {% call auth_button('facebook', 'opt-in') %}Facebook{% endcall %}
-            {% call auth_button('github', 'opt-in') %}GitHub{% endcall %}
-            {% call auth_button('bitbucket', 'opt-in') %}Bitbucket{% endcall %}
-            {% call auth_button('openstreetmap', 'opt-in') %}OpenStreetMap{% endcall %}
-            </span>
-        </div>
+        {% include "templates/sign-in.html" %}
 
         <p class="other">{{
             _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.",

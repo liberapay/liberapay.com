@@ -10,11 +10,12 @@ from aspen import resources
 from aspen.utils import utcnow
 from aspen.testing.client import Client
 from liberapay.billing.exchanges import record_exchange, record_exchange_result
+from liberapay.constants import SESSION
 from liberapay.elsewhere import UserInfo
 from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.security.user import User
+from liberapay.models.participant import Participant
 from liberapay.testing.vcr import use_cassette
 from psycopg2 import IntegrityError, InternalError
 
@@ -45,8 +46,8 @@ class ClientWithAuth(Client):
         # user authentication
         auth_as = kw.pop('auth_as', None)
         if auth_as:
-            user = User.from_username(auth_as)
-            user.sign_in(self.cookie)
+            assert auth_as.session_token
+            self.cookie[SESSION] = '%s:%s' % (auth_as.id, auth_as.session_token)
 
         for k, v in kw.pop('cookies', {}).items():
             self.cookie[k] = v
@@ -155,6 +156,10 @@ class Harness(unittest.TestCase):
             if key in kw:
                 kw2[key] = kw.pop(key)
 
+        kind = kw.setdefault('kind', 'individual')
+        if kind != 'group':
+            kw.setdefault('password', 'x')
+            kw.setdefault('session_token', username)
         kw.setdefault('status', 'active')
         if not 'join_time' in kw:
             kw['join_time'] = utcnow()
@@ -186,18 +191,7 @@ class Harness(unittest.TestCase):
 
 
     def make_stub(self, **kw):
-        if not kw:
-            return self.db.one("""
-                INSERT INTO participants DEFAULT VALUES
-                  RETURNING participants.*::participants
-            """)
-        cols, vals = zip(*kw.items())
-        cols = ', '.join(cols)
-        placeholders = ', '.join(['%s']*len(vals))
-        return self.db.one("""
-            INSERT INTO participants ({0}) VALUES ({1})
-              RETURNING participants.*::participants
-        """.format(cols, placeholders), vals)
+        return Participant.make_stub(**kw)
 
 
     def fetch_payday(self):

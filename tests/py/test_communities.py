@@ -12,7 +12,7 @@ class Tests(Harness):
         self.alice = self.make_participant("alice", last_bill_result='')
         self.client.POST( '/for/communities.json'
                         , {'name': 'something', 'is_member': 'true'}
-                        , auth_as='alice'
+                        , auth_as=self.alice
                          )
 
     def test_community_member_shows_up_on_community_listing(self):

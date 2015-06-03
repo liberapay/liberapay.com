@@ -1,7 +1,7 @@
 from aspen import Response
 from liberapay.utils import get_participant
 [---]
-if not user.ADMIN:
+if not user.is_admin:
     raise Response(400)
 
 to = request.body.get('to')
@@ -30,7 +30,7 @@ with website.db.get_cursor() as c:
 
         """, (to == 'true', participant.id,))
 
-    participant.add_event(c, 'is_suspicious', is_suspicious, recorder=user.participant.id)
+    participant.add_event(c, 'is_suspicious', is_suspicious, recorder=user.id)
 
 [---] application/json via json_dump
 {"is_suspicious": is_suspicious}

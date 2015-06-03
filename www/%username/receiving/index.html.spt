@@ -6,7 +6,7 @@ participant = get_participant(state, restrict=False)
 if not participant.accepts_tips:
     request.redirect('../')
 elif participant.anonymous_receiving:
-    if user.participant != participant and not user.ADMIN:
+    if user != participant and not user.is_admin:
         request.redirect('../')
 
 title = participant.username
@@ -17,7 +17,7 @@ subhead = _("Receiving")
 {% block content %}
 
 {% set receiving = format_currency(participant.receiving, "USD") %}
-{% if participant == user.participant %}
+{% if participant == user %}
 <h2>{{ _( "You receive {0} per week", receiving) }}</h2>
 {% else %}
 <h2>{{ _("{0} receives {1} per week", participant.username, receiving) }}</h2>
@@ -38,8 +38,7 @@ subhead = _("Receiving")
     </div>
 </div>
 
-{% if participant.receiving > 0 and
-      not user.ANON and (user.participant == participant or user.ADMIN) %}
+{% if participant.receiving > 0 and (user == participant or user.is_admin) %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="row">
 <div class="col1">

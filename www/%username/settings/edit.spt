@@ -1,0 +1,21 @@
+from aspen import Response
+
+from liberapay.models.participant import Participant
+
+[---]
+
+request.allow('POST')
+
+body = request.body
+
+if 'new-password' in body:
+    p = Participant.authenticate('username', 'password',
+                                 request.path['username'],
+                                 body['cur-password'])
+    if not p:
+        raise Response(403, _("Incorrect password"))
+    p.update_password(body['new-password'])
+
+request.redirect('.')
+
+[---] text/html

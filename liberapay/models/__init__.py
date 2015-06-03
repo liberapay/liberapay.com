@@ -27,8 +27,6 @@ def check_db(cursor):
     """
     _check_balances(cursor)
     _check_tips(cursor)
-    _check_orphans(cursor)
-    _check_orphans_no_tips(cursor)
     _check_paydays_volumes(cursor)
 
 
@@ -95,38 +93,6 @@ def _check_balances(cursor):
         where expected <> p.balance
     """)
     assert len(b) == 0, "conflicting balances: {}".format(b)
-
-
-def _check_orphans(cursor):
-    """Finds non-archived participants that don't have an elsewhere account.
-    """
-    orphans = cursor.all("""
-        select username
-          from participants p
-         where status != 'archived'
-           and not exists (select * from elsewhere e where e.participant=p.id)
-    """)
-    assert len(orphans) == 0, "missing elsewheres: {}".format(list(orphans))
-
-
-def _check_orphans_no_tips(cursor):
-    """
-    Finds participants
-        * without elsewhere account attached
-        * having non zero outstanding tip
-
-    This should not happen because when we remove the last elsewhere account
-    in take_over we also zero out all tips.
-    """
-    orphans_with_tips = cursor.all("""
-        WITH valid_tips AS (SELECT * FROM current_tips WHERE amount > 0)
-        SELECT id
-          FROM (SELECT tipper AS id FROM valid_tips
-                UNION
-                SELECT tippee AS id FROM valid_tips) p
-         WHERE NOT EXISTS (SELECT 1 FROM elsewhere WHERE participant=p.id)
-    """)
-    assert len(orphans_with_tips) == 0, orphans_with_tips
 
 
 def _check_paydays_volumes(cursor):

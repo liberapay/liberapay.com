@@ -11,7 +11,7 @@ class TestTipsJson(Harness):
 
         self.make_participant("test_tippee1")
         self.make_participant("test_tippee2")
-        self.make_participant("test_tipper")
+        test_tipper = self.make_participant("test_tipper")
 
         data = [
             {'username': 'test_tippee1', 'amount': '1.00'},
@@ -21,7 +21,7 @@ class TestTipsJson(Harness):
         response = self.client.POST( '/test_tipper/tips.json'
                                    , body=json.dumps(data)
                                    , content_type='application/json'
-                                   , auth_as='test_tipper'
+                                   , auth_as=test_tipper
                                     )
 
         assert response.code == 200
@@ -32,36 +32,36 @@ class TestTipsJson(Harness):
                                                       , 'amount': '1.00'
                                                        }])
                                    , content_type='application/json'
-                                   , auth_as='test_tipper'
+                                   , auth_as=test_tipper
                                     )
 
         assert response.code == 200
 
-        response = self.client.GET('/test_tipper/tips.json', auth_as='test_tipper')
+        response = self.client.GET('/test_tipper/tips.json', auth_as=test_tipper)
         assert response.code == 200
         assert len(json.loads(response.body)) == tippees
 
     def test_get_response(self):
-        self.make_participant("test_tipper")
+        test_tipper = self.make_participant("test_tipper")
 
-        response = self.client.GET('/test_tipper/tips.json', auth_as='test_tipper')
+        response = self.client.GET('/test_tipper/tips.json', auth_as=test_tipper)
 
         assert response.code == 200
         assert len(json.loads(response.body)) == 0 # empty array
 
     def test_get_response_with_tips(self):
         self.make_participant("test_tippee1")
-        self.make_participant("test_tipper")
+        test_tipper = self.make_participant("test_tipper")
 
         response = self.client.POST( '/test_tippee1/tip.json'
                                    , {'amount': '1.00'}
-                                   , auth_as='test_tipper'
+                                   , auth_as=test_tipper
                                     )
 
         assert response.code == 200
         assert json.loads(response.body)['amount'] == '1.00'
 
-        response = self.client.GET('/test_tipper/tips.json', auth_as='test_tipper')
+        response = self.client.GET('/test_tipper/tips.json', auth_as=test_tipper)
         data = json.loads(response.body)[0]
 
         assert response.code == 200

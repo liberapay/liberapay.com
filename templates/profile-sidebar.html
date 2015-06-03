@@ -3,7 +3,7 @@
 <div class="avatar {{ 'is-suspicious' if participant.is_suspicious }}">
     <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
 
-    {% if user.ADMIN %}
+    {% if user.is_admin %}
     <label class="is-suspicious-label">
         Suspicious
         <input type="checkbox" data-username="{{ participant.username }}"
@@ -42,17 +42,14 @@
         {% endif %}
     </table>
 
-    {% if participant.status == 'active' %}
+    {% if participant.join_time %}
     <p>{{ _('Joined') }} {{ to_age(participant.join_time, add_direction=True) }}.</p>
-    {% elif participant.status == 'closed' %}
+    {% endif %}
+    {% if participant.status == 'closed' %}
     <p>Closed {{ to_age(participant.closed_time, add_direction=True) }}.</p>
-    {% else %}
-    {% set ab = participant.absorbed_by %}
-    <p>Absorbed by <a href="/{{ ab.username }}/">{{ ab.username }}</a>
-    {{ to_age(ab.timestamp, add_direction=True) }}.<p>
     {% endif %}
 </div>
 
-{% if participant.accepts_tips and participant != user.participant %}
+{% if participant.accepts_tips and participant != user %}
 {% include "templates/your-tip.html" %}
 {% endif %}

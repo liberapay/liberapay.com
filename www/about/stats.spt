@@ -1,7 +1,5 @@
 from __future__ import division, print_function, unicode_literals
 
-from liberapay import BIRTHDAY
-
 [--------------------------------------------------------]
 
 title = _("Stats")
@@ -120,7 +118,7 @@ def out():
 
 {% block content %}
 
-    <p>{{ _("Liberapay is {0} old and has {1} active users.", to_age(BIRTHDAY), nactive) }}</p>
+    <p>{{ _("Liberapay is {0} old and has {1} active users.", to_age(constants.BIRTHDAY), nactive) }}</p>
 
     <p>
         {{ _("{0} participants gave money in the past week.", ngivers) }}<br />

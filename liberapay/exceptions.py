@@ -1,54 +1,99 @@
-"""
-This module contains exceptions shared across application code.
-"""
-
 from __future__ import print_function, unicode_literals
 
 from aspen import Response
+from dependency_injection import resolve_dependencies
+
+from .constants import MAX_TIP, MIN_TIP, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
 
 
-class ProblemChangingUsername(Exception):
-    def __str__(self):
-        return self.msg.format(self.args[0])
+class LazyResponse(Response):
+
+    def __init__(self, code, lazy_body, **kw):
+        Response.__init__(self, code, '', **kw)
+        self.lazy_body = lazy_body
+
+    def render_body(self, state):
+        f = self.lazy_body
+        self.body = f(*resolve_dependencies(f, state).as_args)
+
+
+class LazyResponse400(LazyResponse):
+
+    def __init__(self, *args, **kw):
+        Response.__init__(self, 400, '', **kw)
+        self.lazy_body = self.msg
+        self.args = args
+
+
+class ProblemChangingUsername(LazyResponse400): pass
 
 class UsernameIsEmpty(ProblemChangingUsername):
-    msg = "You need to provide a username!"
+    def msg(self, _):
+        return _("You need to provide a username!")
 
 class UsernameTooLong(ProblemChangingUsername):
-    msg = "The username '{}' is too long."
+    def msg(self, _):
+        return _("The username '{0}' is too long.", *self.args)
 
 class UsernameContainsInvalidCharacters(ProblemChangingUsername):
-    msg = "The username '{}' contains invalid characters."
+    def msg(self, _):
+        return _("The username '{0}' contains invalid characters.", *self.args)
 
 class UsernameIsRestricted(ProblemChangingUsername):
-    msg = "The username '{}' is restricted."
+    def msg(self, _):
+        return _("The username '{0}' is restricted.", *self.args)
 
 class UsernameAlreadyTaken(ProblemChangingUsername):
-    msg = "The username '{}' is already taken."
+    def msg(self, _):
+        return _("The username '{0}' is already taken.", *self.args)
 
 
-class ProblemChangingEmail(Response):
-    def __init__(self, *args):
-        Response.__init__(self, 400, self.msg.format(*args))
+class ProblemChangingEmail(LazyResponse400): pass
 
 class EmailAlreadyTaken(ProblemChangingEmail):
-    msg = "{} is already connected to a different Liberapay account."
+    def msg(self, _):
+        return _("{0} is already connected to a different Liberapay account.", *self.args)
 
 class CannotRemovePrimaryEmail(ProblemChangingEmail):
-    msg = "You cannot remove your primary email address."
+    def msg(self, _):
+        return _("You cannot remove your primary email address.")
 
 class EmailNotVerified(ProblemChangingEmail):
-    msg = "The email address '{}' is not verified."
+    def msg(self, _):
+        return _("The email address '{0}' is not verified.", *self.args)
 
 class TooManyEmailAddresses(ProblemChangingEmail):
-    msg = "You've reached the maximum number of email addresses we allow."
+    def msg(self, _):
+        return _("You've reached the maximum number of email addresses we allow.")
+
+class BadEmailAddress(ProblemChangingEmail):
+    def msg(self, _):
+        return _("'{0}' is not a valid email address.", *self.args)
 
 
-class TooGreedy(Exception): pass
-class NoSelfTipping(Exception): pass
-class NoTippee(Exception): pass
-class BadAmount(Exception): pass
-class UserDoesntAcceptTips(Exception): pass
+class BadPasswordSize(LazyResponse400):
+    def msg(self, _):
+        return _("The password must be at least {0} and at most {1} characters long.",
+                 PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE)
+
+
+class NoSelfTipping(LazyResponse400):
+    def msg(self, _):
+        return _("You can't donate to yourself.")
+
+class NoTippee(LazyResponse400):
+    def msg(self, _):
+        return _("There is no user named {0}.", *self.args)
+
+class BadAmount(LazyResponse400):
+    def msg(self, _):
+        return _("'{0}' is not a valid donation amount (min={1}, max={2})",
+                 self.args[0], MIN_TIP, MAX_TIP)
+
+class UserDoesntAcceptTips(LazyResponse400):
+    def msg(self, _):
+        return _("The user {0} doesn't accept donations.", *self.args)
+
 
 class NegativeBalance(Exception):
     def __str__(self):

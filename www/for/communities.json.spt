@@ -21,7 +21,7 @@ if request.method == 'POST':
     is_member = is_member == 'true'
 
     # delegate
-    user.participant.insert_into_communities(is_member, name, slug)
+    user.insert_into_communities(is_member, name, slug)
 
 elif request.method == 'GET':
     response.headers["Access-Control-Allow-Origin"] = "*"
@@ -29,7 +29,7 @@ elif request.method == 'GET':
 communities = []
 
 if not user.ANON:
-    communities = community.get_list_for(website.db, user.participant.id)
+    communities = community.get_list_for(website.db, user.id)
 
 [---] application/json via json_dump
 {"communities": communities}

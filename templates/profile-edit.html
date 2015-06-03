@@ -39,11 +39,11 @@
             <button class="edit">{{ _("Edit") }}</button>
         </h2>
         <div class="view">
-            {% if user.participant.goal > 0 %}
+            {% if user.goal > 0 %}
             {{ GOAL }}
-            {% elif user.participant.goal == 0 %}
+            {% elif user.goal == 0 %}
             {{ PATRON }}
-            {% elif user.participant.goal == None %}
+            {% elif user.goal == None %}
             {{ GRATEFUL }}
             {% else %}
             {{ PATRON_NO_GIFTS }}
@@ -51,31 +51,31 @@
         </div>
         <form class="edit" action="goal.json">
             <input type="radio" name="goal" id="goal-yes" value="custom"
-            {% if user.participant.goal > 0 %} checked="true"{% endif %}/>
+            {% if user.goal > 0 %} checked="true"{% endif %}/>
             <label for="goal-yes">{{ GOAL_PARTS[0] }}$</label><input
                 name="goal_custom" id="goal-custom" tabindex="202"
-            {% if (user.participant.goal == None) or (user.participant.goal <= 0) %}
+            {% if (user.goal == None) or (user.goal <= 0) %}
             {% else %}
-            value="{{ format_decimal(user.participant.goal) }}"
+            value="{{ format_decimal(user.goal) }}"
             {% endif %} />
             <label for="goal-yes">{{ GOAL_PARTS[1] }}</label>
 
             <br>
 
             <input type="radio" name="goal" id="goal-null" value="null"
-            {% if user.participant.goal == None %} checked="true"{% endif %}/>
+            {% if user.goal == None %} checked="true"{% endif %}/>
             <label for="goal-null">{{ GRATEFUL }}</label>
 
             <br>
 
             <input type="radio" name="goal" id="goal-0" value="0.00"
-            {% if user.participant.goal == 0 %} checked="true"{% endif %}/>
+            {% if user.goal == 0 %} checked="true"{% endif %}/>
             <label for="goal-0">{{ PATRON }}</label>
 
             <br>
 
             <input type="radio" name="goal" id="goal-negative" value="-1"
-            {% if (user.participant.goal != None) and user.participant.goal < 0 %} checked="true"{% endif %}/>
+            {% if (user.goal != None) and user.goal < 0 %} checked="true"{% endif %}/>
             <label for="goal-negative">{{ PATRON_NO_GIFTS }}</label>
 
             <br /><br />

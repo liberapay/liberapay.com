@@ -18,14 +18,14 @@ class TestCommunitiesJson(Harness):
         assert response.code == 400
 
     def test_joining_and_leaving_community(self):
-        self.make_participant("alice")
+        alice = self.make_participant("alice")
 
-        response = self.client.GET('/for/communities.json', auth_as='alice')
+        response = self.client.GET('/for/communities.json', auth_as=alice)
         assert len(json.loads(response.body)['communities']) == 0
 
         response = self.client.POST( '/for/communities.json'
                                    , {'name': 'Test', 'is_member': 'true'}
-                                   , auth_as='alice'
+                                   , auth_as=alice
                                     )
 
         communities = json.loads(response.body)['communities']
@@ -35,10 +35,10 @@ class TestCommunitiesJson(Harness):
 
         response = self.client.POST( '/for/communities.json'
                                    , {'name': 'Test', 'is_member': 'false'}
-                                   , auth_as='alice'
+                                   , auth_as=alice
                                     )
 
-        response = self.client.GET('/for/communities.json', auth_as='alice')
+        response = self.client.GET('/for/communities.json', auth_as=alice)
 
         assert len(json.loads(response.body)['communities']) == 0
 
@@ -47,8 +47,8 @@ class TestCommunitiesJson(Harness):
         assert not community
 
     def test_get_can_get_communities_for_user(self):
-        self.make_participant("alice")
-        response = self.client.GET('/for/communities.json', auth_as='alice')
+        alice = self.make_participant("alice")
+        response = self.client.GET('/for/communities.json', auth_as=alice)
         assert len(json.loads(response.body)['communities']) == 0
 
     def test_get_can_get_communities_when_anon(self):

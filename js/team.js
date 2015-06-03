@@ -20,7 +20,7 @@ Liberapay.team = (function() {
     function drawMemberTake(member) {
         var take = num(member.take);
 
-        if (member.editing_allowed)
+        if (member.username === Liberapay.username)
             return [ 'form', {'id': 'take'}
                          , ['input', { 'value': take
                                                  , 'data-username': member.username
@@ -28,11 +28,6 @@ Liberapay.team = (function() {
                                                  , 'tabindex': '1'
                                                     }]
                             ];
-
-        if (member.removal_allowed)
-            return [ 'span', { 'class': 'remove'
-                                             , 'data-username': member.username
-                                                }, take];
 
         return take;
     }

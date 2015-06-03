@@ -11,9 +11,10 @@ from liberapay.models.participant import Participant
 class TestRoutes(BalancedHarness):
 
     def hit(self, username, action, network, address, expected=200):
+        auth_as = getattr(self, username)
         r =  self.client.POST('/%s/routes/%s.json' % (username, action),
                               data=dict(network=network, address=address),
-                              auth_as=username, raise_immediately=False)
+                              auth_as=auth_as, raise_immediately=False)
         assert r.code == expected
         return r
 
@@ -94,9 +95,9 @@ class TestRoutes(BalancedHarness):
         assert expected in actual
 
     def test_bank_account_auth(self):
-        self.make_participant('alice')
+        alice = self.make_participant('alice')
         expected = '<em id="status">not connected</em>'
-        actual = self.client.GET('/alice/routes/bank-account.html', auth_as='alice').body
+        actual = self.client.GET('/alice/routes/bank-account.html', auth_as=alice).body
         assert expected in actual
 
     def test_credit_card(self):
@@ -106,24 +107,24 @@ class TestRoutes(BalancedHarness):
         assert expected in actual
 
     def test_credit_card_page_shows_card_missing(self):
-        self.make_participant('alice')
+        alice = self.make_participant('alice')
         expected = 'Your credit card is <em id="status">missing'
-        actual = self.client.GET('/alice/routes/credit-card.html', auth_as='alice').body.decode('utf8')
+        actual = self.client.GET('/alice/routes/credit-card.html', auth_as=alice).body.decode('utf8')
         assert expected in actual
 
     def test_credit_card_page_loads_when_there_is_a_card(self):
         expected = 'Your credit card is <em id="status">working'
-        actual = self.client.GET('/janet/routes/credit-card.html', auth_as='janet').body.decode('utf8')
+        actual = self.client.GET('/janet/routes/credit-card.html', auth_as=self.janet).body.decode('utf8')
         assert expected in actual
 
     def test_credit_card_page_shows_card_failing(self):
         ExchangeRoute.from_network(self.janet, 'balanced-cc').update_error('Some error')
         expected = 'Your credit card is <em id="status">failing'
-        actual = self.client.GET('/janet/routes/credit-card.html', auth_as='janet').body.decode('utf8')
+        actual = self.client.GET('/janet/routes/credit-card.html', auth_as=self.janet).body.decode('utf8')
         assert expected in actual
 
     def test_receipt_page_loads(self):
         ex_id = self.make_exchange('balanced-cc', 113, 30, self.janet)
         url_receipt = '/janet/receipts/{}.html'.format(ex_id)
-        actual = self.client.GET(url_receipt, auth_as='janet').body.decode('utf8')
+        actual = self.client.GET(url_receipt, auth_as=self.janet).body.decode('utf8')
         assert 'Visa' in actual

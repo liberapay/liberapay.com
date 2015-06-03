@@ -5,7 +5,7 @@ from liberapay.utils import get_participant
 
 [-----------------------]
 participant = get_participant(state, restrict=True)
-if user.participant != participant:
+if user != participant:
     raise Response(403) # disallow admins
 
 if request.method == 'POST':

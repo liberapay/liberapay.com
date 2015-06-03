@@ -1,8 +1,9 @@
 from __future__ import division
 
 import base64
+from urllib import quote as urlquote
 
-from liberapay import canonize, utils, wireup
+from liberapay import canonize, insert_constants, utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, x_frame_options
@@ -40,6 +41,7 @@ website.renderer_factories['jinja2'].Renderer.global_context = {
     'to_javascript': utils.to_javascript,
     'type': type,
     'unicode': unicode,
+    'urlquote': urlquote,
 }
 
 
@@ -81,6 +83,7 @@ algorithm.functions = [
 
     canonize,
     i18n.set_up_i18n,
+    insert_constants,
     authentication.start_user_as_anon,
     authentication.authenticate_user_if_possible,
     csrf.extract_token_from_cookie,

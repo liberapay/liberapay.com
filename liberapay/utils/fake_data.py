@@ -7,7 +7,8 @@ import sys
 from faker import Factory
 from psycopg2 import IntegrityError
 
-from liberapay import wireup, MAX_TIP, MIN_TIP
+from liberapay import wireup
+from liberapay.constants import MAX_TIP, MIN_TIP
 from liberapay.elsewhere import PLATFORMS
 from liberapay.models.participant import Participant
 from liberapay.models import community
@@ -47,7 +48,7 @@ def fake_sentence(start=1, stop=100):
     return faker.sentence(random.randrange(start,stop))
 
 
-def fake_participant(db, number="singular", is_admin=False):
+def fake_participant(db, kind=None, is_admin=False):
     """Create a fake User.
     """
     username = faker.first_name() + fake_text_id(3)
@@ -55,18 +56,20 @@ def fake_participant(db, number="singular", is_admin=False):
         _fake_thing( db
                    , "participants"
                    , username=username
+                   , password=None if kind == 'group' else 'x'
+                   , email=username+'@example.org'
                    , is_admin=is_admin
                    , balance=0
                    , anonymous_giving=(random.randrange(5) == 0)
-                   , anonymous_receiving=(number != 'plural' and random.randrange(5) == 0)
+                   , anonymous_receiving=(random.randrange(5) == 0)
                    , balanced_customer_href=faker.uri()
                    , is_suspicious=False
                    , status='active'
                    , join_time=faker.date_time_this_year()
-                   , number=number
+                   , kind=kind or random.choice(('individual', 'organization'))
                     )
     except IntegrityError:
-      return fake_participant(db, number, is_admin)
+        return fake_participant(db, is_admin)
 
     #Call participant constructor to perform other DB initialization
     return Participant.from_username(username)
@@ -235,18 +238,20 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         participants.append(fake_participant(db))
 
     print("Making Teams")
+    teams = []
     for i in xrange(num_teams):
-        team = fake_participant(db, number="plural")
+        team = fake_participant(db, kind="group")
         #Add 1 to 3 members to the team
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
             team.add_member(p)
-        participants.append(team)
+        teams.append(team)
+    participants.extend(teams)
 
     print("Making Elsewheres")
     for p in participants:
-        #All participants get between 1 and 3 elsewheres
-        num_elsewheres = random.randint(1, 3)
+        #All participants get between 0 and 3 elsewheres
+        num_elsewheres = random.randint(0, 3)
         for platform_name in random.sample(PLATFORMS, num_elsewheres):
             fake_elsewhere(db, p, platform_name)
 

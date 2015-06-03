@@ -14,7 +14,7 @@ A_PENNY = Decimal('0.01')
 
 request.allow('GET', 'POST')
 team = get_participant(state, restrict=False)
-if not team.show_as_team(user):
+if team.kind != 'group':
     raise Response(404)
 
 member = Participant.from_username(request.path['membername'])
@@ -24,7 +24,7 @@ is_member = member.member_of(team)
 
 if request.method == 'POST':
 
-    if user.participant not in (member, team):
+    if user not in (member, team):
         raise Response(403)
 
     try:
@@ -38,7 +38,7 @@ if request.method == 'POST':
     msg = None
     out = {}
 
-    if user.participant == team:
+    if user == team:
 
         # The team itself can only add new members, which means setting their
         # take to a penny, and remove members, which means setting it to zero.
@@ -73,7 +73,7 @@ if request.method == 'POST':
         if take == ZERO and not request.body.get('confirmed'):
             out['confirm'] = _("Are you sure you want to leave this team?")
         else:
-            new_take = team.set_take_for(member, take, user.participant)
+            new_take = team.set_take_for(member, take, user)
             new_take_str = format_currency(new_take, 'USD')
             if new_take < take:
                 msg = _("Your take is now {0} (you can't go higher this week).",
@@ -86,7 +86,7 @@ if request.method == 'POST':
         raise Response(403)
 
     if 'confirm' not in out:
-        out['members'] = team.get_members(user.participant)
+        out['members'] = team.get_members()
         out['success'] = msg
 
 else:
