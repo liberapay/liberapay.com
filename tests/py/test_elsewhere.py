@@ -104,6 +104,21 @@ class TestElsewhere(Harness):
         response = self.client.GET('/on/github/liberapay/failure.html')
         assert response.code == 200
 
+    def test_public_json_not_opted_in(self):
+        for platform in self.platforms:
+            self.make_elsewhere(platform.name, 1, 'alice')
+            response = self.client.GET('/on/%s/alice/public.json' % platform.name)
+
+            assert response.code == 200
+
+            data = json.loads(response.body)
+            assert data['on'] == platform.name
+
+    def test_public_json_opted_in(self):
+        self.make_participant('alice', elsewhere='github')
+        response = self.client.GxT('/on/github/alice/public.json')
+        assert response.code == 302
+
 
 class TestConfirmTakeOver(Harness):
 
@@ -159,3 +174,23 @@ class TestFriendFinder(Harness):
         account = AccountElsewhere.upsert(user_info)
         friends, nfriends, pages_urls = platform.get_friends_for(account)
         assert nfriends > 0
+
+
+class TestElsewhereDelete(Harness):
+
+    def test_delete_nonexistent(self):
+        alice = self.make_participant('alice', elsewhere='twitter')
+        response = self.client.PxST('/alice/delete-elsewhere.json', {'platform': 'twitter', 'user_id': 'nonexistent'}, auth_as=alice)
+        assert response.code == 400
+        assert "not exist" in response.body
+
+    def test_delete_200(self):
+        platform = 'twitter'
+        alice = self.make_participant('alice', elsewhere=platform)
+        self.make_elsewhere('github', '1', 'alice')
+        alice.take_over(('github', '1'))
+        data = dict(platform=platform, user_id=alice.id)
+        response = self.client.POST('/alice/delete-elsewhere.json', data, auth_as=alice)
+        assert response.code == 200
+        msg = json.loads(response.body)['msg']
+        assert "OK" in msg
