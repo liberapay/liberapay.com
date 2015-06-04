@@ -57,12 +57,4 @@ Liberapay.settings.init = function() {
             ]
         });
     });
-
-
-    // Wire up close knob.
-    // ===================
-
-    $('button.close-account').click(function() {
-        window.location.href = './close';
-    });
 };

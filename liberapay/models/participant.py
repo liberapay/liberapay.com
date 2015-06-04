@@ -30,6 +30,7 @@ from liberapay.exceptions import (
     CannotRemovePrimaryEmail,
     EmailAlreadyTaken,
     EmailNotVerified,
+    NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
     TooManyEmailAddresses,
@@ -1615,6 +1616,3 @@ class NeedConfirmation(Exception):
     def __bool__(self):
         return any(self._all)
     __nonzero__ = __bool__
-
-
-class NonexistingElsewhere(Exception): pass

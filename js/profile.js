@@ -90,27 +90,6 @@ Liberapay.profile.init = function() {
         $root.find('button.delete').click(Liberapay.payments.deleteRoute);
     });
 
-
-    // Wire up account deletion.
-    // =========================
-
-    $('.account-delete').on('click', function () {
-        var $this = $(this);
-
-        jQuery.ajax({
-            url: "delete-elsewhere.json",
-            type: "POST",
-            dataType: "json",
-            success: function ( ) {
-                location.reload();
-            },
-            error: Liberapay.error,
-            data: { platform: this.dataset.platform, user_id: this.dataset.user_id }
-        });
-
-        return false;
-    });
-
     // Wire up user_name_prompt
     // ========================
 

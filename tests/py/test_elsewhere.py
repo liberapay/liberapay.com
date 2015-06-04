@@ -180,7 +180,7 @@ class TestElsewhereDelete(Harness):
 
     def test_delete_nonexistent(self):
         alice = self.make_participant('alice', elsewhere='twitter')
-        response = self.client.PxST('/alice/delete-elsewhere.json', {'platform': 'twitter', 'user_id': 'nonexistent'}, auth_as=alice)
+        response = self.client.PxST('/alice/elsewhere/delete', {'platform': 'twitter', 'user_id': 'nonexistent'}, auth_as=alice)
         assert response.code == 400
         assert "not exist" in response.body
 
@@ -190,7 +190,7 @@ class TestElsewhereDelete(Harness):
         self.make_elsewhere('github', '1', 'alice')
         alice.take_over(('github', '1'))
         data = dict(platform=platform, user_id=alice.id)
-        response = self.client.POST('/alice/delete-elsewhere.json', data, auth_as=alice)
+        response = self.client.POST('/alice/elsewhere/delete', data, auth_as=alice)
         assert response.code == 200
         msg = json.loads(response.body)['msg']
         assert "OK" in msg

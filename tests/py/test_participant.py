@@ -8,19 +8,18 @@ import pytest
 import liberapay
 from liberapay.constants import SESSION, SESSION_REFRESH
 from liberapay.exceptions import (
-    ProblemChangingUsername,
-    UserDoesntAcceptTips,
-    UsernameIsEmpty,
-    UsernameTooLong,
-    UsernameAlreadyTaken,
-    UsernameContainsInvalidCharacters,
+    BadAmount,
     NoSelfTipping,
     NoTippee,
-    BadAmount,
+    NonexistingElsewhere,
+    ProblemChangingUsername,
+    UserDoesntAcceptTips,
+    UsernameAlreadyTaken,
+    UsernameContainsInvalidCharacters,
+    UsernameIsEmpty,
+    UsernameTooLong,
 )
-from liberapay.models.participant import (
-    NeedConfirmation, NonexistingElsewhere, Participant
-)
+from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.testing import Harness
 
 

@@ -23,6 +23,8 @@ Liberapay.init = function() {
             user_name = $('#jump input').val().trim();
         if (user_name) window.location = '/on/' + platform + '/' + user_name + '/';
     });
+
+    Liberapay.forms.jsSubmit();
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

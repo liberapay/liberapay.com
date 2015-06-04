@@ -20,30 +20,33 @@ emails = participant.get_emails()
 <div class="col0">
     <div id="emails" class="emails">
         <h2>{{ _("Email Addresses (Private)") }}</h2>
+
         <form action="./modify.json" method="POST" class="js-submit">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <ul>
-        {% for email in emails %}
-            <li>
-                {{ email.address }}
-                {% if email.address == participant.email %}
-                    <span class="label label-primary">{{ _("Primary") }}</span>
-                {% else %}
-                    {% if not email.verified %}
-                        <span class="label label-warning">{{ _("Unverified") }}</span>
-                        <button name="resend" value="{{ email.address }}">{{ _("Resend email") }}</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <ul>
+            {% for email in emails %}
+                <li>
+                    {{ email.address }}
+                    {% if email.address == participant.email %}
+                        <span class="label label-primary">{{ _("Primary") }}</span>
                     {% else %}
-                        <button name="set-primary" value="{{ email.address }}">{{ _("Set as primary") }}</button>
+                        {% if not email.verified %}
+                            <span class="label label-warning">{{ _("Unverified") }}</span>
+                            <button name="resend" value="{{ email.address }}">{{ _("Resend email") }}</button>
+                        {% else %}
+                            <button name="set-primary" value="{{ email.address }}">{{ _("Set as primary") }}</button>
+                        {% endif %}
+                        <button name="remove" value="{{ email.address }}">{{ _("Remove") }}</button>
                     {% endif %}
-                    <button name="remove" value="{{ email.address }}">{{ _("Remove") }}</button>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-        <div>
+                </li>
+            {% endfor %}
+            </ul>
+        </form>
+
+        <form action="./modify.json" method="POST" class="js-submit">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input name="email" type="email" placeholder="{{ _('Email address') }}" />
             <button name="add-email">{{ _("Add email address") }}</button>
-        </div>
         </form>
     </div>
 

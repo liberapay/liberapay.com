@@ -95,6 +95,11 @@ class UserDoesntAcceptTips(LazyResponse400):
         return _("The user {0} doesn't accept donations.", *self.args)
 
 
+class NonexistingElsewhere(LazyResponse400):
+    def msg(self, _):
+        return _("It seems you're trying to delete something that doesn't exist.")
+
+
 class NegativeBalance(Exception):
     def __str__(self):
         return "Negative balance not allowed in this context."
