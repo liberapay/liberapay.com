@@ -18,6 +18,7 @@ from psycopg2 import IntegrityError
 from psycopg2.extras import Json
 
 import liberapay
+from liberapay import notifications
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, EMAIL_RE, EMAIL_VERIFICATION_TIMEOUT, MAX_TIP,
     MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, SESSION, SESSION_REFRESH,
@@ -47,7 +48,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     erase_cookie, is_card_expiring, set_cookie,
-    emails, i18n, notifications,
+    emails, i18n,
 )
 
 
@@ -677,7 +678,7 @@ class Participant(Model, MixinTeam):
             p = Participant.from_id(t.tipper)
             if p.email and p.notify_on_join:
                 p.queue_email(
-                    'notify_patron',
+                    'pledgee_joined',
                     user_name=elsewhere.user_name,
                     platform=elsewhere.platform_data.display_name,
                     amount=t.amount,
@@ -771,7 +772,7 @@ class Participant(Model, MixinTeam):
         state['escape'] = lambda a: a
         for name in self.notifications:
             try:
-                f = getattr(notifications, name)
+                f = getattr(notifications.web, name)
                 typ, msg = f(*resolve_dependencies(f, state).as_args)
                 r.append(dict(jsonml=msg, name=name, type=typ))
             except Exception as e:
