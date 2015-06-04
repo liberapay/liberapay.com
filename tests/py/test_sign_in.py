@@ -84,3 +84,7 @@ class TestSignIn(EmailHarness):
     def test_sign_in_bad_kind(self):
         r = self.client.PxST('/sign-in', dict(good_data, kind='group'))
         assert r.code == 400
+
+    def test_sign_in_bad_email(self):
+        r = self.client.PxST('/sign-in', dict(good_data, email='foo@bar'))
+        assert r.code == 400

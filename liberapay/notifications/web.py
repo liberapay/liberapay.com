@@ -18,19 +18,10 @@ def credit_card_failed(_, user):
     )
 
 
-def credit_card_expires(_, user):
-    href = '/%s/routes/credit-card.html' % user.username
-    return ('error',
-        ['span', _("Your credit card is about to expire!") + " ",
-            ['a', {'href': href}, _("Update card")]
-        ],
-    )
-
-
-def email_missing(_, user):
-    href = '/%s/settings/#emails' % user.username
+def pledgee_joined(_, user_name, platform, profile_url):
     return ('notice',
-        ['span', _("You haven't confirmed your email address.") + " ",
-            ['a', {'href': href}, _('Resend the confirmation email')],
+        ['a',
+            {'href': profile_url},
+            _("{0} from {1} has joined Liberapay!", user_name, platform),
         ],
     )

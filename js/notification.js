@@ -39,7 +39,7 @@ Liberapay.initNotifications = function(notifs) {
             jQuery.ajax({
                 url: '/'+Liberapay.username+'/notifications.json',
                 type: 'POST',
-                data: {remove: notif.name},
+                data: {remove: notif.id},
                 dataType: 'json',
                 error: Liberapay.error,
             });

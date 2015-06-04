@@ -1,27 +1,25 @@
 from liberapay.testing import Harness
 
+
 class TestNotifications(Harness):
-	def test_add_single_notification(self):
-		alice = self.make_participant('alice')
-		alice.add_notification('abcd')
-		assert alice.notifications == ["abcd"]
 
-	def test_add_multiple_notifications(self):
-		alice = self.make_participant('alice')
-		alice.add_notification('abcd')
-		alice.add_notification('1234')
-		assert alice.notifications == ["abcd", "1234"]
+    def test_add_notifications(self):
+        alice = self.make_participant('alice')
+        alice.add_notification('abcd')
+        alice.add_notification('1234')
+        assert alice.pending_notifs == 2
 
-	def test_add_same_notification_twice(self):
-		alice = self.make_participant('alice')
-		alice.add_notification('abcd')
-		alice.add_notification('abcd')
-		assert alice.notifications == ["abcd"]
+    def test_remove_notification(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        alice.add_notification('abcd')
+        id = alice.add_notification('1234')
+        alice.add_notification('bcde')
 
-	def test_remove_notification(self):
-		alice = self.make_participant('alice')
-		alice.add_notification('abcd')
-		alice.add_notification('1234')
-		alice.add_notification('bcde')
-		alice.remove_notification('1234')
-		assert alice.notifications == ["abcd", "bcde"]
+        # check that bob can't remove alice's notification
+        bob.remove_notification(id)
+        alice = alice.from_id(alice.id)
+        assert alice.pending_notifs == 3
+
+        alice.remove_notification(id)
+        assert alice.pending_notifs == 2

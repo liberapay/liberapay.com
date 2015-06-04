@@ -1,24 +1,31 @@
 from aspen import Response
+
+from liberapay.notifications import EVENTS
 from liberapay.utils import get_participant
 
 [---]
 request.allow("POST")
 participant = get_participant(state, restrict=True)
 
-field = request.body.get("toggle")
-if field not in ["notify_charge", "notify_on_join"]:
+event = EVENTS.get(request.body.get('event'))
+if not event:
     raise Response(400, "Invalid notification preference.")
+
+enable = request.body['enable']
+if enable == 'true':
+    mask = event.bit
+    op = '|'
+else:
+    mask = 2147483647 ^ event.bit
+    op = '&'
 
 new_value = website.db.one("""
     UPDATE participants
-       SET {0} = {0} # %s
+       SET email_notif_bits = email_notif_bits {0} %s
      WHERE id = %s
- RETURNING {0}
-""".format(field), (request.body.get("bits", 1), participant.id))
+ RETURNING email_notif_bits
+""".format(op), (mask, participant.id))
 assert new_value is not None
 
 [---] application/json via json_dump
-{
-    field: new_value,
-    'msg': _("Your notification preference has been changed.")
-}
+{'msg': _("Your notification preference has been changed.")}

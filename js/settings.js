@@ -81,20 +81,17 @@ Liberapay.settings.init = function() {
     // ================================
 
     $('.email-notifications input').click(function(e) {
-        var field = $(e.target).data('field');
-        var bits = $(e.target).data('bits') || 1;
+        var event = $(e.target).attr('name');
         jQuery.ajax(
             { url: '../emails/notifications.json'
             , type: 'POST'
-            , data: {toggle: field, bits: bits}
-            , dataType: 'json'
+            , data: {event: event, enable: $(e.target).prop('checked')}
             , success: function(data) {
                 Liberapay.notification(data.msg, 'success');
-                $(e.target).attr('checked', data.new_value & bits)
             }
             , error: [
                 Liberapay.error,
-                function(){ $(e.target).attr('checked', !$(e.target).attr('checked')) },
+                function(){ $(e.target).prop('checked', !$(e.target).prop('checked')) },
             ]
         });
     });

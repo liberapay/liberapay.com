@@ -17,24 +17,15 @@ if request.method == 'POST':
         kind = body['kind']
         if kind not in ('individual', 'organization'):
             raise Response(400, 'bad kind')
-        p = Participant.make_active(body['username'], kind, body['password'])
-        try:
-            p.add_email(body['email'])
-        except Exception as e:
-            if website.env.raise_signin_notifications:
-                raise
-            website.tell_sentry(e, state)
+        username, password = body['username'], body['password']
+        with website.db.get_cursor() as c:
+            p = Participant.make_active(username, kind, password, cursor=c)
+            p.add_email(body['email'], cursor=c)
         p.authenticated = True
     else:
         raise Response(400, 'bad action')
     if p:
         p.sign_in(response.headers.cookie)
-        try:
-            p.add_signin_notifications()
-        except Exception as e:
-            if website.env.raise_signin_notifications:
-                raise
-            website.tell_sentry(e, state)
         response.redirect(request.qs.get('back_to', '/'))
 
 [---] text/html

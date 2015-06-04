@@ -1,5 +1,6 @@
 
 from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.notifications import EVENTS
 from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
@@ -184,27 +185,13 @@ not_group = participant.kind != 'group'
         <h2 id="notifications">{{ _("Notifications") }}</h2>
         <div class="email-notifications">
             <span>{{ _("Send me notifications via email:") }}</span>
+            {% for event in EVENTS.values() %}
             <br />
             <label>
-                <input type="checkbox" data-field="notify_on_join"
-                    {{ 'checked' if participant.notify_on_join }} />
-                    {{ _("When people I pledge to join Liberapay") }}
+                <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) }} />
+                {{ _(event.title) }}
             </label>
-            <div>
-                {{ _("When my credit card is charged:") }}
-                <br />
-                <label>
-                    <input type="checkbox" data-field="notify_charge" data-bits="1"
-                        {{ 'checked' if participant.notify_charge.__and__(1) }} />
-                        {{ _("if the charge fails") }}
-                </label>
-                <br />
-                <label>
-                    <input type="checkbox" data-field="notify_charge" data-bits="2"
-                        {{ 'checked' if participant.notify_charge.__and__(2) }} />
-                        {{ _("if the charge succeeds") }}
-                </label>
-            </div>
+            {% endfor %}
         </div>
 
         <div class="close">

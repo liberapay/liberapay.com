@@ -624,46 +624,51 @@ class Payday(object):
               JOIN participants p ON e.participant = p.id
              WHERE "timestamp" >= %(ts_start)s
                AND "timestamp" < %(ts_end)s
-               AND amount > 0
-               AND p.notify_charge > 0
         """, locals())
         for e in exchanges:
-            if e.status not in ('failed', 'succeeded'):
-                log('exchange %s has an unexpected status: %s' % (e.id, e.status))
-                continue
-            i = 1 if e.status == 'failed' else 2
             p = e.participant
-            if p.notify_charge & i == 0:
-                continue
             id = p.id
-            ntippees, top_tippee = self.db.one("""
-                WITH tippees AS (
-                         SELECT p.username, amount
-                           FROM ( SELECT DISTINCT ON (tippee) tippee, amount
-                                    FROM tips
-                                   WHERE mtime < %(ts_start)s
-                                     AND tipper = %(id)s
-                                ORDER BY tippee, mtime DESC
-                                ) t
-                           JOIN participants p ON p.id = t.tippee
-                          WHERE t.amount > 0
-                            AND (p.goal IS NULL or p.goal >= 0)
-                            AND p.is_suspicious IS NOT true
-                            AND p.join_time < %(ts_start)s
-                     )
-                SELECT ( SELECT count(*) FROM tippees ) AS ntippees
-                     , ( SELECT username
-                           FROM tippees
-                       ORDER BY amount DESC
-                          LIMIT 1
-                       ) AS top_tippee
-            """, locals())
-            p.queue_email(
-                'charge_'+e.status,
-                exchange=dict(id=e.id, amount=e.amount, fee=e.fee, note=e.note),
-                ntippees=ntippees,
-                top_tippee=top_tippee,
-            )
+            status = e.status
+            if e.amount > 0:
+                if status not in ('failed', 'succeeded'):
+                    log('exchange %s has an unexpected status: %s' % (e.id, status))
+                    continue
+                ntippees, top_tippee = self.db.one("""
+                    WITH tippees AS (
+                             SELECT p.username, amount
+                               FROM ( SELECT DISTINCT ON (tippee) tippee, amount
+                                        FROM tips
+                                       WHERE mtime < %(ts_start)s
+                                         AND tipper = %(id)s
+                                    ORDER BY tippee, mtime DESC
+                                    ) t
+                               JOIN participants p ON p.id = t.tippee
+                              WHERE t.amount > 0
+                                AND (p.goal IS NULL or p.goal >= 0)
+                                AND p.is_suspicious IS NOT true
+                                AND p.join_time < %(ts_start)s
+                         )
+                    SELECT ( SELECT count(*) FROM tippees ) AS ntippees
+                         , ( SELECT username
+                               FROM tippees
+                           ORDER BY amount DESC
+                              LIMIT 1
+                           ) AS top_tippee
+                """, locals())
+                p.notify(
+                    'charge_'+status,
+                    exchange=dict(id=e.id, amount=e.amount, fee=e.fee, note=e.note),
+                    ntippees=ntippees,
+                    top_tippee=top_tippee,
+                )
+            else:
+                if status not in ('failed', 'pending'):
+                    log('exchange %s has an unexpected status: %s' % (e.id, status))
+                    continue
+                p.notify(
+                    'withdrawal_'+status,
+                    exchange=dict(id=e.id, amount=-e.amount, fee=e.fee, note=e.note),
+                )
 
     # Record-keeping
     # ==============
