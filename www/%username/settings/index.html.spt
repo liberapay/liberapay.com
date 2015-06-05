@@ -1,4 +1,3 @@
-
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
@@ -8,7 +7,6 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Account")
 
-emails = participant.get_emails()
 not_group = participant.kind != 'group'
 
 [-----------------------------------------------------------------------------]
@@ -138,28 +136,6 @@ not_group = participant.kind != 'group'
             {% endif %}
         </table>
 
-        <div id="emails" class="emails">
-            <h2>{{ _("Email Addresses (Private)") }}</h2>
-            <ul>
-            {% for email in emails %}
-                {% set is_primary = email.address == participant.email %}
-                <li class="{{ 'primary' if is_primary }} {{ 'verified' if email.verified }}"
-                    data-email="{{ email.address }}">
-                    {{ email.address }}
-                    <span class="label-primary">{{ _("Primary") }}</span>
-                    <span class="label-unverified">{{ _("Unverified") }}</span>
-                    <button class="remove">{{ _("Remove") }}</button>
-                    <button class="resend">{{ _("Resend email") }}</button>
-                    <button class="set-primary">{{ _("Set as primary") }}</button>
-                </li>
-            {% endfor %}
-            </ul>
-            <form class="add-email">
-                <input class="add-email" name="email" type="email" placeholder="sam@example.net" />
-                <button type="submit">{{ _("Add email address") }}</button>
-            </form>
-        </div>
-
         <h2>{{ _("Privacy") }}</h2>
         <p class="privacy-settings">
             <label>
@@ -180,32 +156,6 @@ not_group = participant.kind != 'group'
                     {{ _("Hide myself from search results.") }}
             </label>
         </p>
-
-        <h2 id="notifications">{{ _("Notifications") }}</h2>
-        <div class="email-notifications">
-            <span>{{ _("Send me notifications via email:") }}</span>
-            <br />
-            <label>
-                <input type="checkbox" data-field="notify_on_join"
-                    {{ 'checked' if participant.notify_on_join }} />
-                    {{ _("When people I pledge to join Liberapay") }}
-            </label>
-            <div>
-                {{ _("When my credit card is charged:") }}
-                <br />
-                <label>
-                    <input type="checkbox" data-field="notify_charge" data-bits="1"
-                        {{ 'checked' if participant.notify_charge.__and__(1) }} />
-                        {{ _("if the charge fails") }}
-                </label>
-                <br />
-                <label>
-                    <input type="checkbox" data-field="notify_charge" data-bits="2"
-                        {{ 'checked' if participant.notify_charge.__and__(2) }} />
-                        {{ _("if the charge succeeds") }}
-                </label>
-            </div>
-        </div>
 
         <div class="close">
           <h2>{{ _("Close") }}</h2>

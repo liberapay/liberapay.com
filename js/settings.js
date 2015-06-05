@@ -1,43 +1,5 @@
 Liberapay.settings = {};
 
-Liberapay.settings.post_email = function(e) {
-    e.preventDefault();
-    var $this = $(this);
-    var action = this.className;
-    var $inputs = $('.emails button, .emails input');
-    console.log($this);
-    var address = $this.parent().data('email') || $('input.add-email').val();
-
-    $inputs.prop('disabled', true);
-
-    $.ajax({
-        url: '../emails/modify.json',
-        type: 'POST',
-        data: {action: action, address: address},
-        dataType: 'json',
-        success: function (msg) {
-            if (msg) {
-                Liberapay.notification(msg, 'success');
-            }
-            if (action == 'add-email') {
-                $('input.add-email').val('');
-                setTimeout(function(){ window.location.reload(); }, 3000);
-                return;
-            } else if (action == 'set-primary') {
-                $('.emails li').removeClass('primary');
-                $this.parent().addClass('primary');
-            } else if (action == 'remove') {
-                $this.parent().fadeOut();
-            }
-            $inputs.prop('disabled', false);
-        },
-        error: [
-            function () { $inputs.prop('disabled', false); },
-            Liberapay.error
-        ],
-    });
-};
-
 Liberapay.settings.init = function() {
 
     // Wire up username knob.
@@ -81,31 +43,20 @@ Liberapay.settings.init = function() {
     // ================================
 
     $('.email-notifications input').click(function(e) {
-        var field = $(e.target).data('field');
-        var bits = $(e.target).data('bits') || 1;
+        var event = $(e.target).attr('name');
         jQuery.ajax(
             { url: '../emails/notifications.json'
             , type: 'POST'
-            , data: {toggle: field, bits: bits}
-            , dataType: 'json'
+            , data: {event: event, enable: $(e.target).prop('checked')}
             , success: function(data) {
                 Liberapay.notification(data.msg, 'success');
-                $(e.target).attr('checked', data.new_value & bits)
             }
             , error: [
                 Liberapay.error,
-                function(){ $(e.target).attr('checked', !$(e.target).attr('checked')) },
+                function(){ $(e.target).prop('checked', !$(e.target).prop('checked')) },
             ]
         });
     });
-
-
-    // Wire up email addresses list.
-    // =============================
-
-    $('.emails button, .emails input').prop('disabled', false);
-    $('.emails button[class]').on('click', Liberapay.settings.post_email);
-    $('form.add-email').on('submit', Liberapay.settings.post_email);
 
 
     // Wire up close knob.

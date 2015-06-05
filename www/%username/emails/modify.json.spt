@@ -6,25 +6,27 @@ from liberapay.utils import get_participant
 request.allow("POST")
 participant = get_participant(state, restrict=True)
 
-action = request.body['action']
-address = request.body['address']
-
 if not participant.email_lang:
     participant.set_email_lang(request.headers.get("Accept-Language"))
 
+body = request.body
 msg = None
-if action in ('add-email', 'resend'):
+if 'add-email' in body or 'resend' in body:
+    address = body['email'] if 'add-email' in body else body['resend']
     r = participant.add_email(address)
     if r:
         msg = _("A verification email has been sent to {0}.", address)
     else:
         raise Response(400, _("You have already added and verified this address."))
-elif action == 'set-primary':
-    participant.update_email(address)
-elif action == 'remove':
-    participant.remove_email(address)
+elif 'set-primary' in body:
+    participant.update_email(body['set-primary'])
+elif 'remove' in body:
+    participant.remove_email(body['remove'])
 else:
-    raise Response(400, 'unknown action "%s"' % action)
+    raise Response(400, 'nothing to do')
+
+if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+    request.redirect('.')
 
 [---] application/json via json_dump
 msg

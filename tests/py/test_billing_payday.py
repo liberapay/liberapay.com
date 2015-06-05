@@ -499,7 +499,7 @@ class TestNotifyParticipants(EmailHarness):
 
     def test_it_notifies_participants(self):
         kalel = self.make_participant('kalel', is_suspicious=False,
-                                      email='kalel@example.net', notify_charge=3)
+                                      email='kalel@example.net')
         lily = self.make_participant('lily', is_suspicious=False)
         kalel.set_tip_to(lily, 10)
 

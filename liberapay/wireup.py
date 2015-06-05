@@ -353,7 +353,6 @@ def env():
         SENTRY_DSN                      = unicode,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = unicode,
-        RAISE_SIGNIN_NOTIFICATIONS      = is_yesish,
 
         # This is used in our Procfile. (PORT is also used but is provided by
         # Heroku; we don't set it ourselves in our app config.)

@@ -54,9 +54,8 @@ CREATE TABLE participants
 , taking                numeric(35,2)           NOT NULL DEFAULT 0
 , npatrons              integer                 NOT NULL DEFAULT 0
 
-, notify_on_join        int                     NOT NULL DEFAULT 1
-, notifications         text[]                  NOT NULL DEFAULT '{}'
-, notify_charge         int                     NOT NULL DEFAULT 3
+, email_notif_bits      int                     NOT NULL DEFAULT 2147483647
+, pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
 
 , CONSTRAINT balance_chk CHECK (NOT (status <> 'active' AND balance <> 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
@@ -349,6 +348,16 @@ CREATE TABLE email_queue
 ( id            serial   PRIMARY KEY
 , participant   bigint   NOT NULL REFERENCES participants
 , spt_name      text     NOT NULL
+, context       bytea    NOT NULL
+);
+
+
+-- web notifications waiting to be displayed
+
+CREATE TABLE notification_queue
+( id            serial   PRIMARY KEY
+, participant   bigint   NOT NULL REFERENCES participants
+, event         text     NOT NULL
 , context       bytea    NOT NULL
 );
 

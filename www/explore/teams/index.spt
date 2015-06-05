@@ -6,7 +6,7 @@ teams = website.db.all("""
          , p.username AS name
          , p.receiving
          , p.goal
-         , p.receiving / t.nmembers AS dollars_per_member 
+         , p.receiving / t.nmembers AS dollars_per_member
          , CASE p.goal
            WHEN NULL THEN NULL
            WHEN 0 THEN NULL

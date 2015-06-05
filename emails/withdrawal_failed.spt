@@ -1,0 +1,18 @@
+{{ _("Withdrawal failure") }}
+
+[---] text/html
+{{ _("We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:",
+     format_currency(exchange.amount - exchange.fee, 'USD')) }}
+
+<pre>{{ exchange.note }}</pre>
+
+<a href="{{ participant.profile_url+'routes/credit-card.html' }}"
+   style="{{ button_style }}">{{ _("Update your bank account information") }}</a>
+
+[---] text/plain
+{{ _("We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:",
+     format_currency(exchange.amount - exchange.fee, 'USD')) }}
+
+{{ exchange.note }}
+
+{{ _("Update your bank account information") }}: {{ participant.profile_url+'routes/credit-card.html' }}

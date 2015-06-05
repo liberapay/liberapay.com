@@ -44,10 +44,11 @@ from liberapay.exceptions import (
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.notifications import EVENTS, web as web_notifs
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     erase_cookie, is_card_expiring, set_cookie,
-    emails, i18n, notifications,
+    emails, i18n,
 )
 
 
@@ -504,7 +505,7 @@ class Participant(Model, MixinTeam):
     # Emails
     # ======
 
-    def add_email(self, email):
+    def add_email(self, email, cursor=None):
         """
             This is called when
             1) Adding a new email address
@@ -517,7 +518,7 @@ class Participant(Model, MixinTeam):
             raise BadEmailAddress(email)
 
         # Check that this address isn't already verified
-        owner = self.db.one("""
+        owner = (cursor or self.db).one("""
             SELECT participant
               FROM emails
              WHERE address = %(email)s
@@ -535,7 +536,7 @@ class Participant(Model, MixinTeam):
         nonce = str(uuid.uuid4())
         added_time = utcnow()
         try:
-            with self.db.get_cursor() as c:
+            with self.db.get_cursor(cursor) as c:
                 self.add_event(c, 'add_email', email)
                 c.run("""
                     INSERT INTO emails
@@ -543,7 +544,7 @@ class Participant(Model, MixinTeam):
                          VALUES (%s, %s, %s, %s)
                 """, (email, nonce, added_time, self.id))
         except IntegrityError:
-            nonce = self.db.one("""
+            nonce = (cursor or self.db).one("""
                 UPDATE emails
                    SET added_time=%s
                  WHERE participant=%s
@@ -559,15 +560,10 @@ class Participant(Model, MixinTeam):
         username = self.username
         quoted_email = quote(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
-        r = self.send_email('verification',
-                        email=email,
-                        link=link.format(**locals()),
-                        include_unsubscribe=False)
+        r = self.send_email('verification', email=email, link=link.format(**locals()))
         assert r == 1 # Make sure the verification email was sent
         if self.email:
-            self.send_email('verification_notice',
-                            new_email=email,
-                            include_unsubscribe=False)
+            self.send_email('verification_notice', new_email=email)
             return 2
         return 1
 
@@ -644,7 +640,6 @@ class Participant(Model, MixinTeam):
             "padding: 0 15px; background: #396; white-space: nowrap; "
             "font: normal 14px/40px Arial, sans-serif; border-radius: 3px"
         )
-        context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email)
         if not email:
             return 0 # Not Sent
@@ -670,19 +665,6 @@ class Participant(Model, MixinTeam):
 
         self._mailer.messages.send(message=message)
         return 1 # Sent
-
-    def notify_patrons(self, elsewhere, tips=None):
-        tips = self.get_tips_receiving() if tips is None else tips
-        for t in tips:
-            p = Participant.from_id(t.tipper)
-            if p.email and p.notify_on_join:
-                p.queue_email(
-                    'notify_patron',
-                    user_name=elsewhere.user_name,
-                    platform=elsewhere.platform_data.display_name,
-                    amount=t.amount,
-                    profile_url=elsewhere.liberapay_url,
-                )
 
     def queue_email(self, spt_name, **context):
         self.db.run("""
@@ -721,29 +703,28 @@ class Participant(Model, MixinTeam):
     # Notifications
     # =============
 
-    def add_notification(self, name):
-        id = self.id
-        r = self.db.one("""
-            UPDATE participants
-               SET notifications = array_append(notifications, %(name)s)
-             WHERE id = %(id)s
-               AND NOT %(name)s = ANY(notifications);
+    def notify(self, event, **context):
+        self.add_notification(event, **context)
+        if self.email_notif_bits & EVENTS.get(event).bit:
+            self.queue_email(event, **context)
 
-            SELECT notifications
-              FROM participants
-             WHERE id = %(id)s;
+    def add_notification(self, event, **context):
+        p_id = self.id
+        context = pickle.dumps(context)
+        n_id = self.db.one("""
+            INSERT INTO notification_queue
+                        (participant, event, context)
+                 VALUES (%(p_id)s, %(event)s, %(context)s)
+              RETURNING id;
         """, locals())
-        self.set_attributes(notifications=r)
-
-    def add_signin_notifications(self):
-        if not self.email and self.join_time < utcnow() - SESSION_TIMEOUT:
-            self.add_notification('email_missing')
-        if self.get_bank_account_error():
-            self.add_notification('ba_withdrawal_failed')
-        if self.get_credit_card_error():
-            self.add_notification('credit_card_failed')
-        elif self.credit_card_expiring():
-            self.add_notification('credit_card_expires')
+        pending_notifs = self.db.one("""
+            UPDATE participants
+               SET pending_notifs = pending_notifs + 1
+             WHERE id = %(p_id)s
+         RETURNING pending_notifs;
+        """, locals())
+        self.set_attributes(pending_notifs=pending_notifs)
+        return n_id
 
     def credit_card_expiring(self):
         route = ExchangeRoute.from_network(self, 'balanced-cc')
@@ -755,29 +736,58 @@ class Participant(Model, MixinTeam):
             return False
         return is_card_expiring(int(year), int(month))
 
-    def remove_notification(self, name):
-        id = self.id
+    def remove_notification(self, n_id):
+        p_id = self.id
         r = self.db.one("""
-            UPDATE participants
-               SET notifications = array_remove(notifications, %(name)s)
-             WHERE id = %(id)s
-         RETURNING notifications
+            DO $$
+            BEGIN
+                DELETE FROM notification_queue
+                 WHERE id = %(n_id)s
+                   AND participant = %(p_id)s;
+                IF (NOT FOUND) THEN RETURN; END IF;
+                UPDATE participants
+                   SET pending_notifs = pending_notifs - 1
+                 WHERE id = %(p_id)s;
+            END;
+            $$ LANGUAGE plpgsql;
+
+            SELECT pending_notifs
+              FROM participants
+             WHERE id = %(p_id)s;
         """, locals())
-        self.set_attributes(notifications=r)
+        self.set_attributes(pending_notifs=r)
 
     def render_notifications(self, state):
         r = []
+        if not self.pending_notifs:
+            return r
+        notifs = self.db.all("""
+            SELECT id, event, context
+              FROM notification_queue
+             WHERE participant = %s
+        """, (self.id,))
         escape = state['escape']
         state['escape'] = lambda a: a
-        for name in self.notifications:
+        for id, event, context in notifs:
             try:
-                f = getattr(notifications, name)
-                typ, msg = f(*resolve_dependencies(f, state).as_args)
-                r.append(dict(jsonml=msg, name=name, type=typ))
+                context = dict(state, **pickle.loads(context))
+                f = getattr(web_notifs, event)
+                typ, msg = f(*resolve_dependencies(f, context).as_args)
+                r.append(dict(id=id, jsonml=msg, type=typ))
             except Exception as e:
                 self._tell_sentry(e, state)
         state['escape'] = escape
         return r
+
+    def notify_patrons(self, elsewhere, tips):
+        for t in tips:
+            Participant.from_id(t.tipper).notify(
+                'pledgee_joined',
+                user_name=elsewhere.user_name,
+                platform=elsewhere.platform_data.display_name,
+                amount=t.amount,
+                profile_url=elsewhere.liberapay_url,
+            )
 
 
     # Exchange-related stuff

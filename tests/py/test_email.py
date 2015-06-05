@@ -15,8 +15,11 @@ class TestEmail(EmailHarness):
 
     def hit_email_spt(self, action, address, auth_as='alice', should_fail=False):
         P = self.client.PxST if should_fail else self.client.POST
-        data = {'action': action, 'address': address}
-        headers = {'HTTP_ACCEPT_LANGUAGE': 'en'}
+        if action == 'add-email':
+            data = {action: '', 'email': address}
+        else:
+            data = {action: address}
+        headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         auth_as = self.alice if auth_as == 'alice' else auth_as
         return P('/alice/emails/modify.json', data, auth_as=auth_as, **headers)
 
@@ -43,11 +46,6 @@ class TestEmail(EmailHarness):
         assert last_email['to'][0]['email'] == 'alice@example.com'
         expected = "We've received a request to connect alice@example.com to the alice account on Liberapay"
         assert expected in last_email['text']
-
-    def test_verification_email_doesnt_contain_unsubscribe(self):
-        self.hit_email_spt('add-email', 'alice@example.com')
-        last_email = self.get_last_email()
-        assert "To stop receiving" not in last_email['text']
 
     def test_adding_second_email_sends_verification_notice(self):
         self.verify_and_change_email('alice1@example.com', 'alice2@example.com')
@@ -168,9 +166,9 @@ class TestEmail(EmailHarness):
         with self.assertRaises(TooManyEmailAddresses):
             self.alice.add_email('alice@example.coop')
 
-    def test_account_page_shows_emails(self):
+    def test_emails_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
-        body = self.client.GET("/alice/settings/", auth_as=self.alice).body
+        body = self.client.GET("/alice/emails/", auth_as=self.alice).body
         assert 'alice@example.com' in body
         assert 'alice@example.net' in body
 
