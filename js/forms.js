@@ -8,7 +8,7 @@ Liberapay.forms.jsEdit = function(params) {
     var $editButton = $root.find('button.edit');
 
     $form.find('button').attr('type', 'button');
-    $form.find('button.save').attr('type', 'submit');
+    var $saveButton = $form.find('button.save').attr('type', 'submit');
 
     $editButton.prop('disabled', false);
     $editButton.click(function(e) {
@@ -20,7 +20,7 @@ Liberapay.forms.jsEdit = function(params) {
         // prompt the user if they try leaving the page before saving
         if (params.confirmBeforeUnload) {
             $(window).on('beforeunload.js_edit', function(e) {
-                e.preventDefault();
+                if (!$saveButton.prop('disabled')) e.preventDefault();
             });
         }
     });
