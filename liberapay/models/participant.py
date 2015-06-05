@@ -560,15 +560,10 @@ class Participant(Model, MixinTeam):
         username = self.username
         quoted_email = quote(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
-        r = self.send_email('verification',
-                        email=email,
-                        link=link.format(**locals()),
-                        include_unsubscribe=False)
+        r = self.send_email('verification', email=email, link=link.format(**locals()))
         assert r == 1 # Make sure the verification email was sent
         if self.email:
-            self.send_email('verification_notice',
-                            new_email=email,
-                            include_unsubscribe=False)
+            self.send_email('verification_notice', new_email=email)
             return 2
         return 1
 
@@ -645,7 +640,6 @@ class Participant(Model, MixinTeam):
             "padding: 0 15px; background: #396; white-space: nowrap; "
             "font: normal 14px/40px Arial, sans-serif; border-radius: 3px"
         )
-        context.setdefault('include_unsubscribe', True)
         email = context.setdefault('email', self.email)
         if not email:
             return 0 # Not Sent

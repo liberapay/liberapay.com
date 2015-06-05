@@ -47,11 +47,6 @@ class TestEmail(EmailHarness):
         expected = "We've received a request to connect alice@example.com to the alice account on Liberapay"
         assert expected in last_email['text']
 
-    def test_verification_email_doesnt_contain_unsubscribe(self):
-        self.hit_email_spt('add-email', 'alice@example.com')
-        last_email = self.get_last_email()
-        assert "To stop receiving" not in last_email['text']
-
     def test_adding_second_email_sends_verification_notice(self):
         self.verify_and_change_email('alice1@example.com', 'alice2@example.com')
         assert self.mailer.call_count == 3
