@@ -5,21 +5,21 @@
      format_currency(exchange.amount + exchange.fee, 'USD'),
      ('<b><a href="{0}">{1}</a></b>'|safe).format(
         participant.profile_url+'giving/',
-        top_tippee if ntippees == 1 else ngettext('{0} and {n} other', 
-                                                  '{0} and {n} others', 
-                                                  ntippees - 1, 
+        top_tippee if ntippees == 1 else ngettext('{0} and {n} other',
+                                                  '{0} and {n} others',
+                                                  ntippees - 1,
                                                   top_tippee))) }}
 <br>
 <br>
-<a href="{{ '{}receipts/{}.html'.format(participant.profile_url, exchange.id) }}" 
+<a href="{{ '{}receipts/{}.html'.format(participant.profile_url, exchange.id) }}"
    style="{{ button_style }}">{{ _("View Receipt") }}</a>
 
 [---] text/plain
 {{ _("We charged your credit card {0} today, to fund your ongoing support for {1}. Thanks for using Liberapay!",
      format_currency(exchange.amount + exchange.fee, 'USD'),
-     top_tippee if ntippees == 1 else ngettext('{0} and {n} other', 
-                                               '{0} and {n} others', 
-                                               ntippees - 1, 
+     top_tippee if ntippees == 1 else ngettext('{0} and {n} other',
+                                               '{0} and {n} others',
+                                               ntippees - 1,
                                                top_tippee)) }}
 
 {{ _("Follow this link to view your receipt:") }} {{ '{}receipts/{}.html'.format(participant.profile_url, exchange.id) }}
