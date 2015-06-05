@@ -1,0 +1,11 @@
+{{ _("Withdrawal initiated") }}
+
+[---] text/html
+{{ _("We have initiated a transfer of {0} from your Liberapay wallet to your bank account. "
+     "Please note that it can take several business days for the transaction to complete.",
+     format_currency(exchange.amount - exchange.fee, 'USD')) }}
+
+[---] text/plain
+{{ _("We have initiated a transfer of {0} from your Liberapay wallet to your bank account. "
+     "Please note that it can take several business days for the transaction to complete.",
+     format_currency(exchange.amount - exchange.fee, 'USD')) }}
