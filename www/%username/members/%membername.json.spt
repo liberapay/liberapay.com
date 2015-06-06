@@ -89,18 +89,12 @@ if request.method == 'POST':
         out['success'] = msg
 
 else:
-    if member == team:
-        out = team.get_team_take()
-        out['id'] = out.pop('member_id')
-        out['username'] = out.pop('member_name')
-        out['take'] = unicode(out.pop('amount'))
-    else:
-        out = website.db.one("""
-            SELECT t.ctime, t.mtime, p.username, t.amount::text as take
-              FROM current_takes t
-              JOIN participants p ON p.id = t.member
-             WHERE team=%s AND member=%s
-        """, (team.id, member.id))
+    out = website.db.one("""
+        SELECT t.ctime, t.mtime, p.username, t.amount::text as take
+          FROM current_takes t
+          JOIN participants p ON p.id = t.member
+         WHERE team=%s AND member=%s
+    """, (team.id, member.id))
 
 [---] application/json via json_dump
 out

@@ -58,7 +58,8 @@ CREATE TABLE participants
 , email_notif_bits      int                     NOT NULL DEFAULT 2147483647
 , pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
 
-, CONSTRAINT balance_chk CHECK (NOT (status <> 'active' AND balance <> 0))
+, CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind='group') AND balance <> 0))
+, CONSTRAINT giving_chk CHECK (NOT (kind='group' AND giving <> 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
 , CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))

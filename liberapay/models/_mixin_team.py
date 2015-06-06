@@ -174,33 +174,16 @@ class MixinTeam(object):
         records = (cursor or self.db).all(TAKES, dict(team=self.id))
         return [r._asdict() for r in records]
 
-    def get_team_take(self, cursor=None):
-        """Return a single take for a team, the team itself's take.
-        """
-        assert self.kind == 'group'
-        TAKE = "SELECT sum(amount) FROM current_takes WHERE team=%s"
-        total_take = (cursor or self.db).one(TAKE, (self.id,), default=0)
-        team_take = max(self.receiving - total_take, 0)
-        membership = { "ctime": None
-                     , "mtime": None
-                     , "member_id": self.id
-                     , "member_name": self.username
-                     , "amount": team_take
-                      }
-        return membership
-
     def compute_actual_takes(self, cursor=None):
         """Get the takes, compute the actual amounts, and return an OrderedDict.
         """
         actual_takes = OrderedDict()
         nominal_takes = self.get_current_takes(cursor=cursor)
-        nominal_takes.append(self.get_team_take(cursor=cursor))
-        budget = balance = self.balance + self.receiving - self.giving
+        budget = balance = self.receiving
         for take in nominal_takes:
             nominal_amount = take['nominal_amount'] = take.pop('amount')
             actual_amount = take['actual_amount'] = min(nominal_amount, balance)
-            if take['member_id'] != self.id:
-                balance -= actual_amount
+            balance -= actual_amount
             take['balance'] = balance
             take['percentage'] = (actual_amount / budget) if budget > 0 else 0
             actual_takes[take['member_id']] = take

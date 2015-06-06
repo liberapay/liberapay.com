@@ -30,16 +30,14 @@ subhead = _("Team Members")
       <th>Member</th>
       <th class="figure">{{ _("Last{0} Week (€)", "<br/>"|safe) }}</th>
       <th class="figure">{{ _("This{0} Week (€)", "<br/>"|safe) }}</th>
-      <th class="figure">{{ _("Team{0} Balance (€)", "<br/>"|safe) }}</th>
       <th class="figure">{{ _("This{0} Week (%)", "<br/>"|safe) }}</th>
     </tr>
     <tr>
       <td></td>
       <td></td>
       <td class="figure last_week"></td>
-      <td class="figure this_week"></td>
-      <td class="figure balance">
-        {{ team.balance + team.receiving - team.giving }}
+      <td class="figure this_week">
+        {{ team.receiving }}
       </td>
       <td class="figure percentage"></td>
     </tr>

@@ -127,6 +127,7 @@ class Payday(object):
                  , balance AS new_balance
                  , is_suspicious
                  , goal
+                 , kind
               FROM participants p
              WHERE is_suspicious IS NOT true
                AND join_time < %(ts_start)s
@@ -142,7 +143,7 @@ class Payday(object):
              WHERE t.timestamp > %(ts_start)s;
 
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
-            SELECT tipper, tippee, amount
+            SELECT tipper, tippee, amount, (p2.kind = 'group') AS to_team
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -273,6 +274,7 @@ class Payday(object):
                          UPDATE payday_tips
                             SET is_funded = true
                           WHERE is_funded IS NOT true
+                            AND to_team IS NOT true
                       RETURNING *
                     )
                     SELECT COUNT(*) FROM updated_rows INTO count;

@@ -62,7 +62,6 @@ Liberapay.team = (function() {
                     , ['td', ['a', {'href': '/'+member.username+'/'}, member.username]]
                     , ['td', {'class': 'figure last_week'}, num(member.last_week)]
                     , ['td', {'class': 'figure take ' + increase}, drawMemberTake(member)]
-                    , ['td', {'class': 'figure balance'}, num(member.balance)]
                     , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
                      ]
                 ));
@@ -73,7 +72,6 @@ Liberapay.team = (function() {
                     , ['td']
                     , ['td']
                     , ['td', {'class': 'figure take'}, num(member.take)]
-                    , ['td', {'class': 'figure balance'}, num(member.balance)]
                     , ['td', {'class': 'figure percentage'}, perc(member.percentage)]
                      ]
                 ));

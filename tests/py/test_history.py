@@ -40,7 +40,6 @@ class TestHistory(FakeTransfersHarness):
         Payday.start().run()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
-        self.make_exchange('mango-cc', 10000, 0, team)
         self.make_exchange('mango-cc', 10000, 0, alice)
         self.make_exchange('mango-cc', -5000, 0, alice)
         self.db.run("""
@@ -49,8 +48,10 @@ class TestHistory(FakeTransfersHarness):
         """)
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        team.add_member(bob)
-        team.set_take_for(bob, Decimal('1.00'), team)
+        david = self.make_participant('david')
+        self.make_exchange('mango-cc', 10000, 0, david)
+        david.set_tip_to(team, Decimal('100'))
+        team.set_take_for(bob, Decimal('1.00'), bob)
         alice.set_tip_to(bob, Decimal('5.00'))
 
         assert bob.balance == 0

@@ -17,7 +17,7 @@ class TestClosing(FakeTransfersHarness):
     # close
 
     def test_close_closes(self):
-        team = self.make_participant('team', kind='group', balance=50)
+        team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')

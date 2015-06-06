@@ -11,13 +11,15 @@ CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
          , 0::numeric(35,2) AS receiving
          , 0 as npatrons
          , goal
+         , kind
       FROM participants p
      WHERE is_suspicious IS NOT true;
 
 CREATE UNIQUE INDEX ON temp_participants (id);
 
 CREATE TEMPORARY TABLE temp_tips ON COMMIT DROP AS
-    SELECT t.id, tipper, tippee, amount, (p2.status = 'active') AS active
+    SELECT t.id, tipper, tippee, amount, (p2.kind = 'group') AS to_team
+         , (p2.status = 'active') AS active
       FROM current_tips t
       JOIN temp_participants p ON p.id = t.tipper
       JOIN temp_participants p2 ON p2.id = t.tippee
@@ -122,6 +124,7 @@ CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
                  UPDATE temp_tips
                     SET is_funded = true
                   WHERE is_funded IS NOT true
+                    AND to_team IS NOT true
               RETURNING *
             )
             SELECT COUNT(*) FROM updated_rows INTO count;
