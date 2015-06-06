@@ -2,7 +2,7 @@ Liberapay.team = (function() {
     function init() {
         $('#lookup-container form').submit(add);
         $('#lookup-results').on('click', 'li', selectLookupResult);
-        $('#query').focus().keyup(lookup);
+        $('#query').keyup(lookup);
 
         jQuery.get("index.json").success(function(members) {
             $('.loading-indicator').remove();
@@ -88,13 +88,18 @@ Liberapay.team = (function() {
     // Add
     // ===
 
+    var lookup_timeout = null;
+    var $query = $('#query');
     function lookup() {
-        var query = $('#query').val();
+        if (lookup_timeout) clearTimeout(lookup_timeout);
+        var query = $query.val();
         if (query.length < 3)
             $('#lookup-results').empty();
-        else
-            // TODO throttle
-            jQuery.get("/search.json", {scope: 'usernames', q: query}).success(drawLookupResults);
+        else {
+            lookup_timeout = setTimeout(function() {
+                jQuery.get("/search.json", {scope: 'usernames', q: query}).success(drawLookupResults);
+            }, 300);
+        }
     }
 
     function drawLookupResults(results) {
