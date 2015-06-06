@@ -20,3 +20,4 @@ assert not [b for b in bits if '{0:b}'.format(b).count('1') != 1]  # single bit
 del bits
 
 EVENTS = OrderedDict((d.name, d) for d in EVENTS)
+EVENTS_S = ' '.join(EVENTS.keys())

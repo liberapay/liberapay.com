@@ -1,4 +1,4 @@
-from liberapay.notifications import EVENTS
+from liberapay.notifications import EVENTS, EVENTS_S
 from liberapay.utils import get_participant
 
 [---]
@@ -50,16 +50,19 @@ emails = participant.get_emails()
         </form>
     </div>
 
-    <h2 id="notifications">{{ _("Notifications") }}</h2>
-    <div class="email-notifications">
-        <span>{{ _("Send me notifications via email:") }}</span>
+    <h2>{{ _("Notifications") }}</h2>
+    <form action="./notifications.json" method="POST" class="js-submit">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="fields" value="{{ EVENTS_S }}" />
+        <span>{{ _("Send me notifications via email:") }}</span><br>
         {% for event in EVENTS.values() %}
-        <br />
         <label>
             <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) }} />
             {{ _(event.title) }}
         </label>
+        <br>
         {% endfor %}
-    </div>
+        <button>{{ _("Save changes") }}</button>
+    </form>
 </div>
 {% endblock %}

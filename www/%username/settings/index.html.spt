@@ -1,3 +1,4 @@
+from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
@@ -40,7 +41,7 @@ not_group = participant.kind != 'group'
         <p>{{ _(participant.kind.title()) }}</p>
 
         {% if not_group %}
-        <form class="password" action="edit" method="POST">
+        <form action="edit" method="POST" class="js-submit">
             <h2>{{ _("Password") }}</h2>
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="password" name="cur-password" placeholder="{{ _('Current password') }}" />
@@ -137,25 +138,18 @@ not_group = participant.kind != 'group'
         </table>
 
         <h2>{{ _("Privacy") }}</h2>
-        <p class="privacy-settings">
+        <form action="./edit" method="POST" class="js-submit">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="privacy" value="{{ PRIVACY_FIELDS_S }}" />
+            {% for name, label in PRIVACY_FIELDS.items() %}
             <label>
-                <input type="checkbox" data-field="anonymous_giving"
-                    {% if participant.anonymous_giving %}checked="true"{% endif %} />
-                    {{ _("Hide total giving from others.") }}
+                <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name] }} />
+                {{ label }}
             </label>
             <br />
-            <label>
-                <input type="checkbox" data-field="anonymous_receiving"
-                    {% if participant.anonymous_receiving %}checked="true"{% endif %} />
-                    {{ _("Hide total receiving from others.") }}
-            </label>
-            <br />
-            <label class="is-searchable">
-                <input type="checkbox" data-field="!is_searchable"
-                    {% if not participant.is_searchable %}checked="true"{% endif %} />
-                    {{ _("Hide myself from search results.") }}
-            </label>
-        </p>
+            {% endfor %}
+            <button>{{ _("Save changes") }}</button>
+        </form>
 
         <div class="close">
             <h2>{{ _("Close") }}</h2>

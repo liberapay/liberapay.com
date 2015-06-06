@@ -1548,7 +1548,7 @@ class Participant(Model, MixinTeam):
         # Values:
         #   null - user is receiving anonymously
         #   3.00 - user receives this amount in tips
-        if not self.anonymous_receiving:
+        if not self.hide_receiving:
             receiving = str(self.receiving)
         else:
             receiving = None
@@ -1558,7 +1558,7 @@ class Participant(Model, MixinTeam):
         # Values:
         #   null - user is giving anonymously
         #   3.00 - user gives this amount in tips
-        if not self.anonymous_giving:
+        if not self.hide_giving:
             giving = str(self.giving)
         else:
             giving = None

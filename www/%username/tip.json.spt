@@ -50,7 +50,7 @@ else:
     out["total_receiving"] = str(total_receiving)
     out["total_receiving_l"] = format_currency(total_receiving, 'USD')
 
-    if not tippee.anonymous_receiving:
+    if not tippee.hide_receiving:
         total_receiving_tippee = tippee.receiving
         out["total_receiving_tippee"] = str(total_receiving_tippee)
         out["total_receiving_tippee_l"] = format_currency(total_receiving_tippee, 'USD')

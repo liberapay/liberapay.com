@@ -110,7 +110,7 @@ Liberapay.forms.jsSubmit = function() {
 };
 
 Liberapay.forms.success = function($form, $inputs) { return function(data) {
-    $inputs.prop('disabled', false);
+    $inputs.prop('disabled', false).filter('[type=password]').val('');
     var msg = data && data.msg || $form.data('success');
     if (msg) {
         Liberapay.notification(msg, 'success');

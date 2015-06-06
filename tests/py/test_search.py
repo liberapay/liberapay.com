@@ -30,3 +30,9 @@ class TestSearch(Harness):
         data = json.loads(response.body)['usernames']
         assert len(data) == 1
         assert data[0]['username'] == 'alice'
+
+    def test_hide_from_search(self):
+        self.make_participant('alice', hide_from_search=True)
+        response = self.client.GET('/search.json?q=alice&scope=usernames')
+        data = json.loads(response.body)['usernames']
+        assert data == []

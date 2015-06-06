@@ -1,5 +1,3 @@
-import json
-
 from liberapay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
 from liberapay.exceptions import TooManyEmailAddresses
 from liberapay.models.participant import Participant
@@ -16,7 +14,7 @@ class TestEmail(EmailHarness):
     def hit_email_spt(self, action, address, auth_as='alice', should_fail=False):
         P = self.client.PxST if should_fail else self.client.POST
         if action == 'add-email':
-            data = {action: '', 'email': address}
+            data = {'email': address}
         else:
             data = {action: address}
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
@@ -36,8 +34,7 @@ class TestEmail(EmailHarness):
 
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
-        actual = json.loads(response.body)
-        assert actual
+        assert response.body == '{}'
 
     def test_adding_email_sends_verification_email(self):
         self.hit_email_spt('add-email', 'alice@example.com')

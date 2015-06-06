@@ -1,7 +1,7 @@
 {% extends "templates/participant.html" %}
 
 {% block head_early %}
-    {% if not participant.is_searchable %}
+    {% if participant.hide_from_search %}
     <meta name="robots" content="noindex,nofollow" />
     {% endif %}
 {% endblock %}
