@@ -30,6 +30,7 @@ from liberapay.exceptions import (
     CannotRemovePrimaryEmail,
     EmailAlreadyTaken,
     EmailNotVerified,
+    NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
     TooManyEmailAddresses,
@@ -1547,7 +1548,7 @@ class Participant(Model, MixinTeam):
         # Values:
         #   null - user is receiving anonymously
         #   3.00 - user receives this amount in tips
-        if not self.anonymous_receiving:
+        if not self.hide_receiving:
             receiving = str(self.receiving)
         else:
             receiving = None
@@ -1557,7 +1558,7 @@ class Participant(Model, MixinTeam):
         # Values:
         #   null - user is giving anonymously
         #   3.00 - user gives this amount in tips
-        if not self.anonymous_giving:
+        if not self.hide_giving:
             giving = str(self.giving)
         else:
             giving = None
@@ -1615,6 +1616,3 @@ class NeedConfirmation(Exception):
     def __bool__(self):
         return any(self._all)
     __nonzero__ = __bool__
-
-
-class NonexistingElsewhere(Exception): pass

@@ -1,7 +1,7 @@
 {% set current_page = request.path.raw %}
 {% set show_members = participant.kind == 'group' %}
 {% set show_dashboard = (user == participant) %}
-{% set show_receiving = (user == participant or not participant.anonymous_receiving) and participant.accepts_tips %}
+{% set show_receiving = (user == participant or not participant.hide_receiving) and participant.accepts_tips %}
 {% set show_profile = show_members or show_receiving %}
 {% set u = participant.username %}
 {% set pages = [ ('/',                  _('Dashboard'), True,           False)

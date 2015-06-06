@@ -5,8 +5,13 @@
     <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Liberapay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
-    <link rel="stylesheet" type="text/css" href="//cloud.typography.com/6540672/615104/css/fonts.css" />
     {% block head %}{% endblock %}
+    <script>
+        // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
+        if (window.location.hash == '#_=_') {
+            window.location.hash = ''; // leaves a # behind
+        }
+    </script>
 </head>
 {% set homepage = request.path.raw == '/' %}
 <body id="{{ 'homepage' if homepage and user.ANON }}">
@@ -51,27 +56,20 @@
                 <li><a href="/about/">{{ _("About") }}</a></li>
                 <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
                 <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
-                <li><a href="/about/terms/">{{ _("Terms") }}</a></li>
+                <li><a href="/about/terms">{{ _("Terms") }}</a></li>
                 <li><a href="https://twitter.com/liberapaye">Twitter</a></li>
                 <li><a href="https://github.com/liberapay/liberapay.com">GitHub</a></li>
             </ul>
         </div>
     </div>
 
-<script>
-    // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
-    if (window.location.hash == '#_=_') {
-        window.location.hash = ''; // for older browsers, leaves a # behind
-        history.pushState('', document.title, window.location.pathname); // nice and clean
-    }
-</script>
 <script src="{{ website.asset('jquery.min.js') }}"></script>
 <script src="{{ website.asset('chosen.jquery.min.js') }}"></script>
 <script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
 <script src="{{ website.asset('base.js') }}"></script>
 
 <script>
-    $(document).ready(function() {
+    $(function(){
         Liberapay.init();
         {% if not user.ANON %}
         Liberapay.username = {{ to_javascript(user.username)|safe }};

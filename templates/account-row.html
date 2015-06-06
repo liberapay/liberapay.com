@@ -29,10 +29,13 @@
                         {{ _("+ Add") }}
                     {% endcall %}
                 {% else %}
-                    <div class="account-delete" title="{{ _("Disconnect") }}"
-                         data-platform="{{ platform.name }}"
-                         data-user_id="{{ account.user_id }}">
-                    </div>
+                    <form action="/{{ account.participant.username }}/elsewhere/delete"
+                          method="POST" class="js-submit">
+                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                         <input type="hidden" name="platform" value="{{ platform.name }}">
+                         <input type="hidden" name="user_id" value="{{ account.user_id }}">
+                         <button class="account-delete" title="{{ _('Disconnect') }}"></button>
+                    </form>
                 {% endif %}
             {% endif %}
         </td>

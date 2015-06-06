@@ -103,9 +103,9 @@ limited = getattr(platform, 'api_friends_limited', False)
     <tr>
         <td><a href="./{{ friend.liberapay_slug }}/">{{ friend.friendly_name }}</a></td>
         <td class="figure">{{ '&check;'|safe if p.accepts_tips }}</td>
-        <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.npatrons }}</td>
-        <td class="figure">{{ _('hidden') if p.anonymous_receiving else p.receiving }}</td>
-        <td class="figure">{{ _('hidden') if p.anonymous_giving else p.giving }}</td>
+        <td class="figure">{{ _('hidden') if p.hide_receiving else p.npatrons }}</td>
+        <td class="figure">{{ _('hidden') if p.hide_receiving else p.receiving }}</td>
+        <td class="figure">{{ _('hidden') if p.hide_giving else p.giving }}</td>
     </tr>
     {% endfor %}
     {% if pages_urls %}

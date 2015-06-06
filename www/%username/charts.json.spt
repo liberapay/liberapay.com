@@ -24,7 +24,7 @@ from liberapay.utils import get_participant
 
 participant = get_participant(state, restrict=False)
 
-if participant.anonymous_receiving:
+if participant.hide_receiving:
     if user != participant and not user.is_admin:
         raise Response(403)
 

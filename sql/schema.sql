@@ -43,9 +43,9 @@ CREATE TABLE participants
 , is_suspicious         boolean                 DEFAULT NULL
 , balanced_customer_href  text                  DEFAULT NULL
 
-, anonymous_giving      boolean                 NOT NULL DEFAULT FALSE
-, anonymous_receiving   boolean                 NOT NULL DEFAULT FALSE
-, is_searchable         bool                    NOT NULL DEFAULT TRUE
+, hide_giving           boolean                 NOT NULL DEFAULT FALSE
+, hide_receiving        boolean                 NOT NULL DEFAULT FALSE
+, hide_from_search      boolean                 NOT NULL DEFAULT FALSE
 
 , avatar_url            text
 , giving                numeric(35,2)           NOT NULL DEFAULT 0

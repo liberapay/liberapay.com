@@ -60,8 +60,8 @@ def fake_participant(db, kind=None, is_admin=False):
                    , email=username+'@example.org'
                    , is_admin=is_admin
                    , balance=0
-                   , anonymous_giving=(random.randrange(5) == 0)
-                   , anonymous_receiving=(random.randrange(5) == 0)
+                   , hide_giving=(random.randrange(5) == 0)
+                   , hide_receiving=(random.randrange(5) == 0)
                    , balanced_customer_href=faker.uri()
                    , is_suspicious=False
                    , status='active'

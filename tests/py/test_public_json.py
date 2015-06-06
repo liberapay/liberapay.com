@@ -40,7 +40,7 @@ class Tests(Harness):
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
         alice = self.make_participant( 'alice'
                                      , last_bill_result=''
-                                     , anonymous_giving=True
+                                     , hide_giving=True
                                      )
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
@@ -51,7 +51,7 @@ class Tests(Harness):
     def test_anonymous_gets_null_receiving_if_user_anonymous(self):
         alice = self.make_participant( 'alice'
                                      , last_bill_result=''
-                                     , anonymous_receiving=True
+                                     , hide_receiving=True
                                      )
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')

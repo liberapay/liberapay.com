@@ -1,4 +1,4 @@
-from liberapay.notifications import EVENTS
+from liberapay.notifications import EVENTS, EVENTS_S
 from liberapay.utils import get_participant
 
 [---]
@@ -20,43 +20,49 @@ emails = participant.get_emails()
 <div class="col0">
     <div id="emails" class="emails">
         <h2>{{ _("Email Addresses (Private)") }}</h2>
+
         <form action="./modify.json" method="POST" class="js-submit">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <ul>
-        {% for email in emails %}
-            <li>
-                {{ email.address }}
-                {% if email.address == participant.email %}
-                    <span class="label label-primary">{{ _("Primary") }}</span>
-                {% else %}
-                    {% if not email.verified %}
-                        <span class="label label-warning">{{ _("Unverified") }}</span>
-                        <button name="resend" value="{{ email.address }}">{{ _("Resend email") }}</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <ul>
+            {% for email in emails %}
+                <li>
+                    {{ email.address }}
+                    {% if email.address == participant.email %}
+                        <span class="label label-primary">{{ _("Primary") }}</span>
                     {% else %}
-                        <button name="set-primary" value="{{ email.address }}">{{ _("Set as primary") }}</button>
+                        {% if not email.verified %}
+                            <span class="label label-warning">{{ _("Unverified") }}</span>
+                            <button name="resend" value="{{ email.address }}">{{ _("Resend email") }}</button>
+                        {% else %}
+                            <button name="set-primary" value="{{ email.address }}">{{ _("Set as primary") }}</button>
+                        {% endif %}
+                        <button name="remove" value="{{ email.address }}">{{ _("Remove") }}</button>
                     {% endif %}
-                    <button name="remove" value="{{ email.address }}">{{ _("Remove") }}</button>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-        <div>
+                </li>
+            {% endfor %}
+            </ul>
+        </form>
+
+        <form action="./modify.json" method="POST" class="js-submit">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input name="email" type="email" placeholder="{{ _('Email address') }}" />
             <button name="add-email">{{ _("Add email address") }}</button>
-        </div>
         </form>
     </div>
 
-    <h2 id="notifications">{{ _("Notifications") }}</h2>
-    <div class="email-notifications">
-        <span>{{ _("Send me notifications via email:") }}</span>
+    <h2>{{ _("Notifications") }}</h2>
+    <form action="./notifications.json" method="POST" class="js-submit">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="fields" value="{{ EVENTS_S }}" />
+        <span>{{ _("Send me notifications via email:") }}</span><br>
         {% for event in EVENTS.values() %}
-        <br />
         <label>
             <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) }} />
             {{ _(event.title) }}
         </label>
+        <br>
         {% endfor %}
-    </div>
+        <button>{{ _("Save changes") }}</button>
+    </form>
 </div>
 {% endblock %}

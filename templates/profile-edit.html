@@ -53,7 +53,7 @@
             <input type="radio" name="goal" id="goal-yes" value="custom"
             {% if user.goal > 0 %} checked="true"{% endif %}/>
             <label for="goal-yes">{{ GOAL_PARTS[0] }}$</label><input
-                name="goal_custom" id="goal-custom" tabindex="202"
+                name="goal_custom" id="goal-custom"
             {% if (user.goal == None) or (user.goal <= 0) %}
             {% else %}
             value="{{ format_decimal(user.goal) }}"

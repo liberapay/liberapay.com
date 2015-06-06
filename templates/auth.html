@@ -1,6 +1,9 @@
 {% macro auth_button(platform, action, user_id='', class='') %}
     <form action="/on/{{ platform }}/redirect" method="post"
-          class="auth-button {{ platform }} {{ class }}">
+          class="auth-button {{ platform }} {{ class }}"
+          {% if class == 'user_name_prompt' %}
+              data-msg="{{ _('Please enter the name of the {0} account you would like to connect:', platform) }}"
+          {% endif %}>
         <input type="hidden" name="action" value="{{ action }}" />
         {% set then=b64encode(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip() %}
         <input type="hidden" name="then" value="{{ then }}" />

@@ -1,32 +1,4 @@
-// Form Generics
-// =============
-
 Liberapay.forms = {};
-
-Liberapay.forms.initCSRF = function() {   // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
-    jQuery(document).ajaxSend(function(event, xhr, settings) {
-        function sameOrigin(url) {
-            // url could be relative or scheme relative or absolute
-            var host = document.location.host; // host + port
-            var protocol = document.location.protocol;
-            var sr_origin = '//' + host;
-            var origin = protocol + sr_origin;
-            // Allow absolute or scheme relative URLs to same origin
-            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-                // or any other URL that isn't scheme relative or absolute i.e relative.
-                !(/^(\/\/|http:|https:).*/.test(url));
-        }
-        function safeMethod(method) {
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-            // We have to avoid httponly on the csrf_token cookie because of this.
-            xhr.setRequestHeader("X-CSRF-TOKEN", Liberapay.getCookie('csrf_token'));
-        }
-    });
-};
 
 Liberapay.forms.jsEdit = function(params) {
 
@@ -36,7 +8,7 @@ Liberapay.forms.jsEdit = function(params) {
     var $editButton = $root.find('button.edit');
 
     $form.find('button').attr('type', 'button');
-    $form.find('button.save').attr('type', 'submit');
+    var $saveButton = $form.find('button.save').attr('type', 'submit');
 
     $editButton.prop('disabled', false);
     $editButton.click(function(e) {
@@ -48,7 +20,7 @@ Liberapay.forms.jsEdit = function(params) {
         // prompt the user if they try leaving the page before saving
         if (params.confirmBeforeUnload) {
             $(window).on('beforeunload.js_edit', function(e) {
-                e.preventDefault();
+                if (!$saveButton.prop('disabled')) e.preventDefault();
             });
         }
     });
@@ -111,3 +83,38 @@ Liberapay.forms.focusInvalid = function($form) {
 Liberapay.forms.setInvalid = function($input, invalid) {
     $input.toggleClass('invalid', invalid);
 };
+
+Liberapay.forms.jsSubmit = function() {
+    function submit(e) {
+        e.preventDefault();
+        var $form = $(this.form || this);
+        var data = $form.serializeArray();
+        if (this.tagName == 'BUTTON') {
+            data.push({name: this.name, value: this.value});
+        }
+        var $inputs = $form.find(':not(:disabled)');
+        $inputs.prop('disabled', true);
+        jQuery.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: data,
+            success: Liberapay.forms.success($form, $inputs),
+            error: [
+                function () { $inputs.prop('disabled', false); },
+                Liberapay.error,
+            ],
+        });
+    }
+    $('.js-submit').submit(submit);
+    $('.js-submit button').filter(':not([type]), [type="submit"]').click(submit);
+};
+
+Liberapay.forms.success = function($form, $inputs) { return function(data) {
+    $inputs.prop('disabled', false).filter('[type=password]').val('');
+    var msg = data && data.msg || $form.data('success');
+    if (msg) {
+        Liberapay.notification(msg, 'success');
+    } else {
+        window.location.href = window.location.href;
+    }
+}};
