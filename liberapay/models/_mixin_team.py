@@ -148,7 +148,7 @@ class MixinTeam(object):
               FROM current_takes t
               JOIN participants p ON p.id = member
              WHERE t.team=%(team)s
-          ORDER BY t.ctime DESC
+          ORDER BY p.username
         """
         records = (cursor or self.db).all(TAKES, dict(team=self.id))
         return [r._asdict() for r in records]
@@ -175,19 +175,17 @@ class MixinTeam(object):
         """, (self.id,))
 
     def get_members(self):
-        """Return a list of member dicts.
+        """Return an OrderedDict of member dicts.
         """
-        assert self.kind == 'group'
         takes = self.compute_actual_takes()
-        members = []
+        members = OrderedDict()
         for take in takes.values():
             member = {}
             member['id'] = take['member_id']
             member['username'] = take['member_name']
-            member['take'] = take['nominal_amount']
-            member['balance'] = take['balance']
-            member['percentage'] = take['percentage']
+            member['nominal_take'] = take['nominal_take']
+            member['actual_amount'] = take['actual_amount']
             member['last_week'] = last_week = self.get_take_last_week_for(member)
             member['max_this_week'] = self.compute_max_this_week(last_week)
-            members.append(member)
+            members[member['id']] = member
         return members

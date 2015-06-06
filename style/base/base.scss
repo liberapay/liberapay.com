@@ -368,3 +368,29 @@ input.invalid:focus + .invalid-msg {
 .text-warning {
     font-weight: bold;
 }
+
+#team {
+    width: auto;
+    margin-bottom: 3em;
+    th {
+        text-align: center;
+    }
+    th, td {
+        &:not(:first-child) {
+            border-left: 1px dashed #ddd;
+        }
+        &:nth-child(2), &:nth-child(3) {
+            border-left: 2px solid #ddd;
+        }
+    }
+    td:first-child {
+        min-width: 12em;
+    }
+    td:not(:first-child) {
+        text-align: right;
+        width: 8em;
+    }
+    input {
+        text-align: inherit;
+    }
+}

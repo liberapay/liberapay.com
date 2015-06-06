@@ -1,16 +1,24 @@
 # encoding: utf8
 """Show information about a single participant. It might be you!
 """
+from __future__ import division, print_function, unicode_literals
+
 from aspen import Response
 
 from liberapay.utils import get_participant
+
+CLASSES = ('info', 'success', 'warning', 'danger')
+
+get_cls = lambda m: 'text-'+CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)]
 
 [-----------------------------------------------------------------------------]
 
 participant = team = get_participant(state, restrict=False)
 if team.kind != 'group':
     raise Response(400)
-tip_or_pledge = "tip"
+
+members = team.get_members()
+
 title = team.username
 subhead = _("Team Members")
 
@@ -23,40 +31,67 @@ subhead = _("Team Members")
 {% endblock %}
 
 {% block content %}
-<table id="team" class="table" data-updating="{{ _('Updating…') }}">
-    <thead>
+<div class="row paragraph">
+<div class="col-md-12">
+
+<table id="team" class="table valign-middle">
+  <thead>
     <tr>
       <th></th>
-      <th>Member</th>
-      <th class="figure">{{ _("Last{0} Week (€)", "<br/>"|safe) }}</th>
-      <th class="figure">{{ _("This{0} Week (€)", "<br/>"|safe) }}</th>
-      <th class="figure">{{ _("This{0} Week (%)", "<br/>"|safe) }}</th>
+      <th>{{ _("Last Week") }}</th>
+      <th colspan=3>{{ _("This Week") }}</th>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
-      <td class="figure last_week"></td>
-      <td class="figure this_week">
-        {{ team.receiving }}
-      </td>
-      <td class="figure percentage"></td>
+      <th>{{ _("Member") }}</th>
+      <th>{{ _("Nominal Take") }}</th>
+      <th>{{ _("Nominal Take") }}</th>
+      <th>{{ _("Actual Take") }}</th>
+      <th>{{ _("Goal") }}</th>
     </tr>
-    {% if user == team %}
+  </thead>
+  <tbody>
+    {% for member in members.values() %}
     <tr>
-      <td colspan="6" class="lookup">
-        <div id="lookup-container">
-          <form>
-            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <input id="query" autocomplete="off" placeholder="{{ _('Enter a username') }}" />
-            <button type="submit">{{ _("Add") }}</button>
-            <ul id="lookup-results"></ul>
-          </form>
-        </div>
-      </td>
+        <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
+        <td>{{ format_decimal(member.last_week) }}</td>
+        {% if member.id == user.id %}
+            <td>
+                <form action="take/" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                    <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take) }}" />
+                </form>
+            </td>
+        {% else %}
+            <td class="{{ get_cls(member) if member.nominal_take != member.last_week }}">{{ format_decimal(member.nominal_take) }}</td>
+        {% endif %}
+        <td>{{ format_decimal(member.actual_amount) }}</td>
+        <td></td>
     </tr>
-    {% endif %}
-    </thead>
-    <tfoot><tr><td colspan=6><div class="loading-indicator"/></td></tr></foot>
-    <tbody id="team-members"></tbody>
+    {% endfor %}
+  </tbody>
 </table>
+
+{% if user.id in members %}
+    <h2>{{ _("Management") }}</h2>
+    <p>{{ _("As a member of this team you can invite other users to join it:") }}</p>
+    <div id="lookup-container">
+        <form action="invite/" method="POST">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <div class="input-group">
+                <input id="query" name="username" class="form-control" autocomplete="off"
+                       placeholder="{{ _('Enter a username') }}" />
+                <div class="input-group-btn">
+                    <button class="btn btn-success">{{ _("Invite") }}</button>
+                </div>
+            </div>
+            <ul id="lookup-results"></ul>
+        </form>
+    </div>
+    <br>
+    <p>{{ _("You can leave the team whenever you want:") }}</p>
+    <a class="btn btn-warning" href="leave">{{ _("Leave this team") }}</a>
+{% endif %}
+
+</div>
+</div>
 {% endblock %}

@@ -6,7 +6,6 @@ from liberapay.utils import get_participant, markdown
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
-tip_or_pledge = "tip"
 title = participant.username
 
 lang = request.qs.get('lang')
