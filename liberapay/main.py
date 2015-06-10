@@ -58,7 +58,6 @@ wireup.username_restrictions(website)
 wireup.load_i18n(website.project_root, tell_sentry)
 wireup.other_stuff(website, env)
 wireup.accounts_elsewhere(website, env)
-wireup.cryptocoin_networks(website)
 
 
 # Periodic jobs

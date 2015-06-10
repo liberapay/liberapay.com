@@ -78,17 +78,6 @@ class TestRoutes(BalancedHarness):
         self.hit('david', 'associate', 'balanced-ba', '/bank_accounts/BA123123123', expected=400)
         assert self.david.get_bank_account_error() is None
 
-    def test_associate_bitcoin(self):
-        addr = '17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j'
-        self.hit('david', 'associate', 'bitcoin', addr)
-        route = ExchangeRoute.from_network(self.david, 'bitcoin')
-        assert route.address == addr
-        assert route.error == ''
-
-    def test_associate_bitcoin_invalid(self):
-        self.hit('david', 'associate', 'bitcoin', '12345', expected=400)
-        assert not ExchangeRoute.from_network(self.david, 'bitcoin')
-
     def test_bank_account(self):
         expected = "add or change your bank account"
         actual = self.client.GET('/alice/routes/bank-account.html').body

@@ -5,7 +5,7 @@ import balanced
 
 from liberapay.billing.exchanges import repr_exception
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import bitcoin, get_participant
+from liberapay.utils import get_participant
 
 [---]
 
@@ -34,11 +34,6 @@ if change:
             ExchangeRoute.associate_balanced(participant, account, network, address)
         except balanced.exc.HTTPError as err:
             raise Response(400, repr_exception(err))
-
-    elif network == 'bitcoin':
-        if not bitcoin.validate(address):
-            raise Response(400, _("This is not a valid Bitcoin address."))
-        ExchangeRoute.insert(participant, network, address)
 
     else:
         raise Response(400, 'unknown network')
