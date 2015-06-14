@@ -59,7 +59,10 @@ def get_participant(state, restrict=True, redirect_stub=True):
             raise Response(403, _("You need to log in to access this page."))
 
     from liberapay.models.participant import Participant  # avoid circular import
-    participant = Participant.from_username(slug)
+    if isinstance(user, Participant) and user.username.lower() == slug.lower():
+        participant = user
+    else:
+        participant = Participant.from_username(slug)
 
     if participant is None:
         raise Response(404)
