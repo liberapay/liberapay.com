@@ -1,5 +1,6 @@
 from __future__ import division
 
+import __builtin__
 import base64
 from urllib import quote as urlquote
 
@@ -27,22 +28,14 @@ website.renderer_factories['jinja2_htmlescaped'] = jinja2_htmlescaped.Factory(we
 website.default_renderers_by_media_type['text/html'] = 'jinja2_htmlescaped'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'  # unescaped is fine here
 
-website.renderer_factories['jinja2'].Renderer.global_context = {
+website.renderer_factories['jinja2'].Renderer.global_context.update(__builtin__.__dict__)
+website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_htmlescaped.
     'b64encode': base64.b64encode,
-    'enumerate': enumerate,
-    'filter': filter,
     'filter_profile_subnav': utils.filter_profile_subnav,
-    'float': float,
-    'len': len,
-    'map': map,
-    'range': range,
-    'str': str,
     'to_javascript': utils.to_javascript,
-    'type': type,
-    'unicode': unicode,
     'urlquote': urlquote,
-}
+})
 
 
 # Wireup Algorithm
