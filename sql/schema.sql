@@ -120,6 +120,7 @@ CREATE TABLE tips
 , tippee       bigint           NOT NULL REFERENCES participants
 , amount       numeric(35,2)    NOT NULL CHECK (amount >= 0)
 , is_funded    boolean          NOT NULL DEFAULT false
+, CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
  );
 
 CREATE INDEX tips_tipper_idx ON tips (tipper, mtime DESC);
