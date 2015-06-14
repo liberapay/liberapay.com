@@ -870,6 +870,16 @@ class Participant(Model, MixinTeam):
         """, locals())
 
 
+    def get_communities(self):
+        return self.db.all("""
+            SELECT c.*
+              FROM community_members cm
+              JOIN communities c ON c.slug = cm.slug
+             WHERE cm.is_member AND cm.participant = %s
+          ORDER BY c.nmembers ASC, c.slug
+        """, (self.id,))
+
+
     def change_username(self, suggested, cursor=None):
         suggested = suggested and suggested.strip()
 

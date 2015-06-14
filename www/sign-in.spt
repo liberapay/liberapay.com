@@ -31,7 +31,8 @@ if request.method == 'POST':
 [---] text/html
 {% extends "templates/base.html" %}
 {% block content %}
-<form class="col1" action="" method="POST">
+<div class="row">
+<form class="col-md-6 form-inline" action="" method="POST">
 
     <h2>{{ _("Log in") }}</h2>
 
@@ -42,40 +43,47 @@ if request.method == 'POST':
         <p class="alert alert-error">{{ _("Bad username or password") }}</p>
     {% endif %}
 
-    <input name="username" autocomplete="username" required
-           placeholder="{{ _('Username') }}" />
-    <input name="password" type="password" autocomplete="current-password" required
-           placeholder="{{ _('Password') }}" />
+    <input name="username" autocomplete="username" class="form-control"
+           required placeholder="{{ _('Username') }}" />
+    <input name="password" type="password" autocomplete="current-password" class="form-control"
+           required placeholder="{{ _('Password') }}" />
 
-    <button type="submit">{{ _("Go") }}</button>
+    <button class="btn btn-default">{{ _("Go") }}</button>
 
 </form>
-<form class="col2" action="" method="POST">
+<form class="col-md-6" action="" method="POST">
 
-    <h2>{{ _("Sign in") }}</h2>
+    <h2>{{ _("Create an account") }}</h2>
 
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
     <input name="action" type="hidden" value="sign-in" />
 
-    <input name="username" autocomplete="username"
+    <div class="form-group">
+    <input name="username" autocomplete="username" class="form-control"
            required maxlength="{{ constants.USERNAME_MAX_SIZE }}"
            placeholder="{{ _('Username') }}" />
-    <input name="email" type="email" autocomplete="email"
+    </div>
+    <div class="form-group">
+    <input name="email" type="email" autocomplete="email" class="form-control"
            required pattern=".*@.*"
            placeholder="{{ _('Email') }}" />
-    <input name="password" type="password" autocomplete="new-password"
+    </div>
+    <div class="form-group">
+    <input name="password" type="password" autocomplete="new-password" class="form-control"
            required minlength="{{ constants.PASSWORD_MIN_SIZE }}"
                     maxlength="{{ constants.PASSWORD_MAX_SIZE }}"
            placeholder="{{ _('Password') }}" />
-    <label>
-        <span>{{ _("Type") }}</span>
-        <select name="kind">
+    </div>
+    <div class="form-group form-inline">
+        <label for="kind">{{ _("Type") }}</label>
+        <select id="kind" name="kind" class="form-control">
             <option value="individual">{{ _("Individual") }}</option>
             <option value="organization">{{ _("Organization") }}</option>
         </select>
-    </label>
+    </div>
 
-    <button type="submit">{{ _("Go") }}</button>
+    <button class="btn btn-default">{{ _("Go") }}</button>
 
 </form>
+</div>
 {% endblock %}

@@ -35,6 +35,9 @@ elif 'privacy' in body:
         """.format(field), (value, p_id))
     out['msg'] = _("Your privacy settings have been changed.")
 
+elif 'username' in body:
+    get_participant(state, restrict=True).change_username(body['username'])
+
 if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
     request.redirect('.')
 

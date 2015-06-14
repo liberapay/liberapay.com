@@ -1,13 +1,17 @@
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=5)
+
 [---]
 
-if not user.ANON:
-    participant = user
-    title = participant.username
+top_communities = query_cache.all("""
+    SELECT * FROM communities ORDER BY nmembers DESC, slug LIMIT 9
+""")
 
 [---]
 {% extends "templates/base.html" %}
+
 {% block head %}
-    <link rel="publisher" href="https://plus.google.com/104524895706770139568">
     <link type="application/opensearchdescription+xml" rel="search" href="/opensearch.osdd" />
     <meta name="description" content="Recurrent donations platform" />
     <meta name="og:type" content="website" />
@@ -16,86 +20,93 @@ if not user.ANON:
     <meta name="og:image" content="{{ website.asset('liberapay.png') }}" />
 {% endblock %}
 
-{% block sidebar %}
-{% if user.ANON %}
-    <img src="{{ website.asset('liberapay.svg') }}" alt="Liberapay">
-    <h1>{{ _("Weekly Payments") }}</h1>
-    <p>{{ _("Motivated by Gratitude") }}</p>
-
-    <p>{{ _("Sustainably crowdfund your business, personal projects, or charity, with {0}no extra fees{1}.",
-            "<span>"|safe, "</span>"|safe) }}</p>
-
-    <p><a href="/about/">{{ _("Learn more") }}</a></p>
-{% else %}
-{% include "templates/profile-sidebar.html" %}
-{% endif %}
-{% endblock %}
-
-{% block heading %}{{ super() if not user.ANON }}{% endblock %}
-{% block subnav %}
-{% if not user.ANON %}{% include "templates/profile-subnav.html" %}{% endif %}
-{% endblock %}
-
 {% block content %}
-    {% if user.ANON %}
 
-        {{ _("{0}Sign In{1} {2}to Accept Weekly Payments{3}",
-             "<h1>"|safe, "</h1>"|safe, "<p>"|safe, "</p>"|safe) }}
-        {% from 'templates/auth.html' import auth_button with context %}
+{% if user.ANON %}
+    <div class="jumbotron" style="text-align: center">
+        <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
+        <p><a class="btn btn-primary btn-lg" href="/sign-in">{{ _("Join us") }}</a></p>
+    </div>
+{% endif %}
 
-        {% include "templates/sign-in.html" %}
+<div class="row">
 
-        <p class="other">{{
-            _("By signing in, you indicate that you have read and agree to our {0}Terms and Conditions{1}.",
-              "<a href='/about/terms/'>"|safe, "</a>"|safe) + " " +
-            _("You'll be joining {0} active users, who exchanged {1} {2}last week{3}.",
-              format_number(website.gnactive),
-              format_currency(website.gtransfer_volume, "USD"),
-              "<a href='/about/stats'>"|safe, "</a>"|safe) + " " +
-            _("Want to see who they are? Browse {0}our communities{1}.",
-              "<a href='/for/'>"|safe, "</a>"|safe)
-        }}</p>
+    <div class="col-md-6">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ _("Donate") }}</h2>
+        </div>
 
-    {% else %}
-
-        <div class="col0">
-            <h2>{{ _("Giving") }}</h2>
-
-            <p><a href="/{{ participant.username }}/giving/">{{
-                _("You give {0} per week.", format_currency(participant.giving, 'USD'))
+        <div class="panel-body">
+            {% if not user.ANON %}
+            <p><a href="/{{ user.username }}/giving/">{{
+                _("You give {0} per week.", format_currency(user.giving, 'USD'))
             }}</a></p>
+            {% endif %}
 
             <p>{{ _("Who inspires you? See if they're on Liberapay:") }}</p>
             {% include "templates/search-box.html" %}
 
-            <p>{{ _("Find your friends from social networks:") }}<br>
+            <p>{{ _("Explore our communities:") }}</p>
+            <ul class="communities">
+                {% for community in top_communities %}
+                <li>
+                    <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+                    {% set n = community.nmembers %}
+                    <div class="nmembers">
+                        {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <a class="btn btn-default" href="/explore/">{{ _("More") }}</a><br><br>
+
+            <p>{{ _("Find your friends from social networks:") }}</p>
             {% for p in website.friends_platforms %}
-                <a href="/on/{{ p.name }}/">{{ p.display_name }}</a
-                >{{ ',' if not loop.last }}
+                <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
             {% endfor %}
-            </p>
+        </div>
+    </div>
+    </div>
 
-            <h2>{{ _("Receiving") }}</h2>
+    <div class="col-md-6">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ _("Receive") }}</h2>
+        </div>
 
-            <p><a href="/{{ participant.username }}/receiving/">{{
-                _("You receive {0} per week.", format_currency(participant.receiving, 'USD'))
+        <div class="panel-body">
+        {% if user.ANON %}
+
+            <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
+            <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
+            <a class="btn btn-primary" href="/sign-in">{{ _("Join us") }}</a>
+
+        {% else %}
+
+            <p><a href="/{{ user.username }}/receiving/">{{
+                _("You receive {0} per week.", format_currency(user.receiving, 'USD'))
             }}</a></p>
 
-            {% if not participant.accepts_tips %}
-                <p>{{ _("You are currently declining tips, you can change that {0}on your profile{1}.",
-                        "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</p>
-            {% elif participant.goal and participant.receiving >= participant.goal %}
-                <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", participant.goal) }}</p>
+            {% if not user.accepts_tips %}
+                <p>{{ _("You are currently refusing donations, you can change that {0}on your profile{1}.",
+                        "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</p>
+            {% elif user.goal and user.receiving >= user.goal %}
+                <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", user.goal) }}</p>
             {% else %}
                 <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
                 <ol>
                     <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
-                             "<a href='/%s/'>"|safe % participant.username, "</a>"|safe) }}</li>
+                             "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</li>
                     <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
-                             "<a href='/%s/widgets'>"|safe % participant.username, "</a>"|safe) }}</li>
+                             "<a href='/%s/widgets/'>"|safe % user.username, "</a>"|safe) }}</li>
                 </ol>
             {% endif %}
-        </div>
 
-    {% endif %}
+        {% endif %}
+        </div>
+    </div>
+    </div>
+
+</div>
 {% endblock %}

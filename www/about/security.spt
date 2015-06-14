@@ -62,24 +62,23 @@ title = _("Security")
 [---] text/html
 {% extends "templates/about.html" %}
 {% block content %}
-<div class="col0">
+
     <p>Please send security disclosures to <a onclick="$(this).html('admin&amp;#64;liberapay.com')">[click to see address]</a>.</p>
 
     <h2>Hall of Fame</h2>
 
     <p>Thank you to the following researchers (most recent first) for
     disclosing security issues to Gratipay (Liberapay's predecessor).</p>
-</div>
-<div class="hall-of-fame">
-    <dl>
+
+    <ol>
         {% for researchers, link in hof %}
-        <dt>
+        <li>
         {% for handle, href in researchers %}
             <a href="{{ href }}">{{ handle }}</a>{% if not loop.last %}{% if loop.revindex0 == 1 %} &amp; {% else %}, {% endif %}{% endif %}
         {% endfor %}
-        </dt>
-        <dd><a href="{{ link }}">{{ link }}</a></dd>
+        &mdash; <a href="{{ link }}">{{ link }}</a>
+        </li>
         {% endfor %}
-    </dl>
-</div>
+    </ol>
+
 {% endblock %}

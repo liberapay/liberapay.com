@@ -1,9 +1,7 @@
 {% extends "templates/base.html" %}
 {% block subnav %}
-    {% set current_page = request.path.raw.split('/')[2] %}
-    {% set nav_base = "/explore" %}
-    {% set pages = [ ('/', _('Communities'))
-                   , ('/teams/', _('Teams'))
-                    ] %}
-    {% include "templates/nav.html" %}
+    {% from "templates/nav.html" import nav with context %}
+    <ul class="nav nav-tabs">{{
+        nav([('/', _('Communities')), ('/teams/', _('Teams'))], base='/explore')
+    }}</ul>
 {% endblock %}

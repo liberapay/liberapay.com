@@ -29,7 +29,11 @@ if request.method == 'POST':
 {% extends "templates/base.html" %}
 
 {% block content %}
-<div class="col0">
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
     {% if payday_is_running %}
 
         <form><div>
@@ -148,14 +152,4 @@ if request.method == 'POST':
     </form>
     {% endif %}
 </div>
-{% endblock %}
-
-{% block scripts %}
-{% if error %}
-    <script>
-        $(function () {
-            Liberapay.notification({{ to_javascript(error)|safe }}, 'error', -1)
-        });
-    </script>
-{% endif %}
 {% endblock %}

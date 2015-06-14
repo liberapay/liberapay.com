@@ -1,46 +1,39 @@
+{% macro tip_form(tippee=None, tip=None, inline=False, disabled='') %}
+{% set pledging = tippee.__class__.__name__ == 'AccountElsewhere' %}
 {% if user.ANON %}
-    <div class="right">
-        <div class="sign-in-to">
-            {% include "templates/sign-in.html" %}
-            {% set pledging = request.path.decoded.startswith('/on/') %}
-            {{ _("to pledge to {0}", account.friendly_name) if pledging else _("to give to {0}", participant.username) }}
-        </div>
+    <div class="sign-in-to">
+        {% include "templates/sign-in.html" %}
+        {{ _("to pledge to {0}", tippee.friendly_name) if pledging else _("to give to {0}", tippee.username) }}
     </div>
 {% else %}
-    <div class="cta">
-        {% set tippee = participant.username %}
-        {% set tip = user.get_tip_to(participant) %}
-        <h2>{{ _('Your Tip') }}</h2>
-        <div class="js-edit your-tip {{ 'anon' if user.ANON }}"
-             data-tippee="{{ participant.id }}">
-            <div class="view">
-                <span class="amount">{{ format_currency(tip.amount, 'USD') }}</span>
-                <div class="per-week">{{ _("per week") }}</div>
-                <button class="edit {{ 'not-zero' if tip.amount > 0 }}">
-                    <span class="zero">{{
-                        _("Pledge to {0}", account.user_name) if account else
-                        _("Give to {0}", tippee)
-                    }}</span>
-                    <span class="not-zero">{{ _("Edit") }}</span>
-                </button>
+    {% set p = tippee.participant if pledging else tippee %}
+    {% set tip = tip or user.get_tip_to(p) %}
+    <form action="/{{ p.username }}/tip.json" method="POST" class="your-tip">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
+        {% if inline %}
+            {{ tip_input(tip, disabled, small=True, pledging=pledging) }}
+        {% else %}
+            <label for="amount">{{ _('Your donation') }}</label>
+            <div class="form-group">
+                {{ tip_input(tip, disabled, pledging=pledging) }}
             </div>
-            <form class="edit" action="/{{ tippee }}/tip.json">
-                $
-                <input type="number" name="amount" class="amount" value="{{ format_decimal(tip.amount) }}"
-                       min="0" max="{{ constants.MAX_TIP }}">
-                <div class="per-week">{{ _("per week") }}</div>
-                <button class="save">{{ _("Save") }}</button>
-                <button class="cancel">{{ _("Cancel") }}</button>
-                <button class="stop {{ 'zero' if not tip.amount }}">{{ _("Stop Giving") }}</button>
-            </form>
-        </div>
-
-        {% if not tip.is_funded %}
-        <div id="payment-prompt" class="{{ 'needed' if tip.amount > 0 }}">
-            {{ _("Back your payment with a {0}credit card{1} to make sure it goes through!",
-                 "<a href='/%s/routes/credit-card.html'>"|safe % user.username,
-                 "</a>"|safe) }}
-        </div>
         {% endif %}
-    </div>
+    </form>
 {% endif %}
+{% endmacro %}
+
+{% macro tip_input(tip, disabled='', small=False, pledging=False) %}
+    <div class="input-group">
+        <div class="input-group-addon">$</div>
+        <input type="text" name="amount" id="amount"
+               class="amount form-control {{ 'input-sm' if small }}"
+               value="{{ format_decimal(tip.amount) }}" {{ disabled }} />
+        <div class="input-group-addon">{{ _("per week") }}</div>
+        <div class="input-group-btn">
+            <button class="btn btn-success {{ 'btn-sm' if small }}" {{ disabled }}>{{
+                _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate") 
+            }}</button>
+        </div>
+    </div>
+{% endmacro %}

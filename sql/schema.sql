@@ -193,7 +193,7 @@ CREATE TABLE paydays
 -- exchange routes -- how money moves in and out of Liberapay
 
 CREATE TYPE payment_net AS ENUM
-    ('balanced-ba', 'balanced-cc', 'paypal');
+    ('balanced-ba', 'balanced-cc');
 
 CREATE TABLE exchange_routes
 ( id            serial         PRIMARY KEY

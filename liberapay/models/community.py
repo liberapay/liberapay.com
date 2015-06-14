@@ -18,27 +18,19 @@ def slugize(slug):
     return slug
 
 
-def get_list_for(db, participant_id):
-    """Return a listing of communities.
-    """
-    if participant_id is None:
-        return db.all("""
-            SELECT c.*
-              FROM communities c
-          ORDER BY nmembers DESC, slug
-        """)
-    else:
-        return db.all("""
-            SELECT c.*
-              FROM community_members cm
-              JOIN communities c ON c.slug = cm.slug
-             WHERE cm.is_member AND cm.participant = %s
-          ORDER BY c.nmembers ASC, c.slug
-        """, (participant_id,))
-
 class Community(Model):
 
     typname = "communities"
+
+    @classmethod
+    def get_list(cls):
+        """Return a listing of communities.
+        """
+        return cls.db.all("""
+            SELECT c.*::communities
+              FROM communities c
+          ORDER BY nmembers DESC, slug
+        """)
 
     @classmethod
     def from_slug(cls, slug):

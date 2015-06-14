@@ -20,15 +20,6 @@ if participant == user:
 [-----------------------------------------------------------------------------]
 {% extends "templates/base.html" %}
 
-{% block scripts %}
-<script>
-    $(document).ready(function() {
-        $('button.resend').on('click', Liberapay.settings.post_email);
-    });
-</script>
-{{ super() }}
-{% endblock %}
-
 {% block content %}
     {% if user.ANON %}
         <h1>{{ _("Please Sign In") }}</h1>
@@ -67,8 +58,7 @@ if participant == user:
                 <h1>{{ _("Missing Info") }}</h1>
                 <p>{{ _("Sorry, that's a bad link. Please try again.") }}</p>
             {% endif %}
-            <p data-email="{{ email }}"><button class="resend">{{ _("Resend verification email") }}</button></p>
         {% endif %}
-        <a href="/{{ participant.username }}/settings/#emails">{{ _("View your email addresses") }}.</a>
+        <a class="btn btn-primary" href="/{{ participant.username }}/emails/">{{ _("View your email addresses") }}</a>
     {% endif %}
 {% endblock %}

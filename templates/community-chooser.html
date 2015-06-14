@@ -1,0 +1,13 @@
+{% macro community_chooser(communities) %}
+    <form class="community-chooser" data-add-msg='{{ _("Add a new community") }}'>
+        <select data-placeholder='{{ _("Find or create a community…") }}'
+                class="{{ 'edit' if edit }}">
+            <option></option>
+            {% for community in communities %}
+            <option value="{{ community.slug }}">{{ community.name }} -
+            {{ ngettext("{n} Member", "{n} Members", community.nmembers).lower() }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+{% endmacro %}

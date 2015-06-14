@@ -4,7 +4,7 @@ from urlparse import urlsplit
 
 import sass
 
-filename = os.path.join(website.project_root, 'scss', 'base.scss')
+filename = os.path.join(website.project_root, 'style/base/base.scss')
 output_style = 'compressed' if website.env.compress_assets else 'nested'
 
 def url_sub(m):

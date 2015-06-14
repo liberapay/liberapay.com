@@ -28,6 +28,6 @@ title = _("Sign Out")
     <form id="sign-out" method="POST">
         <input name="back_to" type="hidden" value="/" />
         <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-        <button type="submit">{{ _("Sign out") }}</button>
+        <button class="btn btn-primary">{{ _("Sign out") }}</button>
     </form>
 {% endblock %}

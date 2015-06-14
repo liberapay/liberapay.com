@@ -113,11 +113,6 @@ def log_cursor(f):
     return wrapper
 
 
-def format_money(money):
-    format = '%.2f' if money < 1000 else '%.0f'
-    return format % money
-
-
 def excerpt_intro(text, length=175, append=u'…'):
     if not text:
         return ''
@@ -160,7 +155,7 @@ def filter_profile_subnav(user, participant, pages):
         if (user == participant and show_them) \
         or (user != participant and show_others) \
         or user.is_admin:
-            out.append((foo, bar, show_them, show_others))
+            out.append((foo, bar))
     return out
 
 

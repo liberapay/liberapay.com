@@ -6,6 +6,7 @@ from urllib import quote as urlquote
 
 from liberapay import canonize, insert_constants, utils, wireup
 from liberapay.cron import Cron
+from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, x_frame_options
 from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie, timer
@@ -31,6 +32,7 @@ website.default_renderers_by_media_type['text/plain'] = 'jinja2'  # unescaped is
 website.renderer_factories['jinja2'].Renderer.global_context.update(__builtin__.__dict__)
 website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_htmlescaped.
+    'Community': Community,
     'b64encode': base64.b64encode,
     'filter_profile_subnav': utils.filter_profile_subnav,
     'to_javascript': utils.to_javascript,

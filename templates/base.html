@@ -4,6 +4,7 @@
     {% block head_early %}{% endblock %}
     <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Liberapay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
     {% block head %}{% endblock %}
     <script>
@@ -13,70 +14,64 @@
         }
     </script>
 </head>
-{% set homepage = request.path.raw == '/' %}
-<body id="{{ 'homepage' if homepage and user.ANON }}">
+{% from 'templates/nav.html' import nav with context %}
+<body>
 
-    <div id="wrapper">
-        <div id="header" class="clearfix">
-            <h1><a href="/"><img src="{{ website.asset('liberapay.svg') }}"
-                                 alt="Liberapay" /></a></h1>
-            {% set pages = [('/about/', _('About')), ('/explore/', _('Explore')), ('/search', _('Search'))] %}
-            {% set current_page = request.path.raw.split('/')[1] %}
-            {% include "templates/nav.html" %}
+<div id="wrapper">
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <ul class="nav navbar-nav pull-left">
+                <li><a class="navbar-brand" href="/">Liberapay</a></li>
+                {{ nav([('/explore/', _('Explore')), ('/search', _('Search')), ('/about/', _('About'))]) }}
+            </ul>
+            <ul class="nav navbar-nav pull-right">
             {% if user.ANON %}
-                {% include "templates/sign-in.html" %}
+                <li>{% include "templates/sign-in.html" %}</li>
             {% else %}
-            <ul class="nav you-are">
-                <li>
-                    <a href="/" class="{{ 'selected' if request.path.raw.split('/')[1] == user.username }}">
-                        {{ user.username }}
-                        <div class="quick-stats">
-                            <span class="my-total-giving">{{ format_currency(user.giving, "USD") }}</span>/{{ _("wk") }}
-                        </div>
-                    </a>
-                </li>
+                <li>{% include "templates/profile-dropdown.html" %}</li>
+                <li><a href="/{{ user.username }}/notifications"
+                       title="{{ _('Notifications') }}"
+                       style="color: {{ '#e11' if user.pending_notifs else '#888' }}">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                    <span class="sr-only">{{ _("Notifications") }}</span>
+                    {% if user.pending_notifs %}
+                        <span class="pending-notifs">{{ user.pending_notifs }}</span>
+                    {% endif %}
+                </a></li>
                 <li>{% include "templates/sign-out.html" %}</li>
-            </ul>
             {% endif %}
-        </div>
-
-        <div id="main">
-            <div id="sidebar">{% block sidebar %}{% endblock %}</div>
-            <div id="content" class="clearfix">
-                {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-                {% block subnav %}{% endblock %}
-                {% block content %}{% endblock %}
-            </div>
-        </div>
-
-        <a class="feedback" href="https://github.com/liberapay/liberapay.com/issues" target="_blank">Feedback</a>
-
-        <div id="footer">
-            <ul>
-                <li><a href="/about/">{{ _("About") }}</a></li>
-                <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
-                <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
-                <li><a href="/about/terms">{{ _("Terms") }}</a></li>
-                <li><a href="https://twitter.com/liberapaye">Twitter</a></li>
-                <li><a href="https://github.com/liberapay/liberapay.com">GitHub</a></li>
             </ul>
         </div>
+    </nav>
+
+    <div id="main" class="container">
+        {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+        <div id="subnav">{% block subnav %}{% endblock %}</div>
+        {% block content %}{% endblock %}
     </div>
+
+    <footer role="navigation">
+        <a href="/about/">{{ _("About") }}</a>
+        <a href="/about/contact">{{ _("Contact Us") }}</a>
+        <a href="/about/faq">{{ _("FAQ") }}</a>
+        <a href="/about/terms">{{ _("Terms") }}</a>
+        <a href="https://twitter.com/liberapaye">Twitter</a>
+        <a href="https://github.com/liberapay/liberapay.com">GitHub</a>
+    </footer>
+</div>
 
 <script src="{{ website.asset('jquery.min.js') }}"></script>
 <script src="{{ website.asset('chosen.jquery.min.js') }}"></script>
 <script src="{{ website.asset('bootstrap-dropdown.js') }}"></script>
 <script src="{{ website.asset('base.js') }}"></script>
+{% if user.is_admin %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}
 
 <script>
     $(function(){
-        Liberapay.init();
         {% if not user.ANON %}
         Liberapay.username = {{ to_javascript(user.username)|safe }};
-        Liberapay.initNotifications(
-            {{ to_javascript(user.render_notifications(state))|safe }}
-        );
         {% endif %}
+        Liberapay.init();
     });
 </script>
 

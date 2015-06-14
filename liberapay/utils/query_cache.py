@@ -90,10 +90,10 @@ class QueryCache(object):
         self.pruner.start()
 
 
-    def one(self, query, params, process=None):
+    def one(self, query, params=None, process=None):
         return self._do_query(self.db.one, query, params, process)
 
-    def all(self, query, params, process=None):
+    def all(self, query, params=None, process=None):
         if process is None:
             process = lambda g: list(g)
         return self._do_query(self.db.all, query, params, process)

@@ -81,7 +81,7 @@ if query:
 
     <div class="row">
     {% if usernames %}
-    <div class="col1">
+    <div class="col-md-6">
         <h2>{{ ngettext("Found a matching username",
                         "Found matching usernames",
                         len(usernames)) }}</h2>
@@ -99,7 +99,7 @@ if query:
     {% endif %}
 
     {% if communities %}
-    <div class="col1">
+    <div class="col-md-6">
         <h2>{{ ngettext("Found a matching community name",
                         "Found matching community names",
                         len(communities)) }}</h2>
@@ -126,7 +126,8 @@ if query:
                         "Found matching user statements",
                         len(statements)) }}</h2>
         {% for result in statements %}
-            <div class="search-result" href="/{{ result.username }}/">
+            <div class="panel panel-default">
+            <div class="panel-body search-result" href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="col-right">
                     <a class="username" href="/{{ result.username }}/">{{ result.username }}</a>
@@ -136,6 +137,7 @@ if query:
                         }}</blockquote>
                     {% endif %}
                 </div>
+            </div>
             </div>
         {% endfor %}
     </div>

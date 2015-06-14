@@ -1,4 +1,5 @@
-{% extends "templates/participant.html" %}
+{% extends "templates/base.html" %}
+{% from 'templates/avatar-url.html' import avatar_img with context %}
 
 {% block head_early %}
     {% if participant.hide_from_search %}
@@ -6,16 +7,54 @@
     {% endif %}
 {% endblock %}
 
-{% block scripts %}
-    {% if user.is_admin %}<script src="{{ website.asset('admin.js') }}"></script>{% endif %}
-    <script>$(document).ready(Liberapay.tips.init)</script>
-    <script>$(document).ready(function() {
-      $('#goal-custom').on('click change', function() {
-        $('#goal-yes').attr('checked', true)
-      })
-    })</script>
+{% block heading %}
+<div class="row">
+<div class="col-sm-10 col-md-7 col-lg-6 profile-box">
+    <div class="panel panel-primary">
+        <div class="panel-body row">
+            <div class="avatar {{ 'is-suspicious' if participant.is_suspicious }} col-xs-4">
+                <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
+
+                {% if participant.join_time %}
+                <p>{{ _('Joined') }} {{ to_age(participant.join_time, add_direction=True) }}.</p>
+                {% endif %}
+                {% if participant.status == 'closed' %}
+                <p>Closed {{ to_age(participant.closed_time, add_direction=True) }}.</p>
+                {% endif %}
+
+                {% if user.is_admin %}
+                <label class="is-suspicious-label">
+                    Suspicious
+                    <input type="checkbox" data-username="{{ participant.username }}"
+                        {% if participant.is_suspicious %}checked="true"{% endif %} />
+                </label>
+                {% elif participant.is_suspicious %}
+                <div class="is-suspicious-label">Suspicious</div>
+                {% endif %}
+            </div>
+
+            <div class="col-xs-8">
+            {% block box %}{% include "templates/profile-box.html" %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}
 
 {% block subnav %}
-{% include "templates/profile-subnav.html" %}
+    {% set show_members = participant.kind == 'group' %}
+    {% set show_income = not participant.hide_receiving and participant.accepts_tips %}
+    {% set pages = filter_profile_subnav(user, participant, [
+        ('/',            _('Profile'),   True,           True),
+        ('/members/',    _('Members'),   show_members,   show_members),
+        ('/income/',     _('Income'),    True,           show_income),
+        ('/history/',    _('History'),   False,          False),
+    ]) %}
+    {% if len(pages) > 1 %}
+    {% from "templates/nav.html" import nav with context %}
+    <ul class="nav nav-tabs">
+        {{ nav(pages, base='/'+participant.username) }}
+    </ul>
+    {% endif %}
 {% endblock %}

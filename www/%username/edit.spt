@@ -1,0 +1,174 @@
+from __future__ import print_function, unicode_literals
+
+from collections import OrderedDict
+
+from aspen import Response
+
+from liberapay.utils import get_participant, markdown
+from liberapay.utils.i18n import LANGUAGES_2
+
+[---]
+participant = get_participant(state, restrict=True)
+
+if request.method == 'POST':
+    lang = request.body['lang']
+    statement = request.body['statement']
+
+    if lang not in LANGUAGES_2:
+        raise Response(400, "unknown lang")
+
+    if request.body.get('save') == 'true':
+        participant.upsert_statement(lang, statement)
+        request.redirect(request.line.uri+'#statement')
+
+else:
+    lang = request.qs.get('lang')
+    if lang:
+        statement = participant.get_statement([lang])[0]
+    else:
+        statement, lang = participant.get_statement(request.accept_langs)
+
+pref_langs = set(request.accept_langs + participant.get_statement_langs())
+select_langs = OrderedDict((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
+select_langs.update([('', '---')])  # Separator
+select_langs.update(locale.languages_2)
+stmt_placeholder = _("You don't have a profile statement in this language yet.")
+confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
+
+if participant.kind == 'individual':
+    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
+    PATRON = _("I'm here as a patron.")
+    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
+    GOAL_RAW = _("My goal is to receive {0}")
+else:
+    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
+    PATRON = _("We're here as a patron.")
+    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
+    GOAL_RAW = _("Our goal is to receive {0}")
+
+GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD', trailing_zeroes=False))
+GOAL_PARTS = GOAL_RAW.split("{0}")
+
+edit = True
+
+[---] text/html
+{% extends "templates/profile.html" %}
+
+{% block scripts %}
+{{ super() }}
+<script>$(document).ready(Liberapay.profile.init);</script>
+{% endblock %}
+
+{% block heading %}
+{% if user == participant %}
+    <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
+{% endif %}
+{{ super() }}
+{% endblock %}
+
+{% block box %}
+<form action="goal.html" method="POST" class="goal">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <div class="radio">
+        <label class="with-input-group-sm">
+            <input type="radio" name="goal" id="goal-yes" value="custom"
+                   {{ 'checked' if user.goal > 0 }}/>
+            <span>{{ GOAL_PARTS[0] }}</span>
+            <div><div class="input-group">
+                <div class="input-group-addon">$</div>
+                <input type="text" name="goal_custom" id="goal-custom"
+                       class="amount form-control input-sm"
+                       value="{{ format_decimal(user.goal) if user.goal and user.goal > 0 }}" />
+                <div class="input-group-addon">{{ _("per week") }}</div>
+            </div></div>
+            <span>{{ GOAL_PARTS[1] }}</span>
+        </label>
+
+        <label>
+            <input type="radio" name="goal" id="goal-null" value="null"
+                   {{ 'checked' if user.goal == None }} />
+            {{ GRATEFUL }}
+        </label>
+
+        <label>
+            <input type="radio" name="goal" id="goal-0" value="0.00"
+                   {{ 'checked' if user.goal == 0 }} />
+            {{ PATRON }}
+        </label>
+
+        <label>
+            <input type="radio" name="goal" id="goal-negative" value="-1"
+                   {{ 'checked' if user.goal and user.goal < 0 }} />
+            {{ PATRON_NO_GIFTS }}
+        </label>
+    </div>
+
+    <button class="save btn btn-primary">{{ _("Save") }}</button>
+</form>
+{% endblock %}
+
+{% block subnav %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+
+        <h2 id="statement">{{ _("Statement") }}</h2>
+
+        {% if request.body.get('preview') == 'true' %}
+
+            <div class="alert alert-info">{{ _("This is a preview.") }}</div>
+
+            <form action="#statement" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <input type="hidden" name="lang" value="{{ lang }}" />
+                <textarea class="hidden" name="statement">{{ statement }}</textarea>
+                <section class="profile-statement">{{ markdown.render(statement) }}</section>
+                <br>
+                <button class="btn btn-default">{{ _("Edit") }}</button>
+                <button class="btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+            </form>
+
+        {% else %}
+
+            <p>{{ _("Tell us how you're making the world better.") }}</p>
+
+            {{ _("Liberapay allows you to have profile statements in multiple languages. "
+                 "Use the selector below to switch between them.") }}<br>
+
+            <form action="#statement" method="GET" class="form-inline langs">
+                <select class="form-control" name="lang">
+                {% for code, name in select_langs.items() %}
+                    <option value="{{ code }}"
+                            {{ 'selected' if code == lang }}
+                            {{ 'disabled' if not code }}
+                        >{{ name }}</option>
+                {% endfor %}
+                </select>
+                <button class="btn btn-default">{{ _("Switch") }}</button>
+            </form>
+
+            <form action="#statement" method="POST" class="statement">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <input type="hidden" name="lang" value="{{ lang }}" />
+                <textarea name="statement" rows="15" class="form-control"
+                          placeholder="{{ stmt_placeholder }}"
+                          data-confirm-discard="{{ confirm_discard }}"
+                    >{{ statement or '' }}</textarea>
+                <p class="help-block">{{ _("Markdown supported.") }}
+                    <a href="https://daringfireball.net/projects/markdown/basics"
+                       target="_blank">{{ _("What is markdown?") }}</a>
+                </p>
+                <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
+                <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+            </form>
+
+        {% endif %}
+
+    </div>
+    {% include "templates/connected-accounts.html" %}
+    {% include "templates/team-listing.html" %}
+    {% include "templates/community-listing.html" %}
+</div>
+{% endblock %}

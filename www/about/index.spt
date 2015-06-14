@@ -3,9 +3,8 @@ title = _("About")
 [---] text/html
 {% extends "templates/about.html" %}
 {% block content %}
-<div class="col0">
 
-    <p>{{ _("Liberapay is a way to donate money recurrently to people and teams you believe in.") }}</p>
+    <p>{{ _("Liberapay is a way to donate money recurrently to people whose work you appreciate.") }}</p>
 
     <p>{{ _(
         "Payments come with no strings attached. You don't know exactly who is "
@@ -26,5 +25,4 @@ title = _("About")
         , '<a href="/Liberapay/">'|safe, '</a>'|safe
     ) }}</p>
 
-</div>
 {% endblock %}

@@ -1,77 +1,5 @@
 Liberapay.forms = {};
 
-Liberapay.forms.jsEdit = function(params) {
-
-    var $root = $(params.root);
-    var $form = $root.find('form.edit');
-    var $view = $root.find('.view');
-    var $editButton = $root.find('button.edit');
-
-    $form.find('button').attr('type', 'button');
-    var $saveButton = $form.find('button.save').attr('type', 'submit');
-
-    $editButton.prop('disabled', false);
-    $editButton.click(function(e) {
-        if (params.hideEditButton) $editButton.hide();
-        else $editButton.prop('disabled', true);
-        $form.css('display', $form.data('display') || 'block');
-        $view.hide();
-
-        // prompt the user if they try leaving the page before saving
-        if (params.confirmBeforeUnload) {
-            $(window).on('beforeunload.js_edit', function(e) {
-                if (!$saveButton.prop('disabled')) e.preventDefault();
-            });
-        }
-    });
-
-    function finish_editing() {
-        $editButton.show().prop('disabled', false);
-        $form.hide();
-        $view.show();
-        $(window).off('beforeunload.js_edit');
-    }
-    $root.find('button.cancel').click(finish_editing);
-
-    function post(e, confirmed) {
-        e.preventDefault();
-
-        var data = $form.serializeArray();
-        if (confirmed) data.push({name: 'confirmed', value: true});
-
-        var $inputs = $form.find(':not(:disabled)');
-        $inputs.prop('disabled', true);
-
-        $.ajax({
-            url: $form.attr('action'),
-            type: 'POST',
-            data: data,
-            dataType: 'json',
-            success: function (d) {
-                $inputs.prop('disabled', false);
-                if (d.confirm) {
-                    if (confirm(d.confirm)) return post(e, true);
-                    return;
-                }
-                var r = (params.success || function () {
-                    if (d.html || d.html === '') {
-                        $view.html(d.html);
-                        if (d.html === '') window.location.reload();
-                    }
-                }).call(this, d);
-                if (r !== false) finish_editing();
-            },
-            error: params.error || [
-                function () { $inputs.prop('disabled', false); },
-                Liberapay.error,
-            ],
-        });
-    }
-
-    $form.on('submit', post);
-
-};
-
 Liberapay.forms.clearInvalid = function($form) {
     $form.find('.invalid').removeClass('invalid');
 };
@@ -89,6 +17,7 @@ Liberapay.forms.jsSubmit = function() {
         e.preventDefault();
         var $form = $(this.form || this);
         var data = $form.serializeArray();
+        var button = this.tagName == 'BUTTON' ? this : null;
         if (this.tagName == 'BUTTON') {
             data.push({name: this.name, value: this.value});
         }
@@ -98,7 +27,7 @@ Liberapay.forms.jsSubmit = function() {
             url: $form.attr('action'),
             type: 'POST',
             data: data,
-            success: Liberapay.forms.success($form, $inputs),
+            success: Liberapay.forms.success($form, $inputs, button),
             error: [
                 function () { $inputs.prop('disabled', false); },
                 Liberapay.error,
@@ -109,8 +38,13 @@ Liberapay.forms.jsSubmit = function() {
     $('.js-submit button').filter(':not([type]), [type="submit"]').click(submit);
 };
 
-Liberapay.forms.success = function($form, $inputs) { return function(data) {
+Liberapay.forms.success = function($form, $inputs, button) { return function(data) {
     $inputs.prop('disabled', false).filter('[type=password]').val('');
+    var on_success = $form.data('on-success');
+    if (on_success.substr(0, 8) == 'fadeOut:') {
+        var $e = $(button).parents(on_success.substr(8)).eq(0);
+        return $e.fadeOut(null, $e.remove);
+    }
     var msg = data && data.msg || $form.data('success');
     if (msg) {
         Liberapay.notification(msg, 'success');
@@ -118,3 +52,35 @@ Liberapay.forms.success = function($form, $inputs) { return function(data) {
         window.location.href = window.location.href;
     }
 }};
+
+Liberapay.forms.communityChooser = function() {
+    var $select = $('.community-chooser select');
+    if ($select.length === 0) return;
+    var edit = $select.hasClass('edit');
+    function join(term) {
+        jQuery.ajax({
+            url: '/'+Liberapay.username+'/communities.json',
+            type: "POST",
+            data: {'do': 'join:'+term},
+            success: function (data) {
+                if (edit) {
+                    window.location.reload();
+                } else {
+                    window.location = '/for/'+data.slug;
+                }
+            },
+            error: Liberapay.error,
+        });
+    }
+    var chosenOpts = Liberapay.username ? {
+        create_option: join,
+        create_option_text: $('.community-chooser').data('add-msg'),
+    }: {};
+    $select.chosen(chosenOpts).change(function() {
+        if (edit) {
+            join($select.val());
+        } else {
+            window.location = '/for/'+$select.val();
+        }
+    });
+};

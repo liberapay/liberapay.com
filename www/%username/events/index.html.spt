@@ -13,7 +13,7 @@ events = db.all("""
 """, (participant.id,))
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/profile.html" %}
+{% extends "templates/settings.html" %}
 {% block content %}
 
 <style>

@@ -4,8 +4,8 @@ title = _("Frequently Asked Questions")
 [---] text/html
 {% extends "templates/about.html" %}
 {% block content %}
-<div class="row">
-<dl class="col1">
+<div class="row faq">
+<dl class="col-md-6">
 
     <dt id="what-is-it">{{ _("What is Liberapay?") }}</dt>
 
@@ -51,18 +51,8 @@ title = _("Frequently Asked Questions")
 
     <dd><a href="/about/me/routes/bank-account.html">{{ _("Connect a bank account") }}</a></dd>
 
-
-    <dt id="taxable">{{ _("Do I have to pay taxes on the income I receive from Liberapay?") }}</dt>
-
-    <dd>{{ _("We don't know, it's up to you to figure out your country's tax rules.") }}</dd>
-
-
-    <dt id="tax-deductible">{{ _("Are donations through Liberapay tax-deductible?") }}</dt>
-
-    <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
-
 </dl>
-<dl class="col1">
+<dl class="col-md-6">
 
     <dt id="receipts-decrease">{{ _("Why did my receipts decrease?") }}</dt>
 
@@ -101,6 +91,16 @@ title = _("Frequently Asked Questions")
         "stabilize income by reducing how dependent it is on a few large patrons."
         , format_currency(constants.MAX_TIP, 'USD')
     ) }}</dd>
+
+
+    <dt id="taxable">{{ _("Do I have to pay taxes on the income I receive from Liberapay?") }}</dt>
+
+    <dd>{{ _("We don't know, it's up to you to figure out your country's tax rules.") }}</dd>
+
+
+    <dt id="tax-deductible">{{ _("Are donations through Liberapay tax-deductible?") }}</dt>
+
+    <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
 
 
     <dt id="close-account">{{ _("How do I close my account?") }}</dt>

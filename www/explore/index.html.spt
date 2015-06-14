@@ -1,76 +1,34 @@
-from liberapay.models import community
+from liberapay.models.community import Community
 
 [-----------------------------]
 
-communities = community.get_list_for(website.db, None)
+communities = Community.get_list()
 ncommunities = len(communities)
 title = _("Explore")
 
 [-----------------------------]
 {% extends "templates/explore.html" %}
 
-{% block sidebar %}
-    <div class="avatar">
-        <img src="{{ website.asset('communities.svg') }}">
-    </div>
-    <p>
-        {{ ngettext( "There is {n} community on Liberapay."
-                   , "There are {n} communities on Liberapay."
-                   , ncommunities
-                    ) }}
-    </p>
-{% endblock %}
-
 {% block content %}
-<form class="communities" data-add-msg='{{ _("Add a new community") }}'>
-    <select data-placeholder='{{ _("Find or add a community ...") }}'>
-        <option></option>
-        {% for community in communities %}
-        <option value="{{ community.slug }}">{{ community.name }} -
-        {{ ngettext("{n} Member", "{n} Members", community.nmembers).lower() }}
-        </option>
-        {% endfor %}
-    </select>
-</form>
+<p>
+    {{ ngettext("There is {n} community on Liberapay.",
+                "There are {n} communities on Liberapay.",
+                ncommunities) }}
+</p>
+
+{% from "templates/community-chooser.html" import community_chooser with context %}
+{{ community_chooser(communities) }}
 
 <h2>{{ _("Popular Communities") }}</h2>
-<ul class="community memberships">
-    {% for community in communities[:18] %}
+<ul class="communities">
+    {% for community in communities[:20] %}
     <li>
         <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
         {% set n = community.nmembers %}
-        <div class="fine">
+        <div class="nmembers">
             {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
         </div>
     </li>
     {% endfor %}
 </ul>
-{% endblock %}
-
-{% block scripts %}
-<script>
-    $(document).ready(function() {
-        var communityChooser = $('.communities select');
-        function createOption(term) {
-            jQuery.post({
-                url: '/for/communities.json',
-                data: {name: name, is_member: true},
-                dataType: 'json',
-                success: function (data) {
-                    window.location = '/for/'+data.slug
-                },
-                error: Liberapay.error,
-            });
-        }
-        var chosenOpts = Liberapay.username ? {
-            create_option: createOption,
-            create_option_text: $('.communities').data('add-msg'),
-        }: {};
-        communityChooser.chosen(chosenOpts).change(function() {
-            window.location = '/for/'+communityChooser.val()
-        });
-    });
-</script>
-
-{{ super() }}
 {% endblock %}
