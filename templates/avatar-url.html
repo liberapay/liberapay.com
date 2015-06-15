@@ -4,3 +4,7 @@
 <img class="avatar" src="{{ avatar_url(account) }}"
      onerror="this.src = '{{ website.asset('avatar-default.png') }}'" />
 {% endmacro %}
+
+{% macro avatar_default() %}
+<img class="avatar" src="{{ website.asset('avatar-default.png') }}" />
+{% endmacro %}

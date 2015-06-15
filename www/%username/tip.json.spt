@@ -25,11 +25,13 @@ else:
     # Get and maybe set amount.
     # =========================
 
-    if request.method == 'POST' and 'amount' in request.body and tippee != tipper:
+    if request.method == 'POST':
         try:
             out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
         except (InvalidOperation, ValueError, NumberFormatError):
             raise Response(400, "bad amount")
+        if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+            request.redirect(request.body.get('back_to') or '..')
     else:
         out = tipper.get_tip_to(tippee)
 

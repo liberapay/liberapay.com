@@ -120,6 +120,7 @@ CREATE TABLE tips
 , tippee       bigint           NOT NULL REFERENCES participants
 , amount       numeric(35,2)    NOT NULL CHECK (amount >= 0)
 , is_funded    boolean          NOT NULL DEFAULT false
+, CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
  );
 
 CREATE INDEX tips_tipper_idx ON tips (tipper, mtime DESC);
@@ -192,7 +193,7 @@ CREATE TABLE paydays
 -- exchange routes -- how money moves in and out of Liberapay
 
 CREATE TYPE payment_net AS ENUM
-    ('balanced-ba', 'balanced-cc', 'paypal', 'bitcoin');
+    ('balanced-ba', 'balanced-cc');
 
 CREATE TABLE exchange_routes
 ( id            serial         PRIMARY KEY

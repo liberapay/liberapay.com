@@ -1,14 +1,32 @@
-{% if communities or user == participant %}
-    <h2>{{ _("Communities") }}</h2>
-    <ul class="community memberships">
+{% set communities = participant.get_communities() %}
+{% if communities or edit %}
+<div class="col-md-6">
+    <h2 id="communities">{{ _("Communities") }}</h2>
+{% if edit %}
+    {% from "templates/community-chooser.html" import community_chooser with context %}
+    {{ community_chooser(Community.get_list()) }}
+    <br>
+    <form action="/{{ participant.username }}/communities.json" method="POST"
+          class="js-submit" data-on-success="fadeOut:li">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="back_to" value="{{ request.line.uri }}#communities">
+{% endif %}
+    <ul class="communities">
         {% for community in communities %}
         <li>
             <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-            <div class="fine">{{ with_others(community) }}</div>
+            <div class="nmembers">{{
+                ngettext("with {n} other", "with {n} others", community.nmembers - 1)
+            }}</div>
+            {% if edit %}
+                <button name="do" value="leave:{{ community.name }}"
+                        class="btn btn-default btn-xs">{{ _('Leave') }}</button>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
-    {% if user == participant %}
-        <p><a href="/explore/">{{ _("Join Communities") }}</a></p>
-    {% endif %}
+{% if edit %}
+    </form>
+{% endif %}
+</div>
 {% endif %}

@@ -14,10 +14,11 @@ title = _("Failure")
 [---]
 {% extends "templates/base.html" %}
 {% block content %}
+<div class="alert alert-danger">
 
     {% if team %}
 
-    <h2>{{ _("Are you really an administrator of the {0} team?", name) }}</h2>
+    <h4>{{ _("Are you really an administrator of the {0} team?", name) }}</h4>
 
     <p>{{ _("Your attempt to claim this account failed because you're logged "
             "into {0} as someone who isn't an administrator of the {1} team. "
@@ -29,7 +30,7 @@ title = _("Failure")
 
     {% else %}
 
-    <h2>{{ _("Are you really {0}?", name) }}</h2>
+    <h4>{{ _("Are you really {0}?", name) }}</h4>
 
     <p>{{ _("Your attempt to claim this account failed because you're logged "
             "into {0} as someone else. Please sign out and {1}try again{2}.",
@@ -39,4 +40,5 @@ title = _("Failure")
 
     {% endif %}
 
+</div>
 {% endblock %}

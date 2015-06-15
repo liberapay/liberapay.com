@@ -1,9 +1,0 @@
-from liberapay.utils import get_participant
-
-[---]
-
-participant = get_participant(state, restrict=True)
-new_username = participant.change_username(request.body['username'])
-
-[---] application/json via json_dump
-{"username": new_username}

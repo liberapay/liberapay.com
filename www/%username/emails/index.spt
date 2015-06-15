@@ -9,52 +9,56 @@ subhead = _("Email settings")
 emails = participant.get_emails()
 
 [---] text/html
-{% extends "templates/profile.html" %}
-
-{% block scripts %}
-<script>$(document).ready(Liberapay.settings.init);</script>
-{{ super() }}
-{% endblock %}
+{% extends "templates/settings.html" %}
 
 {% block content %}
-<div class="col0">
-    <div id="emails" class="emails">
-        <h2>{{ _("Email Addresses (Private)") }}</h2>
 
-        <form action="./modify.json" method="POST" class="js-submit">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <ul>
-            {% for email in emails %}
-                <li>
-                    {{ email.address }}
-                    {% if email.address == participant.email %}
-                        <span class="label label-primary">{{ _("Primary") }}</span>
+    <h2>{{ _("Email Addresses (Private)") }}</h2>
+
+    <form action="./modify.json" method="POST" class="js-submit">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <ul class="emails">
+        {% for email in emails %}
+            <li class="clearfix">
+                <span class="address">{{ email.address }}</span>
+                {% if email.address == participant.email %}
+                    <span class="label label-primary">{{ _("Primary") }}</span>
+                {% else %}
+                    <button name="remove" value="{{ email.address }}"
+                            class="btn btn-danger btn-sm">{{ _("Remove") }}</button>
+                    {% if not email.verified %}
+                        <span class="label label-warning">{{ _("Unverified") }}</span>
+                        <button name="resend" value="{{ email.address }}"
+                                class="btn btn-default btn-sm">{{ _("Resend email") }}</button>
                     {% else %}
-                        {% if not email.verified %}
-                            <span class="label label-warning">{{ _("Unverified") }}</span>
-                            <button name="resend" value="{{ email.address }}">{{ _("Resend email") }}</button>
-                        {% else %}
-                            <button name="set-primary" value="{{ email.address }}">{{ _("Set as primary") }}</button>
-                        {% endif %}
-                        <button name="remove" value="{{ email.address }}">{{ _("Remove") }}</button>
+                        <span class="label label-success">{{ _("Verified") }}</span>
+                        <button name="set-primary" value="{{ email.address }}"
+                                class="btn btn-primary btn-sm">{{ _("Set as primary") }}</button>
                     {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-        </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </form>
 
-        <form action="./modify.json" method="POST" class="js-submit">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <input name="email" type="email" placeholder="{{ _('Email address') }}" />
-            <button name="add-email">{{ _("Add email address") }}</button>
-        </form>
-    </div>
+    <form action="./modify.json" method="POST" class="js-submit">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <div class="input-group">
+            <input name="email" type="email" class="form-control"
+                   placeholder="{{ _('Email address') }}" />
+            <div class="input-group-btn">
+                <button name="add-email" class="btn btn-default">{{ _("Add") }}</button>
+            </div>
+        </div>
+    </form>
 
     <h2>{{ _("Notifications") }}</h2>
+
     <form action="./notifications.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="fields" value="{{ EVENTS_S }}" />
         <span>{{ _("Send me notifications via email:") }}</span><br>
+        <div class="checkbox">
         {% for event in EVENTS.values() %}
         <label>
             <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) }} />
@@ -62,7 +66,8 @@ emails = participant.get_emails()
         </label>
         <br>
         {% endfor %}
-        <button>{{ _("Save changes") }}</button>
+        </div>
+        <button class="btn btn-default">{{ _("Save changes") }}</button>
     </form>
-</div>
+
 {% endblock %}

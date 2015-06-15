@@ -15,19 +15,9 @@ if not token or not account.check_connect_token(token.value):
 
 other = account.participant
 user_accounts_dict = user.get_accounts_elsewhere()
-nix = len(user_accounts_dict) == 1
 user_accounts = user_accounts_dict.values()
 other_accounts = other.get_accounts_elsewhere().values()
 abandoned_account = user_accounts_dict.get(account.platform, None)
-
-giving_after = user.giving
-receiving_after = user.receiving
-if nix:
-    giving_after += other.giving
-    receiving_after += other.receiving
-
-fmt = lambda x: format_currency(x, 'USD')
-get_name = lambda a: a.user_name or a.display_name or a.user_id
 
 title = _("Please Confirm")
 
@@ -39,38 +29,31 @@ title = _("Please Confirm")
 
     <p><img class="platform-icon" src="{{ account.platform_data.icon }}" />
     {{ _("{0} is connected to {1} on Liberapay.",
-         '<span class="highlight">%s</span>'|safe % get_name(account),
+         '<span class="highlight">%s</span>'|safe % account.friendly_name,
          ('<a href="/{0}/">{0}</a>'|safe).format(other.username)) }}
     {{ _("Transfer it?") }}
     </p>
 
     <h2>{{ _("How the accounts are now") }}</h2>
 
-    <div class="scenario">
-        <div class="participant">
+    <div class="row">
+        <div class="col-sm-2">
             <b>{{ user.username }}</b><br />
-            {{ _("Gives") }} {{ fmt(user.giving) }}<br />
-            {{ _("Receives") }} {{ fmt(user.receiving) }}<br />
-            <br />
-
             {% for account in user_accounts %}
                 <img src="{{ account.platform_data.icon }}"
                      alt="{{ account.platform }}"
                      class="platform-icon" />
-                {{ get_name(account) }}<br />
+                {{ account.friendly_name }}<br />
             {% endfor %}
         </div>
-        <div class="participant other">
+        <div class="col-sm-2 other">
             <b>{{ other.username }}</b><br />
-            {{ _("Gives") }} {{ fmt(other.giving) }}<br />
-            {{ _("Receives") }} {{ fmt(other.receiving) }}<br />
-            <br />
             {% for other_account in other_accounts %}
                 <img src="{{ other_account.platform_data.icon }}"
                      alt="{{ other_account.platform }}"
                      class="platform-icon" />
                 <span class="{{ 'highlight' if other_account.platform == account.platform }}">
-                    {{ get_name(other_account) }}<br />
+                    {{ other_account.friendly_name }}<br />
                 </span>
             {% endfor %}
         </div>
@@ -79,20 +62,16 @@ title = _("Please Confirm")
 
     <h2>{{ _("How the accounts will be after the transfer") }}</h2>
 
-    <div class="scenario">
-        <div class="participant">
+    <div class="row">
+        <div class="col-sm-2">
             <b>{{ user.username }}</b><br />
-            {{ _("Gives") }} {{ fmt(giving_after) }}<br />
-            {{ _("Receives") }} {{ fmt(receiving_after) }}<br />
-            <br />
-
             {% for user_account in user_accounts %}
                 {% if user_account != abandoned_account %}
                 <span class="account-elsewhere">
                     <img src="{{ user_account.platform_data.icon }}"
                          alt="{{ user_account.platform }}"
                          class="platform-icon" />
-                    {{ get_name(user_account) }}<br />
+                    {{ user_account.friendly_name }}<br />
                 </span>
                 {% endif %}
             {% endfor %}
@@ -101,26 +80,19 @@ title = _("Please Confirm")
                 <img src="{{ account.platform_data.icon }}" alt="{{ account.platform }}"
                     class="platform-icon" />
                 <span class="highlight">
-                    {{ get_name(account) }}<br />
+                    {{ account.friendly_name }}<br />
                 </span>
             </span>
         </div>
-        <div class="participant other {{ 'nix' if nix }}">
-            {% if nix %}
-                <img id="nix" src="{{ website.asset('nix.png') }}" />
-            {% endif %}
+        <div class="col-sm-2 other">
             <b>{{ other.username }}</b><br />
-            {{ _("Gives") }} {{ fmt(other.giving) }}<br />
-            {{ _("Receives") }} {{ fmt(other.receiving) }}<br />
-            <br />
-
             {% for other_account in other_accounts %}
                 {% if other_account.platform != account.platform %}
                     <span class="account-elsewhere">
                         <img src="{{ other_account.platform_data.icon }}"
                              alt="{{ other_account.platform }}"
                              class="platform-icon" />
-                        {{ get_name(other_account) }}<br />
+                        {{ other_account.friendly_name }}<br />
                     </span>
                 {% endif %}
             {% endfor %}
@@ -130,7 +102,7 @@ title = _("Please Confirm")
             {{ _("Abandoned:") }}<br/><br/>
             <span class="account-elsewhere">
                 <img src="{{ abandoned_account.platform_data.icon }}" />
-                {{ get_name(abandoned_account) }}<br />
+                {{ abandoned_account.friendly_name }}<br />
             </span>
         </div>
         {% endif %}
@@ -142,8 +114,8 @@ title = _("Please Confirm")
     <form action="/on/take-over.html" method="POST">
         <input type="hidden" name="account_id" value="{{ account_id }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <button name="should_transfer" value="yes" class="selected larger">{{ _("Yes") }}</button>
-        <button name="should_transfer" value="no" >{{ _("No") }}</button>
+        <button name="should_transfer" value="yes" class="btn btn-success">{{ _("Yes") }}</button>
+        <button name="should_transfer" value="no" class="btn btn-default" >{{ _("No") }}</button>
     </form>
 
 </div>

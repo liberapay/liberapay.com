@@ -76,7 +76,6 @@ class TestElsewhere(Harness):
             get_user_info.side_effect = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
-            assert 'has not joined' in response.body.decode('utf8')
 
     def test_user_pages_not_found(self):
         user_name = 'adhsjakdjsdkjsajdhksda'
@@ -87,12 +86,6 @@ class TestElsewhere(Harness):
             r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
             expected = error % (user_name, platform.display_name)
             assert expected in r.body
-
-    def test_user_name_is_in_button(self):
-        bob = self.make_participant('bob')
-        self.make_elsewhere('twitter', -1, 'alice')
-        body = self.client.GET('/on/twitter/alice/', auth_as=bob).body
-        assert '<span class="zero">Pledge to alice</span>' in body
 
     def test_user_name_is_in_pledge_cta(self):
         self.make_elsewhere('twitter', -1, 'alice')

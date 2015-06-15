@@ -1,0 +1,304 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+#wrapper {
+    min-height: 100%;
+    min-width: 100%;
+    padding-bottom: 100px;
+    position: relative;
+
+    & > footer {
+        bottom: 0px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+
+        & > a {
+            display: inline-block;
+            padding: 10px;
+        }
+    }
+}
+
+.navbar-dropdown {
+    background: transparent;
+    border: none;
+    color: #777;
+    margin: 8px 0;
+    padding: 7px 13px;
+
+    &:hover {
+        color: #333;
+    }
+}
+
+.avatar img {
+    max-height: 160px;
+    max-width: 100%;
+}
+
+#members .avatar {
+    max-height: 32px;
+    max-width: 32px;
+}
+
+.user-box {
+    width: 500px;
+}
+
+input.amount {
+    min-width: 5em;
+    max-width: 8em;
+    &.input-sm {
+        width: 5em;
+    }
+}
+
+.input-group-addon, .input-group-btn {
+    width: auto !important;
+}
+
+.input-group-addon:not(:first-child) {
+    border-left: none;
+}
+
+.radio > .with-input-group-sm {
+    & > input[type=radio] {
+        top: 5px;
+    }
+    & > div {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+.langs select {
+    margin: 5px 0;
+}
+
+.statement textarea {
+    resize: vertical;
+}
+
+div.account {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    vertical-align: top;
+    width: 135px;
+    word-wrap: break-word;
+}
+
+div.account-action {
+    position: absolute;
+    right: 0;
+    top: 1px;
+}
+
+button.close {
+    padding: 0 5px;
+}
+
+img.account-type {
+    max-height: 32px;
+    max-width: 32px;
+}
+
+.profile-box {
+    float: none;
+    margin: 0 auto;
+    .avatar {
+        text-align: center;
+    }
+    h1 {
+        font-size: 20px;
+        margin: 0 0 10px;
+    }
+    .radio {
+        margin-top: 0;
+    }
+}
+
+@import "chosen";
+
+form.community-chooser select {
+    width: 300px;
+}
+
+ul.communities {
+    margin: 0;
+    padding: 0;
+    & > li {
+        display: inline-block;
+        margin: 0 5px 1em 0;
+        position: relative;
+        vertical-align: top;
+        width: 130px;
+        word-wrap: break-word;
+    }
+    .nmembers {
+        font-size: 85%;
+    }
+}
+
+.search-result {
+    .avatar {
+        float: left;
+        max-height: 66px;
+        max-width: 66px;
+    }
+    .col-right {
+        margin-left: 74px;
+    }
+    .excerpt {
+        font-size: 100%;
+    }
+}
+
+ul.people {
+    margin: 0;
+    padding: 0;
+}
+
+li.mini-user {
+    display: inline-block;
+    margin-bottom: 5px;
+    padding: 5px;
+    text-align: center;
+    vertical-align: top;
+    width: 110px;
+    img.avatar {
+        max-width: 100%;
+    }
+    .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.giving table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+#subnav + p, #subnav + div.paragraph {
+    margin-top: 1.5em;
+}
+
+ul.emails {
+    margin: 1em 0;
+    max-width: 600px;
+    padding: 0;
+    li {
+        border-bottom: 1px dashed #ccc;
+        line-height: 30px;
+        list-style: none;
+        margin: 0.33em 0.5em;
+        padding: 0 0 0.33em;
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+    span.address {
+        display: inline-block;
+        max-width: 250px;
+        vertical-align: top;
+        word-wrap: break-word;
+    }
+    button {
+        float: right;
+        margin-left: 1em;
+    }
+}
+
+.faq dt {
+    margin: 1.5em 0 0.33em;
+}
+
+section.profile-statement {
+    h1, h2, h3, h4 {
+        color: #956410;
+    }
+    h1 {
+        font-size: 26px;
+        margin: 26px 0 10px;
+    }
+    h2 {
+        font-size: 20px;
+        margin: 20px 0 10px;
+    }
+    h3 {
+        font-size: 16px;
+        margin: 16px 0 10px;
+    }
+    h4, h5, h6 {
+        font-size: 14px;
+        margin: 14px 0 10px;
+    }
+}
+
+#notification-area {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    text-align: center;
+
+    .notification {
+        padding: 10px;
+    }
+
+    .notification-error {
+        background-color: #f2dede;
+        border-top: 1px solid #ebccd1;
+        color: #a94442;
+    }
+
+    .notification-success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+    }
+}
+
+.dropdown-hover {
+    .dropdown-menu {
+        margin-top: 0;
+    }
+    &:hover .dropdown-menu {
+        display: block;
+    }
+}
+
+#history {
+    td.totals {
+        padding-left: 0px;
+    }
+    .fees, .outside {
+        border-right: 1px solid #ddd;
+    }
+    .outside {
+        text-align: right;
+    }
+}
+
+table.friends > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.navbar-nav {
+    margin: 0;
+    & > li {
+        float: left;
+        & > a {
+            padding-bottom: 15px;
+            padding-top: 15px;
+        }
+    }
+}

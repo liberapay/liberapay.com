@@ -1,15 +1,20 @@
 {% set teams = participant.get_teams() %}
-{% if teams or user == participant %}
+{% if teams or edit %}
+<div class="col-md-6">
     <h2>{{ _("Teams") }}</h2>
     <ul class="team memberships">
         {% for team in teams %}
         <li>
             <a href="/{{ team.name }}/">{{ team.name }}</a>
-            <div class="fine">{{ with_others(team) }}</div>
+            <div class="fine">{{
+                ngettext("with {n} other", "with {n} others", team.nmembers - 1)
+            }}</div>
         </li>
         {% endfor %}
     </ul>
-    {% if user == participant %}
-        <p><a href="/about/teams/">{{ _("Learn more about how teams work") }}</a></p>
+    {% if edit %}
+        <p><a href="/explore/teams/">{{ _("Explore teams") }}</a></p>
+        <p><a href="/about/teams">{{ _("Learn more about how teams work") }}</a></p>
     {% endif %}
+</div>
 {% endif %}

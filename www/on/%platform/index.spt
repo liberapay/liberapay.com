@@ -35,25 +35,15 @@ limited = getattr(platform, 'api_friends_limited', False)
 
 [---] text/html
 {% extends "templates/base.html" %}
+
 {% from 'templates/auth.html' import auth_button with context %}
+{% from "templates/your-tip.html" import tip_form with context %}
 
 {% block subnav %}
-    {% set current_page = platform.name %}
-    {% set nav_base = '/on' %}
-    {% set pages = platforms_nav %}
-    {% include "templates/nav.html" %}
-{% endblock %}
-
-{% block sidebar %}
-    <div class="avatar">
-        <img src='{{ website.asset("platforms/%s.png" % platform.name) }}' />
-    </div>
-    {% if nfriends and nfriends > 0 %}
-    <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
-                   nfriends, platform.display_name) }}
-    </p>
-    {% endif %}
-
+    {% from "templates/nav.html" import nav with context %}
+    <nav class="nav nav-tabs">
+        {{ nav(platforms_nav, base='/on') }}
+    </nav>
 {% endblock %}
 
 {% macro limitation_note() %}
@@ -69,7 +59,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 {% if user.ANON %}
 <p>{% include "templates/sign-in.html" %}</p>
 {% elif need_reconnect %}
-<div>
+<div class="paragraph">
     <span style="display: inline-block">
     {% call auth_button(platform.name, 'connect') %}{{
         _("Please refresh your {0} connection", platform.display_name)
@@ -78,7 +68,7 @@ limited = getattr(platform, 'api_friends_limited', False)
     {{ _("to find your friends from there.") }}
 </div>
 {% elif not account or not sess %}
-<div>
+<div class="paragraph">
     <span style="display: inline-block">
     {% call auth_button(platform.name, 'connect') %}{{
         _("Connect your {0} account", platform.display_name)
@@ -90,22 +80,24 @@ limited = getattr(platform, 'api_friends_limited', False)
 <p>{{ _("No friends found.") }}</p>
 {{ limitation_note() }}
 {% else %}
-<table class="table">
+<p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
+               nfriends, platform.display_name) }}</p>
+<table class="table table-condensed friends">
     <tr>
         <th>{{ _('Name') }}</th>
-        <th class="figure">{{ _('Accepts donations?') }}</th>
-        <th class="figure">{{ _('Supporters') }}</th>
-        <th class="figure">{{ _('Receives') }}</th>
-        <th class="figure">{{ _('Gives') }}</th>
+        <th>{{ _('On Liberapay?') }}</th>
+        <th>{{ _('Receives') }}</th>
+        <th>{{ _('Pledge/Donate') }}</th>
     </tr>
     {% for friend in friends %}
     {% set p = friend.participant %}
-    <tr>
+    {% set tippee = p if p.join_time else friend %}
+    <tr class="{{ 'info' if p.join_time and p.accepts_tips }}">
         <td><a href="./{{ friend.liberapay_slug }}/">{{ friend.friendly_name }}</a></td>
-        <td class="figure">{{ '&check;'|safe if p.accepts_tips }}</td>
-        <td class="figure">{{ _('hidden') if p.hide_receiving else p.npatrons }}</td>
-        <td class="figure">{{ _('hidden') if p.hide_receiving else p.receiving }}</td>
-        <td class="figure">{{ _('hidden') if p.hide_giving else p.giving }}</td>
+        <td>{{ _("Yes") if p.join_time else _("No") }}</td>
+        <td>{{ _('hidden') if p.hide_receiving else p.receiving and format_currency(p.receiving, 'USD') or '0' }}</td>
+        <td>{{ tip_form(tippee=tippee, inline=True) if p.accepts_tips else
+               _("{0} doesn't accept donations", friend.friendly_name) }}</td>
     </tr>
     {% endfor %}
     {% if pages_urls %}

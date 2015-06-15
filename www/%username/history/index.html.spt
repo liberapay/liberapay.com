@@ -35,7 +35,7 @@ else:
     BALANCE = _("Their balance is {0}.", format_currency(participant.balance, "USD"))
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/profile.html" %}
+{% extends "templates/settings.html" %}
 {% block content %}
 
 <p>{{ BALANCE }}</p>
@@ -43,14 +43,15 @@ else:
 <h2>{{ _("Account Statement") }}</h2>
 
 {% if len(years) > 1 %}
-<ul class="nav">
+<ul class="nav nav-pills">
     {% for y in years %}
-        <li><a href="?year={{ y }}" class="{{ 'selected' if y == year }}">{{ y }}</a></li>
+        <li><a href="?year={{ y }}" class="{{ 'active' if y == year }}">{{ y }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
 
-<table id="history">
+<div class="row col-md-8">
+<table class="table table-condensed" id="history">
 {% for event in events %}
     {% if event['kind'] == 'totals' %}
     <tr><td colspan="8" class="totals">
@@ -184,5 +185,6 @@ else:
     <p>{{ _("No transactions to show.") }}</p>
 {% endfor %}
 </table>
+</div>
 
 {% endblock %}

@@ -24,20 +24,23 @@ pledges = [t for t in pledges if t.amount > 0]
 npledges = len(pledges)
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/profile.html" %}
+{% extends "templates/settings.html" %}
+
+{% from "templates/your-tip.html" import tip_form with context %}
+
 {% block content %}
-<div class="giving">
+<div class="giving row">
 
 {% if ntips %}
-<div class="pane">
-    <h2>{{ _("Tips") }} (N={{ ntips }})</h2>
-    <table>
+<div class="col-md-8">
+    <h3>{{ _("Tips") }} (N={{ ntips }})</h3>
+    <table class="table">
         <thead>
             <tr>
                 <th class="recipient">{{ _("Recipient") }}</th>
-                <th class="amount">{{ _("Weekly") }}</th>
-                <th class="mtime">{{ _("Last Set") }}</th>
-                <th class="ctime">{{ _("First Set") }}</th>
+                <th class="amount">{{ _("Amount") }}</th>
+                <th class="ctime">{{ _("Created") }}</th>
+                <th class="mtime">{{ _("Modified") }}</th>
             </tr>
         </thead>
         <tfoot>
@@ -52,9 +55,9 @@ npledges = len(pledges)
         {% for tip in tips %}
         <tr>
             <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
-            <td class="amount">{{ tip.amount }}</td>
-            <td class="mtime">{{ to_age(tip.mtime) }}</td>
-            <td class="ctime">{{ to_age(tip.ctime) }}</td>
+            <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
+            <td class="ctime">{{ to_age(tip.ctime, add_direction=True) }}</td>
+            <td class="mtime">{{ to_age(tip.mtime, add_direction=True) }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -62,41 +65,16 @@ npledges = len(pledges)
 </div>
 {% endif %}
 
-{% if ncancelled_tips %}
-<div class="pane">
-    <h2>{{ _("Recently Cancelled") }} (N={{ ncancelled_tips }})</h2>
-    <p class="note">{{ _("within the last 30 days") }}</p>
-    <table>
-        <thead>
-            <tr>
-                <th class="recipient">{{ _("Recipient") }}</th>
-                <th class="mtime">{{ _("Cancelled") }}</th>
-                <th class="ctime">{{ _("First Set") }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for tip in cancelled_tips %}
-            <tr>
-                <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
-                <td class="mtime">{{ to_age(tip.mtime) }}</td>
-                <td class="ctime">{{ to_age(tip.ctime) }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endif %}
-
 {% if npledges %}
-<div class="pane">
-    <h2>{{ _("Pledges") }} (N={{ len(pledges) }})</h2>
-    <table>
+<div class="col-md-8">
+    <h3>{{ _("Pledges") }} (N={{ len(pledges) }})</h3>
+    <table class="table">
         <thead>
             <tr>
                 <th class="recipient">{{ _("Recipient") }}</th>
                 <th class="amount">{{ _("Amount") }}</th>
-                <th class="mtime">{{ _("Last Set") }}</th>
-                <th class="ctime">{{ _("First Set") }}</th>
+                <th class="ctime">{{ _("Created") }}</th>
+                <th class="mtime">{{ _("Modified") }}</th>
             </tr>
         </thead>
         <tfoot>
@@ -112,13 +90,38 @@ npledges = len(pledges)
             <tr>
                 <td class="recipient">
                     <img class="platform-icon" src="{{ website.asset('platforms/%s.12.png' % tip.platform) }}" />
-                    <a href="/{{ tip.username }}/">{{ tip.user_name }}</a>
+                    <a href="/on/{{ tip.platform }}/{{ tip.user_name }}/">{{ tip.user_name }}</a>
                 </td>
-                <td class="amount">{{ tip.amount }}</td>
-                <td class="mtime">{{ to_age(tip.mtime) }}</td>
-                <td class="ctime">{{ to_age(tip.ctime) }}</td>
+                <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
+                <td class="ctime">{{ to_age(tip.ctime, add_direction=True) }}</td>
+                <td class="mtime">{{ to_age(tip.mtime, add_direction=True) }}</td>
             </tr>
         {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if ncancelled_tips %}
+<div class="col-md-8">
+    <h3>{{ _("Recently Cancelled") }} (N={{ ncancelled_tips }})
+        <small>{{ _("within the last 30 days") }}</small></h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="recipient">{{ _("Recipient") }}</th>
+                <th class="ctime">{{ _("Created") }}</th>
+                <th class="mtime">{{ _("Cancelled") }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tip in cancelled_tips %}
+            <tr>
+                <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
+                <td class="ctime">{{ to_age(tip.ctime, add_direction=True) }}</td>
+                <td class="mtime">{{ to_age(tip.mtime, add_direction=True) }}</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import print_function, unicode_literals
 
 from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
@@ -9,7 +10,7 @@ ALL_OFF = {'privacy': PRIVACY_FIELDS_S}
 ALL_ON = dict({k: 'on' for k in PRIVACY_FIELDS}, **ALL_OFF)
 
 
-class Tests(Harness):
+class TestPrivacy(Harness):
 
     def setUp(self):
         Harness.setUp(self)
@@ -50,3 +51,49 @@ class Tests(Harness):
         alice = Participant.from_username('alice')
         self.make_participant('A-Team', kind='group', hide_from_search=True).add_member(alice)
         assert 'A-Team' not in self.client.GET("/explore/teams/").body
+
+
+class TestUsername(Harness):
+
+    def change_username(self, new_username, auth_as='alice'):
+        if auth_as:
+            auth_as = self.make_participant(auth_as)
+
+        r = self.client.POST('/alice/settings/edit', {'username': new_username},
+                             auth_as=auth_as, raise_immediately=False)
+        return r
+
+    def test_participant_can_change_their_username(self):
+        r = self.change_username("bob")
+        assert r.code == 302
+
+    def test_anonymous_gets_403(self):
+        r = self.change_username("bob", auth_as=None)
+        assert r.code == 403
+
+    def test_empty(self):
+        r = self.change_username('      ')
+        assert r.code == 400
+        assert "You need to provide a username!" in r.body, r.body
+
+    def test_invalid(self):
+        r = self.change_username("§".encode('utf8'))
+        assert r.code == 400
+        assert b"The username &#39;§&#39; contains invalid characters." in r.body, r.body
+
+    def test_restricted_username(self):
+        r = self.change_username("assets")
+        assert r.code == 400
+        assert "The username &#39;assets&#39; is restricted." in r.body, r.body
+
+    def test_unavailable(self):
+        self.make_participant("bob")
+        r = self.change_username("bob")
+        assert r.code == 400
+        assert "The username &#39;bob&#39; is already taken." in r.body, r.body
+
+    def test_too_long(self):
+        username = "I am way too long, and you know it, and the American people know it."
+        r = self.change_username(username)
+        assert r.code == 400
+        assert "The username &#39;%s&#39; is too long." % username in r.body, r.body

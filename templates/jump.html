@@ -1,12 +1,11 @@
-<form id="jump">
-    {{ _("Jump to {0} from {1}",
-         """<input placeholder='username' autocomplete='off' autocorrect='off'
-                   spellcheck='false' size='12' type='text'>"""|safe,
-         """<select>
-            <option value='twitter'>Twitter</option>
-            <option value='facebook'>Facebook</option>
-            <option value='github'>GitHub</option>
-            <option value='bitbucket'>Bitbucket</option>
-         </select>"""|safe) }}
-    <button type="submit">{{ _("Go") }}</button>
+<form id="jump" class="form-inline">
+    <input placeholder="{{ _('username') }}" autocomplete="off" autocorrect="off"
+           spellcheck="false" size="12" type="text" class="form-control">
+    <select class="form-control">
+        <option value="twitter">Twitter</option>
+        <option value="facebook">Facebook</option>
+        <option value="github">GitHub</option>
+        <option value="bitbucket">Bitbucket</option>
+    </select>
+    <button class="btn btn-default">{{ _("Go") }}</button>
 </form>

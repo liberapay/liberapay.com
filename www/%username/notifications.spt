@@ -1,7 +1,33 @@
+from liberapay.notifications.jsonml import jsonml
 from liberapay.utils import get_participant
+
 [---]
-request.allow('POST')
+
+request.allow('GET', 'POST')
+
 participant = get_participant(state, restrict=True)
-participant.remove_notification(request.body['remove'])
+
+if request.method == 'POST':
+    participant.remove_notification(request.body['remove'])
+
+notifs = participant.render_notifications(state)
+
 [---] application/json via json_dump
-{}
+notifs
+
+[---] text/html
+{% extends "templates/base.html" %}
+
+{% block content %}
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    {% for notif in notifs %}
+        <div class="alert alert-{{ notif.type }}">
+            {{ jsonml(notif.jsonml) }}
+            <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
+        </div>
+    {% else %}
+        <p>{{ _("No notifications to show.") }}</p>
+    {% endfor %}
+</form>
+{% endblock %}

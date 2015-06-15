@@ -1,90 +1,60 @@
 """Show information about a single participant. It might be you!
 """
-from collections import OrderedDict
 
-from liberapay.models import community
 from liberapay.utils import get_participant, markdown
-
-LONG_STATEMENT = 256
 
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
 tip_or_pledge = "tip"
-title = username = participant.username
+title = participant.username
 
-accounts = participant.get_accounts_elsewhere()
-
-statement, stmt_lang = participant.get_statement(request.accept_langs)
-long_statement = len(statement or '') > LONG_STATEMENT
-if user == participant:
-    pref_langs = set(request.accept_langs + participant.get_statement_langs())
-    select_langs = OrderedDict((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
-    select_langs.update([('', '---')])  # Separator
-    select_langs.update(locale.languages_2)
-    stmt_placeholder = _("You don't have a profile statement in this language yet.")
-    confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
-communities = community.get_list_for(website.db, participant.id)
-
-if participant.kind == 'individual':
-    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
-    PATRON = _("I'm here as a patron.")
-    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
-    GOAL_RAW = _("My goal is to receive {0} per week on Liberapay.")
+lang = request.qs.get('lang')
+if lang:
+    statement = participant.get_statement([lang])[0]
 else:
-    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
-    PATRON = _("We're here as a patron.")
-    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
-    GOAL_RAW = _("Our goal is to receive {0} per week on Liberapay.")
+    statement, lang = participant.get_statement(request.accept_langs)
 
-GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD', trailing_zeroes=False))
-GOAL_PARTS = GOAL_RAW.split("{0}")
-
-def with_others(obj):
-    others = obj.nmembers - 1
-    return ngettext("with {n} other", "with {n} others", others)
+langs = participant.get_statement_langs()
+langs = 'en fr de it es'.split()
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 
-{% block content %}
+{% block heading %}
 {% if user == participant %}
-    <div id="profile-edit">
-        {% include "templates/profile-edit.html" %}
-    </div>
-{% else %}
-    <div class="clearfix">
-        <div class="col0">
-            {% if statement %}
-            <h2>{{ _("Statement") }}</h2>
-            <div class="statement profile-statement">
-                {{ markdown.render(statement) }}
-            </div>
-            {% endif %}
-            <div class="goal">
-                <h2>{{ _('Funding Goal') }}</h2>
-                {% if participant.goal == None %}
-                {{ GRATEFUL }}
-                {% elif participant.goal == 0 %}
-                {{ PATRON }}
-                {% elif participant.goal < 0 %}
-                {{ PATRON_NO_GIFTS }}
-                {% else %}
-                {{ GOAL }}
-                {% endif %}
-            </div>
-
-            {% include "templates/team-listing.html" %}
-            {% include "templates/community-listing.html" %}
-            {% include "templates/connected-accounts.html" %}
-        </div>
-    </div>
-{% endif %}
-{% endblock %}
-
-{% block scripts %}
-{% if user == participant %}
-<script>$(document).ready(Liberapay.profile.init);</script>
+    <a href="edit" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
 {% endif %}
 {{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% if statement %}
+    <div class="col-md-6 clearfix">
+        <h2 id="statement">{{ _("Statement") }}
+        {% if len(langs) > 1 %}
+        <span class="dropdown-hover" style="display: inline-block; position: relative;">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                {{ locale.languages_2[lang] }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+            {% for l in langs %}
+                <li class="{{ 'active' if l == lang }}">
+                    <a href="?lang={{ l }}#statement">{{ locale.languages_2[l] }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </span>
+        {% endif %}
+        </h2>
+        <section class="profile-statement">
+            {{ markdown.render(statement) }}
+        </section>
+    </div>
+    {% endif %}
+    {% include "templates/connected-accounts.html" %}
+    {% include "templates/team-listing.html" %}
+    {% include "templates/community-listing.html" %}
+</div>
 {% endblock %}

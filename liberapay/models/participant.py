@@ -800,16 +800,6 @@ class Participant(Model, MixinTeam):
     def get_credit_card_error(self):
         return getattr(ExchangeRoute.from_network(self, 'balanced-cc'), 'error', None)
 
-    def get_cryptocoin_addresses(self):
-        routes = self.db.all("""
-            SELECT network, address
-              FROM current_exchange_routes r
-             WHERE participant = %s
-               AND network = 'bitcoin'
-               AND error <> 'invalidated'
-        """, (self.id,))
-        return {r.network: r.address for r in routes}
-
 
     # Random Junk
     # ===========
@@ -878,6 +868,16 @@ class Participant(Model, MixinTeam):
             END;
             $$ LANGUAGE plpgsql;
         """, locals())
+
+
+    def get_communities(self):
+        return self.db.all("""
+            SELECT c.*
+              FROM community_members cm
+              JOIN communities c ON c.slug = cm.slug
+             WHERE cm.is_member AND cm.participant = %s
+          ORDER BY c.nmembers ASC, c.slug
+        """, (self.id,))
 
 
     def change_username(self, suggested, cursor=None):
@@ -1584,9 +1584,6 @@ class Participant(Model, MixinTeam):
         for platform, account in accounts.items():
             fields = ['id', 'user_id', 'user_name']
             elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
-
-        # Key: cryptocoins
-        output['cryptocoins'] = self.get_cryptocoin_addresses()
 
         return output
 

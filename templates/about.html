@@ -1,15 +1,15 @@
 {% extends "templates/base.html" %}
-{% block sidebar %}
-    {% set current_page = request.path.raw.split('/')[2] %}
-    {% set nav_base = "/about" %}
-    {% set pages = [ ('/', _('About'))
-                   , ('/faq', _('FAQ'))
-                   , ('/payday', _('Payday'))
-                   , ('/teams', _('Teams'))
-                   , ('/stats', _('Stats'))
-                   , ('/terms', _('Terms'))
-                   , ('/contact', _('Contact'))
-                   , ('/security', _('Security'))
-                    ] %}
-    {% include "templates/nav.html" %}
+{% block subnav %}
+    {% set pages = [
+        ('/', _('About')),
+        ('/faq', _('FAQ')),
+        ('/payday', _('Payday')),
+        ('/teams', _('Teams')),
+        ('/stats', _('Stats')),
+        ('/terms', _('Terms')),
+        ('/contact', _('Contact')),
+        ('/security', _('Security'))
+    ] %}
+    {% from "templates/nav.html" import nav with context %}
+    <ul class="nav nav-tabs">{{ nav(pages, base='/about') }}</ul>
 {% endblock %}

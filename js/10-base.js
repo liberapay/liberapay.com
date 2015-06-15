@@ -25,6 +25,7 @@ Liberapay.init = function() {
     });
 
     Liberapay.forms.jsSubmit();
+    Liberapay.forms.communityChooser();
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

@@ -65,21 +65,9 @@ class TestPages(Harness):
 
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')
-        expected = "<a href='/alice/'>"
+        expected = "<a href='/alice/edit'>"
         actual = self.client.GET('/', auth_as=alice).body
         assert expected in actual
-
-    def test_profile(self):
-        self.make_participant('cheese')
-        expected = "I&#39;m grateful for gifts"
-        actual = self.client.GET('/cheese/').body.decode('utf8') # deal with cent sign
-        assert expected in actual
-
-    def test_username_is_in_button(self):
-        self.make_participant('alice')
-        bob = self.make_participant('bob')
-        body = self.client.GET('/alice/', auth_as=bob).body
-        assert '<span class="zero">Give to alice</span>' in body
 
     def test_username_is_in_unauth_giving_cta(self):
         self.make_participant('alice')
@@ -113,13 +101,6 @@ class TestPages(Harness):
         response = self.client.PxST('/sign-out.html', auth_as=alice,
                                     HTTP_X_REQUESTED_WITH=b'XMLHttpRequest')
         assert response.code == 200
-
-    def test_settings_page_available_balance(self):
-        alice = self.make_participant('alice')
-        self.db.run("UPDATE participants SET balance = 123.00 WHERE username = 'alice'")
-        actual = self.client.GET("/alice/settings/", auth_as=alice).body
-        expected = "123"
-        assert expected in actual
 
     def test_giving_page(self):
         alice = self.make_participant('alice')
