@@ -20,11 +20,13 @@ class TestTipJson(Harness):
         response1 = self.client.POST( "/test_tippee1/tip.json"
                                     , {'amount': "1.00"}
                                     , auth_as=test_tipper
+                                    , HTTP_X_REQUESTED_WITH=b'XMLHttpRequest'
                                      )
 
         response2 = self.client.POST( "/test_tippee2/tip.json"
                                     , {'amount': "3.00"}
                                     , auth_as=test_tipper
+                                    , HTTP_X_REQUESTED_WITH=b'XMLHttpRequest'
                                      )
 
         # Confirm we get back the right amounts.
@@ -73,6 +75,7 @@ class TestTipJson(Harness):
         response = self.client.POST( "/%s/tip.json" % alice.participant.username
                                    , {'amount': "10.00"}
                                    , auth_as=bob
+                                   , HTTP_X_REQUESTED_WITH=b'XMLHttpRequest'
                                     )
         data = json.loads(response.body)
         assert response.code == 200
