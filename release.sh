@@ -53,13 +53,8 @@ heroku config -sa liberapay | ./env/bin/honcho run -e /dev/stdin \
 
 # Sync the translations
 echo "Syncing translations..."
-if [ ! -e .transifexrc -a ! -e ~/.transifexrc ]; then
-    heroku config -sa liberapay | ./env/bin/honcho run -e /dev/stdin make transifexrc
-fi
-make i18n_upload
-make i18n_download
-git add i18n
-if git commit --dry-run &>/dev/null; then git commit -m "update i18n files"; fi
+make i18n_pull
+make i18n_update
 
 
 # Check for a branch.sql
