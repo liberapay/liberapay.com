@@ -10,28 +10,28 @@ def withdrawal_failed(_, user):
     )
 
 
-def withdrawal_pending(_, user, exchange, format_currency):
+def withdrawal_pending(_, user, exchange, Money):
     return ('success',
         ['span', _("We have initiated a transfer of {0} from your Liberapay wallet to your bank account.",
-                   format_currency(exchange.amount - exchange.fee, 'USD'))
+                   Money(exchange.amount - exchange.fee, 'USD'))
         ]
     )
 
 
-def charge_failed(_, user, exchange, format_currency):
+def charge_failed(_, user, exchange, Money):
     href = '/%s/routes/credit-card.html' % user.username
     return ('danger',
         ['a', {'href': href},
               _("We tried to charge your credit card {0}, but it failed!",
-                format_currency(exchange.amount + exchange.fee, 'USD'))
+                Money(exchange.amount + exchange.fee, 'USD'))
         ]
     )
 
 
-def charge_succeeded(_, user, exchange, format_currency):
+def charge_succeeded(_, user, exchange, Money):
     return ('success',
         ['span', _("We charged your credit card {0} to fund your ongoing donations.",
-                   format_currency(exchange.amount + exchange.fee, 'USD'))
+                   Money(exchange.amount + exchange.fee, 'USD'))
         ]
     )
 

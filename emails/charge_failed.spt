@@ -2,7 +2,7 @@
 
 [---] text/html
 {{ _("We tried to charge your credit card {0} today, to fund your ongoing support for {1}, but the charge failed with this message:",
-     format_currency(exchange.amount + exchange.fee, 'USD'),
+     Money(exchange.amount + exchange.fee, 'USD'),
      ('<b><a href="{0}">{1}</a></b>'|safe).format(
         participant.profile_url+'giving/',
         top_tippee if ntippees == 1 else ngettext('{0} and {n} other',
@@ -17,7 +17,7 @@
 
 [---] text/plain
 {{ _("We tried to charge your credit card {0} today, to fund your ongoing support for {1}, but the charge failed with this message:",
-     format_currency(exchange.amount + exchange.fee, 'USD'),
+     Money(exchange.amount + exchange.fee, 'USD'),
      top_tippee if ntippees == 1 else ngettext('{0} and {n} other',
                                                '{0} and {n} others',
                                                ntippees - 1,

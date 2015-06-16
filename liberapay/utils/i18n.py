@@ -1,7 +1,9 @@
 # encoding: utf8
 from __future__ import print_function, unicode_literals
 
-from datetime import date, datetime
+from collections import namedtuple, OrderedDict
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 from io import BytesIO
 import re
 from unicodedata import combining, normalize
@@ -16,8 +18,18 @@ from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
     get_decimal_symbol, parse_decimal
 )
-from collections import OrderedDict
 import jinja2.ext
+
+
+Money = namedtuple('Money', 'amount currency')
+
+
+class datedelta(timedelta):
+
+    def __new__(cls, *a, **kw):
+        if len(a) == 1 and not kw and isinstance(a[0], timedelta):
+            return timedelta.__new__(cls, a[0].days, a[0].seconds, a[0].microseconds)
+        return timedelta.__new__(cls, *a, **kw)
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
@@ -114,17 +126,40 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
+def i_format(loc, s, *a, **kw):
+    if a:
+        a = list(a)
+    for c, f in [(a, enumerate), (kw, dict.items)]:
+        for k, o in f(c):
+            if isinstance(o, Decimal):
+                c[k] = format_decimal(o, locale=loc)
+            elif isinstance(o, int):
+                c[k] = format_number(o, locale=loc)
+            elif isinstance(o, Money):
+                c[k] = format_money(*o, locale=loc)
+            elif isinstance(o, datedelta):
+                c[k] = format_timedelta(o, locale=loc, granularity='day')
+            elif isinstance(o, timedelta):
+                c[k] = format_timedelta(o, locale=loc)
+    return s.format(*a, **kw)
+
+
 def get_text(context, loc, s, *a, **kw):
     escape = context['escape']
     msg = loc.catalog.get(s)
+    s2 = None
     if msg:
-        s = msg.string or s
-        if isinstance(s, tuple):
-            s = s[0]
+        s2 = msg.string
+        if isinstance(s2, tuple):
+            s2 = s2[0]
+    if s2:
+        s = s2
+    else:
+        loc = LOCALE_EN
     if a or kw:
         if isinstance(s, bytes):
             s = s.decode('ascii')
-        return escape(s).format(*a, **kw)
+        return i_format(loc, escape(s), *a, **kw)
     return escape(s)
 
 
@@ -139,18 +174,18 @@ def n_get_text(tell_sentry, state, loc, s, p, n, *a, **kw):
         except Exception as e:
             tell_sentry(e, state)
     if not s2:
-        loc = 'en'
+        loc = LOCALE_EN
         s2 = s if n == 1 else p
     kw['n'] = format_number(n, locale=loc) or n
     if isinstance(s2, bytes):
         s2 = s2.decode('ascii')
-    return escape(s2).format(*a, **kw)
+    return i_format(loc, escape(s2), *a, **kw)
 
 
-def to_age(dt, loc, **kw):
+def to_age(dt):
     if isinstance(dt, datetime):
-        return format_timedelta(dt - utcnow(), locale=loc, **kw)
-    return format_timedelta(dt - date.today(), locale=loc, granularity='day', **kw)
+        return dt - utcnow()
+    return datedelta(dt - date.today())
 
 
 def regularize_locale(loc):
@@ -198,7 +233,7 @@ def match_lang(languages):
     return LOCALE_EN
 
 
-def format_currency_with_options(number, currency, format=None, locale='en', trailing_zeroes=True):
+def format_money(number, currency, format=None, locale='en', trailing_zeroes=True):
     s = format_currency(number, currency, format, locale=locale)
     if not trailing_zeroes:
         s = s.replace(get_decimal_symbol(locale)+'00', '')
@@ -218,17 +253,18 @@ def add_helpers_to_context(tell_sentry, context, loc):
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
     context['_'] = lambda s, *a, **kw: get_text(context, loc, s, *a, **kw)
     context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, context, loc, *a, **kw)
+    context['Money'] = Money
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
-    context['format_currency'] = lambda *a, **kw: format_currency_with_options(*a, locale=loc, **kw)
+    context['format_currency'] = lambda *a, **kw: format_money(*a, locale=loc, **kw)
     context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
     context['parse_decimal'] = lambda *a: parse_decimal(*a, locale=loc)
-    def _to_age(delta, **kw):
-        try:
-            return to_age(delta, loc, **kw)
-        except:
-            return to_age(delta, 'en', **kw)
-    context['to_age'] = _to_age
+    context['to_age'] = to_age
+    def to_age_str(o, **kw):
+        if not isinstance(o, datetime):
+            kw.setdefault('granularity', 'day')
+        return format_timedelta(to_age(o), locale=loc, **kw)
+    context['to_age_str'] = to_age_str
 
 
 def extract_spt(fileobj, *args, **kw):

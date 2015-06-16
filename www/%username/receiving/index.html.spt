@@ -10,7 +10,7 @@ subhead = _("Receiving")
 {% extends "templates/settings.html" %}
 {% block content %}
 
-{% set receiving = format_currency(participant.receiving, "USD") %}
+{% set receiving = Money(participant.receiving, "USD") %}
 {% if participant == user %}
 <p>{{ _("You receive {0} per week", receiving) }}</p>
 {% else %}

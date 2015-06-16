@@ -40,7 +40,7 @@ top_communities = query_cache.all("""
         <div class="panel-body">
             {% if not user.ANON %}
             <p><a href="/{{ user.username }}/giving/">{{
-                _("You give {0} per week.", format_currency(user.giving, 'USD'))
+                _("You give {0} per week.", Money(user.giving, 'USD'))
             }}</a></p>
             {% endif %}
 
@@ -85,7 +85,7 @@ top_communities = query_cache.all("""
         {% else %}
 
             <p><a href="/{{ user.username }}/receiving/">{{
-                _("You receive {0} per week.", format_currency(user.receiving, 'USD'))
+                _("You receive {0} per week.", Money(user.receiving, 'USD'))
             }}</a></p>
 
             {% if not user.accepts_tips %}

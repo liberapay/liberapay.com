@@ -16,10 +16,10 @@
                 <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
 
                 {% if participant.join_time %}
-                <p>{{ _('Joined') }} {{ to_age(participant.join_time, add_direction=True) }}.</p>
+                <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 {% endif %}
                 {% if participant.status == 'closed' %}
-                <p>Closed {{ to_age(participant.closed_time, add_direction=True) }}.</p>
+                <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
                 {% endif %}
 
                 {% if user.is_admin %}

@@ -130,16 +130,16 @@ def out():
             npeople, pcc, ncc) }}</p>
 
     <p>{{ _("{0} is escrowed within Liberapay. {1} people have connected a bank account for withdrawals.",
-            format_currency(escrow, 'USD'), nach) }}</p>
+            Money(escrow, 'USD'), nach) }}</p>
 
     {% if last_payday %}
-    <p>{{ _("{0} changed hands {1}.", format_currency(transfer_volume, 'USD'),
+    <p>{{ _("{0} changed hands {1}.", Money(transfer_volume, 'USD'),
             to_age(last_payday.ts_start)) }}</p>
     {% endif %}
 
     <p>{{ ngettext("On average, people who give, give {0} each to one other user",
                    "On average, people who give, give {0} each to {n} other users",
-                   average_tippees, format_currency(average_tip, 'USD')) }}</p>
+                   average_tippees, Money(average_tip, 'USD')) }}</p>
 
     <div class="two-column">
         <div class="chart-wrapper">

@@ -40,25 +40,20 @@ else:
     total_receiving = tipper.receiving
 
     out["amount"] = str(amount)
-    out["amount_l"] = format_currency(amount, 'USD')
     if tippee.username == 'Liberapay':
         out["msg"] = _("Thank you so much for supporting Liberapay! :D")
     else:
-        out["msg"] = _("Tip changed to {0} per week!", out["amount_l"])
+        out["msg"] = _("Tip changed to {0} per week!", Money(amount, 'USD'))
     out["npatrons"] = tippee.npatrons
     out["tippee_id"] = tippee.id
     out["total_giving"] = str(total_giving)
-    out["total_giving_l"] = format_currency(total_giving, 'USD')
     out["total_receiving"] = str(total_receiving)
-    out["total_receiving_l"] = format_currency(total_receiving, 'USD')
 
     if not tippee.hide_receiving:
         total_receiving_tippee = tippee.receiving
         out["total_receiving_tippee"] = str(total_receiving_tippee)
-        out["total_receiving_tippee_l"] = format_currency(total_receiving_tippee, 'USD')
     else:
         out["total_receiving_tippee"] = None
-        out["total_receiving_tippee_l"] = '[' + _("hidden") + ']'
 
     if 'ctime' in out:
         out["ctime"] = str(out['ctime'])
