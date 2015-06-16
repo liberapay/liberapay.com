@@ -68,18 +68,25 @@ pytest-re: env
 	PYTHONPATH=. $(py_test) --lf ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
-i18n: env
-	$(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
-
-i18n_upload: i18n
-	$(env_bin)/tx push -s
-	rm i18n/*.pot
-
-i18n_download: env
-	$(env_bin)/tx pull -a -f --mode=reviewed --minimum-perc=50
+i18n_extract: env
+	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
+	@for f in i18n/*/*.po; do \
+		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
+	done
+	rm i18n/core.pot
 	@for f in i18n/*/*.po; do \
 	    sed -E -e '/^"POT?-[^-]+-Date: /d' \
 	           -e '/^"Last-Translator: /d' \
 	           -e '/^#: /d' "$$f" >"$$f.new"; \
 	    mv "$$f.new" "$$f"; \
 	done
+
+i18n_update: i18n_extract
+	@git add i18n
+	@if git commit --dry-run &>/dev/null; then git commit -m "update translation catalogs"; fi
+
+i18n_pull: env
+	@git remote | grep weblate >/dev/null || git remote add weblate git://git.weblate.org/liberapay.com.git
+	git checkout master
+	git fetch weblate
+	git merge -m "merge translations" weblate/master
