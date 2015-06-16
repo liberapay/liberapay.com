@@ -80,7 +80,7 @@ top_communities = query_cache.all("""
 
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
-            <a class="btn btn-primary" href="/sign-in">{{ _("Join us") }}</a>
+            <a class="btn btn-success" href="/sign-in">{{ _("Join us") }}</a>
 
         {% else %}
 
