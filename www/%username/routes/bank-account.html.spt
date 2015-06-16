@@ -38,7 +38,7 @@ title = _("Bank Account")
     <p>{{ _("When you receive money on Liberapay we'll automatically deposit it into your bank account.") }}
     {{ _("If you don't connect a bank account then your money will accumulate within Liberapay unless you regift it to others.") }}
     {{ _("Deposits are initiated every Thursday, but only if you have more than {0} in your balance.",
-         format_currency(MINIMUM_CREDIT, 'USD')) }}</p>
+         Money(MINIMUM_CREDIT, 'USD')) }}</p>
 
 {% endblock %}
 

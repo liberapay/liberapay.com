@@ -56,8 +56,8 @@ npledges = len(pledges)
         <tr>
             <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
             <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
-            <td class="ctime">{{ to_age(tip.ctime, add_direction=True) }}</td>
-            <td class="mtime">{{ to_age(tip.mtime, add_direction=True) }}</td>
+            <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
+            <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -93,8 +93,8 @@ npledges = len(pledges)
                     <a href="/on/{{ tip.platform }}/{{ tip.user_name }}/">{{ tip.user_name }}</a>
                 </td>
                 <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
-                <td class="ctime">{{ to_age(tip.ctime, add_direction=True) }}</td>
-                <td class="mtime">{{ to_age(tip.mtime, add_direction=True) }}</td>
+                <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
+                <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -118,8 +118,8 @@ npledges = len(pledges)
             {% for tip in cancelled_tips %}
             <tr>
                 <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
-                <td class="ctime">{{ to_age(tip.ctime, add_direction=True) }}</td>
-                <td class="mtime">{{ to_age(tip.mtime, add_direction=True) }}</td>
+                <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
+                <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             </tr>
             {% endfor %}
         </tbody>

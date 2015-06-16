@@ -46,7 +46,6 @@ else:
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("Our goal is to receive {0}")
 
-GOAL = GOAL_RAW.format(format_currency(participant.goal or 0, 'USD', trailing_zeroes=False))
 GOAL_PARTS = GOAL_RAW.split("{0}")
 
 edit = True

@@ -74,12 +74,11 @@ if request.method == 'POST':
             out['confirm'] = _("Are you sure you want to leave this team?")
         else:
             new_take = team.set_take_for(member, take, user)
-            new_take_str = format_currency(new_take, 'USD')
             if new_take < take:
                 msg = _("Your take is now {0} (you can't go higher this week).",
-                        new_take_str)
+                        Money(new_take, 'USD'))
             else:
-                msg = _("Your take is now {0}.", new_take_str)
+                msg = _("Your take is now {0}.", Money(new_take, 'USD'))
 
     else:
         # Only the team itself can add new members.
