@@ -27,6 +27,7 @@ Liberapay.forms.jsSubmit = function() {
             url: $form.attr('action'),
             type: 'POST',
             data: data,
+            dataType: 'json',
             success: Liberapay.forms.success($form, $inputs, button),
             error: [
                 function () { $inputs.prop('disabled', false); },
@@ -41,7 +42,7 @@ Liberapay.forms.jsSubmit = function() {
 Liberapay.forms.success = function($form, $inputs, button) { return function(data) {
     $inputs.prop('disabled', false).filter('[type=password]').val('');
     var on_success = $form.data('on-success');
-    if (on_success.substr(0, 8) == 'fadeOut:') {
+    if (on_success && on_success.substr(0, 8) == 'fadeOut:') {
         var $e = $(button).parents(on_success.substr(8)).eq(0);
         return $e.fadeOut(null, $e.remove);
     }

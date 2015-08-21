@@ -302,3 +302,72 @@ table.friends > tbody > tr > td {
         }
     }
 }
+
+#credit-card input {
+    margin-bottom: 5px;
+}
+#card_number {
+    width: 15em;
+}
+#expiration_date {
+    width: 6em;
+}
+#cvv {
+    margin-left: 0.8em;
+    width: 5em;
+}
+
+label:not([for]) {
+    font-weight: normal;
+    vertical-align: top;
+    span:first-child {
+        font-weight: 700;
+    }
+}
+
+input.invalid {
+    box-shadow: rgb(255, 0, 0) 0 0 1.5px 1px;
+}
+input.invalid:focus {
+    box-shadow: rgba(255, 0, 0, 0.4) 0 0 2px 2px;
+}
+.invalid-msg {
+    $background: #eee;
+    $border: #aaa;
+    background: $background;
+    border: 1px solid $border;
+    border-radius: 5px;
+    display: none;
+    margin: 7px 0 0 -12px;
+    padding: 12px;
+    position: absolute;
+
+    &::after, &::before {
+        background: transparent;
+        border-style: solid outset solid solid;
+        border-color: transparent;
+        content: '';
+        height: 0;
+        left: 4px;
+        position: absolute;
+        top: -16px;
+        width: 0;
+    }
+    &::after {
+        border-width: 7px;
+        border-bottom-color: $background;
+        margin-left: 1px;
+        margin-top: 2px;
+    }
+    &::before {
+        border-width: 8px;
+        border-bottom-color: $border;
+    }
+}
+input.invalid:focus + .invalid-msg {
+    display: block;
+}
+
+.text-warning {
+    font-weight: bold;
+}

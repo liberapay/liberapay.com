@@ -29,14 +29,14 @@ def get_end_of_year_balance(db, participant, year, current_year):
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount > 0
-                     AND (status is null OR status = 'succeeded')
+                     AND status = 'succeeded'
                ) + (
                   SELECT COALESCE(sum(amount-fee), 0) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount < 0
-                     AND (status is null OR status <> 'failed')
+                     AND status <> 'failed'
                ) + (
                   SELECT COALESCE(sum(-amount), 0) AS a
                     FROM transfers

@@ -1,0 +1,60 @@
+
+from functools import reduce
+
+from aspen import Response
+from mangopaysdk.entities.bankaccount import BankAccount
+from mangopaysdk.types.address import Address
+from mangopaysdk.types.bankaccountdetailsiban import BankAccountDetailsIBAN
+from mangopaysdk.types.bankaccountdetailsus import BankAccountDetailsUS
+from mangopaysdk.types.bankaccountdetailsca import BankAccountDetailsCA
+from mangopaysdk.types.bankaccountdetailsgb import BankAccountDetailsGB
+from mangopaysdk.types.bankaccountdetailsother import BankAccountDetailsOTHER
+
+from liberapay.billing import mangoapi
+from liberapay.billing.exchanges import repr_exception, ResponseException
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
+
+[---]
+
+request.allow('POST')
+participant = get_participant(state, restrict=True)
+body = request.body
+
+ba = BankAccount()
+ba.OwnerName = body.pop('OwnerName')
+addr = Address()
+for key in list(body):
+    if not key.startswith('OwnerAddress.'):
+        continue
+    k = key[13:]
+    if not k[:1].isupper():
+        continue
+    setattr(addr, k, body.pop(key))
+ba.OwnerAddress = addr
+
+ba_type = body.pop('Type')
+if ba_type not in ('IBAN', 'US', 'CA', 'GB', 'OTHER'):
+    raise Response(400, "bad Type")
+
+ba_details = globals()['BankAccountDetails'+ba_type]()
+for k in body:
+    if not k[:1].isupper():
+        continue
+    v = body[k]
+    if k == 'AccountNumber':
+        v = v.replace(' ', '')
+    setattr(ba_details, k, v)
+ba.Details = ba_details
+
+try:
+    ba = mangoapi.users.CreateBankAccount(participant.mangopay_user_id, ba)
+except ResponseException as err:
+    raise Response(400, repr_exception(err))
+else:
+    ExchangeRoute.insert(participant, 'mango-ba', ba.Id)
+    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        response.redirect(request.line.uri)
+
+[---] application/json
+{}

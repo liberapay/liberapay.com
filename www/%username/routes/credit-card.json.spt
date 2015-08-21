@@ -1,0 +1,40 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from aspen import Response
+from mangopaysdk.entities.card import Card
+from mangopaysdk.entities.cardregistration import CardRegistration
+
+from liberapay.billing import mangoapi
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
+
+KEYS = ("AccessKey", "CardRegistrationURL", "Id", "PreregistrationData")
+
+[---]
+
+request.allow('POST')
+participant = get_participant(state, restrict=True)
+body = request.body
+
+out = None
+
+if 'Currency' in body:
+    cr = CardRegistration()
+    cr.UserId = participant.mangopay_user_id
+    cr.Currency = body['Currency']
+    cr.CardType = body['CardType']
+    cr = mangoapi.cardRegistrations.Create(cr)
+    out = {k[0].lower()+k[1:]: getattr(cr, k) for k in KEYS}
+
+else:
+    card = mangoapi.cards.Get(body['CardId'])
+    if card.UserId != participant.mangopay_user_id:
+        raise Response(403)
+    old_route = ExchangeRoute.from_network(participant, 'mango-cc')
+    one_off = body.get('keep') != 'true'
+    ExchangeRoute.insert(participant, 'mango-cc', card.Id, one_off=one_off)
+    if old_route:
+        old_route.invalidate()
+
+[---] application/json via json_dump
+out

@@ -14,7 +14,7 @@ CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
          , ( SELECT count(*)
                FROM exchange_routes r
               WHERE r.participant = p.id
-                AND network = 'balanced-cc'
+                AND network = 'mango-cc'
                 AND error = ''
            ) > 0 AS credit_card_ok
       FROM participants p

@@ -41,7 +41,8 @@ CREATE TABLE participants
 , balance               numeric(35,2)           NOT NULL DEFAULT 0.0
 , goal                  numeric(35,2)           DEFAULT NULL
 , is_suspicious         boolean                 DEFAULT NULL
-, balanced_customer_href  text                  DEFAULT NULL
+, mangopay_user_id      text                    DEFAULT NULL UNIQUE
+, mangopay_wallet_id    text                    DEFAULT NULL
 
 , hide_giving           boolean                 NOT NULL DEFAULT FALSE
 , hide_receiving        boolean                 NOT NULL DEFAULT FALSE
@@ -60,6 +61,7 @@ CREATE TABLE participants
 , CONSTRAINT balance_chk CHECK (NOT (status <> 'active' AND balance <> 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
+, CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))
 , CONSTRAINT password_chk CHECK ((status='stub' OR kind='group') = (password IS NULL))
  );
 
@@ -171,29 +173,20 @@ CREATE TABLE paydays
 , ts_end                timestamptz      UNIQUE NOT NULL DEFAULT '1970-01-01T00:00:00+00'::timestamptz
 , nparticipants         bigint           NOT NULL DEFAULT 0
 , ntippers              bigint           NOT NULL DEFAULT 0
+, ntippees              bigint           NOT NULL DEFAULT 0
 , ntips                 bigint           NOT NULL DEFAULT 0
 , ntransfers            bigint           NOT NULL DEFAULT 0
 , transfer_volume       numeric(35,2)    NOT NULL DEFAULT 0.00
-, ncc_failing           bigint           NOT NULL DEFAULT 0
-, ncc_missing           bigint           NOT NULL DEFAULT 0
-, ncharges              bigint           NOT NULL DEFAULT 0
-, charge_volume         numeric(35,2)    NOT NULL DEFAULT 0.00
-, charge_fees_volume    numeric(35,2)    NOT NULL DEFAULT 0.00
-, nachs                 bigint           NOT NULL DEFAULT 0
-, ach_volume            numeric(35,2)    NOT NULL DEFAULT 0.00
-, ach_fees_volume       numeric(35,2)    NOT NULL DEFAULT 0.00
-, nach_failing          bigint           NOT NULL DEFAULT 0
-, npachinko             bigint           NOT NULL DEFAULT 0
-, pachinko_volume       numeric(35,2)    NOT NULL DEFAULT 0.00
+, ntakes                bigint           NOT NULL DEFAULT 0
+, take_volume           numeric(35,2)    NOT NULL DEFAULT 0.00
 , nactive               bigint           NOT NULL DEFAULT 0
-, stage                 integer          DEFAULT 0
  );
 
 
 -- exchange routes -- how money moves in and out of Liberapay
 
 CREATE TYPE payment_net AS ENUM
-    ('balanced-ba', 'balanced-cc');
+    ('mango-ba', 'mango-cc');
 
 CREATE TABLE exchange_routes
 ( id            serial         PRIMARY KEY
@@ -201,7 +194,7 @@ CREATE TABLE exchange_routes
 , network       payment_net    NOT NULL
 , address       text           NOT NULL CHECK (address <> '')
 , error         text           NOT NULL
-, fee_cap       numeric(35,2)
+, one_off       boolean        NOT NULL
 , UNIQUE (participant, network, address)
 );
 
@@ -215,7 +208,7 @@ CREATE CAST (current_exchange_routes AS exchange_routes) WITH INOUT;
 
 -- exchanges -- when a participant moves cash between Liberapay and their bank
 
-CREATE TYPE exchange_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
+CREATE TYPE exchange_status AS ENUM ('pre', 'created', 'failed', 'succeeded');
 
 CREATE TABLE exchanges
 ( id                serial               PRIMARY KEY

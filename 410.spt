@@ -8,7 +8,7 @@ title = _('Closed') if 'username' in request.path else '410'
     <p>{{ _("The account owner has closed this account.") }}</p>
     {% if user.ANON %}
     <h2>{{ _("Are you the account owner?") }}</h2>
-    <p>{% include "templates/sign-in.html" %} {{ _("to reopen your account.") }}</p>
+    <p>{% include "templates/sign-in-link.html" %} {{ _("to reopen your account.") }}</p>
     {% endif %}
 {% else %}
     <p>{{ status_strings[410] }}</p>

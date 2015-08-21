@@ -484,16 +484,6 @@ class TestPayout(Harness):
         Payday.start().payout()
         log.assert_any_call('UNREVIEWED: alice')
 
-    @mock.patch('liberapay.billing.payday.ach_credit')
-    def test_payout_ach_error(self, ach_credit):
-        self.make_participant('alice', is_suspicious=False,
-                              balance=20, balanced_customer_href='foo',
-                              last_ach_result='')
-        ach_credit.return_value = 'some error'
-        Payday.start().payout()
-        payday = self.fetch_payday()
-        assert payday['nach_failing'] == 1
-
 
 class TestNotifyParticipants(EmailHarness):
 

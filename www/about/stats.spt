@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import division, print_function, unicode_literals
 
 [--------------------------------------------------------]
@@ -9,7 +10,7 @@ nach = db.one("""
     SELECT count(*)
       FROM current_exchange_routes r
       JOIN participants p ON p.id = r.participant
-     WHERE r.network = 'balanced-ba'
+     WHERE r.network = 'mango-ba'
        AND r.error = ''
        AND p.is_suspicious IS NOT true
 """)
@@ -18,7 +19,7 @@ ncc = db.one("""
     SELECT count(*)
       FROM current_exchange_routes r
       JOIN participants p ON p.id = r.participant
-     WHERE r.network = 'balanced-cc'
+     WHERE r.network = 'mango-cc'
        AND r.error = ''
        AND p.is_suspicious IS NOT true
 """)
@@ -84,13 +85,7 @@ last_payday = db.one("select * from paydays order by ts_end desc limit 1", back_
 if last_payday:
     nactive = last_payday['nactive']
     ngivers = last_payday['ntippers']
-    nreceivers = db.one("""
-        SELECT count(distinct tippee)
-          FROM transfers
-         WHERE timestamp > %(ts_start)s
-           AND timestamp < %(ts_end)s
-           AND context IN ('tip', 'take')
-    """, last_payday)
+    nreceivers = last_payday['ntippees']
     noverlap = ngivers + nreceivers - nactive
 else:
     nactive = ngivers = nreceivers = noverlap = 0
@@ -130,16 +125,16 @@ def out():
             npeople, pcc, ncc) }}</p>
 
     <p>{{ _("{0} is escrowed within Liberapay. {1} people have connected a bank account for withdrawals.",
-            Money(escrow, 'USD'), nach) }}</p>
+            Money(escrow, 'EUR'), nach) }}</p>
 
     {% if last_payday %}
-    <p>{{ _("{0} changed hands {1}.", Money(transfer_volume, 'USD'),
+    <p>{{ _("{0} changed hands {1}.", Money(transfer_volume, 'EUR'),
             to_age(last_payday.ts_start)) }}</p>
     {% endif %}
 
     <p>{{ ngettext("On average, people who give, give {0} each to one other user",
                    "On average, people who give, give {0} each to {n} other users",
-                   average_tippees, Money(average_tip, 'USD')) }}</p>
+                   average_tippees, Money(average_tip, 'EUR')) }}</p>
 
     <div class="two-column">
         <div class="chart-wrapper">
@@ -160,7 +155,7 @@ def out():
 
         <div class="chart-wrapper">
             <a name="cumulative-gifts"></a>
-            <h2>{{ _("Total Gifts ($)") }}</h2>
+            <h2>{{ _("Total Gifts (€)") }}</h2>
             <p class="note">{{ _("Money transferred within Liberapay (cumulative)") }}</p>
             <div class="chart" data-chart="total_gifts"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -168,7 +163,7 @@ def out():
 
         <div class="chart-wrapper">
             <a name="gifts"></a>
-            <h2>{{ _("Weekly Gifts ($)") }}</h2>
+            <h2>{{ _("Weekly Gifts (€)") }}</h2>
             <p class="note">{{ _("Money transferred within Liberapay (per week)") }}</p>
             <div class="chart" data-chart="weekly_gifts"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -176,7 +171,7 @@ def out():
 
         <div class="chart-wrapper newline">
             <a name="charges"></a>
-            <h2>{{ _("Charges ($)") }}</h2>
+            <h2>{{ _("Charges (€)") }}</h2>
             <p class="note">{{ _("Money moved into Liberapay via credit card") }}</p>
             <div class="chart" data-chart="charges"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -184,7 +179,7 @@ def out():
 
         <div class="chart-wrapper">
             <a name="withdrawals"></a>
-            <h2>{{ _("Withdrawals ($)") }}</h2>
+            <h2>{{ _("Withdrawals (€)") }}</h2>
             <p class="note">{{ _("Money withdrawn from Liberapay to a bank account") }}</p>
             <div class="chart" data-chart="withdrawals"></div>
             <div class="x-axis">{{ _("weeks") }}</div>

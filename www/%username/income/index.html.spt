@@ -15,7 +15,7 @@ subhead = _("Income")
 {% extends "templates/profile.html" %}
 {% block content %}
 
-{% set receiving = Money(participant.receiving, "USD") %}
+{% set receiving = Money(participant.receiving, "EUR") %}
 <p>{{ _("{0} receives {1} per week", participant.username, receiving) }}</p>
 
 <div class="row">

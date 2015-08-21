@@ -1,6 +1,9 @@
-from aspen.utils import utcnow
-from liberapay.utils import get_participant
 from datetime import timedelta
+
+from aspen.utils import utcnow
+
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -23,17 +26,37 @@ ntips = len(tips)
 pledges = [t for t in pledges if t.amount > 0]
 npledges = len(pledges)
 
+weekly = total - participant.receiving
+
 [-----------------------------------------------------------------------------]
 {% extends "templates/settings.html" %}
 
 {% from "templates/your-tip.html" import tip_form with context %}
 
 {% block content %}
+
+{% if weekly > 0 %}
+    {% set funded = participant.balance // weekly %}
+    <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
+        {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
+        {% if funded > 0 %}
+            {{ _("Your donations are funded for another {0} weeks.", funded) }}
+        {% else %}
+            {{ _("You need to transfer money to your wallet to fund your donations.") }}
+        {% endif %}
+        {% if funded < 52 %}
+            <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}" href="payin">{{ _("Add money") }}</a>
+        {% endif %}
+    </p>
+{% else %}
+    <p>{{ _("You give {0} per week.", Money(participant.giving, "USD")) }}</p>
+{% endif %}
+
 <div class="giving row">
 
 {% if ntips %}
 <div class="col-md-8">
-    <h3>{{ _("Tips") }} (N={{ ntips }})</h3>
+    <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
     <table class="table">
         <thead>
             <tr>

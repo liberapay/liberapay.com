@@ -40,7 +40,7 @@ top_communities = query_cache.all("""
         <div class="panel-body">
             {% if not user.ANON %}
             <p><a href="/{{ user.username }}/giving/">{{
-                _("You give {0} per week.", Money(user.giving, 'USD'))
+                _("You give {0} per week.", Money(user.giving, 'EUR'))
             }}</a></p>
             {% endif %}
 
@@ -85,7 +85,7 @@ top_communities = query_cache.all("""
         {% else %}
 
             <p><a href="/{{ user.username }}/receiving/">{{
-                _("You receive {0} per week.", Money(user.receiving, 'USD'))
+                _("You receive {0} per week.", Money(user.receiving, 'EUR'))
             }}</a></p>
 
             {% if not user.accepts_tips %}
@@ -93,6 +93,9 @@ top_communities = query_cache.all("""
                         "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</p>
             {% elif user.goal and user.receiving >= user.goal %}
                 <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", user.goal) }}</p>
+            {% elif not user.mangopay_user_id %}
+                <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
+                <p><a class="btn btn-primary" href="/{{ user.username }}/identity">{{ _("Fill identity form") }}</a></p>
             {% else %}
                 <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
                 <ol>

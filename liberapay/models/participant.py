@@ -9,8 +9,8 @@ from time import sleep
 from urllib import quote
 import uuid
 
+from aspen import Response
 from aspen.utils import utcnow
-import balanced
 from dependency_injection import resolve_dependencies
 from markupsafe import escape as htmlescape
 from postgres.orm import Model
@@ -18,6 +18,7 @@ from psycopg2 import IntegrityError
 from psycopg2.extras import Json
 
 import liberapay
+from liberapay.billing import mangoapi
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, EMAIL_RE, EMAIL_VERIFICATION_TIMEOUT, MAX_TIP,
     MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, SESSION, SESSION_REFRESH,
@@ -41,14 +42,13 @@ from liberapay.exceptions import (
     UsernameIsRestricted,
     UsernameTooLong,
 )
-
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.notifications import EVENTS, web as web_notifs
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    erase_cookie, is_card_expiring, set_cookie,
+    erase_cookie, set_cookie,
     emails, i18n,
 )
 
@@ -130,7 +130,7 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def _from_thing(cls, thing, value):
-        assert thing in ("id", "lower(username)")
+        assert thing in ("id", "lower(username)", "mangopay_user_id")
         return cls.db.one("""
             SELECT participants.*::participants
               FROM participants
@@ -344,8 +344,6 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as cursor:
             if disbursement_strategy == None:
                 pass  # No balance, supposedly. final_check will make sure.
-            elif disbursement_strategy == 'bank':
-                self.withdraw_balance_to_bank_account()
             elif disbursement_strategy == 'downstream':
                 # This in particular needs to come before clear_tips_giving.
                 self.distribute_balance_as_final_gift(cursor)
@@ -360,18 +358,6 @@ class Participant(Model, MixinTeam):
             self.clear_personal_information(cursor)
             self.final_check(cursor)
             self.update_status('closed', cursor)
-
-    class BankWithdrawalFailed(Exception): pass
-
-    def withdraw_balance_to_bank_account(self):
-        from liberapay.billing.exchanges import ach_credit
-        error = ach_credit( self.db
-                          , self
-                          , Decimal('0.00') # don't withhold anything
-                          , Decimal('0.00') # send it all
-                           )
-        if error:
-            raise self.BankWithdrawalFailed(error)
 
     class NoOneToGiveFinalGiftTo(Exception): pass
 
@@ -727,16 +713,6 @@ class Participant(Model, MixinTeam):
         self.set_attributes(pending_notifs=pending_notifs)
         return n_id
 
-    def credit_card_expiring(self):
-        route = ExchangeRoute.from_network(self, 'balanced-cc')
-        if not route:
-            return
-        card = balanced.Card.fetch(route.address)
-        year, month = card.expiration_year, card.expiration_month
-        if not (year and month):
-            return False
-        return is_card_expiring(int(year), int(month))
-
     def remove_notification(self, n_id):
         p_id = self.id
         r = self.db.one("""
@@ -795,10 +771,10 @@ class Participant(Model, MixinTeam):
     # ======================
 
     def get_bank_account_error(self):
-        return getattr(ExchangeRoute.from_network(self, 'balanced-ba'), 'error', None)
+        return getattr(ExchangeRoute.from_network(self, 'mango-ba'), 'error', None)
 
     def get_credit_card_error(self):
-        return getattr(ExchangeRoute.from_network(self, 'balanced-cc'), 'error', None)
+        return getattr(ExchangeRoute.from_network(self, 'mango-cc'), 'error', None)
 
 
     # Random Junk
@@ -1093,7 +1069,7 @@ class Participant(Model, MixinTeam):
             raise BadAmount(amount)
 
         if not tippee.accepts_tips and amount != 0:
-            raise UserDoesntAcceptTips
+            raise UserDoesntAcceptTips(tippee.username)
 
         # Insert tip
         NEW_TIP = """\
@@ -1333,26 +1309,12 @@ class Participant(Model, MixinTeam):
         return accounts_dict
 
 
-    def get_balanced_account(self):
-        """Fetch or create the balanced account for this participant.
+    def get_mangopay_account(self):
+        """Fetch the mangopay account for this participant.
         """
-        if not self.balanced_customer_href:
-            customer = balanced.Customer(meta={
-                'username': self.username,
-                'participant_id': self.id,
-            }).save()
-            r = self.db.one("""
-                UPDATE participants
-                   SET balanced_customer_href=%s
-                 WHERE id=%s
-                   AND balanced_customer_href IS NULL
-             RETURNING id
-            """, (customer.href, self.id))
-            if not r:
-                return self.get_balanced_account()
-        else:
-            customer = balanced.Customer.fetch(self.balanced_customer_href)
-        return customer
+        if not self.mangopay_user_id:
+            return
+        return mangoapi.users.Get(self.mangopay_user_id)
 
 
     def take_over(self, account, have_confirmation=False):
@@ -1613,3 +1575,30 @@ class NeedConfirmation(Exception):
     def __bool__(self):
         return any(self._all)
     __nonzero__ = __bool__
+
+
+def sign_in(request, state, redirect=True):
+    body = request.body
+    p = None
+    if body.get('log-in.username'):
+        p = Participant.authenticate('username', 'password',
+                                     body['log-in.username'], body['log-in.password'])
+        if p and p.status == 'closed':
+            p.update_status('active')
+    elif body.get('sign-in.username'):
+        kind = body['sign-in.kind']
+        if kind not in ('individual', 'organization'):
+            raise Response(400, 'bad kind')
+        username, password = body['sign-in.username'], body['sign-in.password']
+        with state['website'].db.get_cursor() as c:
+            p = Participant.make_active(username, kind, password, cursor=c)
+            p.add_email(body['sign-in.email'], cursor=c)
+        p.authenticated = True
+    if p:
+        response = state['response']
+        p.sign_in(response.headers.cookie)
+        if redirect:
+            response.redirect(request.qs.get('back_to', '/'))
+        state['user'] = p
+        return p
+    return state['user']

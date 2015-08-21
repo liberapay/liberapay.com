@@ -10,8 +10,6 @@ charts = website.db.all("""\
               WHERE ts_start <= p.ts_start
                    )::text          AS total_gifts
          , transfer_volume::text    AS weekly_gifts
-         , charge_volume::text      AS charges
-         , abs(ach_volume)::text    AS withdrawals
       FROM paydays p
   ORDER BY ts_start DESC
 

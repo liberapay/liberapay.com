@@ -27,7 +27,6 @@ def check_db(cursor):
     """
     _check_balances(cursor)
     _check_tips(cursor)
-    _check_paydays_volumes(cursor)
 
 
 def _check_tips(cursor):
@@ -64,7 +63,7 @@ def _check_balances(cursor):
                       select participant as id, sum(amount) as a
                         from exchanges
                        where amount > 0
-                         and (status is null or status = 'succeeded')
+                         and status = 'succeeded'
                     group by participant
 
                        union all
@@ -72,7 +71,7 @@ def _check_balances(cursor):
                       select participant as id, sum(amount-fee) as a
                         from exchanges
                        where amount < 0
-                         and (status is null or status <> 'failed')
+                         and status <> 'failed'
                     group by participant
 
                        union all
@@ -93,81 +92,3 @@ def _check_balances(cursor):
         where expected <> p.balance
     """)
     assert len(b) == 0, "conflicting balances: {}".format(b)
-
-
-def _check_paydays_volumes(cursor):
-    """
-    Recalculate *_volume fields in paydays table using exchanges table.
-    """
-    if cursor.one("select exists (select * from paydays where ts_end < ts_start) as running"):
-        # payday is running
-        return
-    charge_volume = cursor.all("""
-        select * from (
-            select id, ts_start, charge_volume, (
-                    select coalesce(sum(amount+fee), 0)
-                    from exchanges
-                    where timestamp > ts_start
-                    and timestamp < ts_end
-                    and amount > 0
-                    and recorder is null
-                    and (status is null or status <> 'failed')
-                ) as ref
-            from paydays
-            order by id
-        ) as foo
-        where charge_volume != ref
-    """)
-    assert len(charge_volume) == 0
-
-    charge_fees_volume = cursor.all("""
-        select * from (
-            select id, ts_start, charge_fees_volume, (
-                    select coalesce(sum(fee), 0)
-                    from exchanges
-                    where timestamp > ts_start
-                    and timestamp < ts_end
-                    and amount > 0
-                    and recorder is null
-                    and (status is null or status <> 'failed')
-                ) as ref
-            from paydays
-            order by id
-        ) as foo
-        where charge_fees_volume != ref
-    """)
-    assert len(charge_fees_volume) == 0
-
-    ach_volume = cursor.all("""
-        select * from (
-            select id, ts_start, ach_volume, (
-                    select coalesce(sum(amount), 0)
-                    from exchanges
-                    where timestamp > ts_start
-                    and timestamp < ts_end
-                    and amount < 0
-                    and recorder is null
-                ) as ref
-            from paydays
-            order by id
-        ) as foo
-        where ach_volume != ref
-    """)
-    assert len(ach_volume) == 0
-
-    ach_fees_volume = cursor.all("""
-        select * from (
-            select id, ts_start, ach_fees_volume, (
-                    select coalesce(sum(fee), 0)
-                    from exchanges
-                    where timestamp > ts_start
-                    and timestamp < ts_end
-                    and amount < 0
-                    and recorder is null
-                ) as ref
-            from paydays
-            order by id
-        ) as foo
-        where ach_fees_volume != ref
-    """)
-    assert len(ach_fees_volume) == 0

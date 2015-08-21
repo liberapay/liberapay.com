@@ -1,0 +1,75 @@
+"""Get or change the authenticated user's tip to this person.
+"""
+from decimal import InvalidOperation
+
+from aspen import Response
+from babel.numbers import NumberFormatError
+from liberapay.models.participant import sign_in
+from liberapay.utils import get_participant
+
+[-----------------------------------------------------------------------------]
+
+if user.ANON:
+    if request.method == 'POST':
+        user = sign_in(request, state, redirect=False)
+    if user.ANON:
+        raise Response(403, _("Please sign in first"))
+
+out = {}
+
+# Get tipper and tippee.
+# ======================
+
+tipper = user
+tippee = get_participant(state, restrict=False, redirect_stub=False)
+
+
+# Get and maybe set amount.
+# =========================
+
+if request.method == 'POST':
+    try:
+        out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
+    except (InvalidOperation, ValueError, NumberFormatError):
+        raise Response(400, "bad amount")
+    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        if not out['is_funded']:
+            response.redirect('/' + tipper.username + '/giving/payin')
+        response.redirect(request.body.get('back_to') or '..')
+else:
+    out = tipper.get_tip_to(tippee)
+
+amount = out['amount']
+total_giving = tipper.giving
+total_receiving = tipper.receiving
+
+out["amount"] = str(amount)
+if tippee.username == 'Liberapay' and amount > 0:
+    out["msg"] = _("Thank you so much for supporting Liberapay! :D")
+elif request.method == 'POST':
+    out["msg"] = _("Tip changed to {0} per week!", Money(amount, 'EUR'))
+out["npatrons"] = tippee.npatrons
+out["tippee_id"] = tippee.id
+out["total_giving"] = str(total_giving)
+out["total_receiving"] = str(total_receiving)
+
+if not tippee.hide_receiving:
+    total_receiving_tippee = tippee.receiving
+    out["total_receiving_tippee"] = str(total_receiving_tippee)
+else:
+    out["total_receiving_tippee"] = None
+
+if 'ctime' in out:
+    out["ctime"] = str(out['ctime'])
+    out["mtime"] = str(out['mtime'])
+else:
+    out["ctime"] = out["mtime"] = None
+
+[---] text/html
+{% extends "templates/base.html" %}
+{% block content %}
+{% include "templates/sign-in-form.html" %}
+{% endblock %}
+
+[---] application/json via json_dump
+out

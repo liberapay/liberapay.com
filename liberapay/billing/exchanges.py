@@ -1,159 +1,135 @@
 """Functions for moving money between Liberapay and the outside world.
 """
-from __future__ import unicode_literals
+from __future__ import division, unicode_literals
 
 from decimal import Decimal, ROUND_UP
 
-import balanced
-
-from aspen import log
+from aspen import Response
 from aspen.utils import typecheck
-from liberapay.exceptions import NegativeBalance, NotWhitelisted
+from mangopaysdk.entities.payin import PayIn
+from mangopaysdk.entities.payout import PayOut
+from mangopaysdk.entities.wallet import Wallet
+from mangopaysdk.types.exceptions.responseexception import ResponseException
+from mangopaysdk.types.money import Money
+
+from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
+from liberapay.exceptions import NegativeBalance, NoMoney, TransactionFeeTooHigh, UserIsSuspicious
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
 
 
-BALANCED_CLASSES = {
-    "bank_accounts": balanced.BankAccount,
-    "cards": balanced.Card,
-}
+MINIMUM_CHARGE = Decimal("10.00")
 
-BALANCED_LINKS = {
-    "bank_accounts": {
-        "bank_accounts.bank_account_verification": "/verifications/{bank_accounts.bank_account_verification}",
-        "bank_accounts.bank_account_verifications": "/bank_accounts/{bank_accounts.id}/verifications",
-        "bank_accounts.credits": "/bank_accounts/{bank_accounts.id}/credits",
-        "bank_accounts.customer": "/customers/{bank_accounts.customer}",
-        "bank_accounts.debits": "/bank_accounts/{bank_accounts.id}/debits",
-        "bank_accounts.settlements": "/bank_accounts/{bank_accounts.id}/settlements"
-    },
-    "cards": {
-        "cards.card_holds": "/cards/{cards.id}/card_holds",
-        "cards.customer": "/customers/{cards.customer}",
-        "cards.debits": "/cards/{cards.id}/debits",
-        "cards.disputes": "/cards/{cards.id}/disputes"
-    }
-}
+# https://www.mangopay.com/pricing/
+FEE_CHARGE = (Decimal("0.18"), Decimal("0.018"))  # 0.18 euros + 1.8%
+FEE_CREDIT = 0
+FEE_CREDIT_OUTSIDE_SEPA = Decimal("2.5")
 
-def thing_from_href(things, href):
-    """This is a temporary hack, we'll get rid of it when we migrate to Stripe.
-    """
-    id = href.rsplit('/', 1)[1]
-    d = {'href': href, 'id': id, 'links': {}, 'meta': {}}
-    C = BALANCED_CLASSES[things]
-    return C(**{things: [d], 'links': BALANCED_LINKS[things]})
-
-
-# Balanced has a $0.50 minimum. We go even higher to avoid onerous
-# per-transaction fees. See:
-# https://github.com/gratipay/gratipay.com/issues/167
-
-MINIMUM_CHARGE = Decimal("9.41")
-MINIMUM_CREDIT = Decimal("10.00")
-
-FEE_CHARGE = ( Decimal("0.30")   # $0.30
-             , Decimal("0.029")  #  2.9%
-              )
-FEE_CREDIT = Decimal("0.00")    # Balanced doesn't actually charge us for this,
-                                # because we were in the door early enough.
+SEPA_ZONE = set("""
+    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
+    MC MT NL NO PL PT RO SE SI SK
+""".split())
 
 
 def upcharge(amount):
     """Given an amount, return a higher amount and the difference.
     """
     typecheck(amount, Decimal)
+
+    if amount < MINIMUM_CHARGE:
+        amount = MINIMUM_CHARGE
+
+    # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
+    # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
     charge_amount = (amount + FEE_CHARGE[0]) / (1 - FEE_CHARGE[1])
     charge_amount = charge_amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
-    return charge_amount, charge_amount - amount
+    fee = charge_amount - amount
 
-assert upcharge(MINIMUM_CHARGE) == (Decimal('10.00'), Decimal('0.59'))
+    return charge_amount, fee
+
+assert upcharge(MINIMUM_CHARGE) == (Decimal('10.37'), Decimal('0.37')), upcharge(MINIMUM_CHARGE)
 
 
-def skim_credit(amount):
+def skim_credit(amount, ba):
     """Given an amount, return a lower amount and the difference.
+
+    The returned amount can be negative, look out for that.
     """
     typecheck(amount, Decimal)
-    return amount - FEE_CREDIT, FEE_CREDIT
+    if ba.Type == 'IBAN':
+        country = ba.Details.IBAN[:2].upper()
+    elif ba.Type in ('US', 'GB', 'CA'):
+        country = ba.Type
+    else:
+        assert ba.Type == 'OTHER', ba.Type
+        country = ba.Details.Country.upper()
+    if country in SEPA_ZONE:
+        fee = FEE_CREDIT
+    else:
+        fee = FEE_CREDIT_OUTSIDE_SEPA
+    return amount - fee, fee
+
+
+def repr_error(o):
+    r = o.ResultCode
+    if r == '000000':
+        return
+    msg = getattr(o, 'ResultMessage', None)
+    if msg:
+        r += ': ' + msg
+    return r
 
 
 def repr_exception(e):
-    if isinstance(e, balanced.exc.HTTPError):
-        return '%s %s, %s' % (e.status_code, e.status, e.description)
+    if isinstance(e, ResponseException):
+        return '%s %s' % (e.Code, e.Message)
     else:
         return repr(e)
 
 
-def ach_credit(db, participant, withhold, minimum_credit=MINIMUM_CREDIT):
-
-    # Compute the amount to credit them.
-    # ==================================
-    # Leave money in the wallet to cover their obligations next week (as these
-    # currently stand).
-
-    balance = participant.balance
-    assert balance is not None, balance # sanity check
-    amount = balance - withhold
-
-    # Do some last-minute checks.
-    # ===========================
-
-    if amount <= 0:
-        return      # Participant not owed anything.
-
-    if amount < minimum_credit:
-        also_log = ""
-        if withhold > 0:
-            also_log = " ($%s balance - $%s in obligations)"
-            also_log %= (balance, withhold)
-        log("Minimum payout is $%s. %s is only due $%s%s."
-           % (minimum_credit, participant.username, amount, also_log))
-        return      # Participant owed too little.
-
-    if not participant.is_whitelisted:
-        raise NotWhitelisted      # Participant not trusted.
-
-    route = ExchangeRoute.from_network(participant, 'balanced-ba')
-    if not route:
-        return 'No bank account'
+def test_hook():
+    return
 
 
-    # Do final calculations.
-    # ======================
+def payout(db, participant, amount):
+    if participant.is_suspicious:
+        raise UserIsSuspicious
 
-    credit_amount, fee = skim_credit(amount)
-    cents = credit_amount * 100
+    route = ExchangeRoute.from_network(participant, 'mango-ba')
+    assert route
+    ba = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
 
-    if withhold > 0:
-        also_log = "$%s balance - $%s in obligations"
-        also_log %= (balance, withhold)
-    else:
-        also_log = "$%s" % amount
-    msg = "Crediting %s %d cents (%s - $%s fee = $%s) on Balanced ... "
-    msg %= (participant.username, cents, also_log, fee, credit_amount)
+    # Do final calculations
+    credit_amount, fee = skim_credit(amount, ba)
+    if credit_amount <= 0:
+        raise NoMoney
+    if fee / credit_amount > 0.1:
+        raise TransactionFeeTooHigh
 
-
-    # Try to dance with Balanced.
-    # ===========================
-
+    # Try to dance with MangoPay
     e_id = record_exchange(db, route, -credit_amount, fee, participant, 'pre')
-    meta = dict(exchange_id=e_id, participant_id=participant.id)
+    payout = PayOut()
+    payout.AuthorId = participant.mangopay_user_id
+    payout.DebitedFunds = Money(int(credit_amount * 100), 'EUR')
+    payout.DebitedWalletId = participant.mangopay_wallet_id
+    payout.Fees = Money(int(fee * 100), 'EUR')
+    payout.MeanOfPaymentDetails = PayOutPaymentDetailsBankWire(
+        BankAccountId=route.address,
+        BankWireRef=str(e_id),
+    )
+    payout.Tag = str(e_id)
     try:
-        ba = thing_from_href('bank_accounts', route.address)
-        ba.credit(amount=cents, description=participant.username, meta=meta)
-        record_exchange_result(db, e_id, 'pending', None, participant)
-        log(msg + "succeeded.")
-        error = ""
+        test_hook()
+        mangoapi.payOuts.Create(payout)
+        return record_exchange_result(db, e_id, 'created', None, participant)
     except Exception as e:
         error = repr_exception(e)
-        record_exchange_result(db, e_id, 'failed', error, participant)
-        log(msg + "failed: %s" % error)
-
-    return error
+        return record_exchange_result(db, e_id, 'failed', error, participant)
 
 
-def create_card_hold(db, participant, amount):
-    """Create a hold on the participant's credit card.
+def charge(db, participant, amount, return_url):
+    """Charge the participant's credit card.
 
     Amount should be the nominal amount. We'll compute fees below this function
     and add it to amount to end up with charge_amount.
@@ -161,109 +137,50 @@ def create_card_hold(db, participant, amount):
     """
     typecheck(amount, Decimal)
 
-    username = participant.username
+    if participant.is_suspicious:
+        raise UserIsSuspicious
 
+    route = ExchangeRoute.from_network(participant, 'mango-cc')
+    assert route
 
-    # Perform some last-minute checks.
-    # ================================
+    charge_amount, fee = upcharge(amount)
+    amount = charge_amount - fee
 
-    if participant.is_suspicious is not False:
-        raise NotWhitelisted      # Participant not trusted.
-
-    route = ExchangeRoute.from_network(participant, 'balanced-cc')
-    if not route:
-        return None, 'No credit card'
-
-
-    # Go to Balanced.
-    # ===============
-
-    cents, amount_str, charge_amount, fee = _prep_hit(amount)
-    msg = "Holding " + amount_str + " on Balanced for " + username + " ... "
-
-    hold = None
-    try:
-        card = thing_from_href('cards', route.address)
-        hold = card.hold( amount=cents
-                        , description=username
-                        , meta=dict(participant_id=participant.id, state='new')
-                         )
-        log(msg + "succeeded.")
-        error = ""
-    except Exception as e:
-        error = repr_exception(e)
-        log(msg + "failed: %s" % error)
-        record_exchange(db, route, amount, fee, participant, 'failed', error)
-
-    return hold, error
-
-
-def capture_card_hold(db, participant, amount, hold):
-    """Capture the previously created hold on the participant's credit card.
-    """
-    typecheck( hold, balanced.CardHold
-             , amount, Decimal
-              )
-
-    username = participant.username
-    assert participant.id == int(hold.meta['participant_id'])
-
-    route = ExchangeRoute.from_address(participant, 'balanced-cc', hold.card_href)
-    assert isinstance(route, ExchangeRoute)
-
-    cents, amount_str, charge_amount, fee = _prep_hit(amount)
-    amount = charge_amount - fee  # account for possible rounding
     e_id = record_exchange(db, route, amount, fee, participant, 'pre')
-
-    meta = dict(participant_id=participant.id, exchange_id=e_id)
+    payin = PayIn()
+    payin.AuthorId = participant.mangopay_user_id
+    if not participant.mangopay_wallet_id:
+        w = Wallet()
+        w.Owners.append(participant.mangopay_user_id)
+        w.Description = str(participant.id)
+        w.Currency = 'EUR'
+        w = mangoapi.wallets.Create(w)
+        db.run("""
+            UPDATE participants
+               SET mangopay_wallet_id = %s
+             WHERE id = %s
+        """, (w.Id, participant.id))
+        participant.set_attributes(mangopay_wallet_id=w.Id)
+    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.DebitedFunds = Money(int(charge_amount * 100), 'EUR')
+    payin.ExecutionDetails = PayInExecutionDetailsDirect(
+        CardId=route.address,
+        SecureModeReturnURL=return_url,
+    )
+    payin.Fees = Money(int(fee * 100), 'EUR')
+    payin.PaymentDetails = PayInPaymentDetailsCard(CardType='CB_VISA_MASTERCARD')
+    payin.Tag = str(e_id)
     try:
-        hold.capture(amount=cents, description=username, meta=meta)
-        record_exchange_result(db, e_id, 'succeeded', None, participant)
+        test_hook()
+        payin = mangoapi.payIns.Create(payin)
     except Exception as e:
         error = repr_exception(e)
-        record_exchange_result(db, e_id, 'failed', error, participant)
-        raise
+        return record_exchange_result(db, e_id, 'failed', error, participant)
 
-    hold.meta['state'] = 'captured'
-    hold.save()
+    if payin.ExecutionDetails.SecureModeRedirectURL:
+        raise Response(302, headers={'Location': payin.ExecutionDetails.SecureModeRedirectURL})
 
-    log("Captured " + amount_str + " on Balanced for " + username)
-
-
-def cancel_card_hold(hold):
-    """Cancel the previously created hold on the participant's credit card.
-    """
-    hold.is_void = True
-    hold.meta['state'] = 'cancelled'
-    hold.save()
-
-
-def _prep_hit(unrounded):
-    """Takes an amount in dollars. Returns cents, etc.
-
-    cents       This is passed to the payment processor charge API. This is
-                the value that is actually charged to the participant. It's
-                an int.
-    amount_str  A detailed string representation of the amount.
-    upcharged   Decimal dollar equivalent to `cents'.
-    fee         Decimal dollar amount of the fee portion of `upcharged'.
-
-    The latter two end up in the db in a couple places via record_exchange.
-
-    """
-    also_log = ''
-    rounded = unrounded
-    if unrounded < MINIMUM_CHARGE:
-        rounded = MINIMUM_CHARGE  # per github/#167
-        also_log = ' [rounded up from $%s]' % unrounded
-
-    upcharged, fee = upcharge(rounded)
-    cents = int(upcharged * 100)
-
-    amount_str = "%d cents ($%s%s + $%s fee = $%s)"
-    amount_str %= cents, rounded, also_log, fee, upcharged
-
-    return cents, amount_str, upcharged, fee
+    return record_exchange_result(db, e_id, 'succeeded', None, participant)
 
 
 def record_exchange(db, route, amount, fee, participant, status, error=None):
@@ -302,28 +219,33 @@ def record_exchange_result(db, exchange_id, status, error, participant):
     """Updates the status of an exchange.
     """
     with db.get_cursor() as cursor:
-        amount, fee, p_id, route = cursor.one("""
+        e = cursor.one("""
             UPDATE exchanges e
                SET status=%(status)s
                  , note=%(error)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
-         RETURNING amount, fee, participant
+         RETURNING id, amount, fee, participant, recorder, note, status
                  , ( SELECT r.*::exchange_routes
                        FROM exchange_routes r
                       WHERE r.id = e.route
                    ) AS route
         """, locals())
-        assert participant.id == p_id
-        assert isinstance(route, ExchangeRoute)
+        if not e:
+            return
+        assert participant.id == e.participant
+        assert isinstance(e.route, ExchangeRoute)
 
+        amount = e.amount
         if amount < 0:
-            amount -= fee
+            amount -= e.fee
             amount = amount if status == 'failed' else 0
-            propagate_exchange(cursor, participant, route, error, -amount)
+            propagate_exchange(cursor, participant, e.route, error, -amount)
         else:
             amount = amount if status == 'succeeded' else 0
-            propagate_exchange(cursor, participant, route, error, amount)
+            propagate_exchange(cursor, participant, e.route, error, amount)
+
+        return e
 
 
 def propagate_exchange(cursor, participant, route, error, amount):
@@ -345,26 +267,22 @@ def propagate_exchange(cursor, participant, route, error, amount):
         participant.set_attributes(balance=new_balance)
 
 
-def sync_with_balanced(db):
-    """We can get out of sync with Balanced if record_exchange_result was
-    interrupted or wasn't called. This is where we fix that.
+def sync_with_mangopay(db):
+    """We can get out of sync with MangoPay if record_exchange_result wasn't
+    completed. This is where we fix that.
     """
     check_db(db)
-    exchanges = db.all("""
-        SELECT *
-          FROM exchanges
-         WHERE status = 'pre'
-    """)
-    meta_exchange_id = balanced.Transaction.f.meta.exchange_id
+
+    exchanges = db.all("SELECT * FROM exchanges WHERE status = 'pre'")
     for e in exchanges:
         p = Participant.from_id(e.participant)
-        cls = balanced.Debit if e.amount > 0 else balanced.Credit
-        transactions = cls.query.filter(meta_exchange_id == e.id).all()
+        transactions = mangoapi.users.GetTransactions(e.mangopay_user_id)
+        transactions = [x for x in transactions if x.Tag == str(e.id)]
         assert len(transactions) < 2
         if transactions:
             t = transactions[0]
-            error = t.failure_reason
-            status = t.status
+            error = repr_error(t)
+            status = t.Status.lower()
             assert (not error) ^ (status == 'failed')
             record_exchange_result(db, e.id, status, error, p)
         else:

@@ -104,4 +104,15 @@ class NegativeBalance(Exception):
     def __str__(self):
         return "Negative balance not allowed in this context."
 
-class NotWhitelisted(Exception): pass
+
+class UserIsSuspicious(Exception): pass
+
+
+class NoMoney(LazyResponse400):
+    def msg(self, _):
+        return _("You don't have any money in your wallet.")
+
+
+class TransactionFeeTooHigh(LazyResponse400):
+    def msg(self, _):
+        return _("The transaction fee would be more than 10%.")

@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import print_function, unicode_literals
 
 from collections import OrderedDict
@@ -75,7 +76,7 @@ edit = True
                    {{ 'checked' if user.goal > 0 }}/>
             <span>{{ GOAL_PARTS[0] }}</span>
             <div><div class="input-group">
-                <div class="input-group-addon">$</div>
+                <div class="input-group-addon">€</div>
                 <input type="text" name="goal_custom" id="goal-custom"
                        class="amount form-control input-sm"
                        value="{{ format_decimal(user.goal) if user.goal and user.goal > 0 }}" />

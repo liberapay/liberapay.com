@@ -1,3 +1,5 @@
+# coding: utf8
+
 [-----------------------------]
 
 teams = website.db.all("""
@@ -35,11 +37,11 @@ subhead = _("Teams")
 <table class="table">
     <tr>
         <th>{{ _("Team Name") }}</th>
-        <th class="figure">{{ _("Receiving ($)") }}</th>
-        <th class="figure">{{ _("Goal ($)") }}</th>
+        <th class="figure">{{ _("Receiving (€)") }}</th>
+        <th class="figure">{{ _("Goal (€)") }}</th>
         <th class="figure">{{ _("% Funded") }}</th>
         <th class="figure">{{ _("Members") }}</th>
-        <th class="figure">{{ _("Receiving{0} Per Member ($)", "<br>"|safe) }}</th>
+        <th class="figure">{{ _("Receiving{0} Per Member (€)", "<br>"|safe) }}</th>
     </tr>
     {% for team in teams %}
     <tr>

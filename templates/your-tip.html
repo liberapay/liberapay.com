@@ -2,13 +2,13 @@
 {% set pledging = tippee.__class__.__name__ == 'AccountElsewhere' %}
 {% if user.ANON %}
     <div class="sign-in-to">
-        {% include "templates/sign-in.html" %}
+        {% include "templates/sign-in-link.html" %}
         {{ _("to pledge to {0}", tippee.friendly_name) if pledging else _("to give to {0}", tippee.username) }}
     </div>
 {% else %}
     {% set p = tippee.participant if pledging else tippee %}
     {% set tip = tip or user.get_tip_to(p) %}
-    <form action="/{{ p.username }}/tip.json" method="POST" class="your-tip">
+    <form action="/{{ p.username }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
         {% if inline %}
@@ -25,7 +25,7 @@
 
 {% macro tip_input(tip, disabled='', small=False, pledging=False) %}
     <div class="input-group">
-        <div class="input-group-addon">$</div>
+        <div class="input-group-addon">€</div>
         <input type="text" name="amount" id="amount"
                class="amount form-control {{ 'input-sm' if small }}"
                value="{{ format_decimal(tip.amount) }}" {{ disabled }} />
