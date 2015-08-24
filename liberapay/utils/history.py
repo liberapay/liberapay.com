@@ -77,9 +77,16 @@ def iter_payday_events(db, participant, year=None):
            AND extract(year from timestamp) = %(year)s
     """, locals(), back_as=dict)
     transfers = db.all("""
-        SELECT *
+        SELECT *, p.username
           FROM transfers
-         WHERE (tipper=%(id)s OR tippee=%(id)s)
+          JOIN participants p ON p.id = tipper
+         WHERE tippee=%(id)s
+           AND extract(year from timestamp) = %(year)s
+        UNION ALL
+        SELECT *, p.username
+          FROM transfers
+          JOIN participants p ON p.id = tippee
+         WHERE tipper=%(id)s
            AND extract(year from timestamp) = %(year)s
     """, locals(), back_as=dict)
 

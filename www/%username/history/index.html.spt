@@ -148,7 +148,7 @@ else:
                 {% else %}
                     {{ context }} from
                 {% endif %}
-                <a href="/{{ event['tipper'] }}/{{ subpath }}">{{ event['tipper'] }}</a>
+                <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
             {% else %}
                 anonymous tip
             {% endif %}
@@ -158,7 +158,7 @@ else:
             {% else %}
                 {{ context }} to
             {% endif %}
-            <a href="/{{ event['tippee'] }}/{{ subpath }}">{{ event['tippee'] }}</a>
+            <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
         {% endif %}
         </td>
 
