@@ -4,6 +4,7 @@ import aspen.utils
 from aspen import log
 from psycopg2 import IntegrityError
 
+from liberapay.billing.exchanges import transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.models import check_db
 
@@ -63,15 +64,36 @@ class Payday(object):
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
 
+        self.shuffle()
+
+        self.update_stats()
+        self.update_cached_amounts()
+
+        self.end()
+        self.notify_participants()
+
+        _end = aspen.utils.utcnow()
+        _delta = _end - _start
+        fmt_past = "Script ran for %%(age)s (%s)." % _delta
+        log(aspen.utils.to_age(_start, fmt_past=fmt_past))
+
+    def shuffle(self):
         with self.db.get_cursor() as cursor:
             self.prepare(cursor, self.ts_start)
-            self.transfer_tips(cursor)
-            self.transfer_takes(cursor, self.ts_start)
+            self.transfer_virtually(cursor, self.ts_start)
             transfers = cursor.all("""
-                SELECT * FROM transfers WHERE "timestamp" > %s
-            """, (self.ts_start,))
+                SELECT t.*
+                     , p.mangopay_user_id AS tipper_mango_id
+                     , p2.mangopay_user_id AS tippee_mango_id
+                     , p.mangopay_wallet_id AS tipper_wallet_id
+                     , p2.mangopay_wallet_id AS tippee_wallet_id
+                  FROM payday_transfers t
+                  JOIN participants p ON p.id = t.tipper
+                  JOIN participants p2 ON p2.id = t.tippee
+            """)
             try:
-                self.update_balances(cursor)
+                self.check_balances(cursor)
+                self.transfer_for_real(transfers)
                 check_db(cursor)
             except:
                 # Dump transfers for debugging
@@ -88,17 +110,6 @@ class Payday(object):
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context);
         """)
-
-        self.update_stats()
-        self.update_cached_amounts()
-
-        self.end()
-        self.notify_participants()
-
-        _end = aspen.utils.utcnow()
-        _delta = _end - _start
-        fmt_past = "Script ran for %%(age)s (%s)." % _delta
-        log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
     @staticmethod
     def prepare(cursor, ts_start):
@@ -119,6 +130,7 @@ class Payday(object):
               FROM participants p
              WHERE is_suspicious IS NOT true
                AND join_time < %(ts_start)s
+               AND mangopay_user_id IS NOT NULL
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
@@ -284,12 +296,10 @@ class Payday(object):
         log('Prepared the DB.')
 
     @staticmethod
-    def transfer_tips(cursor):
-        cursor.run("SELECT settle_tip_graph()")
-
-    @staticmethod
-    def transfer_takes(cursor, ts_start):
+    def transfer_virtually(cursor, ts_start):
         cursor.run("""
+
+        SELECT settle_tip_graph();
 
         INSERT INTO payday_takes
             SELECT team, member, amount
@@ -315,33 +325,32 @@ class Payday(object):
         """, dict(ts_start=ts_start))
 
     @staticmethod
-    def update_balances(cursor):
-        participants = cursor.all("""
-
-            UPDATE participants p
-               SET balance = (balance + p2.new_balance - p2.old_balance)
-              FROM payday_participants p2
-             WHERE p.id = p2.id
-               AND p2.new_balance <> p2.old_balance
-         RETURNING p.id
-                 , p.username
-                 , balance AS new_balance
-                 , ( SELECT balance
-                       FROM participants p3
-                      WHERE p3.id = p.id
-                   ) AS cur_balance;
-
+    def check_balances(cursor):
+        """Check that balances aren't becoming (more) negative
+        """
+        oops = cursor.one("""
+            SELECT *
+              FROM (
+                     SELECT p.id
+                          , p.username
+                          , (p.balance + p2.new_balance - p2.old_balance) AS new_balance
+                          , p.balance AS cur_balance
+                       FROM payday_participants p2
+                       JOIN participants p ON p.id = p2.id
+                        AND p2.new_balance <> p2.old_balance
+                   ) foo
+             WHERE new_balance < 0 AND new_balance < cur_balance
+             LIMIT 1
         """)
-        # Check that balances aren't becoming (more) negative
-        for p in participants:
-            if p.new_balance < 0 and p.new_balance < p.cur_balance:
-                log(p)
-                raise NegativeBalance()
-        cursor.run("""
-            INSERT INTO transfers (timestamp, tipper, tippee, amount, context)
-                SELECT * FROM payday_transfers;
-        """)
-        log("Updated the balances of %i participants." % len(participants))
+        if oops:
+            log(oops)
+            raise NegativeBalance()
+        log("Checked the balances.")
+
+    def transfer_for_real(self, transfers):
+        db = self.db
+        for t in transfers:
+            transfer(db, **t._asdict())
 
     def update_stats(self):
         self.db.run("""\
@@ -350,6 +359,7 @@ class Payday(object):
                      SELECT *
                        FROM transfers
                       WHERE "timestamp" >= %(ts_start)s
+                        AND status = 'succeeded'
                  )
                , our_tips AS (
                      SELECT *

@@ -11,12 +11,6 @@ CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
          , 0::numeric(35,2) AS receiving
          , 0 as npatrons
          , goal
-         , ( SELECT count(*)
-               FROM exchange_routes r
-              WHERE r.participant = p.id
-                AND network = 'mango-cc'
-                AND error = ''
-           ) > 0 AS credit_card_ok
       FROM participants p
      WHERE is_suspicious IS NOT true;
 
@@ -53,7 +47,7 @@ CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
               FROM temp_participants p
              WHERE id = NEW.tipper
         );
-        IF (NEW.amount > tipper.fake_balance AND NOT tipper.credit_card_ok) THEN
+        IF (NEW.amount > tipper.fake_balance) THEN
             RETURN NULL;
         END IF;
         IF (NEW.active) THEN
@@ -145,12 +139,6 @@ $$ LANGUAGE plpgsql;
 -- Start fake payday
 
 -- Step 1: tips
-UPDATE temp_tips t
-   SET is_funded = true
-  FROM temp_participants p
- WHERE p.id = t.tipper
-   AND p.credit_card_ok;
-
 SELECT settle_tip_graph();
 
 -- Step 2: team takes

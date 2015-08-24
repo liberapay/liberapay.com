@@ -42,11 +42,13 @@ def get_end_of_year_balance(db, participant, year, current_year):
                     FROM transfers
                    WHERE tipper = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND status = 'succeeded'
                ) + (
                   SELECT COALESCE(sum(amount), 0) AS a
                     FROM transfers
                    WHERE tippee = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND status = 'succeeded'
                ) AS delta
     """, locals())
     balance = start_balance + delta
@@ -151,6 +153,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
               FROM transfers
              WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           GROUP BY tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
@@ -159,6 +162,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           GROUP BY tipper
         """, params, back_as=back_as)
     else:
@@ -174,6 +178,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
               FROM transfers
              WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           ORDER BY id ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
@@ -182,6 +187,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           ORDER BY id ASC
         """, params, back_as=back_as)
         out['received'] = lambda: db.all("""
@@ -190,6 +196,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context NOT IN ('take', 'take-over')
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           ORDER BY id ASC
         """, params, back_as=back_as)
 

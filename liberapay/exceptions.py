@@ -100,17 +100,12 @@ class NonexistingElsewhere(LazyResponse400):
         return _("It seems you're trying to delete something that doesn't exist.")
 
 
-class NegativeBalance(Exception):
-    def __str__(self):
-        return "Negative balance not allowed in this context."
+class NegativeBalance(LazyResponse400):
+    def msg(self, _):
+        return _("There isn't enough money in your wallet.")
 
 
 class UserIsSuspicious(Exception): pass
-
-
-class NoMoney(LazyResponse400):
-    def msg(self, _):
-        return _("You don't have any money in your wallet.")
 
 
 class TransactionFeeTooHigh(LazyResponse400):

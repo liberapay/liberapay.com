@@ -78,12 +78,14 @@ def _check_balances(cursor):
 
                       select tipper as id, sum(-amount) as a
                         from transfers
+                       where status = 'succeeded'
                     group by tipper
 
                        union all
 
                       select tippee as id, sum(amount) as a
                         from transfers
+                       where status = 'succeeded'
                     group by tippee
                     ) as foo
             group by id

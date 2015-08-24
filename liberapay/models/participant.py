@@ -386,22 +386,13 @@ class Participant(Model, MixinTeam):
         if diff != 0:
             transfers[0][1] += diff  # Give it to the highest receiver.
 
+        from liberapay.billing.exchanges import transfer
+        db = self.db
+        tipper = self.id
         for tippee, amount in transfers:
-            assert amount > 0
-            balance = cursor.one("""
-                UPDATE participants
-                   SET balance = balance - %s
-                 WHERE id = %s
-             RETURNING balance
-            """, (amount, self.id))
-            assert balance >= 0  # sanity check
-            cursor.run( "UPDATE participants SET balance=balance + %s WHERE id=%s"
-                      , (amount, tippee)
-                       )
-            cursor.run( "INSERT INTO transfers (tipper, tippee, amount, context) "
-                        "VALUES (%s, %s, %s, 'final-gift')"
-                      , (self.id, tippee, amount)
-                       )
+            balance = transfer(db, tipper, tippee, amount, 'final-gift',
+                               tipper_mango_id=self.mangopay_user_id,
+                               tipper_wallet_id=self.mangopay_wallet_id)
 
         assert balance == 0
         self.set_attributes(balance=balance)

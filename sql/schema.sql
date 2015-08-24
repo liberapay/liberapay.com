@@ -152,6 +152,8 @@ CREATE TRIGGER update_current_tip INSTEAD OF UPDATE ON current_tips
 CREATE TYPE transfer_context AS ENUM
     ('tip', 'take', 'final-gift', 'take-over');
 
+CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
+
 CREATE TABLE transfers
 ( id          serial              PRIMARY KEY
 , timestamp   timestamptz         NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -159,6 +161,7 @@ CREATE TABLE transfers
 , tippee      bigint              NOT NULL REFERENCES participants
 , amount      numeric(35,2)       NOT NULL CHECK (amount > 0)
 , context     transfer_context    NOT NULL
+, status      transfer_status     NOT NULL
  );
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);

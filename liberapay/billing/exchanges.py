@@ -1,6 +1,6 @@
 """Functions for moving money between Liberapay and the outside world.
 """
-from __future__ import division, unicode_literals
+from __future__ import division, print_function, unicode_literals
 
 from decimal import Decimal, ROUND_UP
 
@@ -8,12 +8,13 @@ from aspen import Response
 from aspen.utils import typecheck
 from mangopaysdk.entities.payin import PayIn
 from mangopaysdk.entities.payout import PayOut
+from mangopaysdk.entities.transfer import Transfer
 from mangopaysdk.entities.wallet import Wallet
 from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
-from liberapay.exceptions import NegativeBalance, NoMoney, TransactionFeeTooHigh, UserIsSuspicious
+from liberapay.exceptions import LazyResponse, NegativeBalance, TransactionFeeTooHigh, UserIsSuspicious
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
@@ -88,6 +89,21 @@ def repr_exception(e):
         return repr(e)
 
 
+def create_wallet(db, participant):
+    w = Wallet()
+    w.Owners.append(participant.mangopay_user_id)
+    w.Description = str(participant.id)
+    w.Currency = 'EUR'
+    w = mangoapi.wallets.Create(w)
+    db.run("""
+        UPDATE participants
+           SET mangopay_wallet_id = %s
+         WHERE id = %s
+    """, (w.Id, participant.id))
+    participant.set_attributes(mangopay_wallet_id=w.Id)
+    return w.Id
+
+
 def test_hook():
     return
 
@@ -102,9 +118,7 @@ def payout(db, participant, amount):
 
     # Do final calculations
     credit_amount, fee = skim_credit(amount, ba)
-    if credit_amount <= 0:
-        raise NoMoney
-    if fee / credit_amount > 0.1:
+    if credit_amount <= 0 or fee / credit_amount > 0.1:
         raise TransactionFeeTooHigh
 
     # Try to dance with MangoPay
@@ -150,17 +164,7 @@ def charge(db, participant, amount, return_url):
     payin = PayIn()
     payin.AuthorId = participant.mangopay_user_id
     if not participant.mangopay_wallet_id:
-        w = Wallet()
-        w.Owners.append(participant.mangopay_user_id)
-        w.Description = str(participant.id)
-        w.Currency = 'EUR'
-        w = mangoapi.wallets.Create(w)
-        db.run("""
-            UPDATE participants
-               SET mangopay_wallet_id = %s
-             WHERE id = %s
-        """, (w.Id, participant.id))
-        participant.set_attributes(mangopay_wallet_id=w.Id)
+        create_wallet(db, participant)
     payin.CreditedWalletId = participant.mangopay_wallet_id
     payin.DebitedFunds = Money(int(charge_amount * 100), 'EUR')
     payin.ExecutionDetails = PayInExecutionDetailsDirect(
@@ -267,6 +271,54 @@ def propagate_exchange(cursor, participant, route, error, amount):
         participant.set_attributes(balance=new_balance)
 
 
+def transfer(db, tipper, tippee, amount, context, **kw):
+    t_id = db.one("""
+        INSERT INTO transfers
+                    (tipper, tippee, amount, context, status)
+             VALUES (%s, %s, %s, %s, 'pre')
+          RETURNING id
+    """, (tipper, tippee, amount, context))
+    get = lambda id, col: db.one("SELECT {0} FROM participants WHERE id = %s".format(col), (id,))
+    tr = Transfer()
+    tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
+    tr.CreditedUserId = kw.get('tippee_mango_id') or get(tippee, 'mangopay_user_id')
+    tr.CreditedWalletID = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
+    if not tr.CreditedWalletID:
+        tr.CreditedWalletID = create_wallet(db, Participant.from_id(tippee))
+    tr.DebitedFunds = Money(int(amount * 100), 'EUR')
+    tr.DebitedWalletID = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
+    tr.Fees = Money(0, 'EUR')
+    tr.Tag = str(t_id)
+    tr = mangoapi.transfers.Create(tr)
+    return record_transfer_result(db, t_id, tipper, tippee, amount, tr)
+
+
+def record_transfer_result(db, t_id, tipper, tippee, amount, tr):
+    error = repr_error(tr)
+    status = tr.Status.lower()
+    assert (not error) ^ (status == 'failed')
+    with db.get_cursor() as c:
+        c.run("UPDATE transfers SET status = %s WHERE id = %s", (status, t_id))
+        if status == 'succeeded':
+            balance = c.one("""
+
+                UPDATE participants
+                   SET balance = balance + %(amount)s
+                 WHERE id = %(tippee)s;
+
+                UPDATE participants
+                   SET balance = balance - %(amount)s
+                 WHERE id = %(tipper)s
+                   AND balance - %(amount)s >= 0
+             RETURNING balance;
+
+            """, locals())
+            if balance is None:
+                raise NegativeBalance
+            return balance
+    raise LazyResponse(500, lambda _: _("Transfering the money failed, please try again."))
+
+
 def sync_with_mangopay(db):
     """We can get out of sync with MangoPay if record_exchange_result wasn't
     completed. This is where we fix that.
@@ -276,7 +328,7 @@ def sync_with_mangopay(db):
     exchanges = db.all("SELECT * FROM exchanges WHERE status = 'pre'")
     for e in exchanges:
         p = Participant.from_id(e.participant)
-        transactions = mangoapi.users.GetTransactions(e.mangopay_user_id)
+        transactions = mangoapi.users.GetTransactions(p.mangopay_user_id)
         transactions = [x for x in transactions if x.Tag == str(e.id)]
         assert len(transactions) < 2
         if transactions:
@@ -295,4 +347,17 @@ def sync_with_mangopay(db):
                        SET balance=(balance + %s)
                      WHERE id=%s
                 """, (-e.amount + e.fee, p.id))
+
+    transfers = db.all("SELECT * FROM transfers WHERE status = 'pre'")
+    for t in transfers:
+        tipper = Participant.from_id(t.tipper)
+        transactions = mangoapi.wallets.GetTransactions(tipper.mangopay_wallet_id)
+        transactions = [x for x in transactions if x.Type == 'TRANSFER' and x.Tag == str(t.id)]
+        assert len(transactions) < 2
+        if transactions:
+            record_transfer_result(db, t.id, t.tipper, t.tippee, t.amount, transactions[0])
+        else:
+            # The transfer didn't happen, remove it
+            db.run("DELETE FROM transfers WHERE id = %s", (t.id,))
+
     check_db(db)
