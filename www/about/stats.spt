@@ -128,12 +128,12 @@ def out():
             Money(escrow, 'EUR'), nach) }}</p>
 
     {% if last_payday %}
-    <p>{{ _("{0} changed hands {1}.", Money(transfer_volume, 'EUR'),
+    <p>{{ _("{0} changed hands {1} ago.", Money(transfer_volume, 'EUR'),
             to_age(last_payday.ts_start)) }}</p>
     {% endif %}
 
-    <p>{{ ngettext("On average, people who give, give {0} each to one other user",
-                   "On average, people who give, give {0} each to {n} other users",
+    <p>{{ ngettext("On average, people who donate give {0} each to one other user.",
+                   "On average, people who donate give {0} each to {n} other users.",
                    average_tippees, Money(average_tip, 'EUR')) }}</p>
 
     <div class="two-column">
