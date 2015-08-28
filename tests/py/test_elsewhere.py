@@ -85,11 +85,11 @@ class TestElsewhere(Harness):
                 continue
             r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
             expected = error % (user_name, platform.display_name)
-            assert expected in r.body
+            assert expected in r.text
 
     def test_user_name_is_in_pledge_cta(self):
         self.make_elsewhere('twitter', -1, 'alice')
-        body = self.client.GET('/on/twitter/alice/').body
+        body = self.client.GET('/on/twitter/alice/').text
         assert 'pledge to alice' in body
 
     def test_failure_page_accepts_valid_username(self):
@@ -130,11 +130,11 @@ class TestConfirmTakeOver(Harness):
 
         response = self.client.GxT(url, auth_as=self.bob)
         assert response.code == 400
-        assert 'bad connect token' in response.body
+        assert 'bad connect token' in response.text
 
         response = self.client.GET(url, auth_as=self.bob, cookies=self.connect_cookie)
         assert response.code == 200
-        assert 'Please Confirm' in response.body
+        assert 'Please Confirm' in response.text
 
     def test_take_over(self):
         data = {'account_id': self.alice_elsewhere.id, 'should_transfer': 'yes'}
@@ -144,7 +144,7 @@ class TestConfirmTakeOver(Harness):
 
         response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob)
         assert response.code == 400
-        assert 'bad connect token' in response.body
+        assert 'bad connect token' in response.text
 
         response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob,
                                     cookies=self.connect_cookie)
@@ -177,7 +177,7 @@ class TestElsewhereDelete(Harness):
         response = self.client.POST('/alice/elsewhere/delete', data, auth_as=alice,
                                     raise_immediately=False)
         assert response.code == 400
-        assert "doesn&#39;t exist" in response.body
+        assert "doesn&#39;t exist" in response.text
 
     def test_delete(self):
         platform = 'twitter'

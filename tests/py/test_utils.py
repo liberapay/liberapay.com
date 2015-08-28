@@ -43,15 +43,13 @@ class Tests(Harness):
         actual = utils.dict_to_querystring({})
         assert actual == expected
 
-    def test_short_difference_is_expiring(self):
-        expiring = datetime.utcnow() + timedelta(days = 1)
-        expiring = utils.is_card_expiring(expiring.year, expiring.month)
-        assert expiring
+    def test_is_expired(self):
+        expiration = datetime.utcnow() - timedelta(days = 40)
+        assert utils.is_card_expired(expiration.year, expiration.month)
 
-    def test_long_difference_not_expiring(self):
-        expiring = datetime.utcnow() + timedelta(days = 100)
-        expiring = utils.is_card_expiring(expiring.year, expiring.month)
-        assert not expiring
+    def test_not_expired(self):
+        expiration = datetime.utcnow() + timedelta(days = 100)
+        assert not utils.is_card_expired(expiration.year, expiration.month)
 
     def test_format_currency_without_trailing_zeroes(self):
         expected = '$16'

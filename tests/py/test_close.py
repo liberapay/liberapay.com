@@ -7,13 +7,12 @@ import mock
 import pytest
 
 from liberapay.billing.payday import Payday
-from liberapay.exceptions import NotWhitelisted
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
-from liberapay.testing import Harness
+from liberapay.testing.mangopay import FakeTransfersHarness
 
 
-class TestClosing(Harness):
+class TestClosing(FakeTransfersHarness):
 
     # close
 
@@ -43,13 +42,13 @@ class TestClosing(Harness):
 
     def test_close_page_is_usually_available(self):
         alice = self.make_participant('alice')
-        body = self.client.GET('/alice/settings/close', auth_as=alice).body
+        body = self.client.GET('/alice/settings/close', auth_as=alice).text
         assert 'Personal Information' in body
 
     def test_close_page_is_not_available_during_payday(self):
         Payday.start()
         alice = self.make_participant('alice')
-        body = self.client.GET('/alice/settings/close', auth_as=alice).body
+        body = self.client.GET('/alice/settings/close', auth_as=alice).text
         assert 'Personal Information' not in body
         assert 'Try Again Later' in body
 
@@ -58,7 +57,7 @@ class TestClosing(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, D('10.00'))
 
-        data = {'disbursement_strategy': 'downstream'}
+        data = {'disburse_to': 'downstream'}
         response = self.client.PxST('/alice/settings/close', auth_as=alice, data=data)
         assert response.code == 302
         assert response.headers['Location'] == '/alice/'
@@ -68,38 +67,8 @@ class TestClosing(Harness):
     def test_cant_post_to_close_page_during_payday(self):
         Payday.start()
         alice = self.make_participant('alice')
-        body = self.client.POST('/alice/settings/close', auth_as=alice).body
+        body = self.client.POST('/alice/settings/close', auth_as=alice).text
         assert 'Try Again Later' in body
-
-    @mock.patch('liberapay.billing.exchanges.ach_credit')
-    def test_ach_credit_failure_doesnt_cause_500(self, ach_credit):
-        ach_credit.side_effect = 'some error'
-        alice = self.make_participant('alice', balance=384)
-        data = {'disbursement_strategy': 'bank'}
-        r = self.client.POST('/alice/settings/close', auth_as=alice, data=data)
-        assert r.code == 200
-
-
-    # wbtba - withdraw_balance_to_bank_account
-
-    @mock.patch('liberapay.billing.exchanges.thing_from_href')
-    def test_wbtba_withdraws_balance_to_bank_account(self, tfh):
-        alice = self.make_participant( 'alice'
-                                     , balance=D('10.00')
-                                     , is_suspicious=False
-                                     , last_ach_result=''
-                                      )
-        alice.close('bank')
-
-    def test_wbtba_raises_NotWhitelisted_if_not_whitelisted(self):
-        alice = self.make_participant('alice', balance=D('10.00'))
-        with pytest.raises(NotWhitelisted):
-            alice.withdraw_balance_to_bank_account()
-
-    def test_wbtba_raises_NotWhitelisted_if_blacklisted(self):
-        alice = self.make_participant('alice', balance=D('10.00'), is_suspicious=True)
-        with pytest.raises(NotWhitelisted):
-            alice.withdraw_balance_to_bank_account()
 
 
     # dbafg - distribute_balance_as_final_gift
@@ -183,7 +152,7 @@ class TestClosing(Harness):
     # ctg - clear_tips_giving
 
     def test_ctg_clears_tips_giving(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice')
         alice.set_tip_to(self.make_participant('bob'), D('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tipper=%s AND amount > 0",

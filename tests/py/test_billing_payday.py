@@ -1,43 +1,38 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from decimal import Decimal as D
-import os
 
-import balanced
 import mock
 
-from liberapay.billing.exchanges import create_card_hold
 from liberapay.billing.payday import NoPayday, Payday
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
-from liberapay.testing import Foobar, Harness
-from liberapay.testing.balanced import BalancedHarness
+from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
 
 
-class TestPayday(BalancedHarness):
+class TestPayday(FakeTransfersHarness, MangopayHarness):
 
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    def test_payday_moves_money(self, fch):
+    def test_payday_moves_money(self):
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        fch.return_value = {}
+        self.make_exchange('mango-cc', 10, 0, self.janet)
         Payday.start().run()
 
         janet = Participant.from_username('janet')
         homer = Participant.from_username('homer')
 
         assert homer.balance == D('6.00')
-        assert janet.balance == D('3.41')
+        assert janet.balance == D('4.00')
 
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    def test_payday_doesnt_move_money_from_a_suspicious_account(self, fch):
+        assert self.transfer_mock.call_count
+
+    def test_payday_doesnt_move_money_from_a_suspicious_account(self):
         self.db.run("""
             UPDATE participants
                SET is_suspicious = true
              WHERE username = 'janet'
         """)
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        fch.return_value = {}
         Payday.start().run()
 
         janet = Participant.from_username('janet')
@@ -46,15 +41,13 @@ class TestPayday(BalancedHarness):
         assert janet.balance == D('0.00')
         assert homer.balance == D('0.00')
 
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    def test_payday_doesnt_move_money_to_a_suspicious_account(self, fch):
+    def test_payday_doesnt_move_money_to_a_suspicious_account(self):
         self.db.run("""
             UPDATE participants
                SET is_suspicious = true
              WHERE username = 'homer'
         """)
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        fch.return_value = {}
         Payday.start().run()
 
         janet = Participant.from_username('janet')
@@ -62,50 +55,12 @@ class TestPayday(BalancedHarness):
 
         assert janet.balance == D('0.00')
         assert homer.balance == D('0.00')
-
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    def test_payday_moves_money_with_balanced(self, fch):
-        self.janet.set_tip_to(self.homer, '15.00')
-        fch.return_value = {}
-        Payday.start().run()
-
-        janet = Participant.from_username('janet')
-        homer = Participant.from_username('homer')
-
-        assert janet.balance == D('0.00')
-        assert homer.balance == D('0.00')
-
-        janet_customer = balanced.Customer.fetch(janet.balanced_customer_href)
-        homer_customer = balanced.Customer.fetch(homer.balanced_customer_href)
-
-        created_at = balanced.Transaction.f.created_at
-
-        credit = homer_customer.credits.sort(created_at.desc()).first()
-        assert credit.amount == 1500
-        assert credit.description == 'homer'
-
-        debit = janet_customer.debits.sort(created_at.desc()).first()
-        assert debit.amount == 1576  # base amount + fee
-        assert debit.description == 'janet'
-
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('liberapay.billing.payday.create_card_hold')
-    def test_ncc_failing(self, cch, fch):
-        self.janet.set_tip_to(self.homer, 24)
-        fch.return_value = {}
-        cch.return_value = (None, 'oops')
-        payday = Payday.start()
-        before = self.fetch_payday()
-        assert before['ncc_failing'] == 0
-        payday.payin()
-        after = self.fetch_payday()
-        assert after['ncc_failing'] == 1
 
     def test_update_cached_amounts(self):
         team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
-        carl = self.make_participant('carl', last_bill_result="Fail!")
+        carl = self.make_participant('carl', balance=1.56)
         dana = self.make_participant('dana')
         emma = Participant.make_stub(username='emma')
         alice.set_tip_to(dana, '3.00')
@@ -117,7 +72,7 @@ class TestPayday(BalancedHarness):
         team.set_take_for(bob, D('1.00'), bob)
         bob.set_tip_to(dana, '2.00')  # funded by bob's take
         bob.set_tip_to(emma, '7.00')  # not funded, insufficient receiving
-        carl.set_tip_to(dana, '2.08')  # not funded, failing card
+        carl.set_tip_to(dana, '2.08')  # not funded, insufficient balance
 
         def check():
             alice = Participant.from_username('alice')
@@ -161,7 +116,7 @@ class TestPayday(BalancedHarness):
         check()
 
     def test_update_cached_amounts_depth(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         usernames = ('bob', 'carl', 'dana', 'emma', 'fred', 'greg')
         users = [self.make_participant(username) for username in usernames]
 
@@ -220,7 +175,7 @@ class TestPayday(BalancedHarness):
         participants = list(participants)
         second_participants = list(second_participants)
 
-        # carl is the only active participant
+        # carl is the only participant
         assert len(participants) == 1
         assert participants == second_participants
 
@@ -243,93 +198,7 @@ class TestPayday(BalancedHarness):
         with self.assertRaises(NoPayday):
             Payday().end()
 
-    @mock.patch('liberapay.billing.payday.log')
-    @mock.patch('liberapay.billing.payday.Payday.payin')
-    def test_payday(self, payin, log):
-        greeting = 'Greetings, program! It\'s PAYDAY!!!!'
-        Payday.start().run()
-        log.assert_any_call(greeting)
-        assert payin.call_count == 1
-
-
-class TestPayin(BalancedHarness):
-
-    def create_card_holds(self):
-        payday = Payday.start()
-        with self.db.get_cursor() as cursor:
-            payday.prepare(cursor, payday.ts_start)
-            return payday.create_card_holds(cursor)
-
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('liberapay.billing.payday.create_card_hold')
-    def test_hold_amount_includes_negative_balance(self, cch, fch):
-        self.db.run("""
-            UPDATE participants SET balance = -10 WHERE username='janet'
-        """)
-        self.janet.set_tip_to(self.homer, 25)
-        fch.return_value = {}
-        cch.return_value = (None, 'some error')
-        self.create_card_holds()
-        assert cch.call_args[0][-1] == 35
-
-    def test_payin_fetches_and_uses_existing_holds(self):
-        self.janet.set_tip_to(self.homer, 20)
-        hold, error = create_card_hold(self.db, self.janet, D(20))
-        assert hold is not None
-        assert not error
-        with mock.patch('liberapay.billing.payday.create_card_hold') as cch:
-            cch.return_value = (None, None)
-            self.create_card_holds()
-            assert not cch.called, cch.call_args_list
-
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    def test_payin_cancels_existing_holds_of_insufficient_amounts(self, fch):
-        self.janet.set_tip_to(self.homer, 30)
-        hold, error = create_card_hold(self.db, self.janet, D(10))
-        assert not error
-        fch.return_value = {self.janet.id: hold}
-        with mock.patch('liberapay.billing.payday.create_card_hold') as cch:
-            fake_hold = object()
-            cch.return_value = (fake_hold, None)
-            holds = self.create_card_holds()
-            assert len(holds) == 1
-            assert holds[self.janet.id] is fake_hold
-            assert hold.voided_at is not None
-
-    @mock.patch('liberapay.billing.payday.CardHold')
-    @mock.patch('liberapay.billing.payday.cancel_card_hold')
-    def test_fetch_card_holds_handles_extra_holds(self, cancel, CardHold):
-        fake_hold = mock.MagicMock()
-        fake_hold.meta = {'participant_id': 0}
-        fake_hold.save = mock.MagicMock()
-        CardHold.query.filter.return_value = [fake_hold]
-        for attr, state in (('failure_reason', 'failed'),
-                            ('voided_at', 'cancelled'),
-                            ('debit_href', 'captured')):
-            holds = Payday.fetch_card_holds(set())
-            assert fake_hold.meta['state'] == state
-            fake_hold.save.assert_called_with()
-            assert len(holds) == 0
-            setattr(fake_hold, attr, None)
-        holds = Payday.fetch_card_holds(set())
-        cancel.assert_called_with(fake_hold)
-        assert len(holds) == 0
-
-    @mock.patch('liberapay.billing.payday.log')
-    def test_payin_cancels_uncaptured_holds(self, log):
-        self.janet.set_tip_to(self.homer, 42)
-        alice = self.make_participant('alice',
-                                      is_suspicious=False)
-        self.make_exchange('balanced-cc', 50, 0, alice)
-        alice.set_tip_to(self.janet, 50)
-        Payday.start().payin()
-        assert log.call_args_list[-3][0] == ("Captured 0 card holds.",)
-        assert log.call_args_list[-2][0] == ("Canceled 1 card holds.",)
-        assert Participant.from_id(alice.id).balance == 0
-        assert Participant.from_id(self.janet.id).balance == 8
-        assert Participant.from_id(self.homer.id).balance == 42
-
-    def test_payin_cant_make_balances_more_negative(self):
+    def test_payday_cant_make_balances_more_negative(self):
         self.db.run("""
             UPDATE participants SET balance = -10 WHERE username='janet'
         """)
@@ -342,59 +211,51 @@ class TestPayin(BalancedHarness):
                  WHERE username IN ('janet', 'homer')
             """)
             with self.assertRaises(NegativeBalance):
-                payday.update_balances(cursor)
+                payday.check_balances(cursor)
 
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('liberapay.billing.exchanges.thing_from_href')
-    def test_card_hold_error(self, tfh, fch):
-        self.janet.set_tip_to(self.homer, 17)
-        tfh.side_effect = Foobar
-        fch.return_value = {}
-        Payday.start().payin()
-        payday = self.fetch_payday()
-        assert payday['ncc_failing'] == 1
+    @staticmethod
+    def get_new_balances(cursor):
+        return {id: new_balance for id, new_balance in cursor.all(
+            "SELECT id, new_balance FROM payday_participants"
+        )}
 
-    def test_payin_doesnt_process_tips_when_goal_is_negative(self):
-        alice = self.make_participant('alice', balance=20)
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, 13)
-        self.db.run("UPDATE participants SET goal = -1 WHERE username='bob'")
+    def test_payday_doesnt_process_tips_when_goal_is_negative(self):
+        self.make_exchange('mango-cc', 20, 0, self.janet)
+        self.janet.set_tip_to(self.homer, 13)
+        self.db.run("UPDATE participants SET goal = -1 WHERE username='homer'")
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_tips(cursor)
-            payday.update_balances(cursor)
-        assert Participant.from_id(alice.id).balance == 20
-        assert Participant.from_id(bob.id).balance == 0
+            payday.transfer_virtually(cursor, payday.ts_start)
+            new_balances = self.get_new_balances(cursor)
+            assert new_balances[self.janet.id] == 20
+            assert new_balances[self.homer.id] == 0
 
-    def test_payin_doesnt_make_null_transfers(self):
+    def test_payday_doesnt_make_null_transfers(self):
         alice = self.make_participant('alice')
         alice.set_tip_to(self.homer, 1)
         alice.set_tip_to(self.homer, 0)
         a_team = self.make_participant('a_team', kind='group')
         a_team.add_member(alice)
-        Payday.start().payin()
+        Payday.start().run()
         transfers0 = self.db.all("SELECT * FROM transfers WHERE amount = 0")
         assert not transfers0
 
     def test_transfer_tips(self):
-        alice = self.make_participant('alice', balance=1,
-                                      last_bill_result='')
-        alice.set_tip_to(self.janet, D('0.51'))
-        alice.set_tip_to(self.homer, D('0.50'))
+        self.make_exchange('mango-cc', 1, 0, self.david)
+        self.david.set_tip_to(self.janet, D('0.51'))
+        self.david.set_tip_to(self.homer, D('0.50'))
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_tips(cursor)
-            payday.update_balances(cursor)
-        alice = Participant.from_id(alice.id)
-        assert Participant.from_id(alice.id).balance == D('0.49')
-        assert Participant.from_id(self.janet.id).balance == D('0.51')
-        assert Participant.from_id(self.homer.id).balance == 0
+            payday.transfer_virtually(cursor, payday.ts_start)
+            new_balances = self.get_new_balances(cursor)
+            assert new_balances[self.david.id] == D('0.49')
+            assert new_balances[self.janet.id] == D('0.51')
+            assert new_balances[self.homer.id] == 0
 
     def test_transfer_tips_whole_graph(self):
-        alice = self.make_participant('alice', balance=0,
-                                      last_bill_result='')
+        alice = self.make_participant('alice', balance=50)
         alice.set_tip_to(self.homer, D('50'))
         self.homer.set_tip_to(self.janet, D('20'))
         self.janet.set_tip_to(self.david, D('5'))
@@ -403,21 +264,12 @@ class TestPayin(BalancedHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            cursor.run("""UPDATE payday_participants
-                             SET card_hold_ok = true
-                           WHERE id = %s
-                """, (alice.id,))
-            payday.transfer_tips(cursor)
-            cursor.run("""UPDATE payday_participants
-                             SET new_balance = 0
-                           WHERE id = %s
-                """, (alice.id,))
-            payday.update_balances(cursor)
-        alice = Participant.from_id(alice.id)
-        assert Participant.from_id(alice.id).balance == D('0')
-        assert Participant.from_id(self.homer.id).balance == D('30')
-        assert Participant.from_id(self.janet.id).balance == D('15')
-        assert Participant.from_id(self.david.id).balance == D('5')
+            payday.transfer_virtually(cursor, payday.ts_start)
+            new_balances = self.get_new_balances(cursor)
+            assert new_balances[alice.id] == D('0')
+            assert new_balances[self.homer.id] == D('30')
+            assert new_balances[self.janet.id] == D('15')
+            assert new_balances[self.david.id] == D('5')
 
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', kind='group', balance=20)
@@ -434,10 +286,7 @@ class TestPayin(BalancedHarness):
         # Run the transfer multiple times to make sure we ignore takes that
         # have already been processed
         for i in range(3):
-            with self.db.get_cursor() as cursor:
-                payday.prepare(cursor, payday.ts_start)
-                payday.transfer_takes(cursor, payday.ts_start)
-                payday.update_balances(cursor)
+            payday.shuffle()
 
         participants = self.db.all("SELECT username, balance FROM participants")
 
@@ -451,56 +300,8 @@ class TestPayin(BalancedHarness):
             else:
                 assert p.balance == 0
 
-    @mock.patch.object(Payday, 'fetch_card_holds')
-    @mock.patch('liberapay.billing.payday.capture_card_hold')
-    def test_payin_dumps_transfers_for_debugging(self, cch, fch):
-        self.janet.set_tip_to(self.homer, 10)
-        fake_hold = mock.MagicMock()
-        fake_hold.amount = 1500
-        fch.return_value = {self.janet.id: fake_hold}
-        cch.side_effect = Foobar
-        open_ = mock.MagicMock()
-        open_.side_effect = open
-        with mock.patch.dict(__builtins__, {'open': open_}):
-            with self.assertRaises(Foobar):
-                Payday.start().payin()
-        filename = open_.call_args_list[-1][0][0]
-        assert filename.endswith('_transfers.csv')
-        os.unlink(filename)
-
-
-class TestPayout(Harness):
-
-    def test_payout_no_balanced_href(self):
-        self.make_participant('alice', is_suspicious=False,
-                              balance=20)
-        Payday.start().payout()
-
-    @mock.patch('liberapay.billing.payday.log')
-    def test_payout_unreviewed(self, log):
-        self.make_participant('alice', is_suspicious=None,
-                              balance=20, balanced_customer_href='foo',
-                              last_ach_result='')
-        Payday.start().payout()
-        log.assert_any_call('UNREVIEWED: alice')
-
 
 class TestNotifyParticipants(EmailHarness):
 
     def test_it_notifies_participants(self):
-        kalel = self.make_participant('kalel', is_suspicious=False,
-                                      email='kalel@example.net')
-        lily = self.make_participant('lily', is_suspicious=False)
-        kalel.set_tip_to(lily, 10)
-
-        for status in ('failed', 'succeeded'):
-            payday = Payday.start()
-            self.make_exchange('balanced-cc', 10, 0, kalel, status)
-            payday.end()
-            payday.notify_participants()
-
-            emails = self.db.one('SELECT * FROM email_queue')
-            assert emails.spt_name == 'charge_'+status
-
-            Participant.dequeue_emails()
-            assert self.get_last_email()['to'][0]['email'] == 'kalel@example.net'
+        pass  # TODO

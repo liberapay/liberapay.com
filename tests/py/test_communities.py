@@ -12,12 +12,12 @@ class Tests(Harness):
         Harness.setUp(self)
 
         # Alice joins a community.
-        self.alice = self.make_participant("alice", last_bill_result='')
+        self.alice = self.make_participant('alice', balance=100)
         self.client.POST('/alice/communities.json', {'do': 'join:something'},
                          auth_as=self.alice, HTTP_X_REQUESTED_WITH=b'XMLHttpRequest')
 
     def test_community_member_shows_up_on_community_listing(self):
-        html = self.client.GET('/for/something/', want='response.body')
+        html = self.client.GET('/for/something/').text
         assert html.count('alice') == 2  # entry in New Participants
 
     def test_givers_show_up_on_community_page(self):
@@ -26,9 +26,9 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         self.alice.set_tip_to(bob, '1.00')
 
-        html = self.client.GET('/for/something/', want='response.body')
-        assert html.count('alice') == 4  # entries in both New Participants and Givers
-        assert 'bob' not in html
+        html = self.client.GET('/for/something/').text
+        assert html.count('alice') == 4, html  # entries in both New Participants and Givers
+        assert 'bob' not in html, html
 
     def test_givers_dont_show_up_if_they_give_zero(self):
 
@@ -37,33 +37,33 @@ class Tests(Harness):
         self.alice.set_tip_to(bob, '1.00')
         self.alice.set_tip_to(bob, '0.00')
 
-        html = self.client.GET('/for/something/', want='response.body')
+        html = self.client.GET('/for/something/').text
         assert html.count('alice') == 2  # entry in New Participants only
         assert 'bob' not in html
 
     def test_receivers_show_up_on_community_page(self):
 
         # Bob tips alice.
-        bob = self.make_participant("bob", last_bill_result='')
+        bob = self.make_participant('bob', balance=100)
         bob.set_tip_to(self.alice, '1.00')
 
-        html = self.client.GET('/for/something/', want='response.body')
+        html = self.client.GET('/for/something/').text
         assert html.count('alice') == 4  # entries in both New Participants and Receivers
         assert 'bob' not in html
 
     def test_receivers_dont_show_up_if_they_receive_zero(self):
 
         # Bob tips alice.
-        bob = self.make_participant("bob", last_bill_result='')
+        bob = self.make_participant('bob', balance=100)
         bob.set_tip_to(self.alice, '1.00')
         bob.set_tip_to(self.alice, '0.00')  # zero out bob's tip
 
-        html = self.client.GET('/for/something/', want='response.body')
+        html = self.client.GET('/for/something/').text
         assert html.count('alice') == 2  # entry in New Participants only
         assert 'bob' not in html
 
     def test_community_listing_works_for_pristine_community(self):
-        html = self.client.GET('/for/pristine/', want='response.body')
+        html = self.client.GET('/for/pristine/').text
         assert 'first one here' in html
 
 

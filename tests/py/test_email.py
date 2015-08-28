@@ -34,7 +34,7 @@ class TestEmail(EmailHarness):
 
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
-        assert response.body == '{}'
+        assert response.text == '{}'
 
     def test_adding_email_sends_verification_email(self):
         self.hit_email_spt('add-email', 'alice@example.com')
@@ -66,7 +66,7 @@ class TestEmail(EmailHarness):
 
     def test_verify_email_without_adding_email(self):
         response = self.verify_email('', 'sample-nonce')
-        assert 'Missing Info' in response.body
+        assert 'Missing Info' in response.text
 
     def test_verify_email_wrong_nonce(self):
         self.hit_email_spt('add-email', 'alice@example.com')
@@ -165,7 +165,7 @@ class TestEmail(EmailHarness):
 
     def test_emails_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
-        body = self.client.GET("/alice/emails/", auth_as=self.alice).body
+        body = self.client.GET("/alice/emails/", auth_as=self.alice).text
         assert 'alice@example.com' in body
         assert 'alice@example.net' in body
 

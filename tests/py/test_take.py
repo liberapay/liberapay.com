@@ -15,7 +15,7 @@ class Tests(Harness):
         team = self.make_participant(username, kind='group', **kw)
         if Participant.from_username('Daddy Warbucks') is None:
             warbucks = self.make_participant( 'Daddy Warbucks'
-                                            , last_bill_result=''
+                                            , balance=1000
                                              )
             self.warbucks = warbucks
         self.warbucks.set_tip_to(team, '100')
@@ -26,8 +26,8 @@ class Tests(Harness):
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
         actual_amount = amount if actual_amount is None else actual_amount
         self.db.run("""
-            INSERT INTO transfers (timestamp, tipper, tippee, amount, context)
-            VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s, 'take')
+            INSERT INTO transfers (timestamp, tipper, tippee, amount, context, status)
+            VALUES (now(), %(tipper)s, %(tippee)s, %(amount)s, 'take', 'succeeded')
         """, dict(tipper=team.id, tippee=member.id, amount=actual_amount))
         self.db.run("UPDATE paydays SET ts_end=now() WHERE ts_end < ts_start")
 
@@ -88,7 +88,8 @@ class Tests(Harness):
         assert members[0]['balance'] == 58
 
     def test_compute_actual_takes_counts_the_team_balance(self):
-        team = self.make_team(balance=D('59.46'), giving=D('7.15'))
+        team = self.make_team(balance=D('59.46'))
+        team.set_tip_to(self.make_participant('bob'), D('7.15'))
         alice = self.make_participant('alice')
         self.take_last_week(team, alice, '100.00')
         team.set_take_for(alice, D('142.00'), team)
@@ -202,7 +203,7 @@ class Tests(Harness):
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
         assert team.get_take_last_week_for(alice) == 30
         self.db.run("""
-            INSERT INTO transfers (timestamp, tipper, tippee, amount, context)
-            VALUES (now(), %(tipper)s, %(id)s, %(amount)s, 'take')
+            INSERT INTO transfers (timestamp, tipper, tippee, amount, context, status)
+            VALUES (now(), %(tipper)s, %(id)s, %(amount)s, 'take', 'succeeded')
         """, dict(tipper=team.id, id=alice.id, amount=take_this_week))
         assert team.get_take_last_week_for(alice) == 30

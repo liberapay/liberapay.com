@@ -264,7 +264,7 @@ class Tests(Harness):
     # set_tip_to - stt
 
     def test_stt_sets_tip_to(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_stub()
         alice.set_tip_to(bob, '1.00')
 
@@ -272,7 +272,7 @@ class Tests(Harness):
         assert actual == Decimal('1.00')
 
     def test_stt_returns_a_dict(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
         actual = alice.set_tip_to(bob, '1.00')
         assert isinstance(actual, dict)
@@ -281,7 +281,7 @@ class Tests(Harness):
         assert actual['first_time_tipper'] is True
 
     def test_stt_returns_False_for_second_time_tipper(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
         actual = alice.set_tip_to(bob, '2.00')
@@ -289,25 +289,25 @@ class Tests(Harness):
         assert actual['first_time_tipper'] is False
 
     def test_stt_doesnt_allow_self_tipping(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         with pytest.raises(NoSelfTipping):
             alice.set_tip_to(alice, '10.00')
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
         with pytest.raises(BadAmount):
             alice.set_tip_to(bob, '1000.00')
 
     def test_stt_fails_to_tip_unknown_people(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         with pytest.raises(NoTippee):
             alice.set_tip_to('bob', '1.00')
 
     # giving, npatrons and receiving
 
     def test_only_funded_tips_count(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
         carl = self.make_participant('carl', last_bill_result="Fail!")
         dana = self.make_participant('dana')
@@ -330,8 +330,8 @@ class Tests(Harness):
         assert funded_tips == [3, 6, 5]
 
     def test_only_latest_tip_counts(self):
-        alice = self.make_participant('alice', last_bill_result='')
-        bob = self.make_participant('bob', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
+        bob = self.make_participant('bob', balance=100)
         carl = self.make_participant('carl')
         alice.set_tip_to(carl, '12.00')
         alice.set_tip_to(carl, '3.00')
@@ -344,7 +344,7 @@ class Tests(Harness):
 
     def test_receiving_includes_tips_from_whitelisted_accounts(self):
         alice = self.make_participant( 'alice'
-                                     , last_bill_result=''
+                                     , balance=100
                                      , is_suspicious=False
                                       )
         bob = self.make_stub()
@@ -355,7 +355,7 @@ class Tests(Harness):
 
     def test_receiving_includes_tips_from_unreviewed_accounts(self):
         alice = self.make_participant( 'alice'
-                                     , last_bill_result=''
+                                     , balance=100
                                      , is_suspicious=None
                                       )
         bob = self.make_stub()
@@ -366,7 +366,7 @@ class Tests(Harness):
 
     def test_receiving_ignores_tips_from_blacklisted_accounts(self):
         alice = self.make_participant( 'alice'
-                                     , last_bill_result=''
+                                     , balance=100
                                      , is_suspicious=True
                                       )
         bob = self.make_stub()
@@ -376,13 +376,13 @@ class Tests(Harness):
         assert bob.npatrons == 0
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob', taking=Decimal('42.00'))
         alice.set_tip_to(bob, '3.00')
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
 
     def test_receiving_is_zero_for_patrons(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '3.00')
 
@@ -395,20 +395,20 @@ class Tests(Harness):
     # pledging
 
     def test_pledging_only_counts_latest_tip(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, '12.00')
         alice.set_tip_to(bob, '3.00')
         assert alice.pledging == Decimal('3.00')
 
     def test_cant_pledge_to_locked_accounts(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_stub(goal=-1)
         with self.assertRaises(UserDoesntAcceptTips):
             alice.set_tip_to(bob, '3.00')
 
     def test_pledging_isnt_giving(self):
-        alice = self.make_participant('alice', last_bill_result='')
+        alice = self.make_participant('alice', balance=100)
         bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, '3.00')
         assert alice.giving == Decimal('0.00')
@@ -460,11 +460,3 @@ class Tests(Harness):
     def test_suggested_payment_is_zero_for_new_user(self):
         alice = self.make_participant('alice')
         assert alice.suggested_payment == 0
-
-
-class TestGetBalancedAccount(Harness):
-    def test_get_balanced_account_creates_new_customer_href(self):
-        alice = self.make_participant('alice')
-        account = alice.get_balanced_account()
-        alice = Participant.from_username('alice')
-        assert alice.balanced_customer_href == account.href

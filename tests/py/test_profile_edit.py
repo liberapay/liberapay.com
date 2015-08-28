@@ -17,7 +17,7 @@ class Tests(Harness):
         r = self.change_statement('en', 'Lorem ipsum')
         assert r.code == 302
         r = self.client.GET('/alice/')
-        assert '<p>Lorem ipsum</p>\n' in r.body, r.body
+        assert '<p>Lorem ipsum</p>\n' in r.text, r.text
 
     def test_anonymous_gets_403(self):
         r = self.change_statement('en', 'Some statement', auth_as=None)

@@ -19,7 +19,7 @@ class Tests(Harness):
 
     def test_changing_to_minus_1_asks_confirmation(self):
         r = self.client.POST('/alice/goal', {'goal': '-1'}, auth_as=self.alice)
-        assert "Warning: Doing this will remove all the tips you are currently receiving." in r.body
+        assert "Warning: Doing this will remove all the tips you are currently receiving." in r.text
 
     def test_wonky_custom_amounts_are_standardized(self):
         self.change_goal("custom", ",100,100.00001")

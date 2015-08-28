@@ -125,13 +125,13 @@ class Tests2(Harness):
     def test_no_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
-        assert "Bad CSRF cookie" in r.body
+        assert "Bad CSRF cookie" in r.text
         assert b'csrf_token' in r.headers.cookie
 
     def test_bad_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=b'bad_token', raise_immediately=False)
         assert r.code == 403
-        assert "Bad CSRF cookie" in r.body
+        assert "Bad CSRF cookie" in r.text
         assert r.headers.cookie[b'csrf_token'].value != 'bad_token'
 
     def test_csrf_cookie_set_for_most_requests(self):

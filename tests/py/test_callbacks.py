@@ -1,64 +1,40 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import json
-
 from mock import patch
 
-from liberapay.billing.exchanges import record_exchange
-from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.testing import Harness
+from mangopaysdk.entities.payout import PayOut
+
+from liberapay.billing.exchanges import record_exchange, repr_error
+from liberapay.testing.mangopay import MangopayHarness
 
 
-class TestBalancedCallbacks(Harness):
+class TestMangopayCallbacks(MangopayHarness):
 
-    def callback(self, *a, **kw):
-        kw.setdefault(b'HTTP_X_FORWARDED_FOR', b'50.18.199.26')
-        kw.setdefault('content_type', 'application/json')
+    def callback(self, qs, **kw):
         kw.setdefault('raise_immediately', False)
-        return self.client.POST('/callbacks/balanced', **kw)
+        return self.client.GET('/callbacks/mangopay?'+qs, **kw)
 
-    def test_simplate_checks_source_address(self):
-        r = self.callback(HTTP_X_FORWARDED_FOR=b'0.0.0.0')
-        assert r.code == 403
-
-    def test_simplate_doesnt_require_a_csrf_token(self):
-        r = self.callback(body=b'{"events": []}', csrf_token=False)
-        assert r.code == 200, r.body
-
-    def test_no_csrf_cookie_set_for_callbacks(self):
-        r = self.callback(body=b'{"events": []}', csrf_token=False)
-        assert b'csrf_token' not in r.headers.cookie
-
+    @patch('mangopaysdk.tools.apipayouts.ApiPayOuts.Get')
     @patch('liberapay.billing.exchanges.record_exchange_result')
-    def test_credit_callback(self, rer):
-        alice = self.make_participant('alice', last_ach_result='')
-        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
+    def test_payout_callback(self, rer, Get):
+        homer, ba = self.homer, self.homer_route
         for status in ('succeeded', 'failed'):
+            status_up = status.upper()
             error = 'FOO' if status == 'failed' else None
-            e_id = record_exchange(self.db, ba, 10, 0, alice, 'pre')
-            body = json.dumps({
-                "events": [
-                    {
-                        "type": "credit."+status,
-                        "entity": {
-                            "credits": [
-                                {
-                                    "failure_reason": error,
-                                    "meta": {
-                                        "participant_id": alice.id,
-                                        "exchange_id": e_id,
-                                    },
-                                    "status": status,
-                                }
-                            ]
-                        }
-                    }
-                ]
-            })
-            r = self.callback(body=body, csrf_token=False)
-            assert r.code == 200, r.body
+            e_id = record_exchange(self.db, ba, 10, 0, homer, 'pre')
+            qs = "EventType=PAYOUT_NORMAL_"+status_up+"&RessourceId=123456790"
+            payout = PayOut()
+            payout.Status = status_up
+            payout.ResultCode = '000001' if error else '000000'
+            payout.ResultMessage = error
+            payout.AuthorId = homer.mangopay_user_id
+            payout.Tag = str(e_id)
+            Get.return_value = payout
+            r = self.callback(qs, csrf_token=False)
+            assert b'csrf_token' not in r.headers.cookie
+            assert r.code == 200, r.text
             assert rer.call_count == 1
-            assert rer.call_args[0][:-1] == (self.db, e_id, status, error)
-            assert rer.call_args[0][-1].id == alice.id
+            assert rer.call_args[0][:-1] == (self.db, str(e_id), status, repr_error(payout))
+            assert rer.call_args[0][-1].id == homer.id
             assert rer.call_args[1] == {}
             rer.reset_mock()
