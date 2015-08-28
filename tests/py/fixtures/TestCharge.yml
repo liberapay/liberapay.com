@@ -1,0 +1,70 @@
+interactions:
+- request:
+    body: '{"AuthorId": "8301771", "Tag": "141066466", "CreditedWalletId": "8301772",
+      "CardId": "8301774", "SecureModeReturnURL": "http://localhost/", "Fees": {"Currency":
+      "EUR", "Amount": 202}, "CardType": "CB_VISA_MASTERCARD", "DebitedFunds": {"Currency":
+      "EUR", "Amount": 10202}}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct/
+  response:
+    body: {string: !!python/unicode '{"Id":"8301780","Tag":"141066466","CreationDate":1440851689,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":10202},"CreditedFunds":{"Currency":"EUR","Amount":10000},"Fees":{"Currency":"EUR","Amount":202},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"8301774","SecureModeReturnURL":"http://localhost/?transactionId=8301780","SecureModeRedirectURL":"https://api.sandbox.mangopay.com:443/Redirect/ACSWithValidation?token=265e083986ab4f4c8c120d3ff8b4525f","SecureModeNeeded":true}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['716']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"AuthorId": "8301771", "Tag": "141066467", "CreditedWalletId": "8301772",
+      "CardId": "-1", "SecureModeReturnURL": "http://localhost/", "Fees": {"Currency":
+      "EUR", "Amount": 37}, "CardType": "CB_VISA_MASTERCARD", "DebitedFunds": {"Currency":
+      "EUR", "Amount": 1037}}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct/
+  response:
+    body: {string: !!python/unicode '{"Message":"One or several required parameters
+        are missing or incorrect. An incorrect resource ID also raises this kind of
+        error.","Type":"param_error","Id":"e5408507-1b8e-4184-abd0-f52e2142cb7a#1440851691","Date":1440851692.0,"errors":{"CardId":"The
+        value -1 is not valid"}}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['275']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 400, message: Bad Request}
+- request:
+    body: '{"Currency": "EUR", "Owners": ["8301771"], "Description": "2"}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+  response:
+    body: {string: !!python/unicode '{"Description":"2","Owners":["8301771"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"8301782","Tag":null,"CreationDate":1440851693}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['171']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"AuthorId": "8301771", "Tag": "141066469", "CreditedWalletId": "8301782",
+      "CardId": "8301774", "SecureModeReturnURL": "http://localhost/", "Fees": {"Currency":
+      "EUR", "Amount": 37}, "CardType": "CB_VISA_MASTERCARD", "DebitedFunds": {"Currency":
+      "EUR", "Amount": 1037}}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct/
+  response:
+    body: {string: !!python/unicode '{"Id":"8301783","Tag":"141066469","CreationDate":1440851696,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851697,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301782","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"8301774","SecureModeReturnURL":null,"SecureModeRedirectURL":null,"SecureModeNeeded":false}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['594']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+version: 1

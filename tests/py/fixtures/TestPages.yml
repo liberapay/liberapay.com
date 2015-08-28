@@ -3,18 +3,88 @@ interactions:
     body: null
     headers: {}
     method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cards/8301774
+  response:
+    body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":true,"Currency":"EUR","Validity":"VALID","UserId":"8301771","Id":"8301774","Tag":null,"CreationDate":1440851675}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['286']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301769
+  response:
+    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"David","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"8301769","Tag":null,"CreationDate":1440851665}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['415']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301769
+  response:
+    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"David","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"8301769","Tag":null,"CreationDate":1440851665}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['415']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cards/8301774
+  response:
+    body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":true,"Currency":"EUR","Validity":"VALID","UserId":"8301771","Id":"8301774","Tag":null,"CreationDate":1440851675}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['286']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301769
+  response:
+    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"David","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"8301769","Tag":null,"CreationDate":1440851665}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['415']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
     uri: https://api.github.com:443/users/liberapay
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA52TTW6DMBCF7+I1iYH8tLFU9QKVuukqm8iAAyMZ27INEUW5e8dAIhpVlcgKsOd9
-        fn7M9ETqEhRhREImLDe8IxGBgrAk3e3j+HCICG+55/bUWIlllffGMUrHRbcuwVdN1jhhc628UH6d
-        65o29CZ/b982SCztRAloggsPNAMTaZQjztG5o8rX8sHBePJQP688ayn1BfWPhv89gt5l6G18B1U+
-        g0BZT7WvBCaG17iGy4PzC+0Mkp6GxwmKAHH4D6wollmaRGjootBLT60weqA1mcstGA9aLbT2S4oo
-        bUuu4Js/gUKpQ0IwtdDEIEGpaLHlFmpHTU+NhZbnXYjDilxAi+k+w3sQI853RmCbf86SCZmDFyde
-        1GHczlw6ERHF61D4MZs97GfDVUeYaqSMSIbzOY0dTt290Ye2R6bU+RD8OFSi5hCGFDcqsIJnEunT
-        URnoccc0mYT8NCbIkohMC0PLERbf+h9HaPaFbT185Yj1GBT3SEvjZLeKd6s0/UpStn1h6f6IZzem
-        +Ltmw5JXlmyP5PoDJJ9p5ngEAAA=
+        H4sIAAAAAAAAA52TUW+kIBSF/wvPtqi7M92SNP0DTfalT32ZoFK9CQIBtJk1/e89qNO4k80mzpNA
+        7vk4HO+dmLYtGSaYpkp56eSZZYwaJorycMzzx8eMyVFG6U+D1yjrYnRBcL4chvuWYjdUQ1C+tiYq
+        E+9r2/OBX+TP49MPEFu/UhKa4eCK5mglLXLgAt866mKvrxwsN8/128p3q7X9gP7a8H+v4N8yeFvW
+        ZNpbEJBN3MZOITE84zM9nkLcaWeWTDx9TtQkSMA/8KrZZ2kVwdCHgZeJe+XsTBuqUHtykazZae0v
+        KVDWt9LQH3kDCtIAQjK108QsgVSNaLmd2kUzcedplPU5xeFVrWhEurfwrsTAxbNTaPPfm2RS5hTV
+        STZ9Grd3qYPKmJF9KnzZzB762UlzZsIMWmeswnyuY4ep+270ue3B1Laeg7+Uq14SxnTRduSVrDRu
+        WFlkL0s3VJrq0xKjKDK2Hsx9x0R+GQLM0WaH3p53NbgRackIa2VeHO7yw11Zvhal+PkgyuMbnA2u
+        +UfN8bX4JQ4Fyt7Y5xdr+YwtfQQAAA==
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -25,8 +95,8 @@ interactions:
       content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: [W/"16c5616f1f7f57adf84ebb85c70008d6"]
-      last-modified: ['Fri, 22 May 2015 13:18:14 GMT']
+      etag: [W/"edf8aa2a5f76e98e1d67c6477ace9626"]
+      last-modified: ['Tue, 26 May 2015 18:51:47 GMT']
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
       transfer-encoding: [chunked]
@@ -38,7 +108,14 @@ interactions:
     method: GET
     uri: https://api.github.com:443/orgs/liberapay/public_members
   response:
-    body: {string: !!python/unicode '[]'}
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52TwWrDMAyG38XnUq+MwhYYO+wZdiojuI7qCBzb2EpKG/rulZMwuhwG7snB6Pv0
+        W7EPo7DeoBOV+GqVM0p7sRHYiGq3f9vt3182Qg2KVKz7aLmoJQqpknLeTFuD1PbHPkHU3hE42mrf
+        yV4u9Ofw8co+ExdJFgveWMkCLqKZZluSD3Fa6uyq/9x3Kn8oPHlr/Znpddr/GshfioPN3+jMEwam
+        RumpBR4WH+GWD46JysJMxCjzUmOTHYmnH6EpCrQwHOfsOMkoIwQ/yfpj0hEDoXdlwf6QbPLRKIdX
+        VW5iMrEgRyqLMBFMwsAXrQydkVGGiIPSlzyKCBpw4ME+oVuxbKNLAL7b3/zj85iRoFZNlx/WSdkE
+        t587ouWI2WoDAAA=
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -46,63 +123,14 @@ interactions:
           X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
           X-Poll-Interval']
       cache-control: ['public, max-age=60, s-maxage=60']
-      content-length: ['2']
+      content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: ['"98f0c1b396a4e5d54f4d5fe561d54b44"']
+      etag: [W/"7e1bcc65d400d193c9e55e41e2c7beaa"]
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/cards/CC6j2lN0CEuf3wt77J2bQW7r
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41UXU/bMBR951dYeaat44Sk6VupEBOIbgzGpE1T5MY2NaR2ZTuFCvW/z3aSJgEm
-        LQ+Wcj98zz33+L6dABAUWBEdzMBv+wPAmz+tueTi2Zlbg4ustJEbqqw1WPxI1ovbl5CYsnrS15ch
-        1Q/3JTJBk384bS9iXDxStVVcGJc4LVIGYxRFyRlm02kR0SgpGERpnNACJzEjBYsSQgpEQxZlNpwW
-        GYsYI/AMoyQNjhcXu12uqK5Kd6+oyvLoEdVmVcN87X2h/bpsvNP5VmqDy3yDTbF22ITs/PR1yxU2
-        XIp8I4Vx/hAeK2yowUNyFH20sZ4aKVil3U8b7rjjZp8b+eIj+g5MiG1C58g5zuUrQB8p5MTfu0ie
-        ULmEi4uKRS8mTa/Q6vZnqnqMYEMfpdq7aGnWloIjYLPfUmcuFCXcDEls+x9wuMLiORd447Ouvt18
-        /X45X4LFl/ndBTifL69PwXI8Hw/51EZRajo+91R3ASuFhe/jgWvcmastsahJjr06EAzPRjAaoeg+
-        jGZxNovTcRimYRr/6pWqKbPxfXFagq2l30OtYuqY/cQcunohisAN5gLceej9wVhpGN/8p/NspFNI
-        4mMyiELYzy5kJYza502Aq//hZRRY5ISu7DhmgOFS007ANe+DgfQEuafYPUIEUadI+xre9Rlwne+o
-        4oxTx7tRVVfAqf/4doK6edBIEdg5gbo/4OADIoGQBniZ9Cbu4Ddyeo9/rShztEz8cpn8h3IVHaog
-        HoVwhNJ7mM3gdIaSMYRZklkVeBYP9vzj2Hq3puplNnZV87Us/V5rQbx5LGNODh5V468pb/N6C27S
-        bjs9aTJbw6GZc5NEuN5Wxir901JH76CQn/q/Mmqfbe5wcvgLinZLo6IFAAA=
-    headers:
-      content-encoding: [gzip]
-      content-length: ['671']
-      content-type: [application/json]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers: {}
-    method: GET
-    uri: https://api.balancedpayments.com:443/cards/CC6j2lN0CEuf3wt77J2bQW7r
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41UXU/bMBR951dYeaat44Sk6VupEBOIbgzGpE1T5MY2NaR2ZTuFCvW/z3aSJgEm
-        LQ+Wcj98zz33+L6dABAUWBEdzMBv+wPAmz+tueTi2Zlbg4ustJEbqqw1WPxI1ovbl5CYsnrS15ch
-        1Q/3JTJBk384bS9iXDxStVVcGJc4LVIGYxRFyRlm02kR0SgpGERpnNACJzEjBYsSQgpEQxZlNpwW
-        GYsYI/AMoyQNjhcXu12uqK5Kd6+oyvLoEdVmVcN87X2h/bpsvNP5VmqDy3yDTbF22ITs/PR1yxU2
-        XIp8I4Vx/hAeK2yowUNyFH20sZ4aKVil3U8b7rjjZp8b+eIj+g5MiG1C58g5zuUrQB8p5MTfu0ie
-        ULmEi4uKRS8mTa/Q6vZnqnqMYEMfpdq7aGnWloIjYLPfUmcuFCXcDEls+x9wuMLiORd447Ouvt18
-        /X45X4LFl/ndBTifL69PwXI8Hw/51EZRajo+91R3ASuFhe/jgWvcmastsahJjr06EAzPRjAaoeg+
-        jGZxNovTcRimYRr/6pWqKbPxfXFagq2l30OtYuqY/cQcunohisAN5gLceej9wVhpGN/8p/NspFNI
-        4mMyiELYzy5kJYza502Aq//hZRRY5ISu7DhmgOFS007ANe+DgfQEuafYPUIEUadI+xre9Rlwne+o
-        4oxTx7tRVVfAqf/4doK6edBIEdg5gbo/4OADIoGQBniZ9Cbu4Ddyeo9/rShztEz8cpn8h3IVHaog
-        HoVwhNJ7mM3gdIaSMYRZklkVeBYP9vzj2Hq3puplNnZV87Us/V5rQbx5LGNODh5V468pb/N6C27S
-        bjs9aTJbw6GZc5NEuN5Wxir901JH76CQn/q/Mmqfbe5wcvgLinZLo6IFAAA=
-    headers:
-      content-encoding: [gzip]
-      content-length: ['671']
-      content-type: [application/json]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -112,14 +140,14 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA52TTW6DMBCF7+I1iYH8tLFU9QKVuukqm8iAAyMZ27INEUW5e8dAIhpVlcgKsOd9
-        fn7M9ETqEhRhREImLDe8IxGBgrAk3e3j+HCICG+55/bUWIlllffGMUrHRbcuwVdN1jhhc628UH6d
-        65o29CZ/b982SCztRAloggsPNAMTaZQjztG5o8rX8sHBePJQP688ayn1BfWPhv89gt5l6G18B1U+
-        g0BZT7WvBCaG17iGy4PzC+0Mkp6GxwmKAHH4D6wollmaRGjootBLT60weqA1mcstGA9aLbT2S4oo
-        bUuu4Js/gUKpQ0IwtdDEIEGpaLHlFmpHTU+NhZbnXYjDilxAi+k+w3sQI853RmCbf86SCZmDFyde
-        1GHczlw6ERHF61D4MZs97GfDVUeYaqSMSIbzOY0dTt290Ye2R6bU+RD8OFSi5hCGFDcqsIJnEunT
-        URnoccc0mYT8NCbIkohMC0PLERbf+h9HaPaFbT185Yj1GBT3SEvjZLeKd6s0/UpStn1h6f6IZzem
-        +Ltmw5JXlmyP5PoDJJ9p5ngEAAA=
+        H4sIAAAAAAAAA52TUW+kIBSF/wvPtqi7M92SNP0DTfalT32ZoFK9CQIBtJk1/e89qNO4k80mzpNA
+        7vk4HO+dmLYtGSaYpkp56eSZZYwaJorycMzzx8eMyVFG6U+D1yjrYnRBcL4chvuWYjdUQ1C+tiYq
+        E+9r2/OBX+TP49MPEFu/UhKa4eCK5mglLXLgAt866mKvrxwsN8/128p3q7X9gP7a8H+v4N8yeFvW
+        ZNpbEJBN3MZOITE84zM9nkLcaWeWTDx9TtQkSMA/8KrZZ2kVwdCHgZeJe+XsTBuqUHtykazZae0v
+        KVDWt9LQH3kDCtIAQjK108QsgVSNaLmd2kUzcedplPU5xeFVrWhEurfwrsTAxbNTaPPfm2RS5hTV
+        STZ9Grd3qYPKmJF9KnzZzB762UlzZsIMWmeswnyuY4ep+270ue3B1Laeg7+Uq14SxnTRduSVrDRu
+        WFlkL0s3VJrq0xKjKDK2Hsx9x0R+GQLM0WaH3p53NbgRackIa2VeHO7yw11Zvhal+PkgyuMbnA2u
+        +UfN8bX4JQ4Fyt7Y5xdr+YwtfQQAAA==
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -130,8 +158,8 @@ interactions:
       content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: [W/"16c5616f1f7f57adf84ebb85c70008d6"]
-      last-modified: ['Fri, 22 May 2015 13:18:14 GMT']
+      etag: [W/"edf8aa2a5f76e98e1d67c6477ace9626"]
+      last-modified: ['Tue, 26 May 2015 18:51:47 GMT']
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
       transfer-encoding: [chunked]
@@ -143,7 +171,14 @@ interactions:
     method: GET
     uri: https://api.github.com:443/orgs/liberapay/public_members
   response:
-    body: {string: !!python/unicode '[]'}
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52TwWrDMAyG38XnUq+MwhYYO+wZdiojuI7qCBzb2EpKG/rulZMwuhwG7snB6Pv0
+        W7EPo7DeoBOV+GqVM0p7sRHYiGq3f9vt3182Qg2KVKz7aLmoJQqpknLeTFuD1PbHPkHU3hE42mrf
+        yV4u9Ofw8co+ExdJFgveWMkCLqKZZluSD3Fa6uyq/9x3Kn8oPHlr/Znpddr/GshfioPN3+jMEwam
+        RumpBR4WH+GWD46JysJMxCjzUmOTHYmnH6EpCrQwHOfsOMkoIwQ/yfpj0hEDoXdlwf6QbPLRKIdX
+        VW5iMrEgRyqLMBFMwsAXrQydkVGGiIPSlzyKCBpw4ME+oVuxbKNLAL7b3/zj85iRoFZNlx/WSdkE
+        t587ouWI2WoDAAA=
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -151,63 +186,84 @@ interactions:
           X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
           X-Poll-Interval']
       cache-control: ['public, max-age=60, s-maxage=60']
-      content-length: ['2']
+      content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: ['"98f0c1b396a4e5d54f4d5fe561d54b44"']
+      etag: [W/"7e1bcc65d400d193c9e55e41e2c7beaa"]
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/cards/CC6j2lN0CEuf3wt77J2bQW7r
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cards/8301774
   response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41UXU/bMBR951dYeaat44Sk6VupEBOIbgzGpE1T5MY2NaR2ZTuFCvW/z3aSJgEm
-        LQ+Wcj98zz33+L6dABAUWBEdzMBv+wPAmz+tueTi2Zlbg4ustJEbqqw1WPxI1ovbl5CYsnrS15ch
-        1Q/3JTJBk384bS9iXDxStVVcGJc4LVIGYxRFyRlm02kR0SgpGERpnNACJzEjBYsSQgpEQxZlNpwW
-        GYsYI/AMoyQNjhcXu12uqK5Kd6+oyvLoEdVmVcN87X2h/bpsvNP5VmqDy3yDTbF22ITs/PR1yxU2
-        XIp8I4Vx/hAeK2yowUNyFH20sZ4aKVil3U8b7rjjZp8b+eIj+g5MiG1C58g5zuUrQB8p5MTfu0ie
-        ULmEi4uKRS8mTa/Q6vZnqnqMYEMfpdq7aGnWloIjYLPfUmcuFCXcDEls+x9wuMLiORd447Ouvt18
-        /X45X4LFl/ndBTifL69PwXI8Hw/51EZRajo+91R3ASuFhe/jgWvcmastsahJjr06EAzPRjAaoeg+
-        jGZxNovTcRimYRr/6pWqKbPxfXFagq2l30OtYuqY/cQcunohisAN5gLceej9wVhpGN/8p/NspFNI
-        4mMyiELYzy5kJYza502Aq//hZRRY5ISu7DhmgOFS007ANe+DgfQEuafYPUIEUadI+xre9Rlwne+o
-        4oxTx7tRVVfAqf/4doK6edBIEdg5gbo/4OADIoGQBniZ9Cbu4Ddyeo9/rShztEz8cpn8h3IVHaog
-        HoVwhNJ7mM3gdIaSMYRZklkVeBYP9vzj2Hq3puplNnZV87Us/V5rQbx5LGNODh5V468pb/N6C27S
-        bjs9aTJbw6GZc5NEuN5Wxir901JH76CQn/q/Mmqfbe5wcvgLinZLo6IFAAA=
+    body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":true,"Currency":"EUR","Validity":"VALID","UserId":"8301771","Id":"8301774","Tag":null,"CreationDate":1440851675}'}
     headers:
-      content-encoding: [gzip]
-      content-length: ['671']
-      content-type: [application/json]
+      cache-control: [no-cache]
+      content-length: ['286']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
     status: {code: 200, message: OK}
 - request:
     body: null
     headers: {}
     method: GET
-    uri: https://api.balancedpayments.com:443/cards/CC6j2lN0CEuf3wt77J2bQW7r
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301769
   response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA41UXU/bMBR951dYeaat44Sk6VupEBOIbgzGpE1T5MY2NaR2ZTuFCvW/z3aSJgEm
-        LQ+Wcj98zz33+L6dABAUWBEdzMBv+wPAmz+tueTi2Zlbg4ustJEbqqw1WPxI1ovbl5CYsnrS15ch
-        1Q/3JTJBk384bS9iXDxStVVcGJc4LVIGYxRFyRlm02kR0SgpGERpnNACJzEjBYsSQgpEQxZlNpwW
-        GYsYI/AMoyQNjhcXu12uqK5Kd6+oyvLoEdVmVcN87X2h/bpsvNP5VmqDy3yDTbF22ITs/PR1yxU2
-        XIp8I4Vx/hAeK2yowUNyFH20sZ4aKVil3U8b7rjjZp8b+eIj+g5MiG1C58g5zuUrQB8p5MTfu0ie
-        ULmEi4uKRS8mTa/Q6vZnqnqMYEMfpdq7aGnWloIjYLPfUmcuFCXcDEls+x9wuMLiORd447Ouvt18
-        /X45X4LFl/ndBTifL69PwXI8Hw/51EZRajo+91R3ASuFhe/jgWvcmastsahJjr06EAzPRjAaoeg+
-        jGZxNovTcRimYRr/6pWqKbPxfXFagq2l30OtYuqY/cQcunohisAN5gLceej9wVhpGN/8p/NspFNI
-        4mMyiELYzy5kJYza502Aq//hZRRY5ISu7DhmgOFS007ANe+DgfQEuafYPUIEUadI+xre9Rlwne+o
-        4oxTx7tRVVfAqf/4doK6edBIEdg5gbo/4OADIoGQBniZ9Cbu4Ddyeo9/rShztEz8cpn8h3IVHaog
-        HoVwhNJ7mM3gdIaSMYRZklkVeBYP9vzj2Hq3puplNnZV87Us/V5rQbx5LGNODh5V468pb/N6C27S
-        bjs9aTJbw6GZc5NEuN5Wxir901JH76CQn/q/Mmqfbe5wcvgLinZLo6IFAAA=
+    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"David","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"8301769","Tag":null,"CreationDate":1440851665}'}
     headers:
-      content-encoding: [gzip]
-      content-length: ['671']
-      content-type: [application/json]
+      cache-control: [no-cache]
+      content-length: ['415']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301769
+  response:
+    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"David","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"8301769","Tag":null,"CreationDate":1440851665}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['415']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cards/8301774
+  response:
+    body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":true,"Currency":"EUR","Validity":"VALID","UserId":"8301771","Id":"8301774","Tag":null,"CreationDate":1440851675}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['286']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301769
+  response:
+    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"David","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"8301769","Tag":null,"CreationDate":1440851665}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['415']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -217,14 +273,14 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA52TTW6DMBCF7+I1iYH8tLFU9QKVuukqm8iAAyMZ27INEUW5e8dAIhpVlcgKsOd9
-        fn7M9ETqEhRhREImLDe8IxGBgrAk3e3j+HCICG+55/bUWIlllffGMUrHRbcuwVdN1jhhc628UH6d
-        65o29CZ/b982SCztRAloggsPNAMTaZQjztG5o8rX8sHBePJQP688ayn1BfWPhv89gt5l6G18B1U+
-        g0BZT7WvBCaG17iGy4PzC+0Mkp6GxwmKAHH4D6wollmaRGjootBLT60weqA1mcstGA9aLbT2S4oo
-        bUuu4Js/gUKpQ0IwtdDEIEGpaLHlFmpHTU+NhZbnXYjDilxAi+k+w3sQI853RmCbf86SCZmDFyde
-        1GHczlw6ERHF61D4MZs97GfDVUeYaqSMSIbzOY0dTt290Ye2R6bU+RD8OFSi5hCGFDcqsIJnEunT
-        URnoccc0mYT8NCbIkohMC0PLERbf+h9HaPaFbT185Yj1GBT3SEvjZLeKd6s0/UpStn1h6f6IZzem
-        +Ltmw5JXlmyP5PoDJJ9p5ngEAAA=
+        H4sIAAAAAAAAA52TUW+kIBSF/wvPtqi7M92SNP0DTfalT32ZoFK9CQIBtJk1/e89qNO4k80mzpNA
+        7vk4HO+dmLYtGSaYpkp56eSZZYwaJorycMzzx8eMyVFG6U+D1yjrYnRBcL4chvuWYjdUQ1C+tiYq
+        E+9r2/OBX+TP49MPEFu/UhKa4eCK5mglLXLgAt866mKvrxwsN8/128p3q7X9gP7a8H+v4N8yeFvW
+        ZNpbEJBN3MZOITE84zM9nkLcaWeWTDx9TtQkSMA/8KrZZ2kVwdCHgZeJe+XsTBuqUHtykazZae0v
+        KVDWt9LQH3kDCtIAQjK108QsgVSNaLmd2kUzcedplPU5xeFVrWhEurfwrsTAxbNTaPPfm2RS5hTV
+        STZ9Grd3qYPKmJF9KnzZzB762UlzZsIMWmeswnyuY4ep+270ue3B1Laeg7+Uq14SxnTRduSVrDRu
+        WFlkL0s3VJrq0xKjKDK2Hsx9x0R+GQLM0WaH3p53NbgRackIa2VeHO7yw11Zvhal+PkgyuMbnA2u
+        +UfN8bX4JQ4Fyt7Y5xdr+YwtfQQAAA==
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -235,8 +291,8 @@ interactions:
       content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: [W/"16c5616f1f7f57adf84ebb85c70008d6"]
-      last-modified: ['Fri, 22 May 2015 13:18:14 GMT']
+      etag: [W/"edf8aa2a5f76e98e1d67c6477ace9626"]
+      last-modified: ['Tue, 26 May 2015 18:51:47 GMT']
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
       transfer-encoding: [chunked]
@@ -248,7 +304,14 @@ interactions:
     method: GET
     uri: https://api.github.com:443/orgs/liberapay/public_members
   response:
-    body: {string: !!python/unicode '[]'}
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52TwWrDMAyG38XnUq+MwhYYO+wZdiojuI7qCBzb2EpKG/rulZMwuhwG7snB6Pv0
+        W7EPo7DeoBOV+GqVM0p7sRHYiGq3f9vt3182Qg2KVKz7aLmoJQqpknLeTFuD1PbHPkHU3hE42mrf
+        yV4u9Ofw8co+ExdJFgveWMkCLqKZZluSD3Fa6uyq/9x3Kn8oPHlr/Znpddr/GshfioPN3+jMEwam
+        RumpBR4WH+GWD46JysJMxCjzUmOTHYmnH6EpCrQwHOfsOMkoIwQ/yfpj0hEDoXdlwf6QbPLRKIdX
+        VW5iMrEgRyqLMBFMwsAXrQydkVGGiIPSlzyKCBpw4ME+oVuxbKNLAL7b3/zj85iRoFZNlx/WSdkE
+        t587ouWI2WoDAAA=
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -256,12 +319,13 @@ interactions:
           X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
           X-Poll-Interval']
       cache-control: ['public, max-age=60, s-maxage=60']
-      content-length: ['2']
+      content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: ['"98f0c1b396a4e5d54f4d5fe561d54b44"']
+      etag: [W/"7e1bcc65d400d193c9e55e41e2c7beaa"]
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 version: 1

@@ -7,14 +7,14 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA52TTW6DMBCF7+I1iYH8tLFU9QKVuukqm8iAAyMZ27INEUW5e8dAIhpVlcgKsOd9
-        fn7M9ETqEhRhREImLDe8IxGBgrAk3e3j+HCICG+55/bUWIlllffGMUrHRbcuwVdN1jhhc628UH6d
-        65o29CZ/b982SCztRAloggsPNAMTaZQjztG5o8rX8sHBePJQP688ayn1BfWPhv89gt5l6G18B1U+
-        g0BZT7WvBCaG17iGy4PzC+0Mkp6GxwmKAHH4D6wollmaRGjootBLT60weqA1mcstGA9aLbT2S4oo
-        bUuu4Js/gUKpQ0IwtdDEIEGpaLHlFmpHTU+NhZbnXYjDilxAi+k+w3sQI853RmCbf86SCZmDFyde
-        1GHczlw6ERHF61D4MZs97GfDVUeYaqSMSIbzOY0dTt290Ye2R6bU+RD8OFSi5hCGFDcqsIJnEunT
-        URnoccc0mYT8NCbIkohMC0PLERbf+h9HaPaFbT185Yj1GBT3SEvjZLeKd6s0/UpStn1h6f6IZzem
-        +Ltmw5JXlmyP5PoDJJ9p5ngEAAA=
+        H4sIAAAAAAAAA52TUW+kIBSF/wvPtqi7M92SNP0DTfalT32ZoFK9CQIBtJk1/e89qNO4k80mzpNA
+        7vk4HO+dmLYtGSaYpkp56eSZZYwaJorycMzzx8eMyVFG6U+D1yjrYnRBcL4chvuWYjdUQ1C+tiYq
+        E+9r2/OBX+TP49MPEFu/UhKa4eCK5mglLXLgAt866mKvrxwsN8/128p3q7X9gP7a8H+v4N8yeFvW
+        ZNpbEJBN3MZOITE84zM9nkLcaWeWTDx9TtQkSMA/8KrZZ2kVwdCHgZeJe+XsTBuqUHtykazZae0v
+        KVDWt9LQH3kDCtIAQjK108QsgVSNaLmd2kUzcedplPU5xeFVrWhEurfwrsTAxbNTaPPfm2RS5hTV
+        STZ9Grd3qYPKmJF9KnzZzB762UlzZsIMWmeswnyuY4ep+270ue3B1Laeg7+Uq14SxnTRduSVrDRu
+        WFlkL0s3VJrq0xKjKDK2Hsx9x0R+GQLM0WaH3p53NbgRackIa2VeHO7yw11Zvhal+PkgyuMbnA2u
+        +UfN8bX4JQ4Fyt7Y5xdr+YwtfQQAAA==
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -25,8 +25,8 @@ interactions:
       content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: [W/"16c5616f1f7f57adf84ebb85c70008d6"]
-      last-modified: ['Fri, 22 May 2015 13:18:14 GMT']
+      etag: [W/"edf8aa2a5f76e98e1d67c6477ace9626"]
+      last-modified: ['Tue, 26 May 2015 18:51:47 GMT']
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
       transfer-encoding: [chunked]
@@ -38,7 +38,14 @@ interactions:
     method: GET
     uri: https://api.github.com:443/orgs/liberapay/public_members
   response:
-    body: {string: !!python/unicode '[]'}
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52TwWrDMAyG38XnUq+MwhYYO+wZdiojuI7qCBzb2EpKG/rulZMwuhwG7snB6Pv0
+        W7EPo7DeoBOV+GqVM0p7sRHYiGq3f9vt3182Qg2KVKz7aLmoJQqpknLeTFuD1PbHPkHU3hE42mrf
+        yV4u9Ofw8co+ExdJFgveWMkCLqKZZluSD3Fa6uyq/9x3Kn8oPHlr/Znpddr/GshfioPN3+jMEwam
+        RumpBR4WH+GWD46JysJMxCjzUmOTHYmnH6EpCrQwHOfsOMkoIwQ/yfpj0hEDoXdlwf6QbPLRKIdX
+        VW5iMrEgRyqLMBFMwsAXrQydkVGGiIPSlzyKCBpw4ME+oVuxbKNLAL7b3/zj85iRoFZNlx/WSdkE
+        t587ouWI2WoDAAA=
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-origin: ['*']
@@ -46,12 +53,13 @@ interactions:
           X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
           X-Poll-Interval']
       cache-control: ['public, max-age=60, s-maxage=60']
-      content-length: ['2']
+      content-encoding: [gzip]
       content-security-policy: [default-src 'none']
       content-type: [application/json; charset=utf-8]
-      etag: ['"98f0c1b396a4e5d54f4d5fe561d54b44"']
+      etag: [W/"7e1bcc65d400d193c9e55e41e2c7beaa"]
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
@@ -71,10 +79,10 @@ interactions:
       content-length: ['93']
       content-type: [application/json;charset=utf-8]
       expires: ['Tue, 31 Mar 1981 05:00:00 GMT']
-      last-modified: ['Mon, 25 May 2015 17:13:33 GMT']
+      last-modified: ['Sat, 29 Aug 2015 12:35:34 GMT']
       pragma: [no-cache]
-      set-cookie: ['guest_id=v1%3A143257401303961298; Domain=.twitter.com; Path=/;
-          Expires=Wed, 24-May-2017 17:13:33 UTC']
+      set-cookie: ['guest_id=v1%3A144085173476796921; Domain=.twitter.com; Path=/;
+          Expires=Mon, 28-Aug-2017 12:35:34 UTC']
       status: [404 Not Found]
       strict-transport-security: [max-age=631138519]
     status: {code: 404, message: Not Found}
@@ -131,6 +139,8 @@ interactions:
         H4sIAAAAAAAAA6tWSi0qyi9SslKoVspNLS5OTE8FspUSUzKKsxKzU7KKU7KzihOzUjKyi1MSlWpr
         AfM0plMwAAAA
     headers:
+      bbuserid: ['4601603']
+      bbusername: [liberapay]
       content-encoding: [gzip]
       content-language: [en]
       content-type: [application/json; charset=utf-8]

@@ -1,0 +1,51 @@
+interactions:
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301775/bankaccounts/8301777
+  response:
+    body: {string: !!python/unicode '{"OwnerAddress":{"AddressLine1":"Somewhere","AddressLine2":null,"City":"The
+        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"8301775","OwnerName":"Homer
+        Jay","Type":"IBAN","Id":"8301777","Tag":null,"CreationDate":1440851680}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['308']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"BankWireRef": "658989072", "DebitedFunds": {"Currency": "EUR", "Amount":
+      100}, "BankAccountId": "8301777", "AuthorId": "8301775", "Tag": "658989072",
+      "Fees": {"Currency": "EUR", "Amount": 0}, "DebitedWalletId": "8301776"}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payouts/bankwire/
+  response:
+    body: {string: !!python/unicode '{"Id":"8301778","Tag":"658989072","CreationDate":1440851686,"AuthorId":"8301775","CreditedUserId":null,"DebitedFunds":{"Currency":"EUR","Amount":100},"CreditedFunds":{"Currency":"EUR","Amount":100},"Fees":{"Currency":"EUR","Amount":0},"Status":"FAILED","ResultCode":"001001","ResultMessage":"Unsufficient
+        wallet balance","ExecutionDate":null,"Type":"PAYOUT","Nature":"REGULAR","CreditedWalletId":null,"DebitedWalletId":"8301776","PaymentType":"BANK_WIRE","BankAccountId":"8301777","BankWireRef":"658989072"}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['507']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301775/bankaccounts/8301777
+  response:
+    body: {string: !!python/unicode '{"OwnerAddress":{"AddressLine1":"Somewhere","AddressLine2":null,"City":"The
+        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"8301775","OwnerName":"Homer
+        Jay","Type":"IBAN","Id":"8301777","Tag":null,"CreationDate":1440851680}'}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['308']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+version: 1
