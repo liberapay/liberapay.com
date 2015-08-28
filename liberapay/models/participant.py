@@ -936,40 +936,31 @@ class Participant(Model, MixinTeam):
 
     def update_giving(self, cursor=None):
         # Update is_funded on tips
-        if self.get_credit_card_error() == '':
-            updated = (cursor or self.db).all("""
-                UPDATE current_tips
-                   SET is_funded = true
-                 WHERE tipper = %s
-                   AND is_funded IS NOT true
+        tips = (cursor or self.db).all("""
+            SELECT t.*
+              FROM current_tips t
+              JOIN participants p2 ON p2.id = t.tippee
+             WHERE t.tipper = %s
+               AND t.amount > 0
+               AND p2.is_suspicious IS NOT true
+          ORDER BY p2.join_time IS NULL, t.ctime ASC
+        """, (self.id,))
+        fake_balance = self.balance + self.receiving
+        updated = []
+        for tip in tips:
+            if tip.amount > fake_balance:
+                is_funded = False
+            else:
+                fake_balance -= tip.amount
+                is_funded = True
+            if tip.is_funded == is_funded:
+                continue
+            updated.append((cursor or self.db).one("""
+                UPDATE tips
+                   SET is_funded = %s
+                 WHERE id = %s
              RETURNING *
-            """, (self.id,))
-        else:
-            tips = (cursor or self.db).all("""
-                SELECT t.*
-                  FROM current_tips t
-                  JOIN participants p2 ON p2.id = t.tippee
-                 WHERE t.tipper = %s
-                   AND t.amount > 0
-                   AND p2.is_suspicious IS NOT true
-              ORDER BY p2.join_time IS NULL, t.ctime ASC
-            """, (self.id,))
-            fake_balance = self.balance + self.receiving
-            updated = []
-            for tip in tips:
-                if tip.amount > fake_balance:
-                    is_funded = False
-                else:
-                    fake_balance -= tip.amount
-                    is_funded = True
-                if tip.is_funded == is_funded:
-                    continue
-                updated.append((cursor or self.db).one("""
-                    UPDATE tips
-                       SET is_funded = %s
-                     WHERE id = %s
-                 RETURNING *
-                """, (is_funded, tip.id)))
+            """, (is_funded, tip.id)))
 
         # Update giving and pledging on participant
         giving, pledging = (cursor or self.db).one("""

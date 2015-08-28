@@ -58,8 +58,6 @@ class ExchangeRoute(Model):
                  VALUES (%(p_id)s, %(network)s, %(address)s, %(error)s, %(one_off)s)
               RETURNING exchange_routes.*::exchange_routes
         """, locals())
-        if network == 'mango-cc':
-            participant.update_giving_and_tippees()
         r.__dict__['participant'] = participant
         return r
 
@@ -72,7 +70,7 @@ class ExchangeRoute(Model):
                 assert card.Active is False, card.Active
         self.update_error('invalidated')
 
-    def update_error(self, new_error, propagate=True):
+    def update_error(self, new_error):
         id = self.id
         old_error = self.error
         if old_error == 'invalidated':
@@ -83,10 +81,3 @@ class ExchangeRoute(Model):
              WHERE id = %(id)s
         """, locals())
         self.set_attributes(error=new_error)
-
-        # Update the receiving amounts of tippees if requested and necessary
-        if not propagate or self.network != 'mango-cc':
-            return
-        if self.participant.is_suspicious or bool(new_error) == bool(old_error):
-            return
-        self.participant.update_giving_and_tippees()

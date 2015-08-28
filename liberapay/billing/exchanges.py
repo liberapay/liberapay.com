@@ -256,7 +256,7 @@ def propagate_exchange(cursor, participant, route, error, amount):
     """Propagates an exchange's result to the participant's balance and the
     route's status.
     """
-    route.update_error(error or '', propagate=False)
+    route.update_error(error or '')
     new_balance = cursor.one("""
         UPDATE participants
            SET balance=(balance + %s)
