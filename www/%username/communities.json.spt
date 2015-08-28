@@ -33,7 +33,7 @@ if request.method == 'POST':
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         out['slug'] = slug
     else:
-        request.redirect(request.body.get('back_to') or '/for/'+slug)
+        response.redirect(request.body.get('back_to') or '/for/'+slug)
 
 else:
     out = participant.get_communities()

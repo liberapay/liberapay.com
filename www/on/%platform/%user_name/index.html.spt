@@ -12,7 +12,7 @@ platform, account = get_account_elsewhere(website, state)
 participant = account.participant
 
 if participant.status != 'stub':
-    request.redirect('/%s/' % participant.username)
+    response.redirect('/%s/' % participant.username)
 
 title = friendly_name = account.friendly_name
 user_id = account.user_id

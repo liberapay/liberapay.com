@@ -24,7 +24,7 @@ if request.method == 'POST':
             except participant.BankWithdrawalFailed as e:
                 error = _("The bank withdrawal failed. Error message: {0}", e)
             else:
-                request.redirect('/%s/' % participant.username)
+                response.redirect('/%s/' % participant.username)
 [---] text/html
 {% extends "templates/base.html" %}
 

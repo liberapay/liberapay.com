@@ -10,7 +10,7 @@ request.allow('POST')
 body = request.body
 
 if body['should_transfer'] != 'yes':
-    request.redirect('/%s/' % user.username)
+    response.redirect('/%s/' % user.username)
 
 account_id = body['account_id']
 account = AccountElsewhere.from_id(account_id)
@@ -24,6 +24,6 @@ if not token or not account.check_connect_token(token.value):
 account.save_connect_token(None, None)
 
 user.take_over(account, have_confirmation=True)
-request.redirect('/%s/' % user.username)
+response.redirect('/%s/' % user.username)
 
 [---------]

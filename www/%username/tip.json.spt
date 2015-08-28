@@ -31,7 +31,7 @@ else:
         except (InvalidOperation, ValueError, NumberFormatError):
             raise Response(400, "bad amount")
         if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
-            request.redirect(request.body.get('back_to') or '..')
+            response.redirect(request.body.get('back_to') or '..')
     else:
         out = tipper.get_tip_to(tippee)
 

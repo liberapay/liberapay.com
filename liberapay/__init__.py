@@ -12,7 +12,7 @@ class X: pass
 canonical_scheme = None
 canonical_host = None
 
-def canonize(request):
+def canonize(request, website):
     """Enforce a certain scheme and hostname.
     """
     scheme = request.headers.get('X-Forwarded-Proto', 'http') # per Heroku
@@ -30,7 +30,7 @@ def canonize(request):
         else:
             # For non-idempotent methods, redirect to homepage.
             url += '/'
-        request.redirect(url)
+        website.redirect(url)
 
 
 def insert_constants():
