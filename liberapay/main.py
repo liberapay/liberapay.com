@@ -16,7 +16,7 @@ import aspen
 from aspen.website import Website
 
 
-website = Website([])
+website = Website()
 
 
 # Configure renderers

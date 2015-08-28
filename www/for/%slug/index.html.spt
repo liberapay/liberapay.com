@@ -12,7 +12,7 @@ if name_pattern.match(_slug) is None:
     raise Response(404)
 slug = slugize(_slug)
 if slug != _slug:
-    request.redirect('../' + slug + '/')
+    response.redirect('../' + slug + '/')
 
 try:
     limit = min(int(request.qs.get('limit', 12)), 100)

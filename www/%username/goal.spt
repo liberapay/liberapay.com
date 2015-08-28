@@ -26,7 +26,7 @@ if goal == -1 and not request.body.get("confirmed"):
             "\n\nThat cannot be undone!")
 else:
     participant.update_goal(goal)
-    request.redirect('./edit')
+    response.redirect('./edit')
 
 [---] text/html
 {% extends "templates/base.html" %}

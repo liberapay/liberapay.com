@@ -78,7 +78,7 @@ def get_participant(state, restrict=True, redirect_stub=True):
         if redirect_stub:
             to = participant.resolve_stub()
             assert to
-            request.redirect(to)
+            raise Response(302, headers={'Location': to})
 
     if restrict:
         if participant != user:

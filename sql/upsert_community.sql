@@ -33,6 +33,11 @@ CREATE OR REPLACE FUNCTION upsert_community() RETURNS trigger AS $$
             ELSE
                 DELETE FROM communities WHERE slug = rec.slug AND nmembers = 1;
                 IF (FOUND) THEN RETURN rec; END IF;
+                IF (SELECT 1 FROM communities WHERE slug = rec.slug) THEN
+                    CONTINUE;
+                ELSE
+                    RETURN rec;
+                END IF;
             END IF;
         END LOOP;
         RAISE 'upsert in communities failed';

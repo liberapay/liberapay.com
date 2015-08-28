@@ -112,6 +112,8 @@ class Harness(unittest.TestCase):
                 if not tablenames:
                     raise
                 tablenames.insert(0, tablename)
+                self.tablenames.remove(tablename)
+                self.tablenames.insert(0, tablename)
         self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
 
 

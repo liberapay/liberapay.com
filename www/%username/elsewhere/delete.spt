@@ -12,7 +12,7 @@ user_id = request.body["user_id"]
 user.delete_elsewhere(platform, user_id)
 
 if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
-    request.redirect('..')
+    response.redirect('..')
 
 [---] application/json via json_dump
 {}

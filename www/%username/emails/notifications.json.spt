@@ -25,7 +25,7 @@ for field in fields:
     """.format(op), (mask, p_id))
 
 if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
-    request.redirect('.')
+    response.redirect('.')
 
 [---] application/json via json_dump
 {'msg': _("Your notification settings have been changed.")}

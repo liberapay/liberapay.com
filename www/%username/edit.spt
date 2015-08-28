@@ -19,7 +19,7 @@ if request.method == 'POST':
 
     if request.body.get('save') == 'true':
         participant.upsert_statement(lang, statement)
-        request.redirect(request.line.uri+'#statement')
+        response.redirect(request.line.uri+'#statement')
 
 else:
     lang = request.qs.get('lang')

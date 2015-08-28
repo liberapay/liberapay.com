@@ -67,7 +67,7 @@ class TestPages(Harness):
         alice = self.make_participant('alice')
         expected = "<a href='/alice/edit'>"
         actual = self.client.GET('/', auth_as=alice).body
-        assert expected in actual
+        assert expected in actual, actual
 
     def test_username_is_in_unauth_giving_cta(self):
         self.make_participant('alice')
