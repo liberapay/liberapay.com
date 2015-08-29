@@ -271,10 +271,10 @@ def add_helpers_to_context(tell_sentry, context, loc):
 
 
 def extract_spt(fileobj, *args, **kw):
-    pages = list(split_and_escape(fileobj.read()))
+    pages = list(split_and_escape(fileobj.read().decode('utf8')))
     npages = len(pages)
     for i, page in enumerate(pages, 1):
-        f = BytesIO(b'\n' * page.offset + page.content)
+        f = BytesIO(b'\n' * page.offset + page.content.encode('utf8'))
         content_type, renderer = parse_specline(page.header)
         extractor = None
         if (i == npages and not page.header) or content_type in ('text/html', 'text/plain'):
