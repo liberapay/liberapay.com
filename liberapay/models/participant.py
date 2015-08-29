@@ -928,11 +928,10 @@ class Participant(Model, MixinTeam):
             elif status == 'active':
                 self.update_goal(None, c)
 
-    def update_giving_and_tippees(self):
-        with self.db.get_cursor() as cursor:
-            updated_tips = self.update_giving(cursor)
-            for tip in updated_tips:
-                Participant.from_id(tip.tippee).update_receiving(cursor)
+    def update_giving_and_tippees(self, cursor):
+        updated_tips = self.update_giving(cursor)
+        for tip in updated_tips:
+            Participant.from_id(tip.tippee).update_receiving(cursor)
 
     def update_giving(self, cursor=None):
         # Update is_funded on tips

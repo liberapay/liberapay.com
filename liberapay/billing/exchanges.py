@@ -267,8 +267,10 @@ def propagate_exchange(cursor, participant, route, error, amount):
     if amount < 0 and new_balance < 0:
         raise NegativeBalance
 
-    if hasattr(participant, 'set_attributes'):
-        participant.set_attributes(balance=new_balance)
+    participant.set_attributes(balance=new_balance)
+
+    if amount != 0:
+        participant.update_giving_and_tippees(cursor)
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
