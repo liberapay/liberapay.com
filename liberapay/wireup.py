@@ -12,12 +12,12 @@ from aspen.testing.client import Client
 from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
-import balanced
+from environment import Environment, is_yesish
+import mandrill
+import raven
+
 import liberapay
 import liberapay.billing.payday
-import raven
-import mandrill
-from environment import Environment, is_yesish
 from liberapay.elsewhere import PlatformRegistry
 from liberapay.elsewhere.bitbucket import Bitbucket
 from liberapay.elsewhere.bountysource import Bountysource
@@ -38,9 +38,11 @@ from liberapay.utils.i18n import (
     get_function_from_rule, make_sorted_dict
 )
 
+
 def canonical(env):
     liberapay.canonical_scheme = env.canonical_scheme
     liberapay.canonical_host = env.canonical_host
+    liberapay.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
 
 
 def db(env):
@@ -56,6 +58,7 @@ def db(env):
 
     return db
 
+
 def mail(env, project_root='.'):
     Participant._mailer = mandrill.Mandrill(env.mandrill_key)
     emails = {}
@@ -66,8 +69,13 @@ def mail(env, project_root='.'):
         emails[base_name] = compile_email_spt(spt)
     Participant._emails = emails
 
+
 def billing(env):
-    balanced.configure(env.balanced_api_secret)
+    from mangopaysdk.configuration import Configuration
+    Configuration.BaseURL = env.mangopay_base_url
+    Configuration.ClientID = env.mangopay_client_id
+    Configuration.ClientPassword = env.mangopay_client_password
+    Configuration.SSLVerification = True
 
 
 def username_restrictions(website):
@@ -312,7 +320,9 @@ def env():
         CACHE_STATIC                    = is_yesish,
         COMPRESS_ASSETS                 = is_yesish,
         PASSWORD_ROUNDS                 = int,
-        BALANCED_API_SECRET             = unicode,
+        MANGOPAY_BASE_URL               = unicode,
+        MANGOPAY_CLIENT_ID              = unicode,
+        MANGOPAY_CLIENT_PASSWORD        = unicode,
         GITHUB_CLIENT_ID                = unicode,
         GITHUB_CLIENT_SECRET            = unicode,
         GITHUB_CALLBACK                 = unicode,

@@ -4,21 +4,20 @@ from datetime import datetime
 from decimal import Decimal
 import json
 
-from mock import patch
-
 from liberapay.billing.payday import Payday
 from liberapay.models.participant import Participant
 from liberapay.testing import Harness
+from liberapay.testing.mangopay import FakeTransfersHarness
 from liberapay.utils.history import get_end_of_year_balance, iter_payday_events
 
 
 def make_history(harness):
     alice = harness.make_participant('alice', join_time=datetime(2001, 1, 1, 0, 0, 0))
     harness.alice = alice
-    harness.make_exchange('balanced-cc', 50, 0, alice)
-    harness.make_exchange('balanced-cc', 12, 0, alice, status='failed')
-    harness.make_exchange('balanced-ba', -40, 0, alice)
-    harness.make_exchange('balanced-ba', -5, 0, alice, status='failed')
+    harness.make_exchange('mango-cc', 50, 0, alice)
+    harness.make_exchange('mango-cc', 12, 0, alice, status='failed')
+    harness.make_exchange('mango-ba', -40, 0, alice)
+    harness.make_exchange('mango-ba', -5, 0, alice, status='failed')
     harness.db.run("""
         UPDATE exchanges
            SET timestamp = "timestamp" - interval '1 year'
@@ -29,21 +28,21 @@ def make_history(harness):
       ORDER BY id ASC
          LIMIT 1
     """))
-    harness.make_exchange('balanced-cc', 35, 0, alice)
-    harness.make_exchange('balanced-cc', 49, 0, alice, status='failed')
-    harness.make_exchange('balanced-ba', -15, 0, alice)
-    harness.make_exchange('balanced-ba', -7, 0, alice, status='failed')
+    harness.make_exchange('mango-cc', 35, 0, alice)
+    harness.make_exchange('mango-cc', 49, 0, alice, status='failed')
+    harness.make_exchange('mango-ba', -15, 0, alice)
+    harness.make_exchange('mango-ba', -7, 0, alice, status='failed')
 
 
-class TestHistory(Harness):
+class TestHistory(FakeTransfersHarness):
 
     def test_iter_payday_events(self):
         Payday.start().run()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
-        self.make_exchange('balanced-cc', 10000, 0, team)
-        self.make_exchange('balanced-cc', 10000, 0, alice)
-        self.make_exchange('balanced-cc', -5000, 0, alice)
+        self.make_exchange('mango-cc', 10000, 0, team)
+        self.make_exchange('mango-cc', 10000, 0, alice)
+        self.make_exchange('mango-cc', -5000, 0, alice)
         self.db.run("""
             UPDATE transfers
                SET timestamp = "timestamp" - interval '1 month'
@@ -56,9 +55,7 @@ class TestHistory(Harness):
 
         assert bob.balance == 0
         for i in range(2):
-            with patch.object(Payday, 'fetch_card_holds') as fch:
-                fch.return_value = {}
-                Payday.start().run()
+            Payday.start().run()
             self.db.run("""
                 UPDATE paydays
                    SET ts_start = ts_start - interval '1 week'
@@ -94,9 +91,9 @@ class TestHistory(Harness):
 
     def test_iter_payday_events_with_failed_exchanges(self):
         alice = self.make_participant('alice')
-        self.make_exchange('balanced-cc', 50, 0, alice)
-        self.make_exchange('balanced-cc', 12, 0, alice, status='failed')
-        self.make_exchange('balanced-ba', -40, 0, alice, status='failed')
+        self.make_exchange('mango-cc', 50, 0, alice)
+        self.make_exchange('mango-cc', 12, 0, alice, status='failed')
+        self.make_exchange('mango-ba', -40, 0, alice, status='failed')
         events = list(iter_payday_events(self.db, alice))
         assert len(events) == 5
         assert events[0]['kind'] == 'day-open'

@@ -14,7 +14,7 @@ subpath = 'history/' if user.is_admin else ''
 admin_override = user.is_admin and (participant != user or 'override' in request.qs)
 translated_status = { None:         ''
                     , 'pre':        _('pre')
-                    , 'pending':    _('pending')
+                    , 'created':    _('pending')
                     , 'failed':     _('failed')
                     , 'succeeded':  _('succeeded')
                      }
@@ -30,9 +30,9 @@ if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
 
 if participant == user:
-    BALANCE = _("Your balance is {0}.", Money(participant.balance, "USD"))
+    BALANCE = _("Your balance is {0}.", Money(participant.balance, "EUR"))
 else:
-    BALANCE = _("Their balance is {0}.", Money(participant.balance, "USD"))
+    BALANCE = _("Their balance is {0}.", Money(participant.balance, "EUR"))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/settings.html" %}
@@ -55,14 +55,14 @@ else:
 {% for event in events %}
     {% if event['kind'] == 'totals' %}
     <tr><td colspan="8" class="totals">
-        {{ _("Total given: {0}", Money(event['given'], "USD")) }}
+        {{ _("Total given: {0}", Money(event['given'], "EUR")) }}
             {% if event['given'] %}
             (<a href="export.csv?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
                 _("Export as CSV")
             }}</a>)
             {% endif %}
         <br>
-        {{ _("Total received: {0}", Money(event['received'], "USD")) }}
+        {{ _("Total received: {0}", Money(event['received'], "EUR")) }}
     </td></tr>
     {% elif event['kind'] == 'day-open' %}
     <tr>
@@ -97,12 +97,9 @@ else:
         <td class="balance">{{ event['balance'] }}</td>
         <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
-        {% if event['recorder'] == None %}
-            {{ _("Automatic Withdrawal").lower() }}
-            {% if event['note'] %}&mdash;{{ event['note'] }}{% endif %}
-        {% elif event['note'] %}
-            &ldquo;{{ event['note'] }}&rdquo;&mdash;
-            <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
+        {{ event['note'] or '' }}
+        {% if event['recorder'] %}
+            &mdash; <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
         </td>
     </tr>
@@ -116,14 +113,11 @@ else:
         <td class="balance">{{ event['balance'] }}</td>
         <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
-        {% if event['recorder'] == None %}
-            {{ _("Automatic Charge").lower() }}
-            {% if event['note'] %}&mdash;{{ event['note'] }}{% endif %}
-        {% elif event['note'] %}
-            &ldquo;{{ event['note'] }}&rdquo;&mdash;
-            <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
+        {{ event['note'] or '' }}
+        {% if event['recorder'] %}
+            &mdash; <a href="/~{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         {% endif %}
-        {% if event['status'] in (None, 'succeeded') %}
+        {% if event['status'] == 'succeeded' %}
             (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
         {% endif %}
         </td>
@@ -154,7 +148,7 @@ else:
                 {% else %}
                     {{ context }} from
                 {% endif %}
-                <a href="/{{ event['tipper'] }}/{{ subpath }}">{{ event['tipper'] }}</a>
+                <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
             {% else %}
                 anonymous tip
             {% endif %}
@@ -164,7 +158,7 @@ else:
             {% else %}
                 {{ context }} to
             {% endif %}
-            <a href="/{{ event['tippee'] }}/{{ subpath }}">{{ event['tippee'] }}</a>
+            <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
         {% endif %}
         </td>
 

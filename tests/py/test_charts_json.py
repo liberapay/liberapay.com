@@ -3,34 +3,32 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import json
 
-from mock import patch
-
 from aspen.utils import utcnow
 from liberapay.billing.payday import Payday
-from liberapay.testing import Harness
+from liberapay.testing.mangopay import FakeTransfersHarness
+
 
 def today():
     return datetime.datetime.utcnow().date().strftime('%Y-%m-%d')
 
-class TestChartsJson(Harness):
+
+class TestChartsJson(FakeTransfersHarness):
 
     def setUp(self):
-        Harness.setUp(self)
+        super(TestChartsJson, self).setUp()
 
         self.alice = self.make_participant('alice')
         self.bob = self.make_participant('bob')
         self.carl = self.make_participant('carl')
-        self.make_exchange('balanced-cc', 10, 0, self.alice)
-        self.make_exchange('balanced-cc', 10, 0, self.bob)
+        self.make_exchange('mango-cc', 10, 0, self.alice)
+        self.make_exchange('mango-cc', 10, 0, self.bob)
         self.make_participant('notactive')
 
         self.alice.set_tip_to(self.carl, '1.00')
         self.bob.set_tip_to(self.carl, '2.00')
 
     def run_payday(self):
-        with patch.object(Payday, 'fetch_card_holds') as fch:
-            fch.return_value = {}
-            Payday.start().run()
+        Payday.start().run()
 
 
     def test_no_payday_returns_empty_list(self):
@@ -105,8 +103,8 @@ class TestChartsJson(Harness):
         # Do an out-of-band transfer.
         self.db.run("UPDATE participants SET balance=balance - 4 WHERE username='alice'")
         self.db.run("UPDATE participants SET balance=balance + 4 WHERE username='carl'")
-        self.db.run("INSERT INTO transfers (tipper, tippee, amount, context) "
-                    "VALUES (%s, %s, 4, 'tip')",
+        self.db.run("INSERT INTO transfers (tipper, tippee, amount, context, status) "
+                    "VALUES (%s, %s, 4, 'tip', 'succeeded')",
                     (self.alice.id, self.carl.id))
 
         self.run_payday()   # third
@@ -144,8 +142,6 @@ class TestChartsJson(Harness):
 
         expected = { "date": today()
                    , "weekly_gifts": '3.00'
-                   , "charges": '0.00'
-                   , "withdrawals": '0.00'
                    , "active_users": '3'
                    , "total_users": '4'
                    , "total_gifts": '6.00'

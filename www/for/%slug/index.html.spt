@@ -114,7 +114,7 @@ receivers = query_cache.all("""
 
 {% if user.ANON %}
     <div class="sign-in-to">
-        {% include "templates/sign-in.html" %}
+        {% include "templates/sign-in-link.html" %}
         {{ _("to join the {0} community on Liberapay.", community.name) }}
     </div>
 {% else %}
@@ -154,12 +154,12 @@ receivers = query_cache.all("""
             {% if giver.anonymous and not user.is_admin %}
                 {{ avatar_default() }}
                 <div class="name">{{ _("Anonymous") }}</div>
-                <div class="money">{{ format_currency(giver.amount, 'USD', trailing_zeroes=False) }}</div>
+                <div class="money">{{ format_currency(giver.amount, 'EUR', trailing_zeroes=False) }}</div>
             {% else %}
             <a href="/{{ giver.username }}/" class="mini-user{{ ' anonymous' if giver.anonymous }}">
                 {{ avatar_img(giver) }}
                 <div class="name">{{ giver.username }}</div>
-                <div class="money">{{ format_currency(giver.amount, 'USD', trailing_zeroes=False) }}</div>
+                <div class="money">{{ format_currency(giver.amount, 'EUR', trailing_zeroes=False) }}</div>
             </a>
             {% endif %}
         </li>
@@ -175,12 +175,12 @@ receivers = query_cache.all("""
             {% if receiver.anonymous and not user.is_admin %}
                 {{ avatar_default() }}
                 <div class="name">{{ _("Anonymous") }}</div>
-                <div class="money">{{ format_currency(receiver.amount, 'USD', trailing_zeroes=False) }}</div>
+                <div class="money">{{ format_currency(receiver.amount, 'EUR', trailing_zeroes=False) }}</div>
             {% else %}
             <a href="/{{ receiver.username }}/" class="mini-user{{ ' anonymous' if receiver.anonymous }}">
                 {{ avatar_img(receiver) }}
                 <div class="name">{{ receiver.username }}</div>
-                <div class="money">{{ format_currency(receiver.amount, 'USD', trailing_zeroes=False) }}</div>
+                <div class="money">{{ format_currency(receiver.amount, 'EUR', trailing_zeroes=False) }}</div>
             </a>
             {% endif %}
         </li>

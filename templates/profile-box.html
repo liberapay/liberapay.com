@@ -4,9 +4,9 @@
 {% set giving = participant.giving %}
 {% set receiving = participant.receiving %}
 {% set goal = participant.goal %}
-{% set giving_str = Money(giving, 'USD') %}
-{% set receiving_str = Money(receiving, 'USD') %}
-{% set goal_str = goal and Money(goal, 'USD') %}
+{% set giving_str = Money(giving, 'EUR') %}
+{% set receiving_str = Money(receiving, 'EUR') %}
+{% set goal_str = goal and Money(goal, 'EUR') %}
 {% set goal_percent = goal and receiving / goal * 100 %}
 
 {% if participant.hide_giving or participant.hide_receiving %}

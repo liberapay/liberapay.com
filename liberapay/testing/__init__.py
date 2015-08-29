@@ -6,7 +6,7 @@ import itertools
 import unittest
 from os.path import dirname, join, realpath
 
-from aspen import resources
+from aspen import resources, Response
 from aspen.utils import utcnow
 from aspen.testing.client import Client
 from liberapay.billing.exchanges import record_exchange, record_exchange_result
@@ -55,6 +55,13 @@ class ClientWithAuth(Client):
         return Client.build_wsgi_environ(self, *a, **kw)
 
 
+def decode_body(self):
+    body = self.body
+    return body.decode(self.charset) if isinstance(body, bytes) else body
+
+Response.text = property(decode_body)
+
+
 class Harness(unittest.TestCase):
 
     client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
@@ -67,7 +74,13 @@ class Harness(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH 1")
+        cls_name = cls.__name__
+        if cls_name[4:5].isupper():
+            cls_id = sum(ord(c) - 97 << (i*5) for i, c in enumerate(cls_name[4:10].lower()))
+        else:
+            cls_id = 1
+        cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH %s", (cls_id,))
+        cls.db.run("ALTER SEQUENCE transfers_id_seq RESTART WITH %s", (cls_id,))
         cls.setUpVCR()
 
 
@@ -144,17 +157,10 @@ class Harness(unittest.TestCase):
             print()
 
 
-    @classmethod
-    def make_balanced_customer(cls):
-        import balanced
-        seq = next(cls.seq)
-        return unicode(balanced.Customer(meta=dict(seq=seq)).save().href)
-
-
     def make_participant(self, username, **kw):
         platform = kw.pop('elsewhere', 'github')
         kw2 = {}
-        for key in ('last_ach_result', 'last_bill_result'):
+        for key in ('last_bill_result', 'balance'):
             if key in kw:
                 kw2[key] = kw.pop(key)
 
@@ -165,8 +171,9 @@ class Harness(unittest.TestCase):
         kw.setdefault('status', 'active')
         if not 'join_time' in kw:
             kw['join_time'] = utcnow()
-        if kw.get('balanced_customer_href') == 'new':
-            kw['balanced_customer_href'] = self.make_balanced_customer()
+        i = next(self.seq)
+        kw.setdefault('mangopay_user_id', -i)
+        kw.setdefault('mangopay_wallet_id', -i)
         cols, vals = zip(*kw.items())
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
@@ -183,11 +190,10 @@ class Harness(unittest.TestCase):
                  VALUES (%s,%s,%s,%s)
         """, (platform, participant.id, username, participant.id))
 
-        # Insert exchange routes
         if 'last_bill_result' in kw2:
-            ExchangeRoute.insert(participant, 'balanced-cc', '/cards/foo', kw2['last_bill_result'])
-        if 'last_ach_result' in kw2:
-            ExchangeRoute.insert(participant, 'balanced-ba', '/bank_accounts/bar', kw2['last_ach_result'])
+            ExchangeRoute.insert(participant, 'mango-cc', '-1', kw2['last_bill_result'])
+        if 'balance' in kw2:
+            self.make_exchange('mango-cc', kw2['balance'], 0, participant)
 
         return participant
 
@@ -205,8 +211,8 @@ class Harness(unittest.TestCase):
             network = route
             route = ExchangeRoute.from_network(participant, network)
             if not route:
-                from .balanced import BalancedHarness
-                route = ExchangeRoute.insert(participant, network, BalancedHarness.card_href)
+                from .mangopay import MangopayHarness
+                route = ExchangeRoute.insert(participant, network, MangopayHarness.card_id)
                 assert route
         e_id = record_exchange(self.db, route, amount, fee, participant, 'pre')
         record_exchange_result(self.db, e_id, status, error, participant)

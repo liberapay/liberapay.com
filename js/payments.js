@@ -15,12 +15,20 @@ Liberapay.payments = {};
 
 Liberapay.payments.init = function() {
     $('#delete').submit(Liberapay.payments.deleteRoute);
-
-    // Lazily depend on Balanced.
-    var balanced_js = "https://js.balancedpayments.com/1.1/balanced.min.js";
-    jQuery.getScript(balanced_js, function() {
-        $('input[type!="hidden"]').eq(0).focus();
-    }).fail(Liberapay.error);
+    $('input[type="digits"]').on('keypress', function(e) {
+        if (e.metaKey || e.ctrlKey || e.which < 32) return true;
+        if (!(/^[\d\s]+$/.test(String.fromCharCode(e.which)))) e.preventDefault();
+        var $input = $(this);
+        var length = $input.val().replace(/[^\d]/g, "").length;
+        var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
+        if (maxdigits && length >= maxdigits) e.preventDefault();
+    });
+    $('fieldset.hidden').prop('disabled', true);
+    $('button[data-modify]').click(function() {
+        var $btn = $(this);
+        $($btn.data('modify')).removeClass('hidden').prop('disabled', false);
+        $btn.parent().addClass('hidden');
+    });
 }
 
 Liberapay.payments.deleteRoute = function(e) {
@@ -43,45 +51,59 @@ Liberapay.payments.deleteRoute = function(e) {
     return false;
 };
 
-Liberapay.payments.onError = function(response) {
-    $('button#save').prop('disabled', false);
-    var msg = response.status_code + ": " +
-        $.map(response.errors, function(obj) { return obj.description }).join(', ');
-    Liberapay.notification(msg, 'error', -1);
-    return msg;
+Liberapay.payments.submit = function(e) {
+    e.preventDefault();
+    $('#loading-indicator').remove();
+    var $bg = $('<div id="loading-indicator">').css({
+        'background-color': 'rgba(0, 0, 0, 0.5)',
+        'bottom': 0,
+        'left': 0,
+        'position': 'fixed',
+        'right': 0,
+        'top': 0,
+        'z-index': 1040,
+    }).appendTo($('body'));
+    var $loading = $('<div class="alert alert-info">');
+    $loading.text($(this).data('msg-loading'));
+    $loading.appendTo($bg).center('fixed');
+
+    var step2 = Liberapay.payments.onSuccess;
+    if ($('#bank-account:not(.hidden)').length) step2 = Liberapay.payments.ba.submit;
+    if ($('#credit-card:not(.hidden)').length) step2 = Liberapay.payments.cc.submit;
+    if ($('#identity').length) {
+        Liberapay.payments.id.submit(step2);
+    } else {
+        step2();
+    }
+};
+
+Liberapay.payments.error = function(jqXHR, textStatus, errorThrown) {
+    $('#loading-indicator').remove();
+    if (jqXHR) Liberapay.error(jqXHR, textStatus, errorThrown);
 };
 
 Liberapay.payments.onSuccess = function(data) {
-    $('button#save').prop('disabled', false);
-    window.location.reload();
+    $('#amount').parents('form').off('submit');  // prevents infinite loop
+    $('#amount').wrap('<form action="" method="POST">').parent().submit();
 };
 
-Liberapay.payments.associate = function (network) { return function (response) {
-    if (response.status_code !== 201) {
-        return Liberapay.payments.onError(response);
-    }
 
-    /* The request to tokenize the thing succeeded. Now we need to associate it
-     * to the Customer on Balanced and to the participant in our DB.
-     */
-    var data = {
-        network: network,
-        address: network == 'balanced-ba' ? response.bank_accounts[0].href
-                                          : response.cards[0].href,
-    };
+// Identity
+// ========
 
+Liberapay.payments.id = {};
+
+Liberapay.payments.id.submit = function(success) {
+    var data = $('#identity').serializeArray();
     jQuery.ajax({
-        url: "associate.json",
-        type: "POST",
+        url: '/'+Liberapay.username+'/identity',
+        type: 'POST',
         data: data,
-        dataType: "json",
-        success: Liberapay.payments.onSuccess,
-        error: [
-            Liberapay.error,
-            function() { $('button#save').prop('disabled', false); },
-        ],
+        dataType: 'json',
+        success: success,
+        error: Liberapay.payments.error,
     });
-}};
+}
 
 
 // Bank Accounts
@@ -91,36 +113,56 @@ Liberapay.payments.ba = {};
 
 Liberapay.payments.ba.init = function() {
     Liberapay.payments.init();
-    $('form#bank-account').submit(Liberapay.payments.ba.submit);
+    $('fieldset.tab-pane:not(.active)').prop('disabled', true);
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $($(e.target).attr('href')).prop('disabled', false);
+        $($(e.relatedTarget).attr('href')).prop('disabled', true);
+    });
+    $('form#payout').submit(Liberapay.payments.submit);
 };
 
-Liberapay.payments.ba.submit = function (e) {
-    e.preventDefault();
+Liberapay.payments.ba.submit = function () {
+    var $ba = $('#bank-account');
+    Liberapay.forms.clearInvalid($ba);
 
-    $('button#save').prop('disabled', true);
-    Liberapay.forms.clearInvalid($(this));
+    var $iban = $('input[name="IBAN"]');
+    var is_iban_invalid = !$('#iban').prop('disabled') && IBAN.isValid($iban.val()) === false;
+    Liberapay.forms.setInvalid($iban, is_iban_invalid);
 
-    var bankAccount = {
-        name: $('#account_name').val(),
-        account_number: $('#account_number').val(),
-        account_type: $('#account_type').val(),
-        routing_number: $('#routing_number').val()
-    };
+    var $bban = $('#bban input[name="AccountNumber"]');
+    var country = $('#bban select[name="Country"]').val();
+    var is_bban_invalid = !$('#bban').prop('disabled') && IBAN.isValidBBAN(country, $bban.val()) === false;
+    Liberapay.forms.setInvalid($bban, is_bban_invalid);
 
-    // Validate routing number.
-    if (bankAccount.routing_number) {
-        if (!balanced.bankAccount.validateRoutingNumber(bankAccount.routing_number)) {
-            Liberapay.forms.setInvalid($('#routing_number'));
-            Liberapay.forms.focusInvalid($(this));
-            $('button#save').prop('disabled', false);
-            return false
+    var invalids = 0;
+    $('input[type="digits"]').each(function() {
+        var $input = $(this);
+        if ($input.parents(':disabled').length) return;
+        var digits = $input.attr('digits');
+        var maxdigits = $input.attr('maxdigits') || digits;
+        var mindigits = $input.attr('mindigits') || digits;
+        var length = $input.val().replace(/[^\d]/g, "").length;
+        if (!(/^[\d\s]+$/.test($input.val())) ||
+            maxdigits && length > maxdigits ||
+            mindigits && length < mindigits) {
+            invalids++;
         }
+    });
+
+    if (is_bban_invalid || is_iban_invalid || invalids) {
+        Liberapay.forms.focusInvalid($ba);
+        return Liberapay.payments.error();
     }
 
-    // Okay, send the data to Balanced.
-    balanced.bankAccount.create( bankAccount
-                               , Liberapay.payments.associate('balanced-ba')
-                                );
+    var data = $ba.serializeArray();
+    jQuery.ajax({
+        url: '/'+Liberapay.username+'/routes/bank-account.json',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        success: Liberapay.payments.onSuccess,
+        error: Liberapay.payments.error,
+    });
 };
 
 
@@ -131,19 +173,27 @@ Liberapay.payments.cc = {};
 
 Liberapay.payments.cc.init = function() {
     Liberapay.payments.init();
-    $('form#credit-card').submit(Liberapay.payments.cc.submit);
     Liberapay.payments.cc.formatInputs(
         $('#card_number'),
-        $('#expiration_month'),
-        $('#expiration_year'),
+        $('#expiration_date'),
         $('#cvv')
     );
+    $('form#payin').submit(Liberapay.payments.submit);
 };
 
+Liberapay.payments.cc.onError = function(response) {
+    Liberapay.payments.error();
+    if (response.ResultMessage == 'CORS_FAIL') {
+        var msg = $('#credit-card').data('msg-cors-fail');
+    } else {
+        var msg = response.ResultMessage;
+    }
+    Liberapay.notification(msg + ' (Error code: '+response.ResultCode+')', 'error', -1);
+};
 
-/* Most of the following code is taken from https://github.com/wangjohn/creditly */
+Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateInput, cvvInput) {
+    /* This code was originally taken from https://github.com/wangjohn/creditly */
 
-Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthInput, expirationYearInput, cvvInput) {
     function getInputValue(e, element) {
         var inputValue = element.val().trim();
         inputValue = inputValue + String.fromCharCode(e.which);
@@ -151,19 +201,7 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthI
     }
 
     function isEscapedKeyStroke(e) {
-        // Key event is for a browser shortcut
-        if (e.metaKey || e.ctrlKey) return true;
-
-        // If keycode is a space
-        if (e.which === 32) return false;
-
-        // If keycode is a special char (WebKit)
-        if (e.which === 0) return true;
-
-        // If char is a special char (Firefox)
-        if (e.which < 33) return true;
-
-        return false;
+        return e.metaKey || e.ctrlKey || e.which < 32;
     }
 
     function isNumberEvent(e) {
@@ -186,37 +224,29 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthI
     function shouldProcessInput(e, maximumLength, element) {
         var target = e.currentTarget;
         if (getInputValue(e, element).length > maximumLength) {
-          e.preventDefault();
-          return false;
+            e.preventDefault();
+            return false;
         }
         if ((target.selectionStart !== target.value.length)) {
-          return false;
+            return false;
         }
         return (!isEscapedKeyStroke(e)) && onlyAllowNumeric(e, maximumLength, element);
     }
 
-    function addSpaces(number, spaces) {
-      var parts = []
-      var j = 0;
-      for (var i=0; i<spaces.length; i++) {
-        if (number.length > spaces[i]) {
-          parts.push(number.slice(j, spaces[i]));
-          j = spaces[i];
-        } else {
-          if (i < spaces.length) {
-            parts.push(number.slice(j, spaces[i]));
-          } else {
-            parts.push(number.slice(j));
-          }
-          break;
+    function addSeparators(string, positions, separator) {
+        var separator = separator || ' ';
+        var parts = []
+        var j = 0;
+        for (var i=0; i<positions.length; i++) {
+            if (string.length > positions[i]) {
+                parts.push(string.slice(j, positions[i]));
+                j = positions[i];
+            } else {
+                break;
+            }
         }
-      }
-
-      if (parts.length > 0) {
-        return parts.join(" ");
-      } else {
-        return number;
-      }
+        parts.push(string.slice(j));
+        return parts.join(separator);
     }
 
     var americanExpressSpaces = [4, 10, 15];
@@ -228,28 +258,16 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthI
         var maximumLength = (isAmericanExpressCard ? 15 : 16);
         if (shouldProcessInput(e, maximumLength, cardNumberInput)) {
             var newInput;
-            newInput = isAmericanExpressCard ? addSpaces(number, americanExpressSpaces) : addSpaces(number, defaultSpaces);
+            newInput = isAmericanExpressCard ? addSeparators(number, americanExpressSpaces) : addSeparators(number, defaultSpaces);
             cardNumberInput.val(newInput);
         }
     });
 
-    expirationMonthInput.on("keypress", function(e) {
-        var maximumLength = 2;
-        if (shouldProcessInput(e, maximumLength, expirationMonthInput)) {
-            var newInput = getInputValue(e, expirationMonthInput);
-            if (newInput < 13) {
-                expirationMonthInput.val(newInput);
-            } else {
-                e.preventDefault();
-            }
-        }
-    });
-
-    expirationYearInput.on("keypress", function(e) {
-        var maximumLength = 2;
-        if (shouldProcessInput(e, maximumLength, expirationYearInput)) {
-            var newInput = getInputValue(e, expirationYearInput);
-            expirationYearInput.val(newInput);
+    expirationDateInput.on("keypress", function(e) {
+        var maximumLength = 4;
+        if (shouldProcessInput(e, maximumLength, expirationDateInput)) {
+            var newInput = getInputValue(e, expirationDateInput);
+            expirationDateInput.val(addSeparators(newInput, [2], '/'));
         }
     });
 
@@ -264,64 +282,63 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationMonthI
     });
 }
 
-Liberapay.payments.cc.submit = function(e) {
+Liberapay.payments.cc.submit = function() {
 
-    e.stopPropagation();
-    e.preventDefault();
-    $('button#save').prop('disabled', true);
-    Liberapay.forms.clearInvalid($(this));
-
-    // Adapt our form lingo to balanced nomenclature.
+    Liberapay.forms.clearInvalid($('#credit-card'));
 
     function val(field) {
-        return $('form#credit-card #'+field).val();
+        return $('#'+field).val().replace(/[^\d]/g, '');
     }
 
-    var credit_card = {};   // holds CC info
+    var cardData = {
+        cardType: 'CB_VISA_MASTERCARD',
+        cardNumber: val('card_number'),
+        cardCvx: val('cvv'),
+        cardExpirationDate: val('expiration_date'),
+    };
 
-    credit_card.number = val('card_number').replace(/[^\d]/g, '');
-    credit_card.cvv = val('cvv');
-    credit_card.name = val('name');
-    var country = val('country') || null;
-
-    credit_card.meta = { 'address_2': val('address_2')
-                       , 'region': val('state')
-                       , 'city_town': val('city_town')
-                       , 'country': country
-                        };
-
-    // XXX We're duping some of this info in both meta and address due to
-    // evolution of the Balanced API and our stepwise keeping-up. See:
-    // https://github.com/gratipay/gratipay.com/issues/2446 and links from
-    // there.
-    credit_card.address = { 'line1': val('address_1')
-                          , 'line2': val('address_2')
-                          , 'city': val('city_town')
-                          , 'state': val('state')
-                          , 'postal_code': val('zip')
-                          , 'country_code': country
-                           };
-
-    credit_card.expiration_month = val('expiration_month');
-    var year = val('expiration_year');
-    credit_card.expiration_year = year.length == 2 ? '20' + year : year;
-
-    var is_card_number_invalid = !balanced.card.isCardNumberValid(credit_card.number);
-    var is_expiry_invalid = !balanced.card.isExpiryValid(credit_card.expiration_month,
-                                                         credit_card.expiration_year);
-    var is_cvv_invalid = !balanced.card.isSecurityCodeValid(credit_card.number,
-                                                            credit_card.cvv);
+    var is_card_number_invalid = mangoPay._validation._cardNumberValidator._validate(cardData.cardNumber) !== true;
+    var is_expiry_invalid = mangoPay._validation._expirationDateValidator._validate(cardData.cardExpirationDate, new Date()) !== true;
 
     Liberapay.forms.setInvalid($('#card_number'), is_card_number_invalid);
-    Liberapay.forms.setInvalid($('#expiration_month'), is_expiry_invalid);
-    Liberapay.forms.setInvalid($('#cvv'), is_cvv_invalid);
+    Liberapay.forms.setInvalid($('#expiration_date'), is_expiry_invalid);
 
-    if (is_card_number_invalid || is_expiry_invalid || is_cvv_invalid) {
-        $('button#save').prop('disabled', false);
-        Liberapay.forms.focusInvalid($(this));
+    if (is_card_number_invalid || is_expiry_invalid) {
+        Liberapay.payments.error();
+        Liberapay.forms.focusInvalid($('#credit-card'));
         return false;
     }
 
-    balanced.card.create(credit_card, Liberapay.payments.associate('balanced-cc'));
+    jQuery.ajax({
+        url: '/'+Liberapay.username+'/routes/credit-card.json',
+        type: "POST",
+        data: {CardType: 'CB_VISA_MASTERCARD', Currency: 'EUR'},
+        dataType: "json",
+        success: Liberapay.payments.cc.register(cardData),
+        error: Liberapay.payments.error,
+    });
     return false;
+};
+
+Liberapay.payments.cc.register = function (cardData) {
+    return function (cardRegistrationData) {
+        cardRegistrationData.Id = cardRegistrationData.id;
+        delete cardRegistrationData.id;
+        mangoPay.cardRegistration.init(cardRegistrationData);
+        mangoPay.cardRegistration.registerCard(cardData, Liberapay.payments.cc.associate, Liberapay.payments.cc.onError);
+    }
+};
+
+Liberapay.payments.cc.associate = function (response) {
+    /* The request to tokenize the card succeeded. Now we need to associate it
+     * to the participant in our DB.
+     */
+    jQuery.ajax({
+        url: '/'+Liberapay.username+'/routes/credit-card.json',
+        type: "POST",
+        data: {CardId: response.CardId, keep: $('input#keep').prop('checked')},
+        dataType: "json",
+        success: Liberapay.payments.onSuccess,
+        error: Liberapay.payments.error,
+    });
 };

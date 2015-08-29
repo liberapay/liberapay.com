@@ -26,7 +26,7 @@ if participant == user:
 
         <p>{{ _("Sign in to finish connecting your email.") }}</p>
 
-        <p>{% include "templates/sign-in.html" %}</p>
+        <p>{% include "templates/sign-in-link.html" %}</p>
     {% elif user != participant %}
         <h1>{{ _("Wrong Account") }}</h1>
 

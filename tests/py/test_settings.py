@@ -19,7 +19,7 @@ class TestPrivacy(Harness):
     def hit_edit(self, expected_code=302, **kw):
         response = self.client.PxST("/alice/settings/edit", auth_as=self.alice, **kw)
         if response.code != expected_code:
-            print(response.body)
+            print(response.text)
         return response
 
     def test_participant_can_modify_privacy_settings(self):
@@ -40,17 +40,17 @@ class TestPrivacy(Harness):
     def test_meta_robots_tag_added_on_opt_out(self):
         self.hit_edit(data=dict(ALL_OFF, hide_from_search='on'))
         expected = '<meta name="robots" content="noindex,nofollow" />'
-        assert expected in self.client.GET("/alice/").body
+        assert expected in self.client.GET("/alice/").text
 
     def test_team_participant_does_show_up_on_explore_teams(self):
         alice = Participant.from_username('alice')
         self.make_participant('A-Team', kind='group').add_member(alice)
-        assert 'A-Team' in self.client.GET("/explore/teams/").body
+        assert 'A-Team' in self.client.GET("/explore/teams/").text
 
     def test_team_participant_doesnt_show_up_on_explore_teams(self):
         alice = Participant.from_username('alice')
         self.make_participant('A-Team', kind='group', hide_from_search=True).add_member(alice)
-        assert 'A-Team' not in self.client.GET("/explore/teams/").body
+        assert 'A-Team' not in self.client.GET("/explore/teams/").text
 
 
 class TestUsername(Harness):
@@ -74,26 +74,26 @@ class TestUsername(Harness):
     def test_empty(self):
         r = self.change_username('      ')
         assert r.code == 400
-        assert "You need to provide a username!" in r.body, r.body
+        assert "You need to provide a username!" in r.text, r.text
 
     def test_invalid(self):
         r = self.change_username("§".encode('utf8'))
         assert r.code == 400
-        assert b"The username &#39;§&#39; contains invalid characters." in r.body, r.body
+        assert "The username &#39;§&#39; contains invalid characters." in r.text, r.text
 
     def test_restricted_username(self):
         r = self.change_username("assets")
         assert r.code == 400
-        assert "The username &#39;assets&#39; is restricted." in r.body, r.body
+        assert "The username &#39;assets&#39; is restricted." in r.text, r.text
 
     def test_unavailable(self):
         self.make_participant("bob")
         r = self.change_username("bob")
         assert r.code == 400
-        assert "The username &#39;bob&#39; is already taken." in r.body, r.body
+        assert "The username &#39;bob&#39; is already taken." in r.text, r.text
 
     def test_too_long(self):
         username = "I am way too long, and you know it, and the American people know it."
         r = self.change_username(username)
         assert r.code == 400
-        assert "The username &#39;%s&#39; is too long." % username in r.body, r.body
+        assert "The username &#39;%s&#39; is too long." % username in r.text, r.text

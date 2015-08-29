@@ -7,10 +7,11 @@ from liberapay.testing import Harness
 
 
 class TestChartOfReceiving(Harness):
+
     def setUp(self):
         Harness.setUp(self)
         for participant in ['alice', 'bob']:
-            p = self.make_participant(participant, last_bill_result='')
+            p = self.make_participant(participant, balance=100)
             setattr(self, participant, p)
 
     def test_get_tip_distribution_handles_a_tip(self):
@@ -26,7 +27,7 @@ class TestChartOfReceiving(Harness):
         assert actual == expected
 
     def test_get_tip_distribution_handles_multiple_tips(self):
-        carl = self.make_participant('carl', last_bill_result='')
+        carl = self.make_participant('carl', balance=100)
         self.alice.set_tip_to(self.bob, '1.00')
         carl.set_tip_to(self.bob, '3.00')
         expected = ([

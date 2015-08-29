@@ -2,7 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+from urllib import quote as urlquote
 
 from aspen import Response, json
 from aspen.utils import to_rfc822, utcnow
@@ -12,10 +13,6 @@ import liberapay
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
-
-# Difference between current time and credit card expiring date when
-# card is considered as expiring
-EXPIRING_DELTA = timedelta(days = 30)
 
 
 def dict_to_querystring(mapping):
@@ -56,6 +53,9 @@ def get_participant(state, restrict=True, redirect_stub=True):
 
     if restrict:
         if user.ANON:
+            if request.method == 'GET':
+                url = '/sign-in?back_to='+urlquote(request.line.uri)
+                raise Response(302, headers={'Location': url})
             raise Response(403, _("You need to log in to access this page."))
 
     from liberapay.models.participant import Participant  # avoid circular import
@@ -121,11 +121,10 @@ def excerpt_intro(text, length=175, append=u'…'):
     return text
 
 
-def is_card_expiring(expiration_year, expiration_month):
-    now = datetime.utcnow()
-    expiring_date = datetime(expiration_year, expiration_month, 1)
-    delta = expiring_date - now
-    return delta < EXPIRING_DELTA
+def is_card_expired(exp_year, exp_month):
+    today = date.today()
+    cur_year, cur_month = today.year, today.month
+    return exp_year < cur_year or exp_year == cur_year and exp_month < cur_month
 
 
 def set_cookie(cookies, key, value, expires=None, httponly=True, path=b'/'):

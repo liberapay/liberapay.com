@@ -14,7 +14,7 @@ class TestTipJson(Harness):
         # We need accounts
         self.make_participant("test_tippee1")
         self.make_participant("test_tippee2")
-        test_tipper = self.make_participant("test_tipper", last_bill_result='')
+        test_tipper = self.make_participant("test_tipper", balance=100)
 
         # Then, add a $1.50 and $3.00 tip
         response1 = self.client.POST( "/test_tippee1/tip.json"
@@ -46,7 +46,7 @@ class TestTipJson(Harness):
                                    , auth_as=bob
                                    , raise_immediately=False
                                     )
-        assert "not a valid donation amount" in response.body
+        assert "not a valid donation amount" in response.text
         assert response.code == 400
 
         response = self.client.POST( "/alice/tip.json"
@@ -54,7 +54,7 @@ class TestTipJson(Harness):
                                    , auth_as=bob
                                    , raise_immediately=False
                                     )
-        assert "not a valid donation amount" in response.body
+        assert "not a valid donation amount" in response.text
         assert response.code == 400
 
     def test_set_tip_to_patron(self):
@@ -66,7 +66,7 @@ class TestTipJson(Harness):
                                    , auth_as=bob
                                    , raise_immediately=False
                                     )
-        assert "doesn't accept donations" in response.body
+        assert "doesn't accept donations" in response.text, response.text
         assert response.code == 400
 
     def test_tip_to_unclaimed(self):

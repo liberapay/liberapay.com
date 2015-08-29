@@ -99,7 +99,7 @@ if is_team:
             {% elif not locked %}
                 {% if user.ANON %}
                     <p>{{ _("We never collect money for you unless you join.") }}</p>
-                    {% include "templates/sign-in-button.html" %}
+                    {% include "templates/sign-in-link.html" %}
                 {% else %}
                     <p>{{ _("Connect this {0} account to your Liberapay profile.",
                             platform.display_name) }}</p>

@@ -29,24 +29,26 @@ def get_end_of_year_balance(db, participant, year, current_year):
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount > 0
-                     AND (status is null OR status = 'succeeded')
+                     AND status = 'succeeded'
                ) + (
                   SELECT COALESCE(sum(amount-fee), 0) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount < 0
-                     AND (status is null OR status <> 'failed')
+                     AND status <> 'failed'
                ) + (
                   SELECT COALESCE(sum(-amount), 0) AS a
                     FROM transfers
                    WHERE tipper = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND status = 'succeeded'
                ) + (
                   SELECT COALESCE(sum(amount), 0) AS a
                     FROM transfers
                    WHERE tippee = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND status = 'succeeded'
                ) AS delta
     """, locals())
     balance = start_balance + delta
@@ -75,9 +77,16 @@ def iter_payday_events(db, participant, year=None):
            AND extract(year from timestamp) = %(year)s
     """, locals(), back_as=dict)
     transfers = db.all("""
-        SELECT *
+        SELECT *, p.username
           FROM transfers
-         WHERE (tipper=%(id)s OR tippee=%(id)s)
+          JOIN participants p ON p.id = tipper
+         WHERE tippee=%(id)s
+           AND extract(year from timestamp) = %(year)s
+        UNION ALL
+        SELECT *, p.username
+          FROM transfers
+          JOIN participants p ON p.id = tippee
+         WHERE tipper=%(id)s
            AND extract(year from timestamp) = %(year)s
     """, locals(), back_as=dict)
 
@@ -151,6 +160,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
               FROM transfers
              WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           GROUP BY tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
@@ -159,6 +169,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           GROUP BY tipper
         """, params, back_as=back_as)
     else:
@@ -174,6 +185,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
               FROM transfers
              WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           ORDER BY id ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
@@ -182,6 +194,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           ORDER BY id ASC
         """, params, back_as=back_as)
         out['received'] = lambda: db.all("""
@@ -190,6 +203,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tippee = %(id)s
                AND context NOT IN ('take', 'take-over')
                AND extract(year from timestamp) = %(year)s
+               AND status = 'succeeded'
           ORDER BY id ASC
         """, params, back_as=back_as)
 

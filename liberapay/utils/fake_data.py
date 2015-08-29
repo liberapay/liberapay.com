@@ -62,7 +62,6 @@ def fake_participant(db, kind=None, is_admin=False):
                    , balance=0
                    , hide_giving=(random.randrange(5) == 0)
                    , hide_receiving=(random.randrange(5) == 0)
-                   , balanced_customer_href=faker.uri()
                    , is_suspicious=False
                    , status='active'
                    , join_time=faker.date_time_this_year()
@@ -133,6 +132,7 @@ def fake_transfer(db, tipper, tippee):
            , tippee=tippee.id
            , amount=fake_tip_amount()
            , context='tip'
+           , status='succeeded'
             )
 
 def fake_exchange(db, participant, amount, fee, timestamp):
@@ -182,50 +182,12 @@ def prep_db(db):
 
         CREATE TRIGGER process_exchange AFTER INSERT ON exchanges
             FOR EACH ROW EXECUTE PROCEDURE process_exchange();
-
-        CREATE OR REPLACE FUNCTION process_payday() RETURNS trigger AS $$
-            BEGIN
-                SELECT COALESCE(SUM(amount+fee), 0)
-                  FROM exchanges
-                 WHERE timestamp > NEW.ts_start
-                   AND timestamp < NEW.ts_end
-                   AND amount > 0
-                  INTO NEW.charge_volume;
-
-                SELECT COALESCE(SUM(fee), 0)
-                  FROM exchanges
-                 WHERE timestamp > NEW.ts_start
-                   AND timestamp < NEW.ts_end
-                   AND amount > 0
-                  INTO NEW.charge_fees_volume;
-
-                SELECT COALESCE(SUM(amount), 0)
-                  FROM exchanges
-                 WHERE timestamp > NEW.ts_start
-                   AND timestamp < NEW.ts_end
-                   AND amount < 0
-                  INTO NEW.ach_volume;
-
-                SELECT COALESCE(SUM(fee), 0)
-                  FROM exchanges
-                 WHERE timestamp > NEW.ts_start
-                   AND timestamp < NEW.ts_end
-                   AND amount < 0
-                  INTO NEW.ach_fees_volume;
-
-                RETURN NEW;
-            END;
-        $$ language plpgsql;
-
-        CREATE TRIGGER process_payday BEFORE INSERT ON paydays
-            FOR EACH ROW EXECUTE PROCEDURE process_payday();
     """)
 
 def clean_db(db):
     db.run("""
         DROP FUNCTION process_transfer() CASCADE;
         DROP FUNCTION process_exchange() CASCADE;
-        DROP FUNCTION process_payday() CASCADE;
     """)
 
 

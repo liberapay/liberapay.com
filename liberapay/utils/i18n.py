@@ -11,7 +11,7 @@ from unicodedata import combining, normalize
 from aspen.resources.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
 from babel.core import LOCALE_ALIASES, Locale
-from babel.dates import format_timedelta
+from babel.dates import format_datetime, format_timedelta
 from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
 from babel.numbers import (
@@ -141,6 +141,8 @@ def i_format(loc, s, *a, **kw):
                 c[k] = format_timedelta(o, locale=loc, granularity='day')
             elif isinstance(o, timedelta):
                 c[k] = format_timedelta(o, locale=loc)
+            elif isinstance(o, datetime):
+                c[k] = format_datetime(o, locale=loc)
     return s.format(*a, **kw)
 
 
@@ -258,6 +260,7 @@ def add_helpers_to_context(tell_sentry, context, loc):
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
     context['format_currency'] = lambda *a, **kw: format_money(*a, locale=loc, **kw)
     context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
+    context['format_datetime'] = lambda *a: format_datetime(*a, locale=loc)
     context['parse_decimal'] = lambda *a: parse_decimal(*a, locale=loc)
     context['to_age'] = to_age
     def to_age_str(o, **kw):

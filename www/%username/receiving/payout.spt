@@ -1,0 +1,294 @@
+# coding: utf8
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from datetime import datetime
+from decimal import Decimal as D, InvalidOperation
+
+from aspen import Response
+from babel.numbers import NumberFormatError
+
+import liberapay
+from liberapay.billing import mangoapi
+from liberapay.billing.exchanges import payout
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
+
+def obfuscate(n, x, y):
+    return n[:x] + 'x'*len(n[x:y]) + n[y:]
+
+[---]
+
+participant = get_participant(state, restrict=True)
+exchange = None
+bank_account, ba_details, ba_type = None, None, 'IBAN'
+
+if request.method == 'POST':
+    body = request.body
+
+    try:
+        amount = parse_decimal(request.body['amount'])
+    except (InvalidOperation, NumberFormatError, ValueError):
+        raise Response(400, "bad amount")
+    exchange = payout(website.db, participant, amount)
+    response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
+
+elif 'exchange_id' in request.qs:
+    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s",
+                              (request.qs['exchange_id'],))
+
+route = ExchangeRoute.from_network(participant, 'mango-ba')
+if route:
+    bank_account = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
+    ba_details = bank_account.Details
+    ba_type = bank_account.Type
+
+title = _("Withdraw money")
+
+[---] text/html
+{% extends "templates/base.html" %}
+
+{% block content %}
+<form id="payout" action="javascript:" method="POST"
+      data-msg-loading="{{ _('Request in progress, please wait…') }}">
+
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+
+    {% if exchange %}
+        {% set success = exchange.status != 'failed' %}
+        <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
+            _("{0} have been taken from your liberapay wallet. "
+              "If the transfer is successful {1} will land in your bank account and {2} will be paid in fees.",
+              Money(-exchange.amount, 'EUR'), Money(-exchange.amount - exchange.fee, 'EUR'), Money(exchange.fee, 'EUR')) if success else
+            _("The attempt to send {0} to your bank account has failed. Error message: {1}", Money(-exchange.amount, 'EUR'), exchange.note)
+        }}</div>
+    {% endif %}
+    <p>
+        {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
+    </p>
+
+    {% if participant.balance > 0 %}
+    <h3>{{ _("Amount") }}</h3>
+
+    <fieldset id="amount" class="form-inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <div class="input-group">
+            <input name="amount" value="{{ format_decimal(participant.balance) }}"
+                   class="form-control" size=6 required />
+            <div class="input-group-addon">€</div>
+        </div>
+    </fieldset>
+
+
+    <h3>{{ _("Bank account") }}</h3>
+
+    {% if bank_account %}
+    <div>
+        <p>
+        {% if ba_type == 'IBAN' %}
+            {{ _("IBAN") }}: {{ obfuscate(ba_details.IBAN, 2, -4) }}
+        {% elif ba_type == 'US' %}
+            {{ _("Routing Number") }}: {{ ba_details.ABA }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}<br>
+            {{ _("Bank Account Type") }}: {{ ba_details.DepositAccountType.lower() }}
+        {% elif ba_type == 'CA' %}
+            {{ _("Bank Name") }}: {{ ba_details.BankName }}<br>
+            {{ _("Institution Number") }}: {{ ba_details.InstitutionNumber }}<br>
+            {{ _("Branch Code") }}: {{ ba_details.BranchCode }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -4) }}
+        {% elif ba_type == 'GB' %}
+            {{ _("Sort Code") }}: {{ ba_details.SortCode }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}
+        {% elif ba_type == 'OTHER' %}
+            {{ _("Country") }}: {{ ba_details.Country }}<br>
+            {{ _("BIC (Bank Identifier Code)") }}: {{ ba_details.BIC }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}
+        {% endif %}
+        </p>
+        <button class="btn btn-default btn-sm" type="button" data-modify="#bank-account">{{ _("Modify") }}</button>
+    </div>
+    {% endif %}
+
+    <fieldset id="bank-account" class="{{ 'hidden' if bank_account }}">
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="{{ 'active' if ba_type == 'IBAN' }}">
+                <a href="#iban" aria-controls="iban" role="tab" data-toggle="tab">{{ _("International") }}</a></li>
+            <li role="presentation" class="{{ 'active' if ba_type == 'US' }}">
+                <a href="#usa" aria-controls="usa" role="tab" data-toggle="tab">{{ _("USA") }}</a></li>
+            <li role="presentation" class="{{ 'active' if ba_type == 'CA' }}">
+                <a href="#canada" aria-controls="canada" role="tab" data-toggle="tab">{{ _("Canada") }}</a></li>
+            <li role="presentation" class="{{ 'active' if ba_type == 'GB' }}">
+                <a href="#uk" aria-controls="uk" role="tab" data-toggle="tab">{{ _("UK") }}</a></li>
+            <li role="presentation" class="{{ 'active' if ba_type == 'OTHER' }}">
+                <a href="#bban" aria-controls="bban" role="tab" data-toggle="tab">{{ _("Other") }}</a></li>
+        </ul>
+        <br>
+
+        <div class="tab-content">
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'IBAN' }}" id="iban">
+                <input type="hidden" name="Type" value="IBAN" />
+
+                <label>
+                    <span>{{ _("IBAN (International Bank Account Number)") }}</span>
+                    <input name="IBAN" class="form-control" size=40 required />
+                    <span class="invalid-msg">{{ _("This IBAN is invalid.") }}</span>
+                </label>
+            </fieldset>
+
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'US' }}" id="usa">
+                <input type="hidden" name="Type" value="US" />
+
+                <label>
+                    <span>{{ _("Routing Number") }}</span>
+                    <input name="ABA" class="form-control" required size=12
+                           type="digits" digits=9 title="9 digits" />
+                </label>
+
+                <label>
+                    <span>{{ _("Account Number") }}</span>
+                    <input name="AccountNumber" class="form-control" size=18 required />
+                </label>
+
+                <label>
+                    <span>{{ _("Bank Account Type") }}</span>
+                    <select name="DepositAccountType" class="form-control" required>
+                        <option value="CHECKING">{{ _('checking') }}</option>
+                        <option value="SAVINGS">{{ _('savings') }}</option>
+                    </select>
+                </label>
+            </fieldset>
+
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'CA' }}" id="canada">
+                <input type="hidden" name="Type" value="CA" />
+
+                <label>
+                    <span>{{ _("Bank Name") }}</span>
+                    <input name="BankName" class="form-control" required size=30 />
+                </label><br>
+
+                <label>
+                    <span>{{ _("Institution Number") }}</span>
+                    <input name="InstitutionNumber" class="form-control" required
+                           type="digits" mindigits=3 maxdigits=4 size=4 title="3 or 4 digits" />
+                </label>
+
+                <label>
+                    <span>{{ _("Branch Code") }}</span>
+                    <input name="BranchCode" class="form-control" required
+                           type="digits" digits=5 size=5 title="5 digits" />
+                </label>
+
+                <label>
+                    <span>{{ _("Account Number") }}</span>
+                    <input name="AccountNumber" class="form-control" required
+                           type="digits" maxdigits=20 size=25 title="up to 20 digits" />
+                </label>
+            </fieldset>
+
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'GB' }}" id="uk">
+                <input type="hidden" name="Type" value="GB" />
+
+                <label>
+                    <span>{{ _("Sort Code") }}</span>
+                    <input name="SortCode" class="form-control" required
+                           type="digits" digits=6 size=6 title="6 digits" />
+                </label>
+
+                <label>
+                    <span>{{ _("Account Number") }}</span>
+                    <input name="AccountNumber" class="form-control" required
+                           type="digits" size=14 />
+                </label>
+            </fieldset>
+
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'OTHER' }}" id="bban">
+                <input type="hidden" name="Type" value="OTHER" />
+
+                <label>
+                    <span>{{ _("Country") }}</span>
+                    <select name="Country" class="form-control" required>
+                    <option></option>
+                    {% for each in locale.countries.items() %}
+                        <option value="{{ each[0] }}">{{ each[1] }}</option>
+                    {% endfor %}
+                    </select>
+                </label><br>
+
+                <label>
+                    <span>{{ _("BIC (Bank Identifier Code)") }}</span>
+                    <input name="BIC" class="form-control" required
+                           size=11 maxlength=11 />
+                </label>
+
+                <label>
+                    <span>{{ _("Account Number") }}</span>
+                    <input name="AccountNumber" class="form-control" required
+                           size=30 pattern="[a-zA-Z0-9]+" title="{{ _('only letters (a-z) and digits (0-9) are allowed') }}" />
+                    <span class="invalid-msg">{{ _("This account number is invalid.") }}</span>
+                </label>
+            </fieldset>
+        </div>
+
+        <br>
+        <p>{{ _("The following fields are about the legal owner of the bank account.") }}</p>
+
+        <label>
+            <span>{{ _("Name") }}</span>
+            <input name="OwnerName" class="form-control" required />
+        </label><br>
+
+        <label>
+            <span>{{ _("Address") }}</span>
+            <input name="OwnerAddress.AddressLine1" class="form-control" required />
+        </label><br>
+
+        <label>
+            <span>{{ _("Address (second line)") }}</span>
+            <input name="OwnerAddress.AddressLine2" class="form-control" />
+        </label><br>
+
+        <label>
+            <span>{{ _("City") }}</span>
+            <input name="OwnerAddress.City" class="form-control" required />
+        </label><br>
+
+        <label>
+            <span>{{ _("Region") }}</span>
+            <input name="OwnerAddress.Region" class="form-control" />
+        </label><br>
+
+        <label>
+            <span>{{ _("Postal Code") }}</span>
+            <input name="OwnerAddress.PostalCode" class="form-control" required
+                   size=6 pattern="[a-zA-Z0-9]+" title="{{ _('Alphanumeric (with no spaces)') }}" />
+        </label><br>
+
+        <label>
+            <span>{{ _("Country") }}</span>
+            <select name="OwnerAddress.Country" class="form-control" required>
+            <option></option>
+            {% for each in locale.countries.items() %}
+                <option value="{{ each[0] }}">{{ each[1] }}</option>
+            {% endfor %}
+            </select>
+        </label><br>
+
+    </fieldset>
+
+    <br>
+    <button class="btn btn-primary">{{ _("Go") }}</button>
+
+    <br><br>
+    <p class="alert alert-info">
+        {{ _("Personal and financial information is securely stored by our partner, {0}.",
+             '<a href="https://www.mangopay.com/legal-notices/">Mangopay</a>'|safe) }}
+    </p>
+    {% endif %}
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>$(function() { Liberapay.payments.ba.init(); });</script>
+{% endblock %}

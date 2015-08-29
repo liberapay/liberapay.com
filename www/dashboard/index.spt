@@ -11,7 +11,7 @@ unreviewed = website.db.all("""
          , balance
       FROM participants
      WHERE is_suspicious IS NULL
-       AND balanced_customer_href IS NOT NULL
+       AND mangopay_user_id IS NOT NULL
        AND status = 'active'
   ORDER BY join_time
 

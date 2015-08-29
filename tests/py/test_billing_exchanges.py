@@ -2,379 +2,315 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D
 
-import balanced
+from aspen import Response
 import mock
 import pytest
 
-from aspen.utils import typecheck
 from liberapay.billing.exchanges import (
-    _prep_hit,
-    ach_credit,
-    cancel_card_hold,
-    capture_card_hold,
-    create_card_hold,
+    upcharge,
+    payout,
+    charge,
     record_exchange,
     record_exchange_result,
     skim_credit,
-    sync_with_balanced,
+    sync_with_mangopay,
+    transfer,
 )
-from liberapay.exceptions import NegativeBalance, NotWhitelisted
-from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.exceptions import NegativeBalance, UserIsSuspicious, TransactionFeeTooHigh
 from liberapay.models.participant import Participant
-from liberapay.testing import Foobar, Harness
-from liberapay.testing.balanced import BalancedHarness
+from liberapay.testing import Foobar
+from liberapay.testing.mangopay import MangopayHarness
 
 
-class TestCredits(BalancedHarness):
+class TestPayouts(MangopayHarness):
 
-    def test_ach_credit_withhold(self):
-        self.make_exchange('balanced-cc', 27, 0, self.homer)
-        withhold = D('1.00')
-        error = ach_credit(self.db, self.homer, withhold)
-        assert error == ''
+    def test_payout(self):
+        self.make_exchange('mango-cc', 27, 0, self.homer)
+        exchange = payout(self.db, self.homer, D('1.00'))
+        assert exchange.note is None
+        assert exchange.status == 'created'
         homer = Participant.from_id(self.homer.id)
-        assert self.homer.balance == homer.balance == 1
+        assert self.homer.balance == homer.balance == 26
 
-    def test_ach_credit_amount_under_minimum(self):
-        self.make_exchange('balanced-cc', 8, 0, self.homer)
-        r = ach_credit(self.db, self.homer, 0)
-        assert r is None
+    @mock.patch('mangopaysdk.tools.apiusers.ApiUsers.GetBankAccount')
+    def test_payout_amount_under_minimum(self, gba):
+        self.make_exchange('mango-cc', 8, 0, self.homer)
+        gba.return_value = self.bank_account_outside_sepa
+        with self.assertRaises(TransactionFeeTooHigh):
+            payout(self.db, self.homer, D('0.10'))
 
-    @mock.patch('liberapay.billing.exchanges.thing_from_href')
-    def test_ach_credit_failure(self, tfh):
-        tfh.side_effect = Foobar
-        self.make_exchange('balanced-cc', 20, 0, self.homer)
-        error = ach_credit(self.db, self.homer, D('1.00'))
+    @mock.patch('liberapay.billing.exchanges.test_hook')
+    def test_payout_failure(self, test_hook):
+        test_hook.side_effect = Foobar
+        self.make_exchange('mango-cc', 20, 0, self.homer)
+        exchange = payout(self.db, self.homer, D('1.00'))
+        assert exchange.status == 'failed'
         homer = Participant.from_id(self.homer.id)
-        assert self.homer.get_bank_account_error() == error == "Foobar()"
+        assert homer.get_bank_account_error() == exchange.note == "Foobar()"
         assert self.homer.balance == homer.balance == 20
 
-    def test_ach_credit_no_bank_account(self):
-        self.make_exchange('balanced-cc', 20, 0, self.david)
-        error = ach_credit(self.db, self.david, D('1.00'))
-        assert error == 'No bank account'
+    def test_payout_no_bank_account(self):
+        self.make_exchange('mango-cc', 20, 0, self.david)
+        with self.assertRaises(AssertionError):
+            payout(self.db, self.david, D('1.00'))
 
-    def test_ach_credit_invalidated_bank_account(self):
-        bob = self.make_participant('bob', is_suspicious=False, balance=20,
-                                    last_ach_result='invalidated')
-        error = ach_credit(self.db, bob, D('1.00'))
-        assert error == 'No bank account'
+    def test_payout_invalidated_bank_account(self):
+        self.make_exchange('mango-cc', 20, 0, self.homer)
+        self.homer_route.invalidate()
+        with self.assertRaises(AssertionError):
+            payout(self.db, self.homer, D('10.00'))
 
 
-class TestCardHolds(BalancedHarness):
+class TestCharge(MangopayHarness):
 
-    def test_create_card_hold_for_suspicious_raises_NotWhitelisted(self):
+    def test_charge_for_suspicious_raises_UserIsSuspicious(self):
         bob = self.make_participant('bob', is_suspicious=True,
-                                    balanced_customer_href='fake_href')
-        with self.assertRaises(NotWhitelisted):
-            create_card_hold(self.db, bob, D('1.00'))
+                                    mangopay_user_id='fake_id')
+        with self.assertRaises(UserIsSuspicious):
+            charge(self.db, bob, D('1.00'), 'http://localhost/')
 
-    @mock.patch('liberapay.billing.exchanges.thing_from_href')
-    def test_create_card_hold_failure(self, tfh):
-        tfh.side_effect = Foobar
-        hold, error = create_card_hold(self.db, self.janet, D('1.00'))
-        assert hold is None
-        assert error == "Foobar()"
-        exchange = self.db.one("SELECT * FROM exchanges")
-        assert exchange
+    @mock.patch('liberapay.billing.exchanges.test_hook')
+    def test_charge_failure(self, test_hook):
+        test_hook.side_effect = Foobar
+        exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
+        assert exchange.note == "Foobar()"
         assert exchange.amount
         assert exchange.status == 'failed'
         janet = Participant.from_id(self.janet.id)
         assert self.janet.get_credit_card_error() == 'Foobar()'
         assert self.janet.balance == janet.balance == 0
 
-    def test_create_card_hold_success(self):
-        hold, error = create_card_hold(self.db, self.janet, D('1.00'))
+    def test_charge_success_and_wallet_creation(self):
+        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
+        self.janet.set_attributes(mangopay_wallet_id=None)
+        exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
         janet = Participant.from_id(self.janet.id)
-        assert isinstance(hold, balanced.CardHold)
-        assert hold.failure_reason is None
-        assert hold.amount == 1000
-        assert hold.meta['state'] == 'new'
-        assert error == ''
-        assert self.janet.balance == janet.balance == 0
+        assert exchange.note is None
+        assert exchange.amount == 10
+        assert exchange.status == 'succeeded'
+        assert self.janet.balance == janet.balance == 10
 
-        # Clean up
-        cancel_card_hold(hold)
-
-    def test_capture_card_hold_full_amount(self):
-        hold, error = create_card_hold(self.db, self.janet, D('20.00'))
-        assert error == ''  # sanity check
-        assert hold.meta['state'] == 'new'
-
-        capture_card_hold(self.db, self.janet, D('20.00'), hold)
-        janet = Participant.from_id(self.janet.id)
-        assert self.janet.balance == janet.balance == D('20.00')
-        assert self.janet.get_credit_card_error() == ''
-        assert hold.meta['state'] == 'captured'
-
-    def test_capture_card_hold_partial_amount(self):
-        hold, error = create_card_hold(self.db, self.janet, D('20.00'))
-        assert error == ''  # sanity check
-
-        capture_card_hold(self.db, self.janet, D('15.00'), hold)
-        janet = Participant.from_id(self.janet.id)
-        assert self.janet.balance == janet.balance == D('15.00')
-        assert self.janet.get_credit_card_error() == ''
-
-    def test_capture_card_hold_too_high_amount(self):
-        hold, error = create_card_hold(self.db, self.janet, D('20.00'))
-        assert error == ''  # sanity check
-
-        with self.assertRaises(balanced.exc.HTTPError):
-            capture_card_hold(self.db, self.janet, D('20.01'), hold)
-
+    def test_charge_100(self):
+        with self.assertRaises(Response) as cm:
+            charge(self.db, self.janet, D('100'), 'http://localhost/')
+        r = cm.exception
+        assert r.code == 302
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == 0
 
-        # Clean up
-        cancel_card_hold(hold)
+    def test_charge_bad_card(self):
+        self.db.run("UPDATE exchange_routes SET address = '-1'")
+        exchange = charge(self.db, self.janet, D('10.00'), 'http://localhost/')
+        assert 'CardId: The value -1 is not valid' in exchange.note
 
-    def test_capture_card_hold_amount_under_minimum(self):
-        hold, error = create_card_hold(self.db, self.janet, D('20.00'))
-        assert error == ''  # sanity check
-
-        capture_card_hold(self.db, self.janet, D('0.01'), hold)
-        janet = Participant.from_id(self.janet.id)
-        assert self.janet.balance == janet.balance == D('9.41')
-        assert self.janet.get_credit_card_error() == ''
-
-    def test_create_card_hold_bad_card(self):
-        bob = self.make_participant('bob', balanced_customer_href='new',
-                                    is_suspicious=False)
-        card = balanced.Card(
-            number='4444444444444448',
-            expiration_year=2020,
-            expiration_month=12
-        ).save()
-        card.associate_to_customer(bob.balanced_customer_href)
-        ExchangeRoute.insert(bob, 'balanced-cc', card.href)
-
-        hold, error = create_card_hold(self.db, bob, D('10.00'))
-        assert error.startswith('402 Payment Required, ')
-
-    def test_create_card_hold_multiple_cards(self):
-        bob = self.make_participant('bob', balanced_customer_href='new',
-                                    is_suspicious=False)
-        card = balanced.Card(
-            number='4242424242424242',
-            expiration_year=2020,
-            expiration_month=12
-        ).save()
-        card.associate_to_customer(bob.balanced_customer_href)
-        ExchangeRoute.insert(bob, 'balanced-cc', card.href)
-
-        card = balanced.Card(
-            number='4242424242424242',
-            expiration_year=2030,
-            expiration_month=12
-        ).save()
-        card.associate_to_customer(bob.balanced_customer_href)
-        ExchangeRoute.insert(bob, 'balanced-cc', card.href)
-
-        hold, error = create_card_hold(self.db, bob, D('10.00'))
-        assert error == ''
-
-    def test_create_card_hold_no_card(self):
+    def test_charge_no_card(self):
         bob = self.make_participant('bob', is_suspicious=False)
-        hold, error = create_card_hold(self.db, bob, D('10.00'))
-        assert error == 'No credit card'
+        with self.assertRaises(AssertionError):
+            charge(self.db, bob, D('10.00'), 'http://localhost/')
 
-    def test_create_card_hold_invalidated_card(self):
+    def test_charge_invalidated_card(self):
         bob = self.make_participant('bob', is_suspicious=False, last_bill_result='invalidated')
-        hold, error = create_card_hold(self.db, bob, D('10.00'))
-        assert error == 'No credit card'
+        with self.assertRaises(AssertionError):
+            charge(self.db, bob, D('10.00'), 'http://localhost/')
 
 
-class TestFees(Harness):
+class TestFees(MangopayHarness):
 
-    def prep(self, amount):
-        """Given a dollar amount as a string, return a 3-tuple.
-
-        The return tuple is like the one returned from _prep_hit, but with the
-        second value, a log message, removed.
-
-        """
-        typecheck(amount, unicode)
-        out = list(_prep_hit(D(amount)))
-        out = [out[0]] + out[2:]
-        return tuple(out)
-
-    def test_prep_hit_basically_works(self):
-        actual = _prep_hit(D('20.00'))
-        expected = (2091,
-                    u'2091 cents ($20.00 + $0.91 fee = $20.91)',
-                    D('20.91'), D('0.91'))
+    def test_upcharge_basically_works(self):
+        actual = upcharge(D('20.00'))
+        expected = (D('20.55'), D('0.55'))
         assert actual == expected
 
-    def test_prep_hit_full_in_rounded_case(self):
-        actual = _prep_hit(D('5.00'))
-        expected = (1000,
-                    u'1000 cents ($9.41 [rounded up from $5.00] + $0.59 fee = $10.00)',
-                    D('10.00'), D('0.59'))
+    def test_upcharge_full_in_rounded_case(self):
+        actual = upcharge(D('5.00'))
+        expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_prep_hit_at_ten_dollars(self):
-        actual = self.prep(u'10.00')
-        expected = (1061, D('10.61'), D('0.61'))
+    def test_upcharge_at_ten_dollars(self):
+        actual = upcharge(D('10.00'))
+        expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_prep_hit_at_forty_cents(self):
-        actual = self.prep(u'0.40')
-        expected = (1000, D('10.00'), D('0.59'))
+    def test_upcharge_at_forty_cents(self):
+        actual = upcharge(D('0.40'))
+        expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_prep_hit_at_fifty_cents(self):
-        actual = self.prep(u'0.50')
-        expected = (1000, D('10.00'), D('0.59'))
+    def test_upcharge_at_fifty_cents(self):
+        actual = upcharge(D('0.50'))
+        expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_prep_hit_at_sixty_cents(self):
-        actual = self.prep(u'0.60')
-        expected = (1000, D('10.00'), D('0.59'))
+    def test_upcharge_at_sixty_cents(self):
+        actual = upcharge(D('0.60'))
+        expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_prep_hit_at_eighty_cents(self):
-        actual = self.prep(u'0.80')
-        expected = (1000, D('10.00'), D('0.59'))
+    def test_upcharge_at_eighty_cents(self):
+        actual = upcharge(D('0.80'))
+        expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_prep_hit_at_nine_fifteen(self):
-        actual = self.prep(u'9.15')
-        expected = (1000, D('10.00'), D('0.59'))
+    def test_upcharge_at_nine_ninty_nine(self):
+        actual = upcharge(D('9.99'))
+        expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_prep_hit_at_nine_forty(self):
-        actual = self.prep(u'9.40')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_nine_forty_one(self):
-        actual = self.prep(u'9.41')
-        expected = (1000, D('10.00'), D('0.59'))
-        assert actual == expected
-
-    def test_prep_hit_at_nine_forty_two(self):
-        actual = self.prep(u'9.42')
-        expected = (1002, D('10.02'), D('0.60'))
+    def test_upcharge_at_ten_eleven(self):
+        actual = upcharge(D('10.11'))
+        expected = (D('10.48'), D('0.37'))
         assert actual == expected
 
     def test_skim_credit(self):
-        actual = skim_credit(D('10.00'))
+        actual = skim_credit(D('10.00'), self.bank_account)
         assert actual == (D('10.00'), D('0.00'))
 
+    def test_skim_credit_outside_sepa(self):
+        actual = skim_credit(D('10.00'), self.bank_account_outside_sepa)
+        assert actual == (D('7.50'), D('2.50'))
 
-class TestRecordExchange(Harness):
+
+class TestRecordExchange(MangopayHarness):
 
     def test_record_exchange_doesnt_update_balance_for_positive_amounts(self):
-        alice = self.make_participant('alice', last_bill_result='')
         record_exchange( self.db
-                       , ExchangeRoute.from_network(alice, 'balanced-cc')
+                       , self.janet_route
                        , amount=D("0.59")
                        , fee=D("0.41")
-                       , participant=alice
+                       , participant=self.janet
                        , status='pre'
                         )
-        alice = Participant.from_username('alice')
-        assert alice.balance == D('0.00')
+        janet = Participant.from_username('janet')
+        assert self.janet.balance == janet.balance == D('0.00')
 
     def test_record_exchange_updates_balance_for_negative_amounts(self):
-        alice = self.make_participant('alice', balance=50, last_ach_result='')
-        record_exchange( self.db
-                       , ExchangeRoute.from_network(alice, 'balanced-ba')
-                       , amount=D('-35.84')
-                       , fee=D('0.75')
-                       , participant=alice
-                       , status='pre'
-                        )
-        alice = Participant.from_username('alice')
-        assert alice.balance == D('13.41')
+        self.make_exchange('mango-cc', 50, 0, self.homer)
+        record_exchange(
+            self.db,
+            self.homer_route,
+            amount=D('-35.84'),
+            fee=D('0.75'),
+            participant=self.homer,
+            status='pre',
+        )
+        homer = Participant.from_username('homer')
+        assert homer.balance == D('13.41')
 
     def test_record_exchange_fails_if_negative_balance(self):
-        alice = self.make_participant('alice', last_ach_result='')
-        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
         with pytest.raises(NegativeBalance):
-            record_exchange(self.db, ba, D("-10.00"), D("0.41"), alice, 'pre')
+            record_exchange(self.db, self.homer_route, D("-10.00"), D("0.41"), self.homer, 'pre')
+
+    def test_record_exchange_failure(self):
+        record_exchange(self.db, self.janet_route, D("10.00"), D("0.01"), self.janet, 'failed', 'OOPS')
+        janet = Participant.from_id(self.janet.id)
+        assert self.janet.balance == janet.balance == 0
+        assert self.janet_route.error == 'OOPS'
 
     def test_record_exchange_result_restores_balance_on_error(self):
-        alice = self.make_participant('alice', balance=30, last_ach_result='')
-        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
-        e_id = record_exchange(self.db, ba, D('-27.06'), D('0.81'), alice, 'pre')
-        assert alice.balance == D('02.13')
-        record_exchange_result(self.db, e_id, 'failed', 'SOME ERROR', alice)
-        alice = Participant.from_username('alice')
-        assert alice.balance == D('30.00')
+        homer, ba = self.homer, self.homer_route
+        self.make_exchange('mango-cc', 30, 0, homer)
+        e_id = record_exchange(self.db, ba, D('-27.06'), D('0.81'), homer, 'pre')
+        assert homer.balance == D('02.13')
+        record_exchange_result(self.db, e_id, 'failed', 'SOME ERROR', homer)
+        homer = Participant.from_username('homer')
+        assert homer.balance == D('30.00')
 
     def test_record_exchange_result_restores_balance_on_error_with_invalidated_route(self):
-        alice = self.make_participant('alice', balance=37, last_ach_result='')
-        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
-        e_id = record_exchange(self.db, ba, D('-32.45'), D('0.86'), alice, 'pre')
-        assert alice.balance == D('3.69')
+        homer, ba = self.homer, self.homer_route
+        self.make_exchange('mango-cc', 37, 0, homer)
+        e_id = record_exchange(self.db, ba, D('-32.45'), D('0.86'), homer, 'pre')
+        assert homer.balance == D('3.69')
         ba.update_error('invalidated')
-        record_exchange_result(self.db, e_id, 'failed', 'oops', alice)
-        alice = Participant.from_username('alice')
-        assert alice.balance == D('37.00')
-        assert ba.error == alice.get_bank_account_error() == 'invalidated'
+        record_exchange_result(self.db, e_id, 'failed', 'oops', homer)
+        homer = Participant.from_username('homer')
+        assert homer.balance == D('37.00')
+        assert ba.error == homer.get_bank_account_error() == 'invalidated'
 
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
-        alice = self.make_participant('alice', balance=50, last_ach_result='')
-        ba = ExchangeRoute.from_network(alice, 'balanced-ba')
-        e_id = record_exchange(self.db, ba, D('-43.98'), D('1.60'), alice, 'pre')
-        assert alice.balance == D('4.42')
-        record_exchange_result(self.db, e_id, 'succeeded', None, alice)
-        alice = Participant.from_username('alice')
-        assert alice.balance == D('4.42')
+        homer, ba = self.homer, self.homer_route
+        self.make_exchange('mango-cc', 50, 0, homer)
+        e_id = record_exchange(self.db, ba, D('-43.98'), D('1.60'), homer, 'pre')
+        assert homer.balance == D('4.42')
+        record_exchange_result(self.db, e_id, 'succeeded', None, homer)
+        homer = Participant.from_username('homer')
+        assert homer.balance == D('4.42')
 
     def test_record_exchange_result_updates_balance_for_positive_amounts(self):
-        alice = self.make_participant('alice', balance=4, last_bill_result='')
-        cc = ExchangeRoute.from_network(alice, 'balanced-cc')
-        e_id = record_exchange(self.db, cc, D('31.59'), D('0.01'), alice, 'pre')
-        assert alice.balance == D('4.00')
-        record_exchange_result(self.db, e_id, 'succeeded', None, alice)
-        alice = Participant.from_username('alice')
-        assert alice.balance == D('35.59')
+        janet, cc = self.janet, self.janet_route
+        self.make_exchange('mango-cc', 4, 0, janet)
+        e_id = record_exchange(self.db, cc, D('31.59'), D('0.01'), janet, 'pre')
+        assert janet.balance == D('4.00')
+        record_exchange_result(self.db, e_id, 'succeeded', None, janet)
+        janet = Participant.from_username('janet')
+        assert janet.balance == D('35.59')
 
 
-class TestSyncWithBalanced(BalancedHarness):
+class TestSync(MangopayHarness):
 
-    def test_sync_with_balanced(self):
+    def test_sync_with_mangopay(self):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer:
             rer.side_effect = Foobar()
-            hold, error = create_card_hold(self.db, self.janet, D('20.00'))
-            assert error == ''  # sanity check
             with self.assertRaises(Foobar):
-                capture_card_hold(self.db, self.janet, D('10.00'), hold)
+                charge(self.db, self.janet, D('10.00'), 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
-        sync_with_balanced(self.db)
+        sync_with_mangopay(self.db)
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'succeeded'
         assert Participant.from_username('janet').balance == 10
 
-    def test_sync_with_balanced_deletes_charges_that_didnt_happen(self):
+    def test_sync_with_mangopay_deletes_charges_that_didnt_happen(self):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \
-           , mock.patch('balanced.CardHold.capture') as capture:
-            rer.side_effect = capture.side_effect = Foobar
-            hold, error = create_card_hold(self.db, self.janet, D('33.67'))
-            assert error == ''  # sanity check
+           , mock.patch('liberapay.billing.mangoapi.payIns.Create') as Create:
+            rer.side_effect = Create.side_effect = Foobar
             with self.assertRaises(Foobar):
-                capture_card_hold(self.db, self.janet, D('7.52'), hold)
+                charge(self.db, self.janet, D('33.67'), 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
-        sync_with_balanced(self.db)
+        sync_with_mangopay(self.db)
         exchanges = self.db.all("SELECT * FROM exchanges")
         assert not exchanges
         assert Participant.from_username('janet').balance == 0
 
-    def test_sync_with_balanced_reverts_credits_that_didnt_happen(self):
-        self.make_exchange('balanced-cc', 41, 0, self.homer)
+    def test_sync_with_mangopay_reverts_credits_that_didnt_happen(self):
+        self.make_exchange('mango-cc', 41, 0, self.homer)
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \
-           , mock.patch('liberapay.billing.exchanges.thing_from_href') as tfh:
-            rer.side_effect = tfh.side_effect = Foobar
+           , mock.patch('liberapay.billing.exchanges.test_hook') as test_hook:
+            rer.side_effect = test_hook.side_effect = Foobar
             with self.assertRaises(Foobar):
-                ach_credit(self.db, self.homer, 0, 0)
+                payout(self.db, self.homer, D('35.00'))
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'pre'
-        sync_with_balanced(self.db)
+        sync_with_mangopay(self.db)
         exchanges = self.db.all("SELECT * FROM exchanges WHERE amount < 0")
         assert not exchanges
         assert Participant.from_username('homer').balance == 41
+
+    def test_sync_with_mangopay_transfers(self):
+        self.make_exchange('mango-cc', 10, 0, self.janet)
+        with mock.patch('liberapay.billing.exchanges.record_transfer_result') as rtr:
+            rtr.side_effect = Foobar()
+            with self.assertRaises(Foobar):
+                transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
+        t = self.db.one("SELECT * FROM transfers")
+        assert t.status == 'pre'
+        sync_with_mangopay(self.db)
+        t = self.db.one("SELECT * FROM transfers")
+        assert t.status == 'succeeded'
+        assert Participant.from_username('david').balance == 10
+        assert Participant.from_username('janet').balance == 0
+
+    def test_sync_with_mangopay_deletes_transfers_that_didnt_happen(self):
+        self.make_exchange('mango-cc', 10, 0, self.janet)
+        with mock.patch('liberapay.billing.exchanges.record_transfer_result') as rtr \
+           , mock.patch('liberapay.billing.mangoapi.transfers.Create') as Create:
+            rtr.side_effect = Create.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
+        t = self.db.one("SELECT * FROM transfers")
+        assert t.status == 'pre'
+        sync_with_mangopay(self.db)
+        transfers = self.db.all("SELECT * FROM transfers")
+        assert not transfers
+        assert Participant.from_username('david').balance == 0
+        assert Participant.from_username('janet').balance == 10

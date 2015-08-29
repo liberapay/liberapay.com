@@ -1,3 +1,6 @@
+# coding: utf8
+
+from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
@@ -6,15 +9,24 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Receiving")
 
+route = ExchangeRoute.from_network(participant, 'mango-ba')
+
 [-----------------------------------------------------------------------------]
 {% extends "templates/settings.html" %}
 {% block content %}
 
-{% set receiving = Money(participant.receiving, "USD") %}
+{% set receiving = Money(participant.receiving, "EUR") %}
 {% if participant == user %}
-<p>{{ _("You receive {0} per week", receiving) }}</p>
+<p>{{ _("You receive {0} per week.", receiving) }}</p>
 {% else %}
-<p>{{ _("{0} receives {1} per week", participant.username, receiving) }}</p>
+<p>{{ _("{0} receives {1} per week.", participant.username, receiving) }}</p>
+{% endif %}
+
+{% if not participant.mangopay_user_id %}
+    <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
+    <p><a class="btn btn-primary" href="../identity">{{ _("Fill identity form") }}</a></p>
+{% elif participant.balance > 0 %}
+    <p><a class="btn btn-default" href="payout">{{ _("Withdraw money") }}</a></p>
 {% endif %}
 
 {% if participant.receiving > 0 %}
@@ -26,17 +38,17 @@ subhead = _("Receiving")
 </div>
 
 <div class="col-md-6">
-    <h2>{{ _("Tips Received, by Dollar Amount") }}</h2>
+    <h2>{{ _("Tips Received, by Amount") }}</h2>
     <table class="tip-distribution">
         {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
         <tr>
-            <td class="dollar-sign">$</td>
+            <td class="dollar-sign">€</td>
             <td class="amount">{{ amount }}</td>
             <td colspan="2"></td>
             <td class="count">
                 <span class="green bar" style="width: {{ psummed * 240 }}pt"></span>
-                {{ "%5.1f" % (psummed * 100) }}%
-                <span class="number">(${{ summed }})</span>
+                {{ format_percent(psummed) }}
+                <span class="number">({{ format_currency(summed, 'EUR') }})</span>
             </td>
         </tr>
         {% endfor %}

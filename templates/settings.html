@@ -1,16 +1,12 @@
 {% extends "templates/base.html" %}
 
-{% block scripts %}
-    <script>$(document).ready(Liberapay.settings.init);</script>
-    {{ super() }}
-{% endblock %}
-
 {% block subnav %}
     {% set pages = [
         ('/giving/', _('Giving')),
         ('/receiving/', _('Receiving')),
         ('/history/', _('History')),
         ('/settings/', _('Settings')),
+        ('/identity', _('Identity')),
         ('/emails/', _('Emails')),
         ('/widgets/', _('Widgets')),
     ] + ([

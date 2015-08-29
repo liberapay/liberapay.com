@@ -2,7 +2,7 @@
 
 [---] text/html
 {{ _("We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:",
-     Money(exchange.amount - exchange.fee, 'USD')) }}
+     Money(exchange.amount - exchange.fee, 'EUR')) }}
 
 <pre>{{ exchange.note }}</pre>
 
@@ -11,7 +11,7 @@
 
 [---] text/plain
 {{ _("We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:",
-     Money(exchange.amount - exchange.fee, 'USD')) }}
+     Money(exchange.amount - exchange.fee, 'EUR')) }}
 
 {{ exchange.note }}
 

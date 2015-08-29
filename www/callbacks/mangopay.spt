@@ -1,0 +1,28 @@
+"""An endpoint to receive Mangopay's callbacks.
+
+Doc: https://docs.mangopay.com/api-references/notifications/
+"""
+
+from aspen import Response
+
+from liberapay.billing import mangoapi
+from liberapay.billing.exchanges import record_exchange_result, repr_error
+from liberapay.models.participant import Participant
+
+[---]
+
+try:
+    event, status = request.qs['EventType'].rsplit('_', 1)
+except ValueError:
+    raise Response(400, "bad EventType")
+RessourceId = request.qs['RessourceId']
+
+if event == 'PAYOUT_NORMAL':
+    payout = mangoapi.payOuts.Get(RessourceId)
+    if payout.Status != status:
+        Response(400, "status mismatch")
+    error = repr_error(payout)
+    p = Participant._from_thing("mangopay_user_id", payout.AuthorId)
+    record_exchange_result(website.db, payout.Tag, status.lower(), error, p)
+
+[---] text/plain

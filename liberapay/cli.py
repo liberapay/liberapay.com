@@ -15,11 +15,11 @@ def payday():
     # Lazily import the billing module.
     # =================================
 
-    from liberapay.billing.exchanges import sync_with_balanced
+    from liberapay.billing.exchanges import sync_with_mangopay
     from liberapay.billing.payday import Payday
 
     try:
-        sync_with_balanced(db)
+        sync_with_mangopay(db)
         Payday.start().run()
     except KeyboardInterrupt:
         pass
