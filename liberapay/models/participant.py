@@ -165,6 +165,9 @@ class Participant(Model, MixinTeam):
                 p.authenticated = True
                 return p
 
+    def refetch(self):
+        return self._from_thing('id', self.id)
+
 
     # Password Management
     # ===================

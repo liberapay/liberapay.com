@@ -4,7 +4,7 @@ from mock import patch
 
 from mangopaysdk.entities.payout import PayOut
 
-from liberapay.billing.exchanges import record_exchange, repr_error
+from liberapay.billing.exchanges import record_exchange
 from liberapay.testing.mangopay import MangopayHarness
 
 
@@ -15,13 +15,16 @@ class TestMangopayCallbacks(MangopayHarness):
         return self.client.GET('/callbacks/mangopay?'+qs, **kw)
 
     @patch('mangopaysdk.tools.apipayouts.ApiPayOuts.Get')
-    @patch('liberapay.billing.exchanges.record_exchange_result')
-    def test_payout_callback(self, rer, Get):
+    def test_payout_callback(self, Get):
         homer, ba = self.homer, self.homer_route
         for status in ('succeeded', 'failed'):
             status_up = status.upper()
             error = 'FOO' if status == 'failed' else None
-            e_id = record_exchange(self.db, ba, 10, 0, homer, 'pre')
+            self.make_exchange('mango-cc', 10, 0, homer)
+            e_id = record_exchange(self.db, ba, -10, 0, homer, 'pre')
+            assert homer.balance == 0
+            homer.close(None)
+            assert homer.status == 'closed'
             qs = "EventType=PAYOUT_NORMAL_"+status_up+"&RessourceId=123456790"
             payout = PayOut()
             payout.Status = status_up
@@ -33,8 +36,11 @@ class TestMangopayCallbacks(MangopayHarness):
             r = self.callback(qs, csrf_token=False)
             assert b'csrf_token' not in r.headers.cookie
             assert r.code == 200, r.text
-            assert rer.call_count == 1
-            assert rer.call_args[0][:-1] == (self.db, str(e_id), status, repr_error(payout))
-            assert rer.call_args[0][-1].id == homer.id
-            assert rer.call_args[1] == {}
-            rer.reset_mock()
+            homer = homer.refetch()
+            if status == 'succeeded':
+                assert homer.balance == 0
+                assert homer.status == 'closed'
+            else:
+                assert homer.balance == 10
+                assert homer.status == 'active'
+            homer.update_status('active')  # reset for next loop run
