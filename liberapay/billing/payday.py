@@ -184,6 +184,7 @@ class Payday(object):
         , tippee bigint
         , amount numeric(35,2)
         , context transfer_context
+        , UNIQUE (tipper, tippee, context)
         ) ON COMMIT DROP;
 
 
