@@ -1,8 +1,8 @@
 from liberapay.utils import get_participant
+
 [---]
+
 participant = get_participant(state, restrict=True)
-title = _("Close Account")
-subhead = participant.username
 
 payday_is_running = website.db.one("""
     SELECT ts_start FROM paydays WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
@@ -16,6 +16,12 @@ if request.method == 'POST' and not payday_is_running:
     else:
         participant.close(disburse_to)
         response.redirect('/%s/' % participant.username)
+
+pending_payouts = website.db.one("SELECT count(*) FROM exchanges WHERE status = 'created'")
+
+title = _("Close Account")
+subhead = participant.username
+
 [---] text/html
 {% extends "templates/base.html" %}
 
@@ -45,7 +51,7 @@ if request.method == 'POST' and not payday_is_running:
 
         {% if participant.balance > 0 %}
 
-        <h2 class="first">{{ _("Balance") }}</h2>
+        <h2>{{ _("Wallet") }}</h2>
 
         <p>{{ _("You have {0} in your wallet. What should we do with it?",
                 Money(participant.balance, 'EUR')) }}</p>
@@ -65,6 +71,16 @@ if request.method == 'POST' and not payday_is_running:
 
         <p>{{ _(
             "If neither option works for you, please contact support@liberapay.com."
+        ) }}</p>
+
+        {% elif pending_payouts %}
+
+        <h2>{{ _("Wallet") }}</h2>
+
+        <p class="alert alert-warning">{{ _(
+            "You have a pending transfer to your bank account. If it fails, "
+            "the money will reappear in your wallet and your account will be "
+            "automatically reopened."
         ) }}</p>
 
         {% endif %}
@@ -90,7 +106,7 @@ if request.method == 'POST' and not payday_is_running:
         ) }}</p>
 
 
-        <h2>{{ _("Username") }}</h2>
+        <h2>{{ _("Username, email and password") }}</h2>
 
         <p>{{ _(
             "We may give your username to someone else if they ask for it, but "
@@ -99,8 +115,9 @@ if request.method == 'POST' and not payday_is_running:
         ) }}</p>
 
         <p>{{ _(
-            "Until we give your username to someone else, you can use it again "
-            "if you ever decide to rejoin Liberapay. Simply sign in."
+            "We don't erase your email address and password immediately, so "
+            "for a while you'll be able to reopen your account by simply "
+            "logging in, until your account is definitively archived."
         ) }}</p>
 
 
