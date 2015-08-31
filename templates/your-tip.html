@@ -6,9 +6,8 @@
         {{ _("to pledge to {0}", tippee.friendly_name) if pledging else _("to give to {0}", tippee.username) }}
     </div>
 {% else %}
-    {% set p = tippee.participant if pledging else tippee %}
-    {% set tip = tip or user.get_tip_to(p) %}
-    <form action="/{{ p.username }}/tip" method="POST" class="your-tip">
+    {% set tip = tip or user.get_tip_to(tippee.participant or tippee) %}
+    <form action="/~{{ tip.tippee }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
         {% if inline %}
