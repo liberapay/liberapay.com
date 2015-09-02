@@ -112,10 +112,13 @@ class Platform(object):
         The response is returned, after checking its status code and ratelimit
         headers.
         """
+        url = self.api_url+path
         is_user_session = bool(sess)
         if not sess:
             sess = self.get_auth_session()
-        response = sess.get(self.api_url+path, **kw)
+            if self.name == 'github':
+                url += '?client_id=%s&client_secret=%s' % (self.api_key, self.api_secret)
+        response = sess.get(url, **kw)
 
         limit, remaining, reset = self.get_ratelimit_headers(response)
         if not is_user_session:
