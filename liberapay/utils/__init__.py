@@ -15,30 +15,6 @@ import liberapay
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
-def dict_to_querystring(mapping):
-    if not mapping:
-        return u''
-
-    arguments = []
-    for key, values in mapping.iteritems():
-        for val in values:
-            arguments.append(u'='.join([key, val]))
-
-    return u'?' + u'&'.join(arguments)
-
-
-def canonicalize(path, base, canonical, given, arguments=None):
-    if given != canonical:
-        assert canonical.lower() == given.lower()  # sanity check
-        remainder = path[len(base + given):]
-
-        if arguments is not None:
-            arguments = dict_to_querystring(arguments)
-
-        newpath = base + canonical + remainder + arguments or ''
-        raise Response(302, headers={"Location": newpath})
-
-
 def get_participant(state, restrict=True, redirect_stub=True):
     """Given a Request, raise Response or return Participant.
 
@@ -48,7 +24,6 @@ def get_participant(state, restrict=True, redirect_stub=True):
     request = state['request']
     user = state['user']
     slug = request.line.uri.path['username']
-    qs = request.line.uri.querystring
     _ = state['_']
 
     if restrict:
@@ -58,16 +33,25 @@ def get_participant(state, restrict=True, redirect_stub=True):
                 raise Response(302, headers={'Location': url})
             raise Response(403, _("You need to log in to access this page."))
 
-    from liberapay.models.participant import Participant  # avoid circular import
-    if isinstance(user, Participant) and user.username.lower() == slug.lower():
-        participant = user
+    if slug.startswith('~'):
+        thing = 'id'
+        value = slug[1:]
+        participant = user if user and str(user.id) == value else None
     else:
-        participant = Participant.from_username(slug)
+        thing = 'lower(username)'
+        value = slug.lower()
+        participant = user if user and user.username.lower() == value else None
 
     if participant is None:
-        raise Response(404)
+        from liberapay.models.participant import Participant  # avoid circular import
+        participant = Participant._from_thing(thing, value)
+        if participant is None:
+            raise Response(404)
 
-    canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
+    if request.method in ('GET', 'HEAD'):
+        if slug != participant.username:
+            canon = '/' + participant.username + request.line.uri[len(slug)+1:]
+            raise Response(302, headers={'Location': canon})
 
     status = participant.status
     if status == 'closed':
