@@ -58,16 +58,27 @@ def get_participant(state, restrict=True, redirect_stub=True):
                 raise Response(302, headers={'Location': url})
             raise Response(403, _("You need to log in to access this page."))
 
-    from liberapay.models.participant import Participant  # avoid circular import
-    if isinstance(user, Participant) and user.username.lower() == slug.lower():
-        participant = user
+    if slug.startswith('~'):
+        thing = 'id'
+        value = slug[1:]
+        participant = user if user and str(user.id) == value else None
     else:
-        participant = Participant.from_username(slug)
+        thing = 'lower(username)'
+        value = slug.lower()
+        participant = user if user and user.username.lower() == value else None
 
     if participant is None:
-        raise Response(404)
+        from liberapay.models.participant import Participant  # avoid circular import
+        participant = Participant._from_thing(thing, value)
+        if participant is None:
+            raise Response(404)
 
-    canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
+    if request.method in ('GET', 'HEAD'):
+        if thing == 'id':
+            if not participant.username.startswith('~'):  # prevent redirect loop
+                raise Response(302, headers={'Location': '/'+participant.username+'/'})
+        else:
+            canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
 
     status = participant.status
     if status == 'closed':

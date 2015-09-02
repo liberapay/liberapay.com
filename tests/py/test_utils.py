@@ -20,6 +20,13 @@ class Tests(Harness):
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
+    def test_get_participant_gets_participant_from_id(self):
+        expected = self.make_participant('alice')
+        state = self.client.POST('/~1/', return_after='dispatch_request_to_filesystem',
+                                 want='state')
+        actual = utils.get_participant(state, restrict=False)
+        assert actual == expected
+
     def test_get_participant_canonicalizes(self):
         self.make_participant('alice')
         state = self.client.GET( '/Alice/'
@@ -32,6 +39,15 @@ class Tests(Harness):
         actual = cm.exception.code
 
         assert actual == 302
+
+    def test_get_participant_canonicalizes_id_to_username(self):
+        self.make_participant('alice')
+        state = self.client.GET('/~1/', return_after='dispatch_request_to_filesystem',
+                                want='state')
+        with self.assertRaises(Response) as cm:
+            utils.get_participant(state, restrict=False)
+        r = cm.exception
+        assert r.code == 302
 
     def test_dict_to_querystring_converts_dict_to_querystring(self):
         expected = "?foo=bar"
