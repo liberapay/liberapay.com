@@ -13,10 +13,8 @@ class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
         expected = self.make_participant('alice')
-        state = self.client.GET( '/alice/'
-                               , return_after='dispatch_request_to_filesystem'
-                               , want='state'
-                                )
+        state = self.client.GET('/alice/', return_after='dispatch_request_to_filesystem',
+                                want='state')
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
@@ -29,35 +27,23 @@ class Tests(Harness):
 
     def test_get_participant_canonicalizes(self):
         self.make_participant('alice')
-        state = self.client.GET( '/Alice/'
-                               , return_after='dispatch_request_to_filesystem'
-                               , want='state'
-                                )
-
-        with self.assertRaises(Response) as cm:
-            utils.get_participant(state, restrict=False)
-        actual = cm.exception.code
-
-        assert actual == 302
-
-    def test_get_participant_canonicalizes_id_to_username(self):
-        self.make_participant('alice')
-        state = self.client.GET('/~1/', return_after='dispatch_request_to_filesystem',
+        state = self.client.GET('/Alice/?foo=bar', return_after='dispatch_request_to_filesystem',
                                 want='state')
         with self.assertRaises(Response) as cm:
             utils.get_participant(state, restrict=False)
         r = cm.exception
         assert r.code == 302
+        assert r.headers['Location'] == '/alice/?foo=bar'
 
-    def test_dict_to_querystring_converts_dict_to_querystring(self):
-        expected = "?foo=bar"
-        actual = utils.dict_to_querystring({"foo": ["bar"]})
-        assert actual == expected
-
-    def test_dict_to_querystring_converts_empty_dict_to_querystring(self):
-        expected = ""
-        actual = utils.dict_to_querystring({})
-        assert actual == expected
+    def test_get_participant_canonicalizes_id_to_username(self):
+        self.make_participant('alice')
+        state = self.client.GET('/~1/?x=2', return_after='dispatch_request_to_filesystem',
+                                want='state')
+        with self.assertRaises(Response) as cm:
+            utils.get_participant(state, restrict=False)
+        r = cm.exception
+        assert r.code == 302
+        assert r.headers['Location'] == '/alice/?x=2'
 
     def test_is_expired(self):
         expiration = datetime.utcnow() - timedelta(days = 40)

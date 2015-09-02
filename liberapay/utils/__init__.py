@@ -15,30 +15,6 @@ import liberapay
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
-def dict_to_querystring(mapping):
-    if not mapping:
-        return u''
-
-    arguments = []
-    for key, values in mapping.iteritems():
-        for val in values:
-            arguments.append(u'='.join([key, val]))
-
-    return u'?' + u'&'.join(arguments)
-
-
-def canonicalize(path, base, canonical, given, arguments=None):
-    if given != canonical:
-        assert canonical.lower() == given.lower()  # sanity check
-        remainder = path[len(base + given):]
-
-        if arguments is not None:
-            arguments = dict_to_querystring(arguments)
-
-        newpath = base + canonical + remainder + arguments or ''
-        raise Response(302, headers={"Location": newpath})
-
-
 def get_participant(state, restrict=True, redirect_stub=True):
     """Given a Request, raise Response or return Participant.
 
@@ -48,7 +24,6 @@ def get_participant(state, restrict=True, redirect_stub=True):
     request = state['request']
     user = state['user']
     slug = request.line.uri.path['username']
-    qs = request.line.uri.querystring
     _ = state['_']
 
     if restrict:
@@ -74,11 +49,9 @@ def get_participant(state, restrict=True, redirect_stub=True):
             raise Response(404)
 
     if request.method in ('GET', 'HEAD'):
-        if thing == 'id':
-            if not participant.username.startswith('~'):  # prevent redirect loop
-                raise Response(302, headers={'Location': '/'+participant.username+'/'})
-        else:
-            canonicalize(request.line.uri.path.raw, '/', participant.username, slug, qs)
+        if slug != participant.username:
+            canon = '/' + participant.username + request.line.uri[len(slug)+1:]
+            raise Response(302, headers={'Location': canon})
 
     status = participant.status
     if status == 'closed':
