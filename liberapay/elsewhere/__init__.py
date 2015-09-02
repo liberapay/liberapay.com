@@ -117,7 +117,8 @@ class Platform(object):
         if not sess:
             sess = self.get_auth_session()
             if self.name == 'github':
-                url += '?client_id=%s&client_secret=%s' % (self.api_key, self.api_secret)
+                url += '?' if '?' not in url else '&'
+                url += 'client_id=%s&client_secret=%s' % (self.api_key, self.api_secret)
         response = sess.get(url, **kw)
 
         limit, remaining, reset = self.get_ratelimit_headers(response)
