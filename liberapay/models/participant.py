@@ -1076,7 +1076,10 @@ class Participant(Model, MixinTeam):
 
         if update_self:
             # Update giving/pledging amount of tipper
-            self.update_giving(cursor)
+            updated = self.update_giving(cursor)
+            for u in updated:
+                if u.id == t.id:
+                    t.__dict__['is_funded'] = u.is_funded
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
