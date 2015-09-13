@@ -1,5 +1,4 @@
-[Liberapay](http://liberapay.com) is a recurrent donations platform, forked from
-[Gratipay](http://gratipay.com).
+[Liberapay](http://liberapay.com) is a recurrent donations platform, trying to bring back the original spirit of Gittip that [Gratipay](http://gratipay.com) has [strayed away from](https://medium.com/gratipay-blog/gratipay-2-0-2453d3c53077).
 
 
 ## Contributing to the translations
@@ -13,7 +12,7 @@
 
 Firstly, make sure you have the following dependencies installed:
 
-- python 2.7
+- python 2.7 (a pull request to port to python 3 is very much welcome)
 - virtualenv
 - postgresql
 - make
@@ -72,8 +71,7 @@ you can also use the following commands:
 
 ### Help
 
-If there is something you can't seem to figure out by yourself, come ask us in
-the IRC channel #liberapay on [Freenode](http://webchat.freenode.net/).
+Need some help? [Open an issue](https://github.com/liberapay/liberapay.com/issues/new) or come ask your question in the IRC channel #liberapay on [Freenode](http://webchat.freenode.net/).
 
 
 ## License
