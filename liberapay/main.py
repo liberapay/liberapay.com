@@ -12,7 +12,7 @@ from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, allow_cors_for_assets, x_frame_options
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
-from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min
+from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min, scss
 from liberapay.website import website
 
 
@@ -25,6 +25,7 @@ website.renderer_factories['csv_dump'] = csv_dump.Factory(website)
 website.renderer_factories['jinja2_htmlescaped'] = jinja2_htmlescaped.Factory(website)
 website.renderer_factories['jinja2_html_jswrapped'] = jinja2_html_jswrapped.Factory(website)
 website.renderer_factories['jinja2_xml_min'] = jinja2_xml_min.Factory(website)
+website.renderer_factories['scss'] = scss.Factory(website)
 website.default_renderers_by_media_type['text/html'] = 'jinja2_htmlescaped'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'  # unescaped is fine here
 
