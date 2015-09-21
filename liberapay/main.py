@@ -29,9 +29,14 @@ website.renderer_factories['jinja2_htmlescaped'] = jinja2_htmlescaped.Factory(we
 website.default_renderers_by_media_type['text/html'] = 'jinja2_htmlescaped'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'  # unescaped is fine here
 
+def _assert(x):
+    assert x, repr(x)
+    return x
+
 website.renderer_factories['jinja2'].Renderer.global_context.update(__builtin__.__dict__)
 website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_htmlescaped.
+    'assert': _assert,
     'Community': Community,
     'b64encode': base64.b64encode,
     'filter_profile_subnav': utils.filter_profile_subnav,
