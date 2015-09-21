@@ -26,7 +26,7 @@ route = ExchangeRoute.from_network(participant, 'mango-ba')
     <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
     <p><a class="btn btn-primary" href="../identity">{{ _("Fill identity form") }}</a></p>
 {% elif participant.balance > 0 %}
-    <p><a class="btn btn-default" href="payout">{{ _("Withdraw money") }}</a></p>
+    <p><a class="btn btn-default" href="payout/Li4=">{{ _("Withdraw money") }}</a></p>
 {% endif %}
 
 {% if participant.receiving > 0 %}

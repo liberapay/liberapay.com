@@ -1,6 +1,7 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from base64 import b64decode
 from datetime import datetime
 from decimal import Decimal as D, InvalidOperation
 
@@ -33,8 +34,8 @@ if request.method == 'POST':
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
 elif 'exchange_id' in request.qs:
-    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s",
-                              (request.qs['exchange_id'],))
+    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
+                              (request.qs['exchange_id'], participant.id))
 
 route = ExchangeRoute.from_network(participant, 'mango-ba')
 if route:
@@ -42,19 +43,30 @@ if route:
     ba_details = bank_account.Details
     ba_type = bank_account.Type
 
+back_to = b64decode(request.path['back_to'])
+success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
+show_form = participant.balance > 0 and not success
+
 title = _("Withdraw money")
 
 [---] text/html
 {% extends "templates/base.html" %}
 
+{% block heading %}{% endblock %}
+
 {% block content %}
-<form id="payout" action="javascript:" method="POST"
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+<div class="panel panel-primary">
+<div class="panel-heading">
+    <h1 class="panel-title">{{ title }}</h1>
+</div>
+<form id="payout" class="panel-body" action="javascript:" method="POST"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     {% if exchange %}
-        {% set success = exchange.status != 'failed' %}
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your liberapay wallet. "
               "If the transfer is successful {1} will land in your bank account and {2} will be paid in fees.",
@@ -65,8 +77,11 @@ title = _("Withdraw money")
     <p>
         {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
     </p>
+    {% if success and back_to %}
+        <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
+    {% endif %}
 
-    {% if participant.balance > 0 %}
+    {% if show_form %}
     <h3>{{ _("Amount") }}</h3>
 
     <fieldset id="amount" class="form-inline">
@@ -276,16 +291,23 @@ title = _("Withdraw money")
     </fieldset>
 
     <br>
-    <button class="btn btn-primary">{{ _("Go") }}</button>
+    <button class="btn btn-success">{{ _("Go") }}</button>
 
-    <br><br>
-    <p class="alert alert-info">
-        {{ _("Personal and financial information is securely stored by our partner, {0}.",
-             '<a href="https://www.mangopay.com/legal-notices/">Mangopay</a>'|safe) }}
-    </p>
+    {% if back_to %}
+        <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
+    {% endif %}
     {% endif %}
 
 </form>
+</div>
+{% if show_form %}
+<p class="alert alert-info">
+    {{ _("Personal and financial information is securely stored by our partner, {0}.",
+         '<a href="https://www.mangopay.com/legal-notices/">Mangopay</a>'|safe) }}
+</p>
+{% endif %}
+</div>
+</div>
 {% endblock %}
 
 {% block scripts %}

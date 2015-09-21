@@ -1,9 +1,11 @@
 """Get or change the authenticated user's tip to this person.
 """
+from base64 import b64encode
 from decimal import InvalidOperation
 
 from aspen import Response
 from babel.numbers import NumberFormatError
+
 from liberapay.models.participant import sign_in
 from liberapay.utils import get_participant
 
@@ -33,9 +35,10 @@ if request.method == 'POST':
     except (InvalidOperation, ValueError, NumberFormatError):
         raise Response(400, "bad amount")
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        back_to = request.body.get('back_to')
         if not out['is_funded']:
-            response.redirect('/' + tipper.username + '/giving/payin')
-        response.redirect(request.body.get('back_to') or '..')
+            response.redirect('/' + tipper.username + '/giving/payin/' + b64encode(back_to))
+        response.redirect(back_to or '..')
 else:
     out = tipper.get_tip_to(tippee)
 

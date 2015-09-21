@@ -1,6 +1,7 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from base64 import b64decode
 from datetime import datetime
 from decimal import Decimal as D, InvalidOperation
 
@@ -65,30 +66,34 @@ if request.method == 'POST':
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
 elif 'exchange_id' in request.qs:
-    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s",
-                              (request.qs['exchange_id'],))
+    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
+                              (request.qs['exchange_id'], participant.id))
 
 account = participant.get_mangopay_account()
+back_to = b64decode(request.path['back_to'])
+success = getattr(exchange, 'status', None) == 'succeeded'
+show_form = weekly > 0 and funded < 52 and not success
 
 title = _("Add money")
 
 [---] text/html
 {% extends "templates/base.html" %}
 
+{% block heading %}{% endblock %}
+
 {% block content %}
-{% if not participant.email %}
-    <p class="alert alert-warning">{{
-        _("Please {0}verify your email address{1} then reload this page.",
-          '<a href="../emails/" target="_blank">'|safe, '</a>'|safe)
-    }}</p>
-{% else %}
-<form id="payin" action="javascript:" method="POST"
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+<div class="panel panel-primary">
+<div class="panel-heading">
+    <h1 class="panel-title">{{ title }}</h1>
+</div>
+<form id="payin" class="panel-body" action="javascript:" method="POST"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     {% if exchange %}
-        {% set success = exchange.status == 'succeeded' %}
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees.",
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
@@ -96,21 +101,22 @@ title = _("Add money")
         }}</div>
     {% endif %}
     <p>
-        {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
-        {{ _("You receive {0} per week.", Money(participant.receiving, 'EUR')) }}
-        {{ _("You want to donate {0} per week.", Money(donations, 'EUR')) }}
-    </p>
-    <p class="text-{{ 'success' if funded == 'inf' or funded > 0 else 'warning' }}">
         {% if weekly <= 0 %}
             {{ _("Your donations are funded by your income.") }}
         {% elif funded > 0 %}
-            {{ _("Your donations are funded for another {0} weeks.", funded) }}
+            {{ ngettext("Your donations are only funded for another week.",
+                        "Your donations are funded for another {n} weeks.",
+                        funded) }}
         {% else %}
             {{ _("You need to transfer money to your wallet to fund your donations.") }}
         {% endif %}
     </p>
+    {% if success and back_to %}
+        <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
+    {% endif %}
 
-    {% if weekly > 0 and funded < 52 %}
+    {% if participant.email %}
+    {% if show_form %}
     <h3>{{ _("Amount") }}</h3>
 
     <fieldset id="amount" class="form-inline">
@@ -168,17 +174,30 @@ title = _("Add money")
     </fieldset>
 
     <br>
-    <button class="btn btn-primary">{{ _("Go") }}</button>
+    <button class="btn btn-success">{{ _("Go") }}</button>
 
-    <br><br>
-    <p class="alert alert-info">
-        {{ _("Personal and financial information is securely stored by our partner, {0}.",
-             '<a href="https://www.mangopay.com/legal-notices/">Mangopay</a>'|safe) }}
-    </p>
+    {% if back_to %}
+        <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
+    {% endif %}
+    {% endif %}
+
+    {% else %}
+    <p class="alert alert-warning">{{
+        _("Please {0}verify your email address{1} then reload this page.",
+          '<a href="../emails/" target="_blank">'|safe, '</a>'|safe)
+    }}</p>
     {% endif %}
 
 </form>
+</div>
+{% if show_form %}
+<p class="alert alert-info">
+    {{ _("Personal and financial information is securely stored by our partner, {0}.",
+         '<a href="https://www.mangopay.com/legal-notices/">Mangopay</a>'|safe) }}
+</p>
 {% endif %}
+</div>
+</div>
 {% endblock %}
 
 {% block scripts %}
