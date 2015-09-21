@@ -1076,7 +1076,10 @@ class Participant(Model, MixinTeam):
 
         if update_self:
             # Update giving/pledging amount of tipper
-            self.update_giving(cursor)
+            updated = self.update_giving(cursor)
+            for u in updated:
+                if u.id == t.id:
+                    t.__dict__['is_funded'] = u.is_funded
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
@@ -1176,10 +1179,12 @@ class Participant(Model, MixinTeam):
                      , p.join_time
                      , p.username
                      , p.kind
+                     , t.is_funded
+                     , (p.mangopay_user_id IS NOT NULL) AS is_identified
+                     , p.is_suspicious
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
-                   AND p.is_suspicious IS NOT true
                    AND p.status = 'active'
               ORDER BY tippee
                      , t.mtime DESC
@@ -1205,7 +1210,6 @@ class Participant(Model, MixinTeam):
                   JOIN participants p ON p.id = t.tippee
                   JOIN elsewhere e ON e.participant = t.tippee
                  WHERE tipper = %s
-                   AND p.is_suspicious IS NOT true
                    AND p.status = 'stub'
               ORDER BY tippee
                      , t.mtime DESC

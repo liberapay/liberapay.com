@@ -64,6 +64,7 @@ weekly = total - participant.receiving
                 <th class="amount">{{ _("Amount") }}</th>
                 <th class="ctime">{{ _("Created") }}</th>
                 <th class="mtime">{{ _("Modified") }}</th>
+                <th class="funded">{{ _("Active?") }}</th>
             </tr>
         </thead>
         <tfoot>
@@ -72,15 +73,27 @@ weekly = total - participant.receiving
                 <th class="total">{{ total }}</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </tfoot>
         <tbody>
         {% for tip in tips %}
+        {% set inactive = tip.is_suspicious or not tip.is_identified or not tip.is_funded %}
         <tr>
             <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
             <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
             <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
+            <td class="funded {{ 'danger' if inactive }}">
+                {% if tip.is_suspicious %}
+                    {{ _("No: the donee is blacklisted") }}
+                {% elif not tip.is_identified %}
+                    {{ _("No: the donee hasn't filled the identity form") }}</td>
+                {% elif not tip.is_funded %}
+                    {{ _("No: insufficient funds") }}
+                {% else %}
+                    {{ _("Yes") }}
+                {% endif %}
         </tr>
         {% endfor %}
         </tbody>
