@@ -74,6 +74,32 @@ class Tests(Harness):
         actual = markdown.render('Example <script>alert "hi";</script>')
         assert expected == actual
 
+    def test_markdown_render_renders_http_links(self):
+        expected = '<p><a href="http://example.com/">foo</a></p>\n'
+        assert markdown.render('[foo](http://example.com/)') == expected
+        expected = '<p><a href="http://example.com/">http://example.com/</a></p>\n'
+        assert markdown.render('<http://example.com/>') == expected
+
+    def test_markdown_render_renders_https_links(self):
+        expected = '<p><a href="https://example.com/">foo</a></p>\n'
+        assert markdown.render('[foo](https://example.com/)') == expected
+        expected = '<p><a href="https://example.com/">https://example.com/</a></p>\n'
+        assert markdown.render('<https://example.com/>') == expected
+
+    def test_markdown_render_escapes_javascript_links(self):
+        expected = '<p>[foo](javascript:foo)</p>\n'
+        assert markdown.render('[foo](javascript:foo)') == expected
+        expected = '<p>&lt;javascript:foo&gt;</p>\n'
+        assert markdown.render('<javascript:foo>') == expected
+
+    def test_markdown_render_doesnt_allow_any_explicit_anchors(self):
+        expected = '<p>foo</p>\n'
+        assert markdown.render('<a href="http://example.com/">foo</a>') == expected
+        expected = '<p>foo</p>\n'
+        assert markdown.render('<a href="https://example.com/">foo</a>') == expected
+        expected = '<p>foo</p>\n'
+        assert markdown.render('<a href="javascript:foo">foo</a>') == expected
+
     def test_markdown_render_autolinks(self):
         expected = '<p><a href="http://google.com/">http://google.com/</a></p>\n'
         actual = markdown.render('http://google.com/')
