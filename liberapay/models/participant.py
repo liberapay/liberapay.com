@@ -1072,19 +1072,19 @@ class Participant(Model, MixinTeam):
 
         """
         args = dict(tipper=self.id, tippee=tippee.id, amount=amount)
-        t = (cursor or self.db).one(NEW_TIP, args)
+        t = (cursor or self.db).one(NEW_TIP, args)._asdict()
 
         if update_self:
             # Update giving/pledging amount of tipper
             updated = self.update_giving(cursor)
             for u in updated:
-                if u.id == t.id:
-                    t.__dict__['is_funded'] = u.is_funded
+                if u.id == t['id']:
+                    t['is_funded'] = u.is_funded
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
 
-        return t._asdict()
+        return t
 
 
     def get_tip_to(self, tippee):
