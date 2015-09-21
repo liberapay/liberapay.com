@@ -1069,6 +1069,7 @@ class Participant(Model, MixinTeam):
                          )
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
+                      , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
         """
         args = dict(tipper=self.id, tippee=tippee.id, amount=amount)
