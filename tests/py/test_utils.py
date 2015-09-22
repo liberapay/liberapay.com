@@ -25,6 +25,14 @@ class Tests(Harness):
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
+    def test_get_participant_raises_404_for_missing_id(self):
+        state = self.client.GET('/~/', return_after='dispatch_request_to_filesystem',
+                                want='state')
+        with self.assertRaises(Response) as cm:
+            utils.get_participant(state, restrict=False)
+        r = cm.exception
+        assert r.code == 404
+
     def test_get_participant_canonicalizes(self):
         self.make_participant('alice')
         state = self.client.GET('/Alice/?foo=bar', return_after='dispatch_request_to_filesystem',

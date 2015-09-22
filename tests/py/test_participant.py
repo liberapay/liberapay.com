@@ -271,14 +271,25 @@ class Tests(Harness):
         actual = alice.get_tip_to(bob)['amount']
         assert actual == Decimal('1.00')
 
-    def test_stt_returns_a_dict(self):
+    def test_stt_works_for_pledges(self):
+        alice = self.make_participant('alice', balance=1)
+        bob = self.make_stub()
+        t = alice.set_tip_to(bob, '10.00')
+        assert isinstance(t, dict)
+        assert isinstance(t['amount'], Decimal)
+        assert t['amount'] == 10
+        assert t['is_funded'] is False
+        assert t['is_pledge'] is True
+        assert t['first_time_tipper'] is True
+
+    def test_stt_works_for_donations(self):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
-        actual = alice.set_tip_to(bob, '1.00')
-        assert isinstance(actual, dict)
-        assert isinstance(actual['amount'], Decimal)
-        assert actual['amount'] == 1
-        assert actual['first_time_tipper'] is True
+        t = alice.set_tip_to(bob, '1.00')
+        assert t['amount'] == 1
+        assert t['is_funded'] is True
+        assert t['is_pledge'] is False
+        assert t['first_time_tipper'] is True
 
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', balance=100)

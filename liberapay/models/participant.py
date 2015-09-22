@@ -1069,30 +1069,31 @@ class Participant(Model, MixinTeam):
                          )
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
+                      , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
         """
         args = dict(tipper=self.id, tippee=tippee.id, amount=amount)
-        t = (cursor or self.db).one(NEW_TIP, args)
+        t = (cursor or self.db).one(NEW_TIP, args)._asdict()
 
         if update_self:
             # Update giving/pledging amount of tipper
             updated = self.update_giving(cursor)
             for u in updated:
-                if u.id == t.id:
-                    t.__dict__['is_funded'] = u.is_funded
+                if u.id == t['id']:
+                    t['is_funded'] = u.is_funded
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
 
-        return t._asdict()
+        return t
 
 
     def get_tip_to(self, tippee):
         """Given a participant (or their id), returns a dict.
         """
-        default = dict(amount=Decimal('0.00'), is_funded=False)
         if isinstance(tippee, Participant):
             tippee = tippee.id
+        default = dict(amount=Decimal('0.00'), is_funded=False, tippee=tippee)
         return self.db.one("""\
 
             SELECT *
