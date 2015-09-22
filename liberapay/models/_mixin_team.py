@@ -3,8 +3,6 @@
 from collections import OrderedDict
 from decimal import Decimal
 
-from aspen.utils import typecheck
-
 
 class MemberLimitReached(Exception): pass
 
@@ -22,21 +20,20 @@ class MixinTeam(object):
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.__set_take_for(member, Decimal('0.01'), self)
+        self.set_take_for(member, Decimal('0.00'), self)
 
     def remove_member(self, member):
         """Remove a member from this team.
         """
         assert self.kind == 'group'
-        self.__set_take_for(member, Decimal('0.00'), self)
+        self.set_take_for(member, None, self)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
             INSERT INTO takes (ctime, member, team, amount, recorder) (
-                SELECT ctime, member, %(id)s, 0.00, %(id)s
+                SELECT ctime, member, %(id)s, NULL, %(id)s
                   FROM current_takes
                  WHERE team=%(id)s
-                   AND amount > 0
             );
         """, dict(id=self.id))
 
@@ -68,7 +65,7 @@ class MixinTeam(object):
                    )
           ORDER BY mtime DESC LIMIT 1
 
-        """, (self.id, member_id), default=Decimal('0.00'))
+        """, (self.id, member_id)) or Decimal('0.00')
 
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
@@ -85,30 +82,17 @@ class MixinTeam(object):
         """
         return max(last_week * Decimal('2'), Decimal('1.00'))
 
-    def set_take_for(self, member, take, recorder, cursor=None):
+    def set_take_for(self, member, take, recorder, check_max=True, cursor=None):
         """Sets member's take from the team pool.
         """
         assert self.kind == 'group'
 
-        # lazy import to avoid circular import
-        from liberapay.models.participant import Participant
+        if take and check_max:
+            last_week = self.get_take_last_week_for(member)
+            max_this_week = self.compute_max_this_week(last_week)
+            if take > max_this_week:
+                take = max_this_week
 
-        typecheck( member, Participant
-                 , take, Decimal
-                 , recorder, Participant
-                  )
-
-        last_week = self.get_take_last_week_for(member)
-        max_this_week = self.compute_max_this_week(last_week)
-        if take > max_this_week:
-            take = max_this_week
-
-        self.__set_take_for(member, take, recorder, cursor)
-        return take
-
-    def __set_take_for(self, member, amount, recorder, cursor=None):
-        assert self.kind == 'group'
-        # XXX Factored out for testing purposes only! :O Use .set_take_for.
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
@@ -130,7 +114,7 @@ class MixinTeam(object):
                         , %(recorder)s
                          )
 
-            """, dict(member=member.id, team=self.id, amount=amount,
+            """, dict(member=member.id, team=self.id, amount=take,
                       recorder=recorder.id))
             # Compute the new takes
             new_takes = self.compute_actual_takes(cursor)
@@ -138,6 +122,8 @@ class MixinTeam(object):
             self.update_taking(old_takes, new_takes, cursor, member)
             # Update is_funded on member's tips
             member.update_giving(cursor)
+
+        return take
 
     def update_taking(self, old_takes, new_takes, cursor=None, member=None):
         """Update `taking` amounts based on the difference between `old_takes`

@@ -268,11 +268,28 @@ CREATE TABLE takes
 , mtime             timestamptz          NOT NULL DEFAULT CURRENT_TIMESTAMP
 , member            bigint               NOT NULL REFERENCES participants
 , team              bigint               NOT NULL REFERENCES participants
-, amount            numeric(35,2)        NOT NULL DEFAULT 0.0
+, amount            numeric(35,2)        DEFAULT 1
 , recorder          bigint               NOT NULL REFERENCES participants
-, CONSTRAINT no_team_recursion CHECK (team <> member)
-, CONSTRAINT not_negative CHECK ((amount >= (0)::numeric))
+, CONSTRAINT not_negative CHECK (amount IS NULL OR amount >= 0)
  );
+
+CREATE OR REPLACE FUNCTION check_member() RETURNS trigger AS $$
+    DECLARE
+        m participants;
+    BEGIN
+        m := (SELECT p.*::participants FROM participants p WHERE id = NEW.member);
+        IF (m.kind = 'group') THEN
+            RAISE 'cannot add a team to a team';
+        END IF;
+        IF (m.status <> 'active') THEN
+            RAISE 'cannot add an inactive user to a team';
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_member BEFORE INSERT ON takes FOR EACH ROW
+    EXECUTE PROCEDURE check_member();
 
 CREATE VIEW current_takes AS
     SELECT * FROM (
@@ -285,7 +302,7 @@ CREATE VIEW current_takes AS
        ORDER BY member
               , team
               , mtime DESC
-    ) AS anon WHERE amount > 0;
+    ) AS anon WHERE amount IS NOT NULL;
 
 
 -- log of participant events

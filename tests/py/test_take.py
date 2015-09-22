@@ -22,7 +22,7 @@ class Tests(Harness):
         return team
 
     def take_last_week(self, team, member, amount, actual_amount=None):
-        team._MixinTeam__set_take_for(member, amount, member)
+        team.set_take_for(member, amount, member, check_max=False)
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
         actual_amount = amount if actual_amount is None else actual_amount
         self.db.run("""
@@ -66,7 +66,7 @@ class Tests(Harness):
         team = self.make_team()
         alice = self.make_participant('alice')
         self.take_last_week(team, alice, '20.00', actual_amount='15.03')
-        team._MixinTeam__set_take_for(alice, D('35.00'), team)
+        team.set_take_for(alice, D('35.00'), team, check_max=False)
         assert team.set_take_for(alice, D('42.00'), alice) == 40
 
     def test_if_last_week_is_less_than_a_dollar_can_increase_to_a_dollar(self):
