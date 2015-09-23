@@ -54,7 +54,7 @@ weekly = total - participant.receiving
     <p>{{ _("You give {0} per week.", Money(participant.giving, "USD")) }}</p>
 {% endif %}
 
-<div class="giving row">
+<div class="giving row valign-middle">
 
 {% if ntips %}
 <div class="col-md-8">
