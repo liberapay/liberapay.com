@@ -26,6 +26,16 @@ Liberapay.init = function() {
 
     Liberapay.forms.jsSubmit();
     Liberapay.forms.communityChooser();
+
+    var success_re = /([?&])success=[^&]*/;
+    if (success_re.test(location.search)) {
+        history.replaceState(null, null,
+            location.pathname+
+            location.search.replace(success_re, '$1').replace(/[\?&]$/, '')+
+            location.hash
+        );
+    }
+    $('.notification .close').click(function(){ $(this).parent().fadeOut() });
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

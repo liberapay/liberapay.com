@@ -1,0 +1,83 @@
+from __future__ import division, print_function, unicode_literals
+
+from base64 import b64encode
+from decimal import InvalidOperation
+
+from aspen import Response
+from babel.numbers import NumberFormatError
+
+from liberapay.models.participant import Participant
+from liberapay.utils import get_participant
+
+[---]
+
+request.allow('GET', 'POST')
+if user.ANON:
+    raise Response(403)
+
+team = get_participant(state, restrict=False)
+if team.kind != 'group':
+    raise Response(404)
+
+member = request.path['member'] or request.body.get('username')
+member = Participant.from_username(member) if member else user
+if not member:
+    raise Response(404, _("User not found."))
+is_member = member.member_of(team)
+
+action = request.path['action']
+msg = None
+confirm = None
+
+if action in ('take', 'leave'):
+    if user != member:
+        raise Response(403, "you are not logged in as "+member.username)
+elif not user.member_of(team):
+    raise Response(403, _("You are not a member of this team."))
+
+if not is_member and action != 'invite':
+    raise Response(403, _("{0} is not a member of this team.", member.username))
+
+if action == 'invite':
+    if member.kind == 'group':
+        raise Response(400, _("A team can't join a team"))
+    if member.status != 'active':
+        raise Response(400, _("You can't invite an inactive user to join a team."))
+    if not is_member:
+        team.invite(member)
+        msg = _("{0} has been invited to the team.", member.username)
+    else:
+        msg = _("{0} is already a member of this team.", member.username)
+
+elif action == 'take':
+    try:
+        take = parse_decimal(request.body['take'])
+    except (InvalidOperation, NumberFormatError):
+        raise Response(400, _("That's not a valid number"))
+    new_take = team.set_take_for(member, take, user)
+    if new_take < take:
+        msg = _("Your take is now {0} (you can't go higher this week).",
+                Money(new_take, 'EUR'))
+    else:
+        msg = _("Your take is now {0}.", Money(new_take, 'EUR'))
+
+elif action == 'leave':
+    if not request.body.get('confirmed'):
+        confirm = _("Are you sure you want to leave this team?")
+    else:
+        team.set_take_for(member, None, user)
+
+else:
+    raise Response(400, "bad action")
+
+if not confirm:
+    response.redirect('..?success='+b64encode(msg.encode('utf8')) if msg else '..')
+
+msg = confirm
+
+[---] text/html
+{% extends "templates/base.html" %}
+{% block content %}
+    {% from "templates/confirm.html" import confirm with context %}
+    {{ confirm(msg, request.body, '..') }}
+{% endblock %}

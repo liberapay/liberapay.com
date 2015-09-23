@@ -1,0 +1,12 @@
+{% macro confirm(msg, data, back) %}
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        {% for k, v in data.items() %}
+        <input type="hidden" name="{{ k }}" value="{{ v }}" />
+        {% endfor %}
+        <input type="hidden" name="confirmed" value="true" />
+        <div class="alert alert-danger">{{ msg }}</div>
+        <a class="btn btn-default" href="{{ back }}">{{ _("Cancel") }}</a>
+        <button class="btn btn-danger">{{ _("Confirm") }}</button>
+    </form>
+{% endmacro %}

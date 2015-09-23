@@ -38,6 +38,7 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_htmlescaped.
     'assert': _assert,
     'Community': Community,
+    'b64decode': base64.b64decode,
     'b64encode': base64.b64encode,
     'filter_profile_subnav': utils.filter_profile_subnav,
     'to_javascript': utils.to_javascript,

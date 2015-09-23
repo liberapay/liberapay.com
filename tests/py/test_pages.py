@@ -33,7 +33,8 @@ class TestPages(MangopayHarness):
                      .replace('/for/%slug/', '/for/wonderland/') \
                      .replace('/%platform/', '/github/') \
                      .replace('/%user_name/', '/liberapay/') \
-                     .replace('/%membername', '/david') \
+                     .replace('/%action', '/leave') \
+                     .replace('/%member', '/david') \
                      .replace('/%exchange_id.int', '/%s' % self.exchange_id) \
                      .replace('/%redirect_to', '/giving') \
                      .replace('/%back_to', '/Li4=') \

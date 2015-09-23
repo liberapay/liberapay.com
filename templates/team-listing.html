@@ -9,6 +9,10 @@
             <div class="fine">{{
                 ngettext("with {n} other", "with {n} others", team.nmembers - 1)
             }}</div>
+            {% if edit %}
+                <a href="/{{ team.name }}/members/leave/?back_to={{ urlquote(request.line.uri) }}"
+                   class="btn btn-default btn-xs">{{ _('Leave') }}</a>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
