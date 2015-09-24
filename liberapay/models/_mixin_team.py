@@ -165,13 +165,10 @@ class MixinTeam(object):
         """
         actual_takes = OrderedDict()
         nominal_takes = self.get_current_takes(cursor=cursor)
-        budget = balance = self.receiving
+        balance = self.receiving
         for take in nominal_takes:
-            nominal_amount = take['nominal_amount'] = take.pop('amount')
-            actual_amount = take['actual_amount'] = min(nominal_amount, balance)
-            balance -= actual_amount
-            take['balance'] = balance
-            take['percentage'] = (actual_amount / budget) if budget > 0 else 0
+            take['nominal_take'] = take.pop('amount')
+            take['actual_amount'] = 0  # TODO
             actual_takes[take['member_id']] = take
         return actual_takes
 

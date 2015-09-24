@@ -31,12 +31,6 @@ CREATE INDEX ON temp_tips (tipper);
 CREATE INDEX ON temp_tips (tippee);
 ALTER TABLE temp_tips ADD COLUMN is_funded boolean NOT NULL DEFAULT false;
 
-CREATE TEMPORARY TABLE temp_takes
-( team bigint
-, member bigint
-, amount numeric(35,2)
-) ON COMMIT DROP;
-
 
 -- Create a trigger to process tips
 
@@ -78,39 +72,6 @@ CREATE TRIGGER fake_tip BEFORE UPDATE OF is_funded ON temp_tips
     EXECUTE PROCEDURE fake_tip();
 
 
--- Create a trigger to process takes
-
-CREATE OR REPLACE FUNCTION fake_take() RETURNS trigger AS $$
-    DECLARE
-        actual_amount numeric(35,2);
-        team_balance numeric(35,2);
-    BEGIN
-        team_balance := (
-            SELECT fake_balance
-              FROM temp_participants
-             WHERE id = NEW.team
-        );
-        IF (team_balance <= 0) THEN RETURN NULL; END IF;
-        actual_amount := NEW.amount;
-        IF (team_balance < NEW.amount) THEN
-            actual_amount := team_balance;
-        END IF;
-        UPDATE temp_participants
-           SET fake_balance = (fake_balance - actual_amount)
-         WHERE id = NEW.team;
-        UPDATE temp_participants
-           SET fake_balance = (fake_balance + actual_amount)
-             , taking = (taking + actual_amount)
-             , receiving = (receiving + actual_amount)
-         WHERE id = NEW.member;
-        RETURN NULL;
-    END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER fake_take AFTER INSERT ON temp_takes
-    FOR EACH ROW EXECUTE PROCEDURE fake_take();
-
-
 -- Create a function to settle whole tip graph
 
 CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
@@ -139,24 +100,10 @@ CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
 $$ LANGUAGE plpgsql;
 
 
--- Start fake payday
-
--- Step 1: tips
+-- Do fake payday
 SELECT settle_tip_graph();
 
--- Step 2: team takes
-INSERT INTO temp_takes
-    SELECT team, member, amount
-      FROM current_takes t
-     WHERE t.amount > 0
-       AND t.team IN (SELECT id FROM temp_participants)
-       AND t.member IN (SELECT id FROM temp_participants)
-  ORDER BY ctime DESC;
-
--- Step 3: tips again
-SELECT settle_tip_graph();
-
--- Step 4: update the real tables
+-- Update the real tables
 UPDATE tips t
    SET is_funded = tt.is_funded
   FROM temp_tips tt
@@ -179,6 +126,5 @@ UPDATE participants p
        );
 
 -- Clean up functions
-DROP FUNCTION fake_take() CASCADE;
 DROP FUNCTION fake_tip() CASCADE;
 DROP FUNCTION settle_tip_graph() CASCADE;

@@ -80,7 +80,7 @@ class Payday(object):
     def shuffle(self):
         with self.db.get_cursor() as cursor:
             self.prepare(cursor, self.ts_start)
-            self.transfer_virtually(cursor, self.ts_start)
+            self.transfer_virtually(cursor)
             transfers = cursor.all("""
                 SELECT t.*
                      , p.mangopay_user_id AS tipper_mango_id
@@ -105,7 +105,6 @@ class Payday(object):
 
         # Clean up leftover functions
         self.db.run("""
-            DROP FUNCTION process_take();
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context);
@@ -173,12 +172,6 @@ class Payday(object):
                     WHERE tipper = p.id
                ), 0);
 
-        CREATE TEMPORARY TABLE payday_takes
-        ( team bigint
-        , member bigint
-        , amount numeric(35,2)
-        ) ON COMMIT DROP;
-
         CREATE TEMPORARY TABLE payday_transfers
         ( timestamp timestamptz DEFAULT now()
         , tipper bigint
@@ -235,32 +228,6 @@ class Payday(object):
             EXECUTE PROCEDURE process_tip();
 
 
-        -- Create a trigger to process takes
-
-        CREATE OR REPLACE FUNCTION process_take() RETURNS trigger AS $$
-            DECLARE
-                actual_amount numeric(35,2);
-                team_balance numeric(35,2);
-            BEGIN
-                team_balance := (
-                    SELECT new_balance
-                      FROM payday_participants
-                     WHERE id = NEW.team
-                );
-                IF (team_balance <= 0) THEN RETURN NULL; END IF;
-                actual_amount := NEW.amount;
-                IF (team_balance < NEW.amount) THEN
-                    actual_amount := team_balance;
-                END IF;
-                EXECUTE transfer(NEW.team, NEW.member, actual_amount, 'take');
-                RETURN NULL;
-            END;
-        $$ LANGUAGE plpgsql;
-
-        CREATE TRIGGER process_take AFTER INSERT ON payday_takes
-            FOR EACH ROW EXECUTE PROCEDURE process_take();
-
-
         -- Create a function to settle whole tip graph
 
         CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
@@ -299,33 +266,12 @@ class Payday(object):
         log('Prepared the DB.')
 
     @staticmethod
-    def transfer_virtually(cursor, ts_start):
+    def transfer_virtually(cursor):
         cursor.run("""
 
         SELECT settle_tip_graph();
 
-        INSERT INTO payday_takes
-            SELECT team, member, amount
-              FROM ( SELECT DISTINCT ON (team, member)
-                            team, member, amount, ctime
-                       FROM takes
-                      WHERE mtime < %(ts_start)s
-                   ORDER BY team, member, mtime DESC
-                   ) t
-             WHERE t.amount > 0
-               AND t.team IN (SELECT id FROM payday_participants)
-               AND t.member IN (SELECT id FROM payday_participants)
-               AND ( SELECT id
-                       FROM payday_transfers_done t2
-                      WHERE t.team = t2.tipper
-                        AND t.member = t2.tippee
-                        AND context = 'take'
-                   ) IS NULL
-          ORDER BY t.team, t.ctime DESC;
-
-        SELECT settle_tip_graph();
-
-        """, dict(ts_start=ts_start))
+        """)
 
     @staticmethod
     def check_balances(cursor):

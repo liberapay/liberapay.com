@@ -226,7 +226,7 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[self.janet.id] == 20
             assert new_balances[self.homer.id] == 0
@@ -248,7 +248,7 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[self.david.id] == D('0.49')
             assert new_balances[self.janet.id] == D('0.51')
@@ -264,7 +264,7 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[alice.id] == D('0')
             assert new_balances[self.homer.id] == D('30')
