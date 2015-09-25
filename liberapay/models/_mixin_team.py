@@ -12,6 +12,16 @@ class InactiveParticipantAdded(Exception): pass
 
 class MixinTeam(object):
 
+    def invite(self, invitee, inviter):
+        with self.db.get_cursor() as c:
+            self.add_event(c, 'invite', dict(invitee=invitee.id), inviter.id)
+            invitee.notify(
+                'team_invite',
+                team=self.username,
+                team_url=self.profile_url,
+                inviter=inviter.username,
+            )
+
     def add_member(self, member):
         """Add a member to this team.
         """

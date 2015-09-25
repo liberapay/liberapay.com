@@ -43,3 +43,17 @@ def pledgee_joined(_, user_name, platform, profile_url):
             _("{0} from {1} has joined Liberapay!", user_name, platform),
         ]
     )
+
+
+def team_invite(_, team, team_url, inviter):
+    return ('info',
+        ['span',
+            _("{0} has invited you to join the {1} team.", inviter, team),
+            " ",
+            ['a', {'href': team_url}, _("See the team's profile")],
+            " | ",
+            ['a', {'href': team_url+'members/accept'}, _("Accept")],
+            " | ",
+            ['a', {'href': team_url+'members/refuse'}, _("Refuse")]
+        ]
+    )
