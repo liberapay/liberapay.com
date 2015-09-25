@@ -8,6 +8,26 @@
 
 ## Contributing to the code
 
+### Introduction
+
+Liberapay is a fork of [Gratipay](https://github.com/gratipay/gratipay.com), so it's based on the web micro-framework [Aspen](http://aspen.io/). Aspen uses filesystem routing and [simplates](http://simplates.org/): to make Liberapay return a `Hello $user, your id is $userid` message for requests to the URL `/$user/hello`, you only need to create the file `www/%username/hello.spt` with this inside:
+
+```
+from liberapay.utils import get_participant
+[---]
+participant = get_participant(state)
+[---] text/html
+{{ _("Hello {0}, your id is {1}", request.path['username'], participant.id) }}
+```
+
+As illustrated by the last line our default template engine is [Jinja](http://jinja.pocoo.org/).
+
+The `_` function attempts to translate the message into the user's language and escapes the variables properly (it knows that it's generating a message for an HTML page).
+
+The python code inside simplates is only for request-specific logic, common backend code is in the `liberapay/` directory.
+
+We interact with the database by writing raw SQL queries sent via the [postgres.py](https://postgres-py.readthedocs.org/en/latest/) library.
+
 ### Installation
 
 Firstly, make sure you have the following dependencies installed:
