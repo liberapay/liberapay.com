@@ -69,7 +69,7 @@ else:
         <th colspan="8"><h2>
             {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}
             {% if event['payday_number'] %}
-                &mdash; Weekly Payday #{{ event['payday_number'] }}
+                &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             {% endif %}
         </h2></th>
     </tr>
@@ -142,19 +142,28 @@ else:
         <td class="notes">
         {% set context = event['context'] %}
         {% if event['tippee'] == participant.id %}
-            {% if context == 'take' or admin_override %}
+            {% if admin_override %}
                 {{ context }} from
                 <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
+                {% if event['team'] %}
+                    for team <a href="/{{ event['team_name'] }}/">{{ event['team_name'] }}</a>
+                {% endif %}
+            {% elif context == 'take' %}
+                {{ _("anonymous donation for your role in the {0} team",
+                     ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
             {% else %}
-                anonymous tip
+                {{ _("anonymous donation") }}
             {% endif %}
         {% else %}
-            {% if context == 'take' %}
-                take by
+            {% set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username']) %}
+            {% if context == 'final-gift' %}
+                {{ _("final gift to {0}", to) }}
+            {% elif context == 'take' %}
+                {{ _("donation to {0} for their role in the {1} team", to,
+                     ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
             {% else %}
-                {{ context }} to
+                {{ _("donation to {0}", to) }}
             {% endif %}
-            <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
         {% endif %}
         </td>
 

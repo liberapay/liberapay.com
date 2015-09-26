@@ -1,7 +1,12 @@
 """Teams are groups of participants.
 """
+from __future__ import division, print_function, unicode_literals
+
 from collections import OrderedDict
-from decimal import Decimal
+from decimal import Decimal, ROUND_UP
+
+
+CENT = Decimal('0.01')
 
 
 class MemberLimitReached(Exception): pass
@@ -169,9 +174,12 @@ class MixinTeam(object):
         actual_takes = OrderedDict()
         nominal_takes = self.get_current_takes(cursor=cursor)
         balance = self.receiving
+        total_takes = sum(t['amount'] for t in nominal_takes)
+        ratio = balance / total_takes if total_takes else 0
         for take in nominal_takes:
-            take['nominal_take'] = take.pop('amount')
-            take['actual_amount'] = 0  # TODO
+            nominal = take['nominal_take'] = take.pop('amount')
+            actual = take['actual_amount'] = (nominal * ratio).quantize(CENT, rounding=ROUND_UP)
+            balance -= actual
             actual_takes[take['member_id']] = take
         return actual_takes
 

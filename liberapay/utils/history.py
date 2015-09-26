@@ -77,13 +77,13 @@ def iter_payday_events(db, participant, year=None):
            AND extract(year from timestamp) = %(year)s
     """, locals(), back_as=dict)
     transfers = db.all("""
-        SELECT *, p.username
+        SELECT *, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers
           JOIN participants p ON p.id = tipper
          WHERE tippee=%(id)s
            AND extract(year from timestamp) = %(year)s
         UNION ALL
-        SELECT *, p.username
+        SELECT *, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers
           JOIN participants p ON p.id = tippee
          WHERE tipper=%(id)s
@@ -96,7 +96,7 @@ def iter_payday_events(db, participant, year=None):
     if transfers:
         yield dict(
             kind='totals',
-            given=sum(t['amount'] for t in transfers if t['tipper'] == id and t['context'] != 'take'),
+            given=sum(t['amount'] for t in transfers if t['tipper'] == id),
             received=sum(t['amount'] for t in transfers if t['tippee'] == id),
         )
 
@@ -164,13 +164,13 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
           GROUP BY tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
-            SELECT tipper AS team, sum(amount) AS amount
+            SELECT team, sum(amount) AS amount
               FROM transfers
              WHERE tippee = %(id)s
                AND context = 'take'
                AND extract(year from timestamp) = %(year)s
                AND status = 'succeeded'
-          GROUP BY tipper
+          GROUP BY team
         """, params, back_as=back_as)
     else:
         out['exchanges'] = lambda: db.all("""
@@ -189,7 +189,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
           ORDER BY id ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
-            SELECT timestamp, tipper AS team, amount
+            SELECT timestamp, team, amount
               FROM transfers
              WHERE tippee = %(id)s
                AND context = 'take'

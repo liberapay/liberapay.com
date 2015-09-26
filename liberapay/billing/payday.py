@@ -107,7 +107,8 @@ class Payday(object):
         self.db.run("""
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
-            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context);
+            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint);
+            DROP FUNCTION resolve_takes(bigint);
         """)
 
     @staticmethod
@@ -130,7 +131,7 @@ class Payday(object):
               FROM participants p
              WHERE is_suspicious IS NOT true
                AND join_time < %(ts_start)s
-               AND mangopay_user_id IS NOT NULL
+               AND (mangopay_user_id IS NOT NULL OR kind = 'group')
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
@@ -172,19 +173,41 @@ class Payday(object):
                     WHERE tipper = p.id
                ), 0);
 
+        CREATE TEMPORARY TABLE payday_takes ON COMMIT DROP AS
+            SELECT team, member, amount
+              FROM ( SELECT DISTINCT ON (team, member)
+                            team, member, amount
+                       FROM takes
+                      WHERE mtime < %(ts_start)s
+                   ORDER BY team, member, mtime DESC
+                   ) t
+             WHERE t.amount IS NOT NULL
+               AND t.amount > 0
+               AND t.team IN (SELECT id FROM payday_participants)
+               AND t.member IN (SELECT id FROM payday_participants)
+               AND ( SELECT id
+                       FROM payday_transfers_done t2
+                      WHERE t.team = t2.tipper
+                        AND t.member = t2.tippee
+                        AND context = 'take'
+                   ) IS NULL;
+
+        CREATE UNIQUE INDEX ON payday_takes (team, member);
+
         CREATE TEMPORARY TABLE payday_transfers
         ( timestamp timestamptz DEFAULT now()
         , tipper bigint
         , tippee bigint
         , amount numeric(35,2)
         , context transfer_context
-        , UNIQUE (tipper, tippee, context)
+        , team bigint
+        , UNIQUE (tipper, tippee, context, team)
         ) ON COMMIT DROP;
 
 
         -- Prepare a statement that makes and records a transfer
 
-        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context)
+        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint)
         RETURNS void AS $$
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;
@@ -197,8 +220,8 @@ class Payday(object):
                  WHERE id = $2;
                 IF (NOT FOUND) THEN RAISE 'tippee not found'; END IF;
                 INSERT INTO payday_transfers
-                            (tipper, tippee, amount, context)
-                     VALUES ($1, $2, $3, $4);
+                            (tipper, tippee, amount, context, team)
+                     VALUES ($1, $2, $3, $4, $5);
             END;
         $$ LANGUAGE plpgsql;
 
@@ -215,7 +238,7 @@ class Payday(object):
                      WHERE id = NEW.tipper
                 );
                 IF (NEW.amount <= tipper.new_balance) THEN
-                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip');
+                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL);
                     RETURN NEW;
                 END IF;
                 RETURN NULL;
@@ -228,7 +251,7 @@ class Payday(object):
             EXECUTE PROCEDURE process_tip();
 
 
-        -- Create a function to settle whole tip graph
+        -- Create a function to settle one-to-one donations
 
         CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
             DECLARE
@@ -256,6 +279,64 @@ class Payday(object):
         $$ LANGUAGE plpgsql;
 
 
+        -- Create a function to resolve many-to-many donations (team takes)
+
+        CREATE OR REPLACE FUNCTION resolve_takes(team_id bigint) RETURNS void AS $$
+            DECLARE
+                total_income numeric(35,2);
+                total_takes numeric(35,2);
+                ratio numeric;
+                tip record;
+                take record;
+                amount numeric(35,2);
+                our_tips CURSOR FOR
+                    SELECT t.tipper, (round_up(t.amount * ratio, 2)) AS amount
+                      FROM payday_tips t
+                      JOIN payday_participants p ON p.id = t.tipper
+                     WHERE t.tippee = team_id;
+                our_takes CURSOR FOR
+                    SELECT t.member, (round_up(t.amount * ratio, 2)) AS amount
+                      FROM payday_takes t
+                     WHERE t.team = team_id
+                  ORDER BY t.member;
+            BEGIN
+                total_income := (
+                    SELECT sum(t.amount)
+                      FROM payday_tips t
+                      JOIN payday_participants p ON p.id = t.tipper
+                     WHERE t.tippee = team_id
+                       AND p.new_balance >= t.amount
+                );
+                total_takes := (
+                    SELECT sum(t.amount)
+                      FROM payday_takes t
+                     WHERE t.team = team_id
+                );
+                IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
+                ratio := total_income / total_takes;
+
+                OPEN our_takes;
+                FETCH our_takes INTO take;
+                FOR tip IN our_tips LOOP
+                    LOOP
+                        IF (take.amount = 0) THEN
+                            FETCH our_takes INTO take;
+                            IF (take IS NULL) THEN RETURN; END IF;
+                        END IF;
+                        amount := min(tip.amount, take.amount);
+                        IF (tip.tipper <> take.member) THEN
+                            EXECUTE transfer(tip.tipper, take.member, amount, 'take', team_id);
+                        END IF;
+                        tip.amount := tip.amount - amount;
+                        take.amount := take.amount - amount;
+                        EXIT WHEN tip.amount = 0;
+                    END LOOP;
+                END LOOP;
+                RETURN;
+            END;
+        $$ LANGUAGE plpgsql;
+
+
         -- Save the stats we already have
 
         UPDATE paydays
@@ -268,9 +349,9 @@ class Payday(object):
     @staticmethod
     def transfer_virtually(cursor):
         cursor.run("""
-
-        SELECT settle_tip_graph();
-
+            SELECT settle_tip_graph();
+            SELECT resolve_takes(team) FROM payday_takes GROUP BY team ORDER BY team;
+            SELECT settle_tip_graph();
         """)
 
     @staticmethod

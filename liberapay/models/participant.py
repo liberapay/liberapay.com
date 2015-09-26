@@ -985,7 +985,7 @@ class Participant(Model, MixinTeam):
                       WHERE tipper = %(id)s
                         AND p2.is_suspicious IS NOT true
                         AND p2.status = 'active'
-                        AND p2.mangopay_user_id IS NOT NULL
+                        AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
                         AND amount > 0
                         AND is_funded
                    ), 0)
@@ -1184,7 +1184,7 @@ class Participant(Model, MixinTeam):
                      , p.username
                      , p.kind
                      , t.is_funded
-                     , (p.mangopay_user_id IS NOT NULL) AS is_identified
+                     , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
                      , p.is_suspicious
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee

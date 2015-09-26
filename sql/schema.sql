@@ -16,7 +16,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 \i sql/enforce-utc.sql
 
-\i sql/enumerate.sql
+\i sql/utils.sql
 
 
 -- participants -- user accounts
@@ -161,7 +161,10 @@ CREATE TABLE transfers
 , tippee      bigint              NOT NULL REFERENCES participants
 , amount      numeric(35,2)       NOT NULL CHECK (amount > 0)
 , context     transfer_context    NOT NULL
+, team        bigint              REFERENCES participants
 , status      transfer_status     NOT NULL
+, CONSTRAINT team_chk CHECK ((context='take') = (team IS NOT NULL))
+, CONSTRAINT self_chk CHECK (tipper <> tippee)
  );
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
