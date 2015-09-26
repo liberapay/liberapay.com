@@ -15,18 +15,11 @@ class MixinTeam(object):
     def add_member(self, member):
         """Add a member to this team.
         """
-        assert self.kind == 'group'
         if len(self.get_current_takes()) == 149:
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
         self.set_take_for(member, Decimal('0.00'), self)
-
-    def remove_member(self, member):
-        """Remove a member from this team.
-        """
-        assert self.kind == 'group'
-        self.set_take_for(member, None, self)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
