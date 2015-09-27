@@ -142,12 +142,8 @@ else:
         <td class="notes">
         {% set context = event['context'] %}
         {% if event['tippee'] == participant.id %}
-            {% if context in ('take', 'take-over') or admin_override %}
-                {% if context == 'take-over' %}
-                    balance from taken-over account
-                {% else %}
-                    {{ context }} from
-                {% endif %}
+            {% if context == 'take' or admin_override %}
+                {{ context }} from
                 <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
             {% else %}
                 anonymous tip

@@ -49,7 +49,6 @@ transfers = website.db.all("""\
         , tipper
      FROM transfers
     WHERE tippee=%s
-      AND context <> 'take-over'
       AND status = 'succeeded'
  ORDER BY id DESC
 

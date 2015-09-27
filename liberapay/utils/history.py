@@ -201,7 +201,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
             SELECT timestamp, amount, context
               FROM transfers
              WHERE tippee = %(id)s
-               AND context NOT IN ('take', 'take-over')
+               AND context <> 'take'
                AND extract(year from timestamp) = %(year)s
                AND status = 'succeeded'
           ORDER BY id ASC

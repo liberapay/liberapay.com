@@ -151,7 +151,7 @@ CREATE TRIGGER update_current_tip INSTEAD OF UPDATE ON current_tips
 -- transfers -- balance transfers from one user to another
 
 CREATE TYPE transfer_context AS ENUM
-    ('tip', 'take', 'final-gift', 'take-over');
+    ('tip', 'take', 'final-gift');
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
 
