@@ -16,7 +16,7 @@ not_group = participant.kind != 'group'
 {% block content %}
 <div id="settings">
 
-        <form action="edit" method="POST" class="js-submit">
+        <form action="edit" method="POST">
             <h2>{{ _("Username") }}</h2>
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <div class="form-group">

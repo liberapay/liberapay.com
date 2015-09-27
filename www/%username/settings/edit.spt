@@ -36,7 +36,9 @@ elif 'privacy' in body:
     out['msg'] = _("Your privacy settings have been changed.")
 
 elif 'username' in body:
-    get_participant(state, restrict=True).change_username(body['username'])
+    p = get_participant(state, restrict=True)
+    p.change_username(body['username'])
+    response.redirect('/'+p.username+'/settings/')
 
 if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
     response.redirect('.')
