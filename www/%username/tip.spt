@@ -36,7 +36,7 @@ if request.method == 'POST':
         raise Response(400, "bad amount")
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         back_to = request.body.get('back_to')
-        if not out['is_funded'] and not out['is_pledge']:
+        if out['amount'] and not out['is_funded'] and not out['is_pledge']:
             response.redirect('/' + tipper.username + '/giving/payin/' + b64encode(back_to))
         response.redirect(back_to or '..')
 else:
