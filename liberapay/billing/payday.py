@@ -355,3 +355,24 @@ class Payday(object):
 
     def notify_participants(self):
         pass  # TODO
+
+
+if __name__ == '__main__':  # pragma: no cover
+    from liberapay import wireup
+    from liberapay.billing.exchanges import sync_with_mangopay
+
+    # Wire things up.
+    # ===============
+
+    env = wireup.env()
+    db = wireup.db(env)
+    wireup.billing(env)
+
+    try:
+        sync_with_mangopay(db)
+        Payday.start().run()
+    except KeyboardInterrupt:
+        pass
+    except:
+        import traceback
+        traceback.print_exc()
