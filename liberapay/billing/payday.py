@@ -1,12 +1,15 @@
 from __future__ import unicode_literals
 
+import os
+import os.path
+import pickle
+
 import aspen.utils
 from aspen import log
 from psycopg2 import IntegrityError
 
 from liberapay.billing.exchanges import transfer
 from liberapay.exceptions import NegativeBalance
-from liberapay.models import check_db
 
 
 with open('sql/fake_payday.sql') as f:
@@ -15,6 +18,11 @@ with open('sql/fake_payday.sql') as f:
 
 class NoPayday(Exception):
     __str__ = lambda self: "No payday found where one was expected."
+
+
+class NS(object):
+    def __init__(self, d):
+        self.__dict__.update(d)
 
 
 class Payday(object):
@@ -71,44 +79,52 @@ class Payday(object):
         self.end()
         self.notify_participants()
 
+        os.unlink(self.transfers_filename)
+
         _end = aspen.utils.utcnow()
         _delta = _end - _start
         fmt_past = "Script ran for %%(age)s (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
     def shuffle(self):
-        with self.db.get_cursor() as cursor:
-            self.prepare(cursor, self.ts_start)
-            self.transfer_virtually(cursor)
-            transfers = cursor.all("""
-                SELECT t.*
-                     , p.mangopay_user_id AS tipper_mango_id
-                     , p2.mangopay_user_id AS tippee_mango_id
-                     , p.mangopay_wallet_id AS tipper_wallet_id
-                     , p2.mangopay_wallet_id AS tippee_wallet_id
-                  FROM payday_transfers t
-                  JOIN participants p ON p.id = t.tipper
-                  JOIN participants p2 ON p2.id = t.tippee
-            """)
-            try:
+        self.transfers_filename = 'payday-%s_transfers.pickle' % self.id
+        if os.path.exists(self.transfers_filename):
+            with open(self.transfers_filename, 'rb') as f:
+                transfers = pickle.load(f)
+            done = self.db.all("""
+                SELECT *
+                  FROM transfers t
+                 WHERE t.timestamp >= %(ts_start)s;
+            """, dict(ts_start=self.ts_start))
+            done = set((t.tipper, t.tippee, t.context, t.team) for t in done)
+            transfers = [t for t in transfers if (t.tipper, t.tippee, t.context, t.team) not in done]
+        else:
+            with self.db.get_cursor() as cursor:
+                self.prepare(cursor, self.ts_start)
+                self.transfer_virtually(cursor)
+                transfers = [NS(t._asdict()) for t in cursor.all("""
+                    SELECT t.*
+                         , p.mangopay_user_id AS tipper_mango_id
+                         , p2.mangopay_user_id AS tippee_mango_id
+                         , p.mangopay_wallet_id AS tipper_wallet_id
+                         , p2.mangopay_wallet_id AS tippee_wallet_id
+                      FROM payday_transfers t
+                      JOIN participants p ON p.id = t.tipper
+                      JOIN participants p2 ON p2.id = t.tippee
+                """)]
                 self.check_balances(cursor)
-                self.transfer_for_real(transfers)
-                check_db(cursor)
-            except:
-                # Dump transfers for debugging
-                import csv
-                from time import time
-                with open('%s_transfers.csv' % time(), 'wb') as f:
-                    csv.writer(f).writerows(transfers)
-                raise
+                with open(self.transfers_filename, 'wb') as f:
+                    pickle.dump(transfers, f)
+                cursor.run("""
+                    UPDATE paydays
+                       SET nparticipants = (SELECT count(*) FROM payday_participants)
+                     WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
+                """)
+            self.clean_up()
 
-        # Clean up leftover functions
-        self.db.run("""
-            DROP FUNCTION process_tip();
-            DROP FUNCTION settle_tip_graph();
-            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint);
-            DROP FUNCTION resolve_takes(bigint);
-        """)
+        self.transfer_for_real(transfers)
+
+        self.db.self_check()
 
     @staticmethod
     def prepare(cursor, ts_start):
@@ -135,11 +151,6 @@ class Payday(object):
 
         CREATE UNIQUE INDEX ON payday_participants (id);
 
-        CREATE TEMPORARY TABLE payday_transfers_done ON COMMIT DROP AS
-            SELECT *
-              FROM transfers t
-             WHERE t.timestamp > %(ts_start)s;
-
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT tipper, tippee, amount, (p2.kind = 'group') AS to_team
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
@@ -151,12 +162,6 @@ class Payday(object):
               JOIN payday_participants p2 ON p2.id = t.tippee
              WHERE t.amount > 0
                AND (p2.goal IS NULL or p2.goal >= 0)
-               AND ( SELECT id
-                       FROM payday_transfers_done t2
-                      WHERE t.tipper = t2.tipper
-                        AND t.tippee = t2.tippee
-                        AND context = 'tip'
-                   ) IS NULL
           ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
@@ -174,13 +179,7 @@ class Payday(object):
              WHERE t.amount IS NOT NULL
                AND t.amount > 0
                AND t.team IN (SELECT id FROM payday_participants)
-               AND t.member IN (SELECT id FROM payday_participants)
-               AND ( SELECT id
-                       FROM payday_transfers_done t2
-                      WHERE t.team = t2.tipper
-                        AND t.member = t2.tippee
-                        AND context = 'take'
-                   ) IS NULL;
+               AND t.member IN (SELECT id FROM payday_participants);
 
         CREATE UNIQUE INDEX ON payday_takes (team, member);
 
@@ -326,13 +325,6 @@ class Payday(object):
             END;
         $$ LANGUAGE plpgsql;
 
-
-        -- Save the stats we already have
-
-        UPDATE paydays
-           SET nparticipants = (SELECT count(*) FROM payday_participants)
-         WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
-
         """, dict(ts_start=ts_start))
         log('Prepared the DB.')
 
@@ -370,7 +362,15 @@ class Payday(object):
     def transfer_for_real(self, transfers):
         db = self.db
         for t in transfers:
-            transfer(db, **t._asdict())
+            transfer(db, **t.__dict__)
+
+    def clean_up(self):
+        self.db.run("""
+            DROP FUNCTION process_tip();
+            DROP FUNCTION settle_tip_graph();
+            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint);
+            DROP FUNCTION resolve_takes(bigint);
+        """)
 
     def update_stats(self):
         self.db.run("""\
