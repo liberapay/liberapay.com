@@ -54,9 +54,8 @@ class Payday(object):
     def run(self):
         """This is the starting point for payday.
 
-        This method runs every Thursday. It is structured such that it can be
-        run again safely (with a newly-instantiated Payday object) if it
-        crashes.
+        It is structured such that it can be run again safely (with a
+        newly-instantiated Payday object) if it crashes.
 
         """
         self.db.self_check()
