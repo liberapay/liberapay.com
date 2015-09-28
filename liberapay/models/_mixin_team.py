@@ -199,3 +199,14 @@ class MixinTeam(object):
             member['max_this_week'] = self.compute_max_this_week(last_week)
             members[member['id']] = member
         return members
+
+    @property
+    def closed_by(self):
+        assert self.status == 'closed'
+        return self.db.one("""
+            SELECT member
+              FROM takes
+             WHERE team = %s
+          ORDER BY mtime DESC
+             LIMIT 1
+        """, (self.id,))

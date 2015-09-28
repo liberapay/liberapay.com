@@ -2,12 +2,25 @@
 
 from aspen import Response
 
+from liberapay.exceptions import UsernameAlreadyTaken
+from liberapay.models.participant import Participant
+
 [---]
 
 if request.method == 'POST':
     if user.ANON:
         raise Response(403)
-    t = user.make_team(request.body['name'])
+    name = request.body['name']
+    t = Participant.from_username(name)
+    if t:
+        if t.kind == 'group' and t.status == 'closed' and user.id == t.closed_by:
+            with website.db.get_cursor() as c:
+                t.update_status('active', c)
+                t.add_member(user, c)
+        else:
+            raise UsernameAlreadyTaken(name)
+    else:
+        t = user.make_team(name)
     response.redirect('/'+t.username+'/')
 
 title = _("Teams")
