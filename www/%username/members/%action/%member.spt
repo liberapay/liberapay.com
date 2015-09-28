@@ -81,6 +81,8 @@ elif action == 'leave':
         confirm = _("Are you sure you want to leave this team?")
     else:
         team.set_take_for(member, None, user)
+        if not team.nmembers:
+            team.close(None)
 
 elif action == 'accept':
     with website.db.get_cursor() as c:
