@@ -116,6 +116,18 @@ class Participant(Model, MixinTeam):
             p.change_username(username, c)
         return p
 
+    def make_team(self, name):
+        with self.db.get_cursor() as c:
+            t = c.one("""
+                INSERT INTO participants
+                            (kind, status, join_time)
+                     VALUES ('group', 'active', now())
+                  RETURNING participants.*::participants
+            """)
+            t.change_username(name, c)
+            t.add_member(self, c)
+        return t
+
     @classmethod
     def from_id(cls, id):
         """Return an existing participant based on id.

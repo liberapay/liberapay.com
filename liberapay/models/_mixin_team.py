@@ -22,14 +22,14 @@ class MixinTeam(object):
                 inviter=inviter.username,
             )
 
-    def add_member(self, member):
+    def add_member(self, member, cursor=None):
         """Add a member to this team.
         """
         if len(self.get_current_takes()) == 149:
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, Decimal('0.00'), self)
+        self.set_take_for(member, Decimal('0.00'), self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
