@@ -12,10 +12,6 @@ from liberapay.billing.exchanges import transfer
 from liberapay.exceptions import NegativeBalance
 
 
-with open('sql/fake_payday.sql') as f:
-    FAKE_PAYDAY = f.read()
-
-
 class NoPayday(Exception):
     __str__ = lambda self: "No payday found where one was expected."
 
@@ -152,7 +148,7 @@ class Payday(object):
         CREATE UNIQUE INDEX ON payday_participants (id);
 
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
-            SELECT tipper, tippee, amount, (p2.kind = 'group') AS to_team
+            SELECT t.id, tipper, tippee, amount, (p2.kind = 'group') AS to_team
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -236,7 +232,7 @@ class Payday(object):
 
         CREATE TRIGGER process_tip BEFORE UPDATE OF is_funded ON payday_tips
             FOR EACH ROW
-            WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true)
+            WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true AND NEW.to_team IS NOT true)
             EXECUTE PROCEDURE process_tip();
 
 
@@ -279,7 +275,7 @@ class Payday(object):
                 take record;
                 amount numeric(35,2);
                 our_tips CURSOR FOR
-                    SELECT t.tipper, (round_up(t.amount * ratio, 2)) AS amount
+                    SELECT t.id, t.tipper, (round_up(t.amount * ratio, 2)) AS amount
                       FROM payday_tips t
                       JOIN payday_participants p ON p.id = t.tipper
                      WHERE t.tippee = team_id;
@@ -314,6 +310,7 @@ class Payday(object):
                         END IF;
                         amount := min(tip.amount, take.amount);
                         IF (tip.tipper <> take.member) THEN
+                            UPDATE payday_tips SET is_funded = true WHERE id = tip.id;
                             EXECUTE transfer(tip.tipper, take.member, amount, 'take', team_id);
                         END IF;
                         tip.amount := tip.amount - amount;
@@ -412,8 +409,57 @@ class Payday(object):
         log("Updated payday stats.")
 
     def update_cached_amounts(self):
+        now = aspen.utils.utcnow()
         with self.db.get_cursor() as cursor:
-            cursor.execute(FAKE_PAYDAY)
+            self.prepare(cursor, now)
+            self.transfer_virtually(cursor)
+            cursor.run("""
+
+            UPDATE tips t
+               SET is_funded = t2.is_funded
+              FROM payday_tips t2
+             WHERE t.id = t2.id
+               AND t.is_funded <> t2.is_funded;
+
+            UPDATE participants p
+               SET giving = p2.giving
+              FROM ( SELECT tipper AS id, sum(amount) AS giving
+                       FROM payday_transfers
+                   GROUP BY tipper
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.giving <> p2.giving;
+
+            UPDATE participants p
+               SET taking = p2.taking
+              FROM ( SELECT tippee AS id, sum(amount) AS taking
+                       FROM payday_transfers
+                      WHERE context = 'take'
+                   GROUP BY tippee
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.taking <> p2.taking;
+
+            UPDATE participants p
+               SET receiving = p2.receiving
+              FROM ( SELECT tippee AS id, sum(amount) AS receiving
+                       FROM payday_transfers
+                   GROUP BY tippee
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.receiving <> p2.receiving;
+
+            UPDATE participants p
+               SET npatrons = p2.npatrons
+              FROM ( SELECT tippee AS id, count(*) AS npatrons
+                       FROM payday_transfers
+                   GROUP BY tippee
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.npatrons <> p2.npatrons;
+
+            """)
+        self.clean_up()
         log("Updated receiving amounts.")
 
     def end(self):
