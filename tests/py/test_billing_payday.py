@@ -81,7 +81,6 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             dana = Participant.from_username('dana')
             emma = Participant.from_username('emma')
             assert alice.giving == D('13.00')
-            assert alice.pledging == D('1.00')
             assert alice.receiving == D('5.00')
             assert bob.giving == D('7.00')
             assert bob.receiving == D('7.00')
@@ -108,7 +107,6 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             UPDATE participants
                SET giving = 0
                  , npatrons = 0
-                 , pledging = 0
                  , receiving = 0
                  , taking = 0;
         """)
@@ -129,7 +127,6 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             for username in reversed(usernames[1:]):
                 user = Participant.from_username(username)
                 assert user.giving == D('1.00')
-                assert user.pledging == D('0.00')
                 assert user.receiving == D('1.00')
                 assert user.npatrons == 1
             funded_tips = self.db.all("SELECT id FROM tips WHERE is_funded ORDER BY id")

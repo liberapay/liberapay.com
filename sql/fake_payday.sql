@@ -6,7 +6,6 @@ CREATE TEMPORARY TABLE temp_participants ON COMMIT DROP AS
          , status
          , balance AS fake_balance
          , 0::numeric(35,2) AS giving
-         , 0::numeric(35,2) AS pledging
          , 0::numeric(35,2) AS taking
          , 0::numeric(35,2) AS receiving
          , 0 as npatrons
@@ -54,7 +53,6 @@ CREATE OR REPLACE FUNCTION fake_tip() RETURNS trigger AS $$
         ELSE
             UPDATE temp_participants
                SET fake_balance = (fake_balance - NEW.amount)
-                 , pledging = (pledging + NEW.amount)
              WHERE id = NEW.tipper;
         END IF;
         UPDATE temp_participants
@@ -112,14 +110,12 @@ UPDATE tips t
 
 UPDATE participants p
    SET giving = p2.giving
-     , pledging = p2.pledging
      , taking = p2.taking
      , receiving = p2.receiving
      , npatrons = p2.npatrons
   FROM temp_participants p2
  WHERE p.id = p2.id
    AND ( p.giving <> p2.giving OR
-         p.pledging <> p2.pledging OR
          p.taking <> p2.taking OR
          p.receiving <> p2.receiving OR
          p.npatrons <> p2.npatrons

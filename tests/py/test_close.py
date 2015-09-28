@@ -258,7 +258,6 @@ class TestClosing(FakeTransfersHarness):
                                      , session_token='deadbeef'
                                      , session_expires='2000-01-01'
                                      , giving=20
-                                     , pledging=30
                                      , receiving=40
                                      , npatrons=21
                                       )
@@ -276,7 +275,6 @@ class TestClosing(FakeTransfersHarness):
         assert alice.avatar_url == new_alice.avatar_url == None
         assert alice.email == new_alice.email
         assert alice.giving == new_alice.giving == 0
-        assert alice.pledging == new_alice.pledging == 0
         assert alice.receiving == new_alice.receiving == 0
         assert alice.npatrons == new_alice.npatrons == 0
         assert alice.session_token == new_alice.session_token == None

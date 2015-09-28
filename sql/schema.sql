@@ -50,7 +50,6 @@ CREATE TABLE participants
 
 , avatar_url            text
 , giving                numeric(35,2)           NOT NULL DEFAULT 0
-, pledging              numeric(35,2)           NOT NULL DEFAULT 0
 , receiving             numeric(35,2)           NOT NULL DEFAULT 0
 , taking                numeric(35,2)           NOT NULL DEFAULT 0
 , npatrons              integer                 NOT NULL DEFAULT 0

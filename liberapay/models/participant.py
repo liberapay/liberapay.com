@@ -316,7 +316,7 @@ class Participant(Model, MixinTeam):
 
     @property
     def usage(self):
-        return max(self.giving + self.pledging, self.receiving)
+        return max(self.giving, self.receiving)
 
     @property
     def suggested_payment(self):
@@ -473,7 +473,6 @@ class Participant(Model, MixinTeam):
                  , session_token=NULL
                  , session_expires=now()
                  , giving=0
-                 , pledging=0
                  , receiving=0
                  , npatrons=0
              WHERE id=%(id)s
@@ -976,32 +975,24 @@ class Participant(Model, MixinTeam):
              RETURNING *
             """, (is_funded, tip.id)))
 
-        # Update giving and pledging on participant
-        giving, pledging = (cursor or self.db).one("""
-            WITH our_tips AS (
-                     SELECT amount, p2.status
+        # Update giving on participant
+        giving = (cursor or self.db).one("""
+            UPDATE participants p
+               SET giving = COALESCE((
+                     SELECT sum(amount)
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
                         AND p2.is_suspicious IS NOT true
+                        AND p2.status = 'active'
+                        AND p2.mangopay_user_id IS NOT NULL
                         AND amount > 0
                         AND is_funded
-                 )
-            UPDATE participants p
-               SET giving = COALESCE((
-                       SELECT sum(amount)
-                         FROM our_tips
-                        WHERE status = 'active'
-                   ), 0)
-                 , pledging = COALESCE((
-                       SELECT sum(amount)
-                         FROM our_tips
-                        WHERE status = 'stub'
                    ), 0)
              WHERE p.id = %(id)s
-         RETURNING giving, pledging
+         RETURNING giving
         """, dict(id=self.id))
-        self.set_attributes(giving=giving, pledging=pledging)
+        self.set_attributes(giving=giving)
 
         return updated
 
@@ -1088,7 +1079,7 @@ class Participant(Model, MixinTeam):
         t = (cursor or self.db).one(NEW_TIP, args)._asdict()
 
         if update_self:
-            # Update giving/pledging amount of tipper
+            # Update giving amount of tipper
             updated = self.update_giving(cursor)
             for u in updated:
                 if u.id == t['id']:
