@@ -135,7 +135,6 @@ class Payday(object):
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
-        CREATE UNIQUE INDEX ON payday_participants (username);
 
         CREATE TEMPORARY TABLE payday_transfers_done ON COMMIT DROP AS
             SELECT *
