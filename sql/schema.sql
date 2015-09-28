@@ -312,7 +312,7 @@ CREATE TABLE events
 , ts           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
 , participant  bigint        NOT NULL REFERENCES participants
 , type         text          NOT NULL
-, payload      json
+, payload      jsonb
 , recorder     bigint        REFERENCES participants
  );
 

@@ -485,11 +485,11 @@ class Participant(Model, MixinTeam):
     @property
     def closed_time(self):
         return self.db.one("""
-            SELECT ts AT TIME ZONE 'UTC'
+            SELECT ts
               FROM events
              WHERE participant=%s
                AND type='set_status'
-               AND payload='closed'
+               AND payload='"closed"'
           ORDER BY ts DESC
              LIMIT 1
         """, (str(self.id),))
