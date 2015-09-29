@@ -138,21 +138,22 @@ class MixinTeam(object):
         and `new_takes`.
         """
         for p_id in set(old_takes.keys()).union(new_takes.keys()):
-            if p_id == self.id:
-                continue
             old = old_takes.get(p_id, {}).get('actual_amount', Decimal(0))
             new = new_takes.get(p_id, {}).get('actual_amount', Decimal(0))
             diff = new - old
             if diff != 0:
-                r = (cursor or self.db).one("""
+                (cursor or self.db).run("""
                     UPDATE participants
                        SET taking = (taking + %(diff)s)
                          , receiving = (receiving + %(diff)s)
                      WHERE id=%(p_id)s
-                 RETURNING taking, receiving
                 """, dict(p_id=p_id, diff=diff))
-                if member and p_id == member.id:
-                    member.set_attributes(**r._asdict())
+            if member and p_id == member.id:
+                r = (cursor or self.db).one(
+                    "SELECT taking, receiving FROM participants WHERE id = %s",
+                    (p_id,)
+                )
+                member.set_attributes(**r._asdict())
 
     def get_current_takes(self, cursor=None):
         """Return a list of member takes for a team.
