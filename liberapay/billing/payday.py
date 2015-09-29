@@ -164,14 +164,6 @@ class Payday(object):
         CREATE INDEX ON payday_tips (tippee);
         ALTER TABLE payday_tips ADD COLUMN is_funded boolean;
 
-        ALTER TABLE payday_participants ADD COLUMN giving_today numeric(35,2);
-        UPDATE payday_participants p
-           SET giving_today = COALESCE((
-                   SELECT sum(amount)
-                     FROM payday_tips
-                    WHERE tipper = p.id
-               ), 0);
-
         CREATE TEMPORARY TABLE payday_takes ON COMMIT DROP AS
             SELECT team, member, amount
               FROM ( SELECT DISTINCT ON (team, member)
