@@ -109,7 +109,7 @@ receivers = query_cache.all("""
 <p>{{ ngettext("This community was created {0} ago and has {n} member.",
                "This community was created {0} ago and has {n} members.",
                community.nmembers,
-               to_age_str(community.ctime, add_direction=False)) }}</p>
+               to_age(community.ctime)) }}</p>
 {% endif %}
 
 {% if user.ANON %}
