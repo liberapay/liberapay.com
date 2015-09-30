@@ -52,8 +52,12 @@ langs = 'en fr de it es'.split()
         </section>
     </div>
     {% endif %}
+    {% if participant.kind == 'group' %}
+    {% include "templates/members-listing.html" %}
+    {% else %}
     {% include "templates/connected-accounts.html" %}
     {% include "templates/team-listing.html" %}
     {% include "templates/community-listing.html" %}
+    {% endif %}
 </div>
 {% endblock %}

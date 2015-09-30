@@ -160,7 +160,7 @@ class MixinTeam(object):
         """
         assert self.kind == 'group'
         TAKES = """
-            SELECT p.id AS member_id, p.username AS member_name, t.amount, t.ctime, t.mtime
+            SELECT p.id AS member_id, p.username AS member_name, t.amount, t.ctime, t.mtime, p.avatar_url
               FROM current_takes t
               JOIN participants p ON p.id = member
              WHERE t.team=%(team)s
