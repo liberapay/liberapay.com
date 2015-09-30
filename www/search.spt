@@ -85,16 +85,16 @@ if query:
         <h2>{{ ngettext("Found a matching username",
                         "Found matching usernames",
                         len(usernames)) }}</h2>
-        <div class="search-results">
+        <ul class="people">
         {% for result in usernames %}
-            <a class="mini-user" href="/{{ result.username }}/">
-                <span class="inner">
-                    <span class="avatar" style="background-image: url('{{ avatar_url(result) }}')"></span>
-                    <span class="name">{{ result.username }}</span>
-                </span>
+        <li class="panel panel-default mini-user">
+            <a href="/{{ result.username }}/">
+                <img class="avatar" src="{{ avatar_url(result) }}" />
+                <span class="name">{{ result.username }}</span>
             </a>
+        </li>
         {% endfor %}
-        </div>
+        </ul>
     </div>
     {% endif %}
 
@@ -107,7 +107,7 @@ if query:
         {% for result in communities %}
             <li>
                 <a href="/for/{{ result.slug }}/">{{ result.name }}</a>
-                <div class="fine">{{
+                <div class="nmembers">{{
                     ngettext("{0}{n}{1} Member",
                              "{0}{n}{1} Members",
                              result.nmembers,

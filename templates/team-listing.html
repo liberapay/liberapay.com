@@ -6,7 +6,7 @@
         {% for team in teams %}
         <li>
             <a href="/{{ team.name }}/">{{ team.name }}</a>
-            <div class="fine">{{
+            <div class="nmembers">{{
                 ngettext("with {n} other", "with {n} others", team.nmembers - 1)
             }}</div>
             {% if edit %}

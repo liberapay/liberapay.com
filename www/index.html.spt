@@ -48,7 +48,7 @@ top_communities = query_cache.all("""
             {% include "templates/search-box.html" %}
 
             <p>{{ _("Explore our communities:") }}</p>
-            <ul class="communities">
+            <ul class="communities memberships">
                 {% for community in top_communities %}
                 <li>
                     <a href="/for/{{ community.slug }}/">{{ community.name }}</a>

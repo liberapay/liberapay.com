@@ -11,7 +11,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="back_to" value="{{ request.line.uri }}#communities">
 {% endif %}
-    <ul class="communities">
+    <ul class="communities memberships">
         {% for community in communities %}
         <li>
             <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
