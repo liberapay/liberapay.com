@@ -91,6 +91,7 @@ title = participant.username
             {{ GRATEFUL }}
         </label>
 
+        {% if participant.kind != 'group' %}
         <label>
             <input type="radio" name="goal" id="goal-0" value="0.00"
                    {{ 'checked' if user.goal == 0 }} />
@@ -102,6 +103,7 @@ title = participant.username
                    {{ 'checked' if user.goal and user.goal < 0 }} />
             {{ PATRON_NO_GIFTS }}
         </label>
+        {% endif %}
     </div>
 
     <button class="save btn btn-primary">{{ _("Save") }}</button>
