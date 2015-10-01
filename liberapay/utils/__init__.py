@@ -15,7 +15,7 @@ import liberapay
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
-def get_participant(state, restrict=True, redirect_stub=True):
+def get_participant(state, restrict=True, redirect_stub=True, allow_member=False):
     """Given a Request, raise Response or return Participant.
 
     If restrict is True then we'll restrict access to owners and admins.
@@ -66,7 +66,9 @@ def get_participant(state, restrict=True, redirect_stub=True):
 
     if restrict:
         if participant != user:
-            if not user.is_admin:
+            if allow_member and participant.kind == 'group' and user.member_of(participant):
+                pass
+            elif not user.is_admin:
                 raise Response(403, _("You are not authorized to access this page."))
 
     return participant

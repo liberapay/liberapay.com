@@ -12,4 +12,8 @@
         </li>
     {% endfor %}
     </ul>
+    {% if edit %}
+        <br>
+        {% include "templates/team-invite.html" %}
+    {% endif %}
 </div>

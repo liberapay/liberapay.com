@@ -25,11 +25,6 @@ subhead = _("Team Members")
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 
-{% block scripts %}
-<script>$(document).ready(Liberapay.team.init);</script>
-{{ super() }}
-{% endblock %}
-
 {% block content %}
 <div class="row paragraph">
 <div class="col-md-12">
@@ -74,19 +69,7 @@ subhead = _("Team Members")
 {% if user.id in members %}
     <h2>{{ _("Management") }}</h2>
     <p>{{ _("As a member of this team you can invite other users to join it:") }}</p>
-    <div id="lookup-container">
-        <form action="invite/" method="POST">
-            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <div class="input-group">
-                <input id="query" name="username" class="form-control" autocomplete="off"
-                       placeholder="{{ _('Enter a username') }}" />
-                <div class="input-group-btn">
-                    <button class="btn btn-success">{{ _("Invite") }}</button>
-                </div>
-            </div>
-            <ul id="lookup-results"></ul>
-        </form>
-    </div>
+    {% include "templates/team-invite.html" %}
     <br>
     <p>{{ _("You can leave the team whenever you want:") }}</p>
     <a class="btn btn-warning" href="leave">{{ _("Leave this team") }}</a>

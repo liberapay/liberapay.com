@@ -36,6 +36,8 @@ Liberapay.init = function() {
         );
     }
     $('.notification .close').click(function(){ $(this).parent().fadeOut() });
+
+    Liberapay.lookup.init();
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

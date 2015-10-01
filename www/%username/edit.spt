@@ -9,7 +9,7 @@ from liberapay.utils import get_participant, markdown
 from liberapay.utils.i18n import LANGUAGES_2
 
 [---]
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
     lang = request.body['lang']
@@ -62,9 +62,7 @@ title = participant.username
 {% endblock %}
 
 {% block heading %}
-{% if user == participant %}
     <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
-{% endif %}
 {{ super() }}
 {% endblock %}
 
@@ -169,8 +167,12 @@ title = participant.username
         {% endif %}
 
     </div>
+    {% if participant.kind == 'group' %}
+    {% include "templates/members-listing.html" %}
+    {% else %}
     {% include "templates/connected-accounts.html" %}
     {% include "templates/team-listing.html" %}
     {% include "templates/community-listing.html" %}
+    {% endif %}
 </div>
 {% endblock %}
