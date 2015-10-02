@@ -43,11 +43,9 @@
 {% endblock %}
 
 {% block subnav %}
-    {% set show_members = participant.kind == 'group' %}
     {% set show_income = not participant.hide_receiving and participant.accepts_tips %}
     {% set pages = filter_profile_subnav(user, participant, [
         ('/',            _('Profile'),   True,           True),
-        ('/members/',    _('Members'),   show_members,   show_members),
         ('/income/',     _('Income'),    True,           show_income),
         ('/history/',    _('History'),   False,          False),
     ]) %}

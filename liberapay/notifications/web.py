@@ -52,8 +52,8 @@ def team_invite(_, team, team_url, inviter):
             " ",
             ['a', {'href': team_url}, _("See the team's profile")],
             " | ",
-            ['a', {'href': team_url+'members/accept'}, _("Accept")],
+            ['a', {'href': team_url+'membership/accept'}, _("Accept")],
             " | ",
-            ['a', {'href': team_url+'members/refuse'}, _("Refuse")]
+            ['a', {'href': team_url+'membership/refuse'}, _("Refuse")]
         ]
     )
