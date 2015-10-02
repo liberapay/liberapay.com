@@ -15,7 +15,6 @@ else:
     statement, lang = participant.get_statement(request.accept_langs)
 
 langs = participant.get_statement_langs()
-langs = 'en fr de it es'.split()
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
