@@ -111,8 +111,8 @@ img.account-type {
 }
 
 .profile-box {
+    display: inline-block;
     float: none;
-    margin: 0 auto;
     .avatar {
         text-align: center;
     }
@@ -123,6 +123,10 @@ img.account-type {
     .radio {
         margin-top: 0;
     }
+}
+
+.btn.pull-right {
+    margin-bottom: 1em;
 }
 
 @import "chosen";
