@@ -64,6 +64,7 @@ CREATE TABLE participants
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
 , CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))
 , CONSTRAINT password_chk CHECK ((status='stub' OR kind='group') = (password IS NULL))
+, CONSTRAINT secret_team_chk CHECK (NOT (kind='group' AND hide_receiving))
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
