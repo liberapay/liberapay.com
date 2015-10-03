@@ -5,6 +5,7 @@ Liberapay.lookup.init = function() {
         var $form = $(this);
         var $input = $form.find('input[name="username"]');
         var $results = $form.find('.lookup-results');
+        $results.css('width', $input.css('width'));
 
         var lookup_timeout = null;
         function lookup() {
@@ -32,7 +33,7 @@ Liberapay.lookup.init = function() {
         }
 
         function selectLookupResult() {
-            $input.val($(this).html());
+            $input.val($(this).html()).focus();
             $results.empty();
         }
 

@@ -398,3 +398,25 @@ input.invalid:focus + .invalid-msg {
         text-align: inherit;
     }
 }
+
+.lookup-results {
+    background: #fff;
+    border: 1px solid #66AFE9;
+    border-top: none;
+    color: #888;
+    margin: -4px 0 0;
+    padding: 2px 0;
+    position: absolute;
+    z-index: 5;
+    & > li {
+        display: block;
+        margin: 0;
+        padding: 2px 12px;
+        &:hover {
+            background: #eee;
+        }
+    }
+    &:empty {
+        display: none;
+    }
+}
