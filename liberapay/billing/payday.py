@@ -483,6 +483,7 @@ if __name__ == '__main__':  # pragma: no cover
 
     env = wireup.env()
     db = wireup.db(env)
+    Payday.db = db
     wireup.billing(env)
 
     try:
