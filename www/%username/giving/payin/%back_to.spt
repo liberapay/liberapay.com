@@ -184,7 +184,8 @@ title = _("Add money")
     {% else %}
     <p class="alert alert-warning">{{
         _("Please {0}verify your email address{1} then reload this page.",
-          '<a href="../emails/" target="_blank">'|safe, '</a>'|safe)
+          '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
+          '</a>'|safe)
     }}</p>
     {% endif %}
 

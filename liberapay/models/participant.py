@@ -1541,6 +1541,9 @@ class Participant(Model, MixinTeam):
 
         return output
 
+    def path(self, path):
+        return '/%s/%s' % (self.username, path)
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
