@@ -16,7 +16,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 \i sql/enforce-utc.sql
 
-\i sql/enumerate.sql
+\i sql/utils.sql
 
 
 -- participants -- user accounts
@@ -50,7 +50,6 @@ CREATE TABLE participants
 
 , avatar_url            text
 , giving                numeric(35,2)           NOT NULL DEFAULT 0
-, pledging              numeric(35,2)           NOT NULL DEFAULT 0
 , receiving             numeric(35,2)           NOT NULL DEFAULT 0
 , taking                numeric(35,2)           NOT NULL DEFAULT 0
 , npatrons              integer                 NOT NULL DEFAULT 0
@@ -58,11 +57,14 @@ CREATE TABLE participants
 , email_notif_bits      int                     NOT NULL DEFAULT 2147483647
 , pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
 
-, CONSTRAINT balance_chk CHECK (NOT (status <> 'active' AND balance <> 0))
+, CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind='group') AND balance <> 0))
+, CONSTRAINT giving_chk CHECK (NOT (kind='group' AND giving <> 0))
+, CONSTRAINT goal_chk CHECK (NOT (kind='group' AND status='active' AND goal IS NOT NULL AND goal <= 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
 , CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))
 , CONSTRAINT password_chk CHECK ((status='stub' OR kind='group') = (password IS NULL))
+, CONSTRAINT secret_team_chk CHECK (NOT (kind='group' AND hide_receiving))
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
@@ -150,7 +152,7 @@ CREATE TRIGGER update_current_tip INSTEAD OF UPDATE ON current_tips
 -- transfers -- balance transfers from one user to another
 
 CREATE TYPE transfer_context AS ENUM
-    ('tip', 'take', 'final-gift', 'take-over');
+    ('tip', 'take', 'final-gift');
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
 
@@ -161,7 +163,10 @@ CREATE TABLE transfers
 , tippee      bigint              NOT NULL REFERENCES participants
 , amount      numeric(35,2)       NOT NULL CHECK (amount > 0)
 , context     transfer_context    NOT NULL
+, team        bigint              REFERENCES participants
 , status      transfer_status     NOT NULL
+, CONSTRAINT team_chk CHECK ((context='take') = (team IS NOT NULL))
+, CONSTRAINT self_chk CHECK (tipper <> tippee)
  );
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
@@ -267,11 +272,28 @@ CREATE TABLE takes
 , mtime             timestamptz          NOT NULL DEFAULT CURRENT_TIMESTAMP
 , member            bigint               NOT NULL REFERENCES participants
 , team              bigint               NOT NULL REFERENCES participants
-, amount            numeric(35,2)        NOT NULL DEFAULT 0.0
+, amount            numeric(35,2)        DEFAULT 1
 , recorder          bigint               NOT NULL REFERENCES participants
-, CONSTRAINT no_team_recursion CHECK (team <> member)
-, CONSTRAINT not_negative CHECK ((amount >= (0)::numeric))
+, CONSTRAINT not_negative CHECK (amount IS NULL OR amount >= 0)
  );
+
+CREATE OR REPLACE FUNCTION check_member() RETURNS trigger AS $$
+    DECLARE
+        m participants;
+    BEGIN
+        m := (SELECT p.*::participants FROM participants p WHERE id = NEW.member);
+        IF (m.kind = 'group') THEN
+            RAISE 'cannot add a team to a team';
+        END IF;
+        IF (m.status <> 'active') THEN
+            RAISE 'cannot add an inactive user to a team';
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_member BEFORE INSERT ON takes FOR EACH ROW
+    EXECUTE PROCEDURE check_member();
 
 CREATE VIEW current_takes AS
     SELECT * FROM (
@@ -284,7 +306,7 @@ CREATE VIEW current_takes AS
        ORDER BY member
               , team
               , mtime DESC
-    ) AS anon WHERE amount > 0;
+    ) AS anon WHERE amount IS NOT NULL;
 
 
 -- log of participant events
@@ -294,7 +316,7 @@ CREATE TABLE events
 , ts           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
 , participant  bigint        NOT NULL REFERENCES participants
 , type         text          NOT NULL
-, payload      json
+, payload      jsonb
 , recorder     bigint        REFERENCES participants
  );
 

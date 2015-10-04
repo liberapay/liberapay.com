@@ -1,0 +1,13 @@
+<form action="/{{ participant.username }}/membership/invite?back_to={{ urlquote(request.line.uri) }}"
+      method="POST"
+      class="username-lookup">
+    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+    <div class="input-group">
+        <input name="username" class="form-control" autocomplete="off"
+               placeholder="{{ _('Enter a username') }}" />
+        <div class="input-group-btn">
+            <button class="btn btn-success">{{ _("Invite") }}</button>
+        </div>
+    </div>
+    <ul class="lookup-results"></ul>
+</form>

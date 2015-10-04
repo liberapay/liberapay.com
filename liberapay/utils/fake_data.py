@@ -60,8 +60,8 @@ def fake_participant(db, kind=None, is_admin=False):
                    , email=username+'@example.org'
                    , is_admin=is_admin
                    , balance=0
-                   , hide_giving=(random.randrange(5) == 0)
-                   , hide_receiving=(random.randrange(5) == 0)
+                   , hide_giving=kind != 'group' and (random.randrange(5) == 0)
+                   , hide_receiving=kind != 'group' and (random.randrange(5) == 0)
                    , is_suspicious=False
                    , status='active'
                    , join_time=faker.date_time_this_year()

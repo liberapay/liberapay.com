@@ -111,8 +111,8 @@ img.account-type {
 }
 
 .profile-box {
+    display: inline-block;
     float: none;
-    margin: 0 auto;
     .avatar {
         text-align: center;
     }
@@ -125,13 +125,17 @@ img.account-type {
     }
 }
 
+.btn.pull-right {
+    margin-bottom: 1em;
+}
+
 @import "chosen";
 
 form.community-chooser select {
     width: 300px;
 }
 
-ul.communities {
+ul.memberships {
     margin: 0;
     padding: 0;
     & > li {
@@ -181,10 +185,6 @@ li.mini-user {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-}
-
-.giving table > tbody > tr > td {
-    vertical-align: middle;
 }
 
 #subnav + p, #subnav + div.paragraph {
@@ -249,6 +249,7 @@ section.profile-statement {
     position: fixed;
     right: 0;
     text-align: center;
+    z-index: 10;
 
     .notification {
         padding: 10px;
@@ -288,7 +289,7 @@ section.profile-statement {
     }
 }
 
-table.friends > tbody > tr > td {
+.valign-middle tbody > tr > td {
     vertical-align: middle;
 }
 
@@ -370,4 +371,52 @@ input.invalid:focus + .invalid-msg {
 
 .text-warning {
     font-weight: bold;
+}
+
+#team {
+    width: auto;
+    margin-bottom: 3em;
+    th {
+        text-align: center;
+    }
+    th, td {
+        &:not(:first-child) {
+            border-left: 1px dashed #ddd;
+        }
+        &:nth-child(2), &:nth-child(3) {
+            border-left: 2px solid #ddd;
+        }
+    }
+    td:first-child {
+        min-width: 12em;
+    }
+    td:not(:first-child) {
+        text-align: right;
+        width: 8em;
+    }
+    input {
+        text-align: inherit;
+    }
+}
+
+.lookup-results {
+    background: #fff;
+    border: 1px solid #66AFE9;
+    border-top: none;
+    color: #888;
+    margin: -4px 0 0;
+    padding: 2px 0;
+    position: absolute;
+    z-index: 5;
+    & > li {
+        display: block;
+        margin: 0;
+        padding: 2px 12px;
+        &:hover {
+            background: #eee;
+        }
+    }
+    &:empty {
+        display: none;
+    }
 }

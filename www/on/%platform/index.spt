@@ -82,7 +82,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 {% else %}
 <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
                nfriends, platform.display_name) }}</p>
-<table class="table table-condensed friends">
+<table class="table table-condensed valign-middle">
     <tr>
         <th>{{ _('Name') }}</th>
         <th>{{ _('On Liberapay?') }}</th>

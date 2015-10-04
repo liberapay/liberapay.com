@@ -28,12 +28,12 @@ class TestPages(MangopayHarness):
                 return spt[i:spt.rfind('/')+1]
             return spt[i:-4]
         for url in sorted(map(f, find_files(self.client.www_root, '*.spt'))):
-            url = url.replace('/%username/members/', '/team/members/') \
+            url = url.replace('/%username/membership/', '/team/membership/') \
                      .replace('/%username/', '/david/') \
                      .replace('/for/%slug/', '/for/wonderland/') \
                      .replace('/%platform/', '/github/') \
                      .replace('/%user_name/', '/liberapay/') \
-                     .replace('/%membername', '/david') \
+                     .replace('/%action', '/leave') \
                      .replace('/%exchange_id.int', '/%s' % self.exchange_id) \
                      .replace('/%redirect_to', '/giving') \
                      .replace('/%back_to', '/Li4=') \

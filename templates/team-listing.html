@@ -6,15 +6,19 @@
         {% for team in teams %}
         <li>
             <a href="/{{ team.name }}/">{{ team.name }}</a>
-            <div class="fine">{{
+            <div class="nmembers">{{
                 ngettext("with {n} other", "with {n} others", team.nmembers - 1)
             }}</div>
+            {% if edit %}
+                <a href="/{{ team.name }}/membership/leave?back_to={{ urlquote(request.line.uri) }}"
+                   class="btn btn-default btn-xs">{{ _('Leave') }}</a>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>
     {% if edit %}
         <p><a href="/explore/teams/">{{ _("Explore teams") }}</a></p>
-        <p><a href="/about/teams">{{ _("Learn more about how teams work") }}</a></p>
+        <p><a href="/about/teams">{{ _("About teams") }}</a></p>
     {% endif %}
 </div>
 {% endif %}

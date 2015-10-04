@@ -1,20 +1,24 @@
 from __future__ import unicode_literals
 
+import os
+import os.path
+import pickle
+
 import aspen.utils
 from aspen import log
 from psycopg2 import IntegrityError
 
 from liberapay.billing.exchanges import transfer
 from liberapay.exceptions import NegativeBalance
-from liberapay.models import check_db
-
-
-with open('sql/fake_payday.sql') as f:
-    FAKE_PAYDAY = f.read()
 
 
 class NoPayday(Exception):
     __str__ = lambda self: "No payday found where one was expected."
+
+
+class NS(object):
+    def __init__(self, d):
+        self.__dict__.update(d)
 
 
 class Payday(object):
@@ -54,9 +58,8 @@ class Payday(object):
     def run(self):
         """This is the starting point for payday.
 
-        This method runs every Thursday. It is structured such that it can be
-        run again safely (with a newly-instantiated Payday object) if it
-        crashes.
+        It is structured such that it can be run again safely (with a
+        newly-instantiated Payday object) if it crashes.
 
         """
         self.db.self_check()
@@ -72,44 +75,52 @@ class Payday(object):
         self.end()
         self.notify_participants()
 
+        os.unlink(self.transfers_filename)
+
         _end = aspen.utils.utcnow()
         _delta = _end - _start
         fmt_past = "Script ran for %%(age)s (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
     def shuffle(self):
-        with self.db.get_cursor() as cursor:
-            self.prepare(cursor, self.ts_start)
-            self.transfer_virtually(cursor, self.ts_start)
-            transfers = cursor.all("""
-                SELECT t.*
-                     , p.mangopay_user_id AS tipper_mango_id
-                     , p2.mangopay_user_id AS tippee_mango_id
-                     , p.mangopay_wallet_id AS tipper_wallet_id
-                     , p2.mangopay_wallet_id AS tippee_wallet_id
-                  FROM payday_transfers t
-                  JOIN participants p ON p.id = t.tipper
-                  JOIN participants p2 ON p2.id = t.tippee
-            """)
-            try:
+        self.transfers_filename = 'payday-%s_transfers.pickle' % self.id
+        if os.path.exists(self.transfers_filename):
+            with open(self.transfers_filename, 'rb') as f:
+                transfers = pickle.load(f)
+            done = self.db.all("""
+                SELECT *
+                  FROM transfers t
+                 WHERE t.timestamp >= %(ts_start)s;
+            """, dict(ts_start=self.ts_start))
+            done = set((t.tipper, t.tippee, t.context, t.team) for t in done)
+            transfers = [t for t in transfers if (t.tipper, t.tippee, t.context, t.team) not in done]
+        else:
+            with self.db.get_cursor() as cursor:
+                self.prepare(cursor, self.ts_start)
+                self.transfer_virtually(cursor)
+                transfers = [NS(t._asdict()) for t in cursor.all("""
+                    SELECT t.*
+                         , p.mangopay_user_id AS tipper_mango_id
+                         , p2.mangopay_user_id AS tippee_mango_id
+                         , p.mangopay_wallet_id AS tipper_wallet_id
+                         , p2.mangopay_wallet_id AS tippee_wallet_id
+                      FROM payday_transfers t
+                      JOIN participants p ON p.id = t.tipper
+                      JOIN participants p2 ON p2.id = t.tippee
+                """)]
                 self.check_balances(cursor)
-                self.transfer_for_real(transfers)
-                check_db(cursor)
-            except:
-                # Dump transfers for debugging
-                import csv
-                from time import time
-                with open('%s_transfers.csv' % time(), 'wb') as f:
-                    csv.writer(f).writerows(transfers)
-                raise
+                with open(self.transfers_filename, 'wb') as f:
+                    pickle.dump(transfers, f)
+                cursor.run("""
+                    UPDATE paydays
+                       SET nparticipants = (SELECT count(*) FROM payday_participants)
+                     WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
+                """)
+            self.clean_up()
 
-        # Clean up leftover functions
-        self.db.run("""
-            DROP FUNCTION process_take();
-            DROP FUNCTION process_tip();
-            DROP FUNCTION settle_tip_graph();
-            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context);
-        """)
+        self.transfer_for_real(transfers)
+
+        self.db.self_check()
 
     @staticmethod
     def prepare(cursor, ts_start):
@@ -127,22 +138,17 @@ class Payday(object):
                  , balance AS new_balance
                  , is_suspicious
                  , goal
+                 , kind
               FROM participants p
              WHERE is_suspicious IS NOT true
                AND join_time < %(ts_start)s
-               AND mangopay_user_id IS NOT NULL
+               AND (mangopay_user_id IS NOT NULL OR kind = 'group')
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
-        CREATE UNIQUE INDEX ON payday_participants (username);
-
-        CREATE TEMPORARY TABLE payday_transfers_done ON COMMIT DROP AS
-            SELECT *
-              FROM transfers t
-             WHERE t.timestamp > %(ts_start)s;
 
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
-            SELECT tipper, tippee, amount
+            SELECT t.id, tipper, tippee, amount, (p2.kind = 'group') AS to_team
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -152,31 +158,26 @@ class Payday(object):
               JOIN payday_participants p2 ON p2.id = t.tippee
              WHERE t.amount > 0
                AND (p2.goal IS NULL or p2.goal >= 0)
-               AND ( SELECT id
-                       FROM payday_transfers_done t2
-                      WHERE t.tipper = t2.tipper
-                        AND t.tippee = t2.tippee
-                        AND context = 'tip'
-                   ) IS NULL
           ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
         CREATE INDEX ON payday_tips (tippee);
         ALTER TABLE payday_tips ADD COLUMN is_funded boolean;
 
-        ALTER TABLE payday_participants ADD COLUMN giving_today numeric(35,2);
-        UPDATE payday_participants p
-           SET giving_today = COALESCE((
-                   SELECT sum(amount)
-                     FROM payday_tips
-                    WHERE tipper = p.id
-               ), 0);
+        CREATE TEMPORARY TABLE payday_takes ON COMMIT DROP AS
+            SELECT team, member, amount
+              FROM ( SELECT DISTINCT ON (team, member)
+                            team, member, amount
+                       FROM takes
+                      WHERE mtime < %(ts_start)s
+                   ORDER BY team, member, mtime DESC
+                   ) t
+             WHERE t.amount IS NOT NULL
+               AND t.amount > 0
+               AND t.team IN (SELECT id FROM payday_participants)
+               AND t.member IN (SELECT id FROM payday_participants);
 
-        CREATE TEMPORARY TABLE payday_takes
-        ( team bigint
-        , member bigint
-        , amount numeric(35,2)
-        ) ON COMMIT DROP;
+        CREATE UNIQUE INDEX ON payday_takes (team, member);
 
         CREATE TEMPORARY TABLE payday_transfers
         ( timestamp timestamptz DEFAULT now()
@@ -184,13 +185,14 @@ class Payday(object):
         , tippee bigint
         , amount numeric(35,2)
         , context transfer_context
-        , UNIQUE (tipper, tippee, context)
+        , team bigint
+        , UNIQUE (tipper, tippee, context, team)
         ) ON COMMIT DROP;
 
 
         -- Prepare a statement that makes and records a transfer
 
-        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context)
+        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint)
         RETURNS void AS $$
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;
@@ -203,8 +205,8 @@ class Payday(object):
                  WHERE id = $2;
                 IF (NOT FOUND) THEN RAISE 'tippee not found'; END IF;
                 INSERT INTO payday_transfers
-                            (tipper, tippee, amount, context)
-                     VALUES ($1, $2, $3, $4);
+                            (tipper, tippee, amount, context, team)
+                     VALUES ($1, $2, $3, $4, $5);
             END;
         $$ LANGUAGE plpgsql;
 
@@ -221,7 +223,7 @@ class Payday(object):
                      WHERE id = NEW.tipper
                 );
                 IF (NEW.amount <= tipper.new_balance) THEN
-                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip');
+                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL);
                     RETURN NEW;
                 END IF;
                 RETURN NULL;
@@ -230,37 +232,11 @@ class Payday(object):
 
         CREATE TRIGGER process_tip BEFORE UPDATE OF is_funded ON payday_tips
             FOR EACH ROW
-            WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true)
+            WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true AND NEW.to_team IS NOT true)
             EXECUTE PROCEDURE process_tip();
 
 
-        -- Create a trigger to process takes
-
-        CREATE OR REPLACE FUNCTION process_take() RETURNS trigger AS $$
-            DECLARE
-                actual_amount numeric(35,2);
-                team_balance numeric(35,2);
-            BEGIN
-                team_balance := (
-                    SELECT new_balance
-                      FROM payday_participants
-                     WHERE id = NEW.team
-                );
-                IF (team_balance <= 0) THEN RETURN NULL; END IF;
-                actual_amount := NEW.amount;
-                IF (team_balance < NEW.amount) THEN
-                    actual_amount := team_balance;
-                END IF;
-                EXECUTE transfer(NEW.team, NEW.member, actual_amount, 'take');
-                RETURN NULL;
-            END;
-        $$ LANGUAGE plpgsql;
-
-        CREATE TRIGGER process_take AFTER INSERT ON payday_takes
-            FOR EACH ROW EXECUTE PROCEDURE process_take();
-
-
-        -- Create a function to settle whole tip graph
+        -- Create a function to settle one-to-one donations
 
         CREATE OR REPLACE FUNCTION settle_tip_graph() RETURNS void AS $$
             DECLARE
@@ -273,6 +249,7 @@ class Payday(object):
                          UPDATE payday_tips
                             SET is_funded = true
                           WHERE is_funded IS NOT true
+                            AND to_team IS NOT true
                       RETURNING *
                     )
                     SELECT COUNT(*) FROM updated_rows INTO count;
@@ -287,43 +264,74 @@ class Payday(object):
         $$ LANGUAGE plpgsql;
 
 
-        -- Save the stats we already have
+        -- Create a function to resolve many-to-many donations (team takes)
 
-        UPDATE paydays
-           SET nparticipants = (SELECT count(*) FROM payday_participants)
-         WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
+        CREATE OR REPLACE FUNCTION resolve_takes(team_id bigint) RETURNS void AS $$
+            DECLARE
+                total_income numeric(35,2);
+                total_takes numeric(35,2);
+                ratio numeric;
+                tip record;
+                take record;
+                amount numeric(35,2);
+                our_tips CURSOR FOR
+                    SELECT t.id, t.tipper, (round_up(t.amount * ratio, 2)) AS amount
+                      FROM payday_tips t
+                      JOIN payday_participants p ON p.id = t.tipper
+                     WHERE t.tippee = team_id;
+                our_takes CURSOR FOR
+                    SELECT t.member, (round_up(t.amount * ratio, 2)) AS amount
+                      FROM payday_takes t
+                     WHERE t.team = team_id
+                  ORDER BY t.member;
+            BEGIN
+                total_income := (
+                    SELECT sum(t.amount)
+                      FROM payday_tips t
+                      JOIN payday_participants p ON p.id = t.tipper
+                     WHERE t.tippee = team_id
+                       AND p.new_balance >= t.amount
+                );
+                total_takes := (
+                    SELECT sum(t.amount)
+                      FROM payday_takes t
+                     WHERE t.team = team_id
+                );
+                IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
+                ratio := total_income / total_takes;
+
+                OPEN our_takes;
+                FETCH our_takes INTO take;
+                FOR tip IN our_tips LOOP
+                    LOOP
+                        IF (take.amount = 0) THEN
+                            FETCH our_takes INTO take;
+                            IF (take IS NULL) THEN RETURN; END IF;
+                        END IF;
+                        amount := min(tip.amount, take.amount);
+                        IF (tip.tipper <> take.member) THEN
+                            UPDATE payday_tips SET is_funded = true WHERE id = tip.id;
+                            EXECUTE transfer(tip.tipper, take.member, amount, 'take', team_id);
+                        END IF;
+                        tip.amount := tip.amount - amount;
+                        take.amount := take.amount - amount;
+                        EXIT WHEN tip.amount = 0;
+                    END LOOP;
+                END LOOP;
+                RETURN;
+            END;
+        $$ LANGUAGE plpgsql;
 
         """, dict(ts_start=ts_start))
         log('Prepared the DB.')
 
     @staticmethod
-    def transfer_virtually(cursor, ts_start):
+    def transfer_virtually(cursor):
         cursor.run("""
-
-        SELECT settle_tip_graph();
-
-        INSERT INTO payday_takes
-            SELECT team, member, amount
-              FROM ( SELECT DISTINCT ON (team, member)
-                            team, member, amount, ctime
-                       FROM takes
-                      WHERE mtime < %(ts_start)s
-                   ORDER BY team, member, mtime DESC
-                   ) t
-             WHERE t.amount > 0
-               AND t.team IN (SELECT id FROM payday_participants)
-               AND t.member IN (SELECT id FROM payday_participants)
-               AND ( SELECT id
-                       FROM payday_transfers_done t2
-                      WHERE t.team = t2.tipper
-                        AND t.member = t2.tippee
-                        AND context = 'take'
-                   ) IS NULL
-          ORDER BY t.team, t.ctime DESC;
-
-        SELECT settle_tip_graph();
-
-        """, dict(ts_start=ts_start))
+            SELECT settle_tip_graph();
+            SELECT resolve_takes(team) FROM payday_takes GROUP BY team ORDER BY team;
+            SELECT settle_tip_graph();
+        """)
 
     @staticmethod
     def check_balances(cursor):
@@ -351,7 +359,15 @@ class Payday(object):
     def transfer_for_real(self, transfers):
         db = self.db
         for t in transfers:
-            transfer(db, **t._asdict())
+            transfer(db, **t.__dict__)
+
+    def clean_up(self):
+        self.db.run("""
+            DROP FUNCTION process_tip();
+            DROP FUNCTION settle_tip_graph();
+            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint);
+            DROP FUNCTION resolve_takes(bigint);
+        """)
 
     def update_stats(self):
         self.db.run("""\
@@ -393,8 +409,57 @@ class Payday(object):
         log("Updated payday stats.")
 
     def update_cached_amounts(self):
+        now = aspen.utils.utcnow()
         with self.db.get_cursor() as cursor:
-            cursor.execute(FAKE_PAYDAY)
+            self.prepare(cursor, now)
+            self.transfer_virtually(cursor)
+            cursor.run("""
+
+            UPDATE tips t
+               SET is_funded = t2.is_funded
+              FROM payday_tips t2
+             WHERE t.id = t2.id
+               AND t.is_funded <> t2.is_funded;
+
+            UPDATE participants p
+               SET giving = p2.giving
+              FROM ( SELECT tipper AS id, sum(amount) AS giving
+                       FROM payday_transfers
+                   GROUP BY tipper
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.giving <> p2.giving;
+
+            UPDATE participants p
+               SET taking = p2.taking
+              FROM ( SELECT tippee AS id, sum(amount) AS taking
+                       FROM payday_transfers
+                      WHERE context = 'take'
+                   GROUP BY tippee
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.taking <> p2.taking;
+
+            UPDATE participants p
+               SET receiving = p2.receiving
+              FROM ( SELECT tippee AS id, sum(amount) AS receiving
+                       FROM payday_transfers
+                   GROUP BY tippee
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.receiving <> p2.receiving;
+
+            UPDATE participants p
+               SET npatrons = p2.npatrons
+              FROM ( SELECT tippee AS id, count(*) AS npatrons
+                       FROM payday_transfers
+                   GROUP BY tippee
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.npatrons <> p2.npatrons;
+
+            """)
+        self.clean_up()
         log("Updated receiving amounts.")
 
     def end(self):
@@ -407,3 +472,25 @@ class Payday(object):
 
     def notify_participants(self):
         pass  # TODO
+
+
+if __name__ == '__main__':  # pragma: no cover
+    from liberapay import wireup
+    from liberapay.billing.exchanges import sync_with_mangopay
+
+    # Wire things up.
+    # ===============
+
+    env = wireup.env()
+    db = wireup.db(env)
+    Payday.db = db
+    wireup.billing(env)
+
+    try:
+        sync_with_mangopay(db)
+        Payday.start().run()
+    except KeyboardInterrupt:
+        pass
+    except:
+        import traceback
+        traceback.print_exc()

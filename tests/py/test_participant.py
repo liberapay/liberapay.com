@@ -405,13 +405,6 @@ class Tests(Harness):
 
     # pledging
 
-    def test_pledging_only_counts_latest_tip(self):
-        alice = self.make_participant('alice', balance=100)
-        bob = self.make_elsewhere('github', 58946, 'bob').participant
-        alice.set_tip_to(bob, '12.00')
-        alice.set_tip_to(bob, '3.00')
-        assert alice.pledging == Decimal('3.00')
-
     def test_cant_pledge_to_locked_accounts(self):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_stub(goal=-1)

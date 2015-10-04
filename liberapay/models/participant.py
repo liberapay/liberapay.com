@@ -116,6 +116,18 @@ class Participant(Model, MixinTeam):
             p.change_username(username, c)
         return p
 
+    def make_team(self, name):
+        with self.db.get_cursor() as c:
+            t = c.one("""
+                INSERT INTO participants
+                            (kind, status, join_time)
+                     VALUES ('group', 'active', now())
+                  RETURNING participants.*::participants
+            """)
+            t.change_username(name, c)
+            t.add_member(self, c)
+        return t
+
     @classmethod
     def from_id(cls, id):
         """Return an existing participant based on id.
@@ -304,7 +316,7 @@ class Participant(Model, MixinTeam):
 
     @property
     def usage(self):
-        return max(self.giving + self.pledging, self.receiving)
+        return max(self.giving, self.receiving)
 
     @property
     def suggested_payment(self):
@@ -444,7 +456,7 @@ class Participant(Model, MixinTeam):
              WHERE member=%s
         """, (self.id,))
         for t in teams:
-            t.set_take_for(self, Decimal(0), self, cursor)
+            t.set_take_for(self, None, self, cursor)
 
     def clear_personal_information(self, cursor):
         """Clear personal information such as statements and goal.
@@ -461,7 +473,6 @@ class Participant(Model, MixinTeam):
                  , session_token=NULL
                  , session_expires=now()
                  , giving=0
-                 , pledging=0
                  , receiving=0
                  , npatrons=0
              WHERE id=%(id)s
@@ -473,11 +484,11 @@ class Participant(Model, MixinTeam):
     @property
     def closed_time(self):
         return self.db.one("""
-            SELECT ts AT TIME ZONE 'UTC'
+            SELECT ts
               FROM events
              WHERE participant=%s
                AND type='set_status'
-               AND payload='closed'
+               AND payload='"closed"'
           ORDER BY ts DESC
              LIMIT 1
         """, (str(self.id),))
@@ -964,32 +975,24 @@ class Participant(Model, MixinTeam):
              RETURNING *
             """, (is_funded, tip.id)))
 
-        # Update giving and pledging on participant
-        giving, pledging = (cursor or self.db).one("""
-            WITH our_tips AS (
-                     SELECT amount, p2.status
+        # Update giving on participant
+        giving = (cursor or self.db).one("""
+            UPDATE participants p
+               SET giving = COALESCE((
+                     SELECT sum(amount)
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
                         AND p2.is_suspicious IS NOT true
+                        AND p2.status = 'active'
+                        AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
                         AND amount > 0
                         AND is_funded
-                 )
-            UPDATE participants p
-               SET giving = COALESCE((
-                       SELECT sum(amount)
-                         FROM our_tips
-                        WHERE status = 'active'
-                   ), 0)
-                 , pledging = COALESCE((
-                       SELECT sum(amount)
-                         FROM our_tips
-                        WHERE status = 'stub'
                    ), 0)
              WHERE p.id = %(id)s
-         RETURNING giving, pledging
+         RETURNING giving
         """, dict(id=self.id))
-        self.set_attributes(giving=giving, pledging=pledging)
+        self.set_attributes(giving=giving)
 
         return updated
 
@@ -1076,7 +1079,7 @@ class Participant(Model, MixinTeam):
         t = (cursor or self.db).one(NEW_TIP, args)._asdict()
 
         if update_self:
-            # Update giving/pledging amount of tipper
+            # Update giving amount of tipper
             updated = self.update_giving(cursor)
             for u in updated:
                 if u.id == t['id']:
@@ -1181,7 +1184,7 @@ class Participant(Model, MixinTeam):
                      , p.username
                      , p.kind
                      , t.is_funded
-                     , (p.mangopay_user_id IS NOT NULL) AS is_identified
+                     , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
                      , p.is_suspicious
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
@@ -1537,6 +1540,9 @@ class Participant(Model, MixinTeam):
             elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
 
         return output
+
+    def path(self, path):
+        return '/%s/%s' % (self.username, path)
 
 
 class NeedConfirmation(Exception):

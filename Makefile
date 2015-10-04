@@ -48,6 +48,9 @@ run_:
 py: env
 	PYTHONPATH=. $(with_local_env) $(env_bin)/python -i liberapay/main.py
 
+payday: env
+	PYTHONPATH=. $(with_local_env) $(env_bin)/python liberapay/billing/payday.py
+
 test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 

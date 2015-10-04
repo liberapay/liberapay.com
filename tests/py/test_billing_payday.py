@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from decimal import Decimal as D
+import os
 
 import mock
 
@@ -65,8 +66,8 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         emma = Participant.make_stub(username='emma')
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
-        alice.set_tip_to(emma, '1.00')
-        alice.set_tip_to(team, '4.00')
+        alice.set_tip_to(emma, '0.50')
+        alice.set_tip_to(team, '1.00')
         bob.set_tip_to(alice, '5.00')
         team.add_member(bob)
         team.set_take_for(bob, D('1.00'), bob)
@@ -80,8 +81,7 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             carl = Participant.from_username('carl')
             dana = Participant.from_username('dana')
             emma = Participant.from_username('emma')
-            assert alice.giving == D('13.00')
-            assert alice.pledging == D('1.00')
+            assert alice.giving == D('10.00')
             assert alice.receiving == D('5.00')
             assert bob.giving == D('7.00')
             assert bob.receiving == D('7.00')
@@ -90,10 +90,10 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             assert carl.receiving == D('0.00')
             assert dana.receiving == D('5.00')
             assert dana.npatrons == 2
-            assert emma.receiving == D('1.00')
+            assert emma.receiving == D('0.50')
             assert emma.npatrons == 1
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
-            assert funded_tips == [3, 6, 1, 4, 5, 2]
+            assert funded_tips == [3, 6, 0.5, 1, 5, 2]
 
         # Pre-test check
         check()
@@ -104,13 +104,17 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
 
         # Check that update_cached_amounts actually updates amounts
         self.db.run("""
-            UPDATE tips SET is_funded = false;
+            UPDATE tips t
+               SET is_funded = false
+              FROM participants p
+             WHERE p.id = t.tippee
+               AND p.mangopay_user_id IS NOT NULL;
             UPDATE participants
                SET giving = 0
                  , npatrons = 0
-                 , pledging = 0
                  , receiving = 0
-                 , taking = 0;
+                 , taking = 0
+             WHERE mangopay_user_id IS NOT NULL;
         """)
         Payday.start().update_cached_amounts()
         check()
@@ -129,7 +133,6 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             for username in reversed(usernames[1:]):
                 user = Participant.from_username(username)
                 assert user.giving == D('1.00')
-                assert user.pledging == D('0.00')
                 assert user.receiving == D('1.00')
                 assert user.npatrons == 1
             funded_tips = self.db.all("SELECT id FROM tips WHERE is_funded ORDER BY id")
@@ -226,7 +229,7 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[self.janet.id] == 20
             assert new_balances[self.homer.id] == 0
@@ -248,7 +251,7 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[self.david.id] == D('0.49')
             assert new_balances[self.janet.id] == D('0.51')
@@ -264,7 +267,7 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[alice.id] == D('0')
             assert new_balances[self.homer.id] == D('30')
@@ -272,11 +275,13 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             assert new_balances[self.david.id] == D('5')
 
     def test_transfer_takes(self):
-        a_team = self.make_participant('a_team', kind='group', balance=20)
+        a_team = self.make_participant('a_team', kind='group')
         alice = self.make_participant('alice')
-        a_team.add_member(alice)
-        a_team.add_member(self.make_participant('bob'))
         a_team.set_take_for(alice, D('1.00'), alice)
+        bob = self.make_participant('bob')
+        a_team.set_take_for(bob, D('0.01'), bob)
+        charlie = self.make_participant('charlie', balance=1000)
+        charlie.set_tip_to(a_team, D('1.01'))
 
         payday = Payday.start()
 
@@ -288,15 +293,17 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
         for i in range(3):
             payday.shuffle()
 
+        os.unlink(payday.transfers_filename)
+
         participants = self.db.all("SELECT username, balance FROM participants")
 
         for p in participants:
-            if p.username == 'a_team':
-                assert p.balance == D('18.99')
-            elif p.username == 'alice':
+            if p.username == 'alice':
                 assert p.balance == D('1.00')
             elif p.username == 'bob':
                 assert p.balance == D('0.01')
+            elif p.username == 'charlie':
+                assert p.balance == D('998.99')
             else:
                 assert p.balance == 0
 

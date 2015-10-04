@@ -6,7 +6,6 @@ from liberapay.utils import get_participant, markdown
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
-tip_or_pledge = "tip"
 title = participant.username
 
 lang = request.qs.get('lang')
@@ -16,13 +15,12 @@ else:
     statement, lang = participant.get_statement(request.accept_langs)
 
 langs = participant.get_statement_langs()
-langs = 'en fr de it es'.split()
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/profile.html" %}
 
 {% block heading %}
-{% if user == participant %}
+{% if user == participant or participant.kind == 'group' and user.member_of(participant) %}
     <a href="edit" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
 {% endif %}
 {{ super() }}
@@ -53,8 +51,12 @@ langs = 'en fr de it es'.split()
         </section>
     </div>
     {% endif %}
+    {% if participant.kind == 'group' %}
+    {% include "templates/members-listing.html" %}
+    {% else %}
     {% include "templates/connected-accounts.html" %}
     {% include "templates/team-listing.html" %}
     {% include "templates/community-listing.html" %}
+    {% endif %}
 </div>
 {% endblock %}

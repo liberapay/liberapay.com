@@ -1,18 +1,50 @@
 # encoding: utf8
+
+from aspen import Response
+
+from liberapay.exceptions import UsernameAlreadyTaken
+from liberapay.models.participant import Participant
+
 [---]
+
+if request.method == 'POST':
+    if user.ANON:
+        raise Response(403)
+    name = request.body['name']
+    t = Participant.from_username(name)
+    if t:
+        if t.kind == 'group' and t.status == 'closed' and user.id == t.closed_by:
+            with website.db.get_cursor() as c:
+                t.update_status('active', c)
+                t.add_member(user, c)
+        else:
+            raise UsernameAlreadyTaken(name)
+    else:
+        t = user.make_team(name)
+    response.redirect('/'+t.username+'/edit')
+
 title = _("Teams")
 [---] text/html
 {% extends "templates/about.html" %}
 {% block content %}
 
 <p>{{ _(
-    "A Liberapay team account is a collective donation jar, it allows a group "
-    "of users to receive money, and share it democratically."
+    "A Liberapay team coordinates donations from multiple donors to multiple "
+    "donees. Donors choose how much they want to give, donees decide how to "
+    "share the money, Liberapay computes and executes the transfers from "
+    "donors to donees."
 ) }}</p>
 
 <h2>{{ _("Creating a team") }}</h2>
 
-<p>TODO</p>
+{% if user.ANON %}
+    <p>{{ _("You need to {0}sign in{1} first.",
+            '<a href="/sign-in?back_to=%s">'|safe % urlquote(request.line.uri),
+            '</a>'|safe
+) }}</p>
+{% else %}
+    {% include "templates/create-team.html" %}
+{% endif %}
 
 <h2>{{ _("Becoming a team member") }}</h2>
 

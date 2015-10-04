@@ -1,0 +1,14 @@
+{{ _("You have been invited to join a team on Liberapay") }}
+
+[---] text/html
+<p>{{ _("{0} has invited you to join the {1} team.", inviter, team) }}</p>
+
+<a href="{{ team_url }}" style="{{ button_style }}">{{ _("See the team's profile") }}</a>
+<a href="{{ team_url }}membership/accept" style="{{ button_style }}">{{ _("Accept") }}</a>
+<a href="{{ team_url }}membership/refuse" style="{{ button_style }}">{{ _("Refuse") }}</a>
+[---] text/plain
+{{ _("{0} has invited you to join the {1} team.", inviter, team) }}
+
+{{ _("See the team's profile") }}: {{ team_url }}
+{{ _("Accept") }}: {{ team_url }}membership/accept
+{{ _("Refuse") }}: {{ team_url }}membership/refuse

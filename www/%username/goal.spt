@@ -31,12 +31,6 @@ else:
 [---] text/html
 {% extends "templates/base.html" %}
 {% block content %}
-    <form action="" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="goal" value="{{ goal }}" />
-        <input type="hidden" name="confirmed" value="true" />
-        <div class="alert alert-danger">{{ msg }}</div>
-        <a class="btn btn-default" href="./edit">{{ _("Cancel") }}</a>
-        <button class="btn btn-danger">{{ _("Confirm") }}</button>
-    </form>
+    {% from "templates/confirm.html" import confirm with context %}
+    {{ confirm(msg, request.body, './edit') }}
 {% endblock %}

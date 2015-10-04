@@ -1,0 +1,10 @@
+<form action="/about/teams" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <div class="input-group">
+        <input class="form-control" name="name" size=30
+               placeholder="{{ _('Name of the team') }}" />
+        <div class="input-group-btn">
+            <button class="btn btn-success">{{ _("Create") }}</button>
+        </div>
+    </div>
+</form>

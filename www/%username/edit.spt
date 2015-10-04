@@ -9,7 +9,7 @@ from liberapay.utils import get_participant, markdown
 from liberapay.utils.i18n import LANGUAGES_2
 
 [---]
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
     lang = request.body['lang']
@@ -33,6 +33,8 @@ pref_langs = set(request.accept_langs + participant.get_statement_langs())
 select_langs = OrderedDict((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
 select_langs.update([('', '---')])  # Separator
 select_langs.update(locale.languages_2)
+if not lang:
+    lang = select_langs.keys()[0]
 stmt_placeholder = _("You don't have a profile statement in this language yet.")
 confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
 
@@ -51,6 +53,8 @@ GOAL_PARTS = GOAL_RAW.split("{0}")
 
 edit = True
 
+title = participant.username
+
 [---] text/html
 {% extends "templates/profile.html" %}
 
@@ -60,9 +64,7 @@ edit = True
 {% endblock %}
 
 {% block heading %}
-{% if user == participant %}
     <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
-{% endif %}
 {{ super() }}
 {% endblock %}
 
@@ -91,6 +93,7 @@ edit = True
             {{ GRATEFUL }}
         </label>
 
+        {% if participant.kind != 'group' %}
         <label>
             <input type="radio" name="goal" id="goal-0" value="0.00"
                    {{ 'checked' if user.goal == 0 }} />
@@ -102,6 +105,7 @@ edit = True
                    {{ 'checked' if user.goal and user.goal < 0 }} />
             {{ PATRON_NO_GIFTS }}
         </label>
+        {% endif %}
     </div>
 
     <button class="save btn btn-primary">{{ _("Save") }}</button>
@@ -167,8 +171,12 @@ edit = True
         {% endif %}
 
     </div>
+    {% if participant.kind == 'group' %}
+    {% include "templates/members-listing.html" %}
+    {% else %}
     {% include "templates/connected-accounts.html" %}
     {% include "templates/team-listing.html" %}
     {% include "templates/community-listing.html" %}
+    {% endif %}
 </div>
 {% endblock %}
