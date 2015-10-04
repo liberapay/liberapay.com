@@ -160,7 +160,7 @@ class Tests(Harness):
         alice = Participant.from_username('alice')
         assert alice.receiving == alice.taking == 25
 
-    # get_take_last_week_for - gtlwf
+    # get_takes_last_week - gtlw
 
     def test_gtlwf_works_during_payday(self):
         team = self.make_team()
@@ -169,9 +169,9 @@ class Tests(Harness):
         take_this_week = D('42.00')
         team.set_take_for(alice, take_this_week, alice)
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
-        assert team.get_take_last_week_for(alice) == 30
+        assert team.get_takes_last_week()[alice.id] == 30
         self.db.run("""
             INSERT INTO transfers (tipper, tippee, amount, context, status, team)
             VALUES (%(tipper)s, %(id)s, %(amount)s, 'take', 'succeeded', %(team)s)
         """, dict(tipper=self.warbucks.id, id=alice.id, amount=take_this_week, team=team.id))
-        assert team.get_take_last_week_for(alice) == 30
+        assert team.get_takes_last_week()[alice.id] == 30

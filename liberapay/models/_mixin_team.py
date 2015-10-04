@@ -4,9 +4,12 @@ from __future__ import division, print_function, unicode_literals
 
 from collections import OrderedDict
 from decimal import Decimal, ROUND_UP
+from statistics import median
 
 
+ZERO = Decimal('0.00')
 CENT = Decimal('0.01')
+UNIT = Decimal('1.00')
 
 
 class MemberLimitReached(Exception): pass
@@ -34,7 +37,7 @@ class MixinTeam(object):
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, Decimal('0.00'), self, cursor=cursor)
+        self.set_take_for(member, ZERO, self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
@@ -55,25 +58,26 @@ class MixinTeam(object):
              WHERE team=%s AND member=%s
         """, (team.id, self.id), default=False)
 
-    def get_take_last_week_for(self, member):
-        """Get the user's nominal take last week. Used in throttling.
+    def get_takes_last_week(self):
+        """Get the users' nominal takes last week. Used in throttling.
         """
         assert self.kind == 'group'
-        member_id = getattr(member, 'id', None) or member['id']
-        return self.db.one("""
+        takes = {t.member: t.amount for t in self.db.all("""
 
-            SELECT amount
+            SELECT DISTINCT (member) member, amount, mtime
               FROM takes
-             WHERE team=%s AND member=%s
+             WHERE team=%s
                AND mtime < (
                        SELECT ts_start
                          FROM paydays
                         WHERE ts_end > ts_start
                      ORDER BY ts_start DESC LIMIT 1
                    )
-          ORDER BY mtime DESC LIMIT 1
+          ORDER BY member, mtime DESC
 
-        """, (self.id, member_id)) or Decimal('0.00')
+        """, (self.id,)) if t.amount}
+        takes['_relative_min'] = median(takes.values() or (0,)) ** Decimal('0.7')
+        return takes
 
     def get_take_for(self, member):
         """Return a Decimal representation of the take for this member, or 0.
@@ -82,13 +86,18 @@ class MixinTeam(object):
         return self.db.one( "SELECT amount FROM current_takes "
                             "WHERE member=%s AND team=%s"
                           , (member.id, self.id)
-                          , default=Decimal('0.00')
+                          , default=ZERO
                            )
 
-    def compute_max_this_week(self, last_week):
-        """2x last week's take, but at least a dollar.
+    def compute_max_this_week(self, member_id, last_week):
+        """2x the member's take last week, but at least 1 unit or a minimum
+        based on last week's median take.
         """
-        return max(last_week * Decimal('2'), Decimal('1.00'))
+        return max(
+            last_week.get(member_id, 0) * 2,
+            last_week['_relative_min'],
+            UNIT
+        )
 
     def set_take_for(self, member, take, recorder, check_max=True, cursor=None):
         """Sets member's take from the team pool.
@@ -96,8 +105,8 @@ class MixinTeam(object):
         assert self.kind == 'group'
 
         if take and check_max:
-            last_week = self.get_take_last_week_for(member)
-            max_this_week = self.compute_max_this_week(last_week)
+            last_week = self.get_takes_last_week()
+            max_this_week = self.compute_max_this_week(member.id, last_week)
             if take > max_this_week:
                 take = max_this_week
 
@@ -138,8 +147,8 @@ class MixinTeam(object):
         and `new_takes`.
         """
         for p_id in set(old_takes.keys()).union(new_takes.keys()):
-            old = old_takes.get(p_id, {}).get('actual_amount', Decimal(0))
-            new = new_takes.get(p_id, {}).get('actual_amount', Decimal(0))
+            old = old_takes.get(p_id, {}).get('actual_amount', ZERO)
+            new = new_takes.get(p_id, {}).get('actual_amount', ZERO)
             diff = new - old
             if diff != 0:
                 (cursor or self.db).run("""
@@ -197,15 +206,16 @@ class MixinTeam(object):
         """Return an OrderedDict of member dicts.
         """
         takes = self.compute_actual_takes()
+        last_week = self.get_takes_last_week()
         members = OrderedDict()
         for take in takes.values():
             member = {}
-            member['id'] = take['member_id']
+            m_id = member['id'] = take['member_id']
             member['username'] = take['member_name']
             member['nominal_take'] = take['nominal_take']
             member['actual_amount'] = take['actual_amount']
-            member['last_week'] = last_week = self.get_take_last_week_for(member)
-            member['max_this_week'] = self.compute_max_this_week(last_week)
+            member['last_week'] = last_week.get(m_id, ZERO)
+            member['max_this_week'] = self.compute_max_this_week(m_id, last_week)
             members[member['id']] = member
         return members
 
