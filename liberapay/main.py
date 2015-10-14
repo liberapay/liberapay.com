@@ -4,7 +4,7 @@ import __builtin__
 import base64
 from urllib import quote as urlquote
 
-from liberapay import canonize, insert_constants, utils, wireup
+from liberapay import canonize, fill_accept_header, insert_constants, utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
@@ -97,6 +97,7 @@ algorithm.functions = [
     algorithm['apply_typecasters_to_path'],
     algorithm['get_resource_for_request'],
     algorithm['extract_accept_from_request'],
+    fill_accept_header,
     algorithm['get_response_for_resource'],
 
     tell_sentry,

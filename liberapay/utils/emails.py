@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from aspen.resources.pagination import parse_specline, split_and_escape
+from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
 from jinja2 import Environment
 
