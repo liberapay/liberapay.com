@@ -1,0 +1,36 @@
+from liberapay.utils import get_participant, include_svg
+
+with open(website.www_root+'/assets/liberapay/icon.svg') as f:
+    ICON = f.read()
+ICON = include_svg(ICON, 16, 16)
+
+[---]
+
+participant = get_participant(state, restrict=False)
+
+response.headers['Cache-Control'] = 'public, max-age=86400'
+response.headers['Vary'] = 'Accept-Language'
+
+[---] application/javascript via jinja2_html_jswrapped
+<style>
+html > body .liberapay-btn {
+    background-image: linear-gradient(#ff6762, #e25c57);
+    border: 1px solid #c7514c;
+    border-bottom-color: #aa4541;
+    border-radius: 4px;
+    color: #222;
+    display: inline-block;
+    font-family: Helvetica Neue,Helvetica,sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 6px;
+    text-decoration: none;
+}
+html > body .liberapay-btn:hover {
+    background-image: linear-gradient(#F55d57, #d7534d);
+}
+.liberapay-btn > svg, .liberapay-btn > span {
+    vertical-align: middle;
+}
+</style>
+<a class="liberapay-btn" href="{{ participant.profile_url }}">{{ ICON }} <span>{{ _("Donate") }}</span></a>

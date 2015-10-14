@@ -1,0 +1,33 @@
+from aspen import Response
+from markupsafe import Markup
+
+from liberapay.utils import get_participant
+
+A, B = Markup('<strong style="font-weight: 700">'), Markup('</strong><br>')
+
+[---]
+
+t = request.path['type']
+if t not in ('giving.js', 'receiving.js'):
+    raise Response(400)
+
+participant = get_participant(state, restrict=False)
+
+response.headers['Cache-Control'] = 'public, max-age=600'
+response.headers['Vary'] = 'Accept-Language'
+
+[---] application/javascript via jinja2_html_jswrapped
+<a href="{{ participant.profile_url }}"
+   style="background-image: linear-gradient(#ffcdc7, #f7b3ad);
+          border: 2px solid #e7716c; border-radius: 5px; color: #444;
+          display: inline-block;
+          font-family: Helvetica Neue,Helvetica,sans-serif; font-size: 14px;
+          padding: 5px 7px; text-align: center;
+          text-decoration: none;"
+>{% if participant.kind == 'individual' %}{{
+    _("{0}I donate {1} weekly{2}on Liberapay", A, Money(participant.giving, 'EUR'), B) if t[0] == 'g' else
+    _("{0}I receive {1} weekly{2}on Liberapay", A, Money(participant.receiving, 'EUR'), B)
+}}{% else %}{{
+    _("{0}We donate {1} weekly{2}on Liberapay", A, Money(participant.giving, 'EUR'), B) if t[0] == 'g' else
+    _("{0}We receive {1} weekly{2}on Liberapay", A, Money(participant.receiving, 'EUR'), B)
+}}{% endif %}</a>

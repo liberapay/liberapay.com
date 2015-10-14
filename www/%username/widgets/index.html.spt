@@ -1,47 +1,54 @@
 from liberapay.utils import get_participant
 
-[-----------------------------------------------------------------------------]
+[---]
 
 participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Widgets")
+profile_url = participant.profile_url
 
-[-----------------------------------------------------------------------------]
+[---]
 {% extends "templates/settings.html" %}
 {% block content %}
 <div class="col0">
 
-    <h2>{{ _("Badge") }}</h2>
+    <h2>{{ _("Donation Button") }}</h2>
 
-    <p>{{ _("Use this code to embed a Liberapay badge on your website:") }}</p>
+    <p>{{ _("Use this code to add a donation button on your website:") }}</p>
 
-    <pre>&lt;img src="//img.shields.io/liberapay/{{ participant.username }}.svg"&gt;</pre>
+    <pre>&lt;script src="{{ profile_url }}widgets/button.js"&gt;&lt;/script&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <img src="//img.shields.io/liberapay/{{ participant.username }}.svg">
+    <p><script src="button.js"></script></p>
+
+    <h2>{{ _("Static Donation Button") }}</h2>
+
+    <p>{{ _("Use this code to embed a static donation button on your website:") }}</p>
+
+    <pre>&lt;a href="{{ profile_url }}"&gt;&lt;img src="https://static.liberapay.com/widgets/donate.svg"&gt;&lt;/a&gt;</pre>
+
+    <p>{{ _("Here's what it looks like:") }}</p>
+
+    <a href="{{ profile_url }}"><img src="/assets/widgets/donate.svg"></a>
 
     <h2>{{ _("Giving & Receiving Widgets") }}</h2>
 
     <p>{{ _("Use this code to add a Liberapay \"receiving\" widget on your website:") }}</p>
 
-    <pre>&lt;script data-username="{{ participant.username }}"
-        src="//static.liberapay.com/v1.js"&gt;&lt;/script&gt;</pre>
+    <pre>&lt;script src="{{ profile_url }}widgets/receiving.js"&gt;&lt;/script&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <p><script data-username="{{ participant.username }}" src="//static.liberapay.com/v1.js"></script></p>
+    <p><script src="receiving.js"></script></p>
 
-    <p>{{ _("Or, if you'd like to include a \"giving\" widget, you can add the {0} attribute:",
-            "<pre>data-widget=\"giving\"</pre>"|safe) }}</p>
+    <p>{{ _("Or, if you'd like to include a \"giving\" widget, you can use this:") }}</p>
 
-    <pre>&lt;script data-username="{{ participant.username }}"
-        data-widget="giving"
-        src="//static.liberapay.com/v1.js"&gt;&lt;/script&gt;</pre>
+    <pre>&lt;script src="{{ profile_url }}widgets/giving.js"&gt;&lt;/script&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <p><script data-username="{{ participant.username }}" data-widget="giving" src="//static.liberapay.com/v1.js"></script></p>
+    <p><script src="giving.js"></script></p>
 
 </div>
 {% endblock %}

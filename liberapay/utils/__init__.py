@@ -3,10 +3,12 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import date, datetime, timedelta
+import re
 from urllib import quote as urlquote
 
 from aspen import Response, json
 from aspen.utils import to_rfc822, utcnow
+from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
 import liberapay
@@ -148,3 +150,21 @@ def to_javascript(obj):
     """For when you want to inject an object into a <script> tag.
     """
     return json.dumps(obj).replace('</', '<\\/')
+
+
+svg_attrs_re = re.compile(r'\s+(?:height|width|x|y|xmlns)=(["\']).*?\1')
+
+def include_svg(svg, height, width, x=None, y=None):
+    """For when you want to include an SVG in an HTML page or in another SVG.
+    """
+    assert svg.startswith('<svg')
+    i = svg.find('>')
+    assert i != -1
+    d = locals()
+    attrs = svg_attrs_re.sub('', svg[4:i])
+    for a in ('height', 'width', 'x', 'y'):
+        v = d[a]
+        if v is None:
+            continue
+        attrs += ' %s="%s"' % (a, v)
+    return Markup(svg[:4] + attrs + svg[i:])
