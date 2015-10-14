@@ -8,7 +8,7 @@ from io import BytesIO
 import re
 from unicodedata import combining, normalize
 
-from aspen.resources.pagination import parse_specline, split_and_escape
+from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen.utils import utcnow
 from babel.core import LOCALE_ALIASES, Locale
 from babel.dates import format_datetime, format_timedelta
