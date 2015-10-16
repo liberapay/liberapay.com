@@ -1,0 +1,24 @@
+from liberapay.utils import include_svg
+
+with open(website.www_root+'/assets/liberapay/icon.svg') as f:
+    ICON = f.read()
+ICON = include_svg(ICON, 16, 16, x=5, y=5)
+
+[---]
+[---] image/svg+xml via jinja2_xml_min
+<svg xmlns="http://www.w3.org/2000/svg" width="78" height="26">
+    <style><![CDATA[ #front:hover { fill:url(#b); } ]]></style>
+    <linearGradient id="a" x2="0" y2="100%">
+        <stop offset="0" stop-color="#ddd" stop-opacity="0"/>
+        <stop offset="1" stop-color="#333" stop-opacity=".1"/>
+    </linearGradient>
+    <linearGradient id="b" x2="0" y2="100%">
+        <stop offset="0" stop-color="#ddd" stop-opacity=".1"/>
+        <stop offset="1" stop-color="#333" stop-opacity=".1"/>
+    </linearGradient>
+    <rect id="back" stroke="#c7514c" fill="#ff6762" x="1" y=".5" width="76" height="25" rx="2"/>
+    {{ ICON }}
+    <text fill="#333" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+          font-weight="700" font-size="13" x="46.5" y="18">Donate</text>
+    <rect id="front" fill="url(#a)" x="1" y=".5" width="76" height="25" rx="2"/>
+</svg>

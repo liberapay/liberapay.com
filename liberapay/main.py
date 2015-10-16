@@ -10,7 +10,7 @@ from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, x_frame_options
 from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie, timer
-from liberapay.renderers import csv_dump, jinja2_htmlescaped
+from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min
 
 import aspen
 from aspen.website import Website
@@ -26,6 +26,8 @@ website.renderer_default = 'unspecified'  # require explicit renderer, to avoid 
 
 website.renderer_factories['csv_dump'] = csv_dump.Factory(website)
 website.renderer_factories['jinja2_htmlescaped'] = jinja2_htmlescaped.Factory(website)
+website.renderer_factories['jinja2_html_jswrapped'] = jinja2_html_jswrapped.Factory(website)
+website.renderer_factories['jinja2_xml_min'] = jinja2_xml_min.Factory(website)
 website.default_renderers_by_media_type['text/html'] = 'jinja2_htmlescaped'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'  # unescaped is fine here
 

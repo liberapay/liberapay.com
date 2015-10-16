@@ -37,6 +37,7 @@ class TestPages(MangopayHarness):
                      .replace('/%exchange_id.int', '/%s' % self.exchange_id) \
                      .replace('/%redirect_to', '/giving') \
                      .replace('/%back_to', '/Li4=') \
+                     .replace('/%type', '/receiving.js') \
                      .replace('/%endpoint', '/public')
             assert '/%' not in url
             try:
