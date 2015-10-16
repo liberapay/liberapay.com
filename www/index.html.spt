@@ -99,10 +99,11 @@ top_communities = query_cache.all("""
             {% else %}
                 <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
                 <ol>
-                    <li>{{ _("{0}Fill out your profile{1} to let others know about you.",
+                    <li>{{ _("{0}Fill out your profile{1}.",
                              "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</li>
-                    <li>{{ _("Reach a wider audience by {0}embedding our widgets{1} on your blog/website.",
+                    <li>{{ _("{0}Embed our widgets{1} on your blog/website.",
                              "<a href='/%s/widgets/'>"|safe % user.username, "</a>"|safe) }}</li>
+                    <li>{{ _("Contact the people who benefit from your work and ask them to support you.") }}</li>
                 </ol>
             {% endif %}
 
