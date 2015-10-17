@@ -6,7 +6,7 @@
 # Caner Başaran <basaran.caner@gmail.com>, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version:  Liberapay\n"
+"Project-Id-Version: Liberapay\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "Language-Team: Turkish (https://hosted.weblate.org/projects/liberapay/core/tr/)\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -63,6 +63,21 @@ msgid "Your pledge to give {0} every week to {1} will be turned into action now 
 msgstr ""
 
 msgid "Follow this link to view {0}'s profile:"
+msgstr ""
+
+msgid "You have been invited to join a team on Liberapay"
+msgstr ""
+
+msgid "{0} has invited you to join the {1} team."
+msgstr ""
+
+msgid "See the team's profile"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Refuse"
 msgstr ""
 
 msgid "Connect to {0} on Liberapay?"
@@ -191,6 +206,9 @@ msgstr ""
 msgid "When someone I pledge to joins Liberapay"
 msgstr ""
 
+msgid "When someone invites me to join a team"
+msgstr ""
+
 msgid "The transfer to your bank account has failed!"
 msgstr ""
 
@@ -285,7 +303,19 @@ msgstr[1] ""
 msgid "Leave"
 msgstr "Ayrıl"
 
+msgid "Cancel"
+msgstr "İptal"
+
+msgid "Confirm"
+msgstr ""
+
 msgid "Accounts Elsewhere"
+msgstr ""
+
+msgid "Name of the team"
+msgstr ""
+
+msgid "Create"
 msgstr ""
 
 msgid "Disconnect"
@@ -332,6 +362,9 @@ msgstr ""
 
 msgid "Go"
 msgstr "Git"
+
+msgid "Members"
+msgstr "Üyeler"
 
 msgid "Previous"
 msgstr ""
@@ -399,9 +432,6 @@ msgstr ""
 msgid "Closed {0} ago."
 msgstr ""
 
-msgid "Members"
-msgstr "Üyeler"
-
 msgid "Income"
 msgstr ""
 
@@ -438,10 +468,16 @@ msgstr "Bireysel"
 msgid "Sign out"
 msgstr "Oturumu kapat"
 
+msgid "Enter a username"
+msgstr ""
+
+msgid "Invite"
+msgstr ""
+
 msgid "Explore teams"
 msgstr ""
 
-msgid "Learn more about how teams work"
+msgid "About teams"
 msgstr ""
 
 msgid "to pledge to {0}"
@@ -521,11 +557,14 @@ msgstr ""
 msgid "To receive money, do something awesome and then tell people about it:"
 msgstr ""
 
-msgid "{0}Fill out your profile{1} to let others know about you."
-msgstr "Diğerler kullanıcıların hakkınızda bilgi alabilmesi için {0}profilinizi doldurun{1}."
+msgid "{0}Fill out your profile{1}."
+msgstr ""
 
-msgid "Reach a wider audience by {0}embedding our widgets{1} on your blog/website."
-msgstr "Blog ve websitenize {0}widget'ımızı gömerek{1} daha geniş kitlelere ulaşabilirsiniz."
+msgid "{0}Embed our widgets{1} on your blog/website."
+msgstr ""
+
+msgid "Contact the people who benefit from your work and ask them to support you."
+msgstr ""
 
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
@@ -621,12 +660,6 @@ msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
 "\n"
 "That cannot be undone!"
-msgstr ""
-
-msgid "Cancel"
-msgstr "İptal"
-
-msgid "Confirm"
 msgstr ""
 
 msgid "Invalid date of birth."
@@ -751,8 +784,10 @@ msgstr[1] ""
 msgid "You have {0} in your liberapay wallet."
 msgstr ""
 
-msgid "Your donations are funded for another {0} weeks."
-msgstr ""
+msgid "Your donations are only funded for another week."
+msgid_plural "Your donations are funded for another {n} weeks."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr ""
@@ -773,6 +808,21 @@ msgid "Created"
 msgstr ""
 
 msgid "Modified"
+msgstr ""
+
+msgid "Active?"
+msgstr ""
+
+msgid "No: the donee is blacklisted"
+msgstr ""
+
+msgid "No: the donee hasn't filled the identity form"
+msgstr ""
+
+msgid "No: insufficient funds"
+msgstr ""
+
+msgid "Yes"
 msgstr ""
 
 msgid "Pledges"
@@ -802,10 +852,10 @@ msgstr ""
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr ""
 
-msgid "You want to donate {0} per week."
+msgid "Your donations are funded by your income."
 msgstr ""
 
-msgid "Your donations are funded by your income."
+msgid "Go back"
 msgstr ""
 
 msgid "{0} ({n} week)"
@@ -882,6 +932,9 @@ msgstr ""
 msgid "Total received: {0}"
 msgstr ""
 
+msgid "Weekly Payday #{0}"
+msgstr ""
+
 msgid "Outside"
 msgstr ""
 
@@ -915,10 +968,41 @@ msgstr ""
 msgid "Receipt"
 msgstr ""
 
+msgid "anonymous donation for your role in the {0} team"
+msgstr ""
+
+msgid "anonymous donation"
+msgstr ""
+
+msgid "final gift to {0}"
+msgstr ""
+
+msgid "donation to {0} for their role in the {1} team"
+msgstr ""
+
+msgid "donation to {0}"
+msgstr ""
+
 msgid "No transactions to show."
 msgstr ""
 
 msgid "{0} receives {1} per week"
+msgstr ""
+
+msgid "Last Week"
+msgstr ""
+
+msgid "This Week"
+msgstr ""
+
+#, fuzzy
+msgid "Member"
+msgstr "Üye"
+
+msgid "Nominal Take"
+msgstr ""
+
+msgid "Actual Take"
 msgstr ""
 
 msgid "Dollars Received Per Week"
@@ -930,55 +1014,43 @@ msgstr ""
 msgid "Number of Patrons Per Week"
 msgstr ""
 
-msgid "User not found."
-msgstr ""
-
-msgid "A team can't take from itself"
-msgstr ""
-
-msgid "You're only allowed to add or remove members, you can't set their takes to specific amounts."
-msgstr ""
-
-msgid "Are you sure you want to remove {0} from this team?"
-msgstr ""
-
-msgid "{0} has been removed from the team."
-msgstr ""
-
-msgid "{0} is already a member of this team."
-msgstr ""
-
-msgid "{0} has been added to the team."
-msgstr ""
-
-msgid "Are you sure you want to leave this team?"
-msgstr ""
-
 msgid "Your take is now {0} (you can't go higher this week)."
 msgstr ""
 
 msgid "Your take is now {0}."
 msgstr ""
 
-msgid "Team Members"
-msgstr "Takım Üyeleri"
-
-msgid "Updating…"
+msgid "You are not invited to join this team."
 msgstr ""
 
-msgid "Last{0} Week (€)"
+msgid "You have already accepted this invitation."
 msgstr ""
 
-msgid "This{0} Week (€)"
+msgid "You have already refused this invitation."
 msgstr ""
 
-msgid "Team{0} Balance (€)"
+msgid "You are not a member of this team."
 msgstr ""
 
-msgid "This{0} Week (%)"
-msgstr "Bu{0} Hafta (%)"
+msgid "User not found."
+msgstr ""
 
-msgid "Enter a username"
+msgid "A team can't join a team"
+msgstr ""
+
+msgid "You can't invite an inactive user to join a team."
+msgstr ""
+
+msgid "{0} has been invited to the team."
+msgstr ""
+
+msgid "{0} is already a member of this team."
+msgstr ""
+
+msgid "Are you sure you want to leave this team?"
+msgstr ""
+
+msgid "You are now a member of the team."
 msgstr ""
 
 msgid "Amount:"
@@ -1137,7 +1209,7 @@ msgstr ""
 msgid "We immediately clear out most of the information in your profile."
 msgstr ""
 
-msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of. If you're closing a team account, all team members will be removed from the team."
+msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
 msgstr ""
 
 msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
@@ -1188,14 +1260,20 @@ msgstr "Gizlilik"
 msgid "Close"
 msgstr "Kapatma"
 
-msgid "Badge"
-msgstr "Rozet"
+msgid "Donation Button"
+msgstr ""
 
-msgid "Use this code to embed a Liberapay badge on your website:"
-msgstr "Websitenize Liberapay rozeti gömmek için bu kodu kullanın:"
+msgid "Use this code to add a donation button on your website:"
+msgstr ""
 
 msgid "Here's what it looks like:"
 msgstr "İşte böyle gözüküyor:"
+
+msgid "Static Donation Button"
+msgstr ""
+
+msgid "Use this code to embed a static donation button on your website:"
+msgstr ""
 
 msgid "Giving & Receiving Widgets"
 msgstr ""
@@ -1203,7 +1281,7 @@ msgstr ""
 msgid "Use this code to add a Liberapay \"receiving\" widget on your website:"
 msgstr ""
 
-msgid "Or, if you'd like to include a \"giving\" widget, you can add the {0} attribute:"
+msgid "Or, if you'd like to include a \"giving\" widget, you can use this:"
 msgstr ""
 
 msgid "Frequently Asked Questions"
@@ -1221,7 +1299,7 @@ msgstr ""
 msgid "Liberapay is a non-profit association founded in 2015 and legally registered in France (well, not yet)."
 msgstr ""
 
-msgid "Anyone is welcome to join {0}the members of the Liberapay team{2} in {1}building Liberapay{2}."
+msgid "Anyone is welcome to join the members of {0}the Liberapay team{2} in {1}building Liberapay{2}."
 msgstr ""
 
 msgid "How is Liberapay funded?"
@@ -1370,10 +1448,13 @@ msgstr ""
 msgid "Money withdrawn from Liberapay to a bank account"
 msgstr ""
 
-msgid "A Liberapay team account is a collective donation jar, it allows a group of users to receive money, and share it democratically."
+msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
 msgstr ""
 
 msgid "Creating a team"
+msgstr ""
+
+msgid "You need to {0}sign in{1} first."
 msgstr ""
 
 msgid "Becoming a team member"
@@ -1463,9 +1544,6 @@ msgid "How the accounts will be after the transfer"
 msgstr ""
 
 msgid "Abandoned:"
-msgstr ""
-
-msgid "Yes"
 msgstr ""
 
 msgid "No"
@@ -1573,10 +1651,6 @@ msgstr ""
 
 msgid "Lock"
 msgstr ""
-
-#, fuzzy
-msgid "Member"
-msgstr "Üye"
 
 msgid "declines gifts"
 msgstr ""
