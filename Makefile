@@ -78,13 +78,14 @@ i18n_extract: env
 	done
 	rm i18n/core.pot
 	@for f in i18n/*/*.po; do \
-	    sed -E -e '/^"POT?-[^-]+-Date: /d' \
-	           -e '/^"Last-Translator: /d' \
+	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator): /d' \
+	           -e 's/^("[^:]+: ) +/\1/' \
+	           -e 's/^("Language-Team: .+? )</\1"\n"</' \
 	           -e '/^#: /d' "$$f" >"$$f.new"; \
 	    mv "$$f.new" "$$f"; \
 	done
 
-i18n_update: i18n_extract
+i18n_update: i18n_pull i18n_extract
 	@git add i18n
 	@if git commit --dry-run &>/dev/null; then git commit -m "update translation catalogs"; fi
 
@@ -92,4 +93,4 @@ i18n_pull: env
 	@git remote | grep weblate >/dev/null || git remote add weblate git://git.weblate.org/liberapay.com.git
 	git checkout master
 	git fetch weblate
-	git merge -m "merge translations" weblate/master
+	git merge --no-ff -m "merge translations" weblate/master
