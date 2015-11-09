@@ -282,9 +282,10 @@ class TestSync(MangopayHarness):
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
-        exchanges = self.db.all("SELECT * FROM exchanges WHERE amount < 0")
-        assert not exchanges
-        assert Participant.from_username('homer').balance == 41
+        exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
+        assert exchange.status == 'failed'
+        homer = self.homer.refetch()
+        assert homer.balance == homer.withdrawable_balance == 41
 
     def test_sync_with_mangopay_transfers(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)

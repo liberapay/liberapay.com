@@ -35,6 +35,8 @@ SEPA_ZONE = set("""
     MC MT NL NO PL PT RO SE SI SK
 """.split())
 
+QUARANTINE = '4 weeks'
+
 
 def upcharge(amount):
     """Given an amount, return a higher amount and the difference.
@@ -275,9 +277,9 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
             SELECT *
               FROM cash_bundles
              WHERE owner = %s
-               AND ts < now() - INTERVAL '4 weeks'
+               AND ts < now() - INTERVAL %s
           ORDER BY ts
-        """, (participant.id,))
+        """, (participant.id, QUARANTINE))
         withdrawable = sum(b.amount for b in bundles)
         x = -amount
         if x > withdrawable:
@@ -328,15 +330,24 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
     tr = mangoapi.transfers.Create(tr)
-    return record_transfer_result(db, t_id, tipper, tippee, amount, tr)
+    return record_transfer_result(db, t_id, tr)
 
 
-def record_transfer_result(db, t_id, tipper, tippee, amount, tr):
+def record_transfer_result(db, t_id, tr):
     error = repr_error(tr)
     status = tr.Status.lower()
     assert (not error) ^ (status == 'failed')
+    return _record_transfer_result(db, t_id, status)
+
+
+def _record_transfer_result(db, t_id, status):
     with db.get_cursor() as c:
-        c.run("UPDATE transfers SET status = %s WHERE id = %s", (status, t_id))
+        tipper, tippee, amount = c.one("""
+            UPDATE transfers
+               SET status = %s
+             WHERE id = %s
+         RETURNING tipper, tippee, amount
+        """, (status, t_id))
         if status == 'succeeded':
             balance = c.one("""
 
@@ -420,7 +431,7 @@ def sync_with_mangopay(db):
         transactions = [x for x in transactions if x.Type == 'TRANSFER' and x.Tag == str(t.id)]
         assert len(transactions) < 2
         if transactions:
-            record_transfer_result(db, t.id, t.tipper, t.tippee, t.amount, transactions[0])
+            record_transfer_result(db, t.id, transactions[0])
         else:
             # The transfer didn't happen, remove it
             db.run("DELETE FROM transfers WHERE id = %s", (t.id,))

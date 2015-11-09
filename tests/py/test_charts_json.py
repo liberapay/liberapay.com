@@ -101,11 +101,7 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()   # second
 
         # Do an out-of-band transfer.
-        self.db.run("UPDATE participants SET balance=balance - 4 WHERE username='alice'")
-        self.db.run("UPDATE participants SET balance=balance + 4 WHERE username='carl'")
-        self.db.run("INSERT INTO transfers (tipper, tippee, amount, context, status) "
-                    "VALUES (%s, %s, 4, 'tip', 'succeeded')",
-                    (self.alice.id, self.carl.id))
+        self.make_transfer(self.alice.id, self.carl.id, 4)
 
         self.run_payday()   # third
 
