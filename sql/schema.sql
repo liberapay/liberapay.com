@@ -227,7 +227,7 @@ CREATE TABLE exchanges
 , recorder          bigint               REFERENCES participants
 , note              text
 , status            exchange_status      NOT NULL
-, route             bigint               REFERENCES exchange_routes
+, route             bigint               NOT NULL REFERENCES exchange_routes
  );
 
 CREATE INDEX exchanges_participant_idx ON exchanges (participant);
