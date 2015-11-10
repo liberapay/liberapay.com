@@ -14,6 +14,7 @@ from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
+from liberapay.constants import QUARANTINE
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
     TransactionFeeTooHigh, UserIsSuspicious
@@ -35,7 +36,7 @@ SEPA_ZONE = set("""
     MC MT NL NO PL PT RO SE SI SK
 """.split())
 
-QUARANTINE = '4 weeks'
+QUARANTINE = '%s days' % QUARANTINE.days
 
 
 def upcharge(amount):

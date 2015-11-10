@@ -781,6 +781,16 @@ class Participant(Model, MixinTeam):
     def get_credit_card_error(self):
         return getattr(ExchangeRoute.from_network(self, 'mango-cc'), 'error', None)
 
+    @property
+    def withdrawable_balance(self):
+        from liberapay.billing.exchanges import QUARANTINE
+        return self.db.one("""
+            SELECT COALESCE(sum(amount), 0)
+              FROM cash_bundles
+             WHERE owner = %s
+               AND ts < now() - INTERVAL %s
+        """, (self.id, QUARANTINE))
+
 
     # Random Junk
     # ===========
