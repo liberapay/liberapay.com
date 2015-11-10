@@ -14,7 +14,11 @@ from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
-from liberapay.exceptions import LazyResponse, NegativeBalance, TransactionFeeTooHigh, UserIsSuspicious
+from liberapay.constants import QUARANTINE
+from liberapay.exceptions import (
+    LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
+    TransactionFeeTooHigh, UserIsSuspicious
+)
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
@@ -31,6 +35,8 @@ SEPA_ZONE = set("""
     AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
     MC MT NL NO PL PT RO SE SI SK
 """.split())
+
+QUARANTINE = '%s days' % QUARANTINE.days
 
 
 def upcharge(amount):
@@ -203,20 +209,20 @@ def record_exchange(db, route, amount, fee, participant, status, error=None):
 
     with db.get_cursor() as cursor:
 
-        exchange_id = cursor.one("""
+        e = cursor.one("""
             INSERT INTO exchanges
                    (amount, fee, participant, status, route, note)
             VALUES (%s, %s, %s, %s, %s, %s)
-         RETURNING id
+         RETURNING *
         """, (amount, fee, participant.id, status, route.id, error))
 
         if status == 'failed':
-            propagate_exchange(cursor, participant, route, error, 0)
+            propagate_exchange(cursor, participant, e, route, error, 0)
         elif amount < 0:
             amount -= fee
-            propagate_exchange(cursor, participant, route, '', amount)
+            propagate_exchange(cursor, participant, e, route, '', amount)
 
-    return exchange_id
+    return e.id
 
 
 def record_exchange_result(db, exchange_id, status, error, participant):
@@ -229,7 +235,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
                  , note=%(error)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
-         RETURNING id, amount, fee, participant, recorder, note, status
+         RETURNING id, amount, fee, participant, recorder, note, status, timestamp
                  , ( SELECT r.*::exchange_routes
                        FROM exchange_routes r
                       WHERE r.id = e.route
@@ -242,21 +248,20 @@ def record_exchange_result(db, exchange_id, status, error, participant):
 
         amount = e.amount
         if amount < 0:
-            amount -= e.fee
-            amount = amount if status == 'failed' else 0
-            propagate_exchange(cursor, participant, e.route, error, -amount)
+            amount = -amount + e.fee if status == 'failed' else 0
         else:
             amount = amount if status == 'succeeded' else 0
-            propagate_exchange(cursor, participant, e.route, error, amount)
+        propagate_exchange(cursor, participant, e, e.route, error, amount)
 
         return e
 
 
-def propagate_exchange(cursor, participant, route, error, amount):
+def propagate_exchange(cursor, participant, exchange, route, error, amount):
     """Propagates an exchange's result to the participant's balance and the
     route's status.
     """
     route.update_error(error or '')
+
     new_balance = cursor.one("""
         UPDATE participants
            SET balance=(balance + %s)
@@ -266,6 +271,40 @@ def propagate_exchange(cursor, participant, route, error, amount):
 
     if amount < 0 and new_balance < 0:
         raise NegativeBalance
+
+    if amount < 0:
+        bundles = cursor.all("""
+            LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
+            SELECT *
+              FROM cash_bundles
+             WHERE owner = %s
+               AND ts < now() - INTERVAL %s
+          ORDER BY ts
+        """, (participant.id, QUARANTINE))
+        withdrawable = sum(b.amount for b in bundles)
+        x = -amount
+        if x > withdrawable:
+            raise NotEnoughWithdrawableMoney(Money(withdrawable, 'EUR'))
+        for b in bundles:
+            if x >= b.amount:
+                cursor.run("DELETE FROM cash_bundles WHERE id = %s", (b.id,))
+                x -= b.amount
+                if x == 0:
+                    break
+            else:
+                assert x > 0
+                cursor.run("""
+                    UPDATE cash_bundles
+                       SET amount = (amount - %s)
+                     WHERE id = %s
+                """, (x, b.id))
+                break
+    elif amount > 0:
+        cursor.run("""
+            INSERT INTO cash_bundles
+                        (owner, origin, amount, ts)
+                 VALUES (%s, %s, %s, %s)
+        """, (participant.id, exchange.id, amount, exchange.timestamp))
 
     participant.set_attributes(balance=new_balance)
 
@@ -292,15 +331,24 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
     tr = mangoapi.transfers.Create(tr)
-    return record_transfer_result(db, t_id, tipper, tippee, amount, tr)
+    return record_transfer_result(db, t_id, tr)
 
 
-def record_transfer_result(db, t_id, tipper, tippee, amount, tr):
+def record_transfer_result(db, t_id, tr):
     error = repr_error(tr)
     status = tr.Status.lower()
     assert (not error) ^ (status == 'failed')
+    return _record_transfer_result(db, t_id, status)
+
+
+def _record_transfer_result(db, t_id, status):
     with db.get_cursor() as c:
-        c.run("UPDATE transfers SET status = %s WHERE id = %s", (status, t_id))
+        tipper, tippee, amount = c.one("""
+            UPDATE transfers
+               SET status = %s
+             WHERE id = %s
+         RETURNING tipper, tippee, amount
+        """, (status, t_id))
         if status == 'succeeded':
             balance = c.one("""
 
@@ -317,6 +365,35 @@ def record_transfer_result(db, t_id, tipper, tippee, amount, tr):
             """, locals())
             if balance is None:
                 raise NegativeBalance
+            bundles = c.all("""
+                LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
+                SELECT *
+                  FROM cash_bundles
+                 WHERE owner = %s
+              ORDER BY ts
+            """, (tipper,))
+            x = amount
+            for b in bundles:
+                if x >= b.amount:
+                    c.run("""
+                        UPDATE cash_bundles
+                           SET owner = %s
+                         WHERE id = %s
+                    """, (tippee, b.id))
+                    x -= b.amount
+                    if x == 0:
+                        break
+                else:
+                    c.run("""
+                        UPDATE cash_bundles
+                           SET amount = (amount - %s)
+                         WHERE id = %s;
+
+                        INSERT INTO cash_bundles
+                                    (owner, origin, amount, ts)
+                             VALUES (%s, %s, %s, %s);
+                    """, (x, b.id, tippee, b.origin, x, b.ts))
+                    break
             return balance
     raise LazyResponse(500, lambda _: _("Transfering the money failed, please try again."))
 
@@ -340,15 +417,13 @@ def sync_with_mangopay(db):
             assert (not error) ^ (status == 'failed')
             record_exchange_result(db, e.id, status, error, p)
         else:
-            # The exchange didn't happen, remove it
-            db.run("DELETE FROM exchanges WHERE id=%s", (e.id,))
-            # and restore the participant's balance if it was a credit
+            # The exchange didn't happen
             if e.amount < 0:
-                db.run("""
-                    UPDATE participants
-                       SET balance=(balance + %s)
-                     WHERE id=%s
-                """, (-e.amount + e.fee, p.id))
+                # Mark it as failed if it was a credit
+                record_exchange_result(db, e.id, 'failed', 'interrupted', p)
+            else:
+                # Otherwise forget about it
+                db.run("DELETE FROM exchanges WHERE id=%s", (e.id,))
 
     transfers = db.all("SELECT * FROM transfers WHERE status = 'pre'")
     for t in transfers:
@@ -357,7 +432,7 @@ def sync_with_mangopay(db):
         transactions = [x for x in transactions if x.Type == 'TRANSFER' and x.Tag == str(t.id)]
         assert len(transactions) < 2
         if transactions:
-            record_transfer_result(db, t.id, t.tipper, t.tippee, t.amount, transactions[0])
+            record_transfer_result(db, t.id, transactions[0])
         else:
             # The transfer didn't happen, remove it
             db.run("DELETE FROM transfers WHERE id = %s", (t.id,))

@@ -46,6 +46,9 @@ if route:
 back_to = b64decode(request.path['back_to'])
 success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
 show_form = participant.balance > 0 and not success
+if show_form:
+    withdrawable = participant.withdrawable_balance
+    show_form = withdrawable > 0
 
 title = _("Withdraw money")
 
@@ -76,6 +79,18 @@ title = _("Withdraw money")
     {% endif %}
     <p>
         {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
+        {% if not success %}
+            {% if participant.balance > withdrawable %}
+                {% if withdrawable == 0 %}
+                    {{ _("Unfortunately you cannot withdraw that money yet, it is still in quarantine.") }}
+                {% else %}
+                    {{ _("Out of that, {0} is available for withdrawal, the rest is still in quarantine.",
+                         Money(withdrawable, 'EUR')) }}
+                {% endif %}
+                </p><p>
+                {{ _("We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience.", constants.QUARANTINE) }}
+            {% endif %}
+        {% endif %}
     </p>
     {% if success and back_to %}
         <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
@@ -87,7 +102,7 @@ title = _("Withdraw money")
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <div class="input-group">
-            <input name="amount" value="{{ format_decimal(participant.balance) }}"
+            <input name="amount" value="{{ format_decimal(withdrawable) }}"
                    class="form-control" size=6 required />
             <div class="input-group-addon">€</div>
         </div>

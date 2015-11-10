@@ -49,7 +49,12 @@ title = _("Frequently Asked Questions")
 
     <dt id="how-withdraw-funds">{{ _("How do I withdraw funds from Liberapay?") }}</dt>
 
-    <dd><a href="/about/me/receiving/payout">{{ _("Withdraw money") }}</a></dd>
+    <dd>
+        <p><a href="/about/me/receiving/payout">{{ _("Withdraw money") }}</a></p>
+        <p>{{ _("Please note that there is a quarantine period of {0} for money "
+                "coming from credit cards due to the risk of chargebacks.",
+                constants.QUARANTINE) }}</p>
+    </dd>
 
 </dl>
 <dl class="col-md-6">

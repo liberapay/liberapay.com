@@ -9,7 +9,10 @@ from os.path import dirname, join, realpath
 from aspen import resources, Response
 from aspen.utils import utcnow
 from aspen.testing.client import Client
-from liberapay.billing.exchanges import record_exchange, record_exchange_result
+from liberapay.billing import exchanges
+from liberapay.billing.exchanges import (
+    record_exchange, record_exchange_result, _record_transfer_result
+)
 from liberapay.constants import SESSION
 from liberapay.elsewhere import UserInfo
 from liberapay.main import website
@@ -64,6 +67,7 @@ Response.text = property(decode_body)
 
 class Harness(unittest.TestCase):
 
+    QUARANTINE = exchanges.QUARANTINE
     client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
     db = client.website.db
     platforms = client.website.platforms
@@ -82,6 +86,7 @@ class Harness(unittest.TestCase):
         cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH %s", (cls_id,))
         cls.db.run("ALTER SEQUENCE transfers_id_seq RESTART WITH %s", (cls_id,))
         cls.setUpVCR()
+        exchanges.QUARANTINE = '0 seconds'
 
 
     @classmethod
@@ -103,6 +108,7 @@ class Harness(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.vcr_cassette.__exit__(None, None, None)
+        exchanges.QUARANTINE = cls.QUARANTINE
 
 
     def setUp(self):
@@ -217,6 +223,17 @@ class Harness(unittest.TestCase):
         e_id = record_exchange(self.db, route, amount, fee, participant, 'pre')
         record_exchange_result(self.db, e_id, status, error, participant)
         return e_id
+
+
+    def make_transfer(self, tipper, tippee, amount, context='tip', team=None, status='succeeded'):
+        t_id = self.db.one("""
+            INSERT INTO transfers
+                        (tipper, tippee, amount, context, team, status)
+                 VALUES (%s, %s, %s, %s, %s, 'pre')
+              RETURNING id
+        """, (tipper, tippee, amount, context, team))
+        _record_transfer_result(self.db, t_id, status)
+        return t_id
 
 
 class Foobar(Exception): pass

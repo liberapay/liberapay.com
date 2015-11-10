@@ -389,3 +389,16 @@ CREATE TABLE balances_at
 , balance      numeric(35,2)  NOT NULL
 , UNIQUE (participant, at)
 );
+
+
+-- all the money currently in the system, grouped by origin and current owner
+
+CREATE TABLE cash_bundles
+( id           bigserial      PRIMARY KEY
+, owner        bigint         NOT NULL REFERENCES participants
+, origin       bigint         NOT NULL REFERENCES exchanges
+, amount       numeric(35,2)  NOT NULL CHECK (amount > 0)
+, ts           timestamptz    NOT NULL
+);
+
+CREATE INDEX cash_bundles_owner_idx ON cash_bundles (owner);

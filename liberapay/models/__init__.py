@@ -27,6 +27,7 @@ def check_db(cursor):
     """
     _check_balances(cursor)
     _check_tips(cursor)
+    _check_bundles(cursor)
 
 
 def _check_tips(cursor):
@@ -94,3 +95,19 @@ def _check_balances(cursor):
         where expected <> p.balance
     """)
     assert len(b) == 0, "conflicting balances: {}".format(b)
+
+
+def _check_bundles(cursor):
+    """Check that balances and cash bundles are coherent.
+    """
+    b = cursor.all("""
+        SELECT bundles_total, balance
+          FROM (
+              SELECT owner, sum(amount) AS bundles_total
+                FROM cash_bundles b
+            GROUP BY owner
+          ) foo
+          JOIN participants p ON p.id = owner
+         WHERE bundles_total <> balance
+    """)
+    assert len(b) == 0, "bundles are out of whack: {}".format(b)

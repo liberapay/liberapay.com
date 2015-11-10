@@ -20,7 +20,9 @@ def make_history(harness):
     harness.make_exchange('mango-ba', -5, 0, alice, status='failed')
     harness.db.run("""
         UPDATE exchanges
-           SET timestamp = "timestamp" - interval '1 year'
+           SET timestamp = "timestamp" - interval '1 year';
+        UPDATE cash_bundles
+           SET ts = ts - interval '1 year';
     """)
     harness.past_year = int(harness.db.one("""
         SELECT extract(year from timestamp)

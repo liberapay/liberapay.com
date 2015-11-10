@@ -6,6 +6,7 @@ from aspen import Response
 import mock
 import pytest
 
+from liberapay.billing import exchanges
 from liberapay.billing.exchanges import (
     upcharge,
     payout,
@@ -16,7 +17,10 @@ from liberapay.billing.exchanges import (
     sync_with_mangopay,
     transfer,
 )
-from liberapay.exceptions import NegativeBalance, UserIsSuspicious, TransactionFeeTooHigh
+from liberapay.exceptions import (
+    NegativeBalance, NotEnoughWithdrawableMoney, UserIsSuspicious,
+    TransactionFeeTooHigh
+)
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
 from liberapay.testing.mangopay import MangopayHarness
@@ -26,11 +30,13 @@ class TestPayouts(MangopayHarness):
 
     def test_payout(self):
         self.make_exchange('mango-cc', 27, 0, self.homer)
-        exchange = payout(self.db, self.homer, D('1.00'))
+        self.make_exchange('mango-cc', 19, 0, self.homer)
+        exchange = payout(self.db, self.homer, D('30.00'))
         assert exchange.note is None
         assert exchange.status == 'created'
         homer = Participant.from_id(self.homer.id)
-        assert self.homer.balance == homer.balance == 26
+        assert self.homer.balance == homer.balance == 16
+        self.db.self_check()
 
     @mock.patch('mangopaysdk.tools.apiusers.ApiUsers.GetBankAccount')
     def test_payout_amount_under_minimum(self, gba):
@@ -59,6 +65,14 @@ class TestPayouts(MangopayHarness):
         self.homer_route.invalidate()
         with self.assertRaises(AssertionError):
             payout(self.db, self.homer, D('10.00'))
+
+    @mock.patch('mangopaysdk.tools.apiusers.ApiUsers.GetBankAccount')
+    def test_payout_quarantine(self, gba):
+        self.make_exchange('mango-cc', 39, 0, self.homer)
+        gba.return_value = self.bank_account
+        with mock.patch.multiple(exchanges, QUARANTINE='1 month'):
+            with self.assertRaises(NotEnoughWithdrawableMoney):
+                payout(self.db, self.homer, D('32.00'))
 
 
 class TestCharge(MangopayHarness):
@@ -89,6 +103,10 @@ class TestCharge(MangopayHarness):
         assert exchange.amount == 10
         assert exchange.status == 'succeeded'
         assert self.janet.balance == janet.balance == 10
+        assert janet.withdrawable_balance == 10
+        with mock.patch.multiple(exchanges, QUARANTINE='1 month'):
+            assert janet.withdrawable_balance == 0
+            self.db.self_check()
 
     def test_charge_100(self):
         with self.assertRaises(Response) as cm:
@@ -282,9 +300,10 @@ class TestSync(MangopayHarness):
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
-        exchanges = self.db.all("SELECT * FROM exchanges WHERE amount < 0")
-        assert not exchanges
-        assert Participant.from_username('homer').balance == 41
+        exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
+        assert exchange.status == 'failed'
+        homer = self.homer.refetch()
+        assert homer.balance == homer.withdrawable_balance == 41
 
     def test_sync_with_mangopay_transfers(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)

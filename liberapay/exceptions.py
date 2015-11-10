@@ -105,6 +105,11 @@ class NegativeBalance(LazyResponse400):
         return _("There isn't enough money in your wallet.")
 
 
+class NotEnoughWithdrawableMoney(LazyResponse400):
+    def msg(self, _):
+        return _("You can't withdraw more than {0} at this time.", *self.args)
+
+
 class UserIsSuspicious(Exception): pass
 
 

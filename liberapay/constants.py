@@ -20,6 +20,8 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')
 
+QUARANTINE = timedelta(weeks=4)
+
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
