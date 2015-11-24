@@ -801,12 +801,11 @@ class Participant(Model, MixinTeam):
             VALUES (%s, %s, %s, %s)
         """, (self.id, type, Json(payload), recorder))
 
-    @property
-    def profile_url(self):
+    def url(self, path=''):
         scheme = liberapay.canonical_scheme
         host = liberapay.canonical_host
         username = self.username
-        return '{scheme}://{host}/{username}/'.format(**locals())
+        return '{scheme}://{host}/{username}/{path}'.format(**locals())
 
     def get_teams(self):
         """Return a list of teams this user is a member of.

@@ -17,7 +17,7 @@ response.headers['Cache-Control'] = 'public, max-age=600'
 response.headers['Vary'] = 'Accept-Language'
 
 [---] application/javascript via jinja2_html_jswrapped
-<a href="{{ participant.profile_url }}"
+<a href="{{ participant.url() }}"
    style="background-image: linear-gradient(#ffcdc7, #f7b3ad);
           border: 2px solid #e7716c; border-radius: 5px; color: #444;
           display: inline-block;

@@ -31,6 +31,7 @@ if request.method == 'POST':
     except (InvalidOperation, NumberFormatError, ValueError):
         raise Response(400, "bad amount")
     exchange = payout(website.db, participant, amount)
+    participant.notify('withdrawal_'+exchange.status, exchange=exchange)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
 elif 'exchange_id' in request.qs:

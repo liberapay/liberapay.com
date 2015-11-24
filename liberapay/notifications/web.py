@@ -10,7 +10,7 @@ def withdrawal_failed(_, user, exchange):
     )
 
 
-def withdrawal_pending(_, user, exchange, Money):
+def withdrawal_created(_, user, exchange, Money):
     return ('success',
         ['span', _("We have initiated a transfer of {0} from your Liberapay wallet to your bank account.",
                    Money(exchange.amount - exchange.fee, 'EUR'))
