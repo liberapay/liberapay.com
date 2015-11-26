@@ -99,6 +99,7 @@ title = _("Add money")
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
             _("The attempt to take {0} from your credit card has failed. Error message: {1}", Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
         }}</div>
+        <a href="{{ participant.path('receipts/%s.html' % exchange.id) }}">{{ _("View Receipt") }}</a>
     {% endif %}
     <p>
         {% if weekly <= 0 %}

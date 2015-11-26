@@ -7,8 +7,6 @@ Event = namedtuple('Event', 'name bit title')
 
 _ = lambda a: a
 EVENTS = [
-    Event('charge_failed', 1, _("When charging my credit card fails")),
-    Event('charge_succeeded', 2, _("When charging my credit card succeeds")),
     Event('withdrawal_created', 4, _("When a transfer to my bank account is initiated")),
     Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
     Event('pledgee_joined', 16, _("When someone I pledge to joins Liberapay")),

@@ -18,24 +18,6 @@ def withdrawal_created(_, user, exchange, Money):
     )
 
 
-def charge_failed(_, user, exchange, Money):
-    href = '/%s/giving/payin?exchange_id=%s' % (user.username, exchange.id)
-    return ('danger',
-        ['a', {'href': href},
-              _("We tried to charge your credit card {0}, but it failed!",
-                Money(exchange.amount + exchange.fee, 'EUR'))
-        ]
-    )
-
-
-def charge_succeeded(_, user, exchange, Money):
-    return ('success',
-        ['span', _("We charged your credit card {0} to fund your ongoing donations.",
-                   Money(exchange.amount + exchange.fee, 'EUR'))
-        ]
-    )
-
-
 def pledgee_joined(_, user_name, platform, profile_url):
     return ('info',
         ['a',
