@@ -23,3 +23,17 @@ class TestNotifications(Harness):
 
         alice.remove_notification(id)
         assert alice.pending_notifs == 2
+
+    def test_render_notifications(self):
+        alice = self.make_participant('alice')
+        alice.add_notification('fake_event_name')
+        alice.add_notification(
+            'team_invite',
+            team='team',
+            team_url='fake_url',
+            inviter='bob',
+        )
+        r = self.client.GET('/alice/notifications.html', auth_as=alice).body
+        assert 'fake_event_name' not in r
+        assert '<a href="fake_url"' in r
+        assert 'bob' in r
