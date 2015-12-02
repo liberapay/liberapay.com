@@ -11,7 +11,6 @@ import uuid
 
 from aspen import Response
 from aspen.utils import utcnow
-from dependency_injection import resolve_dependencies
 from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -45,7 +44,7 @@ from liberapay.exceptions import (
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.notifications import EVENTS, web as web_notifs
+from liberapay.notifications import EVENTS
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     erase_cookie, set_cookie,
@@ -695,8 +694,9 @@ class Participant(Model, MixinTeam):
     # Notifications
     # =============
 
-    def notify(self, event, **context):
-        self.add_notification(event, **context)
+    def notify(self, event, web=True, **context):
+        if web:
+            self.add_notification(event, **context)
         if self.email_notif_bits & EVENTS.get(event).bit:
             self.queue_email(event, **context)
 
@@ -753,9 +753,10 @@ class Participant(Model, MixinTeam):
         for id, event, context in notifs:
             try:
                 context = dict(state, **pickle.loads(context))
-                f = getattr(web_notifs, event)
-                typ, msg = f(*resolve_dependencies(f, context).as_args)
-                r.append(dict(id=id, jsonml=msg, type=typ))
+                spt = self._emails[event]
+                html = spt['text/html'].render(context).strip()
+                typ = context.get('type', 'info')
+                r.append(dict(id=id, html=html, type=typ))
             except Exception as e:
                 self._tell_sentry(e, state)
         state['escape'] = escape
