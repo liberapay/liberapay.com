@@ -168,3 +168,14 @@ def include_svg(svg, height, width, x=None, y=None):
             continue
         attrs += ' %s="%s"' % (a, v)
     return Markup(svg[:4] + attrs + svg[i:])
+
+
+def group_by(iterable, key):
+    r = {}
+    for obj in iterable:
+        try:
+            k = obj[key]
+        except KeyError:
+            continue
+        r.setdefault(k, []).append(obj)
+    return r

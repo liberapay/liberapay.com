@@ -11,6 +11,7 @@ import uuid
 
 from aspen import Response
 from aspen.utils import utcnow
+import aspen_jinja2_renderer
 from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -624,6 +625,7 @@ class Participant(Model, MixinTeam):
                   (self.id, address))
 
     def send_email(self, spt_name, **context):
+        context.update(aspen_jinja2_renderer.Renderer.global_context)
         context['participant'] = self
         context['username'] = self.username
         context['button_style'] = (
