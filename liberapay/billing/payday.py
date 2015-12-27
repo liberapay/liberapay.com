@@ -481,6 +481,8 @@ class Payday(object):
           ORDER BY ts_end DESC
              LIMIT 1
         """, (self.ts_start,), default=constants.BIRTHDAY)
+
+        # Income notifications
         r = self.db.all("""
             SELECT tippee, json_agg(t) AS transfers
               FROM transfers t
@@ -502,6 +504,24 @@ class Payday(object):
                 personal=personal,
                 by_team=by_team,
             )
+
+        # Low-balance notifications
+        participants = self.db.all("""
+            SELECT p.*::participants
+              FROM participants p
+             WHERE balance < giving
+               AND giving > 0
+               AND EXISTS (
+                     SELECT 1
+                       FROM transfers t
+                      WHERE t.tipper = p.id
+                        AND t.timestamp > %s
+                        AND t.timestamp <= %s
+                        AND t.status = 'succeeded'
+                   )
+        """, (previous_ts_end, self.ts_end))
+        for p in participants:
+            p.notify('low_balance')
 
 
 if __name__ == '__main__':  # pragma: no cover
