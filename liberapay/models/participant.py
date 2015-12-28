@@ -1,6 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 from base64 import b64decode, b64encode
+from binascii import hexlify
 from decimal import Decimal, ROUND_DOWN
 from hashlib import pbkdf2_hmac
 from os import urandom
@@ -660,11 +661,12 @@ class Participant(Model, MixinTeam):
         return 1 # Sent
 
     def queue_email(self, spt_name, **context):
+        context = b'\\x' + hexlify(pickle.dumps(context, 2))
         self.db.run("""
             INSERT INTO email_queue
                         (participant, spt_name, context)
                  VALUES (%s, %s, %s)
-        """, (self.id, spt_name, pickle.dumps(context)))
+        """, (self.id, spt_name, context))
 
     @classmethod
     def dequeue_emails(cls):
@@ -704,7 +706,7 @@ class Participant(Model, MixinTeam):
 
     def add_notification(self, event, **context):
         p_id = self.id
-        context = pickle.dumps(context)
+        context = b'\\x' + hexlify(pickle.dumps(context, 2))
         n_id = self.db.one("""
             INSERT INTO notification_queue
                         (participant, event, context)
