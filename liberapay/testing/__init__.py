@@ -57,6 +57,11 @@ class ClientWithAuth(Client):
 
         return Client.build_wsgi_environ(self, *a, **kw)
 
+    def hit(self, *a, **kw):
+        if kw.pop('xhr', False):
+            kw[b'HTTP_X_REQUESTED_WITH'] = b'XMLHttpRequest'
+        return super(ClientWithAuth, self).hit(*a, **kw)
+
 
 def decode_body(self):
     body = self.body

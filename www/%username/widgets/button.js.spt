@@ -33,4 +33,4 @@ html > body .liberapay-btn:hover {
     vertical-align: middle;
 }
 </style>
-<a class="liberapay-btn" href="{{ participant.profile_url }}">{{ ICON }} <span>{{ _("Donate") }}</span></a>
+<a class="liberapay-btn" href="{{ participant.url() }}">{{ ICON }} <span>{{ _("Donate") }}</span></a>

@@ -26,7 +26,7 @@ class MixinTeam(object):
             invitee.notify(
                 'team_invite',
                 team=self.username,
-                team_url=self.profile_url,
+                team_url=self.url(),
                 inviter=inviter.username,
             )
 

@@ -1,0 +1,51 @@
+{{ _("You have received {0} this week", Money(total, 'EUR')) }}
+
+[---] text/html
+<p>{{ _("{0} were given to you personally.", Money(personal, 'EUR')) }}</p>
+
+{% if not by_team %}
+    {% set teams = participant.get_teams() %}
+    {% if not teams %}
+        <p>{{ _("You are not a member of any team, so you haven't received any money for participation in teams.") }}</p>
+    {% else %}
+        <p>{{ ngettext("No money was given to you for your role in the {0} team.",
+                       "No money was given to you for your roles in the {n} teams you are a member of.",
+                       len(teams), teams[0].name) }}</p>
+    {% endif %}
+{% elif len(by_team) == 1 %}
+    {% set team, amount = next(by_team.items()) %}
+    <p>{{ _("{0} were given to you for your role in the {1} team.", Money(amount, 'EUR'), team) }}</p>
+{% else %}
+    <p>{{ _("{0} were given to you for your roles in the following teams:", Money(sum(by_team.values()), 'EUR')) }}</p>
+    <ul>
+    {% for team, amount in by_team.items() %}
+        <li>{{ _("{0}: {1}", team, Money(amount, 'EUR')) }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{{ participant.url('history/') }}">{{ _("See your account's transaction logs") }}</a>
+
+[---] text/plain
+{{ _("{0} were given to you personally.", Money(personal, 'EUR')) }}
+
+{% if not by_team %}
+    {% set teams = participant.get_teams() %}
+    {% if not teams %}
+        {{- _("You are not a member of any team, so you haven't received any money for participation in teams.") }}
+    {% else %}
+        {{- ngettext("No money was given to you for your role in the {0} team.",
+                     "No money was given to you for your roles in the {n} teams you are a member of.",
+                     len(teams), teams[0].name) }}
+    {% endif %}
+{% elif len(by_team) == 1 %}
+    {% set team, amount = next(by_team.items()) %}
+    {{- _("{0} were given to you for your role in the {1} team.", Money(amount, 'EUR'), team) }}
+{% else %}
+    {{- _("{0} were given to you for your roles in the following teams:", Money(sum(by_team.values()), 'EUR')) }}
+    {% for team, amount in by_team.items() %}
+        {{- _("- {0}: {1}", team, Money(amount, 'EUR')) }}
+    {% endfor %}
+{% endif %}
+
+{{ _("See your account's transaction logs") }}: {{ participant.url('history/') }}

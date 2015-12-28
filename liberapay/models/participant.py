@@ -1,6 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 from base64 import b64decode, b64encode
+from binascii import hexlify
 from decimal import Decimal, ROUND_DOWN
 from hashlib import pbkdf2_hmac
 from os import urandom
@@ -11,7 +12,7 @@ import uuid
 
 from aspen import Response
 from aspen.utils import utcnow
-from dependency_injection import resolve_dependencies
+import aspen_jinja2_renderer
 from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -45,7 +46,7 @@ from liberapay.exceptions import (
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.notifications import EVENTS, web as web_notifs
+from liberapay.notifications import EVENTS
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     erase_cookie, set_cookie,
@@ -625,6 +626,7 @@ class Participant(Model, MixinTeam):
                   (self.id, address))
 
     def send_email(self, spt_name, **context):
+        context.update(aspen_jinja2_renderer.Renderer.global_context)
         context['participant'] = self
         context['username'] = self.username
         context['button_style'] = (
@@ -651,7 +653,7 @@ class Participant(Model, MixinTeam):
         message['from_email'] = 'support@liberapay.com'
         message['from_name'] = 'Liberapay Support'
         message['to'] = [{'email': email, 'name': self.username}]
-        message['subject'] = spt['subject'].render(context)
+        message['subject'] = spt['subject'].render(context).strip()
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
 
@@ -659,11 +661,12 @@ class Participant(Model, MixinTeam):
         return 1 # Sent
 
     def queue_email(self, spt_name, **context):
+        context = b'\\x' + hexlify(pickle.dumps(context, 2))
         self.db.run("""
             INSERT INTO email_queue
                         (participant, spt_name, context)
                  VALUES (%s, %s, %s)
-        """, (self.id, spt_name, pickle.dumps(context)))
+        """, (self.id, spt_name, context))
 
     @classmethod
     def dequeue_emails(cls):
@@ -695,14 +698,15 @@ class Participant(Model, MixinTeam):
     # Notifications
     # =============
 
-    def notify(self, event, **context):
-        self.add_notification(event, **context)
+    def notify(self, event, web=True, **context):
+        if web:
+            self.add_notification(event, **context)
         if self.email_notif_bits & EVENTS.get(event).bit:
             self.queue_email(event, **context)
 
     def add_notification(self, event, **context):
         p_id = self.id
-        context = pickle.dumps(context)
+        context = b'\\x' + hexlify(pickle.dumps(context, 2))
         n_id = self.db.one("""
             INSERT INTO notification_queue
                         (participant, event, context)
@@ -753,9 +757,10 @@ class Participant(Model, MixinTeam):
         for id, event, context in notifs:
             try:
                 context = dict(state, **pickle.loads(context))
-                f = getattr(web_notifs, event)
-                typ, msg = f(*resolve_dependencies(f, context).as_args)
-                r.append(dict(id=id, jsonml=msg, type=typ))
+                spt = self._emails[event]
+                html = spt['text/html'].render(context).strip()
+                typ = context.get('type', 'info')
+                r.append(dict(id=id, html=html, type=typ))
             except Exception as e:
                 self._tell_sentry(e, state)
         state['escape'] = escape
@@ -801,12 +806,11 @@ class Participant(Model, MixinTeam):
             VALUES (%s, %s, %s, %s)
         """, (self.id, type, Json(payload), recorder))
 
-    @property
-    def profile_url(self):
+    def url(self, path=''):
         scheme = liberapay.canonical_scheme
         host = liberapay.canonical_host
         username = self.username
-        return '{scheme}://{host}/{username}/'.format(**locals())
+        return '{scheme}://{host}/{username}/{path}'.format(**locals())
 
     def get_teams(self):
         """Return a list of teams this user is a member of.

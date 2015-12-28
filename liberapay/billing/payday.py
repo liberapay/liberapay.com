@@ -8,8 +8,11 @@ import aspen.utils
 from aspen import log
 from psycopg2 import IntegrityError
 
+from liberapay import constants
 from liberapay.billing.exchanges import transfer
 from liberapay.exceptions import NegativeBalance
+from liberapay.models.participant import Participant
+from liberapay.utils import group_by
 
 
 class NoPayday(Exception):
@@ -471,7 +474,54 @@ class Payday(object):
         """, default=NoPayday).replace(tzinfo=aspen.utils.utc)
 
     def notify_participants(self):
-        pass  # TODO
+        previous_ts_end = self.db.one("""
+            SELECT ts_end
+              FROM paydays
+             WHERE ts_start < %s
+          ORDER BY ts_end DESC
+             LIMIT 1
+        """, (self.ts_start,), default=constants.BIRTHDAY)
+
+        # Income notifications
+        r = self.db.all("""
+            SELECT tippee, json_agg(t) AS transfers
+              FROM transfers t
+             WHERE "timestamp" > %s
+               AND "timestamp" <= %s
+          GROUP BY tippee
+        """, (previous_ts_end, self.ts_end))
+        for tippee_id, transfers in r:
+            successes = [t for t in transfers if t['status'] == 'succeeded']
+            if not successes:
+                continue
+            by_team = {k: sum(t['amount'] for t in v)
+                       for k, v in group_by(successes, 'team').items()}
+            personal = by_team.pop(None, 0)
+            by_team = {Participant.from_id(k).username: v for k, v in by_team.items()}
+            Participant.from_id(tippee_id).notify(
+                'income',
+                total=sum(t['amount'] for t in successes),
+                personal=personal,
+                by_team=by_team,
+            )
+
+        # Low-balance notifications
+        participants = self.db.all("""
+            SELECT p.*::participants
+              FROM participants p
+             WHERE balance < giving
+               AND giving > 0
+               AND EXISTS (
+                     SELECT 1
+                       FROM transfers t
+                      WHERE t.tipper = p.id
+                        AND t.timestamp > %s
+                        AND t.timestamp <= %s
+                        AND t.status = 'succeeded'
+                   )
+        """, (previous_ts_end, self.ts_end))
+        for p in participants:
+            p.notify('low_balance')
 
 
 if __name__ == '__main__':  # pragma: no cover

@@ -1,4 +1,3 @@
-from liberapay.notifications.jsonml import jsonml
 from liberapay.utils import get_participant
 
 [---]
@@ -23,7 +22,7 @@ notifs
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     {% for notif in notifs %}
         <div class="alert alert-{{ notif.type }}">
-            {{ jsonml(notif.jsonml) }}
+            {{ notif.html|safe }}
             <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
         </div>
     {% else %}

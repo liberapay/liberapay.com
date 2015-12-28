@@ -14,8 +14,11 @@ from jinja2 import Environment
  ) = range(6)
 
 
-jinja_env = Environment()
-jinja_env_html = Environment(autoescape=True, extensions=['jinja2.ext.autoescape'])
+jinja_env = Environment(trim_blocks=True, lstrip_blocks=True)
+jinja_env_html = Environment(
+    trim_blocks=True, lstrip_blocks=True,
+    autoescape=True, extensions=['jinja2.ext.autoescape'],
+)
 
 def compile_email_spt(fpath):
     r = {}
