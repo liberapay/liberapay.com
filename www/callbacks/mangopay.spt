@@ -31,5 +31,8 @@ if event == 'PAYOUT_NORMAL':
     if status == 'failed' and p.status == 'closed':
         p.update_status('active')
     record_exchange_result(website.db, e_id, status, error, p)
+    if status != 'succeeded':
+        e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
+        p.notify('withdrawal_'+status, exchange=e._asdict())
 
 [---] text/plain

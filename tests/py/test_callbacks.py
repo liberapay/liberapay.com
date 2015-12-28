@@ -5,10 +5,11 @@ from mock import patch
 from mangopaysdk.entities.payout import PayOut
 
 from liberapay.billing.exchanges import record_exchange
+from liberapay.testing.emails import EmailHarness
 from liberapay.testing.mangopay import MangopayHarness
 
 
-class TestMangopayCallbacks(MangopayHarness):
+class TestMangopayCallbacks(EmailHarness, MangopayHarness):
 
     def callback(self, qs, **kw):
         kw.setdefault('raise_immediately', False)
@@ -43,4 +44,8 @@ class TestMangopayCallbacks(MangopayHarness):
             else:
                 assert homer.balance == 10
                 assert homer.status == 'active'
+                emails = self.get_emails()
+                assert len(emails) == 1
+                assert emails[0]['to'][0]['email'] == homer.email
+                assert 'fail' in emails[0]['subject']
             homer.update_status('active')  # reset for next loop run
