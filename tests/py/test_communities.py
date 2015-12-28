@@ -14,7 +14,7 @@ class Tests(Harness):
         # Alice joins a community.
         self.alice = self.make_participant('alice', balance=100)
         self.client.POST('/alice/communities.json', {'do': 'join:something'},
-                         auth_as=self.alice, HTTP_X_REQUESTED_WITH=b'XMLHttpRequest')
+                         auth_as=self.alice, xhr=True)
 
     def test_community_member_shows_up_on_community_listing(self):
         html = self.client.GET('/for/something/').text
@@ -83,7 +83,7 @@ class TestCommunitiesJson(Harness):
         response = self.client.POST( '/alice/communities.json'
                                    , {'do': 'join:Test'}
                                    , auth_as=self.alice
-                                   , HTTP_X_REQUESTED_WITH=b'XMLHttpRequest'
+                                   , xhr=True
                                     )
 
         r = json.loads(response.body)
@@ -92,7 +92,7 @@ class TestCommunitiesJson(Harness):
         response = self.client.POST( '/alice/communities.json'
                                    , {'do': 'leave:Test'}
                                    , auth_as=self.alice
-                                   , HTTP_X_REQUESTED_WITH=b'XMLHttpRequest'
+                                   , xhr=True
                                     )
 
         response = self.client.GET('/alice/communities.json', auth_as=self.alice)
