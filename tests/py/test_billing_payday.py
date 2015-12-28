@@ -12,7 +12,7 @@ from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
 
 
-class TestPayday(FakeTransfersHarness, MangopayHarness):
+class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def test_payday_moves_money(self):
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
@@ -307,8 +307,16 @@ class TestPayday(FakeTransfersHarness, MangopayHarness):
             else:
                 assert p.balance == 0
 
-
-class TestNotifyParticipants(EmailHarness):
-
     def test_it_notifies_participants(self):
-        pass  # TODO
+        self.make_exchange('mango-cc', 10, 0, self.janet)
+        self.janet.set_tip_to(self.david, '4.50')
+        self.janet.set_tip_to(self.homer, '3.50')
+        self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
+                         data={'fields': 'income', 'income': ''}, xhr=True)
+        Payday.start().run()
+        emails = self.get_emails()
+        assert len(emails) == 2
+        assert emails[0]['to'][0]['email'] == self.david.email
+        assert '4.50' in emails[0]['subject']
+        assert emails[1]['to'][0]['email'] == self.janet.email
+        assert 'top up' in emails[1]['subject']

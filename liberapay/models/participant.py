@@ -652,7 +652,7 @@ class Participant(Model, MixinTeam):
         message['from_email'] = 'support@liberapay.com'
         message['from_name'] = 'Liberapay Support'
         message['to'] = [{'email': email, 'name': self.username}]
-        message['subject'] = spt['subject'].render(context)
+        message['subject'] = spt['subject'].render(context).strip()
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
 
