@@ -24,36 +24,42 @@ msgstr "Io misa? Respondu retpoŝton por helpo."
 msgid "Change your email settings"
 msgstr ""
 
-msgid "Donation failure"
+msgid "You have received {0} this week"
 msgstr ""
 
-msgid "We tried to charge your credit card {0} today, to fund your ongoing support for {1}, but the charge failed with this message:"
+msgid "{0} were given to you personally."
 msgstr ""
 
-msgid "{0} and {n} other"
-msgid_plural "{0} and {n} others"
+msgid "You are not a member of any team, so you haven't received any money for participation in teams."
+msgstr ""
+
+msgid "No money was given to you for your role in the {0} team."
+msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Fix Credit Card"
+msgid "{0} were given to you for your role in the {1} team."
 msgstr ""
 
-msgid "Follow this link to fix your credit card:"
+msgid "{0} were given to you for your roles in the following teams:"
 msgstr ""
 
-msgid "Notification of credit card charge"
+msgid "{0}: {1}"
 msgstr ""
 
-msgid "We charged your credit card {0} today, to fund your ongoing support for {1}. Thanks for using Liberapay!"
+msgid "See your account's transaction logs"
 msgstr ""
 
-msgid "View Receipt"
+msgid "- {0}: {1}"
 msgstr ""
 
-msgid "Follow this link to view your receipt:"
+msgid "It's time to top up your Liberapay wallet"
 msgstr ""
 
-msgid "Follow this link if you want to view or modify your payments:"
+msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
+msgstr ""
+
+msgid "Add money"
 msgstr ""
 
 msgid "{0} from {1} has joined Liberapay!"
@@ -98,19 +104,22 @@ msgstr "Konektanta {0} al {1} en Liberapay."
 msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
 msgstr "Ni konektas {0} al la {1} konto en Liberapay. Tiu estas avizo sendita al {2} ĉar tio estas la ĉefa retpoŝtadreso ni havas en dosiero."
 
+msgid "Withdrawal initiated"
+msgstr ""
+
+msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
+msgstr ""
+
 msgid "Withdrawal failure"
 msgstr ""
 
 msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
 msgstr ""
 
-msgid "Update your bank account information"
+msgid "Try again"
 msgstr ""
 
-msgid "Withdrawal initiated"
-msgstr ""
-
-msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
+msgid "You can try again: {0}"
 msgstr ""
 
 msgid "Hide total giving from others."
@@ -173,6 +182,9 @@ msgstr ""
 msgid "There isn't enough money in your wallet."
 msgstr ""
 
+msgid "You can't withdraw more than {0} at this time."
+msgstr ""
+
 msgid "The transaction fee would be more than 10%."
 msgstr ""
 
@@ -191,10 +203,10 @@ msgstr "{0} revenis eraron, bonvolu reprovi pli malfrue."
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Ne ekzistas uzanton nomitan {0} en {1}."
 
-msgid "When charging my credit card fails"
+msgid "When I receive money"
 msgstr ""
 
-msgid "When charging my credit card succeeds"
+msgid "When there isn't enough money in my wallet to cover my donations"
 msgstr ""
 
 msgid "When a transfer to my bank account is initiated"
@@ -207,18 +219,6 @@ msgid "When someone I pledge to joins Liberapay"
 msgstr ""
 
 msgid "When someone invites me to join a team"
-msgstr ""
-
-msgid "The transfer to your bank account has failed!"
-msgstr ""
-
-msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account."
-msgstr ""
-
-msgid "We tried to charge your credit card {0}, but it failed!"
-msgstr ""
-
-msgid "We charged your credit card {0} to fund your ongoing donations."
 msgstr ""
 
 msgid "You need to log in to access this page."
@@ -795,9 +795,6 @@ msgstr[1] ""
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr ""
 
-msgid "Add money"
-msgstr ""
-
 msgid "Donations"
 msgstr ""
 
@@ -853,6 +850,9 @@ msgid "{0} have been taken from your credit card, {1} went to your liberapay wal
 msgstr ""
 
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
+msgstr ""
+
+msgid "View Receipt"
 msgstr ""
 
 msgid "Your donations are funded by your income."
@@ -1084,6 +1084,15 @@ msgid "{0} have been taken from your liberapay wallet. If the transfer is succes
 msgstr ""
 
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
+msgstr ""
+
+msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
+msgstr ""
+
+msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
+msgstr ""
+
+msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
 msgstr ""
 
 msgid "Bank account"
@@ -1327,6 +1336,9 @@ msgid "How do I add funds to Liberapay?"
 msgstr ""
 
 msgid "How do I withdraw funds from Liberapay?"
+msgstr ""
+
+msgid "Please note that there is a quarantine period of {0} for money coming from credit cards due to the risk of chargebacks."
 msgstr ""
 
 msgid "Why did my receipts decrease?"
