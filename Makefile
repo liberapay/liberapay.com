@@ -71,26 +71,58 @@ pytest-re: env
 	PYTHONPATH=. $(py_test) --lf ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
-i18n_extract: env
+_i18n_extract: env
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
 	@for f in i18n/*/*.po; do \
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
 	done
 	rm i18n/core.pot
+	@$(MAKE) --no-print-directory _i18n_clean
+
+_i18n_clean:
 	@for f in i18n/*/*.po; do \
-	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator): /d' \
+	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator|X-Generator|Language): /d' \
 	           -e 's/^("[^:]+: ) +/\1/' \
-	           -e 's/^("Language-Team: .+? )</\1"\n"</' \
+	           -e 's/^("Language-Team: .+? )<(.+)>\\n/\1"\n"<\2>\\n/' \
 	           -e '/^#: /d' "$$f" >"$$f.new"; \
 	    mv "$$f.new" "$$f"; \
 	done
 
-i18n_update: i18n_pull i18n_extract
-	@git add i18n
-	@if git commit --dry-run &>/dev/null; then git commit -m "update translation catalogs"; fi
+i18n_update: _i18n_pull _i18n_extract
+	@if git commit --dry-run i18n &>/dev/null; then \
+		git commit -m "update translation catalogs" i18n; \
+	fi
 
-i18n_pull: env
+_i18n_fetch:
 	@git remote | grep weblate >/dev/null || git remote add weblate git://git.weblate.org/liberapay.com.git
-	git checkout master
 	git fetch weblate
-	git merge --no-ff -m "merge translations" weblate/master
+
+_i18n_pull: _i18n_fetch
+	git checkout -q master
+	@if git commit --dry-run i18n &>/dev/null; then \
+		echo "There are uncommitted changes in the i18n/ directory." && exit 1; \
+	fi
+	@if test $$(git diff HEAD i18n | wc -c) -gt 0; then \
+		echo "There are unstaged changes in the i18n/ directory." && exit 1; \
+	fi
+	git merge --squash weblate/master
+	@if test $$(git diff HEAD i18n | wc -c) -gt 0; then \
+		$(MAKE) --no-print-directory _i18n_merge; \
+	fi
+
+_i18n_merge:
+	@git reset -q HEAD i18n
+	@while true; do \
+		git add -p i18n; \
+		echo -n 'Are you done? (y/n) ' && read done; \
+		test "$$done" = 'y' && break; \
+	fi
+	@git diff --cached i18n >new-translations.patch
+	@git checkout -q HEAD i18n
+	@git merge -q --no-ff -m "merge translations" weblate/master
+	@git checkout -q HEAD~ i18n
+	@patch -s -p1 -i new-translations.patch
+	@$(MAKE) --no-print-directory _i18n_clean
+	@git add i18n
+	@git commit --amend i18n
+	rm new-translations.patch
