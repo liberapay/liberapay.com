@@ -10,7 +10,7 @@
 
 ### Introduction
 
-Liberapay is a fork of [Gratipay](https://github.com/gratipay/gratipay.com), so it's based on the web micro-framework [Aspen](http://aspen.io/). Aspen uses filesystem routing and [simplates](http://simplates.org/): to make Liberapay return a `Hello $user, your id is $userid` message for requests to the URL `/$user/hello`, you only need to create the file `www/%username/hello.spt` with this inside:
+Liberapay is a fork of [Gratipay](https://github.com/gratipay/gratipay.com), so it uses the web micro-framework [Aspen](http://aspen.io/), which is based on filesystem routing and [simplates](http://simplates.org/). Don't worry, it's quite simple. For example to make Liberapay return a `Hello $user, your id is $userid` message for requests to the URL `/$user/hello`, you only need to create the file `www/%username/hello.spt` with this inside:
 
 ```
 from liberapay.utils import get_participant
