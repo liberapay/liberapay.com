@@ -1,6 +1,7 @@
 # encoding: utf8
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+from base64 import b64decode 
 
 from datetime import date, datetime, timedelta
 import re
@@ -70,6 +71,12 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
                 raise Response(403, _("You are not authorized to access this page."))
 
     return participant
+
+def b64_decode_wrapper(b_64_encoded_string):
+    try:
+        b64decode(b_64_encoded_string)
+    except Exception:
+        raise Response(400, "invalid base64 input")
 
 
 def update_global_stats(website):
