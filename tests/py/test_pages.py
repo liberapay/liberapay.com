@@ -1,7 +1,8 @@
 from __future__ import print_function, unicode_literals
 
-import re
+from collections import OrderedDict
 from decimal import Decimal as D
+import re
 
 from aspen import Response
 
@@ -27,9 +28,9 @@ class TestPages(MangopayHarness):
             if spt[spt.rfind('/')+1:].startswith('index.'):
                 return spt[i:spt.rfind('/')+1]
             return spt[i:-4]
+        urls = OrderedDict()
         for url in sorted(map(f, find_files(self.client.www_root, '*.spt'))):
             url = url.replace('/%username/membership/', '/team/membership/') \
-                     .replace('/%username/', '/david/') \
                      .replace('/for/%slug/', '/for/wonderland/') \
                      .replace('/%platform/', '/github/') \
                      .replace('/%user_name/', '/liberapay/') \
@@ -39,6 +40,9 @@ class TestPages(MangopayHarness):
                      .replace('/%back_to', '/Li4=') \
                      .replace('/%type', '/receiving.js') \
                      .replace('/%endpoint', '/public')
+            urls[url.replace('/%username/', '/david/')] = None
+            urls[url.replace('/%username/', '/team/')] = None
+        for url in urls:
             assert '/%' not in url
             try:
                 r = self.client.GET(url, **kw)
