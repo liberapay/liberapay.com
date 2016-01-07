@@ -39,6 +39,7 @@ def make_history(harness):
 class TestHistory(FakeTransfersHarness):
 
     def test_iter_payday_events(self):
+        now = datetime.now()
         Payday.start().run()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
@@ -70,7 +71,18 @@ class TestHistory(FakeTransfersHarness):
         assert bob.balance == 12
 
         Payday().start()
-        events = list(iter_payday_events(self.db, bob))
+
+        # Make sure events are all in the same year
+        delta = '%s days' % (364 - (now - datetime(now.year, 1, 1)).days)
+        self.db.run("""
+            UPDATE paydays
+               SET ts_start = ts_start + interval %(delta)s
+                 , ts_end = ts_end + interval %(delta)s;
+            UPDATE transfers
+               SET timestamp = "timestamp" + interval %(delta)s;
+        """, dict(delta=delta))
+
+        events = list(iter_payday_events(self.db, bob, now.year))
         assert len(events) == 9
         assert events[0]['kind'] == 'totals'
         assert events[0]['given'] == 0
@@ -83,13 +95,13 @@ class TestHistory(FakeTransfersHarness):
 
         alice = Participant.from_id(alice.id)
         assert alice.balance == 4990
-        events = list(iter_payday_events(self.db, alice))
+        events = list(iter_payday_events(self.db, alice, now.year))
         assert events[0]['given'] == 10
         assert len(events) == 11
 
         carl = Participant.from_id(carl.id)
         assert carl.balance == 0
-        events = list(iter_payday_events(self.db, carl))
+        events = list(iter_payday_events(self.db, carl, now.year))
         assert len(events) == 0
 
     def test_iter_payday_events_with_failed_exchanges(self):
