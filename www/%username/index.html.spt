@@ -20,7 +20,7 @@ langs = participant.get_statement_langs()
 {% extends "templates/profile.html" %}
 
 {% block heading %}
-{% if user == participant or participant.kind == 'group' and user.member_of(participant) %}
+{% if user == participant or participant.kind == 'group' and user and user.member_of(participant) %}
     <a href="edit" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
 {% endif %}
 {{ super() }}
