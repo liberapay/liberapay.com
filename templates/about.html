@@ -1,4 +1,5 @@
 {% extends "templates/base.html" %}
+{% block heading %}{% endblock %}
 {% block subnav %}
     {% set pages = [
         ('/', _('About')),
@@ -6,7 +7,7 @@
         ('/payday', _('Payday')),
         ('/teams', _('Teams')),
         ('/stats', _('Stats')),
-        ('/terms', _('Terms')),
+        ('/legal', _('Legal')),
         ('/contact', _('Contact')),
         ('/security', _('Security'))
     ] %}

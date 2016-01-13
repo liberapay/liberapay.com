@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import atexit
 import fnmatch
 import os
+import re
 from tempfile import mkstemp
 
 import aspen
@@ -31,6 +32,7 @@ from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models import DB
+from liberapay.utils import markdown
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (
@@ -254,9 +256,9 @@ def clean_assets(www_root):
             pass
 
 
-def load_i18n(project_root, tell_sentry):
+def load_i18n(website):
     # Load the locales
-    localeDir = os.path.join(project_root, 'i18n', 'core')
+    localeDir = os.path.join(website.project_root, 'i18n', 'core')
     locales = LOCALES
     for file in os.listdir(localeDir):
         try:
@@ -277,7 +279,7 @@ def load_i18n(project_root, tell_sentry):
                 except KeyError:
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
-            tell_sentry(e, {})
+            website.tell_sentry(e, {})
 
     # Add aliases
     for k, v in list(locales.items()):
@@ -289,6 +291,20 @@ def load_i18n(project_root, tell_sentry):
     # Patch the locales to look less formal
     locales['fr'].currency_formats[None] = parse_pattern('#,##0.00\u202f\xa4')
     locales['fr'].currency_symbols['USD'] = '$'
+
+    # Load the markdown files
+    docs = website.docs = {}
+    heading_re = re.compile(r'^(#+ )', re.M)
+    for path in find_files(os.path.join(website.project_root, 'i18n'), '*.md'):
+        d, b = os.path.split(path)
+        doc = os.path.basename(d)
+        lang = b[:-3]
+        with open(path, 'rb') as f:
+            md = f.read().decode('utf8')
+            if md.startswith('# '):
+                md = '\n'.join(md.split('\n')[1:]).strip()
+                md = heading_re.sub(r'#\1', md)
+            docs.setdefault(doc, {}).__setitem__(lang, markdown.render(md))
 
 
 def other_stuff(website, env):

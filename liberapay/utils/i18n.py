@@ -263,11 +263,23 @@ def add_helpers_to_context(tell_sentry, context, loc):
     context['format_datetime'] = lambda *a: format_datetime(*a, locale=loc)
     context['parse_decimal'] = lambda *a: parse_decimal(*a, locale=loc)
     context['to_age'] = to_age
+
     def to_age_str(o, **kw):
         if not isinstance(o, datetime):
             kw.setdefault('granularity', 'day')
         return format_timedelta(to_age(o), locale=loc, **kw)
+
     context['to_age_str'] = to_age_str
+
+    def getdoc(name):
+        versions = context['website'].docs[name]
+        for lang in context['request'].accept_langs:
+            doc = versions.get(lang)
+            if doc:
+                return doc
+        return versions['en']
+
+    context['getdoc'] = getdoc
 
 
 def extract_spt(fileobj, *args, **kw):
