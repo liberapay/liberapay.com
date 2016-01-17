@@ -63,7 +63,7 @@ teams = website.db.all("""
     <table class="tip-distribution">
         {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
         <tr>
-            <td class="dollar-sign">€</td>
+            <td class="currency-symbol">€</td>
             <td class="amount">{{ amount }}</td>
             <td colspan="2"></td>
             <td class="count">

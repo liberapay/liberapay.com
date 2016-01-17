@@ -8,7 +8,7 @@ teams = website.db.all("""
          , p.username AS name
          , p.receiving
          , p.goal
-         , p.receiving / t.nmembers AS dollars_per_member
+         , p.receiving / t.nmembers AS euros_per_member
          , CASE p.goal
            WHEN NULL THEN NULL
            WHEN 0 THEN NULL
@@ -22,7 +22,7 @@ teams = website.db.all("""
         ON p.id = t.id
      WHERE (p.goal >= 0 OR p.goal IS NULL)
        AND NOT p.hide_from_search
-  ORDER BY dollars_per_member DESC, nmembers ASC
+  ORDER BY euros_per_member DESC, nmembers ASC
 
 """)
 nteams = len(teams)
@@ -50,7 +50,7 @@ subhead = _("Teams")
         <td class="figure">{{ team.goal or '&mdash;'|safe }}</td>
         <td class="figure">{{ team.pfunded if team.pfunded else '&mdash;'|safe }}</td>
         <td class="figure">{{ team.nmembers }}</td>
-        <td class="figure">{{ format_decimal(team.dollars_per_member, '#,##0.00') }}</td>
+        <td class="figure">{{ format_decimal(team.euros_per_member, '#,##0.00') }}</td>
     </tr>
     {% endfor %}
 </table>

@@ -144,7 +144,7 @@ class TestFees(MangopayHarness):
         expected = (D('10.37'), D('0.37'))
         assert actual == expected
 
-    def test_upcharge_at_ten_dollars(self):
+    def test_upcharge_at_ten(self):
         actual = upcharge(D('10.00'))
         expected = (D('10.37'), D('0.37'))
         assert actual == expected

@@ -68,7 +68,7 @@ class Tests(Harness):
         team.set_take_for(alice, D('35.00'), team, check_max=False)
         assert team.set_take_for(alice, D('42.00'), alice) == 40
 
-    def test_if_last_week_is_less_than_a_dollar_can_increase_to_a_dollar(self):
+    def test_if_last_week_is_less_than_one_can_increase_to_one(self):
         team = self.make_team()
         alice = self.make_participant('alice')
         self.take_last_week(team, alice, '0.01')
