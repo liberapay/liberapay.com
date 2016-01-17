@@ -4,7 +4,7 @@
     'text-'+CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)]
 }}{% endmacro %}
 
-{% macro team_takes_table(members) %}
+{% macro team_takes_table(team) %}
     <table id="team" class="table valign-middle">
       <thead>
         <tr>
@@ -20,13 +20,14 @@
         </tr>
       </thead>
       <tbody>
-        {% for member in members.values() %}
+        {% for member in team.get_members().values() %}
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
             <td>{{ format_decimal(member.last_week) }}</td>
             {% if member.id == user.id %}
                 <td>
-                    <form action="take" method="POST">
+                    <form action="/~{{ team.id }}/income/take?back_to={{ urlquote(request.line.uri) }}"
+                          method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                         <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take) }}" />
                     </form>

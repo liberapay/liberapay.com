@@ -9,10 +9,17 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Receiving")
 
-route = ExchangeRoute.from_network(participant, 'mango-ba')
+teams = website.db.all("""
+    SELECT p.*::participants
+      FROM current_takes x
+      JOIN participants p ON p.id = x.team
+     WHERE member=%s
+  ORDER BY x.amount DESC
+""", (participant.id,))
 
 [-----------------------------------------------------------------------------]
 {% extends "templates/settings.html" %}
+{% from "templates/team-members.html" import team_takes_table with context %}
 {% block content %}
 
 {% set receiving = Money(participant.receiving, "EUR") %}
@@ -29,7 +36,18 @@ route = ExchangeRoute.from_network(participant, 'mango-ba')
     <p><a class="btn btn-default" href="payout/Li4=">{{ _("Withdraw money") }}</a></p>
 {% endif %}
 
-{% if participant.receiving > 0 %}
+{% if teams %}
+    <h2 id="teams">{{ _("Teams") }}</h2>
+    {% for team in teams %}
+        <h4>{{ team.username }}</h4>
+        <p>{{ _("{0} receives {1} per week",
+                '<a href="%s">%s</a>'|safe % (team.path(''), team.username),
+                Money(team.receiving, "EUR")) }}</p>
+        {{ team_takes_table(team, cls='table-condensed') }}
+    {% endfor %}
+{% endif %}
+
+{% if participant.receiving > participant.taking %}
 {% set tip_distribution = participant.get_tip_distribution()[0] %}
 <div class="row">
 <div class="col-md-6">

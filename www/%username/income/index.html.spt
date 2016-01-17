@@ -23,8 +23,7 @@ subhead = _("Income")
 <p>{{ _("{0} receives {1} per week", participant.username, receiving) }}</p>
 
 {% if participant.kind == 'group' %}
-    {% set members = participant.get_members() %}
-    {{ team_takes_table(members) }}
+    {{ team_takes_table(participant) }}
 {% endif %}
 
 <div class="row">
