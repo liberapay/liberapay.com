@@ -1,0 +1,42 @@
+{% set CLASSES = ('info', 'success', 'warning', 'danger') %}
+
+{% macro get_cls(m) %}{{
+    'text-'+CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)]
+}}{% endmacro %}
+
+{% macro team_takes_table(members) %}
+    <table id="team" class="table valign-middle">
+      <thead>
+        <tr>
+          <th></th>
+          <th>{{ _("Last Week") }}</th>
+          <th colspan=2>{{ _("This Week") }}</th>
+        </tr>
+        <tr>
+          <th>{{ _("Member") }}</th>
+          <th>{{ _("Nominal Take") }}</th>
+          <th>{{ _("Nominal Take") }}</th>
+          <th>{{ _("Actual Take") }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for member in members.values() %}
+        <tr>
+            <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
+            <td>{{ format_decimal(member.last_week) }}</td>
+            {% if member.id == user.id %}
+                <td>
+                    <form action="take" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                        <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take) }}" />
+                    </form>
+                </td>
+            {% else %}
+                <td class="{{ get_cls(member) if member.nominal_take != member.last_week }}">{{ format_decimal(member.nominal_take) }}</td>
+            {% endif %}
+            <td>{{ format_decimal(member.actual_amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endmacro %}
