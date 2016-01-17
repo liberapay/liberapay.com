@@ -1,16 +1,16 @@
 {% set CLASSES = ('info', 'success', 'warning', 'danger') %}
 
 {% macro get_cls(m) %}{{
-    'text-'+CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)]
+    CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)]
 }}{% endmacro %}
 
-{% macro team_takes_table(team) %}
-    <table id="team" class="table valign-middle">
+{% macro team_takes_table(team, cls='') %}
+    <table id="team" class="table valign-middle {{ cls }}">
       <thead>
         <tr>
           <th></th>
-          <th>{{ _("Last Week") }}</th>
-          <th colspan=2>{{ _("This Week") }}</th>
+          <th>{{ _("Last Payday") }}</th>
+          <th colspan=2>{{ _("Next Payday") }}</th>
         </tr>
         <tr>
           <th>{{ _("Member") }}</th>
@@ -23,19 +23,20 @@
         {% for member in team.get_members().values() %}
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
-            <td>{{ format_decimal(member.last_week) }}</td>
+            <td>{{ format_decimal(member.last_week, '#,##0.00') }}</td>
+            {% set cell_cls = get_cls(member) if member.nominal_take != member.last_week else '' %}
             {% if member.id == user.id %}
-                <td>
+                <td class="{{ cell_cls or 'active' }}">
                     <form action="/~{{ team.id }}/income/take?back_to={{ urlquote(request.line.uri) }}"
                           method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-                        <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take) }}" />
+                        <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take, '#,##0.00') }}" />
                     </form>
                 </td>
             {% else %}
-                <td class="{{ get_cls(member) if member.nominal_take != member.last_week }}">{{ format_decimal(member.nominal_take) }}</td>
+                <td class="{{ 'text-'+cell_cls }}">{{ format_decimal(member.nominal_take, '#,##0.00') }}</td>
             {% endif %}
-            <td>{{ format_decimal(member.actual_amount) }}</td>
+            <td>{{ format_currency(member.actual_amount, 'EUR') }}</td>
         </tr>
         {% endfor %}
       </tbody>
