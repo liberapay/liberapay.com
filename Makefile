@@ -88,10 +88,14 @@ _i18n_clean:
 	    mv "$$f.new" "$$f"; \
 	done
 
-i18n_update: _i18n_pull _i18n_extract
+i18n_update: _i18n_rebase _i18n_pull _i18n_extract
 	@if git commit --dry-run i18n &>/dev/null; then \
 		git commit -m "update translation catalogs" i18n; \
 	fi
+
+_i18n_rebase:
+	@echo -n "Please go to https://hosted.weblate.org/update/liberapay/?method=rebase if you haven't done it yet, then press Enter to continue..."
+	@read a
 
 _i18n_fetch:
 	@git remote | grep weblate >/dev/null || git remote add weblate git://git.weblate.org/liberapay.com.git
