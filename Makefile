@@ -116,7 +116,7 @@ _i18n_merge:
 		git add -p i18n; \
 		echo -n 'Are you done? (y/n) ' && read done; \
 		test "$$done" = 'y' && break; \
-	fi
+	done
 	@git diff --cached i18n >new-translations.patch
 	@git checkout -q HEAD i18n
 	@git merge -q --no-ff -m "merge translations" weblate/master
