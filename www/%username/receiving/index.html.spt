@@ -39,7 +39,10 @@ teams = website.db.all("""
 {% if teams %}
     <h2 id="teams">{{ _("Teams") }}</h2>
     {% for team in teams %}
-        <h4>{{ team.username }}</h4>
+        <h4>{{ team.username }}
+            <a href="/{{ team.username }}/membership/leave?back_to={{ urlquote(request.line.uri) }}"
+               class="btn btn-default btn-xs">{{ _('Leave') }}</a>
+        </h4>
         <p>{{ _("{0} receives {1} per week",
                 '<a href="%s">%s</a>'|safe % (team.path(''), team.username),
                 Money(team.receiving, "EUR")) }}</p>
