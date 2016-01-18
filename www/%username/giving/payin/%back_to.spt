@@ -194,8 +194,9 @@ title = _("Add money")
 </div>
 {% if show_form %}
 <p class="alert alert-info">
-    {{ _("Personal and financial information is securely stored by our partner, {0}.",
-         '<a href="https://www.mangopay.com/legal-notices/">Mangopay</a>'|safe) }}
+    <a href="https://www.mangopay.com/legal-notices/">
+        <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" />
+    </a>
 </p>
 {% endif %}
 </div>
