@@ -48,7 +48,7 @@ if request.method == 'POST':
         try:
             if account.Id:
                 account = mangoapi.users.Update(account)
-            else:
+            elif body.get('terms') == 'agree':
                 account = mangoapi.users.Create(account)
                 id = website.db.one("""
                     UPDATE participants
@@ -59,6 +59,8 @@ if request.method == 'POST':
                 """, (account.Id, participant.id))
                 if id != account.Id:
                     raise Response(409, "race condition")
+            else:
+                error = _("You have to agree to MangoPay's Terms of Service.")
         except ResponseException as err:
             error = repr_exception(err)
 
@@ -92,7 +94,15 @@ else:
 
     {% include "templates/identity-form.html" %}
 
-    <div class="form-group"></div>
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="terms" value="agree" required
+                   {% if account.Id %} checked disabled {% endif %} />
+            {{ _("I agree to {0}MangoPay's Terms of Service{1}",
+                 '<a href="/about/legal#mangopay-terms">'|safe,
+                 '</a>'|safe) }}
+        </label>
+    </div>
 
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 
