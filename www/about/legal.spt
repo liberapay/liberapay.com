@@ -1,3 +1,13 @@
+import os
+
+from markupsafe import Markup
+
+MANGOPAY_TERMS = Markup().join(
+    Markup('<li><a href="%s">%s</a></li>') % (website.asset('mangopay/'+f), f)
+    for f in sorted(os.listdir(website.www_root+'/assets/mangopay'))
+    if f.startswith('Mangopay_Terms-') and f.endswith('.pdf')
+)
+
 [---]
 title = _("Legal")
 [---] text/html
@@ -29,6 +39,16 @@ Red Had Inc<br>100 E. Davie Street<br>Raleigh, NC 27601<br>USA<br><br>
 <h2 id="terms">{{ _("Terms of Service") }}</h2>
 
 {{ getdoc("terms") }}
+
+<h2 id="mangopay-terms">{{ _("Terms of Use of the MangoPay Electronic Money") }}</h2>
+
+<p>{{ _(
+    "{0} is our payments partner, you have to accept their terms of service to "
+    "be able to fully use Liberapay.",
+    '<a href="https://www.mangopay.com/legal-notices/">MangoPay</a>'|safe
+) }}</p>
+
+<ul>{{ MANGOPAY_TERMS }}</ul>
 
 </div></div>
 {% endblock %}
