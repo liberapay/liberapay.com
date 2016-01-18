@@ -1595,6 +1595,8 @@ def sign_in(request, state, redirect=True):
         if p and p.status == 'closed':
             p.update_status('active')
     elif body.get('sign-in.username'):
+        if body.get('sign-in.terms') != 'agree':
+            raise Response(400, 'you have to agree to the terms')
         kind = body['sign-in.kind']
         if kind not in ('individual', 'organization'):
             raise Response(400, 'bad kind')
