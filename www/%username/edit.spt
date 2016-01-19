@@ -75,13 +75,13 @@ title = participant.username
     <div class="radio">
         <label class="with-input-group-sm">
             <input type="radio" name="goal" id="goal-yes" value="custom"
-                   {{ 'checked' if user.goal > 0 }}/>
+                   {{ 'checked' if participant.goal > 0 }}/>
             <span>{{ GOAL_PARTS[0] }}</span>
             <div><div class="input-group">
                 <div class="input-group-addon">€</div>
                 <input type="text" name="goal_custom" id="goal-custom"
                        class="amount form-control input-sm"
-                       value="{{ format_decimal(user.goal) if user.goal and user.goal > 0 }}" />
+                       value="{{ format_decimal(participant.goal) if participant.goal and participant.goal > 0 }}" />
                 <div class="input-group-addon">{{ _("per week") }}</div>
             </div></div>
             <span>{{ GOAL_PARTS[1] }}</span>
@@ -89,20 +89,20 @@ title = participant.username
 
         <label>
             <input type="radio" name="goal" id="goal-null" value="null"
-                   {{ 'checked' if user.goal == None }} />
+                   {{ 'checked' if participant.goal == None }} />
             {{ GRATEFUL }}
         </label>
 
         {% if participant.kind != 'group' %}
         <label>
             <input type="radio" name="goal" id="goal-0" value="0.00"
-                   {{ 'checked' if user.goal == 0 }} />
+                   {{ 'checked' if participant.goal == 0 }} />
             {{ PATRON }}
         </label>
 
         <label>
             <input type="radio" name="goal" id="goal-negative" value="-1"
-                   {{ 'checked' if user.goal and user.goal < 0 }} />
+                   {{ 'checked' if participant.goal and participant.goal < 0 }} />
             {{ PATRON_NO_GIFTS }}
         </label>
         {% endif %}

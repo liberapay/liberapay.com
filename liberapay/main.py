@@ -58,7 +58,7 @@ website.db = wireup.db(env)
 website.mailer = wireup.mail(env, website.project_root)
 wireup.billing(env)
 wireup.username_restrictions(website)
-wireup.load_i18n(website.project_root, tell_sentry)
+wireup.load_i18n(website)
 wireup.other_stuff(website, env)
 wireup.accounts_elsewhere(website, env)
 

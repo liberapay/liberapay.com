@@ -1,4 +1,7 @@
 raw = """\
+Sergey Bobrov https://twitter.com/Black2Fan
+https://github.com/gratipay/security-flh0cu/issues/1
+
 BALAJI P R https://www.linkedin.com/in/balagpy
 https://github.com/gratipay/security-2a443f/issues/1
 
@@ -67,8 +70,12 @@ title = _("Security")
 
     <h2>Hall of Fame</h2>
 
-    <p>Thank you to the following researchers (most recent first) for
-    disclosing security issues to Gratipay (Liberapay's predecessor).</p>
+    <p>Thanks to all hackers who have disclosed security issues to Gratipay
+    <a href="https://hackerone.com/gratipay">on Hackerone</a>, some of which
+    also applied to Liberapay.</p>
+
+    <p>Thanks to the following researchers (most recent first) for disclosing
+    security issues to Gratipay through other means:</p>
 
     <ol>
         {% for researchers, link in hof %}

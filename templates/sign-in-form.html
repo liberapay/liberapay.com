@@ -56,6 +56,15 @@
         </select>
     </div>
 
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="sign-in.terms" value="agree" required />
+            {{ _("I accept {0}Liberapay's Terms of Service{1}",
+                 '<a href="/about/legal#terms">'|safe,
+                 '</a>'|safe) }}
+        </label>
+    </div>
+
     <button class="btn btn-default">{{ _("Go") }}</button>
 
 </form>

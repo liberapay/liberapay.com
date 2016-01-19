@@ -12,6 +12,7 @@ good_data = {
     'sign-in.password': 'password',
     'sign-in.kind': 'individual',
     'sign-in.email': 'bob@example.com',
+    'sign-in.terms': 'agree',
 }
 
 

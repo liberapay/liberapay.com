@@ -7,21 +7,6 @@ title = _("Frequently Asked Questions")
 <div class="row faq">
 <dl class="col-md-6">
 
-    <dt id="what-is-it">{{ _("What is Liberapay?") }}</dt>
-
-    <dd>{{ _("Liberapay is a recurrent donations platform. It's stable "
-             "crowdfunding, with no intrinsic fees and no strings attached.") }}</dd>
-
-
-    <dt id="who-is-it">{{ _("Who is Liberapay?") }}</dt>
-
-    <dd>{{ _("Liberapay is a non-profit association founded in 2015 and legally registered in France (well, not yet).") }}
-    {{ _("Anyone is welcome to join the members of {0}the Liberapay team{2} in {1}building Liberapay{2}.",
-         '<a href="/Liberapay/">'|safe,
-         '<a href="https://github.com/liberapay/liberapay.com">'|safe,
-         '</a>'|safe) }}</dd>
-
-
     <dt id="how-funded">{{ _("How is Liberapay funded?") }}</dt>
 
     <dd>{{ _("Liberapay is funded {0}on Liberapay{1}.",
@@ -31,10 +16,15 @@ title = _("Frequently Asked Questions")
 
     <dt id="who-can-use">{{ _("Who can use Liberapay?") }}</dt>
 
-    <dd>{{ _("Pretty much anyone who has a bank account (to receive) and a "
-             "credit card (to give) that are usable internationally. Please "
-             "note that banking fees can vary based on your country and the "
-             "currency of the transaction.") }}</dd>
+    <dd>{{ _(
+        "Donating requires a credit or debit card (Visa or MasterCard), "
+        "unfortunately it's not truly worldwide and may not work depending on "
+        "where you live. Withdrawing the money you receive is done by transfer "
+        "to your bank account, again this might not work depending on where "
+        "you live, but if that happens we'll try to find a solution. Please "
+        "note that banking fees can vary based on your country and the "
+        "currencies involved in the transaction."
+    ) }}</dd>
 
 
     <dt id="one-time-gift">{{ _("Can I make a one-time donation?") }}</dt>
@@ -42,24 +32,32 @@ title = _("Frequently Asked Questions")
     <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>
 
 
-    <dt id="how-add-funds">{{ _("How do I add funds to Liberapay?") }}</dt>
-
-    <dd><a href="/about/me/giving/payin">{{ _("Add money") }}</a></dd>
-
-
-    <dt id="how-withdraw-funds">{{ _("How do I withdraw funds from Liberapay?") }}</dt>
+    <dt id="differences">{{ _("What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?") }}</dt>
 
     <dd>
-        <p><a href="/about/me/receiving/payout">{{ _("Withdraw money") }}</a></p>
-        <p>{{ _("Please note that there is a quarantine period of {0} for money "
-                "coming from credit cards due to the risk of chargebacks.",
-                constants.QUARANTINE) }}</p>
+    <ol>
+        <li>{{ _("Liberapay is only for donations, meaning that transactions "
+                 "must not be linked to a contract nor a promise of "
+                 "recompense.") }}</li>
+        <li>{{ _("Liberapay is an open project structured around a non-profit "
+                 "organization, which sets it apart from commercial platforms "
+                 "like Patreon and Tipeee.") }}</li>
+        <li>{{ _("Unlike other non-profit platforms, Liberapay is neutral. You "
+                 "can create an account without having to wait for us to "
+                 "approve it, and we won't kick you out unless you break the "
+                 "law or the terms of service.") }}</li>
+    </ol>
+    <p>{{ _("If you'd like more details, the snowdrift.coop folks have "
+            "compiled {0}a big list{1} of crowdfunding platforms and the "
+            "differences between them.",
+            '<a href="https://snowdrift.coop/p/snowdrift/w/en/othercrowdfunding">'|safe,
+            '</a>'|safe) }}</p>
     </dd>
 
 </dl>
 <dl class="col-md-6">
 
-    <dt id="receipts-decrease">{{ _("Why did my receipts decrease?") }}</dt>
+    <dt id="income-decrease">{{ _("Why did my income decrease?") }}</dt>
 
     <dd>{{ _("If your income decreased, one of the following happened:") }}
 
@@ -68,13 +66,13 @@ title = _("Frequently Asked Questions")
                  "to you, or their account was closed or blacklisted.") }}</li>
 
         <li>{{ _("A donor to you had insufficient funds in their Liberapay wallet "
-                 "to fund their donation to you, and pulling money from their credit "
-                 "card failed.") }}</li>
+                 "to fund their donation to you.") }}</li>
 
         <li>{{ _("Your account has been blacklisted for legal reasons.") }}</li>
 
       </ol>
     </dd>
+
 
     <dt id="maximum-amount">{{ _("Is there a minimum or maximum amount I can give or receive?") }}</dt>
 
@@ -106,11 +104,6 @@ title = _("Frequently Asked Questions")
     <dt id="tax-deductible">{{ _("Are donations through Liberapay tax-deductible?") }}</dt>
 
     <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
-
-
-    <dt id="close-account">{{ _("How do I close my account?") }}</dt>
-
-    <dd><a href="/about/me/settings/close">{{ _("Close account") }}</a></dd>
 
 </dl>
 </div>

@@ -1,8 +1,11 @@
 [---]
-title = _("About")
+title = _("Introduction")
 [---] text/html
 {% extends "templates/about.html" %}
 {% block content %}
+<div class="row"><div class="col-md-8">
+
+    <h2 id="what">{{ _("What is Liberapay?") }}</h2>
 
     <p>{{ _("Liberapay is a way to donate money recurrently to people whose work you appreciate.") }}</p>
 
@@ -25,4 +28,28 @@ title = _("About")
         , '<a href="/Liberapay/">'|safe, '</a>'|safe
     ) }}</p>
 
+    <p>{{ _(
+        "Liberapay is an open project, you can help us {1}translate it{0}, "
+        "{2}improve its code{0}, and {3}manage its legal entity{0}. If you do "
+        "so you'll be able to join {4}the Liberapay team{0} and receive a "
+        "share of the money that our users donate to keep the service running.",
+        '</a>'|safe,
+        '<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
+        '<a href="https://github.com/liberapay/liberapay.com">'|safe,
+        '<a href="https://github.com/liberapay/liberapay.org">'|safe,
+        '<a href="/Liberapay/">'|safe
+    ) }}</p>
+
+
+    <h2 id="who">{{ _("Who is Liberapay?") }}</h2>
+
+    <p>{{ _(
+        "Liberapay is a non-profit organization {0}founded in 2015 in France{1} by {2} and {3}.",
+        '<a href="https://github.com/liberapay/liberapay.org/issues/2">'|safe,
+        '</a>'|safe,
+        '<a href="/Changaco/">Changaco</a>'|safe,
+        '<a href="/Zatalyz/">Zatalyz</a>'|safe,
+    ) }}</p>
+
+</div></div>
 {% endblock %}

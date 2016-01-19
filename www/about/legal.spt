@@ -1,0 +1,54 @@
+import os
+
+from markupsafe import Markup
+
+MANGOPAY_TERMS = Markup().join(
+    Markup('<li><a href="%s">%s</a></li>') % (website.asset('mangopay/'+f), f)
+    for f in sorted(os.listdir(website.www_root+'/assets/mangopay'))
+    if f.startswith('Mangopay_Terms-') and f.endswith('.pdf')
+)
+
+[---]
+title = _("Legal")
+[---] text/html
+{% extends "templates/about.html" %}
+
+{% block content %}
+<div class="row"><div class="col-md-8">
+
+<h2 id="info">{{ _("Legal Information") }}</h2>
+
+<p>{{ _(
+    "This website is managed by Liberapay, a non-profit organization founded in 2015 and legally registered in France.\n"
+    "Its publication director is Liberapay's legal representative, {0}.",
+    "Charly Coste"
+).replace('\n', '<br>'|safe) }}</p>
+
+<p><a class="btn btn-primary" href="/about/contact">{{ _("Contact Us") }}</a></p>
+
+<p>{{ _("Postal address:") }}</p>
+<blockquote class="small">Association Liberapay<br>Chez M. Coste<br>Le Bourg<br>14770 St Jean Le Blanc<br>France</blockquote>
+
+<p>{{ _("This website is hosted on {0} by:",
+        '<a href="https://openshift.com/">OpenShift</a>'|safe) }}</p>
+<blockquote class="small">
+Red Had Inc<br>100 E. Davie Street<br>Raleigh, NC 27601<br>USA<br><br>
+{{ _("Phone number: {0}", "+1 888 733 428 1") }}
+</blockquote>
+
+<h2 id="terms">{{ _("Terms of Service") }}</h2>
+
+{{ getdoc("terms") }}
+
+<h2 id="mangopay-terms">{{ _("Terms of Use of the MangoPay Electronic Money") }}</h2>
+
+<p>{{ _(
+    "{0} is our payments partner, you have to accept their terms of service to "
+    "be able to fully use Liberapay.",
+    '<a href="https://www.mangopay.com/legal-notices/">MangoPay</a>'|safe
+) }}</p>
+
+<ul>{{ MANGOPAY_TERMS }}</ul>
+
+</div></div>
+{% endblock %}
