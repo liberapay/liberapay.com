@@ -27,6 +27,7 @@ title = _("Teams")
 [---] text/html
 {% extends "templates/about.html" %}
 {% block content %}
+<div class="row paragraph"><div class="col-md-8">
 
 <p>{{ _(
     "A Liberapay team coordinates donations from multiple donors to multiple "
@@ -35,10 +36,15 @@ title = _("Teams")
     "donors to donees."
 ) }}</p>
 
+<p>{{ _(
+    "Teams are for peer-to-peer donations, they can't be used by a legal "
+    "entity to distribute donations to its members."
+) }}</p>
+
 <h2>{{ _("Creating a team") }}</h2>
 
 {% if user.ANON %}
-    <p>{{ _("You need to {0}sign in{1} first.",
+    <p>{{ _("You need to {0}sign into your own account{1} first.",
             '<a href="/sign-in?back_to=%s">'|safe % urlquote(request.line.uri),
             '</a>'|safe
 ) }}</p>
@@ -48,14 +54,55 @@ title = _("Teams")
 
 <h2>{{ _("Becoming a team member") }}</h2>
 
-<p>TODO</p>
+<p>{{ _(
+    "Once you have contributed to a team's project, ask its members to invite "
+    "you. Don't forget to tell them what your username is."
+) }}</p>
 
 <h2>{{ _("Sharing the money") }}</h2>
 
-<p>TODO</p>
+<p>{{ _(
+    "Teams don't have a hierarchy, all their members are equal and set their "
+    "own take."
+) }}</p>
+
+<p>{{ _(
+    "You can change your takes from {0}your teams dashboard{1}. It contains "
+    "tables that show the nominal takes of all members for the next and "
+    "previous payday, as well as an estimate of the actual amounts of money "
+    "they'll receive in the next payday.",
+    '<a href="/about/me/receiving/#teams">'|safe,
+    '</a>'|safe
+) }}</p>
+
+<p>{{ _(
+    "The nominal takes are the raw numbers that the members input themselves, "
+    "the actual takes are computed by the system: first it sums up the nominal "
+    "takes, then it computes the percentage that each take represents, and "
+    "finally it applies those percentages to the available income."
+) }}</p>
+
+<p>{{ _(
+    "Nominal takes are throttled, they can't be raised higher than a maximum "
+    "computed based on the nominal takes at the time of the previous payday. "
+    "The exact limit is the maximum of these three values: two times the "
+    "member's take in the previous payday, 70% of the median take in the "
+    "previous payday, and the number 1."
+) }}</p>
 
 <h2>{{ _("Removing team membership") }}</h2>
 
-<p>TODO</p>
+<p>{{ _(
+    "You can leave a team from {0}your teams dashboard{1}.",
+    '<a href="/about/me/receiving/#teams">'|safe,
+    '</a>'|safe
+) }}</p>
 
+<p>{{ _(
+    "Kicking a member out of a team is not implemented yet. Please contact "
+    "support with evidence that the member needs to be kicked out and that "
+    "there is consensus on that among the other members."
+) }}</p>
+
+</div></div>
 {% endblock %}

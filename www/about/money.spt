@@ -1,0 +1,51 @@
+[---]
+title = _("Money")
+[---] text/html
+{% extends "templates/about.html" %}
+{% block content %}
+<div class="row"><div class="col-md-8">
+
+<h3>{{ _("Quarantine") }}</h3>
+
+<p>{{ _(
+    "We quarantine money for {0} to protect ourselves from credit card fraud, "
+    "sorry for the inconvenience.",
+    constants.QUARANTINE
+) + ' ' + _(
+    "Concretely, you are prevented from withdrawing the quarantined money from "
+    "your Liberapay account to your bank account."
+) }}</p>
+
+<h3>{{ _("Chargebacks") }}</h3>
+
+<p>{{ _(
+    "If despite our fraud prevention efforts you receive money whose origin is "
+    "revealed to be fraudulent, it falls on you to pay it back."
+) }}</p>
+
+<h3>{{ _("Safety") }}</h3>
+
+<p>{{ _(
+    "We guarantee that the funds you put in our custody will not be lost in "
+    "case of bankruptcy, whether it affects us or a third party to whom we "
+    "have delegated the custody of the funds."
+) }}</p>
+
+<h3>{{ _("Wallets") }}</h3>
+
+<p>{{ _(
+    "A user's money is held in their wallets. We currently only support one "
+    "wallet per user, and only one currency (the euro) in that wallet."
+) }}</p>
+
+<h3>Payday</h3>
+
+<p>{{ _(
+    "Payday is when donations are actually executed. It's a program ({0}this "
+    "one{1}) that we run every Wednesday.",
+    '<a href="https://github.com/liberapay/liberapay.com/blob/master/liberapay/billing/payday.py">'|safe,
+    '</a>'|safe
+) }}</p>
+
+</div></div>
+{% endblock %}
