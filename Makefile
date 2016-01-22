@@ -109,6 +109,7 @@ _i18n_pull: _i18n_fetch
 	@if test $$(git diff HEAD i18n | wc -c) -gt 0; then \
 		echo "There are unstaged changes in the i18n/ directory." && exit 1; \
 	fi
+	git pull master
 	git merge --squash weblate/master
 	@if test $$(git diff HEAD i18n | wc -c) -gt 0; then \
 		$(MAKE) --no-print-directory _i18n_merge; \
