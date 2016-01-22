@@ -1,9 +1,15 @@
 [Liberapay](http://liberapay.com) is a recurrent donations platform, trying to bring back the original spirit of Gittip that [Gratipay](http://gratipay.com) has [strayed away from](https://medium.com/gratipay-blog/gratipay-2-0-2453d3c53077).
 
+## Contact
+
+You have a question? Come ask us in [the salon](https://github.com/liberapay/salon) or in the IRC channel #liberapay on [Freenode](http://webchat.freenode.net/).
+
 
 ## Contributing to the translations
 
 [![We use Weblate for translations](https://hosted.weblate.org/widgets/liberapay/-/287x66-white.png)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+
+If you have questions about translating Liberapay, you can ask them [in the translation thread](https://github.com/liberapay/salon/issues/2) of the salon.
 
 
 ## Contributing to the code
@@ -88,10 +94,6 @@ you can also use the following commands:
 
 - `make pytest` only runs the python tests without recreating the test DB
 - `make pytest-re` does the same but only runs the tests that failed in the previous run
-
-### Help
-
-Need some help? [Open an issue](https://github.com/liberapay/liberapay.com/issues/new) or come ask your question in the IRC channel #liberapay on [Freenode](http://webchat.freenode.net/).
 
 
 ## License
