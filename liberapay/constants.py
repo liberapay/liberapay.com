@@ -17,6 +17,11 @@ BIRTHDAY = date(2015, 5, 22)
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
 EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 
+JINJA_ENV_COMMON = dict(
+    trim_blocks=True, lstrip_blocks=True,
+    line_statement_prefix='%', line_comment_prefix='#',
+)
+
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')
 
