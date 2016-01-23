@@ -95,6 +95,18 @@ you can also use the following commands:
 - `make pytest` only runs the python tests without recreating the test DB
 - `make pytest-re` does the same but only runs the tests that failed in the previous run
 
+### Deploying the app
+
+Liberapay is hosted on [OpenShift Online](https://openshift.com/), which runs
+the [OpenShift M4][M4] platform (also called OpenShift 2.x, not to be confused
+with the newer OpenShift 3.x based on Docker). The user documentation is on
+[developers.openshift.com][OS-dev].
+
+To deploy the app simply run `release.sh`, it'll guide you through it.
+
+[M4]: https://docs.openshift.org/origin-m4/
+[OS-dev]: https://developers.openshift.com/
+
 
 ## License
 
