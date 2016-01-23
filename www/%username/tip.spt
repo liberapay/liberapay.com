@@ -69,10 +69,10 @@ else:
     out["ctime"] = out["mtime"] = None
 
 [---] text/html
-{% extends "templates/base.html" %}
-{% block content %}
-{% include "templates/sign-in-form.html" %}
-{% endblock %}
+% extends "templates/base.html"
+% block content
+% include "templates/sign-in-form.html"
+% endblock
 
 [---] application/json via json_dump
 out

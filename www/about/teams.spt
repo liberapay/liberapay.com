@@ -25,8 +25,8 @@ if request.method == 'POST':
 
 title = _("Teams")
 [---] text/html
-{% extends "templates/about.html" %}
-{% block content %}
+% extends "templates/about.html"
+% block content
 <div class="row paragraph"><div class="col-md-8">
 
 <p>{{ _(
@@ -43,14 +43,14 @@ title = _("Teams")
 
 <h2>{{ _("Creating a team") }}</h2>
 
-{% if user.ANON %}
+% if user.ANON
     <p>{{ _("You need to {0}sign into your own account{1} first.",
             '<a href="/sign-in?back_to=%s">'|safe % urlquote(request.line.uri),
             '</a>'|safe
 ) }}</p>
-{% else %}
-    {% include "templates/create-team.html" %}
-{% endif %}
+% else
+    % include "templates/create-team.html"
+% endif
 
 <h2>{{ _("Becoming a team member") }}</h2>
 
@@ -105,4 +105,4 @@ title = _("Teams")
 ) }}</p>
 
 </div></div>
-{% endblock %}
+% endblock

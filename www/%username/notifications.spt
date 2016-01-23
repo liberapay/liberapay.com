@@ -15,18 +15,18 @@ notifs = participant.render_notifications(state)
 notifs
 
 [---] text/html
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
-{% block content %}
+% block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    {% for notif in notifs %}
+    % for notif in notifs
         <div class="alert alert-{{ notif.type }}">
             {{ notif.html|safe }}
             <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
         </div>
-    {% else %}
+    % else
         <p>{{ _("No notifications to show.") }}</p>
-    {% endfor %}
+    % endfor
 </form>
-{% endblock %}
+% endblock

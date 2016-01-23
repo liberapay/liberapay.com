@@ -1,8 +1,8 @@
 [---]
 title = _("Money")
 [---] text/html
-{% extends "templates/about.html" %}
-{% block content %}
+% extends "templates/about.html"
+% block content
 <div class="row"><div class="col-md-8">
 
 <h3>{{ _("Quarantine") }}</h3>
@@ -48,4 +48,4 @@ title = _("Money")
 ) }}</p>
 
 </div></div>
-{% endblock %}
+% endblock

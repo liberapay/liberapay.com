@@ -1,10 +1,10 @@
-{% set CLASSES = ('info', 'success', 'warning', 'danger') %}
+% set CLASSES = ('info', 'success', 'warning', 'danger')
 
-{% macro get_cls(m) %}{{
-    CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)]
-}}{% endmacro %}
+% macro get_cls(m)
+    {{ CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)] }}
+% endmacro
 
-{% macro team_takes_table(team, cls='') %}
+% macro team_takes_table(team, cls='')
     <table id="team" class="table valign-middle {{ cls }}">
       <thead>
         <tr>
@@ -20,12 +20,12 @@
         </tr>
       </thead>
       <tbody>
-        {% for member in team.get_members().values() %}
+        % for member in team.get_members().values()
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
             <td>{{ format_decimal(member.last_week, '#,##0.00') }}</td>
-            {% set cell_cls = get_cls(member) if member.nominal_take != member.last_week else '' %}
-            {% if member.id == user.id %}
+            % set cell_cls = get_cls(member) if member.nominal_take != member.last_week else ''
+            % if member.id == user.id
                 <td class="{{ cell_cls or 'active' }}">
                     <form action="/~{{ team.id }}/income/take?back_to={{ urlquote(request.line.uri) }}"
                           method="POST">
@@ -33,12 +33,12 @@
                         <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take, '#,##0.00') }}" />
                     </form>
                 </td>
-            {% else %}
+            % else
                 <td class="{{ 'text-'+cell_cls }}">{{ format_decimal(member.nominal_take, '#,##0.00') }}</td>
-            {% endif %}
+            % endif
             <td>{{ format_currency(member.actual_amount, 'EUR') }}</td>
         </tr>
-        {% endfor %}
+        % endfor
       </tbody>
     </table>
-{% endmacro %}
+% endmacro

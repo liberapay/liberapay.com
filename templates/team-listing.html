@@ -1,24 +1,24 @@
-{% set teams = participant.get_teams() %}
-{% if teams or edit %}
+% set teams = participant.get_teams()
+% if teams or edit
 <div class="col-md-6">
     <h2>{{ _("Teams") }}</h2>
     <ul class="team memberships">
-        {% for team in teams %}
+        % for team in teams
         <li>
             <a href="/{{ team.name }}/">{{ team.name }}</a>
             <div class="nmembers">{{
                 ngettext("with {n} other", "with {n} others", team.nmembers - 1)
             }}</div>
-            {% if edit %}
+            % if edit
                 <a href="/{{ team.name }}/membership/leave?back_to={{ urlquote(request.line.uri) }}"
                    class="btn btn-default btn-xs">{{ _('Leave') }}</a>
-            {% endif %}
+            % endif
         </li>
-        {% endfor %}
+        % endfor
     </ul>
-    {% if edit %}
+    % if edit
         <p><a href="/explore/teams/">{{ _("Explore teams") }}</a></p>
         <p><a href="/about/teams">{{ _("About teams") }}</a></p>
-    {% endif %}
+    % endif
 </div>
-{% endif %}
+% endif

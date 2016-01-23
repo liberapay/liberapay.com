@@ -1,18 +1,18 @@
 <div class="row">
 <form class="col-md-6 form-inline" action="" method="POST">
 
-    {% if request.method == 'POST' %}
-    {% for k, v in request.body.items() %}
+    % if request.method == 'POST'
+    % for k, v in request.body.items()
         <input name="{{ k }}" type="hidden" value="{{ v }}" />
-    {% endfor %}
-    {% endif %}
+    % endfor
+    % endif
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
 
     <h2>{{ _("Log in") }}</h2>
 
-    {% if request.log_in_failed %}
+    % if request.log_in_failed
         <p class="alert alert-error">{{ _("Bad username or password") }}</p>
-    {% endif %}
+    % endif
 
     <input name="log-in.username" autocomplete="username" class="form-control"
            required placeholder="{{ _('Username') }}" />
@@ -26,11 +26,11 @@
 
     <h2>{{ _("Create an account") }}</h2>
 
-    {% if request.method == 'POST' %}
-    {% for k, v in request.body.items() %}
+    % if request.method == 'POST'
+    % for k, v in request.body.items()
         <input name="{{ k }}" type="hidden" value="{{ v }}" />
-    {% endfor %}
-    {% endif %}
+    % endfor
+    % endif
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
 
     <div class="form-group">

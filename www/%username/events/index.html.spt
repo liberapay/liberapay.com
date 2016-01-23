@@ -13,23 +13,23 @@ events = db.all("""
 """, (participant.id,))
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/settings.html" %}
-{% block content %}
+% extends "templates/settings.html"
+% block content
 
 <style>
     #events td { padding: 4px; }
 </style>
 <table id="events" class="centered">
 
-    {% for e in events %}
+    % for e in events
     <tr>
         <td class="ts mono">{{ e.ts }}</td>
         <td class="type mono">{{ e.type }}</td>
         <td class="payload mono">{{ e.payload }}</td>
 
     </tr>
-    {% endfor %}
+    % endfor
 
 </table>
 
-{% endblock %}
+% endblock

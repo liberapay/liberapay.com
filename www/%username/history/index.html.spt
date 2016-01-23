@@ -35,42 +35,42 @@ else:
     BALANCE = _("Their balance is {0}.", Money(participant.balance, "EUR"))
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/settings.html" %}
-{% block content %}
+% extends "templates/settings.html"
+% block content
 
 <p>{{ BALANCE }}</p>
 
 <h2>{{ _("Account Statement") }}</h2>
 
-{% if len(years) > 1 %}
+% if len(years) > 1
 <ul class="nav nav-pills">
-    {% for y in years %}
+    % for y in years
         <li><a href="?year={{ y }}" class="{{ 'active' if y == year }}">{{ y }}</a></li>
-    {% endfor %}
+    % endfor
 </ul>
-{% endif %}
+% endif
 
 <div class="row col-md-8">
 <table class="table table-condensed" id="history">
-{% for event in events %}
-    {% if event['kind'] == 'totals' %}
+% for event in events
+    % if event['kind'] == 'totals'
     <tr><td colspan="8" class="totals">
         {{ _("Total given: {0}", Money(event['given'], "EUR")) }}
-            {% if event['given'] %}
+            % if event['given']
             (<a href="export.csv?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
                 _("Export as CSV")
             }}</a>)
-            {% endif %}
+            % endif
         <br>
         {{ _("Total received: {0}", Money(event['received'], "EUR")) }}
     </td></tr>
-    {% elif event['kind'] == 'day-open' %}
+    % elif event['kind'] == 'day-open'
     <tr>
         <th colspan="8"><h2>
             {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}
-            {% if event['payday_number'] %}
+            % if event['payday_number']
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
-            {% endif %}
+            % endif
         </h2></th>
     </tr>
     <tr class="head">
@@ -87,7 +87,7 @@ else:
         <td class="status">{{ _("Status") }}</td>
         <td class="notes">{{ _("Notes") }}</td>
     </tr>
-    {% elif event['kind'] == 'credit' %}
+    % elif event['kind'] == 'credit'
     <tr>
         <td class="bank">{{ -event['amount'] }}</td>
         <td class="card"></td>
@@ -98,12 +98,12 @@ else:
         <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
         {{ event['note'] or '' }}
-        {% if event['recorder'] %}
+        % if event['recorder']
             &mdash; <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-        {% endif %}
+        % endif
         </td>
     </tr>
-    {% elif event['kind'] == 'charge' %}
+    % elif event['kind'] == 'charge'
     <tr>
         <td class="bank"></td>
         <td class="card">{{ event['amount'] + event['fee'] }}</td>
@@ -114,61 +114,61 @@ else:
         <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
         {{ event['note'] or '' }}
-        {% if event['recorder'] %}
+        % if event['recorder']
             &mdash; <a href="/~{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-        {% endif %}
-        {% if event['status'] == 'succeeded' %}
+        % endif
+        % if event['status'] == 'succeeded'
             (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
-        {% endif %}
+        % endif
         </td>
     </tr>
-    {% elif event['kind'] == 'transfer' %}
+    % elif event['kind'] == 'transfer'
     <tr>
         <td class="bank"></td>
         <td class="card"></td>
         <td class="fees"></td>
 
-        {% if event['tippee'] == participant.id %}
+        % if event['tippee'] == participant.id
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
-        {% else %}
+        % else
         <td class="credits"></td>
         <td class="debits">{{ event['amount'] }}</td>
-        {% endif %}
+        % endif
 
         <td class="balance">{{ event['balance'] }}</td>
 
         <td class="status"></td>
         <td class="notes">
-        {% set context = event['context'] %}
-        {% if event['tippee'] == participant.id %}
-            {% if admin_override %}
+        % set context = event['context']
+        % if event['tippee'] == participant.id
+            % if admin_override
                 {{ context }} from
                 <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
-                {% if event['team'] %}
+                % if event['team']
                     for team <a href="/{{ event['team_name'] }}/">{{ event['team_name'] }}</a>
-                {% endif %}
-            {% elif context == 'take' %}
+                % endif
+            % elif context == 'take'
                 {{ _("anonymous donation for your role in the {0} team",
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
-            {% else %}
+            % else
                 {{ _("anonymous donation") }}
-            {% endif %}
-        {% else %}
-            {% set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username']) %}
-            {% if context == 'final-gift' %}
+            % endif
+        % else
+            % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
+            % if context == 'final-gift'
                 {{ _("final gift to {0}", to) }}
-            {% elif context == 'take' %}
+            % elif context == 'take'
                 {{ _("donation to {0} for their role in the {1} team", to,
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
-            {% else %}
+            % else
                 {{ _("donation to {0}", to) }}
-            {% endif %}
-        {% endif %}
+            % endif
+        % endif
         </td>
 
     </tr>
-    {% elif event['kind'] == 'day-close' %}
+    % elif event['kind'] == 'day-close'
     <tr>
         <td class="bank"></td>
         <td class="card"></td>
@@ -179,11 +179,11 @@ else:
         <td class="status"></td>
         <td class="notes"></td>
     </tr>
-    {% endif %}
-{% else %}
+    % endif
+% else
     <p>{{ _("No transactions to show.") }}</p>
-{% endfor %}
+% endfor
 </table>
 </div>
 
-{% endblock %}
+% endblock

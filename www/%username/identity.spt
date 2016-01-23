@@ -76,25 +76,25 @@ else:
 {}
 
 [---] text/html
-{% extends "templates/settings.html" %}
+% extends "templates/settings.html"
 
-{% block content %}
+% block content
 <div class="paragraph">
-{% if not participant.email %}
+% if not participant.email
 <p class="alert alert-warning">{{
     _("Please {0}verify your email address{1} then reload this page.",
       '<a href="./emails/" target="_blank">'|safe, '</a>'|safe)
 }}</p>
-{% else %}
+% else
 <form action="" method="POST" class="js-submit">
 
-    {% if error %}
+    % if error
     <div class="alert alert-danger">{{ error }}</div>
-    {% endif %}
+    % endif
 
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
-    {% include "templates/identity-form.html" %}
+    % include "templates/identity-form.html"
 
     <div class="form-group">
         <label>
@@ -109,6 +109,6 @@ else:
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 
 </form>
-{% endif %}
+% endif
 </div>
-{% endblock %}
+% endblock

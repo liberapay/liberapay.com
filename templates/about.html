@@ -1,6 +1,6 @@
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 {% block heading %}{% endblock %}
-{% block subnav %}
+% block subnav
     {% set pages = [
         ('/', _('Introduction')),
         ('/faq', _('FAQ')),
@@ -11,6 +11,6 @@
         ('/contact', _('Contact')),
         ('/security', _('Security'))
     ] %}
-    {% from "templates/nav.html" import nav with context %}
+    % from "templates/nav.html" import nav with context
     <ul class="nav nav-tabs">{{ nav(pages, base='/about') }}</ul>
-{% endblock %}
+% endblock

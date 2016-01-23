@@ -1,25 +1,25 @@
-{% macro pages_links(pages_urls) %}
+% macro pages_links(pages_urls)
     <ul class="pager">
-        {% if pages_urls.get('prev') %}
+        % if pages_urls.get('prev')
             <li><a href="?page={{ b64encode(pages_urls['prev']) }}">
                 ⇠ {{ _("Previous") }}
             </a></li>
-        {% endif %}
-        {% if pages_urls.get('next') %}
+        % endif
+        % if pages_urls.get('next')
             <li><a href="?page={{ b64encode(pages_urls['next']) }}">
                 {{ _("Next") }} ⇢
             </a></li>
-        {% endif %}
+        % endif
         <li style="clear: both"></li>
-        {% if pages_urls.get('first') %}
+        % if pages_urls.get('first')
             <li class="previous"><a href="?page={{ b64encode(pages_urls['first']) }}">
                 ⇤ {{ _("First") }}
             </a></li>
-        {% endif %}
-        {% if pages_urls.get('last') %}
+        % endif
+        % if pages_urls.get('last')
             <li class="next"><a href="?page={{ b64encode(pages_urls['last']) }}">
                 {{ _("Last") }} ⇥
             </a></li>
-        {% endif %}
+        % endif
     </ul>
-{% endmacro %}
+% endmacro

@@ -18,27 +18,27 @@ teams = website.db.all("""
 """, (participant.id,))
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/settings.html" %}
-{% from "templates/team-members.html" import team_takes_table with context %}
-{% block content %}
+% extends "templates/settings.html"
+% from "templates/team-members.html" import team_takes_table with context
+% block content
 
-{% set receiving = Money(participant.receiving, "EUR") %}
-{% if participant == user %}
+% set receiving = Money(participant.receiving, "EUR")
+% if participant == user
 <p>{{ _("You receive {0} per week.", receiving) }}</p>
-{% else %}
+% else
 <p>{{ _("{0} receives {1} per week.", participant.username, receiving) }}</p>
-{% endif %}
+% endif
 
-{% if not participant.mangopay_user_id %}
+% if not participant.mangopay_user_id
     <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
     <p><a class="btn btn-primary" href="../identity">{{ _("Fill identity form") }}</a></p>
-{% elif participant.balance > 0 %}
+% elif participant.balance > 0
     <p><a class="btn btn-default" href="payout/Li4=">{{ _("Withdraw money") }}</a></p>
-{% endif %}
+% endif
 
 <h2 id="teams">{{ _("Teams") }}</h2>
-{% if teams %}
-    {% for team in teams %}
+% if teams
+    % for team in teams
         <h4>{{ team.username }}
             <a href="/{{ team.username }}/membership/leave?back_to={{ urlquote(request.line.uri) }}"
                class="btn btn-default btn-xs">{{ _('Leave') }}</a>
@@ -47,27 +47,27 @@ teams = website.db.all("""
                 '<a href="%s">%s</a>'|safe % (team.path(''), team.username),
                 Money(team.receiving, "EUR")) }}</p>
         {{ team_takes_table(team, cls='table-condensed') }}
-    {% endfor %}
-{% else %}
+    % endfor
+% else
     <p>{{ _("You are not a member of any team.") }}</p>
-{% endif %}
+% endif
 <p>
     <a class="btn btn-default" href="/about/teams">{{ _("About teams") }}</a>
     <a class="btn btn-default" href="/explore/teams/">{{ _("Explore teams") }}</a>
 </p>
 
-{% if participant.receiving > participant.taking %}
-{% set tip_distribution = participant.get_tip_distribution()[0] %}
+% if participant.receiving > participant.taking
+% set tip_distribution = participant.get_tip_distribution()[0]
 <div class="row">
 <div class="col-md-6">
     <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
-    {% include "templates/tip-distribution.html" %}
+    % include "templates/tip-distribution.html"
 </div>
 
 <div class="col-md-6">
     <h2>{{ _("Tips Received, by Amount") }}</h2>
     <table class="tip-distribution">
-        {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution %}
+        % for amount, ncontributors, summed, pcontributors, psummed in tip_distribution
         <tr>
             <td class="currency-symbol">€</td>
             <td class="amount">{{ amount }}</td>
@@ -78,9 +78,9 @@ teams = website.db.all("""
                 <span class="number">({{ format_currency(summed, 'EUR') }})</span>
             </td>
         </tr>
-        {% endfor %}
+        % endfor
     </table>
 </div>
 </div>
-{% endif %}
-{% endblock %}
+% endif
+% endblock

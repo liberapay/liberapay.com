@@ -1,8 +1,8 @@
 [---]
 title = _("Contact")
 [---] text/html
-{% extends "templates/about.html" %}
-{% block content %}
+% extends "templates/about.html"
+% block content
 
     <p>
       Email: <a onmouseover="$(this).attr('href', 'mailto:'+$(this).text())">support&#64;liberapay.com</a><br />
@@ -12,4 +12,4 @@ title = _("Contact")
       {{ _("Phone: sorry, we don't have a phone number yet") }}
     </p>
 
-{% endblock %}
+% endblock

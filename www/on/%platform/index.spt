@@ -34,52 +34,52 @@ if account:
 limited = getattr(platform, 'api_friends_limited', False)
 
 [---] text/html
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
-{% from 'templates/auth.html' import auth_button with context %}
-{% from "templates/your-tip.html" import tip_form with context %}
+% from 'templates/auth.html' import auth_button with context
+% from "templates/your-tip.html" import tip_form with context
 
-{% block subnav %}
-    {% from "templates/nav.html" import nav with context %}
+% block subnav
+    % from "templates/nav.html" import nav with context
     <nav class="nav nav-tabs">
         {{ nav(platforms_nav, base='/on') }}
     </nav>
-{% endblock %}
+% endblock
 
-{% macro limitation_note() %}
-    {% if limited %}
+% macro limitation_note()
+    % if limited
         <br>
         <p>{{ _("Note: privacy settings may prevent Liberapay from seeing some of your {0} friends.",
                 platform.display_name) }}</p>
-    {% endif %}
-{% endmacro %}
+    % endif
+% endmacro
 
-{% block content %}
+% block content
 
-{% if user.ANON %}
+% if user.ANON
 <p>{% include "templates/sign-in-link.html" %}</p>
-{% elif need_reconnect %}
+% elif need_reconnect
 <div class="paragraph">
     <span style="display: inline-block">
-    {% call auth_button(platform.name, 'connect') %}{{
-        _("Please refresh your {0} connection", platform.display_name)
-    }}{% endcall %}
+    % call auth_button(platform.name, 'connect')
+        {{ _("Please refresh your {0} connection", platform.display_name) }}
+    % endcall
     </span>
     {{ _("to find your friends from there.") }}
 </div>
-{% elif not account or not sess %}
+% elif not account or not sess
 <div class="paragraph">
     <span style="display: inline-block">
-    {% call auth_button(platform.name, 'connect') %}{{
-        _("Connect your {0} account", platform.display_name)
-    }}{% endcall %}
+    % call auth_button(platform.name, 'connect')
+        {{ _("Connect your {0} account", platform.display_name) }}
+    % endcall
     </span>
     {{ _("to find your friends from there.") }}
 </div>
-{% elif not friends %}
+% elif not friends
 <p>{{ _("No friends found.") }}</p>
 {{ limitation_note() }}
-{% else %}
+% else
 <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
                nfriends, platform.display_name) }}</p>
 <table class="table table-condensed valign-middle">
@@ -89,9 +89,9 @@ limited = getattr(platform, 'api_friends_limited', False)
         <th>{{ _('Receives') }}</th>
         <th>{{ _('Pledge/Donate') }}</th>
     </tr>
-    {% for friend in friends %}
-    {% set p = friend.participant %}
-    {% set tippee = p if p.join_time else friend %}
+    % for friend in friends
+    % set p = friend.participant
+    % set tippee = p if p.join_time else friend
     <tr class="{{ 'info' if p.join_time and p.accepts_tips }}">
         <td><a href="./{{ friend.liberapay_slug }}/">{{ friend.friendly_name }}</a></td>
         <td>{{ _("Yes") if p.join_time else _("No") }}</td>
@@ -99,13 +99,13 @@ limited = getattr(platform, 'api_friends_limited', False)
         <td>{{ tip_form(tippee=tippee, inline=True) if p.accepts_tips else
                _("{0} doesn't accept donations", friend.friendly_name) }}</td>
     </tr>
-    {% endfor %}
-    {% if pages_urls %}
-        {% from 'templates/pagination.html' import pages_links with context %}
+    % endfor
+    % if pages_urls
+        % from 'templates/pagination.html' import pages_links with context
         <tr><td colspan="5">{{ pages_links(pages_urls) }}</td></tr>
-    {% endif %}
+    % endif
 </table>
 {{ limitation_note() }}
-{% endif %}
+% endif
 
-{% endblock %}
+% endblock

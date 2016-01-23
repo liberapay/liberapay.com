@@ -12,11 +12,11 @@ team = request.qs.get('team', '').lower() == 'true'
 title = _("Failure")
 
 [---]
-{% extends "templates/base.html" %}
-{% block content %}
+% extends "templates/base.html"
+% block content
 <div class="alert alert-danger">
 
-    {% if team %}
+    % if team
 
     <h4>{{ _("Are you really an administrator of the {0} team?", name) }}</h4>
 
@@ -28,7 +28,7 @@ title = _("Failure")
             '<a href="./">'|safe,
             '</a>'|safe) }}</p>
 
-    {% else %}
+    % else
 
     <h4>{{ _("Are you really {0}?", name) }}</h4>
 
@@ -38,7 +38,7 @@ title = _("Failure")
             '<a href="./">'|safe,
             '</a>'|safe) }}</p>
 
-    {% endif %}
+    % endif
 
 </div>
-{% endblock %}
+% endblock

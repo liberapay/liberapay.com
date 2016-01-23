@@ -1,5 +1,5 @@
     <table class="tip-distribution">
-        {% for amount, ncontributors, summed, pcontributors, psummed in tip_distribution%}
+        % for amount, ncontributors, summed, pcontributors, psummed in tip_distribution
         <tr>
             <td class="currency-symbol">€</td>
             <td class="amount">{{ amount }}</td>
@@ -9,5 +9,5 @@
                 <span class="number">({{ ncontributors }})</span>
             </td>
         </tr>
-        {% endfor %}
+        % endfor
     </table>

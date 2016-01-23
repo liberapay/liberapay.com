@@ -9,25 +9,25 @@ top_communities = query_cache.all("""
 """)
 
 [---]
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
-{% block head %}
+% block head
     <link type="application/opensearchdescription+xml" rel="search" href="/opensearch.osdd" />
     <meta name="description" content="Recurrent donations platform" />
     <meta name="og:type" content="website" />
     <meta name="og:url" content="https://liberapay.com/" />
     <meta name="og:title" content="Liberapay" />
     <meta name="og:image" content="{{ website.asset('liberapay.png') }}" />
-{% endblock %}
+% endblock
 
-{% block content %}
+% block content
 
-{% if user.ANON %}
+% if user.ANON
     <div class="jumbotron" style="text-align: center">
         <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
         <p><a class="btn btn-primary btn-lg" href="/sign-in">{{ _("Join us") }}</a></p>
     </div>
-{% endif %}
+% endif
 
 <div class="row">
 
@@ -38,33 +38,33 @@ top_communities = query_cache.all("""
         </div>
 
         <div class="panel-body">
-            {% if not user.ANON %}
+            % if not user.ANON
             <p><a href="/{{ user.username }}/giving/">{{
                 _("You give {0} per week.", Money(user.giving, 'EUR'))
             }}</a></p>
-            {% endif %}
+            % endif
 
             <p>{{ _("Who inspires you? See if they're on Liberapay:") }}</p>
-            {% include "templates/search-box.html" %}
+            % include "templates/search-box.html"
 
             <p>{{ _("Explore our communities:") }}</p>
             <ul class="communities memberships">
-                {% for community in top_communities %}
+                % for community in top_communities
                 <li>
                     <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-                    {% set n = community.nmembers %}
+                    % set n = community.nmembers
                     <div class="nmembers">
                         {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
                     </div>
                 </li>
-                {% endfor %}
+                % endfor
             </ul>
             <a class="btn btn-default" href="/explore/">{{ _("More") }}</a><br><br>
 
             <p>{{ _("Find your friends from social networks:") }}</p>
-            {% for p in website.friends_platforms %}
+            % for p in website.friends_platforms
                 <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
-            {% endfor %}
+            % endfor
         </div>
     </div>
     </div>
@@ -76,27 +76,27 @@ top_communities = query_cache.all("""
         </div>
 
         <div class="panel-body">
-        {% if user.ANON %}
+        % if user.ANON
 
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
             <a class="btn btn-success" href="/sign-in">{{ _("Join us") }}</a>
 
-        {% else %}
+        % else
 
             <p><a href="/{{ user.username }}/receiving/">{{
                 _("You receive {0} per week.", Money(user.receiving, 'EUR'))
             }}</a></p>
 
-            {% if not user.accepts_tips %}
+            % if not user.accepts_tips
                 <p>{{ _("You are currently refusing donations, you can change that {0}on your profile{1}.",
                         "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</p>
-            {% elif user.goal and user.receiving >= user.goal %}
+            % elif user.goal and user.receiving >= user.goal
                 <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", user.goal) }}</p>
-            {% elif not user.mangopay_user_id %}
+            % elif not user.mangopay_user_id
                 <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
                 <p><a class="btn btn-primary" href="/{{ user.username }}/identity">{{ _("Fill identity form") }}</a></p>
-            {% else %}
+            % else
                 <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
                 <ol>
                     <li>{{ _("{0}Fill out your profile{1}.",
@@ -105,12 +105,12 @@ top_communities = query_cache.all("""
                              "<a href='/%s/widgets/'>"|safe % user.username, "</a>"|safe) }}</li>
                     <li>{{ _("Contact the people who benefit from your work and ask them to support you.") }}</li>
                 </ol>
-            {% endif %}
+            % endif
 
-        {% endif %}
+        % endif
         </div>
     </div>
     </div>
 
 </div>
-{% endblock %}
+% endblock

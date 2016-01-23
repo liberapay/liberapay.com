@@ -7,28 +7,28 @@ ncommunities = len(communities)
 title = _("Explore")
 
 [-----------------------------]
-{% extends "templates/explore.html" %}
+% extends "templates/explore.html"
 
-{% block content %}
+% block content
 <p>
     {{ ngettext("There is {n} community on Liberapay.",
                 "There are {n} communities on Liberapay.",
                 ncommunities) }}
 </p>
 
-{% from "templates/community-chooser.html" import community_chooser with context %}
+% from "templates/community-chooser.html" import community_chooser with context
 {{ community_chooser(communities) }}
 
 <h2>{{ _("Popular Communities") }}</h2>
 <ul class="communities">
-    {% for community in communities[:20] %}
+    % for community in communities[:20]
     <li>
         <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
-        {% set n = community.nmembers %}
+        % set n = community.nmembers
         <div class="nmembers">
             {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
         </div>
     </li>
-    {% endfor %}
+    % endfor
 </ul>
-{% endblock %}
+% endblock

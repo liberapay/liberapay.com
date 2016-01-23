@@ -95,46 +95,46 @@ receivers = query_cache.all("""
 """, (community.slug, limit, offset))
 
 [---]
-{% from 'templates/avatar-url.html' import avatar_img, avatar_default with context %}
+% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
 
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
-{% block content %}
+% block content
 
-{% if community.nmembers == 0 %}
+% if community.nmembers == 0
     <p>{{ _("You're the first one here!") }}</p>
     <p>{{ _("Bring the {0} community to Liberapay to find like-minded people to give to.",
             community.name) }}</p>
-{% else %}
+% else
 <p>{{ ngettext("This community was created {0} ago and has {n} member.",
                "This community was created {0} ago and has {n} members.",
                community.nmembers,
                to_age(community.ctime)) }}</p>
-{% endif %}
+% endif
 
-{% if user.ANON %}
+% if user.ANON
     <div class="sign-in-to">
-        {% include "templates/sign-in-link.html" %}
+        % include "templates/sign-in-link.html"
         {{ _("to join the {0} community on Liberapay.", community.name) }}
     </div>
-{% else %}
+% else
     <form action="/{{ user.username }}/communities.json" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        {% set is_member = community.check_membership(user) %}
+        % set is_member = community.check_membership(user)
         <button class="btn btn-{{ 'danger' if is_member else 'primary' }}" name="do"
                 value="{{ 'leave' if is_member else 'join' }}:{{ community.name }}">
             {{ _("Leave") if is_member else _("Join") }}
         </button>
     </form>
-{% endif %}
+% endif
 
-{% if community.nmembers %}
+% if community.nmembers
 <div class="row">
 
 <div class="col-md-4">
     <h2>{{ _("New Members") }}</h2>
     <ul class="people">
-        {% for participant in new_participants %}
+        % for participant in new_participants
         <li class="panel panel-default mini-user">
             <a href="/{{ participant.username }}/">
                 {{ avatar_img(participant) }}
@@ -142,52 +142,52 @@ receivers = query_cache.all("""
                 <div class="age">{{ to_age_str(participant.join_time, add_direction=True) }}</div>
             </a>
         </li>
-        {% endfor %}
+        % endfor
     </ul>
 </div>
 
 <div class="col-md-4">
     <h2>{{ _("Top Givers") }}</h2>
     <ul class="people">
-        {% for giver in givers %}
+        % for giver in givers
         <li class="panel panel-default mini-user">
-            {% if giver.anonymous and not user.is_admin %}
+            % if giver.anonymous and not user.is_admin
                 {{ avatar_default() }}
                 <div class="name">{{ _("Anonymous") }}</div>
                 <div class="money">{{ format_currency(giver.amount, 'EUR', trailing_zeroes=False) }}</div>
-            {% else %}
+            % else
             <a href="/{{ giver.username }}/" class="{{ 'anonymous' if giver.anonymous }}">
                 {{ avatar_img(giver) }}
                 <div class="name">{{ giver.username }}</div>
                 <div class="money">{{ format_currency(giver.amount, 'EUR', trailing_zeroes=False) }}</div>
             </a>
-            {% endif %}
+            % endif
         </li>
-        {% endfor %}
+        % endfor
     </ul>
 </div>
 
 <div class="col-md-4">
     <h2>{{ _("Top Receivers") }}</h2>
     <ul class="people">
-        {% for receiver in receivers %}
+        % for receiver in receivers
         <li class="panel panel-default mini-user">
-            {% if receiver.anonymous and not user.is_admin %}
+            % if receiver.anonymous and not user.is_admin
                 {{ avatar_default() }}
                 <div class="name">{{ _("Anonymous") }}</div>
                 <div class="money">{{ format_currency(receiver.amount, 'EUR', trailing_zeroes=False) }}</div>
-            {% else %}
+            % else
             <a href="/{{ receiver.username }}/" class="{{ 'anonymous' if receiver.anonymous }}">
                 {{ avatar_img(receiver) }}
                 <div class="name">{{ receiver.username }}</div>
                 <div class="money">{{ format_currency(receiver.amount, 'EUR', trailing_zeroes=False) }}</div>
             </a>
-            {% endif %}
+            % endif
         </li>
-        {% endfor %}
+        % endfor
     </ul>
 </div>
 
 </div>
-{% endif %}
-{% endblock %}
+% endif
+% endblock

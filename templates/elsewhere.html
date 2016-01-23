@@ -1,18 +1,18 @@
-{% from 'templates/avatar-url.html' import avatar_img with context %}
+% from 'templates/avatar-url.html' import avatar_img with context
 
-{% macro account_elsewhere(platform, accounts, auth_button) %}
-    {% set account = accounts.get(platform.name, None) %}
+% macro account_elsewhere(platform, accounts, auth_button)
+    % set account = accounts.get(platform.name, None)
     <div class="account panel {{ 'panel-primary' if account and edit else 'panel-default' }}">
     <div class="panel-body">
         <div class="account-action">
-            {% if edit %}
-                {% if account == None %}
-                    {% set allow_team = participant.kind == 'organization' and platform.is_team_admin %}
-                    {% set cls = allow_team and 'user_name_prompt' or '' %}
-                    {% call auth_button(platform.name, 'connect', class=cls, btn_cls='close') %}
+            % if edit
+                % if account == None
+                    % set allow_team = participant.kind == 'organization' and platform.is_team_admin
+                    % set cls = allow_team and 'user_name_prompt' or ''
+                    % call auth_button(platform.name, 'connect', class=cls, btn_cls='close')
                         +
-                    {% endcall %}
-                {% else %}
+                    % endcall
+                % else
                     <form action="/{{ account.participant.username }}/elsewhere/delete"
                           method="POST" class="js-submit">
                          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -20,19 +20,19 @@
                          <input type="hidden" name="user_id" value="{{ account.user_id }}">
                          <button class="close" title="{{ _('Disconnect') }}">&times;</button>
                     </form>
-                {% endif %}
-            {% endif %}
+                % endif
+            % endif
         </div>
         <img class="account-type" src="{{ platform.logo }}" />
         <div>
-            {% if account %}
+            % if account
                 <a class="account-username" rel="me" href="{{ account.html_url }}">{{
                     account.friendly_name_long
                 }}</a>
-            {% else %}
+            % else
                 {{ platform.display_name }}
-            {% endif %}
+            % endif
         </div>
     </div>
     </div>
-{% endmacro %}
+% endmacro

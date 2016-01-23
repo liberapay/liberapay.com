@@ -92,12 +92,13 @@ account = participant.get_mangopay_account()
     <h1>{{ _("Receipt") }}</h1>
 
     <div id="their-info">
-        {% if participant.kind == 'individual' %}
+        % if participant.kind == 'individual'
             {{ account.FirstName }} {{ account.LastName }}
-        {% elif participant.kind == 'organization' %}
+        % elif participant.kind == 'organization'
             {{ account.Name }}
             ({{ account.LegalRepresentativeFirstName }} {{ account.LegalRepresentativeLastName }})
-        {% endif %}<br>
+        % endif
+        <br>
         {{ card.Alias }} ({{ card.CardProvider }})
     </div>
 

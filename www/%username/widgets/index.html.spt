@@ -8,8 +8,8 @@ subhead = _("Widgets")
 profile_url = participant.url()
 
 [---]
-{% extends "templates/settings.html" %}
-{% block content %}
+% extends "templates/settings.html"
+% block content
 <div class="col0">
 
     <h2>{{ _("Donation Button") }}</h2>
@@ -51,4 +51,4 @@ profile_url = participant.url()
     <p><script src="giving.js"></script></p>
 
 </div>
-{% endblock %}
+% endblock

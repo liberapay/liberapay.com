@@ -29,34 +29,34 @@ npledges = len(pledges)
 weekly = total - participant.receiving
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/settings.html" %}
+% extends "templates/settings.html"
 
-{% from "templates/your-tip.html" import tip_form with context %}
+% from "templates/your-tip.html" import tip_form with context
 
-{% block content %}
+% block content
 
-{% if weekly > 0 %}
-    {% set funded = participant.balance // weekly %}
+% if weekly > 0
+    % set funded = participant.balance // weekly
     <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
         {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
-        {% if funded > 0 %}
+        % if funded > 0
             {{ ngettext("Your donations are only funded for another week.",
                         "Your donations are funded for another {n} weeks.",
                         funded) }}
-        {% else %}
+        % else
             {{ _("You need to transfer money to your wallet to fund your donations.") }}
-        {% endif %}
-        {% if funded < 52 %}
+        % endif
+        % if funded < 52
             <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}" href="payin/Li4=">{{ _("Add money") }}</a>
-        {% endif %}
+        % endif
     </p>
-{% else %}
+% else
     <p>{{ _("You give {0} per week.", Money(participant.giving, "USD")) }}</p>
-{% endif %}
+% endif
 
 <div class="giving row valign-middle">
 
-{% if ntips %}
+% if ntips
 <div class="col-md-8">
     <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
     <table class="table">
@@ -79,31 +79,31 @@ weekly = total - participant.receiving
             </tr>
         </tfoot>
         <tbody>
-        {% for tip in tips %}
-        {% set inactive = tip.is_suspicious or not tip.is_identified or not tip.is_funded %}
+        % for tip in tips
+        % set inactive = tip.is_suspicious or not tip.is_identified or not tip.is_funded
         <tr>
             <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
             <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
             <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             <td class="funded {{ 'danger' if inactive }}">
-                {% if tip.is_suspicious %}
+                % if tip.is_suspicious
                     {{ _("No: the donee is blacklisted") }}
-                {% elif not tip.is_identified %}
+                % elif not tip.is_identified
                     {{ _("No: the donee hasn't filled the identity form") }}</td>
-                {% elif not tip.is_funded %}
+                % elif not tip.is_funded
                     {{ _("No: insufficient funds") }}
-                {% else %}
+                % else
                     {{ _("Yes") }}
-                {% endif %}
+                % endif
         </tr>
-        {% endfor %}
+        % endfor
         </tbody>
     </table>
 </div>
-{% endif %}
+% endif
 
-{% if npledges %}
+% if npledges
 <div class="col-md-8">
     <h3>{{ _("Pledges") }} (N={{ len(pledges) }})</h3>
     <table class="table">
@@ -124,7 +124,7 @@ weekly = total - participant.receiving
             </tr>
         </tfoot>
         <tbody>
-        {% for tip in pledges %}
+        % for tip in pledges
             <tr>
                 <td class="recipient">
                     <img class="platform-icon" src="{{ website.asset('platforms/%s.12.png' % tip.platform) }}" />
@@ -134,13 +134,13 @@ weekly = total - participant.receiving
                 <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
                 <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             </tr>
-        {% endfor %}
+        % endfor
         </tbody>
     </table>
 </div>
-{% endif %}
+% endif
 
-{% if ncancelled_tips %}
+% if ncancelled_tips
 <div class="col-md-8">
     <h3>{{ _("Recently Cancelled") }} (N={{ ncancelled_tips }})
         <small>{{ _("within the last 30 days") }}</small></h3>
@@ -153,17 +153,17 @@ weekly = total - participant.receiving
             </tr>
         </thead>
         <tbody>
-            {% for tip in cancelled_tips %}
+            % for tip in cancelled_tips
             <tr>
                 <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
                 <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
                 <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             </tr>
-            {% endfor %}
+            % endfor
         </tbody>
     </table>
 </div>
-{% endif %}
+% endif
 
 </div>
-{% endblock %}
+% endblock

@@ -17,46 +17,46 @@ else:
 langs = participant.get_statement_langs()
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/profile.html" %}
+% extends "templates/profile.html"
 
-{% block heading %}
-{% if user == participant or participant.kind == 'group' and user and user.member_of(participant) %}
+% block heading
+% if user == participant or participant.kind == 'group' and user and user.member_of(participant)
     <a href="edit" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
-{% endif %}
+% endif
 {{ super() }}
-{% endblock %}
+% endblock
 
-{% block content %}
+% block content
 <div class="row">
-    {% if statement %}
+    % if statement
     <div class="col-md-6 clearfix">
         <h2 id="statement">{{ _("Statement") }}
-        {% if len(langs) > 1 %}
+        % if len(langs) > 1
         <span class="dropdown-hover" style="display: inline-block; position: relative;">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
                 {{ locale.languages_2[lang] }} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
-            {% for l in langs %}
+            % for l in langs
                 <li class="{{ 'active' if l == lang }}">
                     <a href="?lang={{ l }}#statement">{{ locale.languages_2[l] }}</a>
                 </li>
-            {% endfor %}
+            % endfor
             </ul>
         </span>
-        {% endif %}
+        % endif
         </h2>
         <section class="profile-statement">
             {{ markdown.render(statement) }}
         </section>
     </div>
-    {% endif %}
-    {% if participant.kind == 'group' %}
-    {% include "templates/members-listing.html" %}
-    {% else %}
-    {% include "templates/connected-accounts.html" %}
-    {% include "templates/team-listing.html" %}
-    {% include "templates/community-listing.html" %}
-    {% endif %}
+    % endif
+    % if participant.kind == 'group'
+    % include "templates/members-listing.html"
+    % else
+    % include "templates/connected-accounts.html"
+    % include "templates/team-listing.html"
+    % include "templates/community-listing.html"
+    % endif
 </div>
-{% endblock %}
+% endblock
