@@ -1,13 +1,10 @@
 #!/bin/sh
 
-
 # Fail on error
 set -e
 
-
 # Be somewhere predictable
 cd "`dirname $0`"
-
 
 # Helpers
 
@@ -27,11 +24,9 @@ require () {
     fi
 }
 
-
 # Check that we have the required tools
 require heroku
 require git
-
 
 # Make sure we have the latest master
 if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
@@ -40,22 +35,18 @@ if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
 fi
 git pull
 
-
 # Compute the next version number
 prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
 version="$((prev + 1))"
-
 
 # Check that the environment contains all required variables
 heroku config -sa liberapay | ./env/bin/honcho run -e /dev/stdin \
     ./env/bin/python liberapay/wireup.py
 
-
 # Sync the translations
 echo "Syncing translations..."
 make i18n_pull
 make i18n_update
-
 
 # Check for a branch.sql
 if [ -e sql/branch.sql ]; then
@@ -78,11 +69,9 @@ if [ -e sql/branch.sql ]; then
     fi
 fi
 
-
 # Ask confirmation and bump the version
 yesno "Tag and deploy version $version?" || exit
 git tag $version
-
 
 # Deploy to Heroku
 [ "$maintenance" = "yes" ] && heroku maintenance:on -a liberapay
@@ -92,11 +81,9 @@ git push --force heroku master
 [ "$run_sql" = "after" ] && heroku pg:psql -a liberapay <sql/branch.sql
 rm -f sql/branch.sql
 
-
 # Push to GitHub
 git push
 git push --tags
-
 
 # Check for schema drift
 if [[ $run_sql ]]; then
