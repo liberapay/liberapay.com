@@ -92,6 +92,7 @@ i18n_update: _i18n_rebase _i18n_pull _i18n_extract
 	@if git commit --dry-run i18n &>/dev/null; then \
 		git commit -m "update translation catalogs" i18n; \
 	fi
+	@echo "All done, check that everything is okay then push to master."
 
 _i18n_rebase:
 	@echo -n "Please go to https://hosted.weblate.org/update/liberapay/?method=rebase if you haven't done it yet, then press Enter to continue..."
@@ -109,7 +110,7 @@ _i18n_pull: _i18n_fetch
 	@if test $$(git diff HEAD i18n | wc -c) -gt 0; then \
 		echo "There are unstaged changes in the i18n/ directory." && exit 1; \
 	fi
-	git pull master
+	git pull
 	git merge --squash weblate/master
 	@if test $$(git diff HEAD i18n | wc -c) -gt 0; then \
 		$(MAKE) --no-print-directory _i18n_merge; \
