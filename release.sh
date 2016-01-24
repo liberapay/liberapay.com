@@ -32,10 +32,7 @@ require rhc
 require git
 
 # Make sure we have the latest master
-if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
-    echo "Not on master, checkout master first."
-    exit
-fi
+git checkout -q master
 git pull
 
 # Compute the next version number
