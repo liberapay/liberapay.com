@@ -6,6 +6,9 @@ set -e
 # Be somewhere predictable
 cd "`dirname $0`"
 
+# Constants
+APPNAME=liberapay
+
 # Helpers
 
 yesno () {
@@ -25,7 +28,7 @@ require () {
 }
 
 # Check that we have the required tools
-require heroku
+require rhc
 require git
 
 # Make sure we have the latest master
@@ -40,7 +43,7 @@ prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
 version="$((prev + 1))"
 
 # Check that the environment contains all required variables
-heroku config -sa liberapay | ./env/bin/honcho run -e /dev/stdin \
+rhc ssh $APPNAME env | ./env/bin/honcho run -e /dev/stdin \
     ./env/bin/python liberapay/wireup.py
 
 # Sync the translations
@@ -59,9 +62,9 @@ if [ -e sql/branch.sql ]; then
     git commit -m "merge branch.sql into schema.sql"
 
     # Deployment options
-    if yesno "Should branch.sql be applied before deploying to Heroku instead of after?"; then
+    if yesno "Should branch.sql be applied before deploying instead of after?"; then
         run_sql="before"
-        if yesno "Should the maintenance mode be turned on during deployment?"; then
+        if yesno "Should the app be stopped during deployment?"; then
             maintenance="yes"
         fi
     else
@@ -73,12 +76,12 @@ fi
 yesno "Tag and deploy version $version?" || exit
 git tag $version
 
-# Deploy to Heroku
-[ "$maintenance" = "yes" ] && heroku maintenance:on -a liberapay
-[ "$run_sql" = "before" ] && heroku pg:psql -a liberapay <sql/branch.sql
-git push --force heroku master
-[ "$maintenance" = "yes" ] && heroku maintenance:off -a liberapay
-[ "$run_sql" = "after" ] && heroku pg:psql -a liberapay <sql/branch.sql
+# Deploy
+[ "$maintenance" = "yes" ] && rhc app stop $APPNAME
+[ "$run_sql" = "before" ] && rhc ssh $APPNAME psql <sql/branch.sql
+git push --force openshift master
+[ "$maintenance" = "yes" ] && rhc app start $APPNAME
+[ "$run_sql" = "after" ] && rhc ssh $APPNAME psql <sql/branch.sql
 rm -f sql/branch.sql
 
 # Push to GitHub
