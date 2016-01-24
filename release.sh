@@ -27,6 +27,11 @@ require () {
     fi
 }
 
+# Sync the translations
+if yesno "Shall we sync translations first?"; then
+    make i18n_update
+fi
+
 # Check that we have the required tools
 require rhc
 require git
@@ -42,11 +47,6 @@ version="$((prev + 1))"
 # Check that the environment contains all required variables
 rhc ssh $APPNAME env | ./env/bin/honcho run -e /dev/stdin \
     ./env/bin/python liberapay/wireup.py
-
-# Sync the translations
-echo "Syncing translations..."
-make i18n_pull
-make i18n_update
 
 # Check for a branch.sql
 if [ -e sql/branch.sql ]; then
