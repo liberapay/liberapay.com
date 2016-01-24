@@ -251,7 +251,7 @@ msgstr ""
 msgid "FAQ"
 msgstr "FAQ"
 
-msgid "Payday"
+msgid "Money"
 msgstr ""
 
 msgid "Teams"
@@ -1086,6 +1086,9 @@ msgstr ""
 msgid "Withdraw money"
 msgstr ""
 
+msgid "You are not a member of any team."
+msgstr ""
+
 msgid "Tips Received, by Number of Tips"
 msgstr "Fooien ontvangen, per aantal fooien"
 
@@ -1439,6 +1442,33 @@ msgstr ""
 msgid "Sign In"
 msgstr "Log in"
 
+msgid "Quarantine"
+msgstr ""
+
+msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
+msgstr ""
+
+msgid "Chargebacks"
+msgstr ""
+
+msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
+msgstr ""
+
+msgid "Safety"
+msgstr ""
+
+msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
+msgstr ""
+
+msgid "Wallets"
+msgstr ""
+
+msgid "A user's money is held in their wallets. We currently only support one wallet per user, and only one currency (the euro) in that wallet."
+msgstr ""
+
+msgid "Payday is when donations are actually executed. It's a program ({0}this one{1}) that we run every Wednesday."
+msgstr ""
+
 msgid "Liberapay is {0} old and has {1} active users."
 msgstr ""
 
@@ -1504,19 +1534,44 @@ msgstr ""
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
 msgstr ""
 
+msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
+msgstr ""
+
 msgid "Creating a team"
 msgstr ""
 
-msgid "You need to {0}sign in{1} first."
+msgid "You need to {0}sign into your own account{1} first."
 msgstr ""
 
 msgid "Becoming a team member"
 msgstr ""
 
+msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
+msgstr ""
+
 msgid "Sharing the money"
 msgstr ""
 
+msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
+msgstr ""
+
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
+msgstr ""
+
+msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income."
+msgstr ""
+
+#, python-format
+msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: two times the member's take in the previous payday, 70% of the median take in the previous payday, and the number 1."
+msgstr ""
+
 msgid "Removing team membership"
+msgstr ""
+
+msgid "You can leave a team from {0}your teams dashboard{1}."
+msgstr ""
+
+msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
 msgstr ""
 
 msgid "Fraud Review Dashboard"
