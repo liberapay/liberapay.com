@@ -1,6 +1,6 @@
-{% macro nav(items, base='') %}
-    {% set current = request.path.raw[len(base):].lstrip('/').split('/', 1)[0] %}
-    {% for slug, name in items %}
+% macro nav(items, base='')
+    % set current = request.path.raw[len(base):].lstrip('/').split('/', 1)[0]
+    % for slug, name in items
         <li{% if slug.strip('/') == current %} class="active"{% endif %}><a href="{{ base }}{{ slug }}">{{ name }}</a></li>
-    {% endfor %}
-{% endmacro %}
+    % endfor
+% endmacro

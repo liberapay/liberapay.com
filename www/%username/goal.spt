@@ -29,8 +29,8 @@ else:
     response.redirect('./edit')
 
 [---] text/html
-{% extends "templates/base.html" %}
-{% block content %}
-    {% from "templates/confirm.html" import confirm with context %}
+% extends "templates/base.html"
+% block content
+    % from "templates/confirm.html" import confirm with context
     {{ confirm(msg, request.body, './edit') }}
-{% endblock %}
+% endblock

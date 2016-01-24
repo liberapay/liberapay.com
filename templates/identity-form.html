@@ -1,7 +1,7 @@
 
     <p>{{ _("We need to know who you are because of financial regulations.") }}</p>
 
-    {% if participant.kind == 'organization' %}
+    % if participant.kind == 'organization'
 
     <label>
         <span>{{ _("Organization Type") }}</span>
@@ -21,9 +21,9 @@
     <br><br>
     <p>{{ _("The following fields are about the organization's legal representative (you, probably).") }}</p>
 
-    {% endif %}
+    % endif
 
-    {% set p = 'LegalRepresentative' if participant.kind == 'organization' else '' %}
+    % set p = 'LegalRepresentative' if participant.kind == 'organization' else ''
 
     <label>
         <span>{{ _('Given Name') }}</span>
@@ -42,10 +42,10 @@
         <span>{{ _("Country (residence)") }}</span>
         <select name="{{ p }}CountryOfResidence" class="form-control" required>
         <option></option>
-        {% set country = account[p+'CountryOfResidence'] or request.country %}
-        {% for each in locale.countries.items() %}
+        % set country = account[p+'CountryOfResidence'] or request.country
+        % for each in locale.countries.items()
             <option value="{{ each[0] }}" {{ 'selected' if each[0] == country }}>{{ each[1] }}</option>
-        {% endfor %}
+        % endfor
         </select>
     </label>
 
@@ -54,18 +54,18 @@
         <span>{{ _("Country (nationality)") }}</span>
         <select name="{{ p }}Nationality" class="form-control" required>
         <option></option>
-        {% set country = account[p+'Nationality'] or request.country %}
-        {% for each in locale.countries.items() %}
+        % set country = account[p+'Nationality'] or request.country
+        % for each in locale.countries.items()
             <option value="{{ each[0] }}" {{ 'selected' if each[0] == country }}>{{ each[1] }}</option>
-        {% endfor %}
+        % endfor
         </select>
     </label>
 
     <br>
     <label>
         <span>{{ _("Date of Birth") }}</span>
-        {% set dob = account[p+'Birthday'] %}
-        {% set dob = dob and datetime.utcfromtimestamp(dob).date().isoformat() %}
+        % set dob = account[p+'Birthday']
+        % set dob = dob and datetime.utcfromtimestamp(dob).date().isoformat()
         <input name="{{ p }}Birthday" value="{{ dob or request.body.get('Birthday', '') }}"
                pattern="[1-2][0-9]{3}-[0-9]{1,2}-[0-9]{1,2}"
                placeholder="{{ _('YYYY-MM-DD') }}" title="{{ _('YYYY-MM-DD') }}"

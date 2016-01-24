@@ -1,16 +1,16 @@
-{% from 'templates/auth.html' import auth_button with context %}
-{% from 'templates/elsewhere.html' import account_elsewhere with context %}
+% from 'templates/auth.html' import auth_button with context
+% from 'templates/elsewhere.html' import account_elsewhere with context
 
-{% set accounts = participant.get_accounts_elsewhere() %}
-{% if accounts or edit %}
+% set accounts = participant.get_accounts_elsewhere()
+% if accounts or edit
 <div class="col-md-6">
 <h2>{{ _("Accounts Elsewhere") }}</h2>
 <div class="accounts">
-    {% for platform in website.platforms %}
-        {% if accounts[platform.name] or edit %}
+    % for platform in website.platforms
+        % if accounts[platform.name] or edit
             {{ account_elsewhere(platform, accounts, auth_button) }}
-        {% endif %}
-    {% endfor %}
+        % endif
+    % endfor
 </div>
 </div>
-{% endif %}
+% endif

@@ -77,11 +77,11 @@ show_form = weekly > 0 and funded < 52 and not success
 title = _("Add money")
 
 [---] text/html
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
 {% block heading %}{% endblock %}
 
-{% block content %}
+% block content
 <div class="row">
 <div class="col-md-8 col-md-offset-2">
 <div class="panel panel-primary">
@@ -93,62 +93,62 @@ title = _("Add money")
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-    {% if exchange %}
+    % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees.",
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
             _("The attempt to take {0} from your credit card has failed. Error message: {1}", Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
         }}</div>
         <a href="{{ participant.path('receipts/%s.html' % exchange.id) }}">{{ _("View Receipt") }}</a>
-    {% endif %}
+    % endif
     <p>
-        {% if weekly <= 0 %}
+        % if weekly <= 0
             {{ _("Your donations are funded by your income.") }}
-        {% elif funded > 0 %}
+        % elif funded > 0
             {{ ngettext("Your donations are only funded for another week.",
                         "Your donations are funded for another {n} weeks.",
                         funded) }}
-        {% else %}
+        % else
             {{ _("You need to transfer money to your wallet to fund your donations.") }}
-        {% endif %}
+        % endif
     </p>
-    {% if success and back_to %}
+    % if success and back_to
         <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
-    {% endif %}
+    % endif
 
-    {% if participant.email %}
-    {% if show_form %}
+    % if participant.email
+    % if show_form
     <h3>{{ _("Amount") }}</h3>
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <select class="form-control" name="amount">
-        {% for weeks in sorted(set((min_weeks, 4, 13, 26, 39, 52))) %}
-            {% if weeks >= min_weeks %}
+        % for weeks in sorted(set((min_weeks, 4, 13, 26, 39, 52)))
+            % if weeks >= min_weeks
             <option value="{{ weekly * weeks }}">{{ ngettext("{0} ({n} week)", "{0} ({n} weeks)", weeks, Money(upcharge(weekly * weeks)[0], 'EUR')) }}</option>
-            {% endif %}
-        {% endfor %}
+            % endif
+        % endfor
         </select>
     </fieldset>
 
 
-    {% if not participant.mangopay_user_id %}
+    % if not participant.mangopay_user_id
     <h3>{{ _("Identity") }}</h3>
 
     <fieldset id="identity">
-    {% include "templates/identity-form.html" %}
+    % include "templates/identity-form.html"
     </fieldset>
-    {% endif %}
+    % endif
 
 
     <h3>{{ _("Credit card") }}</h3>
 
-    {% if card %}
+    % if card
     <div>
         <p>{{ card.Alias }} ({{ card.CardProvider }})</p>
         <button class="btn btn-default btn-sm" type="button" data-modify="#credit-card">{{ _("Modify") }}</button>
     </div>
-    {% endif %}
+    % endif
 
     <fieldset id="credit-card" class="{{ 'hidden' if card }}"
           data-msg-cors-fail='{{ _("Your browser is not letting us send your credit card data to our payment processor. "
@@ -177,33 +177,33 @@ title = _("Add money")
     <br>
     <button class="btn btn-success">{{ _("Go") }}</button>
 
-    {% if back_to %}
+    % if back_to
         <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
-    {% endif %}
-    {% endif %}
+    % endif
+    % endif
 
-    {% else %}
+    % else
     <p class="alert alert-warning">{{
         _("Please {0}verify your email address{1} then reload this page.",
           '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
           '</a>'|safe)
     }}</p>
-    {% endif %}
+    % endif
 
 </form>
 </div>
-{% if show_form %}
+% if show_form
 <p class="alert alert-info">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" />
     </a>
 </p>
-{% endif %}
+% endif
 </div>
 </div>
-{% endblock %}
+% endblock
 
-{% block scripts %}
+% block scripts
 {{ super() }}
 <script>
     mangoPay.cardRegistration.baseURL = {{ to_javascript(website.env.mangopay_base_url)|safe }};
@@ -212,4 +212,4 @@ title = _("Add money")
         Liberapay.payments.cc.init();
     });
 </script>
-{% endblock %}
+% endblock

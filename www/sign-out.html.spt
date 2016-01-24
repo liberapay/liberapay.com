@@ -23,11 +23,11 @@ if request.method == 'POST':
 
 title = _("Sign Out")
 [-----------------------------------------------------------------------------]
-{% extends "templates/base.html" %}
-{% block content %}
+% extends "templates/base.html"
+% block content
     <form id="sign-out" method="POST">
         <input name="back_to" type="hidden" value="/" />
         <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
         <button class="btn btn-primary">{{ _("Sign out") }}</button>
     </form>
-{% endblock %}
+% endblock

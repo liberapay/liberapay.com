@@ -18,47 +18,47 @@ if participant == user:
 
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
-{% block content %}
-    {% if user.ANON %}
+% block content
+    % if user.ANON
         <h1>{{ _("Please Sign In") }}</h1>
 
         <p>{{ _("Sign in to finish connecting your email.") }}</p>
 
         <p>{% include "templates/sign-in-link.html" %}</p>
-    {% elif user != participant %}
+    % elif user != participant
         <h1>{{ _("Wrong Account") }}</h1>
 
         <p>{{ _("You're signed into the wrong Liberapay account to complete this email "
                 "verification.") }}</p>
-    {% else %}
-        {% if result == emails.VERIFICATION_SUCCEEDED %}
+    % else
+        % if result == emails.VERIFICATION_SUCCEEDED
             <h1>{{ _("Success!") }}</h1>
             <p>{{ _("Your email address {0} is now connected to your Liberapay account.",
                     ("<b>%s</b>"|safe) % email) }}</p>
-        {% elif result == emails.VERIFICATION_STYMIED %}
+        % elif result == emails.VERIFICATION_STYMIED
             <h1>{{ _("Address Taken") }}</h1>
             <p>{{ _("The email address {0} is already connected to a different Liberapay account.",
                     ("<b>%s</b>"|safe) % email) }}</p>
-        {% elif result == emails.VERIFICATION_REDUNDANT %}
+        % elif result == emails.VERIFICATION_REDUNDANT
             <h1>{{ _("Already Verified") }}</h1>
             <p>{{ _("Your email address {0} is already connected to your Liberapay account.",
                     ("<b>%s</b>"|safe) % email) }}</p>
-        {% else %}
-            {% if result == emails.VERIFICATION_EXPIRED  %}
+        % else
+            % if result == emails.VERIFICATION_EXPIRED
                 <h1>{{ _("Expired") }}</h1>
                 <p>{{ _("The verification code for {0} has expired.",
                         ("<b>%s</b>"|safe) % email) }}</p>
-            {% elif result == emails.VERIFICATION_FAILED %}
+            % elif result == emails.VERIFICATION_FAILED
                 <h1>{{ _("Failure") }}</h1>
                 <p>{{ _("The verification code for {0} is bad.",
                         ("<b>%s</b>"|safe) % email) }}</p>
-            {% elif result == emails.VERIFICATION_MISSING %}
+            % elif result == emails.VERIFICATION_MISSING
                 <h1>{{ _("Missing Info") }}</h1>
                 <p>{{ _("Sorry, that's a bad link. Please try again.") }}</p>
-            {% endif %}
-        {% endif %}
+            % endif
+        % endif
         <a class="btn btn-primary" href="/{{ participant.username }}/emails/">{{ _("View your email addresses") }}</a>
-    {% endif %}
-{% endblock %}
+    % endif
+% endblock

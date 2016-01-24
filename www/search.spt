@@ -69,42 +69,42 @@ if query:
         """, locals())
 
 [---] text/html
-{% extends "templates/base.html" %}
-{% from 'templates/avatar-url.html' import avatar_url, avatar_img with context %}
-{% block content %}
+% extends "templates/base.html"
+% from 'templates/avatar-url.html' import avatar_url, avatar_img with context
+% block content
 
-    {% include "templates/search-box.html" %}
+    % include "templates/search-box.html"
 
-    {% set usernames = results.get('usernames') %}
-    {% set communities = results.get('communities') %}
-    {% set statements = results.get('statements') %}
+    % set usernames = results.get('usernames')
+    % set communities = results.get('communities')
+    % set statements = results.get('statements')
 
     <div class="row">
-    {% if usernames %}
+    % if usernames
     <div class="col-md-6">
         <h2>{{ ngettext("Found a matching username",
                         "Found matching usernames",
                         len(usernames)) }}</h2>
         <ul class="people">
-        {% for result in usernames %}
+        % for result in usernames
         <li class="panel panel-default mini-user">
             <a href="/{{ result.username }}/">
                 <img class="avatar" src="{{ avatar_url(result) }}" />
                 <span class="name">{{ result.username }}</span>
             </a>
         </li>
-        {% endfor %}
+        % endfor
         </ul>
     </div>
-    {% endif %}
+    % endif
 
-    {% if communities %}
+    % if communities
     <div class="col-md-6">
         <h2>{{ ngettext("Found a matching community name",
                         "Found matching community names",
                         len(communities)) }}</h2>
         <ul class="community memberships">
-        {% for result in communities %}
+        % for result in communities
             <li>
                 <a href="/for/{{ result.slug }}/">{{ result.name }}</a>
                 <div class="nmembers">{{
@@ -114,45 +114,45 @@ if query:
                              "", "").lower()
                 }}</div>
             </li>
-        {% endfor %}
+        % endfor
         </ul>
     </div>
-    {% endif %}
+    % endif
     </div>
 
-    {% if statements %}
+    % if statements
     <div>
         <h2>{{ ngettext("Found a matching user statement",
                         "Found matching user statements",
                         len(statements)) }}</h2>
-        {% for result in statements %}
+        % for result in statements
             <div class="panel panel-default">
             <div class="panel-body search-result" href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="col-right">
                     <a class="username" href="/{{ result.username }}/">{{ result.username }}</a>
-                    {% if len(result.excerpts) == 1 %}
+                    % if len(result.excerpts) == 1
                         <blockquote class="excerpt profile-statement">{{
                             markdown.render(result.excerpts[0].excerpt)
                         }}</blockquote>
-                    {% endif %}
+                    % endif
                 </div>
             </div>
             </div>
-        {% endfor %}
+        % endfor
     </div>
-    {% endif %}
+    % endif
 
-    {% if query and not (usernames or communities or statements) %}
+    % if query and not (usernames or communities or statements)
         <p>{{ _("Sorry, we didn't find anything matching your query.") }}</p>
-    {% endif %}
+    % endif
 
     <h2>{{ _("Looking for a specific user of a social network?") }}</h2>
-    {% include "templates/jump.html" %}
+    % include "templates/jump.html"
 
-{% endblock %}
+% endblock
 
-{% block scripts %}
+% block scripts
 <script>
     $(document).ready(function(){
         $('div.search-result').css('cursor', 'pointer').click(function(){
@@ -160,6 +160,6 @@ if query:
         });
     });
 </script>
-{% endblock %}
+% endblock
 [---] application/json via json_dump
 results

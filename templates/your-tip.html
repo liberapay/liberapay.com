@@ -1,28 +1,28 @@
-{% macro tip_form(tippee=None, tip=None, inline=False, disabled='') %}
-{% set pledging = tippee.__class__.__name__ == 'AccountElsewhere' %}
-{% if user.ANON %}
+% macro tip_form(tippee=None, tip=None, inline=False, disabled='')
+% set pledging = tippee.__class__.__name__ == 'AccountElsewhere'
+% if user.ANON
     <div class="sign-in-to">
-        {% include "templates/sign-in-link.html" %}
+        % include "templates/sign-in-link.html"
         {{ _("to pledge to {0}", tippee.friendly_name) if pledging else _("to give to {0}", tippee.username) }}
     </div>
-{% else %}
-    {% set tip = tip or user.get_tip_to(tippee.participant or tippee) %}
+% else
+    % set tip = tip or user.get_tip_to(tippee.participant or tippee)
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
-        {% if inline %}
+        % if inline
             {{ tip_input(tip, disabled, small=True, pledging=pledging) }}
-        {% else %}
+        % else
             <label for="amount">{{ _('Your donation') }}</label>
             <div class="form-group">
                 {{ tip_input(tip, disabled, pledging=pledging) }}
             </div>
-        {% endif %}
+        % endif
     </form>
-{% endif %}
-{% endmacro %}
+% endif
+% endmacro
 
-{% macro tip_input(tip, disabled='', small=False, pledging=False) %}
+% macro tip_input(tip, disabled='', small=False, pledging=False)
     <div class="input-group">
         <div class="input-group-addon">€</div>
         <input type="text" name="amount" id="amount"
@@ -35,4 +35,4 @@
             }}</button>
         </div>
     </div>
-{% endmacro %}
+% endmacro

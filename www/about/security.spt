@@ -63,8 +63,8 @@ for line in raw.splitlines():
 [---]
 title = _("Security")
 [---] text/html
-{% extends "templates/about.html" %}
-{% block content %}
+% extends "templates/about.html"
+% block content
 
     <p>Please send security disclosures to <a onclick="$(this).html('admin&amp;#64;liberapay.com')">[click to see address]</a>.</p>
 
@@ -78,14 +78,14 @@ title = _("Security")
     security issues to Gratipay through other means:</p>
 
     <ol>
-        {% for researchers, link in hof %}
+        % for researchers, link in hof
         <li>
-        {% for handle, href in researchers %}
+        % for handle, href in researchers
             <a href="{{ href }}">{{ handle }}</a>{% if not loop.last %}{% if loop.revindex0 == 1 %} &amp; {% else %}, {% endif %}{% endif %}
-        {% endfor %}
+        % endfor
         &mdash; <a href="{{ link }}">{{ link }}</a>
         </li>
-        {% endfor %}
+        % endfor
     </ol>
 
-{% endblock %}
+% endblock

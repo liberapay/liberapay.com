@@ -9,35 +9,35 @@ subhead = _("Email settings")
 emails = participant.get_emails()
 
 [---] text/html
-{% extends "templates/settings.html" %}
+% extends "templates/settings.html"
 
-{% block content %}
+% block content
 
     <h2>{{ _("Email Addresses (Private)") }}</h2>
 
     <form action="./modify.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <ul class="emails">
-        {% for email in emails %}
+        % for email in emails
             <li class="clearfix">
                 <span class="address">{{ email.address }}</span>
-                {% if email.address == participant.email %}
+                % if email.address == participant.email
                     <span class="label label-primary">{{ _("Primary") }}</span>
-                {% else %}
+                % else
                     <button name="remove" value="{{ email.address }}"
                             class="btn btn-danger btn-sm">{{ _("Remove") }}</button>
-                    {% if not email.verified %}
+                    % if not email.verified
                         <span class="label label-warning">{{ _("Unverified") }}</span>
                         <button name="resend" value="{{ email.address }}"
                                 class="btn btn-default btn-sm">{{ _("Resend email") }}</button>
-                    {% else %}
+                    % else
                         <span class="label label-success">{{ _("Verified") }}</span>
                         <button name="set-primary" value="{{ email.address }}"
                                 class="btn btn-primary btn-sm">{{ _("Set as primary") }}</button>
-                    {% endif %}
-                {% endif %}
+                    % endif
+                % endif
             </li>
-        {% endfor %}
+        % endfor
         </ul>
     </form>
 
@@ -59,15 +59,15 @@ emails = participant.get_emails()
         <input type="hidden" name="fields" value="{{ EVENTS_S }}" />
         <span>{{ _("Send me notifications via email:") }}</span><br>
         <div class="checkbox">
-        {% for event in EVENTS.values() %}
+        % for event in EVENTS.values()
         <label>
             <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) }} />
             {{ _(event.title) }}
         </label>
         <br>
-        {% endfor %}
+        % endfor
         </div>
         <button class="btn btn-default">{{ _("Save changes") }}</button>
     </form>
 
-{% endblock %}
+% endblock

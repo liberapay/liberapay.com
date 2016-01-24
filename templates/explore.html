@@ -1,7 +1,7 @@
-{% extends "templates/base.html" %}
-{% block subnav %}
-    {% from "templates/nav.html" import nav with context %}
+% extends "templates/base.html"
+% block subnav
+    % from "templates/nav.html" import nav with context
     <ul class="nav nav-tabs">{{
         nav([('/', _('Communities')), ('/teams/', _('Teams'))], base='/explore')
     }}</ul>
-{% endblock %}
+% endblock

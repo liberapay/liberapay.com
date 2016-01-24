@@ -1,42 +1,42 @@
-{% from 'templates/your-tip.html' import tip_form with context %}
+% from 'templates/your-tip.html' import tip_form with context
 
-{% set username = participant.username %}
-{% set giving = participant.giving %}
-{% set receiving = participant.receiving %}
-{% set goal = participant.goal %}
-{% set giving_str = Money(giving, 'EUR') %}
-{% set receiving_str = Money(receiving, 'EUR') %}
-{% set goal_str = goal and Money(goal, 'EUR') %}
-{% set goal_percent = goal and receiving / goal * 100 %}
+% set username = participant.username
+% set giving = participant.giving
+% set receiving = participant.receiving
+% set goal = participant.goal
+% set giving_str = Money(giving, 'EUR')
+% set receiving_str = Money(receiving, 'EUR')
+% set goal_str = goal and Money(goal, 'EUR')
+% set goal_percent = goal and receiving / goal * 100
 
-{% if participant.hide_giving or participant.hide_receiving %}
+% if participant.hide_giving or participant.hide_receiving
     <p>{{ _("{0}'s account is in private mode.", username) }}</p>
-{% elif goal == None %}
+% elif goal == None
     <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
-{% elif goal > 0 %}
+% elif goal > 0
     <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}<br>
-    {% if receiving == 0 %}
+    % if receiving == 0
         {{ _("Will you be the first to contribute?", username) }}</p>
-    {% else %}
-        {% if receiving >= goal %}
+    % else
+        % if receiving >= goal
             {{ _("Mission accomplished, {0} receives {1} per week!", username, receiving_str) }}
-        {% elif user.ANON or user.get_tip_to(participant)['amount'] == 0 %}
+        % elif user.ANON or user.get_tip_to(participant)['amount'] == 0
             {{ _("Will you contribute?", username) }}
-        {% endif %}
+        % endif
         </p>
         {{ _("Current income: {0}", receiving_str) }}
         <div class="progress">
             <div class="progress-bar {{ 'progress-bar-success' if receiving >= goal }}"
                  style="min-width: 2px; width: {{ receiving / goal * 100 }}%;"></div>
         </div>
-    {% endif %}
-{% else %}
+    % endif
+% else
     <p>{{ _("{0} gives {1} per week.", username, giving_str) }}</p>
-{% endif %}
+% endif
 
-{% if participant.accepts_tips %}
-    {% set disabled = 'disabled' if user == participant else '' %}
+% if participant.accepts_tips
+    % set disabled = 'disabled' if user == participant else ''
     {{ tip_form(tippee=participant, disabled=disabled) }}
-{% else %}
+% else
     <p>{{ _("{0} doesn't accept donations", username) }}</p>
-{% endif %}
+% endif

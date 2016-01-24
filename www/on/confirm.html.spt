@@ -23,8 +23,8 @@ title = _("Please Confirm")
 
 [--------]
 
-{% extends "templates/base.html" %}
-{% block content %}
+% extends "templates/base.html"
+% block content
 <div class="on-confirm">
 
     <p><img class="platform-icon" src="{{ account.platform_data.icon }}" />
@@ -39,23 +39,23 @@ title = _("Please Confirm")
     <div class="row">
         <div class="col-sm-2">
             <b>{{ user.username }}</b><br />
-            {% for account in user_accounts %}
+            % for account in user_accounts
                 <img src="{{ account.platform_data.icon }}"
                      alt="{{ account.platform }}"
                      class="platform-icon" />
                 {{ account.friendly_name }}<br />
-            {% endfor %}
+            % endfor
         </div>
         <div class="col-sm-2 other">
             <b>{{ other.username }}</b><br />
-            {% for other_account in other_accounts %}
+            % for other_account in other_accounts
                 <img src="{{ other_account.platform_data.icon }}"
                      alt="{{ other_account.platform }}"
                      class="platform-icon" />
                 <span class="{{ 'highlight' if other_account.platform == account.platform }}">
                     {{ other_account.friendly_name }}<br />
                 </span>
-            {% endfor %}
+            % endfor
         </div>
     </div>
 
@@ -65,16 +65,16 @@ title = _("Please Confirm")
     <div class="row">
         <div class="col-sm-2">
             <b>{{ user.username }}</b><br />
-            {% for user_account in user_accounts %}
-                {% if user_account != abandoned_account %}
+            % for user_account in user_accounts
+                % if user_account != abandoned_account
                 <span class="account-elsewhere">
                     <img src="{{ user_account.platform_data.icon }}"
                          alt="{{ user_account.platform }}"
                          class="platform-icon" />
                     {{ user_account.friendly_name }}<br />
                 </span>
-                {% endif %}
-            {% endfor %}
+                % endif
+            % endfor
 
             <span class="account-elsewhere">
                 <img src="{{ account.platform_data.icon }}" alt="{{ account.platform }}"
@@ -86,18 +86,18 @@ title = _("Please Confirm")
         </div>
         <div class="col-sm-2 other">
             <b>{{ other.username }}</b><br />
-            {% for other_account in other_accounts %}
-                {% if other_account.platform != account.platform %}
+            % for other_account in other_accounts
+                % if other_account.platform != account.platform
                     <span class="account-elsewhere">
                         <img src="{{ other_account.platform_data.icon }}"
                              alt="{{ other_account.platform }}"
                              class="platform-icon" />
                         {{ other_account.friendly_name }}<br />
                     </span>
-                {% endif %}
-            {% endfor %}
+                % endif
+            % endfor
         </div>
-        {% if abandoned_account %}
+        % if abandoned_account
         <div class="abandoned">
             {{ _("Abandoned:") }}<br/><br/>
             <span class="account-elsewhere">
@@ -105,7 +105,7 @@ title = _("Please Confirm")
                 {{ abandoned_account.friendly_name }}<br />
             </span>
         </div>
-        {% endif %}
+        % endif
     </div>
 
 
@@ -119,4 +119,4 @@ title = _("Please Confirm")
     </form>
 
 </div>
-{% endblock %}
+% endblock

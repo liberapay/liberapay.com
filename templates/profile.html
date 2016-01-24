@@ -1,13 +1,13 @@
-{% extends "templates/base.html" %}
-{% from 'templates/avatar-url.html' import avatar_img with context %}
+% extends "templates/base.html"
+% from 'templates/avatar-url.html' import avatar_img with context
 
-{% block head_early %}
-    {% if participant.hide_from_search %}
+% block head_early
+    % if participant.hide_from_search
     <meta name="robots" content="noindex,nofollow" />
-    {% endif %}
-{% endblock %}
+    % endif
+% endblock
 
-{% block heading %}
+% block heading
 <div class="row">
 <div class="col-sm-10 col-md-7 col-lg-6 profile-box">
     <div class="panel panel-primary">
@@ -15,22 +15,22 @@
             <div class="avatar {{ 'is-suspicious' if participant.is_suspicious }} col-xs-4">
                 <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
 
-                {% if participant.join_time %}
+                % if participant.join_time
                 <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
-                {% endif %}
-                {% if participant.status == 'closed' %}
+                % endif
+                % if participant.status == 'closed'
                 <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
-                {% endif %}
+                % endif
 
-                {% if user.is_admin %}
+                % if user.is_admin
                 <label class="is-suspicious-label">
                     Suspicious
                     <input type="checkbox" data-username="{{ participant.username }}"
-                        {% if participant.is_suspicious %}checked="true"{% endif %} />
+                        {{ 'checked' if participant.is_suspicious }} />
                 </label>
-                {% elif participant.is_suspicious %}
+                % elif participant.is_suspicious
                 <div class="is-suspicious-label">Suspicious</div>
-                {% endif %}
+                % endif
             </div>
 
             <div class="col-xs-8">
@@ -40,19 +40,19 @@
     </div>
 </div>
 </div>
-{% endblock %}
+% endblock
 
-{% block subnav %}
-    {% set show_income = not participant.hide_receiving and participant.accepts_tips %}
+% block subnav
+    % set show_income = not participant.hide_receiving and participant.accepts_tips
     {% set pages = filter_profile_subnav(user, participant, [
         ('/',            _('Profile'),   True,           True),
         ('/income/',     _('Income'),    True,           show_income),
         ('/history/',    _('History'),   False,          False),
     ]) %}
-    {% if len(pages) > 1 %}
-    {% from "templates/nav.html" import nav with context %}
+    % if len(pages) > 1
+    % from "templates/nav.html" import nav with context
     <ul class="nav nav-tabs">
         {{ nav(pages, base='/'+participant.username) }}
     </ul>
-    {% endif %}
-{% endblock %}
+    % endif
+% endblock

@@ -15,7 +15,7 @@
         }
     </script>
 </head>
-{% from 'templates/nav.html' import nav with context %}
+% from 'templates/nav.html' import nav with context
 <body>
 
 <div id="wrapper">
@@ -26,21 +26,21 @@
                 {{ nav([('/explore/', _('Explore')), ('/search', _('Search')), ('/about/', _('About'))]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
-            {% if user.ANON %}
+            % if user.ANON
                 <li>{% include "templates/sign-in-link.html" %}</li>
-            {% else %}
+            % else
                 <li>{% include "templates/profile-dropdown.html" %}</li>
                 <li><a href="/{{ user.username }}/notifications"
                        title="{{ _('Notifications') }}"
                        style="color: {{ '#e11' if user.pending_notifs else '#888' }}">
                     <span class="glyphicon glyphicon-info-sign"></span>
                     <span class="sr-only">{{ _("Notifications") }}</span>
-                    {% if user.pending_notifs %}
+                    % if user.pending_notifs
                         <span class="pending-notifs">{{ user.pending_notifs }}</span>
-                    {% endif %}
+                    % endif
                 </a></li>
                 <li>{% include "templates/sign-out.html" %}</li>
-            {% endif %}
+            % endif
             </ul>
         </div>
     </nav>
@@ -69,21 +69,21 @@
 
 <script>
     $(function(){
-        {% if not user.ANON %}
+        % if not user.ANON
         Liberapay.username = {{ to_javascript(user.username)|safe }};
-        {% endif %}
+        % endif
         Liberapay.init();
     });
 </script>
 
 {% block scripts %}{% endblock %}
 
-{% set _success = request.qs.get('success') %}
-{% if _success %}
+% set _success = request.qs.get('success')
+% if _success
 <div id="notification-area"><div class="notification notification-success">{{
     b64decode(_success).decode('utf8')
 }}<span class="close">&times;</span></div></div>
-{% endif %}
+% endif
 
 </body>
 </html>

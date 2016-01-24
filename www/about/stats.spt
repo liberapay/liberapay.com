@@ -102,16 +102,16 @@ def out():
 
 [----------------------------------------------------------] text/html
 
-{% extends "templates/about.html" %}
+% extends "templates/about.html"
 
-{% block scripts %}
+% block scripts
 <script>
     jQuery.get('/about/charts.json', Liberapay.charts.make);
 </script>
 {{ super() }}
-{% endblock %}
+% endblock
 
-{% block content %}
+% block content
 
     <p>{{ _("Liberapay is {0} old and has {1} active users.", to_age(constants.BIRTHDAY), nactive) }}</p>
 
@@ -127,10 +127,10 @@ def out():
     <p>{{ _("{0} is escrowed within Liberapay. {1} people have connected a bank account for withdrawals.",
             Money(escrow, 'EUR'), nach) }}</p>
 
-    {% if last_payday %}
+    % if last_payday
     <p>{{ _("{0} changed hands {1} ago.", Money(transfer_volume, 'EUR'),
             to_age(last_payday.ts_start)) }}</p>
-    {% endif %}
+    % endif
 
     <p>{{ ngettext("On average, people who donate give {0} each to one other user.",
                    "On average, people who donate give {0} each to {n} other users.",
@@ -186,7 +186,7 @@ def out():
         </div>
     </div>
 
-{% endblock %}
+% endblock
 
 [----------------------------------------------------------] application/json via json_dump
 out()

@@ -38,16 +38,16 @@ if is_team:
         allow_team_connect = False
 
 [-----------------------------------------------------------------------------]
-{% from 'templates/avatar-url.html' import avatar_img with context %}
+% from 'templates/avatar-url.html' import avatar_img with context
 
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
 {% block heading %}{% endblock %}
 
-{% block content %}
+% block content
 
-{% from 'templates/auth.html' import auth_button with context %}
-{% from 'templates/your-tip.html' import tip_form with context %}
+% from 'templates/auth.html' import auth_button with context
+% from 'templates/your-tip.html' import tip_form with context
 
 <div class="row">
     <div class="col-md-6">
@@ -60,26 +60,26 @@ if is_team:
             </div>
 
             <div class="col-xs-8">
-            {% if allow_pledges %}
+            % if allow_pledges
                 {{ tip_form(tippee=account) }}
-            {% elif locked %}
+            % elif locked
                 <p>{{ _("{0} has opted out of Liberapay", friendly_name) }}</p>
-                {% if is_team %}
+                % if is_team
                     <p>{{ _("If you are an administrator of this {0} team account, you can "
                             "unlock it to allow people to pledge tips to your team on "
                             "Liberapay.",
                             platform.display_name) }}</p>
-                {% else %}
+                % else
                     <p>{{ _("If you are {0} on {1}, you can unlock your account to allow "
                             "people to pledge tips to you on Liberapay.",
                             '<a href="%s">%s</a>'|safe % (account.html_url, friendly_name),
                             platform.display_name) }}</p>
-                {% endif %}
+                % endif
 
-                {% call auth_button(platform.name, 'unlock', user_id) %}
+                % call auth_button(platform.name, 'unlock', user_id)
                     {{ _("Unlock") }}
-                {% endcall %}
-            {% endif %}
+                % endcall
+            % endif
             </div>
 
         </div>
@@ -89,41 +89,41 @@ if is_team:
     <div class="panel panel-default">
         <div class="panel-heading">{{ _("Are you {0}?", friendly_name) }}</div>
         <div class="panel-body">
-            {% if is_team and allow_team_connect and not locked %}
+            % if is_team and allow_team_connect and not locked
                 <p>{{ _("Are you an administrator of this {0} team account? Connect it "
                         "to your Liberapay account.",
                         platform.display_name) }}</p>
-                {% call auth_button(platform.name, 'connect', user_id) %}
+                % call auth_button(platform.name, 'connect', user_id)
                     {{ _("Connect team account") }}
-                {% endcall %}
-            {% elif not locked %}
-                {% if user.ANON %}
+                % endcall
+            % elif not locked
+                % if user.ANON
                     <p>{{ _("We never collect money for you unless you join.") }}</p>
-                    {% include "templates/sign-in-link.html" %}
-                {% else %}
+                    % include "templates/sign-in-link.html"
+                % else
                     <p>{{ _("Connect this {0} account to your Liberapay profile.",
                             platform.display_name) }}</p>
-                    {% call auth_button(platform.name, 'connect', user_id) %}
+                    % call auth_button(platform.name, 'connect', user_id)
                         {{ _("Connect") }}
-                    {% endcall %}
-                {% endif %}
-            {% endif %}
+                    % endcall
+                % endif
+            % endif
         </div>
     </div>
     </div>
 </div>
 <div>
 
-    {% if user.ANON %}
+    % if user.ANON
         <h2>{{ _("What is Liberapay?") }}</h2>
 
         <p>{{ _("Liberapay is a way to thank and support your favorite artists, "
                 "musicians, writers, programmers, etc. by setting up a small weekly "
                 "cash gift to them.") }}
         <a href="/about/">{{ _("Learn more") }}</a></p>
-    {% endif %}
+    % endif
 
-    {% if user.ANON and allow_pledges %}
+    % if user.ANON and allow_pledges
         <h2>{{ _("Don't like what you see?") }}</h2>
 
         <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
@@ -131,27 +131,27 @@ if is_team:
                 "locked accounts.",
                 platform.display_name) }}</p>
 
-        {% call auth_button(platform.name, 'lock', user_id) %}
+        % call auth_button(platform.name, 'lock', user_id)
             {{ _("Lock") }}
-        {% endcall %}
-    {% endif %}
+        % endcall
+    % endif
 
-    {% if is_team and not locked %}
+    % if is_team and not locked
 
-        {% if allow_pledges and members %}
+        % if allow_pledges and members
             <h2>{{ team_description }}</h2>
-        {% endif %}
+        % endif
 
-        {% if members %}
+        % if members
         <table id="members" class="table table-condensed">
         <thead><tr><th>{{ _("Member") }}</th><th>{{ _("Status") }}</th></tr></thead>
         <tbody>
 
-        {% for member in members %}
-            {% set on_liberapay = member.participant.status != 'stub' %}
-            {% set declines_gifts = not member.participant.accepts_tips %}
+        % for member in members
+            % set on_liberapay = member.participant.status != 'stub'
+            % set declines_gifts = not member.participant.accepts_tips
             <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-liberapay' if not on_liberapay }}">
-                {% if on_liberapay %}
+                % if on_liberapay
                     <td>
                         <a href="/{{ member.participant.username }}/">
                             {{ avatar_img(member.participant) }}
@@ -159,13 +159,13 @@ if is_team:
                         </a>
                     </td>
                     <td>
-                        {% if declines_gifts %}
+                        % if declines_gifts
                             {{ _("declines gifts") }}
-                        {% else %}
+                        % else
                             {{ _("accepts gifts") }}
-                        {% endif %}
+                        % endif
                     </td>
-                {% else %}
+                % else
                     <td>
                         <a href="/on/{{platform.name}}/{{member.liberapay_slug}}/">
                             {{ avatar_img(member) }}
@@ -173,25 +173,25 @@ if is_team:
                         </a>
                     </td>
                     <td>
-                        {% if not member.participant.accepts_tips %}
+                        % if not member.participant.accepts_tips
                             {{ _("opted out of Liberapay") }}
-                        {% else %}
+                        % else
                             {{ _("hasn't joined Liberapay yet") }}
-                        {% endif %}
+                        % endif
                     </td>
-                {% endif %}
+                % endif
             </tr>
-        {% endfor %}
+        % endfor
 
-        {% if pages_urls %}
-            {% from 'templates/pagination.html' import pages_links with context %}
+        % if pages_urls
+            % from 'templates/pagination.html' import pages_links with context
             <tr><td colspan="2">{{ pages_links(pages_urls) }}</td></tr>
-        {% endif %}
+        % endif
 
         </tbody>
         </table>
-        {% endif %}
+        % endif
 
-    {% endif %}
+    % endif
 </div>
-{% endblock %}
+% endblock

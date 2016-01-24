@@ -56,19 +56,19 @@ edit = True
 title = participant.username
 
 [---] text/html
-{% extends "templates/profile.html" %}
+% extends "templates/profile.html"
 
-{% block scripts %}
+% block scripts
 {{ super() }}
 <script>$(document).ready(Liberapay.profile.init);</script>
-{% endblock %}
+% endblock
 
-{% block heading %}
+% block heading
     <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
 {{ super() }}
-{% endblock %}
+% endblock
 
-{% block box %}
+% block box
 <form action="goal.html" method="POST" class="goal">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
@@ -93,7 +93,7 @@ title = participant.username
             {{ GRATEFUL }}
         </label>
 
-        {% if participant.kind != 'group' %}
+        % if participant.kind != 'group'
         <label>
             <input type="radio" name="goal" id="goal-0" value="0.00"
                    {{ 'checked' if participant.goal == 0 }} />
@@ -105,22 +105,22 @@ title = participant.username
                    {{ 'checked' if participant.goal and participant.goal < 0 }} />
             {{ PATRON_NO_GIFTS }}
         </label>
-        {% endif %}
+        % endif
     </div>
 
     <button class="save btn btn-primary">{{ _("Save") }}</button>
 </form>
-{% endblock %}
+% endblock
 
 {% block subnav %}{% endblock %}
 
-{% block content %}
+% block content
 <div class="row">
     <div class="col-md-6">
 
         <h2 id="statement">{{ _("Statement") }}</h2>
 
-        {% if request.body.get('preview') == 'true' %}
+        % if request.body.get('preview') == 'true'
 
             <div class="alert alert-info">{{ _("This is a preview.") }}</div>
 
@@ -134,7 +134,7 @@ title = participant.username
                 <button class="btn btn-success" name="save" value="true">{{ _("Save") }}</button>
             </form>
 
-        {% else %}
+        % else
 
             <p>{{ _("Tell us how you're making the world better.") }}</p>
 
@@ -143,12 +143,12 @@ title = participant.username
 
             <form action="#statement" method="GET" class="form-inline langs">
                 <select class="form-control" name="lang">
-                {% for code, name in select_langs.items() %}
+                % for code, name in select_langs.items()
                     <option value="{{ code }}"
                             {{ 'selected' if code == lang }}
                             {{ 'disabled' if not code }}
                         >{{ name }}</option>
-                {% endfor %}
+                % endfor
                 </select>
                 <button class="btn btn-default">{{ _("Switch") }}</button>
             </form>
@@ -168,15 +168,15 @@ title = participant.username
                 <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
             </form>
 
-        {% endif %}
+        % endif
 
     </div>
-    {% if participant.kind == 'group' %}
-    {% include "templates/members-listing.html" %}
-    {% else %}
-    {% include "templates/connected-accounts.html" %}
-    {% include "templates/team-listing.html" %}
-    {% include "templates/community-listing.html" %}
-    {% endif %}
+    % if participant.kind == 'group'
+    % include "templates/members-listing.html"
+    % else
+    % include "templates/connected-accounts.html"
+    % include "templates/team-listing.html"
+    % include "templates/community-listing.html"
+    % endif
 </div>
-{% endblock %}
+% endblock

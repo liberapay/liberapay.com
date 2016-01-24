@@ -6,7 +6,7 @@ if request.method == 'POST':
     sign_in(request, state)
 
 [---] text/html
-{% extends "templates/base.html" %}
-{% block content %}
-{% include "templates/sign-in-form.html" %}
-{% endblock %}
+% extends "templates/base.html"
+% block content
+% include "templates/sign-in-form.html"
+% endblock

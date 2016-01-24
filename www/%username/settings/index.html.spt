@@ -11,9 +11,9 @@ subhead = _("Account")
 not_group = participant.kind != 'group'
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/settings.html" %}
+% extends "templates/settings.html"
 
-{% block content %}
+% block content
 <div id="settings">
 
         <form action="edit" method="POST">
@@ -35,7 +35,7 @@ not_group = participant.kind != 'group'
         <h2>{{ _("Account type") }}</h2>
         <p>{{ _(participant.kind.title()) }}</p>
 
-        {% if not_group %}
+        % if not_group
         <form action="edit" method="POST" class="js-submit form-inline">
             <h2>{{ _("Password") }}</h2>
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
@@ -51,13 +51,13 @@ not_group = participant.kind != 'group'
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="privacy" value="{{ PRIVACY_FIELDS_S }}" />
             <div class="checkbox">
-            {% for name, label in PRIVACY_FIELDS.items() %}
+            % for name, label in PRIVACY_FIELDS.items()
             <label>
                 <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name] }} />
                 {{ label }}
             </label>
             <br />
-            {% endfor %}
+            % endfor
             </div>
             <button class="btn btn-default">{{ _("Save changes") }}</button>
         </form>
@@ -66,8 +66,8 @@ not_group = participant.kind != 'group'
             <h2>{{ _("Close") }}</h2>
             <a class="btn btn-default" href="./close">{{ _("Close Account") }}</a>
         </div>
-        {% endif %}
+        % endif
 
     </div>
 </div>
-{% endblock %}
+% endblock

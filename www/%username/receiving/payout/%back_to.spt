@@ -54,11 +54,11 @@ if show_form:
 title = _("Withdraw money")
 
 [---] text/html
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
 {% block heading %}{% endblock %}
 
-{% block content %}
+% block content
 <div class="row">
 <div class="col-md-8 col-md-offset-2">
 <div class="panel panel-primary">
@@ -70,34 +70,34 @@ title = _("Withdraw money")
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-    {% if exchange %}
+    % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your liberapay wallet. "
               "If the transfer is successful {1} will land in your bank account and {2} will be paid in fees.",
               Money(-exchange.amount, 'EUR'), Money(-exchange.amount - exchange.fee, 'EUR'), Money(exchange.fee, 'EUR')) if success else
             _("The attempt to send {0} to your bank account has failed. Error message: {1}", Money(-exchange.amount, 'EUR'), exchange.note)
         }}</div>
-    {% endif %}
+    % endif
     <p>
         {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
-        {% if not success %}
-            {% if participant.balance > withdrawable %}
-                {% if withdrawable == 0 %}
+        % if not success
+            % if participant.balance > withdrawable
+                % if withdrawable == 0
                     {{ _("Unfortunately you cannot withdraw that money yet, it is still in quarantine.") }}
-                {% else %}
+                % else
                     {{ _("Out of that, {0} is available for withdrawal, the rest is still in quarantine.",
                          Money(withdrawable, 'EUR')) }}
-                {% endif %}
+                % endif
                 </p><p>
                 {{ _("We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience.", constants.QUARANTINE) }}
-            {% endif %}
-        {% endif %}
+            % endif
+        % endif
     </p>
-    {% if success and back_to %}
+    % if success and back_to
         <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
-    {% endif %}
+    % endif
 
-    {% if show_form %}
+    % if show_form
     <h3>{{ _("Amount") }}</h3>
 
     <fieldset id="amount" class="form-inline">
@@ -112,32 +112,32 @@ title = _("Withdraw money")
 
     <h3>{{ _("Bank account") }}</h3>
 
-    {% if bank_account %}
+    % if bank_account
     <div>
         <p>
-        {% if ba_type == 'IBAN' %}
+        % if ba_type == 'IBAN'
             {{ _("IBAN") }}: {{ obfuscate(ba_details.IBAN, 2, -4) }}
-        {% elif ba_type == 'US' %}
+        % elif ba_type == 'US'
             {{ _("Routing Number") }}: {{ ba_details.ABA }}<br>
             {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}<br>
             {{ _("Bank Account Type") }}: {{ ba_details.DepositAccountType.lower() }}
-        {% elif ba_type == 'CA' %}
+        % elif ba_type == 'CA'
             {{ _("Bank Name") }}: {{ ba_details.BankName }}<br>
             {{ _("Institution Number") }}: {{ ba_details.InstitutionNumber }}<br>
             {{ _("Branch Code") }}: {{ ba_details.BranchCode }}<br>
             {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -4) }}
-        {% elif ba_type == 'GB' %}
+        % elif ba_type == 'GB'
             {{ _("Sort Code") }}: {{ ba_details.SortCode }}<br>
             {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}
-        {% elif ba_type == 'OTHER' %}
+        % elif ba_type == 'OTHER'
             {{ _("Country") }}: {{ ba_details.Country }}<br>
             {{ _("BIC (Bank Identifier Code)") }}: {{ ba_details.BIC }}<br>
             {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}
-        {% endif %}
+        % endif
         </p>
         <button class="btn btn-default btn-sm" type="button" data-modify="#bank-account">{{ _("Modify") }}</button>
     </div>
-    {% endif %}
+    % endif
 
     <fieldset id="bank-account" class="{{ 'hidden' if bank_account }}">
 
@@ -239,9 +239,9 @@ title = _("Withdraw money")
                     <span>{{ _("Country") }}</span>
                     <select name="Country" class="form-control" required>
                     <option></option>
-                    {% for each in locale.countries.items() %}
+                    % for each in locale.countries.items()
                         <option value="{{ each[0] }}">{{ each[1] }}</option>
-                    {% endfor %}
+                    % endfor
                     </select>
                 </label><br>
 
@@ -298,9 +298,9 @@ title = _("Withdraw money")
             <span>{{ _("Country") }}</span>
             <select name="OwnerAddress.Country" class="form-control" required>
             <option></option>
-            {% for each in locale.countries.items() %}
+            % for each in locale.countries.items()
                 <option value="{{ each[0] }}">{{ each[1] }}</option>
-            {% endfor %}
+            % endfor
             </select>
         </label><br>
 
@@ -309,25 +309,25 @@ title = _("Withdraw money")
     <br>
     <button class="btn btn-success">{{ _("Go") }}</button>
 
-    {% if back_to %}
+    % if back_to
         <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
-    {% endif %}
-    {% endif %}
+    % endif
+    % endif
 
 </form>
 </div>
-{% if show_form %}
+% if show_form
 <p class="alert alert-info">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" />
     </a>
 </p>
-{% endif %}
+% endif
 </div>
 </div>
-{% endblock %}
+% endblock
 
-{% block scripts %}
+% block scripts
 {{ super() }}
 <script>$(function() { Liberapay.payments.ba.init(); });</script>
-{% endblock %}
+% endblock

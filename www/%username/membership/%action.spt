@@ -85,8 +85,8 @@ if not confirm:
 msg = confirm
 
 [---] text/html
-{% extends "templates/base.html" %}
-{% block content %}
-    {% from "templates/confirm.html" import confirm with context %}
+% extends "templates/base.html"
+% block content
+    % from "templates/confirm.html" import confirm with context
     {{ confirm(msg, request.body, back_to) }}
-{% endblock %}
+% endblock

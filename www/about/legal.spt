@@ -11,9 +11,9 @@ MANGOPAY_TERMS = Markup().join(
 [---]
 title = _("Legal")
 [---] text/html
-{% extends "templates/about.html" %}
+% extends "templates/about.html"
 
-{% block content %}
+% block content
 <div class="row"><div class="col-md-8">
 
 <h2 id="info">{{ _("Legal Information") }}</h2>
@@ -51,4 +51,4 @@ Red Had Inc<br>100 E. Davie Street<br>Raleigh, NC 27601<br>USA<br><br>
 <ul>{{ MANGOPAY_TERMS }}</ul>
 
 </div></div>
-{% endblock %}
+% endblock

@@ -4,6 +4,8 @@ from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
 from jinja2 import Environment
 
+from liberapay.constants import JINJA_ENV_COMMON
+
 
 ( VERIFICATION_MISSING
 , VERIFICATION_FAILED
@@ -14,10 +16,10 @@ from jinja2 import Environment
  ) = range(6)
 
 
-jinja_env = Environment(trim_blocks=True, lstrip_blocks=True)
+jinja_env = Environment(**JINJA_ENV_COMMON)
 jinja_env_html = Environment(
-    trim_blocks=True, lstrip_blocks=True,
     autoescape=True, extensions=['jinja2.ext.autoescape'],
+    **JINJA_ENV_COMMON
 )
 
 def compile_email_spt(fpath):

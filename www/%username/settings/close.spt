@@ -23,15 +23,15 @@ title = _("Close Account")
 subhead = participant.username
 
 [---] text/html
-{% extends "templates/base.html" %}
+% extends "templates/base.html"
 
-{% block content %}
+% block content
 
-    {% if error %}
+    % if error
         <div class="alert alert-danger">{{ error }}</div>
-    {% endif %}
+    % endif
 
-    {% if payday_is_running %}
+    % if payday_is_running
 
         <form><div>
 
@@ -45,11 +45,11 @@ subhead = participant.username
 
         </div></form>
 
-    {% else %}
+    % else
     <form method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-        {% if participant.balance > 0 %}
+        % if participant.balance > 0
 
         <h2>{{ _("Wallet") }}</h2>
 
@@ -73,7 +73,7 @@ subhead = participant.username
             "If neither option works for you, please contact support@liberapay.com."
         ) }}</p>
 
-        {% elif pending_payouts %}
+        % elif pending_payouts
 
         <h2>{{ _("Wallet") }}</h2>
 
@@ -83,7 +83,7 @@ subhead = participant.username
             "automatically reopened."
         ) }}</p>
 
-        {% endif %}
+        % endif
 
 
         <h2>{{ _("Personal Information") }}</h2>
@@ -124,6 +124,6 @@ subhead = participant.username
 
         <button class="btn btn-danger btn-lg">{{ _("Yes, close my Liberapay account") }}</button>
     </form>
-    {% endif %}
+    % endif
 </div>
-{% endblock %}
+% endblock

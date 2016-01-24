@@ -15,16 +15,16 @@ title = participant.username
 subhead = _("Income")
 
 [-----------------------------------------------------------------------------]
-{% extends "templates/profile.html" %}
-{% from "templates/team-members.html" import team_takes_table with context %}
-{% block content %}
+% extends "templates/profile.html"
+% from "templates/team-members.html" import team_takes_table with context
+% block content
 
-{% set receiving = Money(participant.receiving, "EUR") %}
+% set receiving = Money(participant.receiving, "EUR")
 <p>{{ _("{0} receives {1} per week", participant.username, receiving) }}</p>
 
-{% if participant.kind == 'group' %}
+% if participant.kind == 'group'
     {{ team_takes_table(participant) }}
-{% endif %}
+% endif
 
 <div class="row">
     <div class="chart-wrapper col-md-6">
@@ -41,13 +41,13 @@ subhead = _("Income")
     </div>
 </div>
 
-{% endblock %}
+% endblock
 
-{% block scripts %}
+% block scripts
 <script>
 $(document).ready(function() {
     jQuery.get('../charts.json', Liberapay.charts.make);
 });
 </script>
 {{ super() }}
-{% endblock %}
+% endblock
