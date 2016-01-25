@@ -87,7 +87,7 @@ limited = getattr(platform, 'api_friends_limited', False)
         <th>{{ _('Name') }}</th>
         <th>{{ _('On Liberapay?') }}</th>
         <th>{{ _('Receives') }}</th>
-        <th>{{ _('Pledge/Donate') }}</th>
+        <th>{{ _('Support') }}</th>
     </tr>
     % for friend in friends
     % set p = friend.participant
