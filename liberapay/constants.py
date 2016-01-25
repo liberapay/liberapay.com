@@ -19,7 +19,7 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
-    line_statement_prefix='%', line_comment_prefix='#',
+    line_statement_prefix='%',
 )
 
 MAX_TIP = Decimal('100.00')
