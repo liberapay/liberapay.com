@@ -56,7 +56,7 @@ if participant == user:
                         ("<b>%s</b>"|safe) % email) }}</p>
             % elif result == emails.VERIFICATION_MISSING
                 <h1>{{ _("Missing Info") }}</h1>
-                <p>{{ _("Sorry, that's a bad link. Please try again.") }}</p>
+                <p>{{ _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.") }}</p>
             % endif
         % endif
         <a class="btn btn-primary" href="/{{ participant.username }}/emails/">{{ _("View your email addresses") }}</a>
