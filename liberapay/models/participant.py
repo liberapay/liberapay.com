@@ -1105,12 +1105,18 @@ class Participant(Model, MixinTeam):
         return t
 
 
+    @staticmethod
+    def _zero_tip_dict(tippee):
+        if isinstance(tippee, Participant):
+            tippee = tippee.id
+        return dict(amount=Decimal('0.00'), is_funded=False, tippee=tippee)
+
+
     def get_tip_to(self, tippee):
         """Given a participant (or their id), returns a dict.
         """
-        if isinstance(tippee, Participant):
-            tippee = tippee.id
-        default = dict(amount=Decimal('0.00'), is_funded=False, tippee=tippee)
+        default = self._zero_tip_dict(tippee)
+        tippee = default['tippee']
         if self.id == tippee:
             return default
         return self.db.one("""\
