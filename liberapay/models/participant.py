@@ -1111,6 +1111,8 @@ class Participant(Model, MixinTeam):
         if isinstance(tippee, Participant):
             tippee = tippee.id
         default = dict(amount=Decimal('0.00'), is_funded=False, tippee=tippee)
+        if self.id == tippee:
+            return default
         return self.db.one("""\
 
             SELECT *
