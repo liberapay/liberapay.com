@@ -171,8 +171,8 @@ def out():
 
         <div class="chart-wrapper newline">
             <a name="charges"></a>
-            <h2>{{ _("Charges (€)") }}</h2>
-            <p class="note">{{ _("Money moved into Liberapay via credit card") }}</p>
+            <h2>{{ _("Deposits (€)") }}</h2>
+            <p class="note">{{ _("Money moved into Liberapay") }}</p>
             <div class="chart" data-chart="charges"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
@@ -180,7 +180,7 @@ def out():
         <div class="chart-wrapper">
             <a name="withdrawals"></a>
             <h2>{{ _("Withdrawals (€)") }}</h2>
-            <p class="note">{{ _("Money withdrawn from Liberapay to a bank account") }}</p>
+            <p class="note">{{ _("Money moved out of Liberapay") }}</p>
             <div class="chart" data-chart="withdrawals"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
