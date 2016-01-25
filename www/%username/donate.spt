@@ -1,0 +1,48 @@
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=False)
+title = _("Donate to {0}", participant.username)
+
+[---] text/html
+% extends "templates/base.html"
+
+% from 'templates/elsewhere.html' import account_elsewhere with context
+% from 'templates/your-tip.html' import tip_form with context
+
+{% block heading %}{% endblock %}
+
+% block content
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+    <h2 class="text-primary">{{ title }}</h2>
+
+    % include "templates/profile-box.html"
+
+    {{ tip_form(tippee=participant) }}
+
+    <h4>{{ _("Who exactly will I be donating to?") }}</h4>
+    <p><a href="{{ participant.path('') }}">{{
+        _("View {0}'s profile", participant.username)
+    }}</a></p>
+    % set e_accounts = participant.get_accounts_elsewhere()
+    % if e_accounts
+        <p>{{ _(
+            "We have confirmed through an automated verification process that "
+            "{0} has control of the following accounts on other platforms:",
+            participant.username
+        ) }}</p>
+        % for platform in website.platforms if platform.name in e_accounts
+            {{ account_elsewhere(platform, e_accounts, None) }}
+        % endfor
+    % endif
+
+    <h4>{{ _("What is this site?") }}</h4>
+    <p>
+        {{ _("Liberapay is a recurrent donations platform.") }}
+        <a href="/about/">{{ _("Learn more") }}</a>
+    </p>
+
+</div>
+</div>
+% endblock
