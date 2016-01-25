@@ -1136,15 +1136,14 @@ msgstr "Numéro de l'institution"
 msgid "Branch Code"
 msgstr "Code de l'agence"
 
-#, fuzzy
 msgid "Sort Code"
-msgstr "Sort Code"
+msgstr "Code de banque (Sort Code)"
 
 msgid "Country"
 msgstr "Pays"
 
 msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Bank Identifier Code)"
+msgstr "Code de banque (BIC: Bank Identifier Code)"
 
 msgid "International"
 msgstr "International"
@@ -1162,7 +1161,7 @@ msgid "Other"
 msgstr "Autre"
 
 msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (International Bank Account Number)"
+msgstr "Numéro de compte (IBAN: International Bank Account Number)"
 
 msgid "This IBAN is invalid."
 msgstr "Cet IBAN est invalide."
@@ -1215,19 +1214,17 @@ msgstr "Réessayez plus tard"
 msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
 msgstr "Désolé, nous procédons au paiement en ce moment et nous ne pouvons pas clore un compte maintenant. Réessayez dans quelques heures."
 
-#, fuzzy
 msgid "Wallet"
 msgstr "Portefeuille"
 
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Vous avez {0} dans votre portefeuille. Que voulez-vous en faire ?"
 
-#, fuzzy
 msgid "Withdraw it"
-msgstr "Le retirer"
+msgstr "Les retirer"
 
 msgid "Give it to the {0}people I donate to{1}"
-msgstr "Le reverser aux {0}personnes auxquelles je fais des dons{1}"
+msgstr "Les verser aux {0}personnes auxquelles je fais des dons{1}"
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Si aucune option ne vous convient, merci d'envoyer un email à support@liberapay.com."
@@ -1235,7 +1232,6 @@ msgstr "Si aucune option ne vous convient, merci d'envoyer un email à support@l
 msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
 msgstr "Il y a un transfert en cours vers votre compte en banque. S'il échoue, cet argent retournera dans votre portefeuille et votre compte sera réouvert automatiquement."
 
-#, fuzzy
 msgid "Personal Information"
 msgstr "Informations personnelles"
 
@@ -1324,7 +1320,7 @@ msgid "Frequently Asked Questions"
 msgstr "Foire Aux Questions"
 
 msgid "How is Liberapay funded?"
-msgstr "Comment se finance Liberapay ?"
+msgstr "Comment est financé Liberapay ?"
 
 msgid "Liberapay is funded {0}on Liberapay{1}."
 msgstr "Liberapay se finance {0}sur Liberapay{1}."
@@ -1382,7 +1378,10 @@ msgid "The minimum you can give any user is {0}. To minimize processing fees, we
 msgstr "Au minimum, vous pouvez donner {0} à un utilisateur. Pour minimiser les frais de traitements, votre carte de crédit ne sera débitée qu' {1} fois (L'argent qui n'est pas tout de suite donné sera disponible sur votre portefeuille Liberapay)."
 
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
-msgstr "Au maximum, vous pouvez donner {0} à un utilisateur par semaine, pour éviter que le bénéficiaire ne soit dépendant de quelques gros mécènes."
+msgstr ""
+"Le maximum que vous pouvez donner à un utilisateur est {0} par semaine. "
+"Cette limite aide à stabiliser le revenu du bénéficiaire en évitant qu'il ne "
+"soit dépendant de quelques gros mécènes."
 
 msgid "Do I have to pay taxes on the income I receive from Liberapay?"
 msgstr "Devrais-je payer des taxes sur le revenu que je touche sur Liberapay ?"
@@ -1431,7 +1430,6 @@ msgstr "Ce site est géré par Liberapay, une association à but non lucratif fo
 msgid "Postal address:"
 msgstr "Adresse postale :"
 
-#, fuzzy
 msgid "This website is hosted on {0} by:"
 msgstr "Ce site est hébergé sur {0} par :"
 
@@ -1441,9 +1439,8 @@ msgstr "Numéro de téléphone : {0}"
 msgid "Terms of Service"
 msgstr "Conditions d'utilisation du service"
 
-#, fuzzy
 msgid "Terms of Use of the MangoPay Electronic Money"
-msgstr "Conditions d'utilisation de MangoPay Electronic Money"
+msgstr "Conditions d'utilisation de la monnaie électronique MangoPay"
 
 msgid "{0} is our payments partner, you have to accept their terms of service to be able to fully use Liberapay."
 msgstr "{0} est notre partenaire de paiements. Vous devez accepter leur conditions d'utilisation pour pouvoir pleinement utiliser Liberapay."
@@ -1499,11 +1496,10 @@ msgstr "{0} sont déposés sur Liberapay. {1} personnes ont renseigné leur num�
 msgid "{0} changed hands {1} ago."
 msgstr "{0} ont été échangé en {1}."
 
-#, fuzzy
 msgid "On average, people who donate give {0} each to one other user."
 msgid_plural "On average, people who donate give {0} each to {n} other users."
-msgstr[0] "En moyenne, un donateur donne {0} à chaque autre utilisateur."
-msgstr[1] "En moyenne, un donateur donne {0} à {n} autres utilisateurs."
+msgstr[0] "En moyenne, les donateurs donnent {0} à une personne."
+msgstr[1] "En moyenne, les donateurs donnent à {n} personnes {0} chacune."
 
 msgid "Total Users"
 msgstr "Nombre d'utilisateurs total"
@@ -1559,9 +1555,8 @@ msgstr "Devenez membre d'une équipe"
 msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
 msgstr ""
 
-#, fuzzy
 msgid "Sharing the money"
-msgstr "Partager de l'argent"
+msgstr "Partager l'argent"
 
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr ""
@@ -1576,9 +1571,8 @@ msgstr ""
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: two times the member's take in the previous payday, 70% of the median take in the previous payday, and the number 1."
 msgstr ""
 
-#, fuzzy
 msgid "Removing team membership"
-msgstr "Dissoudre l'équipe"
+msgstr "Quitter une équipe"
 
 msgid "You can leave a team from {0}your teams dashboard{1}."
 msgstr ""
@@ -1603,9 +1597,8 @@ msgstr "Équipes (N={0})"
 msgid "Team Name"
 msgstr "Nom de l'équipe"
 
-#, fuzzy
 msgid "Receiving (€)"
-msgstr "Reçu (€)"
+msgstr "Revenu (€)"
 
 msgid "Goal (€)"
 msgstr "Objectif (€)"
@@ -1614,9 +1607,8 @@ msgstr "Objectif (€)"
 msgid "% Funded"
 msgstr "% financé"
 
-#, fuzzy
 msgid "Receiving{0} Per Member (€)"
-msgstr "Reçoit{0} par membre (€)"
+msgstr "Revenu{0} par membre (€)"
 
 msgid "You're the first one here!"
 msgstr "Vous êtes la première personne ici !"
@@ -1783,4 +1775,3 @@ msgstr "refuse d'utiliser Liberapay"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "n'est pas encore inscrit sur Liberapay"
-
