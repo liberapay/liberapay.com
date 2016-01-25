@@ -84,8 +84,8 @@ title = _("Frequently Asked Questions")
 
     <dd>{{ _(
         "The minimum you can give any user is {0}. To minimize processing fees, "
-        "we charge your credit card at least {1} at a time (the money that isn't "
-        "donated immediately is stored in your Liberapay wallet)."
+        "we charge your credit card at least {1} at a time (the money is stored "
+        "in your Liberapay wallet and transferred to others during Payday)."
         , Money(constants.MIN_TIP, 'EUR'), Money(10, 'EUR')
     ) }}</dd>
 
