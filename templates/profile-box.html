@@ -12,7 +12,11 @@
 % if participant.hide_giving or participant.hide_receiving
     <p>{{ _("{0}'s account is in private mode.", username) }}</p>
 % elif goal == None
-    <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
+    % if participant.kind != 'group'
+        <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
+    % else
+        <p>{{ _("{0} receives {1} per week.", username, receiving_str, giving_str) }}</p>
+    % endif
 % elif goal > 0
     <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}<br>
     % if receiving == 0
