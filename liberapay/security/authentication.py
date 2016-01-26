@@ -27,13 +27,49 @@ def _turn_off_csrf(request):
     request.headers['X-CSRF-TOKEN'] = csrf_token
 
 
+def sign_in(request, state):
+    try:
+        body = request.body
+    except Response:
+        return
+
+    p = None
+
+    if body.get('log-in.username'):
+        p = Participant.authenticate(
+            'username', 'password',
+            body['log-in.username'], body['log-in.password']
+        )
+        if p and p.status == 'closed':
+            p.update_status('active')
+
+    elif body.get('sign-in.username'):
+        if body.get('sign-in.terms') != 'agree':
+            raise Response(400, 'you have to agree to the terms')
+        kind = body['sign-in.kind']
+        if kind not in ('individual', 'organization'):
+            raise Response(400, 'bad kind')
+        with state['website'].db.get_cursor() as c:
+            p = Participant.make_active(
+                body['sign-in.username'], kind, body['sign-in.password'],
+                cursor=c
+            )
+            p.add_email(body['sign-in.email'], cursor=c)
+        p.authenticated = True
+
+    if p:
+        response = state.setdefault('response', Response())
+        p.sign_in(response.headers.cookie)
+        state['user'] = p
+
+
 def start_user_as_anon():
     """Make sure we always have a user object, regardless of exceptions during authentication.
     """
     return {'user': ANON}
 
 
-def authenticate_user_if_possible(request, user):
+def authenticate_user_if_possible(request, state, user):
     """This signs the user in.
     """
     if request.line.uri.startswith('/assets/'):
@@ -56,6 +92,8 @@ def authenticate_user_if_possible(request, user):
         p = Participant.authenticate('id', 'session', *creds)
         if p:
             return {'user': p}
+    elif request.method == 'POST':
+        sign_in(request, state)
 
 
 def add_auth_to_response(response, request=None, user=ANON):

@@ -10,7 +10,6 @@ from time import sleep
 from urllib import quote
 import uuid
 
-from aspen import Response
 from aspen.utils import utcnow
 import aspen_jinja2_renderer
 from markupsafe import escape as htmlescape
@@ -1592,32 +1591,3 @@ class NeedConfirmation(Exception):
     def __bool__(self):
         return any(self._all)
     __nonzero__ = __bool__
-
-
-def sign_in(request, state, redirect=True):
-    body = request.body
-    p = None
-    if body.get('log-in.username'):
-        p = Participant.authenticate('username', 'password',
-                                     body['log-in.username'], body['log-in.password'])
-        if p and p.status == 'closed':
-            p.update_status('active')
-    elif body.get('sign-in.username'):
-        if body.get('sign-in.terms') != 'agree':
-            raise Response(400, 'you have to agree to the terms')
-        kind = body['sign-in.kind']
-        if kind not in ('individual', 'organization'):
-            raise Response(400, 'bad kind')
-        username, password = body['sign-in.username'], body['sign-in.password']
-        with state['website'].db.get_cursor() as c:
-            p = Participant.make_active(username, kind, password, cursor=c)
-            p.add_email(body['sign-in.email'], cursor=c)
-        p.authenticated = True
-    if p:
-        response = state['response']
-        p.sign_in(response.headers.cookie)
-        if redirect:
-            response.redirect(request.qs.get('back_to', '/'))
-        state['user'] = p
-        return p
-    return state['user']

@@ -5,13 +5,14 @@ from base64 import b64encode
 from aspen import Response
 
 from liberapay.elsewhere._paginators import _modify_query
+from liberapay.exceptions import AuthRequired
 from liberapay.utils import get_participant
 
 [---]
 
 request.allow('POST')
 if user.ANON:
-    raise Response(403)
+    raise AuthRequired
 
 team = get_participant(state, restrict=False)
 if team.kind != 'group':

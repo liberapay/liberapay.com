@@ -22,10 +22,14 @@ if code == 500 and not err:
 
 [----------------------------------------] text/html
 % extends "templates/base.html"
-% set title = code
+% set title = '' if response.show_sign_in_form else code
 % block content
-    <p>{{ msg }}</p>
-    <pre>{{ err }}</pre>
+    % if response.show_sign_in_form
+        % include "templates/sign-in-form.html"
+    % else
+        <p>{{ msg }}</p>
+        <pre>{{ err }}</pre>
+    % endif
 % endblock
 [----------------------------------------] application/json via json_dump
 { "error_code": code

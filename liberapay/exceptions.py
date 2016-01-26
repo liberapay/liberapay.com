@@ -17,6 +17,16 @@ class LazyResponse(Response):
         self.body = f(*resolve_dependencies(f, state).as_args)
 
 
+class AuthRequired(LazyResponse):
+    show_sign_in_form = True
+
+    def __init__(self, *args, **kw):
+        Response.__init__(self, 403, '', **kw)
+
+    def lazy_body(self, _):
+        return _("You need to sign in first")
+
+
 class LazyResponse400(LazyResponse):
 
     def __init__(self, *args, **kw):

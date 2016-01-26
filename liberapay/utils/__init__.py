@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from datetime import date, datetime, timedelta
 import re
-from urllib import quote as urlquote
 
 from aspen import Response, json
 from aspen.utils import to_rfc822, utcnow
@@ -12,6 +11,7 @@ from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
 import liberapay
+from liberapay.exceptions import AuthRequired
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
@@ -28,12 +28,8 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     slug = request.line.uri.path['username']
     _ = state['_']
 
-    if restrict:
-        if user.ANON:
-            if request.method == 'GET':
-                url = '/sign-in?back_to='+urlquote(request.line.uri)
-                raise Response(302, headers={'Location': url})
-            raise Response(403, _("You need to log in to access this page."))
+    if restrict and user.ANON:
+        raise AuthRequired
 
     if slug.startswith('~'):
         thing = 'id'

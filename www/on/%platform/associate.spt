@@ -5,6 +5,7 @@ from aspen import log, resources, Response
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
 from liberapay import canonical_scheme, canonical_host
+from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation
 
@@ -54,7 +55,7 @@ log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
 if action == 'connect':
     if user.ANON:
-        raise Response(403)
+        raise AuthRequired
     try:
         user.take_over((platform.name, account.user_id))
     except NeedConfirmation:

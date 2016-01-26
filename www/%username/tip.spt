@@ -2,18 +2,13 @@
 """
 from base64 import b64encode
 
-from aspen import Response
-
-from liberapay.models.participant import sign_in
+from liberapay.exceptions import AuthRequired
 from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
 if user.ANON:
-    if request.method == 'POST':
-        user = sign_in(request, state, redirect=False)
-    if user.ANON:
-        raise Response(403, _("Please sign in first"))
+    raise AuthRequired
 
 out = {}
 

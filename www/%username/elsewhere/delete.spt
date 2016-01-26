@@ -1,10 +1,10 @@
-from aspen import Response
+from liberapay.exceptions import AuthRequired
 
 [---]
 
 request.allow("POST")
 if user.ANON:
-    raise Response(403)
+    raise AuthRequired
 
 platform = request.body["platform"]
 user_id = request.body["user_id"]
