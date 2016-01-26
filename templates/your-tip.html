@@ -11,6 +11,13 @@
             <div class="form-group">
                 {{ tip_input(tip, disabled, pledging=pledging) }}
             </div>
+            <p>{{ _("Not sure how much to donate? Here are some standard amounts:") }}</p>
+            % for msg, amount in constants.STANDARD_TIPS
+                % set amount_str = format_decimal(amount, '#,##0.00')
+                <a class="btn btn-default" href="?amount={{ amount_str }}"
+                    >{{ _(msg, amount_str) }}</a>
+            % endfor
+            <br><br>
         % endif
     </form>
 % endmacro
@@ -20,7 +27,8 @@
         <div class="input-group-addon">€</div>
         <input type="text" name="amount" id="amount"
                class="amount form-control {{ 'input-sm' if small }}"
-               value="{{ format_decimal(tip.amount) }}" {{ disabled }} />
+               value="{{ request.qs.get('amount') or format_decimal(tip.amount) }}"
+               {{ disabled }} />
         <div class="input-group-addon">{{ _("per week") }}</div>
         <div class="input-group-btn">
             <button class="btn btn-success {{ 'btn-sm' if small }}" {{ disabled }}>{{
