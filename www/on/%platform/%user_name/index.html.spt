@@ -185,7 +185,7 @@ if is_team:
 
         % if pages_urls
             % from 'templates/pagination.html' import pages_links with context
-            <tr><td colspan="2">{{ pages_links(pages_urls) }}</td></tr>
+            <tr><td colspan="2">{{ pages_links(pages_urls, '#members') }}</td></tr>
         % endif
 
         </tbody>
