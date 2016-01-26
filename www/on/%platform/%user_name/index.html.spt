@@ -62,6 +62,11 @@ if is_team:
 
             <div class="col-xs-8">
             % if allow_pledges
+                <p>{{ _(
+                    "Liberapay allows you to pledge to donate to people who haven't joined "
+                    "the site yet. The donation will automatically start if they sign up "
+                    "to receive it. We'll send you a notification when that happens."
+                ) }}</p>
                 {{ tip_form(tippee=account) }}
             % elif locked
                 <p>{{ _("{0} has opted out of Liberapay", friendly_name) }}</p>
