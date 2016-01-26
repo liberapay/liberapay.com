@@ -1,5 +1,4 @@
 from aspen import Response
-from babel.numbers import NumberFormatError
 
 from liberapay.utils import get_participant
 
@@ -16,10 +15,7 @@ elif goal == "custom":
     goal = request.body["goal_custom"]
 
 if goal is not None:
-    try:
-        goal = parse_decimal(goal)
-    except NumberFormatError:
-        raise Response(400, _("That's not a valid number"))
+    goal = parse_decimal(goal)
 
 if goal == -1 and not request.body.get("confirmed"):
     msg = _("Warning: Doing this will remove all the tips you are currently receiving."

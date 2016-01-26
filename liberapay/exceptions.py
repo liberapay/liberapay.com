@@ -116,3 +116,8 @@ class UserIsSuspicious(Exception): pass
 class TransactionFeeTooHigh(LazyResponse400):
     def msg(self, _):
         return _("The transaction fee would be more than 10%.")
+
+
+class InvalidNumber(LazyResponse400):
+    def msg(self, _):
+        return _('"{0}" is not a valid number.', *self.args)

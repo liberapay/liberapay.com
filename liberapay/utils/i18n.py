@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from io import BytesIO
 import re
 from unicodedata import combining, normalize
@@ -16,9 +16,11 @@ from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
-    get_decimal_symbol, parse_decimal
+    get_decimal_symbol, NumberFormatError, parse_decimal
 )
 import jinja2.ext
+
+from liberapay.exceptions import InvalidNumber
 
 
 Money = namedtuple('Money', 'amount currency')
@@ -261,8 +263,15 @@ def add_helpers_to_context(tell_sentry, context, loc):
     context['format_currency'] = lambda *a, **kw: format_money(*a, locale=loc, **kw)
     context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
     context['format_datetime'] = lambda *a: format_datetime(*a, locale=loc)
-    context['parse_decimal'] = lambda *a: parse_decimal(*a, locale=loc)
     context['to_age'] = to_age
+
+    def parse_decimal_or_400(s, *a):
+        try:
+            return parse_decimal(s, *a, locale=loc)
+        except (InvalidOperation, NumberFormatError, ValueError):
+            raise InvalidNumber(s)
+
+    context['parse_decimal'] = parse_decimal_or_400
 
     def to_age_str(o, **kw):
         if not isinstance(o, datetime):
