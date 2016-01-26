@@ -79,7 +79,9 @@ title = _("Teams")
     "The nominal takes are the raw numbers that the members input themselves, "
     "the actual takes are computed by the system: first it sums up the nominal "
     "takes, then it computes the percentage that each take represents, and "
-    "finally it applies those percentages to the available income."
+    "finally it applies those percentages to the available income. Nominal "
+    "takes also act as maximums: the actual takes are never higher than the "
+    "nominal ones, even if additional income is available."
 ) }}</p>
 
 <p>{{ _(
