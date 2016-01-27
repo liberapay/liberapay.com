@@ -41,18 +41,18 @@
     </div>
 
     % block subnav
-    % set show_income = not participant.hide_receiving and participant.accepts_tips
-    {% set pages = filter_profile_subnav(user, participant, [
-        ('/',            _('Profile'),   True,           True),
-        ('/income/',     _('Income'),    True,           show_income),
-        ('/history/',    _('History'),   False,          False),
-    ]) %}
-    % if len(pages) > 1
-    % from "templates/nav.html" import nav with context
-    <ul class="nav nav-tabs">
-        {{ nav(pages, base='/'+participant.username) }}
-    </ul>
-    % endif
+        % set show_income = not participant.hide_receiving and participant.accepts_tips
+        {% set pages = filter_profile_subnav(user, participant, [
+            ('/',            _('Profile'),   True,           True),
+            ('/income/',     _('Income'),    True,           show_income),
+            ('/history/',    _('History'),   False,          False),
+        ]) %}
+        % if len(pages) > 1
+            % from "templates/nav.html" import nav with context
+            <ul class="nav nav-tabs">
+                {{ nav(pages, base='/'+participant.username) }}
+            </ul>
+        % endif
     % endblock
 % endblock
 
