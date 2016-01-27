@@ -136,6 +136,21 @@ msgstr "Ne pas publier la somme que je reçois chaque semaine."
 msgid "Hide myself from search results."
 msgstr "Ne pas autoriser l'indexation de mon profil par les moteurs de recherches."
 
+msgid "Symbolic ({0})"
+msgstr ""
+
+msgid "Small ({0})"
+msgstr ""
+
+msgid "Medium ({0})"
+msgstr ""
+
+msgid "Large ({0})"
+msgstr ""
+
+msgid "You need to sign in first"
+msgstr ""
+
 msgid "You need to provide a username!"
 msgstr "Vous devez fournir un nom d'utilisateur !"
 
@@ -193,6 +208,9 @@ msgstr "Vous ne pouvez retirer plus de {0} à cet instant."
 msgid "The transaction fee would be more than 10%."
 msgstr "Les frais de transaction seraient supérieurs à 10%."
 
+msgid "\"{0}\" is not a valid number."
+msgstr ""
+
 msgid "Transfering the money failed, please try again."
 msgstr "Le transfert de l'argent a échoué, merci d'essayer à nouveau."
 
@@ -225,9 +243,6 @@ msgstr "Quand quelqu'un que je soutiens rejoint Liberapay"
 
 msgid "When someone invites me to join a team"
 msgstr "Quand quelqu'un m'invite à rejoindre une équipe"
-
-msgid "You need to log in to access this page."
-msgstr "Vous devez vous identifier pour accéder à cette page."
 
 msgid "You are not authorized to access this page."
 msgstr "Vous n'êtes pas autorisé à accéder à cette page."
@@ -365,6 +380,9 @@ msgstr "Date de naissance"
 msgid "YYYY-MM-DD"
 msgstr "AAAA-MM-JJ"
 
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "J'accepte les {0}conditions d'utilisation de MangoPay{1}"
+
 msgid "username"
 msgstr "Nom d'utilisateur"
 
@@ -386,29 +404,38 @@ msgstr "Début"
 msgid "Last"
 msgstr "Fin"
 
-msgid "{0}'s account is in private mode."
-msgstr "Le compte de {0} est en mode privé."
+msgid "{0} doesn't publish how much they give and receive."
+msgstr ""
 
 msgid "{0} receives {1} and gives {2} per week."
 msgstr "{0} reçoit {1} et donne {2} par semaine."
 
+msgid "{0} receives {1} per week."
+msgstr "{0} reçoit {1} par semaine."
+
 msgid "{0}'s goal is to receive {1} per week."
 msgstr "L'objectif de {0} est de recevoir {1} par semaine."
 
-msgid "Will you be the first to contribute?"
-msgstr "Serez-vous le premier à contribuer ?"
-
-msgid "Mission accomplished, {0} receives {1} per week!"
-msgstr "Mission accomplie : {0} reçoit {1} chaque semaine !"
-
-msgid "Will you contribute?"
-msgstr "Allez-vous contribuer ?"
+msgid "Be the first to contribute!"
+msgstr ""
 
 msgid "Current income: {0}"
 msgstr "Revenu actuel : {0}"
 
+msgid "Mission accomplished!"
+msgstr ""
+
 msgid "{0} gives {1} per week."
 msgstr "{0} donne {1} par semaine."
+
+msgid "You give {0} per week to {1}."
+msgstr ""
+
+msgid "Modify"
+msgstr "Modifier"
+
+msgid "Donate"
+msgstr "Donner"
 
 msgid "{0} doesn't accept donations"
 msgstr "{0} n'accepte pas les dons"
@@ -506,26 +533,17 @@ msgstr "Part nominale"
 msgid "Actual Take"
 msgstr "Montant réel"
 
-msgid "to pledge to {0}"
-msgstr "pour faire une promesse de don à {0}"
-
-msgid "to give to {0}"
-msgstr "pour donner à {0}"
-
 msgid "Your donation"
 msgstr "Votre don"
+
+msgid "Not sure how much to donate? Here are some standard amounts:"
+msgstr ""
 
 msgid "per week"
 msgstr "par semaine"
 
-msgid "Modify"
-msgstr "Modifier"
-
 msgid "Pledge"
 msgstr "Promettre"
-
-msgid "Donate"
-msgstr "Donner"
 
 msgid "Liberapay is a recurrent donations platform."
 msgstr "Liberapay est une plateforme de dons récurrents."
@@ -616,6 +634,21 @@ msgstr "Cherchez-vous un utilisateur spécifique d'un réseau social ?"
 msgid "Sign Out"
 msgstr "Déconnexion"
 
+msgid "Donate to {0}"
+msgstr "Donner à {0}"
+
+msgid "Who exactly will I be donating to?"
+msgstr ""
+
+msgid "View {0}'s profile"
+msgstr ""
+
+msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
+msgstr ""
+
+msgid "What is this site?"
+msgstr ""
+
 msgid "You don't have a profile statement in this language yet."
 msgstr "Vous n'avez pas encore de message de présentation dans cette langue."
 
@@ -679,9 +712,6 @@ msgstr "Qu'est-ce que markdown ?"
 msgid "Preview"
 msgstr "Aperçu"
 
-msgid "That's not a valid number"
-msgstr "Ceci n'est pas un nombre valide"
-
 msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
 "\n"
@@ -700,14 +730,8 @@ msgstr "Vous devez accepter les conditions d'utilisation de MangoPay."
 msgid "Please {0}verify your email address{1} then reload this page."
 msgstr "Veuillez {0}valider votre adresse email{1} puis recharger cette page."
 
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "J'accepte les {0}conditions d'utilisation de MangoPay{1}"
-
 msgid "No notifications to show."
 msgstr "Aucune notification à afficher."
-
-msgid "Please sign in first"
-msgstr "Identification nécessaire"
 
 msgid "Thank you so much for supporting Liberapay! :D"
 msgstr "Merci beaucoup de soutenir Liberapay ! :D"
@@ -803,9 +827,7 @@ msgid "Missing Info"
 msgstr "Information manquante"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr ""
-"Veuillez vérifier que le lien sur lequel vous avez cliqué ou que vous avez "
-"copié-collé n'a pas été tronqué ou altéré d'une quelconque manière."
+msgstr "Veuillez vérifier que le lien sur lequel vous avez cliqué ou que vous avez copié-collé n'a pas été tronqué ou altéré d'une quelconque manière."
 
 msgid "View your email addresses"
 msgstr "Gérer vos adresses courriel"
@@ -881,9 +903,7 @@ msgid "JavaScript is required"
 msgstr "JavaScript est nécessaire"
 
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
-"Nous avons débité {0} sur votre carte bancaire, {1} sont arrivés dans votre "
-"compte Liberapay, {2} sont partis en frais de transaction."
+msgstr "Nous avons débité {0} sur votre carte bancaire, {1} sont arrivés dans votre compte Liberapay, {2} sont partis en frais de transaction."
 
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "Nous n'avons pas réussi à débiter {0} sur votre carte bancaire. Message d'erreur : {1}"
@@ -1085,9 +1105,6 @@ msgstr "Total :"
 msgid "Transaction ID: {0}"
 msgstr "Numéro de transaction : {0}"
 
-msgid "{0} receives {1} per week."
-msgstr "{0} reçoit {1} par semaine."
-
 msgid "Withdraw money"
 msgstr "Effectuer un retrait"
 
@@ -1101,10 +1118,7 @@ msgid "Tips Received, by Amount"
 msgstr "Dons reçus, par montant"
 
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
-msgstr ""
-"{0} ont été retirés de votre portefeuille Liberapay. Si le transfert abouti, "
-"{1} arriveront dans votre compte bancaire et {2} seront payés en frais de "
-"transaction."
+msgstr "{0} ont été retirés de votre portefeuille Liberapay. Si le transfert abouti, {1} arriveront dans votre compte bancaire et {2} seront payés en frais de transaction."
 
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
 msgstr "Nous n'avons pas pu créditer votre compte en banque de {0}. Message d'erreur : {1}"
@@ -1347,10 +1361,7 @@ msgid "What are the differences between Liberapay and other recurrent crowdfundi
 msgstr "Quelles sont les différences entre Liberapay et les autres plateformes de dons récurrents du type Patreon ?"
 
 msgid "Liberapay is only for donations, meaning that transactions must not be linked to a contract nor a promise of recompense."
-msgstr ""
-"Liberapay permet seulement de faire des dons, c'est à dire que les "
-"transactions effectuées ne doivent pas être liées à un contrat ni à une "
-"promesse de récompense."
+msgstr "Liberapay permet seulement de faire des dons, c'est à dire que les transactions effectuées ne doivent pas être liées à un contrat ni à une promesse de récompense."
 
 msgid "Liberapay is an open project structured around a non-profit organization, which sets it apart from commercial platforms like Patreon and Tipeee."
 msgstr "Liberapay est un projet libre maintenu par une association à but non lucratif, ce qui le différencie des plateformes commerciales comme Patreon ou Tipeee."
@@ -1368,14 +1379,10 @@ msgid "If your income decreased, one of the following happened:"
 msgstr "Il peut y avoir plusieurs raisons à une baisse de revenus :"
 
 msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed or blacklisted."
-msgstr ""
-"Un de vos donateurs peut avoir intentionnellement diminué ou annulé son don "
-"envers vous, ou bien son compte a pu être fermé ou mis sur liste noire."
+msgstr "Un de vos donateurs peut avoir intentionnellement diminué ou annulé son don envers vous, ou bien son compte a pu être fermé ou mis sur liste noire."
 
 msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
-msgstr ""
-"Un de vos donateurs n'a pas suffisamment d'argent dans son portefeuille "
-"Liberapay pour financer son don envers vous."
+msgstr "Un de vos donateurs n'a pas suffisamment d'argent dans son portefeuille Liberapay pour financer son don envers vous."
 
 msgid "Your account has been blacklisted for legal reasons."
 msgstr "Votre compte a été mit sur liste noire pour des raisons légales."
@@ -1387,12 +1394,7 @@ msgid "There are no restrictions on the total amount you can give or receive, bu
 msgstr "Il n'y a pas de restrictions au montant que vous pouvez recevoir. Cependant, pour des raisons légales, si vous percevez annuellement une somme importante, vous devrez fournir une pièce d'identité."
 
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr ""
-"Le minimum que vous pouvez donner à un utilisateur est {0}. Afin de "
-"minimiser les frais de transaction, chaque débit que nous effectuons sur "
-"votre carte bancaire est d'au moins {1} (les fonds sont stockés dans votre "
-"portefeuille Liberapay et transférés aux bénéficiaires de vos dons durant "
-"chaque Payday)."
+msgstr "Le minimum que vous pouvez donner à un utilisateur est {0}. Afin de minimiser les frais de transaction, chaque débit que nous effectuons sur votre carte bancaire est d'au moins {1} (les fonds sont stockés dans votre portefeuille Liberapay et transférés aux bénéficiaires de vos dons durant chaque Payday)."
 
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
 msgstr "Le maximum que vous pouvez donner à un utilisateur est {0} par semaine. Cette limite aide à stabiliser le revenu du bénéficiaire en évitant qu'il ne soit dépendant de quelques gros mécènes."
@@ -1422,10 +1424,7 @@ msgid "Donations are public. By default, the total amount you give and the total
 msgstr "Les dons sont publics. Par défaut, les montant que vous donnez ou recevez sont publics (vous avez la possibilité de cacher ce montant)."
 
 msgid "Liberapay does not take a cut of payments, recipients get the full face value. The service is funded by the donations to {0}its own account{1}."
-msgstr ""
-"Liberapay ne prend pas de commission sur les paiements, vous recevez la "
-"totalité de ce qu'on vous donne. Le service se finance par les dons à {0}son "
-"propre compte{1}."
+msgstr "Liberapay ne prend pas de commission sur les paiements, vous recevez la totalité de ce qu'on vous donne. Le service se finance par les dons à {0}son propre compte{1}."
 
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
 msgstr "Liberapay est un projet libre, vous pouvez le {1}traduire{0}, {2}améliorer son code{0}, ou faire partie de {3}son entité légale{0}. En nous aidant de cette manière, vous pourrez rejoindre {4}l'équipe de Liberapay{0} et percevoir une partie de l'argent que nos utilisateurs nous donnent pour maintenir le service."
@@ -1460,51 +1459,40 @@ msgid "Terms of Use of the MangoPay Electronic Money"
 msgstr "Conditions d'utilisation de la monnaie électronique MangoPay"
 
 msgid "{0} is our payments partner, you have to accept their terms of service to be able to fully use Liberapay."
-msgstr ""
-"{0} est notre partenaire de paiements, vous devez accepter leurs conditions "
-"d'utilisation pour pouvoir pleinement utiliser Liberapay."
+msgstr "{0} est notre partenaire de paiements, vous devez accepter leurs conditions d'utilisation pour pouvoir pleinement utiliser Liberapay."
 
 msgid "Sign In"
 msgstr "Connectez vous"
+
+msgid "You need to log in to access this page."
+msgstr "Vous devez vous identifier pour accéder à cette page."
 
 msgid "Quarantine"
 msgstr "Quarantaine"
 
 msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr ""
-"Concrètement, il vous faudra attendre la fin de la période de quarantaine "
-"pour transférer de l'argent de Liberapay vers votre compte bancaire."
+msgstr "Concrètement, il vous faudra attendre la fin de la période de quarantaine pour transférer de l'argent de Liberapay vers votre compte bancaire."
 
 msgid "Chargebacks"
 msgstr "Remboursements"
 
 msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
-msgstr ""
-"Si malgré nos efforts de lutte contre la fraude vous recevez de l'argent "
-"dont l'orgine est frauduleuse, il vous incombe de le rembourser."
+msgstr "Si malgré nos efforts de lutte contre la fraude vous recevez de l'argent dont l'orgine est frauduleuse, il vous incombe de le rembourser."
 
 msgid "Safety"
 msgstr "Sûreté"
 
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr ""
-"Nous garantissons que les fonds dont nous avons la charge ne seront pas perdus en cas de "
-"banqueroute, qu'elle nous affecte nous-même ou un tiers auquel nous aurions "
-"délégué la garde des fonds."
+msgstr "Nous garantissons que les fonds dont nous avons la charge ne seront pas perdus en cas de banqueroute, qu'elle nous affecte nous-même ou un tiers auquel nous aurions délégué la garde des fonds."
 
 msgid "Wallets"
 msgstr "Portefeuilles"
 
 msgid "A user's money is held in their wallets. We currently only support one wallet per user, and only one currency (the euro) in that wallet."
-msgstr ""
-"L'argent d'un utilisateur est conservé dans son portefeuille. Nous "
-"n'autorisons actuellement qu'un portefeuille par utilisateur, et qu'une "
-"seule monnaie (l'euro) dans celui-ci."
+msgstr "L'argent d'un utilisateur est conservé dans son portefeuille. Nous n'autorisons actuellement qu'un portefeuille par utilisateur, et qu'une seule monnaie (l'euro) dans celui-ci."
 
 msgid "Payday is when donations are actually executed. It's a program ({0}this one{1}) that we run every Wednesday."
-msgstr ""
-"« Payday » est le nom du programme qui effectue les dons entre les "
-"utilisateurs chaque mercredi ({0}code source{1})."
+msgstr "« Payday » est le nom du programme qui effectue les dons entre les utilisateurs chaque mercredi ({0}code source{1})."
 
 msgid "Liberapay is {0} old and has {1} active users."
 msgstr "Liberapay est âgé de {0} ans et compte {1} utilisateurs actifs."
@@ -1572,9 +1560,7 @@ msgid "A Liberapay team coordinates donations from multiple donors to multiple d
 msgstr "L'équipe de Liberapay coordonne les multiples transferts de dons depuis les donateurs vers les receveurs. Les donateurs choisissent combien ils veulent donner et comment partager l'argent et Liberapay traite et exécute les transferts."
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
-msgstr ""
-"Les équipes sont réservées aux dons pairs-à-pairs, elles ne peuvent pas "
-"être utilisées par une entité légale pour distribuer des dons à ses membres."
+msgstr "Les équipes sont réservées aux dons pairs-à-pairs, elles ne peuvent pas être utilisées par une entité légale pour distribuer des dons à ses membres."
 
 msgid "Creating a team"
 msgstr "Créer une équipe"
@@ -1586,54 +1572,32 @@ msgid "Becoming a team member"
 msgstr "Devenez membre d'une équipe"
 
 msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
-msgstr ""
-"Lorsque vous contribuez au projet d'une équipe, demandez à ses membres de "
-"vous inviter. N'oubliez pas de leur préciser votre nom d'utilisateur."
+msgstr "Lorsque vous contribuez au projet d'une équipe, demandez à ses membres de vous inviter. N'oubliez pas de leur préciser votre nom d'utilisateur."
 
 msgid "Sharing the money"
 msgstr "Partager l'argent"
 
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
-msgstr ""
-"Les équipes n'ont pas de hiérarchie, tous les membres sont égaux et décident "
-"eux-mêmes de la part des revenus de l'équipe qu'ils reçoivent."
+msgstr "Les équipes n'ont pas de hiérarchie, tous les membres sont égaux et décident eux-mêmes de la part des revenus de l'équipe qu'ils reçoivent."
 
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr ""
-"Vous pouvez modifier vos parts depuis {0}votre gestionnaire d'équipes{1}. Il "
-"contient des tableaux qui montrent les parts nominales de tous les membres "
-"pour le prochain et le précédent jours de paie, ainsi qu'une estimation du "
-"montant réel d'argent que chaque membre recevra durant le prochain jour de "
-"paie."
+msgstr "Vous pouvez modifier vos parts depuis {0}votre gestionnaire d'équipes{1}. Il contient des tableaux qui montrent les parts nominales de tous les membres pour le prochain et le précédent jours de paie, ainsi qu'une estimation du montant réel d'argent que chaque membre recevra durant le prochain jour de paie."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income."
-msgstr ""
-"Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, "
-"les montants réels sont calculés par le système : d'abord il fait la somme "
-"des parts nominales, puis il calcule le pourcentage que chaque part "
-"représente, et enfin il applique ces pourcentages au revenu disponible."
+msgstr "Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, les montants réels sont calculés par le système : d'abord il fait la somme des parts nominales, puis il calcule le pourcentage que chaque part représente, et enfin il applique ces pourcentages au revenu disponible."
 
 #, python-format
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: two times the member's take in the previous payday, 70% of the median take in the previous payday, and the number 1."
-msgstr ""
-"Les parts nominales sont limitées, elles ne peuvent pas être augmentées au-"
-"dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au "
-"précédent jour de paie. La limite exacte est le maximum de ces trois valeurs "
-": deux fois la part du membre mercredi dernier, 70 % de la médiane des parts "
-"mercredi dernier, et le nombre 1."
+msgstr "Les parts nominales sont limitées, elles ne peuvent pas être augmentées au-dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au précédent jour de paie. La limite exacte est le maximum de ces trois valeurs : deux fois la part du membre mercredi dernier, 70 % de la médiane des parts mercredi dernier, et le nombre 1."
 
 msgid "Removing team membership"
 msgstr "Quitter une équipe"
 
 msgid "You can leave a team from {0}your teams dashboard{1}."
-msgstr ""
-"Vous pouvez quitter une équipe depuis {0}votre gestionnaire d'équipe{1}."
+msgstr "Vous pouvez quitter une équipe depuis {0}votre gestionnaire d'équipe{1}."
 
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
-msgstr ""
-"Expulser un membre d'une équipe n'est actuellement pas géré. Veuillez nous "
-"contacter en justifiant de la nécessité de l'expulsion et du consensus à ce "
-"sujet parmi les autres membres."
+msgstr "Expulser un membre d'une équipe n'est actuellement pas géré. Veuillez nous contacter en justifiant de la nécessité de l'expulsion et du consensus à ce sujet parmi les autres membres."
 
 msgid "Fraud Review Dashboard"
 msgstr "Gestion des fraudes"
@@ -1773,8 +1737,8 @@ msgid_plural "{0} is a team with {n} public members"
 msgstr[0] "{0} est une équipe avec {n} membre public"
 msgstr[1] "{0} est une équipe avec {n} membres publics"
 
-msgid "Donate to {0}"
-msgstr "Donner à {0}"
+msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+msgstr ""
 
 msgid "{0} has opted out of Liberapay"
 msgstr "{0} s'est désinscrit de Liberapay"
@@ -1829,3 +1793,4 @@ msgstr "refuse d'utiliser Liberapay"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "n'est pas encore inscrit sur Liberapay"
+
