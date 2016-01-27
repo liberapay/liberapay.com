@@ -23,7 +23,7 @@
     % else
         {{ _("Current income: {0}", receiving_str) }}
         % set progress_cls = CLASSES[min(int(receiving / goal), 1)]
-        <div class="progress">
+        <div class="progress profile-goal-bar">
             <div class="progress-bar progress-bar-{{ progress_cls }}"
                  style="min-width: 2px; width: {{ min(receiving / goal * 100, 100) }}%;">{{
                 _("Mission accomplished!") if receiving >= goal
