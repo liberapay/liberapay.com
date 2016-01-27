@@ -1,8 +1,14 @@
 from __future__ import division
 
-import __builtin__
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
 import base64
-from urllib import quote as urlquote
+try:
+    from urllib.parse import quote as urlquote
+except ImportError:
+    from urllib import quote as urlquote
 
 from liberapay import canonize, fill_accept_header, insert_constants, utils, wireup
 from liberapay.cron import Cron
@@ -35,7 +41,7 @@ def _assert(x):
     assert x, repr(x)
     return x
 
-website.renderer_factories['jinja2'].Renderer.global_context.update(__builtin__.__dict__)
+website.renderer_factories['jinja2'].Renderer.global_context.update(builtins.__dict__)
 website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_htmlescaped.
     'assert': _assert,

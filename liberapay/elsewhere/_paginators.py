@@ -2,8 +2,11 @@
 """
 from __future__ import unicode_literals
 
-from urllib import urlencode
-from urlparse import parse_qs, urlsplit, urlunsplit
+try:
+    from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
+except ImportError:
+    from urllib import urlencode
+    from urlparse import parse_qs, urlsplit, urlunsplit
 
 
 def _modify_query(url, key, value):

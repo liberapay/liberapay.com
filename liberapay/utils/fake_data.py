@@ -168,12 +168,12 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     """
     print("Making Participants")
     participants = []
-    for i in xrange(num_participants):
+    for i in range(num_participants):
         participants.append(fake_participant(db))
 
     print("Making Teams")
     teams = []
-    for i in xrange(num_teams):
+    for i in range(num_teams):
         team = fake_participant(db, kind="group")
         #Add 1 to 3 members to the team
         members = random.sample(participants, random.randint(1, 3))
@@ -190,7 +190,7 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
             fake_elsewhere(db, p, platform_name)
 
     print("Making Communities")
-    for i in xrange(num_communities):
+    for i in range(num_communities):
         creator = random.sample(participants, 1)
         community = fake_community(db, creator[0])
 
@@ -200,13 +200,13 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
 
     print("Making Tips")
     tips = []
-    for i in xrange(num_tips):
+    for i in range(num_tips):
         tipper, tippee = random.sample(participants, 2)
         tips.append(fake_tip(db, tipper, tippee))
 
     # Transfers
     transfers = []
-    for i in xrange(num_transfers):
+    for i in range(num_transfers):
         tipper, tippee = random.sample(participants, 2)
         while tipper.kind == 'group' or tippee.kind == 'group':
             tipper, tippee = random.sample(participants, 2)
@@ -233,9 +233,9 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
         sys.stdout.flush()
         payday_counter += 1
         end_date = date + datetime.timedelta(days=7)
-        week_tips = filter(lambda x: date < x.ctime < end_date, tips)
-        week_transfers = filter(lambda x: date < x.timestamp < end_date, transfers)
-        week_participants = filter(lambda x: x.join_time < end_date, participants)
+        week_tips = [x for x in tips if date < x.ctime < end_date]
+        week_transfers = [x for x in transfers if date < x.timestamp < end_date]
+        week_participants = [x for x in participants if x.join_time < end_date]
         actives=set()
         tippers=set()
         for xfers in week_tips, week_transfers:

@@ -7,7 +7,10 @@ from hashlib import pbkdf2_hmac
 from os import urandom
 import pickle
 from time import sleep
-from urllib import quote
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib import quote
 import uuid
 
 from aspen.utils import utcnow
@@ -1482,7 +1485,7 @@ class Participant(Model, MixinTeam):
         """Deletes account elsewhere unless the user would not be able
         to log in anymore.
         """
-        user_id = unicode(user_id)
+        user_id = str(user_id)
         with self.db.get_cursor() as c:
             c.one("""
                 DELETE FROM elsewhere

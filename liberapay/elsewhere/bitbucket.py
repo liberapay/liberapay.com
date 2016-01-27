@@ -44,7 +44,7 @@ class Bitbucket(PlatformOAuth1):
         """
         try:
             return PlatformOAuth1.api_get(self, path, sess, **kw)
-        except Response, response:
+        except Response as response:
             if response.code == 404 and ' is a team account' in response.body:
                 assert path.startswith('/2.0/users/')
                 path = '/2.0/teams/' + path[11:]

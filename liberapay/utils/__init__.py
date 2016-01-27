@@ -97,7 +97,7 @@ def log_cursor(f):
     return wrapper
 
 
-def excerpt_intro(text, length=175, append=u'…'):
+def excerpt_intro(text, length=175, append='…'):
     if not text:
         return ''
     if len(text) > length:
