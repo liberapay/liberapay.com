@@ -30,7 +30,7 @@ class Tests(Harness):
 
     def tearDown(self):
         Harness.tearDown(self)
-        reset = Environment(CANONICAL_SCHEME=unicode, CANONICAL_HOST=unicode, environ=self.environ)
+        reset = Environment(CANONICAL_SCHEME=str, CANONICAL_HOST=str, environ=self.environ)
         wireup.canonical(reset)
 
     def test_canonize_canonizes(self):

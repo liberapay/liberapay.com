@@ -7,7 +7,7 @@ import traceback
 # Define a query cache.
 # ==========================
 
-class FormattingError(StandardError):
+class FormattingError(Exception):
     """Represent a problem with a format callable.
     """
 

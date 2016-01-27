@@ -143,7 +143,7 @@ class Harness(unittest.TestCase):
 
     def make_elsewhere(self, platform, user_id, user_name, **kw):
         info = UserInfo( platform=platform
-                       , user_id=unicode(user_id)
+                       , user_id=str(user_id)
                        , user_name=user_name
                        , **kw
                        )
@@ -158,13 +158,13 @@ class Harness(unittest.TestCase):
         widths = list(len(k) for k in data[0]._fields)
         for row in data:
             for i, v in enumerate(row):
-                widths[i] = max(widths[i], len(unicode(v)))
+                widths[i] = max(widths[i], len(str(v)))
         for k, w in zip(data[0]._fields, widths):
-            print("{0:{width}}".format(unicode(k), width=w), end=' | ')
+            print("{0:{width}}".format(str(k), width=w), end=' | ')
         print()
         for row in data:
             for v, w in zip(row, widths):
-                print("{0:{width}}".format(unicode(v), width=w), end=' | ')
+                print("{0:{width}}".format(str(v), width=w), end=' | ')
             print()
 
 

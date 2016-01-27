@@ -24,7 +24,7 @@ class Cron(object):
             while True:
                 try:
                     func()
-                except Exception, e:
+                except Exception as e:
                     self.website.tell_sentry(e, {})
                     log_dammit(traceback.format_exc().strip())
                 sleep(period)

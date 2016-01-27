@@ -31,8 +31,8 @@ class TestChartOfReceiving(Harness):
         self.alice.set_tip_to(self.bob, '1.00')
         carl.set_tip_to(self.bob, '3.00')
         expected = ([
-            [Decimal('1.00'), 1L, Decimal('1.00'), 0.5, Decimal('0.25')],
-            [Decimal('3.00'), 1L, Decimal('3.00'), 0.5, Decimal('0.75')]
+            [Decimal('1.00'), 1, Decimal('1.00'), 0.5, Decimal('0.25')],
+            [Decimal('3.00'), 1, Decimal('3.00'), 0.5, Decimal('0.75')]
         ], 2.0, Decimal('4.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
@@ -41,7 +41,7 @@ class TestChartOfReceiving(Harness):
         bad_cc = self.make_participant('bad_cc', last_bill_result='Failure!')
         self.alice.set_tip_to(self.bob, '1.00')
         bad_cc.set_tip_to(self.bob, '3.00')
-        expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
+        expected = ([[Decimal('1.00'), 1, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
@@ -50,7 +50,7 @@ class TestChartOfReceiving(Harness):
         missing_cc = self.make_participant('missing_cc')
         self.alice.set_tip_to(self.bob, '1.00')
         missing_cc.set_tip_to(self.bob, '3.00')
-        expected = ([[Decimal('1.00'), 1L, Decimal('1.00'), 1, Decimal('1')]],
+        expected = ([[Decimal('1.00'), 1, Decimal('1.00'), 1, Decimal('1')]],
                     1.0, Decimal('1.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected

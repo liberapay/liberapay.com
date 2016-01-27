@@ -7,7 +7,10 @@ from datetime import datetime
 import hashlib
 import json
 import logging
-from urllib import quote
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib import quote
 import xml.etree.ElementTree as ET
 
 from aspen import log, Response
@@ -203,7 +206,7 @@ class Platform(object):
         else:
             r.user_id = self.x_user_id(r, info)
         assert r.user_id is not None
-        r.user_id = unicode(r.user_id)
+        r.user_id = str(r.user_id)
         assert len(r.user_id) > 0
         r.display_name = self.x_display_name(r, info, None)
         r.email = self.x_email(r, info, None)

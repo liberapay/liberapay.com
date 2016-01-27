@@ -15,7 +15,7 @@ class Tests(Harness):
 
         data = json.loads(self.client.GET('/bob/public.json').body)
         assert data['receiving'] == '1.00'
-        assert data.has_key('my_tip') == False
+        assert 'my_tip' not in data
 
         data = json.loads(self.client.GET('/alice/public.json').body)
         assert data['giving'] == '1.00'
@@ -45,7 +45,7 @@ class Tests(Harness):
     def test_anonymous_does_not_get_goal_if_user_regifts(self):
         self.make_participant('alice', balance=100, goal=0)
         data = json.loads(self.client.GET('/alice/public.json').body)
-        assert data.has_key('goal') == False
+        assert 'goal' not in data
 
     def test_anonymous_gets_null_goal_if_user_has_no_goal(self):
         self.make_participant('alice', balance=100)

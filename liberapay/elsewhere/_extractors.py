@@ -7,6 +7,7 @@ from operator import getitem
 import xml.etree.ElementTree as ET
 
 from aspen import log
+from functools import reduce
 
 
 def _getitemchain(o, *keys):
@@ -29,7 +30,7 @@ def any_key(*keys, **kw):
     clean = kw.pop('clean', lambda a: a)
     def f(self, extracted, info, *default):
         for key in keys:
-            chain = isinstance(key, basestring) and (key,) or key
+            chain = (key,) if not isinstance(key, (list, tuple)) else key
             try:
                 v = _getitemchain(info, *chain)
             except (KeyError, TypeError):

@@ -1,6 +1,9 @@
 from __future__ import print_function, unicode_literals
 
-from Cookie import SimpleCookie
+try:
+    from http.cookies import SimpleCookie
+except ImportError:
+    from Cookie import SimpleCookie
 from decimal import Decimal
 
 import pytest
@@ -180,7 +183,7 @@ class TestStub(Harness):
 
     def test_changing_username_to_invalid_characters(self):
         with self.assertRaises(UsernameContainsInvalidCharacters):
-            self.stub.change_username(u"\u2603") # Snowman
+            self.stub.change_username("\u2603") # Snowman
 
     def test_changing_username_to_restricted_name(self):
         from liberapay import RESTRICTED_USERNAMES
@@ -256,10 +259,6 @@ class Tests(Harness):
         assert not p
 
     # id
-
-    def test_participant_gets_a_long_id(self):
-        actual = type(self.make_participant('alice').id)
-        assert actual == long
 
     # set_tip_to - stt
 
