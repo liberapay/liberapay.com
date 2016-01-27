@@ -3,3 +3,6 @@
 echo "Fetching resources from Git Large File Storage..."
 pip install git-lfs
 python -m git_lfs -v ~/git/$OPENSHIFT_APP_NAME.git $OPENSHIFT_REPO_DIR
+
+echo "Removing unnecessary files..."
+rm -rf $OPENSHIFT_REPO_DIR/tests
