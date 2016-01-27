@@ -19,8 +19,8 @@ title = _("Explore")
 % from "templates/community-chooser.html" import community_chooser with context
 {{ community_chooser(communities) }}
 
-<h2>{{ _("Popular Communities") }}</h2>
-<ul class="communities">
+<h3>{{ _("Popular Communities") }}</h3>
+<ul class="communities memberships">
     % for community in communities[:20]
     <li>
         <a href="/for/{{ community.slug }}/">{{ community.name }}</a>

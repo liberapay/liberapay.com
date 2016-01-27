@@ -50,8 +50,9 @@ if is_team:
 % from 'templates/your-tip.html' import tip_form with context
 
 <div class="row">
-    <div class="col-md-6">
-    <div class="panel panel-default">
+<div class="col-md-8 col-md-offset-2">
+
+    <div class="panel panel-primary">
         <div class="panel-heading">{{ _("Donate to {0}", friendly_name) }}</div>
         <div class="panel-body row">
 
@@ -61,6 +62,11 @@ if is_team:
 
             <div class="col-xs-8">
             % if allow_pledges
+                <p>{{ _(
+                    "Liberapay allows you to pledge to donate to people who haven't joined "
+                    "the site yet. The donation will automatically start if they sign up "
+                    "to receive it. We'll send you a notification when that happens."
+                ) }}</p>
                 {{ tip_form(tippee=account) }}
             % elif locked
                 <p>{{ _("{0} has opted out of Liberapay", friendly_name) }}</p>
@@ -84,8 +90,7 @@ if is_team:
 
         </div>
     </div>
-    </div>
-    <div class="col-md-6">
+
     <div class="panel panel-default">
         <div class="panel-heading">{{ _("Are you {0}?", friendly_name) }}</div>
         <div class="panel-body">
@@ -110,22 +115,25 @@ if is_team:
             % endif
         </div>
     </div>
-    </div>
-</div>
-<div>
 
     % if user.ANON
-        <h2>{{ _("What is Liberapay?") }}</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ _("What is Liberapay?") }}</div>
 
+        <div class="panel-body">
         <p>{{ _("Liberapay is a way to thank and support your favorite artists, "
                 "musicians, writers, programmers, etc. by setting up a small weekly "
                 "cash gift to them.") }}
         <a href="/about/">{{ _("Learn more") }}</a></p>
+        </div>
+    </div>
     % endif
 
     % if user.ANON and allow_pledges
-        <h2>{{ _("Don't like what you see?") }}</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ _("Don't like what you see?") }}</div>
 
+        <div class="panel-body">
         <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
                 "out of Liberapay by locking it. We don't allow new pledges to "
                 "locked accounts.",
@@ -134,15 +142,15 @@ if is_team:
         % call auth_button(platform.name, 'lock', user_id)
             {{ _("Lock") }}
         % endcall
+        </div>
+    </div>
     % endif
 
-    % if is_team and not locked
+    % if is_team and members and not locked
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ team_description }}</div>
 
-        % if allow_pledges and members
-            <h2>{{ team_description }}</h2>
-        % endif
-
-        % if members
+        <div class="panel-body">
         <table id="members" class="table table-condensed">
         <thead><tr><th>{{ _("Member") }}</th><th>{{ _("Status") }}</th></tr></thead>
         <tbody>
@@ -185,13 +193,14 @@ if is_team:
 
         % if pages_urls
             % from 'templates/pagination.html' import pages_links with context
-            <tr><td colspan="2">{{ pages_links(pages_urls) }}</td></tr>
+            <tr><td colspan="2">{{ pages_links(pages_urls, '#members') }}</td></tr>
         % endif
 
         </tbody>
         </table>
-        % endif
-
+        </div>
+    </div>
     % endif
+</div>
 </div>
 % endblock

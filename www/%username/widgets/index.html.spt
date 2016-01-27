@@ -12,7 +12,7 @@ profile_url = participant.url()
 % block content
 <div class="col0">
 
-    <h2>{{ _("Donation Button") }}</h2>
+    <h3>{{ _("Donation Button") }}</h3>
 
     <p>{{ _("Use this code to add a donation button on your website:") }}</p>
 
@@ -22,7 +22,7 @@ profile_url = participant.url()
 
     <p><script src="button.js"></script></p>
 
-    <h2>{{ _("Static Donation Button") }}</h2>
+    <h3>{{ _("Static Donation Button") }}</h3>
 
     <p>{{ _("Use this code to embed a static donation button on your website:") }}</p>
 
@@ -32,7 +32,7 @@ profile_url = participant.url()
 
     <a href="{{ profile_url }}"><img src="/assets/widgets/donate.svg"></a>
 
-    <h2>{{ _("Giving & Receiving Widgets") }}</h2>
+    <h3>{{ _("Giving & Receiving Widgets") }}</h3>
 
     <p>{{ _("Use this code to add a Liberapay \"receiving\" widget on your website:") }}</p>
 

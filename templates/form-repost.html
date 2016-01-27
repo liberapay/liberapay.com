@@ -1,0 +1,7 @@
+% if request.method == 'POST'
+    % for k, values in request.body.items()
+        % for v in values:
+            <input name="{{ k }}" type="hidden" value="{{ v }}" />
+        % endfor
+    % endfor
+% endif

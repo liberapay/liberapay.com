@@ -1,29 +1,24 @@
 from __future__ import division, print_function, unicode_literals
 
 from base64 import b64encode
-from decimal import InvalidOperation
 
 from aspen import Response
-from babel.numbers import NumberFormatError
 
 from liberapay.elsewhere._paginators import _modify_query
+from liberapay.exceptions import AuthRequired
 from liberapay.utils import get_participant
 
 [---]
 
 request.allow('POST')
 if user.ANON:
-    raise Response(403)
+    raise AuthRequired
 
 team = get_participant(state, restrict=False)
 if team.kind != 'group':
     raise Response(404)
 
-try:
-    take = parse_decimal(request.body['take'])
-except (InvalidOperation, NumberFormatError):
-    raise Response(400, _("That's not a valid number"))
-
+take = parse_decimal(request.body['take'])
 new_take = team.set_take_for(user, take, user)
 if new_take < take:
     msg = _("Your take is now {0} (you can't go higher this week).",

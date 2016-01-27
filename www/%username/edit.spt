@@ -63,9 +63,8 @@ title = participant.username
 <script>$(document).ready(Liberapay.profile.init);</script>
 % endblock
 
-% block heading
+% block profile_btn
     <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
-{{ super() }}
 % endblock
 
 % block box
@@ -115,10 +114,8 @@ title = participant.username
 {% block subnav %}{% endblock %}
 
 % block content
-<div class="row">
-    <div class="col-md-6">
 
-        <h2 id="statement">{{ _("Statement") }}</h2>
+        <h3 id="statement">{{ _("Statement") }}</h3>
 
         % if request.body.get('preview') == 'true'
 
@@ -170,7 +167,6 @@ title = participant.username
 
         % endif
 
-    </div>
     % if participant.kind == 'group'
     % include "templates/members-listing.html"
     % else
@@ -178,5 +174,5 @@ title = participant.username
     % include "templates/team-listing.html"
     % include "templates/community-listing.html"
     % endif
-</div>
+
 % endblock

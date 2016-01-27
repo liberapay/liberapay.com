@@ -3,10 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from base64 import b64decode
 from datetime import datetime
-from decimal import Decimal as D, InvalidOperation
+from decimal import Decimal as D
 
 from aspen import Response
-from babel.numbers import NumberFormatError
 
 import liberapay
 from liberapay.billing import mangoapi
@@ -26,10 +25,7 @@ bank_account, ba_details, ba_type = None, None, 'IBAN'
 if request.method == 'POST':
     body = request.body
 
-    try:
-        amount = parse_decimal(request.body['amount'])
-    except (InvalidOperation, NumberFormatError, ValueError):
-        raise Response(400, "bad amount")
+    amount = parse_decimal(request.body['amount'])
     exchange = payout(website.db, participant, amount)
     participant.notify('withdrawal_'+exchange.status, web=False, exchange=exchange)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)

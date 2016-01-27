@@ -2,14 +2,14 @@
 
 from aspen import Response
 
-from liberapay.exceptions import UsernameAlreadyTaken
+from liberapay.exceptions import AuthRequired, UsernameAlreadyTaken
 from liberapay.models.participant import Participant
 
 [---]
 
 if request.method == 'POST':
     if user.ANON:
-        raise Response(403)
+        raise AuthRequired
     name = request.body['name']
     t = Participant.from_username(name)
     if t:
@@ -41,7 +41,7 @@ title = _("Teams")
     "entity to distribute donations to its members."
 ) }}</p>
 
-<h2>{{ _("Creating a team") }}</h2>
+<h3>{{ _("Creating a team") }}</h3>
 
 % if user.ANON
     <p>{{ _("You need to {0}sign into your own account{1} first.",
@@ -52,14 +52,14 @@ title = _("Teams")
     % include "templates/create-team.html"
 % endif
 
-<h2>{{ _("Becoming a team member") }}</h2>
+<h3>{{ _("Becoming a team member") }}</h3>
 
 <p>{{ _(
     "Once you have contributed to a team's project, ask its members to invite "
     "you. Don't forget to tell them what your username is."
 ) }}</p>
 
-<h2>{{ _("Sharing the money") }}</h2>
+<h3>{{ _("Sharing the money") }}</h3>
 
 <p>{{ _(
     "Teams don't have a hierarchy, all their members are equal and set their "
@@ -90,7 +90,7 @@ title = _("Teams")
     "previous payday, and the number 1."
 ) }}</p>
 
-<h2>{{ _("Removing team membership") }}</h2>
+<h3>{{ _("Removing team membership") }}</h3>
 
 <p>{{ _(
     "You can leave a team from {0}your teams dashboard{1}.",

@@ -19,18 +19,15 @@ langs = participant.get_statement_langs()
 [-----------------------------------------------------------------------------]
 % extends "templates/profile.html"
 
-% block heading
+% block profile_btn
 % if user == participant or participant.kind == 'group' and user and user.member_of(participant)
     <a href="edit" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
 % endif
-{{ super() }}
 % endblock
 
 % block content
-<div class="row">
     % if statement
-    <div class="col-md-6 clearfix">
-        <h2 id="statement">{{ _("Statement") }}
+        <h3 id="statement">{{ _("Statement") }}
         % if len(langs) > 1
         <span class="dropdown-hover" style="display: inline-block; position: relative;">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
@@ -45,11 +42,10 @@ langs = participant.get_statement_langs()
             </ul>
         </span>
         % endif
-        </h2>
+        </h3>
         <section class="profile-statement">
             {{ markdown.render(statement) }}
         </section>
-    </div>
     % endif
     % if participant.kind == 'group'
     % include "templates/members-listing.html"
@@ -58,5 +54,4 @@ langs = participant.get_statement_langs()
     % include "templates/team-listing.html"
     % include "templates/community-listing.html"
     % endif
-</div>
 % endblock

@@ -1,5 +1,4 @@
-% from 'templates/your-tip.html' import tip_form with context
-
+% set CLASSES = ('info', 'success')
 % set username = participant.username
 % set giving = participant.giving
 % set receiving = participant.receiving
@@ -7,27 +6,28 @@
 % set giving_str = Money(giving, 'EUR')
 % set receiving_str = Money(receiving, 'EUR')
 % set goal_str = goal and Money(goal, 'EUR')
-% set goal_percent = goal and receiving / goal * 100
+% set tip = user.get_tip_to(participant)
 
 % if participant.hide_giving or participant.hide_receiving
-    <p>{{ _("{0}'s account is in private mode.", username) }}</p>
+    <p>{{ _("{0} doesn't publish how much they give and receive.", username) }}</p>
 % elif goal == None
-    <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
-% elif goal > 0
-    <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}<br>
-    % if receiving == 0
-        {{ _("Will you be the first to contribute?", username) }}</p>
+    % if participant.kind != 'group'
+        <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
     % else
-        % if receiving >= goal
-            {{ _("Mission accomplished, {0} receives {1} per week!", username, receiving_str) }}
-        % elif user.ANON or user.get_tip_to(participant)['amount'] == 0
-            {{ _("Will you contribute?", username) }}
-        % endif
-        </p>
+        <p>{{ _("{0} receives {1} per week.", username, receiving_str, giving_str) }}</p>
+    % endif
+% elif goal > 0
+    <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}</p>
+    % if receiving == 0
+        <p>{{ _("Be the first to contribute!") }}</p>
+    % else
         {{ _("Current income: {0}", receiving_str) }}
-        <div class="progress">
-            <div class="progress-bar {{ 'progress-bar-success' if receiving >= goal }}"
-                 style="min-width: 2px; width: {{ receiving / goal * 100 }}%;"></div>
+        % set progress_cls = CLASSES[min(int(receiving / goal), 1)]
+        <div class="progress profile-goal-bar">
+            <div class="progress-bar progress-bar-{{ progress_cls }}"
+                 style="min-width: 2px; width: {{ min(receiving / goal * 100, 100) }}%;">{{
+                _("Mission accomplished!") if receiving >= goal
+            }}</div>
         </div>
     % endif
 % else
@@ -35,8 +35,17 @@
 % endif
 
 % if participant.accepts_tips
-    % set disabled = 'disabled' if user == participant else ''
-    {{ tip_form(tippee=participant, disabled=disabled) }}
+    % set donate_path = participant.path('donate')
+    % if request.path.raw.startswith(donate_path)
+    % elif tip['amount']
+        <p>{{ _("You give {0} per week to {1}.", Money(tip['amount'], 'EUR'), username) }}</p>
+        % if not on_donate
+            <a class="btn btn-default" href="{{ donate_path }}">{{ _("Modify") }}</a>
+        % endif
+    % else
+        <a class="btn btn-primary {{ 'btn-lg' if receiving < goal }}"
+           href="{{ donate_path }}">{{ _("Donate") }}</a>
+    % endif
 % else
     <p>{{ _("{0} doesn't accept donations", username) }}</p>
 % endif

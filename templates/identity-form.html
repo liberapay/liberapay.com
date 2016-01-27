@@ -71,3 +71,13 @@
                placeholder="{{ _('YYYY-MM-DD') }}" title="{{ _('YYYY-MM-DD') }}"
                class="form-control" size=10 required />
     </label>
+
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="terms" value="agree" required
+                   {% if account.Id %} checked disabled {% endif %} />
+            {{ _("I agree to {0}MangoPay's Terms of Service{1}",
+                 '<a href="/about/legal#mangopay-terms">'|safe,
+                 '</a>'|safe) }}
+        </label>
+    </div>

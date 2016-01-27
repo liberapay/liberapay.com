@@ -1,21 +1,14 @@
 """Get or change the authenticated user's tip to this person.
 """
 from base64 import b64encode
-from decimal import InvalidOperation
 
-from aspen import Response
-from babel.numbers import NumberFormatError
-
-from liberapay.models.participant import sign_in
+from liberapay.exceptions import AuthRequired
 from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
 if user.ANON:
-    if request.method == 'POST':
-        user = sign_in(request, state, redirect=False)
-    if user.ANON:
-        raise Response(403, _("Please sign in first"))
+    raise AuthRequired
 
 out = {}
 
@@ -30,10 +23,7 @@ tippee = get_participant(state, restrict=False, redirect_stub=False)
 # =========================
 
 if request.method == 'POST':
-    try:
-        out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
-    except (InvalidOperation, ValueError, NumberFormatError):
-        raise Response(400, "bad amount")
+    out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         back_to = request.body.get('back_to')
         if out['amount'] and not out['is_funded'] and not out['is_pledge']:

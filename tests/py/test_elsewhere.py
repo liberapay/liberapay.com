@@ -87,10 +87,10 @@ class TestElsewhere(Harness):
             expected = error % (user_name, platform.display_name)
             assert expected in r.text
 
-    def test_user_name_is_in_pledge_cta(self):
+    def test_tip_form_is_in_pledge_page(self):
         self.make_elsewhere('twitter', -1, 'alice')
         body = self.client.GET('/on/twitter/alice/').text
-        assert 'pledge to alice' in body
+        assert 'action="/~1/tip"' in body
 
     def test_failure_page_accepts_valid_username(self):
         self.client.GET('/on/github/liberapay/')  # normal case will have the db primed

@@ -1,11 +1,7 @@
 <div class="row">
 <form class="col-md-6 form-inline" action="" method="POST">
 
-    % if request.method == 'POST'
-    % for k, v in request.body.items()
-        <input name="{{ k }}" type="hidden" value="{{ v }}" />
-    % endfor
-    % endif
+    % include "templates/form-repost.html"
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
 
     <h2>{{ _("Log in") }}</h2>
@@ -26,11 +22,7 @@
 
     <h2>{{ _("Create an account") }}</h2>
 
-    % if request.method == 'POST'
-    % for k, v in request.body.items()
-        <input name="{{ k }}" type="hidden" value="{{ v }}" />
-    % endfor
-    % endif
+    % include "templates/form-repost.html"
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
 
     <div class="form-group">

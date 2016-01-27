@@ -39,7 +39,7 @@ body {
 }
 
 .avatar img {
-    max-height: 160px;
+    max-height: 120px;
     max-width: 100%;
 }
 
@@ -111,8 +111,6 @@ img.account-type {
 }
 
 .profile-box {
-    display: inline-block;
-    float: none;
     .avatar {
         text-align: center;
     }
@@ -123,6 +121,10 @@ img.account-type {
     .radio {
         margin-top: 0;
     }
+}
+
+.profile-goal-bar {
+    max-width: 450px;
 }
 
 .btn.pull-right {

@@ -1,7 +1,6 @@
 % set communities = participant.get_communities()
 % if communities or edit
-<div class="col-md-6">
-    <h2 id="communities">{{ _("Communities") }}</h2>
+    <h3 id="communities">{{ _("Communities") }}</h3>
 % if edit
     % from "templates/community-chooser.html" import community_chooser with context
     {{ community_chooser(Community.get_list()) }}
@@ -28,5 +27,4 @@
 % if edit
     </form>
 % endif
-</div>
 % endif

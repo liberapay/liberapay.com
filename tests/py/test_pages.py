@@ -79,10 +79,10 @@ class TestPages(MangopayHarness):
         actual = self.client.GET('/', auth_as=alice).text
         assert expected in actual, actual
 
-    def test_username_is_in_unauth_giving_cta(self):
+    def test_donate_link_is_in_profile_page(self):
         self.make_participant('alice')
         body = self.client.GET('/alice/').text
-        assert 'give to alice' in body
+        assert 'href="/alice/donate"' in body
 
     def test_github_associate(self):
         assert self.client.GxT('/on/github/associate').code == 400

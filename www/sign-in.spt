@@ -1,9 +1,7 @@
-from liberapay.models.participant import sign_in
-
 [---]
 
-if request.method == 'POST':
-    sign_in(request, state)
+if request.method == 'POST' and not user.ANON:
+    response.redirect(request.qs.get('back_to', '/'))
 
 [---] text/html
 % extends "templates/base.html"

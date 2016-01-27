@@ -22,10 +22,23 @@ if code == 500 and not err:
 
 [----------------------------------------] text/html
 % extends "templates/base.html"
-% set title = code
+
+% set title = '' if response.show_sign_in_form else code
+% set closed = code == 410 and 'username' in request.path
+
 % block content
-    <p>{{ msg }}</p>
-    <pre>{{ err }}</pre>
+    % if response.show_sign_in_form
+        % include "templates/sign-in-form.html"
+    % elif closed
+        <p>{{ _("The account owner has closed this account.") }}</p>
+        % if user.ANON
+        <h2>{{ _("Are you the account owner?") }}</h2>
+        <p>{% include "templates/sign-in-link.html" %} {{ _("to reopen your account.") }}</p>
+        % endif
+    % else
+        <p>{{ msg }}</p>
+        <pre>{{ err }}</pre>
+    % endif
 % endblock
 [----------------------------------------] application/json via json_dump
 { "error_code": code

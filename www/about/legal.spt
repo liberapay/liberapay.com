@@ -16,7 +16,7 @@ title = _("Legal")
 % block content
 <div class="row"><div class="col-md-8">
 
-<h2 id="info">{{ _("Legal Information") }}</h2>
+<h3 id="info">{{ _("Legal Information") }}</h3>
 
 <p>{{ _(
     "This website is managed by Liberapay, a non-profit organization founded in 2015 and legally registered in France.\n"
@@ -36,11 +36,11 @@ Red Had Inc<br>100 E. Davie Street<br>Raleigh, NC 27601<br>USA<br><br>
 {{ _("Phone number: {0}", "+1 888 733 428 1") }}
 </blockquote>
 
-<h2 id="terms">{{ _("Terms of Service") }}</h2>
+<h3 id="terms">{{ _("Terms of Service") }}</h3>
 
 {{ getdoc("terms") }}
 
-<h2 id="mangopay-terms">{{ _("Terms of Use of the MangoPay Electronic Money") }}</h2>
+<h3 id="mangopay-terms">{{ _("Terms of Use of the MangoPay Electronic Money") }}</h3>
 
 <p>{{ _(
     "{0} is our payments partner, you have to accept their terms of service to "
