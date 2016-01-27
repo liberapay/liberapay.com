@@ -27,7 +27,7 @@ langs = participant.get_statement_langs()
 
 % block content
     % if statement
-        <h2 id="statement">{{ _("Statement") }}
+        <h3 id="statement">{{ _("Statement") }}
         % if len(langs) > 1
         <span class="dropdown-hover" style="display: inline-block; position: relative;">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
@@ -42,7 +42,7 @@ langs = participant.get_statement_langs()
             </ul>
         </span>
         % endif
-        </h2>
+        </h3>
         <section class="profile-statement">
             {{ markdown.render(statement) }}
         </section>

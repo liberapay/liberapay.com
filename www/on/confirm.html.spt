@@ -35,7 +35,7 @@ title = _("Please Confirm")
     {{ _("Transfer it?") }}
     </p>
 
-    <h2>{{ _("How the accounts are now") }}</h2>
+    <h3>{{ _("How the accounts are now") }}</h3>
 
     <div class="row">
         <div class="col-sm-2">
@@ -61,7 +61,7 @@ title = _("Please Confirm")
     </div>
 
 
-    <h2>{{ _("How the accounts will be after the transfer") }}</h2>
+    <h3>{{ _("How the accounts will be after the transfer") }}</h3>
 
     <div class="row">
         <div class="col-sm-2">
@@ -110,7 +110,7 @@ title = _("Please Confirm")
     </div>
 
 
-    <h2>{{ _("Transfer it?") }}</h2>
+    <h3>{{ _("Transfer it?") }}</h3>
 
     <form action="/on/take-over.html" method="POST">
         <input type="hidden" name="account_id" value="{{ account_id }}" />

@@ -303,7 +303,7 @@ def load_i18n(website):
             md = f.read().decode('utf8')
             if md.startswith('# '):
                 md = '\n'.join(md.split('\n')[1:]).strip()
-                md = heading_re.sub(r'#\1', md)
+                md = heading_re.sub(r'##\1', md)
             docs.setdefault(doc, {}).__setitem__(lang, markdown.render(md))
 
 

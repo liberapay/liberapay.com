@@ -82,9 +82,9 @@ if query:
     <div class="row">
     % if usernames
     <div class="col-md-6">
-        <h2>{{ ngettext("Found a matching username",
+        <h3>{{ ngettext("Found a matching username",
                         "Found matching usernames",
-                        len(usernames)) }}</h2>
+                        len(usernames)) }}</h3>
         <ul class="people">
         % for result in usernames
         <li class="panel panel-default mini-user">
@@ -100,9 +100,9 @@ if query:
 
     % if communities
     <div class="col-md-6">
-        <h2>{{ ngettext("Found a matching community name",
+        <h3>{{ ngettext("Found a matching community name",
                         "Found matching community names",
-                        len(communities)) }}</h2>
+                        len(communities)) }}</h3>
         <ul class="community memberships">
         % for result in communities
             <li>
@@ -122,9 +122,9 @@ if query:
 
     % if statements
     <div>
-        <h2>{{ ngettext("Found a matching user statement",
+        <h3>{{ ngettext("Found a matching user statement",
                         "Found matching user statements",
-                        len(statements)) }}</h2>
+                        len(statements)) }}</h3>
         % for result in statements
             <div class="panel panel-default">
             <div class="panel-body search-result" href="/{{ result.username }}/">
@@ -147,7 +147,7 @@ if query:
         <p>{{ _("Sorry, we didn't find anything matching your query.") }}</p>
     % endif
 
-    <h2>{{ _("Looking for a specific user of a social network?") }}</h2>
+    <h3>{{ _("Looking for a specific user of a social network?") }}</h3>
     % include "templates/jump.html"
 
 % endblock

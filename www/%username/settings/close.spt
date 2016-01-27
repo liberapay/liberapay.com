@@ -35,7 +35,7 @@ subhead = participant.username
 
         <form><div>
 
-            <h2>{{ _("Try Again Later") }}</h2>
+            <h3>{{ _("Try Again Later") }}</h3>
 
             <p>{{ _(
                 "Sorry, we're running payday right now, and we're not set up "
@@ -51,7 +51,7 @@ subhead = participant.username
 
         % if participant.balance > 0
 
-        <h2>{{ _("Wallet") }}</h2>
+        <h3>{{ _("Wallet") }}</h3>
 
         <p>{{ _("You have {0} in your wallet. What should we do with it?",
                 Money(participant.balance, 'EUR')) }}</p>
@@ -75,7 +75,7 @@ subhead = participant.username
 
         % elif pending_payouts
 
-        <h2>{{ _("Wallet") }}</h2>
+        <h3>{{ _("Wallet") }}</h3>
 
         <p class="alert alert-warning">{{ _(
             "You have a pending transfer to your bank account. If it fails, "
@@ -86,7 +86,7 @@ subhead = participant.username
         % endif
 
 
-        <h2>{{ _("Personal Information") }}</h2>
+        <h3>{{ _("Personal Information") }}</h3>
 
         <p>{{ _("We immediately clear out most of the information in your profile.") }}</p>
 
@@ -105,7 +105,7 @@ subhead = participant.username
         ) }}</p>
 
 
-        <h2>{{ _("Username, email and password") }}</h2>
+        <h3>{{ _("Username, email and password") }}</h3>
 
         <p>{{ _(
             "We may give your username to someone else if they ask for it, but "
@@ -120,7 +120,7 @@ subhead = participant.username
         ) }}</p>
 
 
-        <h2>{{ _("Ready?") }}</h2>
+        <h3>{{ _("Ready?") }}</h3>
 
         <button class="btn btn-danger btn-lg">{{ _("Yes, close my Liberapay account") }}</button>
     </form>

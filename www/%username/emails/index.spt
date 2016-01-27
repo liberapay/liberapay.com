@@ -13,7 +13,7 @@ emails = participant.get_emails()
 
 % block content
 
-    <h2>{{ _("Email Addresses (Private)") }}</h2>
+    <h3>{{ _("Email Addresses (Private)") }}</h3>
 
     <form action="./modify.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
@@ -52,7 +52,7 @@ emails = participant.get_emails()
         </div>
     </form>
 
-    <h2>{{ _("Notifications") }}</h2>
+    <h3>{{ _("Notifications") }}</h3>
 
     <form action="./notifications.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />

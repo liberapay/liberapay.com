@@ -132,7 +132,7 @@ receivers = query_cache.all("""
 <div class="row">
 
 <div class="col-md-4">
-    <h2>{{ _("New Members") }}</h2>
+    <h3>{{ _("New Members") }}</h3>
     <ul class="people">
         % for participant in new_participants
         <li class="panel panel-default mini-user">
@@ -147,7 +147,7 @@ receivers = query_cache.all("""
 </div>
 
 <div class="col-md-4">
-    <h2>{{ _("Top Givers") }}</h2>
+    <h3>{{ _("Top Givers") }}</h3>
     <ul class="people">
         % for giver in givers
         <li class="panel panel-default mini-user">
@@ -168,7 +168,7 @@ receivers = query_cache.all("""
 </div>
 
 <div class="col-md-4">
-    <h2>{{ _("Top Receivers") }}</h2>
+    <h3>{{ _("Top Receivers") }}</h3>
     <ul class="people">
         % for receiver in receivers
         <li class="panel panel-default mini-user">

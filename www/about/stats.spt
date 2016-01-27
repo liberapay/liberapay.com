@@ -139,7 +139,7 @@ def out():
     <div class="two-column">
         <div class="chart-wrapper">
             <a name="users"></a>
-            <h2>{{ _("Total Users") }}</h2>
+            <h3>{{ _("Total Users") }}</h3>
             <p class="note">{{ _("Anyone who's ever created an account on Liberapay") }}</p>
             <div class="chart" data-chart="total_users"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -147,7 +147,7 @@ def out():
 
         <div class="chart-wrapper">
             <a name="active"></a>
-            <h2>{{ _("Active Users") }}</h2>
+            <h3>{{ _("Active Users") }}</h3>
             <p class="note">{{ _("Users that gave and/or received money within Liberapay (per week)") }}</p>
             <div class="chart" data-chart="active_users"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -155,7 +155,7 @@ def out():
 
         <div class="chart-wrapper">
             <a name="cumulative-gifts"></a>
-            <h2>{{ _("Total Gifts (€)") }}</h2>
+            <h3>{{ _("Total Gifts (€)") }}</h3>
             <p class="note">{{ _("Money transferred within Liberapay (cumulative)") }}</p>
             <div class="chart" data-chart="total_gifts"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -163,7 +163,7 @@ def out():
 
         <div class="chart-wrapper">
             <a name="gifts"></a>
-            <h2>{{ _("Weekly Gifts (€)") }}</h2>
+            <h3>{{ _("Weekly Gifts (€)") }}</h3>
             <p class="note">{{ _("Money transferred within Liberapay (per week)") }}</p>
             <div class="chart" data-chart="weekly_gifts"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -171,7 +171,7 @@ def out():
 
         <div class="chart-wrapper newline">
             <a name="charges"></a>
-            <h2>{{ _("Deposits (€)") }}</h2>
+            <h3>{{ _("Deposits (€)") }}</h3>
             <p class="note">{{ _("Money moved into Liberapay") }}</p>
             <div class="chart" data-chart="charges"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
@@ -179,7 +179,7 @@ def out():
 
         <div class="chart-wrapper">
             <a name="withdrawals"></a>
-            <h2>{{ _("Withdrawals (€)") }}</h2>
+            <h3>{{ _("Withdrawals (€)") }}</h3>
             <p class="note">{{ _("Money moved out of Liberapay") }}</p>
             <div class="chart" data-chart="withdrawals"></div>
             <div class="x-axis">{{ _("weeks") }}</div>

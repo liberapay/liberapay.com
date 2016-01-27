@@ -36,7 +36,7 @@ teams = website.db.all("""
     <p><a class="btn btn-default" href="payout/Li4=">{{ _("Withdraw money") }}</a></p>
 % endif
 
-<h2 id="teams">{{ _("Teams") }}</h2>
+<h3 id="teams">{{ _("Teams") }}</h3>
 % if teams
     % for team in teams
         <h4>{{ team.username }}
@@ -60,12 +60,12 @@ teams = website.db.all("""
 % set tip_distribution = participant.get_tip_distribution()[0]
 <div class="row">
 <div class="col-md-6">
-    <h2>{{ _("Tips Received, by Number of Tips") }}</h2>
+    <h3>{{ _("Tips Received, by Number of Tips") }}</h3>
     % include "templates/tip-distribution.html"
 </div>
 
 <div class="col-md-6">
-    <h2>{{ _("Tips Received, by Amount") }}</h2>
+    <h3>{{ _("Tips Received, by Amount") }}</h3>
     <table class="tip-distribution">
         % for amount, ncontributors, summed, pcontributors, psummed in tip_distribution
         <tr>
