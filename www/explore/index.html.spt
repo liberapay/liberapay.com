@@ -20,7 +20,7 @@ title = _("Explore")
 {{ community_chooser(communities) }}
 
 <h3>{{ _("Popular Communities") }}</h3>
-<ul class="communities">
+<ul class="communities memberships">
     % for community in communities[:20]
     <li>
         <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
