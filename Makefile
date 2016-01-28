@@ -42,7 +42,7 @@ run: env
 	$(with_local_env) make --no-print-directory run_
 
 run_:
-	$(env_bin)/$(shell grep -E '^web: ' Procfile | cut -d' ' -f2-)
+	$(env_bin)/gunicorn liberapay.main:website --bind :8339 $$GUNICORN_OPTS
 
 py: env
 	PYTHONPATH=. $(with_local_env) $(env_bin)/python -i liberapay/main.py
