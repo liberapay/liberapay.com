@@ -7,7 +7,7 @@ set -e
 cd "`dirname $0`"
 
 # Constants
-APPNAME=liberapay
+[ -z "$APPNAME" ] && export APPNAME=liberapay
 
 # Helpers
 

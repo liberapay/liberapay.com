@@ -30,7 +30,7 @@ schema: env
 	$(with_local_env) ./recreate-schema.sh
 
 schema-diff: test-schema
-	pg_dump -sO `heroku config:get DATABASE_URL -a liberapay` >prod.sql
+	rhc ssh $$APPNAME --command 'pg_dump -sO' >prod.sql
 	$(with_tests_env) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
 	diff -uw prod.sql local.sql
 	rm prod.sql local.sql
