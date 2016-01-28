@@ -7,9 +7,9 @@ set -e
 
 echo "=============================================================================="
 
-# I got the idea for dropping the schema as a way to clear out the db from
-# http://www.postgresql.org/message-id/200408241254.19075.josh@agliodbs.com. On
-# Heroku Postgres we don't have permission to drop and create the db as a whole.
+# We don't necessarily have permission to drop and create the db as a whole, so
+# we recreate the public schema instead.
+# http://www.postgresql.org/message-id/200408241254.19075.josh@agliodbs.com
 
 echo "Recreating public schema ... "
 psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
