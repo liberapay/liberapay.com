@@ -5,4 +5,5 @@ pip install git-lfs
 python -m git_lfs -v ~/git/$OPENSHIFT_APP_NAME.git $OPENSHIFT_REPO_DIR
 
 echo "Removing unnecessary files..."
-rm -rf $OPENSHIFT_REPO_DIR/tests
+cd $OPENSHIFT_REPO_DIR
+rm -rf Makefile pytest.ini requirements_*.txt *.env *.md *.sh sql/ tests/
