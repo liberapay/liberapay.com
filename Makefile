@@ -16,6 +16,9 @@ else
 	pytest = ./tests/py/
 endif
 
+echo:
+	@echo $($(var))
+
 env: requirements*.txt
 	$(python) -c "import virtualenv" || pip install virtualenv
 	$(python) -m virtualenv ./env/

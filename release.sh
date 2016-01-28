@@ -58,6 +58,16 @@ if [ -e sql/branch.sql ]; then
     git add sql/schema.sql
     git commit -m "merge branch.sql into schema.sql"
 
+    # Run branch.sql on the test DB in echo mode to get back a "compiled"
+    # version on stdout without commands like \i
+    echo "Compiling branch.sql..."
+    $(make echo var=with_tests_env) sh -eu -c \ '
+        psql $DATABASE_URL <sql/recreate-schema.sql >/dev/null
+        psql -e $DATABASE_URL <sql/branch.sql >sql/branch_.sql
+    '
+    mv sql/branch{_,}.sql
+    echo "Done."
+
     # Deployment options
     if yesno "Should branch.sql be applied before deploying instead of after?"; then
         run_sql="before"

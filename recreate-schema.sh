@@ -5,20 +5,6 @@
 # Exit on errors and undefined variables
 set -eu
 
-echo "=============================================================================="
-
-# We don't necessarily have permission to drop and create the db as a whole, so
-# we recreate the public schema instead.
-# http://www.postgresql.org/message-id/200408241254.19075.josh@agliodbs.com
-
-echo "Recreating public schema ... "
-psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
-
-
-echo "=============================================================================="
-echo "Applying sql/schema.sql ..."
-echo
-
 if [ "${1-}" = "test" ]; then
     psql $DATABASE_URL <<EOF
 DO \$$
@@ -28,8 +14,11 @@ END
 \$$
 EOF
 fi
-psql $DATABASE_URL < sql/schema.sql
 
+echo "=============================================================================="
+echo "Applying sql/recreate-schema.sql ... "
+echo
+psql $DATABASE_URL < sql/recreate-schema.sql
 
 echo "=============================================================================="
 echo "Looking for sql/branch.sql ..."
