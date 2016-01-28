@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# Fail on error
-set -e
+# Fail on errors and undefined variables
+set -eu
 
 # Be somewhere predictable
 cd "`dirname $0`"
 
 # Constants
-[ -z "$APPNAME" ] && export APPNAME=liberapay
+export APPNAME=${APPNAME-liberapay}
 
 # Helpers
 
@@ -74,11 +74,11 @@ yesno "Tag and deploy version $version?" || exit
 git tag $version
 
 # Deploy
-[ "$maintenance" = "yes" ] && rhc app stop $APPNAME
-[ "$run_sql" = "before" ] && rhc ssh $APPNAME psql <sql/branch.sql
+[ "${maintenance-}" = "yes" ] && rhc app stop $APPNAME
+[ "${run_sql-}" = "before" ] && rhc ssh $APPNAME psql <sql/branch.sql
 git push --force openshift master
-[ "$maintenance" = "yes" ] && rhc app start $APPNAME
-[ "$run_sql" = "after" ] && rhc ssh $APPNAME psql <sql/branch.sql
+[ "${maintenance-}" = "yes" ] && rhc app start $APPNAME
+[ "${run_sql-}" = "after" ] && rhc ssh $APPNAME psql <sql/branch.sql
 rm -f sql/branch.sql
 
 # Push to GitHub
@@ -86,7 +86,7 @@ git push
 git push --tags
 
 # Check for schema drift
-if [[ $run_sql ]]; then
+if [[ ${run_sql-} ]]; then
     if ! make schema-diff; then
         echo "schema.sql doesn't match the production DB, please fix it"
         exit 1
