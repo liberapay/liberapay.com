@@ -16,11 +16,10 @@ else
 	pytest = ./tests/py/
 endif
 
-env: requirements.txt requirements_tests.txt
+env: requirements*.txt
 	$(python) -c "import virtualenv" || pip install virtualenv
 	$(python) -m virtualenv ./env/
-	$(pip) install -r requirements.txt
-	$(pip) install -r requirements_tests.txt
+	$(pip) install $$(for f in requirements*.txt; do echo "-r $$f"; done)
 	@touch env
 
 clean:
