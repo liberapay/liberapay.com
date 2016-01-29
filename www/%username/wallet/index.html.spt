@@ -9,7 +9,7 @@ from liberapay.utils.history import iter_payday_events
 
 participant = get_participant(state, restrict=True)
 title = participant.username
-subhead = _("History")
+subhead = _("Wallet")
 subpath = 'history/' if user.is_admin else ''
 admin_override = user.is_admin and (participant != user or 'override' in request.qs)
 translated_status = { None:         ''
@@ -39,6 +39,11 @@ else:
 % block content
 
 <p>{{ BALANCE }}</p>
+
+% if participant.balance > 0
+    <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/Li4=') }}"
+          >{{ _("Withdraw money") }}</a></p>
+% endif
 
 <h3>{{ _("Account Statement") }}</h3>
 

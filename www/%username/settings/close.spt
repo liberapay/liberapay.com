@@ -58,7 +58,8 @@ subhead = participant.username
 
         <ul>
 
-            <li><a href="../receiving/payout/{{ b64encode(request.line.uri) }}">{{ _("Withdraw it") }}</a></li>
+            <li><a href="{{ participant.path('wallet/payout/'+b64encode(request.line.uri)) }}"
+                    >{{ _("Withdraw it") }}</a></li>
 
             <li><label>
                 <input type="radio" name="disburse_to" value="downstream"
