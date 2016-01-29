@@ -328,6 +328,7 @@ def other_stuff(website, env):
 
 def env():
     env = Environment(
+        ASPEN_PROJECT_ROOT              = str,
         DATABASE_URL                    = str,
         DATABASE_MAXCONN                = int,
         CANONICAL_HOST                  = str,
