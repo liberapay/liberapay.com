@@ -1,0 +1,33 @@
+from aspen import Response
+
+from liberapay.exceptions import AuthRequired
+from liberapay.models.community import Community
+
+[---]
+
+request.allow('POST')
+if user.ANON:
+    raise AuthRequired
+
+community = Community.from_name(request.path['name'])
+if not community:
+    raise Response(404)
+
+action = request.path['action']
+
+if action in ('subscribe', 'unsubscribe'):
+    is_on = action == 'subscribe'
+    user.update_community_status('subscriptions', is_on, community.id)
+
+elif action in ('join', 'leave'):
+    is_on = action == 'join'
+    user.update_community_status('memberships', is_on, community.id)
+
+else:
+    raise Response(400)
+
+if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+    response.redirect(request.body.get('back_to') or '/for/'+community.name)
+
+[---] application/json
+{}

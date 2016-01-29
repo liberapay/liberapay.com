@@ -1,6 +1,5 @@
 from aspen import Response
 
-from liberapay.models import community
 from liberapay.utils import get_participant
 
 [---]
@@ -14,26 +13,19 @@ if request.method == 'POST':
 
     do = request.body['do']
     try:
-        action, name = do.split(':', 1)
+        action, c_id = do.split(':', 1)
+        c_id = int(c_id)
     except ValueError:
         raise Response(400)
 
-    if community.name_pattern.match(name) is None:
-        errormsg = "The community name %s contains invalid characters." % name
-        raise Response(400, errormsg)
-
-    slug = community.slugize(name)
-
     if action not in ('join', 'leave'):
         raise Response(400)
-    is_member = action == 'join'
 
-    user.insert_into_communities(is_member, name, slug)
+    is_on = action == 'join'
+    user.update_community_status('memberships', is_on, c_id)
 
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        out['slug'] = slug
-    else:
-        response.redirect(request.body.get('back_to') or '/for/'+slug)
+    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        response.redirect(request.body.get('back_to') or participant.path('edit'))
 
 else:
     out = participant.get_communities()

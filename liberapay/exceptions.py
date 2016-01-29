@@ -131,3 +131,13 @@ class TransactionFeeTooHigh(LazyResponse400):
 class InvalidNumber(LazyResponse400):
     def msg(self, _):
         return _('"{0}" is not a valid number.', *self.args)
+
+
+class CommunityAlreadyExists(LazyResponse400):
+    def msg(self, _):
+        return _('The "{0}" community already exists.', *self.args)
+
+
+class InvalidCommunityName(LazyResponse400):
+    def msg(self, _):
+        return _('"{0}" is not a valid community name.', *self.args)

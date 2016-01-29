@@ -1,21 +1,38 @@
 import re
 
 from postgres.orm import Model
+from psycopg2 import IntegrityError
+
+from liberapay.exceptions import CommunityAlreadyExists, InvalidCommunityName
 
 
-name_pattern = re.compile(r'^[A-Za-z0-9,._ -]+$')
-slugize_re = re.compile(r'^[ ,._-]+$')
+name_maxlength = 40
+name_allowed_chars_pattern = r'\w\.-'
+name_pattern = r'^[%s]{1,%s}$' % (name_allowed_chars_pattern, name_maxlength)
+name_re = re.compile(name_pattern, re.U)
+normalize_re = re.compile(r'[^%s]+' % name_allowed_chars_pattern, re.U)
 
-def slugize(slug):
-    """Convert a string to a string for an URL.
-    """
-    assert name_pattern.match(slug) is not None
-    return slugize_re.sub('-', slug.lower()).strip('-')
+def normalize(name):
+    return normalize_re.sub('-', name).strip('-')
 
 
 class Community(Model):
 
     typname = "communities"
+
+    @classmethod
+    def create(cls, name, creator_id):
+        if name_re.match(name) is None:
+            raise InvalidCommunityName(name)
+        try:
+            return cls.db.one("""
+                INSERT INTO communities
+                            (name, creator)
+                     VALUES (%s, %s)
+                  RETURNING communities.*::communities
+            """, (name, creator_id))
+        except IntegrityError:
+            raise CommunityAlreadyExists(name)
 
     @classmethod
     def get_list(cls):
@@ -24,31 +41,33 @@ class Community(Model):
         return cls.db.all("""
             SELECT c.*::communities
               FROM communities c
-          ORDER BY nmembers DESC, slug
+          ORDER BY nmembers DESC, name
         """)
 
     @classmethod
-    def from_slug(cls, slug):
+    def from_name(cls, name):
+        if name_re.match(name) is None:
+            return
         return cls.db.one("""
-            SELECT c.*::communities FROM communities c WHERE slug=%s;
-        """, (slug,))
+            SELECT c.*::communities FROM communities c WHERE lower(name)=%s;
+        """, (name.lower(),))
 
     def get_members(self, limit=None, offset=None):
         return self.db.all("""
             SELECT p.*::participants
-              FROM community_members c
-              JOIN participants p ON p.id = c.participant
-             WHERE c.slug = %s
-               AND c.is_member
-               AND p.is_suspicious IS NOT true
-          ORDER BY c.ctime
+              FROM community_memberships cm
+              JOIN participants p ON p.id = cm.participant
+             WHERE cm.community = %s
+               AND cm.is_on
+          ORDER BY cm.ctime
              LIMIT %s
             OFFSET %s;
-        """, (self.slug, limit, offset))
+        """, (self.id, limit, offset))
 
-    def check_membership(self, participant):
+    def check_status(self, table, participant):
+        assert table in ('memberships', 'subscriptions')
         return self.db.one("""
-            SELECT is_member
-              FROM community_members
-             WHERE slug=%s AND participant=%s
-        """, (self.slug, participant.id))
+            SELECT is_on
+              FROM community_{0}
+             WHERE community=%s AND participant=%s
+        """.format(table), (self.id, participant.id))

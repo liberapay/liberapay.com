@@ -1,0 +1,34 @@
+from liberapay.exceptions import AuthRequired
+from liberapay.models.community import name_maxlength, normalize
+
+[---]
+
+if request.method == 'POST':
+    if user.ANON:
+        raise AuthRequired
+    c = user.create_community(request.body['name'])
+    response.redirect('/for/'+c.name)
+else:
+    name = normalize(request.qs.get('name', ''))
+
+title = _("Start a new community")
+
+[---] text/html
+% extends "templates/panel.html"
+
+% block panel_body
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <label>
+        <span>{{ _("Name") }}</span>
+        <input class="form-control" name="name" value="{{ name }}"
+                required maxlength="{{ name_maxlength }}" />
+        <p class="help-block">{{ _(
+            "All unicode alphanumeric characters are allowed, as well as dots "
+            "(.), underscores (_), and dashes (-). Maximum length is {0}.",
+            name_maxlength
+        )}}</p>
+    </label><br>
+    <button class="btn btn-success">{{ _("Go") }}</button>
+</form>
+% endblock

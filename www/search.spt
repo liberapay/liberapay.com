@@ -60,10 +60,10 @@ if query:
 
     if scope in (None, 'communities'):
         results['communities'] = website.db.all("""
-            SELECT slug, name, nmembers, similarity(name, %(q)s) AS rank
+            SELECT id, name, nmembers, nsubscribers
+                 , similarity(name, %(q)s) AS rank
               FROM communities
              WHERE name %% %(q)s
-               AND nmembers > 0
           ORDER BY rank DESC, name
              LIMIT 10
         """, locals())
@@ -106,12 +106,9 @@ if query:
         <ul class="community memberships">
         % for result in communities
             <li>
-                <a href="/for/{{ result.slug }}/">{{ result.name }}</a>
+                <a href="/for/{{ result.name }}/">{{ result.name }}</a>
                 <div class="nmembers">{{
-                    ngettext("{0}{n}{1} Member",
-                             "{0}{n}{1} Members",
-                             result.nmembers,
-                             "", "").lower()
+                    ngettext("{n} member", "{n} members", result.nmembers)
                 }}</div>
             </li>
         % endfor

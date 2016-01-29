@@ -1,0 +1,72 @@
+from aspen import Response
+from aspen.utils import utcnow
+from liberapay.models.community import Community
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=1)
+
+[---]
+
+name = request.path['name']
+community = Community.from_name(name)
+if not community:
+    response.redirect('/for/new?name=' + urlquote(name))
+elif community.name != name:
+    response.redirect('/for/' + community.name + '/')
+
+try:
+    limit = min(int(request.qs.get('limit', 50)), 100)
+    offset = int(request.qs.get('offset', 0))
+except ValueError:
+    raise Response(400)
+
+members = query_cache.all("""
+    SELECT username, cc.ctime, avatar_url
+      FROM participants p
+      JOIN community_memberships cc ON cc.participant = p.id AND cc.community = %s
+     WHERE cc.is_on
+  ORDER BY cc.ctime DESC
+     LIMIT %s
+    OFFSET %s
+""", (community.id, limit, offset))
+
+title = community.name
+
+[---]
+% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+
+% extends "templates/base.html"
+
+% block content
+
+    <p>{{ ngettext(
+        "This community was created {0} ago and has {n} member.",
+        "This community was created {0} ago and has {n} members.",
+        community.nmembers, to_age(community.ctime)
+    ) }}</p>
+
+    % set is_member = community.check_status('memberships', user)
+    % set action = 'leave' if is_member else 'join'
+    <form action="/for/{{ name }}/{{ action }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-{{ 'danger' if is_member else 'primary' }}">
+            {{ _("Leave") if is_member else _("Join") }}
+        </button>
+    </form>
+
+    % if members
+    <h3>{{ _("New Members") }}</h3>
+    <ul class="people">
+        % for m in members
+        <li class="panel panel-default mini-user">
+            <a href="/{{ m.username }}/">
+                {{ avatar_img(m) }}
+                <div class="name">{{ m.username }}</div>
+                <div class="age">{{ to_age_str(m.ctime, add_direction=True) }}</div>
+            </a>
+        </li>
+        % endfor
+    </ul>
+    % endif
+
+% endblock

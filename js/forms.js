@@ -57,31 +57,14 @@ Liberapay.forms.success = function($form, $inputs, button) { return function(dat
 Liberapay.forms.communityChooser = function() {
     var $select = $('.community-chooser select');
     if ($select.length === 0) return;
-    var edit = $select.hasClass('edit');
-    function join(term) {
-        jQuery.ajax({
-            url: '/'+Liberapay.username+'/communities.json',
-            type: "POST",
-            data: {'do': 'join:'+term},
-            success: function (data) {
-                if (edit) {
-                    window.location.reload();
-                } else {
-                    window.location = '/for/'+data.slug;
-                }
-            },
-            error: Liberapay.error,
-        });
+    function create(name) {
+        window.location = '/for/new?name='+encodeURIComponent(name);
     }
     var chosenOpts = Liberapay.username ? {
-        create_option: join,
+        create_option: create,
         create_option_text: $('.community-chooser').data('add-msg'),
     }: {};
     $select.chosen(chosenOpts).change(function() {
-        if (edit) {
-            join($select.val());
-        } else {
-            window.location = '/for/'+$select.val();
-        }
+        window.location = '/for/'+$select.val();
     });
 };

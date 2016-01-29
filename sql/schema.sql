@@ -235,33 +235,50 @@ CREATE INDEX exchanges_participant_idx ON exchanges (participant);
 
 -- communities -- groups of participants
 
-CREATE TABLE community_members
-( slug          text           NOT NULL
-, participant   bigint         NOT NULL REFERENCES participants
-, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, name          text           NOT NULL
-, is_member     boolean        NOT NULL
-, UNIQUE (slug, participant)
-);
-
 CREATE TABLE communities
-( slug text PRIMARY KEY
-, name text UNIQUE NOT NULL
-, nmembers int NOT NULL
-, ctime timestamptz NOT NULL
-, CHECK (nmembers > 0)
+( id             bigserial     PRIMARY KEY
+, name           text          UNIQUE NOT NULL
+, nmembers       int           NOT NULL DEFAULT 0
+, nsubscribers   int           NOT NULL DEFAULT 0
+, ctime          timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, creator        bigint        NOT NULL REFERENCES participants
+, CHECK (nsubscribers >= 0)
 );
 
-\i sql/upsert_community.sql
-
-CREATE TRIGGER upsert_community
-    BEFORE INSERT OR UPDATE OR DELETE ON community_members
-    FOR EACH ROW
-    EXECUTE PROCEDURE upsert_community();
+CREATE UNIQUE INDEX ON communities (lower(name));
 
 CREATE INDEX community_trgm_idx ON communities
     USING gist(name gist_trgm_ops);
+
+\i sql/update_community.sql
+
+CREATE TABLE community_memberships
+( participant   bigint         NOT NULL REFERENCES participants
+, community     bigint         NOT NULL REFERENCES communities
+, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, is_on         boolean        NOT NULL
+, UNIQUE (participant, community)
+);
+
+CREATE TRIGGER update_community_nmembers
+    BEFORE INSERT OR UPDATE OR DELETE ON community_memberships
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_community_nmembers();
+
+CREATE TABLE community_subscriptions
+( participant   bigint         NOT NULL REFERENCES participants
+, community     bigint         NOT NULL REFERENCES communities
+, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, is_on         boolean        NOT NULL
+, UNIQUE (participant, community)
+);
+
+CREATE TRIGGER update_community_nsubscribers
+    BEFORE INSERT OR UPDATE OR DELETE ON community_subscriptions
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_community_nsubscribers();
 
 
 -- takes -- how members of a team share the money it receives

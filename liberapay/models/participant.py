@@ -47,6 +47,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.notifications import EVENTS
 from liberapay.security.crypto import constant_time_compare
@@ -466,7 +467,8 @@ class Participant(Model, MixinTeam):
         """
         r = cursor.one("""
 
-            DELETE FROM community_members WHERE participant=%(id)s;
+            DELETE FROM community_memberships WHERE participant=%(id)s;
+            DELETE FROM community_subscriptions WHERE participant=%(id)s;
             DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
             DELETE FROM statements WHERE participant=%(id)s;
 
@@ -799,8 +801,8 @@ class Participant(Model, MixinTeam):
         """, (self.id, QUARANTINE))
 
 
-    # Random Junk
-    # ===========
+    # Random Stuff
+    # ============
 
     def add_event(self, c, type, payload, recorder=None):
         c.run("""
@@ -836,7 +838,14 @@ class Participant(Model, MixinTeam):
         return (self.goal is None) or (self.goal >= 0)
 
 
-    def insert_into_communities(self, is_member, name, slug):
+    # Communities
+    # ===========
+
+    def create_community(self, name):
+        return Community.create(name, self.id)
+
+    def update_community_status(self, table, on, c_id):
+        assert table in ('memberships', 'subscriptions')
         p_id = self.id
         self.db.run("""
             DO $$
@@ -844,38 +853,41 @@ class Participant(Model, MixinTeam):
                 cname text;
             BEGIN
                 BEGIN
-                    INSERT INTO community_members
-                                (name, slug, participant, is_member)
-                         VALUES (%(name)s, %(slug)s, %(p_id)s, %(is_member)s);
+                    INSERT INTO community_{0}
+                                (community, participant, is_on)
+                         VALUES (%(c_id)s, %(p_id)s, %(on)s);
                     IF (FOUND) THEN RETURN; END IF;
                 EXCEPTION WHEN unique_violation THEN
                     GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
-                    IF (cname <> 'community_members_slug_participant_key') THEN
+                    IF (cname <> 'community_{0}_participant_community_key') THEN
                         RAISE;
                     END IF;
                 END;
-                UPDATE community_members
-                   SET is_member = %(is_member)s
+                UPDATE community_{0}
+                   SET is_on = %(on)s
                      , mtime = CURRENT_TIMESTAMP
-                 WHERE slug = %(slug)s
+                 WHERE community = %(c_id)s
                    AND participant = %(p_id)s;
                 IF (NOT FOUND) THEN
-                    RAISE 'upsert in community_members failed';
+                    RAISE 'upsert in community_{0} failed';
                 END IF;
             END;
             $$ LANGUAGE plpgsql;
-        """, locals())
+        """.format(table), locals())
 
 
     def get_communities(self):
         return self.db.all("""
             SELECT c.*
-              FROM community_members cm
-              JOIN communities c ON c.slug = cm.slug
-             WHERE cm.is_member AND cm.participant = %s
-          ORDER BY c.nmembers ASC, c.slug
+              FROM community_memberships cm
+              JOIN communities c ON c.id = cm.community
+             WHERE cm.is_on AND cm.participant = %s
+          ORDER BY c.nmembers ASC, c.name
         """, (self.id,))
 
+
+    # More Random Stuff
+    # =================
 
     def change_username(self, suggested, cursor=None):
         suggested = suggested and suggested.strip()

@@ -72,15 +72,10 @@ def fake_participant(db, kind=None, is_admin=False):
 def fake_community(db, creator):
     """Create a fake community
     """
-    name = faker.city()
-    if not community.name_pattern.match(name):
-        return fake_community(db, creator)
-
-    slug = community.slugize(name)
-
-    creator.insert_into_communities(True, name, slug)
-
-    return community.Community.from_slug(slug)
+    name = community.normalize(faker.city())
+    c = creator.create_community(name)
+    creator.update_community_status('memberships', True, c.id)
+    return c
 
 
 def fake_tip_amount():
@@ -196,7 +191,7 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
 
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
-            p.insert_into_communities(True, community.name, community.slug)
+            p.update_community_status('memberships', True, community.id)
 
     print("Making Tips")
     tips = []
