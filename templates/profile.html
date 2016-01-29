@@ -35,7 +35,7 @@
         {% set pages = filter_profile_subnav(user, participant, [
             ('/',            _('Profile'),   True,           True),
             ('/income/',     _('Income'),    True,           show_income),
-            ('/history/',    _('History'),   False,          False),
+            ('/wallet/',     _('Wallet'),    False,          False),
         ]) %}
         % if len(pages) > 1
             % from "templates/nav.html" import nav with context

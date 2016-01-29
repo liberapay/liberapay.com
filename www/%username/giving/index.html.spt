@@ -47,7 +47,9 @@ weekly = total - participant.receiving
             {{ _("You need to transfer money to your wallet to fund your donations.") }}
         % endif
         % if funded < 52
-            <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}" href="payin/Li4=">{{ _("Add money") }}</a>
+            <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}"
+               href="{{ participant.path('wallet/payin/'+b64encode(request.path.raw)) }}"
+               >{{ _("Add money") }}</a>
         % endif
     </p>
 % else

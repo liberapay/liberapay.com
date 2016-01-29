@@ -6,7 +6,7 @@
 
 <pre>{{ exchange.note }}</pre>
 
-<a href="{{ participant.url('receiving/payout/') }}"
+<a href="{{ participant.url('wallet/payout/') }}"
    style="{{ button_style }}">{{ _("Try again") }}</a>
 
 [---] text/plain
@@ -15,4 +15,4 @@
 
 {{ exchange.note }}
 
-{{ _("You can try again: {0}", participant.url('receiving/payout/')) }}
+{{ _("You can try again: {0}", participant.url('wallet/payout/')) }}
