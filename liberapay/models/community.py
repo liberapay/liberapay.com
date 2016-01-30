@@ -4,18 +4,13 @@ from postgres.orm import Model
 
 
 name_pattern = re.compile(r'^[A-Za-z0-9,._ -]+$')
+slugize_re = re.compile(r'^[ ,._-]+$')
 
 def slugize(slug):
     """Convert a string to a string for an URL.
     """
     assert name_pattern.match(slug) is not None
-    slug = slug.lower()
-    for c in (' ', ',', '.', '_'):
-        slug = slug.replace(c, '-')
-    while '--' in slug:
-        slug = slug.replace('--', '-')
-    slug = slug.strip('-')
-    return slug
+    return slugize_re.sub('-', slug.lower()).strip('-')
 
 
 class Community(Model):
