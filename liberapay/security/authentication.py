@@ -60,6 +60,8 @@ def sign_in(request, state):
     if p:
         response = state.setdefault('response', Response())
         p.sign_in(response.headers.cookie)
+        if body.pop('form.repost', None) != 'true':
+            response.redirect(request.line.uri)
         state['user'] = p
 
 
