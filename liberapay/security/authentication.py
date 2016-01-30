@@ -29,23 +29,23 @@ def sign_in(request, state):
     if body.get('log-in.username'):
         p = Participant.authenticate(
             'username', 'password',
-            body['log-in.username'], body['log-in.password']
+            body.pop('log-in.username'), body.pop('log-in.password')
         )
         if p and p.status == 'closed':
             p.update_status('active')
 
     elif body.get('sign-in.username'):
-        if body.get('sign-in.terms') != 'agree':
+        if body.pop('sign-in.terms') != 'agree':
             raise Response(400, 'you have to agree to the terms')
-        kind = body['sign-in.kind']
+        kind = body.pop('sign-in.kind')
         if kind not in ('individual', 'organization'):
             raise Response(400, 'bad kind')
         with state['website'].db.get_cursor() as c:
             p = Participant.make_active(
-                body['sign-in.username'], kind, body['sign-in.password'],
+                body.pop('sign-in.username'), kind, body.pop('sign-in.password'),
                 cursor=c
             )
-            p.add_email(body['sign-in.email'], cursor=c)
+            p.add_email(body.pop('sign-in.email'), cursor=c)
         p.authenticated = True
 
     if p:
