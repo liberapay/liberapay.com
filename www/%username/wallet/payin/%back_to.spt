@@ -77,18 +77,10 @@ show_form = weekly > 0 and funded < 52 and not success
 title = _("Add money")
 
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/panel.html"
 
-{% block heading %}{% endblock %}
-
-% block content
-<div class="row">
-<div class="col-md-8 col-md-offset-2">
-<div class="panel panel-primary">
-<div class="panel-heading">
-    <h1 class="panel-title">{{ title }}</h1>
-</div>
-<form id="payin" class="panel-body" action="javascript:" method="POST"
+% block panel_body
+<form id="payin" action="javascript:" method="POST"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
@@ -191,7 +183,9 @@ title = _("Add money")
     % endif
 
 </form>
-</div>
+% endblock
+
+% block below_panel
 % if show_form
 <p class="alert alert-info">
     <a href="https://www.mangopay.com/legal-notices/">
@@ -199,8 +193,6 @@ title = _("Add money")
     </a>
 </p>
 % endif
-</div>
-</div>
 % endblock
 
 % block scripts
