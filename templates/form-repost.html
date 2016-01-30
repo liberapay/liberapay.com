@@ -1,4 +1,5 @@
 % if request.method == 'POST'
+    <input name="form.repost" type="hidden" value="true" />
     % for k, values in request.body.items()
         % for v in values:
             <input name="{{ k }}" type="hidden" value="{{ v }}" />
