@@ -5,7 +5,6 @@ import binascii
 from aspen import Response
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant
-from liberapay.security import csrf
 
 
 class _ANON(object):
@@ -17,14 +16,6 @@ class _ANON(object):
 
 
 ANON = _ANON()
-
-
-def _turn_off_csrf(request):
-    """Given a request, short-circuit CSRF.
-    """
-    csrf_token = csrf._get_new_token()
-    request.headers.cookie['csrf_token'] = csrf_token
-    request.headers['X-CSRF-TOKEN'] = csrf_token
 
 
 def sign_in(request, state):
@@ -87,7 +78,6 @@ def authenticate_user_if_possible(request, state, user):
         participant = Participant.authenticate('id', 'password', *creds)
         if not participant:
             raise Response(401)
-        _turn_off_csrf(request)
         return {'user': participant}
     elif SESSION in request.headers.cookie:
         creds = request.headers.cookie[SESSION].value.split(':', 1)
