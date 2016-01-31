@@ -1,8 +1,11 @@
 from liberapay.models.community import Community
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=1)
 
 [-----------------------------]
 
-communities = Community.get_list()
+communities = Community.get_list(query_cache)
 ncommunities = len(communities)
 title = _("Explore")
 
@@ -16,19 +19,29 @@ title = _("Explore")
                 ncommunities) }}
 </p>
 
-% from "templates/community-chooser.html" import community_chooser with context
-{{ community_chooser(communities) }}
+<form class="form-group" action="/search" method="get">
+    <input type="hidden" name="scope" value="communities" />
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="{{ _('Search communities') }}" />
+        <div class="input-group-btn">
+            <button class="btn btn-default">{{ _("Go") }}</button>
+        </div>
+    </div>
+</form>
+
+<p><a class="btn btn-primary" href="/for/new">{{ _("Start a new community") }}</a></p>
 
 <h3>{{ _("Popular Communities") }}</h3>
 <ul class="communities memberships">
     % for community in communities[:20]
     <li>
-        <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+        <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
         % set n = community.nmembers
         <div class="nmembers">
-            {{ ngettext("{0}{n}{1} Member", "{0}{n}{1} Members", n, "", "").lower() }}
+            {{ ngettext("{n} member", "{n} members", n) }}
         </div>
     </li>
     % endfor
 </ul>
+
 % endblock

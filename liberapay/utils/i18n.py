@@ -244,6 +244,17 @@ def format_money(number, currency, format=None, locale='en', trailing_zeroes=Tru
     return s
 
 
+def get_lang_options(request, locale, previously_used_langs, add_multi=False):
+    pref_langs = set(request.accept_langs + previously_used_langs)
+    langs = OrderedDict()
+    if add_multi:
+        langs.update([('mul', locale.languages.get('mul', 'Multilingual'))])
+    langs.update((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
+    langs.update([('', '---')])  # Separator
+    langs.update(locale.languages_2)
+    return langs
+
+
 def set_up_i18n(website, request, state):
     accept_lang = request.headers.get("Accept-Language", "")
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
@@ -263,6 +274,7 @@ def add_helpers_to_context(tell_sentry, context, loc):
     context['format_currency'] = lambda *a, **kw: format_money(*a, locale=loc, **kw)
     context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
     context['format_datetime'] = lambda *a: format_datetime(*a, locale=loc)
+    context['get_lang_options'] = lambda *a, **kw: get_lang_options(context['request'], loc, *a, **kw)
     context['to_age'] = to_age
 
     def parse_decimal_or_400(s, *a):

@@ -1,0 +1,119 @@
+from six.moves.urllib.parse import quote as urlquote
+
+from liberapay.models.community import Community
+from liberapay.utils import markdown
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=1)
+
+[---]
+
+name = request.path['name']
+community = Community.from_name(name)
+if not community:
+    response.redirect('/for/new?name=' + urlquote(name))
+elif community.name != name:
+    response.redirect('/for/' + community.name + '/')
+
+try:
+    limit = min(int(request.qs.get('limit', 50)), 100)
+    offset = int(request.qs.get('offset', 0))
+except ValueError:
+    raise Response(400)
+
+members = query_cache.all("""
+    SELECT username, cc.ctime, avatar_url
+      FROM participants p
+      JOIN community_memberships cc ON cc.participant = p.id AND cc.community = %s
+     WHERE cc.is_on
+  ORDER BY cc.ctime DESC
+     LIMIT %s
+    OFFSET %s
+""", (community.id, limit, offset))
+
+title = pretty_name = community.pretty_name
+
+[---]
+% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+
+% extends "templates/base.html"
+
+{% block before_content %}{% endblock %}
+
+% block content
+<div class="row">
+<div class="col-md-8">
+
+    % if user.id == community.creator
+        <a class="btn btn-default pull-right" href="edit">{{ _("Edit") }}</a>
+    % endif
+
+    <h2 style="margin-top: 0;">{{ title }}
+        <small>{{
+            community.participant.get_statement(request.accept_langs, 'subtitle')[0] or ''
+        }}</small>
+    </h2>
+
+    <p>{{ ngettext(
+        "This community was created {0} ago and has {n} member.",
+        "This community was created {0} ago and has {n} members.",
+        community.nmembers, to_age(community.ctime)
+    ) }}</p>
+
+    <p>{{ _(
+        "Are you a contributor in the {0} community? Then join it on Liberapay!"
+        "\nSoon you'll be able to advertise your community projects here and "
+        "post status updates about your work.",
+        pretty_name
+    ).replace('\n', '<br>'|safe) }}</p>
+
+    % set is_member = community.check_status('memberships', user)
+    % set action = 'leave' if is_member else 'join'
+    <form action="/for/{{ name }}/{{ action }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-{{ 'danger' if is_member else 'primary' }}">
+            {{ _("Leave") if is_member else _("Join") }}
+        </button>
+    </form>
+
+    % if members
+    <h3>{{ _("New Members") }}</h3>
+    <ul class="people">
+        % for m in members
+        <li class="panel panel-default mini-user">
+            <a href="/{{ m.username }}/">
+                {{ avatar_img(m) }}
+                <div class="name">{{ m.username }}</div>
+                <div class="age">{{ to_age_str(m.ctime, add_direction=True) }}</div>
+            </a>
+        </li>
+        % endfor
+    </ul>
+    % endif
+
+</div>
+<div class="col-md-4">
+
+    <div class="alert alert-info">{{ _(
+        "Community newsletters will help you stay informed about what's going "
+        "on and which projects need support. They're not operational yet but "
+        "you can already subscribe."
+    ).replace('\n', '<br>'|safe) }}</div>
+
+    % set is_subscribed = community.check_status('subscriptions', user)
+    % set action = 'unsubscribe' if is_subscribed else 'subscribe'
+    <form action="/for/{{ name }}/{{ action }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-{{ 'danger' if is_subscribed else 'success' }}">
+            {{ _("Unsubscribe") if is_subscribed else _("Subscribe") }}
+        </button>
+        <p>{{ ngettext("{n} subscriber", "{n} subscribers", community.nsubscribers) }}</p>
+    </form>
+
+    <section class="community-sidebar">{{ markdown.render(
+        community.participant.get_statement(request.accept_langs, 'sidebar')[0] or ''
+    ) }}</section>
+
+</div>
+</div>
+% endblock

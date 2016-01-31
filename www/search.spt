@@ -47,6 +47,7 @@ if query:
                             , ts_rank_cd(search_vector, query) AS rank
                          FROM statements NATURAL JOIN queries
                         WHERE lang IN %(langs)s
+                          AND type = 'profile'
                           AND search_vector @@ query
                      ORDER BY rank DESC
                         LIMIT 10
@@ -60,10 +61,10 @@ if query:
 
     if scope in (None, 'communities'):
         results['communities'] = website.db.all("""
-            SELECT slug, name, nmembers, similarity(name, %(q)s) AS rank
+            SELECT id, name, nmembers, nsubscribers
+                 , similarity(name, %(q)s) AS rank
               FROM communities
              WHERE name %% %(q)s
-               AND nmembers > 0
           ORDER BY rank DESC, name
              LIMIT 10
         """, locals())
@@ -73,11 +74,17 @@ if query:
 % from 'templates/avatar-url.html' import avatar_url, avatar_img with context
 % block content
 
-    % include "templates/search-box.html"
-
     % set usernames = results.get('usernames')
     % set communities = results.get('communities')
     % set statements = results.get('statements')
+
+    % if query and not (usernames or communities or statements)
+        <p class="alert alert-warning">{{
+            _("Sorry, we didn't find anything matching your query."
+        ) }}</p>
+    % endif
+
+    % include "templates/search-box.html"
 
     <div class="row">
     % if usernames
@@ -106,12 +113,9 @@ if query:
         <ul class="community memberships">
         % for result in communities
             <li>
-                <a href="/for/{{ result.slug }}/">{{ result.name }}</a>
+                <a href="/for/{{ result.name }}/">{{ result.name.replace('_', ' ') }}</a>
                 <div class="nmembers">{{
-                    ngettext("{0}{n}{1} Member",
-                             "{0}{n}{1} Members",
-                             result.nmembers,
-                             "", "").lower()
+                    ngettext("{n} member", "{n} members", result.nmembers)
                 }}</div>
             </li>
         % endfor
@@ -143,10 +147,7 @@ if query:
     </div>
     % endif
 
-    % if query and not (usernames or communities or statements)
-        <p>{{ _("Sorry, we didn't find anything matching your query.") }}</p>
-    % endif
-
+    <br>
     <h3>{{ _("Looking for a specific user of a social network?") }}</h3>
     % include "templates/jump.html"
 

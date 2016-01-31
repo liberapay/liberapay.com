@@ -1,14 +1,9 @@
 from __future__ import division
 
-try:
-    import builtins
-except ImportError:
-    import __builtin__ as builtins
 import base64
-try:
-    from urllib.parse import quote as urlquote
-except ImportError:
-    from urllib import quote as urlquote
+
+from six.moves import builtins
+from six.moves.urllib.parse import quote as urlquote
 
 from liberapay import canonize, fill_accept_header, insert_constants, utils, wireup
 from liberapay.cron import Cron

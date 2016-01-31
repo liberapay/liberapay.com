@@ -43,7 +43,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if participant is None:
         from liberapay.models.participant import Participant  # avoid circular import
         participant = Participant._from_thing(thing, value) if value else None
-        if participant is None:
+        if participant is None or participant.kind == 'community':
             raise Response(404)
 
     if request.method in ('GET', 'HEAD'):

@@ -1,0 +1,59 @@
+from liberapay.exceptions import AuthRequired
+from liberapay.models.community import name_maxlength, normalize
+from liberapay.utils.i18n import LANGUAGES_2
+
+[---]
+
+lang = None
+
+if request.method == 'POST':
+    if user.ANON:
+        raise AuthRequired
+    body = request.body
+    lang = body['lang']
+    if lang not in LANGUAGES_2 and lang != 'mul':
+        raise Response(400, "unknown lang")
+    c = user.create_community(body['name'], lang=lang)
+    response.redirect('/for/'+c.name+'/edit')
+else:
+    name = normalize(request.qs.get('name', ''))
+    body = {}
+
+select_langs = get_lang_options([], add_multi=True)
+lang = lang or next(iter(select_langs.keys()))
+
+title = _("Start a new community")
+
+[---] text/html
+% from "templates/select-lang.html" import lang_options with context
+
+% extends "templates/panel.html"
+
+% block panel_body
+<form action="" class="block-labels" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <label>
+        <span>{{ _("Name") }}</span>
+        <input class="form-control" name="name" value="{{ name }}"
+               required maxlength="{{ name_maxlength }}" />
+        <p class="help-block">{{ _(
+            "Use underscores (_) instead of spaces. All unicode alphanumeric "
+            "characters are allowed, as well as dots (.) and dashes (-)."
+        ) + " " + _(
+            "Maximum length is {0}.", name_maxlength
+        ) }}</p>
+    </label>
+
+    <label>
+        <span>{{ _("Language of the name") }}</span>
+        <div class="form-inline">
+            <select class="form-control" name="lang">{{
+                lang_options(select_langs, lang)
+            }}</select>
+        </div>
+    </label>
+
+    <button class="btn btn-success">{{ _("Go") }}</button>
+</form>
+% endblock

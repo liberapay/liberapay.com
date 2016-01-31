@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- participants -- user accounts
 
-CREATE TYPE participant_kind AS ENUM ('individual', 'organization', 'group');
+CREATE TYPE participant_kind AS ENUM ('individual', 'organization', 'group', 'community');
 CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed');
 
 CREATE TABLE participants
@@ -57,14 +57,14 @@ CREATE TABLE participants
 , email_notif_bits      int                     NOT NULL DEFAULT 2147483647
 , pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
 
-, CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind='group') AND balance <> 0))
-, CONSTRAINT giving_chk CHECK (NOT (kind='group' AND giving <> 0))
-, CONSTRAINT goal_chk CHECK (NOT (kind='group' AND status='active' AND goal IS NOT NULL AND goal <= 0))
+, CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
+, CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
+, CONSTRAINT goal_chk CHECK (NOT (kind IN ('group', 'community') AND status='active' AND goal IS NOT NULL AND goal <= 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
 , CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))
-, CONSTRAINT password_chk CHECK ((status='stub' OR kind='group') = (password IS NULL))
-, CONSTRAINT secret_team_chk CHECK (NOT (kind='group' AND hide_receiving))
+, CONSTRAINT password_chk CHECK ((status='stub' OR kind IN ('group', 'community')) = (password IS NULL))
+, CONSTRAINT secret_team_chk CHECK (NOT (kind IN ('group', 'community') AND hide_receiving))
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
@@ -235,33 +235,54 @@ CREATE INDEX exchanges_participant_idx ON exchanges (participant);
 
 -- communities -- groups of participants
 
-CREATE TABLE community_members
-( slug          text           NOT NULL
-, participant   bigint         NOT NULL REFERENCES participants
-, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
-, name          text           NOT NULL
-, is_member     boolean        NOT NULL
-, UNIQUE (slug, participant)
-);
-
 CREATE TABLE communities
-( slug text PRIMARY KEY
-, name text UNIQUE NOT NULL
-, nmembers int NOT NULL
-, ctime timestamptz NOT NULL
-, CHECK (nmembers > 0)
+( id             bigserial     PRIMARY KEY
+, name           text          UNIQUE NOT NULL
+, nmembers       int           NOT NULL DEFAULT 0
+, nsubscribers   int           NOT NULL DEFAULT 0
+, ctime          timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, creator        bigint        NOT NULL REFERENCES participants
+, lang           text          NOT NULL
+, participant    bigint        NOT NULL REFERENCES participants
+, CHECK (nsubscribers >= 0)
 );
 
-\i sql/upsert_community.sql
-
-CREATE TRIGGER upsert_community
-    BEFORE INSERT OR UPDATE OR DELETE ON community_members
-    FOR EACH ROW
-    EXECUTE PROCEDURE upsert_community();
+CREATE UNIQUE INDEX ON communities (lower(name));
 
 CREATE INDEX community_trgm_idx ON communities
     USING gist(name gist_trgm_ops);
+
+\i sql/community_with_participant.sql
+
+\i sql/update_community.sql
+
+CREATE TABLE community_memberships
+( participant   bigint         NOT NULL REFERENCES participants
+, community     bigint         NOT NULL REFERENCES communities
+, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, is_on         boolean        NOT NULL
+, UNIQUE (participant, community)
+);
+
+CREATE TRIGGER update_community_nmembers
+    BEFORE INSERT OR UPDATE OR DELETE ON community_memberships
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_community_nmembers();
+
+CREATE TABLE community_subscriptions
+( participant   bigint         NOT NULL REFERENCES participants
+, community     bigint         NOT NULL REFERENCES communities
+, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, is_on         boolean        NOT NULL
+, UNIQUE (participant, community)
+);
+
+CREATE TRIGGER update_community_nsubscribers
+    BEFORE INSERT OR UPDATE OR DELETE ON community_subscriptions
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_community_nsubscribers();
 
 
 -- takes -- how members of a team share the money it receives
@@ -282,8 +303,8 @@ CREATE OR REPLACE FUNCTION check_member() RETURNS trigger AS $$
         m participants;
     BEGIN
         m := (SELECT p.*::participants FROM participants p WHERE id = NEW.member);
-        IF (m.kind = 'group') THEN
-            RAISE 'cannot add a team to a team';
+        IF (m.kind IN ('group', 'community')) THEN
+            RAISE 'cannot add a group account to a team';
         END IF;
         IF (m.status <> 'active') THEN
             RAISE 'cannot add an inactive user to a team';
@@ -344,13 +365,16 @@ CREATE TABLE emails
 
 -- profile statements
 
+CREATE TYPE stmt_type AS ENUM ('profile', 'sidebar', 'subtitle');
+
 CREATE TABLE statements
 ( participant    bigint      NOT NULL REFERENCES participants
+, type           stmt_type   NOT NULL
 , lang           text        NOT NULL
 , content        text        NOT NULL CHECK (content <> '')
 , search_vector  tsvector
 , search_conf    regconfig   NOT NULL
-, UNIQUE (participant, lang)
+, UNIQUE (participant, type, lang)
 );
 
 CREATE INDEX statements_fts_idx ON statements USING gist(search_vector);

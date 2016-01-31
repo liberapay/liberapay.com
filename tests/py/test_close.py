@@ -283,13 +283,14 @@ class TestClosing(FakeTransfersHarness):
 
     def test_cpi_clears_communities(self):
         alice = self.make_participant('alice')
-        alice.insert_into_communities(True, 'test', 'test')
+        c = alice.create_community('test')
+        alice.update_community_status('memberships', True, c.id)
         bob = self.make_participant('bob')
-        bob.insert_into_communities(True, 'test', 'test')
+        bob.update_community_status('memberships', True, c.id)
 
-        assert Community.from_slug('test').nmembers == 2  # sanity check
+        assert Community.from_name('test').nmembers == 2  # sanity check
 
         with self.db.get_cursor() as cursor:
             alice.clear_personal_information(cursor)
 
-        assert Community.from_slug('test').nmembers == 1
+        assert Community.from_name('test').nmembers == 1

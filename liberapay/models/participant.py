@@ -7,11 +7,9 @@ from hashlib import pbkdf2_hmac
 from os import urandom
 import pickle
 from time import sleep
-try:
-    from urllib.parse import quote
-except ImportError:
-    from urllib import quote
 import uuid
+
+from six.moves.urllib.parse import quote
 
 from aspen.utils import utcnow
 import aspen_jinja2_renderer
@@ -47,6 +45,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.notifications import EVENTS
 from liberapay.security.crypto import constant_time_compare
@@ -273,43 +272,51 @@ class Participant(Model, MixinTeam):
     # Statement
     # =========
 
-    def get_statement(self, langs):
+    def get_statement(self, langs, type='profile'):
         """Get the participant's statement in the language that best matches
         the list provided.
         """
+        p_id = self.id
         return self.db.one("""
             SELECT content, lang
               FROM statements
               JOIN enumerate(%(langs)s) langs ON langs.value = statements.lang
-             WHERE participant=%(id)s
+             WHERE participant = %(p_id)s
+               AND type = %(type)s
           ORDER BY langs.rank
              LIMIT 1
-        """, dict(id=self.id, langs=langs), default=(None, None))
+        """, locals(), default=(None, None))
 
-    def get_statement_langs(self):
-        return self.db.all("SELECT lang FROM statements WHERE participant=%s",
-                           (self.id,))
+    def get_statement_langs(self, type='profile'):
+        return self.db.all("""
+            SELECT lang FROM statements WHERE participant=%s AND type=%s
+        """, (self.id, type))
 
-    def upsert_statement(self, lang, statement):
+    def upsert_statement(self, lang, statement, type='profile'):
         if not statement:
-            self.db.run("DELETE FROM statements WHERE participant=%s AND lang=%s",
-                        (self.id, lang))
+            self.db.run("""
+                DELETE FROM statements
+                 WHERE participant=%s
+                   AND type=%s
+                   AND lang=%s
+            """, (self.id, type, lang))
             return
         r = self.db.one("""
             UPDATE statements
                SET content=%s
              WHERE participant=%s
+               AND type=%s
                AND lang=%s
          RETURNING true
-        """, (statement, self.id, lang))
+        """, (statement, self.id, type, lang))
         if not r:
             search_conf = i18n.SEARCH_CONFS.get(lang, 'simple')
             try:
                 self.db.run("""
                     INSERT INTO statements
-                                (lang, content, participant, search_conf)
-                         VALUES (%s, %s, %s, %s)
-                """, (lang, statement, self.id, search_conf))
+                                (lang, content, participant, search_conf, type)
+                         VALUES (%s, %s, %s, %s, %s)
+                """, (lang, statement, self.id, search_conf, type))
             except IntegrityError:
                 return self.upsert_statement(lang, statement)
 
@@ -466,7 +473,8 @@ class Participant(Model, MixinTeam):
         """
         r = cursor.one("""
 
-            DELETE FROM community_members WHERE participant=%(id)s;
+            DELETE FROM community_memberships WHERE participant=%(id)s;
+            DELETE FROM community_subscriptions WHERE participant=%(id)s;
             DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
             DELETE FROM statements WHERE participant=%(id)s;
 
@@ -799,8 +807,8 @@ class Participant(Model, MixinTeam):
         """, (self.id, QUARANTINE))
 
 
-    # Random Junk
-    # ===========
+    # Random Stuff
+    # ============
 
     def add_event(self, c, type, payload, recorder=None):
         c.run("""
@@ -836,7 +844,14 @@ class Participant(Model, MixinTeam):
         return (self.goal is None) or (self.goal >= 0)
 
 
-    def insert_into_communities(self, is_member, name, slug):
+    # Communities
+    # ===========
+
+    def create_community(self, name, **kw):
+        return Community.create(name, self.id, **kw)
+
+    def update_community_status(self, table, on, c_id):
+        assert table in ('memberships', 'subscriptions')
         p_id = self.id
         self.db.run("""
             DO $$
@@ -844,38 +859,41 @@ class Participant(Model, MixinTeam):
                 cname text;
             BEGIN
                 BEGIN
-                    INSERT INTO community_members
-                                (name, slug, participant, is_member)
-                         VALUES (%(name)s, %(slug)s, %(p_id)s, %(is_member)s);
+                    INSERT INTO community_{0}
+                                (community, participant, is_on)
+                         VALUES (%(c_id)s, %(p_id)s, %(on)s);
                     IF (FOUND) THEN RETURN; END IF;
                 EXCEPTION WHEN unique_violation THEN
                     GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
-                    IF (cname <> 'community_members_slug_participant_key') THEN
+                    IF (cname <> 'community_{0}_participant_community_key') THEN
                         RAISE;
                     END IF;
                 END;
-                UPDATE community_members
-                   SET is_member = %(is_member)s
+                UPDATE community_{0}
+                   SET is_on = %(on)s
                      , mtime = CURRENT_TIMESTAMP
-                 WHERE slug = %(slug)s
+                 WHERE community = %(c_id)s
                    AND participant = %(p_id)s;
                 IF (NOT FOUND) THEN
-                    RAISE 'upsert in community_members failed';
+                    RAISE 'upsert in community_{0} failed';
                 END IF;
             END;
             $$ LANGUAGE plpgsql;
-        """, locals())
+        """.format(table), locals())
 
 
     def get_communities(self):
         return self.db.all("""
             SELECT c.*
-              FROM community_members cm
-              JOIN communities c ON c.slug = cm.slug
-             WHERE cm.is_member AND cm.participant = %s
-          ORDER BY c.nmembers ASC, c.slug
+              FROM community_memberships cm
+              JOIN communities c ON c.id = cm.community
+             WHERE cm.is_on AND cm.participant = %s
+          ORDER BY c.nmembers ASC, c.name
         """, (self.id,))
 
+
+    # More Random Stuff
+    # =================
 
     def change_username(self, suggested, cursor=None):
         suggested = suggested and suggested.strip()

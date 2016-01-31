@@ -2,9 +2,6 @@
 % if communities or edit
     <h3 id="communities">{{ _("Communities") }}</h3>
 % if edit
-    % from "templates/community-chooser.html" import community_chooser with context
-    {{ community_chooser(Community.get_list()) }}
-    <br>
     <form action="/{{ participant.username }}/communities.json" method="POST"
           class="js-submit" data-on-success="fadeOut:li">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -13,12 +10,12 @@
     <ul class="communities memberships">
         % for community in communities
         <li>
-            <a href="/for/{{ community.slug }}/">{{ community.name }}</a>
+            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
             <div class="nmembers">{{
                 ngettext("with {n} other", "with {n} others", community.nmembers - 1)
             }}</div>
             % if edit
-                <button name="do" value="leave:{{ community.name }}"
+                <button name="do" value="leave:{{ community.id }}"
                         class="btn btn-default btn-xs">{{ _('Leave') }}</button>
             % endif
         </li>
@@ -26,5 +23,6 @@
     </ul>
 % if edit
     </form>
+    <p><a class="btn btn-default" href="/explore/">{{ _("Explore communities") }}</a></p>
 % endif
 % endif

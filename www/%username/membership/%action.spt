@@ -45,7 +45,7 @@ if action == 'invite':
     invitee = Participant.from_username(request.body['username'])
     if not invitee:
         raise Response(404, _("User not found."))
-    if invitee.kind == 'group':
+    if invitee.kind in ('group', 'community'):
         raise Response(400, _("A team can't join a team"))
     if invitee.status != 'active':
         raise Response(400, _("You can't invite an inactive user to join a team."))

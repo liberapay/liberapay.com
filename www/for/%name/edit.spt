@@ -1,0 +1,87 @@
+from liberapay.exceptions import AuthRequired
+from liberapay.models.community import Community
+from liberapay.utils.i18n import LANGUAGES_2
+
+[---]
+
+name = request.path['name']
+c = Community.from_name(name)
+if not c:
+    response.redirect('/for/new?name=' + urlquote(name))
+elif c.name != name:
+    response.redirect('/for/' + c.name + '/')
+
+if request.method == 'POST':
+    if user.ANON:
+        raise AuthRequired
+    body = request.body
+    lang, subtitle, sidebar = body['lang'], body['subtitle'], body['sidebar']
+    if lang not in LANGUAGES_2:
+        raise Response(400, "unknown lang")
+    if len(subtitle) > c.subtitle_maxlength:
+        raise Response(400, "subtitle too long")
+    if len(sidebar) > c.sidebar_maxlength:
+        raise Response(400, "sidebar too long")
+    c.participant.upsert_statement(lang, subtitle, 'subtitle')
+    c.participant.upsert_statement(lang, sidebar, 'sidebar')
+else:
+    lang = request.qs.get('lang')
+    if lang:
+        subtitle = c.participant.get_statement([lang], 'subtitle')[0]
+        sidebar = c.participant.get_statement([lang], 'sidebar')[0]
+    else:
+        subtitle, lang = c.participant.get_statement(request.accept_langs, 'subtitle')
+        sidebar, lang = c.participant.get_statement(request.accept_langs, 'sidebar')
+
+select_langs = get_lang_options(c.participant.get_statement_langs('subtitle'))
+lang = lang or next(iter(select_langs.keys()))
+
+title = _("{0} community settings", c.name)
+
+[---] text/html
+% from "templates/select-lang.html" import lang_options with context
+
+% extends "templates/panel.html"
+
+% block panel_body
+
+{{ _("Liberapay allows you to internationalize your texts. "
+     "Use the selector below to switch between languages.") }}<br>
+<form action="" method="GET" class="form-group form-inline langs">
+    <select class="form-control" name="lang">{{
+        lang_options(select_langs, lang)
+    }}</select>
+    <button class="btn btn-default">{{ _("Switch") }}</button>
+</form>
+
+<form action="" class="block-labels" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="lang" value="{{ lang }}" />
+
+    <label>
+        <span>{{ _("Short description") }}</span>
+        <input class="form-control" name="subtitle" value="{{ subtitle or '' }}"
+               maxlength="{{ c.subtitle_maxlength }}" />
+        <p class="help-block">{{ _(
+            "Maximum length is {0}.", c.subtitle_maxlength
+        ) }}</p>
+    </label>
+
+    <label>
+        <span>{{ _("Sidebar text") }}</span>
+        <textarea class="form-control vertical-resize" name="sidebar" rows=10
+                  maxlength="{{ c.sidebar_maxlength }}"
+            >{{ sidebar or '' }}</textarea>
+        <p class="help-block">
+            {{ _("Maximum length is {0}.", c.sidebar_maxlength) }}
+            {{ _("Markdown supported.") }}
+            <a href="https://daringfireball.net/projects/markdown/basics"
+               target="_blank">{{ _("What is markdown?") }}</a>
+        </p>
+    </label>
+
+    <button class="btn btn-success">{{ _("Save") }}</button>
+
+    <a href="." class="btn btn-warning pull-right">{{ _("Go back") }}</a>
+</form>
+% endblock

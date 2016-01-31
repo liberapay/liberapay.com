@@ -1,0 +1,19 @@
+% extends "templates/base.html"
+
+{% block before_content %}{% endblock %}
+
+% block content
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h1 class="panel-title">{{ title }}</h1>
+            </div>
+            <div class="panel-body">
+                {% block panel_body %}{% endblock %}
+            </div>
+        </div>
+        {% block under_panel %}{% endblock %}
+    </div>
+</div>
+% endblock
