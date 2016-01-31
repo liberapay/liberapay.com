@@ -69,7 +69,7 @@ title = _("{0} community settings", c.name)
 
     <label>
         <span>{{ _("Sidebar text") }}</span>
-        <textarea class="form-control" name="sidebar" rows=5
+        <textarea class="form-control vertical-resize" name="sidebar" rows=10
                   maxlength="{{ c.sidebar_maxlength }}"
             >{{ sidebar or '' }}</textarea>
         <p class="help-block">

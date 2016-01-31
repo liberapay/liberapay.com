@@ -144,7 +144,7 @@ title = participant.username
             <form action="#statement" method="POST" class="statement">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                 <input type="hidden" name="lang" value="{{ lang }}" />
-                <textarea name="statement" rows="15" class="form-control"
+                <textarea name="statement" rows="15" class="form-control vertical-resize"
                           placeholder="{{ stmt_placeholder }}"
                           data-confirm-discard="{{ confirm_discard }}"
                     >{{ statement or '' }}</textarea>
