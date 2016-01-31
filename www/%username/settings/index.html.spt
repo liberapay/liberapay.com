@@ -8,7 +8,7 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Account")
 
-not_group = participant.kind != 'group'
+is_a_person = participant.kind in ('group', 'community')
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
@@ -35,7 +35,7 @@ not_group = participant.kind != 'group'
         <h3>{{ _("Account type") }}</h3>
         <p>{{ _(participant.kind.title()) }}</p>
 
-        % if not_group
+        % if is_a_person
         <form action="edit" method="POST" class="js-submit form-inline">
             <h3>{{ _("Password") }}</h3>
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />

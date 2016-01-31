@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- participants -- user accounts
 
-CREATE TYPE participant_kind AS ENUM ('individual', 'organization', 'group');
+CREATE TYPE participant_kind AS ENUM ('individual', 'organization', 'group', 'community');
 CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed');
 
 CREATE TABLE participants
@@ -57,14 +57,14 @@ CREATE TABLE participants
 , email_notif_bits      int                     NOT NULL DEFAULT 2147483647
 , pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
 
-, CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind='group') AND balance <> 0))
-, CONSTRAINT giving_chk CHECK (NOT (kind='group' AND giving <> 0))
-, CONSTRAINT goal_chk CHECK (NOT (kind='group' AND status='active' AND goal IS NOT NULL AND goal <= 0))
+, CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
+, CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
+, CONSTRAINT goal_chk CHECK (NOT (kind IN ('group', 'community') AND status='active' AND goal IS NOT NULL AND goal <= 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
 , CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))
-, CONSTRAINT password_chk CHECK ((status='stub' OR kind='group') = (password IS NULL))
-, CONSTRAINT secret_team_chk CHECK (NOT (kind='group' AND hide_receiving))
+, CONSTRAINT password_chk CHECK ((status='stub' OR kind IN ('group', 'community')) = (password IS NULL))
+, CONSTRAINT secret_team_chk CHECK (NOT (kind IN ('group', 'community') AND hide_receiving))
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
@@ -243,6 +243,7 @@ CREATE TABLE communities
 , ctime          timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
 , creator        bigint        NOT NULL REFERENCES participants
 , lang           text          NOT NULL
+, participant    bigint        NOT NULL REFERENCES participants
 , CHECK (nsubscribers >= 0)
 );
 
@@ -250,6 +251,8 @@ CREATE UNIQUE INDEX ON communities (lower(name));
 
 CREATE INDEX community_trgm_idx ON communities
     USING gist(name gist_trgm_ops);
+
+\i sql/community_with_participant.sql
 
 \i sql/update_community.sql
 
@@ -300,8 +303,8 @@ CREATE OR REPLACE FUNCTION check_member() RETURNS trigger AS $$
         m participants;
     BEGIN
         m := (SELECT p.*::participants FROM participants p WHERE id = NEW.member);
-        IF (m.kind = 'group') THEN
-            RAISE 'cannot add a team to a team';
+        IF (m.kind IN ('group', 'community')) THEN
+            RAISE 'cannot add a group account to a team';
         END IF;
         IF (m.status <> 'active') THEN
             RAISE 'cannot add an inactive user to a team';

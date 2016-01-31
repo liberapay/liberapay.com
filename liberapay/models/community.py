@@ -18,19 +18,26 @@ def normalize(name):
 
 class Community(Model):
 
-    typname = "communities"
+    typname = "community_with_participant"
 
     @classmethod
     def create(cls, name, creator_id, lang='mul'):
         if name_re.match(name) is None:
             raise InvalidCommunityName(name)
         try:
-            return cls.db.one("""
-                INSERT INTO communities
-                            (name, creator, lang)
-                     VALUES (%s, %s, %s)
-                  RETURNING communities.*::communities
-            """, (name, creator_id, lang))
+            with cls.db.get_cursor() as cursor:
+                p_id = cursor.one("""
+                    INSERT INTO participants
+                                (kind, status, join_time)
+                         VALUES ('community', 'active', now())
+                      RETURNING id
+                """)
+                return cursor.one("""
+                    INSERT INTO communities
+                                (name, creator, lang, participant)
+                         VALUES (%s, %s, %s, %s)
+                      RETURNING communities.*::community_with_participant
+                """, (name, creator_id, lang, p_id))
         except IntegrityError:
             raise CommunityAlreadyExists(name)
 
@@ -39,7 +46,7 @@ class Community(Model):
         """Return a listing of communities.
         """
         return db.all("""
-            SELECT c.*::communities
+            SELECT c.*, replace(name, '_', ' ') AS pretty_name
               FROM communities c
           ORDER BY nmembers DESC, name
         """)
@@ -49,7 +56,9 @@ class Community(Model):
         if name_re.match(name) is None:
             return
         return cls.db.one("""
-            SELECT c.*::communities FROM communities c WHERE lower(name)=%s;
+            SELECT c.*::community_with_participant
+              FROM communities c
+             WHERE lower(name)=%s
         """, (name.lower(),))
 
     @property

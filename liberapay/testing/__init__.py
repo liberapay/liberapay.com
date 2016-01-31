@@ -176,7 +176,7 @@ class Harness(unittest.TestCase):
                 kw2[key] = kw.pop(key)
 
         kind = kw.setdefault('kind', 'individual')
-        if kind != 'group':
+        if kind not in ('group', 'community'):
             kw.setdefault('password', 'x')
             kw.setdefault('session_token', username)
         kw.setdefault('status', 'active')

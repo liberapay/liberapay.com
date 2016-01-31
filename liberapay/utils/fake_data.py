@@ -45,20 +45,22 @@ def fake_participant(db, kind=None, is_admin=False):
     """Create a fake User.
     """
     username = faker.first_name() + fake_text_id(3)
+    kind = kind or random.choice(('individual', 'organization'))
+    is_a_person = kind in ('individual', 'organization')
     try:
         _fake_thing( db
                    , "participants"
                    , username=username
-                   , password=None if kind == 'group' else 'x'
+                   , password=None if not is_a_person else 'x'
                    , email=username+'@example.org'
                    , is_admin=is_admin
                    , balance=0
-                   , hide_giving=kind != 'group' and (random.randrange(5) == 0)
-                   , hide_receiving=kind != 'group' and (random.randrange(5) == 0)
+                   , hide_giving=is_a_person and (random.randrange(5) == 0)
+                   , hide_receiving=is_a_person and (random.randrange(5) == 0)
                    , is_suspicious=False
                    , status='active'
                    , join_time=faker.date_time_this_year()
-                   , kind=kind or random.choice(('individual', 'organization'))
+                   , kind=kind
                    , mangopay_user_id=username
                    , mangopay_wallet_id='-1'
                     )
@@ -203,7 +205,8 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     transfers = []
     for i in range(num_transfers):
         tipper, tippee = random.sample(participants, 2)
-        while tipper.kind == 'group' or tippee.kind == 'group':
+        while tipper.kind in ('group', 'community') or \
+              tippee.kind in ('group', 'community'):
             tipper, tippee = random.sample(participants, 2)
         sys.stdout.write("\rMaking Transfers (%i/%i)" % (i+1, num_transfers))
         sys.stdout.flush()
