@@ -105,7 +105,7 @@ class MixinTeam(object):
         """
         assert self.kind == 'group'
 
-        if take and check_max:
+        if take and check_max and take > 1:
             last_week = self.get_takes_last_week()
             max_this_week = self.compute_max_this_week(member.id, last_week)
             if take > max_this_week:
