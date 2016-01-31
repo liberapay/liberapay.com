@@ -90,12 +90,13 @@ class MixinTeam(object):
                            )
 
     def compute_max_this_week(self, member_id, last_week):
-        """2x the member's take last week, but at least 1 unit or a minimum
-        based on last week's median take.
+        """2x the member's take last week, or a minimum based on last week's
+        median take, or current income divided by the number of members if takes
+        were zero last week, or 1.
         """
         return max(
             last_week.get(member_id, 0) * 2,
-            last_week['_relative_min'],
+            last_week['_relative_min'] or self.receiving / self.nmembers,
             UNIT
         )
 
