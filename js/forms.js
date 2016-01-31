@@ -53,18 +53,3 @@ Liberapay.forms.success = function($form, $inputs, button) { return function(dat
         window.location.href = window.location.href;
     }
 }};
-
-Liberapay.forms.communityChooser = function() {
-    var $select = $('.community-chooser select');
-    if ($select.length === 0) return;
-    function create(name) {
-        window.location = '/for/new?name='+encodeURIComponent(name);
-    }
-    var chosenOpts = Liberapay.username ? {
-        create_option: create,
-        create_option_text: $('.community-chooser').data('add-msg'),
-    }: {};
-    $select.chosen(chosenOpts).change(function() {
-        window.location = '/for/'+$select.val();
-    });
-};

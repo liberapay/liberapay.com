@@ -5,7 +5,10 @@ query_cache = QueryCache(website.db, threshold=5)
 [---]
 
 top_communities = query_cache.all("""
-    SELECT * FROM communities ORDER BY nmembers DESC, name LIMIT 9
+    SELECT *, replace(name, '_', ' ') AS pretty_name
+      FROM communities
+  ORDER BY nmembers DESC, name
+     LIMIT 9
 """)
 
 [---]
@@ -51,7 +54,7 @@ top_communities = query_cache.all("""
             <ul class="communities memberships">
                 % for community in top_communities
                 <li>
-                    <a href="/for/{{ community.name }}/">{{ community.name }}</a>
+                    <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
                     % set n = community.nmembers
                     <div class="nmembers">
                         {{ ngettext("{n} member", "{n} members", n) }}

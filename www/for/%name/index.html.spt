@@ -30,7 +30,7 @@ members = query_cache.all("""
     OFFSET %s
 """, (community.id, limit, offset))
 
-title = community.name
+title = community.pretty_name
 
 [---]
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context

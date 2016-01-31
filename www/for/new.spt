@@ -38,8 +38,8 @@ title = _("Start a new community")
         <input class="form-control" name="name" value="{{ name }}"
                required maxlength="{{ name_maxlength }}" />
         <p class="help-block">{{ _(
-            "All unicode alphanumeric characters are allowed, as well as dots "
-            "(.) underscores (_) and dashes (-)."
+            "Use underscores (_) instead of spaces. All unicode alphanumeric "
+            "characters are allowed, as well as dots (.) and dashes (-)."
         ) + " " + _(
             "Maximum length is {0}.", name_maxlength
         ) }}</p>

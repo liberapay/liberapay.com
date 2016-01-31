@@ -13,7 +13,7 @@ name_re = re.compile(name_pattern, re.U)
 normalize_re = re.compile(r'[^%s]+' % name_allowed_chars_pattern, re.U)
 
 def normalize(name):
-    return normalize_re.sub('-', name).strip('-')
+    return normalize_re.sub('_', name).strip('_')
 
 
 class Community(Model):
@@ -34,11 +34,11 @@ class Community(Model):
         except IntegrityError:
             raise CommunityAlreadyExists(name)
 
-    @classmethod
-    def get_list(cls):
+    @staticmethod
+    def get_list(db):
         """Return a listing of communities.
         """
-        return cls.db.all("""
+        return db.all("""
             SELECT c.*::communities
               FROM communities c
           ORDER BY nmembers DESC, name
@@ -51,6 +51,10 @@ class Community(Model):
         return cls.db.one("""
             SELECT c.*::communities FROM communities c WHERE lower(name)=%s;
         """, (name.lower(),))
+
+    @property
+    def pretty_name(self):
+        return self.name.replace('_', ' ')
 
     def get_members(self, limit=None, offset=None):
         return self.db.all("""

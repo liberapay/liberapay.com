@@ -112,7 +112,7 @@ if query:
         <ul class="community memberships">
         % for result in communities
             <li>
-                <a href="/for/{{ result.name }}/">{{ result.name }}</a>
+                <a href="/for/{{ result.name }}/">{{ result.name.replace('_', ' ') }}</a>
                 <div class="nmembers">{{
                     ngettext("{n} member", "{n} members", result.nmembers)
                 }}</div>

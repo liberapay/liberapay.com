@@ -10,7 +10,7 @@
     <ul class="communities memberships">
         % for community in communities
         <li>
-            <a href="/for/{{ community.name }}/">{{ community.name }}</a>
+            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
             <div class="nmembers">{{
                 ngettext("with {n} other", "with {n} others", community.nmembers - 1)
             }}</div>
