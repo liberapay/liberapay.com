@@ -1,8 +1,6 @@
 # coding: utf8
 from __future__ import print_function, unicode_literals
 
-from collections import OrderedDict
-
 from aspen import Response
 
 from liberapay.utils import get_participant, markdown
@@ -29,12 +27,8 @@ else:
     else:
         statement, lang = participant.get_statement(request.accept_langs)
 
-pref_langs = set(request.accept_langs + participant.get_statement_langs())
-select_langs = OrderedDict((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
-select_langs.update([('', '---')])  # Separator
-select_langs.update(locale.languages_2)
-if not lang:
-    lang = select_langs.keys()[0]
+select_langs = get_lang_options(participant.get_statement_langs())
+lang = lang or next(iter(select_langs.keys()))
 stmt_placeholder = _("You don't have a profile statement in this language yet.")
 confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
 
@@ -56,6 +50,8 @@ edit = True
 title = participant.username
 
 [---] text/html
+% from "templates/select-lang.html" import lang_options with context
+
 % extends "templates/profile.html"
 
 % block scripts
@@ -139,14 +135,9 @@ title = participant.username
                  "Use the selector below to switch between them.") }}<br>
 
             <form action="#statement" method="GET" class="form-inline langs">
-                <select class="form-control" name="lang">
-                % for code, name in select_langs.items()
-                    <option value="{{ code }}"
-                            {{ 'selected' if code == lang }}
-                            {{ 'disabled' if not code }}
-                        >{{ name }}</option>
-                % endfor
-                </select>
+                <select class="form-control" name="lang">{{
+                    lang_options(select_langs, lang)
+                }}</select>
                 <button class="btn btn-default">{{ _("Switch") }}</button>
             </form>
 

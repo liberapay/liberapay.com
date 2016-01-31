@@ -21,16 +21,16 @@ class Community(Model):
     typname = "communities"
 
     @classmethod
-    def create(cls, name, creator_id):
+    def create(cls, name, creator_id, lang='mul'):
         if name_re.match(name) is None:
             raise InvalidCommunityName(name)
         try:
             return cls.db.one("""
                 INSERT INTO communities
-                            (name, creator)
-                     VALUES (%s, %s)
+                            (name, creator, lang)
+                     VALUES (%s, %s, %s)
                   RETURNING communities.*::communities
-            """, (name, creator_id))
+            """, (name, creator_id, lang))
         except IntegrityError:
             raise CommunityAlreadyExists(name)
 

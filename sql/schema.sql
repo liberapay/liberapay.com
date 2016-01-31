@@ -242,6 +242,7 @@ CREATE TABLE communities
 , nsubscribers   int           NOT NULL DEFAULT 0
 , ctime          timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
 , creator        bigint        NOT NULL REFERENCES participants
+, lang           text          NOT NULL
 , CHECK (nsubscribers >= 0)
 );
 

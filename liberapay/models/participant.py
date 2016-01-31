@@ -839,8 +839,8 @@ class Participant(Model, MixinTeam):
     # Communities
     # ===========
 
-    def create_community(self, name):
-        return Community.create(name, self.id)
+    def create_community(self, name, **kw):
+        return Community.create(name, self.id, **kw)
 
     def update_community_status(self, table, on, c_id):
         assert table in ('memberships', 'subscriptions')
