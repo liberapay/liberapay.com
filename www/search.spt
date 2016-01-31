@@ -73,11 +73,17 @@ if query:
 % from 'templates/avatar-url.html' import avatar_url, avatar_img with context
 % block content
 
-    % include "templates/search-box.html"
-
     % set usernames = results.get('usernames')
     % set communities = results.get('communities')
     % set statements = results.get('statements')
+
+    % if query and not (usernames or communities or statements)
+        <p class="alert alert-warning">{{
+            _("Sorry, we didn't find anything matching your query."
+        ) }}</p>
+    % endif
+
+    % include "templates/search-box.html"
 
     <div class="row">
     % if usernames
@@ -140,10 +146,7 @@ if query:
     </div>
     % endif
 
-    % if query and not (usernames or communities or statements)
-        <p>{{ _("Sorry, we didn't find anything matching your query.") }}</p>
-    % endif
-
+    <br>
     <h3>{{ _("Looking for a specific user of a social network?") }}</h3>
     % include "templates/jump.html"
 
