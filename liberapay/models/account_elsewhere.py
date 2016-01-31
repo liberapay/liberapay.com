@@ -2,12 +2,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from datetime import timedelta
 import json
-try:
-    from urllib.parse import urlsplit, urlunsplit
-except ImportError:
-    from urlparse import urlsplit, urlunsplit
 import uuid
 import xml.etree.ElementTree as ET
+
+from six.moves.urllib.parse import urlsplit, urlunsplit
 
 from aspen import Response
 from aspen.utils import utcnow

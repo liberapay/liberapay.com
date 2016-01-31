@@ -1,10 +1,8 @@
 from __future__ import print_function, unicode_literals
 
-try:
-    from http.cookies import SimpleCookie
-except ImportError:
-    from Cookie import SimpleCookie
 from decimal import Decimal
+
+from six.moves.http_cookies import SimpleCookie
 
 import pytest
 

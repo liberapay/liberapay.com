@@ -7,11 +7,9 @@ from hashlib import pbkdf2_hmac
 from os import urandom
 import pickle
 from time import sleep
-try:
-    from urllib.parse import quote
-except ImportError:
-    from urllib import quote
 import uuid
+
+from six.moves.urllib.parse import quote
 
 from aspen.utils import utcnow
 import aspen_jinja2_renderer
