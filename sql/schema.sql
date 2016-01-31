@@ -365,13 +365,16 @@ CREATE TABLE emails
 
 -- profile statements
 
+CREATE TYPE stmt_type AS ENUM ('profile', 'sidebar', 'subtitle');
+
 CREATE TABLE statements
 ( participant    bigint      NOT NULL REFERENCES participants
+, type           stmt_type   NOT NULL
 , lang           text        NOT NULL
 , content        text        NOT NULL CHECK (content <> '')
 , search_vector  tsvector
 , search_conf    regconfig   NOT NULL
-, UNIQUE (participant, lang)
+, UNIQUE (participant, type, lang)
 );
 
 CREATE INDEX statements_fts_idx ON statements USING gist(search_vector);

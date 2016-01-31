@@ -272,43 +272,51 @@ class Participant(Model, MixinTeam):
     # Statement
     # =========
 
-    def get_statement(self, langs):
+    def get_statement(self, langs, type='profile'):
         """Get the participant's statement in the language that best matches
         the list provided.
         """
+        p_id = self.id
         return self.db.one("""
             SELECT content, lang
               FROM statements
               JOIN enumerate(%(langs)s) langs ON langs.value = statements.lang
-             WHERE participant=%(id)s
+             WHERE participant = %(p_id)s
+               AND type = %(type)s
           ORDER BY langs.rank
              LIMIT 1
-        """, dict(id=self.id, langs=langs), default=(None, None))
+        """, locals(), default=(None, None))
 
-    def get_statement_langs(self):
-        return self.db.all("SELECT lang FROM statements WHERE participant=%s",
-                           (self.id,))
+    def get_statement_langs(self, type='profile'):
+        return self.db.all("""
+            SELECT lang FROM statements WHERE participant=%s AND type=%s
+        """, (self.id, type))
 
-    def upsert_statement(self, lang, statement):
+    def upsert_statement(self, lang, statement, type='profile'):
         if not statement:
-            self.db.run("DELETE FROM statements WHERE participant=%s AND lang=%s",
-                        (self.id, lang))
+            self.db.run("""
+                DELETE FROM statements
+                 WHERE participant=%s
+                   AND type=%s
+                   AND lang=%s
+            """, (self.id, type, lang))
             return
         r = self.db.one("""
             UPDATE statements
                SET content=%s
              WHERE participant=%s
+               AND type=%s
                AND lang=%s
          RETURNING true
-        """, (statement, self.id, lang))
+        """, (statement, self.id, type, lang))
         if not r:
             search_conf = i18n.SEARCH_CONFS.get(lang, 'simple')
             try:
                 self.db.run("""
                     INSERT INTO statements
-                                (lang, content, participant, search_conf)
-                         VALUES (%s, %s, %s, %s)
-                """, (lang, statement, self.id, search_conf))
+                                (lang, content, participant, search_conf, type)
+                         VALUES (%s, %s, %s, %s, %s)
+                """, (lang, statement, self.id, search_conf, type))
             except IntegrityError:
                 return self.upsert_statement(lang, statement)
 

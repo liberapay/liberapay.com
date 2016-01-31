@@ -20,6 +20,9 @@ class Community(Model):
 
     typname = "community_with_participant"
 
+    subtitle_maxlength = 120
+    sidebar_maxlength = 4096
+
     @classmethod
     def create(cls, name, creator_id, lang='mul'):
         if name_re.match(name) is None:
