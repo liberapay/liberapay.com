@@ -301,7 +301,7 @@ class Payday(object):
                      WHERE t.team = team_id
                 );
                 IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
-                ratio := total_income / total_takes;
+                ratio := min(total_income / total_takes, 1::numeric);
 
                 OPEN our_takes;
                 FETCH our_takes INTO take;
