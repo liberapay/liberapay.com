@@ -211,6 +211,12 @@ msgstr "Les frais de transaction seraient supérieurs à 10%."
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" n'est pas un nombre valide."
 
+msgid "The \"{0}\" community already exists."
+msgstr ""
+
+msgid "\"{0}\" is not a valid community name."
+msgstr ""
+
 msgid "Transfering the money failed, please try again."
 msgstr "Le transfert de l'argent a échoué, merci d'essayer à nouveau."
 
@@ -304,17 +310,6 @@ msgstr "Notifications"
 msgid "Contact Us"
 msgstr "Nous Contacter"
 
-msgid "Add a new community"
-msgstr "Ajouter une nouvelle communauté"
-
-msgid "Find or create a community…"
-msgstr "Trouver ou créer une communauté…"
-
-msgid "{n} Member"
-msgid_plural "{n} Members"
-msgstr[0] "{n} Membre"
-msgstr[1] "{n} Membres"
-
 msgid "Communities"
 msgstr "Communautés"
 
@@ -325,6 +320,9 @@ msgstr[1] "avec {n} autres"
 
 msgid "Leave"
 msgstr "Quitter"
+
+msgid "Explore communities"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Annuler"
@@ -449,8 +447,11 @@ msgstr "Dons"
 msgid "Receiving"
 msgstr "Revenus"
 
-msgid "History"
-msgstr "Historique"
+msgid "Wallet"
+msgstr "Portefeuille"
+
+msgid "Withdraw money"
+msgstr "Effectuer un retrait"
 
 msgid "Settings"
 msgstr "Paramètres"
@@ -537,8 +538,7 @@ msgid "Your donation"
 msgstr "Votre don"
 
 msgid "Not sure how much to donate? Here are some standard amounts:"
-msgstr ""
-"Vous ne savez pas trop combien donner ? Voici quelques montants standard :"
+msgstr "Vous ne savez pas trop combien donner ? Voici quelques montants standard :"
 
 msgid "per week"
 msgstr "par semaine"
@@ -564,10 +564,10 @@ msgstr "Qui vous inspire ? Voyez s'ils sont sur Liberapay :"
 msgid "Explore our communities:"
 msgstr "Explorez nos communautés :"
 
-msgid "{0}{n}{1} Member"
-msgid_plural "{0}{n}{1} Members"
-msgstr[0] "{0}{n}{1} Membre"
-msgstr[1] "{0}{n}{1} Membres"
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "More"
 msgstr "Plus"
@@ -611,6 +611,9 @@ msgstr "{0}Ajoutez nos boutons{1} sur votre blog ou site."
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Contactez ceux qui bénéficient de votre travail et demandez-leur de vous soutenir."
 
+msgid "Sorry, we didn't find anything matching your query."
+msgstr "Désolé, nous n'avons rien trouvé qui corresponde à votre requête."
+
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
 msgstr[0] "Trouvé un nom d'utilisateur"
@@ -625,9 +628,6 @@ msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
 msgstr[0] "Trouvé une présentation d'utilisateur"
 msgstr[1] "Trouvé des présentations d'utilisateurs"
-
-msgid "Sorry, we didn't find anything matching your query."
-msgstr "Désolé, nous n'avons rien trouvé qui corresponde à votre requête."
 
 msgid "Looking for a specific user of a social network?"
 msgstr "Cherchez-vous un utilisateur spécifique d'un réseau social ?"
@@ -645,9 +645,7 @@ msgid "View {0}'s profile"
 msgstr "Voir le profil de {0}"
 
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
-msgstr ""
-"Nous avons confirmé, par un processus de vérification automatique, que {0} a "
-"le contrôle des comptes suivants sur d'autres plateformes :"
+msgstr "Nous avons confirmé, par un processus de vérification automatique, que {0} a le contrôle des comptes suivants sur d'autres plateformes :"
 
 msgid "What is this site?"
 msgstr "Qu'est-ce que ce site ?"
@@ -896,67 +894,164 @@ msgstr "dans les 30 derniers jours"
 msgid "Cancelled"
 msgstr "Annulé"
 
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Pourquoi essayez-vous d'ajouter encore de l'argent à votre portefeuille ? Veuillez nous contacter sur support@liberapay.com si vous avez une bonne raison."
+msgid "{0} receives {1} per week"
+msgstr "{0} reçoit {1} par semaine"
 
-msgid "Request in progress, please wait…"
-msgstr "Requête en cours, patience…"
+msgid "Euros Received Per Week"
+msgstr "Revenus par semaine (en euros)"
 
-msgid "JavaScript is required"
-msgstr "JavaScript est nécessaire"
+msgid "weeks"
+msgstr "semaines"
 
-msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
-msgstr "Nous avons débité {0} sur votre carte bancaire, {1} sont arrivés dans votre compte Liberapay, {2} sont partis en frais de transaction."
+msgid "Number of Patrons Per Week"
+msgstr "Nombre de donateurs par semaine"
 
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Nous n'avons pas réussi à débiter {0} sur votre carte bancaire. Message d'erreur : {1}"
+msgid "Your take is now {0} (you can't go higher this week)."
+msgstr "Votre part est désormais {0} (vous ne pouvez pas prendre plus cette semaine)."
 
-msgid "View Receipt"
-msgstr "Voir le reçu"
+msgid "Your take is now {0}."
+msgstr "Votre part est désormais {0}."
 
-msgid "Your donations are funded by your income."
-msgstr "Vos dons sont financés par vos revenus."
+msgid "You are not invited to join this team."
+msgstr "Vous n'avez pas été invité à rejoindre cette équipe."
 
-msgid "Go back"
-msgstr "Retour"
+msgid "You have already accepted this invitation."
+msgstr "Vous avez déjà accepté cette invitation."
 
-msgid "{0} ({n} week)"
-msgid_plural "{0} ({n} weeks)"
-msgstr[0] "{0} ({n} semaine)"
-msgstr[1] "{0} ({n} semaines)"
+msgid "You have already refused this invitation."
+msgstr "Vous avez déjà refusé cette invitation."
 
-msgid "Credit card"
-msgstr "Carte de crédit"
+msgid "You are not a member of this team."
+msgstr "Vous ne faites pas partie de cette équipe."
 
-msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
-msgstr "Votre navigateur ne nous autorise pas à envoyer les informations de votre carte bancaire à notre gestionnaire de paiements. Vérifiez que cette requête n'est pas bloquée par une extension comme NoScript."
+msgid "User not found."
+msgstr "Utilisateur introuvable."
 
-msgid "Credit Card Number"
-msgstr "Numéro de carte"
+msgid "A team can't join a team"
+msgstr "Une équipe ne peut pas rejoindre une équipe"
 
-msgid "This card number is invalid."
-msgstr "Ce numéro de carte est invalide."
+msgid "You can't invite an inactive user to join a team."
+msgstr "Vous ne pouvez pas inviter un utilisateur inactif à rejoindre une équipe."
 
-msgid "MM/YY"
-msgstr "MM/AA"
+msgid "{0} has been invited to the team."
+msgstr "{0} a été invité à rejoindre l'équipe."
 
-msgid "Expiration Month"
-msgstr "Mois d'expiration"
+msgid "{0} is already a member of this team."
+msgstr "{0} est déjà membre de cette équipe."
 
-msgid "This expiration date is invalid."
-msgstr "Cette data d'expiration est invalide."
+msgid "Are you sure you want to leave this team?"
+msgstr "Êtes-vous sûr de vouloir quitter cette équipe ?"
 
-msgid "CVV"
-msgstr "CVC"
+msgid "You are now a member of the team."
+msgstr "Vous faites maintenant partie de l'équipe."
 
-msgid "Verification code (3 digits located on the back of the card)"
-msgstr "Code de vérification (les 3 chiffres à l'arrière de votre carte)"
+msgid "Receipt"
+msgstr "Récépissé"
 
-msgid "This verification code is invalid."
-msgstr "Ce code de vérification est invalide."
+msgid "Amount:"
+msgstr "Montant :"
 
-msgid "Remember the card number for next time"
-msgstr "Se rappeler du numéro de carte pour la prochaine fois"
+msgid "Fee:"
+msgstr "Frais :"
+
+msgid "Total:"
+msgstr "Total :"
+
+msgid "Transaction ID: {0}"
+msgstr "Numéro de transaction : {0}"
+
+msgid "You are not a member of any team."
+msgstr "Vous n'êtes membre d'aucune équipe."
+
+msgid "Tips Received, by Number of Tips"
+msgstr "Dons reçus, par nombre de dons"
+
+msgid "Tips Received, by Amount"
+msgstr "Dons reçus, par montant"
+
+msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
+msgstr "Vous avez encore de l'argent dans ce compte Liberapay, choisissez une méthode de versement ci-dessous ou contactez nous."
+
+msgid "Close Account"
+msgstr "Fermer mon compte"
+
+msgid "Try Again Later"
+msgstr "Réessayez plus tard"
+
+msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
+msgstr "Désolé, nous procédons au paiement en ce moment et nous ne pouvons pas clore un compte maintenant. Réessayez dans quelques heures."
+
+msgid "You have {0} in your wallet. What should we do with it?"
+msgstr "Vous avez {0} dans votre portefeuille. Que voulez-vous en faire ?"
+
+msgid "Withdraw it"
+msgstr "Les retirer"
+
+msgid "Give it to the {0}people I donate to{1}"
+msgstr "Les verser aux {0}personnes auxquelles je fais des dons{1}"
+
+msgid "If neither option works for you, please contact support@liberapay.com."
+msgstr "Si aucune option ne vous convient, merci d'envoyer un email à support@liberapay.com."
+
+msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
+msgstr "Il y a un transfert en cours vers votre compte en banque. S'il échoue, cet argent retournera dans votre portefeuille et votre compte sera réouvert automatiquement."
+
+msgid "Personal Information"
+msgstr "Informations personnelles"
+
+msgid "We immediately clear out most of the information in your profile."
+msgstr "Nous effacerons automatiquement la plupart des informations de votre profil."
+
+msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
+msgstr "Les champs de profils, les demandes de dons, les dons que vous avez reçu et ceux que vous avez attribué seront automatiquement effacés. Vous serez également effacé du registre des groupes et des équipes desquelles vous avez fait parti."
+
+msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
+msgstr "En revanche, l'historique des dons que vous avez reçus et attribués {0}ne sera pas{1} supprimé du site, car c'est une information que nous considérons comme utile aux autres utilisateurs (ceux qui ont reçu de vous ou à qui vous avez donné)."
+
+msgid "Username, email and password"
+msgstr "Identifiant, email et mot de passe"
+
+msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
+msgstr "Nous pourrions transférer votre identifiant si quelqu'un d'autre en fait la demande, mais au plus tôt un an après la fermeture de votre compte (à moins que vous n'ayez enfreint la loi sur une marque déposée)."
+
+msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
+msgstr "Nous ne supprimerons pas immédiatement vos email et mot de passe. Pendant un moment, vous aurez donc la possibilité de rouvrir votre compte en vous identifiant avant qu'il ne soit définitivement archivé."
+
+msgid "Ready?"
+msgstr "Prêt ?"
+
+msgid "Yes, close my Liberapay account"
+msgstr "Oui, je veux fermer mon compte Liberapay"
+
+msgid "Incorrect password"
+msgstr "Mot de passe incorrect"
+
+msgid "Your password has been changed."
+msgstr "Votre mot de passe a été modifié."
+
+msgid "Your privacy settings have been changed."
+msgstr "Vos paramètres de confidentialité ont été changé."
+
+msgid "Account"
+msgstr "Compte"
+
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "Avez-vous mis des liens vers votre profil Liberapay sur d'autres sites ? Pensez à les mettre à jour !"
+
+msgid "Account type"
+msgstr "Type de compte"
+
+msgid "Current password"
+msgstr "Mot de passe actuel"
+
+msgid "New password"
+msgstr "Nouveau mot de passe"
+
+msgid "Privacy"
+msgstr "Confidentialité"
+
+msgid "Close"
+msgstr "Fermer"
 
 msgid "Export History"
 msgstr "Exporter l'historique"
@@ -1024,9 +1119,6 @@ msgstr "État"
 msgid "Notes"
 msgstr "Notes"
 
-msgid "Receipt"
-msgstr "Récépissé"
-
 msgid "anonymous donation for your role in the {0} team"
 msgstr "don anonyme pour votre rôle dans l'équipe {0}"
 
@@ -1045,80 +1137,67 @@ msgstr "don à {0}"
 msgid "No transactions to show."
 msgstr "Aucune transaction à afficher."
 
-msgid "{0} receives {1} per week"
-msgstr "{0} reçoit {1} par semaine"
+msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
+msgstr "Pourquoi essayez-vous d'ajouter encore de l'argent à votre portefeuille ? Veuillez nous contacter sur support@liberapay.com si vous avez une bonne raison."
 
-msgid "Euros Received Per Week"
-msgstr "Revenus par semaine (en euros)"
+msgid "Request in progress, please wait…"
+msgstr "Requête en cours, patience…"
 
-msgid "weeks"
-msgstr "semaines"
+msgid "JavaScript is required"
+msgstr "JavaScript est nécessaire"
 
-msgid "Number of Patrons Per Week"
-msgstr "Nombre de donateurs par semaine"
+msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr "Nous avons débité {0} sur votre carte bancaire, {1} sont arrivés dans votre compte Liberapay, {2} sont partis en frais de transaction."
 
-msgid "Your take is now {0} (you can't go higher this week)."
-msgstr "Votre part est désormais {0} (vous ne pouvez pas prendre plus cette semaine)."
+msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
+msgstr "Nous n'avons pas réussi à débiter {0} sur votre carte bancaire. Message d'erreur : {1}"
 
-msgid "Your take is now {0}."
-msgstr "Votre part est désormais {0}."
+msgid "View Receipt"
+msgstr "Voir le reçu"
 
-msgid "You are not invited to join this team."
-msgstr "Vous n'avez pas été invité à rejoindre cette équipe."
+msgid "Your donations are funded by your income."
+msgstr "Vos dons sont financés par vos revenus."
 
-msgid "You have already accepted this invitation."
-msgstr "Vous avez déjà accepté cette invitation."
+msgid "Go back"
+msgstr "Retour"
 
-msgid "You have already refused this invitation."
-msgstr "Vous avez déjà refusé cette invitation."
+msgid "{0} ({n} week)"
+msgid_plural "{0} ({n} weeks)"
+msgstr[0] "{0} ({n} semaine)"
+msgstr[1] "{0} ({n} semaines)"
 
-msgid "You are not a member of this team."
-msgstr "Vous ne faites pas partie de cette équipe."
+msgid "Credit card"
+msgstr "Carte de crédit"
 
-msgid "User not found."
-msgstr "Utilisateur introuvable."
+msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
+msgstr "Votre navigateur ne nous autorise pas à envoyer les informations de votre carte bancaire à notre gestionnaire de paiements. Vérifiez que cette requête n'est pas bloquée par une extension comme NoScript."
 
-msgid "A team can't join a team"
-msgstr "Une équipe ne peut pas rejoindre une équipe"
+msgid "Credit Card Number"
+msgstr "Numéro de carte"
 
-msgid "You can't invite an inactive user to join a team."
-msgstr "Vous ne pouvez pas inviter un utilisateur inactif à rejoindre une équipe."
+msgid "This card number is invalid."
+msgstr "Ce numéro de carte est invalide."
 
-msgid "{0} has been invited to the team."
-msgstr "{0} a été invité à rejoindre l'équipe."
+msgid "MM/YY"
+msgstr "MM/AA"
 
-msgid "{0} is already a member of this team."
-msgstr "{0} est déjà membre de cette équipe."
+msgid "Expiration Month"
+msgstr "Mois d'expiration"
 
-msgid "Are you sure you want to leave this team?"
-msgstr "Êtes-vous sûr de vouloir quitter cette équipe ?"
+msgid "This expiration date is invalid."
+msgstr "Cette data d'expiration est invalide."
 
-msgid "You are now a member of the team."
-msgstr "Vous faites maintenant partie de l'équipe."
+msgid "CVV"
+msgstr "CVC"
 
-msgid "Amount:"
-msgstr "Montant :"
+msgid "Verification code (3 digits located on the back of the card)"
+msgstr "Code de vérification (les 3 chiffres à l'arrière de votre carte)"
 
-msgid "Fee:"
-msgstr "Frais :"
+msgid "This verification code is invalid."
+msgstr "Ce code de vérification est invalide."
 
-msgid "Total:"
-msgstr "Total :"
-
-msgid "Transaction ID: {0}"
-msgstr "Numéro de transaction : {0}"
-
-msgid "Withdraw money"
-msgstr "Effectuer un retrait"
-
-msgid "You are not a member of any team."
-msgstr "Vous n'êtes membre d'aucune équipe."
-
-msgid "Tips Received, by Number of Tips"
-msgstr "Dons reçus, par nombre de dons"
-
-msgid "Tips Received, by Amount"
-msgstr "Dons reçus, par montant"
+msgid "Remember the card number for next time"
+msgstr "Se rappeler du numéro de carte pour la prochaine fois"
 
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
 msgstr "{0} ont été retirés de votre portefeuille Liberapay. Si le transfert abouti, {1} arriveront dans votre compte bancaire et {2} seront payés en frais de transaction."
@@ -1224,93 +1303,6 @@ msgstr "Code postal"
 
 msgid "Alphanumeric (with no spaces)"
 msgstr "Alphanumérique (sans espaces)"
-
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "Vous avez encore de l'argent dans ce compte Liberapay, choisissez une méthode de versement ci-dessous ou contactez nous."
-
-msgid "Close Account"
-msgstr "Fermer mon compte"
-
-msgid "Try Again Later"
-msgstr "Réessayez plus tard"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Désolé, nous procédons au paiement en ce moment et nous ne pouvons pas clore un compte maintenant. Réessayez dans quelques heures."
-
-msgid "Wallet"
-msgstr "Portefeuille"
-
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr "Vous avez {0} dans votre portefeuille. Que voulez-vous en faire ?"
-
-msgid "Withdraw it"
-msgstr "Les retirer"
-
-msgid "Give it to the {0}people I donate to{1}"
-msgstr "Les verser aux {0}personnes auxquelles je fais des dons{1}"
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr "Si aucune option ne vous convient, merci d'envoyer un email à support@liberapay.com."
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr "Il y a un transfert en cours vers votre compte en banque. S'il échoue, cet argent retournera dans votre portefeuille et votre compte sera réouvert automatiquement."
-
-msgid "Personal Information"
-msgstr "Informations personnelles"
-
-msgid "We immediately clear out most of the information in your profile."
-msgstr "Nous effacerons automatiquement la plupart des informations de votre profil."
-
-msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
-msgstr "Les champs de profils, les demandes de dons, les dons que vous avez reçu et ceux que vous avez attribué seront automatiquement effacés. Vous serez également effacé du registre des groupes et des équipes desquelles vous avez fait parti."
-
-msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
-msgstr "En revanche, l'historique des dons que vous avez reçus et attribués {0}ne sera pas{1} supprimé du site, car c'est une information que nous considérons comme utile aux autres utilisateurs (ceux qui ont reçu de vous ou à qui vous avez donné)."
-
-msgid "Username, email and password"
-msgstr "Identifiant, email et mot de passe"
-
-msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr "Nous pourrions transférer votre identifiant si quelqu'un d'autre en fait la demande, mais au plus tôt un an après la fermeture de votre compte (à moins que vous n'ayez enfreint la loi sur une marque déposée)."
-
-msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr "Nous ne supprimerons pas immédiatement vos email et mot de passe. Pendant un moment, vous aurez donc la possibilité de rouvrir votre compte en vous identifiant avant qu'il ne soit définitivement archivé."
-
-msgid "Ready?"
-msgstr "Prêt ?"
-
-msgid "Yes, close my Liberapay account"
-msgstr "Oui, je veux fermer mon compte Liberapay"
-
-msgid "Incorrect password"
-msgstr "Mot de passe incorrect"
-
-msgid "Your password has been changed."
-msgstr "Votre mot de passe a été modifié."
-
-msgid "Your privacy settings have been changed."
-msgstr "Vos paramètres de confidentialité ont été changé."
-
-msgid "Account"
-msgstr "Compte"
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Avez-vous mis des liens vers votre profil Liberapay sur d'autres sites ? Pensez à les mettre à jour !"
-
-msgid "Account type"
-msgstr "Type de compte"
-
-msgid "Current password"
-msgstr "Mot de passe actuel"
-
-msgid "New password"
-msgstr "Nouveau mot de passe"
-
-msgid "Privacy"
-msgstr "Confidentialité"
-
-msgid "Close"
-msgstr "Fermer"
 
 msgid "Donation Button"
 msgstr "Bouton de don"
@@ -1586,12 +1578,12 @@ msgstr "Les équipes n'ont pas de hiérarchie, tous les membres sont égaux et d
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
 msgstr "Vous pouvez modifier vos parts depuis {0}votre gestionnaire d'équipes{1}. Il contient des tableaux qui montrent les parts nominales de tous les membres pour le prochain et le précédent jours de paie, ainsi qu'une estimation du montant réel d'argent que chaque membre recevra durant le prochain jour de paie."
 
-msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income."
-msgstr "Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, les montants réels sont calculés par le système : d'abord il fait la somme des parts nominales, puis il calcule le pourcentage que chaque part représente, et enfin il applique ces pourcentages au revenu disponible."
+msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
+msgstr ""
 
 #, python-format
-msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: two times the member's take in the previous payday, 70% of the median take in the previous payday, and the number 1."
-msgstr "Les parts nominales sont limitées, elles ne peuvent pas être augmentées au-dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au précédent jour de paie. La limite exacte est le maximum de ces trois valeurs : deux fois la part du membre mercredi dernier, 70 % de la médiane des parts mercredi dernier, et le nombre 1."
+msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
+msgstr ""
 
 msgid "Removing team membership"
 msgstr "Quitter une équipe"
@@ -1609,6 +1601,12 @@ msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
 msgstr[0] "Il y a {n} communauté sur Liberapay."
 msgstr[1] "Il y a {n} communautés sur Liberapay."
+
+msgid "Search communities"
+msgstr ""
+
+msgid "Start a new community"
+msgstr ""
 
 msgid "Popular Communities"
 msgstr "Communautés populaires"
@@ -1632,19 +1630,36 @@ msgstr "% financé"
 msgid "Receiving{0} Per Member (€)"
 msgstr "Revenu{0} par membre (€)"
 
-msgid "You're the first one here!"
-msgstr "Vous êtes la première personne ici !"
+msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
+msgstr ""
 
-msgid "Bring the {0} community to Liberapay to find like-minded people to give to."
-msgstr "Amenez la communauté {0} sur Liberapay pour trouver des gens comme vous à qui donner."
+msgid "Maximum length is {0}."
+msgstr ""
+
+msgid "Language of the name"
+msgstr ""
+
+msgid "{0} community settings"
+msgstr ""
+
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr ""
+
+msgid "Short description"
+msgstr ""
+
+msgid "Sidebar text"
+msgstr ""
 
 msgid "This community was created {0} ago and has {n} member."
 msgid_plural "This community was created {0} ago and has {n} members."
 msgstr[0] "Cette communauté a été créé il y a {0} et compte {n} membre."
 msgstr[1] "Cette communauté a été créé il y a {0} et compte {n} membres."
 
-msgid "to join the {0} community on Liberapay."
-msgstr "pour devenir membre de la communauté {0} sur Liberapay."
+msgid ""
+"Are you a contributor in the {0} community? Then join it on Liberapay!\n"
+"Soon you'll be able to advertise your community projects here and post status updates about your work."
+msgstr ""
 
 msgid "Join"
 msgstr "Rejoindre"
@@ -1652,14 +1667,19 @@ msgstr "Rejoindre"
 msgid "New Members"
 msgstr "Nouveaux membres"
 
-msgid "Top Givers"
-msgstr "Membres qui donnent le plus"
+msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
+msgstr ""
 
-msgid "Anonymous"
-msgstr "Anonyme"
+msgid "Unsubscribe"
+msgstr ""
 
-msgid "Top Receivers"
-msgstr "Membres qui reçoivent le plus"
+msgid "Subscribe"
+msgstr ""
+
+msgid "{n} subscriber"
+msgid_plural "{n} subscribers"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Please Confirm"
 msgstr "Veuillez confirmer"
@@ -1741,11 +1761,7 @@ msgstr[0] "{0} est une équipe avec {n} membre public"
 msgstr[1] "{0} est une équipe avec {n} membres publics"
 
 msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
-msgstr ""
-"Liberapay vous permet de faire une promesse de don à quelqu'un qui n'a pas "
-"encore rejoint le site. Le don sera activé automatiquement si la personne "
-"s'inscrit pour le recevoir. Nous vous enverrons une notification à ce "
-"moment là."
+msgstr "Liberapay vous permet de faire une promesse de don à quelqu'un qui n'a pas encore rejoint le site. Le don sera activé automatiquement si la personne s'inscrit pour le recevoir. Nous vous enverrons une notification à ce moment là."
 
 msgid "{0} has opted out of Liberapay"
 msgstr "{0} s'est désinscrit de Liberapay"
@@ -1800,3 +1816,4 @@ msgstr "refuse d'utiliser Liberapay"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "n'est pas encore inscrit sur Liberapay"
+

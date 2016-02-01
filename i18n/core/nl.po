@@ -209,6 +209,12 @@ msgstr ""
 msgid "\"{0}\" is not a valid number."
 msgstr ""
 
+msgid "The \"{0}\" community already exists."
+msgstr ""
+
+msgid "\"{0}\" is not a valid community name."
+msgstr ""
+
 msgid "Transfering the money failed, please try again."
 msgstr ""
 
@@ -302,17 +308,6 @@ msgstr "Notificaties"
 msgid "Contact Us"
 msgstr "Contact"
 
-msgid "Add a new community"
-msgstr ""
-
-msgid "Find or create a community…"
-msgstr ""
-
-msgid "{n} Member"
-msgid_plural "{n} Members"
-msgstr[0] "{n} Lid"
-msgstr[1] "{n} Leden"
-
 msgid "Communities"
 msgstr "Gemeenschappen"
 
@@ -323,6 +318,9 @@ msgstr[1] "met {n} anderen"
 
 msgid "Leave"
 msgstr "Verlaat"
+
+msgid "Explore communities"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Annuleer"
@@ -447,8 +445,11 @@ msgstr "Geven"
 msgid "Receiving"
 msgstr "Ontvangt"
 
-msgid "History"
-msgstr "Geschiedenis"
+msgid "Wallet"
+msgstr ""
+
+msgid "Withdraw money"
+msgstr ""
 
 msgid "Settings"
 msgstr "Instellingen"
@@ -562,10 +563,10 @@ msgstr "Wie inspireert u? Kijk of ze ook lid zijn van Liberapay:"
 msgid "Explore our communities:"
 msgstr ""
 
-msgid "{0}{n}{1} Member"
-msgid_plural "{0}{n}{1} Members"
-msgstr[0] "{0}{n}{1} lid"
-msgstr[1] "{0}{n}{1} leden"
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "More"
 msgstr "Meer"
@@ -609,6 +610,9 @@ msgstr ""
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr ""
 
+msgid "Sorry, we didn't find anything matching your query."
+msgstr "Sorry, we hebben niks gevonden wat voldoet aan je zoekopdracht."
+
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
 msgstr[0] "De volgende overeenkomende gebruikersnaam is gevonden"
@@ -623,9 +627,6 @@ msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
 msgstr[0] "De volgende overeenkomende gebruikersverklaring is gevonden"
 msgstr[1] "De volgende overeenkomende gebruikersverklaringen zijn gevonden"
-
-msgid "Sorry, we didn't find anything matching your query."
-msgstr "Sorry, we hebben niks gevonden wat voldoet aan je zoekopdracht."
 
 msgid "Looking for a specific user of a social network?"
 msgstr "Ben je op zoek naar één specifieke gebruiker van een sociaal netwerk?"
@@ -892,67 +893,164 @@ msgstr "in de afgelopen 30 dagen"
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
+msgid "{0} receives {1} per week"
+msgstr "{0} ontvangt {1} per week"
+
+msgid "Euros Received Per Week"
+msgstr "Euro ontvangen per week"
+
+msgid "weeks"
+msgstr "weken"
+
+msgid "Number of Patrons Per Week"
+msgstr "Aantal patroons per week"
+
+msgid "Your take is now {0} (you can't go higher this week)."
+msgstr "Uw deel van de opbrengst is {0} (het is niet mogelijk om deze week meer te ontvangen)."
+
+msgid "Your take is now {0}."
+msgstr "Uw deel van de opbrengst is {0}."
+
+msgid "You are not invited to join this team."
 msgstr ""
 
-msgid "Request in progress, please wait…"
+msgid "You have already accepted this invitation."
 msgstr ""
 
-msgid "JavaScript is required"
+msgid "You have already refused this invitation."
 msgstr ""
 
-msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgid "You are not a member of this team."
 msgstr ""
 
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
+msgid "User not found."
+msgstr "Gebruiker is niet gevonden."
+
+msgid "A team can't join a team"
 msgstr ""
 
-msgid "View Receipt"
+msgid "You can't invite an inactive user to join a team."
 msgstr ""
 
-msgid "Your donations are funded by your income."
+msgid "{0} has been invited to the team."
 msgstr ""
 
-msgid "Go back"
+msgid "{0} is already a member of this team."
+msgstr "{0} is al lid van dit team."
+
+msgid "Are you sure you want to leave this team?"
+msgstr "Weet je zeker dat je dit team wilt verlaten?"
+
+msgid "You are now a member of the team."
 msgstr ""
 
-msgid "{0} ({n} week)"
-msgid_plural "{0} ({n} weeks)"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Receipt"
+msgstr "Ontvangstbewijs"
 
-msgid "Credit card"
+msgid "Amount:"
 msgstr ""
 
-msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
+msgid "Fee:"
 msgstr ""
 
-msgid "Credit Card Number"
-msgstr "Kredietkaartnummer"
-
-msgid "This card number is invalid."
-msgstr "Dit kaartnummer is ongeldig."
-
-msgid "MM/YY"
+msgid "Total:"
 msgstr ""
 
-msgid "Expiration Month"
-msgstr "Geldig tot de maand"
-
-msgid "This expiration date is invalid."
-msgstr "Deze geldigheidsdatum is ongeldig."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code (3 digits located on the back of the card)"
+msgid "Transaction ID: {0}"
 msgstr ""
 
-msgid "This verification code is invalid."
-msgstr "Deze verificatiecode is ongeldig."
-
-msgid "Remember the card number for next time"
+msgid "You are not a member of any team."
 msgstr ""
+
+msgid "Tips Received, by Number of Tips"
+msgstr "Fooien ontvangen, per aantal fooien"
+
+msgid "Tips Received, by Amount"
+msgstr ""
+
+msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
+msgstr "Er staat nog geld op deze Liberapay account, kies alsjeblieft een methode voor uitbetaling of neem contact op met onze support afdeling."
+
+msgid "Close Account"
+msgstr "Sluit account"
+
+msgid "Try Again Later"
+msgstr ""
+
+msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
+msgstr ""
+
+msgid "You have {0} in your wallet. What should we do with it?"
+msgstr ""
+
+msgid "Withdraw it"
+msgstr ""
+
+msgid "Give it to the {0}people I donate to{1}"
+msgstr ""
+
+msgid "If neither option works for you, please contact support@liberapay.com."
+msgstr ""
+
+msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
+msgstr ""
+
+msgid "Personal Information"
+msgstr ""
+
+msgid "We immediately clear out most of the information in your profile."
+msgstr ""
+
+msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
+msgstr ""
+
+msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
+msgstr ""
+
+msgid "Username, email and password"
+msgstr ""
+
+msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
+msgstr ""
+
+msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
+msgstr ""
+
+msgid "Ready?"
+msgstr ""
+
+msgid "Yes, close my Liberapay account"
+msgstr ""
+
+msgid "Incorrect password"
+msgstr ""
+
+msgid "Your password has been changed."
+msgstr ""
+
+msgid "Your privacy settings have been changed."
+msgstr ""
+
+msgid "Account"
+msgstr "Account"
+
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "Heb je je Liberapay profiel gelinkt vanaf andere websites? Verzeker je ervan deze links te actualiseren!"
+
+msgid "Account type"
+msgstr "Type account"
+
+msgid "Current password"
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
+msgid "Privacy"
+msgstr "Privacy"
+
+msgid "Close"
+msgstr "Sluit"
 
 msgid "Export History"
 msgstr "Exporteer geschiedenis"
@@ -1020,9 +1118,6 @@ msgstr "Status"
 msgid "Notes"
 msgstr "Notas"
 
-msgid "Receipt"
-msgstr "Ontvangstbewijs"
-
 msgid "anonymous donation for your role in the {0} team"
 msgstr ""
 
@@ -1041,79 +1136,66 @@ msgstr ""
 msgid "No transactions to show."
 msgstr "Er zijn geen overboekingen aanwezig in het systeem."
 
-msgid "{0} receives {1} per week"
-msgstr "{0} ontvangt {1} per week"
-
-msgid "Euros Received Per Week"
-msgstr "Euro ontvangen per week"
-
-msgid "weeks"
-msgstr "weken"
-
-msgid "Number of Patrons Per Week"
-msgstr "Aantal patroons per week"
-
-msgid "Your take is now {0} (you can't go higher this week)."
-msgstr "Uw deel van de opbrengst is {0} (het is niet mogelijk om deze week meer te ontvangen)."
-
-msgid "Your take is now {0}."
-msgstr "Uw deel van de opbrengst is {0}."
-
-msgid "You are not invited to join this team."
+msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr ""
 
-msgid "You have already accepted this invitation."
+msgid "Request in progress, please wait…"
 msgstr ""
 
-msgid "You have already refused this invitation."
+msgid "JavaScript is required"
 msgstr ""
 
-msgid "You are not a member of this team."
+msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr ""
 
-msgid "User not found."
-msgstr "Gebruiker is niet gevonden."
-
-msgid "A team can't join a team"
+msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr ""
 
-msgid "You can't invite an inactive user to join a team."
+msgid "View Receipt"
 msgstr ""
 
-msgid "{0} has been invited to the team."
+msgid "Your donations are funded by your income."
 msgstr ""
 
-msgid "{0} is already a member of this team."
-msgstr "{0} is al lid van dit team."
-
-msgid "Are you sure you want to leave this team?"
-msgstr "Weet je zeker dat je dit team wilt verlaten?"
-
-msgid "You are now a member of the team."
+msgid "Go back"
 msgstr ""
 
-msgid "Amount:"
+msgid "{0} ({n} week)"
+msgid_plural "{0} ({n} weeks)"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Credit card"
 msgstr ""
 
-msgid "Fee:"
+msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
 msgstr ""
 
-msgid "Total:"
+msgid "Credit Card Number"
+msgstr "Kredietkaartnummer"
+
+msgid "This card number is invalid."
+msgstr "Dit kaartnummer is ongeldig."
+
+msgid "MM/YY"
 msgstr ""
 
-msgid "Transaction ID: {0}"
+msgid "Expiration Month"
+msgstr "Geldig tot de maand"
+
+msgid "This expiration date is invalid."
+msgstr "Deze geldigheidsdatum is ongeldig."
+
+msgid "CVV"
+msgstr "CVV"
+
+msgid "Verification code (3 digits located on the back of the card)"
 msgstr ""
 
-msgid "Withdraw money"
-msgstr ""
+msgid "This verification code is invalid."
+msgstr "Deze verificatiecode is ongeldig."
 
-msgid "You are not a member of any team."
-msgstr ""
-
-msgid "Tips Received, by Number of Tips"
-msgstr "Fooien ontvangen, per aantal fooien"
-
-msgid "Tips Received, by Amount"
+msgid "Remember the card number for next time"
 msgstr ""
 
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -1220,93 +1302,6 @@ msgstr ""
 
 msgid "Alphanumeric (with no spaces)"
 msgstr ""
-
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "Er staat nog geld op deze Liberapay account, kies alsjeblieft een methode voor uitbetaling of neem contact op met onze support afdeling."
-
-msgid "Close Account"
-msgstr "Sluit account"
-
-msgid "Try Again Later"
-msgstr ""
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr ""
-
-msgid "Wallet"
-msgstr ""
-
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr ""
-
-msgid "Withdraw it"
-msgstr ""
-
-msgid "Give it to the {0}people I donate to{1}"
-msgstr ""
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr ""
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr ""
-
-msgid "Personal Information"
-msgstr ""
-
-msgid "We immediately clear out most of the information in your profile."
-msgstr ""
-
-msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
-msgstr ""
-
-msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
-msgstr ""
-
-msgid "Username, email and password"
-msgstr ""
-
-msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr ""
-
-msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr ""
-
-msgid "Ready?"
-msgstr ""
-
-msgid "Yes, close my Liberapay account"
-msgstr ""
-
-msgid "Incorrect password"
-msgstr ""
-
-msgid "Your password has been changed."
-msgstr ""
-
-msgid "Your privacy settings have been changed."
-msgstr ""
-
-msgid "Account"
-msgstr "Account"
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Heb je je Liberapay profiel gelinkt vanaf andere websites? Verzeker je ervan deze links te actualiseren!"
-
-msgid "Account type"
-msgstr "Type account"
-
-msgid "Current password"
-msgstr ""
-
-msgid "New password"
-msgstr ""
-
-msgid "Privacy"
-msgstr "Privacy"
-
-msgid "Close"
-msgstr "Sluit"
 
 msgid "Donation Button"
 msgstr ""
@@ -1582,11 +1577,11 @@ msgstr ""
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
 msgstr ""
 
-msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income."
+msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr ""
 
 #, python-format
-msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: two times the member's take in the previous payday, 70% of the median take in the previous payday, and the number 1."
+msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
 msgstr ""
 
 msgid "Removing team membership"
@@ -1605,6 +1600,12 @@ msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
 msgstr[0] "Er is {n} community op Liberapay."
 msgstr[1] "Er zijn {n} communities op Liberapay."
+
+msgid "Search communities"
+msgstr ""
+
+msgid "Start a new community"
+msgstr ""
 
 msgid "Popular Communities"
 msgstr "Populaire gemeenschappen"
@@ -1628,19 +1629,36 @@ msgstr "% Gefinancierd"
 msgid "Receiving{0} Per Member (€)"
 msgstr ""
 
-msgid "You're the first one here!"
-msgstr "Je bent de eerste hier!"
+msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
+msgstr ""
 
-msgid "Bring the {0} community to Liberapay to find like-minded people to give to."
-msgstr "Breng de {0} gemeenschap naar Liberapay om gelijkgestemden mensen te vinden om aan te geven."
+msgid "Maximum length is {0}."
+msgstr ""
+
+msgid "Language of the name"
+msgstr ""
+
+msgid "{0} community settings"
+msgstr ""
+
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr ""
+
+msgid "Short description"
+msgstr ""
+
+msgid "Sidebar text"
+msgstr ""
 
 msgid "This community was created {0} ago and has {n} member."
 msgid_plural "This community was created {0} ago and has {n} members."
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "to join the {0} community on Liberapay."
-msgstr "vervoegt de {0} gemeenschap op Liberapay."
+msgid ""
+"Are you a contributor in the {0} community? Then join it on Liberapay!\n"
+"Soon you'll be able to advertise your community projects here and post status updates about your work."
+msgstr ""
 
 msgid "Join"
 msgstr "Vervoeg"
@@ -1648,14 +1666,19 @@ msgstr "Vervoeg"
 msgid "New Members"
 msgstr "Nieuwe leden"
 
-msgid "Top Givers"
-msgstr "Top gevers"
+msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
+msgstr ""
 
-msgid "Anonymous"
-msgstr "Anoniem"
+msgid "Unsubscribe"
+msgstr ""
 
-msgid "Top Receivers"
-msgstr "Top ontvangers"
+msgid "Subscribe"
+msgstr ""
+
+msgid "{n} subscriber"
+msgid_plural "{n} subscribers"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Please Confirm"
 msgstr "Bevestigen alstublieft"

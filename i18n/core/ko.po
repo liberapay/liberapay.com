@@ -204,6 +204,12 @@ msgstr ""
 msgid "\"{0}\" is not a valid number."
 msgstr ""
 
+msgid "The \"{0}\" community already exists."
+msgstr ""
+
+msgid "\"{0}\" is not a valid community name."
+msgstr ""
+
 msgid "Transfering the money failed, please try again."
 msgstr ""
 
@@ -297,16 +303,6 @@ msgstr ""
 msgid "Contact Us"
 msgstr ""
 
-msgid "Add a new community"
-msgstr ""
-
-msgid "Find or create a community…"
-msgstr ""
-
-msgid "{n} Member"
-msgid_plural "{n} Members"
-msgstr[0] ""
-
 msgid "Communities"
 msgstr "커뮤니티"
 
@@ -316,6 +312,9 @@ msgstr[0] "{n}명의 다른 참여자와 함께"
 
 msgid "Leave"
 msgstr "탈퇴하기"
+
+msgid "Explore communities"
+msgstr ""
 
 msgid "Cancel"
 msgstr "취소"
@@ -440,8 +439,11 @@ msgstr "기부"
 msgid "Receiving"
 msgstr ""
 
-msgid "History"
-msgstr "기록"
+msgid "Wallet"
+msgstr ""
+
+msgid "Withdraw money"
+msgstr ""
 
 msgid "Settings"
 msgstr ""
@@ -554,9 +556,9 @@ msgstr ""
 msgid "Explore our communities:"
 msgstr ""
 
-msgid "{0}{n}{1} Member"
-msgid_plural "{0}{n}{1} Members"
-msgstr[0] "{0}{n}{1} 명의 참여자"
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] ""
 
 msgid "More"
 msgstr "더 보기"
@@ -600,6 +602,9 @@ msgstr ""
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr ""
 
+msgid "Sorry, we didn't find anything matching your query."
+msgstr ""
+
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
 msgstr[0] ""
@@ -611,9 +616,6 @@ msgstr[0] ""
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
 msgstr[0] ""
-
-msgid "Sorry, we didn't find anything matching your query."
-msgstr ""
 
 msgid "Looking for a specific user of a social network?"
 msgstr ""
@@ -875,66 +877,164 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
+msgid "{0} receives {1} per week"
 msgstr ""
 
-msgid "Request in progress, please wait…"
+msgid "Euros Received Per Week"
 msgstr ""
 
-msgid "JavaScript is required"
+msgid "weeks"
+msgstr "주"
+
+msgid "Number of Patrons Per Week"
+msgstr "주간 후원자 수"
+
+msgid "Your take is now {0} (you can't go higher this week)."
 msgstr ""
 
-msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgid "Your take is now {0}."
 msgstr ""
 
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
+msgid "You are not invited to join this team."
 msgstr ""
 
-msgid "View Receipt"
+msgid "You have already accepted this invitation."
 msgstr ""
 
-msgid "Your donations are funded by your income."
+msgid "You have already refused this invitation."
 msgstr ""
 
-msgid "Go back"
+msgid "You are not a member of this team."
 msgstr ""
 
-msgid "{0} ({n} week)"
-msgid_plural "{0} ({n} weeks)"
-msgstr[0] ""
-
-msgid "Credit card"
+msgid "User not found."
 msgstr ""
 
-msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
+msgid "A team can't join a team"
 msgstr ""
 
-msgid "Credit Card Number"
-msgstr "신용 카드 번호"
-
-msgid "This card number is invalid."
+msgid "You can't invite an inactive user to join a team."
 msgstr ""
 
-msgid "MM/YY"
+msgid "{0} has been invited to the team."
 msgstr ""
 
-msgid "Expiration Month"
+msgid "{0} is already a member of this team."
 msgstr ""
 
-msgid "This expiration date is invalid."
+msgid "Are you sure you want to leave this team?"
 msgstr ""
 
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code (3 digits located on the back of the card)"
+msgid "You are now a member of the team."
 msgstr ""
 
-msgid "This verification code is invalid."
+msgid "Receipt"
+msgstr "영수증"
+
+msgid "Amount:"
 msgstr ""
 
-msgid "Remember the card number for next time"
+msgid "Fee:"
 msgstr ""
+
+msgid "Total:"
+msgstr ""
+
+msgid "Transaction ID: {0}"
+msgstr ""
+
+msgid "You are not a member of any team."
+msgstr ""
+
+msgid "Tips Received, by Number of Tips"
+msgstr ""
+
+msgid "Tips Received, by Amount"
+msgstr ""
+
+msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
+msgstr ""
+
+msgid "Close Account"
+msgstr "계정 삭제"
+
+msgid "Try Again Later"
+msgstr ""
+
+msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
+msgstr ""
+
+msgid "You have {0} in your wallet. What should we do with it?"
+msgstr ""
+
+msgid "Withdraw it"
+msgstr ""
+
+msgid "Give it to the {0}people I donate to{1}"
+msgstr ""
+
+msgid "If neither option works for you, please contact support@liberapay.com."
+msgstr ""
+
+msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
+msgstr ""
+
+msgid "Personal Information"
+msgstr ""
+
+msgid "We immediately clear out most of the information in your profile."
+msgstr ""
+
+msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
+msgstr ""
+
+msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
+msgstr ""
+
+msgid "Username, email and password"
+msgstr ""
+
+msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
+msgstr ""
+
+msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
+msgstr ""
+
+msgid "Ready?"
+msgstr ""
+
+msgid "Yes, close my Liberapay account"
+msgstr ""
+
+msgid "Incorrect password"
+msgstr ""
+
+msgid "Your password has been changed."
+msgstr ""
+
+msgid "Your privacy settings have been changed."
+msgstr ""
+
+msgid "Account"
+msgstr "계정"
+
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "혹시 다른 사이트에 Liberapay 프로필 페이지를 링크하신 적 있으신가요? 그 링크들 업데이트 해주세요!"
+
+msgid "Account type"
+msgstr ""
+
+msgid "Current password"
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
+msgid "Privacy"
+msgstr "개인 정보"
+
+msgid "Close"
+msgstr "탈퇴"
 
 msgid "Export History"
 msgstr ""
@@ -1002,9 +1102,6 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-msgid "Receipt"
-msgstr "영수증"
-
 msgid "anonymous donation for your role in the {0} team"
 msgstr ""
 
@@ -1023,79 +1120,65 @@ msgstr ""
 msgid "No transactions to show."
 msgstr ""
 
-msgid "{0} receives {1} per week"
+msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr ""
 
-msgid "Euros Received Per Week"
+msgid "Request in progress, please wait…"
 msgstr ""
 
-msgid "weeks"
-msgstr "주"
-
-msgid "Number of Patrons Per Week"
-msgstr "주간 후원자 수"
-
-msgid "Your take is now {0} (you can't go higher this week)."
+msgid "JavaScript is required"
 msgstr ""
 
-msgid "Your take is now {0}."
+msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr ""
 
-msgid "You are not invited to join this team."
+msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr ""
 
-msgid "You have already accepted this invitation."
+msgid "View Receipt"
 msgstr ""
 
-msgid "You have already refused this invitation."
+msgid "Your donations are funded by your income."
 msgstr ""
 
-msgid "You are not a member of this team."
+msgid "Go back"
 msgstr ""
 
-msgid "User not found."
+msgid "{0} ({n} week)"
+msgid_plural "{0} ({n} weeks)"
+msgstr[0] ""
+
+msgid "Credit card"
 msgstr ""
 
-msgid "A team can't join a team"
+msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
 msgstr ""
 
-msgid "You can't invite an inactive user to join a team."
+msgid "Credit Card Number"
+msgstr "신용 카드 번호"
+
+msgid "This card number is invalid."
 msgstr ""
 
-msgid "{0} has been invited to the team."
+msgid "MM/YY"
 msgstr ""
 
-msgid "{0} is already a member of this team."
+msgid "Expiration Month"
 msgstr ""
 
-msgid "Are you sure you want to leave this team?"
+msgid "This expiration date is invalid."
 msgstr ""
 
-msgid "You are now a member of the team."
+msgid "CVV"
+msgstr "CVV"
+
+msgid "Verification code (3 digits located on the back of the card)"
 msgstr ""
 
-msgid "Amount:"
+msgid "This verification code is invalid."
 msgstr ""
 
-msgid "Fee:"
-msgstr ""
-
-msgid "Total:"
-msgstr ""
-
-msgid "Transaction ID: {0}"
-msgstr ""
-
-msgid "Withdraw money"
-msgstr ""
-
-msgid "You are not a member of any team."
-msgstr ""
-
-msgid "Tips Received, by Number of Tips"
-msgstr ""
-
-msgid "Tips Received, by Amount"
+msgid "Remember the card number for next time"
 msgstr ""
 
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -1202,93 +1285,6 @@ msgstr ""
 
 msgid "Alphanumeric (with no spaces)"
 msgstr ""
-
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr ""
-
-msgid "Close Account"
-msgstr "계정 삭제"
-
-msgid "Try Again Later"
-msgstr ""
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr ""
-
-msgid "Wallet"
-msgstr ""
-
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr ""
-
-msgid "Withdraw it"
-msgstr ""
-
-msgid "Give it to the {0}people I donate to{1}"
-msgstr ""
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr ""
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr ""
-
-msgid "Personal Information"
-msgstr ""
-
-msgid "We immediately clear out most of the information in your profile."
-msgstr ""
-
-msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
-msgstr ""
-
-msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
-msgstr ""
-
-msgid "Username, email and password"
-msgstr ""
-
-msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr ""
-
-msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr ""
-
-msgid "Ready?"
-msgstr ""
-
-msgid "Yes, close my Liberapay account"
-msgstr ""
-
-msgid "Incorrect password"
-msgstr ""
-
-msgid "Your password has been changed."
-msgstr ""
-
-msgid "Your privacy settings have been changed."
-msgstr ""
-
-msgid "Account"
-msgstr "계정"
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "혹시 다른 사이트에 Liberapay 프로필 페이지를 링크하신 적 있으신가요? 그 링크들 업데이트 해주세요!"
-
-msgid "Account type"
-msgstr ""
-
-msgid "Current password"
-msgstr ""
-
-msgid "New password"
-msgstr ""
-
-msgid "Privacy"
-msgstr "개인 정보"
-
-msgid "Close"
-msgstr "탈퇴"
 
 msgid "Donation Button"
 msgstr ""
@@ -1563,11 +1559,11 @@ msgstr ""
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
 msgstr ""
 
-msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income."
+msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr ""
 
 #, python-format
-msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: two times the member's take in the previous payday, 70% of the median take in the previous payday, and the number 1."
+msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
 msgstr ""
 
 msgid "Removing team membership"
@@ -1585,6 +1581,12 @@ msgstr ""
 msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
 msgstr[0] ""
+
+msgid "Search communities"
+msgstr ""
+
+msgid "Start a new community"
+msgstr ""
 
 msgid "Popular Communities"
 msgstr ""
@@ -1608,17 +1610,34 @@ msgstr ""
 msgid "Receiving{0} Per Member (€)"
 msgstr ""
 
-msgid "You're the first one here!"
-msgstr "첫 참여자십니다!"
+msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
+msgstr ""
 
-msgid "Bring the {0} community to Liberapay to find like-minded people to give to."
+msgid "Maximum length is {0}."
+msgstr ""
+
+msgid "Language of the name"
+msgstr ""
+
+msgid "{0} community settings"
+msgstr ""
+
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr ""
+
+msgid "Short description"
+msgstr ""
+
+msgid "Sidebar text"
 msgstr ""
 
 msgid "This community was created {0} ago and has {n} member."
 msgid_plural "This community was created {0} ago and has {n} members."
 msgstr[0] ""
 
-msgid "to join the {0} community on Liberapay."
+msgid ""
+"Are you a contributor in the {0} community? Then join it on Liberapay!\n"
+"Soon you'll be able to advertise your community projects here and post status updates about your work."
 msgstr ""
 
 msgid "Join"
@@ -1627,14 +1646,18 @@ msgstr "참여하기"
 msgid "New Members"
 msgstr "새 참여자"
 
-msgid "Top Givers"
-msgstr "주요 기부자"
+msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
+msgstr ""
 
-msgid "Anonymous"
-msgstr "익명"
+msgid "Unsubscribe"
+msgstr ""
 
-msgid "Top Receivers"
-msgstr "주요 모금자"
+msgid "Subscribe"
+msgstr ""
+
+msgid "{n} subscriber"
+msgid_plural "{n} subscribers"
+msgstr[0] ""
 
 msgid "Please Confirm"
 msgstr ""
