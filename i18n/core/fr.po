@@ -212,10 +212,10 @@ msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" n'est pas un nombre valide."
 
 msgid "The \"{0}\" community already exists."
-msgstr ""
+msgstr "La communauté \"{0}\" existe déjà."
 
 msgid "\"{0}\" is not a valid community name."
-msgstr ""
+msgstr "\"{0}\" n'est pas un nom de communauté valide."
 
 msgid "Transfering the money failed, please try again."
 msgstr "Le transfert de l'argent a échoué, merci d'essayer à nouveau."
@@ -322,7 +322,7 @@ msgid "Leave"
 msgstr "Quitter"
 
 msgid "Explore communities"
-msgstr ""
+msgstr "Explorer les communautés"
 
 msgid "Cancel"
 msgstr "Annuler"
@@ -566,8 +566,8 @@ msgstr "Explorez nos communautés :"
 
 msgid "{n} member"
 msgid_plural "{n} members"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} membre"
+msgstr[1] "{n} membres"
 
 msgid "More"
 msgstr "Plus"
@@ -1413,7 +1413,10 @@ msgid "Liberapay is a way to donate money recurrently to people whose work you a
 msgstr "Liberapay vous permet de faire des dons de manière récurrente aux personnes dont vous appréciez le travail."
 
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "Les paiements sont inconditionnels. Vous ne pas exactement qui vous donne, et les dons sont limités à {0} par semaine et par donateur pour éviter une emprise malvenue."
+msgstr ""
+"Les paiements sont inconditionnels. Vous ne savez pas exactement qui vous "
+"donne, et les dons sont limités à {0} par semaine et par donateur pour "
+"éviter de dépendre d'un seul gros donateur."
 
 msgid "Donations are public. By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Les dons sont publics. Par défaut, les montant que vous donnez ou recevez sont publics (vous avez la possibilité de cacher ce montant)."
@@ -1580,10 +1583,23 @@ msgstr "Vous pouvez modifier vos parts depuis {0}votre gestionnaire d'équipes{1
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr ""
+"Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, "
+"les montants réels sont calculés par le système : d'abord il fait la somme "
+"des parts nominales, puis il calcule le pourcentage que chaque part "
+"représente, et enfin il applique ces pourcentages au revenu disponible. Les "
+"parts nominales agissent aussi en maximums : les montants réels ne sont "
+"jamais supérieurs aux montants nominaux, même si le revenu de l'équipe le "
+"permettrait."
 
 #, python-format
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
 msgstr ""
+"Les parts nominales sont limitées, elles ne peuvent pas être augmentées au-"
+"dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au "
+"précédent jour de paie. La limite exacte est le maximum de ces trois valeurs "
+": le nombre 1, deux fois la part du membre mercredi dernier, 70 % de la "
+"médiane des parts mercredi dernier, ou si ce nombre est zéro, le revenu "
+"actuel de l'équipe divisé par le nombre de membres."
 
 msgid "Removing team membership"
 msgstr "Quitter une équipe"
@@ -1603,10 +1619,10 @@ msgstr[0] "Il y a {n} communauté sur Liberapay."
 msgstr[1] "Il y a {n} communautés sur Liberapay."
 
 msgid "Search communities"
-msgstr ""
+msgstr "Chercher une communauté"
 
 msgid "Start a new community"
-msgstr ""
+msgstr "Créer une communauté"
 
 msgid "Popular Communities"
 msgstr "Communautés populaires"
@@ -1632,24 +1648,29 @@ msgstr "Revenu{0} par membre (€)"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr ""
+"Utiliser des tirets bas (_) au lieu d'espaces. Tous les caractères "
+"alphanumériques Unicode sont autorisés, ainsi que les points (.) et les "
+"tirets (-)."
 
 msgid "Maximum length is {0}."
-msgstr ""
+msgstr "Longueur maximale : {0}."
 
 msgid "Language of the name"
-msgstr ""
+msgstr "Langue du nom"
 
 msgid "{0} community settings"
-msgstr ""
+msgstr "Paramètres de la communauté {0}"
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
 msgstr ""
+"Liberapay vous permet de traduire vos textes. Utilisez le sélecteur ci-"
+"dessous pour passer d'une langue à une autre."
 
 msgid "Short description"
-msgstr ""
+msgstr "Description courte"
 
 msgid "Sidebar text"
-msgstr ""
+msgstr "Texte de la barre latérale"
 
 msgid "This community was created {0} ago and has {n} member."
 msgid_plural "This community was created {0} ago and has {n} members."
@@ -1660,6 +1681,9 @@ msgid ""
 "Are you a contributor in the {0} community? Then join it on Liberapay!\n"
 "Soon you'll be able to advertise your community projects here and post status updates about your work."
 msgstr ""
+"Êtes-vous un contributeur dans la communauté {0} ? Oui ? Alors rejoignez-là "
+"sur Liberapay !\n"
+"Bientôt vous pourrez partager ici vos projets avec le reste de la communauté."
 
 msgid "Join"
 msgstr "Rejoindre"
@@ -1669,17 +1693,20 @@ msgstr "Nouveaux membres"
 
 msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
 msgstr ""
+"Les bulletins vous aident à rester informer sur l'actualité de la communauté "
+"et sur les projets qui ont besoin de soutien. Elles ne sont pas encore "
+"opérationnelles mais vous pouvez d'ores et déjà vous y inscrire."
 
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Me désinscrire"
 
 msgid "Subscribe"
-msgstr ""
+msgstr "M'inscrire"
 
 msgid "{n} subscriber"
 msgid_plural "{n} subscribers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} inscrit"
+msgstr[1] "{n} inscrits"
 
 msgid "Please Confirm"
 msgstr "Veuillez confirmer"
@@ -1816,4 +1843,3 @@ msgstr "refuse d'utiliser Liberapay"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "n'est pas encore inscrit sur Liberapay"
-
