@@ -1,0 +1,7 @@
+#!/bin/bash -eu
+
+pid=$(cat $OPENSHIFT_DATA_DIR/gunicorn.pid || true)
+if [ ! -z "$pid" ]; then
+    echo "Sending SIGHUP to gunicorn..."
+    kill -s SIGHUP $pid
+fi
