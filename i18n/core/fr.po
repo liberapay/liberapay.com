@@ -734,11 +734,11 @@ msgstr "Veuillez {0}valider votre adresse email{1} puis recharger cette page."
 msgid "No notifications to show."
 msgstr "Aucune notification à afficher."
 
-msgid "Thank you so much for supporting Liberapay! :D"
-msgstr "Merci beaucoup de soutenir Liberapay ! :D"
+msgid "Your weekly donation to {0} has been stopped."
+msgstr ""
 
-msgid "Tip changed to {0} per week!"
-msgstr "Le montant du don est désormais {0} par semaine !"
+msgid "You are now donating {0} per week to {1}. Thank you!"
+msgstr ""
 
 msgid "Email settings"
 msgstr "Paramètres de courriel"
@@ -1413,10 +1413,7 @@ msgid "Liberapay is a way to donate money recurrently to people whose work you a
 msgstr "Liberapay vous permet de faire des dons de manière récurrente aux personnes dont vous appréciez le travail."
 
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr ""
-"Les paiements sont inconditionnels. Vous ne savez pas exactement qui vous "
-"donne, et les dons sont limités à {0} par semaine et par donateur pour "
-"éviter de dépendre d'un seul gros donateur."
+msgstr "Les paiements sont inconditionnels. Vous ne savez pas exactement qui vous donne, et les dons sont limités à {0} par semaine et par donateur pour éviter de dépendre d'un seul gros donateur."
 
 msgid "Donations are public. By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Les dons sont publics. Par défaut, les montant que vous donnez ou recevez sont publics (vous avez la possibilité de cacher ce montant)."
@@ -1492,8 +1489,8 @@ msgstr "L'argent d'un utilisateur est conservé dans son portefeuille. Nous n'au
 msgid "Payday is when donations are actually executed. It's a program ({0}this one{1}) that we run every Wednesday."
 msgstr "« Payday » est le nom du programme qui effectue les dons entre les utilisateurs chaque mercredi ({0}code source{1})."
 
-msgid "Liberapay is {0} old and has {1} active users."
-msgstr "Liberapay est âgé de {0} ans et compte {1} utilisateurs actifs."
+msgid "Liberapay was launched {0} ago and has {1} active users."
+msgstr ""
 
 msgid "{0} participants gave money in the past week."
 msgstr "{0} participants ont donné de l'argent la semaine dernière."
@@ -1504,11 +1501,11 @@ msgstr "{0} ont reçu de l'argent."
 msgid "{0} did both."
 msgstr "{0} ont fait les deux."
 
-msgid "{0} people have joined Liberapay. Of those, {1}% ({2}) have a working credit card on file."
-msgstr "{0} personnes sont inscrites sur Liberapay. Parmi elles, {1}% ({2}) ont renseigné leur numéro de carte."
+msgid "{0} people have joined Liberapay."
+msgstr ""
 
-msgid "{0} is escrowed within Liberapay. {1} people have connected a bank account for withdrawals."
-msgstr "{0} sont déposés sur Liberapay. {1} personnes ont renseigné leur numéro de compte pour un retrait."
+msgid "{0} is escrowed within Liberapay."
+msgstr ""
 
 msgid "{0} changed hands {1} ago."
 msgstr "{0} ont été échangé en {1}."
@@ -1582,24 +1579,11 @@ msgid "You can change your takes from {0}your teams dashboard{1}. It contains ta
 msgstr "Vous pouvez modifier vos parts depuis {0}votre gestionnaire d'équipes{1}. Il contient des tableaux qui montrent les parts nominales de tous les membres pour le prochain et le précédent jours de paie, ainsi qu'une estimation du montant réel d'argent que chaque membre recevra durant le prochain jour de paie."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
-msgstr ""
-"Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, "
-"les montants réels sont calculés par le système : d'abord il fait la somme "
-"des parts nominales, puis il calcule le pourcentage que chaque part "
-"représente, et enfin il applique ces pourcentages au revenu disponible. Les "
-"parts nominales agissent aussi en maximums : les montants réels ne sont "
-"jamais supérieurs aux montants nominaux, même si le revenu de l'équipe le "
-"permettrait."
+msgstr "Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, les montants réels sont calculés par le système : d'abord il fait la somme des parts nominales, puis il calcule le pourcentage que chaque part représente, et enfin il applique ces pourcentages au revenu disponible. Les parts nominales agissent aussi en maximums : les montants réels ne sont jamais supérieurs aux montants nominaux, même si le revenu de l'équipe le permettrait."
 
 #, python-format
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
-msgstr ""
-"Les parts nominales sont limitées, elles ne peuvent pas être augmentées au-"
-"dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au "
-"précédent jour de paie. La limite exacte est le maximum de ces trois valeurs "
-": le nombre 1, deux fois la part du membre mercredi dernier, 70 % de la "
-"médiane des parts mercredi dernier, ou si ce nombre est zéro, le revenu "
-"actuel de l'équipe divisé par le nombre de membres."
+msgstr "Les parts nominales sont limitées, elles ne peuvent pas être augmentées au-dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au précédent jour de paie. La limite exacte est le maximum de ces trois valeurs : le nombre 1, deux fois la part du membre mercredi dernier, 70 % de la médiane des parts mercredi dernier, ou si ce nombre est zéro, le revenu actuel de l'équipe divisé par le nombre de membres."
 
 msgid "Removing team membership"
 msgstr "Quitter une équipe"
@@ -1647,10 +1631,7 @@ msgid "Receiving{0} Per Member (€)"
 msgstr "Revenu{0} par membre (€)"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
-msgstr ""
-"Utiliser des tirets bas (_) au lieu d'espaces. Tous les caractères "
-"alphanumériques Unicode sont autorisés, ainsi que les points (.) et les "
-"tirets (-)."
+msgstr "Utiliser des tirets bas (_) au lieu d'espaces. Tous les caractères alphanumériques Unicode sont autorisés, ainsi que les points (.) et les tirets (-)."
 
 msgid "Maximum length is {0}."
 msgstr "Longueur maximale : {0}."
@@ -1662,9 +1643,7 @@ msgid "{0} community settings"
 msgstr "Paramètres de la communauté {0}"
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr ""
-"Liberapay vous permet de traduire vos textes. Utilisez le sélecteur ci-"
-"dessous pour passer d'une langue à une autre."
+msgstr "Liberapay vous permet de traduire vos textes. Utilisez le sélecteur ci-dessous pour passer d'une langue à une autre."
 
 msgid "Short description"
 msgstr "Description courte"
@@ -1681,8 +1660,7 @@ msgid ""
 "Are you a contributor in the {0} community? Then join it on Liberapay!\n"
 "Soon you'll be able to advertise your community projects here and post status updates about your work."
 msgstr ""
-"Êtes-vous un contributeur dans la communauté {0} ? Oui ? Alors rejoignez-là "
-"sur Liberapay !\n"
+"Êtes-vous un contributeur dans la communauté {0} ? Oui ? Alors rejoignez-là sur Liberapay !\n"
 "Bientôt vous pourrez partager ici vos projets avec le reste de la communauté."
 
 msgid "Join"
@@ -1692,10 +1670,7 @@ msgid "New Members"
 msgstr "Nouveaux membres"
 
 msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
-msgstr ""
-"Les bulletins vous aident à rester informer sur l'actualité de la communauté "
-"et sur les projets qui ont besoin de soutien. Elles ne sont pas encore "
-"opérationnelles mais vous pouvez d'ores et déjà vous y inscrire."
+msgstr "Les bulletins vous aident à rester informer sur l'actualité de la communauté et sur les projets qui ont besoin de soutien. Elles ne sont pas encore opérationnelles mais vous pouvez d'ores et déjà vous y inscrire."
 
 msgid "Unsubscribe"
 msgstr "Me désinscrire"
@@ -1843,3 +1818,4 @@ msgstr "refuse d'utiliser Liberapay"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "n'est pas encore inscrit sur Liberapay"
+
