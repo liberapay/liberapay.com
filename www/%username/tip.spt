@@ -24,8 +24,14 @@ tippee = get_participant(state, restrict=False, redirect_stub=False)
 
 if request.method == 'POST':
     out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
+    if out['amount'] == 0:
+        out["msg"] = _("Your weekly donation to {0} has been stopped.", tippee.username)
+    else:
+        out["msg"] = _("You are now donating {0} per week to {1}. Thank you!",
+                       Money(out['amount'], 'EUR'), tippee.username)
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         back_to = request.body.get('back_to')
+        back_to += '?success=' + b64encode(out["msg"].encode('utf8'))
         if out['amount'] and not out['is_funded'] and not out['is_pledge']:
             response.redirect('/' + tipper.username + '/wallet/payin/' + b64encode(back_to))
         response.redirect(back_to or '..')
@@ -37,10 +43,6 @@ total_giving = tipper.giving
 total_receiving = tipper.receiving
 
 out["amount"] = str(amount)
-if tippee.username == 'Liberapay' and amount > 0:
-    out["msg"] = _("Thank you so much for supporting Liberapay! :D")
-elif request.method == 'POST':
-    out["msg"] = _("Tip changed to {0} per week!", Money(amount, 'EUR'))
 out["npatrons"] = tippee.npatrons
 out["tippee_id"] = tippee.id
 out["total_giving"] = str(total_giving)
@@ -57,12 +59,6 @@ if 'ctime' in out:
     out["mtime"] = str(out['mtime'])
 else:
     out["ctime"] = out["mtime"] = None
-
-[---] text/html
-% extends "templates/base.html"
-% block content
-% include "templates/sign-in-form.html"
-% endblock
 
 [---] application/json via json_dump
 out
