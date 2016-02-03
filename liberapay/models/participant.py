@@ -895,7 +895,7 @@ class Participant(Model, MixinTeam):
 
     def get_communities(self):
         return self.db.all("""
-            SELECT c.*
+            SELECT c.*, replace(c.name, '_', ' ') AS pretty_name
               FROM community_memberships cm
               JOIN communities c ON c.id = cm.community
              WHERE cm.is_on AND cm.participant = %s
