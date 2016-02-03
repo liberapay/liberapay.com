@@ -212,6 +212,7 @@ def accounts_elsewhere(website, env):
     )
 
     platforms = [twitter, github, facebook, google, bitbucket, openstreetmap, bountysource]
+    platforms = [p for p in platforms if p.api_secret]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(platforms)
 
     friends_platforms = [p for p in website.platforms if getattr(p, 'api_friends_path', None)]

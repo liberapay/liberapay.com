@@ -10,11 +10,11 @@ from psycopg2 import IntegrityError
 from liberapay import wireup
 from liberapay.billing.exchanges import record_exchange_result, _record_transfer_result
 from liberapay.constants import MAX_TIP, MIN_TIP
-from liberapay.elsewhere import PLATFORMS
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models import community
 from liberapay.models import check_db
+from liberapay.wireup import accounts_elsewhere, env
 
 
 faker = Factory.create()
@@ -180,10 +180,17 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     participants.extend(teams)
 
     print("Making Elsewheres")
+    e = env()
+    class Website(object):
+        def asset(self, *a):
+            return ''
+    website = Website()
+    accounts_elsewhere(website, e)
+    platforms = [p.name for p in website.platforms]
     for p in participants:
         #All participants get between 0 and 3 elsewheres
         num_elsewheres = random.randint(0, 3)
-        for platform_name in random.sample(PLATFORMS, num_elsewheres):
+        for platform_name in random.sample(platforms, num_elsewheres):
             fake_elsewhere(db, p, platform_name)
 
     print("Making Communities")
