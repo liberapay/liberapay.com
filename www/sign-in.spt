@@ -1,10 +1,10 @@
+from liberapay.exceptions import AuthRequired
+
 [---]
 
-if request.method == 'POST' and not user.ANON:
-    response.redirect(request.qs.get('back_to', '/'))
+if user.ANON:
+    raise AuthRequired
+
+response.redirect(request.qs.get('back_to', '/'))
 
 [---] text/html
-% extends "templates/base.html"
-% block content
-% include "templates/sign-in-form.html"
-% endblock
