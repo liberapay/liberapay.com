@@ -8,7 +8,7 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Account")
 
-is_a_person = participant.kind in ('group', 'community')
+is_a_person = participant.kind not in ('group', 'community')
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
@@ -68,6 +68,5 @@ is_a_person = participant.kind in ('group', 'community')
         </div>
         % endif
 
-    </div>
 </div>
 % endblock
