@@ -1,7 +1,8 @@
 from __future__ import print_function, unicode_literals
 
+from aspen.utils import utc
 from collections import OrderedDict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 import re
 
@@ -23,6 +24,8 @@ JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
 )
+
+LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')

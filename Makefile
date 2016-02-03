@@ -16,11 +16,13 @@ else
 	pytest = ./tests/py/
 endif
 
-env: requirements.txt requirements_tests.txt
+echo:
+	@echo $($(var))
+
+env: requirements*.txt
 	$(python) -c "import virtualenv" || pip install virtualenv
 	$(python) -m virtualenv ./env/
-	$(pip) install -r requirements.txt
-	$(pip) install -r requirements_tests.txt
+	$(pip) install $$(for f in requirements*.txt; do echo "-r $$f"; done)
 	@touch env
 
 clean:
@@ -31,7 +33,7 @@ schema: env
 	$(with_local_env) ./recreate-schema.sh
 
 schema-diff: test-schema
-	pg_dump -sO `heroku config:get DATABASE_URL -a liberapay` >prod.sql
+	rhc ssh $$APPNAME --command 'pg_dump -sO' >prod.sql
 	$(with_tests_env) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
 	diff -uw prod.sql local.sql
 	rm prod.sql local.sql
@@ -43,7 +45,7 @@ run: env
 	$(with_local_env) make --no-print-directory run_
 
 run_:
-	$(env_bin)/$(shell grep -E '^web: ' Procfile | cut -d' ' -f2-)
+	$(env_bin)/gunicorn liberapay.main:website --bind :8339 $$GUNICORN_OPTS
 
 py: env
 	PYTHONPATH=. $(with_local_env) $(env_bin)/python -i liberapay/main.py

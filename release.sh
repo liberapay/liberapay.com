@@ -1,13 +1,13 @@
 #!/bin/sh
 
-
-# Fail on error
-set -e
-
+# Fail on errors and undefined variables
+set -eu
 
 # Be somewhere predictable
 cd "`dirname $0`"
 
+# Constants
+export APPNAME=${APPNAME-liberapay}
 
 # Helpers
 
@@ -27,35 +27,26 @@ require () {
     fi
 }
 
+# Sync the translations
+if yesno "Shall we sync translations first?"; then
+    make i18n_update
+fi
 
 # Check that we have the required tools
-require heroku
+require rhc
 require git
 
-
 # Make sure we have the latest master
-if [ "`git rev-parse --abbrev-ref HEAD`" != "master" ]; then
-    echo "Not on master, checkout master first."
-    exit
-fi
+git checkout -q master
 git pull
-
 
 # Compute the next version number
 prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
 version="$((prev + 1))"
 
-
 # Check that the environment contains all required variables
-heroku config -sa liberapay | ./env/bin/honcho run -e /dev/stdin \
+rhc ssh $APPNAME env | ./env/bin/honcho run -e /dev/stdin \
     ./env/bin/python liberapay/wireup.py
-
-
-# Sync the translations
-echo "Syncing translations..."
-make i18n_pull
-make i18n_update
-
 
 # Check for a branch.sql
 if [ -e sql/branch.sql ]; then
@@ -67,10 +58,20 @@ if [ -e sql/branch.sql ]; then
     git add sql/schema.sql
     git commit -m "merge branch.sql into schema.sql"
 
+    # Run branch.sql on the test DB in echo mode to get back a "compiled"
+    # version on stdout without commands like \i
+    echo "Compiling branch.sql..."
+    $(make echo var=with_tests_env) sh -eu -c \ '
+        psql $DATABASE_URL <sql/recreate-schema.sql >/dev/null
+        psql -e $DATABASE_URL <sql/branch.sql >sql/branch_.sql
+    '
+    mv sql/branch{_,}.sql
+    echo "Done."
+
     # Deployment options
-    if yesno "Should branch.sql be applied before deploying to Heroku instead of after?"; then
+    if yesno "Should branch.sql be applied before deploying instead of after?"; then
         run_sql="before"
-        if yesno "Should the maintenance mode be turned on during deployment?"; then
+        if yesno "Should the app be stopped during deployment?"; then
             maintenance="yes"
         fi
     else
@@ -78,28 +79,24 @@ if [ -e sql/branch.sql ]; then
     fi
 fi
 
-
 # Ask confirmation and bump the version
 yesno "Tag and deploy version $version?" || exit
 git tag $version
 
-
-# Deploy to Heroku
-[ "$maintenance" = "yes" ] && heroku maintenance:on -a liberapay
-[ "$run_sql" = "before" ] && heroku pg:psql -a liberapay <sql/branch.sql
-git push --force heroku master
-[ "$maintenance" = "yes" ] && heroku maintenance:off -a liberapay
-[ "$run_sql" = "after" ] && heroku pg:psql -a liberapay <sql/branch.sql
+# Deploy
+[ "${maintenance-}" = "yes" ] && rhc app stop $APPNAME
+[ "${run_sql-}" = "before" ] && rhc ssh $APPNAME psql <sql/branch.sql
+git push --force openshift master
+[ "${maintenance-}" = "yes" ] && rhc app start $APPNAME
+[ "${run_sql-}" = "after" ] && rhc ssh $APPNAME psql <sql/branch.sql
 rm -f sql/branch.sql
-
 
 # Push to GitHub
 git push
 git push --tags
 
-
 # Check for schema drift
-if [[ $run_sql ]]; then
+if [[ ${run_sql-} ]]; then
     if ! make schema-diff; then
         echo "schema.sql doesn't match the production DB, please fix it"
         exit 1

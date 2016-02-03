@@ -74,7 +74,7 @@ def mail(env, project_root='.'):
 
 def billing(env):
     from mangopaysdk.configuration import Configuration
-    Configuration.BaseURL = env.mangopay_base_url
+    Configuration.BaseUrl = env.mangopay_base_url
     Configuration.ClientID = env.mangopay_client_id
     Configuration.ClientPassword = env.mangopay_client_password
     Configuration.SSLVerification = True
@@ -212,6 +212,7 @@ def accounts_elsewhere(website, env):
     )
 
     platforms = [twitter, github, facebook, google, bitbucket, openstreetmap, bountysource]
+    platforms = [p for p in platforms if p.api_secret]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(platforms)
 
     friends_platforms = [p for p in website.platforms if getattr(p, 'api_friends_path', None)]
@@ -328,6 +329,7 @@ def other_stuff(website, env):
 
 def env():
     env = Environment(
+        ASPEN_PROJECT_ROOT              = str,
         DATABASE_URL                    = str,
         DATABASE_MAXCONN                = int,
         CANONICAL_HOST                  = str,
@@ -369,9 +371,6 @@ def env():
         SENTRY_DSN                      = str,
         LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = str,
-
-        # This is used in our Procfile. (PORT is also used but is provided by
-        # Heroku; we don't set it ourselves in our app config.)
         GUNICORN_OPTS                   = str,
     )
 

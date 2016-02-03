@@ -23,7 +23,6 @@ from liberapay.exceptions import LazyResponse
 
 
 ACTIONS = {'connect', 'lock', 'unlock'}
-PLATFORMS = 'facebook google bitbucket bountysource github openstreetmap twitter'.split()
 
 
 class UnknownAccountElsewhere(Exception): pass

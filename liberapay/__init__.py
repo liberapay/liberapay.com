@@ -17,7 +17,7 @@ canonical_host = None
 def canonize(request, website):
     """Enforce a certain scheme and hostname.
     """
-    scheme = request.headers.get('X-Forwarded-Proto', 'http') # per Heroku
+    scheme = request.headers.get('X-Forwarded-Proto', 'http')
     host = request.headers['Host']
     bad_scheme = scheme != canonical_scheme
     bad_host = bool(canonical_host) and (host != canonical_host)
