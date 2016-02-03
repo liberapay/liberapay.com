@@ -69,6 +69,8 @@ class TestSignIn(EmailHarness):
         assert SESSION in r.headers.cookie
         Participant.dequeue_emails()
         assert self.get_last_email()
+        p = Participant.from_username(good_data['sign-in.username'])
+        assert p.avatar_url
 
     def test_sign_in_non_ascii_username(self):
         r = self.sign_in(dict(username='mélodie'.encode('utf8')))

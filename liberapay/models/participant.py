@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from base64 import b64decode, b64encode
 from binascii import hexlify
 from decimal import Decimal, ROUND_DOWN
-from hashlib import pbkdf2_hmac
+from hashlib import pbkdf2_hmac, md5
 from os import urandom
 import pickle
 from time import sleep
@@ -565,9 +565,20 @@ class Participant(Model, MixinTeam):
         link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
         r = self.send_email('verification', email=email, link=link.format(**locals()))
         assert r == 1 # Make sure the verification email was sent
+
         if self.email:
             self.send_email('verification_notice', new_email=email)
             return 2
+        else:
+            gravatar_id = md5(email.strip().lower()).hexdigest()
+            gravatar_url = 'https://secure.gravatar.com/avatar/'+gravatar_id
+            (cursor or self.db).run("""
+                UPDATE participants
+                   SET avatar_url = %s
+                 WHERE id = %s
+            """, (gravatar_url, self.id))
+            self.set_attributes(avatar_url=gravatar_url)
+
         return 1
 
     def update_email(self, email):
@@ -932,6 +943,8 @@ class Participant(Model, MixinTeam):
         return suggested
 
     def update_avatar(self):
+        if self.status != 'stub':
+            return
         avatar_url = self.db.run("""
             UPDATE participants p
                SET avatar_url = (
