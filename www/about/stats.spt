@@ -113,7 +113,8 @@ def out():
 
 % block content
 
-    <p>{{ _("Liberapay is {0} old and has {1} active users.", to_age(constants.BIRTHDAY), nactive) }}</p>
+    <p>{{ _("Liberapay was launched {0} ago and has {1} active users.",
+            to_age(constants.LAUNCH_TIME), nactive) }}</p>
 
     <p>
         {{ _("{0} participants gave money in the past week.", ngivers) }}<br />
