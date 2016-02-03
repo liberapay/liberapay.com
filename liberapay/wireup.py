@@ -74,7 +74,7 @@ def mail(env, project_root='.'):
 
 def billing(env):
     from mangopaysdk.configuration import Configuration
-    Configuration.BaseURL = env.mangopay_base_url
+    Configuration.BaseUrl = env.mangopay_base_url
     Configuration.ClientID = env.mangopay_client_id
     Configuration.ClientPassword = env.mangopay_client_password
     Configuration.SSLVerification = True
