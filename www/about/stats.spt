@@ -96,22 +96,21 @@ def out():
 
 % block content
 
-    <p>{{ _("Liberapay was launched {0} ago and has {1} active users.",
-            to_age(constants.LAUNCH_TIME), nactive) }}</p>
-
-    <p>
-        {{ _("{0} participants gave money in the past week.", ngivers) }}<br />
-        {{ _("{0} received money.", nreceivers) }}<br />
-        {{ _("{0} did both.", noverlap) }}
-    </p>
-
-    <p>{{ _("{0} people have joined Liberapay.", npeople) }}</p>
+    <p>{{ _("Liberapay was launched {0} ago and has {1} users.",
+            to_age(constants.LAUNCH_TIME), npeople) }}</p>
 
     <p>{{ _("{0} is escrowed within Liberapay.", Money(escrow, 'EUR')) }}</p>
 
     % if last_payday
-    <p>{{ _("{0} changed hands {1} ago.", Money(transfer_volume, 'EUR'),
-            to_age(last_payday.ts_start)) }}</p>
+    <p>
+        {{ _(
+            "The last payday was {0} ago and transferred {1} between {2} users.",
+            to_age(last_payday.ts_start), Money(transfer_volume, 'EUR'), nactive
+        ) }}<br />
+        {{ _("{0} participants gave money.", ngivers) }}<br />
+        {{ _("{0} received money.", nreceivers) }}<br />
+        {{ _("{0} did both.", noverlap) }}
+    </p>
     % endif
 
     <p>{{ ngettext("On average, people who donate give {0} each to one other user.",
