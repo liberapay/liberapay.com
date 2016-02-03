@@ -34,6 +34,25 @@ top_communities = query_cache.all("""
 
 <div class="row">
 
+    <div class="col-xs-12">
+    <div class="alert alert-warning">
+        <p>{{ _(
+            "Liberapay only opened {0} ago, so it still looks a bit empty, but "
+            "it won't stay that way for long if you join it and help us "
+            "{1}spread the word{2}!",
+            to_age(constants.LAUNCH_TIME),
+            '<a href="https://github.com/liberapay/salon/issues/3">'|safe,
+            '</a>'|safe
+        ) }}</p>
+        <p>{{ _(
+            "Please consider donating to {0}the Liberapay team{1}, even only "
+            "a symbolic amount, to help kickstart the platform.",
+            '<a href="/Liberapay/">'|safe,
+            '</a>'|safe
+        ) }}</p>
+    </div>
+    </div>
+
     <div class="col-md-6">
     <div class="panel panel-primary">
         <div class="panel-heading">
