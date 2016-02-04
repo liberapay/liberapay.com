@@ -76,6 +76,14 @@ cron(env.dequeue_emails_every, Participant.dequeue_emails, True)
 # Website Algorithm
 # =================
 
+def return_500_for_exception(website, exception):
+    response = aspen.Response(500)
+    if website.show_tracebacks:
+        import traceback
+        response.body = traceback.format_exc()
+    return {'response': response, 'exception': None}
+
+
 noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [
@@ -110,10 +118,9 @@ algorithm.functions = [
     http_caching.add_caching_to_response,
     x_frame_options,
 
-    algorithm['log_traceback_for_5xx'],
     algorithm['delegate_error_to_simplate'],
     tell_sentry,
-    algorithm['log_traceback_for_exception'],
+    return_500_for_exception,
 
     tell_sentry,
 ]

@@ -7,6 +7,7 @@ import fnmatch
 import os
 import re
 from tempfile import mkstemp
+import traceback
 
 import aspen
 from aspen.testing.client import Client
@@ -98,6 +99,8 @@ def make_sentry_teller(env):
             return
 
         if not sentry:
+            # No Sentry, log to stderr instead
+            traceback.print_exc()
             return
 
         user = state.get('user')
