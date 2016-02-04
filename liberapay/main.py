@@ -10,7 +10,7 @@ from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, x_frame_options
-from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie, timer
+from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie
 from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min
 
 import aspen
@@ -79,7 +79,6 @@ cron(env.dequeue_emails_every, Participant.dequeue_emails, True)
 noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [
-    timer.start,
     algorithm['parse_environ_into_request'],
     algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
@@ -116,7 +115,6 @@ algorithm.functions = [
     tell_sentry,
     algorithm['log_traceback_for_exception'],
 
-    timer.end,
     tell_sentry,
 ]
 

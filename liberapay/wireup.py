@@ -324,8 +324,6 @@ def other_stuff(website, env):
         website.asset = lambda path: env.asset_url+path
         clean_assets(website.www_root)
 
-    website.log_metrics = env.log_metrics
-
 
 def env():
     env = Environment(
@@ -369,7 +367,6 @@ def env():
         CHECK_DB_EVERY                  = int,
         DEQUEUE_EMAILS_EVERY            = int,
         SENTRY_DSN                      = str,
-        LOG_METRICS                     = is_yesish,
         MANDRILL_KEY                    = str,
         GUNICORN_OPTS                   = str,
     )
