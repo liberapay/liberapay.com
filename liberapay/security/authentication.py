@@ -13,6 +13,7 @@ class _ANON(object):
     id = None
     __bool__ = __nonzero__ = lambda *a: False
     get_tip_to = lambda self, tippee: Participant._zero_tip_dict(tippee)
+    __repr__ = lambda self: '<ANON>'
 
 
 ANON = _ANON()

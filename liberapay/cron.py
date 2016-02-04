@@ -1,8 +1,5 @@
 import threading
 from time import sleep
-import traceback
-
-from aspen import log_dammit
 
 
 class Cron(object):
@@ -26,7 +23,6 @@ class Cron(object):
                     func()
                 except Exception as e:
                     self.website.tell_sentry(e, {})
-                    log_dammit(traceback.format_exc().strip())
                 sleep(period)
         t = threading.Thread(target=f)
         t.daemon = True

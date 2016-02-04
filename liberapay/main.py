@@ -5,19 +5,21 @@ import base64
 from six.moves import builtins
 from six.moves.urllib.parse import quote as urlquote
 
+import aspen
+from aspen.website import Website
+
 from liberapay import canonize, fill_accept_header, insert_constants, utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, x_frame_options
-from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie, timer
+from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie
 from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min
 
-import aspen
-from aspen.website import Website
 
-
+aspen.logging.LOGGING_THRESHOLD = 2  # Hide Aspen's startup messages
 website = Website()
+aspen.logging.LOGGING_THRESHOLD = 0
 
 
 # Configure renderers
@@ -76,10 +78,17 @@ cron(env.dequeue_emails_every, Participant.dequeue_emails, True)
 # Website Algorithm
 # =================
 
+def return_500_for_exception(website, exception):
+    response = aspen.Response(500)
+    if website.show_tracebacks:
+        import traceback
+        response.body = traceback.format_exc()
+    return {'response': response, 'exception': None}
+
+
 noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [
-    timer.start,
     algorithm['parse_environ_into_request'],
     algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
@@ -111,13 +120,10 @@ algorithm.functions = [
     http_caching.add_caching_to_response,
     x_frame_options,
 
-    algorithm['log_traceback_for_5xx'],
     algorithm['delegate_error_to_simplate'],
     tell_sentry,
-    algorithm['log_traceback_for_exception'],
-    algorithm['log_result_of_request'],
+    return_500_for_exception,
 
-    timer.end,
     tell_sentry,
 ]
 

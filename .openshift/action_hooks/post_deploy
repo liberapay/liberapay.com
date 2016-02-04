@@ -1,5 +1,6 @@
 #!/bin/bash -eu
 
+# http://docs.gunicorn.org/en/stable/signals.html
 pid=$(cat $OPENSHIFT_DATA_DIR/gunicorn.pid || true)
 if [ ! -z "$pid" ]; then
     echo "Sending SIGHUP to gunicorn..."
