@@ -342,22 +342,22 @@ def env():
 
     if env.malformed:
         plural = len(env.malformed) != 1 and 's' or ''
-        aspen.log_dammit("=" * 42)
-        aspen.log_dammit("Malformed environment variable%s:" % plural)
-        aspen.log_dammit(" ")
+        print("=" * 42)
+        print("Malformed environment variable%s:" % plural)
+        print(" ")
         for key, err in env.malformed:
-            aspen.log_dammit("  {} ({})".format(key, err))
+            print("  {} ({})".format(key, err))
 
         keys = ', '.join([key for key in env.malformed])
         raise BadEnvironment("Malformed envvar{}: {}.".format(plural, keys))
 
     if env.missing:
         plural = len(env.missing) != 1 and 's' or ''
-        aspen.log_dammit("=" * 42)
-        aspen.log_dammit("Missing environment variable%s:" % plural)
-        aspen.log_dammit(" ")
+        print("=" * 42)
+        print("Missing environment variable%s:" % plural)
+        print(" ")
         for key in env.missing:
-            aspen.log_dammit("  " + key)
+            print("  " + key)
 
         keys = ', '.join([key for key in env.missing])
         raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
