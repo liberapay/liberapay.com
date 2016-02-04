@@ -115,7 +115,6 @@ algorithm.functions = [
     algorithm['delegate_error_to_simplate'],
     tell_sentry,
     algorithm['log_traceback_for_exception'],
-    algorithm['log_result_of_request'],
 
     timer.end,
     tell_sentry,

@@ -42,10 +42,7 @@ data: env
 	$(with_local_env) $(env_bin)/python -m liberapay.utils.fake_data
 
 run: env
-	$(with_local_env) make --no-print-directory run_
-
-run_:
-	$(env_bin)/gunicorn liberapay.main:website --bind :8339 $$GUNICORN_OPTS
+	PATH=$(env_bin):$$PATH $(with_local_env) $(env_bin)/python app.py
 
 py: env
 	PYTHONPATH=. $(with_local_env) $(env_bin)/python -i liberapay/main.py
@@ -57,7 +54,7 @@ test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 
 pyflakes: env
-	$(env_bin)/pyflakes liberapay tests
+	$(env_bin)/pyflakes app.py liberapay tests
 
 test: test-schema pytest
 tests: test
