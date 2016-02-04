@@ -99,6 +99,10 @@ def make_sentry_teller(env):
             return
 
         if not sentry:
+            if env.sentry_reraise and not state:
+                # The absence state indicates a special exception, those are the
+                # ones we want to reraise
+                raise
             # No Sentry, log to stderr instead
             traceback.print_exc()
             return
@@ -332,6 +336,7 @@ def env():
         CHECK_DB_EVERY                  = int,
         DEQUEUE_EMAILS_EVERY            = int,
         SENTRY_DSN                      = str,
+        SENTRY_RERAISE                  = is_yesish,
         MANDRILL_KEY                    = str,
         GUNICORN_OPTS                   = str,
     )
