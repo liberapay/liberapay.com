@@ -32,6 +32,7 @@ from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models import DB
+from liberapay.security.authentication import ANON
 from liberapay.utils import markdown
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
@@ -85,81 +86,42 @@ def username_restrictions(website):
 
 
 def make_sentry_teller(env):
-    if not env.sentry_dsn:
-        aspen.log_dammit("Won't log to Sentry (SENTRY_DSN is empty).")
-        def noop(*a, **kw):
-            pass
-        Participant._tell_sentry = noop
-        return noop
+    sentry = raven.Client(env.sentry_dsn) if env.sentry_dsn else None
 
-    sentry = raven.Client(env.sentry_dsn)
+    if not sentry:
+        print("Won't log to Sentry (SENTRY_DSN is empty).")
 
     def tell_sentry(exception, state):
 
-        # Decide if we care.
-        # ==================
+        if isinstance(exception, aspen.Response) and exception.code < 500:
+            # Only log server errors
+            return
 
-        if isinstance(exception, aspen.Response):
-
-            if exception.code < 500:
-
-                # Only log server errors to Sentry. For responses < 500 we use
-                # stream-/line-based access logging. See discussion on:
-
-                # https://github.com/liberapay/liberapay.com/pull/1560.
-
-                return
-
-
-        # Find a user.
-        # ============
-        # | is disallowed in usernames, so we can use it here to indicate
-        # situations in which we can't get a username.
+        if not sentry:
+            return
 
         user = state.get('user')
-        user_id = 'n/a'
+        extra = {}
         if user is None:
-            username = '| no user'
+            user_id = 'no user'
+        elif user is ANON:
+            user_id = 'ANON'
+        elif not hasattr(user, 'id'):
+            user_id = 'no id'
         else:
-            is_anon = getattr(user, 'ANON', None)
-            if is_anon is None:
-                username = '| no ANON'
-            elif is_anon:
-                username = '| anonymous'
-            else:
-                username = getattr(user, 'username', None)
-                if username is None:
-                    username = '| no username'
-                else:
-                    user_id = user.id
-                    user = { 'id': user_id
-                           , 'is_admin': user.is_admin
-                           , 'is_suspicious': user.is_suspicious
-                           , 'join_time': user.join_time.isoformat()
-                           , 'url': 'https://liberapay.com/{}/'.format(username)
-                            }
+            user_id = user.id
+            extra['user_url'] = 'https://liberapay.com/~{}/'.format(user_id)
 
-
-        # Fire off a Sentry call.
-        # =======================
-
-        dispatch_result = state.get('dispatch_result')
-        request = state.get('request')
-        tags = { 'username': username
-               , 'user_id': user_id
-                }
-        extra = { 'filepath': getattr(dispatch_result, 'match', None)
-                , 'request': str(request).splitlines()
-                , 'user': user
-                 }
+        # Tell Sentry
+        tags = {
+            'user_id': user_id,
+            'username': getattr(user, 'username', None),
+        }
+        extra['url'] = getattr(state.get('request'), 'uri', None)
         result = sentry.captureException(tags=tags, extra=extra)
 
-
-        # Emit a reference string to stdout.
-        # ==================================
-
-        ident = sentry.get_ident(result)
-        aspen.log_dammit('Exception reference: ' + ident)
+        # Put the Sentry id in the state for logging, etc
+        state['sentry_ident'] = sentry.get_ident(result)
 
     Participant._tell_sentry = tell_sentry
     return tell_sentry
