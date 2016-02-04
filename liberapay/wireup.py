@@ -130,7 +130,7 @@ def make_sentry_teller(env):
         # Put the Sentry id in the state for logging, etc
         state['sentry_ident'] = sentry.get_ident(result)
 
-    Participant._tell_sentry = tell_sentry
+    Participant._tell_sentry = staticmethod(tell_sentry)
     return tell_sentry
 
 
