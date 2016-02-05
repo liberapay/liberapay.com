@@ -1,3 +1,5 @@
+# coding: utf8
+
 from liberapay.utils.query_cache import QueryCache
 
 query_cache = QueryCache(website.db, threshold=5)
@@ -34,33 +36,20 @@ new_members = query_cache.all("""
 
 % block content
 
-% if user.ANON
-    <div class="jumbotron" style="text-align: center">
-        <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
+<div class="jumbotron" style="text-align: center">
+    <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
+    <p>{{ _(
+        "We currently have {0} users ready to exchange {1} per month…\n"
+        "Not so bad considering that we only opened {2} ago!",
+        website.gnusers, website.gmonthly_volume,
+        to_age(constants.LAUNCH_TIME)
+    ).replace('\n', '<br>'|safe) }}</p>
+    % if user.ANON
         <p><a class="btn btn-primary btn-lg" href="/sign-in">{{ _("Join us") }}</a></p>
-    </div>
-% endif
+    % endif
+</div>
 
 <div class="row">
-
-    <div class="col-xs-12">
-    <div class="alert alert-warning">
-        <p>{{ _(
-            "Liberapay only opened {0} ago, so it still looks a bit empty, but "
-            "it won't stay that way for long if you join it and help us "
-            "{1}spread the word{2}!",
-            to_age(constants.LAUNCH_TIME),
-            '<a href="https://github.com/liberapay/salon/issues/3">'|safe,
-            '</a>'|safe
-        ) }}</p>
-        <p>{{ _(
-            "Please consider donating to {0}the Liberapay team{1}, even only "
-            "a symbolic amount, to help kickstart the platform.",
-            '<a href="/Liberapay/">'|safe,
-            '</a>'|safe
-        ) }}</p>
-    </div>
-    </div>
 
     <div class="col-md-6">
     <div class="panel panel-primary">
@@ -69,6 +58,15 @@ new_members = query_cache.all("""
         </div>
 
         <div class="panel-body">
+            <div class="alert alert-warning">
+                <p>{{ _(
+                    "Please consider donating to {0}the Liberapay team{1}, even "
+                    "only a symbolic amount, to help kickstart the platform.",
+                    '<a href="/Liberapay/">'|safe,
+                    '</a>'|safe,
+                ) }}</p>
+            </div>
+
             % if not user.ANON
             <p><a href="/{{ user.username }}/giving/">{{
                 _("You give {0} per week.", Money(user.giving, 'EUR'))
