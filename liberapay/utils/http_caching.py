@@ -3,6 +3,7 @@ Handles HTTP caching.
 """
 
 from hashlib import md5
+from os import stat
 
 from aspen import Response
 
@@ -15,11 +16,14 @@ ETAGS = {}
 def asset_etag(path):
     if path.endswith('.spt'):
         return ''
+    mtime = stat(path).st_mtime
     if path in ETAGS:
-        h = ETAGS[path]
-    else:
-        with open(path) as f:
-            h = ETAGS[path] = b64encode_s(md5(f.read()).digest())
+        h, cached_mtime = ETAGS[path]
+        if cached_mtime == mtime:
+            return h
+    with open(path) as f:
+        h = b64encode_s(md5(f.read()).digest())
+    ETAGS[path] = (h, mtime)
     return h
 
 
