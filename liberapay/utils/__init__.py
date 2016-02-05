@@ -88,7 +88,7 @@ def b64decode_s(s, **kw):
 
 
 def b64encode_s(s):
-    return b64encode(s, '-_').replace(b'=', b'~')
+    return b64encode(s, b'-_').replace(b'=', b'~')
 
 
 def update_global_stats(website):
