@@ -13,6 +13,7 @@ from postgres.cursors import SimpleCursorBase
 
 import liberapay
 from liberapay.exceptions import AuthRequired
+from liberapay.utils.i18n import Money
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
@@ -92,12 +93,15 @@ def b64encode_s(s):
 
 
 def update_global_stats(website):
-    stats = website.db.one("""
-        SELECT nactive, transfer_volume FROM paydays
-        ORDER BY ts_end DESC LIMIT 1
-    """, default=(0, 0.0))
-    website.gnactive = stats[0]
-    website.gtransfer_volume = stats[1]
+    website.gnusers = website.db.one("""
+        SELECT count(*) FROM participants WHERE status = 'active';
+    """)
+    transfer_volume = website.db.one("""
+        SELECT coalesce(sum(amount), 0)
+          FROM current_tips
+         WHERE is_funded
+    """)
+    website.gmonthly_volume = Money(transfer_volume * 52 / 12, 'EUR')
 
 
 def _execute(this, sql, params=[]):
