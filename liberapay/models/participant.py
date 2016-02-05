@@ -194,7 +194,7 @@ class Participant(Model, MixinTeam):
         algo = 'sha256'
         salt = urandom(21)
         rounds = cls._password_rounds
-        hashed = pbkdf2_hmac(algo, password, salt, rounds)
+        hashed = pbkdf2_hmac(algo, password.encode('utf8'), salt, rounds)
         hashed = '$'.join((algo, str(rounds), b64encode(salt), b64encode(hashed)))
         return hashed
 

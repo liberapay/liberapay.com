@@ -58,7 +58,7 @@ subhead = participant.username
 
         <ul>
 
-            <li><a href="{{ participant.path('wallet/payout/'+b64encode(request.line.uri)) }}"
+            <li><a href="{{ participant.path('wallet/payout/'+b64encode_s(request.line.uri)) }}"
                     >{{ _("Withdraw it") }}</a></li>
 
             <li><label>

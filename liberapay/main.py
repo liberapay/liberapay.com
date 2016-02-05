@@ -1,7 +1,5 @@
 from __future__ import division
 
-import base64
-
 from six.moves import builtins
 from six.moves.urllib.parse import quote as urlquote
 
@@ -13,7 +11,7 @@ from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, x_frame_options
-from liberapay.utils import erase_cookie, http_caching, i18n, set_cookie
+from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min
 
 
@@ -43,8 +41,8 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_htmlescaped.
     'assert': _assert,
     'Community': Community,
-    'b64decode': base64.b64decode,
-    'b64encode': base64.b64encode,
+    'b64decode_s': b64decode_s,
+    'b64encode_s': b64encode_s,
     'filter_profile_subnav': utils.filter_profile_subnav,
     'to_javascript': utils.to_javascript,
     'urlquote': urlquote,
@@ -83,6 +81,11 @@ def return_500_for_exception(website, exception):
     if website.show_tracebacks:
         import traceback
         response.body = traceback.format_exc()
+    else:
+        response.body = (
+            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
+            "we'll get it fixed ASAP."
+        )
     return {'response': response, 'exception': None}
 
 

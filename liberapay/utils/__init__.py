@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from base64 import b64decode, b64encode
 from datetime import date, datetime, timedelta
 import re
 
@@ -70,6 +71,24 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
                 raise Response(403, _("You are not authorized to access this page."))
 
     return participant
+
+
+def b64decode_s(s, **kw):
+    try:
+        return b64decode(s.replace(b'~', b'='), '-_')
+    except Exception:
+        try:
+            # For retrocompatibility
+            return b64decode(s.replace(b'~', b'='))
+        except Exception:
+            pass
+        if 'default' in kw:
+            return kw['default']
+        raise Response(400, "invalid base64 input")
+
+
+def b64encode_s(s):
+    return b64encode(s, b'-_').replace(b'=', b'~')
 
 
 def update_global_stats(website):

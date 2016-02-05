@@ -48,7 +48,7 @@ weekly = total - participant.receiving
         % endif
         % if funded < 52
             <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}"
-               href="{{ participant.path('wallet/payin/'+b64encode(request.path.raw)) }}"
+               href="{{ participant.path('wallet/payin/'+b64encode_s(request.path.raw)) }}"
                >{{ _("Add money") }}</a>
         % endif
     </p>

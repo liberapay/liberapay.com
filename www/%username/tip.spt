@@ -3,7 +3,7 @@
 from base64 import b64encode
 
 from liberapay.exceptions import AuthRequired
-from liberapay.utils import get_participant
+from liberapay.utils import b64encode_s, get_participant
 
 [-----------------------------------------------------------------------------]
 
@@ -31,9 +31,9 @@ if request.method == 'POST':
                        Money(out['amount'], 'EUR'), tippee.username)
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         back_to = request.body.get('back_to')
-        back_to += '?success=' + b64encode(out["msg"].encode('utf8'))
+        back_to += '?success=' + b64encode_s(out["msg"].encode('utf8'))
         if out['amount'] and not out['is_funded'] and not out['is_pledge']:
-            response.redirect('/' + tipper.username + '/wallet/payin/' + b64encode(back_to))
+            response.redirect('/' + tipper.username + '/wallet/payin/' + b64encode_s(back_to))
         response.redirect(back_to or '..')
 else:
     out = tipper.get_tip_to(tippee)

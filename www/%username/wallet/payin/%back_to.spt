@@ -1,7 +1,6 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from base64 import b64decode
 from datetime import datetime
 from decimal import Decimal as D, InvalidOperation
 
@@ -11,7 +10,7 @@ import liberapay
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import charge, MINIMUM_CHARGE, record_exchange_result, repr_error, upcharge
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import get_participant, is_card_expired
+from liberapay.utils import b64decode_s, get_participant, is_card_expired
 
 [---]
 
@@ -70,7 +69,7 @@ elif 'exchange_id' in request.qs:
                               (request.qs['exchange_id'], participant.id))
 
 account = participant.get_mangopay_account()
-back_to = b64decode(request.path['back_to'])
+back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
 
