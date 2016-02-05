@@ -7,6 +7,7 @@ import fnmatch
 import os
 import re
 from tempfile import mkstemp
+from time import time
 import traceback
 
 import aspen
@@ -215,13 +216,17 @@ def compile_assets(website):
         os.write(tmpfd, content)
         os.close(tmpfd)
         os.rename(tmpfpath, filepath)
-    atexit.register(lambda: clean_assets(website.www_root))
+    compilation_time = time()
+    atexit.register(lambda: clean_assets(website.www_root, compilation_time))
 
 
-def clean_assets(www_root):
+def clean_assets(www_root, older_than=None):
     for spt in find_files(www_root+'/assets/', '*.spt'):
         try:
-            os.unlink(spt[:-4])
+            path = spt[:-4]
+            if older_than and os.stat(path).st_mtime > older_than:
+                continue
+            os.unlink(path)
         except:
             pass
 
