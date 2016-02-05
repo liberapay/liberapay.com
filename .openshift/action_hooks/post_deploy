@@ -1,8 +1,17 @@
 #!/bin/bash -eu
 
 # http://docs.gunicorn.org/en/stable/signals.html
-pid=$(cat $OPENSHIFT_DATA_DIR/gunicorn.pid || true)
+function get_pid() { cat $OPENSHIFT_DATA_DIR/gunicorn.pid || true }
+pid=$(get_pid)
 if [ ! -z "$pid" ]; then
-    echo "Sending SIGHUP to gunicorn..."
-    kill -s SIGHUP $pid
+    echo "Gracefully restarting gunicorn..."
+    kill -s SIGUSR2 $pid
+    sleep 1
+    if [ -z "$(get_pid)" ]; then sleep 9; fi
+    if [ -z "$(get_pid)" -o "$(get_pid)" = "$pid" ]; then
+        echo "Gunicorn has failed to start a new process, you need to fix that!"
+    else
+        kill -s SIGWINCH $pid
+        ( sleep 30 && kill -s SIGTERM $pid ) &
+    fi
 fi
