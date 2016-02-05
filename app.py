@@ -30,7 +30,7 @@ bind = [
 chdir = env['OPENSHIFT_REPO_DIR'] if _production else ''
 
 if _production:
-    pid_file = env['OPENSHIFT_DATA_DIR'] + '/gunicorn.pid'
+    pidfile = env['OPENSHIFT_DATA_DIR'] + '/gunicorn.pid'
 
 # Import extra settings from the GUNICORN_OPTS env var
 import shlex
