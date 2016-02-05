@@ -16,6 +16,8 @@ top_communities = query_cache.all("""
 new_members = query_cache.all("""
     SELECT username, join_time, avatar_url
       FROM participants
+     WHERE status = 'active'
+       AND kind <> 'community'
   ORDER BY join_time DESC NULLS LAST
      LIMIT 25
 """)
