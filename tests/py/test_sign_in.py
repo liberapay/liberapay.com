@@ -76,6 +76,10 @@ class TestSignIn(EmailHarness):
         r = self.sign_in(dict(username='mélodie'.encode('utf8')))
         assert r.code == 400
 
+    def test_sign_in_non_ascii_password(self):
+        r = self.sign_in(dict(password='super clé'.encode('utf8')))
+        assert r.code == 302
+
     def test_sign_in_long_username(self):
         r = self.sign_in(dict(username='a'*200))
         assert r.code == 400
