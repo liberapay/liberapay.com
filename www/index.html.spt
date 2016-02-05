@@ -11,7 +11,16 @@ top_communities = query_cache.all("""
      LIMIT 9
 """)
 
+new_members = query_cache.all("""
+    SELECT username, join_time, avatar_url
+      FROM participants
+  ORDER BY join_time DESC NULLS LAST
+     LIMIT 25
+""")
+
 [---]
+% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+
 % extends "templates/base.html"
 
 % block head
@@ -130,6 +139,28 @@ top_communities = query_cache.all("""
             % endif
 
         % endif
+        </div>
+    </div>
+    </div>
+
+    <div class="col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ _("New Members") }}</h2>
+        </div>
+
+        <div class="panel-body">
+        <ul class="people">
+        % for m in new_members
+            <li class="panel panel-default mini-user">
+                <a href="/{{ m.username }}/">
+                    {{ avatar_img(m) }}
+                    <div class="name">{{ m.username }}</div>
+                    <div class="age">{{ to_age_str(m.join_time, add_direction=True) }}</div>
+                </a>
+            </li>
+        % endfor
+        </ul>
         </div>
     </div>
     </div>
