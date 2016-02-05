@@ -25,7 +25,7 @@ else:
     msg = _("Your take is now {0}.", Money(new_take, 'EUR'))
 
 back_to = request.qs.get('back_to') or '.'
-back_to = _modify_query(back_to, 'success', b64encode_s(msg.encode('utf8')))
+back_to = _modify_query(back_to, 'success', b64encode_s(msg))
 response.redirect(back_to)
 
 [---] text/plain

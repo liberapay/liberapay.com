@@ -1,3 +1,5 @@
+# coding: utf8
+
 from __future__ import print_function, unicode_literals
 
 from collections import OrderedDict
@@ -8,6 +10,7 @@ from aspen import Response
 
 from liberapay.constants import SESSION
 from liberapay.testing.mangopay import MangopayHarness
+from liberapay.utils import b64encode_s
 from liberapay.wireup import find_files
 
 
@@ -143,3 +146,10 @@ class TestPages(MangopayHarness):
         alice = self.make_participant('alice')
         body = self.client.GET("/alice/", auth_as=alice).text
         assert b'Edit' in body
+
+    def test_unicode_success_message_doesnt_break_edit_page(self):
+        alice = self.make_participant('alice')
+        for msg in ('épopée', b'épopée'):
+            r = self.client.GET('/alice/edit?success='+b64encode_s(msg),
+                                auth_as=alice)
+            assert b'épopée' in r.body

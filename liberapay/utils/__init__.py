@@ -75,12 +75,17 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
 
 
 def b64decode_s(s, **kw):
+    udecode = lambda a: a.decode('utf8')
+    if s[:1] == b'.':
+        udecode = lambda a: a
+        s = s[1:]
+    s = s.replace(b'~', b'=')
     try:
-        return b64decode(s.replace(b'~', b'='), '-_')
+        return udecode(b64decode(s, '-_'))
     except Exception:
         try:
             # For retrocompatibility
-            return b64decode(s.replace(b'~', b'='))
+            return udecode(b64decode(s))
         except Exception:
             pass
         if 'default' in kw:
@@ -89,7 +94,16 @@ def b64decode_s(s, **kw):
 
 
 def b64encode_s(s):
-    return b64encode(s, b'-_').replace(b'=', b'~')
+    prefix = b''
+    if not isinstance(s, bytes):
+        s = s.encode('utf8')
+    else:
+        # Check whether the string is binary or already utf8
+        try:
+            s.decode('utf8')
+        except UnicodeError:
+            prefix = b'.'
+    return prefix + b64encode(s, b'-_').replace(b'=', b'~')
 
 
 def update_global_stats(website):

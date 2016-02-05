@@ -117,3 +117,7 @@ class Tests(Harness):
         expected = '<p>Examples like this_one and this other_one.</p>\n'
         actual = markdown.render('Examples like this_one and this other_one.')
         assert expected == actual
+
+
+    def test_safe_base64_transcode_works_with_binary_data(self):
+        utils.b64decode_s(utils.b64encode_s(b'\xff'))
