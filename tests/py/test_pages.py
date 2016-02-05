@@ -149,6 +149,7 @@ class TestPages(MangopayHarness):
 
     def test_unicode_success_message_doesnt_break_edit_page(self):
         alice = self.make_participant('alice')
-        r = self.client.GET('/alice/edit?success='+b64encode_s('épopée'),
-                            auth_as=alice)
-        assert b'épopée' in r.body
+        for msg in ('épopée', b'épopée'):
+            r = self.client.GET('/alice/edit?success='+b64encode_s(msg),
+                                auth_as=alice)
+            assert b'épopée' in r.body
