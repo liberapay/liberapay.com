@@ -81,6 +81,11 @@ def return_500_for_exception(website, exception):
     if website.show_tracebacks:
         import traceback
         response.body = traceback.format_exc()
+    else:
+        response.body = (
+            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
+            "we'll get it fixed ASAP."
+        )
     return {'response': response, 'exception': None}
 
 
