@@ -124,7 +124,7 @@ def make_sentry_teller(env):
             'user_id': user_id,
             'username': getattr(user, 'username', None),
         }
-        extra['url'] = getattr(state.get('request'), 'uri', None)
+        extra['request_line'] = getattr(state.get('request'), 'line', None)
         result = sentry.captureException(tags=tags, extra=extra)
 
         # Put the Sentry id in the state for logging, etc
