@@ -21,7 +21,7 @@ def asset_etag(path):
         h, cached_mtime = ETAGS[path]
         if cached_mtime == mtime:
             return h
-    with open(path) as f:
+    with open(path, 'rb') as f:
         h = b64encode_s(md5(f.read()).digest())
     ETAGS[path] = (h, mtime)
     return h
