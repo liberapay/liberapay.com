@@ -1,7 +1,6 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from base64 import b64decode
 from datetime import datetime
 from decimal import Decimal as D
 
@@ -11,7 +10,7 @@ import liberapay
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payout
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import get_participant
+from liberapay.utils import b64decode_s, get_participant
 
 def obfuscate(n, x, y):
     return n[:x] + 'x'*len(n[x:y]) + n[y:]
@@ -40,7 +39,7 @@ if route:
     ba_details = bank_account.Details
     ba_type = bank_account.Type
 
-back_to = b64decode(request.path['back_to'])
+back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
 show_form = participant.balance > 0 and not success
 if show_form:

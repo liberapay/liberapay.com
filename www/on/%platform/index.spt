@@ -1,9 +1,8 @@
-from base64 import b64decode
-
 from aspen import Response
 from oauthlib.oauth2 import TokenExpiredError
 
 from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.utils import b64decode_s
 
 platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.friends_platforms]
 del p
@@ -23,7 +22,7 @@ sess = None
 if account:
     sess = account.get_auth_session()
     if sess:
-        page_url = b64decode(request.qs.get('page', ''))
+        page_url = b64decode_s(request.qs.get('page', ''))
         try:
             friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
         except TokenExpiredError:

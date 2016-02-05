@@ -82,8 +82,9 @@
 
 % set _success = request.qs.get('success')
 % if _success
+% set _success = _success and b64decode_s(_success, default=None)
 <div id="notification-area"><div class="notification notification-success">{{
-    b64decode(_success).decode('utf8')
+    _success
 }}<span class="close">&times;</span></div></div>
 % endif
 

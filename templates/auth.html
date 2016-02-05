@@ -5,7 +5,7 @@
               data-msg="{{ _('Please enter the name of the {0} account you would like to connect:', platform) }}"
           {% endif %}>
         <input type="hidden" name="action" value="{{ action }}" />
-        % set then=b64encode(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip()
+        % set then=b64encode_s(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip()
         <input type="hidden" name="then" value="{{ then }}" />
         <input type="hidden" name="user_id" value="{{ user_id }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />

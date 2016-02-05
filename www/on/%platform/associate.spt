@@ -1,4 +1,3 @@
-from base64 import b64decode
 import json
 
 from aspen import log, resources, Response
@@ -8,6 +7,7 @@ from liberapay import canonical_scheme, canonical_host
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation
+from liberapay.utils import b64decode_s
 
 [-----------------------------]
 
@@ -26,8 +26,8 @@ except KeyError:
     raise Response(400, 'Missing cookie')
 if not cookie_value:
     raise Response(400, 'Empty cookie')
-query_data, action, then, action_user_id = json.loads(b64decode(cookie_value))
-then = b64decode(then)  # double-b64encoded to avoid other encoding issues w/ qs
+query_data, action, then, action_user_id = json.loads(b64decode_s(cookie_value))
+then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
 # Finish the auth process, the returned session is ready to use
 url = canonical_scheme+'://'+canonical_host+request.line.uri.raw

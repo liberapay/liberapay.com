@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import json
-from base64 import b64encode
 
 import mock
 
@@ -9,6 +8,7 @@ from liberapay.elsewhere import UserInfo
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.testing import Harness
 import liberapay.testing.elsewhere as user_info_examples
+from liberapay.utils import b64encode_s
 
 
 class TestElsewhere(Harness):
@@ -41,7 +41,7 @@ class TestElsewhere(Harness):
         gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
         ft.return_value = None
 
-        cookie = b64encode(json.dumps(['query_data', 'connect', '', '2']))
+        cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT('/on/github/associate?state=deadbeef',
                                    auth_as=alice,
                                    cookies={b'github_deadbeef': cookie})

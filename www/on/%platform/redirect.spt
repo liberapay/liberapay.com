@@ -1,9 +1,9 @@
-from base64 import b64encode
 from datetime import timedelta
 import json
 
 from aspen import Response
 from liberapay.elsewhere import ACTIONS
+from liberapay.utils import b64encode_s
 
 COOKIE_TIMEOUT = timedelta(minutes=5)
 
@@ -27,7 +27,7 @@ if action not in ACTIONS:
 url, query_id, query_data = platform.get_auth_url(user=user)
 
 cookie_name = (platform.name+'_'+query_id).encode('ascii')
-cookie_value = b64encode(json.dumps([query_data, action, then, user_id]))
+cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id]))
 response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
 
 response.redirect(url)

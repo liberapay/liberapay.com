@@ -1,8 +1,8 @@
 # encoding: utf8
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from base64 import b64decode 
 
+from base64 import b64decode, b64encode
 from datetime import date, datetime, timedelta
 import re
 
@@ -72,11 +72,23 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
 
     return participant
 
-def b64_decode_wrapper(b_64_encoded_string):
+
+def b64decode_s(s, **kw):
     try:
-        b64decode(b_64_encoded_string)
+        return b64decode(s.replace(b'~', b'='), '-_')
     except Exception:
+        try:
+            # For retrocompatibility
+            return b64decode(s.replace(b'~', b'='))
+        except Exception:
+            pass
+        if 'default' in kw:
+            return kw['default']
         raise Response(400, "invalid base64 input")
+
+
+def b64encode_s(s):
+    return b64encode(s, '-_').replace(b'=', b'~')
 
 
 def update_global_stats(website):

@@ -1,10 +1,12 @@
 """
 Handles HTTP caching.
 """
-from base64 import b64encode
+
 from hashlib import md5
 
 from aspen import Response
+
+from liberapay.utils import b64encode_s
 
 
 ETAGS = {}
@@ -17,7 +19,7 @@ def asset_etag(path):
         h = ETAGS[path]
     else:
         with open(path) as f:
-            h = ETAGS[path] = b64encode(md5(f.read()).digest(), '-_').replace('=', '~')
+            h = ETAGS[path] = b64encode_s(md5(f.read()).digest())
     return h
 
 
