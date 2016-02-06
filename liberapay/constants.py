@@ -14,6 +14,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 "-_")
 
+AVATAR_QUERY = '?s=160'
 
 BIRTHDAY = date(2015, 5, 22)
 

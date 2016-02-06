@@ -21,7 +21,8 @@ from psycopg2.extras import Json
 import liberapay
 from liberapay.billing import mangoapi
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, EMAIL_RE, EMAIL_VERIFICATION_TIMEOUT, MAX_TIP,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, EMAIL_RE,
+    EMAIL_VERIFICATION_TIMEOUT, MAX_TIP,
     MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, SESSION, SESSION_REFRESH,
     SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
@@ -572,6 +573,7 @@ class Participant(Model, MixinTeam):
         else:
             gravatar_id = md5(email.strip().lower()).hexdigest()
             gravatar_url = 'https://secure.gravatar.com/avatar/'+gravatar_id
+            gravatar_url += AVATAR_QUERY
             (cursor or self.db).run("""
                 UPDATE participants
                    SET avatar_url = %s

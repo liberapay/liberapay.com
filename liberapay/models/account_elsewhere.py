@@ -14,6 +14,7 @@ from psycopg2 import IntegrityError
 import xmltodict
 
 import liberapay
+from liberapay.constants import AVATAR_QUERY
 from liberapay.security.crypto import constant_time_compare
 
 
@@ -103,7 +104,7 @@ class AccountElsewhere(Model):
             fragment = ''
             if netloc.endswith('githubusercontent.com') or \
                netloc.endswith('gravatar.com'):
-                query = 's=160'
+                query = AVATAR_QUERY
             i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
 
         # Serialize extra_info
