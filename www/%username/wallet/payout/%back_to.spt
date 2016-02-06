@@ -33,18 +33,21 @@ elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
-route = ExchangeRoute.from_network(participant, 'mango-ba')
-if route:
-    bank_account = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
-    ba_details = bank_account.Details
-    ba_type = bank_account.Type
-
 back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
 show_form = participant.balance > 0 and not success
 if show_form:
     withdrawable = participant.withdrawable_balance
     show_form = withdrawable > 0
+
+if show_form:
+    route = ExchangeRoute.from_network(participant, 'mango-ba')
+    if route:
+        bank_account = mangoapi.users.GetBankAccount(
+            participant.mangopay_user_id, route.address
+        )
+        ba_details = bank_account.Details
+        ba_type = bank_account.Type
 
 title = _("Withdraw money")
 
