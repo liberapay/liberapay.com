@@ -78,7 +78,7 @@ def add_caching_to_response(response, request=None, etag=None):
     # https://developers.google.com/speed/docs/best-practices/caching
     response.headers['Etag'] = etag
 
-    # Set CORS header for https://static.liberapay.com
+    # Set CORS header for https://*.liberapay.com
     if 'Access-Control-Allow-Origin' not in response.headers:
         response.headers['Access-Control-Allow-Origin'] = 'https://liberapay.com'
 
