@@ -51,6 +51,15 @@ if is_team:
 <div class="row">
 <div class="col-md-8 col-md-offset-2">
 
+    % if participant.receiving
+    <div class="alert alert-success">{{ ngettext(
+        "A Liberapay user has pledged to donate {0} per week to {1}.",
+        "{n} Liberapay users have pledged to donate a total of {0} per week to {1}.",
+        participant.npatrons,
+        Money(participant.receiving, 'EUR'), friendly_name
+    ) }}</div>
+    % endif
+
     <div class="panel panel-primary">
         <div class="panel-heading">{{ _("Donate to {0}", friendly_name) }}</div>
         <div class="panel-body row">
