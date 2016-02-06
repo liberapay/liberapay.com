@@ -108,7 +108,10 @@ def b64encode_s(s):
 
 def update_global_stats(website):
     website.gnusers = website.db.one("""
-        SELECT count(*) FROM participants WHERE status = 'active';
+        SELECT count(*)
+          FROM participants
+         WHERE status = 'active'
+           AND kind <> 'community';
     """)
     transfer_volume = website.db.one("""
         SELECT coalesce(sum(amount), 0)
