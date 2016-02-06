@@ -62,9 +62,9 @@ if [ -e sql/branch.sql ]; then
     # Run branch.sql on the test DB in echo mode to get back a "compiled"
     # version on stdout without commands like \i
     echo "Compiling branch.sql..."
-    $(make echo var=with_tests_env) sh -eu -c \ '
+    $(make echo var=with_tests_env) sh -eu -c '
         psql $DATABASE_URL <sql/recreate-schema.sql >/dev/null
-        psql -e $DATABASE_URL <sql/branch.sql >sql/branch_.sql
+        psql -e $DATABASE_URL -o /dev/null <sql/branch.sql >sql/branch_.sql
     '
     mv sql/branch{_,}.sql
     echo "Done."
