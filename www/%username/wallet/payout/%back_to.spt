@@ -36,7 +36,7 @@ elif 'exchange_id' in request.qs:
 back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
 show_form = participant.balance > 0 and not success
-if show_form:
+if show_form or not success:
     withdrawable = participant.withdrawable_balance
     show_form = withdrawable > 0
 
