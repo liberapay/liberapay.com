@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from decimal import Decimal as D
 import json
 
 import mock
@@ -76,6 +77,16 @@ class TestElsewhere(Harness):
             get_user_info.side_effect = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
+
+    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
+    def test_user_page_shows_pledges(self, get_user_info):
+        alice = self.make_elsewhere('github', 1, 'alice').participant
+        bob = self.make_participant('bob', balance=100)
+        amount = D('14.97')
+        bob.set_tip_to(alice, amount)
+        assert alice.receiving == amount
+        r = self.client.GET('/on/github/alice/')
+        assert str(amount) in r.body, r.body.decode('utf8')
 
     def test_user_pages_not_found(self):
         user_name = 'adhsjakdjsdkjsajdhksda'
