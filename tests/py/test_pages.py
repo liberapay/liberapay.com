@@ -161,3 +161,10 @@ class TestPages(MangopayHarness):
                             auth_as=self.david)
         assert r.code == 200
         assert error in r.body.decode('utf8')
+
+    def test_can_see_payout_success_page(self):
+        eid = self.make_exchange('mango-ba', 19, 0, self.david)
+        r = self.client.GET('/david/wallet/payout/?exchange_id=%s' % eid,
+                            auth_as=self.david)
+        assert r.code == 200
+        assert '€19' in r.body.decode('utf8')
