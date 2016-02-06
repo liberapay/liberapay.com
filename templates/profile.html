@@ -14,9 +14,12 @@
     <div class="panel panel-default profile-box">
         <div class="panel-body row">
             <div class="avatar col-xs-3">
-                <a href="/{{ participant.username }}/">{{ avatar_img(participant) }}</a>
+                {{ avatar_img(participant) }}
 
-                % if participant.join_time
+                % if edit
+                <a class="btn btn-default" href="https://gravatar.com/"
+                   target="_blank">{{ _("Modify your Gravatar") }}</a>
+                % elif participant.join_time
                 <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 % endif
                 % if participant.status == 'closed'
