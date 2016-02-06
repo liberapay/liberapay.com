@@ -17,9 +17,8 @@
                 {{ avatar_img(participant) }}
 
                 % if edit
-                <a class="btn btn-default" href="https://gravatar.com/">{{
-                    _("Modify your Gravatar")
-                }}</a>
+                <a class="btn btn-default" href="https://gravatar.com/"
+                   target="_blank">{{ _("Modify your Gravatar") }}</a>
                 % elif participant.join_time
                 <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 % endif
