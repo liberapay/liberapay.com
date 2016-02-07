@@ -34,7 +34,8 @@ class TestSignIn(EmailHarness):
         bob.sign_in(cookies)
         r = self.log_in('alice', password, cookies=cookies)
         assert r.code == 302
-        assert SESSION in r.headers.cookie
+        expected = b'%s:%s' % (alice.id, alice.refetch().session_token)
+        assert r.headers.cookie[SESSION].value == expected
 
     def test_log_in_closed_account(self):
         password = 'password'
