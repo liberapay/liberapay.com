@@ -46,6 +46,18 @@
         <a class="btn btn-primary {{ 'btn-lg' if receiving < goal else '' }}"
            href="{{ donate_path }}">{{ _("Donate") }}</a>
     % endif
+    <p class="text-right">
+        {{ _("Share:") }}
+        <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}" target="_blank">
+            <i class="fa fa-lg fa-facebook-square"></i>
+        </a>
+        <a class="btn" href="https://twitter.com/share" target="_blank">
+            <i class="fa fa-lg fa-twitter"></i>
+        </a>
+        <a class="btn" href="https://plus.google.com/share?url={{ participant.url() }}" target="_blank">
+            <i class="fa fa-lg fa-google-plus"></i>
+        </a>
+    </div>
 % else
     <p>{{ _("{0} doesn't accept donations", username) }}</p>
 % endif
