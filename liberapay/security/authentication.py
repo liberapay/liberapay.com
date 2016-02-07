@@ -19,10 +19,13 @@ class _ANON(object):
 ANON = _ANON()
 
 
-def sign_in(request, state):
+def sign_in_with_form_data(request, state):
     try:
         body = request.body
     except Response:
+        return
+
+    if not isinstance(body, dict):
         return
 
     p = None
@@ -49,12 +52,7 @@ def sign_in(request, state):
             p.add_email(body.pop('sign-in.email'), cursor=c)
         p.authenticated = True
 
-    if p:
-        response = state.setdefault('response', Response())
-        p.sign_in(response.headers.cookie)
-        if body.pop('form.repost', None) != 'true':
-            response.redirect(request.line.uri)
-        state['user'] = p
+    return p
 
 
 def start_user_as_anon():
@@ -68,6 +66,8 @@ def authenticate_user_if_possible(request, state, user):
     """
     if request.line.uri.startswith('/assets/'):
         return
+
+    # HTTP auth
     if 'Authorization' in request.headers:
         header = request.headers['authorization']
         if not header.startswith('Basic '):
@@ -80,13 +80,26 @@ def authenticate_user_if_possible(request, state, user):
         if not participant:
             raise Response(401)
         return {'user': participant}
-    elif SESSION in request.headers.cookie:
+
+    # Cookie and form auth
+    # We want to try cookie auth first, but we want form auth to supersede it
+    p = None
+    response = state.setdefault('response', Response())
+    if SESSION in request.headers.cookie:
         creds = request.headers.cookie[SESSION].value.split(':', 1)
         p = Participant.authenticate('id', 'session', *creds)
         if p:
-            return {'user': p}
-    elif request.method == 'POST':
-        sign_in(request, state)
+            state['user'] = p
+    if request.method == 'POST':
+        old_p = p
+        p = sign_in_with_form_data(request, state)
+        if p:
+            if old_p:
+                old_p.sign_out(response.headers.cookie)
+            p.sign_in(response.headers.cookie)
+            state['user'] = p
+            if request.body.pop('form.repost', None) != 'true':
+                response.redirect(request.line.uri)
 
 
 def add_auth_to_response(response, request=None, user=ANON):

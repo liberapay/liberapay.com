@@ -2,7 +2,7 @@ from aspen import Response
 
 from liberapay.security.authentication import ANON
 
-[-----------------------------------------------------------------------------]
+[---]
 
 if user.ANON:
     response.redirect('/')
@@ -22,7 +22,7 @@ if request.method == 'POST':
     response.redirect(back_to)
 
 title = _("Sign Out")
-[-----------------------------------------------------------------------------]
+[---] text/html
 % extends "templates/base.html"
 % block content
     <form id="sign-out" method="POST">

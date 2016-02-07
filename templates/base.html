@@ -26,9 +26,7 @@
                 {{ nav([('/explore/', _('Explore')), ('/search', _('Search')), ('/about/', _('About'))]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
-            % if user.ANON
-                <li>{% include "templates/sign-in-link.html" %}</li>
-            % else
+            % if not user.ANON
                 <li>{% include "templates/profile-dropdown.html" %}</li>
                 <li><a href="/{{ user.username }}/notifications"
                        title="{{ _('Notifications') }}"
@@ -40,6 +38,8 @@
                     % endif
                 </a></li>
                 <li>{% include "templates/sign-out.html" %}</li>
+            % elif not response.show_sign_in_form
+                <li>{% include "templates/sign-in-link.html" %}</li>
             % endif
             </ul>
         </div>
