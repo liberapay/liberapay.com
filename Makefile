@@ -10,12 +10,6 @@ with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
 with_tests_env := $(env_bin)/honcho run -e $(test_env_files)
 py_test := $(with_tests_env) $(env_bin)/py.test
 
-ifdef PYTEST
-	pytest = ./tests/py/$(PYTEST)
-else
-	pytest = ./tests/py/
-endif
-
 echo:
 	@echo $($(var))
 
@@ -60,7 +54,7 @@ test: test-schema pytest
 tests: test
 
 pytest: env
-	PYTHONPATH=. $(py_test) --cov liberapay $(pytest)
+	PYTHONPATH=. $(py_test) --cov liberapay ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
 
 pytest-cov: env
