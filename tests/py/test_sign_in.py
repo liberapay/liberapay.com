@@ -2,6 +2,8 @@
 
 from __future__ import division, print_function, unicode_literals
 
+from six.moves.http_cookies import SimpleCookie
+
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
@@ -18,15 +20,19 @@ good_data = {
 
 class TestSignIn(EmailHarness):
 
-    def log_in(self, username, password):
+    def log_in(self, username, password, **kw):
         data = {'log-in.username': username, 'log-in.password': password}
-        return self.client.POST('/sign-in', data, raise_immediately=False)
+        return self.client.POST('/sign-in', data, raise_immediately=False, **kw)
 
     def test_log_in(self):
         password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
-        r = self.log_in('alice', password)
+        bob = self.make_participant('bob')
+        bob.authenticated = True
+        cookies = SimpleCookie()
+        bob.sign_in(cookies)
+        r = self.log_in('alice', password, cookies=cookies)
         assert r.code == 302
         assert SESSION in r.headers.cookie
 
