@@ -25,6 +25,9 @@ def sign_in_with_form_data(request, state):
     except Response:
         return
 
+    if not isinstance(body, dict):
+        return
+
     p = None
 
     if body.get('log-in.username'):
