@@ -139,12 +139,10 @@ class Payday(object):
                  , join_time
                  , balance AS old_balance
                  , balance AS new_balance
-                 , is_suspicious
                  , goal
                  , kind
               FROM participants p
-             WHERE is_suspicious IS NOT true
-               AND join_time < %(ts_start)s
+             WHERE join_time < %(ts_start)s
                AND (mangopay_user_id IS NOT NULL OR kind = 'group')
           ORDER BY join_time;
 

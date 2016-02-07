@@ -18,7 +18,7 @@ from liberapay.billing.exchanges import (
     transfer,
 )
 from liberapay.exceptions import (
-    NegativeBalance, NotEnoughWithdrawableMoney, UserIsSuspicious,
+    NegativeBalance, NotEnoughWithdrawableMoney,
     TransactionFeeTooHigh
 )
 from liberapay.models.participant import Participant
@@ -77,12 +77,6 @@ class TestPayouts(MangopayHarness):
 
 class TestCharge(MangopayHarness):
 
-    def test_charge_for_suspicious_raises_UserIsSuspicious(self):
-        bob = self.make_participant('bob', is_suspicious=True,
-                                    mangopay_user_id='fake_id')
-        with self.assertRaises(UserIsSuspicious):
-            charge(self.db, bob, D('1.00'), 'http://localhost/')
-
     @mock.patch('liberapay.billing.exchanges.test_hook')
     def test_charge_failure(self, test_hook):
         test_hook.side_effect = Foobar
@@ -122,12 +116,12 @@ class TestCharge(MangopayHarness):
         assert 'CardId: The value -1 is not valid' in exchange.note
 
     def test_charge_no_card(self):
-        bob = self.make_participant('bob', is_suspicious=False)
+        bob = self.make_participant('bob')
         with self.assertRaises(AssertionError):
             charge(self.db, bob, D('10.00'), 'http://localhost/')
 
     def test_charge_invalidated_card(self):
-        bob = self.make_participant('bob', is_suspicious=False, last_bill_result='invalidated')
+        bob = self.make_participant('bob', last_bill_result='invalidated')
         with self.assertRaises(AssertionError):
             charge(self.db, bob, D('10.00'), 'http://localhost/')
 

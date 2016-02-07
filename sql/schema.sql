@@ -40,7 +40,6 @@ CREATE TABLE participants
 
 , balance               numeric(35,2)           NOT NULL DEFAULT 0.0
 , goal                  numeric(35,2)           DEFAULT NULL
-, is_suspicious         boolean                 DEFAULT NULL
 , mangopay_user_id      text                    DEFAULT NULL UNIQUE
 , mangopay_wallet_id    text                    DEFAULT NULL
 
@@ -322,8 +321,6 @@ CREATE VIEW current_takes AS
            FROM takes t
            JOIN participants p1 ON p1.id = member
            JOIN participants p2 ON p2.id = team
-          WHERE p1.is_suspicious IS NOT TRUE
-            AND p2.is_suspicious IS NOT TRUE
        ORDER BY member
               , team
               , mtime DESC

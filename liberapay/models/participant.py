@@ -222,7 +222,6 @@ class Participant(Model, MixinTeam):
                SET session_token=%s
                  , session_expires=%s
              WHERE id=%s
-               AND is_suspicious IS NOT true
         """, (new_token, expires, self.id))
         self.set_attributes(session_token=new_token, session_expires=expires)
 
@@ -230,7 +229,7 @@ class Participant(Model, MixinTeam):
         """Set ``session_expires`` to the given datetime.
         """
         self.db.run( "UPDATE participants SET session_expires=%s "
-                     "WHERE id=%s AND is_suspicious IS NOT true"
+                     "WHERE id=%s"
                    , (expires, self.id,)
                     )
         self.set_attributes(session_expires=expires)
@@ -260,14 +259,6 @@ class Participant(Model, MixinTeam):
         """
         self.update_session(None, None)
         erase_cookie(cookies, SESSION)
-
-
-    # Suspiciousness
-    # ==============
-
-    @property
-    def is_whitelisted(self):
-        return self.is_suspicious is False
 
 
     # Statement
@@ -1004,7 +995,6 @@ class Participant(Model, MixinTeam):
               JOIN participants p2 ON p2.id = t.tippee
              WHERE t.tipper = %s
                AND t.amount > 0
-               AND p2.is_suspicious IS NOT true
           ORDER BY p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
         fake_balance = self.balance + self.receiving
@@ -1032,7 +1022,6 @@ class Participant(Model, MixinTeam):
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
-                        AND p2.is_suspicious IS NOT true
                         AND p2.status = 'active'
                         AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
                         AND amount > 0
@@ -1054,7 +1043,6 @@ class Participant(Model, MixinTeam):
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tipper
                       WHERE tippee = %(id)s
-                        AND p2.is_suspicious IS NOT true
                         AND amount > 0
                         AND is_funded
                  )
@@ -1198,7 +1186,6 @@ class Participant(Model, MixinTeam):
                        JOIN participants p ON p.id = tipper
                       WHERE tippee=%s
                         AND is_funded
-                        AND is_suspicious IS NOT true
                    ORDER BY tipper
                           , mtime DESC
                     ) AS foo
@@ -1242,7 +1229,6 @@ class Participant(Model, MixinTeam):
                      , p.kind
                      , t.is_funded
                      , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
-                     , p.is_suspicious
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
@@ -1316,7 +1302,6 @@ class Participant(Model, MixinTeam):
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
-                   AND p.is_suspicious IS NOT true
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo

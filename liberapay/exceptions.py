@@ -120,9 +120,6 @@ class NotEnoughWithdrawableMoney(LazyResponse400):
         return _("You can't withdraw more than {0} at this time.", *self.args)
 
 
-class UserIsSuspicious(Exception): pass
-
-
 class TransactionFeeTooHigh(LazyResponse400):
     def msg(self, _):
         return _("The transaction fee would be more than 10%.")

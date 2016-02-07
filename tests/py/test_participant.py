@@ -353,7 +353,6 @@ class Tests(Harness):
     def test_receiving_includes_tips_from_whitelisted_accounts(self):
         alice = self.make_participant( 'alice'
                                      , balance=100
-                                     , is_suspicious=False
                                       )
         bob = self.make_stub()
         alice.set_tip_to(bob, '3.00')
@@ -364,24 +363,12 @@ class Tests(Harness):
     def test_receiving_includes_tips_from_unreviewed_accounts(self):
         alice = self.make_participant( 'alice'
                                      , balance=100
-                                     , is_suspicious=None
                                       )
         bob = self.make_stub()
         alice.set_tip_to(bob, '3.00')
 
         assert bob.receiving == Decimal('3.00')
         assert bob.npatrons == 1
-
-    def test_receiving_ignores_tips_from_blacklisted_accounts(self):
-        alice = self.make_participant( 'alice'
-                                     , balance=100
-                                     , is_suspicious=True
-                                      )
-        bob = self.make_stub()
-        alice.set_tip_to(bob, '3.00')
-
-        assert bob.receiving == Decimal('0.00')
-        assert bob.npatrons == 0
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', balance=100)

@@ -57,7 +57,6 @@ def fake_participant(db, kind=None, is_admin=False):
                    , balance=0
                    , hide_giving=is_a_person and (random.randrange(5) == 0)
                    , hide_receiving=is_a_person and (random.randrange(5) == 0)
-                   , is_suspicious=False
                    , status='active'
                    , join_time=faker.date_time_this_year()
                    , kind=kind

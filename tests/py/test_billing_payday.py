@@ -27,36 +27,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
         assert self.transfer_mock.call_count
 
-    def test_payday_doesnt_move_money_from_a_suspicious_account(self):
-        self.db.run("""
-            UPDATE participants
-               SET is_suspicious = true
-             WHERE username = 'janet'
-        """)
-        self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        Payday.start().run()
-
-        janet = Participant.from_username('janet')
-        homer = Participant.from_username('homer')
-
-        assert janet.balance == D('0.00')
-        assert homer.balance == D('0.00')
-
-    def test_payday_doesnt_move_money_to_a_suspicious_account(self):
-        self.db.run("""
-            UPDATE participants
-               SET is_suspicious = true
-             WHERE username = 'homer'
-        """)
-        self.janet.set_tip_to(self.homer, '6.00')  # under $10!
-        Payday.start().run()
-
-        janet = Participant.from_username('janet')
-        homer = Participant.from_username('homer')
-
-        assert janet.balance == D('0.00')
-        assert homer.balance == D('0.00')
-
     def test_update_cached_amounts(self):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', balance=100)
