@@ -235,10 +235,10 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateIn
 
     function addSeparators(string, positions, separator) {
         var separator = separator || ' ';
-        var parts = []
+        var parts = [];
         var j = 0;
         for (var i=0; i<positions.length; i++) {
-            if (string.length > positions[i]) {
+            if (string.length >= positions[i]) {
                 parts.push(string.slice(j, positions[i]));
                 j = positions[i];
             } else {
@@ -249,8 +249,8 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateIn
         return parts.join(separator);
     }
 
-    var americanExpressSpaces = [4, 10, 15];
-    var defaultSpaces = [4, 8, 12, 16];
+    var americanExpressSpaces = [4, 10];
+    var defaultSpaces = [4, 8, 12];
 
     cardNumberInput.on("keypress", function(e) {
         var number = getInputValue(e, cardNumberInput);
