@@ -234,14 +234,19 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateIn
     }
 
     function addSeparators(string, positions, separator) {
+        // positions isn't supposed to contain the maximum length as its last
+        // element, if it does you'll get a separator at the end of string
         var separator = separator || ' ';
         var parts = [];
         var j = 0;
         var slen = string.length;
         for (var i=0; i<positions.length && slen >= positions[i]; i++) {
+            // This loop adds all the complete parts in the array
             parts.push(string.slice(j, positions[i]));
             j = positions[i];
         }
+        // This adds whatever's left, it can be an empty string, in which case
+        // the string will have a separator at the end
         parts.push(string.slice(j));
         return parts.join(separator);
     }
