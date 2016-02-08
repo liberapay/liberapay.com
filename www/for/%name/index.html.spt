@@ -1,19 +1,13 @@
 from six.moves.urllib.parse import quote as urlquote
 
-from liberapay.models.community import Community
-from liberapay.utils import markdown
+from liberapay.utils import get_community, markdown
 from liberapay.utils.query_cache import QueryCache
 
 query_cache = QueryCache(website.db, threshold=1)
 
 [---]
 
-name = request.path['name']
-community = Community.from_name(name)
-if not community:
-    response.redirect('/for/new?name=' + urlquote(name))
-elif community.name != name:
-    response.redirect('/for/' + community.name + '/')
+community = get_community(state, restrict=False)
 
 try:
     limit = min(int(request.qs.get('limit', 50)), 100)

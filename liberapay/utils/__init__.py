@@ -6,6 +6,8 @@ from base64 import b64decode, b64encode
 from datetime import date, datetime, timedelta
 import re
 
+from six.moves.urllib.parse import quote as urlquote
+
 from aspen import Response, json
 from aspen.utils import to_rfc822, utcnow
 from markupsafe import Markup
@@ -13,6 +15,7 @@ from postgres.cursors import SimpleCursorBase
 
 import liberapay
 from liberapay.exceptions import AuthRequired
+from liberapay.models.community import Community
 from liberapay.utils.i18n import Money
 
 
@@ -72,6 +75,30 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
                 raise Response(403, _("You are not authorized to access this page."))
 
     return participant
+
+
+def get_community(state, restrict=False):
+    request, response = state['request'], state['response']
+    user = state['user']
+    name = request.path['name']
+
+    c = Community.from_name(name)
+    if request.method in ('GET', 'HEAD'):
+        if not c:
+            response.redirect('/for/new?name=' + urlquote(name))
+        if c.name != name:
+            response.redirect('/for/' + c.name + request.line.uri[5+len(name):])
+    elif not c:
+        raise Response(404)
+
+    if restrict:
+        if user.ANON:
+            raise AuthRequired
+        if user.id != c.creator and not user.is_admin:
+            _ = state['_']
+            raise Response(403, _("You are not authorized to access this page."))
+
+    return c
 
 
 def b64decode_s(s, **kw):
