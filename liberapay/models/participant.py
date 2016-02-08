@@ -1041,7 +1041,6 @@ class Participant(Model, MixinTeam):
             WITH our_tips AS (
                      SELECT amount
                        FROM current_tips
-                       JOIN participants p2 ON p2.id = tipper
                       WHERE tippee = %(id)s
                         AND amount > 0
                         AND is_funded
@@ -1183,7 +1182,6 @@ class Participant(Model, MixinTeam):
                             amount
                           , tipper
                        FROM tips
-                       JOIN participants p ON p.id = tipper
                       WHERE tippee=%s
                         AND is_funded
                    ORDER BY tipper
