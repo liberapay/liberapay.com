@@ -350,26 +350,6 @@ class Tests(Harness):
         assert carl.receiving == Decimal('3.00')
         assert carl.npatrons == 1
 
-    def test_receiving_includes_tips_from_whitelisted_accounts(self):
-        alice = self.make_participant( 'alice'
-                                     , balance=100
-                                      )
-        bob = self.make_stub()
-        alice.set_tip_to(bob, '3.00')
-
-        assert bob.receiving == Decimal('3.00')
-        assert bob.npatrons == 1
-
-    def test_receiving_includes_tips_from_unreviewed_accounts(self):
-        alice = self.make_participant( 'alice'
-                                     , balance=100
-                                      )
-        bob = self.make_stub()
-        alice.set_tip_to(bob, '3.00')
-
-        assert bob.receiving == Decimal('3.00')
-        assert bob.npatrons == 1
-
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob', taking=Decimal('42.00'))
