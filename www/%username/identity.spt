@@ -15,6 +15,10 @@ KEYS_LEGAL = ['Name', 'LegalPersonType'] + ['LegalRepresentative'+k for k in KEY
 [---]
 request.allow('GET', 'POST')
 participant = get_participant(state, restrict=True)
+
+if participant.kind not in ('individual', 'organization'):
+    raise Response(403)
+
 title = participant.username
 error = ''
 
