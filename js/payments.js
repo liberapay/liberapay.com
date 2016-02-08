@@ -234,23 +234,25 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateIn
     }
 
     function addSeparators(string, positions, separator) {
+        // positions isn't supposed to contain the maximum length as its last
+        // element, if it does you'll get a separator at the end of string
         var separator = separator || ' ';
-        var parts = []
+        var parts = [];
         var j = 0;
-        for (var i=0; i<positions.length; i++) {
-            if (string.length > positions[i]) {
-                parts.push(string.slice(j, positions[i]));
-                j = positions[i];
-            } else {
-                break;
-            }
+        var slen = string.length;
+        for (var i=0; i<positions.length && slen >= positions[i]; i++) {
+            // This loop adds all the complete parts in the array
+            parts.push(string.slice(j, positions[i]));
+            j = positions[i];
         }
+        // This adds whatever's left, it can be an empty string, in which case
+        // the string will have a separator at the end
         parts.push(string.slice(j));
         return parts.join(separator);
     }
 
-    var americanExpressSpaces = [4, 10, 15];
-    var defaultSpaces = [4, 8, 12, 16];
+    var americanExpressSpaces = [4, 10];
+    var defaultSpaces = [4, 8, 12];
 
     cardNumberInput.on("keypress", function(e) {
         var number = getInputValue(e, cardNumberInput);
@@ -258,7 +260,9 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateIn
         var maximumLength = (isAmericanExpressCard ? 15 : 16);
         if (shouldProcessInput(e, maximumLength, cardNumberInput)) {
             var newInput;
-            newInput = isAmericanExpressCard ? addSeparators(number, americanExpressSpaces) : addSeparators(number, defaultSpaces);
+            newInput = isAmericanExpressCard ?
+                addSeparators(number, americanExpressSpaces) :
+                addSeparators(number, defaultSpaces);
             cardNumberInput.val(newInput);
         }
     });
