@@ -255,7 +255,9 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateIn
         var maximumLength = (isAmericanExpressCard ? 15 : 16);
         if (shouldProcessInput(e, maximumLength, cardNumberInput)) {
             var newInput;
-            newInput = isAmericanExpressCard ? addSeparators(number, americanExpressSpaces) : addSeparators(number, defaultSpaces);
+            newInput = isAmericanExpressCard ?
+                addSeparators(number, americanExpressSpaces) :
+                addSeparators(number, defaultSpaces);
             cardNumberInput.val(newInput);
         }
     });
