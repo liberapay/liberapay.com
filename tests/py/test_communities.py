@@ -86,6 +86,26 @@ class TestCommunitySubscriptions(Harness):
         assert len(json.loads(response.body)) == 0
 
 
+class TestCommunityEdit(Harness):
+
+    def setUp(self):
+        Harness.setUp(self)
+        self.alice = self.make_participant("alice")
+        self.community = Community.create('test', self.alice.id)
+
+    def test_creator_can_edit_community(self):
+        data = {'lang': 'en', 'subtitle': '', 'sidebar': ''}
+        response = self.client.POST('/for/test/edit', data, auth_as=self.alice)
+        assert response.code == 200
+
+    def test_others_cant_edit_community(self):
+        response = self.client.PxST('/for/test/edit')
+        assert response.code == 403
+        bob = self.make_participant('bob')
+        response = self.client.PxST('/for/test/edit', auth_as=bob)
+        assert response.code == 403
+
+
 class TestForCommunityJson(Harness):
 
     def setUp(self):
