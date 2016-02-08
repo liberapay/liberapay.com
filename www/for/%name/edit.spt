@@ -1,19 +1,11 @@
-from liberapay.exceptions import AuthRequired
-from liberapay.models.community import Community
+from liberapay.utils import get_community
 from liberapay.utils.i18n import LANGUAGES_2
 
 [---]
 
-name = request.path['name']
-c = Community.from_name(name)
-if not c:
-    response.redirect('/for/new?name=' + urlquote(name))
-elif c.name != name:
-    response.redirect('/for/' + c.name + '/')
+c = get_community(state, restrict=True)
 
 if request.method == 'POST':
-    if user.ANON:
-        raise AuthRequired
     body = request.body
     lang, subtitle, sidebar = body['lang'], body['subtitle'], body['sidebar']
     if lang not in LANGUAGES_2:

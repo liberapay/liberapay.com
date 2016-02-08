@@ -1,17 +1,11 @@
 from aspen import Response
 
-from liberapay.exceptions import AuthRequired
-from liberapay.models.community import Community
+from liberapay.utils import get_community
 
 [---]
 
 request.allow('POST')
-if user.ANON:
-    raise AuthRequired
-
-community = Community.from_name(request.path['name'])
-if not community:
-    raise Response(404)
+community = get_community(state, restrict=True)
 
 action = request.path['action']
 

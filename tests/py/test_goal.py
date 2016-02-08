@@ -55,3 +55,14 @@ class Tests(Harness):
           ORDER BY ts DESC
         """)
         assert actual == ['400', None, '1100.00', '0', '100']
+
+    def test_team_member_can_change_team_goal(self):
+        team = self.make_participant('team', kind='group')
+        team.add_member(self.alice)
+        r = self.client.PxST(
+            '/team/goal',
+            {'goal': 'custom', 'goal_custom': '99.99'},
+            auth_as=self.alice
+        )
+        assert r.code == 302
+        assert team.refetch().goal == Decimal('99.99')
