@@ -237,13 +237,10 @@ Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateIn
         var separator = separator || ' ';
         var parts = [];
         var j = 0;
-        for (var i=0; i<positions.length; i++) {
-            if (string.length >= positions[i]) {
-                parts.push(string.slice(j, positions[i]));
-                j = positions[i];
-            } else {
-                break;
-            }
+        var slen = string.length;
+        for (var i=0; i<positions.length && slen >= positions[i]; i++) {
+            parts.push(string.slice(j, positions[i]));
+            j = positions[i];
         }
         parts.push(string.slice(j));
         return parts.join(separator);
