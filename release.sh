@@ -66,8 +66,8 @@ if [ -e sql/branch.sql ]; then
     echo >>$branch_c
     echo "UPDATE db_meta SET value = '$new_version'::jsonb WHERE key = 'schema_version';" >>$branch_c
     $(make echo var=with_tests_env) sh -eu -c "
-        psql \$DATABASE_URL <sql/recreate-schema.sql >/dev/null
-        psql -e \$DATABASE_URL -o /dev/null <$branch_c >$branch_c.
+        psql \$DATABASE_URL -v ON_ERROR_STOP=on <sql/recreate-schema.sql >/dev/null
+        psql -e \$DATABASE_URL -v ON_ERROR_STOP=on -o /dev/null <$branch_c >$branch_c.
     "
     mv $branch_c{.,}
     echo "Done."
