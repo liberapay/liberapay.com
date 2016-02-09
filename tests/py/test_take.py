@@ -84,6 +84,7 @@ class Tests(Harness):
         assert len(members) == 1
         assert members[alice.id]['username'] == 'alice'
         assert members[alice.id]['nominal_take'] == 42
+        assert members[alice.id]['actual_amount'] == 42
 
     def test_taking_and_receiving_are_updated_correctly(self):
         team = self.make_team()
