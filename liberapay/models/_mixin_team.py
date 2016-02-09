@@ -186,7 +186,7 @@ class MixinTeam(object):
         nominal_takes = self.get_current_takes(cursor=cursor)
         balance = self.receiving
         total_takes = sum(t['amount'] for t in nominal_takes)
-        ratio = balance / total_takes if total_takes else 0
+        ratio = min(balance / total_takes, 1) if total_takes else 0
         for take in nominal_takes:
             nominal = take['nominal_take'] = take.pop('amount')
             actual = take['actual_amount'] = (nominal * ratio).quantize(CENT, rounding=ROUND_UP)
