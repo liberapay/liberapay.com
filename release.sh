@@ -53,7 +53,7 @@ rhc ssh $APPNAME env | ./env/bin/honcho run -e /dev/stdin \
 if [ -e sql/branch.sql ]; then
     # Merge branch.sql into schema.sql
     git rm --cached sql/branch.sql
-    echo | cat sql/branch.sql >>sql/schema.sql
+    echo -e '\n' | cat - sql/branch.sql >>sql/schema.sql
     echo "sql/branch.sql has been appended to sql/schema.sql"
     read -p "Please make the necessary manual modifications to schema.sql now, then press Enter to continue... " enter
     git add sql/schema.sql
