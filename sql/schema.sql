@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '1'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '2'::jsonb);
 
 
 -- participants -- user accounts
@@ -45,7 +45,6 @@ CREATE TABLE participants
 
 , balance               numeric(35,2)           NOT NULL DEFAULT 0.0
 , goal                  numeric(35,2)           DEFAULT NULL
-, is_suspicious         boolean                 DEFAULT NULL
 , mangopay_user_id      text                    DEFAULT NULL UNIQUE
 , mangopay_wallet_id    text                    DEFAULT NULL
 
@@ -325,13 +324,7 @@ CREATE VIEW current_takes AS
     SELECT * FROM (
          SELECT DISTINCT ON (member, team) t.*
            FROM takes t
-           JOIN participants p1 ON p1.id = member
-           JOIN participants p2 ON p2.id = team
-          WHERE p1.is_suspicious IS NOT TRUE
-            AND p2.is_suspicious IS NOT TRUE
-       ORDER BY member
-              , team
-              , mtime DESC
+       ORDER BY member, team, mtime DESC
     ) AS anon WHERE amount IS NOT NULL;
 
 
