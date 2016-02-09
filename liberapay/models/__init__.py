@@ -111,3 +111,37 @@ def _check_bundles(cursor):
          WHERE bundles_total <> balance
     """)
     assert len(b) == 0, "bundles are out of whack: {}".format(b)
+
+
+def run_migrations(db):
+    v = 0
+    db_meta = db.one("SELECT to_regclass('db_meta')")
+    if db_meta:
+        v = db.one("SELECT value FROM db_meta WHERE key = 'schema_version'")
+    migrations = open('sql/migrations.sql').read().split('\n\n-- migration #')
+    for m in migrations[1:]:
+        n, sql = m.split('\n', 1)
+        n = int(n)
+        if v >= n:
+            continue
+        print('Running migration #%s...' % n)
+        db.run(sql)
+        db.run("""
+            UPDATE db_meta
+               SET value = '%s'::jsonb
+             WHERE key = 'schema_version'
+        """, (n,))
+    print('All done.' if n != v else 'No new migrations found.')
+    return n - v
+
+
+if __name__ == '__main__':
+    from liberapay import wireup
+    env = wireup.env()
+    db = wireup.db(env)
+    print('Checking DB...')
+    db.self_check()
+    r = run_migrations(db)
+    if r:
+        print('Checking DB...')
+        db.self_check()
