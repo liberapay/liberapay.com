@@ -17,7 +17,7 @@ from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymen
 from liberapay.constants import QUARANTINE
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
-    TransactionFeeTooHigh, UserIsSuspicious
+    TransactionFeeTooHigh
 )
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
@@ -115,9 +115,6 @@ def test_hook():
 
 
 def payout(db, participant, amount):
-    if participant.is_suspicious:
-        raise UserIsSuspicious
-
     route = ExchangeRoute.from_network(participant, 'mango-ba')
     assert route
     ba = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
@@ -156,9 +153,6 @@ def charge(db, participant, amount, return_url):
 
     """
     typecheck(amount, Decimal)
-
-    if participant.is_suspicious:
-        raise UserIsSuspicious
 
     route = ExchangeRoute.from_network(participant, 'mango-cc')
     assert route

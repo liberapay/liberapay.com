@@ -82,16 +82,14 @@ weekly = total - participant.receiving
         </tfoot>
         <tbody>
         % for tip in tips
-        % set inactive = tip.is_suspicious or not tip.is_identified or not tip.is_funded
+        % set inactive = not tip.is_identified or not tip.is_funded
         <tr>
             <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
             <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
             <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             <td class="funded {{ 'danger' if inactive }}">
-                % if tip.is_suspicious
-                    {{ _("No: the donee is blacklisted") }}
-                % elif not tip.is_identified
+                % if not tip.is_identified
                     {{ _("No: the donee hasn't filled the identity form") }}</td>
                 % elif not tip.is_funded
                     {{ _("No: insufficient funds") }}
