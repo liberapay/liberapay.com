@@ -19,6 +19,11 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 \i sql/utils.sql
 
 
+-- database metadata
+CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '1'::jsonb);
+
+
 -- participants -- user accounts
 
 CREATE TYPE participant_kind AS ENUM ('individual', 'organization', 'group', 'community');

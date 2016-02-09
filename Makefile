@@ -35,7 +35,10 @@ schema-diff: test-schema
 data: env
 	$(with_local_env) $(env_bin)/python -m liberapay.utils.fake_data
 
-run: env
+db-migrations: sql/migrations.sql
+	PYTHONPATH=. $(with_local_env) $(env_bin)/python liberapay/models/__init__.py
+
+run: env db-migrations
 	PATH=$(env_bin):$$PATH $(with_local_env) $(env_bin)/python app.py
 
 py: env
