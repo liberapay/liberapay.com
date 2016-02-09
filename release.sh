@@ -51,13 +51,25 @@ rhc ssh $APPNAME env | ./env/bin/honcho run -e /dev/stdin \
 
 # Check for a branch.sql
 if [ -e sql/branch.sql ]; then
+    schema_version_re="('schema_version',) +'([0-9]+)'"
+    schema_version=$(sed -n -r -e "s/.*$schema_version_re.*/\2/p" sql/schema.sql)
+    new_version=$(($schema_version + 1))
+
+    # Merge branch.sql into migrations.sql
+    out=sql/migrations.sql
+    echo -e '\n-- migration' "#$new_version" >>$out
+    ./env/bin/python -c "print(open('sql/branch.sql').read().strip())" >>$out
+
     # Merge branch.sql into schema.sql
     git rm --cached sql/branch.sql
+    sed -i -r -e "s/$schema_version_re/\1 '$new_version'/" sql/schema.sql
     echo -e '\n' | cat - sql/branch.sql >>sql/schema.sql
-    echo "sql/branch.sql has been appended to sql/schema.sql"
-    read -p "Please make the necessary manual modifications to schema.sql now, then press Enter to continue... " enter
-    git add sql/schema.sql
-    git commit -m "merge branch.sql into schema.sql"
+
+    # Let the user do the rest, then commit
+    echo "sql/branch.sql has been merged into sql/schema.sql and sql/migrations.sql"
+    read -p "Please make the necessary manual modifications to those files now, then press Enter to continue... " enter
+    git add sql/{schema,migrations}.sql
+    git commit -m "merge branch.sql"
 
     # Run branch.sql on the test DB in echo mode to get back a "compiled"
     # version on stdout without commands like \i
