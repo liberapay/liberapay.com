@@ -78,6 +78,8 @@ if [ -e sql/branch.sql ]; then
     # Run branch.sql on the test DB in echo mode to get back a "compiled"
     # version on stdout without commands like \i
     echo "Compiling branch.sql..."
+    echo >>sql/branch.sql
+    echo "UPDATE db_meta SET value = '$new_version'::jsonb WHERE key = 'schema_version';" >>sql/branch.sql
     $(make echo var=with_tests_env) sh -eu -c '
         psql $DATABASE_URL <sql/recreate-schema.sql >/dev/null
         psql -e $DATABASE_URL -o /dev/null <sql/branch.sql >sql/branch_.sql
@@ -102,10 +104,10 @@ git tag $version
 
 # Deploy
 [ "${maintenance-}" = "yes" ] && rhc app stop $APPNAME
-[ "${run_sql-}" = "before" ] && rhc ssh $APPNAME psql <sql/branch.sql
+[ "${run_sql-}" = "before" ] && rhc ssh $APPNAME 'psql -v ON_ERROR_STOP=on' <sql/branch.sql
 git push --force openshift master
 [ "${maintenance-}" = "yes" ] && rhc app start $APPNAME
-[ "${run_sql-}" = "after" ] && rhc ssh $APPNAME psql <sql/branch.sql
+[ "${run_sql-}" = "after" ] && rhc ssh $APPNAME 'psql -v ON_ERROR_STOP=on' <sql/branch.sql
 rm -f sql/branch.sql
 
 # Push to GitHub
