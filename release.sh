@@ -51,6 +51,10 @@ rhc ssh $APPNAME env | ./env/bin/honcho run -e /dev/stdin \
 
 # Check for a branch.sql
 if [ -e sql/branch.sql ]; then
+    if [ "$(git show :sql/branch.sql)" != "$(<sql/branch.sql)" ]; then
+        echo "sql/branch.sql has been modifed" && exit 1
+    fi
+
     schema_version_re="('schema_version',) +'([0-9]+)'"
     schema_version=$(sed -n -r -e "s/.*$schema_version_re.*/\2/p" sql/schema.sql)
     new_version=$(($schema_version + 1))
