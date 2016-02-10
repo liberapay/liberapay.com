@@ -200,7 +200,7 @@ class TestEmail(EmailHarness):
 
     def test_can_dequeue_an_email(self):
         larry = self.make_participant('larry', email='larry@example.com')
-        larry.queue_email("verification")
+        larry.queue_email("verification", link='https://example.com/larry')
 
         assert self.db.one("SELECT spt_name FROM email_queue") == "verification"
         Participant.dequeue_emails()
