@@ -780,7 +780,7 @@ class Participant(Model, MixinTeam):
                 typ = context.get('type', 'info')
                 r.append(dict(id=id, html=html, type=typ))
             except Exception as e:
-                self._tell_sentry(e, state)
+                self._tell_sentry(e, state, allow_reraise=True)
         state['escape'] = escape
         return r
 

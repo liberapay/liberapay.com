@@ -69,7 +69,7 @@ if request.method == 'POST':
                 error = _("You have to agree to MangoPay's Terms of Service.")
         except ResponseException as err:
             error = repr_exception(err)
-            website.tell_sentry(err, state)
+            website.tell_sentry(err, state, allow_reraise=True)
 
     if error and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         raise Response(400, error)

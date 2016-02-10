@@ -94,16 +94,14 @@ def make_sentry_teller(env):
     if not sentry:
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
-    def tell_sentry(exception, state):
+    def tell_sentry(exception, state, allow_reraise=False):
 
         if isinstance(exception, aspen.Response) and exception.code < 500:
             # Only log server errors
             return
 
         if not sentry:
-            if env.sentry_reraise and not state:
-                # The absence state indicates a special exception, those are the
-                # ones we want to reraise
+            if env.sentry_reraise and allow_reraise:
                 raise
             # No Sentry, log to stderr instead
             traceback.print_exc()
@@ -256,7 +254,7 @@ def load_i18n(website):
                 except KeyError:
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
-            website.tell_sentry(e, {})
+            website.tell_sentry(e, {}, allow_reraise=True)
 
     # Add aliases
     for k, v in list(locales.items()):
@@ -292,7 +290,7 @@ def other_stuff(website, env):
             try:
                 etag = asset_etag(fspath)
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e, {}, allow_reraise=True)
             return env.asset_url+path+(etag and '?etag='+etag)
         website.asset = asset
         compile_assets(website)
