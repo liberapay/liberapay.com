@@ -508,8 +508,14 @@ class Payday(object):
         participants = self.db.all("""
             SELECT p.*::participants
               FROM participants p
-             WHERE balance < giving
-               AND giving > 0
+             WHERE balance < (
+                     SELECT sum(amount)
+                       FROM current_tips t
+                       JOIN participants p2 ON p2.id = t.tippee
+                      WHERE t.tipper = p.id
+                        AND p2.mangopay_user_id IS NOT NULL
+                        AND p2.status = 'active'
+                   )
                AND EXISTS (
                      SELECT 1
                        FROM transfers t
