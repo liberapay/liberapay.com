@@ -58,7 +58,7 @@ class Payday(object):
         payday.__dict__.update(d)
         return payday
 
-    def run(self):
+    def run(self, log_dir='', keep_log=False):
         """This is the starting point for payday.
 
         It is structured such that it can be run again safely (with a
@@ -70,6 +70,8 @@ class Payday(object):
         _start = aspen.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
 
+        self.transfers_filename = log_dir+'payday-%s_transfers.pickle' % self.id
+
         self.shuffle()
 
         self.update_stats()
@@ -78,7 +80,8 @@ class Payday(object):
         self.end()
         self.notify_participants()
 
-        os.unlink(self.transfers_filename)
+        if not keep_log:
+            os.unlink(self.transfers_filename)
 
         _end = aspen.utils.utcnow()
         _delta = _end - _start
@@ -86,7 +89,6 @@ class Payday(object):
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
     def shuffle(self):
-        self.transfers_filename = 'payday-%s_transfers.pickle' % self.id
         if os.path.exists(self.transfers_filename):
             with open(self.transfers_filename, 'rb') as f:
                 transfers = pickle.load(f)
@@ -523,20 +525,26 @@ class Payday(object):
 
 
 if __name__ == '__main__':  # pragma: no cover
+    from os import environ
+
     from liberapay import wireup
     from liberapay.billing.exchanges import sync_with_mangopay
-
-    # Wire things up.
-    # ===============
 
     env = wireup.env()
     db = wireup.db(env)
     Payday.db = db
     wireup.billing(env)
 
+    if env.mangopay_client_id == 'liberapay':
+        log_dir = environ['OPENSHIFT_DATA_DIR']
+        keep_log = True
+    else:
+        log_dir = ''
+        keep_log = False
+
     try:
         sync_with_mangopay(db)
-        Payday.start().run()
+        Payday.start().run(log_dir, keep_log)
     except KeyboardInterrupt:
         pass
     except:
