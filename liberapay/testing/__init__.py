@@ -9,6 +9,8 @@ from os.path import dirname, join, realpath
 from aspen import resources, Response
 from aspen.utils import utcnow
 from aspen.testing.client import Client
+from psycopg2 import IntegrityError, InternalError
+
 from liberapay.billing import exchanges
 from liberapay.billing.exchanges import (
     record_exchange, record_exchange_result, _record_transfer_result
@@ -20,7 +22,6 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.testing.vcr import use_cassette
-from psycopg2 import IntegrityError, InternalError
 
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
@@ -52,6 +53,7 @@ class ClientWithAuth(Client):
             assert auth_as.session_token
             self.cookie[SESSION] = '%s:%s' % (auth_as.id, auth_as.session_token)
 
+        # cookies
         for k, v in kw.pop('cookies', {}).items():
             self.cookie[k] = v
 
@@ -60,6 +62,16 @@ class ClientWithAuth(Client):
     def hit(self, *a, **kw):
         if kw.pop('xhr', False):
             kw[b'HTTP_X_REQUESTED_WITH'] = b'XMLHttpRequest'
+
+        # prevent tell_sentry from reraising errors
+        if not kw.pop('sentry_reraise', True):
+            env = self.website.env
+            old_reraise, env.sentry_reraise = env.sentry_reraise, False
+            try:
+                return super(ClientWithAuth, self).hit(*a, **kw)
+            finally:
+                env.sentry_reraise = old_reraise
+
         return super(ClientWithAuth, self).hit(*a, **kw)
 
 

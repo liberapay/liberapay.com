@@ -176,7 +176,7 @@ def n_get_text(tell_sentry, state, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            tell_sentry(e, state)
+            tell_sentry(e, state, allow_reraise=True)
     if not s2:
         loc = LOCALE_EN
         s2 = s if n == 1 else p

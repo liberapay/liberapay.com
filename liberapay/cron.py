@@ -22,7 +22,7 @@ class Cron(object):
                 try:
                     func()
                 except Exception as e:
-                    self.website.tell_sentry(e, {})
+                    self.website.tell_sentry(e, {}, allow_reraise=True)
                 sleep(period)
         t = threading.Thread(target=f)
         t.daemon = True

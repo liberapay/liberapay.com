@@ -640,7 +640,6 @@ class Participant(Model, MixinTeam):
                   (self.id, address))
 
     def send_email(self, spt_name, **context):
-        context.update(aspen_jinja2_renderer.Renderer.global_context)
         self.fill_notification_context(context)
         email = context.setdefault('email', self.email)
         if not email:
@@ -752,6 +751,7 @@ class Participant(Model, MixinTeam):
         self.set_attributes(pending_notifs=r)
 
     def fill_notification_context(self, context):
+        context.update(aspen_jinja2_renderer.Renderer.global_context)
         context['participant'] = self
         context['username'] = self.username
         context['button_style'] = (
@@ -780,7 +780,7 @@ class Participant(Model, MixinTeam):
                 typ = context.get('type', 'info')
                 r.append(dict(id=id, html=html, type=typ))
             except Exception as e:
-                self._tell_sentry(e, state)
+                self._tell_sentry(e, state, allow_reraise=True)
         state['escape'] = escape
         return r
 
