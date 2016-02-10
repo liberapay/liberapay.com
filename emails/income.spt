@@ -13,7 +13,7 @@
                        len(teams), teams[0].name) }}</p>
     % endif
 % elif len(by_team) == 1
-    % set team, amount = next(by_team.items())
+    % set team, amount = list(by_team.items())[0]
     <p>{{ _("{0} were given to you for your role in the {1} team.", Money(amount, 'EUR'), team) }}</p>
 % else
     <p>{{ _("{0} were given to you for your roles in the following teams:", Money(sum(by_team.values()), 'EUR')) }}</p>
@@ -39,7 +39,7 @@
                      len(teams), teams[0].name) }}
     % endif
 % elif len(by_team) == 1
-    % set team, amount = next(by_team.items())
+    % set team, amount = list(by_team.items())[0]
     {{- _("{0} were given to you for your role in the {1} team.", Money(amount, 'EUR'), team) }}
 % else
     {{- _("{0} were given to you for your roles in the following teams:", Money(sum(by_team.values()), 'EUR')) }}
