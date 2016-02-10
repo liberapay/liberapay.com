@@ -26,7 +26,6 @@ class TestNotifications(Harness):
 
     def test_render_notifications(self):
         alice = self.make_participant('alice')
-        alice.add_notification('fake_event_name')
         alice.add_notification(
             'team_invite',
             team='team',
@@ -34,6 +33,12 @@ class TestNotifications(Harness):
             inviter='bob',
         )
         r = self.client.GET('/alice/notifications.html', auth_as=alice).body
-        assert 'fake_event_name' not in r
         assert '<a href="fake_url"' in r
         assert 'bob' in r
+
+    def test_render_unknown_notification(self):
+        alice = self.make_participant('alice')
+        alice.add_notification('fake_event_name')
+        r = self.client.GET('/alice/notifications.html', auth_as=alice,
+                            sentry_reraise=False).body
+        assert 'fake_event_name' not in r
