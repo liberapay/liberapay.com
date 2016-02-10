@@ -35,7 +35,7 @@ langs = participant.get_statement_langs()
             </button>
             <ul class="dropdown-menu" role="menu">
             % for l in langs
-                <li class="{{ 'active' if l == lang }}">
+                <li class="{{ 'active' if l == lang else '' }}">
                     <a href="?lang={{ l }}#statement">{{ locale.languages_2[l] }}</a>
                 </li>
             % endfor

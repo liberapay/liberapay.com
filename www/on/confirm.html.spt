@@ -53,7 +53,7 @@ title = _("Please Confirm")
                 <img src="{{ other_account.platform_data.icon }}"
                      alt="{{ other_account.platform }}"
                      class="platform-icon" />
-                <span class="{{ 'highlight' if other_account.platform == account.platform }}">
+                <span class="{{ 'highlight' if other_account.platform == account.platform else '' }}">
                     {{ other_account.friendly_name }}<br />
                 </span>
             % endfor

@@ -129,24 +129,24 @@ title = _("Withdraw money")
     </div>
     % endif
 
-    <fieldset id="bank-account" class="{{ 'hidden' if bank_account }}">
+    <fieldset id="bank-account" class="{{ 'hidden' if bank_account else '' }}">
 
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="{{ 'active' if ba_type == 'IBAN' }}">
+            <li role="presentation" class="{{ 'active' if ba_type == 'IBAN' else '' }}">
                 <a href="#iban" aria-controls="iban" role="tab" data-toggle="tab">{{ _("International") }}</a></li>
-            <li role="presentation" class="{{ 'active' if ba_type == 'US' }}">
+            <li role="presentation" class="{{ 'active' if ba_type == 'US' else '' }}">
                 <a href="#usa" aria-controls="usa" role="tab" data-toggle="tab">{{ _("USA") }}</a></li>
-            <li role="presentation" class="{{ 'active' if ba_type == 'CA' }}">
+            <li role="presentation" class="{{ 'active' if ba_type == 'CA' else '' }}">
                 <a href="#canada" aria-controls="canada" role="tab" data-toggle="tab">{{ _("Canada") }}</a></li>
-            <li role="presentation" class="{{ 'active' if ba_type == 'GB' }}">
+            <li role="presentation" class="{{ 'active' if ba_type == 'GB' else '' }}">
                 <a href="#uk" aria-controls="uk" role="tab" data-toggle="tab">{{ _("UK") }}</a></li>
-            <li role="presentation" class="{{ 'active' if ba_type == 'OTHER' }}">
+            <li role="presentation" class="{{ 'active' if ba_type == 'OTHER' else '' }}">
                 <a href="#bban" aria-controls="bban" role="tab" data-toggle="tab">{{ _("Other") }}</a></li>
         </ul>
         <br>
 
         <div class="tab-content">
-            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'IBAN' }}" id="iban">
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'IBAN' else '' }}" id="iban">
                 <input type="hidden" name="Type" value="IBAN" />
 
                 <label>
@@ -156,7 +156,7 @@ title = _("Withdraw money")
                 </label>
             </fieldset>
 
-            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'US' }}" id="usa">
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'US' else '' }}" id="usa">
                 <input type="hidden" name="Type" value="US" />
 
                 <label>
@@ -179,7 +179,7 @@ title = _("Withdraw money")
                 </label>
             </fieldset>
 
-            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'CA' }}" id="canada">
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'CA' else '' }}" id="canada">
                 <input type="hidden" name="Type" value="CA" />
 
                 <label>
@@ -206,7 +206,7 @@ title = _("Withdraw money")
                 </label>
             </fieldset>
 
-            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'GB' }}" id="uk">
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'GB' else '' }}" id="uk">
                 <input type="hidden" name="Type" value="GB" />
 
                 <label>
@@ -222,7 +222,7 @@ title = _("Withdraw money")
                 </label>
             </fieldset>
 
-            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'OTHER' }}" id="bban">
+            <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'OTHER' else '' }}" id="bban">
                 <input type="hidden" name="Type" value="OTHER" />
 
                 <label>

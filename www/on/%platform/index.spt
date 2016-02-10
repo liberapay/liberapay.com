@@ -91,7 +91,7 @@ limited = getattr(platform, 'api_friends_limited', False)
     % for friend in friends
     % set p = friend.participant
     % set tippee = p if p.join_time else friend
-    <tr class="{{ 'info' if p.join_time and p.accepts_tips }}">
+    <tr class="{{ 'info' if p.join_time and p.accepts_tips else '' }}">
         <td><a href="./{{ friend.liberapay_slug }}/">{{ friend.friendly_name }}</a></td>
         <td>{{ _("Yes") if p.join_time else _("No") }}</td>
         <td>{{ _('hidden') if p.hide_receiving else p.receiving and format_currency(p.receiving, 'EUR') or '0' }}</td>

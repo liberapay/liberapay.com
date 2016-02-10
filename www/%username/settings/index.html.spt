@@ -53,7 +53,7 @@ is_a_person = participant.kind not in ('group', 'community')
             <div class="checkbox">
             % for name, label in PRIVACY_FIELDS.items()
             <label>
-                <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name] }} />
+                <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name] else '' }} />
                 {{ label }}
             </label>
             <br />

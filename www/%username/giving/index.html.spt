@@ -88,7 +88,7 @@ weekly = total - participant.receiving
             <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
             <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
-            <td class="funded {{ 'danger' if inactive }}">
+            <td class="funded {{ 'danger' if inactive else '' }}">
                 % if not tip.is_identified
                     {{ _("No: the donee hasn't filled the identity form") }}</td>
                 % elif not tip.is_funded

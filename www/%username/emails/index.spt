@@ -61,7 +61,7 @@ emails = participant.get_emails()
         <div class="checkbox">
         % for event in EVENTS.values()
         <label>
-            <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) }} />
+            <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) else '' }} />
             {{ _(event.title) }}
         </label>
         <br>

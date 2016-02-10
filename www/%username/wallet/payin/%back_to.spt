@@ -141,7 +141,7 @@ title = _("Add money")
     </div>
     % endif
 
-    <fieldset id="credit-card" class="{{ 'hidden' if card }}"
+    <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
           data-msg-cors-fail='{{ _("Your browser is not letting us send your credit card data to our payment processor. "
                                    "Please make sure the request is not being blocked by an extension like NoScript.") }}'>
         <div>

@@ -26,7 +26,7 @@
         <div class="progress profile-goal-bar">
             <div class="progress-bar progress-bar-{{ progress_cls }}"
                  style="min-width: 2px; width: {{ min(receiving / goal * 100, 100) }}%;">{{
-                _("Mission accomplished!") if receiving >= goal
+                _("Mission accomplished!") if receiving >= goal else ''
             }}</div>
         </div>
     % endif
@@ -43,7 +43,7 @@
             <a class="btn btn-default" href="{{ donate_path }}">{{ _("Modify") }}</a>
         % endif
     % else
-        <a class="btn btn-primary {{ 'btn-lg' if receiving < goal }}"
+        <a class="btn btn-primary {{ 'btn-lg' if receiving < goal else '' }}"
            href="{{ donate_path }}">{{ _("Donate") }}</a>
     % endif
 % else
