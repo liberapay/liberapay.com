@@ -6,6 +6,12 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 import re
 
+from jinja2 import StrictUndefined
+
+
+class TestableUndefined(StrictUndefined):
+    __bool__ = __nonzero__ = lambda self: False
+
 
 _ = lambda a: a
 
@@ -24,6 +30,7 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
+    undefined=TestableUndefined,
 )
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
