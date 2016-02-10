@@ -9,8 +9,17 @@ import re
 from jinja2 import StrictUndefined
 
 
-class TestableUndefined(StrictUndefined):
+class CustomUndefined(StrictUndefined):
     __bool__ = __nonzero__ = lambda self: False
+
+    def __str__(self):
+        try:
+            self._fail_with_undefined_error()
+        except Exception as e:
+            self._tell_sentry(e, {})
+        return ''
+
+    __unicode__ = __str__
 
 
 _ = lambda a: a
@@ -30,7 +39,7 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
-    undefined=TestableUndefined,
+    undefined=CustomUndefined,
 )
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)

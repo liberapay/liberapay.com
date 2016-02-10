@@ -21,6 +21,7 @@ import raven
 
 import liberapay
 import liberapay.billing.payday
+from liberapay.constants import CustomUndefined
 from liberapay.elsewhere import PlatformRegistry
 from liberapay.elsewhere.bitbucket import Bitbucket
 from liberapay.elsewhere.bountysource import Bountysource
@@ -131,6 +132,7 @@ def make_sentry_teller(env):
         # Put the Sentry id in the state for logging, etc
         state['sentry_ident'] = sentry.get_ident(result)
 
+    CustomUndefined._tell_sentry = staticmethod(tell_sentry)
     Participant._tell_sentry = staticmethod(tell_sentry)
     return tell_sentry
 
