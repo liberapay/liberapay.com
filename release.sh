@@ -109,7 +109,7 @@ git tag $version
 git push --force openshift master
 [ "${maintenance-}" = "yes" ] && rhc app start $APPNAME
 [ "${run_sql-}" = "after" ] && rhc ssh $APPNAME 'psql -v ON_ERROR_STOP=on' <$branch_c
-rm -f $branch_c
+[ "${branch_c-}" != "" ] && rm -f $branch_c
 
 # Push to GitHub
 git push
