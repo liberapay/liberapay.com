@@ -44,7 +44,7 @@
         <option></option>
         % set country = account[p+'CountryOfResidence'] or request.country
         % for each in locale.countries.items()
-            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country }}>{{ each[1] }}</option>
+            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
         % endfor
         </select>
     </label>
@@ -56,7 +56,7 @@
         <option></option>
         % set country = account[p+'Nationality'] or request.country
         % for each in locale.countries.items()
-            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country }}>{{ each[1] }}</option>
+            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
         % endfor
         </select>
     </label>

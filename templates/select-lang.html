@@ -1,8 +1,8 @@
 % macro lang_options(langs, selected)
     % for code, name in langs.items()
         <option value="{{ code }}"
-                {{ 'selected' if code == selected }}
-                {{ 'disabled' if not code }}
+                {{ 'selected' if code == selected else '' }}
+                {{ 'disabled' if not code else '' }}
             >{{ name }}</option>
     % endfor
 % endmacro

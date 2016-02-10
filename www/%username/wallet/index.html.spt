@@ -50,7 +50,7 @@ else:
 % if len(years) > 1
 <ul class="nav nav-pills">
     % for y in years
-        <li><a href="?year={{ y }}" class="{{ 'active' if y == year }}">{{ y }}</a></li>
+        <li><a href="?year={{ y }}" class="{{ 'active' if y == year else '' }}">{{ y }}</a></li>
     % endfor
 </ul>
 % endif

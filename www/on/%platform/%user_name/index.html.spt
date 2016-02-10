@@ -166,7 +166,8 @@ if is_team:
         % for member in members
             % set on_liberapay = member.participant.status != 'stub'
             % set declines_gifts = not member.participant.accepts_tips
-            <tr class="{{ 'declines' if declines_gifts }} {{ 'not-on-liberapay' if not on_liberapay }}">
+            <tr class="{{ 'declines' if declines_gifts else '' }}
+                       {{ 'not-on-liberapay' if not on_liberapay else '' }}">
                 % if on_liberapay
                     <td>
                         <a href="/{{ member.participant.username }}/">
