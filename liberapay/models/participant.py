@@ -641,13 +641,7 @@ class Participant(Model, MixinTeam):
 
     def send_email(self, spt_name, **context):
         context.update(aspen_jinja2_renderer.Renderer.global_context)
-        context['participant'] = self
-        context['username'] = self.username
-        context['button_style'] = (
-            "color: #fff; text-decoration:none; display:inline-block; "
-            "padding: 0 15px; background: #396; white-space: nowrap; "
-            "font: normal 14px/40px Arial, sans-serif; border-radius: 3px"
-        )
+        self.fill_notification_context(context)
         email = context.setdefault('email', self.email)
         if not email:
             return 0 # Not Sent
@@ -757,6 +751,15 @@ class Participant(Model, MixinTeam):
         """, locals())
         self.set_attributes(pending_notifs=r)
 
+    def fill_notification_context(self, context):
+        context['participant'] = self
+        context['username'] = self.username
+        context['button_style'] = (
+            "color: #fff; text-decoration:none; display:inline-block; "
+            "padding: 0 15px; background: #396; white-space: nowrap; "
+            "font: normal 14px/40px Arial, sans-serif; border-radius: 3px"
+        )
+
     def render_notifications(self, state):
         r = []
         if not self.pending_notifs:
@@ -771,6 +774,7 @@ class Participant(Model, MixinTeam):
         for id, event, context in notifs:
             try:
                 context = dict(state, **pickle.loads(context))
+                self.fill_notification_context(context)
                 spt = self._emails[event]
                 html = spt['text/html'].render(context).strip()
                 typ = context.get('type', 'info')
