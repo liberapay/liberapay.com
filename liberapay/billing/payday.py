@@ -280,11 +280,7 @@ class Payday(object):
                       FROM payday_tips t
                       JOIN payday_participants p ON p.id = t.tipper
                      WHERE t.tippee = team_id;
-                our_takes CURSOR FOR
-                    SELECT t.member, (round_up(t.amount * ratio, 2)) AS amount
-                      FROM payday_takes t
-                     WHERE t.team = team_id
-                  ORDER BY t.member;
+                our_takes refcursor;
             BEGIN
                 total_income := (
                     SELECT sum(t.amount)
@@ -301,7 +297,11 @@ class Payday(object):
                 IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
                 ratio := min(total_income / total_takes, 1::numeric);
 
-                OPEN our_takes;
+                OPEN our_takes FOR
+                    SELECT t.member, (round_up(t.amount * ratio, 2)) AS amount
+                      FROM payday_takes t
+                     WHERE t.team = team_id
+                  ORDER BY t.member;
                 FETCH our_takes INTO take;
                 FOR tip IN our_tips LOOP
                     LOOP
