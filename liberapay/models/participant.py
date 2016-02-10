@@ -771,10 +771,11 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         escape = state['escape']
         state['escape'] = lambda a: a
-        for id, event, context in notifs:
+        for id, event, notif_context in notifs:
             try:
-                context = dict(state, **pickle.loads(context))
+                context = dict(state)
                 self.fill_notification_context(context)
+                context.update(pickle.loads(notif_context))
                 spt = self._emails[event]
                 html = spt['text/html'].render(context).strip()
                 typ = context.get('type', 'info')
