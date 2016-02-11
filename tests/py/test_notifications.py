@@ -46,6 +46,7 @@ class TestNotifications(Harness):
         assert '<a href="fake_url"' in r
         assert 'bob' in r
         assert ' alert-&lt;type ' not in r
+        assert 'alert-info' in r
 
     def test_render_unknown_notification(self):
         alice = self.make_participant('alice')
