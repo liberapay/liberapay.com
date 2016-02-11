@@ -21,7 +21,7 @@ good_data = {
 class TestSignIn(EmailHarness):
 
     def log_in(self, username, password, **kw):
-        data = {'log-in.username': username, 'log-in.password': password}
+        data = {'log-in.id': username, 'log-in.password': password}
         return self.client.POST('/sign-in', data, raise_immediately=False, **kw)
 
     def test_log_in(self):

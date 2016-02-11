@@ -30,10 +30,12 @@ def sign_in_with_form_data(request, state):
 
     p = None
 
-    if body.get('log-in.username'):
+    if body.get('log-in.id'):
+        id = body.pop('log-in.id')
+        k = 'email' if '@' in id else 'username'
         p = Participant.authenticate(
-            'username', 'password',
-            body.pop('log-in.username'), body.pop('log-in.password')
+            k, 'password',
+            id, body.pop('log-in.password')
         )
         if p and p.status == 'closed':
             p.update_status('active')

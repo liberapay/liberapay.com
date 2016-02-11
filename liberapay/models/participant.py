@@ -145,7 +145,17 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def _from_thing(cls, thing, value):
-        assert thing in ("id", "lower(username)", "mangopay_user_id")
+        assert thing in ("id", "lower(username)", "mangopay_user_id", "email")
+        if thing == 'email':
+            # This query looks for an unverified address if the participant
+            # doesn't have any verified address
+            return cls.db.one("""
+                SELECT p.*::participants
+                  FROM emails e
+                  JOIN participants p ON p.id = e.participant
+                 WHERE e.address = %s
+                   AND (p.email IS NULL OR p.email = e.address)
+            """, (value,))
         return cls.db.one("""
             SELECT participants.*::participants
               FROM participants
@@ -154,14 +164,13 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def authenticate(cls, k1, k2, v1=None, v2=None):
-        assert k1 in ('id', 'username')
+        assert k1 in ('id', 'username', 'email')
         if not (v1 and v2):
             return
-        p = cls.db.one("""
-            SELECT participants.*::participants
-              FROM participants
-             WHERE {0}=%s
-        """.format(k1), (v1,))
+        if k1 == 'username':
+            k1 = 'lower(username)'
+            v1 = v1.lower()
+        p = cls._from_thing(k1, v1)
         if not p:
             return
         if k2 == 'session':
