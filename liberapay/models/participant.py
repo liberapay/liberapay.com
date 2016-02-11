@@ -9,7 +9,7 @@ import pickle
 from time import sleep
 import uuid
 
-from six.moves.urllib.parse import quote
+from six.moves.urllib.parse import quote, urlencode
 
 from aspen.utils import utcnow
 import aspen_jinja2_renderer
@@ -243,15 +243,17 @@ class Participant(Model, MixinTeam):
                     )
         self.set_attributes(session_expires=expires)
 
-    def sign_in(self, cookies):
-        """Start a new session for the user.
+    def start_session(self):
+        """Start a new session for the user, invalidating the previous one.
         """
-        assert self.authenticated
         token = uuid.uuid4().hex
         expires = utcnow() + SESSION_TIMEOUT
         self.update_session(token, expires)
-        creds = '%s:%s' % (self.id, token)
-        set_cookie(cookies, SESSION, creds, expires)
+
+    def sign_in(self, cookies):
+        assert self.authenticated
+        creds = '%s:%s' % (self.id, self.session_token)
+        set_cookie(cookies, SESSION, creds, self.session_expires)
 
     def keep_signed_in(self, cookies):
         """Extend the user's current session.
@@ -835,11 +837,14 @@ class Participant(Model, MixinTeam):
             VALUES (%s, %s, %s, %s)
         """, (self.id, type, Json(payload), recorder))
 
-    def url(self, path=''):
+    def url(self, path='', query=''):
         scheme = liberapay.canonical_scheme
         host = liberapay.canonical_host
         username = self.username
-        return '{scheme}://{host}/{username}/{path}'.format(**locals())
+        if query:
+            assert '?' not in path
+            query = '?' + urlencode(query)
+        return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
 
     def get_teams(self):
         """Return a list of teams this user is a member of.

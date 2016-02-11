@@ -1,8 +1,50 @@
+% if state.get('email-login.sent-to')
+
+<div class="alert alert-success">
+    <p>{{ _(
+        "We've sent you a password reset link. Check your inbox, open the "
+        "provided link in a new tab, change your password, then come back to "
+        "this page and click on the button below to carry on with what you "
+        "wanted to do."
+    ) }}</p>
+
+    <br>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="email-login.carry-on"
+               value="{{ state['email-login.sent-to'] }}" />
+        <button class="btn btn-success">{{ _("Carry on") }}</button>
+    </form>
+</div>
+
+% elif state.get('email-login.carry-on')
+
+% set email = state['email-login.carry-on']
+<p class="alert alert-danger">{{
+    _("You're still not logged in as {0}.", email)
+}}</p>
+
+<form action="" class="form-inline" method="POST">
+    % include "templates/form-repost.html"
+    <input type="hidden" name="log-in.id" value="{{ email }}" />
+    <p>{{ _("Log in as {0}:", email) }}</p>
+    <input type="password" name="log-in.password"
+           class="form-control" size=30
+           required placeholder="{{ _('Password') }}" />
+    <button class="btn btn-default">{{ _("Go") }}</button>
+</form>
+
+% else
+
+% if state.get('sign-in.error')
+    <p class="alert alert-danger">{{ state['sign-in.error'] }}</p>
+% endif
+
 <div class="row">
-<form class="col-md-6 form-inline" action="" method="POST">
+<div class="col-md-6">
+<form class="form-inline" action="" method="POST">
 
     % include "templates/form-repost.html"
-    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
 
     <h2>{{ _("Log in") }}</h2>
 
@@ -18,12 +60,26 @@
     <button class="btn btn-default">{{ _("Go") }}</button>
 
 </form>
+<form class="form-inline" action="" method="POST">
+
+    <br><br>
+    <h4>{{ _("Forgot your password?") }}</h4>
+
+    % include "templates/form-repost.html"
+
+    <input name="email-login.email" class="form-control" size=40
+           type="email" autocomplete="email" required pattern=".*@.*"
+           placeholder="{{ _('Email') }}" />
+
+    <button class="btn btn-default">{{ _("Go") }}</button>
+
+</form>
+</div>
 <form class="col-md-6" action="" method="POST">
 
     <h2>{{ _("Create an account") }}</h2>
 
     % include "templates/form-repost.html"
-    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
 
     <div class="form-group">
     <input name="sign-in.username" autocomplete="username" class="form-control"
@@ -61,3 +117,5 @@
 
 </form>
 </div>
+
+% endif
