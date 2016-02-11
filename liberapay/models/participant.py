@@ -773,12 +773,13 @@ class Participant(Model, MixinTeam):
         state['escape'] = lambda a: a
         for id, event, notif_context in notifs:
             try:
+                notif_context = pickle.loads(notif_context)
                 context = dict(state)
                 self.fill_notification_context(context)
-                context.update(pickle.loads(notif_context))
+                context.update(notif_context)
                 spt = self._emails[event]
                 html = spt['text/html'].render(context).strip()
-                typ = context.get('type', 'info')
+                typ = notif_context.get('type', 'info')
                 r.append(dict(id=id, html=html, type=typ))
             except Exception as e:
                 self._tell_sentry(e, state, allow_reraise=True)
