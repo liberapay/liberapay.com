@@ -676,6 +676,7 @@ class Participant(Model, MixinTeam):
         message['text'] = render('text/plain', context)
 
         self._mailer.messages.send(message=message)
+        self._log_email(message)
         return 1 # Sent
 
     def queue_email(self, spt_name, **context):
