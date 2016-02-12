@@ -95,6 +95,12 @@ class TestSignIn(EmailHarness):
         r = self.log_in('alice', 'deadbeef')
         assert SESSION not in r.headers.cookie
 
+    def test_log_in_non_ascii_password(self):
+        password = 'le blé pousse dans le champ'
+        alice = self.make_participant('alice')
+        alice.update_password(password)
+        self.log_in_and_check(alice, password.encode('utf8'))
+
     def test_email_login(self):
         email = 'alice@example.net'
         alice = self.make_participant('alice')
