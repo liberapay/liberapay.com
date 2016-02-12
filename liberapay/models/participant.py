@@ -252,7 +252,7 @@ class Participant(Model, MixinTeam):
 
     def sign_in(self, cookies):
         assert self.authenticated
-        self.start_session()
+        #self.start_session()
         creds = '%s:%s' % (self.id, self.session_token)
         set_cookie(cookies, SESSION, creds, self.session_expires)
 
