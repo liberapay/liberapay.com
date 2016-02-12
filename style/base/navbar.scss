@@ -1,0 +1,61 @@
+
+.navbar-nav {
+    margin: 0;
+    & > li {
+        float: left;
+        & > a {
+            padding-bottom: 15px;
+            padding-top: 15px;
+        }
+    }
+}
+
+.navbar-liberapay {
+    background: #555;
+    border: none;
+
+    .navbar-nav > li {
+        & > a, .navbar-btn, .dropdown a {
+            background: transparent;
+            border: none;
+            color: #ddd;
+            &:hover, &:active, &:focus {
+                background: #444;
+                color: #eee;
+            }
+            &.navbar-warning {
+                color: #eea236;
+                &:hover, &:active, &:focus {
+                    color: #f0ad4e;
+                }
+            }
+        }
+        .navbar-btn {
+            margin: 0;
+            padding: 15px 13px;
+        }
+        .dropdown-menu {
+            background: #555;
+            border: none;
+            border-radius: none;
+            position: absolute;
+            & > .level2 > a {
+                padding-left: 30px;
+            }
+        }
+    }
+
+    .container .navbar-brand {
+        margin-left: 0;
+    }
+    .navbar-brand {
+        & > img {
+            background: #f5f5f5;
+            border-radius: 4px;
+            color: #000;
+            height: 30px;
+            line-height: 30px;
+            margin-top: -5px;
+        }
+    }
+}
