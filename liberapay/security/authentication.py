@@ -120,6 +120,7 @@ def authenticate_user_if_possible(request, state, user, _):
         if p:
             state['user'] = p
     session_p, p = p, None
+    session_suffix = ''
     redirect_url = request.line.uri
     if request.method == 'POST':
         body = _get_body(request)
@@ -142,10 +143,11 @@ def authenticate_user_if_possible(request, state, user, _):
             qs = '?' + urlencode(request.qs, doseq=True) if request.qs else ''
             redirect_url = request.path.raw + qs
             session_p = p
+            session_suffix = '.em'
     if p:
         if session_p:
             session_p.sign_out(response.headers.cookie)
-        p.sign_in(response.headers.cookie)
+        p.sign_in(response.headers.cookie, session_suffix)
         state['user'] = p
         if request.body.pop('form.repost', None) != 'true':
             response.redirect(redirect_url)

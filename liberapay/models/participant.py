@@ -249,16 +249,16 @@ class Participant(Model, MixinTeam):
                     )
         self.set_attributes(session_expires=expires)
 
-    def start_session(self):
+    def start_session(self, suffix=''):
         """Start a new session for the user, invalidating the previous one.
         """
-        token = uuid.uuid4().hex
+        token = uuid.uuid4().hex + suffix
         expires = utcnow() + SESSION_TIMEOUT
         self.update_session(token, expires)
 
-    def sign_in(self, cookies):
+    def sign_in(self, cookies, suffix=''):
         assert self.authenticated
-        self.start_session()
+        self.start_session(suffix)
         creds = '%s:%s' % (self.id, self.session_token)
         set_cookie(cookies, SESSION, creds, self.session_expires)
 
