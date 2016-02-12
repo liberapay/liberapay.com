@@ -10,7 +10,7 @@ from liberapay.utils.history import iter_payday_events
 participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Wallet")
-subpath = 'history/' if user.is_admin else ''
+subpath = 'wallet/' if user.is_admin else ''
 admin_override = user.is_admin and (participant != user or 'override' in request.qs)
 translated_status = { None:         ''
                     , 'pre':        _('pre')

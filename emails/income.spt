@@ -24,7 +24,7 @@
     </ul>
 % endif
 
-<a href="{{ participant.url('history/') }}">{{ _("See your account's transaction logs") }}</a>
+<a href="{{ participant.url('wallet/') }}">{{ _("See your account's transaction logs") }}</a>
 
 [---] text/plain
 {{ _("{0} were given to you personally.", Money(personal, 'EUR')) }}
@@ -48,4 +48,4 @@
     % endfor
 % endif
 
-{{ _("See your account's transaction logs") }}: {{ participant.url('history/') }}
+{{ _("See your account's transaction logs") }}: {{ participant.url('wallet/') }}
