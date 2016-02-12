@@ -11,18 +11,23 @@ request.allow('POST')
 body = request.body
 out = {}
 
+p = get_participant(state, restrict=True)
+if user != p:
+    raise Response(403)
+
 if 'new-password' in body:
-    p = Participant.authenticate('username', 'password',
-                                 request.path['username'],
-                                 body['cur-password'])
-    if not p:
-        raise Response(403, _("Incorrect password"))
+    if p.session_token and p.session_token.endswith('.em'):
+        pass  # user logged in via email, allow resetting password
+    else:
+        p = Participant.authenticate('username', 'password',
+                                     request.path['username'],
+                                     body['cur-password'])
+        if not p:
+            raise Response(403, _("Incorrect password"))
     p.update_password(body['new-password'])
     out['msg'] = _("Your password has been changed.")
 
 elif 'privacy' in body:
-    participant = get_participant(state, restrict=True)
-    p_id = participant.id
     fields = body['privacy'].split()
     for field in fields:
         if field not in PRIVACY_FIELDS:
@@ -32,11 +37,10 @@ elif 'privacy' in body:
             UPDATE participants
                SET {0} = %s
              WHERE id = %s
-        """.format(field), (value, p_id))
+        """.format(field), (value, p.id))
     out['msg'] = _("Your privacy settings have been changed.")
 
 elif 'username' in body:
-    p = get_participant(state, restrict=True)
     p.change_username(body['username'])
     response.redirect('/'+p.username+'/settings/')
 
