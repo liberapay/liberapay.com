@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from base64 import b64encode
 import json
 
+from aspen.exceptions import MalformedBody, UnknownBodyType
 from aspen.http.request import Request
 from aspen.http.response import Response
 from environment import Environment
@@ -157,3 +158,15 @@ class Tests2(Harness):
     def test_sanitize_token_rejects_goofy_token(self):
         token = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
         assert csrf._sanitize_token(token) is None
+
+    def test_malformed_body(self):
+        with self.assertRaises(MalformedBody):
+            self.client.POST('/', body=b'a', content_type=b'application/json')
+
+    def test_unknown_body_type(self):
+        with self.assertRaises(UnknownBodyType):
+            self.client.POST('/', body=b'x', content_type=b'unknown/x')
+
+    def test_non_dict_body(self):
+        r = self.client.POST('/', body=b'[]', content_type=b'application/json')
+        assert r.code == 200

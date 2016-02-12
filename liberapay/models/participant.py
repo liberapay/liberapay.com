@@ -9,7 +9,7 @@ import pickle
 from time import sleep
 import uuid
 
-from six.moves.urllib.parse import quote
+from six.moves.urllib.parse import quote, urlencode
 
 from aspen.utils import utcnow
 import aspen_jinja2_renderer
@@ -145,7 +145,17 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def _from_thing(cls, thing, value):
-        assert thing in ("id", "lower(username)", "mangopay_user_id")
+        assert thing in ("id", "lower(username)", "mangopay_user_id", "email")
+        if thing == 'email':
+            # This query looks for an unverified address if the participant
+            # doesn't have any verified address
+            return cls.db.one("""
+                SELECT p.*::participants
+                  FROM emails e
+                  JOIN participants p ON p.id = e.participant
+                 WHERE e.address = %s
+                   AND (p.email IS NULL OR p.email = e.address)
+            """, (value,))
         return cls.db.one("""
             SELECT participants.*::participants
               FROM participants
@@ -154,14 +164,13 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def authenticate(cls, k1, k2, v1=None, v2=None):
-        assert k1 in ('id', 'username')
+        assert k1 in ('id', 'username', 'email')
         if not (v1 and v2):
             return
-        p = cls.db.one("""
-            SELECT participants.*::participants
-              FROM participants
-             WHERE {0}=%s
-        """.format(k1), (v1,))
+        if k1 == 'username':
+            k1 = 'lower(username)'
+            v1 = v1.lower()
+        p = cls._from_thing(k1, v1)
         if not p:
             return
         if k2 == 'session':
@@ -234,15 +243,17 @@ class Participant(Model, MixinTeam):
                     )
         self.set_attributes(session_expires=expires)
 
-    def sign_in(self, cookies):
-        """Start a new session for the user.
+    def start_session(self):
+        """Start a new session for the user, invalidating the previous one.
         """
-        assert self.authenticated
         token = uuid.uuid4().hex
         expires = utcnow() + SESSION_TIMEOUT
         self.update_session(token, expires)
-        creds = '%s:%s' % (self.id, token)
-        set_cookie(cookies, SESSION, creds, expires)
+
+    def sign_in(self, cookies):
+        assert self.authenticated
+        creds = '%s:%s' % (self.id, self.session_token)
+        set_cookie(cookies, SESSION, creds, self.session_expires)
 
     def keep_signed_in(self, cookies):
         """Extend the user's current session.
@@ -665,6 +676,7 @@ class Participant(Model, MixinTeam):
         message['text'] = render('text/plain', context)
 
         self._mailer.messages.send(message=message)
+        self._log_email(message)
         return 1 # Sent
 
     def queue_email(self, spt_name, **context):
@@ -826,11 +838,14 @@ class Participant(Model, MixinTeam):
             VALUES (%s, %s, %s, %s)
         """, (self.id, type, Json(payload), recorder))
 
-    def url(self, path=''):
+    def url(self, path='', query=''):
         scheme = liberapay.canonical_scheme
         host = liberapay.canonical_host
         username = self.username
-        return '{scheme}://{host}/{username}/{path}'.format(**locals())
+        if query:
+            assert '?' not in path
+            query = '?' + urlencode(query)
+        return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
 
     def get_teams(self):
         """Return a list of teams this user is a member of.

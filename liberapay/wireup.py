@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import atexit
 import fnmatch
+import json
 import os
 import re
 from tempfile import mkstemp
@@ -74,6 +75,21 @@ def mail(env, project_root='.'):
         base_name = spt[i:-4]
         emails[base_name] = compile_email_spt(spt)
     Participant._emails = emails
+
+    def log_email(message):
+        message = dict(message)
+        html, text = message.pop('html'), message.pop('text')
+        print('\n', ' ', '='*26, 'BEGIN EMAIL', '='*26)
+        print(json.dumps(message))
+        print('[---] text/html')
+        print(html)
+        print('[---] text/plain')
+        print(text)
+        print('  ', '='*27, 'END EMAIL', '='*27)
+
+    Participant._log_email = staticmethod(
+        log_email if env.log_emails else lambda *a: None
+    )
 
 
 def billing(env):
@@ -344,6 +360,7 @@ def env():
         SENTRY_RERAISE                  = is_yesish,
         MANDRILL_KEY                    = str,
         GUNICORN_OPTS                   = str,
+        LOG_EMAILS                      = is_yesish,
     )
 
 

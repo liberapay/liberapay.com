@@ -2,8 +2,12 @@
 """
 import binascii
 
+from six.moves.urllib.parse import urlencode
+
 from aspen import Response
-from liberapay.constants import SESSION
+
+from liberapay.constants import SESSION, SESSION_TIMEOUT
+from liberapay.exceptions import AuthRequired
 from liberapay.models.participant import Participant
 
 
@@ -19,21 +23,26 @@ class _ANON(object):
 ANON = _ANON()
 
 
-def sign_in_with_form_data(request, state):
+def _get_body(request):
     try:
         body = request.body
     except Response:
         return
-
     if not isinstance(body, dict):
         return
+    return body
 
+
+def sign_in_with_form_data(body, state):
     p = None
+    _, website = state['_'], state['website']
 
-    if body.get('log-in.username'):
+    if body.get('log-in.id'):
+        id = body.pop('log-in.id')
+        k = 'email' if '@' in id else 'username'
         p = Participant.authenticate(
-            'username', 'password',
-            body.pop('log-in.username'), body.pop('log-in.password')
+            k, 'password',
+            id, body.pop('log-in.password')
         )
         if p and p.status == 'closed':
             p.update_status('active')
@@ -44,13 +53,33 @@ def sign_in_with_form_data(request, state):
         kind = body.pop('sign-in.kind')
         if kind not in ('individual', 'organization'):
             raise Response(400, 'bad kind')
-        with state['website'].db.get_cursor() as c:
+        with website.db.get_cursor() as c:
             p = Participant.make_active(
                 body.pop('sign-in.username'), kind, body.pop('sign-in.password'),
                 cursor=c
             )
             p.add_email(body.pop('sign-in.email'), cursor=c)
         p.authenticated = True
+
+    elif body.get('email-login.email'):
+        email = body.pop('email-login.email')
+        p = Participant._from_thing('email', email)
+        if p:
+            p.start_session()
+            qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
+            p.send_email(
+                'password_reset',
+                email=email,
+                link=p.url('settings/', qs),
+                link_validity=SESSION_TIMEOUT,
+            )
+            state['email-login.sent-to'] = email
+        else:
+            state['sign-in.error'] = _(
+                "We didn't find any account whose primary email address is {0}.",
+                email
+            )
+        p = None
 
     return p
 
@@ -61,7 +90,7 @@ def start_user_as_anon():
     return {'user': ANON}
 
 
-def authenticate_user_if_possible(request, state, user):
+def authenticate_user_if_possible(request, state, user, _):
     """This signs the user in.
     """
     if request.line.uri.startswith('/assets/'):
@@ -90,16 +119,36 @@ def authenticate_user_if_possible(request, state, user):
         p = Participant.authenticate('id', 'session', *creds)
         if p:
             state['user'] = p
+    session_p, p = p, None
+    redirect_url = request.line.uri
     if request.method == 'POST':
-        old_p = p
-        p = sign_in_with_form_data(request, state)
-        if p:
-            if old_p:
-                old_p.sign_out(response.headers.cookie)
-            p.sign_in(response.headers.cookie)
-            state['user'] = p
-            if request.body.pop('form.repost', None) != 'true':
-                response.redirect(request.line.uri)
+        body = _get_body(request)
+        if body:
+            p = sign_in_with_form_data(body, state)
+            carry_on = body.pop('email-login.carry-on', None)
+            if not p and carry_on:
+                p_email = session_p and (
+                    session_p.email or session_p.get_emails()[0].address
+                )
+                if p_email != carry_on:
+                    state['email-login.carry-on'] = carry_on
+                    raise AuthRequired
+    elif request.method == 'GET' and request.qs.get('log-in.id'):
+        id, token = request.qs.pop('log-in.id'), request.qs.pop('log-in.token')
+        p = Participant.authenticate('id', 'session', id, token)
+        if not p and (not session_p or session_p.id != id):
+            raise Response(400, _("This login link is expired or invalid."))
+        else:
+            qs = '?' + urlencode(request.qs, doseq=True) if request.qs else ''
+            redirect_url = request.path.raw + qs
+            session_p = p
+    if p:
+        if session_p:
+            session_p.sign_out(response.headers.cookie)
+        p.sign_in(response.headers.cookie)
+        state['user'] = p
+        if request.body.pop('form.repost', None) != 'true':
+            response.redirect(redirect_url)
 
 
 def add_auth_to_response(response, request=None, user=ANON):
