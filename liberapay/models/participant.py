@@ -187,7 +187,7 @@ class Participant(Model, MixinTeam):
             algo, rounds, salt, hashed = p.password.split('$', 3)
             rounds = int(rounds)
             salt, hashed = b64decode(salt), b64decode(hashed)
-            if pbkdf2_hmac(algo, v2, salt, rounds) == hashed:
+            if cls._hash_password(v2, algo, salt, rounds) == hashed:
                 p.authenticated = True
                 return p
 
@@ -198,6 +198,10 @@ class Participant(Model, MixinTeam):
     # Password Management
     # ===================
 
+    @staticmethod
+    def _hash_password(password, algo, salt, rounds):
+        return pbkdf2_hmac(algo, password.encode('utf8'), salt, rounds)
+
     @classmethod
     def hash_password(cls, password):
         l = len(password)
@@ -206,7 +210,7 @@ class Participant(Model, MixinTeam):
         algo = 'sha256'
         salt = urandom(21)
         rounds = cls._password_rounds
-        hashed = pbkdf2_hmac(algo, password.encode('utf8'), salt, rounds)
+        hashed = cls._hash_password(password, algo, salt, rounds)
         hashed = '$'.join((algo, str(rounds), b64encode(salt), b64encode(hashed)))
         return hashed
 
