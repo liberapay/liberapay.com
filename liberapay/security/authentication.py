@@ -139,8 +139,9 @@ def authenticate_user_if_possible(request, state, user, _):
         if not p and (not session_p or session_p.id != id):
             raise Response(400, _("This login link is expired or invalid."))
         else:
-            qs = '?' + urlencode(request.qs) if request.qs else ''
+            qs = '?' + urlencode(request.qs, doseq=True) if request.qs else ''
             redirect_url = request.path.raw + qs
+            session_p = p
     if p:
         if session_p:
             session_p.sign_out(response.headers.cookie)
