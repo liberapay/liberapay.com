@@ -176,6 +176,8 @@ class Participant(Model, MixinTeam):
         if k2 == 'session':
             if not p.session_token:
                 return
+            if p.session_expires < utcnow():
+                return
             if constant_time_compare(p.session_token, v2):
                 p.authenticated = True
                 return p
