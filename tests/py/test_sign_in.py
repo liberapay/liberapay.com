@@ -4,6 +4,8 @@ from __future__ import division, print_function, unicode_literals
 
 from six.moves.http_cookies import SimpleCookie
 
+from aspen.utils import to_rfc822, utcnow
+
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
@@ -24,7 +26,31 @@ class TestSignIn(EmailHarness):
         data = {'log-in.id': username, 'log-in.password': password}
         return self.client.POST('/sign-in', data, raise_immediately=False, **kw)
 
+    def log_in_and_check(self, p, password, **kw):
+        r = self.log_in(p.username, password, **kw)
+        p = p.refetch()
+        # Basic checks
+        assert r.code == 302
+        expected = b'%s:%s' % (p.id, p.session_token)
+        sess_cookie = r.headers.cookie[SESSION]
+        assert sess_cookie.value == expected
+        assert sess_cookie[b'expires'] > to_rfc822(utcnow())
+        # More thorough check
+        self.check_with_about_me(p.username, r.headers.cookie)
+        return p
+
+    def check_with_about_me(self, username, cookies):
+        r = self.client.GET('/about/me/', cookies=cookies, raise_immediately=False)
+        assert r.code == 302
+        assert r.headers['Location'] == '/'+username+'/'
+
     def test_log_in(self):
+        password = 'password'
+        alice = self.make_participant('alice')
+        alice.update_password(password)
+        self.log_in_and_check(alice, password)
+
+    def test_log_in_switch_user(self):
         password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
@@ -32,20 +58,14 @@ class TestSignIn(EmailHarness):
         bob.authenticated = True
         cookies = SimpleCookie()
         bob.sign_in(cookies)
-        r = self.log_in('alice', password, cookies=cookies)
-        assert r.code == 302
-        expected = b'%s:%s' % (alice.id, alice.refetch().session_token)
-        assert r.headers.cookie[SESSION].value == expected
+        self.log_in_and_check(alice, password, cookies=cookies)
 
     def test_log_in_closed_account(self):
         password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
         alice.update_status('closed')
-        r = self.log_in('alice', password)
-        assert r.code == 302
-        assert SESSION in r.headers.cookie
-        alice2 = Participant.from_id(alice.id)
+        alice2 = self.log_in_and_check(alice, password)
         assert alice2.status == 'active'
         assert alice2.join_time == alice.join_time
 
