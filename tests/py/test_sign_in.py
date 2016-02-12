@@ -2,6 +2,8 @@
 
 from __future__ import division, print_function, unicode_literals
 
+from datetime import timedelta
+
 from six.moves.http_cookies import SimpleCookie
 
 from aspen.utils import to_rfc822, utcnow
@@ -49,6 +51,15 @@ class TestSignIn(EmailHarness):
         alice = self.make_participant('alice')
         alice.update_password(password)
         self.log_in_and_check(alice, password)
+
+    def test_log_in_with_old_session(self):
+        alice = self.make_participant('alice')
+        alice.update_session('x', utcnow() - timedelta(days=1))
+        alice.authenticated = True
+        cookies = SimpleCookie()
+        alice.sign_in(cookies)
+        print(cookies)
+        self.check_with_about_me('alice', cookies)
 
     def test_log_in_switch_user(self):
         password = 'password'
