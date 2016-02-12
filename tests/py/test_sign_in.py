@@ -125,9 +125,18 @@ class TestSignIn(EmailHarness):
         assert r.code == 302
         assert r.headers['Location'] == '/alice/?foo=bar'
         # ↑ checks that original path and query are preserved
-        expected_cookie = '%s:%s' % (alice.id, alice2.session_token)
-        assert r.headers.cookie[SESSION].value == expected_cookie
-        # ↑ checks that we are in fact logged in
+
+        # Check that we can change our password
+        password = 'new-password'
+        r = self.client.POST(
+            '/alice/settings/edit',
+            {'new-password': password},
+            cookies=r.headers.cookie,
+            raise_immediately=False,
+        )
+        assert r.code == 302
+        alice2 = Participant.authenticate('id', 'password', alice.id, password)
+        assert alice2 and alice2 == alice
 
     def test_email_login_bad_email(self):
         data = {'email-login.email': 'unknown@example.org'}
