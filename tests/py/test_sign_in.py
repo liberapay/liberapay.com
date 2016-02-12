@@ -64,6 +64,51 @@ class TestSignIn(EmailHarness):
         r = self.log_in('alice', 'deadbeef')
         assert SESSION not in r.headers.cookie
 
+    def test_email_login(self):
+        email = 'alice@example.net'
+        alice = self.make_participant('alice')
+        alice.add_email(email)
+
+        data = {'email-login.email': email}
+        r = self.client.POST('/', data, raise_immediately=False)
+        alice = alice.refetch()
+        assert alice.session_token not in r.headers.raw
+        assert alice.session_token not in r.body.decode('utf8')
+
+        Participant.dequeue_emails()
+        last_email = self.get_last_email()
+        assert last_email and last_email['subject'] == 'Password reset'
+        assert 'log-in.token='+alice.session_token in last_email['text']
+
+        url = '/alice/?foo=bar&log-in.id=%s&log-in.token=%s'
+        r = self.client.GxT(url % (alice.id, alice.session_token))
+        alice2 = alice.refetch()
+        assert alice2.session_token != alice.session_token
+        # ↑ this means that the link is only valid once
+        assert r.code == 302
+        assert r.headers['Location'] == '/alice/?foo=bar'
+        # ↑ checks that original path and query are preserved
+        expected_cookie = '%s:%s' % (alice.id, alice2.session_token)
+        assert r.headers.cookie[SESSION].value == expected_cookie
+        # ↑ checks that we are in fact logged in
+
+    def test_email_login_bad_email(self):
+        data = {'email-login.email': 'unknown@example.org'}
+        r = self.client.POST('/sign-in', data, raise_immediately=False)
+        assert r.code == 403
+        assert SESSION not in r.headers.cookie
+        Participant.dequeue_emails()
+        assert not self.get_emails()
+
+    def test_email_login_bad_id(self):
+        r = self.client.GxT('/?log-in.id=1&log-in.token=x')
+        assert r.code == 400
+
+    def test_email_login_bad_token(self):
+        alice = self.make_participant('alice')
+        r = self.client.GxT('/?log-in.id=%s&log-in.token=x' % alice.id)
+        assert r.code == 400
+
     def sign_in(self, custom):
         data = dict(good_data)
         for k, v in custom.items():
@@ -109,4 +154,8 @@ class TestSignIn(EmailHarness):
 
     def test_sign_in_bad_email(self):
         r = self.sign_in(dict(email='foo@bar'))
+        assert r.code == 400
+
+    def test_sign_in_terms_not_checked(self):
+        r = self.sign_in(dict(terms=''))
         assert r.code == 400
