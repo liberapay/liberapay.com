@@ -26,7 +26,7 @@
 
 <p>{{ _("You now have {0} in your wallet.", Money(new_balance, 'EUR')) }}</p>
 
-<a href="{{ participant.url('wallet/') }}">{{ _("See your account's transaction logs") }}</a>
+<p><a href="{{ participant.url('wallet/') }}">{{ _("See your account's transaction logs") }}</a></p>
 
 [---] text/plain
 {{ _("{0} were given to you personally.", Money(personal, 'EUR')) }}
