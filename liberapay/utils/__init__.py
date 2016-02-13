@@ -90,6 +90,8 @@ def get_community(state, restrict=False):
             response.redirect('/for/' + c.name + request.line.uri[5+len(name):])
     elif not c:
         raise Response(404)
+    elif user.ANON:
+        raise AuthRequired
 
     if restrict:
         if user.ANON:
