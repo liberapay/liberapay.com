@@ -59,11 +59,12 @@ class TestCommunitiesJson(Harness):
         assert len(json.loads(response.body)) == 0
 
 
-class TestCommunitySubscriptions(Harness):
+class TestCommunityActions(Harness):
 
     def setUp(self):
         Harness.setUp(self)
         self.alice = self.make_participant("alice")
+        self.bob = self.make_participant("bob")
         self.community = Community.create('test', self.alice.id)
 
     def test_post_bad_name_returns_404(self):
@@ -72,16 +73,30 @@ class TestCommunitySubscriptions(Harness):
         assert response.code == 404
 
     def test_subscribe_and_unsubscribe(self):
-        response = self.client.POST('/for/test/subscribe', auth_as=self.alice,
+        response = self.client.POST('/for/test/subscribe', auth_as=self.bob,
                                     xhr=True)
 
         r = json.loads(response.body)
         assert r == {}
 
-        response = self.client.POST('/for/test/unsubscribe', auth_as=self.alice,
+        response = self.client.POST('/for/test/unsubscribe', auth_as=self.bob,
                                     xhr=True)
 
-        response = self.client.GET('/alice/communities.json', auth_as=self.alice)
+        response = self.client.GET('/bob/communities.json', auth_as=self.bob)
+
+        assert len(json.loads(response.body)) == 0
+
+    def test_join_and_leave(self):
+        response = self.client.POST('/for/test/join', auth_as=self.bob,
+                                    xhr=True)
+
+        r = json.loads(response.body)
+        assert r == {}
+
+        response = self.client.POST('/for/test/leave', auth_as=self.bob,
+                                    xhr=True)
+
+        response = self.client.GET('/bob/communities.json', auth_as=self.bob)
 
         assert len(json.loads(response.body)) == 0
 
