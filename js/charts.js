@@ -8,8 +8,9 @@ Liberapay.charts.make = function(series) {
 };
 
 Liberapay.charts._make = function(series) {
-    if (!series.length) {
-        $('.chart-wrapper').remove();
+    if (series.length) {
+        $('.chart-wrapper').show();
+    } else {
         return;
     }
 
