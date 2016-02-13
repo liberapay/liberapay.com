@@ -10,6 +10,12 @@ title = _("Donate to {0}", participant.username)
 % from 'templates/elsewhere.html' import account_elsewhere with context
 % from 'templates/your-tip.html' import tip_form with context
 
+% block head_early
+    % if 'amount' in request.qs
+        <meta name="robots" content="noindex" />
+    % endif
+% endblock
+
 {% block heading %}{% endblock %}
 
 % block content
