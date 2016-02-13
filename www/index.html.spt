@@ -38,7 +38,7 @@ new_members = query_cache.all("""
 
 % block content
 
-<div class="jumbotron" style="text-align: center">
+<div class="jumbotron" style="background: #eef0ff; text-align: center;">
     <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
     <p>{{ _(
         "We currently have {0} users ready to exchange {1} per month…\n"
