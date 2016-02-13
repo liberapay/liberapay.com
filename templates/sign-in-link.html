@@ -1,3 +1,3 @@
-<a href="/sign-in?back_to={{ urlquote(request.line.uri) }}"
+<a href="/sign-in?back_to={{ urlquote(request.line.uri) }}" rel="nofollow"
    {% if request.method not in ('GET', 'HEAD') %} target="_blank" {% endif %}
    >{{ _("Sign in") }}</a>
