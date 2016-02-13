@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import json
 
+from liberapay.exceptions import AuthRequired
 from liberapay.models.community import Community
 from liberapay.testing import Harness
 
@@ -87,6 +88,9 @@ class TestCommunityActions(Harness):
         assert len(json.loads(response.body)) == 0
 
     def test_join_and_leave(self):
+        with self.assertRaises(AuthRequired):
+            self.client.POST('/for/test/join')
+
         response = self.client.POST('/for/test/join', auth_as=self.bob,
                                     xhr=True)
 
