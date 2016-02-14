@@ -82,9 +82,9 @@ def out():
 % extends "templates/about.html"
 
 % block scripts
-<script>
-    jQuery.get('/about/charts.json', Liberapay.charts.make);
-</script>
+% if last_payday
+    <script>jQuery.get('/about/charts.json', Liberapay.charts.make);</script>
+% endif
 {{ super() }}
 % endblock
 
@@ -110,6 +110,9 @@ def out():
     <p>{{ ngettext("On average, people who donate give {0} each to one other user.",
                    "On average, people who donate give {0} each to {n} other users.",
                    average_tippees, Money(average_tip, 'EUR')) }}</p>
+
+    % if last_payday
+    <noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
 
     <div class="two-column">
         <div class="chart-wrapper">
@@ -160,6 +163,7 @@ def out():
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
     </div>
+    % endif
 
 % endblock
 
