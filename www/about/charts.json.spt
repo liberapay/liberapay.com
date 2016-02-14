@@ -3,13 +3,12 @@ charts = website.db.all("""\
 
     SELECT ts_start::date           AS date
          , ts_start::date           AS xTitle
-         , nparticipants::text      AS total_users
-         , nactive::text            AS active_users
-         , ( SELECT sum(transfer_volume)
-               FROM paydays
-              WHERE ts_start <= p.ts_start
-                   )::text          AS total_gifts
-         , transfer_volume::text    AS weekly_gifts
+         , nparticipants::text
+         , nusers::text
+         , nactive::text
+         , transfer_volume::text
+         , week_deposits::text
+         , week_withdrawals::text
       FROM paydays p
   ORDER BY ts_start DESC
 

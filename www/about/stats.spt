@@ -119,7 +119,7 @@ def out():
             <a name="users"></a>
             <h3>{{ _("Total Users") }}</h3>
             <p class="note">{{ _("Anyone who's ever created an account on Liberapay") }}</p>
-            <div class="chart" data-chart="total_users"></div>
+            <div class="chart" data-chart="nusers"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
@@ -127,15 +127,7 @@ def out():
             <a name="active"></a>
             <h3>{{ _("Active Users") }}</h3>
             <p class="note">{{ _("Users that gave and/or received money within Liberapay (per week)") }}</p>
-            <div class="chart" data-chart="active_users"></div>
-            <div class="x-axis">{{ _("weeks") }}</div>
-        </div>
-
-        <div class="chart-wrapper col-md-6">
-            <a name="cumulative-gifts"></a>
-            <h3>{{ _("Total Gifts (€)") }}</h3>
-            <p class="note">{{ _("Money transferred within Liberapay (cumulative)") }}</p>
-            <div class="chart" data-chart="total_gifts"></div>
+            <div class="chart" data-chart="nactive"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
@@ -143,15 +135,15 @@ def out():
             <a name="gifts"></a>
             <h3>{{ _("Weekly Gifts (€)") }}</h3>
             <p class="note">{{ _("Money transferred within Liberapay (per week)") }}</p>
-            <div class="chart" data-chart="weekly_gifts"></div>
+            <div class="chart" data-chart="transfer_volume"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
         <div class="chart-wrapper col-md-6">
-            <a name="charges"></a>
+            <a name="deposits"></a>
             <h3>{{ _("Deposits (€)") }}</h3>
             <p class="note">{{ _("Money moved into Liberapay") }}</p>
-            <div class="chart" data-chart="charges"></div>
+            <div class="chart" data-chart="week_deposits"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
 
@@ -159,7 +151,7 @@ def out():
             <a name="withdrawals"></a>
             <h3>{{ _("Withdrawals (€)") }}</h3>
             <p class="note">{{ _("Money moved out of Liberapay") }}</p>
-            <div class="chart" data-chart="withdrawals"></div>
+            <div class="chart" data-chart="week_withdrawals"></div>
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
     </div>
