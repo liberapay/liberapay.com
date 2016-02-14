@@ -115,11 +115,45 @@ class Payday(object):
                 self.check_balances(cursor)
                 with open(self.transfers_filename, 'wb') as f:
                     pickle.dump(transfers, f)
+                if self.id > 1:
+                    previous_ts_start = self.db.one("""
+                        SELECT ts_start
+                          FROM paydays
+                         WHERE id = %s
+                    """, (self.id - 1,))
+                else:
+                    previous_ts_start = constants.EPOCH
+                assert previous_ts_start
+                ts_start = self.ts_start
                 cursor.run("""
+                    WITH week_exchanges AS (
+                             SELECT e.*
+                               FROM exchanges e
+                              WHERE e.timestamp < %(ts_start)s
+                                AND e.timestamp >= %(previous_ts_start)s
+                                AND status <> 'failed'
+                         )
                     UPDATE paydays
                        SET nparticipants = (SELECT count(*) FROM payday_participants)
+                         , nusers = (
+                               SELECT count(*)
+                                 FROM participants
+                                WHERE kind IN ('individual', 'organization')
+                                  AND join_time < %(ts_start)s
+                                  AND status = 'active'
+                           )
+                         , week_deposits = (
+                               SELECT COALESCE(sum(amount), 0)
+                                 FROM week_exchanges
+                                WHERE amount > 0
+                           )
+                         , week_withdrawals = (
+                               SELECT COALESCE(-sum(amount), 0)
+                                 FROM week_exchanges
+                                WHERE amount < 0
+                           )
                      WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
-                """)
+                """, locals())
             self.clean_up()
 
         self.transfer_for_real(transfers)

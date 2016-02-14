@@ -36,6 +36,8 @@ BIRTHDAY = date(2015, 5, 22)
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
 EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 
+EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
+
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',

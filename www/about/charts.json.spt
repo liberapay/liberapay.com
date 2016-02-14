@@ -1,21 +1,29 @@
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=5)
+
 [---]
-charts = website.db.all("""\
+
+charts = [r._asdict() for r in query_cache.all("""\
 
     SELECT ts_start::date           AS date
          , ts_start::date           AS xTitle
-         , nparticipants::text      AS total_users
-         , nactive::text            AS active_users
-         , ( SELECT sum(transfer_volume)
-               FROM paydays
-              WHERE ts_start <= p.ts_start
-                   )::text          AS total_gifts
-         , transfer_volume::text    AS weekly_gifts
+         , nparticipants::text
+         , nusers::text
+         , nactive::text
+         , transfer_volume::text
+         , week_deposits::text
+         , week_withdrawals::text
       FROM paydays p
   ORDER BY ts_start DESC
 
-""", back_as=dict)
+""")]
 for c in charts:
     c['xTitle'] = c.pop('xtitle')  # postgres doesn't respect case here
+
 response.headers["Access-Control-Allow-Origin"] = "*"
+
+response.headers['Cache-Control'] = 'public, max-age=600'
+
 [---] application/json via json_dump
 charts

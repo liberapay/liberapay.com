@@ -8,8 +8,9 @@ Liberapay.charts.make = function(series) {
 };
 
 Liberapay.charts._make = function(series) {
-    if (!series.length) {
-        $('.chart-wrapper').remove();
+    if (series.length) {
+        $('.chart-wrapper').show();
+    } else {
         return;
     }
 
@@ -31,7 +32,8 @@ Liberapay.charts._make = function(series) {
 
 
     var H = $('.chart').height() - 20;
-    var W = (1 / series.length * 100).toFixed(10) + '%';
+    var W = (1 / series.length * 100).toFixed(10) * $('.chart').width();
+    W = W > 10 ? '10px' : (W < 5 ? '5px' : W+'px');
 
 
     // Compute maxes and scales.

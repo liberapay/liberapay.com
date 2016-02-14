@@ -1,0 +1,57 @@
+.chart-wrapper {
+    display: none;
+
+    $chart-bar-color: #9ea0ff;
+    $chart-numbers-color: #444;
+
+    .chart {
+        height: 120px; // 100px for the chart + room for the max flag
+    }
+    .bar {
+        height: 100%;
+        float: left;
+        position: relative;
+        cursor: pointer;
+    }
+    .shaded {
+        position: absolute;
+        background: $chart-bar-color;
+        bottom: 0;
+        width: 100%;
+    }
+    .bar span, .x-axis {
+        font: normal 7pt/7pt "Lucida Mono", Monaco, monospace;
+    }
+    .bar span.x-tick {
+        position: absolute;
+        bottom: -12pt;
+        right: 0;
+        padding: 5pt 0.5pt 0 0;
+        border: 1pt solid $chart-numbers-color;
+        border-style: none solid none none;
+        color: $chart-numbers-color;
+        background: white;
+    }
+    .bar span.y-label {     // This is the flag.
+        position: absolute;
+        top: -17pt;
+        right: 0;
+        z-index: 1;         // Wants to be over the bars.
+        text-align: center;
+        background: white;
+        color: $chart-numbers-color;
+        border: 2pt solid $chart-numbers-color;
+        border-radius: 3pt 0 0 3pt;
+        padding: 2pt 3pt;
+    }
+    .bar:not(.flagged):not(.max):not(:hover) span {
+        display: none;
+    }
+    .x-axis {
+        text-align: center;
+        padding-top: 14pt;
+    }
+    .note {
+        font-style: italic;
+    }
+}
