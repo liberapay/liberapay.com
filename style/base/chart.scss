@@ -1,6 +1,9 @@
 .chart-wrapper {
     display: none;
 
+    $chart-bar-color: #9ea0ff;
+    $chart-numbers-color: #444;
+
     .chart {
         height: 120px; // 100px for the chart + room for the max flag
     }
@@ -12,7 +15,7 @@
     }
     .shaded {
         position: absolute;
-        background: #396;
+        background: $chart-bar-color;
         bottom: 0;
         width: 100%;
     }
@@ -24,9 +27,9 @@
         bottom: -12pt;
         right: 0;
         padding: 5pt 0.5pt 0 0;
-        border: 1pt solid #630;
+        border: 1pt solid $chart-numbers-color;
         border-style: none solid none none;
-        color: #630;
+        color: $chart-numbers-color;
         background: white;
     }
     .bar span.y-label {     // This is the flag.
@@ -36,8 +39,8 @@
         z-index: 1;         // Wants to be over the bars.
         text-align: center;
         background: white;
-        color: #630;
-        border: 2pt solid #630;
+        color: $chart-numbers-color;
+        border: 2pt solid $chart-numbers-color;
         border-radius: 3pt 0 0 3pt;
         padding: 2pt 3pt;
     }
