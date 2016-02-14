@@ -102,7 +102,12 @@ class TestCharge(MangopayHarness):
             assert janet.withdrawable_balance == 0
             self.db.self_check()
 
-    def test_charge_100(self):
+    @mock.patch('mangopaysdk.tools.apipayins.ApiPayIns.Create')
+    def test_charge_100(self, Create):
+        def add_redirect_url_to_payin(payin):
+            payin.ExecutionDetails.SecureModeRedirectURL = 'some url'
+            return payin
+        Create.side_effect = add_redirect_url_to_payin
         with self.assertRaises(Response) as cm:
             charge(self.db, self.janet, D('100'), 'http://localhost/')
         r = cm.exception
