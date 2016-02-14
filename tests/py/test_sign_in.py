@@ -3,10 +3,12 @@
 from __future__ import division, print_function, unicode_literals
 
 from datetime import timedelta
+from email.utils import parsedate
+from time import gmtime
 
 from six.moves.http_cookies import SimpleCookie
 
-from aspen.utils import to_rfc822, utcnow
+from aspen.utils import utcnow
 
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant
@@ -36,7 +38,9 @@ class TestSignIn(EmailHarness):
         expected = b'%s:%s' % (p.id, p.session_token)
         sess_cookie = r.headers.cookie[SESSION]
         assert sess_cookie.value == expected
-        assert sess_cookie[b'expires'] > to_rfc822(utcnow())
+        expires = sess_cookie[b'expires']
+        assert expires.endswith(' GMT')
+        assert parsedate(expires) > gmtime()
         # More thorough check
         self.check_with_about_me(p.username, r.headers.cookie)
         return p
