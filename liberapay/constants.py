@@ -39,7 +39,7 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
-    undefined=CustomUndefined,
+    #undefined=CustomUndefined,
 )
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
