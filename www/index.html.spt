@@ -38,7 +38,7 @@ new_members = query_cache.all("""
 
 % block content
 
-<div class="jumbotron" style="text-align: center">
+<div class="jumbotron" style="background: #eef0ff; text-align: center;">
     <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
     <p>{{ _(
         "We currently have {0} users ready to exchange {1} per month…\n"
@@ -54,13 +54,9 @@ new_members = query_cache.all("""
 <div class="row">
 
     <div class="col-md-6">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h2 class="panel-title">{{ _("Donate") }}</h2>
-        </div>
+            <h2 class="banderole primary">{{ _("Donate") }}</h2>
 
-        <div class="panel-body">
-            <div class="alert alert-warning">
+            <div class="text-warning">
                 <p>{{ _(
                     "Please consider donating to {0}the Liberapay team{1}, even "
                     "only a symbolic amount, to help kickstart the platform.",
@@ -93,20 +89,16 @@ new_members = query_cache.all("""
             <a class="btn btn-default" href="/explore/">{{ _("More") }}</a><br><br>
 
             <p>{{ _("Find your friends from social networks:") }}</p>
+            <p>
             % for p in website.friends_platforms
                 <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
             % endfor
-        </div>
-    </div>
+            </p>
     </div>
 
     <div class="col-md-6">
-    <div class="panel panel-success">
-        <div class="panel-heading">
-            <h2 class="panel-title">{{ _("Receive") }}</h2>
-        </div>
+        <h2 class="banderole success">{{ _("Receive") }}</h2>
 
-        <div class="panel-body">
         % if user.ANON
 
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
@@ -139,17 +131,11 @@ new_members = query_cache.all("""
             % endif
 
         % endif
-        </div>
-    </div>
     </div>
 
     <div class="col-xs-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">{{ _("New Members") }}</h2>
-        </div>
+        <h2 class="banderole default">{{ _("New Members") }}</h2>
 
-        <div class="panel-body">
         <ul class="people">
         % for m in new_members
             <li class="panel panel-default mini-user">
@@ -161,8 +147,6 @@ new_members = query_cache.all("""
             </li>
         % endfor
         </ul>
-        </div>
-    </div>
     </div>
 
 </div>

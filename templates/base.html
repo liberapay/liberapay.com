@@ -19,10 +19,13 @@
 <body>
 
 <div id="wrapper">
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-liberapay navbar-static-top">
         <div class="container">
             <ul class="nav navbar-nav pull-left">
-                <li><a class="navbar-brand" href="/">Liberapay</a></li>
+                <li>
+                    <a class="navbar-brand" href="/">
+                        <img src="{{ website.asset('liberapay/icon.svg') }}"
+                             alt="&nbsp;Liberapay&nbsp;" /></a></li>
                 {{ nav([('/explore/', _('Explore')), ('/search', _('Search')), ('/about/', _('About'))]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
@@ -30,7 +33,7 @@
                 <li>{% include "templates/profile-dropdown.html" %}</li>
                 <li><a href="/{{ user.username }}/notifications"
                        title="{{ _('Notifications') }}"
-                       style="color: {{ '#e11' if user.pending_notifs else '#888' }}">
+                       class="{{ 'navbar-warning' if user.pending_notifs else '' }}">
                     <span class="glyphicon glyphicon-info-sign"></span>
                     <span class="sr-only">{{ _("Notifications") }}</span>
                     % if user.pending_notifs
