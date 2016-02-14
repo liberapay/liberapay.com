@@ -32,6 +32,11 @@ title = _("Frequently Asked Questions")
     <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>
 
 
+    <dt id="fees">{{ _("What are the payment processing fees?") }}</dt>
+
+    <dd>{{ _("When adding fund on Liberapay, there is a fixed fee of {0} and a variable fee of {1}%.", Money(constants.FEE_CHARGE_FIX, 'EUR'), constants.FEE_CHARGE_VAR * 100) }}</dd>
+
+
     <dt id="differences">{{ _("What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?") }}</dt>
 
     <dd>

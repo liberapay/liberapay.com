@@ -38,6 +38,10 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
+# https://www.mangopay.com/pricing/
+FEE_CHARGE_FIX = Decimal('0.18')  # 0.18 euros
+FEE_CHARGE_VAR = Decimal('0.018')  # 1.8%
+
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
