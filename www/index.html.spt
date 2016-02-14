@@ -41,7 +41,7 @@ new_members = query_cache.all("""
 <div class="jumbotron" style="background: #eef0ff; text-align: center;">
     <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
     <p>{{ _(
-        "We currently have {0} users ready to exchange {1} per month…\n"
+        "We currently have {0} users transferring {1} per month…\n"
         "Not so bad considering that we only opened {2} ago!",
         website.gnusers, website.gmonthly_volume,
         to_age(constants.LAUNCH_TIME)
@@ -71,7 +71,7 @@ new_members = query_cache.all("""
             }}</a></p>
             % endif
 
-            <p>{{ _("Who inspires you? See if they're on Liberapay:") }}</p>
+            <p>{{ _("Whose work do you appreciate? See if they're on Liberapay:") }}</p>
             % include "templates/search-box.html"
 
             <p>{{ _("Explore our communities:") }}</p>
