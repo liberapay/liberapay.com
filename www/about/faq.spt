@@ -32,19 +32,6 @@ title = _("Frequently Asked Questions")
     <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>
 
 
-    <dt id="fees">{{ _("What are the payment processing fees?") }}</dt>
-
-    <dd>{{ _(
-        "Adding money to Liberapay via credit/debit card (currently the only "
-        "supported payment method) incurs a fee of {0}% + {1}. Withdrawing "
-        "money to a SEPA bank account is free, transfers to other countries "
-        "cost {2} per transfer.",
-        constants.FEE_CHARGE_VAR * 100,
-        Money(constants.FEE_CHARGE_FIX, 'EUR'),
-        Money(constants.FEE_CREDIT_OUTSIDE_SEPA, 'EUR'),
-    ) }}</dd>
-
-
     <dt id="differences">{{ _("What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?") }}</dt>
 
     <dd>
@@ -70,19 +57,17 @@ title = _("Frequently Asked Questions")
 </dl>
 <dl class="col-md-6">
 
-    <dt id="income-decrease">{{ _("Why did my income decrease?") }}</dt>
+    <dt id="fees">{{ _("What are the payment processing fees?") }}</dt>
 
-    <dd>{{ _("If your income decreased, one of the following happened:") }}
-
-      <ol>
-        <li>{{ _("A donor to you intentionally decreased or zeroed their donation "
-                 "to you, or their account was closed.") }}</li>
-
-        <li>{{ _("A donor to you had insufficient funds in their Liberapay wallet "
-                 "to fund their donation to you.") }}</li>
-
-      </ol>
-    </dd>
+    <dd>{{ _(
+        "Adding money to Liberapay via credit/debit card (currently the only "
+        "supported payment method) incurs a fee of {0}% + {1}. Withdrawing "
+        "money to a SEPA bank account is free, transfers to other countries "
+        "cost {2} per transfer.",
+        constants.FEE_CHARGE_VAR * 100,
+        Money(constants.FEE_CHARGE_FIX, 'EUR'),
+        Money(constants.FEE_CREDIT_OUTSIDE_SEPA, 'EUR'),
+    ) }}</dd>
 
 
     <dt id="maximum-amount">{{ _("Is there a minimum or maximum amount I can give or receive?") }}</dt>
@@ -115,6 +100,21 @@ title = _("Frequently Asked Questions")
     <dt id="tax-deductible">{{ _("Are donations through Liberapay tax-deductible?") }}</dt>
 
     <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
+
+
+    <dt id="income-decrease">{{ _("Why did my income decrease?") }}</dt>
+
+    <dd>{{ _("If your income decreased, one of the following happened:") }}
+
+      <ol>
+        <li>{{ _("A donor to you intentionally decreased or zeroed their donation "
+                 "to you, or their account was closed.") }}</li>
+
+        <li>{{ _("A donor to you had insufficient funds in their Liberapay wallet "
+                 "to fund their donation to you.") }}</li>
+
+      </ol>
+    </dd>
 
 </dl>
 </div>
