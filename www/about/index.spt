@@ -23,9 +23,13 @@ title = _("Introduction")
     ) }}</p>
 
     <p>{{ _(
-        "Liberapay does not take a cut of payments, recipients get the full face "
-        "value. The service is funded by the donations to {0}its own account{1}."
-        , '<a href="/Liberapay/">'|safe, '</a>'|safe
+        "Liberapay does not take a cut of payments, the service is funded by "
+        "the donations to {1}its own account{0}. So, recipients get the full "
+        "value of the donations, but there are {2}payment processing fees{0} "
+        "when moving money in or out of Liberapay.",
+        '</a>'|safe,
+        '<a href="/Liberapay/">'|safe,
+        '<a href="/about/faq#fees">'|safe,
     ) }}</p>
 
     <p>{{ _(
