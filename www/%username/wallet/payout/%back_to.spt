@@ -88,6 +88,12 @@ title = _("Withdraw money")
     % endif
 
     % if show_form
+    <p>{{ _(
+        "Withdrawing money to a SEPA bank account is free, transfers to other "
+        "countries cost {0} per transfer.",
+        Money(constants.FEE_CREDIT_OUTSIDE_SEPA, 'EUR'),
+    ) }}</p>
+
     <h3>{{ _("Amount") }}</h3>
 
     <fieldset id="amount" class="form-inline">

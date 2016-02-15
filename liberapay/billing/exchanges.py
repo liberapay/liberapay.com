@@ -14,7 +14,10 @@ from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
-from liberapay.constants import QUARANTINE
+from liberapay.constants import (
+    FEE_CHARGE_FIX, FEE_CHARGE_VAR, FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA,
+    MINIMUM_CHARGE, QUARANTINE, SEPA_ZONE,
+)
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
     TransactionFeeTooHigh
@@ -23,18 +26,6 @@ from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
 
-
-MINIMUM_CHARGE = Decimal("10.00")
-
-# https://www.mangopay.com/pricing/
-FEE_CHARGE = (Decimal("0.18"), Decimal("0.018"))  # 0.18 euros + 1.8%
-FEE_CREDIT = 0
-FEE_CREDIT_OUTSIDE_SEPA = Decimal("2.5")
-
-SEPA_ZONE = set("""
-    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
-    MC MT NL NO PL PT RO SE SI SK
-""".split())
 
 QUARANTINE = '%s days' % QUARANTINE.days
 
@@ -49,8 +40,8 @@ def upcharge(amount):
 
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
-    charge_amount = (amount + FEE_CHARGE[0]) / (1 - FEE_CHARGE[1])
-    charge_amount = charge_amount.quantize(FEE_CHARGE[0], rounding=ROUND_UP)
+    charge_amount = (amount + FEE_CHARGE_FIX) / (1 - FEE_CHARGE_VAR)
+    charge_amount = charge_amount.quantize(FEE_CHARGE_FIX, rounding=ROUND_UP)
     fee = charge_amount - amount
 
     return charge_amount, fee

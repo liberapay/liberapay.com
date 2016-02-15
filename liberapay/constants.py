@@ -38,6 +38,12 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
+# https://www.mangopay.com/pricing/
+FEE_CHARGE_FIX = Decimal('0.18')  # 0.18 euros
+FEE_CHARGE_VAR = Decimal('0.018')  # 1.8%
+FEE_CREDIT = 0
+FEE_CREDIT_OUTSIDE_SEPA = Decimal("2.5")
+
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
@@ -48,6 +54,8 @@ LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')
+
+MINIMUM_CHARGE = Decimal("10.00")
 
 QUARANTINE = timedelta(weeks=4)
 
@@ -60,6 +68,11 @@ PRIVACY_FIELDS = OrderedDict([
     ('hide_from_search', _("Hide myself from search results.")),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
+
+SEPA_ZONE = set("""
+    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
+    MC MT NL NO PL PT RO SE SI SK
+""".split())
 
 SESSION = b'session'
 SESSION_REFRESH = timedelta(hours=1)

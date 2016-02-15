@@ -8,7 +8,7 @@ from aspen import Response
 
 import liberapay
 from liberapay.billing import mangoapi
-from liberapay.billing.exchanges import charge, MINIMUM_CHARGE, record_exchange_result, repr_error, upcharge
+from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant, is_card_expired
 
@@ -43,7 +43,7 @@ donations = participant.get_giving_for_profile()[1]
 weekly = donations - participant.receiving
 if weekly > 0:
     funded = participant.balance // weekly
-    min_weeks = max(MINIMUM_CHARGE // weekly, 1)
+    min_weeks = max(constants.MINIMUM_CHARGE // weekly, 1)
 
 if request.method == 'POST':
     if weekly <= 0 or funded >= 52 or participant.balance > 1500:
@@ -109,6 +109,13 @@ title = _("Add money")
 
     % if participant.email
     % if show_form
+    <p>{{ _(
+        "Adding money to Liberapay via credit/debit card (currently the only "
+        "supported payment method) incurs a fee of {0}% + {1}.",
+        constants.FEE_CHARGE_VAR * 100,
+        Money(constants.FEE_CHARGE_FIX, 'EUR'),
+    ) }}</p>
+
     <h3>{{ _("Amount") }}</h3>
 
     <fieldset id="amount" class="form-inline">
