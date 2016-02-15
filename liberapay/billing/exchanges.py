@@ -14,7 +14,10 @@ from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
-from liberapay.constants import QUARANTINE, FEE_CHARGE_FIX, FEE_CHARGE_VAR
+from liberapay.constants import (
+    FEE_CHARGE_FIX, FEE_CHARGE_VAR, FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA,
+    MINIMUM_CHARGE, QUARANTINE, SEPA_ZONE,
+)
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
     TransactionFeeTooHigh
@@ -23,16 +26,6 @@ from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
 
-
-MINIMUM_CHARGE = Decimal("10.00")
-
-FEE_CREDIT = 0
-FEE_CREDIT_OUTSIDE_SEPA = Decimal("2.5")
-
-SEPA_ZONE = set("""
-    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
-    MC MT NL NO PL PT RO SE SI SK
-""".split())
 
 QUARANTINE = '%s days' % QUARANTINE.days
 
