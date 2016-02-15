@@ -34,7 +34,15 @@ title = _("Frequently Asked Questions")
 
     <dt id="fees">{{ _("What are the payment processing fees?") }}</dt>
 
-    <dd>{{ _("When adding fund on Liberapay, there is a fixed fee of {0} and a variable fee of {1}%.", Money(constants.FEE_CHARGE_FIX, 'EUR'), constants.FEE_CHARGE_VAR * 100) }}</dd>
+    <dd>{{ _(
+        "Adding money to Liberapay via credit/debit card (currently the only "
+        "supported payment method) incurs a fee of {0}% + {1}. Withdrawing "
+        "money to a SEPA bank account is free, transfers to other countries "
+        "cost {2} per transfer.",
+        constants.FEE_CHARGE_VAR * 100,
+        Money(constants.FEE_CHARGE_FIX, 'EUR'),
+        Money(constants.FEE_CREDIT_OUTSIDE_SEPA, 'EUR'),
+    ) }}</dd>
 
 
     <dt id="differences">{{ _("What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?") }}</dt>
