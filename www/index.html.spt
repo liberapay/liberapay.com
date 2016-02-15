@@ -1,8 +1,11 @@
 # coding: utf8
 
+from liberapay.models.participant import Participant
 from liberapay.utils.query_cache import QueryCache
 
 query_cache = QueryCache(website.db, threshold=5)
+
+Liberapay_id = getattr(Participant.from_username('Liberapay'), 'id', -1)
 
 [---]
 
@@ -102,6 +105,15 @@ new_members = query_cache.all("""
     <div class="col-md-6">
             <h2 class="banderole primary">{{ _("Donate") }}</h2>
 
+            % set Liberapay_tip = user.get_tip_to(Liberapay_id)['amount']
+            % if Liberapay_tip
+            <div class="text-success">
+                <p>{{ _(
+                    "You give {0} per week to the Liberapay team. Thank you!",
+                    Money(Liberapay_tip, 'EUR'),
+                ) }}</p>
+            </div>
+            % else
             <div class="text-warning">
                 <p>{{ _(
                     "Please consider donating to {0}the Liberapay team{1}, even "
@@ -110,6 +122,7 @@ new_members = query_cache.all("""
                     '</a>'|safe,
                 ) }}</p>
             </div>
+            % endif
 
             % if not user.ANON
             <p><a href="/{{ user.username }}/giving/">{{
