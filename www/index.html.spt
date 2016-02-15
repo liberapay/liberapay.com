@@ -180,6 +180,30 @@ new_members = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
+        <h2 class="banderole info">{{ _("Upcoming Features") }}</h2>
+        <ul>
+            <li>{{ _(
+                "The ability to list your projects on your profile and link "
+                "them to the relevant communities."
+            ) }}</li>
+            <li>{{ _(
+                "Communication between donors and donees, through project status "
+                "updates that will also be aggregated into community newsletters."
+            ) }}</li>
+            <li>{{ _(
+                "Total giving amount: you'll choose how much you want to give "
+                "per week, and we'll compute each of your donations accordingly."
+            ) }}</li>
+            <li>{{ _(
+                "Alternative payment methods: SEPA direct debits, and manual "
+                "bank transfers."
+            ) }}</li>
+            <li><a href="https://github.com/liberapay/liberapay.com/issues"
+                    >{{ _("and more…") }}</a></li>
+        </ul>
+    </div>
+
+    <div class="col-xs-12">
         <h2 class="banderole default">{{ _("New Members") }}</h2>
 
         <ul class="people">
