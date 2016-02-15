@@ -61,11 +61,12 @@ title = _("Frequently Asked Questions")
 
     <dd>{{ _(
         "Adding money to Liberapay via credit/debit card (currently the only "
-        "supported payment method) incurs a fee of {0}% + {1}. Withdrawing "
-        "money to a SEPA bank account is free, transfers to other countries "
-        "cost {2} per transfer.",
+        "supported payment method) incurs a fee of {0}% + {1}.",
         constants.FEE_CHARGE_VAR * 100,
         Money(constants.FEE_CHARGE_FIX, 'EUR'),
+    ) + " " + _(
+        "Withdrawing money to a SEPA bank account is free, transfers to other "
+        "countries cost {0} per transfer.",
         Money(constants.FEE_CREDIT_OUTSIDE_SEPA, 'EUR'),
     ) }}</dd>
 

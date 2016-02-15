@@ -109,6 +109,13 @@ title = _("Add money")
 
     % if participant.email
     % if show_form
+    <p>{{ _(
+        "Adding money to Liberapay via credit/debit card (currently the only "
+        "supported payment method) incurs a fee of {0}% + {1}.",
+        constants.FEE_CHARGE_VAR * 100,
+        Money(constants.FEE_CHARGE_FIX, 'EUR'),
+    ) }}</p>
+
     <h3>{{ _("Amount") }}</h3>
 
     <fieldset id="amount" class="form-inline">
