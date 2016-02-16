@@ -46,7 +46,11 @@ def upcharge(amount):
 
     return charge_amount, fee
 
-assert upcharge(MINIMUM_CHARGE) == (Decimal('10.37'), Decimal('0.37')), upcharge(MINIMUM_CHARGE)
+
+t = upcharge(MINIMUM_CHARGE)
+assert t == (Decimal('15.46'), Decimal('0.46')), upcharge(MINIMUM_CHARGE)
+assert t[1] / t[0] < Decimal('0.03')  # less than 3% fee
+del t
 
 
 def skim_credit(amount, ba):

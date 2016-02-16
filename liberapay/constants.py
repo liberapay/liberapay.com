@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import print_function, unicode_literals
 
 from aspen.utils import utc
@@ -55,7 +56,7 @@ LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')
 
-MINIMUM_CHARGE = Decimal("10.00")
+MINIMUM_CHARGE = Decimal("15.00")  # fee ≈ 3%
 
 QUARANTINE = timedelta(weeks=4)
 
