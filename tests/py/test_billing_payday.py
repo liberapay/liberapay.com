@@ -288,9 +288,15 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
         Payday.start().run()
+        david = self.david.refetch()
+        assert david.balance == D('4.73')
+        janet = self.janet.refetch()
+        assert janet.balance == D('1.77')
+        assert janet.giving == D('0.23')
         emails = self.get_emails()
         assert len(emails) == 2
         assert emails[0]['to'][0]['email'] == self.david.email
-        assert 'received' in emails[0]['subject']
+        assert '4.73' in emails[0]['subject']
         assert emails[1]['to'][0]['email'] == self.janet.email
         assert 'top up' in emails[1]['subject']
+        assert '1.77' in emails[1]['text']
