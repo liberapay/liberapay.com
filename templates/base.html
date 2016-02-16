@@ -49,13 +49,16 @@
         </div>
     </nav>
 
-    <div id="main" class="container">
+    <div id="main">
+        {% block before_container %}{% endblock %}
+        <div class="container">
         % block before_content
             {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
             <div id="subnav">{% block subnav %}{% endblock %}</div>
         % endblock
         {% block content %}{% endblock %}
         {% block after_content %}{% endblock %}
+        </div>
     </div>
 
     <footer role="navigation">

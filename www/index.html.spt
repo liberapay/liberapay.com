@@ -1,8 +1,11 @@
 # coding: utf8
 
+from liberapay.models.participant import Participant
 from liberapay.utils.query_cache import QueryCache
 
 query_cache = QueryCache(website.db, threshold=5)
+
+Liberapay_id = getattr(Participant.from_username('Liberapay'), 'id', -1)
 
 [---]
 
@@ -36,9 +39,11 @@ new_members = query_cache.all("""
     <meta name="og:image" content="{{ website.asset('liberapay/icon.200.png') }}" />
 % endblock
 
-% block content
+% block before_container
 
+% if user.ANON
 <div class="jumbotron" style="background: #eef0ff; text-align: center;">
+<div class="container">
     <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
     <p>{{ _(
         "We currently have {0} users transferring {1} per month…\n"
@@ -46,16 +51,69 @@ new_members = query_cache.all("""
         website.gnusers, website.gmonthly_volume,
         to_age(constants.LAUNCH_TIME)
     ).replace('\n', '<br>'|safe) }}</p>
-    % if user.ANON
-        <p><a class="btn btn-primary btn-lg" href="/sign-in">{{ _("Join us") }}</a></p>
-    % endif
+    <p><a class="btn btn-primary btn-lg" href="/sign-in">{{ _("Join us") }}</a></p>
+    <hr>
+    <p>{{ _("Why use Liberapay?") }}</p>
+    <dl class="row homepage-pitch">
+        <div class="col-sm-4">
+            <dt>
+                <span class="glyphicon glyphicon-flash" aria-hidden="true"></span><br>
+                {{ _("It's easy") }}
+            </dt>
+            <dd>{{ _(
+                "Liberapay makes it easy to donate and receive money "
+                "recurrently, you'll only need a few minutes to get started. "
+                "No Paypal account needed."
+            ) }}</dd>
+        </div>
+        <div class="col-sm-4">
+            <dt>
+                <span class="glyphicon glyphicon-euro" aria-hidden="true"></span><br>
+                {{ _("It's economical") }}
+            </dt>
+            <dd>{{ _(
+                "We don't take a cut on your donations, and our {0}payment "
+                "processor's fees{1} are among the lowest in the world.",
+                '<a href="/about/faq#fees">'|safe,
+                '</a>'|safe,
+            ) }}</dd>
+        </div>
+        <div class="col-sm-4">
+            <dt>
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><br>
+                {{ _("It's open") }}
+            </dt>
+            <dd>{{ _(
+                "Liberapay is run transparently by a {1}non-profit organization{0}, "
+                "its {2}source code{0} is public.",
+                '</a>'|safe,
+                '<a href="https://github.com/liberapay/liberapay.org">'|safe,
+                '<a href="https://github.com/liberapay/liberapay.com">'|safe,
+            ) }}</dd>
+        </div>
+    </dl>
 </div>
+</div>
+% endif
+
+% endblock
+
+% block content
 
 <div class="row">
 
     <div class="col-md-6">
             <h2 class="banderole primary">{{ _("Donate") }}</h2>
 
+            % set Liberapay_tip = user.get_tip_to(Liberapay_id)['amount']
+            % if Liberapay_tip
+            <div class="text-success">
+                <p>{{ _(
+                    "You give {0} per week to the Liberapay team. Thank you!",
+                    Money(Liberapay_tip, 'EUR'),
+                ) }}</p>
+            </div>
+            % else
             <div class="text-warning">
                 <p>{{ _(
                     "Please consider donating to {0}the Liberapay team{1}, even "
@@ -64,6 +122,7 @@ new_members = query_cache.all("""
                     '</a>'|safe,
                 ) }}</p>
             </div>
+            % endif
 
             % if not user.ANON
             <p><a href="/{{ user.username }}/giving/">{{
@@ -131,6 +190,30 @@ new_members = query_cache.all("""
             % endif
 
         % endif
+    </div>
+
+    <div class="col-xs-12">
+        <h2 class="banderole info">{{ _("Upcoming Features") }}</h2>
+        <ul>
+            <li>{{ _(
+                "The ability to list your projects on your profile and link "
+                "them to the relevant communities."
+            ) }}</li>
+            <li>{{ _(
+                "Communication between donors and donees, through project status "
+                "updates that will also be aggregated into community newsletters."
+            ) }}</li>
+            <li>{{ _(
+                "Total giving amount: you'll choose how much you want to give "
+                "per week, and we'll compute each of your donations accordingly."
+            ) }}</li>
+            <li>{{ _(
+                "Alternative payment methods: SEPA direct debits, and manual "
+                "bank transfers."
+            ) }}</li>
+            <li><a href="https://github.com/liberapay/liberapay.com/issues"
+                    >{{ _("and more…") }}</a></li>
+        </ul>
     </div>
 
     <div class="col-xs-12">
