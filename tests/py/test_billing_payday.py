@@ -284,7 +284,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team = self.make_participant('team', kind='group')
         self.janet.set_tip_to(team, '0.25')
         team.add_member(self.david)
-        team.set_take_for(self.david, '0.23', team)
+        team.set_take_for(self.david, D('0.23'), team)
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
         Payday.start().run()
