@@ -277,6 +277,26 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             else:
                 assert p.balance == 0
 
+    def test_mutual_tipping_through_teams(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice', balance=8)
+        alice.set_tip_to(team, D('0.25'))
+        team.set_take_for(alice, D('1.00'), alice)
+        bob = self.make_participant('bob', balance=10)
+        bob.set_tip_to(team, D('3.17'))
+        team.set_take_for(bob, D('0.48'), bob)
+
+        Payday.start().run()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('8.75'),  # 8 - 0.25 + 1.00
+            'bob': D('9.25'),  # 10 - 1.00 + 0.25
+            'team': D('0.00'),
+        }
+        assert d == expected
+
     def test_it_notifies_participants(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
         self.janet.set_tip_to(self.david, '4.50')
@@ -284,13 +304,19 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team = self.make_participant('team', kind='group')
         self.janet.set_tip_to(team, '0.25')
         team.add_member(self.david)
-        team.set_take_for(self.david, '0.23', team)
+        team.set_take_for(self.david, D('0.23'), team)
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
         Payday.start().run()
+        david = self.david.refetch()
+        assert david.balance == D('4.73')
+        janet = self.janet.refetch()
+        assert janet.balance == D('1.77')
+        assert janet.giving == D('0.23')
         emails = self.get_emails()
         assert len(emails) == 2
         assert emails[0]['to'][0]['email'] == self.david.email
-        assert 'received' in emails[0]['subject']
+        assert '4.73' in emails[0]['subject']
         assert emails[1]['to'][0]['email'] == self.janet.email
         assert 'top up' in emails[1]['subject']
+        assert '1.77' in emails[1]['text']
