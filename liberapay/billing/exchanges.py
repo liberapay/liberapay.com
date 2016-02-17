@@ -15,8 +15,8 @@ from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
-    FEE_CHARGE_FIX, FEE_CHARGE_VAR, FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA,
-    MINIMUM_CHARGE, QUARANTINE, SEPA_ZONE,
+    CHARGE_MIN, CHARGE_TARGET, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
+    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, QUARANTINE, SEPA_ZONE,
 )
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
@@ -35,8 +35,8 @@ def upcharge(amount):
     """
     typecheck(amount, Decimal)
 
-    if amount < MINIMUM_CHARGE:
-        amount = MINIMUM_CHARGE
+    if amount < CHARGE_MIN:
+        amount = CHARGE_MIN
 
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
@@ -47,9 +47,12 @@ def upcharge(amount):
     return charge_amount, fee
 
 
-t = upcharge(MINIMUM_CHARGE)
-assert t == (Decimal('15.46'), Decimal('0.46')), upcharge(MINIMUM_CHARGE)
+t = upcharge(CHARGE_MIN)
+assert t == (Decimal('15.46'), Decimal('0.46')), t
 assert t[1] / t[0] < Decimal('0.03')  # less than 3% fee
+t = upcharge(CHARGE_TARGET)
+assert t == (Decimal('93.87'), Decimal('1.87')), t
+assert t[1] / t[0] < Decimal('0.02')  # less than 2% fee
 del t
 
 
