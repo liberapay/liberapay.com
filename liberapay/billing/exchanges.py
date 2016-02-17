@@ -15,7 +15,7 @@ from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
-    CHARGE_MIN, CHARGE_TARGET, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
+    CHARGE_MIN, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
     FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, QUARANTINE, SEPA_ZONE,
 )
 from liberapay.exceptions import (
@@ -45,15 +45,6 @@ def upcharge(amount):
     fee = charge_amount - amount
 
     return charge_amount, fee
-
-
-t = upcharge(CHARGE_MIN)
-assert t == (Decimal('15.46'), Decimal('0.46')), t
-assert t[1] / t[0] < Decimal('0.03')  # less than 3% fee
-t = upcharge(CHARGE_TARGET)
-assert t == (Decimal('93.87'), Decimal('1.87')), t
-assert t[1] / t[0] < Decimal('0.02')  # less than 2% fee
-del t
 
 
 def skim_credit(amount, ba):
