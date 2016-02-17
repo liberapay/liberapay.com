@@ -166,7 +166,10 @@ class Tests(Harness):
     def test_gtlwf_works_during_payday(self):
         team = self.make_team()
         alice = self.make_participant('alice')
+        self.take_last_week(team, alice, '20.00')
+        assert team.get_takes_last_week()[alice.id] == 20
         self.take_last_week(team, alice, '30.00')
+        assert team.get_takes_last_week()[alice.id] == 30
         take_this_week = D('42.00')
         team.set_take_for(alice, take_this_week, alice)
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
