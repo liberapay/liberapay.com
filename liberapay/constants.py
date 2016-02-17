@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import print_function, unicode_literals
 
 from aspen.utils import utc
@@ -31,7 +32,12 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 
 AVATAR_QUERY = '?s=160&default=retro'
 
+BALANCE_MAX = Decimal("1000")
+
 BIRTHDAY = date(2015, 5, 22)
+
+CHARGE_MIN = Decimal("15.00")  # fee ≈ 3%
+CHARGE_TARGET = Decimal("92.00")  # fee ≈ 2%
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
 EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
@@ -54,8 +60,6 @@ LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')
-
-MINIMUM_CHARGE = Decimal("10.00")
 
 QUARANTINE = timedelta(weeks=4)
 

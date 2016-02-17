@@ -15,8 +15,8 @@ from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
-    FEE_CHARGE_FIX, FEE_CHARGE_VAR, FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA,
-    MINIMUM_CHARGE, QUARANTINE, SEPA_ZONE,
+    CHARGE_MIN, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
+    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, QUARANTINE, SEPA_ZONE,
 )
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
@@ -35,8 +35,8 @@ def upcharge(amount):
     """
     typecheck(amount, Decimal)
 
-    if amount < MINIMUM_CHARGE:
-        amount = MINIMUM_CHARGE
+    if amount < CHARGE_MIN:
+        amount = CHARGE_MIN
 
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
@@ -45,8 +45,6 @@ def upcharge(amount):
     fee = charge_amount - amount
 
     return charge_amount, fee
-
-assert upcharge(MINIMUM_CHARGE) == (Decimal('10.37'), Decimal('0.37')), upcharge(MINIMUM_CHARGE)
 
 
 def skim_credit(amount, ba):

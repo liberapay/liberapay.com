@@ -17,6 +17,7 @@ from liberapay.billing.exchanges import (
     sync_with_mangopay,
     transfer,
 )
+from liberapay.constants import CHARGE_MIN, CHARGE_TARGET
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney,
     TransactionFeeTooHigh
@@ -91,13 +92,13 @@ class TestCharge(MangopayHarness):
     def test_charge_success_and_wallet_creation(self):
         self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
         self.janet.set_attributes(mangopay_wallet_id=None)
-        exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
+        exchange = charge(self.db, self.janet, D('100'), 'http://localhost/')
         janet = Participant.from_id(self.janet.id)
         assert exchange.note is None
-        assert exchange.amount == 10
+        assert exchange.amount == 100
         assert exchange.status == 'succeeded'
-        assert self.janet.balance == janet.balance == 10
-        assert janet.withdrawable_balance == 10
+        assert self.janet.balance == janet.balance == 100
+        assert janet.withdrawable_balance == 100
         with mock.patch.multiple(exchanges, QUARANTINE='1 month'):
             assert janet.withdrawable_balance == 0
             self.db.self_check()
@@ -140,42 +141,29 @@ class TestFees(MangopayHarness):
 
     def test_upcharge_full_in_rounded_case(self):
         actual = upcharge(D('5.00'))
-        expected = (D('10.37'), D('0.37'))
+        expected = upcharge(CHARGE_MIN)
         assert actual == expected
 
-    def test_upcharge_at_ten(self):
-        actual = upcharge(D('10.00'))
-        expected = (D('10.37'), D('0.37'))
+    def test_upcharge_at_min(self):
+        actual = upcharge(CHARGE_MIN)
+        expected = (D('15.46'), D('0.46'))
+        assert actual == expected
+        assert actual[1] / actual[0] < D('0.03')  # less than 3% fee
+
+    def test_upcharge_at_target(self):
+        actual = upcharge(CHARGE_TARGET)
+        expected = (D('93.87'), D('1.87'))
+        assert actual == expected
+        assert actual[1] / actual[0] < D('0.02')  # less than 2% fee
+
+    def test_upcharge_at_one_cent(self):
+        actual = upcharge(D('0.01'))
+        expected = upcharge(CHARGE_MIN)
         assert actual == expected
 
-    def test_upcharge_at_forty_cents(self):
-        actual = upcharge(D('0.40'))
-        expected = (D('10.37'), D('0.37'))
-        assert actual == expected
-
-    def test_upcharge_at_fifty_cents(self):
-        actual = upcharge(D('0.50'))
-        expected = (D('10.37'), D('0.37'))
-        assert actual == expected
-
-    def test_upcharge_at_sixty_cents(self):
-        actual = upcharge(D('0.60'))
-        expected = (D('10.37'), D('0.37'))
-        assert actual == expected
-
-    def test_upcharge_at_eighty_cents(self):
-        actual = upcharge(D('0.80'))
-        expected = (D('10.37'), D('0.37'))
-        assert actual == expected
-
-    def test_upcharge_at_nine_ninty_nine(self):
-        actual = upcharge(D('9.99'))
-        expected = (D('10.37'), D('0.37'))
-        assert actual == expected
-
-    def test_upcharge_at_ten_eleven(self):
-        actual = upcharge(D('10.11'))
-        expected = (D('10.48'), D('0.37'))
+    def test_upcharge_at_min_minus_one_cent(self):
+        actual = upcharge(CHARGE_MIN - D('0.01'))
+        expected = upcharge(CHARGE_MIN)
         assert actual == expected
 
     def test_skim_credit(self):
@@ -268,13 +256,13 @@ class TestSync(MangopayHarness):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             with self.assertRaises(Foobar):
-                charge(self.db, self.janet, D('10.00'), 'http://localhost/')
+                charge(self.db, self.janet, CHARGE_MIN, 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'succeeded'
-        assert Participant.from_username('janet').balance == 10
+        assert Participant.from_username('janet').balance == CHARGE_MIN
 
     def test_sync_with_mangopay_deletes_charges_that_didnt_happen(self):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \

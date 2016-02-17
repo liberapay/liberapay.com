@@ -43,10 +43,16 @@ donations = participant.get_giving_for_profile()[1]
 weekly = donations - participant.receiving
 if weekly > 0:
     funded = participant.balance // weekly
-    min_weeks = max(constants.MINIMUM_CHARGE // weekly, 1)
+    min_weeks = max(constants.CHARGE_MIN // weekly, 1)
+    max_weeks = min(
+        max(constants.CHARGE_TARGET // weekly, 52),
+        constants.BALANCE_MAX // weekly
+    )
+    weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
+    weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
 
 if request.method == 'POST':
-    if weekly <= 0 or funded >= 52 or participant.balance > 1500:
+    if weekly <= 0 or funded >= 52 or participant.balance > constants.BALANCE_MAX:
         raise Response(403, _(
             "Why are you trying to put more money into your wallet? "
             "Please contact support@liberapay.com if you have a legitimate reason."
@@ -121,10 +127,15 @@ title = _("Add money")
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <select class="form-control" name="amount">
-        % for weeks in sorted(set((min_weeks, 4, 13, 26, 39, 52)))
-            % if weeks >= min_weeks
-            <option value="{{ weekly * weeks }}">{{ ngettext("{0} ({n} week)", "{0} ({n} weeks)", weeks, Money(upcharge(weekly * weeks)[0], 'EUR')) }}</option>
-            % endif
+        % for weeks in weeks_list
+            % set amount = weekly * weeks
+            % set charge_amount, fees = upcharge(amount)
+            <option value="{{ amount }}">{{ _(
+                "{0} ({2}% fee included)",
+                Money(charge_amount, 'EUR'),
+                Money(amount, 'EUR'),
+                (fees / charge_amount * 100).quantize(constants.CHARGE_MIN),
+            ) }}</option>
         % endfor
         </select>
     </fieldset>
