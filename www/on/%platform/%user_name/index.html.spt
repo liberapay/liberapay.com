@@ -60,6 +60,8 @@ if is_team:
     ) }}</div>
     % endif
 
+    <p><a class="btn btn-default" href="/explore/pledges/">← {{ _("Explore pledges") }}</a></p>
+
     <div class="panel panel-primary">
         <div class="panel-heading">{{ _("Donate to {0}", friendly_name) }}</div>
         <div class="panel-body row">
