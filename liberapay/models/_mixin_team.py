@@ -64,7 +64,7 @@ class MixinTeam(object):
         assert self.kind == 'group'
         takes = {t.member: t.amount for t in self.db.all("""
 
-            SELECT DISTINCT (member) member, amount, mtime
+            SELECT DISTINCT ON (member) member, amount, mtime
               FROM takes
              WHERE team=%s
                AND mtime < (
