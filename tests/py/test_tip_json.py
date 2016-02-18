@@ -64,3 +64,11 @@ class TestTipJson(Harness):
         data = json.loads(response.body)
         assert response.code == 200
         assert data['amount'] == "10.00"
+        assert "alice" in data['msg']
+
+        # Stop pledging
+        response = self.tip(bob, alice.participant.username, "0.00")
+        data = json.loads(response.body)
+        assert response.code == 200
+        assert data['amount'] == "0.00"
+        assert "alice" in data['msg']
