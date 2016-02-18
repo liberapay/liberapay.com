@@ -53,7 +53,6 @@ subhead = _("Pledges")
     <p>{{ _("Do you have someone in mind?") }}</p>
     % include "templates/jump.html"
 
-    <br>
     <p>{{ _("We can help you find pledgees if you connect your accounts:") }}</p>
     <p>
     % for p in website.friends_platforms
