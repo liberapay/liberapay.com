@@ -9,10 +9,10 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     participant.remove_notification(request.body['remove'])
 
-notifs = participant.render_notifications(state)
+# NOTE: don't factor the render_notifications() call here, it'll break escaping
 
 [---] application/json via json_dump
-notifs
+participant.render_notifications(state)
 
 [---] text/html
 % extends "templates/base.html"
@@ -20,7 +20,7 @@ notifs
 % block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    % for notif in notifs
+    % for notif in participant.render_notifications(state)
         <div class="alert alert-{{ notif.type }}">
             {{ notif.html|safe }}
             <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
