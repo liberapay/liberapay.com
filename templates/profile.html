@@ -17,8 +17,12 @@
                 {{ avatar_img(participant) }}
 
                 % if edit
-                <a class="btn btn-default" href="https://gravatar.com/"
-                   target="_blank">{{ _("Modify your Gravatar") }}</a>
+                    % if participant.kind == 'group'
+                        {{ _("Sorry, teams can't change their avatar yet.") }}
+                    % else
+                        <a class="btn btn-default" href="https://gravatar.com/"
+                           target="_blank">{{ _("Modify your Gravatar") }}</a>
+                    % endif
                 % elif participant.join_time
                 <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 % endif

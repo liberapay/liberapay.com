@@ -788,8 +788,6 @@ class Participant(Model, MixinTeam):
               FROM notification_queue
              WHERE participant = %s
         """, (self.id,))
-        escape = state['escape']
-        state['escape'] = lambda a: a
         for id, event, notif_context in notifs:
             try:
                 notif_context = pickle.loads(notif_context)
@@ -802,7 +800,6 @@ class Participant(Model, MixinTeam):
                 r.append(dict(id=id, html=html, type=typ))
             except Exception as e:
                 self._tell_sentry(e, state, allow_reraise=True)
-        state['escape'] = escape
         return r
 
     def notify_patrons(self, elsewhere, tips):

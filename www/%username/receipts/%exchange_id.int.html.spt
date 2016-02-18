@@ -75,13 +75,11 @@ account = participant.get_mangopay_account()
         text-transform: uppercase;
         width: 100%;
     }
-    #txnid td {
+    #txnid p {
+        margin: 0;
         padding: 3pt 0 0;
         white-space: nowrap;
     }
-    #txnid td.date { text-align: left; }
-    #txnid td.mdash { text-align: center; width: 100%; }
-    #txnid td.txnid { text-align: right; }
 </style>
 <div id="page"><div id="page-padding">
 
@@ -117,12 +115,9 @@ account = participant.get_mangopay_account()
         </tr>
     </table>
 
-    <table id="txnid">
-        <tr>
-            <td class="date">{{ format_datetime(exchange.timestamp) }}</td>
-            <td class="mdash">&mdash;</td>
-            <td class="txnid">{{ _("Transaction ID: {0}", exchange.id) }}</td>
-        </tr>
-    </table>
+    <div id="txnid">
+        <p>{{ format_datetime(exchange.timestamp) }}</p>
+        <p>{{ _("Transaction ID: {0}", str(exchange.id)) }}</p>
+    </div>
 
 </div></div>

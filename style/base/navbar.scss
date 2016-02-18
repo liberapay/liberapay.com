@@ -30,6 +30,15 @@
                 }
             }
         }
+        &.active {
+            & > a, .navbar-btn, .dropdown a {
+                background: #444;
+                color: #eee;
+                &.navbar-warning {
+                    color: #f0ad4e;
+                }
+            }
+        }
         .navbar-btn {
             margin: 0;
             padding: 15px 13px;

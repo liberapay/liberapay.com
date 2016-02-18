@@ -18,6 +18,10 @@ out = {}
 tipper = user
 tippee = get_participant(state, restrict=False, redirect_stub=False)
 
+tippee_name = tippee.username
+if tippee.status == 'stub':
+    tippee_name = list(tippee.get_accounts_elsewhere().values())[0].user_name
+
 
 # Get and maybe set amount.
 # =========================
@@ -25,10 +29,10 @@ tippee = get_participant(state, restrict=False, redirect_stub=False)
 if request.method == 'POST':
     out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
     if out['amount'] == 0:
-        out["msg"] = _("Your weekly donation to {0} has been stopped.", tippee.username)
+        out["msg"] = _("Your weekly donation to {0} has been stopped.", tippee_name)
     else:
         out["msg"] = _("You are now donating {0} per week to {1}. Thank you!",
-                       Money(out['amount'], 'EUR'), tippee.username)
+                       Money(out['amount'], 'EUR'), tippee_name)
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         back_to = request.body.get('back_to')
         back_to += '&' if '?' in back_to else '?'
