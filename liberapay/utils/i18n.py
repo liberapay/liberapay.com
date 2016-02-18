@@ -310,10 +310,10 @@ def extract_spt(fileobj, *args, **kw):
         f = BytesIO(b'\n' * page.offset + page.content.encode('utf8'))
         content_type, renderer = parse_specline(page.header)
         extractor = None
-        if (i == npages and not page.header) or content_type in ('text/html', 'text/plain'):
-            extractor = jinja2.ext.babel_extract
-        elif i < 3:
+        if i < 3 and i < npages and not page.header:
             extractor = extract_python
+        else:
+            extractor = jinja2.ext.babel_extract
         if extractor:
             for match in extractor(f, *args, **kw):
                 yield match
