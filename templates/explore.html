@@ -2,6 +2,10 @@
 % block subnav
     % from "templates/nav.html" import nav with context
     <ul class="nav nav-tabs">{{
-        nav([('/', _('Communities')), ('/teams/', _('Teams'))], base='/explore')
+        nav([
+            ('/', _('Communities')),
+            ('/teams/', _('Teams')),
+            ('/pledges/', _('Pledges')),
+        ], base='/explore')
     }}</ul>
 % endblock
