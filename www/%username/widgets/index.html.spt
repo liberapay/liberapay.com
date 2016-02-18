@@ -26,11 +26,11 @@ profile_url = participant.url()
 
     <p>{{ _("Use this code to embed a static donation button on your website:") }}</p>
 
-    <pre>&lt;a href="{{ profile_url }}"&gt;&lt;img src="https://liberapay.com/assets/widgets/donate.svg"&gt;&lt;/a&gt;</pre>
+    <pre>&lt;a href="{{ profile_url }}donate"&gt;&lt;img src="https://liberapay.com/assets/widgets/donate.svg"&gt;&lt;/a&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <a href="{{ profile_url }}"><img src="/assets/widgets/donate.svg"></a>
+    <a href="{{ profile_url }}donate"><img src="/assets/widgets/donate.svg"></a>
 
     <h3>{{ _("Giving & Receiving Widgets") }}</h3>
 
