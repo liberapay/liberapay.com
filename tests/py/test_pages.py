@@ -168,3 +168,45 @@ class TestPages(MangopayHarness):
                             auth_as=self.david)
         assert r.code == 200
         assert '€19' in r.body.decode('utf8')
+
+    def test_identity_form(self):
+        janeway = self.make_participant(
+            'janeway', email='janeway@example.org', mangopay_user_id=None,
+            mangopay_wallet_id=None,
+        )
+        assert janeway.mangopay_user_id is None
+
+        # Create a mangopay NaturalUser
+        data = {
+            'FirstName': 'Kathryn',
+            'LastName': 'Janeway',
+            'CountryOfResidence': 'US',
+            'Nationality': 'IS',
+            'Birthday': '1995-01-16',
+            'terms': 'agree',
+        }
+        kw = dict(auth_as=janeway, raise_immediately=False, xhr=True)
+        r = self.client.POST('/janeway/identity', data, **kw)
+        assert r.code == 200, r.text
+        janeway = janeway.refetch()
+        assert janeway.mangopay_user_id
+
+        # Edit NaturalUser
+        data2 = dict(data, Nationality='US')
+        r = self.client.POST('/janeway/identity', data2, **kw)
+        assert r.code == 200, r.text
+        janeway2 = janeway.refetch()
+        assert janeway2.mangopay_user_id == janeway.mangopay_user_id
+
+        # Create a mangopay LegalUser
+        self.db.run("UPDATE participants SET mangopay_user_id = mangopay_wallet_id = NULL")
+        r = self.client.POST('/janeway/identity', data, **kw)
+        assert r.code == 200, r.text
+        janeway = janeway.refetch()
+        assert janeway.mangopay_user_id
+
+        # Edit LegalUser
+        r = self.client.POST('/janeway/identity', data2, **kw)
+        assert r.code == 200, r.text
+        janeway2 = janeway.refetch()
+        assert janeway2.mangopay_user_id == janeway.mangopay_user_id
