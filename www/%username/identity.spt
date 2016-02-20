@@ -51,8 +51,9 @@ if request.method == 'POST':
     if not error:
         try:
             if account.Id:
-                if not account.Address.Country:
-                    account.Address = None
+                for k, v in list(account.__dict__.items()):
+                    if k.endswith('Address') and not getattr(v, 'Country', None):
+                        setattr(account, k, None)
                 account = mangoapi.users.Update(account)
             elif body.get('terms') == 'agree':
                 account = mangoapi.users.Create(account)
