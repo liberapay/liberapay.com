@@ -176,36 +176,42 @@ class TestPages(MangopayHarness):
         )
         assert janeway.mangopay_user_id is None
 
-        # Create a mangopay NaturalUser
-        data = {
+        # Create a mangopay natural user
+        user_data = {
             'FirstName': 'Kathryn',
             'LastName': 'Janeway',
             'CountryOfResidence': 'US',
             'Nationality': 'IS',
             'Birthday': '1995-01-16',
-            'terms': 'agree',
         }
+        data = dict(user_data, terms='agree')
         kw = dict(auth_as=janeway, raise_immediately=False, xhr=True)
         r = self.client.POST('/janeway/identity', data, **kw)
         assert r.code == 200, r.text
         janeway = janeway.refetch()
         assert janeway.mangopay_user_id
 
-        # Edit NaturalUser
+        # Edit the natural user
         data2 = dict(data, Nationality='US')
         r = self.client.POST('/janeway/identity', data2, **kw)
         assert r.code == 200, r.text
         janeway2 = janeway.refetch()
         assert janeway2.mangopay_user_id == janeway.mangopay_user_id
 
-        # Create a mangopay LegalUser
+        # Create a mangopay legal user
+        self.db.run("UPDATE participants SET kind = 'organization'")
         self.db.run("UPDATE participants SET mangopay_user_id = mangopay_wallet_id = NULL")
+        data = {'LegalRepresentative'+k: v for k, v in user_data.items()}
+        data['LegalPersonType'] = 'BUSINESS'
+        data['Name'] = 'Starfleet'
+        data['terms'] = 'agree'
         r = self.client.POST('/janeway/identity', data, **kw)
         assert r.code == 200, r.text
         janeway = janeway.refetch()
         assert janeway.mangopay_user_id
 
-        # Edit LegalUser
+        # Edit the legal user
+        data2 = dict(data, LegalPersonType='ORGANIZATION')
         r = self.client.POST('/janeway/identity', data2, **kw)
         assert r.code == 200, r.text
         janeway2 = janeway.refetch()
