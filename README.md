@@ -40,7 +40,7 @@ Firstly, make sure you have the following dependencies installed:
 
 - python 2.7 (a pull request to port to python 3 is very much welcome)
 - virtualenv
-- postgresql
+- postgresql 9.4.5
 - make
 
 Then run:
