@@ -6,8 +6,10 @@
     <label>
         <span>{{ _("Organization Type") }}</span>
         <select name="LegalPersonType" class="form-control" required>
-            <option value="BUSINESS">{{ _('Business') }}</option>
-            <option value="ORGANIZATION">{{ _('Organization') }}</option>
+            % for v, t in [('BUSINESS', _('Business')), ('ORGANIZATION', _('Organization'))]
+            <option value="{{ v }}" {{ 'selected' if account.LegalPersonType == v else '' }}
+                    >{{ t }}</option>
+            % endfor
         </select>
     </label>
 
