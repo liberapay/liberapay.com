@@ -240,16 +240,18 @@ interactions:
       pragma: [no-cache]
     status: {code: 200, message: OK}
 - request:
-    body: '{"CountryOfResidence": "US", "FirstName": "Kathryn", "LastName": "Janeway",
-      "Birthday": 790214400.0, "Nationality": "IS", "Email": "janeway@example.org"}'
+    body: '{"LegalRepresentativeBirthday": 790214400.0, "Name": "Starfleet", "LegalRepresentativeNationality":
+      "IS", "LegalRepresentativeCountryOfResidence": "US", "LegalRepresentativeFirstName":
+      "Kathryn", "LegalRepresentativeLastName": "Janeway", "LegalPersonType": "BUSINESS",
+      "Email": "janeway@example.org"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/legal
   response:
-    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Kathryn","LastName":"Janeway","Birthday":790214400,"Nationality":"IS","CountryOfResidence":"US","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"10989591","Tag":null,"CreationDate":1455993243}'}
+    body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"BUSINESS","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":790214400,"LegalRepresentativeNationality":"IS","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"10990042","Tag":null,"CreationDate":1456001246}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['428']
+      content-length: ['775']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -258,27 +260,29 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/10989591
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/10990042
   response:
-    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Kathryn","LastName":"Janeway","Birthday":790214400,"Nationality":"IS","CountryOfResidence":"US","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"10989591","Tag":null,"CreationDate":1455993243}'}
+    body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"BUSINESS","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":790214400,"LegalRepresentativeNationality":"IS","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"10990042","Tag":null,"CreationDate":1456001246}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['428']
+      content-length: ['775']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
     status: {code: 200, message: OK}
 - request:
-    body: '{"CountryOfResidence": "US", "FirstName": "Kathryn", "LastName": "Janeway",
-      "Birthday": 790214400.0, "Nationality": "US", "Email": "janeway@example.org"}'
+    body: '{"LegalRepresentativeBirthday": 790214400.0, "Name": "Starfleet", "LegalRepresentativeNationality":
+      "IS", "LegalRepresentativeCountryOfResidence": "US", "LegalRepresentativeFirstName":
+      "Kathryn", "LegalRepresentativeLastName": "Janeway", "LegalPersonType": "ORGANIZATION",
+      "Email": "janeway@example.org"}'
     headers: {}
     method: PUT
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural/10989591
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/legal/10990042
   response:
-    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Kathryn","LastName":"Janeway","Birthday":790214400,"Nationality":"US","CountryOfResidence":"US","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"10989591","Tag":null,"CreationDate":1455993243}'}
+    body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"ORGANIZATION","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":790214400,"LegalRepresentativeNationality":"IS","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"10990042","Tag":null,"CreationDate":1456001246}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['428']
+      content-length: ['779']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
