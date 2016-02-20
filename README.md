@@ -83,6 +83,15 @@ be run on the production DB and the changes will be merged into `sql/schema.sql`
 
 That process is semi-automated by `release.sh`.
 
+### CSS and JavaScript
+
+For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3]
+(https://getbootstrap.com/). Stylesheets are in the `style/` directory and our
+JavaScript code is in `js/`. Our policy for both is to have as little as
+possible of them: the website should be almost entirely usable without JS, and
+our CSS should leverage Bootstrap as much as possible instead of containing lots
+of custom rules that would become a burden to maintain.
+
 ### Testing [![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg)](https://travis-ci.org/liberapay/liberapay.com)
 
 The easiest way to run the test suite is:
