@@ -44,6 +44,8 @@ def sign_in_with_form_data(body, state):
             k, 'password',
             id, body.pop('log-in.password')
         )
+        if not p:
+            state['sign-in.error'] = _("Bad username or password.")
         if p and p.status == 'closed':
             p.update_status('active')
 
