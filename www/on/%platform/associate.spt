@@ -4,7 +4,6 @@ from aspen import log, resources, Response
 from oauthlib.oauth2 import OAuth2Error
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
-from liberapay import canonical_scheme, canonical_host
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation
@@ -37,7 +36,7 @@ if error_message:
                           platform.display_name, error_message))
 
 # Finish the auth process, the returned session is ready to use
-url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
+url = website.canonical_url+request.line.uri.raw
 try:
     sess = platform.handle_auth_callback(url, query_id, query_data)
 except TokenRequestDenied as e:

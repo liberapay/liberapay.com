@@ -6,7 +6,6 @@ from six.moves.http_cookies import SimpleCookie
 
 import pytest
 
-import liberapay
 from liberapay.constants import SESSION, SESSION_REFRESH
 from liberapay.exceptions import (
     BadAmount,
@@ -211,8 +210,8 @@ class Tests(Harness):
     # sessions
 
     def test_session_cookie_is_secure_if_it_should_be(self):
-        canonical_scheme = liberapay.canonical_scheme
-        liberapay.canonical_scheme = 'https'
+        canonical_scheme = self.client.website.canonical_scheme
+        self.client.website.canonical_scheme = 'https'
         try:
             cookies = SimpleCookie()
             alice = self.make_participant('alice')
@@ -220,7 +219,7 @@ class Tests(Harness):
             alice.sign_in(cookies)
             assert '; secure' in cookies[SESSION].output()
         finally:
-            liberapay.canonical_scheme = canonical_scheme
+            self.client.website.canonical_scheme = canonical_scheme
 
     def test_session_is_regularly_refreshed(self):
         alice = self.make_participant('alice')

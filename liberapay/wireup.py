@@ -44,14 +44,16 @@ from liberapay.utils.i18n import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
     get_function_from_rule, make_sorted_dict
 )
+from liberapay.website import website
 
 
 def canonical(env):
-    liberapay.canonical_scheme = env.canonical_scheme
-    liberapay.canonical_host = env.canonical_host
+    website.canonical_scheme = env.canonical_scheme
+    website.canonical_host = env.canonical_host
+    website.canonical_domain = None
     if env.canonical_host:
-        liberapay.canonical_domain = '.' + env.canonical_host.split(':')[0]
-    liberapay.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
+        website.canonical_domain = ('.' + env.canonical_host.split(':')[0]).encode('ascii')
+    website.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
 
 
 def db(env):
