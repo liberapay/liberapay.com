@@ -250,7 +250,7 @@ def clean_assets(www_root, older_than=None):
 def load_i18n(website):
     # Load the locales
     localeDir = os.path.join(website.project_root, 'i18n', 'core')
-    locales = LOCALES
+    locales = website.locales = LOCALES
     for file in os.listdir(localeDir):
         try:
             parts = file.split(".")
