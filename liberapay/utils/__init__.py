@@ -193,6 +193,8 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path=b'/'):
         cookie[b'httponly'] = True
     if path:
         cookie[b'path'] = path
+    if liberapay.canonical_domain:
+        cookie[b'domain'] = liberapay.canonical_domain
     if liberapay.canonical_scheme == 'https':
         cookie[b'secure'] = True
 

@@ -13,6 +13,7 @@ from . import constants
 class X: pass
 canonical_scheme = None
 canonical_host = None
+canonical_domain = None
 
 def canonize(request, website):
     """Enforce a certain scheme and hostname.

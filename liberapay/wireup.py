@@ -49,6 +49,8 @@ from liberapay.utils.i18n import (
 def canonical(env):
     liberapay.canonical_scheme = env.canonical_scheme
     liberapay.canonical_host = env.canonical_host
+    if env.canonical_host:
+        liberapay.canonical_domain = '.' + env.canonical_host.split(':')[0]
     liberapay.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
 
 
