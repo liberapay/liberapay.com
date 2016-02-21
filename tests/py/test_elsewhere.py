@@ -49,6 +49,16 @@ class TestElsewhere(Harness):
         assert response.code == 302
         assert response.headers['Location'].startswith('/on/confirm.html?id=')
 
+    def test_connect_failure(self):
+        alice = self.make_participant('alice')
+        error = 'User canceled the Dialog flow'
+        url = '/on/facebook/associate?error_message=%s&state=deadbeef' % error
+        cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
+        response = self.client.GxT(url, auth_as=alice,
+                                   cookies={b'facebook_deadbeef': cookie})
+        assert response.code == 502, response.text
+        assert error in response.text
+
     def test_redirect_csrf(self):
         response = self.client.GxT('/on/github/redirect')
         assert response.code == 405
