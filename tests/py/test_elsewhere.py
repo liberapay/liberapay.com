@@ -34,6 +34,24 @@ class TestElsewhere(Harness):
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere.Platform.get_user_self_info')
     @mock.patch('liberapay.elsewhere.Platform.get_user_info')
+    def test_connect_success(self, gui, gusi, ft):
+        alice = self.make_participant('alice', elsewhere='twitter')
+
+        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2})
+        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
+        ft.return_value = None
+
+        then = '/foobar'
+        cookie = b64encode_s(json.dumps(['query_data', 'connect', b64encode_s(then), '2']))
+        response = self.client.GxT('/on/github/associate?state=deadbeef',
+                                   auth_as=alice,
+                                   cookies={b'github_deadbeef': cookie})
+        assert response.code == 302, response.text
+        assert response.headers['Location'] == then
+
+    @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
+    @mock.patch('liberapay.elsewhere.Platform.get_user_self_info')
+    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
     def test_connect_might_need_confirmation(self, gui, gusi, ft):
         alice = self.make_participant('alice')
         self.make_participant('bob')
