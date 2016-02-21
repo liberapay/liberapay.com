@@ -1,3 +1,5 @@
+# coding: utf8
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from base64 import b64encode
@@ -91,6 +93,26 @@ class Tests(Harness):
             assert self.client.GET("/", raise_immediately=False).code == 400
         finally:
             Request.from_wsgi = old_from_wsgi
+
+    def test_i18n_subdomain_works(self):
+        r = self.client.GET(
+            '/',
+            HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'fr.example.com',
+            raise_immediately=False,
+        )
+        assert r.code == 200
+        assert '<html lang="fr">' in r.text
+        assert 'À propos' in r.text
+
+    def test_i18n_subdomain_is_redirected_to_https(self):
+        r = self.client.GET(
+            '/',
+            HTTP_X_FORWARDED_PROTO=b'http', HTTP_HOST=b'en.example.com',
+            raise_immediately=False,
+        )
+        assert r.code == 302
+        assert not r.headers.cookie
+        assert r.headers['Location'] == b'https://en.example.com/'
 
 
 class Tests2(Harness):
