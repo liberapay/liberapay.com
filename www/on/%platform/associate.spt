@@ -29,6 +29,12 @@ if not cookie_value:
 query_data, action, then, action_user_id = json.loads(b64decode_s(cookie_value))
 then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
+# Check for an error message in the querystring
+error_message = request.qs.get('error_message', '')
+if error_message:
+    raise Response(502, _("{0} returned this error message: {1}",
+                          platform.display_name, error_message))
+
 # Finish the auth process, the returned session is ready to use
 url = canonical_scheme+'://'+canonical_host+request.line.uri.raw
 try:
