@@ -1,6 +1,8 @@
 <div class="dropdown">
 <button class="dropdown-toggle navbar-btn" type="button"
-        data-toggle="dropdown" aria-expanded="true">
+        data-toggle="dropdown" aria-expanded="true"
+        title="{{ _('Switch to another language') }}">
+    <span class="glyphicon glyphicon-globe glyphicon--margin-r" aria-hidden="true"></span>
     {{ locale.language.upper() }}
     <span class="caret"></span>
 </button>
@@ -13,6 +15,7 @@
     <li role="separator" class="divider"></li>
     <li><a href="https://hosted.weblate.org/engage/liberapay/?utm_source=liberapay-navbar"
            target="_blank"
-           >{{ _("Help us translate Liberapay") }}</a></li>
+           ><span class="glyphicon glyphicon-pencil glyphicon--margin-r" aria-hidden="true"></span>
+           {{ _("Help us translate Liberapay") }}</a></li>
 </ul>
 </div>
