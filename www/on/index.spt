@@ -1,0 +1,13 @@
+[---]
+platform = request.qs.get('platform')
+if platform:
+    if not getattr(website.platforms, platform, None):
+        raise Response(400, "unknown platform")
+    user_name = request.qs.get('user_name')
+    if user_name:
+        response.redirect('/on/%s/%s/' % (platform, user_name))
+    else:
+        response.redirect('/on/%s/' % platform)
+else:
+    response.redirect('/explore/pledges/')
+[---] text/plain
