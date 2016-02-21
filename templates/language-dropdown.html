@@ -10,5 +10,9 @@
         ><a href="{{ l_url }}{{ request.line.uri }}" hreflang="{{ l_code }}"
             >{{ _("{0} ({1} complete)", l_name, format_percent(l_completion)) }}</a></li>
 % endfor
+    <li role="separator" class="divider"></li>
+    <li><a href="https://hosted.weblate.org/engage/liberapay/?utm_source=liberapay-navbar"
+           target="_blank"
+           >{{ _("Help us translate Liberapay") }}</a></li>
 </ul>
 </div>
