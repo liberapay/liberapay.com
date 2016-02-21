@@ -30,6 +30,7 @@
                 {{ nav([('/explore/', _('Explore')), ('/search', _('Search')), ('/about/', _('About'))]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
+                <li>{% include "templates/language-dropdown.html" %}</li>
             % if not user.ANON
                 <li>{% include "templates/profile-dropdown.html" %}</li>
                 <li><a href="/{{ user.username }}/notifications"

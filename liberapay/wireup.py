@@ -277,6 +277,13 @@ def load_i18n(website):
         except Exception as e:
             website.tell_sentry(e, {}, allow_reraise=True)
 
+    # Prepare a unique and sorted list for use in the language switcher
+    loc_url = website.canonical_scheme+'://%s.'+website.canonical_host
+    website.lang_list = sorted(
+        (l.language, l.language_name.title(), loc_url % l.language)
+        for l in set(locales.values())
+    )
+
     # Add aliases
     for k, v in list(locales.items()):
         locales.setdefault(ALIASES.get(k, k), v)
