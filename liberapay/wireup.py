@@ -54,6 +54,7 @@ def canonical(env):
     if env.canonical_host:
         website.canonical_domain = ('.' + env.canonical_host.split(':')[0]).encode('ascii')
     website.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
+    website.asset_url = website.canonical_url+'/assets/'
 
 
 def db(env):
@@ -311,11 +312,11 @@ def other_stuff(website, env):
                 etag = asset_etag(fspath)
             except Exception as e:
                 website.tell_sentry(e, {}, allow_reraise=True)
-            return env.asset_url+path+(etag and '?etag='+etag)
+            return website.asset_url+path+(etag and '?etag='+etag)
         website.asset = asset
         compile_assets(website)
     else:
-        website.asset = lambda path: env.asset_url+path
+        website.asset = lambda path: website.asset_url+path
         clean_assets(website.www_root)
 
 
@@ -326,7 +327,6 @@ def env():
         DATABASE_MAXCONN                = int,
         CANONICAL_HOST                  = str,
         CANONICAL_SCHEME                = str,
-        ASSET_URL                       = str,
         CACHE_STATIC                    = is_yesish,
         COMPRESS_ASSETS                 = is_yesish,
         PASSWORD_ROUNDS                 = int,
