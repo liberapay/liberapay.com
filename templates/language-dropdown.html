@@ -5,9 +5,10 @@
     <span class="caret"></span>
 </button>
 <ul class="dropdown-menu" role="menu">
-% for l_code, l_name, l_url in website.lang_list
+% for l_completion, l_code, l_name, l_url in website.lang_list
     <li {% if l_code == locale.language %} class="active" {% endif %}
-        ><a href="{{ l_url }}{{ request.line.uri }}" hreflang="{{ l_code }}">{{ l_name }}</a></li>
+        ><a href="{{ l_url }}{{ request.line.uri }}" hreflang="{{ l_code }}"
+            >{{ _("{0} ({1} complete)", l_name, format_percent(l_completion)) }}</a></li>
 % endfor
 </ul>
 </div>

@@ -278,10 +278,16 @@ def load_i18n(website):
             website.tell_sentry(e, {}, allow_reraise=True)
 
     # Prepare a unique and sorted list for use in the language switcher
+    for l in locales.values():
+        strings = [m.string for m in l.catalog]
+        l.completion = sum(1 for s in strings if s) / len(strings)
     loc_url = website.canonical_scheme+'://%s.'+website.canonical_host
     website.lang_list = sorted(
-        (l.language, l.language_name.title(), loc_url % l.language)
-        for l in set(locales.values())
+        (
+            (l.completion, l.language, l.language_name.title(), loc_url % l.language)
+            for l in set(locales.values())
+        ),
+        key=lambda t: (-t[0], t[1]),
     )
 
     # Add aliases
