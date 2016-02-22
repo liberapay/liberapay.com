@@ -8,7 +8,7 @@ from liberapay.utils import b64encode_s
 
 COOKIE_TIMEOUT = timedelta(minutes=5)
 
-[-----------------------------]
+[---]
 
 request.allow('POST')
 
@@ -28,12 +28,31 @@ if action not in ACTIONS:
 if action == 'connect' and user.ANON:
     raise AuthRequired
 
-url, query_id, query_data = platform.get_auth_url(user=user)
+team = not user.ANON and user.kind == 'organization' and platform.is_team_admin
 
-cookie_name = (platform.name+'_'+query_id).encode('ascii')
-cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id]))
-response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
+if user_id or not team or action != 'connect':
+    url, query_id, query_data = platform.get_auth_url(user=user)
 
-response.redirect(url)
+    cookie_name = (platform.name+'_'+query_id).encode('ascii')
+    cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id]))
+    response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
 
-[-----------------------------] text/plain
+    response.redirect(url)
+
+else:
+    body.pop('user_id')  # so it doesn't appear in the reposted form data
+
+title = _("Which account?")
+
+[---] text/html
+% extends "templates/panel.html"
+
+% block panel_body
+<form action="" method="POST">
+    % include "templates/form-repost.html"
+    <p>{{ _("Please enter the name of the {0} account you would like to connect:",
+            platform.display_name) }}</p>
+    <input class="form-control" name="user_id"
+           placeholder="{{ _('{0} username', platform.display_name) }}" />
+</form>
+% endblock
