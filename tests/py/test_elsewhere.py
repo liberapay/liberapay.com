@@ -82,7 +82,7 @@ class TestElsewhere(Harness):
         assert response.code == 405
 
     def test_redirects(self):
-        data = dict(action='connect', then='/', user_id='')
+        data = dict(action='lock', then='/', user_id='')
         for platform in self.platforms:
             platform.get_auth_url = lambda *a, **kw: ('', '', '')
             response = self.client.PxST('/on/%s/redirect' % platform.name, data)
