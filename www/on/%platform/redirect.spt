@@ -3,6 +3,7 @@ import json
 
 from aspen import Response
 from liberapay.elsewhere import ACTIONS
+from liberapay.exceptions import AuthRequired
 from liberapay.utils import b64encode_s
 
 COOKIE_TIMEOUT = timedelta(minutes=5)
@@ -23,6 +24,9 @@ except KeyError:
 
 if action not in ACTIONS:
     raise Response(400)
+
+if action == 'connect' and user.ANON:
+    raise AuthRequired
 
 url, query_id, query_data = platform.get_auth_url(user=user)
 

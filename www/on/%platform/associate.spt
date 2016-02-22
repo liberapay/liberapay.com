@@ -35,6 +35,10 @@ if error_message:
     raise Response(502, _("{0} returned this error message: {1}",
                           platform.display_name, error_message))
 
+# Require auth before trying a connection
+if action == 'connect' and user.ANON:
+    raise AuthRequired
+
 # Finish the auth process, the returned session is ready to use
 url = website.canonical_url+request.line.uri.raw
 try:
@@ -62,8 +66,6 @@ if action_user_id and account.user_id != action_user_id:
 log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
 if action == 'connect':
-    if user.ANON:
-        raise AuthRequired
     try:
         user.take_over((platform.name, account.user_id))
     except NeedConfirmation:
