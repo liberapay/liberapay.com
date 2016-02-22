@@ -54,7 +54,11 @@ account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
 participant = account.participant
 
 if action_user_id and account.user_id != action_user_id:
-    claimed_account = AccountElsewhere.upsert(platform.get_user_info('user_id', action_user_id))
+    if action_user_id[0] == '>':
+        key, value = 'user_name', action_user_id[1:]
+    else:
+        key, value = 'user_id', action_user_id
+    claimed_account = AccountElsewhere.upsert(platform.get_user_info(key, value))
     if not claimed_account.is_team:
         then = '/on/%s/%s/failure.html'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))

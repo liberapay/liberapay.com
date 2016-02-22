@@ -29,6 +29,9 @@ if action == 'connect' and user.ANON:
     raise AuthRequired
 
 team = not user.ANON and user.kind == 'organization' and platform.is_team_admin
+if team and not user_id:
+    user_id = body.get('user_name')
+    user_id = user_id and '>'+user_id
 
 if user_id or not team or action != 'connect':
     url, query_id, query_data = platform.get_auth_url(user=user)
@@ -38,9 +41,6 @@ if user_id or not team or action != 'connect':
     response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
 
     response.redirect(url)
-
-else:
-    body.pop('user_id')  # so it doesn't appear in the reposted form data
 
 title = _("Which account?")
 
@@ -52,7 +52,7 @@ title = _("Which account?")
     % include "templates/form-repost.html"
     <p>{{ _("Please enter the name of the {0} account you would like to connect:",
             platform.display_name) }}</p>
-    <input class="form-control" name="user_id"
+    <input class="form-control" name="user_name"
            placeholder="{{ _('{0} username', platform.display_name) }}" />
 </form>
 % endblock
