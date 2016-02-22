@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
 accesslog = '-'  # stderr
 access_log_format = (
-    '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "-" %(L)ss'
+    '%(t)s %(s)s %(L)ss %({Host}i)s "%(r)s" %(b)s "%(f)s"'
 )
 
 bind = [
