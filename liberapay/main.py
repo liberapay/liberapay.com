@@ -9,7 +9,7 @@ from liberapay import canonize, fill_accept_header, insert_constants, utils, wir
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
-from liberapay.security import authentication, csrf, x_frame_options
+from liberapay.security import authentication, csrf, allow_cors_for_assets, x_frame_options
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min
 from liberapay.website import website
@@ -117,6 +117,7 @@ algorithm.functions = [
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,
     x_frame_options,
+    allow_cors_for_assets,
 
     algorithm['delegate_error_to_simplate'],
     tell_sentry,

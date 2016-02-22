@@ -126,16 +126,23 @@ class Tests2(Harness):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
 
+    def test_cors_is_not_allowed_by_default(self):
+        r = self.client.GET('/')
+        assert 'Access-Control-Allow-Origin' not in r.headers
+
+    def test_cors_is_allowed_for_assets(self):
+        r = self.client.GET('/assets/jquery.min.js')
+        assert r.code == 200
+        assert r.headers['Access-Control-Allow-Origin'] == '*'
+
     def test_caching_of_assets(self):
         r = self.client.GET('/assets/jquery.min.js')
-        assert r.headers['Access-Control-Allow-Origin'] == 'https://liberapay.com'
         assert r.headers['Cache-Control'] == 'public, max-age=5'
         assert 'Vary' not in r.headers
         assert not r.headers.cookie
 
     def test_caching_of_assets_with_etag(self):
         r = self.client.GET(self.client.website.asset('jquery.min.js'))
-        assert r.headers['Access-Control-Allow-Origin'] == 'https://liberapay.com'
         assert r.headers['Cache-Control'] == 'public, max-age=31536000'
         assert 'Vary' not in r.headers
         assert not r.headers.cookie

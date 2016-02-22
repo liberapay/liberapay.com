@@ -1,3 +1,14 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+
+def allow_cors_for_assets(response, request=None):
+    """The subdomains need this to access the assets on the main domain.
+    """
+    if request is not None and request.path.raw.startswith('/assets/'):
+        if b'Access-Control-Allow-Origin' not in response.headers:
+            response.headers[b'Access-Control-Allow-Origin'] = b'*'
+
+
 def x_frame_options(response):
     """X-Frame-Origin
 
@@ -5,9 +16,9 @@ def x_frame_options(response):
     http://en.wikipedia.org/wiki/Clickjacking
 
     """
-    if 'X-Frame-Options' not in response.headers:
-        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    elif response.headers['X-Frame-Options'] == 'ALLOWALL':
+    if b'X-Frame-Options' not in response.headers:
+        response.headers[b'X-Frame-Options'] = b'SAMEORIGIN'
+    elif response.headers[b'X-Frame-Options'] == b'ALLOWALL':
 
         # ALLOWALL is non-standard. It's useful as a signal from a simplate
         # that it doesn't want X-Frame-Options set at all, but because it's
@@ -19,4 +30,4 @@ def x_frame_options(response):
         #   http://en.wikipedia.org/wiki/Clickjacking#X-Frame-Options
         #   http://ipsec.pl/node/1094
 
-        del response.headers['X-Frame-Options']
+        del response.headers[b'X-Frame-Options']
