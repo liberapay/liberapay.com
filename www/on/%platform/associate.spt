@@ -62,7 +62,7 @@ if action_user_id and account.user_id != action_user_id:
     if not claimed_account.is_team:
         then = '/on/%s/%s/failure.html'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
-    if not platform.is_team_admin(claimed_account.user_name, sess):
+    if not platform.is_team_member(claimed_account.user_name, sess):
         then = '/on/%s/%s/failure.html?team=true'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
     account = claimed_account

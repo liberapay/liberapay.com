@@ -28,7 +28,7 @@ if action not in ACTIONS:
 if action == 'connect' and user.ANON:
     raise AuthRequired
 
-team = not user.ANON and user.kind == 'organization' and platform.is_team_admin
+team = not user.ANON and user.kind == 'organization' and platform.is_team_member
 if team and not user_id:
     user_id = body.get('user_name')
     user_id = user_id and '>'+user_id
