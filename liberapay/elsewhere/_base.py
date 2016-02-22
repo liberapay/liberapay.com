@@ -10,13 +10,16 @@ except ImportError:
     from urllib import quote
 import xml.etree.ElementTree as ET
 
-from aspen import log, Response
+from aspen import Response
 from aspen.utils import to_age, utc
 from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.elsewhere._extractors import not_available
 from liberapay.exceptions import LazyResponse
+
+
+logger = logging.getLogger('liberapay.elsewhere')
 
 
 class UserInfo(object):
@@ -128,8 +131,7 @@ class Platform(object):
                     return _("You're making requests too fast, please try again later.")
             raise LazyResponse(status, msg)
         if status != 200:
-            log('{} api responded with {}:\n{}'.format(self.name, status, response.text),
-                level=logging.ERROR)
+            logger.error('{} api responded with {}:\n{}'.format(self.name, status, response.text))
             msg = lambda _: _("{0} returned an error, please try again later.",
                               self.display_name)
             raise LazyResponse(502, msg)
@@ -147,7 +149,7 @@ class Platform(object):
                 reset = datetime.fromtimestamp(reset, tz=utc)
             except (TypeError, ValueError):
                 d = dict(limit=limit, remaining=remaining, reset=reset)
-                log('Got weird rate headers from %s: %s' % (self.name, d))
+                logger.warning('Got weird rate headers from %s: %s' % (self.name, d))
                 limit, remaining, reset = None, None, None
 
         return limit, remaining, reset
@@ -168,7 +170,7 @@ class Platform(object):
                 log_lvl = logging.ERROR
             elif percent_remaining < 0.05:
                 log_lvl = logging.CRITICAL
-            log(log_msg, log_lvl)
+            logger.log(log_lvl, log_msg)
 
     def extract_user_info(self, info):
         """
