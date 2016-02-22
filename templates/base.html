@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ locale.language }}">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+    % if locale.completion < 0.5
+        <meta name="robots" content="noindex,nofollow" />
+    % endif
     {% block head_early %}{% endblock %}
     <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Liberapay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
