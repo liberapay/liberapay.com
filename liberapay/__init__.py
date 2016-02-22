@@ -10,20 +10,30 @@ from . import constants
 # This is an Aspen hook to ensure that requests are served on a certain root
 # URL, even if multiple domains point to the application.
 
-class X: pass
-canonical_scheme = None
-canonical_host = None
 
 def canonize(request, website):
     """Enforce a certain scheme and hostname.
     """
     scheme = request.headers.get('X-Forwarded-Proto', 'http')
     host = request.headers['Host']
+    canonical_host = website.canonical_host
+    canonical_scheme = website.canonical_scheme
     bad_scheme = scheme != canonical_scheme
-    bad_host = bool(canonical_host) and (host != canonical_host)
-                # '' and False => ''
+    bad_host = False
+    if canonical_host:
+        if host == canonical_host:
+            pass
+        elif host.endswith('.'+canonical_host):
+            subdomain = host[:-len(canonical_host)-1]
+            if subdomain in website.locales:
+                accept_langs = request.headers.get('Accept-Language', '')
+                request.headers['Accept-Language'] = subdomain+','+accept_langs
+            else:
+                bad_host = True
+        else:
+            bad_host = True
     if bad_scheme or bad_host:
-        url = '%s://%s' % (canonical_scheme, canonical_host)
+        url = '%s://%s' % (canonical_scheme, canonical_host if bad_host else host)
         if request.line.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
             # Redirect to a particular path for idempotent methods.
             url += request.line.uri.path.raw

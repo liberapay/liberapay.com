@@ -13,10 +13,10 @@ from aspen.utils import to_rfc822, utcnow
 from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
-import liberapay
 from liberapay.exceptions import AuthRequired
 from liberapay.models.community import Community
 from liberapay.utils.i18n import Money
+from liberapay.website import website
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
@@ -193,7 +193,9 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path=b'/'):
         cookie[b'httponly'] = True
     if path:
         cookie[b'path'] = path
-    if liberapay.canonical_scheme == 'https':
+    if website.canonical_domain:
+        cookie[b'domain'] = website.canonical_domain
+    if website.canonical_scheme == 'https':
         cookie[b'secure'] = True
 
 

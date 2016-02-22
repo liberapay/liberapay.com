@@ -17,13 +17,6 @@ Liberapay.init = function() {
         }
     });
 
-    $('#jump').submit(function (e) {
-        e.preventDefault();
-        var platform = $('#jump select').val().trim(),
-            user_name = $('#jump input').val().trim();
-        if (user_name) window.location = '/on/' + platform + '/' + user_name + '/';
-    });
-
     Liberapay.forms.jsSubmit();
 
     var success_re = /([?&])success=[^&]*/;

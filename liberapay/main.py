@@ -4,7 +4,6 @@ from six.moves import builtins
 from six.moves.urllib.parse import quote as urlquote
 
 import aspen
-from aspen.website import Website
 
 from liberapay import canonize, fill_accept_header, insert_constants, utils, wireup
 from liberapay.cron import Cron
@@ -13,11 +12,7 @@ from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, x_frame_options
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.renderers import csv_dump, jinja2_htmlescaped, jinja2_html_jswrapped, jinja2_xml_min
-
-
-aspen.logging.LOGGING_THRESHOLD = 2  # Hide Aspen's startup messages
-website = Website()
-aspen.logging.LOGGING_THRESHOLD = 0
+from liberapay.website import website
 
 
 # Configure renderers

@@ -44,12 +44,17 @@ from liberapay.utils.i18n import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
     get_function_from_rule, make_sorted_dict
 )
+from liberapay.website import website
 
 
 def canonical(env):
-    liberapay.canonical_scheme = env.canonical_scheme
-    liberapay.canonical_host = env.canonical_host
-    liberapay.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
+    website.canonical_scheme = env.canonical_scheme
+    website.canonical_host = env.canonical_host
+    website.canonical_domain = None
+    if env.canonical_host:
+        website.canonical_domain = ('.' + env.canonical_host.split(':')[0]).encode('ascii')
+    website.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
+    website.asset_url = website.canonical_url+'/assets/'
 
 
 def db(env):
@@ -250,7 +255,7 @@ def clean_assets(www_root, older_than=None):
 def load_i18n(website):
     # Load the locales
     localeDir = os.path.join(website.project_root, 'i18n', 'core')
-    locales = LOCALES
+    locales = website.locales = LOCALES
     for file in os.listdir(localeDir):
         try:
             parts = file.split(".")
@@ -271,6 +276,19 @@ def load_i18n(website):
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
             website.tell_sentry(e, {}, allow_reraise=True)
+
+    # Prepare a unique and sorted list for use in the language switcher
+    for l in locales.values():
+        strings = [m.string for m in l.catalog]
+        l.completion = sum(1 for s in strings if s) / len(strings)
+    loc_url = website.canonical_scheme+'://%s.'+website.canonical_host
+    website.lang_list = sorted(
+        (
+            (l.completion, l.language, l.language_name.title(), loc_url % l.language)
+            for l in set(locales.values())
+        ),
+        key=lambda t: (-t[0], t[1]),
+    )
 
     # Add aliases
     for k, v in list(locales.items()):
@@ -307,11 +325,11 @@ def other_stuff(website, env):
                 etag = asset_etag(fspath)
             except Exception as e:
                 website.tell_sentry(e, {}, allow_reraise=True)
-            return env.asset_url+path+(etag and '?etag='+etag)
+            return website.asset_url+path+(etag and '?etag='+etag)
         website.asset = asset
         compile_assets(website)
     else:
-        website.asset = lambda path: env.asset_url+path
+        website.asset = lambda path: website.asset_url+path
         clean_assets(website.www_root)
 
 
@@ -322,7 +340,6 @@ def env():
         DATABASE_MAXCONN                = int,
         CANONICAL_HOST                  = str,
         CANONICAL_SCHEME                = str,
-        ASSET_URL                       = str,
         CACHE_STATIC                    = is_yesish,
         COMPRESS_ASSETS                 = is_yesish,
         PASSWORD_ROUNDS                 = int,

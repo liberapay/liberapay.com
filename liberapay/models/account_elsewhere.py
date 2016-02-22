@@ -13,9 +13,9 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-import liberapay
 from liberapay.constants import AVATAR_QUERY
 from liberapay.security.crypto import constant_time_compare
+from liberapay.website import website
 
 
 CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
@@ -188,8 +188,8 @@ class AccountElsewhere(Model):
 
     @property
     def liberapay_url(self):
-        scheme = liberapay.canonical_scheme
-        host = liberapay.canonical_host
+        scheme = website.canonical_scheme
+        host = website.canonical_host
         platform = self.platform
         slug = self.liberapay_slug
         return "{scheme}://{host}/on/{platform}/{slug}/".format(**locals())

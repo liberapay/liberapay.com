@@ -54,6 +54,7 @@ from liberapay.utils import (
     erase_cookie, set_cookie,
     emails, i18n,
 )
+from liberapay.website import website
 
 
 class Participant(Model, MixinTeam):
@@ -568,8 +569,8 @@ class Participant(Model, MixinTeam):
             if not nonce:
                 return self.add_email(email)
 
-        scheme = liberapay.canonical_scheme
-        host = liberapay.canonical_host
+        scheme = website.canonical_scheme
+        host = website.canonical_host
         username = self.username
         quoted_email = quote(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
@@ -843,8 +844,8 @@ class Participant(Model, MixinTeam):
         """, (self.id, type, Json(payload), recorder))
 
     def url(self, path='', query=''):
-        scheme = liberapay.canonical_scheme
-        host = liberapay.canonical_host
+        scheme = website.canonical_scheme
+        host = website.canonical_host
         username = self.username
         if query:
             assert '?' not in path

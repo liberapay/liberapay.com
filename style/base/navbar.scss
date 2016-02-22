@@ -14,7 +14,7 @@
     background: #555;
     border: none;
 
-    .navbar-nav > li {
+    .navbar-nav li {
         & > a, .navbar-btn, .dropdown a {
             background: transparent;
             border: none;
@@ -38,6 +38,9 @@
                     color: #f0ad4e;
                 }
             }
+        }
+        &.divider {
+            background: #999;
         }
         .navbar-btn {
             margin: 0;
