@@ -77,6 +77,13 @@ class TestPages(MangopayHarness):
         self.david.set_tip_to(bob, D('0.50'))
         self.browse(auth_as=self.david)
 
+    def test_homepage_in_all_supported_langs(self):
+        self.make_participant('alice')
+        self.db.run("UPDATE participants SET join_time = now() - INTERVAL '1 hour'")
+        for _, l, _, _ in self.client.website.lang_list:
+            r = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=l.encode('ascii'))
+            assert r.code == 200, r.text
+
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')
         expected = "<a href='/alice/edit'>"
