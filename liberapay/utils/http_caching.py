@@ -78,10 +78,6 @@ def add_caching_to_response(response, request=None, etag=None):
     # https://developers.google.com/speed/docs/best-practices/caching
     response.headers['Etag'] = etag
 
-    # Set CORS header for https://*.liberapay.com
-    if 'Access-Control-Allow-Origin' not in response.headers:
-        response.headers['Access-Control-Allow-Origin'] = 'https://liberapay.com'
-
     if request.line.uri.querystring.get('etag'):
         # We can cache "indefinitely" when the querystring contains the etag.
         response.headers['Cache-Control'] = 'public, max-age=31536000'
