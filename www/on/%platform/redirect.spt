@@ -3,11 +3,12 @@ import json
 
 from aspen import Response
 from liberapay.elsewhere import ACTIONS
+from liberapay.exceptions import AuthRequired
 from liberapay.utils import b64encode_s
 
 COOKIE_TIMEOUT = timedelta(minutes=5)
 
-[-----------------------------]
+[---]
 
 request.allow('POST')
 
@@ -24,12 +25,34 @@ except KeyError:
 if action not in ACTIONS:
     raise Response(400)
 
-url, query_id, query_data = platform.get_auth_url(user=user)
+if action == 'connect' and user.ANON:
+    raise AuthRequired
 
-cookie_name = (platform.name+'_'+query_id).encode('ascii')
-cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id]))
-response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
+team = not user.ANON and user.kind == 'organization' and platform.is_team_member
+if team and not user_id:
+    user_id = body.get('user_name')
+    user_id = user_id and '>'+user_id
 
-response.redirect(url)
+if user_id or not team or action != 'connect':
+    url, query_id, query_data = platform.get_auth_url(user=user)
 
-[-----------------------------] text/plain
+    cookie_name = (platform.name+'_'+query_id).encode('ascii')
+    cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id]))
+    response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
+
+    response.redirect(url)
+
+title = _("Which account?")
+
+[---] text/html
+% extends "templates/panel.html"
+
+% block panel_body
+<form action="" method="POST">
+    % include "templates/form-repost.html"
+    <p>{{ _("Please enter the name of the {0} account you would like to connect:",
+            platform.display_name) }}</p>
+    <input class="form-control" name="user_name"
+           placeholder="{{ _('{0} username', platform.display_name) }}" />
+</form>
+% endblock

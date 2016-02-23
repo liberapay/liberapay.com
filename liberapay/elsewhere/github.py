@@ -39,8 +39,7 @@ class GitHub(PlatformOAuth2):
     x_avatar_url = key('avatar_url')
     x_is_team = key('type', clean=lambda t: t.lower() == 'organization')
 
-    def is_team_admin(self, team_name, sess):
-        user_teams = self.api_parser(self.api_get('/user/teams', sess=sess))
-        return any(team.get('organization', {}).get('login') == team_name and
-                   team.get('permission') == 'admin'
-                   for team in user_teams)
+    def is_team_member(self, org_name, sess):
+        org_name = org_name.lower()
+        user_orgs = self.api_parser(self.api_get('/user/orgs', sess=sess))
+        return any(org.get('login') == org_name for org in user_orgs)

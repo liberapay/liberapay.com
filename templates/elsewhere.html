@@ -7,9 +7,7 @@
         <div class="account-action">
             % if edit
                 % if account == None
-                    % set allow_team = participant.kind == 'organization' and platform.is_team_admin
-                    % set cls = allow_team and 'user_name_prompt' or ''
-                    % call auth_button(platform.name, 'connect', class=cls, btn_cls='close')
+                    % call auth_button(platform.name, 'connect', btn_cls='close')
                         +
                     % endcall
                 % else

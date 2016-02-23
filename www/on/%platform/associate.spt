@@ -35,6 +35,10 @@ if error_message:
     raise Response(502, _("{0} returned this error message: {1}",
                           platform.display_name, error_message))
 
+# Require auth before trying a connection
+if action == 'connect' and user.ANON:
+    raise AuthRequired
+
 # Finish the auth process, the returned session is ready to use
 url = website.canonical_url+request.line.uri.raw
 try:
@@ -50,11 +54,15 @@ account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
 participant = account.participant
 
 if action_user_id and account.user_id != action_user_id:
-    claimed_account = AccountElsewhere.upsert(platform.get_user_info('user_id', action_user_id))
+    if action_user_id[0] == '>':
+        key, value = 'user_name', action_user_id[1:]
+    else:
+        key, value = 'user_id', action_user_id
+    claimed_account = AccountElsewhere.upsert(platform.get_user_info(key, value))
     if not claimed_account.is_team:
         then = '/on/%s/%s/failure.html'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
-    if not platform.is_team_admin(claimed_account.user_name, sess):
+    if not platform.is_team_member(claimed_account.user_name, sess):
         then = '/on/%s/%s/failure.html?team=true'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
     account = claimed_account
@@ -62,8 +70,6 @@ if action_user_id and account.user_id != action_user_id:
 log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
 if action == 'connect':
-    if user.ANON:
-        raise AuthRequired
     try:
         user.take_over((platform.name, account.user_id))
     except NeedConfirmation:
