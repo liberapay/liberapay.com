@@ -277,6 +277,56 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             else:
                 assert p.balance == 0
 
+    def test_underfunded_team(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, D('1.00'), alice)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('1.00'), bob)
+        charlie = self.make_participant('charlie', balance=1000)
+        charlie.set_tip_to(team, D('0.26'))
+
+        Payday.start().run()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.13'),
+            'bob': D('0.13'),
+            'charlie': D('999.74'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+    def test_wellfunded_team(self):
+        """
+        This tests two properties:
+        - takes are maximums
+        - donors all pay their share, the first donor doesn't pay everything
+        """
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, D('0.79'), alice)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('0.21'), bob)
+        charlie = self.make_participant('charlie', balance=10)
+        charlie.set_tip_to(team, D('5.00'))
+        dan = self.make_participant('dan', balance=10)
+        dan.set_tip_to(team, D('5.00'))
+
+        Payday.start().run()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79'),
+            'bob': D('0.21'),
+            'charlie': D('9.5'),
+            'dan': D('9.5'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
     def test_mutual_tipping_through_teams(self):
         self.clear_tables()
         team = self.make_participant('team', kind='group')
