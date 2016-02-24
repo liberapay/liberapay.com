@@ -310,13 +310,12 @@ class Payday(object):
                 tips_ratio numeric;
                 tip record;
                 take record;
-                amount numeric(35,2);
+                transfer_amount numeric(35,2);
                 our_tips CURSOR FOR
                     SELECT t.id, t.tipper, (round_up(t.amount * tips_ratio, 2)) AS amount
                       FROM payday_tips t
                       JOIN payday_participants p ON p.id = t.tipper
                      WHERE t.tippee = team_id;
-                our_takes refcursor;
             BEGIN
                 total_income := (
                     SELECT sum(t.amount)
@@ -334,25 +333,23 @@ class Payday(object):
                 takes_ratio := min(total_income / total_takes, 1::numeric);
                 tips_ratio := min(total_takes / total_income, 1::numeric);
 
-                OPEN our_takes FOR
+                CREATE TEMPORARY TABLE our_takes ON COMMIT DROP AS
                     SELECT t.member, (round_up(t.amount * takes_ratio, 2)) AS amount
                       FROM payday_takes t
-                     WHERE t.team = team_id
-                  ORDER BY t.member;
-                FETCH our_takes INTO take;
+                     WHERE t.team = team_id;
+
                 FOR tip IN our_tips LOOP
-                    LOOP
-                        IF (take.amount = 0) THEN
-                            FETCH our_takes INTO take;
-                            IF (take IS NULL) THEN RETURN; END IF;
+                    FOR take IN (SELECT * FROM our_takes ORDER BY member) LOOP
+                        IF (take.amount = 0 OR tip.tipper = take.member) THEN
+                            CONTINUE;
                         END IF;
-                        amount := min(tip.amount, take.amount);
-                        IF (tip.tipper <> take.member) THEN
-                            UPDATE payday_tips SET is_funded = true WHERE id = tip.id;
-                            EXECUTE transfer(tip.tipper, take.member, amount, 'take', team_id);
-                        END IF;
-                        tip.amount := tip.amount - amount;
-                        take.amount := take.amount - amount;
+                        transfer_amount := min(tip.amount, take.amount);
+                        UPDATE payday_tips SET is_funded = true WHERE id = tip.id;
+                        EXECUTE transfer(tip.tipper, take.member, transfer_amount, 'take', team_id);
+                        tip.amount := tip.amount - transfer_amount;
+                        UPDATE our_takes t
+                           SET amount = take.amount - transfer_amount
+                         WHERE t.member = take.member;
                         EXIT WHEN tip.amount = 0;
                     END LOOP;
                 END LOOP;
