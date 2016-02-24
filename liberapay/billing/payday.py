@@ -306,12 +306,13 @@ class Payday(object):
             DECLARE
                 total_income numeric(35,2);
                 total_takes numeric(35,2);
-                ratio numeric;
+                takes_ratio numeric;
+                tips_ratio numeric;
                 tip record;
                 take record;
                 amount numeric(35,2);
                 our_tips CURSOR FOR
-                    SELECT t.id, t.tipper, (round_up(t.amount * ratio, 2)) AS amount
+                    SELECT t.id, t.tipper, (round_up(t.amount * tips_ratio, 2)) AS amount
                       FROM payday_tips t
                       JOIN payday_participants p ON p.id = t.tipper
                      WHERE t.tippee = team_id;
@@ -330,10 +331,11 @@ class Payday(object):
                      WHERE t.team = team_id
                 );
                 IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
-                ratio := min(total_income / total_takes, 1::numeric);
+                takes_ratio := min(total_income / total_takes, 1::numeric);
+                tips_ratio := min(total_takes / total_income, 1::numeric);
 
                 OPEN our_takes FOR
-                    SELECT t.member, (round_up(t.amount * ratio, 2)) AS amount
+                    SELECT t.member, (round_up(t.amount * takes_ratio, 2)) AS amount
                       FROM payday_takes t
                      WHERE t.team = team_id
                   ORDER BY t.member;
