@@ -235,11 +235,11 @@ class Payday(object):
                 UPDATE payday_participants
                    SET new_balance = (new_balance - $3)
                  WHERE id = $1;
-                IF (NOT FOUND) THEN RAISE 'tipper not found'; END IF;
+                IF (NOT FOUND) THEN RAISE 'tipper %% not found', $1; END IF;
                 UPDATE payday_participants
                    SET new_balance = (new_balance + $3)
                  WHERE id = $2;
-                IF (NOT FOUND) THEN RAISE 'tippee not found'; END IF;
+                IF (NOT FOUND) THEN RAISE 'tippee %% not found', $2; END IF;
                 INSERT INTO payday_transfers
                             (tipper, tippee, amount, context, team)
                      VALUES ($1, $2, $3, $4, $5);
