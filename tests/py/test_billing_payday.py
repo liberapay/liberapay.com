@@ -5,7 +5,7 @@ import os
 
 import mock
 
-from liberapay.billing.payday import NoPayday, Payday
+from liberapay.billing.payday import main, NoPayday, Payday
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
@@ -13,6 +13,13 @@ from liberapay.testing.emails import EmailHarness
 
 
 class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
+
+    def test_payday_id_is_serial(self):
+        for i in range(1, 4):
+            self.db.run("SELECT nextval('paydays_id_seq')")
+            main()
+            id = self.db.one("SELECT id FROM paydays ORDER BY id DESC LIMIT 1")
+            assert id == i
 
     def test_payday_moves_money(self):
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!

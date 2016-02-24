@@ -562,7 +562,7 @@ class Payday(object):
             p.notify('low_balance')
 
 
-if __name__ == '__main__':  # pragma: no cover
+def main():
     from os import environ
 
     from liberapay import wireup
@@ -588,3 +588,7 @@ if __name__ == '__main__':  # pragma: no cover
     except:
         import traceback
         traceback.print_exc()
+
+
+if __name__ == '__main__':  # pragma: no cover
+    main()
