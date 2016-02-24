@@ -163,24 +163,6 @@ class Harness(unittest.TestCase):
         return AccountElsewhere.upsert(info)
 
 
-    def show_table(self, table):
-        print('\n{:=^80}'.format(table))
-        data = self.db.all('select * from '+table, back_as='namedtuple')
-        if len(data) == 0:
-            return
-        widths = list(len(k) for k in data[0]._fields)
-        for row in data:
-            for i, v in enumerate(row):
-                widths[i] = max(widths[i], len(str(v)))
-        for k, w in zip(data[0]._fields, widths):
-            print("{0:{width}}".format(str(k), width=w), end=' | ')
-        print()
-        for row in data:
-            for v, w in zip(row, widths):
-                print("{0:{width}}".format(str(v), width=w), end=' | ')
-            print()
-
-
     def make_participant(self, username, **kw):
         platform = kw.pop('elsewhere', 'github')
         kw2 = {}
