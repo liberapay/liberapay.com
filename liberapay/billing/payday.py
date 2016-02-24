@@ -41,14 +41,14 @@ class Payday(object):
                 INSERT INTO paydays DEFAULT VALUES
                 RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
             """, back_as=dict)
-            log("Starting a new payday.")
+            log("Starting payday #%s." % d['id'])
         except IntegrityError:  # Collision, we have a Payday already.
             d = cls.db.one("""
                 SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
                   FROM paydays
                  WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
             """, back_as=dict)
-            log("Picking up with an existing payday.")
+            log("Picking up payday #%s." % d['id'])
 
         d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
 

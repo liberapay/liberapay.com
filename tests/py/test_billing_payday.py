@@ -134,7 +134,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             participants = get_participants(cursor)
 
         expected_logging_call_args = [
-            ('Starting a new payday.'),
+            ('Starting payday #1.'),
             ('Payday started at {}.'.format(ts_start)),
             ('Prepared the DB.'),
         ]
@@ -160,7 +160,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert participants == second_participants
 
         expected_logging_call_args = [
-            ('Picking up with an existing payday.'),
+            ('Picking up payday #1.'),
             ('Payday started at {}.'.format(second_ts_start)),
             ('Prepared the DB.'),
         ]
