@@ -331,18 +331,18 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', balance=8)
-        alice.set_tip_to(team, D('0.25'))
-        team.set_take_for(alice, D('1.00'), alice)
+        alice.set_tip_to(team, D('2.00'))
+        team.set_take_for(alice, D('0.25'), alice)
         bob = self.make_participant('bob', balance=10)
-        bob.set_tip_to(team, D('3.17'))
-        team.set_take_for(bob, D('0.48'), bob)
+        bob.set_tip_to(team, D('2.00'))
+        team.set_take_for(bob, D('0.75'), bob)
 
         Payday.start().run()
 
         d = dict(self.db.all("SELECT username, balance FROM participants"))
         expected = {
-            'alice': D('8.75'),  # 8 - 0.25 + 1.00
-            'bob': D('9.25'),  # 10 - 1.00 + 0.25
+            'alice': D('7.75'),  # 8 - 0.50 + 0.25
+            'bob': D('10.25'),  # 10 - 0.25 + 0.50
             'team': D('0.00'),
         }
         assert d == expected
