@@ -7,7 +7,10 @@ They are wrapped in lambdas to prevent tests from persistently modifying the
 data.
 """
 
+from __future__ import unicode_literals
+
 import xml.etree.ElementTree as ET
+
 
 bitbucket = lambda: {
     "username": "whit537",
@@ -122,6 +125,32 @@ github = lambda: {
     "repos_url": "https://api.github.com/users/whit537/repos",
     "following": 15,
     "login": "whit537"
+}
+
+gitlab = lambda: {
+    "two_factor_enabled": False,
+    "can_create_project": True,
+    "twitter": "Changaco",
+    "linkedin": "",
+    "color_scheme_id": 1,
+    "web_url": "https://gitlab.com/u/Changaco",
+    "skype": "",
+    "identities": [],
+    "id": 155803,
+    "projects_limit": 100000,
+    "current_sign_in_at": "2016-02-16T20:38:00.092Z",
+    "state": "active",
+    "email": "changaco@changaco.oy.lc",
+    "website_url": "http://changaco.oy.lc",
+    "username": "Changaco",
+    "bio": "",
+    "can_create_group": True,
+    "is_admin": False,
+    "name": "Changaco",
+    "created_at": "2015-05-22T12:51:41.103Z",
+    "avatar_url": "https://secure.gravatar.com/avatar/37bbd0ccd96666e9868bee47e3c30eb0?s=80&d=identicon",
+    "private_token": "redacted",
+    "theme_id": 1
 }
 
 openstreetmap = lambda: ET.fromstring("""
