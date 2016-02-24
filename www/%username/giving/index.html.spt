@@ -127,7 +127,7 @@ weekly = total - participant.receiving
         % for tip in pledges
             <tr>
                 <td class="recipient">
-                    <img class="platform-icon" src="{{ website.asset('platforms/%s.12.png' % tip.platform) }}" />
+                    <img class="platform-icon" src="{{ website.asset('platforms/%s.16.png' % tip.platform) }}" />
                     <a href="/on/{{ tip.platform }}/{{ tip.user_name }}/">{{ tip.user_name }}</a>
                 </td>
                 <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
