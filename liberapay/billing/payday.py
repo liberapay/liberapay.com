@@ -38,7 +38,12 @@ class Payday(object):
         """
         try:
             d = cls.db.one("""
-                INSERT INTO paydays DEFAULT VALUES
+                INSERT INTO paydays (id) VALUES (COALESCE((
+                     SELECT id
+                       FROM paydays
+                   ORDER BY id DESC
+                      LIMIT 1
+                ), 0) + 1)
                 RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
             """, back_as=dict)
             log("Starting payday #%s." % d['id'])
