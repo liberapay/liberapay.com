@@ -28,6 +28,7 @@ from liberapay.elsewhere.bitbucket import Bitbucket
 from liberapay.elsewhere.bountysource import Bountysource
 from liberapay.elsewhere.github import GitHub
 from liberapay.elsewhere.gitlab import GitLab
+from liberapay.elsewhere.linuxfr import LinuxFr
 from liberapay.elsewhere.facebook import Facebook
 from liberapay.elsewhere.google import Google
 from liberapay.elsewhere.openstreetmap import OpenStreetMap
@@ -200,6 +201,11 @@ def accounts_elsewhere(website, env):
         env.openstreetmap_api_url,
         env.openstreetmap_auth_url,
     )
+    linuxfr = LinuxFr(
+        env.linuxfr_id,
+        env.linuxfr_secret,
+        env.linuxfr_callback,
+    )
     bountysource = Bountysource(
         None,
         env.bountysource_api_secret,
@@ -208,7 +214,7 @@ def accounts_elsewhere(website, env):
         env.bountysource_www_host,
     )
 
-    platforms = [twitter, github, gitlab, facebook, google, bitbucket, openstreetmap, bountysource]
+    platforms = [twitter, github, gitlab, facebook, google, bitbucket, openstreetmap, linuxfr, bountysource]
     platforms = [p for p in platforms if p.api_secret]
     website.platforms = AccountElsewhere.platforms = PlatformRegistry(platforms)
 
@@ -358,6 +364,9 @@ def env():
         GITLAB_ID                       = str,
         GITLAB_SECRET                   = str,
         GITLAB_CALLBACK                 = str,
+        LINUXFR_ID                      = str,
+        LINUXFR_SECRET                  = str,
+        LINUXFR_CALLBACK                = str,
         BITBUCKET_CONSUMER_KEY          = str,
         BITBUCKET_CONSUMER_SECRET       = str,
         BITBUCKET_CALLBACK              = str,

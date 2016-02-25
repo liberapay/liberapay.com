@@ -153,6 +153,12 @@ gitlab = lambda: {
     "theme_id": 1
 }
 
+linuxfr = lambda: {
+    "login": "Changaco",
+    "email": "changaco@changaco.oy.lc",
+    "created_at": "2009-08-14T10:31:22.000+02:00"
+}
+
 openstreetmap = lambda: ET.fromstring("""
  <!-- copied from http://wiki.openstreetmap.org/wiki/API_v0.6 -->
  <osm version="0.6" generator="OpenStreetMap server">
