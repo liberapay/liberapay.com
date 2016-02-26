@@ -233,10 +233,6 @@ def make_sentry_teller(env):
     return {'tell_sentry': tell_sentry}
 
 
-class BadEnvironment(SystemExit):
-    pass
-
-
 def accounts_elsewhere(app_conf, asset):
     twitter = Twitter(
         app_conf.twitter_consumer_key,
@@ -401,13 +397,11 @@ def env():
         print("Malformed environment variable%s:" % plural)
         for key, err in env.malformed:
             print("  {} ({})".format(key, err))
-        keys = ', '.join([key for key in env.malformed])
-        raise BadEnvironment("Malformed envvar{}: {}.".format(plural, keys))
 
     if env.missing:
         plural = len(env.missing) != 1 and 's' or ''
         keys = ', '.join([key for key in env.missing])
-        raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
+        print("Missing envvar{}: {}.".format(plural, keys))
 
     return {'env': env}
 
@@ -432,5 +426,12 @@ full_algorithm = Algorithm(
 )
 
 
+def main():
+    from liberapay.main import website
+    app_conf, env = website.app_conf, website.env
+    if app_conf.missing or app_conf.mistyped or env.missing or env.malformed:
+        raise SystemExit('The configuration is incorrect.')
+
+
 if __name__ == '__main__':
-    env()
+    main()
