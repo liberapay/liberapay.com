@@ -88,8 +88,12 @@ class Harness(unittest.TestCase):
     client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
     db = client.website.db
     platforms = client.website.platforms
-    tablenames = db.all("SELECT tablename FROM pg_tables "
-                        "WHERE schemaname='public'")
+    tablenames = db.all("""
+        SELECT tablename
+          FROM pg_tables
+         WHERE schemaname='public'
+           AND tablename NOT IN ('db_meta', 'app_conf')
+    """)
     seq = itertools.count(0)
 
 

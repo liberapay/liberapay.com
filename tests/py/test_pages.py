@@ -10,8 +10,7 @@ from aspen import Response
 
 from liberapay.constants import SESSION
 from liberapay.testing.mangopay import MangopayHarness
-from liberapay.utils import b64encode_s
-from liberapay.wireup import find_files
+from liberapay.utils import b64encode_s, find_files
 
 
 overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')

@@ -8,9 +8,7 @@ import json
 from aspen.exceptions import MalformedBody, UnknownBodyType
 from aspen.http.request import Request
 from aspen.http.response import Response
-from environment import Environment
 
-from liberapay import wireup
 from liberapay.constants import SESSION
 from liberapay.security import csrf
 from liberapay.testing import Harness
@@ -20,21 +18,14 @@ class Tests(Harness):
 
     def setUp(self):
         Harness.setUp(self)
-
-        # Grab configuration from the environment, storing for later.
-        env = wireup.env()
-        self.environ = env.environ
-
-        # Change env, doesn't change self.environ.
-        env.canonical_scheme = 'https'
-        env.canonical_host = 'example.com'
-
-        wireup.canonical(env)
+        self.client.website.canonical_scheme = 'https'
+        self.client.website.canonical_host = 'example.com'
 
     def tearDown(self):
         Harness.tearDown(self)
-        reset = Environment(CANONICAL_SCHEME=str, CANONICAL_HOST=str, environ=self.environ)
-        wireup.canonical(reset)
+        website = self.client.website
+        website.canonical_scheme = website.env.canonical_scheme
+        website.canonical_host = website.env.canonical_host
 
     def test_canonize_canonizes(self):
         response = self.client.GxT( "/"

@@ -215,8 +215,8 @@ title = _("Add money")
 % block scripts
 {{ super() }}
 <script>
-    mangoPay.cardRegistration.baseURL = {{ to_javascript(website.env.mangopay_base_url)|safe }};
-    mangoPay.cardRegistration.clientId = {{ to_javascript(website.env.mangopay_client_id)|safe }};
+    mangoPay.cardRegistration.baseURL = {{ to_javascript(website.app_conf.mangopay_base_url)|safe }};
+    mangoPay.cardRegistration.clientId = {{ to_javascript(website.app_conf.mangopay_client_id)|safe }};
     $(function() {
         Liberapay.payments.cc.init();
     });

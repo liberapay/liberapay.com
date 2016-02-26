@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from base64 import b64decode, b64encode
 from datetime import date, datetime, timedelta
+import fnmatch
+import os
 import re
 
 from six.moves.urllib.parse import quote as urlquote
@@ -246,3 +248,9 @@ def group_by(iterable, key):
             continue
         r.setdefault(k, []).append(obj)
     return r
+
+
+def find_files(directory, pattern):
+    for root, dirs, files in os.walk(directory):
+        for filename in fnmatch.filter(files, pattern):
+            yield os.path.join(root, filename)

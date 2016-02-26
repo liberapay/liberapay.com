@@ -31,5 +31,17 @@ else
     echo "include schema changes with your pull request."
 fi
 
+echo "=============================================================================="
+echo "Applying sql/app-conf-defaults.sql ... "
+echo
+psql $DATABASE_URL < sql/app-conf-defaults.sql
+
+if [ "${1-}" = "test" ]; then
+    echo "=============================================================================="
+    echo "Applying sql/app-conf-tests.sql ... "
+    echo
+    psql $DATABASE_URL < sql/app-conf-tests.sql
+fi
+
 echo
 echo "=============================================================================="

@@ -2,17 +2,15 @@
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import atexit
-import fnmatch
 import json
 import os
 import re
-from tempfile import mkstemp
-from time import time
 import traceback
 
+from six import text_type as str
+
+from algorithm import Algorithm
 import aspen
-from aspen.testing.client import Client
 from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
@@ -39,24 +37,24 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models import DB
 from liberapay.security.authentication import ANON
-from liberapay.utils import markdown
+from liberapay.utils import find_files, markdown
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
     get_function_from_rule, make_sorted_dict
 )
-from liberapay.website import website
 
 
 def canonical(env):
-    website.canonical_scheme = env.canonical_scheme
-    website.canonical_host = env.canonical_host
-    website.canonical_domain = None
+    canonical_scheme = env.canonical_scheme
+    canonical_host = env.canonical_host
+    canonical_domain = None
     if env.canonical_host:
-        website.canonical_domain = ('.' + env.canonical_host.split(':')[0]).encode('ascii')
-    website.canonical_url = '%s://%s' % (env.canonical_scheme, env.canonical_host)
-    website.asset_url = website.canonical_url+'/assets/'
+        canonical_domain = ('.' + canonical_host.split(':')[0]).encode('ascii')
+    canonical_url = '%s://%s' % (canonical_scheme, canonical_host)
+    asset_url = canonical_url+'/assets/'
+    return locals()
 
 
 def db(env):
@@ -68,20 +66,97 @@ def db(env):
         db.register_model(model)
     liberapay.billing.payday.Payday.db = db
 
-    Participant._password_rounds = env.password_rounds
-
-    return db
+    return {'db': db}
 
 
-def mail(env, project_root='.'):
-    Participant._mailer = mandrill.Mandrill(env.mandrill_key)
+class AppConf(object):
+
+    fields = dict(
+        bitbucket_callback              = str,
+        bitbucket_consumer_key          = str,
+        bitbucket_consumer_secret       = str,
+        bountysource_api_host           = str,
+        bountysource_api_secret         = str,
+        bountysource_callback           = str,
+        bountysource_www_host           = str,
+        cache_static                    = bool,
+        check_db_every                  = int,
+        compress_assets                 = bool,
+        dequeue_emails_every            = int,
+        facebook_app_id                 = str,
+        facebook_app_secret             = str,
+        facebook_callback               = str,
+        github_callback                 = str,
+        github_client_id                = str,
+        github_client_secret            = str,
+        gitlab_callback                 = str,
+        gitlab_id                       = str,
+        gitlab_secret                   = str,
+        google_callback                 = str,
+        google_client_id                = str,
+        google_client_secret            = str,
+        linuxfr_callback                = str,
+        linuxfr_id                      = str,
+        linuxfr_secret                  = str,
+        log_emails                      = bool,
+        mandrill_key                    = str,
+        mangopay_base_url               = str,
+        mangopay_client_id              = str,
+        mangopay_client_password        = str,
+        openstreetmap_api_url           = str,
+        openstreetmap_auth_url          = str,
+        openstreetmap_callback          = str,
+        openstreetmap_consumer_key      = str,
+        openstreetmap_consumer_secret   = str,
+        password_rounds                 = int,
+        twitter_callback                = str,
+        twitter_consumer_key            = str,
+        twitter_consumer_secret         = str,
+        update_global_stats_every       = int,
+    )
+
+    def __init__(self, d):
+        d = d if isinstance(d, dict) else dict(d)
+
+        unexpected = set(d) - set(self.fields)
+        if unexpected:
+            print("Found %i unexpected variables in the app_conf table:  %s" %
+                  (len(unexpected), ' '.join(unexpected)))
+
+        missing, mistyped = [], []
+        for k, t in self.fields.items():
+            if k in d:
+                v = d[k]
+                if isinstance(v, t):
+                    self.__dict__[k] = v
+                else:
+                    mistyped.append((k, v, t))
+            else:
+                missing.append(k)
+        if missing:
+            print('Missing configuration variables: ', ' '.join(missing))
+        for k, v, t in mistyped:
+            print('Invalid configuration variable, %s: %s is of type %s, not %s' %
+                  (k, json.dumps(v), type(v), t))
+
+        self.missing = missing
+        self.mistyped = mistyped
+        self.unexpected = unexpected
+
+
+def app_conf(db):
+    conf = AppConf(db.all("SELECT key, value FROM app_conf"))
+    return {'app_conf': conf}
+
+
+def mail(app_conf, project_root='.'):
+    mailer = mandrill.Mandrill(app_conf.mandrill_key)
     emails = {}
     emails_dir = project_root+'/emails/'
     i = len(emails_dir)
     for spt in find_files(emails_dir, '*.spt'):
         base_name = spt[i:-4]
         emails[base_name] = compile_email_spt(spt)
-    Participant._emails = emails
 
     def log_email(message):
         message = dict(message)
@@ -94,21 +169,21 @@ def mail(env, project_root='.'):
         print(text)
         print('  ', '='*27, 'END EMAIL', '='*27)
 
-    Participant._log_email = staticmethod(
-        log_email if env.log_emails else lambda *a: None
-    )
+    log_email = log_email if app_conf.log_emails else lambda *a, **kw: None
+
+    return {'emails': emails, 'log_email': log_email, 'mailer': mailer}
 
 
-def billing(env):
+def billing(app_conf):
     from mangopaysdk.configuration import Configuration
-    Configuration.BaseUrl = env.mangopay_base_url
-    Configuration.ClientID = env.mangopay_client_id
-    Configuration.ClientPassword = env.mangopay_client_password
+    Configuration.BaseUrl = app_conf.mangopay_base_url
+    Configuration.ClientID = app_conf.mangopay_client_id
+    Configuration.ClientPassword = app_conf.mangopay_client_password
     Configuration.SSLVerification = True
 
 
-def username_restrictions(website):
-    liberapay.RESTRICTED_USERNAMES = os.listdir(website.www_root)
+def username_restrictions(www_root):
+    return {'restricted_usernames': os.listdir(www_root)}
 
 
 def make_sentry_teller(env):
@@ -154,120 +229,83 @@ def make_sentry_teller(env):
         state['sentry_ident'] = sentry.get_ident(result)
 
     CustomUndefined._tell_sentry = staticmethod(tell_sentry)
-    Participant._tell_sentry = staticmethod(tell_sentry)
-    return tell_sentry
+
+    return {'tell_sentry': tell_sentry}
 
 
 class BadEnvironment(SystemExit):
     pass
 
 
-def accounts_elsewhere(website, env):
-
+def accounts_elsewhere(app_conf, asset):
     twitter = Twitter(
-        env.twitter_consumer_key,
-        env.twitter_consumer_secret,
-        env.twitter_callback,
+        app_conf.twitter_consumer_key,
+        app_conf.twitter_consumer_secret,
+        app_conf.twitter_callback,
     )
     facebook = Facebook(
-        env.facebook_app_id,
-        env.facebook_app_secret,
-        env.facebook_callback,
+        app_conf.facebook_app_id,
+        app_conf.facebook_app_secret,
+        app_conf.facebook_callback,
     )
     github = GitHub(
-        env.github_client_id,
-        env.github_client_secret,
-        env.github_callback,
+        app_conf.github_client_id,
+        app_conf.github_client_secret,
+        app_conf.github_callback,
     )
     gitlab = GitLab(
-        env.gitlab_id,
-        env.gitlab_secret,
-        env.gitlab_callback,
+        app_conf.gitlab_id,
+        app_conf.gitlab_secret,
+        app_conf.gitlab_callback,
     )
     google = Google(
-        env.google_client_id,
-        env.google_client_secret,
-        env.google_callback,
+        app_conf.google_client_id,
+        app_conf.google_client_secret,
+        app_conf.google_callback,
     )
     bitbucket = Bitbucket(
-        env.bitbucket_consumer_key,
-        env.bitbucket_consumer_secret,
-        env.bitbucket_callback,
+        app_conf.bitbucket_consumer_key,
+        app_conf.bitbucket_consumer_secret,
+        app_conf.bitbucket_callback,
     )
     openstreetmap = OpenStreetMap(
-        env.openstreetmap_consumer_key,
-        env.openstreetmap_consumer_secret,
-        env.openstreetmap_callback,
-        env.openstreetmap_api_url,
-        env.openstreetmap_auth_url,
+        app_conf.openstreetmap_consumer_key,
+        app_conf.openstreetmap_consumer_secret,
+        app_conf.openstreetmap_callback,
+        app_conf.openstreetmap_api_url,
+        app_conf.openstreetmap_auth_url,
     )
     linuxfr = LinuxFr(
-        env.linuxfr_id,
-        env.linuxfr_secret,
-        env.linuxfr_callback,
+        app_conf.linuxfr_id,
+        app_conf.linuxfr_secret,
+        app_conf.linuxfr_callback,
     )
     bountysource = Bountysource(
         None,
-        env.bountysource_api_secret,
-        env.bountysource_callback,
-        env.bountysource_api_host,
-        env.bountysource_www_host,
+        app_conf.bountysource_api_secret,
+        app_conf.bountysource_callback,
+        app_conf.bountysource_api_host,
+        app_conf.bountysource_www_host,
     )
 
     platforms = [twitter, github, gitlab, facebook, google, bitbucket, openstreetmap, linuxfr, bountysource]
     platforms = [p for p in platforms if p.api_secret]
-    website.platforms = AccountElsewhere.platforms = PlatformRegistry(platforms)
+    platforms = PlatformRegistry(platforms)
 
-    friends_platforms = [p for p in website.platforms if getattr(p, 'api_friends_path', None)]
-    website.friends_platforms = PlatformRegistry(friends_platforms)
+    friends_platforms = [p for p in platforms if getattr(p, 'api_friends_path', None)]
+    friends_platforms = PlatformRegistry(friends_platforms)
 
     for platform in platforms:
-        platform.icon = website.asset('platforms/%s.16.png' % platform.name)
-        platform.logo = website.asset('platforms/%s.png' % platform.name)
+        platform.icon = asset('platforms/%s.16.png' % platform.name)
+        platform.logo = asset('platforms/%s.png' % platform.name)
+
+    return {'platforms': platforms, 'friends_platforms': friends_platforms}
 
 
-def find_files(directory, pattern):
-    for root, dirs, files in os.walk(directory):
-        for filename in fnmatch.filter(files, pattern):
-            yield os.path.join(root, filename)
-
-
-def compile_assets(website):
-    client = Client(website.www_root, website.project_root)
-    client._website = website
-    for spt in find_files(website.www_root+'/assets/', '*.spt'):
-        filepath = spt[:-4]                         # /path/to/www/assets/foo.css
-        urlpath = spt[spt.rfind('/assets/'):-4]     # /assets/foo.css
-        try:
-            # Remove any existing compiled asset, so we can access the dynamic
-            # one instead (Aspen prefers foo.css over foo.css.spt).
-            os.unlink(filepath)
-        except:
-            pass
-        content = client.GET(urlpath).body
-        tmpfd, tmpfpath = mkstemp(dir='.')
-        os.write(tmpfd, content)
-        os.close(tmpfd)
-        os.rename(tmpfpath, filepath)
-    compilation_time = time()
-    atexit.register(lambda: clean_assets(website.www_root, compilation_time))
-
-
-def clean_assets(www_root, older_than=None):
-    for spt in find_files(www_root+'/assets/', '*.spt'):
-        try:
-            path = spt[:-4]
-            if older_than and os.stat(path).st_mtime > older_than:
-                continue
-            os.unlink(path)
-        except:
-            pass
-
-
-def load_i18n(website):
+def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     # Load the locales
-    localeDir = os.path.join(website.project_root, 'i18n', 'core')
-    locales = website.locales = LOCALES
+    localeDir = os.path.join(project_root, 'i18n', 'core')
+    locales = LOCALES
     for file in os.listdir(localeDir):
         try:
             parts = file.split(".")
@@ -287,14 +325,14 @@ def load_i18n(website):
                 except KeyError:
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
-            website.tell_sentry(e, {}, allow_reraise=True)
+            tell_sentry(e, {}, allow_reraise=True)
 
     # Prepare a unique and sorted list for use in the language switcher
     for l in locales.values():
         strings = [m.string for m in l.catalog]
         l.completion = sum(1 for s in strings if s) / len(strings)
-    loc_url = website.canonical_scheme+'://%s.'+website.canonical_host
-    website.lang_list = sorted(
+    loc_url = canonical_scheme+'://%s.'+canonical_host
+    lang_list = sorted(
         (
             (l.completion, l.language, l.language_name.title(), loc_url % l.language)
             for l in set(locales.values())
@@ -314,9 +352,9 @@ def load_i18n(website):
     locales['fr'].currency_symbols['USD'] = '$'
 
     # Load the markdown files
-    docs = website.docs = {}
+    docs = {}
     heading_re = re.compile(r'^(#+ )', re.M)
-    for path in find_files(os.path.join(website.project_root, 'i18n'), '*.md'):
+    for path in find_files(os.path.join(project_root, 'i18n'), '*.md'):
         d, b = os.path.split(path)
         doc = os.path.basename(d)
         lang = b[:-3]
@@ -327,22 +365,22 @@ def load_i18n(website):
                 md = heading_re.sub(r'##\1', md)
             docs.setdefault(doc, {}).__setitem__(lang, markdown.render(md))
 
+    return {'docs': docs, 'lang_list': lang_list, 'locales': locales}
 
-def other_stuff(website, env):
-    if env.cache_static:
+
+def asset_url_generator(app_conf, asset_url, tell_sentry, www_root):
+    if app_conf.cache_static:
         def asset(path):
-            fspath = website.www_root+'/assets/'+path
+            fspath = www_root+'/assets/'+path
             etag = ''
             try:
                 etag = asset_etag(fspath)
             except Exception as e:
-                website.tell_sentry(e, {}, allow_reraise=True)
-            return website.asset_url+path+(etag and '?etag='+etag)
-        website.asset = asset
-        compile_assets(website)
+                tell_sentry(e, {}, allow_reraise=True)
+            return asset_url+path+(etag and '?etag='+etag)
     else:
-        website.asset = lambda path: website.asset_url+path
-        clean_assets(website.www_root)
+        asset = lambda path: asset_url+path
+    return {'asset': asset}
 
 
 def env():
@@ -352,79 +390,46 @@ def env():
         DATABASE_MAXCONN                = int,
         CANONICAL_HOST                  = str,
         CANONICAL_SCHEME                = str,
-        CACHE_STATIC                    = is_yesish,
-        COMPRESS_ASSETS                 = is_yesish,
-        PASSWORD_ROUNDS                 = int,
-        MANGOPAY_BASE_URL               = str,
-        MANGOPAY_CLIENT_ID              = str,
-        MANGOPAY_CLIENT_PASSWORD        = str,
-        GITHUB_CLIENT_ID                = str,
-        GITHUB_CLIENT_SECRET            = str,
-        GITHUB_CALLBACK                 = str,
-        GITLAB_ID                       = str,
-        GITLAB_SECRET                   = str,
-        GITLAB_CALLBACK                 = str,
-        LINUXFR_ID                      = str,
-        LINUXFR_SECRET                  = str,
-        LINUXFR_CALLBACK                = str,
-        BITBUCKET_CONSUMER_KEY          = str,
-        BITBUCKET_CONSUMER_SECRET       = str,
-        BITBUCKET_CALLBACK              = str,
-        TWITTER_CONSUMER_KEY            = str,
-        TWITTER_CONSUMER_SECRET         = str,
-        TWITTER_CALLBACK                = str,
-        FACEBOOK_APP_ID                 = str,
-        FACEBOOK_APP_SECRET             = str,
-        FACEBOOK_CALLBACK               = str,
-        GOOGLE_CLIENT_ID                = str,
-        GOOGLE_CLIENT_SECRET            = str,
-        GOOGLE_CALLBACK                 = str,
-        BOUNTYSOURCE_API_SECRET         = str,
-        BOUNTYSOURCE_CALLBACK           = str,
-        BOUNTYSOURCE_API_HOST           = str,
-        BOUNTYSOURCE_WWW_HOST           = str,
-        OPENSTREETMAP_CONSUMER_KEY      = str,
-        OPENSTREETMAP_CONSUMER_SECRET   = str,
-        OPENSTREETMAP_CALLBACK          = str,
-        OPENSTREETMAP_API_URL           = str,
-        OPENSTREETMAP_AUTH_URL          = str,
-        UPDATE_GLOBAL_STATS_EVERY       = int,
-        CHECK_DB_EVERY                  = int,
-        DEQUEUE_EMAILS_EVERY            = int,
         SENTRY_DSN                      = str,
         SENTRY_RERAISE                  = is_yesish,
-        MANDRILL_KEY                    = str,
         GUNICORN_OPTS                   = str,
-        LOG_EMAILS                      = is_yesish,
     )
-
-
-    # Error Checking
-    # ==============
 
     if env.malformed:
         plural = len(env.malformed) != 1 and 's' or ''
         print("=" * 42)
         print("Malformed environment variable%s:" % plural)
-        print(" ")
         for key, err in env.malformed:
             print("  {} ({})".format(key, err))
-
         keys = ', '.join([key for key in env.malformed])
         raise BadEnvironment("Malformed envvar{}: {}.".format(plural, keys))
 
     if env.missing:
         plural = len(env.missing) != 1 and 's' or ''
-        print("=" * 42)
-        print("Missing environment variable%s:" % plural)
-        print(" ")
-        for key in env.missing:
-            print("  " + key)
-
         keys = ', '.join([key for key in env.missing])
         raise BadEnvironment("Missing envvar{}: {}.".format(plural, keys))
 
-    return env
+    return {'env': env}
+
+
+minimal_algorithm = Algorithm(
+    env,
+    db,
+)
+
+full_algorithm = Algorithm(
+    env,
+    db,
+    make_sentry_teller,
+    canonical,
+    app_conf,
+    mail,
+    billing,
+    username_restrictions,
+    load_i18n,
+    asset_url_generator,
+    accounts_elsewhere,
+)
 
 
 if __name__ == '__main__':

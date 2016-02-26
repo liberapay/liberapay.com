@@ -183,8 +183,7 @@ class TestStub(Harness):
             self.stub.change_username("\u2603") # Snowman
 
     def test_changing_username_to_restricted_name(self):
-        from liberapay import RESTRICTED_USERNAMES
-        for name in RESTRICTED_USERNAMES:
+        for name in self.client.website.restricted_usernames:
             with self.assertRaises(ProblemChangingUsername):
                 self.stub.change_username(name)
 

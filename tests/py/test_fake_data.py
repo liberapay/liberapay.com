@@ -15,8 +15,10 @@ class TestFakeData(Harness):
         num_teams = 1
         num_transfers = 5
         num_communities = 5
-        fake_data.populate_db(self.db, num_participants, num_tips, num_teams,
-                              num_transfers, num_communities)
+        fake_data.populate_db(
+            self.client.website, num_participants, num_tips, num_teams,
+            num_transfers, num_communities,
+        )
         tips = self.db.all("SELECT * FROM tips")
         participants = self.db.all("SELECT * FROM participants")
         transfers = self.db.all("SELECT * FROM transfers")

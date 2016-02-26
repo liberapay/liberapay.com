@@ -1,4 +1,3 @@
-from liberapay.models.participant import Participant
 from liberapay.testing import Harness
 from liberapay.utils.emails import jinja_env_html, SimplateLoader
 
@@ -27,7 +26,7 @@ class TestNotifications(Harness):
         assert alice.pending_notifs == 2
 
     def test_render_notifications(self):
-        Participant._emails['test_event'] = {
+        self.client.website.emails['test_event'] = {
             'subject': 'Test notification',
             'text/html': SimplateLoader(None, """
                 Test that builtins are available: len([]) = {{ len([]) }}.
