@@ -118,9 +118,10 @@ class Platform(object):
         is_user_session = bool(sess)
         if not sess:
             sess = self.get_auth_session()
-            if self.name == 'github':
+            api_app_auth_params = getattr(self, 'api_app_auth_params', None)
+            if api_app_auth_params:
                 url += '?' if '?' not in url else '&'
-                url += 'client_id=%s&client_secret=%s' % (self.api_key, self.api_secret)
+                url += api_app_auth_params.format(**self.__dict__)
         response = sess.get(url, **kw)
 
         limit, remaining, reset = self.get_ratelimit_headers(response)
