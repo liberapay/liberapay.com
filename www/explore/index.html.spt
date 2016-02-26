@@ -1,47 +1,50 @@
-from liberapay.models.community import Community
 from liberapay.utils.query_cache import QueryCache
 
-query_cache = QueryCache(website.db, threshold=1)
+query_cache = QueryCache(website.db, threshold=5)
 
 [-----------------------------]
 
-communities = Community.get_list(query_cache)
-ncommunities = len(communities)
+top_communities = query_cache.all("""
+    SELECT *, replace(name, '_', ' ') AS pretty_name
+      FROM communities
+  ORDER BY nmembers DESC, name
+     LIMIT 9
+""")
+
 title = _("Explore")
 
 [-----------------------------]
 % extends "templates/explore.html"
 
 % block content
-<p>
-    {{ ngettext("There is {n} community on Liberapay.",
-                "There are {n} communities on Liberapay.",
-                ncommunities) }}
-</p>
 
-<form class="form-group" action="/search" method="get">
-    <input type="hidden" name="scope" value="communities" />
-    <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="{{ _('Search communities') }}" />
-        <div class="input-group-btn">
-            <button class="btn btn-default">{{ _("Go") }}</button>
-        </div>
-    </div>
-</form>
+    <p>{{ _("Whose work do you appreciate? See if they're on Liberapay:") }}</p>
+    % include "templates/search-box.html"
 
-<p><a class="btn btn-primary" href="/for/new">{{ _("Start a new community") }}</a></p>
+    <p>{{ _("You can also pledge to people who haven't joined Liberapay yet:") }}</p>
+    % include "templates/jump.html"
 
-<h3>{{ _("Popular Communities") }}</h3>
-<ul class="communities memberships">
-    % for community in communities[:20]
-    <li>
-        <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-        % set n = community.nmembers
-        <div class="nmembers">
-            {{ ngettext("{n} member", "{n} members", n) }}
-        </div>
-    </li>
+    <p><a class="btn btn-default" href="/explore/pledges/">{{ _("Explore pledges") }}</a></p>
+
+    <p>{{ _("Explore our communities:") }}</p>
+    <ul class="communities memberships">
+        % for community in top_communities
+        <li>
+            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
+            % set n = community.nmembers
+            <div class="nmembers">
+                {{ ngettext("{n} member", "{n} members", n) }}
+            </div>
+        </li>
+        % endfor
+    </ul>
+    <a class="btn btn-default" href="/explore/">{{ _("More") }}</a><br><br>
+
+    <p>{{ _("Find your friends from social networks:") }}</p>
+    <p>
+    % for p in website.friends_platforms
+        <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
     % endfor
-</ul>
+    </p>
 
 % endblock

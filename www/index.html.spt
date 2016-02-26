@@ -7,13 +7,6 @@ query_cache = QueryCache(website.db, threshold=5)
 
 [---]
 
-top_communities = query_cache.all("""
-    SELECT *, replace(name, '_', ' ') AS pretty_name
-      FROM communities
-  ORDER BY nmembers DESC, name
-     LIMIT 9
-""")
-
 new_members = query_cache.all("""
     SELECT username, join_time, avatar_url
       FROM participants
@@ -66,7 +59,7 @@ new_members = query_cache.all("""
         </div>
         <div class="col-sm-4">
             <dt>
-                <span class="glyphicon glyphicon-euro" aria-hidden="true"></span><br>
+                <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span><br>
                 {{ _("It's economical") }}
             </dt>
             <dd>{{ _(
@@ -101,42 +94,32 @@ new_members = query_cache.all("""
 <div class="row">
 
     <div class="col-md-6">
-            <h2 class="banderole primary">{{ _("Donate") }}</h2>
+        <h2 class="banderole primary">{{ _("Donate") }}</h2>
 
-            % if not user.ANON
+        % if user.ANON
+
+            <p>{{ _(
+                "People who contribute to the commons need you to support their work. "
+                "Building free software, spreading free knowledge, these things take "
+                "time and cost money, not only to do the initial work, but also to "
+                "maintain it over time."
+            ) }}</p>
+            <p>{{ _(
+                "Liberapay's recurrent donations system is designed to provide a "
+                "stable crowdfunded basic income to creators, enabling them to keep "
+                "doing great work that benefits everyone. Ready to contribute? Then "
+                "let's get started:"
+            ) }}</p>
+
+        % else
+
             <p><a href="/{{ user.username }}/giving/">{{
                 _("You give {0} per week.", Money(user.giving, 'EUR'))
             }}</a></p>
-            % endif
 
-            <p>{{ _("Whose work do you appreciate? See if they're on Liberapay:") }}</p>
-            % include "templates/search-box.html"
+        % endif
 
-            <p>{{ _("You can also pledge to people who haven't joined Liberapay yet:") }}</p>
-            % include "templates/jump.html"
-
-            <p><a class="btn btn-default" href="/explore/pledges/">{{ _("Explore pledges") }}</a></p>
-
-            <p>{{ _("Explore our communities:") }}</p>
-            <ul class="communities memberships">
-                % for community in top_communities
-                <li>
-                    <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-                    % set n = community.nmembers
-                    <div class="nmembers">
-                        {{ ngettext("{n} member", "{n} members", n) }}
-                    </div>
-                </li>
-                % endfor
-            </ul>
-            <a class="btn btn-default" href="/explore/">{{ _("More") }}</a><br><br>
-
-            <p>{{ _("Find your friends from social networks:") }}</p>
-            <p>
-            % for p in website.friends_platforms
-                <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
-            % endfor
-            </p>
+        <a class="btn btn-primary btn-lg" href="/explore/">{{ _("Explore") }}</a>
     </div>
 
     <div class="col-md-6">
@@ -146,7 +129,7 @@ new_members = query_cache.all("""
 
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
-            <a class="btn btn-success" href="/sign-in">{{ _("Join us") }}</a>
+            <a class="btn btn-success btn-lg" href="/sign-in">{{ _("Join us") }}</a>
 
         % else
 
