@@ -1,7 +1,6 @@
-"""Wireup
-"""
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from collections import OrderedDict
 import json
 import os
 import re
@@ -18,19 +17,8 @@ from environment import Environment, is_yesish
 import mandrill
 import raven
 
-import liberapay
 import liberapay.billing.payday
 from liberapay.constants import CustomUndefined
-from liberapay.elsewhere import PlatformRegistry
-from liberapay.elsewhere.bitbucket import Bitbucket
-from liberapay.elsewhere.bountysource import Bountysource
-from liberapay.elsewhere.github import GitHub
-from liberapay.elsewhere.gitlab import GitLab
-from liberapay.elsewhere.linuxfr import LinuxFr
-from liberapay.elsewhere.facebook import Facebook
-from liberapay.elsewhere.google import Google
-from liberapay.elsewhere.openstreetmap import OpenStreetMap
-from liberapay.elsewhere.twitter import Twitter
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
@@ -73,28 +61,29 @@ class AppConf(object):
 
     fields = dict(
         bitbucket_callback              = str,
-        bitbucket_consumer_key          = str,
-        bitbucket_consumer_secret       = str,
-        bountysource_api_host           = str,
-        bountysource_api_secret         = str,
+        bitbucket_id                    = str,
+        bitbucket_secret                = str,
+        bountysource_api_url            = str,
+        bountysource_auth_url           = str,
         bountysource_callback           = str,
-        bountysource_www_host           = str,
+        bountysource_id                 = None.__class__,
+        bountysource_secret             = str,
         cache_static                    = bool,
         check_db_every                  = int,
         compress_assets                 = bool,
         dequeue_emails_every            = int,
-        facebook_app_id                 = str,
-        facebook_app_secret             = str,
         facebook_callback               = str,
+        facebook_id                     = str,
+        facebook_secret                 = str,
         github_callback                 = str,
-        github_client_id                = str,
-        github_client_secret            = str,
+        github_id                       = str,
+        github_secret                   = str,
         gitlab_callback                 = str,
         gitlab_id                       = str,
         gitlab_secret                   = str,
         google_callback                 = str,
-        google_client_id                = str,
-        google_client_secret            = str,
+        google_id                       = str,
+        google_secret                   = str,
         linuxfr_callback                = str,
         linuxfr_id                      = str,
         linuxfr_secret                  = str,
@@ -106,12 +95,12 @@ class AppConf(object):
         openstreetmap_api_url           = str,
         openstreetmap_auth_url          = str,
         openstreetmap_callback          = str,
-        openstreetmap_consumer_key      = str,
-        openstreetmap_consumer_secret   = str,
+        openstreetmap_id                = str,
+        openstreetmap_secret            = str,
         password_rounds                 = int,
         twitter_callback                = str,
-        twitter_consumer_key            = str,
-        twitter_consumer_secret         = str,
+        twitter_id                      = str,
+        twitter_secret                  = str,
         update_global_stats_every       = int,
     )
 
@@ -233,58 +222,33 @@ def make_sentry_teller(env):
     return {'tell_sentry': tell_sentry}
 
 
-def accounts_elsewhere(app_conf, asset):
-    twitter = Twitter(
-        app_conf.twitter_consumer_key,
-        app_conf.twitter_consumer_secret,
-        app_conf.twitter_callback,
-    )
-    facebook = Facebook(
-        app_conf.facebook_app_id,
-        app_conf.facebook_app_secret,
-        app_conf.facebook_callback,
-    )
-    github = GitHub(
-        app_conf.github_client_id,
-        app_conf.github_client_secret,
-        app_conf.github_callback,
-    )
-    gitlab = GitLab(
-        app_conf.gitlab_id,
-        app_conf.gitlab_secret,
-        app_conf.gitlab_callback,
-    )
-    google = Google(
-        app_conf.google_client_id,
-        app_conf.google_client_secret,
-        app_conf.google_callback,
-    )
-    bitbucket = Bitbucket(
-        app_conf.bitbucket_consumer_key,
-        app_conf.bitbucket_consumer_secret,
-        app_conf.bitbucket_callback,
-    )
-    openstreetmap = OpenStreetMap(
-        app_conf.openstreetmap_consumer_key,
-        app_conf.openstreetmap_consumer_secret,
-        app_conf.openstreetmap_callback,
-        app_conf.openstreetmap_api_url,
-        app_conf.openstreetmap_auth_url,
-    )
-    linuxfr = LinuxFr(
-        app_conf.linuxfr_id,
-        app_conf.linuxfr_secret,
-        app_conf.linuxfr_callback,
-    )
-    bountysource = Bountysource(
-        None,
-        app_conf.bountysource_api_secret,
-        app_conf.bountysource_callback,
-        app_conf.bountysource_api_host,
-        app_conf.bountysource_www_host,
-    )
+class PlatformRegistry(object):
+    """Registry of platforms we support.
+    """
+    def __init__(self, platforms):
+        self.__dict__ = OrderedDict((p.name, p) for p in platforms)
 
-    platforms = [twitter, github, gitlab, facebook, google, bitbucket, openstreetmap, linuxfr, bountysource]
+    def __contains__(self, platform):
+        return platform.name in self.__dict__
+
+    def __iter__(self):
+        return iter(self.__dict__.values())
+
+
+def accounts_elsewhere(app_conf, asset):
+    platforms = []
+    for cls in liberapay.elsewhere.CLASSES:
+        conf = {
+            k[len(cls.name)+1:]: v
+            for k, v in app_conf.__dict__.items() if k.startswith(cls.name+'_')
+        }
+        platforms.append(cls(
+            conf.pop('id'),
+            conf.pop('secret'),
+            conf.pop('callback'),
+            **conf
+        ))
+
     platforms = [p for p in platforms if p.api_secret]
     platforms = PlatformRegistry(platforms)
 

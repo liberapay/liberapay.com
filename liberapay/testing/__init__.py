@@ -16,7 +16,7 @@ from liberapay.billing.exchanges import (
     record_exchange, record_exchange_result, _record_transfer_result
 )
 from liberapay.constants import SESSION
-from liberapay.elsewhere import UserInfo
+from liberapay.elsewhere._base import UserInfo
 from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute

@@ -2,12 +2,12 @@
 """
 from __future__ import unicode_literals
 
+from functools import reduce
 import json
 from operator import getitem
 import xml.etree.ElementTree as ET
 
 from aspen import log
-from functools import reduce
 
 
 def _getitemchain(o, *keys):

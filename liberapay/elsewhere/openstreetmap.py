@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from liberapay.elsewhere import PlatformOAuth1
+from liberapay.elsewhere._base import PlatformOAuth1
 from liberapay.elsewhere._extractors import not_available, xpath
 
 
