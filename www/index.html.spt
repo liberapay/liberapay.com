@@ -160,7 +160,23 @@ new_members = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
-        <h2 class="banderole info">{{ _("Upcoming Features") }}</h2>
+        <h2 class="banderole default">{{ _("New Members") }}</h2>
+
+        <ul class="people">
+        % for m in new_members
+            <li class="panel panel-default mini-user">
+                <a href="/{{ m.username }}/">
+                    {{ avatar_img(m) }}
+                    <div class="name">{{ m.username }}</div>
+                    <div class="age">{{ to_age_str(m.join_time, add_direction=True) }}</div>
+                </a>
+            </li>
+        % endfor
+        </ul>
+    </div>
+
+    <div class="col-xs-12">
+        <h2 class="banderole default">{{ _("Upcoming Features") }}</h2>
         <ul>
             <li>{{ _(
                 "The ability to list your projects on your profile and link "
@@ -180,22 +196,6 @@ new_members = query_cache.all("""
             ) }}</li>
             <li><a href="https://github.com/liberapay/liberapay.com/issues"
                     >{{ _("and more…") }}</a></li>
-        </ul>
-    </div>
-
-    <div class="col-xs-12">
-        <h2 class="banderole default">{{ _("New Members") }}</h2>
-
-        <ul class="people">
-        % for m in new_members
-            <li class="panel panel-default mini-user">
-                <a href="/{{ m.username }}/">
-                    {{ avatar_img(m) }}
-                    <div class="name">{{ m.username }}</div>
-                    <div class="age">{{ to_age_str(m.join_time, add_direction=True) }}</div>
-                </a>
-            </li>
-        % endfor
         </ul>
     </div>
 
