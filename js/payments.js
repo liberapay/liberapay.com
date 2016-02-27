@@ -51,7 +51,17 @@ Liberapay.payments.deleteRoute = function(e) {
     return false;
 };
 
-Liberapay.payments.submit = function(e) {
+Liberapay.payments.wrap = function(f) {
+    return function() {
+        try {
+            return f.apply(this, arguments);
+        } catch (e) {
+            Liberapay.payments.cc.onError({ResultCode: "1999999", ResultMessage: e})
+        }
+    }
+};
+
+Liberapay.payments.submit = Liberapay.payments.wrap(function(e) {
     e.preventDefault();
     $('#loading-indicator').remove();
     var $bg = $('<div id="loading-indicator">').css({
@@ -75,7 +85,7 @@ Liberapay.payments.submit = function(e) {
     } else {
         step2();
     }
-};
+});
 
 Liberapay.payments.error = function(jqXHR, textStatus, errorThrown) {
     $('#loading-indicator').remove();
@@ -325,12 +335,12 @@ Liberapay.payments.cc.submit = function() {
 };
 
 Liberapay.payments.cc.register = function (cardData) {
-    return function (cardRegistrationData) {
+    return Liberapay.payments.wrap(function (cardRegistrationData) {
         cardRegistrationData.Id = cardRegistrationData.id;
         delete cardRegistrationData.id;
         mangoPay.cardRegistration.init(cardRegistrationData);
         mangoPay.cardRegistration.registerCard(cardData, Liberapay.payments.cc.associate, Liberapay.payments.cc.onError);
-    }
+    })
 };
 
 Liberapay.payments.cc.associate = function (response) {

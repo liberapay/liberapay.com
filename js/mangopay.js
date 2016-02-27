@@ -516,7 +516,14 @@ var mangoPay = {
             }
 
             // Send data
-            xmlhttp.send(settings.type === "post" ? parameters : null);
+            try {
+                xmlhttp.send(settings.type === "post" ? parameters : null);
+            } catch (e) {
+                if (settings.crossDomain)
+                    return settings.error({ResultCode: "1000000", ResultMessage: "CORS_FAIL"});
+                else
+                    return settings.error({ResultCode: "1000001", ResultMessage: "XHR_FAIL"});
+            }
 
         },
 
