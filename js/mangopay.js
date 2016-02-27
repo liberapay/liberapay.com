@@ -271,6 +271,9 @@ var mangoPay = {
              */
             _validate: function(cvv, cardType) {
 
+               if(cardType === "MAESTRO") {
+                   return true;
+               }
                cvv = cvv ? cvv.trim() : "";
                cardType = cardType ? cardType.trim() : "";
 
@@ -465,7 +468,7 @@ var mangoPay = {
 
             // Put together input data as string
             var parameters = "";
-            for (key in settings.data) {
+            for (var key in settings.data) {
                 parameters += (parameters.length > 0 ? '&' : '') + key + "=" + encodeURIComponent(settings.data[key]);
             }
 
