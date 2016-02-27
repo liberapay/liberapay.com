@@ -30,7 +30,7 @@ class AccountElsewhere(Model):
 
     def __init__(self, *args, **kwargs):
         super(AccountElsewhere, self).__init__(*args, **kwargs)
-        self.platform_data = getattr(self.platforms, self.platform)
+        self.platform_data = getattr(website.platforms, self.platform)
 
 
     # Constructors

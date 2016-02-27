@@ -247,7 +247,7 @@ class TestClosing(FakeTransfersHarness):
 
     # cpi - clear_personal_information
 
-    @mock.patch.object(Participant, '_mailer')
+    @mock.patch('liberapay.website.website.mailer')
     def test_cpi_clears_personal_information(self, mailer):
         alice = self.make_participant( 'alice'
                                      , goal=100

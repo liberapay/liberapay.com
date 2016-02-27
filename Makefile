@@ -51,7 +51,7 @@ test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 
 pyflakes: env
-	$(env_bin)/pyflakes app.py liberapay tests
+	$(env_bin)/flake8 --select=F app.py liberapay tests
 
 test: test-schema pytest
 tests: test

@@ -2,7 +2,6 @@ from datetime import timedelta
 import json
 
 from aspen import Response
-from liberapay.elsewhere import ACTIONS
 from liberapay.exceptions import AuthRequired
 from liberapay.utils import b64encode_s
 
@@ -22,7 +21,7 @@ try:
 except KeyError:
     raise Response(400)
 
-if action not in ACTIONS:
+if action not in constants.ELSEWHERE_ACTIONS:
     raise Response(400)
 
 if action == 'connect' and user.ANON:

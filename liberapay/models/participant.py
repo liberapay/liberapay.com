@@ -18,7 +18,6 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 from psycopg2.extras import Json
 
-import liberapay
 from liberapay.billing import mangoapi
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, EMAIL_RE,
@@ -210,7 +209,7 @@ class Participant(Model, MixinTeam):
             raise BadPasswordSize
         algo = 'sha256'
         salt = urandom(21)
-        rounds = cls._password_rounds
+        rounds = website.app_conf.password_rounds
         hashed = cls._hash_password(password, algo, salt, rounds)
         hashed = '$'.join((algo, str(rounds), b64encode(salt), b64encode(hashed)))
         return hashed
@@ -665,13 +664,13 @@ class Participant(Model, MixinTeam):
             return 0 # Not Sent
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
-        i18n.add_helpers_to_context(self._tell_sentry, context, locale)
+        i18n.add_helpers_to_context(context, locale)
         context['escape'] = lambda s: s
         context_html = dict(context)
-        i18n.add_helpers_to_context(self._tell_sentry, context_html, locale)
+        i18n.add_helpers_to_context(context_html, locale)
         context_html['escape'] = htmlescape
-        spt = self._emails[spt_name]
-        base_spt = self._emails['base']
+        spt = website.emails[spt_name]
+        base_spt = website.emails['base']
         def render(t, context):
             b = base_spt[t].render(context).strip()
             return b.replace('$body', spt[t].render(context).strip())
@@ -683,8 +682,8 @@ class Participant(Model, MixinTeam):
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
 
-        self._mailer.messages.send(message=message)
-        self._log_email(message)
+        website.mailer.messages.send(message=message)
+        website.log_email(message)
         return 1 # Sent
 
     def queue_email(self, spt_name, **context):
@@ -795,12 +794,12 @@ class Participant(Model, MixinTeam):
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)
-                spt = self._emails[event]
+                spt = website.emails[event]
                 html = spt['text/html'].render(context).strip()
                 typ = notif_context.get('type', 'info')
                 r.append(dict(id=id, html=html, type=typ))
             except Exception as e:
-                self._tell_sentry(e, state, allow_reraise=True)
+                website.tell_sentry(e, state, allow_reraise=True)
         return r
 
     def notify_patrons(self, elsewhere, tips):
@@ -939,7 +938,7 @@ class Participant(Model, MixinTeam):
 
         lowercased = suggested.lower()
 
-        if lowercased in liberapay.RESTRICTED_USERNAMES:
+        if lowercased in website.restricted_usernames:
             raise UsernameIsRestricted(suggested)
 
         if suggested != self.username:

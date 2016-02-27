@@ -13,7 +13,8 @@ except ImportError:
 import requests
 
 from aspen import Response
-from liberapay.elsewhere import Platform
+
+from liberapay.elsewhere._base import Platform
 from liberapay.elsewhere._extractors import key, not_available
 
 

@@ -5,7 +5,7 @@ import json
 
 import mock
 
-from liberapay.elsewhere import UserInfo
+from liberapay.elsewhere._base import UserInfo
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.testing import Harness
 import liberapay.testing.elsewhere as user_info_examples
@@ -32,8 +32,8 @@ class TestElsewhere(Harness):
             assert len(r.user_id) > 0
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
-    @mock.patch('liberapay.elsewhere.Platform.get_user_self_info')
-    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
+    @mock.patch('liberapay.elsewhere._base.Platform.get_user_self_info')
+    @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_connect_success(self, gui, gusi, ft):
         alice = self.make_participant('alice', elsewhere='twitter')
 
@@ -50,8 +50,8 @@ class TestElsewhere(Harness):
         assert response.headers['Location'] == then
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
-    @mock.patch('liberapay.elsewhere.Platform.get_user_self_info')
-    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
+    @mock.patch('liberapay.elsewhere._base.Platform.get_user_self_info')
+    @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_connect_might_need_confirmation(self, gui, gusi, ft):
         alice = self.make_participant('alice')
         self.make_participant('bob')
@@ -94,7 +94,7 @@ class TestElsewhere(Harness):
             account = AccountElsewhere.upsert(platform.extract_user_info(user_info))
             assert isinstance(account, AccountElsewhere)
 
-    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
+    @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_pages(self, get_user_info):
         for platform in self.platforms:
             alice = UserInfo( platform=platform.name
@@ -106,7 +106,7 @@ class TestElsewhere(Harness):
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
 
-    @mock.patch('liberapay.elsewhere.Platform.get_user_info')
+    @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_page_shows_pledges(self, get_user_info):
         alice = self.make_elsewhere('github', 1, 'alice').participant
         bob = self.make_participant('bob', balance=100)

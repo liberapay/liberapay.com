@@ -39,6 +39,8 @@ BIRTHDAY = date(2015, 5, 22)
 CHARGE_MIN = Decimal("15.00")  # fee ≈ 3%
 CHARGE_TARGET = Decimal("92.00")  # fee ≈ 2%
 
+ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
+
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
 EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 

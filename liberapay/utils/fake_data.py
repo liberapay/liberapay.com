@@ -7,14 +7,11 @@ import sys
 from faker import Factory
 from psycopg2 import IntegrityError
 
-from liberapay import wireup
 from liberapay.billing.exchanges import record_exchange_result, _record_transfer_result
 from liberapay.constants import MAX_TIP, MIN_TIP
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models import community
-from liberapay.models import check_db
-from liberapay.wireup import accounts_elsewhere, env
 
 
 faker = Factory.create()
@@ -159,9 +156,11 @@ def fake_exchange(db, participant, amount, fee, timestamp):
     return e
 
 
-def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfers=5000, num_communities=20):
+def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_transfers=5000, num_communities=20):
     """Populate DB with fake data.
     """
+    db = website.db
+
     print("Making Participants")
     participants = []
     for i in range(num_participants):
@@ -179,12 +178,6 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
     participants.extend(teams)
 
     print("Making Elsewheres")
-    e = env()
-    class Website(object):
-        def asset(self, *a):
-            return ''
-    website = Website()
-    accounts_elsewhere(website, e)
     platforms = [p.name for p in website.platforms]
     for p in participants:
         #All participants get between 0 and 3 elsewheres
@@ -262,9 +255,9 @@ def populate_db(db, num_participants=100, num_tips=200, num_teams=5, num_transfe
 
 
 def main():
-    db = wireup.db(wireup.env())
-    populate_db(db)
-    check_db(db)
+    from liberapay.main import website
+    populate_db(website)
+    website.db.self_check()
 
 
 if __name__ == '__main__':

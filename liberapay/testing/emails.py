@@ -8,7 +8,7 @@ class EmailHarness(Harness):
 
     def setUp(self):
         super(EmailHarness, self).setUp()
-        self.mailer_patcher = mock.patch.object(Participant._mailer.messages, 'send')
+        self.mailer_patcher = mock.patch.object(self.client.website.mailer.messages, 'send')
         self.mailer = self.mailer_patcher.start()
         self.addCleanup(self.mailer_patcher.stop)
         sleep_patcher = mock.patch('liberapay.models.participant.sleep')

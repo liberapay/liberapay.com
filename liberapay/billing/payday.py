@@ -569,12 +569,10 @@ if __name__ == '__main__':  # pragma: no cover
     from liberapay import wireup
     from liberapay.billing.exchanges import sync_with_mangopay
 
-    env = wireup.env()
-    db = wireup.db(env)
-    Payday.db = db
-    wireup.billing(env)
+    r = wireup.full_algorithm.run()
+    db, env = r['db'], r['env']
 
-    if env.mangopay_client_id == 'liberapay':
+    if env.canonical_host == 'liberapay.com':
         log_dir = environ['OPENSHIFT_DATA_DIR']
         keep_log = True
     else:

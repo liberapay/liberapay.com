@@ -4,9 +4,9 @@ from urlparse import urlsplit
 
 import sass
 
-from liberapay.wireup import find_files
+from liberapay.utils import find_files
 
-output_style = b'compressed' if website.env.compress_assets else b'nested'
+output_style = b'compressed' if website.app_conf.compress_assets else b'nested'
 
 def url_sub(m):
     url = urlsplit(m.group(2))
@@ -22,7 +22,7 @@ url_re = re.compile(r"""\burl\((['"])(.+?)['"]\)""")
 css = ''
 for f in find_files(website.project_root+'/style/base/', '*.scss'):
     css += sass.compile(output_style=output_style, filename=f)
-if website.env.cache_static:
+if website.app_conf.cache_static:
     css = url_re.sub(url_sub, css)
 [---] via stdlib_format
 {css}

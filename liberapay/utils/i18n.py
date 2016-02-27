@@ -21,6 +21,7 @@ from babel.numbers import (
 import jinja2.ext
 
 from liberapay.exceptions import InvalidNumber
+from liberapay.website import website
 
 
 Money = namedtuple('Money', 'amount currency')
@@ -167,7 +168,7 @@ def get_text(context, loc, s, *a, **kw):
     return escape(s)
 
 
-def n_get_text(tell_sentry, state, loc, s, p, n, *a, **kw):
+def n_get_text(state, loc, s, p, n, *a, **kw):
     escape = state['escape']
     n = n or 0
     msg = loc.catalog.get((s, p))
@@ -176,7 +177,7 @@ def n_get_text(tell_sentry, state, loc, s, p, n, *a, **kw):
         try:
             s2 = msg.string[loc.catalog.plural_func(n)]
         except Exception as e:
-            tell_sentry(e, state, allow_reraise=True)
+            website.tell_sentry(e, state, allow_reraise=True)
     if not s2:
         loc = LOCALE_EN
         s2 = s if n == 1 else p
@@ -259,15 +260,15 @@ def set_up_i18n(website, request, state):
     accept_lang = request.headers.get("Accept-Language", "")
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
-    add_helpers_to_context(website.tell_sentry, state, loc)
+    add_helpers_to_context(state, loc)
 
 
-def add_helpers_to_context(tell_sentry, context, loc):
+def add_helpers_to_context(context, loc):
     context['escape'] = lambda s: s  # to be overriden by renderers
     context['locale'] = loc
     context['decimal_symbol'] = get_decimal_symbol(locale=loc)
     context['_'] = lambda s, *a, **kw: get_text(context, loc, s, *a, **kw)
-    context['ngettext'] = lambda *a, **kw: n_get_text(tell_sentry, context, loc, *a, **kw)
+    context['ngettext'] = lambda *a, **kw: n_get_text(context, loc, *a, **kw)
     context['Money'] = Money
     context['format_number'] = lambda *a: format_number(*a, locale=loc)
     context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)

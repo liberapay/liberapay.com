@@ -16,7 +16,7 @@ from liberapay.billing.exchanges import (
     record_exchange, record_exchange_result, _record_transfer_result
 )
 from liberapay.constants import SESSION
-from liberapay.elsewhere import UserInfo
+from liberapay.elsewhere._base import UserInfo
 from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
@@ -88,8 +88,12 @@ class Harness(unittest.TestCase):
     client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
     db = client.website.db
     platforms = client.website.platforms
-    tablenames = db.all("SELECT tablename FROM pg_tables "
-                        "WHERE schemaname='public'")
+    tablenames = db.all("""
+        SELECT tablename
+          FROM pg_tables
+         WHERE schemaname='public'
+           AND tablename NOT IN ('db_meta', 'app_conf')
+    """)
     seq = itertools.count(0)
 
 

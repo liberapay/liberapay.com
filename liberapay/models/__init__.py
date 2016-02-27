@@ -131,14 +131,16 @@ def run_migrations(db):
                SET value = '%s'::jsonb
              WHERE key = 'schema_version'
         """, (n,))
+    if db.one("SELECT count(*) FROM app_conf") == 0:
+        print('Running sql/app-conf-defaults.sql...')
+        db.run(open('sql/app-conf-defaults.sql').read())
     print('All done.' if n != v else 'No new migrations found.')
     return n - v
 
 
 if __name__ == '__main__':
     from liberapay import wireup
-    env = wireup.env()
-    db = wireup.db(env)
+    db = wireup.minimal_algorithm.run()['db']
     print('Checking DB...')
     db.self_check()
     r = run_migrations(db)
