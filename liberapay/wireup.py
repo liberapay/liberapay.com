@@ -17,6 +17,7 @@ from environment import Environment, is_yesish
 import mandrill
 import raven
 
+from liberapay import elsewhere
 import liberapay.billing.payday
 from liberapay.constants import CustomUndefined
 from liberapay.models.account_elsewhere import AccountElsewhere
@@ -237,7 +238,7 @@ class PlatformRegistry(object):
 
 def accounts_elsewhere(app_conf, asset):
     platforms = []
-    for cls in liberapay.elsewhere.CLASSES:
+    for cls in elsewhere.CLASSES:
         conf = {
             k[len(cls.name)+1:]: v
             for k, v in app_conf.__dict__.items() if k.startswith(cls.name+'_')
