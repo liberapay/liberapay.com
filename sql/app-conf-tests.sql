@@ -9,3 +9,5 @@ BEGIN
     PERFORM update_app_conf('update_homepage_every', '0'::jsonb);
 END;
 $$;
+
+DROP FUNCTION update_app_conf(text, jsonb);
