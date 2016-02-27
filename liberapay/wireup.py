@@ -251,6 +251,12 @@ def accounts_elsewhere(app_conf, asset):
         ))
 
     platforms = [p for p in platforms if p.api_secret]
+    order = """
+        twitter github gitlab facebook google bitbucket openstreetmap linuxfr
+    """.split()
+    n = len(order)
+    order = dict(zip(order, range(n)))
+    platforms = sorted(platforms, key=lambda p: (order.get(p.name, n), p.name))
     platforms = PlatformRegistry(platforms)
 
     friends_platforms = [p for p in platforms if getattr(p, 'api_friends_path', None)]
