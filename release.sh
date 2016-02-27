@@ -44,11 +44,6 @@ git pull
 prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
 version="$((prev + 1))"
 
-# Check that the environment contains all required variables
-export PYTHONPATH=.
-rhc ssh $APPNAME env | ./env/bin/honcho run -e /dev/stdin \
-    ./env/bin/python liberapay/wireup.py
-
 # Check for a branch.sql
 if [ -e sql/branch.sql ]; then
     if [ "$(git show :sql/branch.sql)" != "$(<sql/branch.sql)" ]; then
