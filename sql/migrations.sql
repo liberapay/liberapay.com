@@ -48,3 +48,6 @@ UPDATE paydays p
             WHERE payday_id = p.id
               AND amount < 0
        );
+
+-- migration #4
+CREATE TABLE app_conf (key text PRIMARY KEY, value jsonb);
