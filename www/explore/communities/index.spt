@@ -14,6 +14,9 @@ subhead = _("Communities")
 % extends "templates/explore.html"
 
 % block content
+
+<p><a class="btn btn-primary pull-right" href="/for/new">{{ _("Start a new community") }}</a></p>
+
 <p>
     {{ ngettext("There is {n} community on Liberapay.",
                 "There are {n} communities on Liberapay.",
@@ -30,9 +33,7 @@ subhead = _("Communities")
     </div>
 </form>
 
-<p><a class="btn btn-primary" href="/for/new">{{ _("Start a new community") }}</a></p>
-
-<h3>{{ _("Popular Communities") }}</h3>
+<h3 class="banderole success">{{ _("Popular Communities") }}</h3>
 <ul class="communities memberships">
     % for community in communities[:20]
     <li>
