@@ -30,6 +30,10 @@ Liberapay.init = function() {
     $('.notification .close').click(function(){ $(this).parent().fadeOut() });
 
     Liberapay.lookup.init();
+
+    $('div[href]').css('cursor', 'pointer').click(function() {
+        location.href = this.getAttribute('href');
+    });
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

@@ -8,6 +8,7 @@ title = _("Donate to {0}", participant.username)
 % extends "templates/base.html"
 
 % from 'templates/elsewhere.html' import account_elsewhere with context
+% from 'templates/profile-goal-bar.html' import profile_goal_bar with context
 % from 'templates/your-tip.html' import tip_form with context
 
 % block head_early
@@ -23,7 +24,7 @@ title = _("Donate to {0}", participant.username)
 <div class="col-md-6 col-md-offset-3">
     <h2 class="text-primary">{{ title }}</h2>
 
-    % include "templates/profile-box.html"
+    {{ profile_goal_bar(participant) }}
 
     {{ tip_form(tippee=participant) }}
 

@@ -1,51 +1,115 @@
-% set CLASSES = ('info', 'success')
-% set username = participant.username
-% set giving = participant.giving
-% set receiving = participant.receiving
-% set goal = participant.goal
-% set giving_str = Money(giving, 'EUR')
-% set receiving_str = Money(receiving, 'EUR')
-% set goal_str = goal and Money(goal, 'EUR')
-% set tip = user.get_tip_to(participant)
+% from 'templates/avatar-url.html' import avatar_img with context
+% from "templates/profile-goal-bar.html" import profile_goal_bar with context
 
-% if participant.hide_giving or participant.hide_receiving
-    <p>{{ _("{0} doesn't publish how much they give and receive.", username) }}</p>
-% elif goal == None
-    % if participant.kind != 'group'
-        <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
-    % else
-        <p>{{ _("{0} receives {1} per week.", username, receiving_str, giving_str) }}</p>
-    % endif
-% elif goal > 0
-    <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}</p>
-    % if receiving == 0
-        <p>{{ _("Be the first to contribute!") }}</p>
-    % else
-        {{ _("Current income: {0}", receiving_str) }}
-        % set progress_cls = CLASSES[min(int(receiving / goal), 1)]
-        <div class="progress profile-goal-bar">
-            <div class="progress-bar progress-bar-{{ progress_cls }}"
-                 style="min-width: 2px; width: {{ min(receiving / goal * 100, 100) }}%;">{{
-                _("Mission accomplished!") if receiving >= goal else ''
-            }}</div>
+% macro profile_box_full(participant)
+    % call profile_box(participant)
+        {{ profile_box_full_col2(participant) }}
+    % endcall
+% endmacro
+
+% macro profile_box_embedded(participant, nmembers=None)
+    % call profile_box(participant, embedded=True)
+        {{ profile_box_embedded_col2(participant, nmembers=nmembers) }}
+    % endcall
+% endmacro
+
+% macro profile_box(participant, embedded=False)
+    <div class="panel panel-default profile-box"
+         {% if embedded %} href="{{ participant.path('') }}" {% endif %}>
+        <div class="panel-body row">
+            <div class="avatar col-xs-3">
+                % if embedded
+                    <a href="{{ participant.path('') }}">{{
+                        avatar_img(participant)
+                    }}</a>
+                % else
+                    {{ avatar_img(participant) }}
+                % endif
+
+                % if edit
+                    % if participant.kind == 'group'
+                        {{ _("Sorry, teams can't change their avatar yet.") }}
+                    % else
+                        <a class="btn btn-default" href="https://gravatar.com/"
+                           target="_blank">{{ _("Modify your Gravatar") }}</a>
+                    % endif
+                % elif participant.join_time and not embedded
+                <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
+                % endif
+                % if participant.status == 'closed'
+                <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
+                % endif
+            </div>
+
+            <div class="col-xs-9">
+                {{ caller() }}
+            </div>
         </div>
-    % endif
-% else
-    <p>{{ _("{0} gives {1} per week.", username, giving_str) }}</p>
-% endif
+    </div>
+% endmacro
 
-% if participant.accepts_tips
-    % set donate_path = participant.path('donate')
-    % if request.path.raw.startswith(donate_path)
-    % elif tip['amount']
-        <p>{{ _("You give {0} per week to {1}.", Money(tip['amount'], 'EUR'), username) }}</p>
-        % if not on_donate
-            <a class="btn btn-default" href="{{ donate_path }}">{{ _("Modify") }}</a>
+% macro profile_box_full_col2(participant)
+    % set username = participant.username
+    % set giving = participant.giving
+    % set receiving = participant.receiving
+    % set goal = participant.goal
+    % set giving_str = Money(giving, 'EUR')
+    % set receiving_str = Money(receiving, 'EUR')
+    % set goal_str = goal and Money(goal, 'EUR')
+
+    % if participant.hide_giving or participant.hide_receiving
+        <p>{{ _("{0} doesn't publish how much they give and receive.", username) }}</p>
+    % elif goal == None
+        % if participant.kind != 'group'
+            <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
+        % else
+            <p>{{ _("{0} receives {1} per week.", username, receiving_str, giving_str) }}</p>
+        % endif
+    % elif goal > 0
+        % if receiving == 0
+            <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}</p>
+            <p>{{ _("Be the first to contribute!") }}</p>
+        % else
+            <h1>{{ username }}</h1>
+            {{ profile_goal_bar(participant) }}
         % endif
     % else
-        <a class="btn btn-primary {{ 'btn-lg' if receiving < goal else '' }}"
-           href="{{ donate_path }}">{{ _("Donate") }}</a>
+        <p>{{ _("{0} gives {1} per week.", username, giving_str) }}</p>
     % endif
-% else
-    <p>{{ _("{0} doesn't accept donations", username) }}</p>
-% endif
+
+    % if participant.accepts_tips
+        % set tip = user.get_tip_to(participant)
+        % set donate_path = participant.path('donate')
+        % if tip['amount']
+            <a class="btn btn-default" href="{{ donate_path }}">{{
+                _("Modify your donation ({0})", Money(tip['amount'], 'EUR'))
+            }}</a>
+        % else
+            <a class="btn btn-primary {{ 'btn-lg' if receiving < goal else '' }}"
+               href="{{ donate_path }}">{{ _("Donate") }}</a>
+        % endif
+    % else
+        <p>{{ _("This user doesn't accept donations.") }}</p>
+    % endif
+% endmacro
+
+% macro profile_box_embedded_col2(participant, nmembers=None)
+    % set username = participant.username
+    % set receiving = participant.receiving
+    % set goal = participant.goal
+
+    <h4><a href="/{{ username }}/">{{ username }}</a></h4>
+
+    % if participant.hide_giving or participant.hide_receiving
+    % elif goal == None
+        <p>{{ _("Income: {0}/week", Money(receiving, 'EUR')) }}</p>
+    % elif goal > 0
+        {{ profile_goal_bar(participant) }}
+    % else
+        <p>{{ _("This user doesn't accept donations.") }}</p>
+    % endif
+
+    % if nmembers
+        {{ ngettext("{n} member", "{n} members", nmembers) }}
+    % endif
+% endmacro

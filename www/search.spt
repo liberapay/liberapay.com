@@ -152,15 +152,5 @@ if query:
     % include "templates/jump.html"
 
 % endblock
-
-% block scripts
-<script>
-    $(document).ready(function(){
-        $('div.search-result').css('cursor', 'pointer').click(function(){
-            window.location = $(this).attr('href');
-        });
-    });
-</script>
-% endblock
 [---] application/json via json_dump
 results

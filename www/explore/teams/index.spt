@@ -5,15 +5,7 @@
 teams = website.db.all("""
 
     SELECT t.*
-         , p.username AS name
-         , p.receiving
-         , p.goal
-         , p.receiving / t.nmembers AS euros_per_member
-         , CASE p.goal
-           WHEN NULL THEN NULL
-           WHEN 0 THEN NULL
-           ELSE ((p.receiving / p.goal) * 100)::int
-            END                     AS pfunded
+         , p.*::participants AS participant
       FROM ( SELECT team AS id, count(member) AS nmembers
                FROM current_takes
            GROUP BY team
@@ -22,7 +14,7 @@ teams = website.db.all("""
         ON p.id = t.id
      WHERE (p.goal >= 0 OR p.goal IS NULL)
        AND NOT p.hide_from_search
-  ORDER BY euros_per_member DESC, nmembers ASC
+  ORDER BY receiving DESC, join_time DESC
 
 """)
 nteams = len(teams)
@@ -30,28 +22,22 @@ title = _("Explore")
 subhead = _("Teams")
 
 [-----------------------------] text/html
+% from 'templates/profile-box.html' import profile_box_embedded with context
+
 % extends "templates/explore.html"
 
 % block content
-<h3>{{ _("Teams (N={0})", nteams) }}</h3>
-<table class="table">
-    <tr>
-        <th>{{ _("Team Name") }}</th>
-        <th class="figure">{{ _("Receiving (€)") }}</th>
-        <th class="figure">{{ _("Goal (€)") }}</th>
-        <th class="figure">{{ _("% Funded") }}</th>
-        <th class="figure">{{ _("Members") }}</th>
-        <th class="figure">{{ _("Receiving{0} Per Member (€)", "<br>"|safe) }}</th>
-    </tr>
+<p>{{ ngettext(
+    "There is {n} team on Liberapay:",
+    "There are {n} teams on Liberapay:",
+    nteams
+) }}</p>
+
+<div class="row">
     % for team in teams
-    <tr>
-        <td class=""><a href="/{{ team.name }}/">{{ team.name }}</a></td>
-        <td class="figure">{{ format_decimal(team.receiving, '#,##0.00') }}</td>
-        <td class="figure">{{ team.goal or '&mdash;'|safe }}</td>
-        <td class="figure">{{ team.pfunded if team.pfunded else '&mdash;'|safe }}</td>
-        <td class="figure">{{ team.nmembers }}</td>
-        <td class="figure">{{ format_decimal(team.euros_per_member, '#,##0.00') }}</td>
-    </tr>
+    <div class="col-md-6">
+        {{ profile_box_embedded(team.participant, nmembers=team.nmembers) }}
+    </div>
     % endfor
-</table>
+</div>
 % endblock
