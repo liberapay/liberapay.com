@@ -13,7 +13,7 @@ new_members = query_cache.all("""
      WHERE status = 'active'
        AND kind <> 'community'
   ORDER BY join_time DESC NULLS LAST
-     LIMIT 25
+     LIMIT 10
 """)
 
 [---]
