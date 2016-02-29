@@ -31,8 +31,6 @@ new_members = query_cache.all("""
 % endblock
 
 % block before_container
-
-% if user.ANON
 <div class="jumbotron" style="background: #eef0ff; text-align: center;">
 <div class="container">
     <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
@@ -42,51 +40,8 @@ new_members = query_cache.all("""
         website.gnusers, website.gmonthly_volume,
         to_age(constants.LAUNCH_TIME)
     ).replace('\n', '<br>'|safe) }}</p>
-    <p><a class="btn btn-primary btn-lg" href="/sign-in">{{ _("Join us") }}</a></p>
-    <hr>
-    <p>{{ _("Why use Liberapay?") }}</p>
-    <dl class="row homepage-pitch">
-        <div class="col-sm-4">
-            <dt>
-                <span class="glyphicon glyphicon-flash" aria-hidden="true"></span><br>
-                {{ _("It's easy") }}
-            </dt>
-            <dd>{{ _(
-                "Liberapay makes it easy to donate and receive money "
-                "recurrently, you'll only need a few minutes to get started. "
-                "No Paypal account needed."
-            ) }}</dd>
-        </div>
-        <div class="col-sm-4">
-            <dt>
-                <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span><br>
-                {{ _("It's economical") }}
-            </dt>
-            <dd>{{ _(
-                "We don't take a cut on your donations, and our {0}payment "
-                "processor's fees{1} are among the lowest in the world.",
-                '<a href="/about/faq#fees">'|safe,
-                '</a>'|safe,
-            ) }}</dd>
-        </div>
-        <div class="col-sm-4">
-            <dt>
-                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><br>
-                {{ _("It's open") }}
-            </dt>
-            <dd>{{ _(
-                "Liberapay is run transparently by a {1}non-profit organization{0}, "
-                "its {2}source code{0} is public.",
-                '</a>'|safe,
-                '<a href="https://github.com/liberapay/liberapay.org">'|safe,
-                '<a href="https://github.com/liberapay/liberapay.com">'|safe,
-            ) }}</dd>
-        </div>
-    </dl>
 </div>
 </div>
-% endif
-
 % endblock
 
 % block content
@@ -157,6 +112,48 @@ new_members = query_cache.all("""
             % endif
 
         % endif
+    </div>
+
+    <div class="col-xs-12">
+        <h2 class="banderole info">{{ _("Why use Liberapay?") }}</h2>
+        <dl class="row homepage-pitch">
+            <div class="col-sm-4">
+                <dt>
+                    <span class="glyphicon glyphicon-flash" aria-hidden="true"></span><br>
+                    {{ _("It's easy") }}
+                </dt>
+                <dd>{{ _(
+                    "Liberapay makes it easy to donate and receive money "
+                    "recurrently, you'll only need a few minutes to get started. "
+                    "No Paypal account needed."
+                ) }}</dd>
+            </div>
+            <div class="col-sm-4">
+                <dt>
+                    <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span><br>
+                    {{ _("It's economical") }}
+                </dt>
+                <dd>{{ _(
+                    "We don't take a cut on your donations, and our {0}payment "
+                    "processor's fees{1} are among the lowest in the world.",
+                    '<a href="/about/faq#fees">'|safe,
+                    '</a>'|safe,
+                ) }}</dd>
+            </div>
+            <div class="col-sm-4">
+                <dt>
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><br>
+                    {{ _("It's open") }}
+                </dt>
+                <dd>{{ _(
+                    "Liberapay is run transparently by a {1}non-profit organization{0}, "
+                    "its {2}source code{0} is public.",
+                    '</a>'|safe,
+                    '<a href="https://github.com/liberapay/liberapay.org">'|safe,
+                    '<a href="https://github.com/liberapay/liberapay.com">'|safe,
+                ) }}</dd>
+            </div>
+        </dl>
     </div>
 
     <div class="col-xs-12">
