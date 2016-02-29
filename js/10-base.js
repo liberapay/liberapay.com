@@ -34,6 +34,8 @@ Liberapay.init = function() {
     $('div[href]').css('cursor', 'pointer').click(function() {
         location.href = this.getAttribute('href');
     });
+
+    $('.navbar .dropdown-hover').removeClass('dropdown-hover');
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
