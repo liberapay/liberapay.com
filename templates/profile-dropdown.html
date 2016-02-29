@@ -1,6 +1,9 @@
+% from 'templates/avatar-url.html' import avatar_img with context
+
 <div class="dropdown dropdown-hover">
 <button class="dropdown-toggle navbar-btn" type="button"
         data-toggle="dropdown" aria-expanded="true">
+    {{ avatar_img(user) }}
     {{ user.username }}
     <span class="caret"></span>
 </button>
