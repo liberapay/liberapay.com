@@ -27,9 +27,9 @@ langs = participant.get_statement_langs()
 
 % block content
     % if statement
-        <h3 id="statement">{{ _("Statement") }}
+        <h3 class="banderole info" id="statement">{{ _("Statement") }}
         % if len(langs) > 1
-        <span class="dropdown-hover" style="display: inline-block; position: relative;">
+        <span class="dropdown-hover pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
                 {{ locale.languages_2[lang] }} <span class="caret"></span>
             </button>

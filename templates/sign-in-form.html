@@ -46,7 +46,7 @@
 
     % include "templates/form-repost.html"
 
-    <h2>{{ _("Log in") }}</h2>
+    <h2 class="banderole success">{{ _("Log in") }}</h2>
 
     % if request.log_in_failed
         <p class="alert alert-error">{{ _("Bad username or password") }}</p>
@@ -77,7 +77,7 @@
 </div>
 <form class="col-md-6" action="" method="POST">
 
-    <h2>{{ _("Create an account") }}</h2>
+    <h2 class="banderole info">{{ _("Create an account") }}</h2>
 
     % include "templates/form-repost.html"
 

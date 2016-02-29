@@ -15,6 +15,7 @@
         {{ profile_box_full(participant) }}
     % endblock
 
+    % if not edit
     <div class="profile-share">
         <span>{{ _("Share:") }}</span>
         <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}" target="_blank">
@@ -27,6 +28,7 @@
             <i class="fa fa-lg fa-google-plus"></i>
         </a>
     </div>
+    % endif
 
     % block subnav
         % set show_income = not participant.hide_receiving and participant.accepts_tips

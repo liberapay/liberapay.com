@@ -114,7 +114,7 @@ title = participant.username
 
 % block content
 
-        <h3 id="statement">{{ _("Statement") }}</h3>
+        <h3 class="banderole info" id="statement">{{ _("Statement") }}</h3>
 
         % if request.body.get('preview') == 'true'
 

@@ -3,7 +3,7 @@
 
 % set accounts = participant.get_accounts_elsewhere()
 % if accounts or edit
-<h3>{{ _("Accounts Elsewhere") }}</h3>
+<h3 class="banderole default">{{ _("Accounts Elsewhere") }}</h3>
 <div class="accounts">
     % for platform in website.platforms
         % if accounts[platform.name] or edit
