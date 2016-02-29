@@ -570,13 +570,10 @@ class Payday(object):
 def main():
     from os import environ
 
-    from liberapay import wireup
     from liberapay.billing.exchanges import sync_with_mangopay
+    from liberapay.main import website
 
-    r = wireup.full_algorithm.run()
-    db, env = r['db'], r['env']
-
-    if env.canonical_host == 'liberapay.com':
+    if website.env.canonical_host == 'liberapay.com':
         log_dir = environ['OPENSHIFT_DATA_DIR']
         keep_log = True
     else:
@@ -584,7 +581,7 @@ def main():
         keep_log = False
 
     try:
-        sync_with_mangopay(db)
+        sync_with_mangopay(website.db)
         Payday.start().run(log_dir, keep_log)
     except KeyboardInterrupt:
         pass
