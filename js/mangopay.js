@@ -271,6 +271,9 @@ var mangoPay = {
              */
             _validate: function(cvv, cardType) {
 
+               if(cardType === "MAESTRO") {
+                   return true;
+               }
                cvv = cvv ? cvv.trim() : "";
                cardType = cardType ? cardType.trim() : "";
 
@@ -465,7 +468,7 @@ var mangoPay = {
 
             // Put together input data as string
             var parameters = "";
-            for (key in settings.data) {
+            for (var key in settings.data) {
                 parameters += (parameters.length > 0 ? '&' : '') + key + "=" + encodeURIComponent(settings.data[key]);
             }
 
@@ -516,7 +519,14 @@ var mangoPay = {
             }
 
             // Send data
-            xmlhttp.send(settings.type === "post" ? parameters : null);
+            try {
+                xmlhttp.send(settings.type === "post" ? parameters : null);
+            } catch (e) {
+                if (settings.crossDomain)
+                    return settings.error({ResultCode: "1000000", ResultMessage: "CORS_FAIL"});
+                else
+                    return settings.error({ResultCode: "1000001", ResultMessage: "XHR_FAIL"});
+            }
 
         },
 
