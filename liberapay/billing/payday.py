@@ -38,17 +38,22 @@ class Payday(object):
         """
         try:
             d = cls.db.one("""
-                INSERT INTO paydays DEFAULT VALUES
+                INSERT INTO paydays (id) VALUES (COALESCE((
+                     SELECT id
+                       FROM paydays
+                   ORDER BY id DESC
+                      LIMIT 1
+                ), 0) + 1)
                 RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
             """, back_as=dict)
-            log("Starting a new payday.")
+            log("Starting payday #%s." % d['id'])
         except IntegrityError:  # Collision, we have a Payday already.
             d = cls.db.one("""
                 SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
                   FROM paydays
                  WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
             """, back_as=dict)
-            log("Picking up with an existing payday.")
+            log("Picking up payday #%s." % d['id'])
 
         d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
 
@@ -235,11 +240,11 @@ class Payday(object):
                 UPDATE payday_participants
                    SET new_balance = (new_balance - $3)
                  WHERE id = $1;
-                IF (NOT FOUND) THEN RAISE 'tipper not found'; END IF;
+                IF (NOT FOUND) THEN RAISE 'tipper %% not found', $1; END IF;
                 UPDATE payday_participants
                    SET new_balance = (new_balance + $3)
                  WHERE id = $2;
-                IF (NOT FOUND) THEN RAISE 'tippee not found'; END IF;
+                IF (NOT FOUND) THEN RAISE 'tippee %% not found', $2; END IF;
                 INSERT INTO payday_transfers
                             (tipper, tippee, amount, context, team)
                      VALUES ($1, $2, $3, $4, $5);
@@ -306,16 +311,16 @@ class Payday(object):
             DECLARE
                 total_income numeric(35,2);
                 total_takes numeric(35,2);
-                ratio numeric;
+                takes_ratio numeric;
+                tips_ratio numeric;
                 tip record;
                 take record;
-                amount numeric(35,2);
+                transfer_amount numeric(35,2);
                 our_tips CURSOR FOR
-                    SELECT t.id, t.tipper, (round_up(t.amount * ratio, 2)) AS amount
+                    SELECT t.id, t.tipper, (round_up(t.amount * tips_ratio, 2)) AS amount
                       FROM payday_tips t
                       JOIN payday_participants p ON p.id = t.tipper
                      WHERE t.tippee = team_id;
-                our_takes refcursor;
             BEGIN
                 total_income := (
                     SELECT sum(t.amount)
@@ -330,27 +335,26 @@ class Payday(object):
                      WHERE t.team = team_id
                 );
                 IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
-                ratio := min(total_income / total_takes, 1::numeric);
+                takes_ratio := min(total_income / total_takes, 1::numeric);
+                tips_ratio := min(total_takes / total_income, 1::numeric);
 
-                OPEN our_takes FOR
-                    SELECT t.member, (round_up(t.amount * ratio, 2)) AS amount
+                CREATE TEMPORARY TABLE our_takes ON COMMIT DROP AS
+                    SELECT t.member, (round_up(t.amount * takes_ratio, 2)) AS amount
                       FROM payday_takes t
-                     WHERE t.team = team_id
-                  ORDER BY t.member;
-                FETCH our_takes INTO take;
+                     WHERE t.team = team_id;
+
                 FOR tip IN our_tips LOOP
-                    LOOP
-                        IF (take.amount = 0) THEN
-                            FETCH our_takes INTO take;
-                            IF (take IS NULL) THEN RETURN; END IF;
+                    FOR take IN (SELECT * FROM our_takes ORDER BY member) LOOP
+                        IF (take.amount = 0 OR tip.tipper = take.member) THEN
+                            CONTINUE;
                         END IF;
-                        amount := min(tip.amount, take.amount);
-                        IF (tip.tipper <> take.member) THEN
-                            UPDATE payday_tips SET is_funded = true WHERE id = tip.id;
-                            EXECUTE transfer(tip.tipper, take.member, amount, 'take', team_id);
-                        END IF;
-                        tip.amount := tip.amount - amount;
-                        take.amount := take.amount - amount;
+                        transfer_amount := min(tip.amount, take.amount);
+                        UPDATE payday_tips SET is_funded = true WHERE id = tip.id;
+                        EXECUTE transfer(tip.tipper, take.member, transfer_amount, 'take', team_id);
+                        tip.amount := tip.amount - transfer_amount;
+                        UPDATE our_takes t
+                           SET amount = take.amount - transfer_amount
+                         WHERE t.member = take.member;
                         EXIT WHEN tip.amount = 0;
                     END LOOP;
                 END LOOP;
@@ -563,7 +567,7 @@ class Payday(object):
             p.notify('low_balance')
 
 
-if __name__ == '__main__':  # pragma: no cover
+def main():
     from os import environ
 
     from liberapay import wireup
@@ -587,3 +591,7 @@ if __name__ == '__main__':  # pragma: no cover
     except:
         import traceback
         traceback.print_exc()
+
+
+if __name__ == '__main__':  # pragma: no cover
+    main()

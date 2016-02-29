@@ -1,6 +1,10 @@
+from __future__ import print_function
+
 from contextlib import contextmanager
+import re
 
 from postgres import Postgres
+from postgres.cursors import SimpleCursorBase
 
 
 @contextmanager
@@ -136,6 +140,27 @@ def run_migrations(db):
         db.run(open('sql/app-conf-defaults.sql').read())
     print('All done.' if n != v else 'No new migrations found.')
     return n - v
+
+
+def show_table(db, table):
+    assert re.match(r'^\w+$', table)
+    print('\n{:=^80}'.format(table))
+    data = db.all('select * from '+table)
+    if len(data) == 0:
+        return
+    widths = list(len(k) for k in data[0]._fields)
+    for row in data:
+        for i, v in enumerate(row):
+            widths[i] = max(widths[i], len(str(v)))
+    for k, w in zip(data[0]._fields, widths):
+        print("{0:{width}}".format(str(k), width=w), end=' | ')
+    print()
+    for row in data:
+        for v, w in zip(row, widths):
+            print("{0:{width}}".format(str(v), width=w), end=' | ')
+        print()
+
+SimpleCursorBase.show_table = show_table
 
 
 if __name__ == '__main__':

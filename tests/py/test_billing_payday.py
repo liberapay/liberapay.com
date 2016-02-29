@@ -5,7 +5,7 @@ import os
 
 import mock
 
-from liberapay.billing.payday import NoPayday, Payday
+from liberapay.billing.payday import main, NoPayday, Payday
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
@@ -13,6 +13,13 @@ from liberapay.testing.emails import EmailHarness
 
 
 class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
+
+    def test_payday_id_is_serial(self):
+        for i in range(1, 4):
+            self.db.run("SELECT nextval('paydays_id_seq')")
+            main()
+            id = self.db.one("SELECT id FROM paydays ORDER BY id DESC LIMIT 1")
+            assert id == i
 
     def test_payday_moves_money(self):
         self.janet.set_tip_to(self.homer, '6.00')  # under $10!
@@ -127,7 +134,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             participants = get_participants(cursor)
 
         expected_logging_call_args = [
-            ('Starting a new payday.'),
+            ('Starting payday #1.'),
             ('Payday started at {}.'.format(ts_start)),
             ('Prepared the DB.'),
         ]
@@ -153,7 +160,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert participants == second_participants
 
         expected_logging_call_args = [
-            ('Picking up with an existing payday.'),
+            ('Picking up payday #1.'),
             ('Payday started at {}.'.format(second_ts_start)),
             ('Prepared the DB.'),
         ]
@@ -277,22 +284,72 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             else:
                 assert p.balance == 0
 
-    def test_mutual_tipping_through_teams(self):
+    def test_underfunded_team(self):
         self.clear_tables()
         team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=8)
-        alice.set_tip_to(team, D('0.25'))
+        alice = self.make_participant('alice')
         team.set_take_for(alice, D('1.00'), alice)
-        bob = self.make_participant('bob', balance=10)
-        bob.set_tip_to(team, D('3.17'))
-        team.set_take_for(bob, D('0.48'), bob)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('1.00'), bob)
+        charlie = self.make_participant('charlie', balance=1000)
+        charlie.set_tip_to(team, D('0.26'))
 
         Payday.start().run()
 
         d = dict(self.db.all("SELECT username, balance FROM participants"))
         expected = {
-            'alice': D('8.75'),  # 8 - 0.25 + 1.00
-            'bob': D('9.25'),  # 10 - 1.00 + 0.25
+            'alice': D('0.13'),
+            'bob': D('0.13'),
+            'charlie': D('999.74'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+    def test_wellfunded_team(self):
+        """
+        This tests two properties:
+        - takes are maximums
+        - donors all pay their share, the first donor doesn't pay everything
+        """
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, D('0.79'), alice)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('0.21'), bob)
+        charlie = self.make_participant('charlie', balance=10)
+        charlie.set_tip_to(team, D('5.00'))
+        dan = self.make_participant('dan', balance=10)
+        dan.set_tip_to(team, D('5.00'))
+
+        Payday.start().run()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79'),
+            'bob': D('0.21'),
+            'charlie': D('9.5'),
+            'dan': D('9.5'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+    def test_mutual_tipping_through_teams(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice', balance=8)
+        alice.set_tip_to(team, D('2.00'))
+        team.set_take_for(alice, D('0.25'), alice)
+        bob = self.make_participant('bob', balance=10)
+        bob.set_tip_to(team, D('2.00'))
+        team.set_take_for(bob, D('0.75'), bob)
+
+        Payday.start().run()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('7.75'),  # 8 - 0.50 + 0.25
+            'bob': D('10.25'),  # 10 - 0.25 + 0.50
             'team': D('0.00'),
         }
         assert d == expected
