@@ -20,6 +20,7 @@
     </script>
 </head>
 % from 'templates/nav.html' import icon_span, nav, nav_about, nav_explore with context
+% from 'templates/search.html' import search_form with context
 <body>
 
 <div id="wrapper">
@@ -37,6 +38,9 @@
                     }),
                     ('/search', _('Search'), {
                         'icon': 'glyphicon glyphicon-search',
+                        'form': True,
+                        'role': 'search',
+                        'subnav': search_form(),
                     }),
                     ('/about/', _('About'), {
                         'icon': 'glyphicon glyphicon-question-sign',

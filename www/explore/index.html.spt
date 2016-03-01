@@ -14,12 +14,14 @@ top_communities = query_cache.all("""
 title = _("Explore")
 
 [-----------------------------]
+% from 'templates/search.html' import search_form with context
+
 % extends "templates/explore.html"
 
 % block content
 
     <p>{{ _("Whose work do you appreciate? See if they're on Liberapay:") }}</p>
-    % include "templates/search-box.html"
+    {{ search_form() }}
 
     <p>{{ _("You can also pledge to people who haven't joined Liberapay yet:") }}</p>
     % include "templates/jump.html"

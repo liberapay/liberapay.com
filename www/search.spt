@@ -72,6 +72,7 @@ if query:
 [---] text/html
 % extends "templates/base.html"
 % from 'templates/avatar-url.html' import avatar_url, avatar_img with context
+% from 'templates/search.html' import search_form with context
 % block content
 
     % set usernames = results.get('usernames')
@@ -84,7 +85,7 @@ if query:
         ) }}</p>
     % endif
 
-    % include "templates/search-box.html"
+    {{ search_form(autofocus=True) }}
 
     <div class="row">
     % if usernames

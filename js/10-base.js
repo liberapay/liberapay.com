@@ -36,6 +36,13 @@ Liberapay.init = function() {
     });
 
     $('.navbar .dropdown-hover').removeClass('dropdown-hover');
+
+    $('.dropdown-toggle-form').click(function() {
+        var $this = $(this);
+        setTimeout(function() {
+            $this.siblings('.dropdown-menu').find('input').eq(0).focus();
+        }, 10);
+    });
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

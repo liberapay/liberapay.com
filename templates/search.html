@@ -1,0 +1,16 @@
+% macro search_form(autofocus=False)
+    <form action="/search" class="search" method="get">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control"
+                       style="width: 250px;"
+                       placeholder="{{ _('Search Liberapay') }}"
+                       value="{{ query or '' }}"
+                       {{ 'autofocus' if autofocus else '' }} />
+                <div class="input-group-btn">
+                    <button class="btn btn-default">{{ _("Go") }}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+% endmacro
