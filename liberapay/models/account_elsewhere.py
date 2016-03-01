@@ -242,6 +242,8 @@ def get_account_elsewhere(website, state, api_lookup=True):
         uid = uid[1:]
     else:
         key = 'user_name'
+        if uid[:1] == '@':
+            uid = uid[1:]
     try:
         account = AccountElsewhere._from_thing(key, platform.name, uid)
     except UnknownAccountElsewhere:

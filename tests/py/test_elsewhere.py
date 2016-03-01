@@ -116,6 +116,19 @@ class TestElsewhere(Harness):
         r = self.client.GET('/on/github/alice/')
         assert str(amount) in r.body, r.body.decode('utf8')
 
+    @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
+    def test_user_page_doesnt_fail_on_at_sign(self, get_user_info):
+        def f(k, v, *a):
+            if (k, v) == ('user_name', 'alice'):
+                return UserInfo(
+                    platform='twitter', user_id='0', user_name='alice',
+                    is_team=False
+                )
+            raise Exception
+        get_user_info.side_effect = f
+        response = self.client.GET('/on/twitter/@alice/')
+        assert response.code == 200
+
     def test_user_pages_not_found(self):
         user_name = 'adhsjakdjsdkjsajdhksda'
         error = "There doesn't seem to be a user named %s on %s."
