@@ -19,7 +19,7 @@
         }
     </script>
 </head>
-% from 'templates/nav.html' import nav with context
+% from 'templates/nav.html' import nav, nav_about with context
 <body>
 
 <div id="wrapper">
@@ -30,7 +30,11 @@
                     <a class="navbar-brand" href="/">
                         <img src="{{ website.asset('liberapay/icon.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
-                {{ nav([('/explore/', _('Explore')), ('/search', _('Search')), ('/about/', _('About'))]) }}
+                {{ nav([
+                    ('/explore/', _('Explore')),
+                    ('/search', _('Search')),
+                    ('/about/', _('About'), nav_about()),
+                ]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
                 <li>{% include "templates/language-dropdown.html" %}</li>

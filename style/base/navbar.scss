@@ -15,7 +15,7 @@
     border: none;
 
     .navbar-nav li {
-        & > a, .navbar-btn, .dropdown a {
+        & > a, .navbar-btn {
             background: transparent;
             border: none;
             color: #ddd;
@@ -31,7 +31,7 @@
             }
         }
         &.active {
-            & > a, .navbar-btn, .dropdown a {
+            & > a, .navbar-btn {
                 background: #444;
                 color: #eee;
                 &.navbar-warning {

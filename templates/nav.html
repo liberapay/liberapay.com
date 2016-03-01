@@ -1,6 +1,33 @@
 % macro nav(items, base='')
-    % set current = request.path.raw[len(base):].lstrip('/').split('/', 1)[0]
-    % for slug, name in items
-        <li{% if slug.strip('/') == current %} class="active"{% endif %}><a href="{{ base }}{{ slug }}">{{ name }}</a></li>
+    % set current = request.path.raw.startswith(base) and request.path.raw[len(base):].lstrip('/').split('/', 1)[0]
+    % for item in items
+        % set slug = item[0]
+        <li{% if slug.strip('/') == current %} class="active"{% endif %}>
+            % if item[2]
+                <div class="dropdown dropdown-hover">
+                    <button class="dropdown-toggle navbar-btn" type="button"
+                            data-toggle="dropdown" aria-expanded="true">
+                        {{ item[1] }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">{{ item[2] }}</ul>
+                </div>
+            % else
+                <a href="{{ base }}{{ slug }}">{{ item[1] }}</a>
+            % endif
+        </li>
     % endfor
+% endmacro
+
+% macro nav_about()
+    {{ nav([
+        ('/', _('Introduction')),
+        ('/faq', _('FAQ')),
+        ('/money', _('Money')),
+        ('/teams', _('Teams')),
+        ('/stats', _('Stats')),
+        ('/legal', _('Legal')),
+        ('/contact', _('Contact')),
+        ('/security', _('Security'))
+    ], base='/about') }}
 % endmacro

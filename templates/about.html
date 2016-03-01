@@ -1,16 +1,6 @@
 % extends "templates/base.html"
 {% block heading %}{% endblock %}
 % block subnav
-    {% set pages = [
-        ('/', _('Introduction')),
-        ('/faq', _('FAQ')),
-        ('/money', _('Money')),
-        ('/teams', _('Teams')),
-        ('/stats', _('Stats')),
-        ('/legal', _('Legal')),
-        ('/contact', _('Contact')),
-        ('/security', _('Security'))
-    ] %}
-    % from "templates/nav.html" import nav with context
-    <ul class="nav nav-tabs">{{ nav(pages, base='/about') }}</ul>
+    % from "templates/nav.html" import about_nav with context
+    <ul class="nav nav-tabs">{{ nav_about() }}</ul>
 % endblock
