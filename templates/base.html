@@ -19,7 +19,7 @@
         }
     </script>
 </head>
-% from 'templates/nav.html' import nav, nav_about with context
+% from 'templates/nav.html' import nav, nav_about, nav_explore with context
 <body>
 
 <div id="wrapper">
@@ -31,7 +31,7 @@
                         <img src="{{ website.asset('liberapay/icon.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
                 {{ nav([
-                    ('/explore/', _('Explore')),
+                    ('/explore/', _('Explore'), nav_explore()),
                     ('/search', _('Search')),
                     ('/about/', _('About'), nav_about()),
                 ]) }}

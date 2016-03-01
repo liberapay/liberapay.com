@@ -31,3 +31,12 @@
         ('/security', _('Security'))
     ], base='/about') }}
 % endmacro
+
+% macro nav_explore()
+    {{ nav([
+        ('/', _('Overview')),
+        ('/communities/', _('Communities')),
+        ('/teams/', _('Teams')),
+        ('/pledges/', _('Pledges')),
+    ], base='/explore') }}
+% endmacro
