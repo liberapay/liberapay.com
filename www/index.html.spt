@@ -7,13 +7,30 @@ query_cache = QueryCache(website.db, threshold=5)
 
 [---]
 
-new_members = query_cache.all("""
-    SELECT username, join_time, avatar_url
-      FROM participants
-     WHERE status = 'active'
-       AND kind <> 'community'
-  ORDER BY join_time DESC NULLS LAST
-     LIMIT 10
+recent_events = query_cache.all("""
+    SELECT *
+      FROM (
+            SELECT 'new_user' AS event
+                 , avatar_url
+                 , username
+                 , join_time AS ts
+                 , json_build_object() AS args
+              FROM participants
+             WHERE status = 'active'
+               AND kind <> 'community'
+
+            UNION ALL
+
+            SELECT 'new_community' AS event
+                 , p.avatar_url
+                 , p.username
+                 , c.ctime AS ts
+                 , json_build_object('community_name', c.name) AS args
+              FROM communities c
+              JOIN participants p ON p.id = c.creator
+           ) foo
+  ORDER BY ts DESC
+     LIMIT 20
 """)
 
 [---]
@@ -157,19 +174,32 @@ new_members = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
-        <h2 class="banderole default">{{ _("New Members") }}</h2>
-
-        <ul class="people">
-        % for m in new_members
-            <li class="panel panel-default mini-user">
-                <a href="/{{ m.username }}/">
-                    {{ avatar_img(m) }}
-                    <div class="name">{{ m.username }}</div>
-                    <div class="age">{{ to_age_str(m.join_time, add_direction=True) }}</div>
+        <h2 class="banderole default">{{ _("Recent Activity") }}</h2>
+    </div>
+    <div class="col-md-6">
+        % for e in recent_events
+            % if loop.index == 11
+                </div><div class="col-md-6">
+            % endif
+            % set user_link
+                <a href="/{{ e.username }}/">
+                    {{ avatar_img(e) }}
+                    {{ e.username }}
                 </a>
-            </li>
+            % endset
+            <p class="event">
+                % if e.event == 'new_user'
+                    {{ _('{0} joined Liberapay {1} ago.', user_link|safe, to_age(e.ts)) }}
+                % elif e.event == 'new_community'
+                    {{ _(
+                        '{0} created the {1} community {2} ago.',
+                        user_link|safe,
+                        ('<a href="/for/{0}/">{0}</a>'|safe).format(e.args.community_name),
+                        to_age(e.ts),
+                    ) }}
+                % endif
+            </p>
         % endfor
-        </ul>
     </div>
 
     <div class="col-xs-12">
