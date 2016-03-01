@@ -13,11 +13,11 @@
             % if options['subnav']
                 % set button_extra_cls = 'dropdown-toggle-form' if options['form'] else ''
                 <div class="dropdown dropdown-hover">
-                    <button class="dropdown-toggle navbar-btn {{ button_extra_cls }}"
-                            data-toggle="dropdown" aria-expanded="true">
+                    <a class="dropdown-toggle navbar-btn {{ button_extra_cls }}"
+                       href="{{ base }}{{ slug }}" data-toggle="dropdown" aria-expanded="true">
                         {{ icon }}
                         <span>{{ item[1] }}</span>
-                    </button>
+                    </a>
                     % if options['role']
                         <div class="dropdown-menu" role="{{ options['role'] }}">{{ options['subnav'] }}</div>
                     % else

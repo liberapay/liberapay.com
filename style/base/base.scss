@@ -301,6 +301,13 @@ section.profile-statement {
     }
 }
 
+a.dropdown-toggle {
+    display: block;
+    &:active, &:focus, &:hover {
+        text-decoration: none;
+    }
+}
+
 .dropdown-toggle > img.avatar {
     border-radius: 2px;
     height: 20px;

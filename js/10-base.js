@@ -43,6 +43,14 @@ Liberapay.init = function() {
             $this.siblings('.dropdown-menu').find('input').eq(0).focus();
         }, 10);
     });
+
+    // TODO make the navbar responsive instead of doing this
+    $('.navbar a.dropdown-toggle').click(function(e) {
+        if ($('html').width() < 768) {
+            e.stopPropagation();
+            location.href = this.getAttribute('href');
+        }
+    });
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
