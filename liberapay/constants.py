@@ -89,6 +89,7 @@ STANDARD_TIPS = (
     (_("Small ({0})"), Decimal('0.25')),
     (_("Medium ({0})"), Decimal('1.00')),
     (_("Large ({0})"), Decimal('5.00')),
+    (_("Maximum ({0})"), MAX_TIP),
 )
 
 USERNAME_MAX_SIZE = 32
