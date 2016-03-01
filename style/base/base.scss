@@ -279,8 +279,24 @@ section.profile-statement {
     position: relative;
     .dropdown-menu {
         margin-top: 0;
+        &::before, &::after {
+            content: ' ';
+            display: block;
+            margin-left: -50%;
+            position: absolute;
+            width: 200%;
+            z-index: -1;
+        }
+        &::before {
+            height: 100%;
+            margin-top: -5px;
+        }
+        &::after {
+            border-radius: 0 0 25px 25px;
+            height: 75px;
+        }
     }
-    &:hover .dropdown-menu {
+    &:hover .dropdown-menu, .dropdown-toggle:focus + .dropdown-menu {
         display: block;
     }
 }
