@@ -15,8 +15,8 @@
             <div class="buttons">
             % for msg, amount in constants.STANDARD_TIPS
                 % set amount_str = format_decimal(amount, '#,##0.00')
-                <a class="btn btn-default" href="?amount={{ amount_str }}" rel="nofollow"
-                    >{{ _(msg, amount_str) }}</a>
+                <a class="btn btn-default amount-btn" href="?amount={{ amount_str }}"
+                   rel="nofollow">{{ _(msg, amount_str) }}</a>
             % endfor
             </div>
             <br>

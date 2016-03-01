@@ -51,6 +51,15 @@ Liberapay.init = function() {
             location.href = this.getAttribute('href');
         }
     });
+
+    var amount_re = /\?(.*&)*amount=(.+?)(&|$)/;
+    $('a.amount-btn').each(function() {
+        $(this).data('href', this.getAttribute('href')).attr('href', null);
+    }).click(function(e) {
+        var href = $(this).data('href');
+        $('#amount').val(amount_re.exec(href)[2]);
+        history.pushState(null, null, location.pathname + href + location.hash);
+    });
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
