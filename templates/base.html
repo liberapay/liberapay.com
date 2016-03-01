@@ -19,7 +19,7 @@
         }
     </script>
 </head>
-% from 'templates/nav.html' import nav, nav_about, nav_explore with context
+% from 'templates/nav.html' import icon_span, nav, nav_about, nav_explore with context
 <body>
 
 <div id="wrapper">
@@ -31,9 +31,17 @@
                         <img src="{{ website.asset('liberapay/icon.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
                 {{ nav([
-                    ('/explore/', _('Explore'), nav_explore()),
-                    ('/search', _('Search')),
-                    ('/about/', _('About'), nav_about()),
+                    ('/explore/', _('Explore'), {
+                        'icon': 'glyphicon glyphicon-globe',
+                        'subnav': nav_explore(),
+                    }),
+                    ('/search', _('Search'), {
+                        'icon': 'glyphicon glyphicon-search',
+                    }),
+                    ('/about/', _('About'), {
+                        'icon': 'glyphicon glyphicon-question-sign',
+                        'subnav': nav_about(),
+                    }),
                 ]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
@@ -51,6 +59,7 @@
                 </a></li>
                 <li>{% include "templates/sign-out.html" %}</li>
             % elif not response.show_sign_in_form
+                % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
                 <li>{% include "templates/sign-in-link.html" %}</li>
             % endif
             </ul>

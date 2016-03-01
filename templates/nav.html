@@ -1,19 +1,27 @@
+% macro icon_span(classes)
+    <span class="{{ classes }}" aria-hidden="true"></span>
+% endmacro
+
 % macro nav(items, base='')
     % set current = request.path.raw.startswith(base) and request.path.raw[len(base):].lstrip('/').split('/', 1)[0]
     % for item in items
         % set slug = item[0]
+        % set options = item[2] or {}
+        % set icon = options['icon']
+        % set icon = icon_span(icon) if icon else ''
         <li{% if slug.strip('/') == current %} class="active"{% endif %}>
-            % if item[2]
+            % if options['subnav']
                 <div class="dropdown dropdown-hover">
                     <button class="dropdown-toggle navbar-btn" type="button"
                             data-toggle="dropdown" aria-expanded="true">
-                        {{ item[1] }}
+                        {{ icon }}
+                        <span>{{ item[1] }}</span>
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu">{{ item[2] }}</ul>
+                    <ul class="dropdown-menu" role="menu">{{ options['subnav'] }}</ul>
                 </div>
             % else
-                <a href="{{ base }}{{ slug }}">{{ item[1] }}</a>
+                <a href="{{ base }}{{ slug }}">{{ icon }} {{ item[1] }}</a>
             % endif
         </li>
     % endfor
