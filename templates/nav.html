@@ -1,6 +1,4 @@
-% macro icon_span(classes)
-    <span class="{{ classes }}" aria-hidden="true"></span>
-% endmacro
+% from "templates/icons.html" import icon_span
 
 % macro nav(items, base='')
     % set current = request.path.raw.startswith(base) and request.path.raw[len(base):].lstrip('/').split('/', 1)[0]

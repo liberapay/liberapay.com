@@ -35,6 +35,7 @@ recent_events = query_cache.all("""
 
 [---]
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+% from "templates/icons.html" import glyphicon
 
 % extends "templates/base.html"
 
@@ -91,7 +92,9 @@ recent_events = query_cache.all("""
 
         % endif
 
-        <a class="btn btn-primary btn-lg" href="/explore/">{{ _("Explore") }}</a>
+        <a class="btn btn-primary btn-lg" href="/explore/">
+            {{ glyphicon('globe') }} <span>{{ _("Explore") }}</span>
+        </a>
     </div>
 
     <div class="col-md-6">
@@ -101,7 +104,9 @@ recent_events = query_cache.all("""
 
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
-            <a class="btn btn-success btn-lg" href="/sign-in">{{ _("Join us") }}</a>
+            <a class="btn btn-success btn-lg" href="/sign-in">
+                {{ glyphicon('log-in') }} <span>{{ _("Join us") }}</span>
+            </a>
 
         % else
 

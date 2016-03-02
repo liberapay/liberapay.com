@@ -1,4 +1,5 @@
 % from 'templates/avatar-url.html' import avatar_img with context
+% from "templates/icons.html" import glyphicon
 % from "templates/profile-goal-bar.html" import profile_goal_bar with context
 
 % macro profile_box_full(participant)
@@ -86,7 +87,10 @@
             }}</a>
         % else
             <a class="btn btn-primary {{ 'btn-lg' if receiving < goal else '' }}"
-               href="{{ donate_path }}">{{ _("Donate") }}</a>
+               href="{{ donate_path }}">
+                {{ glyphicon('thumbs-up') }}
+                <span>{{ _("Donate") }}</span>
+            </a>
         % endif
     % else
         <p>{{ _("This user doesn't accept donations.") }}</p>
