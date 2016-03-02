@@ -573,6 +573,9 @@ def main():
     from liberapay.billing.exchanges import sync_with_mangopay
     from liberapay.main import website
 
+    # https://github.com/liberapay/salon/issues/19#issuecomment-191230689
+    from liberapay.billing.payday import Payday
+
     if website.env.canonical_host == 'liberapay.com':
         log_dir = environ['OPENSHIFT_DATA_DIR']
         keep_log = True
