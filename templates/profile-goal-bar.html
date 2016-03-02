@@ -1,0 +1,20 @@
+% set CLASSES = ('info', 'success')
+
+% macro profile_goal_bar(p)
+    % if p.goal and p.goal > 0
+        <div class="profile-goal-bar">
+            <span class="pull-right">{{ _("Goal: {0}", Money(p.goal, 'EUR')) }}</span>
+            {{ _("Income: {0}/week", Money(p.receiving, 'EUR')) }}
+            % set progress_cls = CLASSES[min(int(p.receiving / p.goal), 1)]
+            <div class="progress">
+                <div class="progress-bar progress-bar-{{ progress_cls }}"
+                     style="min-width: {{ '2px' if p.receiving > 0 else 0 }};
+                            width: {{ min(p.receiving / p.goal * 100, 100) }}%;">{{
+                    _("Mission accomplished!") if p.receiving >= p.goal else ''
+                }}</div>
+            </div>
+        </div>
+    % else
+        <p>{{ _("Income: {0}/week", Money(p.receiving, 'EUR')) }}</p>
+    % endif
+% endmacro

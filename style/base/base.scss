@@ -26,15 +26,10 @@ body {
     }
 }
 
-.glyphicon--margin-r {
-    margin-right: 2px;
-}
-
 .homepage-pitch {
-    margin-bottom: 0;
-    margin-top: -15px;
     & > div {
         margin-top: 15px;
+        text-align: center;
     }
     dt {
         font-size: 18px;
@@ -117,7 +112,8 @@ img.account-type {
     .avatar {
         text-align: center;
     }
-    h1 {
+    h1, h4 {
+        color: #337ab7;
         font-size: 20px;
         margin: 0 0 10px;
     }
@@ -136,6 +132,9 @@ img.account-type {
 
 .profile-goal-bar {
     max-width: 450px;
+    .progress {
+        margin-bottom: 1em;
+    }
 }
 
 .btn.pull-right {
@@ -276,11 +275,36 @@ section.profile-statement {
 }
 
 .dropdown-hover {
+    display: inline-block;
+    position: relative;
     .dropdown-menu {
         margin-top: 0;
+        &::before, &::after {
+            content: ' ';
+            display: block;
+            margin-left: -50%;
+            position: absolute;
+            width: 200%;
+            z-index: -1;
+        }
+        &::before {
+            height: 100%;
+            margin-top: -5px;
+        }
+        &::after {
+            border-radius: 0 0 25px 25px;
+            height: 75px;
+        }
     }
-    &:hover .dropdown-menu {
+    &:hover .dropdown-menu, .dropdown-toggle:focus + .dropdown-menu {
         display: block;
+    }
+}
+
+a.dropdown-toggle {
+    display: block;
+    &:active, &:focus, &:hover {
+        text-decoration: none;
     }
 }
 
@@ -454,4 +478,20 @@ section.community-sidebar {
         font-size: 14px;
         margin: 14px 0 10px;
     }
+}
+
+p.event {
+    margin-bottom: 0.5em;
+    .avatar {
+        height: 20px;
+        margin: -4px 2px -2px 0;
+    }
+}
+
+.buttons .btn {
+    margin-bottom: 5px;
+}
+
+.glyphicon + span {
+    margin-left: 2px;
 }

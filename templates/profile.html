@@ -1,5 +1,5 @@
 % extends "templates/base.html"
-% from 'templates/avatar-url.html' import avatar_img with context
+% from 'templates/profile-box.html' import profile_box_full with context
 
 % block head_early
     % if participant.hide_from_search
@@ -11,31 +11,11 @@
 {% block profile_btn %}{% endblock %}
 <div class="row">
 <div class="col-xs-12 col-md-8 col-md-offset-2">
-    <div class="panel panel-default profile-box">
-        <div class="panel-body row">
-            <div class="avatar col-xs-3">
-                {{ avatar_img(participant) }}
+    % block box
+        {{ profile_box_full(participant) }}
+    % endblock
 
-                % if edit
-                    % if participant.kind == 'group'
-                        {{ _("Sorry, teams can't change their avatar yet.") }}
-                    % else
-                        <a class="btn btn-default" href="https://gravatar.com/"
-                           target="_blank">{{ _("Modify your Gravatar") }}</a>
-                    % endif
-                % elif participant.join_time
-                <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
-                % endif
-                % if participant.status == 'closed'
-                <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
-                % endif
-            </div>
-
-            <div class="col-xs-9">
-            {% block box %}{% include "templates/profile-box.html" %}{% endblock %}
-            </div>
-        </div>
-    </div>
+    % if not edit
     <div class="profile-share">
         <span>{{ _("Share:") }}</span>
         <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}" target="_blank">
@@ -48,6 +28,7 @@
             <i class="fa fa-lg fa-google-plus"></i>
         </a>
     </div>
+    % endif
 
     % block subnav
         % set show_income = not participant.hide_receiving and participant.accepts_tips

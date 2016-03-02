@@ -1,47 +1,46 @@
-from liberapay.models.community import Community
 from liberapay.utils.query_cache import QueryCache
 
-query_cache = QueryCache(website.db, threshold=1)
+query_cache = QueryCache(website.db, threshold=5)
 
 [-----------------------------]
 
-communities = Community.get_list(query_cache)
-ncommunities = len(communities)
 title = _("Explore")
 
 [-----------------------------]
+% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+% from 'templates/icons.html' import glyphicon
+
 % extends "templates/explore.html"
 
 % block content
-<p>
-    {{ ngettext("There is {n} community on Liberapay.",
-                "There are {n} communities on Liberapay.",
-                ncommunities) }}
-</p>
 
-<form class="form-group" action="/search" method="get">
-    <input type="hidden" name="scope" value="communities" />
-    <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="{{ _('Search communities') }}" />
-        <div class="input-group-btn">
-            <button class="btn btn-default">{{ _("Go") }}</button>
-        </div>
-    </div>
-</form>
+    <p>{{ _(
+        "Liberapay provides several ways of finding great people to donate to:"
+    ) }}</p>
+    <br>
 
-<p><a class="btn btn-primary" href="/for/new">{{ _("Start a new community") }}</a></p>
+    <dl>
+        <dt><a href="/explore/communities/">{{ _("Explore Communities") }}</a></dt>
+        <dd>{{ _(
+            "Communities allow you to find people that work on things you care "
+            "about. You can also subscribe to their newsletters to stay informed."
+        ) }}</dd>
+    </dl>
 
-<h3>{{ _("Popular Communities") }}</h3>
-<ul class="communities memberships">
-    % for community in communities[:20]
-    <li>
-        <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-        % set n = community.nmembers
-        <div class="nmembers">
-            {{ ngettext("{n} member", "{n} members", n) }}
-        </div>
-    </li>
-    % endfor
-</ul>
+    <dl>
+        <dt><a href="/explore/teams/">{{ _("Explore Teams") }}</a></dt>
+        <dd>{{ _(
+            "A team is a group of users working on a specific project."
+        ) }}</dd>
+    </dl>
+
+    <dl>
+        <dt><a href="/explore/pledges/">{{ _("Explore Pledges") }}</a></dt>
+        <dd>{{ _(
+            "Liberapay allows you to pledge to donate to people who haven't joined "
+            "the site yet. The donation will automatically start if they sign up "
+            "to receive it. We'll send you a notification when that happens."
+        ) }}</dd>
+    </dl>
 
 % endblock

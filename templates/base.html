@@ -19,7 +19,9 @@
         }
     </script>
 </head>
-% from 'templates/nav.html' import nav with context
+% from "templates/icons.html" import icon_span
+% from 'templates/nav.html' import nav, nav_about, nav_explore with context
+% from 'templates/search.html' import search_form with context
 <body>
 
 <div id="wrapper">
@@ -30,23 +32,29 @@
                     <a class="navbar-brand" href="/">
                         <img src="{{ website.asset('liberapay/icon.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
-                {{ nav([('/explore/', _('Explore')), ('/search', _('Search')), ('/about/', _('About'))]) }}
+                {{ nav([
+                    ('/explore/', _('Explore'), {
+                        'icon': 'glyphicon glyphicon-globe',
+                        'subnav': nav_explore(),
+                    }),
+                    ('/search', _('Search'), {
+                        'icon': 'glyphicon glyphicon-search',
+                        'form': True,
+                        'role': 'search',
+                        'subnav': search_form(autocomplete=False),
+                    }),
+                    ('/about/', _('About'), {
+                        'icon': 'glyphicon glyphicon-question-sign',
+                        'subnav': nav_about(),
+                    }),
+                ]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
-                <li>{% include "templates/language-dropdown.html" %}</li>
+                % include "templates/navbar-common.html"
             % if not user.ANON
-                <li>{% include "templates/profile-dropdown.html" %}</li>
-                <li><a href="/{{ user.username }}/notifications"
-                       title="{{ _('Notifications') }}"
-                       class="{{ 'navbar-warning' if user.pending_notifs else '' }}">
-                    <span class="glyphicon glyphicon-info-sign"></span>
-                    <span class="sr-only">{{ _("Notifications") }}</span>
-                    % if user.pending_notifs
-                        <span class="pending-notifs">{{ user.pending_notifs }}</span>
-                    % endif
-                </a></li>
-                <li>{% include "templates/sign-out.html" %}</li>
+                % include "templates/navbar-logged-in.html"
             % elif not response.show_sign_in_form
+                % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
                 <li>{% include "templates/sign-in-link.html" %}</li>
             % endif
             </ul>
@@ -70,8 +78,10 @@
         <a href="/about/contact">{{ _("Contact Us") }}</a>
         <a href="/about/faq">{{ _("FAQ") }}</a>
         <a href="/about/legal">{{ _("Legal") }}</a>
-        <a href="https://twitter.com/liberapaye">Twitter</a>
+        <a href="https://framasphere.org/u/liberapay">Diaspora*</a>
         <a href="https://github.com/liberapay/liberapay.com">GitHub</a>
+        <a href="https://twitter.com/liberapaye">Twitter</a>
+        <a href="https://www.facebook.com/Liberapay-472128142945598/">Facebook</a>
     </footer>
 </div>
 

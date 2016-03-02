@@ -72,6 +72,7 @@ if query:
 [---] text/html
 % extends "templates/base.html"
 % from 'templates/avatar-url.html' import avatar_url, avatar_img with context
+% from 'templates/search.html' import search_form with context
 % block content
 
     % set usernames = results.get('usernames')
@@ -84,7 +85,8 @@ if query:
         ) }}</p>
     % endif
 
-    % include "templates/search-box.html"
+    <p>{{ _('Whose work do you appreciate?') }}</p>
+    {{ search_form(autofocus=True) }}
 
     <div class="row">
     % if usernames
@@ -148,19 +150,10 @@ if query:
     % endif
 
     <br>
-    <h3>{{ _("Looking for a specific user of a social network?") }}</h3>
+    <h3>{{ _("Didn't find who you were looking for?") }}</h3>
+    <p>{{ _("You can also pledge to people who haven't joined Liberapay yet:") }}</p>
     % include "templates/jump.html"
 
-% endblock
-
-% block scripts
-<script>
-    $(document).ready(function(){
-        $('div.search-result').css('cursor', 'pointer').click(function(){
-            window.location = $(this).attr('href');
-        });
-    });
-</script>
 % endblock
 [---] application/json via json_dump
 results

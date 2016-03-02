@@ -50,6 +50,7 @@ edit = True
 title = participant.username
 
 [---] text/html
+% from 'templates/profile-box.html' import profile_box with context
 % from "templates/select-lang.html" import lang_options with context
 
 % extends "templates/profile.html"
@@ -64,6 +65,7 @@ title = participant.username
 % endblock
 
 % block box
+% call profile_box(participant)
 <form action="goal.html" method="POST" class="goal">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
@@ -105,13 +107,14 @@ title = participant.username
 
     <button class="save btn btn-primary">{{ _("Save") }}</button>
 </form>
+% endcall
 % endblock
 
 {% block subnav %}{% endblock %}
 
 % block content
 
-        <h3 id="statement">{{ _("Statement") }}</h3>
+        <h3 class="banderole info" id="statement">{{ _("Statement") }}</h3>
 
         % if request.body.get('preview') == 'true'
 

@@ -5,28 +5,37 @@ from liberapay.utils.query_cache import QueryCache
 
 query_cache = QueryCache(website.db, threshold=5)
 
-Liberapay_id = getattr(Participant.from_username('Liberapay'), 'id', -1)
-
 [---]
 
-top_communities = query_cache.all("""
-    SELECT *, replace(name, '_', ' ') AS pretty_name
-      FROM communities
-  ORDER BY nmembers DESC, name
-     LIMIT 9
-""")
+recent_events = query_cache.all("""
+    SELECT *
+      FROM (
+            SELECT 'new_user' AS event
+                 , avatar_url
+                 , username
+                 , join_time AS ts
+                 , json_build_object() AS args
+              FROM participants
+             WHERE status = 'active'
+               AND kind <> 'community'
 
-new_members = query_cache.all("""
-    SELECT username, join_time, avatar_url
-      FROM participants
-     WHERE status = 'active'
-       AND kind <> 'community'
-  ORDER BY join_time DESC NULLS LAST
-     LIMIT 25
+            UNION ALL
+
+            SELECT 'new_community' AS event
+                 , p.avatar_url
+                 , p.username
+                 , c.ctime AS ts
+                 , json_build_object('community_name', c.name) AS args
+              FROM communities c
+              JOIN participants p ON p.id = c.creator
+           ) foo
+  ORDER BY ts DESC
+     LIMIT 20
 """)
 
 [---]
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+% from "templates/icons.html" import glyphicon
 
 % extends "templates/base.html"
 
@@ -40,8 +49,6 @@ new_members = query_cache.all("""
 % endblock
 
 % block before_container
-
-% if user.ANON
 <div class="jumbotron" style="background: #eef0ff; text-align: center;">
 <div class="container">
     <p>{{ _("Liberapay is a recurrent donations platform.") }} <a href="/about/">{{ _("Learn more") }}</a></p>
@@ -51,51 +58,8 @@ new_members = query_cache.all("""
         website.gnusers, website.gmonthly_volume,
         to_age(constants.LAUNCH_TIME)
     ).replace('\n', '<br>'|safe) }}</p>
-    <p><a class="btn btn-primary btn-lg" href="/sign-in">{{ _("Join us") }}</a></p>
-    <hr>
-    <p>{{ _("Why use Liberapay?") }}</p>
-    <dl class="row homepage-pitch">
-        <div class="col-sm-4">
-            <dt>
-                <span class="glyphicon glyphicon-flash" aria-hidden="true"></span><br>
-                {{ _("It's easy") }}
-            </dt>
-            <dd>{{ _(
-                "Liberapay makes it easy to donate and receive money "
-                "recurrently, you'll only need a few minutes to get started. "
-                "No Paypal account needed."
-            ) }}</dd>
-        </div>
-        <div class="col-sm-4">
-            <dt>
-                <span class="glyphicon glyphicon-euro" aria-hidden="true"></span><br>
-                {{ _("It's economical") }}
-            </dt>
-            <dd>{{ _(
-                "We don't take a cut on your donations, and our {0}payment "
-                "processor's fees{1} are among the lowest in the world.",
-                '<a href="/about/faq#fees">'|safe,
-                '</a>'|safe,
-            ) }}</dd>
-        </div>
-        <div class="col-sm-4">
-            <dt>
-                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><br>
-                {{ _("It's open") }}
-            </dt>
-            <dd>{{ _(
-                "Liberapay is run transparently by a {1}non-profit organization{0}, "
-                "its {2}source code{0} is public.",
-                '</a>'|safe,
-                '<a href="https://github.com/liberapay/liberapay.org">'|safe,
-                '<a href="https://github.com/liberapay/liberapay.com">'|safe,
-            ) }}</dd>
-        </div>
-    </dl>
 </div>
 </div>
-% endif
-
 % endblock
 
 % block content
@@ -103,61 +67,41 @@ new_members = query_cache.all("""
 <div class="row">
 
     <div class="col-md-6">
-            <h2 class="banderole primary">{{ _("Donate") }}</h2>
+        <h2 class="banderole primary">{{ _("Donate") }}</h2>
 
-            % set Liberapay_tip = user.get_tip_to(Liberapay_id)['amount']
-            % if Liberapay_tip
-            <div class="text-success">
-                <p>{{ _(
-                    "You give {0} per week to the Liberapay team. Thank you!",
-                    Money(Liberapay_tip, 'EUR'),
-                ) }}</p>
-            </div>
-            % else
-            <div class="text-warning">
-                <p>{{ _(
-                    "Please consider donating to {0}the Liberapay team{1}, even "
-                    "only a symbolic amount, to help kickstart the platform.",
-                    '<a href="/Liberapay/">'|safe,
-                    '</a>'|safe,
-                ) }}</p>
-            </div>
-            % endif
+        % if user.ANON
 
-            % if not user.ANON
+            <p>{{ _(
+                "People who contribute to the commons need you to support their work. "
+                "Building free software, spreading free knowledge, these things take "
+                "time and cost money, not only to do the initial work, but also to "
+                "maintain it over time."
+            ) }}</p>
+            <p>{{ _(
+                "Liberapay's recurrent donations system is designed to provide a "
+                "stable crowdfunded basic income to creators, enabling them to keep "
+                "doing great work that benefits everyone. Ready to contribute? Then "
+                "let's get started:"
+            ) }}</p>
+
+        % else
+
             <p><a href="/{{ user.username }}/giving/">{{
                 _("You give {0} per week.", Money(user.giving, 'EUR'))
             }}</a></p>
-            % endif
 
-            <p>{{ _("Whose work do you appreciate? See if they're on Liberapay:") }}</p>
-            % include "templates/search-box.html"
+        % endif
 
-            <p>{{ _("You can also pledge to people who haven't joined Liberapay yet:") }}</p>
-            % include "templates/jump.html"
-
-            <p><a class="btn btn-default" href="/explore/pledges/">{{ _("Explore pledges") }}</a></p>
-
-            <p>{{ _("Explore our communities:") }}</p>
-            <ul class="communities memberships">
-                % for community in top_communities
-                <li>
-                    <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-                    % set n = community.nmembers
-                    <div class="nmembers">
-                        {{ ngettext("{n} member", "{n} members", n) }}
-                    </div>
-                </li>
-                % endfor
-            </ul>
-            <a class="btn btn-default" href="/explore/">{{ _("More") }}</a><br><br>
-
-            <p>{{ _("Find your friends from social networks:") }}</p>
-            <p>
-            % for p in website.friends_platforms
-                <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
-            % endfor
-            </p>
+        <a class="btn btn-primary btn-lg" href="/explore/"
+           data-toggle="tooltip" data-placement="bottom"
+           title="{{ _('Find great people to donate to') }}">
+            {{ glyphicon('globe') }} <span>{{ _("Explore") }}</span>
+        </a>
+        <a class="btn btn-primary btn-lg" href="/search"
+           data-toggle="tooltip" data-placement="bottom"
+           title="{{ _('Whose work do you appreciate? See if they\'re on Liberapay') }}">
+            {{ glyphicon('search') }} <span>{{ _("Search") }}</span>
+        </a>
     </div>
 
     <div class="col-md-6">
@@ -167,7 +111,9 @@ new_members = query_cache.all("""
 
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
-            <a class="btn btn-success" href="/sign-in">{{ _("Join us") }}</a>
+            <a class="btn btn-success btn-lg" href="/sign-in">
+                {{ glyphicon('log-in') }} <span>{{ _("Join us") }}</span>
+            </a>
 
         % else
 
@@ -198,7 +144,78 @@ new_members = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
-        <h2 class="banderole info">{{ _("Upcoming Features") }}</h2>
+        <h2 class="banderole info">{{ _("Why use Liberapay?") }}</h2>
+        <dl class="row homepage-pitch">
+            <div class="col-sm-4">
+                <dt>
+                    <span class="glyphicon glyphicon-flash" aria-hidden="true"></span><br>
+                    {{ _("It's easy") }}
+                </dt>
+                <dd>{{ _(
+                    "Liberapay makes it easy to donate and receive money "
+                    "recurrently, you'll only need a few minutes to get started. "
+                    "No Paypal account needed."
+                ) }}</dd>
+            </div>
+            <div class="col-sm-4">
+                <dt>
+                    <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span><br>
+                    {{ _("It's economical") }}
+                </dt>
+                <dd>{{ _(
+                    "We don't take a cut on your donations, and our {0}payment "
+                    "processor's fees{1} are among the lowest in the world.",
+                    '<a href="/about/faq#fees">'|safe,
+                    '</a>'|safe,
+                ) }}</dd>
+            </div>
+            <div class="col-sm-4">
+                <dt>
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><br>
+                    {{ _("It's open") }}
+                </dt>
+                <dd>{{ _(
+                    "Liberapay is run transparently by a {1}non-profit organization{0}, "
+                    "its {2}source code{0} is public.",
+                    '</a>'|safe,
+                    '<a href="https://github.com/liberapay/liberapay.org">'|safe,
+                    '<a href="https://github.com/liberapay/liberapay.com">'|safe,
+                ) }}</dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="col-xs-12">
+        <h2 class="banderole default">{{ _("Recent Activity") }}</h2>
+    </div>
+    <div class="col-md-6">
+        % for e in recent_events
+            % if loop.index == 11
+                </div><div class="col-md-6">
+            % endif
+            % set user_link
+                <a href="/{{ e.username }}/">
+                    {{ avatar_img(e) }}
+                    {{ e.username }}
+                </a>
+            % endset
+            <p class="event">
+                % if e.event == 'new_user'
+                    {{ _('{0} joined Liberapay {1} ago.', user_link|safe, to_age(e.ts)) }}
+                % elif e.event == 'new_community'
+                    {{ _(
+                        '{0} created the {1} community {2} ago.',
+                        user_link|safe,
+                        ('<a href="/for/{0}/">{0}</a>'|safe).format(e.args.community_name),
+                        to_age(e.ts),
+                    ) }}
+                % endif
+            </p>
+        % endfor
+    </div>
+
+    <div class="col-xs-12">
+        <h2 class="banderole default">{{ _("Upcoming Features") }}</h2>
         <ul>
             <li>{{ _(
                 "The ability to list your projects on your profile and link "
@@ -221,21 +238,12 @@ new_members = query_cache.all("""
         </ul>
     </div>
 
-    <div class="col-xs-12">
-        <h2 class="banderole default">{{ _("New Members") }}</h2>
-
-        <ul class="people">
-        % for m in new_members
-            <li class="panel panel-default mini-user">
-                <a href="/{{ m.username }}/">
-                    {{ avatar_img(m) }}
-                    <div class="name">{{ m.username }}</div>
-                    <div class="age">{{ to_age_str(m.join_time, add_direction=True) }}</div>
-                </a>
-            </li>
-        % endfor
-        </ul>
-    </div>
-
 </div>
+% endblock
+
+% block scripts
+{{ super() }}
+<script>$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})</script>
 % endblock
