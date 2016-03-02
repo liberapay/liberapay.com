@@ -95,6 +95,9 @@ recent_events = query_cache.all("""
         <a class="btn btn-primary btn-lg" href="/explore/">
             {{ glyphicon('globe') }} <span>{{ _("Explore") }}</span>
         </a>
+        <a class="btn btn-primary btn-lg" href="/search">
+            {{ glyphicon('search') }} <span>{{ _("Search") }}</span>
+        </a>
     </div>
 
     <div class="col-md-6">
