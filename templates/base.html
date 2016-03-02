@@ -50,19 +50,9 @@
                 ]) }}
             </ul>
             <ul class="nav navbar-nav pull-right">
-                <li>{% include "templates/language-dropdown.html" %}</li>
+                % include "templates/navbar-common.html"
             % if not user.ANON
-                <li>{% include "templates/profile-dropdown.html" %}</li>
-                <li><a href="/{{ user.username }}/notifications"
-                       title="{{ _('Notifications') }}"
-                       class="{{ 'navbar-warning' if user.pending_notifs else '' }}">
-                    <span class="glyphicon glyphicon-info-sign"></span>
-                    <span class="sr-only">{{ _("Notifications") }}</span>
-                    % if user.pending_notifs
-                        <span class="pending-notifs">{{ user.pending_notifs }}</span>
-                    % endif
-                </a></li>
-                <li>{% include "templates/sign-out.html" %}</li>
+                % include "templates/navbar-logged-in.html"
             % elif not response.show_sign_in_form
                 % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
                 <li>{% include "templates/sign-in-link.html" %}</li>
