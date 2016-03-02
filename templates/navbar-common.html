@@ -12,7 +12,11 @@
     % for l_completion, l_code, l_name, l_url in website.lang_list
         <li {% if l_code == locale.language %} class="active" {% endif %}
             ><a href="{{ l_url }}{{ request.line.uri }}"
-                {% if l_completion < 0.5 %} rel="nofollow" {% else %} hreflang="{{ l_code }}" {% endif %}
+                % if l_completion < 0.5
+                    rel="nofollow"
+                % else
+                    rel="alternate" hreflang="{{ l_code }}"
+                % endif
                 >{{ _("{0} ({1} complete)", l_name, format_percent(l_completion)) }}</a></li>
     % endfor
         <li role="separator" class="divider"></li>
