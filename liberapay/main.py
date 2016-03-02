@@ -38,7 +38,6 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
     'Community': Community,
     'b64decode_s': b64decode_s,
     'b64encode_s': b64encode_s,
-    'filter_profile_subnav': utils.filter_profile_subnav,
     'to_javascript': utils.to_javascript,
     'urlquote': urlquote,
 })

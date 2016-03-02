@@ -83,7 +83,7 @@ def out():
 
 % block scripts
 % if last_payday
-    <script>jQuery.get('/about/charts.json', Liberapay.charts.make);</script>
+    <script>Liberapay.charts.load('/about/charts.json');</script>
 % endif
 {{ super() }}
 % endblock
