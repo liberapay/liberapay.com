@@ -83,6 +83,13 @@ class TestPages(MangopayHarness):
             r = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=l.encode('ascii'))
             assert r.code == 200, r.text
 
+        link_default = '<link rel="alternate" hreflang="x-default" href="%s/" />'
+        link_default %= self.website.canonical_url
+        assert link_default in r.text
+        link_lang = '<link rel="alternate" hreflang="{0}" href="{1}://{0}.{2}/" />'
+        link_lang = link_lang.format(l, self.website.canonical_scheme, self.website.canonical_host)
+        assert link_lang in r.text
+
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')
         expected = "<a href='/alice/edit'>"
