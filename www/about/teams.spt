@@ -47,7 +47,7 @@ title = _("Teams")
     <p>{{ _("You need to {0}sign into your own account{1} first.",
             '<a href="/sign-in?back_to=%s">'|safe % urlquote(request.line.uri),
             '</a>'|safe
-) }}</p>
+    ) }}</p>
 % else
     % include "templates/create-team.html"
 % endif

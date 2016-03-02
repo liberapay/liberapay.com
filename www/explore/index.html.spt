@@ -4,49 +4,43 @@ query_cache = QueryCache(website.db, threshold=5)
 
 [-----------------------------]
 
-top_communities = query_cache.all("""
-    SELECT *, replace(name, '_', ' ') AS pretty_name
-      FROM communities
-  ORDER BY nmembers DESC, name
-     LIMIT 9
-""")
-
 title = _("Explore")
 
 [-----------------------------]
-% from 'templates/search.html' import search_form with context
+% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+% from 'templates/icons.html' import glyphicon
 
 % extends "templates/explore.html"
 
 % block content
 
-    <p>{{ _("Whose work do you appreciate? See if they're on Liberapay:") }}</p>
-    {{ search_form() }}
+    <p>{{ _(
+        "Liberapay provides several ways of finding great people to donate to:"
+    ) }}</p>
+    <br>
 
-    <p>{{ _("You can also pledge to people who haven't joined Liberapay yet:") }}</p>
-    % include "templates/jump.html"
+    <dl>
+        <dt><a href="/explore/communities/">{{ _("Explore Communities") }}</a></dt>
+        <dd>{{ _(
+            "Communities allow you to find people that work on things you care "
+            "about. You can also subscribe to their newsletters to stay informed."
+        ) }}</dd>
+    </dl>
 
-    <p><a class="btn btn-default" href="/explore/pledges/">{{ _("Explore pledges") }}</a></p>
+    <dl>
+        <dt><a href="/explore/teams/">{{ _("Explore Teams") }}</a></dt>
+        <dd>{{ _(
+            "A team is a group of users working on a specific project."
+        ) }}</dd>
+    </dl>
 
-    <p>{{ _("Explore our communities:") }}</p>
-    <ul class="communities memberships">
-        % for community in top_communities
-        <li>
-            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-            % set n = community.nmembers
-            <div class="nmembers">
-                {{ ngettext("{n} member", "{n} members", n) }}
-            </div>
-        </li>
-        % endfor
-    </ul>
-    <a class="btn btn-default" href="/explore/">{{ _("More") }}</a><br><br>
-
-    <p>{{ _("Find your friends from social networks:") }}</p>
-    <p>
-    % for p in website.friends_platforms
-        <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
-    % endfor
-    </p>
+    <dl>
+        <dt><a href="/explore/pledges/">{{ _("Explore Pledges") }}</a></dt>
+        <dd>{{ _(
+            "Liberapay allows you to pledge to donate to people who haven't joined "
+            "the site yet. The donation will automatically start if they sign up "
+            "to receive it. We'll send you a notification when that happens."
+        ) }}</dd>
+    </dl>
 
 % endblock

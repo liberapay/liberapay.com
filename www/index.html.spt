@@ -92,10 +92,14 @@ recent_events = query_cache.all("""
 
         % endif
 
-        <a class="btn btn-primary btn-lg" href="/explore/">
+        <a class="btn btn-primary btn-lg" href="/explore/"
+           data-toggle="tooltip" data-placement="bottom"
+           title="{{ _('Find great people to donate to') }}">
             {{ glyphicon('globe') }} <span>{{ _("Explore") }}</span>
         </a>
-        <a class="btn btn-primary btn-lg" href="/search">
+        <a class="btn btn-primary btn-lg" href="/search"
+           data-toggle="tooltip" data-placement="bottom"
+           title="{{ _('Whose work do you appreciate? See if they\'re on Liberapay') }}">
             {{ glyphicon('search') }} <span>{{ _("Search") }}</span>
         </a>
     </div>
@@ -235,4 +239,11 @@ recent_events = query_cache.all("""
     </div>
 
 </div>
+% endblock
+
+% block scripts
+{{ super() }}
+<script>$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})</script>
 % endblock
