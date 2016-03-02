@@ -338,6 +338,7 @@ class Payday(object):
                 takes_ratio := min(total_income / total_takes, 1::numeric);
                 tips_ratio := min(total_takes / total_income, 1::numeric);
 
+                DROP TABLE IS EXISTS our_takes;
                 CREATE TEMPORARY TABLE our_takes ON COMMIT DROP AS
                     SELECT t.member, (round_up(t.amount * takes_ratio, 2)) AS amount
                       FROM payday_takes t
