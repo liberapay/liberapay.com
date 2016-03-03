@@ -581,7 +581,7 @@ class Participant(Model, MixinTeam):
             return 2
         else:
             gravatar_id = md5(email.strip().lower()).hexdigest()
-            gravatar_url = 'https://secure.gravatar.com/avatar/'+gravatar_id
+            gravatar_url = 'https://seccdn.libravatar.org/avatar/'+gravatar_id
             gravatar_url += AVATAR_QUERY
             (cursor or self.db).run("""
                 UPDATE participants

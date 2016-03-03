@@ -103,7 +103,8 @@ class AccountElsewhere(Model):
             scheme, netloc, path, query, fragment = urlsplit(i.avatar_url)
             fragment = ''
             if netloc.endswith('githubusercontent.com') or \
-               netloc.endswith('gravatar.com'):
+               netloc.endswith('gravatar.com') or \
+               netloc.endswith('libravatar.org'):
                 query = AVATAR_QUERY
             i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
 
