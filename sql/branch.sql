@@ -19,4 +19,6 @@ BEGIN;
 
     ALTER TABLE participants ADD COLUMN avatar_src avatar_sources;
 
+    ALTER TABLE participants ADD COLUMN avatar_email text;
+
 END;
