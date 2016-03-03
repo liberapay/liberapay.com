@@ -580,15 +580,7 @@ class Participant(Model, MixinTeam):
             self.send_email('verification_notice', new_email=email)
             return 2
         else:
-            gravatar_id = md5(email.strip().lower()).hexdigest()
-            gravatar_url = 'https://seccdn.libravatar.org/avatar/'+gravatar_id
-            gravatar_url += AVATAR_QUERY
-            (cursor or self.db).run("""
-                UPDATE participants
-                   SET avatar_url = %s
-                 WHERE id = %s
-            """, (gravatar_url, self.id))
-            self.set_attributes(avatar_url=gravatar_url)
+            self.update_avatar()
 
         return 1
 
@@ -604,6 +596,7 @@ class Participant(Model, MixinTeam):
                  WHERE id=%(id)s
             """, locals())
         self.set_attributes(email=email)
+        self.update_avatar()
 
     def verify_email(self, email, nonce):
         if '' in (email, nonce):
@@ -647,6 +640,14 @@ class Participant(Model, MixinTeam):
               FROM emails
              WHERE participant=%s
           ORDER BY id
+        """, (self.id,))
+
+    def get_any_email(self):
+        return self.db.one("""
+            SELECT address
+              FROM emails
+             WHERE participant=%s
+             LIMIT 1
         """, (self.id,))
 
     def remove_email(self, address):
@@ -960,23 +961,50 @@ class Participant(Model, MixinTeam):
 
         return suggested
 
-    def update_avatar(self):
-        if self.status != 'stub':
-            return
-        avatar_url = self.db.run("""
-            UPDATE participants p
-               SET avatar_url = (
-                       SELECT avatar_url
-                         FROM elsewhere
-                        WHERE participant = p.id
-                     ORDER BY platform = 'github' DESC,
-                              avatar_url LIKE '%%gravatar.com%%' DESC
-                        LIMIT 1
-                   )
-             WHERE p.id = %s
-         RETURNING avatar_url
-        """, (self.id,))
-        self.set_attributes(avatar_url=avatar_url)
+    def update_avatar(self, src=None):
+        if self.status == 'stub':
+            assert src is None
+            avatar_url = self.db.one("""
+                UPDATE participants p
+                   SET avatar_url = (
+                           SELECT avatar_url
+                             FROM elsewhere
+                            WHERE participant = p.id
+                            LIMIT 1
+                       )
+                 WHERE p.id = %s
+             RETURNING avatar_url
+            """, (self.id,))
+            self.set_attributes(avatar_url=avatar_url)
+            return avatar_url
+
+        elif src in (None, 'libravatar'):
+            email = self.avatar_email or self.email or self.get_any_email()
+            if not email:
+                return
+            avatar_id = md5(email.strip().lower()).hexdigest()
+            avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
+            avatar_url += AVATAR_QUERY
+
+        else:
+            avatar_url = self.db.one("""
+                SELECT avatar_url
+                  FROM elsewhere
+                 WHERE participant = %s
+                   AND platform = %s
+            """, (self.id, src))
+            if not avatar_url:
+                return
+
+        self.db.run("""
+            UPDATE participants
+               SET avatar_url = %s
+                 , avatar_src = %s
+             WHERE id = %s
+        """, (avatar_url, src, self.id))
+        self.set_attributes(avatar_src=src, avatar_url=avatar_url)
+
+        return avatar_url
 
     def update_goal(self, goal, cursor=None):
         with self.db.get_cursor(cursor) as c:

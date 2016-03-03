@@ -55,6 +55,8 @@ def db(env):
         db.register_model(model)
     liberapay.billing.payday.Payday.db = db
 
+    db.enums['avatar_sources'] = db.all("SELECT unnest(enum_range(NULL::avatar_sources))")
+
     return {'db': db}
 
 

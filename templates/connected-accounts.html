@@ -1,7 +1,7 @@
 % from 'templates/auth.html' import auth_button with context
 % from 'templates/elsewhere.html' import account_elsewhere with context
 
-% set accounts = participant.get_accounts_elsewhere()
+% set accounts = accounts or participant.get_accounts_elsewhere()
 % if accounts or edit
 <h3 class="banderole default">{{ _("Accounts Elsewhere") }}</h3>
 <div class="accounts">

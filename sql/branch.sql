@@ -14,4 +14,9 @@ BEGIN;
            )
      WHERE avatar_url LIKE '%//secure.gravatar.com/%';
 
+    CREATE TYPE avatar_sources AS ENUM
+        ('libravatar', 'bitbucket', 'facebook', 'github', 'google', 'twitter');
+
+    ALTER TABLE participants ADD COLUMN avatar_src avatar_sources;
+
 END;

@@ -6,6 +6,8 @@ from aspen import Response
 from liberapay.utils import get_participant, markdown
 from liberapay.utils.i18n import LANGUAGES_2
 
+AVATAR_SOURCES = website.db.enums['avatar_sources']
+
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
 
@@ -47,9 +49,12 @@ GOAL_PARTS = GOAL_RAW.split("{0}")
 
 edit = True
 
+accounts = participant.get_accounts_elsewhere()
+
 title = participant.username
 
 [---] text/html
+% from 'templates/icons.html' import glyphicon
 % from 'templates/profile-box.html' import profile_box with context
 % from "templates/select-lang.html" import lang_options with context
 
@@ -110,8 +115,6 @@ title = participant.username
 % endcall
 % endblock
 
-{% block subnav %}{% endblock %}
-
 % block content
 
         <h3 class="banderole info" id="statement">{{ _("Statement") }}</h3>
@@ -168,5 +171,32 @@ title = participant.username
     % include "templates/team-listing.html"
     % include "templates/community-listing.html"
     % endif
+
+    <h3 class="banderole default" id="avatar">{{ _("Avatar") }}</h3>
+
+    <a class="btn btn-default" target="_blank" href="https://www.libravatar.org/account/login/">
+       {{ glyphicon('edit') }}
+       <span>{{ _("Modify your Libravatar") }}</span>
+    </a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a class="btn btn-default btn-sm" target="_blank" href="https://www.libravatar.org/">
+       {{ glyphicon('info-sign') }}
+       <span>{{ _("What is Libravatar?") }}</span>
+    </a><br>
+    <br>
+
+    <form action="{{ participant.path('avatar') }}" method="POST"
+          class="form-inline js-submit">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <label for="avatar-src">{{ _("Avatar source") }}</label><br>
+        <select class="form-control" name="src" id="avatar-src">
+            % for src in AVATAR_SOURCES
+                <option value="{{ src }}" {% if src == participant.avatar_src %} selected {% endif %}
+                        {% if src != 'libravatar' and src not in accounts %} disabled {% endif %}
+                    >{{ src }}</option>
+            % endfor
+        </select>
+        <button class="save btn btn-success">{{ _("Modify") }}</button>
+    </form>
 
 % endblock

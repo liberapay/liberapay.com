@@ -1,0 +1,24 @@
+from aspen import Response
+
+from liberapay.utils import b64encode_s, get_participant
+
+[---]
+
+participant = get_participant(state, restrict=True, allow_member=True)
+
+msg = None
+
+if request.method == 'POST':
+    src = request.body['src']
+    if src not in website.db.enums['avatar_sources']:
+        raise Response(400, 'bad src')
+    r = participant.update_avatar(src)
+    if not r:
+        raise Response(400, _("We were unable to get an avatar for you from {0}.", src))
+
+    msg = _("Your new avatar URL is: {0}", participant.avatar_url)
+    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        response.redirect(participant.path('edit')+'?success='+b64encode_s(msg)+'#avatar')
+
+[---] application/json
+{"url": participant.avatar_url, "msg": msg}

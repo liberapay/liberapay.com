@@ -28,13 +28,8 @@
                 % endif
 
                 % if edit
-                    % if participant.kind == 'group'
-                        {{ _("Sorry, teams can't change their avatar yet.") }}
-                    % else
-                        <a class="btn btn-default"
-                           href="https://www.libravatar.org/account/login/"
-                           target="_blank">{{ _("Modify your Libravatar") }}</a>
-                    % endif
+                    <a class="btn btn-default" href="#avatar"
+                        >{{ _("Modify your avatar") }}</a>
                 % elif participant.join_time and not embedded
                 <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 % endif
