@@ -88,6 +88,7 @@ class Harness(unittest.TestCase):
     client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
     db = client.website.db
     platforms = client.website.platforms
+    website = client.website
     tablenames = db.all("""
         SELECT tablename
           FROM pg_tables
