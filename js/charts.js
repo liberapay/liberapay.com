@@ -1,15 +1,21 @@
 Liberapay.charts = {};
 
-// After retrieving the JSON data, wait for document ready event.
-Liberapay.charts.make = function(series) {
-    $(document).ready(function() {
-        Liberapay.charts._make(series);
-    });
-};
+Liberapay.charts.load = function(url, button) {
+    jQuery.get(url, function(series) {
+        $(function() {
+            Liberapay.charts.make(series, button);
+        });
+    }).fail(Liberapay.error);
+}
 
-Liberapay.charts._make = function(series) {
+Liberapay.charts.make = function(series, button) {
     if (series.length) {
         $('.chart-wrapper').show();
+    } else if (button && $(button).data('msg-empty')) {
+        var $btn = $(button);
+        $btn.attr('disabled', '').prop('disabled');
+        $btn.after($('<span>').text(' '+$btn.data('msg-empty')));
+        return;
     } else {
         return;
     }

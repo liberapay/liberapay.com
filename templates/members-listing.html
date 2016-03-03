@@ -12,6 +12,9 @@
         </li>
     % endfor
     </ul>
+    <br>
+    <p><a class="btn btn-default" href="{{ participant.path('income/') }}"
+          >{{ _("View income shares") }}</a></p>
     % if edit
         <br>
         % include "templates/team-invite.html"

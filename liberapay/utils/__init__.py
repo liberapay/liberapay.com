@@ -205,16 +205,6 @@ def erase_cookie(cookies, key, **kw):
     set_cookie(cookies, key, '', BEGINNING_OF_EPOCH, **kw)
 
 
-def filter_profile_subnav(user, participant, pages):
-    out = []
-    for foo, bar, show_them, show_others in pages:
-        if (user == participant and show_them) \
-        or (user != participant and show_others) \
-        or user.is_admin:
-            out.append((foo, bar))
-    return out
-
-
 def to_javascript(obj):
     """For when you want to inject an object into a <script> tag.
     """
