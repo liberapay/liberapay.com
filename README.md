@@ -40,7 +40,7 @@ We interact with the database by writing raw SQL queries sent via the [postgres.
 
 Firstly, make sure you have the following dependencies installed:
 
-- python 2.7 (a pull request to port to python 3 is very much welcome)
+- python 2.7 ([we're working on porting to python 3](https://github.com/liberapay/liberapay.com/pull/88))
 - virtualenv
 - postgresql 9.4.5
 - make
