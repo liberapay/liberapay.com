@@ -964,27 +964,26 @@ class Participant(Model, MixinTeam):
     def update_avatar(self, src=None):
         if self.status == 'stub':
             assert src is None
-            avatar_url = self.db.one("""
-                UPDATE participants p
-                   SET avatar_url = (
-                           SELECT avatar_url
-                             FROM elsewhere
-                            WHERE participant = p.id
-                            LIMIT 1
-                       )
-                 WHERE p.id = %s
-             RETURNING avatar_url
-            """, (self.id,))
-            self.set_attributes(avatar_url=avatar_url)
-            return avatar_url
 
-        elif src in (None, 'libravatar'):
-            email = self.avatar_email or self.email or self.get_any_email()
+        email = self.avatar_email or self.email or self.get_any_email()
+
+        if src == 'libravatar' or src is None and email:
             if not email:
                 return
             avatar_id = md5(email.strip().lower()).hexdigest()
             avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
             avatar_url += AVATAR_QUERY
+
+        elif src is None:
+            avatar_url = self.db.one("""
+                SELECT avatar_url
+                  FROM elsewhere
+                 WHERE participant = %s
+              ORDER BY platform = 'github' DESC,
+                       avatar_url LIKE '%%libravatar.org%%' DESC,
+                       avatar_url LIKE '%%gravatar.com%%' DESC
+                 LIMIT 1
+            """, (self.id,))
 
         else:
             avatar_url = self.db.one("""
@@ -993,8 +992,9 @@ class Participant(Model, MixinTeam):
                  WHERE participant = %s
                    AND platform = %s
             """, (self.id, src))
-            if not avatar_url:
-                return
+
+        if not avatar_url:
+            return
 
         self.db.run("""
             UPDATE participants
