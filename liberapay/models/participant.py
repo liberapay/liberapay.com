@@ -965,16 +965,17 @@ class Participant(Model, MixinTeam):
         if self.status == 'stub':
             assert src is None
 
+        platform, key = src.split(':', 1) if src else (None, None)
         email = self.avatar_email or self.email or self.get_any_email()
 
-        if src == 'libravatar' or src is None and email:
+        if platform == 'libravatar' or platform is None and email:
             if not email:
                 return
             avatar_id = md5(email.strip().lower()).hexdigest()
             avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
             avatar_url += AVATAR_QUERY
 
-        elif src is None:
+        elif platform is None:
             avatar_url = self.db.one("""
                 SELECT avatar_url
                   FROM elsewhere
@@ -991,7 +992,8 @@ class Participant(Model, MixinTeam):
                   FROM elsewhere
                  WHERE participant = %s
                    AND platform = %s
-            """, (self.id, src))
+                -- AND user_id = %%s  -- not implemented yet
+            """, (self.id, platform))
 
         if not avatar_url:
             return

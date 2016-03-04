@@ -14,8 +14,6 @@ def just_yield(obj):
 
 class DB(Postgres):
 
-    enums = {}
-
     def get_cursor(self, cursor=None, **kw):
         if cursor:
             if kw:

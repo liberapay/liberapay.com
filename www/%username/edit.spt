@@ -6,8 +6,6 @@ from aspen import Response
 from liberapay.utils import get_participant, markdown
 from liberapay.utils.i18n import LANGUAGES_2
 
-AVATAR_SOURCES = website.db.enums['avatar_sources']
-
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
 
@@ -192,7 +190,7 @@ title = participant.username
         <div class="form-group">
             <label for="avatar-src">{{ _("Avatar source") }}</label><br>
             <select class="form-control" name="src" id="avatar-src">
-                % for src in AVATAR_SOURCES
+                % for src in constants.AVATAR_SOURCES
                     <option value="{{ src }}" {% if src == participant.avatar_src %} selected {% endif %}
                             {% if src != 'libravatar' and src not in accounts %} disabled {% endif %}
                         >{{ src }}</option>

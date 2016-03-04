@@ -11,7 +11,7 @@ msg = None
 if request.method == 'POST':
     src, email = request.body['src'], request.body.get('email') or None
 
-    if src not in website.db.enums['avatar_sources']:
+    if src not in constants.AVATAR_SOURCES:
         raise Response(400, 'bad src')
 
     website.db.run("""
@@ -19,7 +19,7 @@ if request.method == 'POST':
     """, (email, participant.id))
     participant.set_attributes(avatar_email=email)
 
-    r = participant.update_avatar(src)
+    r = participant.update_avatar(src+':')
     if not r:
         raise Response(400, _("We were unable to get an avatar for you from {0}.", src))
 

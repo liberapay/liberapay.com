@@ -31,6 +31,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "-_")
 
 AVATAR_QUERY = '?s=160&default=retro'
+AVATAR_SOURCES = 'libravatar bitbucket facebook github google twitter'.split()
 
 BALANCE_MAX = Decimal("1000")
 
