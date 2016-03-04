@@ -9,7 +9,10 @@ from liberapay.utils import emails, get_participant
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
-if participant == user:
+ok = participant == user
+if not ok and not user.ANON and participant.kind == 'group':
+    ok = user.member_of(participant)
+if ok:
     email = request.qs.get('email', '')
     nonce = request.qs.get('nonce', '')
     result = participant.verify_email(email, nonce)
@@ -27,7 +30,7 @@ if participant == user:
         <p>{{ _("Sign in to finish connecting your email.") }}</p>
 
         <p>{% include "templates/sign-in-link.html" %}</p>
-    % elif user != participant
+    % elif not ok
         <h1>{{ _("Wrong Account") }}</h1>
 
         <p>{{ _("You're signed into the wrong Liberapay account to complete this email "

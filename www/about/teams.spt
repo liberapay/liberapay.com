@@ -20,7 +20,7 @@ if request.method == 'POST':
         else:
             raise UsernameAlreadyTaken(name)
     else:
-        t = user.make_team(name)
+        t = user.make_team(name, request.body.get('email'))
     response.redirect('/'+t.username+'/edit')
 
 title = _("Teams")

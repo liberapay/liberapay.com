@@ -3,7 +3,7 @@ from liberapay.utils import get_participant
 
 [---]
 
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, allow_member=True)
 title = participant.username
 subhead = _("Email settings")
 emails = participant.get_emails()

@@ -119,7 +119,7 @@ class Participant(Model, MixinTeam):
             p.change_username(username, c)
         return p
 
-    def make_team(self, name):
+    def make_team(self, name, email=None):
         with self.db.get_cursor() as c:
             t = c.one("""
                 INSERT INTO participants
@@ -129,6 +129,8 @@ class Participant(Model, MixinTeam):
             """)
             t.change_username(name, c)
             t.add_member(self, c)
+        if email:
+            t.add_email(email)
         return t
 
     @classmethod
@@ -1638,6 +1640,10 @@ class Participant(Model, MixinTeam):
 
     def path(self, path):
         return '/%s/%s' % (self.username, path)
+
+    @property
+    def is_person(self):
+        return self.kind in ('individual', 'organization')
 
 
 class NeedConfirmation(Exception):
