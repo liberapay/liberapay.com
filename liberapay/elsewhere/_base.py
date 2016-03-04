@@ -194,7 +194,7 @@ class Platform(object):
             if r.email and not gravatar_id:
                 gravatar_id = hashlib.md5(r.email.strip().lower()).hexdigest()
             if gravatar_id:
-                r.avatar_url = 'https://secure.gravatar.com/avatar/'+gravatar_id
+                r.avatar_url = 'https://seccdn.libravatar.org/avatar/'+gravatar_id
         r.is_team = self.x_is_team(r, info, False)
         r.extra_info = info
         return r

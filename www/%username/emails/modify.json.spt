@@ -4,7 +4,7 @@ from liberapay.utils import get_participant
 [-----------------------------------------]
 
 request.allow("POST")
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, allow_member=True)
 
 if not participant.email_lang:
     participant.set_email_lang(request.headers.get("Accept-Language"))

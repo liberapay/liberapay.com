@@ -28,12 +28,8 @@
                 % endif
 
                 % if edit
-                    % if participant.kind == 'group'
-                        {{ _("Sorry, teams can't change their avatar yet.") }}
-                    % else
-                        <a class="btn btn-default" href="https://gravatar.com/"
-                           target="_blank">{{ _("Modify your Gravatar") }}</a>
-                    % endif
+                    <a class="btn btn-default" href="#avatar"
+                        >{{ _("Modify your avatar") }}</a>
                 % elif participant.join_time and not embedded
                 <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 % endif

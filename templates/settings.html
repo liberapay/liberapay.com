@@ -1,12 +1,13 @@
 % extends "templates/base.html"
 
 % block subnav
-    {% set pages = [
+    {% set pages = ([
         ('/giving/', _('Giving')),
         ('/receiving/', _('Receiving')),
         ('/wallet/', _('Wallet')),
         ('/settings/', _('Settings')),
         ('/identity', _('Identity')),
+    ] if participant.is_person else []) + [
         ('/emails/', _('Emails')),
         ('/widgets/', _('Widgets')),
     ] + ([

@@ -119,7 +119,7 @@ class Participant(Model, MixinTeam):
             p.change_username(username, c)
         return p
 
-    def make_team(self, name):
+    def make_team(self, name, email=None):
         with self.db.get_cursor() as c:
             t = c.one("""
                 INSERT INTO participants
@@ -129,6 +129,8 @@ class Participant(Model, MixinTeam):
             """)
             t.change_username(name, c)
             t.add_member(self, c)
+        if email:
+            t.add_email(email)
         return t
 
     @classmethod
@@ -580,15 +582,7 @@ class Participant(Model, MixinTeam):
             self.send_email('verification_notice', new_email=email)
             return 2
         else:
-            gravatar_id = md5(email.strip().lower()).hexdigest()
-            gravatar_url = 'https://secure.gravatar.com/avatar/'+gravatar_id
-            gravatar_url += AVATAR_QUERY
-            (cursor or self.db).run("""
-                UPDATE participants
-                   SET avatar_url = %s
-                 WHERE id = %s
-            """, (gravatar_url, self.id))
-            self.set_attributes(avatar_url=gravatar_url)
+            self.update_avatar(cursor=cursor)
 
         return 1
 
@@ -604,6 +598,7 @@ class Participant(Model, MixinTeam):
                  WHERE id=%(id)s
             """, locals())
         self.set_attributes(email=email)
+        self.update_avatar()
 
     def verify_email(self, email, nonce):
         if '' in (email, nonce):
@@ -647,6 +642,14 @@ class Participant(Model, MixinTeam):
               FROM emails
              WHERE participant=%s
           ORDER BY id
+        """, (self.id,))
+
+    def get_any_email(self, cursor=None):
+        return (cursor or self.db).one("""
+            SELECT address
+              FROM emails
+             WHERE participant=%s
+             LIMIT 1
         """, (self.id,))
 
     def remove_email(self, address):
@@ -960,23 +963,52 @@ class Participant(Model, MixinTeam):
 
         return suggested
 
-    def update_avatar(self):
-        if self.status != 'stub':
+    def update_avatar(self, src=None, cursor=None):
+        if self.status == 'stub':
+            assert src is None
+
+        platform, key = src.split(':', 1) if src else (None, None)
+        email = self.avatar_email or self.email or self.get_any_email(cursor)
+
+        if platform == 'libravatar' or platform is None and email:
+            if not email:
+                return
+            avatar_id = md5(email.strip().lower()).hexdigest()
+            avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
+            avatar_url += AVATAR_QUERY
+
+        elif platform is None:
+            avatar_url = (cursor or self.db).one("""
+                SELECT avatar_url
+                  FROM elsewhere
+                 WHERE participant = %s
+              ORDER BY platform = 'github' DESC,
+                       avatar_url LIKE '%%libravatar.org%%' DESC,
+                       avatar_url LIKE '%%gravatar.com%%' DESC
+                 LIMIT 1
+            """, (self.id,))
+
+        else:
+            avatar_url = (cursor or self.db).one("""
+                SELECT avatar_url
+                  FROM elsewhere
+                 WHERE participant = %s
+                   AND platform = %s
+                -- AND user_id = %%s  -- not implemented yet
+            """, (self.id, platform))
+
+        if not avatar_url:
             return
-        avatar_url = self.db.run("""
-            UPDATE participants p
-               SET avatar_url = (
-                       SELECT avatar_url
-                         FROM elsewhere
-                        WHERE participant = p.id
-                     ORDER BY platform = 'github' DESC,
-                              avatar_url LIKE '%%gravatar.com%%' DESC
-                        LIMIT 1
-                   )
-             WHERE p.id = %s
-         RETURNING avatar_url
-        """, (self.id,))
-        self.set_attributes(avatar_url=avatar_url)
+
+        (cursor or self.db).run("""
+            UPDATE participants
+               SET avatar_url = %s
+                 , avatar_src = %s
+             WHERE id = %s
+        """, (avatar_url, src, self.id))
+        self.set_attributes(avatar_src=src, avatar_url=avatar_url)
+
+        return avatar_url
 
     def update_goal(self, goal, cursor=None):
         with self.db.get_cursor(cursor) as c:
@@ -1608,6 +1640,10 @@ class Participant(Model, MixinTeam):
 
     def path(self, path):
         return '/%s/%s' % (self.username, path)
+
+    @property
+    def is_person(self):
+        return self.kind in ('individual', 'organization')
 
 
 class NeedConfirmation(Exception):
