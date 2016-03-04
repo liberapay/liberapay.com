@@ -118,8 +118,8 @@ title = _("Add money")
     <p>{{ _(
         "Adding money to Liberapay via credit/debit card (currently the only "
         "supported payment method) incurs a fee of {0}% + {1}.",
-        constants.FEE_CHARGE_VAR * 100,
-        Money(constants.FEE_CHARGE_FIX, 'EUR'),
+        constants.FEE_CHARGE_VAR * (constants.FEE_VAT + 1) * 100,
+        Money(constants.FEE_CHARGE_FIX * (constants.FEE_VAT + 1), 'EUR'),
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
@@ -129,7 +129,7 @@ title = _("Add money")
         <select class="form-control" name="amount">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees = upcharge(amount)
+            % set charge_amount, fees, vat = upcharge(amount)
             <option value="{{ amount }}">{{ _(
                 "{0} ({2}% fee included)",
                 Money(charge_amount, 'EUR'),

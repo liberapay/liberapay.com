@@ -17,6 +17,7 @@ from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymen
 from liberapay.constants import (
     CHARGE_MIN, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
     FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, QUARANTINE, SEPA_ZONE,
+    FEE_VAT,
 )
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
@@ -44,7 +45,12 @@ def upcharge(amount):
     charge_amount = charge_amount.quantize(FEE_CHARGE_FIX, rounding=ROUND_UP)
     fee = charge_amount - amount
 
-    return charge_amount, fee
+    # + VAT
+    vat = (fee * FEE_VAT).quantize(FEE_CHARGE_FIX, rounding=ROUND_UP)
+    charge_amount += vat
+    fee += vat
+
+    return charge_amount, fee, vat
 
 
 def skim_credit(amount, ba):
@@ -64,7 +70,9 @@ def skim_credit(amount, ba):
         fee = FEE_CREDIT
     else:
         fee = FEE_CREDIT_OUTSIDE_SEPA
-    return amount - fee, fee
+    vat = (fee * FEE_VAT).quantize(Decimal('0.01'), rounding=ROUND_UP)
+    fee += vat
+    return amount - fee, fee, vat
 
 
 def repr_error(o):
@@ -109,12 +117,12 @@ def payout(db, participant, amount):
     ba = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
 
     # Do final calculations
-    credit_amount, fee = skim_credit(amount, ba)
+    credit_amount, fee, vat = skim_credit(amount, ba)
     if credit_amount <= 0 or fee / credit_amount > 0.1:
         raise TransactionFeeTooHigh
 
     # Try to dance with MangoPay
-    e_id = record_exchange(db, route, -credit_amount, fee, participant, 'pre')
+    e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre')
     payout = PayOut()
     payout.AuthorId = participant.mangopay_user_id
     payout.DebitedFunds = Money(int(credit_amount * 100), 'EUR')
@@ -146,10 +154,10 @@ def charge(db, participant, amount, return_url):
     route = ExchangeRoute.from_network(participant, 'mango-cc')
     assert route
 
-    charge_amount, fee = upcharge(amount)
+    charge_amount, fee, vat = upcharge(amount)
     amount = charge_amount - fee
 
-    e_id = record_exchange(db, route, amount, fee, participant, 'pre')
+    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
     payin = PayIn()
     payin.AuthorId = participant.mangopay_user_id
     if not participant.mangopay_wallet_id:
@@ -176,7 +184,7 @@ def charge(db, participant, amount, return_url):
     return record_exchange_result(db, e_id, 'succeeded', None, participant)
 
 
-def record_exchange(db, route, amount, fee, participant, status, error=None):
+def record_exchange(db, route, amount, fee, vat, participant, status, error=None):
     """Given a Bunch of Stuff, return an int (exchange_id).
 
     Records in the exchanges table have these characteristics:
@@ -188,16 +196,18 @@ def record_exchange(db, route, amount, fee, participant, status, error=None):
 
         fee     The payment processor's fee. It's always positive.
 
+        vat     The amount of VAT included in the fee. Always positive.
+
     """
 
     with db.get_cursor() as cursor:
 
         e = cursor.one("""
             INSERT INTO exchanges
-                   (amount, fee, participant, status, route, note)
-            VALUES (%s, %s, %s, %s, %s, %s)
+                   (amount, fee, vat, participant, status, route, note)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
          RETURNING *
-        """, (amount, fee, participant.id, status, route.id, error))
+        """, (amount, fee, vat, participant.id, status, route.id, error))
 
         if status == 'failed':
             propagate_exchange(cursor, participant, e, route, error, 0)
@@ -218,7 +228,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
                  , note=%(error)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
-         RETURNING id, amount, fee, participant, recorder, note, status, timestamp
+         RETURNING id, amount, fee, vat, participant, recorder, note, status, timestamp
                  , ( SELECT r.*::exchange_routes
                        FROM exchange_routes r
                       WHERE r.id = e.route

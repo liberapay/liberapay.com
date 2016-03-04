@@ -1,0 +1,4 @@
+BEGIN;
+    ALTER TABLE exchanges ADD COLUMN vat numeric(35,2) NOT NULL DEFAULT 0;
+    ALTER TABLE exchanges ALTER COLUMN vat DROP DEFAULT;
+END;

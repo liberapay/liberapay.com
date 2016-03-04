@@ -217,7 +217,7 @@ class Harness(unittest.TestCase):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
 
 
-    def make_exchange(self, route, amount, fee, participant, status='succeeded', error=''):
+    def make_exchange(self, route, amount, fee, participant, status='succeeded', error='', vat=0):
         if not isinstance(route, ExchangeRoute):
             network = route
             route = ExchangeRoute.from_network(participant, network)
@@ -225,7 +225,7 @@ class Harness(unittest.TestCase):
                 from .mangopay import MangopayHarness
                 route = ExchangeRoute.insert(participant, network, MangopayHarness.card_id)
                 assert route
-        e_id = record_exchange(self.db, route, amount, fee, participant, 'pre')
+        e_id = record_exchange(self.db, route, amount, fee, vat, participant, 'pre')
         record_exchange_result(self.db, e_id, status, error, participant)
         return e_id
 
