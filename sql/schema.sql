@@ -56,10 +56,7 @@ CREATE TABLE participants
 , hide_receiving        boolean                 NOT NULL DEFAULT FALSE
 , hide_from_search      boolean                 NOT NULL DEFAULT FALSE
 
-, avatar_src            text
 , avatar_url            text
-, avatar_email          text
-
 , giving                numeric(35,2)           NOT NULL DEFAULT 0
 , receiving             numeric(35,2)           NOT NULL DEFAULT 0
 , taking                numeric(35,2)           NOT NULL DEFAULT 0
@@ -67,6 +64,9 @@ CREATE TABLE participants
 
 , email_notif_bits      int                     NOT NULL DEFAULT 2147483647
 , pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
+
+, avatar_src            text
+, avatar_email          text
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
