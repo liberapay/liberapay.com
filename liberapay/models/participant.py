@@ -582,7 +582,7 @@ class Participant(Model, MixinTeam):
             self.send_email('verification_notice', new_email=email)
             return 2
         else:
-            self.update_avatar()
+            self.update_avatar(cursor=cursor)
 
         return 1
 
@@ -644,8 +644,8 @@ class Participant(Model, MixinTeam):
           ORDER BY id
         """, (self.id,))
 
-    def get_any_email(self):
-        return self.db.one("""
+    def get_any_email(self, cursor=None):
+        return (cursor or self.db).one("""
             SELECT address
               FROM emails
              WHERE participant=%s
@@ -963,12 +963,12 @@ class Participant(Model, MixinTeam):
 
         return suggested
 
-    def update_avatar(self, src=None):
+    def update_avatar(self, src=None, cursor=None):
         if self.status == 'stub':
             assert src is None
 
         platform, key = src.split(':', 1) if src else (None, None)
-        email = self.avatar_email or self.email or self.get_any_email()
+        email = self.avatar_email or self.email or self.get_any_email(cursor)
 
         if platform == 'libravatar' or platform is None and email:
             if not email:
@@ -978,7 +978,7 @@ class Participant(Model, MixinTeam):
             avatar_url += AVATAR_QUERY
 
         elif platform is None:
-            avatar_url = self.db.one("""
+            avatar_url = (cursor or self.db).one("""
                 SELECT avatar_url
                   FROM elsewhere
                  WHERE participant = %s
@@ -989,7 +989,7 @@ class Participant(Model, MixinTeam):
             """, (self.id,))
 
         else:
-            avatar_url = self.db.one("""
+            avatar_url = (cursor or self.db).one("""
                 SELECT avatar_url
                   FROM elsewhere
                  WHERE participant = %s
@@ -1000,7 +1000,7 @@ class Participant(Model, MixinTeam):
         if not avatar_url:
             return
 
-        self.db.run("""
+        (cursor or self.db).run("""
             UPDATE participants
                SET avatar_url = %s
                  , avatar_src = %s
