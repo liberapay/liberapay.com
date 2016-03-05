@@ -224,7 +224,15 @@ ul.emails {
 }
 
 .faq dt {
-    margin: 1.5em 0 0.33em;
+    margin: 1.5em 0 0;
+    padding-bottom: 0.33em;
+    &:target, &:target + dd {
+        background-color: rgba(yellow, 0.3);
+        animation: target-flash 1.5s 1;
+    }
+}
+@keyframes target-flash {
+    0% { background-color: rgba(yellow, 0.7); }
 }
 
 section.profile-statement {

@@ -73,24 +73,24 @@ title = _("Frequently Asked Questions")
 
     <dt id="maximum-amount">{{ _("Is there a minimum or maximum amount I can give or receive?") }}</dt>
 
-    <dd>{{ _(
+    <dd>
+    {{ _(
         "There are no restrictions on the total amount you can give or receive, "
         "but for legal reasons you will need to provide identity documents if "
         "you give or receive a significant amount of money per year."
-    ) }}</dd>
-
-    <dd>{{ _(
+    ) }}<br>
+    {{ _(
         "The minimum you can give any user is {0}. To minimize processing fees, "
         "we charge your credit card at least {1} at a time (the money is stored "
         "in your Liberapay wallet and transferred to others during Payday)."
         , Money(constants.MIN_TIP, 'EUR'), Money(constants.CHARGE_MIN, 'EUR')
-    ) }}</dd>
-
-    <dd>{{ _(
+    ) }}<br>
+    {{ _(
         "The maximum you can give any one user is {0} per week. This helps to "
         "stabilize income by reducing how dependent it is on a few large patrons."
         , Money(constants.MAX_TIP, 'EUR')
-    ) }}</dd>
+    ) }}
+    </dd>
 
 
     <dt id="taxable">{{ _("Do I have to pay taxes on the income I receive from Liberapay?") }}</dt>
