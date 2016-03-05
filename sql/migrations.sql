@@ -67,3 +67,7 @@ UPDATE participants
  WHERE avatar_url LIKE '%//secure.gravatar.com/%';
 ALTER TABLE participants ADD COLUMN avatar_src text;
 ALTER TABLE participants ADD COLUMN avatar_email text;
+
+-- migration #6
+ALTER TABLE exchanges ADD COLUMN vat numeric(35,2) NOT NULL DEFAULT 0;
+ALTER TABLE exchanges ALTER COLUMN vat DROP DEFAULT;
