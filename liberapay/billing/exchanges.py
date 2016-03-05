@@ -284,12 +284,22 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
             raise NotEnoughWithdrawableMoney(Money(withdrawable, 'EUR'))
         for b in bundles:
             if x >= b.amount:
+                cursor.run("""
+                    INSERT INTO e2e_transfers
+                                (origin, withdrawal, amount)
+                         VALUES (%s, %s, %s)
+                """, (b.origin, exchange.id, b.amount))
                 cursor.run("DELETE FROM cash_bundles WHERE id = %s", (b.id,))
                 x -= b.amount
                 if x == 0:
                     break
             else:
                 assert x > 0
+                cursor.run("""
+                    INSERT INTO e2e_transfers
+                                (origin, withdrawal, amount)
+                         VALUES (%s, %s, %s)
+                """, (b.origin, exchange.id, x))
                 cursor.run("""
                     UPDATE cash_bundles
                        SET amount = (amount - %s)
