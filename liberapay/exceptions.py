@@ -27,12 +27,16 @@ class AuthRequired(LazyResponse):
         return _("You need to sign in first")
 
 
-class LazyResponse400(LazyResponse):
+class LazyResponseXXX(LazyResponse):
 
     def __init__(self, *args, **kw):
-        Response.__init__(self, 400, '', **kw)
+        Response.__init__(self, self.code, '', **kw)
         self.lazy_body = self.msg
         self.args = args
+
+
+class LazyResponse400(LazyResponseXXX):
+    code = 400
 
 
 class ProblemChangingUsername(LazyResponse400): pass
@@ -123,6 +127,16 @@ class NotEnoughWithdrawableMoney(LazyResponse400):
 class TransactionFeeTooHigh(LazyResponse400):
     def msg(self, _):
         return _("The transaction fee would be more than 10%.")
+
+
+class PaydayIsRunning(LazyResponseXXX):
+    code = 503
+
+    def msg(self, _):
+        return _(
+            "Sorry, we're running payday right now, and we're not set up to do "
+            "payouts while payday is running. Please check back in a few hours."
+        )
 
 
 class InvalidNumber(LazyResponse400):
