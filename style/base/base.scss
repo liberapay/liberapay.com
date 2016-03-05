@@ -230,6 +230,16 @@ ul.emails {
         background-color: rgba(yellow, 0.3);
         animation: target-flash 1.5s 1;
     }
+    & > a {
+        color: #000;
+        position: relative;
+        text-decoration: none;
+        &:hover:before {
+            content: '§';
+            left: -1em;
+            position: absolute;
+        }
+    }
 }
 @keyframes target-flash {
     0% { background-color: rgba(yellow, 0.7); }

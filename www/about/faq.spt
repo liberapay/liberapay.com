@@ -3,18 +3,23 @@
 title = _("Frequently Asked Questions")
 [---] text/html
 % extends "templates/about.html"
+
+% macro dt(title, id)
+    <dt id="{{ id }}"><a href="#{{ id }}">{{ title }}</a></dt>
+% endmacro
+
 % block content
 <div class="row faq">
 <dl class="col-md-6">
 
-    <dt id="how-funded">{{ _("How is Liberapay funded?") }}</dt>
+    {{ dt(_("How is Liberapay funded?"), 'how-funded') }}
 
     <dd>{{ _("Liberapay is funded {0}on Liberapay{1}.",
              '<a href="/Liberapay/">'|safe,
              '</a>'|safe) }}</dd>
 
 
-    <dt id="who-can-use">{{ _("Who can use Liberapay?") }}</dt>
+    {{ dt(_("Who can use Liberapay?"), 'who-can-use') }}
 
     <dd>{{ _(
         "Donating requires a credit or debit card (Visa or MasterCard), "
@@ -27,12 +32,12 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
-    <dt id="one-time-gift">{{ _("Can I make a one-time donation?") }}</dt>
+    {{ dt(_("Can I make a one-time donation?"), 'one-time-gift') }}
 
     <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>
 
 
-    <dt id="differences">{{ _("What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?") }}</dt>
+    {{ dt(_("What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"), 'differences') }}
 
     <dd>
     <ol>
@@ -57,7 +62,7 @@ title = _("Frequently Asked Questions")
 </dl>
 <dl class="col-md-6">
 
-    <dt id="fees">{{ _("What are the payment processing fees?") }}</dt>
+    {{ dt(_("What are the payment processing fees?"), 'fees') }}
 
     <dd>{{ _(
         "Adding money to Liberapay via credit/debit card (currently the only "
@@ -71,7 +76,7 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
-    <dt id="maximum-amount">{{ _("Is there a minimum or maximum amount I can give or receive?") }}</dt>
+    {{ dt(_("Is there a minimum or maximum amount I can give or receive?"), 'maximum-amount') }}
 
     <dd>
     {{ _(
@@ -93,17 +98,17 @@ title = _("Frequently Asked Questions")
     </dd>
 
 
-    <dt id="taxable">{{ _("Do I have to pay taxes on the income I receive from Liberapay?") }}</dt>
+    {{ dt(_("Do I have to pay taxes on the income I receive from Liberapay?"), 'taxable') }}
 
     <dd>{{ _("We don't know, it's up to you to figure out your country's tax rules.") }}</dd>
 
 
-    <dt id="tax-deductible">{{ _("Are donations through Liberapay tax-deductible?") }}</dt>
+    {{ dt(_("Are donations through Liberapay tax-deductible?"), 'tax-deductible') }}
 
     <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
 
 
-    <dt id="income-decrease">{{ _("Why did my income decrease?") }}</dt>
+    {{ dt(_("Why did my income decrease?"), 'income-decrease') }}
 
     <dd>{{ _("If your income decreased, one of the following happened:") }}
 
