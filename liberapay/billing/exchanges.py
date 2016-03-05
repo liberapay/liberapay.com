@@ -20,7 +20,7 @@ from liberapay.constants import (
     FEE_VAT,
 )
 from liberapay.exceptions import (
-    LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
+    LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
     TransactionFeeTooHigh
 )
 from liberapay.models import check_db
@@ -112,6 +112,10 @@ def test_hook():
 
 
 def payout(db, participant, amount):
+    payday = db.one("SELECT * FROM paydays WHERE ts_start > ts_end")
+    if payday:
+        raise PaydayIsRunning
+
     route = ExchangeRoute.from_network(participant, 'mango-ba')
     assert route
     ba = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
