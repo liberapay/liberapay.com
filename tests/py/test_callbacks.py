@@ -22,7 +22,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             status_up = status.upper()
             error = 'FOO' if status == 'failed' else None
             self.make_exchange('mango-cc', 10, 0, homer)
-            e_id = record_exchange(self.db, ba, -10, 0, homer, 'pre')
+            e_id = record_exchange(self.db, ba, -10, 0, 0, homer, 'pre')
             assert homer.balance == 0
             homer.close(None)
             assert homer.status == 'closed'

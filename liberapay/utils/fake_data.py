@@ -130,7 +130,7 @@ def fake_transfer(db, tipper, tippee, amount, timestamp):
     return t
 
 
-def fake_exchange(db, participant, amount, fee, timestamp):
+def fake_exchange(db, participant, amount, fee, vat, timestamp):
     route = ExchangeRoute.from_network(participant, 'mango-cc')
     if not route:
         route = _fake_thing(
@@ -149,6 +149,7 @@ def fake_exchange(db, participant, amount, fee, timestamp):
         participant=participant.id,
         amount=amount,
         fee=fee,
+        vat=vat,
         status='pre',
         route=route.id,
     )
@@ -211,7 +212,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
         sys.stdout.flush()
         amount = fake_tip_amount()
         ts = faker.date_time_this_year()
-        fake_exchange(db, tipper, amount, 0, (ts - datetime.timedelta(days=1)))
+        fake_exchange(db, tipper, amount, 0, 0, (ts - datetime.timedelta(days=1)))
         transfers.append(fake_transfer(db, tipper, tippee, amount, ts))
     print("")
 

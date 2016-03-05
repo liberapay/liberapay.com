@@ -62,12 +62,12 @@ title = _("Frequently Asked Questions")
     <dd>{{ _(
         "Adding money to Liberapay via credit/debit card (currently the only "
         "supported payment method) incurs a fee of {0}% + {1}.",
-        constants.FEE_CHARGE_VAR * 100,
-        Money(constants.FEE_CHARGE_FIX, 'EUR'),
+        constants.FEE_CHARGE_VAR * (constants.FEE_VAT + 1) * 100,
+        Money(constants.FEE_CHARGE_FIX * (constants.FEE_VAT + 1), 'EUR'),
     ) + " " + _(
         "Withdrawing money to a SEPA bank account is free, transfers to other "
         "countries cost {0} per transfer.",
-        Money(constants.FEE_CREDIT_OUTSIDE_SEPA, 'EUR'),
+        Money(constants.FEE_CREDIT_OUTSIDE_SEPA * (constants.FEE_VAT + 1), 'EUR'),
     ) }}</dd>
 
 
@@ -83,7 +83,7 @@ title = _("Frequently Asked Questions")
         "The minimum you can give any user is {0}. To minimize processing fees, "
         "we charge your credit card at least {1} at a time (the money is stored "
         "in your Liberapay wallet and transferred to others during Payday)."
-        , Money(constants.MIN_TIP, 'EUR'), Money(10, 'EUR')
+        , Money(constants.MIN_TIP, 'EUR'), Money(constants.CHARGE_MIN, 'EUR')
     ) }}</dd>
 
     <dd>{{ _(
