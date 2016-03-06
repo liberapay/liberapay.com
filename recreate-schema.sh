@@ -5,6 +5,8 @@
 # Exit on errors and undefined variables
 set -eu
 
+alias psql='psql -v ON_ERROR_STOP=on'
+
 if [ "${1-}" = "test" ]; then
     psql $DATABASE_URL <<EOF
 DO \$$
