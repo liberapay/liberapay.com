@@ -3,9 +3,11 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
+from binascii import hexlify
 from datetime import date, datetime, timedelta
 import fnmatch
 import os
+import pickle
 import re
 
 from six.moves.urllib.parse import quote as urlquote
@@ -244,3 +246,10 @@ def find_files(directory, pattern):
     for root, dirs, files in os.walk(directory):
         for filename in fnmatch.filter(files, pattern):
             yield os.path.join(root, filename)
+
+
+def serialize(context):
+    for k, v in context.items():
+        if str(type(v)) == "<class 'psycopg2.extras.Record'>":
+            context[k] = v._asdict()
+    return b'\\x' + hexlify(pickle.dumps(context, 2))
