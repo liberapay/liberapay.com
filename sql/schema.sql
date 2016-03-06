@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '6'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '7'::jsonb);
 
 
 -- app configuration
@@ -235,7 +235,7 @@ CREATE TYPE exchange_status AS ENUM ('pre', 'created', 'failed', 'succeeded');
 CREATE TABLE exchanges
 ( id                serial               PRIMARY KEY
 , timestamp         timestamptz          NOT NULL DEFAULT CURRENT_TIMESTAMP
-, amount            numeric(35,2)        NOT NULL
+, amount            numeric(35,2)        NOT NULL CHECK (amount <> 0)
 , fee               numeric(35,2)        NOT NULL
 , participant       bigint               NOT NULL REFERENCES participants
 , recorder          bigint               REFERENCES participants
@@ -435,3 +435,13 @@ CREATE TABLE cash_bundles
 );
 
 CREATE INDEX cash_bundles_owner_idx ON cash_bundles (owner);
+
+
+-- end-to-end log of transfers, links payouts to payins
+
+CREATE TABLE e2e_transfers
+( id           bigserial      PRIMARY KEY
+, origin       bigint         NOT NULL REFERENCES exchanges
+, withdrawal   bigint         NOT NULL REFERENCES exchanges
+, amount       numeric(35,2)  NOT NULL CHECK (amount > 0)
+);
