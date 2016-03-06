@@ -112,6 +112,8 @@ def test_hook():
 
 
 def payout(db, participant, amount, ignore_high_fee=False):
+    assert amount > 0
+
     payday = db.one("SELECT * FROM paydays WHERE ts_start > ts_end")
     if payday:
         raise PaydayIsRunning

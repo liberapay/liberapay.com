@@ -28,6 +28,8 @@ if request.method == 'POST':
     body = request.body
 
     amount = parse_decimal(request.body['amount'])
+    if amount <= 0:
+        raise Response(400, _("The amount cannot be zero."))
     ignore_high_fee = body.get('confirmed') == 'true'
     try:
         exchange = payout(website.db, participant, amount, ignore_high_fee)
