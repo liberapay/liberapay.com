@@ -203,7 +203,7 @@ class Harness(unittest.TestCase):
 
         if 'last_bill_result' in kw2:
             ExchangeRoute.insert(participant, 'mango-cc', '-1', kw2['last_bill_result'])
-        if 'balance' in kw2:
+        if 'balance' in kw2 and kw2['balance'] != 0:
             self.make_exchange('mango-cc', kw2['balance'], 0, participant)
 
         return participant

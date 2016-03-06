@@ -16,12 +16,12 @@ from mangopaysdk.types.money import Money
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
     CHARGE_MIN, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
-    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, QUARANTINE, SEPA_ZONE,
+    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, FEE_CREDIT_WARN, QUARANTINE, SEPA_ZONE,
     FEE_VAT,
 )
 from liberapay.exceptions import (
-    LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney,
-    TransactionFeeTooHigh
+    LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
+    FeeExceedsAmount, TransactionFeeTooHigh,
 )
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
@@ -111,21 +111,30 @@ def test_hook():
     return
 
 
-def payout(db, participant, amount):
+def payout(db, participant, amount, ignore_high_fee=False):
+    assert amount > 0
+
+    payday = db.one("SELECT * FROM paydays WHERE ts_start > ts_end")
+    if payday:
+        raise PaydayIsRunning
+
     route = ExchangeRoute.from_network(participant, 'mango-ba')
     assert route
     ba = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
 
     # Do final calculations
     credit_amount, fee, vat = skim_credit(amount, ba)
-    if credit_amount <= 0 or fee / credit_amount > 0.1:
-        raise TransactionFeeTooHigh
+    if credit_amount <= 0 and fee > 0:
+        raise FeeExceedsAmount
+    fee_percent = fee / amount
+    if fee_percent > FEE_CREDIT_WARN and not ignore_high_fee:
+        raise TransactionFeeTooHigh(fee_percent, fee, amount)
 
     # Try to dance with MangoPay
     e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre')
     payout = PayOut()
     payout.AuthorId = participant.mangopay_user_id
-    payout.DebitedFunds = Money(int(credit_amount * 100), 'EUR')
+    payout.DebitedFunds = Money(int(amount * 100), 'EUR')
     payout.DebitedWalletId = participant.mangopay_wallet_id
     payout.Fees = Money(int(fee * 100), 'EUR')
     payout.MeanOfPaymentDetails = PayOutPaymentDetailsBankWire(
@@ -280,12 +289,22 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
             raise NotEnoughWithdrawableMoney(Money(withdrawable, 'EUR'))
         for b in bundles:
             if x >= b.amount:
+                cursor.run("""
+                    INSERT INTO e2e_transfers
+                                (origin, withdrawal, amount)
+                         VALUES (%s, %s, %s)
+                """, (b.origin, exchange.id, b.amount))
                 cursor.run("DELETE FROM cash_bundles WHERE id = %s", (b.id,))
                 x -= b.amount
                 if x == 0:
                     break
             else:
                 assert x > 0
+                cursor.run("""
+                    INSERT INTO e2e_transfers
+                                (origin, withdrawal, amount)
+                         VALUES (%s, %s, %s)
+                """, (b.origin, exchange.id, x))
                 cursor.run("""
                     UPDATE cash_bundles
                        SET amount = (amount - %s)

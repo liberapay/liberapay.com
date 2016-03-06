@@ -17,16 +17,13 @@ elif goal == "custom":
 if goal is not None:
     goal = parse_decimal(goal)
 
+back_to = './edit'
 if goal == -1 and not request.body.get("confirmed"):
     msg = _("Warning: Doing this will remove all the tips you are currently receiving."
             "\n\nThat cannot be undone!")
+    response.render('templates/confirm.spt', state, msg=msg, back_to=back_to)
 else:
     participant.update_goal(goal)
-    response.redirect('./edit')
+    response.redirect(back_to)
 
-[---] text/html
-% extends "templates/base.html"
-% block content
-    % from "templates/confirm.html" import confirm with context
-    {{ confirm(msg, request.body, './edit') }}
-% endblock
+[---] text/plain

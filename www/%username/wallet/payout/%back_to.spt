@@ -9,6 +9,7 @@ from aspen import Response
 import liberapay
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payout
+from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant
 
@@ -21,20 +22,33 @@ participant = get_participant(state, restrict=True)
 exchange = None
 bank_account, ba_details, ba_type = None, None, 'IBAN'
 
+back_to = b64decode_s(request.path['back_to'], default=None)
+
 if request.method == 'POST':
     body = request.body
 
     amount = parse_decimal(request.body['amount'])
-    exchange = payout(website.db, participant, amount)
-    participant.notify('withdrawal_'+exchange.status, web=False, exchange=exchange)
-    response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
+    if amount <= 0:
+        raise Response(400, _("The amount cannot be zero."))
+    ignore_high_fee = body.get('confirmed') == 'true'
+    try:
+        exchange = payout(website.db, participant, amount, ignore_high_fee)
+    except TransactionFeeTooHigh as e:
+        msg = _(
+            "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?",
+            (e.args[0] * 100).quantize(D('0.1')), *e.args[1:]
+        )
+        response.render('templates/confirm.spt', state,
+                        msg=msg, back_to=back_to, cls='warning')
+    if exchange:
+        participant.notify('withdrawal_'+exchange.status, web=False, exchange=exchange)
+        response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
 elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
-back_to = b64decode_s(request.path['back_to'], default=None)
-success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
+success = getattr(exchange, 'status', None) in ('created', 'succeeded')
 show_form = participant.balance > 0 and not success
 if show_form or not success:
     withdrawable = participant.withdrawable_balance
@@ -64,7 +78,7 @@ title = _("Withdraw money")
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your liberapay wallet. "
               "If the transfer is successful {1} will land in your bank account and {2} will be paid in fees.",
-              Money(-exchange.amount, 'EUR'), Money(-exchange.amount - exchange.fee, 'EUR'), Money(exchange.fee, 'EUR')) if success else
+              Money(-exchange.amount + exchange.fee, 'EUR'), Money(-exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
             _("The attempt to send {0} to your bank account has failed. Error message: {1}", Money(-exchange.amount, 'EUR'), exchange.note)
         }}</div>
     % endif

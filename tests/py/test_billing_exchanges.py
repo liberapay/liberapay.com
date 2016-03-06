@@ -17,10 +17,11 @@ from liberapay.billing.exchanges import (
     sync_with_mangopay,
     transfer,
 )
+from liberapay.billing.payday import Payday
 from liberapay.constants import CHARGE_MIN, CHARGE_TARGET
 from liberapay.exceptions import (
-    NegativeBalance, NotEnoughWithdrawableMoney,
-    TransactionFeeTooHigh
+    NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
+    FeeExceedsAmount,
 )
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
@@ -43,7 +44,7 @@ class TestPayouts(MangopayHarness):
     def test_payout_amount_under_minimum(self, gba):
         self.make_exchange('mango-cc', 8, 0, self.homer)
         gba.return_value = self.bank_account_outside_sepa
-        with self.assertRaises(TransactionFeeTooHigh):
+        with self.assertRaises(FeeExceedsAmount):
             payout(self.db, self.homer, D('0.10'))
 
     @mock.patch('liberapay.billing.exchanges.test_hook')
@@ -74,6 +75,12 @@ class TestPayouts(MangopayHarness):
         with mock.patch.multiple(exchanges, QUARANTINE='1 month'):
             with self.assertRaises(NotEnoughWithdrawableMoney):
                 payout(self.db, self.homer, D('32.00'))
+
+    def test_payout_during_payday(self):
+        self.make_exchange('mango-cc', 200, 0, self.homer)
+        Payday.start()
+        with self.assertRaises(PaydayIsRunning):
+            payout(self.db, self.homer, D('97.35'))
 
 
 class TestCharge(MangopayHarness):
