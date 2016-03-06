@@ -31,6 +31,8 @@ def compile_assets(website):
         except:
             pass
         content = client.GET(urlpath).body
+        if not isinstance(content, bytes):
+            content = content.encode('utf8')
         tmpfd, tmpfpath = mkstemp(dir='.')
         os.write(tmpfd, content)
         os.close(tmpfd)
