@@ -52,6 +52,7 @@ FEE_CHARGE_FIX = Decimal('0.18')  # 0.18 euros
 FEE_CHARGE_VAR = Decimal('0.018')  # 1.8%
 FEE_CREDIT = 0
 FEE_CREDIT_OUTSIDE_SEPA = Decimal("2.5")
+FEE_CREDIT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 
 JINJA_ENV_COMMON = dict(

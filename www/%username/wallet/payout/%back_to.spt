@@ -9,6 +9,7 @@ from aspen import Response
 import liberapay
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payout
+from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant
 
@@ -21,19 +22,30 @@ participant = get_participant(state, restrict=True)
 exchange = None
 bank_account, ba_details, ba_type = None, None, 'IBAN'
 
+back_to = b64decode_s(request.path['back_to'], default=None)
+
 if request.method == 'POST':
     body = request.body
 
     amount = parse_decimal(request.body['amount'])
-    exchange = payout(website.db, participant, amount)
-    participant.notify('withdrawal_'+exchange.status, web=False, exchange=exchange)
-    response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
+    ignore_high_fee = body.get('confirmed') == 'true'
+    try:
+        exchange = payout(website.db, participant, amount, ignore_high_fee)
+    except TransactionFeeTooHigh as e:
+        msg = _(
+            "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?",
+            (e.args[0] * 100).quantize(D('0.1')), *e.args[1:]
+        )
+        response.render('templates/confirm.spt', state,
+                        msg=msg, back_to=back_to, cls='warning')
+    if exchange:
+        participant.notify('withdrawal_'+exchange.status, web=False, exchange=exchange)
+        response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
 elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
-back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
 show_form = participant.balance > 0 and not success
 if show_form or not success:

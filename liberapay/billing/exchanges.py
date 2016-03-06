@@ -16,12 +16,12 @@ from mangopaysdk.types.money import Money
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
     CHARGE_MIN, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
-    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, QUARANTINE, SEPA_ZONE,
+    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, FEE_CREDIT_WARN, QUARANTINE, SEPA_ZONE,
     FEE_VAT,
 )
 from liberapay.exceptions import (
     LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
-    TransactionFeeTooHigh
+    FeeExceedsAmount, TransactionFeeTooHigh,
 )
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
@@ -111,7 +111,7 @@ def test_hook():
     return
 
 
-def payout(db, participant, amount):
+def payout(db, participant, amount, ignore_high_fee=False):
     payday = db.one("SELECT * FROM paydays WHERE ts_start > ts_end")
     if payday:
         raise PaydayIsRunning
@@ -122,8 +122,11 @@ def payout(db, participant, amount):
 
     # Do final calculations
     credit_amount, fee, vat = skim_credit(amount, ba)
-    if credit_amount <= 0 or fee / credit_amount > 0.1:
-        raise TransactionFeeTooHigh
+    if credit_amount <= 0 and fee > 0:
+        raise FeeExceedsAmount
+    fee_percent = fee / amount
+    if fee_percent > FEE_CREDIT_WARN and not ignore_high_fee:
+        raise TransactionFeeTooHigh(fee_percent, fee, amount)
 
     # Try to dance with MangoPay
     e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre')
