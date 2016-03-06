@@ -46,7 +46,7 @@ elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
-success = getattr(exchange, 'status', None) in ('pending', 'succeeded')
+success = getattr(exchange, 'status', None) in ('created', 'succeeded')
 show_form = participant.balance > 0 and not success
 if show_form or not success:
     withdrawable = participant.withdrawable_balance
@@ -76,7 +76,7 @@ title = _("Withdraw money")
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your liberapay wallet. "
               "If the transfer is successful {1} will land in your bank account and {2} will be paid in fees.",
-              Money(-exchange.amount, 'EUR'), Money(-exchange.amount - exchange.fee, 'EUR'), Money(exchange.fee, 'EUR')) if success else
+              Money(-exchange.amount + exchange.fee, 'EUR'), Money(-exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
             _("The attempt to send {0} to your bank account has failed. Error message: {1}", Money(-exchange.amount, 'EUR'), exchange.note)
         }}</div>
     % endif
