@@ -136,6 +136,15 @@ def _redirect(response, url):
     raise response
 aspen.Response.redirect = _redirect
 
+if hasattr(aspen.Response, 'render'):
+    raise Warning('aspen.Response.render() already exists')
+def _render(response, path, state, **extra):
+    state.update(extra)
+    assert response is state['response']
+    aspen.resources.get(state['website'], path).respond(state)
+    raise response
+aspen.Response.render = _render
+
 if hasattr(aspen.Response, 'set_cookie'):
     raise Warning('aspen.Response.set_cookie() already exists')
 def _set_cookie(response, *args, **kw):

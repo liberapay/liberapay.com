@@ -81,11 +81,6 @@ if not confirm:
         back_to = _modify_query(back_to, 'success', b64encode_s(msg))
     response.redirect(back_to)
 
-msg = confirm
+response.render('templates/confirm.spt', state, msg=confirm, back_to=back_to)
 
-[---] text/html
-% extends "templates/base.html"
-% block content
-    % from "templates/confirm.html" import confirm with context
-    {{ confirm(msg, request.body, back_to) }}
-% endblock
+[---] text/plain
