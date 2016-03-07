@@ -6,7 +6,7 @@ from requests_oauthlib.oauth1_session import TokenRequestDenied
 
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
-from liberapay.models.participant import NeedConfirmation
+from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.utils import b64decode_s
 
 [-----------------------------]
@@ -26,7 +26,9 @@ except KeyError:
     raise Response(400, 'Missing cookie')
 if not cookie_value:
     raise Response(400, 'Empty cookie')
-query_data, action, then, action_user_id = json.loads(b64decode_s(cookie_value))
+cookie_obj = json.loads(b64decode_s(cookie_value))
+query_data, action, then, action_user_id = cookie_obj[:4]
+p_id = cookie_obj[4] if len(cookie_obj) > 4 else None
 then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
 # Check for an error message in the querystring
@@ -70,8 +72,11 @@ if action_user_id and account.user_id != action_user_id:
 log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
 if action == 'connect':
+    connect_to = Participant.from_id(p_id) if p_id else user
+    if not user.controls(connect_to):
+        raise Response(403, "can't connect to an account you don't control")
     try:
-        user.take_over((platform.name, account.user_id))
+        connect_to.take_over((platform.name, account.user_id))
     except NeedConfirmation:
         token, expires = account.make_connect_token()
         response.set_cookie(b'connect_%s' % account.id, token, expires)

@@ -3,6 +3,7 @@ import json
 
 from aspen import Response
 from liberapay.exceptions import AuthRequired
+from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s
 
 COOKIE_TIMEOUT = timedelta(minutes=5)
@@ -18,6 +19,7 @@ if platform is None:
 body = request.body
 try:
     action, then, user_id = body['action'], body['then'], body['user_id']
+    p_id = body.get('p_id') or ''
 except KeyError:
     raise Response(400)
 
@@ -27,7 +29,9 @@ if action not in constants.ELSEWHERE_ACTIONS:
 if action == 'connect' and user.ANON:
     raise AuthRequired
 
-team = not user.ANON and user.kind == 'organization' and platform.is_team_member
+p = Participant.from_id(p_id) if p_id else user
+
+team = not p.ANON and p.kind != 'individual' and platform.is_team_member
 if team and not user_id:
     user_id = body.get('user_name')
     user_id = user_id and '>'+user_id
@@ -36,7 +40,7 @@ if user_id or not team or action != 'connect':
     url, query_id, query_data = platform.get_auth_url(user=user)
 
     cookie_name = (platform.name+'_'+query_id).encode('ascii')
-    cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id]))
+    cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id, p_id]))
     response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
 
     response.redirect(url)

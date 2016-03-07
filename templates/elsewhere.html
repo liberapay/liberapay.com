@@ -7,7 +7,7 @@
         <div class="account-action">
             % if edit
                 % if account == None
-                    % call auth_button(platform.name, 'connect', btn_cls='close')
+                    % call auth_button(platform.name, 'connect', btn_cls='close', participant=participant)
                         +
                     % endcall
                 % else

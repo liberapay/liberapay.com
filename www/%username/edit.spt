@@ -164,8 +164,9 @@ title = participant.username
 
     % if participant.kind == 'group'
     % include "templates/members-listing.html"
-    % else
+    % endif
     % include "templates/connected-accounts.html"
+    % if participant.kind != 'group'
     % include "templates/team-listing.html"
     % include "templates/community-listing.html"
     % endif
