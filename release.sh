@@ -58,6 +58,7 @@ if [ -e sql/branch.sql ]; then
     # version on stdout without commands like \i
     branch_c=sql/branch-compiled.sql
     echo "Compiling branch.sql into $branch_c..."
+    cp sql/branch.sql $branch_c
     echo >>$branch_c
     echo "UPDATE db_meta SET value = '$new_version'::jsonb WHERE key = 'schema_version';" >>$branch_c
     $(make echo var=with_tests_env) sh -eu -c "
