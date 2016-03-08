@@ -15,7 +15,7 @@ echo:
 
 env: requirements*.txt
 	$(python) -c "import virtualenv" || pip install virtualenv
-	$(python) -m virtualenv ./env/
+	$(python) -m virtualenv --no-download ./env/
 	$(pip) install $$(for f in requirements*.txt; do echo "-r $$f"; done)
 	@touch env
 
