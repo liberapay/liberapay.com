@@ -2,6 +2,7 @@ from aspen import Response
 
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.participant import Participant
 
 [---------]
 if user.ANON:
@@ -10,8 +11,16 @@ request.allow('POST')
 
 body = request.body
 
+p_id = body.get('p_id')
+participant = Participant.from_id(p_id) if p_id else user
+if not participant:
+    raise Response(400, 'bad p_id')
+
 if body['should_transfer'] != 'yes':
-    response.redirect('/%s/' % user.username)
+    response.redirect(participant.path('edit'))
+
+if not user.controls(participant):
+    raise AuthRequired
 
 account_id = body['account_id']
 account = AccountElsewhere.from_id(account_id)
@@ -24,7 +33,7 @@ if not token or not account.check_connect_token(token.value):
 
 account.save_connect_token(None, None)
 
-user.take_over(account, have_confirmation=True)
-response.redirect('/%s/' % user.username)
+participant.take_over(account, have_confirmation=True)
+response.redirect(participant.path('edit'))
 
 [---------]

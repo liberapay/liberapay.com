@@ -80,7 +80,7 @@ if action == 'connect':
     except NeedConfirmation:
         token, expires = account.make_connect_token()
         response.set_cookie(b'connect_%s' % account.id, token, expires)
-        response.redirect('/on/confirm.html?id=%s' % account.id)
+        response.redirect('/on/confirm.html?id=%s&p_id=%s' % (account.id, connect_to.id))
 
 elif action in {'lock', 'unlock'}:
     account.participant.update_goal(-1 if action == 'lock' else None)
