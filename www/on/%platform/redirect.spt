@@ -31,7 +31,7 @@ if action == 'connect' and user.ANON:
 
 p = Participant.from_id(p_id) if p_id else user
 
-team = not p.ANON and p.kind != 'individual' and platform.is_team_member
+team = not p.ANON and p.kind != 'individual' and hasattr(platform, 'is_team_member')
 if team and not user_id:
     user_id = body.get('user_name')
     user_id = user_id and '>'+user_id
