@@ -84,7 +84,7 @@ class Platform(object):
             msg %= self.__class__.__name__, ', '.join(missing_attrs)
             raise AttributeError(msg)
 
-    def api_get(self, path, sess=None, **kw):
+    def api_get(self, path, sess=None, error_handler=True, **kw):
         """
         Given a `path` (e.g. /users/foo), this function sends a GET request to
         the platform's API (e.g. https://api.github.com/users/foo).
@@ -102,20 +102,28 @@ class Platform(object):
                 url += api_app_auth_params.format(**self.__dict__)
         response = sess.get(url, **kw)
 
-        limit, remaining, reset = self.get_ratelimit_headers(response)
         if not is_user_session:
+            limit, remaining, reset = self.get_ratelimit_headers(response)
             self.log_ratelimit_headers(limit, remaining, reset)
 
         # Check response status
+        if error_handler is True:
+            error_handler = self.api_error_handler
         status = response.status_code
-        if status == 401 and isinstance(self, PlatformOAuth1):
+        if status == 401 and isinstance(self, PlatformOAuth1) and is_user_session:
             # https://tools.ietf.org/html/rfc5849#section-3.2
-            if is_user_session:
-                raise TokenExpiredError
-            raise Response(500)
+            raise TokenExpiredError
+        if status != 200 and error_handler:
+            error_handler(response, is_user_session)
+
+        return response
+
+    def api_error_handler(self, response, is_user_session):
+        status = response.status_code
         if status == 404:
             raise Response(404, response.text)
         if status == 429 and is_user_session:
+            limit, remaining, reset = self.get_ratelimit_headers(response)
             def msg(_, to_age):
                 if remaining == 0 and reset:
                     return _("You've consumed your quota of requests, you can try again in {0}.", to_age(reset))
@@ -128,8 +136,6 @@ class Platform(object):
             msg = lambda _: _("{0} returned an error, please try again later.",
                               self.display_name)
             raise LazyResponse(502, msg)
-
-        return response
 
     def get_ratelimit_headers(self, response):
         limit, remaining, reset = None, None, None
