@@ -9,9 +9,7 @@ from liberapay.utils import emails, get_participant
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
-ok = participant == user
-if not ok and not user.ANON and participant.kind == 'group':
-    ok = user.member_of(participant)
+ok = not user.ANON and user.controls(participant)
 if ok:
     email = request.qs.get('email', '')
     nonce = request.qs.get('nonce', '')

@@ -2,20 +2,25 @@ from aspen import Response
 
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.participant import Participant
 
 [--------]
 
 if user.ANON:
     raise AuthRequired
 
-account_id = request.qs['id']
+account_id, p_id = request.qs['id'], request.qs.get('p_id')
 account = AccountElsewhere.from_id(account_id)
 token = request.headers.cookie.get('connect_%s' % account_id)
 if not token or not account.check_connect_token(token.value):
     raise Response(400, 'bad connect token "%s"' % token)
 
+p = Participant.from_id(p_id) if p_id else user
+if not p:
+    raise Response(400, 'bad p_id')
+
 other = account.participant
-user_accounts_dict = user.get_accounts_elsewhere()
+user_accounts_dict = p.get_accounts_elsewhere()
 user_accounts = user_accounts_dict.values()
 other_accounts = other.get_accounts_elsewhere().values()
 abandoned_account = user_accounts_dict.get(account.platform, None)
@@ -39,7 +44,7 @@ title = _("Please Confirm")
 
     <div class="row">
         <div class="col-sm-2">
-            <b>{{ user.username }}</b><br />
+            <b>{{ p.username }}</b><br />
             % for account in user_accounts
                 <img src="{{ account.platform_data.icon }}"
                      alt="{{ account.platform }}"
@@ -65,7 +70,7 @@ title = _("Please Confirm")
 
     <div class="row">
         <div class="col-sm-2">
-            <b>{{ user.username }}</b><br />
+            <b>{{ p.username }}</b><br />
             % for user_account in user_accounts
                 % if user_account != abandoned_account
                 <span class="account-elsewhere">
@@ -114,6 +119,7 @@ title = _("Please Confirm")
 
     <form action="/on/take-over.html" method="POST">
         <input type="hidden" name="account_id" value="{{ account_id }}" />
+        <input type="hidden" name="p_id" value="{{ p.id }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <button name="should_transfer" value="yes" class="btn btn-success">{{ _("Yes") }}</button>
         <button name="should_transfer" value="no" class="btn btn-default" >{{ _("No") }}</button>

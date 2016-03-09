@@ -1644,6 +1644,12 @@ class Participant(Model, MixinTeam):
     def is_person(self):
         return self.kind in ('individual', 'organization')
 
+    def controls(self, other):
+        return isinstance(other, Participant) and (
+            self.id == other.id or
+            other.kind == 'group' and self.member_of(other)
+        )
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
