@@ -1,11 +1,25 @@
 from __future__ import division, print_function, unicode_literals
 
+from datetime import timedelta
+
 from aspen import Response
 
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import AuthRequired
 from liberapay.models.participant import Participant
-from liberapay.utils import b64encode_s, get_participant
+from liberapay.utils import b64encode_s, get_participant, utcnow
+
+ONE_WEEK = timedelta(days=7)
+
+def get_invite(p):
+    return website.db.one("""
+        SELECT *
+          FROM events
+         WHERE type LIKE 'invite%%'
+           AND payload->>'invitee' = %s::text
+      ORDER BY ts DESC
+         LIMIT 1
+    """, (p.id,))
 
 [---]
 
@@ -22,14 +36,7 @@ msg = None
 confirm = None
 
 if action in ('accept', 'refuse'):
-    invite = website.db.one("""
-        SELECT *
-          FROM events
-         WHERE type LIKE 'invite%%'
-           AND payload->>'invitee' = %s::text
-      ORDER BY ts DESC
-         LIMIT 1
-    """, (user.id,))
+    invite = get_invite(user)
     if not invite:
         raise Response(400, _("You are not invited to join this team."))
     if invite.type == 'invite_accept':
@@ -47,6 +54,19 @@ if action == 'invite':
         raise Response(400, _("A team can't join a team"))
     if invitee.status != 'active':
         raise Response(400, _("You can't invite an inactive user to join a team."))
+    invite = get_invite(invitee)
+    if invite:
+        invite_age = utcnow() - invite.ts
+        if invite.type == 'invite' and invite_age < ONE_WEEK:
+            raise Response(400, _(
+                "{0} has already been invited to join this team {1} ago.",
+                invitee.username, invite_age
+            ))
+        elif invite.type == 'invite_refuse' and invite_age < ONE_WEEK:
+            raise Response(400, _(
+                "{0} has already refused to join this team {1} ago.",
+                invitee.username, invite_age
+            ))
     if not invitee.member_of(team):
         team.invite(invitee, user)
         msg = _("{0} has been invited to the team.", invitee.username)
