@@ -1021,22 +1021,24 @@ class Participant(Model, MixinTeam):
 
     def update_status(self, status, cursor=None):
         with self.db.get_cursor(cursor) as c:
+            goal = 'goal'
+            if status == 'closed':
+                goal = '-1'
+            elif status == 'active':
+                goal = 'NULL'
             r = c.one("""
                 UPDATE participants
                    SET status = %(status)s
                      , join_time = COALESCE(join_time, CURRENT_TIMESTAMP)
+                     , goal = {0}
                  WHERE id=%(id)s
-                   AND status <> %(status)s
-             RETURNING status, join_time
-            """, dict(id=self.id, status=status))
-            if not r:
-                return
+             RETURNING status, join_time, goal
+            """.format(goal), dict(id=self.id, status=status))
             self.set_attributes(**r._asdict())
             self.add_event(c, 'set_status', status)
-            if status == 'closed':
-                self.update_goal(-1, c)
-            elif status == 'active':
-                self.update_goal(None, c)
+            if not self.accepts_tips:
+                self.clear_tips_receiving(c)
+                self.update_receiving(c)
 
     def update_giving_and_tippees(self, cursor):
         updated_tips = self.update_giving(cursor)
