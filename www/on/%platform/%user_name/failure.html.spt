@@ -16,7 +16,17 @@ title = _("Failure")
 % block content
 <div class="alert alert-danger">
 
-    % if team
+    % if request.qs.get('error') == 'CantReadMembership'
+        <p>{{ _(
+            "We were unable to determine if you are a member of the {0} team on {1}."
+            "\n\nPlease {2}check that you gave us the necessary permissions{3}."
+            , name
+            , platform.display_name
+            , '<a href="%s">'|safe % platform.get_CantReadMembership_url()
+            , '</a>'|safe
+        ).replace('\n', '<br>'|safe) }}</p>
+
+    % elif team
 
     <h4>{{ _("Are you really an administrator of the {0} team?", name) }}</h4>
 

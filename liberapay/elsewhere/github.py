@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from liberapay.elsewhere._base import PlatformOAuth2
+from liberapay.elsewhere._exceptions import CantReadMembership
 from liberapay.elsewhere._extractors import key
 from liberapay.elsewhere._paginators import header_links_paginator
 
@@ -40,7 +41,34 @@ class GitHub(PlatformOAuth2):
     x_avatar_url = key('avatar_url')
     x_is_team = key('type', clean=lambda t: t.lower() == 'organization')
 
-    def is_team_member(self, org_name, sess):
+    def get_CantReadMembership_url(self, **kw):
+        return 'https://github.com/settings/connections/applications/'+self.api_key
+
+    def is_team_member(self, org_name, sess, account):
         org_name = org_name.lower()
+
+        # Check public membership first
+        response = self.api_get(
+            '/orgs/'+org_name+'/public_members/'+account.user_name,
+            sess=sess, error_handler=None
+        )
+        if response.status_code == 204:
+            return True
+        elif response.status_code != 404:
+            self.api_error_handler(response, True)
+
+        # Check private membership
+        response = self.api_get(
+            '/user/memberships/orgs/'+org_name, sess=sess, error_handler=None
+        )
+        if response.status_code == 403:
+            raise CantReadMembership
+        elif response.status_code >= 400:
+            self.api_error_handler(response, True)
+        membership = self.api_parser(response)
+        if membership['state'] == 'active':
+            return True
+
+        # Try the endpoint we were using before
         user_orgs = self.api_parser(self.api_get('/user/orgs', sess=sess))
         return any(org.get('login') == org_name for org in user_orgs)
