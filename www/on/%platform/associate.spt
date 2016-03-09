@@ -4,6 +4,7 @@ from aspen import log, resources, Response
 from oauthlib.oauth2 import OAuth2Error
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
+from liberapay.elsewhere._exceptions import CantReadMembership
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation, Participant
@@ -64,7 +65,12 @@ if action_user_id and account.user_id != action_user_id:
     if not claimed_account.is_team:
         then = '/on/%s/%s/failure.html'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
-    if not platform.is_team_member(claimed_account.user_name, sess):
+    try:
+        is_member = platform.is_team_member(claimed_account.user_name, sess, account)
+    except CantReadMembership as e:
+        then = '/on/%s/%s/failure.html?error=CantReadMembership'
+        response.redirect(then % (platform.name, claimed_account.liberapay_slug))
+    if not is_member:
         then = '/on/%s/%s/failure.html?team=true'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
     account = claimed_account
