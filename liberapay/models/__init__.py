@@ -2,9 +2,14 @@ from __future__ import print_function
 
 from contextlib import contextmanager
 import re
+import sys
+import traceback
+
+from six.moves import input
 
 from postgres import Postgres
 from postgres.cursors import SimpleCursorBase
+from psycopg2 import IntegrityError, ProgrammingError
 
 
 @contextmanager
@@ -129,7 +134,13 @@ def run_migrations(db):
         if v >= n:
             continue
         print('Running migration #%s...' % n)
-        db.run(sql)
+        try:
+            db.run(sql)
+        except (IntegrityError, ProgrammingError):
+            traceback.print_exc()
+            r = input('Have you already run this migration? (y/N) ')
+            if r.lower() != 'y':
+                sys.exit(1)
         db.run("""
             UPDATE db_meta
                SET value = '%s'::jsonb
