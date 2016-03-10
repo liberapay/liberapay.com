@@ -2,8 +2,10 @@
 % from 'templates/profile-box.html' import profile_box_full with context
 
 % block head_early
-    % if participant.hide_from_search
-    <meta name="robots" content="noindex,nofollow" />
+    % set nofollow = ['nofollow'] if participant.profile_nofollow else []
+    % set noindex = ['noindex'] if participant.hide_from_search else []
+    % if nofollow or noindex
+    <meta name="robots" content="{{ ','.join(noindex + nofollow) }}" />
     % endif
 % endblock
 
