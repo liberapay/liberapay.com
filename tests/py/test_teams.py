@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from liberapay.models._mixin_team import InactiveParticipantAdded
+from liberapay.models.participant import Participant
 from liberapay.testing import Harness
 
 
@@ -41,3 +42,26 @@ class Tests(Harness):
         assert len(self.team.get_current_takes()) == 2  # sanity check
         self.team.remove_all_members()
         assert len(self.team.get_current_takes()) == 0
+
+    def test_create_close_and_reopen_team(self):
+        alice = self.make_participant('alice')
+        r = self.client.PxST('/about/teams', {'name': 'Team'}, auth_as=alice)
+        assert r.code == 302
+        assert r.headers['Location'] == '/Team/edit'
+        t = Participant.from_username('Team')
+        assert t
+        assert t.status == 'active'
+        assert t.nmembers == 1
+
+        t.close(None)
+        t2 = t.refetch()
+        assert t.status == t2.status == 'closed'
+        assert t.goal == t2.goal == -1
+
+        r = self.client.PxST('/about/teams', {'name': 'Team'}, auth_as=alice)
+        assert r.code == 302
+        assert r.headers['Location'] == '/Team/edit'
+        t = t.refetch()
+        assert t.nmembers == 1
+        assert t.status == 'active'
+        assert t.goal == None
