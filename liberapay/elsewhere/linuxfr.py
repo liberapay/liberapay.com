@@ -9,7 +9,7 @@ class LinuxFr(PlatformOAuth2):
     # Platform attributes
     name = 'linuxfr'
     display_name = 'LinuxFr.org'
-    account_url = 'https://linuxfr.org/users/{user_name}'
+    account_url = 'https://linuxfr.org/users/{user_name_lower}'
 
     # Auth attributes
     # LinuxFr uses https://github.com/doorkeeper-gem/doorkeeper
