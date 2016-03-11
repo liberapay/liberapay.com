@@ -83,7 +83,8 @@ PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
 PRIVACY_FIELDS = OrderedDict([
     ('hide_giving', _("Hide total giving from others.")),
     ('hide_receiving', _("Hide total receiving from others.")),
-    ('hide_from_search', _("Hide myself from search results.")),
+    ('hide_from_search', _("Hide myself from search results on Liberapay.")),
+    ('profile_noindex', _("Tell web search engines not to index my profile.")),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 

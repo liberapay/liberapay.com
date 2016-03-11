@@ -3,7 +3,7 @@
 
 % block head_early
     % set nofollow = ['nofollow'] if participant.profile_nofollow else []
-    % set noindex = ['noindex'] if participant.hide_from_search else []
+    % set noindex = ['noindex'] if participant.profile_noindex else []
     % if nofollow or noindex
     <meta name="robots" content="{{ ','.join(noindex + nofollow) }}" />
     % endif

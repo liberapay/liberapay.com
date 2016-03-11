@@ -38,7 +38,7 @@ class TestPrivacy(Harness):
     # Related to is-searchable
 
     def test_meta_robots_tag_added_on_opt_out(self):
-        self.hit_edit(data=dict(ALL_OFF, hide_from_search='on'))
+        self.hit_edit(data=dict(ALL_OFF, profile_noindex='on'))
         expected = '<meta name="robots" content="noindex,nofollow" />'
         assert expected in self.client.GET("/alice/").text
 
