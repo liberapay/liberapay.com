@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '7'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '8'::jsonb);
 
 
 -- app configuration
@@ -67,6 +67,8 @@ CREATE TABLE participants
 
 , avatar_src            text
 , avatar_email          text
+
+, profile_nofollow      boolean                 DEFAULT TRUE
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
