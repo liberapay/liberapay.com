@@ -136,6 +136,7 @@ def authenticate_user_if_possible(request, state, user, _):
                 if p_email != carry_on:
                     state['email-login.carry-on'] = carry_on
                     raise AuthRequired
+            redirect_url = body.get('sign-in.back-to') or redirect_url
     elif request.method == 'GET' and request.qs.get('log-in.id'):
         id, token = request.qs.pop('log-in.id'), request.qs.pop('log-in.token')
         p = Participant.authenticate('id', 'session', id, token)

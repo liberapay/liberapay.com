@@ -79,41 +79,7 @@
 
     <h2 class="banderole info">{{ _("Create an account") }}</h2>
 
-    % include "templates/form-repost.html"
-
-    <div class="form-group">
-    <input name="sign-in.username" autocomplete="username" class="form-control"
-           required maxlength="{{ constants.USERNAME_MAX_SIZE }}"
-           placeholder="{{ _('Username') }}" />
-    </div>
-    <div class="form-group">
-    <input name="sign-in.email" type="email" autocomplete="email" class="form-control"
-           required pattern=".*@.*"
-           placeholder="{{ _('Email') }}" />
-    </div>
-    <div class="form-group">
-    <input name="sign-in.password" type="password" autocomplete="new-password" class="form-control"
-           required minlength="{{ constants.PASSWORD_MIN_SIZE }}"
-                    maxlength="{{ constants.PASSWORD_MAX_SIZE }}"
-           placeholder="{{ _('Password') }}" />
-    </div>
-    <div class="form-group form-inline">
-        <select id="kind" name="sign-in.kind" class="form-control">
-            <option value="individual">{{ _("Individual") }}</option>
-            <option value="organization">{{ _("Organization") }}</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>
-            <input type="checkbox" name="sign-in.terms" value="agree" required />
-            {{ _("I accept {0}Liberapay's Terms of Service{1}",
-                 '<a href="/about/legal#terms">'|safe,
-                 '</a>'|safe) }}
-        </label>
-    </div>
-
-    <button class="btn btn-default">{{ _("Go") }}</button>
+    % include "templates/sign-up-form.html"
 
 </form>
 </div>
