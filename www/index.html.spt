@@ -68,40 +68,7 @@ recent_events = query_cache.all("""
 
     <div class="col-md-6">
         <h2 class="banderole primary">{{ _("Donate") }}</h2>
-
-        % if user.ANON
-
-            <p>{{ _(
-                "People who contribute to the commons need you to support their work. "
-                "Building free software, spreading free knowledge, these things take "
-                "time and cost money, not only to do the initial work, but also to "
-                "maintain it over time."
-            ) }}</p>
-            <p>{{ _(
-                "Liberapay's recurrent donations system is designed to provide a "
-                "stable crowdfunded basic income to creators, enabling them to keep "
-                "doing great work that benefits everyone. Ready to contribute? Then "
-                "let's get started:"
-            ) }}</p>
-
-        % else
-
-            <p><a href="/{{ user.username }}/giving/">{{
-                _("You give {0} per week.", Money(user.giving, 'EUR'))
-            }}</a></p>
-
-        % endif
-
-        <a class="btn btn-primary btn-lg" href="/explore/"
-           data-toggle="tooltip" data-placement="bottom"
-           title="{{ _('Find great people to donate to') }}">
-            {{ glyphicon('globe') }} <span>{{ _("Explore") }}</span>
-        </a>
-        <a class="btn btn-primary btn-lg" href="/search"
-           data-toggle="tooltip" data-placement="bottom"
-           title="{{ _('Whose work do you appreciate? See if they\'re on Liberapay') }}">
-            {{ glyphicon('search') }} <span>{{ _("Search") }}</span>
-        </a>
+        % include "templates/pitch-donors.html"
     </div>
 
     <div class="col-md-6">
@@ -239,11 +206,4 @@ recent_events = query_cache.all("""
     </div>
 
 </div>
-% endblock
-
-% block scripts
-{{ super() }}
-<script>$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})</script>
 % endblock

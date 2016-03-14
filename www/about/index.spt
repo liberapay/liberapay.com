@@ -45,6 +45,11 @@ title = _("Introduction")
     ) }}</p>
 
 
+    <h3 id="who">{{ _("Why should you donate?") }}</h3>
+
+    % include "templates/pitch-donors.html"
+
+
     <h3 id="who">{{ _("Who is Liberapay?") }}</h3>
 
     <p>{{ _(
