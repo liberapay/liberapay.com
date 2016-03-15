@@ -1,0 +1,33 @@
+[---]
+title = _("Feeds")
+[---] text/html
+% extends "templates/about.html"
+% from "templates/icons.html" import fontawesome
+
+% block content
+<div class="row paragraph"><div class="col-md-6">
+
+    <p>{{ _("You can get updates from us on the following social networks:") }}</p>
+    <a class="btn btn-default btn-lg" href="https://framasphere.org/u/liberapay">
+        {{ fontawesome('asterisk') }} <span>Diaspora</span>
+    </a>
+    <a class="btn btn-default btn-lg" href="https://twitter.com/liberapaye">
+        {{ fontawesome('twitter') }} <span>Twitter</span>
+    </a>
+    <a class="btn btn-default btn-lg" href="https://www.facebook.com/Liberapay-472128142945598/">
+        {{ fontawesome('facebook') }} <span>Facebook</span>
+    </a>
+    <br><br>
+
+    <p>{{ _(
+        "You can also follow the {1}development of the Liberapay software{0}, "
+        "the {2}adventures of the Liberapay legal entity{0}, and the "
+        "{3}general discussions of the Liberapay team{0}.",
+        '</a>'|safe,
+        '<a href="https://github.com/liberapay/liberapay.com">'|safe,
+        '<a href="https://github.com/liberapay/liberapay.org#readme">'|safe,
+        '<a href="https://github.com/liberapay/salon#readme">'|safe,
+    ) }}</p>
+
+</div></div>
+% endblock
