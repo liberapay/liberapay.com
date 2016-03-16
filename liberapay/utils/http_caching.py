@@ -9,8 +9,8 @@ from os import stat
 from tempfile import mkstemp
 from time import time
 
-from aspen import Response
-from aspen.testing.client import Client
+from aspen import resources, Response
+from aspen.dispatcher import DispatchResult, DispatchStatus
 
 from liberapay.utils import b64encode_s, find_files
 
@@ -19,18 +19,12 @@ ETAGS = {}
 
 
 def compile_assets(website):
-    client = Client(website.www_root, website.project_root)
-    client._website = website
     for spt in find_files(website.www_root+'/assets/', '*.spt'):
-        filepath = spt[:-4]                         # /path/to/www/assets/foo.css
-        urlpath = spt[spt.rfind('/assets/'):-4]     # /assets/foo.css
-        try:
-            # Remove any existing compiled asset, so we can access the dynamic
-            # one instead (Aspen prefers foo.css over foo.css.spt).
-            os.unlink(filepath)
-        except:
-            pass
-        content = client.GET(urlpath).body
+        filepath = spt[:-4]  # /path/to/www/assets/foo.css
+        dispatch_result = DispatchResult(DispatchStatus.okay, spt, {}, "Found.", {}, True)
+        state = dict(dispatch_result=dispatch_result, response=Response())
+        state['state'] = state
+        content = resources.get(website, spt).respond(state).body
         if not isinstance(content, bytes):
             content = content.encode('utf8')
         tmpfd, tmpfpath = mkstemp(dir='.')
