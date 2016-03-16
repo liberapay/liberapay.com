@@ -320,7 +320,8 @@ class Payday(object):
                     SELECT t.id, t.tipper, (round_up(t.amount * tips_ratio, 2)) AS amount
                       FROM payday_tips t
                       JOIN payday_participants p ON p.id = t.tipper
-                     WHERE t.tippee = team_id;
+                     WHERE t.tippee = team_id
+                       AND p.new_balance >= t.amount;
             BEGIN
                 total_income := (
                     SELECT sum(t.amount)
