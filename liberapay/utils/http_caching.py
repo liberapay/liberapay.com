@@ -64,8 +64,12 @@ def asset_etag(path):
 
 # algorithm functions
 
-def get_etag_for_file(dispatch_result):
-    return {'etag': asset_etag(dispatch_result.match)}
+def get_etag_for_file(dispatch_result, website, state):
+    try:
+        return {'etag': asset_etag(dispatch_result.match)}
+    except Exception as e:
+        website.tell_sentry(e, state)
+        return {'etag': None}
 
 
 def try_to_serve_304(dispatch_result, request, etag):
