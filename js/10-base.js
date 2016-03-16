@@ -60,6 +60,8 @@ Liberapay.init = function() {
         $('#amount').val(amount_re.exec(href)[2]);
         history.pushState(null, null, location.pathname + href + location.hash);
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
