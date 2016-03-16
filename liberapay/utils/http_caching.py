@@ -7,7 +7,6 @@ from hashlib import md5
 import os
 from os import stat
 from tempfile import mkstemp
-from time import time
 
 from aspen import resources, Response
 from aspen.dispatcher import DispatchResult, DispatchStatus
@@ -19,8 +18,11 @@ ETAGS = {}
 
 
 def compile_assets(website):
+    cleanup = []
     for spt in find_files(website.www_root+'/assets/', '*.spt'):
         filepath = spt[:-4]  # /path/to/www/assets/foo.css
+        if not os.path.exists(filepath):
+            cleanup.append(filepath)
         dispatch_result = DispatchResult(DispatchStatus.okay, spt, {}, "Found.", {}, True)
         state = dict(dispatch_result=dispatch_result, response=Response())
         state['state'] = state
@@ -31,19 +33,19 @@ def compile_assets(website):
         os.write(tmpfd, content)
         os.close(tmpfd)
         os.rename(tmpfpath, filepath)
-    compilation_time = time()
-    atexit.register(lambda: clean_assets(website.www_root, compilation_time))
+    atexit.register(lambda: rm_f(*cleanup))
 
 
-def clean_assets(www_root, older_than=None):
-    for spt in find_files(www_root+'/assets/', '*.spt'):
+def rm_f(*paths):
+    for path in paths:
         try:
-            path = spt[:-4]
-            if older_than and os.stat(path).st_mtime > older_than:
-                continue
             os.unlink(path)
         except:
             pass
+
+
+def clean_assets(www_root):
+    rm_f(*[spt[:-4] for spt in find_files(www_root+'/assets/', '*.spt')])
 
 
 def asset_etag(path):
