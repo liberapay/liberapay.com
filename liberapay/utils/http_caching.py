@@ -7,10 +7,9 @@ from hashlib import md5
 import os
 from os import stat
 from tempfile import mkstemp
-from time import time
 
-from aspen import Response
-from aspen.testing.client import Client
+from aspen import resources, Response
+from aspen.dispatcher import DispatchResult, DispatchStatus
 
 from liberapay.utils import b64encode_s, find_files
 
@@ -19,37 +18,34 @@ ETAGS = {}
 
 
 def compile_assets(website):
-    client = Client(website.www_root, website.project_root)
-    client._website = website
+    cleanup = []
     for spt in find_files(website.www_root+'/assets/', '*.spt'):
-        filepath = spt[:-4]                         # /path/to/www/assets/foo.css
-        urlpath = spt[spt.rfind('/assets/'):-4]     # /assets/foo.css
-        try:
-            # Remove any existing compiled asset, so we can access the dynamic
-            # one instead (Aspen prefers foo.css over foo.css.spt).
-            os.unlink(filepath)
-        except:
-            pass
-        content = client.GET(urlpath).body
+        filepath = spt[:-4]  # /path/to/www/assets/foo.css
+        if not os.path.exists(filepath):
+            cleanup.append(filepath)
+        dispatch_result = DispatchResult(DispatchStatus.okay, spt, {}, "Found.", {}, True)
+        state = dict(dispatch_result=dispatch_result, response=Response())
+        state['state'] = state
+        content = resources.get(website, spt).respond(state).body
         if not isinstance(content, bytes):
             content = content.encode('utf8')
         tmpfd, tmpfpath = mkstemp(dir='.')
         os.write(tmpfd, content)
         os.close(tmpfd)
         os.rename(tmpfpath, filepath)
-    compilation_time = time()
-    atexit.register(lambda: clean_assets(website.www_root, compilation_time))
+    atexit.register(lambda: rm_f(*cleanup))
 
 
-def clean_assets(www_root, older_than=None):
-    for spt in find_files(www_root+'/assets/', '*.spt'):
+def rm_f(*paths):
+    for path in paths:
         try:
-            path = spt[:-4]
-            if older_than and os.stat(path).st_mtime > older_than:
-                continue
             os.unlink(path)
         except:
             pass
+
+
+def clean_assets(www_root):
+    rm_f(*[spt[:-4] for spt in find_files(www_root+'/assets/', '*.spt')])
 
 
 def asset_etag(path):
@@ -68,8 +64,12 @@ def asset_etag(path):
 
 # algorithm functions
 
-def get_etag_for_file(dispatch_result):
-    return {'etag': asset_etag(dispatch_result.match)}
+def get_etag_for_file(dispatch_result, website, state):
+    try:
+        return {'etag': asset_etag(dispatch_result.match)}
+    except Exception as e:
+        website.tell_sentry(e, state)
+        return {'etag': None}
 
 
 def try_to_serve_304(dispatch_result, request, etag):
