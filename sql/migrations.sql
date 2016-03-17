@@ -83,3 +83,13 @@ ALTER TABLE exchanges ADD CONSTRAINT exchanges_amount_check CHECK (amount <> 0);
 
 -- migration #8
 ALTER TABLE participants ADD COLUMN profile_nofollow boolean DEFAULT TRUE;
+
+-- migration #9
+CREATE OR REPLACE VIEW sponsors AS
+    SELECT *
+      FROM participants p
+     WHERE status = 'active'
+       AND kind = 'organization'
+       AND giving > receiving
+       AND giving >= 10
+       AND NOT profile_nofollow;
