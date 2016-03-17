@@ -4,11 +4,20 @@ title = _("Contact")
 % extends "templates/about.html"
 % block content
 
-    <p>
-      Email: <a onmouseover="$(this).attr('href', 'mailto:'+$(this).text())">support&#64;liberapay.com</a><br />
-      IRC: #liberapay on Freenode (<a href="http://webchat.freenode.net/">webchat</a>)<br />
-      GitHub: <a href="https://github.com/liberapay/liberapay.com/issues/new">liberapay</a><br />
-      {{ _("Phone: sorry, we don't have a phone number yet") }}
-    </p>
+    <h4>{{ _("To contact us privately:") }}</h4>
+    <p><a class="btn btn-primary" data-addr="support&#64;liberapay.com"
+          onmouseover="$(this).attr('href', 'mailto:'+$(this).data('addr'))"
+          >{{ _("Send us an email") }}</a></p>
+    <p>{{ _("We are currently able to answer in English and French.") }}</p>
+    <p>{{ _("We currently don't have a phone number.") }}</p>
+
+    <br>
+    <h4>{{ _("To report a problem or make a suggestion in English:") }}</h4>
+    <p><a class="btn btn-default" href="https://github.com/liberapay/liberapay.com/issues/new"
+          >{{ _("Open an issue on GitHub") }}</a></p>
+
+    <br>
+    <h4>{{ _("Other comunication channels:") }}</h4>
+    IRC: #liberapay on Freenode (<a href="http://webchat.freenode.net/">webchat</a>)<br>
 
 % endblock
