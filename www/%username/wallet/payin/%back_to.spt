@@ -99,7 +99,15 @@ title = _("Add money")
         <a href="{{ participant.path('receipts/%s.html' % exchange.id) }}">{{ _("View Receipt") }}</a>
     % endif
     <p>
-        % if weekly <= 0
+        % if donations == 0
+            {{ _(
+                "You haven't set up any donations yet, once you do you'll be "
+                "prompted to add money to your account."
+            ) }}
+            </p><p>
+            % from "templates/buttons.html" import find_donees with context
+            {{ find_donees() }}
+        % elif weekly <= 0
             {{ _("Your donations are funded by your income.") }}
         % elif funded > 0
             {{ ngettext("Your donations are only funded for another week.",
@@ -113,8 +121,8 @@ title = _("Add money")
         <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
     % endif
 
-    % if participant.email
     % if show_form
+    % if participant.email
     <p>{{ _(
         "Adding money to Liberapay via credit/debit card (currently the only "
         "supported payment method) incurs a fee of {0}% + {1}.",
@@ -189,7 +197,6 @@ title = _("Add money")
     % if back_to
         <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
     % endif
-    % endif
 
     % else
     <p class="alert alert-warning">{{
@@ -197,6 +204,7 @@ title = _("Add money")
           '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
           '</a>'|safe)
     }}</p>
+    % endif
     % endif
 
 </form>

@@ -59,6 +59,8 @@ title = _("Introduction")
     <h3 id="who">{{ _("Why should you donate?") }}</h3>
 
     % include "templates/pitch-donors.html"
+    % from "templates/buttons.html" import find_donees with context
+    {{ find_donees() }}
 
 
     <h3 id="who">{{ _("Who is Liberapay?") }}</h3>
