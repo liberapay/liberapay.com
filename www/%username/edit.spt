@@ -148,10 +148,11 @@ title = participant.username
                           placeholder="{{ stmt_placeholder }}"
                           data-confirm-discard="{{ confirm_discard }}"
                     >{{ statement or '' }}</textarea>
-                <p class="help-block">{{ _("Markdown supported.") }}
+                <p class="help-block pull-right">{{ _("Markdown supported.") }}
                     <a href="https://daringfireball.net/projects/markdown/basics"
                        target="_blank">{{ _("What is markdown?") }}</a>
                 </p>
+                <p> </p>{# this is for spacing #}
                 <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
                 <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
             </form>
