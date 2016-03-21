@@ -354,6 +354,24 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         }
         assert d == expected
 
+    def test_unfunded_tip_to_team_doesnt_cause_NegativeBalance(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        alice.set_tip_to(team, D('1.00'))  # unfunded tip
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('1.00'), bob)
+
+        Payday.start().run()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.00'),
+            'bob': D('0.00'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
     def test_it_notifies_participants(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
         self.janet.set_tip_to(self.david, '4.50')
