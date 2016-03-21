@@ -28,7 +28,7 @@ else:
         statement, lang = participant.get_statement(request.accept_langs)
 
 select_langs = get_lang_options(participant.get_statement_langs())
-lang = lang or next(iter(select_langs.keys()))
+lang = lang or locale.language
 stmt_placeholder = _("You don't have a profile statement in this language yet.")
 confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
 
