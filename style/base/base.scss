@@ -241,6 +241,14 @@ ul.emails {
         }
     }
 }
+
+h2, h3, h4, h5, h6 {
+    &:target {
+        background-color: rgba(yellow, 0.2);
+        animation: target-flash 1.5s 1;
+    }
+}
+
 @keyframes target-flash {
     0% { background-color: rgba(yellow, 0.7); }
 }

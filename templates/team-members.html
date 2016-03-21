@@ -5,6 +5,16 @@
 % endmacro
 
 % macro team_takes_table(team, cls='')
+    % set members = team.get_members()
+    % if user.id in members
+        <p>{{ _(
+            "Your nominal take from the {0} team is limited to {1} this week. "
+            "{2}Why?{3}",
+            team.username,
+            format_decimal(members[user.id]['max_this_week'], '#,##0.00'),
+            '<a href="/about/teams#throttling">'|safe, '</a>'|safe
+        ) }}</p>
+    % endif
     <table class="table valign-middle team {{ cls }}">
       <thead>
         <tr>
@@ -20,7 +30,6 @@
         </tr>
       </thead>
       <tbody>
-        % set members = team.get_members()
         % for member in members.values()
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
