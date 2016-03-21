@@ -195,6 +195,7 @@ class MixinTeam(object):
             actual = take['actual_amount'] = (nominal * ratio).quantize(CENT, rounding=ROUND_UP)
             balance -= actual
             actual_takes[take['member_id']] = take
+        actual_takes.leftover = balance
         return actual_takes
 
     @property
@@ -212,6 +213,7 @@ class MixinTeam(object):
         takes = self.compute_actual_takes()
         last_week = self.get_takes_last_week()
         members = OrderedDict()
+        members.leftover = takes.leftover
         for take in takes.values():
             member = {}
             m_id = member['id'] = take['member_id']
