@@ -14,7 +14,7 @@ echo:
 	@echo $($(var))
 
 env: requirements*.txt
-	$(python) -c "import virtualenv" || pip install virtualenv
+	$(python) -m pip --disable-pip-version-check install --user "virtualenv>=15.0.0"
 	$(python) -m virtualenv --no-download ./env/
 	$(pip) install $$(for f in requirements*.txt; do echo "-r $$f"; done)
 	@touch env
