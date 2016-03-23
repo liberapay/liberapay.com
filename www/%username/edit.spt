@@ -28,7 +28,7 @@ else:
         statement, lang = participant.get_statement(request.accept_langs)
 
 select_langs = get_lang_options(participant.get_statement_langs())
-lang = lang or next(iter(select_langs.keys()))
+lang = lang or locale.language
 stmt_placeholder = _("You don't have a profile statement in this language yet.")
 confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
 
@@ -135,29 +135,35 @@ title = participant.username
 
             <p>{{ _("Tell us how you're making the world better.") }}</p>
 
-            {{ _("Liberapay allows you to have profile statements in multiple languages. "
-                 "Use the selector below to switch between them.") }}<br>
+            <p>{{ _(
+                "Liberapay allows you to have profile statements in multiple languages. "
+                "Use the selector below to switch between them."
+            ) }}</p>
 
+            <form action="#statement" method="POST" class="statement">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <input type="hidden" name="lang" value="{{ lang }}" />
+                {{ _("Current language: {0}", lang.upper()) }}
+                <textarea name="statement" rows="15" class="form-control vertical-resize"
+                          placeholder="{{ stmt_placeholder }}"
+                          data-confirm-discard="{{ confirm_discard }}"
+                    >{{ statement or '' }}</textarea>
+                <p class="help-block pull-right">{{ _("Markdown supported.") }}
+                    <a href="https://daringfireball.net/projects/markdown/basics"
+                       target="_blank">{{ _("What is markdown?") }}</a>
+                </p>
+                <p> </p>{# this is for spacing #}
+                <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
+                <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+            </form>
+
+            <br>
+            {{ _("Switch to another language:") }}
             <form action="#statement" method="GET" class="form-inline langs">
                 <select class="form-control" name="lang">{{
                     lang_options(select_langs, lang)
                 }}</select>
                 <button class="btn btn-default">{{ _("Switch") }}</button>
-            </form>
-
-            <form action="#statement" method="POST" class="statement">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-                <input type="hidden" name="lang" value="{{ lang }}" />
-                <textarea name="statement" rows="15" class="form-control vertical-resize"
-                          placeholder="{{ stmt_placeholder }}"
-                          data-confirm-discard="{{ confirm_discard }}"
-                    >{{ statement or '' }}</textarea>
-                <p class="help-block">{{ _("Markdown supported.") }}
-                    <a href="https://daringfireball.net/projects/markdown/basics"
-                       target="_blank">{{ _("What is markdown?") }}</a>
-                </p>
-                <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
-                <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
             </form>
 
         % endif
