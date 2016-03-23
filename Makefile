@@ -1,4 +1,5 @@
 python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
+install_where := $(shell $(python) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')")
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
@@ -14,8 +15,8 @@ echo:
 	@echo $($(var))
 
 env: requirements*.txt
-	where=$$($(python) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')") \
-	$(python) -m $(pip) install $$where "virtualenv>=15.0.0"
+	$(python) -m ensurepip $(install_where)
+	$(python) -m $(pip) install $(install_where) "virtualenv>=15.0.0"
 	$(python) -m virtualenv --no-download ./env/
 	$(env_bin)/$(pip) install $$(for f in requirements*.txt; do echo "-r $$f"; done)
 	@touch env
