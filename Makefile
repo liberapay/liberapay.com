@@ -5,6 +5,7 @@ install_where := $(shell $(python) -c "import sys; print('' if hasattr(sys, 'rea
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
 bin_dir := $(shell $(python) -c 'import sys; print("Scripts" if sys.platform == "win32" else "bin")')
 env_bin := env/$(bin_dir)
+env_py := $(env_bin)/python
 test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := pip --disable-pip-version-check
 with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
@@ -35,19 +36,19 @@ schema-diff: test-schema
 	rm prod.sql local.sql
 
 data: env
-	$(with_local_env) $(env_bin)/python -m liberapay.utils.fake_data
+	$(with_local_env) $(env_py) -m liberapay.utils.fake_data
 
 db-migrations: sql/migrations.sql
-	PYTHONPATH=. $(with_local_env) $(env_bin)/python liberapay/models/__init__.py
+	PYTHONPATH=. $(with_local_env) $(env_py) liberapay/models/__init__.py
 
 run: env db-migrations
-	PATH=$(env_bin):$$PATH $(with_local_env) $(env_bin)/python app.py
+	PATH=$(env_bin):$$PATH $(with_local_env) $(env_py) app.py
 
 py: env
-	PYTHONPATH=. $(with_local_env) $(env_bin)/python -i liberapay/main.py
+	PYTHONPATH=. $(with_local_env) $(env_py) -i liberapay/main.py
 
 payday: env
-	PYTHONPATH=. $(with_local_env) $(env_bin)/python liberapay/billing/payday.py
+	PYTHONPATH=. $(with_local_env) $(env_py) liberapay/billing/payday.py
 
 test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
