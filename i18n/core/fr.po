@@ -614,6 +614,8 @@ msgstr "À propos des équipes"
 
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr ""
+"Votre part nominale dans l'équipe {0} est limitée à {1} cette semaine. {2}"
+"Pourquoi ?{3}"
 
 msgid "Last Payday"
 msgstr "Précédente paie"
@@ -632,9 +634,12 @@ msgstr "Montant réel"
 
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
 msgstr ""
+"Le revenu non distribué reste dans les portefeuilles des donateurs, il ne "
+"s'accumule pas dans le compte de l'équipe. Une équipe n'étant pas une entité "
+"légale, nous ne pouvons pas stocker de l'argent en son nom."
 
 msgid "Leftover"
-msgstr ""
+msgstr "Restant"
 
 msgid "Your donation"
 msgstr "Votre don"
@@ -883,7 +888,7 @@ msgid "Liberapay allows you to have profile statements in multiple languages. Us
 msgstr "Liberapay vous permet de vous présentez en plusieurs langues. Utilisez le sélecteur ci-dessous pour passer d'une langue à une autre."
 
 msgid "Current language: {0}"
-msgstr ""
+msgstr "Langue actuelle : {0}"
 
 msgid "Markdown supported."
 msgstr "Markdown supporté."
@@ -895,7 +900,7 @@ msgid "Preview"
 msgstr "Aperçu"
 
 msgid "Switch to another language:"
-msgstr ""
+msgstr "Passer à une autre langue :"
 
 msgid "Switch"
 msgstr "Changer"
@@ -1843,14 +1848,22 @@ msgid "The nominal takes are the raw numbers that the members input themselves, 
 msgstr "Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, les montants réels sont calculés par le système : d'abord il fait la somme des parts nominales, puis il calcule le pourcentage que chaque part représente, et enfin il applique ces pourcentages au revenu disponible. Les parts nominales agissent aussi en maximums : les montants réels ne sont jamais supérieurs aux montants nominaux, même si le revenu de l'équipe le permettrait."
 
 msgid "Regulation of take amounts"
-msgstr ""
+msgstr "Régulation des montants des parts"
 
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
 msgstr ""
+"Les parts nominales sont limitées, elles ne peuvent pas être augmentées au-"
+"dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au "
+"précédent jour de paie. Cette régulation est conçue pour réduire le risque "
+"d'abus par des membres malintentionnés."
 
 #, python-format
 msgid "The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
 msgstr ""
+"La limite exacte est le maximum de ces trois valeurs : le nombre 1, deux "
+"fois la part du membre mercredi dernier, 70 % de la médiane des parts "
+"mercredi dernier, ou si ce nombre est zéro, le revenu actuel de l'équipe "
+"divisé par le nombre de membres."
 
 msgid "Removing team membership"
 msgstr "Quitter une équipe"
