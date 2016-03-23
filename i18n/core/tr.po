@@ -611,6 +611,9 @@ msgstr ""
 msgid "About teams"
 msgstr ""
 
+msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
+msgstr ""
+
 msgid "Last Payday"
 msgstr ""
 
@@ -625,6 +628,12 @@ msgid "Nominal Take"
 msgstr ""
 
 msgid "Actual Take"
+msgstr ""
+
+msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
+msgstr ""
+
+msgid "Leftover"
 msgstr ""
 
 msgid "Your donation"
@@ -871,7 +880,7 @@ msgstr "Dünyayı nasıl daha iyi bir yer yaptınızı anlatın."
 msgid "Liberapay allows you to have profile statements in multiple languages. Use the selector below to switch between them."
 msgstr "Liberapay, çok dilli profil sözcesine sahip olmanızı sağlar. Aralarında geçiş için aşağıdaki seçiciyi kullanın."
 
-msgid "Switch"
+msgid "Current language: {0}"
 msgstr ""
 
 msgid "Markdown supported."
@@ -881,6 +890,12 @@ msgid "What is markdown?"
 msgstr "Nedir bu Markdown?"
 
 msgid "Preview"
+msgstr ""
+
+msgid "Switch to another language:"
+msgstr ""
+
+msgid "Switch"
 msgstr ""
 
 msgid "Avatar"
@@ -1822,8 +1837,14 @@ msgstr ""
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr ""
 
+msgid "Regulation of take amounts"
+msgstr ""
+
+msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
+msgstr ""
+
 #, python-format
-msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
+msgid "The exact limit is the maximum of these three values: the number 1, two times the member's take in the previous payday, 70% of the median take in the previous payday, or if that number is zero, the current income divided by the number of members."
 msgstr ""
 
 msgid "Removing team membership"
