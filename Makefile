@@ -15,8 +15,11 @@ py_test := $(with_tests_env) $(env_bin)/py.test
 echo:
 	@echo $($(var))
 
+_warning:
+	@echo -e "\nWarning: you're using an old version of python, you really should upgrade!\n"
+
 env: requirements*.txt
-	$(python) -m ensurepip $(install_where)
+	$(python) -m ensurepip $(install_where) || $(MAKE) --no-print-directory _warning
 	$(python) -m $(pip) install $(install_where) "virtualenv>=15.0.0"
 	$(python) -m virtualenv --no-download ./env/
 	$(env_bin)/$(pip) install $$(for f in requirements*.txt; do echo "-r $$f"; done)
