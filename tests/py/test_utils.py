@@ -6,7 +6,7 @@ from datetime import timedelta
 from aspen.http.response import Response
 from liberapay import utils
 from liberapay.testing import Harness
-from liberapay.utils import i18n, markdown
+from liberapay.utils import i18n, markdown, b64decode_s
 
 
 class Tests(Harness):
@@ -121,3 +121,6 @@ class Tests(Harness):
 
     def test_safe_base64_transcode_works_with_binary_data(self):
         utils.b64decode_s(utils.b64encode_s(b'\xff'))
+
+    def test_b64decode_s_decodes(self):
+        assert b64decode_s('VGhlRW50ZXI_cHJpc2U~') == 'TheEnter?prise'
