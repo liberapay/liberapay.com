@@ -108,6 +108,16 @@ def get_community(state, restrict=False):
 
 
 def b64decode_s(s, **kw):
+    def error():
+        if 'default' in kw:
+            return kw['default']
+        raise Response(400, "invalid base64 input")
+
+    try:
+        s = s.encode('ascii')
+    except UnicodeError:
+        return error()
+
     udecode = lambda a: a.decode('utf8')
     if s[:1] == b'.':
         udecode = lambda a: a
@@ -121,9 +131,7 @@ def b64decode_s(s, **kw):
             return udecode(b64decode(s))
         except Exception:
             pass
-        if 'default' in kw:
-            return kw['default']
-        raise Response(400, "invalid base64 input")
+        return error()
 
 
 def b64encode_s(s):

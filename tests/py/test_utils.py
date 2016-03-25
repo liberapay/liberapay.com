@@ -6,7 +6,7 @@ from datetime import timedelta
 from aspen.http.response import Response
 from liberapay import utils
 from liberapay.testing import Harness
-from liberapay.utils import i18n, markdown
+from liberapay.utils import i18n, markdown, b64encode_s, b64decode_s
 
 
 class Tests(Harness):
@@ -119,5 +119,27 @@ class Tests(Harness):
         assert expected == actual
 
 
+    # Base64 encoding/decoding
+    # ========================
+
     def test_safe_base64_transcode_works_with_binary_data(self):
         utils.b64decode_s(utils.b64encode_s(b'\xff'))
+
+    def test_b64encode_s_replaces_slash_with_underscore(self):
+        # TheEnter?prise => VGhlRW50ZXI/cHJpc2U=
+        assert b64encode_s('TheEnter?prise') == 'VGhlRW50ZXI_cHJpc2U~'
+
+    def test_b64encode_s_replaces_equals_with_tilde(self):
+        assert b64encode_s('TheEnterprise') == 'VGhlRW50ZXJwcmlzZQ~~'
+
+    def test_b64decode_s_decodes(self):
+        assert b64decode_s('VGhlRW50ZXI_cHJpc2U~') == 'TheEnter?prise'
+
+    def test_b64decode_s_raises_response_on_error(self):
+        with self.assertRaises(Response) as cm:
+            b64decode_s('abcd')
+        assert cm.exception.code == 400
+
+    def test_b64decode_s_returns_default_if_passed_on_error(self):
+        assert b64decode_s('abcd', default='error') == 'error'
+
