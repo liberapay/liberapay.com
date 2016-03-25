@@ -1,0 +1,13 @@
+% include "templates/form-repost.html"
+
+% if request.log_in_failed
+    <p class="alert alert-error">{{ _("Bad username or password") }}</p>
+% endif
+
+<input name="log-in.id" autocomplete="username" class="form-control" size=25
+       required placeholder="{{ _('Username or email') }}" />
+<input name="log-in.password" class="form-control" size=25
+       type="password" autocomplete="current-password"
+       required placeholder="{{ _('Password') }}" />
+
+<button class="btn btn-default">{{ _("Go") }}</button>

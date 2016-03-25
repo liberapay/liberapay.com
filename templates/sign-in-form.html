@@ -44,20 +44,9 @@
 <div class="col-md-6">
 <form class="form-inline" action="" method="POST">
 
-    % include "templates/form-repost.html"
-
     <h2 class="banderole success">{{ _("Log in") }}</h2>
 
-    % if request.log_in_failed
-        <p class="alert alert-error">{{ _("Bad username or password") }}</p>
-    % endif
-
-    <input name="log-in.id" autocomplete="username" class="form-control"
-           required placeholder="{{ _('Username or email') }}" />
-    <input name="log-in.password" type="password" autocomplete="current-password" class="form-control"
-           required placeholder="{{ _('Password') }}" />
-
-    <button class="btn btn-default">{{ _("Go") }}</button>
+    % include "templates/log-in-form.html"
 
 </form>
 <form class="form-inline" action="" method="POST">
