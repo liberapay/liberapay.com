@@ -726,10 +726,10 @@ class Participant(Model, MixinTeam):
     # Notifications
     # =============
 
-    def notify(self, event, web=True, **context):
+    def notify(self, event, force_email=False, web=True, **context):
         if web:
             self.add_notification(event, **context)
-        if self.email_notif_bits & EVENTS.get(event).bit:
+        if force_email or self.email_notif_bits & EVENTS.get(event).bit:
             self.queue_email(event, **context)
 
     def add_notification(self, event, **context):

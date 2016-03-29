@@ -544,6 +544,24 @@ class Payday(object):
                 by_team=by_team,
             )
 
+        # Identity-required notifications
+        participants = self.db.all("""
+            SELECT p.*::participants
+              FROM participants p
+             WHERE mangopay_user_id IS NULL
+               AND (p.goal IS NULL OR p.goal >= 0)
+               AND EXISTS (
+                     SELECT 1
+                       FROM current_tips t
+                       JOIN participants p2 ON p2.id = t.tipper
+                      WHERE t.tippee = p.id
+                        AND t.amount > 0
+                        AND p2.balance > t.amount
+                   )
+        """)
+        for p in participants:
+            p.notify('identity_required', force_email=True)
+
         # Low-balance notifications
         participants = self.db.all("""
             SELECT p.*::participants
