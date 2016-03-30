@@ -24,6 +24,8 @@
     </ul>
 % endif
 
+<p>{{ _("You now have {0} in your wallet.", Money(participant.balance, 'EUR')) }}</p>
+
 <a href="{{ participant.url('wallet/') }}">{{ _("See your account's transaction logs") }}</a>
 
 [---] text/plain
@@ -47,5 +49,7 @@
         {{- _("- {0}: {1}", team, Money(amount, 'EUR')) }}
     % endfor
 % endif
+
+{{ _("You now have {0} in your wallet.", Money(participant.balance, 'EUR')) }}
 
 {{ _("See your account's transaction logs") }}: {{ participant.url('wallet/') }}
