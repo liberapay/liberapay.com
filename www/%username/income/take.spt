@@ -16,6 +16,9 @@ team = get_participant(state, restrict=False)
 if team.kind != 'group':
     raise Response(404)
 
+if not user.mangopay_user_id:
+    raise Response(403, _("You can't receive money until you've filled the identity form in your account settings."))
+
 take = parse_decimal(request.body['take'])
 new_take = team.set_take_for(user, take, user)
 if new_take < take:
