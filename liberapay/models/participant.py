@@ -8,7 +8,7 @@ import pickle
 from time import sleep
 import uuid
 
-from six.moves.urllib.parse import quote, urlencode
+from six.moves.urllib.parse import urlencode
 
 from aspen.utils import utcnow
 import aspen_jinja2_renderer
@@ -49,7 +49,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.notifications import EVENTS
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    erase_cookie, serialize, set_cookie,
+    b64encode_s, erase_cookie, serialize, set_cookie,
     emails, i18n,
 )
 from liberapay.website import website
@@ -572,8 +572,8 @@ class Participant(Model, MixinTeam):
         scheme = website.canonical_scheme
         host = website.canonical_host
         username = self.username
-        quoted_email = quote(email)
-        link = "{scheme}://{host}/{username}/emails/verify.html?email={quoted_email}&nonce={nonce}"
+        base64_email = b64encode_s(email)
+        link = "{scheme}://{host}/{username}/emails/verify.html?email64={base64_email}&nonce={nonce}"
         r = self.send_email('verification', email=email, link=link.format(**locals()))
         assert r == 1 # Make sure the verification email was sent
 
