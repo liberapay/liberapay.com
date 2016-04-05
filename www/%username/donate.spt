@@ -24,7 +24,9 @@ title = _("Donate to {0}", participant.username)
 <div class="col-md-7 col-md-offset-3">
     <h2 class="text-primary">{{ title }}</h2>
 
+    % if not participant.hide_receiving
     {{ profile_goal_bar(participant) }}
+    % endif
 
     {{ tip_form(tippee=participant) }}
 
