@@ -382,6 +382,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team.set_take_for(self.david, D('0.23'), team)
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
+        kalel = self.make_participant(
+            'kalel', mangopay_user_id=None, email='kalel@example.org',
+        )
+        self.janet.set_tip_to(kalel, '0.10')
         Payday.start().run()
         david = self.david.refetch()
         assert david.balance == D('4.73')
@@ -389,9 +393,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert janet.balance == D('1.77')
         assert janet.giving == D('0.23')
         emails = self.get_emails()
-        assert len(emails) == 2
+        assert len(emails) == 3
         assert emails[0]['to'][0]['email'] == self.david.email
         assert '4.73' in emails[0]['subject']
-        assert emails[1]['to'][0]['email'] == self.janet.email
-        assert 'top up' in emails[1]['subject']
-        assert '1.77' in emails[1]['text']
+        assert emails[1]['to'][0]['email'] == kalel.email
+        assert 'identity form' in emails[1]['text']
+        assert emails[2]['to'][0]['email'] == self.janet.email
+        assert 'top up' in emails[2]['subject']
+        assert '1.77' in emails[2]['text']
