@@ -216,7 +216,7 @@ recent_events = query_cache.all("""
     <div class="col-md-6">
         % for e in recent_events
             % if loop.index == ceil(len(recent_events) / 2.0) + 1
-                </div><div class="col-md-6">
+                </div><div class="col-md-6 visible-md-block visible-lg-block">
             % endif
             <p class="event">
                 % if e.event == 'new_user'
