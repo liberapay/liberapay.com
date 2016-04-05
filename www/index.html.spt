@@ -18,8 +18,6 @@ recent_events = query_cache.all("""
     SELECT *
       FROM (
             SELECT 'new_user' AS event
-                 , avatar_url
-                 , username
                  , join_time AS ts
                  , json_build_object() AS args
               FROM participants
@@ -29,18 +27,14 @@ recent_events = query_cache.all("""
             UNION ALL
 
             SELECT 'new_community' AS event
-                 , p.avatar_url
-                 , p.username
                  , c.ctime AS ts
-                 , json_build_object('community_name', c.name) AS args
+                 , json_build_object() AS args
               FROM communities c
               JOIN participants p ON p.id = c.creator
 
             UNION ALL
 
             SELECT 'payday' AS event
-                 , NULL AS avatar_url
-                 , NULL AS username
                  , p.ts_end AS ts
                  , json_build_object('transfer_volume', p.transfer_volume) AS args
               FROM paydays p
@@ -222,22 +216,19 @@ recent_events = query_cache.all("""
             % if loop.index == 11
                 </div><div class="col-md-6">
             % endif
-            % set user_link
-                <a href="/{{ e.username }}/">
-                    {{ avatar_img(e) }}
-                    {{ e.username }}
-                </a>
-            % endset
             <p class="event">
                 % if e.event == 'new_user'
-                    {{ _('{0} joined Liberapay {1} ago.', user_link|safe, to_age(e.ts)) }}
+                    {{ glyphicon('user') }}
+                    <span>{{ _(
+                        'Someone joined Liberapay {0} ago.',
+                        to_age(e.ts)
+                    ) }}</span>
                 % elif e.event == 'new_community'
-                    {{ _(
-                        '{0} created the {1} community {2} ago.',
-                        user_link|safe,
-                        ('<a href="/for/{0}/">{0}</a>'|safe).format(e.args.community_name),
+                    {{ glyphicon('plus') }}
+                    <span>{{ _(
+                        'Someone created a new community {0} ago.',
                         to_age(e.ts),
-                    ) }}
+                    ) }}</span>
                 % elif e.event == 'payday'
                     {{ glyphicon('refresh') }}
                     <span>{{ _(
