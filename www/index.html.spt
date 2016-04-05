@@ -1,5 +1,7 @@
 # coding: utf8
 
+from math import ceil
+
 from liberapay.models.participant import Participant
 from liberapay.utils.query_cache import QueryCache
 
@@ -40,7 +42,7 @@ recent_events = query_cache.all("""
               FROM paydays p
            ) foo
   ORDER BY ts DESC
-     LIMIT 20
+     LIMIT 16
 """)
 
 [---]
@@ -213,7 +215,7 @@ recent_events = query_cache.all("""
     </div>
     <div class="col-md-6">
         % for e in recent_events
-            % if loop.index == 11
+            % if loop.index == ceil(len(recent_events) / 2.0) + 1
                 </div><div class="col-md-6">
             % endif
             <p class="event">
