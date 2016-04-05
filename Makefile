@@ -10,7 +10,6 @@ test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := pip --disable-pip-version-check
 with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
 with_tests_env := $(env_bin)/honcho run -e $(test_env_files)
-py_test := $(with_tests_env) $(env_bin)/py.test
 
 echo:
 	@echo $($(var))
@@ -62,15 +61,18 @@ pyflakes: env
 test: test-schema pytest
 tests: test
 
+_pytest:
+	PYTHONPATH=. $(with_tests_env) sh -c '$(env_bin)/py.test -n $${PYTEST_SLAVES-2} $(args)'
+
 pytest: env
-	PYTHONPATH=. $(py_test) ./tests/py/test_$${PYTEST-*}.py
+	@$(MAKE) --no-print-directory _pytest args="./tests/py/test_$${PYTEST-*}.py"
 	@$(MAKE) --no-print-directory pyflakes
 
 pytest-cov: env
-	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/
+	@$(MAKE) --no-print-directory _pytest args="--cov-report html --cov liberapay ./tests/py/"
 
 pytest-re: env
-	PYTHONPATH=. $(py_test) --lf ./tests/py/
+	@$(MAKE) --no-print-directory _pytest args="--lf ./tests/py/"
 	@$(MAKE) --no-print-directory pyflakes
 
 _i18n_extract: env
