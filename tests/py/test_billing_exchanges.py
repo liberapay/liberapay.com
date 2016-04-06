@@ -31,8 +31,12 @@ from liberapay.testing.mangopay import MangopayHarness
 class TestPayouts(MangopayHarness):
 
     def test_payout(self):
-        self.make_exchange('mango-cc', 27, 0, self.homer)
-        self.make_exchange('mango-cc', 19, 0, self.homer)
+        e = charge(self.db, self.janet, D('46.00'), 'http://localhost/')
+        assert e.status == 'succeeded', e.note
+        self.janet.set_tip_to(self.homer, '42.00')
+        self.janet.close('downstream')
+        self.homer = self.homer.refetch()
+        assert self.homer.balance == 46
         exchange = payout(self.db, self.homer, D('30.00'))
         assert exchange.note is None
         assert exchange.status == 'created'
