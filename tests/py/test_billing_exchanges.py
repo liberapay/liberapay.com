@@ -86,7 +86,7 @@ class TestPayouts(MangopayHarness):
 class TestCharge(MangopayHarness):
 
     @mock.patch('liberapay.billing.exchanges.test_hook')
-    def test_charge_failure(self, test_hook):
+    def test_charge_exception(self, test_hook):
         test_hook.side_effect = Foobar
         exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
         assert exchange.note == "Foobar()"
@@ -94,6 +94,24 @@ class TestCharge(MangopayHarness):
         assert exchange.status == 'failed'
         janet = Participant.from_id(self.janet.id)
         assert self.janet.get_credit_card_error() == 'Foobar()'
+        assert self.janet.balance == janet.balance == 0
+
+    @mock.patch('mangopaysdk.tools.apipayins.ApiPayIns.Create')
+    def test_charge_failure(self, Create):
+        def fail_payin(payin):
+            payin.ExecutionDetails.SecureModeRedirectURL = None
+            payin.ResultCode = '1'
+            payin.ResultMessage = 'oops'
+            payin.Status = 'FAILED'
+            return payin
+        Create.side_effect = fail_payin
+        exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
+        error = "1: oops"
+        assert exchange.note == error
+        assert exchange.amount
+        assert exchange.status == 'failed'
+        janet = self.janet.refetch()
+        assert self.janet.get_credit_card_error() == error
         assert self.janet.balance == janet.balance == 0
 
     def test_charge_success_and_wallet_creation(self):
