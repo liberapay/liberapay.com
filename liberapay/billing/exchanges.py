@@ -144,8 +144,8 @@ def payout(db, participant, amount, ignore_high_fee=False):
     payout.Tag = str(e_id)
     try:
         test_hook()
-        mangoapi.payOuts.Create(payout)
-        return record_exchange_result(db, e_id, 'created', None, participant)
+        payout = mangoapi.payOuts.Create(payout)
+        return record_exchange_result(db, e_id, payout.Status.lower(), repr_error(payout), participant)
     except Exception as e:
         error = repr_exception(e)
         return record_exchange_result(db, e_id, 'failed', error, participant)
