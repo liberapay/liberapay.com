@@ -33,6 +33,7 @@ recent_events = query_cache.all("""
                  , json_build_object() AS args
               FROM communities c
               JOIN participants p ON p.id = c.creator
+             WHERE c.nmembers > 0
 
             UNION ALL
 
