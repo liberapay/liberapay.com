@@ -13,6 +13,10 @@ if t not in ('giving.js', 'receiving.js'):
 
 participant = get_participant(state, restrict=False)
 
+if participant.hide_giving and t != 'receiving.js' or \
+   participant.hide_receiving and t != 'giving.js':
+    raise Response(403)
+
 response.headers['Cache-Control'] = 'public, max-age=600'
 response.headers['Vary'] = 'Accept-Language'
 
