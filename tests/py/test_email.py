@@ -2,7 +2,7 @@ from liberapay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, Em
 from liberapay.exceptions import TooManyEmailAddresses
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils import emails
+from liberapay.utils import b64encode_s, emails
 
 
 class TestEmail(EmailHarness):
@@ -22,7 +22,8 @@ class TestEmail(EmailHarness):
         return P('/alice/emails/modify.json', data, auth_as=auth_as, **headers)
 
     def verify_email(self, email, nonce, should_fail=False):
-        url = '/alice/emails/verify.html?email=%s&nonce=%s' % (email, nonce)
+        # Email address is base64 encoded in url.
+        url = '/alice/emails/verify.html?email64=%s&nonce=%s' % (b64encode_s(email), nonce)
         G = self.client.GxT if should_fail else self.client.GET
         return G(url, auth_as=self.alice)
 
@@ -35,6 +36,13 @@ class TestEmail(EmailHarness):
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
         assert response.text == '{}'
+
+    def test_email_address_is_base64_encoded_in_sent_verification_link(self):
+        address = 'alice@gratipay.com'
+        encoded = b64encode_s(address)
+        self.hit_email_spt('add-email', address)
+        last_email = self.get_last_email()
+        assert "/alice/emails/verify.html?email64="+encoded in last_email['text']
 
     def test_adding_email_sends_verification_email(self):
         self.hit_email_spt('add-email', 'alice@example.com')
@@ -104,6 +112,17 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = self.alice.get_email('alice@example.com').nonce
         self.verify_email('alice@example.com', nonce)
+        expected = 'alice@example.com'
+        actual = Participant.from_username('alice').email
+        assert expected == actual
+
+    def test_email_verification_is_backwards_compatible(self):
+        """Test email verification still works with unencoded email in verification link.
+        """
+        self.hit_email_spt('add-email', 'alice@example.com')
+        nonce = self.alice.get_email('alice@example.com').nonce
+        url = '/alice/emails/verify.html?email=alice@example.com&nonce='+nonce
+        self.client.GET(url, auth_as=self.alice)
         expected = 'alice@example.com'
         actual = Participant.from_username('alice').email
         assert expected == actual
