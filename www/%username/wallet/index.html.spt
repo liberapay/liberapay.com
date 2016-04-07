@@ -143,7 +143,7 @@ else:
 
         <td class="balance">{{ event['balance'] }}</td>
 
-        <td class="status"></td>
+        <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
         % set context = event['context']
         % if event['tippee'] == participant.id
