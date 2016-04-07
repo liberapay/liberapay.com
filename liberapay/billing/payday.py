@@ -465,40 +465,57 @@ class Payday(object):
 
             UPDATE participants p
                SET giving = p2.giving
-              FROM ( SELECT tipper AS id, sum(amount) AS giving
-                       FROM payday_transfers
-                   GROUP BY tipper
+              FROM ( SELECT p2.id
+                          , COALESCE((
+                                SELECT sum(amount)
+                                  FROM payday_transfers t
+                                 WHERE t.tipper = p2.id
+                            ), 0) AS giving
+                       FROM participants p2
                    ) p2
              WHERE p.id = p2.id
                AND p.giving <> p2.giving;
 
             UPDATE participants p
                SET taking = p2.taking
-              FROM ( SELECT tippee AS id, sum(amount) AS taking
-                       FROM payday_transfers
-                      WHERE context = 'take'
-                   GROUP BY tippee
+              FROM ( SELECT p2.id
+                          , COALESCE((
+                                SELECT sum(amount)
+                                  FROM payday_transfers t
+                                 WHERE t.tippee = p2.id
+                                   AND context = 'take'
+                            ), 0) AS taking
+                       FROM participants p2
                    ) p2
              WHERE p.id = p2.id
                AND p.taking <> p2.taking;
 
             UPDATE participants p
                SET receiving = p2.receiving
-              FROM ( SELECT tippee AS id, sum(amount) AS receiving
-                       FROM payday_transfers
-                   GROUP BY tippee
+              FROM ( SELECT p2.id
+                          , COALESCE((
+                                SELECT sum(amount)
+                                  FROM payday_transfers t
+                                 WHERE t.tippee = p2.id
+                            ), 0) AS receiving
+                       FROM participants p2
                    ) p2
              WHERE p.id = p2.id
-               AND p.receiving <> p2.receiving;
+               AND p.receiving <> p2.receiving
+               AND p.status <> 'stub';
 
             UPDATE participants p
                SET npatrons = p2.npatrons
-              FROM ( SELECT tippee AS id, count(*) AS npatrons
-                       FROM payday_transfers
-                   GROUP BY tippee
+              FROM ( SELECT p2.id
+                          , ( SELECT count(*)
+                                FROM payday_transfers t
+                               WHERE t.tippee = p2.id
+                            ) AS npatrons
+                       FROM participants p2
                    ) p2
              WHERE p.id = p2.id
-               AND p.npatrons <> p2.npatrons;
+               AND p.npatrons <> p2.npatrons
+               AND p.status <> 'stub';
 
             """)
         self.clean_up()
