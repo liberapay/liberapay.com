@@ -496,7 +496,7 @@ class Payday(object):
                           , COALESCE((
                                 SELECT sum(amount)
                                   FROM payday_transfers t
-                                 WHERE t.tippee = p2.id
+                                 WHERE t.tippee = p2.id OR t.team = p2.id
                             ), 0) AS receiving
                        FROM participants p2
                    ) p2
@@ -509,7 +509,7 @@ class Payday(object):
               FROM ( SELECT p2.id
                           , ( SELECT count(*)
                                 FROM payday_transfers t
-                               WHERE t.tippee = p2.id
+                               WHERE t.tippee = p2.id OR t.team = p2.id
                             ) AS npatrons
                        FROM participants p2
                    ) p2
