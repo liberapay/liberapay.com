@@ -179,12 +179,12 @@ class Harness(unittest.TestCase):
         if kind not in ('group', 'community'):
             kw.setdefault('password', 'x')
             kw.setdefault('session_token', username)
+            i = next(self.seq)
+            kw.setdefault('mangopay_user_id', -i)
+            kw.setdefault('mangopay_wallet_id', -i)
         kw.setdefault('status', 'active')
         if not 'join_time' in kw:
             kw['join_time'] = utcnow()
-        i = next(self.seq)
-        kw.setdefault('mangopay_user_id', -i)
-        kw.setdefault('mangopay_wallet_id', -i)
         cols, vals = zip(*kw.items())
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))

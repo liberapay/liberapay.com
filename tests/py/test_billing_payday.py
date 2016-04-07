@@ -72,6 +72,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
             assert funded_tips == [3, 6, 0.5, 1, 5, 2]
 
+            janet = self.janet.refetch()
+            assert janet.giving == 0
+            assert janet.receiving == 0
+            assert janet.taking == 0
+            assert janet.npatrons == 0
+
         # Pre-test check
         check()
 
@@ -87,10 +93,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
              WHERE p.id = t.tippee
                AND p.mangopay_user_id IS NOT NULL;
             UPDATE participants
-               SET giving = 0
-                 , npatrons = 0
-                 , receiving = 0
-                 , taking = 0
+               SET giving = 10000
+                 , npatrons = 10000
+                 , receiving = 10000
+                 , taking = 10000
              WHERE mangopay_user_id IS NOT NULL;
         """)
         Payday.start().update_cached_amounts()
