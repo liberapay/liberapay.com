@@ -144,8 +144,8 @@ def payout(db, participant, amount, ignore_high_fee=False):
     payout.Tag = str(e_id)
     try:
         test_hook()
-        mangoapi.payOuts.Create(payout)
-        return record_exchange_result(db, e_id, 'created', None, participant)
+        payout = mangoapi.payOuts.Create(payout)
+        return record_exchange_result(db, e_id, payout.Status.lower(), repr_error(payout), participant)
     except Exception as e:
         error = repr_exception(e)
         return record_exchange_result(db, e_id, 'failed', error, participant)
@@ -190,7 +190,7 @@ def charge(db, participant, amount, return_url):
     if payin.ExecutionDetails.SecureModeRedirectURL:
         raise Response(302, headers={'Location': payin.ExecutionDetails.SecureModeRedirectURL})
 
-    return record_exchange_result(db, e_id, 'succeeded', None, participant)
+    return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
 
 
 def record_exchange(db, route, amount, fee, vat, participant, status, error=None):
