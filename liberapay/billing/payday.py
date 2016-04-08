@@ -493,10 +493,11 @@ class Payday(object):
             UPDATE participants p
                SET receiving = p2.receiving
               FROM ( SELECT p2.id
-                          , COALESCE((
+                          , p2.taking + COALESCE((
                                 SELECT sum(amount)
-                                  FROM payday_transfers t
-                                 WHERE t.tippee = p2.id OR t.team = p2.id
+                                  FROM payday_tips t
+                                 WHERE t.tippee = p2.id
+                                   AND t.is_funded
                             ), 0) AS receiving
                        FROM participants p2
                    ) p2
