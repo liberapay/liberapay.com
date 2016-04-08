@@ -92,7 +92,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         # Check that update_cached_amounts actually updates amounts
         self.db.run("""
             UPDATE tips t
-               SET is_funded = false
+               SET is_funded = true
               FROM participants p
              WHERE p.id = t.tippee
                AND p.mangopay_user_id IS NOT NULL;
