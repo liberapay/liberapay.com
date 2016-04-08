@@ -108,6 +108,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         Payday.start().update_cached_amounts()
         check()
 
+        # Check that the update methods of Participant concur
+        for p in self.db.all("SELECT p.*::participants FROM participants p"):
+            p.update_receiving()
+            p.update_giving()
+        check()
+
     def test_update_cached_amounts_depth(self):
         alice = self.make_participant('alice', balance=100)
         usernames = ('bob', 'carl', 'dana', 'emma', 'fred', 'greg')
