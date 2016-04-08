@@ -245,6 +245,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert new_balances[self.david.id] == D('0.49')
             assert new_balances[self.janet.id] == D('0.51')
             assert new_balances[self.homer.id] == 0
+            nulls = cursor.all("SELECT * FROM payday_tips WHERE is_funded IS NULL")
+            assert not nulls
 
     def test_transfer_tips_whole_graph(self):
         alice = self.make_participant('alice', balance=50)
