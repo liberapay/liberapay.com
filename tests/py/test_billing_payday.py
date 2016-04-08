@@ -403,7 +403,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert david.balance == D('4.73')
         janet = self.janet.refetch()
         assert janet.balance == D('1.77')
-        assert janet.giving == D('0.23')
+        assert janet.giving == D('0.25')
         emails = self.get_emails()
         assert len(emails) == 3
         assert emails[0]['to'][0]['email'] == self.david.email

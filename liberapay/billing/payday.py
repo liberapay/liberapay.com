@@ -468,8 +468,9 @@ class Payday(object):
               FROM ( SELECT p2.id
                           , COALESCE((
                                 SELECT sum(amount)
-                                  FROM payday_transfers t
+                                  FROM payday_tips t
                                  WHERE t.tipper = p2.id
+                                   AND t.is_funded
                             ), 0) AS giving
                        FROM participants p2
                    ) p2
