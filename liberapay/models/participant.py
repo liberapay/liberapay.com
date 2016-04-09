@@ -783,14 +783,12 @@ class Participant(Model, MixinTeam):
 
     def render_notifications(self, state):
         r = []
-        if not self.pending_notifs:
-            return r
         notifs = self.db.all("""
-            SELECT id, event, context
+            SELECT id, event, context, is_new
               FROM notification_queue
              WHERE participant = %s
         """, (self.id,))
-        for id, event, notif_context in notifs:
+        for id, event, notif_context, is_new in notifs:
             try:
                 notif_context = pickle.loads(notif_context)
                 context = dict(state)
@@ -799,7 +797,7 @@ class Participant(Model, MixinTeam):
                 spt = website.emails[event]
                 html = spt['text/html'].render(context).strip()
                 typ = notif_context.get('type', 'info')
-                r.append(dict(id=id, html=html, type=typ))
+                r.append(dict(id=id, html=html, type=typ, is_new=is_new))
             except Exception as e:
                 website.tell_sentry(e, state, allow_reraise=True)
         return r
