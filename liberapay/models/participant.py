@@ -801,6 +801,7 @@ class Participant(Model, MixinTeam):
             SELECT id, event, context, is_new
               FROM notification_queue
              WHERE participant = %s
+          ORDER BY is_new DESC, id DESC
         """, (self.id,))
         for id, event, notif_context, is_new in notifs:
             try:
