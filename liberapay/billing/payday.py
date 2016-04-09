@@ -373,6 +373,7 @@ class Payday(object):
             SELECT settle_tip_graph();
             SELECT resolve_takes(team) FROM payday_takes GROUP BY team ORDER BY team;
             SELECT settle_tip_graph();
+            UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
         """)
 
     @staticmethod

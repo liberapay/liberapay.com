@@ -92,7 +92,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         # Check that update_cached_amounts actually updates amounts
         self.db.run("""
             UPDATE tips t
-               SET is_funded = false
+               SET is_funded = true
               FROM participants p
              WHERE p.id = t.tippee
                AND p.mangopay_user_id IS NOT NULL;
@@ -106,6 +106,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
              WHERE status = 'active';
         """)
         Payday.start().update_cached_amounts()
+        check()
+
+        # Check that the update methods of Participant concur
+        for p in self.db.all("SELECT p.*::participants FROM participants p"):
+            p.update_receiving()
+            p.update_giving()
         check()
 
     def test_update_cached_amounts_depth(self):
@@ -245,6 +251,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert new_balances[self.david.id] == D('0.49')
             assert new_balances[self.janet.id] == D('0.51')
             assert new_balances[self.homer.id] == 0
+            nulls = cursor.all("SELECT * FROM payday_tips WHERE is_funded IS NULL")
+            assert not nulls
 
     def test_transfer_tips_whole_graph(self):
         alice = self.make_participant('alice', balance=50)
