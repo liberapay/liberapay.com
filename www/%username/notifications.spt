@@ -31,8 +31,8 @@ participant.render_notifications(state)
     <br>
     % for notif in participant.render_notifications(state)
         <div class="alert alert-{{ notif.type }} {{ 'alert-read' if not notif.is_new else '' }}">
-            {{ notif.html|safe }}
             <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
+            {{ notif.html|safe }}
         </div>
     % else
         <p>{{ _("No notifications to show.") }}</p>
