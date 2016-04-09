@@ -105,6 +105,10 @@ you can also use the following commands:
 - `make pytest` only runs the python tests without recreating the test DB
 - `make pytest-re` does the same but only runs the tests that failed in the previous run
 
+### Tinkering with payments
+
+We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to modify that part of the code you'll need the [MangoPay API documentation](https://docs.mangopay.com/api-references/).
+
 ### Deploying the app
 
 Liberapay is hosted on [OpenShift Online](https://openshift.com/), which runs
