@@ -750,24 +750,38 @@ class Participant(Model, MixinTeam):
         self.set_attributes(pending_notifs=pending_notifs)
         return n_id
 
+    def mark_all_notifications_as_read(self):
+        p_id = self.id
+        r = self.db.one("""
+            WITH updated AS (
+                UPDATE notification_queue
+                   SET is_new = false
+                 WHERE participant = %(p_id)s
+                   AND is_new
+             RETURNING id
+            )
+            UPDATE participants
+               SET pending_notifs = pending_notifs - (SELECT count(*) FROM updated)
+             WHERE id = %(p_id)s
+         RETURNING pending_notifs;
+        """, locals())
+        self.set_attributes(pending_notifs=r)
+
     def remove_notification(self, n_id):
         p_id = self.id
         r = self.db.one("""
-            DO $$
-            BEGIN
+            WITH deleted AS (
                 DELETE FROM notification_queue
                  WHERE id = %(n_id)s
-                   AND participant = %(p_id)s;
-                IF (NOT FOUND) THEN RETURN; END IF;
-                UPDATE participants
-                   SET pending_notifs = pending_notifs - 1
-                 WHERE id = %(p_id)s;
-            END;
-            $$ LANGUAGE plpgsql;
-
-            SELECT pending_notifs
-              FROM participants
-             WHERE id = %(p_id)s;
+                   AND participant = %(p_id)s
+             RETURNING is_new
+            )
+            UPDATE participants
+               SET pending_notifs = pending_notifs - (
+                       SELECT count(*) FROM deleted WHERE is_new
+                   )
+             WHERE id = %(p_id)s
+         RETURNING pending_notifs;
         """, locals())
         self.set_attributes(pending_notifs=r)
 
