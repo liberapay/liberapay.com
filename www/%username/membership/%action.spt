@@ -11,15 +11,16 @@ from liberapay.utils import b64encode_s, get_participant, utcnow
 
 ONE_WEEK = timedelta(days=7)
 
-def get_invite(p):
+def get_invite(team, p):
     return website.db.one("""
         SELECT *
           FROM events
-         WHERE type LIKE 'invite%%'
+         WHERE participant = %s
+           AND type LIKE 'invite%%'
            AND payload->>'invitee' = %s::text
       ORDER BY ts DESC
          LIMIT 1
-    """, (p.id,))
+    """, (team.id, p.id,))
 
 [---]
 
@@ -36,7 +37,7 @@ msg = None
 confirm = None
 
 if action in ('accept', 'refuse'):
-    invite = get_invite(user)
+    invite = get_invite(team, user)
     if not invite:
         raise Response(400, _("You are not invited to join this team."))
     if invite.type == 'invite_accept':
@@ -54,7 +55,7 @@ if action == 'invite':
         raise Response(400, _("A team can't join a team"))
     if invitee.status != 'active':
         raise Response(400, _("You can't invite an inactive user to join a team."))
-    invite = get_invite(invitee)
+    invite = get_invite(team, invitee)
     if invite:
         invite_age = utcnow() - invite.ts
         if invite.type == 'invite' and invite_age < ONE_WEEK:
