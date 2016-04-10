@@ -63,6 +63,17 @@ class Tests(Harness):
         is_member = self.bob.member_of(self.a_team)
         assert is_member is False
 
+    def test_invite_is_scoped_to_specific_team(self):
+        b_team = self.make_participant('B-Team', kind='group')
+        self.a_team.invite(self.bob, self.alice)
+
+        # Chech that bob can't use the invite from A-Team to join B-Team
+        r = self.client.PxST('/B-Team/membership/accept', auth_as=self.bob)
+        assert r.code == 400
+        assert 'not invited' in r.text
+        is_member = self.bob.member_of(b_team)
+        assert is_member is False
+
 
 class Tests2(Harness):
 
