@@ -35,6 +35,34 @@ class Tests(Harness):
         self.a_team.remove_all_members()
         assert len(self.a_team.get_current_takes()) == 0
 
+    def test_invite_accept_leave(self):
+        r = self.client.PxST(
+            '/A-Team/membership/invite', {'username': 'bob'}, auth_as=self.alice,
+        )
+        assert r.code == 302
+
+        r = self.client.PxST('/A-Team/membership/accept', auth_as=self.bob)
+        assert r.code == 302
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is True
+
+        r = self.client.PxST('/A-Team/membership/leave', auth_as=self.alice)
+        assert r.code == 200
+        assert 'confirm' in r.text
+
+        r = self.client.PxST(
+            '/A-Team/membership/leave', {'confirmed': 'true'}, auth_as=self.alice,
+        )
+        is_member = self.alice.member_of(self.a_team)
+        assert is_member is False
+
+    def test_refuse_invite(self):
+        self.a_team.invite(self.bob, self.alice)
+        r = self.client.PxST('/A-Team/membership/refuse', auth_as=self.bob)
+        assert r.code == 302
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is False
+
 
 class Tests2(Harness):
 
