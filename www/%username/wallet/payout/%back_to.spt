@@ -63,6 +63,9 @@ if show_form:
         ba_details = bank_account.Details
         ba_type = bank_account.Type
 
+if user == participant:
+    participant.mark_notifications_as_read('withdrawal_failed')
+
 title = _("Withdraw money")
 
 [---] text/html

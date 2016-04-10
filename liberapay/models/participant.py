@@ -727,10 +727,10 @@ class Participant(Model, MixinTeam):
     # =============
 
     def notify(self, event, force_email=False, web=True, **context):
-        if web:
-            self.add_notification(event, **context)
         if force_email or self.email_notif_bits & EVENTS.get(event).bit:
             self.queue_email(event, **context)
+        if web:
+            return self.add_notification(event, **context)
 
     def add_notification(self, event, **context):
         p_id = self.id
@@ -750,13 +750,14 @@ class Participant(Model, MixinTeam):
         self.set_attributes(pending_notifs=pending_notifs)
         return n_id
 
-    def mark_all_notifications_as_read(self):
+    def mark_notification_as_read(self, n_id):
         p_id = self.id
         r = self.db.one("""
             WITH updated AS (
                 UPDATE notification_queue
                    SET is_new = false
                  WHERE participant = %(p_id)s
+                   AND id = %(n_id)s
                    AND is_new
              RETURNING id
             )
@@ -765,6 +766,27 @@ class Participant(Model, MixinTeam):
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
         """, locals())
+        self.set_attributes(pending_notifs=r)
+
+    def mark_notifications_as_read(self, event=None):
+        if not self.pending_notifs:
+            return
+        p_id = self.id
+        sql_filter = 'AND event = %(event)s' if event else ''
+        r = self.db.one("""
+            WITH updated AS (
+                UPDATE notification_queue
+                   SET is_new = false
+                 WHERE participant = %(p_id)s
+                   AND is_new
+                   {0}
+             RETURNING id
+            )
+            UPDATE participants
+               SET pending_notifs = pending_notifs - (SELECT count(*) FROM updated)
+             WHERE id = %(p_id)s
+         RETURNING pending_notifs;
+        """.format(sql_filter), locals())
         self.set_attributes(pending_notifs=r)
 
     def remove_notification(self, n_id):

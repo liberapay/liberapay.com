@@ -66,6 +66,7 @@ if request.method == 'POST':
                 """, (account.Id, participant.id))
                 if id != account.Id:
                     raise Response(409, "race condition")
+                participant.mark_notifications_as_read('identity_required')
             else:
                 error = _("You have to agree to MangoPay's Terms of Service.")
         except ResponseException as err:
