@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '9'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '10'::jsonb);
 
 
 -- app configuration
@@ -413,6 +413,7 @@ CREATE TABLE notification_queue
 , participant   bigint   NOT NULL REFERENCES participants
 , event         text     NOT NULL
 , context       bytea    NOT NULL
+, is_new        boolean  NOT NULL DEFAULT TRUE
 );
 
 

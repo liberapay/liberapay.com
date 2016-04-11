@@ -93,3 +93,6 @@ CREATE OR REPLACE VIEW sponsors AS
        AND giving > receiving
        AND giving >= 10
        AND NOT profile_nofollow;
+
+-- migration #10
+ALTER TABLE notification_queue ADD COLUMN is_new boolean NOT NULL DEFAULT TRUE;
