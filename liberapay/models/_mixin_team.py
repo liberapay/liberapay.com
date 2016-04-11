@@ -21,14 +21,16 @@ class InactiveParticipantAdded(Exception): pass
 class MixinTeam(object):
 
     def invite(self, invitee, inviter):
+        assert self.kind == 'group'
         with self.db.get_cursor() as c:
-            self.add_event(c, 'invite', dict(invitee=invitee.id), inviter.id)
-            invitee.notify(
+            n_id = invitee.notify(
                 'team_invite',
                 team=self.username,
                 team_url=self.url(),
                 inviter=inviter.username,
             )
+            payload = dict(invitee=invitee.id, notification_id=n_id)
+            self.add_event(c, 'invite', payload, inviter.id)
 
     def add_member(self, member, cursor=None):
         """Add a member to this team.

@@ -44,6 +44,7 @@ if action in ('accept', 'refuse'):
         raise Response(200, _("You have already accepted this invitation."))
     if invite.type == 'invite_refuse':
         raise Response(400, _("You have already refused this invitation."))
+    notif_id = invite.payload.get('notification_id')
 elif not user.member_of(team):
     raise Response(403, _("You are not a member of this team."))
 
@@ -87,10 +88,14 @@ elif action == 'accept':
         team.add_event(c, 'invite_accept', dict(invitee=user.id))
         team.add_member(user)
     msg = _("You are now a member of the team.")
+    if notif_id:
+        user.mark_notification_as_read(notif_id)
 
 elif action == 'refuse':
     with website.db.get_cursor() as c:
         team.add_event(c, 'invite_refuse', dict(invitee=user.id))
+    if notif_id:
+        user.mark_notification_as_read(notif_id)
     response.redirect('/')
 
 else:

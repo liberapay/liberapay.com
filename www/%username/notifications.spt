@@ -7,7 +7,12 @@ request.allow('GET', 'POST')
 participant = get_participant(state, restrict=True)
 
 if request.method == 'POST':
-    participant.remove_notification(request.body['remove'])
+    body = request.body
+    if body.get('mark_all_as_read') == 'true':
+        participant.mark_all_notifications_as_read()
+    else:
+        participant.remove_notification(request.body['remove'])
+    response.redirect(request.line.uri)
 
 # NOTE: don't factor the render_notifications() call here, it'll break escaping
 
@@ -20,10 +25,14 @@ participant.render_notifications(state)
 % block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <button class="btn btn-primary" name="mark_all_as_read" value="true">{{
+        _("Mark all notifications as read")
+    }}</button><br>
+    <br>
     % for notif in participant.render_notifications(state)
-        <div class="alert alert-{{ notif.type }}">
-            {{ notif.html|safe }}
+        <div class="alert alert-{{ notif.type }} {{ 'alert-read' if not notif.is_new else '' }}">
             <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
+            {{ notif.html|safe }}
         </div>
     % else
         <p>{{ _("No notifications to show.") }}</p>
