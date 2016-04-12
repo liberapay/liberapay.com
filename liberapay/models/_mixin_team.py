@@ -194,7 +194,10 @@ class MixinTeam(object):
         ratio = min(balance / total_takes, 1) if total_takes else 0
         for take in nominal_takes:
             nominal = take['nominal_take'] = take.pop('amount')
-            actual = take['actual_amount'] = (nominal * ratio).quantize(CENT, rounding=ROUND_UP)
+            actual = take['actual_amount'] = min(
+                (nominal * ratio).quantize(CENT, rounding=ROUND_UP),
+                balance
+            )
             balance -= actual
             actual_takes[take['member_id']] = take
         actual_takes.leftover = balance
