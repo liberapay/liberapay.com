@@ -323,15 +323,18 @@ class Payday(object):
                      WHERE t.tippee = team_id
                        AND p.new_balance >= t.amount;
             BEGIN
-                total_income := (
-                    SELECT sum(t.amount)
-                      FROM payday_tips t
-                      JOIN payday_participants p ON p.id = t.tipper
-                     WHERE t.tippee = team_id
-                       AND p.new_balance >= t.amount
-                );
+                WITH funded AS (
+                     UPDATE payday_tips
+                        SET is_funded = true
+                       FROM payday_participants p
+                      WHERE p.id = tipper
+                        AND tippee = team_id
+                        AND p.new_balance >= amount
+                  RETURNING amount
+                )
+                SELECT COALESCE(sum(amount), 0) FROM funded INTO total_income;
                 total_takes := (
-                    SELECT sum(t.amount)
+                    SELECT COALESCE(sum(t.amount), 0)
                       FROM payday_takes t
                      WHERE t.team = team_id
                 );
@@ -351,7 +354,6 @@ class Payday(object):
                             CONTINUE;
                         END IF;
                         transfer_amount := min(tip.amount, take.amount);
-                        UPDATE payday_tips SET is_funded = true WHERE id = tip.id;
                         EXECUTE transfer(tip.tipper, take.member, transfer_amount, 'take', team_id);
                         tip.amount := tip.amount - transfer_amount;
                         UPDATE our_takes t
@@ -371,7 +373,7 @@ class Payday(object):
     def transfer_virtually(cursor):
         cursor.run("""
             SELECT settle_tip_graph();
-            SELECT resolve_takes(team) FROM payday_takes GROUP BY team ORDER BY team;
+            SELECT resolve_takes(id) FROM payday_participants WHERE kind = 'group';
             SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
         """)
