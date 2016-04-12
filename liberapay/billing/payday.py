@@ -514,13 +514,28 @@ class Payday(object):
               FROM ( SELECT p2.id
                           , ( SELECT count(*)
                                 FROM payday_transfers t
-                               WHERE t.tippee = p2.id OR t.team = p2.id
+                               WHERE t.tippee = p2.id
                             ) AS npatrons
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
                AND p.npatrons <> p2.npatrons
-               AND p.status <> 'stub';
+               AND p.status <> 'stub'
+               AND p.kind IN ('individual', 'organization');
+
+            UPDATE participants p
+               SET npatrons = p2.npatrons
+              FROM ( SELECT p2.id
+                          , ( SELECT count(*)
+                                FROM payday_tips t
+                               WHERE t.tippee = p2.id
+                                 AND t.is_funded
+                            ) AS npatrons
+                       FROM participants p2
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.npatrons <> p2.npatrons
+               AND p.kind = 'group';
 
             """)
         self.clean_up()
