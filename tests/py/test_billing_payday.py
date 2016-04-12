@@ -41,10 +41,13 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         carl = self.make_participant('carl', balance=1.56)
         dana = self.make_participant('dana')
         emma = Participant.make_stub(username='emma')
+        team2 = self.make_participant('team2', kind='group')
+        team2.add_member(dana)
         alice.set_tip_to(dana, '3.00')
         alice.set_tip_to(bob, '6.00')
         alice.set_tip_to(emma, '0.50')
         alice.set_tip_to(team, '1.20')
+        alice.set_tip_to(team2, '0.49')
         bob.set_tip_to(alice, '5.00')
         team.add_member(bob)
         team.set_take_for(bob, D('1.00'), bob)
@@ -58,7 +61,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             carl = Participant.from_username('carl')
             dana = Participant.from_username('dana')
             emma = Participant.from_username('emma')
-            assert alice.giving == D('10.20')
+            assert alice.giving == D('10.69')
             assert alice.receiving == D('5.00')
             assert bob.giving == D('7.00')
             assert bob.receiving == D('7.00')
@@ -70,11 +73,15 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert emma.receiving == D('0.50')
             assert emma.npatrons == 1
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
-            assert funded_tips == [3, 6, 0.5, D('1.20'), 5, 2]
+            assert funded_tips == [3, 6, 0.5, D('1.20'), D('0.49'), 5, 2]
 
             team = Participant.from_username('team')
             assert team.receiving == D('1.20')
             assert team.npatrons == 1
+
+            team2 = Participant.from_username('team2')
+            assert team2.receiving == D('0.49')
+            assert team2.npatrons == 1
 
             janet = self.janet.refetch()
             assert janet.giving == 0
