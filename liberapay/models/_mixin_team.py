@@ -175,7 +175,9 @@ class MixinTeam(object):
         """
         assert self.kind == 'group'
         TAKES = """
-            SELECT p.id AS member_id, p.username AS member_name, t.amount, t.ctime, t.mtime, p.avatar_url
+            SELECT p.id AS member_id, p.username AS member_name, p.avatar_url
+                 , (p.mangopay_user_id IS NOT NULL) AS is_identified
+                 , t.amount, t.ctime, t.mtime
               FROM current_takes t
               JOIN participants p ON p.id = member
              WHERE t.team=%(team)s
@@ -190,11 +192,14 @@ class MixinTeam(object):
         actual_takes = OrderedDict()
         nominal_takes = self.get_current_takes(cursor=cursor)
         balance = self.receiving
-        total_takes = sum(t['amount'] for t in nominal_takes)
+        total_takes = sum(t['amount'] for t in nominal_takes if t['is_identified'])
         ratio = min(balance / total_takes, 1) if total_takes else 0
         for take in nominal_takes:
             nominal = take['nominal_take'] = take.pop('amount')
-            actual = take['actual_amount'] = (nominal * ratio).quantize(CENT, rounding=ROUND_UP)
+            actual = take['actual_amount'] = min(
+                (nominal * ratio).quantize(CENT, rounding=ROUND_UP),
+                balance
+            ) if take['is_identified'] else ZERO
             balance -= actual
             actual_takes[take['member_id']] = take
         actual_takes.leftover = balance
