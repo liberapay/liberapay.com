@@ -27,7 +27,6 @@ INSERT INTO app_conf (key, value) VALUES
     ('linuxfr_id', '"c574b5f45ce054a0750a3764b3ff8ff2c9f88fe36611272a0bf5e4e07bd3c0bf"'::jsonb),
     ('linuxfr_secret', '"8c518595790487015cd0c33be2d04939946f99aad33c86a6af20a99bc749fb3b"'::jsonb),
     ('log_emails', 'true'::jsonb),
-    ('mandrill_key', '"HqMAZGCNBHdoepoWiarAUw"'::jsonb),
     ('mangopay_base_url', '"https://api.sandbox.mangopay.com"'::jsonb),
     ('mangopay_client_id', '"liberapay-dev"'::jsonb),
     ('mangopay_client_password', '"Toi8KBqA3UDSWKgEcC7CLqup3kcaDUSTmy4hN3UiKz6ZUJCZz1"'::jsonb),

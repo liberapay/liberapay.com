@@ -2,6 +2,7 @@ from __future__ import print_function, unicode_literals
 
 from base64 import b64decode, b64encode
 from decimal import Decimal, ROUND_DOWN
+from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
 import pickle
@@ -677,14 +678,13 @@ class Participant(Model, MixinTeam):
             b = base_spt[t].render(context).strip()
             return b.replace('$body', spt[t].render(context).strip())
         message = {}
-        message['from_email'] = 'support@liberapay.com'
-        message['from_name'] = 'Liberapay Support'
-        message['to'] = [{'email': email, 'name': self.username}]
+        message['from_email'] = 'Liberapay Support <support@liberapay.com>'
+        message['to'] = [formataddr((self.username, email))]
         message['subject'] = spt['subject'].render(context).strip()
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
 
-        website.mailer.messages.send(message=message)
+        website.mailer.send(**message)
         website.log_email(message)
         return 1 # Sent
 

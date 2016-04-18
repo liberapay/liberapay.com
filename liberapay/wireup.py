@@ -14,7 +14,7 @@ from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 from environment import Environment, is_yesish
-import mandrill
+from mailshake import SMTPMailer
 import raven
 
 from liberapay import elsewhere
@@ -89,7 +89,6 @@ class AppConf(object):
         linuxfr_id                      = str,
         linuxfr_secret                  = str,
         log_emails                      = bool,
-        mandrill_key                    = str,
         mangopay_base_url               = str,
         mangopay_client_id              = str,
         mangopay_client_password        = str,
@@ -99,6 +98,11 @@ class AppConf(object):
         openstreetmap_id                = str,
         openstreetmap_secret            = str,
         password_rounds                 = int,
+        smtp_host                       = str,
+        smtp_port                       = int,
+        smtp_username                   = str,
+        smtp_password                   = str,
+        smtp_use_tls                    = bool,
         twitter_callback                = str,
         twitter_id                      = str,
         twitter_secret                  = str,
@@ -140,7 +144,9 @@ def app_conf(db):
 
 
 def mail(app_conf, project_root='.'):
-    mailer = mandrill.Mandrill(app_conf.mandrill_key)
+    mailer = SMTPMailer(**{
+        k[5:]: v for k, v in app_conf.__dict__.items() if k.startswith('smtp_')
+    })
     emails = {}
     emails_dir = project_root+'/emails/'
     i = len(emails_dir)
