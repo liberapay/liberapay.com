@@ -684,9 +684,9 @@ class Participant(Model, MixinTeam):
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
 
-        website.mailer.send(**message)
+        n = website.mailer.send(**message)
         website.log_email(message)
-        return 1 # Sent
+        return n
 
     def queue_email(self, spt_name, **context):
         context = serialize(context)
@@ -704,16 +704,26 @@ class Participant(Model, MixinTeam):
           ORDER BY id ASC
              LIMIT 60
         """)
+        delete = lambda m: cls.db.run(
+            "DELETE FROM email_queue WHERE id = %s", (m.id,)
+        )
         while True:
             messages = fetch_messages()
             if not messages:
                 break
             for msg in messages:
                 p = cls.from_id(msg.participant)
-                r = p.send_email(msg.spt_name, **pickle.loads(msg.context))
-                cls.db.run("DELETE FROM email_queue WHERE id = %s", (msg.id,))
-                if r == 1:
-                    sleep(1)
+                if not p.email:
+                    delete(msg)
+                    continue
+                try:
+                    r = p.send_email(msg.spt_name, **pickle.loads(msg.context))
+                    assert r == 1
+                except Exception as e:
+                    website.tell_sentry(e, {}, allow_reraise=True)
+                else:
+                    delete(msg)
+                sleep(1)
 
     def set_email_lang(self, accept_lang):
         if not accept_lang:
