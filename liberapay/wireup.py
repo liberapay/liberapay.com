@@ -14,7 +14,7 @@ from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 from environment import Environment, is_yesish
-from mailshake import SMTPMailer
+from mailshake import DummyMailer, SMTPMailer
 import raven
 
 from liberapay import elsewhere
@@ -144,9 +144,10 @@ def app_conf(db):
 
 
 def mail(app_conf, project_root='.'):
-    mailer = SMTPMailer(**{
+    smtp_conf = {
         k[5:]: v for k, v in app_conf.__dict__.items() if k.startswith('smtp_')
-    })
+    }
+    mailer = SMTPMailer(**smtp_conf) if smtp_conf else DummyMailer()
     emails = {}
     emails_dir = project_root+'/emails/'
     i = len(emails_dir)
