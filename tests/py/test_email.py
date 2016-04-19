@@ -48,7 +48,7 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', 'alice@example.com')
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
-        assert last_email['to'][0]['email'] == 'alice@example.com'
+        assert last_email['to'][0] == 'alice <alice@example.com>'
         expected = "We've received a request to connect alice@example.com to the alice account on Liberapay"
         assert expected in last_email['text']
 
@@ -56,7 +56,7 @@ class TestEmail(EmailHarness):
         self.verify_and_change_email('alice1@example.com', 'alice2@example.com')
         assert self.mailer.call_count == 3
         last_email = self.get_last_email()
-        assert last_email['to'][0]['email'] == 'alice1@example.com'
+        assert last_email['to'][0] == 'alice <alice1@example.com>'
         expected = "We are connecting alice2@example.com to the alice account on Liberapay"
         assert expected in last_email['text']
 
@@ -225,7 +225,7 @@ class TestEmail(EmailHarness):
         Participant.dequeue_emails()
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
-        assert last_email['to'][0]['email'] == 'larry@example.com'
+        assert last_email['to'][0] == 'larry <larry@example.com>'
         expected = "connect larry"
         assert expected in last_email['text']
         assert self.db.one("SELECT spt_name FROM email_queue") is None

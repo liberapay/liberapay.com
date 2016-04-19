@@ -421,10 +421,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert janet.giving == D('0.25')
         emails = self.get_emails()
         assert len(emails) == 3
-        assert emails[0]['to'][0]['email'] == self.david.email
+        assert emails[0]['to'][0] == 'david <%s>' % self.david.email
         assert '4.73' in emails[0]['subject']
-        assert emails[1]['to'][0]['email'] == kalel.email
+        assert emails[1]['to'][0] == 'kalel <%s>' % kalel.email
         assert 'identity form' in emails[1]['text']
-        assert emails[2]['to'][0]['email'] == self.janet.email
+        assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
         assert 'top up' in emails[2]['subject']
         assert '1.77' in emails[2]['text']

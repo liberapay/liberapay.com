@@ -21,6 +21,6 @@ class TestTransactionalEmails(EmailHarness):
         Participant.dequeue_emails()
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
-        assert last_email['to'][0]['email'] == 'bob@example.com'
+        assert last_email['to'][0] == 'bob <bob@example.com>'
         assert "to dan" in last_email['text']
         assert "Change your email settings" in last_email['text']

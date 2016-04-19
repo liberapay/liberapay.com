@@ -3,7 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import date
 from decimal import Decimal as D
 
-import mock
 import pytest
 
 from liberapay.billing.payday import Payday
@@ -247,8 +246,7 @@ class TestClosing(FakeTransfersHarness):
 
     # cpi - clear_personal_information
 
-    @mock.patch('liberapay.website.website.mailer')
-    def test_cpi_clears_personal_information(self, mailer):
+    def test_cpi_clears_personal_information(self):
         alice = self.make_participant( 'alice'
                                      , goal=100
                                      , hide_giving=True

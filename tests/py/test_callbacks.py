@@ -46,6 +46,6 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
                 assert homer.status == 'active'
                 emails = self.get_emails()
                 assert len(emails) == 1
-                assert emails[0]['to'][0]['email'] == homer.email
+                assert emails[0]['to'][0] == 'homer <%s>' % homer.email
                 assert 'fail' in emails[0]['subject']
             homer.update_status('active')  # reset for next loop run
