@@ -53,7 +53,7 @@ weekly = total - participant.receiving
         % endif
     </p>
 % else
-    <p>{{ _("You give {0} per week.", Money(participant.giving, "USD")) }}</p>
+    <p>{{ _("You give {0} per week.", Money(participant.giving, "EUR")) }}</p>
 % endif
 
 <div class="giving row valign-middle">
