@@ -44,16 +44,6 @@ class Community(Model):
         except IntegrityError:
             raise CommunityAlreadyExists(name)
 
-    @staticmethod
-    def get_list(db):
-        """Return a listing of communities.
-        """
-        return db.all("""
-            SELECT c.*, replace(name, '_', ' ') AS pretty_name
-              FROM communities c
-          ORDER BY nmembers DESC, name
-        """)
-
     @classmethod
     def from_name(cls, name):
         if name_re.match(name) is None:

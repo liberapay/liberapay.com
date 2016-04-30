@@ -1,12 +1,27 @@
-from liberapay.models.community import Community
 from liberapay.utils.query_cache import QueryCache
 
 query_cache = QueryCache(website.db, threshold=1)
 
 [---]
 
-communities = Community.get_list(query_cache)
-ncommunities = len(communities)
+ncommunities = query_cache.one("SELECT count(*) FROM communities")
+
+communities = query_cache.all("""
+    SELECT c.*, replace(name, '_', ' ') AS pretty_name
+         , ( SELECT content
+               FROM statements
+               JOIN enumerate(string_to_array(%s, ' ')) langs ON langs.value = statements.lang
+              WHERE participant = c.participant
+                AND type = 'subtitle'
+           ORDER BY langs.rank
+              LIMIT 1
+           ) AS subtitle
+      FROM communities c
+     WHERE nmembers > 1 OR nsubscribers > 1
+  ORDER BY nmembers DESC, random()
+     LIMIT 20
+""", (' '.join(request.accept_langs),))
+
 title = _("Explore")
 subhead = _("Communities")
 
@@ -40,11 +55,11 @@ subhead = _("Communities")
 
 <h3 class="banderole success">{{ _("Popular Communities") }}</h3>
 <div>
-    % for community in communities[:20]
+    % for community in communities
     <div class="community">
         <h4 style="display: inline-block;">
             <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-            <small>{{ community.participant.get_statement(request.accept_langs, 'subtitle')[0] or '' }}</small>
+            <small>{{ community.subtitle or '' }}</small>
         </h4>
         &nbsp;&mdash;&nbsp; {{ ngettext("{n} member", "{n} members", community.nmembers) }}
     </div>
