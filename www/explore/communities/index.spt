@@ -39,16 +39,16 @@ subhead = _("Communities")
 </form>
 
 <h3 class="banderole success">{{ _("Popular Communities") }}</h3>
-<ul class="communities memberships">
+<div>
     % for community in communities[:20]
-    <li>
-        <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-        % set n = community.nmembers
-        <div class="nmembers">
-            {{ ngettext("{n} member", "{n} members", n) }}
-        </div>
-    </li>
+    <div class="community">
+        <h4 style="display: inline-block;">
+            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
+            <small>{{ community.participant.get_statement(request.accept_langs, 'subtitle')[0] or '' }}</small>
+        </h4>
+        &nbsp;&mdash;&nbsp; {{ ngettext("{n} member", "{n} members", community.nmembers) }}
+    </div>
     % endfor
-</ul>
+</div>
 
 % endblock
