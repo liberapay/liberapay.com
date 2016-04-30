@@ -6,7 +6,7 @@ query_cache = QueryCache(website.db, threshold=1)
 
 ncommunities = query_cache.one("SELECT count(*) FROM communities")
 
-communities = query_cache.all("""
+communities_top = query_cache.all("""
     SELECT c.*, replace(name, '_', ' ') AS pretty_name
          , ( SELECT content
                FROM statements
@@ -19,8 +19,23 @@ communities = query_cache.all("""
       FROM communities c
      WHERE nmembers > 1 OR nsubscribers > 1
   ORDER BY nmembers DESC, random()
-     LIMIT 20
+     LIMIT 15
 """, (' '.join(request.accept_langs),))
+
+communities_langs = set(query_cache.all("SELECT DISTINCT lang FROM communities"))
+communities_loc = query_cache.all("""
+    SELECT c.*, replace(name, '_', ' ') AS pretty_name
+         , ( SELECT content
+               FROM statements s
+              WHERE s.participant = c.participant
+                AND s.type = 'subtitle'
+                AND s.lang = c.lang
+           ) AS subtitle
+      FROM communities c
+     WHERE lang = %s
+  ORDER BY nmembers DESC, random()
+     LIMIT 15
+""", (([l for l in request.accept_langs if l in communities_langs] + [''])[0],))
 
 title = _("Explore")
 subhead = _("Communities")
@@ -55,7 +70,7 @@ subhead = _("Communities")
 
 <h3 class="banderole success">{{ _("Popular Communities") }}</h3>
 <div>
-    % for community in communities
+    % for community in communities_top
     <div class="community">
         <h4 style="display: inline-block;">
             <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
@@ -64,6 +79,23 @@ subhead = _("Communities")
         &nbsp;&mdash;&nbsp; {{ ngettext("{n} member", "{n} members", community.nmembers) }}
     </div>
     % endfor
+</div>
+
+<h3 class="banderole success">{{ _("Top Communities In Your Language") }}</h3>
+<div>
+% if communities_loc
+    % for community in communities_loc
+    <div class="community">
+        <h4 style="display: inline-block;">
+            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
+            <small>{{ community.subtitle or '' }}</small>
+        </h4>
+        &nbsp;&mdash;&nbsp; {{ ngettext("{n} member", "{n} members", community.nmembers) }}
+    </div>
+    % endfor
+% else
+    {{ _("Sorry, we haven't found any. Why don't you start one?") }}
+% endif
 </div>
 
 % endblock
