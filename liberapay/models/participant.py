@@ -1011,6 +1011,7 @@ class Participant(Model, MixinTeam):
         if self.status == 'stub':
             assert src is None
 
+        src = self.avatar_src if src is None else src
         platform, key = src.split(':', 1) if src else (None, None)
         email = self.avatar_email or self.email or self.get_any_email(cursor)
 
