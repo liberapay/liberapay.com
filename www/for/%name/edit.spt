@@ -26,7 +26,7 @@ else:
         sidebar, lang = c.participant.get_statement(request.accept_langs, 'sidebar')
 
 select_langs = get_lang_options(c.participant.get_statement_langs('subtitle'))
-lang = lang or next(iter(select_langs.keys()))
+lang = lang or c.lang or next(iter(select_langs.keys()))
 
 title = _("{0} community settings", c.name)
 
