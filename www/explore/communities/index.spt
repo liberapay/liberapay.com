@@ -1,12 +1,42 @@
-from liberapay.models.community import Community
 from liberapay.utils.query_cache import QueryCache
 
 query_cache = QueryCache(website.db, threshold=1)
 
 [---]
 
-communities = Community.get_list(query_cache)
-ncommunities = len(communities)
+ncommunities = query_cache.one("SELECT count(*) FROM communities")
+
+communities_top = query_cache.all("""
+    SELECT c.*, replace(name, '_', ' ') AS pretty_name
+         , ( SELECT content
+               FROM statements
+               JOIN enumerate(string_to_array(%s, ' ')) langs ON langs.value = statements.lang
+              WHERE participant = c.participant
+                AND type = 'subtitle'
+           ORDER BY langs.rank
+              LIMIT 1
+           ) AS subtitle
+      FROM communities c
+     WHERE nmembers > 1 OR nsubscribers > 1
+  ORDER BY nmembers DESC, random()
+     LIMIT 15
+""", (' '.join(request.accept_langs),))
+
+communities_langs = set(query_cache.all("SELECT DISTINCT lang FROM communities"))
+communities_loc = query_cache.all("""
+    SELECT c.*, replace(name, '_', ' ') AS pretty_name
+         , ( SELECT content
+               FROM statements s
+              WHERE s.participant = c.participant
+                AND s.type = 'subtitle'
+                AND s.lang = c.lang
+           ) AS subtitle
+      FROM communities c
+     WHERE lang = %s
+  ORDER BY nmembers DESC, random()
+     LIMIT 15
+""", (([l for l in request.accept_langs if l in communities_langs] + [''])[0],))
+
 title = _("Explore")
 subhead = _("Communities")
 
@@ -15,7 +45,12 @@ subhead = _("Communities")
 
 % block content
 
-<p><a class="btn btn-primary pull-right" href="/for/new">{{ _("Start a new community") }}</a></p>
+<p>{{ _(
+    "Communities allow you to find people that work on things you care "
+    "about. You can also subscribe to their newsletters to stay informed."
+) }}</p>
+
+<p><a class="btn btn-primary btn-lg pull-right" href="/for/new">{{ _("Start a new community") }}</a></p>
 
 <p>
     {{ ngettext("There is {n} community on Liberapay.",
@@ -34,16 +69,33 @@ subhead = _("Communities")
 </form>
 
 <h3 class="banderole success">{{ _("Popular Communities") }}</h3>
-<ul class="communities memberships">
-    % for community in communities[:20]
-    <li>
-        <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
-        % set n = community.nmembers
-        <div class="nmembers">
-            {{ ngettext("{n} member", "{n} members", n) }}
-        </div>
-    </li>
+<div>
+    % for community in communities_top
+    <div class="community">
+        <h4 style="display: inline-block;">
+            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
+            <small>{{ community.subtitle or '' }}</small>
+        </h4>
+        &nbsp;&mdash;&nbsp; {{ ngettext("{n} member", "{n} members", community.nmembers) }}
+    </div>
     % endfor
-</ul>
+</div>
+
+<h3 class="banderole success">{{ _("Top Communities In Your Language") }}</h3>
+<div>
+% if communities_loc
+    % for community in communities_loc
+    <div class="community">
+        <h4 style="display: inline-block;">
+            <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
+            <small>{{ community.subtitle or '' }}</small>
+        </h4>
+        &nbsp;&mdash;&nbsp; {{ ngettext("{n} member", "{n} members", community.nmembers) }}
+    </div>
+    % endfor
+% else
+    {{ _("Sorry, we haven't found any. Why don't you start one?") }}
+% endif
+</div>
 
 % endblock

@@ -27,6 +27,12 @@ subhead = _("Teams")
 % extends "templates/explore.html"
 
 % block content
+<p>{{ _(
+    "A team allows members of a project to receive money and share it, without "
+    "having to set up a legal entity. {0}Learn more…{1}",
+    '<a href="/about/teams">'|safe, '</a>'|safe
+) }}</p>
+
 <p>{{ ngettext(
     "There is {n} team on Liberapay:",
     "There are {n} teams on Liberapay:",
@@ -40,4 +46,6 @@ subhead = _("Teams")
     </div>
     % endfor
 </div>
+
+<p><a class="btn btn-primary btn-lg" href="/about/teams">{{ _("Create a team") }}</a></p>
 % endblock
