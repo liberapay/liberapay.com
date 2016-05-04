@@ -586,6 +586,7 @@ class Payday(object):
             SELECT p.*::participants
               FROM participants p
              WHERE mangopay_user_id IS NULL
+               AND kind IN ('individual', 'organization')
                AND (p.goal IS NULL OR p.goal >= 0)
                AND EXISTS (
                      SELECT 1
