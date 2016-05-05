@@ -403,7 +403,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.make_exchange('mango-cc', 10, 0, self.janet)
         self.janet.set_tip_to(self.david, '4.50')
         self.janet.set_tip_to(self.homer, '3.50')
-        team = self.make_participant('team', kind='group')
+        team = self.make_participant('team', kind='group', email='team@example.com')
         self.janet.set_tip_to(team, '0.25')
         team.add_member(self.david)
         team.set_take_for(self.david, D('0.23'), team)
