@@ -13,6 +13,7 @@ from six.moves.urllib.parse import urlencode
 
 from aspen.utils import utcnow
 import aspen_jinja2_renderer
+from html2text import html2text
 from markupsafe import escape as htmlescape
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -674,9 +675,15 @@ class Participant(Model, MixinTeam):
         context_html['escape'] = htmlescape
         spt = website.emails[spt_name]
         base_spt = website.emails['base']
+        bodies = {}
         def render(t, context):
             b = base_spt[t].render(context).strip()
-            return b.replace('$body', spt[t].render(context).strip())
+            if t == 'text/plain' and t not in spt:
+                body = html2text(bodies['text/html']).strip()
+            else:
+                body = spt[t].render(context).strip()
+            bodies[t] = body
+            return b.replace('$body', body)
         message = {}
         message['from_email'] = 'Liberapay Support <support@liberapay.com>'
         message['to'] = [formataddr((self.username, email))]
