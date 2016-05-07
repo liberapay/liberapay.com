@@ -1,6 +1,6 @@
 from liberapay.utils import get_participant, include_svg
 
-with open(website.www_root+'/assets/liberapay/icon.svg') as f:
+with open(website.www_root+'/assets/liberapay/icon-v2_black.svg') as f:
     ICON = f.read()
 ICON = include_svg(ICON, 16, 16)
 
