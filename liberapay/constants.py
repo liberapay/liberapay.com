@@ -37,8 +37,8 @@ BALANCE_MAX = Decimal("1000")
 
 BIRTHDAY = date(2015, 5, 22)
 
-CHARGE_MIN = Decimal("15.00")  # fee ≈ 3.5%
-CHARGE_TARGET = Decimal("92.00")  # fee ≈ 2.33%
+PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
+PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
 
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
@@ -48,11 +48,11 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
 # https://www.mangopay.com/pricing/
-FEE_CHARGE_FIX = Decimal('0.18')  # 0.18 euros
-FEE_CHARGE_VAR = Decimal('0.018')  # 1.8%
-FEE_CREDIT = 0
-FEE_CREDIT_OUTSIDE_SEPA = Decimal("2.5")
-FEE_CREDIT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
+FEE_PAYIN_CARD_FIX = Decimal('0.18')  # 0.18 euros
+FEE_PAYIN_CARD_VAR = Decimal('0.018')  # 1.8%
+FEE_PAYOUT = 0
+FEE_PAYOUT_OUTSIDE_SEPA = Decimal("2.5")
+FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 
 JINJA_ENV_COMMON = dict(

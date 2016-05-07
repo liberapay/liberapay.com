@@ -18,7 +18,7 @@ from liberapay.billing.exchanges import (
     transfer,
 )
 from liberapay.billing.payday import Payday
-from liberapay.constants import CHARGE_MIN, CHARGE_TARGET
+from liberapay.constants import PAYIN_CARD_MIN, PAYIN_CARD_TARGET
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
     FeeExceedsAmount,
@@ -170,29 +170,29 @@ class TestFees(MangopayHarness):
 
     def test_upcharge_full_in_rounded_case(self):
         actual = upcharge(D('5.00'))
-        expected = upcharge(CHARGE_MIN)
+        expected = upcharge(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_upcharge_at_min(self):
-        actual = upcharge(CHARGE_MIN)
+        actual = upcharge(PAYIN_CARD_MIN)
         expected = (D('15.54'), D('0.54'), D('0.08'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.035')  # less than 3.5% fee
 
     def test_upcharge_at_target(self):
-        actual = upcharge(CHARGE_TARGET)
+        actual = upcharge(PAYIN_CARD_TARGET)
         expected = (D('94.19'), D('2.19'), D('0.32'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.024')  # less than 2.4% fee
 
     def test_upcharge_at_one_cent(self):
         actual = upcharge(D('0.01'))
-        expected = upcharge(CHARGE_MIN)
+        expected = upcharge(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_upcharge_at_min_minus_one_cent(self):
-        actual = upcharge(CHARGE_MIN - D('0.01'))
-        expected = upcharge(CHARGE_MIN)
+        actual = upcharge(PAYIN_CARD_MIN - D('0.01'))
+        expected = upcharge(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_skim_credit(self):
@@ -287,13 +287,13 @@ class TestSync(MangopayHarness):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             with self.assertRaises(Foobar):
-                charge(self.db, self.janet, CHARGE_MIN, 'http://localhost/')
+                charge(self.db, self.janet, PAYIN_CARD_MIN, 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'succeeded'
-        assert Participant.from_username('janet').balance == CHARGE_MIN
+        assert Participant.from_username('janet').balance == PAYIN_CARD_MIN
 
     def test_sync_with_mangopay_deletes_charges_that_didnt_happen(self):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \

@@ -15,8 +15,8 @@ from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
-    CHARGE_MIN, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
-    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, FEE_CREDIT_WARN, QUARANTINE, SEPA_ZONE,
+    PAYIN_CARD_MIN, FEE_PAYIN_CARD_FIX, FEE_PAYIN_CARD_VAR,
+    FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
     FEE_VAT,
 )
 from liberapay.exceptions import (
@@ -36,17 +36,17 @@ def upcharge(amount):
     """
     typecheck(amount, Decimal)
 
-    if amount < CHARGE_MIN:
-        amount = CHARGE_MIN
+    if amount < PAYIN_CARD_MIN:
+        amount = PAYIN_CARD_MIN
 
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
-    charge_amount = (amount + FEE_CHARGE_FIX) / (1 - FEE_CHARGE_VAR)
-    charge_amount = charge_amount.quantize(FEE_CHARGE_FIX, rounding=ROUND_UP)
+    charge_amount = (amount + FEE_PAYIN_CARD_FIX) / (1 - FEE_PAYIN_CARD_VAR)
+    charge_amount = charge_amount.quantize(FEE_PAYIN_CARD_FIX, rounding=ROUND_UP)
     fee = charge_amount - amount
 
     # + VAT
-    vat = (fee * FEE_VAT).quantize(FEE_CHARGE_FIX, rounding=ROUND_UP)
+    vat = (fee * FEE_VAT).quantize(FEE_PAYIN_CARD_FIX, rounding=ROUND_UP)
     charge_amount += vat
     fee += vat
 
@@ -67,9 +67,9 @@ def skim_credit(amount, ba):
         assert ba.Type == 'OTHER', ba.Type
         country = ba.Details.Country.upper()
     if country in SEPA_ZONE:
-        fee = FEE_CREDIT
+        fee = FEE_PAYOUT
     else:
-        fee = FEE_CREDIT_OUTSIDE_SEPA
+        fee = FEE_PAYOUT_OUTSIDE_SEPA
     vat = (fee * FEE_VAT).quantize(Decimal('0.01'), rounding=ROUND_UP)
     fee += vat
     return amount - fee, fee, vat
@@ -127,7 +127,7 @@ def payout(db, participant, amount, ignore_high_fee=False):
     if credit_amount <= 0 and fee > 0:
         raise FeeExceedsAmount
     fee_percent = fee / amount
-    if fee_percent > FEE_CREDIT_WARN and not ignore_high_fee:
+    if fee_percent > FEE_PAYOUT_WARN and not ignore_high_fee:
         raise TransactionFeeTooHigh(fee_percent, fee, amount)
 
     # Try to dance with MangoPay

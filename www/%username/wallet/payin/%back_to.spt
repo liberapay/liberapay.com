@@ -43,9 +43,9 @@ donations = participant.get_giving_for_profile()[1]
 weekly = donations - participant.receiving
 if weekly > 0:
     funded = participant.balance // weekly
-    min_weeks = max(constants.CHARGE_MIN // weekly, 1)
+    min_weeks = max(constants.PAYIN_CARD_MIN // weekly, 1)
     max_weeks = min(
-        max(constants.CHARGE_TARGET // weekly, 52),
+        max(constants.PAYIN_CARD_TARGET // weekly, 52),
         constants.BALANCE_MAX // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
@@ -127,10 +127,9 @@ title = _("Add money")
     % if show_form
     % if participant.email
     <p>{{ _(
-        "Adding money to Liberapay via credit/debit card (currently the only "
-        "supported payment method) incurs a fee of {0}% + {1}.",
-        constants.FEE_CHARGE_VAR * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_CHARGE_FIX * (constants.FEE_VAT + 1), 'EUR'),
+        "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
+        constants.FEE_PAYIN_CARD_VAR * (constants.FEE_VAT + 1) * 100,
+        Money(constants.FEE_PAYIN_CARD_FIX * (constants.FEE_VAT + 1), 'EUR'),
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
@@ -145,7 +144,7 @@ title = _("Add money")
                 "{0} ({2}% fee included)",
                 Money(charge_amount, 'EUR'),
                 Money(amount, 'EUR'),
-                (fees / charge_amount * 100).quantize(constants.CHARGE_MIN),
+                (fees / charge_amount * 100).quantize(constants.PAYIN_CARD_MIN),
             ) }}</option>
         % endfor
         </select>
