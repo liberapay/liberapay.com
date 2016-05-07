@@ -37,9 +37,6 @@ BALANCE_MAX = Decimal("1000")
 
 BIRTHDAY = date(2015, 5, 22)
 
-PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
-PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
-
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
@@ -66,10 +63,11 @@ LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')
 
-QUARANTINE = timedelta(weeks=4)
-
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
+
+PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
+PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
 
 PRIVACY_FIELDS = OrderedDict([
     ('hide_giving', _("Hide total giving from others.")),
@@ -77,6 +75,8 @@ PRIVACY_FIELDS = OrderedDict([
     ('hide_from_search', _("Hide myself from search results.")),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
+
+QUARANTINE = timedelta(weeks=4)
 
 SEPA_ZONE = set("""
     AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
