@@ -52,6 +52,7 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
 # https://www.mangopay.com/pricing/
+FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), Decimal(0))  # 0.5%
 FEE_PAYIN_CARD = Fees(Decimal('0.018'), Decimal('0.18'))  # 1.8% + €0.18
 FEE_PAYOUT = Fees(Decimal(0), Decimal(0))
 FEE_PAYOUT_OUTSIDE_SEPA = Fees(Decimal(0), Decimal('2.5'))

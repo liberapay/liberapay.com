@@ -13,10 +13,16 @@ from mangopaysdk.entities.wallet import Wallet
 from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
 
-from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
+from liberapay.billing import (
+    mangoapi,
+    PayInExecutionDetailsDirect,
+    PayInPaymentDetailsCard, PayInPaymentDetailsBankWire,
+    PayOutPaymentDetailsBankWire,
+)
 from liberapay.constants import (
     D_CENT,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
+    FEE_PAYIN_BANK_WIRE,
     FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
     FEE_VAT,
 )
@@ -204,6 +210,42 @@ def charge(db, participant, amount, return_url):
         raise Response(302, headers={'Location': payin.ExecutionDetails.SecureModeRedirectURL})
 
     return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+
+
+def payin_bank_wire(db, participant, debit_amount):
+    """Prepare to receive a bank wire payin.
+
+    The amount should be how much the user intends to send, not how much will
+    arrive in the wallet.
+    """
+
+    route = ExchangeRoute.from_network(participant, 'mango-bw')
+    if not route:
+        route = ExchangeRoute.insert(participant, 'mango-bw', 'x')
+
+    amount, fee, vat = skim_amount(debit_amount, FEE_PAYIN_BANK_WIRE)
+
+    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
+    payin = PayIn()
+    payin.AuthorId = participant.mangopay_user_id
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.ExecutionDetails = PayInExecutionDetailsDirect()
+    payin.PaymentDetails = PayInPaymentDetailsBankWire(
+        DeclaredDebitedFunds=Money(int(debit_amount * 100), 'EUR'),
+        DeclaredFees=Money(int(fee * 100), 'EUR'),
+    )
+    payin.Tag = str(e_id)
+    try:
+        test_hook()
+        payin = mangoapi.payIns.Create(payin)
+    except Exception as e:
+        error = repr_exception(e)
+        return None, record_exchange_result(db, e_id, 'failed', error, participant)
+
+    e = record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+    return payin, e
 
 
 def record_exchange(db, route, amount, fee, vat, participant, status, error=None):
