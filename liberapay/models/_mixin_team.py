@@ -6,10 +6,7 @@ from collections import OrderedDict
 from decimal import Decimal, ROUND_UP
 from statistics import median
 
-
-ZERO = Decimal('0.00')
-CENT = Decimal('0.01')
-UNIT = Decimal('1.00')
+from liberapay.constants import D_CENT, D_UNIT, D_ZERO
 
 
 class MemberLimitReached(Exception): pass
@@ -39,7 +36,7 @@ class MixinTeam(object):
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, ZERO, self, cursor=cursor)
+        self.set_take_for(member, D_ZERO, self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
@@ -88,7 +85,7 @@ class MixinTeam(object):
         return self.db.one( "SELECT amount FROM current_takes "
                             "WHERE member=%s AND team=%s"
                           , (member.id, self.id)
-                          , default=ZERO
+                          , default=D_ZERO
                            )
 
     def compute_max_this_week(self, member_id, last_week):
@@ -99,7 +96,7 @@ class MixinTeam(object):
         return max(
             last_week.get(member_id, 0) * 2,
             last_week['_relative_min'] or self.receiving / self.nmembers,
-            UNIT
+            D_UNIT
         )
 
     def set_take_for(self, member, take, recorder, check_max=True, cursor=None):
@@ -153,8 +150,8 @@ class MixinTeam(object):
         and `new_takes`.
         """
         for p_id in set(old_takes.keys()).union(new_takes.keys()):
-            old = old_takes.get(p_id, {}).get('actual_amount', ZERO)
-            new = new_takes.get(p_id, {}).get('actual_amount', ZERO)
+            old = old_takes.get(p_id, {}).get('actual_amount', D_ZERO)
+            new = new_takes.get(p_id, {}).get('actual_amount', D_ZERO)
             diff = new - old
             if diff != 0:
                 (cursor or self.db).run("""
@@ -197,9 +194,9 @@ class MixinTeam(object):
         for take in nominal_takes:
             nominal = take['nominal_take'] = take.pop('amount')
             actual = take['actual_amount'] = min(
-                (nominal * ratio).quantize(CENT, rounding=ROUND_UP),
+                (nominal * ratio).quantize(D_CENT, rounding=ROUND_UP),
                 balance
-            ) if take['is_identified'] else ZERO
+            ) if take['is_identified'] else D_ZERO
             balance -= actual
             actual_takes[take['member_id']] = take
         actual_takes.leftover = balance
@@ -227,7 +224,7 @@ class MixinTeam(object):
             member['username'] = take['member_name']
             member['nominal_take'] = take['nominal_take']
             member['actual_amount'] = take['actual_amount']
-            member['last_week'] = last_week.get(m_id, ZERO)
+            member['last_week'] = last_week.get(m_id, D_ZERO)
             member['max_this_week'] = self.compute_max_this_week(m_id, last_week)
             members[member['id']] = member
         return members

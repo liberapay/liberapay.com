@@ -40,6 +40,10 @@ BALANCE_MAX = Decimal("1000")
 
 BIRTHDAY = date(2015, 5, 22)
 
+D_CENT = Decimal('0.01')
+D_UNIT = Decimal('1.00')
+D_ZERO = Decimal('0.00')
+
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)

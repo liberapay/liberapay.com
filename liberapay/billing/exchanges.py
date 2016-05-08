@@ -15,6 +15,7 @@ from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
+    D_CENT,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
     FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
     FEE_VAT,
@@ -28,7 +29,6 @@ from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
 
 
-CENT = Decimal('0.01')
 QUARANTINE = '%s days' % QUARANTINE.days
 
 
@@ -43,11 +43,11 @@ def upcharge(amount, fees, min_amount):
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
     charge_amount = (amount + fees.fix) / (1 - fees.var)
-    charge_amount = charge_amount.quantize(CENT, rounding=ROUND_UP)
+    charge_amount = charge_amount.quantize(D_CENT, rounding=ROUND_UP)
     fee = charge_amount - amount
 
     # + VAT
-    vat = (fee * FEE_VAT).quantize(CENT, rounding=ROUND_UP)
+    vat = (fee * FEE_VAT).quantize(D_CENT, rounding=ROUND_UP)
     charge_amount += vat
     fee += vat
 
@@ -74,7 +74,7 @@ def skim_credit(amount, ba):
         fee = FEE_PAYOUT
     else:
         fee = FEE_PAYOUT_OUTSIDE_SEPA
-    vat = (fee * FEE_VAT).quantize(CENT, rounding=ROUND_UP)
+    vat = (fee * FEE_VAT).quantize(D_CENT, rounding=ROUND_UP)
     fee += vat
     return amount - fee, fee, vat
 
