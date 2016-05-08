@@ -15,7 +15,7 @@ from mangopaysdk.types.money import Money
 
 from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
 from liberapay.constants import (
-    PAYIN_CARD_MIN, FEE_PAYIN_CARD_FIX, FEE_PAYIN_CARD_VAR,
+    PAYIN_CARD_MIN, FEE_PAYIN_CARD,
     FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
     FEE_VAT,
 )
@@ -28,29 +28,33 @@ from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
 
 
+CENT = Decimal('0.01')
 QUARANTINE = '%s days' % QUARANTINE.days
 
 
-def upcharge(amount):
+def upcharge(amount, fees, min_amount):
     """Given an amount, return a higher amount and the difference.
     """
     typecheck(amount, Decimal)
 
-    if amount < PAYIN_CARD_MIN:
-        amount = PAYIN_CARD_MIN
+    if amount < min_amount:
+        amount = min_amount
 
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
-    charge_amount = (amount + FEE_PAYIN_CARD_FIX) / (1 - FEE_PAYIN_CARD_VAR)
-    charge_amount = charge_amount.quantize(FEE_PAYIN_CARD_FIX, rounding=ROUND_UP)
+    charge_amount = (amount + fees.fix) / (1 - fees.var)
+    charge_amount = charge_amount.quantize(CENT, rounding=ROUND_UP)
     fee = charge_amount - amount
 
     # + VAT
-    vat = (fee * FEE_VAT).quantize(FEE_PAYIN_CARD_FIX, rounding=ROUND_UP)
+    vat = (fee * FEE_VAT).quantize(CENT, rounding=ROUND_UP)
     charge_amount += vat
     fee += vat
 
     return charge_amount, fee, vat
+
+
+upcharge_card = lambda amount: upcharge(amount, FEE_PAYIN_CARD, PAYIN_CARD_MIN)
 
 
 def skim_credit(amount, ba):
@@ -70,7 +74,7 @@ def skim_credit(amount, ba):
         fee = FEE_PAYOUT
     else:
         fee = FEE_PAYOUT_OUTSIDE_SEPA
-    vat = (fee * FEE_VAT).quantize(Decimal('0.01'), rounding=ROUND_UP)
+    vat = (fee * FEE_VAT).quantize(CENT, rounding=ROUND_UP)
     fee += vat
     return amount - fee, fee, vat
 
@@ -163,7 +167,7 @@ def charge(db, participant, amount, return_url):
     route = ExchangeRoute.from_network(participant, 'mango-cc')
     assert route
 
-    charge_amount, fee, vat = upcharge(amount)
+    charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee
 
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')

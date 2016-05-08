@@ -7,7 +7,7 @@ from decimal import Decimal as D, InvalidOperation
 from aspen import Response
 
 from liberapay.billing import mangoapi
-from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge
+from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge_card
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant, is_card_expired
 
@@ -127,8 +127,8 @@ title = _("Add money")
     % if participant.email
     <p>{{ _(
         "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
-        constants.FEE_PAYIN_CARD_VAR * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_PAYIN_CARD_FIX * (constants.FEE_VAT + 1), 'EUR'),
+        constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
+        Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
@@ -138,7 +138,7 @@ title = _("Add money")
         <select class="form-control" name="amount">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge(amount)
+            % set charge_amount, fees, vat = upcharge_card(amount)
             <option value="{{ amount }}">{{ _(
                 "{0} ({2}% fee included)",
                 Money(charge_amount, 'EUR'),

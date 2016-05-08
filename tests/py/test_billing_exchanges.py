@@ -8,7 +8,7 @@ import pytest
 
 from liberapay.billing import exchanges
 from liberapay.billing.exchanges import (
-    upcharge,
+    upcharge_card,
     payout,
     charge,
     record_exchange,
@@ -164,35 +164,35 @@ class TestCharge(MangopayHarness):
 class TestFees(MangopayHarness):
 
     def test_upcharge_basically_works(self):
-        actual = upcharge(D('20.00'))
+        actual = upcharge_card(D('20.00'))
         expected = (D('20.65'), D('0.65'), D('0.10'))
         assert actual == expected
 
     def test_upcharge_full_in_rounded_case(self):
-        actual = upcharge(D('5.00'))
-        expected = upcharge(PAYIN_CARD_MIN)
+        actual = upcharge_card(D('5.00'))
+        expected = upcharge_card(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_upcharge_at_min(self):
-        actual = upcharge(PAYIN_CARD_MIN)
+        actual = upcharge_card(PAYIN_CARD_MIN)
         expected = (D('15.54'), D('0.54'), D('0.08'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.035')  # less than 3.5% fee
 
     def test_upcharge_at_target(self):
-        actual = upcharge(PAYIN_CARD_TARGET)
+        actual = upcharge_card(PAYIN_CARD_TARGET)
         expected = (D('94.19'), D('2.19'), D('0.32'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.024')  # less than 2.4% fee
 
     def test_upcharge_at_one_cent(self):
-        actual = upcharge(D('0.01'))
-        expected = upcharge(PAYIN_CARD_MIN)
+        actual = upcharge_card(D('0.01'))
+        expected = upcharge_card(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_upcharge_at_min_minus_one_cent(self):
-        actual = upcharge(PAYIN_CARD_MIN - D('0.01'))
-        expected = upcharge(PAYIN_CARD_MIN)
+        actual = upcharge_card(PAYIN_CARD_MIN - D('0.01'))
+        expected = upcharge_card(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_skim_credit(self):

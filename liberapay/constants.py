@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 
 from aspen.utils import utc
-from collections import OrderedDict
+from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 import re
@@ -21,6 +21,9 @@ class CustomUndefined(StrictUndefined):
         return ''
 
     __unicode__ = __str__
+
+
+Fees = namedtuple('Fees', ('var', 'fix'))
 
 
 _ = lambda a: a
@@ -45,8 +48,7 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
 # https://www.mangopay.com/pricing/
-FEE_PAYIN_CARD_FIX = Decimal('0.18')  # 0.18 euros
-FEE_PAYIN_CARD_VAR = Decimal('0.018')  # 1.8%
+FEE_PAYIN_CARD = Fees(Decimal('0.018'), Decimal('0.18'))  # 1.8% + €0.18
 FEE_PAYOUT = 0
 FEE_PAYOUT_OUTSIDE_SEPA = Decimal("2.5")
 FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%

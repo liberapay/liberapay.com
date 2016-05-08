@@ -66,8 +66,8 @@ title = _("Frequently Asked Questions")
 
     <dd>{{ _(
         "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
-        constants.FEE_PAYIN_CARD_VAR * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_PAYIN_CARD_FIX * (constants.FEE_VAT + 1), 'EUR'),
+        constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
+        Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
     ) + " " + _(
         "Withdrawing money to a SEPA bank account is free, transfers to other "
         "countries cost {0} per transfer.",
