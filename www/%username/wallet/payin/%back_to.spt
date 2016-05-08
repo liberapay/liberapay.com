@@ -6,7 +6,6 @@ from decimal import Decimal as D, InvalidOperation
 
 from aspen import Response
 
-import liberapay
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge
 from liberapay.models.exchange_route import ExchangeRoute
