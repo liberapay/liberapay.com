@@ -107,7 +107,7 @@ title = _("Withdraw money")
     <p>{{ _(
         "Withdrawing money to a SEPA bank account is free, transfers to other "
         "countries cost {0} per transfer.",
-        Money(constants.FEE_PAYOUT_OUTSIDE_SEPA * (constants.FEE_VAT + 1), 'EUR'),
+        Money(constants.FEE_PAYOUT_OUTSIDE_SEPA.fix * (constants.FEE_VAT + 1), 'EUR'),
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>

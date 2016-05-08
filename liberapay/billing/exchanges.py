@@ -57,8 +57,19 @@ def upcharge(amount, fees, min_amount):
 upcharge_card = lambda amount: upcharge(amount, FEE_PAYIN_CARD, PAYIN_CARD_MIN)
 
 
+def skim_amount(amount, fees):
+    """Given a nominal amount, compute the fees, taxes, and the actual amount.
+    """
+    fee = amount * fees.var + fees.fix
+    vat = fee * FEE_VAT
+    fee += vat
+    fee = fee.quantize(D_CENT, rounding=ROUND_UP)
+    vat = vat.quantize(D_CENT, rounding=ROUND_UP)
+    return amount - fee, fee, vat
+
+
 def skim_credit(amount, ba):
-    """Given an amount, return a lower amount and the difference.
+    """Given a payout amount, return a lower amount, the fee, and taxes.
 
     The returned amount can be negative, look out for that.
     """
@@ -74,9 +85,7 @@ def skim_credit(amount, ba):
         fee = FEE_PAYOUT
     else:
         fee = FEE_PAYOUT_OUTSIDE_SEPA
-    vat = (fee * FEE_VAT).quantize(D_CENT, rounding=ROUND_UP)
-    fee += vat
-    return amount - fee, fee, vat
+    return skim_amount(amount, fee)
 
 
 def repr_error(o):

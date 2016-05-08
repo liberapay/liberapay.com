@@ -53,8 +53,8 @@ EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
 # https://www.mangopay.com/pricing/
 FEE_PAYIN_CARD = Fees(Decimal('0.018'), Decimal('0.18'))  # 1.8% + €0.18
-FEE_PAYOUT = 0
-FEE_PAYOUT_OUTSIDE_SEPA = Decimal("2.5")
+FEE_PAYOUT = Fees(Decimal(0), Decimal(0))
+FEE_PAYOUT_OUTSIDE_SEPA = Fees(Decimal(0), Decimal('2.5'))
 FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 
