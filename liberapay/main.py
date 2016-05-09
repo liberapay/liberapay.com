@@ -4,6 +4,7 @@ from six.moves import builtins
 from six.moves.urllib.parse import quote as urlquote
 
 import aspen
+import aspen.http.mapping
 
 from liberapay import canonize, fill_accept_header, insert_constants, utils, wireup
 from liberapay.cron import Cron
@@ -125,8 +126,16 @@ algorithm.functions = [
 ]
 
 
-# Monkey patch aspen.Response
-# ===========================
+# Monkey patch aspen
+# ==================
+
+pop = aspen.http.mapping.Mapping.pop
+def _pop(self, name, default=aspen.http.mapping.NO_DEFAULT):
+    try:
+        return pop(self, name, default)
+    except KeyError:
+        raise aspen.Response(400, "Missing key: %s" % repr(name))
+aspen.http.mapping.Mapping.pop = _pop
 
 if hasattr(aspen.Response, 'redirect'):
     raise Warning('aspen.Response.redirect() already exists')
