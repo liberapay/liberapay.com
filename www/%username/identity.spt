@@ -39,6 +39,9 @@ if request.method == 'POST':
         v = body.get(k)
         if v:
             setattr(account, k, v)
+        else:
+            error = _("You haven't filled all the required fields.")
+            break
 
     dob = body.get(p+'Birthday', '')
     if dob:
