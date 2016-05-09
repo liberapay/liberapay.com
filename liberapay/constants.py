@@ -36,8 +36,6 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 AVATAR_QUERY = '?s=160&default=retro'
 AVATAR_SOURCES = 'libravatar bitbucket facebook github google twitter'.split()
 
-BALANCE_MAX = Decimal("1000")
-
 BIRTHDAY = date(2015, 5, 22)
 
 D_CENT = Decimal('0.01')
@@ -64,6 +62,10 @@ JINJA_ENV_COMMON = dict(
     line_statement_prefix='%',
     #undefined=CustomUndefined,
 )
+
+# https://docs.mangopay.com/api-references/kyc-rules/
+KYC_PAYIN_YEARLY_THRESHOLD = Decimal('2500')
+KYC_PAYOUT_YEARLY_THRESHOLD = Decimal('1000')
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
