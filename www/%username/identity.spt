@@ -43,7 +43,10 @@ if request.method == 'POST':
     dob = body.get(p+'Birthday', '')
     if dob:
         try:
-            dt = datetime(*map(int, dob.split('-')))
+            year, month, day = map(int, dob.split('-'))
+            # the above raises ValueError if the number of parts isn't 3
+            # or if any part isn't an integer
+            dt = datetime(year, month, day)
             setattr(account, p+'Birthday', (dt - EPOCH).total_seconds())
         except ValueError:
             error = _("Invalid date of birth.")
