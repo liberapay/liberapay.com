@@ -49,13 +49,17 @@ def upcharge(amount, fees, min_amount):
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
     charge_amount = (amount + fees.fix) / (1 - fees.var)
-    charge_amount = charge_amount.quantize(D_CENT, rounding=ROUND_UP)
     fee = charge_amount - amount
 
     # + VAT
-    vat = (fee * FEE_VAT).quantize(D_CENT, rounding=ROUND_UP)
+    vat = fee * FEE_VAT
     charge_amount += vat
     fee += vat
+
+    # Round
+    charge_amount = charge_amount.quantize(D_CENT, rounding=ROUND_UP)
+    fee = fee.quantize(D_CENT, rounding=ROUND_UP)
+    vat = vat.quantize(D_CENT, rounding=ROUND_UP)
 
     return charge_amount, fee, vat
 
