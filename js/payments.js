@@ -193,12 +193,20 @@ Liberapay.payments.cc.init = function() {
 
 Liberapay.payments.cc.onError = function(response) {
     Liberapay.payments.error();
+    var debugInfo = '';
     if (response.ResultMessage == 'CORS_FAIL') {
         var msg = $('#credit-card').data('msg-cors-fail');
     } else {
         var msg = response.ResultMessage;
+        var xhr = response.xmlhttp;
+        if (xhr) {
+            var text = xhr.responseText;
+            text = text && text.length > 200 ? text.slice(0, 200) + '...' : text;
+            debugInfo = {status: xhr.status, responseText: text};
+            debugInfo = ' (Debug info: '+JSON.stringify(debugInfo)+')';
+        }
     }
-    Liberapay.notification(msg + ' (Error code: '+response.ResultCode+')', 'error', -1);
+    Liberapay.notification(msg + ' (Error code: '+response.ResultCode+')' + debugInfo, 'error', -1);
 };
 
 Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateInput, cvvInput) {

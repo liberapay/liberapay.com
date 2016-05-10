@@ -130,7 +130,7 @@ var mangoPay = {
                 },
 
                 // Forward response to the return URL
-                success: function(data) {
+                success: function(data, xmlhttp) {
 
                     var dataToSend = "";
 
@@ -138,7 +138,8 @@ var mangoPay = {
                     if (data === null) {
                         errorCallback({
                             "ResultCode": "001599", 
-                            "ResultMessage": "Token processing error"
+                            "ResultMessage": "Token processing error",
+                            "xmlhttp": xmlhttp
                         });
                         return;
                     }
@@ -159,7 +160,8 @@ var mangoPay = {
                     if (xmlhttp.ResultCode) return errorCallback(xmlhttp);
                     errorCallback({
                         "ResultCode": "001599", 
-                        "ResultMessage": "Token processing error"
+                        "ResultMessage": "Token processing error",
+                        "xmlhttp": xmlhttp
                     });
                     return;
                 }
@@ -194,7 +196,7 @@ var mangoPay = {
                 data: paylineData,
 
                 // Invoke the user supplied success or error handler here
-                success: function(data) {
+                success: function(data, xmlhttp) {
 
                     // Parse API reponse
                     try {
@@ -203,7 +205,8 @@ var mangoPay = {
                     catch(err) {
                         errorCallback({
                             "ResultCode": "101699",
-                            "ResultMessage": "CardRegistration should return a valid JSON response"
+                            "ResultMessage": "CardRegistration should return a valid JSON response",
+                            "xmlhttp": xmlhttp
                         });
                         return;
                     }
@@ -238,7 +241,8 @@ var mangoPay = {
                     // Invoke user supplied error callback
                     errorCallback({
                         "ResultCode": "101699", 
-                        "ResultMessage": message
+                        "ResultMessage": message,
+                        "xmlhttp": xmlhttp
                     });
 
                 }
@@ -485,7 +489,7 @@ var mangoPay = {
                     settings.error(xdr);
                 };
                 xdr.onload = function() {
-                    settings.success(xdr.responseText);
+                    settings.success(xdr.responseText, xdr);
                 };
                 xdr.open(settings.type, url);
                 xdr.send(settings.type === "post" ? parameters : null);
@@ -496,7 +500,7 @@ var mangoPay = {
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4) {
                     if (/^2[0-9][0-9]$/.test(xmlhttp.status)) {
-                        settings.success(xmlhttp.responseText);
+                        settings.success(xmlhttp.responseText, xmlhttp);
                     } else {
                         settings.error(xmlhttp, xmlhttp.status, xmlhttp.statusText);
                     }
