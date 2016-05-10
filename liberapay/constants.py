@@ -75,6 +75,7 @@ MIN_TIP = Decimal('0.01')
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
+PAYIN_BANK_WIRE_MIN = Decimal('2.00')
 PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
 PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
 

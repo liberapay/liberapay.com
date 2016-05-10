@@ -20,7 +20,7 @@ from liberapay.billing import (
     PayOutPaymentDetailsBankWire,
 )
 from liberapay.constants import (
-    D_CENT,
+    D_CENT, D_ZERO,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
     FEE_PAYIN_BANK_WIRE,
     FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
@@ -60,6 +60,7 @@ def upcharge(amount, fees, min_amount):
     return charge_amount, fee, vat
 
 
+upcharge_bank_wire = lambda amount: upcharge(amount, FEE_PAYIN_BANK_WIRE, D_ZERO)
 upcharge_card = lambda amount: upcharge(amount, FEE_PAYIN_CARD, PAYIN_CARD_MIN)
 
 
