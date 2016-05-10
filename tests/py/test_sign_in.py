@@ -162,6 +162,9 @@ class TestSignIn(EmailHarness):
     def sign_in(self, custom):
         data = dict(good_data)
         for k, v in custom.items():
+            if v is None:
+                del data['sign-in.'+k]
+                continue
             data['sign-in.'+k] = v
         return self.client.POST('/sign-in', data, raise_immediately=False)
 
@@ -207,5 +210,5 @@ class TestSignIn(EmailHarness):
         assert r.code == 400
 
     def test_sign_in_terms_not_checked(self):
-        r = self.sign_in(dict(terms=''))
+        r = self.sign_in(dict(terms=None))
         assert r.code == 400
