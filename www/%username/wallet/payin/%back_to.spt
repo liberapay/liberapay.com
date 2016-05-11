@@ -59,8 +59,6 @@ if request.method == 'POST':
     if not route:
         raise Response(400, "no credit card")
 
-    body = request.body
-
     try:
         amount = D(request.body['amount'])
     except (InvalidOperation, ValueError):
