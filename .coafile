@@ -1,0 +1,12 @@
+[Default]
+ignore = build/**, **/*.min.js
+
+[py-analysis]
+bears = RadonBear, CPDBear
+language = py
+files = **/*.py
+
+[js-analysis]
+bears = JSComplexityBear, CPDBear
+language = js
+files = **/*.js
