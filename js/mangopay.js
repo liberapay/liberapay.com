@@ -27,7 +27,7 @@ var mangoPay = {
 
         /**
          * Initialize card registration object
-         * 
+         *
          * @param {object} cardRegisterData Card pre-registration data {Id, cardRegistrationURL, preregistrationData, accessKey}
          */
         init: function(cardRegisterData) {
@@ -42,7 +42,7 @@ var mangoPay = {
          *
          * @param {object} cardData Sensitive card details {cardNumber, cardType, cardExpirationDate, cardCvx}
          * @param {function} successCallback A function to invoke when the card registration succeeds. It will receive CardRegistration object.
-         * @param {function} errorCallback A function to invoke when the the card registration fails. It will receive an error object {ResultCode, ResultMessage}. 
+         * @param {function} errorCallback A function to invoke when the the card registration fails. It will receive an error object {ResultCode, ResultMessage}.
          */
         registerCard: function(cardData, successCallback, errorCallback) {
 
@@ -137,7 +137,7 @@ var mangoPay = {
                     // Something wrong, no data came back from Payline
                     if (data === null) {
                         errorCallback({
-                            "ResultCode": "001599", 
+                            "ResultCode": "001599",
                             "ResultMessage": "Token processing error",
                             "xmlhttp": xmlhttp
                         });
@@ -159,7 +159,7 @@ var mangoPay = {
                 error: function(xmlhttp) {
                     if (xmlhttp.ResultCode) return errorCallback(xmlhttp);
                     errorCallback({
-                        "ResultCode": "001599", 
+                        "ResultCode": "001599",
                         "ResultMessage": "Token processing error",
                         "xmlhttp": xmlhttp
                     });
@@ -240,7 +240,7 @@ var mangoPay = {
 
                     // Invoke user supplied error callback
                     errorCallback({
-                        "ResultCode": "101699", 
+                        "ResultCode": "101699",
                         "ResultMessage": message,
                         "xmlhttp": xmlhttp
                     });
@@ -329,7 +329,7 @@ var mangoPay = {
                         var currentYear = currentDate.getFullYear();
                         if (currentYear < year)
                             return true;
-                        
+
                         if (currentYear === year)
                         {
                             var currentMonth = currentDate.getMonth() + 1;
@@ -440,7 +440,7 @@ var mangoPay = {
                 var numbers = /^[0-9]+$/;
 
                 if(input.match(numbers)) {
-                    return true;  
+                    return true;
                 }
 
                 return false;
@@ -571,9 +571,9 @@ var mangoPay = {
 
 
 // for older browsers define trim function (IE 8)
-if(! String.prototype.trim){  
-    String.prototype.trim = function(){  
-        return this.replace(/^\s+|\s+$/g,'');  
+if(! String.prototype.trim){
+    String.prototype.trim = function(){
+        return this.replace(/^\s+|\s+$/g,'');
     };
 }
 
