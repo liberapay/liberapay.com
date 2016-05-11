@@ -166,6 +166,7 @@ def _execute(this, sql, params=[]):
     print(sql.strip(), params)
     super(SimpleCursorBase, this).execute(sql, params)
 
+
 def log_cursor(f):
     "Prints sql and params to stdout. Works globaly so watch for threaded use."
     def wrapper(*a, **kw):
@@ -222,6 +223,7 @@ def to_javascript(obj):
 
 
 svg_attrs_re = re.compile(r'\s+(?:height|width|x|y|xmlns)=(["\']).*?\1')
+
 
 def include_svg(svg, height, width, x=None, y=None):
     """For when you want to include an SVG in an HTML page or in another SVG.

@@ -12,10 +12,12 @@ CENT = Decimal('0.01')
 UNIT = Decimal('1.00')
 
 
-class MemberLimitReached(Exception): pass
+class MemberLimitReached(Exception):
+    pass
 
 
-class InactiveParticipantAdded(Exception): pass
+class InactiveParticipantAdded(Exception):
+    pass
 
 
 class MixinTeam(object):
@@ -85,10 +87,8 @@ class MixinTeam(object):
         """Return a Decimal representation of the take for this member, or 0.
         """
         assert self.kind == 'group'
-        return self.db.one( "SELECT amount FROM current_takes "
-                            "WHERE member=%s AND team=%s"
-                          , (member.id, self.id)
-                          , default=ZERO
+        return self.db.one("SELECT amount FROM current_takes "
+                           "WHERE member=%s AND team=%s", (member.id, self.id), default=ZERO
                            )
 
     def compute_max_this_week(self, member_id, last_week):

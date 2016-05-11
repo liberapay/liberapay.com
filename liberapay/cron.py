@@ -17,6 +17,7 @@ class Cron(object):
             self.exclusive_jobs.append((period, func))
             self._wait_for_lock()
             return
+
         def f():
             while True:
                 try:
@@ -32,6 +33,7 @@ class Cron(object):
         if self.conn:
             return  # Already waiting
         self.conn = self.website.db.get_connection().__enter__()
+
         def f():
             cursor = self.conn.cursor()
             while True:

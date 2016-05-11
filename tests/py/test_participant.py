@@ -24,6 +24,7 @@ from liberapay.testing import Harness
 
 
 class TestNeedConfirmation(Harness):
+
     def test_need_confirmation1(self):
         assert not NeedConfirmation(False, False)
 
@@ -180,7 +181,7 @@ class TestStub(Harness):
 
     def test_changing_username_to_invalid_characters(self):
         with self.assertRaises(UsernameContainsInvalidCharacters):
-            self.stub.change_username("\u2603") # Snowman
+            self.stub.change_username("\u2603")  # Snowman
 
     def test_changing_username_to_restricted_name(self):
         for name in self.client.website.restricted_usernames:

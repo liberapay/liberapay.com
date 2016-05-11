@@ -97,7 +97,6 @@ class Harness(unittest.TestCase):
     """)
     seq = itertools.count(0)
 
-
     @classmethod
     def setUpClass(cls):
         cls_name = cls.__name__
@@ -109,7 +108,6 @@ class Harness(unittest.TestCase):
         cls.db.run("ALTER SEQUENCE transfers_id_seq RESTART WITH %s", (cls_id,))
         cls.setUpVCR()
         exchanges.QUARANTINE = '0 seconds'
-
 
     @classmethod
     def setUpVCR(cls):
@@ -126,21 +124,17 @@ class Harness(unittest.TestCase):
         cls.vcr_cassette = use_cassette(cls.__name__)
         cls.vcr_cassette.__enter__()
 
-
     @classmethod
     def tearDownClass(cls):
         cls.vcr_cassette.__exit__(None, None, None)
         exchanges.QUARANTINE = cls.QUARANTINE
 
-
     def setUp(self):
         self.clear_tables()
-
 
     def tearDown(self):
         resources.__cache__ = {}  # Clear the simplate cache.
         self.clear_tables()
-
 
     def clear_tables(self):
         tablenames = self.tablenames[:]
@@ -158,15 +152,10 @@ class Harness(unittest.TestCase):
         self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
         self.db.run("ALTER SEQUENCE paydays_id_seq RESTART WITH 1")
 
-
     def make_elsewhere(self, platform, user_id, user_name, **kw):
-        info = UserInfo( platform=platform
-                       , user_id=str(user_id)
-                       , user_name=user_name
-                       , **kw
-                       )
+        info = UserInfo(platform=platform, user_id=str(user_id), user_name=user_name, **kw
+                        )
         return AccountElsewhere.upsert(info)
-
 
     def make_participant(self, username, **kw):
         platform = kw.pop('elsewhere', 'github')
@@ -208,14 +197,11 @@ class Harness(unittest.TestCase):
 
         return participant
 
-
     def make_stub(self, **kw):
         return Participant.make_stub(**kw)
 
-
     def fetch_payday(self):
         return self.db.one("SELECT * FROM paydays", back_as=dict)
-
 
     def make_exchange(self, route, amount, fee, participant, status='succeeded', error='', vat=0):
         if not isinstance(route, ExchangeRoute):
@@ -229,7 +215,6 @@ class Harness(unittest.TestCase):
         record_exchange_result(self.db, e_id, status, error, participant)
         return e_id
 
-
     def make_transfer(self, tipper, tippee, amount, context='tip', team=None, status='succeeded'):
         t_id = self.db.one("""
             INSERT INTO transfers
@@ -241,4 +226,5 @@ class Harness(unittest.TestCase):
         return t_id
 
 
-class Foobar(Exception): pass
+class Foobar(Exception):
+    pass

@@ -69,7 +69,6 @@ class TestClosing(FakeTransfersHarness):
         body = self.client.POST('/alice/settings/close', auth_as=alice).text
         assert 'Try Again Later' in body
 
-
     # dbafg - distribute_balance_as_final_gift
 
     def test_dbafg_distributes_balance_as_final_gift(self):
@@ -147,7 +146,6 @@ class TestClosing(FakeTransfersHarness):
         assert Participant.from_username('carl').balance == D('0.00')
         assert Participant.from_username('alice').balance == D('0.00')
 
-
     # ctg - clear_tips_giving
 
     def test_ctg_clears_tips_giving(self):
@@ -194,7 +192,6 @@ class TestClosing(FakeTransfersHarness):
         with self.db.get_cursor() as cursor:
             alice.clear_tips_giving(cursor)
         assert ntips() == 0
-
 
     # ctr - clear_tips_receiving
 
@@ -243,21 +240,10 @@ class TestClosing(FakeTransfersHarness):
             alice.clear_tips_receiving(cursor)
         assert ntips() == 0
 
-
     # cpi - clear_personal_information
 
     def test_cpi_clears_personal_information(self):
-        alice = self.make_participant( 'alice'
-                                     , goal=100
-                                     , hide_giving=True
-                                     , hide_receiving=True
-                                     , avatar_url='img-url'
-                                     , email='alice@example.com'
-                                     , session_token='deadbeef'
-                                     , session_expires='2000-01-01'
-                                     , giving=20
-                                     , receiving=40
-                                     , npatrons=21
+        alice = self.make_participant('alice', goal=100, hide_giving=True, hide_receiving=True, avatar_url='img-url', email='alice@example.com', session_token='deadbeef', session_expires='2000-01-01', giving=20, receiving=40, npatrons=21
                                       )
         alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')

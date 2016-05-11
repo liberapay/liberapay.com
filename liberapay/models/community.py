@@ -12,6 +12,7 @@ name_pattern = r'^[%s]{1,%s}$' % (name_allowed_chars_pattern, name_maxlength)
 name_re = re.compile(name_pattern, re.U)
 normalize_re = re.compile(r'[^%s]+' % name_allowed_chars_pattern, re.U)
 
+
 def normalize(name):
     return normalize_re.sub('_', name).strip('_')
 
