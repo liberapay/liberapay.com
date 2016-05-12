@@ -128,7 +128,7 @@ class Tests2(Harness):
 
     def test_caching_of_assets(self):
         r = self.client.GET('/assets/jquery.min.js')
-        assert r.headers['Cache-Control'] == 'public, max-age=5'
+        assert r.headers['Cache-Control'] == 'public, max-age=3600'
         assert 'Vary' not in r.headers
         assert not r.headers.cookie
 
