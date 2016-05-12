@@ -3,15 +3,40 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D, InvalidOperation
 
-from aspen import Response
+from aspen import json, Response
 
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
 from liberapay.utils import b64decode_s, get_participant
 
+
+def get_exchange_payin(participant, request):
+    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
+                              (request.qs['exchange_id'], participant.id))
+    if not exchange:
+        raise Response(403)
+    if 'payin_id' in request.qs:
+        payin = mangoapi.payIns.Get(request.qs['payin_id'])
+        if payin.Tag != str(exchange.id):
+            raise Response(403)
+    else:
+        payin = None
+    return exchange, payin
+
 [---]
 
 participant = get_participant(state, restrict=True)
+
+if request.method == 'POST' and request.body.get('action') == 'email':
+    exchange, payin = get_exchange_payin(participant, request)
+    participant.send_email(
+        'payin_bankwire_created',
+        exchange=exchange._asdict(), payin=payin,
+    )
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        raise Response(200, json.dumps({'msg': _("The email has been sent.")}))
+    else:
+        response.redirect(request.line.uri)
 
 exchange, payin = None, None
 
@@ -43,14 +68,7 @@ if request.method == 'POST':
     response.redirect(redir)
 
 elif 'exchange_id' in request.qs:
-    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
-    if not exchange:
-        raise Response(403)
-    if 'payin_id' in request.qs:
-        payin = mangoapi.payIns.Get(request.qs['payin_id'])
-        if payin.Tag != str(exchange.id):
-            raise Response(403)
+    exchange, payin = get_exchange_payin(participant, request)
 
 account = participant.get_mangopay_account()
 back_to = b64decode_s(request.path['back_to'], default=None)
@@ -66,10 +84,6 @@ title = _("Add money")
 % extends "templates/panel.html"
 
 % block panel_body
-<form id="payin" action="javascript:" method="POST"
-      data-msg-loading="{{ _('Request in progress, please wait…') }}">
-
-    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     % if exchange and exchange.status in ('succeeded', 'failed')
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
@@ -132,11 +146,22 @@ title = _("Add money")
         </dl>
 
         % if back_to
-            <p><a href="{{ back_to }}" class="btn btn-default">{{ _("Go back") }}</a></p>
+            <a href="{{ back_to }}" class="btn btn-default pull-right">{{ _("Go back") }}</a>
         % endif
+
+        <form action="" class="js-submit" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="action" value="email" />
+            <button class="btn btn-primary">{{ _("Email me this information") }}</button>
+        </form>
 
     % elif show_form
     % if participant.email
+    <form id="payin" action="javascript:" method="POST"
+          data-msg-loading="{{ _('Request in progress, please wait…') }}">
+
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+
     <p>
         % if funded > 0
             {{ ngettext("Your donations are only funded for another week.",
@@ -187,6 +212,8 @@ title = _("Add money")
         <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
     % endif
 
+    </form>
+
     % else
     <p class="alert alert-warning">{{
         _("Please {0}verify your email address{1} then reload this page.",
@@ -196,7 +223,6 @@ title = _("Add money")
     % endif
     % endif
 
-</form>
 % endblock
 
 % block under_panel
