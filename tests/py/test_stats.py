@@ -55,6 +55,7 @@ class TestChartOfReceiving(Harness):
         actual = self.bob.get_tip_distribution()
         assert actual == expected
 
+
 class TestJson(Harness):
 
     def test_200(self):

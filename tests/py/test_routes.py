@@ -9,9 +9,9 @@ class TestRoutes(MangopayHarness):
 
     def hit(self, username, action, network, address, expected=200):
         auth_as = getattr(self, username)
-        r =  self.client.POST('/%s/routes/%s.json' % (username, action),
-                              data=dict(network=network, address=address),
-                              auth_as=auth_as, raise_immediately=False)
+        r = self.client.POST('/%s/routes/%s.json' % (username, action),
+                             data=dict(network=network, address=address),
+                             auth_as=auth_as, raise_immediately=False)
         assert r.code == expected
         return r
 

@@ -28,6 +28,7 @@ def _popitemchain(obj, *keys):
 
 def any_key(*keys, **kw):
     clean = kw.pop('clean', lambda a: a)
+
     def f(self, extracted, info, *default):
         for key in keys:
             chain = (key,) if not isinstance(key, (list, tuple)) else key

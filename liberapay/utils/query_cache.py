@@ -71,7 +71,6 @@ class QueryCache(object):
     threshold = 5           # maximum life of a cache entry [seconds as int]
     threshold_prune = 60    # time between pruning runs [seconds as int]
 
-
     def __init__(self, db, threshold=5, threshold_prune=60):
         """
         """
@@ -88,7 +87,6 @@ class QueryCache(object):
         self.pruner = threading.Thread(target=self.prune)
         self.pruner.setDaemon(True)
         self.pruner.start()
-
 
     def one(self, query, params=None, process=None):
         return self._do_query(self.db.one, query, params, process)
@@ -107,7 +105,6 @@ class QueryCache(object):
 
         key = (query, params)
 
-
         # Check out an entry.
         # ===================
         # Each entry has its own lock, and "checking out" an entry means
@@ -115,7 +112,7 @@ class QueryCache(object):
         # "check in" a new dummy entry for it (and prevent other threads from
         # adding the same query), which will be populated presently.
 
-        #thread_id = threading.currentThread().getName()[-1:] # for debugging
+        # thread_id = threading.currentThread().getName()[-1:] # for debugging
         #call_id = ''.join([random.choice(string.letters) for i in range(5)])
 
         self.locks.checkout.acquire()
@@ -151,10 +148,9 @@ class QueryCache(object):
                     self.locks.checkin.release()
 
         finally:
-            self.locks.checkout.release() # Now that we've checked out our
-                                          # queryset, other threads are free to
-                                          # check out other queries.
-
+            self.locks.checkout.release()  # Now that we've checked out our
+            # queryset, other threads are free to
+            # check out other queries.
 
         # Process the query.
         # ==================
@@ -177,10 +173,8 @@ class QueryCache(object):
                     entry.exc = None
                 except:
                     entry.result = None
-                    entry.exc = ( FormattingError(traceback.format_exc())
-                                , sys.exc_info()[2]
+                    entry.exc = (FormattingError(traceback.format_exc()), sys.exc_info()[2]
                                  )
-
 
             # Check the queryset back in.
             # ===========================
@@ -198,7 +192,6 @@ class QueryCache(object):
 
         finally:
             entry.lock.release()
-
 
     def prune(self):
         """Periodically remove any stale queries in our cache.
@@ -225,7 +218,6 @@ class QueryCache(object):
                     available = entry.lock.acquire(False)
                     if not available:
                         continue
-
 
                     # Remove the entry if it is too old.
                     # ==================================

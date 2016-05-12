@@ -4,6 +4,7 @@ import json
 
 from liberapay.testing import Harness
 
+
 class TestSearch(Harness):
 
     def test_get_non_existent_user(self):

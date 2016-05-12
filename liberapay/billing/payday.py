@@ -20,6 +20,7 @@ class NoPayday(Exception):
 
 
 class NS(object):
+
     def __init__(self, d):
         self.__dict__.update(d)
 

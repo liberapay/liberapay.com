@@ -30,17 +30,14 @@ class TestChartsJson(FakeTransfersHarness):
     def run_payday(self):
         Payday.start().run()
 
-
     def test_no_payday_returns_empty_list(self):
         assert json.loads(self.client.GET('/carl/charts.json').body) == []
 
     def test_first_payday_comes_through(self):
         self.run_payday()   # first
 
-        expected = [ { "date": today()
-                     , "npatrons": 2
-                     , "receipts": 3.00
-                      }
+        expected = [{"date": today(), "npatrons": 2, "receipts": 3.00
+                     }
                     ]
         actual = json.loads(self.client.GET('/carl/charts.json').body)
 
@@ -54,14 +51,10 @@ class TestChartsJson(FakeTransfersHarness):
 
         self.run_payday()   # second
 
-        expected = [ { "date": today()
-                     , "npatrons": 1 # most recent first
+        expected = [{"date": today(), "npatrons": 1  # most recent first
                      , "receipts": 5.00
-                      }
-                   , { "date": today()
-                     , "npatrons": 2
-                     , "receipts": 3.00
-                      }
+                     }, {"date": today(), "npatrons": 2, "receipts": 3.00
+                         }
                     ]
         actual = json.loads(self.client.GET('/carl/charts.json').body)
 
@@ -79,18 +72,11 @@ class TestChartsJson(FakeTransfersHarness):
         self.alice.set_tip_to(self.carl, '5.00')
         self.run_payday()   # third
 
-        expected = [ { "date": today()
-                     , "npatrons": 1 # most recent first
+        expected = [{"date": today(), "npatrons": 1  # most recent first
                      , "receipts": 5.00
-                      }
-                   , { "date": today()
-                     , "npatrons": 0
-                     , "receipts": 0.00
-                      }
-                   , { "date": today()
-                     , "npatrons": 2
-                     , "receipts": 3.00
-                      }
+                     }, {"date": today(), "npatrons": 0, "receipts": 0.00
+                         }, {"date": today(), "npatrons": 2, "receipts": 3.00
+                             }
                     ]
         actual = json.loads(self.client.GET('/carl/charts.json').body)
 
@@ -105,18 +91,12 @@ class TestChartsJson(FakeTransfersHarness):
 
         self.run_payday()   # third
 
-        expected = [ { "date": today()
-                     , "npatrons": 2 # most recent first
+        expected = [{"date": today(), "npatrons": 2  # most recent first
                      , "receipts": 3.00
-                      }
-                   , { "date": today()
-                     , "npatrons": 3  # Since this is rare, don't worry that we double-count alice.
-                     , "receipts": 7.00
-                      }
-                   , { "date": today()
-                     , "npatrons": 2
-                     , "receipts": 3.00
-                      }
+                     }, {"date": today(), "npatrons": 3  # Since this is rare, don't worry that we double-count alice.
+                         , "receipts": 7.00
+                         }, {"date": today(), "npatrons": 2, "receipts": 3.00
+                             }
                     ]
         actual = json.loads(self.client.GET('/carl/charts.json').body)
 

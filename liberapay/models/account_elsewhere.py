@@ -21,7 +21,8 @@ from liberapay.website import website
 CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
 
 
-class UnknownAccountElsewhere(Exception): pass
+class UnknownAccountElsewhere(Exception):
+    pass
 
 
 class AccountElsewhere(Model):
@@ -31,7 +32,6 @@ class AccountElsewhere(Model):
     def __init__(self, *args, **kwargs):
         super(AccountElsewhere, self).__init__(*args, **kwargs)
         self.platform_data = getattr(website.platforms, self.platform)
-
 
     # Constructors
     # ============
@@ -146,7 +146,6 @@ class AccountElsewhere(Model):
         account.participant.update_avatar()
         return account
 
-
     # Connect tokens
     # ==============
 
@@ -170,7 +169,6 @@ class AccountElsewhere(Model):
              WHERE id = %s
          RETURNING connect_token, connect_expires
         """, (token, expires, self.id))
-
 
     # Random Stuff
     # ============

@@ -44,6 +44,7 @@ def query_param_paginator(param, **kw):
     page_key = kw.get('page')
     total_key = kw.get('total')
     links_keys_map = tuple((k, v) for k, v in kw.items() if k in links_keys)
+
     def f(self, response, parsed):
         url = _strip_prefix(self.api_url, response.request.url)
         links = {k: _modify_query(url, param, parsed[k2])
@@ -79,6 +80,7 @@ def keys_paginator(page_key, **kw):
     paging_key = kw.get('paging')
     total_key = kw.get('total')
     links_keys_map = tuple((k, kw.get(k, k)) for k in links_keys)
+
     def f(self, response, parsed):
         page = parsed[page_key]
         paging = parsed.get(paging_key, {}) if paging_key else parsed

@@ -6,6 +6,7 @@ from liberapay.constants import JINJA_ENV_COMMON
 
 
 class HTMLRenderer(base.Renderer):
+
     def render_content(self, context):
 
         # Extend to inject an HTML-escaping function. Since autoescape is on,

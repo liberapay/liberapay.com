@@ -22,6 +22,7 @@ class TestPages(MangopayHarness):
     def setUpClass(cls):
         super(TestPages, cls).setUpClass()
         i = len(cls.client.www_root)
+
         def f(spt):
             if spt[spt.rfind('/')+1:].startswith('index.'):
                 return spt[i:spt.rfind('/')+1]

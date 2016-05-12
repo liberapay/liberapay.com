@@ -1,0 +1,22 @@
+[Default]
+ignore = (env|.git|build|www/assets)/**, **/*.(min.*|png|ico), Makefile
+max_line_length = 120
+
+[spacing]
+bears = SpaceConsistencyBear
+use_spaces = yeah
+files = **/*
+
+[py-analysis]
+bears = RadonBear, CPDBear
+language = py
+files = **/*.py
+
+[py-style]
+bears = PEP8Bear
+files = **/*.py
+
+[js-analysis]
+bears = JSComplexityBear, CPDBear
+language = js
+files = **/*.js

@@ -7,12 +7,7 @@ from jinja2 import Environment
 from liberapay.constants import JINJA_ENV_COMMON
 
 
-( VERIFICATION_MISSING
-, VERIFICATION_FAILED
-, VERIFICATION_EXPIRED
-, VERIFICATION_REDUNDANT
-, VERIFICATION_STYMIED
-, VERIFICATION_SUCCEEDED
+(VERIFICATION_MISSING, VERIFICATION_FAILED, VERIFICATION_EXPIRED, VERIFICATION_REDUNDANT, VERIFICATION_STYMIED, VERIFICATION_SUCCEEDED
  ) = range(6)
 
 
@@ -21,6 +16,7 @@ jinja_env_html = Environment(
     autoescape=True, extensions=['jinja2.ext.autoescape'],
     **JINJA_ENV_COMMON
 )
+
 
 def compile_email_spt(fpath):
     r = {}

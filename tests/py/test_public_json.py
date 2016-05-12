@@ -21,10 +21,8 @@ class Tests(Harness):
         assert data['giving'] == '1.00'
 
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
-        alice = self.make_participant( 'alice'
-                                     , balance=100
-                                     , hide_giving=True
-                                     )
+        alice = self.make_participant('alice', balance=100, hide_giving=True
+                                      )
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
         data = json.loads(self.client.GET('/alice/public.json').body)
@@ -32,10 +30,8 @@ class Tests(Harness):
         assert data['giving'] == None
 
     def test_anonymous_gets_null_receiving_if_user_anonymous(self):
-        alice = self.make_participant( 'alice'
-                                     , balance=100
-                                     , hide_receiving=True
-                                     )
+        alice = self.make_participant('alice', balance=100, hide_receiving=True
+                                      )
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
         data = json.loads(self.client.GET('/alice/public.json').body)

@@ -54,11 +54,11 @@ class Tests(Harness):
         assert r.headers['Location'] == '/alice/?x=2'
 
     def test_is_expired(self):
-        expiration = datetime.utcnow() - timedelta(days = 40)
+        expiration = datetime.utcnow() - timedelta(days=40)
         assert utils.is_card_expired(expiration.year, expiration.month)
 
     def test_not_expired(self):
-        expiration = datetime.utcnow() + timedelta(days = 100)
+        expiration = datetime.utcnow() + timedelta(days=100)
         assert not utils.is_card_expired(expiration.year, expiration.month)
 
     def test_format_currency_without_trailing_zeroes(self):
@@ -70,7 +70,6 @@ class Tests(Harness):
         expected = '$16.00'
         actual = i18n.format_money(16, 'USD', locale='en')
         assert actual == expected
-
 
     def test_markdown_render_does_render(self):
         expected = "<p>Example</p>\n"
@@ -118,7 +117,6 @@ class Tests(Harness):
         actual = markdown.render('Examples like this_one and this other_one.')
         assert expected == actual
 
-
     # Base64 encoding/decoding
     # ========================
 
@@ -142,4 +140,3 @@ class Tests(Harness):
 
     def test_b64decode_s_returns_default_if_passed_on_error(self):
         assert b64decode_s('abcd', default='error') == 'error'
-

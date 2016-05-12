@@ -1,6 +1,7 @@
 from markupsafe import Markup
 import misaka as m  # http://misaka.61924.nl/
 
+
 def render(markdown):
     return Markup(m.html(
         markdown,

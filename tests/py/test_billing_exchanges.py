@@ -207,13 +207,7 @@ class TestFees(MangopayHarness):
 class TestRecordExchange(MangopayHarness):
 
     def test_record_exchange_doesnt_update_balance_for_positive_amounts(self):
-        record_exchange( self.db
-                       , self.janet_route
-                       , amount=D("0.59")
-                       , fee=D("0.41")
-                       , vat=D("0.00")
-                       , participant=self.janet
-                       , status='pre'
+        record_exchange(self.db, self.janet_route, amount=D("0.59"), fee=D("0.41"), vat=D("0.00"), participant=self.janet, status='pre'
                         )
         janet = Participant.from_username('janet')
         assert self.janet.balance == janet.balance == D('0.00')
@@ -311,7 +305,7 @@ class TestSync(MangopayHarness):
     def test_sync_with_mangopay_reverts_credits_that_didnt_happen(self):
         self.make_exchange('mango-cc', 41, 0, self.homer)
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \
-           , mock.patch('liberapay.billing.exchanges.test_hook') as test_hook:
+                , mock.patch('liberapay.billing.exchanges.test_hook') as test_hook:
             rer.side_effect = test_hook.side_effect = Foobar
             with self.assertRaises(Foobar):
                 payout(self.db, self.homer, D('35.00'))
@@ -340,7 +334,7 @@ class TestSync(MangopayHarness):
     def test_sync_with_mangopay_deletes_transfers_that_didnt_happen(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
         with mock.patch('liberapay.billing.exchanges.record_transfer_result') as rtr \
-           , mock.patch('liberapay.billing.mangoapi.transfers.Create') as Create:
+                , mock.patch('liberapay.billing.mangoapi.transfers.Create') as Create:
             rtr.side_effect = Create.side_effect = Foobar
             with self.assertRaises(Foobar):
                 transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')

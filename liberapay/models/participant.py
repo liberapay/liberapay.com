@@ -76,7 +76,6 @@ class Participant(Model, MixinTeam):
     def __repr__(self):
         return '<Participant #%s "%s">' % (repr(self.id), repr(self.username))
 
-
     # Constructors
     # ============
 
@@ -197,7 +196,6 @@ class Participant(Model, MixinTeam):
     def refetch(self):
         return self._from_thing('id', self.id)
 
-
     # Password Management
     # ===================
 
@@ -228,7 +226,6 @@ class Participant(Model, MixinTeam):
                  WHERE id = %(p_id)s;
             """, locals())
 
-
     # Session Management
     # ==================
 
@@ -246,9 +243,8 @@ class Participant(Model, MixinTeam):
     def set_session_expires(self, expires):
         """Set ``session_expires`` to the given datetime.
         """
-        self.db.run( "UPDATE participants SET session_expires=%s "
-                     "WHERE id=%s"
-                   , (expires, self.id,)
+        self.db.run("UPDATE participants SET session_expires=%s "
+                    "WHERE id=%s", (expires, self.id,)
                     )
         self.set_attributes(session_expires=expires)
 
@@ -280,7 +276,6 @@ class Participant(Model, MixinTeam):
         """
         self.update_session(None, None)
         erase_cookie(cookies, SESSION)
-
 
     # Statement
     # =========
@@ -333,7 +328,6 @@ class Participant(Model, MixinTeam):
             except IntegrityError:
                 return self.upsert_statement(lang, statement)
 
-
     # Pricing
     # =======
 
@@ -344,7 +338,6 @@ class Participant(Model, MixinTeam):
     @property
     def suggested_payment(self):
         return (self.usage * Decimal('0.05')).quantize(Decimal('.01'))
-
 
     # Stubs
     # =====
@@ -357,11 +350,11 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         return rec and '/on/%s/%s/' % (rec.platform, rec.user_name)
 
-
     # Closing
     # =======
 
-    class AccountNotEmpty(Exception): pass
+    class AccountNotEmpty(Exception):
+        pass
 
     def final_check(self, cursor):
         """Sanity-check that balance and tips have been dealt with.
@@ -374,7 +367,8 @@ class Participant(Model, MixinTeam):
         if incoming > 0:
             raise self.AccountNotEmpty
 
-    class UnknownDisbursementStrategy(Exception): pass
+    class UnknownDisbursementStrategy(Exception):
+        pass
 
     def close(self, disbursement_strategy):
         """Close the participant's account.
@@ -397,7 +391,8 @@ class Participant(Model, MixinTeam):
             self.final_check(cursor)
             self.update_status('closed', cursor)
 
-    class NoOneToGiveFinalGiftTo(Exception): pass
+    class NoOneToGiveFinalGiftTo(Exception):
+        pass
 
     def distribute_balance_as_final_gift(self, cursor):
         """Distribute a balance as a final gift.
@@ -405,7 +400,7 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips, total, _, _= self.get_giving_for_profile()
+        tips, total, _, _ = self.get_giving_for_profile()
         transfers = []
         distributed = Decimal('0.00')
 
@@ -517,7 +512,6 @@ class Participant(Model, MixinTeam):
              LIMIT 1
         """, (str(self.id),))
 
-
     # Emails
     # ======
 
@@ -577,7 +571,7 @@ class Participant(Model, MixinTeam):
         base64_email = b64encode_s(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email64={base64_email}&nonce={nonce}"
         r = self.send_email('verification', email=email, link=link.format(**locals()))
-        assert r == 1 # Make sure the verification email was sent
+        assert r == 1  # Make sure the verification email was sent
 
         if self.email:
             self.send_email('verification_notice', new_email=email)
@@ -665,7 +659,7 @@ class Participant(Model, MixinTeam):
         self.fill_notification_context(context)
         email = context.setdefault('email', self.email)
         if not email:
-            return 0 # Not Sent
+            return 0  # Not Sent
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(context, locale)
@@ -676,6 +670,7 @@ class Participant(Model, MixinTeam):
         spt = website.emails[spt_name]
         base_spt = website.emails['base']
         bodies = {}
+
         def render(t, context):
             b = base_spt[t].render(context).strip()
             if t == 'text/plain' and t not in spt:
@@ -738,7 +733,6 @@ class Participant(Model, MixinTeam):
         self.db.run("UPDATE participants SET email_lang=%s WHERE id=%s",
                     (accept_lang, self.id))
         self.set_attributes(email_lang=accept_lang)
-
 
     # Notifications
     # =============
@@ -866,7 +860,6 @@ class Participant(Model, MixinTeam):
                 profile_url=elsewhere.liberapay_url,
             )
 
-
     # Exchange-related stuff
     # ======================
 
@@ -885,7 +878,6 @@ class Participant(Model, MixinTeam):
              WHERE owner = %s
                AND ts < now() - INTERVAL %s
         """, (self.id, QUARANTINE))
-
 
     # Random Stuff
     # ============
@@ -926,7 +918,6 @@ class Participant(Model, MixinTeam):
     def accepts_tips(self):
         return (self.goal is None) or (self.goal >= 0)
 
-
     # Communities
     # ===========
 
@@ -964,7 +955,6 @@ class Participant(Model, MixinTeam):
             $$ LANGUAGE plpgsql;
         """.format(table), locals())
 
-
     def get_communities(self):
         return self.db.all("""
             SELECT c.*, replace(c.name, '_', ' ') AS pretty_name
@@ -973,7 +963,6 @@ class Participant(Model, MixinTeam):
              WHERE cm.is_on AND cm.participant = %s
           ORDER BY c.nmembers ASC, c.name
         """, (self.id,))
-
 
     # More Random Stuff
     # =================
@@ -1009,7 +998,7 @@ class Participant(Model, MixinTeam):
                     raise UsernameAlreadyTaken(suggested)
 
                 self.add_event(c, 'set_username', suggested)
-                assert (suggested, lowercased) == actual # sanity check
+                assert (suggested, lowercased) == actual  # sanity check
                 self.set_attributes(username=suggested)
 
         return suggested
@@ -1170,7 +1159,6 @@ class Participant(Model, MixinTeam):
             new_takes = self.compute_actual_takes(cursor=cursor)
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
-
     def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, returns a dict.
 
@@ -1237,13 +1225,11 @@ class Participant(Model, MixinTeam):
 
         return t
 
-
     @staticmethod
     def _zero_tip_dict(tippee):
         if isinstance(tippee, Participant):
             tippee = tippee.id
         return dict(amount=Decimal('0.00'), is_funded=False, tippee=tippee)
-
 
     def get_tip_to(self, tippee):
         """Given a participant (or their id), returns a dict.
@@ -1262,7 +1248,6 @@ class Participant(Model, MixinTeam):
              LIMIT 1
 
         """, (self.id, tippee), back_as=dict, default=default)
-
 
     def get_tip_distribution(self):
         """
@@ -1309,9 +1294,7 @@ class Participant(Model, MixinTeam):
         npatrons = 0.0  # float to trigger float division
         contributed = Decimal('0.00')
         for rec in self.db.all(SQL, (self.id,)):
-            tip_amounts.append([ rec.amount
-                               , rec.ncontributing
-                               , rec.amount * rec.ncontributing
+            tip_amounts.append([rec.amount, rec.ncontributing, rec.amount * rec.ncontributing
                                 ])
             contributed += tip_amounts[-1][2]
             npatrons += rec.ncontributing
@@ -1321,7 +1304,6 @@ class Participant(Model, MixinTeam):
             row.append((row[2] / contributed) if contributed > 0 else 0)
 
         return tip_amounts, npatrons, contributed
-
 
     def get_giving_for_profile(self):
 
@@ -1375,7 +1357,6 @@ class Participant(Model, MixinTeam):
 
         """, (self.id,))
 
-
         # Compute the total
 
         total = sum([t.amount for t in tips])
@@ -1418,12 +1399,10 @@ class Participant(Model, MixinTeam):
                    , tippee
         """, (self.id,), back_as=dict)
 
-
     def get_age_in_seconds(self):
         if self.join_time is not None:
             return (utcnow() - self.join_time).total_seconds()
         return -1
-
 
     def get_account_elsewhere(self, platform):
         """Return an AccountElsewhere instance.
@@ -1436,7 +1415,6 @@ class Participant(Model, MixinTeam):
                AND platform=%s
 
         """, (self.id, platform))
-
 
     def get_accounts_elsewhere(self):
         """Return a dict of AccountElsewhere instances.
@@ -1451,14 +1429,12 @@ class Participant(Model, MixinTeam):
         accounts_dict = {account.platform: account for account in accounts}
         return accounts_dict
 
-
     def get_mangopay_account(self):
         """Fetch the mangopay account for this participant.
         """
         if not self.mangopay_user_id:
             return
         return mangoapi.users.Get(self.mangopay_user_id)
-
 
     def take_over(self, account, have_confirmation=False):
         """Given an AccountElsewhere or a tuple (platform_name, user_id),
@@ -1563,15 +1539,13 @@ class Participant(Model, MixinTeam):
             # Move any old account out of the way
             if we_already_have_that_kind_of_account:
                 new_stub = Participant.make_stub(cursor)
-                cursor.run( "UPDATE elsewhere SET participant=%s "
-                            "WHERE platform=%s AND participant=%s"
-                          , (new_stub.id, platform, self.id)
+                cursor.run("UPDATE elsewhere SET participant=%s "
+                           "WHERE platform=%s AND participant=%s", (new_stub.id, platform, self.id)
                            )
 
             # Do the deal
-            cursor.run( "UPDATE elsewhere SET participant=%s "
-                        "WHERE platform=%s AND user_id=%s"
-                      , (self.id, platform, user_id)
+            cursor.run("UPDATE elsewhere SET participant=%s "
+                       "WHERE platform=%s AND user_id=%s", (self.id, platform, user_id)
                        )
 
             # Turn pledges into actual tips
@@ -1625,11 +1599,8 @@ class Participant(Model, MixinTeam):
         self.update_avatar()
 
     def to_dict(self, details=False, inquirer=None):
-        output = { 'id': self.id
-                 , 'username': self.username
-                 , 'avatar': self.avatar_url
-                 , 'kind': self.kind
-                 }
+        output = {'id': self.id, 'username': self.username, 'avatar': self.avatar_url, 'kind': self.kind
+                  }
 
         if not details:
             return output

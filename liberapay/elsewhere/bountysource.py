@@ -74,7 +74,7 @@ class Bountysource(Platform):
 
     def handle_auth_callback(self, url, query_id, unused_arg):
         sess = self.get_auth_session(token=query_id)
-        sess._callback_url=url
+        sess._callback_url = url
         return sess
 
 
