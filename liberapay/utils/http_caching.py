@@ -121,5 +121,5 @@ def add_caching_to_response(response, request=None, etag=None):
         # We can cache "indefinitely" when the querystring contains the etag.
         response.headers['Cache-Control'] = 'public, max-age=31536000'
     else:
-        # Otherwise we cache for 5 seconds
-        response.headers['Cache-Control'] = 'public, max-age=5'
+        # Otherwise we cache for 1 hour
+        response.headers['Cache-Control'] = 'public, max-age=3600'
