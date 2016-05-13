@@ -8,14 +8,16 @@ import pytest
 
 from liberapay.billing import exchanges
 from liberapay.billing.exchanges import (
-    upcharge_card,
-    payout,
     charge,
+    payin_bank_wire,
+    payout,
     record_exchange,
     record_exchange_result,
     skim_credit,
     sync_with_mangopay,
     transfer,
+    upcharge_bank_wire,
+    upcharge_card,
 )
 from liberapay.billing.payday import Payday
 from liberapay.constants import PAYIN_CARD_MIN, PAYIN_CARD_TARGET
@@ -26,6 +28,14 @@ from liberapay.exceptions import (
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
 from liberapay.testing.mangopay import MangopayHarness
+
+
+def fail_payin(payin):
+    payin.ExecutionDetails.SecureModeRedirectURL = None
+    payin.ResultCode = '1'
+    payin.ResultMessage = 'oops'
+    payin.Status = 'FAILED'
+    return payin
 
 
 class TestPayouts(MangopayHarness):
@@ -102,12 +112,6 @@ class TestCharge(MangopayHarness):
 
     @mock.patch('mangopaysdk.tools.apipayins.ApiPayIns.Create')
     def test_charge_failure(self, Create):
-        def fail_payin(payin):
-            payin.ExecutionDetails.SecureModeRedirectURL = None
-            payin.ResultCode = '1'
-            payin.ResultMessage = 'oops'
-            payin.Status = 'FAILED'
-            return payin
         Create.side_effect = fail_payin
         exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
         error = "1: oops"
@@ -159,6 +163,50 @@ class TestCharge(MangopayHarness):
         bob = self.make_participant('bob', last_bill_result='invalidated')
         with self.assertRaises(AssertionError):
             charge(self.db, bob, D('10.00'), 'http://localhost/')
+
+
+class TestPayinBankWire(MangopayHarness):
+
+    def test_payin_bank_wire_creation(self):
+        path = '/janet/wallet/payin/bankwire/'
+        data = {'amount': str(upcharge_bank_wire(D('10.00'))[0])}
+
+        r = self.client.PxST(path, data, auth_as=self.janet)
+        assert r.code == 403  # rejected because janet has no donations set up
+
+        self.janet.set_tip_to(self.david, '10.00')
+        r = self.client.PxST(path, data, auth_as=self.janet)
+        assert r.code == 302, r.text
+        redir = r.headers['Location']
+        assert redir.startswith(path+'?exchange_id=')
+
+        r = self.client.GET(redir, auth_as=self.janet)
+        assert b'IBAN' in r.body, r.text
+
+        janet = self.janet.refetch()
+        assert janet.balance == 0
+
+    @mock.patch('liberapay.billing.exchanges.test_hook')
+    def test_payinbank_wire_exception_and_wallet_creation(self, test_hook):
+        test_hook.side_effect = Foobar
+        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
+        self.janet.set_attributes(mangopay_wallet_id=None)
+        exchange = payin_bank_wire(self.db, self.janet, D('50'))[1]
+        assert exchange.note == 'Foobar()'
+        assert exchange.status == 'failed'
+        janet = self.janet.refetch()
+        assert self.janet.balance == janet.balance == 0
+
+    @mock.patch('mangopaysdk.tools.apipayins.ApiPayIns.Create')
+    def test_payin_bank_wire_failure(self, Create):
+        Create.side_effect = fail_payin
+        exchange = payin_bank_wire(self.db, self.janet, D('1.00'))[1]
+        error = "1: oops"
+        assert exchange.note == error
+        assert exchange.amount
+        assert exchange.status == 'failed'
+        janet = self.janet.refetch()
+        assert self.janet.balance == janet.balance == 0
 
 
 class TestFees(MangopayHarness):
