@@ -6,8 +6,9 @@ from collections import OrderedDict
 from decimal import Decimal as D
 import re
 
-from aspen import Response
+from aspen import json, Response
 
+from liberapay.billing.payday import Payday
 from liberapay.constants import SESSION
 from liberapay.testing.mangopay import MangopayHarness
 from liberapay.utils import b64encode_s, find_files
@@ -106,6 +107,14 @@ class TestPages(MangopayHarness):
 
     def test_twitter_associate(self):
         assert self.client.GxT('/on/twitter/associate').code == 400
+
+    def test_paydays_json_gives_paydays(self):
+        Payday.start()
+        self.make_participant("alice")
+
+        response = self.client.GET("/about/paydays.json")
+        paydays = json.loads(response.body)
+        assert paydays[0]['ntippers'] == 0
 
     def test_404(self):
         response = self.client.GET('/about/four-oh-four.html', raise_immediately=False)
