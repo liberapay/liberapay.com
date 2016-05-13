@@ -162,16 +162,6 @@ title = _("Add money")
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-    <p>
-        % if funded > 0
-            {{ ngettext("Your donations are only funded for another week.",
-                        "Your donations are funded for another {n} weeks.",
-                        funded) }}
-        % else
-            {{ _("You need to transfer money to your wallet to fund your donations.") }}
-        % endif
-    </p>
-
     <p>{{ _(
         "Adding money to Liberapay via bank wire incurs a fee of {0}% from our "
         "payment processor.",

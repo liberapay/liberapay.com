@@ -526,3 +526,22 @@ span.help-title {
 .alert-read {
     background: transparent;
 }
+
+.overlayed {
+    position: relative;
+    a.overlay {
+        background: none;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+}
+
+.payment-methods {
+    text-align: center;
+    .payment-icon {
+        font-size: 2em;
+    }
+}

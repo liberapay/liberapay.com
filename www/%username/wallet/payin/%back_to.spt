@@ -1,80 +1,28 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from datetime import datetime
-from decimal import Decimal as D, InvalidOperation
-
-from aspen import Response
-
-from liberapay.billing import mangoapi
-from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge_card
-from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import b64decode_s, get_participant, is_card_expired
+from liberapay.utils import b64decode_s, get_participant, utcnow
 
 [---]
 
 participant = get_participant(state, restrict=True)
 
-if request.method == 'GET' and 'transactionId' in request.qs:
-    payin = mangoapi.payIns.Get(request.qs['transactionId'])
-    if payin.AuthorId != participant.mangopay_user_id:
-        raise Response(403)
-    status = payin.Status.lower()
-    error = repr_error(payin)
-    record_exchange_result(website.db, payin.Tag, status, error, participant)
-    response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
-
-exchange = None
-route = ExchangeRoute.from_network(participant, 'mango-cc')
-
-card = mangoapi.cards.Get(route.address) if route else None
-if card:
-    inactive = card.Validity != 'UNKNOWN' and card.Active is False
-    invalid = card.Validity == 'INVALID'
-    used_one_off = card.Validity == 'VALID' and route.one_off
-    month, year = int(card.ExpirationDate[:2]), int(card.ExpirationDate[2:]) + 2000
-    if inactive or invalid or used_one_off or is_card_expired(year, month):
-        route.invalidate(card)
-        card = None
+if 'transactionId' in request.qs or 'exchange_id' in request.qs or \
+    request.method == 'POST':
+    # For backward compatibility
+    response.redirect(
+        participant.path('wallet/payin/card/'+request.path['back_to']),
+        code=307
+    )
 
 funded = float('inf')
 donations = participant.get_giving_for_profile()[1]
 weekly = donations - participant.receiving
 if weekly > 0:
     funded = participant.balance // weekly
-    min_weeks = max(constants.PAYIN_CARD_MIN // weekly, 1)
-    max_weeks = min(
-        max(constants.PAYIN_CARD_TARGET // weekly, 52),
-        constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly
-    )
-    weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
-    weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
 
-if request.method == 'POST':
-    if weekly <= 0 or funded >= 52:
-        raise Response(403, _(
-            "Why are you trying to put more money into your wallet? "
-            "Please contact support@liberapay.com if you have a legitimate reason."
-        ))
-    if not route:
-        raise Response(400, "no credit card")
-
-    try:
-        amount = D(request.body['amount'])
-    except (InvalidOperation, ValueError):
-        raise Response(400, "bad amount")
-    return_url = website.canonical_url + request.path.raw
-    exchange = charge(website.db, participant, amount, return_url)
-    response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
-
-elif 'exchange_id' in request.qs:
-    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
-
-account = participant.get_mangopay_account()
 back_to = b64decode_s(request.path['back_to'], default=None)
-success = getattr(exchange, 'status', None) == 'succeeded'
-show_form = weekly > 0 and funded < 52 and not success
+can_payin = weekly > 0 and funded < 52
 
 if funded > 0 and user == participant:
     participant.mark_notifications_as_read('low_balance')
@@ -85,21 +33,22 @@ title = _("Add money")
 % extends "templates/panel.html"
 
 % block panel_body
-<form id="payin" action="javascript:" method="POST"
-      data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
-    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
-
-    % if exchange
-        <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
-            _("{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees.",
-              Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
-            _("The attempt to take {0} from your credit card has failed. Error message: {1}", Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
-        }}</div>
-        % if success
-        <a href="{{ participant.path('receipts/%s.html' % exchange.id) }}">{{ _("View Receipt") }}</a>
+    % if not participant.email
+        % if participant.join_time > utcnow() - constants.SESSION_TIMEOUT
+            <p class="alert alert-success">{{ _(
+                "We've sent you an email, please open it now and click the confirmation "
+                "link inside, then come back to this page and carry on."
+            ) }}</p>
+        % else
+            <p class="alert alert-warning">{{ _(
+                "Please {0}verify your email address{1}, then come back to this page and carry on.",
+                '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
+                '</a>'|safe
+            ) }}</p>
         % endif
     % endif
+
     <p>
         % if donations == 0
             {{ _(
@@ -119,115 +68,59 @@ title = _("Add money")
             {{ _("You need to transfer money to your wallet to fund your donations.") }}
         % endif
     </p>
-    % if success and back_to
-        <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
-    % endif
 
-    % if show_form
-    % if participant.email
-    <p>{{ _(
-        "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
-        constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
-    ) }}</p>
+    % if can_payin
 
-    <h3>{{ _("Amount") }}</h3>
+    <p>{{ _("Please choose a payment method:") }}</p>
 
-    <fieldset id="amount" class="form-inline">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <select class="form-control" name="amount">
-        % for weeks in weeks_list
-            % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_card(amount)
-            <option value="{{ amount }}">{{ _(
-                "{0} ({2}% fee included)",
-                Money(charge_amount, 'EUR'),
-                Money(amount, 'EUR'),
-                (fees / charge_amount * 100).quantize(constants.PAYIN_CARD_MIN),
-            ) }}</option>
-        % endfor
-        </select>
-    </fieldset>
+    <div class="row payment-methods">
+    % from "templates/icons.html" import fontawesome
 
+        <div class="col-sm-6">
+            <div class="panel panel-default"><div class="panel-body overlayed">
+                <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
+                <h4>{{ _("Credit Card") }}<br><small>Visa / Mastercard / CB</small></h4>
+                <p>
+                    {{ _("Easy and instantaneous") }}<br>
+                    {{ _("Fees: {0}% + {1}",
+                         constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
+                         Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
+                    ) }}
+                </p>
+                <a class="overlay" href="./card/{{ b64encode_s(back_to) }}"></a>
+            </div></div>
+        </div>
 
-    % if not participant.mangopay_user_id
-    <h3>{{ _("Identity") }}</h3>
+        <div class="col-sm-6">
+            <div class="panel panel-default"><div class="panel-body overlayed">
+                <p class="payment-icon">{{ fontawesome('bank') }}</p>
+                <h4>{{ _("Bank Wire") }}<br>
+                    <small>{{ _("To a Euro account") }}</small></h4>
+                <p>
+                    {{ _("Cheaper but cumbersome") }}<br>
+                    {{ _("Fee: {0}%",
+                         constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100) }}
+                </p>
+                <a class="overlay" href="./bankwire/{{ b64encode_s(back_to) }}"></a>
+            </div></div>
+        </div>
 
-    <fieldset id="identity">
-    % include "templates/identity-form.html"
-    </fieldset>
-    % endif
-
-
-    <h3>{{ _("Credit card") }}</h3>
-
-    % if card
-    <div>
-        <p>{{ card.Alias }} ({{ card.CardProvider }})</p>
-        <button class="btn btn-default btn-sm" type="button" data-modify="#credit-card">{{ _("Modify") }}</button>
     </div>
-    % endif
-
-    <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
-          data-msg-cors-fail='{{ _("Your browser is not letting us send your credit card data to our payment processor. "
-                                   "Please make sure the request is not being blocked by an extension like NoScript.") }}'>
-        <div>
-            <input id="card_number" class="form-control" required
-                   placeholder="{{ _('Credit Card Number') }}" />
-            <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
-        </div>
-        <div class="form-inline">
-            <input id="expiration_date" class="form-control"
-                   placeholder="{{ _('MM/YY') }}" title="{{ _('Expiration Date') }}"
-                   required maxlength=6 />
-            <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
-
-            <input id="cvv" class="form-control" required placeholder="{{ _('CVV') }}"
-                   title="{{ _('Verification code (3 digits located on the back of the card)') }}" />
-            <span class="invalid-msg">{{ _("This verification code is invalid.") }}</span>
-        </div>
-        <label>
-            <input type="checkbox" id="keep" checked />
-            {{ _("Remember the card number for next time") }}
-        </label>
-    </fieldset>
-
-    <br>
-    <button class="btn btn-success">{{ _("Go") }}</button>
 
     % if back_to
-        <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
+        <a href="{{ back_to }}" class="btn btn-default pull-right">{{ _("Go back") }}</a>
     % endif
 
-    % else
-    <p class="alert alert-warning">{{
-        _("Please {0}verify your email address{1} then reload this page.",
-          '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
-          '</a>'|safe)
-    }}</p>
-    % endif
     % endif
 
-</form>
 % endblock
 
-% block below_panel
-% if show_form
+% block under_panel
+% if can_payin
 <p class="alert alert-info">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" />
     </a>
 </p>
 % endif
-% endblock
-
-% block scripts
-{{ super() }}
-<script>
-    mangoPay.cardRegistration.baseURL = {{ to_javascript(website.app_conf.mangopay_base_url)|safe }};
-    mangoPay.cardRegistration.clientId = {{ to_javascript(website.app_conf.mangopay_client_id)|safe }};
-    $(function() {
-        Liberapay.payments.cc.init();
-    });
-</script>
 % endblock
