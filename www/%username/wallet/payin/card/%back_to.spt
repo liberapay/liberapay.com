@@ -169,8 +169,8 @@ title = _("Add money")
     % endif
 
     <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
-          data-msg-cors-fail='{{ _("Your browser is not letting us send your credit card data to our payment processor. "
-                                   "Please make sure the request is not being blocked by an extension like NoScript.") }}'>
+          data-msg-cors-fail='{{ _("The request failed. Please make sure your browser is up-to-date, and disable "
+                                   "any extension that blocks requests (e.g. NoScript), then try again.") }}'>
         <div>
             <input id="card_number" class="form-control" required
                    placeholder="{{ _('Credit Card Number') }}" />

@@ -198,7 +198,9 @@ Liberapay.payments.cc.onError = function(response) {
     } else {
         var msg = response.ResultMessage;
         var xhr = response.xmlhttp;
-        if (xhr) {
+        if (xhr && xhr.status === 0) {
+            var msg = $('#credit-card').data('msg-cors-fail');
+        } else if (xhr) {
             var text = xhr.responseText;
             text = text && text.length > 200 ? text.slice(0, 200) + '...' : text;
             debugInfo = {status: xhr.status, responseText: text};
