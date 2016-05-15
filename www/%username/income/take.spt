@@ -21,6 +21,8 @@ if not user.mangopay_user_id:
 
 take = parse_decimal(request.body['take'])
 new_take = team.set_take_for(user, take, user)
+if new_take is None:
+    raise Response(403, _("You are not a member of the {0} team.", team.username))
 if new_take < take:
     msg = _("Your take is now {0} (you can't go higher this week).",
             Money(new_take, 'EUR'))

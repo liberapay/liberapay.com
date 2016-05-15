@@ -79,14 +79,12 @@ class MixinTeam(object):
         return takes
 
     def get_take_for(self, member):
-        """Return a Decimal representation of the take for this member, or 0.
+        """Return the nominal take for this member, or None.
         """
-        assert self.kind == 'group'
-        return self.db.one( "SELECT amount FROM current_takes "
-                            "WHERE member=%s AND team=%s"
-                          , (member.id, self.id)
-                          , default=D_ZERO
-                           )
+        return self.db.one(
+            "SELECT amount FROM current_takes WHERE member = %s AND team = %s",
+            (member.id, self.id)
+        )
 
     def compute_max_this_week(self, member_id, last_week):
         """2x the member's take last week, or a minimum based on last week's
@@ -103,6 +101,11 @@ class MixinTeam(object):
         """Sets member's take from the team pool.
         """
         assert self.kind == 'group'
+
+        if recorder.id != self.id:
+            cur_take = self.get_take_for(member)
+            if cur_take is None:
+                return None
 
         if not isinstance(take, (None.__class__, Decimal)):
             take = Decimal(take)
