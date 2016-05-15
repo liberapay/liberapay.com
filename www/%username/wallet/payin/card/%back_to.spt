@@ -70,7 +70,6 @@ elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
-account = participant.get_mangopay_account()
 back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
@@ -154,6 +153,7 @@ title = _("Add money")
     <h3>{{ _("Identity") }}</h3>
 
     <fieldset id="identity">
+    % set account = None
     % include "templates/identity-form.html"
     </fieldset>
     % endif
