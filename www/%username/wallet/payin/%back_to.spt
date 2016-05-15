@@ -34,7 +34,7 @@ title = _("Add money")
 
 % block panel_body
 
-    % if not participant.email
+    % if can_payin and not participant.email
         % if participant.join_time > utcnow() - constants.SESSION_TIMEOUT
             <p class="alert alert-success">{{ _(
                 "We've sent you an email, please open it now and click the confirmation "
