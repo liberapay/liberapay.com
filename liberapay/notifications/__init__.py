@@ -13,6 +13,8 @@ EVENTS = [
     Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
     Event('pledgee_joined', 16, _("When someone I pledge to joins Liberapay")),
     Event('team_invite', 32, _("When someone invites me to join a team")),
+    Event('payin_bankwire_failed', 64, _("When a bank wire transfer to my Liberapay wallet fails")),
+    Event('payin_bankwire_succeeded', 128, _("When a bank wire transfer to my Liberapay wallet succeeds")),
 ]
 del _
 

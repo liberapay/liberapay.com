@@ -2,9 +2,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from mock import patch
 
+from mangopaysdk.entities.payin import PayIn
 from mangopaysdk.entities.payout import PayOut
 
 from liberapay.billing.exchanges import record_exchange
+from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing.emails import EmailHarness
 from liberapay.testing.mangopay import MangopayHarness
 
@@ -34,7 +36,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             payout.AuthorId = homer.mangopay_user_id
             payout.Tag = str(e_id)
             Get.return_value = payout
-            r = self.callback(qs, csrf_token=False)
+            r = self.callback(qs)
             assert b'csrf_token' not in r.headers.cookie
             assert r.code == 200, r.text
             homer = homer.refetch()
@@ -48,4 +50,39 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
                 assert len(emails) == 1
                 assert emails[0]['to'][0] == 'homer <%s>' % homer.email
                 assert 'fail' in emails[0]['subject']
+            homer.update_status('active')  # reset for next loop run
+
+    @patch('mangopaysdk.tools.apipayins.ApiPayIns.Get')
+    def test_payin_bank_wire_callback(self, Get):
+        homer = self.homer
+        route = ExchangeRoute.insert(homer, 'mango-bw', 'x')
+        for status in ('failed', 'succeeded'):
+            status_up = status.upper()
+            error = 'FOO' if status == 'failed' else None
+            e_id = record_exchange(self.db, route, 11, 0, 0, homer, 'pre')
+            assert homer.balance == 0
+            homer.close(None)
+            assert homer.status == 'closed'
+            qs = "EventType=PAYIN_NORMAL_"+status_up+"&RessourceId=123456790"
+            payin = PayIn()
+            payin.Status = status_up
+            payin.ResultCode = '000001' if error else '000000'
+            payin.ResultMessage = error
+            payin.AuthorId = homer.mangopay_user_id
+            payin.PaymentType = 'BANK_WIRE'
+            payin.Tag = str(e_id)
+            Get.return_value = payin
+            r = self.callback(qs)
+            assert r.code == 200, r.text
+            homer = homer.refetch()
+            if status == 'succeeded':
+                assert homer.balance == 11
+                assert homer.status == 'active'
+            else:
+                assert homer.balance == 0
+                assert homer.status == 'closed'
+            emails = self.get_emails()
+            assert len(emails) == 1
+            assert emails[0]['to'][0] == 'homer <%s>' % homer.email
+            assert status[:4] in emails[0]['subject']
             homer.update_status('active')  # reset for next loop run

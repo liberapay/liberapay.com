@@ -21,4 +21,6 @@ class EmailHarness(Harness):
 
     def get_emails(self):
         Participant.dequeue_emails()
-        return [a[1] for a in self.mailer.call_args_list]
+        emails = [a[1] for a in self.mailer.call_args_list]
+        self.mailer.reset_mock()
+        return emails

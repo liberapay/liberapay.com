@@ -69,11 +69,11 @@ if request.method == 'POST':
 
 elif 'exchange_id' in request.qs:
     exchange, payin = get_exchange_payin(participant, request)
+    if exchange.status == 'succeeded':
+        response.redirect(participant.path('receipts/%s.html' % exchange.id))
 
-account = participant.get_mangopay_account()
 back_to = b64decode_s(request.path['back_to'], default=None)
-success = getattr(exchange, 'status', None) == 'succeeded'
-show_form = weekly > 0 and funded < 52 and not success and not payin
+show_form = weekly > 0 and funded < 52 and not payin
 
 if funded > 0 and user == participant:
     participant.mark_notifications_as_read('low_balance')
@@ -85,18 +85,11 @@ title = _("Add money")
 
 % block panel_body
 
-    % if exchange and exchange.status in ('succeeded', 'failed')
-        <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
-            _("{0} have been received by bank wire, {1} went to your liberapay wallet, {2} were paid in transaction fees.",
-              Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
-            _("The attempt to transfer {0} by bank wire has failed. Error message: {1}", Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
+    % if exchange and exchange.status == 'failed'
+        <div class="alert alert-danger">{{
+            _("The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}",
+              Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
         }}</div>
-        % if success
-        <a href="{{ participant.path('receipts/%s.html' % exchange.id) }}">{{ _("View Receipt") }}</a>
-        % endif
-        % if back_to
-            <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
-        % endif
     % endif
 
     % if not show_form and not payin
@@ -117,9 +110,8 @@ title = _("Add money")
                         funded) }}
         % endif
     </p>
-    % endif
 
-    % if payin
+    % elif payin
 
         % set pd = payin.PaymentDetails
         <p>{{ _(
@@ -191,6 +183,7 @@ title = _("Add money")
     <h3>{{ _("Identity") }}</h3>
 
     <fieldset id="identity">
+    % set account = None
     % include "templates/identity-form.html"
     </fieldset>
     % endif

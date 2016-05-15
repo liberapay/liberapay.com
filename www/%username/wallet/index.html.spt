@@ -80,12 +80,11 @@ else:
         </h3></th>
     </tr>
     <tr class="head">
-        <td colspan="3" class="outside">&larr; {{ _("Outside") }}</td>
+        <td colspan="2" class="outside">&larr; {{ _("Outside") }}</td>
         <td colspan="5" class="inside">{{ _("Inside Liberapay") }} &rarr;</td>
     </tr>
     <tr class="head">
         <td class="bank">{{ _("Bank") }}</td>
-        <td class="card">{{ _("Card") }}</td>
         <td class="fees">{{ _("Fees") }}</td>
         <td class="credits">{{ _("Credits") }}</td>
         <td class="debits">{{ _("Debits") }}</td>
@@ -96,7 +95,6 @@ else:
     % elif event['kind'] == 'credit'
     <tr>
         <td class="bank">{{ -event['amount'] }}</td>
-        <td class="card"></td>
         <td class="fees">{{ event['fee'] }}</td>
         <td class="credits"></td>
         <td class="debits">{{ -event['amount'] + event['fee'] }}</td>
@@ -111,8 +109,7 @@ else:
     </tr>
     % elif event['kind'] == 'charge'
     <tr>
-        <td class="bank"></td>
-        <td class="card">{{ event['amount'] + event['fee'] }}</td>
+        <td class="bank">{{ event['amount'] + event['fee'] }}</td>
         <td class="fees">{{ event['fee'] }}</td>
         <td class="credits">{{ event['amount'] }}</td>
         <td class="debits"></td>
@@ -131,7 +128,6 @@ else:
     % elif event['kind'] == 'transfer'
     <tr>
         <td class="bank"></td>
-        <td class="card"></td>
         <td class="fees"></td>
 
         % if event['tippee'] == participant.id
@@ -177,7 +173,6 @@ else:
     % elif event['kind'] == 'day-close'
     <tr>
         <td class="bank"></td>
-        <td class="card"></td>
         <td class="fees"></td>
         <td class="credits"></td>
         <td class="debits"></td>
