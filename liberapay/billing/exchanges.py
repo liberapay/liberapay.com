@@ -13,10 +13,17 @@ from mangopaysdk.entities.wallet import Wallet
 from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
 
-from liberapay.billing import mangoapi, PayInExecutionDetailsDirect, PayInPaymentDetailsCard, PayOutPaymentDetailsBankWire
+from liberapay.billing import (
+    mangoapi,
+    PayInExecutionDetailsDirect,
+    PayInPaymentDetailsCard, PayInPaymentDetailsBankWire,
+    PayOutPaymentDetailsBankWire,
+)
 from liberapay.constants import (
-    CHARGE_MIN, FEE_CHARGE_FIX, FEE_CHARGE_VAR,
-    FEE_CREDIT, FEE_CREDIT_OUTSIDE_SEPA, FEE_CREDIT_WARN, QUARANTINE, SEPA_ZONE,
+    D_CENT, D_ZERO,
+    PAYIN_CARD_MIN, FEE_PAYIN_CARD,
+    FEE_PAYIN_BANK_WIRE,
+    FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
     FEE_VAT,
 )
 from liberapay.exceptions import (
@@ -31,30 +38,45 @@ from liberapay.models.exchange_route import ExchangeRoute
 QUARANTINE = '%s days' % QUARANTINE.days
 
 
-def upcharge(amount):
+def upcharge(amount, fees, min_amount):
     """Given an amount, return a higher amount and the difference.
     """
     typecheck(amount, Decimal)
 
-    if amount < CHARGE_MIN:
-        amount = CHARGE_MIN
+    if amount < min_amount:
+        amount = min_amount
 
     # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
     # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
-    charge_amount = (amount + FEE_CHARGE_FIX) / (1 - FEE_CHARGE_VAR)
-    charge_amount = charge_amount.quantize(FEE_CHARGE_FIX, rounding=ROUND_UP)
+    charge_amount = (amount + fees.fix) / (1 - fees.var)
+    charge_amount = charge_amount.quantize(D_CENT, rounding=ROUND_UP)
     fee = charge_amount - amount
 
     # + VAT
-    vat = (fee * FEE_VAT).quantize(FEE_CHARGE_FIX, rounding=ROUND_UP)
+    vat = (fee * FEE_VAT).quantize(D_CENT, rounding=ROUND_UP)
     charge_amount += vat
     fee += vat
 
     return charge_amount, fee, vat
 
 
+upcharge_bank_wire = lambda amount: upcharge(amount, FEE_PAYIN_BANK_WIRE, D_ZERO)
+upcharge_card = lambda amount: upcharge(amount, FEE_PAYIN_CARD, PAYIN_CARD_MIN)
+
+
+def skim_amount(amount, fees):
+    """Given a nominal amount, compute the fees, taxes, and the actual amount.
+    """
+    fee = amount * fees.var + fees.fix
+    vat = fee * FEE_VAT
+    fee += vat
+    fee = fee.quantize(D_CENT, rounding=ROUND_UP)
+    vat = vat.quantize(D_CENT, rounding=ROUND_UP)
+    return amount - fee, fee, vat
+
+
 def skim_credit(amount, ba):
-    """Given an amount, return a lower amount and the difference.
+    """Given a payout amount, return a lower amount, the fee, and taxes.
 
     The returned amount can be negative, look out for that.
     """
@@ -67,12 +89,10 @@ def skim_credit(amount, ba):
         assert ba.Type == 'OTHER', ba.Type
         country = ba.Details.Country.upper()
     if country in SEPA_ZONE:
-        fee = FEE_CREDIT
+        fee = FEE_PAYOUT
     else:
-        fee = FEE_CREDIT_OUTSIDE_SEPA
-    vat = (fee * FEE_VAT).quantize(Decimal('0.01'), rounding=ROUND_UP)
-    fee += vat
-    return amount - fee, fee, vat
+        fee = FEE_PAYOUT_OUTSIDE_SEPA
+    return skim_amount(amount, fee)
 
 
 def repr_error(o):
@@ -127,7 +147,7 @@ def payout(db, participant, amount, ignore_high_fee=False):
     if credit_amount <= 0 and fee > 0:
         raise FeeExceedsAmount
     fee_percent = fee / amount
-    if fee_percent > FEE_CREDIT_WARN and not ignore_high_fee:
+    if fee_percent > FEE_PAYOUT_WARN and not ignore_high_fee:
         raise TransactionFeeTooHigh(fee_percent, fee, amount)
 
     # Try to dance with MangoPay
@@ -163,7 +183,7 @@ def charge(db, participant, amount, return_url):
     route = ExchangeRoute.from_network(participant, 'mango-cc')
     assert route
 
-    charge_amount, fee, vat = upcharge(amount)
+    charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee
 
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
@@ -191,6 +211,42 @@ def charge(db, participant, amount, return_url):
         raise Response(302, headers={'Location': payin.ExecutionDetails.SecureModeRedirectURL})
 
     return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+
+
+def payin_bank_wire(db, participant, debit_amount):
+    """Prepare to receive a bank wire payin.
+
+    The amount should be how much the user intends to send, not how much will
+    arrive in the wallet.
+    """
+
+    route = ExchangeRoute.from_network(participant, 'mango-bw')
+    if not route:
+        route = ExchangeRoute.insert(participant, 'mango-bw', 'x')
+
+    amount, fee, vat = skim_amount(debit_amount, FEE_PAYIN_BANK_WIRE)
+
+    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
+    payin = PayIn()
+    payin.AuthorId = participant.mangopay_user_id
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.ExecutionDetails = PayInExecutionDetailsDirect()
+    payin.PaymentDetails = PayInPaymentDetailsBankWire(
+        DeclaredDebitedFunds=Money(int(debit_amount * 100), 'EUR'),
+        DeclaredFees=Money(int(fee * 100), 'EUR'),
+    )
+    payin.Tag = str(e_id)
+    try:
+        test_hook()
+        payin = mangoapi.payIns.Create(payin)
+    except Exception as e:
+        error = repr_exception(e)
+        return None, record_exchange_result(db, e_id, 'failed', error, participant)
+
+    e = record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+    return payin, e
 
 
 def record_exchange(db, route, amount, fee, vat, participant, status, error=None):

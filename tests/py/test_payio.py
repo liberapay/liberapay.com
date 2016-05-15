@@ -8,17 +8,19 @@ import pytest
 
 from liberapay.billing import exchanges
 from liberapay.billing.exchanges import (
-    upcharge,
-    payout,
     charge,
+    payin_bank_wire,
+    payout,
     record_exchange,
     record_exchange_result,
     skim_credit,
     sync_with_mangopay,
     transfer,
+    upcharge_bank_wire,
+    upcharge_card,
 )
 from liberapay.billing.payday import Payday
-from liberapay.constants import CHARGE_MIN, CHARGE_TARGET
+from liberapay.constants import PAYIN_CARD_MIN, PAYIN_CARD_TARGET
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
     FeeExceedsAmount,
@@ -26,6 +28,14 @@ from liberapay.exceptions import (
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
 from liberapay.testing.mangopay import MangopayHarness
+
+
+def fail_payin(payin):
+    payin.ExecutionDetails.SecureModeRedirectURL = None
+    payin.ResultCode = '1'
+    payin.ResultMessage = 'oops'
+    payin.Status = 'FAILED'
+    return payin
 
 
 class TestPayouts(MangopayHarness):
@@ -102,12 +112,6 @@ class TestCharge(MangopayHarness):
 
     @mock.patch('mangopaysdk.tools.apipayins.ApiPayIns.Create')
     def test_charge_failure(self, Create):
-        def fail_payin(payin):
-            payin.ExecutionDetails.SecureModeRedirectURL = None
-            payin.ResultCode = '1'
-            payin.ResultMessage = 'oops'
-            payin.Status = 'FAILED'
-            return payin
         Create.side_effect = fail_payin
         exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
         error = "1: oops"
@@ -161,38 +165,82 @@ class TestCharge(MangopayHarness):
             charge(self.db, bob, D('10.00'), 'http://localhost/')
 
 
+class TestPayinBankWire(MangopayHarness):
+
+    def test_payin_bank_wire_creation(self):
+        path = '/janet/wallet/payin/bankwire/'
+        data = {'amount': str(upcharge_bank_wire(D('10.00'))[0])}
+
+        r = self.client.PxST(path, data, auth_as=self.janet)
+        assert r.code == 403  # rejected because janet has no donations set up
+
+        self.janet.set_tip_to(self.david, '10.00')
+        r = self.client.PxST(path, data, auth_as=self.janet)
+        assert r.code == 302, r.text
+        redir = r.headers['Location']
+        assert redir.startswith(path+'?exchange_id=')
+
+        r = self.client.GET(redir, auth_as=self.janet)
+        assert b'IBAN' in r.body, r.text
+
+        janet = self.janet.refetch()
+        assert janet.balance == 0
+
+    @mock.patch('liberapay.billing.exchanges.test_hook')
+    def test_payinbank_wire_exception_and_wallet_creation(self, test_hook):
+        test_hook.side_effect = Foobar
+        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
+        self.janet.set_attributes(mangopay_wallet_id=None)
+        exchange = payin_bank_wire(self.db, self.janet, D('50'))[1]
+        assert exchange.note == 'Foobar()'
+        assert exchange.status == 'failed'
+        janet = self.janet.refetch()
+        assert self.janet.balance == janet.balance == 0
+
+    @mock.patch('mangopaysdk.tools.apipayins.ApiPayIns.Create')
+    def test_payin_bank_wire_failure(self, Create):
+        Create.side_effect = fail_payin
+        exchange = payin_bank_wire(self.db, self.janet, D('1.00'))[1]
+        error = "1: oops"
+        assert exchange.note == error
+        assert exchange.amount
+        assert exchange.status == 'failed'
+        janet = self.janet.refetch()
+        assert self.janet.balance == janet.balance == 0
+
+
 class TestFees(MangopayHarness):
 
     def test_upcharge_basically_works(self):
-        actual = upcharge(D('20.00'))
+        actual = upcharge_card(D('20.00'))
         expected = (D('20.65'), D('0.65'), D('0.10'))
         assert actual == expected
 
     def test_upcharge_full_in_rounded_case(self):
-        actual = upcharge(D('5.00'))
-        expected = upcharge(CHARGE_MIN)
+        actual = upcharge_card(D('5.00'))
+        expected = upcharge_card(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_upcharge_at_min(self):
-        actual = upcharge(CHARGE_MIN)
+        actual = upcharge_card(PAYIN_CARD_MIN)
         expected = (D('15.54'), D('0.54'), D('0.08'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.035')  # less than 3.5% fee
 
     def test_upcharge_at_target(self):
-        actual = upcharge(CHARGE_TARGET)
+        actual = upcharge_card(PAYIN_CARD_TARGET)
         expected = (D('94.19'), D('2.19'), D('0.32'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.024')  # less than 2.4% fee
 
     def test_upcharge_at_one_cent(self):
-        actual = upcharge(D('0.01'))
-        expected = upcharge(CHARGE_MIN)
+        actual = upcharge_card(D('0.01'))
+        expected = upcharge_card(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_upcharge_at_min_minus_one_cent(self):
-        actual = upcharge(CHARGE_MIN - D('0.01'))
-        expected = upcharge(CHARGE_MIN)
+        actual = upcharge_card(PAYIN_CARD_MIN - D('0.01'))
+        expected = upcharge_card(PAYIN_CARD_MIN)
         assert actual == expected
 
     def test_skim_credit(self):
@@ -287,13 +335,13 @@ class TestSync(MangopayHarness):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             with self.assertRaises(Foobar):
-                charge(self.db, self.janet, CHARGE_MIN, 'http://localhost/')
+                charge(self.db, self.janet, PAYIN_CARD_MIN, 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'succeeded'
-        assert Participant.from_username('janet').balance == CHARGE_MIN
+        assert Participant.from_username('janet').balance == PAYIN_CARD_MIN
 
     def test_sync_with_mangopay_deletes_charges_that_didnt_happen(self):
         with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer \

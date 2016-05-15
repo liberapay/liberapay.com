@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 
 from aspen.utils import utc
-from collections import OrderedDict
+from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 import re
@@ -23,6 +23,9 @@ class CustomUndefined(StrictUndefined):
     __unicode__ = __str__
 
 
+Fees = namedtuple('Fees', ('var', 'fix'))
+
+
 _ = lambda a: a
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -33,12 +36,11 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 AVATAR_QUERY = '?s=160&default=retro'
 AVATAR_SOURCES = 'libravatar bitbucket facebook github google twitter'.split()
 
-BALANCE_MAX = Decimal("1000")
-
 BIRTHDAY = date(2015, 5, 22)
 
-CHARGE_MIN = Decimal("15.00")  # fee ≈ 3.5%
-CHARGE_TARGET = Decimal("92.00")  # fee ≈ 2.33%
+D_CENT = Decimal('0.01')
+D_UNIT = Decimal('1.00')
+D_ZERO = Decimal('0.00')
 
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
@@ -48,11 +50,11 @@ EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
 # https://www.mangopay.com/pricing/
-FEE_CHARGE_FIX = Decimal('0.18')  # 0.18 euros
-FEE_CHARGE_VAR = Decimal('0.018')  # 1.8%
-FEE_CREDIT = 0
-FEE_CREDIT_OUTSIDE_SEPA = Decimal("2.5")
-FEE_CREDIT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
+FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), Decimal(0))  # 0.5%
+FEE_PAYIN_CARD = Fees(Decimal('0.018'), Decimal('0.18'))  # 1.8% + €0.18
+FEE_PAYOUT = Fees(Decimal(0), Decimal(0))
+FEE_PAYOUT_OUTSIDE_SEPA = Fees(Decimal(0), Decimal('2.5'))
+FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 
 JINJA_ENV_COMMON = dict(
@@ -61,15 +63,21 @@ JINJA_ENV_COMMON = dict(
     #undefined=CustomUndefined,
 )
 
+# https://docs.mangopay.com/api-references/kyc-rules/
+KYC_PAYIN_YEARLY_THRESHOLD = Decimal('2500')
+KYC_PAYOUT_YEARLY_THRESHOLD = Decimal('1000')
+
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
 MAX_TIP = Decimal('100.00')
 MIN_TIP = Decimal('0.01')
 
-QUARANTINE = timedelta(weeks=4)
-
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
+
+PAYIN_BANK_WIRE_MIN = Decimal('2.00')
+PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
+PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
 
 PRIVACY_FIELDS = OrderedDict([
     ('hide_giving', _("Hide total giving from others.")),
@@ -77,6 +85,8 @@ PRIVACY_FIELDS = OrderedDict([
     ('hide_from_search', _("Hide myself from search results.")),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
+
+QUARANTINE = timedelta(weeks=4)
 
 SEPA_ZONE = set("""
     AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV

@@ -139,8 +139,8 @@ aspen.http.mapping.Mapping.pop = _pop
 
 if hasattr(aspen.Response, 'redirect'):
     raise Warning('aspen.Response.redirect() already exists')
-def _redirect(response, url):
-    response.code = 302
+def _redirect(response, url, code=302):
+    response.code = code
     response.headers['Location'] = url
     raise response
 aspen.Response.redirect = _redirect

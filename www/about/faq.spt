@@ -22,13 +22,9 @@ title = _("Frequently Asked Questions")
     {{ dt(_("Who can use Liberapay?"), 'who-can-use') }}
 
     <dd>{{ _(
-        "Donating requires a credit or debit card (Visa or MasterCard), "
-        "unfortunately it's not truly worldwide and may not work depending on "
-        "where you live. Withdrawing the money you receive is done by transfer "
-        "to your bank account, again this might not work depending on where "
-        "you live, but if that happens we'll try to find a solution. Please "
-        "note that banking fees can vary based on your country and the "
-        "currencies involved in the transaction."
+        "In theory, anyone who has a bank account. In practice, payments may not "
+        "work depending on where you live. Please contact us if you encounter any "
+        "problems."
     ) }}</dd>
 
 
@@ -65,14 +61,17 @@ title = _("Frequently Asked Questions")
     {{ dt(_("What are the payment processing fees?"), 'fees') }}
 
     <dd>{{ _(
-        "Adding money to Liberapay via credit/debit card (currently the only "
-        "supported payment method) incurs a fee of {0}% + {1}.",
-        constants.FEE_CHARGE_VAR * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_CHARGE_FIX * (constants.FEE_VAT + 1), 'EUR'),
+        "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
+        constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
+        Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
     ) + " " + _(
+        "Adding money to Liberapay via bank wire incurs a fee of {0}% from our "
+        "payment processor.",
+        constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100,
+    ) }}<br>{{ _(
         "Withdrawing money to a SEPA bank account is free, transfers to other "
         "countries cost {0} per transfer.",
-        Money(constants.FEE_CREDIT_OUTSIDE_SEPA * (constants.FEE_VAT + 1), 'EUR'),
+        Money(constants.FEE_PAYOUT_OUTSIDE_SEPA.fix * (constants.FEE_VAT + 1), 'EUR'),
     ) }}</dd>
 
 
@@ -82,13 +81,15 @@ title = _("Frequently Asked Questions")
     {{ _(
         "There are no restrictions on the total amount you can give or receive, "
         "but for legal reasons you will need to provide identity documents if "
-        "you give or receive a significant amount of money per year."
+        "you give more than {0}, or receive more than {1}, per year."
+        , Money(constants.KYC_PAYIN_YEARLY_THRESHOLD, 'EUR')
+        , Money(constants.KYC_PAYOUT_YEARLY_THRESHOLD, 'EUR')
     ) }}<br>
     {{ _(
         "The minimum you can give any user is {0}. To minimize processing fees, "
         "we charge your credit card at least {1} at a time (the money is stored "
         "in your Liberapay wallet and transferred to others during Payday)."
-        , Money(constants.MIN_TIP, 'EUR'), Money(constants.CHARGE_MIN, 'EUR')
+        , Money(constants.MIN_TIP, 'EUR'), Money(constants.PAYIN_CARD_MIN, 'EUR')
     ) }}<br>
     {{ _(
         "The maximum you can give any one user is {0} per week. This helps to "

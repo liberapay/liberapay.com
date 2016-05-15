@@ -9,6 +9,11 @@ from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import record_exchange_result, repr_error
 from liberapay.models.participant import Participant
 
+EVENT_TYPES = {
+    'PAYIN_NORMAL': mangoapi.payIns,
+    'PAYOUT_NORMAL': mangoapi.payOuts,
+}
+
 [---]
 
 try:
@@ -17,22 +22,34 @@ except ValueError:
     raise Response(400, "bad EventType")
 RessourceId = request.qs['RessourceId']
 
-if event == 'PAYOUT_NORMAL':
-    payout = mangoapi.payOuts.Get(RessourceId)
-    if payout.Status != status:
+cls = EVENT_TYPES.get(event)
+
+if cls:
+    # Check stuff
+    payio = cls.Get(RessourceId)
+    if payio.Status != status:
         raise Response(400, "status mismatch")
     status = status.lower()
-    e_id = payout.Tag
+    e_id = payio.Tag
     e_status = website.db.one("SELECT status FROM exchanges WHERE id = %s", (e_id,))
     if e_status == status:
         raise Response(200, "already done")
-    error = repr_error(payout)
-    p = Participant._from_thing("mangopay_user_id", payout.AuthorId)
+
+    # Update the DB
+    error = repr_error(payio)
+    p = Participant._from_thing("mangopay_user_id", payio.AuthorId)
     if status == 'failed' and p.status == 'closed':
         p.update_status('active')
     record_exchange_result(website.db, e_id, status, error, p)
-    if status != 'succeeded':
-        e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
+
+    # Notify the user
+    e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
+    if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
+        p.notify('payin_bankwire_'+status, exchange=e._asdict())
+    elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
         p.notify('withdrawal_'+status, exchange=e._asdict())
+
+else:
+    raise Response(400, "unknown event type")
 
 [---] text/plain

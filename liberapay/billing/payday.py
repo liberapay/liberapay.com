@@ -644,9 +644,9 @@ def main():
     try:
         sync_with_mangopay(website.db)
         Payday.start().run(log_dir, keep_log)
-    except KeyboardInterrupt:
+    except KeyboardInterrupt:  # pragma: no cover
         pass
-    except:
+    except:  # pragma: no cover
         import traceback
         traceback.print_exc()
 

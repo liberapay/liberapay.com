@@ -1,0 +1,235 @@
+# coding: utf8
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from decimal import Decimal as D, InvalidOperation
+
+from aspen import json, Response
+
+from liberapay.billing import mangoapi
+from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
+from liberapay.utils import b64decode_s, get_participant
+
+
+def get_exchange_payin(participant, request):
+    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
+                              (request.qs['exchange_id'], participant.id))
+    if not exchange:
+        raise Response(403)
+    if 'payin_id' in request.qs:
+        payin = mangoapi.payIns.Get(request.qs['payin_id'])
+        if payin.Tag != str(exchange.id):
+            raise Response(403)
+    else:
+        payin = None
+    return exchange, payin
+
+[---]
+
+participant = get_participant(state, restrict=True)
+
+if request.method == 'POST' and request.body.get('action') == 'email':
+    exchange, payin = get_exchange_payin(participant, request)
+    participant.send_email(
+        'payin_bankwire_created',
+        exchange=exchange._asdict(), payin=payin,
+    )
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        raise Response(200, json.dumps({'msg': _("The email has been sent.")}))
+    else:
+        response.redirect(request.line.uri)
+
+exchange, payin = None, None
+
+funded = float('inf')
+donations = participant.get_giving_for_profile()[1]
+weekly = donations - participant.receiving
+if weekly > 0:
+    funded = participant.balance // weekly
+    min_weeks = max(constants.PAYIN_BANK_WIRE_MIN // weekly, 1)
+    max_weeks = min(52, constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly)
+    weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
+    weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
+
+if request.method == 'POST':
+    if weekly <= 0 or funded >= 52:
+        raise Response(403, _(
+            "Why are you trying to put more money into your wallet? "
+            "Please contact support@liberapay.com if you have a legitimate reason."
+        ))
+
+    try:
+        amount = D(request.body['amount'])
+    except (InvalidOperation, ValueError):
+        raise Response(400, "bad amount")
+    payin, exchange = payin_bank_wire(website.db, participant, amount)
+    redir = request.path.raw+'?exchange_id=%s' % exchange.id
+    if payin and exchange.status == 'created':
+        redir += '&payin_id=%s' % payin.Id
+    response.redirect(redir)
+
+elif 'exchange_id' in request.qs:
+    exchange, payin = get_exchange_payin(participant, request)
+
+account = participant.get_mangopay_account()
+back_to = b64decode_s(request.path['back_to'], default=None)
+success = getattr(exchange, 'status', None) == 'succeeded'
+show_form = weekly > 0 and funded < 52 and not success and not payin
+
+if funded > 0 and user == participant:
+    participant.mark_notifications_as_read('low_balance')
+
+title = _("Add money")
+
+[---] text/html
+% extends "templates/panel.html"
+
+% block panel_body
+
+    % if exchange and exchange.status in ('succeeded', 'failed')
+        <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
+            _("{0} have been received by bank wire, {1} went to your liberapay wallet, {2} were paid in transaction fees.",
+              Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
+            _("The attempt to transfer {0} by bank wire has failed. Error message: {1}", Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
+        }}</div>
+        % if success
+        <a href="{{ participant.path('receipts/%s.html' % exchange.id) }}">{{ _("View Receipt") }}</a>
+        % endif
+        % if back_to
+            <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
+        % endif
+    % endif
+
+    % if not show_form and not payin
+    <p>
+        % if donations == 0
+            {{ _(
+                "You haven't set up any donations yet, once you do you'll be "
+                "prompted to add money to your account."
+            ) }}
+            </p><p>
+            % from "templates/buttons.html" import find_donees with context
+            {{ find_donees() }}
+        % elif weekly <= 0
+            {{ _("Your donations are funded by your income.") }}
+        % else
+            {{ ngettext("Your donations are only funded for another week.",
+                        "Your donations are funded for another {n} weeks.",
+                        funded) }}
+        % endif
+    </p>
+    % endif
+
+    % if payin
+
+        % set pd = payin.PaymentDetails
+        <p>{{ _(
+            "We are ready to receive the funds. Please send exactly {0} to the "
+            "following account using the reference code below so we'll know the "
+            "money came from you:",
+            Money(exchange.amount + exchange.fee, 'EUR')
+        ) }}</p>
+        <dl>
+            <dt>{{ _("IBAN (International Bank Account Number)") }}</dt>
+            <dd>{{ pd.BankAccount.Details.IBAN }}</dd>
+            <dt>{{ _("BIC (Bank Identifier Code)") }}</dt>
+            <dd>{{ pd.BankAccount.Details.BIC }}</dd>
+            <dt>{{ _("Wire Reference Code") }}</dt>
+            <dd>{{ pd.WireReference }}</dd>
+            <br>
+            <dt>{{ _("Bank Account Owner Name") }}</dt>
+            <dd>{{ pd.BankAccount.OwnerName }}</dd>
+            <dt>{{ _("Bank Account Owner Address") }}</dt>
+            <dd>{{ pd.BankAccount.OwnerAddress.AddressLine1 }},
+                {{ pd.BankAccount.OwnerAddress.PostalCode }}
+                {{ pd.BankAccount.OwnerAddress.City }},
+                {{ pd.BankAccount.OwnerAddress.Country }}</dd>
+        </dl>
+
+        % if back_to
+            <a href="{{ back_to }}" class="btn btn-default pull-right">{{ _("Go back") }}</a>
+        % endif
+
+        <form action="" class="js-submit" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="action" value="email" />
+            <button class="btn btn-primary">{{ _("Email me this information") }}</button>
+        </form>
+
+    % elif show_form
+    % if participant.email
+    <form id="payin" action="javascript:" method="POST"
+          data-msg-loading="{{ _('Request in progress, please wait…') }}">
+
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+
+    <p>{{ _(
+        "Adding money to Liberapay via bank wire incurs a fee of {0}% from our "
+        "payment processor.",
+        constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100,
+    ) }}</p>
+
+    <h3>{{ _("Amount") }}</h3>
+
+    <fieldset id="amount" class="form-inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <select class="form-control" name="amount">
+        % for weeks in weeks_list
+            % set amount = weekly * weeks
+            % set charge_amount, fees, vat = upcharge_bank_wire(amount)
+            <option value="{{ charge_amount }}">{{ _(
+                "{0} ({2}% fee included)",
+                Money(charge_amount, 'EUR'),
+                Money(amount, 'EUR'),
+                (fees / charge_amount * 100).quantize(constants.D_CENT),
+            ) }}</option>
+        % endfor
+        </select>
+    </fieldset>
+
+
+    % if not participant.mangopay_user_id
+    <h3>{{ _("Identity") }}</h3>
+
+    <fieldset id="identity">
+    % include "templates/identity-form.html"
+    </fieldset>
+    % endif
+
+    <br>
+    <button class="btn btn-success">{{ _("Go") }}</button>
+
+    % if back_to
+        <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
+    % endif
+
+    </form>
+
+    % else
+    <p class="alert alert-warning">{{
+        _("Please {0}verify your email address{1} then reload this page.",
+          '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
+          '</a>'|safe)
+    }}</p>
+    % endif
+    % endif
+
+% endblock
+
+% block under_panel
+% if show_form
+<p class="alert alert-info">
+    <a href="https://www.mangopay.com/legal-notices/">
+        <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" />
+    </a>
+</p>
+% endif
+% endblock
+
+% block scripts
+{{ super() }}
+<script>
+    $(function() {
+        Liberapay.payments.init();
+    });
+</script>
+% endblock

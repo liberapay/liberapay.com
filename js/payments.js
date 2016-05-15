@@ -29,6 +29,7 @@ Liberapay.payments.init = function() {
         $($btn.data('modify')).removeClass('hidden').prop('disabled', false);
         $btn.parent().addClass('hidden');
     });
+    $('form#payin, form#payout').submit(Liberapay.payments.submit);
 }
 
 Liberapay.payments.deleteRoute = function(e) {
@@ -128,7 +129,6 @@ Liberapay.payments.ba.init = function() {
         $($(e.target).attr('href')).prop('disabled', false);
         $($(e.relatedTarget).attr('href')).prop('disabled', true);
     });
-    $('form#payout').submit(Liberapay.payments.submit);
 };
 
 Liberapay.payments.ba.submit = function () {
@@ -188,7 +188,6 @@ Liberapay.payments.cc.init = function() {
         $('#expiration_date'),
         $('#cvv')
     );
-    $('form#payin').submit(Liberapay.payments.submit);
 };
 
 Liberapay.payments.cc.onError = function(response) {
