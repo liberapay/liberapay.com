@@ -50,7 +50,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         alice.set_tip_to(team2, '0.49')
         bob.set_tip_to(alice, '5.00')
         team.add_member(bob)
-        team.set_take_for(bob, D('1.00'), bob)
+        team.set_take_for(bob, D('1.00'), team)
         bob.set_tip_to(dana, '2.00')  # funded by bob's take
         bob.set_tip_to(emma, '7.00')  # not funded, insufficient receiving
         carl.set_tip_to(dana, '2.08')  # not funded, insufficient balance
@@ -281,16 +281,16 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', kind='group')
         alice = self.make_participant('alice')
-        a_team.set_take_for(alice, D('1.00'), alice)
+        a_team.set_take_for(alice, D('1.00'), a_team)
         bob = self.make_participant('bob')
-        a_team.set_take_for(bob, D('0.01'), bob)
+        a_team.set_take_for(bob, D('0.01'), a_team)
         charlie = self.make_participant('charlie', balance=1000)
         charlie.set_tip_to(a_team, D('1.01'))
 
         payday = Payday.start()
 
         # Test that payday ignores takes set after it started
-        a_team.set_take_for(alice, D('2.00'), alice)
+        a_team.set_take_for(alice, D('2.00'), a_team)
 
         # Run the transfer multiple times to make sure we ignore takes that
         # have already been processed
@@ -315,9 +315,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
-        team.set_take_for(alice, D('1.00'), alice)
+        team.set_take_for(alice, D('1.00'), team)
         bob = self.make_participant('bob')
-        team.set_take_for(bob, D('1.00'), bob)
+        team.set_take_for(bob, D('1.00'), team)
         charlie = self.make_participant('charlie', balance=1000)
         charlie.set_tip_to(team, D('0.26'))
 
@@ -341,9 +341,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
-        team.set_take_for(alice, D('0.79'), alice)
+        team.set_take_for(alice, D('0.79'), team)
         bob = self.make_participant('bob')
-        team.set_take_for(bob, D('0.21'), bob)
+        team.set_take_for(bob, D('0.21'), team)
         charlie = self.make_participant('charlie', balance=10)
         charlie.set_tip_to(team, D('5.00'))
         dan = self.make_participant('dan', balance=10)
@@ -366,10 +366,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', balance=8)
         alice.set_tip_to(team, D('2.00'))
-        team.set_take_for(alice, D('0.25'), alice)
+        team.set_take_for(alice, D('0.25'), team)
         bob = self.make_participant('bob', balance=10)
         bob.set_tip_to(team, D('2.00'))
-        team.set_take_for(bob, D('0.75'), bob)
+        team.set_take_for(bob, D('0.75'), team)
 
         Payday.start().run()
 
@@ -387,7 +387,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         alice = self.make_participant('alice')
         alice.set_tip_to(team, D('1.00'))  # unfunded tip
         bob = self.make_participant('bob')
-        team.set_take_for(bob, D('1.00'), bob)
+        team.set_take_for(bob, D('1.00'), team)
 
         Payday.start().run()
 

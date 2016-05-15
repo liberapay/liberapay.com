@@ -21,7 +21,7 @@ class Tests(Harness):
         return team
 
     def take_last_week(self, team, member, amount, actual_amount=None):
-        team.set_take_for(member, amount, member, check_max=False)
+        team.set_take_for(member, amount, team, check_max=False)
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
         actual_amount = amount if actual_amount is None else actual_amount
         self.db.run("""

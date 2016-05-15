@@ -54,7 +54,7 @@ class TestHistory(FakeTransfersHarness):
         david = self.make_participant('david')
         self.make_exchange('mango-cc', 10000, 0, david)
         david.set_tip_to(team, Decimal('1.00'))
-        team.set_take_for(bob, Decimal('1.00'), bob)
+        team.set_take_for(bob, Decimal('1.00'), team)
         alice.set_tip_to(bob, Decimal('5.00'))
 
         assert bob.balance == 0
