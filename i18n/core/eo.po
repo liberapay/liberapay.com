@@ -94,6 +94,48 @@ msgstr ""
 msgid "Please note that the link is only valid for {0}."
 msgstr ""
 
+msgid "Bank wire to your Liberapay wallet"
+msgstr ""
+
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr ""
+
+msgid "IBAN (International Bank Account Number)"
+msgstr ""
+
+msgid "BIC (Bank Identifier Code)"
+msgstr ""
+
+msgid "Wire Reference Code"
+msgstr ""
+
+msgid "Bank Account Owner Name"
+msgstr ""
+
+msgid "Bank Account Owner Address"
+msgstr ""
+
+msgid "The bank wire to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr ""
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr ""
+
+msgid "Try again"
+msgstr ""
+
+msgid "The bank wire to your Liberapay wallet has succeeded"
+msgstr ""
+
+msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} you sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
+msgstr ""
+
+msgid "View receipt"
+msgstr ""
+
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} de {1} ĵus membriĝis Liberapay!"
 
@@ -146,9 +188,6 @@ msgid "Withdrawal failure"
 msgstr ""
 
 msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
-msgstr ""
-
-msgid "Try again"
 msgstr ""
 
 msgid "You can try again: {0}"
@@ -784,7 +823,7 @@ msgstr ""
 msgid "Total giving amount: you'll choose how much you want to give per week, and we'll compute each of your donations accordingly."
 msgstr ""
 
-msgid "Alternative payment methods: SEPA direct debits, and manual bank transfers."
+msgid "Additional payment methods: SEPA direct debits, more types of cards, other direct debit schemes."
 msgstr ""
 
 msgid "and more…"
@@ -1388,19 +1427,10 @@ msgstr ""
 msgid "No transactions to show."
 msgstr ""
 
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
+msgid "We've sent you an email, please open it now and click the confirmation link inside, then come back to this page and carry on."
 msgstr ""
 
-msgid "Request in progress, please wait…"
-msgstr ""
-
-msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
-
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr ""
-
-msgid "View Receipt"
+msgid "Please {0}verify your email address{1}, then come back to this page and carry on."
 msgstr ""
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
@@ -1409,20 +1439,75 @@ msgstr ""
 msgid "Your donations are funded by your income."
 msgstr ""
 
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Credit Card"
+msgstr ""
+
+msgid "Easy and instantaneous"
+msgstr ""
+
+msgid "Fees: {0}% + {1}"
+msgstr ""
+
+msgid "Bank Wire"
+msgstr ""
+
+msgid "To a Euro account"
+msgstr ""
+
+msgid "Cheaper but cumbersome"
+msgstr ""
+
+msgid "Fee: {0}%"
+msgstr ""
+
 msgid "Go back"
 msgstr ""
 
-msgid "Adding money to Liberapay via credit/debit card (currently the only supported payment method) incurs a fee of {0}% + {1}."
+msgid "The email has been sent."
+msgstr ""
+
+msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
+msgstr ""
+
+msgid "{0} have been received by bank wire, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+msgid "The attempt to transfer {0} by bank wire has failed. Error message: {1}"
+msgstr ""
+
+msgid "View Receipt"
+msgstr ""
+
+msgid "Email me this information"
+msgstr ""
+
+msgid "Request in progress, please wait…"
+msgstr ""
+
+#, python-format
+msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr ""
 
 #, python-format
 msgid "{0} ({2}% fee included)"
 msgstr ""
 
+msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
+msgstr ""
+
+msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
+msgstr ""
+
 msgid "Credit card"
 msgstr ""
 
-msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
+msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
 msgstr ""
 
 msgid "Credit Card Number"
@@ -1506,9 +1591,6 @@ msgstr ""
 msgid "Country"
 msgstr "Lando"
 
-msgid "BIC (Bank Identifier Code)"
-msgstr ""
-
 msgid "International"
 msgstr ""
 
@@ -1522,9 +1604,6 @@ msgid "UK"
 msgstr ""
 
 msgid "Other"
-msgstr ""
-
-msgid "IBAN (International Bank Account Number)"
 msgstr ""
 
 msgid "This IBAN is invalid."
@@ -1632,7 +1711,7 @@ msgstr ""
 msgid "Who can use Liberapay?"
 msgstr ""
 
-msgid "Donating requires a credit or debit card (Visa or MasterCard), unfortunately it's not truly worldwide and may not work depending on where you live. Withdrawing the money you receive is done by transfer to your bank account, again this might not work depending on where you live, but if that happens we'll try to find a solution. Please note that banking fees can vary based on your country and the currencies involved in the transaction."
+msgid "In theory, anyone who has a bank account. In practice, payments may not work depending on where you live. Please contact us if you encounter any problems."
 msgstr ""
 
 msgid "Can I make a one-time donation?"
@@ -1662,7 +1741,7 @@ msgstr ""
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr ""
 
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give or receive a significant amount of money per year."
+msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
 msgstr ""
 
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."

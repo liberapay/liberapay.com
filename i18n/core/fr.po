@@ -95,6 +95,48 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Ne tardez pas, le lien n'est valide que pendant {0}."
 
+msgid "Bank wire to your Liberapay wallet"
+msgstr ""
+
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr ""
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "Numéro de compte (IBAN: International Bank Account Number)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "Code de banque (BIC: Bank Identifier Code)"
+
+msgid "Wire Reference Code"
+msgstr ""
+
+msgid "Bank Account Owner Name"
+msgstr ""
+
+msgid "Bank Account Owner Address"
+msgstr ""
+
+msgid "The bank wire to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr ""
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr ""
+
+msgid "Try again"
+msgstr "Essayez à nouveau"
+
+msgid "The bank wire to your Liberapay wallet has succeeded"
+msgstr ""
+
+msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} you sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
+msgstr ""
+
+msgid "View receipt"
+msgstr ""
+
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} ({1}) s'est inscrit sur Liberapay !"
 
@@ -148,9 +190,6 @@ msgstr "Échec du retrait"
 
 msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
 msgstr "Nous avons essayé de transférer {0} de votre porte-monnaie Liberapay à votre compte bancaire, mais le transfert a échoué avec ce message :"
-
-msgid "Try again"
-msgstr "Essayez à nouveau"
 
 msgid "You can try again: {0}"
 msgstr "Vous pouvez essayer à nouveau : {0}"
@@ -786,8 +825,8 @@ msgstr "La communication entre donateurs et bénéficiaires, à travers des rapp
 msgid "Total giving amount: you'll choose how much you want to give per week, and we'll compute each of your donations accordingly."
 msgstr "Montant global de dons : vous choisirez combien vous voulez donner par semaine, et nous calculerons chacun de vos dons en conséquence."
 
-msgid "Alternative payment methods: SEPA direct debits, and manual bank transfers."
-msgstr "Des méthodes de paiement alternatives : prélèvements SEPA, et virements bancaires manuels."
+msgid "Additional payment methods: SEPA direct debits, more types of cards, other direct debit schemes."
+msgstr ""
 
 msgid "and more…"
 msgstr "et plus encore…"
@@ -1390,20 +1429,11 @@ msgstr "don à {0}"
 msgid "No transactions to show."
 msgstr "Aucune transaction à afficher."
 
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Pourquoi essayez-vous d'ajouter encore de l'argent à votre portefeuille ? Veuillez nous contacter sur support@liberapay.com si vous avez une bonne raison."
+msgid "We've sent you an email, please open it now and click the confirmation link inside, then come back to this page and carry on."
+msgstr ""
 
-msgid "Request in progress, please wait…"
-msgstr "Requête en cours, patience…"
-
-msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
-msgstr "Nous avons débité {0} sur votre carte bancaire, {1} sont arrivés dans votre compte Liberapay, {2} sont partis en frais de transaction."
-
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Nous n'avons pas réussi à débiter {0} sur votre carte bancaire. Message d'erreur : {1}"
-
-msgid "View Receipt"
-msgstr "Voir le reçu"
+msgid "Please {0}verify your email address{1}, then come back to this page and carry on."
+msgstr ""
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Vous n'avez mis en place aucun don, quand vous l'aurez fait il vous sera demandé d'ajouter de l'argent à votre compte."
@@ -1411,21 +1441,76 @@ msgstr "Vous n'avez mis en place aucun don, quand vous l'aurez fait il vous sera
 msgid "Your donations are funded by your income."
 msgstr "Vos dons sont financés par vos revenus."
 
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Credit Card"
+msgstr ""
+
+msgid "Easy and instantaneous"
+msgstr ""
+
+msgid "Fees: {0}% + {1}"
+msgstr ""
+
+msgid "Bank Wire"
+msgstr ""
+
+msgid "To a Euro account"
+msgstr ""
+
+msgid "Cheaper but cumbersome"
+msgstr ""
+
+msgid "Fee: {0}%"
+msgstr ""
+
 msgid "Go back"
 msgstr "Retour"
 
-msgid "Adding money to Liberapay via credit/debit card (currently the only supported payment method) incurs a fee of {0}% + {1}."
-msgstr "Ajouter de l'argent par carte bancaire (actuellement la seule méthode de paiement gérée) entraîne des frais de {0} % + {1}."
+msgid "The email has been sent."
+msgstr ""
+
+msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
+msgstr "Pourquoi essayez-vous d'ajouter encore de l'argent à votre portefeuille ? Veuillez nous contacter sur support@liberapay.com si vous avez une bonne raison."
+
+msgid "{0} have been received by bank wire, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+msgid "The attempt to transfer {0} by bank wire has failed. Error message: {1}"
+msgstr ""
+
+msgid "View Receipt"
+msgstr "Voir le reçu"
+
+msgid "Email me this information"
+msgstr ""
+
+msgid "Request in progress, please wait…"
+msgstr "Requête en cours, patience…"
+
+#, python-format
+msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
+msgstr ""
 
 #, python-format
 msgid "{0} ({2}% fee included)"
 msgstr "{0} ({2}% de frais inclus)"
 
+msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr "Nous avons débité {0} sur votre carte bancaire, {1} sont arrivés dans votre compte Liberapay, {2} sont partis en frais de transaction."
+
+msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
+msgstr "Nous n'avons pas réussi à débiter {0} sur votre carte bancaire. Message d'erreur : {1}"
+
+msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
+msgstr ""
+
 msgid "Credit card"
 msgstr "Carte de crédit"
 
-msgid "Your browser is not letting us send your credit card data to our payment processor. Please make sure the request is not being blocked by an extension like NoScript."
-msgstr "Votre navigateur ne nous autorise pas à envoyer les informations de votre carte bancaire à notre gestionnaire de paiements. Vérifiez que cette requête n'est pas bloquée par une extension comme NoScript."
+msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
+msgstr ""
 
 msgid "Credit Card Number"
 msgstr "Numéro de carte"
@@ -1508,9 +1593,6 @@ msgstr "Code de banque (Sort Code)"
 msgid "Country"
 msgstr "Pays"
 
-msgid "BIC (Bank Identifier Code)"
-msgstr "Code de banque (BIC: Bank Identifier Code)"
-
 msgid "International"
 msgstr "International"
 
@@ -1525,9 +1607,6 @@ msgstr "Grande-Bretagne"
 
 msgid "Other"
 msgstr "Autre"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "Numéro de compte (IBAN: International Bank Account Number)"
 
 msgid "This IBAN is invalid."
 msgstr "Cet IBAN est invalide."
@@ -1634,8 +1713,8 @@ msgstr "Liberapay se finance {0}sur Liberapay{1}."
 msgid "Who can use Liberapay?"
 msgstr "Qui peut utiliser Liberapay ?"
 
-msgid "Donating requires a credit or debit card (Visa or MasterCard), unfortunately it's not truly worldwide and may not work depending on where you live. Withdrawing the money you receive is done by transfer to your bank account, again this might not work depending on where you live, but if that happens we'll try to find a solution. Please note that banking fees can vary based on your country and the currencies involved in the transaction."
-msgstr "Les dons se font par carte bancaire (CB, Visa ou MasterCard), malheureusement le système n'est pas vraiment mondial et le paiement peut être refusé selon où vous habitez. Retirer l'argent qui vous a été donné se fait par transfert vers votre compte bancaire, là encore le paiement peut être refusé selon où vous vivez, mais si cela arrive nous essayerons de trouver une solution avec vous. Veuillez noter que les frais bancaires peuvent varier en fonction de votre pays et des devises impliquées dans la transaction."
+msgid "In theory, anyone who has a bank account. In practice, payments may not work depending on where you live. Please contact us if you encounter any problems."
+msgstr ""
 
 msgid "Can I make a one-time donation?"
 msgstr "Puis-je faire un don non récurrent ?"
@@ -1664,8 +1743,8 @@ msgstr "Quels sont les frais de paiement ?"
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Y a-t-il un montant minimum ou maximum que je peux donner ou recevoir ?"
 
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give or receive a significant amount of money per year."
-msgstr "Il n'y a pas de restriction au montant que vous pouvez donner ou recevoir. Cependant, pour des raisons légales, vous devrez fournir une pièce d'identité si vous donnez ou recevez une somme annuelle importante."
+msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
+msgstr ""
 
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
 msgstr "Le minimum que vous pouvez donner à un utilisateur est {0}. Afin de minimiser les frais de transaction, chaque débit que nous effectuons sur votre carte bancaire est d'au moins {1} (les fonds sont stockés dans votre portefeuille Liberapay et transférés aux bénéficiaires de vos dons durant chaque Payday)."
