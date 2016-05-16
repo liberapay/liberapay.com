@@ -10,6 +10,7 @@ from six.moves import input
 from postgres import Postgres
 from postgres.cursors import SimpleCursorBase
 from psycopg2 import IntegrityError, ProgrammingError
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 
 @contextmanager
@@ -134,13 +135,21 @@ def run_migrations(db):
         if v >= n:
             continue
         print('Running migration #%s...' % n)
-        try:
-            db.run(sql)
-        except (IntegrityError, ProgrammingError):
-            traceback.print_exc()
-            r = input('Have you already run this migration? (y/N) ')
-            if r.lower() != 'y':
-                sys.exit(1)
+        with db.get_connection() as conn:
+            # Some schema updates can't run inside a transaction, so we run the
+            # migration outside of any transaction
+            old_isolation_level = conn.isolation_level
+            conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+            try:
+                cursor = conn.cursor()
+                cursor.execute(sql)
+            except (IntegrityError, ProgrammingError):
+                traceback.print_exc()
+                r = input('Have you already run this migration? (y/N) ')
+                if r.lower() != 'y':
+                    sys.exit(1)
+            finally:
+                conn.set_isolation_level(old_isolation_level)
         db.run("""
             UPDATE db_meta
                SET value = '%s'::jsonb
