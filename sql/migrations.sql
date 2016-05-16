@@ -96,3 +96,6 @@ CREATE OR REPLACE VIEW sponsors AS
 
 -- migration #10
 ALTER TABLE notification_queue ADD COLUMN is_new boolean NOT NULL DEFAULT TRUE;
+
+-- migration #11
+ALTER TYPE payment_net ADD VALUE 'mango-bw' BEFORE 'mango-cc';
