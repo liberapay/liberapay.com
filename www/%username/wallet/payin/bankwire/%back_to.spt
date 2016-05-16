@@ -7,7 +7,12 @@ from aspen import json, Response
 
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
+from liberapay.notifications import EVENTS
 from liberapay.utils import b64decode_s, get_participant
+
+
+NOTIF_BIT_FAIL = EVENTS['payin_bankwire_failed'].bit
+NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
 
 
 def get_exchange_payin(participant, request):
@@ -137,15 +142,30 @@ title = _("Add money")
                 {{ pd.BankAccount.OwnerAddress.Country }}</dd>
         </dl>
 
-        % if back_to
-            <a href="{{ back_to }}" class="btn btn-default pull-right">{{ _("Go back") }}</a>
-        % endif
-
         <form action="" class="js-submit" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="action" value="email" />
             <button class="btn btn-primary">{{ _("Email me this information") }}</button>
         </form>
+
+        <br>
+        % set notif_fail = NOTIF_BIT_FAIL.__and__(participant.email_notif_bits)
+        % set notif_succ = NOTIF_BIT_SUCC.__and__(participant.email_notif_bits)
+        % if notif_fail and notif_succ
+            <p class="alert alert-info">{{ _(
+                "We will send you an email once we know whether your payment has succeeded or failed."
+            ) }}</p>
+        % else
+            <p class="alert alert-warning">{{ _(
+                "You have disabled some or all email notifications about bank wires."
+            ) }}</p>
+            <a class="btn btn-primary" href="{{ participant.path('emails/') }}"
+               >{{ _("Change your email settings") }}</a>
+        % endif
+
+        % if back_to
+            <a href="{{ back_to }}" class="btn btn-default pull-right">{{ _("Go back") }}</a>
+        % endif
 
     % elif show_form
     % if participant.email
