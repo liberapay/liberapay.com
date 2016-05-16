@@ -14,6 +14,9 @@ from . import constants
 def canonize(request, website):
     """Enforce a certain scheme and hostname.
     """
+    if request.path.raw.startswith('/callbacks/'):
+        # Don't redirect callbacks
+        return
     scheme = request.headers.get('X-Forwarded-Proto', 'http')
     host = request.headers['Host']
     canonical_host = website.canonical_host
