@@ -74,6 +74,18 @@ class Tests(Harness):
         is_member = self.bob.member_of(b_team)
         assert is_member is False
 
+    def test_members_can_take_from_team(self):
+        r = self.client.PxST('/A-Team/income/take', {'take': '1'}, auth_as=self.alice)
+        assert r.code == 302
+        take = self.a_team.get_take_for(self.alice)
+        assert take == 1
+
+    def test_non_members_cant_take_from_team(self):
+        r = self.client.PxST('/A-Team/income/take', {'take': '2'}, auth_as=self.bob)
+        assert r.code == 403
+        take = self.a_team.get_take_for(self.bob)
+        assert take is None
+
 
 class Tests2(Harness):
 
