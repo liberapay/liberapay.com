@@ -2,6 +2,10 @@ from __future__ import print_function, unicode_literals
 
 from mimetypes import guess_type
 
+from six.moves.urllib.parse import urlsplit, urlunsplit
+
+from aspen.http.request import Line
+
 from . import constants
 
 
@@ -16,6 +20,14 @@ def canonize(request, website):
     """
     if request.path.raw.startswith('/callbacks/'):
         # Don't redirect callbacks
+        if request.path.raw[-1] == '/':
+            # Remove trailing slash
+            l = request.line
+            scheme, netloc, path, query, fragment = urlsplit(l.uri)
+            assert path[-1] == '/'  # sanity check
+            path = path[:-1]
+            new_uri = urlunsplit((scheme, netloc, path, query, fragment))
+            request.line = Line(l.method.raw, new_uri, l.version.raw)
         return
     scheme = request.headers.get('X-Forwarded-Proto', 'http')
     host = request.headers['Host']
