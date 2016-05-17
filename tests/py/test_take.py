@@ -75,6 +75,13 @@ class Tests(Harness):
         actual = team.set_take_for(alice, D('42.00'), team)
         assert actual == 1
 
+    def test_can_take_leftover(self):
+        team = self.make_team()
+        alice = self.make_participant('alice')
+        self.take_last_week(team, alice, '0.01')
+        actual = team.set_take_for(alice, D('200.00'), team)
+        assert actual == 100
+
     def test_get_members(self):
         team = self.make_team()
         alice = self.make_participant('alice')
