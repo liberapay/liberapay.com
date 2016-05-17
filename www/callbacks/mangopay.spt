@@ -38,21 +38,22 @@ if cls:
     # Update the DB
     error = repr_error(payio)
     p = Participant._from_thing("mangopay_user_id", payio.AuthorId)
-    if p.status == 'closed':
-        affects_balance = (
-            event == 'PAYOUT_NORMAL' and status == 'failed' or
-            event == 'PAYIN_NORMAL' and status == 'succeeded'
-        )
-        if affects_balance:
-            p.update_status('active')
+    was_closed = p.status == 'closed'
+    affects_balance = (
+        event == 'PAYOUT_NORMAL' and status == 'failed' or
+        event == 'PAYIN_NORMAL' and status == 'succeeded'
+    )
+    reopen = was_closed and affects_balance
+    if reopen:
+        p.update_status('active')
     record_exchange_result(website.db, e_id, status, error, p)
 
     # Notify the user
     e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        p.notify('payin_bankwire_'+status, exchange=e._asdict())
+        p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
     elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
-        p.notify('withdrawal_'+status, exchange=e._asdict())
+        p.notify('withdrawal_'+status, exchange=e._asdict(), force_email=reopen)
 
 else:
     raise Response(400, "unknown event type")
