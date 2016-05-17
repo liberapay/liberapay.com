@@ -24,10 +24,11 @@ class Tests(Harness):
         team.set_take_for(member, amount, team, check_max=False)
         self.db.run("INSERT INTO paydays DEFAULT VALUES")
         actual_amount = amount if actual_amount is None else actual_amount
-        self.db.run("""
-            INSERT INTO transfers (tipper, tippee, amount, context, status, team)
-            VALUES (%(tipper)s, %(tippee)s, %(amount)s, 'take', 'succeeded', %(team)s)
-        """, dict(tipper=self.warbucks.id, tippee=member.id, amount=actual_amount, team=team.id))
+        if D(actual_amount) > 0:
+            self.db.run("""
+                INSERT INTO transfers (tipper, tippee, amount, context, status, team)
+                VALUES (%(tipper)s, %(tippee)s, %(amount)s, 'take', 'succeeded', %(team)s)
+            """, dict(tipper=self.warbucks.id, tippee=member.id, amount=actual_amount, team=team.id))
         self.db.run("UPDATE paydays SET ts_end=now() WHERE ts_end < ts_start")
 
     def test_random_schmoe_is_not_member_of_team(self):
@@ -41,12 +42,6 @@ class Tests(Harness):
         self.take_last_week(team, alice, '40.00')
         assert alice.member_of(team)
 
-    def test_cant_grow_tip_a_lot(self):
-        team = self.make_team()
-        alice = self.make_participant('alice')
-        self.take_last_week(team, alice, '40.00')
-        assert team.set_take_for(alice, D('100.00'), alice) == 80
-
     def test_take_can_double(self):
         team = self.make_team()
         alice = self.make_participant('alice')
@@ -56,6 +51,7 @@ class Tests(Harness):
 
     def test_take_can_double_but_not_a_penny_more(self):
         team = self.make_team()
+        self.warbucks.set_tip_to(team, '20')
         alice = self.make_participant('alice')
         self.take_last_week(team, alice, '40.00')
         actual = team.set_take_for(alice, D('80.01'), alice)
@@ -63,6 +59,7 @@ class Tests(Harness):
 
     def test_increase_is_based_on_nominal_take_last_week(self):
         team = self.make_team()
+        self.warbucks.set_tip_to(team, '15.03')
         alice = self.make_participant('alice')
         self.take_last_week(team, alice, '20.00', actual_amount='15.03')
         team.set_take_for(alice, D('35.00'), team, check_max=False)
@@ -70,10 +67,18 @@ class Tests(Harness):
 
     def test_if_last_week_is_less_than_one_can_increase_to_one(self):
         team = self.make_team()
+        self.warbucks.set_tip_to(team, '0.50')
         alice = self.make_participant('alice')
         self.take_last_week(team, alice, '0.01')
         actual = team.set_take_for(alice, D('42.00'), team)
         assert actual == 1
+
+    def test_can_take_one_share_when_takes_were_all_zero_last_week(self):
+        team = self.make_team()
+        alice = self.make_participant('alice')
+        self.take_last_week(team, alice, '0.00')
+        actual = team.set_take_for(alice, D('200.00'), team)
+        assert actual == 100
 
     def test_can_take_leftover(self):
         team = self.make_team()
