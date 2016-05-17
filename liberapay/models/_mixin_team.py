@@ -75,7 +75,6 @@ class MixinTeam(object):
           ORDER BY member, mtime DESC
 
         """, (self.id,)) if t.amount}
-        takes['_relative_min'] = median(takes.values() or (0,)) ** Decimal('0.7')
         return takes
 
     def get_take_for(self, member):
@@ -87,13 +86,20 @@ class MixinTeam(object):
         )
 
     def compute_max_this_week(self, member_id, last_week):
-        """2x the member's take last week, or a minimum based on last week's
-        median take, or current income divided by the number of members if takes
-        were zero last week, or 1.
+        """2x the member's take last week, or the member's take last week + a
+        proportional share of the leftover, or a minimum based on last week's
+        median take, or 1.
         """
+        sum_last_week = sum(last_week.values())
+        initial_leftover = self.receiving - sum_last_week
+        nonzero_last_week = [a for a in last_week.values() if a]
+        member_last_week = last_week.get(member_id, 0)
+        leftover_share = member_last_week / (sum_last_week or Decimal('inf'))
+        leftover_share = max(leftover_share, D_UNIT / self.nmembers)
         return max(
-            last_week.get(member_id, 0) * 2,
-            last_week['_relative_min'] or self.receiving / self.nmembers,
+            member_last_week * 2,
+            member_last_week + initial_leftover * leftover_share,
+            median(nonzero_last_week or (0,)),
             D_UNIT
         )
 
