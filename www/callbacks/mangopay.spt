@@ -21,6 +21,10 @@ try:
 except ValueError:
     raise Response(400, "bad EventType")
 RessourceId = request.qs['RessourceId']
+try:
+    int(RessourceId)
+except ValueError:
+    raise Response(400, "bad RessourceId")
 
 cls = EVENT_TYPES.get(event)
 
