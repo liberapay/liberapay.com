@@ -63,7 +63,7 @@ test: test-schema pytest
 tests: test
 
 pytest: env
-	PYTHONPATH=. $(py_test) --cov liberapay ./tests/py/test_$${PYTEST-*}.py
+	PYTHONPATH=. $(py_test) ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
 
 pytest-cov: env
