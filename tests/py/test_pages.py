@@ -51,7 +51,7 @@ class TestPages(MangopayHarness):
 
     def browse(self, **kw):
         for url in self.urls:
-            url = url.replace('/%exchange_id.int', '/%s' % self.exchange_id)
+            url = url.replace('/%exchange_id', '/%s' % self.exchange_id)
             assert '/%' not in url
             try:
                 r = self.client.GET(url, **kw)

@@ -11,9 +11,15 @@ PAYMENT_METHODS = {
 }
 del _
 
-[-------------------]
+[---]
 
 participant = get_participant(state, restrict=True)
+
+e_id = request.path['exchange_id'].split('.html')[0]
+try:
+    int(e_id)
+except ValueError:
+    raise Response(404)
 
 exchange = website.db.one("""
     SELECT *
@@ -21,7 +27,7 @@ exchange = website.db.one("""
      WHERE id = %s
        AND participant = %s
        AND amount > 0
-""", (request.path['exchange_id'], participant.id))
+""", (e_id, participant.id))
 if exchange is None or exchange.status != 'succeeded':
     raise Response(404)
 
@@ -32,7 +38,7 @@ if route.network == 'mango-cc':
 
 account = participant.get_mangopay_account()
 
-[-------------------]
+[---] text/html
 <style>
     body {
         margin: 0;
