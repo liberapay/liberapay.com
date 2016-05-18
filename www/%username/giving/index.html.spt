@@ -15,11 +15,6 @@ recently = utcnow() - timedelta(days=30)
 cancelled_tips = [x for x in tips if x.amount == 0 and x.mtime >= recently]
 ncancelled_tips = len(cancelled_tips)
 
-CANCELLED = ngettext( "You cancelled {n} tip in the past 30 days"
-                    , "You cancelled {n} tips in the past 30 days"
-                    , ncancelled_tips
-                     )
-
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
