@@ -3,8 +3,8 @@
     % set tip = tip or user.get_tip_to(tippee.participant or tippee)
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
         % if inline
+            <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
             {{ tip_input(tip, disabled, small=True, pledging=pledging) }}
         % else
             <h4>{{ _('Your donation') }}</h4>
