@@ -75,7 +75,7 @@ if request.method == 'POST':
 elif 'exchange_id' in request.qs:
     exchange, payin = get_exchange_payin(participant, request)
     if exchange.status == 'succeeded':
-        response.redirect(participant.path('receipts/%s.html' % exchange.id))
+        response.redirect(participant.path('receipts/%s' % exchange.id))
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 show_form = weekly > 0 and funded < 52 and not payin

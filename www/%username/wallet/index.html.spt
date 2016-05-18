@@ -121,7 +121,7 @@ else:
             &mdash; <a href="/~{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         % endif
         % if event['status'] == 'succeeded'
-            (<a href="../receipts/{{ event['id'] }}.html">{{ _("Receipt").lower() }}</a>)
+            (<a href="../receipts/{{ event['id'] }}">{{ _("Receipt").lower() }}</a>)
         % endif
         </td>
     </tr>
