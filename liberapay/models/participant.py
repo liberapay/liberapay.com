@@ -334,18 +334,6 @@ class Participant(Model, MixinTeam):
                 return self.upsert_statement(lang, statement)
 
 
-    # Pricing
-    # =======
-
-    @property
-    def usage(self):
-        return max(self.giving, self.receiving)
-
-    @property
-    def suggested_payment(self):
-        return (self.usage * Decimal('0.05')).quantize(D_CENT)
-
-
     # Stubs
     # =====
 

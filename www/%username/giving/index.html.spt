@@ -1,9 +1,11 @@
 from datetime import timedelta
+from decimal import Decimal
 
 from aspen.utils import utcnow
 
-from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.models.participant import Participant
 from liberapay.utils import get_participant
+
 
 [-----------------------------------------------------------------------------]
 
@@ -20,6 +22,9 @@ tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
 pledges = [t for t in pledges if t.amount > 0]
 npledges = len(pledges)
+
+Liberapay = Participant.from_username('Liberapay')
+Liberapay_tip = participant.get_tip_to(getattr(Liberapay, 'id', -1))
 
 weekly = total - participant.receiving
 
@@ -49,6 +54,31 @@ weekly = total - participant.receiving
     </p>
 % else
     <p>{{ _("You give {0} per week.", Money(participant.giving, "EUR")) }}</p>
+% endif
+
+% if not Liberapay_tip.amount
+<br>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">{{ _("Liberapay needs your support") }}</h4>
+    </div>
+    <div class="panel-body">
+        <p>{{ _(
+            "Liberapay does not take a cut of payments and is only funded by the "
+            "donations to {0}its own account{1}, please consider chipping in:",
+            '<a href="/Liberapay/">'|safe, '</a>'|safe,
+        ) }}</p>
+        {{ tip_form(tip=Liberapay_tip, inline=True) }}
+        <p> </p>
+        % if Liberapay and Liberapay.receiving < Liberapay.goal * Decimal('0.5')
+            <p>{{ _(
+                "Building Liberapay is a lot of work, and there still is much to "
+                "do, but our developers, translators, and other contributors are "
+                "severly underpaid, and it's slowing down our progress."
+            ) }}</p>
+        % endif
+    </div>
+</div>
 % endif
 
 <div class="giving row valign-middle">
