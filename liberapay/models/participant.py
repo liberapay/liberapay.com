@@ -875,14 +875,28 @@ class Participant(Model, MixinTeam):
         """, (self.id, QUARANTINE))
 
 
-    # Random Stuff
-    # ============
+    # Events
+    # ======
 
     def add_event(self, c, type, payload, recorder=None):
         c.run("""
             INSERT INTO events (participant, type, payload, recorder)
             VALUES (%s, %s, %s, %s)
         """, (self.id, type, Json(payload), recorder))
+
+    def get_last_event_of_type(self, type):
+        return self.db.one("""
+            SELECT *
+              FROM events
+             WHERE participant = %s
+               AND type = %s
+          ORDER BY ts DESC
+             LIMIT 1
+        """, (self.id, type))
+
+
+    # Random Stuff
+    # ============
 
     def url(self, path='', query=''):
         scheme = website.canonical_scheme
