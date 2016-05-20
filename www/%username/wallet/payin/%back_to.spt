@@ -107,6 +107,12 @@ title = _("Add money")
 
     </div>
 
+    <p>{{ _(
+        "The fees are those of our payment processors, Liberapay is only funded "
+        "by the donations to {0}its own account{1}.",
+        '<a href="/Liberapay/">'|safe, '</a>'|safe
+    ) }}</p>
+
     % if back_to
         <a href="{{ back_to }}" class="btn btn-default pull-right">{{ _("Go back") }}</a>
     % endif

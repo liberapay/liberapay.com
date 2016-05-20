@@ -39,6 +39,7 @@ AVATAR_SOURCES = 'libravatar bitbucket facebook github google twitter'.split()
 BIRTHDAY = date(2015, 5, 22)
 
 D_CENT = Decimal('0.01')
+D_INF = Decimal('inf')
 D_UNIT = Decimal('1.00')
 D_ZERO = Decimal('0.00')
 

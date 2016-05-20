@@ -6,7 +6,7 @@ from collections import OrderedDict
 from decimal import Decimal, ROUND_UP
 from statistics import median
 
-from liberapay.constants import D_CENT, D_UNIT, D_ZERO
+from liberapay.constants import D_CENT, D_INF, D_UNIT, D_ZERO
 
 
 class MemberLimitReached(Exception): pass
@@ -94,7 +94,7 @@ class MixinTeam(object):
         initial_leftover = self.receiving - sum_last_week
         nonzero_last_week = [a for a in last_week.values() if a]
         member_last_week = last_week.get(member_id, 0)
-        leftover_share = member_last_week / (sum_last_week or Decimal('inf'))
+        leftover_share = member_last_week / (sum_last_week or D_INF)
         leftover_share = max(leftover_share, D_UNIT / self.nmembers)
         return max(
             member_last_week * 2,

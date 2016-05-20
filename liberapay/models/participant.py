@@ -21,7 +21,7 @@ from psycopg2.extras import Json
 
 from liberapay.billing import mangoapi
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, EMAIL_RE,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, MAX_TIP,
     MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, SESSION, SESSION_REFRESH,
     SESSION_TIMEOUT, USERNAME_MAX_SIZE
@@ -334,18 +334,6 @@ class Participant(Model, MixinTeam):
                 return self.upsert_statement(lang, statement)
 
 
-    # Pricing
-    # =======
-
-    @property
-    def usage(self):
-        return max(self.giving, self.receiving)
-
-    @property
-    def suggested_payment(self):
-        return (self.usage * Decimal('0.05')).quantize(Decimal('.01'))
-
-
     # Stubs
     # =====
 
@@ -407,11 +395,11 @@ class Participant(Model, MixinTeam):
 
         tips, total, _, _= self.get_giving_for_profile()
         transfers = []
-        distributed = Decimal('0.00')
+        distributed = D_ZERO
 
         for tip in tips:
             rate = tip.amount / total
-            pro_rated = (self.balance * rate).quantize(Decimal('0.01'), ROUND_DOWN)
+            pro_rated = (self.balance * rate).quantize(D_CENT, ROUND_DOWN)
             if pro_rated == 0:
                 continue
             distributed += pro_rated
@@ -887,14 +875,28 @@ class Participant(Model, MixinTeam):
         """, (self.id, QUARANTINE))
 
 
-    # Random Stuff
-    # ============
+    # Events
+    # ======
 
     def add_event(self, c, type, payload, recorder=None):
         c.run("""
             INSERT INTO events (participant, type, payload, recorder)
             VALUES (%s, %s, %s, %s)
         """, (self.id, type, Json(payload), recorder))
+
+    def get_last_event_of_type(self, type):
+        return self.db.one("""
+            SELECT *
+              FROM events
+             WHERE participant = %s
+               AND type = %s
+          ORDER BY ts DESC
+             LIMIT 1
+        """, (self.id, type))
+
+
+    # Random Stuff
+    # ============
 
     def url(self, path='', query=''):
         scheme = website.canonical_scheme
@@ -1242,7 +1244,7 @@ class Participant(Model, MixinTeam):
     def _zero_tip_dict(tippee):
         if isinstance(tippee, Participant):
             tippee = tippee.id
-        return dict(amount=Decimal('0.00'), is_funded=False, tippee=tippee)
+        return dict(amount=D_ZERO, is_funded=False, tippee=tippee)
 
 
     def get_tip_to(self, tippee):
@@ -1307,7 +1309,7 @@ class Participant(Model, MixinTeam):
         tip_amounts = []
 
         npatrons = 0.0  # float to trigger float division
-        contributed = Decimal('0.00')
+        contributed = D_ZERO
         for rec in self.db.all(SQL, (self.id,)):
             tip_amounts.append([ rec.amount
                                , rec.ncontributing
@@ -1381,11 +1383,11 @@ class Participant(Model, MixinTeam):
         total = sum([t.amount for t in tips])
         if not total:
             # If tips is an empty list, total is int 0. We want a Decimal.
-            total = Decimal('0.00')
+            total = D_ZERO
 
         pledges_total = sum([t.amount for t in pledges])
         if not pledges_total:
-            pledges_total = Decimal('0.00')
+            pledges_total = D_ZERO
 
         return tips, total, pledges, pledges_total
 

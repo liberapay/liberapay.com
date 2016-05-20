@@ -421,12 +421,6 @@ class Tests(Harness):
         actual = stub.resolve_stub()
         assert actual == "/on/openstreetmap/alice/"
 
-    # suggested_payment
-
-    def test_suggested_payment_is_zero_for_new_user(self):
-        alice = self.make_participant('alice')
-        assert alice.suggested_payment == 0
-
     # avatar
 
     def test_update_avatar(self):
