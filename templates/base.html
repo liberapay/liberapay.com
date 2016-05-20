@@ -7,7 +7,7 @@
     {% block head_early %}{% endblock %}
     <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Liberapay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ website.asset('liberapay/icon.16.png') }}" type="image/png">
+    <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/3.3.6/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ website.asset('fontawesome/4.5.0/css/font-awesome.min.css') }}" type="text/css">
@@ -36,7 +36,7 @@
             <ul class="nav navbar-nav pull-left">
                 <li>
                     <a class="navbar-brand" href="/">
-                        <img src="{{ website.asset('liberapay/icon.svg') }}"
+                        <img src="{{ website.asset('liberapay/icon-v2_black.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
                 {{ nav([
                     ('/explore/', _('Explore'), {
