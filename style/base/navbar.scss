@@ -11,43 +11,49 @@
 }
 
 .navbar-liberapay {
-    background: #555;
+    background: #f6c915;
     border: none;
 
     .navbar-nav li {
         & > a, .navbar-btn {
             background: transparent;
             border: none;
-            color: #ddd;
+            color: #222;
             &:hover, &:active, &:focus {
                 background: #444;
-                color: #eee;
+                color: #f9f9f9;
+                img {
+                    background: #f9f9f9;
+                }
             }
             &.navbar-warning {
-                color: #eea236;
+                color: #f54020;
                 &:hover, &:active, &:focus {
-                    color: #f0ad4e;
+                    color: #f94321;
                 }
             }
         }
         &.active {
             & > a, .navbar-btn {
                 background: #444;
-                color: #eee;
+                color: #f9f9f9;
+                img {
+                    background: #f9f9f9;
+                }
                 &.navbar-warning {
                     color: #f0ad4e;
                 }
             }
         }
         &.divider {
-            background: #999;
+            background: #666;
         }
         .navbar-btn {
             margin: 0;
             padding: 15px 13px;
         }
         .dropdown-menu {
-            background: #555;
+            background: #f6c915;
             border: none;
             border-radius: none;
             position: absolute;
@@ -69,7 +75,6 @@
     }
     .navbar-brand {
         & > img {
-            background: #f5f5f5;
             border-radius: 4px;
             color: #000;
             height: 30px;

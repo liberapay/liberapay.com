@@ -62,8 +62,8 @@ recent_events = query_cache.all("""
 % endblock
 
 % block before_container
-<div class="jumbotron" style="background: #eef0ff; text-align: center;">
 <div class="container">
+<div class="jumbotron" style="background: #fbfbfb; text-align: center;">
     <p>{{ _("Liberapay is a recurrent donations platform.") }}</p>
     <p class="buttons">
         <a class="btn btn-info btn-lg" href="/about/">
@@ -74,11 +74,9 @@ recent_events = query_cache.all("""
         </a>
     </p>
     <p>{{ _(
-        "We currently have {0} users transferring {1} per month…\n"
-        "Not so bad considering that we only opened {2} ago!",
+        "We currently have {0} users donating {1} per month.",
         website.gnusers, website.gmonthly_volume,
-        to_age(constants.LAUNCH_TIME)
-    ).replace('\n', '<br>'|safe) }}</p>
+    ) }}</p>
 </div>
 </div>
 % endblock

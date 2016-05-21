@@ -33,7 +33,8 @@
                {{ disabled }} />
         <div class="input-group-addon">{{ _("per week") }}</div>
         <div class="input-group-btn">
-            <button class="btn btn-success {{ 'btn-sm' if small else '' }}" {{ disabled }}>{{
+            <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
+                           {{ 'btn-sm' if small else '' }}" {{ disabled }}>{{
                 _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
             }}</button>
         </div>

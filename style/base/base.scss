@@ -41,6 +41,25 @@ body {
     }
 }
 
+.btn-donate {
+    $base-color: #ffee16;
+    background-color: $base-color;
+    border-color: darken($base-color, 10%);
+    &.btn-lg {
+        border: none;
+        box-shadow: 0 0 5px $base-color;
+    }
+    color: #1a171b;
+    &:hover {
+        background-color: lighten($base-color, 20%);
+        border-color: $base-color;
+        &.btn-lg {
+            border: none;
+            box-shadow: 0 0 5px lighten($base-color, 20%);
+        }
+    }
+}
+
 .avatar img {
     max-height: 120px;
     max-width: 100%;
