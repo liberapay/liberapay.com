@@ -463,7 +463,7 @@ def _record_transfer_result(db, t_id, status):
                     """, (x, b.id, tippee, b.origin, x, b.ts))
                     break
             return balance
-    raise LazyResponse(500, lambda _: _("Transfering the money failed, please try again."))
+    raise LazyResponse(500, lambda _: _("Transferring the money failed, please try again."))
 
 
 def sync_with_mangopay(db):
