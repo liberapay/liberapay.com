@@ -82,7 +82,7 @@
                 _("Modify your donation ({0})", Money(tip['amount'], 'EUR'))
             }}</a>
         % else
-            <a class="btn btn-primary {{ 'btn-lg' if goal is none or receiving < goal else '' }}"
+            <a class="btn btn-donate {{ 'btn-lg' if goal is none or receiving < goal else '' }}"
                href="{{ donate_path }}">
                 {{ glyphicon('thumbs-up') }}
                 <span>{{ _("Donate") }}</span>
