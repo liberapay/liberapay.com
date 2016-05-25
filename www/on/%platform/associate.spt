@@ -33,7 +33,7 @@ p_id = cookie_obj[4] if len(cookie_obj) > 4 else None
 then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
 # Check for an error message in the querystring
-error_message = request.qs.get('error_message', '')
+error_message = request.qs.get('error_message') or request.qs.get('error_description')
 if error_message:
     raise Response(502, _("{0} returned this error message: {1}",
                           platform.display_name, error_message))
