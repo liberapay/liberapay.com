@@ -11,6 +11,7 @@ pip := pip --disable-pip-version-check
 with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
 with_tests_env := $(env_bin)/honcho run -e $(test_env_files)
 py_test := $(with_tests_env) $(env_bin)/py.test
+pep8_ignore = E127,E226,E301,E302,E303,E309,E402,E701,E711,E712,E731
 
 echo:
 	@echo $($(var))
@@ -57,7 +58,7 @@ test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 
 pyflakes: env
-	$(env_bin)/flake8 --select=F app.py liberapay tests
+	$(env_bin)/flake8 --max-line-length=120 --show-source --ignore=$(pep8_ignore) app.py liberapay tests
 
 test: test-schema pytest
 tests: test
