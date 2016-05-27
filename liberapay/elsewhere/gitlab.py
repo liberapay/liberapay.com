@@ -22,10 +22,10 @@ class GitLab(PlatformOAuth2):
     api_format = 'json'
     api_paginator = header_links_paginator()
     api_url = 'https://gitlab.com/api/v3'
-    #api_user_info_path = '/users/{user_id}'
-    #api_user_name_info_path = '/users?username={user_name}'
+    # api_user_info_path = '/users/{user_id}'
+    # api_user_name_info_path = '/users?username={user_name}'
     api_user_self_info_path = '/user'
-    #api_team_members_path = '/groups/{user_name}/members'
+    # api_team_members_path = '/groups/{user_name}/members'
 
     # The commented out paths are because we need this:
     # https://gitlab.com/gitlab-org/gitlab-ce/issues/13795

@@ -97,11 +97,8 @@ class TestElsewhere(Harness):
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_pages(self, get_user_info):
         for platform in self.platforms:
-            alice = UserInfo( platform=platform.name
-                            , user_id='0'
-                            , user_name='alice'
-                            , is_team=False
-                             )
+            alice = UserInfo(platform=platform.name, user_id='0',
+                             user_name='alice', is_team=False)
             get_user_info.side_effect = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200

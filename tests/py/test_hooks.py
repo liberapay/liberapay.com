@@ -28,9 +28,9 @@ class Tests(Harness):
         website.canonical_host = website.env.canonical_host
 
     def test_canonize_canonizes(self):
-        response = self.client.GxT( "/"
-                                  , HTTP_HOST=b'example.com'
-                                  , HTTP_X_FORWARDED_PROTO=b'http'
+        response = self.client.GxT("/",
+                                   HTTP_HOST=b'example.com',
+                                   HTTP_X_FORWARDED_PROTO=b'http',
                                    )
         assert response.code == 302
         assert response.headers['Location'] == b'https://example.com/'
@@ -41,11 +41,11 @@ class Tests(Harness):
         session cookies, for obvious security reasons.
         """
         alice = self.make_participant('alice')
-        redirect = self.client.GET( "/"
-                                  , auth_as=alice
-                                  , HTTP_X_FORWARDED_PROTO=b'http'
-                                  , HTTP_HOST=b'example.com'
-                                  , raise_immediately=False
+        redirect = self.client.GET("/",
+                                   auth_as=alice,
+                                   HTTP_X_FORWARDED_PROTO=b'http',
+                                   HTTP_HOST=b'example.com',
+                                   raise_immediately=False,
                                    )
         assert redirect.code == 302
         assert not redirect.headers.cookie
@@ -56,10 +56,10 @@ class Tests(Harness):
         alice.update_password(password)
 
         auth_header = b'Basic ' + b64encode(b'%s:%s' % (alice.id, password))
-        response = self.client.GET( '/alice/public.json'
-                                  , HTTP_AUTHORIZATION=auth_header
-                                  , HTTP_X_FORWARDED_PROTO=b'https'
-                                  , HTTP_HOST=b'example.com'
+        response = self.client.GET('/alice/public.json',
+                                   HTTP_AUTHORIZATION=auth_header,
+                                   HTTP_X_FORWARDED_PROTO=b'https',
+                                   HTTP_HOST=b'example.com',
                                    )
 
         assert response.code == 200
@@ -68,10 +68,10 @@ class Tests(Harness):
     def test_bad_userid_returns_401(self):
         self.make_participant('alice')
         auth_header = b'Basic ' + b64encode(b'foo:')
-        response = self.client.GxT( '/alice/public.json'
-                                  , HTTP_AUTHORIZATION=auth_header
-                                  , HTTP_X_FORWARDED_PROTO=b'https'
-                                  , HTTP_HOST=b'example.com'
+        response = self.client.GxT('/alice/public.json',
+                                   HTTP_AUTHORIZATION=auth_header,
+                                   HTTP_X_FORWARDED_PROTO=b'https',
+                                   HTTP_HOST=b'example.com',
                                    )
         assert response.code == 401
 

@@ -40,13 +40,9 @@ def get_random_string(length=12,
         # time a random string is required. This may change the
         # properties of the chosen random sequence slightly, but this
         # is better than absolute predictability.
-        random.seed(
-            hashlib.sha256(
-                "%s%s%s" % (
-                    random.getstate(),
-                    time.time(),
-                    UNSECURE_RANDOM_STRING)
-                ).digest())
+        random.seed(hashlib.sha256(
+            "%s%s%s" % (random.getstate(), time.time(), UNSECURE_RANDOM_STRING)
+        ).digest())
     return ''.join([random.choice(allowed_chars) for i in range(length)])
 
 

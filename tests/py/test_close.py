@@ -247,18 +247,19 @@ class TestClosing(FakeTransfersHarness):
     # cpi - clear_personal_information
 
     def test_cpi_clears_personal_information(self):
-        alice = self.make_participant( 'alice'
-                                     , goal=100
-                                     , hide_giving=True
-                                     , hide_receiving=True
-                                     , avatar_url='img-url'
-                                     , email='alice@example.com'
-                                     , session_token='deadbeef'
-                                     , session_expires='2000-01-01'
-                                     , giving=20
-                                     , receiving=40
-                                     , npatrons=21
-                                      )
+        alice = self.make_participant(
+            'alice',
+            goal=100,
+            hide_giving=True,
+            hide_receiving=True,
+            avatar_url='img-url',
+            email='alice@example.com',
+            session_token='deadbeef',
+            session_expires='2000-01-01',
+            giving=20,
+            receiving=40,
+            npatrons=21,
+        )
         alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')
 

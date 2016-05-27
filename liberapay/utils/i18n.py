@@ -250,7 +250,7 @@ def get_lang_options(request, locale, previously_used_langs, add_multi=False):
     langs = OrderedDict()
     if add_multi:
         langs.update([('mul', locale.languages.get('mul', 'Multilingual'))])
-    langs.update((k,v) for k, v in locale.languages_2.items() if k in pref_langs)
+    langs.update((k, v) for k, v in locale.languages_2.items() if k in pref_langs)
     langs.update([('', '---')])  # Separator
     langs.update(locale.languages_2)
     return langs
