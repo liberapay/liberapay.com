@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa
 
 """
 Examples of data returned by the APIs of the elsewhere platforms.
@@ -237,14 +238,14 @@ twitter = lambda: {
 }
 
 facebook = lambda: {
-   "id": "187701977",
-   "first_name": "Chad",
-   "gender": "male",
-   "last_name": "Whitacre",
-   "link": "https://www.facebook.com/whit537",
-   "locale": "en_US",
-   "name": "Chad Whitacre",
-   "username": "whit537"
+    "id": "187701977",
+    "first_name": "Chad",
+    "gender": "male",
+    "last_name": "Whitacre",
+    "link": "https://www.facebook.com/whit537",
+    "locale": "en_US",
+    "name": "Chad Whitacre",
+    "username": "whit537"
 }
 
 google = lambda: {

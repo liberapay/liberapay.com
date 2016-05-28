@@ -52,10 +52,7 @@ class Platform(object):
     x_avatar_url = not_available
     x_is_team = not_available
 
-    required_attrs = ( 'account_url'
-                     , 'display_name'
-                     , 'name'
-                     )
+    required_attrs = ('account_url', 'display_name', 'name')
 
     def __init__(self, api_key, api_secret, callback_url, api_url=None, auth_url=None):
         self.api_key = api_key
@@ -131,8 +128,8 @@ class Platform(object):
                     return _("You're making requests too fast, please try again later.")
             raise LazyResponse(status, msg)
         if status != 200:
-            log('{} api responded with {}:\n{}'.format(self.name, status, response.text)
-               , level=logging.ERROR)
+            log('{} api responded with {}:\n{}'.format(self.name, status, response.text),
+                level=logging.ERROR)
             msg = lambda _: _("{0} returned an error, please try again later.",
                               self.display_name)
             raise LazyResponse(502, msg)

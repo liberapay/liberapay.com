@@ -36,20 +36,16 @@ class TestCommunitiesJson(Harness):
         assert response.code == 400
 
     def test_joining_and_leaving_community(self):
-        response = self.client.POST( '/alice/communities.json'
-                                   , {'do': 'join:'+self.c_id}
-                                   , auth_as=self.alice
-                                   , xhr=True
-                                    )
+        response = self.client.POST('/alice/communities.json',
+                                    {'do': 'join:'+self.c_id},
+                                    auth_as=self.alice, xhr=True)
 
         r = json.loads(response.body)
         assert r == {}
 
-        response = self.client.POST( '/alice/communities.json'
-                                   , {'do': 'leave:'+self.c_id}
-                                   , auth_as=self.alice
-                                   , xhr=True
-                                    )
+        response = self.client.POST('/alice/communities.json',
+                                    {'do': 'leave:'+self.c_id},
+                                    auth_as=self.alice, xhr=True)
 
         response = self.client.GET('/alice/communities.json', auth_as=self.alice)
 
@@ -148,7 +144,7 @@ class TestForCommunityJson(Harness):
     def test_get_existing_community(self):
         response = self.client.GET('/for/test/index.json')
         result = json.loads(response.body)
-        #assert len(result['animators']) == 2  # Not implemented yet
+        # assert len(result['animators']) == 2  # Not implemented yet
         assert result['name'] == 'test'
 
     def test_post_not_supported(self):
@@ -158,19 +154,19 @@ class TestForCommunityJson(Harness):
     def test_limit(self):
         response = self.client.GET('/for/test/index.json?limit=1')
         json.loads(response.body)
-        #assert len(result['animators']) == 1  # Not implemented yet
+        # assert len(result['animators']) == 1  # Not implemented yet
 
     def test_offset(self):
         response = self.client.GET('/for/test/index.json?offset=1')
         json.loads(response.body)
-        #assert len(result['animators']) == 1  # Not implemented yet
+        # assert len(result['animators']) == 1  # Not implemented yet
 
     def test_max_limit(self):
         for i in range(110):
             self.add_participant(str(i))
         response = self.client.GET('/for/test/index.json?limit=200')
         json.loads(response.body)
-        #assert len(result['animators']) == 100  # Not implemented yet
+        # assert len(result['animators']) == 100  # Not implemented yet
 
     def test_invalid_limit(self):
         response = self.client.GxT('/for/test/index.json?limit=abc')

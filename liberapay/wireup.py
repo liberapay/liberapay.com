@@ -107,7 +107,7 @@ class AppConf(object):
         twitter_id                      = str,
         twitter_secret                  = str,
         update_global_stats_every       = int,
-    )
+    )  # flake8: noqa
 
     def __init__(self, d):
         d = d if isinstance(d, dict) else dict(d)
@@ -370,7 +370,7 @@ def env():
         SENTRY_DSN                      = str,
         SENTRY_RERAISE                  = is_yesish,
         GUNICORN_OPTS                   = str,
-    )
+    )  # flake8: noqa
 
     if env.malformed:
         plural = len(env.malformed) != 1 and 's' or ''

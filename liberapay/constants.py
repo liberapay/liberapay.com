@@ -61,7 +61,7 @@ FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
-    #undefined=CustomUndefined,
+    # undefined=CustomUndefined,
 )
 
 # https://docs.mangopay.com/api-references/kyc-rules/

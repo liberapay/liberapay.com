@@ -115,9 +115,6 @@ class QueryCache(object):
         # "check in" a new dummy entry for it (and prevent other threads from
         # adding the same query), which will be populated presently.
 
-        #thread_id = threading.currentThread().getName()[-1:] # for debugging
-        #call_id = ''.join([random.choice(string.letters) for i in range(5)])
-
         self.locks.checkout.acquire()
         try:  # critical section
             if key in self.cache:
@@ -151,9 +148,9 @@ class QueryCache(object):
                     self.locks.checkin.release()
 
         finally:
-            self.locks.checkout.release() # Now that we've checked out our
-                                          # queryset, other threads are free to
-                                          # check out other queries.
+            # Now that we've checked out our queryset, other threads are free
+            # to check out other queries.
+            self.locks.checkout.release()
 
 
         # Process the query.
@@ -177,9 +174,10 @@ class QueryCache(object):
                     entry.exc = None
                 except:
                     entry.result = None
-                    entry.exc = ( FormattingError(traceback.format_exc())
-                                , sys.exc_info()[2]
-                                 )
+                    entry.exc = (
+                        FormattingError(traceback.format_exc()),
+                        sys.exc_info()[2]
+                    )
 
 
             # Check the queryset back in.

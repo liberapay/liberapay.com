@@ -35,7 +35,7 @@ def fake_text_id(size=6, chars=string.ascii_lowercase + string.digits):
 def fake_sentence(start=1, stop=100):
     """Create a sentence of random length.
     """
-    return faker.sentence(random.randrange(start,stop))
+    return faker.sentence(random.randrange(start, stop))
 
 
 def fake_participant(db, kind=None, is_admin=False):
@@ -45,25 +45,26 @@ def fake_participant(db, kind=None, is_admin=False):
     kind = kind or random.choice(('individual', 'organization'))
     is_a_person = kind in ('individual', 'organization')
     try:
-        _fake_thing( db
-                   , "participants"
-                   , username=username
-                   , password=None if not is_a_person else 'x'
-                   , email=username+'@example.org'
-                   , is_admin=is_admin
-                   , balance=0
-                   , hide_giving=is_a_person and (random.randrange(5) == 0)
-                   , hide_receiving=is_a_person and (random.randrange(5) == 0)
-                   , status='active'
-                   , join_time=faker.date_time_this_year()
-                   , kind=kind
-                   , mangopay_user_id=username
-                   , mangopay_wallet_id='-1'
-                    )
+        _fake_thing(
+            db,
+            "participants",
+            username=username,
+            password=None if not is_a_person else 'x',
+            email=username+'@example.org',
+            is_admin=is_admin,
+            balance=0,
+            hide_giving=is_a_person and (random.randrange(5) == 0),
+            hide_receiving=is_a_person and (random.randrange(5) == 0),
+            status='active',
+            join_time=faker.date_time_this_year(),
+            kind=kind,
+            mangopay_user_id=username,
+            mangopay_wallet_id='-1',
+        )
     except IntegrityError:
         return fake_participant(db, is_admin)
 
-    #Call participant constructor to perform other DB initialization
+    # Call participant constructor to perform other DB initialization
     return Participant.from_username(username)
 
 
@@ -171,7 +172,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
     teams = []
     for i in range(num_teams):
         team = fake_participant(db, kind="group")
-        #Add 1 to 3 members to the team
+        # Add 1 to 3 members to the team
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
             team.add_member(p)
@@ -181,7 +182,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
     print("Making Elsewheres")
     platforms = [p.name for p in website.platforms]
     for p in participants:
-        #All participants get between 0 and 3 elsewheres
+        # All participants get between 0 and 3 elsewheres
         num_elsewheres = random.randint(0, 3)
         for platform_name in random.sample(platforms, num_elsewheres):
             fake_elsewhere(db, p, platform_name)
@@ -218,9 +219,9 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
 
     # Paydays
     # First determine the boundaries - min and max date
-    min_date = min(min(x.ctime for x in tips), \
+    min_date = min(min(x.ctime for x in tips),
                    min(x.timestamp for x in transfers))
-    max_date = max(max(x.ctime for x in tips), \
+    max_date = max(max(x.ctime for x in tips),
                    max(x.timestamp for x in transfers))
     # iterate through min_date, max_date one week at a time
     payday_counter = 1
@@ -234,8 +235,8 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
         week_tips = [x for x in tips if date < x.ctime < end_date]
         week_transfers = [x for x in transfers if date < x.timestamp < end_date]
         week_participants = [x for x in participants if x.join_time < end_date]
-        actives=set()
-        tippers=set()
+        actives = set()
+        tippers = set()
         for xfers in week_tips, week_transfers:
             actives.update(x.tipper for x in xfers)
             actives.update(x.tippee for x in xfers)

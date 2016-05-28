@@ -246,10 +246,8 @@ class Participant(Model, MixinTeam):
     def set_session_expires(self, expires):
         """Set ``session_expires`` to the given datetime.
         """
-        self.db.run( "UPDATE participants SET session_expires=%s "
-                     "WHERE id=%s"
-                   , (expires, self.id,)
-                    )
+        self.db.run("UPDATE participants SET session_expires=%s WHERE id=%s",
+                    (expires, self.id,))
         self.set_attributes(session_expires=expires)
 
     def start_session(self, suffix=''):
@@ -368,7 +366,7 @@ class Participant(Model, MixinTeam):
         """Close the participant's account.
         """
         with self.db.get_cursor() as cursor:
-            if disbursement_strategy == None:
+            if disbursement_strategy is None:
                 pass  # No balance, supposedly. final_check will make sure.
             elif disbursement_strategy == 'downstream':
                 # This in particular needs to come before clear_tips_giving.
@@ -393,7 +391,7 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips, total, _, _= self.get_giving_for_profile()
+        tips, total, _, _ = self.get_giving_for_profile()
         transfers = []
         distributed = D_ZERO
 
@@ -565,7 +563,7 @@ class Participant(Model, MixinTeam):
         base64_email = b64encode_s(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email64={base64_email}&nonce={nonce}"
         r = self.send_email('verification', email=email, link=link.format(**locals()))
-        assert r == 1 # Make sure the verification email was sent
+        assert r == 1  # Make sure the verification email was sent
 
         if self.email:
             self.send_email('verification_notice', new_email=email)
@@ -653,7 +651,7 @@ class Participant(Model, MixinTeam):
         self.fill_notification_context(context)
         email = context.setdefault('email', self.email)
         if not email:
-            return 0 # Not Sent
+            return 0  # Not Sent
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(context, locale)
@@ -1011,7 +1009,7 @@ class Participant(Model, MixinTeam):
                     raise UsernameAlreadyTaken(suggested)
 
                 self.add_event(c, 'set_username', suggested)
-                assert (suggested, lowercased) == actual # sanity check
+                assert (suggested, lowercased) == actual  # sanity check
                 self.set_attributes(username=suggested)
 
         return suggested
@@ -1311,10 +1309,11 @@ class Participant(Model, MixinTeam):
         npatrons = 0.0  # float to trigger float division
         contributed = D_ZERO
         for rec in self.db.all(SQL, (self.id,)):
-            tip_amounts.append([ rec.amount
-                               , rec.ncontributing
-                               , rec.amount * rec.ncontributing
-                                ])
+            tip_amounts.append([
+                rec.amount,
+                rec.ncontributing,
+                rec.amount * rec.ncontributing,
+            ])
             contributed += tip_amounts[-1][2]
             npatrons += rec.ncontributing
 
@@ -1565,16 +1564,20 @@ class Participant(Model, MixinTeam):
             # Move any old account out of the way
             if we_already_have_that_kind_of_account:
                 new_stub = Participant.make_stub(cursor)
-                cursor.run( "UPDATE elsewhere SET participant=%s "
-                            "WHERE platform=%s AND participant=%s"
-                          , (new_stub.id, platform, self.id)
-                           )
+                cursor.run("""
+                    UPDATE elsewhere
+                       SET participant=%s
+                     WHERE platform=%s
+                       AND participant=%s
+                """, (new_stub.id, platform, self.id))
 
             # Do the deal
-            cursor.run( "UPDATE elsewhere SET participant=%s "
-                        "WHERE platform=%s AND user_id=%s"
-                      , (self.id, platform, user_id)
-                       )
+            cursor.run("""
+                UPDATE elsewhere
+                   SET participant=%s
+                 WHERE platform=%s
+                   AND user_id=%s
+            """, (self.id, platform, user_id))
 
             # Turn pledges into actual tips
             if old_tips:
@@ -1627,11 +1630,12 @@ class Participant(Model, MixinTeam):
         self.update_avatar()
 
     def to_dict(self, details=False, inquirer=None):
-        output = { 'id': self.id
-                 , 'username': self.username
-                 , 'avatar': self.avatar_url
-                 , 'kind': self.kind
-                 }
+        output = {
+            'id': self.id,
+            'username': self.username,
+            'avatar': self.avatar_url,
+            'kind': self.kind,
+        }
 
         if not details:
             return output

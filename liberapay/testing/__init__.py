@@ -160,11 +160,8 @@ class Harness(unittest.TestCase):
 
 
     def make_elsewhere(self, platform, user_id, user_name, **kw):
-        info = UserInfo( platform=platform
-                       , user_id=str(user_id)
-                       , user_name=user_name
-                       , **kw
-                       )
+        info = UserInfo(platform=platform, user_id=str(user_id),
+                        user_name=user_name, **kw)
         return AccountElsewhere.upsert(info)
 
 
@@ -183,7 +180,7 @@ class Harness(unittest.TestCase):
             kw.setdefault('mangopay_user_id', -i)
             kw.setdefault('mangopay_wallet_id', -i)
         kw.setdefault('status', 'active')
-        if not 'join_time' in kw:
+        if 'join_time' not in kw:
             kw['join_time'] = utcnow()
         cols, vals = zip(*kw.items())
         cols = ', '.join(cols)
