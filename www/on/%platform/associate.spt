@@ -1,6 +1,6 @@
 import json
 
-from aspen import log, resources, Response
+from aspen import resources, Response
 from oauthlib.oauth2 import OAuth2Error
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
@@ -74,8 +74,6 @@ if action_user_id and account.user_id != action_user_id:
         then = '/on/%s/%s/failure.html?team=true'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
     account = claimed_account
-
-log('%s user "%s" wants to %s' % (platform.name, account.user_id, action))
 
 if action == 'connect':
     connect_to = Participant.from_id(p_id) if p_id else user
