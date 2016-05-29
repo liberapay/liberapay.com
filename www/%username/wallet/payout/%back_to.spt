@@ -61,6 +61,11 @@ if show_form:
         )
         ba_details = bank_account.Details
         ba_type = bank_account.Type
+    donations = participant.get_giving_for_profile()[1]
+    recommended_withdrawal = min(
+        withdrawable,
+        max(participant.balance - donations, constants.D_ZERO)
+    )
 
 if user == participant:
     participant.mark_notifications_as_read('withdrawal_failed')
@@ -112,10 +117,14 @@ title = _("Withdraw money")
 
     <h3>{{ _("Amount") }}</h3>
 
+    % if donations
+        <p>{{ _("You should keep at least {0} in your wallet to fund your donations this week.", Money(donations, 'EUR')) }}</p>
+    % endif
+
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <div class="input-group">
-            <input name="amount" value="{{ format_decimal(withdrawable) }}"
+            <input name="amount" value="{{ format_decimal(recommended_withdrawal) }}"
                    class="form-control" size=6 required />
             <div class="input-group-addon">€</div>
         </div>
