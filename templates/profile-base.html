@@ -1,0 +1,9 @@
+% extends "templates/base.html"
+
+% block head_early
+    % set nofollow = ['nofollow'] if participant.profile_nofollow else []
+    % set noindex = ['noindex'] if participant.profile_noindex or 'amount' in request.qs else []
+    % if nofollow or noindex
+    <meta name="robots" content="{{ ','.join(noindex + nofollow) }}" />
+    % endif
+% endblock

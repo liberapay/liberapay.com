@@ -1,13 +1,5 @@
-% extends "templates/base.html"
+% extends "templates/profile-base.html"
 % from 'templates/profile-box.html' import profile_box_full with context
-
-% block head_early
-    % set nofollow = ['nofollow'] if participant.profile_nofollow else []
-    % set noindex = ['noindex'] if participant.profile_noindex else []
-    % if nofollow or noindex
-    <meta name="robots" content="{{ ','.join(noindex + nofollow) }}" />
-    % endif
-% endblock
 
 % block before_content
 {% block profile_btn %}{% endblock %}
