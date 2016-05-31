@@ -49,7 +49,7 @@ class TestPrivacy(Harness):
 
     def test_team_participant_doesnt_show_up_on_explore_teams(self):
         alice = Participant.from_username('alice')
-        self.make_participant('A-Team', kind='group', hide_from_search=True).add_member(alice)
+        self.make_participant('A-Team', kind='group', hide_from_lists=True).add_member(alice)
         assert 'A-Team' not in self.client.GET("/explore/teams/").text
 
 

@@ -85,6 +85,7 @@ PRIVACY_FIELDS = OrderedDict([
     ('hide_receiving', _("Hide total receiving from others.")),
     ('hide_from_search', _("Hide myself from search results on Liberapay.")),
     ('profile_noindex', _("Tell web search engines not to index my profile.")),
+    ('hide_from_lists', _("Prevent my profile from being listed on Liberapay.")),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 
