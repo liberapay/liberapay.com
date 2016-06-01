@@ -158,6 +158,8 @@ class Participant(Model, MixinTeam):
                   JOIN participants p ON p.id = e.participant
                  WHERE e.address = %s
                    AND (p.email IS NULL OR p.email = e.address)
+              ORDER BY p.email NULLS LAST, p.id ASC
+                 LIMIT 1
             """, (value,))
         return cls.db.one("""
             SELECT participants.*::participants

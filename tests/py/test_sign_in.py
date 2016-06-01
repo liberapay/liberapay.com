@@ -32,6 +32,9 @@ class TestSignIn(EmailHarness):
 
     def log_in_and_check(self, p, password, **kw):
         r = self.log_in(p.username, password, **kw)
+        return self.check_login(r, p)
+
+    def check_login(self, r, p):
         p = p.refetch()
         # Basic checks
         assert r.code == 302
@@ -55,6 +58,16 @@ class TestSignIn(EmailHarness):
         alice = self.make_participant('alice')
         alice.update_password(password)
         self.log_in_and_check(alice, password)
+
+    def test_log_in_with_email_as_id(self):
+        email = 'alice@example.net'
+        password = 'password'
+        alice = self.make_participant('alice')
+        alice.add_email(email)
+        bob = self.make_participant('bob', email=email)
+        bob.update_password(password)
+        r = self.log_in(email, password)
+        self.check_login(r, bob)
 
     def test_log_in_with_old_session(self):
         alice = self.make_participant('alice')
