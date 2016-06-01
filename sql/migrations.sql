@@ -102,3 +102,7 @@ ALTER TYPE payment_net ADD VALUE 'mango-bw' BEFORE 'mango-cc';
 
 -- migration #12
 ALTER TABLE communities ADD COLUMN is_hidden boolean NOT NULL DEFAULT FALSE;
+
+-- migration #13
+ALTER TABLE participants ADD COLUMN profile_noindex boolean NOT NULL DEFAULT FALSE;
+ALTER TABLE participants ADD COLUMN hide_from_lists boolean NOT NULL DEFAULT FALSE;
