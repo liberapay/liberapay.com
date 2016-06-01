@@ -198,6 +198,12 @@ class Harness(unittest.TestCase):
                  VALUES (%s,%s,%s,%s)
         """, (platform, participant.id, username, participant.id))
 
+        if 'email' in kw:
+            self.db.run("""
+                INSERT INTO emails
+                            (participant, address, verified, verified_time)
+                     VALUES (%s, %s, true, now())
+            """, (participant.id, kw['email']))
         if 'last_bill_result' in kw2:
             ExchangeRoute.insert(participant, 'mango-cc', '-1', kw2['last_bill_result'])
         if 'balance' in kw2 and kw2['balance'] != 0:
