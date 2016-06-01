@@ -278,7 +278,10 @@ class TestClosing(FakeTransfersHarness):
         assert alice.npatrons == new_alice.npatrons == 0
         assert alice.session_token == new_alice.session_token == None
         assert alice.session_expires.year == new_alice.session_expires.year == date.today().year
-        assert not alice.get_emails()
+        emails = alice.get_emails()
+        assert len(emails) == 1
+        assert emails[0].address == 'alice@example.com'
+        assert emails[0].verified
 
     def test_cpi_clears_communities(self):
         alice = self.make_participant('alice')
