@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '11'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '12'::jsonb);
 
 
 -- app configuration
@@ -261,6 +261,7 @@ CREATE TABLE communities
 , creator        bigint        NOT NULL REFERENCES participants
 , lang           text          NOT NULL
 , participant    bigint        NOT NULL REFERENCES participants
+, is_hidden      boolean       NOT NULL DEFAULT FALSE
 , CHECK (nsubscribers >= 0)
 );
 

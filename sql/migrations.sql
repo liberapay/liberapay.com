@@ -99,3 +99,6 @@ ALTER TABLE notification_queue ADD COLUMN is_new boolean NOT NULL DEFAULT TRUE;
 
 -- migration #11
 ALTER TYPE payment_net ADD VALUE 'mango-bw' BEFORE 'mango-cc';
+
+-- migration #12
+ALTER TABLE communities ADD COLUMN is_hidden boolean NOT NULL DEFAULT FALSE;
