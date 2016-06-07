@@ -19,6 +19,7 @@ from liberapay.elsewhere._extractors import not_available
 from liberapay.exceptions import LazyResponse
 
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('liberapay.elsewhere')
 
 
