@@ -144,7 +144,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         Payday.start().update_cached_amounts()
         check()
 
-    @mock.patch('liberapay.billing.payday.logger.info')
+    @mock.patch('liberapay.billing.payday.log')
     def test_start_prepare(self, log):
         self.clear_tables()
         self.make_participant('carl', balance=10)

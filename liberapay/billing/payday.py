@@ -1,6 +1,5 @@
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
-import logging
 import os
 import os.path
 import pickle
@@ -15,7 +14,7 @@ from liberapay.models.participant import Participant
 from liberapay.utils import group_by
 
 
-logger = logging.getLogger('liberapay.billing.payday')
+log = print
 
 
 class NoPayday(Exception):
@@ -49,18 +48,18 @@ class Payday(object):
                 ), 0) + 1)
                 RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
             """, back_as=dict)
-            logger.info("Starting payday #%s." % d['id'])
+            log("Starting payday #%s." % d['id'])
         except IntegrityError:  # Collision, we have a Payday already.
             d = cls.db.one("""
                 SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
                   FROM paydays
                  WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
             """, back_as=dict)
-            logger.info("Picking up payday #%s." % d['id'])
+            log("Picking up payday #%s." % d['id'])
 
         d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
 
-        logger.info("Payday started at %s." % d['ts_start'])
+        log("Payday started at %s." % d['ts_start'])
 
         payday = Payday()
         payday.__dict__.update(d)
@@ -76,7 +75,7 @@ class Payday(object):
         self.db.self_check()
 
         _start = aspen.utils.utcnow()
-        logger.info("Greetings, program! It's PAYDAY!!!!")
+        log("Greetings, program! It's PAYDAY!!!!")
 
         self.shuffle(log_dir)
 
@@ -92,7 +91,7 @@ class Payday(object):
         _end = aspen.utils.utcnow()
         _delta = _end - _start
         fmt_past = "Script ran for %%(age)s (%s)." % _delta
-        logger.info(aspen.utils.to_age(_start, fmt_past=fmt_past))
+        log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
     def shuffle(self, log_dir=''):
         self.transfers_filename = log_dir+'payday-%s_transfers.pickle' % self.id
@@ -370,7 +369,7 @@ class Payday(object):
         $$ LANGUAGE plpgsql;
 
         """, dict(ts_start=ts_start))
-        logger.info("Prepared the DB.")
+        log("Prepared the DB.")
 
     @staticmethod
     def transfer_virtually(cursor):
@@ -400,9 +399,9 @@ class Payday(object):
              LIMIT 1
         """)
         if oops:
-            logger.critical(oops)
+            log(oops)
             raise NegativeBalance()
-        logger.info("Checked the balances.")
+        log("Checked the balances.")
 
     def transfer_for_real(self, transfers):
         db = self.db
@@ -454,7 +453,7 @@ class Payday(object):
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
 
         """, {'ts_start': self.ts_start})
-        logger.info("Updated payday stats.")
+        log("Updated payday stats.")
 
     def update_cached_amounts(self):
         now = aspen.utils.utcnow()
@@ -542,7 +541,7 @@ class Payday(object):
 
             """)
         self.clean_up()
-        logger.info("Updated receiving amounts.")
+        log("Updated receiving amounts.")
 
     def end(self):
         self.ts_end = self.db.one("""
