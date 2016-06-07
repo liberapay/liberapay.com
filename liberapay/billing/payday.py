@@ -1,5 +1,6 @@
 from __future__ import print_function, unicode_literals
 
+from datetime import date
 import os
 import os.path
 import pickle
@@ -627,7 +628,7 @@ class Payday(object):
             p.notify('low_balance')
 
 
-def main():
+def main(run_checks=True, reraise=False):
     from os import environ
 
     from liberapay.billing.exchanges import sync_with_mangopay
@@ -636,12 +637,31 @@ def main():
     # https://github.com/liberapay/salon/issues/19#issuecomment-191230689
     from liberapay.billing.payday import Payday
 
-    if website.env.canonical_host == 'liberapay.com':
+    if website.canonical_host == 'liberapay.com':
         log_dir = environ['OPENSHIFT_DATA_DIR']
         keep_log = True
     else:
         log_dir = ''
         keep_log = False
+
+    if run_checks:
+        # Check that payday hasn't already been run today
+        r = website.db.one("""
+            SELECT id
+              FROM paydays
+             WHERE ts_start >= now() - INTERVAL '6 days'
+               AND ts_end >= ts_start
+        """)
+        assert not r, "payday has already been run this week"
+        # Check that today is Wednesday
+        wd = date.today().isoweekday()
+        assert wd == 3, "today is not Wednesday (%s != 3)" % wd
+
+    # Prevent a race condition, by acquiring a DB lock
+    conn = website.db.get_connection().__enter__()
+    cursor = conn.cursor()
+    lock = cursor.one("SELECT pg_try_advisory_lock(1)")
+    assert lock, "failed to acquire the payday lock"
 
     try:
         sync_with_mangopay(website.db)
@@ -649,8 +669,12 @@ def main():
     except KeyboardInterrupt:  # pragma: no cover
         pass
     except:  # pragma: no cover
+        if reraise:
+            raise
         import traceback
         traceback.print_exc()
+    finally:
+        conn.close()
 
 
 if __name__ == '__main__':  # pragma: no cover
