@@ -17,7 +17,13 @@ if request.method == 'POST' and not payday_is_running:
         participant.close(disburse_to)
         response.redirect('/%s/' % participant.username)
 
-pending_payouts = website.db.one("SELECT count(*) FROM exchanges WHERE status = 'created'")
+pending_payouts = website.db.one("""
+    SELECT count(*)
+      FROM exchanges
+     WHERE participant = %s
+       AND amount < 0
+       AND status = 'created'
+""", (participant.id,))
 
 title = _("Close Account")
 subhead = participant.username
