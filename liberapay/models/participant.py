@@ -22,7 +22,7 @@ from psycopg2.extras import Json
 from liberapay.billing import mangoapi
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO, EMAIL_RE,
-    EMAIL_VERIFICATION_TIMEOUT, MAX_TIP,
+    EMAIL_VERIFICATION_TIMEOUT, EVENTS, MAX_TIP,
     MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, SESSION, SESSION_REFRESH,
     SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
@@ -48,7 +48,6 @@ from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.notifications import EVENTS
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     b64encode_s, erase_cookie, serialize, set_cookie,

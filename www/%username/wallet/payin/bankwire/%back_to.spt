@@ -7,7 +7,7 @@ from aspen import json, Response
 
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
-from liberapay.notifications import EVENTS
+from liberapay.constants import EVENTS
 from liberapay.utils import b64decode_s, get_participant
 
 
