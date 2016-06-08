@@ -23,8 +23,8 @@ from liberapay.billing import mangoapi
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS, MAX_TIP,
-    MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, SESSION, SESSION_REFRESH,
-    SESSION_TIMEOUT, USERNAME_MAX_SIZE
+    MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PRIVILEGES,
+    SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
 from liberapay.exceptions import (
     BadAmount,
@@ -279,6 +279,14 @@ class Participant(Model, MixinTeam):
         """
         self.update_session(None, None)
         erase_cookie(cookies, SESSION)
+
+
+    # Permissions
+    # ===========
+
+    @property
+    def is_admin(self):
+        return self.privileges & PRIVILEGES['admin']
 
 
     # Statement

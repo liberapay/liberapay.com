@@ -110,6 +110,9 @@ PRIVACY_FIELDS = OrderedDict([
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 
+PRIVILEGES = dict(admin=1)
+check_bits(list(PRIVILEGES.values()))
+
 QUARANTINE = timedelta(weeks=4)
 
 SEPA_ZONE = set("""
