@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from collections import OrderedDict
 import json
+import logging
 import os
 import re
 import traceback
@@ -372,7 +373,10 @@ def env():
         GUNICORN_OPTS                   = str,
         LOG_DIR                         = str,
         KEEP_PAYDAY_LOGS                = is_yesish,
+        LOGGING_LEVEL                   = str,
     )  # flake8: noqa
+
+    logging.basicConfig(level=getattr(logging, env.logging_level.upper()))
 
     if env.log_dir[:1] == '$':
         var_name = env.log_dir[1:]
