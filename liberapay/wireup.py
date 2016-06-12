@@ -370,7 +370,15 @@ def env():
         SENTRY_DSN                      = str,
         SENTRY_RERAISE                  = is_yesish,
         GUNICORN_OPTS                   = str,
+        LOG_DIR                         = str,
+        KEEP_PAYDAY_LOGS                = is_yesish,
     )  # flake8: noqa
+
+    if env.log_dir[:1] == '$':
+        var_name = env.log_dir[1:]
+        env.log_dir = environ.get(var_name)
+        if env.log_dir is None:
+            env.missing.append(var_name+' (referenced by LOG_DIR)')
 
     if env.malformed:
         plural = len(env.malformed) != 1 and 's' or ''
