@@ -94,6 +94,10 @@ class Payday(object):
         fmt_past = "Script ran for %%(age)s (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
+        if keep_log:
+            output_log_path = log_dir+'/payday-%i.txt' % self.id
+            os.rename(output_log_path+'.part', output_log_path)
+
     def shuffle(self, log_dir='.'):
         self.transfers_filename = log_dir+'/payday-%s_transfers.pickle' % self.id
         if os.path.exists(self.transfers_filename):

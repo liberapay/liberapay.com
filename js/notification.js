@@ -3,6 +3,8 @@
  * Valid notification types are "error" and "success".
  */
 Liberapay.notification = function(text, type, timeout) {
+    if (text.length === 0) return;
+
     var type = type || 'notice';
     var timeout = timeout || (type == 'error' ? 10000 : 5000);
 

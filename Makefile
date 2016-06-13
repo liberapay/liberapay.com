@@ -51,9 +51,6 @@ run: env db-migrations
 py: env
 	PYTHONPATH=. $(with_local_env) $(env_py) -i liberapay/main.py
 
-payday: env
-	PYTHONPATH=. $(with_local_env) $(env_py) liberapay/billing/payday.py
-
 test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 

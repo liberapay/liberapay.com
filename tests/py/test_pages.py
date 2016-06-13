@@ -36,6 +36,7 @@ class TestPages(MangopayHarness):
                      .replace('/%action', '/leave') \
                      .replace('/%redirect_to', '/giving') \
                      .replace('/%back_to', '/Li4=') \
+                     .replace('/payday/%id', '/payday/') \
                      .replace('/%type', '/receiving.js') \
                      .replace('/%endpoint', '/public')
             urls[url.replace('/%username/', '/david/')] = None

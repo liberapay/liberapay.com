@@ -110,7 +110,7 @@ PRIVACY_FIELDS = OrderedDict([
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 
-PRIVILEGES = dict(admin=1)
+PRIVILEGES = dict(admin=1, run_payday=2)
 check_bits(list(PRIVILEGES.values()))
 
 QUARANTINE = timedelta(weeks=4)

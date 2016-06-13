@@ -284,6 +284,9 @@ class Participant(Model, MixinTeam):
     # Permissions
     # ===========
 
+    def has_privilege(self, p):
+        return self.privileges & PRIVILEGES[p]
+
     @property
     def is_admin(self):
         return self.privileges & PRIVILEGES['admin']

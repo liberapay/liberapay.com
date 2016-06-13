@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from base64 import b64decode, b64encode
 from binascii import hexlify
 from datetime import date, datetime, timedelta
+import errno
 import fnmatch
 import os
 import pickle
@@ -261,3 +262,27 @@ def serialize(context):
         if str(type(v)) == "<class 'psycopg2.extras.Record'>":
             context[k] = v._asdict()
     return b'\\x' + hexlify(pickle.dumps(context, 2))
+
+
+def pid_exists(pid):
+    """Check whether pid exists in the current process table. UNIX only.
+
+    Source: http://stackoverflow.com/a/6940314/2729778
+    """
+    if not pid > 0:
+        raise ValueError("bad PID %s" % pid)
+    try:
+        os.kill(pid, 0)
+    except OSError as err:
+        if err.errno == errno.ESRCH:
+            # ESRCH == No such process
+            return False
+        elif err.errno == errno.EPERM:
+            # EPERM clearly means there's a process to deny access to
+            return True
+        else:
+            # According to "man 2 kill" possible error values are
+            # (EINVAL, EPERM, ESRCH)
+            raise
+    else:
+        return True
