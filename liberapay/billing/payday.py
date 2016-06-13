@@ -628,14 +628,14 @@ class Payday(object):
             p.notify('low_balance')
 
 
-def main(run_checks=True, reraise=False):
+def main(override_payday_checks=False, reraise=False):
     from liberapay.billing.exchanges import sync_with_mangopay
     from liberapay.main import website
 
     # https://github.com/liberapay/salon/issues/19#issuecomment-191230689
     from liberapay.billing.payday import Payday
 
-    if run_checks:
+    if not website.env.override_payday_checks and not override_payday_checks:
         # Check that payday hasn't already been run today
         r = website.db.one("""
             SELECT id

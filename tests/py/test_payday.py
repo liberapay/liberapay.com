@@ -29,19 +29,19 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             lock = cursor.one("SELECT pg_try_advisory_lock(1)")
             assert lock  # sanity check
             with self.assertRaises(AssertionError) as cm:
-                main(reraise=True)
+                main()
             assert cm.exception.message == "failed to acquire the payday lock"
 
-        main(reraise=True)
+        main()
 
         with self.assertRaises(AssertionError) as cm:
-            main(reraise=True)
+            main()
         assert cm.exception.message == "payday has already been run this week"
 
     def test_payday_id_is_serial(self):
         for i in range(1, 4):
             self.db.run("SELECT nextval('paydays_id_seq')")
-            main(run_checks=False, reraise=True)
+            main(override_payday_checks=True, reraise=True)
             id = self.db.one("SELECT id FROM paydays ORDER BY id DESC LIMIT 1")
             assert id == i
 

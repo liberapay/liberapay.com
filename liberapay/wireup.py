@@ -376,6 +376,7 @@ def env():
         CACHE_STATIC                    = is_yesish,
         CLEAN_ASSETS                    = is_yesish,
         RUN_CRON_JOBS                   = is_yesish,
+        OVERRIDE_PAYDAY_CHECKS          = is_yesish,
     )  # flake8: noqa
 
     logging.basicConfig(level=getattr(logging, env.logging_level.upper()))
