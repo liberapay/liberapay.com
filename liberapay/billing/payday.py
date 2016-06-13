@@ -628,7 +628,7 @@ class Payday(object):
             p.notify('low_balance')
 
 
-def main(override_payday_checks=False, reraise=False):
+def main(override_payday_checks=False):
     from liberapay.billing.exchanges import sync_with_mangopay
     from liberapay.main import website
 
@@ -659,11 +659,9 @@ def main(override_payday_checks=False, reraise=False):
         Payday.start().run(website.env.log_dir, website.env.keep_payday_logs)
     except KeyboardInterrupt:  # pragma: no cover
         pass
-    except:  # pragma: no cover
-        if reraise:
-            raise
-        import traceback
-        traceback.print_exc()
+    except Exception as e:  # pragma: no cover
+        website.tell_sentry(e, {})
+        raise
     finally:
         conn.close()
 
