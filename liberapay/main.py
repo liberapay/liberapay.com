@@ -49,22 +49,24 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
 
 website.__dict__.update(wireup.full_algorithm.run(**website.__dict__))
 website.__dict__.pop('state')
-conf = website.app_conf
+env = website.env
 tell_sentry = website.tell_sentry
 
-if conf.cache_static:
+if env.cache_static:
     http_caching.compile_assets(website)
-else:
+elif env.clean_assets:
     http_caching.clean_assets(website.www_root)
 
 
 # Periodic jobs
 # =============
 
-cron = Cron(website)
-cron(conf.update_global_stats_every, lambda: utils.update_global_stats(website))
-cron(conf.check_db_every, website.db.self_check, True)
-cron(conf.dequeue_emails_every, Participant.dequeue_emails, True)
+if env.run_cron_jobs:
+    conf = website.app_conf
+    cron = Cron(website)
+    cron(conf.update_global_stats_every, lambda: utils.update_global_stats(website))
+    cron(conf.check_db_every, website.db.self_check, True)
+    cron(conf.dequeue_emails_every, Participant.dequeue_emails, True)
 
 
 # Website Algorithm
@@ -100,8 +102,8 @@ algorithm.functions = [
 
     algorithm['dispatch_request_to_filesystem'],
 
-    http_caching.get_etag_for_file if conf.cache_static else noop,
-    http_caching.try_to_serve_304 if conf.cache_static else noop,
+    http_caching.get_etag_for_file if env.cache_static else noop,
+    http_caching.try_to_serve_304 if env.cache_static else noop,
 
     algorithm['apply_typecasters_to_path'],
     algorithm['get_resource_for_request'],

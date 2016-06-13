@@ -33,7 +33,8 @@ def compile_assets(website):
         os.write(tmpfd, content)
         os.close(tmpfd)
         os.rename(tmpfpath, filepath)
-    atexit.register(lambda: rm_f(*cleanup))
+    if website.env.clean_assets:
+        atexit.register(lambda: rm_f(*cleanup))
 
 
 def rm_f(*paths):

@@ -13,3 +13,5 @@ CREATE OR REPLACE VIEW sponsors AS
        AND giving >= 10
        AND NOT profile_nofollow
     ;
+
+DELETE FROM app_conf WHERE key = 'cache_static';
