@@ -383,7 +383,7 @@ def env():
 
     if env.log_dir[:1] == '$':
         var_name = env.log_dir[1:]
-        env.log_dir = environ.get(var_name)
+        env.log_dir = os.environ.get(var_name)
         if env.log_dir is None:
             env.missing.append(var_name+' (referenced by LOG_DIR)')
 
