@@ -106,3 +106,18 @@ ALTER TABLE communities ADD COLUMN is_hidden boolean NOT NULL DEFAULT FALSE;
 -- migration #13
 ALTER TABLE participants ADD COLUMN profile_noindex boolean NOT NULL DEFAULT FALSE;
 ALTER TABLE participants ADD COLUMN hide_from_lists boolean NOT NULL DEFAULT FALSE;
+
+-- migration #14
+DROP VIEW sponsors;
+ALTER TABLE participants ADD COLUMN privileges int NOT NULL DEFAULT 0;
+UPDATE participants SET privileges = 1 WHERE is_admin;
+ALTER TABLE participants DROP COLUMN is_admin;
+CREATE OR REPLACE VIEW sponsors AS
+    SELECT *
+      FROM participants p
+     WHERE status = 'active'
+       AND kind = 'organization'
+       AND giving > receiving
+       AND giving >= 10
+       AND NOT profile_nofollow;
+DELETE FROM app_conf WHERE key = 'cache_static';
