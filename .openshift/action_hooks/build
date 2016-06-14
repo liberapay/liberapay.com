@@ -7,7 +7,3 @@ python -m git_lfs -vv ~/git/$OPENSHIFT_APP_NAME.git $OPENSHIFT_REPO_DIR
 echo "Removing unnecessary files..."
 cd $OPENSHIFT_REPO_DIR
 rm -rf Makefile pytest.ini requirements_*.txt *.env *.md *.sh sql/ tests/
-
-echo "Checking the configuration..."
-cd $OPENSHIFT_REPO_DIR
-PYTHONPATH=. python liberapay/wireup.py
