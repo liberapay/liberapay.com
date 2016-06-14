@@ -34,6 +34,8 @@ class LazyResponseXXX(LazyResponse):
         self.lazy_body = self.msg
         self.args = args
 
+    __str__ = Exception.__str__
+
 
 class LazyResponse400(LazyResponseXXX):
     code = 400
@@ -155,3 +157,12 @@ class CommunityAlreadyExists(LazyResponse400):
 class InvalidCommunityName(LazyResponse400):
     def msg(self, _):
         return _('"{0}" is not a valid community name.', *self.args)
+
+
+class TransferError(LazyResponseXXX):
+    code = 500
+    def msg(self, _):
+        return _(
+            "Transferring the money failed, sorry. Please contact support@liberapay.com "
+            "if the problem persists. Error message: {0}", *self.args
+        )
