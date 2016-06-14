@@ -23,6 +23,13 @@ class CustomUndefined(StrictUndefined):
     __unicode__ = __str__
 
 
+def check_bits(bits):
+    assert len(set(bits)) == len(bits)  # no duplicates
+    assert not [b for b in bits if '{0:b}'.format(b).count('1') != 1]  # single bit
+
+
+Event = namedtuple('Event', 'name bit title')
+
 Fees = namedtuple('Fees', ('var', 'fix'))
 
 
@@ -49,6 +56,20 @@ EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
 EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
 
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
+
+EVENTS = [
+    Event('income', 1, _("When I receive money")),
+    Event('low_balance', 2, _("When there isn't enough money in my wallet to cover my donations")),
+    Event('withdrawal_created', 4, _("When a transfer to my bank account is initiated")),
+    Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
+    Event('pledgee_joined', 16, _("When someone I pledge to joins Liberapay")),
+    Event('team_invite', 32, _("When someone invites me to join a team")),
+    Event('payin_bankwire_failed', 64, _("When a bank wire transfer to my Liberapay wallet fails")),
+    Event('payin_bankwire_succeeded', 128, _("When a bank wire transfer to my Liberapay wallet succeeds")),
+]
+check_bits([e.bit for e in EVENTS])
+EVENTS = OrderedDict((e.name, e) for e in EVENTS)
+EVENTS_S = ' '.join(EVENTS.keys())
 
 # https://www.mangopay.com/pricing/
 FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), Decimal(0))  # 0.5%
@@ -88,6 +109,9 @@ PRIVACY_FIELDS = OrderedDict([
     ('hide_from_lists', _("Prevent my profile from being listed on Liberapay.")),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
+
+PRIVILEGES = dict(admin=1, run_payday=2)
+check_bits(list(PRIVILEGES.values()))
 
 QUARANTINE = timedelta(weeks=4)
 

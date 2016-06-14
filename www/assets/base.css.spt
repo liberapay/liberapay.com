@@ -22,7 +22,7 @@ url_re = re.compile(r"""\burl\((['"])(.+?)['"]\)""")
 css = ''
 for f in find_files(website.project_root+'/style/base/', '*.scss'):
     css += sass.compile(output_style=output_style, filename=f)
-if website.app_conf.cache_static:
+if website.env.cache_static:
     css = url_re.sub(url_sub, css)
 [---] via stdlib_format
 {css}

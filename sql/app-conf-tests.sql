@@ -4,7 +4,6 @@ $$ LANGUAGE sql;
 
 DO $$
 BEGIN
-    PERFORM update_app_conf('cache_static', 'true'::jsonb);
     PERFORM update_app_conf('check_db_every', '0'::jsonb);
     PERFORM update_app_conf('update_homepage_every', '0'::jsonb);
 END;

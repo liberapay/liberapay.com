@@ -66,7 +66,7 @@ class Payday(object):
         payday.__dict__.update(d)
         return payday
 
-    def run(self, log_dir='', keep_log=False):
+    def run(self, log_dir='.', keep_log=False):
         """This is the starting point for payday.
 
         It is structured such that it can be run again safely (with a
@@ -94,8 +94,12 @@ class Payday(object):
         fmt_past = "Script ran for %%(age)s (%s)." % _delta
         log(aspen.utils.to_age(_start, fmt_past=fmt_past))
 
-    def shuffle(self, log_dir=''):
-        self.transfers_filename = log_dir+'payday-%s_transfers.pickle' % self.id
+        if keep_log:
+            output_log_path = log_dir+'/payday-%i.txt' % self.id
+            os.rename(output_log_path+'.part', output_log_path)
+
+    def shuffle(self, log_dir='.'):
+        self.transfers_filename = log_dir+'/payday-%s_transfers.pickle' % self.id
         if os.path.exists(self.transfers_filename):
             with open(self.transfers_filename, 'rb') as f:
                 transfers = pickle.load(f)
@@ -628,23 +632,14 @@ class Payday(object):
             p.notify('low_balance')
 
 
-def main(run_checks=True, reraise=False):
-    from os import environ
-
+def main(override_payday_checks=False):
     from liberapay.billing.exchanges import sync_with_mangopay
     from liberapay.main import website
 
     # https://github.com/liberapay/salon/issues/19#issuecomment-191230689
     from liberapay.billing.payday import Payday
 
-    if website.canonical_host == 'liberapay.com':
-        log_dir = environ['OPENSHIFT_DATA_DIR']
-        keep_log = True
-    else:
-        log_dir = ''
-        keep_log = False
-
-    if run_checks:
+    if not website.env.override_payday_checks and not override_payday_checks:
         # Check that payday hasn't already been run today
         r = website.db.one("""
             SELECT id
@@ -665,14 +660,12 @@ def main(run_checks=True, reraise=False):
 
     try:
         sync_with_mangopay(website.db)
-        Payday.start().run(log_dir, keep_log)
+        Payday.start().run(website.env.log_dir, website.env.keep_payday_logs)
     except KeyboardInterrupt:  # pragma: no cover
         pass
-    except:  # pragma: no cover
-        if reraise:
-            raise
-        import traceback
-        traceback.print_exc()
+    except Exception as e:  # pragma: no cover
+        website.tell_sentry(e, {})
+        raise
     finally:
         conn.close()
 

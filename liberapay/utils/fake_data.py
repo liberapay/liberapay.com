@@ -38,7 +38,7 @@ def fake_sentence(start=1, stop=100):
     return faker.sentence(random.randrange(start, stop))
 
 
-def fake_participant(db, kind=None, is_admin=False):
+def fake_participant(db, kind=None):
     """Create a fake User.
     """
     username = faker.first_name() + fake_text_id(3)
@@ -51,7 +51,6 @@ def fake_participant(db, kind=None, is_admin=False):
             username=username,
             password=None if not is_a_person else 'x',
             email=username+'@example.org',
-            is_admin=is_admin,
             balance=0,
             hide_giving=is_a_person and (random.randrange(5) == 0),
             hide_receiving=is_a_person and (random.randrange(5) == 0),
@@ -62,7 +61,7 @@ def fake_participant(db, kind=None, is_admin=False):
             mangopay_wallet_id='-1',
         )
     except IntegrityError:
-        return fake_participant(db, is_admin)
+        return fake_participant(db)
 
     # Call participant constructor to perform other DB initialization
     return Participant.from_username(username)

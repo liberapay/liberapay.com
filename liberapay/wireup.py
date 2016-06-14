@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from collections import OrderedDict
 import json
+import logging
 import os
 import re
 import traceback
@@ -69,7 +70,6 @@ class AppConf(object):
         bountysource_callback           = str,
         bountysource_id                 = None.__class__,
         bountysource_secret             = str,
-        cache_static                    = bool,
         check_db_every                  = int,
         compress_assets                 = bool,
         dequeue_emails_every            = int,
@@ -345,8 +345,8 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     return {'docs': docs, 'lang_list': lang_list, 'locales': locales}
 
 
-def asset_url_generator(app_conf, asset_url, tell_sentry, www_root):
-    if app_conf.cache_static:
+def asset_url_generator(env, asset_url, tell_sentry, www_root):
+    if env.cache_static:
         def asset(path):
             fspath = www_root+'/assets/'+path
             etag = ''
@@ -370,7 +370,22 @@ def env():
         SENTRY_DSN                      = str,
         SENTRY_RERAISE                  = is_yesish,
         GUNICORN_OPTS                   = str,
+        LOG_DIR                         = str,
+        KEEP_PAYDAY_LOGS                = is_yesish,
+        LOGGING_LEVEL                   = str,
+        CACHE_STATIC                    = is_yesish,
+        CLEAN_ASSETS                    = is_yesish,
+        RUN_CRON_JOBS                   = is_yesish,
+        OVERRIDE_PAYDAY_CHECKS          = is_yesish,
     )  # flake8: noqa
+
+    logging.basicConfig(level=getattr(logging, env.logging_level.upper()))
+
+    if env.log_dir[:1] == '$':
+        var_name = env.log_dir[1:]
+        env.log_dir = environ.get(var_name)
+        if env.log_dir is None:
+            env.missing.append(var_name+' (referenced by LOG_DIR)')
 
     if env.malformed:
         plural = len(env.malformed) != 1 and 's' or ''

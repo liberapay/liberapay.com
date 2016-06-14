@@ -1,0 +1,222 @@
+from datetime import date
+import mmap
+import os
+from subprocess import Popen
+import sys
+from threading import Lock
+
+from aspen import Response
+
+from liberapay.exceptions import AuthRequired
+from liberapay.utils import pid_exists
+
+devnull = open(os.devnull)
+root = website.project_root
+
+payday_log_path = lambda i: website.env.log_dir+'/payday-%i.txt' % i
+
+def payday_preexec():
+    # Tweak env
+    from os import environ
+    environ['CACHE_STATIC'] = 'no'
+    environ['CLEAN_ASSETS'] = 'no'
+    environ['RUN_CRON_JOBS'] = 'no'
+    environ['PYTHONPATH'] = root
+    # Write PID file
+    pid_file = open(website.env.log_dir+'/payday.pid', 'w')
+    pid_file.write(str(os.getpid()))
+
+def exec_payday(log_file):
+    # Fork twice, like a traditional unix daemon
+    if os.fork():
+        sys.exit(0)
+    if os.fork():
+        sys.exit(0)
+    # Fork again and exec
+    Popen(
+        [sys.executable, '-u', 'liberapay/billing/payday.py'],
+        stdin=devnull, stdout=log_file, stderr=log_file,
+        close_fds=True, cwd=root, preexec_fn=payday_preexec,
+    )
+
+def parse_int(s, **kw):
+    try:
+        return int(s)
+    except ValueError:
+        if 'default' in kw:
+            return kw['default']
+        raise Response(400, "'%s' is not a valid integer" % s)
+
+MAXLEN = mmap.PAGESIZE * 100
+
+file_seek_lock = Lock()
+
+def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
+    """This implements a non-standard `x-lines` HTTP Range Request mechanism.
+
+    Why? Because streaming blocks of full lines instead of arbitrary blocks of bytes is
+    a simple way to avoid splitting a multibyte char (e.g. UTF8-encoded) in the middle.
+
+    The standard for HTTP range requests is https://tools.ietf.org/html/rfc7233
+    """
+    file_is_partial = f.name.endswith('.part')
+    req_range = request.headers.get('Range', '').split('=', 1)
+    if req_range[0] != 'x-lines':
+        raise Response(416, "unknown range specifier")
+    req_range = req_range[-1].split('-', 1)
+    first_pos = parse_int(req_range[0], default=0)
+    # NOTE we're ignoring the rest of the requested range
+    with file_seek_lock:
+        f.seek(max(first_pos - 1, 0))
+        if first_pos > 0:
+            lf = f.read(1)
+            if lf != b'\n':
+                raise Response(416, "byte %s is not a line feed" % first_pos)
+        lines = f.readlines(maxlen)
+        if file_is_partial and lines and lines[-1][-1:] != b'\n':
+            lines = lines[:-1]
+        data = ''.join(lines)
+    l = len(data)
+    last_pos = first_pos + l - 1
+    if file_is_partial or first_pos > 0 or last_pos < os.fstat(f.fileno()).st_size - 1:
+        response.code = 206
+        size = '*' if file_is_partial else os.fstat(f.fileno()).st_size
+        cr = 'x-lines %s-%s/%s' % (first_pos, last_pos, size)
+        # NOTE the range's unit is bytes, not lines
+        response.headers['Content-Range'] = cr
+    response.headers['Content-Type'] = 'text/plain'
+    response.body = data
+    return response
+
+payday_logs = {}
+
+class payday_pid(object):
+    file, lock = None, Lock()
+
+def serve_payday_log(payday_id, request, response):
+    f = None
+    if payday_id in payday_logs:
+        f = payday_logs[payday_id]
+        if not os.path.exists(f.name):
+            payday_logs.pop(payday_id, None)
+            f.close()
+            f = None
+    if not f:
+        log_path = payday_log_path(payday_id)
+        if not os.path.exists(log_path):
+            log_path += '.part'
+        try:
+            f = payday_logs[payday_id] = open(log_path, 'rb')
+        except IOError as e:
+            if e.errno == 2:
+                raise Response(404)
+            raise Response(500, "IOError")
+    stream_lines_from_file(f, request, response)
+    if f.name.endswith('.part') and not response.body:
+        # Check that payday hasn't crashed
+        if not payday_pid.file:
+            try:
+                payday_pid.file = open(website.env.log_dir+'/payday.pid', 'rb')
+            except IOError as e:
+                if e.errno != 2:
+                    raise
+        if payday_pid.file:
+            with payday_pid.lock:
+                payday_pid.file.seek(0)
+                pid = parse_int(payday_pid.file.read(1024).strip(), default=None)
+        else:
+            pid = None
+        if not pid or not pid_exists(pid):
+            raise Response(500, "Payday seems to have crashed.")
+    raise response
+
+[---]
+
+if user.ANON:
+    raise AuthRequired
+if not user.has_privilege('run_payday') and not user.is_admin:
+    raise Response(403, "You're not authorized to run payday.")
+
+payday_id = request.path['id'].split('.', 1)[0]
+title = "Payday"
+
+if payday_id:
+    try:
+        payday_id = int(payday_id)
+    except ValueError:
+        raise Response(404)
+    title += " #%s" % payday_id
+else:
+    last_payday = website.db.one("SELECT * FROM paydays ORDER BY id DESC LIMIT 1")
+    payday_is_running = bool(last_payday) and last_payday.ts_end < last_payday.ts_start
+    today = date.today()
+    today_weekday = today.isoweekday()
+    today_is_wednesday = today_weekday == 3
+    override_checks = website.env.override_payday_checks
+
+if request.method == 'POST':
+    action = request.body['action']
+    if action not in ('run_payday', 'rerun_payday'):
+        raise Response(400, "bad action")
+    rerun = action == 'rerun_payday'
+    if not rerun and payday_is_running:
+        # Payday has already been started, redirect
+        response.redirect('./%s' % last_payday.id)
+    p_id = payday_id if rerun else last_payday.id + 1
+    log_file = open(payday_log_path(p_id)+'.part', 'a')
+    exec_payday(log_file)
+    response.redirect('./%s' % p_id)
+
+[---] text/html
+% extends "templates/base.html"
+
+% block content
+    % if payday_id
+        <noscript class="alert alert-danger">JavaScript is required</noscript>
+        <pre class="console" id="payday-log"
+             data-log-url="{{ request.path.raw+'.txt' }}"
+             data-rerun="#payday-rerun"
+             data-msg-success="Payday has been successfully run \o/"></pre>
+        <form action="" class="hidden" id="payday-rerun" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <button class="btn btn-danger btn-lg" name="action" value="rerun_payday">Rerun payday</button>
+        </form>
+    % else
+        <h3>Running Payday</h3>
+        % if payday_is_running
+            <p>Payday is running right now, you can go <a href="./{{ last_payday.id }}">see the log</a>.</p>
+        % elif last_payday and last_payday.ts_start.date() == today and not override_checks
+            <p>Payday has already been run today.</p>
+        % elif today_is_wednesday or override_checks
+            <p class="alert alert-warning">
+                Before clicking the button below, make sure there isn't any issue that needs
+                to be dealt with before this week's payday, and no important code changes
+                to merge or deploy.
+            </p>
+            <form action="" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <button class="btn btn-danger btn-lg" name="action" value="run_payday">Run payday</button>
+            </form>
+        % else
+            <p>Payday runs on Wednesday. That's not today.</p>
+        % endif
+
+        % if last_payday
+            <br>
+            <h3>Payday Logs</h3>
+            % for i in range(last_payday.id, 0, -1)
+                <a href="./{{ i }}">Payday #{{ i }}</a><br>
+            % endfor
+        % endif
+    % endif
+% endblock
+
+% block scripts
+    {{ super() }}
+    % if payday_id
+        <script>$(function(){ Liberapay.tail_log($('#payday-log')) })</script>
+    % endif
+% endblock
+
+[---] text/plain
+{{ serve_payday_log(payday_id, request, response) }}
