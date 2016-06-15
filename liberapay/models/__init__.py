@@ -162,25 +162,35 @@ def run_migrations(db):
     return n - v
 
 
-def show_table(db, table):
-    assert re.match(r'^\w+$', table)
-    print('\n{:=^80}'.format(table))
-    data = db.all('select * from '+table)
+def render(db, query, args=None):
+    data = db.all(query, args)
     if len(data) == 0:
         return
+    r = ''
     widths = list(len(k) for k in data[0]._fields)
     for row in data:
         for i, v in enumerate(row):
             widths[i] = max(widths[i], len(str(v)))
     for k, w in zip(data[0]._fields, widths):
-        print("{0:{width}}".format(str(k), width=w), end=' | ')
-    print()
+        r += "{0:{width}} | ".format(str(k), width=w)
+    r += '\n'
     for row in data:
         for v, w in zip(row, widths):
-            print("{0:{width}}".format(str(v), width=w), end=' | ')
-        print()
+            r += "{0:{width}} | ".format(str(v), width=w)
+        r += '\n'
+    return r
 
-SimpleCursorBase.show_table = show_table
+DB.render = SimpleCursorBase.render = render
+
+
+def show_table(db, table):
+    assert re.match(r'^\w+$', table)
+    print('\n{:=^80}'.format(table))
+    r = render(db, 'select * from '+table)
+    if r:
+        print(r, end='')
+
+DB.show_table = SimpleCursorBase.show_table = show_table
 
 
 if __name__ == '__main__':
