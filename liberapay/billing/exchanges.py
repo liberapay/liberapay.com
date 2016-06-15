@@ -27,8 +27,8 @@ from liberapay.constants import (
     FEE_VAT,
 )
 from liberapay.exceptions import (
-    LazyResponse, NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
-    FeeExceedsAmount, TransactionFeeTooHigh,
+    NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
+    FeeExceedsAmount, TransactionFeeTooHigh, TransferError,
 )
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
@@ -410,17 +410,18 @@ def record_transfer_result(db, t_id, tr):
     error = repr_error(tr)
     status = tr.Status.lower()
     assert (not error) ^ (status == 'failed')
-    return _record_transfer_result(db, t_id, status)
+    return _record_transfer_result(db, t_id, status, error)
 
 
-def _record_transfer_result(db, t_id, status):
+def _record_transfer_result(db, t_id, status, error=None):
     with db.get_cursor() as c:
         tipper, tippee, amount = c.one("""
             UPDATE transfers
                SET status = %s
+                 , error = %s
              WHERE id = %s
          RETURNING tipper, tippee, amount
-        """, (status, t_id))
+        """, (status, error, t_id))
         if status == 'succeeded':
             balance = c.one("""
 
@@ -467,7 +468,7 @@ def _record_transfer_result(db, t_id, status):
                     """, (x, b.id, tippee, b.origin, x, b.ts))
                     break
             return balance
-    raise LazyResponse(500, lambda _: _("Transferring the money failed, please try again."))
+    raise TransferError(error)
 
 
 def sync_with_mangopay(db):
