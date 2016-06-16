@@ -29,9 +29,9 @@ def payday_preexec():
 def exec_payday(log_file):
     # Fork twice, like a traditional unix daemon
     if os.fork():
-        sys.exit(0)
+        os.execlp('true', 'true')
     if os.fork():
-        sys.exit(0)
+        os.execlp('true', 'true')
     # Fork again and exec
     Popen(
         [sys.executable, '-u', 'liberapay/billing/payday.py'],
