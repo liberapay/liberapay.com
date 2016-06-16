@@ -1,7 +1,10 @@
 #!/bin/bash -eu
 
 # http://docs.gunicorn.org/en/stable/signals.html
-function get_pid() { cat $OPENSHIFT_DATA_DIR/gunicorn.pid || true }
+function get_pid() {
+    i="$(cat $OPENSHIFT_DATA_DIR/gunicorn.pid || true)"
+    if [ ! -z "$i" -a -d /proc/$i ]; then echo -n $i; fi
+}
 pid=$(get_pid)
 if [ ! -z "$pid" ]; then
     echo "Gracefully restarting gunicorn..."
