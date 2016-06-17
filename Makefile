@@ -66,6 +66,7 @@ pytest: env
 
 pytest-cov: env
 	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/
+	@$(MAKE) --no-print-directory pyflakes
 
 pytest-re: env
 	PYTHONPATH=. $(py_test) --lf ./tests/py/
