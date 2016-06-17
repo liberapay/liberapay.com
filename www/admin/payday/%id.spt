@@ -29,9 +29,9 @@ def payday_preexec():
 def exec_payday(log_file):
     # Fork twice, like a traditional unix daemon
     if os.fork():
-        sys.exit(0)
+        os.execlp('true', 'true')
     if os.fork():
-        sys.exit(0)
+        os.execlp('true', 'true')
     # Fork again and exec
     Popen(
         [sys.executable, '-u', 'liberapay/billing/payday.py'],
@@ -202,6 +202,11 @@ if request.method == 'POST':
         % endif
 
         % if last_payday
+            <br>
+            <h3>Payday Stats</h3>
+            <pre>{{ website.db.render("SELECT * FROM paydays ORDER BY id DESC LIMIT 10") }}</pre>
+            <a class="btn btn-default" href="/about/paydays">More</a>
+
             <br>
             <h3>Payday Logs</h3>
             % for i in range(last_payday.id, 0, -1)
