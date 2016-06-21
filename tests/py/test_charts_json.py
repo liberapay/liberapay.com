@@ -3,7 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import json
 
-from aspen.utils import utcnow
+from pando.utils import utcnow
+
 from liberapay.billing.payday import Payday
 from liberapay.testing.mangopay import FakeTransfersHarness
 

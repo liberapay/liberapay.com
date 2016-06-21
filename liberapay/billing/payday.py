@@ -5,7 +5,8 @@ import os
 import os.path
 import pickle
 
-import aspen.utils
+from babel.dates import format_timedelta
+import pando.utils
 from psycopg2 import IntegrityError
 
 from liberapay import constants
@@ -58,7 +59,7 @@ class Payday(object):
             """, back_as=dict)
             log("Picking up payday #%s." % d['id'])
 
-        d['ts_start'] = d['ts_start'].replace(tzinfo=aspen.utils.utc)
+        d['ts_start'] = d['ts_start'].replace(tzinfo=pando.utils.utc)
 
         log("Payday started at %s." % d['ts_start'])
 
@@ -75,7 +76,7 @@ class Payday(object):
         """
         self.db.self_check()
 
-        _start = aspen.utils.utcnow()
+        _start = pando.utils.utcnow()
         log("Greetings, program! It's PAYDAY!!!!")
 
         self.shuffle(log_dir)
@@ -89,10 +90,10 @@ class Payday(object):
         if not keep_log:
             os.unlink(self.transfers_filename)
 
-        _end = aspen.utils.utcnow()
+        _end = pando.utils.utcnow()
         _delta = _end - _start
-        fmt_past = "Script ran for %%(age)s (%s)." % _delta
-        log(aspen.utils.to_age(_start, fmt_past=fmt_past))
+        msg = "Script ran for %s ({0})."
+        log(msg.format(_delta) % format_timedelta(_delta, locale='en'))
 
         if keep_log:
             output_log_path = log_dir+'/payday-%i.txt' % self.id
@@ -465,7 +466,7 @@ class Payday(object):
         log("Updated payday stats.")
 
     def update_cached_amounts(self):
-        now = aspen.utils.utcnow()
+        now = pando.utils.utcnow()
         with self.db.get_cursor() as cursor:
             self.prepare(cursor, now)
             self.transfer_virtually(cursor)
@@ -558,7 +559,7 @@ class Payday(object):
                SET ts_end=now()
              WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
          RETURNING ts_end AT TIME ZONE 'UTC'
-        """, default=NoPayday).replace(tzinfo=aspen.utils.utc)
+        """, default=NoPayday).replace(tzinfo=pando.utils.utc)
 
     def notify_participants(self):
         previous_ts_end = self.db.one("""

@@ -1,13 +1,13 @@
 # coding: utf8
 from __future__ import print_function, unicode_literals
 
-from aspen.utils import utc
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 import re
 
 from jinja2 import StrictUndefined
+from pando.utils import utc
 
 
 class CustomUndefined(StrictUndefined):

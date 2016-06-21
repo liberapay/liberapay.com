@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D
 
-from aspen import Response
+from pando import Response
 import mock
 import pytest
 

@@ -1,7 +1,7 @@
 import json
 
-from aspen import resources, Response
 from oauthlib.oauth2 import OAuth2Error
+from pando import Response
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
 from liberapay.elsewhere._exceptions import CantReadMembership

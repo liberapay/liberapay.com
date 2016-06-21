@@ -14,5 +14,7 @@ participant.delete_elsewhere(platform, user_id)
 if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
     response.redirect('..')
 
+[---] text/html
+
 [---] application/json via json_dump
 {}

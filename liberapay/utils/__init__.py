@@ -13,8 +13,8 @@ import re
 
 from six.moves.urllib.parse import quote as urlquote
 
-from aspen import Response, json
-from aspen.utils import to_rfc822, utcnow
+from pando import Response, json
+from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 

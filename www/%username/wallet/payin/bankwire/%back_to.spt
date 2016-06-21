@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D, InvalidOperation
 
-from aspen import json, Response
+from pando import json, Response
 
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire

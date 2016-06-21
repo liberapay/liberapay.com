@@ -186,7 +186,7 @@ class TestConfirmTakeOver(Harness):
         assert 'Please Confirm' in response.text
 
     def test_take_over(self):
-        data = {'account_id': self.alice_elsewhere.id, 'should_transfer': 'yes'}
+        data = {'account_id': str(self.alice_elsewhere.id), 'should_transfer': 'yes'}
 
         response = self.client.PxST('/on/take-over.html', data=data)
         assert response.code == 403
@@ -233,6 +233,6 @@ class TestElsewhereDelete(Harness):
         alice = self.make_participant('alice', elsewhere=platform)
         self.make_elsewhere('github', '1', 'alice')
         alice.take_over(('github', '1'))
-        data = dict(platform=platform, user_id=alice.id)
+        data = dict(platform=platform, user_id=str(alice.id))
         response = self.client.PxST('/alice/elsewhere/delete', data, auth_as=alice)
         assert response.code == 302

@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import csv
 from io import BytesIO
 
-from aspen import renderers
+from aspen.simplates import renderers
 
 
 class Renderer(renderers.Renderer):

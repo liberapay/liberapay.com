@@ -12,7 +12,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import timedelta
 import re
 
-from aspen import Response
+from pando import Response
 
 from .crypto import constant_time_compare, get_random_string
 

@@ -6,9 +6,10 @@ import itertools
 import unittest
 from os.path import dirname, join, realpath
 
-from aspen import resources, Response
-from aspen.utils import utcnow
-from aspen.testing.client import Client
+from aspen import resources
+from pando import Response
+from pando.utils import utcnow
+from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
 
 from liberapay.billing import exchanges

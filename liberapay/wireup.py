@@ -10,7 +10,7 @@ import traceback
 from six import text_type as str
 
 from algorithm import Algorithm
-import aspen
+import pando
 from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
@@ -39,10 +39,12 @@ from liberapay.utils.i18n import (
 def canonical(env):
     canonical_scheme = env.canonical_scheme
     canonical_host = env.canonical_host
-    canonical_domain = None
-    if env.canonical_host:
+    if canonical_host:
         canonical_domain = ('.' + canonical_host.split(':')[0]).encode('ascii')
-    canonical_url = '%s://%s' % (canonical_scheme, canonical_host)
+        canonical_url = '%s://%s' % (canonical_scheme, canonical_host)
+    else:
+        canonical_domain = None
+        canonical_url = ''
     asset_url = canonical_url+'/assets/'
     return locals()
 
@@ -193,7 +195,7 @@ def make_sentry_teller(env):
 
     def tell_sentry(exception, state, allow_reraise=False):
 
-        if isinstance(exception, aspen.Response) and exception.code < 500:
+        if isinstance(exception, pando.Response) and exception.code < 500:
             # Only log server errors
             return
 

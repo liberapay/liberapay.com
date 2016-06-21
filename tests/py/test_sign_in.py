@@ -8,7 +8,7 @@ from time import gmtime
 
 from six.moves.http_cookies import SimpleCookie
 
-from aspen.utils import utcnow
+from pando.utils import utcnow
 
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant

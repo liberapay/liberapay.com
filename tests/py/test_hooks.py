@@ -5,9 +5,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from base64 import b64encode
 import json
 
-from aspen.exceptions import MalformedBody, UnknownBodyType
-from aspen.http.request import Request
-from aspen.http.response import Response
+from pando.exceptions import MalformedBody, UnknownBodyType
+from pando.http.request import Request
+from pando.http.response import Response
 
 from liberapay.constants import SESSION
 from liberapay.security import csrf

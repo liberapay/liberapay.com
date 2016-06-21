@@ -7,7 +7,7 @@ from decimal import Decimal as D
 import os
 import re
 
-from aspen import json, Response
+from pando import json, Response
 import pytest
 
 from liberapay.billing.payday import Payday
