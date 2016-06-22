@@ -191,6 +191,7 @@ class Payday(object):
               FROM participants p
              WHERE join_time < %(ts_start)s
                AND (mangopay_user_id IS NOT NULL OR kind = 'group')
+               AND is_suspended IS NOT true
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);

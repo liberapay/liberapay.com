@@ -404,6 +404,7 @@ class Participant(Model, MixinTeam):
             return
 
         tips, total, _, _ = self.get_giving_for_profile()
+        tips = [t for t in tips if t.is_identified and not t.is_suspended]
         transfers = []
         distributed = D_ZERO
 
@@ -1351,6 +1352,7 @@ class Participant(Model, MixinTeam):
                      , p.kind
                      , t.is_funded
                      , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
+                     , p.is_suspended
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
