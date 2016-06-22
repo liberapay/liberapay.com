@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '15'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '16'::jsonb);
 
 
 -- app configuration
@@ -72,6 +72,8 @@ CREATE TABLE participants
 , hide_from_lists       boolean                 NOT NULL DEFAULT FALSE
 
 , privileges            int                     NOT NULL DEFAULT 0
+
+, is_suspended          boolean
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))

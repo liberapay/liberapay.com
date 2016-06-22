@@ -124,3 +124,6 @@ DELETE FROM app_conf WHERE key = 'cache_static';
 
 -- migration #15
 ALTER TABLE transfers ADD COLUMN error text;
+
+-- migration #16
+ALTER TABLE participants ADD COLUMN is_suspended boolean;
