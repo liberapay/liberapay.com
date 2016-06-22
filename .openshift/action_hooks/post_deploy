@@ -17,17 +17,19 @@ function is_okay() {
 
 # http://docs.gunicorn.org/en/stable/signals.html
 pid_file="$OPENSHIFT_DATA_DIR/gunicorn.pid"
-function get_pid() {
-    i="$(cat "$pid_file" || true)"
+function _get_pid() {
+    i="$(cat "$1" || true)"
     if [ ! -z "$i" -a -d /proc/$i ]; then echo -n $i; fi
 }
+function get_pid() { _get_pid "$pid_file"; }
+function get_pid2() { _get_pid "${pid_file}.2"; }
 pid=$(get_pid)
 if [ ! -z "$pid" ]; then
     echo "Gracefully restarting gunicorn..."
     kill -s SIGUSR2 $pid
     sleep 1
-    if [ -z "$(get_pid)" ]; then sleep 9; fi
-    new_pid=$(get_pid)
+    if [ -z "$(get_pid2)" ]; then sleep 9; fi
+    new_pid=$(get_pid2)
     if [ -z "$new_pid" -o "$new_pid" = "$pid" ]; then
         echo "Gunicorn has failed to start a new process, you need to fix that!"
     else
