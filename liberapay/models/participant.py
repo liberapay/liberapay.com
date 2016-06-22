@@ -404,6 +404,7 @@ class Participant(Model, MixinTeam):
             return
 
         tips, total, _, _ = self.get_giving_for_profile()
+        tips = [t for t in tips if t.is_identified]
         transfers = []
         distributed = D_ZERO
 
