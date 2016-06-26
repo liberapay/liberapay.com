@@ -1,3 +1,9 @@
+# Liberapay
+
+[![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg?branch=master)](https://travis-ci.org/liberapay/liberapay.com)
+[![Weblate](https://hosted.weblate.org/widgets/liberapay/-/shields-badge.svg)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+[![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/liberapay/donate)
+
 [Liberapay](http://liberapay.com) is a recurrent donations platform.
 
 It's a fork of Gittip/Gratipay, see [this post](https://github.com/liberapay/salon/issues/8) for the differences between the two.
