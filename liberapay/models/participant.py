@@ -412,8 +412,9 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips, total, _, _ = self.get_giving_for_profile()
+        tips = self.get_giving_for_profile()[0]
         tips = [t for t in tips if t.is_identified and not t.is_suspended]
+        total = sum(t.amount for t in tips)
         transfers = []
         distributed = D_ZERO
 
