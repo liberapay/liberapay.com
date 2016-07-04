@@ -153,6 +153,8 @@ else:
             % elif context == 'take'
                 {{ _("anonymous donation for your role in the {0} team",
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
+            % elif context == 'refund'
+                {{ _("donation refund") }}
             % else
                 {{ _("anonymous donation") }}
             % endif
@@ -163,6 +165,8 @@ else:
             % elif context == 'take'
                 {{ _("donation to {0} for their role in the {1} team", to,
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
+            % elif context == 'refund'
+                {{ _("refund of anonymous donation") }}
             % else
                 {{ _("donation to {0}", to) }}
             % endif
