@@ -127,3 +127,6 @@ ALTER TABLE transfers ADD COLUMN error text;
 
 -- migration #16
 ALTER TABLE participants ADD COLUMN is_suspended boolean;
+
+-- migration #17
+ALTER TYPE transfer_context ADD VALUE 'refund';
