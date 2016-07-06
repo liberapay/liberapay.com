@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '17'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '18'::jsonb);
 
 
 -- app configuration
@@ -184,6 +184,7 @@ CREATE TABLE transfers
 , team        bigint              REFERENCES participants
 , status      transfer_status     NOT NULL
 , error       text
+, refund_ref  bigint              REFERENCES transfers
 , CONSTRAINT team_chk CHECK ((context='take') = (team IS NOT NULL))
 , CONSTRAINT self_chk CHECK (tipper <> tippee)
  );
@@ -251,6 +252,7 @@ CREATE TABLE exchanges
 , status            exchange_status      NOT NULL
 , route             bigint               NOT NULL REFERENCES exchange_routes
 , vat               numeric(35,2)        NOT NULL
+, refund_ref        bigint               REFERENCES exchanges
  );
 
 CREATE INDEX exchanges_participant_idx ON exchanges (participant);
