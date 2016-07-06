@@ -310,7 +310,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
 
         amount = e.amount
         if amount < 0:
-            amount = -amount + e.fee if status == 'failed' else 0
+            amount = -amount + max(e.fee, 0) if status == 'failed' else 0
         else:
             amount = amount if status == 'succeeded' else 0
         propagate_exchange(cursor, participant, e, e.route, error, amount)

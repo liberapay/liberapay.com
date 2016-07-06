@@ -31,7 +31,7 @@ def get_end_of_year_balance(db, participant, year, current_year):
                      AND amount > 0
                      AND status = 'succeeded'
                ) + (
-                  SELECT COALESCE(sum(amount-fee), 0) AS a
+                  SELECT COALESCE(sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE 0 END)), 0) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
@@ -136,7 +136,7 @@ def iter_payday_events(db, participant, year=None):
             else:
                 kind = 'credit'
                 if event['status'] != 'failed':
-                    balance -= event['amount'] - event['fee']
+                    balance -= event['amount'] - max(event['fee'], 0)
         else:
             kind = 'transfer'
             if event['status'] != 'succeeded':
