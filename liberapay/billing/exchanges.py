@@ -35,6 +35,10 @@ from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
 
 
+Money.__eq__ = lambda a, b: isinstance(b, Money) and a.__dict__ == b.__dict__
+Money.__repr__ = lambda m: '<Money Amount=%(Amount)r Currency=%(Currency)r>' % m.__dict__
+
+
 QUARANTINE = '%s days' % QUARANTINE.days
 
 
@@ -253,6 +257,26 @@ def payin_bank_wire(db, participant, debit_amount):
     return payin, e
 
 
+def record_payout_refund(db, payout_refund):
+    orig_payout = mangoapi.payOuts.Get(payout_refund.InitialTransactionId)
+    e_origin = db.one("SELECT * FROM exchanges WHERE id = %s" % (orig_payout.Tag,))
+    e_refund_id = db.one("SELECT id FROM exchanges WHERE refund_ref = %s", (e_origin.id,))
+    if e_refund_id:
+        # Already recorded
+        return e_refund_id
+    amount, fee, vat = -e_origin.amount, -e_origin.fee, -e_origin.vat
+    assert payout_refund.DebitedFunds == Money(int(amount * 100), 'EUR')
+    assert payout_refund.Fees == Money(int(fee * 100), 'EUR')
+    route = ExchangeRoute.from_id(e_origin.route)
+    participant = Participant.from_id(e_origin.participant)
+    return db.one("""
+        INSERT INTO exchanges
+               (amount, fee, vat, participant, status, route, note, refund_ref)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+     RETURNING id
+    """, (amount, fee, vat, participant.id, 'created', route.id, None, e_origin.id))
+
+
 def record_exchange(db, route, amount, fee, vat, participant, status, error=None):
     """Given a Bunch of Stuff, return an int (exchange_id).
 
@@ -312,7 +336,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
         if amount < 0:
             amount = -amount + max(e.fee, 0) if status == 'failed' else 0
         else:
-            amount = amount if status == 'succeeded' else 0
+            amount = amount - min(e.fee, 0) if status == 'succeeded' else 0
         propagate_exchange(cursor, participant, e, e.route, error, amount)
 
         return e
