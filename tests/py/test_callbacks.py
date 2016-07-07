@@ -81,7 +81,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             refund.ResultCode = '000001' if error else '000000'
             refund.ResultMessage = error
             reason = refund.RefundReason = RefundReason()
-            reason.RefusedReasonMessage = 'BECAUSE 42'
+            reason.RefundReasonMessage = 'BECAUSE 42'
             refund.AuthorId = homer.mangopay_user_id
             R_Get.return_value = refund
             # Call back
