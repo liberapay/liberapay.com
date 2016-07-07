@@ -34,6 +34,9 @@ if request.method == 'POST':
         p = 'LegalRepresentative'
         keys = KEYS_LEGAL
 
+    if not account.Tag:
+        account.Tag = website.canonical_url + '/~%i/' % participant.id
+
     account.Email = participant.email
     for k in keys:
         v = body.get(k)
