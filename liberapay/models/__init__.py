@@ -79,7 +79,7 @@ def _check_balances(cursor):
 
                        union all
 
-                      select participant as id, sum(amount-fee) as a
+                      select participant as id, sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE 0 END)) as a
                         from exchanges
                        where amount < 0
                          and status <> 'failed'
