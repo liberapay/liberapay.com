@@ -71,7 +71,7 @@ def _check_balances(cursor):
           from (
             select id, sum(a) as expected
               from (
-                      select participant as id, sum(amount) as a
+                      select participant as id, sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE 0 END)) as a
                         from exchanges
                        where amount > 0
                          and status = 'succeeded'

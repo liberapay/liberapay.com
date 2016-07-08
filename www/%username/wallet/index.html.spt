@@ -109,9 +109,9 @@ else:
     </tr>
     % elif event['kind'] == 'charge'
     <tr>
-        <td class="bank">{{ event['amount'] + event['fee'] }}</td>
+        <td class="bank">{{ -event['amount'] - max(event['fee'], 0) }}</td>
         <td class="fees">{{ event['fee'] }}</td>
-        <td class="credits">{{ event['amount'] }}</td>
+        <td class="credits">{{ event['amount'] - min(event['fee'], 0) }}</td>
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="status">{{ translated_status[event['status']] }}</td>
