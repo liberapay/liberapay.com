@@ -395,6 +395,17 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
                      WHERE id = %s
                 """, (x, b.id))
                 break
+    elif amount > 0 and exchange.amount < 0:
+        cursor.run("""
+            LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
+            INSERT INTO cash_bundles
+                        (owner, origin, amount, ts)
+                 SELECT %(p_id)s, t.origin, t.amount, e.timestamp
+                   FROM e2e_transfers t
+                   JOIN exchanges e ON e.id = t.origin
+                  WHERE t.withdrawal = %(e_id)s;
+            DELETE FROM e2e_transfers WHERE withdrawal = %(e_id)s;
+        """, dict(p_id=participant.id, e_id=exchange.id))
     elif amount > 0:
         cursor.run("""
             INSERT INTO cash_bundles
