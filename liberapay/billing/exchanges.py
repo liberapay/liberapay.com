@@ -361,11 +361,12 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
     if amount < 0:
         bundles = cursor.all("""
             LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
-            SELECT *
-              FROM cash_bundles
-             WHERE owner = %s
-               AND ts < now() - INTERVAL %s
-          ORDER BY ts
+            SELECT b.*
+              FROM cash_bundles b
+              JOIN exchanges e ON e.id = b.origin
+             WHERE b.owner = %s
+               AND b.ts < now() - INTERVAL %s
+          ORDER BY b.owner = e.participant DESC, b.ts
         """, (participant.id, QUARANTINE))
         withdrawable = sum(b.amount for b in bundles)
         x = -amount
@@ -475,11 +476,12 @@ def _record_transfer_result(db, t_id, status, error=None):
                 raise NegativeBalance
             bundles = c.all("""
                 LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
-                SELECT *
-                  FROM cash_bundles
-                 WHERE owner = %s
-              ORDER BY ts
-            """, (tipper,))
+                SELECT b.*
+                  FROM cash_bundles b
+                  JOIN exchanges e ON e.id = b.origin
+                 WHERE b.owner = %s
+              ORDER BY e.participant = %s DESC, b.ts
+            """, (tipper, tippee))
             x = amount
             for b in bundles:
                 if x >= b.amount:
