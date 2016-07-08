@@ -130,11 +130,11 @@ def iter_payday_events(db, participant, year=None):
 
         if 'fee' in event:
             if event['amount'] > 0:
-                kind = 'charge'
-                if event['status'] in (None, 'succeeded'):
+                kind = 'payout-refund' if event['refund_ref'] else 'charge'
+                if event['status'] == 'succeeded':
                     balance -= event['amount'] - min(event['fee'], 0)
             else:
-                kind = 'credit'
+                kind = 'payin-refund' if event['refund_ref'] else 'credit'
                 if event['status'] != 'failed':
                     balance -= event['amount'] - max(event['fee'], 0)
         else:
