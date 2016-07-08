@@ -38,6 +38,7 @@ def check_db(cursor):
     _check_balances(cursor)
     _check_tips(cursor)
     _check_bundles(cursor)
+    _check_bundles_and_e2e_transfers(cursor)
 
 
 def _check_tips(cursor):
@@ -57,7 +58,7 @@ def _check_tips(cursor):
               ORDER BY tipper, tippee, mtime
               ) AS foo
     """)
-    assert conflicting_tips == 0
+    assert conflicting_tips == 0, conflicting_tips
 
 
 def _check_balances(cursor):
@@ -104,7 +105,7 @@ def _check_balances(cursor):
         join participants p on p.id = foo2.id
         where expected <> p.balance
     """)
-    assert len(b) == 0, "conflicting balances: {}".format(b)
+    assert len(b) == 0, "conflicting balances:\n" + '\n'.join(str(r) for r in b)
 
 
 def _check_bundles(cursor):
@@ -120,7 +121,37 @@ def _check_bundles(cursor):
           JOIN participants p ON p.id = owner
          WHERE bundles_total <> balance
     """)
-    assert len(b) == 0, "bundles are out of whack: {}".format(b)
+    assert len(b) == 0, "bundles are out of whack:\n" + '\n'.join(str(r) for r in b)
+
+
+def _check_bundles_and_e2e_transfers(cursor):
+    """Check that bundles and e2e_transfers are coherent with exchanges.
+    """
+    l = cursor.all("""
+        WITH r AS (
+        SELECT e.id as e_id
+             , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded') THEN 0 ELSE e.amount END) as total_expected
+             , (COALESCE(in_bundles, 0) + COALESCE(in_e2e_transfers, 0)) as total_found
+             , in_bundles
+             , in_e2e_transfers
+          FROM exchanges e
+          LEFT JOIN (
+                  SELECT b.origin, sum(b.amount) as in_bundles
+                    FROM cash_bundles b
+                GROUP BY b.origin
+               ) AS b ON b.origin = e.id
+          LEFT JOIN (
+                  SELECT t.origin, sum(t.amount) as in_e2e_transfers
+                    FROM e2e_transfers t
+                GROUP BY t.origin
+               ) AS t ON t.origin = e.id
+        )
+        SELECT *
+          FROM r
+         WHERE total_expected <> total_found
+      ORDER BY e_id
+    """)
+    assert len(l) == 0, "bundles and/or e2e_transfers are out of whack:\n" + '\n'.join(str(r) for r in l)
 
 
 def run_migrations(db):
