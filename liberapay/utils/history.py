@@ -24,7 +24,7 @@ def get_end_of_year_balance(db, participant, year, current_year):
     start_balance = get_end_of_year_balance(db, participant, year-1, current_year)
     delta = db.one("""
         SELECT (
-                  SELECT COALESCE(sum(amount), 0) AS a
+                  SELECT COALESCE(sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE 0 END)), 0) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
@@ -130,11 +130,11 @@ def iter_payday_events(db, participant, year=None):
 
         if 'fee' in event:
             if event['amount'] > 0:
-                kind = 'charge'
-                if event['status'] in (None, 'succeeded'):
-                    balance -= event['amount']
+                kind = 'payout-refund' if event['refund_ref'] else 'charge'
+                if event['status'] == 'succeeded':
+                    balance -= event['amount'] - min(event['fee'], 0)
             else:
-                kind = 'credit'
+                kind = 'payin-refund' if event['refund_ref'] else 'credit'
                 if event['status'] != 'failed':
                     balance -= event['amount'] - max(event['fee'], 0)
         else:

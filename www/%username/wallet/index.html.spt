@@ -92,7 +92,7 @@ else:
         <td class="status">{{ _("Status") }}</td>
         <td class="notes">{{ _("Notes") }}</td>
     </tr>
-    % elif event['kind'] == 'credit'
+    % elif event['kind'] in ('credit', 'payin-refund')
     <tr>
         <td class="bank">{{ -event['amount'] - min(event['fee'], 0) }}</td>
         <td class="fees">{{ event['fee'] }}</td>
@@ -101,26 +101,34 @@ else:
         <td class="balance">{{ event['balance'] }}</td>
         <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
-        {{ event['note'] or '' }}
+        % if event['kind'] == 'payin-refund'
+            {{ event['note'] or _("refund") }}
+        % else
+            {{ event['note'] or '' }}
+        % endif
         % if event['recorder']
             &mdash; <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         % endif
         </td>
     </tr>
-    % elif event['kind'] == 'charge'
+    % elif event['kind'] in ('charge', 'payout-refund')
     <tr>
-        <td class="bank">{{ event['amount'] + event['fee'] }}</td>
+        <td class="bank">{{ -event['amount'] - max(event['fee'], 0) }}</td>
         <td class="fees">{{ event['fee'] }}</td>
-        <td class="credits">{{ event['amount'] }}</td>
+        <td class="credits">{{ event['amount'] - min(event['fee'], 0) }}</td>
         <td class="debits"></td>
         <td class="balance">{{ event['balance'] }}</td>
         <td class="status">{{ translated_status[event['status']] }}</td>
         <td class="notes">
-        {{ event['note'] or '' }}
+        % if event['kind'] == 'payout-refund'
+            {{ _("refund of failed withdrawal (error message: {0})", event['note']) }}
+        % else
+            {{ event['note'] or '' }}
+        % endif
         % if event['recorder']
             &mdash; <a href="/~{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         % endif
-        % if event['status'] == 'succeeded'
+        % if event['status'] == 'succeeded' and event['kind'] == 'charge'
             (<a href="../receipts/{{ event['id'] }}">{{ _("Receipt").lower() }}</a>)
         % endif
         </td>
