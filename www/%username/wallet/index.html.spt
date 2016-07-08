@@ -128,7 +128,7 @@ else:
         % if event['recorder']
             &mdash; <a href="/~{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         % endif
-        % if event['status'] == 'succeeded'
+        % if event['status'] == 'succeeded' and event['kind'] == 'charge'
             (<a href="../receipts/{{ event['id'] }}">{{ _("Receipt").lower() }}</a>)
         % endif
         </td>
