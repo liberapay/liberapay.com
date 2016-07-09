@@ -27,7 +27,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
-from liberapay.testing.mangopay import MangopayHarness
+from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 
 
 def fail_payin(payin):
@@ -324,6 +324,30 @@ class TestRecordExchange(MangopayHarness):
         record_exchange_result(self.db, e_id, 'succeeded', None, janet)
         janet = Participant.from_username('janet')
         assert janet.balance == D('35.59')
+
+
+class TestCashBundles(FakeTransfersHarness, MangopayHarness):
+
+    def test_cash_bundles_are_merged_after_transfer(self):
+        bundles_count = lambda: self.db.one("SELECT count(*) FROM cash_bundles")
+        assert bundles_count() == 0
+        self.make_exchange('mango-cc', 45, 0, self.janet)
+        assert bundles_count() == 1
+        transfer(self.db, self.janet.id, self.homer.id, D('10.00'), 'tip')
+        assert bundles_count() == 2
+        transfer(self.db, self.homer.id, self.janet.id, D('5.00'), 'tip')
+        assert bundles_count() == 2
+        transfer(self.db, self.homer.id, self.janet.id, D('5.00'), 'tip')
+        assert bundles_count() == 1
+
+    def test_cash_bundles_are_merged_after_payout_failure(self):
+        bundles_count = lambda: self.db.one("SELECT count(*) FROM cash_bundles")
+        self.make_exchange('mango-cc', 46, 0, self.homer)
+        assert bundles_count() == 1
+        self.make_exchange('mango-cc', -40, 0, self.homer, status='failed')
+        assert bundles_count() == 1
+        sync_with_mangopay(self.db)
+        assert bundles_count() == 1
 
 
 class TestSync(MangopayHarness):
