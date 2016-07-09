@@ -418,6 +418,7 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
 
     if amount != 0:
         participant.update_giving_and_tippees(cursor)
+        merge_cash_bundles(cursor, participant.id)
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
@@ -450,6 +451,7 @@ def record_transfer_result(db, t_id, tr):
 
 
 def _record_transfer_result(db, t_id, status, error=None):
+    balance = None
     with db.get_cursor() as c:
         tipper, tippee, amount = c.one("""
             UPDATE transfers
@@ -504,8 +506,40 @@ def _record_transfer_result(db, t_id, status, error=None):
                              VALUES (%s, %s, %s, %s);
                     """, (x, b.id, tippee, b.origin, x, b.ts))
                     break
-            return balance
+    if balance is not None:
+        merge_cash_bundles(db, tippee)
+        return balance
     raise TransferError(error)
+
+
+def merge_cash_bundles(db, p_id):
+    return db.one("""
+        LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
+        WITH regroup AS (
+                 SELECT owner, origin, sum(amount) AS amount, max(ts) AS ts
+                   FROM cash_bundles
+                  WHERE owner = %s
+               GROUP BY owner, origin
+                 HAVING count(*) > 1
+             ),
+             inserted AS (
+                 INSERT INTO cash_bundles
+                             (owner, origin, amount, ts)
+                      SELECT owner, origin, amount, ts
+                        FROM regroup
+                   RETURNING *
+             ),
+             deleted AS (
+                 DELETE
+                   FROM cash_bundles b
+                  USING regroup g
+                  WHERE b.owner = g.owner
+                    AND b.origin = g.origin
+              RETURNING b.*
+             )
+        SELECT (SELECT json_agg(d) FROM deleted d) AS before
+             , (SELECT json_agg(i) FROM inserted i) AS after
+    """, (p_id,))
 
 
 def sync_with_mangopay(db):

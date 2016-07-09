@@ -339,6 +339,7 @@ class TestCashBundles(FakeTransfersHarness, MangopayHarness):
         assert bundles_count() == 2
         transfer(self.db, self.homer.id, self.janet.id, D('5.00'), 'tip')
         assert bundles_count() == 1
+        self.db.self_check()
 
     def test_cash_bundles_are_merged_after_payout_failure(self):
         bundles_count = lambda: self.db.one("SELECT count(*) FROM cash_bundles")
@@ -346,8 +347,7 @@ class TestCashBundles(FakeTransfersHarness, MangopayHarness):
         assert bundles_count() == 1
         self.make_exchange('mango-cc', -40, 0, self.homer, status='failed')
         assert bundles_count() == 1
-        sync_with_mangopay(self.db)
-        assert bundles_count() == 1
+        self.db.self_check()
 
 
 class TestSync(MangopayHarness):
