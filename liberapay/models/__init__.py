@@ -130,7 +130,10 @@ def _check_bundles_and_e2e_transfers(cursor):
     l = cursor.all("""
         WITH r AS (
         SELECT e.id as e_id
-             , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded') THEN 0 ELSE e.amount END) as total_expected
+             , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded')
+                     THEN 0
+                     ELSE e.amount - (CASE WHEN (e.fee < 0) THEN e.fee ELSE 0 END)
+                END) as total_expected
              , (COALESCE(in_bundles, 0) + COALESCE(in_e2e_transfers, 0)) as total_found
              , in_bundles
              , in_e2e_transfers
