@@ -572,6 +572,7 @@ class Payday(object):
               FROM transfers t
              WHERE "timestamp" > %s
                AND "timestamp" <= %s
+               AND context <> 'refund'
           GROUP BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
