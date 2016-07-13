@@ -97,7 +97,10 @@ def iter_payday_events(db, participant, year=None):
         yield dict(
             kind='totals',
             given=sum(t['amount'] for t in transfers if t['tipper'] == id and t['status'] == 'succeeded'),
-            received=sum(t['amount'] for t in transfers if t['tippee'] == id and t['status'] == 'succeeded'),
+            received=sum(
+                t['amount'] for t in transfers
+                if t['tippee'] == id and t['status'] == 'succeeded' and t['context'] != 'refund'
+            ),
         )
 
     payday_dates = db.all("""
@@ -163,6 +166,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE tipper = %(id)s
                AND extract(year from timestamp) = %(year)s
                AND status = 'succeeded'
+               AND context <> 'refund'
           GROUP BY tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
