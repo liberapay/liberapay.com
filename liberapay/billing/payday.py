@@ -620,6 +620,7 @@ class Payday(object):
                       WHERE t.tipper = p.id
                         AND p2.mangopay_user_id IS NOT NULL
                         AND p2.status = 'active'
+                        AND p2.is_suspended IS NOT true
                    )
                AND EXISTS (
                      SELECT 1
