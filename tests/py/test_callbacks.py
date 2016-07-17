@@ -5,6 +5,7 @@ from mock import patch
 from mangopaysdk.entities.payin import PayIn
 from mangopaysdk.entities.payout import PayOut
 from mangopaysdk.entities.refund import Refund
+from mangopaysdk.types.payinpaymentdetailsbankwire import PayInPaymentDetailsBankWire
 from mangopaysdk.types.refundreason import RefundReason
 
 from liberapay.billing.exchanges import Money, record_exchange
@@ -121,6 +122,10 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             payin.ResultMessage = error
             payin.AuthorId = homer.mangopay_user_id
             payin.PaymentType = 'BANK_WIRE'
+            pd = payin.PaymentDetails = PayInPaymentDetailsBankWire()
+            pd.DeclaredDebitedFunds = Money(1100, 'EUR').__dict__
+            pd.DeclaredFees = Money(0, 'EUR').__dict__
+            payin.CreditedFunds = Money(1100, 'EUR')
             payin.Tag = str(e_id)
             Get.return_value = payin
             r = self.callback(qs)
