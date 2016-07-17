@@ -42,6 +42,12 @@ if cls:
     e_status = website.db.one("SELECT status FROM exchanges WHERE id = %s", (e_id,))
     if e_status == status:
         raise Response(200, "already done")
+    if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
+        pd = payio.PaymentDetails
+        expected = pd.DeclaredDebitedFunds['Amount'] - pd.DeclaredFees['Amount']
+        actual = payio.CreditedFunds
+        assert actual.Amount == expected, (actual, expected)
+        assert actual.Currency == 'EUR'
 
     # Update the DB
     error = repr_error(payio)
@@ -74,3 +80,6 @@ else:
     raise Response(400, "unknown event type")
 
 [---] text/plain
+
+[---] application/json
+{}
