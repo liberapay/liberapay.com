@@ -72,7 +72,7 @@ pytest-re: env
 	@$(MAKE) --no-print-directory pyflakes
 
 _i18n_extract: env
-	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www error.spt
+	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
 	@for f in i18n/*/*.po; do \
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
 	done
