@@ -34,21 +34,6 @@ title = _("Add money")
 
 % block panel_body
 
-    % if can_payin and not participant.email
-        % if participant.join_time > utcnow() - constants.SESSION_TIMEOUT
-            <p class="alert alert-success">{{ _(
-                "We've sent you an email, please open it now and click the confirmation "
-                "link inside, then come back to this page and carry on."
-            ) }}</p>
-        % else
-            <p class="alert alert-warning">{{ _(
-                "Please {0}verify your email address{1}, then come back to this page and carry on.",
-                '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
-                '</a>'|safe
-            ) }}</p>
-        % endif
-    % endif
-
     <p>
         % if donations == 0
             {{ _(

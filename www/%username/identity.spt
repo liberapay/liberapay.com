@@ -37,7 +37,7 @@ if request.method == 'POST':
     if not account.Tag:
         account.Tag = website.canonical_url + '/~%i/' % participant.id
 
-    account.Email = participant.email
+    account.Email = participant.email or participant.get_any_email()
     for k in keys:
         v = body.get(k)
         if v:
@@ -96,12 +96,6 @@ else:
 
 % block content
 <div class="paragraph">
-% if not participant.email
-<p class="alert alert-warning">{{
-    _("Please {0}verify your email address{1} then reload this page.",
-      '<a href="./emails/" target="_blank">'|safe, '</a>'|safe)
-}}</p>
-% else
 <form action="" method="POST" class="js-submit">
 
     % if error
@@ -115,6 +109,5 @@ else:
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 
 </form>
-% endif
 </div>
 % endblock
