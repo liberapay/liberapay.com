@@ -168,7 +168,6 @@ title = _("Add money")
         % endif
 
     % elif show_form
-    % if participant.email
     <form id="payin" action="javascript:" method="POST"
           data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
@@ -216,14 +215,6 @@ title = _("Add money")
     % endif
 
     </form>
-
-    % else
-    <p class="alert alert-warning">{{
-        _("Please {0}verify your email address{1} then reload this page.",
-          '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
-          '</a>'|safe)
-    }}</p>
-    % endif
     % endif
 
 % endblock

@@ -123,7 +123,6 @@ title = _("Add money")
     % endif
 
     % if show_form
-    % if participant.email
     <p>{{ _(
         "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
         constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
@@ -197,14 +196,6 @@ title = _("Add money")
 
     % if back_to
         <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
-    % endif
-
-    % else
-    <p class="alert alert-warning">{{
-        _("Please {0}verify your email address{1} then reload this page.",
-          '<a href="%s" target="_blank">'|safe % participant.path('emails/'),
-          '</a>'|safe)
-    }}</p>
     % endif
     % endif
 
