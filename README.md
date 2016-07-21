@@ -40,14 +40,12 @@ The `_` function attempts to translate the message into the user's language and 
 
 The python code inside simplates is only for request-specific logic, common backend code is in the `liberapay/` directory.
 
-We interact with the database by writing raw SQL queries sent via the [postgres.py](https://postgres-py.readthedocs.org/en/latest/) library.
-
 ### Installation
 
 Firstly, make sure you have the following dependencies installed:
 
 - python ≥ 2.7.8 ([we're working on porting to python 3](https://github.com/liberapay/liberapay.com/pull/88))
-- postgresql 9.4.5
+- postgresql 9.4.5 (see [the official download & install docs](https://www.postgresql.org/download/)
 - make
 
 Then run:
@@ -60,6 +58,8 @@ Now you need to give yourself superuser postgres powers (if it hasn't been done 
 
     createdb liberapay
     createdb liberapay_tests
+
+If you need a deeper understanding take a look at the [Database Roles](https://www.postgresql.org/docs/9.4/static/user-manag.html) and [Managing Databases](https://www.postgresql.org/docs/9.4/static/managing-databases.html) sections of PostgreSQL's documentation.
 
 Then you can set up the DB:
 
@@ -83,12 +83,19 @@ You can create some fake users to make it look more like the real site:
 
     make data
 
-### Modifying the database schema
+### SQL
+
+The python code interacts with the database by sending raw SQL queries through
+the [postgres.py](https://postgres-py.readthedocs.org/en/latest/) library.
+
+The [official PostgreSQL documentation](https://www.postgresql.org/docs/9.4/static/index.html)
+is your friend when dealing with SQL, especially the sections "[The SQL Language]
+(https://www.postgresql.org/docs/9.4/static/sql.html)" and "[SQL Commands]
+(https://www.postgresql.org/docs/9.4/static/sql-commands.html)".
 
 The DB schema is in `sql/schema.sql`, but don't modify that file directly,
 instead put the changes in `sql/branch.sql`. During deployment that script will
 be run on the production DB and the changes will be merged into `sql/schema.sql`.
-
 That process is semi-automated by `release.sh`.
 
 ### CSS and JavaScript
