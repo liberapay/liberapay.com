@@ -34,10 +34,13 @@ participant = get_participant(state, restrict=True)
 
 if request.method == 'POST' and request.body.get('action') == 'email':
     exchange, payin = get_exchange_payin(participant, request)
-    participant.send_email(
+    sent = participant.send_email(
         'payin_bankwire_created',
+        email=(participant.email or participant.get_any_email()),
         exchange=exchange._asdict(), payin=payin,
     )
+    if not sent:
+        raise Response(500, _("An unknown error occurred."))
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         raise Response(200, json.dumps({'msg': _("The email has been sent.")}))
     else:
