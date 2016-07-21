@@ -54,9 +54,10 @@ Then run:
 
     make env
 
-Now you'll need to create two postgres databases, here's the simplest way of doing it:
+Now you need to give yourself superuser postgres powers (if it hasn't been done already), and create two databases:
 
-    sudo -u postgres createuser --superuser $USER
+    su postgres -c "createuser --superuser $(whoami)"
+
     createdb liberapay
     createdb liberapay_tests
 
