@@ -30,12 +30,12 @@ class Renderer(renderers.Renderer):
         return self.url_re.sub(self.url_sub, css)
 
     def render_content(self, context):
-        output_style = 'compressed' if self.website.compress_assets else 'nested'
+        output_style = 'compressed' if self.website.app_conf.compress_assets else 'nested'
         kw = dict(output_style=output_style, string=self.compiled)
         if self.website.project_root is not None:
             kw['include_paths'] = self.website.project_root
         css = sass.compile(**kw)
-        if self.website.cache_static:
+        if self.website.env.cache_static:
             css = self.replace_urls(css)
         return css
 
