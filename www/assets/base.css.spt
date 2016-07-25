@@ -1,28 +1,4 @@
-import os
-import re
-from urlparse import urlsplit
-
-import sass
-
-from liberapay.utils import find_files
-
-output_style = b'compressed' if website.app_conf.compress_assets else b'nested'
-
-def url_sub(m):
-    url = urlsplit(m.group(2))
-    if url.scheme or url.netloc:
-        # We need both tests because "//example.com" has no scheme and "data:"
-        # has no netloc. In either case, we want to leave the URL untouched.
-        return m.group(0)
-    repl = website.asset(url.path) + (url.query and '&'+url.query) + (url.fragment and '#'+url.fragment)
-    return 'url({0}{1}{0})'.format(m.group(1), repl)
-
-url_re = re.compile(r"""\burl\((['"])(.+?)['"]\)""")
 [---]
-css = ''
-for f in find_files(website.project_root+'/style/base/', '*.scss'):
-    css += sass.compile(output_style=output_style, filename=f)
-if website.env.cache_static:
-    css = url_re.sub(url_sub, css)
-[---] via stdlib_format
-{css}
+[---] text/css via scss
+@import "style/variables";
+@import "style/base/*";
