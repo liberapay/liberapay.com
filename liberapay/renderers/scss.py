@@ -12,6 +12,13 @@ class Renderer(renderers.Renderer):
     def __init__(self, *a, **kw):
         renderers.Renderer.__init__(self, *a, **kw)
         self.website = self._factory._configuration
+        self.cache_static = self.website.env.cache_static
+        compress = self.website.app_conf.compress_assets
+        output_style = 'compressed' if compress else 'nested'
+        kw = dict(output_style=output_style)
+        if self.website.project_root is not None:
+            kw['include_paths'] = self.website.project_root
+        self.sass_conf = kw
 
     url_re = re.compile(r"""\burl\((['"])(.+?)['"]\)""")
 
@@ -30,12 +37,8 @@ class Renderer(renderers.Renderer):
         return self.url_re.sub(self.url_sub, css)
 
     def render_content(self, context):
-        output_style = 'compressed' if self.website.app_conf.compress_assets else 'nested'
-        kw = dict(output_style=output_style, string=self.compiled)
-        if self.website.project_root is not None:
-            kw['include_paths'] = self.website.project_root
-        css = sass.compile(**kw)
-        if self.website.env.cache_static:
+        css = sass.compile(**dict(self.sass_conf, string=self.compiled))
+        if self.cache_static:
             css = self.replace_urls(css)
         return css
 
