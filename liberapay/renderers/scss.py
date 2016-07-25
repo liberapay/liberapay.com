@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import fnmatch
 import os
+import posixpath
 import re
 from urlparse import urlsplit
 
@@ -32,6 +33,11 @@ class Renderer(renderers.Renderer):
         return '; '.join('@import "%s"' % (d + name[:-5]) for name in files)
 
     def compile(self, filepath, src):
+        basepath = posixpath.dirname(filepath)
+        assets_root = self.website.www_root + '/assets/'
+        if basepath.startswith(assets_root):
+            basepath = basepath[len(assets_root):]
+        self.basepath = (basepath.rstrip('/') + '/').lstrip('/')
         return self.wildcard_import_re.sub(self.wildcard_import_sub, src)
 
     url_re = re.compile(r"""\burl\((['"])(.+?)['"]\)""")
@@ -42,7 +48,8 @@ class Renderer(renderers.Renderer):
             # We need both tests because "//example.com" has no scheme and "data:"
             # has no netloc. In either case, we want to leave the URL untouched.
             return m.group(0)
-        repl = self.website.asset(url.path) \
+        path = posixpath.normpath(self.basepath + url.path)
+        repl = self.website.asset(path) \
              + (url.query and '&'+url.query) \
              + (url.fragment and '#'+url.fragment)
         return 'url({0}{1}{0})'.format(m.group(1), repl)
