@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import fnmatch
+import os
 import re
 from urlparse import urlsplit
 
@@ -9,9 +11,9 @@ from aspen import renderers
 
 class Renderer(renderers.Renderer):
 
-    def __init__(self, *a, **kw):
-        renderers.Renderer.__init__(self, *a, **kw)
-        self.website = self._factory._configuration
+    def __init__(self, factory, *a, **kw):
+        self.website = factory._configuration
+        renderers.Renderer.__init__(self, factory, *a, **kw)
         self.cache_static = self.website.env.cache_static
         compress = self.website.app_conf.compress_assets
         output_style = 'compressed' if compress else 'nested'
@@ -19,6 +21,18 @@ class Renderer(renderers.Renderer):
         if self.website.project_root is not None:
             kw['include_paths'] = self.website.project_root
         self.sass_conf = kw
+
+    # SASS doesn't support wildcard imports, so we implement it ourselves
+    wildcard_import_re = re.compile(r'@import "(.*/)\*"')
+
+    def wildcard_import_sub(self, m):
+        d = m.group(1)
+        files = sorted(os.listdir(self.website.project_root + '/' + d))
+        files = fnmatch.filter(files, '*.scss')
+        return '; '.join('@import "%s"' % (d + name[:-5]) for name in files)
+
+    def compile(self, filepath, src):
+        return self.wildcard_import_re.sub(self.wildcard_import_sub, src)
 
     url_re = re.compile(r"""\burl\((['"])(.+?)['"]\)""")
 
