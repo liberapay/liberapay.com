@@ -107,6 +107,11 @@ possible of them: the website should be almost entirely usable without JS, and
 our CSS should leverage Bootstrap as much as possible instead of containing lots
 of custom rules that would become a burden to maintain.
 
+We compile Bootstrap ourselves from the SASS source in the `style/bootstrap/`
+directory. We do that to be able to easily customize it by changing values in
+`style/variables.scss`. Modifying the files in `style/bootstrap/` is probably
+not a good idea.
+
 ### Testing [![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg)](https://travis-ci.org/liberapay/liberapay.com)
 
 The easiest way to run the test suite is:
