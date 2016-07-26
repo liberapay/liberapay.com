@@ -133,3 +133,19 @@ _i18n_merge:
 	@git add i18n
 	@git commit --amend i18n
 	rm new-translations.patch
+
+bootstrap-upgrade:
+	@if [ -z "$(version)" ]; then echo "You forgot the 'version=x.x.x' argument."; exit 1; fi
+	wget https://github.com/twbs/bootstrap-sass/archive/v$(version).tar.gz -O bootstrap-sass-$(version).tar.gz
+	tar -xaf bootstrap-sass-$(version).tar.gz
+	rm -rf www/assets/bootstrap/{fonts,js}/*
+	mv bootstrap-sass-$(version)/assets/javascripts/bootstrap.min.js www/assets/bootstrap/js
+	mv bootstrap-sass-$(version)/assets/fonts/bootstrap/* www/assets/bootstrap/fonts
+	rm -rf style/bootstrap
+	mv bootstrap-sass-$(version)/assets/stylesheets/bootstrap style
+	mv style/{bootstrap/_,}variables.scss
+	git add style/bootstrap www/assets/bootstrap
+	git commit -m "upgrade Bootstrap to $(version)"
+	git commit -p style/variables.scss -m "merge upstream changes into variables.scss"
+	git checkout -q HEAD style/variables.scss
+	rm -rf bootstrap-sass-$(version){,.tar.gz}
