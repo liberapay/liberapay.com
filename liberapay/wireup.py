@@ -177,6 +177,8 @@ def billing(app_conf):
     Configuration.ClientID = app_conf.mangopay_client_id
     Configuration.ClientPassword = app_conf.mangopay_client_password
     Configuration.SSLVerification = True
+    import requests
+    Configuration.Session = requests.Session()
 
 
 def username_restrictions(www_root):
