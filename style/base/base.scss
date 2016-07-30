@@ -132,7 +132,7 @@ img.account-type {
         text-align: center;
     }
     h1, h4 {
-        color: #337ab7;
+        color: $brand-primary;
         font-size: 20px;
         margin: 0 0 10px;
     }
@@ -307,15 +307,15 @@ section.profile-statement {
     }
 
     .notification-error {
-        background-color: #f2dede;
-        border-top: 1px solid #ebccd1;
-        color: #a94442;
+        background-color: $state-danger-bg;
+        border-top: 1px solid $state-danger-border;
+        color: $state-danger-text;
     }
 
     .notification-success {
-        color: #3c763d;
-        background-color: #dff0d8;
-        border-color: #d6e9c6;
+        background-color: $state-success-bg;
+        border-color: $state-success-border;
+        color: $state-success-text;
     }
 }
 

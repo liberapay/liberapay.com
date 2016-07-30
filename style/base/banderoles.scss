@@ -4,20 +4,20 @@
     margin-top: 30px;
     padding: 10px 15px;
     &.default {
-        background: #f5f5f5;
+        background: $panel-default-heading-bg;
         color: #333;
     }
     &.info {
-        background: #d9edf7;
-        color: #31708f;
+        background: $state-info-bg;
+        color: $state-info-text;
     }
     &.primary {
-        background: #337ab7;
+        background: $brand-primary;
         color: #fff;
     }
     &.success {
-        background: #dff0d8;
-        color: #3c763d;
+        background: $state-success-bg;
+        color: $state-success-text;
     }
 
     .dropdown-toggle {
