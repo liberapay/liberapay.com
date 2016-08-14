@@ -120,6 +120,12 @@ class TestCommunityEdit(Harness):
         response = self.client.PxST('/for/test/edit', auth_as=bob)
         assert response.code == 403
 
+    def test_multilingual_community_edit_form_has_real_lang(self):
+        assert self.community.lang == 'mul'
+        response = self.client.GET('/for/test/edit', auth_as=self.alice)
+        assert response.code == 200
+        assert 'name="lang" value="mul"' not in response.text
+
 
 class TestForCommunityJson(Harness):
 
