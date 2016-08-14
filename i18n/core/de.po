@@ -99,9 +99,12 @@ msgstr ""
 
 msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
 msgstr ""
+"Wir sind bereit das Geld zu erhalten. Bitte senden Sie exakt {0} unter "
+"Verwendung des Referenz-Codes (so dass wir es Ihnen zuordnen können) an den "
+"folgenden Account:"
 
 msgid "IBAN (International Bank Account Number)"
-msgstr "Kontonummer (IBAN: International Bank Account Number)"
+msgstr "IBAN (Internationale Kontonummer)"
 
 msgid "BIC (Bank Identifier Code)"
 msgstr "Bankleitzahl (BIC : Bank Identifier Code)"
@@ -120,6 +123,8 @@ msgstr "Die Überweisung auf Ihr Liberapay Konto ist fehlgeschlagen"
 
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr ""
+"Der Versuch {0} von Ihrem Bankkonto zu transferieren ist mit der folgenden "
+"Fehlermeldung fehlgeschlagen:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Sie können es erneut versuchen, möglicherweise mit einer anderen Bezahlungsmethode, indem sie auf den unten stehenden Link klicken:"
@@ -185,38 +190,42 @@ msgid "We have initiated a transfer of {0} from your Liberapay wallet to your ba
 msgstr "Wir haben einen Transfer von {0} von ihrem Liberapay Konto auf Ihr Bankkonto begonnen. Bitte beachten Sie, dass es bis zum Abschluss der Transaktion mehrere Werktage dauern kann."
 
 msgid "Withdrawal failure"
-msgstr ""
+msgstr "Auszahlungsfehlschlag"
 
-#, fuzzy
 msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
-msgstr "Wir haben versucht, {0} vom Liberapay Konto auf Ihr Bankkonto zu übertragen, aber der Transfer ist fehlgeschlagen mit dieser Nachricht:"
+msgstr ""
+"Wir haben versucht {0} von Ihrem Liberapay Konto auf Ihr Bankkonto zu "
+"übertragen, aber der Transfer ist fehlgeschlagen mit dieser Nachricht:"
 
 msgid "You can try again: {0}"
 msgstr "Sie können es erneut versuchen: {0}"
 
 msgid "When I receive money"
-msgstr ""
+msgstr "Wenn ich Geld erhalte"
 
 msgid "When there isn't enough money in my wallet to cover my donations"
 msgstr ""
+"Wenn nicht genügend Geld in meinem Geldbeutel ist um meine Spenden zu decken"
 
 msgid "When a transfer to my bank account is initiated"
-msgstr ""
+msgstr "Wenn ein Geldtransfer zu meinem Bankkonto gestartet wird"
 
 msgid "When a transfer to my bank account fails"
-msgstr ""
+msgstr "Wenn der Übertrag auf mein Bankkonto fehlschlägt"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr ""
 
 msgid "When someone invites me to join a team"
-msgstr ""
+msgstr "Wenn mich jemand dazu einlädt einem Team beizutreten"
 
 msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr ""
+msgstr "Wenn eine Banküberweisung an meinen Liberapay Geldbeutel fehlschlägt"
 
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr ""
+"Wenn eine Banküberweisung an meinen Liberapay Geldbeutel erfolgreich "
+"durchgeführt ist"
 
 msgid "Hide total giving from others."
 msgstr "Gesamtbetrag an gegebenem Geld verstecken."
@@ -225,13 +234,13 @@ msgid "Hide total receiving from others."
 msgstr "Gesamtbetrag an erhaltenem Geld verstecken."
 
 msgid "Hide myself from search results on Liberapay."
-msgstr ""
+msgstr "Verstecke mich bei Suchergebnissen auf Liberapay."
 
 msgid "Tell web search engines not to index my profile."
-msgstr ""
+msgstr "Teile Suchmaschinen mit mein Profil nicht zu indexieren."
 
 msgid "Prevent my profile from being listed on Liberapay."
-msgstr ""
+msgstr "Verhindere dass mein Profil auf Liberapay aufgelistet wird."
 
 msgid "Symbolic ({0})"
 msgstr "Symbolische ({0})"
@@ -298,27 +307,28 @@ msgstr "Dieser Benutzer akzeptiert keine Spenden."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr ""
+"Es scheint so als ob Sie etwas zu löschen versuchen das nicht existiert."
 
 msgid "There isn't enough money in your wallet."
-msgstr ""
+msgstr "In Ihrem Geldbeutel befindet sich nicht genügend Geld."
 
 msgid "You can't withdraw more than {0} at this time."
-msgstr ""
+msgstr "Sie können nicht mehr als {0} auf einmal auszahlen."
 
 msgid "The transaction's fee would exceed its amount."
-msgstr ""
+msgstr "Die Übertragungsgebühr würde diesen Betrag übersteigen."
 
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
 msgstr ""
 
 msgid "\"{0}\" is not a valid number."
-msgstr ""
+msgstr "\"{0}\" ist keine gültige Zahl."
 
 msgid "The \"{0}\" community already exists."
-msgstr ""
+msgstr "Die Community \"{0}\" existiert bereits."
 
 msgid "\"{0}\" is not a valid community name."
-msgstr ""
+msgstr "\"{0}\" ist kein gültiger Community Name."
 
 msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
 msgstr ""
@@ -861,7 +871,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Didn't find who you were looking for?"
-msgstr ""
+msgstr "Haben Sie nicht gefunden wen Sie gesucht haben?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
 msgstr ""
@@ -1757,6 +1767,8 @@ msgstr "Kann ich eine einmalige Spende machen?"
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
 msgstr ""
+"Liberapay wurde entwickelt für langfristige, planbare Finanzierung und "
+"unterstützt nur wiederkehrende Spenden."
 
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
 msgstr ""
@@ -1963,9 +1975,8 @@ msgstr ""
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
 msgstr ""
 
-#, fuzzy
 msgid "Creating a team"
-msgstr "Ein Team grunden"
+msgstr "Ein Team gründen"
 
 msgid "You need to {0}sign into your own account{1} first."
 msgstr ""
