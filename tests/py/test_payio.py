@@ -23,7 +23,7 @@ from liberapay.billing.payday import Payday
 from liberapay.constants import PAYIN_CARD_MIN, PAYIN_CARD_TARGET
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
-    FeeExceedsAmount,
+    FeeExceedsAmount, AccountSuspended,
 )
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
@@ -96,6 +96,17 @@ class TestPayouts(MangopayHarness):
         with self.assertRaises(PaydayIsRunning):
             payout(self.db, self.homer, D('97.35'))
 
+    def test_payout_suspended_user(self):
+        self.make_exchange('mango-cc', 20, 0, self.homer)
+        self.db.run("""
+            UPDATE participants
+               SET is_suspended = true
+             WHERE id = %s
+        """, (self.homer.id,))
+        self.homer.set_attributes(is_suspended=True)
+        with self.assertRaises(AccountSuspended):
+            payout(self.db, self.homer, D('10.00'))
+
 
 class TestCharge(MangopayHarness):
 
@@ -163,6 +174,16 @@ class TestCharge(MangopayHarness):
         bob = self.make_participant('bob', last_bill_result='invalidated')
         with self.assertRaises(AssertionError):
             charge(self.db, bob, D('10.00'), 'http://localhost/')
+
+    def test_charge_suspended_user(self):
+        self.db.run("""
+            UPDATE participants
+               SET is_suspended = true
+             WHERE id = %s
+        """, (self.janet.id,))
+        self.janet.set_attributes(is_suspended=True)
+        with self.assertRaises(AccountSuspended):
+            charge(self.db, self.janet, D('10.00'), 'http://localhost/')
 
 
 class TestPayinBankWire(MangopayHarness):
