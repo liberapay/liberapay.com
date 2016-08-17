@@ -5,7 +5,7 @@ from liberapay.utils import b64decode_s, get_participant, utcnow
 
 [---]
 
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if 'transactionId' in request.qs or 'exchange_id' in request.qs or \
     request.method == 'POST':

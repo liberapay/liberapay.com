@@ -18,7 +18,7 @@ from aspen.utils import to_rfc822, utcnow
 from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import AccountSuspended, AuthRequired
 from liberapay.models.community import Community
 from liberapay.utils.i18n import Money
 from liberapay.website import website
@@ -27,7 +27,8 @@ from liberapay.website import website
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
-def get_participant(state, restrict=True, redirect_stub=True, allow_member=False):
+def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,
+                    block_suspended_user=False):
     """Given a Request, raise Response or return Participant.
 
     If restrict is True then we'll restrict access to owners and admins.
@@ -78,6 +79,9 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
                 pass
             elif not user.is_admin:
                 raise Response(403, _("You are not authorized to access this page."))
+
+    if block_suspended_user and participant.is_suspended and participant == user:
+        raise AccountSuspended()
 
     return participant
 

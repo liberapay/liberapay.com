@@ -17,7 +17,7 @@ def obfuscate(n, x, y):
 
 [---]
 
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, block_suspended_user=True)
 exchange = None
 bank_account, ba_details, ba_type = None, None, 'IBAN'
 

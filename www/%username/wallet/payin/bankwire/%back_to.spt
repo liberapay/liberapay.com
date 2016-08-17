@@ -30,7 +30,7 @@ def get_exchange_payin(participant, request):
 
 [---]
 
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if request.method == 'POST' and request.body.get('action') == 'email':
     exchange, payin = get_exchange_payin(participant, request)
