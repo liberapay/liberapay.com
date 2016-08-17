@@ -29,6 +29,7 @@ from liberapay.constants import (
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
     FeeExceedsAmount, TransactionFeeTooHigh, TransferError,
+    AccountSuspended,
 )
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
@@ -292,6 +293,8 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
         vat     The amount of VAT included in the fee. Always positive.
 
     """
+    if participant.is_suspended:
+        raise AccountSuspended()
 
     with db.get_cursor() as cursor:
 

@@ -167,3 +167,12 @@ class TransferError(LazyResponseXXX):
             "Transferring the money failed, sorry. Please contact support@liberapay.com "
             "if the problem persists. Error message: {0}", *self.args
         )
+
+
+class AccountSuspended(LazyResponseXXX):
+    code = 403
+    def msg(self, _):
+        return _(
+            "You are not allowed to do this because your account is currently "
+            "suspended."
+        )
