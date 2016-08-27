@@ -58,9 +58,10 @@ class BrowseTestHarness(MangopayHarness):
             assert '/%' not in url
             try:
                 r = self.client.GET(url, **kw)
-            except Response as r:
-                if r.code == 404 or r.code >= 500:
+            except Response as e:
+                if e.code == 404 or e.code >= 500:
                     raise
+                r = e
             assert r.code != 404
             assert r.code < 500
             assert not overescaping_re.search(r.text)
