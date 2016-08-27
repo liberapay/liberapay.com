@@ -18,7 +18,7 @@ from liberapay.testing.mangopay import MangopayHarness
 class TestMangopayCallbacks(EmailHarness, MangopayHarness):
 
     def callback(self, qs, **kw):
-        kw.setdefault(b'HTTP_ACCEPT', b'application/json')
+        kw.setdefault('HTTP_ACCEPT', b'application/json')
         kw.setdefault('raise_immediately', False)
         return self.client.GET('/callbacks/mangopay?'+qs, **kw)
 

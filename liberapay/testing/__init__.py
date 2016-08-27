@@ -45,7 +45,7 @@ class ClientWithAuth(Client):
         if csrf_token:
             cookies = kw.setdefault('cookies', {})
             cookies[CSRF_TOKEN] = csrf_token
-            kw[b'HTTP_X-CSRF-TOKEN'] = csrf_token
+            kw['HTTP_X-CSRF-TOKEN'] = csrf_token
 
         # user authentication
         auth_as = kw.pop('auth_as', None)
@@ -58,7 +58,7 @@ class ClientWithAuth(Client):
 
     def hit(self, *a, **kw):
         if kw.pop('xhr', False):
-            kw[b'HTTP_X_REQUESTED_WITH'] = b'XMLHttpRequest'
+            kw['HTTP_X_REQUESTED_WITH'] = b'XMLHttpRequest'
 
         # prevent tell_sentry from reraising errors
         if not kw.pop('sentry_reraise', True):
