@@ -20,8 +20,8 @@ except NotImplementedError:
     using_sysrandom = False
 
 
-pool = string.digits + string.letters + string.punctuation
-UNSECURE_RANDOM_STRING = b"".join([random.choice(pool) for i in range(64)])
+pool = string.digits + string.ascii_letters + string.punctuation
+UNSECURE_RANDOM_STRING = "".join([random.choice(pool) for i in range(64)])
 
 
 def get_random_string(length=12,
