@@ -13,18 +13,18 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '1.00')
 
-        data = json.loads(self.client.GET('/bob/public.json').body)
+        data = json.loads(self.client.GET('/bob/public.json').text)
         assert data['receiving'] == '1.00'
         assert 'my_tip' not in data
 
-        data = json.loads(self.client.GET('/alice/public.json').body)
+        data = json.loads(self.client.GET('/alice/public.json').text)
         assert data['giving'] == '1.00'
 
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
         alice = self.make_participant('alice', balance=100, hide_giving=True)
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
-        data = json.loads(self.client.GET('/alice/public.json').body)
+        data = json.loads(self.client.GET('/alice/public.json').text)
 
         assert data['giving'] == None
 
@@ -32,23 +32,23 @@ class Tests(Harness):
         alice = self.make_participant('alice', balance=100, hide_receiving=True)
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, '1.00')
-        data = json.loads(self.client.GET('/alice/public.json').body)
+        data = json.loads(self.client.GET('/alice/public.json').text)
 
         assert data['receiving'] == None
 
     def test_anonymous_does_not_get_goal_if_user_regifts(self):
         self.make_participant('alice', balance=100, goal=0)
-        data = json.loads(self.client.GET('/alice/public.json').body)
+        data = json.loads(self.client.GET('/alice/public.json').text)
         assert 'goal' not in data
 
     def test_anonymous_gets_null_goal_if_user_has_no_goal(self):
         self.make_participant('alice', balance=100)
-        data = json.loads(self.client.GET('/alice/public.json').body)
+        data = json.loads(self.client.GET('/alice/public.json').text)
         assert data['goal'] == None
 
     def test_anonymous_gets_user_goal_if_set(self):
         self.make_participant('alice', balance=100, goal=1)
-        data = json.loads(self.client.GET('/alice/public.json').body)
+        data = json.loads(self.client.GET('/alice/public.json').text)
         assert data['goal'] == '1.00'
 
     def test_authenticated_user_gets_their_tip(self):
@@ -57,7 +57,7 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '1.00')
 
-        raw = self.client.GET('/bob/public.json', auth_as=alice).body
+        raw = self.client.GET('/bob/public.json', auth_as=alice).text
 
         data = json.loads(raw)
 
@@ -74,7 +74,7 @@ class Tests(Harness):
         bob.set_tip_to(dana, '3.00')
         carl.set_tip_to(dana, '12.00')
 
-        raw = self.client.GET('/dana/public.json', auth_as=alice).body
+        raw = self.client.GET('/dana/public.json', auth_as=alice).text
 
         data = json.loads(raw)
 
@@ -88,7 +88,7 @@ class Tests(Harness):
 
         bob.set_tip_to(carl, '3.00')
 
-        raw = self.client.GET('/carl/public.json', auth_as=alice).body
+        raw = self.client.GET('/carl/public.json', auth_as=alice).text
 
         data = json.loads(raw)
 
@@ -101,7 +101,7 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '3.00')
 
-        raw = self.client.GET('/bob/public.json', auth_as=bob).body
+        raw = self.client.GET('/bob/public.json', auth_as=bob).text
 
         data = json.loads(raw)
 
@@ -120,7 +120,7 @@ class Tests(Harness):
 
         alice.set_tip_to(bob, '3.00')
 
-        raw = self.client.GET('/bob/public.json?callback=foo', auth_as=bob).body
+        raw = self.client.GET('/bob/public.json?callback=foo', auth_as=bob).text
 
         assert raw == '''\
 /**/ foo({

@@ -111,7 +111,7 @@ class Tests2(Harness):
     def test_accept_header_is_respected(self):
         r = self.client.GET('/about/stats', HTTP_ACCEPT=b'application/json')
         assert r.headers[b'Content-Type'] == b'application/json; charset=UTF-8'
-        json.loads(r.body)
+        json.loads(r.text)
 
     def test_error_spt_works(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)

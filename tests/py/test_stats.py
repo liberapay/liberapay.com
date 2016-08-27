@@ -60,5 +60,5 @@ class TestJson(Harness):
     def test_200(self):
         response = self.client.GET('/about/stats.json')
         assert response.code == 200
-        body = json.loads(response.body)
+        body = json.loads(response.text)
         assert len(body) > 0

@@ -30,8 +30,8 @@ class TestTipJson(Harness):
         response2 = self.tip(test_tipper, "test_tippee2", "3.00")
 
         # Confirm we get back the right amounts.
-        first_data = json.loads(response1.body)
-        second_data = json.loads(response2.body)
+        first_data = json.loads(response1.text)
+        second_data = json.loads(response2.text)
         assert first_data['amount'] == "1.00"
         assert first_data['total_giving'] == "1.00"
         assert second_data['amount'] == "3.00"
@@ -61,14 +61,14 @@ class TestTipJson(Harness):
         alice = self.make_elsewhere('twitter', 1, 'alice')
         bob = self.make_participant("bob")
         response = self.tip(bob, alice.participant.username, "10.00")
-        data = json.loads(response.body)
+        data = json.loads(response.text)
         assert response.code == 200
         assert data['amount'] == "10.00"
         assert "alice" in data['msg']
 
         # Stop pledging
         response = self.tip(bob, alice.participant.username, "0.00")
-        data = json.loads(response.body)
+        data = json.loads(response.text)
         assert response.code == 200
         assert data['amount'] == "0.00"
         assert "alice" in data['msg']

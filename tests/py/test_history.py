@@ -136,16 +136,16 @@ class TestExport(Harness):
 
     def test_export_json(self):
         r = self.client.GET('/alice/wallet/export.json', auth_as=self.alice)
-        assert json.loads(r.body)
+        assert json.loads(r.text)
 
     def test_export_json_aggregate(self):
         r = self.client.GET('/alice/wallet/export.json?mode=aggregate', auth_as=self.alice)
-        assert json.loads(r.body)
+        assert json.loads(r.text)
 
     def test_export_json_past_year(self):
         r = self.client.GET('/alice/wallet/export.json?year=%s' % self.past_year, auth_as=self.alice)
-        assert len(json.loads(r.body)['exchanges']) == 4
+        assert len(json.loads(r.text)['exchanges']) == 4
 
     def test_export_csv(self):
         r = self.client.GET('/alice/wallet/export.csv?key=exchanges', auth_as=self.alice)
-        assert r.body.count('\n') == 5
+        assert r.text.count('\n') == 5

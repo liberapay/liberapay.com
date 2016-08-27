@@ -133,7 +133,7 @@ class TestPages(BrowseTestHarness):
         self.make_participant("alice")
 
         response = self.client.GET("/about/paydays.json")
-        paydays = json.loads(response.body)
+        paydays = json.loads(response.text)
         assert paydays[0]['ntippers'] == 0
 
     def test_404(self):

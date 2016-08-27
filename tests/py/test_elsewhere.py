@@ -113,7 +113,7 @@ class TestElsewhere(Harness):
         bob.set_tip_to(alice, amount)
         assert alice.receiving == amount
         r = self.client.GET('/on/github/alice/')
-        assert str(amount) in r.body, r.body.decode('utf8')
+        assert str(amount) in r.text, r.text
 
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_page_doesnt_fail_on_at_sign(self, get_user_info):
@@ -155,7 +155,7 @@ class TestElsewhere(Harness):
 
             assert response.code == 200
 
-            data = json.loads(response.body)
+            data = json.loads(response.text)
             assert data['on'] == platform.name
 
     def test_public_json_opted_in(self):

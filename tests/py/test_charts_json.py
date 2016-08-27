@@ -33,13 +33,13 @@ class TestChartsJson(FakeTransfersHarness):
 
 
     def test_no_payday_returns_empty_list(self):
-        assert json.loads(self.client.GET('/carl/charts.json').body) == []
+        assert json.loads(self.client.GET('/carl/charts.json').text) == []
 
     def test_first_payday_comes_through(self):
         self.run_payday()   # first
 
         expected = [{"date": today(), "npatrons": 2, "receipts": 3.00}]
-        actual = json.loads(self.client.GET('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').text)
 
         assert actual == expected
 
@@ -55,7 +55,7 @@ class TestChartsJson(FakeTransfersHarness):
             {"date": today(), "npatrons": 1, "receipts": 5.00},  # most recent first
             {"date": today(), "npatrons": 2, "receipts": 3.00},
         ]
-        actual = json.loads(self.client.GET('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').text)
 
         assert actual == expected
 
@@ -76,7 +76,7 @@ class TestChartsJson(FakeTransfersHarness):
             {"date": today(), "npatrons": 0, "receipts": 0.00},
             {"date": today(), "npatrons": 2, "receipts": 3.00},
         ]
-        actual = json.loads(self.client.GET('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').text)
 
         assert actual == expected
 
@@ -106,7 +106,7 @@ class TestChartsJson(FakeTransfersHarness):
                 "receipts": 3.00,
             },
         ]
-        actual = json.loads(self.client.GET('/carl/charts.json').body)
+        actual = json.loads(self.client.GET('/carl/charts.json').text)
 
         assert actual == expected
 
@@ -116,7 +116,7 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()   # third
 
         expected = []
-        actual = json.loads(self.client.GET('/alice/charts.json').body)
+        actual = json.loads(self.client.GET('/alice/charts.json').text)
 
         assert actual == expected
 
@@ -134,7 +134,7 @@ class TestChartsJson(FakeTransfersHarness):
             "week_withdrawals": '0.00',
             "xTitle": utcnow().strftime('%Y-%m-%d'),
         }
-        actual = json.loads(self.client.GET('/about/charts.json').body)[0]
+        actual = json.loads(self.client.GET('/about/charts.json').text)[0]
 
         assert actual == expected
 
