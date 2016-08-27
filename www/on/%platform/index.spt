@@ -5,6 +5,9 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.utils import b64decode_s
 
 platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.friends_platforms]
+
+# backcompat: py2 leaks p, py3 doesn't, so we have to assign `p` then delete it
+p = None
 del p
 
 [---]
