@@ -9,7 +9,7 @@ import pickle
 from time import sleep
 import uuid
 
-from six.moves.urllib.parse import urlencode
+from six.moves.urllib.parse import quote, urlencode
 
 import aspen_jinja2_renderer
 from html2text import html2text
@@ -358,7 +358,9 @@ class Participant(Model, MixinTeam):
               FROM elsewhere
              WHERE participant = %s
         """, (self.id,))
-        return rec and '/on/%s/%s/' % (rec.platform, rec.user_name)
+        if rec:
+            return '/on/%s/%s/' % (quote(rec.platform), quote(rec.user_name))
+        return None
 
 
     # Closing

@@ -1,6 +1,6 @@
 from base64 import b64decode, b64encode
 
-from six.moves.urllib.parse import urlencode
+from six.moves.urllib.parse import quote, urlencode
 
 from pando import Response
 
@@ -27,7 +27,7 @@ if not endpoint in whitelisted_endpoints:
 platform, account = get_account_elsewhere(website, state)
 
 if account.participant.status != 'stub':
-    next_url = '/%s/%s.json' % (account.participant.username, endpoint)
+    next_url = '/%s/%s.json' % (quote(account.participant.username), endpoint)
     next_url += stringify_qs(request.qs)
     headers = {}
     headers[b"Access-Control-Allow-Origin"] = b"*"
