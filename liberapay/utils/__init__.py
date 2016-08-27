@@ -121,7 +121,7 @@ def b64decode_s(s, **kw):
         raise Response(400, "invalid base64 input")
 
     try:
-        s = s.encode('ascii')
+        s = s.encode('ascii') if hasattr(s, 'encode') else s
     except UnicodeError:
         return error()
 
