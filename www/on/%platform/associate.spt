@@ -43,7 +43,7 @@ if action == 'connect' and user.ANON:
     raise AuthRequired
 
 # Finish the auth process, the returned session is ready to use
-url = website.canonical_url+request.line.uri.raw
+url = website.canonical_url + request.line.uri
 try:
     sess = platform.handle_auth_callback(url, query_id, query_data)
 except TokenRequestDenied as e:
