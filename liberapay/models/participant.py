@@ -1670,7 +1670,7 @@ class Participant(Model, MixinTeam):
         #   null - user has no funding goal
         #   3.00 - user wishes to receive at least this amount
         if self.goal != 0:
-            if self.goal > 0:
+            if self.goal and self.goal > 0:
                 goal = str(self.goal)
             else:
                 goal = None

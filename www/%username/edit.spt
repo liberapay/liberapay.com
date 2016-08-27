@@ -75,7 +75,7 @@ title = participant.username
     <div class="radio">
         <label class="with-input-group-sm">
             <input type="radio" name="goal" id="goal-yes" value="custom"
-                   {{ 'checked' if participant.goal > 0 else '' }}/>
+                   {{ 'checked' if participant.goal and participant.goal > 0 else '' }}/>
             <span>{{ GOAL_PARTS[0] }}</span>
             <div><div class="input-group">
                 <div class="input-group-addon">€</div>
