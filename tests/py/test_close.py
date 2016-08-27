@@ -59,7 +59,7 @@ class TestClosing(FakeTransfersHarness):
         data = {'disburse_to': 'downstream'}
         response = self.client.PxST('/alice/settings/close', auth_as=alice, data=data)
         assert response.code == 302
-        assert response.headers['Location'] == '/alice/'
+        assert response.headers[b'Location'] == b'/alice/'
         assert Participant.from_username('alice').balance == 0
         assert Participant.from_username('bob').balance == 7
 

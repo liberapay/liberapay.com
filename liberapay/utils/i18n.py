@@ -257,7 +257,7 @@ def get_lang_options(request, locale, previously_used_langs, add_multi=False):
 
 
 def set_up_i18n(website, request, state):
-    accept_lang = request.headers.get("Accept-Language", "")
+    accept_lang = request.headers.get(b"Accept-Language", b"").decode('ascii', 'replace')
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
     add_helpers_to_context(state, loc)

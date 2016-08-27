@@ -112,7 +112,7 @@ class Tests(Harness):
         self.make_participant('alice', balance=100)
         response = self.client.GET('/alice/public.json')
 
-        assert response.headers['Access-Control-Allow-Origin'] == '*'
+        assert response.headers[b'Access-Control-Allow-Origin'] == b'*'
 
     def test_jsonp_works(self):
         alice = self.make_participant('alice', balance=100)

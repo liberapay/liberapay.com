@@ -42,7 +42,7 @@ class Tests(Harness):
             utils.get_participant(state, restrict=False)
         r = cm.exception
         assert r.code == 302
-        assert r.headers['Location'] == '/alice/?foo=bar'
+        assert r.headers[b'Location'] == b'/alice/?foo=bar'
 
     def test_get_participant_canonicalizes_id_to_username(self):
         self.make_participant('alice')
@@ -52,7 +52,7 @@ class Tests(Harness):
             utils.get_participant(state, restrict=False)
         r = cm.exception
         assert r.code == 302
-        assert r.headers['Location'] == '/alice/?x=2'
+        assert r.headers[b'Location'] == b'/alice/?x=2'
 
     def test_is_expired(self):
         expiration = datetime.utcnow() - timedelta(days=40)

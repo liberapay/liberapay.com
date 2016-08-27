@@ -1,7 +1,7 @@
 [---]
 
 query = "SELECT * FROM paydays ORDER BY id DESC"
-response.headers["Access-Control-Allow-Origin"] = "*"
+response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
 [---] application/json via json_dump
 website.db.all(query)

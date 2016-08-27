@@ -24,7 +24,7 @@ if request.method == 'POST':
         raise Response(400, _("We were unable to get an avatar for you from {0}.", src))
 
     msg = _("Your new avatar URL is: {0}", participant.avatar_url)
-    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+    if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
         response.redirect(participant.path('edit')+'?success='+b64encode_s(msg)+'#avatar')
 
 [---] text/html

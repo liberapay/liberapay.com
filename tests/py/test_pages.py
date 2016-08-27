@@ -109,7 +109,7 @@ class TestPages(BrowseTestHarness):
         link_lang = link_lang.format(l, self.website.canonical_scheme, self.website.canonical_host)
         assert link_lang in r.text
 
-        assert r.headers[b'Content-Type'] == 'text/html; charset=UTF-8'
+        assert r.headers[b'Content-Type'] == b'text/html; charset=UTF-8'
 
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')
@@ -144,7 +144,7 @@ class TestPages(BrowseTestHarness):
     def test_anonymous_sign_out_redirects(self):
         response = self.client.PxST('/sign-out.html')
         assert response.code == 302
-        assert response.headers['Location'] == '/'
+        assert response.headers[b'Location'] == b'/'
 
     def test_sign_out_overwrites_session_cookie(self):
         alice = self.make_participant('alice')

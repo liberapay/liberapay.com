@@ -734,6 +734,8 @@ class Participant(Model, MixinTeam):
     def set_email_lang(self, accept_lang):
         if not accept_lang:
             return
+        if isinstance(accept_lang, bytes):
+            accept_lang = accept_lang.decode('ascii', 'replace')
         self.db.run("UPDATE participants SET email_lang=%s WHERE id=%s",
                     (accept_lang, self.id))
         self.set_attributes(email_lang=accept_lang)

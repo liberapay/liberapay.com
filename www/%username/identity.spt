@@ -82,7 +82,7 @@ if request.method == 'POST':
             error = repr_exception(err)
             website.tell_sentry(err, state, allow_reraise=True)
 
-    if error and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    if error and request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
         raise Response(400, error)
 
 else:

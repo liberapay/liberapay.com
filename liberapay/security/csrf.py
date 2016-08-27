@@ -54,7 +54,7 @@ def reject_forgeries(request, csrf_token):
         if request.line.uri.startswith('/callbacks/'):
             return
         # and requests using HTTP auth
-        if 'Authorization' in request.headers:
+        if b'Authorization' in request.headers:
             return
 
         # Check non-cookie token for match.
@@ -66,7 +66,7 @@ def reject_forgeries(request, csrf_token):
         if second_token == "":
             # Fall back to X-CSRF-TOKEN, to make things easier for AJAX,
             # and possible for PUT/DELETE.
-            second_token = request.headers.get('X-CSRF-TOKEN', '')
+            second_token = request.headers.get(b'X-CSRF-TOKEN', b'').decode('ascii', 'replace')
 
         if not constant_time_compare(second_token, csrf_token):
             raise Response(403, "Bad CSRF cookie")

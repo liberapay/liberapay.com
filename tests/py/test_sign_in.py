@@ -51,7 +51,7 @@ class TestSignIn(EmailHarness):
     def check_with_about_me(self, username, cookies):
         r = self.client.GET('/about/me/', cookies=cookies, raise_immediately=False)
         assert r.code == 302
-        assert r.headers['Location'] == '/'+username+'/'
+        assert r.headers[b'Location'] == b'/' + username.encode() + b'/'
 
     def test_log_in(self):
         password = 'password'
@@ -126,7 +126,7 @@ class TestSignIn(EmailHarness):
         data = {'email-login.email': email}
         r = self.client.POST('/', data, raise_immediately=False)
         alice = alice.refetch()
-        assert alice.session_token not in r.headers.raw
+        assert alice.session_token not in r.headers.raw.decode('ascii')
         assert alice.session_token not in r.body.decode('utf8')
 
         Participant.dequeue_emails()
@@ -140,7 +140,7 @@ class TestSignIn(EmailHarness):
         assert alice2.session_token != alice.session_token
         # ↑ this means that the link is only valid once
         assert r.code == 302
-        assert r.headers['Location'] == '/alice/?foo=bar'
+        assert r.headers[b'Location'] == b'/alice/?foo=bar'
         # ↑ checks that original path and query are preserved
 
         # Check that we can change our password

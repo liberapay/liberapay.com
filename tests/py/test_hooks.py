@@ -33,7 +33,7 @@ class Tests(Harness):
                                    HTTP_X_FORWARDED_PROTO=b'http',
                                    )
         assert response.code == 302
-        assert response.headers['Location'] == b'https://example.com/'
+        assert response.headers[b'Location'] == b'https://example.com/'
 
     def test_no_cookies_over_http(self):
         """
@@ -103,14 +103,14 @@ class Tests(Harness):
         )
         assert r.code == 302
         assert not r.headers.cookie
-        assert r.headers['Location'] == b'https://en.example.com/'
+        assert r.headers[b'Location'] == b'https://en.example.com/'
 
 
 class Tests2(Harness):
 
     def test_accept_header_is_respected(self):
         r = self.client.GET('/about/stats', HTTP_ACCEPT=b'application/json')
-        assert r.headers['Content-Type'] == 'application/json; charset=UTF-8'
+        assert r.headers[b'Content-Type'] == b'application/json; charset=UTF-8'
         json.loads(r.body)
 
     def test_error_spt_works(self):
@@ -119,29 +119,29 @@ class Tests2(Harness):
 
     def test_cors_is_not_allowed_by_default(self):
         r = self.client.GET('/')
-        assert 'Access-Control-Allow-Origin' not in r.headers
+        assert b'Access-Control-Allow-Origin' not in r.headers
 
     def test_cors_is_allowed_for_assets(self):
         r = self.client.GET('/assets/jquery.min.js')
         assert r.code == 200
-        assert r.headers['Access-Control-Allow-Origin'] == '*'
+        assert r.headers[b'Access-Control-Allow-Origin'] == b'*'
 
     def test_caching_of_assets(self):
         r = self.client.GET('/assets/jquery.min.js')
-        assert r.headers['Cache-Control'] == 'public, max-age=3600'
-        assert 'Vary' not in r.headers
+        assert r.headers[b'Cache-Control'] == b'public, max-age=3600'
+        assert b'Vary' not in r.headers
         assert not r.headers.cookie
 
     def test_caching_of_assets_with_etag(self):
         r = self.client.GET(self.client.website.asset('jquery.min.js'))
-        assert r.headers['Cache-Control'] == 'public, max-age=31536000'
-        assert 'Vary' not in r.headers
+        assert r.headers[b'Cache-Control'] == b'public, max-age=31536000'
+        assert b'Vary' not in r.headers
         assert not r.headers.cookie
 
     def test_caching_of_simplates(self):
         r = self.client.GET('/')
-        assert r.headers['Cache-Control'] == 'no-cache'
-        assert 'Vary' not in r.headers
+        assert r.headers[b'Cache-Control'] == b'no-cache'
+        assert b'Vary' not in r.headers
 
     def test_no_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)

@@ -18,7 +18,7 @@ if ok:
     nonce = request.qs.get('nonce', '')
     result = participant.verify_email(email, nonce)
     if not participant.email_lang:
-        participant.set_email_lang(request.headers.get("Accept-Language"))
+        participant.set_email_lang(request.headers.get(b"Accept-Language"))
 
 
 [-----------------------------------------------------------------------------]

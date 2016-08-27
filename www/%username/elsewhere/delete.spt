@@ -11,7 +11,7 @@ user_id = request.body["user_id"]
 
 participant.delete_elsewhere(platform, user_id)
 
-if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
     response.redirect('..')
 
 [---] text/html

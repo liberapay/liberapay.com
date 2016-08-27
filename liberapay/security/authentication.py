@@ -99,13 +99,13 @@ def authenticate_user_if_possible(request, state, user, _):
         return
 
     # HTTP auth
-    if 'Authorization' in request.headers:
-        header = request.headers['authorization']
-        if not header.startswith('Basic '):
+    if b'Authorization' in request.headers:
+        header = request.headers[b'Authorization']
+        if not header.startswith(b'Basic '):
             raise Response(401, 'Unsupported authentication method')
         try:
-            creds = binascii.a2b_base64(header[len('Basic '):]).split(':', 1)
-        except binascii.Error:
+            creds = binascii.a2b_base64(header[len('Basic '):]).decode('utf8').split(':', 1)
+        except (binascii.Error, UnicodeDecodeError):
             raise Response(400, 'Malformed "Authorization" header')
         participant = Participant.authenticate('id', 'password', *creds)
         if not participant:

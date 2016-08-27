@@ -53,7 +53,7 @@ except ResponseException as err:
     raise Response(400, repr_exception(err))
 else:
     ExchangeRoute.insert(participant, 'mango-ba', ba.Id)
-    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+    if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
         response.redirect(request.line.uri)
 
 [---] text/html

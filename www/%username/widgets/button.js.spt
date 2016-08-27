@@ -8,8 +8,8 @@ ICON = include_svg(ICON, 16, 16)
 
 participant = get_participant(state, restrict=False)
 
-response.headers['Cache-Control'] = 'public, max-age=86400'
-response.headers['Vary'] = 'Accept-Language'
+response.headers[b'Cache-Control'] = b'public, max-age=86400'
+response.headers[b'Vary'] = b'Accept-Language'
 
 [---] application/javascript via jinja2_html_jswrapped
 <style>

@@ -21,9 +21,9 @@ charts = [r._asdict() for r in query_cache.all("""\
 for c in charts:
     c['xTitle'] = c.pop('xtitle')  # postgres doesn't respect case here
 
-response.headers["Access-Control-Allow-Origin"] = "*"
+response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
-response.headers['Cache-Control'] = 'public, max-age=600'
+response.headers[b'Cache-Control'] = b'public, max-age=600'
 
 [---] application/json via json_dump
 charts
