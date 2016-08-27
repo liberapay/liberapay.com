@@ -4,7 +4,8 @@ import fnmatch
 import os
 import posixpath
 import re
-from urlparse import urlsplit
+
+from six.moves.urllib.parse import urlsplit
 
 import sass
 from aspen import renderers

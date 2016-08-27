@@ -1,5 +1,6 @@
 from base64 import b64decode, b64encode
-from urllib import urlencode
+
+from six.moves.urllib.parse import urlencode
 
 from pando import Response
 
