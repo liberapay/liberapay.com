@@ -5,7 +5,6 @@ from decimal import Decimal, ROUND_DOWN
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
-import pickle
 from time import sleep
 import uuid
 
@@ -50,7 +49,7 @@ from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    b64encode_s, erase_cookie, serialize, set_cookie,
+    b64encode_s, deserialize, erase_cookie, serialize, set_cookie,
     emails, i18n,
 )
 from liberapay.website import website
@@ -730,7 +729,7 @@ class Participant(Model, MixinTeam):
                     delete(msg)
                     continue
                 try:
-                    r = p.send_email(msg.spt_name, **pickle.loads(msg.context))
+                    r = p.send_email(msg.spt_name, **deserialize(msg.context))
                     assert r == 1
                 except Exception as e:
                     website.tell_sentry(e, {}, allow_reraise=True)
@@ -852,7 +851,7 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         for id, event, notif_context, is_new in notifs:
             try:
-                notif_context = pickle.loads(notif_context)
+                notif_context = deserialize(notif_context)
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)

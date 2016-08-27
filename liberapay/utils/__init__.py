@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
-from binascii import hexlify
+from binascii import hexlify, unhexlify
 from datetime import date, datetime, timedelta
 import errno
 import fnmatch
@@ -270,6 +270,12 @@ def serialize(context):
         if str(type(v)) == "<class 'psycopg2.extras.Record'>":
             context[k] = v._asdict()
     return b'\\x' + hexlify(pickle.dumps(context, 2))
+
+
+def deserialize(context):
+    if isinstance(context, memoryview) and context[:2].tobytes() == b'\\x':
+        context = unhexlify(context[2:])
+    return pickle.loads(context)
 
 
 def pid_exists(pid):
