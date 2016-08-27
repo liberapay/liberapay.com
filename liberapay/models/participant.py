@@ -1040,7 +1040,7 @@ class Participant(Model, MixinTeam):
         if platform == 'libravatar' or platform is None and email:
             if not email:
                 return
-            avatar_id = md5(email.strip().lower()).hexdigest()
+            avatar_id = md5(email.strip().lower().encode('utf8')).hexdigest()
             avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
             avatar_url += AVATAR_QUERY
 
