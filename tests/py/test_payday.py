@@ -20,7 +20,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         date.today.return_value.isoweekday.return_value = 2
         with self.assertRaises(AssertionError) as cm:
             main()
-        assert cm.exception.message == "today is not Wednesday (2 != 3)"
+        assert cm.exception.msg == "today is not Wednesday (2 != 3)"
 
         date.today.return_value.isoweekday.return_value = 3
 
@@ -30,13 +30,13 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert lock  # sanity check
             with self.assertRaises(AssertionError) as cm:
                 main()
-            assert cm.exception.message == "failed to acquire the payday lock"
+            assert cm.exception.msg == "failed to acquire the payday lock"
 
         main()
 
         with self.assertRaises(AssertionError) as cm:
             main()
-        assert cm.exception.message == "payday has already been run this week"
+        assert cm.exception.msg == "payday has already been run this week"
 
     def test_payday_id_is_serial(self):
         for i in range(1, 4):
