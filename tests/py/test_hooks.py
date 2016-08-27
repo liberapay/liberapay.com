@@ -55,7 +55,7 @@ class Tests(Harness):
         password = 'password'
         alice.update_password(password)
 
-        auth_header = b'Basic ' + b64encode(b'%s:%s' % (alice.id, password))
+        auth_header = b'Basic ' + b64encode(('%s:%s' % (alice.id, password)).encode('ascii'))
         response = self.client.GET('/alice/public.json',
                                    HTTP_AUTHORIZATION=auth_header,
                                    HTTP_X_FORWARDED_PROTO=b'https',

@@ -11,6 +11,7 @@ import os
 import pickle
 import re
 
+from six import PY3
 from six.moves.urllib.parse import quote as urlquote
 
 from pando import Response, json
@@ -150,7 +151,8 @@ def b64encode_s(s):
             s.decode('utf8')
         except UnicodeError:
             prefix = b'.'
-    return prefix + b64encode(s, b'-_').replace(b'=', b'~')
+    r = prefix + b64encode(s, b'-_').replace(b'=', b'~')
+    return r.decode('ascii') if PY3 else r
 
 
 def update_global_stats(website):

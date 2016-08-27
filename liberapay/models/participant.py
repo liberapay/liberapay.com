@@ -215,7 +215,12 @@ class Participant(Model, MixinTeam):
         salt = urandom(21)
         rounds = website.app_conf.password_rounds
         hashed = cls._hash_password(password, algo, salt, rounds)
-        hashed = '$'.join((algo, str(rounds), b64encode(salt), b64encode(hashed)))
+        hashed = '$'.join((
+            algo,
+            str(rounds),
+            b64encode(salt).decode('ascii'),
+            b64encode(hashed).decode('ascii')
+        ))
         return hashed
 
     def update_password(self, password, cursor=None):

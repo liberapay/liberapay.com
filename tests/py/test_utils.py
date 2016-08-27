@@ -128,10 +128,10 @@ class Tests(Harness):
 
     def test_b64encode_s_replaces_slash_with_underscore(self):
         # TheEnter?prise => VGhlRW50ZXI/cHJpc2U=
-        assert b64encode_s('TheEnter?prise') == 'VGhlRW50ZXI_cHJpc2U~'
+        assert b64encode_s('TheEnter?prise') == str('VGhlRW50ZXI_cHJpc2U~')
 
     def test_b64encode_s_replaces_equals_with_tilde(self):
-        assert b64encode_s('TheEnterprise') == 'VGhlRW50ZXJwcmlzZQ~~'
+        assert b64encode_s('TheEnterprise') == str('VGhlRW50ZXJwcmlzZQ~~')
 
     def test_b64decode_s_decodes(self):
         assert b64decode_s('VGhlRW50ZXI_cHJpc2U~') == 'TheEnter?prise'
