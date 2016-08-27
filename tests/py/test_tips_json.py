@@ -19,7 +19,7 @@ class TestTipsJson(Harness):
         ]
 
         response = self.client.POST('/test_tipper/tips.json',
-                                    body=json.dumps(data),
+                                    body=json.dumps(data).encode('ascii'),
                                     content_type='application/json',
                                     auth_as=test_tipper,
                                     )
@@ -29,7 +29,7 @@ class TestTipsJson(Harness):
 
         data = [{'username': 'test_tippee2', 'amount': '1.00'}]
         response = self.client.POST('/test_tipper/tips.json?also_prune=' + also_prune,
-                                    body=json.dumps(data),
+                                    body=json.dumps(data).encode('ascii'),
                                     content_type='application/json',
                                     auth_as=test_tipper,
                                     )
