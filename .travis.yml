@@ -6,15 +6,15 @@ branches:
     - master
 cache:
   directories:
-    - env/bin
-    - env/lib/python2.7/site-packages
+    - .tox
 install:
- - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rf env; fi
- - touch requirements.txt && make env
+ - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rf .tox; fi
+ - pip install tox
 before_script:
  - psql -U postgres -c 'CREATE DATABASE liberapay_tests;'
+ - make test-schema
  - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rfv tests/py/fixtures; export LIBERAPAY_I18N_TEST=yes; fi
-script: make test
+script: tox
 notifications:
   email: false
   irc:
