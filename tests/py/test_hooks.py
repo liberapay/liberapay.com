@@ -147,21 +147,21 @@ class Tests2(Harness):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
         assert "Bad CSRF cookie" in r.text
-        assert b'csrf_token' in r.headers.cookie
+        assert csrf.CSRF_TOKEN in r.headers.cookie
 
     def test_bad_csrf_cookie(self):
-        r = self.client.POST('/', csrf_token=b'bad_token', raise_immediately=False)
+        r = self.client.POST('/', csrf_token='bad_token', raise_immediately=False)
         assert r.code == 403
         assert "Bad CSRF cookie" in r.text
-        assert r.headers.cookie[b'csrf_token'].value != 'bad_token'
+        assert r.headers.cookie[csrf.CSRF_TOKEN].value != 'bad_token'
 
     def test_csrf_cookie_set_for_most_requests(self):
         r = self.client.GET('/')
-        assert b'csrf_token' in r.headers.cookie
+        assert csrf.CSRF_TOKEN in r.headers.cookie
 
     def test_no_csrf_cookie_set_for_assets(self):
         r = self.client.GET('/assets/base.css')
-        assert b'csrf_token' not in r.headers.cookie
+        assert csrf.CSRF_TOKEN not in r.headers.cookie
 
     def test_sanitize_token_passes_through_good_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'

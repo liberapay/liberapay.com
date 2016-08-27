@@ -120,7 +120,7 @@ SEPA_ZONE = set("""
     MC MT NL NO PL PT RO SE SI SK
 """.split())
 
-SESSION = b'session'
+SESSION = str('session')  # bytes in python2, unicode in python3
 SESSION_REFRESH = timedelta(hours=1)
 SESSION_TIMEOUT = timedelta(hours=6)
 

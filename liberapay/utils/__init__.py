@@ -200,23 +200,24 @@ def is_card_expired(exp_year, exp_month):
     return exp_year < cur_year or exp_year == cur_year and exp_month < cur_month
 
 
-def set_cookie(cookies, key, value, expires=None, httponly=True, path=b'/'):
-    cookies[key] = value
+def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
+    key = str(key)
+    cookies[key] = str(value)
     cookie = cookies[key]
     if expires:
         if isinstance(expires, timedelta):
             expires += utcnow()
         if isinstance(expires, datetime):
-            expires = to_rfc822(expires).encode('ascii')
-        cookie[b'expires'] = expires
+            expires = to_rfc822(expires)
+        cookie[str('expires')] = str(expires)
     if httponly:
-        cookie[b'httponly'] = True
+        cookie[str('httponly')] = True
     if path:
-        cookie[b'path'] = path
+        cookie[str('path')] = str(path)
     if website.canonical_domain:
-        cookie[b'domain'] = website.canonical_domain
+        cookie[str('domain')] = str(website.canonical_domain)
     if website.canonical_scheme == 'https':
-        cookie[b'secure'] = True
+        cookie[str('secure')] = True
 
 
 def erase_cookie(cookies, key, **kw):

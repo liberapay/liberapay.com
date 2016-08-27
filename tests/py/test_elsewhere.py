@@ -21,7 +21,7 @@ class TestElsewhere(Harness):
     def test_associate_with_empty_cookie_raises_400(self):
         response = self.client.GxT(
             '/on/github/associate?state=deadbeef',
-            cookies={b'github_deadbeef': b''},
+            cookies={'github_deadbeef': ''},
         )
         assert response.code == 400
 
@@ -47,7 +47,7 @@ class TestElsewhere(Harness):
         cookie = b64encode_s(json.dumps(['query_data', 'connect', b64encode_s(then), '2']))
         response = self.client.GxT('/on/github/associate?state=deadbeef',
                                    auth_as=alice,
-                                   cookies={b'github_deadbeef': cookie})
+                                   cookies={'github_deadbeef': cookie})
         assert response.code == 302, response.text
         assert response.headers[b'Location'] == then
 
@@ -65,7 +65,7 @@ class TestElsewhere(Harness):
         cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT('/on/github/associate?state=deadbeef',
                                    auth_as=alice,
-                                   cookies={b'github_deadbeef': cookie})
+                                   cookies={'github_deadbeef': cookie})
         assert response.code == 302
         assert response.headers[b'Location'].startswith(b'/on/confirm.html?id=')
 
@@ -75,7 +75,7 @@ class TestElsewhere(Harness):
         url = '/on/facebook/associate?error_message=%s&state=deadbeef' % error
         cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT(url, auth_as=alice,
-                                   cookies={b'facebook_deadbeef': cookie})
+                                   cookies={'facebook_deadbeef': cookie})
         assert response.code == 502, response.text
         assert error in response.text
 
@@ -170,7 +170,7 @@ class TestConfirmTakeOver(Harness):
         Harness.setUp(self)
         self.alice_elsewhere = self.make_elsewhere('twitter', -1, 'alice')
         token, expires = self.alice_elsewhere.make_connect_token()
-        self.connect_cookie = {b'connect_%s' % self.alice_elsewhere.id: token}
+        self.connect_cookie = {'connect_%s' % self.alice_elsewhere.id: token}
         self.bob = self.make_participant('bob')
 
     def test_confirm(self):

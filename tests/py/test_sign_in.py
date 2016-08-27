@@ -38,10 +38,10 @@ class TestSignIn(EmailHarness):
         p = p.refetch()
         # Basic checks
         assert r.code == 302
-        expected = b'%s:%s' % (p.id, p.session_token)
+        expected = str('%s:%s') % (p.id, p.session_token)
         sess_cookie = r.headers.cookie[SESSION]
         assert sess_cookie.value == expected
-        expires = sess_cookie[b'expires']
+        expires = sess_cookie[str('expires')]
         assert expires.endswith(' GMT')
         assert parsedate(expires) > gmtime()
         # More thorough check
