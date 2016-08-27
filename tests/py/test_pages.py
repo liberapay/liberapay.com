@@ -188,14 +188,16 @@ class TestPages(BrowseTestHarness):
     def test_new_participant_can_edit_profile(self):
         alice = self.make_participant('alice')
         body = self.client.GET("/alice/", auth_as=alice).text
-        assert b'Edit' in body
+        assert 'Edit' in body
 
     def test_unicode_success_message_doesnt_break_edit_page(self):
         alice = self.make_participant('alice')
-        for msg in ('épopée', b'épopée'):
+        s = 'épopée'
+        bs = s.encode('utf8')
+        for msg in (s, bs):
             r = self.client.GET('/alice/edit?success='+b64encode_s(msg),
                                 auth_as=alice)
-            assert b'épopée' in r.body
+            assert bs in r.body
 
     def test_can_see_payout_failure_page(self):
         error = 'error message #94355731569'
