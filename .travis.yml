@@ -13,7 +13,7 @@ install:
  - touch requirements.txt && make env
 before_script:
  - psql -U postgres -c 'CREATE DATABASE liberapay_tests;'
- - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rfv tests/py/fixtures; fi
+ - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rfv tests/py/fixtures; export LIBERAPAY_I18N_TEST=yes; fi
 script: make test
 notifications:
   email: false
