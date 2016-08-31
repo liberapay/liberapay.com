@@ -74,6 +74,7 @@ pytest-re: env
 
 _i18n_extract: env
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
+	@PYTHONPATH=. $(env_bin)/python liberapay/utils/i18n.py po-reflag i18n/core.pot
 	@for f in i18n/*/*.po; do \
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
 	done
@@ -85,6 +86,7 @@ _i18n_clean:
 	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator|X-Generator|Language): /d' \
 	           -e 's/^("[^:]+: ) +/\1/' \
 	           -e 's/^("Language-Team: .+? )<(.+)>\\n/\1"\n"<\2>\\n/' \
+	           -e 's/^#(, .+)?, python-format(, .+)?$$/#\1\2/' \
 	           -e '/^#: /d' "$$f" >"$$f.new"; \
 	    mv "$$f.new" "$$f"; \
 	done
