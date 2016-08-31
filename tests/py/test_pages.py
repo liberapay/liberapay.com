@@ -19,11 +19,11 @@ from liberapay.utils import b64encode_s, find_files
 overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
 
 
-class TestPages(MangopayHarness):
+class BrowseTestHarness(MangopayHarness):
 
     @classmethod
     def setUpClass(cls):
-        super(TestPages, cls).setUpClass()
+        super(BrowseTestHarness, cls).setUpClass()
         i = len(cls.client.www_root)
         def f(spt):
             if spt[spt.rfind('/')+1:].startswith('index.'):
@@ -65,6 +65,21 @@ class TestPages(MangopayHarness):
             assert r.code < 500
             assert not overescaping_re.search(r.text)
 
+
+@pytest.mark.skipif(
+        os.environ.get('LIBERAPAY_I18N_TEST') != 'yes',
+        reason="this is an expensive test, we don't want to run it every time",
+    )
+class TestTranslations(BrowseTestHarness):
+
+    def test_all_pages_in_all_supported_langs(self):
+        self.browse_setup()
+        for _, l, _, _ in self.client.website.lang_list:
+            self.browse(HTTP_ACCEPT_LANGUAGE=l.encode('ascii'))
+
+
+class TestPages(BrowseTestHarness):
+
     def test_anon_can_browse_in_french(self):
         self.browse_setup()
         self.browse(HTTP_ACCEPT_LANGUAGE=b'fr')
@@ -93,15 +108,6 @@ class TestPages(MangopayHarness):
         link_lang = '<link rel="alternate" hreflang="{0}" href="{1}://{0}.{2}/" />'
         link_lang = link_lang.format(l, self.website.canonical_scheme, self.website.canonical_host)
         assert link_lang in r.text
-
-    @pytest.mark.skipif(
-        os.environ.get('LIBERAPAY_I18N_TEST') != 'yes',
-        reason="this is an expensive test, we don't want to run it every time",
-    )
-    def test_all_pages_in_all_supported_langs(self):
-        self.browse_setup()
-        for _, l, _, _ in self.client.website.lang_list:
-            self.browse(HTTP_ACCEPT_LANGUAGE=l.encode('ascii'))
 
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')

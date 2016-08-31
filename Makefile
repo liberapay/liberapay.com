@@ -73,7 +73,7 @@ pytest-re: env
 	@$(MAKE) --no-print-directory pyflakes
 
 pytest-i18n-browse: env
-	PYTHONPATH=. LIBERAPAY_I18N_TEST=yes $(py_test) -k test_all_pages_in_all_supported_langs ./tests/py/
+	PYTHONPATH=. LIBERAPAY_I18N_TEST=yes $(py_test) -k TestTranslations ./tests/py/
 
 _i18n_extract: env
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
