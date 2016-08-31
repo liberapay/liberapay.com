@@ -411,7 +411,10 @@ class Payday(object):
 
     def transfer_for_real(self, transfers):
         db = self.db
-        for t in transfers:
+        print("Starting transfers (n=%i)" % len(transfers))
+        msg = "Executing transfer #%i (amount=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s)"
+        for i, t in enumerate(transfers):
+            log(msg % (i, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id))
             transfer(db, **t.__dict__)
 
     def clean_up(self):
