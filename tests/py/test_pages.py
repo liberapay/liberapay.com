@@ -4,9 +4,11 @@ from __future__ import print_function, unicode_literals
 
 from collections import OrderedDict
 from decimal import Decimal as D
+import os
 import re
 
 from aspen import json, Response
+import pytest
 
 from liberapay.billing.payday import Payday
 from liberapay.constants import SESSION
@@ -91,6 +93,15 @@ class TestPages(MangopayHarness):
         link_lang = '<link rel="alternate" hreflang="{0}" href="{1}://{0}.{2}/" />'
         link_lang = link_lang.format(l, self.website.canonical_scheme, self.website.canonical_host)
         assert link_lang in r.text
+
+    @pytest.mark.skipif(
+        os.environ.get('LIBERAPAY_I18N_TEST') != 'yes',
+        reason="this is an expensive test, we don't want to run it every time",
+    )
+    def test_all_pages_in_all_supported_langs(self):
+        self.browse_setup()
+        for _, l, _, _ in self.client.website.lang_list:
+            self.browse(HTTP_ACCEPT_LANGUAGE=l.encode('ascii'))
 
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')

@@ -72,6 +72,9 @@ pytest-re: env
 	PYTHONPATH=. $(py_test) --lf ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
+pytest-i18n-browse: env
+	PYTHONPATH=. LIBERAPAY_I18N_TEST=yes $(py_test) -k test_all_pages_in_all_supported_langs ./tests/py/
+
 _i18n_extract: env
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot emails liberapay templates www
 	@PYTHONPATH=. $(env_bin)/python liberapay/utils/i18n.py po-reflag i18n/core.pot
@@ -95,6 +98,8 @@ i18n_update: _i18n_rebase _i18n_pull _i18n_extract
 	@if git commit --dry-run i18n &>/dev/null; then \
 		git commit -m "update translation catalogs" i18n; \
 	fi
+	@echo "Running i18n browse test..."
+	@$(MAKE) --no-print-directory pytest-i18n-browse
 	@echo "All done, check that everything is okay then push to master."
 
 _i18n_rebase:
