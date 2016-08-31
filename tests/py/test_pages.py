@@ -67,9 +67,9 @@ class BrowseTestHarness(MangopayHarness):
 
 
 @pytest.mark.skipif(
-        os.environ.get('LIBERAPAY_I18N_TEST') != 'yes',
-        reason="this is an expensive test, we don't want to run it every time",
-    )
+    os.environ.get('LIBERAPAY_I18N_TEST') != 'yes',
+    reason="this is an expensive test, we don't want to run it every time",
+)
 class TestTranslations(BrowseTestHarness):
 
     def test_all_pages_in_all_supported_langs(self):
