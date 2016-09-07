@@ -5,9 +5,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from base64 import b64encode
 import json
 
-from aspen.exceptions import MalformedBody, UnknownBodyType
-from aspen.http.request import Request
-from aspen.http.response import Response
+from pando.exceptions import MalformedBody, UnknownBodyType
+from pando.http.request import Request
+from pando.http.response import Response
 
 from liberapay.constants import SESSION
 from liberapay.security import csrf
@@ -110,7 +110,7 @@ class Tests2(Harness):
 
     def test_accept_header_is_respected(self):
         r = self.client.GET('/about/stats', HTTP_ACCEPT=b'application/json')
-        assert r.headers['Content-Type'].startswith('application/json')
+        assert r.headers['Content-Type'] == 'application/json; charset=UTF-8'
         json.loads(r.body)
 
     def test_error_spt_works(self):

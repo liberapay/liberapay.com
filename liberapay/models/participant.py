@@ -11,10 +11,10 @@ import uuid
 
 from six.moves.urllib.parse import urlencode
 
-from aspen.utils import utcnow
 import aspen_jinja2_renderer
 from html2text import html2text
 from markupsafe import escape as htmlescape
+from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 from psycopg2.extras import Json

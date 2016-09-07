@@ -7,8 +7,8 @@ import xml.etree.ElementTree as ET
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
-from aspen import Response
-from aspen.utils import utcnow
+from pando import Response
+from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict

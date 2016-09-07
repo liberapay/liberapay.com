@@ -8,8 +8,9 @@ import os
 from os import stat
 from tempfile import mkstemp
 
-from aspen import resources, Response
-from aspen.dispatcher import DispatchResult, DispatchStatus
+from aspen import resources
+from aspen.request_processor.dispatcher import DispatchResult, DispatchStatus
+from pando import Response
 
 from liberapay.utils import b64encode_s, find_files
 
@@ -26,7 +27,7 @@ def compile_assets(website):
         dispatch_result = DispatchResult(DispatchStatus.okay, spt, {}, "Found.", {}, True)
         state = dict(dispatch_result=dispatch_result, response=Response())
         state['state'] = state
-        content = resources.get(website, spt).respond(state).body
+        content = resources.get(website.request_processor, spt).render(state).body
         if not isinstance(content, bytes):
             content = content.encode('utf8')
         tmpfd, tmpfpath = mkstemp(dir='.')

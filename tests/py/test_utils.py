@@ -3,7 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import datetime
 from datetime import timedelta
 
-from aspen.http.response import Response
+from pando.http.response import Response
+
 from liberapay import utils
 from liberapay.testing import Harness
 from liberapay.utils import i18n, markdown, b64encode_s, b64decode_s
@@ -13,20 +14,20 @@ class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
         expected = self.make_participant('alice')
-        state = self.client.GET('/alice/', return_after='dispatch_request_to_filesystem',
+        state = self.client.GET('/alice/', return_after='handle_dispatch_exception',
                                 want='state')
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
     def test_get_participant_gets_participant_from_id(self):
         expected = self.make_participant('alice')
-        state = self.client.POST('/~1/', return_after='dispatch_request_to_filesystem',
+        state = self.client.POST('/~1/', return_after='handle_dispatch_exception',
                                  want='state')
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
     def test_get_participant_raises_404_for_missing_id(self):
-        state = self.client.GET('/~/', return_after='dispatch_request_to_filesystem',
+        state = self.client.GET('/~/', return_after='handle_dispatch_exception',
                                 want='state')
         with self.assertRaises(Response) as cm:
             utils.get_participant(state, restrict=False)
@@ -35,7 +36,7 @@ class Tests(Harness):
 
     def test_get_participant_canonicalizes(self):
         self.make_participant('alice')
-        state = self.client.GET('/Alice/?foo=bar', return_after='dispatch_request_to_filesystem',
+        state = self.client.GET('/Alice/?foo=bar', return_after='handle_dispatch_exception',
                                 want='state')
         with self.assertRaises(Response) as cm:
             utils.get_participant(state, restrict=False)
@@ -45,7 +46,7 @@ class Tests(Harness):
 
     def test_get_participant_canonicalizes_id_to_username(self):
         self.make_participant('alice')
-        state = self.client.GET('/~1/?x=2', return_after='dispatch_request_to_filesystem',
+        state = self.client.GET('/~1/?x=2', return_after='handle_dispatch_exception',
                                 want='state')
         with self.assertRaises(Response) as cm:
             utils.get_participant(state, restrict=False)

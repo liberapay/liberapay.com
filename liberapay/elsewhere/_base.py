@@ -10,8 +10,9 @@ except ImportError:
     from urllib import quote
 import xml.etree.ElementTree as ET
 
-from aspen import Response
-from aspen.utils import to_age, utc
+from babel.dates import format_timedelta
+from pando import Response
+from pando.utils import utc
 from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
@@ -161,10 +162,12 @@ class Platform(object):
             return
         percent_remaining = remaining/limit
         if percent_remaining < 0.5:
+            reset_delta = reset - datetime.now().replace(tz=utc)
+            reset_delta = format_timedelta(reset_delta, locale='en')
             log_msg = (
                 '{0} API: {1:.1%} of ratelimit has been consumed, '
                 '{2} requests remaining, resets {3}.'
-            ).format(self.name, 1 - percent_remaining, remaining, to_age(reset))
+            ).format(self.name, 1 - percent_remaining, remaining, reset_delta)
             log_lvl = logging.WARNING
             if percent_remaining < 0.2:
                 log_lvl = logging.ERROR

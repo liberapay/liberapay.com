@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
-from aspen import Response
 from dependency_injection import resolve_dependencies
+from pando import Response
 
 from .constants import MAX_TIP, MIN_TIP, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
 

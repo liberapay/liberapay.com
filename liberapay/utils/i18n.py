@@ -9,7 +9,6 @@ import re
 from unicodedata import combining, normalize
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
-from aspen.utils import utcnow
 from babel.core import LOCALE_ALIASES, Locale
 from babel.dates import format_datetime, format_timedelta
 from babel.messages.extract import extract_python
@@ -19,6 +18,7 @@ from babel.numbers import (
     get_decimal_symbol, NumberFormatError, parse_decimal
 )
 import jinja2.ext
+from pando.utils import utcnow
 
 from liberapay.exceptions import InvalidNumber
 from liberapay.website import website

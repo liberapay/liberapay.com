@@ -1,4 +1,4 @@
-from aspen import Response
+from pando import Response
 
 from liberapay.constants import PRIVACY_FIELDS
 from liberapay.models.participant import Participant
@@ -46,6 +46,8 @@ elif 'username' in body:
 
 if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
     response.redirect('.')
+
+[---] text/html
 
 [---] application/json
 out

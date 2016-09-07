@@ -4,7 +4,7 @@ import binascii
 
 from six.moves.urllib.parse import urlencode
 
-from aspen import Response
+from pando import Response
 
 from liberapay.constants import SESSION, SESSION_TIMEOUT
 from liberapay.exceptions import AuthRequired

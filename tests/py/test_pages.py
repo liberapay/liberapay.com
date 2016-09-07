@@ -7,7 +7,7 @@ from decimal import Decimal as D
 import os
 import re
 
-from aspen import json, Response
+from pando import json, Response
 import pytest
 
 from liberapay.billing.payday import Payday
@@ -108,6 +108,8 @@ class TestPages(BrowseTestHarness):
         link_lang = '<link rel="alternate" hreflang="{0}" href="{1}://{0}.{2}/" />'
         link_lang = link_lang.format(l, self.website.canonical_scheme, self.website.canonical_host)
         assert link_lang in r.text
+
+        assert r.headers[b'Content-Type'] == 'text/html; charset=UTF-8'
 
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')

@@ -1,10 +1,8 @@
 from __future__ import print_function, unicode_literals
 
-from mimetypes import guess_type
-
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
-from aspen.http.request import Line
+from pando.http.request import Line
 
 from . import constants
 
@@ -62,13 +60,3 @@ def canonize(request, website):
 
 def insert_constants():
     return {'constants': constants}
-
-
-def fill_accept_header(state, request, accept_header):
-    """Work around aspen's content negotiation weirdness
-
-    This sets `accept_header` to `application/json` when the requested URL ends
-    in `.json` and the `Accept` header is missing.
-    """
-    if not accept_header:
-        state['accept_header'] = guess_type(request.path.raw, strict=False)[0]

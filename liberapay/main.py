@@ -5,8 +5,10 @@ from six.moves.urllib.parse import quote as urlquote
 
 import aspen
 import aspen.http.mapping
+import pando
+from pando.algorithms.website import fill_response_with_output
 
-from liberapay import canonize, fill_accept_header, insert_constants, utils, wireup
+from liberapay import canonize, insert_constants, utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
@@ -74,7 +76,7 @@ if env.run_cron_jobs:
 # =================
 
 def return_500_for_exception(website, exception):
-    response = aspen.Response(500)
+    response = pando.Response(500)
     if website.show_tracebacks:
         import traceback
         response.body = traceback.format_exc()
@@ -90,6 +92,7 @@ noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [
     algorithm['parse_environ_into_request'],
+    algorithm['insert_variables_for_aspen'],
     algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
 
@@ -101,16 +104,17 @@ algorithm.functions = [
     csrf.reject_forgeries,
     authentication.authenticate_user_if_possible,
 
-    algorithm['dispatch_request_to_filesystem'],
+    algorithm['dispatch_path_to_filesystem'],
+    algorithm['handle_dispatch_exception'],
 
     http_caching.get_etag_for_file if env.cache_static else noop,
     http_caching.try_to_serve_304 if env.cache_static else noop,
 
     algorithm['apply_typecasters_to_path'],
-    algorithm['get_resource_for_request'],
-    algorithm['extract_accept_from_request'],
-    fill_accept_header,
-    algorithm['get_response_for_resource'],
+    algorithm['load_resource_from_filesystem'],
+    algorithm['create_response_object'],
+    algorithm['render_resource'],
+    algorithm['fill_response_with_output'],
 
     tell_sentry,
     algorithm['get_response_for_exception'],
@@ -129,8 +133,8 @@ algorithm.functions = [
 ]
 
 
-# Monkey patch aspen
-# ==================
+# Monkey patch aspen and pando
+# ============================
 
 pop = aspen.http.mapping.Mapping.pop
 def _pop(self, name, default=aspen.http.mapping.NO_DEFAULT):
@@ -140,31 +144,32 @@ def _pop(self, name, default=aspen.http.mapping.NO_DEFAULT):
         raise aspen.Response(400, "Missing key: %s" % repr(name))
 aspen.http.mapping.Mapping.pop = _pop
 
-if hasattr(aspen.Response, 'redirect'):
-    raise Warning('aspen.Response.redirect() already exists')
+if hasattr(pando.Response, 'redirect'):
+    raise Warning('pando.Response.redirect() already exists')
 def _redirect(response, url, code=302):
     response.code = code
     response.headers['Location'] = url
     raise response
-aspen.Response.redirect = _redirect
+pando.Response.redirect = _redirect
 
-if hasattr(aspen.Response, 'render'):
-    raise Warning('aspen.Response.render() already exists')
+if hasattr(pando.Response, 'render'):
+    raise Warning('pando.Response.render() already exists')
 def _render(response, path, state, **extra):
     state.update(extra)
-    assert response is state['response']
-    aspen.resources.get(state['website'], path).respond(state)
+    request_processor = state['request_processor']
+    output = aspen.resources.get(request_processor, path).render(state)
+    fill_response_with_output(output, response, request_processor)
     raise response
-aspen.Response.render = _render
+pando.Response.render = _render
 
-if hasattr(aspen.Response, 'set_cookie'):
-    raise Warning('aspen.Response.set_cookie() already exists')
+if hasattr(pando.Response, 'set_cookie'):
+    raise Warning('pando.Response.set_cookie() already exists')
 def _set_cookie(response, *args, **kw):
     set_cookie(response.headers.cookie, *args, **kw)
-aspen.Response.set_cookie = _set_cookie
+pando.Response.set_cookie = _set_cookie
 
-if hasattr(aspen.Response, 'erase_cookie'):
-    raise Warning('aspen.Response.erase_cookie() already exists')
+if hasattr(pando.Response, 'erase_cookie'):
+    raise Warning('pando.Response.erase_cookie() already exists')
 def _erase_cookie(response, *args, **kw):
     erase_cookie(response.headers.cookie, *args, **kw)
-aspen.Response.erase_cookie = _erase_cookie
+pando.Response.erase_cookie = _erase_cookie
