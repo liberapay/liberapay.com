@@ -19,8 +19,10 @@ class TestElsewhere(Harness):
         assert response.code == 400
 
     def test_associate_with_empty_cookie_raises_400(self):
-        self.client.cookie[b'github_deadbeef'] = b''
-        response = self.client.GxT('/on/github/associate?state=deadbeef')
+        response = self.client.GxT(
+            '/on/github/associate?state=deadbeef',
+            cookies={b'github_deadbeef': b''},
+        )
         assert response.code == 400
 
     def test_extract_user_info(self):
