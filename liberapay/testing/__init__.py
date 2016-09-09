@@ -74,7 +74,7 @@ class ClientWithAuth(Client):
 
 def decode_body(self):
     body = self.body
-    return body.decode(self.charset) if isinstance(body, bytes) else body
+    return body.decode('utf8') if isinstance(body, bytes) else body
 
 Response.text = property(decode_body)
 
