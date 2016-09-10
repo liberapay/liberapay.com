@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import re
 
-from . import jinja2_htmlescaped as base
+from . import jinja2 as base
 
 
 whitespace_re = re.compile(r'>\s+<')

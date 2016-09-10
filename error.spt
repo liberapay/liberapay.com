@@ -16,9 +16,7 @@ except Exception as e:
 
 if isinstance(response, LazyResponse):
     response.render_body(state)
-err = response.body
-if err and isinstance(err, bytes):
-    err = err.decode(response.charset)
+err = response.text
 if code == 500 and not err:
     err = _("Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!")
 

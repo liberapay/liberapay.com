@@ -40,23 +40,19 @@ class ClientWithAuth(Client):
         """Extend base class to support authenticating as a certain user.
         """
 
-        self.cookie.clear()
-
         # csrf - for both anon and authenticated
         csrf_token = kw.get('csrf_token', b'ThisIsATokenThatIsThirtyTwoBytes')
         if csrf_token:
-            self.cookie[b'csrf_token'] = csrf_token
+            cookies = kw.setdefault('cookies', {})
+            cookies[b'csrf_token'] = csrf_token
             kw[b'HTTP_X-CSRF-TOKEN'] = csrf_token
 
         # user authentication
         auth_as = kw.pop('auth_as', None)
         if auth_as:
             assert auth_as.session_token
-            self.cookie[SESSION] = '%s:%s' % (auth_as.id, auth_as.session_token)
-
-        # cookies
-        for k, v in kw.pop('cookies', {}).items():
-            self.cookie[k] = v
+            cookies = kw.setdefault('cookies', {})
+            cookies[SESSION] = '%s:%s' % (auth_as.id, auth_as.session_token)
 
         return Client.build_wsgi_environ(self, *a, **kw)
 
@@ -78,7 +74,7 @@ class ClientWithAuth(Client):
 
 def decode_body(self):
     body = self.body
-    return body.decode(self.charset) if isinstance(body, bytes) else body
+    return body.decode('utf8') if isinstance(body, bytes) else body
 
 Response.text = property(decode_body)
 
