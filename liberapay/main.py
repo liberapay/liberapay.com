@@ -136,14 +136,6 @@ algorithm.functions = [
 # Monkey patch aspen and pando
 # ============================
 
-pop = aspen.http.mapping.Mapping.pop
-def _pop(self, name, default=aspen.http.mapping.NO_DEFAULT):
-    try:
-        return pop(self, name, default)
-    except KeyError:
-        raise aspen.Response(400, "Missing key: %s" % repr(name))
-aspen.http.mapping.Mapping.pop = _pop
-
 if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')
 def _redirect(response, url, code=302):
