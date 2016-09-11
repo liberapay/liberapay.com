@@ -173,3 +173,10 @@ if hasattr(pando.Response, 'erase_cookie'):
 def _erase_cookie(response, *args, **kw):
     erase_cookie(response.headers.cookie, *args, **kw)
 pando.Response.erase_cookie = _erase_cookie
+
+if hasattr(pando.Response, 'text'):
+    raise Warning('pando.Response.text already exists')
+def _decode_body(self):
+    body = self.body
+    return body.decode('utf8') if isinstance(body, bytes) else body
+pando.Response.text = property(_decode_body)

@@ -7,7 +7,6 @@ import unittest
 from os.path import dirname, join, realpath
 
 from aspen import resources
-from pando import Response
 from pando.utils import utcnow
 from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
@@ -70,13 +69,6 @@ class ClientWithAuth(Client):
                 env.sentry_reraise = old_reraise
 
         return super(ClientWithAuth, self).hit(*a, **kw)
-
-
-def decode_body(self):
-    body = self.body
-    return body.decode('utf8') if isinstance(body, bytes) else body
-
-Response.text = property(decode_body)
 
 
 class Harness(unittest.TestCase):
