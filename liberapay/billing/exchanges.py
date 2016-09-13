@@ -220,7 +220,7 @@ def charge(db, participant, amount, return_url):
         return record_exchange_result(db, e_id, 'failed', error, participant)
 
     if payin.ExecutionDetails.SecureModeRedirectURL:
-        raise Response(302, headers={'Location': payin.ExecutionDetails.SecureModeRedirectURL})
+        raise Response().redirect(payin.ExecutionDetails.SecureModeRedirectURL)
 
     return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
 

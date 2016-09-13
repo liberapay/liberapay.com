@@ -1,5 +1,7 @@
 from __future__ import division
 
+import string
+
 from six.moves import builtins
 from six.moves.urllib.parse import quote as urlquote
 
@@ -7,6 +9,7 @@ import aspen
 import aspen.http.mapping
 import pando
 from pando.algorithms.website import fill_response_with_output
+from pando.utils import maybe_encode
 
 from liberapay import canonize, insert_constants, utils, wireup
 from liberapay.cron import Cron
@@ -136,19 +139,17 @@ algorithm.functions = [
 # Monkey patch aspen and pando
 # ============================
 
-pop = aspen.http.mapping.Mapping.pop
-def _pop(self, name, default=aspen.http.mapping.NO_DEFAULT):
-    try:
-        return pop(self, name, default)
-    except KeyError:
-        raise aspen.Response(400, "Missing key: %s" % repr(name))
-aspen.http.mapping.Mapping.pop = _pop
+if hasattr(pando.Response, 'encode_url'):
+    raise Warning('pando.Response.encode_url() already exists')
+def _encode_url(url):
+    return maybe_encode(urlquote(maybe_encode(url, 'utf8'), string.punctuation))
+pando.Response.encode_url = staticmethod(_encode_url)
 
 if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')
 def _redirect(response, url, code=302):
     response.code = code
-    response.headers['Location'] = url
+    response.headers['Location'] = response.encode_url(url)
     raise response
 pando.Response.redirect = _redirect
 
