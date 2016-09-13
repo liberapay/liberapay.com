@@ -35,6 +35,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
 
     """
     request = state['request']
+    response = state['response']
     user = state['user']
     slug = request.line.uri.path['username']
     _ = state['_']
@@ -60,7 +61,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if request.method in ('GET', 'HEAD'):
         if slug != participant.username:
             canon = '/' + participant.username + request.line.uri[len(slug)+1:]
-            raise Response(302, headers={'Location': canon})
+            raise response.redirect(canon)
 
     status = participant.status
     if status == 'closed':
@@ -71,7 +72,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         if redirect_stub:
             to = participant.resolve_stub()
             assert to
-            raise Response(302, headers={'Location': to})
+            raise response.redirect(to)
 
     if restrict:
         if participant != user:

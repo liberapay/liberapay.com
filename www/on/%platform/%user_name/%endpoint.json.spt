@@ -30,7 +30,7 @@ if account.participant.status != 'stub':
     next_url += stringify_qs(request.qs)
     headers = {}
     headers["Access-Control-Allow-Origin"] = "*"
-    headers["Location"] = next_url
+    headers["Location"] = Response.encode_url(next_url)
     raise Response(302, body='*barrel roll*', headers=headers)
 
 
