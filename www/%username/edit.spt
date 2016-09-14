@@ -69,7 +69,7 @@ title = participant.username
 
 % block box
 % call profile_box(participant)
-<form action="goal.html" method="POST" class="goal">
+<form action="goal" method="POST" class="goal">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
     <div class="radio">
