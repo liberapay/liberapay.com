@@ -33,4 +33,4 @@ back_to = request.qs.get('back_to') or '.'
 back_to = _modify_query(back_to, 'success', b64encode_s(msg))
 response.redirect(back_to)
 
-[---] text/plain
+[---] text/html

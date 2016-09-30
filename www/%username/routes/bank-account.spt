@@ -56,5 +56,7 @@ else:
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         response.redirect(request.line.uri)
 
+[---] text/html
+
 [---] application/json
 {}

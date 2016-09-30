@@ -27,5 +27,7 @@ if request.method == 'POST':
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         response.redirect(participant.path('edit')+'?success='+b64encode_s(msg)+'#avatar')
 
+[---] text/html
+
 [---] application/json
 {"url": participant.avatar_url, "msg": msg}
