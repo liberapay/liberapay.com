@@ -23,5 +23,7 @@ else:
 if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
     response.redirect(request.body.get('back_to') or '/for/'+community.name)
 
+[---] text/html
+
 [---] application/json
 {}
