@@ -72,32 +72,25 @@ class TestCommunityActions(Harness):
     def test_subscribe_and_unsubscribe(self):
         response = self.client.POST('/for/test/subscribe', auth_as=self.bob,
                                     xhr=True)
+        assert response.code == 200
 
-        r = json.loads(response.body)
-        assert r == {}
-
-        response = self.client.POST('/for/test/unsubscribe', auth_as=self.bob,
-                                    xhr=True)
+        self.client.POST('/for/test/unsubscribe', auth_as=self.bob, xhr=True)
 
         response = self.client.GET('/bob/communities.json', auth_as=self.bob)
-
         assert len(json.loads(response.body)) == 0
 
     def test_join_and_leave(self):
         with self.assertRaises(AuthRequired):
             self.client.POST('/for/test/join')
 
-        response = self.client.POST('/for/test/join', auth_as=self.bob,
-                                    xhr=True)
-
-        r = json.loads(response.body)
-        assert r == {}
-
-        response = self.client.POST('/for/test/leave', auth_as=self.bob,
-                                    xhr=True)
+        self.client.POST('/for/test/join', auth_as=self.bob, xhr=True)
 
         response = self.client.GET('/bob/communities.json', auth_as=self.bob)
+        assert len(json.loads(response.body)) == 1
 
+        self.client.POST('/for/test/leave', auth_as=self.bob, xhr=True)
+
+        response = self.client.GET('/bob/communities.json', auth_as=self.bob)
         assert len(json.loads(response.body)) == 0
 
 
