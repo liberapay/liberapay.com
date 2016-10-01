@@ -118,7 +118,7 @@ class Participant(Model, MixinTeam):
             p.change_username(username, c)
         return p
 
-    def make_team(self, name, email=None):
+    def make_team(self, name, email=None, email_lang=None):
         with self.db.get_cursor() as c:
             t = c.one("""
                 INSERT INTO participants
@@ -129,6 +129,7 @@ class Participant(Model, MixinTeam):
             t.change_username(name, c)
             t.add_member(self, c)
         if email:
+            t.set_email_lang(email_lang)
             t.add_email(email)
         return t
 
@@ -737,13 +738,15 @@ class Participant(Model, MixinTeam):
                     delete(msg)
                 sleep(1)
 
-    def set_email_lang(self, accept_lang):
+    def set_email_lang(self, accept_lang, cursor=None):
         if not accept_lang:
             return
         if isinstance(accept_lang, bytes):
             accept_lang = accept_lang.decode('ascii', 'replace')
-        self.db.run("UPDATE participants SET email_lang=%s WHERE id=%s",
-                    (accept_lang, self.id))
+        (cursor or self.db).run(
+            "UPDATE participants SET email_lang=%s WHERE id=%s",
+            (accept_lang, self.id)
+        )
         self.set_attributes(email_lang=accept_lang)
 
 
