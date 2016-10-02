@@ -10,6 +10,7 @@ from mangopaysdk.types.refundreason import RefundReason
 
 from liberapay.billing.exchanges import Money, record_exchange
 from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.emails import EmailHarness
 from liberapay.testing.mangopay import MangopayHarness
 
@@ -17,7 +18,7 @@ from liberapay.testing.mangopay import MangopayHarness
 class TestMangopayCallbacks(EmailHarness, MangopayHarness):
 
     def callback(self, qs, **kw):
-        kw.setdefault(b'HTTP_ACCEPT', b'application/json')
+        kw.setdefault('HTTP_ACCEPT', b'application/json')
         kw.setdefault('raise_immediately', False)
         return self.client.GET('/callbacks/mangopay?'+qs, **kw)
 
@@ -41,7 +42,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             payout.Tag = str(e_id)
             Get.return_value = payout
             r = self.callback(qs)
-            assert b'csrf_token' not in r.headers.cookie
+            assert CSRF_TOKEN not in r.headers.cookie
             assert r.code == 200, r.text
             homer = homer.refetch()
             if status == 'succeeded':

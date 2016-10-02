@@ -27,11 +27,14 @@ def canonize(request, website):
             new_uri = urlunsplit((scheme, netloc, path, query, fragment))
             request.line = Line(l.method.raw, new_uri, l.version.raw)
         return
-    scheme = request.headers.get('X-Forwarded-Proto', 'http')
-    host = request.headers['Host']
+    scheme = request.headers.get(b'X-Forwarded-Proto', b'http')
+    try:
+        request.hostname = host = request.headers[b'Host'].decode('idna')
+    except UnicodeDecodeError:
+        request.hostname = host = ''
     canonical_host = website.canonical_host
     canonical_scheme = website.canonical_scheme
-    bad_scheme = scheme != canonical_scheme
+    bad_scheme = scheme.decode('ascii', 'replace') != canonical_scheme
     bad_host = False
     if canonical_host:
         if host == canonical_host:
@@ -39,8 +42,9 @@ def canonize(request, website):
         elif host.endswith('.'+canonical_host):
             subdomain = host[:-len(canonical_host)-1]
             if subdomain in website.locales:
-                accept_langs = request.headers.get('Accept-Language', '')
-                request.headers['Accept-Language'] = subdomain+','+accept_langs
+                accept_langs = request.headers.get(b'Accept-Language', b'')
+                accept_langs = subdomain.encode('idna') + b',' + accept_langs
+                request.headers[b'Accept-Language'] = accept_langs
             else:
                 bad_host = True
         else:

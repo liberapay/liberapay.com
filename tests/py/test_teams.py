@@ -93,7 +93,7 @@ class Tests2(Harness):
         alice = self.make_participant('alice')
         r = self.client.PxST('/about/teams', {'name': 'Team'}, auth_as=alice)
         assert r.code == 302
-        assert r.headers['Location'] == '/Team/edit'
+        assert r.headers[b'Location'] == b'/Team/edit'
         t = Participant.from_username('Team')
         assert t
         assert t.status == 'active'
@@ -106,7 +106,7 @@ class Tests2(Harness):
 
         r = self.client.PxST('/about/teams', {'name': 'Team'}, auth_as=alice)
         assert r.code == 302
-        assert r.headers['Location'] == '/Team/edit'
+        assert r.headers[b'Location'] == b'/Team/edit'
         t = t.refetch()
         assert t.nmembers == 1
         assert t.status == 'active'

@@ -58,9 +58,10 @@ class BrowseTestHarness(MangopayHarness):
             assert '/%' not in url
             try:
                 r = self.client.GET(url, **kw)
-            except Response as r:
-                if r.code == 404 or r.code >= 500:
+            except Response as e:
+                if e.code == 404 or e.code >= 500:
                     raise
+                r = e
             assert r.code != 404
             assert r.code < 500
             assert not overescaping_re.search(r.text)
@@ -109,7 +110,7 @@ class TestPages(BrowseTestHarness):
         link_lang = link_lang.format(l, self.website.canonical_scheme, self.website.canonical_host)
         assert link_lang in r.text
 
-        assert r.headers[b'Content-Type'] == 'text/html; charset=UTF-8'
+        assert r.headers[b'Content-Type'] == b'text/html; charset=UTF-8'
 
     def test_escaping_on_homepage(self):
         alice = self.make_participant('alice')
@@ -133,7 +134,7 @@ class TestPages(BrowseTestHarness):
         self.make_participant("alice")
 
         response = self.client.GET("/about/paydays.json")
-        paydays = json.loads(response.body)
+        paydays = json.loads(response.text)
         assert paydays[0]['ntippers'] == 0
 
     def test_404(self):
@@ -144,7 +145,7 @@ class TestPages(BrowseTestHarness):
     def test_anonymous_sign_out_redirects(self):
         response = self.client.PxST('/sign-out.html')
         assert response.code == 302
-        assert response.headers['Location'] == '/'
+        assert response.headers[b'Location'] == b'/'
 
     def test_sign_out_overwrites_session_cookie(self):
         alice = self.make_participant('alice')
@@ -187,14 +188,16 @@ class TestPages(BrowseTestHarness):
     def test_new_participant_can_edit_profile(self):
         alice = self.make_participant('alice')
         body = self.client.GET("/alice/", auth_as=alice).text
-        assert b'Edit' in body
+        assert 'Edit' in body
 
     def test_unicode_success_message_doesnt_break_edit_page(self):
         alice = self.make_participant('alice')
-        for msg in ('épopée', b'épopée'):
+        s = 'épopée'
+        bs = s.encode('utf8')
+        for msg in (s, bs):
             r = self.client.GET('/alice/edit?success='+b64encode_s(msg),
                                 auth_as=alice)
-            assert b'épopée' in r.body
+            assert bs in r.body
 
     def test_can_see_payout_failure_page(self):
         error = 'error message #94355731569'

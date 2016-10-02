@@ -189,7 +189,7 @@ class TestCharge(MangopayHarness):
 class TestPayinBankWire(MangopayHarness):
 
     def test_payin_bank_wire_creation(self):
-        path = '/janet/wallet/payin/bankwire/'
+        path = b'/janet/wallet/payin/bankwire/'
         data = {'amount': str(upcharge_bank_wire(D('10.00'))[0])}
 
         r = self.client.PxST(path, data, auth_as=self.janet)
@@ -198,8 +198,8 @@ class TestPayinBankWire(MangopayHarness):
         self.janet.set_tip_to(self.david, '10.00')
         r = self.client.PxST(path, data, auth_as=self.janet)
         assert r.code == 302, r.text
-        redir = r.headers['Location']
-        assert redir.startswith(path+'?exchange_id=')
+        redir = r.headers[b'Location']
+        assert redir.startswith(path+b'?exchange_id=')
 
         r = self.client.GET(redir, auth_as=self.janet)
         assert b'IBAN' in r.body, r.text

@@ -11,13 +11,13 @@ if request.method == 'POST':
     user.sign_out(response.headers.cookie)
     state['user'] = ANON
 
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+    if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
         raise Response(200)
 
     if 'back_to' in request.body:
         back_to = request.body['back_to']
     else:
-        back_to = request.headers.get('referer', '/')
+        back_to = request.headers.get(b'Referer', b'/')
 
     response.redirect(back_to)
 

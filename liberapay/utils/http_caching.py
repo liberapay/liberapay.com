@@ -86,7 +86,7 @@ def try_to_serve_304(dispatch_result, request, etag):
         # Don't serve one version of a file as if it were another.
         raise Response(410)
 
-    headers_etag = request.headers.get('If-None-Match')
+    headers_etag = request.headers.get(b'If-None-Match', b'').decode('ascii', 'replace')
     if not headers_etag:
         # This client doesn't want a 304.
         return
@@ -107,8 +107,8 @@ def add_caching_to_response(response, request=None, etag=None):
     """
     if not etag:
         # This is a dynamic resource, disable caching by default
-        if 'Cache-Control' not in response.headers:
-            response.headers['Cache-Control'] = 'no-cache'
+        if b'Cache-Control' not in response.headers:
+            response.headers[b'Cache-Control'] = b'no-cache'
         return
 
     assert request is not None  # sanity check
@@ -117,11 +117,11 @@ def add_caching_to_response(response, request=None, etag=None):
         return
 
     # https://developers.google.com/speed/docs/best-practices/caching
-    response.headers['Etag'] = etag
+    response.headers[b'Etag'] = etag.encode('ascii')
 
     if request.line.uri.querystring.get('etag'):
         # We can cache "indefinitely" when the querystring contains the etag.
-        response.headers['Cache-Control'] = 'public, max-age=31536000'
+        response.headers[b'Cache-Control'] = b'public, max-age=31536000'
     else:
         # Otherwise we cache for 1 hour
-        response.headers['Cache-Control'] = 'public, max-age=3600'
+        response.headers[b'Cache-Control'] = b'public, max-age=3600'

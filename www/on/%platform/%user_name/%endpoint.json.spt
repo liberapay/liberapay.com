@@ -1,5 +1,6 @@
 from base64 import b64decode, b64encode
-from urllib import urlencode
+
+from six.moves.urllib.parse import quote, urlencode
 
 from pando import Response
 
@@ -26,11 +27,11 @@ if not endpoint in whitelisted_endpoints:
 platform, account = get_account_elsewhere(website, state)
 
 if account.participant.status != 'stub':
-    next_url = '/%s/%s.json' % (account.participant.username, endpoint)
+    next_url = '/%s/%s.json' % (quote(account.participant.username), endpoint)
     next_url += stringify_qs(request.qs)
     headers = {}
-    headers["Access-Control-Allow-Origin"] = "*"
-    headers["Location"] = Response.encode_url(next_url)
+    headers[b"Access-Control-Allow-Origin"] = b"*"
+    headers[b"Location"] = Response.encode_url(next_url)
     raise Response(302, body='*barrel roll*', headers=headers)
 
 
@@ -61,7 +62,7 @@ if not user.ANON:
     out["my_tip"] = str(my_tip)
 
 
-response.headers["Access-Control-Allow-Origin"] = "*"
+response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
 [---] application/json via jsonp_dump
 out

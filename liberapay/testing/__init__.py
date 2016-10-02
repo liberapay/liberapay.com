@@ -21,6 +21,7 @@ from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
+from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.vcr import use_cassette
 
 
@@ -40,11 +41,11 @@ class ClientWithAuth(Client):
         """
 
         # csrf - for both anon and authenticated
-        csrf_token = kw.get('csrf_token', b'ThisIsATokenThatIsThirtyTwoBytes')
+        csrf_token = kw.get('csrf_token', 'ThisIsATokenThatIsThirtyTwoBytes')
         if csrf_token:
             cookies = kw.setdefault('cookies', {})
-            cookies[b'csrf_token'] = csrf_token
-            kw[b'HTTP_X-CSRF-TOKEN'] = csrf_token
+            cookies[CSRF_TOKEN] = csrf_token
+            kw['HTTP_X-CSRF-TOKEN'] = csrf_token
 
         # user authentication
         auth_as = kw.pop('auth_as', None)
@@ -57,7 +58,7 @@ class ClientWithAuth(Client):
 
     def hit(self, *a, **kw):
         if kw.pop('xhr', False):
-            kw[b'HTTP_X_REQUESTED_WITH'] = b'XMLHttpRequest'
+            kw['HTTP_X_REQUESTED_WITH'] = b'XMLHttpRequest'
 
         # prevent tell_sentry from reraising errors
         if not kw.pop('sentry_reraise', True):

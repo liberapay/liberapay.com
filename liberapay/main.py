@@ -149,7 +149,7 @@ if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')
 def _redirect(response, url, code=302):
     response.code = code
-    response.headers['Location'] = response.encode_url(url)
+    response.headers[b'Location'] = response.encode_url(url)
     raise response
 pando.Response.redirect = _redirect
 

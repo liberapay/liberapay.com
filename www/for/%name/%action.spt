@@ -20,7 +20,7 @@ elif action in ('join', 'leave'):
 else:
     raise Response(400)
 
-if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
     response.redirect(request.body.get('back_to') or '/for/'+community.name)
 
 [---] text/html

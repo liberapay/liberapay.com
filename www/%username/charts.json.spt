@@ -75,7 +75,7 @@ if paydays:
         curpayday['npatrons'] += 1
         curpayday['receipts'] += transfer['amount']
 
-response.headers["Access-Control-Allow-Origin"] = "*"
+response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
 [---] application/json via jsonp_dump
 paydays

@@ -8,7 +8,7 @@ for filename in sorted(os.listdir(js_root)):
         catted.append('/*' + filename.center(68) + '*/')
         catted.append('/' + ('*'*70) + '/' + '\n')
         with open(os.path.join(js_root, filename), 'rb') as f:
-            catted.append(f.read())
+            catted.append(f.read().decode('utf8'))
 js = "\n".join(catted)
 [---] via stdlib_format
 {js}

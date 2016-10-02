@@ -21,7 +21,7 @@ class TestElsewhere(Harness):
     def test_associate_with_empty_cookie_raises_400(self):
         response = self.client.GxT(
             '/on/github/associate?state=deadbeef',
-            cookies={b'github_deadbeef': b''},
+            cookies={'github_deadbeef': ''},
         )
         assert response.code == 400
 
@@ -43,13 +43,13 @@ class TestElsewhere(Harness):
         gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
         ft.return_value = None
 
-        then = '/foobar'
+        then = b'/foobar'
         cookie = b64encode_s(json.dumps(['query_data', 'connect', b64encode_s(then), '2']))
         response = self.client.GxT('/on/github/associate?state=deadbeef',
                                    auth_as=alice,
-                                   cookies={b'github_deadbeef': cookie})
+                                   cookies={'github_deadbeef': cookie})
         assert response.code == 302, response.text
-        assert response.headers['Location'] == then
+        assert response.headers[b'Location'] == then
 
     @mock.patch('requests_oauthlib.OAuth2Session.fetch_token')
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_self_info')
@@ -65,9 +65,9 @@ class TestElsewhere(Harness):
         cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT('/on/github/associate?state=deadbeef',
                                    auth_as=alice,
-                                   cookies={b'github_deadbeef': cookie})
+                                   cookies={'github_deadbeef': cookie})
         assert response.code == 302
-        assert response.headers['Location'].startswith('/on/confirm.html?id=')
+        assert response.headers[b'Location'].startswith(b'/on/confirm.html?id=')
 
     def test_connect_failure(self):
         alice = self.make_participant('alice')
@@ -75,7 +75,7 @@ class TestElsewhere(Harness):
         url = '/on/facebook/associate?error_message=%s&state=deadbeef' % error
         cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT(url, auth_as=alice,
-                                   cookies={b'facebook_deadbeef': cookie})
+                                   cookies={'facebook_deadbeef': cookie})
         assert response.code == 502, response.text
         assert error in response.text
 
@@ -113,7 +113,7 @@ class TestElsewhere(Harness):
         bob.set_tip_to(alice, amount)
         assert alice.receiving == amount
         r = self.client.GET('/on/github/alice/')
-        assert str(amount) in r.body, r.body.decode('utf8')
+        assert str(amount) in r.text, r.text
 
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_page_doesnt_fail_on_at_sign(self, get_user_info):
@@ -155,7 +155,7 @@ class TestElsewhere(Harness):
 
             assert response.code == 200
 
-            data = json.loads(response.body)
+            data = json.loads(response.text)
             assert data['on'] == platform.name
 
     def test_public_json_opted_in(self):
@@ -170,7 +170,7 @@ class TestConfirmTakeOver(Harness):
         Harness.setUp(self)
         self.alice_elsewhere = self.make_elsewhere('twitter', -1, 'alice')
         token, expires = self.alice_elsewhere.make_connect_token()
-        self.connect_cookie = {b'connect_%s' % self.alice_elsewhere.id: token}
+        self.connect_cookie = {'connect_%s' % self.alice_elsewhere.id: token}
         self.bob = self.make_participant('bob')
 
     def test_confirm(self):
@@ -200,7 +200,7 @@ class TestConfirmTakeOver(Harness):
         response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob,
                                     cookies=self.connect_cookie)
         assert response.code == 302
-        assert response.headers['Location'] == '/bob/edit'
+        assert response.headers[b'Location'] == b'/bob/edit'
 
 
 class TestFriendFinder(Harness):

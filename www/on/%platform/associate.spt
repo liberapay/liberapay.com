@@ -20,7 +20,7 @@ if platform is None:
 query_id = platform.get_query_id(request.qs)
 
 # Check that we have a cookie that matches the query id (CSRF prevention)
-cookie_name = (platform.name+'_'+query_id).encode('ascii')
+cookie_name = str(platform.name+'_'+query_id)
 try:
     cookie_value = request.headers.cookie[cookie_name].value
 except KeyError:
@@ -43,7 +43,7 @@ if action == 'connect' and user.ANON:
     raise AuthRequired
 
 # Finish the auth process, the returned session is ready to use
-url = website.canonical_url+request.line.uri.raw
+url = website.canonical_url + request.line.uri
 try:
     sess = platform.handle_auth_callback(url, query_id, query_data)
 except TokenRequestDenied as e:
@@ -83,7 +83,7 @@ if action == 'connect':
         connect_to.take_over((platform.name, account.user_id))
     except NeedConfirmation:
         token, expires = account.make_connect_token()
-        response.set_cookie(b'connect_%s' % account.id, token, expires)
+        response.set_cookie('connect_%s' % account.id, token, expires)
         response.redirect('/on/confirm.html?id=%s&p_id=%s' % (account.id, connect_to.id))
 
 elif action in {'lock', 'unlock'}:

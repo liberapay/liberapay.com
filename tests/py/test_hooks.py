@@ -33,7 +33,7 @@ class Tests(Harness):
                                    HTTP_X_FORWARDED_PROTO=b'http',
                                    )
         assert response.code == 302
-        assert response.headers['Location'] == b'https://example.com/'
+        assert response.headers[b'Location'] == b'https://example.com/'
 
     def test_no_cookies_over_http(self):
         """
@@ -55,7 +55,7 @@ class Tests(Harness):
         password = 'password'
         alice.update_password(password)
 
-        auth_header = b'Basic ' + b64encode(b'%s:%s' % (alice.id, password))
+        auth_header = b'Basic ' + b64encode(('%s:%s' % (alice.id, password)).encode('ascii'))
         response = self.client.GET('/alice/public.json',
                                    HTTP_AUTHORIZATION=auth_header,
                                    HTTP_X_FORWARDED_PROTO=b'https',
@@ -103,15 +103,15 @@ class Tests(Harness):
         )
         assert r.code == 302
         assert not r.headers.cookie
-        assert r.headers['Location'] == b'https://en.example.com/'
+        assert r.headers[b'Location'] == b'https://en.example.com/'
 
 
 class Tests2(Harness):
 
     def test_accept_header_is_respected(self):
         r = self.client.GET('/about/stats', HTTP_ACCEPT=b'application/json')
-        assert r.headers['Content-Type'] == 'application/json; charset=UTF-8'
-        json.loads(r.body)
+        assert r.headers[b'Content-Type'] == b'application/json; charset=UTF-8'
+        json.loads(r.text)
 
     def test_error_spt_works(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
@@ -119,49 +119,49 @@ class Tests2(Harness):
 
     def test_cors_is_not_allowed_by_default(self):
         r = self.client.GET('/')
-        assert 'Access-Control-Allow-Origin' not in r.headers
+        assert b'Access-Control-Allow-Origin' not in r.headers
 
     def test_cors_is_allowed_for_assets(self):
         r = self.client.GET('/assets/jquery.min.js')
         assert r.code == 200
-        assert r.headers['Access-Control-Allow-Origin'] == '*'
+        assert r.headers[b'Access-Control-Allow-Origin'] == b'*'
 
     def test_caching_of_assets(self):
         r = self.client.GET('/assets/jquery.min.js')
-        assert r.headers['Cache-Control'] == 'public, max-age=3600'
-        assert 'Vary' not in r.headers
+        assert r.headers[b'Cache-Control'] == b'public, max-age=3600'
+        assert b'Vary' not in r.headers
         assert not r.headers.cookie
 
     def test_caching_of_assets_with_etag(self):
         r = self.client.GET(self.client.website.asset('jquery.min.js'))
-        assert r.headers['Cache-Control'] == 'public, max-age=31536000'
-        assert 'Vary' not in r.headers
+        assert r.headers[b'Cache-Control'] == b'public, max-age=31536000'
+        assert b'Vary' not in r.headers
         assert not r.headers.cookie
 
     def test_caching_of_simplates(self):
         r = self.client.GET('/')
-        assert r.headers['Cache-Control'] == 'no-cache'
-        assert 'Vary' not in r.headers
+        assert r.headers[b'Cache-Control'] == b'no-cache'
+        assert b'Vary' not in r.headers
 
     def test_no_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
         assert "Bad CSRF cookie" in r.text
-        assert b'csrf_token' in r.headers.cookie
+        assert csrf.CSRF_TOKEN in r.headers.cookie
 
     def test_bad_csrf_cookie(self):
-        r = self.client.POST('/', csrf_token=b'bad_token', raise_immediately=False)
+        r = self.client.POST('/', csrf_token='bad_token', raise_immediately=False)
         assert r.code == 403
         assert "Bad CSRF cookie" in r.text
-        assert r.headers.cookie[b'csrf_token'].value != 'bad_token'
+        assert r.headers.cookie[csrf.CSRF_TOKEN].value != 'bad_token'
 
     def test_csrf_cookie_set_for_most_requests(self):
         r = self.client.GET('/')
-        assert b'csrf_token' in r.headers.cookie
+        assert csrf.CSRF_TOKEN in r.headers.cookie
 
     def test_no_csrf_cookie_set_for_assets(self):
         r = self.client.GET('/assets/base.css')
-        assert b'csrf_token' not in r.headers.cookie
+        assert csrf.CSRF_TOKEN not in r.headers.cookie
 
     def test_sanitize_token_passes_through_good_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'

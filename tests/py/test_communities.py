@@ -40,7 +40,7 @@ class TestCommunitiesJson(Harness):
                                     {'do': 'join:'+self.c_id},
                                     auth_as=self.alice, xhr=True)
 
-        r = json.loads(response.body)
+        r = json.loads(response.text)
         assert r == {}
 
         response = self.client.POST('/alice/communities.json',
@@ -49,11 +49,11 @@ class TestCommunitiesJson(Harness):
 
         response = self.client.GET('/alice/communities.json', auth_as=self.alice)
 
-        assert len(json.loads(response.body)) == 0
+        assert len(json.loads(response.text)) == 0
 
     def test_get_can_get_communities_for_user(self):
         response = self.client.GET('/alice/communities.json', auth_as=self.alice)
-        assert len(json.loads(response.body)) == 0
+        assert len(json.loads(response.text)) == 0
 
 
 class TestCommunityActions(Harness):
@@ -77,7 +77,7 @@ class TestCommunityActions(Harness):
         self.client.POST('/for/test/unsubscribe', auth_as=self.bob, xhr=True)
 
         response = self.client.GET('/bob/communities.json', auth_as=self.bob)
-        assert len(json.loads(response.body)) == 0
+        assert len(json.loads(response.text)) == 0
 
     def test_join_and_leave(self):
         with self.assertRaises(AuthRequired):
@@ -86,12 +86,12 @@ class TestCommunityActions(Harness):
         self.client.POST('/for/test/join', auth_as=self.bob, xhr=True)
 
         response = self.client.GET('/bob/communities.json', auth_as=self.bob)
-        assert len(json.loads(response.body)) == 1
+        assert len(json.loads(response.text)) == 1
 
         self.client.POST('/for/test/leave', auth_as=self.bob, xhr=True)
 
         response = self.client.GET('/bob/communities.json', auth_as=self.bob)
-        assert len(json.loads(response.body)) == 0
+        assert len(json.loads(response.text)) == 0
 
 
 class TestCommunityEdit(Harness):
@@ -142,7 +142,7 @@ class TestForCommunityJson(Harness):
 
     def test_get_existing_community(self):
         response = self.client.GET('/for/test/index.json')
-        result = json.loads(response.body)
+        result = json.loads(response.text)
         # assert len(result['animators']) == 2  # Not implemented yet
         assert result['name'] == 'test'
 
@@ -152,19 +152,19 @@ class TestForCommunityJson(Harness):
 
     def test_limit(self):
         response = self.client.GET('/for/test/index.json?limit=1')
-        json.loads(response.body)
+        json.loads(response.text)
         # assert len(result['animators']) == 1  # Not implemented yet
 
     def test_offset(self):
         response = self.client.GET('/for/test/index.json?offset=1')
-        json.loads(response.body)
+        json.loads(response.text)
         # assert len(result['animators']) == 1  # Not implemented yet
 
     def test_max_limit(self):
         for i in range(110):
             self.add_participant(str(i))
         response = self.client.GET('/for/test/index.json?limit=200')
-        json.loads(response.body)
+        json.loads(response.text)
         # assert len(result['animators']) == 100  # Not implemented yet
 
     def test_invalid_limit(self):

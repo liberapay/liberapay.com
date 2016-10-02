@@ -216,7 +216,7 @@ class Tests(Harness):
             alice = self.make_participant('alice')
             alice.authenticated = True
             alice.sign_in(cookies)
-            assert '; secure' in cookies[SESSION].output()
+            assert '; secure' in cookies[SESSION].output().lower()
         finally:
             self.client.website.canonical_scheme = canonical_scheme
 

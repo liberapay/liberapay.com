@@ -60,10 +60,10 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
     The standard for HTTP range requests is https://tools.ietf.org/html/rfc7233
     """
     file_is_partial = f.name.endswith('.part')
-    req_range = request.headers.get('Range', '').split('=', 1)
-    if req_range[0] != 'x-lines':
+    req_range = request.headers.get(b'Range', b'').split(b'=', 1)
+    if req_range[0] != b'x-lines':
         raise Response(416, "unknown range specifier")
-    req_range = req_range[-1].split('-', 1)
+    req_range = req_range[-1].split(b'-', 1)
     first_pos = parse_int(req_range[0], default=0)
     # NOTE we're ignoring the rest of the requested range
     with file_seek_lock:
@@ -83,8 +83,8 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
         size = '*' if file_is_partial else os.fstat(f.fileno()).st_size
         cr = 'x-lines %s-%s/%s' % (first_pos, last_pos, size)
         # NOTE the range's unit is bytes, not lines
-        response.headers['Content-Range'] = cr
-    response.headers['Content-Type'] = 'text/plain'
+        response.headers[b'Content-Range'] = cr.encode('ascii')
+    response.headers[b'Content-Type'] = b'text/plain'
     response.body = data
     return response
 

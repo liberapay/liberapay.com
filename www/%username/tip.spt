@@ -33,7 +33,7 @@ if request.method == 'POST':
     else:
         out["msg"] = _("You are now donating {0} per week to {1}. Thank you!",
                        Money(out['amount'], 'EUR'), tippee_name)
-    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+    if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
         back_to = request.body.get('back_to') or tipper.path('giving/')
         back_to += '&' if '?' in back_to else '?'
         back_to += 'success=' + b64encode_s(out["msg"])

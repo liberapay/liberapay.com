@@ -5,11 +5,10 @@ from decimal import Decimal, ROUND_DOWN
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
-import pickle
 from time import sleep
 import uuid
 
-from six.moves.urllib.parse import urlencode
+from six.moves.urllib.parse import quote, urlencode
 
 import aspen_jinja2_renderer
 from html2text import html2text
@@ -50,7 +49,7 @@ from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    b64encode_s, erase_cookie, serialize, set_cookie,
+    b64encode_s, deserialize, erase_cookie, serialize, set_cookie,
     emails, i18n,
 )
 from liberapay.website import website
@@ -215,7 +214,12 @@ class Participant(Model, MixinTeam):
         salt = urandom(21)
         rounds = website.app_conf.password_rounds
         hashed = cls._hash_password(password, algo, salt, rounds)
-        hashed = '$'.join((algo, str(rounds), b64encode(salt), b64encode(hashed)))
+        hashed = '$'.join((
+            algo,
+            str(rounds),
+            b64encode(salt).decode('ascii'),
+            b64encode(hashed).decode('ascii')
+        ))
         return hashed
 
     def update_password(self, password, cursor=None):
@@ -353,7 +357,9 @@ class Participant(Model, MixinTeam):
               FROM elsewhere
              WHERE participant = %s
         """, (self.id,))
-        return rec and '/on/%s/%s/' % (rec.platform, rec.user_name)
+        if rec:
+            return '/on/%s/%s/' % (quote(rec.platform), quote(rec.user_name))
+        return None
 
 
     # Closing
@@ -723,7 +729,7 @@ class Participant(Model, MixinTeam):
                     delete(msg)
                     continue
                 try:
-                    r = p.send_email(msg.spt_name, **pickle.loads(msg.context))
+                    r = p.send_email(msg.spt_name, **deserialize(msg.context))
                     assert r == 1
                 except Exception as e:
                     website.tell_sentry(e, {}, allow_reraise=True)
@@ -734,6 +740,8 @@ class Participant(Model, MixinTeam):
     def set_email_lang(self, accept_lang):
         if not accept_lang:
             return
+        if isinstance(accept_lang, bytes):
+            accept_lang = accept_lang.decode('ascii', 'replace')
         self.db.run("UPDATE participants SET email_lang=%s WHERE id=%s",
                     (accept_lang, self.id))
         self.set_attributes(email_lang=accept_lang)
@@ -843,7 +851,7 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         for id, event, notif_context, is_new in notifs:
             try:
-                notif_context = pickle.loads(notif_context)
+                notif_context = deserialize(notif_context)
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)
@@ -1038,7 +1046,7 @@ class Participant(Model, MixinTeam):
         if platform == 'libravatar' or platform is None and email:
             if not email:
                 return
-            avatar_id = md5(email.strip().lower()).hexdigest()
+            avatar_id = md5(email.strip().lower().encode('utf8')).hexdigest()
             avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
             avatar_url += AVATAR_QUERY
 
@@ -1663,7 +1671,7 @@ class Participant(Model, MixinTeam):
         #   null - user has no funding goal
         #   3.00 - user wishes to receive at least this amount
         if self.goal != 0:
-            if self.goal > 0:
+            if self.goal and self.goal > 0:
                 goal = str(self.goal)
             else:
                 goal = None
