@@ -15,9 +15,11 @@ from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
 
 
+password = 'password'
+
 good_data = {
     'sign-in.username': 'bob',
-    'sign-in.password': 'password',
+    'sign-in.password': password,
     'sign-in.kind': 'individual',
     'sign-in.email': 'bob@example.com',
     'sign-in.terms': 'agree',
@@ -26,9 +28,10 @@ good_data = {
 
 class TestLogIn(EmailHarness):
 
-    def log_in(self, username, password, **kw):
+    def log_in(self, username, password, url='/sign-in', extra={}, **kw):
         data = {'log-in.id': username, 'log-in.password': password}
-        return self.client.POST('/sign-in', data, raise_immediately=False, **kw)
+        data.update(extra)
+        return self.client.POST(url, data, raise_immediately=False, **kw)
 
     def log_in_and_check(self, p, password, **kw):
         r = self.log_in(p.username, password, **kw)
@@ -54,14 +57,20 @@ class TestLogIn(EmailHarness):
         assert r.headers[b'Location'] == b'/' + username.encode() + b'/'
 
     def test_log_in(self):
-        password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
         self.log_in_and_check(alice, password)
 
+    def test_log_in_form_repost(self):
+        alice = self.make_participant('alice')
+        alice.update_password(password)
+        extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
+        r = self.log_in('alice', password, url='/for/new', extra=extra)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/for/python/edit'
+
     def test_log_in_with_email_as_id(self):
         email = 'alice@example.net'
-        password = 'password'
         alice = self.make_participant('alice')
         alice.add_email(email)
         bob = self.make_participant('bob', email=email)
@@ -79,7 +88,6 @@ class TestLogIn(EmailHarness):
         self.check_with_about_me('alice', cookies)
 
     def test_log_in_switch_user(self):
-        password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
         bob = self.make_participant('bob')
@@ -89,7 +97,6 @@ class TestLogIn(EmailHarness):
         self.log_in_and_check(alice, password, cookies=cookies)
 
     def test_log_in_closed_account(self):
-        password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
         alice.update_status('closed')
