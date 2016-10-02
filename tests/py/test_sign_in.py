@@ -24,7 +24,7 @@ good_data = {
 }
 
 
-class TestSignIn(EmailHarness):
+class TestLogIn(EmailHarness):
 
     def log_in(self, username, password, **kw):
         data = {'log-in.id': username, 'log-in.password': password}
@@ -172,22 +172,31 @@ class TestSignIn(EmailHarness):
         r = self.client.GxT('/?log-in.id=%s&log-in.token=x' % alice.id)
         assert r.code == 400
 
-    def sign_in(self, custom):
-        data = dict(good_data)
+
+class TestSignIn(EmailHarness):
+
+    def sign_in(self, custom={}, extra={}, url='/sign-in', **kw):
+        data = dict(good_data, **extra)
         for k, v in custom.items():
             if v is None:
                 del data['sign-in.'+k]
                 continue
             data['sign-in.'+k] = v
-        return self.client.POST('/sign-in', data, raise_immediately=False)
+        kw.setdefault('raise_immediately', False)
+        return self.client.POST(url, data, **kw)
 
     def test_sign_in(self):
-        r = self.client.PxST('/sign-in', good_data)
+        r = self.sign_in(HTTP_ACCEPT_LANGUAGE='fr')
         assert r.code == 302, r.text
         assert SESSION in r.headers.cookie
+        # Check that an email was sent, in the user's preferred language
         Participant.dequeue_emails()
-        assert self.get_last_email()
-        p = Participant.from_username(good_data['sign-in.username'])
+        last_email = self.get_last_email()
+        username = good_data['sign-in.username']
+        expected_subject = 'Lier à %s sur Liberapay ?' % username
+        assert last_email['subject'] == expected_subject
+        # Check that the new user has an avatar
+        p = Participant.from_username(username)
         assert p.avatar_url
 
     def test_sign_in_non_ascii_username(self):
