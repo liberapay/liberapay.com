@@ -199,6 +199,12 @@ class TestSignIn(EmailHarness):
         p = Participant.from_username(username)
         assert p.avatar_url
 
+    def test_sign_in_form_repost(self):
+        extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
+        r = self.sign_in(url='/for/new', extra=extra)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/for/python/edit'
+
     def test_sign_in_non_ascii_username(self):
         r = self.sign_in(dict(username='mélodie'.encode('utf8')))
         assert r.code == 400
