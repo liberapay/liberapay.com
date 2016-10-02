@@ -234,3 +234,9 @@ class TestSignIn(EmailHarness):
     def test_sign_in_terms_not_checked(self):
         r = self.sign_in(dict(terms=None))
         assert r.code == 400
+
+    def test_sign_in_without_csrf_cookie(self):
+        r = self.sign_in(csrf_token=None)
+        assert r.code == 403
+        assert "Bad CSRF cookie" in r.text
+        assert SESSION not in r.headers.cookie
