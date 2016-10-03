@@ -12,8 +12,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import timedelta
 import re
 
-from pando import Response
-
 from .crypto import constant_time_compare, get_random_string
 
 
@@ -47,7 +45,7 @@ def extract_token_from_cookie(request):
     return {'csrf_token': token}
 
 
-def reject_forgeries(request, csrf_token):
+def reject_forgeries(request, response, csrf_token):
     # Assume that anything not defined as 'safe' by RC2616 needs protection.
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
 
@@ -70,7 +68,7 @@ def reject_forgeries(request, csrf_token):
             second_token = request.headers.get(b'X-CSRF-TOKEN', b'').decode('ascii', 'replace')
 
         if not constant_time_compare(second_token, csrf_token):
-            raise Response(403, "Bad CSRF cookie")
+            raise response.error(403, "Bad CSRF cookie")
 
 
 def add_token_to_response(response, csrf_token=None):

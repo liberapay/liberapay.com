@@ -98,6 +98,7 @@ algorithm.functions = [
     algorithm['insert_variables_for_aspen'],
     algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
+    algorithm['create_response_object'],
 
     canonize,
     i18n.set_up_i18n,
@@ -115,7 +116,6 @@ algorithm.functions = [
 
     algorithm['apply_typecasters_to_path'],
     algorithm['load_resource_from_filesystem'],
-    algorithm['create_response_object'],
     algorithm['render_resource'],
     algorithm['fill_response_with_output'],
 
@@ -144,6 +144,22 @@ if hasattr(pando.Response, 'encode_url'):
 def _encode_url(url):
     return maybe_encode(urlquote(maybe_encode(url, 'utf8'), string.punctuation))
 pando.Response.encode_url = staticmethod(_encode_url)
+
+if hasattr(pando.Response, 'error'):
+    raise Warning('pando.Response.error() already exists')
+def _error(self, code, msg=''):
+    self.code = code
+    self.body = msg
+    raise self
+pando.Response.error = _error
+
+if hasattr(pando.Response, 'success'):
+    raise Warning('pando.Response.success() already exists')
+def _success(self, code=200, msg=''):
+    self.code = code
+    self.body = msg
+    raise self
+pando.Response.success = _success
 
 if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')

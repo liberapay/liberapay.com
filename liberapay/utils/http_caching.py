@@ -74,7 +74,7 @@ def get_etag_for_file(dispatch_result, website, state):
         return {'etag': None}
 
 
-def try_to_serve_304(dispatch_result, request, etag):
+def try_to_serve_304(dispatch_result, request, response, etag):
     """Try to serve a 304 for static resources.
     """
     if not etag:
@@ -84,7 +84,7 @@ def try_to_serve_304(dispatch_result, request, etag):
     qs_etag = request.line.uri.querystring.get('etag')
     if qs_etag and qs_etag != etag:
         # Don't serve one version of a file as if it were another.
-        raise Response(410)
+        raise response.error(410)
 
     headers_etag = request.headers.get(b'If-None-Match', b'').decode('ascii', 'replace')
     if not headers_etag:
@@ -99,7 +99,7 @@ def try_to_serve_304(dispatch_result, request, etag):
     # =======
     # We can serve a 304! :D
 
-    raise Response(304)
+    raise response.success(304)
 
 
 def add_caching_to_response(response, request=None, etag=None):
