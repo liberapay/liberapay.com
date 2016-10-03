@@ -6,6 +6,11 @@ from pando import Response
 from .constants import MAX_TIP, MIN_TIP, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
 
 
+class Redirect(Exception):
+    def __init__(self, url):
+        self.url = url
+
+
 class LazyResponse(Response):
 
     def __init__(self, code, lazy_body, **kw):

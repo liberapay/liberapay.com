@@ -7,6 +7,7 @@ from pando import Response
 
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge_card
+from liberapay.exceptions import Redirect
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant, is_card_expired
 
@@ -63,7 +64,10 @@ if request.method == 'POST':
     except (InvalidOperation, ValueError):
         raise Response(400, "bad amount")
     return_url = website.canonical_url + request.path.raw
-    exchange = charge(website.db, participant, amount, return_url)
+    try:
+        exchange = charge(website.db, participant, amount, return_url)
+    except Redirect as e:
+        response.redirect(e.url)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
 elif 'exchange_id' in request.qs:
