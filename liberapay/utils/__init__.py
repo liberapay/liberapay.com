@@ -200,22 +200,28 @@ def is_card_expired(exp_year, exp_month):
     return exp_year < cur_year or exp_year == cur_year and exp_month < cur_month
 
 
+def ensure_str(s):
+    if isinstance(s, str):
+        return s
+    return s.decode('ascii') if isinstance(s, bytes) else s.encode('ascii')
+
+
 def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
-    key = str(key)
-    cookies[key] = str(value)
+    key = ensure_str(key)
+    cookies[key] = ensure_str(value)
     cookie = cookies[key]
     if expires:
         if isinstance(expires, timedelta):
             expires += utcnow()
         if isinstance(expires, datetime):
             expires = to_rfc822(expires)
-        cookie[str('expires')] = str(expires)
+        cookie[str('expires')] = ensure_str(expires)
     if httponly:
         cookie[str('httponly')] = True
     if path:
-        cookie[str('path')] = str(path)
+        cookie[str('path')] = ensure_str(path)
     if website.canonical_domain:
-        cookie[str('domain')] = str(website.canonical_domain)
+        cookie[str('domain')] = ensure_str(website.canonical_domain)
     if website.canonical_scheme == 'https':
         cookie[str('secure')] = True
 

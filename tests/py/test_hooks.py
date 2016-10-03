@@ -117,7 +117,7 @@ class Tests(Harness):
         assert r.code == 200
         cookie = r.headers.cookie[csrf.CSRF_TOKEN]
         assert cookie[str('domain')] == str('.example.com')
-        assert cookie[str('expires')][:5] == str('Mon, ')
+        assert cookie[str('expires')][-4:] == str(' GMT')
         assert cookie[str('path')] == str('/')
         assert cookie[str('secure')] is True
 
