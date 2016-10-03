@@ -60,6 +60,7 @@ def sign_in_with_form_data(body, state):
                 body.pop('sign-in.username'), kind, body.pop('sign-in.password'),
                 cursor=c
             )
+            p.set_email_lang(state['request'].headers.get(b'Accept-Language'), cursor=c)
             p.add_email(body.pop('sign-in.email'), cursor=c)
         p.authenticated = True
 

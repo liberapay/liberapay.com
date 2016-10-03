@@ -15,20 +15,23 @@ from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
 
 
+password = 'password'
+
 good_data = {
     'sign-in.username': 'bob',
-    'sign-in.password': 'password',
+    'sign-in.password': password,
     'sign-in.kind': 'individual',
     'sign-in.email': 'bob@example.com',
     'sign-in.terms': 'agree',
 }
 
 
-class TestSignIn(EmailHarness):
+class TestLogIn(EmailHarness):
 
-    def log_in(self, username, password, **kw):
+    def log_in(self, username, password, url='/sign-in', extra={}, **kw):
         data = {'log-in.id': username, 'log-in.password': password}
-        return self.client.POST('/sign-in', data, raise_immediately=False, **kw)
+        data.update(extra)
+        return self.client.POST(url, data, raise_immediately=False, **kw)
 
     def log_in_and_check(self, p, password, **kw):
         r = self.log_in(p.username, password, **kw)
@@ -54,14 +57,20 @@ class TestSignIn(EmailHarness):
         assert r.headers[b'Location'] == b'/' + username.encode() + b'/'
 
     def test_log_in(self):
-        password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
         self.log_in_and_check(alice, password)
 
+    def test_log_in_form_repost(self):
+        alice = self.make_participant('alice')
+        alice.update_password(password)
+        extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
+        r = self.log_in('alice', password, url='/for/new', extra=extra)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/for/python/edit'
+
     def test_log_in_with_email_as_id(self):
         email = 'alice@example.net'
-        password = 'password'
         alice = self.make_participant('alice')
         alice.add_email(email)
         bob = self.make_participant('bob', email=email)
@@ -79,7 +88,6 @@ class TestSignIn(EmailHarness):
         self.check_with_about_me('alice', cookies)
 
     def test_log_in_switch_user(self):
-        password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
         bob = self.make_participant('bob')
@@ -89,7 +97,6 @@ class TestSignIn(EmailHarness):
         self.log_in_and_check(alice, password, cookies=cookies)
 
     def test_log_in_closed_account(self):
-        password = 'password'
         alice = self.make_participant('alice')
         alice.update_password(password)
         alice.update_status('closed')
@@ -172,23 +179,38 @@ class TestSignIn(EmailHarness):
         r = self.client.GxT('/?log-in.id=%s&log-in.token=x' % alice.id)
         assert r.code == 400
 
-    def sign_in(self, custom):
-        data = dict(good_data)
+
+class TestSignIn(EmailHarness):
+
+    def sign_in(self, custom={}, extra={}, url='/sign-in', **kw):
+        data = dict(good_data, **extra)
         for k, v in custom.items():
             if v is None:
                 del data['sign-in.'+k]
                 continue
             data['sign-in.'+k] = v
-        return self.client.POST('/sign-in', data, raise_immediately=False)
+        kw.setdefault('raise_immediately', False)
+        return self.client.POST(url, data, **kw)
 
     def test_sign_in(self):
-        r = self.client.PxST('/sign-in', good_data)
+        r = self.sign_in(HTTP_ACCEPT_LANGUAGE='fr')
         assert r.code == 302, r.text
         assert SESSION in r.headers.cookie
+        # Check that an email was sent, in the user's preferred language
         Participant.dequeue_emails()
-        assert self.get_last_email()
-        p = Participant.from_username(good_data['sign-in.username'])
+        last_email = self.get_last_email()
+        username = good_data['sign-in.username']
+        expected_subject = 'Lier à %s sur Liberapay ?' % username
+        assert last_email['subject'] == expected_subject
+        # Check that the new user has an avatar
+        p = Participant.from_username(username)
         assert p.avatar_url
+
+    def test_sign_in_form_repost(self):
+        extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
+        r = self.sign_in(url='/for/new', extra=extra)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/for/python/edit'
 
     def test_sign_in_non_ascii_username(self):
         r = self.sign_in(dict(username='mélodie'.encode('utf8')))
@@ -225,3 +247,9 @@ class TestSignIn(EmailHarness):
     def test_sign_in_terms_not_checked(self):
         r = self.sign_in(dict(terms=None))
         assert r.code == 400
+
+    def test_sign_in_without_csrf_cookie(self):
+        r = self.sign_in(csrf_token=None)
+        assert r.code == 403
+        assert "Bad CSRF cookie" in r.text
+        assert SESSION not in r.headers.cookie
