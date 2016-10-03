@@ -1,5 +1,3 @@
-from pando import Response
-
 from liberapay.constants import PRIVACY_FIELDS
 from liberapay.models.participant import Participant
 from liberapay.utils import get_participant
@@ -13,7 +11,7 @@ out = {}
 
 p = get_participant(state, restrict=True)
 if user != p:
-    raise Response(403)
+    raise response.error(403)
 
 if 'new-password' in body:
     if p.session_token and p.session_token.endswith('.em'):
@@ -23,7 +21,7 @@ if 'new-password' in body:
                                      request.path['username'],
                                      body['cur-password'])
         if not p:
-            raise Response(403, _("Incorrect password"))
+            raise response.error(403, _("Incorrect password"))
     p.update_password(body['new-password'])
     out['msg'] = _("Your password has been changed.")
 

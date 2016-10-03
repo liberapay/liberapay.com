@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from pando import Response
 from mangopaysdk.entities.card import Card
 from mangopaysdk.entities.cardregistration import CardRegistration
 
@@ -29,7 +28,7 @@ if 'Currency' in body:
 else:
     card = mangoapi.cards.Get(body['CardId'])
     if card.UserId != participant.mangopay_user_id:
-        raise Response(403)
+        raise response.error(403)
     old_route = ExchangeRoute.from_network(participant, 'mango-cc')
     one_off = body.get('keep') != 'true'
     ExchangeRoute.insert(participant, 'mango-cc', card.Id, one_off=one_off)

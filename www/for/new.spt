@@ -1,5 +1,3 @@
-from pando import Response
-
 from liberapay.exceptions import AuthRequired
 from liberapay.models.community import name_maxlength, normalize
 from liberapay.utils.i18n import LANGUAGES_2
@@ -14,7 +12,7 @@ if request.method == 'POST':
     body = request.body
     lang = body['lang']
     if lang not in LANGUAGES_2 and lang != 'mul':
-        raise Response(400, "unknown lang")
+        raise response.error(400, "unknown lang")
     c = user.create_community(body['name'], lang=lang)
     response.redirect('/for/'+c.name+'/edit')
 else:

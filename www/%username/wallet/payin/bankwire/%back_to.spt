@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D, InvalidOperation
 
-from pando import json, Response
+from pando import json
 
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
@@ -19,11 +19,11 @@ def get_exchange_payin(participant, request):
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
     if not exchange:
-        raise Response(403)
+        raise response.error(403)
     if 'payin_id' in request.qs:
         payin = mangoapi.payIns.Get(request.qs['payin_id'])
         if payin.Tag != str(exchange.id):
-            raise Response(403)
+            raise response.error(403)
     else:
         payin = None
     return exchange, payin
@@ -40,9 +40,9 @@ if request.method == 'POST' and request.body.get('action') == 'email':
         exchange=exchange._asdict(), payin=payin,
     )
     if not sent:
-        raise Response(500, _("An unknown error occurred."))
+        raise response.error(500, _("An unknown error occurred."))
     if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
-        raise Response(200, json.dumps({'msg': _("The email has been sent.")}))
+        raise response.success(200, json.dumps({'msg': _("The email has been sent.")}))
     else:
         response.redirect(request.line.uri)
 
@@ -60,7 +60,7 @@ if weekly > 0:
 
 if request.method == 'POST':
     if weekly <= 0 or funded >= 52:
-        raise Response(403, _(
+        raise response.error(403, _(
             "Why are you trying to put more money into your wallet? "
             "Please contact support@liberapay.com if you have a legitimate reason."
         ))
@@ -68,7 +68,7 @@ if request.method == 'POST':
     try:
         amount = D(request.body['amount'])
     except (InvalidOperation, ValueError):
-        raise Response(400, "bad amount")
+        raise response.error(400, "bad amount")
     payin, exchange = payin_bank_wire(website.db, participant, amount)
     redir = request.path.raw+'?exchange_id=%s' % exchange.id
     if payin and exchange.status == 'created':

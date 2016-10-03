@@ -1,4 +1,3 @@
-from pando import Response
 from liberapay.models.community import Community
 
 [----------------------]
@@ -9,13 +8,13 @@ community = Community.from_name(request.path['name'])
 
 if not community:
     # Community not found
-    raise Response(404)
+    raise response.error(404)
 
 try:
     limit = min(int(request.qs.get('limit', 10)), 100)
     offset = int(request.qs.get('offset', 0))
 except ValueError:
-    raise Response(400)
+    raise response.error(400)
 
 community_members = community.get_members(limit=limit, offset=offset)
 

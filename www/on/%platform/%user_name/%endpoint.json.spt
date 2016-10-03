@@ -2,8 +2,6 @@ from base64 import b64decode, b64encode
 
 from six.moves.urllib.parse import quote, urlencode
 
-from pando import Response
-
 from liberapay.models.account_elsewhere import get_account_elsewhere
 
 whitelisted_endpoints = ['public', 'charts']
@@ -22,17 +20,15 @@ def stringify_qs(qs, prefix='?'):
 
 endpoint = request.path['endpoint']
 if not endpoint in whitelisted_endpoints:
-    raise Response(404)
+    raise response.error(404)
 
 platform, account = get_account_elsewhere(website, state)
 
 if account.participant.status != 'stub':
     next_url = '/%s/%s.json' % (quote(account.participant.username), endpoint)
     next_url += stringify_qs(request.qs)
-    headers = {}
-    headers[b"Access-Control-Allow-Origin"] = b"*"
-    headers[b"Location"] = Response.encode_url(next_url)
-    raise Response(302, body='*barrel roll*', headers=headers)
+    response.headers[b"Access-Control-Allow-Origin"] = b"*"
+    raise response.redirect(next_url)
 
 
 participant = account.participant

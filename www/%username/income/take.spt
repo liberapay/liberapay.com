@@ -1,7 +1,5 @@
 from __future__ import division, print_function, unicode_literals
 
-from pando import Response
-
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import AuthRequired
 from liberapay.utils import b64encode_s, get_participant
@@ -14,15 +12,15 @@ if user.ANON:
 
 team = get_participant(state, restrict=False)
 if team.kind != 'group':
-    raise Response(404)
+    raise response.error(404)
 
 if not user.mangopay_user_id:
-    raise Response(403, _("You can't receive money until you've filled the identity form in your account settings."))
+    raise response.error(403, _("You can't receive money until you've filled the identity form in your account settings."))
 
 take = parse_decimal(request.body['take'])
 new_take = team.set_take_for(user, take, user)
 if new_take is None:
-    raise Response(403, _("You are not a member of the {0} team.", team.username))
+    raise response.error(403, _("You are not a member of the {0} team.", team.username))
 if new_take < take:
     msg = _("Your take is now {0} (you can't go higher this week).",
             Money(new_take, 'EUR'))

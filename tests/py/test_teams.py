@@ -69,7 +69,7 @@ class Tests(Harness):
 
         # Chech that bob can't use the invite from A-Team to join B-Team
         r = self.client.PxST('/B-Team/membership/accept', auth_as=self.bob)
-        assert r.code == 400
+        assert r.code == 403
         assert 'not invited' in r.text
         is_member = self.bob.member_of(b_team)
         assert is_member is False

@@ -1,7 +1,6 @@
 from datetime import timedelta
 from decimal import Decimal
 
-from pando import Response
 from pando.utils import utcnow
 
 from liberapay.models.participant import Participant
@@ -24,7 +23,7 @@ if request.method == 'POST':
             participant.add_event(website.db, 'freeload', None)
         response.redirect(request.line.uri)
     else:
-        raise Response(400)
+        raise response.error(400)
 
 tips, total, pledges, pledges_total = participant.get_giving_for_profile()
 title = participant.username

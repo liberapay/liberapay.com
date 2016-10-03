@@ -1,4 +1,3 @@
-from pando import Response
 from markupsafe import Markup
 
 from liberapay.utils import get_participant
@@ -9,13 +8,13 @@ A, B = Markup('<br><span style="font-size: 125%">'), Markup('</span>')
 
 t = request.path['type']
 if t not in ('giving.js', 'receiving.js'):
-    raise Response(400)
+    raise response.error(400)
 
 participant = get_participant(state, restrict=False)
 
 if participant.hide_giving and t != 'receiving.js' or \
    participant.hide_receiving and t != 'giving.js':
-    raise Response(403)
+    raise response.error(403)
 
 response.headers[b'Cache-Control'] = b'public, max-age=600'
 response.headers[b'Vary'] = b'Accept-Language'

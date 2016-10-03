@@ -1,5 +1,3 @@
-from pando import Response
-
 from liberapay.security.authentication import ANON
 
 [---]
@@ -12,7 +10,7 @@ if request.method == 'POST':
     state['user'] = ANON
 
     if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
-        raise Response(200)
+        raise response.success()
 
     if 'back_to' in request.body:
         back_to = request.body['back_to']

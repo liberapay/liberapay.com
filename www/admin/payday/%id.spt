@@ -5,8 +5,6 @@ from subprocess import Popen
 import sys
 from threading import Lock
 
-from pando import Response
-
 from liberapay.exceptions import AuthRequired
 from liberapay.utils import pid_exists
 
@@ -45,7 +43,7 @@ def parse_int(s, **kw):
     except ValueError:
         if 'default' in kw:
             return kw['default']
-        raise Response(400, "'%s' is not a valid integer" % s)
+        raise response.error(400, "'%s' is not a valid integer" % s)
 
 MAXLEN = mmap.PAGESIZE * 100
 
@@ -62,7 +60,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
     file_is_partial = f.name.endswith('.part')
     req_range = request.headers.get(b'Range', b'').split(b'=', 1)
     if req_range[0] != b'x-lines':
-        raise Response(416, "unknown range specifier")
+        raise response.error(416, "unknown range specifier")
     req_range = req_range[-1].split(b'-', 1)
     first_pos = parse_int(req_range[0], default=0)
     # NOTE we're ignoring the rest of the requested range
@@ -71,7 +69,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
         if first_pos > 0:
             lf = f.read(1)
             if lf != b'\n':
-                raise Response(416, "byte %s is not a line feed" % first_pos)
+                raise response.error(416, "byte %s is not a line feed" % first_pos)
         lines = f.readlines(maxlen)
         if file_is_partial and lines and lines[-1][-1:] != b'\n':
             lines = lines[:-1]
@@ -109,8 +107,8 @@ def serve_payday_log(payday_id, request, response):
             f = payday_logs[payday_id] = open(log_path, 'rb')
         except IOError as e:
             if e.errno == 2:
-                raise Response(404)
-            raise Response(500, "IOError")
+                raise response.error(404)
+            raise response.error(500, "IOError")
     stream_lines_from_file(f, request, response)
     if f.name.endswith('.part') and not response.body:
         # Check that payday hasn't crashed
@@ -127,7 +125,7 @@ def serve_payday_log(payday_id, request, response):
         else:
             pid = None
         if not pid or not pid_exists(pid):
-            raise Response(500, "Payday seems to have crashed.")
+            raise response.error(500, "Payday seems to have crashed.")
     raise response
 
 [---]
@@ -135,7 +133,7 @@ def serve_payday_log(payday_id, request, response):
 if user.ANON:
     raise AuthRequired
 if not user.has_privilege('run_payday') and not user.is_admin:
-    raise Response(403, "You're not authorized to run payday.")
+    raise response.error(403, "You're not authorized to run payday.")
 
 payday_id = request.path['id'].split('.', 1)[0]
 title = "Payday"
@@ -144,7 +142,7 @@ if payday_id:
     try:
         payday_id = int(payday_id)
     except ValueError:
-        raise Response(404)
+        raise response.error(404)
     title += " #%s" % payday_id
 else:
     last_payday = website.db.one("SELECT * FROM paydays ORDER BY id DESC LIMIT 1")
@@ -157,7 +155,7 @@ else:
 if request.method == 'POST':
     action = request.body['action']
     if action not in ('run_payday', 'rerun_payday'):
-        raise Response(400, "bad action")
+        raise response.error(400, "bad action")
     rerun = action == 'rerun_payday'
     if not rerun and payday_is_running:
         # Payday has already been started, redirect

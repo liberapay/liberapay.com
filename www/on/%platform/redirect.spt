@@ -1,7 +1,6 @@
 from datetime import timedelta
 import json
 
-from pando import Response
 from liberapay.exceptions import AuthRequired
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s
@@ -14,17 +13,17 @@ request.allow('POST')
 
 platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None:
-    raise Response(404)
+    raise response.error(404)
 
 body = request.body
 try:
     action, then, user_id = body['action'], body['then'], body['user_id']
     p_id = body.get('p_id') or ''
 except KeyError:
-    raise Response(400)
+    raise response.error(400)
 
 if action not in constants.ELSEWHERE_ACTIONS:
-    raise Response(400)
+    raise response.error(400)
 
 if action == 'connect' and user.ANON:
     raise AuthRequired
