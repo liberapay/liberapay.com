@@ -20,12 +20,15 @@ class Tests(Harness):
         Harness.setUp(self)
         self.client.website.canonical_scheme = 'https'
         self.client.website.canonical_host = 'example.com'
+        self._canonical_domain = self.client.website.canonical_domain
+        self.client.website.canonical_domain = b'.example.com'
 
     def tearDown(self):
         Harness.tearDown(self)
         website = self.client.website
         website.canonical_scheme = website.env.canonical_scheme
         website.canonical_host = website.env.canonical_host
+        website.canonical_domain = self._canonical_domain
 
     def test_canonize_canonizes(self):
         response = self.client.GxT("/",
@@ -104,6 +107,19 @@ class Tests(Harness):
         assert r.code == 302
         assert not r.headers.cookie
         assert r.headers[b'Location'] == b'https://en.example.com/'
+
+    def test_csrf_cookie_properties(self):
+        r = self.client.GET(
+            '/',
+            HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'en.example.com',
+            csrf_token=None, raise_immediately=False,
+        )
+        assert r.code == 200
+        cookie = r.headers.cookie[csrf.CSRF_TOKEN]
+        assert cookie[str('domain')] == str('.example.com')
+        assert cookie[str('expires')][:5] == str('Mon, ')
+        assert cookie[str('path')] == str('/')
+        assert cookie[str('secure')] is True
 
 
 class Tests2(Harness):
