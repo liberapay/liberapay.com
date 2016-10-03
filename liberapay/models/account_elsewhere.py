@@ -14,6 +14,7 @@ from psycopg2 import IntegrityError
 import xmltodict
 
 from liberapay.constants import AVATAR_QUERY
+from liberapay.elsewhere._exceptions import UserNotFound
 from liberapay.security.crypto import constant_time_compare
 from liberapay.website import website
 
@@ -255,12 +256,12 @@ def get_account_elsewhere(website, state, api_lookup=True):
             raise Response(404)
         try:
             user_info = platform.get_user_info(key, uid)
-        except Response as r:
-            if r.code == 404:
-                _ = state['_']
-                err = _("There doesn't seem to be a user named {0} on {1}.",
-                        uid, platform.display_name)
-                raise Response(404, err)
-            raise
+        except NotImplementedError as e:
+            raise Response(400, e.args[0])
+        except UserNotFound:
+            _ = state['_']
+            err = _("There doesn't seem to be a user named {0} on {1}.",
+                    uid, platform.display_name)
+            raise Response(404, err)
         account = AccountElsewhere.upsert(user_info)
     return platform, account

@@ -16,8 +16,10 @@ from pando.utils import utc
 from oauthlib.oauth2 import TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
-from liberapay.elsewhere._extractors import not_available
 from liberapay.exceptions import LazyResponse
+
+from ._exceptions import UserNotFound
+from ._extractors import not_available
 
 
 logger = logging.getLogger('liberapay.elsewhere')
@@ -231,9 +233,16 @@ class Platform(object):
             path = 'api_user_name_info_path'
         path = getattr(self, path, None)
         if not path:
-            raise Response(400)
+            raise NotImplementedError(
+                "%s lookup is not available for %s" % (self.display_name, key)
+            )
         path = path.format(**{key: value})
-        info = self.api_parser(self.api_get(path, sess=sess))
+        def error_handler(response, is_user_session):
+            if response.status_code == 404:
+                raise UserNotFound(value, key)
+            self.api_error_handler(response, is_user_session)
+        response = self.api_get(path, sess=sess, error_handler=error_handler)
+        info = self.api_parser(response)
         return self.extract_user_info(info)
 
     def get_user_self_info(self, sess):
