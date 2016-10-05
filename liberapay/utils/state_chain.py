@@ -6,6 +6,7 @@ from pando import Response
 from pando.http.request import Line
 
 from .. import constants
+from ..exceptions import LazyResponse
 
 
 def canonize(request, website):
@@ -62,6 +63,30 @@ def canonize(request, website):
 
 def insert_constants():
     return {'constants': constants}
+
+
+def merge_exception_into_response(state, exception, response=None):
+    if response is None or not isinstance(exception, Response):
+        return
+    # clear the exception
+    state['exception'] = None
+    # set debug info
+    exception.set_whence_raised()
+    # render response if it's lazy
+    if isinstance(exception, LazyResponse):
+        exception.render_body(state)
+        exception.__dict__.pop('lazy_body', None)
+    # there's nothing else to do if the exception is the response
+    if exception is response:
+        return
+    # merge cookies
+    response.headers.cookie.update(exception.headers.cookie)
+    # merge headers
+    for k, values in exception.__dict__.pop('headers').items():
+        for v in values:
+            response.headers.add(k, v)
+    # copy the rest
+    response.__dict__.update(exception.__dict__)
 
 
 def return_500_for_exception(website, exception, response=None):

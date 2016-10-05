@@ -18,7 +18,8 @@ from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, allow_cors_for_assets, x_frame_options
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.state_chain import (
-    canonize, insert_constants, return_500_for_exception,
+    canonize, insert_constants,
+    merge_exception_into_response, return_500_for_exception,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
 from liberapay.website import website
@@ -110,6 +111,7 @@ algorithm.functions = [
     algorithm['fill_response_with_output'],
 
     tell_sentry,
+    merge_exception_into_response,
     algorithm['get_response_for_exception'],
 
     authentication.add_auth_to_response,
