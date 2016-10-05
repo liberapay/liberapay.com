@@ -1,7 +1,6 @@
 
 from functools import reduce
 
-from pando import Response
 from mangopaysdk.entities.bankaccount import BankAccount
 from mangopaysdk.types.address import Address
 from mangopaysdk.types.bankaccountdetailsiban import BankAccountDetailsIBAN
@@ -35,7 +34,7 @@ ba.OwnerAddress = addr
 
 ba_type = body.pop('Type')
 if ba_type not in ('IBAN', 'US', 'CA', 'GB', 'OTHER'):
-    raise Response(400, "bad Type")
+    raise response.error(400, "bad Type")
 
 ba_details = globals()['BankAccountDetails'+ba_type]()
 for k in body:
@@ -50,7 +49,7 @@ ba.Details = ba_details
 try:
     ba = mangoapi.users.CreateBankAccount(participant.mangopay_user_id, ba)
 except ResponseException as err:
-    raise Response(400, repr_exception(err))
+    raise response.error(400, repr_exception(err))
 else:
     ExchangeRoute.insert(participant, 'mango-ba', ba.Id)
     if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':

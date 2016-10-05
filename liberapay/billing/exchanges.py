@@ -10,7 +10,6 @@ from mangopaysdk.entities.transfer import Transfer
 from mangopaysdk.entities.wallet import Wallet
 from mangopaysdk.types.exceptions.responseexception import ResponseException
 from mangopaysdk.types.money import Money
-from pando import Response
 from pando.utils import typecheck
 
 from liberapay.billing import (
@@ -29,7 +28,7 @@ from liberapay.constants import (
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
     FeeExceedsAmount, TransactionFeeTooHigh, TransferError,
-    AccountSuspended,
+    AccountSuspended, Redirect,
 )
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
@@ -220,7 +219,7 @@ def charge(db, participant, amount, return_url):
         return record_exchange_result(db, e_id, 'failed', error, participant)
 
     if payin.ExecutionDetails.SecureModeRedirectURL:
-        raise Response().redirect(payin.ExecutionDetails.SecureModeRedirectURL)
+        raise Redirect(payin.ExecutionDetails.SecureModeRedirectURL)
 
     return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
 

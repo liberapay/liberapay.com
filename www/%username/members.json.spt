@@ -1,6 +1,5 @@
 """Endpoint to list team members.
 """
-from pando import Response
 from liberapay.utils import get_participant
 
 [--------------------]
@@ -8,7 +7,7 @@ from liberapay.utils import get_participant
 request.allow('GET')
 team = get_participant(state, restrict=False)
 if team.kind != 'group':
-    raise Response(400)
+    raise response.error(400)
 
 [--------------------] application/json via json_dump
 team.get_members()

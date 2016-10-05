@@ -3,8 +3,6 @@
 Doc: https://docs.mangopay.com/api-references/notifications/
 """
 
-from pando import Response
-
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import record_exchange_result, record_payout_refund, repr_error
 from liberapay.models.participant import Participant
@@ -20,12 +18,12 @@ EVENT_TYPES = {
 try:
     event, status = request.qs['EventType'].rsplit('_', 1)
 except ValueError:
-    raise Response(400, "bad EventType")
+    raise response.error(400, "bad EventType")
 RessourceId = request.qs['RessourceId']
 try:
     int(RessourceId)
 except ValueError:
-    raise Response(400, "bad RessourceId")
+    raise response.error(400, "bad RessourceId")
 
 cls = EVENT_TYPES.get(event)
 
@@ -33,7 +31,7 @@ if cls:
     # Check stuff
     payio = cls.Get(RessourceId)
     if payio.Status != status:
-        raise Response(400, "status mismatch")
+        raise response.error(400, "status mismatch")
     status = status.lower()
     e_id = payio.Tag
     if event == 'PAYOUT_REFUND':
@@ -41,7 +39,7 @@ if cls:
         e_id = record_payout_refund(website.db, payio)
     e_status = website.db.one("SELECT status FROM exchanges WHERE id = %s", (e_id,))
     if e_status == status:
-        raise Response(200, "already done")
+        raise response.success(200, "already done")
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
         pd = payio.PaymentDetails
         expected = pd.DeclaredDebitedFunds['Amount'] - pd.DeclaredFees['Amount']
@@ -77,7 +75,7 @@ if cls:
         p.notify('withdrawal_failed', exchange=d, force_email=reopen)
 
 else:
-    raise Response(400, "unknown event type")
+    raise response.error(400, "unknown event type")
 
 [---] text/plain
 

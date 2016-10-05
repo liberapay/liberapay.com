@@ -1,11 +1,10 @@
-from pando import Response
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.utils import get_participant
 
 [---]
 
 if not user.is_admin:
-    raise Response(403)
+    raise response.error(403)
 
 participant = get_participant(state, restrict=True)
 accounts = participant.get_accounts_elsewhere()

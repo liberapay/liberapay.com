@@ -1,5 +1,3 @@
-from pando import Response
-
 from liberapay.utils import get_community
 from liberapay.utils.i18n import LANGUAGES_2
 
@@ -11,11 +9,11 @@ if request.method == 'POST':
     body = request.body
     lang, subtitle, sidebar = body['lang'], body['subtitle'], body['sidebar']
     if lang not in LANGUAGES_2:
-        raise Response(400, "unknown lang")
+        raise response.error(400, "unknown lang")
     if len(subtitle) > c.subtitle_maxlength:
-        raise Response(400, "subtitle too long")
+        raise response.error(400, "subtitle too long")
     if len(sidebar) > c.sidebar_maxlength:
-        raise Response(400, "sidebar too long")
+        raise response.error(400, "sidebar too long")
     c.participant.upsert_statement(lang, subtitle, 'subtitle')
     c.participant.upsert_statement(lang, sidebar, 'sidebar')
 else:

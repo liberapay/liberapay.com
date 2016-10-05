@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from pando import Response
-
 from liberapay.utils import get_participant
 from liberapay.utils.history import export_history
 
@@ -15,7 +13,7 @@ current_year = datetime.utcnow().year
 try:
     year = int(request.qs.get('year', current_year))
 except ValueError:
-    raise Response(400, "bad year")
+    raise response.error(400, "bad year")
 
 key = request.qs.get('key')
 mode = request.qs.get('mode')

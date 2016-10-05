@@ -6,6 +6,11 @@ from pando import Response
 from .constants import MAX_TIP, MIN_TIP, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
 
 
+class Redirect(Exception):
+    def __init__(self, url):
+        self.url = url
+
+
 class LazyResponse(Response):
 
     def __init__(self, code, lazy_body, **kw):
@@ -18,10 +23,10 @@ class LazyResponse(Response):
 
 
 class AuthRequired(LazyResponse):
-    show_sign_in_form = True
 
     def __init__(self, *args, **kw):
         Response.__init__(self, 403, '', **kw)
+        self.show_sign_in_form = True
 
     def lazy_body(self, _):
         return _("You need to sign in first")

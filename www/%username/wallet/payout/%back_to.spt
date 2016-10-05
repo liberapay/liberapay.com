@@ -4,8 +4,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import datetime
 from decimal import Decimal as D
 
-from pando import Response
-
 from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payout
 from liberapay.exceptions import TransactionFeeTooHigh
@@ -28,7 +26,7 @@ if request.method == 'POST':
 
     amount = parse_decimal(request.body['amount'])
     if amount <= 0:
-        raise Response(400, _("The amount cannot be zero."))
+        raise response.error(400, _("The amount cannot be zero."))
     ignore_high_fee = body.get('confirmed') == 'true'
     try:
         exchange = payout(website.db, participant, amount, ignore_high_fee)

@@ -2,8 +2,6 @@ from __future__ import division, print_function, unicode_literals
 
 from datetime import timedelta
 
-from pando import Response
-
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import AuthRequired
 from liberapay.models.participant import Participant
@@ -30,7 +28,7 @@ if user.ANON:
 
 team = get_participant(state, restrict=False)
 if team.kind != 'group':
-    raise Response(404)
+    raise response.error(404)
 
 action = request.path['action']
 msg = None
@@ -39,33 +37,33 @@ confirm = None
 if action in ('accept', 'refuse'):
     invite = get_invite(team, user)
     if not invite:
-        raise Response(400, _("You are not invited to join this team."))
+        raise response.error(403, _("You are not invited to join this team."))
     if invite.type == 'invite_accept':
-        raise Response(200, _("You have already accepted this invitation."))
+        raise response.error(409, _("You have already accepted this invitation."))
     if invite.type == 'invite_refuse':
-        raise Response(400, _("You have already refused this invitation."))
+        raise response.error(409, _("You have already refused this invitation."))
     notif_id = invite.payload.get('notification_id')
 elif not user.member_of(team):
-    raise Response(403, _("You are not a member of this team."))
+    raise response.error(403, _("You are not a member of this team."))
 
 if action == 'invite':
     invitee = Participant.from_username(request.body['username'])
     if not invitee:
-        raise Response(404, _("User not found."))
+        raise response.error(404, _("User not found."))
     if invitee.kind in ('group', 'community'):
-        raise Response(400, _("A team can't join a team"))
+        raise response.error(400, _("A team can't join a team"))
     if invitee.status != 'active':
-        raise Response(400, _("You can't invite an inactive user to join a team."))
+        raise response.error(400, _("You can't invite an inactive user to join a team."))
     invite = get_invite(team, invitee)
     if invite:
         invite_age = utcnow() - invite.ts
         if invite.type == 'invite' and invite_age < ONE_WEEK:
-            raise Response(400, _(
+            raise response.error(400, _(
                 "{0} has already been invited to join this team {1} ago.",
                 invitee.username, invite_age
             ))
         elif invite.type == 'invite_refuse' and invite_age < ONE_WEEK:
-            raise Response(400, _(
+            raise response.error(400, _(
                 "{0} has already refused to join this team {1} ago.",
                 invitee.username, invite_age
             ))
@@ -99,7 +97,7 @@ elif action == 'refuse':
     response.redirect('/')
 
 else:
-    raise Response(400, "bad action")
+    raise response.error(400, "bad action")
 
 back_to = request.qs.get('back_to') or ('../income' if action == 'accept' else '/')
 if not confirm:

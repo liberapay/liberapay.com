@@ -1,5 +1,3 @@
-from pando import Response
-
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
@@ -14,7 +12,7 @@ body = request.body
 p_id = body.get('p_id')
 participant = Participant.from_id(p_id) if p_id else user
 if not participant:
-    raise Response(400, 'bad p_id')
+    raise response.error(400, 'bad p_id')
 
 if body['should_transfer'] != 'yes':
     response.redirect(participant.path('edit'))
@@ -25,11 +23,11 @@ if not user.controls(participant):
 account_id = body['account_id']
 account = AccountElsewhere.from_id(account_id)
 if not account:
-    raise Response(400, 'bad account_id "%s"' % account_id)
+    raise response.error(400, 'bad account_id "%s"' % account_id)
 
 token = request.headers.cookie.get('connect_%s' % account_id)
 if not token or not account.check_connect_token(token.value):
-    raise Response(400, 'bad connect token "%s"' % token)
+    raise response.error(400, 'bad connect token "%s"' % token)
 
 account.save_connect_token(None, None)
 

@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from pando import Response
-
 from liberapay.utils import get_participant
 from liberapay.utils.history import iter_payday_events
 
@@ -23,7 +21,7 @@ current_year = datetime.utcnow().year
 try:
     year = int(request.qs.get('year', current_year))
 except ValueError:
-    raise Response(400, "bad year")
+    raise response.error(400, "bad year")
 events = iter_payday_events(website.db, participant, year)
 years = []
 if participant.join_time:

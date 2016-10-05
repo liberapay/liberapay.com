@@ -1,7 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from pando import Response
-
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
@@ -16,7 +14,7 @@ route = ExchangeRoute.from_address(participant,
 if route:
     route.invalidate()
 else:
-    raise Response(400, _("It seems you're trying to delete something that doesn't exist."))
+    raise response.error(400, _("It seems you're trying to delete something that doesn't exist."))
 
 [---] application/json via json_dump
 {}

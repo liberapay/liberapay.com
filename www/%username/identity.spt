@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from pando import Response
 from mangopaysdk.entities.userlegal import UserLegal
 from mangopaysdk.entities.usernatural import UserNatural
 
@@ -17,7 +16,7 @@ request.allow('GET', 'POST')
 participant = get_participant(state, restrict=True)
 
 if participant.kind not in ('individual', 'organization'):
-    raise Response(403)
+    raise response.error(403)
 
 title = participant.username
 error = ''
@@ -74,7 +73,7 @@ if request.method == 'POST':
                  RETURNING mangopay_user_id
                 """, (account.Id, participant.id))
                 if id != account.Id:
-                    raise Response(409, "race condition")
+                    raise response.error(409, "race condition")
                 participant.mark_notifications_as_read('identity_required')
             else:
                 error = _("You have to agree to MangoPay's Terms of Service.")
@@ -83,7 +82,7 @@ if request.method == 'POST':
             website.tell_sentry(err, state, allow_reraise=True)
 
     if error and request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
-        raise Response(400, error)
+        raise response.error(400, error)
 
 else:
     account = participant.get_mangopay_account()

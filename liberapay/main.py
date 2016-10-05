@@ -11,12 +11,16 @@ import pando
 from pando.algorithms.website import fill_response_with_output
 from pando.utils import maybe_encode
 
-from liberapay import canonize, insert_constants, utils, wireup
+from liberapay import utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, allow_cors_for_assets, x_frame_options
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
+from liberapay.utils.state_chain import (
+    canonize, insert_constants,
+    merge_exception_into_response, return_500_for_exception,
+)
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
 from liberapay.website import website
 
@@ -78,19 +82,6 @@ if env.run_cron_jobs:
 # Website Algorithm
 # =================
 
-def return_500_for_exception(website, exception):
-    response = pando.Response(500)
-    if website.show_tracebacks:
-        import traceback
-        response.body = traceback.format_exc()
-    else:
-        response.body = (
-            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
-            "we'll get it fixed ASAP."
-        )
-    return {'response': response, 'exception': None}
-
-
 noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [
@@ -98,6 +89,7 @@ algorithm.functions = [
     algorithm['insert_variables_for_aspen'],
     algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
+    algorithm['create_response_object'],
 
     canonize,
     i18n.set_up_i18n,
@@ -115,11 +107,11 @@ algorithm.functions = [
 
     algorithm['apply_typecasters_to_path'],
     algorithm['load_resource_from_filesystem'],
-    algorithm['create_response_object'],
     algorithm['render_resource'],
     algorithm['fill_response_with_output'],
 
     tell_sentry,
+    merge_exception_into_response,
     algorithm['get_response_for_exception'],
 
     authentication.add_auth_to_response,
@@ -144,6 +136,22 @@ if hasattr(pando.Response, 'encode_url'):
 def _encode_url(url):
     return maybe_encode(urlquote(maybe_encode(url, 'utf8'), string.punctuation))
 pando.Response.encode_url = staticmethod(_encode_url)
+
+if hasattr(pando.Response, 'error'):
+    raise Warning('pando.Response.error() already exists')
+def _error(self, code, msg=''):
+    self.code = code
+    self.body = msg
+    raise self
+pando.Response.error = _error
+
+if hasattr(pando.Response, 'success'):
+    raise Warning('pando.Response.success() already exists')
+def _success(self, code=200, msg=''):
+    self.code = code
+    self.body = msg
+    raise self
+pando.Response.success = _success
 
 if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')

@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D
 
-from pando import Response
 import mock
 import pytest
 
@@ -23,7 +22,7 @@ from liberapay.billing.payday import Payday
 from liberapay.constants import PAYIN_CARD_MIN, PAYIN_CARD_TARGET
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
-    FeeExceedsAmount, AccountSuspended,
+    FeeExceedsAmount, AccountSuspended, Redirect,
 )
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
@@ -153,10 +152,8 @@ class TestCharge(MangopayHarness):
             payin.ExecutionDetails.SecureModeRedirectURL = 'some url'
             return payin
         Create.side_effect = add_redirect_url_to_payin
-        with self.assertRaises(Response) as cm:
+        with self.assertRaises(Redirect):
             charge(self.db, self.janet, D('100'), 'http://localhost/')
-        r = cm.exception
-        assert r.code == 302
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == 0
 

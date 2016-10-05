@@ -1,15 +1,13 @@
 # encoding: utf8
 from __future__ import division, print_function, unicode_literals
 
-from pando import Response
-
 from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
 if participant.kind != 'group':
-    raise Response(403)
+    raise response.error(403)
 
 title = participant.username
 subhead = _("Income Shares")

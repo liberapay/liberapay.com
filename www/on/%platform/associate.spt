@@ -1,7 +1,6 @@
 import json
 
 from oauthlib.oauth2 import OAuth2Error
-from pando import Response
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
 from liberapay.elsewhere._exceptions import CantReadMembership
@@ -14,7 +13,7 @@ from liberapay.utils import b64decode_s
 
 platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None:
-    raise Response(404)
+    raise response.error(404)
 
 # Get the query id from the querystring
 query_id = platform.get_query_id(request.qs)
@@ -24,9 +23,9 @@ cookie_name = str(platform.name+'_'+query_id)
 try:
     cookie_value = request.headers.cookie[cookie_name].value
 except KeyError:
-    raise Response(400, 'Missing cookie')
+    raise response.error(400, 'Missing cookie')
 if not cookie_value:
-    raise Response(400, 'Empty cookie')
+    raise response.error(400, 'Empty cookie')
 cookie_obj = json.loads(b64decode_s(cookie_value))
 query_data, action, then, action_user_id = cookie_obj[:4]
 p_id = cookie_obj[4] if len(cookie_obj) > 4 else None
@@ -35,7 +34,7 @@ then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ 
 # Check for an error message in the querystring
 error_message = request.qs.get('error_message') or request.qs.get('error_description')
 if error_message:
-    raise Response(502, _("{0} returned this error message: {1}",
+    raise response.error(502, _("{0} returned this error message: {1}",
                           platform.display_name, error_message))
 
 # Require auth before trying a connection
@@ -47,10 +46,10 @@ url = website.canonical_url + request.line.uri
 try:
     sess = platform.handle_auth_callback(url, query_id, query_data)
 except TokenRequestDenied as e:
-    raise Response(502, _("{0} returned an error, please try again later.",
+    raise response.error(502, _("{0} returned an error, please try again later.",
                           platform.display_name))
 except OAuth2Error as e:
-    raise Response(502, e.message)
+    raise response.error(502, e.message)
 
 # Get the user's info from the platform's API and upsert it in the DB
 account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
@@ -61,7 +60,10 @@ if action_user_id and account.user_id != action_user_id:
         key, value = 'user_name', action_user_id[1:]
     else:
         key, value = 'user_id', action_user_id
-    claimed_account = AccountElsewhere.upsert(platform.get_user_info(key, value))
+    try:
+        claimed_account = AccountElsewhere.upsert(platform.get_user_info(key, value))
+    except NotImplementedError as e:
+        raise response.error(400, e.args[0])
     if not claimed_account.is_team:
         then = '/on/%s/%s/failure.html'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
@@ -78,7 +80,7 @@ if action_user_id and account.user_id != action_user_id:
 if action == 'connect':
     connect_to = Participant.from_id(p_id) if p_id else user
     if not user.controls(connect_to):
-        raise Response(403, "can't connect to an account you don't control")
+        raise response.error(403, "can't connect to an account you don't control")
     try:
         connect_to.take_over((platform.name, account.user_id))
     except NeedConfirmation:
@@ -90,7 +92,7 @@ elif action in {'lock', 'unlock'}:
     account.participant.update_goal(-1 if action == 'lock' else None)
 
 else:
-    raise Response(400)
+    raise response.error(400)
 
 response.erase_cookie(cookie_name)
 response.redirect(then)

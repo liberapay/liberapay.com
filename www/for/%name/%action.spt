@@ -1,5 +1,3 @@
-from pando import Response
-
 from liberapay.utils import get_community
 
 [---]
@@ -18,7 +16,7 @@ elif action in ('join', 'leave'):
     user.update_community_status('memberships', is_on, community.id)
 
 else:
-    raise Response(400)
+    raise response.error(400)
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
     response.redirect(request.body.get('back_to') or '/for/'+community.name)

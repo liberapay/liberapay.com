@@ -1,5 +1,3 @@
-from pando import Response
-
 from liberapay.utils import b64encode_s, get_participant
 
 [---]
@@ -12,7 +10,7 @@ if request.method == 'POST':
     src, email = request.body['src'], request.body.get('email') or None
 
     if src not in constants.AVATAR_SOURCES:
-        raise Response(400, 'bad src')
+        raise response.error(400, 'bad src')
 
     website.db.run("""
         UPDATE participants SET avatar_email = %s WHERE id = %s
@@ -21,7 +19,7 @@ if request.method == 'POST':
 
     r = participant.update_avatar(src+':')
     if not r:
-        raise Response(400, _("We were unable to get an avatar for you from {0}.", src))
+        raise response.error(400, _("We were unable to get an avatar for you from {0}.", src))
 
     msg = _("Your new avatar URL is: {0}", participant.avatar_url)
     if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':

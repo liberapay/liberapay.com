@@ -1,4 +1,3 @@
-from pando import Response
 from oauthlib.oauth2 import TokenExpiredError
 
 from liberapay.models.account_elsewhere import AccountElsewhere
@@ -13,7 +12,7 @@ del p
 [---]
 platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None or platform not in website.friends_platforms:
-    raise Response(404)
+    raise response.error(404)
 
 title = _("Friend Finder")
 

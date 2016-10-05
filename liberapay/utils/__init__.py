@@ -57,7 +57,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         from liberapay.models.participant import Participant  # avoid circular import
         participant = Participant._from_thing(thing, value) if value else None
         if participant is None or participant.kind == 'community':
-            raise Response(404)
+            raise response.error(404)
 
     if request.method in ('GET', 'HEAD'):
         if slug != participant.username:
@@ -68,7 +68,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if status == 'closed':
         if user.is_admin:
             return participant
-        raise Response(410)
+        raise response.error(410)
     elif status == 'stub':
         if redirect_stub:
             to = participant.resolve_stub()
@@ -80,7 +80,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
             if allow_member and participant.kind == 'group' and user.member_of(participant):
                 pass
             elif not user.is_admin:
-                raise Response(403, _("You are not authorized to access this page."))
+                raise response.error(403, _("You are not authorized to access this page."))
 
     if block_suspended_user and participant.is_suspended and participant == user:
         raise AccountSuspended()
@@ -100,7 +100,7 @@ def get_community(state, restrict=False):
         if c.name != name:
             response.redirect('/for/' + c.name + request.line.uri[5+len(name):])
     elif not c:
-        raise Response(404)
+        raise response.error(404)
     elif user.ANON:
         raise AuthRequired
 
@@ -109,7 +109,7 @@ def get_community(state, restrict=False):
             raise AuthRequired
         if user.id != c.creator and not user.is_admin:
             _ = state['_']
-            raise Response(403, _("You are not authorized to access this page."))
+            raise response.error(403, _("You are not authorized to access this page."))
 
     return c
 
