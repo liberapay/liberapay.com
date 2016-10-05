@@ -23,10 +23,10 @@ class LazyResponse(Response):
 
 
 class AuthRequired(LazyResponse):
-    show_sign_in_form = True
 
     def __init__(self, *args, **kw):
         Response.__init__(self, 403, '', **kw)
+        self.show_sign_in_form = True
 
     def lazy_body(self, _):
         return _("You need to sign in first")
