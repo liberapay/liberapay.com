@@ -11,12 +11,15 @@ import pando
 from pando.algorithms.website import fill_response_with_output
 from pando.utils import maybe_encode
 
-from liberapay import canonize, insert_constants, utils, wireup
+from liberapay import utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, allow_cors_for_assets, x_frame_options
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
+from liberapay.utils.state_chain import (
+    canonize, insert_constants, return_500_for_exception,
+)
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
 from liberapay.website import website
 
@@ -77,19 +80,6 @@ if env.run_cron_jobs:
 
 # Website Algorithm
 # =================
-
-def return_500_for_exception(website, exception):
-    response = pando.Response(500)
-    if website.show_tracebacks:
-        import traceback
-        response.body = traceback.format_exc()
-    else:
-        response.body = (
-            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
-            "we'll get it fixed ASAP."
-        )
-    return {'response': response, 'exception': None}
-
 
 noop = lambda: None
 algorithm = website.algorithm
