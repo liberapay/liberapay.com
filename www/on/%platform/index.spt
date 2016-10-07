@@ -84,7 +84,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 {{ limitation_note() }}
 % else
 <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
-               nfriends, platform.display_name) }}</p>
+               nfriends, platform.display_name) if nfriends >= 0 }}</p>
 <table class="table table-condensed valign-middle">
     <tr>
         <th>{{ _('Name') }}</th>
