@@ -1,0 +1,5 @@
+<p>{{ _("This account has been closed.") }}</p>
+% if user.ANON
+<h2>{{ _("Are you the account owner?") }}</h2>
+<p>{% include "templates/sign-in-link.html" %} {{ _("to reopen your account.") }}</p>
+% endif
