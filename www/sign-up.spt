@@ -7,7 +7,7 @@ title = _("Sign Up")
 
 % block content
 <div class="row">
-    <form action="" method="POST" class="col-md-6 col-md-offset-3">
+    <form action="" method="POST" class="col-md-8 col-md-offset-2">
         <input type="hidden" name="sign-in.back-to" value="{{ request.qs.get('back_to', '/') }}" />
         <h3>{{ _("Create your account") }}</h3>
         % if not user.ANON

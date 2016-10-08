@@ -1,37 +1,33 @@
 % include "templates/form-repost.html"
 
-<div class="form-group">
-<input name="sign-in.username" autocomplete="username" class="form-control"
-       required maxlength="{{ constants.USERNAME_MAX_SIZE }}"
-       placeholder="{{ _('Username') }}" />
-</div>
+<p>{{ _("Please input your email address:") }}</p>
 <div class="form-group">
 <input name="sign-in.email" type="email" autocomplete="email" class="form-control"
        required pattern=".*@.*"
        placeholder="{{ _('Email') }}" />
 </div>
-<div class="form-group">
-<input name="sign-in.password" type="password" autocomplete="new-password" class="form-control"
-       required minlength="{{ constants.PASSWORD_MIN_SIZE }}"
-                maxlength="{{ constants.PASSWORD_MAX_SIZE }}"
-       placeholder="{{ _('Password') }}" />
-</div>
-<div class="form-group">
-    <select id="kind" name="sign-in.kind" class="form-control">
-        <option value="individual">{{ _("Individual") }}</option>
-        <option value="organization">{{ _("Business / Organization") }}</option>
-    </select>
-    <p class="help-block pull-right"><a href="/about/teams">{{ _("How do I create a team account?") }}</a></p>
-</div>
-<div class="clearfix"></div>
 
+<p>{{ _("Are you acting as the representative of an organization?") }}</p>
 <div class="form-group">
     <label>
-        <input type="checkbox" name="sign-in.terms" value="agree" required />
-        {{ _("I accept {0}Liberapay's Terms of Service{1}",
-             '<a href="/about/legal#terms">'|safe,
-             '</a>'|safe) }}
+        <input type="radio" required name="sign-in.kind" value="individual" />
+        {{ _("No, I want to create a personal account.") }}
+    </label><br>
+    <label>
+        <input type="radio" required name="sign-in.kind" value="organization" />
+        {{ _("Yes, I represent a business or nonprofit.") }}
     </label>
+    <p class="help-block">{{ _(
+        "If you want to create an account for a collective that doesn't have a "
+        "legal entity, create a personal account first, then {0}create a team{1}.",
+        '<a href="/about/teams">'|safe, '</a>'|safe,
+    ) }}</p>
 </div>
 
 <button class="btn btn-default">{{ _("Go") }}</button>
+
+<br><br>
+<p class="alert alert-info">{{ _(
+    "By creating a Liberapay account you accept our {0}Terms of Service{1}.",
+    '<a href="/about/legal#terms">'|safe, '</a>'|safe,
+) }}</p>

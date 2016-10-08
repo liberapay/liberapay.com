@@ -22,7 +22,6 @@ good_data = {
     'sign-in.password': password,
     'sign-in.kind': 'individual',
     'sign-in.email': 'bob@example.com',
-    'sign-in.terms': 'agree',
 }
 
 
@@ -130,7 +129,7 @@ class TestLogIn(EmailHarness):
         alice = self.make_participant('alice')
         alice.add_email(email)
 
-        data = {'email-login.email': email}
+        data = {'log-in.id': email}
         r = self.client.POST('/', data, raise_immediately=False)
         alice = alice.refetch()
         assert alice.session_token not in r.headers.raw.decode('ascii')
@@ -138,7 +137,7 @@ class TestLogIn(EmailHarness):
 
         Participant.dequeue_emails()
         last_email = self.get_last_email()
-        assert last_email and last_email['subject'] == 'Password reset'
+        assert last_email and last_email['subject'] == 'Log in to Liberapay'
         assert 'log-in.token='+alice.session_token in last_email['text']
 
         url = '/alice/?foo=bar&log-in.id=%s&log-in.token=%s'
@@ -163,7 +162,7 @@ class TestLogIn(EmailHarness):
         assert alice2 and alice2 == alice
 
     def test_email_login_bad_email(self):
-        data = {'email-login.email': 'unknown@example.org'}
+        data = {'log-in.id': 'unknown@example.org'}
         r = self.client.POST('/sign-in', data, raise_immediately=False)
         assert r.code == 403
         assert SESSION not in r.headers.cookie
@@ -212,6 +211,10 @@ class TestSignIn(EmailHarness):
         assert r.code == 302
         assert r.headers[b'Location'] == b'/for/python/edit'
 
+    def test_sign_in_without_username(self):
+        r = self.sign_in(dict(username=''))
+        assert r.code == 302
+
     def test_sign_in_non_ascii_username(self):
         r = self.sign_in(dict(username='mélodie'.encode('utf8')))
         assert r.code == 400
@@ -228,6 +231,10 @@ class TestSignIn(EmailHarness):
         r = self.sign_in(dict(username='about'))
         assert r.code == 400
 
+    def test_sign_in_without_password(self):
+        r = self.sign_in(dict(password=''))
+        assert r.code == 302
+
     def test_sign_in_short_password(self):
         r = self.sign_in(dict(password='a'))
         assert r.code == 400
@@ -242,10 +249,6 @@ class TestSignIn(EmailHarness):
 
     def test_sign_in_bad_email(self):
         r = self.sign_in(dict(email='foo@bar'))
-        assert r.code == 400
-
-    def test_sign_in_terms_not_checked(self):
-        r = self.sign_in(dict(terms=None))
         assert r.code == 400
 
     def test_sign_in_without_csrf_cookie(self):
