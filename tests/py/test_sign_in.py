@@ -8,11 +8,13 @@ from time import gmtime
 
 from six.moves.http_cookies import SimpleCookie
 
+from babel.messages.catalog import Message
 from pando.utils import utcnow
 
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
+from liberapay.utils.i18n import LOCALES
 
 
 password = 'password'
@@ -192,6 +194,8 @@ class TestSignIn(EmailHarness):
         return self.client.POST(url, data, **kw)
 
     def test_sign_in(self):
+        fake_msg = Message('Connect to Liberapay account?', 'Vous avez du pain ?')
+        LOCALES['fr'].catalog[fake_msg.id] = fake_msg
         r = self.sign_in(HTTP_ACCEPT_LANGUAGE='fr')
         assert r.code == 302, r.text
         assert SESSION in r.headers.cookie
@@ -199,8 +203,7 @@ class TestSignIn(EmailHarness):
         Participant.dequeue_emails()
         last_email = self.get_last_email()
         username = good_data['sign-in.username']
-        expected_subject = 'Lier à %s sur Liberapay ?' % username
-        assert last_email['subject'] == expected_subject
+        assert last_email['subject'] == fake_msg.string
         # Check that the new user has an avatar
         p = Participant.from_username(username)
         assert p.avatar_url
