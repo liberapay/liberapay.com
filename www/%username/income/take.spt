@@ -1,14 +1,14 @@
 from __future__ import division, print_function, unicode_literals
 
 from liberapay.elsewhere._paginators import _modify_query
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 from liberapay.utils import b64encode_s, get_participant
 
 [---]
 
 request.allow('POST')
 if user.ANON:
-    raise AuthRequired
+    raise LoginRequired
 
 team = get_participant(state, restrict=False)
 if team.kind != 'group':

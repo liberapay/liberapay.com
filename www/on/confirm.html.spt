@@ -1,11 +1,11 @@
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 
 [--------]
 
 if user.ANON:
-    raise AuthRequired
+    raise LoginRequired
 
 account_id, p_id = request.qs['id'], request.qs.get('p_id')
 account = AccountElsewhere.from_id(account_id)

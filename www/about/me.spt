@@ -1,9 +1,9 @@
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 [---]
 if not user.ANON:
     response.redirect('/' + user.username + '/' + request.path.get('redirect_to', ''))
 else:
-    raise AuthRequired
+    raise LoginRequired
 title = _("Sign In")
 [---] text/html
 % extends "templates/base.html"

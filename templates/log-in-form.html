@@ -1,3 +1,39 @@
+% if state.get('log-in.email-sent-to')
+
+% set email = state['log-in.email-sent-to']
+<div class="alert alert-success">
+    <p>{{ _(
+        "We've sent you a single-use login link. Check your inbox, open the "
+        "provided link in a new tab, then come back to this page and click on "
+        "the button below to carry on with what you wanted to do."
+    ) }}</p>
+
+    <br>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="log-in.carry-on" value="{{ email }}" />
+        <button class="btn btn-success">{{ _("Carry on") }}</button>
+    </form>
+</div>
+
+% elif state.get('log-in.carry-on')
+
+% set email = state['log-in.carry-on']
+<div class="alert alert-danger">
+    <p>{{ _("You're still not logged in as {0}.", email) }}</p>
+
+    <br>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="log-in.carry-on" value="{{ email }}" />
+        <button class="btn btn-primary">{{ _("Try again") }}</button>
+    </form>
+</div>
+
+% else
+
+<form action="" method="POST">
+
 % include "templates/form-repost.html"
 
 % if state.get('log-in.error')
@@ -21,3 +57,7 @@
 ) }}</p>
 
 <button class="btn btn-default">{{ _("Go") }}</button>
+
+</form>
+
+% endif

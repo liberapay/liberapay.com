@@ -7,7 +7,7 @@ from six.moves.urllib.parse import urlencode
 from pando import Response
 
 from liberapay.constants import SESSION, SESSION_TIMEOUT
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 
 
@@ -141,7 +141,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
                 )
                 if p_email != carry_on:
                     state['log-in.carry-on'] = carry_on
-                    raise AuthRequired
+                    raise LoginRequired
             redirect_url = body.get('sign-in.back-to') or redirect_url
     elif request.method == 'GET' and request.qs.get('log-in.id'):
         id, token = request.qs.pop('log-in.id'), request.qs.pop('log-in.token')

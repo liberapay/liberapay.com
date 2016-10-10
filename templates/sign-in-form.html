@@ -1,43 +1,8 @@
-% if state.get('log-in.email-sent-to')
-
-<div class="alert alert-success">
-    <p>{{ _(
-        "We've sent you a password reset link. Check your inbox, open the "
-        "provided link in a new tab, change your password, then come back to "
-        "this page and click on the button below to carry on with what you "
-        "wanted to do."
-    ) }}</p>
-
-    <br>
-    <form action="" method="POST">
-        % include "templates/form-repost.html"
-        <input type="hidden" name="log-in.carry-on"
-               value="{{ state['log-in.email-sent-to'] }}" />
-        <button class="btn btn-success">{{ _("Carry on") }}</button>
-    </form>
-</div>
-
-% elif state.get('log-in.carry-on')
-
-% set email = state['log-in.carry-on']
-<p class="alert alert-danger">{{
-    _("You're still not logged in as {0}.", email)
-}}</p>
-
-<form action="" class="form-inline" method="POST">
-    % include "templates/form-repost.html"
-    <input type="hidden" name="log-in.id" value="{{ email }}" />
-    <p>{{ _("Log in as {0}:", email) }}</p>
-    <input type="password" name="log-in.password"
-           class="form-control" size=30
-           required placeholder="{{ _('Password') }}" />
-    <button class="btn btn-default">{{ _("Go") }}</button>
-</form>
-
-% else
-
 <div class="row">
 <div class="col-lg-8 col-lg-offset-2">
+% if state.get('log-in.email-sent-to') or state.get('log-in.carry-on')
+% include "templates/log-in-form.html"
+% else
 
 % if state.get('sign-in.error')
     <p class="alert alert-danger">{{ state['sign-in.error'] }}</p>
@@ -45,23 +10,14 @@
     <p>{{ _("You need an account for this. Please fill one of the forms below.") }}</p>
 % endif
 
+<h2 class="banderole success">{{ _("Create an account") }}</h2>
 <form action="" method="POST">
-
-    <h2 class="banderole success">{{ _("Create an account") }}</h2>
-
-    % include "templates/form-repost.html"
-
     % include "templates/sign-up-form.html"
-
 </form>
-<form action="" method="POST">
 
-    <h2 class="banderole success">{{ _("Use an existing account") }}</h2>
-
-    % include "templates/log-in-form.html"
-
-</form>
-</div>
-</div>
+<h2 class="banderole success">{{ _("Use an existing account") }}</h2>
+% include "templates/log-in-form.html"
 
 % endif
+</div>
+</div>

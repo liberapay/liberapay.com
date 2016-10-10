@@ -32,6 +32,16 @@ class AuthRequired(LazyResponse):
         return _("You need to sign in first")
 
 
+class LoginRequired(LazyResponse):
+
+    def __init__(self):
+        Response.__init__(self, 403, '')
+        self.html_template = 'templates/log-in-required.html'
+
+    def lazy_body(self, _):
+        return _("You need to log in")
+
+
 class LazyResponseXXX(LazyResponse):
 
     def __init__(self, *args, **kw):
