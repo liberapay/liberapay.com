@@ -19,17 +19,8 @@ is_a_person = participant.kind not in ('group', 'community')
         <p>{{ _(participant.kind.title()) }}</p>
 
         % if is_a_person
-        <form action="edit" method="POST" class="js-submit form-inline">
-            <h3>{{ _("Password") }}</h3>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            % if user.password and not (user.session_token or '').endswith('.em')
-            <input type="password" name="cur-password" class="form-control"
-                   placeholder="{{ _('Current password') }}" />
-            % endif
-            <input type="password" name="new-password" class="form-control"
-                   placeholder="{{ _('New password') }}" />
-            <button class="btn btn-default">{{ _("Modify") }}</button>
-        </form>
+        <h3>{{ _("Password") }}</h3>
+        % include "templates/password-form.html"
 
         <h3>{{ _("Privacy") }}</h3>
         % from "templates/privacy-form.html" import privacy_form with context

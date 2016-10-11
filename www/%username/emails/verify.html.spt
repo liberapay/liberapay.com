@@ -68,19 +68,6 @@ if ok:
     % if ok and not participant.password
         <br><br>
         <h2>{{ _("Password") }}</h2>
-        <p>{{ _(
-            "Setting a password allows you to log in directly, instead of waiting "
-            "for a single-use link sent via email. Keep in mind that Liberapay is "
-            "a financial service, use a strong password!"
-        ) }}</p>
-        <form action="{{ participant.path('settings/edit') }}" method="POST">
-            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <div class="form-group">
-                <input name="new-password" type="password" autocomplete="new-password" class="form-control"
-                       minlength="{{ constants.PASSWORD_MIN_SIZE }}" maxlength="{{ constants.PASSWORD_MAX_SIZE }}"
-                       required placeholder="{{ _('Password') }}" />
-            </div>
-            <button class="btn btn-default">{{ _("Go") }}</button>
-        </form>
+        % include "templates/password-form.html"
     % endif
 % endblock
