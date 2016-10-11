@@ -17,6 +17,8 @@ if user != p:
 if 'new-password' in body:
     if p.session_token and p.session_token.endswith('.em'):
         pass  # user logged in via email, allow resetting password
+    elif not p.password:
+        pass  # user doesn't have a password yet, allow adding one
     else:
         p = Participant.authenticate('username', 'password',
                                      request.path['username'],
