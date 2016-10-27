@@ -195,7 +195,7 @@ class TestSignIn(EmailHarness):
 
     def test_sign_in(self):
         fake_msg = Message('Connect to Liberapay account?', 'Vous avez du pain ?')
-        LOCALES['fr'].catalog[fake_msg.id] = fake_msg
+        LOCALES['fr'].catalog[fake_msg.id].string = fake_msg.string
         r = self.sign_in(HTTP_ACCEPT_LANGUAGE='fr')
         assert r.code == 302, r.text
         assert SESSION in r.headers.cookie
