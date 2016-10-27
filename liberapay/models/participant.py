@@ -96,17 +96,18 @@ class Participant(Model, MixinTeam):
             """.format(x), vals)
 
     @classmethod
-    def make_active(cls, username, kind, password, cursor=None):
+    def make_active(cls, kind, username=None, password=None, cursor=None):
         """Return a new active participant.
         """
         now = utcnow()
         d = {
             'kind': kind,
             'status': 'active',
-            'password': cls.hash_password(password),
-            'password_mtime': now,
             'join_time': now,
         }
+        if password:
+            d['password'] = cls.hash_password(password)
+            d['password_mtime'] = now
         cols, vals = zip(*d.items())
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
@@ -115,7 +116,8 @@ class Participant(Model, MixinTeam):
                 INSERT INTO participants ({0}) VALUES ({1})
                   RETURNING participants.*::participants
             """.format(cols, placeholders), vals)
-            p.change_username(username, c)
+            if username:
+                p.change_username(username, c)
         return p
 
     def make_team(self, name, email=None, email_lang=None):

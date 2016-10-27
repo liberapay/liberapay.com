@@ -47,26 +47,62 @@ edit = True
 
 accounts = participant.get_accounts_elsewhere()
 
-title = participant.username
+_username = participant.username
+_username = _username if _username[0] != '~' else ''
+title = _username
 
 [---] text/html
 % from 'templates/icons.html' import glyphicon
-% from 'templates/profile-box.html' import profile_box with context
 % from "templates/select-lang.html" import lang_options with context
 
-% extends "templates/profile.html"
+% extends "templates/base.html"
 
 % block scripts
 {{ super() }}
 <script>$(document).ready(Liberapay.profile.init);</script>
 % endblock
 
-% block profile_btn
-    <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
-% endblock
+{% block heading %}{% endblock %}
 
-% block box
-% call profile_box(participant)
+% block content
+    <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
+
+<div class="row">
+<div class="col-xs-12 col-md-8 col-md-offset-2">
+
+    % macro username_form()
+    <h3 class="banderole default">{{ _("Username") }}</h3>
+    <form action="{{ participant.path('settings/edit') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="back_to" value="edit" />
+        % if not _username
+        <p>{{ _("Setting a username makes the URL of your profile nicer.") }}</p>
+        % endif
+        <div class="form-group">
+        <div class="input-group">
+            <input name="username" class="form-control"
+                   value="{{ _username }}"
+                   maxlength="{{ constants.USERNAME_MAX_SIZE }}"
+                   placeholder="{{ _('Username') }}"/>
+            <div class="input-group-btn">
+                <button class="btn btn-{{ 'warning' if _username else 'success' }}">{{
+                    _("Modify" if _username else "Go")
+                }}</button>
+            </div>
+        </div>
+        </div>
+        % if _username
+        <div class="alert alert-warning">
+            {{ _("Have you linked to your Liberapay profile from other websites? Be sure to update those links!") }}
+        </div>
+        % endif
+    </form>
+    % endmacro
+    % if not _username
+        {{ username_form() }}
+    % endif
+
+<h3 class="banderole default" id="goal">{{ _("Goal") }}</h3>
 <form action="goal" method="POST" class="goal">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
@@ -83,20 +119,20 @@ title = participant.username
                 <div class="input-group-addon">{{ _("per week") }}</div>
             </div></div>
             <span>{{ GOAL_PARTS[1] }}</span>
-        </label>
+        </label><br>
 
         <label>
             <input type="radio" name="goal" id="goal-null" value="null"
                    {{ 'checked' if participant.goal == None else '' }} />
             {{ GRATEFUL }}
-        </label>
+        </label><br>
 
         % if participant.kind != 'group'
         <label>
             <input type="radio" name="goal" id="goal-0" value="0.00"
                    {{ 'checked' if participant.goal == 0 else '' }} />
             {{ PATRON }}
-        </label>
+        </label><br>
 
         <label>
             <input type="radio" name="goal" id="goal-negative" value="-1"
@@ -106,14 +142,10 @@ title = participant.username
         % endif
     </div>
 
-    <button class="save btn btn-primary">{{ _("Save") }}</button>
+    <button class="save btn btn-success">{{ _("Save") }}</button>
 </form>
-% endcall
-% endblock
 
-% block content
-
-        <h3 class="banderole info" id="statement">{{ _("Statement") }}</h3>
+        <h3 class="banderole default" id="statement">{{ _("Statement") }}</h3>
 
         % if request.body.get('preview') == 'true'
 
@@ -213,4 +245,14 @@ title = participant.username
         </div>
     </form>
 
+    <h3 class="banderole default">{{ _("Privacy") }}</h3>
+    % from "templates/privacy-form.html" import privacy_form with context
+    {{ privacy_form(participant) }}
+
+    % if _username
+        {{ username_form() }}
+    % endif
+
+</div>
+</div>
 % endblock

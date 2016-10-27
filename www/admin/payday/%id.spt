@@ -5,7 +5,7 @@ from subprocess import Popen
 import sys
 from threading import Lock
 
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 from liberapay.utils import pid_exists
 
 devnull = open(os.devnull)
@@ -131,7 +131,7 @@ def serve_payday_log(payday_id, request, response):
 [---]
 
 if user.ANON:
-    raise AuthRequired
+    raise LoginRequired
 if not user.has_privilege('run_payday') and not user.is_admin:
     raise response.error(403, "You're not authorized to run payday.")
 

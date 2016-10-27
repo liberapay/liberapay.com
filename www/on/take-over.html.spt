@@ -1,10 +1,10 @@
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 
 [---------]
 if user.ANON:
-    raise AuthRequired
+    raise LoginRequired
 request.allow('POST')
 
 body = request.body
@@ -18,7 +18,7 @@ if body['should_transfer'] != 'yes':
     response.redirect(participant.path('edit'))
 
 if not user.controls(participant):
-    raise AuthRequired
+    raise LoginRequired
 
 account_id = body['account_id']
 account = AccountElsewhere.from_id(account_id)

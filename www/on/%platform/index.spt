@@ -61,28 +61,30 @@ limited = getattr(platform, 'api_friends_limited', False)
 <p>{% include "templates/sign-in-link.html" %}</p>
 % elif need_reconnect
 <div class="paragraph">
-    <span style="display: inline-block">
+    <p>{{ _(
+        "Please refresh your {0} connection to find your friends from there.",
+        platform.display_name
+    ) }}</p>
     % call auth_button(platform.name, 'connect')
-        {{ _("Please refresh your {0} connection", platform.display_name) }}
+        {{ _("Refresh") }}
     % endcall
-    </span>
-    {{ _("to find your friends from there.") }}
 </div>
 % elif not account or not sess
 <div class="paragraph">
-    <span style="display: inline-block">
+    <p>{{ _(
+        "Connect your {0} account to find your friends from there.",
+        platform.display_name
+    ) }}</p>
     % call auth_button(platform.name, 'connect')
-        {{ _("Connect your {0} account", platform.display_name) }}
+        {{ _("Connect") }}
     % endcall
-    </span>
-    {{ _("to find your friends from there.") }}
 </div>
 % elif not friends
 <p>{{ _("No friends found.") }}</p>
 {{ limitation_note() }}
 % else
 <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
-               nfriends, platform.display_name) }}</p>
+               nfriends, platform.display_name) if nfriends >= 0 }}</p>
 <table class="table table-condensed valign-middle">
     <tr>
         <th>{{ _('Name') }}</th>

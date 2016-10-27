@@ -3,7 +3,7 @@ from __future__ import division, print_function, unicode_literals
 from datetime import timedelta
 
 from liberapay.elsewhere._paginators import _modify_query
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant, utcnow
 
@@ -24,7 +24,7 @@ def get_invite(team, p):
 
 request.allow('GET', 'POST')
 if user.ANON:
-    raise AuthRequired
+    raise LoginRequired
 
 team = get_participant(state, restrict=False)
 if team.kind != 'group':

@@ -19,7 +19,7 @@ from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
-from liberapay.exceptions import AccountSuspended, AuthRequired
+from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired
 from liberapay.models.community import Community
 from liberapay.utils.i18n import Money
 from liberapay.website import website
@@ -42,7 +42,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     _ = state['_']
 
     if restrict and user.ANON:
-        raise AuthRequired
+        raise LoginRequired
 
     if slug.startswith('~'):
         thing = 'id'
@@ -68,6 +68,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if status == 'closed':
         if user.is_admin:
             return participant
+        response.html_template = 'templates/account-closed.html'
         raise response.error(410)
     elif status == 'stub':
         if redirect_stub:
@@ -106,7 +107,7 @@ def get_community(state, restrict=False):
 
     if restrict:
         if user.ANON:
-            raise AuthRequired
+            raise LoginRequired
         if user.id != c.creator and not user.is_admin:
             _ = state['_']
             raise response.error(403, _("You are not authorized to access this page."))

@@ -1,6 +1,6 @@
 from liberapay.constants import PRIVACY_FIELDS
 from liberapay.models.participant import Participant
-from liberapay.utils import get_participant
+from liberapay.utils import b64encode_s, get_participant
 
 [---]
 
@@ -16,6 +16,8 @@ if user != p:
 if 'new-password' in body:
     if p.session_token and p.session_token.endswith('.em'):
         pass  # user logged in via email, allow resetting password
+    elif not p.password:
+        pass  # user doesn't have a password yet, allow adding one
     else:
         p = Participant.authenticate('username', 'password',
                                      request.path['username'],
@@ -40,10 +42,17 @@ elif 'privacy' in body:
 
 elif 'username' in body:
     p.change_username(body['username'])
-    response.redirect('/'+p.username+'/settings/')
+    response.redirect(p.path('edit'))
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-    response.redirect('.')
+    back_to = body.get('back_to') or '.'
+    try:
+        assert '?' not in back_to
+        assert '#' not in back_to
+        back_to += '?success=' + b64encode_s(out["msg"])
+    except Exception as e:
+        website.tell_sentry(e)
+    response.redirect(back_to)
 
 [---] text/html
 

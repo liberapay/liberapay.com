@@ -1,4 +1,3 @@
-from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
@@ -16,53 +15,16 @@ is_a_person = participant.kind not in ('group', 'community')
 % block content
 <div id="settings">
 
-        <form action="edit" method="POST">
-            <h3>{{ _("Username") }}</h3>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <div class="form-group">
-            <div class="input-group">
-                <input name="username" value="{{ participant.username }}" class="form-control"/>
-                <div class="input-group-btn">
-                    <button class="btn btn-warning">{{ _("Modify") }}</button>
-                </div>
-            </div>
-            </div>
-            <div class="alert alert-warning">
-                {{ _("Have you linked to your Liberapay profile from other websites? Be sure to update those links!") }}
-            </div>
-        </form>
-
         <h3>{{ _("Account type") }}</h3>
         <p>{{ _(participant.kind.title()) }}</p>
 
         % if is_a_person
-        <form action="edit" method="POST" class="js-submit form-inline">
-            <h3>{{ _("Password") }}</h3>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            % if not (user.session_token or '').endswith('.em')
-            <input type="password" name="cur-password" class="form-control"
-                   placeholder="{{ _('Current password') }}" />
-            % endif
-            <input type="password" name="new-password" class="form-control"
-                   placeholder="{{ _('New password') }}" />
-            <button class="btn btn-default">{{ _("Modify") }}</button>
-        </form>
+        <h3>{{ _("Password") }}</h3>
+        % include "templates/password-form.html"
 
         <h3>{{ _("Privacy") }}</h3>
-        <form action="./edit" method="POST" class="js-submit">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <input type="hidden" name="privacy" value="{{ PRIVACY_FIELDS_S }}" />
-            <div class="checkbox">
-            % for name, label in PRIVACY_FIELDS.items()
-            <label>
-                <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name] else '' }} />
-                {{ _(label) }}
-            </label>
-            <br />
-            % endfor
-            </div>
-            <button class="btn btn-default">{{ _("Save changes") }}</button>
-        </form>
+        % from "templates/privacy-form.html" import privacy_form with context
+        {{ privacy_form(participant) }}
 
         <div>
             <h3>{{ _("Close") }}</h3>

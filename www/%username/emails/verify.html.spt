@@ -64,4 +64,10 @@ if ok:
         % endif
         <a class="btn btn-primary" href="/{{ participant.username }}/emails/">{{ _("View your email addresses") }}</a>
     % endif
+
+    % if ok and not participant.password
+        <br><br>
+        <h2>{{ _("Password") }}</h2>
+        % include "templates/password-form.html"
+    % endif
 % endblock

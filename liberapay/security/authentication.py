@@ -7,7 +7,7 @@ from six.moves.urllib.parse import urlencode
 from pando import Response
 
 from liberapay.constants import SESSION, SESSION_TIMEOUT
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 
 
@@ -39,51 +39,56 @@ def sign_in_with_form_data(body, state):
 
     if body.get('log-in.id'):
         id = body.pop('log-in.id')
+        password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
-        p = Participant.authenticate(
-            k, 'password',
-            id, body.pop('log-in.password')
-        )
-        if not p:
-            state['sign-in.error'] = _("Bad username or password.")
-        if p and p.status == 'closed':
-            p.update_status('active')
+        if password:
+            p = Participant.authenticate(
+                k, 'password',
+                id, password,
+            )
+            if not p:
+                state['log-in.error'] = _("Bad username or password.")
+            if p and p.status == 'closed':
+                p.update_status('active')
+        elif k == 'username':
+            state['log-in.error'] = _("\"{0}\" is not a valid email address.", id)
+            return
+        else:
+            email = id
+            p = Participant._from_thing('email', email)
+            if p:
+                p.start_session()
+                qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
+                p.send_email(
+                    'login_link',
+                    email=email,
+                    link=p.url('settings/', qs),
+                    link_validity=SESSION_TIMEOUT,
+                )
+                state['log-in.email-sent-to'] = email
+            else:
+                state['log-in.error'] = _(
+                    "We didn't find any account whose primary email address is {0}.",
+                    email
+                )
+            p = None
 
-    elif body.get('sign-in.username'):
+    elif 'sign-in.email' in body:
         response = state['response']
-        if body.pop('sign-in.terms') != 'agree':
-            raise response.error(400, 'you have to agree to the terms')
         kind = body.pop('sign-in.kind')
         if kind not in ('individual', 'organization'):
             raise response.error(400, 'bad kind')
+        email = body.pop('sign-in.email')
+        if not email:
+            raise response.error(400, 'email is required')
         with website.db.get_cursor() as c:
             p = Participant.make_active(
-                body.pop('sign-in.username'), kind, body.pop('sign-in.password'),
-                cursor=c
+                kind, body.pop('sign-in.username', None),
+                body.pop('sign-in.password', None), cursor=c,
             )
             p.set_email_lang(state['request'].headers.get(b'Accept-Language'), cursor=c)
-            p.add_email(body.pop('sign-in.email'), cursor=c)
+            p.add_email(email, cursor=c)
         p.authenticated = True
-
-    elif body.get('email-login.email'):
-        email = body.pop('email-login.email')
-        p = Participant._from_thing('email', email)
-        if p:
-            p.start_session()
-            qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
-            p.send_email(
-                'password_reset',
-                email=email,
-                link=p.url('settings/', qs),
-                link_validity=SESSION_TIMEOUT,
-            )
-            state['email-login.sent-to'] = email
-        else:
-            state['sign-in.error'] = _(
-                "We didn't find any account whose primary email address is {0}.",
-                email
-            )
-        p = None
 
     return p
 
@@ -129,14 +134,14 @@ def authenticate_user_if_possible(request, response, state, user, _):
         body = _get_body(request)
         if body:
             p = sign_in_with_form_data(body, state)
-            carry_on = body.pop('email-login.carry-on', None)
+            carry_on = body.pop('log-in.carry-on', None)
             if not p and carry_on:
                 p_email = session_p and (
                     session_p.email or session_p.get_emails()[0].address
                 )
                 if p_email != carry_on:
-                    state['email-login.carry-on'] = carry_on
-                    raise AuthRequired
+                    state['log-in.carry-on'] = carry_on
+                    raise LoginRequired
             redirect_url = body.get('sign-in.back-to') or redirect_url
     elif request.method == 'GET' and request.qs.get('log-in.id'):
         id, token = request.qs.pop('log-in.id'), request.qs.pop('log-in.token')
