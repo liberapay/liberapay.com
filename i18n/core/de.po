@@ -78,6 +78,20 @@ msgstr "Sehen sie Ihre Transaktionen"
 msgid "- {0}: {1}"
 msgstr "- {0} : {1}"
 
+msgid "Log in to Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
+msgstr ""
+
+msgid "Follow this link to proceed:"
+msgstr "Folgen Sie diesem Link um fortzufahren:"
+
+#, python-brace-format
+msgid "Please note that the link is only valid for {0}."
+msgstr "Bitte beachten Sie, dass der Link nur gültig ist für {0}."
+
 msgid "It's time to top up your Liberapay wallet"
 msgstr "Es ist Zeit ihr Liberapay Konto aufzuladen"
 
@@ -87,23 +101,6 @@ msgstr "Sie haben {0} in ihrem Liberapay Portemonnaie übrig aber Sie brauchen m
 
 msgid "Add money"
 msgstr "Geld hinzufügen"
-
-msgid "Password reset"
-msgstr "Passwort zurücksetzen"
-
-#, python-brace-format
-msgid "We've received a request to reset the password of the {0} account on Liberapay."
-msgstr "Wir haben eine Anfrage bekommen, um das Passwort des {0} Accounts auf Liberapay zurückzusetzen."
-
-msgid "Follow this link to proceed:"
-msgstr "Folgen Sie diesem Link um fortzufahren:"
-
-msgid "Reset password"
-msgstr "Passwort zurücksetzen"
-
-#, python-brace-format
-msgid "Please note that the link is only valid for {0}."
-msgstr "Bitte beachten Sie, dass der Link nur gültig ist für {0}."
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Banküberweisung auf Ihr Liberapay Portemonnaie"
@@ -178,9 +175,8 @@ msgstr "Akzeptieren"
 msgid "Refuse"
 msgstr "Verweigern"
 
-#, python-brace-format
-msgid "Connect to {0} on Liberapay?"
-msgstr "Mit {0} auf Liberapay verbinden?"
+msgid "Connect to Liberapay account?"
+msgstr ""
 
 #, python-brace-format
 msgid "We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?"
@@ -279,6 +275,9 @@ msgstr "Maximum ({0})"
 
 msgid "You need to sign in first"
 msgstr "Sie müssen sich zuerst anmelden"
+
+msgid "You need to log in"
+msgstr ""
 
 msgid "You need to provide a username!"
 msgstr "Sie müssen einen Benutzernamen angeben!"
@@ -390,6 +389,10 @@ msgid "Bad username or password."
 msgstr "Falscher Benutzername oder Passwort."
 
 #, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr ""
+
+#, python-brace-format
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Wir fanden keine Konto, dessen primäre E-Mail-Adresse ist {0}."
 
@@ -413,6 +416,15 @@ msgstr "interner Serverfehler"
 
 msgid "Upstream Error"
 msgstr "Upstream-Fehler"
+
+msgid "This account has been closed."
+msgstr ""
+
+msgid "Are you the account owner?"
+msgstr ""
+
+msgid "Log in to reopen your account."
+msgstr ""
 
 msgid "Explore"
 msgstr "Entdecke"
@@ -514,6 +526,25 @@ msgstr "Benutzername"
 msgid "Go"
 msgstr "Los"
 
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Weiter"
+
+#, python-brace-format
+msgid "You're still not logged in as {0}."
+msgstr "Sie sind noch nicht eingeloggt als {0}."
+
+msgid "Email address"
+msgstr "E-Mail-Adresse"
+
+msgid "Password (optional)"
+msgstr ""
+
+msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
+msgstr ""
+
 msgid "Members"
 msgstr "Mitglieder"
 
@@ -605,11 +636,23 @@ msgstr "Erste"
 msgid "Last"
 msgstr "Letzte"
 
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr ""
+
+msgid "Current password"
+msgstr "Aktuelles Passwort"
+
+msgid "New password"
+msgstr "Neues Passwort"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Menschen, die zu den commons beitragen müssen Sie ihre Arbeit zu unterstützen. freie Software Aufbau, freie Verbreitung von Wissen, diese Dinge brauchen Zeit und Geld kosten, nicht nur die erste Arbeit zu tun, sondern sie auch im Laufe der Zeit zu halten."
 
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
 msgstr "Liberapay des rezidivierenden Spenden System wurde entwickelt, um eine stabile Crowdfunded Grundeinkommen Schöpfer zu schaffen, ihnen ermöglichen, große Arbeit leistet zu halten, die allen zugute kommt. Bereit zu tragen? Dann lassen Sie uns beginnen:"
+
+msgid "Save changes"
+msgstr "Speichern"
 
 msgid "Modify your avatar"
 msgstr "Dein Avatar ändern"
@@ -681,40 +724,14 @@ msgstr "Durchsuche Liberapay"
 msgid "Identity"
 msgstr "Identität"
 
-msgid "We've sent you a password reset link. Check your inbox, open the provided link in a new tab, change your password, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "Wir haben Sie Link zum Zurücksetzen eines Passworts gesendet. Überprüfen Sie Ihren Posteingang, öffnen Sie den angegebenen Link in einem neuen Tab, Ihr Passwort zu ändern, dann kommen Sie wieder auf diese Seite und klicken Sie auf die Schaltfläche unten, um weitermachen mit dem, was Sie tun wollte."
-
-msgid "Carry on"
-msgstr "Weiter"
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Sie sind noch nicht eingeloggt als {0}."
-
-#, python-brace-format
-msgid "Log in as {0}:"
-msgstr "Melden Sie sich an als {0}:"
-
-msgid "Password"
-msgstr "Passwort"
-
-msgid "Log in"
-msgstr "Anmelden"
-
-msgid "Bad username or password"
-msgstr "Bad Benutzername oder Passwort"
-
-msgid "Username or email"
-msgstr "Username oder email"
-
-msgid "Forgot your password?"
-msgstr "Passwort vergessen?"
-
-msgid "Email"
-msgstr "E-Mail"
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr ""
 
 msgid "Create an account"
 msgstr "Erstellen Sie ein Konto"
+
+msgid "Use an existing account"
+msgstr ""
 
 msgid "Sign in"
 msgstr "Anmelden"
@@ -722,21 +739,28 @@ msgstr "Anmelden"
 msgid "Sign out"
 msgstr "Abmelden"
 
-msgid "Username"
-msgstr "Benutzername"
+msgid "Please input your email address:"
+msgstr ""
 
-msgid "Individual"
-msgstr "Einzelperson"
+msgid "Email"
+msgstr "E-Mail"
 
-msgid "Business / Organization"
-msgstr "Unternehmen / Organisation"
+msgid "Are you acting as the representative of an organization?"
+msgstr ""
 
-msgid "How do I create a team account?"
-msgstr "Wie erstelle ich ein Teamkonto?"
+msgid "No, I want to create a personal account."
+msgstr ""
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr ""
 
 #, python-brace-format
-msgid "I accept {0}Liberapay's Terms of Service{1}"
-msgstr "Ich akzeptiere {0} Liberapay die Servicebedingungen {1}"
+msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
+msgstr ""
+
+#, python-brace-format
+msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
+msgstr ""
 
 msgid "Enter a username"
 msgstr "Geben Sie einen Benutzernamen"
@@ -1027,6 +1051,18 @@ msgstr "Unser Ziel ist es, {0} zu erhalten"
 msgid "View"
 msgstr "Aussicht"
 
+msgid "Username"
+msgstr "Benutzername"
+
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr ""
+
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "Haben Sie auf andern Webseiten Ihr Liberapay Profil verlinkt? Stellen Sie sicher, dass Sie diese Links eineuern!"
+
+msgid "Goal"
+msgstr ""
+
 msgid "Save"
 msgstr "Speichern"
 
@@ -1078,6 +1114,9 @@ msgstr "Avatar-Quelle"
 
 msgid "Avatar email (for Libravatar only)"
 msgstr "Avatar Email (nur fur Libravatar)"
+
+msgid "Privacy"
+msgstr "Datenschutz"
 
 msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
@@ -1156,17 +1195,11 @@ msgstr "Überprüft"
 msgid "Set as primary"
 msgstr "Als Standard festlegen"
 
-msgid "Email address"
-msgstr "E-Mail-Adresse"
-
 msgid "Add"
 msgstr "Hinzufügen"
 
 msgid "Send me notifications via email:"
 msgstr "Senden Sie mir per e-Mail:"
-
-msgid "Save changes"
-msgstr "Speichern"
 
 msgid "You have already added and verified this address."
 msgstr "Du hast diese Adresse bereits hinzugefügt und bestätigt."
@@ -1230,6 +1263,9 @@ msgstr "Bitte überprüfen Sie, dass der Link angeklickt oder kopier eingefügt 
 
 msgid "View your email addresses"
 msgstr "Liste Ihrer E-Mail Adressen"
+
+msgid "Password"
+msgstr "Passwort"
 
 msgid "Events"
 msgstr "Events"
@@ -1472,20 +1508,8 @@ msgstr "Ihre Privatsphäre-Einstellungen wurden geändert."
 msgid "Account"
 msgstr "Account"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Haben Sie auf andern Webseiten Ihr Liberapay Profil verlinkt? Stellen Sie sicher, dass Sie diese Links eineuern!"
-
 msgid "Account type"
 msgstr "Kontotyp"
-
-msgid "Current password"
-msgstr "Aktuelles Passwort"
-
-msgid "New password"
-msgstr "Neues Passwort"
-
-msgid "Privacy"
-msgstr "Datenschutz"
 
 msgid "Close"
 msgstr "Schließen"
@@ -1734,8 +1758,8 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr "Wir Quarantäne Geld für {0}, um uns von Kreditkartenbetrug schützen, sorry für die Unannehmlichkeiten."
 
 #, python-brace-format
-msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer."
-msgstr "Geld auf ein SEPA-Bankkonto Abhebungen kostenlos, Transfers zu anderen Ländern kosten {0} pro Transfer."
+msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer. Additional fee from your bank may apply."
+msgstr ""
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
@@ -2347,15 +2371,18 @@ msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0}
 msgstr "Hinweis: Privatsphäre-Einstellungen Liberapay verhindern möglicherweise einige Ihrer {0} Freunde zu sehen."
 
 #, python-brace-format
-msgid "Please refresh your {0} connection"
-msgstr "Bitte aktualisieren Sie Ihre {0} Verbindung"
+msgid "Please refresh your {0} connection to find your friends from there."
+msgstr ""
 
-msgid "to find your friends from there."
-msgstr "findest du deine Freunde von dort."
+msgid "Refresh"
+msgstr ""
 
 #, python-brace-format
-msgid "Connect your {0} account"
-msgstr "Verbinden Sie Ihr Konto {0}"
+msgid "Connect your {0} account to find your friends from there."
+msgstr ""
+
+msgid "Connect"
+msgstr "Verbinden"
 
 msgid "No friends found."
 msgstr "Keine Freunde gefunden."
@@ -2474,9 +2501,6 @@ msgstr "Wir erheben nie Geld für Sie, wenn Sie kommen."
 #, python-brace-format
 msgid "Connect this {0} account to your Liberapay profile."
 msgstr "Verbinden Sie dieses Konto {0} mit Ihrem Liberapay Profil."
-
-msgid "Connect"
-msgstr "Verbinden"
 
 msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
 msgstr "Liberpay ist eine Art Ihren Lieblingskünstlern, -Musikern, -Programmierern etc. zu danken und diese zu unterstützen, indem sie eine wöchentliche, kleine Spende für diese einrichten."

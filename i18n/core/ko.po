@@ -77,6 +77,20 @@ msgstr "계정의 거래 기록을 봅니다"
 msgid "- {0}: {1}"
 msgstr ""
 
+msgid "Log in to Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
+msgstr ""
+
+msgid "Follow this link to proceed:"
+msgstr "이 링크를 통해 진행하세요:"
+
+#, python-brace-format
+msgid "Please note that the link is only valid for {0}."
+msgstr "이 링크는 {0}까지만 유효합니다."
+
 msgid "It's time to top up your Liberapay wallet"
 msgstr "Liberapay 지갑을 충전할 시간입니다"
 
@@ -86,23 +100,6 @@ msgstr "Liberapay 지갑에 {0} 만큼이 남아 있지만 다음 주의 기부�
 
 msgid "Add money"
 msgstr "입금하기"
-
-msgid "Password reset"
-msgstr "비밀번호 재설정"
-
-#, python-brace-format
-msgid "We've received a request to reset the password of the {0} account on Liberapay."
-msgstr "Liberapay 계정 {0}의 비밀번호를 재설정할 것을 요청받았습니다."
-
-msgid "Follow this link to proceed:"
-msgstr "이 링크를 통해 진행하세요:"
-
-msgid "Reset password"
-msgstr "비밀번호 재설정"
-
-#, python-brace-format
-msgid "Please note that the link is only valid for {0}."
-msgstr "이 링크는 {0}까지만 유효합니다."
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Liberapay 지갑으로 계좌 이체"
@@ -177,9 +174,8 @@ msgstr "승인"
 msgid "Refuse"
 msgstr "거절"
 
-#, python-brace-format
-msgid "Connect to {0} on Liberapay?"
-msgstr "Liberapay에 {0} 을(를) 연결할까요?"
+msgid "Connect to Liberapay account?"
+msgstr ""
 
 #, python-brace-format
 msgid "We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?"
@@ -278,6 +274,9 @@ msgstr "최대치 ({0})"
 
 msgid "You need to sign in first"
 msgstr "먼저 로그인해야 합니다"
+
+msgid "You need to log in"
+msgstr ""
 
 msgid "You need to provide a username!"
 msgstr "사용자 이름을 입력하세요!"
@@ -389,6 +388,10 @@ msgid "Bad username or password."
 msgstr "잘못된 계정명 또는 비밀번호."
 
 #, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr ""
+
+#, python-brace-format
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "이메일 계정이 {0} 인 계정을 찾을 수 없었습니다."
 
@@ -412,6 +415,15 @@ msgstr "서버 내부 오류"
 
 msgid "Upstream Error"
 msgstr "상부 에러"
+
+msgid "This account has been closed."
+msgstr ""
+
+msgid "Are you the account owner?"
+msgstr ""
+
+msgid "Log in to reopen your account."
+msgstr ""
 
 msgid "Explore"
 msgstr "둘러보기"
@@ -512,6 +524,25 @@ msgstr "사용자 이름"
 msgid "Go"
 msgstr "확인"
 
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr ""
+
+msgid "Carry on"
+msgstr "계속하기"
+
+#, python-brace-format
+msgid "You're still not logged in as {0}."
+msgstr "아직도 {0} 사용자로 로그인되어 있지 않습니다."
+
+msgid "Email address"
+msgstr ""
+
+msgid "Password (optional)"
+msgstr ""
+
+msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
+msgstr ""
+
 msgid "Members"
 msgstr "회원"
 
@@ -603,11 +634,23 @@ msgstr "처음"
 msgid "Last"
 msgstr "끝"
 
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr ""
+
+msgid "Current password"
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "공공의 이익을 위해 기여하는 사람들은 지원이 필요합니다. 자유 소프트웨어 제작, 자유로운 지식의 공유와 같은 일들은 시간을 소모하며, 초기 작업 외에도 유지보수에 자금을 필요로 합니다."
 
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
 msgstr "Liberapay의 반복적인 기부 시스템은 제작자에게 안정적인 크라우드펀딩을 허용하여 모두에게 이익을 주는 좋은 일을 계속할 수 있도록 돕습니다. 준비되었나요? 시작해 봅시다:"
+
+msgid "Save changes"
+msgstr ""
 
 msgid "Modify your avatar"
 msgstr "아바타 변경하기"
@@ -678,40 +721,14 @@ msgstr "Liberapay 검색"
 msgid "Identity"
 msgstr "신분"
 
-msgid "We've sent you a password reset link. Check your inbox, open the provided link in a new tab, change your password, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "비밀번호 재설정 링크를 보냈습니다. 받은 편지함을 확인하고, 새 탭으로 제공된 링크를 열고 새 비밀번호를 설정한 후 이 페이지로 돌아와 아래 버튼을 눌러 하던 일을 계속하세요."
-
-msgid "Carry on"
-msgstr "계속하기"
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "아직도 {0} 사용자로 로그인되어 있지 않습니다."
-
-#, python-brace-format
-msgid "Log in as {0}:"
-msgstr "{0} 사용자로 로그인:"
-
-msgid "Password"
-msgstr "비밀번호"
-
-msgid "Log in"
-msgstr "로그인"
-
-msgid "Bad username or password"
-msgstr "잘못된 사용자 계정 또는 비밀번호"
-
-msgid "Username or email"
-msgstr "사용자 이름 또는 이메일"
-
-msgid "Forgot your password?"
-msgstr "비밀번호를 잃어버렸나요?"
-
-msgid "Email"
-msgstr "이메일"
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr ""
 
 msgid "Create an account"
 msgstr "새 계정 만들기"
+
+msgid "Use an existing account"
+msgstr ""
 
 msgid "Sign in"
 msgstr "로그인"
@@ -719,21 +736,28 @@ msgstr "로그인"
 msgid "Sign out"
 msgstr "로그아웃"
 
-msgid "Username"
-msgstr "사용자 이름"
+msgid "Please input your email address:"
+msgstr ""
 
-msgid "Individual"
-msgstr "개인"
+msgid "Email"
+msgstr "이메일"
 
-msgid "Business / Organization"
-msgstr "사업체 / 조직"
+msgid "Are you acting as the representative of an organization?"
+msgstr ""
 
-msgid "How do I create a team account?"
-msgstr "어떻게 팀 계정을 만드나요?"
+msgid "No, I want to create a personal account."
+msgstr ""
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr ""
 
 #, python-brace-format
-msgid "I accept {0}Liberapay's Terms of Service{1}"
-msgstr "{0}Liberapay 이용 약관{1}에 동의합니다"
+msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
+msgstr ""
+
+#, python-brace-format
+msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
+msgstr ""
 
 msgid "Enter a username"
 msgstr "계정 이름을 입력하세요"
@@ -1020,6 +1044,18 @@ msgstr "저희의 기부 목표액은 {0} 입니다"
 msgid "View"
 msgstr "보기"
 
+msgid "Username"
+msgstr "사용자 이름"
+
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr ""
+
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "혹시 다른 사이트에서 Liberapay 프로필 페이지를 링크하신 적이 있으신가요? 그 링크를 업데이트해주세요!"
+
+msgid "Goal"
+msgstr ""
+
 msgid "Save"
 msgstr "저장"
 
@@ -1071,6 +1107,9 @@ msgstr "아바타 출처"
 
 msgid "Avatar email (for Libravatar only)"
 msgstr "아바타 이메일 (Libravata용)"
+
+msgid "Privacy"
+msgstr "개인 정보"
 
 msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
@@ -1149,16 +1188,10 @@ msgstr ""
 msgid "Set as primary"
 msgstr ""
 
-msgid "Email address"
-msgstr ""
-
 msgid "Add"
 msgstr ""
 
 msgid "Send me notifications via email:"
-msgstr ""
-
-msgid "Save changes"
 msgstr ""
 
 msgid "You have already added and verified this address."
@@ -1223,6 +1256,9 @@ msgstr ""
 
 msgid "View your email addresses"
 msgstr ""
+
+msgid "Password"
+msgstr "비밀번호"
 
 msgid "Events"
 msgstr ""
@@ -1464,20 +1500,8 @@ msgstr ""
 msgid "Account"
 msgstr "계정"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "혹시 다른 사이트에서 Liberapay 프로필 페이지를 링크하신 적이 있으신가요? 그 링크를 업데이트해주세요!"
-
 msgid "Account type"
 msgstr ""
-
-msgid "Current password"
-msgstr ""
-
-msgid "New password"
-msgstr ""
-
-msgid "Privacy"
-msgstr "개인 정보"
 
 msgid "Close"
 msgstr "탈퇴"
@@ -1726,7 +1750,7 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr ""
 
 #, python-brace-format
-msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer."
+msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer. Additional fee from your bank may apply."
 msgstr ""
 
 #, python-brace-format
@@ -2329,14 +2353,17 @@ msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0}
 msgstr ""
 
 #, python-brace-format
-msgid "Please refresh your {0} connection"
+msgid "Please refresh your {0} connection to find your friends from there."
 msgstr ""
 
-msgid "to find your friends from there."
+msgid "Refresh"
 msgstr ""
 
 #, python-brace-format
-msgid "Connect your {0} account"
+msgid "Connect your {0} account to find your friends from there."
+msgstr ""
+
+msgid "Connect"
 msgstr ""
 
 msgid "No friends found."
@@ -2449,9 +2476,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Connect this {0} account to your Liberapay profile."
-msgstr ""
-
-msgid "Connect"
 msgstr ""
 
 msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
