@@ -1,6 +1,6 @@
 from liberapay.constants import PRIVACY_FIELDS
 from liberapay.models.participant import Participant
-from liberapay.utils import get_participant
+from liberapay.utils import b64encode_s, get_participant
 
 [---]
 
@@ -8,7 +8,6 @@ request.allow('POST')
 
 body = request.body
 out = {}
-redir = '.'
 
 p = get_participant(state, restrict=True)
 if user != p:
@@ -40,14 +39,20 @@ elif 'privacy' in body:
              WHERE id = %s
         """.format(field), (value, p.id))
     out['msg'] = _("Your privacy settings have been changed.")
-    redir = body.get('back_to') or redir
 
 elif 'username' in body:
     p.change_username(body['username'])
     response.redirect(p.path('edit'))
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-    response.redirect(redir)
+    back_to = body.get('back_to') or '.'
+    try:
+        assert '?' not in back_to
+        assert '#' not in back_to
+        back_to += '?success=' + b64encode_s(out["msg"])
+    except Exception as e:
+        website.tell_sentry(e)
+    response.redirect(back_to)
 
 [---] text/html
 
