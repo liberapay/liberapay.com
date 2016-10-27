@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '18'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '19'::jsonb);
 
 
 -- app configuration
@@ -81,7 +81,6 @@ CREATE TABLE participants
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
 , CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))
-, CONSTRAINT password_chk CHECK ((status='stub' OR kind IN ('group', 'community')) = (password IS NULL))
 , CONSTRAINT secret_team_chk CHECK (NOT (kind IN ('group', 'community') AND hide_receiving))
  );
 

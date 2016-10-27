@@ -134,3 +134,6 @@ ALTER TYPE transfer_context ADD VALUE 'refund';
 -- migration #18
 ALTER TABLE transfers ADD COLUMN refund_ref bigint REFERENCES transfers;
 ALTER TABLE exchanges ADD COLUMN refund_ref bigint REFERENCES exchanges;
+
+-- migration #19
+ALTER TABLE participants DROP CONSTRAINT password_chk;
