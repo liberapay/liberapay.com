@@ -7,12 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: 2016-10-28 11:04+0000\n"
+"Last-Translator: Muhammad Taufiq Sumadi <sumadi11895@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>"
+"\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 2.9-dev\n"
 "Generated-By: Babel 2.2.0\n"
 
 msgid "Greetings,"
@@ -309,14 +313,14 @@ msgstr "Nemůžete odebrat hlavní emailovou adresu."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
-msgstr "E-mailová adresa \"{0}\" není ověřena."
+msgstr "Emailová adresa '{0}' není ověřena."
 
 msgid "You've reached the maximum number of email addresses we allow."
 msgstr "Dosáhli jste nejvyšší počet e-mailových adres, které umožňujeme."
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
-msgstr "\"{0}\" není platnou emailovou adresu."
+msgstr "'{0}' není platnou emailovou adresu."
 
 #, python-brace-format
 msgid "The password must be at least {0} and at most {1} characters long."
@@ -517,7 +521,7 @@ msgid "Date of Birth"
 msgstr "Datum narození"
 
 msgid "YYYY-MM-DD"
-msgstr "RRRR-MM-DD"
+msgstr "YYYY-MM-DD"
 
 #, python-brace-format
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
@@ -1643,7 +1647,7 @@ msgstr "Jednoduché a okamžité"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
-msgstr "Poplatky: {0} % + {1}"
+msgstr "Poplatky: {0}% + {1}"
 
 msgid "To a Euro account"
 msgstr "K účtu v eurech"
@@ -1653,7 +1657,7 @@ msgstr "Levnější, ale těžkopádné"
 
 #, python-brace-format
 msgid "Fee: {0}%"
-msgstr "Poplatek: {0} %"
+msgstr "Poplatek: {0}%"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
@@ -1689,11 +1693,13 @@ msgstr "Požádat v průběhu, čekejte prosím…"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Přidání peněz na Liberapay bankovním převodem poněkud poplatek {0} % od naší platební procesor."
+msgstr ""
+"Přidání peněz na Liberapay bankovním převodem poněkud poplatek {0}% od naší "
+"platební procesor."
 
 #, python-brace-format
 msgid "{0} ({2}% fee included)"
-msgstr "{0} ({2} % poplatku)"
+msgstr "{0} ({2}% poplatku)"
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
@@ -1708,7 +1714,9 @@ msgstr "Zobrazit účtenku"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "Přidání peněz na Liberapay prostřednictvím kreditní/debetní karty poněkud poplatek {0} % + {1}."
+msgstr ""
+"Přidání peněz na Liberapay prostřednictvím kreditní/debetní karty poněkud "
+"poplatek {0}% + {1}."
 
 msgid "Credit card"
 msgstr "Kreditní karta"
@@ -1723,7 +1731,7 @@ msgid "This card number is invalid."
 msgstr "Toto číslo karty je neplatné."
 
 msgid "MM/YY"
-msgstr "MM/RR"
+msgstr "MM/YY"
 
 msgid "Expiration Date"
 msgstr "Datum vypršení platnosti"
@@ -1748,7 +1756,9 @@ msgstr "Částka nemůže být nulový."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "Transakce poplatku by byla vysoká: {0} % ({1} / {2}). Chcete přesto pokračovat?"
+msgstr ""
+"Transakce poplatku by byla vysoká: {0}% ({1} / {2}). Chcete přesto "
+"pokračovat?"
 
 #, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2540,4 +2550,3 @@ msgstr "odmítl používat Liberapay"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "ještě se nepřidal na Liberapay"
-
