@@ -44,7 +44,7 @@ The python code inside simplates is only for request-specific logic, common back
 
 Firstly, make sure you have the following dependencies installed:
 
-- python ≥ 2.7.8 ([we're working on porting to python 3](https://github.com/liberapay/liberapay.com/pull/88))
+- python ≥ 2.7.8 (the code is compatible with python 3, but production still runs on python 2 for now)
 - postgresql 9.4.5 (see [the official download & install docs](https://www.postgresql.org/download/)
 - make
 
@@ -130,14 +130,10 @@ We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to 
 
 ### Deploying the app
 
-Liberapay is hosted on [OpenShift Online](https://openshift.com/), which runs
-the [OpenShift M4][M4] platform (also called OpenShift 2.x, not to be confused
-with the newer OpenShift 3.x based on Docker). The user documentation is on
-[developers.openshift.com][OS-dev].
+Liberapay is currently hosted on the legacy 2.x version of [OpenShift Online](https://openshift.com/) (not the new v3 based on Docker). The user documentation is on [developers.openshift.com][OS-dev]. We need to migrate either to v3 or to something else soon (want to help? see [#177](https://github.com/liberapay/liberapay.com/issues/177)).
 
-To deploy the app simply run `release.sh`, it'll guide you through it.
+To deploy the app simply run `release.sh`, it'll guide you through it. Of course you need to be given access first.
 
-[M4]: https://docs.openshift.org/origin-m4/
 [OS-dev]: https://developers.openshift.com/
 
 
