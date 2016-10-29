@@ -137,3 +137,8 @@ ALTER TABLE exchanges ADD COLUMN refund_ref bigint REFERENCES exchanges;
 
 -- migration #19
 ALTER TABLE participants DROP CONSTRAINT password_chk;
+
+-- migration #20
+ALTER TABLE transfers
+    DROP CONSTRAINT team_chk,
+    ADD CONSTRAINT team_chk CHECK (NOT (context='take' AND team IS NULL));
