@@ -147,6 +147,18 @@ class TestClosing(FakeTransfersHarness):
         assert Participant.from_username('carl').balance == D('0.00')
         assert Participant.from_username('alice').balance == D('0.00')
 
+    def test_dbafg_distributes_to_team(self):
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice', balance=D('10.00'))
+        bob = self.make_participant('bob')
+        alice.set_tip_to(team, D('3.00'))
+        team.set_take_for(alice, 1, team)
+        team.set_take_for(bob, 1, team)
+        with self.db.get_cursor() as cursor:
+            alice.distribute_balance_as_final_gift(cursor)
+        assert alice.balance == 0
+        assert bob.refetch().balance == 10
+
 
     # ctg - clear_tips_giving
 

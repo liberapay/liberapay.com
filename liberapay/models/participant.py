@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 from base64 import b64decode, b64encode
-from decimal import Decimal, ROUND_DOWN
+from decimal import Decimal, ROUND_DOWN, ROUND_UP
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
@@ -412,8 +412,9 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips, total, _, _ = self.get_giving_for_profile()
+        tips = self.get_giving_for_profile()[0]
         tips = [t for t in tips if t.is_identified and not t.is_suspended]
+        total = sum(t.amount for t in tips)
         transfers = []
         distributed = D_ZERO
 
@@ -422,8 +423,30 @@ class Participant(Model, MixinTeam):
             pro_rated = (self.balance * rate).quantize(D_CENT, ROUND_DOWN)
             if pro_rated == 0:
                 continue
+            if tip.kind == 'group':
+                team_id = tip.tippee
+                team = Participant.from_id(team_id)
+                takes = [
+                    t for t in team.get_current_takes(cursor=cursor)
+                    if t['is_identified'] and t['amount'] and t['member_id'] != self.id
+                ]
+                if not takes:
+                    continue
+                balance = pro_rated
+                total_takes = sum(t['amount'] for t in takes)
+                ratio = balance / total_takes if total_takes else 0
+                for take in takes:
+                    nominal = take['amount']
+                    actual = min(
+                        (nominal * ratio).quantize(D_CENT, rounding=ROUND_UP),
+                        balance
+                    )
+                    balance -= actual
+                    transfers.append([take['member_id'], actual, team_id])
+                assert balance == 0
+            else:
+                transfers.append([tip.tippee, pro_rated, None])
             distributed += pro_rated
-            transfers.append([tip.tippee, pro_rated])
 
         if not transfers:
             raise self.NoOneToGiveFinalGiftTo
@@ -435,8 +458,8 @@ class Participant(Model, MixinTeam):
         from liberapay.billing.exchanges import transfer
         db = self.db
         tipper = self.id
-        for tippee, amount in transfers:
-            balance = transfer(db, tipper, tippee, amount, 'final-gift',
+        for tippee, amount, team in transfers:
+            balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
                                tipper_mango_id=self.mangopay_user_id,
                                tipper_wallet_id=self.mangopay_wallet_id)
 
