@@ -51,7 +51,7 @@ if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
         assert '#' not in back_to
         back_to += '?success=' + b64encode_s(out["msg"])
     except Exception as e:
-        website.tell_sentry(e)
+        website.tell_sentry(e, state)
     response.redirect(back_to)
 
 [---] text/html
