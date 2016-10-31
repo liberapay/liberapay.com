@@ -671,7 +671,7 @@ def main(override_payday_checks=False):
     except KeyboardInterrupt:  # pragma: no cover
         pass
     except Exception as e:  # pragma: no cover
-        website.tell_sentry(e, {})
+        website.tell_sentry(e, {}, allow_reraise=False)
         raise
     finally:
         conn.close()

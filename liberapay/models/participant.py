@@ -758,7 +758,7 @@ class Participant(Model, MixinTeam):
                     r = p.send_email(msg.spt_name, **deserialize(msg.context))
                     assert r == 1
                 except Exception as e:
-                    website.tell_sentry(e, {}, allow_reraise=True)
+                    website.tell_sentry(e, {})
                 else:
                     delete(msg)
                 sleep(1)
@@ -888,7 +888,7 @@ class Participant(Model, MixinTeam):
                 typ = notif_context.get('type', 'info')
                 r.append(dict(id=id, html=html, type=typ, is_new=is_new))
             except Exception as e:
-                website.tell_sentry(e, state, allow_reraise=True)
+                website.tell_sentry(e, state)
         return r
 
     def notify_patrons(self, elsewhere, tips):

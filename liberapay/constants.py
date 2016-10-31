@@ -17,7 +17,7 @@ class CustomUndefined(StrictUndefined):
         try:
             self._fail_with_undefined_error()
         except Exception as e:
-            self._tell_sentry(e, {}, allow_reraise=True)
+            self._tell_sentry(e, {})
         return ''
 
     __unicode__ = __str__

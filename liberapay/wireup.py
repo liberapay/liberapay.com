@@ -193,7 +193,7 @@ def make_sentry_teller(env):
     if not sentry:
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
-    def tell_sentry(exception, state, allow_reraise=False):
+    def tell_sentry(exception, state, allow_reraise=True):
 
         if isinstance(exception, pando.Response) and exception.code < 500:
             # Only log server errors
@@ -303,7 +303,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 except KeyError:
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
-            tell_sentry(e, {}, allow_reraise=True)
+            tell_sentry(e, {})
 
     # Prepare a unique and sorted list for use in the language switcher
     percent = lambda l: sum((percent(s) if isinstance(s, tuple) else 1) for s in l if s) / len(l)
@@ -357,7 +357,7 @@ def asset_url_generator(env, asset_url, tell_sentry, www_root):
             try:
                 etag = asset_etag(fspath)
             except Exception as e:
-                tell_sentry(e, {}, allow_reraise=True)
+                tell_sentry(e, {})
             return asset_url+path+(etag and '?etag='+etag)
     else:
         asset = lambda path: asset_url+path
