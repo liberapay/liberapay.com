@@ -37,6 +37,7 @@ class Tests(Harness):
                                    )
         assert response.code == 302
         assert response.headers[b'Location'] == b'https://example.com/'
+        assert response.headers[b'Cache-Control'] == b'public, max-age=86400'
 
     def test_no_cookies_over_http(self):
         """

@@ -58,7 +58,9 @@ def canonize(request, website):
         else:
             # For non-idempotent methods, redirect to homepage.
             url += '/'
-        website.redirect(url)
+        response = Response()
+        response.headers[b'Cache-Control'] = b'public, max-age=86400'
+        response.redirect(url)
 
 
 def insert_constants():
