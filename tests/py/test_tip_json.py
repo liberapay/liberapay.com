@@ -7,10 +7,13 @@ from liberapay.testing import Harness
 
 class TestTipJson(Harness):
 
-    def tip(self, tipper, tippee, amount, raise_immediately=True):
+    def tip(self, tipper, tippee, amount, period=None, raise_immediately=True):
+        data = {'amount': amount}
+        if period:
+            data['period'] = period
         return self.client.POST(
             "/%s/tip.json" % tippee,
-            {'amount': amount},
+            data,
             auth_as=tipper,
             xhr=True,
             raise_immediately=raise_immediately,
@@ -47,6 +50,14 @@ class TestTipJson(Harness):
 
         response = self.tip(bob, "alice", "-1.00", raise_immediately=False)
         assert "not a valid weekly donation amount" in response.text
+        assert response.code == 400
+
+        response = self.tip(bob, "alice", "0.01", period='monthly', raise_immediately=False)
+        assert "not a valid monthly donation amount" in response.text
+        assert response.code == 400
+
+        response = self.tip(bob, "alice", "10000000", period='yearly', raise_immediately=False)
+        assert "not a valid yearly donation amount" in response.text
         assert response.code == 400
 
     def test_set_tip_to_patron(self):

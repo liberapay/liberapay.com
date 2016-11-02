@@ -286,6 +286,18 @@ class Tests(Harness):
         assert t['is_pledge'] is False
         assert t['first_time_tipper'] is True
 
+    def test_stt_works_for_monthly_donations(self):
+        alice = self.make_participant('alice', balance=100)
+        bob = self.make_participant('bob')
+        t = alice.set_tip_to(bob, '4.33', 'monthly')
+        assert t['amount'] == 1
+
+    def test_stt_works_for_yearly_donations(self):
+        alice = self.make_participant('alice', balance=100)
+        bob = self.make_participant('bob')
+        t = alice.set_tip_to(bob, '104', 'yearly')
+        assert t['amount'] == 2
+
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
