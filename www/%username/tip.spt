@@ -27,7 +27,10 @@ if tippee.status == 'stub':
 # =========================
 
 if request.method == 'POST':
-    out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']))
+    period = request.body.get('period', 'weekly')
+    if period not in constants.PERIOD_CONVERSION_RATES:
+        raise Response(400, "bad 'period' value '%s'" % period)
+    out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']), period)
     if out['amount'] == 0:
         out["msg"] = _("Your weekly donation to {0} has been stopped.", tippee_name)
     else:

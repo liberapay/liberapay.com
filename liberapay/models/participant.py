@@ -20,9 +20,10 @@ from psycopg2.extras import Json
 
 from liberapay.billing import mangoapi
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO, EMAIL_RE,
-    EMAIL_VERIFICATION_TIMEOUT, EVENTS, MAX_TIP,
-    MIN_TIP, PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PRIVILEGES,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
+    DONATION_WEEKLY_MAX, DONATION_WEEKLY_MIN, EMAIL_RE,
+    EMAIL_VERIFICATION_TIMEOUT, EVENTS, PASSWORD_MAX_SIZE,
+    PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
 from liberapay.exceptions import (
@@ -1220,7 +1221,8 @@ class Participant(Model, MixinTeam):
             self.update_taking(old_takes, new_takes, cursor=cursor)
 
 
-    def set_tip_to(self, tippee, amount, update_self=True, update_tippee=True, cursor=None):
+    def set_tip_to(self, tippee, periodic_amount, period='weekly',
+                   update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, returns a dict.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
@@ -1247,32 +1249,35 @@ class Participant(Model, MixinTeam):
         if self.id == tippee.id:
             raise NoSelfTipping
 
-        amount = Decimal(amount)  # May raise InvalidOperation
-        if amount != 0 and amount < MIN_TIP or amount > MAX_TIP:
-            raise BadAmount(amount)
+        periodic_amount = Decimal(periodic_amount)  # May raise InvalidOperation
+        amount = periodic_amount * PERIOD_CONVERSION_RATES[period]
+
+        if periodic_amount != 0 and amount < DONATION_WEEKLY_MIN or amount > DONATION_WEEKLY_MAX:
+            raise BadAmount(periodic_amount, period)
+
+        amount = amount.quantize(D_CENT, rounding=ROUND_UP)
 
         if not tippee.accepts_tips and amount != 0:
             raise UserDoesntAcceptTips(tippee.username)
 
         # Insert tip
-        NEW_TIP = """\
+        t = (cursor or self.db).one("""\
 
             INSERT INTO tips
-                        (ctime, tipper, tippee, amount)
+                        (ctime, tipper, tippee, amount, period, periodic_amount)
                  VALUES ( COALESCE (( SELECT ctime
                                         FROM tips
                                        WHERE (tipper=%(tipper)s AND tippee=%(tippee)s)
                                        LIMIT 1
                                       ), CURRENT_TIMESTAMP)
-                        , %(tipper)s, %(tippee)s, %(amount)s
+                        , %(tipper)s, %(tippee)s, %(amount)s, %(period)s, %(periodic_amount)s
                          )
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
-        """
-        args = dict(tipper=self.id, tippee=tippee.id, amount=amount)
-        t = (cursor or self.db).one(NEW_TIP, args)._asdict()
+        """, dict(tipper=self.id, tippee=tippee.id, amount=amount,
+                  period=period, periodic_amount=periodic_amount))._asdict()
 
         if update_self:
             # Update giving amount of tipper
@@ -1291,7 +1296,8 @@ class Participant(Model, MixinTeam):
     def _zero_tip_dict(tippee):
         if isinstance(tippee, Participant):
             tippee = tippee.id
-        return dict(amount=D_ZERO, is_funded=False, tippee=tippee)
+        return dict(amount=D_ZERO, is_funded=False, tippee=tippee,
+                    period='weekly', periodic_amount=D_ZERO)
 
 
     def get_tip_to(self, tippee):
@@ -1380,6 +1386,8 @@ class Participant(Model, MixinTeam):
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
+                     , period
+                     , periodic_amount
                      , tippee
                      , t.ctime
                      , t.mtime
@@ -1406,6 +1414,8 @@ class Participant(Model, MixinTeam):
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
+                     , period
+                     , periodic_amount
                      , tippee
                      , t.ctime
                      , t.mtime
@@ -1455,6 +1465,8 @@ class Participant(Model, MixinTeam):
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
+                     , period
+                     , periodic_amount
                      , tippee
                      , t.ctime
                      , p.username
@@ -1536,7 +1548,7 @@ class Participant(Model, MixinTeam):
 
         CREATE_TEMP_TABLE_FOR_TIPS = """
             CREATE TEMP TABLE temp_tips ON COMMIT drop AS
-                SELECT ctime, tipper, tippee, amount, is_funded
+                SELECT ctime, tipper, tippee, amount, period, periodic_amount, is_funded
                   FROM current_tips
                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
                    AND amount > 0;
@@ -1545,22 +1557,25 @@ class Participant(Model, MixinTeam):
         CONSOLIDATE_TIPS_RECEIVING = """
             -- Create a new set of tips, one for each current tip *to* either
             -- the dead or the live account. If a user was tipping both the
-            -- dead and the live account, then we create one new combined tip
-            -- to the live account (via the GROUP BY and sum()).
-            INSERT INTO tips (ctime, tipper, tippee, amount, is_funded)
-                 SELECT min(ctime), tipper, %(live)s AS tippee, sum(amount), bool_and(is_funded)
+            -- dead and the live account, then we keep the highest tip. We don't
+            -- sum the amounts to prevent the new one from being above the
+            -- maximum allowed.
+            INSERT INTO tips (ctime, tipper, tippee, amount, period, periodic_amount, is_funded)
+                 SELECT DISTINCT ON (tipper)
+                        ctime, tipper, %(live)s AS tippee, amount, period,
+                        periodic_amount, is_funded
                    FROM temp_tips
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
                 AND NOT (tipper = %(dead)s OR tipper = %(live)s)
                         -- Don't include tips *from* the dead or live account,
                         -- lest we convert cross-tipping to self-tipping.
-               GROUP BY tipper
+               ORDER BY tipper, amount DESC
         """
 
         ZERO_OUT_OLD_TIPS_RECEIVING = """
-            INSERT INTO tips (ctime, tipper, tippee, amount)
-                SELECT ctime, tipper, tippee, 0 AS amount
+            INSERT INTO tips (ctime, tipper, tippee, amount, period, periodic_amount)
+                SELECT ctime, tipper, tippee, 0 AS amount, period, 0 AS periodic_amount
                   FROM temp_tips
                  WHERE tippee=%s
         """

@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
-from decimal import Decimal
+from decimal import Decimal, ROUND_UP
 import re
 
 from jinja2 import StrictUndefined
@@ -50,6 +50,16 @@ D_INF = Decimal('inf')
 D_UNIT = Decimal('1.00')
 D_ZERO = Decimal('0.00')
 
+DONATION_LIMITS_WEEKLY = (Decimal('0.01'), Decimal('100.00'))
+DONATION_LIMITS = {
+    'weekly': DONATION_LIMITS_WEEKLY,
+    'monthly': tuple((x * Decimal(52) / Decimal(12)).quantize(D_CENT, rounding=ROUND_UP)
+                     for x in DONATION_LIMITS_WEEKLY),
+    'yearly': tuple((x * Decimal(52)).quantize(D_CENT)
+                    for x in DONATION_LIMITS_WEEKLY),
+}
+DONATION_WEEKLY_MIN, DONATION_WEEKLY_MAX = DONATION_LIMITS_WEEKLY
+
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
@@ -91,15 +101,18 @@ KYC_PAYOUT_YEARLY_THRESHOLD = Decimal('1000')
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
-MAX_TIP = Decimal('100.00')
-MIN_TIP = Decimal('0.01')
-
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
 PAYIN_BANK_WIRE_MIN = Decimal('2.00')
 PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
 PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
+
+PERIOD_CONVERSION_RATES = {
+    'weekly': Decimal(1),
+    'monthly': Decimal(12) / Decimal(52),
+    'yearly': Decimal(1) / Decimal(52),
+}
 
 PRIVACY_FIELDS = OrderedDict([
     ('hide_giving', _("Hide total giving from others.")),
@@ -129,7 +142,7 @@ STANDARD_TIPS = (
     (_("Small ({0})"), Decimal('0.25')),
     (_("Medium ({0})"), Decimal('1.00')),
     (_("Large ({0})"), Decimal('5.00')),
-    (_("Maximum ({0})"), MAX_TIP),
+    (_("Maximum ({0})"), DONATION_WEEKLY_MAX),
 )
 
 USERNAME_MAX_SIZE = 32

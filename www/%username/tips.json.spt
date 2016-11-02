@@ -15,9 +15,10 @@ if request.method == 'POST':
         seen.add(tip['username'])
         one = {"username": tip['username']}
         try:
-            amount = participant.set_tip_to( tip['username']
-                                           , parse_decimal(tip['amount'])
-                                            )['amount']
+            amount = participant.set_tip_to(
+                tip['username'], parse_decimal(tip['amount']),
+                tip.get('period', 'weekly'),
+            )['amount']
         except Exception as exc:
             amount = "error"
             one['error'] = exc.__class__.__name__
@@ -28,7 +29,7 @@ if request.method == 'POST':
         old_tips = participant.get_current_tips()
         for tip in old_tips:
             if tip['username'] not in seen:
-                participant.set_tip_to(tip['username'], '0.00')
+                participant.set_tip_to(tip['username'], '0.00', tip['period'])
 
 else:
     tips, total, pledges, pledges_total = participant.get_giving_for_profile()

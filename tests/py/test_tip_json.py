@@ -42,11 +42,11 @@ class TestTipJson(Harness):
         bob = self.make_participant("bob")
 
         response = self.tip(bob, "alice", "110.00", raise_immediately=False)
-        assert "not a valid donation amount" in response.text
+        assert "not a valid weekly donation amount" in response.text
         assert response.code == 400
 
         response = self.tip(bob, "alice", "-1.00", raise_immediately=False)
-        assert "not a valid donation amount" in response.text
+        assert "not a valid weekly donation amount" in response.text
         assert response.code == 400
 
     def test_set_tip_to_patron(self):

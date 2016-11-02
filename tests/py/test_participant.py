@@ -82,7 +82,7 @@ class TestTakeOver(Harness):
         bob.take_over(carl, have_confirmation=True)
         tips = self.db.all("select * from tips where amount > 0 order by id asc")
         assert len(tips) == 3
-        assert tips[-1].amount == 6
+        assert tips[-1].amount == 5
         assert tips[-1].is_funded is False
         self.db.self_check()
 
