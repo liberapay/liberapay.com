@@ -103,7 +103,7 @@ weekly = total - participant.receiving
 <div class="giving row valign-middle">
 
 % if ntips
-<div class="col-md-8">
+<div class="col-lg-12">
     <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
     <table class="table">
         <thead>
@@ -150,7 +150,7 @@ weekly = total - participant.receiving
 % endif
 
 % if npledges
-<div class="col-md-8">
+<div class="col-lg-8">
     <h3>{{ _("Pledges") }} (N={{ len(pledges) }})</h3>
     <table class="table">
         <thead>
@@ -187,7 +187,7 @@ weekly = total - participant.receiving
 % endif
 
 % if ncancelled_tips
-<div class="col-md-8">
+<div class="col-lg-7">
     <h3>{{ _("Recently Cancelled") }} (N={{ ncancelled_tips }})
         <small>{{ _("within the last 30 days") }}</small></h3>
     <table class="table">
