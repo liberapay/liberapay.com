@@ -441,6 +441,8 @@ class Participant(Model, MixinTeam):
                         (nominal * ratio).quantize(D_CENT, rounding=ROUND_UP),
                         balance
                     )
+                    if actual == 0:
+                        continue
                     balance -= actual
                     transfers.append([take['member_id'], actual, team_id])
                 assert balance == 0
