@@ -130,6 +130,7 @@ class TestLogIn(EmailHarness):
         email = 'alice@example.net'
         alice = self.make_participant('alice')
         alice.add_email(email)
+        alice.close(None)
 
         data = {'log-in.id': email}
         r = self.client.POST('/', data, raise_immediately=False)
