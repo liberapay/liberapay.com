@@ -48,8 +48,6 @@ def sign_in_with_form_data(body, state):
             )
             if not p:
                 state['log-in.error'] = _("Bad username or password.")
-            if p and p.status == 'closed':
-                p.update_status('active')
         elif k == 'username':
             state['log-in.error'] = _("\"{0}\" is not a valid email address.", id)
             return
@@ -156,6 +154,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
     if p:
         if session_p:
             session_p.sign_out(response.headers.cookie)
+        if p.status == 'closed':
+            p.update_status('active')
         p.sign_in(response.headers.cookie, session_suffix)
         state['user'] = p
         if request.body.pop('form.repost', None) != 'true':
