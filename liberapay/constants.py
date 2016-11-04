@@ -138,11 +138,11 @@ SESSION_REFRESH = timedelta(hours=1)
 SESSION_TIMEOUT = timedelta(hours=6)
 
 STANDARD_TIPS = (
-    (_("Symbolic ({0})"), Decimal('0.01')),
-    (_("Small ({0})"), Decimal('0.25')),
-    (_("Medium ({0})"), Decimal('1.00')),
-    (_("Large ({0})"), Decimal('5.00')),
-    (_("Maximum ({0})"), DONATION_WEEKLY_MAX),
+    (_("Symbolic ({0} per week)"), Decimal('0.01')),
+    (_("Small ({0} per week)"), Decimal('0.25')),
+    (_("Medium ({0} per week)"), Decimal('1.00')),
+    (_("Large ({0} per week)"), Decimal('5.00')),
+    (_("Maximum ({0} per week)"), DONATION_WEEKLY_MAX),
 )
 
 USERNAME_MAX_SIZE = 32

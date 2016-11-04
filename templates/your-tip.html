@@ -16,7 +16,7 @@
             % for msg, amount in constants.STANDARD_TIPS
                 % set amount_str = format_decimal(amount, '#,##0.00')
                 <a class="btn btn-default amount-btn" href="?amount={{ amount_str }}"
-                   rel="nofollow">{{ _(msg, amount_str) }}</a>
+                   rel="nofollow">{{ _(msg, Money(amount, 'EUR')) }}</a>
             % endfor
             </div>
             <br>
