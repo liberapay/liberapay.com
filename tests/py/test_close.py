@@ -149,15 +149,18 @@ class TestClosing(FakeTransfersHarness):
 
     def test_dbafg_distributes_to_team(self):
         team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=D('10.00'))
+        alice = self.make_participant('alice', balance=D('0.01'))
         bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
         alice.set_tip_to(team, D('3.00'))
         team.set_take_for(alice, 1, team)
         team.set_take_for(bob, 1, team)
+        team.set_take_for(carl, D('0.01'), team)
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert alice.balance == 0
-        assert bob.refetch().balance == 10
+        assert bob.refetch().balance == D('0.01')
+        assert carl.refetch().balance == 0
 
 
     # ctg - clear_tips_giving
