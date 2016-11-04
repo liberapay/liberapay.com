@@ -118,7 +118,12 @@ weekly = total - participant.receiving
         <tfoot>
             <tr>
                 <th></th>
-                <th class="total">{{ total }}</th>
+                <th class="total">{{ _(
+                    "{0} per week ~ {1} per month ~ {2} per year",
+                    Money(total, 'EUR'),
+                    Money(total / constants.PERIOD_CONVERSION_RATES['monthly'], 'EUR'),
+                    Money(total / constants.PERIOD_CONVERSION_RATES['yearly'], 'EUR'),
+                ) }}</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -164,7 +169,12 @@ weekly = total - participant.receiving
         <tfoot>
             <tr>
                 <th></th>
-                <th class="total">{{ pledges_total }}</th>
+                <th class="total">{{ _(
+                    "{0} per week ~ {1} per month ~ {2} per year",
+                    Money(pledges_total, 'EUR'),
+                    Money(pledges_total / constants.PERIOD_CONVERSION_RATES['monthly'], 'EUR'),
+                    Money(pledges_total / constants.PERIOD_CONVERSION_RATES['yearly'], 'EUR'),
+                ) }}</th>
                 <th></th>
                 <th></th>
             </tr>
