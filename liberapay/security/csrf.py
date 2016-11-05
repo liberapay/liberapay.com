@@ -27,34 +27,36 @@ _sanitize_token = lambda t: t if _token_re.match(t) else None
 def extract_token_from_cookie(request):
     """Given a Request object, return a csrf_token.
     """
-    try:
-        token = request.headers.cookie[CSRF_TOKEN].value
-    except KeyError:
+
+    off = (
+        # Turn off CSRF protection on assets, to avoid busting the cache.
+        request.path.raw.startswith('/assets/') or
+        # Turn off CSRF protection on callbacks, so they can receive POST requests.
+        request.path.raw.startswith('/callbacks/') or
+        # Turn off CSRF when using HTTP auth, so API users can use POST and others.
+        b'Authorization' in request.headers
+    )
+
+    if off:
         token = None
     else:
-        token = _sanitize_token(token)
-
-    # Don't set a CSRF cookie on assets, to avoid busting the cache.
-    # Don't set it on callbacks, because we don't need it there.
-
-    if request.path.raw.startswith('/assets/') or request.path.raw.startswith('/callbacks/'):
-        token = None
-    else:
-        token = token or _get_new_token()
+        try:
+            token = request.headers.cookie[CSRF_TOKEN].value
+        except KeyError:
+            token = _get_new_token()
+        else:
+            token = _sanitize_token(token) or _get_new_token()
 
     return {'csrf_token': token}
 
 
 def reject_forgeries(request, response, csrf_token):
+    if csrf_token is None:
+        # CSRF protection is turned off for this request
+        return
+
     # Assume that anything not defined as 'safe' by RC2616 needs protection.
     if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
-
-        # except webhooks
-        if request.line.uri.startswith('/callbacks/'):
-            return
-        # and requests using HTTP auth
-        if b'Authorization' in request.headers:
-            return
 
         # Check non-cookie token for match.
         second_token = ""
