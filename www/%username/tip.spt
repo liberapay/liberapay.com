@@ -5,6 +5,14 @@ from base64 import b64encode
 from liberapay.exceptions import AuthRequired
 from liberapay.utils import b64encode_s, get_participant
 
+_ = lambda a: a
+MESSAGES = {
+    'weekly': _("You are now donating {0} per week to {1}. Thank you!"),
+    'monthly': _("You are now donating {0} per month to {1}. Thank you!"),
+    'yearly': _("You are now donating {0} per year to {1}. Thank you!"),
+}
+del _
+
 [-----------------------------------------------------------------------------]
 
 if user.ANON:
@@ -32,10 +40,10 @@ if request.method == 'POST':
         raise Response(400, "bad 'period' value '%s'" % period)
     out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']), period)
     if out['amount'] == 0:
-        out["msg"] = _("Your weekly donation to {0} has been stopped.", tippee_name)
+        out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
     else:
-        out["msg"] = _("You are now donating {0} per week to {1}. Thank you!",
-                       Money(out['amount'], 'EUR'), tippee_name)
+        out["msg"] = _(MESSAGES[out['period']],
+                       Money(out['periodic_amount'], 'EUR'), tippee_name)
     if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
         back_to = request.body.get('back_to') or tipper.path('giving/')
         back_to += '&' if '?' in back_to else '?'
