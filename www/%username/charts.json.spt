@@ -8,12 +8,6 @@ payday object.
 If the user has never received, we return an empty array. Client code can take
 this to mean, "no chart."
 
-We specifically don't worry about double-counting npatrons for out-of-band
-transfers. That's a rare case right now, pretty much only when someone
-deactivates their account and distributes their balance as a final gift. It
-could become much more common in a one-off payments world, depending on how the
-implementation.
-
 """
 
 from liberapay.utils import get_participant
@@ -46,7 +40,7 @@ transfers = website.db.all("""\
         , amount
         , tipper
      FROM transfers
-    WHERE tippee=%s
+    WHERE %s IN (tippee, team)
       AND status = 'succeeded'
  ORDER BY id DESC
 
@@ -63,14 +57,19 @@ if paydays:
     paydays_i = iter(paydays)
     curpayday = next(paydays_i)
     ts_start = curpayday.pop('ts_start')
+    patrons = set()
 
     # Loop through transfers, advancing payday cursor as appropriate
     for transfer in transfers:
         while transfer['timestamp'] < ts_start:
             curpayday = next(paydays_i)
             ts_start = curpayday.pop('ts_start')
+            patrons.clear()
 
-        curpayday['npatrons'] += 1
+        tipper = transfer['tipper']
+        if tipper not in patrons:
+            curpayday['npatrons'] += 1
+            patrons.add(tipper)
         curpayday['receipts'] += transfer['amount']
 
 response.headers[b"Access-Control-Allow-Origin"] = b"*"
