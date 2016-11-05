@@ -1,4 +1,4 @@
-"""Cross Site Request Forgery middleware, borrowed from Django.
+"""Cross Site Request Forgery middleware, originally borrowed from Django.
 
 See also:
 
@@ -18,6 +18,7 @@ from .crypto import constant_time_compare, get_random_string
 TOKEN_LENGTH = 32
 CSRF_TOKEN = str('csrf_token')  # bytes in python2, unicode in python3
 CSRF_TIMEOUT = timedelta(days=7)
+SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'TRACE'}
 
 _get_new_token = lambda: get_random_string(TOKEN_LENGTH)
 _token_re = re.compile(r'^[a-zA-Z0-9]{%d}$' % TOKEN_LENGTH)
@@ -55,8 +56,8 @@ def reject_forgeries(request, response, csrf_token):
         # CSRF protection is turned off for this request
         return
 
-    # Assume that anything not defined as 'safe' by RC2616 needs protection.
-    if request.line.method not in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
+    # Assume that anything not defined as 'safe' by RFC7231 needs protection.
+    if request.line.method not in SAFE_METHODS:
 
         # Check non-cookie token for match.
         second_token = ""
