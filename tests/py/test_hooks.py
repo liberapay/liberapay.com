@@ -166,6 +166,11 @@ class Tests2(Harness):
         assert "Bad CSRF cookie" in r.text
         assert csrf.CSRF_TOKEN in r.headers.cookie
 
+    def test_no_csrf_cookie_unknown_method_on_asset(self):
+        r = self.client.hit('UNKNOWN', '/assets/base.css', csrf_token=False,
+                            raise_immediately=False)
+        assert r.code == 200  # this should be a 405, that's a "bug" in aspen
+
     def test_bad_csrf_cookie(self):
         r = self.client.POST('/', csrf_token='bad_token', raise_immediately=False)
         assert r.code == 403
