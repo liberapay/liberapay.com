@@ -97,7 +97,7 @@ class TestChartsJson(FakeTransfersHarness):
             },
             {
                 "date": today(),
-                "npatrons": 3,  # Since this is rare, don't worry that we double-count alice.
+                "npatrons": 2,
                 "receipts": 7.00,
             },
             {
@@ -122,6 +122,7 @@ class TestChartsJson(FakeTransfersHarness):
 
     def test_charts_work_for_teams(self):
         team = self.make_participant('team', kind='group')
+        team.set_take_for(self.bob, 0.1, team)
         team.set_take_for(self.carl, 1, team)
         self.alice.set_tip_to(team, '0.30')
         self.bob.set_tip_to(team, '0.59')
