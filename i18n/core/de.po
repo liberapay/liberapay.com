@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.2.0\n"
+"Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
 msgstr "Grüße,"
@@ -20,17 +20,11 @@ msgstr "Grüße,"
 msgid "Something not right? Reply to this email for help."
 msgstr "Stimmt etwas nicht? Sie können uns erreichen, indem Sie auf diese E-Mail antworten."
 
-msgid "Change your email settings"
-msgstr "Passe Deine Email-Einstellungen an"
-
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Jemand will Ihnen auf Liberapay spenden"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "Jemand will ihnen auf Liberapay spenden, aber du musst das Identität-Formular ausfüllen, bevor wir rechtlich für Sie Geld sammeln können."
-
-msgid "Fill identity form"
-msgstr "Identität-Formular ausfüllen"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Wenn Sie keine Spenden auf Liberapay erhalten möchten, können Sie sie ablehnen, indem Sie Ihr Profil entsprechend bearbeiten."
@@ -99,30 +93,8 @@ msgstr "Es ist Zeit ihr Liberapay Konto aufzuladen"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Sie haben {0} in ihrem Liberapay Portemonnaie übrig aber Sie brauchen mindestens {1} um Ihre Spenden nächste Woche abzudecken."
 
-msgid "Add money"
-msgstr "Geld hinzufügen"
-
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Banküberweisung auf Ihr Liberapay Portemonnaie"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Wir sind bereit das Geld zu erhalten. Bitte senden Sie exakt {0} unter Verwendung des Referenz-Codes (so dass wir es Ihnen zuordnen können) an den folgenden Account:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Internationale Kontonummer)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "Bankleitzahl (BIC : Bank Identifier Code)"
-
-msgid "Wire Reference Code"
-msgstr "Verwendungszweck"
-
-msgid "Bank Account Owner Name"
-msgstr "Bankkonto Besitzername"
-
-msgid "Bank Account Owner Address"
-msgstr "Adresse des Kontobesitzers"
 
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Die Überweisung auf Ihr Liberapay Konto ist fehlgeschlagen"
@@ -133,9 +105,6 @@ msgstr "Der Versuch {0} von Ihrem Bankkonto zu transferieren ist mit der folgend
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Sie können es erneut versuchen, möglicherweise mit einer anderen Bezahlungsmethode, indem sie auf den unten stehenden Link klicken:"
-
-msgid "Try again"
-msgstr "Wiederholen"
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Die Überweisung auf dem Liberapay Konto ist es gelungen"
@@ -214,6 +183,9 @@ msgstr "Wir haben versucht {0} von Ihrem Liberapay Konto auf Ihr Bankkonto zu ü
 msgid "You can try again: {0}"
 msgstr "Sie können es erneut versuchen: {0}"
 
+msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
+msgstr ""
+
 msgid "When I receive money"
 msgstr "Wenn ich Geld erhalte"
 
@@ -273,11 +245,15 @@ msgstr "Groß ({0})"
 msgid "Maximum ({0})"
 msgstr "Maximum ({0})"
 
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again in {0}."
+msgstr "Sie haben Ihre Quote von Anfragen verbraucht, können Sie versuchen, wieder in {0}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Sie machen Anfragen zu schnell, bitte versuchen Sie es später noch einmal."
+
 msgid "You need to sign in first"
 msgstr "Sie müssen sich zuerst anmelden"
-
-msgid "You need to log in"
-msgstr ""
 
 msgid "You need to provide a username!"
 msgstr "Sie müssen einen Benutzernamen angeben!"
@@ -335,9 +311,6 @@ msgstr "'{0}' ist keine gültiges Spendenbetrag (min = {1}, max = {2})"
 msgid "The user {0} doesn't accept donations."
 msgstr "Der Benutzer {0} akzeptiert keine Spenden."
 
-msgid "It seems you're trying to delete something that doesn't exist."
-msgstr "Es scheint so als ob Sie etwas zu löschen versuchen das nicht existiert."
-
 msgid "There isn't enough money in your wallet."
 msgstr "In Ihrem Geldbeutel befindet sich nicht genügend Geld."
 
@@ -369,17 +342,6 @@ msgstr "Die Übertragung des Geldes ist gescheitert, sorry. Bitte kontaktieren S
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Sie sind nicht, dies zu tun, weil Ihr Konto erlaubt ist derzeit ausgesetzt."
-
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "Sie haben Ihre Quote von Anfragen verbraucht, können Sie versuchen, wieder in {0}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Sie machen Anfragen zu schnell, bitte versuchen Sie es später noch einmal."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} gab einen Fehler aus, bitte versuch es später wieder."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
@@ -536,6 +498,9 @@ msgstr "Weiter"
 msgid "You're still not logged in as {0}."
 msgstr "Sie sind noch nicht eingeloggt als {0}."
 
+msgid "Try again"
+msgstr "Wiederholen"
+
 msgid "Email address"
 msgstr "E-Mail-Adresse"
 
@@ -543,6 +508,9 @@ msgid "Password (optional)"
 msgstr ""
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
+msgstr ""
+
+msgid "You need to log in"
 msgstr ""
 
 msgid "Members"
@@ -608,6 +576,9 @@ msgstr "Einnahmen"
 
 msgid "Wallet"
 msgstr "Brieftasche"
+
+msgid "Add money"
+msgstr "Geld hinzufügen"
 
 msgid "Withdraw money"
 msgstr "Geld abheben"
@@ -808,184 +779,11 @@ msgstr "Nicht sicher, wie viel zu spenden? Hier sind einige Standardmengen :"
 msgid "per week"
 msgstr "pro Woche"
 
-msgid "Modify"
-msgstr "Ändern"
-
 msgid "Pledge"
 msgstr "Versprechen"
 
-msgid "Liberapay is a recurrent donations platform."
-msgstr "Liberapay ist eine wiederkehrende Spenden-Plattform."
-
-msgid "Learn more"
-msgstr "Mehr erfahren"
-
-msgid "Follow us"
-msgstr "Folgen Sie uns"
-
-#, python-brace-format
-msgid "We currently have {0} users donating {1} per month."
-msgstr "Wir haben derzeit {0} Benutzer spendet {1} pro Monat."
-
-msgid "Receive"
-msgstr "Erhalten"
-
-msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software?"
-msgstr "Sind Sie ein Schöpfer von commons? Haben Sie freie Kunst, verbreiten freies Wissen, schreiben freie Software machen?"
-
-msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
-msgstr "Ja? Dann ist Liberapay für Sie! Erstellen Sie Ihr Konto, füllen Sie Ihr Profil, und Fragen Sie Ihr Publikum, Ihre Arbeit finanziell zu unterstützen."
-
-msgid "Join us"
-msgstr "Begleiten Sie uns"
-
-#, python-brace-format
-msgid "You receive {0} per week."
-msgstr "Du erhältst {0} pro Woche."
-
-#, python-brace-format
-msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
-msgstr "Sie weigern sich Spenden zur Zeit, können Sie das ändern {0} auf Ihrem Profil {1}."
-
-#, python-brace-format
-msgid "Congratulations, you have reached your goal of receiving {0} per week!"
-msgstr "Gratulation, Sie haben Ihr Ziel {0} pro Woche zu erhalten erreicht!"
-
-msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "Wir müssen wissen, wer Sie sind bevor wir rechtlich Geld für Sie sammeln können."
-
-msgid "To receive money, do something awesome and then tell people about it:"
-msgstr "Um Geld zu erhalten machen Sie etwas großartiges und erzählen Sie davon:"
-
-#, python-brace-format
-msgid "{0}Fill out your profile{1}."
-msgstr "{0} Füllen Sie Ihr Profil aus{1}."
-
-#, python-brace-format
-msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr "{0} Einbinden unserer Widgets {1} auf Ihrem Blog / Webseite."
-
-msgid "Contact the people who benefit from your work and ask them to support you."
-msgstr "Kontaktieren Sie die Menschen, die von Ihrer Arbeit profitieren und sie bitten, Sie zu unterstützen."
-
-msgid "Why use Liberapay?"
-msgstr "Warum Liberapay benutzen ?"
-
-msgid "It's easy"
-msgstr "Es ist einfach"
-
-msgid "Liberapay makes it easy to donate and receive money recurrently, you'll only need a few minutes to get started. No Paypal account needed."
-msgstr "Liberapay macht es einfach, Geld wiederkehrend zu spenden und zu empfangen, werden Sie nur ein paar Minuten brauchen, um zu beginnen. Kein Paypal-Konto erforderlich."
-
-msgid "It's economical"
-msgstr "Es ist ökonomisch"
-
-#, python-brace-format
-msgid "We don't take a cut on your donations, and our {0}payment processor's fees{1} are among the lowest in the world."
-msgstr "Wir nehmen nicht einen Schnitt auf Ihre Spenden und aus {0} Zahlung Prozessor Gebühren {1} gehören zu den niedrigsten in der Welt."
-
-msgid "It's open"
-msgstr "Es ist offen"
-
-#, python-brace-format
-msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
-msgstr "Liberapay ausgeführt wird transparent durch eine {1} Non-Profit-Organisation {0}, seine {2} Quellcode {0} ist öffentlich."
-
-msgid "Sponsors"
-msgstr "Sponsoren"
-
-#, python-brace-format
-msgid "We welcome donations from businesses and nonprofits. If you have any questions, don't hesitate to {0}contact us{1}."
-msgstr "Wir freuen uns über Spenden von Unternehmen und gemeinnützige Organisationen. Wenn Sie Fragen haben, zögern Sie nicht auf {0} Kontakt mit uns auf {1}."
-
-#, python-brace-format
-msgid "We currently have {n} sponsor, this section is our way of thanking them."
-msgid_plural "We currently have {n} sponsors, this section is our way of thanking them."
-msgstr[0] "Wir haben derzeit {n} Sponsor, dieser Abschnitt ist unser Weg, um sie zu danken."
-msgstr[1] "Aktuell haben wir {n} Sponsoren, dieser Abschnitt ist unser Weg, um sie zu danken."
-
-msgid "The list below is rotated pseudorandomly."
-msgstr "Die folgende Liste ist pseudo-zufällig gedreht."
-
-msgid "This section is meant to thank our sponsors, but we don't have any yet. That means your organization could be the first!"
-msgstr "Dieser Abschnitt soll unsere Sponsoren danken, aber wir haben noch keine. Das bedeutet, dass Ihre Organisation die erste sein könnte!"
-
-msgid "Recent Activity"
-msgstr "Neueste Aktivität"
-
-#, python-brace-format
-msgid "Someone created a new team {0} ago."
-msgstr "Ein Benutzer hat ein neues Team vor {0} ergestellt."
-
-#, python-brace-format
-msgid "Someone joined Liberapay {0} ago."
-msgstr "Jemand trat Liberapay bey vor {0}."
-
-#, python-brace-format
-msgid "Someone created a new community {0} ago."
-msgstr "Ein Benutzer hat eine neue Gemeinschaft vor {0} ergestellt ."
-
-#, python-brace-format
-msgid "Payday was run {0} ago and transferred {1}."
-msgstr "Zahltag ausgeführt wurde {0} vor und übertragen {1}."
-
-msgid "Upcoming Features"
-msgstr "Zukünftige Features"
-
-msgid "The ability to list your projects on your profile and link them to the relevant communities."
-msgstr "Die Möglichkeit, Ihre Projekte in Ihrem Profil aufzulisten und zu den entsprechenden Gemeinden verbinden."
-
-msgid "Communication between donors and donees, through project status updates that will also be aggregated into community newsletters."
-msgstr "Die Kommunikation zwischen Spendern und Beschenkten über den Projektstatus Updates, die auch in Gemeinschaft Newsletter angehäuft werden."
-
-msgid "Total giving amount: you'll choose how much you want to give per week, and we'll compute each of your donations accordingly."
-msgstr "Insgesamt geben Menge: Sie entscheiden, wie viel Sie pro Woche geben wollen, und wir werden jede Ihrer Spenden entsprechend berechnen."
-
-msgid "Additional payment methods: SEPA direct debits, more types of cards, other direct debit schemes."
-msgstr "Weitere Zahlungsarten: SEPA-Lastschriften, mehrere Arten von Karten, andere Lastschriftverfahren ."
-
-msgid "and more…"
-msgstr "und vieles mehr…"
-
-msgid "Sorry, we didn't find anything matching your query."
-msgstr "Es tut uns leid, wir konnten keine Übereinstimmungen mit Ihrer Suchanfrage finden."
-
-msgid "Whose work do you appreciate?"
-msgstr "Deren Arbeit schätzen Sie?"
-
-msgid "Found a matching username"
-msgid_plural "Found matching usernames"
-msgstr[0] "Gefunden einen falschen Benutzernamen"
-msgstr[1] "Gefunden Benutzernamen"
-
-msgid "Found a matching community name"
-msgid_plural "Found matching community names"
-msgstr[0] "Gefunden eine passende Community-Namen"
-msgstr[1] "Gefunden Community-Namen"
-
-msgid "Found a matching user statement"
-msgid_plural "Found matching user statements"
-msgstr[0] "Gefunden eine passende Benutzeranweisung"
-msgstr[1] "Gefunden passenden Benutzer-Anweisungen"
-
-msgid "Didn't find who you were looking for?"
-msgstr "Haben Sie nicht gefunden wen Sie gesucht haben?"
-
-msgid "You can also pledge to people who haven't joined Liberapay yet:"
-msgstr "Sie können auch die Menschen verpflichten, die Liberapay noch nicht beigetreten sind:"
-
-msgid "Sign Out"
-msgstr "Abmelden"
-
-msgid "Sign Up"
-msgstr "Anmelden"
-
-msgid "Create your account"
-msgstr "Erstellen Sie Ihr Konto"
-
-#, python-brace-format
-msgid "You are already logged in as {0}."
-msgstr "Sie sind bereits eingeloggt als {0}."
+msgid "Modify"
+msgstr "Ändern"
 
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
@@ -1117,59 +915,6 @@ msgstr "Avatar Email (nur fur Libravatar)"
 
 msgid "Privacy"
 msgstr "Datenschutz"
-
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"Achtung: Diese Aktion wir alle Trinkgelder, die du zurzeit erhältst löschen.\n"
-"\n"
-"Das kann NICHT rückgängig gemacht werden!"
-
-msgid "You haven't filled all the required fields."
-msgstr "Sie haben nicht alle Pflichtfelder ausgefüllt."
-
-msgid "Invalid date of birth."
-msgstr "Ungültiges Geburtsdatum."
-
-msgid "You have to agree to MangoPay's Terms of Service."
-msgstr "Sie müssen MangoPays allgemeinen Geschäftsbedingungen zustimmen."
-
-msgid "Income history"
-msgstr "Einkommensverlauf"
-
-msgid "JavaScript is required"
-msgstr "JavaScript ist erforderlich"
-
-msgid "No data to show."
-msgstr "Keine Daten zu zeigen."
-
-msgid "View income history"
-msgstr "Einkommensverlauf anzeigen"
-
-msgid "Euros Received Per Week"
-msgstr "Einkommen pro Woche (in Euro)"
-
-msgid "weeks"
-msgstr "Wochen"
-
-msgid "Number of Patrons Per Week"
-msgstr "Anzahl Unterstützer/-innen pro Woche"
-
-msgid "Mark all notifications as read"
-msgstr "Alle Benachrichtigungen als gelesen markieren"
-
-msgid "No notifications to show."
-msgstr "Keine Benachrichtigungen zu zeigen."
-
-#, python-brace-format
-msgid "Your weekly donation to {0} has been stopped."
-msgstr "Ihre wöchentliche Spende {0} wurde beendet."
-
-#, python-brace-format
-msgid "You are now donating {0} per week to {1}. Thank you!"
-msgstr "Sie spenden jetzt {0} pro Woche an {1}. Danke!"
 
 msgid "Email settings"
 msgstr "Email Einstellungen"
@@ -1336,6 +1081,24 @@ msgstr "innerhalb der letzten 30 Tage"
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"Achtung: Diese Aktion wir alle Trinkgelder, die du zurzeit erhältst löschen.\n"
+"\n"
+"Das kann NICHT rückgängig gemacht werden!"
+
+msgid "You haven't filled all the required fields."
+msgstr "Sie haben nicht alle Pflichtfelder ausgefüllt."
+
+msgid "Invalid date of birth."
+msgstr "Ungültiges Geburtsdatum."
+
+msgid "You have to agree to MangoPay's Terms of Service."
+msgstr "Sie müssen MangoPays allgemeinen Geschäftsbedingungen zustimmen."
+
 msgid "Income Shares"
 msgstr "Ausschüttungsanteile"
 
@@ -1360,6 +1123,27 @@ msgstr "Ihre Meinung ist, jetzt {0} (Sie diese Woche nicht höher gehen kann)."
 #, python-brace-format
 msgid "Your take is now {0}."
 msgstr "Ihre Meinung ist, jetzt {0}."
+
+msgid "Income history"
+msgstr "Einkommensverlauf"
+
+msgid "JavaScript is required"
+msgstr "JavaScript ist erforderlich"
+
+msgid "No data to show."
+msgstr "Keine Daten zu zeigen."
+
+msgid "View income history"
+msgstr "Einkommensverlauf anzeigen"
+
+msgid "Euros Received Per Week"
+msgstr "Einkommen pro Woche (in Euro)"
+
+msgid "weeks"
+msgstr "Wochen"
+
+msgid "Number of Patrons Per Week"
+msgstr "Anzahl Unterstützer/-innen pro Woche"
 
 msgid "You are not invited to join this team."
 msgstr "Sie sind nicht eingeladen, diesem Team beizutreten."
@@ -1404,6 +1188,12 @@ msgstr "Sind Sie sicher, dass Sie dieses Team verlassen möchten?"
 msgid "You are now a member of the team."
 msgstr "Sie sind jetzt ein Mitglied des Teams."
 
+msgid "Mark all notifications as read"
+msgstr "Alle Benachrichtigungen als gelesen markieren"
+
+msgid "No notifications to show."
+msgstr "Keine Benachrichtigungen zu zeigen."
+
 msgid "Bank Wire"
 msgstr "Banküberweisung"
 
@@ -1438,6 +1228,9 @@ msgstr "Trinkgeld erhalten, geordnet nach Anzahl der Spenden"
 
 msgid "Tips Received, by Amount"
 msgstr "Tipps empfangen, um den Betrag"
+
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr "Es scheint so als ob Sie etwas zu löschen versuchen das nicht existiert."
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Sie haben noch Geld auf Ihrem Liberapay Konto. Bitte wählen Sie eine der angegebenen Ausbezahlungsmethoden oder kontaktieren Sie den Support."
@@ -1513,6 +1306,14 @@ msgstr "Kontotyp"
 
 msgid "Close"
 msgstr "Schließen"
+
+#, python-brace-format
+msgid "Your weekly donation to {0} has been stopped."
+msgstr "Ihre wöchentliche Spende {0} wurde beendet."
+
+#, python-brace-format
+msgid "You are now donating {0} per week to {1}. Thank you!"
+msgstr "Sie spenden jetzt {0} pro Woche an {1}. Danke!"
 
 msgid "Export History"
 msgstr "Verlauf exportieren"
@@ -1663,6 +1464,25 @@ msgstr "Warum versuchen Sie, mehr Geld in den Geldbeutel zu setzen ? Bitte konta
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Der Versuch, eine Banküberweisung von {0} vorzubereiten ist gescheitert. Fehlermeldung: {1}"
 
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr "Wir sind bereit das Geld zu erhalten. Bitte senden Sie exakt {0} unter Verwendung des Referenz-Codes (so dass wir es Ihnen zuordnen können) an den folgenden Account:"
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (Internationale Kontonummer)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "Bankleitzahl (BIC : Bank Identifier Code)"
+
+msgid "Wire Reference Code"
+msgstr "Verwendungszweck"
+
+msgid "Bank Account Owner Name"
+msgstr "Bankkonto Besitzername"
+
+msgid "Bank Account Owner Address"
+msgstr "Adresse des Kontobesitzers"
+
 msgid "Email me this information"
 msgstr "Mailen Sie mir diese Informationen"
 
@@ -1671,6 +1491,9 @@ msgstr "Wir werden Ihnen eine E-Mail schicken, sobald wir wissen, ob Ihre Zahlun
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "Sie haben einige oder alle E-Mail-Benachrichtigungen über Banküberweisungen deaktiviert."
+
+msgid "Change your email settings"
+msgstr "Passe Deine Email-Einstellungen an"
 
 msgid "Request in progress, please wait…"
 msgstr "Anfrage läuft, bitte warten…"
@@ -2209,27 +2032,6 @@ msgstr "Sie können ein Team von {0} ihren Team Dashboard {1} verlassen."
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
 msgstr "Tritt ein Mitglied aus einem Team ist noch nicht implementiert. Beweise, dass das Mitglied rausgeschmissen werden muss und dass es Konsens unter den anderen Mitgliedern kontaktieren Sie Support."
 
-msgid "Liberapay provides several ways of finding great people to donate to:"
-msgstr "Liberapay bietet mehrere Möglichkeiten, tolle Leute zu finden, um zu spenden:"
-
-msgid "Explore Communities"
-msgstr "Gemeinschaften erkunden"
-
-msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
-msgstr "Gemeinschaften können Sie Menschen finden, die Arbeit an Dinge, die Sie interessieren. Sie können auch abonnieren ihren Newsletter auf dem Laufenden bleiben."
-
-msgid "Explore Teams"
-msgstr "Teams erkunden"
-
-msgid "A team is a group of users working on a specific project."
-msgstr "Ein Team ist eine Gruppe von Benutzern, die an einem bestimmten Projekt arbeitet."
-
-msgid "Explore Pledges"
-msgstr "Erkunden Sie Zusagen"
-
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
-msgstr "Liberapay können Sie zu verpfänden, um Menschen zu spenden, die die Website noch nicht beigetreten. Die Spende wird automatisch gestartet, wenn sie sich anmelden, um es zu empfangen. Wir senden Ihnen eine Benachrichtigung, wenn das passiert."
-
 msgid "Start a new community"
 msgstr "Starten Sie eine neue community"
 
@@ -2250,6 +2052,27 @@ msgstr "Top Gemeinschaften Ihre Sprache"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "Leider sind wir noch nicht gefunden. Warum beginnen Sie nicht ein?"
+
+msgid "Liberapay provides several ways of finding great people to donate to:"
+msgstr "Liberapay bietet mehrere Möglichkeiten, tolle Leute zu finden, um zu spenden:"
+
+msgid "Explore Communities"
+msgstr "Gemeinschaften erkunden"
+
+msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
+msgstr "Gemeinschaften können Sie Menschen finden, die Arbeit an Dinge, die Sie interessieren. Sie können auch abonnieren ihren Newsletter auf dem Laufenden bleiben."
+
+msgid "Explore Teams"
+msgstr "Teams erkunden"
+
+msgid "A team is a group of users working on a specific project."
+msgstr "Ein Team ist eine Gruppe von Benutzern, die an einem bestimmten Projekt arbeitet."
+
+msgid "Explore Pledges"
+msgstr "Erkunden Sie Zusagen"
+
+msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+msgstr "Liberapay können Sie zu verpfänden, um Menschen zu spenden, die die Website noch nicht beigetreten. Die Spende wird automatisch gestartet, wenn sie sich anmelden, um es zu empfangen. Wir senden Ihnen eine Benachrichtigung, wenn das passiert."
 
 msgid "Recent pledges"
 msgstr "Jüngsten Zusagen"
@@ -2278,16 +2101,6 @@ msgstr[1] "Es gibt {n} Teams auf Liberapay:"
 
 msgid "Create a team"
 msgstr "Ein team erstellen"
-
-msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
-msgstr "Verwenden Sie anstelle von Leerzeichen Unterstriche (_). Alle alphanumerischen Unicode-Zeichen sind erlaubt, sowie Punkte (.) und Bindestriche (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maximale Länge beträgt {0}."
-
-msgid "Language of the name"
-msgstr "Sprache mit dem Namen"
 
 #, python-brace-format
 msgid "{0} community settings"
@@ -2337,88 +2150,151 @@ msgid_plural "{n} subscribers"
 msgstr[0] "{n} Abonnenten"
 msgstr[1] "{n} Abonnenten"
 
-msgid "Please Confirm"
-msgstr "Bitte bestätige"
+msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
+msgstr "Verwenden Sie anstelle von Leerzeichen Unterstriche (_). Alle alphanumerischen Unicode-Zeichen sind erlaubt, sowie Punkte (.) und Bindestriche (-)."
 
 #, python-brace-format
-msgid "{0} is connected to {1} on Liberapay."
-msgstr "{0} ist {1} auf Liberapay verbunden."
+msgid "Maximum length is {0}."
+msgstr "Maximale Länge beträgt {0}."
 
-msgid "Transfer it?"
-msgstr "Es Übertragen ?"
+msgid "Language of the name"
+msgstr "Sprache mit dem Namen"
 
-msgid "How the accounts are now"
-msgstr "Wie sind nun die Konten"
+msgid "Liberapay is a recurrent donations platform."
+msgstr "Liberapay ist eine wiederkehrende Spenden-Plattform."
 
-msgid "How the accounts will be after the transfer"
-msgstr "Wie werden die Konten nach der Übertragung sein"
+msgid "Learn more"
+msgstr "Mehr erfahren"
 
-msgid "Abandoned:"
-msgstr "Aufgegeben:"
-
-msgid "No"
-msgstr "Nein"
+msgid "Follow us"
+msgstr "Folgen Sie uns"
 
 #, python-brace-format
-msgid "{0} returned this error message: {1}"
-msgstr "{0} hat diese Fehlermeldung zuruckgegeben: {1}"
+msgid "We currently have {0} users donating {1} per month."
+msgstr "Wir haben derzeit {0} Benutzer spendet {1} pro Monat."
 
-msgid "Friend Finder"
-msgstr "Freunde finden"
+msgid "Receive"
+msgstr "Erhalten"
 
-#, python-brace-format
-msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0} friends."
-msgstr "Hinweis: Privatsphäre-Einstellungen Liberapay verhindern möglicherweise einige Ihrer {0} Freunde zu sehen."
+msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software?"
+msgstr "Sind Sie ein Schöpfer von commons? Haben Sie freie Kunst, verbreiten freies Wissen, schreiben freie Software machen?"
 
-#, python-brace-format
-msgid "Please refresh your {0} connection to find your friends from there."
-msgstr ""
+msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
+msgstr "Ja? Dann ist Liberapay für Sie! Erstellen Sie Ihr Konto, füllen Sie Ihr Profil, und Fragen Sie Ihr Publikum, Ihre Arbeit finanziell zu unterstützen."
 
-msgid "Refresh"
-msgstr ""
+msgid "Join us"
+msgstr "Begleiten Sie uns"
 
 #, python-brace-format
-msgid "Connect your {0} account to find your friends from there."
-msgstr ""
-
-msgid "Connect"
-msgstr "Verbinden"
-
-msgid "No friends found."
-msgstr "Keine Freunde gefunden."
+msgid "You receive {0} per week."
+msgstr "Du erhältst {0} pro Woche."
 
 #, python-brace-format
-msgid "You have {n} friend on {0}."
-msgid_plural "You have {n} friends on {0}."
-msgstr[0] "Sie haben {n} Freund auf {0}."
-msgstr[1] "Sie haben {n} Freunde auf {0}."
-
-msgid "On Liberapay?"
-msgstr "Auf Liberapay?"
-
-msgid "Receives"
-msgstr "erhält"
-
-msgid "Support"
-msgstr "Support"
-
-msgid "hidden"
-msgstr "versteckt"
+msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
+msgstr "Sie weigern sich Spenden zur Zeit, können Sie das ändern {0} auf Ihrem Profil {1}."
 
 #, python-brace-format
-msgid "{0} doesn't accept donations"
-msgstr "{0} akzeptiert keine Spenden"
+msgid "Congratulations, you have reached your goal of receiving {0} per week!"
+msgstr "Gratulation, Sie haben Ihr Ziel {0} pro Woche zu erhalten erreicht!"
 
-msgid "Which account?"
-msgstr "Welches Konto?"
+msgid "We need to know who you are before we can legally start to collect money for you."
+msgstr "Wir müssen wissen, wer Sie sind bevor wir rechtlich Geld für Sie sammeln können."
+
+msgid "Fill identity form"
+msgstr "Identität-Formular ausfüllen"
+
+msgid "To receive money, do something awesome and then tell people about it:"
+msgstr "Um Geld zu erhalten machen Sie etwas großartiges und erzählen Sie davon:"
 
 #, python-brace-format
-msgid "Please enter the name of the {0} account you would like to connect:"
-msgstr "Bitte geben Sie den Namen des Kontos {0}, die Sie verbinden möchten:"
+msgid "{0}Fill out your profile{1}."
+msgstr "{0} Füllen Sie Ihr Profil aus{1}."
 
 #, python-brace-format
-msgid "{0} username"
-msgstr "{0} Benutzername"
+msgid "{0}Embed our widgets{1} on your blog/website."
+msgstr "{0} Einbinden unserer Widgets {1} auf Ihrem Blog / Webseite."
+
+msgid "Contact the people who benefit from your work and ask them to support you."
+msgstr "Kontaktieren Sie die Menschen, die von Ihrer Arbeit profitieren und sie bitten, Sie zu unterstützen."
+
+msgid "Why use Liberapay?"
+msgstr "Warum Liberapay benutzen ?"
+
+msgid "It's easy"
+msgstr "Es ist einfach"
+
+msgid "Liberapay makes it easy to donate and receive money recurrently, you'll only need a few minutes to get started. No Paypal account needed."
+msgstr "Liberapay macht es einfach, Geld wiederkehrend zu spenden und zu empfangen, werden Sie nur ein paar Minuten brauchen, um zu beginnen. Kein Paypal-Konto erforderlich."
+
+msgid "It's economical"
+msgstr "Es ist ökonomisch"
+
+#, python-brace-format
+msgid "We don't take a cut on your donations, and our {0}payment processor's fees{1} are among the lowest in the world."
+msgstr "Wir nehmen nicht einen Schnitt auf Ihre Spenden und aus {0} Zahlung Prozessor Gebühren {1} gehören zu den niedrigsten in der Welt."
+
+msgid "It's open"
+msgstr "Es ist offen"
+
+#, python-brace-format
+msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
+msgstr "Liberapay ausgeführt wird transparent durch eine {1} Non-Profit-Organisation {0}, seine {2} Quellcode {0} ist öffentlich."
+
+msgid "Sponsors"
+msgstr "Sponsoren"
+
+#, python-brace-format
+msgid "We welcome donations from businesses and nonprofits. If you have any questions, don't hesitate to {0}contact us{1}."
+msgstr "Wir freuen uns über Spenden von Unternehmen und gemeinnützige Organisationen. Wenn Sie Fragen haben, zögern Sie nicht auf {0} Kontakt mit uns auf {1}."
+
+#, python-brace-format
+msgid "We currently have {n} sponsor, this section is our way of thanking them."
+msgid_plural "We currently have {n} sponsors, this section is our way of thanking them."
+msgstr[0] "Wir haben derzeit {n} Sponsor, dieser Abschnitt ist unser Weg, um sie zu danken."
+msgstr[1] "Aktuell haben wir {n} Sponsoren, dieser Abschnitt ist unser Weg, um sie zu danken."
+
+msgid "The list below is rotated pseudorandomly."
+msgstr "Die folgende Liste ist pseudo-zufällig gedreht."
+
+msgid "This section is meant to thank our sponsors, but we don't have any yet. That means your organization could be the first!"
+msgstr "Dieser Abschnitt soll unsere Sponsoren danken, aber wir haben noch keine. Das bedeutet, dass Ihre Organisation die erste sein könnte!"
+
+msgid "Recent Activity"
+msgstr "Neueste Aktivität"
+
+#, python-brace-format
+msgid "Someone created a new team {0} ago."
+msgstr "Ein Benutzer hat ein neues Team vor {0} ergestellt."
+
+#, python-brace-format
+msgid "Someone joined Liberapay {0} ago."
+msgstr "Jemand trat Liberapay bey vor {0}."
+
+#, python-brace-format
+msgid "Someone created a new community {0} ago."
+msgstr "Ein Benutzer hat eine neue Gemeinschaft vor {0} ergestellt ."
+
+#, python-brace-format
+msgid "Payday was run {0} ago and transferred {1}."
+msgstr "Zahltag ausgeführt wurde {0} vor und übertragen {1}."
+
+msgid "Upcoming Features"
+msgstr "Zukünftige Features"
+
+msgid "The ability to list your projects on your profile and link them to the relevant communities."
+msgstr "Die Möglichkeit, Ihre Projekte in Ihrem Profil aufzulisten und zu den entsprechenden Gemeinden verbinden."
+
+msgid "Communication between donors and donees, through project status updates that will also be aggregated into community newsletters."
+msgstr "Die Kommunikation zwischen Spendern und Beschenkten über den Projektstatus Updates, die auch in Gemeinschaft Newsletter angehäuft werden."
+
+msgid "Total giving amount: you'll choose how much you want to give per week, and we'll compute each of your donations accordingly."
+msgstr "Insgesamt geben Menge: Sie entscheiden, wie viel Sie pro Woche geben wollen, und wir werden jede Ihrer Spenden entsprechend berechnen."
+
+msgid "Additional payment methods: SEPA direct debits, more types of cards, other direct debit schemes."
+msgstr "Weitere Zahlungsarten: SEPA-Lastschriften, mehrere Arten von Karten, andere Lastschriftverfahren ."
+
+msgid "and more…"
+msgstr "und vieles mehr…"
 
 #, python-brace-format
 msgid ""
@@ -2526,4 +2402,131 @@ msgstr "aus Liberapay entschieden"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "noch nicht Liberapay beigetreten"
+
+#, python-brace-format
+msgid "{0} returned this error message: {1}"
+msgstr "{0} hat diese Fehlermeldung zuruckgegeben: {1}"
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} gab einen Fehler aus, bitte versuch es später wieder."
+
+msgid "Friend Finder"
+msgstr "Freunde finden"
+
+#, python-brace-format
+msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0} friends."
+msgstr "Hinweis: Privatsphäre-Einstellungen Liberapay verhindern möglicherweise einige Ihrer {0} Freunde zu sehen."
+
+#, python-brace-format
+msgid "Please refresh your {0} connection to find your friends from there."
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+#, python-brace-format
+msgid "Connect your {0} account to find your friends from there."
+msgstr ""
+
+msgid "Connect"
+msgstr "Verbinden"
+
+msgid "No friends found."
+msgstr "Keine Freunde gefunden."
+
+#, python-brace-format
+msgid "You have {n} friend on {0}."
+msgid_plural "You have {n} friends on {0}."
+msgstr[0] "Sie haben {n} Freund auf {0}."
+msgstr[1] "Sie haben {n} Freunde auf {0}."
+
+msgid "On Liberapay?"
+msgstr "Auf Liberapay?"
+
+msgid "Receives"
+msgstr "erhält"
+
+msgid "Support"
+msgstr "Support"
+
+msgid "hidden"
+msgstr "versteckt"
+
+#, python-brace-format
+msgid "{0} doesn't accept donations"
+msgstr "{0} akzeptiert keine Spenden"
+
+msgid "Which account?"
+msgstr "Welches Konto?"
+
+#, python-brace-format
+msgid "Please enter the name of the {0} account you would like to connect:"
+msgstr "Bitte geben Sie den Namen des Kontos {0}, die Sie verbinden möchten:"
+
+#, python-brace-format
+msgid "{0} username"
+msgstr "{0} Benutzername"
+
+msgid "Please Confirm"
+msgstr "Bitte bestätige"
+
+#, python-brace-format
+msgid "{0} is connected to {1} on Liberapay."
+msgstr "{0} ist {1} auf Liberapay verbunden."
+
+msgid "Transfer it?"
+msgstr "Es Übertragen ?"
+
+msgid "How the accounts are now"
+msgstr "Wie sind nun die Konten"
+
+msgid "How the accounts will be after the transfer"
+msgstr "Wie werden die Konten nach der Übertragung sein"
+
+msgid "Abandoned:"
+msgstr "Aufgegeben:"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "Sorry, we didn't find anything matching your query."
+msgstr "Es tut uns leid, wir konnten keine Übereinstimmungen mit Ihrer Suchanfrage finden."
+
+msgid "Whose work do you appreciate?"
+msgstr "Deren Arbeit schätzen Sie?"
+
+msgid "Found a matching username"
+msgid_plural "Found matching usernames"
+msgstr[0] "Gefunden einen falschen Benutzernamen"
+msgstr[1] "Gefunden Benutzernamen"
+
+msgid "Found a matching community name"
+msgid_plural "Found matching community names"
+msgstr[0] "Gefunden eine passende Community-Namen"
+msgstr[1] "Gefunden Community-Namen"
+
+msgid "Found a matching user statement"
+msgid_plural "Found matching user statements"
+msgstr[0] "Gefunden eine passende Benutzeranweisung"
+msgstr[1] "Gefunden passenden Benutzer-Anweisungen"
+
+msgid "Didn't find who you were looking for?"
+msgstr "Haben Sie nicht gefunden wen Sie gesucht haben?"
+
+msgid "You can also pledge to people who haven't joined Liberapay yet:"
+msgstr "Sie können auch die Menschen verpflichten, die Liberapay noch nicht beigetreten sind:"
+
+msgid "Sign Out"
+msgstr "Abmelden"
+
+msgid "Sign Up"
+msgstr "Anmelden"
+
+msgid "Create your account"
+msgstr "Erstellen Sie Ihr Konto"
+
+#, python-brace-format
+msgid "You are already logged in as {0}."
+msgstr "Sie sind bereits eingeloggt als {0}."
 

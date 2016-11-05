@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.2.0\n"
+"Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
 msgstr "Groeten,"
@@ -20,17 +20,11 @@ msgstr "Groeten,"
 msgid "Something not right? Reply to this email for help."
 msgstr "Is er iets mis? Beantwoord deze mail voor hulp."
 
-msgid "Change your email settings"
-msgstr "Uw email-instellingen wijzigen"
-
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Iemand wilt aan u doneren op Liberapay"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "Iemand wilt aan u doneren op Liberapay, maar u moet eerst uw identiteit invullen voor dat ze geld kunnen verzamelen voor jou."
-
-msgid "Fill identity form"
-msgstr "Identiteit formulier invullen"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Als u geen donaties wilt krijgen op Liberapay kan je ze afwijzen door je profiel overeenkomstig te bewerken."
@@ -99,30 +93,8 @@ msgstr "Het is tijd om uw portemonnee te herladen"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Je hebt {0} in je Liberapay portemonnee, maar je hebt op zen minstens {1} nodig om je donaties voor volgende week bedekt te krijgen."
 
-msgid "Add money"
-msgstr "Geld toevoegen"
-
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Bankoverschrijving tot uw Liberapay portemonnee"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "We zijn klaar om de fondsen te ontvangen. Gelieve precies {0} te sturen naar de volgende rekening met de onderstaande referentie code, zodat we weten dat het geld van u kwam:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (International Bank Account Number)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Bank Identifier Code)"
-
-msgid "Wire Reference Code"
-msgstr "Wire Referentie Code"
-
-msgid "Bank Account Owner Name"
-msgstr "Bankrekening eigenaar naam"
-
-msgid "Bank Account Owner Address"
-msgstr "Bankrekening eigenaar adres"
 
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "De overschrijving naar uw Liberapay portemonnee is mislukt"
@@ -133,9 +105,6 @@ msgstr "De poging om de overdracht van {0} van uw bankrekening tot Liberapay is 
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "U kunt het opnieuw proberen, eventueel met een andere betaalmethode, door te klikken op de onderstaande link:"
-
-msgid "Try again"
-msgstr "Probeer opnieuw"
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "De overschrijving naar uw Liberapay portemonnee is geslaagd"
@@ -214,6 +183,9 @@ msgstr "We hebben geprobeerd om {0} uit uw Liberapay portemonnee op uw bankreken
 msgid "You can try again: {0}"
 msgstr "U kunt opnieuw proberen: {0}"
 
+msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
+msgstr ""
+
 msgid "When I receive money"
 msgstr "Als ik geld ontvang"
 
@@ -273,11 +245,15 @@ msgstr "Large ({0})"
 msgid "Maximum ({0})"
 msgstr "Maximum ({0})"
 
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again in {0}."
+msgstr "Je hebt je quota verzoeken verbruikt, kun je het opnieuw proberen in {0}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Je maakt verzoeken te snel, probeer later opnieuw."
+
 msgid "You need to sign in first"
 msgstr "U moet eerst inloggen"
-
-msgid "You need to log in"
-msgstr ""
 
 msgid "You need to provide a username!"
 msgstr "U moet een gebruikersnaam invoeren!"
@@ -335,9 +311,6 @@ msgstr "'{0}' is geen geldige donatie bedrag (min = {1}, max = {2})"
 msgid "The user {0} doesn't accept donations."
 msgstr "De gebruiker {0} accepteert geen donaties."
 
-msgid "It seems you're trying to delete something that doesn't exist."
-msgstr "Het lijkt erop dat u iets probeert te verwijderen wat niet bestaat."
-
 msgid "There isn't enough money in your wallet."
 msgstr "Er is niet genoeg geld in uw portemonnee."
 
@@ -369,17 +342,6 @@ msgstr "het geld niet overbrengen, sorry. Neem contact op met support@liberapay.
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Het is niet toegestaan om dit te doen omdat je account momenteel wordt opgeschort."
-
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "Je hebt je quota verzoeken verbruikt, kun je het opnieuw proberen in {0}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Je maakt verzoeken te snel, probeer later opnieuw."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} resulteert in een foutmelding, probeer het later nog een keer."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
@@ -536,6 +498,9 @@ msgstr "Doorgaan"
 msgid "You're still not logged in as {0}."
 msgstr "Je bent nog altijd niet ingelogd als {0}."
 
+msgid "Try again"
+msgstr "Probeer opnieuw"
+
 msgid "Email address"
 msgstr "E-mailadres"
 
@@ -543,6 +508,9 @@ msgid "Password (optional)"
 msgstr ""
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
+msgstr ""
+
+msgid "You need to log in"
 msgstr ""
 
 msgid "Members"
@@ -608,6 +576,9 @@ msgstr "Ontvangt"
 
 msgid "Wallet"
 msgstr "Portemonnee"
+
+msgid "Add money"
+msgstr "Geld toevoegen"
 
 msgid "Withdraw money"
 msgstr "Geld terugtrekken"
@@ -808,184 +779,11 @@ msgstr "Niet zeker hoe veel te doneren? Hier zijn een aantal veel gebruikte bedr
 msgid "per week"
 msgstr "per week"
 
-msgid "Modify"
-msgstr "Bewerken"
-
 msgid "Pledge"
 msgstr "Doneren"
 
-msgid "Liberapay is a recurrent donations platform."
-msgstr "Librapay is een donatie platform."
-
-msgid "Learn more"
-msgstr "Leer meer"
-
-msgid "Follow us"
-msgstr "Ons volgen"
-
-#, python-brace-format
-msgid "We currently have {0} users donating {1} per month."
-msgstr "We hebben momenteel {0} gebruikers doneert {1} per maand."
-
-msgid "Receive"
-msgstr "Ontvangen"
-
-msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software?"
-msgstr "Bent u een schepper van commons? Maak je vrije kunst, verspreid vrije kennis, schrijf gratis software?"
-
-msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
-msgstr "Ja? Dan is Liberapay voor u! Maak je account, vul je profiel in en vraag uw publiek om je werk financieel te ondersteunen."
-
-msgid "Join us"
-msgstr "Doe met ons mee"
-
-#, python-brace-format
-msgid "You receive {0} per week."
-msgstr "Je ontvangt {0} per week."
-
-#, python-brace-format
-msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
-msgstr "Je bent momenteel weigeren donaties, kunt u instellen dat {0} op je profiel {1}."
-
-#, python-brace-format
-msgid "Congratulations, you have reached your goal of receiving {0} per week!"
-msgstr "Gefeliciteerd, je hebt je doel bereikt om {0} per week te ontvangen!"
-
-msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "We moeten weten wie je bent, voordat we legaal kan beginnen om geld in te zamelen voor je."
-
-msgid "To receive money, do something awesome and then tell people about it:"
-msgstr "Om giften te ontvangen, doe iets geweldigs en vertel er iets over:"
-
-#, python-brace-format
-msgid "{0}Fill out your profile{1}."
-msgstr "{0} Vul je profiel {1}."
-
-#, python-brace-format
-msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr "{0} Embedden onze widgets {1} op uw blog / website."
-
-msgid "Contact the people who benefit from your work and ask them to support you."
-msgstr "Neem contact op met de mensen die profiteren van uw werk en vraag hen om u te ondersteunen."
-
-msgid "Why use Liberapay?"
-msgstr "Waarom Liberapay gebruiken?"
-
-msgid "It's easy"
-msgstr "Het is makkelijk"
-
-msgid "Liberapay makes it easy to donate and receive money recurrently, you'll only need a few minutes to get started. No Paypal account needed."
-msgstr "Liberapay maakt het gemakkelijk om te doneren en geld herhaaldelijk ontvangen, je hoeft alleen maar een paar minuten aan de slag. Geen Paypal-account nodig."
-
-msgid "It's economical"
-msgstr "Het is zuinig"
-
-#, python-brace-format
-msgid "We don't take a cut on your donations, and our {0}payment processor's fees{1} are among the lowest in the world."
-msgstr "Wij hebben geen cut te nemen op uw donaties, en uit {0} payment processor vergoedingen {1} behoren tot de laagste in de wereld."
-
-msgid "It's open"
-msgstr "Het is open"
-
-#, python-brace-format
-msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
-msgstr "Liberapay wordt transparant beheerd door een {1} non-profit organisatie {0}, de {2} broncode {0} is openbaar."
-
-msgid "Sponsors"
-msgstr "sponsors"
-
-#, python-brace-format
-msgid "We welcome donations from businesses and nonprofits. If you have any questions, don't hesitate to {0}contact us{1}."
-msgstr "Wij zijn blij met donaties van bedrijven en non-profitorganisaties. Mocht u nog vragen hebben, aarzel dan niet om {0} contact met ons op {1}."
-
-#, python-brace-format
-msgid "We currently have {n} sponsor, this section is our way of thanking them."
-msgid_plural "We currently have {n} sponsors, this section is our way of thanking them."
-msgstr[0] "Momenteel hebben we {n} geen sponsor, dit gedeelte is onze manier om hen te bedanken."
-msgstr[1] "Momenteel hebben we {n} geen sponsors, dit gedeelte is onze manier om hen te bedanken."
-
-msgid "The list below is rotated pseudorandomly."
-msgstr "De onderstaande lijst is pseudo gedraaid."
-
-msgid "This section is meant to thank our sponsors, but we don't have any yet. That means your organization could be the first!"
-msgstr "Deze sectie is bedoeld om onze sponsors bedanken, maar we hebben geen nog. Dat betekent dat uw organisatie kan de eerste zijn!"
-
-msgid "Recent Activity"
-msgstr "Recente activiteit"
-
-#, python-brace-format
-msgid "Someone created a new team {0} ago."
-msgstr "Iemand creëerde een nieuw team {0} geleden."
-
-#, python-brace-format
-msgid "Someone joined Liberapay {0} ago."
-msgstr "Iemand trad Liberapay {0} geleden."
-
-#, python-brace-format
-msgid "Someone created a new community {0} ago."
-msgstr "Iemand een nieuwe community {0} geleden."
-
-#, python-brace-format
-msgid "Payday was run {0} ago and transferred {1}."
-msgstr "Payday werd {0} geleden gerund en overgebracht {1}."
-
-msgid "Upcoming Features"
-msgstr "Aankomende features"
-
-msgid "The ability to list your projects on your profile and link them to the relevant communities."
-msgstr "De mogelijkheid om uw projecten op je profiel en deze koppelen aan de betrokken gemeenschappen."
-
-msgid "Communication between donors and donees, through project status updates that will also be aggregated into community newsletters."
-msgstr "Communicatie tussen donoren en begiftigden, door middel van project status updates, die ook zullen worden samengevoegd in gemeenschap nieuwsbrieven."
-
-msgid "Total giving amount: you'll choose how much you want to give per week, and we'll compute each of your donations accordingly."
-msgstr "Totaal bedrag geven: je kiezen hoeveel je wilt per week om te geven, en we zullen elk van uw donaties dienovereenkomstig te berekenen."
-
-msgid "Additional payment methods: SEPA direct debits, more types of cards, other direct debit schemes."
-msgstr "Extra betaalmethoden: SEPA domiciliëringen, meer soorten kaarten, andere automatische incasso's."
-
-msgid "and more…"
-msgstr "en meer…"
-
-msgid "Sorry, we didn't find anything matching your query."
-msgstr "Sorry, we hebben niks gevonden wat voldoet aan je zoekopdracht."
-
-msgid "Whose work do you appreciate?"
-msgstr "Wiens werk doe je waarderen ?"
-
-msgid "Found a matching username"
-msgid_plural "Found matching usernames"
-msgstr[0] "De volgende overeenkomende gebruikersnaam is gevonden"
-msgstr[1] "De volgende overeenkomende gebruikersnamen zijn gevonden"
-
-msgid "Found a matching community name"
-msgid_plural "Found matching community names"
-msgstr[0] "De volgende overeenkomende gemeenschap is gevonden"
-msgstr[1] "De volgende overeenkomende gemeenschappen zijn gevonden"
-
-msgid "Found a matching user statement"
-msgid_plural "Found matching user statements"
-msgstr[0] "De volgende overeenkomende gebruikersverklaring is gevonden"
-msgstr[1] "De volgende overeenkomende gebruikersverklaringen zijn gevonden"
-
-msgid "Didn't find who you were looking for?"
-msgstr "Niet gevonden wie je zocht ?"
-
-msgid "You can also pledge to people who haven't joined Liberapay yet:"
-msgstr "U kunt ook beloven om mensen die nog niet zijn toegetreden Liberapay:"
-
-msgid "Sign Out"
-msgstr "Uitloggen"
-
-msgid "Sign Up"
-msgstr "aanmelden"
-
-msgid "Create your account"
-msgstr "Maak een account aan"
-
-#, python-brace-format
-msgid "You are already logged in as {0}."
-msgstr "Je bent al aangemeld als {0}."
+msgid "Modify"
+msgstr "Bewerken"
 
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
@@ -1117,59 +915,6 @@ msgstr "Avatar e-mail (voor Libravatar only)"
 
 msgid "Privacy"
 msgstr "Privacy"
-
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"Let op: als je dit doet, dan worden alle giften die je momenteel ontvangt verwijderd.\n"
-"\n"
-"Dit kan niet ongedaan worden gemaakt!"
-
-msgid "You haven't filled all the required fields."
-msgstr "Je hebt niet gevuld alle verplichte velden."
-
-msgid "Invalid date of birth."
-msgstr "Geboortedatum is ongeldig."
-
-msgid "You have to agree to MangoPay's Terms of Service."
-msgstr "Je moet akkoord gaan voorbehoud van MangoPay."
-
-msgid "Income history"
-msgstr "inkomen geschiedenis"
-
-msgid "JavaScript is required"
-msgstr "JavaScript is nodig"
-
-msgid "No data to show."
-msgstr "Er geen gegevens."
-
-msgid "View income history"
-msgstr "Bekijk inkomen geschiedenis"
-
-msgid "Euros Received Per Week"
-msgstr "Euro ontvangen per week"
-
-msgid "weeks"
-msgstr "weken"
-
-msgid "Number of Patrons Per Week"
-msgstr "Aantal patroons per week"
-
-msgid "Mark all notifications as read"
-msgstr "Markeer alle meldingen als gelezen"
-
-msgid "No notifications to show."
-msgstr "Geen meldingen om te laten zien."
-
-#, python-brace-format
-msgid "Your weekly donation to {0} has been stopped."
-msgstr "Uw wekelijkse donatie aan {0} is gestopt."
-
-#, python-brace-format
-msgid "You are now donating {0} per week to {1}. Thank you!"
-msgstr "U bent nu doneren {0} per week naar {1}. Dank je !"
 
 msgid "Email settings"
 msgstr "E-mailinstellingen"
@@ -1336,6 +1081,24 @@ msgstr "in de afgelopen 30 dagen"
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"Let op: als je dit doet, dan worden alle giften die je momenteel ontvangt verwijderd.\n"
+"\n"
+"Dit kan niet ongedaan worden gemaakt!"
+
+msgid "You haven't filled all the required fields."
+msgstr "Je hebt niet gevuld alle verplichte velden."
+
+msgid "Invalid date of birth."
+msgstr "Geboortedatum is ongeldig."
+
+msgid "You have to agree to MangoPay's Terms of Service."
+msgstr "Je moet akkoord gaan voorbehoud van MangoPay."
+
 msgid "Income Shares"
 msgstr "inkomen aandelen"
 
@@ -1360,6 +1123,27 @@ msgstr "Uw deel van de opbrengst is {0} (het is niet mogelijk om deze week meer 
 #, python-brace-format
 msgid "Your take is now {0}."
 msgstr "Uw deel van de opbrengst is {0}."
+
+msgid "Income history"
+msgstr "inkomen geschiedenis"
+
+msgid "JavaScript is required"
+msgstr "JavaScript is nodig"
+
+msgid "No data to show."
+msgstr "Er geen gegevens."
+
+msgid "View income history"
+msgstr "Bekijk inkomen geschiedenis"
+
+msgid "Euros Received Per Week"
+msgstr "Euro ontvangen per week"
+
+msgid "weeks"
+msgstr "weken"
+
+msgid "Number of Patrons Per Week"
+msgstr "Aantal patroons per week"
 
 msgid "You are not invited to join this team."
 msgstr "U bent niet uitgenodigd voor dit team te versterken."
@@ -1404,6 +1188,12 @@ msgstr "Weet je zeker dat je dit team wilt verlaten?"
 msgid "You are now a member of the team."
 msgstr "Je bent nu een lid van het team."
 
+msgid "Mark all notifications as read"
+msgstr "Markeer alle meldingen als gelezen"
+
+msgid "No notifications to show."
+msgstr "Geen meldingen om te laten zien."
+
 msgid "Bank Wire"
 msgstr "bankoverschrijving"
 
@@ -1438,6 +1228,9 @@ msgstr "Fooien ontvangen, per aantal fooien"
 
 msgid "Tips Received, by Amount"
 msgstr "Tips Ontvangen door Bedrag"
+
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr "Het lijkt erop dat u iets probeert te verwijderen wat niet bestaat."
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Er staat nog geld op deze Liberapay account, kies alsjeblieft een methode voor uitbetaling of neem contact op met onze support afdeling."
@@ -1513,6 +1306,14 @@ msgstr "Type account"
 
 msgid "Close"
 msgstr "Sluit"
+
+#, python-brace-format
+msgid "Your weekly donation to {0} has been stopped."
+msgstr "Uw wekelijkse donatie aan {0} is gestopt."
+
+#, python-brace-format
+msgid "You are now donating {0} per week to {1}. Thank you!"
+msgstr "U bent nu doneren {0} per week naar {1}. Dank je !"
 
 msgid "Export History"
 msgstr "Exporteer geschiedenis"
@@ -1664,6 +1465,25 @@ msgstr "Waarom bent u proberen om meer geld in uw portemonnee? Neem contact op m
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "De poging om een overschrijving van {0} te bereiden is mislukt. Foutmelding: {1}"
 
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr "We zijn klaar om de fondsen te ontvangen. Gelieve precies {0} te sturen naar de volgende rekening met de onderstaande referentie code, zodat we weten dat het geld van u kwam:"
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (International Bank Account Number)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Bank Identifier Code)"
+
+msgid "Wire Reference Code"
+msgstr "Wire Referentie Code"
+
+msgid "Bank Account Owner Name"
+msgstr "Bankrekening eigenaar naam"
+
+msgid "Bank Account Owner Address"
+msgstr "Bankrekening eigenaar adres"
+
 msgid "Email me this information"
 msgstr "E-mail mij deze informatie"
 
@@ -1672,6 +1492,9 @@ msgstr "Wij sturen je een e-mail zodra we weten of uw betaling is gelukt of misl
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "U hebt sommige of alle e-mailberichten over bank draden uitgeschakeld."
+
+msgid "Change your email settings"
+msgstr "Uw email-instellingen wijzigen"
 
 msgid "Request in progress, please wait…"
 msgstr "Verzoek aan de gang, even geduld …"
@@ -2209,27 +2032,6 @@ msgstr "U kunt een team uit het dashboard van {0} uw team {1} te verlaten."
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
 msgstr "Kicking een lid van een team is nog niet geïmplementeerd. Neem contact op met ondersteuning bij het bewijs dat het lid moet worden gegooid en dat er consensus over dat onder de andere leden."
 
-msgid "Liberapay provides several ways of finding great people to donate to:"
-msgstr "Liberapay biedt meerdere manieren van het vinden van goede mensen om te doneren aan:"
-
-msgid "Explore Communities"
-msgstr "Verken de gemeenschappen"
-
-msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
-msgstr "Gemeenschappen toelaten om mensen die werken op de dingen waar je om geeft te vinden. U kunt zich ook abonneren op hun nieuwsbrieven om op de hoogte te blijven."
-
-msgid "Explore Teams"
-msgstr "Verken de teams"
-
-msgid "A team is a group of users working on a specific project."
-msgstr "Een team is een groep van gebruikers die werken aan een specifiek project."
-
-msgid "Explore Pledges"
-msgstr "Verken de beloften"
-
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
-msgstr "Liberapay kunt u beloven om te doneren aan mensen die nog niet zijn toegetreden tot de site. De donatie wordt automatisch gestart als ze zich aanmelden om het te ontvangen. Wij zullen u een melding sturen wanneer dat gebeurt."
-
 msgid "Start a new community"
 msgstr "Start een nieuwe gemeenschap"
 
@@ -2252,6 +2054,27 @@ msgstr "Actieve communities in uw taal"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "Sorry, we hebben niet gevonden geen. Waarom ga je niet een te beginnen ?"
+
+msgid "Liberapay provides several ways of finding great people to donate to:"
+msgstr "Liberapay biedt meerdere manieren van het vinden van goede mensen om te doneren aan:"
+
+msgid "Explore Communities"
+msgstr "Verken de gemeenschappen"
+
+msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
+msgstr "Gemeenschappen toelaten om mensen die werken op de dingen waar je om geeft te vinden. U kunt zich ook abonneren op hun nieuwsbrieven om op de hoogte te blijven."
+
+msgid "Explore Teams"
+msgstr "Verken de teams"
+
+msgid "A team is a group of users working on a specific project."
+msgstr "Een team is een groep van gebruikers die werken aan een specifiek project."
+
+msgid "Explore Pledges"
+msgstr "Verken de beloften"
+
+msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+msgstr "Liberapay kunt u beloven om te doneren aan mensen die nog niet zijn toegetreden tot de site. De donatie wordt automatisch gestart als ze zich aanmelden om het te ontvangen. Wij zullen u een melding sturen wanneer dat gebeurt."
 
 msgid "Recent pledges"
 msgstr "Recente beloften"
@@ -2280,16 +2103,6 @@ msgstr[1] "Er zijn {n} teams op Liberapay:"
 
 msgid "Create a team"
 msgstr "Maak een team"
-
-msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
-msgstr "Gebruik underscores (_) in plaats van spaties. Alle Unicode alfanumerieke karakters zijn toegestaan, alsmede punten en streepjes (.) (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maximale lengte is {0}."
-
-msgid "Language of the name"
-msgstr "Taal van de naam"
 
 #, python-brace-format
 msgid "{0} community settings"
@@ -2339,88 +2152,151 @@ msgid_plural "{n} subscribers"
 msgstr[0] "{n} abonnee"
 msgstr[1] "{n} abonnees"
 
-msgid "Please Confirm"
-msgstr "Bevestigen alstublieft"
+msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
+msgstr "Gebruik underscores (_) in plaats van spaties. Alle Unicode alfanumerieke karakters zijn toegestaan, alsmede punten en streepjes (.) (-)."
 
 #, python-brace-format
-msgid "{0} is connected to {1} on Liberapay."
-msgstr "{0} is verbonden met {1} op Liberapay."
+msgid "Maximum length is {0}."
+msgstr "Maximale lengte is {0}."
 
-msgid "Transfer it?"
-msgstr "Overmaken?"
+msgid "Language of the name"
+msgstr "Taal van de naam"
 
-msgid "How the accounts are now"
-msgstr "Huidige staat van de account"
+msgid "Liberapay is a recurrent donations platform."
+msgstr "Librapay is een donatie platform."
 
-msgid "How the accounts will be after the transfer"
-msgstr "Staat van de account na de overboeking"
+msgid "Learn more"
+msgstr "Leer meer"
 
-msgid "Abandoned:"
-msgstr "Verlaten:"
-
-msgid "No"
-msgstr "Nee"
+msgid "Follow us"
+msgstr "Ons volgen"
 
 #, python-brace-format
-msgid "{0} returned this error message: {1}"
-msgstr "{0} keerde deze foutmelding: {1}"
+msgid "We currently have {0} users donating {1} per month."
+msgstr "We hebben momenteel {0} gebruikers doneert {1} per maand."
 
-msgid "Friend Finder"
-msgstr "Vriendenzoeker"
+msgid "Receive"
+msgstr "Ontvangen"
 
-#, python-brace-format
-msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0} friends."
-msgstr "Let op: privacy-instellingen kan het voorkomen dat Liberapay van het zien van een aantal van uw {0} vrienden."
+msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software?"
+msgstr "Bent u een schepper van commons? Maak je vrije kunst, verspreid vrije kennis, schrijf gratis software?"
 
-#, python-brace-format
-msgid "Please refresh your {0} connection to find your friends from there."
-msgstr ""
+msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
+msgstr "Ja? Dan is Liberapay voor u! Maak je account, vul je profiel in en vraag uw publiek om je werk financieel te ondersteunen."
 
-msgid "Refresh"
-msgstr ""
+msgid "Join us"
+msgstr "Doe met ons mee"
 
 #, python-brace-format
-msgid "Connect your {0} account to find your friends from there."
-msgstr ""
-
-msgid "Connect"
-msgstr "Verbinden"
-
-msgid "No friends found."
-msgstr "Geen vrienden gevonden."
+msgid "You receive {0} per week."
+msgstr "Je ontvangt {0} per week."
 
 #, python-brace-format
-msgid "You have {n} friend on {0}."
-msgid_plural "You have {n} friends on {0}."
-msgstr[0] "Je hebt {n} vriend op {0}."
-msgstr[1] "Je hebt {n} geen vrienden op {0}."
-
-msgid "On Liberapay?"
-msgstr "Op Liberapay?"
-
-msgid "Receives"
-msgstr "Ontvangt"
-
-msgid "Support"
-msgstr "Ondersteuning"
-
-msgid "hidden"
-msgstr "verborgen"
+msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
+msgstr "Je bent momenteel weigeren donaties, kunt u instellen dat {0} op je profiel {1}."
 
 #, python-brace-format
-msgid "{0} doesn't accept donations"
-msgstr "{0} niet donaties accepteert"
+msgid "Congratulations, you have reached your goal of receiving {0} per week!"
+msgstr "Gefeliciteerd, je hebt je doel bereikt om {0} per week te ontvangen!"
 
-msgid "Which account?"
-msgstr "Welk account ?"
+msgid "We need to know who you are before we can legally start to collect money for you."
+msgstr "We moeten weten wie je bent, voordat we legaal kan beginnen om geld in te zamelen voor je."
+
+msgid "Fill identity form"
+msgstr "Identiteit formulier invullen"
+
+msgid "To receive money, do something awesome and then tell people about it:"
+msgstr "Om giften te ontvangen, doe iets geweldigs en vertel er iets over:"
 
 #, python-brace-format
-msgid "Please enter the name of the {0} account you would like to connect:"
-msgstr "Vul de naam van de {0} account die u wilt verbinden:"
+msgid "{0}Fill out your profile{1}."
+msgstr "{0} Vul je profiel {1}."
 
 #, python-brace-format
-msgid "{0} username"
-msgstr "{0} gebruikersnaam"
+msgid "{0}Embed our widgets{1} on your blog/website."
+msgstr "{0} Embedden onze widgets {1} op uw blog / website."
+
+msgid "Contact the people who benefit from your work and ask them to support you."
+msgstr "Neem contact op met de mensen die profiteren van uw werk en vraag hen om u te ondersteunen."
+
+msgid "Why use Liberapay?"
+msgstr "Waarom Liberapay gebruiken?"
+
+msgid "It's easy"
+msgstr "Het is makkelijk"
+
+msgid "Liberapay makes it easy to donate and receive money recurrently, you'll only need a few minutes to get started. No Paypal account needed."
+msgstr "Liberapay maakt het gemakkelijk om te doneren en geld herhaaldelijk ontvangen, je hoeft alleen maar een paar minuten aan de slag. Geen Paypal-account nodig."
+
+msgid "It's economical"
+msgstr "Het is zuinig"
+
+#, python-brace-format
+msgid "We don't take a cut on your donations, and our {0}payment processor's fees{1} are among the lowest in the world."
+msgstr "Wij hebben geen cut te nemen op uw donaties, en uit {0} payment processor vergoedingen {1} behoren tot de laagste in de wereld."
+
+msgid "It's open"
+msgstr "Het is open"
+
+#, python-brace-format
+msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
+msgstr "Liberapay wordt transparant beheerd door een {1} non-profit organisatie {0}, de {2} broncode {0} is openbaar."
+
+msgid "Sponsors"
+msgstr "sponsors"
+
+#, python-brace-format
+msgid "We welcome donations from businesses and nonprofits. If you have any questions, don't hesitate to {0}contact us{1}."
+msgstr "Wij zijn blij met donaties van bedrijven en non-profitorganisaties. Mocht u nog vragen hebben, aarzel dan niet om {0} contact met ons op {1}."
+
+#, python-brace-format
+msgid "We currently have {n} sponsor, this section is our way of thanking them."
+msgid_plural "We currently have {n} sponsors, this section is our way of thanking them."
+msgstr[0] "Momenteel hebben we {n} geen sponsor, dit gedeelte is onze manier om hen te bedanken."
+msgstr[1] "Momenteel hebben we {n} geen sponsors, dit gedeelte is onze manier om hen te bedanken."
+
+msgid "The list below is rotated pseudorandomly."
+msgstr "De onderstaande lijst is pseudo gedraaid."
+
+msgid "This section is meant to thank our sponsors, but we don't have any yet. That means your organization could be the first!"
+msgstr "Deze sectie is bedoeld om onze sponsors bedanken, maar we hebben geen nog. Dat betekent dat uw organisatie kan de eerste zijn!"
+
+msgid "Recent Activity"
+msgstr "Recente activiteit"
+
+#, python-brace-format
+msgid "Someone created a new team {0} ago."
+msgstr "Iemand creëerde een nieuw team {0} geleden."
+
+#, python-brace-format
+msgid "Someone joined Liberapay {0} ago."
+msgstr "Iemand trad Liberapay {0} geleden."
+
+#, python-brace-format
+msgid "Someone created a new community {0} ago."
+msgstr "Iemand een nieuwe community {0} geleden."
+
+#, python-brace-format
+msgid "Payday was run {0} ago and transferred {1}."
+msgstr "Payday werd {0} geleden gerund en overgebracht {1}."
+
+msgid "Upcoming Features"
+msgstr "Aankomende features"
+
+msgid "The ability to list your projects on your profile and link them to the relevant communities."
+msgstr "De mogelijkheid om uw projecten op je profiel en deze koppelen aan de betrokken gemeenschappen."
+
+msgid "Communication between donors and donees, through project status updates that will also be aggregated into community newsletters."
+msgstr "Communicatie tussen donoren en begiftigden, door middel van project status updates, die ook zullen worden samengevoegd in gemeenschap nieuwsbrieven."
+
+msgid "Total giving amount: you'll choose how much you want to give per week, and we'll compute each of your donations accordingly."
+msgstr "Totaal bedrag geven: je kiezen hoeveel je wilt per week om te geven, en we zullen elk van uw donaties dienovereenkomstig te berekenen."
+
+msgid "Additional payment methods: SEPA direct debits, more types of cards, other direct debit schemes."
+msgstr "Extra betaalmethoden: SEPA domiciliëringen, meer soorten kaarten, andere automatische incasso's."
+
+msgid "and more…"
+msgstr "en meer…"
 
 #, python-brace-format
 msgid ""
@@ -2528,4 +2404,131 @@ msgstr "opted out uit Liberapay"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "is nog geen lid geworden van Liberapay"
+
+#, python-brace-format
+msgid "{0} returned this error message: {1}"
+msgstr "{0} keerde deze foutmelding: {1}"
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} resulteert in een foutmelding, probeer het later nog een keer."
+
+msgid "Friend Finder"
+msgstr "Vriendenzoeker"
+
+#, python-brace-format
+msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0} friends."
+msgstr "Let op: privacy-instellingen kan het voorkomen dat Liberapay van het zien van een aantal van uw {0} vrienden."
+
+#, python-brace-format
+msgid "Please refresh your {0} connection to find your friends from there."
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+#, python-brace-format
+msgid "Connect your {0} account to find your friends from there."
+msgstr ""
+
+msgid "Connect"
+msgstr "Verbinden"
+
+msgid "No friends found."
+msgstr "Geen vrienden gevonden."
+
+#, python-brace-format
+msgid "You have {n} friend on {0}."
+msgid_plural "You have {n} friends on {0}."
+msgstr[0] "Je hebt {n} vriend op {0}."
+msgstr[1] "Je hebt {n} geen vrienden op {0}."
+
+msgid "On Liberapay?"
+msgstr "Op Liberapay?"
+
+msgid "Receives"
+msgstr "Ontvangt"
+
+msgid "Support"
+msgstr "Ondersteuning"
+
+msgid "hidden"
+msgstr "verborgen"
+
+#, python-brace-format
+msgid "{0} doesn't accept donations"
+msgstr "{0} niet donaties accepteert"
+
+msgid "Which account?"
+msgstr "Welk account ?"
+
+#, python-brace-format
+msgid "Please enter the name of the {0} account you would like to connect:"
+msgstr "Vul de naam van de {0} account die u wilt verbinden:"
+
+#, python-brace-format
+msgid "{0} username"
+msgstr "{0} gebruikersnaam"
+
+msgid "Please Confirm"
+msgstr "Bevestigen alstublieft"
+
+#, python-brace-format
+msgid "{0} is connected to {1} on Liberapay."
+msgstr "{0} is verbonden met {1} op Liberapay."
+
+msgid "Transfer it?"
+msgstr "Overmaken?"
+
+msgid "How the accounts are now"
+msgstr "Huidige staat van de account"
+
+msgid "How the accounts will be after the transfer"
+msgstr "Staat van de account na de overboeking"
+
+msgid "Abandoned:"
+msgstr "Verlaten:"
+
+msgid "No"
+msgstr "Nee"
+
+msgid "Sorry, we didn't find anything matching your query."
+msgstr "Sorry, we hebben niks gevonden wat voldoet aan je zoekopdracht."
+
+msgid "Whose work do you appreciate?"
+msgstr "Wiens werk doe je waarderen ?"
+
+msgid "Found a matching username"
+msgid_plural "Found matching usernames"
+msgstr[0] "De volgende overeenkomende gebruikersnaam is gevonden"
+msgstr[1] "De volgende overeenkomende gebruikersnamen zijn gevonden"
+
+msgid "Found a matching community name"
+msgid_plural "Found matching community names"
+msgstr[0] "De volgende overeenkomende gemeenschap is gevonden"
+msgstr[1] "De volgende overeenkomende gemeenschappen zijn gevonden"
+
+msgid "Found a matching user statement"
+msgid_plural "Found matching user statements"
+msgstr[0] "De volgende overeenkomende gebruikersverklaring is gevonden"
+msgstr[1] "De volgende overeenkomende gebruikersverklaringen zijn gevonden"
+
+msgid "Didn't find who you were looking for?"
+msgstr "Niet gevonden wie je zocht ?"
+
+msgid "You can also pledge to people who haven't joined Liberapay yet:"
+msgstr "U kunt ook beloven om mensen die nog niet zijn toegetreden Liberapay:"
+
+msgid "Sign Out"
+msgstr "Uitloggen"
+
+msgid "Sign Up"
+msgstr "aanmelden"
+
+msgid "Create your account"
+msgstr "Maak een account aan"
+
+#, python-brace-format
+msgid "You are already logged in as {0}."
+msgstr "Je bent al aangemeld als {0}."
 
