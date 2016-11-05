@@ -8,7 +8,7 @@ from liberapay.billing.exchanges import repr_exception, ResponseException
 from liberapay.utils import get_participant
 
 EPOCH = datetime(1970, 1, 1)
-KEYS_NATURAL = 'FirstName LastName CountryOfResidence Nationality'.split()
+KEYS_NATURAL = 'FirstName LastName CountryOfResidence Nationality Birthday'.split()
 KEYS_LEGAL = ['Name', 'LegalPersonType'] + ['LegalRepresentative'+k for k in KEYS_NATURAL]
 
 [---]
@@ -37,13 +37,6 @@ if request.method == 'POST':
         account.Tag = website.canonical_url + '/~%i/' % participant.id
 
     account.Email = participant.email or participant.get_any_email()
-    for k in keys:
-        v = body.get(k)
-        if v:
-            setattr(account, k, v)
-        else:
-            error = _("You haven't filled all the required fields.")
-            break
 
     dob = body.get(p+'Birthday', '')
     if dob:
@@ -52,9 +45,17 @@ if request.method == 'POST':
             # the above raises ValueError if the number of parts isn't 3
             # or if any part isn't an integer
             dt = datetime(year, month, day)
-            setattr(account, p+'Birthday', (dt - EPOCH).total_seconds())
+            body[p+'Birthday'] = (dt - EPOCH).total_seconds()
         except ValueError:
             error = _("Invalid date of birth.")
+
+    for k in keys:
+        v = body.get(k)
+        if v:
+            setattr(account, k, v)
+        else:
+            error = _("You haven't filled all the required fields.")
+            break
 
     if not error:
         try:
