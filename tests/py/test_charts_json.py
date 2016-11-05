@@ -120,6 +120,19 @@ class TestChartsJson(FakeTransfersHarness):
 
         assert actual == expected
 
+    def test_charts_work_for_teams(self):
+        team = self.make_participant('team', kind='group')
+        team.set_take_for(self.carl, 1, team)
+        self.alice.set_tip_to(team, '0.30')
+        self.bob.set_tip_to(team, '0.59')
+
+        self.run_payday()
+
+        expected = [{"date": today(), "npatrons": 2, "receipts": 0.89}]
+        actual = json.loads(self.client.GET('/team/charts.json').text)
+
+        assert actual == expected
+
     def test_transfer_volume(self):
         self.run_payday()
         self.run_payday()
