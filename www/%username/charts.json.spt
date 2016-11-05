@@ -46,7 +46,7 @@ transfers = website.db.all("""\
         , amount
         , tipper
      FROM transfers
-    WHERE tippee=%s
+    WHERE %s IN (tippee, team)
       AND status = 'succeeded'
  ORDER BY id DESC
 
