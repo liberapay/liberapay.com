@@ -19,10 +19,14 @@ title = _("Legal")
 <h3 id="info">{{ _("Legal Information") }}</h3>
 
 <p>{{ _(
-    "This website is managed by Liberapay, a non-profit organization founded in 2015 and legally registered in France.\n"
-    "Its publication director is Liberapay's legal representative, {0}.",
-    "Charly Coste"
-).replace('\n', '<br>'|safe) }}</p>
+    "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+) }}</p>
+
+<p>{{ _(
+    "Liberapay is registered as a distributor of e-money in the European Union. "
+    "With the help of our partners we monitor transactions for possible fraud, money "
+    "laundering, and terrorism financing, as required by financial regulations."
+) }}</p>
 
 <p><a class="btn btn-primary" href="/about/contact">{{ _("Contact Us") }}</a></p>
 
@@ -35,6 +39,8 @@ title = _("Legal")
 Red Hat Inc<br>100 E. Davie Street<br>Raleigh, NC 27601<br>USA<br><br>
 {{ _("Phone number: {0}", "+1 888 733 428 1") }}
 </blockquote>
+
+<p>{{ _("The publication director is Liberapay's legal representative, currently {0}.", "Charly Coste") }}</p>
 
 <h3 id="terms">{{ _("Terms of Service") }}</h3>
 
