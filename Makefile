@@ -94,7 +94,11 @@ pytest-profiling: $(env)
 	PYTHONPATH=. LIBERAPAY_PROFILING=yes $(py_test) -k $${k-TestPerformance} --profile-svg ./tests/py/
 
 _i18n_extract: $(env)
-	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot --sort-by-file _i18n_warning.html emails liberapay simplates templates www *.spt
+	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot --sort-by-file $$(\
+		git ls-files | \
+		grep -E '^(liberapay/.+\.py|.+\.(spt|html))$$' | \
+		python -c "import sys; print(*sorted(sys.stdin, key=lambda l: l.rsplit('/', 1)))" \
+	)
 	@PYTHONPATH=. $(env_bin)/python cli/po-tools.py reflag i18n/core.pot
 	@for f in i18n/*/*.po; do \
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
