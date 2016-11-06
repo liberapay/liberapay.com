@@ -227,24 +227,24 @@ msgid "Prevent my profile from being listed on Liberapay."
 msgstr "Empêcher mon profil d'être listé sur Liberapay."
 
 #, python-brace-format
-msgid "Symbolic ({0})"
-msgstr "Symbolique ({0})"
+msgid "Symbolic ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Small ({0})"
-msgstr "Petit ({0})"
+msgid "Small ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Medium ({0})"
-msgstr "Moyen ({0})"
+msgid "Medium ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Large ({0})"
-msgstr "Grand ({0})"
+msgid "Large ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Maximum ({0})"
-msgstr "Maximum ({0})"
+msgid "Maximum ({0} per week)"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
@@ -305,8 +305,16 @@ msgid "There is no user named {0}."
 msgstr "Il n'y a pas d'utilisateur nommé {0}."
 
 #, python-brace-format
-msgid "'{0}' is not a valid donation amount (min={1}, max={2})"
-msgstr "'{0}' n'est pas un montant de don valide (min = {1}, max = {2})"
+msgid "'{0}' is not a valid weekly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid monthly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid yearly donation amount (min={1}, max={2})"
+msgstr ""
 
 #, python-brace-format
 msgid "The user {0} doesn't accept donations."
@@ -780,6 +788,12 @@ msgstr "Vous ne savez pas trop combien donner ? Voici quelques montants standar
 msgid "per week"
 msgstr "par semaine"
 
+msgid "per month"
+msgstr ""
+
+msgid "per year"
+msgstr ""
+
 msgid "Pledge"
 msgstr "Promettre"
 
@@ -1061,6 +1075,10 @@ msgstr "Modifié"
 msgid "Active?"
 msgstr "Actif ?"
 
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr ""
+
 msgid "No: the donee hasn't filled the identity form"
 msgstr "Non : le bénéficiaire ne s'est pas identifié"
 
@@ -1091,11 +1109,11 @@ msgstr ""
 "\n"
 "Vous ne pourrez pas les récupérer si vous changez d'avis !"
 
-msgid "You haven't filled all the required fields."
-msgstr "Vous n'avez pas rempli tous les champs obligatoires."
-
 msgid "Invalid date of birth."
 msgstr "Cette date de naissance est invalide."
+
+msgid "You haven't filled all the required fields."
+msgstr "Vous n'avez pas rempli tous les champs obligatoires."
 
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "Vous devez accepter les conditions d'utilisation de MangoPay."
@@ -1309,12 +1327,23 @@ msgid "Close"
 msgstr "Fermer"
 
 #, python-brace-format
-msgid "Your weekly donation to {0} has been stopped."
-msgstr "Votre don hebdomadaire à {0} est arrêté."
-
-#, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
 msgstr "Vous donnez désormais {0} par semaine à {1}. Merci !"
+
+#, python-brace-format
+msgid "You are now donating {0} per month to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "You are now donating {0} per year to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {0} has been stopped."
+msgstr ""
+
+msgid "period"
+msgstr ""
 
 msgid "Export History"
 msgstr "Exporter l'historique"
@@ -1858,11 +1887,11 @@ msgstr "Liberapay est une association à but non lucratif {0}fondée en France e
 msgid "Legal Information"
 msgstr "Informations légales"
 
-#, python-brace-format
-msgid ""
-"This website is managed by Liberapay, a non-profit organization founded in 2015 and legally registered in France.\n"
-"Its publication director is Liberapay's legal representative, {0}."
-msgstr "Ce site est géré par Liberapay, une association à but non lucratif fondée en 2015 et légalement enregistrée en France. Son directeur de publication est le représentant légal de Liberapay, {0}."
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+msgstr ""
+
+msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
+msgstr ""
 
 msgid "Postal address:"
 msgstr "Adresse postale :"
@@ -1874,6 +1903,10 @@ msgstr "Ce site est hébergé sur {0} par :"
 #, python-brace-format
 msgid "Phone number: {0}"
 msgstr "Numéro de téléphone : {0}"
+
+#, python-brace-format
+msgid "The publication director is Liberapay's legal representative, currently {0}."
+msgstr ""
 
 msgid "Terms of Service"
 msgstr "Conditions d'utilisation du service"

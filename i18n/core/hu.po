@@ -227,23 +227,23 @@ msgid "Prevent my profile from being listed on Liberapay."
 msgstr ""
 
 #, python-brace-format
-msgid "Symbolic ({0})"
+msgid "Symbolic ({0} per week)"
 msgstr ""
 
 #, python-brace-format
-msgid "Small ({0})"
+msgid "Small ({0} per week)"
 msgstr ""
 
 #, python-brace-format
-msgid "Medium ({0})"
+msgid "Medium ({0} per week)"
 msgstr ""
 
 #, python-brace-format
-msgid "Large ({0})"
+msgid "Large ({0} per week)"
 msgstr ""
 
 #, python-brace-format
-msgid "Maximum ({0})"
+msgid "Maximum ({0} per week)"
 msgstr ""
 
 #, python-brace-format
@@ -305,7 +305,15 @@ msgid "There is no user named {0}."
 msgstr ""
 
 #, python-brace-format
-msgid "'{0}' is not a valid donation amount (min={1}, max={2})"
+msgid "'{0}' is not a valid weekly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid monthly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid yearly donation amount (min={1}, max={2})"
 msgstr ""
 
 #, python-brace-format
@@ -778,6 +786,12 @@ msgstr ""
 msgid "per week"
 msgstr ""
 
+msgid "per month"
+msgstr ""
+
+msgid "per year"
+msgstr ""
+
 msgid "Pledge"
 msgstr ""
 
@@ -1058,6 +1072,10 @@ msgstr ""
 msgid "Active?"
 msgstr ""
 
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr ""
+
 msgid "No: the donee hasn't filled the identity form"
 msgstr ""
 
@@ -1085,10 +1103,10 @@ msgid ""
 "That cannot be undone!"
 msgstr ""
 
-msgid "You haven't filled all the required fields."
+msgid "Invalid date of birth."
 msgstr ""
 
-msgid "Invalid date of birth."
+msgid "You haven't filled all the required fields."
 msgstr ""
 
 msgid "You have to agree to MangoPay's Terms of Service."
@@ -1303,11 +1321,22 @@ msgid "Close"
 msgstr ""
 
 #, python-brace-format
-msgid "Your weekly donation to {0} has been stopped."
+msgid "You are now donating {0} per week to {1}. Thank you!"
 msgstr ""
 
 #, python-brace-format
-msgid "You are now donating {0} per week to {1}. Thank you!"
+msgid "You are now donating {0} per month to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "You are now donating {0} per year to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {0} has been stopped."
+msgstr ""
+
+msgid "period"
 msgstr ""
 
 msgid "Export History"
@@ -1852,10 +1881,10 @@ msgstr ""
 msgid "Legal Information"
 msgstr ""
 
-#, python-brace-format
-msgid ""
-"This website is managed by Liberapay, a non-profit organization founded in 2015 and legally registered in France.\n"
-"Its publication director is Liberapay's legal representative, {0}."
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+msgstr ""
+
+msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
 msgstr ""
 
 msgid "Postal address:"
@@ -1867,6 +1896,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "Phone number: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "The publication director is Liberapay's legal representative, currently {0}."
 msgstr ""
 
 msgid "Terms of Service"

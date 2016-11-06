@@ -226,24 +226,24 @@ msgid "Prevent my profile from being listed on Liberapay."
 msgstr "Voorkomen dat mijn profiel van wordt vermeld op Liberapay."
 
 #, python-brace-format
-msgid "Symbolic ({0})"
-msgstr "Symbolisch ({0})"
+msgid "Symbolic ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Small ({0})"
-msgstr "Klein ({0})"
+msgid "Small ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Medium ({0})"
-msgstr "Medium ({0})"
+msgid "Medium ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Large ({0})"
-msgstr "Large ({0})"
+msgid "Large ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Maximum ({0})"
-msgstr "Maximum ({0})"
+msgid "Maximum ({0} per week)"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
@@ -304,8 +304,16 @@ msgid "There is no user named {0}."
 msgstr "Er is geen gebruiker met de naam {0}."
 
 #, python-brace-format
-msgid "'{0}' is not a valid donation amount (min={1}, max={2})"
-msgstr "'{0}' is geen geldige donatie bedrag (min = {1}, max = {2})"
+msgid "'{0}' is not a valid weekly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid monthly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid yearly donation amount (min={1}, max={2})"
+msgstr ""
 
 #, python-brace-format
 msgid "The user {0} doesn't accept donations."
@@ -779,6 +787,12 @@ msgstr "Niet zeker hoe veel te doneren? Hier zijn een aantal veel gebruikte bedr
 msgid "per week"
 msgstr "per week"
 
+msgid "per month"
+msgstr ""
+
+msgid "per year"
+msgstr ""
+
 msgid "Pledge"
 msgstr "Doneren"
 
@@ -1060,6 +1074,10 @@ msgstr "gewijzigd"
 msgid "Active?"
 msgstr "Actief ?"
 
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr ""
+
 msgid "No: the donee hasn't filled the identity form"
 msgstr "Nee: de begiftigde heeft niet gevuld de identiteit vorm"
 
@@ -1090,11 +1108,11 @@ msgstr ""
 "\n"
 "Dit kan niet ongedaan worden gemaakt!"
 
-msgid "You haven't filled all the required fields."
-msgstr "Je hebt niet gevuld alle verplichte velden."
-
 msgid "Invalid date of birth."
 msgstr "Geboortedatum is ongeldig."
+
+msgid "You haven't filled all the required fields."
+msgstr "Je hebt niet gevuld alle verplichte velden."
 
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "Je moet akkoord gaan voorbehoud van MangoPay."
@@ -1308,12 +1326,23 @@ msgid "Close"
 msgstr "Sluit"
 
 #, python-brace-format
-msgid "Your weekly donation to {0} has been stopped."
-msgstr "Uw wekelijkse donatie aan {0} is gestopt."
-
-#, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
 msgstr "U bent nu doneren {0} per week naar {1}. Dank je !"
+
+#, python-brace-format
+msgid "You are now donating {0} per month to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "You are now donating {0} per year to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {0} has been stopped."
+msgstr ""
+
+msgid "period"
+msgstr ""
 
 msgid "Export History"
 msgstr "Exporteer geschiedenis"
@@ -1858,13 +1887,11 @@ msgstr "Liberapay is een non-profit organisatie {0} werd opgericht in 2015 in Fr
 msgid "Legal Information"
 msgstr "Legale informatie"
 
-#, python-brace-format
-msgid ""
-"This website is managed by Liberapay, a non-profit organization founded in 2015 and legally registered in France.\n"
-"Its publication director is Liberapay's legal representative, {0}."
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
 msgstr ""
-"Deze website wordt beheerd door LiberaPay, een non-profit organisatie, opgericht in 2015 en wettelijk geregistreerd in Frankrijk.\n"
-"De publicatie directeur is de wettelijke vertegenwoordiger LiberaPay's, {0}."
+
+msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
+msgstr ""
 
 msgid "Postal address:"
 msgstr "Postadres:"
@@ -1876,6 +1903,10 @@ msgstr "Deze website wordt gehost op {0} door:"
 #, python-brace-format
 msgid "Phone number: {0}"
 msgstr "Telefoonnummer: {0}"
+
+#, python-brace-format
+msgid "The publication director is Liberapay's legal representative, currently {0}."
+msgstr ""
 
 msgid "Terms of Service"
 msgstr "Service voorwaarden"

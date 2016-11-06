@@ -228,24 +228,24 @@ msgid "Prevent my profile from being listed on Liberapay."
 msgstr "Zamezit zobrazení mého profilu na Liberapay."
 
 #, python-brace-format
-msgid "Symbolic ({0})"
-msgstr "Symbolicky ({0})"
+msgid "Symbolic ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Small ({0})"
-msgstr "Málo ({0})"
+msgid "Small ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Medium ({0})"
-msgstr "Středně ({0})"
+msgid "Medium ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Large ({0})"
-msgstr "Hodně ({0})"
+msgid "Large ({0} per week)"
+msgstr ""
 
 #, python-brace-format
-msgid "Maximum ({0})"
-msgstr "Maximálně ({0})"
+msgid "Maximum ({0} per week)"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
@@ -306,8 +306,16 @@ msgid "There is no user named {0}."
 msgstr "Neexistuje žádný uživatel s jménem {0}."
 
 #, python-brace-format
-msgid "'{0}' is not a valid donation amount (min={1}, max={2})"
-msgstr "'{0}' není platná darovací částka (min = {1}, max = {2})"
+msgid "'{0}' is not a valid weekly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid monthly donation amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
+msgid "'{0}' is not a valid yearly donation amount (min={1}, max={2})"
+msgstr ""
 
 #, python-brace-format
 msgid "The user {0} doesn't accept donations."
@@ -785,6 +793,12 @@ msgstr "Nejste si jisti, kolik darovat? Zde jsou některé standardní částky:
 msgid "per week"
 msgstr "za týden"
 
+msgid "per month"
+msgstr ""
+
+msgid "per year"
+msgstr ""
+
 msgid "Pledge"
 msgstr "Příslib"
 
@@ -1067,6 +1081,10 @@ msgstr "Upraveno"
 msgid "Active?"
 msgstr "Aktivní?"
 
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr ""
+
 msgid "No: the donee hasn't filled the identity form"
 msgstr "Ne: obdarovaným nevyplnil formulář identity"
 
@@ -1097,11 +1115,11 @@ msgstr ""
 "\n"
 "To nelze vrátit zpět!"
 
-msgid "You haven't filled all the required fields."
-msgstr "Nevyplnili jste všechna požadovaná pole."
-
 msgid "Invalid date of birth."
 msgstr "Chybné datum narození."
+
+msgid "You haven't filled all the required fields."
+msgstr "Nevyplnili jste všechna požadovaná pole."
 
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "Musíte souhlasit s podmínkami služby MangoPay."
@@ -1315,12 +1333,23 @@ msgid "Close"
 msgstr "Zavřít"
 
 #, python-brace-format
-msgid "Your weekly donation to {0} has been stopped."
-msgstr "Vaše týdenní dar na {0} bylo zastaveno."
-
-#, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
 msgstr "Nyní jste dárcem {0} na týden do {1}. Děkuju!"
+
+#, python-brace-format
+msgid "You are now donating {0} per month to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "You are now donating {0} per year to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {0} has been stopped."
+msgstr ""
+
+msgid "period"
+msgstr ""
 
 msgid "Export History"
 msgstr "Exportovat historii"
@@ -1864,13 +1893,11 @@ msgstr "Liberapay je nezisková organizace {0} založil v roce 2015 ve Francii {
 msgid "Legal Information"
 msgstr "Právní informace"
 
-#, python-brace-format
-msgid ""
-"This website is managed by Liberapay, a non-profit organization founded in 2015 and legally registered in France.\n"
-"Its publication director is Liberapay's legal representative, {0}."
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
 msgstr ""
-"Tento web je spravován Liberapay, nezisková organizace založená v roce 2015 a právně registrované ve Francii.\n"
-"Její publikace ředitel je právním zástupcem je Liberapay, {0}."
+
+msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
+msgstr ""
 
 msgid "Postal address:"
 msgstr "Poštovní adresa:"
@@ -1882,6 +1909,10 @@ msgstr "Tento web je hostován na {0} pomocí:"
 #, python-brace-format
 msgid "Phone number: {0}"
 msgstr "Telefonní číslo: {0}"
+
+#, python-brace-format
+msgid "The publication director is Liberapay's legal representative, currently {0}."
+msgstr ""
 
 msgid "Terms of Service"
 msgstr "Podmínky služby"
