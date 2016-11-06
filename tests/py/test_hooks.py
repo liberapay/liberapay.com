@@ -54,31 +54,6 @@ class Tests(Harness):
         assert redirect.code == 302
         assert not redirect.headers.cookie
 
-    def test_session_cookie_not_set_under_basic_auth(self):
-        alice = self.make_participant('alice')
-        password = 'password'
-        alice.update_password(password)
-
-        auth_header = b'Basic ' + b64encode(('%s:%s' % (alice.id, password)).encode('ascii'))
-        response = self.client.GET('/alice/public.json',
-                                   HTTP_AUTHORIZATION=auth_header,
-                                   HTTP_X_FORWARDED_PROTO=b'https',
-                                   HTTP_HOST=b'example.com',
-                                   )
-
-        assert response.code == 200
-        assert SESSION not in response.headers.cookie
-
-    def test_bad_userid_returns_401(self):
-        self.make_participant('alice')
-        auth_header = b'Basic ' + b64encode(b'foo:')
-        response = self.client.GxT('/alice/public.json',
-                                   HTTP_AUTHORIZATION=auth_header,
-                                   HTTP_X_FORWARDED_PROTO=b'https',
-                                   HTTP_HOST=b'example.com',
-                                   )
-        assert response.code == 401
-
     def test_early_failures_dont_break_everything(self):
         old_from_wsgi = Request.from_wsgi
         def broken_from_wsgi(*a, **kw):
@@ -124,6 +99,33 @@ class Tests(Harness):
 
 
 class Tests2(Harness):
+
+    def test_basic_auth_works_and_doesnt_return_a_session_cookie(self):
+        alice = self.make_participant('alice')
+        password = 'password'
+        alice.update_password(password)
+        auth_header = b'Basic ' + b64encode(('%s:%s' % (alice.id, password)).encode('ascii'))
+        r = self.client.GET('/', HTTP_AUTHORIZATION=auth_header)
+        assert r.code == 200
+        assert SESSION not in r.headers.cookie
+
+    def test_basic_auth_malformed_header_returns_400(self):
+        auth_header = b'Basic ' + b64encode(b'bad')
+        r = self.client.GxT('/', HTTP_AUTHORIZATION=auth_header)
+        assert r.code == 400
+        assert r.text == 'Malformed "Authorization" header'
+
+    def test_basic_auth_bad_userid_returns_401(self):
+        auth_header = b'Basic ' + b64encode(b'admin:admin')
+        r = self.client.GxT('/', HTTP_AUTHORIZATION=auth_header)
+        assert r.code == 401
+
+    def test_basic_auth_no_password_returns_401(self):
+        alice = self.make_participant('alice')
+        assert alice.id == 1
+        auth_header = b'Basic ' + b64encode(b'1:')
+        r = self.client.GxT('/', HTTP_AUTHORIZATION=auth_header)
+        assert r.code == 401
 
     def test_accept_header_is_respected(self):
         r = self.client.GET('/about/stats', HTTP_ACCEPT=b'application/json')
