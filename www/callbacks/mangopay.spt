@@ -1,10 +1,15 @@
+# coding: utf8
 """An endpoint to receive Mangopay's callbacks.
 
 Doc: https://docs.mangopay.com/api-references/notifications/
 """
 
+from decimal import Decimal as D
+
 from liberapay.billing import mangoapi
-from liberapay.billing.exchanges import record_exchange_result, record_payout_refund, repr_error
+from liberapay.billing.exchanges import (
+    record_exchange_result, record_payout_refund, repr_error, skim_bank_wire,
+)
 from liberapay.models.participant import Participant
 
 EVENT_TYPES = {
@@ -44,8 +49,32 @@ if cls:
         pd = payio.PaymentDetails
         expected = pd.DeclaredDebitedFunds['Amount'] - pd.DeclaredFees['Amount']
         actual = payio.CreditedFunds
-        assert actual.Amount == expected, (actual, expected)
         assert actual.Currency == 'EUR'
+        credited_amount = actual.Amount
+        if credited_amount != expected:
+            # The user didn't send the expected amount of money
+            credited_amount = D(credited_amount) / D(100)
+            paid_fees = D(payio.Fees.Amount) / D(100)
+            debited_amount = D(payio.DebitedFunds.Amount) / D(100)
+            standard_fee, new_vat = skim_bank_wire(debited_amount)[1:]
+            if abs(paid_fees - standard_fee) > D('0.01'):
+                # MangoPay didn't properly adapt the fee to the received amount
+                try:
+                    raise Exception('fee mismatch in bankwire payin')
+                except Exception as e:
+                    website.tell_sentry(e, state, allow_reraise=False)
+            note = (
+                'amount mismatch: expected %sc€ (fee %sc€)' %
+                (pd.DeclaredDebitedFunds['Amount'], pd.DeclaredFees['Amount'])
+            )
+            website.db.run("""
+                UPDATE exchanges
+                   SET amount = %s
+                     , fee = %s
+                     , vat = %s
+                     , note = %s
+                 WHERE id = %s
+            """, (credited_amount, paid_fees, new_vat, note, e_id))
 
     # Update the DB
     error = repr_error(payio)

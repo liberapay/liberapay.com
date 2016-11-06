@@ -83,6 +83,9 @@ def skim_amount(amount, fees):
     return amount - fee, fee, vat
 
 
+skim_bank_wire = lambda amount: skim_amount(amount, FEE_PAYIN_BANK_WIRE)
+
+
 def skim_credit(amount, ba):
     """Given a payout amount, return a lower amount, the fee, and taxes.
 
@@ -235,7 +238,7 @@ def payin_bank_wire(db, participant, debit_amount):
     if not route:
         route = ExchangeRoute.insert(participant, 'mango-bw', 'x')
 
-    amount, fee, vat = skim_amount(debit_amount, FEE_PAYIN_BANK_WIRE)
+    amount, fee, vat = skim_bank_wire(debit_amount)
 
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
     payin = PayIn()

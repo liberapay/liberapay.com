@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from decimal import Decimal as D
+
 from mock import patch
 
 from mangopaysdk.entities.payin import PayIn
@@ -143,3 +145,48 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             assert emails[0]['to'][0] == 'homer <%s>' % homer.email
             assert status[:4] in emails[0]['subject']
             homer.update_status('active')  # reset for next loop run
+
+    @patch('mangopaysdk.tools.apipayins.ApiPayIns.Get')
+    def test_payin_bank_wire_callback_amount_mismatch(self, Get):
+        self._test_payin_bank_wire_callback_amount_mismatch(Get, 2)
+
+    @patch('mangopaysdk.tools.apipayins.ApiPayIns.Get')
+    def test_payin_bank_wire_callback_amount_and_fee_mismatch(self, Get):
+        self._test_payin_bank_wire_callback_amount_mismatch(Get, 50)
+
+    def _test_payin_bank_wire_callback_amount_mismatch(self, Get, fee):
+        homer = self.homer
+        route = ExchangeRoute.insert(homer, 'mango-bw', 'x')
+        e_id = record_exchange(self.db, route, 11, 0, 0, homer, 'pre')
+        assert homer.balance == 0
+        homer.close(None)
+        assert homer.status == 'closed'
+        qs = "EventType=PAYIN_NORMAL_SUCCEEDED&RessourceId=123456790"
+        payin = PayIn()
+        payin.Status = 'SUCCEEDED'
+        payin.ResultCode = '000000'
+        payin.ResultMessage = None
+        payin.AuthorId = homer.mangopay_user_id
+        payin.PaymentType = 'BANK_WIRE'
+        pd = payin.PaymentDetails = PayInPaymentDetailsBankWire()
+        pd.DeclaredDebitedFunds = Money(4500, 'EUR').__dict__
+        pd.DeclaredFees = Money(100, 'EUR').__dict__
+        payin.DebitedFunds = Money(302, 'EUR')
+        payin.Fees = Money(fee, 'EUR')
+        payin.CreditedFunds = Money(302 - fee, 'EUR')
+        payin.Tag = str(e_id)
+        Get.return_value = payin
+        r = self.callback(qs)
+        assert r.code == 200, r.text
+        e = self.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
+        assert e.amount == D(payin.CreditedFunds.Amount) / D(100)
+        assert e.fee == D(fee) / D(100)
+        assert e.vat == D('0.01')
+        assert e.status == 'succeeded'
+        homer = homer.refetch()
+        assert homer.balance == e.amount
+        assert homer.status == 'active'
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'][0] == 'homer <%s>' % homer.email
+        assert 'succ' in emails[0]['subject']
