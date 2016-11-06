@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from dependency_injection import resolve_dependencies
 from pando import Response
 
-from .constants import MAX_TIP, MIN_TIP, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
+from .constants import DONATION_LIMITS, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
 
 
 class Redirect(Exception):
@@ -117,10 +117,18 @@ class NoTippee(LazyResponse400):
     def msg(self, _):
         return _("There is no user named {0}.", *self.args)
 
+_ = lambda a: a
+BAD_AMOUNT_MESSAGES = {
+    'weekly': _("'{0}' is not a valid weekly donation amount (min={1}, max={2})"),
+    'monthly': _("'{0}' is not a valid monthly donation amount (min={1}, max={2})"),
+    'yearly': _("'{0}' is not a valid yearly donation amount (min={1}, max={2})"),
+}
+del _
+
 class BadAmount(LazyResponse400):
     def msg(self, _):
-        return _("'{0}' is not a valid donation amount (min={1}, max={2})",
-                 self.args[0], MIN_TIP, MAX_TIP)
+        period = self.args[1]
+        return _(BAD_AMOUNT_MESSAGES[period], self.args[0], *DONATION_LIMITS[period])
 
 class UserDoesntAcceptTips(LazyResponse400):
     def msg(self, _):

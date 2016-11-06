@@ -15,7 +15,7 @@ title = _("Introduction")
         "Payments come with no strings attached. You don't know exactly who is "
         "giving to you, and donations are capped at {0} per week per donor to "
         "dampen undue influence."
-        , Money(constants.MAX_TIP, 'EUR')
+        , Money(constants.DONATION_WEEKLY_MAX, 'EUR')
     ) }}</p>
 
     <p>{{ _(

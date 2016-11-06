@@ -8,10 +8,13 @@ from faker import Factory
 from psycopg2 import IntegrityError
 
 from liberapay.billing.exchanges import record_exchange_result, _record_transfer_result
-from liberapay.constants import MAX_TIP, MIN_TIP
+from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models import community
+
+
+DONATION_PERIODS = tuple(PERIOD_CONVERSION_RATES.keys())
 
 
 faker = Factory.create()
@@ -76,19 +79,17 @@ def fake_community(db, creator):
     return c
 
 
-def fake_tip_amount():
-    amount = (D(random.random()) * (MAX_TIP - MIN_TIP) + MIN_TIP)
-
-    decimal_amount = D(amount).quantize(D('.01'))
-    while decimal_amount == D('0.00'):
-        # https://github.com/gratipay/gratipay.com/issues/2950
-        decimal_amount = fake_tip_amount()
-    return decimal_amount
+def random_money_amount(min_amount, max_amount):
+    amount = D(random.random()) * (max_amount - min_amount) + min_amount
+    return amount.quantize(D_CENT)
 
 
 def fake_tip(db, tipper, tippee):
     """Create a fake tip.
     """
+    period = random.choice(DONATION_PERIODS)
+    periodic_amount = random_money_amount(*DONATION_LIMITS[period])
+    amount = (periodic_amount * PERIOD_CONVERSION_RATES[period]).quantize(D_CENT)
     return _fake_thing(
         db,
         "tips",
@@ -96,7 +97,9 @@ def fake_tip(db, tipper, tippee):
         mtime=faker.date_time_this_month(),
         tipper=tipper.id,
         tippee=tippee.id,
-        amount=fake_tip_amount(),
+        amount=amount,
+        period=period,
+        periodic_amount=periodic_amount,
     )
 
 
@@ -202,6 +205,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
         tips.append(fake_tip(db, tipper, tippee))
 
     # Transfers
+    min_amount, max_amount = DONATION_LIMITS['weekly']
     transfers = []
     for i in range(num_transfers):
         tipper, tippee = random.sample(participants, 2)
@@ -210,7 +214,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
             tipper, tippee = random.sample(participants, 2)
         sys.stdout.write("\rMaking Transfers (%i/%i)" % (i+1, num_transfers))
         sys.stdout.flush()
-        amount = fake_tip_amount()
+        amount = random_money_amount(min_amount, max_amount)
         ts = faker.date_time_this_year()
         fake_exchange(db, tipper, amount, 0, 0, (ts - datetime.timedelta(days=1)))
         transfers.append(fake_transfer(db, tipper, tippee, amount, ts))

@@ -82,7 +82,7 @@ class TestTakeOver(Harness):
         bob.take_over(carl, have_confirmation=True)
         tips = self.db.all("select * from tips where amount > 0 order by id asc")
         assert len(tips) == 3
-        assert tips[-1].amount == 6
+        assert tips[-1].amount == 5
         assert tips[-1].is_funded is False
         self.db.self_check()
 
@@ -285,6 +285,18 @@ class Tests(Harness):
         assert t['is_funded'] is True
         assert t['is_pledge'] is False
         assert t['first_time_tipper'] is True
+
+    def test_stt_works_for_monthly_donations(self):
+        alice = self.make_participant('alice', balance=100)
+        bob = self.make_participant('bob')
+        t = alice.set_tip_to(bob, '4.33', 'monthly')
+        assert t['amount'] == 1
+
+    def test_stt_works_for_yearly_donations(self):
+        alice = self.make_participant('alice', balance=100)
+        bob = self.make_participant('bob')
+        t = alice.set_tip_to(bob, '104', 'yearly')
+        assert t['amount'] == 2
 
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', balance=100)

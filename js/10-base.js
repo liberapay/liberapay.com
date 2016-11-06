@@ -52,12 +52,18 @@ Liberapay.init = function() {
         }
     });
 
-    var amount_re = /\?(.*&)*amount=(.+?)(&|$)/;
+    var amount_re = /\?(.*&)*amount=(.*?)(&|$)/;
+    var period_re = /\?(.*&)*period=(.*?)(&|$)/;
     $('a.amount-btn').each(function() {
         $(this).data('href', this.getAttribute('href')).attr('href', null);
     }).click(function(e) {
         var href = $(this).data('href');
         $('#amount').val(amount_re.exec(href)[2]);
+        var period = period_re.exec(href);
+        period = (period ? period[2] : 'weekly') || 'weekly';
+        $('select[name=period] > option').filter(
+            function () { return this.getAttribute('value') === period }
+        ).prop('selected', true);
         history.pushState(null, null, location.pathname + href + location.hash);
     });
 

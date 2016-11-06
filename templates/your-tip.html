@@ -16,7 +16,7 @@
             % for msg, amount in constants.STANDARD_TIPS
                 % set amount_str = format_decimal(amount, '#,##0.00')
                 <a class="btn btn-default amount-btn" href="?amount={{ amount_str }}"
-                   rel="nofollow">{{ _(msg, amount_str) }}</a>
+                   rel="nofollow">{{ _(msg, Money(amount, 'EUR')) }}</a>
             % endfor
             </div>
             <br>
@@ -29,9 +29,14 @@
         <div class="input-group-addon">€</div>
         <input type="text" name="amount" id="amount"
                class="amount form-control {{ 'input-sm' if small else '' }}"
-               value="{{ request.qs.get('amount') or format_decimal(tip.amount) }}"
+               value="{{ request.qs.get('amount') or format_decimal(tip.periodic_amount) }}"
                {{ disabled }} />
-        <div class="input-group-addon">{{ _("per week") }}</div>
+        % set period = request.qs.get('period') or tip.period
+        <select name="period" class="form-control {{ 'input-sm' if small else '' }}">
+            <option value="weekly">{{ _("per week") }}</option>
+            <option value="monthly" {{ 'selected' if period == 'monthly' }}>{{ _("per month") }}</option>
+            <option value="yearly" {{ 'selected' if period == 'yearly' }}>{{ _("per year") }}</option>
+        </select>
         <div class="input-group-btn">
             <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
                            {{ 'btn-sm' if small else '' }}" {{ disabled }}>{{
