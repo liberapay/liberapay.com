@@ -109,10 +109,12 @@ def authenticate_user_if_possible(request, response, state, user, _):
         if not header.startswith(b'Basic '):
             raise response.error(401, 'Unsupported authentication method')
         try:
-            creds = binascii.a2b_base64(header[len('Basic '):]).decode('utf8').split(':', 1)
-        except (binascii.Error, UnicodeDecodeError):
+            uid, pwd = binascii.a2b_base64(header[len('Basic '):]).decode('utf8').split(':', 1)
+        except (binascii.Error, UnicodeDecodeError, ValueError):
             raise response.error(400, 'Malformed "Authorization" header')
-        participant = Participant.authenticate('id', 'password', *creds)
+        if not uid.isdigit():
+            raise response.error(401, 'Invalid user id: expected an integer, got `%s`' % uid)
+        participant = Participant.authenticate('id', 'password', uid, pwd)
         if not participant:
             raise response.error(401, 'Invalid credentials')
         return {'user': participant}
