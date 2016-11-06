@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '20'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '21'::jsonb);
 
 
 -- app configuration
@@ -133,6 +133,8 @@ CREATE UNIQUE INDEX ON elsewhere (lower(user_name), platform);
 
 -- tips -- all times a participant elects to tip another
 
+CREATE TYPE donation_period AS ENUM ('weekly', 'monthly', 'yearly');
+
 CREATE TABLE tips
 ( id           serial           PRIMARY KEY
 , ctime        timestamptz      NOT NULL
@@ -141,6 +143,8 @@ CREATE TABLE tips
 , tippee       bigint           NOT NULL REFERENCES participants
 , amount       numeric(35,2)    NOT NULL CHECK (amount >= 0)
 , is_funded    boolean          NOT NULL DEFAULT false
+, period       donation_period  NOT NULL
+, periodic_amount numeric(35,2) NOT NULL
 , CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
  );
 
