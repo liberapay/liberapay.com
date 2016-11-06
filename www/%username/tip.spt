@@ -42,8 +42,8 @@ if request.method == 'POST':
     if out['amount'] == 0:
         out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
     else:
-        out["msg"] = _(MESSAGES[out['period']],
-                       Money(out['periodic_amount'], 'EUR'), tippee_name)
+        msg = MESSAGES[out['period']]
+        out["msg"] = _(msg, Money(out['periodic_amount'], 'EUR'), tippee_name)
     if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
         back_to = request.body.get('back_to') or tipper.path('giving/')
         back_to += '&' if '?' in back_to else '?'
