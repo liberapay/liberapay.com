@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./recreate-schema.sh test && py.test ./tests/ "$@"

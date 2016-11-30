@@ -136,6 +136,30 @@ To deploy the app simply run `release.sh`, it'll guide you through it. Of course
 
 [OS-dev]: https://developers.openshift.com/
 
+### Setting up a development environment using Docker
+
+If you don't want to install directly dependencies on your machine, you can spin up a development environment easily, assuming you have [Docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/) installed:
+
+    # build the local container
+    docker-compose build
+
+    # initialize the database
+    docker-compose run web bash recreate-schema.sh
+
+    # populate the database with fake data
+    docker-compose run web python -m liberapay.utils.fake_data
+
+    # launch the database and the web server
+    # the application should be available on http://localhost:8339
+    docker-compose up
+
+You can also run tests in the DOcker environment:
+
+    docker-compose -f docker/tests.yml run tests
+
+All arguments are passed to the underlying `py.test` command, so you can use `-x` for failing fast or `--ff` to retry failed tests first:
+
+    docker-compose -f docker/tests.yml run tests -x --ff
 
 ## License
 
