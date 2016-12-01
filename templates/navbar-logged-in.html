@@ -26,13 +26,18 @@
 </li>
 
 % if user.pending_notifs
-<li><a href="/{{ user.username }}/notifications"
+<li class="notifs-wrapper"><a href="/{{ user.username }}/notifications"
        title="{{ _('Notifications') }}"
-       class="{{ 'navbar-warning' if user.pending_notifs else '' }}">
+       class="{{ 'navbar-warning' if user.pending_notifs else '' }} notifs">
     <span class="glyphicon glyphicon-info-sign"></span>
     <span class="sr-only">{{ _("Notifications") }}</span>
     % if user.pending_notifs
         <span class="pending-notifs">{{ user.pending_notifs }}</span>
     % endif
-</a></li>
+</a>
+<div class="data hidden">
+    <p><a href="/{{ user.username }}/notifications">{{ _('All notifications') }}</a>
+    <a class="mark-read pull-right" href="">{{ _('Mark as read') }}</a></p>
+</div>
+</li>
 % endif

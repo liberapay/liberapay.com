@@ -74,6 +74,10 @@ Liberapay.init = function() {
     $('.radio-group .list-group-item > label').on('click', function() {
         $(this).children('input[type="radio"]').prop('checked', true);
     });
+
+    if (!!Liberapay.username){
+        Liberapay.setupNotifications();
+    }
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

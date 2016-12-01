@@ -915,7 +915,7 @@ class Participant(Model, MixinTeam):
           ORDER BY is_new DESC, id DESC
         """, (self.id,))
 
-    def render_notifications(self, state, notifs=None):
+    def render_notifications(self, state, notifs=None, style=True):
         """Render notifications as HTML.
 
         The `notifs` argument allows rendering arbitrary notifications.
@@ -930,6 +930,8 @@ class Participant(Model, MixinTeam):
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)
+                if not style:
+                    context['button_style'] = lambda variant: ''
                 spt = website.emails[event]
                 html = spt['text/html'].render(context).strip()
                 typ = notif_context.get('type', 'info')
