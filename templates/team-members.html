@@ -40,7 +40,10 @@
                     <form action="/~{{ team.id }}/income/take?back_to={{ urlquote(request.line.uri) }}"
                           method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-                        <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take, '#,##0.00') }}" />
+                        <div class="input-group">
+                            <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take, '#,##0.00') }}" />
+                            <span class="input-group-btn"><button class="btn btn-default" title="{{ _("Update my nominal take") }}" type="submit"><i class="fa fa-edit"></i></button></span>
+                        </div>
                     </form>
                 </td>
             % else
