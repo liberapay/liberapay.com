@@ -1,3 +1,5 @@
+from pando import Response
+
 from liberapay.utils import get_participant
 
 [---]
@@ -9,15 +11,24 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     body = request.body
     if body.get('mark_all_as_read') == 'true':
-        participant.mark_notifications_as_read()
+        # this is a security net to avoid race condition described
+        # in https://github.com/liberapay/liberapay.com/issues/136
+        until = body.get('until')
+        try:
+            until = int(until)
+        except TypeError:
+            raise Response(400, 'Missing until parameter')
+        participant.mark_notifications_as_read(until=until)
     else:
         participant.remove_notification(request.body['remove'])
     response.redirect(request.line.uri)
 
 # NOTE: don't factor the render_notifications() call here, it'll break escaping
+notifs = participant.get_notifs()
+unread_notifications = [n for n in notifs if n.is_new]
 
 [---] application/json via json_dump
-participant.render_notifications(state)
+participant.render_notifications(state, notifs=notifs)
 
 [---] text/html
 % extends "templates/base.html"
@@ -25,11 +36,19 @@ participant.render_notifications(state)
 % block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    <button class="btn btn-primary" name="mark_all_as_read" value="true">{{
+    % if len(unread_notifications) > 0
+        <input type="hidden" name="until" value="{{ unread_notifications[0].id }}" />
+    % endif
+    <button class="btn btn-primary"
+    name="mark_all_as_read"
+    % if len(unread_notifications) == 0
+        disabled="disabled"
+    % endif
+    value="true">{{
         _("Mark all notifications as read")
     }}</button><br>
     <br>
-    % for notif in participant.render_notifications(state)
+    % for notif in participant.render_notifications(state, notifs=notifs)
         <div class="alert alert-{{ notif.type }} {{ 'alert-read' if not notif.is_new else '' }}">
             <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
             {{ notif.html|safe }}

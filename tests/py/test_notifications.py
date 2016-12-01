@@ -55,3 +55,43 @@ class TestNotifications(Harness):
         r = self.client.GET('/alice/notifications.html', auth_as=alice,
                             sentry_reraise=False).text
         assert 'fake_event_name' not in r
+
+    def test_marking_notification_as_read_requires_until_id(self):
+        """
+        As described in https://github.com/liberapay/liberapay.com/issues/136,
+        this is to avoid a race condition where new notifications created,
+        but the user did not see them when marking as read
+
+        To solve that, we simply pass the maximum id we want to mark as read
+        """
+        alice = self.make_participant('alice')
+        # n1 = alice.add_notification('low_balance')
+        # n2 = alice.add_notification('low_balance')
+        #
+        # assert alice.pending_notifs == 2
+
+        r = self.client.PxST('/alice/notifications.json', auth_as=alice,
+                             data={'mark_all_as_read': 'true'})
+        assert r.code == 400
+
+        n1 = alice.add_notification('low_balance')
+        n2 = alice.add_notification('low_balance')
+
+        assert alice.pending_notifs == 2
+
+        r = self.client.PxST('/alice/notifications.json', auth_as=alice,
+                             data={
+                                'mark_all_as_read': 'true',
+                                'until': str(n1)})
+
+        assert r.code == 302
+
+        notifications = self.db.all("""
+            SELECT id, event, context, is_new
+              FROM notification_queue
+             WHERE participant = %s
+               AND is_new = true
+          ORDER BY id DESC
+        """, (alice.id,))
+        assert len(notifications) == 1
+        assert notifications[0].id == n2
