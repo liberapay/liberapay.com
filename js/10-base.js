@@ -76,6 +76,8 @@ Liberapay.init = function() {
     });
 
     if (!!Liberapay.username){
+        // if the user is logged in, we initialize
+        // the notification popover
         Liberapay.setupNotifications();
     }
 };

@@ -33,15 +33,23 @@ Liberapay.setupNotifications = function() {
     var limit = 5;
     $.get(url, function(data){
         if (data.length === 0){
+            // there is nothing to display, it's better
+            // to just skip the popup display
             return;
         }
         link.on('click', function(e){
+            // we disable the menu link to avoid conflict with the popup
             e.preventDefault();
         });
         link.popover({
             html : true,
             placement: 'bottom',
             content: function() {
+                // this is the tricky part
+                // here we grab links (see all, mark as read)
+                // from a hidden element in the nav bar
+                // so we can include it in the popover content
+                // with translations and everything
                 var content = $('.notifs-wrapper .data').html();
 
                 content += '<ul class="list-group">';
@@ -56,6 +64,9 @@ Liberapay.setupNotifications = function() {
                     content += '</li>';
                 });
                 content += '</ul>';
+
+                // here we bind a click on the mark as read link
+                // to the ajax call
                 $(document).on('click', 'nav .notifs-wrapper .popover .mark-read', function(e){
                     var url = '/' + Liberapay.username + '/notifications.json'
                     var data = {
