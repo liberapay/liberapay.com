@@ -920,6 +920,8 @@ class Participant(Model, MixinTeam):
 
         The `notifs` argument allows rendering arbitrary notifications.
 
+        The `style` argument can be used to turn off inline button styles.
+
         """
         notifs = notifs or self.get_notifs()
 

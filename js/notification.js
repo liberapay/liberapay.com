@@ -24,25 +24,24 @@ Liberapay.notification = function(text, type, timeout) {
     if (timeout > 0) setTimeout(close, timeout);
 };
 
+/**
+ * Fetch notifications from the backend and setup the corresponding popup in the navbar
+ */
 Liberapay.setupNotifications = function() {
-    // fetch notifications from the backend and setup the corresponding
-    // popup in the navbar
-
     var url = '/' + Liberapay.username + '/notifications.json';
-    var link = $("nav .notifs");
+    var $link = $("nav .notifs");
     var limit = 5;
     $.get(url, function(data){
         if (data.length === 0){
-            // there is nothing to display, it's better
-            // to just skip the popup display
+            // there is nothing to show, it's better to just skip the popup display
             return;
         }
-        link.on('click', function(e){
+        $link.on('click', function(e){
             // we disable the menu link to avoid conflict with the popup
             e.preventDefault();
         });
-        link.popover({
-            html : true,
+        $link.popover({
+            html: true,
             placement: 'bottom',
             content: function() {
                 // this is the tricky part
@@ -65,23 +64,20 @@ Liberapay.setupNotifications = function() {
                 });
                 content += '</ul>';
 
-                // here we bind a click on the mark as read link
-                // to the ajax call
+                // here we bind a click on the "mark as read" link to an ajax call
                 $(document).on('click', 'nav .notifs-wrapper .popover .mark-read', function(e){
-                    var url = '/' + Liberapay.username + '/notifications.json'
-                    var data = {
-                        "mark_all_as_read": true,
-                        "until": notifs[0].id
-                    }
-                    $.post(url, data);
+                    $.post(url, {
+                        mark_all_as_read: true,
+                        until: notifs[0].id,
+                    });
                     e.preventDefault();
-                    $('nav .notifs-wrapper').find('.unread').removeClass('unread')
-                })
+                    $('nav .notifs-wrapper').find('.unread').removeClass('unread');
+                });
 
                 return content;
             },
             title: function() {
-                return link.attr('title');
+                return $link.attr('title');
             }
         });
     });
