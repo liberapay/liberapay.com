@@ -587,11 +587,13 @@ class Payday(object):
                        for k, v in group_by(successes, 'team').items()}
             personal = by_team.pop(None, 0)
             by_team = {Participant.from_id(k).username: v for k, v in by_team.items()}
-            Participant.from_id(tippee_id).notify(
+            p = Participant.from_id(tippee_id)
+            p.notify(
                 'income',
                 total=sum(t['amount'] for t in successes),
                 personal=personal,
                 by_team=by_team,
+                new_balance=p.balance,
             )
 
         # Identity-required notifications
@@ -636,7 +638,7 @@ class Payday(object):
                    )
         """, (previous_ts_end, self.ts_end))
         for p in participants:
-            p.notify('low_balance')
+            p.notify('low_balance', low_balance=p.balance)
 
 
 def main(override_payday_checks=False):
