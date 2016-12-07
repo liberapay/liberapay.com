@@ -35,6 +35,7 @@ schema: env
 schema-diff: test-schema
 	rhc ssh $$APPNAME --command 'pg_dump -sO' >prod.sql
 	$(with_tests_env) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
+	sed -r -e '/^--/d' -e '/^\s*$$/d' -e '/^SET /d' -i prod.sql local.sql
 	diff -uw prod.sql local.sql
 	rm prod.sql local.sql
 
