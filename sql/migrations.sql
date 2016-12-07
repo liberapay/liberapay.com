@@ -156,3 +156,6 @@ CREATE OR REPLACE VIEW current_tips AS
     SELECT DISTINCT ON (tipper, tippee) *
       FROM tips
   ORDER BY tipper, tippee, mtime DESC;
+
+-- migration #22
+DELETE FROM notification_queue WHERE event IN ('income', 'low_balance');
