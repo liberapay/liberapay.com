@@ -2,13 +2,13 @@
 
 [---] text/html
 {{ _("You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week.",
-     Money(participant.balance, 'EUR'), Money(participant.get_giving_for_profile()[1], 'EUR')) }}
+     Money(low_balance, 'EUR'), Money(participant.get_giving_for_profile()[1], 'EUR')) }}
 
 <a href="{{ participant.url('wallet/payin/') }}" style="{{ button_style }}"
     >{{ _("Add money") }}</a>
 
 [---] text/plain
 {{ _("You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week.",
-     Money(participant.balance, 'EUR'), Money(participant.get_giving_for_profile()[1], 'EUR')) }}
+     Money(low_balance, 'EUR'), Money(participant.get_giving_for_profile()[1], 'EUR')) }}
 
 {{ _("Add money") }}: {{ participant.url('wallet/payin/') }}
