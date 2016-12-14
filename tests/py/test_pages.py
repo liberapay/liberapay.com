@@ -237,7 +237,7 @@ class TestPages(BrowseTestHarness):
         assert janeway.mangopay_user_id
 
         # Edit the natural user
-        data2 = dict(data, Nationality='US')
+        data2 = dict(data, Nationality='US', Birthday='1970-01-01')
         r = self.client.POST('/janeway/identity', data2, **kw)
         assert r.code == 200, r.text
         janeway2 = janeway.refetch()
