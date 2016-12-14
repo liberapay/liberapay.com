@@ -45,13 +45,13 @@ if request.method == 'POST':
             # the above raises ValueError if the number of parts isn't 3
             # or if any part isn't an integer
             dt = datetime(year, month, day)
-            body[p+'Birthday'] = (dt - EPOCH).total_seconds()
+            body[p+'Birthday'] = int((dt - EPOCH).total_seconds())
         except ValueError:
             error = _("Invalid date of birth.")
 
     for k in keys:
         v = body.get(k)
-        if v:
+        if v or v == 0:
             setattr(account, k, v)
         else:
             error = _("You haven't filled all the required fields.")
