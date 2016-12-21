@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import re
+from subprocess import check_call
 import traceback
 
 from six import text_type as str
@@ -16,6 +17,7 @@ from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 from environment import Environment, is_yesish
 from mailshake import DummyMailer, SMTPMailer
+import psycopg2
 import raven
 
 from liberapay import elsewhere
@@ -49,10 +51,25 @@ def canonical(env):
     return locals()
 
 
-def db(env):
+def database(env, tell_sentry, retry=True):
     dburl = env.database_url
     maxconn = env.database_maxconn
-    db = DB(dburl, maxconn=maxconn)
+    try:
+        db = DB(dburl, maxconn=maxconn)
+    except psycopg2.OperationalError:
+        pg_dir = os.environ.get('OPENSHIFT_PG_DATA_DIR')
+        if not pg_dir:
+            # We're not in production, let the developer deal with it.
+            raise
+        if not retry:
+            # Give up
+            raise
+        try:
+            check_call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '120'])
+        except Exception as e:
+            tell_sentry(e, {})
+            raise
+        return database(env, tell_sentry, retry=False)
 
     for model in (AccountElsewhere, Community, ExchangeRoute, Participant):
         db.register_model(model)
@@ -408,13 +425,14 @@ def env():
 
 minimal_algorithm = Algorithm(
     env,
-    db,
+    make_sentry_teller,
+    database,
 )
 
 full_algorithm = Algorithm(
     env,
-    db,
     make_sentry_teller,
+    database,
     canonical,
     app_conf,
     mail,
