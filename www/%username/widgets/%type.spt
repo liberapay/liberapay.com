@@ -10,7 +10,7 @@ t = request.path['type']
 if t not in ('giving.js', 'receiving.js'):
     raise response.error(400)
 
-participant = get_participant(state, restrict=False)
+participant = get_participant(state, restrict=False, redirect_canon=False)
 
 if participant.hide_giving and t != 'receiving.js' or \
    participant.hide_receiving and t != 'giving.js':
