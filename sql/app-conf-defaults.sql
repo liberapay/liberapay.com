@@ -7,7 +7,6 @@ INSERT INTO app_conf (key, value) VALUES
     ('bountysource_callback', '"http://127.0.0.1:8339/on/bountysource/associate"'::jsonb),
     ('bountysource_id', 'null'::jsonb),
     ('bountysource_secret', '""'::jsonb),
-    ('cache_static', 'false'::jsonb),
     ('check_db_every', '600'::jsonb),
     ('compress_assets', 'false'::jsonb),
     ('dequeue_emails_every', '60'::jsonb),
