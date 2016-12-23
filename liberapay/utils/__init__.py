@@ -29,7 +29,7 @@ BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
 def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,
-                    block_suspended_user=False):
+                    block_suspended_user=False, redirect_canon=True):
     """Given a Request, raise Response or return Participant.
 
     If restrict is True then we'll restrict access to owners and admins.
@@ -59,7 +59,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         if participant is None or participant.kind == 'community':
             raise response.error(404)
 
-    if request.method in ('GET', 'HEAD'):
+    if redirect_canon and request.method in ('GET', 'HEAD'):
         if slug != participant.username:
             canon = '/' + participant.username + request.line.uri[len(slug)+1:]
             raise response.redirect(canon)

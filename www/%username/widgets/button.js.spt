@@ -6,7 +6,7 @@ ICON = include_svg(ICON, 16, 16)
 
 [---]
 
-participant = get_participant(state, restrict=False)
+participant = get_participant(state, restrict=False, redirect_canon=False)
 
 response.headers[b'Cache-Control'] = b'public, max-age=86400'
 response.headers[b'Vary'] = b'Accept-Language'
