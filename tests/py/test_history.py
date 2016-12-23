@@ -46,8 +46,8 @@ class TestHistory(FakeTransfersHarness):
         self.make_exchange('mango-cc', 10000, 0, alice)
         self.make_exchange('mango-cc', -5000, 0, alice)
         self.db.run("""
-            UPDATE transfers
-               SET timestamp = "timestamp" - interval '1 month'
+            UPDATE exchanges
+               SET timestamp = "timestamp" - interval '1 week'
         """)
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
@@ -61,6 +61,8 @@ class TestHistory(FakeTransfersHarness):
         for i in range(2):
             Payday.start().run()
             self.db.run("""
+                UPDATE exchanges
+                   SET timestamp = "timestamp" - interval '1 week';
                 UPDATE paydays
                    SET ts_start = ts_start - interval '1 week'
                      , ts_end = ts_end - interval '1 week';
@@ -75,9 +77,13 @@ class TestHistory(FakeTransfersHarness):
         # Make sure events are all in the same year
         delta = '%s days' % (364 - (now - datetime(now.year, 1, 1)).days)
         self.db.run("""
+            UPDATE exchanges
+               SET timestamp = "timestamp" + interval %(delta)s;
             UPDATE paydays
-               SET ts_start = ts_start + interval %(delta)s
-                 , ts_end = ts_end + interval %(delta)s;
+               SET ts_start = ts_start + interval %(delta)s;
+            UPDATE paydays
+               SET ts_end = ts_end + interval %(delta)s
+             WHERE ts_end >= ts_start;
             UPDATE transfers
                SET timestamp = "timestamp" + interval %(delta)s;
         """, dict(delta=delta))
