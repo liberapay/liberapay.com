@@ -31,3 +31,14 @@ def x_frame_options(response):
         #   http://ipsec.pl/node/1094
 
         del response.headers[b'X-Frame-Options']
+
+    if b'content-security-policy' not in response.headers:
+        response.headers[b'content-security-policy'] = (
+            b"default-src 'self';"
+            b"script-src 'self' 'unsafe-inline';"
+            b"style-src 'self' 'unsafe-inline';"
+            b"img-src *;"
+            b"upgrade-insecure-requests;"
+            b"block-all-mixed-content;"
+            b"reflected-xss block;"
+        )
