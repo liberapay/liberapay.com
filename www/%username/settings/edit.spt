@@ -45,14 +45,14 @@ elif 'username' in body:
     response.redirect(p.path('edit'))
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-    back_to = body.get('back_to') or '.'
+    back_to = body.get('back_to') or p.path('settings/')
     try:
         assert '?' not in back_to
         assert '#' not in back_to
         back_to += '?success=' + b64encode_s(out["msg"])
     except Exception as e:
         website.tell_sentry(e, state)
-    response.redirect(back_to)
+    response.redirect(back_to, trusted_url=False)
 
 [---] text/html
 

@@ -23,7 +23,8 @@ if request.method == 'POST':
     user.update_community_status('memberships', is_on, c_id)
 
     if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-        response.redirect(request.body.get('back_to') or participant.path('edit'))
+        redir_url = request.body.get('back_to') or participant.path('edit')
+        response.redirect(redir_url, trusted_url=False)
 
 else:
     out = participant.get_communities()

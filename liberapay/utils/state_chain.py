@@ -9,6 +9,13 @@ from .. import constants
 from ..exceptions import LazyResponse
 
 
+def create_response_object(request, website):
+    response = Response()
+    response.request = request
+    response.website = website
+    return {'response': response}
+
+
 def canonize(request, website):
     """Enforce a certain scheme and hostname.
 

@@ -19,7 +19,7 @@ else:
     raise response.error(400)
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-    response.redirect(request.body.get('back_to') or '/for/'+community.name)
+    response.redirect(request.body.get('back_to') or '/for/'+community.name, trusted_url=False)
 
 [---] text/html
 
