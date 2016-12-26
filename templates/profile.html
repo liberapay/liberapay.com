@@ -12,13 +12,13 @@
     % if not edit
     <div class="profile-share">
         <span>{{ _("Share:") }}</span>
-        <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}" target="_blank">
+        <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}">
             <i class="fa fa-lg fa-facebook-square"></i>
         </a>
-        <a class="btn" href="https://twitter.com/share" target="_blank">
+        <a class="btn" href="https://twitter.com/intent/tweet?url={{ urlquote(participant.url()) }}">
             <i class="fa fa-lg fa-twitter"></i>
         </a>
-        <a class="btn" href="https://plus.google.com/share?url={{ participant.url() }}" target="_blank">
+        <a class="btn" href="https://plus.google.com/share?url={{ urlquote(participant.url()) }}">
             <i class="fa fa-lg fa-google-plus"></i>
         </a>
     </div>

@@ -180,7 +180,7 @@ title = _username
                     >{{ statement or '' }}</textarea>
                 <p class="help-block pull-right">{{ _("Markdown supported.") }}
                     <a href="https://daringfireball.net/projects/markdown/basics"
-                       target="_blank">{{ _("What is markdown?") }}</a>
+                       target="_blank" rel="noopener noreferrer">{{ _("What is markdown?") }}</a>
                 </p>
                 <p> </p>{# this is for spacing #}
                 <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
@@ -209,12 +209,14 @@ title = _username
 
     <h3 class="banderole default" id="avatar">{{ _("Avatar") }}</h3>
 
-    <a class="btn btn-default" target="_blank" href="https://www.libravatar.org/account/login/">
+    <a class="btn btn-default" target="_blank" rel="noopener noreferrer"
+       href="https://www.libravatar.org/account/login/">
        {{ glyphicon('edit') }}
        <span>{{ _("Modify your Libravatar") }}</span>
     </a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a class="btn btn-default btn-sm" target="_blank" href="https://www.libravatar.org/">
+    <a class="btn btn-default btn-sm" target="_blank" rel="noopener noreferrer"
+       href="https://www.libravatar.org/">
        {{ glyphicon('info-sign') }}
        <span>{{ _("What is Libravatar?") }}</span>
     </a><br>
