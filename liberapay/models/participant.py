@@ -279,7 +279,7 @@ class Participant(Model, MixinTeam):
         if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
             raise BadPasswordSize
         algo = 'sha256'
-        salt = urandom(21)
+        salt = urandom(32)
         rounds = website.app_conf.password_rounds
         hashed = cls._hash_password(password, algo, salt, rounds)
         hashed = '$'.join((
