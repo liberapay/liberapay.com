@@ -1,21 +1,15 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
-def allow_cors_for_assets(response, request=None):
-    """The subdomains need this to access the assets on the main domain.
-    """
+def set_default_security_headers(response, request=None):
+    # Allow CORS for assets
+    # The subdomains need this to access the assets on the main domain.
     if request is not None and request.path.raw.startswith('/assets/'):
         if b'Access-Control-Allow-Origin' not in response.headers:
             response.headers[b'Access-Control-Allow-Origin'] = b'*'
 
-
-def x_frame_options(response):
-    """X-Frame-Origin
-
-    This is a security measure to prevent clickjacking:
-    http://en.wikipedia.org/wiki/Clickjacking
-
-    """
+    # X-Frame-Options is a security measure to prevent clickjacking
+    # See http://en.wikipedia.org/wiki/Clickjacking
     if b'X-Frame-Options' not in response.headers:
         response.headers[b'X-Frame-Options'] = b'SAMEORIGIN'
     elif response.headers[b'X-Frame-Options'] == b'ALLOWALL':
