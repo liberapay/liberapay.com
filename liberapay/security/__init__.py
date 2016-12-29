@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
-def set_default_security_headers(response, request=None):
+def set_default_security_headers(website, response, request=None):
     # Allow CORS for assets
     # The subdomains need this to access the assets on the main domain.
     if request is not None and request.path.raw.startswith('/assets/'):
@@ -29,12 +29,14 @@ def set_default_security_headers(response, request=None):
     # CSP is a client-side protection against code injection (XSS)
     # https://scotthelme.co.uk/content-security-policy-an-introduction/
     if b'content-security-policy' not in response.headers:
-        response.headers[b'content-security-policy'] = (
+        csp = (
             b"default-src 'self';"
             b"script-src 'self' 'unsafe-inline';"
             b"style-src 'self' 'unsafe-inline';"
+            b"connect-src *;"  # for credit card data
             b"img-src *;"
-            b"upgrade-insecure-requests;"
-            b"block-all-mixed-content;"
             b"reflected-xss block;"
         )
+        if website.canonical_scheme == 'https':
+            csp += b"upgrade-insecure-requests;block-all-mixed-content;"
+        response.headers[b'content-security-policy'] = csp
