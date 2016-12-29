@@ -26,6 +26,8 @@ def set_default_security_headers(response, request=None):
 
         del response.headers[b'X-Frame-Options']
 
+    # CSP is a client-side protection against code injection (XSS)
+    # https://scotthelme.co.uk/content-security-policy-an-introduction/
     if b'content-security-policy' not in response.headers:
         response.headers[b'content-security-policy'] = (
             b"default-src 'self';"
