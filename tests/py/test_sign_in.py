@@ -149,7 +149,7 @@ class TestLogIn(EmailHarness):
         assert alice2.session_token != alice.session_token
         # ↑ this means that the link is only valid once
         assert r.code == 302
-        assert r.headers[b'Location'] == b'/alice/?foo=bar'
+        assert r.headers[b'Location'] == b'http://localhost/alice/?foo=bar'
         # ↑ checks that original path and query are preserved
 
         # Check that we can change our password

@@ -18,7 +18,7 @@ from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, allow_cors_for_assets, x_frame_options
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.state_chain import (
-    canonize, insert_constants,
+    create_response_object, canonize, insert_constants,
     merge_exception_into_response, return_500_for_exception,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
@@ -89,7 +89,7 @@ algorithm.functions = [
     algorithm['insert_variables_for_aspen'],
     algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
-    algorithm['create_response_object'],
+    create_response_object,
 
     canonize,
     i18n.set_up_i18n,
@@ -155,7 +155,15 @@ pando.Response.success = _success
 
 if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')
-def _redirect(response, url, code=302):
+def _redirect(response, url, code=302, trusted_url=True):
+    if not trusted_url:
+        if isinstance(url, bytes):
+            url = url.decode('utf8')
+        if not url.startswith('/') or url.startswith('//'):
+            url = '/?bad_redirect=' + urlquote(url)
+        host = response.request.headers[b'Host'].decode('ascii')
+        # ^ this is safe because we don't accept requests with unknown hosts
+        url = response.website.canonical_scheme + '://' + host + url
     response.code = code
     response.headers[b'Location'] = response.encode_url(url)
     raise response

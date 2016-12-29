@@ -1,4 +1,9 @@
-raw = """\
+liberapay_hof_raw = """
+EdOverflow
+https://github.com/liberapay/liberapay.com/pull/467
+"""
+
+gratipay_hof_raw = """\
 Sergey Bobrov https://twitter.com/Black2Fan
 https://github.com/gratipay/security-flh0cu/issues/1
 
@@ -39,26 +44,31 @@ wilkie buttscicles
 https://github.com/gratipay/gratipay.com/issues/722
 
 d0ugal jacobian spookylukey
-https://github.com/gratipay/gratipay.com/issues/88"""
+https://github.com/gratipay/gratipay.com/issues/88
+"""
 
 parse_twitter = lambda x: [(x, 'https://twitter.com/' + x[1:])]
 parse_github = lambda x: [(y, 'https://github.com/' + y) for y in x.split()]
 parse_link = lambda x: [x.rsplit(None, 1)]
 new_rec = lambda: [[], None]
 
-hof = [new_rec()]
+def parse_hof(raw):
+    hof = [new_rec()]
+    for line in raw.strip().splitlines():
+        if not line:
+            hof.append(new_rec())
+        elif line.startswith('http'):
+            hof[-1][1] = line
+        elif line.startswith('@'):
+            hof[-1][0] = parse_twitter(line)
+        elif ' http' in line:
+            hof[-1][0] = parse_link(line)
+        else:
+            hof[-1][0] = parse_github(line)
+    return hof
 
-for line in raw.splitlines():
-    if not line:
-        hof.append(new_rec())
-    elif line.startswith('http'):
-        hof[-1][1] = line
-    elif line.startswith('@'):
-        hof[-1][0] = parse_twitter(line)
-    elif ' http' in line:
-        hof[-1][0] = parse_link(line)
-    else:
-        hof[-1][0] = parse_github(line)
+gratipay_hof = parse_hof(gratipay_hof_raw)
+liberapay_hof = parse_hof(liberapay_hof_raw)
 
 [---]
 title = _("Security")
@@ -70,13 +80,7 @@ title = _("Security")
 
     <h3>Hall of Fame</h3>
 
-    <p>Thanks to all hackers who have disclosed security issues to Gratipay
-    <a href="https://hackerone.com/gratipay">on Hackerone</a>, some of which
-    also applied to Liberapay.</p>
-
-    <p>Thanks to the following researchers (most recent first) for disclosing
-    security issues to Gratipay through other means:</p>
-
+    % macro show_hof(hof)
     <ol>
         % for researchers, link in hof
         <li>
@@ -87,5 +91,20 @@ title = _("Security")
         </li>
         % endfor
     </ol>
+    % endmacro
+
+    <p>Thanks to the following researchers (most recent first) for having
+    reported security issues to us via email:</p>
+
+    {{ show_hof(liberapay_hof) }}
+
+    <p>Thanks to all hackers who have disclosed security issues to Gratipay
+    <a href="https://hackerone.com/gratipay">on Hackerone</a>, some of which
+    also applied to Liberapay.</p>
+
+    <p>Thanks to the following people (most recent first) for having alerted
+    Gratipay about security issues through other means:</p>
+
+    {{ show_hof(gratipay_hof) }}
 
 % endblock

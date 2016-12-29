@@ -161,7 +161,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
         p.sign_in(response.headers.cookie, session_suffix)
         state['user'] = p
         if request.body.pop('form.repost', None) != 'true':
-            response.redirect(redirect_url)
+            response.redirect(redirect_url, trusted_url=False)
 
 
 def add_auth_to_response(response, request=None, user=ANON):
