@@ -40,3 +40,7 @@ def set_default_security_headers(website, response, request=None):
         if website.canonical_scheme == 'https':
             csp += b"upgrade-insecure-requests;block-all-mixed-content;"
         response.headers[b'content-security-policy-report-only'] = csp
+
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+    if b'X-XSS-Protection' not in response.headers:
+        response.headers[b'X-XSS-Protection'] = b'1; mode=block'
