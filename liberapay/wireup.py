@@ -91,6 +91,7 @@ class AppConf(object):
         bountysource_secret=str,
         check_db_every=int,
         compress_assets=bool,
+        csp_extra=str,
         dequeue_emails_every=int,
         facebook_callback=str,
         facebook_id=str,
