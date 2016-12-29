@@ -27,11 +27,6 @@ require () {
     fi
 }
 
-# Sync the translations
-if yesno "Shall we sync translations first?"; then
-    make i18n_update
-fi
-
 # Check that we have the required tools
 require rhc
 require git
@@ -39,6 +34,11 @@ require git
 # Make sure we have the latest master
 git checkout -q master
 git pull
+
+# Sync the translations
+if yesno "Shall we sync translations first?"; then
+    make i18n_update
+fi
 
 # Compute the next version number
 prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
