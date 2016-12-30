@@ -129,7 +129,7 @@ def iter_payday_events(db, participant, year=None):
                     payday_dates.pop()
                 payday_date = payday_dates[-1] if payday_dates else None
                 if event_date == payday_date:
-                    day_open['payday_number'] = len(payday_dates) - 1
+                    day_open['payday_number'] = len(payday_dates)
             yield day_open
             prev_date = event_date
 

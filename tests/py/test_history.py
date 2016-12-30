@@ -94,7 +94,7 @@ class TestHistory(FakeTransfersHarness):
         assert events[0]['given'] == 0
         assert events[0]['received'] == 12
         assert events[1]['kind'] == 'day-open'
-        assert events[1]['payday_number'] == 2
+        assert events[1]['payday_number'] == 3
         assert events[2]['balance'] == 12
         assert events[-1]['kind'] == 'day-close'
         assert events[-1]['balance'] == 0
