@@ -103,6 +103,8 @@ def iter_payday_events(db, participant, year=None):
                 t['amount'] for t in transfers
                 if t['tippee'] == id and t['status'] == 'succeeded' and t['context'] != 'refund'
             ),
+            npatrons=len(set(t['tipper'] for t in transfers if t['tipper'] != id)),
+            ntippees=len(set(t['tippee'] for t in transfers if t['tippee'] != id)),
         )
 
     payday_dates = db.all("""

@@ -71,14 +71,24 @@ else:
 <div class="row col-md-10">
 % if totals
 <p>
-    {{ _("Total given: {0}", Money(totals['given'], "EUR")) }}
+    {{ ngettext(
+        "Total given: {0} to {n} person",
+        "Total given: {0} to {n} people",
+        totals['ntippees'],
+        Money(totals['given'], "EUR")
+    ) }}
         % if totals['given']
         (<a href="export.csv?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
         % endif
     <br>
-    {{ _("Total received: {0}", Money(totals['received'], "EUR")) }}
+    {{ ngettext(
+        "Total received: {0} from {n} donor",
+        "Total received: {0} from {n} donors",
+        totals['npatrons'],
+        Money(totals['received'], "EUR")
+    ) }}
 </p>
 <br>
 % endif
