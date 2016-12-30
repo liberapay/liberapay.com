@@ -4,6 +4,8 @@ from decimal import Decimal
 from pando import Response
 from psycopg2 import IntegrityError
 
+from ..website import website
+
 
 def get_end_of_year_balance(db, participant, year, current_year):
     if year == current_year:
@@ -157,26 +159,31 @@ def iter_payday_events(db, participant, year=None):
 
 def export_history(participant, year, mode, key, back_as='namedtuple', require_key=False):
     db = participant.db
-    params = dict(id=participant.id, year=year)
+    base_url = website.canonical_url + '/~'
+    params = dict(id=participant.id, year=year, base_url=base_url)
     out = {}
     if mode == 'aggregate':
         out['given'] = lambda: db.all("""
-            SELECT tippee, sum(amount) AS amount
-              FROM transfers
-             WHERE tipper = %(id)s
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-               AND context <> 'refund'
-          GROUP BY tippee
+            SELECT (%(base_url)s || t.tippee::text) AS donee_url,
+                   min(p.username) AS donee_username, sum(t.amount) AS amount
+              FROM transfers t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %(id)s
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+               AND t.context <> 'refund'
+          GROUP BY t.tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
-            SELECT team, sum(amount) AS amount
-              FROM transfers
-             WHERE tippee = %(id)s
-               AND context = 'take'
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-          GROUP BY team
+            SELECT (%(base_url)s || t.team::text) AS team_url,
+                   min(p.username) AS team_username, sum(t.amount) AS amount
+              FROM transfers t
+              JOIN participants p ON p.id = t.team
+             WHERE t.tippee = %(id)s
+               AND t.context = 'take'
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+          GROUP BY t.team
         """, params, back_as=back_as)
     else:
         out['exchanges'] = lambda: db.all("""
@@ -187,21 +194,25 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
           ORDER BY id ASC
         """, params, back_as=back_as)
         out['given'] = lambda: db.all("""
-            SELECT timestamp, tippee, amount, context
-              FROM transfers
-             WHERE tipper = %(id)s
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-          ORDER BY id ASC
+            SELECT timestamp, (%(base_url)s || t.tippee::text) AS donee_url,
+                   p.username AS donee_username, t.amount, t.context
+              FROM transfers t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %(id)s
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+          ORDER BY t.id ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
-            SELECT timestamp, team, amount
-              FROM transfers
-             WHERE tippee = %(id)s
-               AND context = 'take'
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-          ORDER BY id ASC
+            SELECT timestamp, (%(base_url)s || t.team::text) AS team_url,
+                   p.username AS team_username, t.amount
+              FROM transfers t
+              JOIN participants p ON p.id = t.team
+             WHERE t.tippee = %(id)s
+               AND t.context = 'take'
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+          ORDER BY t.id ASC
         """, params, back_as=back_as)
         out['received'] = lambda: db.all("""
             SELECT timestamp, amount, context
