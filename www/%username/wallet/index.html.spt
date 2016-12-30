@@ -11,7 +11,7 @@ subhead = _("Wallet")
 subpath = 'wallet/' if user.is_admin else ''
 admin_override = user.is_admin and (participant != user or 'override' in request.qs)
 translated_status = { None:         ''
-                    , 'pre':        _('pre')
+                    , 'pre':        _('preparing')
                     , 'created':    _('pending')
                     , 'failed':     _('failed')
                     , 'succeeded':  _('succeeded')
