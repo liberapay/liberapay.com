@@ -99,7 +99,7 @@ else:
     % if event['kind'] == 'day-open'
     <tr class="day-open">
         <td class="nature">
-            {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}
+            {{ format_date(event['date'], 'long') }}
             % if event['payday_number']
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif

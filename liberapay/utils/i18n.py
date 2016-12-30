@@ -10,7 +10,7 @@ from unicodedata import combining, normalize
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
 from babel.core import LOCALE_ALIASES, Locale
-from babel.dates import format_datetime, format_timedelta
+from babel.dates import format_date, format_datetime, format_timedelta
 from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
 from babel.numbers import (
@@ -275,6 +275,7 @@ def add_helpers_to_context(context, loc):
     context['format_currency'] = lambda *a, **kw: format_money(*a, locale=loc, **kw)
     context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
     context['format_datetime'] = lambda *a: format_datetime(*a, locale=loc)
+    context['format_date'] = lambda *a: format_date(*a, locale=loc)
     context['get_lang_options'] = lambda *a, **kw: get_lang_options(context['request'], loc, *a, **kw)
     context['to_age'] = to_age
 
