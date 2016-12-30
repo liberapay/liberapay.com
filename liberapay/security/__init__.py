@@ -1,21 +1,15 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
-def allow_cors_for_assets(response, request=None):
-    """The subdomains need this to access the assets on the main domain.
-    """
+def set_default_security_headers(website, response, request=None):
+    # Allow CORS for assets
+    # The subdomains need this to access the assets on the main domain.
     if request is not None and request.path.raw.startswith('/assets/'):
         if b'Access-Control-Allow-Origin' not in response.headers:
             response.headers[b'Access-Control-Allow-Origin'] = b'*'
 
-
-def x_frame_options(response):
-    """X-Frame-Origin
-
-    This is a security measure to prevent clickjacking:
-    http://en.wikipedia.org/wiki/Clickjacking
-
-    """
+    # X-Frame-Options is a security measure to prevent clickjacking
+    # See http://en.wikipedia.org/wiki/Clickjacking
     if b'X-Frame-Options' not in response.headers:
         response.headers[b'X-Frame-Options'] = b'SAMEORIGIN'
     elif response.headers[b'X-Frame-Options'] == b'ALLOWALL':
@@ -31,3 +25,22 @@ def x_frame_options(response):
         #   http://ipsec.pl/node/1094
 
         del response.headers[b'X-Frame-Options']
+
+    # CSP is a client-side protection against code injection (XSS)
+    # https://scotthelme.co.uk/content-security-policy-an-introduction/
+    if b'content-security-policy' not in response.headers:
+        csp = (
+            b"default-src 'self';"
+            b"script-src 'self' 'unsafe-inline';"
+            b"style-src 'self' 'unsafe-inline';"
+            b"connect-src *;"  # for credit card data
+            b"img-src *;"
+            b"reflected-xss block;"
+        ) + website.app_conf.csp_extra.encode()
+        if website.canonical_scheme == 'https':
+            csp += b"upgrade-insecure-requests;block-all-mixed-content;"
+        response.headers[b'content-security-policy-report-only'] = csp
+
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+    if b'X-XSS-Protection' not in response.headers:
+        response.headers[b'X-XSS-Protection'] = b'1; mode=block'

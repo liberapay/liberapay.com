@@ -15,7 +15,7 @@ from liberapay import utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
-from liberapay.security import authentication, csrf, allow_cors_for_assets, x_frame_options
+from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.state_chain import (
     create_response_object, canonize, insert_constants,
@@ -117,8 +117,7 @@ algorithm.functions = [
     authentication.add_auth_to_response,
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,
-    x_frame_options,
-    allow_cors_for_assets,
+    set_default_security_headers,
 
     algorithm['delegate_error_to_simplate'],
     tell_sentry,
