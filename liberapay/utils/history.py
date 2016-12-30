@@ -115,6 +115,7 @@ def iter_payday_events(db, participant, year=None):
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)
+    day_events, day_open = None, None  # for pyflakes
     for event in events:
 
         event['balance'] = balance
@@ -122,7 +123,12 @@ def iter_payday_events(db, participant, year=None):
         event_date = event['timestamp'].date()
         if event_date != prev_date:
             if prev_date:
+                day_open['wallet_delta'] = day_open['balance'] - balance
+                yield day_open
+                for e in day_events:
+                    yield e
                 yield dict(kind='day-close', balance=balance)
+            day_events = []
             day_open = dict(kind='day-open', date=event_date, balance=balance)
             if payday_dates:
                 while payday_dates and payday_dates[-1] > event_date:
@@ -130,30 +136,37 @@ def iter_payday_events(db, participant, year=None):
                 payday_date = payday_dates[-1] if payday_dates else None
                 if event_date == payday_date:
                     day_open['payday_number'] = len(payday_dates)
-            yield day_open
             prev_date = event_date
 
         if 'fee' in event:
             if event['amount'] > 0:
                 kind = 'payout-refund' if event['refund_ref'] else 'charge'
+                event['bank_delta'] = -event['amount'] - max(event['fee'], 0)
+                event['wallet_delta'] = event['amount'] - min(event['fee'], 0)
                 if event['status'] == 'succeeded':
-                    balance -= event['amount'] - min(event['fee'], 0)
+                    balance -= event['wallet_delta']
             else:
                 kind = 'payin-refund' if event['refund_ref'] else 'credit'
+                event['bank_delta'] = -event['amount'] - min(event['fee'], 0)
+                event['wallet_delta'] = event['amount'] - max(event['fee'], 0)
                 if event['status'] != 'failed':
-                    balance -= event['amount'] - max(event['fee'], 0)
+                    balance -= event['wallet_delta']
         else:
             kind = 'transfer'
-            if event['status'] != 'succeeded':
-                pass
-            elif event['tippee'] == id:
-                balance -= event['amount']
+            if event['tippee'] == id:
+                event['wallet_delta'] = event['amount']
             else:
-                balance += event['amount']
+                event['wallet_delta'] = -event['amount']
+            if event['status'] == 'succeeded':
+                balance -= event['wallet_delta']
         event['kind'] = kind
 
-        yield event
+        day_events.append(event)
 
+    day_open['wallet_delta'] = day_open['balance'] - balance
+    yield day_open
+    for e in day_events:
+        yield e
     yield dict(kind='day-close', balance=balance)
 
 

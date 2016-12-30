@@ -278,6 +278,11 @@ def add_helpers_to_context(context, loc):
     context['get_lang_options'] = lambda *a, **kw: get_lang_options(context['request'], loc, *a, **kw)
     context['to_age'] = to_age
 
+    def format_delta(s, *a):
+        return format_decimal(s, *a, format='+#,##0.00;-#,##0.00', locale=loc)
+
+    context['format_delta'] = format_delta
+
     def parse_decimal_or_400(s, *a):
         try:
             return parse_decimal(s, *a, locale=loc)
