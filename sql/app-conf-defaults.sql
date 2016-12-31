@@ -9,6 +9,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('bountysource_secret', '""'::jsonb),
     ('check_db_every', '600'::jsonb),
     ('compress_assets', 'false'::jsonb),
+    ('csp_extra', '""'::jsonb),
     ('dequeue_emails_every', '60'::jsonb),
     ('facebook_callback', '"http://localhost:8339/on/facebook/associate"'::jsonb),
     ('facebook_id', '"1418954898427187"'::jsonb),
