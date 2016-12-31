@@ -159,3 +159,6 @@ CREATE OR REPLACE VIEW current_tips AS
 
 -- migration #22
 DELETE FROM notification_queue WHERE event IN ('income', 'low_balance');
+
+-- migration #23
+INSERT INTO app_conf (key, value) VALUES ('csp_extra', '""'::jsonb);
