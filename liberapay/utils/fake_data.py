@@ -165,6 +165,13 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
     """
     db = website.db
 
+    # Speed things up
+    db.run("""
+        DO $$ BEGIN
+            EXECUTE 'ALTER DATABASE '||current_database()||' SET synchronous_commit TO off';
+        END $$
+    """)
+
     print("Making Participants")
     participants = []
     for i in range(num_participants):

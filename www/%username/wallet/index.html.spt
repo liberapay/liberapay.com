@@ -1,7 +1,13 @@
 from datetime import datetime
+from itertools import chain
 
 from liberapay.utils import get_participant
 from liberapay.utils.history import iter_payday_events
+
+STATUS_MAP = {
+    'failed': 'danger',
+    'succeeded': 'success',
+}
 
 [-----------------------------------------------------------------------------]
 
@@ -23,6 +29,14 @@ try:
 except ValueError:
     raise response.error(400, "bad year")
 events = iter_payday_events(website.db, participant, year)
+try:
+    totals = next(events)
+    if totals['kind'] != 'totals':
+        # it's not what we expected, put it back
+        events = chain((totals,), events)
+        totals = None
+except StopIteration:
+    totals = None
 years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
@@ -54,100 +68,83 @@ else:
 </ul>
 % endif
 
-<div class="row col-md-8">
+<div class="row col-md-10">
+% if totals
+<p>
+    {{ ngettext(
+        "Total given: {0} to {n} person",
+        "Total given: {0} to {n} people",
+        totals['ntippees'],
+        Money(totals['given'], "EUR")
+    ) }}
+        % if totals['given']
+        (<a href="export.csv?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
+            _("Export as CSV")
+        }}</a>)
+        % endif
+    <br>
+    {{ ngettext(
+        "Total received: {0} from {n} donor",
+        "Total received: {0} from {n} donors",
+        totals['npatrons'],
+        Money(totals['received'], "EUR")
+    ) }}
+</p>
+<br>
+% endif
+
 <table class="table table-condensed" id="history">
-% for event in events
-    % if event['kind'] == 'totals'
-    <tr><td colspan="8" class="totals">
-        {{ _("Total given: {0}", Money(event['given'], "EUR")) }}
-            % if event['given']
-            (<a href="export.csv?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
-                _("Export as CSV")
-            }}</a>)
-            % endif
-        <br>
-        {{ _("Total received: {0}", Money(event['received'], "EUR")) }}
-    </td></tr>
-    % elif event['kind'] == 'day-open'
+<thead>
     <tr>
-        <th colspan="8"><h3>
-            {{ event['date'].strftime("%B %d, %Y").replace(' 0', ' ') }}
+        <th class="nature"></th>
+        <th class="status">{{ _("Status") }}</th>
+        <th class="wallet">{{ _("Amount") }}</th>
+        <th class="fees"><a href="/about/faq#fees">{{ _("Fees") }}</a></th>
+        <th class="bank" title="{{ _('The amount you should see on your bank account statement.') }}"
+            >{{ _("Amount in bank") }}</th>
+    </tr>
+</thead>
+<tbody>
+% for event in events
+    % if event['kind'] == 'day-open'
+    <tr class="day-open">
+        <td class="nature">
+            {{ format_date(event['date'], 'long') }}
             % if event['payday_number']
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif
-        </h3></th>
+        </td>
+        <td class="status" title="{{ _('balance at the end of the day') }}">{{ format_currency(event['balance'], 'EUR') }}</td>
+        <td class="wallet">{{ format_delta(event['wallet_delta']) }}</td>
+        <td class="fees"></td>
+        <td class="bank"></td>
     </tr>
-    <tr class="head">
-        <td colspan="2" class="outside">&larr; {{ _("Outside") }}</td>
-        <td colspan="5" class="inside">{{ _("Inside Liberapay") }} &rarr;</td>
-    </tr>
-    <tr class="head">
-        <td class="bank">{{ _("Bank") }}</td>
-        <td class="fees">{{ _("Fees") }}</td>
-        <td class="credits">{{ _("Credits") }}</td>
-        <td class="debits">{{ _("Debits") }}</td>
-        <td class="balance">{{ _("Balance") }}</td>
-        <td class="status">{{ _("Status") }}</td>
-        <td class="notes">{{ _("Notes") }}</td>
-    </tr>
-    % elif event['kind'] in ('credit', 'payin-refund')
+    % elif 'fee' in event
     <tr>
-        <td class="bank">{{ -event['amount'] - min(event['fee'], 0) }}</td>
-        <td class="fees">{{ event['fee'] }}</td>
-        <td class="credits"></td>
-        <td class="debits">{{ -event['amount'] + max(event['fee'], 0) }}</td>
-        <td class="balance">{{ event['balance'] }}</td>
-        <td class="status">{{ translated_status[event['status']] }}</td>
-        <td class="notes">
+        <td class="nature">
         % if event['kind'] == 'payin-refund'
             {{ event['note'] or _("refund") }}
-        % else
-            {{ event['note'] or '' }}
-        % endif
-        % if event['recorder']
-            &mdash; <a href="/{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
-        % endif
-        </td>
-    </tr>
-    % elif event['kind'] in ('charge', 'payout-refund')
-    <tr>
-        <td class="bank">{{ -event['amount'] - max(event['fee'], 0) }}</td>
-        <td class="fees">{{ event['fee'] }}</td>
-        <td class="credits">{{ event['amount'] - min(event['fee'], 0) }}</td>
-        <td class="debits"></td>
-        <td class="balance">{{ event['balance'] }}</td>
-        <td class="status">{{ translated_status[event['status']] }}</td>
-        <td class="notes">
-        % if event['kind'] == 'payout-refund'
+        % elif event['kind'] in ('credit', 'charge')
+            {{ _("withdrawal") if event['kind'] == 'credit' else _("deposit") }}
+            % if event['note']
+                &mdash; {{ _("error message: {0}", event['note']) if event['status'] == 'failed' else event['note'] }}
+            % endif
+        % elif event['kind'] == 'payout-refund'
             {{ _("refund of failed withdrawal (error message: {0})", event['note']) }}
-        % else
-            {{ event['note'] or '' }}
-        % endif
-        % if event['recorder']
-            &mdash; <a href="/~{{ event['recorder'] }}/">{{ event['recorder'] }}</a>
         % endif
         % if event['status'] == 'succeeded' and event['kind'] == 'charge'
             (<a href="../receipts/{{ event['id'] }}">{{ _("Receipt").lower() }}</a>)
         % endif
         </td>
+        <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
+            >{{ translated_status[event['status']] }}</td>
+        <td class="wallet">{{ format_delta(event['wallet_delta']) }}</td>
+        <td class="fees">{{ format_currency(event['fee'], '').strip() }}</td>
+        <td class="bank">{{ format_delta(event['bank_delta']) }}</td>
     </tr>
     % elif event['kind'] == 'transfer'
     <tr>
-        <td class="bank"></td>
-        <td class="fees"></td>
-
-        % if event['tippee'] == participant.id
-        <td class="credits">{{ event['amount'] }}</td>
-        <td class="debits"></td>
-        % else
-        <td class="credits"></td>
-        <td class="debits">{{ event['amount'] }}</td>
-        % endif
-
-        <td class="balance">{{ event['balance'] }}</td>
-
-        <td class="status">{{ translated_status[event['status']] }}</td>
-        <td class="notes">
+        <td class="nature">
         % set context = event['context']
         % if event['tippee'] == participant.id
             % if admin_override
@@ -178,22 +175,18 @@ else:
             % endif
         % endif
         </td>
-
-    </tr>
-    % elif event['kind'] == 'day-close'
-    <tr>
-        <td class="bank"></td>
+        <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
+            >{{ translated_status[event['status']] }}</td>
+        <td class="wallet">{{ format_delta(event['wallet_delta']) }}</td>
         <td class="fees"></td>
-        <td class="credits"></td>
-        <td class="debits"></td>
-        <td class="balance">{{ event['balance'] }}</td>
-        <td class="status"></td>
-        <td class="notes"></td>
+        <td class="bank"></td>
+
     </tr>
     % endif
 % else
     <p>{{ _("No transactions to show.") }}</p>
 % endfor
+</tbody>
 </table>
 </div>
 

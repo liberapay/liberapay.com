@@ -358,14 +358,23 @@ a.dropdown-toggle {
 }
 
 #history {
-    td.totals {
-        padding-left: 0;
-    }
-    .fees, .outside {
-        border-right: 1px solid #ddd;
-    }
-    .outside {
+    td, th {
         text-align: right;
+        &[title] {
+            cursor: help;
+        }
+    }
+    td {
+        border-top-style: dashed;
+    }
+    .day-open {
+        font-weight: bold;
+        td {
+            border-top-style: solid;
+        }
+    }
+    .nature, .status {
+        text-align: left;
     }
 }
 

@@ -4,6 +4,8 @@ from decimal import Decimal
 from pando import Response
 from psycopg2 import IntegrityError
 
+from ..website import website
+
 
 def get_end_of_year_balance(db, participant, year, current_year):
     if year == current_year:
@@ -101,6 +103,8 @@ def iter_payday_events(db, participant, year=None):
                 t['amount'] for t in transfers
                 if t['tippee'] == id and t['status'] == 'succeeded' and t['context'] != 'refund'
             ),
+            npatrons=len(set(t['tipper'] for t in transfers if t['tipper'] != id)),
+            ntippees=len(set(t['tippee'] for t in transfers if t['tippee'] != id)),
         )
 
     payday_dates = db.all("""
@@ -113,6 +117,7 @@ def iter_payday_events(db, participant, year=None):
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)
+    day_events, day_open = None, None  # for pyflakes
     for event in events:
 
         event['balance'] = balance
@@ -120,63 +125,80 @@ def iter_payday_events(db, participant, year=None):
         event_date = event['timestamp'].date()
         if event_date != prev_date:
             if prev_date:
+                day_open['wallet_delta'] = day_open['balance'] - balance
+                yield day_open
+                for e in day_events:
+                    yield e
                 yield dict(kind='day-close', balance=balance)
+            day_events = []
             day_open = dict(kind='day-open', date=event_date, balance=balance)
             if payday_dates:
                 while payday_dates and payday_dates[-1] > event_date:
                     payday_dates.pop()
                 payday_date = payday_dates[-1] if payday_dates else None
                 if event_date == payday_date:
-                    day_open['payday_number'] = len(payday_dates) - 1
-            yield day_open
+                    day_open['payday_number'] = len(payday_dates)
             prev_date = event_date
 
         if 'fee' in event:
             if event['amount'] > 0:
                 kind = 'payout-refund' if event['refund_ref'] else 'charge'
+                event['bank_delta'] = -event['amount'] - max(event['fee'], 0)
+                event['wallet_delta'] = event['amount'] - min(event['fee'], 0)
                 if event['status'] == 'succeeded':
-                    balance -= event['amount'] - min(event['fee'], 0)
+                    balance -= event['wallet_delta']
             else:
                 kind = 'payin-refund' if event['refund_ref'] else 'credit'
+                event['bank_delta'] = -event['amount'] - min(event['fee'], 0)
+                event['wallet_delta'] = event['amount'] - max(event['fee'], 0)
                 if event['status'] != 'failed':
-                    balance -= event['amount'] - max(event['fee'], 0)
+                    balance -= event['wallet_delta']
         else:
             kind = 'transfer'
-            if event['status'] != 'succeeded':
-                pass
-            elif event['tippee'] == id:
-                balance -= event['amount']
+            if event['tippee'] == id:
+                event['wallet_delta'] = event['amount']
             else:
-                balance += event['amount']
+                event['wallet_delta'] = -event['amount']
+            if event['status'] == 'succeeded':
+                balance -= event['wallet_delta']
         event['kind'] = kind
 
-        yield event
+        day_events.append(event)
 
+    day_open['wallet_delta'] = day_open['balance'] - balance
+    yield day_open
+    for e in day_events:
+        yield e
     yield dict(kind='day-close', balance=balance)
 
 
 def export_history(participant, year, mode, key, back_as='namedtuple', require_key=False):
     db = participant.db
-    params = dict(id=participant.id, year=year)
+    base_url = website.canonical_url + '/~'
+    params = dict(id=participant.id, year=year, base_url=base_url)
     out = {}
     if mode == 'aggregate':
         out['given'] = lambda: db.all("""
-            SELECT tippee, sum(amount) AS amount
-              FROM transfers
-             WHERE tipper = %(id)s
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-               AND context <> 'refund'
-          GROUP BY tippee
+            SELECT (%(base_url)s || t.tippee::text) AS donee_url,
+                   min(p.username) AS donee_username, sum(t.amount) AS amount
+              FROM transfers t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %(id)s
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+               AND t.context <> 'refund'
+          GROUP BY t.tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
-            SELECT team, sum(amount) AS amount
-              FROM transfers
-             WHERE tippee = %(id)s
-               AND context = 'take'
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-          GROUP BY team
+            SELECT (%(base_url)s || t.team::text) AS team_url,
+                   min(p.username) AS team_username, sum(t.amount) AS amount
+              FROM transfers t
+              JOIN participants p ON p.id = t.team
+             WHERE t.tippee = %(id)s
+               AND t.context = 'take'
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+          GROUP BY t.team
         """, params, back_as=back_as)
     else:
         out['exchanges'] = lambda: db.all("""
@@ -187,21 +209,25 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
           ORDER BY id ASC
         """, params, back_as=back_as)
         out['given'] = lambda: db.all("""
-            SELECT timestamp, tippee, amount, context
-              FROM transfers
-             WHERE tipper = %(id)s
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-          ORDER BY id ASC
+            SELECT timestamp, (%(base_url)s || t.tippee::text) AS donee_url,
+                   p.username AS donee_username, t.amount, t.context
+              FROM transfers t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %(id)s
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+          ORDER BY t.id ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
-            SELECT timestamp, team, amount
-              FROM transfers
-             WHERE tippee = %(id)s
-               AND context = 'take'
-               AND extract(year from timestamp) = %(year)s
-               AND status = 'succeeded'
-          ORDER BY id ASC
+            SELECT timestamp, (%(base_url)s || t.team::text) AS team_url,
+                   p.username AS team_username, t.amount
+              FROM transfers t
+              JOIN participants p ON p.id = t.team
+             WHERE t.tippee = %(id)s
+               AND t.context = 'take'
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+          ORDER BY t.id ASC
         """, params, back_as=back_as)
         out['received'] = lambda: db.all("""
             SELECT timestamp, amount, context
