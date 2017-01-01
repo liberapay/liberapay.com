@@ -36,7 +36,7 @@ try:
         events = chain((totals,), events)
         totals = None
 except StopIteration:
-    totals = None
+    totals, events = None, ()
 years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
@@ -93,6 +93,7 @@ else:
 <br>
 % endif
 
+% if events
 <table class="table table-condensed" id="history">
 <thead>
     <tr>
@@ -183,11 +184,12 @@ else:
 
     </tr>
     % endif
-% else
-    <p>{{ _("No transactions to show.") }}</p>
 % endfor
 </tbody>
 </table>
+% else
+    <p>{{ _("No transactions to show.") }}</p>
+% endif
 </div>
 
 % endblock
