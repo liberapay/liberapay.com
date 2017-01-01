@@ -25,9 +25,24 @@ translated_status = { None:         ''
 
 current_year = datetime.utcnow().year
 try:
-    year = int(request.qs.get('year', current_year))
+    year = int(request.qs.get('year', 0))
 except ValueError:
     raise response.error(400, "bad year")
+if not year:
+    # Try to detect the year of the last transaction
+    last_event_year = website.db.one("""
+        SELECT extract(year from timestamp)::int AS year
+          FROM transfers
+         WHERE tipper = %(p_id)s OR tippee = %(p_id)s
+     UNION ALL
+        SELECT extract(year from timestamp)::int AS year
+          FROM exchanges
+         WHERE participant = %(p_id)s
+      ORDER BY year DESC
+         LIMIT 1
+    """, dict(p_id=participant.id))
+    year = last_event_year or current_year
+
 events = iter_payday_events(website.db, participant, year)
 try:
     totals = next(events)
