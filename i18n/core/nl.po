@@ -772,6 +772,9 @@ msgstr "Nominale inkomen"
 msgid "Actual Take"
 msgstr "Actuele Inkomen"
 
+msgid "Update my nominal take"
+msgstr ""
+
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
 msgstr "Onopgeëiste inkomsten blijft in de portefeuilles van de donoren, is het voegt zich niet bij in het team account. Aangezien teams geen rechtspersonen zijn kunnen we geen geld houden in hun naam."
 
@@ -1368,49 +1371,51 @@ msgid "Account Statement"
 msgstr "Bankafschrift"
 
 #, python-brace-format
-msgid "Total given: {0}"
-msgstr "Totaal gegeven: {0}"
+msgid "Total given: {0} to {n} person"
+msgid_plural "Total given: {0} to {n} people"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Export as CSV"
 msgstr "Exporteer als CSV"
 
 #, python-brace-format
-msgid "Total received: {0}"
-msgstr "Totaal ontvangen: {0}"
+msgid "Total received: {0} from {n} donor"
+msgid_plural "Total received: {0} from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Fees"
+msgstr "Kosten"
+
+msgid "The amount you should see on your bank account statement."
+msgstr ""
+
+msgid "Amount in bank"
+msgstr ""
 
 #, python-brace-format
 msgid "Weekly Payday #{0}"
 msgstr "Wekelijkse betaaldag # {0}"
 
-msgid "Outside"
-msgstr "Buiten"
-
-msgid "Inside Liberapay"
-msgstr "Binnen Liberapay"
-
-msgid "Bank"
-msgstr "Bank"
-
-msgid "Fees"
-msgstr "Kosten"
-
-msgid "Credits"
-msgstr "Krediet"
-
-msgid "Debits"
-msgstr "Debet"
-
-msgid "Balance"
-msgstr "Balans"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Notes"
-msgstr "Notas"
+msgid "balance at the end of the day"
+msgstr ""
 
 msgid "refund"
 msgstr "terugbetaling"
+
+msgid "withdrawal"
+msgstr ""
+
+msgid "deposit"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"

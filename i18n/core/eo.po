@@ -773,6 +773,9 @@ msgstr "Nominala Take"
 msgid "Actual Take"
 msgstr "Fakta Take"
 
+msgid "Update my nominal take"
+msgstr ""
+
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
 msgstr "Unclaimed enspezoj estadoj en la monujoj de donacantoj, ne accrue en la teamo konto. Kiel teamoj ne leĝaj entoj, ni ne povas teni monon en siaj nomoj."
 
@@ -1369,49 +1372,51 @@ msgid "Account Statement"
 msgstr "Konto komunikaĵo"
 
 #, python-brace-format
-msgid "Total given: {0}"
-msgstr "Totala donita: {0}"
+msgid "Total given: {0} to {n} person"
+msgid_plural "Total given: {0} to {n} people"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Export as CSV"
 msgstr "Eksportado kiel CSV"
 
 #, python-brace-format
-msgid "Total received: {0}"
-msgstr "Totala ricevita: {0}"
+msgid "Total received: {0} from {n} donor"
+msgid_plural "Total received: {0} from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Status"
+msgstr "Stato"
+
+msgid "Fees"
+msgstr "Kotizoj"
+
+msgid "The amount you should see on your bank account statement."
+msgstr ""
+
+msgid "Amount in bank"
+msgstr ""
 
 #, python-brace-format
 msgid "Weekly Payday #{0}"
 msgstr "Semajna Payday # {0}"
 
-msgid "Outside"
-msgstr "Ekstere"
-
-msgid "Inside Liberapay"
-msgstr "Interne Liberapay"
-
-msgid "Bank"
-msgstr "Banko"
-
-msgid "Fees"
-msgstr "Kotizoj"
-
-msgid "Credits"
-msgstr "Bonhavoj"
-
-msgid "Debits"
-msgstr "Debetoj"
-
-msgid "Balance"
-msgstr "Bilanco"
-
-msgid "Status"
-msgstr "Stato"
-
-msgid "Notes"
-msgstr "Notoj"
+msgid "balance at the end of the day"
+msgstr ""
 
 msgid "refund"
 msgstr "repagon"
+
+msgid "withdrawal"
+msgstr ""
+
+msgid "deposit"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"

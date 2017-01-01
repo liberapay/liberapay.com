@@ -769,6 +769,9 @@ msgstr "최대 지분"
 msgid "Actual Take"
 msgstr "실제 지분"
 
+msgid "Update my nominal take"
+msgstr ""
+
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
 msgstr "가져가지 않은 지분은 기부자가 그대로 가지고 있게 되며, 팀 계정에 상속되지 않습니다. 팀은 법인이 아니기 때문에, 팀 명의로 자금을 수수할 수 없습니다."
 
@@ -1364,49 +1367,49 @@ msgid "Account Statement"
 msgstr ""
 
 #, python-brace-format
-msgid "Total given: {0}"
-msgstr ""
+msgid "Total given: {0} to {n} person"
+msgid_plural "Total given: {0} to {n} people"
+msgstr[0] ""
 
 msgid "Export as CSV"
 msgstr "CSV로 내보내기"
 
 #, python-brace-format
-msgid "Total received: {0}"
-msgstr "총 받은 금액: {0}"
+msgid "Total received: {0} from {n} donor"
+msgid_plural "Total received: {0} from {n} donors"
+msgstr[0] ""
+
+msgid "Status"
+msgstr "상태"
+
+msgid "Fees"
+msgstr "수수료"
+
+msgid "The amount you should see on your bank account statement."
+msgstr ""
+
+msgid "Amount in bank"
+msgstr ""
 
 #, python-brace-format
 msgid "Weekly Payday #{0}"
 msgstr ""
 
-msgid "Outside"
+msgid "balance at the end of the day"
 msgstr ""
-
-msgid "Inside Liberapay"
-msgstr ""
-
-msgid "Bank"
-msgstr "은행"
-
-msgid "Fees"
-msgstr "수수료"
-
-msgid "Credits"
-msgstr ""
-
-msgid "Debits"
-msgstr ""
-
-msgid "Balance"
-msgstr "잔액"
-
-msgid "Status"
-msgstr "상태"
-
-msgid "Notes"
-msgstr "비고"
 
 msgid "refund"
 msgstr "환불"
+
+msgid "withdrawal"
+msgstr ""
+
+msgid "deposit"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
