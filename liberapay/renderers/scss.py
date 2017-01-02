@@ -17,7 +17,7 @@ class Renderer(renderers.Renderer):
         self.website = factory._configuration
         renderers.Renderer.__init__(self, factory, *a, **kw)
         self.cache_static = self.website.env.cache_static
-        compress = self.website.app_conf.compress_assets
+        compress = self.website.env.compress_assets
         output_style = 'compressed' if compress else 'nested'
         kw = dict(output_style=output_style)
         if self.website.project_root is not None:

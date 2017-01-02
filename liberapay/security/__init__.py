@@ -36,7 +36,7 @@ def set_default_security_headers(website, response, request=None):
             b"connect-src *;"  # for credit card data
             b"img-src *;"
             b"reflected-xss block;"
-        ) + website.app_conf.csp_extra.encode()
+        ) + website.env.csp_extra.encode()
         if website.canonical_scheme == 'https':
             csp += b"upgrade-insecure-requests;block-all-mixed-content;"
         response.headers[b'content-security-policy-report-only'] = csp

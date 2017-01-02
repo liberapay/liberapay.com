@@ -103,6 +103,9 @@ def authenticate_user_if_possible(request, response, state, user, _):
     if request.line.uri.startswith('/assets/'):
         return
 
+    if not state['website'].db:
+        return
+
     # HTTP auth
     if b'Authorization' in request.headers:
         header = request.headers[b'Authorization']
