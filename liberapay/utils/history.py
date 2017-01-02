@@ -96,16 +96,22 @@ def iter_payday_events(db, participant, year=None):
         return
 
     if transfers:
+        given = [
+            t for t in transfers
+            if t['tipper'] == id and t['status'] == 'succeeded' and not t['refund_ref']
+        ]
+        received = [
+            t for t in transfers
+            if t['tippee'] == id and t['status'] == 'succeeded' and t['context'] != 'refund'
+        ]
         yield dict(
             kind='totals',
-            given=sum(t['amount'] for t in transfers if t['tipper'] == id and t['status'] == 'succeeded'),
-            received=sum(
-                t['amount'] for t in transfers
-                if t['tippee'] == id and t['status'] == 'succeeded' and t['context'] != 'refund'
-            ),
-            npatrons=len(set(t['tipper'] for t in transfers if t['tipper'] != id)),
-            ntippees=len(set(t['tippee'] for t in transfers if t['tippee'] != id)),
+            given=sum(t['amount'] for t in given),
+            received=sum(t['amount'] for t in received),
+            npatrons=len(set(t['tipper'] for t in received)),
+            ntippees=len(set(t['tippee'] for t in given)),
         )
+        del given, received
 
     payday_dates = db.all("""
         SELECT ts_start::date
