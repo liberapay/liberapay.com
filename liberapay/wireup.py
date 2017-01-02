@@ -229,6 +229,10 @@ def make_sentry_teller(env):
             # Only log server errors
             return
 
+        if isinstance(exception, NeedDatabase):
+            # Don't flood Sentry when DB is down
+            return
+
         if not sentry:
             if env.sentry_reraise and allow_reraise:
                 raise
