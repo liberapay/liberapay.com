@@ -75,7 +75,7 @@ def database(env, tell_sentry):
         pg_dir = os.environ.get('OPENSHIFT_PG_DATA_DIR')
         if pg_dir:
             # We know where the postgres data is, try to start the server ourselves
-            r = call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '120'])
+            r = call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '15'])
             if r == 0:
                 return database(env, tell_sentry)
         db = NoDB()
