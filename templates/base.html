@@ -30,6 +30,13 @@
 % from 'templates/search.html' import search_form with context
 <body>
 
+% if not website.db
+<div id="notification-area-top"><div class="notification notification-error">{{ _(
+    "We're currently experiencing technical failures. As a result most things don't work. "
+    "Sorry for the inconvenience, we'll get everything back to normal ASAP."
+) }}</div></div>
+% endif
+
 <div id="wrapper">
     <nav class="navbar navbar-liberapay navbar-static-top">
         <div class="container">
@@ -109,7 +116,7 @@
 % set _success = request.qs.get('success')
 % if _success
 % set _success = _success and b64decode_s(_success, default=None)
-<div id="notification-area"><div class="notification notification-success">{{
+<div id="notification-area-bottom"><div class="notification notification-success">{{
     _success
 }}<span class="close">&times;</span></div></div>
 % endif
