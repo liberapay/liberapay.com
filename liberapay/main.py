@@ -1,6 +1,9 @@
 from __future__ import division
 
+import os
+import signal
 import string
+from threading import Timer
 
 from six.moves import builtins
 from six.moves.urllib.parse import quote as urlquote
@@ -61,6 +64,12 @@ website.__dict__.update(wireup.full_algorithm.run(**website.__dict__))
 website.__dict__.pop('state')
 env = website.env
 tell_sentry = website.tell_sentry
+
+if not website.db:
+    # Re-exec in 30 second to see if the DB is back up
+    # SIGTERM is used to tell gunicorn to gracefully stop the worker
+    # http://docs.gunicorn.org/en/stable/signals.html
+    Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGTERM)).start()
 
 if env.cache_static:
     http_caching.compile_assets(website)
