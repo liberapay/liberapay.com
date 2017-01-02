@@ -71,8 +71,8 @@ elif env.clean_assets:
 # Periodic jobs
 # =============
 
-if env.run_cron_jobs:
-    conf = website.app_conf
+conf = website.app_conf
+if env.run_cron_jobs and conf:
     cron = Cron(website)
     cron(conf.update_global_stats_every, lambda: utils.update_global_stats(website))
     cron(conf.check_db_every, website.db.self_check, True)

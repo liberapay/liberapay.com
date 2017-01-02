@@ -52,6 +52,18 @@ def canonical(env):
     return locals()
 
 
+class NoDB(object):
+
+    def __getattr__(self, attr):
+        raise NeedDatabase()
+
+    __bool__ = lambda self: False
+    __nonzero__ = __bool__
+
+    def register_model(self, model):
+        model.db = self
+
+
 def database(env, tell_sentry):
     dburl = env.database_url
     maxconn = env.database_maxconn
@@ -65,7 +77,7 @@ def database(env, tell_sentry):
             r = call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '120'])
             if r == 0:
                 return database(env, tell_sentry)
-        raise
+        db = NoDB()
 
     for model in (AccountElsewhere, Community, ExchangeRoute, Participant):
         db.register_model(model)
@@ -155,11 +167,15 @@ class AppConf(object):
 
 
 def app_conf(db):
+    if not db:
+        return {'app_conf': None}
     conf = AppConf(db.all("SELECT key, value FROM app_conf"))
     return {'app_conf': conf}
 
 
 def mail(app_conf, project_root='.'):
+    if not app_conf:
+        return
     smtp_conf = {
         k[5:]: v for k, v in app_conf.__dict__.items() if k.startswith('smtp_')
     }
@@ -188,6 +204,8 @@ def mail(app_conf, project_root='.'):
 
 
 def billing(app_conf):
+    if not app_conf:
+        return
     from mangopaysdk.configuration import Configuration
     Configuration.BaseUrl = app_conf.mangopay_base_url
     Configuration.ClientID = app_conf.mangopay_client_id
@@ -262,6 +280,8 @@ class PlatformRegistry(object):
 
 
 def accounts_elsewhere(app_conf, asset):
+    if not app_conf:
+        return
     platforms = []
     for cls in elsewhere.CLASSES:
         conf = {

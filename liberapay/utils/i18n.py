@@ -108,6 +108,7 @@ HTTP_ERRORS = {
     429: _("Too Many Requests"),
     500: _("Internal Server Error"),
     502: _("Upstream Error"),
+    503: _("Service Unavailable"),
 }
 del _
 
