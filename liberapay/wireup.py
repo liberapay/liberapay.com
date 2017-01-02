@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import re
+import signal
 from subprocess import call
 import traceback
 
@@ -232,6 +233,19 @@ def make_sentry_teller(env):
         if isinstance(exception, NeedDatabase):
             # Don't flood Sentry when DB is down
             return
+
+        if isinstance(exception, psycopg2.Error):
+            from liberapay.website import website
+            if getattr(website, 'db', None):
+                try:
+                    website.db.one('SELECT 1 AS x')
+                except psycopg2.Error:
+                    # If it can't answer this simple query, it's down.
+                    website.db = NoDB()
+                    # Show the proper 503 error page
+                    state['exception'] = NeedDatabase()
+                    # Tell gunicorn to gracefully restart this worker
+                    os.kill(os.getpid(), signal.SIGTERM)
 
         if not sentry:
             if env.sentry_reraise and allow_reraise:
