@@ -5,7 +5,7 @@ import json
 import logging
 import os
 import re
-from subprocess import check_call
+from subprocess import call
 import traceback
 
 from six import text_type as str
@@ -23,6 +23,7 @@ import raven
 from liberapay import elsewhere
 import liberapay.billing.payday
 from liberapay.constants import CustomUndefined
+from liberapay.exceptions import NeedDatabase
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
@@ -51,25 +52,20 @@ def canonical(env):
     return locals()
 
 
-def database(env, tell_sentry, retry=True):
+def database(env, tell_sentry):
     dburl = env.database_url
     maxconn = env.database_maxconn
     try:
         db = DB(dburl, maxconn=maxconn)
-    except psycopg2.OperationalError:
+    except psycopg2.OperationalError as e:
+        tell_sentry(e, {})
         pg_dir = os.environ.get('OPENSHIFT_PG_DATA_DIR')
-        if not pg_dir:
-            # We're not in production, let the developer deal with it.
-            raise
-        if not retry:
-            # Give up
-            raise
-        try:
-            check_call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '120'])
-        except Exception as e:
-            tell_sentry(e, {})
-            raise
-        return database(env, tell_sentry, retry=False)
+        if pg_dir:
+            # We know where the postgres data is, try to start the server ourselves
+            r = call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '120'])
+            if r == 0:
+                return database(env, tell_sentry)
+        raise
 
     for model in (AccountElsewhere, Community, ExchangeRoute, Participant):
         db.register_model(model)
