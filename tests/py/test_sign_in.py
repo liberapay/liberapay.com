@@ -167,7 +167,7 @@ class TestLogIn(EmailHarness):
     def test_email_login_bad_email(self):
         data = {'log-in.id': 'unknown@example.org'}
         r = self.client.POST('/sign-in', data, raise_immediately=False)
-        assert r.code == 403
+        assert r.code != 302
         assert SESSION not in r.headers.cookie
         Participant.dequeue_emails()
         assert not self.get_emails()
