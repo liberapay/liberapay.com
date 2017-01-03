@@ -4,7 +4,7 @@ if not user.ANON:
     response.redirect('/' + user.username + '/' + request.path.get('redirect_to', ''))
 else:
     raise LoginRequired
-title = _("Sign In")
+title = _("Log In")
 [---] text/html
 % extends "templates/base.html"
 % block content
