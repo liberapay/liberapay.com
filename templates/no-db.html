@@ -1,0 +1,14 @@
+<h1>{{ _("Service Unavailable") }}</h1>
+
+<p>{{ _("We're unable to process your request right now, sorry.") }}</p>
+
+<p>{{ _("Please try again in a few minutes.") }}</p>
+
+% if request.method == 'GET'
+    <a class="btn btn-primary" href="{{ request.line.uri }}">{{ _("Try again") }}</a>
+% elif request.method == 'POST'
+    <form action="{{ request.line.uri }}" method="POST">
+        % include "templates/form-repost.html"
+        <button class="btn btn-primary">{{ _("Try again") }}</button>
+    </form>
+% endif

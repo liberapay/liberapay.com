@@ -42,6 +42,16 @@ class LoginRequired(LazyResponse):
         return _("You need to log in")
 
 
+class NeedDatabase(LazyResponse):
+
+    def __init__(self):
+        Response.__init__(self, 503, '')
+        self.html_template = 'templates/no-db.html'
+
+    def lazy_body(self, _):
+        return _("We're unable to process your request right now, sorry.")
+
+
 class LazyResponseXXX(LazyResponse):
 
     def __init__(self, *args, **kw):

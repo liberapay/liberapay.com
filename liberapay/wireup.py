@@ -5,7 +5,8 @@ import json
 import logging
 import os
 import re
-from subprocess import check_call
+import signal
+from subprocess import call
 import traceback
 
 from six import text_type as str
@@ -23,6 +24,7 @@ import raven
 from liberapay import elsewhere
 import liberapay.billing.payday
 from liberapay.constants import CustomUndefined
+from liberapay.exceptions import NeedDatabase
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
@@ -51,25 +53,32 @@ def canonical(env):
     return locals()
 
 
-def database(env, tell_sentry, retry=True):
+class NoDB(object):
+
+    def __getattr__(self, attr):
+        raise NeedDatabase()
+
+    __bool__ = lambda self: False
+    __nonzero__ = __bool__
+
+    def register_model(self, model):
+        model.db = self
+
+
+def database(env, tell_sentry):
     dburl = env.database_url
     maxconn = env.database_maxconn
     try:
         db = DB(dburl, maxconn=maxconn)
-    except psycopg2.OperationalError:
+    except psycopg2.OperationalError as e:
+        tell_sentry(e, {})
         pg_dir = os.environ.get('OPENSHIFT_PG_DATA_DIR')
-        if not pg_dir:
-            # We're not in production, let the developer deal with it.
-            raise
-        if not retry:
-            # Give up
-            raise
-        try:
-            check_call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '120'])
-        except Exception as e:
-            tell_sentry(e, {})
-            raise
-        return database(env, tell_sentry, retry=False)
+        if pg_dir:
+            # We know where the postgres data is, try to start the server ourselves
+            r = call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '15'])
+            if r == 0:
+                return database(env, tell_sentry)
+        db = NoDB()
 
     for model in (AccountElsewhere, Community, ExchangeRoute, Participant):
         db.register_model(model)
@@ -90,8 +99,6 @@ class AppConf(object):
         bountysource_id=None.__class__,
         bountysource_secret=str,
         check_db_every=int,
-        compress_assets=bool,
-        csp_extra=str,
         dequeue_emails_every=int,
         facebook_callback=str,
         facebook_id=str,
@@ -159,11 +166,15 @@ class AppConf(object):
 
 
 def app_conf(db):
+    if not db:
+        return {'app_conf': None}
     conf = AppConf(db.all("SELECT key, value FROM app_conf"))
     return {'app_conf': conf}
 
 
 def mail(app_conf, project_root='.'):
+    if not app_conf:
+        return
     smtp_conf = {
         k[5:]: v for k, v in app_conf.__dict__.items() if k.startswith('smtp_')
     }
@@ -192,6 +203,8 @@ def mail(app_conf, project_root='.'):
 
 
 def billing(app_conf):
+    if not app_conf:
+        return
     from mangopaysdk.configuration import Configuration
     Configuration.BaseUrl = app_conf.mangopay_base_url
     Configuration.ClientID = app_conf.mangopay_client_id
@@ -216,6 +229,23 @@ def make_sentry_teller(env):
         if isinstance(exception, pando.Response) and exception.code < 500:
             # Only log server errors
             return
+
+        if isinstance(exception, NeedDatabase):
+            # Don't flood Sentry when DB is down
+            return
+
+        if isinstance(exception, psycopg2.Error):
+            from liberapay.website import website
+            if getattr(website, 'db', None):
+                try:
+                    website.db.one('SELECT 1 AS x')
+                except psycopg2.Error:
+                    # If it can't answer this simple query, it's down.
+                    website.db = NoDB()
+                    # Show the proper 503 error page
+                    state['exception'] = NeedDatabase()
+                    # Tell gunicorn to gracefully restart this worker
+                    os.kill(os.getpid(), signal.SIGTERM)
 
         if not sentry:
             if env.sentry_reraise and allow_reraise:
@@ -266,6 +296,8 @@ class PlatformRegistry(object):
 
 
 def accounts_elsewhere(app_conf, asset):
+    if not app_conf:
+        return
     platforms = []
     for cls in elsewhere.CLASSES:
         conf = {
@@ -389,6 +421,8 @@ def env():
         DATABASE_MAXCONN=int,
         CANONICAL_HOST=str,
         CANONICAL_SCHEME=str,
+        COMPRESS_ASSETS=is_yesish,
+        CSP_EXTRA=str,
         SENTRY_DSN=str,
         SENTRY_RERAISE=is_yesish,
         GUNICORN_OPTS=str,

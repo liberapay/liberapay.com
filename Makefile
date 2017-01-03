@@ -45,7 +45,8 @@ data: env
 db-migrations: sql/migrations.sql
 	PYTHONPATH=. $(with_local_env) $(env_py) liberapay/models/__init__.py
 
-run: env db-migrations
+run: env
+	@$(MAKE) --no-print-directory db-migrations || true
 	PATH=$(env_bin):$$PATH $(with_local_env) $(env_py) app.py
 
 py: env

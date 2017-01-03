@@ -298,11 +298,7 @@ section.profile-statement {
     }
 }
 
-#notification-area {
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
+#notification-area-bottom, #notification-area-top {
     text-align: center;
     z-index: 10;
 
@@ -321,6 +317,12 @@ section.profile-statement {
         border-color: $state-success-border;
         color: $state-success-text;
     }
+}
+#notification-area-bottom {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
 }
 
 .dropdown-hover {

@@ -7,6 +7,7 @@ from decimal import Decimal as D
 import os
 import re
 
+from mock import patch
 from pando import json, Response
 import pytest
 
@@ -14,6 +15,7 @@ from liberapay.billing.payday import Payday
 from liberapay.constants import SESSION
 from liberapay.testing.mangopay import MangopayHarness
 from liberapay.utils import b64encode_s, find_files
+from liberapay.wireup import NoDB
 
 
 overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
@@ -128,6 +130,26 @@ class TestPages(BrowseTestHarness):
 
     def test_twitter_associate(self):
         assert self.client.GxT('/on/twitter/associate').code == 400
+
+    def test_homepage_redirects_when_db_is_down(self):
+        with patch.multiple(self.website, db=NoDB()):
+            r = self.client.GET('/', raise_immediately=False)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/about/'
+
+    def test_about_page_works_even_when_db_is_down(self):
+        alice = self.make_participant('alice')
+        with patch.multiple(self.website, db=NoDB()):
+            r = self.client.GET('/about/', auth_as=alice)
+        assert r.code == 200
+        assert b"Liberapay is " in r.body
+
+    def test_stats_page_is_503_when_db_is_down(self):
+        with patch.multiple(self.website, db=NoDB()):
+            r = self.client.GET('/about/stats', raise_immediately=False)
+        assert r.code == 503
+        assert b" technical failures." in r.body
+        assert b" unable to process your request " in r.body
 
     def test_paydays_json_gives_paydays(self):
         Payday.start()

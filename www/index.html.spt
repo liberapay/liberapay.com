@@ -9,6 +9,9 @@ query_cache = QueryCache(website.db, threshold=5)
 
 [---]
 
+if not website.db:
+    response.redirect('/about/')
+
 sponsors = query_cache.all("""
     SELECT username, giving, avatar_url
       FROM ( SELECT * FROM sponsors ORDER BY random() * giving DESC LIMIT 10 ) foo
