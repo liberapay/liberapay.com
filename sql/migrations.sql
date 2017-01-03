@@ -162,3 +162,6 @@ DELETE FROM notification_queue WHERE event IN ('income', 'low_balance');
 
 -- migration #23
 INSERT INTO app_conf (key, value) VALUES ('csp_extra', '""'::jsonb);
+
+-- migration #24
+DELETE FROM app_conf WHERE key in ('compress_assets', 'csp_extra');
