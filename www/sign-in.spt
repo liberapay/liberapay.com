@@ -2,9 +2,34 @@ from liberapay.exceptions import AuthRequired
 
 [---]
 
-if user.ANON:
-    raise AuthRequired
+if not user.ANON:
+    response.redirect(request.qs.get('back_to', '/'), trusted_url=False)
 
-response.redirect(request.qs.get('back_to', '/'), trusted_url=False)
+title = _("Sign In")
 
 [---] text/html
+% extends "templates/base.html"
+
+{% block heading %}{% endblock %}
+
+% block content
+<div class="row"><div class="col-lg-8 col-lg-offset-2">
+    % if state.get('log-in.email-sent-to') or state.get('log-in.carry-on')
+    % include "templates/log-in-form.html"
+    % else
+
+    % if state.get('sign-in.error')
+        <p class="alert alert-danger">{{ state['sign-in.error'] }}</p>
+    % endif
+
+    <h2 class="banderole success">{{ _("Log in") }}</h2>
+    % include "templates/log-in-form.html"
+
+    <h2 class="banderole success">{{ _("Create an account") }}</h2>
+    <form action="" method="POST">
+        % include "templates/sign-up-form.html"
+    </form>
+
+    % endif
+</div></div>
+% endblock

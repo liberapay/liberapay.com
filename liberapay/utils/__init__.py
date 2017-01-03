@@ -68,6 +68,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if status == 'closed':
         if user.is_admin:
             return participant
+        state['closed_account'] = participant
         response.html_template = 'templates/account-closed.html'
         raise response.error(410)
     elif status == 'stub':
