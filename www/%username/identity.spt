@@ -19,7 +19,7 @@ if participant.kind not in ('individual', 'organization'):
     raise response.error(403)
 
 title = participant.username
-error = ''
+error, success = '', ''
 
 if request.method == 'POST':
     body = request.body
@@ -64,6 +64,7 @@ if request.method == 'POST':
                     if k.endswith('Address') and not getattr(v, 'Country', None):
                         setattr(account, k, None)
                 account = mangoapi.users.Update(account)
+                success = _("Your identity information has been updated.")
             elif body.get('terms') == 'agree':
                 account = mangoapi.users.Create(account)
                 id = website.db.one("""
@@ -76,6 +77,7 @@ if request.method == 'POST':
                 if id != account.Id:
                     raise response.error(409, "race condition")
                 participant.mark_notifications_as_read('identity_required')
+                success = _("Your identity information has been registered.")
             else:
                 error = _("You have to agree to MangoPay's Terms of Service.")
         except ResponseException as err:
@@ -89,7 +91,7 @@ else:
     account = participant.get_mangopay_account()
 
 [---] application/json
-{}
+{"msg": success}
 
 [---] text/html
 % extends "templates/settings.html"
@@ -100,6 +102,8 @@ else:
 
     % if error
     <div class="alert alert-danger">{{ error }}</div>
+    % elif success
+    <div class="alert alert-success">{{ success }}</div>
     % endif
 
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
