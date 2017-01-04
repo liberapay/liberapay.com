@@ -11,10 +11,10 @@ Liberapay.notification = function(text, type, timeout) {
     var dialog = ['div', { 'class': 'notification notification-' + type }, text];
     var $dialog = $(Liberapay.jsonml(dialog));
 
-    if (!$('#notification-area').length)
-        $('body').append('<div id="notification-area"></div>');
+    if (!$('#notification-area-bottom').length)
+        $('body').append('<div id="notification-area-bottom"></div>');
 
-    $('#notification-area').prepend($dialog);
+    $('#notification-area-bottom').prepend($dialog);
 
     function close() {
         $dialog.fadeOut(null, $dialog.remove);
