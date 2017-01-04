@@ -120,7 +120,8 @@ title = _("Add money")
         % endif
     </p>
     % if success and back_to
-        <p><a href="{{ back_to }}" class="btn btn-success">{{ _("Go back") }}</a></p>
+        <p><a href="{{ response.sanitize_untrusted_url(back_to) }}"
+              class="btn btn-success">{{ _("Go back") }}</a></p>
     % endif
     % endif
 
@@ -197,7 +198,8 @@ title = _("Add money")
     <button class="btn btn-success">{{ _("Go") }}</button>
 
     % if back_to
-        <a href="{{ back_to }}" class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
+        <a href="{{ response.sanitize_untrusted_url(back_to) }}"
+           class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
     % endif
     % endif
 
