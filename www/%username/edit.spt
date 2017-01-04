@@ -255,6 +255,12 @@ title = _username
         {{ username_form() }}
     % endif
 
+    % if not participant.mangopay_user_id
+    <h3 class="banderole info">{{ _("Identity") }}</h3>
+    <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
+    <a class="btn btn-primary" href="{{ participant.path('identity') }}" target="_blank">{{ _("Fill identity form") }}</a>
+    % endif
+
 </div>
 </div>
 % endblock
