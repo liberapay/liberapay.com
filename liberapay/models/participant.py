@@ -194,7 +194,7 @@ class Participant(Model, MixinTeam):
             algo, rounds, salt, hashed = p.password.split('$', 3)
             rounds = int(rounds)
             salt, hashed = b64decode(salt), b64decode(hashed)
-            if cls._hash_password(v2, algo, salt, rounds) == hashed:
+            if constant_time_compare(cls._hash_password(v2, algo, salt, rounds), hashed):
                 p.authenticated = True
                 return p
 
