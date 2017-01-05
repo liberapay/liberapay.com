@@ -9,11 +9,11 @@ action = request.path['action']
 
 if action in ('subscribe', 'unsubscribe'):
     is_on = action == 'subscribe'
-    user.update_community_status('subscriptions', is_on, community.id)
+    user.upsert_subscription(is_on, community.participant.id)
 
 elif action in ('join', 'leave'):
     is_on = action == 'join'
-    user.update_community_status('memberships', is_on, community.id)
+    user.upsert_community_membership(is_on, community.id)
 
 else:
     raise response.error(400)

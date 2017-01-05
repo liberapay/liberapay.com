@@ -61,7 +61,7 @@ title = pretty_name = community.pretty_name
         pretty_name
     ).replace('\n', '<br>'|safe) }}</p>
 
-    % set is_member = community.check_status('memberships', user)
+    % set is_member = community.check_membership_status(user)
     % set action = 'leave' if is_member else 'join'
     <form action="/for/{{ community.name }}/{{ action }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
@@ -94,7 +94,7 @@ title = pretty_name = community.pretty_name
         "you can already subscribe."
     ).replace('\n', '<br>'|safe) }}</div>
 
-    % set is_subscribed = community.check_status('subscriptions', user)
+    % set is_subscribed = community.participant.check_subscription_status(user)
     % set action = 'unsubscribe' if is_subscribed else 'subscribe'
     <form action="/for/{{ community.name }}/{{ action }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />

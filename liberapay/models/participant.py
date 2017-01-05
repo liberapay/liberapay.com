@@ -521,7 +521,7 @@ class Participant(Model, MixinTeam):
         r = cursor.one("""
 
             DELETE FROM community_memberships WHERE participant=%(id)s;
-            DELETE FROM community_subscriptions WHERE participant=%(id)s;
+            DELETE FROM subscriptions WHERE subscriber=%(id)s;
             DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
             DELETE FROM statements WHERE participant=%(id)s;
 
@@ -955,6 +955,47 @@ class Participant(Model, MixinTeam):
         """, (self.id, type))
 
 
+    # Newsletters
+    # ===========
+
+    def upsert_subscription(self, on, publisher):
+        subscriber = self.id
+        self.db.run("""
+            DO $$
+            DECLARE
+                cname text;
+            BEGIN
+                BEGIN
+                    INSERT INTO subscriptions
+                                (publisher, subscriber, is_on)
+                         VALUES (%(publisher)s, %(subscriber)s, %(on)s);
+                    IF (FOUND) THEN RETURN; END IF;
+                EXCEPTION WHEN unique_violation THEN
+                    GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
+                    IF (cname <> 'subscriptions_publisher_subscriber_key') THEN
+                        RAISE;
+                    END IF;
+                END;
+                UPDATE subscriptions
+                   SET is_on = %(on)s
+                     , mtime = CURRENT_TIMESTAMP
+                 WHERE publisher = %(publisher)s
+                   AND subscriber = %(subscriber)s;
+                IF (NOT FOUND) THEN
+                    RAISE 'upsert in subscriptions failed';
+                END IF;
+            END;
+            $$ LANGUAGE plpgsql;
+        """, locals())
+
+    def check_subscription_status(self, participant):
+        return self.db.one("""
+            SELECT is_on
+              FROM subscriptions
+             WHERE publisher = %s AND subscriber = %s
+        """, (self.id, participant.id))
+
+
     # Random Stuff
     # ============
 
@@ -995,8 +1036,7 @@ class Participant(Model, MixinTeam):
     def create_community(self, name, **kw):
         return Community.create(name, self.id, **kw)
 
-    def update_community_status(self, table, on, c_id):
-        assert table in ('memberships', 'subscriptions')
+    def upsert_community_membership(self, on, c_id):
         p_id = self.id
         self.db.run("""
             DO $$
@@ -1004,28 +1044,27 @@ class Participant(Model, MixinTeam):
                 cname text;
             BEGIN
                 BEGIN
-                    INSERT INTO community_{0}
+                    INSERT INTO community_memberships
                                 (community, participant, is_on)
                          VALUES (%(c_id)s, %(p_id)s, %(on)s);
                     IF (FOUND) THEN RETURN; END IF;
                 EXCEPTION WHEN unique_violation THEN
                     GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
-                    IF (cname <> 'community_{0}_participant_community_key') THEN
+                    IF (cname <> 'community_memberships_participant_community_key') THEN
                         RAISE;
                     END IF;
                 END;
-                UPDATE community_{0}
+                UPDATE community_memberships
                    SET is_on = %(on)s
                      , mtime = CURRENT_TIMESTAMP
                  WHERE community = %(c_id)s
                    AND participant = %(p_id)s;
                 IF (NOT FOUND) THEN
-                    RAISE 'upsert in community_{0} failed';
+                    RAISE 'upsert in community_memberships failed';
                 END IF;
             END;
             $$ LANGUAGE plpgsql;
-        """.format(table), locals())
-
+        """, locals())
 
     def get_communities(self):
         return self.db.all("""

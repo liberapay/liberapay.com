@@ -15,7 +15,7 @@ class Tests(Harness):
         # Alice joins a community.
         self.alice = self.make_participant('alice', balance=100)
         c = self.alice.create_community('C++')
-        self.alice.update_community_status('memberships', True, c.id)
+        self.alice.upsert_community_membership(True, c.id)
 
     def test_community_member_shows_up_on_community_listing(self):
         html = self.client.GET('/for/C++/').text
@@ -126,14 +126,14 @@ class TestForCommunityJson(Harness):
         Harness.setUp(self)
         alice = self.make_participant('alice')
         self.community = alice.create_community('test')
-        alice.update_community_status('memberships', True, self.community.id)
+        alice.upsert_community_membership(True, self.community.id)
         self.add_participant('bob')
         carl = self.add_participant('carl')
-        carl.update_community_status('memberships', False, self.community.id)
+        carl.upsert_community_membership(False, self.community.id)
 
     def add_participant(self, participant_name):
         participant = self.make_participant(participant_name)
-        participant.update_community_status('memberships', True, self.community.id)
+        participant.upsert_community_membership(True, self.community.id)
         return participant
 
     def test_get_non_existing_community(self):

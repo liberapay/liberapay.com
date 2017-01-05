@@ -51,7 +51,7 @@ class BrowseTestHarness(MangopayHarness):
         self.team = self.make_participant('team', kind='group')
         self.exchange_id = self.make_exchange('mango-cc', 19, 0, self.david)
         c = self.david.create_community('Wonderland')
-        self.david.update_community_status('memberships', True, c.id)
+        self.david.upsert_community_membership(True, c.id)
         self.team.add_member(self.david)
 
     def browse(self, **kw):

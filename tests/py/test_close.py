@@ -301,9 +301,9 @@ class TestClosing(FakeTransfersHarness):
     def test_cpi_clears_communities(self):
         alice = self.make_participant('alice')
         c = alice.create_community('test')
-        alice.update_community_status('memberships', True, c.id)
+        alice.upsert_community_membership(True, c.id)
         bob = self.make_participant('bob')
-        bob.update_community_status('memberships', True, c.id)
+        bob.upsert_community_membership(True, c.id)
 
         assert Community.from_name('test').nmembers == 2  # sanity check
 
