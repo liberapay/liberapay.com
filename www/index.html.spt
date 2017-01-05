@@ -117,9 +117,6 @@ recent_events = query_cache.all("""
                         "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</p>
             % elif user.goal and user.receiving >= user.goal
                 <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", user.goal) }}</p>
-            % elif not user.mangopay_user_id
-                <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
-                <p><a class="btn btn-success btn-lg" href="/{{ user.username }}/identity">{{ _("Fill identity form") }}</a></p>
             % else
                 <p>{{ _("To receive money, do something awesome and then tell people about it:") }}</p>
                 <ol>
@@ -129,6 +126,10 @@ recent_events = query_cache.all("""
                              "<a href='/%s/widgets/'>"|safe % user.username, "</a>"|safe) }}</li>
                     <li>{{ _("Contact the people who benefit from your work and ask them to support you.") }}</li>
                 </ol>
+                % if not user.mangopay_user_id
+                    <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}
+                       <a href="/{{ user.username }}/identity">{{ _("Fill identity form") }}</a></p>
+                % endif
             % endif
 
         % endif
