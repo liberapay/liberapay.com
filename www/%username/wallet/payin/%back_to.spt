@@ -99,7 +99,8 @@ title = _("Add money")
     ) }}</p>
 
     % if back_to
-        <a href="{{ back_to }}" class="btn btn-default pull-right">{{ _("Go back") }}</a>
+        <a href="{{ response.sanitize_untrusted_url(back_to) }}"
+           class="btn btn-default pull-right">{{ _("Go back") }}</a>
     % endif
 
     % endif

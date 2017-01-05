@@ -161,17 +161,23 @@ def _success(self, code=200, msg=''):
     raise self
 pando.Response.success = _success
 
+if hasattr(pando.Response, 'sanitize_untrusted_url'):
+    raise Warning('pando.Response.sanitize_untrusted_url() already exists')
+def _sanitize_untrusted_url(response, url):
+    if isinstance(url, bytes):
+        url = url.decode('utf8', 'replace')
+    if not url.startswith('/') or url.startswith('//'):
+        url = '/?bad_redirect=' + urlquote(url)
+    host = response.request.headers[b'Host'].decode('ascii')
+    # ^ this is safe because we don't accept requests with unknown hosts
+    return response.website.canonical_scheme + '://' + host + url
+pando.Response.sanitize_untrusted_url = _sanitize_untrusted_url
+
 if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')
 def _redirect(response, url, code=302, trusted_url=True):
     if not trusted_url:
-        if isinstance(url, bytes):
-            url = url.decode('utf8')
-        if not url.startswith('/') or url.startswith('//'):
-            url = '/?bad_redirect=' + urlquote(url)
-        host = response.request.headers[b'Host'].decode('ascii')
-        # ^ this is safe because we don't accept requests with unknown hosts
-        url = response.website.canonical_scheme + '://' + host + url
+        url = response.sanitize_untrusted_url(url)
     response.code = code
     response.headers[b'Location'] = response.encode_url(url)
     raise response
