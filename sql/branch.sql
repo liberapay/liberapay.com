@@ -15,6 +15,7 @@ BEGIN;
     , ctime           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
     , scheduled_for   timestamptz
     , sent_at         timestamptz
+    , sent_count      int
     , UNIQUE (newsletter, lang)
     );
 

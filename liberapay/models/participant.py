@@ -1017,18 +1017,22 @@ class Participant(Model, MixinTeam):
             for msg in messages:
                 with cls.db.get_cursor() as cursor:
                     context = serialize(msg.context)
-                    cursor.run("""
+                    count = cursor.one("""
                         INSERT INTO email_queue
                                     (participant, spt_name, context)
                              SELECT p_id, 'newsletter', %s)
-                               FROM unnest(%s)
+                               FROM unnest(%s) subscriber
+                               JOIN participants p ON p.id = subscriber
+                              WHERE p.email IS NOT NULL
+                     RETURNING count(*)
                     """, (context, msg.subscribers))
                     assert cursor.one("""
                         UPDATE newsletter_texts
                            SET sent_at = now()
+                             , sent_count = %s
                          WHERE id = %s
                      RETURNING sent_at
-                    """, (msg.id,))
+                    """, (count, msg.id))
                 sleep(1)
 
 
