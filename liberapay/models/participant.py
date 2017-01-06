@@ -995,6 +995,42 @@ class Participant(Model, MixinTeam):
              WHERE publisher = %s AND subscriber = %s
         """, (self.id, participant.id))
 
+    @classmethod
+    def send_newsletters(cls):
+        fetch_messages = lambda: cls.db.all("""
+            SELECT row_to_json((SELECT a FROM (
+                        SELECT t.id, t.newsletter, t.lang, t.subject, t.body
+                   ) a)) AS context
+                 , ( SELECT array_agg(s.subscriber)
+                       FROM subscriptions s
+                      WHERE s.publisher = t.sender
+                   ) AS subscribers
+              FROM newsletter_texts t
+             WHERE scheduled_for <= now() + INTERVAL '30 seconds'
+               AND sent_at IS NULL
+          ORDER BY scheduled_for ASC
+        """)
+        while True:
+            messages = fetch_messages()
+            if not messages:
+                break
+            for msg in messages:
+                with cls.db.get_cursor() as cursor:
+                    context = serialize(msg.context)
+                    cursor.run("""
+                        INSERT INTO email_queue
+                                    (participant, spt_name, context)
+                             SELECT p_id, 'newsletter', %s)
+                               FROM unnest(%s)
+                    """, (context, msg.subscribers))
+                    assert cursor.one("""
+                        UPDATE newsletter_texts
+                           SET sent_at = now()
+                         WHERE id = %s
+                     RETURNING sent_at
+                    """, (msg.id,))
+                sleep(1)
+
 
     # Random Stuff
     # ============
