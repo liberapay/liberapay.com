@@ -66,7 +66,7 @@
                 % include "templates/navbar-common.html"
             % if not user.ANON
                 % include "templates/navbar-logged-in.html"
-            % elif response.html_template != 'templates/sign-in-form.html'
+            % elif response.html_template != 'templates/auth-required.html'
                 % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
                 <li>{% include "templates/sign-in-link.html" %}</li>
             % endif
