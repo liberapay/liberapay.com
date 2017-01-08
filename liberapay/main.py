@@ -21,7 +21,7 @@ from liberapay.models.participant import Participant
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.state_chain import (
-    create_response_object, canonize, insert_constants,
+    create_response_object, canonize, insert_constants, dont_redirect_from_slashless,
     merge_exception_into_response, return_500_for_exception,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
@@ -109,6 +109,7 @@ algorithm.functions = [
     authentication.authenticate_user_if_possible,
 
     algorithm['dispatch_path_to_filesystem'],
+    dont_redirect_from_slashless,
     algorithm['handle_dispatch_exception'],
 
     http_caching.get_etag_for_file if env.cache_static else noop,
