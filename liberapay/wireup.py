@@ -248,10 +248,11 @@ def make_sentry_teller(env):
                     os.kill(os.getpid(), signal.SIGTERM)
 
         if not sentry:
-            if env.sentry_reraise and allow_reraise:
-                raise
             # No Sentry, log to stderr instead
             traceback.print_exc()
+            # Reraise if allowed
+            if env.sentry_reraise and allow_reraise:
+                raise
             return
 
         user = state.get('user')
