@@ -17,6 +17,9 @@
             <link rel="alternate" hreflang="{{ l_code }}" href="{{ l_url }}{{ request.line.uri }}" />
         % endfor
     % endif
+    % if request.canonical_path
+        <link rel="canonical" href="{{ website.canonical_scheme + '://' + request.hostname + request.canonical_path }}" />
+    % endif
     {% block head %}{% endblock %}
     <script>
         // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url

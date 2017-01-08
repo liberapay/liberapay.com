@@ -82,6 +82,7 @@ def dont_redirect_from_slashless(exception, website, request=None):
         return
     if isinstance(exception, RedirectFromSlashless):
         path = request.line.uri.path = Path(exception.message)
+        request.canonical_path = path.raw
         r = dispatch_path_to_filesystem(website.request_processor, path, request.qs)
         r['exception'] = None
         r['path'] = path
