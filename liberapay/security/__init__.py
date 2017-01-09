@@ -30,13 +30,14 @@ def set_default_security_headers(website, response, request=None):
     # https://scotthelme.co.uk/content-security-policy-an-introduction/
     if b'content-security-policy' not in response.headers:
         csp = (
-            b"default-src 'self';"
-            b"script-src 'self' 'unsafe-inline';"
-            b"style-src 'self' 'unsafe-inline';"
+            b"default-src %(main_domain)s;"
+            b"script-src %(main_domain)s 'unsafe-inline';"
+            b"style-src %(main_domain)s 'unsafe-inline';"
             b"connect-src *;"  # for credit card data
             b"img-src *;"
             b"reflected-xss block;"
-        ) + website.env.csp_extra.encode()
+        ) % {b'main_domain': website.canonical_host.encode('ascii')}
+        csp += website.env.csp_extra.encode()
         if website.canonical_scheme == 'https':
             csp += b"upgrade-insecure-requests;block-all-mixed-content;"
         response.headers[b'content-security-policy-report-only'] = csp
