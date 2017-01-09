@@ -214,3 +214,7 @@ class Tests2(Harness):
     def test_non_dict_body(self):
         r = self.client.POST('/', body=b'[]', content_type=b'application/json')
         assert r.code == 200
+
+    def test_no_trailing_slash_redirects(self):
+        r = self.client.GET('/foo', raise_immediately=False)
+        assert r.code == 404, r.text

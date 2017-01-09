@@ -2,6 +2,9 @@ from __future__ import print_function, unicode_literals
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
+from aspen.http.request import Path
+from aspen.request_processor.algorithm import dispatch_path_to_filesystem
+from aspen.request_processor.dispatcher import RedirectFromSlashless
 from pando import Response
 from pando.http.request import Line
 
@@ -72,6 +75,18 @@ def canonize(request, website):
 
 def insert_constants():
     return {'constants': constants}
+
+
+def dont_redirect_from_slashless(exception, website, request=None):
+    if request is None:
+        return
+    if isinstance(exception, RedirectFromSlashless):
+        path = request.line.uri.path = Path(exception.message)
+        request.canonical_path = path.raw
+        r = dispatch_path_to_filesystem(website.request_processor, path, request.qs)
+        r['exception'] = None
+        r['path'] = path
+        return r
 
 
 def merge_exception_into_response(state, exception, response=None):
