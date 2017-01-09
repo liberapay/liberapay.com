@@ -107,6 +107,14 @@ class Tests(Harness):
         expected = '<p>&lt;javascript:foo&gt;</p>\n'
         assert markdown.render('<javascript:foo>') == expected
 
+    def test_markdown_image_src_filtering(self):
+        expected = '<p><img src="http:foo" /></p>\n'
+        assert markdown.render('![](http:foo)') == expected
+        expected = '<p><img src="https://example.org/" alt="bar" /></p>\n'
+        assert markdown.render('![bar](https://example.org/)') == expected
+        expected = '<p>![foo](javascript:foo)</p>\n'
+        assert markdown.render('![foo](javascript:foo)') == expected
+
     def test_markdown_render_doesnt_allow_any_explicit_anchors(self):
         expected = '<p>foo</p>\n'
         assert markdown.render('<a href="http://example.com/">foo</a>') == expected

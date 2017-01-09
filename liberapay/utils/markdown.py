@@ -11,6 +11,14 @@ url_re = re.compile(r'^(https?|xmpp):')
 
 class CustomRenderer(m.HtmlRenderer):
 
+    def image(self, link, title='', alt=''):
+        if url_re.match(link):
+            maybe_alt = Markup(' alt="%s"') % alt if alt else ''
+            maybe_title = Markup(' title="%s"') % title if title else ''
+            return Markup('<img src="%s"%s%s />') % (link, maybe_alt, maybe_title)
+        else:
+            return escape("![%s](%s)" % (alt, link))
+
     def link(self, content, link, title=''):
         if url_re.match(link):
             maybe_title = Markup(' title="%s"') % title if title else ''
