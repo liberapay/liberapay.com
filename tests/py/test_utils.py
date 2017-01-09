@@ -79,8 +79,8 @@ class Tests(Harness):
         assert expected == actual
 
     def test_markdown_render_escapes_scripts(self):
-        expected = '<p>Example alert &ldquo;hi&rdquo;;</p>\n'
-        actual = markdown.render('Example <script>alert "hi";</script>')
+        expected = '<p>Example alert(1);</p>\n'
+        actual = markdown.render('Example <script>alert(1);</script>')
         assert expected == actual
 
     def test_markdown_render_renders_http_links(self):
