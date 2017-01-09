@@ -95,6 +95,12 @@ class Tests(Harness):
         expected = '<p><a href="https://example.com/">https://example.com/</a></p>\n'
         assert markdown.render('<https://example.com/>') == expected
 
+    def test_markdown_render_renders_xmpp_links(self):
+        expected = '<p><a href="xmpp:foo@example.com">foo</a></p>\n'
+        assert markdown.render('[foo](xmpp:foo@example.com)') == expected
+        expected = '<p><a href="xmpp:foo@example.com">xmpp:foo@example.com</a></p>\n'
+        assert markdown.render('<xmpp:foo@example.com>') == expected
+
     def test_markdown_render_escapes_javascript_links(self):
         expected = '<p>[foo](javascript:foo)</p>\n'
         assert markdown.render('[foo](javascript:foo)') == expected

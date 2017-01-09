@@ -6,7 +6,7 @@ from markupsafe import Markup, escape
 import misaka as m  # http://misaka.61924.nl/
 
 
-url_re = re.compile(r'^https?:')
+url_re = re.compile(r'^(https?|xmpp):')
 
 
 class CustomRenderer(m.HtmlRenderer):
