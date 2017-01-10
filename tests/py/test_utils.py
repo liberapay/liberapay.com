@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 
 from pando.http.response import Response
+from markupsafe import escape
 
 from liberapay import utils
 from liberapay.testing import Harness
@@ -90,8 +91,8 @@ class Tests(Harness):
 
     def test_markdown_autolink_filtering(self):
         # Nice data
-        for url in ('http://a', 'https://b', 'xmpp:c'):
-            expected = '<p><a href="{0}">{0}</a></p>\n'.format(url)
+        for url in ('http://a', "https://b?x&y", 'xmpp:c'):
+            expected = '<p><a href="{0}">{0}</a></p>\n'.format(escape(url))
             actual = markdown.render('<%s>' % url)
             assert actual == expected
         # Naughty data
@@ -105,8 +106,8 @@ class Tests(Harness):
     def test_markdown_link_filtering(self):
         # Nice data
         for url in ('http://a', 'https://b', 'xmpp:c'):
-            expected = '<p><a href="{0}">foo</a></p>\n'.format(url)
-            actual = markdown.render('[foo](%s)' % url)
+            expected = '<p><a href="{0}">&#39;foo</a></p>\n'.format(url)
+            actual = markdown.render("['foo](%s)" % url)
             assert actual == expected
         # Naughty data
         html = markdown.render('[foo](javascript:xss)')
@@ -122,10 +123,10 @@ class Tests(Harness):
 
     def test_markdown_image_src_filtering(self):
         # Nice data
-        expected = '<p><img src="http:foo" /></p>\n'
-        assert markdown.render('![](http:foo)') == expected
-        expected = '<p><img src="https://example.org/" alt="bar" /></p>\n'
-        assert markdown.render('![bar](https://example.org/)') == expected
+        expected = '<p><img src="http:&#34;foo&#34;" /></p>\n'
+        assert markdown.render('![](http:"foo")') == expected
+        expected = '<p><img src="https://example.org/" alt="&#34;bar&#34;" /></p>\n'
+        assert markdown.render('!["bar"](https://example.org/)') == expected
         # Naughty data
         expected = '<p>![foo](javascript:foo)</p>\n'
         assert markdown.render('![foo](javascript:foo)') == expected
