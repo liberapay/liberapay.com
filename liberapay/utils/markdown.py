@@ -22,7 +22,7 @@ class CustomRenderer(m.HtmlRenderer):
     def link(self, content, link, title=''):
         if url_re.match(link):
             maybe_title = Markup(' title="%s"') % title if title else ''
-            return Markup('<a href="%s"%s>%s</a>') % (link, maybe_title, content)
+            return Markup('<a href="%s"%s>' + content + '</a>') % (link, maybe_title)
         else:
             return escape("[%s](%s)" % (content, link))
 
