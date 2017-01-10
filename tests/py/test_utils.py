@@ -72,34 +72,63 @@ class Tests(Harness):
         actual = i18n.format_money(16, 'USD', locale='en')
         assert actual == expected
 
+    # Markdown
+    # ========
 
     def test_markdown_render_does_render(self):
         expected = "<p>Example</p>\n"
         actual = markdown.render('Example')
         assert expected == actual
 
-    def test_markdown_render_escapes_scripts(self):
-        expected = '<p>Example alert &ldquo;hi&rdquo;;</p>\n'
-        actual = markdown.render('Example <script>alert "hi";</script>')
+    def test_markdown_render_discards_scripts(self):
+        expected = '<p>Example alert(1);</p>\n'
+        actual = markdown.render('Example <script>alert(1);</script>')
         assert expected == actual
+        payload = '<sc<script>ript>alert(123)</sc</script>ript>'
+        html = markdown.render(payload)
+        assert '<script>' not in html
 
-    def test_markdown_render_renders_http_links(self):
-        expected = '<p><a href="http://example.com/">foo</a></p>\n'
-        assert markdown.render('[foo](http://example.com/)') == expected
-        expected = '<p><a href="http://example.com/">http://example.com/</a></p>\n'
-        assert markdown.render('<http://example.com/>') == expected
-
-    def test_markdown_render_renders_https_links(self):
-        expected = '<p><a href="https://example.com/">foo</a></p>\n'
-        assert markdown.render('[foo](https://example.com/)') == expected
-        expected = '<p><a href="https://example.com/">https://example.com/</a></p>\n'
-        assert markdown.render('<https://example.com/>') == expected
-
-    def test_markdown_render_escapes_javascript_links(self):
-        expected = '<p>[foo](javascript:foo)</p>\n'
-        assert markdown.render('[foo](javascript:foo)') == expected
+    def test_markdown_autolink_filtering(self):
+        # Nice data
+        for url in ('http://a', 'https://b', 'xmpp:c'):
+            expected = '<p><a href="{0}">{0}</a></p>\n'.format(url)
+            actual = markdown.render('<%s>' % url)
+            assert actual == expected
+        # Naughty data
         expected = '<p>&lt;javascript:foo&gt;</p>\n'
         assert markdown.render('<javascript:foo>') == expected
+        link = 'javascript:0'
+        encoded_link = ''.join('&x{0:x};'.format(ord(c)) for c in link)
+        html = markdown.render('<%s>' % encoded_link)
+        assert link not in html
+
+    def test_markdown_link_filtering(self):
+        # Nice data
+        for url in ('http://a', 'https://b', 'xmpp:c'):
+            expected = '<p><a href="{0}">foo</a></p>\n'.format(url)
+            actual = markdown.render('[foo](%s)' % url)
+            assert actual == expected
+        # Naughty data
+        html = markdown.render('[foo](javascript:xss)')
+        assert html == '<p>[foo](javascript:xss)</p>\n'
+        html = markdown.render('[foo](unknown:bar)')
+        assert html == '<p>[foo](unknown:bar)</p>\n'
+        html = markdown.render('[" xss><xss>]("><xss>)')
+        assert '<xss>' not in html
+        assert '" xss' not in html
+        html = markdown.render('[" xss><xss>](https:"><xss>)')
+        assert '<xss>' not in html
+        assert '" xss' not in html
+
+    def test_markdown_image_src_filtering(self):
+        # Nice data
+        expected = '<p><img src="http:foo" /></p>\n'
+        assert markdown.render('![](http:foo)') == expected
+        expected = '<p><img src="https://example.org/" alt="bar" /></p>\n'
+        assert markdown.render('![bar](https://example.org/)') == expected
+        # Naughty data
+        expected = '<p>![foo](javascript:foo)</p>\n'
+        assert markdown.render('![foo](javascript:foo)') == expected
 
     def test_markdown_render_doesnt_allow_any_explicit_anchors(self):
         expected = '<p>foo</p>\n'
@@ -118,7 +147,6 @@ class Tests(Harness):
         expected = '<p>Examples like this_one and this other_one.</p>\n'
         actual = markdown.render('Examples like this_one and this other_one.')
         assert expected == actual
-
 
     # Base64 encoding/decoding
     # ========================
