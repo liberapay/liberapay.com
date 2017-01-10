@@ -106,8 +106,8 @@ class Tests(Harness):
     def test_markdown_link_filtering(self):
         # Nice data
         for url in ('http://a', 'https://b', 'xmpp:c'):
-            expected = '<p><a href="{0}">&#39;foo</a></p>\n'.format(url)
-            actual = markdown.render("['foo](%s)" % url)
+            expected = '<p><a href="{0}" title="bar&#39;">&#39;foo</a></p>\n'.format(url)
+            actual = markdown.render("['foo](%s \"bar'\")" % url)
             assert actual == expected
         # Naughty data
         html = markdown.render('[foo](javascript:xss)')
@@ -125,8 +125,8 @@ class Tests(Harness):
         # Nice data
         expected = '<p><img src="http:&#34;foo&#34;" /></p>\n'
         assert markdown.render('![](http:"foo")') == expected
-        expected = '<p><img src="https://example.org/" alt="&#34;bar&#34;" /></p>\n'
-        assert markdown.render('!["bar"](https://example.org/)') == expected
+        expected = '<p><img src="https://example.org/" alt="&#34;bar&#34;" title="&#39;title&#39;" /></p>\n'
+        assert markdown.render('!["bar"](https://example.org/ "\'title\'")') == expected
         # Naughty data
         expected = '<p>![foo](javascript:foo)</p>\n'
         assert markdown.render('![foo](javascript:foo)') == expected
