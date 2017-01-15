@@ -51,7 +51,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     b64encode_s, deserialize, erase_cookie, serialize, set_cookie,
-    emails, i18n,
+    emails, i18n, markdown,
 )
 from liberapay.website import website
 
@@ -711,18 +711,26 @@ class Participant(Model, MixinTeam):
         i18n.add_helpers_to_context(context_html, locale)
         context_html['escape'] = htmlescape
         spt = website.emails[spt_name]
-        base_spt = website.emails['base']
-        bodies = {}
-        def render(t, context):
-            b = base_spt[t].render(context).strip()
-            if t == 'text/plain' and t not in spt:
-                body = html2text(bodies['text/html']).strip()
-            else:
-                body = spt[t].render(context).strip()
-            bodies[t] = body
-            return b.replace('$body', body)
+        if spt_name == 'newsletter':
+            def render(t, context):
+                if t == 'text/html':
+                    context['body'] = markdown.render(context['body']).strip()
+                return spt[t].render(context).strip()
+        else:
+            base_spt = website.emails['base']
+            bodies = {}
+            def render(t, context):
+                b = base_spt[t].render(context).strip()
+                if t == 'text/plain' and t not in spt:
+                    body = html2text(bodies['text/html']).strip()
+                else:
+                    body = spt[t].render(context).strip()
+                bodies[t] = body
+                return b.replace('$body', body)
         message = {}
         message['from_email'] = 'Liberapay Support <support@liberapay.com>'
+        if spt_name == 'newsletter':
+            message['from_email'] = 'Liberapay Newsletters <newsletters@liberapay.com>'
         message['to'] = [formataddr((self.username, email))]
         message['subject'] = spt['subject'].render(context).strip()
         message['html'] = render('text/html', context_html)
