@@ -34,6 +34,7 @@ BEGIN;
     , ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
     , mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
     , is_on         boolean        NOT NULL
+    , token         text           NOT NULL
     , UNIQUE (publisher, subscriber)
     );
 

@@ -960,6 +960,7 @@ class Participant(Model, MixinTeam):
 
     def upsert_subscription(self, on, publisher):
         subscriber = self.id
+        token = str(uuid.uuid4())
         self.db.run("""
             DO $$
             DECLARE
@@ -967,8 +968,8 @@ class Participant(Model, MixinTeam):
             BEGIN
                 BEGIN
                     INSERT INTO subscriptions
-                                (publisher, subscriber, is_on)
-                         VALUES (%(publisher)s, %(subscriber)s, %(on)s);
+                                (publisher, subscriber, is_on, token)
+                         VALUES (%(publisher)s, %(subscriber)s, %(on)s, %(token)s);
                     IF (FOUND) THEN RETURN; END IF;
                 EXCEPTION WHEN unique_violation THEN
                     GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
@@ -996,16 +997,24 @@ class Participant(Model, MixinTeam):
         """, (self.id, participant.id))
 
     @classmethod
+    def get_subscriptions(cls, publisher):
+        unsub_url = '{}/~{}/unsubscribe?id=%s&token=%s'.format(website.canonical_url, publisher)
+        return cls.db.all("""
+            SELECT s.*
+                 , format(%(unsub_url)s, s.id, s.token) AS unsubscribe_url
+              FROM subscriptions s
+             WHERE s.publisher = %(publisher)s
+        """, locals())
+
+    @classmethod
     def send_newsletters(cls):
         fetch_messages = lambda: cls.db.all("""
-            SELECT row_to_json((SELECT a FROM (
-                        SELECT t.id, t.newsletter, t.lang, t.subject, t.body
+            SELECT n.sender
+                 , row_to_json((SELECT a FROM (
+                        SELECT t.newsletter, t.lang, t.subject, t.body
                    ) a)) AS context
-                 , ( SELECT array_agg(s.subscriber)
-                       FROM subscriptions s
-                      WHERE s.publisher = t.sender
-                   ) AS subscribers
               FROM newsletter_texts t
+              JOIN newsletters n ON n.id = t.newsletter
              WHERE scheduled_for <= now() + INTERVAL '30 seconds'
                AND sent_at IS NULL
           ORDER BY scheduled_for ASC
@@ -1016,16 +1025,18 @@ class Participant(Model, MixinTeam):
                 break
             for msg in messages:
                 with cls.db.get_cursor() as cursor:
-                    context = serialize(msg.context)
-                    count = cursor.one("""
-                        INSERT INTO email_queue
-                                    (participant, spt_name, context)
-                             SELECT p_id, 'newsletter', %s)
-                               FROM unnest(%s) subscriber
-                               JOIN participants p ON p.id = subscriber
-                              WHERE p.email IS NOT NULL
-                     RETURNING count(*)
-                    """, (context, msg.subscribers))
+                    count = 0
+                    for s in cls.get_subscriptions(msg.sender):
+                        context = dict(msg.context, unsubscribe_url=s.unsubscribe_url)
+                        count += cursor.one("""
+                            INSERT INTO email_queue
+                                        (participant, spt_name, context)
+                                 SELECT p.id, 'newsletter', %s
+                                   FROM participants p
+                                  WHERE p.id = %s
+                                    AND p.email IS NOT NULL
+                         RETURNING count(*)
+                        """, (serialize(context), s.subscriber))
                     assert cursor.one("""
                         UPDATE newsletter_texts
                            SET sent_at = now()
