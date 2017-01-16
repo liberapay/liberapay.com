@@ -31,3 +31,5 @@ BEGIN;
         ;
 
 END;
+
+UPDATE participants SET profile_nofollow = true;
