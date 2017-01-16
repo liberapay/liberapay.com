@@ -33,11 +33,14 @@ elif 'privacy' in body:
         if field not in PRIVACY_FIELDS:
             continue
         value = body.get(field) == 'on'
-        website.db.run("""
-            UPDATE participants
-               SET {0} = %s
-             WHERE id = %s
-        """.format(field), (value, p.id))
+        if isinstance(getattr(p, field), bool):
+            website.db.run("""
+                UPDATE participants
+                   SET {0} = %s
+                 WHERE id = %s
+            """.format(field), (value, p.id))
+        else:
+            p.update_bit(field, 1, value)
     out['msg'] = _("Your privacy settings have been changed.")
 
 elif 'username' in body:

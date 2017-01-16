@@ -6,7 +6,7 @@
         <div class="checkbox">
         % for name, label in constants.PRIVACY_FIELDS.items()
         <label>
-            <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name] else '' }} />
+            <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name].__and__(1) else '' }} />
             {{ _(label) }}
         </label>
         <br />

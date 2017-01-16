@@ -19,7 +19,7 @@ if query:
               FROM participants
              WHERE username %% %(q)s
                AND status = 'active'
-               AND NOT hide_from_search
+               AND hide_from_search = 0
           ORDER BY rank DESC, username
              LIMIT 10
         """, locals())
@@ -54,7 +54,7 @@ if query:
                    ) s
               JOIN participants p ON p.id = s.participant
              WHERE p.status = 'active'
-               AND NOT p.hide_from_search
+               AND p.hide_from_search = 0
           GROUP BY p.id
           ORDER BY max_rank DESC
         """, locals())

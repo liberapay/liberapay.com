@@ -1783,6 +1783,26 @@ class Participant(Model, MixinTeam):
             other.kind == 'group' and self.member_of(other)
         )
 
+    def update_bit(self, column, bit, on):
+        """Updates one bit in an integer in the participants table.
+
+        Bits are used for email notification preferences and privacy settings.
+        """
+        assert isinstance(getattr(self, column), int)  # anti sql injection
+        if on:
+            mask = bit
+            op = '|'
+        else:
+            mask = 2147483647 ^ bit
+            op = '&'
+        r = self.db.one("""
+            UPDATE participants
+               SET {column} = {column} {op} %s
+             WHERE id = %s
+         RETURNING {column}
+        """.format(column=column, op=op), (mask, self.id))
+        self.set_attributes(**{column: r})
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
