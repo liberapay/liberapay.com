@@ -19,6 +19,13 @@ BEGIN;
         ALTER COLUMN hide_from_search SET DATA TYPE int USING (hide_from_search::int),
         ALTER COLUMN hide_from_search SET DEFAULT 0;
 
+    LOCK TABLE communities IN EXCLUSIVE MODE;
+    UPDATE participants p
+       SET hide_from_lists = c.is_hidden::int
+      FROM communities c
+     WHERE c.participant = p.id;
+    ALTER TABLE communities DROP COLUMN is_hidden;
+
     CREATE OR REPLACE VIEW sponsors AS
         SELECT *
           FROM participants p
