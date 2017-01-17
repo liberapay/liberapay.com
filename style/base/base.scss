@@ -216,6 +216,23 @@ li.mini-user {
     }
 }
 
+.user-admin {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1em;
+}
+.mini-user-admin {
+    border-right: 1px solid #ddd;
+    text-align: center;
+    img.avatar {
+        max-width: 110px;
+    }
+    .name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
 #subnav + p, #subnav + div.paragraph {
     margin-top: 1.5em;
 }

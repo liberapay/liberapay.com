@@ -56,8 +56,15 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if participant is None:
         from liberapay.models.participant import Participant  # avoid circular import
         participant = Participant._from_thing(thing, value) if value else None
-        if participant is None or participant.kind == 'community':
+        if participant is None:
             raise response.error(404)
+        elif participant.kind == 'community':
+            c_name = Participant.db.one("""
+                SELECT name
+                  FROM communities
+                 WHERE participant = %s
+            """, (participant.id,))
+            raise response.redirect('/for/%s' % c_name)
 
     if redirect_canon and request.method in ('GET', 'HEAD'):
         if slug != participant.username:
