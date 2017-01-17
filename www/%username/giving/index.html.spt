@@ -39,6 +39,7 @@ npledges = len(pledges)
 
 if not freeload:
     Liberapay = Participant.from_username('Liberapay')
+    Liberapay_goal = getattr(Liberapay, 'goal', None)
     Liberapay_tip = participant.get_tip_to(getattr(Liberapay, 'id', -1))
 
 weekly = total - participant.receiving
@@ -89,7 +90,7 @@ weekly = total - participant.receiving
         ) }}</p>
         {{ tip_form(tip=Liberapay_tip, inline=True) }}
         <p> </p>
-        % if Liberapay and Liberapay.receiving < Liberapay.goal * Decimal('0.5')
+        % if Liberapay_goal and Liberapay.receiving < Liberapay_goal * Decimal('0.5')
             <p>{{ _(
                 "Building Liberapay is a lot of work, and there still is much to "
                 "do, but our developers, translators, and other contributors are "
