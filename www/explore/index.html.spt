@@ -19,28 +19,31 @@ title = _("Explore")
     ) }}</p>
     <br>
 
-    <dl>
-        <dt><a href="/explore/communities/">{{ _("Explore Communities") }}</a></dt>
-        <dd>{{ _(
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Communities") }}</h3>
+        <p>{{ _(
             "Communities allow you to find people that work on things you care "
             "about. You can also subscribe to their newsletters to stay informed."
-        ) }}</dd>
-    </dl>
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/communities/">{{ _("Explore Communities") }}</a></p>
+    </div>
 
-    <dl>
-        <dt><a href="/explore/teams/">{{ _("Explore Teams") }}</a></dt>
-        <dd>{{ _(
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Teams") }}</h3>
+        <p>{{ _(
             "A team is a group of users working on a specific project."
-        ) }}</dd>
-    </dl>
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/teams/">{{ _("Explore Teams") }}</a></p>
+    </div>
 
-    <dl>
-        <dt><a href="/explore/pledges/">{{ _("Explore Pledges") }}</a></dt>
-        <dd>{{ _(
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Pledges") }}</h3>
+        <p>{{ _(
             "Liberapay allows you to pledge to donate to people who haven't joined "
             "the site yet. The donation will automatically start if they sign up "
             "to receive it. We'll send you a notification when that happens."
-        ) }}</dd>
-    </dl>
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/pledges/">{{ _("Explore Pledges") }}</a></p>
+    </div>
 
 % endblock
