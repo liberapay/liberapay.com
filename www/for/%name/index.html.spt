@@ -8,6 +8,7 @@ query_cache = QueryCache(website.db, threshold=1)
 [---]
 
 community = get_community(state, restrict=False)
+participant = community.participant  # used by profile-base.html
 
 try:
     limit = min(int(request.qs.get('limit', 50)), 100)
@@ -30,7 +31,7 @@ title = pretty_name = community.pretty_name
 [---]
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context
 
-% extends "templates/base.html"
+% extends "templates/profile-base.html"
 
 {% block before_content %}{% endblock %}
 

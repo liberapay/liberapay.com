@@ -4,14 +4,22 @@
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
         <input type="hidden" name="privacy" value="{{ constants.PRIVACY_FIELDS_S }}" />
         <div class="checkbox">
+        % set has_override = set()
         % for name, label in constants.PRIVACY_FIELDS.items()
         <label>
-            <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name] else '' }} />
+            <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name].__and__(1) else '' }} />
             {{ _(label) }}
         </label>
+        % if participant[name] == 2
+            {{ has_override.add(True) or '' }}
+            <span class="text-warning">({{ _("Admin override is on.*") }})</span>
+        % endif
         <br />
         % endfor
         </div>
         <button class="btn btn-default">{{ _("Save changes") }}</button>
+        % if has_override
+            <p class="help-block">{{ _("*The referencing of Liberapay profiles is subject to admin approval.") }}</p>
+        % endif
     </form>
 % endmacro

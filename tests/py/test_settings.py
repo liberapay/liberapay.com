@@ -27,13 +27,13 @@ class TestPrivacy(Harness):
         self.hit_edit(data=ALL_ON)
         alice = Participant.from_id(self.alice.id)
         for k in PRIVACY_FIELDS:
-            assert getattr(alice, k) is True
+            assert getattr(alice, k) in (1, 3, True)
 
         # turn them all off
         self.hit_edit(data=ALL_OFF)
         alice = Participant.from_id(self.alice.id)
         for k in PRIVACY_FIELDS:
-            assert getattr(alice, k) is False
+            assert getattr(alice, k) in (0, 2, False)
 
     # Related to is-searchable
 
@@ -49,7 +49,7 @@ class TestPrivacy(Harness):
 
     def test_team_participant_doesnt_show_up_on_explore_teams(self):
         alice = Participant.from_username('alice')
-        self.make_participant('A-Team', kind='group', hide_from_lists=True).add_member(alice)
+        self.make_participant('A-Team', kind='group', hide_from_lists=1).add_member(alice)
         assert 'A-Team' not in self.client.GET("/explore/teams/").text
 
 

@@ -17,8 +17,9 @@ communities_top = query_cache.all("""
               LIMIT 1
            ) AS subtitle
       FROM communities c
+      JOIN participants cp ON cp.id = c.participant
      WHERE (nmembers > 1 OR nsubscribers > 1)
-       AND NOT is_hidden
+       AND cp.hide_from_lists = 0
   ORDER BY nmembers DESC, random()
      LIMIT 15
 """, (' '.join(request.accept_langs),))
@@ -33,8 +34,9 @@ communities_loc = query_cache.all("""
                 AND s.lang = c.lang
            ) AS subtitle
       FROM communities c
+      JOIN participants cp ON cp.id = c.participant
      WHERE lang = %s
-       AND NOT is_hidden
+       AND cp.hide_from_lists = 0
   ORDER BY nmembers DESC, random()
      LIMIT 15
 """, (([l for l in request.accept_langs if l in communities_langs] + [''])[0],))

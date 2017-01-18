@@ -9,6 +9,7 @@ pledgees = website.db.all("""
       JOIN elsewhere e ON e.participant = p.id
      WHERE p.status = 'stub'
        AND p.receiving > 0
+       AND p.hide_from_lists = 0
   ORDER BY ctime DESC
      LIMIT 20
 """)

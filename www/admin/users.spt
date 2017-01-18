@@ -1,0 +1,91 @@
+# coding: utf8
+
+import json
+
+from liberapay.exceptions import LoginRequired
+from liberapay.models.participant import Participant
+
+def parse_int(o, **kw):
+    try:
+        return int(o)
+    except (ValueError, TypeError):
+        if 'default' in kw:
+            return kw['default']
+        raise response.error(400, "'%s' is not a valid integer" % o)
+
+REFERENCING_ATTRS = ('profile_noindex', 'hide_from_lists', 'hide_from_search')
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+if request.method == 'POST':
+    p = Participant.from_id(request.body['p_id'])
+    updated = 0
+    for attr in REFERENCING_ATTRS:
+        value = request.body.get(attr)
+        if value is None:
+            continue
+        p.update_bit(attr, 2, value == 'on')
+        updated += 1
+    raise response.success(200, json.dumps({'msg': "Done, %i bits have been updated." % updated}))
+
+participants = website.db.all("""
+    SELECT p
+         , (SELECT c.name FROM communities c WHERE c.participant = p.id) AS c_name
+      FROM participants p
+     WHERE p.id < %s
+       AND (p.status <> 'stub' OR p.receiving > 0)
+  ORDER BY p.id DESC
+     LIMIT 150
+""", (parse_int(request.qs.get('last_showed'), default=float('inf')),))
+last_id = participants[-1][0].id if participants else 0
+
+title = "Users Admin"
+
+[---] text/html
+% from 'templates/avatar-url.html' import avatar_img with context
+
+% extends "templates/base.html"
+
+% block content
+
+<noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+
+% for p, c_name in participants
+<div class="row user-admin">
+    <div class="col-md-2 mini-user-admin">
+        <a href="/{{ p.username }}/">
+            <div class="name">{{ c_name if c_name else p.username }}<br>({{ p.kind }}, {{ p.status }})</div>
+            {{ avatar_img(p) }}
+            <div class="age">{{ to_age_str(p.join_time, add_direction=True) if p.join_time }}</div>
+        </a>
+    </div>
+    <div class="col-md-10">
+        <form action="javascript:" method="POST" class="js-submit">
+            <input type="hidden" name="p_id" value="{{ p.id }}">
+            % for attr in REFERENCING_ATTRS
+                % set value = getattr(p, attr)
+                <label>
+                    <input type="checkbox" name="{{ attr }}" {{ 'checked' if value.__and__(2) }} />
+                    {{ attr }} (user value: {{ bool(value.__and__(1)) }})
+                </label>
+                <br>
+            % endfor
+            <button class="btn btn-warning">{{ _("Save") }}</button>
+        </form>
+        <br>
+    </div>
+</div>
+<br>
+% endfor
+
+% if last_id > 1
+<a class="btn btn-default btn-lg" href="?last_showed={{ last_id }}">{{ _("Next") }} →</a>
+% endif
+
+% endblock

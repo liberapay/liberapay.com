@@ -16,7 +16,18 @@ Liberapay.forms.jsSubmit = function() {
     function submit(e) {
         e.preventDefault();
         var $form = $(this.form || this);
+        var target = $form.attr('action');
+        var js_only = target == 'javascript:';
         var data = $form.serializeArray();
+        if (js_only) {
+            // workaround for http://stackoverflow.com/q/11424037/2729778
+            $form.find('input[type="checkbox"]').each(function () {
+                var $input = $(this);
+                if (!$input.prop('checked')) {
+                    data.push({name: $input.attr('name'), value: 'off'});
+                }
+            });
+        }
         var button = this.tagName == 'BUTTON' ? this : null;
         if (this.tagName == 'BUTTON') {
             data.push({name: this.name, value: this.value});
@@ -24,7 +35,7 @@ Liberapay.forms.jsSubmit = function() {
         var $inputs = $form.find(':not(:disabled)');
         $inputs.prop('disabled', true);
         jQuery.ajax({
-            url: $form.attr('action'),
+            url: js_only ? '' : target,
             type: 'POST',
             data: data,
             dataType: 'json',

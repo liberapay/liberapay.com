@@ -12,17 +12,7 @@ for field in fields:
     event = EVENTS.get(field)
     if not event:
         continue
-    if body.get(field) == 'on':
-        mask = event.bit
-        op = '|'
-    else:
-        mask = 2147483647 ^ event.bit
-        op = '&'
-    website.db.run("""
-        UPDATE participants
-           SET email_notif_bits = email_notif_bits {0} %s
-         WHERE id = %s
-    """.format(op), (mask, p_id))
+    participant.update_bit('email_notif_bits', event.bit, body.get(field) == 'on')
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
     response.redirect('.')
