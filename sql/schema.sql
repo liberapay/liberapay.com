@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '24'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '25'::jsonb);
 
 
 -- app configuration
@@ -53,7 +53,7 @@ CREATE TABLE participants
 
 , hide_giving           boolean                 NOT NULL DEFAULT FALSE
 , hide_receiving        boolean                 NOT NULL DEFAULT FALSE
-, hide_from_search      boolean                 NOT NULL DEFAULT FALSE
+, hide_from_search      int                     NOT NULL DEFAULT 0
 
 , avatar_url            text
 , giving                numeric(35,2)           NOT NULL DEFAULT 0
@@ -68,8 +68,8 @@ CREATE TABLE participants
 , avatar_email          text
 
 , profile_nofollow      boolean                 DEFAULT TRUE
-, profile_noindex       boolean                 NOT NULL DEFAULT FALSE
-, hide_from_lists       boolean                 NOT NULL DEFAULT FALSE
+, profile_noindex       int                     NOT NULL DEFAULT 2
+, hide_from_lists       int                     NOT NULL DEFAULT 0
 
 , privileges            int                     NOT NULL DEFAULT 0
 
@@ -272,7 +272,6 @@ CREATE TABLE communities
 , creator        bigint        NOT NULL REFERENCES participants
 , lang           text          NOT NULL
 , participant    bigint        NOT NULL REFERENCES participants
-, is_hidden      boolean       NOT NULL DEFAULT FALSE
 , CHECK (nsubscribers >= 0)
 );
 
@@ -471,5 +470,6 @@ CREATE OR REPLACE VIEW sponsors AS
        AND kind = 'organization'
        AND giving > receiving
        AND giving >= 10
-       AND NOT profile_nofollow
+       AND hide_from_lists = 0
+       AND profile_noindex = 0
     ;
