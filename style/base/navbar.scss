@@ -4,8 +4,8 @@
     & > li {
         float: left;
         & > a {
-            padding-bottom: 15px;
-            padding-top: 15px;
+            padding-bottom: $navbar-padding-vertical;
+            padding-top: $navbar-padding-vertical;
         }
     }
 }
@@ -50,7 +50,7 @@
         }
         .navbar-btn {
             margin: 0;
-            padding: 15px 13px;
+            padding: $navbar-padding-vertical $navbar-padding-horizontal;
         }
         .dropdown-menu {
             background: #f6c915;
@@ -77,9 +77,9 @@
         & > img {
             border-radius: 4px;
             color: #000;
-            height: 30px;
-            line-height: 30px;
-            margin-top: -5px;
+            height: $font-size-base * 2;
+            line-height: $font-size-base * 2;
+            margin-top: -$font-size-base / 3;
         }
     }
 }

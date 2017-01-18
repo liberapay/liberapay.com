@@ -284,25 +284,32 @@ h2, h3, h4, h5, h6 {
     0% { background-color: rgba(yellow, 0.7); }
 }
 
+section.profile-statement, section.community-sidebar {
+    h1 {
+        font-size: $font-size-h3;
+        margin: $font-size-h3 0 10px;
+    }
+    h2 {
+        font-size: $font-size-h4;
+        margin: $font-size-h4 0 10px;
+    }
+    h3 {
+        font-size: $font-size-medium;
+        margin: $font-size-medium 0 10px;
+    }
+    h4, h5, h6 {
+        font-size: $font-size-base;
+        margin: $font-size-base 0 10px;
+    }
+}
 section.profile-statement {
     h1, h2, h3, h4 {
         color: #956410;
     }
-    h1 {
-        font-size: 26px;
-        margin: 26px 0 10px;
-    }
-    h2 {
-        font-size: 20px;
-        margin: 20px 0 10px;
-    }
-    h3 {
-        font-size: 16px;
-        margin: 16px 0 10px;
-    }
-    h4, h5, h6 {
-        font-size: 14px;
-        margin: 14px 0 10px;
+}
+section.community-sidebar {
+    h1, h2, h3, h4 {
+        color: #888;
     }
 }
 
@@ -524,28 +531,6 @@ table.team {
     height: 28px;
     margin: -4px 0;
     padding: 2px 5px;
-}
-
-section.community-sidebar {
-    h1, h2, h3, h4 {
-        color: #888;
-    }
-    h1 {
-        font-size: 26px;
-        margin: 26px 0 10px;
-    }
-    h2 {
-        font-size: 20px;
-        margin: 20px 0 10px;
-    }
-    h3 {
-        font-size: 16px;
-        margin: 16px 0 10px;
-    }
-    h4, h5, h6 {
-        font-size: 14px;
-        margin: 14px 0 10px;
-    }
 }
 
 p.event {
