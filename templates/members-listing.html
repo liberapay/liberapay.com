@@ -4,7 +4,7 @@
     % set takes = participant.get_current_takes()
     <ul class="people">
     % for t in takes
-        <li class="panel panel-default mini-user">
+        <li class="mini-user">
             <a href="/{{ t.member_name }}/">
                 <img class="avatar" src="{{ avatar_url(t) }}" />
                 <span class="name">{{ t.member_name }}</span>

@@ -75,7 +75,7 @@ title = pretty_name = community.pretty_name
     <h3>{{ _("New Members") }}</h3>
     <ul class="people">
         % for m in members
-        <li class="panel panel-default mini-user">
+        <li class="mini-user">
             <a href="/{{ m.username }}/">
                 {{ avatar_img(m) }}
                 <div class="name">{{ m.username }}</div>

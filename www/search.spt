@@ -96,7 +96,7 @@ if query:
                         len(usernames)) }}</h3>
         <ul class="people">
         % for result in usernames
-        <li class="panel panel-default mini-user">
+        <li class="mini-user">
             <a href="/{{ result.username }}/">
                 <img class="avatar" src="{{ avatar_url(result) }}" />
                 <span class="name">{{ result.username }}</span>

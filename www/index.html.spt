@@ -196,7 +196,7 @@ recent_events = query_cache.all("""
             </p>
             <ul class="people">
             % for p in sponsors
-                <li class="panel panel-default mini-user">
+                <li class="mini-user">
                     <a href="/{{ p.username }}/">
                         {{ avatar_img(p) }}
                         <div class="name">{{ p.username }}</div>

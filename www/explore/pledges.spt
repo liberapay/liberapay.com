@@ -35,7 +35,7 @@ subhead = _("Pledges")
     % if pledgees
         <ul class="people">
         % for p in pledgees
-            <li class="panel panel-default mini-user">
+            <li class="mini-user">
                 <a href="/on/{{ p.platform }}/{{ p.user_name }}/">
                     {{ avatar_img(p) }}
                     <div class="name">{{ p.user_name }}</div>
