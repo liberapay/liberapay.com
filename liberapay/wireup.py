@@ -25,8 +25,8 @@ from liberapay import elsewhere
 import liberapay.billing.payday
 from liberapay.constants import CustomUndefined
 from liberapay.exceptions import NeedDatabase
-from liberapay.models.account_elsewhere import AccountElsewhere
-from liberapay.models.community import Community
+from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
+from liberapay.models.community import _Community, Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models import DB
@@ -80,7 +80,11 @@ def database(env, tell_sentry):
                 return database(env, tell_sentry)
         db = NoDB()
 
-    for model in (AccountElsewhere, Community, ExchangeRoute, Participant):
+    models = (
+        _AccountElsewhere, AccountElsewhere, _Community, Community,
+        ExchangeRoute, Participant,
+    )
+    for model in models:
         db.register_model(model)
     liberapay.billing.payday.Payday.db = db
 

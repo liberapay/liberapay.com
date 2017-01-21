@@ -16,12 +16,21 @@ def normalize(name):
     return normalize_re.sub('_', name).strip('_')
 
 
+class _Community(Model):
+    typname = "communities"
+
+
 class Community(Model):
 
     typname = "community_with_participant"
 
     subtitle_maxlength = 120
     sidebar_maxlength = 4096
+
+    def __init__(self, raw_record):
+        record = raw_record['c'].__dict__
+        record['participant'] = raw_record['p']
+        super(Community, self).__init__(record)
 
     @classmethod
     def create(cls, name, creator_id, lang='mul'):
