@@ -207,7 +207,7 @@ class AccountElsewhere(Model):
         return self.platform_data.account_url.format(
             user_id=self.user_id,
             user_name=self.user_name,
-            user_name_lower=self.user_name.lower(),
+            user_name_lower=(self.user_name or '').lower(),
             platform_data=self.platform_data
         )
 
