@@ -1,0 +1,46 @@
+# coding: utf8
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=1)
+
+[---]
+
+individuals = query_cache.all("""
+    SELECT p
+      FROM participants p
+     WHERE p.kind = 'individual'
+       AND p.status = 'active'
+       AND (p.goal > 0 OR p.goal IS NULL)
+       AND p.hide_receiving IS NOT TRUE
+       AND p.hide_from_lists = 0
+       AND p.receiving > 0
+       AND EXISTS (SELECT 1 FROM statements s WHERE s.participant = p.id)
+  ORDER BY p.receiving DESC, p.join_time DESC
+     LIMIT 30
+""")
+title = _("Explore")
+subhead = _("Individuals")
+
+[---] text/html
+% from 'templates/profile-box.html' import profile_box_embedded with context
+
+% extends "templates/explore.html"
+
+% block content
+
+% if individuals
+<p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
+<div class="row">
+    % for p in individuals
+    <div class="col-md-6">
+        {{ profile_box_embedded(p) }}
+    </div>
+    % endfor
+</div>
+% else
+<p>{{ _("Nothing to show.") }}</p>
+% endif
+
+<p><a class="btn btn-success btn-lg" href="/sign-up">{{ _("Create your account") }}</a></p>
+
+% endblock

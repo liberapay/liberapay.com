@@ -1,0 +1,46 @@
+# coding: utf8
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=1)
+
+[---]
+
+orgs_receiving = query_cache.all("""
+    SELECT p
+      FROM participants p
+     WHERE p.kind = 'organization'
+       AND p.status = 'active'
+       AND (p.goal > 0 OR p.goal IS NULL)
+       AND p.hide_receiving IS NOT TRUE
+       AND p.hide_from_lists = 0
+       AND p.receiving > 0
+       AND EXISTS (SELECT 1 FROM statements s WHERE s.participant = p.id)
+  ORDER BY p.receiving DESC, p.join_time DESC
+     LIMIT 30
+""")
+title = _("Explore")
+subhead = _("Organizations")
+
+[---] text/html
+% from 'templates/profile-box.html' import profile_box_embedded with context
+
+% extends "templates/explore.html"
+
+% block content
+
+% if orgs_receiving
+<p>{{ _("The top {0} organizations on Liberapay are:", len(orgs_receiving)) }}</p>
+<div class="row">
+    % for p in orgs_receiving
+    <div class="col-md-6">
+        {{ profile_box_embedded(p) }}
+    </div>
+    % endfor
+</div>
+% else
+<p>{{ _("Nothing to show.") }}</p>
+% endif
+
+<p><a class="btn btn-success btn-lg" href="/sign-up">{{ _("Create an organization account") }}</a></p>
+
+% endblock

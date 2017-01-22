@@ -20,15 +20,6 @@ title = _("Explore")
     <br>
 
     <div class="card card-default card-md">
-        <h3 class="text-info">{{ _("Communities") }}</h3>
-        <p>{{ _(
-            "Communities allow you to find people that work on things you care "
-            "about. You can also subscribe to their newsletters to stay informed."
-        ) }}</p>
-        <p><a class="btn btn-info btn-lg" href="/explore/communities">{{ _("Explore Communities") }}</a></p>
-    </div>
-
-    <div class="card card-default card-md">
         <h3 class="text-info">{{ _("Teams") }}</h3>
         <p>{{ _(
             "A team is a group of users working on a specific project."
@@ -37,13 +28,36 @@ title = _("Explore")
     </div>
 
     <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Organizations") }}</h3>
+        <p>{{ _(
+            "Great nonprofits and companies trying to improve the world."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/organizations">{{ _("Explore Organizations") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Individuals") }}</h3>
+        <p>{{ _(
+            "People like you who contribute to the commons (art, knowledge, software, etc). "
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/individuals">{{ _("Explore Individuals") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
         <h3 class="text-info">{{ _("Pledges") }}</h3>
         <p>{{ _(
-            "Liberapay allows you to pledge to donate to people who haven't joined "
-            "the site yet. The donation will automatically start if they sign up "
-            "to receive it. We'll send you a notification when that happens."
+            "Liberapay allows pledging to fund people who haven't joined the site yet."
         ) }}</p>
         <p><a class="btn btn-info btn-lg" href="/explore/pledges">{{ _("Explore Pledges") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Communities") }}</h3>
+        <p>{{ _(
+            "Communities allow you to find people that work on things you care "
+            "about. You can also subscribe to their newsletters to stay informed."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/communities">{{ _("Explore Communities") }}</a></p>
     </div>
 
 % endblock
