@@ -1,12 +1,12 @@
 <div>
     <h3 class="banderole default">{{ _("Members") }}</h3>
-    % from "templates/avatar-url.html" import avatar_url with context
+    % from "templates/avatar-url.html" import avatar_img with context
     % set takes = participant.get_current_takes()
     <ul class="people">
     % for t in takes
         <li class="mini-user">
             <a href="/{{ t.member_name }}/">
-                <img class="avatar" src="{{ avatar_url(t) }}" />
+                {{ avatar_img(t) }}
                 <span class="name">{{ t.member_name }}</span>
             </a>
         </li>

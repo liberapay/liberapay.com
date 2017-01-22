@@ -17,14 +17,14 @@
 % macro profile_box(participant, embedded=False)
     <div class="panel panel-default profile-box"
          {% if embedded %} href="{{ participant.path('') }}" {% endif %}>
-        <div class="panel-body row">
-            <div class="avatar col-xs-3">
+        <div class="panel-body">
+            <div class="avatar-col">
                 % if embedded
                     <a href="{{ participant.path('') }}">{{
-                        avatar_img(participant)
+                        avatar_img(participant, size=120)
                     }}</a>
                 % else
-                    {{ avatar_img(participant) }}
+                    {{ avatar_img(participant, size=120) }}
                 % endif
 
                 % if edit
@@ -38,7 +38,7 @@
                 % endif
             </div>
 
-            <div class="col-xs-9">
+            <div class="col-right">
                 {{ caller() }}
             </div>
         </div>

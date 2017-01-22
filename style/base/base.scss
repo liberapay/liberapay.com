@@ -60,16 +60,6 @@ body {
     }
 }
 
-.avatar img {
-    max-height: 120px;
-    max-width: 100%;
-}
-
-#members .avatar {
-    max-height: 32px;
-    max-width: 32px;
-}
-
 input.amount {
     min-width: 5em;
     max-width: 8em;
@@ -132,8 +122,13 @@ img.account-type {
 }
 
 .profile-box {
-    .avatar {
+    .avatar-col {
+        float: left;
         text-align: center;
+        width: 120px;
+    }
+    .col-right {
+        margin-left: 130px;
     }
     h1, h4 {
         color: $brand-primary;
@@ -181,13 +176,11 @@ ul.memberships {
 }
 
 .search-result {
-    .avatar {
+    .avatar-cutter-72 {
         float: left;
-        max-height: 66px;
-        max-width: 66px;
     }
     .col-right {
-        margin-left: 74px;
+        margin-left: 84px;
     }
     .excerpt {
         font-size: 100%;
@@ -207,9 +200,6 @@ li.mini-user {
     text-align: center;
     vertical-align: top;
     width: 110px;
-    img.avatar {
-        max-width: 100%;
-    }
     .name {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -224,8 +214,8 @@ li.mini-user {
 .mini-user-admin {
     border-right: 1px solid #ddd;
     text-align: center;
-    img.avatar {
-        max-width: 110px;
+    .avatar-cutter-120 {
+        display: inline-block;
     }
     .name {
         overflow: hidden;

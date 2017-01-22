@@ -62,17 +62,17 @@ if is_team:
 
     <div class="panel panel-primary">
         <div class="panel-heading">{{ _("Donate to {0}", friendly_name) }}</div>
-        <div class="panel-body row">
+        <div class="panel-body">
 
-            <div class="avatar col-xs-3">
-                <a href="{{ account.html_url}}">{{ avatar_img(account) }}</a>
+            <div class="avatar-col">
+                <a href="{{ account.html_url}}">{{ avatar_img(account, size=120) }}</a>
                 <hr />
                 <p><a href="{{ account.html_url}}">
                     <span class="fa fa-external-link" aria-hidden="true"></span> {{ _("Profile on {0}", platform.display_name) }}</a>
                 </p>
             </div>
 
-            <div class="col-xs-9">
+            <div class="col-right">
             % if allow_pledges
                 <p>{{ _(
                     "Liberapay allows you to pledge to donate to people who haven't joined "

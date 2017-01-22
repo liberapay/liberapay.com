@@ -61,7 +61,7 @@ title = "Users Admin"
     <div class="col-md-2 mini-user-admin">
         <a href="/{{ p.username }}/">
             <div class="name">{{ c_name if c_name else p.username }}<br>({{ p.kind }}, {{ p.status }})</div>
-            {{ avatar_img(p) }}
+            {{ avatar_img(p, size=120) }}
             <div class="age">{{ to_age_str(p.join_time, add_direction=True) if p.join_time }}</div>
         </a>
     </div>
