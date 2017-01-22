@@ -1,8 +1,11 @@
 # coding: utf8
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=1)
 
 [-----------------------------]
 
-teams = website.db.all("""
+teams = query_cache.all("""
 
     SELECT t.*
          , p.*::participants AS participant
