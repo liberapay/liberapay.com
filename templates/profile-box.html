@@ -15,7 +15,7 @@
 % endmacro
 
 % macro profile_box(participant, embedded=False)
-    <div class="panel panel-default profile-box"
+    <div class="panel panel-default profile-box {{ 'profile-box-embedded' if embedded }}"
          {% if embedded %} href="{{ participant.path('') }}" {% endif %}>
         <div class="panel-body">
             <div class="avatar-col">
