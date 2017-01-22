@@ -24,12 +24,18 @@ CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
 class UnknownAccountElsewhere(Exception): pass
 
 
+class _AccountElsewhere(Model):
+    typname = "elsewhere"
+
+
 class AccountElsewhere(Model):
 
     typname = "elsewhere_with_participant"
 
-    def __init__(self, *args, **kwargs):
-        super(AccountElsewhere, self).__init__(*args, **kwargs)
+    def __init__(self, raw_record):
+        record = raw_record['e'].__dict__
+        record['participant'] = raw_record['p']
+        super(AccountElsewhere, self).__init__(record)
         self.platform_data = getattr(website.platforms, self.platform)
 
 
@@ -79,10 +85,11 @@ class AccountElsewhere(Model):
         accounts = []
         found = cls.db.all("""\
 
-            SELECT elsewhere.*::elsewhere_with_participant
-              FROM elsewhere
-             WHERE platform = %s
-               AND user_id = any(%s)
+            SELECT (e, p)::elsewhere_with_participant
+              FROM elsewhere e
+              JOIN participants p ON p.id = e.participant
+             WHERE e.platform = %s
+               AND e.user_id = any(%s)
 
         """, (platform, [i.user_id for i in user_infos]))
         found = {a.user_id: a for a in found}

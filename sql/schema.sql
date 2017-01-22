@@ -126,8 +126,6 @@ CREATE TABLE elsewhere
 , UNIQUE (participant, platform)
  );
 
-\i sql/elsewhere_with_participant.sql
-
 CREATE UNIQUE INDEX ON elsewhere (lower(user_name), platform);
 
 
@@ -279,8 +277,6 @@ CREATE UNIQUE INDEX ON communities (lower(name));
 
 CREATE INDEX community_trgm_idx ON communities
     USING gist(name gist_trgm_ops);
-
-\i sql/community_with_participant.sql
 
 \i sql/update_community.sql
 
@@ -473,3 +469,8 @@ CREATE OR REPLACE VIEW sponsors AS
        AND hide_from_lists = 0
        AND profile_noindex = 0
     ;
+
+
+-- composite types, keep this at the end of the file
+
+\i sql/composites.sql

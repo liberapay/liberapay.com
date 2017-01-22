@@ -1513,9 +1513,10 @@ class Participant(Model, MixinTeam):
         """
         accounts = self.db.all("""
 
-            SELECT elsewhere.*::elsewhere_with_participant
-              FROM elsewhere
-             WHERE participant=%s
+            SELECT (e, p)::elsewhere_with_participant
+              FROM elsewhere e
+              JOIN participants p ON p.id = e.participant
+             WHERE e.participant = %s
 
         """, (self.id,))
         accounts_dict = {account.platform: account for account in accounts}
@@ -1593,7 +1594,7 @@ class Participant(Model, MixinTeam):
             # Every account elsewhere has at least a stub participant account
             # on Liberapay.
             elsewhere = cursor.one("""
-                SELECT e.*::elsewhere_with_participant
+                SELECT (e, p)::elsewhere_with_participant
                   FROM elsewhere e
                   JOIN participants p ON p.id = e.participant
                  WHERE e.platform=%s AND e.user_id=%s
