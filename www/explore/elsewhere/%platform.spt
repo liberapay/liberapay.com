@@ -1,0 +1,163 @@
+# coding: utf8
+
+from collections import OrderedDict
+
+from liberapay.utils.query_cache import QueryCache
+
+query_cache = QueryCache(website.db, threshold=5)
+
+def parse_int(o, **kw):
+    try:
+        return int(o)
+    except (ValueError, TypeError):
+        if 'default' in kw:
+            return kw['default']
+        raise response.error(400, "'%s' is not a valid integer" % o)
+
+INF = float('inf')
+
+[---]
+
+platforms = query_cache.all("""
+    SELECT platform, json_build_object('n_connected_accounts', c, 'min_id', min_id)
+      FROM (
+        SELECT e.platform, count(*) as c, min(p.id) as min_id
+          FROM elsewhere e
+          JOIN participants p ON p.id = e.participant
+         WHERE p.status = 'active'
+           AND p.hide_from_lists = 0
+      GROUP BY e.platform
+           ) a
+  ORDER BY c DESC, platform ASC
+""")
+platforms = OrderedDict(
+    (p_name, (getattr(website.platforms, p_name), d)) for p_name, d in platforms
+)
+
+platform_name = request.path['platform']
+platform = getattr(website.platforms, platform_name, None)
+if platform_name and not platform:
+    raise response.error(404)
+
+account = None
+
+if platform:
+    order = request.qs.get('order') or 'any'
+    if order not in ('any', 'random', 'latest'):
+        raise response.error(400, "bad order")
+
+    limit = min(parse_int(request.qs.get('limit') or 50), 200)
+    last_shown = parse_int(request.qs.get('last_shown'), default=INF)
+    offset = parse_int(request.qs.get('offset') or 0)
+
+    def get_participants(random):
+        return query_cache.all("""
+            SELECT p
+              FROM elsewhere e
+              JOIN participants p ON p.id = e.participant
+             WHERE p.status = 'active'
+               AND p.hide_from_lists = 0
+               AND e.platform = %s
+               AND p.id < %s
+          ORDER BY (CASE WHEN %s THEN random() ELSE 0 END), p.id DESC
+             LIMIT %s
+        """, (platform_name, last_shown, random, limit))
+
+    get_other_platforms = lambda: [
+        (p.name, p.display_name) for p, d in platforms.values() if p.name != platform_name
+    ]
+
+    if not user.ANON:
+        account = user.get_account_elsewhere(platform.name)
+
+title = _("Explore")
+subhead = _("Social Networks")
+
+[---] text/html
+% from 'templates/avatar-url.html' import avatar_img with context
+% from 'templates/profile-box.html' import profile_box_embedded with context
+
+% extends "templates/explore.html"
+
+% block content
+
+% if not platform
+
+    <p>{{ _("Which platform would you like to explore?") }}</p>
+    % for p, d in platforms.values()
+        % set n_connected_accounts = d['n_connected_accounts']
+        % if n_connected_accounts or p in website.friends_platforms
+        <div class="card card-default card-md card-narrow">
+            <h3 class="text-info">{{ p.display_name }}</h3>
+            <p>{{ ngettext("{n} connected account", "{n} connected accounts", n_connected_accounts) }}</p>
+            <a class="btn btn-info btn-lg" href="/explore/elsewhere/{{ p.name }}"
+                >{{ _("Explore {0}", p.display_name) }}</a>
+        </div>
+        % endif
+    % endfor
+
+% else
+
+    % if platform in website.friends_platforms
+    <p class="text-center">
+        <a class="btn btn-{{ 'primary' if account else 'default' }} btn-lg"
+           href="/on/{{ platform_name }}">{{
+            _("Explore Your {0} Contacts", platform.display_name)
+        }}</a>
+    </p>
+    <br>
+    % endif
+
+    % set platform_extra = platforms[platform_name][1]
+    % set n_accounts_total = platform_extra['n_connected_accounts']
+    % set partial_list = n_accounts_total > limit
+    % set random = order == 'random' or partial_list and order == 'any'
+    % set participants = get_participants(random=random)
+    % if partial_list
+        % if random
+            <p>{{ _("Here are {0} random Liberapay users who have connected their {1} account:",
+                    len(participants), platform.display_name) }}</p>
+        % else
+            <p>{{ _("This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order.",
+                    len(participants), platform.display_name) }}</p>
+        % endif
+    % else
+        <p>{{ _("Here are the {0} Liberapay users who have connected their {1} account:",
+                len(participants), platform.display_name) }}</p>
+    % endif
+    <ul class="people">
+    % for p in participants
+        <li class="mini-user">
+            <a href="{{ p.path('') }}">
+                {{ avatar_img(p) }}
+                <div class="name">{{ p.username }}</div>
+            </a>
+        </li>
+    % endfor
+    </ul>
+
+    % set last_id = participants[-1].id if participants and not random else INF
+    % if partial_list
+        <br>
+        % if last_id > platform_extra['min_id']
+        <p><a class="btn btn-default"
+              href="?order=latest&amp;limit=100{{ '&last_shown=%s' % last_id if not random }}"
+              >{{ _("Next Page →" if not random else "View More") }}</a></p>
+        % else
+        <p><a class="btn btn-default" href="?order=latest&amp;limit=100"
+              >⇤ {{ _("First") }}</a></p>
+        % endif
+    % endif
+
+    <br>
+    <p>{{ _("Explore other platforms:") }}</p>
+    % from "templates/nav.html" import nav with context
+    <nav>
+    % for name, display_name in get_other_platforms()
+        <a class="btn btn-default btn-lg" href="/explore/elsewhere/{{ name }}">{{ display_name }}</a>
+    % endfor
+    </nav>
+
+% endif
+
+% endblock

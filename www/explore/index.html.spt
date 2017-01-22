@@ -52,6 +52,15 @@ title = _("Explore")
     </div>
 
     <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Social Networks") }}</h3>
+        <p>{{ _(
+            "Browse the accounts that Liberapay users have on other platforms. "
+            "Find your contacts by connecting your own accounts."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/elsewhere">{{ _("Explore Social Networks") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
         <h3 class="text-info">{{ _("Communities") }}</h3>
         <p>{{ _(
             "Communities allow you to find people that work on things you care "
