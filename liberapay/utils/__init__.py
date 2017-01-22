@@ -229,8 +229,8 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
         cookie[str('httponly')] = True
     if path:
         cookie[str('path')] = ensure_str(path)
-    if website.canonical_domain:
-        cookie[str('domain')] = ensure_str(website.canonical_domain)
+    if website.cookie_domain:
+        cookie[str('domain')] = ensure_str(website.cookie_domain)
     if website.canonical_scheme == 'https':
         cookie[str('secure')] = True
 
