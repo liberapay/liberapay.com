@@ -1,9 +1,8 @@
 from six.moves.urllib.parse import quote as urlquote
 
 from liberapay.utils import get_community, markdown
-from liberapay.utils.query_cache import QueryCache
 
-query_cache = QueryCache(website.db, threshold=1)
+query_cache = website.db_qc1
 
 [---]
 

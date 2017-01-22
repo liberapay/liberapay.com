@@ -2,9 +2,7 @@
 
 from collections import OrderedDict
 
-from liberapay.utils.query_cache import QueryCache
-
-query_cache = QueryCache(website.db, threshold=5)
+query_cache = website.db_qc5
 
 def parse_int(o, **kw):
     try:

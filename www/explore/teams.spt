@@ -1,9 +1,8 @@
 # coding: utf8
-from liberapay.utils.query_cache import QueryCache
 
-query_cache = QueryCache(website.db, threshold=1)
+query_cache = website.db_qc1
 
-[-----------------------------]
+[---]
 
 teams = query_cache.all("""
 
@@ -24,7 +23,7 @@ nteams = len(teams)
 title = _("Explore")
 subhead = _("Teams")
 
-[-----------------------------] text/html
+[---] text/html
 % from 'templates/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/explore.html"

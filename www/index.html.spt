@@ -3,9 +3,8 @@
 from math import ceil
 
 from liberapay.models.participant import Participant
-from liberapay.utils.query_cache import QueryCache
 
-query_cache = QueryCache(website.db, threshold=5)
+query_cache = website.db_qc5
 
 [---]
 
