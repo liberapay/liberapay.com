@@ -20,15 +20,15 @@ class Tests(Harness):
         Harness.setUp(self)
         self.client.website.canonical_scheme = 'https'
         self.client.website.canonical_host = 'example.com'
-        self._canonical_domain = self.client.website.canonical_domain
-        self.client.website.canonical_domain = b'.example.com'
+        self._cookie_domain = self.client.website.cookie_domain
+        self.client.website.cookie_domain = b'.example.com'
 
     def tearDown(self):
         Harness.tearDown(self)
         website = self.client.website
         website.canonical_scheme = website.env.canonical_scheme
         website.canonical_host = website.env.canonical_host
-        website.canonical_domain = self._canonical_domain
+        website.cookie_domain = self._cookie_domain
 
     def test_canonize_canonizes(self):
         response = self.client.GxT("/",

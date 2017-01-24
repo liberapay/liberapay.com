@@ -43,11 +43,12 @@ from liberapay.utils.i18n import (
 def canonical(env):
     canonical_scheme = env.canonical_scheme
     canonical_host = env.canonical_host
+    cookie_domain = None
     if canonical_host:
-        canonical_domain = ('.' + canonical_host.split(':')[0]).encode('ascii')
         canonical_url = '%s://%s' % (canonical_scheme, canonical_host)
+        if ':' not in canonical_host:
+            cookie_domain = ('.' + canonical_host).encode('ascii')
     else:
-        canonical_domain = None
         canonical_url = ''
     asset_url = canonical_url+'/assets/'
     return locals()
