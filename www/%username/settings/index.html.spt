@@ -28,7 +28,7 @@ is_a_person = participant.kind not in ('group', 'community')
 
         <div>
             <h3>{{ _("Close") }}</h3>
-            <a class="btn btn-default" href="./close">{{ _("Close Account") }}</a>
+            <a class="btn btn-default" href="{{ participant.path('settings/close') }}">{{ _("Close Account") }}</a>
         </div>
         % endif
 

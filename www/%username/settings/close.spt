@@ -71,7 +71,7 @@ subhead = participant.username
                 <input type="radio" name="disburse_to" value="downstream"
                        {{ 'disabled' if not participant.get_giving_for_profile()[1] else '' }} />
                 {{ _("Give it to the {0}people I donate to{1}",
-                     '<a href="../giving/">'|safe, '</a>'|safe) }}
+                     '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
             </label></li>
 
         </ul>
