@@ -39,7 +39,7 @@ msgstr "Hai ricevuto {0} questa settimana"
 
 #, python-brace-format
 msgid "{0} were given to you personally."
-msgstr "{0} è stata data a voi personalmente."
+msgstr "{0} sono stati dati direttamente a te."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
 msgstr "Non sei un membro di una squadra, in modo da non aver ricevuto i soldi per la partecipazione a squadre."
@@ -47,12 +47,13 @@ msgstr "Non sei un membro di una squadra, in modo da non aver ricevuto i soldi p
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Non ci sono soldi è stato dato a voi per il vostro ruolo nella {0} squadra."
-msgstr[1] "Non ci sono soldi è stato dato a voi per i vostri ruoli nelle {n} squadre si è membri di."
+msgstr[0] "Non hai ricevuto niente per il tuo ruolo nella squadra {0}."
+msgstr[1] ""
+"Non hai ricevuto niente per il tuo ruolo nelle {n} squadre di cui fai parte."
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
-msgstr "{0} sono stati dati a voi per il vostro ruolo nella {1} squadra."
+msgstr "{0} ti sono stati dati per il ruolo nella squadra {1}."
 
 #, python-brace-format
 msgid "{0} were given to you for your roles in the following teams:"
@@ -64,10 +65,10 @@ msgstr "{0}: {1}"
 
 #, python-brace-format
 msgid "You now have {0} in your wallet."
-msgstr "Ora avete {0} nel vostro portafoglio."
+msgstr "Ora hai {0} nel tuo portafoglio."
 
 msgid "See your account's transaction logs"
-msgstr "Vedere i registri delle transazioni del tuo account"
+msgstr "Vedi i registri delle transazioni del tuo account"
 
 #, python-brace-format
 msgid "- {0}: {1}"
@@ -203,7 +204,7 @@ msgid "When someone I pledge to joins Liberapay"
 msgstr "Quando qualcuno mi impegno a unisce Liberapay"
 
 msgid "When someone invites me to join a team"
-msgstr "Quando qualcuno mi invita a entrare in un team"
+msgstr "Quando qualcuno mi invita a entrare in una squadra"
 
 msgid "When a bank wire transfer to my Liberapay wallet fails"
 msgstr "Quando un bonifico bancario al mio portafoglio Liberapay fallisce"
@@ -464,7 +465,7 @@ msgid "Name of the team"
 msgstr "Nome della squadra"
 
 msgid "Email of the team (optional)"
-msgstr "Email del team (opzionale)"
+msgstr "Email della squadra (opzionale)"
 
 msgid "Create"
 msgstr "Creare"
@@ -550,7 +551,7 @@ msgid "Money"
 msgstr "I soldi"
 
 msgid "Teams"
-msgstr "Team"
+msgstr "Squadre"
 
 msgid "Stats"
 msgstr "Statistiche"
@@ -568,23 +569,23 @@ msgid "Overview"
 msgstr "Panoramica"
 
 msgid "Organizations"
-msgstr ""
+msgstr "Organizzazioni"
 
 msgid "Individuals"
-msgstr ""
+msgstr "Individui"
 
 msgid "Pledges"
 msgstr "pegni"
 
 msgid "Social Networks"
-msgstr ""
+msgstr "Social Network"
 
 msgid "Switch to another language"
-msgstr "Passare a un'altra lingua"
+msgstr "Passa a un'altra lingua"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} ({1} complete)"
-msgstr "{0} ({1} completare)"
+msgstr "{0} ({1} completate)"
 
 msgid "Help us translate Liberapay"
 msgstr "Aiutaci a tradurre Liberapay"
@@ -665,14 +666,18 @@ msgstr "Le persone che contribuiscono ai beni comuni hanno bisogno di sostenere 
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
 msgstr "Sistema di donazioni ricorrenti di Liberapay è progettato per fornire un reddito di base crowdfunded stabile a creatori, consentendo loro di continuare a fare grande lavoro a vantaggio di tutti. Pronto a contribuire? Allora cominciamo:"
 
+#, fuzzy
 msgid "Admin override is on.*"
-msgstr ""
+msgstr "Un amministratore sta gestendo i dati al tuo posto.*"
 
 msgid "Save changes"
 msgstr "Salva I Cambiamenti"
 
+#, fuzzy
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
+"* Il riferimento dei profili Liberapay è soggetto all'approvazione di un "
+"amministratore."
 
 msgid "Modify your avatar"
 msgstr "Modifica il tuo avatar"
@@ -767,7 +772,9 @@ msgstr "Si, rappresento un'azienda o una no-profit."
 
 #, python-brace-format
 msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
-msgstr "Se intendi creare un account per un gruppo che non ha una persona giuridica, crea prima un account personale, quindi {0}crea un team{1}."
+msgstr ""
+"Se intendi creare un account per un gruppo che non ha una persona giuridica, "
+"crea prima un account personale, quindi {0}crea una squadra{1}."
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -807,7 +814,7 @@ msgid "Actual Take"
 msgstr "Prendere Actual"
 
 msgid "Update my nominal take"
-msgstr ""
+msgstr "Aggiorna il mio introito nominale"
 
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
 msgstr "Soggiorni di reddito non reclamati nei portafogli dei donatori, che non maturano nel conto della squadra. Come le squadre non sono persone giuridiche, non possiamo tenere i soldi nei loro nomi."
@@ -1153,7 +1160,7 @@ msgid "You haven't filled all the required fields."
 msgstr "Non hai compilato tutti i campi obbligatori."
 
 msgid "Your identity information has been updated."
-msgstr ""
+msgstr "Le informazioni sulla tua identità sono state aggiornate."
 
 msgid "Your identity information has been registered."
 msgstr "Le informazioni sulla tua identità sono state registrate."
@@ -1223,10 +1230,10 @@ msgid "User not found."
 msgstr "Utente non trovato."
 
 msgid "A team can't join a team"
-msgstr "Una squadra non può entrare in un team"
+msgstr "Una squadra non può entrare in una squadra"
 
 msgid "You can't invite an inactive user to join a team."
-msgstr "Non si può invitare un utente inattivo ad entrare in un team."
+msgstr "Non si può invitare un utente inattivo ad entrare in una squadra."
 
 #, python-brace-format
 msgid "{0} has already been invited to join this team {1} ago."
@@ -1242,16 +1249,16 @@ msgstr "{0} è stato invitato alla squadra."
 
 #, python-brace-format
 msgid "{0} is already a member of this team."
-msgstr "{0} è già un membro del team."
+msgstr "{0} è già un membro della squadra."
 
 msgid "Are you sure you want to leave this team?"
-msgstr "Sei sicuro di voler lasciare questo team?"
+msgstr "Sei sicuro di voler lasciare questa squadra?"
 
 msgid "You are now a member of the team."
-msgstr "Ora sei un membro del team."
+msgstr "Ora sei un membro della squadra."
 
 msgid "Mark all notifications as read"
-msgstr "Segna tutte le notifiche come già letti"
+msgstr "Segna tutte le notifiche come già lette"
 
 msgid "No notifications to show."
 msgstr "Nessuna notifica da mostrare."
@@ -1749,7 +1756,7 @@ msgstr "Alfanumerico (senza spazi)"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
-msgstr "Ho donare {0} {1} {2}"
+msgstr "Ho donato {0} {1} {2}"
 
 #, python-brace-format
 msgid "I receive {0}{1}{2}"
@@ -2059,7 +2066,11 @@ msgid "Money moved out of Liberapay"
 msgstr "Il denaro spostato dalla LiberaPay"
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
-msgstr "Un team LiberaPay coordina le donazioni provenienti da donatori multipli a più donatari. I donatori scegliete quante vogliono dare, donatari decidere come condividere il denaro, LiberaPay calcola ed esegue i trasferimenti da donatori a donatari."
+msgstr ""
+"Una squadra LiberaPay coordina le donazioni provenienti da donatori multipli "
+"a più riceventi. I donatori scelgono quanto vogliono donare, i riceventi "
+"decidono come suddividere il denaro, LiberaPay calcola ed esegue i "
+"trasferimenti da donatori a riceventi."
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
 msgstr "Le squadre sono per le donazioni peer-to-peer, non possono essere utilizzati da una persona giuridica per distribuire le donazioni ai suoi membri."
@@ -2072,7 +2083,7 @@ msgid "You need to {0}sign into your own account{1} first."
 msgstr "È necessario {0} accedi al tuo account proprio {1} prima."
 
 msgid "Becoming a team member"
-msgstr "Diventare un membro del team"
+msgstr "Diventare un membro della squadra"
 
 msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
 msgstr "Una volta che avete contribuito al progetto di una squadra, chiedere ai suoi membri di invitarvi. Non dimenticare di dire loro che cosa il vostro username è."
@@ -2083,9 +2094,13 @@ msgstr "La condivisione del denaro"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Le squadre non hanno una gerarchia, tutti i loro membri sono uguali e impostare il proprio introito."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "È possibile modificare la prende da {0} il tuo team cruscotto {1}. Esso contiene le tabelle che mostrano il nominale prende di tutti i membri per il prossimo e precedente giorno di paga, nonché una stima degli importi effettivi di denaro riceveranno nel giorno di paga successivo."
+msgstr ""
+"È possibile modificare la quota da {0} il tuo team cruscotto {1}. Esso "
+"contiene le tabelle che mostrano il nominale prende di tutti i membri per il "
+"prossimo e precedente giorno di paga, nonché una stima degli importi "
+"effettivi di denaro riceveranno nel giorno di paga successivo."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "La nominale prende sono i numeri grezzi che l'ingresso membri stessi, l'attuale prende vengono calcolati dal sistema: prima si riassume il nominale prende, poi calcola la percentuale che ogni introito rappresenta, e, infine, si applica queste percentuali al reddito disponibile . Nominale prende anche agire come massimi: l'attuale prende non sono mai superiori a quelle nominali, anche se il reddito supplementare è disponibile."
@@ -2093,8 +2108,13 @@ msgstr "La nominale prende sono i numeri grezzi che l'ingresso membri stessi, l'
 msgid "Regulation of take amounts"
 msgstr "Regolamento di take quantità"
 
+#, fuzzy
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
-msgstr "Nominale prende sono strozzato, non possono essere sollevati superiore nel massimo calcolato sulla base nominale prende al momento della payday precedente. Questo regolamento ha lo scopo di ridurre il rischio di abusi da parte di membri del team di malintenzionati."
+msgstr ""
+"Nominale prende sono strozzato, non possono essere sollevati superiore nel "
+"massimo calcolato sulla base nominale prende al momento della payday "
+"precedente. Questo regolamento ha lo scopo di ridurre il rischio di abusi da "
+"parte di membri del team di malintenzionati."
 
 msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
 msgstr "Il limite esatto è il massimo di questi quattro valori: il numero 1, due volte introito del membro nel giorno di paga precedente, introito del membro in una quota proporzionale di qualsiasi reddito inutilizzato precedente giorno di paga +, la mediana prendere nel giorno di paga precedente."
@@ -2110,7 +2130,10 @@ msgid "Kicking a member out of a team is not implemented yet. Please contact sup
 msgstr "Cacciare un membro di una squadra non è ancora implementata. Si prega di contattare il supporto con evidenza che il membro deve essere cacciato e che non vi è consenso su che tra gli altri membri."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
-msgstr "Comunità permettono di trovare persone che lavorano sulle cose che ti interessano. È inoltre possibile iscriversi alla loro newsletter per rimanere informato."
+msgstr ""
+"Le comunità ti permettono di trovare persone che lavorano a cose che ti "
+"interessano. È inoltre possibile iscriversi alle newsletter per rimanere "
+"informato."
 
 msgid "Start a new community"
 msgstr "Inizia una nuova comunità"
@@ -2122,7 +2145,7 @@ msgstr[0] "C'è {n} comunità su Liberapay."
 msgstr[1] "Ci sono {n} comunità su Liberapay."
 
 msgid "Search communities"
-msgstr "Comunità di ricerca"
+msgstr "Cerca una comunità"
 
 msgid "Popular Communities"
 msgstr "Comunità Popolari"
@@ -2131,39 +2154,45 @@ msgid "Top Communities In Your Language"
 msgstr "Comunità principali nella tua lingua"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
-msgstr "Siamo spiacenti, ma non abbiamo trovato alcuna. Perché non si avvia uno?"
+msgstr "Siamo spiacenti, ma non ne abbiamo trovato nessuna. Vuoi crearne una?"
 
+#, fuzzy
 msgid "Which platform would you like to explore?"
-msgstr ""
+msgstr "Quale piattaforma vorresti esplorare?"
 
 #, python-brace-format
 msgid "{n} connected account"
 msgid_plural "{n} connected accounts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} account collegato"
+msgstr[1] "{n} account collegati"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Explore {0}"
-msgstr ""
+msgstr "Esplora {0}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Explore Your {0} Contacts"
-msgstr ""
+msgstr "Esplora i tuoi {0} contatti"
 
 #, python-brace-format
 msgid "Here are {0} random Liberapay users who have connected their {1} account:"
 msgstr ""
+"{0} utenti di Liberapay scelti a caso tra quelli che hanno collegato il loro "
+"account {1}:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order."
 msgstr ""
+"Questa pagina elenca i {0} utenti Liberapay che hanno collegato il loro "
+"account {1}, in ordine cronologico inverso."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Here are the {0} Liberapay users who have connected their {1} account:"
-msgstr ""
+msgstr "I {0} utenti di Liberapay che hanno collegato il loro account {1}:"
 
+#, fuzzy
 msgid "Explore other platforms:"
-msgstr ""
+msgstr "Esplora altre piattaforme:"
 
 msgid "Liberapay provides several ways of finding great people to donate to:"
 msgstr "LiberaPay fornisce diversi modi di trovare grandi persone a donare a:"
@@ -2175,45 +2204,54 @@ msgid "Explore Teams"
 msgstr "Esplora Squadre"
 
 msgid "Great nonprofits and companies trying to improve the world."
-msgstr ""
+msgstr "No-profit e aziende che cercano di rendere il mondo un posto migliore."
 
+#, fuzzy
 msgid "Explore Organizations"
-msgstr ""
+msgstr "Esplora le organizzazioni"
 
 msgid "People like you who contribute to the commons (art, knowledge, software, etc). "
 msgstr ""
+"Persone che come te contribuiscono alla cultura (arte, conoscenza, software, "
+"etc.). "
 
+#, fuzzy
 msgid "Explore Individuals"
-msgstr ""
+msgstr "Esplora individui"
 
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
 msgstr ""
+"Liberapay consente di impegnare fondi per persone che non hanno ancora un "
+"account sulla piattaforma."
 
 msgid "Explore Pledges"
 msgstr "Esplora Pegni"
 
 msgid "Browse the accounts that Liberapay users have on other platforms. Find your contacts by connecting your own accounts."
 msgstr ""
+"Vedi gli account che gli utenti di Liberapay hanno su altre piattaforme. "
+"Trova i tuoi contatti collegando i tuoi account."
 
+#, fuzzy
 msgid "Explore Social Networks"
-msgstr ""
+msgstr "Esplora i social network"
 
 msgid "Explore Communities"
 msgstr "Esplora Comunità"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The top {0} individuals on Liberapay are:"
-msgstr ""
+msgstr "Le {0} persone \"top\" su Liberapay sono:"
 
 msgid "Nothing to show."
-msgstr ""
+msgstr "Niente da mostrare."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
-msgstr ""
+msgstr "Le {0} organizzazioni \"top\" su Liberapay sono:"
 
 msgid "Create an organization account"
-msgstr ""
+msgstr "Crea un account per un'organizzazione"
 
 msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
 msgstr "LiberaPay permette di pegno a donare a persone che non hanno ancora aderito al sito. La donazione verrà avviato automaticamente se si iscrivono per riceverlo. Ti invieremo una notifica quando ciò accade."
@@ -2235,13 +2273,16 @@ msgstr "Siamo in grado di aiutarvi a trovare pignoratizi se ci si connette gli a
 
 #, python-brace-format
 msgid "A team allows members of a project to receive money and share it, without having to set up a legal entity. {0}Learn more…{1}"
-msgstr "Un team permette ai membri di un progetto di ricevere denaro e condividerlo, senza la necessità di istituire un soggetto giuridico. {0} Per saperne di più ... {1}"
+msgstr ""
+"Una squadra permette ai membri di un progetto di ricevere denaro e "
+"condividerlo, senza la necessità di istituire un soggetto giuridico. {0} Per "
+"saperne di più ... {1}"
 
 #, python-brace-format
 msgid "There is {n} team on Liberapay:"
 msgid_plural "There are {n} teams on Liberapay:"
-msgstr[0] "Non vi è {n} squadra LiberaPay:"
-msgstr[1] "There are {n} teams on LiberaPay :"
+msgstr[0] "C'è {n} squadra su LiberaPay:"
+msgstr[1] "Ci sono {n} squadre su LiberaPay :"
 
 msgid "Create a team"
 msgstr "Creazione di una squadra"
@@ -2409,7 +2450,7 @@ msgstr "Attività recente"
 
 #, python-brace-format
 msgid "Someone created a new team {0} ago."
-msgstr "Qualcuno ha creato un nuovo team {0} fa."
+msgstr "Qualcuno ha creato una nuova squadra {0} fa."
 
 #, python-brace-format
 msgid "Someone joined Liberapay {0} ago."
@@ -2455,11 +2496,14 @@ msgstr ""
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
-msgstr "Sei davvero l'amministratore del team {0}?"
+msgstr "Sei davvero l'amministratore della squadra {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
-msgstr "Il tuo tentativo di rivendicare questo account è fallito perchè sei connesso a {0} come qualcuno che non è l'amministratore del team {1}. Per favore esci e {2}prova ancora{3}."
+msgstr ""
+"Il tuo tentativo di rivendicare questo account è fallito perchè sei connesso "
+"a {0} come qualcuno che non è l'amministratore della squadra {1}. Per favore "
+"esci e {2}prova ancora{3}."
 
 #, python-brace-format
 msgid "Are you really {0}?"
@@ -2471,17 +2515,17 @@ msgstr "Il tuo tentativo di rivendicare questo account è fallito perchè sei co
 
 #, python-brace-format
 msgid "{0} is a private team"
-msgstr "{0} è un team privato"
+msgstr "{0} è una squadra privata"
 
 #, python-brace-format
 msgid "{0} is a big team"
-msgstr "{0} è un team grande"
+msgstr "{0} è una squadra grande"
 
 #, python-brace-format
 msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
-msgstr[0] "{0} è un team con {n} membro pubblico"
-msgstr[1] "{0} è un team con {n} membri pubblici"
+msgstr[0] "{0} è una squadra con {n} membro pubblico"
+msgstr[1] "{0} è una squadra con {n} membri pubblici"
 
 #, python-brace-format
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
@@ -2502,7 +2546,9 @@ msgstr "{0} ha scelto di non LiberaPay"
 
 #, python-brace-format
 msgid "If you are an administrator of this {0} team account, you can unlock it to allow people to pledge tips to your team on Liberapay."
-msgstr "Se sei un amministratore di questo {0} team account, puoi sbloccarlo per permettere ad altri di fare donazioni nei confronti del tuo team su Liberapay."
+msgstr ""
+"Se sei un amministratore dell'account {0} di questa squadra, puoi sbloccarlo "
+"per permettere ad altri di fare donazioni alla tua squadra su Liberapay."
 
 #, python-brace-format
 msgid "If you are {0} on {1}, you can unlock your account to allow people to pledge tips to you on Liberapay."
@@ -2517,10 +2563,13 @@ msgstr "Sei {0} ?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
-msgstr "Sei un amministratore di questo {0} team account? Associalo al tuo account Liberapay."
+msgstr ""
+"Sei un amministratore dell'account {0} di questa squadra? Associalo al tuo "
+"account Liberapay."
 
+#, fuzzy
 msgid "Connect team account"
-msgstr "Associa team account"
+msgstr "Associa account della squadra"
 
 msgid "We never collect money for you unless you join."
 msgstr "Non abbiamo mai raccogliere i soldi per voi a meno che non si uniscono."
@@ -2571,7 +2620,7 @@ msgstr "Nota: le impostazioni di privacy potrebbero impedire a Grtipay di vedere
 
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
-msgstr ""
+msgstr "Aggiorna la tua connessione {0} per trovare i tuoi amici."
 
 msgid "Refresh"
 msgstr "Aggiorna"
