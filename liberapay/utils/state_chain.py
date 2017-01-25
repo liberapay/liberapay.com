@@ -1,6 +1,8 @@
 from __future__ import print_function, unicode_literals
 
-from six.moves.urllib.parse import urlsplit, urlunsplit
+import string
+
+from six.moves.urllib.parse import urlsplit, urlunsplit, quote as urlquote
 
 from aspen.http.request import Path
 from aspen.request_processor.algorithm import dispatch_path_to_filesystem
@@ -108,7 +110,8 @@ def _dispatch_path_to_filesystem(website, request=None):
         request.canonical_path = raw_path
         return r
     except RedirectFromSlashless as exception:
-        path = request.line.uri.path = Path(exception.message)
+        path = urlquote(exception.message.encode('utf8'), string.punctuation)
+        path = request.line.uri.path = Path(path)
         request.canonical_path = path.raw
         r = dispatch_path_to_filesystem(
             request_processor=request_processor, path=path, querystring=qs
