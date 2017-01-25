@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liberapay\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"PO-Revision-Date: 2017-01-25 12:54+0000\n"
+"PO-Revision-Date: 2017-01-25 13:23+0000\n"
 "Last-Translator: Daniele <daniele+weblate@gobbetti.name>\n"
 "Language-Team: Italian "
 "<https://hosted.weblate.org/projects/liberapay/core/it/>\n"
@@ -43,7 +43,7 @@ msgstr "Hai ricevuto {0} questa settimana"
 
 #, python-brace-format
 msgid "{0} were given to you personally."
-msgstr "{0} è stata data a voi personalmente."
+msgstr "{0} sono stati dati direttamente a te."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
 msgstr "Non sei un membro di una squadra, in modo da non aver ricevuto i soldi per la partecipazione a squadre."
@@ -51,12 +51,13 @@ msgstr "Non sei un membro di una squadra, in modo da non aver ricevuto i soldi p
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Non ci sono soldi è stato dato a voi per il vostro ruolo nella {0} squadra."
-msgstr[1] "Non ci sono soldi è stato dato a voi per i vostri ruoli nelle {n} squadre si è membri di."
+msgstr[0] "Non hai ricevuto niente per il tuo ruolo nella squadra {0}."
+msgstr[1] ""
+"Non hai ricevuto niente per il tuo ruolo nelle {n} squadre di cui fai parte."
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
-msgstr "{0} sono stati dati a voi per il vostro ruolo nella {1} squadra."
+msgstr "{0} ti sono stati dati per il ruolo nella squadra {1}."
 
 #, python-brace-format
 msgid "{0} were given to you for your roles in the following teams:"
@@ -68,10 +69,10 @@ msgstr "{0}: {1}"
 
 #, python-brace-format
 msgid "You now have {0} in your wallet."
-msgstr "Ora avete {0} nel vostro portafoglio."
+msgstr "Ora hai {0} nel tuo portafoglio."
 
 msgid "See your account's transaction logs"
-msgstr "Vedere i registri delle transazioni del tuo account"
+msgstr "Vedi i registri delle transazioni del tuo account"
 
 #, python-brace-format
 msgid "- {0}: {1}"
@@ -811,7 +812,7 @@ msgid "Actual Take"
 msgstr "Prendere Actual"
 
 msgid "Update my nominal take"
-msgstr ""
+msgstr "Aggiorna il mio introito nominale"
 
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
 msgstr "Soggiorni di reddito non reclamati nei portafogli dei donatori, che non maturano nel conto della squadra. Come le squadre non sono persone giuridiche, non possiamo tenere i soldi nei loro nomi."
@@ -1157,7 +1158,7 @@ msgid "You haven't filled all the required fields."
 msgstr "Non hai compilato tutti i campi obbligatori."
 
 msgid "Your identity information has been updated."
-msgstr ""
+msgstr "Le informazioni sulla tua identità sono state aggiornate."
 
 msgid "Your identity information has been registered."
 msgstr "Le informazioni sulla tua identità sono state registrate."
@@ -1255,7 +1256,7 @@ msgid "You are now a member of the team."
 msgstr "Ora sei un membro del team."
 
 msgid "Mark all notifications as read"
-msgstr "Segna tutte le notifiche come già letti"
+msgstr "Segna tutte le notifiche come già lette"
 
 msgid "No notifications to show."
 msgstr "Nessuna notifica da mostrare."
@@ -1753,7 +1754,7 @@ msgstr "Alfanumerico (senza spazi)"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
-msgstr "Ho donare {0} {1} {2}"
+msgstr "Ho donato {0} {1} {2}"
 
 #, python-brace-format
 msgid "I receive {0}{1}{2}"
@@ -2126,7 +2127,7 @@ msgstr[0] "C'è {n} comunità su Liberapay."
 msgstr[1] "Ci sono {n} comunità su Liberapay."
 
 msgid "Search communities"
-msgstr "Comunità di ricerca"
+msgstr "Cerca una comunità"
 
 msgid "Popular Communities"
 msgstr "Comunità Popolari"
@@ -2135,7 +2136,7 @@ msgid "Top Communities In Your Language"
 msgstr "Comunità principali nella tua lingua"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
-msgstr "Siamo spiacenti, ma non abbiamo trovato alcuna. Perché non si avvia uno?"
+msgstr "Siamo spiacenti, ma non ne abbiamo trovato nessuna. Vuoi crearne una?"
 
 msgid "Which platform would you like to explore?"
 msgstr ""
@@ -2143,20 +2144,22 @@ msgstr ""
 #, python-brace-format
 msgid "{n} connected account"
 msgid_plural "{n} connected accounts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} account collegato"
+msgstr[1] "{n} account collegati"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Explore {0}"
-msgstr ""
+msgstr "Esplora {0}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Explore Your {0} Contacts"
-msgstr ""
+msgstr "Esplora i tuoi {0} contatti"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Here are {0} random Liberapay users who have connected their {1} account:"
 msgstr ""
+"Ecco {0} utenti di Liberapay scelti a caso tra quelli che hanno collegato il "
+"loro account {1}:"
 
 #, python-brace-format
 msgid "This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order."
