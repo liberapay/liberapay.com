@@ -35,7 +35,7 @@ class BrowseTestHarness(MangopayHarness):
         for url in sorted(map(f, find_files(cls.client.www_root, '*.spt'))):
             url = url.replace('/%username/membership/', '/team/membership/') \
                      .replace('/for/%name/', '/for/wonderland/') \
-                     .replace('/%platform/', '/github/') \
+                     .replace('/%platform', '/github') \
                      .replace('/%user_name/', '/liberapay/') \
                      .replace('/%action', '/leave') \
                      .replace('/%redirect_to', '/giving') \

@@ -31,7 +31,7 @@ teams = website.db.all("""
 
 % if not participant.mangopay_user_id
     <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
-    <p><a class="btn btn-primary" href="../identity">{{ _("Fill identity form") }}</a></p>
+    <p><a class="btn btn-primary" href="{{ participant.path('identity') }}">{{ _("Fill identity form") }}</a></p>
 % elif participant.balance > 0
     <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/Li4=') }}"
           >{{ _("Withdraw money") }}</a></p>

@@ -1,0 +1,36 @@
+
+.avatar-centerer {
+    height: 100%;
+    text-align: center;
+    width: 200%;
+}
+img.avatar {
+    display: inline-block;
+    height: 100%;
+    max-width: 100%;
+}
+
+@mixin avatar-wrap($imgSize) {
+    height: $imgSize;
+    overflow: hidden;
+    width: $imgSize;
+    & > .avatar-centerer {
+        margin-left: - $imgSize / 2;
+    }
+}
+
+.avatar-cutter-120 {
+    @include avatar-wrap(120px);
+}
+
+.avatar-cutter-98 {
+    @include avatar-wrap(98px);
+}
+
+.avatar-cutter-72 {
+    @include avatar-wrap(72px);
+}
+
+.avatar-cutter-28 {
+    @include avatar-wrap(28px);
+}

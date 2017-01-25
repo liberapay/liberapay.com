@@ -15,7 +15,7 @@ elif goal == "custom":
 if goal is not None:
     goal = parse_decimal(goal)
 
-back_to = './edit'
+back_to = participant.path('edit')
 if goal == -1 and not request.body.get("confirmed"):
     msg = _("Warning: Doing this will remove all the tips you are currently receiving."
             "\n\nThat cannot be undone!")

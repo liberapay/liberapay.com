@@ -150,7 +150,7 @@ else:
             {{ _("refund of failed withdrawal (error message: {0})", event['note']) }}
         % endif
         % if event['status'] == 'succeeded' and event['kind'] == 'charge'
-            (<a href="../receipts/{{ event['id'] }}">{{ _("Receipt").lower() }}</a>)
+            (<a href="{{ participant.path('receipts/') }}{{ event['id'] }}">{{ _("Receipt").lower() }}</a>)
         % endif
         </td>
         <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"

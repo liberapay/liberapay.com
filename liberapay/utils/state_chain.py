@@ -1,10 +1,12 @@
 from __future__ import print_function, unicode_literals
 
-from six.moves.urllib.parse import urlsplit, urlunsplit
+import string
+
+from six.moves.urllib.parse import urlsplit, urlunsplit, quote as urlquote
 
 from aspen.http.request import Path
 from aspen.request_processor.algorithm import dispatch_path_to_filesystem
-from aspen.request_processor.dispatcher import RedirectFromSlashless
+from aspen.request_processor.dispatcher import NotFound, RedirectFromSlashless
 from pando import Response
 from pando.http.request import Line
 
@@ -77,14 +79,43 @@ def insert_constants():
     return {'constants': constants}
 
 
-def dont_redirect_from_slashless(exception, website, request=None):
+def _dispatch_path_to_filesystem(website, request=None):
+    """This wrapper function neutralizes some of Aspen's dispatch exceptions.
+
+    - RedirectFromSlashless, always
+    - NotFound, when it's due to an extra slash at the end of the path (i.e.
+      dispatch `/foo/bar/` to `/foo/bar.spt`).
+    """
     if request is None:
         return
-    if isinstance(exception, RedirectFromSlashless):
-        path = request.line.uri.path = Path(exception.message)
+    path = request.path
+    qs = request.qs
+    request_processor = website.request_processor
+    try:
+        return dispatch_path_to_filesystem(
+            request_processor=request_processor, path=path, querystring=qs
+        )
+    except NotFound:
+        raw_path = getattr(path, 'raw', '')
+        if len(raw_path) < 3 or raw_path[-1] != '/' or raw_path[-2] == '/':
+            raise
+        path = Path(raw_path[:-1])
+        if '.' in path.parts[-1]:
+            # Don't dispatch `/foo.html/` to a `/foo.html` file
+            raise
+        r = dispatch_path_to_filesystem(
+            request_processor=request_processor, path=path, querystring=qs
+        )
+        r['path'] = request.line.uri.path = path
+        request.canonical_path = raw_path
+        return r
+    except RedirectFromSlashless as exception:
+        path = urlquote(exception.message.encode('utf8'), string.punctuation)
+        path = request.line.uri.path = Path(path)
         request.canonical_path = path.raw
-        r = dispatch_path_to_filesystem(website.request_processor, path, request.qs)
-        r['exception'] = None
+        r = dispatch_path_to_filesystem(
+            request_processor=request_processor, path=path, querystring=qs
+        )
         r['path'] = path
         return r
 

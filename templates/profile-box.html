@@ -15,16 +15,16 @@
 % endmacro
 
 % macro profile_box(participant, embedded=False)
-    <div class="panel panel-default profile-box"
+    <div class="panel panel-default profile-box {{ 'profile-box-embedded' if embedded }}"
          {% if embedded %} href="{{ participant.path('') }}" {% endif %}>
-        <div class="panel-body row">
-            <div class="avatar col-xs-3">
+        <div class="panel-body">
+            <div class="avatar-col">
                 % if embedded
                     <a href="{{ participant.path('') }}">{{
-                        avatar_img(participant)
+                        avatar_img(participant, size=120)
                     }}</a>
                 % else
-                    {{ avatar_img(participant) }}
+                    {{ avatar_img(participant, size=120) }}
                 % endif
 
                 % if edit
@@ -38,7 +38,7 @@
                 % endif
             </div>
 
-            <div class="col-xs-9">
+            <div class="col-right">
                 {{ caller() }}
             </div>
         </div>
@@ -100,7 +100,7 @@
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
 
-    % if participant.hide_giving or participant.hide_receiving
+    % if participant.hide_receiving
     % elif goal == None
         <p>{{ _("Income: {0}/week", Money(receiving, 'EUR')) }}</p>
     % elif goal > 0

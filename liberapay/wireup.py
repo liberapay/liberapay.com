@@ -38,6 +38,7 @@ from liberapay.utils.i18n import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
     get_function_from_rule, make_sorted_dict
 )
+from liberapay.utils.query_cache import QueryCache
 
 
 def canonical(env):
@@ -89,7 +90,11 @@ def database(env, tell_sentry):
         db.register_model(model)
     liberapay.billing.payday.Payday.db = db
 
-    return {'db': db}
+    use_qc = not env.override_query_cache
+    qc1 = QueryCache(db, threshold=(1 if use_qc else 0))
+    qc5 = QueryCache(db, threshold=(5 if use_qc else 0))
+
+    return {'db': db, 'db_qc1': qc1, 'db_qc5': qc5}
 
 
 class AppConf(object):
@@ -439,6 +444,7 @@ def env():
         CLEAN_ASSETS=is_yesish,
         RUN_CRON_JOBS=is_yesish,
         OVERRIDE_PAYDAY_CHECKS=is_yesish,
+        OVERRIDE_QUERY_CACHE=is_yesish,
     )
 
     logging.basicConfig(level=getattr(logging, env.logging_level.upper()))

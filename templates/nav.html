@@ -46,8 +46,11 @@
 % macro nav_explore()
     {{ nav([
         ('/', _('Overview')),
-        ('/communities/', _('Communities')),
-        ('/teams/', _('Teams')),
-        ('/pledges/', _('Pledges')),
+        ('/teams', _('Teams')),
+        ('/organizations', _('Organizations')),
+        ('/individuals', _('Individuals')),
+        ('/pledges', _('Pledges')),
+        ('/elsewhere', _('Social Networks')),
+        ('/communities', _('Communities')),
     ], base='/explore') }}
 % endmacro

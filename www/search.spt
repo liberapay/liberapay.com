@@ -96,9 +96,9 @@ if query:
                         len(usernames)) }}</h3>
         <ul class="people">
         % for result in usernames
-        <li class="panel panel-default mini-user">
+        <li class="mini-user">
             <a href="/{{ result.username }}/">
-                <img class="avatar" src="{{ avatar_url(result) }}" />
+                {{ avatar_img(result) }}
                 <span class="name">{{ result.username }}</span>
             </a>
         </li>
@@ -134,7 +134,7 @@ if query:
         % for result in statements
             <div class="panel panel-default">
             <div class="panel-body search-result" href="/{{ result.username }}/">
-                {{ avatar_img(result) }}
+                {{ avatar_img(result, size=72) }}
                 <div class="col-right">
                     <a class="username" href="/{{ result.username }}/">{{ result.username }}</a>
                     % if len(result.excerpts) == 1

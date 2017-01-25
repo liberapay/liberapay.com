@@ -1,12 +1,11 @@
-from liberapay.utils.query_cache import QueryCache
 
-query_cache = QueryCache(website.db, threshold=5)
+query_cache = website.db_qc5
 
-[-----------------------------]
+[---]
 
 title = _("Explore")
 
-[-----------------------------]
+[---]
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context
 % from 'templates/icons.html' import glyphicon
 
@@ -19,28 +18,54 @@ title = _("Explore")
     ) }}</p>
     <br>
 
-    <dl>
-        <dt><a href="/explore/communities/">{{ _("Explore Communities") }}</a></dt>
-        <dd>{{ _(
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Teams") }}</h3>
+        <p>{{ _(
+            "A team is a group of users working on a specific project."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/teams">{{ _("Explore Teams") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Organizations") }}</h3>
+        <p>{{ _(
+            "Great nonprofits and companies trying to improve the world."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/organizations">{{ _("Explore Organizations") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Individuals") }}</h3>
+        <p>{{ _(
+            "People like you who contribute to the commons (art, knowledge, software, etc). "
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/individuals">{{ _("Explore Individuals") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Pledges") }}</h3>
+        <p>{{ _(
+            "Liberapay allows pledging to fund people who haven't joined the site yet."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/pledges">{{ _("Explore Pledges") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Social Networks") }}</h3>
+        <p>{{ _(
+            "Browse the accounts that Liberapay users have on other platforms. "
+            "Find your contacts by connecting your own accounts."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/elsewhere">{{ _("Explore Social Networks") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Communities") }}</h3>
+        <p>{{ _(
             "Communities allow you to find people that work on things you care "
             "about. You can also subscribe to their newsletters to stay informed."
-        ) }}</dd>
-    </dl>
-
-    <dl>
-        <dt><a href="/explore/teams/">{{ _("Explore Teams") }}</a></dt>
-        <dd>{{ _(
-            "A team is a group of users working on a specific project."
-        ) }}</dd>
-    </dl>
-
-    <dl>
-        <dt><a href="/explore/pledges/">{{ _("Explore Pledges") }}</a></dt>
-        <dd>{{ _(
-            "Liberapay allows you to pledge to donate to people who haven't joined "
-            "the site yet. The donation will automatically start if they sign up "
-            "to receive it. We'll send you a notification when that happens."
-        ) }}</dd>
-    </dl>
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/communities">{{ _("Explore Communities") }}</a></p>
+    </div>
 
 % endblock

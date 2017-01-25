@@ -7,6 +7,7 @@ participant = get_participant(state, restrict=True, allow_member=True)
 title = participant.username
 subhead = _("Email settings")
 emails = participant.get_emails()
+base_path = participant.path('emails/')
 
 [---] text/html
 % extends "templates/settings.html"
@@ -15,7 +16,7 @@ emails = participant.get_emails()
 
     <h3>{{ _("Email Addresses (Private)") }}</h3>
 
-    <form action="./modify.json" method="POST" class="js-submit">
+    <form action="{{ base_path }}modify.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <ul class="emails">
         % for email in emails
@@ -41,7 +42,7 @@ emails = participant.get_emails()
         </ul>
     </form>
 
-    <form action="./modify.json" method="POST" class="js-submit">
+    <form action="{{ base_path }}modify.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <div class="input-group">
             <input name="email" type="email" class="form-control"
@@ -54,7 +55,7 @@ emails = participant.get_emails()
 
     <h3>{{ _("Notifications") }}</h3>
 
-    <form action="./notifications.json" method="POST" class="js-submit">
+    <form action="{{ base_path }}notifications.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="fields" value="{{ EVENTS_S }}" />
         <span>{{ _("Send me notifications via email:") }}</span><br>

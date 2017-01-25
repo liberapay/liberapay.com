@@ -1,0 +1,28 @@
+
+.card {
+    border-radius: 0.5em;
+    display: block;
+    margin: 0 1em 0.5em 0;
+    padding: 0.5em;
+    text-align: center;
+    vertical-align: top;
+}
+.card-default {
+    border: 1px solid $panel-default-border;
+}
+.card-primary {
+    border: 1px solid $panel-primary-border;
+}
+.card-md {
+    font-size: $font-size-medium;
+}
+
+@media (min-width: $screen-md-min) {
+    .card {
+        display: inline-block;
+        width: 450px;
+    }
+    .card-narrow {
+        width: 290px;
+    }
+}

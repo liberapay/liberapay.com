@@ -1,8 +1,10 @@
 # coding: utf8
 
-[-----------------------------]
+query_cache = website.db_qc1
 
-teams = website.db.all("""
+[---]
+
+teams = query_cache.all("""
 
     SELECT t.*
          , p.*::participants AS participant
@@ -21,7 +23,7 @@ nteams = len(teams)
 title = _("Explore")
 subhead = _("Teams")
 
-[-----------------------------] text/html
+[---] text/html
 % from 'templates/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/explore.html"

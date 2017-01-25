@@ -159,11 +159,11 @@ if request.method == 'POST':
     rerun = action == 'rerun_payday'
     if not rerun and payday_is_running:
         # Payday has already been started, redirect
-        response.redirect('./%s' % last_payday.id)
+        response.redirect('/admin/payday/%s' % last_payday.id)
     p_id = payday_id if rerun else last_payday.id + 1
     log_file = open(payday_log_path(p_id)+'.part', 'a')
     exec_payday(log_file)
-    response.redirect('./%s' % p_id)
+    response.redirect('/admin/payday/%s' % p_id)
 
 [---] text/html
 % extends "templates/base.html"
@@ -182,7 +182,7 @@ if request.method == 'POST':
     % else
         <h3>Running Payday</h3>
         % if payday_is_running
-            <p>Payday is running right now, you can go <a href="./{{ last_payday.id }}">see the log</a>.</p>
+            <p>Payday is running right now, you can go <a href="/admin/payday/{{ last_payday.id }}">see the log</a>.</p>
         % elif last_payday and last_payday.ts_start.date() == today and not override_checks
             <p>Payday has already been run today.</p>
         % elif today_is_wednesday or override_checks
@@ -208,7 +208,7 @@ if request.method == 'POST':
             <br>
             <h3>Payday Logs</h3>
             % for i in range(last_payday.id, 0, -1)
-                <a href="./{{ i }}">Payday #{{ i }}</a><br>
+                <a href="/admin/payday/{{ i }}">Payday #{{ i }}</a><br>
             % endfor
         % endif
     % endif
