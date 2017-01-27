@@ -13,12 +13,13 @@
 .navbar-liberapay {
     background: #f6c915;
     border: none;
+    color: #222;
 
     .navbar-nav li {
         & > a, .navbar-btn {
             background: transparent;
             border: none;
-            color: #222;
+            color: inherit;
             &:hover, &:active, &:focus {
                 background: #444;
                 color: #f9f9f9;

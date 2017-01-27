@@ -52,6 +52,7 @@ recent_events = query_cache.all("""
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context
 % from "templates/icons.html" import fontawesome, glyphicon
 
+% set page_id = 'homepage'
 % extends "templates/base.html"
 
 % block head
@@ -63,47 +64,36 @@ recent_events = query_cache.all("""
     <meta name="og:image" content="{{ website.asset('liberapay/icon-v2_yellow-r.200.png') }}" />
 % endblock
 
-% block before_container
-<div class="container">
-<div class="jumbotron" style="background: #fbfbfb; text-align: center;">
-    <p>{{ _("Liberapay is a recurrent donations platform.") }}</p>
-    <p class="buttons">
-        <a class="btn btn-info btn-lg" href="/about/">
-            {{ glyphicon('info-sign') }} <span>{{ _("Learn more") }}</span>
-        </a>
-        <a class="btn btn-info btn-lg" href="/about/feeds">
-            {{ fontawesome('feed') }} <span>{{ _("Follow us") }}</span>
-        </a>
-    </p>
-    <p>{{ _(
-        "We currently have {0} users donating {1} per month.",
-        website.gnusers, website.gmonthly_volume,
-    ) }}</p>
-</div>
-</div>
-% endblock
-
 % block content
 
 <div class="row">
 
-    <div class="col-md-6">
-        <h2 class="banderole primary">{{ _("Donate") }}</h2>
-        % include "templates/pitch-donors.html"
-        % from "templates/buttons.html" import find_donees with context
-        {{ find_donees() }}
+    <div class="jumbotron col-xs-12">
+    <p><img src="{{ website.asset('liberapay/icon-v2_yellow-r.svg') }}" height=100 width=100 /></p>
+    <p>{{ _("Liberapay is a recurrent donations platform.") }}</p>
+    <p>{{ _(
+        "We currently have {0} users donating {1} per month.",
+        website.gnusers, website.gmonthly_volume,
+    ) }}</p>
     </div>
 
     <div class="col-md-6">
-        <h2 class="banderole success">{{ _("Receive") }}</h2>
+        <h2 class="text-primary">{{ _("Donate") }}</h2>
+        % include "templates/pitch-donors.html"
+        % from "templates/buttons.html" import find_donees with context
+        <div class="buttons">{{ find_donees() }}</div>
+    </div>
+
+    <div class="col-md-6">
+        <h2 class="text-success">{{ _("Receive") }}</h2>
 
         % if user.ANON
 
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
-            <a class="btn btn-success btn-lg" href="/sign-up">
-                {{ glyphicon('log-in') }} <span>{{ _("Join us") }}</span>
-            </a>
+            <div class="buttons"><a class="btn btn-success btn-lg" href="/sign-up">
+                {{ glyphicon('log-in') }} <span>{{ _("Create your account") }}</span>
+            </a></div>
 
         % else
 
@@ -135,7 +125,7 @@ recent_events = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
-        <h2 class="banderole info">{{ _("Why use Liberapay?") }}</h2>
+        <h2 class="text-info">{{ _("Why use Liberapay?") }}</h2>
         <dl class="row homepage-pitch">
             <div class="col-sm-4">
                 <dt>
@@ -177,7 +167,7 @@ recent_events = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
-        <h2 class="banderole success">{{ _("Sponsors") }}</h2>
+        <h2>{{ _("Sponsors") }}</h2>
         <p>{{ _(
             "We welcome donations from businesses and nonprofits. If you have "
             "any questions, don't hesitate to {0}contact us{1}.",
@@ -213,7 +203,7 @@ recent_events = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
-        <h2 class="banderole default">{{ _("Recent Activity") }}</h2>
+        <h2>{{ _("Recent Activity") }}</h2>
     </div>
     <div class="col-md-6">
         % for e in recent_events
@@ -254,7 +244,7 @@ recent_events = query_cache.all("""
     </div>
 
     <div class="col-xs-12">
-        <h2 class="banderole default">{{ _("Upcoming Features") }}</h2>
+        <h2>{{ _("Upcoming Features") }}</h2>
         <ul>
             <li>{{ _(
                 "The ability to list your projects on your profile and link "
@@ -275,6 +265,19 @@ recent_events = query_cache.all("""
             <li><a href="https://github.com/liberapay/liberapay.com/issues"
                     >{{ _("and more…") }}</a></li>
         </ul>
+    </div>
+
+    <div class="col-xs-12">
+        <h2></h2>
+        <p class="buttons">
+            <a class="btn btn-info btn-lg" href="/about/">
+                {{ glyphicon('info-sign') }} <span>{{ _("Learn more") }}</span>
+            </a>
+            <br>
+            <a class="btn btn-info btn-lg" href="/about/feeds">
+                {{ fontawesome('feed') }} <span>{{ _("Follow us") }}</span>
+            </a>
+        </p>
     </div>
 
 </div>

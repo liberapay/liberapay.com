@@ -31,7 +31,7 @@
 % from "templates/icons.html" import icon_span
 % from 'templates/nav.html' import nav, nav_about, nav_explore with context
 % from 'templates/search.html' import search_form with context
-<body>
+<body id="{{ page_id or '' }}">
 
 % if not website.db
 <div id="notification-area-top"><div class="notification notification-error">{{ _(
@@ -44,10 +44,12 @@
     <nav class="navbar navbar-liberapay navbar-static-top">
         <div class="container">
             <ul class="nav navbar-nav pull-left">
+                % if page_id != 'homepage'
                 <li>
                     <a class="navbar-brand" href="/">
                         <img src="{{ website.asset('liberapay/icon-v2_black.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
+                % endif
                 {{ nav([
                     ('/explore/', _('Explore'), {
                         'icon': 'glyphicon glyphicon-globe',
