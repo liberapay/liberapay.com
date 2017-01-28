@@ -66,9 +66,7 @@ recent_events = query_cache.all("""
 
 % block content
 
-<div class="row">
-
-    <div class="jumbotron col-xs-12">
+    <div class="jumbotron section">
     <p><img src="{{ website.asset('liberapay/icon-v2_yellow-r.svg') }}" height=100 width=100 /></p>
     <p>{{ _("Liberapay is a recurrent donations platform.") }}</p>
     <p>{{ _(
@@ -77,6 +75,7 @@ recent_events = query_cache.all("""
     ) }}</p>
     </div>
 
+    <div class="row section">
     <div class="col-md-6">
         <h2 class="text-primary">{{ _("Donate") }}</h2>
         % include "templates/pitch-donors.html"
@@ -123,8 +122,9 @@ recent_events = query_cache.all("""
 
         % endif
     </div>
+    </div>
 
-    <div class="col-xs-12">
+    <div class="section">
         <h2 class="text-info">{{ _("Why use Liberapay?") }}</h2>
         <dl class="row homepage-pitch">
             <div class="col-sm-4">
@@ -166,7 +166,7 @@ recent_events = query_cache.all("""
         </dl>
     </div>
 
-    <div class="col-xs-12">
+    <div class="section">
         <h2>{{ _("Sponsors") }}</h2>
         <p>{{ _(
             "We welcome donations from businesses and nonprofits. If you have "
@@ -202,9 +202,9 @@ recent_events = query_cache.all("""
         % endif
     </div>
 
-    <div class="col-xs-12">
-        <h2>{{ _("Recent Activity") }}</h2>
-    </div>
+    <div class="section">
+    <div class="row">
+        <h2 class="col-xs-12">{{ _("Recent Activity") }}</h2>
     <div class="col-md-6">
         % for e in recent_events
             % if loop.index == ceil(len(recent_events) / 2.0) + 1
@@ -242,8 +242,10 @@ recent_events = query_cache.all("""
             </p>
         % endfor
     </div>
+    </div>
+    </div>
 
-    <div class="col-xs-12">
+    <div class="section">
         <h2>{{ _("Upcoming Features") }}</h2>
         <ul>
             <li>{{ _(
@@ -267,7 +269,7 @@ recent_events = query_cache.all("""
         </ul>
     </div>
 
-    <div class="col-xs-12">
+    <div class="section no-border">
         <h2></h2>
         <p class="buttons">
             <a class="btn btn-info btn-lg" href="/about/">
@@ -280,5 +282,4 @@ recent_events = query_cache.all("""
         </p>
     </div>
 
-</div>
 % endblock

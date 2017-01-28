@@ -37,14 +37,23 @@ body {
     #main {
         font-size: $font-size-medium;
     }
-    .jumbotron {
-        background: transparent;
-        margin: 50px 0;
-        padding: 0;
-        text-align: center;
+    .section {
+        $border-color: #f6c915;
+        border-bottom: 1px solid $border-color;
+        border-image: linear-gradient(to left, #fff, $border-color, #fff) 1;
+        padding: 50px 0 70px;
+        &.no-border {
+            border: none;
+        }
+        &.jumbotron {
+            background: transparent;
+            border-radius: 0;
+            margin: 0;
+            padding-top: 70px;
+            text-align: center;
+        }
     }
     h2 {
-        margin: 100px 0 20px 0;
         text-align: center;
     }
     .buttons {
