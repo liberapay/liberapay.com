@@ -44,13 +44,24 @@ Liberapay.init = function() {
         }, 10);
     });
 
-    // TODO make the navbar responsive instead of doing this
-    $('.navbar a.dropdown-toggle').click(function(e) {
-        if ($('html').width() < 768) {
-            e.stopPropagation();
-            location.href = this.getAttribute('href');
+    var grid_float_breakpoint = 768;
+    $('.navbar-nav > li > .dropdown-toggle').click(function(e) {
+        if ($('html').width() < grid_float_breakpoint) {
+            $('.navbar-collapse').collapse('hide');
         }
     });
+    $('.navbar-nav > li > .dropdown-menu').parent()
+        .on('shown.bs.dropdown', function () {
+            if ($('html').width() < grid_float_breakpoint) {
+                var $menu = $(this).children('.dropdown-menu');
+                $('.navbar').css('padding-bottom', $menu.outerHeight());
+            }
+        })
+        .on('hide.bs.dropdown', function () {
+            if ($('html').width() < grid_float_breakpoint) {
+                $('.navbar').css('padding-bottom', 0);
+            }
+        });
 
     var amount_re = /\?(.*&)*amount=(.*?)(&|$)/;
     var period_re = /\?(.*&)*period=(.*?)(&|$)/;

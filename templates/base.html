@@ -28,7 +28,7 @@
         }
     </script>
 </head>
-% from "templates/icons.html" import icon_span
+% from "templates/icons.html" import glyphicon, icon_span
 % from 'templates/nav.html' import nav, nav_about, nav_explore with context
 % from 'templates/search.html' import search_form with context
 <body id="{{ page_id or '' }}">
@@ -41,14 +41,35 @@
 % endif
 
 <div id="wrapper">
-    <nav class="navbar navbar-liberapay navbar-static-top">
+    <nav class="navbar navbar-liberapay navbar-static-top navbar-collapse"
+         id="navbar">
         <div class="container">
-            <ul class="nav navbar-nav pull-left">
+            <ul class="nav navbar-nav pull-right navbar-always">
+                <li class="collapsed">
+                    <a role="button" class="collapsed" data-toggle="collapse"
+                       data-target="#navbar-liberapay-collapse" data-parent="#navbar"
+                       aria-expanded="false">
+                        <span class="sr-only">{{ _("Toggle navigation") }}</span>
+                        {{ glyphicon('menu-hamburger') }}
+                    </a>
+                </li>
+                % include "templates/navbar-common.html"
+            % if not user.ANON
+                % include "templates/navbar-logged-in.html"
+            % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
+                % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
+                <li>{% include "templates/sign-in-link.html" %}</li>
+            % endif
+            </ul>
+            <div class="collapse navbar-collapse navbar-left" id="navbar-liberapay-collapse">
+            <ul class="nav navbar-nav">
                 % if page_id != 'homepage'
-                <li>
+                <li class="hidden-xs">
                     <a class="navbar-brand" href="/">
                         <img src="{{ website.asset('liberapay/icon-v2_black.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
+                <li class="visible-xs">
+                    <a href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
                 % endif
                 {{ nav([
                     ('/explore/', _('Explore'), {
@@ -67,15 +88,7 @@
                     }),
                 ]) }}
             </ul>
-            <ul class="nav navbar-nav pull-right">
-                % include "templates/navbar-common.html"
-            % if not user.ANON
-                % include "templates/navbar-logged-in.html"
-            % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
-                % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
-                <li>{% include "templates/sign-in-link.html" %}</li>
-            % endif
-            </ul>
+            </div>
         </div>
     </nav>
 

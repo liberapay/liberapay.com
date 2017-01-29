@@ -2,13 +2,13 @@
 
 <li class="dropdown dropdown-hover locale">
     <button class="dropdown-toggle navbar-btn" type="button"
-            data-toggle="dropdown" aria-expanded="true"
+            data-toggle="dropdown"
             title="{{ _('Switch to another language') }}">
         <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-        <span>{{ locale.language.upper() }}</span>
+        <span class="text">{{ locale.language.upper() }}</span>
         <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu dropdown-menu-right" role="menu">
     % for l_completion, l_code, l_name, l_url in website.lang_list
         <li {% if l_code == locale.language %} class="active" {% endif %}
             ><a href="{{ l_url }}{{ request.line.uri }}"

@@ -1,12 +1,9 @@
 
 .navbar-nav {
     margin: 0;
-    & > li {
-        float: left;
-        & > a {
-            padding-bottom: $navbar-padding-vertical;
-            padding-top: $navbar-padding-vertical;
-        }
+    & > li > a {
+        padding-bottom: $navbar-padding-vertical;
+        padding-top: $navbar-padding-vertical;
     }
 }
 
@@ -54,7 +51,7 @@
             padding: $navbar-padding-vertical $navbar-padding-horizontal;
         }
         .dropdown-menu {
-            background: #f6c915;
+            background-color: #f6c915;
             border: none;
             border-radius: 0;
             position: absolute;
@@ -63,6 +60,12 @@
             }
             .form-group {
                 margin: 0 10px;
+            }
+            form .navbar-btn {
+                border-radius: 0;
+                padding: 3px $navbar-padding-horizontal;
+                text-align: left;
+                width: 100%;
             }
         }
         .dropdown-hover .dropdown-menu {
@@ -93,4 +96,49 @@
     border-radius: 2px;
     display: inline-block;
     margin: -8px 2px -8px 0;
+}
+
+.navbar-nav > li.collapsed {
+    display: none;
+}
+
+@media (max-width: $grid-float-breakpoint - 1) {
+    .navbar > .container {
+        position: relative;
+    }
+    .navbar-nav > li.collapsed {
+        display: inline-block;
+    }
+    .navbar .navbar-nav.navbar-always {
+        display: table;
+        width: 100%;
+        & > li {
+            display: table-cell;
+            position: static;
+            text-align: center;
+            vertical-align: top;
+            & > a, & > button {
+                display: inline-block;
+            }
+            .dropdown {
+                position: static;
+            }
+            .dropdown-menu {
+                left: 0;
+                right: 0;
+            }
+        }
+    }
+    .navbar-always > li > * {
+        & > span.text, & > span.caret {
+            display: none;
+        }
+    }
+    .navbar-collapse > .navbar-nav {
+        background-color: #f6c915;
+        color: #222;
+        > li .dropdown-menu {
+            position: static;
+        }
+    }
 }
