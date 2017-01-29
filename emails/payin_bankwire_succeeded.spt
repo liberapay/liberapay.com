@@ -9,5 +9,4 @@
     , Money(exchange.fee, 'EUR')
 ) }}</p>
 
-<a href="{{ participant.url('receipts/%s' % exchange.id) }}"
-   style="{{ button_style }}">{{ _("View receipt") }}</a>
+<a href="{{ participant.url('receipts/%s' % exchange.id) }}">{{ _("View receipt") }}</a>

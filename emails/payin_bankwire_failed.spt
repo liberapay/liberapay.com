@@ -8,5 +8,4 @@
 
 <p>{{ _("You can try again, possibly with another payment method, by clicking on the link below:") }}</p>
 
-<a href="{{ participant.url('wallet/payin/') }}"
-   style="{{ button_style }}">{{ _("Try again") }}</a>
+<a href="{{ participant.url('wallet/payin/') }}">{{ _("Try again") }}</a>

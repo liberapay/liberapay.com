@@ -871,10 +871,15 @@ class Participant(Model, MixinTeam):
         context.update(aspen_jinja2_renderer.Renderer.global_context)
         context['participant'] = self
         context['username'] = self.username
-        context['button_style'] = lambda cls: (
-            "color: #fff; text-decoration: none; display: inline-block; "
-            "padding: 0 16px; background: #396; white-space: nowrap; "
-            "font: normal 16px/40px Ubuntu, Verdana, sans-serif; border-radius: 3px"
+        context['button_style'] = lambda variant: (
+            "color: {text_color}; text-decoration: none; display: inline-block; "
+            "padding: 0 16px; background: {bg_color}; white-space: nowrap; "
+            "border: 1px solid {border_color}; border-radius: 3px; "
+            "font: normal 16px/40px Ubuntu, Verdana, sans-serif;"
+        ).format(
+            bg_color=website.scss_variables['btn-' + variant + '-bg'],
+            border_color=website.scss_variables['btn-' + variant + '-border'],
+            text_color=website.scss_variables['btn-' + variant + '-color'],
         )
 
     def render_notifications(self, state):

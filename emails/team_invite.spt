@@ -3,9 +3,9 @@
 [---] text/html
 <p>{{ _("{0} has invited you to join the {1} team.", inviter, team) }}</p>
 
-<a href="{{ team_url }}" style="{{ button_style }}">{{ _("See the team's profile") }}</a>
-<a href="{{ team_url }}membership/accept" style="{{ button_style }}">{{ _("Accept") }}</a>
-<a href="{{ team_url }}membership/refuse" style="{{ button_style }}">{{ _("Refuse") }}</a>
+<a href="{{ team_url }}" style="{{ button_style('info') }}">{{ _("See the team's profile") }}</a>
+<a href="{{ team_url }}membership/accept" style="{{ button_style('success') }}">{{ _("Accept") }}</a>
+<a href="{{ team_url }}membership/refuse" style="{{ button_style('danger') }}">{{ _("Refuse") }}</a>
 [---] text/plain
 {{ _("{0} has invited you to join the {1} team.", inviter, team) }}
 
