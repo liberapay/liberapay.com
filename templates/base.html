@@ -96,7 +96,11 @@
         {% block before_container %}{% endblock %}
         <div class="container">
         % block before_content
-            {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+            % block heading
+                % if title
+                    <h1 class="{{ 'hidden-xs hidden-sm' if subhead }}">{{ title }}</h1>
+                % endif
+            % endblock
             <div id="subnav">{% block subnav %}{% endblock %}</div>
         % endblock
         {% block content %}{% endblock %}

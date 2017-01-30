@@ -1,0 +1,38 @@
+
+.collapse-md > button {
+    display: none;
+}
+
+@media (max-width: $screen-md-min - 1) {
+    .collapse-md > button {
+        display: block;
+        width: 100%;
+        .caret {
+            margin-left: 5px;
+        }
+    }
+    .collapse-md > .nav-tabs {
+        border: none;
+        display: none;
+        &.collapsing, &.in {
+            display: block;
+        }
+        > li {
+            float: none;
+            > a {
+                border: 1px solid $nav-tabs-border-color;
+                border-radius: 0;
+                margin: 0;
+            }
+            &:first-child > a {
+                border-radius: 4px 4px 0 0;
+            }
+            &:last-child > a {
+                border-radius: 0 0 4px 4px;
+            }
+            &.active > a {
+                background-color: #eee;
+            }
+        }
+    }
+}
