@@ -12,14 +12,19 @@
         }
     }
     .collapse-md > .nav-tabs {
-        border: none;
         display: none;
         &.collapsing, &.in {
             display: block;
         }
+    }
+}
+
+@media (max-width: $screen-sm-min - 1) {
+    .nav-tabs {
+        border: none;
         > li {
             float: none;
-            > a {
+            > a, > a:hover {
                 border: 1px solid $nav-tabs-border-color;
                 border-radius: 0;
                 margin: 0;
@@ -30,8 +35,10 @@
             &:last-child > a {
                 border-radius: 0 0 4px 4px;
             }
-            &.active > a {
-                background-color: #eee;
+            &.active {
+                > a, > a:focus {
+                    background-color: #eee;
+                }
             }
         }
     }
