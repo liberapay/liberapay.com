@@ -622,3 +622,28 @@ span.help-title {
 .profile-box-embedded .panel-body {
     min-height: 139px;
 }
+
+
+@media (max-width: $screen-sm-min - 1) {
+    .col-right {
+        clear: both;
+        margin-left: 0 !important;
+    }
+    span.goal.pull-right {
+        display: block;
+        float: none !important;
+    }
+    .join-time {
+        display: none;
+    }
+    .profile-box {
+        text-align: center;
+        .avatar-col {
+            display: inline-block;
+            float: none;
+        }
+        .profile-goal-bar {
+            margin: auto;
+        }
+    }
+}
