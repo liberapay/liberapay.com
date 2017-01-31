@@ -114,13 +114,12 @@
         width: 100%;
         & > li {
             display: table-cell;
-            position: static;
             text-align: center;
             vertical-align: top;
             & > a, & > button {
                 display: inline-block;
             }
-            .dropdown {
+            &.dropdown {
                 position: static;
             }
             .dropdown-menu {

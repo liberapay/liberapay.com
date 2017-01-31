@@ -50,18 +50,6 @@ Liberapay.init = function() {
             $('.navbar-collapse').collapse('hide');
         }
     });
-    $('.navbar-nav > li > .dropdown-menu').parent()
-        .on('shown.bs.dropdown', function () {
-            if ($('html').width() < grid_float_breakpoint) {
-                var $menu = $(this).children('.dropdown-menu');
-                $('.navbar').css('padding-bottom', $menu.outerHeight());
-            }
-        })
-        .on('hide.bs.dropdown', function () {
-            if ($('html').width() < grid_float_breakpoint) {
-                $('.navbar').css('padding-bottom', 0);
-            }
-        });
 
     var amount_re = /\?(.*&)*amount=(.*?)(&|$)/;
     var period_re = /\?(.*&)*period=(.*?)(&|$)/;

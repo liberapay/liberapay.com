@@ -1,7 +1,6 @@
 % from 'templates/avatar-url.html' import avatar_img with context
 
-<li>
-<div class="dropdown dropdown-hover">
+<li class="dropdown dropdown-hover">
 <button class="dropdown-toggle navbar-btn" type="button"
         data-toggle="dropdown">
     {{ avatar_img(user, size=28) }}
@@ -24,7 +23,6 @@
     <li class="divider"></li>
     <li>{% include "templates/sign-out.html" %}</li>
 </ul>
-</div>
 </li>
 
 % if user.pending_notifs
