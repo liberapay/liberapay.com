@@ -81,10 +81,11 @@ class Payday(object):
 
         self.shuffle(log_dir)
 
-        self.update_stats()
+        self.end()
+
+        self.update_stats(self.id)
         self.update_cached_amounts()
 
-        self.end()
         self.notify_participants()
 
         if not keep_log:
@@ -426,13 +427,18 @@ class Payday(object):
             DROP FUNCTION resolve_takes(bigint);
         """)
 
-    def update_stats(self):
-        self.db.run("""\
+    @classmethod
+    def update_stats(cls, payday_id):
+        ts_start, ts_end = cls.db.one("""
+            SELECT ts_start, ts_end FROM paydays WHERE id = %s
+        """, (payday_id,))
+        cls.db.run("""\
 
             WITH our_transfers AS (
                      SELECT *
                        FROM transfers
                       WHERE "timestamp" >= %(ts_start)s
+                        AND "timestamp" <= %(ts_end)s
                         AND status = 'succeeded'
                  )
                , our_tips AS (
@@ -460,9 +466,9 @@ class Payday(object):
                  , take_volume = (SELECT COALESCE(sum(amount), 0) FROM our_takes)
                  , ntransfers = (SELECT count(*) FROM our_transfers)
                  , transfer_volume = (SELECT COALESCE(sum(amount), 0) FROM our_transfers)
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+             WHERE id = %(payday_id)s
 
-        """, {'ts_start': self.ts_start})
+        """, locals())
         log("Updated payday stats.")
 
     def update_cached_amounts(self):
