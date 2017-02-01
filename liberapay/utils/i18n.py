@@ -318,7 +318,9 @@ def extract_spt(fileobj, *args, **kw):
         f = BytesIO(b'\n' * page.offset + page.content.encode('utf8'))
         content_type, renderer = parse_specline(page.header)
         extractor = None
-        if i < 3 and i < npages and not page.header:
+        python_page = i < 3 and i < npages and not page.header
+        json_page = renderer in ('json_dump', 'jsonp_dump')
+        if python_page or json_page:
             extractor = extract_python
         else:
             extractor = jinja2.ext.babel_extract
