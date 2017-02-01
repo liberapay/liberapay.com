@@ -99,7 +99,7 @@ if query:
         <li class="mini-user">
             <a href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
-                <span class="name">{{ result.username }}</span>
+                <div class="name">{{ result.username }}</div>
             </a>
         </li>
         % endfor

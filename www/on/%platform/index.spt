@@ -15,6 +15,7 @@ if platform is None or platform not in website.friends_platforms:
     raise response.error(404)
 
 title = _("Friend Finder")
+subhead = platform.display_name
 
 account = None
 if not user.ANON:
@@ -42,9 +43,14 @@ limited = getattr(platform, 'api_friends_limited', False)
 
 % block subnav
     % from "templates/nav.html" import nav with context
-    <nav class="nav nav-tabs">
+    <div class="collapse-md">
+    <button class="btn btn-default" type="button"
+            data-toggle="collapse" data-target="#subnav-collapse"
+            >{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></button>
+    <nav class="nav nav-tabs" id="subnav-collapse">
         {{ nav(platforms_nav, base='/on') }}
     </nav>
+    </div>
 % endblock
 
 % macro limitation_note()

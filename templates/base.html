@@ -28,10 +28,10 @@
         }
     </script>
 </head>
-% from "templates/icons.html" import icon_span
+% from "templates/icons.html" import glyphicon, icon_span
 % from 'templates/nav.html' import nav, nav_about, nav_explore with context
 % from 'templates/search.html' import search_form with context
-<body>
+<body id="{{ page_id or '' }}">
 
 % if not website.db
 <div id="notification-area-top"><div class="notification notification-error">{{ _(
@@ -40,14 +40,36 @@
 ) }}</div></div>
 % endif
 
-<div id="wrapper">
-    <nav class="navbar navbar-liberapay navbar-static-top">
+    <nav class="navbar navbar-liberapay navbar-static-top navbar-collapse"
+         id="navbar">
         <div class="container">
-            <ul class="nav navbar-nav pull-left">
-                <li>
+            <ul class="nav navbar-nav pull-right navbar-always">
+                <li class="collapsed">
+                    <a role="button" class="collapsed" data-toggle="collapse"
+                       data-target="#navbar-liberapay-collapse" data-parent="#navbar"
+                       aria-expanded="false">
+                        <span class="sr-only">{{ _("Toggle navigation") }}</span>
+                        {{ glyphicon('menu-hamburger') }}
+                    </a>
+                </li>
+                % include "templates/navbar-common.html"
+            % if not user.ANON
+                % include "templates/navbar-logged-in.html"
+            % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
+                % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
+                <li>{% include "templates/sign-in-link.html" %}</li>
+            % endif
+            </ul>
+            <div class="collapse navbar-collapse navbar-left" id="navbar-liberapay-collapse">
+            <ul class="nav navbar-nav">
+                % if page_id != 'homepage'
+                <li class="hidden-xs">
                     <a class="navbar-brand" href="/">
                         <img src="{{ website.asset('liberapay/icon-v2_black.svg') }}"
                              alt="&nbsp;Liberapay&nbsp;" /></a></li>
+                <li class="visible-xs">
+                    <a href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
+                % endif
                 {{ nav([
                     ('/explore/', _('Explore'), {
                         'icon': 'glyphicon glyphicon-globe',
@@ -65,15 +87,7 @@
                     }),
                 ]) }}
             </ul>
-            <ul class="nav navbar-nav pull-right">
-                % include "templates/navbar-common.html"
-            % if not user.ANON
-                % include "templates/navbar-logged-in.html"
-            % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
-                % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
-                <li>{% include "templates/sign-in-link.html" %}</li>
-            % endif
-            </ul>
+            </div>
         </div>
     </nav>
 
@@ -81,7 +95,11 @@
         {% block before_container %}{% endblock %}
         <div class="container">
         % block before_content
-            {% block heading %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+            % block heading
+                % if title
+                    <h1 class="{{ 'hidden-xs hidden-sm' if subhead }}">{{ title }}</h1>
+                % endif
+            % endblock
             <div id="subnav">{% block subnav %}{% endblock %}</div>
         % endblock
         {% block content %}{% endblock %}
@@ -99,7 +117,6 @@
         <a href="https://twitter.com/liberapaye">Twitter</a>
         <a href="https://www.facebook.com/Liberapay-472128142945598/">Facebook</a>
     </footer>
-</div>
 
 <script src="{{ website.asset('jquery.min.js') }}"></script>
 <script src="{{ website.asset('bootstrap/js/bootstrap.min.js') }}"></script>

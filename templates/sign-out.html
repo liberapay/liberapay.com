@@ -1,12 +1,9 @@
-% if request.method in ('GET', 'HEAD')
-<form action="/sign-out.html" method="POST">
+<form action="/sign-out.html" method="POST"
+      {% if request.method not in ('GET', 'HEAD') %} target="_blank" {% endif %}>
     <input name="back_to" type="hidden" value="{{ request.line.uri }}" />
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-    <button class="btn btn-link navbar-btn" type="submit" title="{{ _('Sign out') }}">
+    <button class="btn navbar-btn" type="submit">
         <span class="glyphicon glyphicon-log-out"></span>
-        <span class="sr-only">{{ _("Sign out") }}</span>
+        <span>{{ _("Sign out") }}</span>
     </button>
 </form>
-% else
-<a href="/sign-out" target="_blank">{{ _("Sign out") }}</a>
-% endif

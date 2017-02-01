@@ -3,7 +3,7 @@
 % macro profile_goal_bar(p)
     % if p.goal and p.goal > 0
         <div class="profile-goal-bar">
-            <span class="pull-right">{{ _("Goal: {0}", Money(p.goal, 'EUR')) }}</span>
+            <span class="goal pull-right">{{ _("Goal: {0}", Money(p.goal, 'EUR')) }}</span>
             {{ _("Income: {0}/week", Money(p.receiving, 'EUR')) }}
             % set progress_cls = CLASSES[min(int(p.receiving / p.goal), 1)]
             <div class="progress">

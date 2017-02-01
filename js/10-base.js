@@ -44,11 +44,10 @@ Liberapay.init = function() {
         }, 10);
     });
 
-    // TODO make the navbar responsive instead of doing this
-    $('.navbar a.dropdown-toggle').click(function(e) {
-        if ($('html').width() < 768) {
-            e.stopPropagation();
-            location.href = this.getAttribute('href');
+    var grid_float_breakpoint = 768;
+    $('.navbar-nav > li > .dropdown-toggle').click(function(e) {
+        if ($('html').width() < grid_float_breakpoint) {
+            $('.navbar-collapse').collapse('hide');
         }
     });
 

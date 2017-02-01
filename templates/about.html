@@ -2,5 +2,10 @@
 {% block heading %}{% endblock %}
 % block subnav
     % from "templates/nav.html" import about_nav with context
-    <ul class="nav nav-tabs">{{ nav_about() }}</ul>
+    <div class="collapse-md">
+    <button class="btn btn-default" type="button"
+            data-toggle="collapse" data-target="#subnav-collapse"
+            >{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></button>
+    <ul class="nav nav-tabs" id="subnav-collapse">{{ nav_about() }}</ul>
+    </div>
 % endblock

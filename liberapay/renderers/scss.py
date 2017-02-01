@@ -34,7 +34,7 @@ class Renderer(renderers.Renderer):
         return '; '.join('@import "%s"' % (d + name[:-5]) for name in files)
 
     def compile(self, filepath, src):
-        basepath = posixpath.dirname(filepath)
+        basepath = posixpath.dirname(filepath) + '/'
         assets_root = self.website.www_root + '/assets/'
         if basepath.startswith(assets_root):
             basepath = basepath[len(assets_root):]

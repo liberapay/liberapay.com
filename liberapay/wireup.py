@@ -20,6 +20,7 @@ from environment import Environment, is_yesish
 from mailshake import DummyMailer, SMTPMailer
 import psycopg2
 import raven
+import sass
 
 from liberapay import elsewhere
 import liberapay.billing.payday
@@ -470,6 +471,21 @@ def env():
     return {'env': env}
 
 
+def load_scss_variables(project_root):
+    """Build a dict representing the `style/variables.scss` file.
+    """
+    # Get the names of all the variables
+    with open(project_root + '/style/variables.scss') as f:
+        variables = f.read()
+    names = [m.group(1) for m in re.finditer(r'^\$([\w-]+):', variables, re.M)]
+    # Compile a big rule that uses all the variables
+    props = ''.join('-x-{0}: ${0};'.format(name) for name in names)
+    css = sass.compile(string=('%s\nx { %s }' % (variables, props)))
+    # Read the final values from the generated CSS
+    d = dict((m.group(1), m.group(2)) for m in re.finditer(r'-x-([\w-]+): (.+?);\s', css))
+    return {'scss_variables': d}
+
+
 minimal_algorithm = Algorithm(
     env,
     make_sentry_teller,
@@ -488,6 +504,7 @@ full_algorithm = Algorithm(
     load_i18n,
     asset_url_generator,
     accounts_elsewhere,
+    load_scss_variables,
 )
 
 

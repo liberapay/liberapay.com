@@ -1,24 +1,22 @@
 
 .navbar-nav {
     margin: 0;
-    & > li {
-        float: left;
-        & > a {
-            padding-bottom: 15px;
-            padding-top: 15px;
-        }
+    & > li > a {
+        padding-bottom: $navbar-padding-vertical;
+        padding-top: $navbar-padding-vertical;
     }
 }
 
 .navbar-liberapay {
     background: #f6c915;
     border: none;
+    color: #222;
 
     .navbar-nav li {
         & > a, .navbar-btn {
             background: transparent;
             border: none;
-            color: #222;
+            color: inherit;
             &:hover, &:active, &:focus {
                 background: #444;
                 color: #f9f9f9;
@@ -50,10 +48,10 @@
         }
         .navbar-btn {
             margin: 0;
-            padding: 15px 13px;
+            padding: $navbar-padding-vertical $navbar-padding-horizontal;
         }
         .dropdown-menu {
-            background: #f6c915;
+            background-color: #f6c915;
             border: none;
             border-radius: 0;
             position: absolute;
@@ -62,6 +60,12 @@
             }
             .form-group {
                 margin: 0 10px;
+            }
+            form .navbar-btn {
+                border-radius: 0;
+                padding: 3px $navbar-padding-horizontal;
+                text-align: left;
+                width: 100%;
             }
         }
         .dropdown-hover .dropdown-menu {
@@ -77,9 +81,9 @@
         & > img {
             border-radius: 4px;
             color: #000;
-            height: 30px;
-            line-height: 30px;
-            margin-top: -5px;
+            height: $font-size-base * 2;
+            line-height: $font-size-base * 2;
+            margin-top: -$font-size-base / 3;
         }
     }
 }
@@ -92,4 +96,48 @@
     border-radius: 2px;
     display: inline-block;
     margin: -8px 2px -8px 0;
+}
+
+.navbar-nav > li.collapsed {
+    display: none;
+}
+
+@media (max-width: $grid-float-breakpoint - 1) {
+    .navbar > .container {
+        position: relative;
+    }
+    .navbar-nav > li.collapsed {
+        display: inline-block;
+    }
+    .navbar .navbar-nav.navbar-always {
+        display: table;
+        width: 100%;
+        & > li {
+            display: table-cell;
+            text-align: center;
+            vertical-align: top;
+            & > a, & > button {
+                display: inline-block;
+            }
+            &.dropdown {
+                position: static;
+            }
+            .dropdown-menu {
+                left: 0;
+                right: 0;
+            }
+        }
+    }
+    .navbar-always > li > * {
+        & > span.text, & > span.caret {
+            display: none;
+        }
+    }
+    .navbar-collapse > .navbar-nav {
+        background-color: #f6c915;
+        color: #222;
+        > li .dropdown-menu {
+            position: static;
+        }
+    }
 }

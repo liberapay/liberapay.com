@@ -2,7 +2,7 @@
 .card {
     border-radius: 0.5em;
     display: block;
-    margin: 0 1em 0.5em 0;
+    margin-bottom: 0.5em;
     padding: 0.5em;
     text-align: center;
     vertical-align: top;
@@ -17,9 +17,10 @@
     font-size: $font-size-medium;
 }
 
-@media (min-width: $screen-md-min) {
+@media (min-width: $screen-sm-min) {
     .card {
         display: inline-block;
+        margin-right: 1em;
         width: 450px;
     }
     .card-narrow {

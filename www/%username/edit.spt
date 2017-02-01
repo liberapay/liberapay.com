@@ -174,7 +174,7 @@ title = _username
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                 <input type="hidden" name="lang" value="{{ lang }}" />
                 {{ _("Current language: {0}", locale.languages.get(lang, lang.upper())) }}
-                <textarea name="statement" rows="15" class="form-control vertical-resize"
+                <textarea name="statement" rows="15" class="form-control profile-statement vertical-resize"
                           placeholder="{{ stmt_placeholder }}"
                           data-confirm-discard="{{ confirm_discard }}"
                     >{{ statement or '' }}</textarea>

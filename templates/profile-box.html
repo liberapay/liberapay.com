@@ -31,7 +31,7 @@
                     <a class="btn btn-default" href="#avatar"
                         >{{ _("Modify your avatar") }}</a>
                 % elif participant.join_time and not embedded
-                <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
+                <p class="join-time">{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 % endif
                 % if participant.status == 'closed'
                 <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>

@@ -6,7 +6,7 @@
     "identity form before we can legally start to collect money for you."
 ) }}</p>
 
-<p><a href="{{ participant.url('identity') }}" style="{{ button_style }}"
+<p><a href="{{ participant.url('identity') }}" style="{{ button_style('primary') }}"
     >{{ _("Fill identity form") }}</a></p>
 
 <p>{{ _(

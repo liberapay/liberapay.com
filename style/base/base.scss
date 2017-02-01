@@ -5,23 +5,55 @@ html, body {
 
 body {
     overflow-y: scroll;
-}
-
-#wrapper {
-    min-height: 100%;
-    min-width: 100%;
-    padding-bottom: 100px;
-    position: relative;
-
     & > footer {
-        bottom: 0;
-        position: absolute;
+        margin: 100px 0 20px 0;
         text-align: center;
-        width: 100%;
-
         & > a {
             display: inline-block;
             padding: 10px;
+        }
+    }
+}
+
+#main {
+    min-height: 75%;
+}
+
+#homepage {
+    > .navbar-liberapay {
+        background-color: transparent;
+        color: $gray-light;
+        .dropdown-menu {
+            color: #222;
+        }
+    }
+    #main {
+        font-size: $font-size-medium;
+    }
+    .section {
+        $border-color: #f6c915;
+        border-bottom: 1px solid $border-color;
+        border-image: linear-gradient(to left, #fff, $border-color, #fff) 1;
+        padding: 50px 0 70px;
+        &.no-border {
+            border: none;
+        }
+        &.jumbotron {
+            background: transparent;
+            border-radius: 0;
+            margin: 0;
+            padding-top: 70px;
+            text-align: center;
+        }
+    }
+    h2 {
+        text-align: center;
+    }
+    .buttons {
+        margin: 1.2em 0;
+        text-align: center;
+        .btn {
+            margin: 0 0.66em 0.66em 0;
         }
     }
 }
@@ -32,12 +64,12 @@ body {
         text-align: center;
     }
     dt {
-        font-size: 18px;
+        font-size: $font-size-large;
         font-weight: 200;
         margin-bottom: 10px;
     }
     .glyphicon {
-        font-size: 21px;
+        font-size: $font-size-large;
     }
 }
 
@@ -121,7 +153,7 @@ img.account-type {
     height: 32px;
 }
 
-.profile-box {
+.panel-body {
     .avatar-col {
         float: left;
         text-align: center;
@@ -130,6 +162,9 @@ img.account-type {
     .col-right {
         margin-left: 130px;
     }
+}
+
+.profile-box {
     h1, h4 {
         color: $brand-primary;
         font-size: 20px;
@@ -284,25 +319,36 @@ h2, h3, h4, h5, h6 {
     0% { background-color: rgba(yellow, 0.7); }
 }
 
-section.profile-statement {
+section.profile-statement, section.community-sidebar {
+    h1 {
+        font-size: $font-size-h3;
+        margin: $font-size-h3 0 10px;
+    }
+    h2 {
+        font-size: $font-size-h4;
+        margin: $font-size-h4 0 10px;
+    }
+    h3 {
+        font-size: $font-size-medium;
+        margin: $font-size-medium 0 10px;
+    }
+    h4, h5, h6 {
+        font-size: $font-size-base;
+        margin: $font-size-base 0 10px;
+    }
+}
+.profile-statement {
+    font-family: Georgia, Times, "Times New Roman", serif;
     h1, h2, h3, h4 {
         color: #956410;
     }
-    h1 {
-        font-size: 26px;
-        margin: 26px 0 10px;
+}
+section.community-sidebar {
+    h1, h2, h3, h4 {
+        color: #888;
     }
-    h2 {
-        font-size: 20px;
-        margin: 20px 0 10px;
-    }
-    h3 {
-        font-size: 16px;
-        margin: 16px 0 10px;
-    }
-    h4, h5, h6 {
-        font-size: 14px;
-        margin: 14px 0 10px;
+    img {
+        max-width: 100%;
     }
 }
 
@@ -526,28 +572,6 @@ table.team {
     padding: 2px 5px;
 }
 
-section.community-sidebar {
-    h1, h2, h3, h4 {
-        color: #888;
-    }
-    h1 {
-        font-size: 26px;
-        margin: 26px 0 10px;
-    }
-    h2 {
-        font-size: 20px;
-        margin: 20px 0 10px;
-    }
-    h3 {
-        font-size: 16px;
-        margin: 16px 0 10px;
-    }
-    h4, h5, h6 {
-        font-size: 14px;
-        margin: 14px 0 10px;
-    }
-}
-
 p.event {
     margin-bottom: 0.5em;
 }
@@ -590,4 +614,29 @@ span.help-title {
 
 .profile-box-embedded .panel-body {
     min-height: 139px;
+}
+
+
+@media (max-width: $screen-sm-min - 1) {
+    .col-right {
+        clear: both;
+        margin-left: 0 !important;
+    }
+    span.goal.pull-right {
+        display: block;
+        float: none !important;
+    }
+    .join-time {
+        display: none;
+    }
+    .profile-box {
+        text-align: center;
+        .avatar-col {
+            display: inline-block;
+            float: none;
+        }
+        .profile-goal-bar {
+            margin: auto;
+        }
+    }
 }
