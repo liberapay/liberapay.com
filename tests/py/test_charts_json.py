@@ -154,7 +154,7 @@ class TestChartsJson(FakeTransfersHarness):
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]
         assert actual == expected
 
-        Payday.recompute_all_stats()
+        Payday.recompute_stats()
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]
         assert actual == expected
 

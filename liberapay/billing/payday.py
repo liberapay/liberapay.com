@@ -83,7 +83,7 @@ class Payday(object):
 
         self.end()
 
-        self.update_stats(self.id)
+        self.recompute_stats(limit=10)
         self.update_cached_amounts()
 
         self.notify_participants()
@@ -480,6 +480,7 @@ class Payday(object):
                          FROM week_exchanges
                         WHERE amount > 0
                           AND refund_ref IS NULL
+                          AND status = 'succeeded'
                    )
                  , week_deposits_refunded = (
                        SELECT COALESCE(sum(amount), 0)
@@ -502,11 +503,17 @@ class Payday(object):
              WHERE id = %(payday_id)s
 
         """, locals())
-        log("Updated payday stats.")
+        log("Updated stats of payday #%i." % payday_id)
 
     @classmethod
-    def recompute_all_stats(cls):
-        ids = cls.db.all("SELECT id FROM paydays WHERE ts_end > ts_start")
+    def recompute_stats(cls, limit=None):
+        ids = cls.db.all("""
+            SELECT id
+              FROM paydays
+             WHERE ts_end > ts_start
+          ORDER BY id DESC
+             LIMIT %s
+        """, (limit,))
         for payday_id in ids:
             cls.update_stats(payday_id)
 
