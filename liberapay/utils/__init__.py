@@ -169,7 +169,7 @@ def update_global_stats(website):
         SELECT count(*)
           FROM participants
          WHERE status = 'active'
-           AND kind <> 'community';
+           AND kind IN ('individual', 'organization');
     """)
     transfer_volume = website.db.one("""
         SELECT coalesce(sum(amount), 0)

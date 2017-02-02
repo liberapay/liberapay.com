@@ -135,6 +135,9 @@ class TestChartsJson(FakeTransfersHarness):
         assert actual == expected
 
     def test_transfer_volume(self):
+        dana = self.make_participant('dana')
+        dana.close(None)
+
         self.run_payday()
         self.run_payday()
 
@@ -149,7 +152,10 @@ class TestChartsJson(FakeTransfersHarness):
             "xTitle": utcnow().strftime('%Y-%m-%d'),
         }
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]
+        assert actual == expected
 
+        Payday.recompute_stats()
+        actual = json.loads(self.client.GET('/about/charts.json').text)[0]
         assert actual == expected
 
     def test_anonymous_receiver(self):

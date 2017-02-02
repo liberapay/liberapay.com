@@ -81,10 +81,11 @@ class Payday(object):
 
         self.shuffle(log_dir)
 
-        self.update_stats()
+        self.end()
+
+        self.recompute_stats(limit=10)
         self.update_cached_amounts()
 
-        self.end()
         self.notify_participants()
 
         if not keep_log:
@@ -128,43 +129,9 @@ class Payday(object):
                 self.check_balances(cursor)
                 with open(self.transfers_filename, 'wb') as f:
                     pickle.dump(transfers, f)
-                if self.id > 1:
-                    previous_ts_start = self.db.one("""
-                        SELECT ts_start
-                          FROM paydays
-                         WHERE id = %s
-                    """, (self.id - 1,))
-                else:
-                    previous_ts_start = constants.EPOCH
-                assert previous_ts_start
-                ts_start = self.ts_start
                 cursor.run("""
-                    WITH week_exchanges AS (
-                             SELECT e.*
-                               FROM exchanges e
-                              WHERE e.timestamp < %(ts_start)s
-                                AND e.timestamp >= %(previous_ts_start)s
-                                AND status <> 'failed'
-                         )
                     UPDATE paydays
                        SET nparticipants = (SELECT count(*) FROM payday_participants)
-                         , nusers = (
-                               SELECT count(*)
-                                 FROM participants
-                                WHERE kind IN ('individual', 'organization')
-                                  AND join_time < %(ts_start)s
-                                  AND status = 'active'
-                           )
-                         , week_deposits = (
-                               SELECT COALESCE(sum(amount), 0)
-                                 FROM week_exchanges
-                                WHERE amount > 0
-                           )
-                         , week_withdrawals = (
-                               SELECT COALESCE(-sum(amount), 0)
-                                 FROM week_exchanges
-                                WHERE amount < 0
-                           )
                      WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
                 """, locals())
             self.clean_up()
@@ -193,6 +160,7 @@ class Payday(object):
              WHERE join_time < %(ts_start)s
                AND (mangopay_user_id IS NOT NULL OR kind = 'group')
                AND is_suspended IS NOT true
+               AND status = 'active'
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
@@ -426,14 +394,29 @@ class Payday(object):
             DROP FUNCTION resolve_takes(bigint);
         """)
 
-    def update_stats(self):
-        self.db.run("""\
+    @classmethod
+    def update_stats(cls, payday_id):
+        ts_start, ts_end = cls.db.one("""
+            SELECT ts_start, ts_end FROM paydays WHERE id = %s
+        """, (payday_id,))
+        if payday_id > 1:
+            previous_ts_start = cls.db.one("""
+                SELECT ts_start
+                  FROM paydays
+                 WHERE id = %s
+            """, (payday_id - 1,))
+        else:
+            previous_ts_start = constants.EPOCH
+        assert previous_ts_start
+        cls.db.run("""\
 
             WITH our_transfers AS (
                      SELECT *
                        FROM transfers
                       WHERE "timestamp" >= %(ts_start)s
+                        AND "timestamp" <= %(ts_end)s
                         AND status = 'succeeded'
+                        AND context <> 'refund'
                  )
                , our_tips AS (
                      SELECT *
@@ -444,6 +427,18 @@ class Payday(object):
                      SELECT *
                        FROM our_transfers
                       WHERE context = 'take'
+                 )
+               , week_exchanges AS (
+                     SELECT e.*
+                          , ( EXISTS (
+                                SELECT e2.id
+                                  FROM exchanges e2
+                                 WHERE e2.refund_ref = e.id
+                            )) AS refunded
+                       FROM exchanges e
+                      WHERE e.timestamp < %(ts_start)s
+                        AND e.timestamp >= %(previous_ts_start)s
+                        AND status <> 'failed'
                  )
             UPDATE paydays
                SET nactive = (
@@ -460,10 +455,67 @@ class Payday(object):
                  , take_volume = (SELECT COALESCE(sum(amount), 0) FROM our_takes)
                  , ntransfers = (SELECT count(*) FROM our_transfers)
                  , transfer_volume = (SELECT COALESCE(sum(amount), 0) FROM our_transfers)
-             WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
+                 , transfer_volume_refunded = (
+                       SELECT COALESCE(sum(amount), 0)
+                         FROM our_transfers
+                        WHERE refund_ref IS NOT NULL
+                   )
+                 , nusers = (
+                       SELECT count(*)
+                         FROM participants p
+                        WHERE p.kind IN ('individual', 'organization')
+                          AND p.join_time < %(ts_start)s
+                          AND COALESCE((
+                                SELECT payload::text
+                                  FROM events e
+                                 WHERE e.participant = p.id
+                                   AND e.type = 'set_status'
+                                   AND e.ts < %(ts_start)s
+                              ORDER BY ts DESC
+                                 LIMIT 1
+                              ), '') <> '"closed"'
+                   )
+                 , week_deposits = (
+                       SELECT COALESCE(sum(amount), 0)
+                         FROM week_exchanges
+                        WHERE amount > 0
+                          AND refund_ref IS NULL
+                          AND status = 'succeeded'
+                   )
+                 , week_deposits_refunded = (
+                       SELECT COALESCE(sum(amount), 0)
+                         FROM week_exchanges
+                        WHERE amount > 0
+                          AND refunded
+                   )
+                 , week_withdrawals = (
+                       SELECT COALESCE(-sum(amount), 0)
+                         FROM week_exchanges
+                        WHERE amount < 0
+                          AND refund_ref IS NULL
+                   )
+                 , week_withdrawals_refunded = (
+                       SELECT COALESCE(sum(amount), 0)
+                         FROM week_exchanges
+                        WHERE amount < 0
+                          AND refunded
+                   )
+             WHERE id = %(payday_id)s
 
-        """, {'ts_start': self.ts_start})
-        log("Updated payday stats.")
+        """, locals())
+        log("Updated stats of payday #%i." % payday_id)
+
+    @classmethod
+    def recompute_stats(cls, limit=None):
+        ids = cls.db.all("""
+            SELECT id
+              FROM paydays
+             WHERE ts_end > ts_start
+          ORDER BY id DESC
+             LIMIT %s
+        """, (limit,))
+        for payday_id in ids:
+            cls.update_stats(payday_id)
 
     def update_cached_amounts(self):
         now = pando.utils.utcnow()
