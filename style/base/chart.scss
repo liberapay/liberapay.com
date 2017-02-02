@@ -20,29 +20,29 @@
         width: 100%;
     }
     .bar span, .x-axis {
-        font: normal 7pt/7pt "Lucida Mono", Monaco, monospace;
+        font: normal 14px/14px $font-family-monospace;
     }
     .bar span.x-tick {
         position: absolute;
-        bottom: -12pt;
+        bottom: -17px;
         right: 0;
-        padding: 5pt 0.5pt 0 0;
-        border: 1pt solid $chart-numbers-color;
+        padding: 3px 1px 0 0;
+        border: 1px solid $chart-numbers-color;
         border-style: none solid none none;
         color: $chart-numbers-color;
         background: white;
     }
     .bar span.y-label {     // This is the flag.
         position: absolute;
-        top: -17pt;
+        top: -23px;
         right: 0;
         z-index: 1;         // Wants to be over the bars.
         text-align: center;
         background: white;
         color: $chart-numbers-color;
-        border: 2pt solid $chart-numbers-color;
-        border-radius: 3pt 0 0 3pt;
-        padding: 2pt 3pt;
+        border: 2px solid $chart-numbers-color;
+        border-radius: 4px 0 0 4px;
+        padding: 2px 3px;
     }
     .bar:not(.flagged):not(.max):not(:hover) span {
         display: none;
