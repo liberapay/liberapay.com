@@ -21,7 +21,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '26'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '27'::jsonb);
 
 
 -- app configuration
@@ -212,6 +212,9 @@ CREATE TABLE paydays
 , nusers                bigint           NOT NULL DEFAULT 0
 , week_deposits         numeric(35,2)    NOT NULL DEFAULT 0
 , week_withdrawals      numeric(35,2)    NOT NULL DEFAULT 0
+, transfer_volume_refunded   numeric(35,2)
+, week_deposits_refunded     numeric(35,2)
+, week_withdrawals_refunded  numeric(35,2)
  );
 
 

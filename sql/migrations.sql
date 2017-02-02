@@ -226,4 +226,9 @@ AS $$
 $$ LANGUAGE SQL;
 CREATE CAST (elsewhere AS elsewhere_with_participant)
     WITH FUNCTION load_participant_for_elsewhere(elsewhere);
-UPDATE db_meta SET value = '26'::jsonb WHERE key = 'schema_version';
+
+-- migration #27
+ALTER TABLE paydays
+    ADD COLUMN transfer_volume_refunded numeric(35,2),
+    ADD COLUMN week_deposits_refunded numeric(35,2),
+    ADD COLUMN week_withdrawals_refunded numeric(35,2);
