@@ -504,6 +504,12 @@ class Payday(object):
         """, locals())
         log("Updated payday stats.")
 
+    @classmethod
+    def recompute_all_stats(cls):
+        ids = cls.db.all("SELECT id FROM paydays WHERE ts_end > ts_start")
+        for payday_id in ids:
+            cls.update_stats(payday_id)
+
     def update_cached_amounts(self):
         now = pando.utils.utcnow()
         with self.db.get_cursor() as cursor:

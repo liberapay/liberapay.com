@@ -152,7 +152,10 @@ class TestChartsJson(FakeTransfersHarness):
             "xTitle": utcnow().strftime('%Y-%m-%d'),
         }
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]
+        assert actual == expected
 
+        Payday.recompute_all_stats()
+        actual = json.loads(self.client.GET('/about/charts.json').text)[0]
         assert actual == expected
 
     def test_anonymous_receiver(self):
