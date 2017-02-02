@@ -468,11 +468,13 @@ class Payday(object):
                        SELECT COALESCE(sum(amount), 0)
                          FROM week_exchanges
                         WHERE amount > 0
+                          AND refund_ref IS NULL
                    )
                  , week_withdrawals = (
                        SELECT COALESCE(-sum(amount), 0)
                          FROM week_exchanges
                         WHERE amount < 0
+                          AND refund_ref IS NULL
                    )
              WHERE id = %(payday_id)s
 
