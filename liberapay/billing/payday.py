@@ -455,6 +455,11 @@ class Payday(object):
                  , take_volume = (SELECT COALESCE(sum(amount), 0) FROM our_takes)
                  , ntransfers = (SELECT count(*) FROM our_transfers)
                  , transfer_volume = (SELECT COALESCE(sum(amount), 0) FROM our_transfers)
+                 , transfer_volume_refunded = (
+                       SELECT COALESCE(sum(amount), 0)
+                         FROM our_transfers
+                        WHERE refund_ref IS NOT NULL
+                   )
                  , nusers = (
                        SELECT count(*)
                          FROM participants p
