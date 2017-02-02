@@ -416,6 +416,7 @@ class Payday(object):
                       WHERE "timestamp" >= %(ts_start)s
                         AND "timestamp" <= %(ts_end)s
                         AND status = 'succeeded'
+                        AND context <> 'refund'
                  )
                , our_tips AS (
                      SELECT *
