@@ -429,6 +429,11 @@ class Payday(object):
                  )
                , week_exchanges AS (
                      SELECT e.*
+                          , ( EXISTS (
+                                SELECT e2.id
+                                  FROM exchanges e2
+                                 WHERE e2.refund_ref = e.id
+                            )) AS refunded
                        FROM exchanges e
                       WHERE e.timestamp < %(ts_start)s
                         AND e.timestamp >= %(previous_ts_start)s
@@ -470,11 +475,23 @@ class Payday(object):
                         WHERE amount > 0
                           AND refund_ref IS NULL
                    )
+                 , week_deposits_refunded = (
+                       SELECT COALESCE(sum(amount), 0)
+                         FROM week_exchanges
+                        WHERE amount > 0
+                          AND refunded
+                   )
                  , week_withdrawals = (
                        SELECT COALESCE(-sum(amount), 0)
                          FROM week_exchanges
                         WHERE amount < 0
                           AND refund_ref IS NULL
+                   )
+                 , week_withdrawals_refunded = (
+                       SELECT COALESCE(sum(amount), 0)
+                         FROM week_exchanges
+                        WHERE amount < 0
+                          AND refunded
                    )
              WHERE id = %(payday_id)s
 
