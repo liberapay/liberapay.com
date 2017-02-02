@@ -160,6 +160,7 @@ class Payday(object):
              WHERE join_time < %(ts_start)s
                AND (mangopay_user_id IS NOT NULL OR kind = 'group')
                AND is_suspended IS NOT true
+               AND status = 'active'
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
@@ -450,10 +451,18 @@ class Payday(object):
                  , transfer_volume = (SELECT COALESCE(sum(amount), 0) FROM our_transfers)
                  , nusers = (
                        SELECT count(*)
-                         FROM participants
-                        WHERE kind IN ('individual', 'organization')
-                          AND join_time < %(ts_start)s
-                          AND status = 'active'
+                         FROM participants p
+                        WHERE p.kind IN ('individual', 'organization')
+                          AND p.join_time < %(ts_start)s
+                          AND COALESCE((
+                                SELECT payload::text
+                                  FROM events e
+                                 WHERE e.participant = p.id
+                                   AND e.type = 'set_status'
+                                   AND e.ts < %(ts_start)s
+                              ORDER BY ts DESC
+                                 LIMIT 1
+                              ), '') <> '"closed"'
                    )
                  , week_deposits = (
                        SELECT COALESCE(sum(amount), 0)

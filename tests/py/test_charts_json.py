@@ -135,6 +135,9 @@ class TestChartsJson(FakeTransfersHarness):
         assert actual == expected
 
     def test_transfer_volume(self):
+        dana = self.make_participant('dana')
+        dana.close(None)
+
         self.run_payday()
         self.run_payday()
 
