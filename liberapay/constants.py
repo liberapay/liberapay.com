@@ -114,6 +114,10 @@ PERIOD_CONVERSION_RATES = {
     'yearly': Decimal(1) / Decimal(52),
 }
 
+POSTAL_ADDRESS_KEYS = (
+    'AddressLine1', 'AddressLine2', 'City', 'Region', 'PostalCode', 'Country'
+)
+
 PRIVACY_FIELDS = OrderedDict([
     ('hide_giving', _("Hide total giving from others.")),
     ('hide_receiving', _("Hide total receiving from others.")),

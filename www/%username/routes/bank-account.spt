@@ -23,13 +23,8 @@ body = request.body
 ba = BankAccount()
 ba.OwnerName = body.pop('OwnerName')
 addr = Address()
-for key in list(body):
-    if not key.startswith('OwnerAddress.'):
-        continue
-    k = key[13:]
-    if not k[:1].isupper():
-        continue
-    setattr(addr, k, body.pop(key))
+for k in constants.POSTAL_ADDRESS_KEYS:
+    setattr(addr, k, body.pop('OwnerAddress.' + k))
 ba.OwnerAddress = addr
 
 ba_type = body.pop('Type')

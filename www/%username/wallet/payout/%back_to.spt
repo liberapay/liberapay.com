@@ -288,41 +288,8 @@ title = _("Withdraw money")
             <input name="OwnerName" class="form-control" required />
         </label><br>
 
-        <label>
-            <span>{{ _("Address") }}</span>
-            <input name="OwnerAddress.AddressLine1" class="form-control" required />
-        </label><br>
-
-        <label>
-            <span>{{ _("Address (second line)") }}</span>
-            <input name="OwnerAddress.AddressLine2" class="form-control" />
-        </label><br>
-
-        <label>
-            <span>{{ _("City") }}</span>
-            <input name="OwnerAddress.City" class="form-control" required />
-        </label><br>
-
-        <label>
-            <span>{{ _("Region") }}</span>
-            <input name="OwnerAddress.Region" class="form-control" />
-        </label><br>
-
-        <label>
-            <span>{{ _("Postal Code") }}</span>
-            <input name="OwnerAddress.PostalCode" class="form-control" required
-                   size=6 pattern="[a-zA-Z0-9]+" title="{{ _('Alphanumeric (with no spaces)') }}" />
-        </label><br>
-
-        <label>
-            <span>{{ _("Country") }}</span>
-            <select name="OwnerAddress.Country" class="form-control" required>
-            <option></option>
-            % for each in locale.countries.items()
-                <option value="{{ each[0] }}">{{ each[1] }}</option>
-            % endfor
-            </select>
-        </label><br>
+        % from "templates/postal-addresses.html" import postal_address_form with context
+        {{ postal_address_form(prefix='Owner') }}
 
     </fieldset>
 
