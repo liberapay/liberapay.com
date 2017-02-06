@@ -22,7 +22,7 @@ env: requirements*.txt
 	$(python) -m ensurepip $(install_where) || $(MAKE) --no-print-directory _warning
 	$(python) -m $(pip) install $(install_where) "virtualenv>=15.0.0"
 	$(python) -m virtualenv --no-download ./env/
-	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements*.txt; do echo "-r $$f"; done)
+	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements{,_*}.txt; do echo "-r $$f"; done)
 	@touch env
 
 rehash-requirements:
