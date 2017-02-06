@@ -25,6 +25,11 @@ env: requirements*.txt
 	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements*.txt; do echo "-r $$f"; done)
 	@touch env
 
+rehash-requirements:
+	for f in requirements*.txt; do \
+	    sed -r -e '/^ +--hash/d' -e 's/\\$$//' $$f | xargs ./env/bin/hashin -r $$f -p 2.7 -p 3.6; \
+	done
+
 clean:
 	rm -rf env *.egg *.egg-info
 	find . -name \*.pyc -delete
