@@ -1,6 +1,10 @@
 language: python
-python:
-  - 3.5
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=py27
+    - python: 3.6
+      env: TOXENV=py36
 addons:
   postgresql: 9.4
 branches:
