@@ -128,6 +128,14 @@ you can also use the following commands:
 
 We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to modify that part of the code you'll need the [MangoPay API documentation](https://docs.mangopay.com/api-references/).
 
+### Modifying python dependencies
+
+We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_install/#hash-checking-mode) to protect ourselves from dependency tampering. Thus when adding or upgrading a dependency the new hashes need to computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
+
+    pip install hashin
+    hashin package==x.y -r requirements.txt
+    # note: we have several requirements files, use the right one
+
 ### Deploying the app
 
 Liberapay is currently hosted on the legacy 2.x version of [OpenShift Online](https://openshift.com/) (not the new v3 based on Docker). The user documentation is on [developers.openshift.com][OS-dev]. We need to migrate either to v3 or to something else soon (want to help? see [#177](https://github.com/liberapay/liberapay.com/issues/177)).
