@@ -1,0 +1,7 @@
+#!/bin/bash -eu
+
+echo "Installing dependencies..."
+# We do this ourselves because we want --require-hashes
+cd $OPENSHIFT_REPO_DIR
+pip install --require-hashes -r requirements.txt -r requirements_prod.txt
+rm requirements.txt requirements_*.txt
