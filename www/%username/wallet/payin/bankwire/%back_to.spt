@@ -3,9 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D, InvalidOperation
 
+from mangopay.resources import BankWirePayIn
 from pando import json
 
-from liberapay.billing import mangoapi
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
 from liberapay.constants import EVENTS
 from liberapay.utils import b64decode_s, get_participant
@@ -21,7 +21,7 @@ def get_exchange_payin(participant, request):
     if not exchange:
         raise response.error(403)
     if 'payin_id' in request.qs:
-        payin = mangoapi.payIns.Get(request.qs['payin_id'])
+        payin = BankWirePayIn.get(request.qs['payin_id'])
         if payin.Tag != str(exchange.id):
             raise response.error(403)
     else:
@@ -121,7 +121,6 @@ title = _("Add money")
 
     % elif payin
 
-        % set pd = payin.PaymentDetails
         <p>{{ _(
             "We are ready to receive the funds. Please send exactly {0} to the "
             "following account using the reference code below so we'll know the "
@@ -130,19 +129,19 @@ title = _("Add money")
         ) }}</p>
         <dl>
             <dt>{{ _("IBAN (International Bank Account Number)") }}</dt>
-            <dd>{{ pd.BankAccount.Details.IBAN }}</dd>
+            <dd>{{ payin.BankAccount.IBAN }}</dd>
             <dt>{{ _("BIC (Bank Identifier Code)") }}</dt>
-            <dd>{{ pd.BankAccount.Details.BIC }}</dd>
+            <dd>{{ payin.BankAccount.BIC }}</dd>
             <dt>{{ _("Wire Reference Code") }}</dt>
-            <dd>{{ pd.WireReference }}</dd>
+            <dd>{{ payin.WireReference }}</dd>
             <br>
             <dt>{{ _("Bank Account Owner Name") }}</dt>
-            <dd>{{ pd.BankAccount.OwnerName }}</dd>
+            <dd>{{ payin.BankAccount.OwnerName }}</dd>
             <dt>{{ _("Bank Account Owner Address") }}</dt>
-            <dd>{{ pd.BankAccount.OwnerAddress.AddressLine1 }},
-                {{ pd.BankAccount.OwnerAddress.PostalCode }}
-                {{ pd.BankAccount.OwnerAddress.City }},
-                {{ pd.BankAccount.OwnerAddress.Country }}</dd>
+            <dd>{{ payin.BankAccount.OwnerAddress.AddressLine1 }},
+                {{ payin.BankAccount.OwnerAddress.PostalCode }}
+                {{ payin.BankAccount.OwnerAddress.City }},
+                {{ payin.BankAccount.OwnerAddress.Country }}</dd>
         </dl>
 
         <form action="" class="js-submit" method="POST">

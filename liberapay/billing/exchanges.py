@@ -4,20 +4,14 @@ from __future__ import division, print_function, unicode_literals
 
 from decimal import Decimal, ROUND_UP
 
-from mangopaysdk.entities.payin import PayIn
-from mangopaysdk.entities.payout import PayOut
-from mangopaysdk.entities.transfer import Transfer
-from mangopaysdk.entities.wallet import Wallet
-from mangopaysdk.types.exceptions.responseexception import ResponseException
-from mangopaysdk.types.money import Money
+from mangopay.exceptions import APIError
+from mangopay.resources import (
+    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, Transaction,
+    Transfer, Wallet,
+)
+from mangopay.utils import Money
 from pando.utils import typecheck
 
-from liberapay.billing import (
-    mangoapi,
-    PayInExecutionDetailsDirect,
-    PayInPaymentDetailsCard, PayInPaymentDetailsBankWire,
-    PayOutPaymentDetailsBankWire,
-)
 from liberapay.constants import (
     D_CENT, D_ZERO,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
@@ -36,7 +30,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 
 
 Money.__eq__ = lambda a, b: isinstance(b, Money) and a.__dict__ == b.__dict__
-Money.__repr__ = lambda m: '<Money Amount=%(Amount)r Currency=%(Currency)r>' % m.__dict__
+Money.__repr__ = lambda m: '<Money Amount=%(amount)r Currency=%(currency)r>' % m.__dict__
 
 
 QUARANTINE = '%s days' % QUARANTINE.days
@@ -93,12 +87,12 @@ def skim_credit(amount, ba):
     """
     typecheck(amount, Decimal)
     if ba.Type == 'IBAN':
-        country = ba.Details.IBAN[:2].upper()
+        country = ba.IBAN[:2].upper()
     elif ba.Type in ('US', 'GB', 'CA'):
         country = ba.Type
     else:
         assert ba.Type == 'OTHER', ba.Type
-        country = ba.Details.Country.upper()
+        country = ba.Country.upper()
     if country in SEPA_ZONE:
         fee = FEE_PAYOUT
     else:
@@ -117,18 +111,18 @@ def repr_error(o):
 
 
 def repr_exception(e):
-    if isinstance(e, ResponseException):
-        return '%s %s' % (e.Code, e.Message)
+    if isinstance(e, APIError):
+        return '%s %s' % (e.code, e.args[0])
     else:
         return repr(e)
 
 
 def create_wallet(db, participant):
     w = Wallet()
-    w.Owners.append(participant.mangopay_user_id)
+    w.Owners = [participant.mangopay_user_id]
     w.Description = str(participant.id)
     w.Currency = 'EUR'
-    w = mangoapi.wallets.Create(w)
+    w.save()
     db.run("""
         UPDATE participants
            SET mangopay_wallet_id = %s
@@ -154,7 +148,7 @@ def payout(db, participant, amount, ignore_high_fee=False):
 
     route = ExchangeRoute.from_network(participant, 'mango-ba')
     assert route
-    ba = mangoapi.users.GetBankAccount(participant.mangopay_user_id, route.address)
+    ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
 
     # Do final calculations
     credit_amount, fee, vat = skim_credit(amount, ba)
@@ -166,19 +160,17 @@ def payout(db, participant, amount, ignore_high_fee=False):
 
     # Try to dance with MangoPay
     e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre')
-    payout = PayOut()
+    payout = BankWirePayOut()
     payout.AuthorId = participant.mangopay_user_id
     payout.DebitedFunds = Money(int(amount * 100), 'EUR')
     payout.DebitedWalletId = participant.mangopay_wallet_id
     payout.Fees = Money(int(fee * 100), 'EUR')
-    payout.MeanOfPaymentDetails = PayOutPaymentDetailsBankWire(
-        BankAccountId=route.address,
-        BankWireRef=str(e_id),
-    )
+    payout.BankAccountId = route.address
+    payout.BankWireRef = str(e_id)
     payout.Tag = str(e_id)
     try:
         test_hook()
-        payout = mangoapi.payOuts.Create(payout)
+        payout.save()
         return record_exchange_result(db, e_id, payout.Status.lower(), repr_error(payout), participant)
     except Exception as e:
         error = repr_exception(e)
@@ -201,28 +193,25 @@ def charge(db, participant, amount, return_url):
     amount = charge_amount - fee
 
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
-    payin = PayIn()
+    payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
     if not participant.mangopay_wallet_id:
         create_wallet(db, participant)
     payin.CreditedWalletId = participant.mangopay_wallet_id
     payin.DebitedFunds = Money(int(charge_amount * 100), 'EUR')
-    payin.ExecutionDetails = PayInExecutionDetailsDirect(
-        CardId=route.address,
-        SecureModeReturnURL=return_url,
-    )
+    payin.CardId = route.address
+    payin.SecureModeReturnURL = return_url
     payin.Fees = Money(int(fee * 100), 'EUR')
-    payin.PaymentDetails = PayInPaymentDetailsCard(CardType='CB_VISA_MASTERCARD')
     payin.Tag = str(e_id)
     try:
         test_hook()
-        payin = mangoapi.payIns.Create(payin)
+        payin.save()
     except Exception as e:
         error = repr_exception(e)
         return record_exchange_result(db, e_id, 'failed', error, participant)
 
-    if payin.ExecutionDetails.SecureModeRedirectURL:
-        raise Redirect(payin.ExecutionDetails.SecureModeRedirectURL)
+    if payin.SecureModeRedirectURL:
+        raise Redirect(payin.SecureModeRedirectURL)
 
     return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
 
@@ -241,20 +230,17 @@ def payin_bank_wire(db, participant, debit_amount):
     amount, fee, vat = skim_bank_wire(debit_amount)
 
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
-    payin = PayIn()
+    payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
     if not participant.mangopay_wallet_id:
         create_wallet(db, participant)
     payin.CreditedWalletId = participant.mangopay_wallet_id
-    payin.ExecutionDetails = PayInExecutionDetailsDirect()
-    payin.PaymentDetails = PayInPaymentDetailsBankWire(
-        DeclaredDebitedFunds=Money(int(debit_amount * 100), 'EUR'),
-        DeclaredFees=Money(int(fee * 100), 'EUR'),
-    )
+    payin.DeclaredDebitedFunds = Money(int(debit_amount * 100), 'EUR')
+    payin.DeclaredFees = Money(int(fee * 100), 'EUR')
     payin.Tag = str(e_id)
     try:
         test_hook()
-        payin = mangoapi.payIns.Create(payin)
+        payin.save()
     except Exception as e:
         error = repr_exception(e)
         return None, record_exchange_result(db, e_id, 'failed', error, participant)
@@ -264,7 +250,7 @@ def payin_bank_wire(db, participant, debit_amount):
 
 
 def record_payout_refund(db, payout_refund):
-    orig_payout = mangoapi.payOuts.Get(payout_refund.InitialTransactionId)
+    orig_payout = BankWirePayOut.get(payout_refund.InitialTransactionId)
     e_origin = db.one("SELECT * FROM exchanges WHERE id = %s" % (orig_payout.Tag,))
     e_refund_id = db.one("SELECT id FROM exchanges WHERE refund_ref = %s", (e_origin.id,))
     if e_refund_id:
@@ -440,14 +426,14 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr = Transfer()
     tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
     tr.CreditedUserId = kw.get('tippee_mango_id') or get(tippee, 'mangopay_user_id')
-    tr.CreditedWalletID = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
-    if not tr.CreditedWalletID:
-        tr.CreditedWalletID = create_wallet(db, Participant.from_id(tippee))
+    tr.CreditedWalletId = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
+    if not tr.CreditedWalletId:
+        tr.CreditedWalletId = create_wallet(db, Participant.from_id(tippee))
     tr.DebitedFunds = Money(int(amount * 100), 'EUR')
-    tr.DebitedWalletID = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
+    tr.DebitedWalletId = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
-    tr = mangoapi.transfers.Create(tr)
+    tr.save()
     return record_transfer_result(db, t_id, tr)
 
 
@@ -559,7 +545,7 @@ def sync_with_mangopay(db):
     exchanges = db.all("SELECT * FROM exchanges WHERE status = 'pre'")
     for e in exchanges:
         p = Participant.from_id(e.participant)
-        transactions = mangoapi.users.GetTransactions(p.mangopay_user_id)
+        transactions = Transaction.all(user_id=p.mangopay_user_id)
         transactions = [x for x in transactions if x.Tag == str(e.id)]
         assert len(transactions) < 2
         if transactions:
@@ -580,7 +566,7 @@ def sync_with_mangopay(db):
     transfers = db.all("SELECT * FROM transfers WHERE status = 'pre'")
     for t in transfers:
         tipper = Participant.from_id(t.tipper)
-        transactions = mangoapi.wallets.GetTransactions(tipper.mangopay_wallet_id)
+        transactions = Transaction.all(user_id=tipper.mangopay_user_id)
         transactions = [x for x in transactions if x.Type == 'TRANSFER' and x.Tag == str(t.id)]
         assert len(transactions) < 2
         if transactions:

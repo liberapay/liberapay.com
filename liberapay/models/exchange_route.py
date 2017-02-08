@@ -1,8 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from mangopay.resources import Card
 from postgres.orm import Model
-
-from liberapay.billing import mangoapi
 
 
 class ExchangeRoute(Model):
@@ -63,10 +62,10 @@ class ExchangeRoute(Model):
 
     def invalidate(self, obj=None):
         if self.network == 'mango-cc':
-            card = obj or mangoapi.cards.Get(self.address)
+            card = obj or Card.get(self.address)
             if card.Active:
-                card.Active = 'false'
-                card = mangoapi.cards.Update(card)
+                card.Active = False
+                card.save()
                 assert card.Active is False, card.Active
         self.update_error('invalidated')
 

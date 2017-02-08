@@ -1,10 +1,9 @@
 from datetime import datetime
 
-from mangopaysdk.entities.userlegal import UserLegal
-from mangopaysdk.entities.usernatural import UserNatural
+from mangopay.resources import LegalUser, NaturalUser
+from mangopay.utils import Address
 
-from liberapay.billing import mangoapi
-from liberapay.billing.exchanges import repr_exception, ResponseException
+from liberapay.billing.exchanges import repr_exception, APIError
 from liberapay.utils import get_participant
 
 EPOCH = datetime(1970, 1, 1)
@@ -25,11 +24,11 @@ if request.method == 'POST':
     body = request.body
 
     if participant.kind == 'individual':
-        account = participant.get_mangopay_account() or UserNatural()
+        account = participant.get_mangopay_account() or NaturalUser()
         p = ''
         keys = KEYS_NATURAL
     else:
-        account = participant.get_mangopay_account() or UserLegal()
+        account = participant.get_mangopay_account() or LegalUser()
         p = 'LegalRepresentative'
         keys = KEYS_LEGAL
 
@@ -60,13 +59,13 @@ if request.method == 'POST':
     if not error:
         try:
             if account.Id:
-                for k, v in list(account.__dict__.items()):
-                    if k.endswith('Address') and not getattr(v, 'Country', None):
+                for k, v in list(account.get_field_dict().items()):
+                    if isinstance(v, Address) and not getattr(v, 'country', None):
                         setattr(account, k, None)
-                account = mangoapi.users.Update(account)
+                account.save()
                 success = _("Your identity information has been updated.")
             elif body.get('terms') == 'agree':
-                account = mangoapi.users.Create(account)
+                account.save()
                 id = website.db.one("""
                     UPDATE participants
                        SET mangopay_user_id = %s
@@ -80,7 +79,7 @@ if request.method == 'POST':
                 success = _("Your identity information has been registered.")
             else:
                 error = _("You have to agree to MangoPay's Terms of Service.")
-        except ResponseException as err:
+        except APIError as err:
             error = repr_exception(err)
             website.tell_sentry(err, state)
 

@@ -12,13 +12,13 @@ from six.moves.urllib.parse import quote, urlencode
 
 import aspen_jinja2_renderer
 from html2text import html2text
+import mangopay
 from markupsafe import escape as htmlescape
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 from psycopg2.extras import Json
 
-from liberapay.billing import mangoapi
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
     DONATION_WEEKLY_MAX, DONATION_WEEKLY_MIN, EMAIL_RE,
@@ -1533,7 +1533,7 @@ class Participant(Model, MixinTeam):
         """
         if not self.mangopay_user_id:
             return
-        return mangoapi.users.Get(self.mangopay_user_id)
+        return mangopay.resources.User.get(self.mangopay_user_id)
 
 
     def take_over(self, account, have_confirmation=False):

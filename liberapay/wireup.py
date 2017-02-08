@@ -216,13 +216,10 @@ def mail(app_conf, project_root='.'):
 def billing(app_conf):
     if not app_conf:
         return
-    from mangopaysdk.configuration import Configuration
-    Configuration.BaseUrl = app_conf.mangopay_base_url
-    Configuration.ClientID = app_conf.mangopay_client_id
-    Configuration.ClientPassword = app_conf.mangopay_client_password
-    Configuration.SSLVerification = True
-    import requests
-    Configuration.Session = requests.Session()
+    import mangopay
+    mangopay.api_url = app_conf.mangopay_base_url
+    mangopay.client_id = app_conf.mangopay_client_id
+    mangopay.passphrase = app_conf.mangopay_client_password
 
 
 def username_restrictions(www_root):

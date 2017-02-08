@@ -1,15 +1,11 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from mangopaysdk.entities.bankaccount import BankAccount
-from mangopaysdk.entities.cardregistration import CardRegistration
-from mangopaysdk.entities.usernatural import UserNatural
-from mangopaysdk.entities.wallet import Wallet
-from mangopaysdk.types.address import Address
-from mangopaysdk.types.bankaccountdetailsiban import BankAccountDetailsIBAN
+from mangopay.resources import (
+    BankAccount, CardRegistration, NaturalUser, Wallet,
+)
 import mock
 import requests
 
-from liberapay.billing import mangoapi
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import Harness
 from liberapay.testing.vcr import use_cassette
@@ -40,14 +36,13 @@ def fake_transfer(tr):
     tr.ErrorCoce = '000000'
     tr.ErrorMessage = None
     tr.Id = -1
-    return tr
 
 
 class FakeTransfersHarness(Harness):
 
     def setUp(self):
         super(FakeTransfersHarness, self).setUp()
-        self.transfer_patch = mock.patch('mangopaysdk.tools.apitransfers.ApiTransfers.Create')
+        self.transfer_patch = mock.patch('mangopay.resources.Transfer.save', autospec=True)
         _mock = self.transfer_patch.__enter__()
         _mock.side_effect = fake_transfer
         self.transfer_mock = _mock
@@ -58,22 +53,24 @@ class FakeTransfersHarness(Harness):
 
 
 def make_mangopay_account(FirstName):
-    account = UserNatural()
+    account = NaturalUser()
     account.FirstName = FirstName
     account.LastName = 'Foobar'
     account.CountryOfResidence = 'BE'
     account.Nationality = 'BE'
     account.Birthday = 0
     account.Email = 'nobody@example.net'
-    return mangoapi.users.Create(account).Id
+    account.save()
+    return account.Id
 
 
 def make_wallet(mangopay_user_id):
     w = Wallet()
-    w.Owners.append(mangopay_user_id)
+    w.Owners = [mangopay_user_id]
     w.Description = 'test wallet'
     w.Currency = 'EUR'
-    return mangoapi.wallets.Create(w)
+    w.save()
+    return w
 
 
 with use_cassette('MangopayHarness'):
@@ -88,7 +85,7 @@ with use_cassette('MangopayHarness'):
     cr.UserId = cls.janet_id
     cr.Currency = 'EUR'
     cr.CardType = 'CB_VISA_MASTERCARD'
-    cr = mangoapi.cardRegistrations.Create(cr)
+    cr.save()
     data = dict(
         accessKeyRef=cr.AccessKey,
         cardNumber='3569990000000132',
@@ -97,25 +94,25 @@ with use_cassette('MangopayHarness'):
         data=cr.PreregistrationData,
     )
     cr.RegistrationData = requests.post(cr.CardRegistrationURL, data).text
-    cr = mangoapi.cardRegistrations.Update(cr)
+    cr.save()
     cls.card_id = cr.CardId
     del cr, data
 
     cls.homer_id = make_mangopay_account('Homer')
     cls.homer_wallet_id = make_wallet(cls.homer_id).Id
-    ba = BankAccount()
+    ba = BankAccount(user_id=cls.homer_id, type='IBAN')
     ba.OwnerName = 'Homer Jay'
-    addr = ba.OwnerAddress = Address()
-    addr.AddressLine1 = 'Somewhere'
-    addr.City = 'The City of Light'
-    addr.PostalCode = '75001'
-    addr.Country = 'FR'
-    ba.Details = BankAccountDetailsIBAN()
-    ba.Details.IBAN = 'FR1420041010050500013M02606'
-    cls.bank_account = mangoapi.users.CreateBankAccount(cls.homer_id, ba)
+    ba.OwnerAddress = {
+        'AddressLine1': 'Somewhere',
+        'City': 'The City of Light',
+        'PostalCode': '75001',
+        'Country': 'FR',
+    }
+    ba.IBAN = 'FR1420041010050500013M02606'
+    ba.save()
+    cls.bank_account = ba
 
     ba = BankAccount()
     ba.Type = 'IBAN'
-    ba.Details = BankAccountDetailsIBAN()
-    ba.Details.IBAN = 'IR861234568790123456789012'
+    ba.IBAN = 'IR861234568790123456789012'
     cls.bank_account_outside_sepa = ba

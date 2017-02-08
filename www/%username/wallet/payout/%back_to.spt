@@ -4,7 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import datetime
 from decimal import Decimal as D
 
-from liberapay.billing import mangoapi
+from mangopay.resources import BankAccount
+
 from liberapay.billing.exchanges import payout
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
@@ -17,7 +18,7 @@ def obfuscate(n, x, y):
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 exchange = None
-bank_account, ba_details, ba_type = None, None, 'IBAN'
+bank_account, ba_type = None, 'IBAN'
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 
@@ -54,10 +55,9 @@ if show_form or not success:
 if show_form:
     route = ExchangeRoute.from_network(participant, 'mango-ba')
     if route:
-        bank_account = mangoapi.users.GetBankAccount(
-            participant.mangopay_user_id, route.address
+        bank_account = BankAccount.get(
+            route.address, user_id=participant.mangopay_user_id
         )
-        ba_details = bank_account.Details
         ba_type = bank_account.Type
     donations = participant.get_giving_for_profile()[1]
     recommended_withdrawal = min(
@@ -136,23 +136,23 @@ title = _("Withdraw money")
     <div>
         <p>
         % if ba_type == 'IBAN'
-            {{ _("IBAN") }}: {{ obfuscate(ba_details.IBAN, 2, -4) }}
+            {{ _("IBAN") }}: {{ obfuscate(bank_account.IBAN, 2, -4) }}
         % elif ba_type == 'US'
-            {{ _("Routing Number") }}: {{ ba_details.ABA }}<br>
-            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}<br>
-            {{ _("Bank Account Type") }}: {{ ba_details.DepositAccountType.lower() }}
+            {{ _("Routing Number") }}: {{ bank_account.ABA }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(bank_account.AccountNumber, 0, -3) }}<br>
+            {{ _("Bank Account Type") }}: {{ bank_account.DepositAccountType.lower() }}
         % elif ba_type == 'CA'
-            {{ _("Bank Name") }}: {{ ba_details.BankName }}<br>
-            {{ _("Institution Number") }}: {{ ba_details.InstitutionNumber }}<br>
-            {{ _("Branch Code") }}: {{ ba_details.BranchCode }}<br>
-            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -4) }}
+            {{ _("Bank Name") }}: {{ bank_account.BankName }}<br>
+            {{ _("Institution Number") }}: {{ bank_account.InstitutionNumber }}<br>
+            {{ _("Branch Code") }}: {{ bank_account.BranchCode }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(bank_account.AccountNumber, 0, -4) }}
         % elif ba_type == 'GB'
-            {{ _("Sort Code") }}: {{ ba_details.SortCode }}<br>
-            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}
+            {{ _("Sort Code") }}: {{ bank_account.SortCode }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(bank_account.AccountNumber, 0, -3) }}
         % elif ba_type == 'OTHER'
-            {{ _("Country") }}: {{ ba_details.Country }}<br>
-            {{ _("BIC (Bank Identifier Code)") }}: {{ ba_details.BIC }}<br>
-            {{ _("Account Number") }}: {{ obfuscate(ba_details.AccountNumber, 0, -3) }}
+            {{ _("Country") }}: {{ bank_account.Country }}<br>
+            {{ _("BIC (Bank Identifier Code)") }}: {{ bank_account.BIC }}<br>
+            {{ _("Account Number") }}: {{ obfuscate(bank_account.AccountNumber, 0, -3) }}
         % endif
         </p>
         <button class="btn btn-default btn-sm" type="button" data-modify="#bank-account">{{ _("Modify") }}</button>

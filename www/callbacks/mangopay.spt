@@ -6,16 +6,17 @@ Doc: https://docs.mangopay.com/api-references/notifications/
 
 from decimal import Decimal as D
 
-from liberapay.billing import mangoapi
+import mangopay.resources
+
 from liberapay.billing.exchanges import (
     record_exchange_result, record_payout_refund, repr_error, skim_bank_wire,
 )
 from liberapay.models.participant import Participant
 
 EVENT_TYPES = {
-    'PAYIN_NORMAL': mangoapi.payIns,
-    'PAYOUT_NORMAL': mangoapi.payOuts,
-    'PAYOUT_REFUND': mangoapi.refunds,
+    'PAYIN_NORMAL': mangopay.resources.PayIn,
+    'PAYOUT_NORMAL': mangopay.resources.BankWirePayOut,
+    'PAYOUT_REFUND': mangopay.resources.Refund,
 }
 
 [---]
@@ -34,7 +35,7 @@ cls = EVENT_TYPES.get(event)
 
 if cls:
     # Check stuff
-    payio = cls.Get(RessourceId)
+    payio = cls.get(RessourceId)
     if payio.Status != status:
         raise response.error(400, "status mismatch")
     status = status.lower()
@@ -46,8 +47,7 @@ if cls:
     if e_status == status:
         raise response.success(200, "already done")
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        pd = payio.PaymentDetails
-        expected = pd.DeclaredDebitedFunds['Amount'] - pd.DeclaredFees['Amount']
+        expected = payio.DeclaredDebitedFunds.Amount - payio.DeclaredFees.Amount
         actual = payio.CreditedFunds
         assert actual.Currency == 'EUR'
         credited_amount = actual.Amount
@@ -65,7 +65,7 @@ if cls:
                     website.tell_sentry(e, state, allow_reraise=False)
             note = (
                 'amount mismatch: expected %sc€ (fee %sc€)' %
-                (pd.DeclaredDebitedFunds['Amount'], pd.DeclaredFees['Amount'])
+                (payio.DeclaredDebitedFunds.Amount, payio.DeclaredFees.Amount)
             )
             website.db.run("""
                 UPDATE exchanges
@@ -79,7 +79,7 @@ if cls:
     # Update the DB
     error = repr_error(payio)
     if event == 'PAYOUT_REFUND':
-        error = payio.RefundReason.RefundReasonMessage
+        error = payio.RefundReason.message
     p = Participant._from_thing("mangopay_user_id", payio.AuthorId)
     was_closed = p.status == 'closed'
     affects_balance = (

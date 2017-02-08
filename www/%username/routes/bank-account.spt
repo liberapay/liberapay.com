@@ -1,18 +1,18 @@
 
 from functools import reduce
 
-from mangopaysdk.entities.bankaccount import BankAccount
-from mangopaysdk.types.address import Address
-from mangopaysdk.types.bankaccountdetailsiban import BankAccountDetailsIBAN
-from mangopaysdk.types.bankaccountdetailsus import BankAccountDetailsUS
-from mangopaysdk.types.bankaccountdetailsca import BankAccountDetailsCA
-from mangopaysdk.types.bankaccountdetailsgb import BankAccountDetailsGB
-from mangopaysdk.types.bankaccountdetailsother import BankAccountDetailsOTHER
+from mangopay.constants import BANK_ACCOUNT_TYPE_CHOICES
+from mangopay.fields import Field
+from mangopay.resources import BankAccount
 
-from liberapay.billing import mangoapi
-from liberapay.billing.exchanges import repr_exception, ResponseException
+from liberapay.billing.exchanges import repr_exception, APIError
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
+
+BA_KEYS = (
+    'IBAN', 'BIC', 'AccountNumber', 'SortCode', 'ABA', 'DepositAccountType',
+    'BankName', 'InstitutionNumber', 'BranchCode', 'Country',
+)
 
 [---]
 
@@ -20,30 +20,19 @@ request.allow('POST')
 participant = get_participant(state, restrict=True)
 body = request.body
 
-ba = BankAccount()
-ba.OwnerName = body.pop('OwnerName')
-addr = Address()
-for k in constants.POSTAL_ADDRESS_KEYS:
-    setattr(addr, k, body.pop('OwnerAddress.' + k))
-ba.OwnerAddress = addr
-
-ba_type = body.pop('Type')
-if ba_type not in ('IBAN', 'US', 'CA', 'GB', 'OTHER'):
+ba_type = body['Type']
+if ba_type not in BANK_ACCOUNT_TYPE_CHOICES:
     raise response.error(400, "bad Type")
-
-ba_details = globals()['BankAccountDetails'+ba_type]()
-for k in body:
-    if not k[:1].isupper():
-        continue
-    v = body[k]
-    if k == 'AccountNumber':
-        v = v.replace(' ', '')
-    setattr(ba_details, k, v)
-ba.Details = ba_details
-
+ba = BankAccount(
+    UserId=participant.mangopay_user_id,
+    Type=ba_type,
+    OwnerName=body['OwnerName'],
+    OwnerAddress={k: body['OwnerAddress.' + k] for k in constants.POSTAL_ADDRESS_KEYS},
+    **{k: body[k] for k in BA_KEYS if k in body}
+)
 try:
-    ba = mangoapi.users.CreateBankAccount(participant.mangopay_user_id, ba)
-except ResponseException as err:
+    ba.save()
+except APIError as err:
     raise response.error(400, repr_exception(err))
 else:
     ExchangeRoute.insert(participant, 'mango-ba', ba.Id)
