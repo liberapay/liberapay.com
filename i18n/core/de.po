@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liberapay\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"PO-Revision-Date: 2017-02-08 09:11+0000\n"
+"PO-Revision-Date: 2017-02-08 10:21+0000\n"
 "Last-Translator: Kim <github@aggressive-solutions.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
@@ -193,6 +193,8 @@ msgstr "Sie können es erneut versuchen: {0}"
 
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr ""
+"Sie haben einen möglichen Fehler gefunden! Bitte entschuldigen Sie die "
+"Unannehmlichkeit, wir werden ihn so schnell wie möglich beheben!"
 
 msgid "When I receive money"
 msgstr "Wenn ich Geld erhalte"
@@ -314,14 +316,17 @@ msgstr "Es gibt keine Benutzer mit dem Namen {0}."
 #, python-brace-format
 msgid "'{0}' is not a valid weekly donation amount (min={1}, max={2})"
 msgstr ""
+"'{0}' ist kein gültiger, wöchentlicher Betrag (mindestens {1}, höchstens {2})"
 
 #, python-brace-format
 msgid "'{0}' is not a valid monthly donation amount (min={1}, max={2})"
 msgstr ""
+"'{0}' ist kein gültiger, monatlichen Betrag (mindestens {1}, höchstens {2})"
 
 #, python-brace-format
 msgid "'{0}' is not a valid yearly donation amount (min={1}, max={2})"
 msgstr ""
+"'{0}' ist kein gültiger, jährlicher Betrag (höchstens {1}, mindestens {2})"
 
 #, python-brace-format
 msgid "The user {0} doesn't accept donations."
@@ -368,7 +373,7 @@ msgstr "Falscher Benutzername oder Passwort."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
-msgstr ""
+msgstr "\"{0}\" ist keine gütlige Emailadresse."
 
 #, python-brace-format
 msgid "We didn't find any account whose primary email address is {0}."
@@ -396,34 +401,37 @@ msgid "Upstream Error"
 msgstr "Upstream-Fehler"
 
 msgid "This account is closed"
-msgstr ""
+msgstr "Dieses Konto ist geschlossen"
 
 msgid "Are you the account owner?"
-msgstr ""
+msgstr "Sind Sie der/die Besitzer/in des Kontos?"
 
 msgid "Log in to reopen your account."
-msgstr ""
+msgstr "Loggen Sie sich ein um Ihr Konto wieder zu öffnen."
 
 msgid "Log in"
-msgstr ""
+msgstr "Einloggen"
 
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr ""
+"Sie benötigen hierfür ein Konto. Bitte füllen Sie das Formular unten aus."
 
 msgid "Create an account"
 msgstr "Erstellen Sie ein Konto"
 
 msgid "Use an existing account"
-msgstr ""
+msgstr "Nutzen Sie ein bestehendes Konto"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr ""
+"Wir haben zur Zeit technische Probleme, deshalb funktionieren die meisten "
+"Dinge nicht. Bitte entschuldigen Sie die Unannehmlichkeiten."
 
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Navigation umschalten"
 
 msgid "Homepage"
-msgstr ""
+msgstr "Startseite"
 
 msgid "Explore"
 msgstr "Entdecke"
@@ -542,13 +550,15 @@ msgid "Email address"
 msgstr "E-Mail-Adresse"
 
 msgid "Password (optional)"
-msgstr ""
+msgstr "Passwort (optional)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
 msgstr ""
+"Lassen Sie das vorherige Feld leer, wenn Ihr Konto kein Passwort hat oder "
+"Sie es vergessen haben. Wir senden Ihnen eine E-Mail zum Einloggen."
 
 msgid "You need to log in"
-msgstr ""
+msgstr "Sie müssen sich einloggen"
 
 msgid "Members"
 msgstr "Mitglieder"
@@ -1584,7 +1594,9 @@ msgstr "Anfrage läuft, bitte warten…"
 
 #, fuzzy, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Hinzufügen von Geld zu Liberapay per Banküberweisung entstehen, eine Gebühr von {0} % (1)  von unserem Zahlungsprozessor ."
+msgstr ""
+"Wenn Sie Ihr Guthaben bei Liberapay per Banküberweisung aufladen, dann fällt "
+"eine zusätzliche Gebühr von {0}% bei unserem Zahlungsdienstleister an."
 
 #, python-brace-format
 msgid "{0} ({2}% fee included)"
@@ -1789,7 +1801,9 @@ msgstr "Geben & empfangen Widgets"
 
 #, fuzzy
 msgid "Use this code to add a Liberapay \"receiving\" widget on your website:"
-msgstr "Verwenden Sie diesen Code ein Liberapay \"empfangen\" Widget auf Ihrer Website hinzufügen:"
+msgstr ""
+"Verwenden Sie diesen Code ein Empfangen-Widget für Liberapay auf Ihrer "
+"Website hinzu zu fügen:"
 
 msgid "Or, if you'd like to include a \"giving\" widget, you can use this:"
 msgstr ""
