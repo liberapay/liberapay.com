@@ -1,17 +1,17 @@
 interactions:
 - request:
-    body: '{"AuthorId": "8301771", "Tag": "79634", "CreditedWalletId": "8301772",
-      "CardId": "8301774", "SecureModeReturnURL": "http://localhost/", "Fees": {"Currency":
-      "EUR", "Amount": 37}, "CardType": "CB_VISA_MASTERCARD", "DebitedFunds": {"Currency":
-      "EUR", "Amount": 1037}}'
+    body: '{"CreditedWalletId": "20717492", "SecureModeReturnURL": "http://localhost/",
+      "Fees": {"Currency": "EUR", "Amount": 54}, "DebitedFunds": {"Currency": "EUR",
+      "Amount": 1554}, "SecureMode": "DEFAULT", "AuthorId": "20717491", "Tag": "79634",
+      "CardId": "20717494"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct/
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct
   response:
-    body: {string: !!python/unicode '{"Id":"8301785","Tag":"79634","CreationDate":1440851700,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851702,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"8301774","SecureModeReturnURL":null,"SecureModeRedirectURL":null,"SecureModeNeeded":false}'}
+    body: {string: !!python/unicode '{"Id":"20717553","Tag":"79634","CreationDate":1486643897,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":1554},"CreditedFunds":{"Currency":"EUR","Amount":1500},"Fees":{"Currency":"EUR","Amount":54},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643898,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"20717494","SecureModeReturnURL":null,"SecureModeRedirectURL":null,"SecureModeNeeded":false,"StatementDescriptor":null}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['590']
+      content-length: ['622']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -20,16 +20,16 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301771/transactions?page=1&per_page=10
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491
   response:
-    body: {string: !!python/unicode '[{"Id":"8301780","Tag":"141066466","CreationDate":1440851689,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":10202},"CreditedFunds":{"Currency":"EUR","Amount":10000},"Fees":{"Currency":"EUR","Amount":202},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null},{"Id":"8301783","Tag":"141066469","CreationDate":1440851696,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851697,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301782","DebitedWalletId":null},{"Id":"8301785","Tag":"79634","CreationDate":1440851700,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851702,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null}]'}
+    body: {string: !!python/unicode '[{"Id":"20717537","Tag":"658989071","CreationDate":1486643885,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":4721},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":121},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643887,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717539","Tag":"658989071","CreationDate":1486643887,"AuthorId":"20717491","CreditedUserId":"20717495","DebitedFunds":{"Currency":"EUR","Amount":4600},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643888,"Type":"TRANSFER","Nature":"REGULAR","CreditedWalletId":"20717496","DebitedWalletId":"20717492"},{"Id":"20717544","Tag":"141066470","CreationDate":1486643891,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":5129},"CreditedFunds":{"Currency":"EUR","Amount":5000},"Fees":{"Currency":"EUR","Amount":129},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643894,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717543","DebitedWalletId":null},{"Id":"20717550","Tag":"47472655","CreationDate":1486643895,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"XXX","Amount":0},"CreditedFunds":{"Currency":"XXX","Amount":0},"Fees":{"Currency":"XXX","Amount":0},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717553","Tag":"79634","CreationDate":1486643897,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":1554},"CreditedFunds":{"Currency":"EUR","Amount":1500},"Fees":{"Currency":"EUR","Amount":54},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643898,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null}]'}
     headers:
       cache-control: [no-cache]
-      content-length: ['1261']
+      content-length: ['2132']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
-      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/8301771/transactions?page=1&per_page=10>;
-          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/8301771/transactions?page=1&per_page=10>;
+      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
+          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
           rel="last"']
       pragma: [no-cache]
     status: {code: 200, message: OK}
@@ -37,16 +37,16 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301771/transactions?page=1&per_page=10
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491
   response:
-    body: {string: !!python/unicode '[{"Id":"8301780","Tag":"141066466","CreationDate":1440851689,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":10202},"CreditedFunds":{"Currency":"EUR","Amount":10000},"Fees":{"Currency":"EUR","Amount":202},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null},{"Id":"8301783","Tag":"141066469","CreationDate":1440851696,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851697,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301782","DebitedWalletId":null},{"Id":"8301785","Tag":"79634","CreationDate":1440851700,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851702,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null}]'}
+    body: {string: !!python/unicode '[{"Id":"20717537","Tag":"658989071","CreationDate":1486643885,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":4721},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":121},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643887,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717539","Tag":"658989071","CreationDate":1486643887,"AuthorId":"20717491","CreditedUserId":"20717495","DebitedFunds":{"Currency":"EUR","Amount":4600},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643888,"Type":"TRANSFER","Nature":"REGULAR","CreditedWalletId":"20717496","DebitedWalletId":"20717492"},{"Id":"20717544","Tag":"141066470","CreationDate":1486643891,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":5129},"CreditedFunds":{"Currency":"EUR","Amount":5000},"Fees":{"Currency":"EUR","Amount":129},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643894,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717543","DebitedWalletId":null},{"Id":"20717550","Tag":"47472655","CreationDate":1486643895,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"XXX","Amount":0},"CreditedFunds":{"Currency":"XXX","Amount":0},"Fees":{"Currency":"XXX","Amount":0},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717553","Tag":"79634","CreationDate":1486643897,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":1554},"CreditedFunds":{"Currency":"EUR","Amount":1500},"Fees":{"Currency":"EUR","Amount":54},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643898,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null}]'}
     headers:
       cache-control: [no-cache]
-      content-length: ['1261']
+      content-length: ['2132']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
-      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/8301771/transactions?page=1&per_page=10>;
-          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/8301771/transactions?page=1&per_page=10>;
+      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
+          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
           rel="last"']
       pragma: [no-cache]
     status: {code: 200, message: OK}
@@ -54,16 +54,16 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets/8301772/transactions?page=1&per_page=10
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491
   response:
-    body: {string: !!python/unicode '[{"Id":"8301780","Tag":"141066466","CreationDate":1440851689,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":10202},"CreditedFunds":{"Currency":"EUR","Amount":10000},"Fees":{"Currency":"EUR","Amount":202},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null},{"Id":"8301785","Tag":"79634","CreationDate":1440851700,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851702,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null}]'}
+    body: {string: !!python/unicode '[{"Id":"20717537","Tag":"658989071","CreationDate":1486643885,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":4721},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":121},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643887,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717539","Tag":"658989071","CreationDate":1486643887,"AuthorId":"20717491","CreditedUserId":"20717495","DebitedFunds":{"Currency":"EUR","Amount":4600},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643888,"Type":"TRANSFER","Nature":"REGULAR","CreditedWalletId":"20717496","DebitedWalletId":"20717492"},{"Id":"20717544","Tag":"141066470","CreationDate":1486643891,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":5129},"CreditedFunds":{"Currency":"EUR","Amount":5000},"Fees":{"Currency":"EUR","Amount":129},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643894,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717543","DebitedWalletId":null},{"Id":"20717550","Tag":"47472655","CreationDate":1486643895,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"XXX","Amount":0},"CreditedFunds":{"Currency":"XXX","Amount":0},"Fees":{"Currency":"XXX","Amount":0},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717553","Tag":"79634","CreationDate":1486643897,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":1554},"CreditedFunds":{"Currency":"EUR","Amount":1500},"Fees":{"Currency":"EUR","Amount":54},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643898,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null}]'}
     headers:
       cache-control: [no-cache]
-      content-length: ['835']
+      content-length: ['2132']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
-      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets/8301772/transactions?page=1&per_page=10>;
-          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets/8301772/transactions?page=1&per_page=10>;
+      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
+          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
           rel="last"']
       pragma: [no-cache]
     status: {code: 200, message: OK}
@@ -71,14 +71,14 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301775/bankaccounts/8301777
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717495/bankaccounts/20717497
   response:
     body: {string: !!python/unicode '{"OwnerAddress":{"AddressLine1":"Somewhere","AddressLine2":null,"City":"The
-        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"8301775","OwnerName":"Homer
-        Jay","Type":"IBAN","Id":"8301777","Tag":null,"CreationDate":1440851680}'}
+        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"20717495","OwnerName":"Homer
+        Jay","Type":"IBAN","Id":"20717497","Tag":null,"CreationDate":1486643837,"Active":true}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['308']
+      content-length: ['324']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -87,32 +87,31 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301775/transactions?page=1&per_page=10
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717495/transactions?user_id=20717495
   response:
-    body: {string: !!python/unicode '[{"Id":"8301778","Tag":"658989072","CreationDate":1440851686,"AuthorId":"8301775","CreditedUserId":null,"DebitedFunds":{"Currency":"EUR","Amount":100},"CreditedFunds":{"Currency":"EUR","Amount":100},"Fees":{"Currency":"EUR","Amount":0},"Status":"FAILED","ResultCode":"001001","ResultMessage":"Unsufficient
-        wallet balance","ExecutionDate":null,"Type":"PAYOUT","Nature":"REGULAR","CreditedWalletId":null,"DebitedWalletId":"8301776"}]'}
+    body: {string: !!python/unicode '[{"Id":"20717541","Tag":"658989072","CreationDate":1486643889,"AuthorId":"20717495","CreditedUserId":null,"DebitedFunds":{"Currency":"EUR","Amount":3000},"CreditedFunds":{"Currency":"EUR","Amount":3000},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643890,"Type":"PAYOUT","Nature":"REGULAR","CreditedWalletId":null,"DebitedWalletId":"20717496"}]'}
     headers:
       cache-control: [no-cache]
-      content-length: ['431']
+      content-length: ['425']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
-      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/8301775/transactions?page=1&per_page=10>;
-          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/8301775/transactions?page=1&per_page=10>;
+      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717495/transactions?user_id=20717495&page=1&per_page=10>;
+          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717495/transactions?user_id=20717495&page=1&per_page=10>;
           rel="last"']
       pragma: [no-cache]
     status: {code: 200, message: OK}
 - request:
-    body: '{"CreditedWalletID": "8301770", "CreditedUserId": "8301769", "DebitedFunds":
-      {"Currency": "EUR", "Amount": 1000}, "AuthorId": "8301771", "Tag": "79635",
-      "Fees": {"Currency": "EUR", "Amount": 0}, "DebitedWalletID": "8301772"}'
+    body: '{"CreditedWalletId": "20717490", "CreditedUserId": "20717489", "DebitedFunds":
+      {"Currency": "EUR", "Amount": 1000}, "AuthorId": "20717491", "Tag": "79635",
+      "Fees": {"Currency": "EUR", "Amount": 0}, "DebitedWalletId": "20717492"}'
     headers: {}
     method: POST
     uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/transfers
   response:
-    body: {string: !!python/unicode '{"Id":"8301789","Tag":"79635","CreationDate":1440851712,"AuthorId":"8301771","CreditedUserId":"8301769","DebitedFunds":{"Currency":"EUR","Amount":1000},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851713,"Type":"TRANSFER","Nature":"REGULAR","DebitedWalletId":"8301772","CreditedWalletId":"8301770"}'}
+    body: {string: !!python/unicode '{"Id":"20717555","Tag":"79635","CreationDate":1486643899,"AuthorId":"20717491","CreditedUserId":"20717489","DebitedFunds":{"Currency":"EUR","Amount":1000},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643900,"Type":"TRANSFER","Nature":"REGULAR","DebitedWalletId":"20717492","CreditedWalletId":"20717490"}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['428']
+      content-length: ['433']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -121,16 +120,16 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets/8301772/transactions?page=1&per_page=10
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491
   response:
-    body: {string: !!python/unicode '[{"Id":"8301780","Tag":"141066466","CreationDate":1440851689,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":10202},"CreditedFunds":{"Currency":"EUR","Amount":10000},"Fees":{"Currency":"EUR","Amount":202},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null},{"Id":"8301785","Tag":"79634","CreationDate":1440851700,"AuthorId":"8301771","CreditedUserId":"8301771","DebitedFunds":{"Currency":"EUR","Amount":1037},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":37},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851702,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"8301772","DebitedWalletId":null},{"Id":"8301789","Tag":"79635","CreationDate":1440851712,"AuthorId":"8301771","CreditedUserId":"8301769","DebitedFunds":{"Currency":"EUR","Amount":1000},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1440851713,"Type":"TRANSFER","Nature":"REGULAR","CreditedWalletId":"8301770","DebitedWalletId":"8301772"}]'}
+    body: {string: !!python/unicode '[{"Id":"20717537","Tag":"658989071","CreationDate":1486643885,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":4721},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":121},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643887,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717539","Tag":"658989071","CreationDate":1486643887,"AuthorId":"20717491","CreditedUserId":"20717495","DebitedFunds":{"Currency":"EUR","Amount":4600},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643888,"Type":"TRANSFER","Nature":"REGULAR","CreditedWalletId":"20717496","DebitedWalletId":"20717492"},{"Id":"20717544","Tag":"141066470","CreationDate":1486643891,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":5129},"CreditedFunds":{"Currency":"EUR","Amount":5000},"Fees":{"Currency":"EUR","Amount":129},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643894,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717543","DebitedWalletId":null},{"Id":"20717550","Tag":"47472655","CreationDate":1486643895,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"XXX","Amount":0},"CreditedFunds":{"Currency":"XXX","Amount":0},"Fees":{"Currency":"XXX","Amount":0},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717553","Tag":"79634","CreationDate":1486643897,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":1554},"CreditedFunds":{"Currency":"EUR","Amount":1500},"Fees":{"Currency":"EUR","Amount":54},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643898,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null},{"Id":"20717555","Tag":"79635","CreationDate":1486643899,"AuthorId":"20717491","CreditedUserId":"20717489","DebitedFunds":{"Currency":"EUR","Amount":1000},"CreditedFunds":{"Currency":"EUR","Amount":1000},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643900,"Type":"TRANSFER","Nature":"REGULAR","CreditedWalletId":"20717490","DebitedWalletId":"20717492"}]'}
     headers:
       cache-control: [no-cache]
-      content-length: ['1264']
+      content-length: ['2566']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
-      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets/8301772/transactions?page=1&per_page=10>;
-          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets/8301772/transactions?page=1&per_page=10>;
+      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
+          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717491/transactions?user_id=20717491&page=1&per_page=10>;
           rel="last"']
       pragma: [no-cache]
     status: {code: 200, message: OK}
