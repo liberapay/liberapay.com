@@ -217,9 +217,13 @@ def billing(app_conf):
     if not app_conf:
         return
     import mangopay
-    mangopay.api_url = app_conf.mangopay_base_url
-    mangopay.client_id = app_conf.mangopay_client_id
-    mangopay.passphrase = app_conf.mangopay_client_password
+    handler = mangopay.APIRequest(
+        client_id=app_conf.mangopay_client_id,
+        passphrase=app_conf.mangopay_client_password,
+        sandbox=('sandbox' in app_conf.mangopay_base_url),
+    )
+    mangopay.get_default_handler = mangopay.base.get_default_handler = \
+        mangopay.query.get_default_handler = lambda: handler
 
 
 def username_restrictions(www_root):
