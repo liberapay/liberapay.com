@@ -135,13 +135,13 @@ class TestCharge(MangopayHarness):
     def test_charge_success_and_wallet_creation(self):
         self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
         self.janet.set_attributes(mangopay_wallet_id=None)
-        exchange = charge(self.db, self.janet, D('50'), 'http://localhost/')
+        exchange = charge(self.db, self.janet, D('20'), 'http://localhost/')
         janet = Participant.from_id(self.janet.id)
         assert exchange.note is None
-        assert exchange.amount == 50
+        assert exchange.amount == 20
         assert exchange.status == 'succeeded'
-        assert self.janet.balance == janet.balance == 50
-        assert janet.withdrawable_balance == 50
+        assert self.janet.balance == janet.balance == 20
+        assert janet.withdrawable_balance == 20
         with mock.patch.multiple(exchanges, QUARANTINE='1 month'):
             assert janet.withdrawable_balance == 0
             self.db.self_check()
