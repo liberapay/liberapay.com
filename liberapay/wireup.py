@@ -224,6 +224,9 @@ def billing(app_conf):
     )
     mangopay.get_default_handler = mangopay.base.get_default_handler = \
         mangopay.query.get_default_handler = lambda: handler
+    # https://github.com/Mangopay/mangopay2-python-sdk/issues/95
+    if not handler.sandbox:
+        mangopay.api.logger.setLevel(logging.CRITICAL)
 
 
 def username_restrictions(www_root):
