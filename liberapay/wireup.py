@@ -217,15 +217,16 @@ def billing(app_conf):
     if not app_conf:
         return
     import mangopay
+    sandbox = 'sandbox' in app_conf.mangopay_base_url
     handler = mangopay.APIRequest(
         client_id=app_conf.mangopay_client_id,
         passphrase=app_conf.mangopay_client_password,
-        sandbox=('sandbox' in app_conf.mangopay_base_url),
+        sandbox=sandbox,
     )
     mangopay.get_default_handler = mangopay.base.get_default_handler = \
         mangopay.query.get_default_handler = lambda: handler
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/95
-    if not handler.sandbox:
+    if not sandbox:
         mangopay.api.logger.setLevel(logging.CRITICAL)
 
 
