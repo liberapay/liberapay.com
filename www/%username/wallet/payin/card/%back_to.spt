@@ -3,7 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D, InvalidOperation
 
-from liberapay.billing import mangoapi
+from mangopay.resources import Card, PayIn
+
 from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge_card
 from liberapay.exceptions import Redirect
 from liberapay.models.exchange_route import ExchangeRoute
@@ -14,7 +15,7 @@ from liberapay.utils import b64decode_s, get_participant, is_card_expired
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if request.method == 'GET' and 'transactionId' in request.qs:
-    payin = mangoapi.payIns.Get(request.qs['transactionId'])
+    payin = PayIn.get(request.qs['transactionId'])
     if payin.AuthorId != participant.mangopay_user_id:
         raise response.error(403)
     status = payin.Status.lower()
@@ -25,7 +26,7 @@ if request.method == 'GET' and 'transactionId' in request.qs:
 exchange = None
 route = ExchangeRoute.from_network(participant, 'mango-cc')
 
-card = mangoapi.cards.Get(route.address) if route else None
+card = Card.get(route.address) if route else None
 if card:
     inactive = card.Validity != 'UNKNOWN' and card.Active is False
     invalid = card.Validity == 'INVALID'

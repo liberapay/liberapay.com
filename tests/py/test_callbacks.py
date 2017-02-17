@@ -4,11 +4,8 @@ from decimal import Decimal as D
 
 from mock import patch
 
-from mangopaysdk.entities.payin import PayIn
-from mangopaysdk.entities.payout import PayOut
-from mangopaysdk.entities.refund import Refund
-from mangopaysdk.types.payinpaymentdetailsbankwire import PayInPaymentDetailsBankWire
-from mangopaysdk.types.refundreason import RefundReason
+from mangopay.resources import BankWirePayOut, BankWirePayIn, Refund
+from mangopay.utils import Reason
 
 from liberapay.billing.exchanges import Money, record_exchange
 from liberapay.models.exchange_route import ExchangeRoute
@@ -24,7 +21,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
         kw.setdefault('raise_immediately', False)
         return self.client.GET('/callbacks/mangopay?'+qs, **kw)
 
-    @patch('mangopaysdk.tools.apipayouts.ApiPayOuts.Get')
+    @patch('mangopay.resources.BankWirePayOut.get')
     def test_payout_callback(self, Get):
         homer, ba = self.homer, self.homer_route
         for status in ('succeeded', 'failed'):
@@ -36,7 +33,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             homer.close(None)
             assert homer.status == 'closed'
             qs = "EventType=PAYOUT_NORMAL_"+status_up+"&RessourceId=123456790"
-            payout = PayOut()
+            payout = BankWirePayOut()
             payout.Status = status_up
             payout.ResultCode = '000001' if error else '000000'
             payout.ResultMessage = error
@@ -59,8 +56,8 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
                 assert 'fail' in emails[0]['subject']
             homer.update_status('active')  # reset for next loop run
 
-    @patch('mangopaysdk.tools.apipayouts.ApiPayOuts.Get')
-    @patch('mangopaysdk.tools.apirefunds.ApiRefunds.Get')
+    @patch('mangopay.resources.BankWirePayOut.get')
+    @patch('mangopay.resources.Refund.get')
     def test_payout_refund_callback(self, R_Get, PO_Get):
         homer, ba = self.homer, self.homer_route
         for status in ('failed', 'succeeded'):
@@ -70,7 +67,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             assert homer.balance == 0
             homer.close(None)
             assert homer.status == 'closed'
-            payout = PayOut()
+            payout = BankWirePayOut()
             payout.Status = 'SUCCEEDED'
             payout.ResultCode = '000000'
             payout.AuthorId = homer.mangopay_user_id
@@ -85,8 +82,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             refund.Status = status_up
             refund.ResultCode = '000001' if error else '000000'
             refund.ResultMessage = error
-            reason = refund.RefundReason = RefundReason()
-            reason.RefundReasonMessage = 'BECAUSE 42'
+            refund.RefundReason = Reason(message='BECAUSE 42')
             refund.AuthorId = homer.mangopay_user_id
             R_Get.return_value = refund
             # Call back
@@ -107,7 +103,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
                 assert 'BECAUSE 42' in emails[0]['text']
             homer.update_status('active')  # reset for next loop run
 
-    @patch('mangopaysdk.tools.apipayins.ApiPayIns.Get')
+    @patch('mangopay.resources.PayIn.get')
     def test_payin_bank_wire_callback(self, Get):
         homer = self.homer
         route = ExchangeRoute.insert(homer, 'mango-bw', 'x')
@@ -119,15 +115,14 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             homer.close(None)
             assert homer.status == 'closed'
             qs = "EventType=PAYIN_NORMAL_"+status_up+"&RessourceId=123456790"
-            payin = PayIn()
+            payin = BankWirePayIn()
             payin.Status = status_up
             payin.ResultCode = '000001' if error else '000000'
             payin.ResultMessage = error
             payin.AuthorId = homer.mangopay_user_id
             payin.PaymentType = 'BANK_WIRE'
-            pd = payin.PaymentDetails = PayInPaymentDetailsBankWire()
-            pd.DeclaredDebitedFunds = Money(1100, 'EUR').__dict__
-            pd.DeclaredFees = Money(0, 'EUR').__dict__
+            payin.DeclaredDebitedFunds = Money(1100, 'EUR')
+            payin.DeclaredFees = Money(0, 'EUR')
             payin.CreditedFunds = Money(1100, 'EUR')
             payin.Tag = str(e_id)
             Get.return_value = payin
@@ -146,11 +141,11 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             assert status[:4] in emails[0]['subject']
             homer.update_status('active')  # reset for next loop run
 
-    @patch('mangopaysdk.tools.apipayins.ApiPayIns.Get')
+    @patch('mangopay.resources.PayIn.get')
     def test_payin_bank_wire_callback_amount_mismatch(self, Get):
         self._test_payin_bank_wire_callback_amount_mismatch(Get, 2)
 
-    @patch('mangopaysdk.tools.apipayins.ApiPayIns.Get')
+    @patch('mangopay.resources.PayIn.get')
     def test_payin_bank_wire_callback_amount_and_fee_mismatch(self, Get):
         self._test_payin_bank_wire_callback_amount_mismatch(Get, 50)
 
@@ -162,15 +157,14 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
         homer.close(None)
         assert homer.status == 'closed'
         qs = "EventType=PAYIN_NORMAL_SUCCEEDED&RessourceId=123456790"
-        payin = PayIn()
+        payin = BankWirePayIn()
         payin.Status = 'SUCCEEDED'
         payin.ResultCode = '000000'
         payin.ResultMessage = None
         payin.AuthorId = homer.mangopay_user_id
         payin.PaymentType = 'BANK_WIRE'
-        pd = payin.PaymentDetails = PayInPaymentDetailsBankWire()
-        pd.DeclaredDebitedFunds = Money(4500, 'EUR').__dict__
-        pd.DeclaredFees = Money(100, 'EUR').__dict__
+        payin.DeclaredDebitedFunds = Money(4500, 'EUR')
+        payin.DeclaredFees = Money(100, 'EUR')
         payin.DebitedFunds = Money(302, 'EUR')
         payin.Fees = Money(fee, 'EUR')
         payin.CreditedFunds = Money(302 - fee, 'EUR')

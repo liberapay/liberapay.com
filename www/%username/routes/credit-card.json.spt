@@ -1,9 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from mangopaysdk.entities.card import Card
-from mangopaysdk.entities.cardregistration import CardRegistration
+from mangopay.resources import Card, CardRegistration
 
-from liberapay.billing import mangoapi
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
@@ -22,11 +20,11 @@ if 'Currency' in body:
     cr.UserId = participant.mangopay_user_id
     cr.Currency = body['Currency']
     cr.CardType = body['CardType']
-    cr = mangoapi.cardRegistrations.Create(cr)
+    cr.save()
     out = {k[0].lower()+k[1:]: getattr(cr, k) for k in KEYS}
 
 else:
-    card = mangoapi.cards.Get(body['CardId'])
+    card = Card.get(body['CardId'])
     if card.UserId != participant.mangopay_user_id:
         raise response.error(403)
     old_route = ExchangeRoute.from_network(participant, 'mango-cc')

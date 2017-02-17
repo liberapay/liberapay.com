@@ -1,30 +1,30 @@
 interactions:
 - request:
-    body: '{"AuthorId": "11763370", "Tag": "658989071", "CreditedWalletId": "11763371",
-      "CardId": "11763373", "SecureModeReturnURL": "http://localhost/", "Fees": {"Currency":
-      "EUR", "Amount": 121}, "CardType": "CB_VISA_MASTERCARD", "DebitedFunds": {"Currency":
-      "EUR", "Amount": 4721}}'
+    body: '{"CreditedWalletId": "20717492", "SecureModeReturnURL": "http://localhost/",
+      "Fees": {"Currency": "EUR", "Amount": 121}, "DebitedFunds": {"Currency": "EUR",
+      "Amount": 4721}, "SecureMode": "DEFAULT", "AuthorId": "20717491", "Tag": "658989071",
+      "CardId": "20717494"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct/
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct
   response:
-    body: {string: !!python/unicode '{"Id":"11763433","Tag":"658989071","CreationDate":1459978297,"AuthorId":"11763370","CreditedUserId":"11763370","DebitedFunds":{"Currency":"EUR","Amount":4721},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":121},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1459978298,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"11763371","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"11763373","SecureModeReturnURL":null,"SecureModeRedirectURL":null,"SecureModeNeeded":false}'}
+    body: {string: !!python/unicode '{"Id":"20717537","Tag":"658989071","CreationDate":1486643885,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":4721},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":121},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643887,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"20717494","SecureModeReturnURL":null,"SecureModeRedirectURL":null,"SecureModeNeeded":false,"StatementDescriptor":null}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['600']
+      content-length: ['627']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
     status: {code: 200, message: OK}
 - request:
-    body: '{"CreditedWalletID": "11763375", "CreditedUserId": "8301775", "DebitedFunds":
-      {"Currency": "EUR", "Amount": 4600}, "AuthorId": "11763370", "Tag": "658989071",
-      "Fees": {"Currency": "EUR", "Amount": 0}, "DebitedWalletID": "11763371"}'
+    body: '{"CreditedWalletId": "20717496", "CreditedUserId": "20717495", "DebitedFunds":
+      {"Currency": "EUR", "Amount": 4600}, "AuthorId": "20717491", "Tag": "658989071",
+      "Fees": {"Currency": "EUR", "Amount": 0}, "DebitedWalletId": "20717492"}'
     headers: {}
     method: POST
     uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/transfers
   response:
-    body: {string: !!python/unicode '{"Id":"11763435","Tag":"658989071","CreationDate":1459978299,"AuthorId":"11763370","CreditedUserId":"8301775","DebitedFunds":{"Currency":"EUR","Amount":4600},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1459978300,"Type":"TRANSFER","Nature":"REGULAR","DebitedWalletId":"11763371","CreditedWalletId":"11763375"}'}
+    body: {string: !!python/unicode '{"Id":"20717539","Tag":"658989071","CreationDate":1486643887,"AuthorId":"20717491","CreditedUserId":"20717495","DebitedFunds":{"Currency":"EUR","Amount":4600},"CreditedFunds":{"Currency":"EUR","Amount":4600},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643888,"Type":"TRANSFER","Nature":"REGULAR","DebitedWalletId":"20717492","CreditedWalletId":"20717496"}'}
     headers:
       cache-control: [no-cache]
       content-length: ['437']
@@ -36,27 +36,27 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301775/bankaccounts/8301777
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717495/bankaccounts/20717497
   response:
     body: {string: !!python/unicode '{"OwnerAddress":{"AddressLine1":"Somewhere","AddressLine2":null,"City":"The
-        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"8301775","OwnerName":"Homer
-        Jay","Type":"IBAN","Id":"8301777","Tag":null,"CreationDate":1459977889}'}
+        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"20717495","OwnerName":"Homer
+        Jay","Type":"IBAN","Id":"20717497","Tag":null,"CreationDate":1486643837,"Active":true}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['310']
+      content-length: ['324']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
     status: {code: 200, message: OK}
 - request:
     body: '{"BankWireRef": "658989072", "DebitedFunds": {"Currency": "EUR", "Amount":
-      3000}, "BankAccountId": "8301777", "AuthorId": "8301775", "Tag": "658989072",
-      "Fees": {"Currency": "EUR", "Amount": 0}, "DebitedWalletId": "11763375"}'
+      3000}, "BankAccountId": "20717497", "AuthorId": "20717495", "Tag": "658989072",
+      "Fees": {"Currency": "EUR", "Amount": 0}, "DebitedWalletId": "20717496"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payouts/bankwire/
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payouts/bankwire
   response:
-    body: {string: !!python/unicode '{"Id":"11763437","Tag":"658989072","CreationDate":1459978301,"AuthorId":"8301775","CreditedUserId":null,"DebitedFunds":{"Currency":"EUR","Amount":3000},"CreditedFunds":{"Currency":"EUR","Amount":3000},"Fees":{"Currency":"EUR","Amount":0},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYOUT","Nature":"REGULAR","CreditedWalletId":null,"DebitedWalletId":"11763375","PaymentType":"BANK_WIRE","BankAccountId":"8301777","BankWireRef":"658989072"}'}
+    body: {string: !!python/unicode '{"Id":"20717541","Tag":"658989072","CreationDate":1486643889,"AuthorId":"20717495","CreditedUserId":null,"DebitedFunds":{"Currency":"EUR","Amount":3000},"CreditedFunds":{"Currency":"EUR","Amount":3000},"Fees":{"Currency":"EUR","Amount":0},"Status":"CREATED","ResultCode":null,"ResultMessage":null,"ExecutionDate":null,"Type":"PAYOUT","Nature":"REGULAR","CreditedWalletId":null,"DebitedWalletId":"20717496","PaymentType":"BANK_WIRE","BankAccountId":"20717497","BankWireRef":"658989072"}'}
     headers:
       cache-control: [no-cache]
       content-length: ['485']
@@ -68,14 +68,14 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/8301775/bankaccounts/8301777
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717495/bankaccounts/20717497
   response:
     body: {string: !!python/unicode '{"OwnerAddress":{"AddressLine1":"Somewhere","AddressLine2":null,"City":"The
-        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"8301775","OwnerName":"Homer
-        Jay","Type":"IBAN","Id":"8301777","Tag":null,"CreationDate":1459977889}'}
+        City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"20717495","OwnerName":"Homer
+        Jay","Type":"IBAN","Id":"20717497","Tag":null,"CreationDate":1486643837,"Active":true}'}
     headers:
       cache-control: [no-cache]
-      content-length: ['310']
+      content-length: ['324']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]

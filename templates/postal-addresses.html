@@ -1,0 +1,44 @@
+% macro postal_address_form(prefix='', saved=None)
+
+    <label>
+        <span>{{ _("Address") }}</span>
+        <input name="{{ prefix }}Address.AddressLine1" class="form-control" required
+               value="{{ saved.AddressLine1 }}" />
+    </label><br>
+
+    <label>
+        <span>{{ _("Address (second line)") }}</span>
+        <input name="{{ prefix }}Address.AddressLine2" class="form-control"
+               value="{{ saved.AddressLine2 }}" />
+    </label><br>
+
+    <label>
+        <span>{{ _("City") }}</span>
+        <input name="{{ prefix }}Address.City" class="form-control" required
+               value="{{ saved.City }}" />
+    </label><br>
+
+    <label>
+        <span>{{ _("Region") }}</span>
+        <input name="{{ prefix }}Address.Region" class="form-control"
+               value="{{ saved.Region }}" />
+    </label><br>
+
+    <label>
+        <span>{{ _("Postal Code") }}</span>
+        <input name="{{ prefix }}Address.PostalCode" class="form-control" required
+               size=6 pattern="[a-zA-Z0-9]+" title="{{ _('Alphanumeric (with no spaces)') }}"
+               value="{{ saved.PostalCode }}" />
+    </label><br>
+
+    <label>
+        <span>{{ _("Country") }}</span>
+        <select name="{{ prefix }}Address.Country" class="form-control" required>
+            <option></option>
+            % for each in locale.countries.items()
+                <option value="{{ each[0] }}" {{ 'selected' if each[0] == saved.Country }}>{{ each[1] }}</option>
+            % endfor
+        </select>
+    </label><br>
+
+% endmacro

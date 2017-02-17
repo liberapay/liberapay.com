@@ -1,4 +1,5 @@
-from liberapay.billing import mangoapi
+from mangopay.resources import Card
+
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 
@@ -33,7 +34,7 @@ if exchange is None or exchange.status != 'succeeded':
 card = None
 route = ExchangeRoute.from_id(exchange.route)
 if route.network == 'mango-cc':
-    card = mangoapi.cards.Get(route.address)
+    card = Card.get(route.address)
 
 account = participant.get_mangopay_account()
 

@@ -1,7 +1,6 @@
 {{ _("Bank wire to your Liberapay wallet") }}
 
 [---] text/html
-% set pd = payin.PaymentDetails
 <p>{{ _(
     "We are ready to receive the funds. Please send exactly {0} to the "
     "following account using the reference code below so we'll know the "
@@ -11,28 +10,28 @@
 
 <p>
     {{ _("IBAN (International Bank Account Number)") }}<br>
-    {{ pd.BankAccount.Details.IBAN }}
+    {{ payin.BankAccount.IBAN }}
 </p>
 
 <p>
     {{ _("BIC (Bank Identifier Code)") }}<br>
-    {{ pd.BankAccount.Details.BIC }}
+    {{ payin.BankAccount.BIC }}
 </p>
 
 <p>
     {{ _("Wire Reference Code") }}<br>
-    {{ pd.WireReference }}
+    {{ payin.WireReference }}
 </p>
 
 <p>
     {{ _("Bank Account Owner Name") }}<br>
-    {{ pd.BankAccount.OwnerName }}
+    {{ payin.BankAccount.OwnerName }}
 </p>
 
 <p>
     {{ _("Bank Account Owner Address") }}<br>
-    {{ pd.BankAccount.OwnerAddress.AddressLine1 }},
-    {{ pd.BankAccount.OwnerAddress.PostalCode }}
-    {{ pd.BankAccount.OwnerAddress.City }},
-    {{ pd.BankAccount.OwnerAddress.Country }}
+    {{ payin.BankAccount.OwnerAddress.AddressLine1 }},
+    {{ payin.BankAccount.OwnerAddress.PostalCode }}
+    {{ payin.BankAccount.OwnerAddress.City }},
+    {{ payin.BankAccount.OwnerAddress.Country }}
 </p>
