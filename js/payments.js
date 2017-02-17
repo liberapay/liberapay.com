@@ -165,6 +165,17 @@ Liberapay.payments.ba.submit = function () {
     }
 
     var data = $ba.serializeArray();
+    // remove values of controls that are inside a disabled fieldset
+    var data2 = [];
+    $.each(data, function(i, item) {
+        var $element = $ba.find('[name="'+item.name+'"]').filter(function() {
+            return $(this).prop('value') == item.value;
+        });
+        if ($element.length != 1) console.error("$element.length = " + $element.length);
+        var $disabled = $element.parents('fieldset:disabled');
+        if ($disabled.length == 0) data2.push(item);
+    })
+    data = data2;
     jQuery.ajax({
         url: '/'+Liberapay.username+'/routes/bank-account.json',
         type: 'POST',
