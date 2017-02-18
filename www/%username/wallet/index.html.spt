@@ -94,7 +94,7 @@ else:
         Money(totals['given'], "EUR")
     ) }}
         % if totals['given']
-        (<a href="export.csv?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
+        (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
         % endif

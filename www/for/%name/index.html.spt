@@ -39,7 +39,7 @@ title = pretty_name = community.pretty_name
 <div class="col-md-8">
 
     % if user.id == community.creator
-        <a class="btn btn-default pull-right" href="edit">{{ _("Edit") }}</a>
+        <a class="btn btn-default pull-right" href="/for/{{ community.name }}/edit">{{ _("Edit") }}</a>
     % endif
 
     <h2 style="margin-top: 0;">{{ title }}
