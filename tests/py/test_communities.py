@@ -14,11 +14,11 @@ class Tests(Harness):
 
         # Alice joins a community.
         self.alice = self.make_participant('alice', balance=100)
-        c = self.alice.create_community('something')
+        c = self.alice.create_community('C++')
         self.alice.update_community_status('memberships', True, c.id)
 
     def test_community_member_shows_up_on_community_listing(self):
-        html = self.client.GET('/for/something/').text
+        html = self.client.GET('/for/C++/').text
         assert html.count('alice') == 2  # entry in New Participants
 
 
