@@ -373,12 +373,12 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             tell_sentry(e, {})
 
     # Prepare a unique and sorted list for use in the language switcher
-    percent = lambda l: sum((percent(s) if isinstance(s, tuple) else 1) for s in l if s) / len(l)
+    percent = lambda l, total: sum((percent(s, len(s)) if isinstance(s, tuple) else 1) for s in l if s) / total
     for l in locales.values():
         if l.language == 'en':
             l.completion = 1
             continue
-        l.completion = percent([m.string for m in l.catalog if m.id])
+        l.completion = percent([m.string for m in l.catalog if m.id and not m.fuzzy], len(l.catalog))
     loc_url = canonical_scheme+'://%s.'+canonical_host
     lang_list = sorted(
         (

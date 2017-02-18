@@ -7,7 +7,7 @@ from liberapay.exceptions import CommunityAlreadyExists, InvalidCommunityName
 
 
 name_maxlength = 40
-name_allowed_chars_pattern = r'\w\.-'
+name_allowed_chars_pattern = r'\w\.\+-'
 name_pattern = r'^[%s]{1,%s}$' % (name_allowed_chars_pattern, name_maxlength)
 name_re = re.compile(name_pattern, re.U)
 normalize_re = re.compile(r'[^%s]+' % name_allowed_chars_pattern, re.U)
