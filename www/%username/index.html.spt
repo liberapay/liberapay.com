@@ -23,7 +23,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block profile_btn
 % if user and user.controls(participant)
-    <a href="edit" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
+    <a href="{{ participant.path('edit') }}" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
 % endif
 % endblock
 

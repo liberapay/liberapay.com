@@ -65,7 +65,7 @@ title = _username
 {% block heading %}{% endblock %}
 
 % block content
-    <a href="." class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
+    <a href="{{ participant.path('') }}" class="btn btn-success btn-lg pull-right">{{ _("View") }}</a>
 
 <div class="row">
 <div class="col-xs-12 col-md-8 col-md-offset-2">

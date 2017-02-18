@@ -24,6 +24,6 @@ subhead = _("Income Shares")
     {{ team_takes_table(participant) }}
 % endif
 
-<a class="btn btn-default" href="..">{{ _("← Go back") }}</a>
+<a class="btn btn-default" href="{{ participant.path('') }}">{{ _("← Go back") }}</a>
 
 % endblock
