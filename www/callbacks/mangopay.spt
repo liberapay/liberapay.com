@@ -76,6 +76,11 @@ if cls:
                  WHERE id = %s
             """, (credited_amount, paid_fees, new_vat, note, e_id))
 
+    if payio.AuthorId == website.app_conf.mangopay_client_id:
+        if event == 'PAYOUT_NORMAL' and status == 'succeeded':
+            # This is the monthly fee profit payout, ignore it
+            raise response.success(200, '{}')
+
     # Update the DB
     error = repr_error(payio)
     if event == 'PAYOUT_REFUND':

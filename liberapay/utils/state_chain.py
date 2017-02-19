@@ -1,5 +1,6 @@
 from __future__ import print_function, unicode_literals
 
+import socket
 import string
 
 from six.moves.urllib.parse import urlsplit, urlunsplit, quote as urlquote
@@ -9,6 +10,7 @@ from aspen.request_processor.algorithm import dispatch_path_to_filesystem
 from aspen.request_processor.dispatcher import NotFound, RedirectFromSlashless
 from pando import Response
 from pando.http.request import Line
+from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
 from ..exceptions import LazyResponse
@@ -142,6 +144,25 @@ def merge_exception_into_response(state, exception, response=None):
             response.headers.add(k, v)
     # copy the rest
     response.__dict__.update(exception.__dict__)
+
+
+def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None):
+    # The mangopay module reraises exceptions and stores the original in `__cause__`.
+    exception = getattr(exception, '__cause__', exception)
+    if isinstance(exception, Timeout) or 'timeout' in str(exception).lower():
+        response = response or Response()
+        response.code = 504
+    elif isinstance(exception, (socket.error, ConnectionError)):
+        response = response or Response()
+        response.code = 502
+    else:
+        return
+    response.body = _(
+        "Processing your request failed because our server was unable to communicate "
+        "with a service located on another machine. This is a temporary issue, please "
+        "try again later."
+    )
+    return {'response': response, 'exception': None}
 
 
 def return_500_for_exception(website, exception, response=None):

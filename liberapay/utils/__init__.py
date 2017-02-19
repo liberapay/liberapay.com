@@ -81,7 +81,9 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     elif status == 'stub':
         if redirect_stub:
             to = participant.resolve_stub()
-            assert to
+            if not to:
+                # Account has been taken over
+                raise response.error(404)
             raise response.redirect(to)
 
     if restrict:
