@@ -1,5 +1,9 @@
-from liberapay.exceptions import CannotRemovePrimaryEmail, EmailAlreadyTaken, EmailNotVerified
-from liberapay.exceptions import TooManyEmailAddresses
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from liberapay.exceptions import (
+    BadEmailAddress, CannotRemovePrimaryEmail, EmailAlreadyTaken,
+    EmailNotVerified, TooManyEmailAddresses,
+)
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils import b64encode_s, emails
@@ -36,6 +40,18 @@ class TestEmail(EmailHarness):
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
         assert response.text == '{}'
+
+    def test_participant_cant_add_bad_email(self):
+        bad = (
+            'a\nb@example.net',
+            'alice@ex\rample.com',
+            '\0bob@example.org',
+        )
+        for blob in bad:
+            with self.assertRaises(BadEmailAddress):
+                self.alice.add_email(blob)
+            response = self.hit_email_spt('add-email', blob, should_fail=True)
+            assert response.code == 400
 
     def test_email_address_is_base64_encoded_in_sent_verification_link(self):
         address = 'alice@gratipay.com'
