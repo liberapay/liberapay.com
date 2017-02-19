@@ -232,3 +232,6 @@ ALTER TABLE paydays
     ADD COLUMN transfer_volume_refunded numeric(35,2),
     ADD COLUMN week_deposits_refunded numeric(35,2),
     ADD COLUMN week_withdrawals_refunded numeric(35,2);
+
+-- migration #28
+INSERT INTO app_conf (key, value) VALUES ('socket_timeout', '10.0'::jsonb);
