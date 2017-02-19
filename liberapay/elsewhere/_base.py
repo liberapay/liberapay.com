@@ -60,7 +60,7 @@ class Platform(object):
 
     required_attrs = ('account_url', 'display_name', 'name')
 
-    def __init__(self, api_key, api_secret, callback_url, api_url=None, auth_url=None):
+    def __init__(self, api_key, api_secret, callback_url, api_url=None, auth_url=None, api_timeout=20.0):
         self.api_key = api_key
         self.api_secret = api_secret
         self.callback_url = callback_url
@@ -70,6 +70,7 @@ class Platform(object):
             self.auth_url = auth_url
         elif not getattr(self, 'auth_url', None):
             self.auth_url = self.api_url
+        self.api_timeout = api_timeout
 
         # Determine the appropriate response parser using `self.api_format`
         api_format = getattr(self, 'api_format', None)
@@ -103,6 +104,7 @@ class Platform(object):
             if api_app_auth_params:
                 url += '?' if '?' not in url else '&'
                 url += api_app_auth_params.format(**self.__dict__)
+        kw.setdefault('timeout', self.api_timeout)
         response = sess.get(url, **kw)
 
         if not is_user_session:

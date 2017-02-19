@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import re
+import socket
 import signal
 from subprocess import call
 import traceback
@@ -136,6 +137,7 @@ class AppConf(object):
         openstreetmap_id=str,
         openstreetmap_secret=str,
         password_rounds=int,
+        socket_timeout=float,
         smtp_host=str,
         smtp_port=int,
         smtp_username=str,
@@ -179,8 +181,10 @@ class AppConf(object):
 def app_conf(db):
     if not db:
         return {'app_conf': None}
-    conf = AppConf(db.all("SELECT key, value FROM app_conf"))
-    return {'app_conf': conf}
+    app_conf = AppConf(db.all("SELECT key, value FROM app_conf"))
+    if app_conf:
+        socket.setdefaulttimeout(app_conf.socket_timeout)
+    return {'app_conf': app_conf}
 
 
 def mail(app_conf, project_root='.'):
@@ -189,6 +193,8 @@ def mail(app_conf, project_root='.'):
     smtp_conf = {
         k[5:]: v for k, v in app_conf.__dict__.items() if k.startswith('smtp_')
     }
+    if smtp_conf:
+        smtp_conf.setdefault('timeout', app_conf.socket_timeout)
     mailer = SMTPMailer(**smtp_conf) if smtp_conf else DummyMailer()
     emails = {}
     emails_dir = project_root+'/emails/'
@@ -222,6 +228,7 @@ def billing(app_conf):
         client_id=app_conf.mangopay_client_id,
         passphrase=app_conf.mangopay_client_password,
         sandbox=sandbox,
+        timeout=app_conf.socket_timeout,
     )
     mangopay.get_default_handler = mangopay.base.get_default_handler = \
         mangopay.query.get_default_handler = lambda: handler
@@ -321,6 +328,7 @@ def accounts_elsewhere(app_conf, asset):
             k[len(cls.name)+1:]: v
             for k, v in app_conf.__dict__.items() if k.startswith(cls.name+'_')
         }
+        conf.setdefault('api_timeout', app_conf.socket_timeout)
         platforms.append(cls(
             conf.pop('id'),
             conf.pop('secret'),
