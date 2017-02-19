@@ -109,6 +109,7 @@ HTTP_ERRORS = {
     500: _("Internal Server Error"),
     502: _("Upstream Error"),
     503: _("Service Unavailable"),
+    504: _("Gateway Timeout"),
 }
 del _
 

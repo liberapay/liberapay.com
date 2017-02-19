@@ -22,7 +22,7 @@ from liberapay.security import authentication, csrf, set_default_security_header
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.state_chain import (
     create_response_object, canonize, insert_constants, _dispatch_path_to_filesystem,
-    merge_exception_into_response, return_500_for_exception,
+    merge_exception_into_response, return_500_for_exception, turn_socket_error_into_50X,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
 from liberapay.website import website
@@ -121,6 +121,7 @@ algorithm.functions = [
 
     tell_sentry,
     merge_exception_into_response,
+    turn_socket_error_into_50X,
     algorithm['get_response_for_exception'],
 
     authentication.add_auth_to_response,
