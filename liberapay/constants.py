@@ -63,7 +63,16 @@ DONATION_WEEKLY_MIN, DONATION_WEEKLY_MAX = DONATION_LIMITS_WEEKLY
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
-EMAIL_RE = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
+EMAIL_RE = re.compile(r'''
+    # This is the regexp used by MangoPay (as of February 2017).
+    # It rejects some valid but exotic addresses.
+    # https://en.wikipedia.org/wiki/Email_address
+    ^
+    [a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*
+    @
+    ([a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?
+    $
+''', re.VERBOSE)
 
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 

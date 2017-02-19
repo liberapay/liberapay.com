@@ -199,8 +199,8 @@ class TestEmail(EmailHarness):
             self.alice.add_email('alice@example.coop')
 
     def test_email_addresses_are_normalized(self):
-        self.alice.add_email('\t Alice." and Bob"@ExAmPlE.InFo \n')
-        assert self.alice.get_any_email() == 'Alice." and Bob"@example.info'
+        self.alice.add_email('\t Alice&Bob@ExAmPlE.InFo \n')
+        assert self.alice.get_any_email() == 'Alice&Bob@example.info'
 
     def test_emails_page_shows_emails(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
