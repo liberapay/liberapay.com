@@ -18,6 +18,8 @@ if not user.mangopay_user_id:
     raise response.error(403, _("You can't receive money until you've filled the identity form in your account settings."))
 
 take = parse_decimal(request.body['take'])
+if take < 0:
+    raise response.error(400, "bad take: negative amounts are not allowed")
 new_take = team.set_take_for(user, take, user)
 if new_take is None:
     raise response.error(403, _("You are not a member of the {0} team.", team.username))
