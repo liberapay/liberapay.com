@@ -1,9 +1,11 @@
 {{ _("{0} from {1} has joined Liberapay!", user_name, platform) }}
 
 [---] text/html
-{{ _("Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!",
-     Money(amount, 'EUR'),
-     ('<b><a href="{0}">{1}</a></b>'|safe).format(profile_url, user_name)) }}
+<p>{{ _(
+    "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!",
+    Money(amount, 'EUR'),
+    ('<b><a href="{0}">{1}</a></b>'|safe).format(profile_url, user_name)
+) }}</p>
 [---] text/plain
 {{ _("Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!",
      Money(amount, 'EUR'),

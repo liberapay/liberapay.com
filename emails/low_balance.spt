@@ -1,11 +1,13 @@
 {{ _("It's time to top up your Liberapay wallet") }}
 
 [---] text/html
-{{ _("You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week.",
-     Money(low_balance, 'EUR'), Money(participant.get_giving_for_profile()[1], 'EUR')) }}
+<p>{{ _(
+    "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week.",
+    Money(low_balance, 'EUR'), Money(participant.get_giving_for_profile()[1], 'EUR')
+) }}</p>
 
-<a href="{{ participant.url('wallet/payin/') }}" style="{{ button_style('primary') }}"
-    >{{ _("Add money") }}</a>
+<p><a href="{{ participant.url('wallet/payin/') }}" style="{{ button_style('primary') }}">{{
+    _("Add money") }}</a></p>
 
 [---] text/plain
 {{ _("You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week.",

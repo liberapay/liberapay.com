@@ -1,12 +1,13 @@
 {{ _("Connect to Liberapay account?") }}
 
 [---] text/html
-{{ _("We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?",
-     ('<b>%s</b>'|safe) % email,
-     ('<b><a href="https://liberapay.com/{0}/">{0}</a></b>'|safe).format(username)) }}
-<br>
-<br>
-<a href="{{ link }}" style="{{ button_style('success') }}">{{ _("Yes, proceed") }}</a>
+<p>{{ _(
+    "We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?",
+    ('<b>%s</b>'|safe) % email,
+    ('<b><a href="https://liberapay.com/{0}/">{0}</a></b>'|safe).format(username)
+) }}</p>
+
+<p><a href="{{ link }}" style="{{ button_style('success') }}">{{ _("Yes, proceed") }}</a></p>
 
 [---] text/plain
 {{ _("We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?",
