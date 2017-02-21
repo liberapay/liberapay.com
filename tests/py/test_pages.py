@@ -34,10 +34,12 @@ class BrowseTestHarness(MangopayHarness):
         urls = OrderedDict()
         for url in sorted(map(f, find_files(cls.client.www_root, '*.spt'))):
             url = url.replace('/%username/membership/', '/team/membership/') \
+                     .replace('/team/membership/%action', '/team/membership/join') \
+                     .replace('/%username/%action', '/%username/subscribe') \
                      .replace('/for/%name/', '/for/wonderland/') \
+                     .replace('/for/wonderland/%action', '/for/wonderland/leave') \
                      .replace('/%platform', '/github') \
                      .replace('/%user_name/', '/liberapay/') \
-                     .replace('/%action', '/leave') \
                      .replace('/%redirect_to', '/giving') \
                      .replace('/%back_to', '/Li4=') \
                      .replace('/payday/%id', '/payday/') \

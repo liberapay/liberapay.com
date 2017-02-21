@@ -79,6 +79,13 @@ class TestCommunityActions(Harness):
         response = self.client.GET('/bob/communities.json', auth_as=self.bob)
         assert len(json.loads(response.text)) == 0
 
+    def test_subscribe_and_unsubscribe_as_anon(self):
+        response = self.client.POST('/for/test/subscribe', xhr=True, raise_immediately=False)
+        assert response.code == 403
+
+        response = self.client.POST('/for/test/unsubscribe', xhr=True, raise_immediately=False)
+        assert response.code == 403
+
     def test_join_and_leave(self):
         with self.assertRaises(AuthRequired):
             self.client.POST('/for/test/join')

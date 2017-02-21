@@ -987,20 +987,21 @@ class Participant(Model, MixinTeam):
             END;
             $$ LANGUAGE plpgsql;
 
-            SELECT id
+            SELECT *
               FROM subscriptions
              WHERE publisher = %(publisher)s
                AND subscriber = %(subscriber)s;
         """, locals())
         if not r and on:
             raise Exception('upsert in subscriptions failed')
+        return r
 
-    def check_subscription_status(self, participant):
+    def check_subscription_status(self, subscriber):
         return self.db.one("""
             SELECT is_on
               FROM subscriptions
              WHERE publisher = %s AND subscriber = %s
-        """, (self.id, participant.id))
+        """, (self.id, subscriber.id))
 
     @classmethod
     def get_subscriptions(cls, publisher):
