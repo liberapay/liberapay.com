@@ -960,12 +960,13 @@ class Participant(Model, MixinTeam):
 
     def upsert_subscription(self, on, publisher):
         subscriber = self.id
-        token = str(uuid.uuid4())
-        self.db.run("""
+        token = str(uuid.uuid4()) if on else None
+        r = self.db.one("""
             DO $$
             DECLARE
                 cname text;
             BEGIN
+                IF (%(on)s) THEN
                 BEGIN
                     INSERT INTO subscriptions
                                 (publisher, subscriber, is_on, token)
@@ -977,17 +978,22 @@ class Participant(Model, MixinTeam):
                         RAISE;
                     END IF;
                 END;
+                END IF;
                 UPDATE subscriptions
                    SET is_on = %(on)s
                      , mtime = CURRENT_TIMESTAMP
                  WHERE publisher = %(publisher)s
                    AND subscriber = %(subscriber)s;
-                IF (NOT FOUND) THEN
-                    RAISE 'upsert in subscriptions failed';
-                END IF;
             END;
             $$ LANGUAGE plpgsql;
+
+            SELECT id
+              FROM subscriptions
+             WHERE publisher = %(publisher)s
+               AND subscriber = %(subscriber)s;
         """, locals())
+        if not r and on:
+            raise Exception('upsert in subscriptions failed')
 
     def check_subscription_status(self, participant):
         return self.db.one("""
