@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liberapay\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"PO-Revision-Date: 2017-02-20 09:09+0000\n"
-"Last-Translator: Kim <github@aggressive-solutions.de>\n"
+"PO-Revision-Date: 2017-02-22 08:47+0000\n"
+"Last-Translator: Kim <github@aggsol.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
 "Language: de\n"
@@ -718,11 +718,11 @@ msgstr "Ihren Avatar ändern"
 
 #, python-brace-format
 msgid "Joined {0} ago."
-msgstr "Registriert {0} vor."
+msgstr "Registriert vor {0}."
 
 #, python-brace-format
 msgid "Closed {0} ago."
-msgstr "Geschlossen {0} vor."
+msgstr "Geschlossen seit {0}."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give and receive."
@@ -829,7 +829,9 @@ msgstr "Über Teams"
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
-msgstr "Ihr Nenn nehmen von der {0} Team ist begrenzt auf {1} Gespräch. {2} Warum? {3}"
+msgstr ""
+"Ihre nominelle Entnahme vom {0}-Team ist diese Woche begrenzt auf {1}. "
+"{2}Warum?{3}"
 
 msgid "Last Payday"
 msgstr "Letzter Zahltag"
@@ -840,12 +842,14 @@ msgstr "Nächster Zahltag"
 msgid "Member"
 msgstr "Mitglied"
 
+#, fuzzy
 msgid "Nominal Take"
-msgstr "nominal nehmen"
+msgstr "Nominelle Entnahme"
 
 msgid "Actual Take"
 msgstr "Tatsächliche nehmen"
 
+#, fuzzy
 msgid "Update my nominal take"
 msgstr "Nominelle Entnahme aktualisieren"
 
@@ -1277,11 +1281,11 @@ msgstr "Sie können nicht einen inaktiven Benutzer einladen, einem Team beizutre
 
 #, python-brace-format
 msgid "{0} has already been invited to join this team {1} ago."
-msgstr "{0} wurde bereits eingeladen, dieses Team beizutreten {1} vor."
+msgstr "{0} wurde bereits vor {1} eingeladen diesem Team beizutreten."
 
 #, python-brace-format
 msgid "{0} has already refused to join this team {1} ago."
-msgstr "{0} hat es bereits abgelehnt, dieses Team beizutreten {1} vor."
+msgstr "{0} hat es vor {1} bereits abgelehnt diesem Team beizutreten."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -2020,7 +2024,7 @@ msgstr "Zahltag ist wenn Spenden tatsächlich ausgeführt werden. Es ist ein Pro
 
 #, python-brace-format
 msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay wurde vor {0} gestarteten und hat {1} Benutzer."
+msgstr "Liberapay wurde vor {0} gestartetet und hat {1} Benutzer."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
@@ -2028,7 +2032,9 @@ msgstr "{0} werden von Liberapay treuhänderisch verwaltet."
 
 #, python-brace-format
 msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr "Der letzte Zahltag war vor {0} und es wurden {1} zwischen {2} Benutzer überwiesen."
+msgstr ""
+"Der letzte Zahltag war vor {0} und es wurden {1} zwischen {2} Benutzer "
+"verteilt."
 
 #, python-brace-format
 msgid "{0} participants gave money."
@@ -2106,18 +2112,34 @@ msgstr "Das Geld teilen"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Teams haben keine Hierarchie. Ihre Mitglieder sind gleichberechtigt die eigene Entnahme zu bestimmen."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Sie können Ihre Entnahme im {0}Dashboard für Teams{1} ändern. Es enthält Tabellen, diese zeigen die nominalen Entnahmen aller Mitglieder für den nächsten und vorherigen Zahltag, sowie eine Schätzung der tatsächlichen Beträge, die erhalten sie am nächsten Zahltag erhalten werden."
+msgstr ""
+"Sie können Ihre Entnahme im {0}Dashboard für Teams{1} ändern. Es enthält "
+"Tabellen, diese zeigen die nominelle Entnahmen aller Mitglieder für den "
+"nächsten und vorherigen Zahltag, sowie eine Schätzung der tatsächlichen "
+"Beträge, die erhalten sie am nächsten Zahltag erhalten werden."
 
+#, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
-msgstr "Die nominalen Entnahmen werden von den Mitgliedern selbst bestimmt. Die tatsächlichen Auszalungen werden vom System berechnet: Zuerst summiert es die nominalen Entnahmen, dann berechnet es den Prozentsatz, dem jede Entnahme entspricht. Anschließend wendet es diese Prozentsätze auf die verfügbaren Einnahmen an. Nominale Entnahmen können auch als Maxima verstanden werden: die tatsächliche Auszahlung ist nie höher als die nominale Entnahme, selbst wenn zusätzliches Einkommen zur Verfügung stünde."
+msgstr ""
+"Die nominellen Entnahmen werden von den Mitgliedern selbst bestimmt. Die "
+"tatsächlichen Auszalungen werden vom System berechnet: Zuerst summiert es "
+"die nominellen Entnahmen, dann berechnet es den Prozentsatz, dem jede "
+"Entnahme entspricht. Anschließend wendet es diese Prozentsätze auf die "
+"verfügbaren Einnahmen an. Nominelle Entnahmen können auch als Maxima "
+"verstanden werden: die tatsächliche Auszahlung ist nie höher als die "
+"nominelle Entnahme, selbst wenn zusätzliches Einkommen zur Verfügung stünde."
 
 msgid "Regulation of take amounts"
 msgstr "Regelung der Entnahmebeträge"
 
+#, fuzzy
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
-msgstr "Nominale Entnahmen sind gedeckelt. Sie können nicht höher als das berechnete Maxium des letzten Zahltags sein. Diese Regel soll das Risiko von Missbrauch durch böswillige Team-Mitglieder mindern."
+msgstr ""
+"Nominelle Entnahmen sind gedeckelt. Sie können nicht höher als das "
+"berechnete Maxium des letzten Zahltags sein. Diese Regel soll das Risiko von "
+"Missbrauch durch böswillige Team-Mitglieder mindern."
 
 msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
 msgstr "Der gedeckelte Wert ist das Maximum der folgenden vier Werte: die Zahl 1, der doppelte Entnahmebetrag des vorherigen Zahltags, die Entnahme des vorherigen Zahltags + einen proportionalen Anteil der ungenutzten Einkünfte, die durchschnittliche Entnahme des vorherigen Zahltags."
@@ -2451,7 +2473,7 @@ msgstr "Ein Benutzer hat vor {0} eine neue Gemeinschaft erstellt ."
 
 #, python-brace-format
 msgid "Payday was run {0} ago and transferred {1}."
-msgstr "Zahltag wurde vor {0} ausgeführt und es wurden {1} gespendet."
+msgstr "Zahltag wurde vor {0} ausgeführt und es wurden {1} verteilt."
 
 msgid "Upcoming Features"
 msgstr "Zukünftige Funktionen"
