@@ -59,7 +59,7 @@ def sign_in_with_form_data(body, state):
                 qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
                 p.send_email(
                     'login_link',
-                    email=email,
+                    email,
                     link=p.url('settings/', qs),
                     link_validity=SESSION_TIMEOUT,
                 )

@@ -36,7 +36,7 @@ if request.method == 'POST' and request.body.get('action') == 'email':
     exchange, payin = get_exchange_payin(participant, request)
     sent = participant.send_email(
         'payin_bankwire_created',
-        email=(participant.email or participant.get_any_email()),
+        (participant.email or participant.get_any_email()),
         exchange=exchange._asdict(), payin=payin,
     )
     if not sent:

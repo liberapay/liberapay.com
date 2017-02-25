@@ -615,11 +615,11 @@ class Participant(Model, MixinTeam):
         username = self.username
         base64_email = b64encode_s(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email64={base64_email}&nonce={nonce}"
-        r = self.send_email('verification', email=email, link=link.format(**locals()))
+        r = self.send_email('verification', email, link=link.format(**locals()))
         assert r == 1  # Make sure the verification email was sent
 
         if self.email:
-            self.send_email('verification_notice', new_email=email)
+            self.send_email('verification_notice', self.email, new_email=email)
             return 2
         else:
             self.update_avatar(cursor=cursor)
@@ -700,11 +700,9 @@ class Participant(Model, MixinTeam):
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.id, address))
 
-    def send_email(self, spt_name, **context):
+    def send_email(self, spt_name, email, **context):
         self.fill_notification_context(context)
-        email = context.setdefault('email', self.email)
-        if not email:
-            return 0  # Not Sent
+        context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(context, locale)
@@ -758,12 +756,14 @@ class Participant(Model, MixinTeam):
             if not messages:
                 break
             for msg in messages:
+                d = deserialize(msg.context)
                 p = cls.from_id(msg.participant)
-                if not p.email:
+                email = d.get('email') or p.email
+                if not email:
                     delete(msg)
                     continue
                 try:
-                    r = p.send_email(msg.spt_name, **deserialize(msg.context))
+                    r = p.send_email(msg.spt_name, email, **d)
                     assert r == 1
                 except Exception as e:
                     website.tell_sentry(e, {})
