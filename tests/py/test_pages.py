@@ -245,7 +245,7 @@ class TestPages(BrowseTestHarness):
 
         # Create a mangopay natural user
         user_data = {
-            'FirstName': 'Kathryn',
+            'FirstName': 'Kàthryn',
             'LastName': 'Janeway',
             'CountryOfResidence': 'US',
             'Nationality': 'IS',
@@ -258,8 +258,13 @@ class TestPages(BrowseTestHarness):
         janeway = janeway.refetch()
         assert janeway.mangopay_user_id
 
+        # Test the rendering of the identity page
+        r = self.client.GET('/janeway/identity.html', auth_as=janeway)
+        assert r.code == 200, r.text
+        assert user_data['FirstName'] in r.text
+
         # Edit the natural user
-        data2 = dict(data, Nationality='US', Birthday='1970-01-01')
+        data2 = dict(data, FirstName='Kathryn', Nationality='US', Birthday='1970-01-01')
         r = self.client.POST('/janeway/identity', data2, **kw)
         assert r.code == 200, r.text
         janeway2 = janeway.refetch()

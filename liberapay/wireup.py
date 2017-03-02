@@ -232,9 +232,20 @@ def billing(app_conf):
     )
     mangopay.get_default_handler = mangopay.base.get_default_handler = \
         mangopay.query.get_default_handler = lambda: handler
+
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/95
     if not sandbox:
         mangopay.api.logger.setLevel(logging.CRITICAL)
+
+    # https://github.com/Mangopay/mangopay2-python-sdk/issues/99
+    import six
+    if not six.PY3:
+        from mangopay.fields import CharField
+        def _python_value(self, value):
+            if self.python_value_callback:
+                value = self.python_value_callback(value)
+            return value
+        CharField.python_value = _python_value
 
 
 def username_restrictions(www_root):

@@ -182,17 +182,17 @@ interactions:
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
-    body: '{"CountryOfResidence": "US", "FirstName": "Kathryn", "LastName": "Janeway",
+    body: '{"CountryOfResidence": "US", "FirstName": "K\u00e0thryn", "LastName": "Janeway",
       "Tag": "/~4/", "Nationality": "IS", "Birthday": 790214400, "KYCLevel": "LIGHT",
       "Email": "janeway@example.org", "PersonType": "NATURAL"}'
     headers: {}
     method: POST
     uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural
   response:
-    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Kathryn","LastName":"Janeway","Birthday":790214400,"Nationality":"IS","CountryOfResidence":"US","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"20717522","Tag":"/~4/","CreationDate":1486643869}'}
+    body: {string: "{\"Address\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"FirstName\":\"K\xE0thryn\",\"LastName\":\"Janeway\",\"Birthday\":790214400,\"Nationality\":\"IS\",\"CountryOfResidence\":\"US\",\"Occupation\":null,\"IncomeRange\":null,\"ProofOfIdentity\":null,\"ProofOfAddress\":null,\"PersonType\":\"NATURAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"20717522\",\"Tag\":\"/~4/\",\"CreationDate\":1488450577}"}
     headers:
       cache-control: [no-cache]
-      content-length: ['430']
+      content-length: ['431']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -203,10 +203,24 @@ interactions:
     method: GET
     uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717522
   response:
-    body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Kathryn","LastName":"Janeway","Birthday":790214400,"Nationality":"IS","CountryOfResidence":"US","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"20717522","Tag":"/~4/","CreationDate":1486643869}'}
+    body: {string: "{\"Address\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"FirstName\":\"K\xE0thryn\",\"LastName\":\"Janeway\",\"Birthday\":790214400,\"Nationality\":\"IS\",\"CountryOfResidence\":\"US\",\"Occupation\":null,\"IncomeRange\":null,\"ProofOfIdentity\":null,\"ProofOfAddress\":null,\"PersonType\":\"NATURAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"20717522\",\"Tag\":\"/~4/\",\"CreationDate\":1488450577}"}
     headers:
       cache-control: [no-cache]
-      content-length: ['430']
+      content-length: ['431']
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717522
+  response:
+    body: {string: "{\"Address\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"FirstName\":\"K\xE0thryn\",\"LastName\":\"Janeway\",\"Birthday\":790214400,\"Nationality\":\"IS\",\"CountryOfResidence\":\"US\",\"Occupation\":null,\"IncomeRange\":null,\"ProofOfIdentity\":null,\"ProofOfAddress\":null,\"PersonType\":\"NATURAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"20717522\",\"Tag\":\"/~4/\",\"CreationDate\":1488450577}"}
+    headers:
+      cache-control: [no-cache]
+      content-length: ['431']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -230,17 +244,17 @@ interactions:
 - request:
     body: '{"LegalRepresentativeBirthday": 790214400, "Tag": "/~4/", "PersonType":
       "NATURAL", "KYCLevel": "LIGHT", "LegalRepresentativeNationality": "IS", "LegalRepresentativeCountryOfResidence":
-      "US", "LegalRepresentativeFirstName": "Kathryn", "LegalRepresentativeLastName":
+      "US", "LegalRepresentativeFirstName": "K\u00e0thryn", "LegalRepresentativeLastName":
       "Janeway", "LegalPersonType": "BUSINESS", "Email": "janeway@example.org", "Name":
       "Starfleet"}'
     headers: {}
     method: POST
     uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/legal
   response:
-    body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"BUSINESS","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":790214400,"LegalRepresentativeNationality":"IS","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"20717524","Tag":"/~4/","CreationDate":1486643870}'}
+    body: {string: "{\"HeadquartersAddress\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"LegalRepresentativeAddress\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"Name\":\"Starfleet\",\"LegalPersonType\":\"BUSINESS\",\"LegalRepresentativeFirstName\":\"K\xE0thryn\",\"LegalRepresentativeLastName\":\"Janeway\",\"LegalRepresentativeEmail\":null,\"LegalRepresentativeBirthday\":790214400,\"LegalRepresentativeNationality\":\"IS\",\"LegalRepresentativeCountryOfResidence\":\"US\",\"ProofOfRegistration\":null,\"ShareholderDeclaration\":null,\"Statute\":null,\"LegalRepresentativeProofOfIdentity\":null,\"PersonType\":\"LEGAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"20717524\",\"Tag\":\"/~4/\",\"CreationDate\":1488450578}"}
     headers:
       cache-control: [no-cache]
-      content-length: ['777']
+      content-length: ['778']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -251,10 +265,10 @@ interactions:
     method: GET
     uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717524
   response:
-    body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"BUSINESS","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":790214400,"LegalRepresentativeNationality":"IS","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"20717524","Tag":"/~4/","CreationDate":1486643870}'}
+    body: {string: "{\"HeadquartersAddress\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"LegalRepresentativeAddress\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"Name\":\"Starfleet\",\"LegalPersonType\":\"BUSINESS\",\"LegalRepresentativeFirstName\":\"K\xE0thryn\",\"LegalRepresentativeLastName\":\"Janeway\",\"LegalRepresentativeEmail\":null,\"LegalRepresentativeBirthday\":790214400,\"LegalRepresentativeNationality\":\"IS\",\"LegalRepresentativeCountryOfResidence\":\"US\",\"ProofOfRegistration\":null,\"ShareholderDeclaration\":null,\"Statute\":null,\"LegalRepresentativeProofOfIdentity\":null,\"PersonType\":\"LEGAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"20717524\",\"Tag\":\"/~4/\",\"CreationDate\":1488450578}"}
     headers:
       cache-control: [no-cache]
-      content-length: ['777']
+      content-length: ['778']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
@@ -262,17 +276,17 @@ interactions:
 - request:
     body: '{"LegalRepresentativeBirthday": 790214400, "Tag": "/~4/", "Name": "Starfleet",
       "KYCLevel": "LIGHT", "LegalRepresentativeNationality": "IS", "LegalRepresentativeCountryOfResidence":
-      "US", "LegalRepresentativeFirstName": "Kathryn", "LegalRepresentativeLastName":
+      "US", "LegalRepresentativeFirstName": "K\u00e0thryn", "LegalRepresentativeLastName":
       "Janeway", "LegalPersonType": "ORGANIZATION", "Email": "janeway@example.org",
       "PersonType": "LEGAL"}'
     headers: {}
     method: PUT
     uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/legal/20717524
   response:
-    body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"ORGANIZATION","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":790214400,"LegalRepresentativeNationality":"IS","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"20717524","Tag":"/~4/","CreationDate":1486643870}'}
+    body: {string: "{\"HeadquartersAddress\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"LegalRepresentativeAddress\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"Name\":\"Starfleet\",\"LegalPersonType\":\"ORGANIZATION\",\"LegalRepresentativeFirstName\":\"K\xE0thryn\",\"LegalRepresentativeLastName\":\"Janeway\",\"LegalRepresentativeEmail\":null,\"LegalRepresentativeBirthday\":790214400,\"LegalRepresentativeNationality\":\"IS\",\"LegalRepresentativeCountryOfResidence\":\"US\",\"ProofOfRegistration\":null,\"ShareholderDeclaration\":null,\"Statute\":null,\"LegalRepresentativeProofOfIdentity\":null,\"PersonType\":\"LEGAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"20717524\",\"Tag\":\"/~4/\",\"CreationDate\":1488450578}"}
     headers:
       cache-control: [no-cache]
-      content-length: ['781']
+      content-length: ['782']
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
