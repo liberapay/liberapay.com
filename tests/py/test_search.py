@@ -2,9 +2,20 @@ from __future__ import unicode_literals
 
 import json
 
+from liberapay.models.community import Community
 from liberapay.testing import Harness
 
 class TestSearch(Harness):
+
+    def test_basic_search(self):
+        response = self.client.GET('/search?q=foobar')
+        assert response.code == 200
+
+    def test_basic_search_with_results(self):
+        alice = self.make_participant('alice')
+        Community.create('alice', alice.id)
+        response = self.client.GET('/search?q=alice')
+        assert response.code == 200
 
     def test_get_non_existent_user(self):
         response = self.client.GET('/search.json?q=alice&scope=usernames')
