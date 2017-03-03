@@ -235,3 +235,89 @@ ALTER TABLE paydays
 
 -- migration #28
 INSERT INTO app_conf (key, value) VALUES ('socket_timeout', '10.0'::jsonb);
+
+-- migration #29
+CREATE TABLE newsletters
+( id              bigserial     PRIMARY KEY
+, ctime           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, sender          bigint        NOT NULL REFERENCES participants
+);
+CREATE TABLE newsletter_texts
+( id              bigserial     PRIMARY KEY
+, newsletter      bigint        NOT NULL REFERENCES newsletters
+, lang            text          NOT NULL
+, subject         text          NOT NULL CHECK (subject <> '')
+, body            text          NOT NULL CHECK (body <> '')
+, ctime           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, scheduled_for   timestamptz
+, sent_at         timestamptz
+, sent_count      int
+, UNIQUE (newsletter, lang)
+);
+CREATE INDEX newsletter_texts_not_sent_idx
+          ON newsletter_texts (scheduled_for ASC)
+       WHERE sent_at IS NULL AND scheduled_for IS NOT NULL;
+CREATE TABLE subscriptions
+( id            bigserial      PRIMARY KEY
+, publisher     bigint         NOT NULL REFERENCES participants
+, subscriber    bigint         NOT NULL REFERENCES participants
+, ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
+, is_on         boolean        NOT NULL
+, token         text
+, UNIQUE (publisher, subscriber)
+);
+LOCK TABLE community_subscriptions IN EXCLUSIVE MODE;
+INSERT INTO subscriptions (publisher, subscriber, ctime, mtime, is_on)
+     SELECT c.participant, cs.participant, cs.ctime, cs.mtime, cs.is_on
+       FROM community_subscriptions cs
+       JOIN communities c ON c.id = cs.community
+   ORDER BY cs.ctime ASC;
+DROP TABLE community_subscriptions;
+DROP FUNCTION IF EXISTS update_community_nsubscribers();
+ALTER TABLE participants ADD COLUMN nsubscribers int NOT NULL DEFAULT 0;
+LOCK TABLE communities IN EXCLUSIVE MODE;
+UPDATE participants p
+   SET nsubscribers = c.nsubscribers
+  FROM communities c
+ WHERE c.participant = p.id
+   AND c.nsubscribers <> p.nsubscribers;
+ALTER TABLE communities DROP COLUMN nsubscribers;
+CREATE OR REPLACE FUNCTION update_community_nmembers() RETURNS trigger AS $$
+    DECLARE
+        old_is_on boolean = (CASE WHEN TG_OP = 'INSERT' THEN FALSE ELSE OLD.is_on END);
+        new_is_on boolean = (CASE WHEN TG_OP = 'DELETE' THEN FALSE ELSE NEW.is_on END);
+        delta int = CASE WHEN new_is_on THEN 1 ELSE -1 END;
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        IF (new_is_on = old_is_on) THEN
+            RETURN (CASE WHEN TG_OP = 'INSERT' THEN NULL ELSE rec END);
+        END IF;
+        UPDATE communities
+           SET nmembers = nmembers + delta
+         WHERE id = rec.community;
+        RETURN rec;
+    END;
+$$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION update_nsubscribers() RETURNS trigger AS $$
+    DECLARE
+        old_is_on boolean = (CASE WHEN TG_OP = 'INSERT' THEN FALSE ELSE OLD.is_on END);
+        new_is_on boolean = (CASE WHEN TG_OP = 'DELETE' THEN FALSE ELSE NEW.is_on END);
+        delta int = CASE WHEN new_is_on THEN 1 ELSE -1 END;
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        IF (new_is_on = old_is_on) THEN
+            RETURN (CASE WHEN TG_OP = 'INSERT' THEN NULL ELSE rec END);
+        END IF;
+        UPDATE participants
+           SET nsubscribers = nsubscribers + delta
+         WHERE id = rec.publisher;
+        RETURN rec;
+    END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER update_nsubscribers
+    BEFORE INSERT OR UPDATE OR DELETE ON subscriptions
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_nsubscribers();

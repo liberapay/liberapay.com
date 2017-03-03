@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '28'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '29'::jsonb);
 
 
 -- app configuration
@@ -76,6 +76,8 @@ CREATE TABLE participants
 , privileges            int                     NOT NULL DEFAULT 0
 
 , is_suspended          boolean
+
+, nsubscribers          int                     NOT NULL DEFAULT 0
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
@@ -270,12 +272,10 @@ CREATE TABLE communities
 ( id             bigserial     PRIMARY KEY
 , name           text          UNIQUE NOT NULL
 , nmembers       int           NOT NULL DEFAULT 0
-, nsubscribers   int           NOT NULL DEFAULT 0
 , ctime          timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
 , creator        bigint        NOT NULL REFERENCES participants
 , lang           text          NOT NULL
 , participant    bigint        NOT NULL REFERENCES participants
-, CHECK (nsubscribers >= 0)
 );
 
 CREATE UNIQUE INDEX ON communities (lower(name));
@@ -297,14 +297,24 @@ CREATE TRIGGER update_community_nmembers
     FOR EACH ROW
     EXECUTE PROCEDURE update_community_nmembers();
 
-CREATE TABLE community_subscriptions
-( participant   bigint         NOT NULL REFERENCES participants
-, community     bigint         NOT NULL REFERENCES communities
+
+-- subscriptions
+
+CREATE TABLE subscriptions
+( id            bigserial      PRIMARY KEY
+, publisher     bigint         NOT NULL REFERENCES participants
+, subscriber    bigint         NOT NULL REFERENCES participants
 , ctime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , mtime         timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , is_on         boolean        NOT NULL
-, UNIQUE (participant, community)
+, token         text
+, UNIQUE (publisher, subscriber)
 );
+
+CREATE TRIGGER update_nsubscribers
+    BEFORE INSERT OR UPDATE OR DELETE ON subscriptions
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_nsubscribers();
 
 
 -- takes -- how members of a team share the money it receives
@@ -467,6 +477,32 @@ CREATE OR REPLACE VIEW sponsors AS
        AND hide_from_lists = 0
        AND profile_noindex = 0
     ;
+
+
+-- newsletters
+
+CREATE TABLE newsletters
+( id              bigserial     PRIMARY KEY
+, ctime           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, sender          bigint        NOT NULL REFERENCES participants
+);
+
+CREATE TABLE newsletter_texts
+( id              bigserial     PRIMARY KEY
+, newsletter      bigint        NOT NULL REFERENCES newsletters
+, lang            text          NOT NULL
+, subject         text          NOT NULL CHECK (subject <> '')
+, body            text          NOT NULL CHECK (body <> '')
+, ctime           timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, scheduled_for   timestamptz
+, sent_at         timestamptz
+, sent_count      int
+, UNIQUE (newsletter, lang)
+);
+
+CREATE INDEX newsletter_texts_not_sent_idx
+          ON newsletter_texts (scheduled_for ASC)
+       WHERE sent_at IS NULL AND scheduled_for IS NOT NULL;
 
 
 -- composite types, keep this at the end of the file
