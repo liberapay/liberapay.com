@@ -75,7 +75,7 @@ def fake_community(db, creator):
     """
     name = community.normalize(faker.city())
     c = creator.create_community(name)
-    creator.update_community_status('memberships', True, c.id)
+    creator.upsert_community_membership(True, c.id)
     return c
 
 
@@ -203,7 +203,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
 
         members = random.sample(participants, random.randint(1, 3))
         for p in members:
-            p.update_community_status('memberships', True, community.id)
+            p.upsert_community_membership(True, community.id)
 
     print("Making Tips")
     tips = []

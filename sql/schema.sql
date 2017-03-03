@@ -18,6 +18,8 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 \i sql/utils.sql
 
+\i sql/update_counts.sql
+
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
@@ -281,8 +283,6 @@ CREATE UNIQUE INDEX ON communities (lower(name));
 CREATE INDEX community_trgm_idx ON communities
     USING gist(name gist_trgm_ops);
 
-\i sql/update_community.sql
-
 CREATE TABLE community_memberships
 ( participant   bigint         NOT NULL REFERENCES participants
 , community     bigint         NOT NULL REFERENCES communities
@@ -305,11 +305,6 @@ CREATE TABLE community_subscriptions
 , is_on         boolean        NOT NULL
 , UNIQUE (participant, community)
 );
-
-CREATE TRIGGER update_community_nsubscribers
-    BEFORE INSERT OR UPDATE OR DELETE ON community_subscriptions
-    FOR EACH ROW
-    EXECUTE PROCEDURE update_community_nsubscribers();
 
 
 -- takes -- how members of a team share the money it receives

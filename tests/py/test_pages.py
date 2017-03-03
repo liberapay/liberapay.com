@@ -34,10 +34,12 @@ class BrowseTestHarness(MangopayHarness):
         urls = OrderedDict()
         for url in sorted(map(f, find_files(cls.client.www_root, '*.spt'))):
             url = url.replace('/%username/membership/', '/team/membership/') \
+                     .replace('/team/membership/%action', '/team/membership/join') \
+                     .replace('/%username/%action', '/%username/subscribe') \
                      .replace('/for/%name/', '/for/wonderland/') \
+                     .replace('/for/wonderland/%action', '/for/wonderland/leave') \
                      .replace('/%platform', '/github') \
                      .replace('/%user_name/', '/liberapay/') \
-                     .replace('/%action', '/leave') \
                      .replace('/%redirect_to', '/giving') \
                      .replace('/%back_to', '/Li4=') \
                      .replace('/payday/%id', '/payday/') \
@@ -51,7 +53,7 @@ class BrowseTestHarness(MangopayHarness):
         self.team = self.make_participant('team', kind='group')
         self.exchange_id = self.make_exchange('mango-cc', 19, 0, self.david)
         c = self.david.create_community('Wonderland')
-        self.david.update_community_status('memberships', True, c.id)
+        self.david.upsert_community_membership(True, c.id)
         self.team.add_member(self.david)
 
     def browse(self, **kw):

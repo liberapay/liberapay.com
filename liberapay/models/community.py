@@ -79,10 +79,13 @@ class Community(Model):
             OFFSET %s;
         """, (self.id, limit, offset))
 
-    def check_status(self, table, participant):
-        assert table in ('memberships', 'subscriptions')
+    def check_membership_status(self, participant):
         return self.db.one("""
             SELECT is_on
-              FROM community_{0}
+              FROM community_memberships
              WHERE community=%s AND participant=%s
-        """.format(table), (self.id, participant.id))
+        """, (self.id, participant.id))
+
+    @property
+    def nsubscribers(self):
+        return self.participant.nsubscribers

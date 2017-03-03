@@ -61,9 +61,10 @@ if query:
 
     if scope in (None, 'communities'):
         results['communities'] = website.db.all("""
-            SELECT id, name, nmembers, nsubscribers
+            SELECT id, name, nmembers, p.nsubscribers
                  , similarity(name, %(q)s) AS rank
-              FROM communities
+              FROM communities c
+              JOIN participants p ON p.id = c.participant
              WHERE name %% %(q)s
           ORDER BY rank DESC, name
              LIMIT 10

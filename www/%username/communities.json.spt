@@ -20,7 +20,7 @@ if request.method == 'POST':
         raise response.error(400)
 
     is_on = action == 'join'
-    user.update_community_status('memberships', is_on, c_id)
+    user.upsert_community_membership(is_on, c_id)
 
     if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
         redir_url = request.body.get('back_to') or participant.path('edit')

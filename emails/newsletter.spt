@@ -1,0 +1,16 @@
+{{ subject }}
+
+[---] text/html
+{{ body }}
+
+<div style="color: #999; font-size: 12px; padding: 21px 0 0;">
+    &mdash;
+    <p><a href="{{ unsubscribe_link }}"
+          style="text-decoration: underline;">{{ _("Unsubscribe") }}</a></p>
+</div>
+
+[---] text/plain
+{{ body }}
+
+--
+{{ _("Unsubscribe") }}: {{ unsubscribe_link }}

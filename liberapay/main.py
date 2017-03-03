@@ -86,6 +86,7 @@ if env.run_cron_jobs and conf:
     cron(conf.update_global_stats_every, lambda: utils.update_global_stats(website))
     cron(conf.check_db_every, website.db.self_check, True)
     cron(conf.dequeue_emails_every, Participant.dequeue_emails, True)
+    cron(conf.send_newsletters_every, Participant.send_newsletters, True)
 
 
 # Website Algorithm

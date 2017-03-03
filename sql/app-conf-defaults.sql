@@ -34,6 +34,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('openstreetmap_id', '"w4eQbkobmMzpkJFwS4tM16a3lq9AFbcoNCKNcGBE"'::jsonb),
     ('openstreetmap_secret', '"W08UgEhxQnh7nMzB7GfSFcqcwPnZMmKMNyxWdcw4"'::jsonb),
     ('password_rounds', '1'::jsonb),
+    ('send_newsletters_every', '60'::jsonb),
     ('socket_timeout', '10.0'::jsonb),
     ('twitter_callback', '"http://127.0.0.1:8339/on/twitter/associate"'::jsonb),
     ('twitter_id', '"h8bBZtoPNz63S5RkZdbo9R5zb"'::jsonb),

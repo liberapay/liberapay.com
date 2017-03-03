@@ -137,6 +137,7 @@ class AppConf(object):
         openstreetmap_id=str,
         openstreetmap_secret=str,
         password_rounds=int,
+        send_newsletters_every=int,
         socket_timeout=float,
         smtp_host=str,
         smtp_port=int,

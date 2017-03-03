@@ -51,7 +51,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     b64encode_s, deserialize, erase_cookie, serialize, set_cookie,
-    emails, i18n,
+    emails, i18n, markdown,
 )
 from liberapay.website import website
 
@@ -521,7 +521,7 @@ class Participant(Model, MixinTeam):
         r = cursor.one("""
 
             DELETE FROM community_memberships WHERE participant=%(id)s;
-            DELETE FROM community_subscriptions WHERE participant=%(id)s;
+            DELETE FROM subscriptions WHERE subscriber=%(id)s;
             DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
             DELETE FROM statements WHERE participant=%(id)s;
 
@@ -615,11 +615,11 @@ class Participant(Model, MixinTeam):
         username = self.username
         base64_email = b64encode_s(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email64={base64_email}&nonce={nonce}"
-        r = self.send_email('verification', email=email, link=link.format(**locals()))
+        r = self.send_email('verification', email, link=link.format(**locals()))
         assert r == 1  # Make sure the verification email was sent
 
         if self.email:
-            self.send_email('verification_notice', new_email=email)
+            self.send_email('verification_notice', self.email, new_email=email)
             return 2
         else:
             self.update_avatar(cursor=cursor)
@@ -700,11 +700,9 @@ class Participant(Model, MixinTeam):
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.id, address))
 
-    def send_email(self, spt_name, **context):
+    def send_email(self, spt_name, email, **context):
         self.fill_notification_context(context)
-        email = context.setdefault('email', self.email)
-        if not email:
-            return 0  # Not Sent
+        context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(context, locale)
@@ -713,18 +711,26 @@ class Participant(Model, MixinTeam):
         i18n.add_helpers_to_context(context_html, locale)
         context_html['escape'] = htmlescape
         spt = website.emails[spt_name]
-        base_spt = website.emails['base']
-        bodies = {}
-        def render(t, context):
-            b = base_spt[t].render(context).strip()
-            if t == 'text/plain' and t not in spt:
-                body = html2text(bodies['text/html']).strip()
-            else:
-                body = spt[t].render(context).strip()
-            bodies[t] = body
-            return b.replace('$body', body)
+        if spt_name == 'newsletter':
+            def render(t, context):
+                if t == 'text/html':
+                    context['body'] = markdown.render(context['body']).strip()
+                return spt[t].render(context).strip()
+        else:
+            base_spt = website.emails['base']
+            bodies = {}
+            def render(t, context):
+                b = base_spt[t].render(context).strip()
+                if t == 'text/plain' and t not in spt:
+                    body = html2text(bodies['text/html']).strip()
+                else:
+                    body = spt[t].render(context).strip()
+                bodies[t] = body
+                return b.replace('$body', body)
         message = {}
         message['from_email'] = 'Liberapay Support <support@liberapay.com>'
+        if spt_name == 'newsletter':
+            message['from_email'] = 'Liberapay Newsletters <newsletters@liberapay.com>'
         message['to'] = [formataddr((self.username, email))]
         message['subject'] = spt['subject'].render(context).strip()
         message['html'] = render('text/html', context_html)
@@ -758,12 +764,14 @@ class Participant(Model, MixinTeam):
             if not messages:
                 break
             for msg in messages:
+                d = deserialize(msg.context)
                 p = cls.from_id(msg.participant)
-                if not p.email:
+                email = d.get('email') or p.email
+                if not email:
                     delete(msg)
                     continue
                 try:
-                    r = p.send_email(msg.spt_name, **deserialize(msg.context))
+                    r = p.send_email(msg.spt_name, email, **d)
                     assert r == 1
                 except Exception as e:
                     website.tell_sentry(e, {})
@@ -955,6 +963,105 @@ class Participant(Model, MixinTeam):
         """, (self.id, type))
 
 
+    # Newsletters
+    # ===========
+
+    def upsert_subscription(self, on, publisher):
+        subscriber = self.id
+        token = str(uuid.uuid4()) if on else None
+        r = self.db.one("""
+            DO $$
+            DECLARE
+                cname text;
+            BEGIN
+                IF (%(on)s) THEN
+                BEGIN
+                    INSERT INTO subscriptions
+                                (publisher, subscriber, is_on, token)
+                         VALUES (%(publisher)s, %(subscriber)s, %(on)s, %(token)s);
+                    IF (FOUND) THEN RETURN; END IF;
+                EXCEPTION WHEN unique_violation THEN
+                    GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
+                    IF (cname <> 'subscriptions_publisher_subscriber_key') THEN
+                        RAISE;
+                    END IF;
+                END;
+                END IF;
+                UPDATE subscriptions
+                   SET is_on = %(on)s
+                     , mtime = CURRENT_TIMESTAMP
+                 WHERE publisher = %(publisher)s
+                   AND subscriber = %(subscriber)s;
+            END;
+            $$ LANGUAGE plpgsql;
+
+            SELECT *
+              FROM subscriptions
+             WHERE publisher = %(publisher)s
+               AND subscriber = %(subscriber)s;
+        """, locals())
+        if not r and on:
+            raise Exception('upsert in subscriptions failed')
+        return r
+
+    def check_subscription_status(self, subscriber):
+        return self.db.one("""
+            SELECT is_on
+              FROM subscriptions
+             WHERE publisher = %s AND subscriber = %s
+        """, (self.id, subscriber.id))
+
+    @classmethod
+    def get_subscriptions(cls, publisher):
+        unsub_url = '{}/~{}/unsubscribe?id=%s&token=%s'.format(website.canonical_url, publisher)
+        return cls.db.all("""
+            SELECT s.*
+                 , format(%(unsub_url)s, s.id, s.token) AS unsubscribe_url
+              FROM subscriptions s
+             WHERE s.publisher = %(publisher)s
+        """, locals())
+
+    @classmethod
+    def send_newsletters(cls):
+        fetch_messages = lambda: cls.db.all("""
+            SELECT n.sender
+                 , row_to_json((SELECT a FROM (
+                        SELECT t.newsletter, t.lang, t.subject, t.body
+                   ) a)) AS context
+              FROM newsletter_texts t
+              JOIN newsletters n ON n.id = t.newsletter
+             WHERE scheduled_for <= now() + INTERVAL '30 seconds'
+               AND sent_at IS NULL
+          ORDER BY scheduled_for ASC
+        """)
+        while True:
+            messages = fetch_messages()
+            if not messages:
+                break
+            for msg in messages:
+                with cls.db.get_cursor() as cursor:
+                    count = 0
+                    for s in cls.get_subscriptions(msg.sender):
+                        context = dict(msg.context, unsubscribe_url=s.unsubscribe_url)
+                        count += cursor.one("""
+                            INSERT INTO email_queue
+                                        (participant, spt_name, context)
+                                 SELECT p.id, 'newsletter', %s
+                                   FROM participants p
+                                  WHERE p.id = %s
+                                    AND p.email IS NOT NULL
+                         RETURNING count(*)
+                        """, (serialize(context), s.subscriber))
+                    assert cursor.one("""
+                        UPDATE newsletter_texts
+                           SET sent_at = now()
+                             , sent_count = %s
+                         WHERE id = %s
+                     RETURNING sent_at
+                    """, (count, msg.id))
+                sleep(1)
+
+
     # Random Stuff
     # ============
 
@@ -995,8 +1102,7 @@ class Participant(Model, MixinTeam):
     def create_community(self, name, **kw):
         return Community.create(name, self.id, **kw)
 
-    def update_community_status(self, table, on, c_id):
-        assert table in ('memberships', 'subscriptions')
+    def upsert_community_membership(self, on, c_id):
         p_id = self.id
         self.db.run("""
             DO $$
@@ -1004,28 +1110,27 @@ class Participant(Model, MixinTeam):
                 cname text;
             BEGIN
                 BEGIN
-                    INSERT INTO community_{0}
+                    INSERT INTO community_memberships
                                 (community, participant, is_on)
                          VALUES (%(c_id)s, %(p_id)s, %(on)s);
                     IF (FOUND) THEN RETURN; END IF;
                 EXCEPTION WHEN unique_violation THEN
                     GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
-                    IF (cname <> 'community_{0}_participant_community_key') THEN
+                    IF (cname <> 'community_memberships_participant_community_key') THEN
                         RAISE;
                     END IF;
                 END;
-                UPDATE community_{0}
+                UPDATE community_memberships
                    SET is_on = %(on)s
                      , mtime = CURRENT_TIMESTAMP
                  WHERE community = %(c_id)s
                    AND participant = %(p_id)s;
                 IF (NOT FOUND) THEN
-                    RAISE 'upsert in community_{0} failed';
+                    RAISE 'upsert in community_memberships failed';
                 END IF;
             END;
             $$ LANGUAGE plpgsql;
-        """.format(table), locals())
-
+        """, locals())
 
     def get_communities(self):
         return self.db.all("""
