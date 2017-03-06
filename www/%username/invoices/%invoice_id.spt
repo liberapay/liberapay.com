@@ -1,0 +1,116 @@
+
+from liberapay.exceptions import LoginRequired
+from liberapay.models.participant import Participant
+from liberapay.utils import get_participant, markdown
+
+[---]
+
+i_id = request.path['invoice_id'].split('.html')[0]
+try:
+    i_id = int(i_id)
+except ValueError:
+    raise response.error(404)
+
+participant = get_participant(state, restrict=False)
+
+if user.ANON:
+    raise LoginRequired
+
+invoice = website.db.one("""
+    SELECT *
+      FROM invoices
+     WHERE id = %(i_id)s
+       AND (sender = %(p_id)s OR addressee = %(p_id)s)
+       AND (sender = %(u_id)s OR addressee = %(u_id)s)
+       AND status <> 'canceled'
+""", dict(i_id=i_id, p_id=participant.id, u_id=user.id))
+if invoice is None:
+    raise response.error(404)
+
+if participant.id == invoice.sender:
+    addressee = user if user.id == invoice.addressee else Participant.from_id(invoice.addressee)
+    sender = participant
+else:
+    addressee = participant
+    sender = user if user.id == invoice.sender else Participant.from_id(invoice.sender)
+
+if invoice.status == 'pre' and user != sender and not user.is_admin:
+    raise response.error(404)
+
+if request.method == 'POST':
+    if request.body['action'] != 'send':
+        raise response.error(400, "bad POST data")
+    if user.id != invoice.sender:
+        raise response.error(403)
+    r = sender.update_invoice_status(invoice.id, 'new')
+    if not r:
+        raise response.error(409, "This invoice has already been submitted or canceled.")
+    addressee.notify(
+        'new_invoice',
+        invoice=invoice,
+        sender_name=sender.username,
+        force_email=True,
+    )
+    response.redirect(request.line.uri)
+
+invoice_events = website.db.all("""
+    SELECT *
+      FROM invoice_events
+     WHERE invoice = %s
+  ORDER BY ts DESC
+""", (i_id,))
+
+title = _("Invoice #{0}", i_id)
+
+[---] text/html
+% extends "templates/base.html"
+
+{% block heading %}{% endblock %}
+
+% block content
+
+% if invoice.status == 'pre'
+<p class="alert alert-info">{{ _("The invoice is ready, please check that everything is correct, then click the button below to send it.") }}</p>
+% endif
+
+<h1 class="text-center">{{ _(constants.INVOICE_NATURES[invoice.nature]) }}</h1>
+
+<p>{{ _("From: {0}", sender.username) }}</p>
+<p>{{ _("To: {0}", addressee.username) }}</p>
+<p>{{ _("Date: {0}", invoice.ctime.date()) }}</p>
+<p>{{ _("Amount: {0}", Money(invoice.amount, 'EUR')) }}</p>
+<p>{{ _("Description: {0}", invoice.description) }}</p>
+% if invoice.details
+<p>{{ _("Details:") }}</p>
+<section class="invoice-details">{{ markdown.render(invoice.details) }}</section>
+% endif
+% if invoice.documents
+<p>{{ _("Documents:") }}</p>
+<ul>
+% for filename, attrs in invoice.documents.items()
+    <li>{{ filename.replace('%20', ' ') }}</li>
+% endfor
+</ul>
+% endif
+
+% if invoice.status == 'pre'
+    <br>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="action" value="send" />
+        <button class="btn btn-primary btn-lg">{{ _("Send") }}</button>
+    </form>
+% elif invoice_events
+    <br>
+    <h3>{{ _("History") }}</h3>
+    % for e in invoice_events
+        <p>{{ format_datetime(e.ts) }} &mdash;
+           {{ _(constants.INVOICE_STATUSES[invoice.status]) }}
+           {% if e.message %} &mdash; {{ _("Message: {0}", e.message) }}{% endif %}</p>
+    % endfor
+    <p>{{ format_datetime(invoice.ctime) }} &mdash; {{ _("Created") }}</p>
+% else
+    <p>{{ _("Status: {0}", _(constants.INVOICE_STATUSES[invoice.status])) }}</p>
+% endif
+
+% endblock

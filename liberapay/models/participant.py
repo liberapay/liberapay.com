@@ -1154,6 +1154,36 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
 
 
+    # Invoices
+    # ========
+
+    def update_invoice_status(self, invoice_id, new_status, message=None):
+        if new_status in ('new', 'retracted'):
+            column = 'sender'
+        elif new_status in ('accepted', 'paid', 'rejected'):
+            column = 'addressee'
+        else:
+            raise ValueError(new_status)
+        with self.db.get_cursor() as c:
+            p_id = self.id
+            r = c.one("""
+                UPDATE invoices
+                   SET status = %(new_status)s
+                 WHERE id = %(invoice_id)s
+                   AND status <> %(new_status)s
+                   AND {0} = %(p_id)s
+             RETURNING id
+            """.format(column), locals())
+            if not r:
+                return False
+            c.run("""
+                INSERT INTO invoice_events
+                            (invoice, participant, status, message)
+                     VALUES (%s, %s, %s, %s)
+            """, (invoice_id, self.id, new_status, message))
+        return True
+
+
     # More Random Stuff
     # =================
 
