@@ -175,7 +175,14 @@ else:
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
             % elif context == 'refund'
                 {{ _("donation refund") }}
-            % else
+            % elif context == 'expense'
+                {{ _("reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}",
+                     link_open='<a href="%s">'|safe % event['invoice_url'],
+                     invoice_id=event['invoice'],
+                     link_close='</a>'|safe,
+                     payer=('<a href="/{0}/">{0}</a>'|safe).format(event['username']),
+                ) }}
+            % elif context == 'tip'
                 {{ _("anonymous donation") }}
             % endif
         % else
@@ -187,7 +194,14 @@ else:
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
             % elif context == 'refund'
                 {{ _("refund of anonymous donation") }}
-            % else
+            % elif context == 'expense'
+                {{ _("payment of {link_open}expense #{invoice_id}{link_close} to {payee}",
+                     link_open='<a href="%s">'|safe % event['invoice_url'],
+                     invoice_id=event['invoice'],
+                     link_close='</a>'|safe,
+                     payee=to,
+                ) }}
+            % elif context == 'tip'
                 {{ _("donation to {0}", to) }}
             % endif
         % endif
