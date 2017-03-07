@@ -98,6 +98,14 @@ FEE_PAYOUT_OUTSIDE_SEPA = Fees(Decimal(0), Decimal('2.5'))
 FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 
+INVOICE_DOC_MAX_SIZE = 5000000
+INVOICE_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'png']
+INVOICE_DOCS_LIMIT = 10
+
+INVOICE_NATURES = {
+    'expense': _("Expense Report"),
+}
+
 INVOICE_STATUSES = {
     'pre': _("Draft"),
     'new': _("Sent (awaiting approval)"),

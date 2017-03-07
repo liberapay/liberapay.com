@@ -34,7 +34,9 @@ class CustomRenderer(m.HtmlRenderer):
 
 
 renderer = CustomRenderer(flags=m.HTML_SKIP_HTML)
-md = m.Markdown(renderer, extensions=('autolink', 'strikethrough', 'no-intra-emphasis'))
+md = m.Markdown(renderer, extensions=(
+    'autolink', 'strikethrough', 'no-intra-emphasis', 'tables',
+))
 
 
 def render(markdown):

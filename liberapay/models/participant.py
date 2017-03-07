@@ -1157,6 +1157,11 @@ class Participant(Model, MixinTeam):
     # Invoices
     # ========
 
+    def can_invoice(self, other):
+        if self.kind != 'individual' or other.kind != 'organization':
+            return False
+        return bool(self.allow_invoices and other.allow_invoices)
+
     def update_invoice_status(self, invoice_id, new_status, message=None):
         if new_status in ('new', 'retracted'):
             column = 'sender'

@@ -1,0 +1,211 @@
+# coding: utf8
+
+import json
+
+from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
+from liberapay.exceptions import AuthRequired
+from liberapay.utils import get_participant, to_javascript
+
+ALLOWED_EXTENSIONS_STR = ', '.join(INVOICE_DOCS_EXTS)
+ALLOWED_EXTENSIONS_JSON = to_javascript(INVOICE_DOCS_EXTS)
+MAX_SIZE_MB = int(INVOICE_DOC_MAX_SIZE / 1000000)
+
+[---]
+
+addressee = get_participant(state, restrict=False)
+
+if user.ANON:
+    raise AuthRequired
+
+if not user.can_invoice(addressee):
+    raise response.error(403, _("You are not allowed to invoice {0}.", addressee.username))
+
+invoice_id = request.qs.get('id')
+if invoice_id:
+    invoice = website.db.one("""
+        SELECT *
+          FROM invoices
+         WHERE id = %s
+           AND sender = %s
+    """, (invoice_id, user.id))
+    if not invoice:
+        raise response.error(400, "bad `id` (in querystring)")
+    if invoice.status != 'pre':
+        raise response.error(400, "This invoice has already been submitted.")
+
+if request.method == 'POST':
+    body = request.body
+    step = body['step']
+    if step == 'create':
+        invoice_nature = body['nature']
+        if invoice_nature != 'expense':
+            raise response.error(400, "bad `nature` value (in POST data)")
+        amount = parse_decimal(body['amount'])
+        description = body['description'].strip()
+        if len(description) < 5:
+            raise response.error(400, _("The description is too short."))
+        if len(description) > 256:
+            raise response.error(400, _("The description is too long."))
+        details = body.get('details')
+        if len(details) > 4096:
+            raise response.error(400, _("The details are too long."))
+        invoice_id = website.db.one("""
+            INSERT INTO invoices
+                        (sender, addressee, nature, amount, description, details, documents, status)
+                 VALUES (%s, %s, %s, %s, %s, %s, '{}'::jsonb, 'pre')
+              RETURNING id
+        """, (user.id, addressee.id, invoice_nature, amount, description, details))
+        raise response.success(200, json.dumps({'invoice_id': invoice_id}))
+    else:
+        raise response.error(400, "unknown step")
+
+title = _("Invoice {someone}", someone=addressee.username)
+
+[---] text/html
+% extends "templates/base.html"
+% block content
+
+<noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
+
+<form action="javascript:" method="POST" id="invoice-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <h4>{{ _("Nature") }}</h4>
+    <select class="form-control" name="nature">
+        <option value="expense">{{ _("Expense Report") }}</option>
+    </select>
+    <p class="help-block">{{ _("(Liberapay only supports one kind of invoice for now.)") }}</p>
+
+    <h4>{{ _("Amount") }}</h4>
+    <div class="input-group">
+        <input type="text" name="amount" class="amount form-control"
+               placeholder="{{ _('Amount') }}" required />
+        <div class="input-group-addon">€</div>
+    </div>
+
+    <h4>{{ _("Description") }}</h4>
+    <input type="text" name="description" class="form-control"
+           placeholder="{{ _('A short description of the invoice') }}" required
+           minlength=5 maxlength=256 />
+
+    <h4>{{ _("Details (optional)") }}</h4>
+    <textarea name="details" class="form-control" rows=4
+              placeholder="{{ _('Details of the invoice (e.g. the breakdown of the amount into its components)') }}"
+              maxlength=4096></textarea>
+    <p class="help-block">
+        {{ _("Markdown supported.") }}
+        <a href="https://daringfireball.net/projects/markdown/basics"
+           target="_blank" rel="noopener noreferrer">{{ _("What is markdown?") }}</a>
+    </p>
+
+    <h4>{{ _("Documents (private)") }}</h4>
+    <p>{{ _("A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened.") }}</p>
+    <p>{{ _("Only the administrators of {0} will be able to download these files.", addressee.username) }}</p>
+    <p>{{ _("Allowed file extensions: {0}. Maximum file size: {1}MB.", ALLOWED_EXTENSIONS_STR, MAX_SIZE_MB) }}</p>
+    % from "templates/fine-uploader.html" import fine_uploader with context
+    {{ fine_uploader() }}
+    <br>
+    <p class="alert alert-warning">{{ _("We will not store these documents forever, archiving them for the long term is your responsibility.") }}</p>
+
+    <br>
+    <button class="btn btn-lg btn-success">{{ _("Go") }}</button>
+
+</form>
+
+% endblock
+
+% block scripts
+{# https://blog.fineuploader.com/2013/08/16/fine-uploader-s3-upload-directly-to-amazon-s3-from-your-browser/ #}
+<script src="{{ website.asset('fine-uploader/all.fine-uploader.min.js') }}"></script>
+<script>
+
+var base_path = {{ to_javascript(addressee.path('invoices/'))|safe }};
+var uploader = new qq.s3.FineUploader({
+    element: document.getElementById('fine-uploader'),
+    template: document.getElementById('qq-template'),
+    autoUpload: false,
+    request: {
+        endpoint: {{ to_javascript(website.app_conf.s3_endpoint)|safe }},
+        accessKey: {{ to_javascript(website.app_conf.s3_public_access_key)|safe }},
+    },
+    objectProperties: {
+        region: {{ to_javascript(website.app_conf.s3_region)|safe }},
+        key: function (fileId) {
+            var filename = uploader.getName(fileId);
+            return 'invoice_docs/' + uploader._invoice_id + '/' + filename
+        },
+    },
+    signature: {
+        endpoint: base_path + 'add-file?step=sign',
+        version: 4,
+        customHeaders: custom_headers,
+    },
+    uploadSuccess: {
+        endpoint: base_path + 'add-file?step=success',
+        customHeaders: custom_headers,
+    },
+    validation: {
+        allowedExtensions: {{ ALLOWED_EXTENSIONS_JSON|safe }},
+        itemLimit: {{ constants.INVOICE_DOCS_LIMIT }},
+        sizeLimit: {{ constants.INVOICE_DOC_MAX_SIZE }},
+    },
+    display: {
+        fileSizeOnSubmit: true,
+    },
+    text: {
+        fileInputTitle: '',
+    },
+    callbacks: {
+        onAllComplete: function (successes, failures) {
+            if (successes.length > 0 && failures.length == 0) {
+                window.location.href = base_path + uploader._invoice_id;
+            }
+        },
+        onSubmitted: function () {
+            $('#invoice-form button').filter(':not([type]), [type="submit"]').prop('disabled', false);
+        },
+    },
+});
+
+function custom_headers() { return {
+    'X-CSRF-TOKEN': Liberapay.getCookie('csrf_token'),
+    'X-Invoice-Id': uploader._invoice_id,
+}}
+
+function submit(e) {
+    e.preventDefault();
+    if (uploader._invoice_id) {
+        return uploader.uploadStoredFiles()
+    }
+    var $form = $('#invoice-form');
+    var form = $form.get(0);
+    if (form.reportValidity && form.reportValidity() == false) return;
+    var $inputs = $form.find(':not(:disabled)').filter(function () {
+        return $(this).parents('#fine-uploader').length == 0
+    });
+    var data = $form.serializeArray();
+    data.push({name: 'step', value: 'create'});
+    $inputs.prop('disabled', true);
+    jQuery.ajax({
+        url: '',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        success: function(data) { return upload_docs(data.invoice_id) },
+        error: [
+            function () { $inputs.prop('disabled', false); },
+            Liberapay.error,
+        ],
+    });
+}
+$('#invoice-form').submit(submit);
+$('#invoice-form button').filter(':not([type]), [type="submit"]').click(submit);
+
+function upload_docs(invoice_id) {
+    history.pushState(null, null, location.pathname + '?id=' + invoice_id);
+    uploader._invoice_id = invoice_id;
+    uploader.uploadStoredFiles();
+}
+
+</script>
+% endblock
