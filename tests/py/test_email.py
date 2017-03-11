@@ -65,7 +65,7 @@ class TestEmail(EmailHarness):
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'alice <alice@example.com>'
-        expected = "We've received a request to connect alice@example.com to the alice account on Liberapay"
+        expected = "We've received a request to associate the email address alice@example.com to "
         assert expected in last_email['text']
 
     def test_adding_second_email_sends_verification_notice(self):
@@ -246,8 +246,7 @@ class TestEmail(EmailHarness):
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'larry <larry@example.com>'
-        expected = "connect larry"
-        assert expected in last_email['text']
+        assert last_email['subject'] == "Email address verification - Liberapay"
         assert self.db.one("SELECT spt_name FROM email_queue") is None
 
     def test_dequeueing_an_email_without_address_just_skips_it(self):
