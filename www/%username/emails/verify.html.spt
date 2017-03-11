@@ -8,66 +8,43 @@ from liberapay.utils import b64decode_s, emails, get_participant
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
-ok = not user.ANON and user.controls(participant)
-if ok:
-    if 'email64' in request.qs:
-        email = b64decode_s(request.qs['email64'], default='')
-    else:
-        email = request.qs.get('email', '')
-    nonce = request.qs.get('nonce', '')
-    result = participant.verify_email(email, nonce)
-    if not participant.email_lang:
-        participant.set_email_lang(request.headers.get(b"Accept-Language"))
 
+if 'email64' in request.qs:
+    email = b64decode_s(request.qs['email64'], default='')
+else:
+    email = request.qs.get('email', '')
+nonce = request.qs.get('nonce', '')
+result = participant.verify_email(email, nonce)
 
 [-----------------------------------------------------------------------------]
 % extends "templates/base.html"
 
 % block content
-    % if user.ANON
-        <h1>{{ _("Please Sign In") }}</h1>
-
-        <p>{{ _("Sign in to finish connecting your email.") }}</p>
-
-        <p>{% include "templates/sign-in-link.html" %}</p>
-    % elif not ok
-        <h1>{{ _("Wrong Account") }}</h1>
-
-        <p>{{ _("You're signed into the wrong Liberapay account to complete this email "
-                "verification.") }}</p>
-    % else
-        % if result == emails.VERIFICATION_SUCCEEDED
-            <h1>{{ _("Success!") }}</h1>
-            <p>{{ _("Your email address {0} is now connected to your Liberapay account.",
-                    ("<b>%s</b>"|safe) % email) }}</p>
-        % elif result == emails.VERIFICATION_STYMIED
-            <h1>{{ _("Address Taken") }}</h1>
-            <p>{{ _("The email address {0} is already connected to a different Liberapay account.",
-                    ("<b>%s</b>"|safe) % email) }}</p>
-        % elif result == emails.VERIFICATION_REDUNDANT
-            <h1>{{ _("Already Verified") }}</h1>
-            <p>{{ _("Your email address {0} is already connected to your Liberapay account.",
-                    ("<b>%s</b>"|safe) % email) }}</p>
-        % else
-            % if result == emails.VERIFICATION_EXPIRED
-                <h1>{{ _("Expired") }}</h1>
-                <p>{{ _("The verification code for {0} has expired.",
-                        ("<b>%s</b>"|safe) % email) }}</p>
-            % elif result == emails.VERIFICATION_FAILED
-                <h1>{{ _("Failure") }}</h1>
-                <p>{{ _("The verification code for {0} is bad.",
-                        ("<b>%s</b>"|safe) % email) }}</p>
-            % elif result == emails.VERIFICATION_MISSING
-                <h1>{{ _("Missing Info") }}</h1>
-                <p>{{ _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.") }}</p>
-            % endif
-        % endif
-        <a class="btn btn-primary" href="/{{ participant.username }}/emails/">{{ _("View your email addresses") }}</a>
+    % if result == emails.VERIFICATION_SUCCEEDED
+        <h1>{{ _("Success!") }}</h1>
+        <p>{{ _("Your email address is now verified.") }}</p>
+    % elif result == emails.VERIFICATION_STYMIED
+        <h1>{{ _("Address Taken") }}</h1>
+        <p>{{ _("This email address is already connected to a different Liberapay account.") }}</p>
+    % elif result == emails.VERIFICATION_REDUNDANT
+        <h1>{{ _("Already Verified") }}</h1>
+        <p>{{ _("This email address has already been verified.") }}</p>
+    % elif result == emails.VERIFICATION_EXPIRED
+        <h1>{{ _("Expired") }}</h1>
+        <p>{{ _("The verification code has expired.") }}</p>
+    % elif result == emails.VERIFICATION_FAILED
+        <h1>{{ _("Failure") }}</h1>
+        <p>{{ _("The verification code is invalid.") }}</p>
+    % elif result == emails.VERIFICATION_MISSING
+        <h1>{{ _("Missing Info") }}</h1>
+        <p>{{ _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.") }}</p>
     % endif
 
-    % if ok and not participant.password and participant.is_person
+    % if result == emails.VERIFICATION_SUCCEEDED and user == participant and not participant.password
         <br><br>
         <h2>{{ _("Password") }}</h2>
         % include "templates/password-form.html"
+    % else
+        <a class="btn btn-primary" href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a>
     % endif
 % endblock
