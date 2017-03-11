@@ -1,18 +1,45 @@
-{{ _("Connect to Liberapay account?") }}
+{{ _("Email address verification - Liberapay") }}
 
 [---] text/html
+% if old_email
 <p>{{ _(
-    "We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?",
+    "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?",
     ('<b>%s</b>'|safe) % email,
-    ('<b><a href="https://liberapay.com/{0}/">{0}</a></b>'|safe).format(username)
+    ('<b>%s</b>'|safe) % old_email,
 ) }}</p>
+% else
+<p>{{ _(
+    "A Liberapay account was created on {0} with the email address {1}. Was it you?",
+    participant.join_time,
+    ('<b>%s</b>'|safe) % email,
+) }}</p>
+% endif
 
 <p><a href="{{ link }}" style="{{ button_style('success') }}">{{ _("Yes, proceed") }}</a></p>
 
-[---] text/plain
-{{ _("We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?",
-     email, username) }}
+<p>{{ _(
+    "Please note that the verification code contained in this message is only valid for {time_interval}.",
+    time_interval=participant.EMAIL_VERIFICATION_TIMEOUT,
+) }}</p>
 
-{{ _("Follow this link to finish connecting your email:") }}
+[---] text/plain
+% if old_email
+{{ _(
+    "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?",
+    email, old_email,
+) }}
+% else
+{{ _(
+    "A Liberapay account was created on {0} with the email address {1}. Was it you?",
+    participant.join_time, email,
+) }}
+% endif
+
+{{ _("Follow this link to validate your email address:") }}
 
 {{ link }}
+
+{{ _(
+    "Please note that the verification code contained in this message is only valid for {time_interval}.",
+    time_interval=participant.EMAIL_VERIFICATION_TIMEOUT,
+) }}

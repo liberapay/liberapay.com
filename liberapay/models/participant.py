@@ -61,6 +61,7 @@ class Participant(Model, MixinTeam):
     typname = 'participants'
 
     ANON = False
+    EMAIL_VERIFICATION_TIMEOUT = EMAIL_VERIFICATION_TIMEOUT
 
     def __eq__(self, other):
         if not isinstance(other, Participant):
@@ -610,12 +611,13 @@ class Participant(Model, MixinTeam):
             if not nonce:
                 return self.add_email(email)
 
+        old_email = self.email or self.get_any_email()
         scheme = website.canonical_scheme
         host = website.canonical_host
         username = self.username
         base64_email = b64encode_s(email)
         link = "{scheme}://{host}/{username}/emails/verify.html?email64={base64_email}&nonce={nonce}"
-        r = self.send_email('verification', email, link=link.format(**locals()))
+        r = self.send_email('verification', email, link=link.format(**locals()), old_email=old_email)
         assert r == 1  # Make sure the verification email was sent
 
         if self.email:
