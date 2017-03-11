@@ -25,9 +25,12 @@ class TestEmail(EmailHarness):
         auth_as = self.alice if auth_as == 'alice' else auth_as
         return P('/alice/emails/modify.json', data, auth_as=auth_as, **headers)
 
+    def get_address_id(self, addr):
+        return self.db.one("SELECT id FROM emails WHERE address = %s", (addr,))
+
     def verify_email(self, email, nonce, should_fail=False):
-        # Email address is base64 encoded in url.
-        url = '/alice/emails/verify.html?email64=%s&nonce=%s' % (b64encode_s(email), nonce)
+        addr_id = self.get_address_id(email) or ''
+        url = '/alice/emails/verify.html?email=%s&nonce=%s' % (addr_id, nonce)
         G = self.client.GxT if should_fail else self.client.GET
         return G(url, auth_as=self.alice)
 
@@ -53,12 +56,12 @@ class TestEmail(EmailHarness):
             response = self.hit_email_spt('add-email', blob, should_fail=True)
             assert response.code == 400
 
-    def test_email_address_is_base64_encoded_in_sent_verification_link(self):
+    def test_verification_link_uses_address_id(self):
         address = 'alice@gratipay.com'
-        encoded = b64encode_s(address)
         self.hit_email_spt('add-email', address)
+        addr_id = self.get_address_id(address)
         last_email = self.get_last_email()
-        assert "/alice/emails/verify.html?email64="+encoded in last_email['text']
+        assert "/alice/emails/verify.html?email=%s&" % addr_id in last_email['text']
 
     def test_adding_email_sends_verification_email(self):
         self.hit_email_spt('add-email', 'alice@example.com')
@@ -135,13 +138,14 @@ class TestEmail(EmailHarness):
     def test_email_verification_is_backwards_compatible(self):
         """Test email verification still works with unencoded email in verification link.
         """
-        self.hit_email_spt('add-email', 'alice@example.com')
-        nonce = self.alice.get_email('alice@example.com').nonce
-        url = '/alice/emails/verify.html?email=alice@example.com&nonce='+nonce
+        addr = 'alice@example.com'
+        self.hit_email_spt('add-email', addr)
+        nonce = self.alice.get_email(addr).nonce
+        email64 = b64encode_s(addr)
+        url = '/alice/emails/verify.html?email64=%s&nonce=%s' % (email64, nonce)
         self.client.GET(url, auth_as=self.alice)
-        expected = 'alice@example.com'
         actual = Participant.from_username('alice').email
-        assert expected == actual
+        assert addr == actual
 
     def test_verified_email_is_not_changed_after_update(self):
         self.verify_and_change_email('alice@example.com', 'alice@example.net')
