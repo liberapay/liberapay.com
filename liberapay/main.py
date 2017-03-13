@@ -28,6 +28,9 @@ from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_m
 from liberapay.website import website
 
 
+application = website  # for stupid WSGI implementations
+
+
 # Configure renderers
 # ===================
 
