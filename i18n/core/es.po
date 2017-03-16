@@ -144,18 +144,26 @@ msgstr "Aceptar"
 msgid "Refuse"
 msgstr "Rechazar"
 
-msgid "Connect to Liberapay account?"
+msgid "Email address verification - Liberapay"
 msgstr ""
 
 #, python-brace-format
-msgid "We've received a request to connect {0} to the {1} account on Liberapay. Sound familiar?"
-msgstr "Hemos recibido una petición de conectar {0} a la cuenta de {1} en Liberapay. ¿Te suena?"
+msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
+msgstr ""
+
+#, python-brace-format
+msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
+msgstr ""
 
 msgid "Yes, proceed"
 msgstr "Sí, ¡adelante!"
 
-msgid "Follow this link to finish connecting your email:"
-msgstr "Sigue este enlace para finalizar la conexión de tu correo electrónico:"
+#, python-brace-format
+msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
+msgstr ""
+
+msgid "Follow this link to validate your email address:"
+msgstr ""
 
 #, python-brace-format
 msgid "Connecting {0} to {1} on Liberapay"
@@ -1052,52 +1060,35 @@ msgstr "Se ha enviado un correo de verificación a {0}."
 msgid "Your notification settings have been changed."
 msgstr ""
 
-msgid "Please Sign In"
-msgstr "Por favor inicia sesión"
-
-msgid "Sign in to finish connecting your email."
-msgstr "Inicia sesión para terminar de conectar tu correo electrónico."
-
-msgid "Wrong Account"
-msgstr "Cuenta equivocada"
-
-msgid "You're signed into the wrong Liberapay account to complete this email verification."
-msgstr "De haber accedido a la cuenta equivocada Librapay para completar esta verificación de correo electrónico."
-
 msgid "Success!"
 msgstr "¡Éxito!"
 
-#, python-brace-format
-msgid "Your email address {0} is now connected to your Liberapay account."
-msgstr "Tu correo electrónico {0} ahora está conectado tu cuenta de Liberapay."
+msgid "Your email address is now verified."
+msgstr ""
 
 msgid "Address Taken"
 msgstr "Correo tomado"
 
-#, python-brace-format
-msgid "The email address {0} is already connected to a different Liberapay account."
-msgstr "El correo electrónico {0} ya está conectado a una cuenta de Liberapay diferente."
+msgid "This email address is already connected to a different Liberapay account."
+msgstr ""
 
 msgid "Already Verified"
 msgstr "Ya verificado"
 
-#, python-brace-format
-msgid "Your email address {0} is already connected to your Liberapay account."
-msgstr "Tu correo electrónico {0} ya está conectado a tu cuenta de Liberapay."
+msgid "This email address has already been verified."
+msgstr ""
 
 msgid "Expired"
 msgstr "Expirado"
 
-#, python-brace-format
-msgid "The verification code for {0} has expired."
-msgstr "El código de verificación de {0} ha expirado."
+msgid "The verification code has expired."
+msgstr ""
 
 msgid "Failure"
 msgstr "Falla"
 
-#, python-brace-format
-msgid "The verification code for {0} is bad."
-msgstr "El código de verificación para {0} es defectuoso."
+msgid "The verification code is invalid."
+msgstr ""
 
 msgid "Missing Info"
 msgstr "Información faltante"
@@ -1105,11 +1096,11 @@ msgstr "Información faltante"
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Por favor, comprueba que el enlace que ha hecho clic o copiar y pegar no se ha truncado o alterado de ninguna manera."
 
-msgid "View your email addresses"
-msgstr "Ver tus correos electrónicos"
-
 msgid "Password"
 msgstr "Contraseña"
+
+msgid "Manage your email addresses"
+msgstr ""
 
 msgid "Events"
 msgstr "Eventos"
