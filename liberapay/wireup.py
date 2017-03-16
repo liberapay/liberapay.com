@@ -225,6 +225,7 @@ def billing(app_conf):
         return
     import mangopay
     sandbox = 'sandbox' in app_conf.mangopay_base_url
+    mangopay.sandbox = sandbox
     handler = mangopay.APIRequest(
         client_id=app_conf.mangopay_client_id,
         passphrase=app_conf.mangopay_client_password,
