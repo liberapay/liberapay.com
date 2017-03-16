@@ -50,7 +50,7 @@ from liberapay.models.community import Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    b64encode_s, deserialize, erase_cookie, serialize, set_cookie,
+    deserialize, erase_cookie, serialize, set_cookie,
     emails, i18n, markdown,
 )
 from liberapay.website import website
@@ -61,6 +61,7 @@ class Participant(Model, MixinTeam):
     typname = 'participants'
 
     ANON = False
+    EMAIL_VERIFICATION_TIMEOUT = EMAIL_VERIFICATION_TIMEOUT
 
     def __eq__(self, other):
         if not isinstance(other, Participant):
@@ -588,34 +589,36 @@ class Participant(Model, MixinTeam):
         if len(self.get_emails()) > 9:
             raise TooManyEmailAddresses(email)
 
-        nonce = str(uuid.uuid4())
         added_time = utcnow()
         try:
             with self.db.get_cursor(cursor) as c:
                 self.add_event(c, 'add_email', email)
-                c.run("""
+                email_row = c.one("""
                     INSERT INTO emails
                                 (address, nonce, added_time, participant)
                          VALUES (%s, %s, %s, %s)
-                """, (email, nonce, added_time, self.id))
+                      RETURNING *
+                """, (email, str(uuid.uuid4()), added_time, self.id))
         except IntegrityError:
-            nonce = (cursor or self.db).one("""
+            email_row = (cursor or self.db).one("""
                 UPDATE emails
                    SET added_time=%s
                  WHERE participant=%s
                    AND address=%s
                    AND verified IS NULL
-             RETURNING nonce
+             RETURNING *
             """, (added_time, self.id, email))
-            if not nonce:
+            if not email_row:
                 return self.add_email(email)
 
+        old_email = self.email or self.get_any_email()
         scheme = website.canonical_scheme
         host = website.canonical_host
         username = self.username
-        base64_email = b64encode_s(email)
-        link = "{scheme}://{host}/{username}/emails/verify.html?email64={base64_email}&nonce={nonce}"
-        r = self.send_email('verification', email, link=link.format(**locals()))
+        addr_id = email_row.id
+        nonce = email_row.nonce
+        link = "{scheme}://{host}/{username}/emails/verify.html?email={addr_id}&nonce={nonce}"
+        r = self.send_email('verification', email, link=link.format(**locals()), old_email=old_email)
         assert r == 1  # Make sure the verification email was sent
 
         if self.email:
@@ -643,7 +646,16 @@ class Participant(Model, MixinTeam):
     def verify_email(self, email, nonce):
         if '' in (email, nonce):
             return emails.VERIFICATION_MISSING
-        r = self.get_email(email)
+        if email.isdigit():
+            r = self.db.one("""
+                SELECT *
+                  FROM emails
+                 WHERE participant = %s
+                   AND id = %s
+            """, (self.id, email))
+            email = r.address
+        else:
+            r = self.get_email(email)
         if r is None:
             return emails.VERIFICATION_FAILED
         if r.verified:
