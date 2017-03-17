@@ -1,0 +1,9 @@
+from liberapay.exceptions import NeedDatabase
+
+[---]
+
+if not website.db:
+    raise NeedDatabase()
+
+[---] text/plain
+OK
