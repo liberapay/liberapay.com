@@ -288,6 +288,8 @@ def make_sentry_teller(env):
                     state['db_is_readonly'] = True
                     # Show the proper 503 error page
                     state['exception'] = NeedDatabase()
+                    # Don't reraise this in tests
+                    allow_reraise = False
 
         if not sentry:
             # No Sentry, log to stderr instead
