@@ -283,6 +283,14 @@ def make_sentry_teller(env):
                     # Tell gunicorn to gracefully restart this worker
                     os.kill(os.getpid(), signal.SIGTERM)
 
+                if 'read-only' in str(exception):
+                    # DB is in read only mode
+                    state['db_is_readonly'] = True
+                    # Show the proper 503 error page
+                    state['exception'] = NeedDatabase()
+                    # Don't reraise this in tests
+                    allow_reraise = False
+
         if not sentry:
             # No Sentry, log to stderr instead
             traceback.print_exc()

@@ -13,6 +13,7 @@ from pando.utils import utcnow
 
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant
+from liberapay.testing import postgres_readonly
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils.i18n import LOCALES
 
@@ -260,3 +261,9 @@ class TestSignIn(EmailHarness):
         assert r.code == 403
         assert "Bad CSRF cookie" in r.text
         assert SESSION not in r.headers.cookie
+
+    def test_sign_in_when_db_is_read_only(self):
+        with postgres_readonly(self.db):
+            r = self.sign_in(HTTP_ACCEPT=b'text/html')
+            assert r.code == 503, r.text
+            assert 'read-only' in r.text
