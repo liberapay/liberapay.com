@@ -28,7 +28,7 @@ require () {
 }
 
 # Check that we have the required tools
-require rhc
+require eb
 require git
 
 # Make sure we have the latest master
@@ -43,9 +43,6 @@ fi
 # Compute the next version number
 prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
 version="$((prev + 1))"
-
-# Check the configuration
-rhc ssh liberapay 'cd $OPENSHIFT_REPO_DIR; PYTHONPATH=. python liberapay/wireup.py'
 
 # Check for a branch.sql
 if [ -e sql/branch.sql ]; then
@@ -90,9 +87,6 @@ if [ -e sql/branch.sql ]; then
     # Deployment options
     if yesno "Should branch.sql be applied before deploying instead of after?"; then
         run_sql="before"
-        if yesno "Should the app be stopped during deployment?"; then
-            maintenance="yes"
-        fi
     else
         run_sql="after"
     fi
@@ -103,11 +97,9 @@ yesno "Tag and deploy version $version?" || exit
 git tag $version
 
 # Deploy
-[ "${maintenance-}" = "yes" ] && rhc app stop $APPNAME
-[ "${run_sql-}" = "before" ] && rhc ssh $APPNAME 'psql -v ON_ERROR_STOP=on' <$branch_c
-git push --force openshift master
-[ "${maintenance-}" = "yes" ] && rhc app start $APPNAME
-[ "${run_sql-}" = "after" ] && rhc ssh $APPNAME 'psql -v ON_ERROR_STOP=on' <$branch_c
+[ "${run_sql-}" = "before" ] && eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_c
+eb deploy liberapay-prod --label $version
+[ "${run_sql-}" = "after" ] && eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_c
 [ "${branch_c-}" != "" ] && rm -f $branch_c
 
 # Push to GitHub

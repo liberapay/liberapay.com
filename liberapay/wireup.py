@@ -471,7 +471,6 @@ def env():
         CSP_EXTRA=str,
         SENTRY_DSN=str,
         SENTRY_RERAISE=is_yesish,
-        GUNICORN_OPTS=str,
         LOG_DIR=str,
         KEEP_PAYDAY_LOGS=is_yesish,
         LOGGING_LEVEL=str,
