@@ -29,14 +29,15 @@ def canonize(request, website):
     This is a Pando state chain function to ensure that requests are served on a
     certain root URL, even if multiple domains point to the application.
     """
-    if request.path.raw.startswith('/callbacks/'):
+    is_callback = request.path.raw.startswith('/callbacks/')
+    is_healthcheck = request.headers.get(b'User-Agent', b'').startswith(b'ELB-HealthChecker')
+    if is_callback or is_healthcheck:
         # Don't redirect callbacks
-        if request.path.raw[-1] == '/':
-            # Remove trailing slash
+        if request.path.raw[-1] == '/' or is_healthcheck:
             l = request.line
             scheme, netloc, path, query, fragment = urlsplit(l.uri)
             assert path[-1] == '/'  # sanity check
-            path = path[:-1]
+            path = '/callbacks/health.txt' if is_healthcheck else path[:-1]
             new_uri = urlunsplit((scheme, netloc, path, query, fragment))
             request.line = Line(l.method.raw, new_uri, l.version.raw)
         return
