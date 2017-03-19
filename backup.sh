@@ -6,5 +6,5 @@ if [ "$(basename $dest)" != 'liberapay' ]; then echo "parent directory should be
 dest="$dest/backups"
 mkdir -p $dest
 dest="$dest/$(date -u -Iseconds).psql"
-rhc ssh --command pg_dump >$dest
+eb ssh liberapay-prod -c pg_dump >$dest
 chmod 400 $dest
