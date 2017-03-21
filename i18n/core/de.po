@@ -7,11 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liberapay\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"Language-Team: German (https://hosted.weblate.org/projects/liberapay/core/de/)\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2017-03-21 15:34+0000\n"
+"Last-Translator: Kim <github@aggsol.de>\n"
+"Language-Team: German "
+"<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.12\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -144,26 +149,34 @@ msgstr "Akzeptieren"
 msgid "Refuse"
 msgstr "Verweigern"
 
+#, fuzzy
 msgid "Email address verification - Liberapay"
-msgstr ""
+msgstr "Überprüfung der E-Mail-Adresse - Liberapay"
 
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
 msgstr ""
+"Wir haben eine Anfrage erhalten die E-Mail-Adresse {0} mit dem Liberapay-"
+"Konto, mit der E-Mail-Adresse {1}, zu verknüpfen. Haben Sie diese Anfrage "
+"gestellt?"
 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr ""
+"Ein Liberapay-Konto wurde am {0} erstellt. Dazu wurde die E-Mail-Adresse {1} "
+"verwendet. Ware Sie das?"
 
 msgid "Yes, proceed"
 msgstr "Ja, fortsetzen"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
 msgstr ""
+"Beachten Sie, daß der Prüfcode in dieser Nachricht nur {time_interval} "
+"gültig ist."
 
 msgid "Follow this link to validate your email address:"
-msgstr ""
+msgstr "Folgen Sie diesem Link um Ihre E-Mail-Adresse zu bestätigen:"
 
 #, python-brace-format
 msgid "Connecting {0} to {1} on Liberapay"
@@ -291,7 +304,7 @@ msgstr "Ihre primäre E-Mail-Adresse kann nicht entfernt werden."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
-msgstr "Die E-Mail-Adresse '{0}' ist noch nicht verifiziert worden."
+msgstr "Die E-Mail-Adresse '{0}' ist noch nicht überprüft worden."
 
 msgid "You've reached the maximum number of email addresses we allow."
 msgstr "Sie haben die maximale Anzahl von E-Mail-Adressen erreicht."
@@ -427,6 +440,8 @@ msgstr "Wir haben zur Zeit technische Probleme, deshalb funktionieren die meiste
 
 msgid "Liberapay is currently in read-only mode as we are migrating the database. This shouldn't take more than a few minutes."
 msgstr ""
+"Liberpay kann zur Zeit keine Änderungen schreiben, da wir gerade die "
+"Datenbank migrieren. Dies sollte nur ein paar Minuten dauern."
 
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
@@ -916,9 +931,11 @@ msgstr "Wer wird genau die Spende erhalten?"
 msgid "View {0}'s profile"
 msgstr "{0} Profil ansehen"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
-msgstr "Wir haben durch einen automatisierten Verifikationsprozess bestätigt, dass {0} Kontrolle der folgenden Konten auf anderen Plattformen hat:"
+msgstr ""
+"Wir haben durch einen automatisierten Überprüfungsprozess ermittelt, dass {0}"
+" Inhaber der folgenden Konten auf anderen Plattformen ist:"
 
 msgid "What is this site?"
 msgstr "Was ist diese Seite?"
@@ -1037,8 +1054,9 @@ msgstr "Primär"
 msgid "Remove"
 msgstr "Löschen"
 
+#, fuzzy
 msgid "Unverified"
-msgstr "Unverifiziert"
+msgstr "Nicht überprüft"
 
 msgid "Resend email"
 msgstr "E-Mail erneut senden"
@@ -1056,11 +1074,11 @@ msgid "Send me notifications via email:"
 msgstr "Senden sie mir Benachrichtigungen per E-Mail:"
 
 msgid "You have already added and verified this address."
-msgstr "Du hast diese Adresse bereits hinzugefügt und bestätigt."
+msgstr "Sie haben diese Adresse bereits hinzugefügt und bestätigt."
 
 #, python-brace-format
 msgid "A verification email has been sent to {0}."
-msgstr "Eine Verifikations-E-Mail wurde an {0} gesandt."
+msgstr "Eine Überprüfungs-E-Mail wurde an {0} geschickt."
 
 msgid "Your notification settings have been changed."
 msgstr "Ihre Benachrichtigungseinstellungen wurden geändert."
@@ -1069,31 +1087,31 @@ msgid "Success!"
 msgstr "Erfolgreich!"
 
 msgid "Your email address is now verified."
-msgstr ""
+msgstr "Ihre E-Mail-Adresse wurde bestätigt."
 
 msgid "Address Taken"
 msgstr "Addresse bereits vergeben"
 
 msgid "This email address is already connected to a different Liberapay account."
-msgstr ""
+msgstr "Diese E-Mail-Adresse ist bereits mit einem Liberapay-Konto verknüpft."
 
 msgid "Already Verified"
-msgstr "Bereits verifiziert"
+msgstr "Bereits überprüft"
 
 msgid "This email address has already been verified."
-msgstr ""
+msgstr "Diese E-Mail-Adresse wurde bereits bestätigt."
 
 msgid "Expired"
 msgstr "Abgelaufen"
 
 msgid "The verification code has expired."
-msgstr ""
+msgstr "Der Prüfcode ist bereits abgelaufen."
 
 msgid "Failure"
 msgstr "Fehler"
 
 msgid "The verification code is invalid."
-msgstr ""
+msgstr "Der Prüfcode ist ungültig."
 
 msgid "Missing Info"
 msgstr "Fehlende Informationen"
@@ -1105,7 +1123,7 @@ msgid "Password"
 msgstr "Passwort"
 
 msgid "Manage your email addresses"
-msgstr ""
+msgstr "E-Mail-Adressen verwalten"
 
 msgid "Events"
 msgstr "Events"
@@ -1657,11 +1675,12 @@ msgstr "Das Ablaufdatum ist ungültig."
 msgid "CVV"
 msgstr "CVV"
 
+#, fuzzy
 msgid "Verification code (3 digits located on the back of the card)"
 msgstr "Kontrollcode (3 Ziffern auf der Rückseite der Karte befindet)"
 
 msgid "This verification code is invalid."
-msgstr "Der Bestätigungscode ist falsch."
+msgstr "Der Prüfcode ist falsch."
 
 msgid "Remember the card number for next time"
 msgstr "Die Nummer der Karte für das nächste Mal merken"
@@ -2689,4 +2708,3 @@ msgstr "Registrieren"
 #, python-brace-format
 msgid "You are already logged in as {0}."
 msgstr "Sie sind bereits angemeldet als {0}."
-
