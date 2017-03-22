@@ -38,8 +38,8 @@ Liberapay.charts.make = function(series, button) {
 
 
     var H = $('.chart').height() - 20;
-    var W = (1 / series.length * 100).toFixed(10) * $('.chart').width();
-    W = W > 10 ? '10px' : (W < 5 ? '5px' : W+'px');
+    var W = (1 / series.length).toFixed(10) * $('.chart').width();
+    W = W > 10 ? '10px' : (W < 5 ? '5px' : Math.floor(W)+'px');
 
 
     // Compute maxes and scales.
