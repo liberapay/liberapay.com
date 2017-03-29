@@ -15,7 +15,9 @@ Liberapay.forms.setInvalid = function($input, invalid) {
 Liberapay.forms.jsSubmit = function() {
     function submit(e) {
         e.preventDefault();
-        var $form = $(this.form || this);
+        var form = this.form || this;
+        if (form.reportValidity && form.reportValidity() == false) return;
+        var $form = $(form);
         var target = $form.attr('action');
         var js_only = target == 'javascript:';
         var data = $form.serializeArray();
