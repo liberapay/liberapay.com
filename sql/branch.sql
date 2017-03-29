@@ -6,7 +6,7 @@ BEGIN;
     CREATE TYPE invoice_nature AS ENUM ('expense');
 
     CREATE TYPE invoice_status AS ENUM
-        ('pre', 'new', 'retracted', 'accepted', 'paid', 'rejected');
+        ('pre', 'canceled', 'new', 'retracted', 'accepted', 'paid', 'rejected');
 
     CREATE TABLE invoices
     ( id            serial            PRIMARY KEY

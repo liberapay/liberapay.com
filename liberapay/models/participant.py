@@ -1163,7 +1163,7 @@ class Participant(Model, MixinTeam):
         return bool(self.allow_invoices and other.allow_invoices)
 
     def update_invoice_status(self, invoice_id, new_status, message=None):
-        if new_status in ('new', 'retracted'):
+        if new_status in ('canceled', 'new', 'retracted'):
             column = 'sender'
         elif new_status in ('accepted', 'paid', 'rejected'):
             column = 'addressee'
