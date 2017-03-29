@@ -1169,13 +1169,19 @@ class Participant(Model, MixinTeam):
             column = 'addressee'
         else:
             raise ValueError(new_status)
+        if new_status in ('new', 'canceled'):
+            old_status = 'pre'
+        elif new_status == 'paid':
+            old_status = 'accepted'
+        else:
+            old_status = 'new'
         with self.db.get_cursor() as c:
             p_id = self.id
             r = c.one("""
                 UPDATE invoices
                    SET status = %(new_status)s
                  WHERE id = %(invoice_id)s
-                   AND status <> %(new_status)s
+                   AND status = %(old_status)s
                    AND {0} = %(p_id)s
              RETURNING id
             """.format(column), locals())
