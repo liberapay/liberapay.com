@@ -103,7 +103,9 @@ title = _("Invoice #{0}", i_id)
     <br>
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <button class="btn btn-primary btn-lg" name="action" value="send">{{ _("Send") }}</button>
+        <button class="btn btn-success btn-lg" name="action" value="send">{{ _("Send") }}</button>
+        &nbsp;&nbsp;&nbsp;
+        <a class="btn btn-primary btn-lg" href="{{ participant.path('invoices/new?id=%s' % invoice.id) }}">{{ _("Modify") }}</a>
         &nbsp;&nbsp;&nbsp;
         <button class="btn btn-danger btn-lg" name="action" value="cancel">{{ _("Delete") }}</button>
     </form>

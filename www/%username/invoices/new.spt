@@ -32,32 +32,52 @@ if invoice_id:
         raise response.error(400, "bad `id` (in querystring)")
     if invoice.status != 'pre':
         raise response.error(400, "This invoice has already been submitted.")
+    already_uploaded = [
+        {
+            'name': name.replace('%20', ' '),
+            'uuid': name,
+            's3Key': 'invoice_docs/%s/%s' % (invoice.id, name),
+        }
+        for name, attrs in invoice.documents.items() if attrs['status'] == 'uploaded'
+    ]
+else:
+    invoice = None
 
 if request.method == 'POST':
     body = request.body
-    step = body['step']
-    if step == 'create':
-        invoice_nature = body['nature']
-        if invoice_nature != 'expense':
-            raise response.error(400, "bad `nature` value (in POST data)")
-        amount = parse_decimal(body['amount'])
-        description = body['description'].strip()
-        if len(description) < 5:
-            raise response.error(400, _("The description is too short."))
-        if len(description) > 256:
-            raise response.error(400, _("The description is too long."))
-        details = body.get('details')
-        if len(details) > 4096:
-            raise response.error(400, _("The details are too long."))
+    invoice_nature = body['nature']
+    if invoice_nature != 'expense':
+        raise response.error(400, "bad `nature` value (in POST data)")
+    amount = parse_decimal(body['amount'])
+    description = body['description'].strip()
+    if len(description) < 5:
+        raise response.error(400, _("The description is too short."))
+    if len(description) > 256:
+        raise response.error(400, _("The description is too long."))
+    details = body.get('details')
+    if len(details) > 4096:
+        raise response.error(400, _("The details are too long."))
+    if invoice:
+        invoice_id = website.db.one("""
+            UPDATE invoices
+               SET nature = %s
+                 , amount = %s
+                 , description = %s
+                 , details = %s
+             WHERE id = %s
+               AND status = 'pre'
+         RETURNING id
+        """, (invoice_nature, amount, description, details, invoice.id))
+        if not invoice_id:
+            response.error(400, "bad `id` (in querystring)")
+    else:
         invoice_id = website.db.one("""
             INSERT INTO invoices
                         (sender, addressee, nature, amount, description, details, documents, status)
                  VALUES (%s, %s, %s, %s, %s, %s, '{}'::jsonb, 'pre')
               RETURNING id
         """, (user.id, addressee.id, invoice_nature, amount, description, details))
-        raise response.success(200, json.dumps({'invoice_id': invoice_id}))
-    else:
-        raise response.error(400, "unknown step")
+    raise response.success(200, json.dumps({'invoice_id': invoice_id}))
 
 title = _("Invoice {someone}", someone=addressee.username)
 
@@ -72,26 +92,30 @@ title = _("Invoice {someone}", someone=addressee.username)
 
     <h4>{{ _("Nature") }}</h4>
     <select class="form-control" name="nature">
-        <option value="expense">{{ _("Expense Report") }}</option>
+    % for value, label in constants.INVOICE_NATURES.items()
+        <option value="{{ value }}" {{ 'selected' if value == invoice.nature }}>{{ _(label) }}</option>
+    % endfor
     </select>
     <p class="help-block">{{ _("(Liberapay only supports one kind of invoice for now.)") }}</p>
 
     <h4>{{ _("Amount") }}</h4>
     <div class="input-group">
         <input type="text" name="amount" class="amount form-control"
-               placeholder="{{ _('Amount') }}" required />
+               placeholder="{{ _('Amount') }}" required
+               value="{{ format_decimal(invoice.amount) if invoice else '' }}" />
         <div class="input-group-addon">€</div>
     </div>
 
     <h4>{{ _("Description") }}</h4>
     <input type="text" name="description" class="form-control"
-           placeholder="{{ _('A short description of the invoice') }}" required
-           minlength=5 maxlength=256 />
+           placeholder="{{ _('A short description of the invoice') }}"
+           required minlength=5 maxlength=256
+           value="{{ invoice.description or '' }}" />
 
     <h4>{{ _("Details (optional)") }}</h4>
     <textarea name="details" class="form-control" rows=4
               placeholder="{{ _('Details of the invoice (e.g. the breakdown of the amount into its components)') }}"
-              maxlength=4096></textarea>
+              maxlength=4096>{{ invoice.details or '' }}</textarea>
     <p class="help-block">
         {{ _("Markdown supported.") }}
         <a href="https://daringfireball.net/projects/markdown/basics"
@@ -157,7 +181,7 @@ var uploader = new qq.s3.FineUploader({
     },
     callbacks: {
         onAllComplete: function (successes, failures) {
-            if (successes.length > 0 && failures.length == 0) {
+            if (successes.length > 0 && failures.length == 0 && uploader._invoice_id) {
                 window.location.href = base_path + uploader._invoice_id;
             }
         },
@@ -167,6 +191,10 @@ var uploader = new qq.s3.FineUploader({
     },
 });
 
+% if already_uploaded
+uploader.addInitialFiles({{ to_javascript(already_uploaded)|safe }});
+% endif
+
 function custom_headers() { return {
     'X-CSRF-TOKEN': Liberapay.getCookie('csrf_token'),
     'X-Invoice-Id': uploader._invoice_id,
@@ -174,9 +202,6 @@ function custom_headers() { return {
 
 function submit(e) {
     e.preventDefault();
-    if (uploader._invoice_id) {
-        return uploader.uploadStoredFiles()
-    }
     var $form = $('#invoice-form');
     var form = $form.get(0);
     if (form.reportValidity && form.reportValidity() == false) return;
@@ -184,14 +209,17 @@ function submit(e) {
         return $(this).parents('#fine-uploader').length == 0
     });
     var data = $form.serializeArray();
-    data.push({name: 'step', value: 'create'});
     $inputs.prop('disabled', true);
     jQuery.ajax({
         url: '',
         type: 'POST',
         data: data,
         dataType: 'json',
-        success: function(data) { return upload_docs(data.invoice_id) },
+        success: function(data) {
+            uploader._invoice_id = data.invoice_id;
+            history.pushState(null, null, location.pathname + '?id=' + data.invoice_id);
+            return upload_docs()
+        },
         error: [
             function () { $inputs.prop('disabled', false); },
             Liberapay.error,
@@ -201,10 +229,12 @@ function submit(e) {
 $('#invoice-form').submit(submit);
 $('#invoice-form button').filter(':not([type]), [type="submit"]').click(submit);
 
-function upload_docs(invoice_id) {
-    history.pushState(null, null, location.pathname + '?id=' + invoice_id);
-    uploader._invoice_id = invoice_id;
-    uploader.uploadStoredFiles();
+function upload_docs() {
+    if (uploader._storedIds.length !== 0) {
+        uploader.uploadStoredFiles();
+    } else {
+        window.location.href = base_path + uploader._invoice_id;
+    }
 }
 
 </script>
