@@ -55,10 +55,19 @@ class BrowseTestHarness(MangopayHarness):
         c = self.david.create_community('Wonderland')
         self.david.upsert_community_membership(True, c.id)
         self.team.add_member(self.david)
+        self.org = self.make_participant('org', kind='organization')
+        self.invoice_id = self.db.one("""
+            INSERT INTO invoices
+                        (sender, addressee, nature, amount, description, details, documents, status)
+                 VALUES (%s, %s, 'expense', '28.04', 'badges and stickers', null, '{}'::jsonb, 'pre')
+              RETURNING id
+        """, (self.david.id, self.org.id))
 
     def browse(self, **kw):
         for url in self.urls:
             url = url.replace('/%exchange_id', '/%s' % self.exchange_id)
+            url = url.replace('/team/invoices/%invoice_id', '/org/invoices/%s' % self.invoice_id)
+            url = url.replace('/%invoice_id', '/%s' % self.invoice_id)
             assert '/%' not in url
             try:
                 r = self.client.GET(url, **kw)

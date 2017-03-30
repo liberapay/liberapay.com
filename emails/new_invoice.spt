@@ -1,0 +1,12 @@
+{{ _("Invoice from {0} on Liberapay", sender_name) }}
+
+[---] text/html
+<p>{{ _(
+    "{sender_name} has submitted an invoice for a payment of {amount}.",
+    sender_name=sender_name, amount=Money(invoice.amount, 'EUR')
+) }}</p>
+
+<p>{{ _("Description: {0}", invoice.description) }}</p>
+
+<p><a href="{{ participant.url('invoices/%s' % invoice.id) }}"
+      style="{{ button_style('primary') }}">{{ _("View the invoice") }}</a></p>

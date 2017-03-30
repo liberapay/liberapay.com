@@ -1,0 +1,123 @@
+from __future__ import unicode_literals
+
+from base64 import b64encode
+from hashlib import sha256
+import hmac
+import json
+
+from six import text_type as str
+from six.moves.urllib.parse import quote, urlsplit
+
+from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
+from liberapay.exceptions import AuthRequired
+from liberapay.utils import get_participant
+
+S3_SECRET_KEY = website.app_conf.s3_secret_key
+AWS4_SECRET_KEY = b'AWS4' + S3_SECRET_KEY.encode('ascii')
+S3_ENDPOINT = website.app_conf.s3_endpoint
+S3_BUCKET = urlsplit(S3_ENDPOINT).hostname
+
+ALLOWED_EXTENSIONS = set(INVOICE_DOCS_EXTS)
+SIZE_RANGE_STR = str(["0", str(INVOICE_DOC_MAX_SIZE)])
+
+[---]
+
+request.allow('POST')
+
+if user.ANON:
+    raise AuthRequired
+
+invoice_id = request.headers['X-Invoice-Id']
+invoice = website.db.one("""
+    SELECT *
+      FROM invoices
+     WHERE id = %s
+       AND sender = %s
+""", (invoice_id, user.id))
+
+if not invoice:
+    raise response.error(400, "bad `X-Invoice-Id` value")
+
+if invoice.status != 'pre':
+    raise response.error(400, "This invoice has already been submitted.")
+
+body = request.body
+step = request.qs['step']
+
+result = {}
+
+print(request.raw_body)
+
+if step == 'sign':
+    n_docs = sum(1 for d in invoice.documents.values() if d['status'] in ('uploaded', 'pre'))
+    if n_docs >= constants.INVOICE_DOCS_LIMIT:
+        raise response.error(403, "limit has been reached")
+    conditions_list = body['conditions']
+    conditions = {}
+    for cond in conditions_list:
+        if isinstance(cond, dict):
+            conditions.update(cond)
+        elif isinstance(cond, list):
+            conditions[cond[0]] = cond[1:]
+    name = conditions['x-amz-meta-qqfilename']
+    if conditions.get('acl') != 'private':
+        raise response.error(400, "`conditions.acl` must be 'private'")
+    if conditions.get('bucket') != S3_BUCKET:
+        raise response.error(400, "`conditions.bucket` must be '%s'" % S3_BUCKET)
+    i = name.rfind('.', 1)
+    extension = name[i+1:] if i > 0 else None
+    if extension not in ALLOWED_EXTENSIONS:
+        raise response.error(400, "bad file extension: %s" % extension)
+    length_range = str(conditions.get('content-length-range'))
+    if length_range != SIZE_RANGE_STR:
+        raise response.error(400, "bad `content-length-range`")
+    key = 'invoice_docs/%s/%s' % (invoice.id, name)
+    if quote(conditions.get('key', '').encode('utf8')) != key:
+        raise response.error(400, "`conditions.key` must be '%s'" % key)
+    policy = b64encode(json.dumps(body))
+    try:
+        empty, date, region, s3, aws4_request = conditions['x-amz-credential'].encode('ascii').split(b'/')
+    except ValueError:
+        raise response.error(400, "bad `x-amz-credential` value")
+    sig_key = hmac.new(AWS4_SECRET_KEY, date, sha256).digest()
+    sig_key = hmac.new(sig_key, region, sha256).digest()
+    sig_key = hmac.new(sig_key, s3, sha256).digest()
+    sig_key = hmac.new(sig_key, aws4_request, sha256).digest()
+    signature = hmac.new(sig_key, policy, sha256).hexdigest()
+    if name in invoice.documents and invoice.documents[name]['status'] == 'uploaded':
+        raise response.error(400, "The file `%s` has already been uploaded." % name)
+    file_attrs = {
+        'status': 'pre',
+    }
+    result['policy'] = policy
+    result['signature'] = signature
+elif step == 'success':
+    name = quote(body['name'])
+    file_attrs = {
+        'status': 'uploaded'
+    }
+else:
+    raise response.error(400, "unknown step")
+
+with website.db.get_cursor() as c:
+    documents = c.one("""
+        SELECT documents
+          FROM invoices
+         WHERE id = %s
+           FOR UPDATE
+    """, (invoice_id,))
+    if step == 'sign':
+        documents[name] = file_attrs
+    else:
+        try:
+            documents[name].update(file_attrs)
+        except KeyError:
+            raise response.error(400, "bad name: %s, %s" % (name, documents.keys()))
+    c.run("""
+        UPDATE invoices
+           SET documents = %s
+         WHERE id = %s
+    """, (json.dumps(documents), invoice_id))
+
+[---] application/json
+result

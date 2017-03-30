@@ -167,6 +167,8 @@ def iter_payday_events(db, participant, year=None):
                 event['wallet_delta'] = -event['amount']
             if event['status'] == 'succeeded':
                 balance -= event['wallet_delta']
+            if event['context'] == 'expense':
+                event['invoice_url'] = participant.path('invoices/%s' % event['invoice'])
         event['kind'] = kind
 
         day_events.append(event)

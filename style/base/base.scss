@@ -319,7 +319,7 @@ h2, h3, h4, h5, h6 {
     0% { background-color: rgba(yellow, 0.7); }
 }
 
-section.profile-statement, section.community-sidebar {
+section.profile-statement, section.community-sidebar, section.invoice-details {
     h1 {
         font-size: $font-size-h3;
         margin: $font-size-h3 0 10px;
@@ -349,6 +349,18 @@ section.community-sidebar {
     }
     img {
         max-width: 100%;
+    }
+}
+section.invoice-details {
+    border-left: 2px solid $gray-light;
+    margin: 0 0 1em 1.5em;
+    padding-left: 0.5em;
+
+    table {
+        td, th {
+            border: 1px solid #ccc;
+            padding: 0.3em 0.4em;
+        }
     }
 }
 
