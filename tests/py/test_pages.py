@@ -59,7 +59,7 @@ class BrowseTestHarness(MangopayHarness):
         self.invoice_id = self.db.one("""
             INSERT INTO invoices
                         (sender, addressee, nature, amount, description, details, documents, status)
-                 VALUES (%s, %s, 'expense', '28.04', 'badges and stickers', null, '{}'::jsonb, 'pre')
+                 VALUES (%s, %s, 'expense', '28.04', 'badges and stickers', null, '{}'::jsonb, 'new')
               RETURNING id
         """, (self.david.id, self.org.id))
 

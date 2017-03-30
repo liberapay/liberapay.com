@@ -13,17 +13,13 @@ except ValueError:
 
 participant = get_participant(state, restrict=False)
 
-if user.ANON:
-    raise LoginRequired
-
 invoice = website.db.one("""
     SELECT *
       FROM invoices
      WHERE id = %(i_id)s
        AND (sender = %(p_id)s OR addressee = %(p_id)s)
-       AND (sender = %(u_id)s OR addressee = %(u_id)s)
        AND status <> 'canceled'
-""", dict(i_id=i_id, p_id=participant.id, u_id=user.id))
+""", dict(i_id=i_id, p_id=participant.id))
 if invoice is None:
     raise response.error(404)
 
