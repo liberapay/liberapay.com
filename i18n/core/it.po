@@ -94,6 +94,17 @@ msgstr "È il momento di ricaricare il vostro portafoglio Liberapay"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Hai {0} al vostro portafoglio Librapay, ma è necessario almeno {1} per coprire le vostre donazioni prossima settimana."
 
+#, python-brace-format
+msgid "Invoice from {0} on Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "{sender_name} has submitted an invoice for a payment of {amount}."
+msgstr ""
+
+msgid "View the invoice"
+msgstr ""
+
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Versamento sul tuo portafoglio Liberapay"
 
@@ -150,24 +161,18 @@ msgstr "Verifica indirizzo email - Liberapay"
 
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
-msgstr ""
-"Abbiamo ricevuto la richiesta di associare un nuovo indirizzo email ({0}) "
-"all'account Liberapay che corrisponde all'indirizzo {1}. Ne sei al corrente?"
+msgstr "Abbiamo ricevuto la richiesta di associare un nuovo indirizzo email ({0}) all'account Liberapay che corrisponde all'indirizzo {1}. Ne sei al corrente?"
 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
-msgstr ""
-"Un account Liberapay è stato creato in data {0} utilizzando l'indirizzo "
-"email {1}. Sei stato tu?"
+msgstr "Un account Liberapay è stato creato in data {0} utilizzando l'indirizzo email {1}. Sei stato tu?"
 
 msgid "Yes, proceed"
 msgstr "Sì, procedi"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr ""
-"Considera che il codice di verifica contenuto in questo messaggio è valido "
-"solo per {time_interval}."
+msgstr "Considera che il codice di verifica contenuto in questo messaggio è valido solo per {time_interval}."
 
 msgid "Follow this link to validate your email address:"
 msgstr "Segui il link qui sotto per verificare il tuo indirizzo email:"
@@ -224,6 +229,27 @@ msgstr "Quando un bonifico bancario al mio portafoglio Liberapay fallisce"
 
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Quando un bonifico bancario al mio portafoglio Liberapay riesce"
+
+msgid "Expense Report"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Sent (awaiting approval)"
+msgstr ""
+
+msgid "Retracted"
+msgstr ""
+
+msgid "Accepted (awaiting payment)"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Rejected"
+msgstr ""
 
 msgid "Hide total giving from others."
 msgstr "Nascondi agli altri il totale donato."
@@ -406,10 +432,7 @@ msgid "Gateway Timeout"
 msgstr "Timeout del gateway"
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
-msgstr ""
-"La tua richiesta non è stata elaborata a causa di un problema nella "
-"comunicazione tra i nostri server ed un servizio esterno. Questo è un "
-"problema temporaneo, per favore riprova più tardi."
+msgstr "La tua richiesta non è stata elaborata a causa di un problema nella comunicazione tra i nostri server ed un servizio esterno. Questo è un problema temporaneo, per favore riprova più tardi."
 
 msgid "This account is closed"
 msgstr "Questo account è chiuso"
@@ -436,10 +459,7 @@ msgid "We're currently experiencing technical failures. As a result most things 
 msgstr "In questo momento ci sono dei problemi tecnici. Per questo motivo molte cose non funzionano. Ci dispiace per il problema che verrà risolto al più presto."
 
 msgid "Liberapay is currently in read-only mode as we are migrating the database. This shouldn't take more than a few minutes."
-msgstr ""
-"In questo momento non si possono apportare modifiche a Liberapay perchè "
-"stiamo migrando il nostro database. Non dovrebbe volerci più di qualche "
-"minuto."
+msgstr "In questo momento non si possono apportare modifiche a Liberapay perchè stiamo migrando il nostro database. Non dovrebbe volerci più di qualche minuto."
 
 msgid "Toggle navigation"
 msgstr "Attiva/disattiva navigazione"
@@ -1293,6 +1313,105 @@ msgstr "settimane"
 msgid "Number of Patrons Per Week"
 msgstr "Numero di Donatori Per Settimana"
 
+#, python-brace-format
+msgid "Invoice #{0}"
+msgstr ""
+
+msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
+msgstr ""
+
+#, python-brace-format
+msgid "From: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "To: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Date: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Amount: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Description: {0}"
+msgstr ""
+
+msgid "Details:"
+msgstr ""
+
+msgid "Documents:"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+#, python-brace-format
+msgid "Message: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Status: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "You are not allowed to invoice {0}."
+msgstr ""
+
+msgid "The description is too short."
+msgstr ""
+
+msgid "The description is too long."
+msgstr ""
+
+msgid "The details are too long."
+msgstr ""
+
+#, python-brace-format
+msgid "Invoice {someone}"
+msgstr ""
+
+msgid "Nature"
+msgstr ""
+
+msgid "(Liberapay only supports one kind of invoice for now.)"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "A short description of the invoice"
+msgstr ""
+
+msgid "Details (optional)"
+msgstr ""
+
+msgid "Details of the invoice (e.g. the breakdown of the amount into its components)"
+msgstr ""
+
+msgid "Documents (private)"
+msgstr ""
+
+msgid "A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened."
+msgstr ""
+
+#, python-brace-format
+msgid "Only the administrators of {0} will be able to download these files."
+msgstr ""
+
+#, python-brace-format
+msgid "Allowed file extensions: {0}. Maximum file size: {1}MB."
+msgstr ""
+
+msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Non siete invitati a unirsi a questa squadra."
 
@@ -1553,6 +1672,10 @@ msgstr "donazione anonima per il vostro ruolo nella {0} squadra"
 msgid "donation refund"
 msgstr "rimborso donazione"
 
+#, python-brace-format
+msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
+msgstr ""
+
 msgid "anonymous donation"
 msgstr "donazione anonima"
 
@@ -1566,6 +1689,10 @@ msgstr "donazione a {0} per il loro ruolo nella squadra {1}"
 
 msgid "refund of anonymous donation"
 msgstr "il rimborso di donazione anonima"
+
+#, python-brace-format
+msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
+msgstr ""
 
 #, python-brace-format
 msgid "donation to {0}"

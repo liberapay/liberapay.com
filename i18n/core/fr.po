@@ -94,6 +94,17 @@ msgstr "Votre compte Liberapay est à sec"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Il reste {0} dans votre compte Liberapay, or il vous faut au moins {1} pour assurer vos dons de la semaine prochaine."
 
+#, python-brace-format
+msgid "Invoice from {0} on Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "{sender_name} has submitted an invoice for a payment of {amount}."
+msgstr ""
+
+msgid "View the invoice"
+msgstr ""
+
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Virement bancaire vers votre compte Liberapay"
 
@@ -218,6 +229,27 @@ msgstr "Quand un virement vers mon portefeuille Liberapay échoue"
 
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Quand un virement vers mon portefeuille Liberapay réussit"
+
+msgid "Expense Report"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Sent (awaiting approval)"
+msgstr ""
+
+msgid "Retracted"
+msgstr ""
+
+msgid "Accepted (awaiting payment)"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Rejected"
+msgstr ""
 
 msgid "Hide total giving from others."
 msgstr "Ne pas publier la somme que je donne chaque semaine."
@@ -1273,6 +1305,105 @@ msgstr "semaines"
 msgid "Number of Patrons Per Week"
 msgstr "Nombre de donateurs par semaine"
 
+#, python-brace-format
+msgid "Invoice #{0}"
+msgstr ""
+
+msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
+msgstr ""
+
+#, python-brace-format
+msgid "From: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "To: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Date: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Amount: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Description: {0}"
+msgstr ""
+
+msgid "Details:"
+msgstr ""
+
+msgid "Documents:"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+#, python-brace-format
+msgid "Message: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Status: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "You are not allowed to invoice {0}."
+msgstr ""
+
+msgid "The description is too short."
+msgstr ""
+
+msgid "The description is too long."
+msgstr ""
+
+msgid "The details are too long."
+msgstr ""
+
+#, python-brace-format
+msgid "Invoice {someone}"
+msgstr ""
+
+msgid "Nature"
+msgstr ""
+
+msgid "(Liberapay only supports one kind of invoice for now.)"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "A short description of the invoice"
+msgstr ""
+
+msgid "Details (optional)"
+msgstr ""
+
+msgid "Details of the invoice (e.g. the breakdown of the amount into its components)"
+msgstr ""
+
+msgid "Documents (private)"
+msgstr ""
+
+msgid "A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened."
+msgstr ""
+
+#, python-brace-format
+msgid "Only the administrators of {0} will be able to download these files."
+msgstr ""
+
+#, python-brace-format
+msgid "Allowed file extensions: {0}. Maximum file size: {1}MB."
+msgstr ""
+
+msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Vous n'avez pas été invité à rejoindre cette équipe."
 
@@ -1532,6 +1663,10 @@ msgstr "don anonyme pour votre rôle dans l'équipe {0}"
 msgid "donation refund"
 msgstr "remboursement du don"
 
+#, python-brace-format
+msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
+msgstr ""
+
 msgid "anonymous donation"
 msgstr "don anonyme"
 
@@ -1545,6 +1680,10 @@ msgstr "don à {0} pour son rôle dans l'équipe {1}"
 
 msgid "refund of anonymous donation"
 msgstr "remboursement du don anonyme"
+
+#, python-brace-format
+msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
+msgstr ""
 
 #, python-brace-format
 msgid "donation to {0}"

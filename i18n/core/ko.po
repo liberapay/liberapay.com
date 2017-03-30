@@ -92,6 +92,17 @@ msgstr "Liberapay 지갑을 충전할 시간입니다"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Liberapay 지갑에 {0} 만큼이 남아 있지만 다음 주의 기부를 진행하기 위해서 적어도 {1} 만큼이 필요합니다."
 
+#, python-brace-format
+msgid "Invoice from {0} on Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "{sender_name} has submitted an invoice for a payment of {amount}."
+msgstr ""
+
+msgid "View the invoice"
+msgstr ""
+
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Liberapay 지갑으로 계좌 이체"
 
@@ -216,6 +227,27 @@ msgstr "Liberapay로의 계좌이체가 실패하였을 때"
 
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Liberapay로의 계좌 이체가 성공할 때"
+
+msgid "Expense Report"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Sent (awaiting approval)"
+msgstr ""
+
+msgid "Retracted"
+msgstr ""
+
+msgid "Accepted (awaiting payment)"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Rejected"
+msgstr ""
 
 msgid "Hide total giving from others."
 msgstr "다른 사람들에게 받고 있는 금액을 숨깁니다."
@@ -1268,6 +1300,105 @@ msgstr "주"
 msgid "Number of Patrons Per Week"
 msgstr "주간 후원자 수"
 
+#, python-brace-format
+msgid "Invoice #{0}"
+msgstr ""
+
+msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
+msgstr ""
+
+#, python-brace-format
+msgid "From: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "To: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Date: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Amount: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Description: {0}"
+msgstr ""
+
+msgid "Details:"
+msgstr ""
+
+msgid "Documents:"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+#, python-brace-format
+msgid "Message: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Status: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "You are not allowed to invoice {0}."
+msgstr ""
+
+msgid "The description is too short."
+msgstr ""
+
+msgid "The description is too long."
+msgstr ""
+
+msgid "The details are too long."
+msgstr ""
+
+#, python-brace-format
+msgid "Invoice {someone}"
+msgstr ""
+
+msgid "Nature"
+msgstr ""
+
+msgid "(Liberapay only supports one kind of invoice for now.)"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "A short description of the invoice"
+msgstr ""
+
+msgid "Details (optional)"
+msgstr ""
+
+msgid "Details of the invoice (e.g. the breakdown of the amount into its components)"
+msgstr ""
+
+msgid "Documents (private)"
+msgstr ""
+
+msgid "A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened."
+msgstr ""
+
+#, python-brace-format
+msgid "Only the administrators of {0} will be able to download these files."
+msgstr ""
+
+#, python-brace-format
+msgid "Allowed file extensions: {0}. Maximum file size: {1}MB."
+msgstr ""
+
+msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr ""
 
@@ -1525,6 +1656,10 @@ msgstr "{0} 팀에서의 역할에 따른 익명 기여"
 msgid "donation refund"
 msgstr "기여 환불"
 
+#, python-brace-format
+msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
+msgstr ""
+
 msgid "anonymous donation"
 msgstr "익명 기여"
 
@@ -1538,6 +1673,10 @@ msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
 
 msgid "refund of anonymous donation"
 msgstr "익명 기여의 환불"
+
+#, python-brace-format
+msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
+msgstr ""
 
 #, python-brace-format
 msgid "donation to {0}"

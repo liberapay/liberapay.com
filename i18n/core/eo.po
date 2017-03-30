@@ -93,6 +93,17 @@ msgstr "Estas tempo por pinti vian Liberapay monujo"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Vi havas {0} lasis en via Liberapay monujo, sed vi bezonas almenaŭ {1} kovri viajn donacojn venontsemajne."
 
+#, python-brace-format
+msgid "Invoice from {0} on Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "{sender_name} has submitted an invoice for a payment of {amount}."
+msgstr ""
+
+msgid "View the invoice"
+msgstr ""
+
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Banko drato al via Liberapay monujo"
 
@@ -149,23 +160,18 @@ msgstr "Kontrolo de retpoŝtadreso – Liberapay"
 
 #, fuzzy, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
-msgstr ""
-"Ni ricevis peton ligi la retpoŝtadreson {0} al la Liberapay konto, kies nuna "
-"adreso estas {1}. Ĉu vi tion faris?"
+msgstr "Ni ricevis peton ligi la retpoŝtadreson {0} al la Liberapay konto, kies nuna adreso estas {1}. Ĉu vi tion faris?"
 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
-msgstr ""
-"Liberapay konto estis kreita je {0} kun la retpoŝtadreso {1}. Ĉu fare de vi?"
+msgstr "Liberapay konto estis kreita je {0} kun la retpoŝtadreso {1}. Ĉu fare de vi?"
 
 msgid "Yes, proceed"
 msgstr "Jes, procedi"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr ""
-"Bonvolu scii, ke la kontrola kodo en ĉi tiu mesaĝo nur validas dum "
-"{time_interval}."
+msgstr "Bonvolu scii, ke la kontrola kodo en ĉi tiu mesaĝo nur validas dum {time_interval}."
 
 msgid "Follow this link to validate your email address:"
 msgstr "Vizitu la jenan ligilon por validigi vian retpoŝtadreson:"
@@ -197,9 +203,7 @@ msgid "You can try again: {0}"
 msgstr "Vi povas provi refoje: {0}"
 
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
-msgstr ""
-"Ŝajne vi trovis cimon! Pardonu la maloportunaĵon, ni ĝin forigos laŭeble "
-"baldaŭ!"
+msgstr "Ŝajne vi trovis cimon! Pardonu la maloportunaĵon, ni ĝin forigos laŭeble baldaŭ!"
 
 msgid "When I receive money"
 msgstr "Kiam mi ricevas monon"
@@ -224,6 +228,27 @@ msgstr "Kiam banko ĝiro al miaj Liberapay monujo mankas"
 
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Kiam banko ĝiro al miaj Liberapay monujo sukcesas"
+
+msgid "Expense Report"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Sent (awaiting approval)"
+msgstr ""
+
+msgid "Retracted"
+msgstr ""
+
+msgid "Accepted (awaiting payment)"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Rejected"
+msgstr ""
 
 msgid "Hide total giving from others."
 msgstr "Kaŝi entute dankesprimas for de aliaj."
@@ -406,9 +431,7 @@ msgid "Gateway Timeout"
 msgstr "Tempolimo de Kluzo"
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
-msgstr ""
-"Traktado de via peto malsukcesis ĉar nia servilo ne povis komuniki kun servo "
-"ĉe alia komputilo. Temas pri provizora problemo, bonvolu reprovi pli malfrue."
+msgstr "Traktado de via peto malsukcesis ĉar nia servilo ne povis komuniki kun servo ĉe alia komputilo. Temas pri provizora problemo, bonvolu reprovi pli malfrue."
 
 msgid "This account is closed"
 msgstr "Ĉi tiu konto estas fermita"
@@ -432,14 +455,10 @@ msgid "Use an existing account"
 msgstr "Uzi jam ekzistantan konton"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
-msgstr ""
-"Nun ni havas teĥnikajn problemojn. Sekve, plejmulto da aferoj ne funkcias. "
-"Ni petas vian pardonon kaj penos ĉion laŭeble baldaŭ ĝustigi."
+msgstr "Nun ni havas teĥnikajn problemojn. Sekve, plejmulto da aferoj ne funkcias. Ni petas vian pardonon kaj penos ĉion laŭeble baldaŭ ĝustigi."
 
 msgid "Liberapay is currently in read-only mode as we are migrating the database. This shouldn't take more than a few minutes."
-msgstr ""
-"Liberapay nun estas en nurlega reĝimo, dum migrado de la datumbazo. Tio ne "
-"daŭros pli longe ol kelkaj minutoj."
+msgstr "Liberapay nun estas en nurlega reĝimo, dum migrado de la datumbazo. Tio ne daŭros pli longe ol kelkaj minutoj."
 
 #, fuzzy
 msgid "Toggle navigation"
@@ -579,10 +598,7 @@ msgid "Go"
 msgstr "Eniri"
 
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr ""
-"Ni sendis al vi unufojan salutan ligilon. Kontrolu vian retpoŝtujon, vizitu "
-"la ligilon en nova langeto, kaj poste revenu ĉi tien alklakonte la ĉi-suban "
-"butonon por daŭrigi kion ajn vi volis fari."
+msgstr "Ni sendis al vi unufojan salutan ligilon. Kontrolu vian retpoŝtujon, vizitu la ligilon en nova langeto, kaj poste revenu ĉi tien alklakonte la ĉi-suban butonon por daŭrigi kion ajn vi volis fari."
 
 msgid "Carry on"
 msgstr "Daŭrigu"
@@ -601,9 +617,7 @@ msgid "Password (optional)"
 msgstr "Pasvorto (malnepra)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
-msgstr ""
-"Lasu la antaŭan kampon malplenan se via konto ne havas pasvorton, aŭ se vi "
-"ĝin perdis. Ni sendos al vi salutan ligilon per retpoŝto."
+msgstr "Lasu la antaŭan kampon malplenan se via konto ne havas pasvorton, aŭ se vi ĝin perdis. Ni sendos al vi salutan ligilon per retpoŝto."
 
 msgid "You need to log in"
 msgstr "Vi devas saluti"
@@ -719,9 +733,7 @@ msgid "Last"
 msgstr "Lastaj"
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr ""
-"Agordinte pasvorton vi povos saluti rekte, anstataŭ per ligilo sendita per "
-"retpoŝto. Memoru, ke Liberapay estas mona servo; uzu fortikan pasvorton!"
+msgstr "Agordinte pasvorton vi povos saluti rekte, anstataŭ per ligilo sendita per retpoŝto. Memoru, ke Liberapay estas mona servo; uzu fortikan pasvorton!"
 
 msgid "Current password"
 msgstr "Aktuala pasvorto"
@@ -1296,6 +1308,105 @@ msgstr "semajnoj"
 msgid "Number of Patrons Per Week"
 msgstr "Nombro de patronoj ĉiusemajne"
 
+#, python-brace-format
+msgid "Invoice #{0}"
+msgstr ""
+
+msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
+msgstr ""
+
+#, python-brace-format
+msgid "From: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "To: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Date: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Amount: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Description: {0}"
+msgstr ""
+
+msgid "Details:"
+msgstr ""
+
+msgid "Documents:"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+#, python-brace-format
+msgid "Message: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Status: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "You are not allowed to invoice {0}."
+msgstr ""
+
+msgid "The description is too short."
+msgstr ""
+
+msgid "The description is too long."
+msgstr ""
+
+msgid "The details are too long."
+msgstr ""
+
+#, python-brace-format
+msgid "Invoice {someone}"
+msgstr ""
+
+msgid "Nature"
+msgstr ""
+
+msgid "(Liberapay only supports one kind of invoice for now.)"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "A short description of the invoice"
+msgstr ""
+
+msgid "Details (optional)"
+msgstr ""
+
+msgid "Details of the invoice (e.g. the breakdown of the amount into its components)"
+msgstr ""
+
+msgid "Documents (private)"
+msgstr ""
+
+msgid "A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened."
+msgstr ""
+
+#, python-brace-format
+msgid "Only the administrators of {0} will be able to download these files."
+msgstr ""
+
+#, python-brace-format
+msgid "Allowed file extensions: {0}. Maximum file size: {1}MB."
+msgstr ""
+
+msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Vi ne invitis aliĝi ĉi teamo."
 
@@ -1555,6 +1666,10 @@ msgstr "anonima donaco por via rolo en la {0} teamo"
 msgid "donation refund"
 msgstr "donaco repagon"
 
+#, python-brace-format
+msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
+msgstr ""
+
 msgid "anonymous donation"
 msgstr "anonima donaco"
 
@@ -1568,6 +1683,10 @@ msgstr "donaco al {0} por ilia rolo en la {1} teamo"
 
 msgid "refund of anonymous donation"
 msgstr "repagon de anonima donaco"
+
+#, python-brace-format
+msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
+msgstr ""
 
 #, python-brace-format
 msgid "donation to {0}"
