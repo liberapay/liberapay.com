@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '29'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '30'::jsonb);
 
 
 -- app configuration
@@ -78,6 +78,8 @@ CREATE TABLE participants
 , is_suspended          boolean
 
 , nsubscribers          int                     NOT NULL DEFAULT 0
+
+, allow_invoices        boolean
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
@@ -175,7 +177,7 @@ CREATE TRIGGER update_current_tip INSTEAD OF UPDATE ON current_tips
 -- transfers -- balance transfers from one user to another
 
 CREATE TYPE transfer_context AS ENUM
-    ('tip', 'take', 'final-gift', 'refund');
+    ('tip', 'take', 'final-gift', 'refund', 'expense');
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
 
@@ -190,8 +192,10 @@ CREATE TABLE transfers
 , status      transfer_status     NOT NULL
 , error       text
 , refund_ref  bigint              REFERENCES transfers
+, invoice     int                 REFERENCES invoices
 , CONSTRAINT team_chk CHECK (NOT (context='take' AND team IS NULL))
 , CONSTRAINT self_chk CHECK (tipper <> tippee)
+, CONSTRAINT expense_chk CHECK (NOT (context='expense' AND invoice IS NULL))
  );
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
@@ -503,6 +507,36 @@ CREATE TABLE newsletter_texts
 CREATE INDEX newsletter_texts_not_sent_idx
           ON newsletter_texts (scheduled_for ASC)
        WHERE sent_at IS NULL AND scheduled_for IS NOT NULL;
+
+
+-- invoices
+
+CREATE TYPE invoice_nature AS ENUM ('expense');
+
+CREATE TYPE invoice_status AS ENUM
+    ('pre', 'canceled', 'new', 'retracted', 'accepted', 'paid', 'rejected');
+
+CREATE TABLE invoices
+( id            serial            PRIMARY KEY
+, ctime         timestamptz       NOT NULL DEFAULT CURRENT_TIMESTAMP
+, sender        bigint            NOT NULL REFERENCES participants
+, addressee     bigint            NOT NULL REFERENCES participants
+, nature        invoice_nature    NOT NULL
+, amount        numeric(35,2)     NOT NULL CHECK (amount > 0)
+, description   text              NOT NULL
+, details       text
+, documents     jsonb             NOT NULL
+, status        invoice_status    NOT NULL
+);
+
+CREATE TABLE invoice_events
+( id            serial            PRIMARY KEY
+, invoice       int               NOT NULL REFERENCES invoices
+, participant   bigint            NOT NULL REFERENCES participants
+, ts            timestamptz       NOT NULL DEFAULT CURRENT_TIMESTAMP
+, status        invoice_status    NOT NULL
+, message       text
+);
 
 
 -- composite types, keep this at the end of the file
