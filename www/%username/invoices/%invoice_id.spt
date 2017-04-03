@@ -110,7 +110,7 @@ title = _("Invoice #{0}", i_id)
     <h3>{{ _("History") }}</h3>
     % for e in invoice_events
         <p>{{ format_datetime(e.ts) }} &mdash;
-           {{ _(constants.INVOICE_STATUSES[invoice.status]) }}
+           {{ _(constants.INVOICE_STATUSES[e.status]) }}
            {% if e.message %} &mdash; {{ _("Message: {0}", e.message) }}{% endif %}</p>
     % endfor
     <p>{{ format_datetime(invoice.ctime) }} &mdash; {{ _("Created") }}</p>
