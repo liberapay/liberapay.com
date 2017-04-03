@@ -324,6 +324,8 @@ CREATE TRIGGER update_nsubscribers
 
 -- migration #30
 ALTER TYPE transfer_context ADD VALUE 'expense';
+
+-- migration #31
 CREATE TYPE invoice_nature AS ENUM ('expense');
 CREATE TYPE invoice_status AS ENUM
     ('pre', 'canceled', 'new', 'retracted', 'accepted', 'paid', 'rejected');
