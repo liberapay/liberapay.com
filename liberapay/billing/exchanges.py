@@ -418,10 +418,10 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
 def transfer(db, tipper, tippee, amount, context, **kw):
     t_id = db.one("""
         INSERT INTO transfers
-                    (tipper, tippee, amount, context, team, status)
-             VALUES (%s, %s, %s, %s, %s, 'pre')
+                    (tipper, tippee, amount, context, team, invoice, status)
+             VALUES (%s, %s, %s, %s, %s, %s, 'pre')
           RETURNING id
-    """, (tipper, tippee, amount, context, kw.get('team')))
+    """, (tipper, tippee, amount, context, kw.get('team'), kw.get('invoice')))
     get = lambda id, col: db.one("SELECT {0} FROM participants WHERE id = %s".format(col), (id,))
     tr = Transfer()
     tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')

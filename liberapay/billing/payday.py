@@ -204,13 +204,14 @@ class Payday(object):
         , amount numeric(35,2)
         , context transfer_context
         , team bigint
+        , invoice int
         , UNIQUE (tipper, tippee, context, team)
         ) ON COMMIT DROP;
 
 
         -- Prepare a statement that makes and records a transfer
 
-        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint)
+        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int)
         RETURNS void AS $$
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;
@@ -223,8 +224,8 @@ class Payday(object):
                  WHERE id = $2;
                 IF (NOT FOUND) THEN RAISE 'tippee %% not found', $2; END IF;
                 INSERT INTO payday_transfers
-                            (tipper, tippee, amount, context, team)
-                     VALUES ($1, $2, $3, $4, $5);
+                            (tipper, tippee, amount, context, team, invoice)
+                     VALUES ($1, $2, $3, $4, $5, $6);
             END;
         $$ LANGUAGE plpgsql;
 
@@ -241,7 +242,7 @@ class Payday(object):
                      WHERE id = NEW.tipper
                 );
                 IF (NEW.amount <= tipper.new_balance) THEN
-                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL);
+                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL, NULL);
                     RETURN NEW;
                 END IF;
                 RETURN NULL;
@@ -331,7 +332,7 @@ class Payday(object):
                             CONTINUE;
                         END IF;
                         transfer_amount := min(tip.amount, take.amount);
-                        EXECUTE transfer(tip.tipper, take.member, transfer_amount, 'take', team_id);
+                        EXECUTE transfer(tip.tipper, take.member, transfer_amount, 'take', team_id, NULL);
                         tip.amount := tip.amount - transfer_amount;
                         UPDATE our_takes t
                            SET amount = take.amount - transfer_amount
@@ -340,6 +341,45 @@ class Payday(object):
                     END LOOP;
                 END LOOP;
                 RETURN;
+            END;
+        $$ LANGUAGE plpgsql;
+
+
+        -- Create a function to pay invoices
+
+        CREATE OR REPLACE FUNCTION pay_invoices() RETURNS void AS $$
+            DECLARE
+                invoices_cursor CURSOR FOR
+                     SELECT i.*
+                       FROM invoices i
+                      WHERE i.status = 'accepted'
+                        AND ( SELECT ie.ts
+                                FROM invoice_events ie
+                               WHERE ie.invoice = i.id
+                            ORDER BY ts DESC
+                               LIMIT 1
+                            ) < %(ts_start)s;
+                payer_balance numeric(35,2);
+            BEGIN
+                FOR i IN invoices_cursor LOOP
+                    payer_balance := (
+                        SELECT p.new_balance
+                          FROM payday_participants p
+                         WHERE id = i.addressee
+                    );
+                    IF (payer_balance < i.amount) THEN
+                        CONTINUE;
+                    END IF;
+                    EXECUTE transfer(i.addressee, i.sender, i.amount,
+                                     i.nature::text::transfer_context,
+                                     NULL, i.id);
+                    UPDATE invoices
+                       SET status = 'paid'
+                     WHERE id = i.id;
+                    INSERT INTO invoice_events
+                                (invoice, participant, status)
+                         VALUES (i.id, i.addressee, 'paid');
+                END LOOP;
             END;
         $$ LANGUAGE plpgsql;
 
@@ -353,6 +393,7 @@ class Payday(object):
             SELECT resolve_takes(id) FROM payday_participants WHERE kind = 'group';
             SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
+            SELECT pay_invoices();
         """)
 
     @staticmethod
@@ -390,7 +431,7 @@ class Payday(object):
         self.db.run("""
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
-            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint);
+            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
             DROP FUNCTION resolve_takes(bigint);
         """)
 
@@ -628,7 +669,7 @@ class Payday(object):
               FROM transfers t
              WHERE "timestamp" > %s
                AND "timestamp" <= %s
-               AND context <> 'refund'
+               AND context NOT IN ('refund', 'expense')
           GROUP BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
