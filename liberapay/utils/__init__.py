@@ -7,6 +7,8 @@ from binascii import hexlify, unhexlify
 from datetime import date, datetime, timedelta
 import errno
 import fnmatch
+from hashlib import sha256
+import hmac
 import os
 import pickle
 import re
@@ -317,3 +319,44 @@ def pid_exists(pid):
             raise
     else:
         return True
+
+
+def build_s3_object_url(key):
+    now = utcnow()
+    timestamp = now.strftime('%Y%m%dT%H%M%SZ')
+    today = timestamp.split('T', 1)[0]
+    region = website.app_conf.s3_region
+    access_key = website.app_conf.s3_public_access_key
+    endpoint = website.app_conf.s3_endpoint
+    assert endpoint.startswith('https://')
+    host = endpoint[8:]
+    querystring = (
+        "X-Amz-Algorithm=AWS4-HMAC-SHA256&"
+        "X-Amz-Credential={access_key}%2F{today}%2F{region}%2Fs3%2Faws4_request&"
+        "X-Amz-Date={timestamp}&"
+        "X-Amz-Expires=86400&"
+        "X-Amz-SignedHeaders=host"
+    ).format(**locals())
+    canonical_request = (
+        "GET\n"
+        "/{key}\n"
+        "{querystring}\n"
+        "host:{host}\n"
+        "\n"
+        "host\n"
+        "UNSIGNED-PAYLOAD"
+    ).format(**locals()).encode()
+    canonical_request_hash = sha256(canonical_request).hexdigest()
+    string_to_sign = (
+        "AWS4-HMAC-SHA256\n"
+        "{timestamp}\n"
+        "{today}/{region}/s3/aws4_request\n"
+        "{canonical_request_hash}"
+    ).format(**locals()).encode()
+    aws4_secret_key = b"AWS4" + website.app_conf.s3_secret_key.encode()
+    sig_key = hmac.new(aws4_secret_key, today.encode(), sha256).digest()
+    sig_key = hmac.new(sig_key, region.encode(), sha256).digest()
+    sig_key = hmac.new(sig_key, b"s3", sha256).digest()
+    sig_key = hmac.new(sig_key, b"aws4_request", sha256).digest()
+    signature = hmac.new(sig_key, string_to_sign, sha256).hexdigest()
+    return endpoint + "/" + key + "?" + querystring + "&X-Amz-Signature=" + signature

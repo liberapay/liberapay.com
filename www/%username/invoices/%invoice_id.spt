@@ -2,7 +2,7 @@
 
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
-from liberapay.utils import get_participant, markdown
+from liberapay.utils import build_s3_object_url, get_participant, markdown
 
 [---]
 
@@ -38,6 +38,14 @@ if request.method == 'POST':
     if user.ANON:
         raise LoginRequired
     action = request.body['action']
+    if action == 'download-file':
+        if user not in (sender, addressee) and not user.is_admin:
+            raise response.error(403, _("Invoice documents are private."))
+        name = request.body['name']
+        if name not in invoice.documents:
+            raise response.error(400, "bad `name` value")
+        key = 'invoice_docs/%i/%s' % (invoice.id, name)
+        response.redirect(build_s3_object_url(key))
     if action in ('send', 'cancel'):
         new_status = 'new' if action == 'send' else action + 'ed'
         allowed_user_id = invoice.sender
@@ -138,11 +146,16 @@ title = _("Invoice #{0}", i_id)
 % endif
 % if invoice.documents
 <p>{{ _("Documents:") }}</p>
+<form action="" method="POST">
+<input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+<input type="hidden" name="action" value="download-file" />
 <ul>
 % for filename, attrs in invoice.documents.items()
-    <li>{{ filename.replace('%20', ' ') }}</li>
+    <li>{{ filename.replace('%20', ' ') }} &nbsp;&nbsp;&nbsp;
+        <button class="btn btn-default btn-xs" name="name" value="{{ filename }}">{{ _("Download") }}</button></li>
 % endfor
 </ul>
+</form>
 % endif
 
 % if invoice.status == 'pre'
