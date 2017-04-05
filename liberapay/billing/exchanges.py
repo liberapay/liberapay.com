@@ -80,19 +80,23 @@ def skim_amount(amount, fees):
 skim_bank_wire = lambda amount: skim_amount(amount, FEE_PAYIN_BANK_WIRE)
 
 
+def get_bank_account_country(ba):
+    if ba.Type == 'IBAN':
+        return ba.IBAN[:2].upper()
+    elif ba.Type in ('US', 'GB', 'CA'):
+        return ba.Type
+    else:
+        assert ba.Type == 'OTHER', ba.Type
+        return ba.Country.upper()
+
+
 def skim_credit(amount, ba):
     """Given a payout amount, return a lower amount, the fee, and taxes.
 
     The returned amount can be negative, look out for that.
     """
     typecheck(amount, Decimal)
-    if ba.Type == 'IBAN':
-        country = ba.IBAN[:2].upper()
-    elif ba.Type in ('US', 'GB', 'CA'):
-        country = ba.Type
-    else:
-        assert ba.Type == 'OTHER', ba.Type
-        country = ba.Country.upper()
+    country = get_bank_account_country(ba)
     if country in SEPA:
         fee = FEE_PAYOUT
     else:

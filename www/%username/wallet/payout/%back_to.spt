@@ -6,7 +6,7 @@ from decimal import Decimal as D
 
 from mangopay.resources import BankAccount
 
-from liberapay.billing.exchanges import payout
+from liberapay.billing.exchanges import get_bank_account_country, payout
 from liberapay.constants import SEPA
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
@@ -21,7 +21,7 @@ def obfuscate(n, x, y):
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 exchange = None
-bank_account, ba_type = None, 'IBAN'
+bank_account = None
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 
@@ -56,14 +56,15 @@ if show_form or not success:
     show_form = withdrawable > 0
 
 if show_form:
+    mp_account = participant.get_mangopay_account()
     route = ExchangeRoute.from_network(participant, 'mango-ba')
     if route:
         bank_account = BankAccount.get(
             route.address, user_id=participant.mangopay_user_id
         )
         ba_type = bank_account.Type
+        country = get_bank_account_country(bank_account)
     else:
-        mp_account = participant.get_mangopay_account()
         country = (
             getattr(mp_account, 'LegalRepresentativeCountryOfResidence', None) or
             getattr(mp_account, 'CountryOfResidence', None)
@@ -277,6 +278,7 @@ title = _("Withdraw money")
                     % for code, name in locale.countries.items()
                         % set disable = code in NOT_OTHER
                         <option value="{{ code }}" {{ 'disabled' if disable }}
+                                {{ 'selected' if code == country and not disable }}
                                 >{{ name }}</option>
                     % endfor
                     </select>
