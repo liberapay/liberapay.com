@@ -1,0 +1,40 @@
+# coding: utf8
+
+from liberapay.utils import get_participant
+
+[---]
+
+participant = get_participant(state, restrict=False)
+
+invoices = website.db.all("""
+    SELECT i.*
+         , ( SELECT ts
+               FROM invoice_events ie
+              WHERE ie.invoice = i.id
+           ORDER BY ts DESC
+              LIMIT 1
+           ) AS mtime
+      FROM invoices i
+     WHERE i.addressee = %s
+       AND i.status NOT IN ('pre', 'canceled')
+  ORDER BY i.ctime DESC
+     LIMIT 100
+""", (participant.id,))
+
+title = _("Invoices - {username}", username=participant.username)
+
+[---] text/html
+% extends "templates/base.html"
+
+% block content
+
+% for i in invoices
+    <p>
+        <a href="{{ participant.path('invoices/%i' % i.id) }}">{{ i.description }}</a>
+        &mdash; {{ _(constants.INVOICE_STATUSES[i.status]) }} ({{ format_date(i.mtime, 'long') }})
+    </p>
+% else
+    <p>{{ _("Nothing to show.") }}</p>
+% endfor
+
+% endblock

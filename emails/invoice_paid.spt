@@ -1,0 +1,20 @@
+{{ _("Your invoice to {0} has been accepted and paid - Liberapay", addressee_name) }}
+
+[---] text/html
+<p>{{ _(
+    "Your request for a payment of {amount} from {addressee_name} has been accepted, "
+    "and the money has been transferred to your wallet."
+    , addressee_name=addressee_name, amount=Money(invoice.amount, 'EUR')
+) }}</p>
+
+<p>
+    % if withdrawable
+    <a href="{{ participant.url('wallet/payout/') }}"
+       style="{{ button_style('primary') }}">{{ _("Withdraw the money") }}</a>
+    % else
+    {{ _("However you cannot withdraw the money yet as it is still in quarantine.") }}
+    % endif
+</p>
+
+<p><a href="{{ participant.url('invoices/%s' % invoice.id) }}"
+      >{{ _("View the invoice") }}</a></p>

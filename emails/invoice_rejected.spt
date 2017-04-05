@@ -1,0 +1,11 @@
+{{ _("Your invoice to {0} has been rejected - Liberapay", addressee_name) }}
+
+[---] text/html
+<p>{{ _(
+    "Your request for a payment of {amount} from {addressee_name} has been rejected."
+    , addressee_name=addressee_name, amount=Money(invoice.amount, 'EUR')
+) }}</p>
+
+<p>{{ _("Reason: “{0}”", rejection_message) }}</p>
+
+<p><a href="{{ participant.url('invoices/%s' % invoice.id) }}">{{ _("View the invoice") }}</a></p>

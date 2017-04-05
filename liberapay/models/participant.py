@@ -1194,6 +1194,21 @@ class Participant(Model, MixinTeam):
             """, (invoice_id, self.id, new_status, message))
         return True
 
+    def pay_invoice(self, invoice):
+        assert self.id == invoice.addressee
+        if self.balance < invoice.amount:
+            return False
+        from liberapay.billing.exchanges import transfer
+        balance = transfer(
+            self.db, self.id, invoice.sender, invoice.amount, invoice.nature,
+            invoice=invoice.id,
+            tipper_mango_id=self.mangopay_user_id,
+            tipper_wallet_id=self.mangopay_wallet_id,
+        )
+        self.update_invoice_status(invoice.id, 'paid')
+        self.set_attributes(balance=balance)
+        return True
+
 
     # More Random Stuff
     # =================

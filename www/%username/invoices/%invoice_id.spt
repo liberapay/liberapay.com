@@ -1,7 +1,8 @@
+# coding: utf8
 
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
-from liberapay.utils import get_participant, markdown
+from liberapay.utils import build_s3_object_url, get_participant, markdown
 
 [---]
 
@@ -34,18 +35,36 @@ if invoice.status == 'pre' and user != sender and not user.is_admin:
     raise response.error(404)
 
 if request.method == 'POST':
+    if user.ANON:
+        raise LoginRequired
     action = request.body['action']
-    if action == 'send':
-        new_status = 'new'
-    elif action == 'cancel':
-        new_status = 'canceled'
+    if action == 'download-file':
+        if user not in (sender, addressee) and not user.is_admin:
+            raise response.error(403, _("Invoice documents are private."))
+        name = request.body['name']
+        if name not in invoice.documents:
+            raise response.error(400, "bad `name` value")
+        key = 'invoice_docs/%i/%s' % (invoice.id, name)
+        response.redirect(build_s3_object_url(key))
+    if action in ('send', 'cancel'):
+        new_status = 'new' if action == 'send' else action + 'ed'
+        allowed_user_id = invoice.sender
+    elif action in ('accept', 'reject'):
+        new_status = action + 'ed'
+        allowed_user_id = invoice.addressee
     else:
         response.error(400, "bad `action` value")
-    if user.id != invoice.sender:
+    if user.id != allowed_user_id:
         raise response.error(403)
-    r = sender.update_invoice_status(invoice.id, new_status)
+    if action in ('reject', 'retract'):
+        msg = request.body['message']
+        if msg and len(msg) > 256:
+            raise response.error(400, _("The message is too long."))
+    else:
+        msg = None
+    r = user.update_invoice_status(invoice.id, new_status, message=msg)
     if not r:
-        raise response.error(409, "This invoice has already been submitted or canceled.")
+        raise response.error(409, "The status of this invoice has already been modified.")
     if action == 'send':
         addressee.notify(
             'new_invoice',
@@ -53,7 +72,26 @@ if request.method == 'POST':
             sender_name=sender.username,
             force_email=True,
         )
-    response.redirect(request.line.uri)
+    elif action == 'accept':
+        paid = addressee.pay_invoice(invoice)
+        sender.notify(
+            'invoice_paid' if paid else 'invoice_accepted',
+            invoice=invoice,
+            addressee_name=addressee.username,
+            accepted_by=user.username,
+            withdrawable=(participant.withdrawable_balance >= invoice.amount),
+            force_email=True,
+        )
+    elif action == 'reject':
+        sender.notify(
+            'invoice_rejected',
+            invoice=invoice,
+            addressee_name=addressee.username,
+            rejected_by=user.username,
+            rejection_message=msg,
+            force_email=True,
+        )
+    response.redirect(participant.path('invoices/%s' % invoice.id))
 
 invoice_events = website.db.all("""
     SELECT *
@@ -71,8 +109,28 @@ title = _("Invoice #{0}", i_id)
 
 % block content
 
+% if request.qs.get('action') == 'reject'
+    <br>
+    <form action="" method="POST" class="col-md-10 col-md-offset-1">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="action" value="reject" />
+        <p>{{ _("Please input a short message explaining why you are rejecting this invoice:") }}</p>
+        <p><input type="text" name="message" class="form-control"
+                  placeholder="{{ _('Short explanation') }}"
+                  required maxlength=256 /></p>
+        <p><button class="btn btn-danger">{{ _("Reject") }}</button></p>
+        <br>
+        <p><a href="{{ participant.path('invoice/%s' % invoice.id) }}"
+              class="btn btn-default">{{ _("← Go back") }}</a></p>
+    </form>
+% else
+
 % if invoice.status == 'pre'
 <p class="alert alert-info">{{ _("The invoice is ready, please check that everything is correct, then click the button below to send it.") }}</p>
+% elif invoice.status == 'paid'
+<p class="alert alert-success">{{ _("This invoice has been paid.") }}</p>
+% elif invoice.status == 'rejected'
+<p class="alert alert-danger">{{ _("This invoice has been rejected.") }}</p>
 % endif
 
 <h1 class="text-center">{{ _(constants.INVOICE_NATURES[invoice.nature]) }}</h1>
@@ -88,11 +146,16 @@ title = _("Invoice #{0}", i_id)
 % endif
 % if invoice.documents
 <p>{{ _("Documents:") }}</p>
+<form action="" method="POST">
+<input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+<input type="hidden" name="action" value="download-file" />
 <ul>
 % for filename, attrs in invoice.documents.items()
-    <li>{{ filename.replace('%20', ' ') }}</li>
+    <li>{{ filename.replace('%20', ' ') }} &nbsp;&nbsp;&nbsp;
+        <button class="btn btn-default btn-xs" name="name" value="{{ filename }}">{{ _("Download") }}</button></li>
 % endfor
 </ul>
+</form>
 % endif
 
 % if invoice.status == 'pre'
@@ -105,17 +168,29 @@ title = _("Invoice #{0}", i_id)
         &nbsp;&nbsp;&nbsp;
         <button class="btn btn-danger btn-lg" name="action" value="cancel">{{ _("Delete") }}</button>
     </form>
-% elif invoice_events
+% elif invoice.status == 'new' and user == addressee
+    <br>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-success btn-lg" name="action" value="accept">{{ _("Accept and Pay") }}</button>
+        &nbsp;&nbsp;&nbsp;
+        <a class="btn btn-warning btn-lg" href="?action=reject">{{ _("Reject") }}</a>
+    </form>
+% endif
+
+% if invoice_events
     <br>
     <h3>{{ _("History") }}</h3>
     % for e in invoice_events
         <p>{{ format_datetime(e.ts) }} &mdash;
-           {{ _(constants.INVOICE_STATUSES[invoice.status]) }}
+           {{ _(constants.INVOICE_STATUSES[e.status]) }}
            {% if e.message %} &mdash; {{ _("Message: {0}", e.message) }}{% endif %}</p>
     % endfor
     <p>{{ format_datetime(invoice.ctime) }} &mdash; {{ _("Created") }}</p>
 % else
     <p>{{ _("Status: {0}", _(constants.INVOICE_STATUSES[invoice.status])) }}</p>
+% endif
+
 % endif
 
 % endblock
