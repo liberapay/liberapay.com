@@ -16,7 +16,7 @@ from liberapay.constants import (
     D_CENT, D_ZERO,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
     FEE_PAYIN_BANK_WIRE,
-    FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
+    FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA,
     FEE_VAT,
 )
 from liberapay.exceptions import (
@@ -93,7 +93,7 @@ def skim_credit(amount, ba):
     else:
         assert ba.Type == 'OTHER', ba.Type
         country = ba.Country.upper()
-    if country in SEPA_ZONE:
+    if country in SEPA:
         fee = FEE_PAYOUT
     else:
         fee = FEE_PAYOUT_OUTSIDE_SEPA
