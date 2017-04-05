@@ -62,6 +62,18 @@ if show_form:
             route.address, user_id=participant.mangopay_user_id
         )
         ba_type = bank_account.Type
+    else:
+        mp_account = participant.get_mangopay_account()
+        country = (
+            getattr(mp_account, 'LegalRepresentativeCountryOfResidence', None) or
+            getattr(mp_account, 'CountryOfResidence', None)
+        )
+        if country in ('US', 'GB', 'CA'):
+            ba_type = country
+        elif country in constants.SEPA:
+            ba_type = 'IBAN'
+        else:
+            ba_type = 'OTHER'
     donations = participant.get_giving_for_profile()[1]
     recommended_withdrawal = min(
         withdrawable,
