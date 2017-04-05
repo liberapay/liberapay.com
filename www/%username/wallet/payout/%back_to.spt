@@ -163,7 +163,7 @@ title = _("Withdraw money")
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="{{ 'active' if ba_type == 'IBAN' else '' }}">
-                <a href="#iban" aria-controls="iban" role="tab" data-toggle="tab">{{ _("International") }}</a></li>
+                <a href="#iban" aria-controls="iban" role="tab" data-toggle="tab">{{ _("SEPA / IBAN") }}</a></li>
             <li role="presentation" class="{{ 'active' if ba_type == 'US' else '' }}">
                 <a href="#usa" aria-controls="usa" role="tab" data-toggle="tab">{{ _("USA") }}</a></li>
             <li role="presentation" class="{{ 'active' if ba_type == 'CA' else '' }}">
