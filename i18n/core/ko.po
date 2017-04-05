@@ -71,6 +71,47 @@ msgstr "계정의 거래 기록을 봅니다"
 msgid "- {0}: {1}"
 msgstr "- {0}: {1}"
 
+#, python-brace-format
+msgid "Your invoice to {0} has been accepted - Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
+msgstr ""
+
+#, python-brace-format
+msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
+msgstr ""
+
+msgid "View the invoice"
+msgstr "청구서 보기"
+
+#, python-brace-format
+msgid "Your invoice to {0} has been accepted and paid - Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
+msgstr ""
+
+msgid "Withdraw the money"
+msgstr ""
+
+msgid "However you cannot withdraw the money yet as it is still in quarantine."
+msgstr ""
+
+#, python-brace-format
+msgid "Your invoice to {0} has been rejected - Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
+msgstr ""
+
+#, python-brace-format
+msgid "Reason: “{0}”"
+msgstr ""
+
 msgid "Log in to Liberapay"
 msgstr "Liberapay에 로그인"
 
@@ -99,9 +140,6 @@ msgstr "Liberapay의 {0} 에서 발송된 청구서"
 #, python-brace-format
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} 님이 {amount} 금액의 지불을 위한 청구서를 발송하였습니다."
-
-msgid "View the invoice"
-msgstr "청구서 보기"
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Liberapay 지갑으로 계좌 이체"
@@ -430,9 +468,7 @@ msgid "Gateway Timeout"
 msgstr "게이트웨이 타임아웃"
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
-msgstr ""
-"다른 서버에 위치한 서비스와 연결할 수 없었기 때문에 요청을 완료할 수 없었습니다. 일시적인 오류이므로, 나중에 다시 시도해 주시기 "
-"바랍니다."
+msgstr "다른 서버에 위치한 서비스와 연결할 수 없었기 때문에 요청을 완료할 수 없었습니다. 일시적인 오류이므로, 나중에 다시 시도해 주시기 바랍니다."
 
 msgid "This account is closed"
 msgstr "이 계정은 폐쇄되었습니다"
@@ -456,9 +492,7 @@ msgid "Use an existing account"
 msgstr "존재하는 계정 사용"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
-msgstr ""
-"기술적인 문제가 발생하고 있습니다. 따라서 사이트 대부분이 동작하지 않습니다. 불편을 드려 죄송합니다. 가능한 한 빨리 정상화를 "
-"진행하겠습니다."
+msgstr "기술적인 문제가 발생하고 있습니다. 따라서 사이트 대부분이 동작하지 않습니다. 불편을 드려 죄송합니다. 가능한 한 빨리 정상화를 진행하겠습니다."
 
 msgid "Liberapay is currently in read-only mode as we are migrating the database. This shouldn't take more than a few minutes."
 msgstr "Liberapay는 현재 데이터베이스를 이전하고 있으므로 읽기 전용으로 동작합니다. 몇 분 이상 걸리지 않을 것입니다."
@@ -1304,11 +1338,32 @@ msgstr "주"
 msgid "Number of Patrons Per Week"
 msgstr "주간 후원자 수"
 
+msgid "Invoice documents are private."
+msgstr ""
+
+msgid "The message is too long."
+msgstr ""
+
 #, python-brace-format
 msgid "Invoice #{0}"
 msgstr ""
 
+msgid "Please input a short message explaining why you are rejecting this invoice:"
+msgstr ""
+
+msgid "Short explanation"
+msgstr ""
+
+msgid "Reject"
+msgstr ""
+
 msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
+msgstr ""
+
+msgid "This invoice has been paid."
+msgstr ""
+
+msgid "This invoice has been rejected."
 msgstr ""
 
 #, python-brace-format
@@ -1337,7 +1392,13 @@ msgstr ""
 msgid "Documents:"
 msgstr ""
 
+msgid "Download"
+msgstr ""
+
 msgid "Send"
+msgstr ""
+
+msgid "Accept and Pay"
 msgstr ""
 
 msgid "History"
@@ -1349,6 +1410,13 @@ msgstr ""
 
 #, python-brace-format
 msgid "Status: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Invoices - {username}"
+msgstr ""
+
+msgid "Nothing to show."
 msgstr ""
 
 #, python-brace-format
@@ -2367,9 +2435,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The top {0} individuals on Liberapay are:"
-msgstr ""
-
-msgid "Nothing to show."
 msgstr ""
 
 #, python-brace-format
