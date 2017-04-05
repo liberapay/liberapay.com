@@ -14,6 +14,23 @@ from liberapay.utils import b64decode_s, get_participant
 
 NOT_OTHER = set('US CA GB'.split()).union(SEPA)
 
+def get_owner_name(account):
+    if account.PersonType == 'NATURAL':
+        return account.FirstName + ' ' + account.LastName
+    else:
+        return account.Name
+
+def get_owner_address(bank_account, mp_account):
+    if bank_account:
+        addr = bank_account.OwnerAddress
+    elif mp_account.PersonType == 'NATURAL':
+        addr = mp_account.Address
+    else:
+        addr = mp_account.HeadquartersAddress
+    if not addr.Country:
+        return None
+    return addr
+
 def obfuscate(n, x, y):
     return n[:x] + 'x'*len(n[x:y]) + n[y:]
 
@@ -304,11 +321,12 @@ title = _("Withdraw money")
 
         <label>
             <span>{{ _("Name") }}</span>
-            <input name="OwnerName" class="form-control" required />
+            <input name="OwnerName" class="form-control" required
+                   value="{{ get_owner_name(mp_account) }}" />
         </label><br>
 
         % from "templates/postal-addresses.html" import postal_address_form with context
-        {{ postal_address_form(prefix='Owner') }}
+        {{ postal_address_form(prefix='Owner', saved=get_owner_address(bank_account, mp_account), country=country) }}
 
     </fieldset>
 
