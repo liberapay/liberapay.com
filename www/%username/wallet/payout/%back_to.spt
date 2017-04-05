@@ -7,9 +7,12 @@ from decimal import Decimal as D
 from mangopay.resources import BankAccount
 
 from liberapay.billing.exchanges import payout
+from liberapay.constants import SEPA
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant
+
+NOT_OTHER = set('US CA GB'.split()).union(SEPA)
 
 def obfuscate(n, x, y):
     return n[:x] + 'x'*len(n[x:y]) + n[y:]
@@ -259,8 +262,10 @@ title = _("Withdraw money")
                     <span>{{ _("Country") }}</span>
                     <select name="Country" class="form-control" required>
                     <option></option>
-                    % for each in locale.countries.items()
-                        <option value="{{ each[0] }}">{{ each[1] }}</option>
+                    % for code, name in locale.countries.items()
+                        % set disable = code in NOT_OTHER
+                        <option value="{{ code }}" {{ 'disabled' if disable }}
+                                >{{ name }}</option>
                     % endfor
                     </select>
                 </label><br>
