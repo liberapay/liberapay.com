@@ -6,10 +6,30 @@ from decimal import Decimal as D
 
 from mangopay.resources import BankAccount
 
-from liberapay.billing.exchanges import payout
+from liberapay.billing.exchanges import get_bank_account_country, payout
+from liberapay.constants import SEPA
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant
+
+NOT_OTHER = set('US CA GB'.split()).union(SEPA)
+
+def get_owner_name(account):
+    if account.PersonType == 'NATURAL':
+        return account.FirstName + ' ' + account.LastName
+    else:
+        return account.Name
+
+def get_owner_address(bank_account, mp_account):
+    if bank_account:
+        addr = bank_account.OwnerAddress
+    elif mp_account.PersonType == 'NATURAL':
+        addr = mp_account.Address
+    else:
+        addr = mp_account.HeadquartersAddress
+    if not addr.Country:
+        return None
+    return addr
 
 def obfuscate(n, x, y):
     return n[:x] + 'x'*len(n[x:y]) + n[y:]
@@ -18,7 +38,7 @@ def obfuscate(n, x, y):
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 exchange = None
-bank_account, ba_type = None, 'IBAN'
+bank_account = None
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 
@@ -53,12 +73,25 @@ if show_form or not success:
     show_form = withdrawable > 0
 
 if show_form:
+    mp_account = participant.get_mangopay_account()
     route = ExchangeRoute.from_network(participant, 'mango-ba')
     if route:
         bank_account = BankAccount.get(
             route.address, user_id=participant.mangopay_user_id
         )
         ba_type = bank_account.Type
+        country = get_bank_account_country(bank_account)
+    else:
+        country = (
+            getattr(mp_account, 'LegalRepresentativeCountryOfResidence', None) or
+            getattr(mp_account, 'CountryOfResidence', None)
+        )
+        if country in ('US', 'GB', 'CA'):
+            ba_type = country
+        elif country in constants.SEPA:
+            ba_type = 'IBAN'
+        else:
+            ba_type = 'OTHER'
     donations = participant.get_giving_for_profile()[1]
     recommended_withdrawal = min(
         withdrawable,
@@ -163,7 +196,7 @@ title = _("Withdraw money")
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="{{ 'active' if ba_type == 'IBAN' else '' }}">
-                <a href="#iban" aria-controls="iban" role="tab" data-toggle="tab">{{ _("International") }}</a></li>
+                <a href="#iban" aria-controls="iban" role="tab" data-toggle="tab">{{ _("SEPA / IBAN") }}</a></li>
             <li role="presentation" class="{{ 'active' if ba_type == 'US' else '' }}">
                 <a href="#usa" aria-controls="usa" role="tab" data-toggle="tab">{{ _("USA") }}</a></li>
             <li role="presentation" class="{{ 'active' if ba_type == 'CA' else '' }}">
@@ -259,8 +292,11 @@ title = _("Withdraw money")
                     <span>{{ _("Country") }}</span>
                     <select name="Country" class="form-control" required>
                     <option></option>
-                    % for each in locale.countries.items()
-                        <option value="{{ each[0] }}">{{ each[1] }}</option>
+                    % for code, name in locale.countries.items()
+                        % set disable = code in NOT_OTHER
+                        <option value="{{ code }}" {{ 'disabled' if disable }}
+                                {{ 'selected' if code == country and not disable }}
+                                >{{ name }}</option>
                     % endfor
                     </select>
                 </label><br>
@@ -285,11 +321,12 @@ title = _("Withdraw money")
 
         <label>
             <span>{{ _("Name") }}</span>
-            <input name="OwnerName" class="form-control" required />
+            <input name="OwnerName" class="form-control" required
+                   value="{{ get_owner_name(mp_account) }}" />
         </label><br>
 
         % from "templates/postal-addresses.html" import postal_address_form with context
-        {{ postal_address_form(prefix='Owner') }}
+        {{ postal_address_form(prefix='Owner', saved=get_owner_address(bank_account, mp_account), country=country) }}
 
     </fieldset>
 

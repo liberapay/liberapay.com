@@ -41,7 +41,7 @@ class BrowseTestHarness(MangopayHarness):
                      .replace('/%platform', '/github') \
                      .replace('/%user_name/', '/liberapay/') \
                      .replace('/%redirect_to', '/giving') \
-                     .replace('/%back_to', '/Li4=') \
+                     .replace('/%back_to', '/') \
                      .replace('/payday/%id', '/payday/') \
                      .replace('/%type', '/receiving.js') \
                      .replace('/%endpoint', '/public')

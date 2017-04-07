@@ -1,4 +1,4 @@
-% macro postal_address_form(prefix='', saved=None)
+% macro postal_address_form(prefix='', saved=None, country=None)
 
     <label>
         <span>{{ _("Address") }}</span>
@@ -35,8 +35,9 @@
         <span>{{ _("Country") }}</span>
         <select name="{{ prefix }}Address.Country" class="form-control" required>
             <option></option>
-            % for each in locale.countries.items()
-                <option value="{{ each[0] }}" {{ 'selected' if each[0] == saved.Country }}>{{ each[1] }}</option>
+            % set country = country or saved.Country
+            % for code, name in locale.countries.items()
+                <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
             % endfor
         </select>
     </label><br>

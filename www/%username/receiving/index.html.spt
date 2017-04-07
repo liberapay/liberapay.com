@@ -33,7 +33,7 @@ teams = website.db.all("""
     <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
     <p><a class="btn btn-primary" href="{{ participant.path('identity') }}">{{ _("Fill identity form") }}</a></p>
 % elif participant.balance > 0
-    <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/Li4=') }}"
+    <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
           >{{ _("Withdraw money") }}</a></p>
 % endif
 

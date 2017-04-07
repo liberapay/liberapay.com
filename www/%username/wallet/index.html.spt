@@ -69,7 +69,7 @@ else:
 <p>{{ BALANCE }}</p>
 
 % if participant.balance > 0
-    <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/Li4=') }}"
+    <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
           >{{ _("Withdraw money") }}</a></p>
 % endif
 

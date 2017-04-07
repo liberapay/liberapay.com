@@ -158,7 +158,7 @@ check_bits(list(PRIVILEGES.values()))
 
 QUARANTINE = timedelta(weeks=4)
 
-SEPA_ZONE = set("""
+SEPA = set("""
     AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
     MC MT NL NO PL PT RO SE SI SK
 """.split())

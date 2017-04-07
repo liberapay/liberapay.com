@@ -16,7 +16,7 @@ from liberapay.constants import (
     D_CENT, D_ZERO,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
     FEE_PAYIN_BANK_WIRE,
-    FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA_ZONE,
+    FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, FEE_PAYOUT_WARN, QUARANTINE, SEPA,
     FEE_VAT,
 )
 from liberapay.exceptions import (
@@ -80,20 +80,24 @@ def skim_amount(amount, fees):
 skim_bank_wire = lambda amount: skim_amount(amount, FEE_PAYIN_BANK_WIRE)
 
 
+def get_bank_account_country(ba):
+    if ba.Type == 'IBAN':
+        return ba.IBAN[:2].upper()
+    elif ba.Type in ('US', 'GB', 'CA'):
+        return ba.Type
+    else:
+        assert ba.Type == 'OTHER', ba.Type
+        return ba.Country.upper()
+
+
 def skim_credit(amount, ba):
     """Given a payout amount, return a lower amount, the fee, and taxes.
 
     The returned amount can be negative, look out for that.
     """
     typecheck(amount, Decimal)
-    if ba.Type == 'IBAN':
-        country = ba.IBAN[:2].upper()
-    elif ba.Type in ('US', 'GB', 'CA'):
-        country = ba.Type
-    else:
-        assert ba.Type == 'OTHER', ba.Type
-        country = ba.Country.upper()
-    if country in SEPA_ZONE:
+    country = get_bank_account_country(ba)
+    if country in SEPA:
         fee = FEE_PAYOUT
     else:
         fee = FEE_PAYOUT_OUTSIDE_SEPA
