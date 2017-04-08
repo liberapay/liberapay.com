@@ -216,8 +216,12 @@ recent = query_cache.one("""
         % endif
         % if recent.n_pledges > 1
         <p>{{ glyphicon('thumbs-up') }} <span>{{ _(
-            "{n} new pledges have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
-            n=recent.n_pledges, money_amount=Money(recent.pledges_amount, 'EUR')
+            "{n} new {link_open}pledges{link_close} have been made in the past month, "
+            "adding {money_amount} of weekly donations waiting to be claimed.",
+            n=recent.n_pledges,
+            link_open='<a href="/explore/pledges">'|safe,
+            link_close='</a>'|safe,
+            money_amount=Money(recent.pledges_amount, 'EUR'),
         ) }}</span></p>
         % endif
         <p>{{ glyphicon('transfer') }} <span>{{ _(
