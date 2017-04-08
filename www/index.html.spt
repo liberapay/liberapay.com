@@ -18,34 +18,32 @@ sponsors = query_cache.all("""
 """)
 nsponsors = query_cache.one("SELECT count(*) FROM sponsors")
 
-recent_events = query_cache.all("""
-    SELECT *
-      FROM (
-            SELECT 'new_user' AS event
-                 , join_time AS ts
-                 , json_build_object('kind', kind) AS args
-              FROM participants
-             WHERE status = 'active'
-               AND kind <> 'community'
-
-            UNION ALL
-
-            SELECT 'new_community' AS event
-                 , c.ctime AS ts
-                 , json_build_object() AS args
-              FROM communities c
-              JOIN participants p ON p.id = c.creator
-             WHERE c.nmembers > 0
-
-            UNION ALL
-
-            SELECT 'payday' AS event
-                 , p.ts_end AS ts
-                 , json_build_object('transfer_volume', p.transfer_volume) AS args
-              FROM paydays p
-           ) foo
-  ORDER BY ts DESC
-     LIMIT 16
+recent = query_cache.one("""
+    WITH _users AS (
+             SELECT join_time
+               FROM participants
+              WHERE join_time > (now() - INTERVAL '30 days')
+                AND status = 'active'
+                AND kind <> 'community'
+         )
+       , _tips AS (
+             SELECT t.amount, p.status
+               FROM current_tips t
+               JOIN participants p ON p.id = t.tippee
+              WHERE t.ctime > (now() - INTERVAL '30 days')
+                AND t.amount > 0
+         )
+       , _donations AS (SELECT * FROM _tips WHERE status = 'active')
+       , _pledges AS (SELECT * FROM _tips WHERE status = 'stub')
+       , _payday AS (SELECT * FROM paydays ORDER BY ts_end DESC LIMIT 1)
+    SELECT (SELECT count(*) FROM _users) AS n_users
+         , (SELECT max(join_time) FROM _users) AS newest_user_ts
+         , (SELECT count(*) FROM _donations) AS n_donations
+         , (SELECT sum(amount) FROM _donations) AS donations_amount
+         , (SELECT count(*) FROM _pledges) AS n_pledges
+         , (SELECT sum(amount) FROM _pledges) AS pledges_amount
+         , (SELECT transfer_volume FROM _payday) AS newest_payday_transfer_volume
+         , (SELECT nactive FROM _payday) AS newest_payday_nactive
 """)
 
 [---]
@@ -203,46 +201,30 @@ recent_events = query_cache.all("""
     </div>
 
     <div class="section">
-    <div class="row">
-        <h2 class="col-xs-12">{{ _("Recent Activity") }}</h2>
-    <div class="col-md-6">
-        % for e in recent_events
-            % if loop.index == ceil(len(recent_events) / 2.0) + 1
-                </div><div class="col-md-6 visible-md-block visible-lg-block">
-            % endif
-            <p class="event">
-                % if e.event == 'new_user'
-                    % if e.args.kind == 'group'
-                    {{ glyphicon('plus') }}
-                    <span>{{ _(
-                        'Someone created a new team {0} ago.',
-                        to_age(e.ts)
-                    ) }}</span>
-                    % else
-                    {{ glyphicon('user') }}
-                    <span>{{ _(
-                        'Someone joined Liberapay {0} ago.',
-                        to_age(e.ts)
-                    ) }}</span>
-                    % endif
-                % elif e.event == 'new_community'
-                    {{ glyphicon('asterisk') }}
-                    <span>{{ _(
-                        'Someone created a new community {0} ago.',
-                        to_age(e.ts),
-                    ) }}</span>
-                % elif e.event == 'payday'
-                    {{ glyphicon('refresh') }}
-                    <span>{{ _(
-                        'Payday was run {0} ago and transferred {1}.',
-                        to_age(e.ts),
-                        Money(e.args.transfer_volume, 'EUR'),
-                    ) }}</span>
-                % endif
-            </p>
-        % endfor
-    </div>
-    </div>
+        <h2>{{ _("Recent Activity") }}</h2>
+        % if recent.n_users > 1
+        <p>{{ glyphicon('user') }} <span>{{ _(
+            "{0} user accounts have been created in the past month. The most recent was {1} ago.",
+            recent.n_users, to_age(recent.newest_user_ts)
+        ) }}</span></p>
+        % endif
+        % if recent.n_donations > 1
+        <p>{{ glyphicon('gift') }} <span>{{ _(
+            "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}.",
+            n=recent.n_donations, money_amount=Money(recent.donations_amount, 'EUR')
+        ) }}</span></p>
+        % endif
+        % if recent.n_pledges > 1
+        <p>{{ glyphicon('thumbs-up') }} <span>{{ _(
+            "{n} new pledges have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
+            n=recent.n_pledges, money_amount=Money(recent.pledges_amount, 'EUR')
+        ) }}</span></p>
+        % endif
+        <p>{{ glyphicon('transfer') }} <span>{{ _(
+            "{money_amount} were transferred last week between {n} users.",
+            money_amount=Money(recent.newest_payday_transfer_volume, 'EUR'),
+            n=recent.newest_payday_nactive,
+        ) }}</span></p>
     </div>
 
     <div class="section">
