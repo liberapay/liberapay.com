@@ -225,6 +225,7 @@ recent = query_cache.one("""
             money_amount=Money(recent.newest_payday_transfer_volume, 'EUR'),
             n=recent.newest_payday_nactive,
         ) }}</span></p>
+        <p><a href="/about/stats" class="btn btn-info">{{ glyphicon('stats') }} <span>{{ _("More stats") }}</span></a></p>
     </div>
 
     <div class="section">
