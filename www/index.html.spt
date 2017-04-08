@@ -167,14 +167,14 @@ recent = query_cache.one("""
     <div class="section">
         <h2>{{ _("Sponsors") }}</h2>
         <p>{{ _(
-            "We welcome donations from businesses and nonprofits. If you have "
-            "any questions, don't hesitate to {0}contact us{1}.",
+            "Donations from businesses and nonprofits are welcome on Liberapay. If "
+            "you have any questions, don't hesitate to {0}contact us{1}.",
             '<a href="/about/contact">'|safe, '</a>'|safe
         ) }}</p>
         % if sponsors
             <p>{{ ngettext(
-                "We currently have {n} sponsor, this section is our way of thanking them.",
-                "We currently have {n} sponsors, this section is our way of thanking them.",
+                "There is currently {n} sponsor on the platform, this section is our way of thanking them.",
+                "There are currently {n} sponsors on the platform, this section is our way of thanking them.",
                 nsponsors
             ) }} {{ fontawesome('smile-o') }}
             % if nsponsors > len(sponsors)
@@ -192,11 +192,6 @@ recent = query_cache.one("""
                 </li>
             % endfor
             </ul>
-        % else
-            <p>{{ _(
-                "This section is meant to thank our sponsors, but we don't have "
-                "any yet. That means your organization could be the first!"
-            ) }} {{ fontawesome('smile-o') }}</p>
         % endif
     </div>
 
