@@ -209,7 +209,9 @@ recent = query_cache.one("""
             '<a href="https://github.com/liberapay/liberapay.com">'|safe,
         ) }}</p>
         <p>{{ _(
-            "We rely on your support to keep Liberapay running and improving."
+            "We rely on your support to keep Liberapay running and {link_start}improving{link_end}.",
+            link_start='<a href="https://github.com/liberapay/liberapay.com/issues">'|safe,
+            link_end='</a>'|safe,
         ) }}</p>
         <p><a href="/Liberapay/donate" class="btn btn-donate btn-lg"
               >{{ glyphicon('thumbs-up') }} <span>{{ _("Fund Liberapay") }}</span></a></p>
@@ -276,30 +278,6 @@ recent = query_cache.one("""
             n=recent.newest_payday_nactive,
         ) }}</span></p>
         <p><a href="/about/stats" class="btn btn-info">{{ glyphicon('stats') }} <span>{{ _("More stats") }}</span></a></p>
-    </div>
-
-    <div class="section">
-        <h2>{{ _("Upcoming Features") }}</h2>
-        <ul>
-            <li>{{ _(
-                "The ability to list your projects on your profile and link "
-                "them to the relevant communities."
-            ) }}</li>
-            <li>{{ _(
-                "Communication between donors and donees, through project status "
-                "updates that will also be aggregated into community newsletters."
-            ) }}</li>
-            <li>{{ _(
-                "Total giving amount: you'll choose how much you want to give "
-                "per week, and we'll compute each of your donations accordingly."
-            ) }}</li>
-            <li>{{ _(
-                "Additional payment methods: SEPA direct debits, more types of "
-                "cards, other direct debit schemes."
-            ) }}</li>
-            <li><a href="https://github.com/liberapay/liberapay.com/issues"
-                    >{{ _("and more…") }}</a></li>
-        </ul>
     </div>
 
     <div class="section no-border">
