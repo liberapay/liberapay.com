@@ -56,7 +56,7 @@ if weekly > 0:
     min_weeks = max(constants.PAYIN_BANK_WIRE_MIN // weekly, 1)
     max_weeks = min(52, constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly)
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
-    weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
+    weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks] or [min_weeks]
 
 if request.method == 'POST':
     if weekly <= 0 or funded >= 52:
