@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Liberapay\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"PO-Revision-Date: 2017-04-11 09:02+0000\n"
-"Last-Translator: Lyz Lach'lan <jminscri@liev.re>\n"
+"PO-Revision-Date: 2017-04-11 09:16+0000\n"
+"Last-Translator: Changaco <changaco@changaco.oy.lc>\n"
 "Language-Team: French "
 "<https://hosted.weblate.org/projects/liberapay/core/fr/>\n"
 "Language: fr\n"
@@ -282,9 +282,8 @@ msgstr "Quand un virement vers mon portefeuille Liberapay échoue"
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Quand un virement vers mon portefeuille Liberapay réussit"
 
-#, fuzzy
 msgid "Expense Report"
-msgstr "Notes de frais"
+msgstr "Note de frais"
 
 msgid "Draft"
 msgstr "Brouillon"
@@ -1457,9 +1456,9 @@ msgstr "Cette description est trop longue."
 msgid "The details are too long."
 msgstr "Les détails sont trop longs."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invoice {someone}"
-msgstr "Facture {someone}"
+msgstr "Facturer {someone}"
 
 msgid "Nature"
 msgstr "Nature"
@@ -1764,10 +1763,11 @@ msgstr "don anonyme pour votre rôle dans l'équipe {0}"
 msgid "donation refund"
 msgstr "remboursement du don"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr ""
-"Remboursement de {link_open} frais #{invoice_id}{link_close} par {payer}"
+"règlement de la {link_open}note de frais n°{invoice_id}{link_close} par "
+"{payer}"
 
 msgid "anonymous donation"
 msgstr "don anonyme"
@@ -1783,9 +1783,10 @@ msgstr "don à {0} pour son rôle dans l'équipe {1}"
 msgid "refund of anonymous donation"
 msgstr "remboursement du don anonyme"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
-msgstr "Paiement de {link_open} frais #{invoice_id}{link_close} par {payee}"
+msgstr ""
+"paiement de la {link_open}note de frais n°{invoice_id}{link_close} à {payee}"
 
 #, python-brace-format
 msgid "donation to {0}"
@@ -2684,7 +2685,6 @@ msgstr ""
 "Nous comptons sur votre soutien pour garder Liberapay actif et "
 "{link_start}l'améliorer{link_end}."
 
-#, fuzzy
 msgid "Fund Liberapay"
 msgstr "Financer Liberapay"
 
@@ -2720,11 +2720,11 @@ msgstr ""
 "{0} comptes utilisateurs ont été créés le mois dernier. Le plus récent était "
 "il y a {1}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
 msgstr ""
-"{n} nouveaux dons ont été ont démarrés le mois dernier, augmentant le total "
-"hebdomadaire de financement à {money_amount}."
+"{n} nouveaux dons ont été ont commencés dans les 30 derniers jours, "
+"augmentant la somme hebdomadaire des financements de {money_amount}."
 
 #, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
