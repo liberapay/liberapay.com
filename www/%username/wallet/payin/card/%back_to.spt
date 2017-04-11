@@ -5,10 +5,18 @@ from decimal import Decimal as D, InvalidOperation
 
 from mangopay.resources import Card, PayIn
 
-from liberapay.billing.exchanges import charge, record_exchange_result, repr_error, upcharge_card
-from liberapay.exceptions import Redirect
+from liberapay.billing.exchanges import (
+    charge, record_exchange_result, repr_error, skim_amount, upcharge_card,
+)
+from liberapay.constants import FEE_PAYIN_CARD, PAYIN_CARD_MIN, KYC_PAYIN_YEARLY_THRESHOLD
+from liberapay.exceptions import InvalidNumber, Redirect
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant, is_card_expired
+from liberapay.utils.i18n import Money
+
+PAYIN_CARD_MAX = skim_amount(KYC_PAYIN_YEARLY_THRESHOLD, FEE_PAYIN_CARD)[0]
+AMOUNT_MIN = Money(PAYIN_CARD_MIN, 'EUR')
+AMOUNT_MAX = Money(PAYIN_CARD_MAX, 'EUR')
 
 [---]
 
@@ -44,7 +52,7 @@ if weekly > 0:
     min_weeks = max(constants.PAYIN_CARD_MIN // weekly, 1)
     max_weeks = min(
         max(constants.PAYIN_CARD_TARGET // weekly, 52),
-        constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly
+        PAYIN_CARD_MAX // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
@@ -58,10 +66,22 @@ if request.method == 'POST':
     if not route:
         raise response.error(400, "no credit card")
 
+    amount = request.body['amount']
+    if amount == 'custom':
+        amount = request.body['amount_custom']
+        try:
+            amount = parse_decimal(amount)
+        except:
+            pass
     try:
-        amount = D(request.body['amount'])
+        amount = D(amount)
     except (InvalidOperation, ValueError):
-        raise response.error(400, "bad amount")
+        raise InvalidNumber(amount)
+    if amount < AMOUNT_MIN.amount or amount > AMOUNT_MAX.amount:
+        raise response.error(400, _(
+            "'{0}' is not an acceptable amount (min={1}, max={2})",
+            amount, AMOUNT_MIN, AMOUNT_MAX
+        ))
     return_url = website.canonical_url + request.path.raw
     try:
         exchange = charge(website.db, participant, amount, return_url)
@@ -137,6 +157,7 @@ title = _("Add money")
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
@@ -166,6 +187,20 @@ title = _("Add money")
             </label>
             </li>
         % endfor
+            <li class="list-group-item">
+            <label>
+                <input type="radio" name="amount" value="custom" class="form-control pull-right hidden-xs" />
+                <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(
+                    "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
+                ) }}</h5>
+                <div class="input-group">
+                    <div class="input-group-addon">€</div>
+                    <input class="form-control amount" name="amount_custom" placeholder="{{ _('Amount') }}" />
+                </div>
+                </div>
+            </label>
+            </li>
         </ul>
     </fieldset>
 
