@@ -137,18 +137,36 @@ title = _("Add money")
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <select class="form-control" name="amount">
+        <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
             % set charge_amount, fees, vat = upcharge_card(amount)
-            <option value="{{ amount }}">{{ _(
-                "{0} ({2}% fee included)",
-                Money(charge_amount, 'EUR'),
-                Money(amount, 'EUR'),
-                (fees / charge_amount * 100).quantize(constants.PAYIN_CARD_MIN),
-            ) }}</option>
+            % set _months = weeks / D('4.33')
+            % set months = _months.quantize(D('1'))
+            <li class="list-group-item">
+            <label>
+                <input type="radio" name="amount" value="{{ amount }}" class="form-control pull-right hidden-xs" />
+                <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(
+                    "{0} ({2}% fee included)",
+                    Money(charge_amount, 'EUR'),
+                    None,
+                    (fees / charge_amount * 100).quantize(constants.D_CENT),
+                ) }}</h5>
+                <p class="list-group-item-text">{{ ngettext(
+                    "Your donations will be funded for {n} week",
+                    "Your donations will be funded for {n} weeks",
+                    weeks
+                ) if abs(_months - months) > D('0.1') else ngettext(
+                    "Your donations will be funded for {0} weeks ({n} month)",
+                    "Your donations will be funded for {0} weeks ({n} months)",
+                    months, weeks
+                ) }}</p>
+                </div>
+            </label>
+            </li>
         % endfor
-        </select>
+        </ul>
     </fieldset>
 
 
