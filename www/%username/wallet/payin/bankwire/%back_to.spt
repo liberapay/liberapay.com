@@ -7,9 +7,13 @@ from mangopay.resources import BankWirePayIn
 from pando import json
 
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
-from liberapay.constants import EVENTS
+from liberapay.constants import EVENTS, KYC_PAYIN_YEARLY_THRESHOLD, PAYIN_BANK_WIRE_MIN
+from liberapay.exceptions import InvalidNumber
 from liberapay.utils import b64decode_s, get_participant
+from liberapay.utils.i18n import Money
 
+AMOUNT_MIN = Money(upcharge_bank_wire(PAYIN_BANK_WIRE_MIN)[0], 'EUR')
+AMOUNT_MAX = Money(upcharge_bank_wire(KYC_PAYIN_YEARLY_THRESHOLD)[0], 'EUR')
 
 NOTIF_BIT_FAIL = EVENTS['payin_bankwire_failed'].bit
 NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
@@ -65,10 +69,22 @@ if request.method == 'POST':
             "Please contact support@liberapay.com if you have a legitimate reason."
         ))
 
+    amount = request.body['amount']
+    if amount == 'custom':
+        amount = request.body['amount_custom']
+        try:
+            amount = parse_decimal(amount)
+        except:
+            pass
     try:
-        amount = D(request.body['amount'])
+        amount = D(amount)
     except (InvalidOperation, ValueError):
-        raise response.error(400, "bad amount")
+        raise InvalidNumber(amount)
+    if amount < AMOUNT_MIN.amount or amount > AMOUNT_MAX.amount:
+        raise response.error(400, _(
+            "'{0}' is not an acceptable amount (min={1}, max={2})",
+            amount, AMOUNT_MIN, AMOUNT_MAX
+        ))
     payin, exchange = payin_bank_wire(website.db, participant, amount)
     redir = request.path.raw+'?exchange_id=%s' % exchange.id
     if payin and exchange.status == 'created':
@@ -216,6 +232,20 @@ title = _("Add money")
             </label>
             </li>
         % endfor
+            <li class="list-group-item">
+            <label>
+                <input type="radio" name="amount" value="custom" class="form-control pull-right hidden-xs" />
+                <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(
+                    "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
+                ) }}</h5>
+                <div class="input-group">
+                    <div class="input-group-addon">€</div>
+                    <input class="form-control amount" name="amount_custom" placeholder="{{ _('Amount') }}" />
+                </div>
+                </div>
+            </label>
+            </li>
         </ul>
     </fieldset>
 
