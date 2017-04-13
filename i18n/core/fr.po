@@ -1807,6 +1807,10 @@ msgid "Why are you trying to put more money into your wallet? Please contact sup
 msgstr "Pourquoi essayez-vous d'ajouter encore de l'argent à votre portefeuille ? Veuillez nous contacter sur support@liberapay.com si vous avez une bonne raison."
 
 #, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "La préparation d'un virement bancaire de {0} a échoué. Message d'erreur : {1}"
 
@@ -1848,9 +1852,28 @@ msgstr "Requête en cours, patience…"
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Ajouter de l'argent par virement bancaire entraîne des frais de {0} % provenant de notre opérateur de paiement."
 
+msgid "Please select a precomputed amount or input a custom one."
+msgstr ""
+
 #, python-brace-format
 msgid "{0} ({2}% fee included)"
 msgstr "{0} ({2}% de frais inclus)"
+
+#, python-brace-format
+msgid "Your donations will be funded for {n} week"
+msgid_plural "Your donations will be funded for {n} weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Your donations will be funded for {0} weeks ({n} month)"
+msgid_plural "Your donations will be funded for {0} weeks ({n} months)"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
@@ -2222,9 +2245,7 @@ msgid "Chargebacks"
 msgstr "Remboursements"
 
 msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
-msgstr ""
-"Si malgré nos efforts de lutte contre la fraude vous recevez de l'argent "
-"dont l'origine est frauduleuse, il vous incombe de le rembourser."
+msgstr "Si malgré nos efforts de lutte contre la fraude vous recevez de l'argent dont l'origine est frauduleuse, il vous incombe de le rembourser."
 
 msgid "Safety"
 msgstr "Sûreté"

@@ -1813,6 +1813,10 @@ msgid "Why are you trying to put more money into your wallet? Please contact sup
 msgstr "Warum versuchen Sie mehr Geld in den Geldbeutel zu zahlen? Bitte kontaktieren Sie support@liberapay.com, wenn Sie einen legitimen Grund haben."
 
 #, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr ""
+
+#, python-brace-format
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Der Versuch, eine Banküberweisung von {0} vorzubereiten ist gescheitert. Fehlermeldung: {1}"
 
@@ -1854,9 +1858,28 @@ msgstr "Anfrage läuft, bitte warten…"
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Wenn Sie Ihr Guthaben bei Liberapay per Banküberweisung aufladen, dann fällt eine zusätzliche Gebühr von {0}% bei unserem Zahlungsdienstleister an."
 
+msgid "Please select a precomputed amount or input a custom one."
+msgstr ""
+
 #, python-brace-format
 msgid "{0} ({2}% fee included)"
 msgstr "{0} ({2}% (1) Gebühr enthalten)"
+
+#, python-brace-format
+msgid "Your donations will be funded for {n} week"
+msgid_plural "Your donations will be funded for {n} weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Your donations will be funded for {0} weeks ({n} month)"
+msgid_plural "Your donations will be funded for {0} weeks ({n} months)"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
