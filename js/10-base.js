@@ -67,6 +67,10 @@ Liberapay.init = function() {
     });
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    $('.radio-group input:not([type="radio"])').on('click change', function() {
+        $(this).parents('label').find('input[type="radio"]').prop('checked', true);
+    });
 };
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {

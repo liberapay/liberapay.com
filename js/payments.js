@@ -64,23 +64,27 @@ Liberapay.payments.wrap = function(f) {
 
 Liberapay.payments.submit = Liberapay.payments.wrap(function(e) {
     e.preventDefault();
-    $('#loading-indicator').remove();
-    var $bg = $('<div id="loading-indicator">').css({
-        'background-color': 'rgba(0, 0, 0, 0.5)',
-        'bottom': 0,
-        'left': 0,
-        'position': 'fixed',
-        'right': 0,
-        'top': 0,
-        'z-index': 1040,
-    }).appendTo($('body'));
-    var $loading = $('<div class="alert alert-info">');
-    $loading.text($(this).data('msg-loading'));
-    $loading.appendTo($bg).center('fixed');
-
-    var step2 = Liberapay.payments.onSuccess;
+    var step2;
     if ($('#bank-account:not(.hidden)').length) step2 = Liberapay.payments.ba.submit;
     if ($('#credit-card:not(.hidden)').length) step2 = Liberapay.payments.cc.submit;
+
+    $('#loading-indicator').remove();
+    if (step2 || $('#identity').length) {
+        var $bg = $('<div id="loading-indicator">').css({
+            'background-color': 'rgba(0, 0, 0, 0.5)',
+            'bottom': 0,
+            'left': 0,
+            'position': 'fixed',
+            'right': 0,
+            'top': 0,
+            'z-index': 1040,
+        }).appendTo($('body'));
+        var $loading = $('<div class="alert alert-info">');
+        $loading.text($(this).data('msg-loading'));
+        $loading.appendTo($bg).center('fixed');
+    }
+
+    step2 = step2 || Liberapay.payments.onSuccess;
     if ($('#identity').length) {
         Liberapay.payments.id.submit(step2);
     } else {

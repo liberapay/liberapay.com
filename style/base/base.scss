@@ -652,3 +652,21 @@ span.help-title {
         }
     }
 }
+
+.radio-group .list-group-item {
+    padding: 0;
+    & > label {
+        display: block;
+        margin: 0;
+        & > input[type="radio"] {
+            margin: 25px 15px 4px;
+        }
+        & > .radio-label {
+            padding: 10px 15px;
+        }
+    }
+}
+.radio-label:hover, input[type="radio"]:checked + .radio-label {
+    color: $list-group-link-hover-color;
+    background-color: $list-group-hover-bg;
+}

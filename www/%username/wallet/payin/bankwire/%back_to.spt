@@ -7,9 +7,13 @@ from mangopay.resources import BankWirePayIn
 from pando import json
 
 from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
-from liberapay.constants import EVENTS
+from liberapay.constants import EVENTS, KYC_PAYIN_YEARLY_THRESHOLD, PAYIN_BANK_WIRE_MIN
+from liberapay.exceptions import InvalidNumber
 from liberapay.utils import b64decode_s, get_participant
+from liberapay.utils.i18n import Money
 
+AMOUNT_MIN = Money(upcharge_bank_wire(PAYIN_BANK_WIRE_MIN)[0], 'EUR')
+AMOUNT_MAX = Money(upcharge_bank_wire(KYC_PAYIN_YEARLY_THRESHOLD)[0], 'EUR')
 
 NOTIF_BIT_FAIL = EVENTS['payin_bankwire_failed'].bit
 NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
@@ -56,7 +60,7 @@ if weekly > 0:
     min_weeks = max(constants.PAYIN_BANK_WIRE_MIN // weekly, 1)
     max_weeks = min(52, constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly)
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
-    weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
+    weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks] or [min_weeks]
 
 if request.method == 'POST':
     if weekly <= 0 or funded >= 52:
@@ -65,10 +69,22 @@ if request.method == 'POST':
             "Please contact support@liberapay.com if you have a legitimate reason."
         ))
 
+    amount = request.body['amount']
+    if amount == 'custom':
+        amount = request.body['amount_custom']
+        try:
+            amount = parse_decimal(amount)
+        except:
+            pass
     try:
-        amount = D(request.body['amount'])
+        amount = D(amount)
     except (InvalidOperation, ValueError):
-        raise response.error(400, "bad amount")
+        raise InvalidNumber(amount)
+    if amount < AMOUNT_MIN.amount or amount > AMOUNT_MAX.amount:
+        raise response.error(400, _(
+            "'{0}' is not an acceptable amount (min={1}, max={2})",
+            amount, AMOUNT_MIN, AMOUNT_MAX
+        ))
     payin, exchange = payin_bank_wire(website.db, participant, amount)
     redir = request.path.raw+'?exchange_id=%s' % exchange.id
     if payin and exchange.status == 'created':
@@ -186,18 +202,51 @@ title = _("Add money")
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <select class="form-control" name="amount">
+        <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
+        <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
             % set charge_amount, fees, vat = upcharge_bank_wire(amount)
-            <option value="{{ charge_amount }}">{{ _(
-                "{0} ({2}% fee included)",
-                Money(charge_amount, 'EUR'),
-                Money(amount, 'EUR'),
-                (fees / charge_amount * 100).quantize(constants.D_CENT),
-            ) }}</option>
+            % set _months = weeks / D('4.33')
+            % set months = _months.quantize(D('1'))
+            <li class="list-group-item">
+            <label>
+                <input type="radio" name="amount" value="{{ charge_amount }}" class="pull-right hidden-xs" />
+                <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(
+                    "{0} ({2}% fee included)",
+                    Money(charge_amount, 'EUR'),
+                    None,
+                    (fees / charge_amount * 100).quantize(constants.D_CENT),
+                ) }}</h5>
+                <p class="list-group-item-text">{{ ngettext(
+                    "Your donations will be funded for {n} week",
+                    "Your donations will be funded for {n} weeks",
+                    weeks
+                ) if abs(_months - months) > D('0.1') else ngettext(
+                    "Your donations will be funded for {0} weeks ({n} month)",
+                    "Your donations will be funded for {0} weeks ({n} months)",
+                    months, weeks
+                ) }}</p>
+                </div>
+            </label>
+            </li>
         % endfor
-        </select>
+            <li class="list-group-item">
+            <label>
+                <input type="radio" name="amount" value="custom" class="pull-right hidden-xs" />
+                <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(
+                    "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
+                ) }}</h5>
+                <div class="input-group">
+                    <div class="input-group-addon">€</div>
+                    <input class="form-control amount" name="amount_custom" placeholder="{{ _('Amount') }}" />
+                </div>
+                </div>
+            </label>
+            </li>
+        </ul>
     </fieldset>
 
 
