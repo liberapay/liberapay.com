@@ -7,6 +7,8 @@
     {% block head_early %}{% endblock %}
     <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Liberapay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ _("Liberapay is a recurrent donations platform which aims to provide a stable income for people contributing to the commons.") }}">
+    <meta name="keywords" content="{{ _("commons,crowdfunding,donations,free culture,free software,funding,money,platform,recurrent") }}">
     <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
