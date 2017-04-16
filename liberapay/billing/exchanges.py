@@ -319,7 +319,8 @@ def record_exchange_result(db, exchange_id, status, error, participant):
                  , note=%(error)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
-         RETURNING id, amount, fee, vat, participant, recorder, note, status, timestamp
+         RETURNING id, amount, fee, vat, participant, recorder, note, status
+                 , timestamp, refund_ref
                  , ( SELECT r.*::exchange_routes
                        FROM exchange_routes r
                       WHERE r.id = e.route
@@ -373,38 +374,36 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
         for b in bundles:
             if x >= b.amount:
                 cursor.run("""
-                    INSERT INTO e2e_transfers
-                                (origin, withdrawal, amount)
-                         VALUES (%s, %s, %s)
-                """, (b.origin, exchange.id, b.amount))
-                cursor.run("DELETE FROM cash_bundles WHERE id = %s", (b.id,))
+                    UPDATE cash_bundles
+                       SET owner = NULL
+                         , withdrawal = %s
+                     WHERE id = %s
+                """, (exchange.id, b.id))
                 x -= b.amount
                 if x == 0:
                     break
             else:
                 assert x > 0
                 cursor.run("""
-                    INSERT INTO e2e_transfers
-                                (origin, withdrawal, amount)
-                         VALUES (%s, %s, %s)
-                """, (b.origin, exchange.id, x))
+                    INSERT INTO cash_bundles
+                                (owner, origin, ts, amount, withdrawal)
+                         VALUES (NULL, %s, %s, %s, %s)
+                """, (b.origin, b.ts, x, exchange.id))
                 cursor.run("""
                     UPDATE cash_bundles
                        SET amount = (amount - %s)
                      WHERE id = %s
                 """, (x, b.id))
                 break
-    elif amount > 0 and exchange.amount < 0:
+    elif amount > 0 and (exchange.amount < 0 or exchange.refund_ref):
+        # failed withdrawal
+        orig_exchange_id = exchange.refund_ref or exchange.id
         cursor.run("""
-            LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
-            INSERT INTO cash_bundles
-                        (owner, origin, amount, ts)
-                 SELECT %(p_id)s, t.origin, t.amount, e.timestamp
-                   FROM e2e_transfers t
-                   JOIN exchanges e ON e.id = t.origin
-                  WHERE t.withdrawal = %(e_id)s;
-            DELETE FROM e2e_transfers WHERE withdrawal = %(e_id)s;
-        """, dict(p_id=participant.id, e_id=exchange.id))
+            UPDATE cash_bundles b
+               SET owner = %(p_id)s
+                 , withdrawal = NULL
+             WHERE withdrawal = %(e_id)s
+        """, dict(p_id=participant.id, e_id=orig_exchange_id))
     elif amount > 0:
         cursor.run("""
             INSERT INTO cash_bundles

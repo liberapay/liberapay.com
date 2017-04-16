@@ -35,10 +35,10 @@ class DB(Postgres):
 def check_db(cursor):
     """Runs all available self checks on the given cursor.
     """
-    _check_balances(cursor)
+    _check_balances_against_transactions(cursor)
     _check_tips(cursor)
-    _check_bundles(cursor)
-    _check_bundles_and_e2e_transfers(cursor)
+    _check_bundles_against_balances(cursor)
+    _check_bundles_against_exchanges(cursor)
 
 
 def _check_tips(cursor):
@@ -61,7 +61,7 @@ def _check_tips(cursor):
     assert conflicting_tips == 0, conflicting_tips
 
 
-def _check_balances(cursor):
+def _check_balances_against_transactions(cursor):
     """
     Recalculates balances for all participants from transfers and exchanges.
 
@@ -108,7 +108,7 @@ def _check_balances(cursor):
     assert len(b) == 0, "conflicting balances:\n" + '\n'.join(str(r) for r in b)
 
 
-def _check_bundles(cursor):
+def _check_bundles_against_balances(cursor):
     """Check that balances and cash bundles are coherent.
     """
     b = cursor.all("""
@@ -124,37 +124,41 @@ def _check_bundles(cursor):
     assert len(b) == 0, "bundles are out of whack:\n" + '\n'.join(str(r) for r in b)
 
 
-def _check_bundles_and_e2e_transfers(cursor):
-    """Check that bundles and e2e_transfers are coherent with exchanges.
+def _check_bundles_against_exchanges(cursor):
+    """Check that bundles are coherent with exchanges.
     """
     l = cursor.all("""
         WITH r AS (
         SELECT e.id as e_id
-             , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded')
+             , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded' OR (
+                              e.amount > 0 AND e.refund_ref IS NOT NULL
+                          ))
                      THEN 0
                      ELSE e.amount - (CASE WHEN (e.fee < 0) THEN e.fee ELSE 0 END)
                 END) as total_expected
-             , (COALESCE(in_bundles, 0) + COALESCE(in_e2e_transfers, 0)) as total_found
-             , in_bundles
-             , in_e2e_transfers
+             , (COALESCE(in_wallets, 0) + COALESCE(withdrawn, 0)) as total_found
+             , in_wallets
+             , withdrawn
           FROM exchanges e
           LEFT JOIN (
-                  SELECT b.origin, sum(b.amount) as in_bundles
+                  SELECT b.origin, sum(b.amount) as in_wallets
                     FROM cash_bundles b
+                   WHERE b.withdrawal IS NULL
                 GROUP BY b.origin
                ) AS b ON b.origin = e.id
           LEFT JOIN (
-                  SELECT t.origin, sum(t.amount) as in_e2e_transfers
-                    FROM e2e_transfers t
-                GROUP BY t.origin
-               ) AS t ON t.origin = e.id
+                  SELECT b2.origin, sum(b2.amount) as withdrawn
+                    FROM cash_bundles b2
+                   WHERE b2.withdrawal IS NOT NULL
+                GROUP BY b2.origin
+               ) AS b2 ON b2.origin = e.id
         )
         SELECT *
           FROM r
          WHERE total_expected <> total_found
       ORDER BY e_id
     """)
-    assert len(l) == 0, "bundles and/or e2e_transfers are out of whack:\n" + '\n'.join(str(r) for r in l)
+    assert len(l) == 0, "bundles are out of whack:\n" + '\n'.join(str(r) for r in l)
 
 
 def run_migrations(db):

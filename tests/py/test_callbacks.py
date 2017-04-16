@@ -54,6 +54,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
                 assert len(emails) == 1
                 assert emails[0]['to'][0] == 'homer <%s>' % homer.email
                 assert 'fail' in emails[0]['subject']
+            self.db.self_check()
             homer.update_status('active')  # reset for next loop run
 
     @patch('mangopay.resources.BankWirePayOut.get')
@@ -101,6 +102,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
                 assert emails[0]['to'][0] == 'homer <%s>' % homer.email
                 assert 'fail' in emails[0]['subject']
                 assert 'BECAUSE 42' in emails[0]['text']
+            self.db.self_check()
             homer.update_status('active')  # reset for next loop run
 
     @patch('mangopay.resources.PayIn.get')
@@ -139,6 +141,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             assert len(emails) == 1
             assert emails[0]['to'][0] == 'homer <%s>' % homer.email
             assert status[:4] in emails[0]['subject']
+            self.db.self_check()
             homer.update_status('active')  # reset for next loop run
 
     @patch('mangopay.resources.PayIn.get')
@@ -184,3 +187,4 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
         assert len(emails) == 1
         assert emails[0]['to'][0] == 'homer <%s>' % homer.email
         assert 'succ' in emails[0]['subject']
+        self.db.self_check()
