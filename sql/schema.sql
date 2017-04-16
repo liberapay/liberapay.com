@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '31'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '32'::jsonb);
 
 
 -- app configuration
@@ -476,30 +476,21 @@ CREATE TABLE balances_at
 );
 
 
--- all the money currently in the system, grouped by origin and current owner
+-- all the money that has ever entered the system
 
 CREATE TABLE cash_bundles
 ( id           bigserial      PRIMARY KEY
-, owner        bigint         NOT NULL REFERENCES participants
+, owner        bigint         REFERENCES participants
 , origin       bigint         NOT NULL REFERENCES exchanges
 , amount       numeric(35,2)  NOT NULL CHECK (amount > 0)
 , ts           timestamptz    NOT NULL
+, withdrawal   int            REFERENCES exchanges
 );
 
 CREATE INDEX cash_bundles_owner_idx ON cash_bundles (owner);
 
 
--- end-to-end log of transfers, links payouts to payins
-
-CREATE TABLE e2e_transfers
-( id           bigserial      PRIMARY KEY
-, origin       bigint         NOT NULL REFERENCES exchanges
-, withdrawal   bigint         NOT NULL REFERENCES exchanges
-, amount       numeric(35,2)  NOT NULL CHECK (amount > 0)
-);
-
-
--- whitelist (via profile_nofollow) of noteworthy organizational donors
+-- whitelist (via profile_noindex) of noteworthy organizational donors
 
 CREATE OR REPLACE VIEW sponsors AS
     SELECT *
