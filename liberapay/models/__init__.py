@@ -130,7 +130,9 @@ def _check_bundles_against_exchanges(cursor):
     l = cursor.all("""
         WITH r AS (
         SELECT e.id as e_id
-             , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded')
+             , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded' OR (
+                              e.amount > 0 AND e.refund_ref IS NOT NULL
+                          ))
                      THEN 0
                      ELSE e.amount - (CASE WHEN (e.fee < 0) THEN e.fee ELSE 0 END)
                 END) as total_expected
