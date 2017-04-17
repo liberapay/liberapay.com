@@ -433,6 +433,7 @@ class Payday(object):
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
             DROP FUNCTION resolve_takes(bigint);
+            DROP FUNCTION pay_invoices();
         """)
 
     @classmethod
