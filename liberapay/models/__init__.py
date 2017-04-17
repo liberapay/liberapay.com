@@ -38,7 +38,8 @@ def check_db(cursor):
     _check_balances_against_transactions(cursor)
     _check_tips(cursor)
     _check_bundles_against_balances(cursor)
-    _check_bundles_against_exchanges(cursor)
+    _check_bundles_grouped_by_origin_against_exchanges(cursor)
+    _check_bundles_grouped_by_withdrawal_against_exchanges(cursor)
 
 
 def _check_tips(cursor):
@@ -112,7 +113,7 @@ def _check_bundles_against_balances(cursor):
     """Check that balances and cash bundles are coherent.
     """
     b = cursor.all("""
-        SELECT bundles_total, balance
+        SELECT owner, bundles_total, balance
           FROM (
               SELECT owner, sum(amount) AS bundles_total
                 FROM cash_bundles b
@@ -124,8 +125,8 @@ def _check_bundles_against_balances(cursor):
     assert len(b) == 0, "bundles are out of whack:\n" + '\n'.join(str(r) for r in b)
 
 
-def _check_bundles_against_exchanges(cursor):
-    """Check that bundles are coherent with exchanges.
+def _check_bundles_grouped_by_origin_against_exchanges(cursor):
+    """Check that bundles grouped by origin are coherent with exchanges.
     """
     l = cursor.all("""
         WITH r AS (
@@ -152,6 +153,37 @@ def _check_bundles_against_exchanges(cursor):
                    WHERE b2.withdrawal IS NOT NULL
                 GROUP BY b2.origin
                ) AS b2 ON b2.origin = e.id
+        )
+        SELECT *
+          FROM r
+         WHERE total_expected <> total_found
+      ORDER BY e_id
+    """)
+    assert len(l) == 0, "bundles are out of whack:\n" + '\n'.join(str(r) for r in l)
+
+
+def _check_bundles_grouped_by_withdrawal_against_exchanges(cursor):
+    """Check that bundles grouped by withdrawal are coherent with exchanges.
+    """
+    l = cursor.all("""
+        WITH r AS (
+        SELECT e.id as e_id
+             , (CASE WHEN (e.amount > 0 OR e.status = 'failed' OR EXISTS (
+                              SELECT 1
+                                FROM exchanges e2
+                               WHERE e2.refund_ref = e.id
+                                 AND e2.status = 'succeeded'
+                          ))
+                     THEN 0
+                     ELSE -e.amount + (CASE WHEN (e.fee < 0) THEN 0 ELSE e.fee END)
+                END) as total_expected
+             , COALESCE(withdrawn, 0) as total_found
+          FROM exchanges e
+          LEFT JOIN (
+                  SELECT b.withdrawal, sum(b.amount) as withdrawn
+                    FROM cash_bundles b
+                GROUP BY b.withdrawal
+               ) AS b ON b.withdrawal = e.id
         )
         SELECT *
           FROM r
