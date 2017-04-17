@@ -112,7 +112,7 @@ def _check_bundles_against_balances(cursor):
     """Check that balances and cash bundles are coherent.
     """
     b = cursor.all("""
-        SELECT bundles_total, balance
+        SELECT owner, bundles_total, balance
           FROM (
               SELECT owner, sum(amount) AS bundles_total
                 FROM cash_bundles b
