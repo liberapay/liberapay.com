@@ -44,8 +44,8 @@ The python code inside simplates is only for request-specific logic, common back
 
 Firstly, make sure you have the following dependencies installed:
 
-- python ≥ 2.7.8 (the code is compatible with python 3, but production still runs on python 2 for now)
-- postgresql 9.4.5 (see [the official download & install docs](https://www.postgresql.org/download/)
+- python ≥ 2.7.12 (the code is compatible with python 3, but production still runs on python 2 for now)
+- postgresql 9.6.1 (see [the official download & install docs](https://www.postgresql.org/download/))
 - make
 
 Then run:
@@ -88,10 +88,7 @@ You can create some fake users to make it look more like the real site:
 The python code interacts with the database by sending raw SQL queries through
 the [postgres.py](https://postgres-py.readthedocs.org/en/latest/) library.
 
-The [official PostgreSQL documentation](https://www.postgresql.org/docs/9.4/static/index.html)
-is your friend when dealing with SQL, especially the sections "[The SQL Language]
-(https://www.postgresql.org/docs/9.4/static/sql.html)" and "[SQL Commands]
-(https://www.postgresql.org/docs/9.4/static/sql-commands.html)".
+The [official PostgreSQL documentation](https://www.postgresql.org/docs/9.6/static/index.html) is your friend when dealing with SQL, especially the sections "[The SQL Language](https://www.postgresql.org/docs/9.6/static/sql.html)" and "[SQL Commands](https://www.postgresql.org/docs/9.6/static/sql-commands.html)".
 
 The DB schema is in `sql/schema.sql`, but don't modify that file directly,
 instead put the changes in `sql/branch.sql`. During deployment that script will
@@ -100,12 +97,7 @@ That process is semi-automated by `release.sh`.
 
 ### CSS and JavaScript
 
-For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3]
-(https://getbootstrap.com/). Stylesheets are in the `style/` directory and our
-JavaScript code is in `js/`. Our policy for both is to have as little as
-possible of them: the website should be almost entirely usable without JS, and
-our CSS should leverage Bootstrap as much as possible instead of containing lots
-of custom rules that would become a burden to maintain.
+For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3](https://getbootstrap.com/). Stylesheets are in the `style/` directory and our JavaScript code is in `js/`. Our policy for both is to have as little as possible of them: the website should be almost entirely usable without JS, and our CSS should leverage Bootstrap as much as possible instead of containing lots of custom rules that would become a burden to maintain.
 
 We compile Bootstrap ourselves from the SASS source in the `style/bootstrap/`
 directory. We do that to be able to easily customize it by changing values in
@@ -140,11 +132,9 @@ If for some reason you need to rehash all requirements, run `make rehash-require
 
 ### Deploying the app
 
-Liberapay is currently hosted on the legacy 2.x version of [OpenShift Online](https://openshift.com/) (not the new v3 based on Docker). The user documentation is on [developers.openshift.com][OS-dev]. We need to migrate either to v3 or to something else soon (want to help? see [#177](https://github.com/liberapay/liberapay.com/issues/177)).
+Liberapay is currently hosted on [AWS](https://aws.amazon.com/) (Ireland).
 
 To deploy the app simply run `release.sh`, it'll guide you through it. Of course you need to be given access first.
-
-[OS-dev]: https://developers.openshift.com/
 
 ### Setting up a development environment using Docker
 
