@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '32'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '33'::jsonb);
 
 
 -- app configuration
@@ -485,6 +485,7 @@ CREATE TABLE cash_bundles
 , amount       numeric(35,2)  NOT NULL CHECK (amount > 0)
 , ts           timestamptz    NOT NULL
 , withdrawal   int            REFERENCES exchanges
+, CONSTRAINT in_or_out CHECK ((owner IS NULL) <> (withdrawal IS NULL))
 );
 
 CREATE INDEX cash_bundles_owner_idx ON cash_bundles (owner);

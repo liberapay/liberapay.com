@@ -369,3 +369,6 @@ INSERT INTO cash_bundles
           , (SELECT e.timestamp FROM exchanges e WHERE e.id = e2e.origin)
        FROM e2e_transfers e2e;
 DROP TABLE e2e_transfers;
+
+-- migration #33
+ALTER TABLE cash_bundles ADD CONSTRAINT in_or_out CHECK ((owner IS NULL) <> (withdrawal IS NULL));
