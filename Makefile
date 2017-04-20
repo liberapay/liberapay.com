@@ -92,7 +92,7 @@ _i18n_extract: env
 
 _i18n_clean:
 	@for f in i18n/*/*.po; do \
-	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator|X-Generator|Language): /d' \
+	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator|X-Generator|Language|Project-Id-Version|Report-Msgid-Bugs-To): /d' \
 	           -e 's/^("[^:]+: ) +/\1/' \
 	           -e 's/^("Language-Team: .+? )<(.+)>\\n/\1"\n"<\2>\\n/' \
 	           -e 's/^#(, .+)?, python-format(, .+)?$$/#\1\2/' \
