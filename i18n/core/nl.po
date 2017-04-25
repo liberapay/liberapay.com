@@ -157,7 +157,7 @@ msgid "We're happy to report that the transfer from your bank account has succee
 msgstr "We zijn blij te kunnen melden dat de overschrijving vanaf je bankrekening is geslaagd. Van de {0} die je hebt overgeschreven is {1} in je Liberapay portemonnee geplaatst en {2} werd betaald voor de transactie."
 
 msgid "View receipt"
-msgstr "Bekijk ontvangbewijs"
+msgstr "Bekijk het ontvangstbewijs"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -693,7 +693,7 @@ msgid "Pledges"
 msgstr "Toezeggingen"
 
 msgid "Social Networks"
-msgstr "Sociale Netwerken"
+msgstr "Sociale netwerken"
 
 msgid "Switch to another language"
 msgstr "Wijzig een andere taal"
@@ -1010,7 +1010,9 @@ msgstr "Bekijk {0}'s profiel"
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
-msgstr "We hebben bevestigd door middel van een automatische verificatie proces dat {0} de controle heeft van de volgende rekeningen op andere platformen:"
+msgstr ""
+"We hebben bevestigd, door middel van een automatisch verificatieproces, dat "
+"{0} controle heeft over de volgende accounts op andere platformen:"
 
 msgid "What is this site?"
 msgstr "Wat is dit voor site?"
@@ -1022,7 +1024,7 @@ msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "Je hebt je bewerkingen niet opgeslagen, weet je zeker dat je ze niet wilt opslaan?"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
-msgstr "Ik ben dankbaar voor giften, maar heb geen specifiek financieringsdoel."
+msgstr "Ik ben dankbaar voor donaties, maar ik heb geen specifiek inkomensdoel."
 
 msgid "I'm here as a patron."
 msgstr "Ik ben hier als donateur."
@@ -1035,13 +1037,15 @@ msgid "My goal is to receive {0}"
 msgstr "Mijn doel is om {0} te ontvangen"
 
 msgid "We're grateful for gifts, but don't have a specific funding goal."
-msgstr "We zijn dankbaar voor giften, maar we hebben geen specifiek financieringsdoel."
+msgstr ""
+"We zijn dankbaar voor donaties, maar we hebben geen specifiek inkomensdoel."
 
 msgid "We're here as a patron."
 msgstr "We zijn hier als patroon."
 
 msgid "We're here as a patron, and politely decline to receive gifts."
-msgstr "We zijn hier als patroon, en zien respectvol af van giften te ontvangen."
+msgstr ""
+"We zijn hier als donateur en zien respectvol af om donaties te ontvangen."
 
 #, python-brace-format
 msgid "Our goal is to receive {0}"
@@ -1316,16 +1320,16 @@ msgid "Your take is now {0}."
 msgstr "Jouw deel van de opbrengst is {0}."
 
 msgid "Income history"
-msgstr "Inkomen geschiedenis"
+msgstr "Inkomensontwikkeling"
 
 msgid "JavaScript is required"
 msgstr "JavaScript is nodig"
 
 msgid "No data to show."
-msgstr "Er geen gegevens."
+msgstr "Geen gegevens om te tonen."
 
 msgid "View income history"
-msgstr "Bekijk inkomen geschiedenis"
+msgstr "Bekijk de inkomensontwikkeling"
 
 msgid "Euros Received Per Week"
 msgstr "Euro's ontvangen per week"
@@ -2287,7 +2291,7 @@ msgstr[0] "Gemiddeld doneren mensen {0} aan één ander mens."
 msgstr[1] "Gemiddeld doneren mensen {0} aan {n} andere mensen."
 
 msgid "Open Accounts"
-msgstr "Open rekeningen"
+msgstr "Accounts"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Aantal open persoonlijke en organisatie accounts op Liberapay"
@@ -2339,7 +2343,9 @@ msgid "Sharing the money"
 msgstr "Geld verdelen"
 
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
-msgstr "Teams hebben geen hiërarchie. Alle leden gelijk en kiezen hun eigen deel."
+msgstr ""
+"Teams hebben geen hiërarchie. Alle leden zijn gelijk en kiezen hun eigen "
+"deel."
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
@@ -2349,16 +2355,19 @@ msgid "The nominal takes are the raw numbers that the members input themselves, 
 msgstr "De nominale delen zijn ruwe cijfers die de leden zelf hebben ingevuld. Het daadwerkelijke deel wordt als volgt berekend: eerst telt het systeem alle nominale delen op, dan berekend hij de percentages die elk deel vertegenwoordigd, hierna berekend hij met die percentages het daadwerkelijke inkomen. Nominale delen hebben ook een maximum: de daadwerkelijke delen zijn nooit hoger dan de nominale delen, zelfs als er extra inkomen beschikbaar is."
 
 msgid "Regulation of take amounts"
-msgstr "Regulering van het bedrag"
+msgstr "Regulering van het inkomen"
 
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
-msgstr "Nominale delen worden geknepen. Ze kunnen niet worden verhoogt boven het maximum dat is berekend op basis van het nominale deel van de vorige betaaldag. Deze regeling is bedoeld om het risico op misbruik door teamleden te beperken."
+msgstr ""
+"De nominale deel wordt geknepen. Het deel kan niet worden verhoogt boven het "
+"maximum dat is berekend op basis van het deel van de vorige betaaldag. Deze "
+"regeling is bedoeld om het risico op misbruik door teamleden te verkleinen."
 
 msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
 msgstr "Het exacte limiet is het hoogste bedrag van één van deze vier waarden: het cijfer één, twee keer het deel van het lid op de vorige betaaldag, het lid zijn deel op de vorige betaaldag plus een evenredig deel van de ongebruikte inkomsten of het gemiddelde deel op de vorige betaaldag."
 
 msgid "Removing team membership"
-msgstr "Het verwijderen van teamlid"
+msgstr "Het verwijderen van een teamlid"
 
 #, python-brace-format
 msgid "You can leave a team from {0}your teams dashboard{1}."
@@ -2368,7 +2377,9 @@ msgid "Kicking a member out of a team is not implemented yet. Please contact sup
 msgstr "Een teamlid verwijderen is nog niet geïmplementeerd. Neem alsjeblieft contact op met bewijs dat het lid moet worden verwijderd en dat er een consensus over is onder de andere leden."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
-msgstr "In een gemeenschap vind je mensen die aan een onderwerp werken waar jij om geeft. Abonneer je op de gemeenschaps specifieke nieuwsbrief en blijf op de hoogte."
+msgstr ""
+"In een gemeenschap vind je mensen die aan een onderwerp werken waar jij om "
+"geeft. Abonneer je op een gemeenschapnieuwsbrief en blijf op de hoogte."
 
 msgid "Start a new community"
 msgstr "Start een nieuwe gemeenschap"
@@ -2480,7 +2491,7 @@ msgid "There are no pledges right now."
 msgstr "Er zijn geen toezeggingen op dit moment."
 
 msgid "Make a pledge"
-msgstr "Doe een donatie toezegging"
+msgstr "Zeg een donatie toe"
 
 msgid "Do you have someone in mind?"
 msgstr "Heb je iemand in gedachten ?"
@@ -2490,7 +2501,10 @@ msgstr "Zoek mensen om aan te doneren met de vriendenzoeker:"
 
 #, python-brace-format
 msgid "A team allows members of a project to receive money and share it, without having to set up a legal entity. {0}Learn more…{1}"
-msgstr "In een team zitten mensen van een project om donaties te ontvangen en te verdelen. Je hebt geen juridische entiteit nodig. {0}Meer informatie...{1}"
+msgstr ""
+"Met een team kan een groep mensen donaties ontvangen en verdelen voor een "
+"project waar ze aan werken zonder een juridische entiteit te starten ({0}"
+"meer informatie{1})."
 
 #, python-brace-format
 msgid "There is {n} team on Liberapay:"
@@ -2535,7 +2549,10 @@ msgid "New Members"
 msgstr "Nieuwe leden"
 
 msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
-msgstr "De gemeenschaps specifieke nieuwsbrief zal je op de hoogte houden van wat er gaande is en welke projecten steun nodig hebben. Momenteel zijn ze nog niet actief, maar je kan je alvast aanmelden."
+msgstr ""
+"De gemeenschapnieuwsbrief zal je op de hoogte houden van wat er gaande is en "
+"welke projecten steun nodig hebben. Momenteel zijn ze nog niet actief, maar "
+"je kan je wel alvast aanmelden."
 
 #, python-brace-format
 msgid "{n} subscriber"
@@ -2585,7 +2602,7 @@ msgid "Congratulations, you have reached your goal of receiving {0} per week!"
 msgstr "Gefeliciteerd, je hebt je doel bereikt om {0} per week te ontvangen!"
 
 msgid "To receive money, do something awesome and then tell people about it:"
-msgstr "Om giften te ontvangen, doe iets geweldigs en vertel mensen er over:"
+msgstr "Ontvang geld voor al het geweldigs wat je doet in drie stappen:"
 
 #, python-brace-format
 msgid "{0}Fill out your profile{1}."
@@ -2663,7 +2680,9 @@ msgstr "Sponsors"
 
 #, python-brace-format
 msgid "Donations from businesses and nonprofits are welcome on Liberapay. If you have any questions, don't hesitate to {0}contact us{1}."
-msgstr "Donaties van bedrijven en non-profit's zijn welkom bij Liberapay. Als je vragen hebt, neem dan gerust {0}contact{1} met ons op."
+msgstr ""
+"Bedrijven en non-profit's kunnen Liberapay sponsoren met een donatie. Als je "
+"hier vragen over hebt, neem dan gerust {0}contact{1} met ons op."
 
 #, python-brace-format
 msgid "There is currently {n} sponsor on the platform, this section is our way of thanking them."
