@@ -140,7 +140,7 @@ subhead = _("Social Networks")
         % if last_id > platform_extra['min_id']
         <p><a class="btn btn-default"
               href="?order=latest&amp;limit=100{{ '&last_shown=%s' % last_id if not random }}"
-              >{{ _("Next Page →" if not random else "View More") }}</a></p>
+              >{{ _("Next Page →") if not random else _("View More") }}</a></p>
         % else
         <p><a class="btn btn-default" href="?order=latest&amp;limit=100"
               >⇤ {{ _("First") }}</a></p>

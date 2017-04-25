@@ -127,6 +127,12 @@ KYC_PAYOUT_YEARLY_THRESHOLD = Decimal('1000')
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
+PARTICIPANT_KINDS = {
+    'individual': _("Individual"),
+    'organization': _("Organization"),
+    'group': _("Team"),
+}
+
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
