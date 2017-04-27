@@ -10,7 +10,11 @@ It's a fork of Gittip/Gratipay, see [this post](https://github.com/liberapay/sal
 
 ## Contact
 
-You have a question? Come ask us in [the salon](https://github.com/liberapay/salon) or in the IRC channel #liberapay on [Freenode](http://webchat.freenode.net/).
+You have a question? Come ask us in:
+
+- [the salon](https://github.com/liberapay/salon)
+- the IRC channel #liberapay on [Freenode](http://webchat.freenode.net/).
+- [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Liberapay/Liberapay.com?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 ## Contributing to the translations
