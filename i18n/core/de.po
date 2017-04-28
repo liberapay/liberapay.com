@@ -283,13 +283,14 @@ msgid "Rejected"
 msgstr "Abgelehnt"
 
 msgid "Individual"
-msgstr ""
+msgstr "Persönlich"
 
 msgid "Organization"
-msgstr ""
+msgstr "Organisation"
 
+#, fuzzy
 msgid "Team"
-msgstr ""
+msgstr "Team"
 
 msgid "Hide total giving from others."
 msgstr "Gesamtbetrag an gegebenem Geld verstecken."
@@ -394,7 +395,7 @@ msgstr "'{0}' ist kein gültiger, monatlichen Betrag (mindestens {1}, höchstens
 
 #, python-brace-format
 msgid "'{0}' is not a valid yearly donation amount (min={1}, max={2})"
-msgstr "'{0}' ist kein gültiger, jährlicher Betrag (höchstens {1}, mindestens {2})"
+msgstr "'{0}' ist kein gültiger jährlicher Spendenbetrag (min={1}, max={2})"
 
 #, python-brace-format
 msgid "The user {0} doesn't accept donations."
@@ -480,8 +481,9 @@ msgstr "Dieses Konto ist geschlossen"
 msgid "Are you the account owner?"
 msgstr "Sind Sie der/die Besitzer/in des Kontos?"
 
+#, fuzzy
 msgid "Log in to reopen your account."
-msgstr "Loggen Sie sich ein um Ihr Konto wieder zu öffnen."
+msgstr "Melden Sie sich an um Ihr Konto wieder zu öffnen."
 
 msgid "Log in"
 msgstr "Einloggen"
@@ -640,6 +642,7 @@ msgstr "Los"
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Wir haben Ihnen ein Einmal-Login geschickt. Prüfen Sie Ihr E-Mail-Postfach, öffnen Sie den erhaltenen Link in einem neuen Tab und klicken Sie auf den Knopf unten um fortzufahren."
 
+#, fuzzy
 msgid "Carry on"
 msgstr "Weiter"
 
@@ -1024,8 +1027,9 @@ msgstr "Wir haben durch einen automatisierten Überprüfungsprozess ermittelt, d
 msgid "What is this site?"
 msgstr "Was ist diese Seite?"
 
+#, fuzzy
 msgid "You don't have a profile statement in this language yet."
-msgstr "Sie haben noch kein Profil-Statement in dieser Sprache geschrieben."
+msgstr "Sie haben noch keinen Profiltext dieser Sprache geschrieben."
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "Ihre Änderungen wurden noch nicht gespeichert. Sind Sie sicher, dass Sie diese verwerfen wollen?"
@@ -1208,8 +1212,9 @@ msgstr "Passwort"
 msgid "Manage your email addresses"
 msgstr "E-Mail-Adressen verwalten"
 
+#, fuzzy
 msgid "Events"
-msgstr "Events"
+msgstr "Ereignisse"
 
 #, python-brace-format
 msgid "You have {0} in your liberapay wallet."
@@ -1235,8 +1240,12 @@ msgstr "Liberapay braucht Ihre Unterstützung"
 msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
 msgstr "Liberapay muss kein Schnitt von Zahlungen und wird nur durch die Spenden an {0} eigene Rechnung finanziert {1}, beachten Sie bitte Chipping in:"
 
+#, fuzzy
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr "Liberapay zu entwickeln ist eine Menge Arbeit, und es gibt noch viel zu tun, aber unsere Entwickler, Übersetzer und anderen Mitwirkenden sind stark unterbezahlt und verlangsamt unseren Fortschritt."
+msgstr ""
+"Liberapay zu entwickeln ist eine Menge Arbeit und es gibt noch viel zu tun. "
+"Unsere Entwickler, Übersetzer und anderen Mitwirkenden sind leider stark "
+"unterbezahlt und das verlangsamt unseren Fortschritt."
 
 msgid "Donations"
 msgstr "Spenden"
@@ -1330,8 +1339,9 @@ msgstr "Einkommensverlauf"
 msgid "JavaScript is required"
 msgstr "JavaScript ist erforderlich"
 
+#, fuzzy
 msgid "No data to show."
-msgstr "Keine Daten zu zeigen."
+msgstr "Keine Daten"
 
 msgid "View income history"
 msgstr "Einkommensverlauf anzeigen"
@@ -1509,7 +1519,7 @@ msgstr "{0} hat es vor {1} bereits abgelehnt diesem Team beizutreten."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
-msgstr "{0} wurde an das Team eingeladen."
+msgstr "{0} wurde in das Team eingeladen."
 
 #, python-brace-format
 msgid "{0} is already a member of this team."
@@ -1524,8 +1534,9 @@ msgstr "Sie sind jetzt ein Mitglied des Teams."
 msgid "Mark all notifications as read"
 msgstr "Alle Benachrichtigungen als gelesen markieren"
 
+#, fuzzy
 msgid "No notifications to show."
-msgstr "Keine Benachrichtigungen zu zeigen."
+msgstr "Keine Benachrichtigungen"
 
 msgid "Bank Wire"
 msgstr "Banküberweisung"
@@ -1584,9 +1595,9 @@ msgstr "Sie haben {0} in der Brieftasche . Was sollen wir damit machen?"
 msgid "Withdraw it"
 msgstr "Ziehen sie es"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
-msgstr "Geben Sie es zu den {0} Menschen, die ich spenden zu {1}"
+msgstr "Den {0} Menschen geben, denen ich {1} spende"
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Wenn keiner dieser Option für Sie in Frage kommt, wenden Sie sich bitte support@liberapay.com."
@@ -2053,8 +2064,11 @@ msgstr "Und so sieht es aus wenn JavaScript deaktiviert ist:"
 msgid "Giving & Receiving Widgets"
 msgstr "Spenden & Empfangen Widgets"
 
+#, fuzzy
 msgid "Use this code to add a Liberapay \"receiving\" widget on your website:"
-msgstr "Verwenden Sie diesen Code um ein Spenden-Widget für Liberapay auf Ihrer Website hinzu zu fügen:"
+msgstr ""
+"Verwenden Sie diesen Code um ein Spenden-Widget für Liberapay auf Ihrer "
+"Website zu setzen:"
 
 msgid "Or, if you'd like to include a \"giving\" widget, you can use this:"
 msgstr "Oder wenn Sie ein Spenden-Widget einbinden möchten, dann benutzen Sie dieses:"
@@ -2389,8 +2403,9 @@ msgid_plural "There are {n} communities on Liberapay."
 msgstr[0] "Es gibt {n} Gemeinschaft auf Liberapay."
 msgstr[1] "Es gibt {n} Gemeinschaften auf Liberapay."
 
+#, fuzzy
 msgid "Search communities"
-msgstr "Suche Gemeinschaften"
+msgstr "Gemeinschaften suchen"
 
 msgid "Popular Communities"
 msgstr "Beliebte Gemeinschaften"
@@ -2431,10 +2446,11 @@ msgid "Here are the {0} Liberapay users who have connected their {1} account:"
 msgstr "Hier sind {0} Nutzer von Liberapay, die mir ihrem {1} Konto verknüft sind:"
 
 msgid "Next Page →"
-msgstr ""
+msgstr "Nächste Seite →"
 
+#, fuzzy
 msgid "View More"
-msgstr ""
+msgstr "Mehr ansehen"
 
 msgid "Explore other platforms:"
 msgstr "Erkunde andere Plattformen:"
@@ -2559,7 +2575,7 @@ msgstr "Gemeinschafts-Newsletter informieren Sie über Ereignisse und welche Pro
 #, python-brace-format
 msgid "{n} subscriber"
 msgid_plural "{n} subscribers"
-msgstr[0] "{n} Abonnenten"
+msgstr[0] "{n} Abonnent"
 msgstr[1] "{n} Abonnenten"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
@@ -2618,8 +2634,10 @@ msgstr "{0} Einbinden unserer Widgets {1} auf Ihrem Blog / Webseite."
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Kontaktieren Sie die Menschen, die von Ihrer Arbeit profitieren und bitten sie Sie zu unterstützen."
 
+#, fuzzy
 msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "Wir müssen wissen, wer Sie sind bevor wir rechtlich Geld für Sie sammeln können."
+msgstr ""
+"Damit wir legal Geld für Sie sammeln können, müssen wir wissen wer Sie sind."
 
 msgid "Fill identity form"
 msgstr "Identität-Formular ausfüllen"
@@ -2833,8 +2851,9 @@ msgstr "verweigert Spenden"
 msgid "accepts gifts"
 msgstr "annahme von Spenden"
 
+#, fuzzy
 msgid "opted out of Liberapay"
-msgstr "aus Liberapay entschieden"
+msgstr "ist bei Liberapay ausgestiegen"
 
 msgid "hasn't joined Liberapay yet"
 msgstr "noch nicht Liberapay beigetreten"
@@ -2907,9 +2926,9 @@ msgstr "{0} Benutzername"
 msgid "Please Confirm"
 msgstr "Bitte bestätige"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} is connected to {1} on Liberapay."
-msgstr "{0} ist mit {1} auf Liberapay verbunden."
+msgstr "{0} ist mit {1} auf Liberapay verknüpft."
 
 msgid "Transfer it?"
 msgstr "Übertragen?"
@@ -2944,8 +2963,9 @@ msgid_plural "Found matching user statements"
 msgstr[0] "Gefunden eine passende Benutzeranweisung"
 msgstr[1] "Gefunden passenden Benutzer-Anweisungen"
 
+#, fuzzy
 msgid "Didn't find who you were looking for?"
-msgstr "Haben Sie den gesuchten Benutzer nicht gefunden?"
+msgstr "Haben Sie die gesuchte Person nicht gefunden?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
 msgstr "Sie können auch versprechen Menschen zu spenden, die Liberapay noch nicht beigetreten sind:"
