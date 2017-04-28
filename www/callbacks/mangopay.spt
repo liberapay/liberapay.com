@@ -47,10 +47,12 @@ if cls:
     if e_status == status:
         raise response.success(200, "already done")
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        expected = payio.DeclaredDebitedFunds.Amount - payio.DeclaredFees.Amount
-        actual = payio.CreditedFunds
-        assert actual.Currency == 'EUR'
-        credited_amount = actual.Amount
+        if status == 'succeeded':
+            expected = payio.DeclaredDebitedFunds.Amount - payio.DeclaredFees.Amount
+            assert payio.CreditedFunds.Currency == 'EUR'
+        else:
+            expected = 0
+        credited_amount = payio.CreditedFunds.Amount
         if credited_amount != expected:
             # The user didn't send the expected amount of money
             credited_amount = D(credited_amount) / D(100)
