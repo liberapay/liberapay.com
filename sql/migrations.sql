@@ -372,3 +372,9 @@ DROP TABLE e2e_transfers;
 
 -- migration #33
 ALTER TABLE cash_bundles ADD CONSTRAINT in_or_out CHECK ((owner IS NULL) <> (withdrawal IS NULL));
+
+-- migration #34
+ALTER TABLE participants DROP CONSTRAINT participants_email_key;
+CREATE UNIQUE INDEX participants_email_key ON participants (lower(email));
+ALTER TABLE emails DROP CONSTRAINT emails_address_verified_key;
+CREATE UNIQUE INDEX emails_address_verified_key ON emails (lower(address), verified);

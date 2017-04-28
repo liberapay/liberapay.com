@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '33'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '34'::jsonb);
 
 
 -- app configuration
@@ -38,7 +38,7 @@ CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed');
 CREATE TABLE participants
 ( id                    bigserial               PRIMARY KEY
 , username              text                    NOT NULL
-, email                 text                    UNIQUE
+, email                 text
 , email_lang            text
 , password              text
 , password_mtime        timestamptz
@@ -91,6 +91,7 @@ CREATE TABLE participants
  );
 
 CREATE UNIQUE INDEX ON participants (lower(username));
+CREATE UNIQUE INDEX participants_email_key ON participants (lower(email));
 
 CREATE INDEX username_trgm_idx ON participants
     USING gist(lower(username) gist_trgm_ops)
@@ -414,13 +415,14 @@ CREATE TABLE emails
 , added_time        timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , verified_time     timestamptz
 , participant       bigint         NOT NULL REFERENCES participants
-, UNIQUE (address, verified)
-    -- A verified email address can't be linked to multiple participants.
-    -- However, an *un*verified address *can* be linked to multiple
-    -- participants. We implement this by using NULL instead of FALSE for the
-    -- unverified state, hence the check constraint on verified.
 , UNIQUE (participant, address)
  );
+
+-- A verified email address can't be linked to multiple participants.
+-- However, an *un*verified address *can* be linked to multiple
+-- participants. We implement this by using NULL instead of FALSE for the
+-- unverified state, hence the check constraint on verified.
+CREATE UNIQUE INDEX emails_address_verified_key ON emails (lower(address), verified);
 
 
 -- profile statements
