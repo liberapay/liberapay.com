@@ -53,7 +53,7 @@ def sign_in_with_form_data(body, state):
             return
         else:
             email = id
-            p = Participant._from_thing('email', email)
+            p = Participant._from_thing('lower(email)', email.lower())
             if p:
                 p.start_session()
                 qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
