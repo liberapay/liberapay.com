@@ -151,16 +151,16 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def _from_thing(cls, thing, value):
-        assert thing in ("id", "lower(username)", "mangopay_user_id", "email")
-        if thing == 'email':
+        assert thing in ("id", "lower(username)", "mangopay_user_id", "lower(email)")
+        if thing == 'lower(email)':
             # This query looks for an unverified address if the participant
             # doesn't have any verified address
             return cls.db.one("""
                 SELECT p.*::participants
                   FROM emails e
                   JOIN participants p ON p.id = e.participant
-                 WHERE e.address = %s
-                   AND (p.email IS NULL OR p.email = e.address)
+                 WHERE lower(e.address) = %s
+                   AND (p.email IS NULL OR lower(p.email) = lower(e.address))
               ORDER BY p.email NULLS LAST, p.id ASC
                  LIMIT 1
             """, (value,))
@@ -175,8 +175,8 @@ class Participant(Model, MixinTeam):
         assert k1 in ('id', 'username', 'email')
         if not (v1 and v2):
             return
-        if k1 == 'username':
-            k1 = 'lower(username)'
+        if k1 in ('username', 'email'):
+            k1 = 'lower(%s)' % k1
             v1 = v1.lower()
         p = cls._from_thing(k1, v1)
         if not p:
