@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Korean (https://hosted.weblate.org/projects/liberapay/core/ko/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2017-04-28 17:05+0000\n"
+"Last-Translator: Yongmin Hong <revi@pobox.com>\n"
+"Language-Team: Korean "
+"<https://hosted.weblate.org/projects/liberapay/core/ko/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.14-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -881,7 +885,7 @@ msgid "Search Liberapay"
 msgstr "Liberapay 검색"
 
 msgid "Identity"
-msgstr "신분"
+msgstr "신원"
 
 msgid "Log In or Create Account"
 msgstr "로그인 또는 계정 만들기"
@@ -1853,166 +1857,172 @@ msgstr "사전에 계산된 금액을 선택하거나 수동으로 금액을 입
 
 #, python-brace-format
 msgid "{0} ({2}% fee included)"
-msgstr ""
+msgstr "{0} (수수료 {2}% 포함)"
 
 #, python-brace-format
 msgid "Your donations will be funded for {n} week"
 msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] ""
+msgstr[0] "{n} 주 동안 기부금이 지급됩니다"
 
 #, python-brace-format
 msgid "Your donations will be funded for {0} weeks ({n} month)"
 msgid_plural "Your donations will be funded for {0} weeks ({n} months)"
-msgstr[0] ""
+msgstr[0] "기부금이 {0}주 ({n}개월)간 지급됩니다"
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
-msgstr ""
+msgstr "맞춤 금액 (최소={0}, 최대={1})"
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
+msgstr "신용카드에서 {0} 만큼을 인출하여 {1} 만큼을 Liberapay 계좌에 입금하였고 {2} 은(는) 수수료로 지불되었습니다."
 
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr ""
+msgstr "신용카드에서 {0} 을 출금하지 못했습니다. 에러 메시지: {1}"
 
 msgid "View Receipt"
-msgstr ""
+msgstr "영수증 보기"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr ""
+msgstr "신용카드/체크카드에서 입금하게 되면 {0}%+{1} 의 수수료가 부과됩니다."
 
 msgid "Credit card"
-msgstr ""
+msgstr "신용카드"
 
 msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
 msgstr ""
+"요청이 실패하였습니다. 브라우저가 최신 상태이고, 요청을 차단하는 확장 기능 (예: NoScript)를 비활성화한 다음에 다시 시도해 "
+"주세요."
 
 msgid "Credit Card Number"
 msgstr "신용 카드 번호"
 
 msgid "This card number is invalid."
-msgstr ""
+msgstr "이 카드 번호는 유효한 번호가 아닙니다."
 
 msgid "MM/YY"
-msgstr ""
+msgstr "MM/YY"
 
 msgid "Expiration Date"
-msgstr ""
+msgstr "만료일"
 
 msgid "This expiration date is invalid."
-msgstr ""
+msgstr "이 만료일은 유효한 값이 아닙니다."
 
 msgid "CVV"
 msgstr "CVV"
 
 msgid "Verification code (3 digits located on the back of the card)"
-msgstr ""
+msgstr "확인 코드 (카드 뒷면의 세 자리 숫자)"
 
 msgid "This verification code is invalid."
-msgstr ""
+msgstr "이 확인 코드는 유효한 값이 아닙니다."
 
 msgid "Remember the card number for next time"
-msgstr ""
+msgstr "다음 결제를 위해 카드 번호 기억하기"
 
 msgid "The amount cannot be zero."
-msgstr ""
+msgstr "금액이 0일 수 없습니다."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr ""
+msgstr "거래 수수료가 높을 것으로 예상됩니다: {0}% ({1}/{2}). 계속 진행할까요?"
 
 #, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
 msgstr ""
+"{0} 만큼이 Liberapay 계좌에서 출금되었습니다. 이체가 성공적이라면 {0} 이(가) 은행 계좌에 도착할 것이고 {2} 은(는) "
+"수수료로 지불될 것입니다."
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr ""
+msgstr "{0} 을(를) 은행 계좌로 이체하는 작업이 실패하였습니다. 에러 메시지: {1}"
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr ""
+msgstr "이 돈은 아직 동결되어 있기 때문에 인출할 수 없습니다."
 
 #, python-brace-format
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr ""
+msgstr "이 중에서 {0} 은(는) 인출할 수 있고, 나머지는 아직 동결되어 있습니다."
 
 #, python-brace-format
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr ""
+msgstr "신용카드 사기로부터 플랫폼을 보호하기 위해 {0} 동안 자금을 동결합니다. 불편을 드려 죄송합니다."
 
 #, python-brace-format
 msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer. Additional fee from your bank may apply."
 msgstr ""
+"SEPA 내 은행 계좌로 자금을 이체하는 것은 무료이지만, 그 외의 국가로 이체하게 되면 거래별로 {0}의 수수료가 적용됩니다. 은행에서 "
+"추가적인 수수료를 부과할 수 있습니다."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
-msgstr ""
+msgstr "이번 주의 기부금을 유지하기 위해서는 적어도 {0} 만큼을 지갑에 남겨둬야 합니다."
 
 msgid "Bank account"
-msgstr ""
+msgstr "은행 계좌"
 
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "은행 고유 식별 번호"
 
 msgid "Account Number"
-msgstr ""
+msgstr "계좌 번호"
 
 msgid "Bank Account Type"
-msgstr ""
+msgstr "계좌 종류"
 
 msgid "Bank Name"
-msgstr ""
+msgstr "은행 이름"
 
 msgid "Institution Number"
-msgstr ""
+msgstr "기관 번호"
 
 msgid "Branch Code"
-msgstr ""
+msgstr "지점 코드"
 
 msgid "Sort Code"
-msgstr ""
+msgstr "분류 코드"
 
 msgid "SEPA / IBAN"
-msgstr ""
+msgstr "SEPA / IBAN"
 
 msgid "USA"
-msgstr ""
+msgstr "미국"
 
 msgid "Canada"
-msgstr ""
+msgstr "캐나다"
 
 msgid "UK"
-msgstr ""
+msgstr "영국"
 
 msgid "Other"
-msgstr ""
+msgstr "그 외"
 
 msgid "This IBAN is invalid."
-msgstr ""
+msgstr "이 IBAN은 유효하지 않습니다."
 
 msgid "checking"
-msgstr ""
+msgstr "당좌 계좌"
 
 msgid "savings"
-msgstr ""
+msgstr "자유입출금 계좌"
 
 msgid "only letters (a-z) and digits (0-9) are allowed"
-msgstr ""
+msgstr "영문자 (a-z)와 숫자 (0-9)만 사용할 수 있습니다"
 
 msgid "This account number is invalid."
-msgstr ""
+msgstr "이 계좌번호는 유효한 번호가 아닙니다."
 
 msgid "The following fields are about the legal owner of the bank account."
-msgstr ""
+msgstr "아래 정보는 예금주에 관한 내용입니다."
 
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
@@ -2031,142 +2041,159 @@ msgid "We receive {0}{1}{2}"
 msgstr ""
 
 msgid "Donation Button"
-msgstr ""
+msgstr "기부 버튼"
 
 msgid "Use this code to add a donation button on your website:"
-msgstr ""
+msgstr "이 코드를 이용해서 웹사이트에 기부 버튼을 삽입하세요:"
 
 msgid "Here's what it looks like:"
-msgstr "아래처럼 보이게 됩니다:"
+msgstr "아래처럼 보입니다:"
 
 msgid "And here's what it looks like with JavaScript turned off:"
-msgstr ""
+msgstr "자바스크립트가 꺼져 있을 때는 이렇게 보입니다:"
 
 msgid "Giving & Receiving Widgets"
-msgstr ""
+msgstr "기부금 & 모금 중 위젯"
 
 msgid "Use this code to add a Liberapay \"receiving\" widget on your website:"
 msgstr "여러분의 웹사이트에 Liberapay \"모금 중\" 위젯을 붙이고 싶다면 아래 코드를 쓰면 됩니다:"
 
 msgid "Or, if you'd like to include a \"giving\" widget, you can use this:"
-msgstr ""
+msgstr "아니면 \"기부 중\" 위젯을 넣고 싶다면 이 위젯을 쓸 수 있습니다:"
 
 msgid "To contact us privately:"
-msgstr ""
+msgstr "Liberapay에 연락하려면:"
 
 msgid "Send us an email"
-msgstr ""
+msgstr "이메일을 보내세요"
 
 msgid "We are currently able to answer in English and French."
-msgstr ""
+msgstr "현재는 영어 및 프랑스어로만 질의에 응답할 수 있습니다."
 
 msgid "We currently don't have a phone number."
-msgstr ""
+msgstr "현재는 전화번호가 없습니다."
 
 msgid "To report a problem or make a suggestion in English:"
-msgstr ""
+msgstr "영어로 문제를 보고하거나 제안할 사항이 있다면:"
 
 msgid "Open an issue on GitHub"
-msgstr ""
+msgstr "GitHub에 이슈를 열어 주세요"
 
 msgid "Other communication channels:"
-msgstr ""
+msgstr "다른 커뮤니케이션 채널:"
 
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "자주 묻는 질문"
 
 msgid "How is Liberapay funded?"
-msgstr ""
+msgstr "Liberapay는 어떻게 자금을 모으나요?"
 
 #, python-brace-format
 msgid "Liberapay is funded {0}on Liberapay{1}."
-msgstr ""
+msgstr "Liberapay는 {0}Liberapay에서 모금을 받고 있습니다{1}."
 
 msgid "Who can use Liberapay?"
-msgstr ""
+msgstr "누가 Liberapay를 쓸 수 있죠?"
 
 msgid "In theory, anyone who has a bank account. In practice, payments may not work depending on where you live. Please contact us if you encounter any problems."
 msgstr ""
+"이론적으로 은행 계좌만 있다면 누구든지 Liberapay를 사용할 수 있습니다. 그러나 현실적으로는 거주 지역에 따라 지불 작업이 "
+"진행되지 않을 수 있습니다. 문제가 발생할 경우 저희에게 연락해 주세요."
 
 msgid "Can I make a one-time donation?"
-msgstr ""
+msgstr "일회성 기부를 할 수는 없나요?"
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr ""
+msgstr "Liberapay는 장기적으로 안정적인 모금을 위해 디자인되었으며 반복적인 기부만을 지원하고 있습니다."
 
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
-msgstr ""
+msgstr "Liberapay와 다른 크라우드펀딩 사이트 (Patreon이라던가) 와 무슨 차이가 있는 거죠?"
 
 msgid "Liberapay is only for donations, meaning that transactions must not be linked to a contract nor a promise of recompense."
-msgstr ""
+msgstr "Liberapay는 오직 기부만을 위한 사이트이며, 거래는 계약, 공약, 보상을 포함할 수 없습니다."
 
 msgid "Liberapay is an open project structured around a non-profit organization, which sets it apart from commercial platforms like Patreon and Tipeee."
 msgstr ""
+"Liberapay는 비영리 기구를 중심으로 구성된 오픈 프로젝트이며 Patreon과 Tipeee와 같은 상업적 플랫폼과 차이가 있습니다."
 
 msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create an account without having to wait for us to approve it, and we won't kick you out unless you break the law or the terms of service."
 msgstr ""
+"다른 비영리 플랫폼과도 달리 Liberapay는 중립적입니다. 계정 생성을 승인받을 필요 없이 계정을 생성할 수 있고, 법률 또는 이용 "
+"약관을 위반하지 않는 한 사용자를 추방하지 않습니다."
 
 #, python-brace-format
 msgid "If you'd like more details, the snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
 msgstr ""
+"더 많은 사항에 대해 알아보고 싶다면 snowdrift.coop 의 구성원들이 만든 크라우드펀딩 플랫폼과 각 플랫폼의 차이에 관한 {0}"
+"긴 목록 (영어){1}을 확인해 보세요."
 
 msgid "Does Liberapay respect financial regulations?"
-msgstr ""
+msgstr "Liberapay는 금융 제재를 존중합니까?"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr ""
+"네, Liberapay는 프랑스에서 만들어졌으며 유럽연합의 금융제재를 따릅니다. 지불 대행자는 모든 허가를 취득하였으며 사기, 돈세탁, "
+"테러와 관련된 자금 지원을 차단하는 데 도움을 주고 있습니다."
 
 msgid "What are the payment processing fees?"
-msgstr ""
+msgstr "지불 대행자 수수료가 뭡니까?"
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
-msgstr ""
+msgstr "주거나 받을 수 있는 금액에 하한선이나 상한선이 있나요?"
 
 #, python-brace-format
 msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
 msgstr ""
+"기부하거나 기부받을 수 있는 금액에는 제한선이 없습니다만, 매년 {0} 이상을 기부하거나 {1} 이상을 기부받는다면 법률적인 이유로 "
+"신원과 관련된 문서를 제공해야 합니다."
 
 #, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
 msgstr ""
+"다른 사용자에게 줄 수 있는 금액의 하한선은 {0}입니다. 지불 대행 수수료를 절감하기 위해, 신용카드 거래마다 {1} 이상의 금애을 "
+"청구합니다 (차액은 Liberapay 계좌에 저금되어 지불일에 이체됩니다)."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
 msgstr ""
+"한 사람에게 줄 수 있는 금액의 상한선은 매주 {0}입니다. 이러한 방식으로 한 명의 고액 기부자에게 의존하는 데서 발생하는 수익의 "
+"불안정성을 해소하는데 도움을 줍니다."
 
 msgid "Do I have to pay taxes on the income I receive from Liberapay?"
-msgstr ""
+msgstr "Liberapay에서 발생하는 소득에 대해 세금을 내야 하나요?"
 
 msgid "We don't know, it's up to you to figure out your country's tax rules."
-msgstr ""
+msgstr "사용자의 국가에서 발생하는 조세 의무를 파악하는 것은 사용자의 책무입니다."
 
 msgid "Are donations through Liberapay tax-deductible?"
-msgstr ""
+msgstr "Liberapay에서 발생하는 기부는 소득공제를 받을 수 있나요?"
 
 msgid "Probably not, but it depends on the tax rules of your country."
-msgstr ""
+msgstr "아닐 것입니다만, 거주 국가의 조세 규정에 따라 다릅니다."
 
 msgid "Why did my income decrease?"
-msgstr ""
+msgstr "왜 제 소득이 감소했죠?"
 
 msgid "If your income decreased, one of the following happened:"
-msgstr ""
+msgstr "소득이 감소했다면 다음 상황 중 하나일 것입니다:"
 
 msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
-msgstr ""
+msgstr "당신에게 기부를 하던 기부자가 직접 기부를 중단하거나 기부금액을 줄였을 수도 있고, 계정이 닫혔을 수도 있습니다."
 
 msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
-msgstr ""
+msgstr "기부자의 Liberapay 지갑에 당신에게 기부할 수 있을 만큼 충분한 잔고를 확보하지 못했을 수도 있습니다."
 
 msgid "You can get updates from us on the following social networks:"
-msgstr ""
+msgstr "다음 소셜 네트워크에서 저희에 관한 업데이트를 수신할 수 있습니다:"
 
 #, python-brace-format
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr ""
+"{1}Liberapay 소프트웨어 개발{0}을 확인할 수 있고, {2}Liberapay 법인{0}의 상황에 대해서도 알아볼 수 있으며, "
+"{3}Liberapay 팀에 관한 일반적인 이야기{0}도 볼 수 있습니다."
 
 msgid "What is Liberapay?"
-msgstr ""
+msgstr "Liberapay가 뭐죠?"
 
 msgid "Liberapay is a way to donate money recurrently to people whose work you appreciate."
 msgstr ""
@@ -2928,4 +2955,3 @@ msgstr "회원 가입"
 #, python-brace-format
 msgid "You are already logged in as {0}."
 msgstr "{0} 계정으로 로그인 되어 있습니다."
-
