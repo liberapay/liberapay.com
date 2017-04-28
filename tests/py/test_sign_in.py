@@ -133,7 +133,7 @@ class TestLogIn(EmailHarness):
         alice.add_email(email)
         alice.close(None)
 
-        data = {'log-in.id': email}
+        data = {'log-in.id': email.upper()}
         r = self.client.POST('/', data, raise_immediately=False)
         alice = alice.refetch()
         assert alice.session_token not in r.headers.raw.decode('ascii')
