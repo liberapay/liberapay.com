@@ -38,9 +38,9 @@ schema: env
 	$(with_local_env) ./recreate-schema.sh
 
 schema-diff: test-schema
-	eb ssh liberapay-prod -c 'pg_dump -sO' >prod.sql
+	eb ssh liberapay-prod -c 'pg_dump -sO' | sed -e '/^INFO: /d' >prod.sql
 	$(with_tests_env) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
-	sed -r -e '/^--/d' -e '/^\s*$$/d' -e '/^SET /d' -i prod.sql local.sql
+	sed -r -e '/^--/d' -e '/^\s*$$/d' -e '/^SET /d' -e 's/\bpg_catalog\.//g' -i prod.sql local.sql
 	diff -uw prod.sql local.sql
 	rm prod.sql local.sql
 
