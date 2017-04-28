@@ -125,7 +125,7 @@ class TestMangopayCallbacks(EmailHarness, MangopayHarness):
             payin.PaymentType = 'BANK_WIRE'
             payin.DeclaredDebitedFunds = Money(1100, 'EUR')
             payin.DeclaredFees = Money(0, 'EUR')
-            payin.CreditedFunds = Money(1100, 'EUR')
+            payin.CreditedFunds = Money(0, 'XXX') if error else Money(1100, 'EUR')
             payin.Tag = str(e_id)
             Get.return_value = payin
             r = self.callback(qs)
