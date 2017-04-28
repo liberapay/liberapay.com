@@ -4,6 +4,7 @@
 Doc: https://docs.mangopay.com/api-references/notifications/
 """
 
+from datetime import timedelta
 from decimal import Decimal as D
 
 import mangopay.resources
@@ -12,12 +13,15 @@ from liberapay.billing.exchanges import (
     record_exchange_result, record_payout_refund, repr_error, skim_bank_wire,
 )
 from liberapay.models.participant import Participant
+from liberapay.utils import utcnow
 
 EVENT_TYPES = {
     'PAYIN_NORMAL': mangopay.resources.PayIn,
     'PAYOUT_NORMAL': mangopay.resources.BankWirePayOut,
     'PAYOUT_REFUND': mangopay.resources.Refund,
 }
+
+NOTIFICATION_TIMEOUT = timedelta(days=35)
 
 [---]
 
@@ -47,10 +51,12 @@ if cls:
     if e_status == status:
         raise response.success(200, "already done")
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        expected = payio.DeclaredDebitedFunds.Amount - payio.DeclaredFees.Amount
-        actual = payio.CreditedFunds
-        assert actual.Currency == 'EUR'
-        credited_amount = actual.Amount
+        if status == 'succeeded':
+            expected = payio.DeclaredDebitedFunds.Amount - payio.DeclaredFees.Amount
+            assert payio.CreditedFunds.Currency == 'EUR'
+        else:
+            expected = 0
+        credited_amount = payio.CreditedFunds.Amount
         if credited_amount != expected:
             # The user didn't send the expected amount of money
             credited_amount = D(credited_amount) / D(100)
@@ -100,7 +106,8 @@ if cls:
     # Notify the user
     e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
+        if e.timestamp > (utcnow() - NOTIFICATION_TIMEOUT):
+            p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
     elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
         p.notify('withdrawal_'+status, exchange=e._asdict(), force_email=reopen)
     elif event == 'PAYOUT_REFUND' and status == 'succeeded':
