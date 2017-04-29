@@ -27,7 +27,7 @@ def payday_preexec():
 def exec_payday(log_file):
     # Fork twice, like a traditional unix daemon
     if os.fork():
-        os.execlp('true', 'true')
+        return
     if os.fork():
         os.execlp('true', 'true')
     # Fork again and exec
@@ -36,6 +36,7 @@ def exec_payday(log_file):
         stdin=devnull, stdout=log_file, stderr=log_file,
         close_fds=True, cwd=root, preexec_fn=payday_preexec,
     )
+    os.execlp('true', 'true')
 
 def parse_int(s, **kw):
     try:
