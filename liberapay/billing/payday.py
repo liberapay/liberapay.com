@@ -115,7 +115,7 @@ class Payday(object):
         else:
             with self.db.get_cursor() as cursor:
                 self.prepare(cursor, self.ts_start)
-                self.transfer_virtually(cursor)
+                self.transfer_virtually(cursor, self.ts_start)
                 transfers = [NS(t._asdict()) for t in cursor.all("""
                     SELECT t.*
                          , p.mangopay_user_id AS tipper_mango_id
@@ -282,50 +282,11 @@ class Payday(object):
             END;
         $$ LANGUAGE plpgsql;
 
-
-        -- Create a function to pay invoices
-
-        CREATE OR REPLACE FUNCTION pay_invoices() RETURNS void AS $$
-            DECLARE
-                invoices_cursor CURSOR FOR
-                     SELECT i.*
-                       FROM invoices i
-                      WHERE i.status = 'accepted'
-                        AND ( SELECT ie.ts
-                                FROM invoice_events ie
-                               WHERE ie.invoice = i.id
-                            ORDER BY ts DESC
-                               LIMIT 1
-                            ) < %(ts_start)s;
-                payer_balance numeric(35,2);
-            BEGIN
-                FOR i IN invoices_cursor LOOP
-                    payer_balance := (
-                        SELECT p.new_balance
-                          FROM payday_participants p
-                         WHERE id = i.addressee
-                    );
-                    IF (payer_balance < i.amount) THEN
-                        CONTINUE;
-                    END IF;
-                    EXECUTE transfer(i.addressee, i.sender, i.amount,
-                                     i.nature::text::transfer_context,
-                                     NULL, i.id);
-                    UPDATE invoices
-                       SET status = 'paid'
-                     WHERE id = i.id;
-                    INSERT INTO invoice_events
-                                (invoice, participant, status)
-                         VALUES (i.id, i.addressee, 'paid');
-                END LOOP;
-            END;
-        $$ LANGUAGE plpgsql;
-
         """, dict(ts_start=ts_start))
         log("Prepared the DB.")
 
     @staticmethod
-    def transfer_virtually(cursor):
+    def transfer_virtually(cursor, ts_start):
         cursor.run("SELECT settle_tip_graph();")
         teams = cursor.all("""
             SELECT id FROM payday_participants WHERE kind = 'group';
@@ -335,8 +296,8 @@ class Payday(object):
         cursor.run("""
             SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
-            SELECT pay_invoices();
         """)
+        Payday.pay_invoices(cursor, ts_start)
 
     @staticmethod
     def resolve_takes(cursor, team_id):
@@ -389,6 +350,40 @@ class Payday(object):
                     break
 
     @staticmethod
+    def pay_invoices(cursor, ts_start):
+        """Settle pending invoices
+        """
+        invoices = cursor.all("""
+            SELECT i.*
+              FROM invoices i
+             WHERE i.status = 'accepted'
+               AND ( SELECT ie.ts
+                       FROM invoice_events ie
+                      WHERE ie.invoice = i.id
+                   ORDER BY ts DESC
+                      LIMIT 1
+                   ) < %(ts_start)s;
+        """, dict(ts_start=ts_start))
+        for i in invoices:
+            payer_balance = cursor.one("""
+                SELECT p.new_balance
+                  FROM payday_participants p
+                 WHERE id = %s
+            """, (i.addressee,))
+            if payer_balance < i.amount:
+                continue
+            cursor.run("""
+                SELECT transfer(%(addressee)s, %(sender)s, %(amount)s,
+                                %(nature)s::transfer_context, NULL, %(id)s);
+                UPDATE invoices
+                   SET status = 'paid'
+                 WHERE id = %(id)s;
+                INSERT INTO invoice_events
+                            (invoice, participant, status)
+                     VALUES (%(id)s, %(addressee)s, 'paid');
+            """, i._asdict())
+
+    @staticmethod
     def check_balances(cursor):
         """Check that balances aren't becoming (more) negative
         """
@@ -424,7 +419,6 @@ class Payday(object):
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
-            DROP FUNCTION pay_invoices();
         """)
 
     @classmethod
@@ -554,7 +548,7 @@ class Payday(object):
         now = pando.utils.utcnow()
         with self.db.get_cursor() as cursor:
             self.prepare(cursor, now)
-            self.transfer_virtually(cursor)
+            self.transfer_virtually(cursor, now)
             cursor.run("""
 
             UPDATE tips t
