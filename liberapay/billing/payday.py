@@ -283,68 +283,6 @@ class Payday(object):
         $$ LANGUAGE plpgsql;
 
 
-        -- Create a function to resolve many-to-many donations (team takes)
-
-        CREATE OR REPLACE FUNCTION resolve_takes(team_id bigint) RETURNS void AS $$
-            DECLARE
-                total_income numeric(35,2);
-                total_takes numeric(35,2);
-                takes_ratio numeric;
-                tips_ratio numeric;
-                tip record;
-                take record;
-                transfer_amount numeric(35,2);
-                our_tips CURSOR FOR
-                    SELECT t.id, t.tipper, (round_up(t.amount * tips_ratio, 2)) AS amount
-                      FROM payday_tips t
-                      JOIN payday_participants p ON p.id = t.tipper
-                     WHERE t.tippee = team_id
-                       AND p.new_balance >= t.amount;
-            BEGIN
-                WITH funded AS (
-                     UPDATE payday_tips
-                        SET is_funded = true
-                       FROM payday_participants p
-                      WHERE p.id = tipper
-                        AND tippee = team_id
-                        AND p.new_balance >= amount
-                  RETURNING amount
-                )
-                SELECT COALESCE(sum(amount), 0) FROM funded INTO total_income;
-                total_takes := (
-                    SELECT COALESCE(sum(t.amount), 0)
-                      FROM payday_takes t
-                     WHERE t.team = team_id
-                );
-                IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
-                takes_ratio := min(total_income / total_takes, 1::numeric);
-                tips_ratio := min(total_takes / total_income, 1::numeric);
-
-                DROP TABLE IF EXISTS our_takes;
-                CREATE TEMPORARY TABLE our_takes ON COMMIT DROP AS
-                    SELECT t.member, (round_up(t.amount * takes_ratio, 2)) AS amount
-                      FROM payday_takes t
-                     WHERE t.team = team_id;
-
-                FOR tip IN our_tips LOOP
-                    FOR take IN (SELECT * FROM our_takes ORDER BY member) LOOP
-                        IF (take.amount = 0 OR tip.tipper = take.member) THEN
-                            CONTINUE;
-                        END IF;
-                        transfer_amount := min(tip.amount, take.amount);
-                        EXECUTE transfer(tip.tipper, take.member, transfer_amount, 'take', team_id, NULL);
-                        tip.amount := tip.amount - transfer_amount;
-                        UPDATE our_takes t
-                           SET amount = take.amount - transfer_amount
-                         WHERE t.member = take.member;
-                        EXIT WHEN tip.amount = 0;
-                    END LOOP;
-                END LOOP;
-                RETURN;
-            END;
-        $$ LANGUAGE plpgsql;
-
-
         -- Create a function to pay invoices
 
         CREATE OR REPLACE FUNCTION pay_invoices() RETURNS void AS $$
@@ -388,13 +326,67 @@ class Payday(object):
 
     @staticmethod
     def transfer_virtually(cursor):
+        cursor.run("SELECT settle_tip_graph();")
+        teams = cursor.all("""
+            SELECT id FROM payday_participants WHERE kind = 'group';
+        """)
+        for team_id in teams:
+            Payday.resolve_takes(cursor, team_id)
         cursor.run("""
-            SELECT settle_tip_graph();
-            SELECT resolve_takes(id) FROM payday_participants WHERE kind = 'group';
             SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
             SELECT pay_invoices();
         """)
+
+    @staticmethod
+    def resolve_takes(cursor, team_id):
+        """Resolve many-to-many donations (team takes)
+        """
+        args = dict(team_id=team_id)
+        total_income = cursor.one("""
+            WITH funded AS (
+                 UPDATE payday_tips
+                    SET is_funded = true
+                   FROM payday_participants p
+                  WHERE p.id = tipper
+                    AND tippee = %(team_id)s
+                    AND p.new_balance >= amount
+              RETURNING amount
+            )
+            SELECT COALESCE(sum(amount), 0) FROM funded;
+        """, args)
+        total_takes = cursor.one("""
+            SELECT COALESCE(sum(t.amount), 0)
+              FROM payday_takes t
+             WHERE t.team = %(team_id)s
+        """, args)
+        if total_income == 0 or total_takes == 0:
+            return
+        args['takes_ratio'] = min(total_income / total_takes, 1)
+        args['tips_ratio'] = min(total_takes / total_income, 1)
+        tips = [NS(t._asdict()) for t in cursor.all("""
+            SELECT t.id, t.tipper, (round_up(t.amount * %(tips_ratio)s, 2)) AS amount
+              FROM payday_tips t
+              JOIN payday_participants p ON p.id = t.tipper
+             WHERE t.tippee = %(team_id)s
+               AND p.new_balance >= t.amount
+        """, args)]
+        takes = [NS(t._asdict()) for t in cursor.all("""
+            SELECT t.member, (round_up(t.amount * %(takes_ratio)s, 2)) AS amount
+              FROM payday_takes t
+             WHERE t.team = %(team_id)s;
+        """, args)]
+        for tip in tips:
+            for take in takes:
+                if take.amount == 0 or tip.tipper == take.member:
+                    continue
+                transfer_amount = min(tip.amount, take.amount)
+                cursor.run("SELECT transfer(%s, %s, %s, 'take', %s, NULL)",
+                           (tip.tipper, take.member, transfer_amount, team_id))
+                tip.amount -= transfer_amount
+                take.amount -= transfer_amount
+                if tip.amount == 0:
+                    break
 
     @staticmethod
     def check_balances(cursor):
@@ -432,7 +424,6 @@ class Payday(object):
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
-            DROP FUNCTION resolve_takes(bigint);
             DROP FUNCTION pay_invoices();
         """)
 
