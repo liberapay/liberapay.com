@@ -13,7 +13,7 @@ import xml.etree.ElementTree as ET
 from babel.dates import format_timedelta
 from pando import Response
 from pando.utils import utc
-from oauthlib.oauth2 import TokenExpiredError
+from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.exceptions import LazyResponse
@@ -99,7 +99,7 @@ class Platform(object):
         url = self.api_url+path
         is_user_session = bool(sess)
         if not sess:
-            sess = self.get_auth_session()
+            sess = self.get_app_session()
             api_app_auth_params = getattr(self, 'api_app_auth_params', None)
             if api_app_auth_params:
                 url += '?' if '?' not in url else '&'
@@ -277,6 +277,9 @@ class PlatformOAuth1(Platform):
     authorize_path = '/oauth/authorize'
     access_token_path = '/oauth/access_token'
 
+    def get_app_session(self):
+        return self.get_auth_session()
+
     def get_auth_session(self, token=None):
         args = ()
         if token:
@@ -307,6 +310,24 @@ class PlatformOAuth2(Platform):
     oauth_default_scope = None
     oauth_email_scope = None
     oauth_payment_scope = None
+
+    can_auth_with_client_credentials = None
+
+    def __init__(self, *args, **kw):
+        Platform.__init__(self, *args, **kw)
+        if self.can_auth_with_client_credentials:
+            app_client = BackendApplicationClient(self.api_key)
+            self.app_session = OAuth2Session(client=app_client)
+
+    def get_app_session(self):
+        if self.can_auth_with_client_credentials:
+            sess = self.app_session
+            if not sess.token:
+                sess.fetch_token(self.access_token_url, client_id=self.api_key,
+                                 client_secret=self.api_secret)
+            return sess
+        else:
+            return self.get_auth_session()
 
     def get_auth_session(self, state=None, token=None, token_updater=None):
         return OAuth2Session(self.api_key, state=state, token=token,
