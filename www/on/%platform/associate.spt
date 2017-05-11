@@ -55,13 +55,17 @@ except OAuth2Error as e:
 account = AccountElsewhere.upsert(platform.get_user_self_info(sess))
 participant = account.participant
 
-if action_user_id and account.user_id != action_user_id:
+if action_user_id:
     if action_user_id[0] == '>':
-        key, value = 'user_name', action_user_id[1:]
+        user_id_type = 'user_name'
+        action_user_id = action_user_id[1:].lower()
+        account_user_id = account.user_name.lower()
     else:
-        key, value = 'user_id', action_user_id
+        user_id_type = 'user_id'
+        account_user_id = account.user_id
+if action_user_id and account_user_id != action_user_id:
     try:
-        claimed_account = AccountElsewhere.upsert(platform.get_user_info(key, value))
+        claimed_account = AccountElsewhere.upsert(platform.get_user_info(domain, user_id_type, action_user_id))
     except NotImplementedError as e:
         raise response.error(400, e.args[0])
     if not claimed_account.is_team:
