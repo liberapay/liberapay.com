@@ -150,14 +150,15 @@ class Harness(unittest.TestCase):
         self.db.run("ALTER SEQUENCE paydays_id_seq RESTART WITH 1")
 
 
-    def make_elsewhere(self, platform, user_id, user_name, **kw):
+    def make_elsewhere(self, platform, user_id, user_name, domain='', **kw):
         info = UserInfo(platform=platform, user_id=str(user_id),
-                        user_name=user_name, **kw)
+                        user_name=user_name, domain=domain, **kw)
         return AccountElsewhere.upsert(info)
 
 
     def make_participant(self, username, **kw):
         platform = kw.pop('elsewhere', 'github')
+        domain = kw.pop('domain', '')
         kw2 = {}
         for key in ('last_bill_result', 'balance'):
             if key in kw:
@@ -185,9 +186,9 @@ class Harness(unittest.TestCase):
 
         self.db.run("""
             INSERT INTO elsewhere
-                        (platform, user_id, user_name, participant)
-                 VALUES (%s,%s,%s,%s)
-        """, (platform, participant.id, username, participant.id))
+                        (platform, user_id, user_name, participant, domain)
+                 VALUES (%s,%s,%s,%s,%s)
+        """, (platform, participant.id, username, participant.id, domain))
 
         if 'email' in kw:
             self.db.run("""

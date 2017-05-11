@@ -49,26 +49,26 @@ class GitHub(PlatformOAuth2):
 
         # Check public membership first
         response = self.api_get(
-            '/orgs/'+org_name+'/public_members/'+account.user_name,
+            '', '/orgs/'+org_name+'/public_members/'+account.user_name,
             sess=sess, error_handler=None
         )
         if response.status_code == 204:
             return True
         elif response.status_code != 404:
-            self.api_error_handler(response, True)
+            self.api_error_handler(response, True, self.domain)
 
         # Check private membership
         response = self.api_get(
-            '/user/memberships/orgs/'+org_name, sess=sess, error_handler=None
+            '', '/user/memberships/orgs/'+org_name, sess=sess, error_handler=None
         )
         if response.status_code == 403:
             raise CantReadMembership
         elif response.status_code >= 400:
-            self.api_error_handler(response, True)
+            self.api_error_handler(response, True, self.domain)
         membership = self.api_parser(response)
         if membership['state'] == 'active':
             return True
 
         # Try the endpoint we were using before
-        user_orgs = self.api_parser(self.api_get('/user/orgs', sess=sess))
+        user_orgs = self.api_parser(self.api_get('', '/user/orgs', sess=sess))
         return any(org.get('login') == org_name for org in user_orgs)

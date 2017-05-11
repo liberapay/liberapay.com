@@ -5,9 +5,10 @@ import hashlib
 import json
 import logging
 try:
-    from urllib.parse import quote
+    from urllib.parse import quote, urlsplit
 except ImportError:
     from urllib import quote
+    from urlparse import urlsplit
 import xml.etree.ElementTree as ET
 
 from babel.dates import format_timedelta
@@ -17,6 +18,7 @@ from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.exceptions import LazyResponse
+from liberapay.website import website
 
 from ._exceptions import UserNotFound
 from ._extractors import not_available
@@ -47,8 +49,11 @@ class UserInfo(object):
 class Platform(object):
 
     allows_team_connect = False
+    optional_user_name = False
+    single_domain = True
 
     # "x" stands for "extract"
+    x_domain = not_available
     x_user_info = not_available
     x_user_id = not_available
     x_user_name = not_available
@@ -60,7 +65,8 @@ class Platform(object):
 
     required_attrs = ('account_url', 'display_name', 'name')
 
-    def __init__(self, api_key, api_secret, callback_url, api_url=None, auth_url=None, api_timeout=20.0):
+    def __init__(self, api_key, api_secret, callback_url, api_url=None, auth_url=None,
+                 api_timeout=20.0, app_name=None, app_url=None):
         self.api_key = api_key
         self.api_secret = api_secret
         self.callback_url = callback_url
@@ -71,6 +77,11 @@ class Platform(object):
         elif not getattr(self, 'auth_url', None):
             self.auth_url = self.api_url
         self.api_timeout = api_timeout
+        self.app_name = app_name
+        self.app_url = app_url
+        self.credentials_cache = {}
+        domain = urlsplit(self.api_url).hostname
+        self.domain = domain if '{' not in domain else None
 
         # Determine the appropriate response parser using `self.api_format`
         api_format = getattr(self, 'api_format', None)
@@ -88,28 +99,22 @@ class Platform(object):
             msg %= self.__class__.__name__, ', '.join(missing_attrs)
             raise AttributeError(msg)
 
-    def api_get(self, path, sess=None, error_handler=True, **kw):
-        """
-        Given a `path` (e.g. /users/foo), this function sends a GET request to
-        the platform's API (e.g. https://api.github.com/users/foo).
-
-        The response is returned, after checking its status code and ratelimit
-        headers.
-        """
-        url = self.api_url+path
+    def api_request(self, method, domain, path, sess=None, error_handler=True, **kw):
+        url = self.api_url.format(domain=domain) + path
+        domain = domain or self.domain
         is_user_session = bool(sess)
         if not sess:
-            sess = self.get_app_session()
+            sess = self.get_app_session(domain)
             api_app_auth_params = getattr(self, 'api_app_auth_params', None)
             if api_app_auth_params:
                 url += '?' if '?' not in url else '&'
                 url += api_app_auth_params.format(**self.__dict__)
         kw.setdefault('timeout', self.api_timeout)
-        response = sess.get(url, **kw)
+        response = sess.request(method, url, **kw)
 
         if not is_user_session:
             limit, remaining, reset = self.get_ratelimit_headers(response)
-            self.log_ratelimit_headers(limit, remaining, reset)
+            self.log_ratelimit_headers(domain, limit, remaining, reset)
 
         # Check response status
         if error_handler is True:
@@ -119,11 +124,21 @@ class Platform(object):
             # https://tools.ietf.org/html/rfc5849#section-3.2
             raise TokenExpiredError
         if status != 200 and error_handler:
-            error_handler(response, is_user_session)
+            error_handler(response, is_user_session, domain)
 
         return response
 
-    def api_error_handler(self, response, is_user_session):
+    def api_get(self, domain, path, sess=None, **kw):
+        """
+        Given a `path` (e.g. /users/foo), this function sends a GET request to
+        the platform's API (e.g. https://api.github.com/users/foo).
+
+        The response is returned, after checking its status code and ratelimit
+        headers.
+        """
+        return self.api_request('GET', domain, path, sess=sess, **kw)
+
+    def api_error_handler(self, response, is_user_session, domain):
         status = response.status_code
         if status == 404:
             raise Response(404, response.text)
@@ -136,9 +151,8 @@ class Platform(object):
                     return _("You're making requests too fast, please try again later.")
             raise LazyResponse(status, msg)
         if status != 200:
-            logger.error('{} api responded with {}:\n{}'.format(self.name, status, response.text))
-            msg = lambda _: _("{0} returned an error, please try again later.",
-                              self.display_name)
+            logger.error('{} responded with {}:\n{}'.format(domain, status, response.text))
+            msg = lambda _: _("{0} returned an error, please try again later.", domain)
             raise LazyResponse(502, msg)
 
     def get_ratelimit_headers(self, response):
@@ -154,12 +168,13 @@ class Platform(object):
                 reset = datetime.fromtimestamp(reset, tz=utc)
             except (TypeError, ValueError):
                 d = dict(limit=limit, remaining=remaining, reset=reset)
-                logger.warning('Got weird rate headers from %s: %s' % (self.name, d))
+                url = response.request.url.split('?', 1)[0]
+                logger.warning('Got weird rate headers from <%s>: %s' % (url, d))
                 limit, remaining, reset = None, None, None
 
         return limit, remaining, reset
 
-    def log_ratelimit_headers(self, limit, remaining, reset):
+    def log_ratelimit_headers(self, domain, limit, remaining, reset):
         """Emit log messages if we're running out of ratelimit.
         """
         if None in (limit, remaining, reset):
@@ -169,9 +184,9 @@ class Platform(object):
             reset_delta = reset - datetime.now().replace(tz=utc)
             reset_delta = format_timedelta(reset_delta, locale='en')
             log_msg = (
-                '{0} API: {1:.1%} of ratelimit has been consumed, '
+                '{0}: {1:.1%} of ratelimit has been consumed, '
                 '{2} requests remaining, resets {3}.'
-            ).format(self.name, 1 - percent_remaining, remaining, reset_delta)
+            ).format(domain, 1 - percent_remaining, remaining, reset_delta)
             log_lvl = logging.WARNING
             if percent_remaining < 0.2:
                 log_lvl = logging.ERROR
@@ -198,6 +213,8 @@ class Platform(object):
         assert r.user_id is not None
         r.user_id = str(r.user_id)
         assert len(r.user_id) > 0
+        r.domain = self.x_domain(r, info, '')
+        assert r.domain is not None
         r.display_name = self.x_display_name(r, info, None)
         r.email = self.x_email(r, info, None)
         r.avatar_url = self.x_avatar_url(r, info, None)
@@ -212,7 +229,7 @@ class Platform(object):
         r.extra_info = info
         return r
 
-    def get_team_members(self, account, page_url=None):
+    def get_team_members(self, account, domain, page_url=None):
         """Given an AccountElsewhere, return its membership list from the API.
         """
         if not page_url:
@@ -220,12 +237,12 @@ class Platform(object):
                 user_id=quote(account.user_id),
                 user_name=quote(account.user_name or ''),
             )
-        r = self.api_get(page_url)
+        r = self.api_get(domain, page_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         members = [self.extract_user_info(m) for m in members]
         return members, count, pages_urls
 
-    def get_user_info(self, key, value, sess=None):
+    def get_user_info(self, domain, key, value, sess=None):
         """Given a user_name or user_id, get the user's info from the API.
         """
         if key == 'user_id':
@@ -238,19 +255,19 @@ class Platform(object):
             raise NotImplementedError(
                 "%s lookup is not available for %s" % (self.display_name, key)
             )
-        path = path.format(**{key: value})
-        def error_handler(response, is_user_session):
+        path = path.format(**{key: value, 'domain': domain})
+        def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
                 raise UserNotFound(value, key)
-            self.api_error_handler(response, is_user_session)
-        response = self.api_get(path, sess=sess, error_handler=error_handler)
+            self.api_error_handler(response, is_user_session, domain)
+        response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
         info = self.api_parser(response)
         return self.extract_user_info(info)
 
-    def get_user_self_info(self, sess):
+    def get_user_self_info(self, domain, sess):
         """Get the authenticated user's info from the API.
         """
-        r = self.api_get(self.api_user_self_info_path, sess=sess)
+        r = self.api_get(domain, self.api_user_self_info_path, sess=sess)
         info = self.extract_user_info(self.api_parser(r))
         token = getattr(sess, 'token', None)
         if token:
@@ -263,12 +280,51 @@ class Platform(object):
                 user_id=quote(account.user_id),
                 user_name=quote(account.user_name or ''),
             )
-        r = self.api_get(page_url, sess=sess)
+        r = self.api_get(account.domain, page_url, sess=sess)
         friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         friends = [self.extract_user_info(f) for f in friends]
         if count == -1 and hasattr(self, 'x_friends_count'):
             count = self.x_friends_count(None, account.extra_info, -1)
         return friends, count, pages_urls
+
+    def get_credentials(self, domain):
+        # 0. Single-domain platforms have a single pair of credentials
+        if self.single_domain:
+            return self.api_key, self.api_secret
+        # 1. Look in the local cache
+        r = self.credentials_cache.get(domain)
+        if r:
+            return r
+        # 2. Look in the DB
+        r = self.get_credentials_from_db(domain)
+        if r:
+            self.credentials_cache[domain] = r
+            return r
+        # 3. Create the credentials
+        with website.db.get_cursor() as cursor:
+            # Prevent race condition
+            cursor.run("LOCK TABLE oauth_apps IN EXCLUSIVE MODE")
+            r = self.get_credentials_from_db(domain)
+            if r:
+                return r
+            # Call the API and store the new credentials
+            key, secret = self.register_app(domain)
+            r = cursor.one("""
+                INSERT INTO oauth_apps
+                            (platform, domain, key, secret)
+                     VALUES (%s, %s, %s, %s)
+                  RETURNING key, secret
+            """, (self.name, domain, key, secret))
+            self.credentials_cache[domain] = r
+            return r
+
+    def get_credentials_from_db(self, domain):
+        return website.db.one("""
+            SELECT key, secret
+              FROM oauth_apps
+             WHERE platform = %s
+               AND domain = %s
+        """, (self.name, domain))
 
 
 class PlatformOAuth1(Platform):
@@ -277,29 +333,33 @@ class PlatformOAuth1(Platform):
     authorize_path = '/oauth/authorize'
     access_token_path = '/oauth/access_token'
 
-    def get_app_session(self):
-        return self.get_auth_session()
+    def get_app_session(self, domain):
+        return self.get_auth_session(domain)
 
-    def get_auth_session(self, token=None):
+    def get_auth_session(self, domain, token=None):
         args = ()
         if token:
             args = (token['token'], token['token_secret'])
-        return OAuth1Session(self.api_key, self.api_secret, *args,
-                             callback_uri=self.callback_url)
+        callback_url = self.callback_url.format(domain=domain)
+        client_id, client_secret = self.get_credentials(domain)
+        return OAuth1Session(client_id, client_secret, *args,
+                             callback_uri=callback_url)
 
-    def get_auth_url(self, **kw):
-        sess = self.get_auth_session()
-        r = sess.fetch_request_token(self.auth_url+self.request_token_path)
-        url = sess.authorization_url(self.auth_url+self.authorize_path)
+    def get_auth_url(self, domain, **kw):
+        sess = self.get_auth_session(domain)
+        auth_url = self.auth_url.format(domain=domain)
+        r = sess.fetch_request_token(auth_url+self.request_token_path)
+        url = sess.authorization_url(auth_url+self.authorize_path)
         return url, r['oauth_token'], r['oauth_token_secret']
 
     def get_query_id(self, querystring):
         return querystring['oauth_token']
 
-    def handle_auth_callback(self, url, token, token_secret):
-        sess = self.get_auth_session(dict(token=token, token_secret=token_secret))
+    def handle_auth_callback(self, domain, url, token, token_secret):
+        sess = self.get_auth_session(domain, dict(token=token, token_secret=token_secret))
         sess.parse_authorization_response(url)
-        r = sess.fetch_access_token(self.auth_url+self.access_token_path)
+        auth_url = self.auth_url.format(domain=domain)
+        r = sess.fetch_access_token(auth_url+self.access_token_path)
         sess.token = dict(token=r['oauth_token'],
                           token_secret=r['oauth_token_secret'])
         return sess
@@ -316,36 +376,44 @@ class PlatformOAuth2(Platform):
     def __init__(self, *args, **kw):
         Platform.__init__(self, *args, **kw)
         if self.can_auth_with_client_credentials:
-            app_client = BackendApplicationClient(self.api_key)
-            self.app_session = OAuth2Session(client=app_client)
+            self.app_sessions = {}
 
-    def get_app_session(self):
+    def get_app_session(self, domain):
         if self.can_auth_with_client_credentials:
-            sess = self.app_session
+            sess = self.app_sessions.get(domain)
+            if not sess:
+                client_id = self.get_credentials(domain)[0]
+                sess = OAuth2Session(client=BackendApplicationClient(client_id))
+                self.app_sessions[domain] = sess
             if not sess.token:
-                sess.fetch_token(self.access_token_url, client_id=self.api_key,
-                                 client_secret=self.api_secret)
+                access_token_url = self.access_token_url.format(domain=domain)
+                client_id, client_secret = self.get_credentials(domain)
+                sess.fetch_token(access_token_url, client_id=client_id,
+                                 client_secret=client_secret)
             return sess
         else:
-            return self.get_auth_session()
+            return self.get_auth_session(domain)
 
-    def get_auth_session(self, state=None, token=None, token_updater=None):
-        return OAuth2Session(self.api_key, state=state, token=token,
+    def get_auth_session(self, domain, state=None, token=None, token_updater=None):
+        callback_url = self.callback_url.format(domain=domain)
+        client_id = self.get_credentials(domain)[0]
+        return OAuth2Session(client_id, state=state, token=token,
                              token_updater=token_updater,
-                             redirect_uri=self.callback_url,
+                             redirect_uri=callback_url,
                              scope=self.oauth_default_scope)
 
-    def get_auth_url(self, **kw):
-        sess = self.get_auth_session()
-        url, state = sess.authorization_url(self.auth_url)
+    def get_auth_url(self, domain, **kw):
+        sess = self.get_auth_session(domain)
+        url, state = sess.authorization_url(self.auth_url.format(domain=domain))
         return url, state, ''
 
     def get_query_id(self, querystring):
         return querystring['state']
 
-    def handle_auth_callback(self, url, state, unused_arg):
-        sess = self.get_auth_session(state=state)
-        sess.fetch_token(self.access_token_url,
-                         client_secret=self.api_secret,
+    def handle_auth_callback(self, domain, url, state, unused_arg):
+        sess = self.get_auth_session(domain, state=state)
+        client_secret = self.get_credentials(domain)[1]
+        sess.fetch_token(self.access_token_url.format(domain=domain),
+                         client_secret=client_secret,
                          authorization_response=url)
         return sess

@@ -114,6 +114,7 @@ def fake_elsewhere(db, participant, platform):
         user_name=participant.id,
         participant=participant.id,
         extra_info=None,
+        domain='',
     )
 
 

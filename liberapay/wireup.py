@@ -102,6 +102,7 @@ def database(env, tell_sentry):
 class AppConf(object):
 
     fields = dict(
+        app_name=str,
         bitbucket_callback=str,
         bitbucket_id=str,
         bitbucket_secret=str,
@@ -344,7 +345,7 @@ class PlatformRegistry(object):
         return iter(self.__dict__.values())
 
 
-def accounts_elsewhere(app_conf, asset):
+def accounts_elsewhere(app_conf, asset, canonical_url):
     if not app_conf:
         return
     platforms = []
@@ -354,14 +355,20 @@ def accounts_elsewhere(app_conf, asset):
             for k, v in app_conf.__dict__.items() if k.startswith(cls.name+'_')
         }
         conf.setdefault('api_timeout', app_conf.socket_timeout)
-        platforms.append(cls(
-            conf.pop('id'),
-            conf.pop('secret'),
-            conf.pop('callback'),
-            **conf
-        ))
+        conf.setdefault('app_name', app_conf.app_name)
+        conf.setdefault('app_url', canonical_url)
+        if hasattr(cls, 'register_app'):
+            callback_url = canonical_url + '/on/' + cls.name + ':{domain}/associate'
+            platforms.append(cls(None, None, callback_url, **conf))
+        else:
+            platforms.append(cls(
+                conf.pop('id'),
+                conf.pop('secret'),
+                conf.pop('callback'),
+                **conf
+            ))
 
-    platforms = [p for p in platforms if p.api_secret]
+    platforms = [p for p in platforms if p.api_secret or hasattr(p, 'register_app')]
     order = """
         twitter github gitlab facebook google bitbucket openstreetmap linuxfr
     """.split()

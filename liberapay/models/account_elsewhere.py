@@ -65,20 +65,21 @@ class AccountElsewhere(Model):
         return cls._from_thing('user_name', platform, user_name)
 
     @classmethod
-    def _from_thing(cls, thing, platform, value):
+    def _from_thing(cls, thing, platform, value, domain):
         assert thing in ('user_id', 'user_name')
         if thing == 'user_name':
             thing = 'lower(user_name)'
             value = value.lower()
-        exception = UnknownAccountElsewhere(thing, platform, value)
+        exception = UnknownAccountElsewhere(thing, platform, value, domain)
         return cls.db.one("""
 
             SELECT elsewhere.*::elsewhere_with_participant
               FROM elsewhere
              WHERE platform = %s
+               AND domain = %s
                AND {} = %s
 
-        """.format(thing), (platform, value), default=exception)
+        """.format(thing), (platform, domain, value), default=exception)
 
     @classmethod
     def get_many(cls, platform, user_infos):
@@ -188,11 +189,17 @@ class AccountElsewhere(Model):
         params = dict(token=self.token)
         if 'refresh_token' in self.token:
             params['token_updater'] = self.save_token
-        return self.platform_data.get_auth_session(**params)
+        return self.platform_data.get_auth_session(self.domain, **params)
+
+    @property
+    def address(self):
+        return self.user_name + '@' + self.domain
 
     @property
     def liberapay_slug(self):
-        return self.user_name or ('~' + self.user_id)
+        if self.user_name:
+            return self.user_name + (('@' + self.domain) if self.domain else '')
+        return '~' + self.user_id + ((':' + self.domain) if self.domain else '')
 
     @property
     def liberapay_url(self):
@@ -205,6 +212,7 @@ class AccountElsewhere(Model):
     @property
     def html_url(self):
         return self.platform_data.account_url.format(
+            domain=self.domain,
             user_id=self.user_id,
             user_name=self.user_name,
             user_name_lower=(self.user_name or '').lower(),
@@ -213,7 +221,9 @@ class AccountElsewhere(Model):
 
     @property
     def friendly_name(self):
-        if getattr(self.platform, 'optional_user_name', False):
+        if self.domain:
+            return self.address
+        elif self.platform_data.optional_user_name:
             return self.display_name or self.user_name or self.user_id
         else:
             return self.user_name or self.display_name or self.user_id
@@ -254,15 +264,17 @@ def get_account_elsewhere(website, state, api_lookup=True):
         key = 'user_name'
         if uid[:1] == '@':
             uid = uid[1:]
+    split = uid.rsplit('@', 1)
+    uid, domain = split if len(split) == 2 else (uid, '')
     try:
-        account = AccountElsewhere._from_thing(key, platform.name, uid)
+        account = AccountElsewhere._from_thing(key, platform.name, uid, domain)
     except UnknownAccountElsewhere:
         account = None
     if not account:
         if not api_lookup:
             raise response.error(404)
         try:
-            user_info = platform.get_user_info(key, uid)
+            user_info = platform.get_user_info(domain, key, uid)
         except NotImplementedError as e:
             raise response.error(400, e.args[0])
         except UserNotFound:

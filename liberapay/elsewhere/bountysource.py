@@ -38,12 +38,12 @@ class Bountysource(Platform):
     x_email = key('email')
     x_avatar_url = key('image_url')
 
-    def get_auth_session(self, token=None):
+    def get_auth_session(self, domain, token=None):
         sess = requests.Session()
         sess.auth = BountysourceAuth(token)
         return sess
 
-    def get_auth_url(self, user):
+    def get_auth_url(self, domain, user):
         query_id = hexlify(os.urandom(10))
         time_now = int(time())
         raw = '%s.%s.%s' % (user.id, time_now, self.api_secret)
@@ -64,7 +64,7 @@ class Bountysource(Platform):
             raise Response(400, 'Invalid hash in access_token')
         return querystring['query_id']
 
-    def get_user_self_info(self, sess):
+    def get_user_self_info(self, domain, sess):
         querystring = urlparse(sess._callback_url).query
         info = {k: v[0] if len(v) == 1 else v
                 for k, v in parse_qs(querystring).items()}
@@ -72,8 +72,8 @@ class Bountysource(Platform):
         info.pop('query_id')
         return self.extract_user_info(info)
 
-    def handle_auth_callback(self, url, query_id, unused_arg):
-        sess = self.get_auth_session(token=query_id)
+    def handle_auth_callback(self, domain, url, query_id, unused_arg):
+        sess = self.get_auth_session(None, token=query_id)
         sess._callback_url = url
         return sess
 

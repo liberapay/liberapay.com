@@ -36,18 +36,18 @@ class Bitbucket(PlatformOAuth1):
     x_avatar_url = any_key('avatar', ('links', 'avatar', 'href'))
     x_is_team = key('type', lambda v: v == 'team')
 
-    def api_get(self, path, sess=None, **kw):
+    def api_get(self, domain, path, sess=None, **kw):
         """Extend to manually retry /users/pypy as /teams/pypy.
 
         Bitbucket gives us a 404 where a 30x would be more helpful.
 
         """
         try:
-            return PlatformOAuth1.api_get(self, path, sess, **kw)
+            return PlatformOAuth1.api_get(self, domain, path, sess, **kw)
         except Response as response:
             if response.code == 404 and ' is a team account' in response.body:
                 assert path.startswith('/2.0/users/')
                 path = '/2.0/teams/' + path[11:]
-                return PlatformOAuth1.api_get(self, path, sess, **kw)
+                return PlatformOAuth1.api_get(self, domain, path, sess, **kw)
             else:
                 raise
