@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-05-12 11:37+0000\n"
+"PO-Revision-Date: 2017-05-12 12:29+0000\n"
 "Last-Translator: Katharsisdrill <katharsisdrill@phillfromgchq.co.uk>\n"
 "Language-Team: Danish "
 "<https://hosted.weblate.org/projects/liberapay/core/da/>\n"
@@ -99,7 +99,7 @@ msgstr "Se faktura"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been accepted and paid - Liberapay"
-msgstr "Din faktura for {0} er blevet accepteret og udbetalt - Liberapay"
+msgstr "Din faktura til {0} er blevet accepteret og udbetalt - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
@@ -183,7 +183,7 @@ msgstr "Bankoverførslen til din Liberapay tegnebog er lykkedes"
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} you sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
 msgstr ""
 "Vi er glade for at kunne meddele at overførslen fra din bankkonto er "
-"lykkedes. Af de{0} du har sent, gik {1} ind på din Liberapay tegnebog, og {2}"
+"lykkedes. Af de{0} du har sent, gik {1} ind på din Liberapay-tegnebog, og {2}"
 " blev betalt i gebyrer."
 
 msgid "View receipt"
@@ -1872,7 +1872,7 @@ msgstr "fejlmeddelelse: {0}"
 
 #, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
-msgstr "refusion af mislykket udtræk (fejlmeddelelse: {0})"
+msgstr "refusion af mislykket udbetaling (fejlmeddelelse: {0})"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2465,7 +2465,7 @@ msgstr "Denne hjemmeside er hosted på {0} af:"
 #, python-brace-format
 msgid "The publication director is Liberapay's legal representative, currently {0}."
 msgstr ""
-"Publikations-direktøren er i Liberapays juridiske repræsentant, I øjeblikket "
+"Publikations-direktøren er Liberapays juridiske repræsentant, I øjeblikket "
 "er det {0}."
 
 msgid "Terms of Service"
@@ -2641,43 +2641,57 @@ msgstr "Regulering af andels beløb"
 
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
 msgstr ""
+"Nominelle andel er begrænsede, de kan ikke hæves højere end en maksimal "
+"beregning baseret på de nominelle andele på tidspunktet for den foregående "
+"betalingsdag. Denne forordning er beregnet til at reducere risikoen for "
+"misbrug af team-medlemmer med dårlige intentioner."
 
 msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
 msgstr ""
+"Den nøjagtige grænse er maksimum af disse fire værdier: tallet 1, to gange "
+"medlemmets andel i den foregående betalingsdag, medlemmets andel i den "
+"foregåendebetalingsdag + en forholdsmæssig andel af ubrugt indkomst, "
+"medianen af andele forrige betalingsdag."
 
 msgid "Removing team membership"
-msgstr ""
+msgstr "At fjerne team medlemskab"
 
 #, python-brace-format
 msgid "You can leave a team from {0}your teams dashboard{1}."
-msgstr ""
+msgstr "Du kan forlade et team fra {0}dit teams kontrolpanel{1}."
 
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
 msgstr ""
+"At smide et medlem ud af et team er endnu ikke implementeret. Kontakt "
+"venligst support med bevis for at medlemmet skal udmeldes og at der er "
+"enighed om det blandt de øvrige medlemmer."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr ""
+"Fællesskaber giver dig mulighed for at finde folk der arbejder på ting du er "
+"interesseret i. Du kan også abonnere på deres nyhedsbreve for at holde dig "
+"informeret."
 
 msgid "Start a new community"
-msgstr ""
+msgstr "Start et ny fællesskab"
 
 #, python-brace-format
 msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "De er {n} fællesskab på Liberapay."
+msgstr[1] "De er {n} fællesskaber på Liberapay."
 
 msgid "Search communities"
-msgstr ""
+msgstr "Søg i fællesskaber"
 
 msgid "Popular Communities"
-msgstr ""
+msgstr "Populære fællesskaber"
 
 msgid "Top Communities In Your Language"
-msgstr ""
+msgstr "Top Fællesskaber På Dit Sprog"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
-msgstr ""
+msgstr "Undskyld, vi har ikke fundet nogen. Hvorfor starter du ikke et?"
 
 msgid "Which platform would you like to explore?"
 msgstr ""
