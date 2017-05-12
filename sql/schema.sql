@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '34'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '35'::jsonb);
 
 
 -- app configuration
@@ -129,11 +129,24 @@ CREATE TABLE elsewhere
 , token                 json
 , connect_token         text
 , connect_expires       timestamptz
-, UNIQUE (platform, user_id)
+, domain                text            NOT NULL -- NULL would break the unique indexes
 , UNIQUE (participant, platform)
- );
+);
 
-CREATE UNIQUE INDEX ON elsewhere (lower(user_name), platform);
+CREATE UNIQUE INDEX elsewhere_user_id_key ON elsewhere (platform, domain, user_id);
+CREATE UNIQUE INDEX elsewhere_user_name_key ON elsewhere (lower(user_name), platform, domain);
+
+
+-- oauth credentials
+
+CREATE TABLE oauth_apps
+( platform   text          NOT NULL
+, domain     text          NOT NULL
+, key        text          NOT NULL
+, secret     text          NOT NULL
+, ctime      timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, UNIQUE (platform, domain, key)
+);
 
 
 -- tips -- all times a participant elects to tip another

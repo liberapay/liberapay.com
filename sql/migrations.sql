@@ -378,3 +378,21 @@ ALTER TABLE participants DROP CONSTRAINT participants_email_key;
 CREATE UNIQUE INDEX participants_email_key ON participants (lower(email));
 ALTER TABLE emails DROP CONSTRAINT emails_address_verified_key;
 CREATE UNIQUE INDEX emails_address_verified_key ON emails (lower(address), verified);
+
+-- migration #35
+ALTER TABLE elsewhere ADD COLUMN domain text NOT NULL DEFAULT '';
+ALTER TABLE elsewhere ALTER COLUMN domain DROP DEFAULT;
+DROP INDEX elsewhere_lower_platform_idx;
+CREATE UNIQUE INDEX elsewhere_user_name_key ON elsewhere (lower(user_name), platform, domain);
+ALTER TABLE elsewhere DROP CONSTRAINT elsewhere_platform_user_id_key;
+CREATE UNIQUE INDEX elsewhere_user_id_key ON elsewhere (platform, domain, user_id);
+CREATE TABLE oauth_apps
+( platform   text          NOT NULL
+, domain     text          NOT NULL
+, key        text          NOT NULL
+, secret     text          NOT NULL
+, ctime      timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
+, UNIQUE (platform, domain, key)
+);
+INSERT INTO app_conf (key, value) VALUES
+    ('app_name', '"Liberapay Dev"'::jsonb);
