@@ -1712,7 +1712,7 @@ class Participant(Model, MixinTeam):
 
 
     def take_over(self, account, have_confirmation=False):
-        """Given an AccountElsewhere or a tuple (platform_name, user_id),
+        """Given an AccountElsewhere or a tuple (platform_name, domain, user_id),
         associate an elsewhere account.
 
         Returns None or raises NeedConfirmation.
@@ -1730,9 +1730,9 @@ class Participant(Model, MixinTeam):
         """
 
         if isinstance(account, AccountElsewhere):
-            platform, user_id = account.platform, account.user_id
+            platform, domain, user_id = account.platform, account.domain, account.user_id
         else:
-            platform, user_id = map(str, account)
+            platform, domain, user_id = map(str, account)
 
         CREATE_TEMP_TABLE_FOR_TIPS = """
             CREATE TEMP TABLE temp_tips ON COMMIT drop AS
@@ -1777,8 +1777,8 @@ class Participant(Model, MixinTeam):
                 SELECT (e, p)::elsewhere_with_participant
                   FROM elsewhere e
                   JOIN participants p ON p.id = e.participant
-                 WHERE e.platform=%s AND e.user_id=%s
-            """, (platform, user_id), default=Exception)
+                 WHERE e.platform=%s AND e.domain=%s AND e.user_id=%s
+            """, (platform, domain, user_id), default=Exception)
             other = elsewhere.participant
 
             if self.id == other.id:
@@ -1829,8 +1829,9 @@ class Participant(Model, MixinTeam):
                 UPDATE elsewhere
                    SET participant=%s
                  WHERE platform=%s
+                   AND domain=%s
                    AND user_id=%s
-            """, (self.id, platform, user_id))
+            """, (self.id, platform, domain, user_id))
 
             # Turn pledges into actual tips
             if old_tips:
@@ -1854,8 +1855,9 @@ class Participant(Model, MixinTeam):
                 """, dict(dead=other.id))
 
             # Log the event
-            payload = dict(platform=platform, user_id=user_id, owner=other.id)
-            self.add_event(cursor, 'take-over', payload)
+            self.add_event(cursor, 'take-over', dict(
+                platform=platform, domain=domain, user_id=user_id, owner=other.id
+            ))
 
         if old_tips:
             self.notify_patrons(elsewhere, tips=old_tips)
@@ -1866,20 +1868,20 @@ class Participant(Model, MixinTeam):
         self.update_receiving()
         self.update_giving()
 
-    def delete_elsewhere(self, platform, user_id):
-        """Deletes account elsewhere unless the user would not be able
-        to log in anymore.
-        """
+    def delete_elsewhere(self, platform, domain, user_id):
         user_id = str(user_id)
         with self.db.get_cursor() as c:
             c.one("""
                 DELETE FROM elsewhere
                 WHERE participant=%s
                 AND platform=%s
+                AND domain=%s
                 AND user_id=%s
                 RETURNING participant
-            """, (self.id, platform, user_id), default=NonexistingElsewhere)
-            self.add_event(c, 'delete_elsewhere', dict(platform=platform, user_id=user_id))
+            """, (self.id, platform, domain, user_id), default=NonexistingElsewhere)
+            self.add_event(c, 'delete_elsewhere', dict(
+                platform=platform, domain=domain, user_id=user_id
+            ))
         self.update_avatar()
 
     def to_dict(self, details=False, inquirer=None):

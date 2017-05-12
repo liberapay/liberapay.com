@@ -89,14 +89,14 @@ class AccountElsewhere(Model):
             SELECT (e, p)::elsewhere_with_participant
               FROM elsewhere e
               JOIN participants p ON p.id = e.participant
+              JOIN jsonb_array_elements(%s::jsonb) a ON a->>0 = e.user_id AND a->>1 = e.domain
              WHERE e.platform = %s
-               AND e.user_id = any(%s)
 
-        """, (platform, [i.user_id for i in user_infos]))
-        found = {a.user_id: a for a in found}
+        """, (json.dumps([[i.user_id, i.domain] for i in user_infos]), platform))
+        found = {(a.user_id, a.domain): a for a in found}
         for i in user_infos:
-            if i.user_id in found:
-                accounts.append(found[i.user_id])
+            if (i.user_id, i.domain) in found:
+                accounts.append(found[(i.user_id, i.domain)])
             else:
                 accounts.append(cls.upsert(i))
         return accounts
@@ -144,9 +144,9 @@ class AccountElsewhere(Model):
             account = cls.db.one("""
                 UPDATE elsewhere
                    SET ({0}) = ({1})
-                 WHERE platform=%s AND user_id=%s
+                 WHERE platform=%s AND domain=%s AND user_id=%s
              RETURNING elsewhere.*::elsewhere_with_participant
-            """.format(cols, placeholders), vals+(i.platform, i.user_id))
+            """.format(cols, placeholders), vals+(i.platform, i.domain, i.user_id))
             if not account:
                 raise
 
