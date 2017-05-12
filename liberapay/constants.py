@@ -60,6 +60,13 @@ DONATION_LIMITS = {
 }
 DONATION_WEEKLY_MIN, DONATION_WEEKLY_MAX = DONATION_LIMITS_WEEKLY
 
+DOMAIN_RE = re.compile(r'''
+    ^
+    ([a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+
+    [a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?
+    $
+''', re.VERBOSE)
+
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)

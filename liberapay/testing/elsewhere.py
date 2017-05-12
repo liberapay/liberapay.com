@@ -160,6 +160,24 @@ linuxfr = lambda: {
     "created_at": "2009-08-14T10:31:22.000+02:00"
 }
 
+mastodon = lambda: {
+    "id": 1964,
+    "username": "Liberapay",
+    "acct": "Liberapay",
+    "display_name": "Liberapay",
+    "locked": False,
+    "created_at": "2017-04-06T12:54:56.938Z",
+    "followers_count": 219,
+    "following_count": 53,
+    "statuses_count": 52,
+    "note": "<p><a href=\"https://liberapay.com/\" rel=\"nofollow noopener\" target=\"_blank\"><span class=\"invisible\">https://</span><span class=\"\">liberapay.com/</span><span class=\"invisible\"></span></a> is a recurrent donations platform. It&apos;s run by a nonprofit organization based in France and its source code is public.</p>",
+    "url": "https://mastodon.rocks/@Liberapay",
+    "avatar": "https://mastodon.rocks/system/accounts/avatars/000/001/964/original/eeaf9ed6fa5eb7b3.png?1491484129",
+    "avatar_static": "https://mastodon.rocks/system/accounts/avatars/000/001/964/original/eeaf9ed6fa5eb7b3.png?1491484129",
+    "header": "https://mastodon.rocks/headers/original/missing.png",
+    "header_static": "https://mastodon.rocks/headers/original/missing.png"
+}
+
 openstreetmap = lambda: ET.fromstring("""
  <!-- copied from http://wiki.openstreetmap.org/wiki/API_v0.6 -->
  <osm version="0.6" generator="OpenStreetMap server">

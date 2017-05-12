@@ -3,7 +3,7 @@
 [---]
 
 pledgees = website.db.all("""
-    SELECT p.receiving, p.avatar_url, e.platform, e.user_name
+    SELECT p.receiving, p.avatar_url, e.platform, e.user_name, e.domain
          , (SELECT ctime FROM current_tips WHERE tippee = p.id ORDER BY ctime DESC LIMIT 1) as ctime
       FROM participants p
       JOIN elsewhere e ON e.participant = p.id
@@ -35,8 +35,9 @@ subhead = _("Pledges")
     % if pledgees
         <ul class="people">
         % for p in pledgees
+            % set slug = p.user_name + ('@' + p.domain if p.domain else '')
             <li class="mini-user">
-                <a href="/on/{{ p.platform }}/{{ p.user_name }}/">
+                <a href="/on/{{ p.platform }}/{{ slug }}/">
                     {{ avatar_img(p) }}
                     <div class="name">{{ p.user_name }}</div>
                     <div class="amount">{{ format_currency(p.receiving, 'EUR') }}</div>

@@ -1,3 +1,5 @@
+# coding: utf8
+
 from datetime import timedelta
 import json
 
@@ -30,15 +32,24 @@ if action == 'connect' and user.ANON:
 
 p = Participant.from_id(p_id) if p_id else user
 
+domain = ''
+if user_id:
+    if platform.single_domain:
+        user_id = '>' + user_id.lstrip('@')
+    else:
+        user_id = user_id.lstrip('@')
+        split = user_id.rsplit('@', 1)
+        if len(split) < 2:
+            raise response.error(400, _("The address you provided is not valid: it doesn't contain any “@” symbol."))
+        user_id, domain = '>' + split[0], split[1].lower()
+        if not constants.DOMAIN_RE.match(domain):
+            raise response.error(400, _("'{0}' is not a valid domain name.", domain))
+
 team = not p.ANON and p.kind != 'individual' and hasattr(platform, 'is_team_member')
-if team and not user_id:
-    user_id = body.get('user_name')
-    user_id = user_id and '>'+user_id
+if user_id or (not team and platform.single_domain) or action != 'connect':
+    url, query_id, query_data = platform.get_auth_url(domain, user=user)
 
-if user_id or not team or action != 'connect':
-    url, query_id, query_data = platform.get_auth_url(user=user)
-
-    cookie_name = (platform.name+'_'+query_id).encode('ascii')
+    cookie_name = (platform.name+'_'+domain+('_' if domain else '')+query_id).encode('ascii')
     cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id, p_id]))
     response.set_cookie(cookie_name, cookie_value, expires=COOKIE_TIMEOUT)
 
@@ -52,9 +63,18 @@ title = _("Which account?")
 % block panel_body
 <form action="" method="POST">
     % include "templates/form-repost.html"
+    % if platform.single_domain
     <p>{{ _("Please enter the name of the {0} account you would like to connect:",
             platform.display_name) }}</p>
-    <input class="form-control" name="user_name"
+    <input class="form-control" name="user_id" required
            placeholder="{{ _('{0} username', platform.display_name) }}" />
+    % else
+    <p>{{ _("Please enter the address of the {0} account you would like to connect:",
+            platform.display_name) }}</p>
+    <input class="form-control" name="user_id" required pattern=".*@.*"
+           placeholder="{{ platform.example_account_address(_) }}" />
+    % endif
+    <br>
+    <button class="btn btn-primary">{{ _("Connect") }}</button>
 </form>
 % endblock

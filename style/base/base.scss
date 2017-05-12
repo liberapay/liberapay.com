@@ -131,18 +131,17 @@ textarea.vertical-resize {
 }
 
 div.account {
-    display: inline-block;
-    position: relative;
-    text-align: center;
-    vertical-align: top;
-    width: 135px;
-    word-wrap: break-word;
+    margin-bottom: 0.9em;
+    padding: 0.1em 0;
+    .auth-button {
+        display: inline-block;
+    }
 }
-
-div.account-action {
-    position: absolute;
-    right: 0;
-    top: 1px;
+a.account-link {
+    text-decoration: none;
+}
+.account-username {
+    margin-left: 0.5ex;
 }
 
 button.close {
@@ -151,6 +150,10 @@ button.close {
 
 img.account-type {
     height: 32px;
+}
+
+.inline-block {
+    display: inline-block;
 }
 
 .panel-body {

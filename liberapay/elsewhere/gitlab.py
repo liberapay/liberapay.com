@@ -16,6 +16,7 @@ class GitLab(PlatformOAuth2):
     # GitLab uses https://github.com/doorkeeper-gem/doorkeeper
     auth_url = 'https://gitlab.com/oauth/authorize'
     access_token_url = 'https://gitlab.com/oauth/token'
+    can_auth_with_client_credentials = True
 
     # API attributes
     # http://doc.gitlab.com/ce/api/

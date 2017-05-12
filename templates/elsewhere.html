@@ -2,35 +2,31 @@
 
 % macro account_elsewhere(platform, accounts, auth_button)
     % set account = accounts.get(platform.name, None)
-    <div class="account panel {{ 'panel-primary' if account and edit else 'panel-default' }}">
-    <div class="panel-body">
-        <div class="account-action">
-            % if edit
-                % if account == None
-                    % call auth_button(platform.name, 'connect', btn_cls='close', participant=participant)
-                        +
-                    % endcall
-                % else
-                    <form action="/{{ account.participant.username }}/elsewhere/delete"
-                          method="POST" class="js-submit">
-                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                         <input type="hidden" name="platform" value="{{ platform.name }}">
-                         <input type="hidden" name="user_id" value="{{ account.user_id }}">
-                         <button class="close" title="{{ _('Disconnect') }}">&times;</button>
-                    </form>
-                % endif
-            % endif
-        </div>
-        <img class="account-type" src="{{ platform.logo }}" />
-        <div>
+    <div class="account">
+        % if account
+            <a class="account-link" rel="me" href="{{ account.html_url }}">
+                <img class="account-type" src="{{ platform.logo }}" />
+                <span class="account-username">{{ account.friendly_name_long }}</span>
+            </a>
+        % else
+            <img class="account-type" src="{{ platform.logo }}" />
+            <span class="account-username">{{ platform.display_name }}</span>
+        % endif
+        % if edit
+            &nbsp;&nbsp;&nbsp;
             % if account
-                <a class="account-username" rel="me" href="{{ account.html_url }}">{{
-                    account.friendly_name_long
-                }}</a>
+            <form action="/{{ account.participant.username }}/elsewhere/delete"
+                  method="POST" class="inline-block js-submit">
+                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                 <input type="hidden" name="platform" value="{{ platform.name }}">
+                 <input type="hidden" name="user_id" value="{{ account.user_id }}">
+                 <button class="btn btn-danger btn-sm">{{ _('Disconnect') }}</button>
+            </form>
             % else
-                {{ platform.display_name }}
+                % call auth_button(platform.name, 'connect', btn_cls='btn btn-default btn-sm', participant=participant)
+                    {{ _("Connect") }}
+                % endcall
             % endif
-        </div>
-    </div>
+        % endif
     </div>
 % endmacro

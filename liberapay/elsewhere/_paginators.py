@@ -63,9 +63,12 @@ def query_param_paginator(param, **kw):
 
 
 def header_links_paginator():
+    # https://tools.ietf.org/html/rfc5988
     # https://developer.github.com/v3/#pagination
     def f(self, response, parsed):
-        links = {k: _strip_prefix(self.api_url, v['url'])
+        domain = urlsplit(response.request.url).hostname
+        api_url = self.api_url.format(domain=domain)
+        links = {k: _strip_prefix(api_url, v['url'])
                  for k, v in response.links.items()
                  if k in links_keys}
         total_count = -1 if links else len(parsed)

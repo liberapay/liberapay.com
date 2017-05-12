@@ -100,7 +100,7 @@ class TestElsewhere(Harness):
     def test_user_pages(self, get_user_info):
         for platform in self.platforms:
             alice = UserInfo(platform=platform.name, user_id='0',
-                             user_name='alice', is_team=False)
+                             user_name='alice', is_team=False, domain='')
             get_user_info.side_effect = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
@@ -117,11 +117,11 @@ class TestElsewhere(Harness):
 
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_page_doesnt_fail_on_at_sign(self, get_user_info):
-        def f(k, v, *a):
-            if (k, v) == ('user_name', 'alice'):
+        def f(domain, k, v, *a):
+            if (domain, k, v) == ('', 'user_name', 'alice'):
                 return UserInfo(
                     platform='twitter', user_id='0', user_name='alice',
-                    is_team=False
+                    is_team=False, domain=''
                 )
             raise Exception
         get_user_info.side_effect = f
@@ -132,7 +132,7 @@ class TestElsewhere(Harness):
         user_name = 'adhsjakdjsdkjsajdhksda'
         error = "There doesn't seem to be a user named %s on %s."
         for platform in self.platforms:
-            if not hasattr(platform, 'api_user_name_info_path'):
+            if not hasattr(platform, 'api_user_name_info_path') or not platform.single_domain:
                 continue
             r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
             expected = error % (user_name, platform.display_name)

@@ -9,6 +9,7 @@ def _import():
     from .gitlab import GitLab  # noqa
     from .google import Google  # noqa
     from .linuxfr import LinuxFr  # noqa
+    from .mastodon import Mastodon  # noqa
     from .openstreetmap import OpenStreetMap  # noqa
     from .twitter import Twitter  # noqa
     return list(locals().values())

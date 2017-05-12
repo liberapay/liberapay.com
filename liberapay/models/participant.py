@@ -358,12 +358,13 @@ class Participant(Model, MixinTeam):
 
     def resolve_stub(self):
         rec = self.db.one("""
-            SELECT platform, user_name
+            SELECT platform, user_name, domain
               FROM elsewhere
              WHERE participant = %s
         """, (self.id,))
         if rec:
-            return '/on/%s/%s/' % (quote(rec.platform), quote(rec.user_name))
+            slug = quote(rec.user_name) + ('@' + rec.domain if rec.domain else '')
+            return '/on/%s/%s/' % (quote(rec.platform), slug)
         return None
 
 
@@ -1608,6 +1609,7 @@ class Participant(Model, MixinTeam):
                      , p.username
                      , e.platform
                      , e.user_name
+                     , e.domain
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                   JOIN elsewhere e ON e.participant = t.tippee
