@@ -1,4 +1,5 @@
 INSERT INTO app_conf (key, value) VALUES
+    ('app_name', '"Liberapay Dev"'::jsonb),
     ('bitbucket_callback', '"http://127.0.0.1:8339/on/bitbucket/associate"'::jsonb),
     ('bitbucket_id', '"Fu9aQHB64WdVR7UxY4"'::jsonb),
     ('bitbucket_secret', '"Y5G6A9BaWDxn2gLKZwwkrGtVE3Zjd7y7"'::jsonb),
