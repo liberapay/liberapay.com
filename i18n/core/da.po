@@ -83,7 +83,7 @@ msgstr "Se faktura"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been accepted and paid - Liberapay"
-msgstr "Din faktura for {0} er blevet accepteret og udbetalt - Liberapay"
+msgstr "Din faktura til {0} er blevet accepteret og udbetalt - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
@@ -154,7 +154,10 @@ msgstr "Bankoverførslen til din Liberapay tegnebog er lykkedes"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} you sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Vi er glade for at kunne meddele at overførslen fra din bankkonto er lykkedes. Af de{0} du har sent, gik {1} ind på din Liberapay tegnebog, og {2} blev betalt i gebyrer."
+msgstr ""
+"Vi er glade for at kunne meddele at overførslen fra din bankkonto er "
+"lykkedes. Af de{0} du har sent, gik {1} ind på din Liberapay-tegnebog, og {2}"
+" blev betalt i gebyrer."
 
 msgid "View receipt"
 msgstr "Se kvittering"
@@ -1738,7 +1741,7 @@ msgstr "fejlmeddelelse: {0}"
 
 #, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
-msgstr "refusion af mislykket udtræk (fejlmeddelelse: {0})"
+msgstr "refusion af mislykket udbetaling (fejlmeddelelse: {0})"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2232,7 +2235,9 @@ msgstr "Denne hjemmeside er hosted på {0} af:"
 
 #, python-brace-format
 msgid "The publication director is Liberapay's legal representative, currently {0}."
-msgstr "Publikations-direktøren er i Liberapays juridiske repræsentant, I øjeblikket er det {0}."
+msgstr ""
+"Publikations-direktøren er Liberapays juridiske repræsentant, I øjeblikket "
+"er det {0}."
 
 msgid "Terms of Service"
 msgstr "Servicevilkår"
@@ -2286,191 +2291,235 @@ msgstr "{0} opbevares hos Liberapay."
 #, python-brace-format
 msgid "The last payday was {0} ago and transferred {1} between {2} users."
 msgstr ""
+"Den sidste betalingsdag var for {0} siden og overførte {1} mellem {2} "
+"brugere."
 
 #, python-brace-format
 msgid "{0} participants gave money."
-msgstr ""
+msgstr "{0} deltagere gav penge."
 
 #, python-brace-format
 msgid "{0} received money."
-msgstr ""
+msgstr "{0} modtog penge."
 
 #, python-brace-format
 msgid "{0} did both."
-msgstr ""
+msgstr "{0} gjorde begge dele."
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
 msgid_plural "On average, people who donate give {0} each to {n} other users."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "I gennemsnit giver folk der donerer {0} hver til en anden bruger."
+msgstr[1] "I gennemsnit giver folk der donerer {0} hver til {n} andre brugere."
 
 msgid "Open Accounts"
-msgstr ""
+msgstr "Åbne Kontoer"
 
 msgid "Number of open individual and organization accounts on Liberapay"
-msgstr ""
+msgstr "Antal åbne individuelle- og organisations-konti hos Liberapay"
 
 msgid "Active Users"
-msgstr ""
+msgstr "Aktive Brugere"
 
 msgid "Users that gave and/or received money within Liberapay (per week)"
-msgstr ""
+msgstr "Brugere der gav og/eller modtog penge inden for Liberapay (pr. uge)"
 
 msgid "Weekly Gifts (€)"
-msgstr ""
+msgstr "Ugentlige Gaver (€)"
 
 msgid "Money transferred within Liberapay (per week)"
-msgstr ""
+msgstr "Penge overført inden for Liberapay (per uge)"
 
 msgid "Deposits (€)"
-msgstr ""
+msgstr "Indlån (€)"
 
 msgid "Money moved into Liberapay"
-msgstr ""
+msgstr "Penge flyttet til Liberapay"
 
 msgid "Withdrawals (€)"
-msgstr ""
+msgstr "Udbetalinger (€)"
 
 msgid "Money moved out of Liberapay"
-msgstr ""
+msgstr "Penge trukket ud af Liberapay"
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
 msgstr ""
+"Et Liberapay-team koordinerer donationer fra mange donorer til mange "
+"modtagere. Donorerne vælger hvor meget de vil give, modtagerne bestemmer "
+"hvordan de deler pengene, Liberapay beregner og udfører overførsler fra "
+"donorer til modtagere."
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
 msgstr ""
+"Teams er for peer-to-peer-donationer, de kan ikke bruges af en juridisk "
+"enhed til at distribuere donationer til sine medlemmer."
 
 msgid "Creating a team"
-msgstr ""
+msgstr "At skabe et team"
 
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
-msgstr ""
+msgstr "Du skal {0}logge ind på din egen konto{1} først."
 
 msgid "Becoming a team member"
-msgstr ""
+msgstr "Hvordan man bliver medlem af et team"
 
 msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
 msgstr ""
+"Når du har bidraget til et holds projekt, så bed dets medlemmer om at "
+"invitere dig. Glem ikke at fortælle dem hvad dit brugernavn er."
 
 msgid "Sharing the money"
-msgstr ""
+msgstr "At dele pengene"
 
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr ""
+"Der er ikke noget hierarki på et team, alle deres medlemmer er lige og "
+"sætter deres egne andel."
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
 msgstr ""
+"Du kan ændre din andel fra {0}dit teams kontrolpanel{1}. Den indeholder "
+"tabeller, der viser de nominelle andele for alle medlemmer for den næste og "
+"forrige betalingsdag, samt et skøn over de faktiske beløb de vil modtage på "
+"næste betalingsdag."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr ""
+"De nominelle andele er de rå tal, som medlemmerne indtaster selv. De "
+"faktiske andele beregnes af systemet: først opsummerer det de nominelle "
+"andele, så beregnes den procentdel, som hver repræsenterer, og endelig "
+"anvender disse procentsatser til den disponible indkomst. Nominelle andele "
+"fungerer også som maksimumsbeløb: de faktiske andele er aldrig højere end de "
+"nominelle, selvom der er ekstra indtægter til rådighed."
 
 msgid "Regulation of take amounts"
-msgstr ""
+msgstr "Regulering af andels beløb"
 
 msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
 msgstr ""
+"Nominelle andel er begrænsede, de kan ikke hæves højere end en maksimal "
+"beregning baseret på de nominelle andele på tidspunktet for den foregående "
+"betalingsdag. Denne forordning er beregnet til at reducere risikoen for "
+"misbrug af team-medlemmer med dårlige intentioner."
 
 msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
 msgstr ""
+"Den nøjagtige grænse er maksimum af disse fire værdier: tallet 1, to gange "
+"medlemmets andel i den foregående betalingsdag, medlemmets andel i den "
+"foregåendebetalingsdag + en forholdsmæssig andel af ubrugt indkomst, "
+"medianen af andele forrige betalingsdag."
 
 msgid "Removing team membership"
-msgstr ""
+msgstr "At fjerne team medlemskab"
 
 #, python-brace-format
 msgid "You can leave a team from {0}your teams dashboard{1}."
-msgstr ""
+msgstr "Du kan forlade et team fra {0}dit teams kontrolpanel{1}."
 
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
 msgstr ""
+"At smide et medlem ud af et team er endnu ikke implementeret. Kontakt "
+"venligst support med bevis for at medlemmet skal udmeldes og at der er "
+"enighed om det blandt de øvrige medlemmer."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr ""
+"Fællesskaber giver dig mulighed for at finde folk der arbejder på ting du er "
+"interesseret i. Du kan også abonnere på deres nyhedsbreve for at holde dig "
+"informeret."
 
 msgid "Start a new community"
-msgstr ""
+msgstr "Start et ny fællesskab"
 
 #, python-brace-format
 msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "De er {n} fællesskab på Liberapay."
+msgstr[1] "De er {n} fællesskaber på Liberapay."
 
 msgid "Search communities"
-msgstr ""
+msgstr "Søg i fællesskaber"
 
 msgid "Popular Communities"
-msgstr ""
+msgstr "Populære fællesskaber"
 
 msgid "Top Communities In Your Language"
-msgstr ""
+msgstr "Top Fællesskaber På Dit Sprog"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
-msgstr ""
+msgstr "Undskyld, vi har ikke fundet nogen. Hvorfor starter du ikke et?"
 
 msgid "Which platform would you like to explore?"
-msgstr ""
+msgstr "Hvilken platform vil du udforske?"
 
 #, python-brace-format
 msgid "{n} connected account"
 msgid_plural "{n} connected accounts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} forbunden konto"
+msgstr[1] "{n} forbundne kontoer"
 
 #, python-brace-format
 msgid "Explore {0}"
-msgstr ""
+msgstr "Udforsk {0}"
 
 #, python-brace-format
 msgid "Explore Your {0} Contacts"
-msgstr ""
+msgstr "Udforsk Dine {0} Kontakter"
 
 #, python-brace-format
 msgid "Here are {0} random Liberapay users who have connected their {1} account:"
 msgstr ""
+"Her er {0} tilfældige Liberapay brugere som har forbundet deres {1} konto:"
 
 #, python-brace-format
 msgid "This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order."
 msgstr ""
+"Denne side viser {0} Liberapay brugere som har fobundet deres {1} konto, i "
+"modsat kronologisk orden."
 
 #, python-brace-format
 msgid "Here are the {0} Liberapay users who have connected their {1} account:"
-msgstr ""
+msgstr "Her er de {0} Liberapay brugere som har forbundet deres {1} konto:"
 
 msgid "Next Page →"
-msgstr ""
+msgstr "Næste side →"
 
 msgid "View More"
-msgstr ""
+msgstr "Se Mere"
 
 msgid "Explore other platforms:"
-msgstr ""
+msgstr "Udforsk andre platforme:"
 
 msgid "Liberapay provides several ways of finding great people to donate to:"
 msgstr ""
+"Liberapay tilbyder flere måder at finde fantastiske mennesker at donere til:"
 
 msgid "A team is a group of users working on a specific project."
-msgstr ""
+msgstr "Et team er en gruppe af brugere der arbejder på et specifikt projekt."
 
 msgid "Explore Teams"
-msgstr ""
+msgstr "Udforsk teams"
 
 msgid "Great nonprofits and companies trying to improve the world."
 msgstr ""
+"Seje nonprofit-organisationer og -virksomheder, der forsøger at forbedre "
+"verden."
 
 msgid "Explore Organizations"
-msgstr ""
+msgstr "Udforsk Organisationer"
 
 msgid "People like you who contribute to the commons (art, knowledge, software, etc). "
-msgstr ""
+msgstr "Folk som dig, der bidrager til commons (kunst, viden, software osv.). "
 
 msgid "Explore Individuals"
-msgstr ""
+msgstr "Udforsk individer"
 
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
 msgstr ""
+"Liberapay tillader at man kan tilbyde penge til folk der ikke har tilmeldt "
+"sig sitet endnu."
 
 msgid "Explore Pledges"
 msgstr ""
