@@ -81,7 +81,7 @@ if [ -e sql/branch.sql ]; then
     git rm sql/branch.sql
     echo "sql/branch.sql has been merged into sql/schema.sql and sql/migrations.sql"
     read -p "Please make the necessary manual modifications to those files now, then press Enter to continue... " enter
-    git add sql/{schema,migrations}.sql
+    git add sql/{schema,migrations,app-conf-*}.sql
     git commit -m "merge branch.sql"
 
     # Deployment options
