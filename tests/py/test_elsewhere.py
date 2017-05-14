@@ -12,6 +12,13 @@ import liberapay.testing.elsewhere as user_info_examples
 from liberapay.utils import b64encode_s
 
 
+def get_user_info_example(platform_name):
+    r = getattr(user_info_examples, platform_name)()
+    if isinstance(r, tuple) and len(r) == 2:
+        return r
+    return '', r
+
+
 class TestElsewhere(Harness):
 
     def test_associate_csrf(self):
@@ -27,8 +34,8 @@ class TestElsewhere(Harness):
 
     def test_extract_user_info(self):
         for platform in self.platforms:
-            user_info = getattr(user_info_examples, platform.name)()
-            r = platform.extract_user_info(user_info)
+            domain, user_info = get_user_info_example(platform.name)
+            r = platform.extract_user_info(user_info, domain)
             assert isinstance(r, UserInfo)
             assert r.user_id is not None
             assert len(r.user_id) > 0
@@ -39,8 +46,8 @@ class TestElsewhere(Harness):
     def test_connect_success(self, gui, gusi, ft):
         alice = self.make_participant('alice', elsewhere='twitter')
 
-        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2})
-        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
+        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2}, '')
+        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1}, '')
         ft.return_value = None
 
         then = b'/foobar'
@@ -58,8 +65,8 @@ class TestElsewhere(Harness):
         alice = self.make_participant('alice')
         self.make_participant('bob')
 
-        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2})
-        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1})
+        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2}, '')
+        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1}, '')
         ft.return_value = None
 
         cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
@@ -92,8 +99,8 @@ class TestElsewhere(Harness):
 
     def test_upsert(self):
         for platform in self.platforms:
-            user_info = getattr(user_info_examples, platform.name)()
-            account = AccountElsewhere.upsert(platform.extract_user_info(user_info))
+            domain, user_info = get_user_info_example(platform.name)
+            account = AccountElsewhere.upsert(platform.extract_user_info(user_info, domain))
             assert isinstance(account, AccountElsewhere)
 
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
@@ -207,14 +214,14 @@ class TestFriendFinder(Harness):
 
     def test_twitter_get_friends_for(self):
         platform = self.platforms.twitter
-        user_info = platform.extract_user_info(user_info_examples.twitter())
+        user_info = platform.extract_user_info(user_info_examples.twitter(), '')
         account = AccountElsewhere.upsert(user_info)
         friends, nfriends, pages_urls = platform.get_friends_for(account)
         assert nfriends > 0
 
     def test_github_get_friends_for(self):
         platform = self.platforms.github
-        user_info = platform.extract_user_info(user_info_examples.github())
+        user_info = platform.extract_user_info(user_info_examples.github(), '')
         account = AccountElsewhere.upsert(user_info)
         friends, nfriends, pages_urls = platform.get_friends_for(account)
         assert nfriends > 0
@@ -234,7 +241,7 @@ class TestElsewhereDelete(Harness):
         platform = 'twitter'
         alice = self.make_participant('alice', elsewhere=platform)
         self.make_elsewhere('github', '1', 'alice')
-        alice.take_over(('github', '1'))
+        alice.take_over(('github', '', '1'))
         data = dict(platform=platform, user_id=str(alice.id))
         response = self.client.PxST('/alice/elsewhere/delete', data, auth_as=alice)
         assert response.code == 302
