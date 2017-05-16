@@ -53,18 +53,6 @@ class AccountElsewhere(Model):
         """, (id,))
 
     @classmethod
-    def from_user_id(cls, platform, user_id):
-        """Return an existing AccountElsewhere based on platform and user_id.
-        """
-        return cls._from_thing('user_id', platform, user_id)
-
-    @classmethod
-    def from_user_name(cls, platform, user_name):
-        """Return an existing AccountElsewhere based on platform and user_name.
-        """
-        return cls._from_thing('user_name', platform, user_name)
-
-    @classmethod
     def _from_thing(cls, thing, platform, value, domain):
         assert thing in ('user_id', 'user_name')
         if thing == 'user_name':
