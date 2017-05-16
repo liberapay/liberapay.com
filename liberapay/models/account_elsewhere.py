@@ -53,18 +53,6 @@ class AccountElsewhere(Model):
         """, (id,))
 
     @classmethod
-    def from_user_id(cls, platform, user_id):
-        """Return an existing AccountElsewhere based on platform and user_id.
-        """
-        return cls._from_thing('user_id', platform, user_id)
-
-    @classmethod
-    def from_user_name(cls, platform, user_name):
-        """Return an existing AccountElsewhere based on platform and user_name.
-        """
-        return cls._from_thing('user_name', platform, user_name)
-
-    @classmethod
     def _from_thing(cls, thing, platform, value, domain):
         assert thing in ('user_id', 'user_name')
         if thing == 'user_name':
@@ -89,14 +77,14 @@ class AccountElsewhere(Model):
             SELECT (e, p)::elsewhere_with_participant
               FROM elsewhere e
               JOIN participants p ON p.id = e.participant
+              JOIN jsonb_array_elements(%s::jsonb) a ON a->>0 = e.user_id AND a->>1 = e.domain
              WHERE e.platform = %s
-               AND e.user_id = any(%s)
 
-        """, (platform, [i.user_id for i in user_infos]))
-        found = {a.user_id: a for a in found}
+        """, (json.dumps([[i.user_id, i.domain] for i in user_infos]), platform))
+        found = {(a.user_id, a.domain): a for a in found}
         for i in user_infos:
-            if i.user_id in found:
-                accounts.append(found[i.user_id])
+            if (i.user_id, i.domain) in found:
+                accounts.append(found[(i.user_id, i.domain)])
             else:
                 accounts.append(cls.upsert(i))
         return accounts
@@ -141,12 +129,22 @@ class AccountElsewhere(Model):
                 """.format(cols, placeholders), (id,)+vals)
         except IntegrityError:
             # The account is already in the DB, update it instead
+            if i.user_name and i.user_id:
+                # Set user_id if it was missing
+                cls.db.run("""
+                    UPDATE elsewhere
+                       SET user_id = %s
+                     WHERE platform=%s AND domain=%s AND lower(user_name)=%s
+                       AND user_id IS NULL
+                """, (i.user_id, i.platform, i.domain, i.user_name.lower()))
+            elif not i.user_id:
+                return cls._from_thing('user_name', i.platform, i.user_name, i.domain)
             account = cls.db.one("""
                 UPDATE elsewhere
                    SET ({0}) = ({1})
-                 WHERE platform=%s AND user_id=%s
+                 WHERE platform=%s AND domain=%s AND user_id=%s
              RETURNING elsewhere.*::elsewhere_with_participant
-            """.format(cols, placeholders), vals+(i.platform, i.user_id))
+            """.format(cols, placeholders), vals+(i.platform, i.domain, i.user_id))
             if not account:
                 raise
 
@@ -270,8 +268,8 @@ def get_account_elsewhere(website, state, api_lookup=True):
         account = AccountElsewhere._from_thing(key, platform.name, uid, domain)
     except UnknownAccountElsewhere:
         account = None
-    if not account:
-        if not api_lookup:
+    if not account or not account.user_id:
+        if not account and not api_lookup:
             raise response.error(404)
         try:
             user_info = platform.get_user_info(domain, key, uid)

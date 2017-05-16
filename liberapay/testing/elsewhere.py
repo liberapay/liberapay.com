@@ -160,7 +160,7 @@ linuxfr = lambda: {
     "created_at": "2009-08-14T10:31:22.000+02:00"
 }
 
-mastodon = lambda: {
+mastodon = lambda: ('mastodon.rocks', {
     "id": 1964,
     "username": "Liberapay",
     "acct": "Liberapay",
@@ -176,7 +176,7 @@ mastodon = lambda: {
     "avatar_static": "https://mastodon.rocks/system/accounts/avatars/000/001/964/original/eeaf9ed6fa5eb7b3.png?1491484129",
     "header": "https://mastodon.rocks/headers/original/missing.png",
     "header_static": "https://mastodon.rocks/headers/original/missing.png"
-}
+})
 
 openstreetmap = lambda: ET.fromstring("""
  <!-- copied from http://wiki.openstreetmap.org/wiki/API_v0.6 -->

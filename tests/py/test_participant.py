@@ -112,15 +112,15 @@ class TestParticipant(Harness):
 
     def test_cant_take_over_claimed_participant_without_confirmation(self):
         with self.assertRaises(NeedConfirmation):
-            self.alice.take_over(('twitter', str(self.bob.id)))
+            self.alice.take_over(('twitter', '', str(self.bob.id)))
 
     def test_connecting_unknown_account_fails(self):
         with self.assertRaises(Exception):
-            self.bob.take_over(('github', 'jim'))
+            self.bob.take_over(('github', '', 'jim'))
 
     def test_delete_elsewhere_nonexisting(self):
         with pytest.raises(NonexistingElsewhere):
-            self.alice.delete_elsewhere('github', 1)
+            self.alice.delete_elsewhere('github', '', 1)
 
     def test_delete_elsewhere(self):
         g = self.make_elsewhere('github', 1, 'alice')
@@ -130,7 +130,7 @@ class TestParticipant(Harness):
         accounts = alice.get_accounts_elsewhere()
         assert accounts['twitter'] and accounts['github']
         # do the thing
-        alice.delete_elsewhere('twitter', alice.id)
+        alice.delete_elsewhere('twitter', '', alice.id)
         # unit test
         accounts = alice.get_accounts_elsewhere()
         assert accounts.get('twitter') is None and accounts['github']

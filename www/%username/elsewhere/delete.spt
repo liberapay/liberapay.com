@@ -7,9 +7,10 @@ request.allow("POST")
 participant = get_participant(state, restrict=True, allow_member=True)
 
 platform = request.body["platform"]
+domain = request.body.get("domain", '')
 user_id = request.body["user_id"]
 
-participant.delete_elsewhere(platform, user_id)
+participant.delete_elsewhere(platform, domain, user_id)
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
     response.redirect('..')

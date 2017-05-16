@@ -70,7 +70,7 @@ class Bountysource(Platform):
                 for k, v in parse_qs(querystring).items()}
         info.pop('access_token')
         info.pop('query_id')
-        return self.extract_user_info(info)
+        return self.extract_user_info(info, '')
 
     def handle_auth_callback(self, domain, url, query_id, unused_arg):
         sess = self.get_auth_session(None, token=query_id)
