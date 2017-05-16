@@ -19,6 +19,7 @@
                   method="POST" class="inline-block js-submit">
                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                  <input type="hidden" name="platform" value="{{ platform.name }}">
+                 <input type="hidden" name="domain" value="{{ account.domain }}">
                  <input type="hidden" name="user_id" value="{{ account.user_id }}">
                  <button class="btn btn-danger btn-sm">{{ _('Disconnect') }}</button>
             </form>

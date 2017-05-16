@@ -194,27 +194,36 @@ class Platform(object):
                 log_lvl = logging.CRITICAL
             logger.log(log_lvl, log_msg)
 
-    def extract_user_info(self, info):
+    def extract_user_info(self, info, source):
         """
         Given a user_info object of variable type (depending on the platform),
         extract the relevant information by calling the platform's extractors
         (`x_user_name`, `x_user_id`, etc).
+
+        `source` must be the domain from which the data was obtained. If it
+        doesn't match the account's domain, then the returned object only
+        contains the account's `domain` and `user_name`, nothing else.
 
         Returns a `UserInfo`. The `user_id` attribute is guaranteed to have a
         unique non-empty value.
         """
         r = UserInfo(platform=self.name)
         info = self.x_user_info(r, info, info)
+        r.domain = self.x_domain(r, info, '')
+        assert r.domain is not None
+        if not self.single_domain:
+            assert r.domain
         r.user_name = self.x_user_name(r, info, None)
         if self.x_user_id.__func__ is not_available:
             r.user_id = r.user_name
-        else:
+        elif source == r.domain:
             r.user_id = self.x_user_id(r, info)
+        else:
+            r.user_id = None
+            return r
         assert r.user_id is not None
         r.user_id = str(r.user_id)
         assert len(r.user_id) > 0
-        r.domain = self.x_domain(r, info, '')
-        assert r.domain is not None
         r.display_name = self.x_display_name(r, info, None)
         r.email = self.x_email(r, info, None)
         r.avatar_url = self.x_avatar_url(r, info, None)
@@ -239,7 +248,7 @@ class Platform(object):
             )
         r = self.api_get(domain, page_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
-        members = [self.extract_user_info(m) for m in members]
+        members = [self.extract_user_info(m, domain) for m in members]
         return members, count, pages_urls
 
     def get_user_info(self, domain, key, value, sess=None):
@@ -262,13 +271,13 @@ class Platform(object):
             self.api_error_handler(response, is_user_session, domain)
         response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
         info = self.api_parser(response)
-        return self.extract_user_info(info)
+        return self.extract_user_info(info, domain)
 
     def get_user_self_info(self, domain, sess):
         """Get the authenticated user's info from the API.
         """
         r = self.api_get(domain, self.api_user_self_info_path, sess=sess)
-        info = self.extract_user_info(self.api_parser(r))
+        info = self.extract_user_info(self.api_parser(r), domain)
         token = getattr(sess, 'token', None)
         if token:
             info.token = json.dumps(token)
@@ -282,7 +291,7 @@ class Platform(object):
             )
         r = self.api_get(account.domain, page_url, sess=sess)
         friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
-        friends = [self.extract_user_info(f) for f in friends]
+        friends = [self.extract_user_info(f, account.domain) for f in friends]
         if count == -1 and hasattr(self, 'x_friends_count'):
             count = self.x_friends_count(None, account.extra_info, -1)
         return friends, count, pages_urls

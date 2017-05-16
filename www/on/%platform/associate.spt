@@ -91,7 +91,7 @@ if action == 'connect':
     if not user.controls(connect_to):
         raise response.error(403, "can't connect to an account you don't control")
     try:
-        connect_to.take_over((platform.name, account.user_id))
+        connect_to.take_over(account)
     except NeedConfirmation:
         token, expires = account.make_connect_token()
         response.set_cookie('connect_%s' % account.id, token, expires)
