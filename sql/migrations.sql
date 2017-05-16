@@ -396,3 +396,8 @@ CREATE TABLE oauth_apps
 );
 INSERT INTO app_conf (key, value) VALUES
     ('app_name', '"Liberapay Dev"'::jsonb);
+
+-- migration #36
+ALTER TABLE elsewhere
+    ALTER COLUMN user_id DROP NOT NULL,
+    ADD CONSTRAINT user_id_chk CHECK (user_id IS NOT NULL OR domain <> '' AND user_name IS NOT NULL);

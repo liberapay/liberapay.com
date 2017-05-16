@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '35'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '36'::jsonb);
 
 
 -- app configuration
@@ -117,7 +117,7 @@ CREATE TABLE elsewhere
 ( id                    serial          PRIMARY KEY
 , participant           bigint          NOT NULL REFERENCES participants
 , platform              text            NOT NULL
-, user_id               text            NOT NULL
+, user_id               text
 , user_name             text
 -- Note: we use "user_name" instead of "username" to avoid having the same
 --       column name in the participants and elsewhere tables.
@@ -131,6 +131,7 @@ CREATE TABLE elsewhere
 , connect_expires       timestamptz
 , domain                text            NOT NULL -- NULL would break the unique indexes
 , UNIQUE (participant, platform)
+, CONSTRAINT user_id_chk CHECK (user_id IS NOT NULL OR domain <> '' AND user_name IS NOT NULL)
 );
 
 CREATE UNIQUE INDEX elsewhere_user_id_key ON elsewhere (platform, domain, user_id);
