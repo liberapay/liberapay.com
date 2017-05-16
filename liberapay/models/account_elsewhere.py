@@ -141,6 +141,16 @@ class AccountElsewhere(Model):
                 """.format(cols, placeholders), (id,)+vals)
         except IntegrityError:
             # The account is already in the DB, update it instead
+            if i.user_name and i.user_id:
+                # Set user_id if it was missing
+                cls.db.run("""
+                    UPDATE elsewhere
+                       SET user_id = %s
+                     WHERE platform=%s AND domain=%s AND lower(user_name)=%s
+                       AND user_id IS NULL
+                """, (i.user_id, i.platform, i.domain, i.user_name.lower()))
+            elif not i.user_id:
+                return cls._from_thing('user_name', i.platform, i.user_name, i.domain)
             account = cls.db.one("""
                 UPDATE elsewhere
                    SET ({0}) = ({1})
