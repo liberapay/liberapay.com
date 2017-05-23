@@ -4,11 +4,16 @@ from mangopay.resources import LegalUser, NaturalUser
 from mangopay.utils import Address
 
 from liberapay.billing.exchanges import repr_exception, APIError
-from liberapay.utils import get_participant
+from liberapay.constants import KYC_DOCS_EXTS
+from liberapay.utils import get_participant, group_by, to_javascript
 
 EPOCH = datetime(1970, 1, 1)
 KEYS_NATURAL = 'FirstName LastName CountryOfResidence Nationality Birthday'.split()
 KEYS_LEGAL = ['Name', 'LegalPersonType'] + ['LegalRepresentative'+k for k in KEYS_NATURAL]
+KEYS_NATURAL_L2 = 'Occupation IncomeRange Address'.split()
+KEYS_LEGAL_L2 = 'HeadquartersAddress LegalRepresentativeEmail LegalRepresentativeAddress'.split()
+
+KYC_DOCS_EXTS_JSON = to_javascript(KYC_DOCS_EXTS)
 
 [---]
 request.allow('GET', 'POST')
@@ -23,14 +28,16 @@ error, success = '', ''
 if request.method == 'POST':
     body = request.body
 
+    level = body.get('level') or '1'
+
     if participant.kind == 'individual':
         account = participant.get_mangopay_account() or NaturalUser()
         p = ''
-        keys = KEYS_NATURAL
+        keys = KEYS_NATURAL_L2 if level == '2' else KEYS_NATURAL
     else:
         account = participant.get_mangopay_account() or LegalUser()
         p = 'LegalRepresentative'
-        keys = KEYS_LEGAL
+        keys = KEYS_LEGAL_L2 if level == '2' else KEYS_LEGAL
 
     if not account.Tag:
         account.Tag = website.canonical_url + '/~%i/' % participant.id
@@ -50,6 +57,8 @@ if request.method == 'POST':
 
     for k in keys:
         v = body.get(k)
+        if k.endswith('Address'):
+            v = {k2: body[k + '.' + k2] for k2 in constants.POSTAL_ADDRESS_KEYS}
         if v or v == 0:
             setattr(account, k, v)
         else:
@@ -89,6 +98,10 @@ if request.method == 'POST':
 else:
     account = participant.get_mangopay_account()
 
+already_uploaded = [doc for doc in account.documents.all() if doc.status != 'CREATED']
+already_uploaded = sorted(already_uploaded, key=lambda doc: -int(doc.id))
+already_uploaded = group_by(already_uploaded, 'type', attr=True)
+
 [---] application/json
 {"msg": success}
 
@@ -112,5 +125,168 @@ else:
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 
 </form>
+<br><hr>
+<form action="javascript:" method="POST" id="identity-form-2">
+
+    <h2>{{ _("Level 2") }}</h2>
+
+    % if account.kyc_level == 'REGULAR'
+        <p class="alert alert-success">{{ _(
+            "You have completed the identity verification process, the amount of "
+            "money you can give and receive per year is no longer limited."
+        ) }}</p>
+    % endif
+
+    <p>{{ _(
+        "If you give more than {0} in a year, or receive more than {1} in a year, "
+        "or if your account shows signs of suspicious activity, then you will have "
+        "to provide additional information:"
+        , Money(constants.KYC_PAYIN_YEARLY_THRESHOLD, 'EUR')
+        , Money(constants.KYC_PAYOUT_YEARLY_THRESHOLD, 'EUR')
+    ) }}</p>
+
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="level" value="2" />
+
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+
+    % include "templates/identity-form-2.html"
+
+    <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
+
+</form>
 </div>
+% endblock
+
+% block scripts
+{# https://docs.fineuploader.com/api/options.html #}
+<script src="{{ website.asset('fine-uploader/all.fine-uploader.min.js') }}"></script>
+<script>
+
+var $form = $('#identity-form-2');
+var form = $form.get(0);
+var $form_submit_button = $('#identity-form-2 button').filter(':not([type]), [type="submit"]');
+var $inputs = $form.find(':not(:disabled)').filter(function () {
+    return $(this).parents('.fine-uploader').length == 0
+});
+
+var uploaders = [];
+$('.fine-uploader').each(function () {
+    var uploader = new qq.FineUploader({
+        element: this,
+        template: document.getElementById('qq-template'),
+        autoUpload: false,
+        request: {
+            endpoint: {{ to_javascript(participant.path('identity-docs'))|safe }},
+            params: {
+                action: 'add_page',
+                csrf_token: Liberapay.getCookie('csrf_token'),
+            },
+        },
+        validation: {
+            allowedExtensions: {{ KYC_DOCS_EXTS_JSON|safe }},
+            sizeLimit: {{ constants.KYC_DOC_MAX_SIZE }},
+        },
+        display: {
+            fileSizeOnSubmit: true,
+        },
+        text: {
+            fileInputTitle: '',
+        },
+        callbacks: {
+            onAllComplete: function (successes, failures) {
+                if (successes.length > 0 && failures.length == 0) {
+                    validate_doc(uploader, uploader._options.request.params.doc_id)
+                }
+            },
+            onSubmitted: function () {
+                $form_submit_button.prop('disabled', false);
+            },
+        },
+    });
+    uploader._doc_type_ = $(this).attr('name');
+    uploaders.push(uploader);
+});
+
+function create_doc(uploader, doc_type) {
+    jQuery.ajax({
+        url: uploader._options.request.endpoint,
+        type: 'POST',
+        data: {action: 'create_doc', 'doc_type': doc_type},
+        dataType: 'json',
+        success: function (data) {
+            uploader._options.request.params.doc_id = data.doc_id;
+            uploader.uploadStoredFiles();
+        },
+        error: [
+            function () { $inputs.prop('disabled', false); },
+            Liberapay.error,
+        ],
+    });
+}
+
+function validate_doc(uploader, doc_id) {
+    jQuery.ajax({
+        url: uploader._options.request.endpoint,
+        type: 'POST',
+        data: {action: 'validate_doc', 'doc_id': doc_id},
+        dataType: 'json',
+        success: function (data) {
+            uploader._allComplete_ = true;
+            var allComplete = true;
+            $.each(uploaders, function () {
+                if (!this._allComplete_) {
+                    allComplete = false;
+                }
+            });
+            if (allComplete === true) {
+                window.location.href = window.location.href;
+            }
+        },
+        error: [
+            function () { $inputs.prop('disabled', false); },
+            Liberapay.error,
+        ],
+    });
+}
+
+function submit(e) {
+    e.preventDefault();
+    if (form.reportValidity && form.reportValidity() == false) return;
+    var data = $form.serializeArray();
+    $inputs.prop('disabled', true);
+    jQuery.ajax({
+        url: '',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        success: function () {
+            var count = 0;
+            $.each(uploaders, function (i, uploader) {
+                console.log(uploader);
+                console.log(uploader._storedIds.length);
+                if (uploader._storedIds.length !== 0) {
+                    count += uploader._storedIds.length;
+                    if (uploader._options.request.params.doc_id) {
+                        uploader.uploadStoredFiles();
+                    } else {
+                        create_doc(uploader, uploader._doc_type_);
+                    }
+                }
+            });
+            if (count == 0) {
+                console.log(count);
+                window.location.href = window.location.href;
+            }
+        },
+        error: [
+            function () { $inputs.prop('disabled', false); },
+            Liberapay.error,
+        ],
+    });
+}
+$form.submit(submit);
+$form_submit_button.click(submit);
+
+</script>
 % endblock

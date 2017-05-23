@@ -9,6 +9,7 @@ import errno
 import fnmatch
 from hashlib import sha256
 import hmac
+from operator import getitem
 import os
 import pickle
 import re
@@ -267,12 +268,13 @@ def include_svg(svg, height, width, x=None, y=None):
     return Markup(svg[:4] + attrs + svg[i:])
 
 
-def group_by(iterable, key):
+def group_by(iterable, key, attr=False, ignored_exceptions=KeyError):
+    f = getattr if attr else getitem
     r = {}
     for obj in iterable:
         try:
-            k = obj[key]
-        except KeyError:
+            k = f(obj, key)
+        except ignored_exceptions:
             continue
         r.setdefault(k, []).append(obj)
     return r
