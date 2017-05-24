@@ -37,7 +37,26 @@ except ValueError:
 
 cls = EVENT_TYPES.get(event)
 
-if cls:
+if event == 'KYC':
+    try:
+        doc = mangopay.resources.Document.get(RessourceId)
+    except Document.DoesNotExist:
+        raise response.error(400, "bad RessourceId: DoesNotExist")
+    p = Participant._from_thing("mangopay_user_id", doc.UserId)
+    if status == 'SUCCEEDED':
+        if doc.Status != 'VALIDATED':
+            raise response.error(400, "status mismatch")
+        raise NotImplementedError
+    elif status == 'FAILED':
+        if doc.Status != 'REFUSED':
+            raise response.error(400, "status mismatch")
+        raise NotImplementedError
+    elif status == 'CREATED':
+        raise response.error(400, "we don't care")
+    else:
+        raise response.error(400, "unknown status")
+
+elif cls:
     # Check stuff
     try:
         payio = cls.get(RessourceId)
