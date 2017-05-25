@@ -98,9 +98,12 @@ if request.method == 'POST':
 else:
     account = participant.get_mangopay_account()
 
-already_uploaded = [doc for doc in account.documents.all() if doc.status != 'CREATED']
-already_uploaded = sorted(already_uploaded, key=lambda doc: -int(doc.id))
-already_uploaded = group_by(already_uploaded, 'type', attr=True)
+if account:
+    already_uploaded = [doc for doc in account.documents.all() if doc.status != 'CREATED']
+    already_uploaded = sorted(already_uploaded, key=lambda doc: -int(doc.id))
+    already_uploaded = group_by(already_uploaded, 'type', attr=True)
+else:
+    already_uploaded = {}
 
 [---] application/json
 {"msg": success}
