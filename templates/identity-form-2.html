@@ -65,7 +65,7 @@
     </label>
 
     <h3>{{ _("Postal Address") }}</h3>
-    {{ postal_address_form(saved=account.Address) }}
+    {{ postal_address_form(saved=account.Address if account else None) }}
 
     <h3>{{ _("Identity Proof") }}</h3>
     <p>{{ _("Passport, or ID Card (front and back), or UK driving licence.") }}</p>
@@ -76,7 +76,7 @@
     <h3>{{ _("Organization Information") }}</h3>
 
     <h4>{{ _("Headquarters Address") }}</h4>
-    {{ postal_address_form(prefix='Headquarters', saved=account.HeadquartersAddress) }}
+    {{ postal_address_form(prefix='Headquarters', saved=account.HeadquartersAddress if account else None) }}
 
     % if account.LegalPersonType != 'SOLETRADER'
     <h4>{{ _("Articles of Association") }}</h4>
@@ -112,7 +112,7 @@
     </label>
 
     <h4>{{ _("Postal Address") }}</h4>
-    {{ postal_address_form(prefix='LegalRepresentative', saved=account.LegalRepresentativeAddress) }}
+    {{ postal_address_form(prefix='LegalRepresentative', saved=account.LegalRepresentativeAddress if account else None) }}
 
     <h4>{{ _("Identity Proof") }}</h4>
     <p>{{ _("Passport, or ID Card (front and back), or UK driving licence.") }}</p>
