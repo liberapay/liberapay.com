@@ -1,21 +1,23 @@
 {# Docs: http://docs.fineuploader.com/features/styling.html #}
 
-% macro fine_uploader()
+% macro fine_uploader_template(cls='qq-uploader', dropzone=True, edit_filenames=True)
 <div class="hidden" id="qq-template">
-    <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="{{ _('Drop files here') }}">
+    <div class="qq-uploader-selector {{ cls }}" qq-drop-area-text="{{ _('Drop files here') }}">
         <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
             <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
         </div>
+        % if dropzone
         <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
             <span class="qq-upload-drop-area-text-selector"></span>
         </div>
-        <div class="qq-upload-button-selector btn btn-primary">{{
-            _("Add a file")
-        }}</div>
         <span class="qq-drop-processing-selector qq-drop-processing">
             <span>{{ _("Processing dropped files…") }}</span>
             <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
         </span>
+        % endif
+        <div class="qq-upload-button-selector btn btn-primary">{{
+            _("Add a file")
+        }}</div>
         <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
             <li>
                 <div class="qq-progress-bar-container-selector">
@@ -24,8 +26,10 @@
                 <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
                 <img class="qq-thumbnail-selector" qq-max-size="64" qq-server-scale>
                 <span class="qq-upload-file-selector qq-upload-file"></span>
+                % if edit_filenames
                 <span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="{{ _('Edit filename') }}"><span class="glyphicon glyphicon-pencil"></span></span>
                 <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
+                % endif
                 <span class="qq-upload-size-selector qq-upload-size"></span>
                 <button type="button" class="btn btn-warning qq-upload-cancel-selector">{{ _("Cancel") }}</button>
                 <button type="button" class="btn btn-primary qq-upload-retry-selector">{{ _("Retry") }}</button>
@@ -59,5 +63,9 @@
         </dialog>
     </div>
 </div>
+% endmacro
+
+% macro fine_uploader()
+{{ fine_uploader_template() }}
 <div id="fine-uploader"></div>
 % endmacro

@@ -129,6 +129,18 @@ JINJA_ENV_COMMON = dict(
 )
 
 # https://docs.mangopay.com/api-references/kyc-rules/
+KYC_DOC_MAX_SIZE = 7000000
+KYC_DOC_MAX_SIZE_MB = int(KYC_DOC_MAX_SIZE / 1000000)
+KYC_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'gif', 'png']
+KYC_DOCS_EXTS_STR = ', '.join(KYC_DOCS_EXTS)
+KYC_INCOME_THRESHOLDS = (
+    (1, 18000),
+    (2, 30000),
+    (3, 50000),
+    (4, 80000),
+    (5, 120000),
+    (6, 120000),
+)
 KYC_PAYIN_YEARLY_THRESHOLD = Decimal('2500')
 KYC_PAYOUT_YEARLY_THRESHOLD = Decimal('1000')
 
