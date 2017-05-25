@@ -33,7 +33,7 @@ if action == 'connect' and user.ANON:
 p = Participant.from_id(p_id) if p_id else user
 
 domain = ''
-if user_id:
+if user_id and body.get('user_id_type') == 'user_name':
     if platform.single_domain:
         user_id = '>' + user_id.lstrip('@')
     else:
@@ -63,6 +63,7 @@ title = _("Which account?")
 % block panel_body
 <form action="" method="POST">
     % include "templates/form-repost.html"
+    <input type="hidden" name="user_id_type" value="user_name" />
     % if platform.single_domain
     <p>{{ _("Please enter the name of the {0} account you would like to connect:",
             platform.display_name) }}</p>
