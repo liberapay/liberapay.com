@@ -67,7 +67,7 @@ class Payday(object):
         payday.__dict__.update(d)
         return payday
 
-    def run(self, log_dir='.', keep_log=False):
+    def run(self, log_dir='.', keep_log=False, recompute_stats=10, update_cached_amounts=True):
         """This is the starting point for payday.
 
         It is structured such that it can be run again safely (with a
@@ -83,8 +83,9 @@ class Payday(object):
 
         self.end()
 
-        self.recompute_stats(limit=10)
-        self.update_cached_amounts()
+        self.recompute_stats(limit=recompute_stats)
+        if update_cached_amounts:
+            self.update_cached_amounts()
 
         self.notify_participants()
 
