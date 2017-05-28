@@ -1,6 +1,9 @@
+# coding: utf8
+
 from __future__ import print_function, unicode_literals
 
 from datetime import date
+from decimal import Decimal, ROUND_UP
 import os
 import os.path
 import pickle
@@ -17,6 +20,10 @@ from liberapay.utils import group_by
 
 
 log = print
+
+
+def round_up(d):
+    return d.quantize(constants.D_CENT, rounding=ROUND_UP)
 
 
 class NoPayday(Exception):
@@ -325,9 +332,18 @@ class Payday(object):
         if total_income == 0 or total_takes == 0:
             return
         args['takes_ratio'] = min(total_income / total_takes, 1)
-        args['tips_ratio'] = min(total_takes / total_income, 1)
+        tips_ratio = args['tips_ratio'] = min(total_takes / total_income, 1)
         tips = [NS(t._asdict()) for t in cursor.all("""
             SELECT t.id, t.tipper, (round_up(t.amount * %(tips_ratio)s, 2)) AS amount
+                 , t.amount AS full_amount
+                 , COALESCE((
+                       SELECT sum(tr.amount)
+                         FROM transfers tr
+                        WHERE tr.tipper = t.tipper
+                          AND tr.team = %(team_id)s
+                          AND tr.context = 'take'
+                          AND tr.status = 'succeeded'
+                   ), 0) AS past_transfers_sum
               FROM payday_tips t
               JOIN payday_participants p ON p.id = t.tipper
              WHERE t.tippee = %(team_id)s
@@ -338,7 +354,67 @@ class Payday(object):
               FROM payday_takes t
              WHERE t.team = %(team_id)s;
         """, args)]
+        adjust_tips = tips_ratio != 1
+        if adjust_tips:
+            # The team has a leftover, so donation amounts can be adjusted.
+            # In the following loop we compute the "weeks" count of each tip.
+            # For example the `weeks` value is 2.5 for a donation currently at
+            # 10€/week which has distributed 25€ in the past.
+            for tip in tips:
+                tip.weeks = round_up(tip.past_transfers_sum / tip.full_amount)
+            max_weeks = max(tip.weeks for tip in tips)
+            min_weeks = min(tip.weeks for tip in tips)
+            adjust_tips = max_weeks != min_weeks
+            if adjust_tips:
+                # Some donors have given fewer weeks worth of money than others,
+                # we want to adjust the amounts so that the weeks count will
+                # eventually be the same for every donation.
+                min_tip_ratio = tips_ratio * Decimal('0.1')
+                # Loop: compute how many "weeks" each tip is behind the "oldest"
+                # tip, as well as a naive ratio and amount based on that number
+                # of weeks
+                for tip in tips:
+                    tip.weeks_to_catch_up = max_weeks - tip.weeks
+                    tip.ratio = min(min_tip_ratio + tip.weeks_to_catch_up, 1)
+                    tip.amount = round_up(tip.full_amount * tip.ratio)
+                naive_amounts_sum = sum(tip.amount for tip in tips)
+                total_to_transfer = min(total_takes, total_income)
+                delta = total_to_transfer - naive_amounts_sum
+                if delta == 0:
+                    # The sum of the naive amounts computed in the previous loop
+                    # matches the end target, we got very lucky and no further
+                    # adjustments are required
+                    adjust_tips = False
+                else:
+                    # Loop: compute the "leeway" of each tip, i.e. how much it
+                    # can be increased or decreased to fill the `delta` gap
+                    if delta < 0:
+                        # The naive amounts are too high: we want to lower the
+                        # amounts of the tips that have a "high" ratio, leaving
+                        # untouched the ones that are already low
+                        for tip in tips:
+                            if tip.ratio > min_tip_ratio:
+                                min_tip_amount = round_up(tip.full_amount * min_tip_ratio)
+                                tip.leeway = min_tip_amount - tip.amount
+                            else:
+                                tip.leeway = 0
+                    else:
+                        # The naive amounts are too low: we can raise all the
+                        # tips that aren't already at their maximum
+                        for tip in tips:
+                            tip.leeway = tip.full_amount - tip.amount
+                    leeway = sum(tip.leeway for tip in tips)
+                    leeway_ratio = min(delta / leeway, 1)
+                    tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
+        # Loop: compute the adjusted donation amounts, and do the transfers
         for tip in tips:
+            if adjust_tips:
+                tip_amount = round_up(tip.amount + tip.leeway * leeway_ratio)
+                if tip_amount == 0:
+                    continue
+                assert tip_amount > 0
+                assert tip_amount <= tip.full_amount
+                tip.amount = tip_amount
             for take in takes:
                 if take.amount == 0 or tip.tipper == take.member:
                     continue
