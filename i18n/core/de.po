@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: German (https://hosted.weblate.org/projects/liberapay/core/de/)\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2017-05-29 09:24+0000\n"
+"Last-Translator: Kim <github@aggsol.de>\n"
+"Language-Team: German "
+"<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.14.1\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -32,7 +36,7 @@ msgstr "Sie haben {0} in dieser Woche bekommen"
 
 #, python-brace-format
 msgid "{0} were given to you personally."
-msgstr "{0} wurden Ihnen persönlich gegeben."
+msgstr "{0} wurden Ihnen persönlich gespendet."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
 msgstr "Sie sind nicht Mitglied eines Teams, deshalb haben Sie kein Geld für die Teilnahme an einem Team erhalten."
@@ -150,7 +154,7 @@ msgid "You can try again, possibly with another payment method, by clicking on t
 msgstr "Sie können es erneut versuchen, möglicherweise mit einer anderen Zahlungsart, indem Sie auf den unten stehenden Link klicken:"
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Die Überweisung auf Ihr Liberapay Konto war erfolgreich"
+msgstr "Die Überweisung auf Ihr Liberapay-Konto war erfolgreich"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} you sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
@@ -335,11 +339,11 @@ msgid "You're making requests too fast, please try again later."
 msgstr "Sie machen Anfragen zu schnell, bitte versuchen Sie es später noch einmal."
 
 msgid "example@mastodon.social"
-msgstr ""
+msgstr "beispiel@mastodon.social"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
-msgstr ""
+msgstr "{0} antwortet nicht wie ein {1} Server."
 
 msgid "You need to sign in first"
 msgstr "Sie müssen sich zuerst anmelden"
@@ -471,7 +475,7 @@ msgid "Too Many Requests"
 msgstr "Zu viele Anfragen"
 
 msgid "Internal Server Error"
-msgstr "interner Serverfehler"
+msgstr "Interner Serverfehler"
 
 msgid "Upstream Error"
 msgstr "Upstream-Fehler"
@@ -609,29 +613,32 @@ msgstr "Ja"
 msgid "Ok"
 msgstr "Ok"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have uploaded {n} document of this type:"
 msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sie haben {n} Dokument diesen Typs hochgeladen:"
+msgstr[1] "Sie haben {n} Dokumente diesen Typs hochgeladen:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Document #{id} is awaiting validation."
-msgstr ""
+msgstr "Dokument #{id} erwartet Bestätigung."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Document #{id} has been validated."
-msgstr ""
+msgstr "Dokument #{id} wurde bestätigt."
 
 #, python-brace-format
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
 msgstr ""
+"Dokument #{id} wurde abgelehnt: {refused_reason_type} - "
+"{refused_reason_message}."
 
 msgid "If you need assistance you can send an email to support@liberapay.com."
 msgstr ""
+"Falls Sie Hilfe benötigen, schreiben Sie eine Email an support@liberapay.com."
 
 msgid "Occupation"
-msgstr ""
+msgstr "Beruf"
 
 msgid "Your main professional activity."
 msgstr ""
@@ -805,7 +812,7 @@ msgid "Organizations"
 msgstr "Organisationen"
 
 msgid "Individuals"
-msgstr "Einzelpersonen"
+msgstr "Personen"
 
 msgid "Pledges"
 msgstr "Zusagen"
@@ -1283,7 +1290,8 @@ msgid "Address Taken"
 msgstr "Addresse bereits vergeben"
 
 msgid "This email address is already connected to a different Liberapay account."
-msgstr "Diese E-Mail-Adresse ist bereits mit einem Liberapay-Konto verknüpft."
+msgstr ""
+"Diese E-Mail-Adresse ist bereits mit einem anderen Liberapay-Konto verknüpft."
 
 msgid "Already Verified"
 msgstr "Bereits überprüft"
@@ -1903,6 +1911,7 @@ msgstr "Einfache und sofortige"
 msgid "Fees: {0}% + {1}"
 msgstr "Gebühren: {0} % + {1}"
 
+#, fuzzy
 msgid "To a Euro account"
 msgstr "Zu einem Euro-Konto"
 
@@ -2256,9 +2265,13 @@ msgstr "Gibt es einen minimalen oder maximalen Betrag, den ich spenden oder erha
 msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
 msgstr "Es gibt keine Einschränkungen auf die Gesamtmenge geben oder empfangen werden können, aber aus rechtlichen Gründen benötigen Sie Ausweispapiere zu bieten, wenn Sie mehr als {0} geben oder mehr als {1}, pro Jahr erhalten."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "Das Minimum kann Ihnen jeder Benutzer ist {0}. Zur Minimierung von Bearbeitungsgebühren belasten wir Ihre Kreditkarte mindestens {1} gleichzeitig (das Geld im Portemonnaie Liberapay gespeichert und auf andere übertragen, während Zahltag)."
+msgstr ""
+"Der minimale Spendenbetrag, den Sie einem Nutzer geben können, beträgt {0}. "
+"Zur Minimierung der Bearbeitungsgebühren belasten wir Ihre Kreditkarte mit "
+"mindestens {1} auf einmal (das Geld wir auf Ihrem Liberapay-Konto "
+"gutgeschrieben und am Zahltag verteilt)."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
@@ -2439,7 +2452,7 @@ msgid "Deposits (€)"
 msgstr "Einlagen (€)"
 
 msgid "Money moved into Liberapay"
-msgstr "Geld nach Liberapay überwiesen"
+msgstr "Geld an Liberapay überwiesen"
 
 msgid "Withdrawals (€)"
 msgstr "Abhebungen (€)"
@@ -3097,4 +3110,3 @@ msgstr "Registrieren"
 #, python-brace-format
 msgid "You are already logged in as {0}."
 msgstr "Sie sind bereits angemeldet als {0}."
-
