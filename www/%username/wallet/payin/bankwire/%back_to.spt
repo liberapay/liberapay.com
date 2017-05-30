@@ -211,7 +211,7 @@ title = _("Add money")
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">
             <label>
-                <input type="radio" name="amount" value="{{ charge_amount }}" class="pull-right hidden-xs" />
+                <input type="radio" name="amount" value="{{ charge_amount }}" class="hidden-xs" />
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
                     "{0} ({2}% fee included)",
@@ -234,7 +234,7 @@ title = _("Add money")
         % endfor
             <li class="list-group-item">
             <label>
-                <input type="radio" name="amount" value="custom" class="pull-right hidden-xs" />
+                <input type="radio" name="amount" value="custom" class="hidden-xs" />
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
                     "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
