@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-05-30 07:23+0000\n"
+"PO-Revision-Date: 2017-06-02 07:51+0000\n"
 "Last-Translator: Kim <github@aggsol.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.14.1\n"
+"X-Generator: Weblate 2.15-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -333,7 +333,9 @@ msgstr "Maximum ({0} pro Woche)"
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "Sie haben Ihre Quote von Anfragen verbraucht, können Sie versuchen, wieder in {0}."
+msgstr ""
+"Sie haben Ihr Kontingent von Anfragen verbraucht. Sie können es erneut "
+"versuchen in {0}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Sie machen Anfragen zu schnell, bitte versuchen Sie es später noch einmal."
@@ -390,7 +392,7 @@ msgid "The password must be at least {0} and at most {1} characters long."
 msgstr "Das Passwort muss zwischen {0} und {1} Zeichen lang sein."
 
 msgid "You can't donate to yourself."
-msgstr "Sie können keine Spende an sich selbst machen ."
+msgstr "Sie können nicht an sich selbst spenden."
 
 #, python-brace-format
 msgid "There is no user named {0}."
@@ -641,7 +643,7 @@ msgid "Occupation"
 msgstr "Beruf"
 
 msgid "Your main professional activity."
-msgstr ""
+msgstr "Ihre berufliche Tätigkeit"
 
 #, fuzzy
 msgid "Income Range"
@@ -672,30 +674,33 @@ msgstr "Identitätsnachweis"
 msgid "Passport, or ID Card (front and back), or UK driving licence."
 msgstr "Reisepass, Personalausweis oder Führerschein."
 
+#, fuzzy
 msgid "Organization Information"
-msgstr ""
+msgstr "Informationen über die Organisation"
 
 #, fuzzy
 msgid "Headquarters Address"
 msgstr "Adresse des Hauptsitzes"
 
 msgid "Articles of Association"
-msgstr ""
+msgstr "Gesellschaftsvertrag/Satzung"
 
 msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
 msgstr ""
 
 msgid "Registration Proof"
-msgstr ""
+msgstr "Nachweis der Eintragung"
 
 msgid "Extract from the Company Register issued within the last three months."
-msgstr ""
+msgstr "Auszug aus dem Handelsregister nicht älter als drei Monate."
 
+#, fuzzy
 msgid "Proof of registration from the official authority."
-msgstr ""
+msgstr "Nachweis der Eintragung von amtlicher Stelle."
 
+#, fuzzy
 msgid "Shareholder Declaration"
-msgstr ""
+msgstr "Angabe der Anteilseigner"
 
 #, python-brace-format
 msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
@@ -2078,7 +2083,7 @@ msgstr "Leider zurückziehen können Sie nicht, dass das Geld noch, es ist immer
 
 #, python-brace-format
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "Aus, dass {0} ist für den Rückzug zur Verfügung, der Rest ist noch in Quarantäne."
+msgstr "Davon sind {0} frei zum Abheben. Der Restbetrag ist noch in Quarantäne."
 
 #, python-brace-format
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
@@ -2749,7 +2754,7 @@ msgstr "Um Geld zu erhalten machen Sie etwas großartiges und erzählen Sie davo
 
 #, python-brace-format
 msgid "{0}Fill out your profile{1}."
-msgstr "{0} Füllen Sie Ihr Profil aus{1}."
+msgstr "{0}Füllen Sie Ihr Profil aus{1}."
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
