@@ -3,7 +3,7 @@
 from base64 import b64encode
 
 from liberapay.exceptions import AuthRequired
-from liberapay.utils import b64encode_s, get_participant
+from liberapay.utils import b64encode_s, get_participant, read_decimal_or_400
 
 _ = lambda a: a
 MESSAGES = {
@@ -35,10 +35,20 @@ if tippee.status == 'stub':
 # =========================
 
 if request.method == 'POST':
-    period = request.body.get('period', 'weekly')
-    if period not in constants.PERIOD_CONVERSION_RATES:
-        raise Response(400, "bad 'period' value '%s'" % period)
-    out = tipper.set_tip_to(tippee, parse_decimal(request.body['amount']), period)
+    amount = request.body.get('selected_amount')
+    if amount and amount != 'custom':
+        period = 'weekly'
+        amount = read_decimal_or_400(amount)
+    else:
+        period = request.body['period']
+        if period not in constants.PERIOD_CONVERSION_RATES:
+            raise Response(400, "bad 'period' value '%s'" % period)
+        amount = request.body.get('amount')
+        if amount:
+            amount = parse_decimal(amount)
+        else:
+            raise response.error(400, _("The donation amount is missing."))
+    out = tipper.set_tip_to(tippee, amount, period)
     if out['amount'] == 0:
         out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
     else:

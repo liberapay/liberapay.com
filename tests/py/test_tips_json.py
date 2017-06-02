@@ -53,7 +53,7 @@ class TestTipsJson(Harness):
         test_tipper = self.make_participant("test_tipper")
 
         response = self.client.POST('/test_tippee1/tip.json',
-                                    {'amount': '1.00'},
+                                    {'amount': '1.00', 'period': 'weekly'},
                                     auth_as=test_tipper,
                                     xhr=True,
                                     )

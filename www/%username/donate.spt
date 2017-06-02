@@ -16,7 +16,7 @@ title = _("Donate to {0}", participant.username)
 % block content
 <div class="row">
 <div class="col-md-7 col-md-offset-3">
-    <h2 class="text-primary">{{ title }}</h2>
+    <h2>{{ _("Donate to {0}", ('<a href="/{0}">{0}</a>'|safe).format(participant.username)) }}</h2>
 
     % if participant.is_suspended
     <p class="alert alert-danger">{{ _(
@@ -25,17 +25,34 @@ title = _("Donate to {0}", participant.username)
     % endif
 
     % if not participant.hide_receiving
-    {{ profile_goal_bar(participant) }}
+        % set goal, receiving = participant.goal, participant.receiving
+        % if goal
+            % if receiving
+            <p>{{ _(
+                "{0} currently receives {1} per week, they need your help to reach "
+                "their funding goal ({2} per week)."
+                , participant.username, Money(receiving, 'EUR'), Money(goal, 'EUR')
+            ) }}</p>
+            % else
+            <p>{{ _(
+                "{0}'s goal is to receive {1} per week."
+                , participant.username, Money(goal, 'EUR')
+            ) }} {{ _("Be the first to contribute!") }}</p>
+            % endif
+        % else
+            <p>{{ _(
+                "{0} currently receives {1} per week."
+                , participant.username, Money(receiving, 'EUR')
+            ) }}</p>
+        % endif
     % endif
 
     {{ tip_form(tippee=participant) }}
+    <br>
 
-    <h4>{{ _("Who exactly will I be donating to?") }}</h4>
-    <p><a href="{{ participant.path('') }}">{{
-        _("View {0}'s profile", participant.username)
-    }}</a></p>
     % set e_accounts = participant.get_accounts_elsewhere()
     % if e_accounts
+        <h3>{{ _("Recipient Identity") }}</h3>
         <p>{{ _(
             "We have confirmed through an automated verification process that "
             "{0} has control of the following accounts on other platforms:",
@@ -44,6 +61,7 @@ title = _("Donate to {0}", participant.username)
         % for platform in website.platforms if platform.name in e_accounts
             {{ account_elsewhere(platform, e_accounts, None) }}
         % endfor
+        <br>
     % endif
 
     <h4>{{ _("What is this site?") }}</h4>

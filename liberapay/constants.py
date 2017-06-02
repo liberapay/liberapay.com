@@ -32,6 +32,8 @@ Event = namedtuple('Event', 'name bit title')
 
 Fees = namedtuple('Fees', ('var', 'fix'))
 
+StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
+
 
 _ = lambda a: a
 
@@ -192,12 +194,22 @@ SESSION = str('session')  # bytes in python2, unicode in python3
 SESSION_REFRESH = timedelta(hours=1)
 SESSION_TIMEOUT = timedelta(hours=6)
 
+
+def make_standard_tip(label, weekly):
+    return StandardTip(
+        label,
+        weekly,
+        weekly / PERIOD_CONVERSION_RATES['monthly'],
+        weekly / PERIOD_CONVERSION_RATES['yearly'],
+    )
+
+
 STANDARD_TIPS = (
-    (_("Symbolic ({0} per week)"), Decimal('0.01')),
-    (_("Small ({0} per week)"), Decimal('0.25')),
-    (_("Medium ({0} per week)"), Decimal('1.00')),
-    (_("Large ({0} per week)"), Decimal('5.00')),
-    (_("Maximum ({0} per week)"), DONATION_WEEKLY_MAX),
+    make_standard_tip(_("Symbolic"), Decimal('0.01')),
+    make_standard_tip(_("Small"), Decimal('0.25')),
+    make_standard_tip(_("Medium"), Decimal('1.00')),
+    make_standard_tip(_("Large"), Decimal('5.00')),
+    make_standard_tip(_("Maximum"), DONATION_WEEKLY_MAX),
 )
 
 USERNAME_MAX_SIZE = 32

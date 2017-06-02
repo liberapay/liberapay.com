@@ -69,7 +69,10 @@ Liberapay.init = function() {
     $('[data-toggle="tooltip"]').tooltip();
 
     $('.radio-group input:not([type="radio"])').on('click change', function() {
-        $(this).parents('label').find('input[type="radio"]').prop('checked', true);
+        $(this).parents('label').children('input[type="radio"]').prop('checked', true);
+    });
+    $('.radio-group .list-group-item > label').on('click', function() {
+        $(this).children('input[type="radio"]').prop('checked', true);
     });
 };
 
