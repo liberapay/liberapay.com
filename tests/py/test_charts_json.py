@@ -29,7 +29,7 @@ class TestChartsJson(FakeTransfersHarness):
         self.bob.set_tip_to(self.carl, '2.00')
 
     def run_payday(self):
-        Payday.start().run()
+        Payday.start().run(recompute_stats=1)
 
 
     def test_no_payday_returns_empty_list(self):

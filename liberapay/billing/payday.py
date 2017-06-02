@@ -1,6 +1,9 @@
+# coding: utf8
+
 from __future__ import print_function, unicode_literals
 
 from datetime import date
+from decimal import Decimal, ROUND_UP
 import os
 import os.path
 import pickle
@@ -17,6 +20,10 @@ from liberapay.utils import group_by
 
 
 log = print
+
+
+def round_up(d):
+    return d.quantize(constants.D_CENT, rounding=ROUND_UP)
 
 
 class NoPayday(Exception):
@@ -67,7 +74,7 @@ class Payday(object):
         payday.__dict__.update(d)
         return payday
 
-    def run(self, log_dir='.', keep_log=False):
+    def run(self, log_dir='.', keep_log=False, recompute_stats=10, update_cached_amounts=True):
         """This is the starting point for payday.
 
         It is structured such that it can be run again safely (with a
@@ -83,8 +90,9 @@ class Payday(object):
 
         self.end()
 
-        self.recompute_stats(limit=10)
-        self.update_cached_amounts()
+        self.recompute_stats(limit=recompute_stats)
+        if update_cached_amounts:
+            self.update_cached_amounts()
 
         self.notify_participants()
 
@@ -115,7 +123,7 @@ class Payday(object):
         else:
             with self.db.get_cursor() as cursor:
                 self.prepare(cursor, self.ts_start)
-                self.transfer_virtually(cursor)
+                self.transfer_virtually(cursor, self.ts_start)
                 transfers = [NS(t._asdict()) for t in cursor.all("""
                     SELECT t.*
                          , p.mangopay_user_id AS tipper_mango_id
@@ -282,119 +290,175 @@ class Payday(object):
             END;
         $$ LANGUAGE plpgsql;
 
-
-        -- Create a function to resolve many-to-many donations (team takes)
-
-        CREATE OR REPLACE FUNCTION resolve_takes(team_id bigint) RETURNS void AS $$
-            DECLARE
-                total_income numeric(35,2);
-                total_takes numeric(35,2);
-                takes_ratio numeric;
-                tips_ratio numeric;
-                tip record;
-                take record;
-                transfer_amount numeric(35,2);
-                our_tips CURSOR FOR
-                    SELECT t.id, t.tipper, (round_up(t.amount * tips_ratio, 2)) AS amount
-                      FROM payday_tips t
-                      JOIN payday_participants p ON p.id = t.tipper
-                     WHERE t.tippee = team_id
-                       AND p.new_balance >= t.amount;
-            BEGIN
-                WITH funded AS (
-                     UPDATE payday_tips
-                        SET is_funded = true
-                       FROM payday_participants p
-                      WHERE p.id = tipper
-                        AND tippee = team_id
-                        AND p.new_balance >= amount
-                  RETURNING amount
-                )
-                SELECT COALESCE(sum(amount), 0) FROM funded INTO total_income;
-                total_takes := (
-                    SELECT COALESCE(sum(t.amount), 0)
-                      FROM payday_takes t
-                     WHERE t.team = team_id
-                );
-                IF (total_income = 0 OR total_takes = 0) THEN RETURN; END IF;
-                takes_ratio := min(total_income / total_takes, 1::numeric);
-                tips_ratio := min(total_takes / total_income, 1::numeric);
-
-                DROP TABLE IF EXISTS our_takes;
-                CREATE TEMPORARY TABLE our_takes ON COMMIT DROP AS
-                    SELECT t.member, (round_up(t.amount * takes_ratio, 2)) AS amount
-                      FROM payday_takes t
-                     WHERE t.team = team_id;
-
-                FOR tip IN our_tips LOOP
-                    FOR take IN (SELECT * FROM our_takes ORDER BY member) LOOP
-                        IF (take.amount = 0 OR tip.tipper = take.member) THEN
-                            CONTINUE;
-                        END IF;
-                        transfer_amount := min(tip.amount, take.amount);
-                        EXECUTE transfer(tip.tipper, take.member, transfer_amount, 'take', team_id, NULL);
-                        tip.amount := tip.amount - transfer_amount;
-                        UPDATE our_takes t
-                           SET amount = take.amount - transfer_amount
-                         WHERE t.member = take.member;
-                        EXIT WHEN tip.amount = 0;
-                    END LOOP;
-                END LOOP;
-                RETURN;
-            END;
-        $$ LANGUAGE plpgsql;
-
-
-        -- Create a function to pay invoices
-
-        CREATE OR REPLACE FUNCTION pay_invoices() RETURNS void AS $$
-            DECLARE
-                invoices_cursor CURSOR FOR
-                     SELECT i.*
-                       FROM invoices i
-                      WHERE i.status = 'accepted'
-                        AND ( SELECT ie.ts
-                                FROM invoice_events ie
-                               WHERE ie.invoice = i.id
-                            ORDER BY ts DESC
-                               LIMIT 1
-                            ) < %(ts_start)s;
-                payer_balance numeric(35,2);
-            BEGIN
-                FOR i IN invoices_cursor LOOP
-                    payer_balance := (
-                        SELECT p.new_balance
-                          FROM payday_participants p
-                         WHERE id = i.addressee
-                    );
-                    IF (payer_balance < i.amount) THEN
-                        CONTINUE;
-                    END IF;
-                    EXECUTE transfer(i.addressee, i.sender, i.amount,
-                                     i.nature::text::transfer_context,
-                                     NULL, i.id);
-                    UPDATE invoices
-                       SET status = 'paid'
-                     WHERE id = i.id;
-                    INSERT INTO invoice_events
-                                (invoice, participant, status)
-                         VALUES (i.id, i.addressee, 'paid');
-                END LOOP;
-            END;
-        $$ LANGUAGE plpgsql;
-
         """, dict(ts_start=ts_start))
         log("Prepared the DB.")
 
     @staticmethod
-    def transfer_virtually(cursor):
+    def transfer_virtually(cursor, ts_start):
+        cursor.run("SELECT settle_tip_graph();")
+        teams = cursor.all("""
+            SELECT id FROM payday_participants WHERE kind = 'group';
+        """)
+        for team_id in teams:
+            Payday.resolve_takes(cursor, team_id)
         cursor.run("""
             SELECT settle_tip_graph();
-            SELECT resolve_takes(id) FROM payday_participants WHERE kind = 'group';
-            SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
-            SELECT pay_invoices();
         """)
+        Payday.pay_invoices(cursor, ts_start)
+
+    @staticmethod
+    def resolve_takes(cursor, team_id):
+        """Resolve many-to-many donations (team takes)
+        """
+        args = dict(team_id=team_id)
+        total_income = cursor.one("""
+            WITH funded AS (
+                 UPDATE payday_tips
+                    SET is_funded = true
+                   FROM payday_participants p
+                  WHERE p.id = tipper
+                    AND tippee = %(team_id)s
+                    AND p.new_balance >= amount
+              RETURNING amount
+            )
+            SELECT COALESCE(sum(amount), 0) FROM funded;
+        """, args)
+        total_takes = cursor.one("""
+            SELECT COALESCE(sum(t.amount), 0)
+              FROM payday_takes t
+             WHERE t.team = %(team_id)s
+        """, args)
+        if total_income == 0 or total_takes == 0:
+            return
+        args['takes_ratio'] = min(total_income / total_takes, 1)
+        tips_ratio = args['tips_ratio'] = min(total_takes / total_income, 1)
+        tips = [NS(t._asdict()) for t in cursor.all("""
+            SELECT t.id, t.tipper, (round_up(t.amount * %(tips_ratio)s, 2)) AS amount
+                 , t.amount AS full_amount
+                 , COALESCE((
+                       SELECT sum(tr.amount)
+                         FROM transfers tr
+                        WHERE tr.tipper = t.tipper
+                          AND tr.team = %(team_id)s
+                          AND tr.context = 'take'
+                          AND tr.status = 'succeeded'
+                   ), 0) AS past_transfers_sum
+              FROM payday_tips t
+              JOIN payday_participants p ON p.id = t.tipper
+             WHERE t.tippee = %(team_id)s
+               AND p.new_balance >= t.amount
+        """, args)]
+        takes = [NS(t._asdict()) for t in cursor.all("""
+            SELECT t.member, (round_up(t.amount * %(takes_ratio)s, 2)) AS amount
+              FROM payday_takes t
+             WHERE t.team = %(team_id)s;
+        """, args)]
+        adjust_tips = tips_ratio != 1
+        if adjust_tips:
+            # The team has a leftover, so donation amounts can be adjusted.
+            # In the following loop we compute the "weeks" count of each tip.
+            # For example the `weeks` value is 2.5 for a donation currently at
+            # 10€/week which has distributed 25€ in the past.
+            for tip in tips:
+                tip.weeks = round_up(tip.past_transfers_sum / tip.full_amount)
+            max_weeks = max(tip.weeks for tip in tips)
+            min_weeks = min(tip.weeks for tip in tips)
+            adjust_tips = max_weeks != min_weeks
+            if adjust_tips:
+                # Some donors have given fewer weeks worth of money than others,
+                # we want to adjust the amounts so that the weeks count will
+                # eventually be the same for every donation.
+                min_tip_ratio = tips_ratio * Decimal('0.1')
+                # Loop: compute how many "weeks" each tip is behind the "oldest"
+                # tip, as well as a naive ratio and amount based on that number
+                # of weeks
+                for tip in tips:
+                    tip.weeks_to_catch_up = max_weeks - tip.weeks
+                    tip.ratio = min(min_tip_ratio + tip.weeks_to_catch_up, 1)
+                    tip.amount = round_up(tip.full_amount * tip.ratio)
+                naive_amounts_sum = sum(tip.amount for tip in tips)
+                total_to_transfer = min(total_takes, total_income)
+                delta = total_to_transfer - naive_amounts_sum
+                if delta == 0:
+                    # The sum of the naive amounts computed in the previous loop
+                    # matches the end target, we got very lucky and no further
+                    # adjustments are required
+                    adjust_tips = False
+                else:
+                    # Loop: compute the "leeway" of each tip, i.e. how much it
+                    # can be increased or decreased to fill the `delta` gap
+                    if delta < 0:
+                        # The naive amounts are too high: we want to lower the
+                        # amounts of the tips that have a "high" ratio, leaving
+                        # untouched the ones that are already low
+                        for tip in tips:
+                            if tip.ratio > min_tip_ratio:
+                                min_tip_amount = round_up(tip.full_amount * min_tip_ratio)
+                                tip.leeway = min_tip_amount - tip.amount
+                            else:
+                                tip.leeway = 0
+                    else:
+                        # The naive amounts are too low: we can raise all the
+                        # tips that aren't already at their maximum
+                        for tip in tips:
+                            tip.leeway = tip.full_amount - tip.amount
+                    leeway = sum(tip.leeway for tip in tips)
+                    leeway_ratio = min(delta / leeway, 1)
+                    tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
+        # Loop: compute the adjusted donation amounts, and do the transfers
+        for tip in tips:
+            if adjust_tips:
+                tip_amount = round_up(tip.amount + tip.leeway * leeway_ratio)
+                if tip_amount == 0:
+                    continue
+                assert tip_amount > 0
+                assert tip_amount <= tip.full_amount
+                tip.amount = tip_amount
+            for take in takes:
+                if take.amount == 0 or tip.tipper == take.member:
+                    continue
+                transfer_amount = min(tip.amount, take.amount)
+                cursor.run("SELECT transfer(%s, %s, %s, 'take', %s, NULL)",
+                           (tip.tipper, take.member, transfer_amount, team_id))
+                tip.amount -= transfer_amount
+                take.amount -= transfer_amount
+                if tip.amount == 0:
+                    break
+
+    @staticmethod
+    def pay_invoices(cursor, ts_start):
+        """Settle pending invoices
+        """
+        invoices = cursor.all("""
+            SELECT i.*
+              FROM invoices i
+             WHERE i.status = 'accepted'
+               AND ( SELECT ie.ts
+                       FROM invoice_events ie
+                      WHERE ie.invoice = i.id
+                   ORDER BY ts DESC
+                      LIMIT 1
+                   ) < %(ts_start)s;
+        """, dict(ts_start=ts_start))
+        for i in invoices:
+            payer_balance = cursor.one("""
+                SELECT p.new_balance
+                  FROM payday_participants p
+                 WHERE id = %s
+            """, (i.addressee,))
+            if payer_balance < i.amount:
+                continue
+            cursor.run("""
+                SELECT transfer(%(addressee)s, %(sender)s, %(amount)s,
+                                %(nature)s::transfer_context, NULL, %(id)s);
+                UPDATE invoices
+                   SET status = 'paid'
+                 WHERE id = %(id)s;
+                INSERT INTO invoice_events
+                            (invoice, participant, status)
+                     VALUES (%(id)s, %(addressee)s, 'paid');
+            """, i._asdict())
 
     @staticmethod
     def check_balances(cursor):
@@ -432,8 +496,6 @@ class Payday(object):
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
-            DROP FUNCTION resolve_takes(bigint);
-            DROP FUNCTION pay_invoices();
         """)
 
     @classmethod
@@ -563,7 +625,7 @@ class Payday(object):
         now = pando.utils.utcnow()
         with self.db.get_cursor() as cursor:
             self.prepare(cursor, now)
-            self.transfer_virtually(cursor)
+            self.transfer_virtually(cursor, now)
             cursor.run("""
 
             UPDATE tips t

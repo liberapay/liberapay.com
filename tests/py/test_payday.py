@@ -256,7 +256,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor)
+            payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[self.janet.id] == 20
             assert new_balances[self.homer.id] == 0
@@ -278,7 +278,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor)
+            payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[self.david.id] == D('0.49')
             assert new_balances[self.janet.id] == D('0.51')
@@ -296,7 +296,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor)
+            payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
             assert new_balances[alice.id] == D('0')
             assert new_balances[self.homer.id] == D('30')
@@ -382,6 +382,242 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             'bob': D('0.21'),
             'charlie': D('9.5'),
             'dan': D('9.5'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+    def test_wellfunded_team_with_early_donor(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, D('0.79'), team)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('0.21'), team)
+        charlie = self.make_participant('charlie', balance=10)
+        charlie.set_tip_to(team, D('2.00'))
+
+        print("> Step 1: three weeks of donations from charlie only")
+        print()
+        for i in range(3):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79') * 3,
+            'bob': D('0.21') * 3,
+            'charlie': D('7.00'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+        print("> Step 2: dan joins the party, charlie's donation is automatically "
+              "reduced while dan catches up")
+        print()
+        dan = self.make_participant('dan', balance=10)
+        dan.set_tip_to(team, D('2.00'))
+
+        for i in range(6):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79') * 9,
+            'bob': D('0.21') * 9,
+            'charlie': D('5.50'),
+            'dan': D('5.50'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+        print("> Step 3: dan has caught up with charlie, they will now both give 0.50")
+        print()
+        for i in range(3):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79') * 12,
+            'bob': D('0.21') * 12,
+            'charlie': D('4.00'),
+            'dan': D('4.00'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+    def test_wellfunded_team_with_two_early_donors(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, D('0.79'), team)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('0.21'), team)
+        charlie = self.make_participant('charlie', balance=10)
+        charlie.set_tip_to(team, D('1.00'))
+        dan = self.make_participant('dan', balance=10)
+        dan.set_tip_to(team, D('3.00'))
+
+        print("> Step 1: three weeks of donations from early donors")
+        print()
+        for i in range(3):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79') * 3,
+            'bob': D('0.21') * 3,
+            'charlie': D('9.25'),
+            'dan': D('7.75'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+        print("> Step 2: a new donor appears, the contributions of the early "
+              "donors automatically decrease while the new donor catches up")
+        print()
+        emma = self.make_participant('emma', balance=10)
+        emma.set_tip_to(team, D('1.00'))
+
+        Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+        print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79') * 4,
+            'bob': D('0.21') * 4,
+            'charlie': D('9.19'),
+            'dan': D('7.59'),
+            'emma': D('9.22'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+        Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+        print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79') * 5,
+            'bob': D('0.21') * 5,
+            'charlie': D('8.99'),
+            'dan': D('7.01'),
+            'emma': D('9.00'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+        print("> Step 3: emma has caught up with the early donors")
+        print()
+
+        for i in range(2):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.79') * 7,
+            'bob': D('0.21') * 7,
+            'charlie': D('8.60'),
+            'dan': D('5.80'),
+            'emma': D('8.60'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+    def test_wellfunded_team_with_two_early_donors_and_low_amounts(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, D('0.01'), team)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('0.01'), team)
+        charlie = self.make_participant('charlie', balance=10)
+        charlie.set_tip_to(team, D('0.02'))
+        dan = self.make_participant('dan', balance=10)
+        dan.set_tip_to(team, D('0.02'))
+
+        print("> Step 1: three weeks of donations from early donors")
+        print()
+        for i in range(3):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.01') * 3,
+            'bob': D('0.01') * 3,
+            'charlie': D('9.97'),
+            'dan': D('9.97'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+        print("> Step 2: a new donor appears, the contributions of the early "
+              "donors automatically decrease while the new donor catches up")
+        print()
+        emma = self.make_participant('emma', balance=10)
+        emma.set_tip_to(team, D('0.02'))
+
+        for i in range(6):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.01') * 9,
+            'bob': D('0.01') * 9,
+            'charlie': D('9.94'),
+            'dan': D('9.94'),
+            'emma': D('9.94'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+    def test_wellfunded_team_with_early_donor_and_small_leftover(self):
+        self.clear_tables()
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, D('0.50'), team)
+        bob = self.make_participant('bob')
+        team.set_take_for(bob, D('0.50'), team)
+        charlie = self.make_participant('charlie', balance=10)
+        charlie.set_tip_to(team, D('0.52'))
+
+        print("> Step 1: three weeks of donations from early donor")
+        print()
+        for i in range(3):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.26') * 3,
+            'bob': D('0.26') * 3,
+            'charlie': D('8.44'),
+            'team': D('0.00'),
+        }
+        assert d == expected
+
+        print("> Step 2: a new donor appears, the contribution of the early "
+              "donor automatically decreases while the new donor catches up, "
+              "but the leftover is small so the adjustments are limited")
+        print()
+        dan = self.make_participant('dan', balance=10)
+        dan.set_tip_to(team, D('0.52'))
+
+        for i in range(3):
+            Payday.start().run(recompute_stats=0, update_cached_amounts=False)
+            print()
+
+        d = dict(self.db.all("SELECT username, balance FROM participants"))
+        expected = {
+            'alice': D('0.26') * 3 + D('0.50') * 3,
+            'bob': D('0.26') * 3 + D('0.50') * 3,
+            'charlie': D('7.00'),
+            'dan': D('8.44'),
             'team': D('0.00'),
         }
         assert d == expected
