@@ -64,11 +64,41 @@ title = _("Donate to {0}", participant.username)
         <br>
     % endif
 
-    <h4>{{ _("What is this site?") }}</h4>
-    <p>
-        {{ _("Liberapay is a recurrent donations platform.") }}
-        <a href="/about/">{{ _("Learn more") }}</a>
-    </p>
+    <h3>{{ _("Frequently Asked Questions") }}</h3>
+
+    <h4>{{ _("What payment methods are available?") }}</h4>
+    <p>{{ _(
+        "We currently support most credit and debit cards (VISA and MasterCard), as "
+        "well as bank wires (in euros). More options will be added in the future."
+    ) }}</p>
+
+    <h4>{{ _("How do recurrent donations work?") }}</h4>
+    <p>{{ _(
+        "On Liberapay donations are funded in advance. You have control over "
+        "how much money you put in and when. Adding more money at once "
+        "results in a lower percentage of {0}transaction fees{1}.",
+        '<a href="/about/faq#fees">'|safe,
+        '</a>'|safe,
+    ) }}</p>
+    <p>{{ _(
+        "When your account no longer contains enough money to fund your "
+        "donations we send you a notification via email so you can add "
+        "money again. Or you can discontinue your donation."
+    ) }}</p>
+
+    <h4>{{ _("Can I make one-time donation?") }}</h4>
+    <p>{{ _(
+        "No, but you can stop your donation at any time, and it will de facto "
+        "cease if you don't top up your account when needed."
+    ) }}</p>
+
+    <h4>{{ _("Is this platform legit and secure?") }}</h4>
+    <p>{{ _(
+        "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} "
+        "in France, we comply with the European Union's financial regulations, and "
+        "the security of our service is of paramount importance to us.",
+        '<a href="/about/legal">'|safe, '</a>'|safe
+    ) }}</p>
 
 </div>
 </div>
