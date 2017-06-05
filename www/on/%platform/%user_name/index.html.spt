@@ -122,6 +122,7 @@ if is_team:
                 % if user.ANON
                     <p>{{ _("We never collect money for you unless you join.") }}</p>
                     % include "templates/sign-in-link.html"
+                    <br>
                 % else
                     <p>{{ _("Connect this {0} account to your Liberapay profile.",
                             platform.display_name) }}</p>
@@ -129,6 +130,19 @@ if is_team:
                         {{ _("Connect") }}
                     % endcall
                 % endif
+            % endif
+            % if user.ANON and allow_pledges
+                <br>
+                <h5>{{ _("Don't like what you see?") }}</h5>
+
+                <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
+                        "out of Liberapay by locking it. We don't allow new pledges to "
+                        "locked accounts.",
+                        platform.display_name) }}</p>
+
+                % call auth_button(platform.name, 'lock', user_id, btn_cls='btn btn-danger')
+                    {{ _("Lock") }}
+                % endcall
             % endif
         </div>
     </div>
@@ -142,23 +156,6 @@ if is_team:
                 "musicians, writers, programmers, etc. by setting up a small weekly "
                 "cash gift to them.") }}
         <a href="/about/">{{ _("Learn more") }}</a></p>
-        </div>
-    </div>
-    % endif
-
-    % if user.ANON and allow_pledges
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _("Don't like what you see?") }}</div>
-
-        <div class="panel-body">
-        <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
-                "out of Liberapay by locking it. We don't allow new pledges to "
-                "locked accounts.",
-                platform.display_name) }}</p>
-
-        % call auth_button(platform.name, 'lock', user_id)
-            {{ _("Lock") }}
-        % endcall
         </div>
     </div>
     % endif
