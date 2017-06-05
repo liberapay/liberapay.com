@@ -14,8 +14,8 @@ class TestTipsJson(Harness):
         test_tipper = self.make_participant("test_tipper")
 
         data = [
-            {'username': 'test_tippee1', 'amount': '1.00'},
-            {'username': 'test_tippee2', 'amount': '2.00'}
+            {'username': 'test_tippee1', 'amount': '1.00', 'period': 'weekly'},
+            {'username': 'test_tippee2', 'amount': '2.00', 'period': 'weekly'}
         ]
 
         response = self.client.POST('/test_tipper/tips.json',
@@ -27,7 +27,7 @@ class TestTipsJson(Harness):
         assert response.code == 200
         assert len(json.loads(response.text)) == 2
 
-        data = [{'username': 'test_tippee2', 'amount': '1.00'}]
+        data = [{'username': 'test_tippee2', 'amount': '1.00', 'period': 'weekly'}]
         response = self.client.POST('/test_tipper/tips.json?also_prune=' + also_prune,
                                     body=json.dumps(data).encode('ascii'),
                                     content_type='application/json',
@@ -53,7 +53,7 @@ class TestTipsJson(Harness):
         test_tipper = self.make_participant("test_tipper")
 
         response = self.client.POST('/test_tippee1/tip.json',
-                                    {'amount': '1.00'},
+                                    {'amount': '1.00', 'period': 'weekly'},
                                     auth_as=test_tipper,
                                     xhr=True,
                                     )

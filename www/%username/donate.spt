@@ -16,7 +16,7 @@ title = _("Donate to {0}", participant.username)
 % block content
 <div class="row">
 <div class="col-md-7 col-md-offset-3">
-    <h2 class="text-primary">{{ title }}</h2>
+    <h2>{{ _("Donate to {0}", ('<a href="/{0}">{0}</a>'|safe).format(participant.username)) }}</h2>
 
     % if participant.is_suspended
     <p class="alert alert-danger">{{ _(
@@ -25,17 +25,34 @@ title = _("Donate to {0}", participant.username)
     % endif
 
     % if not participant.hide_receiving
-    {{ profile_goal_bar(participant) }}
+        % set goal, receiving = participant.goal, participant.receiving
+        % if goal
+            % if receiving
+            <p>{{ _(
+                "{0} currently receives {1} per week, they need your help to reach "
+                "their funding goal ({2} per week)."
+                , participant.username, Money(receiving, 'EUR'), Money(goal, 'EUR')
+            ) }}</p>
+            % else
+            <p>{{ _(
+                "{0}'s goal is to receive {1} per week."
+                , participant.username, Money(goal, 'EUR')
+            ) }} {{ _("Be the first to contribute!") }}</p>
+            % endif
+        % else
+            <p>{{ _(
+                "{0} currently receives {1} per week."
+                , participant.username, Money(receiving, 'EUR')
+            ) }}</p>
+        % endif
     % endif
 
     {{ tip_form(tippee=participant) }}
+    <br>
 
-    <h4>{{ _("Who exactly will I be donating to?") }}</h4>
-    <p><a href="{{ participant.path('') }}">{{
-        _("View {0}'s profile", participant.username)
-    }}</a></p>
     % set e_accounts = participant.get_accounts_elsewhere()
     % if e_accounts
+        <h3>{{ _("Recipient Identity") }}</h3>
         <p>{{ _(
             "We have confirmed through an automated verification process that "
             "{0} has control of the following accounts on other platforms:",
@@ -44,13 +61,44 @@ title = _("Donate to {0}", participant.username)
         % for platform in website.platforms if platform.name in e_accounts
             {{ account_elsewhere(platform, e_accounts, None) }}
         % endfor
+        <br>
     % endif
 
-    <h4>{{ _("What is this site?") }}</h4>
-    <p>
-        {{ _("Liberapay is a recurrent donations platform.") }}
-        <a href="/about/">{{ _("Learn more") }}</a>
-    </p>
+    <h3>{{ _("Frequently Asked Questions") }}</h3>
+
+    <h4>{{ _("What payment methods are available?") }}</h4>
+    <p>{{ _(
+        "We currently support most credit and debit cards (VISA and MasterCard), as "
+        "well as bank wires (in euros). More options will be added in the future."
+    ) }}</p>
+
+    <h4>{{ _("How do recurrent donations work?") }}</h4>
+    <p>{{ _(
+        "On Liberapay donations are funded in advance. You have control over "
+        "how much money you put in and when. Adding more money at once "
+        "results in a lower percentage of {0}transaction fees{1}.",
+        '<a href="/about/faq#fees">'|safe,
+        '</a>'|safe,
+    ) }}</p>
+    <p>{{ _(
+        "When your account no longer contains enough money to fund your "
+        "donations we send you a notification via email so you can add "
+        "money again. Or you can discontinue your donation."
+    ) }}</p>
+
+    <h4>{{ _("Can I make one-time donation?") }}</h4>
+    <p>{{ _(
+        "No, but you can stop your donation at any time, and it will de facto "
+        "cease if you don't top up your account when needed."
+    ) }}</p>
+
+    <h4>{{ _("Is this platform legit and secure?") }}</h4>
+    <p>{{ _(
+        "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} "
+        "in France, we comply with the European Union's financial regulations, and "
+        "the security of our service is of paramount importance to us.",
+        '<a href="/about/legal">'|safe, '</a>'|safe
+    ) }}</p>
 
 </div>
 </div>

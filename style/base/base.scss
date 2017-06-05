@@ -662,14 +662,30 @@ span.help-title {
         display: block;
         margin: 0;
         & > input[type="radio"] {
+            float: right;
             margin: 25px 15px 4px;
         }
         & > .radio-label {
             padding: 10px 15px;
         }
+        & > .radio-label:hover, & > input[type="radio"]:checked + .radio-label {
+            color: $list-group-link-hover-color;
+            background-color: $list-group-hover-bg;
+        }
     }
 }
-.radio-label:hover, input[type="radio"]:checked + .radio-label {
-    color: $list-group-link-hover-color;
-    background-color: $list-group-hover-bg;
+
+.btn-group-radio {
+    input[type="radio"] {
+        display: none;
+    }
+    & > .btn {
+        padding: 0;
+    }
+    .btn-text {
+        padding: 6px 12px;
+    }
+    .btn-text:hover, input[type="radio"]:checked + .btn-text {
+        background-color: #eee;
+    }
 }

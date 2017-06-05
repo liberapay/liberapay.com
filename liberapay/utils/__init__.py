@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from base64 import b64decode, b64encode
 from binascii import hexlify, unhexlify
 from datetime import date, datetime, timedelta
+from decimal import Decimal, InvalidOperation
 import errno
 import fnmatch
 from hashlib import sha256
@@ -22,7 +23,7 @@ from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
-from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired
+from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired, InvalidNumber
 from liberapay.models.community import Community
 from liberapay.utils.i18n import Money
 from liberapay.website import website
@@ -362,3 +363,10 @@ def build_s3_object_url(key):
     sig_key = hmac.new(sig_key, b"aws4_request", sha256).digest()
     signature = hmac.new(sig_key, string_to_sign, sha256).hexdigest()
     return endpoint + "/" + key + "?" + querystring + "&X-Amz-Signature=" + signature
+
+
+def read_decimal_or_400(s):
+    try:
+        return Decimal(s)
+    except (InvalidOperation, ValueError):
+        raise InvalidNumber(s)

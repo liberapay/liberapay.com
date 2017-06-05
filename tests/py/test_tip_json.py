@@ -7,10 +7,8 @@ from liberapay.testing import Harness
 
 class TestTipJson(Harness):
 
-    def tip(self, tipper, tippee, amount, period=None, raise_immediately=True):
-        data = {'amount': amount}
-        if period:
-            data['period'] = period
+    def tip(self, tipper, tippee, amount, period='weekly', raise_immediately=True):
+        data = {'amount': amount, 'period': period}
         return self.client.POST(
             "/%s/tip.json" % tippee,
             data,

@@ -5,43 +5,112 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % if inline
             <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
-            {{ tip_input(tip, disabled, small=True, pledging=pledging) }}
+            {{ tip_input(tip, disabled, small=True) }}
+            <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
+                           btn-sm" {{ disabled }}>{{
+                _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
+            }}</button>
+            % if tip.amount > 0
+            &nbsp;&nbsp;
+            <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Stop") }}</button>
+            % endif
         % else
-            <h4>{{ _('Your donation') }}</h4>
+            % set tippee_name = tippee.friendly_name if pledging else tippee.username
             <div class="form-group">
-                {{ tip_input(tip, disabled, pledging=pledging) }}
+                {{ tip_select(tip, tippee_name, disabled, pledging=pledging) }}
             </div>
-            <p>{{ _("Not sure how much to donate? Here are some standard amounts:") }}</p>
-            <div class="buttons">
-            % for msg, amount in constants.STANDARD_TIPS
-                % set amount_str = format_decimal(amount, '#,##0.00')
-                <a class="btn btn-default amount-btn" href="?amount={{ amount_str }}"
-                   rel="nofollow">{{ _(msg, Money(amount, 'EUR')) }}</a>
-            % endfor
-            </div>
-            <br>
         % endif
     </form>
 % endmacro
 
-% macro tip_input(tip, disabled='', small=False, pledging=False)
+% macro tip_input(tip, disabled='', small=False)
+    <div class="form-inline inline-block">
     <div class="input-group">
         <div class="input-group-addon">€</div>
-        <input type="text" name="amount" id="amount"
+        <input type="text" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
-               value="{{ request.qs.get('amount') or format_decimal(tip.periodic_amount) }}"
+               value="{{ format_decimal(tip.periodic_amount) if tip.periodic_amount else '' }}"
                {{ disabled }} />
-        % set period = request.qs.get('period') or tip.period
+    </div>
+    % set period = request.qs.get('period') or tip.period or 'weekly'
+    % if small
         <select name="period" class="form-control {{ 'input-sm' if small else '' }}">
             <option value="weekly">{{ _("per week") }}</option>
             <option value="monthly" {{ 'selected' if period == 'monthly' }}>{{ _("per month") }}</option>
             <option value="yearly" {{ 'selected' if period == 'yearly' }}>{{ _("per year") }}</option>
         </select>
-        <div class="input-group-btn">
-            <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
-                           {{ 'btn-sm' if small else '' }}" {{ disabled }}>{{
-                _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
-            }}</button>
+    % else
+        <div class="btn-group btn-group-radio">
+            {% set periods = [
+                ('weekly', _("per week")),
+                ('monthly', _("per month")),
+                ('yearly', _("per year")),
+            ] %}
+            % for value, label in periods
+                <label class="btn btn-default">
+                    <input type="radio" name="period" value="{{ value }}" {{ 'checked' if period == value }} />
+                    <div class="btn-text">{{ label }}</div>
+                </label>
+            % endfor
         </div>
+    % endif
     </div>
+% endmacro
+
+% macro tip_select(tip, tippee_name, disabled='', small=False, pledging=False)
+    % set tip_is_standard = []
+    % if tip.amount > 0
+        <p>{{ _(
+            "You are currently donating {0} per week to {1}. You can select or "
+            "input a different amount below, or stop the donation by clicking "
+            "on the Stop button."
+            , Money(tip.amount, 'EUR'), tippee_name
+        ) }}</p>
+    % else
+        <p>{{ _("Please select or input an amount:") }}</p>
+    % endif
+    <ul class="list-group radio-group">
+    % for std_tip in constants.STANDARD_TIPS
+        % set amount_is_a_match = std_tip.weekly == tip.amount
+        % if amount_is_a_match
+            {{ tip_is_standard.append(True) or '' }}
+        % endif
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="selected_amount" value="{{ std_tip.weekly }}"
+                   class="hidden-xs" {{ 'checked' if amount_is_a_match }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(std_tip.label) }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "{0} per week ~ {1} per month ~ {2} per year",
+                    Money(std_tip.weekly, 'EUR'),
+                    Money(std_tip.monthly, 'EUR'),
+                    Money(std_tip.yearly, 'EUR'),
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+    % endfor
+        % set period = request.qs.get('period') or tip.period
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="selected_amount" value="custom" required
+                   class="hidden-xs" {{ 'checked' if tip.amount and not tip_is_standard }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
+                {{ tip_input((None if tip_is_standard else tip), disabled, small=small) }}
+            </div>
+        </label>
+        </li>
+    </ul>
+    <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
+        _("Modify the donation") if tip.amount > 0 else
+        _("Next step →") if user.ANON else
+        _("Pledge") if pledging else
+        _("Donate")
+    }}</button>
+    % if tip.amount > 0
+    <br>
+    <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{ _("Stop the donation") }}</button>
+    % endif
 % endmacro

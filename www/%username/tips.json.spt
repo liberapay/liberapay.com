@@ -16,8 +16,7 @@ if request.method == 'POST':
         one = {"username": tip['username']}
         try:
             amount = participant.set_tip_to(
-                tip['username'], parse_decimal(tip['amount']),
-                tip.get('period', 'weekly'),
+                tip['username'], parse_decimal(tip['amount']), tip['period'],
             )['amount']
         except Exception as exc:
             amount = "error"
@@ -40,6 +39,8 @@ else:
             continue
         out.append({ "username": tip.username
                    , "amount": str(tip.amount)
+                   , "period": str(tip.period)
+                   , "periodic_amount": str(tip.periodic_amount)
                     })
 
 [---] application/json via json_dump
