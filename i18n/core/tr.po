@@ -306,25 +306,20 @@ msgstr ""
 msgid "Prevent my profile from being listed on Liberapay."
 msgstr ""
 
-#, python-brace-format
-msgid "Symbolic ({0} per week)"
-msgstr "Sembolik (haftalık {0})"
+msgid "Symbolic"
+msgstr ""
 
-#, python-brace-format
-msgid "Small ({0} per week)"
-msgstr "Küçük (haftalık {0})"
+msgid "Small"
+msgstr ""
 
-#, python-brace-format
-msgid "Medium ({0} per week)"
-msgstr "Orta (haftalık {0})"
+msgid "Medium"
+msgstr ""
 
-#, python-brace-format
-msgid "Large ({0} per week)"
-msgstr "Büyük (haftalık {0})"
+msgid "Large"
+msgstr ""
 
-#, python-brace-format
-msgid "Maximum ({0} per week)"
-msgstr "Maksimum (haftalık {0})"
+msgid "Maximum"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
@@ -1060,10 +1055,16 @@ msgstr ""
 msgid "Leftover"
 msgstr ""
 
-msgid "Your donation"
+msgid "Pledge"
 msgstr ""
 
-msgid "Not sure how much to donate? Here are some standard amounts:"
+msgid "Modify"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Amount"
 msgstr ""
 
 msgid "per week"
@@ -1075,10 +1076,27 @@ msgstr ""
 msgid "per year"
 msgstr ""
 
-msgid "Pledge"
+#, python-brace-format
+msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
 msgstr ""
 
-msgid "Modify"
+msgid "Please select or input an amount:"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "Modify the donation"
+msgstr ""
+
+msgid "Next step →"
+msgstr ""
+
+msgid "Stop the donation"
 msgstr ""
 
 msgid "Subscribe"
@@ -1115,18 +1133,44 @@ msgstr ""
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr ""
 
-msgid "Who exactly will I be donating to?"
+#, python-brace-format
+msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
 msgstr ""
 
 #, python-brace-format
-msgid "View {0}'s profile"
+msgid "{0} currently receives {1} per week."
+msgstr ""
+
+msgid "Recipient Identity"
 msgstr ""
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
 msgstr ""
 
-msgid "What is this site?"
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgid "What payment methods are available?"
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgstr ""
+
+msgid "How do recurrent donations work?"
+msgstr ""
+
+msgid "Can I make one-time donation?"
+msgstr ""
+
+msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
+msgstr ""
+
+msgid "Is this platform legit and secure?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr ""
 
 msgid "You don't have a profile statement in this language yet."
@@ -1349,9 +1393,6 @@ msgstr ""
 msgid "Recipient"
 msgstr ""
 
-msgid "Amount"
-msgstr ""
-
 msgid "Created"
 msgstr ""
 
@@ -1359,10 +1400,6 @@ msgid "Modified"
 msgstr ""
 
 msgid "Active?"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} per week ~ {1} per month ~ {2} per year"
 msgstr ""
 
 msgid "No: the donee hasn't filled the identity form"
@@ -1759,6 +1796,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "You are now donating {0} per year to {1}. Thank you!"
+msgstr ""
+
+msgid "The donation amount is missing."
 msgstr ""
 
 #, python-brace-format
@@ -2192,9 +2232,6 @@ msgstr ""
 msgid "Other communication channels:"
 msgstr ""
 
-msgid "Frequently Asked Questions"
-msgstr ""
-
 msgid "How is Liberapay funded?"
 msgstr ""
 
@@ -2319,7 +2356,7 @@ msgstr ""
 msgid "Legal Information"
 msgstr ""
 
-msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr ""
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
@@ -2874,6 +2911,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Explore pledges"
+msgstr ""
+
+#, python-brace-format
+msgid "This page is dedicated to the {platform} user {user_name}:"
 msgstr ""
 
 #, python-brace-format

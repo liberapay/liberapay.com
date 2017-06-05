@@ -306,25 +306,20 @@ msgstr "Indicar a los buscadores web que no indicen mi perfil."
 msgid "Prevent my profile from being listed on Liberapay."
 msgstr "Evitar que mi perfil figure en Liberapay."
 
-#, python-brace-format
-msgid "Symbolic ({0} per week)"
-msgstr "Simbólica ({0} por semana)"
+msgid "Symbolic"
+msgstr ""
 
-#, python-brace-format
-msgid "Small ({0} per week)"
-msgstr "Pequeña ({0} por semana)"
+msgid "Small"
+msgstr ""
 
-#, python-brace-format
-msgid "Medium ({0} per week)"
-msgstr "Medio ({0} por semana)"
+msgid "Medium"
+msgstr ""
 
-#, python-brace-format
-msgid "Large ({0} per week)"
-msgstr "Grande ({0} por semana)"
+msgid "Large"
+msgstr ""
 
-#, python-brace-format
-msgid "Maximum ({0} per week)"
-msgstr "Máximo ({0} por semana)"
+msgid "Maximum"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
@@ -1058,11 +1053,17 @@ msgstr "Estancias de ingresos no reclamados en los bolsillos de los donantes, qu
 msgid "Leftover"
 msgstr "Sobrante"
 
-msgid "Your donation"
-msgstr "Tu donación"
+msgid "Pledge"
+msgstr "Promesa"
 
-msgid "Not sure how much to donate? Here are some standard amounts:"
-msgstr "¿No estás seguro de cuánto donar? Estas son algunas de las cantidades estándares:"
+msgid "Modify"
+msgstr "Modificar"
+
+msgid "Stop"
+msgstr ""
+
+msgid "Amount"
+msgstr "Cantidad"
 
 msgid "per week"
 msgstr "por semana"
@@ -1073,11 +1074,28 @@ msgstr "por semana"
 msgid "per year"
 msgstr "por año"
 
-msgid "Pledge"
-msgstr "Promesa"
+#, python-brace-format
+msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
+msgstr ""
 
-msgid "Modify"
-msgstr "Modificar"
+msgid "Please select or input an amount:"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr "{0} por semana ~ {1} por mes ~ {2} por año"
+
+msgid "Custom"
+msgstr ""
+
+msgid "Modify the donation"
+msgstr ""
+
+msgid "Next step →"
+msgstr ""
+
+msgid "Stop the donation"
+msgstr ""
 
 msgid "Subscribe"
 msgstr "Suscribir"
@@ -1113,19 +1131,45 @@ msgstr "Donar a {0}"
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Esta cuenta se ha suspendido temporalmente, no será procesada donaciones a ella."
 
-msgid "Who exactly will I be donating to?"
-msgstr "¿A quién voy a donar exactamente?"
+#, python-brace-format
+msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
+msgstr ""
 
 #, python-brace-format
-msgid "View {0}'s profile"
-msgstr "Ver el perfil de {0}"
+msgid "{0} currently receives {1} per week."
+msgstr ""
+
+msgid "Recipient Identity"
+msgstr ""
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
 msgstr "Hemos confirmado a través de un proceso de verificación automatizada que {0} tiene el control de las siguientes cuentas en otras plataformas:"
 
-msgid "What is this site?"
-msgstr "¿Qué es este sitio?"
+msgid "Frequently Asked Questions"
+msgstr "Preguntas frecuentes"
+
+msgid "What payment methods are available?"
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgstr ""
+
+msgid "How do recurrent donations work?"
+msgstr ""
+
+msgid "Can I make one-time donation?"
+msgstr ""
+
+msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
+msgstr ""
+
+msgid "Is this platform legit and secure?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
+msgstr ""
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "Aún no tienes una declaración de perfil en este idioma."
@@ -1347,9 +1391,6 @@ msgstr "Donaciones"
 msgid "Recipient"
 msgstr "Destinatario"
 
-msgid "Amount"
-msgstr "Cantidad"
-
 msgid "Created"
 msgstr "Creado"
 
@@ -1358,10 +1399,6 @@ msgstr "Modificado"
 
 msgid "Active?"
 msgstr "¿Activo?"
-
-#, python-brace-format
-msgid "{0} per week ~ {1} per month ~ {2} per year"
-msgstr "{0} por semana ~ {1} por mes ~ {2} por año"
 
 msgid "No: the donee hasn't filled the identity form"
 msgstr "No: el donatario no ha llenado el formulario de identidad"
@@ -1761,6 +1798,9 @@ msgstr "Ahora estás donando {0} por mes a {1}. ¡Gracias!"
 #, python-brace-format
 msgid "You are now donating {0} per year to {1}. Thank you!"
 msgstr "Ahora estás donando {0} por año a {1}. ¡Gracias!"
+
+msgid "The donation amount is missing."
+msgstr ""
 
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
@@ -2193,9 +2233,6 @@ msgstr "Abrir un tema en GitHub"
 msgid "Other communication channels:"
 msgstr "Otros canales de comunicación:"
 
-msgid "Frequently Asked Questions"
-msgstr "Preguntas frecuentes"
-
 msgid "How is Liberapay funded?"
 msgstr "¿Cómo se financia Liberapay?"
 
@@ -2320,7 +2357,8 @@ msgstr "Liberapay es una organización sin ánimo de lucro {0} fundada en 2015 e
 msgid "Legal Information"
 msgstr "Información legal"
 
-msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+#, fuzzy
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "Este sitio web está gestionado por Liberapay, una organización sin ánimo de lucro fundada en 2015 en Francia."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
@@ -2881,6 +2919,10 @@ msgstr[1] "{n} Liberapay usuarios han comprometido a donar un total de {0} por s
 
 msgid "Explore pledges"
 msgstr "Explora promesas"
+
+#, python-brace-format
+msgid "This page is dedicated to the {platform} user {user_name}:"
+msgstr ""
 
 #, python-brace-format
 msgid "Profile on {0}"

@@ -307,25 +307,20 @@ msgstr "Řekněte webovým vyhledávačům aby neindexovaly můj profil."
 msgid "Prevent my profile from being listed on Liberapay."
 msgstr "Zamezit zobrazení mého profilu na Liberapay."
 
-#, python-brace-format
-msgid "Symbolic ({0} per week)"
-msgstr "Symbolicky ({0} týdně)"
+msgid "Symbolic"
+msgstr ""
 
-#, python-brace-format
-msgid "Small ({0} per week)"
-msgstr "Málo ({0} týdně)"
+msgid "Small"
+msgstr ""
 
-#, python-brace-format
-msgid "Medium ({0} per week)"
-msgstr "Středně ({0} týdně)"
+msgid "Medium"
+msgstr ""
 
-#, python-brace-format
-msgid "Large ({0} per week)"
-msgstr "Hodně ({0} týdně)"
+msgid "Large"
+msgstr ""
 
-#, python-brace-format
-msgid "Maximum ({0} per week)"
-msgstr "Maximálně ({0} týdně)"
+msgid "Maximum"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
@@ -1062,11 +1057,17 @@ msgstr "Nevyzvednuté příjmy zůstávají v peněženkách dárců, nezůstáv
 msgid "Leftover"
 msgstr "Přebytek"
 
-msgid "Your donation"
-msgstr "Váš příspěvek"
+msgid "Pledge"
+msgstr "Příslib"
 
-msgid "Not sure how much to donate? Here are some standard amounts:"
-msgstr "Nejste si jisti, kolik přispět? Zde jsou některé doporučené částky:"
+msgid "Modify"
+msgstr "Upravit"
+
+msgid "Stop"
+msgstr ""
+
+msgid "Amount"
+msgstr "Částka"
 
 msgid "per week"
 msgstr "týdně"
@@ -1077,11 +1078,28 @@ msgstr "měsíčně"
 msgid "per year"
 msgstr "ročně"
 
-msgid "Pledge"
-msgstr "Příslib"
+#, python-brace-format
+msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
+msgstr ""
 
-msgid "Modify"
-msgstr "Upravit"
+msgid "Please select or input an amount:"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr "{0} týdně ~ {1} měsíčně ~ {2} ročně"
+
+msgid "Custom"
+msgstr ""
+
+msgid "Modify the donation"
+msgstr ""
+
+msgid "Next step →"
+msgstr ""
+
+msgid "Stop the donation"
+msgstr ""
 
 msgid "Subscribe"
 msgstr "Přihlásit se"
@@ -1117,19 +1135,45 @@ msgstr "Přispět {0}"
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Tento účet je dočasně pozastaven, příspěvky pro něj nebudou zpracovány."
 
-msgid "Who exactly will I be donating to?"
-msgstr "Komu přesně budu přispívat?"
+#, python-brace-format
+msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
+msgstr ""
 
 #, python-brace-format
-msgid "View {0}'s profile"
-msgstr "Zobrazit profil uživatele {0}"
+msgid "{0} currently receives {1} per week."
+msgstr ""
+
+msgid "Recipient Identity"
+msgstr ""
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
 msgstr "Pomocí automatického procesu ověření jsme zjistili, že {0} má kontrolu nad následujícími účty na jiných platformách:"
 
-msgid "What is this site?"
-msgstr "Co jsou tyto stránky?"
+msgid "Frequently Asked Questions"
+msgstr "Často kladené otázky"
+
+msgid "What payment methods are available?"
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgstr ""
+
+msgid "How do recurrent donations work?"
+msgstr ""
+
+msgid "Can I make one-time donation?"
+msgstr ""
+
+msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
+msgstr ""
+
+msgid "Is this platform legit and secure?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
+msgstr ""
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "Ještě nemáte vyplněné prohlášení v tomto jazyce."
@@ -1352,9 +1396,6 @@ msgstr "Příspěvky"
 msgid "Recipient"
 msgstr "Příjemce"
 
-msgid "Amount"
-msgstr "Částka"
-
 msgid "Created"
 msgstr "Vytvořeno"
 
@@ -1363,10 +1404,6 @@ msgstr "Upraveno"
 
 msgid "Active?"
 msgstr "Aktivní?"
-
-#, python-brace-format
-msgid "{0} per week ~ {1} per month ~ {2} per year"
-msgstr "{0} týdně ~ {1} měsíčně ~ {2} ročně"
 
 msgid "No: the donee hasn't filled the identity form"
 msgstr "Ne: obdarovaný nevyplnil identifikační formulář"
@@ -1766,6 +1803,9 @@ msgstr "Nyní přispíváte {0} měsíčně pro {1}. Děkujeme!"
 #, python-brace-format
 msgid "You are now donating {0} per year to {1}. Thank you!"
 msgstr "Nyní přispíváte {0} ročně pro {1}. Děkujeme!"
+
+msgid "The donation amount is missing."
+msgstr ""
 
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
@@ -2202,9 +2242,6 @@ msgstr "Nahlašte problém na Githubu"
 msgid "Other communication channels:"
 msgstr "Další komunikační kanály:"
 
-msgid "Frequently Asked Questions"
-msgstr "Často kladené otázky"
-
 msgid "How is Liberapay funded?"
 msgstr "Jak je financován Liberapay?"
 
@@ -2329,7 +2366,8 @@ msgstr "Liberapay je nezisková organizace, kterou {0}v roce 2015 ve Francii{1} 
 msgid "Legal Information"
 msgstr "Právní informace"
 
-msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+#, fuzzy
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "Tento web je provozován Liberapay, neziskovou organizací založenou v roce 2015 a registrovanou ve Francii."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
@@ -2899,6 +2937,10 @@ msgstr[2] "{n} uživatelů Liberapay se zavázalo přispět {0} týdně pro {1}.
 
 msgid "Explore pledges"
 msgstr "Projít přísliby"
+
+#, python-brace-format
+msgid "This page is dedicated to the {platform} user {user_name}:"
+msgstr ""
 
 #, python-brace-format
 msgid "Profile on {0}"

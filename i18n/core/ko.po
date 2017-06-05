@@ -305,25 +305,20 @@ msgstr "인터넷 상의 검색 엔진에게 나를 색인하지 말라고 알�
 msgid "Prevent my profile from being listed on Liberapay."
 msgstr "내 프로필이 Liberapay에 리스트되는 것을 방지합니다."
 
-#, python-brace-format
-msgid "Symbolic ({0} per week)"
-msgstr "상징적 의미 (매주 {0})"
+msgid "Symbolic"
+msgstr ""
 
-#, python-brace-format
-msgid "Small ({0} per week)"
-msgstr "소액 (매주 {0})"
+msgid "Small"
+msgstr ""
 
-#, python-brace-format
-msgid "Medium ({0} per week)"
-msgstr "적당한 금액 (매주 {0})"
+msgid "Medium"
+msgstr ""
 
-#, python-brace-format
-msgid "Large ({0} per week)"
-msgstr "고액 (매주 {0})"
+msgid "Large"
+msgstr ""
 
-#, python-brace-format
-msgid "Maximum ({0} per week)"
-msgstr "최대치 (매주 {0})"
+msgid "Maximum"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
@@ -1054,11 +1049,17 @@ msgstr "가져가지 않은 지분은 기부자가 그대로 가지고 있게 �
 msgid "Leftover"
 msgstr "잔액"
 
-msgid "Your donation"
-msgstr "내 기부"
+msgid "Pledge"
+msgstr "공약"
 
-msgid "Not sure how much to donate? Here are some standard amounts:"
-msgstr "얼마나 기부할지 모르시겠나요? 표준적인 금액입니다:"
+msgid "Modify"
+msgstr "수정하기"
+
+msgid "Stop"
+msgstr ""
+
+msgid "Amount"
+msgstr "금액"
 
 msgid "per week"
 msgstr "매주"
@@ -1069,11 +1070,28 @@ msgstr "매달"
 msgid "per year"
 msgstr "매년"
 
-msgid "Pledge"
-msgstr "공약"
+#, python-brace-format
+msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
+msgstr ""
 
-msgid "Modify"
-msgstr "수정하기"
+msgid "Please select or input an amount:"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr "매주 {0} ~ 매달 {1} ~ 매년 {2}"
+
+msgid "Custom"
+msgstr ""
+
+msgid "Modify the donation"
+msgstr ""
+
+msgid "Next step →"
+msgstr ""
+
+msgid "Stop the donation"
+msgstr ""
 
 msgid "Subscribe"
 msgstr "구독"
@@ -1109,19 +1127,45 @@ msgstr "{0} 에(게) 기부"
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "이 계정은 일시적으로 정지되었으며, 기부금은 처리되지 않습니다."
 
-msgid "Who exactly will I be donating to?"
-msgstr "내가 누구에게 기부하게 됩니까?"
+#, python-brace-format
+msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
+msgstr ""
 
 #, python-brace-format
-msgid "View {0}'s profile"
-msgstr "{0} 님의 프로필 보기"
+msgid "{0} currently receives {1} per week."
+msgstr ""
+
+msgid "Recipient Identity"
+msgstr ""
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
 msgstr "자동적인 계정 인증 절차를 통해 {0} 님이 다음 플랫폼의 계정들을 소유함을 확인하였습니다:"
 
-msgid "What is this site?"
-msgstr "여기는 뭐하는 사이트인가요?"
+msgid "Frequently Asked Questions"
+msgstr "자주 묻는 질문"
+
+msgid "What payment methods are available?"
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgstr ""
+
+msgid "How do recurrent donations work?"
+msgstr ""
+
+msgid "Can I make one-time donation?"
+msgstr ""
+
+msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
+msgstr ""
+
+msgid "Is this platform legit and secure?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
+msgstr ""
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "이 언어로 된 프로필 문구가 없습니다."
@@ -1342,9 +1386,6 @@ msgstr "기부"
 msgid "Recipient"
 msgstr "받는이"
 
-msgid "Amount"
-msgstr "금액"
-
 msgid "Created"
 msgstr "생성됨"
 
@@ -1353,10 +1394,6 @@ msgstr "수정됨"
 
 msgid "Active?"
 msgstr "활동 중입니까?"
-
-#, python-brace-format
-msgid "{0} per week ~ {1} per month ~ {2} per year"
-msgstr "매주 {0} ~ 매달 {1} ~ 매년 {2}"
 
 msgid "No: the donee hasn't filled the identity form"
 msgstr "아니오: 기부받는 사람이 신원 폼을 입력하지 않았습니다"
@@ -1756,6 +1793,9 @@ msgstr "매월 {0} 만큼을 {1} 에게 기부하고 있습니다. 감사합니�
 #, python-brace-format
 msgid "You are now donating {0} per year to {1}. Thank you!"
 msgstr "매년 {0} 만큼을 {1} 에게 기부하고 있습니다. 감사합니다!"
+
+msgid "The donation amount is missing."
+msgstr ""
 
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
@@ -2184,9 +2224,6 @@ msgstr "GitHub에 이슈를 열어 주세요"
 msgid "Other communication channels:"
 msgstr "다른 커뮤니케이션 채널:"
 
-msgid "Frequently Asked Questions"
-msgstr "자주 묻는 질문"
-
 msgid "How is Liberapay funded?"
 msgstr "Liberapay는 어떻게 자금을 모으나요?"
 
@@ -2311,7 +2348,8 @@ msgstr "Liberapay는 {0}2015년에 프랑스{1}에서 {2}와(과) {3}에 의해 
 msgid "Legal Information"
 msgstr "법적 정보"
 
-msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+#, fuzzy
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "이 웹사이트는 2015년에 프랑스에서 법인이 설립된 비영리기구인 Liberapay에 의해 운영됩니다."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
@@ -2351,8 +2389,7 @@ msgid "Chargebacks"
 msgstr "지불 거절"
 
 msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
-msgstr ""
-"사기 방지를 위한 다양한 노력에도 불구하고 자금의 출처가 사기로 밝혀진 돈을 수령하게 된다면, 돈을 환불해 줄 의무는 귀하에게 있습니다."
+msgstr "사기 방지를 위한 다양한 노력에도 불구하고 자금의 출처가 사기로 밝혀진 돈을 수령하게 된다면, 돈을 환불해 줄 의무는 귀하에게 있습니다."
 
 msgid "Safety"
 msgstr "안전"
@@ -2858,6 +2895,10 @@ msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week
 msgstr[0] ""
 
 msgid "Explore pledges"
+msgstr ""
+
+#, python-brace-format
+msgid "This page is dedicated to the {platform} user {user_name}:"
 msgstr ""
 
 #, python-brace-format

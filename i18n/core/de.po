@@ -307,31 +307,24 @@ msgstr "Teile Suchmaschinen mit, mein Profil nicht zu indexieren."
 msgid "Prevent my profile from being listed on Liberapay."
 msgstr "Verhindere, dass mein Profil auf Liberapay aufgelistet wird."
 
-#, python-brace-format
-msgid "Symbolic ({0} per week)"
-msgstr "Symbolische ({0} pro Woche)"
+msgid "Symbolic"
+msgstr ""
 
-#, python-brace-format
-msgid "Small ({0} per week)"
-msgstr "Kleine ({0} pro Woche)"
+msgid "Small"
+msgstr ""
 
-#, python-brace-format
-msgid "Medium ({0} per week)"
-msgstr "Mittel ({0} pro Woche)"
+msgid "Medium"
+msgstr ""
 
-#, python-brace-format
-msgid "Large ({0} per week)"
-msgstr "Groß ({0} pro Woche)"
+msgid "Large"
+msgstr ""
 
-#, python-brace-format
-msgid "Maximum ({0} per week)"
-msgstr "Maximum ({0} pro Woche)"
+msgid "Maximum"
+msgstr ""
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr ""
-"Sie haben Ihr Kontingent von Anfragen verbraucht. Sie können es erneut "
-"versuchen in {0}."
+msgstr "Sie haben Ihr Kontingent von Anfragen verbraucht. Sie können es erneut versuchen in {0}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Sie machen Anfragen zu schnell, bitte versuchen Sie es später noch einmal."
@@ -626,13 +619,10 @@ msgstr "Dokument #{id} wurde bestätigt."
 
 #, python-brace-format
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr ""
-"Dokument #{id} wurde abgelehnt: {refused_reason_type} - "
-"{refused_reason_message}."
+msgstr "Dokument #{id} wurde abgelehnt: {refused_reason_type} - {refused_reason_message}."
 
 msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr ""
-"Falls Sie Hilfe benötigen, schreiben Sie eine Email an support@liberapay.com."
+msgstr "Falls Sie Hilfe benötigen, schreiben Sie eine Email an support@liberapay.com."
 
 msgid "Occupation"
 msgstr "Beruf"
@@ -1067,11 +1057,17 @@ msgstr "Nicht eingeforderte Einnahmen verbleiben in den Geldbörsen der Spender 
 msgid "Leftover"
 msgstr "Übrig"
 
-msgid "Your donation"
-msgstr "Ihre Spende"
+msgid "Pledge"
+msgstr "Versprechen"
 
-msgid "Not sure how much to donate? Here are some standard amounts:"
-msgstr "Nicht sicher, wie viel zu spenden? Hier sind einige Standardmengen :"
+msgid "Modify"
+msgstr "Ändern"
+
+msgid "Stop"
+msgstr ""
+
+msgid "Amount"
+msgstr "Betrag"
 
 msgid "per week"
 msgstr "pro Woche"
@@ -1082,11 +1078,28 @@ msgstr "pro Monat"
 msgid "per year"
 msgstr "pro Jahr"
 
-msgid "Pledge"
-msgstr "Versprechen"
+#, python-brace-format
+msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
+msgstr ""
 
-msgid "Modify"
-msgstr "Ändern"
+msgid "Please select or input an amount:"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} per week ~ {1} per month ~ {2} per year"
+msgstr "{0} pro Woche ~ {1} pro Monat ~ {2} pro Jahr"
+
+msgid "Custom"
+msgstr ""
+
+msgid "Modify the donation"
+msgstr ""
+
+msgid "Next step →"
+msgstr ""
+
+msgid "Stop the donation"
+msgstr ""
 
 msgid "Subscribe"
 msgstr "Abonnieren"
@@ -1122,19 +1135,45 @@ msgstr "Spenden Sie für {0}"
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Dieses Konto wird vorübergehend ausgesetzt, Spenden an sie werden nicht bearbeitet."
 
-msgid "Who exactly will I be donating to?"
-msgstr "Wer wird genau die Spende erhalten?"
+#, python-brace-format
+msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
+msgstr ""
 
 #, python-brace-format
-msgid "View {0}'s profile"
-msgstr "{0} Profil ansehen"
+msgid "{0} currently receives {1} per week."
+msgstr ""
+
+msgid "Recipient Identity"
+msgstr ""
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
 msgstr "Wir haben durch einen automatisierten Überprüfungsprozess ermittelt, dass {0} Inhaber der folgenden Konten auf anderen Plattformen ist:"
 
-msgid "What is this site?"
-msgstr "Was ist diese Seite?"
+msgid "Frequently Asked Questions"
+msgstr "Häufig gestellte Fragen"
+
+msgid "What payment methods are available?"
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgstr ""
+
+msgid "How do recurrent donations work?"
+msgstr ""
+
+msgid "Can I make one-time donation?"
+msgstr ""
+
+msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
+msgstr ""
+
+msgid "Is this platform legit and secure?"
+msgstr ""
+
+#, python-brace-format
+msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
+msgstr ""
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "Sie haben noch keinen Profiltext in dieser Sprache geschrieben."
@@ -1288,8 +1327,7 @@ msgid "Address Taken"
 msgstr "Addresse bereits vergeben"
 
 msgid "This email address is already connected to a different Liberapay account."
-msgstr ""
-"Diese E-Mail-Adresse ist bereits mit einem anderen Liberapay-Konto verknüpft."
+msgstr "Diese E-Mail-Adresse ist bereits mit einem anderen Liberapay-Konto verknüpft."
 
 msgid "Already Verified"
 msgstr "Bereits überprüft"
@@ -1349,19 +1387,13 @@ msgid "Liberapay does not take a cut of payments and is only funded by the donat
 msgstr "Liberapay muss kein Schnitt von Zahlungen und wird nur durch die Spenden an {0} eigene Rechnung finanziert {1}, beachten Sie bitte Chipping in:"
 
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr ""
-"Liberapay zu entwickeln ist eine Menge Arbeit und es gibt noch viel zu tun. "
-"Unsere Entwickler, Übersetzer und anderen Mitwirkenden sind leider stark "
-"unterbezahlt und das verlangsamt unseren Fortschritt."
+msgstr "Liberapay zu entwickeln ist eine Menge Arbeit und es gibt noch viel zu tun. Unsere Entwickler, Übersetzer und anderen Mitwirkenden sind leider stark unterbezahlt und das verlangsamt unseren Fortschritt."
 
 msgid "Donations"
 msgstr "Spenden"
 
 msgid "Recipient"
 msgstr "Empfänger"
-
-msgid "Amount"
-msgstr "Betrag"
 
 msgid "Created"
 msgstr "Erstellt"
@@ -1371,10 +1403,6 @@ msgstr "Geändert"
 
 msgid "Active?"
 msgstr "Aktiv?"
-
-#, python-brace-format
-msgid "{0} per week ~ {1} per month ~ {2} per year"
-msgstr "{0} pro Woche ~ {1} pro Monat ~ {2} pro Jahr"
 
 msgid "No: the donee hasn't filled the identity form"
 msgstr "Nein: Der Empfänger hat das Identitätsformular nicht ausgefüllt"
@@ -1422,9 +1450,7 @@ msgid "Level 2"
 msgstr ""
 
 msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr ""
-"Sie haben den Prozess des Identitätsnachweises abgeschlossen. Die Geldmenge, "
-"die Sie senden und empfangen können, ist nicht länger limitiert."
+msgstr "Sie haben den Prozess des Identitätsnachweises abgeschlossen. Die Geldmenge, die Sie senden und empfangen können, ist nicht länger limitiert."
 
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
@@ -1777,6 +1803,9 @@ msgstr "Sie spenden jetzt {0} pro Monat an {1}. Danke schön!"
 #, python-brace-format
 msgid "You are now donating {0} per year to {1}. Thank you!"
 msgstr "Sie spenden jetzt {0} pro Jahr an {1}. Vielen Dank!"
+
+msgid "The donation amount is missing."
+msgstr ""
 
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
@@ -2211,9 +2240,6 @@ msgstr "Öffnen Sie ein Thema auf GitHub"
 msgid "Other communication channels:"
 msgstr "Andere Kommunikationswege:"
 
-msgid "Frequently Asked Questions"
-msgstr "Häufig gestellte Fragen"
-
 msgid "How is Liberapay funded?"
 msgstr "Wie finanziert sich Liberapay?"
 
@@ -2267,11 +2293,7 @@ msgstr "Es gibt keine Einschränkungen auf die Gesamtmenge geben oder empfangen 
 
 #, fuzzy, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr ""
-"Der minimale Spendenbetrag, den Sie einem Nutzer geben können, beträgt {0}. "
-"Zur Minimierung der Bearbeitungsgebühren belasten wir Ihre Kreditkarte mit "
-"mindestens {1} auf einmal (das Geld wir auf Ihrem Liberapay-Konto "
-"gutgeschrieben und am Zahltag verteilt)."
+msgstr "Der minimale Spendenbetrag, den Sie einem Nutzer geben können, beträgt {0}. Zur Minimierung der Bearbeitungsgebühren belasten wir Ihre Kreditkarte mit mindestens {1} auf einmal (das Geld wir auf Ihrem Liberapay-Konto gutgeschrieben und am Zahltag verteilt)."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
@@ -2342,7 +2364,8 @@ msgstr "Liberapay ist eine gemeinnützige Organisation {0} gegründet im Jahr 20
 msgid "Legal Information"
 msgstr "Rechtliche Hinweise"
 
-msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France."
+#, fuzzy
+msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "Diese Website wird von Liberapay verwaltet. Liberapay ist eine Non-Profit-Organisation, die 2015 in Frankreich gegründet wurde."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
@@ -2915,6 +2938,10 @@ msgid "Explore pledges"
 msgstr "Versprochene Spenden entdecken"
 
 #, python-brace-format
+msgid "This page is dedicated to the {platform} user {user_name}:"
+msgstr ""
+
+#, python-brace-format
 msgid "Profile on {0}"
 msgstr "Profil auf {0}"
 
@@ -3048,8 +3075,7 @@ msgstr "{0} Benutzername"
 
 #, python-brace-format
 msgid "Please enter the address of the {0} account you would like to connect:"
-msgstr ""
-"Bitte geben Sie die Adresse des {0} Kontos an, das Sie verknüpfen wollen:"
+msgstr "Bitte geben Sie die Adresse des {0} Kontos an, das Sie verknüpfen wollen:"
 
 msgid "Please Confirm"
 msgstr "Bitte bestätige"
