@@ -11,6 +11,7 @@ class GitLab(PlatformOAuth2):
     name = 'gitlab'
     display_name = 'GitLab'
     account_url = 'https://gitlab.com/u/{user_name}'
+    repo_url = 'https://gitlab.com/{slug}'
 
     # Auth attributes
     # GitLab uses https://github.com/doorkeeper-gem/doorkeeper
@@ -27,6 +28,7 @@ class GitLab(PlatformOAuth2):
     # api_user_name_info_path = '/users?username={user_name}'
     api_user_self_info_path = '/user'
     # api_team_members_path = '/groups/{user_name}/members'
+    api_repos_path = '/projects?owned=true&visibility=public&order_by=last_activity_at&per_page=100'
 
     # The commented out paths are because we need this:
     # https://gitlab.com/gitlab-org/gitlab-ce/issues/13795
@@ -37,3 +39,13 @@ class GitLab(PlatformOAuth2):
     x_display_name = key('name')
     x_email = key('email')
     x_avatar_url = key('avatar_url')
+
+    # Repo info extractors
+    x_repo_id = key('id')
+    x_repo_name = key('name')
+    x_repo_slug = key('path_with_namespace')
+    x_repo_description = key('description')
+    x_repo_last_update = key('last_activity_at')
+    x_repo_is_fork = key('forked_from_project', clean=bool)
+    x_repo_stars_count = key('star_count')
+    x_repo_owner_id = key('owner', clean=lambda d: d['id'])
