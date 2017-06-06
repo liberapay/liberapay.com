@@ -108,6 +108,78 @@ if is_team:
         </div>
     </div>
 
+    % if is_team and members and not locked
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ team_description }}</div>
+        <div class="panel-body">
+
+            <p>{{ _("You can donate directly to the team's members:") }}</p>
+
+            <table id="members" class="table table-condensed text-center-xs">
+            <tbody>
+
+            % for member in members
+                % set on_liberapay = member.participant.status != 'stub'
+                % set declines_gifts = not member.participant.accepts_tips
+                % set size = 28 if declines_gifts else 72
+                <tr>
+                    % if on_liberapay
+                        % set url = member.participant.path('')
+                        % set username_link
+                            <a href="{{ url }}">{{ member.participant.username }}</a>
+                        % endset
+                        <td>
+                            <a href="{{ url }}" class="avatar-inline">
+                                {{ avatar_img(member.participant, size=size) }}
+                            </a>
+                            <span class="block-xs">{{
+                                _("{0} declines donations", username_link|safe) if declines_gifts else
+                                _("{0} accepts donations", username_link|safe)
+                            }}</span>
+                            % if not declines_gifts
+                                <div class="inline-block pull-right no-float-xs"
+                                     style="line-height: {{ size }}px">
+                                <a class="btn btn-donate btn-lg"
+                                   href="{{ member.participant.path('donate') }}"
+                                   >{{ _("Donate") }}</a>
+                                </div>
+                            % endif
+                        </td>
+                    % else
+                        % set url = '/on/%s/%s/' % (platform.name, member.liberapay_slug)
+                        % set friendly_name_link
+                            <a href="{{ url }}">{{ member.friendly_name }}</a>
+                        % endset
+                        <td>
+                            <a href="{{ url }}" class="avatar-inline">
+                                {{ avatar_img(member, size=size) }}
+                            </a>
+                            <span class="block-xs">{{
+                                _("{0} opted out of Liberapay", friendly_name_link|safe) if declines_gifts else
+                                _("{0} hasn't joined Liberapay yet", friendly_name_link|safe)
+                            }}</span>
+                            % if not declines_gifts
+                                <div class="inline-block pull-right no-float-xs"
+                                     style="line-height: {{ size }}px">
+                                <a class="btn btn-donate" href="{{ url }}">{{ _("Pledge") }}</a>
+                                </div>
+                            % endif
+                        </td>
+                    % endif
+                </tr>
+            % endfor
+
+            % if pages_urls
+                % from 'templates/pagination.html' import pages_links with context
+                <tr><td>{{ pages_links(pages_urls, '#members') }}</td></tr>
+            % endif
+
+            </tbody>
+            </table>
+        </div>
+    </div>
+    % endif
+
     <div class="panel panel-default">
         <div class="panel-heading">{{ _("Are you {0}?", friendly_name) }}</div>
         <div class="panel-body">
@@ -122,6 +194,7 @@ if is_team:
                 % if user.ANON
                     <p>{{ _("We never collect money for you unless you join.") }}</p>
                     % include "templates/sign-in-link.html"
+                    <br>
                 % else
                     <p>{{ _("Connect this {0} account to your Liberapay profile.",
                             platform.display_name) }}</p>
@@ -129,6 +202,19 @@ if is_team:
                         {{ _("Connect") }}
                     % endcall
                 % endif
+            % endif
+            % if user.ANON and allow_pledges
+                <br>
+                <h5>{{ _("Don't like what you see?") }}</h5>
+
+                <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
+                        "out of Liberapay by locking it. We don't allow new pledges to "
+                        "locked accounts.",
+                        platform.display_name) }}</p>
+
+                % call auth_button(platform.name, 'lock', user_id, btn_cls='btn btn-danger')
+                    {{ _("Lock") }}
+                % endcall
             % endif
         </div>
     </div>
@@ -142,80 +228,6 @@ if is_team:
                 "musicians, writers, programmers, etc. by setting up a small weekly "
                 "cash gift to them.") }}
         <a href="/about/">{{ _("Learn more") }}</a></p>
-        </div>
-    </div>
-    % endif
-
-    % if user.ANON and allow_pledges
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _("Don't like what you see?") }}</div>
-
-        <div class="panel-body">
-        <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
-                "out of Liberapay by locking it. We don't allow new pledges to "
-                "locked accounts.",
-                platform.display_name) }}</p>
-
-        % call auth_button(platform.name, 'lock', user_id)
-            {{ _("Lock") }}
-        % endcall
-        </div>
-    </div>
-    % endif
-
-    % if is_team and members and not locked
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ team_description }}</div>
-
-        <div class="panel-body">
-        <table id="members" class="table table-condensed">
-        <thead><tr><th>{{ _("Member") }}</th><th>{{ _("Status") }}</th></tr></thead>
-        <tbody>
-
-        % for member in members
-            % set on_liberapay = member.participant.status != 'stub'
-            % set declines_gifts = not member.participant.accepts_tips
-            <tr class="{{ 'declines' if declines_gifts else '' }}
-                       {{ 'not-on-liberapay' if not on_liberapay else '' }}">
-                % if on_liberapay
-                    <td>
-                        <a href="/{{ member.participant.username }}/">
-                            {{ avatar_img(member.participant) }}
-                            {{member.participant.username}}
-                        </a>
-                    </td>
-                    <td>
-                        % if declines_gifts
-                            {{ _("declines gifts") }}
-                        % else
-                            {{ _("accepts gifts") }}
-                        % endif
-                    </td>
-                % else
-                    <td>
-                        <a href="/on/{{platform.name}}/{{member.liberapay_slug}}/">
-                            {{ avatar_img(member) }}
-                            {{ member.friendly_name }}
-                        </a>
-                    </td>
-                    <td>
-                        % if not member.participant.accepts_tips
-                            {{ _("opted out of Liberapay") }}
-                        % else
-                            {{ _("hasn't joined Liberapay yet") }}
-                        % endif
-                    </td>
-                % endif
-            </tr>
-        % endfor
-
-        % if pages_urls
-            % from 'templates/pagination.html' import pages_links with context
-            <tr><td colspan="2">{{ pages_links(pages_urls, '#members') }}</td></tr>
-        % endif
-
-        </tbody>
-        </table>
         </div>
     </div>
     % endif

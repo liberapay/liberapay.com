@@ -1,0 +1,16 @@
+
+.inline-block {
+    display: inline-block;
+}
+
+@media (max-width: $screen-sm-min - 1) {
+    .block-xs {
+        display: block;
+    }
+    .no-float-xs {
+        float: none !important;
+    }
+    .text-center-xs {
+        text-align: center;
+    }
+}

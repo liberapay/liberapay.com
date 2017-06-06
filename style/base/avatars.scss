@@ -34,3 +34,14 @@ img.avatar {
 .avatar-cutter-28 {
     @include avatar-wrap(28px);
 }
+
+.avatar-inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (max-width: $screen-sm-min - 1) {
+    .avatar-inline {
+        margin-bottom: 0.3em;
+    }
+}
