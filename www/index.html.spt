@@ -226,7 +226,7 @@ recent = query_cache.one("""
         ) }}</p>
         % if sponsors
             <p>{{ ngettext(
-                "There is currently {n} sponsor on the platform, this section is our way of thanking them.",
+                "There is currently {n} sponsor on the platform, this section is our way of thanking for the support.",
                 "There are currently {n} sponsors on the platform, this section is our way of thanking them.",
                 nsponsors
             ) }} {{ fontawesome('smile-o') }}
