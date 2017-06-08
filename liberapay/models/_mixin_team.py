@@ -90,6 +90,8 @@ class MixinTeam(object):
         proportional share of the leftover, or a minimum based on last week's
         median take, or 1.
         """
+        if not self.throttle_takes:
+            return D_INF
         sum_last_week = sum(last_week.values())
         initial_leftover = self.receiving - sum_last_week
         nonzero_last_week = [a for a in last_week.values() if a]
@@ -234,7 +236,8 @@ class MixinTeam(object):
             member['nominal_take'] = take['nominal_take']
             member['actual_amount'] = take['actual_amount']
             member['last_week'] = last_week.get(m_id, D_ZERO)
-            member['max_this_week'] = self.compute_max_this_week(m_id, last_week)
+            x = self.compute_max_this_week(m_id, last_week)
+            member['max_this_week'] = x if x.is_finite() else None
             members[member['id']] = member
         return members
 

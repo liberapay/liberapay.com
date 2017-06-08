@@ -87,6 +87,16 @@ class Tests(Harness):
         actual = team.set_take_for(alice, D('200.00'), team)
         assert actual == 100
 
+    def test_can_take_any_amount_when_throttling_is_disabled(self):
+        team = self.make_team(throttle_takes=False)
+        alice = self.make_participant('alice')
+        self.take_last_week(team, alice, '0.00')
+        team.set_take_for(alice, D('400.00'), alice)
+        assert team.get_take_for(alice) == 400
+        self.take_last_week(team, alice, '10.00')
+        team.set_take_for(alice, D('500.00'), alice)
+        assert team.get_take_for(alice) == 500
+
     def test_get_members(self):
         team = self.make_team()
         alice = self.make_participant('alice')

@@ -6,7 +6,7 @@
 
 % macro team_takes_table(team, cls='')
     % set members = team.get_members()
-    % if user.id in members
+    % if user.id in members and members[user.id]['max_this_week']
         <p>{{ _(
             "Your nominal take from the {0} team is limited to {1} this week. "
             "{2}Why?{3}",
