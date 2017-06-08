@@ -10,6 +10,11 @@ body {
         justify-content: space-around;
         margin: 100px auto 20px auto;
 
+        @media (max-width: $screen-sm-min) {
+            flex-direction: column;
+            text-align: center;
+        }
+
         ul {
             list-style: none;
             padding: 0px;
