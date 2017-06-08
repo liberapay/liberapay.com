@@ -93,6 +93,8 @@ class MixinTeam(object):
         if not self.throttle_takes:
             return D_INF
         sum_last_week = sum(last_week.values())
+        if sum_last_week == 0:
+            return D_INF
         initial_leftover = self.receiving - sum_last_week
         nonzero_last_week = [a for a in last_week.values() if a]
         member_last_week = last_week.get(member_id, 0)
