@@ -120,17 +120,17 @@ class MixinTeam(object):
         if not isinstance(take, (None.__class__, Decimal)):
             take = Decimal(take)
 
-        if take and check_max and take > 1:
-            last_week = self.get_takes_last_week()
-            max_this_week = self.compute_max_this_week(member.id, last_week)
-            if take > max_this_week:
-                take = max_this_week
-
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
             # Compute the current takes
             old_takes = self.compute_actual_takes(cursor)
+            # Throttle the new take, if there is more than one member
+            if take and check_max and len(old_takes) > 1 and take > 1:
+                last_week = self.get_takes_last_week()
+                max_this_week = self.compute_max_this_week(member.id, last_week)
+                if take > max_this_week:
+                    take = max_this_week
             # Insert the new take
             cursor.run("""
 

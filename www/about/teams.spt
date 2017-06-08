@@ -100,6 +100,12 @@ title = _("Teams")
     "take in the previous payday."
 ) }}</p>
 
+<p>{{ _(
+    "Takes are not limited if the team has only one member, or if the previous "
+    "week's takes were all zero (which is the case for any new team that has "
+    "been created after the most recent payday)."
+) }}</p>
+
 <h3>{{ _("Removing team membership") }}</h3>
 
 <p>{{ _(
