@@ -112,15 +112,19 @@
         </div>
     </div>
 
-    <footer role="navigation">
-        <a href="/about/">{{ _("About") }}</a>
-        <a href="/about/contact">{{ _("Contact Us") }}</a>
-        <a href="/about/faq">{{ _("FAQ") }}</a>
-        <a href="/about/legal">{{ _("Legal") }}</a>
-        <a href="https://framasphere.org/u/liberapay">Diaspora*</a>
-        <a href="https://github.com/liberapay/liberapay.com">GitHub</a>
-        <a href="https://twitter.com/liberapaye">Twitter</a>
-        <a href="https://www.facebook.com/Liberapay-472128142945598/">Facebook</a>
+    <footer class="container" role="navigation">
+        <ul>
+          <li><a href="/about/">{{ _("About") }}</a></li>
+          <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
+          <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
+          <li><a href="/about/legal">{{ _("Legal") }}</a></li>
+        </ul>
+        <ul>
+          <li><a href="https://framasphere.org/u/liberapay">Diaspora*</a></li>
+          <li><a href="https://github.com/liberapay/liberapay.com">GitHub</a></li>
+          <li><a href="https://twitter.com/liberapaye">Twitter</a></li>
+          <li><a href="https://www.facebook.com/Liberapay-472128142945598/">Facebook</a></li>
+        </ul>
     </footer>
 
 <script src="{{ website.asset('jquery.min.js') }}"></script>
