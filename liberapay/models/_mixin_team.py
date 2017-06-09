@@ -86,9 +86,9 @@ class MixinTeam(object):
         )
 
     def compute_max_this_week(self, member_id, last_week):
-        """2x the member's take last week, or the member's take last week + a
-        proportional share of the leftover, or a minimum based on last week's
-        median take, or 1.
+        """2x the member's take last week, or the member's take last week + the
+        leftover, or last week's median take, or 1.00, or infinity if the takes
+        were all zero last week or if throttling is disabled.
         """
         if not self.throttle_takes:
             return D_INF
