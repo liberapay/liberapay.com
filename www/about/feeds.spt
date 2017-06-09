@@ -5,19 +5,24 @@ title = _("Feeds")
 % from "templates/icons.html" import fontawesome
 
 % block content
-<div class="row paragraph"><div class="col-md-6">
+<div class="row paragraph"><div class="col-md-8">
 
     <p>{{ _("You can get updates from us on the following social networks:") }}</p>
+    <div class="buttons">
+    <a class="btn btn-default btn-lg" href="https://mastodon.rocks/@Liberapay">
+        {{ fontawesome('columns') }}&nbsp;Mastodon
+    </a>
     <a class="btn btn-default btn-lg" href="https://framasphere.org/u/liberapay">
-        {{ fontawesome('asterisk') }} <span>Diaspora</span>
+        {{ fontawesome('asterisk') }}&nbsp;Diaspora
     </a>
     <a class="btn btn-default btn-lg" href="https://twitter.com/liberapaye">
-        {{ fontawesome('twitter') }} <span>Twitter</span>
+        {{ fontawesome('twitter') }}&nbsp;Twitter
     </a>
     <a class="btn btn-default btn-lg" href="https://www.facebook.com/Liberapay-472128142945598/">
-        {{ fontawesome('facebook') }} <span>Facebook</span>
+        {{ fontawesome('facebook') }}&nbsp;Facebook
     </a>
-    <br><br>
+    </div>
+    <br>
 
     <p>{{ _(
         "You can also follow the {1}development of the Liberapay software{0}, "

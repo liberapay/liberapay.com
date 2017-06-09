@@ -6,11 +6,26 @@ html, body {
 body {
     overflow-y: scroll;
     & > footer {
-        margin: 100px 0 20px 0;
-        text-align: center;
-        & > a {
-            display: inline-block;
-            padding: 10px;
+        display: flex;
+        justify-content: space-around;
+        margin: 100px auto 20px auto;
+
+        @media (max-width: $screen-sm-min) {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        & > ul {
+            list-style: none;
+            padding: 0px;
+
+            & > li {
+                display: inline-block;
+                & > a {
+                    display: inline-block;
+                    padding: 10px;
+                }
+            }
         }
     }
 }
