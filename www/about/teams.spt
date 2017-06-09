@@ -83,6 +83,21 @@ title = _("Teams")
     "nominal ones, even if additional income is available."
 ) }}</p>
 
+<p>{{ _(
+    "You may wonder why we treat nominal takes as maximums instead of simple "
+    "percentages. It's because having maximums allows a team to have unused "
+    "income (called “leftover”), and that is good in several ways. Firstly, it "
+    "provides a “cushion” that stabilizes the income of the team's members. "
+    "Secondly, it eases the integration of new members into a team, because as "
+    "they increase their takes they reduce the leftover instead of affecting "
+    "the income of the other members. Thirdly, it allows our software to adjust "
+    "the amounts that donors actually transfer to the team's members, in a way "
+    "that balances the donors' contributions over time, thus making the system "
+    "more fair. Finally, it encourages donating to a team even if it has "
+    "already reached its funding goal, which is good for the staibility of the "
+    "team's income."
+) }}</p>
+
 <h4 id="throttling">{{ _("Regulation of take amounts") }}</h4>
 
 <p>{{ _(
