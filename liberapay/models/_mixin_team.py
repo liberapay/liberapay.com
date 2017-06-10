@@ -86,19 +86,21 @@ class MixinTeam(object):
         )
 
     def compute_max_this_week(self, member_id, last_week):
-        """2x the member's take last week, or the member's take last week + a
-        proportional share of the leftover, or a minimum based on last week's
-        median take, or 1.
+        """2x the member's take last week, or the member's take last week + the
+        leftover, or last week's median take, or 1.00, or infinity if the takes
+        were all zero last week or if throttling is disabled.
         """
+        if not self.throttle_takes:
+            return D_INF
         sum_last_week = sum(last_week.values())
+        if sum_last_week == 0:
+            return D_INF
         initial_leftover = self.receiving - sum_last_week
         nonzero_last_week = [a for a in last_week.values() if a]
         member_last_week = last_week.get(member_id, 0)
-        leftover_share = member_last_week / (sum_last_week or D_INF)
-        leftover_share = max(leftover_share, D_UNIT / self.nmembers)
         return max(
             member_last_week * 2,
-            member_last_week + initial_leftover * leftover_share,
+            member_last_week + initial_leftover,
             median(nonzero_last_week or (0,)),
             D_UNIT
         )
@@ -116,17 +118,17 @@ class MixinTeam(object):
         if not isinstance(take, (None.__class__, Decimal)):
             take = Decimal(take)
 
-        if take and check_max and take > 1:
-            last_week = self.get_takes_last_week()
-            max_this_week = self.compute_max_this_week(member.id, last_week)
-            if take > max_this_week:
-                take = max_this_week
-
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
             # Compute the current takes
             old_takes = self.compute_actual_takes(cursor)
+            # Throttle the new take, if there is more than one member
+            if take and check_max and len(old_takes) > 1 and take > 1:
+                last_week = self.get_takes_last_week()
+                max_this_week = self.compute_max_this_week(member.id, last_week)
+                if take > max_this_week:
+                    take = max_this_week
             # Insert the new take
             cursor.run("""
 
@@ -234,7 +236,8 @@ class MixinTeam(object):
             member['nominal_take'] = take['nominal_take']
             member['actual_amount'] = take['actual_amount']
             member['last_week'] = last_week.get(m_id, D_ZERO)
-            member['max_this_week'] = self.compute_max_this_week(m_id, last_week)
+            x = self.compute_max_this_week(m_id, last_week)
+            member['max_this_week'] = x if x.is_finite() else None
             members[member['id']] = member
         return members
 
