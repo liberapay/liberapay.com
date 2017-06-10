@@ -122,14 +122,14 @@ class Participant(Model, MixinTeam):
                 p.change_username(username, c)
         return p
 
-    def make_team(self, name, email=None, email_lang=None):
+    def make_team(self, name, email=None, email_lang=None, throttle_takes=True):
         with self.db.get_cursor() as c:
             t = c.one("""
                 INSERT INTO participants
-                            (kind, status, join_time)
-                     VALUES ('group', 'active', now())
+                            (kind, status, join_time, throttle_takes)
+                     VALUES ('group', 'active', now(), %s)
                   RETURNING participants.*::participants
-            """)
+            """, (throttle_takes,))
             t.change_username(name, c)
             t.add_member(self, c)
         if email:
