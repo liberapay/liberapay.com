@@ -563,6 +563,10 @@ msgstr "Naam van het team"
 msgid "Email of the team (optional)"
 msgstr "Emailadres van het team (optioneel)"
 
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr ""
+
 msgid "Create"
 msgstr "Aanmaken"
 
@@ -654,9 +658,7 @@ msgid "Identity Proof"
 msgstr "Identiteitsbewijs"
 
 msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr ""
-"Paspoort, ID-kaart (voor- en achterkant) of rijbewijs uit het Verenigd "
-"Koninkrijk."
+msgstr "Paspoort, ID-kaart (voor- en achterkant) of rijbewijs uit het Verenigd Koninkrijk."
 
 msgid "Organization Information"
 msgstr "Organisatie informatie"
@@ -2506,14 +2508,20 @@ msgstr "Je kunt je deel wijzigen op {0}het team dashboard{1}. Hier staat een tab
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "De nominale delen zijn ruwe cijfers die de leden zelf hebben ingevuld. Het daadwerkelijke deel wordt als volgt berekend: eerst telt het systeem alle nominale delen op, dan berekend hij de percentages die elk deel vertegenwoordigd, hierna berekend hij met die percentages het daadwerkelijke inkomen. Nominale delen hebben ook een maximum: de daadwerkelijke delen zijn nooit hoger dan de nominale delen, zelfs als er extra inkomen beschikbaar is."
 
+msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the staibility of the team's income."
+msgstr ""
+
 msgid "Regulation of take amounts"
 msgstr "Regulering van het inkomen"
 
-msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
-msgstr "De nominale deel wordt geknepen. Het deel kan niet worden verhoogt boven het maximum dat is berekend op basis van het deel van de vorige betaaldag. Deze regeling is bedoeld om het risico op misbruik door teamleden te verkleinen."
+msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
-msgstr "Het exacte limiet is het hoogste bedrag van één van deze vier waarden: het cijfer één, twee keer het deel van het lid op de vorige betaaldag, het lid zijn deel op de vorige betaaldag plus een evenredig deel van de ongebruikte inkomsten of het gemiddelde deel op de vorige betaaldag."
+msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's lefotver income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
+
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
+msgstr ""
 
 msgid "Removing team membership"
 msgstr "Het verwijderen van een teamlid"

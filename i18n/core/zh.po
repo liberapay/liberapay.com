@@ -561,6 +561,10 @@ msgstr "團隊的名稱"
 msgid "Email of the team (optional)"
 msgstr "團隊的聯絡電郵 (可選項目)"
 
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr ""
+
 msgid "Create"
 msgstr "建立"
 
@@ -2495,14 +2499,20 @@ msgstr "你可以在所屬團隊{1}的操控版來改變自己收取的份額 {0
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "名目上的收取是成員所輸入的粗略數字，而真實收取則是由系統計算：首先它會加總名目收取，然後再計算每份收取代表的百分比，最後再將此百分比依可得收入轉算。名目收取通常代表最大：而實際收取不會高過名目，即便有多出來的收入。"
 
+msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the staibility of the team's income."
+msgstr ""
+
 msgid "Regulation of take amounts"
 msgstr "收取數額的規定"
 
-msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
-msgstr "名目收取會減少，它們不會高於前一次付款日基於名目收取數目所計算的最大值。這個規則是為了減少團隊成員惡意濫用的風險。"
+msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
-msgstr "這四個值的最大值明確限制為：數字1、上個付款日成員收取的雙倍、前一個付款日成員收取加上未使用收入的比例分配、前一個付款日收取的中位數。"
+msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's lefotver income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
+
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
+msgstr ""
 
 msgid "Removing team membership"
 msgstr "移除團隊成員資格"

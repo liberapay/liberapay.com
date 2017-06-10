@@ -563,6 +563,10 @@ msgstr "Nombre del equipo"
 msgid "Email of the team (optional)"
 msgstr "Correo electrónico del equipo (opcional)"
 
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr ""
+
 msgid "Create"
 msgstr "Crear"
 
@@ -1076,10 +1080,7 @@ msgstr "por año"
 
 #, python-brace-format
 msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr ""
-"Estás donando actualmente {0} por semana a {1}. Puedes seleccionar o "
-"introducir una cantidad diferente abajo, o parar la donación haciendo clic "
-"en el botón Detener."
+msgstr "Estás donando actualmente {0} por semana a {1}. Puedes seleccionar o introducir una cantidad diferente abajo, o parar la donación haciendo clic en el botón Detener."
 
 msgid "Please select or input an amount:"
 msgstr "Por favor, selecciona o introduce una cantidad:"
@@ -1136,9 +1137,7 @@ msgstr "Esta cuenta se ha suspendido temporalmente, no será procesada donacione
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr ""
-"{0} recibe actualmente {1} por semana, necesita tu ayuda para alcanzar su "
-"objetivo de {2} por semana)."
+msgstr "{0} recibe actualmente {1} por semana, necesita tu ayuda para alcanzar su objetivo de {2} por semana)."
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
@@ -1158,10 +1157,7 @@ msgid "What payment methods are available?"
 msgstr "¿Qué métodos de pago hay disponibles?"
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
-msgstr ""
-"Actualmente soportamos la mayoría de tarjetas de crédito y de débito (VISA y "
-"MasterCard), así como transferencias bancarias (en euros). Más opciones "
-"serán añadidas en el futuro."
+msgstr "Actualmente soportamos la mayoría de tarjetas de crédito y de débito (VISA y MasterCard), así como transferencias bancarias (en euros). Más opciones serán añadidas en el futuro."
 
 msgid "How do recurrent donations work?"
 msgstr "¿Cómo funcionan las donaciones recurrentes?"
@@ -1170,20 +1166,14 @@ msgid "Can I make a one-time donation?"
 msgstr "¿Puedo hacer una donación de una sola vez?"
 
 msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
-msgstr ""
-"No, pero puedes detener tu donación en cualquier momento, y cesará de facto "
-"si no añades fondos a tu cuenta cuando sea necesario."
+msgstr "No, pero puedes detener tu donación en cualquier momento, y cesará de facto si no añades fondos a tu cuenta cuando sea necesario."
 
 msgid "Is this platform legit and secure?"
 msgstr "¿Es esta plataforma legal y segura?"
 
 #, python-brace-format
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
-msgstr ""
-"Sí. Liberapay está gestionado por una organización sin ánimo de lucro {0}"
-"legistrada legalmente{1} en Francia, cumplimos con las regulaciones "
-"financieras de la Unión Europea, y la seguridad de nuestro servicio es de "
-"suma importancia para nosotros."
+msgstr "Sí. Liberapay está gestionado por una organización sin ánimo de lucro {0}legistrada legalmente{1} en Francia, cumplimos con las regulaciones financieras de la Unión Europea, y la seguridad de nuestro servicio es de suma importancia para nosotros."
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "Aún no tienes una declaración de perfil en este idioma."
@@ -2369,9 +2359,7 @@ msgid "Legal Information"
 msgstr "Información legal"
 
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
-msgstr ""
-"Este sitio web está gestionado por Liberapay, una organización sin ánimo de "
-"lucro fundada en 2015 en Francia (Identificador: W144000981)."
+msgstr "Este sitio web está gestionado por Liberapay, una organización sin ánimo de lucro fundada en 2015 en Francia (Identificador: W144000981)."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
 msgstr "Liberapay está registrado como un distribuidor de dinero electrónico en la Unión Europea. Con la ayuda de nuestros socios monitorizamos transacciones en busca de posibles fraudes, blanqueo de capitales y financiación del terrorismo, como requieren las regulaciones financieras."
@@ -2520,14 +2508,20 @@ msgstr "Puedes cambiar tu toma de {0}panel de administración de tus equipos{1}.
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Las tomas nominales son los números en bruto que los propios miembros introducen, las tomas reales son calculadas por el sistema: primero se suman las tomas nominales, después se calcula el porcentaje que cada toma representa, y por último se aplican esos porcentajes a los ingresos disponibles . Las tomas nominales también actúan como máximos: las tomas reales nunca son superiores a las nominales, incluso si el ingreso adicional está disponible."
 
+msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the staibility of the team's income."
+msgstr ""
+
 msgid "Regulation of take amounts"
 msgstr "La regulación de cantidades para llevar"
 
-msgid "Nominal takes are throttled, they can't be raised higher than a maximum computed based on the nominal takes at the time of the previous payday. This regulation is meant to reduce the risk of abuse by ill-intentioned team members."
-msgstr "Las tomas nominal son limitadas, no se pueden levantar más alto que un máximo calculado en base a las tomas nominales en el momento del día de pago anterior. Esta regulación tiene por objeto reducir el riesgo de abuso por parte de los miembros del equipo mal intencionadas."
+msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-msgid "The exact limit is the maximum of these four values: the number 1, two times the member's take in the previous payday, the member's take in the previous payday + a proportional share of any unused income, the median take in the previous payday."
-msgstr "El límite exacto es el máximo de estos cuatro valores: el número 1, dos veces toma del miembro en el día de pago previo, toma del miembro en el día de pago anterior + una parte proporcional de cualquier ingreso no utilizado, la media tomada en el día de pago anterior."
+msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's lefotver income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
+
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
+msgstr ""
 
 msgid "Removing team membership"
 msgstr "La eliminación de los miembros del equipo"
