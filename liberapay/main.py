@@ -11,6 +11,7 @@ from six.moves.urllib.parse import quote as urlquote
 import aspen
 import aspen.http.mapping
 import pando
+from pando import json
 from pando.algorithms.website import fill_response_with_output
 from pando.utils import maybe_encode
 
@@ -168,6 +169,15 @@ def _success(self, code=200, msg=''):
     self.body = msg
     raise self
 pando.Response.success = _success
+
+if hasattr(pando.Response, 'json'):
+    raise Warning('pando.Response.json() already exists')
+def _json(self, obj, code=200):
+    self.code = code
+    self.body = json.dumps(obj)
+    self.headers[b'Content-Type'] = b'application/json'
+    raise self
+pando.Response.json = _json
 
 if hasattr(pando.Response, 'sanitize_untrusted_url'):
     raise Warning('pando.Response.sanitize_untrusted_url() already exists')

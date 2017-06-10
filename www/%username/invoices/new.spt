@@ -1,7 +1,5 @@
 # coding: utf8
 
-import json
-
 from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
 from liberapay.exceptions import AuthRequired
 from liberapay.utils import get_participant, to_javascript
@@ -79,7 +77,7 @@ if request.method == 'POST':
                  VALUES (%s, %s, %s, %s, %s, %s, '{}'::jsonb, 'pre')
               RETURNING id
         """, (user.id, addressee.id, invoice_nature, amount, description, details))
-    raise response.success(200, json.dumps({'invoice_id': invoice_id}))
+    raise response.json({'invoice_id': invoice_id})
 
 title = _("Invoice {someone}", someone=addressee.username)
 
