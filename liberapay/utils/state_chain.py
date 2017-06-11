@@ -178,3 +178,13 @@ def return_500_for_exception(website, exception, response=None):
             "we'll get it fixed ASAP."
         )
     return {'response': response, 'exception': None}
+
+
+def overwrite_status_code_of_gateway_errors(response):
+    """This function changes 502 and 504 response codes to 500.
+
+    Why? Because CloudFlare masks our error page if we return a 502 or 504:
+    https://github.com/liberapay/liberapay.com/issues/592
+    """
+    if response.code in (502, 504):
+        response.code = 500

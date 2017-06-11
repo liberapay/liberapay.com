@@ -23,6 +23,7 @@ from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching
 from liberapay.utils.state_chain import (
     create_response_object, canonize, insert_constants, _dispatch_path_to_filesystem,
     merge_exception_into_response, return_500_for_exception, turn_socket_error_into_50X,
+    overwrite_status_code_of_gateway_errors,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
 from liberapay.website import website
@@ -136,6 +137,8 @@ algorithm.functions = [
     algorithm['delegate_error_to_simplate'],
     tell_sentry,
     return_500_for_exception,
+
+    overwrite_status_code_of_gateway_errors,
 
     tell_sentry,
 ]
