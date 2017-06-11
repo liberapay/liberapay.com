@@ -401,3 +401,6 @@ INSERT INTO app_conf (key, value) VALUES
 ALTER TABLE elsewhere
     ALTER COLUMN user_id DROP NOT NULL,
     ADD CONSTRAINT user_id_chk CHECK (user_id IS NOT NULL OR domain <> '' AND user_name IS NOT NULL);
+
+-- migration #37
+ALTER TABLE participants ADD COLUMN throttle_takes boolean NOT NULL DEFAULT TRUE;
