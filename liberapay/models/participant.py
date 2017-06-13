@@ -1675,6 +1675,17 @@ class Participant(Model, MixinTeam):
         return -1
 
 
+    def get_mangopay_account(self):
+        """Fetch the mangopay account for this participant.
+        """
+        if not self.mangopay_user_id:
+            return
+        return mangopay.resources.User.get(self.mangopay_user_id)
+
+
+    # Accounts Elsewhere
+    # ==================
+
     def get_account_elsewhere(self, platform):
         """Return an AccountElsewhere instance.
         """
@@ -1686,7 +1697,6 @@ class Participant(Model, MixinTeam):
                AND platform=%s
 
         """, (self.id, platform))
-
 
     def get_accounts_elsewhere(self):
         """Return a dict of AccountElsewhere instances.
@@ -1701,15 +1711,6 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         accounts_dict = {account.platform: account for account in accounts}
         return accounts_dict
-
-
-    def get_mangopay_account(self):
-        """Fetch the mangopay account for this participant.
-        """
-        if not self.mangopay_user_id:
-            return
-        return mangopay.resources.User.get(self.mangopay_user_id)
-
 
     def take_over(self, account, have_confirmation=False):
         """Given an AccountElsewhere or a tuple (platform_name, domain, user_id),
@@ -1883,6 +1884,10 @@ class Participant(Model, MixinTeam):
                 platform=platform, domain=domain, user_id=user_id
             ))
         self.update_avatar()
+
+
+    # More Random Stuff
+    # =================
 
     def to_dict(self, details=False, inquirer=None):
         output = {
