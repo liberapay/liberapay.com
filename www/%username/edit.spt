@@ -202,6 +202,10 @@ title = _username
     % include "templates/members-listing.html"
     % endif
     % include "templates/connected-accounts.html"
+
+    <h3 class="banderole default" id="repos">{{ _("Repositories") }}</h3>
+    % include "templates/import-repos.html"
+
     % if participant.kind != 'group'
     % include "templates/team-listing.html"
     % include "templates/community-listing.html"

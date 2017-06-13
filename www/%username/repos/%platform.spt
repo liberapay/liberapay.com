@@ -1,0 +1,128 @@
+# coding: utf8
+
+from datetime import timedelta
+
+from liberapay.models.repository import upsert_repos
+from liberapay.utils import get_participant, utcnow
+
+LIMIT = 20
+THREE_DAYS = timedelta(days=3)
+
+[---]
+
+request.allow('GET', 'POST')
+
+participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == 'POST':
+    for k, v in request.body.items():
+        if k.startswith('show_on_profile:'):
+            try:
+                repo_id = int(k.split(':', 1)[-1])
+            except ValueError:
+                raise response.error(400, "bad key '%s'" % k)
+            v = v[-1] if isinstance(v, list) else v
+            show = v == 'on'
+            website.db.run("""
+                UPDATE repositories
+                   SET show_on_profile = %s
+                 WHERE participant = %s
+                   AND id = %s
+                   AND show_on_profile IS NOT %s
+            """, (show, participant.id, repo_id, show))
+    raise response.json({"msg": _("Your profile has been updated.")})
+
+platform_name = request.path['platform']
+if platform_name:
+    platform = getattr(website.platforms, platform_name, None)
+    if not platform:
+        raise response.error(404, "unknown platform")
+    if not hasattr(platform, 'api_repos_path'):
+        raise response.error(400, "repos are not implemented for platform '%s'" % platform_name)
+
+    account = participant.get_account_elsewhere(platform.name)
+    if account:
+        event_type = 'fetch_repos:%s' % account.id
+        last_fetch = participant.get_last_event_of_type(event_type)
+        try:
+            offset = max(int(request.qs.get('offset', 0)), 0)
+        except (TypeError, ValueError):
+            offset = 0
+        if last_fetch and last_fetch.ts > utcnow() - THREE_DAYS:
+            repos = participant.get_repos_on_platform(
+                platform.name, limit=LIMIT, offset=offset
+            )
+        else:
+            repos = []
+            sess = account.get_auth_session()
+            with website.db.get_cursor() as cursor:
+                next_page = None
+                for i in range(3):
+                    r = platform.get_repos(account, page_url=next_page, sess=sess)
+                    repos += upsert_repos(cursor, r[0], participant)
+                    next_page = r[2].get('next')
+                    if not next_page:
+                        break
+                payload = dict(partial_list=bool(next_page))
+                last_fetch = participant.add_event(cursor, event_type, payload)
+            repos = sorted(repos, key=lambda repo: (not repo.is_fork, repo.last_update), reverse=True)[:LIMIT]
+        total_count = website.db.one("""
+            SELECT count(*)
+              FROM repositories r
+             WHERE r.participant = %s
+               AND r.platform = %s
+        """, (participant.id, platform.name))
+
+title = _("{username}'s Repositories", username=participant.username)
+
+[---] text/html
+% extends "templates/base.html"
+
+% from "templates/repos.html" import show_repo with context
+% from "templates/auth.html" import auth_button with context
+
+% block content
+% if not platform_name
+
+    % include "templates/import-repos.html"
+
+% else
+
+    <h2>{{ _(platform.display_name) }}</h2>
+    % if not account
+        <p>{{ _(
+            "You don't have any {platform} account connected to your profile.",
+            platform=platform.display_name
+        ) }}</p>
+        % call auth_button(platform.name, 'connect')
+            {{ _("Connect {0} account", platform.display_name) }}
+        % endcall
+    % else
+        <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
+        <p>{{ _(
+            "A list of {n} repositories has been imported from your {platform} account, "
+            "{time} ago."
+            , n=total_count, platform=platform.display_name, time=to_age(last_fetch.ts)
+        ) }}</p>
+        <hr>
+        <form action="javascript:" class="js-submit" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            % for repo in repos
+                {{ show_repo(repo, edit=True) }}
+                <hr>
+            % else
+                <p>{{ _("No repositories found.") }}</p>
+            % endfor
+            % if repos
+                <br>
+                % set next_offset = offset + LIMIT
+                % if next_offset < total_count
+                <a class="btn btn-default btn-lg pull-right" href="?offset={{ next_offset }}">{{ _("Next Page →") }}</a>
+                % endif
+                <button class="btn btn-primary btn-lg">{{ _("Save") }}</button>
+            % endif
+        </form>
+    % endif
+
+% endif
+% endblock

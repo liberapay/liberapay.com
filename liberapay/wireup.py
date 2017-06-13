@@ -390,11 +390,14 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     friends_platforms = [p for p in platforms if getattr(p, 'api_friends_path', None)]
     friends_platforms = PlatformRegistry(friends_platforms)
 
+    platforms_with_repos_api = [p for p in platforms if hasattr(p, 'api_repos_path')]
+
     for platform in platforms:
         platform.icon = asset('platforms/%s.16.png' % platform.name)
         platform.logo = asset('platforms/%s.png' % platform.name)
 
-    return {'platforms': platforms, 'friends_platforms': friends_platforms}
+    return {'platforms': platforms, 'friends_platforms': friends_platforms,
+            'platforms_with_repos_api': platforms_with_repos_api}
 
 
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):

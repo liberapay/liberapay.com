@@ -960,9 +960,11 @@ class Participant(Model, MixinTeam):
     # ======
 
     def add_event(self, c, type, payload, recorder=None):
-        c.run("""
-            INSERT INTO events (participant, type, payload, recorder)
-            VALUES (%s, %s, %s, %s)
+        return c.one("""
+            INSERT INTO events
+                        (participant, type, payload, recorder)
+                 VALUES (%s, %s, %s, %s)
+              RETURNING *
         """, (self.id, type, Json(payload), recorder))
 
     def get_last_event_of_type(self, type):
@@ -1884,6 +1886,31 @@ class Participant(Model, MixinTeam):
                 platform=platform, domain=domain, user_id=user_id
             ))
         self.update_avatar()
+
+
+    # Repositories
+    # ============
+
+    def get_repos_for_profile(self):
+        return self.db.all("""
+            SELECT r
+              FROM repositories r
+             WHERE r.participant = %s
+               AND r.show_on_profile
+          ORDER BY r.is_fork ASC NULLS FIRST, r.last_update DESC
+             LIMIT 20
+        """, (self.id,))
+
+    def get_repos_on_platform(self, platform, limit=50, offset=None):
+        return self.db.all("""
+            SELECT r
+              FROM repositories r
+             WHERE r.participant = %s
+               AND r.platform = %s
+          ORDER BY r.is_fork ASC NULLS FIRST, r.last_update DESC
+             LIMIT %s
+            OFFSET %s
+        """, (self.id, platform, limit, offset))
 
 
     # More Random Stuff
