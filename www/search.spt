@@ -66,6 +66,7 @@ if query:
               FROM communities c
               JOIN participants p ON p.id = c.participant
              WHERE name %% %(q)s
+               AND p.hide_from_search = 0
           ORDER BY rank DESC, name
              LIMIT 10
         """, locals())
