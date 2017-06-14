@@ -16,3 +16,6 @@ CREATE TABLE repositories
 , UNIQUE (platform, remote_id)
 , UNIQUE (platform, slug)
 );
+
+CREATE INDEX repositories_trgm_idx ON repositories
+    USING gist(name gist_trgm_ops);
