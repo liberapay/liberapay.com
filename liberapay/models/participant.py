@@ -1882,8 +1882,20 @@ class Participant(Model, MixinTeam):
                    AND user_id=%s
              RETURNING participant
             """, (self.id, platform, domain, user_id), default=NonexistingElsewhere)
+            detached_repos_count = c.one("""
+                WITH detached AS (
+                         UPDATE repositories
+                            SET participant = null
+                          WHERE participant = %s
+                            AND platform = %s
+                            AND owner_id = %s
+                      RETURNING id
+                     )
+                SELECT count(*) FROM detached
+            """, (self.id, platform, user_id))
             self.add_event(c, 'delete_elsewhere', dict(
-                platform=platform, domain=domain, user_id=user_id
+                platform=platform, domain=domain, user_id=user_id,
+                detached_repos_count=detached_repos_count,
             ))
         self.update_avatar()
 

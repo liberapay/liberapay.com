@@ -11,7 +11,7 @@ CREATE TABLE repositories
 , stars_count           int
 , extra_info            json
 , info_fetched_at       timestamptz     NOT NULL DEFAULT now()
-, participant           bigint          NOT NULL REFERENCES participants
+, participant           bigint          REFERENCES participants
 , show_on_profile       boolean         NOT NULL DEFAULT FALSE
 , UNIQUE (platform, remote_id)
 , UNIQUE (platform, slug)
