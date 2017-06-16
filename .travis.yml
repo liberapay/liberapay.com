@@ -6,7 +6,7 @@ matrix:
     - python: 3.6
       env: TOXENV=py36
 addons:
-  postgresql: 9.4
+  postgresql: 9.6
 branches:
   only:
     - master
@@ -32,3 +32,4 @@ notifications:
       - "%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})"
     skip_join: true
 sudo: false
+dist: trusty
