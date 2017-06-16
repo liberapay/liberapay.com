@@ -139,6 +139,7 @@ class AppConf(object):
         openstreetmap_id=str,
         openstreetmap_secret=str,
         password_rounds=int,
+        refetch_repos_every=int,
         s3_endpoint=str,
         s3_public_access_key=str,
         s3_secret_key=str,

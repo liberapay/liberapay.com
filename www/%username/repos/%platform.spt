@@ -59,7 +59,7 @@ if platform_name:
                 next_page = None
                 for i in range(3):
                     r = platform.get_repos(account, page_url=next_page, sess=sess)
-                    repos += upsert_repos(cursor, r[0], participant)
+                    repos += upsert_repos(cursor, r[0], participant, utcnow())
                     next_page = r[2].get('next')
                     if not next_page:
                         break

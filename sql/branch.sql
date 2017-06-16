@@ -19,3 +19,6 @@ CREATE TABLE repositories
 
 CREATE INDEX repositories_trgm_idx ON repositories
     USING gist(name gist_trgm_ops);
+
+INSERT INTO app_conf (key, value) VALUES
+    ('refetch_repos_every', '60'::jsonb);

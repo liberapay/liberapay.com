@@ -19,6 +19,7 @@ from liberapay import utils, wireup
 from liberapay.cron import Cron
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
+from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.state_chain import (
@@ -92,6 +93,7 @@ if env.run_cron_jobs and conf:
     cron(conf.check_db_every, website.db.self_check, True)
     cron(conf.dequeue_emails_every, Participant.dequeue_emails, True)
     cron(conf.send_newsletters_every, Participant.send_newsletters, True)
+    cron(conf.refetch_repos_every, refetch_repos, True)
 
 
 # Website Algorithm
