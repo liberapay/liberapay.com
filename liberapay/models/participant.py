@@ -1876,11 +1876,11 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as c:
             c.one("""
                 DELETE FROM elsewhere
-                WHERE participant=%s
-                AND platform=%s
-                AND domain=%s
-                AND user_id=%s
-                RETURNING participant
+                 WHERE participant=%s
+                   AND platform=%s
+                   AND domain=%s
+                   AND user_id=%s
+             RETURNING participant
             """, (self.id, platform, domain, user_id), default=NonexistingElsewhere)
             self.add_event(c, 'delete_elsewhere', dict(
                 platform=platform, domain=domain, user_id=user_id
