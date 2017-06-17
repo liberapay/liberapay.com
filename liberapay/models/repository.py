@@ -20,6 +20,15 @@ class Repository(Model):
         platform = getattr(website.platforms, self.platform)
         return platform.repo_url.format(**self.__dict__)
 
+    def get_owner(self):
+        return self.db.one("""
+            SELECT elsewhere.*::elsewhere_with_participant
+              FROM elsewhere
+             WHERE platform = %s
+               AND domain = %s
+               AND user_id = %s
+        """, (self.platform, '', str(self.owner_id)))
+
 
 def upsert_repos(cursor, repos, participant, info_fetched_at):
     if not repos:

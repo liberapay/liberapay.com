@@ -1,6 +1,6 @@
 % from "templates/icons.html" import glyphicon
 
-% macro show_repo(repo, edit=False, unlist=False)
+% macro show_repo(repo, donate=False, edit=False, unlist=False)
 <div class="repo">
     <h4>
         <a href="{{ repo.url }}">{{ repo.name }}</a>
@@ -19,13 +19,20 @@
                 value="off">{{ _("Unlist") }}</button>
         % endif
     </h4>
-    <p>{{ repo.description }}</p>
+    <p>{{ repo.description or '' }}</p>
     % if edit
     <p><label>
         <input type="checkbox" name="show_on_profile:{{ repo.id }}" value="on"
                {{ 'checked' if repo.show_on_profile }} />
         {{ _("Show on your profile") }}
     </label></p>
+    % elif donate
+        % set owner = repo.get_owner()
+        % set claimed = bool(owner) and owner.participant.status == 'active'
+        <a class="btn btn-donate {{ 'btn-lg' if claimed }}"
+           href="{{ owner.participant.path('donate') if claimed else
+                    '/on/%s/%s' % (repo.platform, repo.slug.replace('/', '?repo=')) }}"
+           >{{ _("Donate") if claimed else _("Pledge") }}</a>
     % endif
 </div>
 % endmacro
