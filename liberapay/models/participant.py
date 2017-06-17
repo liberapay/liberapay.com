@@ -960,9 +960,11 @@ class Participant(Model, MixinTeam):
     # ======
 
     def add_event(self, c, type, payload, recorder=None):
-        c.run("""
-            INSERT INTO events (participant, type, payload, recorder)
-            VALUES (%s, %s, %s, %s)
+        return c.one("""
+            INSERT INTO events
+                        (participant, type, payload, recorder)
+                 VALUES (%s, %s, %s, %s)
+              RETURNING *
         """, (self.id, type, Json(payload), recorder))
 
     def get_last_event_of_type(self, type):
@@ -1675,6 +1677,17 @@ class Participant(Model, MixinTeam):
         return -1
 
 
+    def get_mangopay_account(self):
+        """Fetch the mangopay account for this participant.
+        """
+        if not self.mangopay_user_id:
+            return
+        return mangopay.resources.User.get(self.mangopay_user_id)
+
+
+    # Accounts Elsewhere
+    # ==================
+
     def get_account_elsewhere(self, platform):
         """Return an AccountElsewhere instance.
         """
@@ -1686,7 +1699,6 @@ class Participant(Model, MixinTeam):
                AND platform=%s
 
         """, (self.id, platform))
-
 
     def get_accounts_elsewhere(self):
         """Return a dict of AccountElsewhere instances.
@@ -1701,15 +1713,6 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         accounts_dict = {account.platform: account for account in accounts}
         return accounts_dict
-
-
-    def get_mangopay_account(self):
-        """Fetch the mangopay account for this participant.
-        """
-        if not self.mangopay_user_id:
-            return
-        return mangopay.resources.User.get(self.mangopay_user_id)
-
 
     def take_over(self, account, have_confirmation=False):
         """Given an AccountElsewhere or a tuple (platform_name, domain, user_id),
@@ -1873,16 +1876,57 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as c:
             c.one("""
                 DELETE FROM elsewhere
-                WHERE participant=%s
-                AND platform=%s
-                AND domain=%s
-                AND user_id=%s
-                RETURNING participant
+                 WHERE participant=%s
+                   AND platform=%s
+                   AND domain=%s
+                   AND user_id=%s
+             RETURNING participant
             """, (self.id, platform, domain, user_id), default=NonexistingElsewhere)
+            detached_repos_count = c.one("""
+                WITH detached AS (
+                         UPDATE repositories
+                            SET participant = null
+                          WHERE participant = %s
+                            AND platform = %s
+                            AND owner_id = %s
+                      RETURNING id
+                     )
+                SELECT count(*) FROM detached
+            """, (self.id, platform, user_id))
             self.add_event(c, 'delete_elsewhere', dict(
-                platform=platform, domain=domain, user_id=user_id
+                platform=platform, domain=domain, user_id=user_id,
+                detached_repos_count=detached_repos_count,
             ))
         self.update_avatar()
+
+
+    # Repositories
+    # ============
+
+    def get_repos_for_profile(self):
+        return self.db.all("""
+            SELECT r
+              FROM repositories r
+             WHERE r.participant = %s
+               AND r.show_on_profile
+          ORDER BY r.is_fork ASC NULLS FIRST, r.last_update DESC
+             LIMIT 20
+        """, (self.id,))
+
+    def get_repos_on_platform(self, platform, limit=50, offset=None):
+        return self.db.all("""
+            SELECT r
+              FROM repositories r
+             WHERE r.participant = %s
+               AND r.platform = %s
+          ORDER BY r.is_fork ASC NULLS FIRST, r.last_update DESC
+             LIMIT %s
+            OFFSET %s
+        """, (self.id, platform, limit, offset))
+
+
+    # More Random Stuff
+    # =================
 
     def to_dict(self, details=False, inquirer=None):
         output = {

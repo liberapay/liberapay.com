@@ -71,6 +71,18 @@ def key(k, clean=lambda a: a):
     return f
 
 
+def drop_keys(*keys):
+    def f(self, info):
+        for k in keys:
+            if callable(k):
+                for k2 in list(info.keys()):
+                    if k(k2):
+                        info.pop(k2)
+            else:
+                info.pop(k, None)
+    return f
+
+
 def not_available(self, extracted, info, default):
     return default
 

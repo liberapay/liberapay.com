@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from liberapay.elsewhere._base import PlatformOAuth2
 from liberapay.elsewhere._exceptions import CantReadMembership
-from liberapay.elsewhere._extractors import key
+from liberapay.elsewhere._extractors import key, drop_keys
 from liberapay.elsewhere._paginators import header_links_paginator
 
 
@@ -12,6 +12,7 @@ class GitHub(PlatformOAuth2):
     name = 'github'
     display_name = 'GitHub'
     account_url = 'https://github.com/{user_name}'
+    repo_url = 'https://github.com/{slug}'
     allows_team_connect = True
 
     # Auth attributes
@@ -30,6 +31,7 @@ class GitHub(PlatformOAuth2):
     api_user_self_info_path = '/user'
     api_team_members_path = '/orgs/{user_name}/public_members'
     api_friends_path = '/users/{user_name}/following'
+    api_repos_path = '/users/{user_name}/repos?type=owner&sort=updated&per_page=100'
     ratelimit_headers_prefix = 'x-ratelimit-'
 
     # User info extractors
@@ -40,6 +42,17 @@ class GitHub(PlatformOAuth2):
     x_gravatar_id = key('gravatar_id')
     x_avatar_url = key('avatar_url')
     x_is_team = key('type', clean=lambda t: t.lower() == 'organization')
+
+    # Repo info extractors
+    x_repo_id = key('id')
+    x_repo_name = key('name')
+    x_repo_slug = key('full_name')
+    x_repo_description = key('description')
+    x_repo_last_update = key('updated_at')
+    x_repo_is_fork = key('fork')
+    x_repo_stars_count = key('stargazers_count')
+    x_repo_owner_id = key('owner', clean=lambda d: d['id'])
+    x_repo_extra_info_drop = drop_keys(lambda k: k.endswith('_url'))
 
     def get_CantReadMembership_url(self, **kw):
         return 'https://github.com/settings/connections/applications/'+self.api_key

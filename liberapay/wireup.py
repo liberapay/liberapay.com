@@ -31,6 +31,7 @@ from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhe
 from liberapay.models.community import _Community, Community
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
+from liberapay.models.repository import Repository
 from liberapay.models import DB
 from liberapay.security.authentication import ANON
 from liberapay.utils import find_files, markdown
@@ -86,7 +87,7 @@ def database(env, tell_sentry):
 
     models = (
         _AccountElsewhere, AccountElsewhere, _Community, Community,
-        ExchangeRoute, Participant,
+        ExchangeRoute, Participant, Repository,
     )
     for model in models:
         db.register_model(model)
@@ -138,6 +139,7 @@ class AppConf(object):
         openstreetmap_id=str,
         openstreetmap_secret=str,
         password_rounds=int,
+        refetch_repos_every=int,
         s3_endpoint=str,
         s3_public_access_key=str,
         s3_secret_key=str,
@@ -389,11 +391,14 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     friends_platforms = [p for p in platforms if getattr(p, 'api_friends_path', None)]
     friends_platforms = PlatformRegistry(friends_platforms)
 
+    platforms_with_repos_api = [p for p in platforms if hasattr(p, 'api_repos_path')]
+
     for platform in platforms:
         platform.icon = asset('platforms/%s.16.png' % platform.name)
         platform.logo = asset('platforms/%s.png' % platform.name)
 
-    return {'platforms': platforms, 'friends_platforms': friends_platforms}
+    return {'platforms': platforms, 'friends_platforms': friends_platforms,
+            'platforms_with_repos_api': platforms_with_repos_api}
 
 
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):

@@ -1,7 +1,5 @@
 # coding: utf8
 
-import json
-
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 
@@ -32,7 +30,7 @@ if request.method == 'POST':
             continue
         p.update_bit(attr, 2, value == 'on')
         updated += 1
-    raise response.success(200, json.dumps({'msg': "Done, %i bits have been updated." % updated}))
+    raise response.json({'msg': "Done, %i bits have been updated." % updated})
 
 participants = website.db.all("""
     SELECT p

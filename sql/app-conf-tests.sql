@@ -8,6 +8,7 @@ BEGIN
     PERFORM update_app_conf('dequeue_emails_every', '0'::jsonb);
     PERFORM update_app_conf('update_homepage_every', '0'::jsonb);
     PERFORM update_app_conf('send_newsletters_every', '0'::jsonb);
+    PERFORM update_app_conf('refetch_repos_every', '0'::jsonb);
 END;
 $$;
 

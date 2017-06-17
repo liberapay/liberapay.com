@@ -46,6 +46,10 @@ class UserInfo(object):
             self.__dict__[key] = value
 
 
+class RepoInfo(object):
+    pass
+
+
 class Platform(object):
 
     allows_team_connect = False
@@ -295,6 +299,35 @@ class Platform(object):
         if count == -1 and hasattr(self, 'x_friends_count'):
             count = self.x_friends_count(None, account.extra_info, -1)
         return friends, count, pages_urls
+
+    def extract_repo_info(self, info, source):
+        r = RepoInfo()
+        r.platform = self.name
+        r.name = self.x_repo_name(r, info)
+        r.slug = self.x_repo_slug(r, info)
+        r.remote_id = self.x_repo_id(r, info)
+        r.owner_id = self.x_repo_owner_id(r, info)
+        r.description = self.x_repo_description(r, info, None)
+        r.last_update = self.x_repo_last_update(r, info, None)
+        r.is_fork = self.x_repo_is_fork(r, info, None)
+        r.stars_count = self.x_repo_stars_count(r, info, None)
+        r.extra_info = info
+        if hasattr(self, 'x_repo_extra_info_drop'):
+            self.x_repo_extra_info_drop(r.extra_info)
+        return r
+
+    def get_repos(self, account, page_url=None, sess=None):
+        if not page_url:
+            page_url = self.api_repos_path.format(
+                user_id=quote(account.user_id),
+                user_name=quote(account.user_name or ''),
+            )
+        r = self.api_get(account.domain, page_url, sess=sess)
+        repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
+        repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
+        if count == -1 and hasattr(self, 'x_repos_count'):
+            count = self.x_repos_count(None, account.extra_info, -1)
+        return repos, count, pages_urls
 
     def get_credentials(self, domain):
         # 0. Single-domain platforms have a single pair of credentials

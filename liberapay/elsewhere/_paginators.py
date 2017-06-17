@@ -62,7 +62,7 @@ def query_param_paginator(param, **kw):
     return f
 
 
-def header_links_paginator():
+def header_links_paginator(total_header=None):
     # https://tools.ietf.org/html/rfc5988
     # https://developer.github.com/v3/#pagination
     def f(self, response, parsed):
@@ -72,6 +72,11 @@ def header_links_paginator():
                  for k, v in response.links.items()
                  if k in links_keys}
         total_count = -1 if links else len(parsed)
+        if total_header and total_count == -1:
+            try:
+                total_count = int(response.headers.get('X-Total', None))
+            except (ValueError, TypeError):
+                pass
         return parsed, total_count, links
     return f
 

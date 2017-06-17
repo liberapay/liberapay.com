@@ -1,5 +1,9 @@
+import logging
 import threading
 from time import sleep
+
+
+logger = logging.getLogger('liberapay.cron')
 
 
 class Cron(object):

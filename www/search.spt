@@ -66,9 +66,29 @@ if query:
               FROM communities c
               JOIN participants p ON p.id = c.participant
              WHERE name %% %(q)s
+               AND p.hide_from_search = 0
           ORDER BY rank DESC, name
              LIMIT 10
         """, locals())
+
+    if scope in (None, 'repositories'):
+        results['repositories'] = website.db.all("""
+            SELECT r.id, r.platform, r.remote_id, r.name, r.slug
+                 , r.description, r.last_update, r.is_fork, r.stars_count
+                 , r.info_fetched_at, r.show_on_profile
+                 , similarity(r.name, %(q)s) AS rank
+                 , json_build_object(
+                       'id', p.id,
+                       'username', p.username,
+                       'avatar_url', p.avatar_url
+                   ) as owner
+              FROM repositories r
+              JOIN participants p ON p.id = r.participant
+             WHERE r.name %% %(q)s
+               AND p.hide_from_search = 0
+          ORDER BY similarity(r.name, %(q)s) DESC, r.is_fork ASC, r.last_update DESC, r.name
+             LIMIT 10
+        """, locals(), back_as=dict)
 
 [---] text/html
 % extends "templates/base.html"
@@ -78,9 +98,10 @@ if query:
 
     % set usernames = results.get('usernames')
     % set communities = results.get('communities')
+    % set repositories = results.get('repositories')
     % set statements = results.get('statements')
 
-    % if query and not (usernames or communities or statements)
+    % if query and not (usernames or communities or repositories or statements)
         <p class="alert alert-warning">{{
             _("Sorry, we didn't find anything matching your query."
         ) }}</p>
@@ -126,6 +147,29 @@ if query:
     </div>
     % endif
     </div>
+
+    % if repositories
+    % set fork = ' ' + _("(fork)")
+    <div>
+        <h3>{{ ngettext("Found a matching repository",
+                        "Found matching repositories",
+                        len(statements)) }}</h3>
+        % for repo in repositories
+            % set owner = repo.owner
+            <div class="paragraph">
+                <a href="/{{ owner.username }}/" class="avatar-inline">
+                    {{ avatar_img(owner, size=28) }}
+                </a>
+                {{ _(
+                    "{username} has a repository named {repo_name} in their {platform} account",
+                    username=('<a href="/{0}/">{0}</a>'|safe).format(owner.username),
+                    repo_name='<em>%s</em>'|safe % (repo.name + (fork if repo.is_fork else '')),
+                    platform=website.platforms[repo.platform].display_name,
+                ) }}
+            </div>
+        % endfor
+    </div>
+    % endif
 
     % if statements
     <div>

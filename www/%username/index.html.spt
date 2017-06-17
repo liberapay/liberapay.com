@@ -21,6 +21,8 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 [-----------------------------------------------------------------------------]
 % extends "templates/profile.html"
 
+% from "templates/repos.html" import show_repo with context
+
 % block profile_btn
 % if user and user.controls(participant)
     <a href="{{ participant.path('edit') }}" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
@@ -53,6 +55,15 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % include "templates/members-listing.html"
     % endif
     % include "templates/connected-accounts.html"
+
+    % set repos = participant.get_repos_for_profile()
+    % if repos
+    <h3 class="banderole default">{{ _("Repositories") }}</h3>
+    % for repo in repos
+        {{ show_repo(repo) }}
+    % endfor
+    % endif
+
     % if participant.kind != 'group'
     % include "templates/team-listing.html"
     % include "templates/community-listing.html"

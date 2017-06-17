@@ -1,0 +1,22 @@
+% from "templates/repos.html" import show_repo with context
+
+% set repos = participant.get_repos_for_profile()
+% if repos
+<p>{{ _("The following repositories are currently displayed on your profile:") }}</p>
+<form action="{{ participant.path('repos') }}" class="js-submit"
+      data-on-success="fadeOut:.repo" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    % for repo in repos
+        {{ show_repo(repo, unlist=True) }}
+    % endfor
+</form>
+<hr>
+% endif
+
+<p>{{ _("We can import a list of your repositories from:") }}</p>
+<p>
+% for platform in website.platforms_with_repos_api
+<a class="btn btn-default" href="{{ participant.path('repos/' + platform.name) }}" target="_blank"
+    >{{ platform.display_name }}</a> &nbsp;&nbsp;
+% endfor
+</p>

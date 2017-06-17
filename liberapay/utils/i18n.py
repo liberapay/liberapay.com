@@ -27,7 +27,7 @@ from liberapay.website import website
 Money = namedtuple('Money', 'amount currency')
 
 
-class datedelta(timedelta):
+class Age(timedelta):
 
     def __new__(cls, *a, **kw):
         if len(a) == 1 and not kw and isinstance(a[0], timedelta):
@@ -142,8 +142,8 @@ def i_format(loc, s, *a, **kw):
                 c[k] = format_number(o, locale=loc)
             elif isinstance(o, Money):
                 c[k] = format_money(*o, locale=loc)
-            elif isinstance(o, datedelta):
-                c[k] = format_timedelta(o, locale=loc, granularity='day')
+            elif isinstance(o, Age):
+                c[k] = format_timedelta(o, locale=loc, **o.format_args)
             elif isinstance(o, timedelta):
                 c[k] = format_timedelta(o, locale=loc)
             elif isinstance(o, datetime):
@@ -189,10 +189,14 @@ def n_get_text(state, loc, s, p, n, *a, **kw):
     return i_format(loc, escape(s2), *a, **kw)
 
 
-def to_age(dt):
+def to_age(dt, **kw):
     if isinstance(dt, datetime):
-        return dt - utcnow()
-    return datedelta(dt - date.today())
+        delta = Age(dt - utcnow())
+    else:
+        delta = Age(dt - date.today())
+        kw.setdefault('granularity', 'day')
+    delta.format_args = kw
+    return delta
 
 
 def regularize_locale(loc):
