@@ -69,6 +69,9 @@ Liberapay.setupNotifications = function() {
                     $.post(url, {
                         mark_all_as_read: true,
                         until: notifs[0].id,
+                    }).done(function() {
+                        $('nav .notifs-wrapper').find('.pending-notifs').html('0')
+                        $('nav .notifs-wrapper .notifs').removeClass('navbar-warning');
                     });
                     e.preventDefault();
                     $('nav .notifs-wrapper').find('.unread').removeClass('unread');
