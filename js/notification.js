@@ -81,4 +81,14 @@ Liberapay.setupNotifications = function() {
             }
         });
     });
+
+    $('body').on('click', function (e) {
+        //did not click a popover toggle or popover
+        // close existing popover
+        if ($(e.target).data('toggle') !== 'popover'
+            && $(e.target).parents('.notifs-wrapper').length === 0
+            && $(e.target).parents('.popover.in').length === 0) {
+            $link.popover('hide')
+        }
+    });
 };
