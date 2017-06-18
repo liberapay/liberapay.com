@@ -23,7 +23,7 @@ if request.method == 'POST':
 # NOTE: don't factor the render_notifications() call here, it'll break escaping
 
 [---] application/json via json_dump
-participant.render_notifications(state, style=False)
+participant.render_notifications(state)
 
 [---] text/html
 % extends "templates/base.html"
