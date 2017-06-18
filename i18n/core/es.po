@@ -736,6 +736,12 @@ msgstr "AAAA-MM-DD"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Acepto las {0}condiciones de servicio de MangoPay{1}"
 
+msgid "The following repositories are currently displayed on your profile:"
+msgstr ""
+
+msgid "We can import a list of your repositories from:"
+msgstr ""
+
 msgid "username"
 msgstr "nombre de usuario"
 
@@ -886,11 +892,7 @@ msgid "New password"
 msgstr "Contraseña nueva"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr ""
-"Las personas que contribuyen al procomún necesitan que les apoyen en su "
-"trabajo. La construcción de software libre, la difusión del conocimiento "
-"libre, son cosas que llevan tiempo y cuestan dinero, no sólo para hacer el "
-"trabajo inicial sino también para mantenerlo en el tiempo."
+msgstr "Las personas que contribuyen al procomún necesitan que les apoyen en su trabajo. La construcción de software libre, la difusión del conocimiento libre, son cosas que llevan tiempo y cuestan dinero, no sólo para hacer el trabajo inicial sino también para mantenerlo en el tiempo."
 
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
 msgstr "El sistema de donaciones recurrentes de Liberapay está diseñado para proporcionar un ingreso básico de financiación colectiva estable a los creadores, permitiéndoles seguir haciendo un gran trabajo que beneficia a todos. ¿Dispuesto a contribuir? Entonces empecemos:"
@@ -988,6 +990,22 @@ msgstr "¡Misión cumplida!"
 
 msgid "Share:"
 msgstr "Compartir:"
+
+msgid "(fork)"
+msgstr ""
+
+msgid "Updated this week"
+msgstr ""
+
+#, python-brace-format
+msgid "Updated {0} ago"
+msgstr ""
+
+msgid "Unlist"
+msgstr ""
+
+msgid "Show on your profile"
+msgstr ""
 
 msgid "Search Liberapay"
 msgstr "Buscar en Liberapay"
@@ -1262,6 +1280,9 @@ msgstr "Cambiar a otro idioma:"
 
 msgid "Switch"
 msgstr "Cambiar"
+
+msgid "Repositories"
+msgstr ""
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1719,6 +1740,31 @@ msgstr "Tips recibidos, por cantidad de tip"
 
 msgid "Tips Received, by Amount"
 msgstr "Consejos recibidos, por Cantidad"
+
+msgid "Your profile has been updated."
+msgstr ""
+
+#, python-brace-format
+msgid "{username}'s Repositories"
+msgstr ""
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr ""
+
+#, python-brace-format
+msgid "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr ""
+
+msgid "No repositories found."
+msgstr ""
+
+msgid "Next Page →"
+msgstr "Página siguiente →"
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Parece que estás intentando borrar algo que no existe."
@@ -2513,47 +2559,19 @@ msgid "The nominal takes are the raw numbers that the members input themselves, 
 msgstr "Las tomas nominales son los números en bruto que los propios miembros introducen, las tomas reales son calculadas por el sistema: primero se suman las tomas nominales, después se calcula el porcentaje que cada toma representa, y por último se aplican esos porcentajes a los ingresos disponibles . Las tomas nominales también actúan como máximos: las tomas reales nunca son superiores a las nominales, incluso si el ingreso adicional está disponible."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the staibility of the team's income."
-msgstr ""
-"Puede que te preguntes por qué tratamos las tomas de nómina como máximos en "
-"vez de como simples porcentajes. Es porque tener máximos permite a un equipo "
-"tener ganancias sin usar (llamado «sobrante»), y eso es bueno en varios "
-"aspectos. Primero, proporciona un «cojín» que estabiliza las ganancias de "
-"los miembros del equipo. Segundo, facilita la integración de nuevos miembros "
-"en un equipo, porque a medida que aumentan sus tomas, reducen el sobrante en "
-"vez de afectar a las ganancias de los otros miembros. Tercero, permite a "
-"nuestro software ajustar las cantidades que los donantes transfieren a los "
-"miembros del equipo, de forma que equilibra las contribuciones de los "
-"donantes en el tiempo, haciendo así el sistema más justo. Finalmente, "
-"alienta a donar a equipos incluso si ya han alcanzado su meta, lo cual es "
-"bueno para la estabilidad de los ingresos de los equipos."
+msgstr "Puede que te preguntes por qué tratamos las tomas de nómina como máximos en vez de como simples porcentajes. Es porque tener máximos permite a un equipo tener ganancias sin usar (llamado «sobrante»), y eso es bueno en varios aspectos. Primero, proporciona un «cojín» que estabiliza las ganancias de los miembros del equipo. Segundo, facilita la integración de nuevos miembros en un equipo, porque a medida que aumentan sus tomas, reducen el sobrante en vez de afectar a las ganancias de los otros miembros. Tercero, permite a nuestro software ajustar las cantidades que los donantes transfieren a los miembros del equipo, de forma que equilibra las contribuciones de los donantes en el tiempo, haciendo así el sistema más justo. Finalmente, alienta a donar a equipos incluso si ya han alcanzado su meta, lo cual es bueno para la estabilidad de los ingresos de los equipos."
 
 msgid "Regulation of take amounts"
 msgstr "La regulación de cantidades para llevar"
 
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
-"Cuando esta característica está habilitada para un equipo, sus miembros no "
-"pueden aumentar sus tomas más de un máximo calculado en base a las tomas "
-"nominales del momento del anterior día de paga. Este mecanismo está pensado "
-"para animar a invitar a unirse al equipo a nuevos contribuidores, al "
-"garantizar que ellos no tomarán una parte desproporcionada de los ingresos "
-"durante las primeras semanas."
+msgstr "Cuando esta característica está habilitada para un equipo, sus miembros no pueden aumentar sus tomas más de un máximo calculado en base a las tomas nominales del momento del anterior día de paga. Este mecanismo está pensado para animar a invitar a unirse al equipo a nuevos contribuidores, al garantizar que ellos no tomarán una parte desproporcionada de los ingresos durante las primeras semanas."
 
 msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
-"El límite funciona así: siempre puedes aumentar tu toma a 1.00 si estaba más "
-"baja, puedes doblar la toma en comparación a la semana anterior, puedes "
-"aumentar la toma al reclamar los restos de los ingresos del equipo y puedes "
-"aumentar tu toma hasta el nivel de la toma media en el día de pago anterior. "
-"Cualquiera de estas posibilidades que resulte en la cantidad más alta es tu "
-"máxima toma para la semana."
+msgstr "El límite funciona así: siempre puedes aumentar tu toma a 1.00 si estaba más baja, puedes doblar la toma en comparación a la semana anterior, puedes aumentar la toma al reclamar los restos de los ingresos del equipo y puedes aumentar tu toma hasta el nivel de la toma media en el día de pago anterior. Cualquiera de estas posibilidades que resulte en la cantidad más alta es tu máxima toma para la semana."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr ""
-"Las tomas no están limitadas si el equipo tiene solo un miembro o si las "
-"tomas de la semana anterior estaban todas a cero (que es el caso para "
-"cualquier nuevo equipo que haya sido creado después del día de pago más "
-"reciente)."
+msgstr "Las tomas no están limitadas si el equipo tiene solo un miembro o si las tomas de la semana anterior estaban todas a cero (que es el caso para cualquier nuevo equipo que haya sido creado después del día de pago más reciente)."
 
 msgid "Removing team membership"
 msgstr "La eliminación de los miembros del equipo"
@@ -2617,9 +2635,6 @@ msgstr "Esta página muestra {0} usuarios de Liberapay que han enlazado su cuent
 #, python-brace-format
 msgid "Here are the {0} Liberapay users who have connected their {1} account:"
 msgstr "Aquí están los {0} usuarios de Liberapay que han enlazado su cuenta de {1}:"
-
-msgid "Next Page →"
-msgstr "Página siguiente →"
 
 msgid "View More"
 msgstr "Ver Más"
@@ -2768,9 +2783,7 @@ msgid "Receive"
 msgstr "Recibir"
 
 msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software?"
-msgstr ""
-"¿Eres un creador de bienes comunes? ¿Haces arte libre, promulgas el "
-"conocimiento libre, escribes software libre?"
+msgstr "¿Eres un creador de bienes comunes? ¿Haces arte libre, promulgas el conocimiento libre, escribes software libre?"
 
 msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
 msgstr "¿Sí? ¡Entonces Liberapay es para ti! Crea tu cuenta, llena tu perfil y pide a tu público que apoye económicamente tu trabajo."
@@ -3140,6 +3153,15 @@ msgid "Found a matching community name"
 msgid_plural "Found matching community names"
 msgstr[0] "Encontrado una coincidencia de nombre de comunidad"
 msgstr[1] "Los nombres de comunidad encontrados equivalentes"
+
+msgid "Found a matching repository"
+msgid_plural "Found matching repositories"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{username} has a repository named {repo_name} in their {platform} account"
+msgstr ""
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"

@@ -72,16 +72,11 @@ msgstr "Din faktura til {0} har blitt godkjent - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr ""
-"Forespørselen din om å utbetale {amount} fra {addressee_name} er blitt "
-"godkjent."
+msgstr "Forespørselen din om å utbetale {amount} fra {addressee_name} er blitt godkjent."
 
 #, fuzzy, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr ""
-"Det er dessverre ikke nok penger i lommeboken til  {0} til at du kan bli "
-"betalt akkurat nå. Pengene vil bli utbetalt automatisk når det er penger der "
-"igjen."
+msgstr "Det er dessverre ikke nok penger i lommeboken til  {0} til at du kan bli betalt akkurat nå. Pengene vil bli utbetalt automatisk når det er penger der igjen."
 
 msgid "View the invoice"
 msgstr "Se faktura"
@@ -106,9 +101,7 @@ msgstr "Fakturaen din til {0} har blitt avvist - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
-msgstr ""
-"Forespørselen din om en utbetaling på {amount} fra {addressee_name} har "
-"blitt avvist."
+msgstr "Forespørselen din om en utbetaling på {amount} fra {addressee_name} har blitt avvist."
 
 #, fuzzy, python-brace-format
 msgid "Reason: “{0}”"
@@ -119,8 +112,7 @@ msgstr "Logg inn på Liberapay"
 
 #, fuzzy, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
-msgstr ""
-"Noen (forhåpentligvis deg) har bedt om å få adgang til {0} konto på Liberapay"
+msgstr "Noen (forhåpentligvis deg) har bedt om å få adgang til {0} konto på Liberapay"
 
 msgid "Follow this link to proceed:"
 msgstr "Følg denne lenken for å fortsette:"
@@ -134,9 +126,7 @@ msgstr "Det er på tide å fylle på Liberapay-lommeboken din"
 
 #, python-brace-format
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr ""
-"Du har {0} igjen i Liberapay-lommeboken din, men du trenger minst {1} for å "
-"dekke neste ukes donasjoner."
+msgstr "Du har {0} igjen i Liberapay-lommeboken din, men du trenger minst {1} for å dekke neste ukes donasjoner."
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
@@ -746,6 +736,12 @@ msgstr ""
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr ""
 
+msgid "The following repositories are currently displayed on your profile:"
+msgstr ""
+
+msgid "We can import a list of your repositories from:"
+msgstr ""
+
 msgid "username"
 msgstr ""
 
@@ -993,6 +989,22 @@ msgid "Mission accomplished!"
 msgstr ""
 
 msgid "Share:"
+msgstr ""
+
+msgid "(fork)"
+msgstr ""
+
+msgid "Updated this week"
+msgstr ""
+
+#, python-brace-format
+msgid "Updated {0} ago"
+msgstr ""
+
+msgid "Unlist"
+msgstr ""
+
+msgid "Show on your profile"
 msgstr ""
 
 msgid "Search Liberapay"
@@ -1267,6 +1279,9 @@ msgid "Switch to another language:"
 msgstr ""
 
 msgid "Switch"
+msgstr ""
+
+msgid "Repositories"
 msgstr ""
 
 msgid "Avatar"
@@ -1721,6 +1736,31 @@ msgid "Tips Received, by Number of Tips"
 msgstr ""
 
 msgid "Tips Received, by Amount"
+msgstr ""
+
+msgid "Your profile has been updated."
+msgstr ""
+
+#, python-brace-format
+msgid "{username}'s Repositories"
+msgstr ""
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr ""
+
+#, python-brace-format
+msgid "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr ""
+
+msgid "No repositories found."
+msgstr ""
+
+msgid "Next Page →"
 msgstr ""
 
 msgid "It seems you're trying to delete something that doesn't exist."
@@ -2593,9 +2633,6 @@ msgstr ""
 msgid "Here are the {0} Liberapay users who have connected their {1} account:"
 msgstr ""
 
-msgid "Next Page →"
-msgstr ""
-
 msgid "View More"
 msgstr ""
 
@@ -3108,6 +3145,15 @@ msgid "Found a matching community name"
 msgid_plural "Found matching community names"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Found a matching repository"
+msgid_plural "Found matching repositories"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{username} has a repository named {repo_name} in their {platform} account"
+msgstr ""
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
