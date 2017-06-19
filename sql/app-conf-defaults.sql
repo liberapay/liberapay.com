@@ -35,6 +35,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('openstreetmap_id', '"w4eQbkobmMzpkJFwS4tM16a3lq9AFbcoNCKNcGBE"'::jsonb),
     ('openstreetmap_secret', '"W08UgEhxQnh7nMzB7GfSFcqcwPnZMmKMNyxWdcw4"'::jsonb),
     ('password_rounds', '1'::jsonb),
+    ('refetch_repos_every', '60'::jsonb),
     ('s3_endpoint', '""'::jsonb),
     ('s3_public_access_key', '""'::jsonb),
     ('s3_secret_key', '""'::jsonb),

@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '37'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '38'::jsonb);
 
 
 -- app configuration
@@ -150,6 +150,31 @@ CREATE TABLE oauth_apps
 , ctime      timestamptz   NOT NULL DEFAULT CURRENT_TIMESTAMP
 , UNIQUE (platform, domain, key)
 );
+
+
+-- repositories
+
+CREATE TABLE repositories
+( id                    bigserial       PRIMARY KEY
+, platform              text            NOT NULL
+, remote_id             text            NOT NULL
+, owner_id              text            NOT NULL
+, name                  text            NOT NULL
+, slug                  text            NOT NULL
+, description           text
+, last_update           timestamptz     NOT NULL
+, is_fork               boolean
+, stars_count           int
+, extra_info            json
+, info_fetched_at       timestamptz     NOT NULL DEFAULT now()
+, participant           bigint          REFERENCES participants
+, show_on_profile       boolean         NOT NULL DEFAULT FALSE
+, UNIQUE (platform, remote_id)
+, UNIQUE (platform, slug)
+);
+
+CREATE INDEX repositories_trgm_idx ON repositories
+    USING gist(name gist_trgm_ops);
 
 
 -- tips -- all times a participant elects to tip another
