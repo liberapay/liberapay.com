@@ -16,7 +16,7 @@
 <p>{{ _("We can import a list of your repositories from:") }}</p>
 <p>
 % for platform in website.platforms.hasattr('api_repos_path')
-<a class="btn btn-default" href="{{ participant.path('repos/' + platform.name) }}" target="_blank"
+<a class="btn btn-default" href="{{ participant.path('repos/' + platform.name) }}"
     >{{ platform.display_name }}</a> &nbsp;&nbsp;
 % endfor
 </p>
