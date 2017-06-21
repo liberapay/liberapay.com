@@ -12,6 +12,7 @@ class GitLab(PlatformOAuth2):
     display_name = 'GitLab'
     account_url = 'https://gitlab.com/u/{user_name}'
     repo_url = 'https://gitlab.com/{slug}'
+    has_teams = True
 
     # Auth attributes
     # GitLab uses https://github.com/doorkeeper-gem/doorkeeper

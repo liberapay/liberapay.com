@@ -39,6 +39,8 @@ if platform_name:
         raise response.error(404, "unknown platform")
     if not hasattr(platform, 'api_repos_path'):
         raise response.error(400, "repos are not implemented for platform '%s'" % platform_name)
+    if participant.kind == 'group' and not hasattr(platform, 'is_team_member'):
+        raise response.error(400, "team repos are not implemented for platform '%s'" % platform_name)
 
     account = participant.get_account_elsewhere(platform.name)
     if account:

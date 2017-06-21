@@ -13,10 +13,18 @@
 <hr>
 % endif
 
-<p>{{ _("We can import a list of your repositories from:") }}</p>
+<p>{{
+    _("We can import a list of your team's repositories from:") if participant.kind == 'group' else
+    _("We can import a list of your repositories from:")
+}}</p>
 <p>
 % for platform in website.platforms.hasattr('api_repos_path')
+% if participant.kind == 'group' and platform.has_teams and not hasattr(platform, 'is_team_member')
+<button class="btn btn-default" disabled title="{{ _('This is not supported yet') }}"
+    >{{ platform.display_name }}</button> &nbsp;&nbsp;
+% else
 <a class="btn btn-default" href="{{ participant.path('repos/' + platform.name) }}"
     >{{ platform.display_name }}</a> &nbsp;&nbsp;
+% endif
 % endfor
 </p>
