@@ -94,7 +94,7 @@ title = _("{username}'s Repositories", username=participant.username)
             "You don't have any {platform} account connected to your profile.",
             platform=platform.display_name
         ) }}</p>
-        % call auth_button(platform.name, 'connect')
+        % call auth_button(platform.name, 'connect', participant=participant)
             {{ _("Connect {0} account", platform.display_name) }}
         % endcall
     % else
