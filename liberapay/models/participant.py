@@ -908,19 +908,19 @@ class Participant(Model, MixinTeam):
         )
 
     def get_notifs(self):
-        notifications = self.db.all("""
+        return self.db.all("""
             SELECT id, event, context, is_new
               FROM notification_queue
              WHERE participant = %s
           ORDER BY is_new DESC, id DESC
         """, (self.id,))
 
-        return notifications
+    def render_notifications(self, state, notifs=None):
+        """Render notifications as HTML.
 
-    def render_notifications(self, state, notifs=[]):
-        # this way we can render arbitrary notifications
-        # this also helps reducing the number of DB queries
-        # in www/%username/notifications.spt
+        The `notifs` argument allows rendering arbitrary notifications.
+
+        """
         notifs = notifs or self.get_notifs()
 
         r = []

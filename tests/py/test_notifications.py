@@ -56,34 +56,14 @@ class TestNotifications(Harness):
                             sentry_reraise=False).text
         assert 'fake_event_name' not in r
 
-    def test_marking_notification_as_read_requires_until_id(self):
-        """
-        As described in https://github.com/liberapay/liberapay.com/issues/136,
-        this is to avoid a race condition where new notifications created,
-        but the user did not see them when marking as read
-
-        To solve that, we simply pass the maximum id we want to mark as read
-        """
+    def test_marking_notifications_as_read_avoids_race_condition(self):
         alice = self.make_participant('alice')
-        # n1 = alice.add_notification('low_balance')
-        # n2 = alice.add_notification('low_balance')
-        #
-        # assert alice.pending_notifs == 2
-
-        r = self.client.PxST('/alice/notifications.json', auth_as=alice,
-                             data={'mark_all_as_read': 'true'})
-        assert r.code == 400
-
         n1 = alice.add_notification('low_balance')
         n2 = alice.add_notification('low_balance')
-
         assert alice.pending_notifs == 2
 
-        r = self.client.PxST('/alice/notifications.json', auth_as=alice,
-                             data={
-                                'mark_all_as_read': 'true',
-                                'until': str(n1)})
-
+        data = {'mark_all_as_read': 'true', 'until': str(n1)}
+        r = self.client.PxST('/alice/notifications.json', data, auth_as=alice)
         assert r.code == 302
 
         notifications = self.db.all("""
