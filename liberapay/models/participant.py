@@ -849,11 +849,15 @@ class Participant(Model, MixinTeam):
         """, locals())
         self.set_attributes(pending_notifs=r)
 
-    def mark_notifications_as_read(self, event=None):
+    def mark_notifications_as_read(self, event=None, until=None):
         if not self.pending_notifs:
             return
         p_id = self.id
         sql_filter = 'AND event = %(event)s' if event else ''
+
+        if until:
+            sql_filter += ' AND id <= %(until)s'
+
         r = self.db.one("""
             WITH updated AS (
                 UPDATE notification_queue
@@ -903,14 +907,23 @@ class Participant(Model, MixinTeam):
             text_color=website.scss_variables['btn-' + variant + '-color'],
         )
 
-    def render_notifications(self, state):
-        r = []
-        notifs = self.db.all("""
+    def get_notifs(self):
+        return self.db.all("""
             SELECT id, event, context, is_new
               FROM notification_queue
              WHERE participant = %s
           ORDER BY is_new DESC, id DESC
         """, (self.id,))
+
+    def render_notifications(self, state, notifs=None):
+        """Render notifications as HTML.
+
+        The `notifs` argument allows rendering arbitrary notifications.
+
+        """
+        notifs = notifs or self.get_notifs()
+
+        r = []
         for id, event, notif_context, is_new in notifs:
             try:
                 notif_context = deserialize(notif_context)

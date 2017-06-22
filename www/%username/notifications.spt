@@ -1,5 +1,7 @@
 from liberapay.utils import get_participant
 
+get_unread = lambda notifs: [n for n in notifs if n['is_new']]
+
 [---]
 
 request.allow('GET', 'POST')
@@ -9,9 +11,13 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     body = request.body
     if body.get('mark_all_as_read') == 'true':
-        participant.mark_notifications_as_read()
+        try:
+            until = int(body.get('until', 0))
+        except ValueError:
+            raise response.error(400, 'bad `until` value')
+        participant.mark_notifications_as_read(until=until)
     else:
-        participant.remove_notification(request.body['remove'])
+        participant.remove_notification(body['remove'])
     response.redirect(request.line.uri)
 
 # NOTE: don't factor the render_notifications() call here, it'll break escaping
@@ -25,11 +31,17 @@ participant.render_notifications(state)
 % block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    <button class="btn btn-primary" name="mark_all_as_read" value="true">{{
+    % set notifs = participant.render_notifications(state)
+    % set unread_notifications = get_unread(notifs)
+    % if len(unread_notifications) > 0
+        <input type="hidden" name="until" value="{{ unread_notifications[0].id }}" />
+    % endif
+    <button class="btn btn-primary" name="mark_all_as_read" value="true"
+        {{ 'disabled' if not unread_notifications }}>{{
         _("Mark all notifications as read")
     }}</button><br>
     <br>
-    % for notif in participant.render_notifications(state)
+    % for notif in notifs
         <div class="alert alert-{{ notif.type }} {{ 'alert-read' if not notif.is_new else '' }}">
             <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
             {{ notif.html|safe }}

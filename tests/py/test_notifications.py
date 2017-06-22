@@ -55,3 +55,23 @@ class TestNotifications(Harness):
         r = self.client.GET('/alice/notifications.html', auth_as=alice,
                             sentry_reraise=False).text
         assert 'fake_event_name' not in r
+
+    def test_marking_notifications_as_read_avoids_race_condition(self):
+        alice = self.make_participant('alice')
+        n1 = alice.add_notification('low_balance')
+        n2 = alice.add_notification('low_balance')
+        assert alice.pending_notifs == 2
+
+        data = {'mark_all_as_read': 'true', 'until': str(n1)}
+        r = self.client.PxST('/alice/notifications.json', data, auth_as=alice)
+        assert r.code == 302
+
+        notifications = self.db.all("""
+            SELECT id, event, context, is_new
+              FROM notification_queue
+             WHERE participant = %s
+               AND is_new = true
+          ORDER BY id DESC
+        """, (alice.id,))
+        assert len(notifications) == 1
+        assert notifications[0].id == n2
