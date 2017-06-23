@@ -59,6 +59,7 @@ def refetch_repos():
             SELECT r.participant, r.platform
               FROM repositories r
              WHERE r.info_fetched_at < now() - interval '6 days'
+               AND r.participant IS NOT NULL
           ORDER BY r.info_fetched_at ASC
              LIMIT 1
         """)
