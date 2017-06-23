@@ -1,0 +1,95 @@
+# coding: utf8
+
+from oauthlib.oauth2 import TokenExpiredError
+
+from liberapay.models.repository import Repository
+from liberapay.utils import b64decode_s, get_participant
+
+[---]
+
+request.allow('GET', 'POST')
+
+participant = get_participant(state, restrict=True)
+
+platform_name = request.path['platform']
+if platform_name:
+    platform = getattr(website.platforms, platform_name, None)
+    if not platform:
+        raise response.error(404, "unknown platform")
+    if not hasattr(platform, 'api_repos_path'):
+        raise response.error(400, "repos are not implemented for platform '%s'" % platform_name)
+
+    account = participant.get_account_elsewhere(platform.name)
+    sess = account.get_auth_session() if account else None
+    if sess:
+        page_url = b64decode_s(request.qs.get('page', ''))
+        try:
+            r = platform.get_starred_repos(account, page_url=page_url, sess=sess)
+        except TokenExpiredError:
+            sess = None
+        else:
+            repos, total_count, next_page = r[0], r[1], r[2].get('next')
+            repos = [Repository(repo.__dict__) for repo in repos]
+    title = _("Starred Repositories on {platform}", platform=platform.display_name)
+else:
+    title = _("Starred Repositories")
+
+[---] text/html
+% extends "templates/base.html"
+
+% from "templates/repos.html" import show_repo with context
+% from "templates/auth.html" import auth_button with context
+
+% block content
+% if not platform_name
+
+    <p>{{ _("We can import a list of repositories you have starred from:") }}</p>
+    <p>
+    % for platform in website.platforms.hasattr('api_starred_path')
+    <a class="btn btn-default btn-lg"
+       href="{{ participant.path('repos/starred/' + platform.name) }}"
+       >{{ platform.display_name }}</a> &nbsp;&nbsp;
+    % endfor
+    </p>
+
+% else
+
+    <p>
+    % if not account
+        <p>{{ _(
+            "You don't have any {platform} account connected to your profile.",
+            platform=platform.display_name
+        ) }}</p>
+        % call auth_button(platform.name, 'connect')
+            {{ _("Connect {0} account", platform.display_name) }}
+        % endcall
+    % elif not sess
+        <p>{{ _(
+            "Your {platform} account needs to be reconnected.",
+            platform=platform.display_name
+        ) }}</p>
+        % call auth_button(platform.name, 'connect')
+            {{ _("Connect {0} account", platform.display_name) }}
+        % endcall
+    % else
+        % if total_count > 0
+            <p>{{ ngettext(
+                "You have starred {n} repository on {platform}.",
+                "You have starred {n} repositories on {platform}.",
+                total_count, platform=platform.display_name
+            ) }}</p>
+        % endif
+        % for repo in repos
+            {{ show_repo(repo, donate=True) }}
+            <hr>
+        % else
+            <p>{{ _("No repositories found.") }}</p>
+        % endfor
+        % if next_page
+            <br>
+            <a class="btn btn-default btn-lg" href="?page={{ b64encode_s(next_page) }}">{{ _("Next Page →") }}</a>
+        % endif
+    % endif
+
+% endif
+% endblock

@@ -339,12 +339,22 @@ class PlatformRegistry(object):
     """
     def __init__(self, platforms):
         self.__dict__ = OrderedDict((p.name, p) for p in platforms)
+        self._hasattr_cache = {}
 
     def __contains__(self, platform):
         return platform.name in self.__dict__
 
     def __iter__(self):
         return iter(self.__dict__.values())
+
+    def _cache_hasattr(self, attr):
+        r = PlatformRegistry([p for p in self if getattr(p, attr, None)])
+        self._hasattr_cache[attr] = r
+        return r
+
+    def hasattr(self, attr):
+        r = self._hasattr_cache.get(attr)
+        return r or self._cache_hasattr(attr)
 
 
 def accounts_elsewhere(app_conf, asset, canonical_url, db):
@@ -391,14 +401,11 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     friends_platforms = [p for p in platforms if getattr(p, 'api_friends_path', None)]
     friends_platforms = PlatformRegistry(friends_platforms)
 
-    platforms_with_repos_api = [p for p in platforms if hasattr(p, 'api_repos_path')]
-
     for platform in platforms:
         platform.icon = asset('platforms/%s.16.png' % platform.name)
         platform.logo = asset('platforms/%s.png' % platform.name)
 
-    return {'platforms': platforms, 'friends_platforms': friends_platforms,
-            'platforms_with_repos_api': platforms_with_repos_api}
+    return {'platforms': platforms, 'friends_platforms': friends_platforms}
 
 
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):

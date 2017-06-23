@@ -29,6 +29,7 @@ class GitLab(PlatformOAuth2):
     api_user_self_info_path = '/user'
     # api_team_members_path = '/groups/{user_name}/members'
     api_repos_path = '/projects?owned=true&visibility=public&order_by=last_activity_at&per_page=100'
+    api_starred_path = '/projects?starred=true&visibility=public'
 
     # The commented out paths are because we need this:
     # https://gitlab.com/gitlab-org/gitlab-ce/issues/13795

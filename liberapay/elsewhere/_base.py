@@ -12,6 +12,7 @@ except ImportError:
 import xml.etree.ElementTree as ET
 
 from babel.dates import format_timedelta
+from dateutil.parser import parse as parse_date
 from pando import Response
 from pando.utils import utc
 from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
@@ -309,6 +310,8 @@ class Platform(object):
         r.owner_id = self.x_repo_owner_id(r, info)
         r.description = self.x_repo_description(r, info, None)
         r.last_update = self.x_repo_last_update(r, info, None)
+        if r.last_update:
+            r.last_update = parse_date(r.last_update)
         r.is_fork = self.x_repo_is_fork(r, info, None)
         r.stars_count = self.x_repo_stars_count(r, info, None)
         r.extra_info = info
@@ -327,6 +330,17 @@ class Platform(object):
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
         if count == -1 and hasattr(self, 'x_repos_count'):
             count = self.x_repos_count(None, account.extra_info, -1)
+        return repos, count, pages_urls
+
+    def get_starred_repos(self, account, sess, page_url=None):
+        if not page_url:
+            page_url = self.api_starred_path.format(
+                user_id=quote(account.user_id),
+                user_name=quote(account.user_name or ''),
+            )
+        r = self.api_get(account.domain, page_url, sess=sess)
+        repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
+        repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
         return repos, count, pages_urls
 
     def get_credentials(self, domain):
