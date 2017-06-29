@@ -573,6 +573,9 @@ msgstr "Crear"
 msgid "Disconnect"
 msgstr "Desconectar"
 
+msgid "This is not supported yet"
+msgstr ""
+
 msgid "Connect"
 msgstr "Conectar"
 
@@ -738,6 +741,9 @@ msgstr "Acepto las {0}condiciones de servicio de MangoPay{1}"
 
 msgid "The following repositories are currently displayed on your profile:"
 msgstr "Los siguientes repositorios se muestran actualmente en tu perfil:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr ""
 
 msgid "We can import a list of your repositories from:"
 msgstr "Podemos importar una lista de tus repositorios de:"
@@ -1007,6 +1013,9 @@ msgstr ""
 msgid "Show on your profile"
 msgstr "Mostrar en tu perfil"
 
+msgid "Pledge"
+msgstr "Promesa"
+
 msgid "Search Liberapay"
 msgstr "Buscar en Liberapay"
 
@@ -1078,9 +1087,6 @@ msgstr "Estancias de ingresos no reclamados en los bolsillos de los donantes, qu
 
 msgid "Leftover"
 msgstr "Sobrante"
-
-msgid "Pledge"
-msgstr "Promesa"
 
 msgid "Modify"
 msgstr "Modificar"
@@ -1748,6 +1754,9 @@ msgstr "Tu perfil ha sido actualizado."
 msgid "{username}'s Repositories"
 msgstr "Repositorios de {username}"
 
+msgid "We can also import lists of repositories for your teams:"
+msgstr ""
+
 #, python-brace-format
 msgid "You don't have any {platform} account connected to your profile."
 msgstr "No tienes ninguna cuenta de {platform} conectada a tu perfil."
@@ -1758,15 +1767,33 @@ msgstr "Conectar cuenta de {0}"
 
 #, python-brace-format
 msgid "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr ""
-"Una lista de {n} repositorios ha sido importada de tu cuenta de {platform}, "
-"hace {time}."
+msgstr "Una lista de {n} repositorios ha sido importada de tu cuenta de {platform}, hace {time}."
 
 msgid "No repositories found."
 msgstr "No se encontraron repositorios."
 
 msgid "Next Page →"
 msgstr "Página siguiente →"
+
+#, python-brace-format
+msgid "Starred Repositories on {platform}"
+msgstr ""
+
+msgid "Starred Repositories"
+msgstr ""
+
+msgid "We can import a list of repositories you have starred from:"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {platform} account needs to be reconnected."
+msgstr ""
+
+#, python-brace-format
+msgid "You have starred {n} repository on {platform}."
+msgid_plural "You have starred {n} repositories on {platform}."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Parece que estás intentando borrar algo que no existe."
@@ -3163,9 +3190,7 @@ msgstr[1] "Encontradas coincidencias con repositorios"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
-msgstr ""
-"{username} tiene un repositorio llamado {repo_name} en su cuenta de "
-"{platform}"
+msgstr "{username} tiene un repositorio llamado {repo_name} en su cuenta de {platform}"
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
