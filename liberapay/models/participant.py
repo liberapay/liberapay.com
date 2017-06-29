@@ -1109,6 +1109,7 @@ class Participant(Model, MixinTeam):
 
             SELECT team AS id
                  , p.username AS name
+                 , p.avatar_url
                  , ( SELECT count(*)
                        FROM current_takes
                       WHERE team=x.team

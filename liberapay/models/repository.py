@@ -35,6 +35,8 @@ def upsert_repos(cursor, repos, participant, info_fetched_at):
         return repos
     r = []
     for repo in repos:
+        if not repo.owner_id:
+            continue
         repo.participant = participant.id
         repo.extra_info = json.dumps(repo.extra_info)
         repo.info_fetched_at = info_fetched_at
@@ -59,6 +61,7 @@ def refetch_repos():
             SELECT r.participant, r.platform
               FROM repositories r
              WHERE r.info_fetched_at < now() - interval '6 days'
+               AND r.participant IS NOT NULL
           ORDER BY r.info_fetched_at ASC
              LIMIT 1
         """)
