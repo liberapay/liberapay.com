@@ -161,7 +161,7 @@ if request.method == 'POST':
     if not rerun and payday_is_running:
         # Payday has already been started, redirect
         response.redirect('/admin/payday/%s' % last_payday.id)
-    p_id = payday_id if rerun else last_payday.id + 1
+    p_id = payday_id if rerun else (last_payday.id + 1 if last_payday else 1)
     log_file = open(payday_log_path(p_id)+'.part', 'a')
     exec_payday(log_file)
     response.redirect('/admin/payday/%s' % p_id)
