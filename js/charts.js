@@ -59,6 +59,7 @@ Liberapay.charts.make = function(series, button) {
     // ==========
 
     charts.forEach(function(chart, chart_index) {
+        chart.css('min-width', (series.length * 5) + 'px');
         series.forEach(function(point, index) {
             var y = parseFloat(point[chart.data('chart')]);
             var bar = $('<div>').addClass('bar');
