@@ -39,6 +39,12 @@ Liberapay.charts.make = function(series, button) {
 
     var H = $('.chart').height() - 20;
     var W = (1 / series.length).toFixed(10) * $('.chart').width();
+    var skip = 0;
+    if (W < 5) {
+        var keep = Math.floor($('.chart').width() / 5);
+        skip = series.length - keep;
+        series = series.slice(-keep);
+    }
     W = W > 10 ? '10px' : (W < 5 ? '5px' : Math.floor(W)+'px');
 
 
@@ -59,6 +65,7 @@ Liberapay.charts.make = function(series, button) {
     // ==========
 
     charts.forEach(function(chart, chart_index) {
+        chart.css('min-width', (series.length * 5) + 'px');
         series.forEach(function(point, index) {
             var y = parseFloat(point[chart.data('chart')]);
             var bar = $('<div>').addClass('bar');
@@ -67,7 +74,7 @@ Liberapay.charts.make = function(series, button) {
             bar.append(shaded);
 
             var xTick = $('<span>').addClass('x-tick');
-            xTick.text(point.xText || index+1).attr('title', point.xTitle);
+            xTick.text(point.xText || index+skip+1).attr('title', point.xTitle);
             bar.append(xTick);
 
             // Display a max flag (only once)
