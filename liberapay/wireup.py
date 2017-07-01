@@ -574,6 +574,8 @@ full_algorithm = Algorithm(
 
 
 def main():
+    from os import environ
+    environ['RUN_CRON_JOBS'] = 'no'
     from liberapay.main import website
     app_conf, env = website.app_conf, website.env
     if app_conf.missing or app_conf.mistyped or env.missing or env.malformed:
