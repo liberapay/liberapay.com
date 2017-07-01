@@ -301,11 +301,17 @@ title = _("Withdraw money")
                     </select>
                 </label><br>
 
-                <label>
-                    <span>{{ _("BIC (Bank Identifier Code)") }}</span>
-                    <input name="BIC" class="form-control" required
+                <div class="form-group-small form-inline">
+                    <label for="bban-bic">{{ _( "BIC (Bank Identifier Code)") }}</label><br>
+                    <input name="BIC" id="bban-bic" class="form-control" required
                            size=11 maxlength=11 />
-                </label>
+                    <span class="glyphicon glyphicon-question-sign input-help"
+                          data-toggle="tooltip" data-placement="bottom" tabindex=0
+                          title="{{ _(
+                              'SWIFT codes are 8 or 11 caracters long. The first 6 characters are '
+                              'letters, the rest can be letters or digits. Example: CMBRFR2BCME'
+                          ) }}"></span>
+                </div>
 
                 <label>
                     <span>{{ _("Account Number") }}</span>
