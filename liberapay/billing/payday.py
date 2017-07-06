@@ -2,7 +2,6 @@
 
 from __future__ import print_function, unicode_literals
 
-from datetime import date
 from decimal import Decimal, ROUND_UP
 import os
 import os.path
@@ -805,7 +804,7 @@ def main(override_payday_checks=False):
     from liberapay.billing.payday import Payday
 
     if not website.env.override_payday_checks and not override_payday_checks:
-        # Check that payday hasn't already been run today
+        # Check that payday hasn't already been run this week
         r = website.db.one("""
             SELECT id
               FROM paydays
@@ -813,9 +812,6 @@ def main(override_payday_checks=False):
                AND ts_end >= ts_start
         """)
         assert not r, "payday has already been run this week"
-        # Check that today is Wednesday
-        wd = date.today().isoweekday()
-        assert wd == 3, "today is not Wednesday (%s != 3)" % wd
 
     # Prevent a race condition, by acquiring a DB lock
     conn = website.db.get_connection().__enter__()

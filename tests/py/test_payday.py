@@ -15,16 +15,7 @@ from liberapay.testing.emails import EmailHarness
 
 class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
-    @mock.patch('liberapay.billing.payday.date')
-    def test_payday_prevents_human_errors(self, date):
-
-        date.today.return_value.isoweekday.return_value = 2
-        with self.assertRaises(AssertionError) as cm:
-            main()
-        assert cm.exception.msg == "today is not Wednesday (2 != 3)"
-
-        date.today.return_value.isoweekday.return_value = 3
-
+    def test_payday_prevents_human_errors(self):
         with self.db.get_connection() as conn:
             cursor = conn.cursor()
             lock = cursor.one("SELECT pg_try_advisory_lock(1)")
@@ -38,6 +29,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         with self.assertRaises(AssertionError) as cm:
             main()
         assert cm.exception.msg == "payday has already been run this week"
+
+        admin = self.make_participant('admin', privileges=1)
+        r = self.client.PxST('/admin/payday', data={'action': 'run_payday'}, auth_as=admin)
+        assert r.code == 403
+        assert r.text == "it's not time to run payday"
 
     def test_payday_id_is_serial(self):
         for i in range(1, 4):
