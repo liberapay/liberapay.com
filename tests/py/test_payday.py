@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D
 import json
-import os
 
 import mock
 
@@ -317,8 +316,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         # have already been processed
         for i in range(3):
             payday.shuffle()
-
-        os.unlink(payday.transfers_filename)
 
         participants = self.db.all("SELECT username, balance FROM participants")
 

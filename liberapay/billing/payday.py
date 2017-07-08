@@ -5,7 +5,6 @@ from __future__ import print_function, unicode_literals
 from decimal import Decimal, ROUND_UP
 import os
 import os.path
-import pickle
 
 from babel.dates import format_timedelta
 import pando.utils
@@ -54,12 +53,12 @@ class Payday(object):
                    ORDER BY id DESC
                       LIMIT 1
                 ), 0) + 1)
-                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start
+                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
             """, back_as=dict)
             log("Starting payday #%s." % d['id'])
         except IntegrityError:  # Collision, we have a Payday already.
             d = cls.db.one("""
-                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start
+                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
                   FROM paydays
                  WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
             """, back_as=dict)
@@ -95,9 +94,6 @@ class Payday(object):
 
         self.notify_participants()
 
-        if not keep_log:
-            os.unlink(self.transfers_filename)
-
         _end = pando.utils.utcnow()
         _delta = _end - _start
         msg = "Script ran for %s ({0})."
@@ -107,11 +103,24 @@ class Payday(object):
             output_log_path = log_dir+'/payday-%i.txt' % self.id
             os.rename(output_log_path+'.part', output_log_path)
 
+        self.db.run("UPDATE paydays SET stage = NULL WHERE id = %s", (self.id,))
+
     def shuffle(self, log_dir='.'):
-        self.transfers_filename = log_dir+'/payday-%s_transfers.pickle' % self.id
-        if os.path.exists(self.transfers_filename):
-            with open(self.transfers_filename, 'rb') as f:
-                transfers = pickle.load(f)
+        if self.stage > 2:
+            return
+        get_transfers = lambda: [NS(t._asdict()) for t in self.db.all("""
+            SELECT t.*
+                 , p.mangopay_user_id AS tipper_mango_id
+                 , p2.mangopay_user_id AS tippee_mango_id
+                 , p.mangopay_wallet_id AS tipper_wallet_id
+                 , p2.mangopay_wallet_id AS tippee_wallet_id
+              FROM payday_transfers t
+              JOIN participants p ON p.id = t.tipper
+              JOIN participants p2 ON p2.id = t.tippee
+          ORDER BY t.id
+        """)]
+        if self.stage == 2:
+            transfers = get_transfers()
             done = self.db.all("""
                 SELECT *
                   FROM transfers t
@@ -120,32 +129,25 @@ class Payday(object):
             done = set((t.tipper, t.tippee, t.context, t.team) for t in done)
             transfers = [t for t in transfers if (t.tipper, t.tippee, t.context, t.team) not in done]
         else:
+            assert self.stage == 1
             with self.db.get_cursor() as cursor:
                 self.prepare(cursor, self.ts_start)
                 self.transfer_virtually(cursor, self.ts_start)
-                transfers = [NS(t._asdict()) for t in cursor.all("""
-                    SELECT t.*
-                         , p.mangopay_user_id AS tipper_mango_id
-                         , p2.mangopay_user_id AS tippee_mango_id
-                         , p.mangopay_wallet_id AS tipper_wallet_id
-                         , p2.mangopay_wallet_id AS tippee_wallet_id
-                      FROM payday_transfers t
-                      JOIN participants p ON p.id = t.tipper
-                      JOIN participants p2 ON p2.id = t.tippee
-                """)]
                 self.check_balances(cursor)
-                with open(self.transfers_filename, 'wb') as f:
-                    pickle.dump(transfers, f)
                 cursor.run("""
                     UPDATE paydays
                        SET nparticipants = (SELECT count(*) FROM payday_participants)
                      WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
-                """, locals())
+                """)
             self.clean_up()
+            self.mark_stage_done()
+            transfers = get_transfers()
 
         self.transfer_for_real(transfers)
 
         self.db.self_check()
+        self.mark_stage_done()
+        self.db.run("DROP TABLE payday_transfers")
 
     @staticmethod
     def prepare(cursor, ts_start):
@@ -204,8 +206,9 @@ class Payday(object):
 
         CREATE UNIQUE INDEX ON payday_takes (team, member);
 
-        CREATE TEMPORARY TABLE payday_transfers
-        ( timestamp timestamptz DEFAULT now()
+        DROP TABLE IF EXISTS payday_transfers;
+        CREATE TABLE payday_transfers
+        ( id serial
         , tipper bigint
         , tippee bigint
         , amount numeric(35,2)
@@ -213,7 +216,7 @@ class Payday(object):
         , team bigint
         , invoice int
         , UNIQUE (tipper, tippee, context, team)
-        ) ON COMMIT DROP;
+        );
 
 
         -- Prepare a statement that makes and records a transfer
@@ -486,8 +489,8 @@ class Payday(object):
         db = self.db
         print("Starting transfers (n=%i)" % len(transfers))
         msg = "Executing transfer #%i (amount=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s)"
-        for i, t in enumerate(transfers):
-            log(msg % (i, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id))
+        for t in transfers:
+            log(msg % (t.id, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id))
             transfer(db, **t.__dict__)
 
     def clean_up(self):
@@ -707,6 +710,14 @@ class Payday(object):
             """)
         self.clean_up()
         log("Updated receiving amounts.")
+
+    def mark_stage_done(self):
+        self.stage = self.db.one("""
+            UPDATE paydays
+               SET stage = stage + 1
+             WHERE id = %s
+         RETURNING stage
+        """, (self.id,), default=NoPayday)
 
     def end(self):
         self.ts_end = self.db.one("""

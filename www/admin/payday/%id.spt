@@ -149,7 +149,7 @@ if payday_id:
     title += " #%s" % payday_id
 else:
     last_payday = website.db.one("SELECT * FROM paydays ORDER BY id DESC LIMIT 1")
-    payday_is_running = bool(last_payday) and last_payday.ts_end < last_payday.ts_start
+    payday_is_running = bool(last_payday) and last_payday.stage is not None
     today = date.today()
     today_weekday = today.isoweekday()
     today_is_wednesday = today_weekday == 3
