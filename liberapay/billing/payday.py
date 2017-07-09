@@ -15,6 +15,7 @@ from liberapay.billing.exchanges import transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.utils import group_by
+from liberapay.website import website
 
 
 log = print
@@ -100,7 +101,13 @@ class Payday(object):
         log(msg.format(_delta) % format_timedelta(_delta, locale='en'))
 
         if keep_log:
-            output_log_path = log_dir+'/payday-%i.txt' % self.id
+            output_log_name = 'payday-%i.txt' % self.id
+            output_log_path = log_dir+'/'+output_log_name
+            if website.s3:
+                s3_bucket = website.app_conf.s3_payday_logs_bucket
+                s3_key = 'paydays/'+output_log_name
+                website.s3.upload_file(output_log_path+'.part', s3_bucket, s3_key)
+                log("Uploaded log to S3.")
             os.rename(output_log_path+'.part', output_log_path)
 
         self.db.run("UPDATE paydays SET stage = NULL WHERE id = %s", (self.id,))

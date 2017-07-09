@@ -17,6 +17,7 @@ import pando
 from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
+import boto3
 from environment import Environment, is_yesish
 from mailshake import DummyMailer, SMTPMailer
 import psycopg2
@@ -144,6 +145,7 @@ class AppConf(object):
         s3_public_access_key=str,
         s3_secret_key=str,
         s3_region=str,
+        s3_payday_logs_bucket=str,
         send_newsletters_every=int,
         socket_timeout=float,
         smtp_host=str,
@@ -495,6 +497,8 @@ def asset_url_generator(env, asset_url, tell_sentry, www_root):
 def env():
     env = Environment(
         ASPEN_PROJECT_ROOT=str,
+        AWS_ACCESS_KEY_ID=str,
+        AWS_SECRET_ACCESS_KEY=str,
         DATABASE_URL=str,
         DATABASE_MAXCONN=int,
         CANONICAL_HOST=str,
@@ -551,6 +555,15 @@ def load_scss_variables(project_root):
     return {'scss_variables': d}
 
 
+def s3(env):
+    key, secret = env.aws_access_key_id, env.aws_secret_access_key
+    if key and secret:
+        s3 = boto3.client('s3', aws_access_key_id=key, aws_secret_access_key=secret)
+    else:
+        s3 = None
+    return {'s3': s3}
+
+
 minimal_algorithm = Algorithm(
     env,
     make_sentry_teller,
@@ -570,6 +583,7 @@ full_algorithm = Algorithm(
     asset_url_generator,
     accounts_elsewhere,
     load_scss_variables,
+    s3,
 )
 
 
