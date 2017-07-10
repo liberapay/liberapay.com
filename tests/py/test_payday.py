@@ -8,6 +8,7 @@ import mock
 from liberapay.billing.payday import main, NoPayday, Payday
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
+from liberapay.testing import Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
 
@@ -314,7 +315,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
         # Run the transfer multiple times to make sure we ignore takes that
         # have already been processed
-        for i in range(3):
+        with mock.patch.object(payday, 'transfer_for_real') as f:
+            f.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                payday.shuffle()
+        for i in range(2):
             payday.shuffle()
 
         participants = self.db.all("SELECT username, balance FROM participants")
@@ -731,3 +736,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
         assert 'top up' in emails[2]['subject']
         assert '1.77' in emails[2]['text']
+
+    def test_log_upload(self):
+        payday = Payday.start()
+        with open('payday-%i.txt.part' % payday.id, 'w') as f:
+            f.write('fake log file\n')
+        with mock.patch.object(self.website, 's3') as s3:
+            payday.run('.', keep_log=True)
+            assert s3.upload_file.call_count == 1
