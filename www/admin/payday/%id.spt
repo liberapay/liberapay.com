@@ -9,6 +9,7 @@ from liberapay.exceptions import LoginRequired
 from liberapay.utils import pid_exists
 
 ONE_WEEK = timedelta(days=7)
+S3_BUCKET = website.app_conf.s3_payday_logs_bucket
 
 devnull = open(os.devnull)
 root = website.project_root
@@ -103,9 +104,15 @@ def serve_payday_log(payday_id, request, response):
             f.close()
             f = None
     if not f:
+        payday = website.db.one("SELECT * FROM paydays WHERE id = %s", (payday_id,))
+        if not payday:
+            raise response.error(404)
         log_path = payday_log_path(payday_id)
-        if not os.path.exists(log_path):
+        if payday.stage:
             log_path += '.part'
+        elif not os.path.exists(log_path) and website.s3:
+            s3_key = 'paydays/payday-%i.txt' % payday_id
+            website.s3.download_file(S3_BUCKET, s3_key, log_path)
         try:
             f = payday_logs[payday_id] = open(log_path, 'rb')
         except IOError as e:
