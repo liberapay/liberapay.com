@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-07-08 15:07+0000\n"
+"PO-Revision-Date: 2017-07-11 11:58+0000\n"
 "Last-Translator: Paweł Szymon Kosiński <email@pskosinski.pl>\n"
 "Language-Team: Polish "
 "<https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
@@ -104,7 +104,7 @@ msgid "Withdraw the money"
 msgstr "Wypłać pieniądze"
 
 msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr "Nie możesz jednak wypłacić pieniądzy ponieważ nadal są w kwarantannie."
+msgstr "Nie możesz jednak wypłacić pieniędzy ponieważ nadal są w kwarantannie."
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -147,11 +147,9 @@ msgstr "Faktura od {0} na Liberapay"
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} złożył fakturę za zapłatę w wysokości {amount}."
 
-#, fuzzy
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Przelew bankowy do portfela Liberapay"
 
-#, fuzzy
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Przelew bankowy do portfela Liberapay nie powiódł się"
 
@@ -159,12 +157,13 @@ msgstr "Przelew bankowy do portfela Liberapay nie powiódł się"
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "Próba przeniesienia {0} z Twojego konta bankowego zakończyła się niepowodzeniem z następującym komunikatem o błędzie:"
 
-#, fuzzy
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Możesz spróbować ponownie, ewentualnie z innej metody płatności, klikając poniższy link:"
+msgstr ""
+"Możesz spróbować ponownie, ewentualnie używając innej metody płatności, "
+"klikając poniższy link:"
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr ""
+msgstr "Pomyślnie dokonano przelewu bankowego do Twojego konta Liberapay"
 
 #, fuzzy, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} you sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
@@ -181,15 +180,14 @@ msgstr "{0} z {1} dołączył do Liberapay!"
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
 msgstr "Twoja obietnicę darowania {0} tygodniowo {1} zostanie teraz włączona, ponieważ dołączył do Liberapay. Hurra!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
-msgstr "Podążaj za odnośnikiem, aby wyświetlić profil użytkownika {0}:"
+msgstr "Kliknij odnośnik, aby wyświetlić profil użytkownika {0}:"
 
-#, fuzzy
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Zostałeś zaproszony do zespołu na Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} has invited you to join the {1} team."
 msgstr "{0} zaprosił Cię do zespołu {1}."
 
@@ -216,9 +214,11 @@ msgstr "Konto Liberapay został utworzony w {0} z adresem e-mail {1}. Czy to Ty?
 msgid "Yes, proceed"
 msgstr "Tak, kontynuuj"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Należy pamiętać, że kod weryfikacyjny zawarty w tej wiadomości jest ważny tylko przez {time_interval}."
+msgstr ""
+"Pamiętaj, że kod weryfikacyjny zawarty w tej wiadomości jest ważny tylko "
+"przez {time_interval}."
 
 msgid "Follow this link to validate your email address:"
 msgstr "Kliknij ten link, aby potwierdzić swój adres e-mail:"
@@ -232,14 +232,14 @@ msgid "We are connecting {0} to the {1} account on Liberapay. This is a notifica
 msgstr "Łączymy {0} do konta {1} na Liberapay. Wysyłamy to do {2}, ponieważ jest podstawowym adresem e-mail."
 
 msgid "Withdrawal initiated"
-msgstr ""
+msgstr "Zainicjowano wypłacanie pieniędzy"
 
 #, fuzzy, python-brace-format
 msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
 msgstr "Wszczęliśmy przekazanie {0} z portfela Liberapay na Twoje konto bankowe. Należy pamiętać, że może upłynąć kilka dni roboczych dla wykonania tej transakcji."
 
 msgid "Withdrawal failure"
-msgstr ""
+msgstr "Wypłata się nie powiodła"
 
 #, python-brace-format
 msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
@@ -870,7 +870,7 @@ msgid "Add money"
 msgstr ""
 
 msgid "Withdraw money"
-msgstr ""
+msgstr "Wypłać pieniądze"
 
 msgid "Settings"
 msgstr ""
@@ -1844,7 +1844,7 @@ msgid "You have {0} in your wallet. What should we do with it?"
 msgstr ""
 
 msgid "Withdraw it"
-msgstr ""
+msgstr "Wypłać"
 
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
@@ -1984,7 +1984,7 @@ msgid "refund"
 msgstr ""
 
 msgid "withdrawal"
-msgstr ""
+msgstr "wypłacanie"
 
 msgid "deposit"
 msgstr ""
@@ -2211,10 +2211,14 @@ msgstr ""
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr ""
+"Niestety nie możesz jeszcze wypłacić pieniędzy, ponieważ nadal znajdują się "
+"w kwarantannie."
 
 #, python-brace-format
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
 msgstr ""
+"Z czego, {0} jest możliwe do wypłaty, a reszta nadal znajduje się w "
+"kwarantannie."
 
 #, python-brace-format
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
@@ -2223,6 +2227,8 @@ msgstr ""
 #, python-brace-format
 msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer. Additional fee from your bank may apply."
 msgstr ""
+"Wypłacanie przelewem SEPA jest darmowe, transfery do innych państw kosztują "
+"{0} za każdy transfer. Po stronie banku mogą występować dodatkowe opłaty."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
@@ -2512,6 +2518,8 @@ msgstr ""
 
 msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
 msgstr ""
+"Konkretnie, nie możesz przelać pieniędzy znajdujących się w kwarantannie z "
+"Twojego konta Liberapay na konto bankowe."
 
 msgid "Chargebacks"
 msgstr ""
@@ -2591,7 +2599,7 @@ msgid "Money moved into Liberapay"
 msgstr ""
 
 msgid "Withdrawals (€)"
-msgstr ""
+msgstr "Wypłaty (€)"
 
 msgid "Money moved out of Liberapay"
 msgstr ""
