@@ -116,6 +116,7 @@ def iter_payday_events(db, participant, year=None):
     payday_dates = db.all("""
         SELECT ts_start::date
           FROM paydays
+         WHERE ts_start IS NOT NULL
       ORDER BY ts_start ASC
     """)
 

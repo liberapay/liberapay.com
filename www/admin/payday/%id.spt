@@ -155,7 +155,13 @@ if payday_id:
         raise response.error(404)
     title += " #%s" % payday_id
 else:
-    last_payday = website.db.one("SELECT * FROM paydays ORDER BY id DESC LIMIT 1")
+    last_payday = website.db.one("""
+        SELECT *
+          FROM paydays
+         WHERE ts_start IS NOT NULL
+      ORDER BY id DESC
+         LIMIT 1
+    """)
     payday_is_running = bool(last_payday) and last_payday.stage is not None
     today = date.today()
     today_weekday = today.isoweekday()

@@ -38,7 +38,7 @@ class NS(object):
 class Payday(object):
 
     @classmethod
-    def start(cls):
+    def start(cls, public_log=''):
         """Try to start a new Payday.
 
         If there is a Payday that hasn't finished yet, then the UNIQUE
@@ -49,11 +49,15 @@ class Payday(object):
         """
         d = cls.db.one("""
             INSERT INTO paydays
-                        (id)
-                 VALUES (COALESCE((SELECT id FROM paydays ORDER BY id DESC LIMIT 1), 0) + 1)
-            ON CONFLICT (ts_end) DO UPDATE SET id = paydays.id  -- noop
+                        (id, public_log, ts_start)
+                 VALUES ( COALESCE((SELECT id FROM paydays ORDER BY id DESC LIMIT 1), 0) + 1
+                        , %s
+                        , now()
+                        )
+            ON CONFLICT (ts_end) DO UPDATE
+                    SET ts_start = COALESCE(paydays.ts_start, excluded.ts_start)
               RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
-        """, back_as=dict)
+        """, (public_log,), back_as=dict)
         log("Running payday #%s." % d['id'])
 
         d['ts_start'] = d['ts_start'].replace(tzinfo=pando.utils.utc)
@@ -813,8 +817,10 @@ def create_payday_issue():
     assert today_is_wednesday, today_weekday
     # Fetch last payday from DB
     last_payday = website.db.one("SELECT * FROM paydays ORDER BY id DESC LIMIT 1")
-    if last_payday and last_payday.ts_start.date() == today:
-        return
+    if last_payday:
+        last_start = last_payday.ts_start
+        if last_start is None or last_start.date() == today:
+            return
     next_payday_id = str(last_payday.id + 1 if last_payday else 1)
     # Prepare to make API requests
     app_conf = website.app_conf
@@ -839,7 +845,11 @@ def create_payday_issue():
     else:
         next_issue['title'] = "Payday #%s" % next_payday_id
     next_issue = github.api_request('POST', '', '/repos/%s/issues' % repo, json=next_issue, sess=sess).json()
-    log("Created payday issue: " + next_issue['html_url'])
+    website.db.run("""
+        INSERT INTO paydays
+                    (id, public_log, ts_start)
+             VALUES (%s, %s, NULL)
+    """, (next_payday_id, next_issue['html_url']))
 
 
 def main(override_payday_checks=False):
