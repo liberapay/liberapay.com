@@ -8,7 +8,6 @@ import os.path
 
 from babel.dates import format_timedelta
 import pando.utils
-from psycopg2 import IntegrityError
 
 from liberapay import constants
 from liberapay.billing.exchanges import transfer
@@ -46,24 +45,14 @@ class Payday(object):
         time of the current Payday to synchronize our work.
 
         """
-        try:
-            d = cls.db.one("""
-                INSERT INTO paydays (id) VALUES (COALESCE((
-                     SELECT id
-                       FROM paydays
-                   ORDER BY id DESC
-                      LIMIT 1
-                ), 0) + 1)
-                RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
-            """, back_as=dict)
-            log("Starting payday #%s." % d['id'])
-        except IntegrityError:  # Collision, we have a Payday already.
-            d = cls.db.one("""
-                SELECT id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
-                  FROM paydays
-                 WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-            """, back_as=dict)
-            log("Picking up payday #%s." % d['id'])
+        d = cls.db.one("""
+            INSERT INTO paydays
+                        (id)
+                 VALUES (COALESCE((SELECT id FROM paydays ORDER BY id DESC LIMIT 1), 0) + 1)
+            ON CONFLICT (ts_end) DO UPDATE SET id = paydays.id  -- noop
+              RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
+        """, back_as=dict)
+        log("Running payday #%s." % d['id'])
 
         d['ts_start'] = d['ts_start'].replace(tzinfo=pando.utils.utc)
 
