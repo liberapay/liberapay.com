@@ -57,29 +57,27 @@ transfers = website.db.all("""\
 if not transfers:
     raise response.json([])
 
-if True:
+paydays_i = iter(paydays)
+curpayday = next(paydays_i)
+ts_end = curpayday.pop('ts_end')
+patrons = set()
 
-    paydays_i = iter(paydays)
-    curpayday = next(paydays_i)
-    ts_end = curpayday.pop('ts_end')
-    patrons = set()
+# Loop through transfers, advancing payday cursor as appropriate
+for transfer in transfers:
+    while transfer['timestamp'] >= ts_end:
+        curpayday = next(paydays_i)
+        ts_end = curpayday.pop('ts_end')
+        patrons.clear()
+    if transfer['timestamp'] >= ts_end:
+        break
 
-    # Loop through transfers, advancing payday cursor as appropriate
-    for transfer in transfers:
-        while transfer['timestamp'] >= ts_end:
-            curpayday = next(paydays_i)
-            ts_end = curpayday.pop('ts_end')
-            patrons.clear()
-        if transfer['timestamp'] >= ts_end:
-            break
+    tipper = transfer['tipper']
+    if tipper not in patrons:
+        curpayday['npatrons'] += 1
+        patrons.add(tipper)
+    curpayday['receipts'] += transfer['amount']
 
-        tipper = transfer['tipper']
-        if tipper not in patrons:
-            curpayday['npatrons'] += 1
-            patrons.add(tipper)
-        curpayday['receipts'] += transfer['amount']
-
-    paydays.reverse()
+paydays.reverse()
 
 [---] application/json via jsonp_dump
 paydays
