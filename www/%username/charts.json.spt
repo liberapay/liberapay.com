@@ -20,51 +20,58 @@ if participant.hide_receiving:
     if user != participant and not user.is_admin:
         raise response.error(403)
 
+response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
 # Fetch data from the database
 
 paydays = website.db.all("""
 
-      SELECT p.ts_start
+      SELECT p.ts_end
            , p.ts_start::date   AS date
            , 0                  AS npatrons
            , 0.00               AS receipts
         FROM paydays p
-    ORDER BY ts_start DESC
+       WHERE stage IS NULL
+    ORDER BY ts_end ASC
 
 """, back_as=dict)
+
+if not paydays:
+    raise response.json([])
+
+col = 'team' if participant.kind == 'group' else 'tippee'
 
 transfers = website.db.all("""\
 
    SELECT timestamp
         , amount
         , tipper
-     FROM transfers
-    WHERE %s IN (tippee, team)
+     FROM transfers t
+    WHERE t.{0} = %s
       AND status = 'succeeded'
- ORDER BY id DESC
+      AND t.timestamp < %s
+ ORDER BY id ASC
 
-""", (participant.id,), back_as=dict)
-
+""".format(col), (participant.id, paydays[-1]['ts_end']), back_as=dict)
 
 if not transfers:
-    # This user has never received money
-    paydays = []
+    raise response.json([])
 
-
-if paydays:
+if True:
 
     paydays_i = iter(paydays)
     curpayday = next(paydays_i)
-    ts_start = curpayday.pop('ts_start')
+    ts_end = curpayday.pop('ts_end')
     patrons = set()
 
     # Loop through transfers, advancing payday cursor as appropriate
     for transfer in transfers:
-        while transfer['timestamp'] < ts_start:
+        while transfer['timestamp'] >= ts_end:
             curpayday = next(paydays_i)
-            ts_start = curpayday.pop('ts_start')
+            ts_end = curpayday.pop('ts_end')
             patrons.clear()
+        if transfer['timestamp'] >= ts_end:
+            break
 
         tipper = transfer['tipper']
         if tipper not in patrons:
@@ -72,7 +79,7 @@ if paydays:
             patrons.add(tipper)
         curpayday['receipts'] += transfer['amount']
 
-response.headers[b"Access-Control-Allow-Origin"] = b"*"
+    paydays.reverse()
 
 [---] application/json via jsonp_dump
 paydays

@@ -33,7 +33,7 @@ class TestChartsJson(FakeTransfersHarness):
 
 
     def test_no_payday_returns_empty_list(self):
-        assert json.loads(self.client.GET('/carl/charts.json').text) == []
+        assert json.loads(self.client.GxT('/carl/charts.json').text) == []
 
     def test_first_payday_comes_through(self):
         self.run_payday()   # first
@@ -80,13 +80,13 @@ class TestChartsJson(FakeTransfersHarness):
 
         assert actual == expected
 
-    def test_out_of_band_transfer_gets_included_with_prior_payday(self):
+    def test_out_of_band_transfer_gets_included_with_next_payday(self):
         self.run_payday()   # first
-        self.run_payday()   # second
 
         # Do an out-of-band transfer.
         self.make_transfer(self.alice.id, self.carl.id, 4)
 
+        self.run_payday()   # second
         self.run_payday()   # third
 
         expected = [
@@ -116,7 +116,7 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()   # third
 
         expected = []
-        actual = json.loads(self.client.GET('/alice/charts.json').text)
+        actual = json.loads(self.client.GxT('/alice/charts.json').text)
 
         assert actual == expected
 

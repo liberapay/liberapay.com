@@ -13,6 +13,7 @@ charts = [r._asdict() for r in query_cache.all("""\
          , week_deposits::text
          , week_withdrawals::text
       FROM paydays p
+     WHERE stage IS NULL
   ORDER BY ts_start DESC
 
 """)]
