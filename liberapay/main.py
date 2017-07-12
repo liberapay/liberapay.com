@@ -16,7 +16,8 @@ from pando.algorithms.website import fill_response_with_output
 from pando.utils import maybe_encode
 
 from liberapay import utils, wireup
-from liberapay.cron import Cron
+from liberapay.billing.payday import create_payday_issue
+from liberapay.cron import Cron, Weekly
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.models.repository import refetch_repos
@@ -94,6 +95,7 @@ if env.run_cron_jobs and conf:
     cron(conf.dequeue_emails_every, Participant.dequeue_emails, True)
     cron(conf.send_newsletters_every, Participant.send_newsletters, True)
     cron(conf.refetch_repos_every, refetch_repos, True)
+    cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
 
 
 # Website Algorithm

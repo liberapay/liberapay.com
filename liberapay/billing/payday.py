@@ -2,12 +2,14 @@
 
 from __future__ import print_function, unicode_literals
 
+from datetime import date
 from decimal import Decimal, ROUND_UP
 import os
 import os.path
 
 from babel.dates import format_timedelta
 import pando.utils
+import requests
 
 from liberapay import constants
 from liberapay.billing.exchanges import transfer
@@ -801,6 +803,43 @@ class Payday(object):
         """, (previous_ts_end, self.ts_end))
         for p in participants:
             p.notify('low_balance', low_balance=p.balance)
+
+
+def create_payday_issue():
+    # Make sure today is payday
+    today = date.today()
+    today_weekday = today.isoweekday()
+    today_is_wednesday = today_weekday == 3
+    assert today_is_wednesday, today_weekday
+    # Fetch last payday from DB
+    last_payday = website.db.one("SELECT * FROM paydays ORDER BY id DESC LIMIT 1")
+    if last_payday and last_payday.ts_start.date() == today:
+        return
+    next_payday_id = str(last_payday.id + 1 if last_payday else 1)
+    # Prepare to make API requests
+    app_conf = website.app_conf
+    sess = requests.Session()
+    sess.auth = (app_conf.bot_github_username, app_conf.bot_github_token)
+    github = website.platforms.github
+    label, repo = app_conf.payday_label, app_conf.payday_repo
+    # Fetch the previous payday issue
+    path = '/repos/%s/issues' % repo
+    params = {'state': 'all', 'labels': label, 'per_page': 1}
+    r = github.api_get('', path, params=params, sess=sess).json()
+    last_issue = r[0] if r else None
+    # Create the next payday issue
+    next_issue = {'body': '', 'labels': [label]}
+    if last_issue:
+        last_issue_payday_id = str(int(last_issue['title'].split()[-1].lstrip('#')))
+        if last_issue_payday_id == next_payday_id:
+            return  # already created
+        assert last_issue_payday_id == str(last_payday.id)
+        next_issue['title'] = last_issue['title'].replace(last_issue_payday_id, next_payday_id)
+        next_issue['body'] = last_issue['body']
+    else:
+        next_issue['title'] = "Payday #%s" % next_payday_id
+    next_issue = github.api_request('POST', '', '/repos/%s/issues' % repo, json=next_issue, sess=sess).json()
+    log("Created payday issue: " + next_issue['html_url'])
 
 
 def main(override_payday_checks=False):
