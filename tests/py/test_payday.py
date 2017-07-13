@@ -5,7 +5,7 @@ import json
 
 import mock
 
-from liberapay.billing.payday import main, NoPayday, Payday
+from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
@@ -744,3 +744,39 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         with mock.patch.object(self.website, 's3') as s3:
             payday.run('.', keep_log=True)
             assert s3.upload_file.call_count == 1
+
+    @mock.patch('liberapay.billing.payday.date')
+    @mock.patch('liberapay.website.website.platforms.github.api_get')
+    @mock.patch('liberapay.website.website.platforms.github.api_request')
+    def test_create_payday_issue(self, api_request, api_get, date):
+        date.today.return_value.isoweekday.return_value = 3
+        # 1st payday issue
+        api_get.return_value.json = lambda: []
+        repo = self.website.app_conf.payday_repo
+        html_url = 'https://github.com/%s/issues/1' % repo
+        api_request.return_value.json = lambda: {'html_url': html_url}
+        create_payday_issue()
+        args = api_request.call_args
+        post_path = '/repos/%s/issues' % repo
+        assert args[0] == ('POST', '', post_path)
+        assert args[1]['json'] == {'body': '', 'title': 'Payday #1', 'labels': ['Payday']}
+        assert args[1]['sess'].auth
+        public_log = self.db.one("SELECT public_log FROM paydays")
+        assert public_log == html_url
+        api_request.reset_mock()
+        # Check that executing the function again doesn't create a duplicate
+        create_payday_issue()
+        assert api_request.call_count == 0
+        # Run 1st payday
+        Payday.start().run()
+        # 2nd payday issue
+        api_get.return_value.json = lambda: [{'body': 'Lorem ipsum', 'title': 'Payday #1'}]
+        html_url = 'https://github.com/%s/issues/2' % repo
+        api_request.return_value.json = lambda: {'html_url': html_url}
+        create_payday_issue()
+        args = api_request.call_args
+        assert args[0] == ('POST', '', post_path)
+        assert args[1]['json'] == {'body': 'Lorem ipsum', 'title': 'Payday #2', 'labels': ['Payday']}
+        assert args[1]['sess'].auth
+        public_log = self.db.one("SELECT public_log FROM paydays WHERE id = 2")
+        assert public_log == html_url
