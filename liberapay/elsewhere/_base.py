@@ -128,7 +128,7 @@ class Platform(object):
         if status == 401 and isinstance(self, PlatformOAuth1) and is_user_session:
             # https://tools.ietf.org/html/rfc5849#section-3.2
             raise TokenExpiredError
-        if status != 200 and error_handler:
+        if status not in (200, 201) and error_handler:
             error_handler(response, is_user_session, domain)
 
         return response

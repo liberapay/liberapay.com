@@ -2,29 +2,20 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal as D
 import json
-import os
 
 import mock
 
-from liberapay.billing.payday import main, NoPayday, Payday
+from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
+from liberapay.testing import Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
 
 
 class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
-    @mock.patch('liberapay.billing.payday.date')
-    def test_payday_prevents_human_errors(self, date):
-
-        date.today.return_value.isoweekday.return_value = 2
-        with self.assertRaises(AssertionError) as cm:
-            main()
-        assert cm.exception.msg == "today is not Wednesday (2 != 3)"
-
-        date.today.return_value.isoweekday.return_value = 3
-
+    def test_payday_prevents_human_errors(self):
         with self.db.get_connection() as conn:
             cursor = conn.cursor()
             lock = cursor.one("SELECT pg_try_advisory_lock(1)")
@@ -38,6 +29,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         with self.assertRaises(AssertionError) as cm:
             main()
         assert cm.exception.msg == "payday has already been run this week"
+
+        admin = self.make_participant('admin', privileges=1)
+        r = self.client.PxST('/admin/payday', data={'action': 'run_payday'}, auth_as=admin)
+        assert r.code == 403
+        assert r.text == "it's not time to run payday"
 
     def test_payday_id_is_serial(self):
         for i in range(1, 4):
@@ -184,7 +180,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             participants = get_participants(cursor)
 
         expected_logging_call_args = [
-            ('Starting payday #1.'),
+            ('Running payday #1.'),
             ('Payday started at {}.'.format(ts_start)),
             ('Prepared the DB.'),
         ]
@@ -210,7 +206,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert participants == second_participants
 
         expected_logging_call_args = [
-            ('Picking up payday #1.'),
+            ('Running payday #1.'),
             ('Payday started at {}.'.format(second_ts_start)),
             ('Prepared the DB.'),
         ]
@@ -319,10 +315,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
         # Run the transfer multiple times to make sure we ignore takes that
         # have already been processed
-        for i in range(3):
+        with mock.patch.object(payday, 'transfer_for_real') as f:
+            f.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                payday.shuffle()
+        for i in range(2):
             payday.shuffle()
-
-        os.unlink(payday.transfers_filename)
 
         participants = self.db.all("SELECT username, balance FROM participants")
 
@@ -738,3 +736,47 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
         assert 'top up' in emails[2]['subject']
         assert '1.77' in emails[2]['text']
+
+    def test_log_upload(self):
+        payday = Payday.start()
+        with open('payday-%i.txt.part' % payday.id, 'w') as f:
+            f.write('fake log file\n')
+        with mock.patch.object(self.website, 's3') as s3:
+            payday.run('.', keep_log=True)
+            assert s3.upload_file.call_count == 1
+
+    @mock.patch('liberapay.billing.payday.date')
+    @mock.patch('liberapay.website.website.platforms.github.api_get')
+    @mock.patch('liberapay.website.website.platforms.github.api_request')
+    def test_create_payday_issue(self, api_request, api_get, date):
+        date.today.return_value.isoweekday.return_value = 3
+        # 1st payday issue
+        api_get.return_value.json = lambda: []
+        repo = self.website.app_conf.payday_repo
+        html_url = 'https://github.com/%s/issues/1' % repo
+        api_request.return_value.json = lambda: {'html_url': html_url}
+        create_payday_issue()
+        args = api_request.call_args
+        post_path = '/repos/%s/issues' % repo
+        assert args[0] == ('POST', '', post_path)
+        assert args[1]['json'] == {'body': '', 'title': 'Payday #1', 'labels': ['Payday']}
+        assert args[1]['sess'].auth
+        public_log = self.db.one("SELECT public_log FROM paydays")
+        assert public_log == html_url
+        api_request.reset_mock()
+        # Check that executing the function again doesn't create a duplicate
+        create_payday_issue()
+        assert api_request.call_count == 0
+        # Run 1st payday
+        Payday.start().run()
+        # 2nd payday issue
+        api_get.return_value.json = lambda: [{'body': 'Lorem ipsum', 'title': 'Payday #1'}]
+        html_url = 'https://github.com/%s/issues/2' % repo
+        api_request.return_value.json = lambda: {'html_url': html_url}
+        create_payday_issue()
+        args = api_request.call_args
+        assert args[0] == ('POST', '', post_path)
+        assert args[1]['json'] == {'body': 'Lorem ipsum', 'title': 'Payday #2', 'labels': ['Payday']}
+        assert args[1]['sess'].auth
+        public_log = self.db.one("SELECT public_log FROM paydays WHERE id = 2")
+        assert public_log == html_url

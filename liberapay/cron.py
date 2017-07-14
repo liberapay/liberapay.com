@@ -1,9 +1,14 @@
+from collections import namedtuple
+from datetime import datetime, timedelta
 import logging
 import threading
 from time import sleep
 
 
 logger = logging.getLogger('liberapay.cron')
+
+
+Weekly = namedtuple('Weekly', 'weekday hour')
 
 
 class Cron(object):
@@ -15,19 +20,38 @@ class Cron(object):
         self.exclusive_jobs = []
 
     def __call__(self, period, func, exclusive=False):
-        if period <= 0:
+        if isinstance(period, int) and period <= 0:
             return
         if exclusive and not self.has_lock:
             self.exclusive_jobs.append((period, func))
             self._wait_for_lock()
             return
         def f():
-            while True:
-                try:
-                    func()
-                except Exception as e:
-                    self.website.tell_sentry(e, {})
-                sleep(period)
+            if isinstance(period, Weekly):
+                while True:
+                    now = datetime.utcnow()
+                    then = now.replace(hour=period.hour, minute=0, second=0)
+                    days = (now.isoweekday() - period.weekday) % 7
+                    if days:
+                        then += timedelta(days=days)
+                    seconds = (then - now).total_seconds()
+                    if seconds > 0:
+                        sleep(seconds)
+                    elif seconds < -3600:
+                        sleep(86400 * 6)
+                        continue
+                    try:
+                        func()
+                    except Exception as e:
+                        self.website.tell_sentry(e, {})
+                    sleep(86400 * 6)
+            else:
+                while True:
+                    try:
+                        func()
+                    except Exception as e:
+                        self.website.tell_sentry(e, {})
+                    sleep(period)
         t = threading.Thread(target=f)
         t.daemon = True
         t.start()

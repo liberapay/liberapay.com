@@ -84,7 +84,7 @@ class Harness(unittest.TestCase):
         SELECT tablename
           FROM pg_tables
          WHERE schemaname='public'
-           AND tablename NOT IN ('db_meta', 'app_conf')
+           AND tablename NOT IN ('db_meta', 'app_conf', 'payday_transfers')
     """)
     seq = itertools.count(0)
 

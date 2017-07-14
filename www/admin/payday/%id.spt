@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 import mmap
 import os
 from subprocess import Popen
@@ -7,6 +7,9 @@ from threading import Lock
 
 from liberapay.exceptions import LoginRequired
 from liberapay.utils import pid_exists
+
+ONE_WEEK = timedelta(days=7)
+S3_BUCKET = website.app_conf.s3_payday_logs_bucket
 
 devnull = open(os.devnull)
 root = website.project_root
@@ -101,9 +104,15 @@ def serve_payday_log(payday_id, request, response):
             f.close()
             f = None
     if not f:
+        payday = website.db.one("SELECT * FROM paydays WHERE id = %s", (payday_id,))
+        if not payday:
+            raise response.error(404)
         log_path = payday_log_path(payday_id)
-        if not os.path.exists(log_path):
+        if payday.stage:
             log_path += '.part'
+        elif not os.path.exists(log_path) and website.s3:
+            s3_key = 'paydays/payday-%i.txt' % payday_id
+            website.s3.download_file(S3_BUCKET, s3_key, log_path)
         try:
             f = payday_logs[payday_id] = open(log_path, 'rb')
         except IOError as e:
@@ -146,14 +155,25 @@ if payday_id:
         raise response.error(404)
     title += " #%s" % payday_id
 else:
-    last_payday = website.db.one("SELECT * FROM paydays ORDER BY id DESC LIMIT 1")
-    payday_is_running = bool(last_payday) and last_payday.ts_end < last_payday.ts_start
+    last_payday = website.db.one("""
+        SELECT *
+          FROM paydays
+         WHERE ts_start IS NOT NULL
+      ORDER BY id DESC
+         LIMIT 1
+    """)
+    payday_is_running = bool(last_payday) and last_payday.stage is not None
     today = date.today()
     today_weekday = today.isoweekday()
     today_is_wednesday = today_weekday == 3
+    payday_is_already_done = bool(last_payday) and last_payday.ts_end.date() == today
+    payday_is_late = bool(last_payday) and today - last_payday.ts_start.date() > ONE_WEEK
+    payday_needs_to_run = (today_is_wednesday and not payday_is_already_done) or payday_is_late
     override_checks = website.env.override_payday_checks
 
 if request.method == 'POST':
+    if not payday_is_running and not payday_needs_to_run:
+        raise response.error(403, "it's not time to run payday")
     action = request.body['action']
     if action not in ('run_payday', 'rerun_payday'):
         raise response.error(400, "bad action")
@@ -184,9 +204,9 @@ if request.method == 'POST':
         <h3>Running Payday</h3>
         % if payday_is_running
             <p>Payday is running right now, you can go <a href="/admin/payday/{{ last_payday.id }}">see the log</a>.</p>
-        % elif last_payday and last_payday.ts_start.date() == today and not override_checks
+        % elif payday_is_already_done and not override_checks
             <p>Payday has already been run today.</p>
-        % elif today_is_wednesday or override_checks
+        % elif payday_needs_to_run or override_checks
             <p class="alert alert-warning">
                 Before clicking the button below, make sure there isn't any issue that needs
                 to be dealt with before this week's payday, and no important code changes

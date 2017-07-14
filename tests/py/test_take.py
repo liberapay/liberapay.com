@@ -4,6 +4,7 @@ from decimal import Decimal as D
 
 from psycopg2 import InternalError
 
+from liberapay.billing.payday import Payday
 from liberapay.testing import Harness
 from liberapay.models.participant import Participant
 
@@ -37,7 +38,7 @@ class Tests(Harness):
 
     def take_last_week(self, team, member, amount, actual_amount=None):
         team.set_take_for(member, amount, team, check_max=False)
-        self.db.run("INSERT INTO paydays DEFAULT VALUES")
+        Payday.start()
         actual_amount = amount if actual_amount is None else actual_amount
         if D(actual_amount) > 0:
             self.db.run("""
@@ -198,7 +199,7 @@ class Tests(Harness):
         assert team.get_takes_last_week()[alice.id] == 30
         take_this_week = D('42.00')
         team.set_take_for(alice, take_this_week, alice)
-        self.db.run("INSERT INTO paydays DEFAULT VALUES")
+        Payday.start()
         assert team.get_takes_last_week()[alice.id] == 30
         self.db.run("""
             INSERT INTO transfers (tipper, tippee, amount, context, status, team)
