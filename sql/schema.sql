@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '38'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '39'::jsonb);
 
 
 -- app configuration
@@ -278,7 +278,7 @@ CREATE INDEX transfers_tippee_idx ON transfers (tippee);
 
 CREATE TABLE paydays
 ( id                    serial           PRIMARY KEY
-, ts_start              timestamptz      NOT NULL DEFAULT CURRENT_TIMESTAMP
+, ts_start              timestamptz
 , ts_end                timestamptz      UNIQUE NOT NULL DEFAULT '1970-01-01T00:00:00+00'::timestamptz
 , nparticipants         bigint           NOT NULL DEFAULT 0
 , ntippers              bigint           NOT NULL DEFAULT 0
@@ -295,6 +295,8 @@ CREATE TABLE paydays
 , transfer_volume_refunded   numeric(35,2)
 , week_deposits_refunded     numeric(35,2)
 , week_withdrawals_refunded  numeric(35,2)
+, stage                 int              DEFAULT 1
+, public_log            text             NOT NULL
  );
 
 

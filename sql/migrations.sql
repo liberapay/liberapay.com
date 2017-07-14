@@ -428,3 +428,20 @@ CREATE INDEX repositories_trgm_idx ON repositories
     USING gist(name gist_trgm_ops);
 INSERT INTO app_conf (key, value) VALUES
     ('refetch_repos_every', '60'::jsonb);
+
+-- migration #39
+ALTER TABLE paydays
+    ADD COLUMN stage int,
+    ALTER COLUMN stage SET DEFAULT 1;
+INSERT INTO app_conf VALUES
+    ('s3_payday_logs_bucket', '""'::jsonb),
+    ('bot_github_username', '"liberapay-bot"'::jsonb),
+    ('bot_github_token', '""'::jsonb),
+    ('payday_repo', '"liberapay-bot/test"'::jsonb),
+    ('payday_label', '"Payday"'::jsonb);
+ALTER TABLE paydays ADD COLUMN public_log text;
+UPDATE paydays SET public_log = '';
+ALTER TABLE paydays ALTER COLUMN public_log SET NOT NULL;
+ALTER TABLE paydays
+    ALTER COLUMN ts_start DROP DEFAULT,
+    ALTER COLUMN ts_start DROP NOT NULL;
