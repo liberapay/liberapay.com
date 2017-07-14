@@ -292,6 +292,7 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
               JOIN exchanges e ON e.id = b.origin
              WHERE b.owner = %s
                AND b.ts < now() - INTERVAL %s
+               AND b.disputed IS NOT TRUE
           ORDER BY b.owner = e.participant DESC, b.ts
         """, (participant.id, QUARANTINE))
         withdrawable = sum(b.amount for b in bundles)

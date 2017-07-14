@@ -966,6 +966,7 @@ class Participant(Model, MixinTeam):
               FROM cash_bundles
              WHERE owner = %s
                AND ts < now() - INTERVAL %s
+               AND disputed IS NOT TRUE
         """, (self.id, QUARANTINE))
 
 
