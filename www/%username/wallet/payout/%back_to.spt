@@ -6,7 +6,8 @@ from decimal import Decimal as D
 
 from mangopay.resources import BankAccount
 
-from liberapay.billing.exchanges import get_bank_account_country, payout
+from liberapay.billing.fees import get_bank_account_country
+from liberapay.billing.transactions import payout
 from liberapay.constants import SEPA
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute

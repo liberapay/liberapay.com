@@ -6,7 +6,7 @@ from mangopay.constants import BANK_ACCOUNT_TYPE_CHOICES
 from mangopay.fields import Field
 from mangopay.resources import BankAccount
 
-from liberapay.billing.exchanges import repr_exception, APIError
+from liberapay.billing.transactions import repr_exception, APIError
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant
 

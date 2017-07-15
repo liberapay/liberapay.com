@@ -7,7 +7,7 @@ from mock import patch
 from mangopay.resources import BankWirePayOut, BankWirePayIn, Refund
 from mangopay.utils import Reason
 
-from liberapay.billing.exchanges import Money, record_exchange
+from liberapay.billing.transactions import Money, record_exchange
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.emails import EmailHarness

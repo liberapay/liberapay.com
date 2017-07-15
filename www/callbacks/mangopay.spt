@@ -9,7 +9,7 @@ from decimal import Decimal as D
 
 import mangopay.resources
 
-from liberapay.billing.exchanges import (
+from liberapay.billing.transactions import (
     record_exchange_result, record_payout_refund, repr_error, skim_bank_wire,
 )
 from liberapay.models.participant import Participant

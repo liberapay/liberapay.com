@@ -3,7 +3,7 @@ from datetime import datetime
 from mangopay.resources import LegalUser, NaturalUser
 from mangopay.utils import Address
 
-from liberapay.billing.exchanges import repr_exception, APIError
+from liberapay.billing.transactions import repr_exception, APIError
 from liberapay.constants import KYC_DOCS_EXTS
 from liberapay.utils import get_participant, group_by, to_javascript
 
