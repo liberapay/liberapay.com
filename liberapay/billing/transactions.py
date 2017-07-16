@@ -22,6 +22,7 @@ from liberapay.exceptions import (
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import group_by, NS
 
 
 Money.__eq__ = lambda a, b: isinstance(b, Money) and a.__dict__ == b.__dict__
@@ -365,17 +366,17 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
     tr.save()
-    return record_transfer_result(db, t_id, tr)
+    return record_transfer_result(db, t_id, tr, bundles=kw.get('bundles'))
 
 
-def record_transfer_result(db, t_id, tr):
+def record_transfer_result(db, t_id, tr, bundles=None):
     error = repr_error(tr)
     status = tr.Status.lower()
     assert (not error) ^ (status == 'failed')
-    return _record_transfer_result(db, t_id, status, error)
+    return _record_transfer_result(db, t_id, status, error, bundles=bundles)
 
 
-def _record_transfer_result(db, t_id, status, error=None):
+def _record_transfer_result(db, t_id, status, error=None, bundles=None):
     balance = None
     with db.get_cursor() as c:
         tipper, tippee, amount = c.one("""
@@ -398,11 +399,11 @@ def _record_transfer_result(db, t_id, status, error=None):
                    AND balance - %(amount)s >= 0
              RETURNING balance;
 
-            """, locals())
+            """.format(balance_chk), locals())
             if balance is None:
                 raise NegativeBalance
-            bundles = c.all("""
-                LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
+            c.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+            bundles = bundles or c.all("""
                 SELECT b.*
                   FROM cash_bundles b
                   JOIN exchanges e ON e.id = b.origin
@@ -437,13 +438,174 @@ def _record_transfer_result(db, t_id, status, error=None):
     raise TransferError(error)
 
 
+def lock_disputed_funds(cursor, exchange, amount):
+    """Prevent money that is linked to a chargeback from being withdrawn.
+    """
+    if amount != exchange.amount + exchange.fee:
+        raise NotImplementedError("partial disputes are not implemented")
+    cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+    disputed_bundles = [NS(d._asdict()) for d in cursor.all("""
+        UPDATE cash_bundles
+           SET disputed = true
+         WHERE origin = %s
+     RETURNING *
+    """, (exchange.id,))]
+    disputed_bundles_sum = sum(b.amount for b in disputed_bundles)
+    assert disputed_bundles_sum == exchange.amount
+    original_owner = exchange.participant
+    for b in disputed_bundles:
+        if b.owner == original_owner:
+            continue
+        try_to_swap_bundle(cursor, b, original_owner)
+
+
+def recover_lost_funds(db, exchange, lost_amount):
+    """Recover as much money as possible from a payin which has been reverted.
+    """
+    original_owner = exchange.participant
+    # Try (again) to swap the disputed bundles
+    with db.get_cursor() as cursor:
+        cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+        disputed_bundles = [NS(d._asdict()) for d in cursor.all("""
+            SELECT *
+              FROM cash_bundles
+             WHERE origin = %s
+               AND disputed = true
+        """, (exchange.id,))]
+        bundles_sum = sum(b.amount for b in disputed_bundles)
+        assert bundles_sum == lost_amount - exchange.fee
+        for b in disputed_bundles:
+            if b.owner == original_owner:
+                continue
+            try_to_swap_bundle(cursor, b, original_owner)
+    # Send the funds to the credit wallet
+    chargebacks_account = Participant.get_chargebacks_account()
+    LiberapayOrg = Participant.from_username('LiberapayOrg')
+    assert LiberapayOrg
+    grouped = group_by(disputed_bundles, lambda b: (b.owner, b.withdrawal))
+    for (owner, withdrawal), bundles in grouped.items():
+        if owner == chargebacks_account.id:
+            continue  # already recovered
+        amount = sum(b.amount for b in bundles)
+        if owner is None:
+            bundles = None
+            withdrawer = db.one("SELECT participant FROM exchanges WHERE id = %s", (withdrawal,))
+            payer = LiberapayOrg.id
+            create_debt(db, withdrawer, payer, amount, exchange.id)
+            create_debt(db, original_owner, withdrawer, amount, exchange.id)
+        else:
+            payer = owner
+            if owner != original_owner:
+                create_debt(db, original_owner, payer, amount, exchange.id)
+        transfer(
+            db, payer, chargebacks_account.id, amount, 'chargeback',
+            bundles=bundles, tippee_wallet_id='CREDIT_EUR',
+        )
+    # Take care of the fee
+    create_debt(db, original_owner, LiberapayOrg.id, exchange.fee, exchange.id)
+    transfer(
+        db, LiberapayOrg.id, chargebacks_account.id, exchange.fee, 'chargeback',
+        tippee_wallet_id='CREDIT_EUR',
+    )
+
+
+def try_to_swap_bundle(cursor, b, original_owner):
+    """Attempt to switch a disputed cash bundle with a "safe" one.
+    """
+    swappable_origin_bundles = [NS(d._asdict()) for d in cursor.all("""
+        SELECT *
+          FROM cash_bundles
+         WHERE owner = %s
+           AND disputed IS NOT TRUE
+      ORDER BY ts ASC
+    """, (original_owner,))]
+    try_to_swap_bundle_with(cursor, b, swappable_origin_bundles)
+    merge_cash_bundles(cursor, original_owner)
+    if b.withdrawal:
+        withdrawer = cursor.one(
+            "SELECT participant FROM exchanges WHERE id = %s", (b.withdrawal,)
+        )
+        swappable_recipient_bundles = [NS(d._asdict()) for d in cursor.all("""
+            SELECT *
+              FROM cash_bundles
+             WHERE owner = %s
+               AND disputed IS NOT TRUE
+          ORDER BY ts ASC, amount = %s DESC
+        """, (withdrawer, b.amount))]
+        # Note: we don't restrict the date in the query above, so a swapped
+        # bundle can end up "withdrawn" before it was even created
+        try_to_swap_bundle_with(cursor, b, swappable_recipient_bundles)
+        merge_cash_bundles(cursor, withdrawer)
+    else:
+        merge_cash_bundles(cursor, b.owner)
+
+
+def try_to_swap_bundle_with(cursor, b1, swappable_bundles):
+    """Attempt to switch the disputed cash bundle `b1` with one (or more) from
+    the `swappable_bundles` list.
+    """
+    for b2 in swappable_bundles:
+        if b2.amount == b1.amount:
+            swap_bundles(cursor, b1, b2)
+            break
+        elif b2.amount > b1.amount:
+            # Split the swappable bundle in two, then do the swap
+            b3 = split_bundle(cursor, b2, b1.amount)
+            swap_bundles(cursor, b1, b3)
+            break
+        else:
+            # Split the disputed bundle in two, then do the swap
+            b3 = split_bundle(cursor, b1, b2.amount)
+            swap_bundles(cursor, b2, b3)
+
+
+def split_bundle(cursor, b, amount):
+    """Cut a bundle in two.
+
+    Returns the new second bundle, whose amount is `amount`.
+    """
+    assert b.amount > amount
+    b.amount = cursor.one("""
+        UPDATE cash_bundles
+           SET amount = (amount - %s)
+         WHERE id = %s
+     RETURNING amount
+    """, (amount, b.id))
+    return NS(cursor.one("""
+        INSERT INTO cash_bundles
+                    (owner, origin, amount, ts, withdrawal, disputed)
+             VALUES (%s, %s, %s, %s, %s, %s)
+          RETURNING *;
+    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed))._asdict())
+
+
+def swap_bundles(cursor, b1, b2):
+    """Switch the current locations of the two cash bundles `b1` and `b2`.
+    """
+    cursor.run("""
+        UPDATE cash_bundles
+           SET owner = %s
+             , withdrawal = %s
+         WHERE id = %s;
+        UPDATE cash_bundles
+           SET owner = %s
+             , withdrawal = %s
+         WHERE id = %s;
+    """, (b2.owner, b2.withdrawal, b1.id, b1.owner, b1.withdrawal, b2.id))
+    b1.owner, b2.owner = b2.owner, b1.owner
+    b1.withdrawal, b2.withdrawal = b2.withdrawal, b1.withdrawal
+
+
 def merge_cash_bundles(db, p_id):
+    """Regroup cash bundles who have the same origin and current location.
+    """
     return db.one("""
         LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
         WITH regroup AS (
                  SELECT owner, origin, sum(amount) AS amount, max(ts) AS ts
                    FROM cash_bundles
                   WHERE owner = %s
+                    AND disputed IS NOT TRUE
                GROUP BY owner, origin
                  HAVING count(*) > 1
              ),
@@ -460,11 +622,21 @@ def merge_cash_bundles(db, p_id):
                   USING regroup g
                   WHERE b.owner = g.owner
                     AND b.origin = g.origin
+                    AND b.disputed IS NOT TRUE
               RETURNING b.*
              )
         SELECT (SELECT json_agg(d) FROM deleted d) AS before
              , (SELECT json_agg(i) FROM inserted i) AS after
     """, (p_id,))
+
+
+def create_debt(db, debtor, creditor, amount, origin):
+    return db.one("""
+        INSERT INTO debts
+                    (debtor, creditor, amount, status, origin)
+             VALUES (%s, %s, %s, 'due', %s)
+          RETURNING *
+    """, (debtor, creditor, amount, origin))
 
 
 def sync_with_mangopay(db):

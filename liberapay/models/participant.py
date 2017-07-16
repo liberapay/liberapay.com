@@ -199,6 +199,27 @@ class Participant(Model, MixinTeam):
                 p.authenticated = True
                 return p
 
+    @classmethod
+    def get_chargebacks_account(cls):
+        r = cls.db.one("""
+            SELECT p
+              FROM participants p
+             WHERE mangopay_user_id = 'CREDIT'
+        """)
+        if r:
+            return r
+        return cls.make_stub(
+            goal=-1,
+            hide_from_search=3,
+            hide_from_lists=3,
+            join_time=utcnow(),
+            kind='organization',
+            mangopay_user_id='CREDIT',
+            mangopay_wallet_id='CREDIT_EUR',
+            status='active',
+            username='_chargebacks_',
+        )
+
     def refetch(self):
         return self._from_thing('id', self.id)
 

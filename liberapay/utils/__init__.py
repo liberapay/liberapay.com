@@ -32,6 +32,11 @@ from liberapay.website import website
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
+class NS(object):
+    def __init__(self, d):
+        self.__dict__.update(d)
+
+
 def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,
                     block_suspended_user=False, redirect_canon=True):
     """Given a Request, raise Response or return Participant.
@@ -270,8 +275,13 @@ def include_svg(svg, height, width, x=None, y=None):
 
 
 def group_by(iterable, key, attr=False, ignored_exceptions=KeyError):
-    f = getattr if attr else getitem
     r = {}
+    if callable(key):
+        for obj in iterable:
+            k = key(obj)
+            r.setdefault(k, []).append(obj)
+        return r
+    f = getattr if attr else getitem
     for obj in iterable:
         try:
             k = f(obj, key)

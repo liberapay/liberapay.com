@@ -15,7 +15,7 @@ from liberapay import constants
 from liberapay.billing.transactions import transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
-from liberapay.utils import group_by
+from liberapay.utils import NS, group_by
 from liberapay.website import website
 
 
@@ -28,11 +28,6 @@ def round_up(d):
 
 class NoPayday(Exception):
     __str__ = lambda self: "No payday found where one was expected."
-
-
-class NS(object):
-    def __init__(self, d):
-        self.__dict__.update(d)
 
 
 class Payday(object):
