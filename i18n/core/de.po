@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-07-14 21:45+0000\n"
-"Last-Translator: Trolli Schmittlauch <spiollinux@googlemail.com>\n"
+"PO-Revision-Date: 2017-07-18 08:30+0000\n"
+"Last-Translator: Kim <github@aggsol.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
 "Language: de\n"
@@ -76,7 +76,8 @@ msgstr "Ihre Rechnung an {0} wurde akzeptiert - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr "Ihre Anfrage für eine Zahlung über {amount} von {addressee_name} wurde akzeptiert."
+msgstr ""
+"Ihre Zahlungsanfrage über {amount} von {addressee_name} wurde akzeptiert."
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
@@ -138,7 +139,7 @@ msgstr "Rechnung von {0} auf Liberapay"
 
 #, python-brace-format
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
-msgstr "{sender_name} hat Ihnen eine Rechnung  über {amount} geschickt."
+msgstr "{sender_name} hat Ihnen eine Rechnung über {amount} geschickt."
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Banküberweisung in Ihre Liberapay-Brieftasche"
@@ -180,7 +181,7 @@ msgstr "Sie wurden eingeladen, einem Team auf Liberapay beizutreten"
 
 #, python-brace-format
 msgid "{0} has invited you to join the {1} team."
-msgstr "{0} hat Sie eingeladen, dem Team „{1}“ beizutreten."
+msgstr "{0} hat Sie ins Team {1} eingeladen."
 
 msgid "See the team's profile"
 msgstr "Das Team-Profil ansehen"
@@ -274,6 +275,7 @@ msgstr "Entwurf"
 msgid "Sent (awaiting approval)"
 msgstr "Abgeschickt (erwartet Freigabe)"
 
+#, fuzzy
 msgid "Retracted"
 msgstr "Eingezogen"
 
@@ -1061,7 +1063,7 @@ msgid "Invite"
 msgstr "Einladen"
 
 msgid "Explore teams"
-msgstr "Entdecken Sie die Teams"
+msgstr "Entdecken Sie Teams"
 
 msgid "About teams"
 msgstr "Über Teams"
@@ -1226,7 +1228,7 @@ msgstr "Ich bin hier als Förderer und lehne Spenden höflichst ab."
 
 #, python-brace-format
 msgid "My goal is to receive {0}"
-msgstr "Mein Ziel ist es, {0} zu erhalten"
+msgstr "Mein Ziel ist es {0} zu erhalten"
 
 msgid "We're grateful for gifts, but don't have a specific funding goal."
 msgstr "Wir sind dankbar für Spenden, aber haben kein spezielles Finanzziel."
@@ -1406,8 +1408,8 @@ msgstr "Sie haben {0} im Liberapay Geldbeutel."
 #, python-brace-format
 msgid "Your donations are only funded for another week."
 msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Ihre Spenden werden nur für eine weitere Woche finanziert."
-msgstr[1] "Ihre Spenden werden für weitere {n} Wochen finanziert."
+msgstr[0] "Ihre Spenden sind nur für eine weitere Woche finanziert."
+msgstr[1] "Ihre Spenden sind für weitere {n} Wochen finanziert."
 
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr "Sie brauchen Geld, um Ihren Geldbeutel zu übertragen Ihre Spenden zu finanzieren."
@@ -1508,7 +1510,7 @@ msgstr "Sie können erst Geld erhalten, wenn Sie das Identitätsformular in Ihre
 
 #, python-brace-format
 msgid "You are not a member of the {0} team."
-msgstr "Sie sind nicht Mitglied der {0} Team."
+msgstr "Sie sind kein Mitglied des {0}-Teams."
 
 #, python-brace-format
 msgid "Your take is now {0} (you can't go higher this week)."
@@ -1834,8 +1836,12 @@ msgstr "Den {0} Menschen geben, denen ich {1} spende"
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Wenn keiner dieser Option für Sie in Frage kommt, wenden Sie sich bitte support@liberapay.com."
 
+#, fuzzy
 msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr "Sie haben eine ausstehende Übertragung auf Ihr Bankkonto. Wenn sie fehlschlägt, wird das Geld in der Brieftasche erneut erscheinen und Ihr Konto wird automatisch wieder geöffnet."
+msgstr ""
+"Sie haben eine ausstehende Überweisung auf Ihr Bankkonto. Wenn diese "
+"fehlschlägt, dann wird das Geld in der Brieftasche erneut gebucht und Ihr "
+"Konto wird automatisch wieder eröffnet."
 
 msgid "Personal Information"
 msgstr "Persönliche Informationen"
@@ -2185,10 +2191,14 @@ msgstr "{0} wurden von Ihrem Liberapay Brieftasche genommen. Wenn die Übertragu
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr "Der Versuch {0} auf Ihr Bankkonto zu senden, ist fehlgeschlagen. Fehlermeldung : {1}"
+msgstr ""
+"Der Versuch {0} auf Ihr Bankkonto zu überweisen, ist fehlgeschlagen. "
+"Fehlermeldung : {1}"
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "Leider zurückziehen können Sie nicht, dass das Geld noch, es ist immer noch in Quarantäne."
+msgstr ""
+"Leider können Sie zur Zeit kein Geld auszahlen lassen. Es befindet sich noch "
+"in Quarantäne."
 
 #, python-brace-format
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
@@ -2653,6 +2663,7 @@ msgstr "Top Gemeinschaften in Ihrer Sprache"
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "Leider haben wir keine Gefunden. Warum gründen Sie nicht eine?"
 
+#, fuzzy
 msgid "Which platform would you like to explore?"
 msgstr "Welche Plattform möchten Sie erkunden?"
 
@@ -2686,6 +2697,7 @@ msgstr "Hier sind {0} Nutzer von Liberapay, die mir ihrem {1} Konto verknüft si
 msgid "View More"
 msgstr "Mehr ansehen"
 
+#, fuzzy
 msgid "Explore other platforms:"
 msgstr "Erkunde andere Plattformen:"
 
@@ -2701,6 +2713,7 @@ msgstr "Teams entdecken"
 msgid "Great nonprofits and companies trying to improve the world."
 msgstr "Großartige Non-Profit-Organisationen und Unternehmen versuchen die Welt zu verbessern."
 
+#, fuzzy
 msgid "Explore Organizations"
 msgstr "Erkunde Organisationen"
 
@@ -2843,7 +2856,7 @@ msgstr "Erstellen Sie Ihr Konto"
 
 #, python-brace-format
 msgid "You receive {0} per week."
-msgstr "Du erhältst {0} pro Woche."
+msgstr "Sie erhalten {0} pro Woche."
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
@@ -2860,9 +2873,9 @@ msgstr "Um Geld zu erhalten machen Sie etwas großartiges und erzählen Sie davo
 msgid "{0}Fill out your profile{1}."
 msgstr "{0}Füllen Sie Ihr Profil aus{1}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr "{0} Binden Sie unsere Widgets {1} auf Ihrem Blog / Webseite ein."
+msgstr "{0}Binden Sie unsere Widgets{1} auf Ihrem Blog / Ihrer Webseite ein."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Kontaktieren Sie die Menschen, die von Ihrer Arbeit profitieren und bitten sie Sie zu unterstützen."
@@ -3061,13 +3074,13 @@ msgstr "{0} akzeptiert keine Spenden"
 msgid "{0} accepts donations"
 msgstr "{0} akzeptiert Spenden"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} opted out of Liberapay"
-msgstr ""
+msgstr "{0} hat sich gegen Liberapay entschieden"
 
 #, python-brace-format
 msgid "{0} hasn't joined Liberapay yet"
-msgstr ""
+msgstr "{0} ist bei Liberapay noch nicht registriert"
 
 #, python-brace-format
 msgid "Are you {0}?"
@@ -3102,7 +3115,7 @@ msgstr "Liberpay ist eine Art Ihren Lieblingskünstlern, -Musikern, -Programmier
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
-msgstr "{0} hat diese Fehlermeldung zuruckgegeben: {1}"
+msgstr "{0} hat diese Fehlermeldung zurück gegeben: {1}"
 
 #, python-brace-format
 msgid "{0} returned an error, please try again later."
@@ -3208,10 +3221,11 @@ msgid_plural "Found matching community names"
 msgstr[0] "Gefunden eine passende Community-Namen"
 msgstr[1] "Gefunden Community-Namen"
 
+#, fuzzy
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ein passendes Repository gefunden"
+msgstr[1] "Passende Repositorys gefunden"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
