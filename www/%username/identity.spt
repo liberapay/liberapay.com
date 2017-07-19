@@ -28,6 +28,7 @@ error, success = '', ''
 if request.method == 'POST':
     body = request.body
 
+    confirmed = body.get('confirmed')
     level = body.get('level') or '1'
 
     if participant.kind == 'individual':
@@ -38,6 +39,14 @@ if request.method == 'POST':
         account = participant.get_mangopay_account() or LegalUser()
         p = 'LegalRepresentative'
         keys = KEYS_LEGAL_L2 if level == '2' else KEYS_LEGAL
+
+    if account.Id and account.kyc_level != 'LIGHT' and not confirmed:
+        confirm = _(
+            "Are you sure you want to change your identity information? If you "
+            "do you may have to go through the identity verification process "
+            "again."
+        )
+        response.render('templates/confirm.spt', state, msg=confirm, back_to='', cls='warning')
 
     if not account.Tag:
         account.Tag = website.canonical_url + '/~%i/' % participant.id
