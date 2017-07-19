@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from mangopay.resources import LegalUser, NaturalUser
+from mangopay.resources import LegalUser, NaturalUser, User, Wallet
 from mangopay.utils import Address
 
-from liberapay.billing.transactions import repr_exception, APIError
+from liberapay.billing.transactions import repr_exception, transfer, APIError
 from liberapay.constants import KYC_DOCS_EXTS
 from liberapay.utils import get_participant, group_by, to_javascript
 
@@ -31,12 +31,38 @@ if request.method == 'POST':
     confirmed = body.get('confirmed')
     level = body.get('level') or '1'
 
-    if participant.kind == 'individual':
-        account = participant.get_mangopay_account() or NaturalUser()
+    account = participant.get_mangopay_account()
+    last_change = None
+    new_kind = participant.kind
+    old_account = None
+
+    if level == '1':
+        new_kind = 'organization' if 'LegalPersonType' in body else 'individual'
+        if new_kind != participant.kind:
+            if participant.balance and not confirmed:
+                confirm = _(
+                    "Are you sure you want to change the type of your account? For legal "
+                    "reasons we will have to create a new account for you in our payment "
+                    "partner's system, and transfer the money from your old account."
+                )
+                response.render('templates/confirm.spt', state, msg=confirm, back_to='')
+            old_account = account
+            account = NaturalUser() if new_kind == 'individual' else LegalUser()
+            last_change = participant.get_last_event_of_type('mangopay-account-change')
+            if last_change:
+                assert last_change.payload['old_user_type'] == account.PersonType
+                account = User.get(last_change.payload['old_user_id'])
+        if body.get('organization') == 'yes':
+            for k in KEYS_NATURAL:
+                body['LegalRepresentative'+k] = body.pop(k, None)
+
+    if not account:
+        account = NaturalUser() if participant.kind == 'individual' else LegalUser()
+
+    if isinstance(account, NaturalUser):
         p = ''
         keys = KEYS_NATURAL_L2 if level == '2' else KEYS_NATURAL
     else:
-        account = participant.get_mangopay_account() or LegalUser()
         p = 'LegalRepresentative'
         keys = KEYS_LEGAL_L2 if level == '2' else KEYS_LEGAL
 
@@ -80,6 +106,51 @@ if request.method == 'POST':
                 for k, v in list(account.get_field_dict().items()):
                     if isinstance(v, Address) and not getattr(v, 'country', None):
                         setattr(account, k, None)
+            if old_account:
+                if old_account.PersonType == 'NATURAL':
+                    if old_account.Address.country:
+                        account.LegalRepresentativeAddress = old_account.Address
+                else:
+                    if old_account.LegalRepresentativeAddress.country:
+                        account.Address = old_account.LegalRepresentativeAddress
+                account.save()
+                old_wallet_id = participant.mangopay_wallet_id
+                if last_change:
+                    new_wallet_id = last_change['old_wallet_id']
+                elif old_wallet_id:
+                    w = Wallet()
+                    w.Owners = [account.Id]
+                    w.Description = str(participant.id)
+                    w.Currency = 'EUR'
+                    w.save()
+                    new_wallet_id = w.Id
+                else:
+                    new_wallet_id = None
+                r = website.db.one("""
+                    UPDATE participants
+                       SET kind = %s
+                         , mangopay_user_id = %s
+                         , mangopay_wallet_id = %s
+                     WHERE id = %s
+                       AND mangopay_user_id = %s
+                 RETURNING kind, mangopay_user_id, mangopay_wallet_id
+                """, (new_kind, account.Id, new_wallet_id, participant.id, old_account.Id))
+                if r.mangopay_user_id != account.Id:
+                    raise response.error(409, "race condition")
+                participant.set_attributes(**r._asdict())
+                participant.add_event(website.db, 'mangopay-account-change', {
+                    'old_user_id': old_account.Id,
+                    'old_user_type': old_account.PersonType,
+                    'old_wallet_id': old_wallet_id,
+                })
+                if participant.balance:
+                    transfer(
+                        website.db, participant.id, participant.id, participant.balance,
+                        'account-switch', tipper_mango_id=old_account.Id,
+                        tipper_wallet_id=old_wallet_id,
+                    )
+                success = _("Your identity information has been updated.")
+            elif account.Id:
                 account.save()
                 success = _("Your identity information has been updated.")
             elif body.get('terms') == 'agree':
@@ -87,10 +158,11 @@ if request.method == 'POST':
                 id = website.db.one("""
                     UPDATE participants
                        SET mangopay_user_id = %s
+                         , kind = %s
                      WHERE id = %s
                        AND mangopay_user_id IS NULL
                  RETURNING mangopay_user_id
-                """, (account.Id, participant.id))
+                """, (account.Id, new_kind, participant.id))
                 if id != account.Id:
                     raise response.error(409, "race condition")
                 participant.mark_notifications_as_read('identity_required')
@@ -122,12 +194,14 @@ else:
 
 % block content
 <div class="paragraph">
-<form action="" method="POST" class="js-submit">
+<form action="" method="POST">
 
     % if error
     <div class="alert alert-danger">{{ error }}</div>
     % elif success
     <div class="alert alert-success">{{ success }}</div>
+    % else
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
     % endif
 
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
