@@ -252,16 +252,6 @@ def billing(app_conf):
     if not sandbox:
         mangopay.api.logger.setLevel(logging.CRITICAL)
 
-    # https://github.com/Mangopay/mangopay2-python-sdk/issues/99
-    import six
-    if not six.PY3:
-        from mangopay.fields import CharField
-        def _python_value(self, value):
-            if self.python_value_callback:
-                value = self.python_value_callback(value)
-            return value
-        CharField.python_value = _python_value
-
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/118
     mangopay.resources.LegalUser.person_type = 'LEGAL'
 
