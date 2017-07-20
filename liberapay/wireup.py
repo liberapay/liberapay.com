@@ -262,6 +262,9 @@ def billing(app_conf):
             return value
         CharField.python_value = _python_value
 
+    # https://github.com/Mangopay/mangopay2-python-sdk/issues/118
+    mangopay.resources.LegalUser.person_type = 'LEGAL'
+
 
 def username_restrictions(www_root):
     return {'restricted_usernames': os.listdir(www_root)}
