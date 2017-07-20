@@ -7,23 +7,6 @@
        placeholder="{{ _('Email') }}" />
 </div>
 
-<p>{{ _("Are you acting as the representative of an organization?") }}</p>
-<div class="form-group">
-    <label>
-        <input type="radio" required name="sign-in.kind" value="individual" />
-        {{ _("No, I want to create a personal account.") }}
-    </label><br>
-    <label>
-        <input type="radio" required name="sign-in.kind" value="organization" />
-        {{ _("Yes, I represent a business or nonprofit.") }}
-    </label>
-    <p class="help-block">{{ _(
-        "If you want to create an account for a collective that doesn't have a "
-        "legal entity, create a personal account first, then {0}create a team{1}.",
-        '<a href="/about/teams">'|safe, '</a>'|safe,
-    ) }}</p>
-</div>
-
 <button class="btn btn-default">{{ _("Go") }}</button>
 
 <br><br>
