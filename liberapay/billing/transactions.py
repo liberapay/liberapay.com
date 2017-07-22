@@ -285,6 +285,7 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
     if amount < 0 and new_balance < 0:
         raise NegativeBalance
 
+    wallet_id = participant.mangopay_wallet_id
     if amount < 0:
         bundles = cursor.all("""
             LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
@@ -307,6 +308,7 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
                     UPDATE cash_bundles
                        SET owner = NULL
                          , withdrawal = %s
+                         , wallet_id = NULL
                      WHERE id = %s
                 """, (exchange.id, b.id))
                 x -= b.amount
@@ -316,8 +318,8 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
                 assert x > 0
                 cursor.run("""
                     INSERT INTO cash_bundles
-                                (owner, origin, ts, amount, withdrawal)
-                         VALUES (NULL, %s, %s, %s, %s)
+                                (owner, origin, ts, amount, withdrawal, wallet_id)
+                         VALUES (NULL, %s, %s, %s, %s, NULL)
                 """, (b.origin, b.ts, x, exchange.id))
                 cursor.run("""
                     UPDATE cash_bundles
@@ -332,14 +334,15 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
             UPDATE cash_bundles b
                SET owner = %(p_id)s
                  , withdrawal = NULL
+                 , wallet_id = %(wallet_id)s
              WHERE withdrawal = %(e_id)s
-        """, dict(p_id=participant.id, e_id=orig_exchange_id))
+        """, dict(p_id=participant.id, e_id=orig_exchange_id, wallet_id=wallet_id))
     elif amount > 0:
         cursor.run("""
             INSERT INTO cash_bundles
-                        (owner, origin, amount, ts)
-                 VALUES (%s, %s, %s, %s)
-        """, (participant.id, exchange.id, amount, exchange.timestamp))
+                        (owner, origin, amount, ts, wallet_id)
+                 VALUES (%s, %s, %s, %s, %s)
+        """, (participant.id, exchange.id, amount, exchange.timestamp, wallet_id))
 
     participant.set_attributes(balance=new_balance)
 
@@ -421,9 +424,9 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
                  WHERE id = %s;
 
                 INSERT INTO cash_bundles
-                            (owner, origin, amount, ts, locked_for)
-                     VALUES (%s, %s, %s, %s, %s);
-            """, (x, b.id, transfer.tipper, b.origin, x, b.ts, transfer.id))
+                            (owner, origin, amount, ts, locked_for, wallet_id)
+                     VALUES (%s, %s, %s, %s, %s, %s);
+            """, (x, b.id, transfer.tipper, b.origin, x, b.ts, transfer.id, b.wallet_id))
             break
 
 
@@ -437,12 +440,12 @@ def record_transfer_result(db, t_id, tr):
 def _record_transfer_result(db, t_id, status, error=None):
     balance = None
     with db.get_cursor() as c:
-        tipper, tippee, amount = c.one("""
+        tipper, tippee, amount, wallet_to = c.one("""
             UPDATE transfers
                SET status = %s
                  , error = %s
              WHERE id = %s
-         RETURNING tipper, tippee, amount
+         RETURNING tipper, tippee, amount, wallet_to
         """, (status, error, t_id))
         if status == 'succeeded':
             # Update the balances
@@ -463,10 +466,11 @@ def _record_transfer_result(db, t_id, status, error=None):
                 UPDATE cash_bundles
                    SET owner = %s
                      , locked_for = NULL
+                     , wallet_id = %s
                  WHERE owner = %s
                    AND locked_for = %s
              RETURNING *
-            """, (tippee, tipper, t_id))
+            """, (tippee, wallet_to, tipper, t_id))
             bundles_sum = sum(b.amount for b in bundles)
             assert bundles_sum == amount
         else:
@@ -634,10 +638,10 @@ def split_bundle(cursor, b, amount):
     """, (amount, b.id))
     return NS(cursor.one("""
         INSERT INTO cash_bundles
-                    (owner, origin, amount, ts, withdrawal, disputed)
-             VALUES (%s, %s, %s, %s, %s, %s)
+                    (owner, origin, amount, ts, withdrawal, disputed, wallet_id)
+             VALUES (%s, %s, %s, %s, %s, %s, %s)
           RETURNING *;
-    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed))._asdict())
+    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed, b.wallet_id))._asdict())
 
 
 def swap_bundles(cursor, b1, b2):
@@ -649,12 +653,15 @@ def swap_bundles(cursor, b1, b2):
         UPDATE cash_bundles
            SET owner = %s
              , withdrawal = %s
+             , wallet_id = %s
          WHERE id = %s;
         UPDATE cash_bundles
            SET owner = %s
              , withdrawal = %s
+             , wallet_id = %s
          WHERE id = %s;
-    """, (b2.owner, b2.withdrawal, b1.id, b1.owner, b1.withdrawal, b2.id))
+    """, (b2.owner, b2.withdrawal, b2.wallet_id, b1.id,
+          b1.owner, b1.withdrawal, b1.wallet_id, b2.id))
     b1.owner, b2.owner = b2.owner, b1.owner
     b1.withdrawal, b2.withdrawal = b2.withdrawal, b1.withdrawal
 
@@ -665,18 +672,18 @@ def merge_cash_bundles(db, p_id):
     return db.one("""
         LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
         WITH regroup AS (
-                 SELECT owner, origin, sum(amount) AS amount, max(ts) AS ts
+                 SELECT owner, origin, wallet_id, sum(amount) AS amount, max(ts) AS ts
                    FROM cash_bundles
                   WHERE owner = %s
                     AND disputed IS NOT TRUE
                     AND locked_for IS NULL
-               GROUP BY owner, origin
+               GROUP BY owner, origin, wallet_id
                  HAVING count(*) > 1
              ),
              inserted AS (
                  INSERT INTO cash_bundles
-                             (owner, origin, amount, ts)
-                      SELECT owner, origin, amount, ts
+                             (owner, origin, amount, ts, wallet_id)
+                      SELECT owner, origin, amount, ts, wallet_id
                         FROM regroup
                    RETURNING *
              ),
@@ -688,6 +695,7 @@ def merge_cash_bundles(db, p_id):
                     AND b.origin = g.origin
                     AND b.disputed IS NOT TRUE
                     AND b.locked_for IS NULL
+                    AND b.wallet_id = g.wallet_id
               RETURNING b.*
              )
         SELECT (SELECT json_agg(d) FROM deleted d) AS before

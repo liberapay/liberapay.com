@@ -30,4 +30,12 @@ BEGIN;
       ORDER BY participant, network, id DESC;
     CREATE CAST (current_exchange_routes AS exchange_routes) WITH INOUT;
 
+    ALTER TABLE cash_bundles ADD COLUMN wallet_id text;
+    UPDATE cash_bundles b
+       SET wallet_id = (SELECT p.mangopay_wallet_id FROM participants p WHERE p.id = b.owner)
+     WHERE owner IS NOT NULL;
+    ALTER TABLE cash_bundles
+        ALTER COLUMN wallet_id DROP DEFAULT,
+        ADD CONSTRAINT wallet_chk CHECK ((wallet_id IS NULL) = (owner IS NULL));
+
 END;
