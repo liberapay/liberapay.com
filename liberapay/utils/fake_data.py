@@ -150,6 +150,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
             address='-1',
             error='',
             one_off=False,
+            remote_user_id=participant.mangopay_user_id,
         )
     e = _fake_thing(
         db,
