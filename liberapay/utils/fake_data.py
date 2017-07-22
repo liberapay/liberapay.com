@@ -131,6 +131,8 @@ def fake_transfer(db, tipper, tippee, amount, timestamp):
         amount=amount,
         context='tip',
         status='pre',
+        wallet_from='-%s' % tipper.id,
+        wallet_to='-%s' % tippee.id,
     )
     lock_bundles(db, t)
     _record_transfer_result(db, t.id, status)

@@ -349,31 +349,39 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
-    t_id = prepare_transfer(db, tipper, tippee, amount, context, **kw)
     get = lambda id, col: db.one("SELECT {0} FROM participants WHERE id = %s".format(col), (id,))
+    wallet_from = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
+    wallet_to = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
+    t_id = prepare_transfer(
+        db, tipper, tippee, amount, context, wallet_from, wallet_to,
+        team=kw.get('team'), invoice=kw.get('invoice'), bundles=kw.get('bundles'),
+    )
     tr = Transfer()
     tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
     tr.CreditedUserId = kw.get('tippee_mango_id') or get(tippee, 'mangopay_user_id')
-    tr.CreditedWalletId = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
+    tr.CreditedWalletId = wallet_to
     if not tr.CreditedWalletId:
         tr.CreditedWalletId = create_wallet(db, Participant.from_id(tippee))
     tr.DebitedFunds = Money(int(amount * 100), 'EUR')
-    tr.DebitedWalletId = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
+    tr.DebitedWalletId = wallet_from
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
     tr.save()
     return record_transfer_result(db, t_id, tr), t_id
 
 
-def prepare_transfer(db, tipper, tippee, amount, context, **kw):
+def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to,
+                     team=None, invoice=None, **kw):
     with db.get_cursor() as cursor:
         transfer = cursor.one("""
             INSERT INTO transfers
-                        (tipper, tippee, amount, context, team, invoice, status)
-                 VALUES (%s, %s, %s, %s, %s, %s, 'pre')
+                        (tipper, tippee, amount, context, team, invoice, status,
+                         wallet_from, wallet_to)
+                 VALUES (%s, %s, %s, %s, %s, %s, 'pre',
+                         %s, %s)
               RETURNING *
-        """, (tipper, tippee, amount, context, kw.get('team'), kw.get('invoice')))
-        lock_bundles(cursor, transfer, bundles=kw.get('bundles'))
+        """, (tipper, tippee, amount, context, team, invoice, wallet_from, wallet_to))
+        lock_bundles(cursor, transfer, **kw)
     return transfer.id
 
 
@@ -542,8 +550,9 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     # can't exceed the original payin amount, so we can't settle the fee debt.
     original_owner = Participant.from_id(original_owner)
     t_id = prepare_transfer(
-        db, original_owner.id, chargebacks_account.id, exchange.amount,
-        'chargeback', prefer_bundles_from=exchange.id,
+        db, original_owner.id, chargebacks_account.id, exchange.amount, 'chargeback',
+        original_owner.mangopay_wallet_id, chargebacks_account.mangopay_wallet_id,
+        prefer_bundles_from=exchange.id,
     )
     tr = SettlementTransfer()
     tr.AuthorId = original_owner.mangopay_user_id
