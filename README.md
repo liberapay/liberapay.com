@@ -116,6 +116,14 @@ you can also use the following commands:
 - `make pytest` only runs the python tests without recreating the test DB
 - `make pytest-re` does the same but only runs the tests that failed in the previous run
 
+#### Updating test fixtures
+
+Some of our tests include interactions with external services. In order to speed up those tests we record the requests and responses automatically using [vcr](https://pypi.python.org/pypi/vcrpy). The records are in the `tests/py/fixtures` directory, one per test class.
+
+If you add or modify interactions with external services, then the tests will fail, because VCR will not find the new or modified request in the records, and will refuse to record the new request by default (see [Record Modes](https://vcrpy.readthedocs.io/en/latest/usage.html#record-modes) for more information). When that happens you can either switch the record mode from `once` to `new_episodes` (in `liberapay/testing/vcr.py`) or delete the obsolete fixture files.
+
+If the new interactions are with MangoPay you have to delete the file `tests/py/fixtures/MangopayOAuth.yml`, otherwise you'll be using an expired authentication token and the requests will be rejected.
+
 ### Tinkering with payments
 
 We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to modify that part of the code you'll need the [MangoPay API documentation](https://docs.mangopay.com/api-references/).
