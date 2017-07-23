@@ -91,6 +91,11 @@ def create_card(mangopay_user_id):
     return cr
 
 
+with use_cassette('MangopayOAuth'):
+    import mangopay
+    mangopay.get_default_handler().auth_manager.get_token()
+
+
 with use_cassette('MangopayHarness'):
     cls = MangopayHarness
 
