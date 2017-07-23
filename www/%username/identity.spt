@@ -143,6 +143,17 @@ if request.method == 'POST':
                     'old_user_type': old_account.PersonType,
                     'old_wallet_id': old_wallet_id,
                 })
+                # Invalidate exchange routes
+                routes = website.db.all("""
+                    SELECT r
+                      FROM exchange_routes r
+                     WHERE participant = %s
+                       AND error <> 'invalidated'
+                """, (participant.id,))
+                for route in routes:
+                    route.invalidate()
+                # Transfer the money
+                participant.refetch()
                 if participant.balance:
                     transfer(
                         website.db, participant.id, participant.id, participant.balance,
