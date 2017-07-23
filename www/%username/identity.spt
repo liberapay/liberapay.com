@@ -46,6 +46,15 @@ if request.method == 'POST':
                     "partner's system, and transfer the money from your old account."
                 )
                 response.render('templates/confirm.spt', state, msg=confirm, back_to='')
+            payday_is_running = website.db.one("""
+                SELECT ts_start FROM paydays WHERE ts_start > ts_end
+            """) is not None
+            if payday_is_running:
+                msg = _(
+                    "We can't change the type of your account during payday, please "
+                    "try again in a few minutes."
+                )
+                response.render('templates/retry-later.spt', state, msg=msg)
             old_account = account
             account = NaturalUser() if new_kind == 'individual' else LegalUser()
             last_change = participant.get_last_event_of_type('mangopay-account-change')
