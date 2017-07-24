@@ -13,6 +13,8 @@ branches:
 cache:
   directories:
     - .tox
+before_install:
+ - tar -xaf ../../liberapay-liberapay.com.tar.gz --strip-components=1
 install:
  - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rf .tox; fi
  - pip install tox
@@ -33,3 +35,5 @@ notifications:
     skip_join: true
 sudo: false
 dist: trusty
+git:
+  strategy: tarball
