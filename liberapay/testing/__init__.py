@@ -12,8 +12,8 @@ from pando.utils import utcnow
 from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
 
-from liberapay.billing import exchanges
-from liberapay.billing.exchanges import (
+from liberapay.billing import transactions
+from liberapay.billing.transactions import (
     record_exchange, record_exchange_result, _record_transfer_result
 )
 from liberapay.constants import SESSION
@@ -75,7 +75,7 @@ class ClientWithAuth(Client):
 
 class Harness(unittest.TestCase):
 
-    QUARANTINE = exchanges.QUARANTINE
+    QUARANTINE = transactions.QUARANTINE
     client = ClientWithAuth(www_root=WWW_ROOT, project_root=PROJECT_ROOT)
     db = client.website.db
     platforms = client.website.platforms
@@ -99,7 +99,7 @@ class Harness(unittest.TestCase):
         cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH %s", (cls_id,))
         cls.db.run("ALTER SEQUENCE transfers_id_seq RESTART WITH %s", (cls_id,))
         cls.setUpVCR()
-        exchanges.QUARANTINE = '0 seconds'
+        transactions.QUARANTINE = '0 seconds'
 
 
     @classmethod
@@ -121,7 +121,7 @@ class Harness(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.vcr_cassette.__exit__(None, None, None)
-        exchanges.QUARANTINE = cls.QUARANTINE
+        transactions.QUARANTINE = cls.QUARANTINE
 
 
     def setUp(self):

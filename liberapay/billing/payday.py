@@ -12,7 +12,7 @@ import pando.utils
 import requests
 
 from liberapay import constants
-from liberapay.billing.exchanges import transfer
+from liberapay.billing.transactions import transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.utils import group_by
@@ -853,7 +853,7 @@ def create_payday_issue():
 
 
 def main(override_payday_checks=False):
-    from liberapay.billing.exchanges import sync_with_mangopay
+    from liberapay.billing.transactions import sync_with_mangopay
     from liberapay.main import website
 
     # https://github.com/liberapay/salon/issues/19#issuecomment-191230689

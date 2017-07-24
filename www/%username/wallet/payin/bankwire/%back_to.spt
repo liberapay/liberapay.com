@@ -5,7 +5,8 @@ from decimal import Decimal as D, InvalidOperation
 
 from mangopay.resources import BankWirePayIn
 
-from liberapay.billing.exchanges import payin_bank_wire, upcharge_bank_wire
+from liberapay.billing.fees import upcharge_bank_wire
+from liberapay.billing.transactions import payin_bank_wire
 from liberapay.constants import EVENTS, KYC_PAYIN_YEARLY_THRESHOLD, PAYIN_BANK_WIRE_MIN
 from liberapay.exceptions import InvalidNumber
 from liberapay.utils import b64decode_s, get_participant

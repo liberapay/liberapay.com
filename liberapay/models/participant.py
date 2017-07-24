@@ -460,7 +460,7 @@ class Participant(Model, MixinTeam):
         if diff != 0:
             transfers[0][1] += diff  # Give it to the highest receiver.
 
-        from liberapay.billing.exchanges import transfer
+        from liberapay.billing.transactions import transfer
         db = self.db
         tipper = self.id
         for tippee, amount, team in transfers:
@@ -960,7 +960,7 @@ class Participant(Model, MixinTeam):
 
     @property
     def withdrawable_balance(self):
-        from liberapay.billing.exchanges import QUARANTINE
+        from liberapay.billing.transactions import QUARANTINE
         return self.db.one("""
             SELECT COALESCE(sum(amount), 0)
               FROM cash_bundles
@@ -1215,7 +1215,7 @@ class Participant(Model, MixinTeam):
         assert self.id == invoice.addressee
         if self.balance < invoice.amount:
             return False
-        from liberapay.billing.exchanges import transfer
+        from liberapay.billing.transactions import transfer
         balance = transfer(
             self.db, self.id, invoice.sender, invoice.amount, invoice.nature,
             invoice=invoice.id,

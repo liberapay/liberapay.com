@@ -5,18 +5,20 @@ from decimal import Decimal as D
 import mock
 import pytest
 
-from liberapay.billing import exchanges
-from liberapay.billing.exchanges import (
+from liberapay.billing import transactions
+from liberapay.billing.fees import (
+    skim_credit,
+    upcharge_bank_wire,
+    upcharge_card,
+)
+from liberapay.billing.transactions import (
     charge,
     payin_bank_wire,
     payout,
     record_exchange,
     record_exchange_result,
-    skim_credit,
     sync_with_mangopay,
     transfer,
-    upcharge_bank_wire,
-    upcharge_card,
 )
 from liberapay.billing.payday import Payday
 from liberapay.constants import PAYIN_CARD_MIN, PAYIN_CARD_TARGET
@@ -60,7 +62,7 @@ class TestPayouts(MangopayHarness):
         with self.assertRaises(FeeExceedsAmount):
             payout(self.db, self.homer, D('0.10'))
 
-    @mock.patch('liberapay.billing.exchanges.test_hook')
+    @mock.patch('liberapay.billing.transactions.test_hook')
     def test_payout_failure(self, test_hook):
         test_hook.side_effect = Foobar
         self.make_exchange('mango-cc', 20, 0, self.homer)
@@ -85,7 +87,7 @@ class TestPayouts(MangopayHarness):
     def test_payout_quarantine(self, gba):
         self.make_exchange('mango-cc', 39, 0, self.homer)
         gba.return_value = self.bank_account
-        with mock.patch.multiple(exchanges, QUARANTINE='1 month'):
+        with mock.patch.multiple(transactions, QUARANTINE='1 month'):
             with self.assertRaises(NotEnoughWithdrawableMoney):
                 payout(self.db, self.homer, D('32.00'))
 
@@ -109,7 +111,7 @@ class TestPayouts(MangopayHarness):
 
 class TestCharge(MangopayHarness):
 
-    @mock.patch('liberapay.billing.exchanges.test_hook')
+    @mock.patch('liberapay.billing.transactions.test_hook')
     def test_charge_exception(self, test_hook):
         test_hook.side_effect = Foobar
         exchange = charge(self.db, self.janet, D('1.00'), 'http://localhost/')
@@ -142,7 +144,7 @@ class TestCharge(MangopayHarness):
         assert exchange.status == 'succeeded'
         assert self.janet.balance == janet.balance == 20
         assert janet.withdrawable_balance == 20
-        with mock.patch.multiple(exchanges, QUARANTINE='1 month'):
+        with mock.patch.multiple(transactions, QUARANTINE='1 month'):
             assert janet.withdrawable_balance == 0
             self.db.self_check()
 
@@ -204,7 +206,7 @@ class TestPayinBankWire(MangopayHarness):
         janet = self.janet.refetch()
         assert janet.balance == 0
 
-    @mock.patch('liberapay.billing.exchanges.test_hook')
+    @mock.patch('liberapay.billing.transactions.test_hook')
     def test_payinbank_wire_exception_and_wallet_creation(self, test_hook):
         test_hook.side_effect = Foobar
         self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
@@ -371,7 +373,7 @@ class TestCashBundles(FakeTransfersHarness, MangopayHarness):
 class TestSync(MangopayHarness):
 
     def test_sync_with_mangopay(self):
-        with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer:
+        with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             with self.assertRaises(Foobar):
                 charge(self.db, self.janet, PAYIN_CARD_MIN, 'http://localhost/')
@@ -384,8 +386,8 @@ class TestSync(MangopayHarness):
 
     def test_sync_with_mangopay_deletes_charges_that_didnt_happen(self):
         pass  # this is for pep8
-        with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer, \
-             mock.patch('liberapay.billing.exchanges.DirectPayIn.save', autospec=True) as save:
+        with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer, \
+             mock.patch('liberapay.billing.transactions.DirectPayIn.save', autospec=True) as save:
             rer.side_effect = save.side_effect = Foobar
             with self.assertRaises(Foobar):
                 charge(self.db, self.janet, D('33.67'), 'http://localhost/')
@@ -398,8 +400,8 @@ class TestSync(MangopayHarness):
 
     def test_sync_with_mangopay_reverts_credits_that_didnt_happen(self):
         self.make_exchange('mango-cc', 41, 0, self.homer)
-        with mock.patch('liberapay.billing.exchanges.record_exchange_result') as rer, \
-             mock.patch('liberapay.billing.exchanges.test_hook') as test_hook:
+        with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer, \
+             mock.patch('liberapay.billing.transactions.test_hook') as test_hook:
             rer.side_effect = test_hook.side_effect = Foobar
             with self.assertRaises(Foobar):
                 payout(self.db, self.homer, D('35.00'))
@@ -413,7 +415,7 @@ class TestSync(MangopayHarness):
 
     def test_sync_with_mangopay_transfers(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
-        with mock.patch('liberapay.billing.exchanges.record_transfer_result') as rtr:
+        with mock.patch('liberapay.billing.transactions.record_transfer_result') as rtr:
             rtr.side_effect = Foobar()
             with self.assertRaises(Foobar):
                 transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
@@ -427,8 +429,8 @@ class TestSync(MangopayHarness):
 
     def test_sync_with_mangopay_deletes_transfers_that_didnt_happen(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
-        with mock.patch('liberapay.billing.exchanges.record_transfer_result') as rtr, \
-             mock.patch('liberapay.billing.exchanges.Transfer.save', autospec=True) as save:
+        with mock.patch('liberapay.billing.transactions.record_transfer_result') as rtr, \
+             mock.patch('liberapay.billing.transactions.Transfer.save', autospec=True) as save:
             rtr.side_effect = save.side_effect = Foobar
             with self.assertRaises(Foobar):
                 transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')

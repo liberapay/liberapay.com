@@ -2,7 +2,7 @@ from base64 import b64encode
 
 from mangopay.resources import Document, Page, User
 
-from liberapay.billing.exchanges import repr_exception, APIError
+from liberapay.billing.transactions import repr_exception, APIError
 from liberapay.utils import get_participant
 
 [---]
