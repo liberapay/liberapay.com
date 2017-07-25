@@ -38,4 +38,11 @@ BEGIN;
         ALTER COLUMN wallet_id DROP DEFAULT,
         ADD CONSTRAINT wallet_chk CHECK ((wallet_id IS NULL) = (owner IS NULL));
 
+    ALTER TABLE exchanges ADD COLUMN wallet_id text;
+    UPDATE exchanges e
+       SET wallet_id = (SELECT p.mangopay_wallet_id FROM participants p WHERE p.id = e.participant);
+    ALTER TABLE exchanges
+        ALTER COLUMN wallet_id DROP DEFAULT,
+        ALTER COLUMN wallet_id SET NOT NULL;
+
 END;

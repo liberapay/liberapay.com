@@ -124,11 +124,12 @@ def charge(db, participant, amount, return_url):
     charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee
 
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
     payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
-    if not participant.mangopay_wallet_id:
-        create_wallet(db, participant)
     payin.CreditedWalletId = participant.mangopay_wallet_id
     payin.DebitedFunds = Money(int(charge_amount * 100), 'EUR')
     payin.CardId = route.address
@@ -161,11 +162,12 @@ def payin_bank_wire(db, participant, debit_amount):
 
     amount, fee, vat = skim_bank_wire(debit_amount)
 
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
     payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
-    if not participant.mangopay_wallet_id:
-        create_wallet(db, participant)
     payin.CreditedWalletId = participant.mangopay_wallet_id
     payin.DeclaredDebitedFunds = Money(int(debit_amount * 100), 'EUR')
     payin.DeclaredFees = Money(int(fee * 100), 'EUR')
@@ -193,12 +195,13 @@ def record_payout_refund(db, payout_refund):
     assert payout_refund.Fees == Money(int(fee * 100), 'EUR')
     route = ExchangeRoute.from_id(e_origin.route)
     participant = Participant.from_id(e_origin.participant)
+    wallet_id = e_origin.wallet_id
     return db.one("""
         INSERT INTO exchanges
-               (amount, fee, vat, participant, status, route, note, refund_ref)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+               (amount, fee, vat, participant, status, route, note, refund_ref, wallet_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
      RETURNING id
-    """, (amount, fee, vat, participant.id, 'created', route.id, None, e_origin.id))
+    """, (amount, fee, vat, participant.id, 'created', route.id, None, e_origin.id, wallet_id))
 
 
 def record_exchange(db, route, amount, fee, vat, participant, status, error=None):
@@ -221,12 +224,13 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
 
     with db.get_cursor() as cursor:
 
+        wallet_id = participant.mangopay_wallet_id
         e = cursor.one("""
             INSERT INTO exchanges
-                   (amount, fee, vat, participant, status, route, note)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+                   (amount, fee, vat, participant, status, route, note, wallet_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
          RETURNING *
-        """, (amount, fee, vat, participant.id, status, route.id, error))
+        """, (amount, fee, vat, participant.id, status, route.id, error, wallet_id))
 
         if status == 'failed':
             propagate_exchange(cursor, participant, e, route, error, 0)
