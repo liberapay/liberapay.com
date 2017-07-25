@@ -3,6 +3,26 @@ ALTER TABLE transfers
     DROP CONSTRAINT self_chk,
     ADD CONSTRAINT self_chk CHECK ((tipper <> tippee) = (context <> 'account-switch'));
 
+CREATE TABLE mangopay_users
+( id            text     PRIMARY KEY
+, participant   bigint   NOT NULL REFERENCES participants
+);
+
+CREATE OR REPLACE FUNCTION upsert_mangopay_user_id() RETURNS trigger AS $$
+    BEGIN
+        INSERT INTO mangopay_users
+                    (id, participant)
+             VALUES (NEW.mangopay_user_id, NEW.id)
+        ON CONFLICT (id) DO NOTHING;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER upsert_mangopay_user_id
+    AFTER INSERT OR UPDATE OF mangopay_user_id ON participants
+    FOR EACH ROW WHEN (NEW.mangopay_user_id IS NOT NULL)
+    EXECUTE PROCEDURE upsert_mangopay_user_id();
+
 BEGIN;
 
     ALTER TABLE transfers

@@ -151,7 +151,7 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def _from_thing(cls, thing, value):
-        assert thing in ("id", "lower(username)", "mangopay_user_id", "lower(email)")
+        assert thing in ("id", "lower(username)", "lower(email)")
         if thing == 'lower(email)':
             # This query looks for an unverified address if the participant
             # doesn't have any verified address
@@ -169,6 +169,15 @@ class Participant(Model, MixinTeam):
               FROM participants
              WHERE {}=%s
         """.format(thing), (value,))
+
+    @classmethod
+    def from_mangopay_user_id(cls, mangopay_user_id):
+        return cls.db.one("""
+            SELECT p
+              FROM mangopay_users u
+              JOIN participants p ON p.id = u.participant
+             WHERE u.id = %s
+        """, (mangopay_user_id,))
 
     @classmethod
     def authenticate(cls, k1, k2, v1=None, v2=None):
