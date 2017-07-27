@@ -487,7 +487,7 @@ class Participant(Model, MixinTeam):
         for tippee, amount, team in transfers:
             balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
                                tipper_mango_id=self.mangopay_user_id,
-                               tipper_wallet_id=self.mangopay_wallet_id)
+                               tipper_wallet_id=self.mangopay_wallet_id)[0]
 
         assert balance == 0
         self.set_attributes(balance=balance)
@@ -1243,7 +1243,7 @@ class Participant(Model, MixinTeam):
             invoice=invoice.id,
             tipper_mango_id=self.mangopay_user_id,
             tipper_wallet_id=self.mangopay_wallet_id,
-        )
+        )[0]
         self.update_invoice_status(invoice.id, 'paid')
         self.set_attributes(balance=balance)
         return True

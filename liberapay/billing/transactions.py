@@ -366,7 +366,7 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
     tr.save()
-    return record_transfer_result(db, t_id, tr, bundles=kw.get('bundles'))
+    return record_transfer_result(db, t_id, tr, bundles=kw.get('bundles')), t_id
 
 
 def record_transfer_result(db, t_id, tr, bundles=None):

@@ -24,3 +24,5 @@ CREATE TABLE debts
 , settlement      int             REFERENCES transfers
 , CONSTRAINT settlement_chk CHECK ((status = 'paid') = (settlement IS NOT NULL))
 );
+
+ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'debt';
