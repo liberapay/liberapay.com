@@ -8,6 +8,7 @@ CREATE TABLE disputes
 , type            text            NOT NULL
 , amount          numeric(35,2)   NOT NULL
 , status          text            NOT NULL
+, result_code     text
 , exchange_id     int             NOT NULL REFERENCES exchanges
 , participant     bigint          NOT NULL REFERENCES participants
 );
@@ -28,3 +29,8 @@ CREATE TABLE debts
 ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'debt';
 
 ALTER TABLE cash_bundles ADD COLUMN locked_for int REFERENCES transfers;
+
+CREATE OR REPLACE FUNCTION get_username(p_id bigint) RETURNS text
+AS $$
+    SELECT username FROM participants WHERE id = p_id;
+$$ LANGUAGE sql;

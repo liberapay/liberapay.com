@@ -78,17 +78,19 @@ elif event == 'DISPUTE':
     dispute_type = dispute.DisputeType
     assert dispute.DisputedFunds.Currency == 'EUR'
     dispute_amount = dispute.DisputedFunds.Amount / 100
+    result_code = dispute.ResultCode
+    new_dispute = not r
     with website.db.get_cursor() as cursor:
         r = cursor.one("""
             INSERT INTO disputes
-                        (id, creation_date, type, amount, status, exchange_id, participant)
-                 VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        (id, creation_date, type, amount, status, result_code, exchange_id, participant)
+                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (id) DO UPDATE
                     SET status = excluded.status
+                      , result_code = excluded.result_code
               RETURNING *
-        """, (dispute.Id, dispute.CreationDate, dispute_type, dispute_amount, status, e_id, p_id))
+        """, (dispute.Id, dispute.CreationDate, dispute_type, dispute_amount, status, result_code, e_id, p_id))
         if status == 'CLOSED':
-            result_code = dispute.ResultCode
             if result_code == 'LOST':
                 # Recover as much of the lost money as possible
                 recover_lost_funds(website.db, exchange, dispute_amount)
@@ -103,6 +105,29 @@ elif event == 'DISPUTE':
         else:
             # Lock the disputed funds
             lock_disputed_funds(cursor, exchange, dispute_amount)
+    # Notify admin
+    disputed_funds = website.db.render("""
+        SELECT owner, withdrawer, sum(amount) AS amount
+          FROM ( SELECT COALESCE(get_username(b.owner), '') AS owner
+                      , COALESCE(get_username((
+                            SELECT e.participant FROM exchanges e WHERE e.id = b.withdrawal
+                        )), '') AS withdrawer
+                      , b.amount
+                   FROM cash_bundles b
+                  WHERE b.origin = %s
+               ) b
+      GROUP BY owner, withdrawer
+    """, (r.exchange_id,))
+    original_owner = Participant.from_id(p_id)
+    Participant.from_username('LiberapayOrg').notify(
+        'dispute',
+        base_spt=None,
+        dispute=r._asdict(),
+        disputed_funds=disputed_funds,
+        new_dispute=new_dispute,
+        profile_url=original_owner.url(),
+        force_email=True,
+    )
 
 elif cls:
     # Check stuff

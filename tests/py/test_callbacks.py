@@ -84,6 +84,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
     @patch('mangopay.resources.Dispute.get')
     @patch('mangopay.resources.PayIn.get')
     def test_dispute_callback_won(self, get_payin, get_dispute):
+        self.make_participant('LiberapayOrg', kind='organization')
         e_id = self.make_exchange('mango-cc', D('16'), D('1'), self.janet)
         dispute = Dispute()
         dispute.Id = '-1'
@@ -121,6 +122,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             'david': 0,
             'homer': D('1.00'),
             'janet': D('15.01'),
+            'LiberapayOrg': 0,
         }
 
     @patch('mangopay.resources.BankWirePayOut.get')
