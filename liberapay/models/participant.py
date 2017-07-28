@@ -988,6 +988,7 @@ class Participant(Model, MixinTeam):
              WHERE owner = %s
                AND ts < now() - INTERVAL %s
                AND disputed IS NOT TRUE
+               AND locked_for IS NULL
         """, (self.id, QUARANTINE))
 
 

@@ -26,3 +26,5 @@ CREATE TABLE debts
 );
 
 ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'debt';
+
+ALTER TABLE cash_bundles ADD COLUMN locked_for int REFERENCES transfers;

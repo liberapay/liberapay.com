@@ -14,7 +14,7 @@ from psycopg2 import IntegrityError, InternalError
 
 from liberapay.billing import transactions
 from liberapay.billing.transactions import (
-    record_exchange, record_exchange_result, _record_transfer_result
+    record_exchange, record_exchange_result, prepare_transfer, _record_transfer_result
 )
 from liberapay.constants import SESSION
 from liberapay.elsewhere._base import UserInfo
@@ -226,12 +226,7 @@ class Harness(unittest.TestCase):
 
 
     def make_transfer(self, tipper, tippee, amount, context='tip', team=None, status='succeeded'):
-        t_id = self.db.one("""
-            INSERT INTO transfers
-                        (tipper, tippee, amount, context, team, status)
-                 VALUES (%s, %s, %s, %s, %s, 'pre')
-              RETURNING id
-        """, (tipper, tippee, amount, context, team))
+        t_id = prepare_transfer(self.db, tipper, tippee, amount, context, team=team)
         _record_transfer_result(self.db, t_id, status)
         return t_id
 
