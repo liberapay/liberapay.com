@@ -12,7 +12,7 @@ from liberapay.billing.transactions import Money, record_exchange
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.emails import EmailHarness
-from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
+from liberapay.testing.mangopay import fake_transfer, FakeTransfersHarness, MangopayHarness
 from liberapay.utils import utcnow
 
 
@@ -25,11 +25,13 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
 
     @patch('mangopay.resources.Dispute.get')
     @patch('mangopay.resources.PayIn.get')
-    def test_dispute_callback_lost(self, get_payin, get_dispute):
+    @patch('mangopay.resources.SettlementTransfer.save', autospec=True)
+    def test_dispute_callback_lost(self, save, get_payin, get_dispute):
         self.make_participant(
             'LiberapayOrg', kind='organization', balance=D('100.00'),
             mangopay_user_id='0', mangopay_wallet_id='0',
         )
+        save.side_effect = fake_transfer
         e_id = self.make_exchange('mango-cc', D('16'), D('1'), self.janet)
         dispute = Dispute()
         dispute.Id = '-1'
@@ -61,11 +63,11 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         # Check final state
         balances = dict(self.db.all("SELECT username, balance FROM participants"))
         assert balances == {
-            '_chargebacks_': D('17.00'),
+            '_chargebacks_': D('16.00'),
             'david': 0,
             'homer': 0,
             'janet': 0,
-            'LiberapayOrg': D('97.19'),
+            'LiberapayOrg': D('98.19'),
         }
         debts = dict(((r[0], r[1]), r[2]) for r in self.db.all("""
             SELECT p_debtor.username AS debtor, p_creditor.username AS creditor, sum(d.amount)
@@ -83,8 +85,10 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
 
     @patch('mangopay.resources.Dispute.get')
     @patch('mangopay.resources.PayIn.get')
-    def test_dispute_callback_won(self, get_payin, get_dispute):
+    @patch('mangopay.resources.SettlementTransfer.save', autospec=True)
+    def test_dispute_callback_won(self, save, get_payin, get_dispute):
         self.make_participant('LiberapayOrg', kind='organization')
+        save.side_effect = fake_transfer
         e_id = self.make_exchange('mango-cc', D('16'), D('1'), self.janet)
         dispute = Dispute()
         dispute.Id = '-1'

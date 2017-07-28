@@ -6,8 +6,8 @@ from decimal import Decimal
 
 from mangopay.exceptions import APIError
 from mangopay.resources import (
-    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, Transaction,
-    Transfer, Wallet,
+    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, SettlementTransfer,
+    Transaction, Transfer, Wallet,
 )
 from mangopay.utils import Money
 from pando.utils import typecheck
@@ -377,18 +377,21 @@ def prepare_transfer(db, tipper, tippee, amount, context, **kw):
     return transfer.id
 
 
-def lock_bundles(cursor, transfer, bundles=None):
+def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
     assert transfer.status == 'pre'
     cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+    tipper, tippee = transfer.tipper, transfer.tippee
     bundles = bundles or cursor.all("""
         SELECT b.*
           FROM cash_bundles b
           JOIN exchanges e ON e.id = b.origin
-         WHERE b.owner = %s
+         WHERE b.owner = %(tipper)s
            AND b.withdrawal IS NULL
            AND b.locked_for IS NULL
-      ORDER BY e.participant = %s DESC, b.ts
-    """, (transfer.tipper, transfer.tippee))
+      ORDER BY b.origin = %(prefer_bundles_from)s DESC
+             , e.participant = %(tippee)s DESC
+             , b.ts
+    """, locals())
     transferable = sum(b.amount for b in bundles)
     x = transfer.amount
     if x > transferable:
@@ -493,7 +496,7 @@ def lock_disputed_funds(cursor, exchange, amount):
         try_to_swap_bundle(cursor, b, original_owner)
 
 
-def recover_lost_funds(db, exchange, lost_amount):
+def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     """Recover as much money as possible from a payin which has been reverted.
     """
     original_owner = exchange.participant
@@ -512,14 +515,15 @@ def recover_lost_funds(db, exchange, lost_amount):
             if b.owner == original_owner:
                 continue
             try_to_swap_bundle(cursor, b, original_owner)
-    # Send the funds to the credit wallet
+    # Move the funds back to the original wallet
     chargebacks_account = Participant.get_chargebacks_account()
     LiberapayOrg = Participant.from_username('LiberapayOrg')
     assert LiberapayOrg
     grouped = group_by(disputed_bundles, lambda b: (b.owner, b.withdrawal))
     for (owner, withdrawal), bundles in grouped.items():
-        if owner == chargebacks_account.id:
-            continue  # already recovered
+        assert owner != chargebacks_account.id
+        if owner == original_owner:
+            continue
         amount = sum(b.amount for b in bundles)
         if owner is None:
             bundles = None
@@ -529,18 +533,29 @@ def recover_lost_funds(db, exchange, lost_amount):
             create_debt(db, original_owner, withdrawer, amount, exchange.id)
         else:
             payer = owner
-            if owner != original_owner:
-                create_debt(db, original_owner, payer, amount, exchange.id)
-        transfer(
-            db, payer, chargebacks_account.id, amount, 'chargeback',
-            bundles=bundles, tippee_wallet_id='CREDIT_EUR',
-        )
-    # Take care of the fee
+            create_debt(db, original_owner, payer, amount, exchange.id)
+        transfer(db, payer, original_owner, amount, 'chargeback', bundles=bundles)
+    # Add a debt for the fee
     create_debt(db, original_owner, LiberapayOrg.id, exchange.fee, exchange.id)
-    transfer(
-        db, LiberapayOrg.id, chargebacks_account.id, exchange.fee, 'chargeback',
-        tippee_wallet_id='CREDIT_EUR',
+    # Send the funds to the credit wallet
+    # We have to do a SettlementTransfer instead of a normal Transfer. The amount
+    # can't exceed the original payin amount, so we can't settle the fee debt.
+    original_owner = Participant.from_id(original_owner)
+    t_id = prepare_transfer(
+        db, original_owner.id, chargebacks_account.id, exchange.amount,
+        'chargeback', prefer_bundles_from=exchange.id,
     )
+    tr = SettlementTransfer()
+    tr.AuthorId = original_owner.mangopay_user_id
+    tr.CreditedUserId = chargebacks_account.mangopay_user_id
+    tr.CreditedWalletId = chargebacks_account.mangopay_wallet_id
+    tr.DebitedFunds = Money(int(amount * 100), 'EUR')
+    tr.DebitedWalletId = original_owner.mangopay_wallet_id
+    tr.Fees = Money(0, 'EUR')
+    tr.RepudiationId = repudiation_id
+    tr.Tag = str(t_id)
+    tr.save()
+    return record_transfer_result(db, t_id, tr)
 
 
 def try_to_swap_bundle(cursor, b, original_owner):
