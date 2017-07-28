@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-07-25 21:09+0000\n"
+"PO-Revision-Date: 2017-07-28 22:05+0000\n"
 "Last-Translator: Mikhail Tycmhuk <qlzp2@mail.ru>\n"
 "Language-Team: Russian "
 "<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
@@ -13,27 +13,25 @@ msgstr ""
 "X-Generator: Weblate 2.16-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
-#, fuzzy
 msgid "Greetings,"
 msgstr "Приветствуем,"
 
-#, fuzzy
 msgid "Something not right? Reply to this email for help."
 msgstr "Что-то не так? Ответьте на это письмо, чтобы получить помощь."
 
-#, fuzzy
 msgid "Someone wants to donate to you on Liberapay"
-msgstr "Кто-то хочет пожертвовать вам на Liberapay"
+msgstr "Кто-то хочет сделать вам пожертвование на Liberapay"
 
-#, fuzzy
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "Кто-то хочет пожертвовать вам на Liberapay, но вам нужно заполнить идентификационную форму прежде, чем мы сможем собирать деньги для вас."
+msgstr ""
+"Кто-то хочет сделать вам пожертвование на Liberapay, но вам нужно заполнить "
+"идентификационную форму прежде, чем мы сможем собирать деньги для вас."
 
-#, fuzzy
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Если вы не хотите получать пожертвования на Liberapay, вы можете отказаться от них, отредактировав свой профиль."
+msgstr ""
+"Если вы не хотите получать пожертвования на Liberapay, вы можете отказаться "
+"от них, отредактировав свой профиль."
 
-#, fuzzy
 msgid "Edit your profile"
 msgstr "Редактировать профиль"
 
@@ -41,21 +39,22 @@ msgstr "Редактировать профиль"
 msgid "You have received {0} this week"
 msgstr "Вы получили {0} за эту неделю"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} were given to you personally."
-msgstr "Вам лично дали {0}"
+msgstr "Вам лично перечислили {0}."
 
-#, fuzzy
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "Вы не состоите ни в одной команде, поэтому вы не получили денег за участие в командах."
+msgstr ""
+"Вы не состоите ни в одной команде, поэтому вы не получили денег за участие в "
+"командах."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Вы не получили денег за вашу роль в {0} команде."
-msgstr[1] "Вы не получили денег за вашу роль в {0} командах."
+msgstr[0] "Вы не получили денег за вашу роль в команде {0}."
+msgstr[1] "Вы не получили денег за вашу роль в {n} командах."
 msgstr[2] ""
-"Вы не получили денег за вашу роль в {0} командах, в которых вы состоите."
+"Вы не получили денег за вашу роль в {n} командах, в которых вы состоите."
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
@@ -73,7 +72,6 @@ msgstr "{0}: {1}"
 msgid "You now have {0} in your wallet."
 msgstr "Теперь у вас {0} в кошельке."
 
-#, fuzzy
 msgid "See your account's transaction logs"
 msgstr "Лог транзакций вашего аккаунта"
 
@@ -81,21 +79,20 @@ msgstr "Лог транзакций вашего аккаунта"
 msgid "- {0}: {1}"
 msgstr "- {0}: {1}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
 msgstr "Ваш счёт для {0} принят - Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
 msgstr "Ваш запрос на оплату {amount} от {addressee_name} принят."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
 msgstr ""
 "К сожалению, в кошельке {0} сейчас недостаточно денег для выплаты, но как "
 "только они там появятся, вам будет заплачено автоматически."
 
-#, fuzzy
 msgid "View the invoice"
 msgstr "Просмотреть счёт"
 
@@ -109,11 +106,9 @@ msgstr ""
 "Запрос на оплату {amount} от {addressee_name} принят, деньги переведены в "
 "ваш кошелёк."
 
-#, fuzzy
 msgid "Withdraw the money"
 msgstr "Снять деньги"
 
-#, fuzzy
 msgid "However you cannot withdraw the money yet as it is still in quarantine."
 msgstr "Однако, вы ещё не можете снять деньги, так они пока в карантине."
 
@@ -121,7 +116,7 @@ msgstr "Однако, вы ещё не можете снять деньги, т�
 msgid "Your invoice to {0} has been rejected - Liberapay"
 msgstr "Счёт {0} отклонён - Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
 msgstr "Ваш запрос на оплату {amount} от {addressee_name} отклонён."
 
@@ -136,62 +131,57 @@ msgstr "Войти в Liberapay"
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr "Кто-то (надеемся, вы) запросил доступ к аккаунту {0} на Liberapay."
 
-#, fuzzy
 msgid "Follow this link to proceed:"
 msgstr "Перейдите по этой ссылке для продолжения:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please note that the link is only valid for {0}."
-msgstr "Обратите внимание, что эта ссылка действительна только для {0}."
+msgstr "Обратите внимание, что эта ссылка действительна только в течение {0}."
 
 msgid "It's time to top up your Liberapay wallet"
 msgstr "Время пополнить ваш кошелёк Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr ""
 "У вас осталось {0} в кошельке Liberapay, но вам надо по меньшей мере {1}, "
 "чтобы иметь возможность делать пожертвования на следующей неделе."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invoice from {0} on Liberapay"
 msgstr "Счёт от {0} на Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} прислал счёт на оплату {amount}."
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Банковский перевод в ваш кошелёк Liberapay"
 
-#, fuzzy
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Не удалось совершить банковский перевод в ваш кошелёк Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr ""
 "Попытка перевода {0} с вашего счёта в банке не удалась, получено сообщение "
 "об ошибке:"
 
-#, fuzzy
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr ""
 "Можете попробовать ещё раз, возможно, используя другой метод оплаты, кликнув "
 "на ссылку ниже:"
 
-#, fuzzy
 msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Банковский перевод в ваш кошелёк Liberapay успешно произведён."
+msgstr "Банковский перевод в ваш кошелёк Liberapay успешно произведён"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} you sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
 msgstr ""
 "Рады сообщить, что перевод с вашего банковского счёта успешно произведён. Из "
 "{0}, что вы отправили, {1} перечислены на ваш кошелёк Liberapay, и {2} пошли "
 "на оплату комиссий."
 
-#, fuzzy
 msgid "View receipt"
 msgstr "Просмотреть квитанцию"
 
@@ -199,7 +189,7 @@ msgstr "Просмотреть квитанцию"
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} из {1} присоединился к Liberapay!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
 msgstr ""
 "Ваше обещание делать пожертвование для {1} каждую неделю в размере {0} "
@@ -225,17 +215,16 @@ msgstr "Принять"
 msgid "Refuse"
 msgstr "Отказаться"
 
-#, fuzzy
 msgid "Email address verification - Liberapay"
 msgstr "Подтверждение адреса электронной почты - Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
 msgstr ""
 "Мы получили запрос на то, чтобы связать адрес электронной почты {0} с "
 "аккаунтом Liberapay, чей текущий адрес {1}. Звучит знакомо?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr ""
 "{0} был создан аккаунт Liberapay с адресом электронной почты {1}. Это были "
@@ -244,7 +233,7 @@ msgstr ""
 msgid "Yes, proceed"
 msgstr "Да, продолжить"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
 msgstr ""
 "Обратите внимание, что код верификации в этом сообщении действителен только "
@@ -264,67 +253,56 @@ msgstr ""
 "Мы подключаем {0} у аккаунту {1} на Liberapay. Это уведомление отправлено на "
 "{2}, потому что это основной адрес электронной почты, который был указан."
 
-#, fuzzy
 msgid "Withdrawal initiated"
 msgstr "Инициировано снятие денег"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
 msgstr ""
 "Мы инициировали перевод {0} из вашего кошелька Liberapay на ваш банковский "
 "счёт. Обратите внимание, что перевод может занять несколько рабочих дней."
 
-#, fuzzy
 msgid "Withdrawal failure"
 msgstr "Не удалось снять деньги"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
 msgstr ""
 "Мы пытались перевести {0} из вашего кошелька Liberapay на ваш банковский "
 "счёт, но перевод не удался, получено сообщение об ошибке:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can try again: {0}"
 msgstr "Можете попробовать ещё раз: {0}"
 
-#, fuzzy
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr ""
 "Похоже, вы нашли баг! Приносим извинения за причинённые неудобства, мы "
 "исправим его как можно скорее!"
 
-#, fuzzy
 msgid "When I receive money"
 msgstr "Когда я получаю деньги"
 
-#, fuzzy
 msgid "When there isn't enough money in my wallet to cover my donations"
 msgstr ""
 "Когда в моём кошельке недостаточно денег, чтобы иметь возможность делать "
 "пожертвования"
 
-#, fuzzy
 msgid "When a transfer to my bank account is initiated"
 msgstr "Когда инициирован перевод на мой банковский счёт"
 
-#, fuzzy
 msgid "When a transfer to my bank account fails"
 msgstr "Когда перевод на мой банковский счёт не прошёл"
 
-#, fuzzy
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Когда кто-то, кого я обещал спонсировать, присоединился к Liberapay"
 
-#, fuzzy
 msgid "When someone invites me to join a team"
 msgstr "Когда кто-то приглашает меня в команду"
 
-#, fuzzy
 msgid "When a bank wire transfer to my Liberapay wallet fails"
 msgstr "Когда банковский перевод в мой кошелёк Liberapay не прошёл"
 
-#, fuzzy
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Когда банковский перевод в мой кошелёк Liberapay успешно завершён"
 
@@ -334,7 +312,6 @@ msgstr "Отчёт о расходах"
 msgid "Draft"
 msgstr "Черновик"
 
-#, fuzzy
 msgid "Sent (awaiting approval)"
 msgstr "Отправлено (ожидание подтверждения)"
 
@@ -359,23 +336,18 @@ msgstr "Организация"
 msgid "Team"
 msgstr "Команда"
 
-#, fuzzy
 msgid "Hide total giving from others."
 msgstr "Скрывать общую получаемую сумму от других."
 
-#, fuzzy
 msgid "Hide total receiving from others."
 msgstr "Скрывать общую отдаваемую сумму от других."
 
-#, fuzzy
 msgid "Hide myself from search results on Liberapay."
 msgstr "Не показывать меня в результатах поиска по Liberapay."
 
-#, fuzzy
 msgid "Tell web search engines not to index my profile."
 msgstr "Говорить движкам веб-поиска не индексировать мой профиль."
 
-#, fuzzy
 msgid "Prevent my profile from being listed on Liberapay."
 msgstr "Не показывать мой профиль на Liberapay."
 
@@ -398,18 +370,16 @@ msgstr "Максимальная"
 msgid "You've consumed your quota of requests, you can try again in {0}."
 msgstr "Вы превысили предел запросов, попробуйте снова через {0}."
 
-#, fuzzy
 msgid "You're making requests too fast, please try again later."
 msgstr "Вы делаете запросы слишком быстро, попробуйте ещё раз чуть позже."
 
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr "{0} - это действительно сервер {1}? Он ведёт себя не так, как должен."
 
-#, fuzzy
 msgid "You need to sign in first"
 msgstr "Сначала необходимо войти в систему"
 
@@ -443,12 +413,11 @@ msgstr "Вы не можете удалить основной адрес эле
 msgid "The email address '{0}' is not verified."
 msgstr "Адрес электронной почты '{0}' не подтверждён."
 
-#, fuzzy
 msgid "You've reached the maximum number of email addresses we allow."
 msgstr ""
 "Вы достигли максимально дозволенного количества адресов электронной почты."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{0}' is not a valid email address."
 msgstr "'{0}' не является корректным адресом электронной почты."
 
@@ -456,52 +425,51 @@ msgstr "'{0}' не является корректным адресом элек
 msgid "The password must be at least {0} and at most {1} characters long."
 msgstr "Пароль должен быть не короче {0} и не длиннее {1} символов."
 
-#, fuzzy
 msgid "You can't donate to yourself."
 msgstr "Вы не можете делать пожертвования самому себе."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "There is no user named {0}."
 msgstr "Пользователь {0} не существует."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{0}' is not a valid weekly donation amount (min={1}, max={2})"
 msgstr ""
 "'{0}' не является корректной еженедельной суммой для пожертвования "
 "(минимум={1}, максимум={2})"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{0}' is not a valid monthly donation amount (min={1}, max={2})"
 msgstr ""
 "'{0}' не является корректной ежемесячной суммой для пожертвования "
 "(минимум={1}, максимум={2})"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{0}' is not a valid yearly donation amount (min={1}, max={2})"
 msgstr ""
 "'{0}' не является корректной ежегодной суммой для пожертвования (минимум={1}"
 ", максимум={2})"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The user {0} doesn't accept donations."
 msgstr "Пользователь {0} не принимает пожертвования."
 
 msgid "There isn't enough money in your wallet."
 msgstr "В вашем кошельке недостаточно денег."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
 msgstr "В данный момент вы не можете снять больше, чем {0}."
 
 msgid "The transaction's fee would exceed its amount."
-msgstr ""
+msgstr "Комиссия перевода увеличит размер переводимой суммы."
 
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
 msgstr ""
 "Сожалеем, но сегодня день выплат, и мы не делаем прочие выплаты, пока он не "
 "окончен. Пожалуйста, попробуйте ещё раз через несколько часов."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" не является корректным числом."
 
@@ -513,17 +481,16 @@ msgstr "Сообщество \"{0}\" уже существует."
 msgid "\"{0}\" is not a valid community name."
 msgstr "\"{0}\" не является корректным названием сообщества."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
 msgstr ""
 "К сожалению, перевод денег не удался. Свяжитесь с support@liberapay.com если "
 "проблема не исчезла. Сообщение об ошибке: {0}"
 
-#, fuzzy
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Операция запрещена, потому что ваш аккаунт деактивирован."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Не удалось найти пользователя {0} на {1}."
 
@@ -538,7 +505,6 @@ msgstr "\"{0}\" не является корректным адресом эле
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Мы не нашли аккаунт с основным адресом электронной почты {0}."
 
-#, fuzzy
 msgid "This login link is expired or invalid."
 msgstr "Ссылка для входа просрочена или неверна."
 
@@ -557,7 +523,6 @@ msgstr "Слишком много запросов"
 msgid "Internal Server Error"
 msgstr "Внутренняя ошибка сервера"
 
-#, fuzzy
 msgid "Upstream Error"
 msgstr "Ошибка передачи от вышестоящего сервера"
 
@@ -576,7 +541,6 @@ msgstr "Этот аккаунт закрыт"
 msgid "Are you the account owner?"
 msgstr "Вы владелец аккаунта?"
 
-#, fuzzy
 msgid "Log in to reopen your account."
 msgstr "Войдите, чтобы заново открыть ваш аккаунт."
 
@@ -602,7 +566,6 @@ msgstr ""
 "В данный момент Liberapay находится в режиме \"только для чтения\", так как "
 "мы переносим базу данных. Это не должно занять больше нескольких минут."
 
-#, fuzzy
 msgid "Toggle navigation"
 msgstr "Переключить навигацию"
 
@@ -717,7 +680,7 @@ msgstr[0] "Вы загрузили {n} документ указанного т�
 msgstr[1] "Вы загрузили {n} документа указанного типа:"
 msgstr[2] "Вы загрузили {n} документов указанного типа:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Document #{id} is awaiting validation."
 msgstr "Документ #{id} ждёт проверки."
 
@@ -772,7 +735,6 @@ msgstr ""
 msgid "Organization Information"
 msgstr "Информация об организации"
 
-#, fuzzy
 msgid "Headquarters Address"
 msgstr "Адрес головного офиса"
 
@@ -870,7 +832,6 @@ msgstr ""
 "откройте присланную ссылку в новой вкладке, затем вернитесь на эту страницу "
 "и нажмите кнопку внизу, чтобы продолжить делать то, что вы хотели."
 
-#, fuzzy
 msgid "Carry on"
 msgstr "Продолжить"
 
@@ -932,7 +893,7 @@ msgid "Individuals"
 msgstr "Частные лица"
 
 msgid "Pledges"
-msgstr "Обещания спонсорства"
+msgstr "Подарки"
 
 msgid "Social Networks"
 msgstr "Социальные сети"
@@ -1124,7 +1085,6 @@ msgstr "Цель: {0}"
 msgid "Mission accomplished!"
 msgstr "Цель достигнута!"
 
-#, fuzzy
 msgid "Share:"
 msgstr "Доля:"
 
@@ -1145,7 +1105,7 @@ msgid "Show on your profile"
 msgstr "Показать свой профиль"
 
 msgid "Pledge"
-msgstr "Обещание спонсорства"
+msgstr "Подарок"
 
 msgid "Search Liberapay"
 msgstr "Поиск по Liberapay"
@@ -1296,7 +1256,6 @@ msgstr "Мы не смогли загрузить аватар для вас и�
 msgid "Your new avatar URL is: {0}"
 msgstr "URL вашего нового аватара: {0}"
 
-#, fuzzy
 msgid "Dashboard"
 msgstr "Панель управления"
 
@@ -1481,7 +1440,6 @@ msgstr "Настройки email"
 msgid "Email Addresses (Private)"
 msgstr "Адреса email (Личные)"
 
-#, fuzzy
 msgid "Primary"
 msgstr "Основной"
 
@@ -1700,7 +1658,6 @@ msgstr ""
 msgid "Your take is now {0}."
 msgstr "Ваша выручка в данный момент составляет {0}."
 
-#, fuzzy
 msgid "Income history"
 msgstr "История прибыли"
 
@@ -1820,7 +1777,6 @@ msgstr "Подробное описание слишком длинное."
 msgid "Invoice {someone}"
 msgstr "Счёт для {someone}"
 
-#, fuzzy
 msgid "Nature"
 msgstr "Тип"
 
@@ -1836,7 +1792,6 @@ msgstr "Краткое описание счёта"
 msgid "Details (optional)"
 msgstr "Детали (необязательно)"
 
-#, fuzzy
 msgid "Details of the invoice (e.g. the breakdown of the amount into its components)"
 msgstr "Детали счёта (например, разбиение общей суммы на промежуточные)"
 
@@ -2233,7 +2188,6 @@ msgstr ""
 "Вы ещё не настроили пожертвования. Как только вы это сделаете, вас попросят "
 "добавить деньги на аккаунт."
 
-#, fuzzy
 msgid "Your donations are funded by your income."
 msgstr "Ваши пожертвования обеспечиваются вашим доходом."
 
@@ -2443,7 +2397,7 @@ msgstr ""
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
 msgstr "{0} из этого доступно для снятия, остальное всё ещё в карантине."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
 msgstr ""
 "Мы держим деньги в карантине в течение {0}, чтобы защититься от мошеничества "
@@ -2480,14 +2434,12 @@ msgstr "Тип банковского счёта"
 msgid "Bank Name"
 msgstr "Название банка"
 
-#, fuzzy
 msgid "Institution Number"
 msgstr "Номер учреждения"
 
 msgid "Branch Code"
 msgstr "Код подразделения"
 
-#, fuzzy
 msgid "Sort Code"
 msgstr "Код сортировки"
 
@@ -2765,7 +2717,7 @@ msgstr "Почему вы должны делать пожертвования?"
 msgid "Who is Liberapay?"
 msgstr "Кто создал Liberapay?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay is a non-profit organization {0}founded in 2015 in France{1} by {2} and {3}."
 msgstr ""
 "Liberapay - некоммерческая оранизация, {0}основанная в 2015 во Франции{1} "
@@ -3068,7 +3020,7 @@ msgstr[0] "{n} подключённый аккаунт"
 msgstr[1] "{n} подключённых аккаунта"
 msgstr[2] "{n} подключённых аккаунтов"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Explore {0}"
 msgstr "Список {0}"
 
@@ -3130,7 +3082,7 @@ msgstr ""
 "которые ещё не присоединились к сайту."
 
 msgid "Explore Pledges"
-msgstr "Список обещаний спонсорства"
+msgstr "Список подарков"
 
 msgid "Browse the accounts that Liberapay users have on other platforms. Find your contacts by connecting your own accounts."
 msgstr ""
@@ -3156,19 +3108,18 @@ msgstr "Создать аккаунт организации"
 
 msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
 msgstr ""
-"Liberapay позволяет давать обещания спонсировать людей, которые ещё не "
-"присоединились к сайту. Пожертвование автоматически начнётся, если они "
-"зарегистрируются, чтобы получать его. Мы отправим вам уведомление, когда это "
-"случится."
+"Liberapay позволяет делать подарки людям, которые ещё не присоединились к "
+"сайту. Пожертвование автоматически начнётся, если они зарегистрируются, "
+"чтобы получать его. Мы отправим вам уведомление, когда это случится."
 
 msgid "Recent pledges"
-msgstr "Недавние обещания пожертвования"
+msgstr "Недавние подарки"
 
 msgid "There are no pledges right now."
-msgstr "В данный момент нет обещаний пожертвований."
+msgstr "В данный момент нет подарков."
 
 msgid "Make a pledge"
-msgstr "Дать обещание сделать пожертвование"
+msgstr "Сделать подарок"
 
 msgid "Do you have someone in mind?"
 msgstr "У вас есть кто-нибудь на примете?"
@@ -3431,9 +3382,8 @@ msgstr ""
 #, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgstr ""
-"{n} новых {link_open}обещаний спонсорства{link_close} было сделано в прошлом "
-"месяце, что добавило {money_amount} к еженедельным пожертвованиям до "
-"востребования."
+"{n} новых {link_open}подарков{link_close} было сделано в прошлом месяце, что "
+"добавило {money_amount} к еженедельным пожертвованиям до востребования."
 
 #, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
@@ -3464,44 +3414,54 @@ msgstr ""
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
-msgstr ""
+msgstr "Вы действительно администратор команды {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
 msgstr ""
+"Попытка заявить права на этот аккаунт не увенчалась успехом, потому что вы "
+"вошли на {0} как кто-то, кто не является администратором команды {1}. "
+"Выйдите и {2}попробуйте ещё раз{3}."
 
 #, python-brace-format
 msgid "Are you really {0}?"
-msgstr ""
+msgstr "Вы действительно {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
 msgstr ""
+"Попытка заявить права на этот аккаунт не увенчалась успехом, потому что вы "
+"вошли на {0} как кто-то другой. Выйдите и {1}попробуйте ещё раз{2}."
 
 #, python-brace-format
 msgid "{0} is a private team"
-msgstr ""
+msgstr "{0} - скрытая команда"
 
 #, python-brace-format
 msgid "{0} is a big team"
-msgstr ""
+msgstr "{0} - большая команда"
 
 #, python-brace-format
 msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} - команда с {n} открытым участником"
+msgstr[1] "{0} - команда с {n} открытыми участниками"
+msgstr[2] "{0} - команда с {n} открытыми участниками"
 
 #, python-brace-format
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
 msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
 msgstr[0] ""
+"Пользователь Liberapay пообещал делать пожертвование в {0} в неделю для {1}."
 msgstr[1] ""
+"{n} пользователя Liberapay пообещали делать пожертвования на общую сумму в "
+"{0} в неделю для {1}."
 msgstr[2] ""
+"{n} пользователей Liberapay пообещали делать пожертвования на общую сумму в "
+"{0} в неделю для {1}."
 
 msgid "Explore pledges"
-msgstr "Список обещаний спонсорства"
+msgstr "Список подарков"
 
 #, python-brace-format
 msgid "This page is dedicated to the {platform} user {user_name}:"
@@ -3509,45 +3469,49 @@ msgstr "Эта страница посвящена пользователю {use
 
 #, python-brace-format
 msgid "Profile on {0}"
-msgstr ""
+msgstr "Профиль на {0}"
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
-msgstr ""
+msgstr "{0} покинул Liberapay"
 
 #, python-brace-format
 msgid "If you are an administrator of this {0} team account, you can unlock it to allow people to pledge tips to your team on Liberapay."
 msgstr ""
+"Если вы администратор аккаунта этой команды {0}, то вы можете разблокировать "
+"её, чтобы позволить людям делать подарки вашей команде на Liberapay."
 
 #, python-brace-format
 msgid "If you are {0} on {1}, you can unlock your account to allow people to pledge tips to you on Liberapay."
 msgstr ""
+"Если вы {0} на {1}, то вы можете разблокировать ваш аккаунт, чтобы позволить "
+"людям делать вам подарки на Liberapay."
 
 msgid "Unlock"
-msgstr ""
+msgstr "Разблокировать"
 
 msgid "You can donate directly to the team's members:"
-msgstr ""
+msgstr "Вы можете делать пожертвования участникам команды напрямую:"
 
 #, python-brace-format
 msgid "{0} declines donations"
-msgstr ""
+msgstr "{0} отказывается принимать пожертвования"
 
 #, python-brace-format
 msgid "{0} accepts donations"
-msgstr ""
+msgstr "{0} принимает пожертвования"
 
 #, python-brace-format
 msgid "{0} opted out of Liberapay"
-msgstr ""
+msgstr "{0} покинул Liberapay"
 
 #, python-brace-format
 msgid "{0} hasn't joined Liberapay yet"
-msgstr ""
+msgstr "{0} ещё не присоединился к Liberapay"
 
 #, python-brace-format
 msgid "Are you {0}?"
-msgstr ""
+msgstr "Вы {0}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
@@ -3559,86 +3523,94 @@ msgid "Connect team account"
 msgstr "Подключить аккаунт команды"
 
 msgid "We never collect money for you unless you join."
-msgstr ""
+msgstr "Мы никогда не будем собирать деньги для вас, пока вы не присоединитесь."
 
 #, python-brace-format
 msgid "Connect this {0} account to your Liberapay profile."
 msgstr "Подключить аккаунт {0} у вашему профилю Liberapay."
 
 msgid "Don't like what you see?"
-msgstr ""
+msgstr "Не нравится то, что вы видите?"
 
 #, python-brace-format
 msgid "If you are an owner of this {0} account, you can explicitly opt out of Liberapay by locking it. We don't allow new pledges to locked accounts."
 msgstr ""
+"Если вы владелец этого {0} аккаунта, то вы можете явно покинуть Liberapay, "
+"заблокировав его. Мы не даём делать новые подарки для заблокированных "
+"аккаунтов."
 
 msgid "Lock"
-msgstr ""
+msgstr "Заблокировать"
 
 msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
 msgstr ""
+"Liberapay - это способ поблагодарить и поддержать ваших любимых артистов, "
+"музыкантов, художников, программистов и т. д., настроив делать им каждую "
+"неделю небольшие денежные подарки."
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
-msgstr ""
+msgstr "{0} вернул сообщение об ошибке: {1}"
 
 #, python-brace-format
 msgid "{0} returned an error, please try again later."
-msgstr ""
+msgstr "{0} вернул ошибку, попробуйте ещё раз позже."
 
 msgid "Friend Finder"
-msgstr ""
+msgstr "Найти друзей"
 
 #, python-brace-format
 msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0} friends."
 msgstr ""
+"Примечание: настройки приватности могут не позволить Liberapay обнаружить "
+"некоторых из ваших друзей {0}."
 
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Обновите связь аккаунта с {0}, чтобы найти ваших друзей оттуда."
 
 msgid "Refresh"
-msgstr ""
+msgstr "Обновить"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."
 msgstr "Подключите аккаунт {0}, чтобы найти ваших друзей оттуда."
 
 msgid "No friends found."
-msgstr ""
+msgstr "Не найдено ни одного друга."
 
 #, python-brace-format
 msgid "You have {n} friend on {0}."
 msgid_plural "You have {n} friends on {0}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "У вас {n} друг на {0}."
+msgstr[1] "У вас {n} друга на {0}."
+msgstr[2] "У вас {n} друзей на {0}."
 
 msgid "On Liberapay?"
-msgstr ""
+msgstr "На Liberapay?"
 
 msgid "Receives"
-msgstr ""
+msgstr "Получает"
 
 msgid "Support"
-msgstr ""
+msgstr "Поддержка"
 
 msgid "hidden"
-msgstr ""
+msgstr "скрыт"
 
 #, python-brace-format
 msgid "{0} doesn't accept donations"
-msgstr ""
+msgstr "{0} не принимает пожертвования"
 
 msgid "The address you provided is not valid: it doesn't contain any â@â symbol."
-msgstr ""
+msgstr "Введённый вами адрес некорректен: в нём нет символа \"@\"."
 
 #, python-brace-format
 msgid "'{0}' is not a valid domain name."
-msgstr ""
+msgstr "'{0}' некорректное имя домена."
 
 msgid "Which account?"
-msgstr ""
+msgstr "Какой аккаунт?"
 
 #, python-brace-format
 msgid "Please enter the name of the {0} account you would like to connect:"
@@ -3646,54 +3618,54 @@ msgstr "Введите название аккаунта {0}, который в�
 
 #, python-brace-format
 msgid "{0} username"
-msgstr ""
+msgstr "Имя пользователя {0}"
 
 #, python-brace-format
 msgid "Please enter the address of the {0} account you would like to connect:"
 msgstr "Введите адрес аккаунта {0}, который вы хотите подключить:"
 
 msgid "Please Confirm"
-msgstr ""
+msgstr "Подтвердите"
 
 #, python-brace-format
 msgid "{0} is connected to {1} on Liberapay."
 msgstr "{0} подключён к {1} на Liberapay."
 
 msgid "Transfer it?"
-msgstr ""
+msgstr "Перенести?"
 
 msgid "How the accounts are now"
-msgstr ""
+msgstr "В каком состоянии аккаунты сейчас"
 
 msgid "How the accounts will be after the transfer"
-msgstr ""
+msgstr "В каком состоянии аккаунты будут после переноса"
 
 msgid "Abandoned:"
-msgstr ""
+msgstr "Заброшенный:"
 
 msgid "Sorry, we didn't find anything matching your query."
-msgstr ""
+msgstr "Извините, мы не нашли ничего по вашему запросу."
 
 msgid "Whose work do you appreciate?"
-msgstr ""
+msgstr "Чью работу вы цените?"
 
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
-msgstr[0] ""
+msgstr[0] "Найти совпадающее имя пользователя"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Найти совпадающие имена пользователей"
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
-msgstr[0] ""
+msgstr[0] "Найти совпадающее название сообщества"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Найти совпадающие названия сообществ"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
-msgstr[0] ""
+msgstr[0] "Найти совпадающий репозиторий"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Найти совпадающие репозитории"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
@@ -3703,25 +3675,26 @@ msgstr ""
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
-msgstr[0] ""
+msgstr[0] "Найти совпадающее описание пользователя"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Найти совпадающие описания пользователей"
 
 msgid "Didn't find who you were looking for?"
-msgstr ""
+msgstr "Не нашли того, кого искали?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
 msgstr ""
+"Вы можете делать подарки людям, которые ещё не присоединились к Liberapay:"
 
 msgid "Sign In"
-msgstr ""
+msgstr "Войти"
 
 msgid "Sign Out"
-msgstr ""
+msgstr "Выйти"
 
 msgid "Sign Up"
-msgstr ""
+msgstr "Зарегистрироваться"
 
 #, python-brace-format
 msgid "You are already logged in as {0}."
-msgstr ""
+msgstr "Вы уже вошли как {0}."
