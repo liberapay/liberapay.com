@@ -184,6 +184,10 @@ else:
                 ) }}
             % elif context == 'tip'
                 {{ _("anonymous donation") }}
+            % elif context == 'chargeback'
+                {{ _("chargeback") }}
+            % elif context == 'debt'
+                {{ _("debt repayment") }}
             % endif
         % else
             % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
@@ -203,6 +207,10 @@ else:
                 ) }}
             % elif context == 'tip'
                 {{ _("donation to {0}", to) }}
+            % elif context == 'chargeback'
+                {{ _("chargeback") }}
+            % elif context == 'debt'
+                {{ _("debt repayment") }}
             % endif
         % endif
         </td>
