@@ -6,6 +6,7 @@ import json
 import mock
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
+from liberapay.billing.transactions import create_debt
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.testing import Foobar
@@ -706,6 +707,33 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             'org': D('9.98'),
             'janet': D('50.02'),
         }
+
+    def test_payday_tries_to_settle_debts(self):
+        # First, test a small debt which can be settled
+        e1_id = self.make_exchange('mango-cc', 10, 0, self.janet)
+        debt = create_debt(self.db, self.janet.id, self.homer.id, 5, e1_id)
+        e2_id = self.make_exchange('mango-cc', 20, 0, self.janet)
+        Payday.start().run()
+        balances = dict(self.db.all("SELECT username, balance FROM participants"))
+        assert balances == {
+            'janet': 25,
+            'homer': 5,
+            'david': 0,
+        }
+        debt = self.db.one("SELECT * FROM debts WHERE id = %s", (debt.id,))
+        assert debt.status == 'paid'
+        # Second, test a big debt that can't be settled
+        self.make_exchange('mango-ba', -15, 0, self.janet)
+        debt2 = create_debt(self.db, self.janet.id, self.homer.id, 20, e2_id)
+        Payday.start().run()
+        balances = dict(self.db.all("SELECT username, balance FROM participants"))
+        assert balances == {
+            'janet': 10,
+            'homer': 5,
+            'david': 0,
+        }
+        debt2 = self.db.one("SELECT * FROM debts WHERE id = %s", (debt2.id,))
+        assert debt2.status == 'due'
 
     def test_it_notifies_participants(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
