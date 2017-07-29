@@ -553,7 +553,7 @@ class Payday(object):
                       WHERE "timestamp" >= %(ts_start)s
                         AND "timestamp" <= %(ts_end)s
                         AND status = 'succeeded'
-                        AND context NOT IN ('refund', 'debt')
+                        AND context IN ('tip', 'take')
                  )
                , our_tips AS (
                      SELECT *
@@ -773,7 +773,7 @@ class Payday(object):
               FROM transfers t
              WHERE "timestamp" > %s
                AND "timestamp" <= %s
-               AND context NOT IN ('refund', 'expense', 'debt')
+               AND context IN ('tip', 'take', 'final-gift')
           GROUP BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:

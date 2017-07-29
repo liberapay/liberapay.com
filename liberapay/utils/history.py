@@ -96,14 +96,12 @@ def iter_payday_events(db, participant, year=None):
         return
 
     if transfers:
-        given = [
+        _transfers = [
             t for t in transfers
-            if t['tipper'] == id and t['status'] == 'succeeded' and not t['refund_ref']
+            if t['status'] == 'succeeded' and t['context'] in ('tip', 'take', 'final-gift')
         ]
-        received = [
-            t for t in transfers
-            if t['tippee'] == id and t['status'] == 'succeeded' and t['context'] != 'refund'
-        ]
+        given = [t for t in _transfers if t['tipper'] == id]
+        received = [t for t in _transfers if t['tippee'] == id]
         yield dict(
             kind='totals',
             given=sum(t['amount'] for t in given),
