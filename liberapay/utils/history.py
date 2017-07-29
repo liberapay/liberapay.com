@@ -96,20 +96,25 @@ def iter_payday_events(db, participant, year=None):
         return
 
     if transfers:
-        _transfers = [
-            t for t in transfers
-            if t['status'] == 'succeeded' and t['context'] in ('tip', 'take', 'final-gift')
-        ]
-        given = [t for t in _transfers if t['tipper'] == id]
-        received = [t for t in _transfers if t['tippee'] == id]
+        successes = [t for t in transfers if t['status'] == 'succeeded' and not t['refund_ref']]
+        regular_donations = [t for t in successes if t['context'] in ('tip', 'take')]
+        reimbursements = [t for t in successes if t['context'] == 'expense']
         yield dict(
             kind='totals',
-            given=sum(t['amount'] for t in given),
-            received=sum(t['amount'] for t in received),
-            npatrons=len(set(t['tipper'] for t in received)),
-            ntippees=len(set(t['tippee'] for t in given)),
+            regular_donations=dict(
+                sent=sum(t['amount'] for t in regular_donations if t['tipper'] == id),
+                received=sum(t['amount'] for t in regular_donations if t['tippee'] == id),
+                npatrons=len(set(t['tipper'] for t in regular_donations if t['tippee'] == id)),
+                ntippees=len(set(t['tippee'] for t in regular_donations if t['tipper'] == id)),
+            ),
+            reimbursements=dict(
+                sent=sum(t['amount'] for t in reimbursements if t['tipper'] == id),
+                received=sum(t['amount'] for t in reimbursements if t['tippee'] == id),
+                npayers=len(set(t['tipper'] for t in reimbursements if t['tippee'] == id)),
+                nrecipients=len(set(t['tippee'] for t in reimbursements if t['tipper'] == id)),
+            ),
         )
-        del given, received
+        del successes, regular_donations, reimbursements
 
     payday_dates = db.all("""
         SELECT ts_start::date
@@ -193,7 +198,19 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE t.tipper = %(id)s
                AND extract(year from t.timestamp) = %(year)s
                AND t.status = 'succeeded'
-               AND t.context <> 'refund'
+               AND t.context IN ('tip', 'take')
+               AND t.refund_ref IS NULL
+          GROUP BY t.tippee
+        """, params, back_as=back_as)
+        out['reimbursed'] = lambda: db.all("""
+            SELECT (%(base_url)s || t.tippee::text) AS recipient_url,
+                   min(p.username) AS recipient_username, sum(t.amount) AS amount
+              FROM transfers t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %(id)s
+               AND extract(year from t.timestamp) = %(year)s
+               AND t.status = 'succeeded'
+               AND t.context = 'expense'
           GROUP BY t.tippee
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""

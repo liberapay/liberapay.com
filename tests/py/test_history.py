@@ -91,8 +91,8 @@ class TestHistory(FakeTransfersHarness):
         events = list(iter_payday_events(self.db, bob, now.year))
         assert len(events) == 9
         assert events[0]['kind'] == 'totals'
-        assert events[0]['given'] == 0
-        assert events[0]['received'] == 12
+        assert events[0]['regular_donations']['sent'] == 0
+        assert events[0]['regular_donations']['received'] == 12
         assert events[1]['kind'] == 'day-open'
         assert events[1]['payday_number'] == 3
         assert events[2]['balance'] == 12
@@ -102,7 +102,7 @@ class TestHistory(FakeTransfersHarness):
         alice = Participant.from_id(alice.id)
         assert alice.balance == 4990
         events = list(iter_payday_events(self.db, alice, now.year))
-        assert events[0]['given'] == 10
+        assert events[0]['regular_donations']['sent'] == 10
         assert len(events) == 11
 
         carl = Participant.from_id(carl.id)
