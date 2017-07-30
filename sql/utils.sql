@@ -5,6 +5,12 @@ AS $$
 $$ LANGUAGE sql STABLE;
 
 
+CREATE OR REPLACE FUNCTION get_username(p_id bigint) RETURNS text
+AS $$
+    SELECT username FROM participants WHERE id = p_id;
+$$ LANGUAGE sql;
+
+
 CREATE OR REPLACE FUNCTION min(a anyelement, b anyelement) RETURNS anyelement
 AS $$
     SELECT CASE WHEN (a < b) THEN a ELSE b END;
