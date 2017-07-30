@@ -7,7 +7,9 @@ import sys
 from faker import Factory
 from psycopg2 import IntegrityError
 
-from liberapay.billing.transactions import record_exchange_result, _record_transfer_result
+from liberapay.billing.transactions import (
+    record_exchange_result, lock_bundles, _record_transfer_result
+)
 from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
@@ -128,8 +130,9 @@ def fake_transfer(db, tipper, tippee, amount, timestamp):
         tippee=tippee.id,
         amount=amount,
         context='tip',
-        status=status,
+        status='pre',
     )
+    lock_bundles(db, t)
     _record_transfer_result(db, t.id, status)
     return t
 

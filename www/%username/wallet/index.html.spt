@@ -86,26 +86,62 @@ else:
 
 <div class="row col-md-10">
 % if totals
-<p>
+    % set regular_donations = totals['regular_donations']
+    % set reimbursements = totals['reimbursements']
+    % set total_sent = regular_donations['sent'] + reimbursements['sent']
+    {{ _("Total money sent: {0}", Money(total_sent, 'EUR')) }}<br>
+    % if total_sent
+    <ul>
+    % if regular_donations['sent']
+    <li>
     {{ ngettext(
-        "Total given: {0} to {n} person",
-        "Total given: {0} to {n} people",
-        totals['ntippees'],
-        Money(totals['given'], "EUR")
+        "{money_amount} in recurrent donations to {n} person",
+        "{money_amount} in recurrent donations to {n} people",
+        regular_donations['ntippees'],
+        money_amount=Money(regular_donations['sent'], "EUR")
     ) }}
-        % if totals['given']
         (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
-        % endif
-    <br>
+    </li>
+    % endif
+    % if reimbursements['sent']
+    <li>
     {{ ngettext(
-        "Total received: {0} from {n} donor",
-        "Total received: {0} from {n} donors",
-        totals['npatrons'],
-        Money(totals['received'], "EUR")
+        "{money_amount} in expense reimbursements to {n} person",
+        "{money_amount} in expense reimbursements to {n} people",
+        reimbursements['nrecipients'],
+        money_amount=Money(reimbursements['sent'], "EUR")
     ) }}
-</p>
+        (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=reimbursed&amp;mode=aggregate">{{
+            _("Export as CSV")
+        }}</a>)
+    </li>
+    % endif
+    </ul>
+    % endif
+    % set total_received = regular_donations['received'] + reimbursements['received']
+    {{ _("Total money received: {0}", Money(total_received, 'EUR')) }}
+    % if total_received
+    <ul>
+    % if regular_donations['received']
+    <li>{{ ngettext(
+        "{money_amount} in recurrent donations from {n} donor",
+        "{money_amount} in recurrent donations from {n} donors",
+        regular_donations['npatrons'],
+        money_amount=Money(regular_donations['received'], "EUR")
+    ) }}</li>
+    % endif
+    % if reimbursements['received']
+    <li>{{ ngettext(
+        "{money_amount} in expense reimbursements from {n} organization",
+        "{money_amount} in expense reimbursements from {n} organizations",
+        reimbursements['npayers'],
+        money_amount=Money(reimbursements['received'], "EUR")
+    ) }}</li>
+    % endif
+    </ul>
+    % endif
 <br>
 % endif
 
@@ -184,6 +220,10 @@ else:
                 ) }}
             % elif context == 'tip'
                 {{ _("anonymous donation") }}
+            % elif context == 'chargeback'
+                {{ _("chargeback") }}
+            % elif context == 'debt'
+                {{ _("debt repayment") }}
             % endif
         % else
             % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
@@ -203,6 +243,10 @@ else:
                 ) }}
             % elif context == 'tip'
                 {{ _("donation to {0}", to) }}
+            % elif context == 'chargeback'
+                {{ _("chargeback") }}
+            % elif context == 'debt'
+                {{ _("debt repayment") }}
             % endif
         % endif
         </td>

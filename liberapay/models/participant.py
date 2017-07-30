@@ -199,6 +199,27 @@ class Participant(Model, MixinTeam):
                 p.authenticated = True
                 return p
 
+    @classmethod
+    def get_chargebacks_account(cls):
+        r = cls.db.one("""
+            SELECT p
+              FROM participants p
+             WHERE mangopay_user_id = 'CREDIT'
+        """)
+        if r:
+            return r
+        return cls.make_stub(
+            goal=-1,
+            hide_from_search=3,
+            hide_from_lists=3,
+            join_time=utcnow(),
+            kind='organization',
+            mangopay_user_id='CREDIT',
+            mangopay_wallet_id='CREDIT_EUR',
+            status='active',
+            username='_chargebacks_',
+        )
+
     def refetch(self):
         return self._from_thing('id', self.id)
 
@@ -466,7 +487,7 @@ class Participant(Model, MixinTeam):
         for tippee, amount, team in transfers:
             balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
                                tipper_mango_id=self.mangopay_user_id,
-                               tipper_wallet_id=self.mangopay_wallet_id)
+                               tipper_wallet_id=self.mangopay_wallet_id)[0]
 
         assert balance == 0
         self.set_attributes(balance=balance)
@@ -730,10 +751,11 @@ class Participant(Model, MixinTeam):
                     context['body'] = markdown.render(context['body']).strip()
                 return spt[t].render(context).strip()
         else:
-            base_spt = website.emails['base']
+            base_spt = context.get('base_spt', 'base')
+            base_spt = website.emails[base_spt] if base_spt else None
             bodies = {}
             def render(t, context):
-                b = base_spt[t].render(context).strip()
+                b = base_spt[t].render(context).strip() if base_spt else '$body'
                 if t == 'text/plain' and t not in spt:
                     body = html2text(bodies['text/html']).strip()
                 else:
@@ -966,6 +988,8 @@ class Participant(Model, MixinTeam):
               FROM cash_bundles
              WHERE owner = %s
                AND ts < now() - INTERVAL %s
+               AND disputed IS NOT TRUE
+               AND locked_for IS NULL
         """, (self.id, QUARANTINE))
 
 
@@ -1221,7 +1245,7 @@ class Participant(Model, MixinTeam):
             invoice=invoice.id,
             tipper_mango_id=self.mangopay_user_id,
             tipper_wallet_id=self.mangopay_wallet_id,
-        )
+        )[0]
         self.update_invoice_status(invoice.id, 'paid')
         self.set_attributes(balance=balance)
         return True

@@ -6,8 +6,8 @@ from decimal import Decimal
 
 from mangopay.exceptions import APIError
 from mangopay.resources import (
-    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, Transaction,
-    Transfer, Wallet,
+    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, SettlementTransfer,
+    Transaction, Transfer, Wallet,
 )
 from mangopay.utils import Money
 from pando.utils import typecheck
@@ -22,6 +22,7 @@ from liberapay.exceptions import (
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import group_by, NS
 
 
 Money.__eq__ = lambda a, b: isinstance(b, Money) and a.__dict__ == b.__dict__
@@ -292,6 +293,8 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
               JOIN exchanges e ON e.id = b.origin
              WHERE b.owner = %s
                AND b.ts < now() - INTERVAL %s
+               AND b.disputed IS NOT TRUE
+               AND b.locked_for IS NULL
           ORDER BY b.owner = e.participant DESC, b.ts
         """, (participant.id, QUARANTINE))
         withdrawable = sum(b.amount for b in bundles)
@@ -346,12 +349,7 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
-    t_id = db.one("""
-        INSERT INTO transfers
-                    (tipper, tippee, amount, context, team, invoice, status)
-             VALUES (%s, %s, %s, %s, %s, %s, 'pre')
-          RETURNING id
-    """, (tipper, tippee, amount, context, kw.get('team'), kw.get('invoice')))
+    t_id = prepare_transfer(db, tipper, tippee, amount, context, **kw)
     get = lambda id, col: db.one("SELECT {0} FROM participants WHERE id = %s".format(col), (id,))
     tr = Transfer()
     tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
@@ -364,7 +362,61 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
     tr.save()
-    return record_transfer_result(db, t_id, tr)
+    return record_transfer_result(db, t_id, tr), t_id
+
+
+def prepare_transfer(db, tipper, tippee, amount, context, **kw):
+    with db.get_cursor() as cursor:
+        transfer = cursor.one("""
+            INSERT INTO transfers
+                        (tipper, tippee, amount, context, team, invoice, status)
+                 VALUES (%s, %s, %s, %s, %s, %s, 'pre')
+              RETURNING *
+        """, (tipper, tippee, amount, context, kw.get('team'), kw.get('invoice')))
+        lock_bundles(cursor, transfer, bundles=kw.get('bundles'))
+    return transfer.id
+
+
+def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
+    assert transfer.status == 'pre'
+    cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+    tipper, tippee = transfer.tipper, transfer.tippee
+    bundles = bundles or cursor.all("""
+        SELECT b.*
+          FROM cash_bundles b
+          JOIN exchanges e ON e.id = b.origin
+         WHERE b.owner = %(tipper)s
+           AND b.withdrawal IS NULL
+           AND b.locked_for IS NULL
+      ORDER BY b.origin = %(prefer_bundles_from)s DESC
+             , e.participant = %(tippee)s DESC
+             , b.ts
+    """, locals())
+    transferable = sum(b.amount for b in bundles)
+    x = transfer.amount
+    if x > transferable:
+        raise NegativeBalance()
+    for b in bundles:
+        if x >= b.amount:
+            cursor.run("""
+                UPDATE cash_bundles
+                   SET locked_for = %s
+                 WHERE id = %s
+            """, (transfer.id, b.id))
+            x -= b.amount
+            if x == 0:
+                break
+        else:
+            cursor.run("""
+                UPDATE cash_bundles
+                   SET amount = (amount - %s)
+                 WHERE id = %s;
+
+                INSERT INTO cash_bundles
+                            (owner, origin, amount, ts, locked_for)
+                     VALUES (%s, %s, %s, %s, %s);
+            """, (x, b.id, transfer.tipper, b.origin, x, b.ts, transfer.id))
+            break
 
 
 def record_transfer_result(db, t_id, tr):
@@ -385,6 +437,7 @@ def _record_transfer_result(db, t_id, status, error=None):
          RETURNING tipper, tippee, amount
         """, (status, error, t_id))
         if status == 'succeeded':
+            # Update the balances
             balance = c.one("""
 
                 UPDATE participants
@@ -394,55 +447,220 @@ def _record_transfer_result(db, t_id, status, error=None):
                 UPDATE participants
                    SET balance = balance - %(amount)s
                  WHERE id = %(tipper)s
-                   AND balance - %(amount)s >= 0
              RETURNING balance;
 
             """, locals())
-            if balance is None:
-                raise NegativeBalance
+            # Transfer the locked bundles to the recipient
             bundles = c.all("""
-                LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
-                SELECT b.*
-                  FROM cash_bundles b
-                  JOIN exchanges e ON e.id = b.origin
-                 WHERE b.owner = %s
-              ORDER BY e.participant = %s DESC, b.ts
-            """, (tipper, tippee))
-            x = amount
-            for b in bundles:
-                if x >= b.amount:
-                    c.run("""
-                        UPDATE cash_bundles
-                           SET owner = %s
-                         WHERE id = %s
-                    """, (tippee, b.id))
-                    x -= b.amount
-                    if x == 0:
-                        break
-                else:
-                    c.run("""
-                        UPDATE cash_bundles
-                           SET amount = (amount - %s)
-                         WHERE id = %s;
-
-                        INSERT INTO cash_bundles
-                                    (owner, origin, amount, ts)
-                             VALUES (%s, %s, %s, %s);
-                    """, (x, b.id, tippee, b.origin, x, b.ts))
-                    break
+                UPDATE cash_bundles
+                   SET owner = %s
+                     , locked_for = NULL
+                 WHERE owner = %s
+                   AND locked_for = %s
+             RETURNING *
+            """, (tippee, tipper, t_id))
+            bundles_sum = sum(b.amount for b in bundles)
+            assert bundles_sum == amount
+        else:
+            # Unlock the bundles
+            bundles = c.all("""
+                UPDATE cash_bundles
+                   SET locked_for = NULL
+                 WHERE owner = %s
+                   AND locked_for = %s
+            """, (tipper, t_id))
     if balance is not None:
         merge_cash_bundles(db, tippee)
         return balance
     raise TransferError(error)
 
 
+def lock_disputed_funds(cursor, exchange, amount):
+    """Prevent money that is linked to a chargeback from being withdrawn.
+    """
+    if amount != exchange.amount + exchange.fee:
+        raise NotImplementedError("partial disputes are not implemented")
+    cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+    disputed_bundles = [NS(d._asdict()) for d in cursor.all("""
+        UPDATE cash_bundles
+           SET disputed = true
+         WHERE origin = %s
+     RETURNING *
+    """, (exchange.id,))]
+    disputed_bundles_sum = sum(b.amount for b in disputed_bundles)
+    assert disputed_bundles_sum == exchange.amount
+    original_owner = exchange.participant
+    for b in disputed_bundles:
+        if b.owner == original_owner:
+            continue
+        try_to_swap_bundle(cursor, b, original_owner)
+
+
+def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
+    """Recover as much money as possible from a payin which has been reverted.
+    """
+    original_owner = exchange.participant
+    # Try (again) to swap the disputed bundles
+    with db.get_cursor() as cursor:
+        cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+        disputed_bundles = [NS(d._asdict()) for d in cursor.all("""
+            SELECT *
+              FROM cash_bundles
+             WHERE origin = %s
+               AND disputed = true
+        """, (exchange.id,))]
+        bundles_sum = sum(b.amount for b in disputed_bundles)
+        assert bundles_sum == lost_amount - exchange.fee
+        for b in disputed_bundles:
+            if b.owner == original_owner:
+                continue
+            try_to_swap_bundle(cursor, b, original_owner)
+    # Move the funds back to the original wallet
+    chargebacks_account = Participant.get_chargebacks_account()
+    LiberapayOrg = Participant.from_username('LiberapayOrg')
+    assert LiberapayOrg
+    grouped = group_by(disputed_bundles, lambda b: (b.owner, b.withdrawal))
+    for (owner, withdrawal), bundles in grouped.items():
+        assert owner != chargebacks_account.id
+        if owner == original_owner:
+            continue
+        amount = sum(b.amount for b in bundles)
+        if owner is None:
+            bundles = None
+            withdrawer = db.one("SELECT participant FROM exchanges WHERE id = %s", (withdrawal,))
+            payer = LiberapayOrg.id
+            create_debt(db, withdrawer, payer, amount, exchange.id)
+            create_debt(db, original_owner, withdrawer, amount, exchange.id)
+        else:
+            payer = owner
+            create_debt(db, original_owner, payer, amount, exchange.id)
+        transfer(db, payer, original_owner, amount, 'chargeback', bundles=bundles)
+    # Add a debt for the fee
+    create_debt(db, original_owner, LiberapayOrg.id, exchange.fee, exchange.id)
+    # Send the funds to the credit wallet
+    # We have to do a SettlementTransfer instead of a normal Transfer. The amount
+    # can't exceed the original payin amount, so we can't settle the fee debt.
+    original_owner = Participant.from_id(original_owner)
+    t_id = prepare_transfer(
+        db, original_owner.id, chargebacks_account.id, exchange.amount,
+        'chargeback', prefer_bundles_from=exchange.id,
+    )
+    tr = SettlementTransfer()
+    tr.AuthorId = original_owner.mangopay_user_id
+    tr.CreditedUserId = chargebacks_account.mangopay_user_id
+    tr.CreditedWalletId = chargebacks_account.mangopay_wallet_id
+    tr.DebitedFunds = Money(int(amount * 100), 'EUR')
+    tr.DebitedWalletId = original_owner.mangopay_wallet_id
+    tr.Fees = Money(0, 'EUR')
+    tr.RepudiationId = repudiation_id
+    tr.Tag = str(t_id)
+    tr.save()
+    return record_transfer_result(db, t_id, tr)
+
+
+def try_to_swap_bundle(cursor, b, original_owner):
+    """Attempt to switch a disputed cash bundle with a "safe" one.
+    """
+    swappable_origin_bundles = [NS(d._asdict()) for d in cursor.all("""
+        SELECT *
+          FROM cash_bundles
+         WHERE owner = %s
+           AND disputed IS NOT TRUE
+           AND locked_for IS NULL
+      ORDER BY ts ASC
+    """, (original_owner,))]
+    try_to_swap_bundle_with(cursor, b, swappable_origin_bundles)
+    merge_cash_bundles(cursor, original_owner)
+    if b.withdrawal:
+        withdrawer = cursor.one(
+            "SELECT participant FROM exchanges WHERE id = %s", (b.withdrawal,)
+        )
+        swappable_recipient_bundles = [NS(d._asdict()) for d in cursor.all("""
+            SELECT *
+              FROM cash_bundles
+             WHERE owner = %s
+               AND disputed IS NOT TRUE
+               AND locked_for IS NULL
+          ORDER BY ts ASC, amount = %s DESC
+        """, (withdrawer, b.amount))]
+        # Note: we don't restrict the date in the query above, so a swapped
+        # bundle can end up "withdrawn" before it was even created
+        try_to_swap_bundle_with(cursor, b, swappable_recipient_bundles)
+        merge_cash_bundles(cursor, withdrawer)
+    else:
+        merge_cash_bundles(cursor, b.owner)
+
+
+def try_to_swap_bundle_with(cursor, b1, swappable_bundles):
+    """Attempt to switch the disputed cash bundle `b1` with one (or more) from
+    the `swappable_bundles` list.
+    """
+    for b2 in swappable_bundles:
+        if b2.amount == b1.amount:
+            swap_bundles(cursor, b1, b2)
+            break
+        elif b2.amount > b1.amount:
+            # Split the swappable bundle in two, then do the swap
+            b3 = split_bundle(cursor, b2, b1.amount)
+            swap_bundles(cursor, b1, b3)
+            break
+        else:
+            # Split the disputed bundle in two, then do the swap
+            b3 = split_bundle(cursor, b1, b2.amount)
+            swap_bundles(cursor, b2, b3)
+
+
+def split_bundle(cursor, b, amount):
+    """Cut a bundle in two.
+
+    Returns the new second bundle, whose amount is `amount`.
+    """
+    assert b.amount > amount
+    assert not b.locked_for
+    b.amount = cursor.one("""
+        UPDATE cash_bundles
+           SET amount = (amount - %s)
+         WHERE id = %s
+     RETURNING amount
+    """, (amount, b.id))
+    return NS(cursor.one("""
+        INSERT INTO cash_bundles
+                    (owner, origin, amount, ts, withdrawal, disputed)
+             VALUES (%s, %s, %s, %s, %s, %s)
+          RETURNING *;
+    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed))._asdict())
+
+
+def swap_bundles(cursor, b1, b2):
+    """Switch the current locations of the two cash bundles `b1` and `b2`.
+    """
+    assert not b1.locked_for
+    assert not b2.locked_for
+    cursor.run("""
+        UPDATE cash_bundles
+           SET owner = %s
+             , withdrawal = %s
+         WHERE id = %s;
+        UPDATE cash_bundles
+           SET owner = %s
+             , withdrawal = %s
+         WHERE id = %s;
+    """, (b2.owner, b2.withdrawal, b1.id, b1.owner, b1.withdrawal, b2.id))
+    b1.owner, b2.owner = b2.owner, b1.owner
+    b1.withdrawal, b2.withdrawal = b2.withdrawal, b1.withdrawal
+
+
 def merge_cash_bundles(db, p_id):
+    """Regroup cash bundles who have the same origin and current location.
+    """
     return db.one("""
         LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
         WITH regroup AS (
                  SELECT owner, origin, sum(amount) AS amount, max(ts) AS ts
                    FROM cash_bundles
                   WHERE owner = %s
+                    AND disputed IS NOT TRUE
+                    AND locked_for IS NULL
                GROUP BY owner, origin
                  HAVING count(*) > 1
              ),
@@ -459,11 +677,22 @@ def merge_cash_bundles(db, p_id):
                   USING regroup g
                   WHERE b.owner = g.owner
                     AND b.origin = g.origin
+                    AND b.disputed IS NOT TRUE
+                    AND b.locked_for IS NULL
               RETURNING b.*
              )
         SELECT (SELECT json_agg(d) FROM deleted d) AS before
              , (SELECT json_agg(i) FROM inserted i) AS after
     """, (p_id,))
+
+
+def create_debt(db, debtor, creditor, amount, origin):
+    return db.one("""
+        INSERT INTO debts
+                    (debtor, creditor, amount, status, origin)
+             VALUES (%s, %s, %s, 'due', %s)
+          RETURNING *
+    """, (debtor, creditor, amount, origin))
 
 
 def sync_with_mangopay(db):
@@ -503,6 +732,12 @@ def sync_with_mangopay(db):
             record_transfer_result(db, t.id, transactions[0])
         else:
             # The transfer didn't happen, remove it
+            db.run("""
+                UPDATE cash_bundles
+                   SET locked_for = NULL
+                 WHERE owner = %s
+                   AND locked_for = %s
+            """, (t.tipper, t.id))
             db.run("DELETE FROM transfers WHERE id = %s", (t.id,))
 
     check_db(db)

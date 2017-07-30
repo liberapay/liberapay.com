@@ -4,22 +4,130 @@ from decimal import Decimal as D
 
 from mock import patch
 
-from mangopay.resources import BankWirePayOut, BankWirePayIn, Refund
+from mangopay.resources import BankWirePayOut, BankWirePayIn, Dispute, PayIn, Refund
 from mangopay.utils import Reason
 
+from liberapay.billing.payday import Payday
 from liberapay.billing.transactions import Money, record_exchange
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.emails import EmailHarness
-from liberapay.testing.mangopay import MangopayHarness
+from liberapay.testing.mangopay import fake_transfer, FakeTransfersHarness, MangopayHarness
+from liberapay.utils import utcnow
 
 
-class TestMangopayCallbacks(EmailHarness, MangopayHarness):
+class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def callback(self, qs, **kw):
         kw.setdefault('HTTP_ACCEPT', b'application/json')
         kw.setdefault('raise_immediately', False)
         return self.client.GET('/callbacks/mangopay?'+qs, **kw)
+
+    @patch('mangopay.resources.Dispute.get')
+    @patch('mangopay.resources.PayIn.get')
+    @patch('mangopay.resources.SettlementTransfer.save', autospec=True)
+    def test_dispute_callback_lost(self, save, get_payin, get_dispute):
+        self.make_participant(
+            'LiberapayOrg', kind='organization', balance=D('100.00'),
+            mangopay_user_id='0', mangopay_wallet_id='0',
+        )
+        save.side_effect = fake_transfer
+        e_id = self.make_exchange('mango-cc', D('16'), D('1'), self.janet)
+        dispute = Dispute()
+        dispute.Id = '-1'
+        dispute.CreationDate = utcnow()
+        dispute.DisputedFunds = Money(1700, 'EUR')
+        dispute.DisputeType = 'CONTESTABLE'
+        dispute.InitialTransactionType = 'PAYIN'
+        get_dispute.return_value = dispute
+        payin = PayIn(tag=str(e_id))
+        get_payin.return_value = payin
+        # Transfer some of the money to homer
+        self.janet.set_tip_to(self.homer, D('3.68'))
+        Payday.start().run()
+        # Withdraw some of the money
+        self.make_exchange('mango-ba', D('-2.68'), 0, self.homer)
+        # Add a bit of money that will remain undisputed, to test bundle swapping
+        self.make_exchange('mango-cc', D('0.32'), 0, self.janet)
+        self.make_exchange('mango-cc', D('0.55'), 0, self.homer)
+        # Call back
+        self.db.self_check()
+        for status in ('CREATED', 'CLOSED'):
+            dispute.Status = status
+            if status == 'CLOSED':
+                dispute.ResultCode = 'LOST'
+            qs = "EventType=DISPUTE_"+status+"&RessourceId=123456790"
+            r = self.callback(qs, raise_immediately=True)
+            assert r.code == 200, r.text
+            self.db.self_check()
+        # Check final state
+        balances = dict(self.db.all("SELECT username, balance FROM participants"))
+        assert balances == {
+            '_chargebacks_': D('16.00'),
+            'david': 0,
+            'homer': 0,
+            'janet': 0,
+            'LiberapayOrg': D('98.19'),
+        }
+        debts = dict(((r[0], r[1]), r[2]) for r in self.db.all("""
+            SELECT p_debtor.username AS debtor, p_creditor.username AS creditor, sum(d.amount)
+              FROM debts d
+              JOIN participants p_debtor ON p_debtor.id = d.debtor
+              JOIN participants p_creditor ON p_creditor.id = d.creditor
+             WHERE d.status = 'due'
+          GROUP BY p_debtor.username, p_creditor.username
+        """))
+        assert debts == {
+            ('janet', 'LiberapayOrg'): D('1.00'),
+            ('janet', 'homer'): D('3.36'),
+            ('homer', 'LiberapayOrg'): D('1.81'),
+        }
+
+    @patch('mangopay.resources.Dispute.get')
+    @patch('mangopay.resources.PayIn.get')
+    @patch('mangopay.resources.SettlementTransfer.save', autospec=True)
+    def test_dispute_callback_won(self, save, get_payin, get_dispute):
+        self.make_participant('LiberapayOrg', kind='organization')
+        save.side_effect = fake_transfer
+        e_id = self.make_exchange('mango-cc', D('16'), D('1'), self.janet)
+        dispute = Dispute()
+        dispute.Id = '-1'
+        dispute.CreationDate = utcnow()
+        dispute.DisputedFunds = Money(1700, 'EUR')
+        dispute.DisputeType = 'CONTESTABLE'
+        dispute.InitialTransactionType = 'PAYIN'
+        get_dispute.return_value = dispute
+        payin = PayIn(tag=str(e_id))
+        get_payin.return_value = payin
+        # Transfer some of the money to homer
+        self.janet.set_tip_to(self.homer, D('3.68'))
+        Payday.start().run()
+        # Withdraw some of the money
+        self.make_exchange('mango-ba', D('-2.68'), 0, self.homer)
+        # Add money that will remain undisputed, to test bundle swapping
+        self.make_exchange('mango-cc', D('2.69'), 0, self.janet)
+        # Call back
+        self.db.self_check()
+        for status in ('CREATED', 'CLOSED'):
+            dispute.Status = status
+            if status == 'CLOSED':
+                dispute.ResultCode = 'WON'
+            qs = "EventType=DISPUTE_"+status+"&RessourceId=123456790"
+            r = self.callback(qs)
+            assert r.code == 200, r.text
+            self.db.self_check()
+        # Check final state
+        disputed = self.db.all("SELECT * FROM cash_bundles WHERE disputed")
+        debts = self.db.all("SELECT * FROM debts")
+        assert not disputed
+        assert not debts
+        balances = dict(self.db.all("SELECT username, balance FROM participants"))
+        assert balances == {
+            'david': 0,
+            'homer': D('1.00'),
+            'janet': D('15.01'),
+            'LiberapayOrg': 0,
+        }
 
     @patch('mangopay.resources.BankWirePayOut.get')
     def test_payout_callback(self, Get):

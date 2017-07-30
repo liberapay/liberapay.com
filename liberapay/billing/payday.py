@@ -15,7 +15,7 @@ from liberapay import constants
 from liberapay.billing.transactions import transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
-from liberapay.utils import group_by
+from liberapay.utils import NS, group_by
 from liberapay.website import website
 
 
@@ -28,11 +28,6 @@ def round_up(d):
 
 class NoPayday(Exception):
     __str__ = lambda self: "No payday found where one was expected."
-
-
-class NS(object):
-    def __init__(self, d):
-        self.__dict__.update(d)
 
 
 class Payday(object):
@@ -146,6 +141,7 @@ class Payday(object):
             transfers = get_transfers()
 
         self.transfer_for_real(transfers)
+        self.settle_debts(self.db)
 
         self.db.self_check()
         self.mark_stage_done()
@@ -502,6 +498,39 @@ class Payday(object):
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
         """)
 
+    @staticmethod
+    def settle_debts(db):
+        while True:
+            with db.get_cursor() as cursor:
+                debt = cursor.one("""
+                    SELECT d.id, d.debtor AS tipper, d.creditor AS tippee, d.amount
+                         , 'debt' AS context
+                         , p_debtor.mangopay_user_id AS tipper_mango_id
+                         , p_debtor.mangopay_wallet_id AS tipper_wallet_id
+                         , p_creditor.mangopay_user_id AS tippee_mango_id
+                         , p_creditor.mangopay_wallet_id AS tippee_wallet_id
+                      FROM debts d
+                      JOIN participants p_debtor ON p_debtor.id = d.debtor
+                      JOIN participants p_creditor ON p_creditor.id = d.creditor
+                     WHERE d.status = 'due'
+                       AND p_debtor.balance >= d.amount
+                       AND p_creditor.status = 'active'
+                     LIMIT 1
+                       FOR UPDATE OF d
+                """)
+                if not debt:
+                    break
+                try:
+                    t_id = transfer(db, **debt._asdict())[1]
+                except NegativeBalance:
+                    continue
+                cursor.run("""
+                    UPDATE debts
+                       SET status = 'paid'
+                         , settlement = %s
+                     WHERE id = %s
+                """, (t_id, debt.id))
+
     @classmethod
     def update_stats(cls, payday_id):
         ts_start, ts_end = cls.db.one("""
@@ -524,7 +553,7 @@ class Payday(object):
                       WHERE "timestamp" >= %(ts_start)s
                         AND "timestamp" <= %(ts_end)s
                         AND status = 'succeeded'
-                        AND context <> 'refund'
+                        AND context IN ('tip', 'take')
                  )
                , our_tips AS (
                      SELECT *
@@ -744,7 +773,7 @@ class Payday(object):
               FROM transfers t
              WHERE "timestamp" > %s
                AND "timestamp" <= %s
-               AND context NOT IN ('refund', 'expense')
+               AND context IN ('tip', 'take', 'final-gift')
           GROUP BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
