@@ -72,8 +72,7 @@ msgstr "Ihre Rechnung an {0} wurde akzeptiert - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr ""
-"Ihre Zahlungsanfrage über {amount} von {addressee_name} wurde akzeptiert."
+msgstr "Ihre Zahlungsanfrage über {amount} von {addressee_name} wurde akzeptiert."
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
@@ -1834,10 +1833,7 @@ msgstr "Wenn keiner dieser Option für Sie in Frage kommt, wenden Sie sich bitte
 
 #, fuzzy
 msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr ""
-"Sie haben eine ausstehende Überweisung auf Ihr Bankkonto. Wenn diese "
-"fehlschlägt, dann wird das Geld in der Brieftasche erneut gebucht und Ihr "
-"Konto wird automatisch wieder eröffnet."
+msgstr "Sie haben eine ausstehende Überweisung auf Ihr Bankkonto. Wenn diese fehlschlägt, dann wird das Geld in der Brieftasche erneut gebucht und Ihr Konto wird automatisch wieder eröffnet."
 
 msgid "Personal Information"
 msgstr "Persönliche Informationen"
@@ -1927,20 +1923,40 @@ msgstr "Ihr Gleichgewicht ist {0}."
 msgid "Account Statement"
 msgstr "Kontoauszug"
 
-#, fuzzy, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
-msgstr[0] "Gesamtspenden: {0} an {n} Person"
-msgstr[1] "Gesamtspenden: {0} an {n} Personen"
+#, python-brace-format
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
-msgstr[0] "Gesamteinnahmen: {0} von {n} Spender"
-msgstr[1] "Gesamteinnahmen: {0} von {n} Spendern"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Status"
 msgstr "Status"
@@ -1991,6 +2007,12 @@ msgstr "Erstattung von {link_open} Ausgaben #{invoice_id}{link_close} von {payer
 
 msgid "anonymous donation"
 msgstr "anonyme Spende"
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
+msgstr ""
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -2187,14 +2209,10 @@ msgstr "{0} wurden von Ihrem Liberapay Brieftasche genommen. Wenn die Übertragu
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr ""
-"Der Versuch {0} auf Ihr Bankkonto zu überweisen, ist fehlgeschlagen. "
-"Fehlermeldung : {1}"
+msgstr "Der Versuch {0} auf Ihr Bankkonto zu überweisen, ist fehlgeschlagen. Fehlermeldung : {1}"
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr ""
-"Leider können Sie zur Zeit kein Geld auszahlen lassen. Es befindet sich noch "
-"in Quarantäne."
+msgstr "Leider können Sie zur Zeit kein Geld auszahlen lassen. Es befindet sich noch in Quarantäne."
 
 #, python-brace-format
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."

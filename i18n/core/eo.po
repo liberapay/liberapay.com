@@ -19,9 +19,7 @@ msgid "Someone wants to donate to you on Liberapay"
 msgstr "Iu volas donaci al vi sur Liberapay"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr ""
-"Iu volas donaci al vi sur Liberapay, sed vi devas plenigi la identeco formo "
-"antaŭ ni povas laŭleĝe komenci kolekti monon por vi."
+msgstr "Iu volas donaci al vi sur Liberapay, sed vi devas plenigi la identeco formo antaŭ ni povas laŭleĝe komenci kolekti monon por vi."
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Se vi ne deziras ricevi donacojn sur Liberapay, vi povas malakcepti ilin redaktante vian profilon laŭe."
@@ -1927,8 +1925,12 @@ msgid "Account Statement"
 msgstr "Konto komunikaĵo"
 
 #, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1936,8 +1938,24 @@ msgid "Export as CSV"
 msgstr "Eksportado kiel CSV"
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1990,6 +2008,12 @@ msgstr ""
 
 msgid "anonymous donation"
 msgstr "anonima donaco"
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
+msgstr ""
 
 #, python-brace-format
 msgid "final gift to {0}"

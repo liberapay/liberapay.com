@@ -1913,17 +1913,35 @@ msgid "Account Statement"
 msgstr "帳戶對帳單"
 
 #, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
-msgstr[0] "全部捐款： {0} 給{n} 人數"
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
+msgstr[0] ""
 
 msgid "Export as CSV"
 msgstr "匯出為CSV檔"
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
-msgstr[0] "全部收款： {0} 來自 {n} 捐款者"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
+msgstr[0] ""
 
 msgid "Status"
 msgstr "狀況"
@@ -1974,6 +1992,12 @@ msgstr "{link_open}費用的報梢 #{invoice_id}{link_close} 來自 {payer}"
 
 msgid "anonymous donation"
 msgstr "匿名捐款"
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
+msgstr ""
 
 #, python-brace-format
 msgid "final gift to {0}"

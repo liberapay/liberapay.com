@@ -1919,19 +1919,39 @@ msgid "Account Statement"
 msgstr "Relevé de compte"
 
 #, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
-msgstr[0] "Total donné : {0} à {n} personne"
-msgstr[1] "Total donné : {0} à {n} personnes"
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Export as CSV"
 msgstr "Exporter en CSV"
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
-msgstr[0] "Total reçu : {0} d'un donateur"
-msgstr[1] "Total reçu : {0} de {n} donateurs"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Status"
 msgstr "État"
@@ -1982,6 +2002,12 @@ msgstr "règlement de la {link_open}note de frais n°{invoice_id}{link_close} pa
 
 msgid "anonymous donation"
 msgstr "don anonyme"
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
+msgstr ""
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -2250,10 +2276,7 @@ msgid "savings"
 msgstr "Compte Épargne"
 
 msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr ""
-"Un code SWIFT est composé de 8 ou 11 caractères. Les 6 premiers caractères "
-"sont des lettres, les autres peuvent être des lettres ou des chiffres. "
-"Exemple : CMBRFR2BCME"
+msgstr "Un code SWIFT est composé de 8 ou 11 caractères. Les 6 premiers caractères sont des lettres, les autres peuvent être des lettres ou des chiffres. Exemple : CMBRFR2BCME"
 
 msgid "only letters (a-z) and digits (0-9) are allowed"
 msgstr "Seuls les lettres (a-z) et les chiffres (0-9) sont autorisés"

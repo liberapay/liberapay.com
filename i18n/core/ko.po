@@ -1181,9 +1181,7 @@ msgid "What payment methods are available?"
 msgstr "어떤 지불 방식을 사용할 수 있나요?"
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
-msgstr ""
-"대부분의 신용카드와 체크/직불카드를 지원하며 (마스터카드와 비자) 유로화 계좌 이체도 지원합니다. 추후에 다른 옵션을 추가할 계획이 "
-"있습니다."
+msgstr "대부분의 신용카드와 체크/직불카드를 지원하며 (마스터카드와 비자) 유로화 계좌 이체도 지원합니다. 추후에 다른 옵션을 추가할 계획이 있습니다."
 
 msgid "How do recurrent donations work?"
 msgstr "지속적인 기부는 어떻게 작동하나요?"
@@ -1199,9 +1197,7 @@ msgstr "합법이예요? 안전합니까?"
 
 #, python-brace-format
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
-msgstr ""
-"예, Liberapay는 프랑스에 {0}소재한 비영리기구{1}에 의해 운영되며, 유럽 연합의 금융 제재를 준수합니다. 서비스의 보안은 "
-"저희에게 있어 가장 중요한 요소이기도 합니다."
+msgstr "예, Liberapay는 프랑스에 {0}소재한 비영리기구{1}에 의해 운영되며, 유럽 연합의 금융 제재를 준수합니다. 서비스의 보안은 저희에게 있어 가장 중요한 요소이기도 합니다."
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "이 언어로 된 프로필 문구가 없습니다."
@@ -1917,17 +1913,35 @@ msgid "Account Statement"
 msgstr "계정 대차표"
 
 #, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
-msgstr[0] "총 기부한 금액: {n} 명에게 {0}"
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
+msgstr[0] ""
 
 msgid "Export as CSV"
 msgstr "CSV로 내보내기"
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
-msgstr[0] "총 기부받은 금액: {n} 기부자로부터 {0}"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
+msgstr[0] ""
 
 msgid "Status"
 msgstr "상태"
@@ -1978,6 +1992,12 @@ msgstr "{payer} 로부터의 {link_open}지출 #{invoice_id}{link_close}에 대�
 
 msgid "anonymous donation"
 msgstr "익명 기여"
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
+msgstr ""
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -2556,9 +2576,7 @@ msgid "Money moved out of Liberapay"
 msgstr "Liberapay에서 나간 금액"
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
-msgstr ""
-"Liberapay 팀은 여러 기부자의 자금을 여러 기부 수령자에게 연결해 줍니다. 기부자는 얼마를 기부할 지 정하고, 기부자는 기부받은 "
-"돈을 어떻게 나눌지 정합니다. Liberapay는 기부자의 자금을 계산하여 기부 수령자에게 전달하는 역할을 합니다."
+msgstr "Liberapay 팀은 여러 기부자의 자금을 여러 기부 수령자에게 연결해 줍니다. 기부자는 얼마를 기부할 지 정하고, 기부자는 기부받은 돈을 어떻게 나눌지 정합니다. Liberapay는 기부자의 자금을 계산하여 기부 수령자에게 전달하는 역할을 합니다."
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
 msgstr "팀은 피어 투 피어 기부를 위한 개념이며, 법인이 기부금을 팀에 배부하는 데 사용될 수 없습니다."

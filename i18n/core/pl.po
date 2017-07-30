@@ -90,9 +90,7 @@ msgstr "Faktura dla {0} została zaakceptowana i zapłacona - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr ""
-"Twój wniosek o płatność w wysokości {amount} z {addressee_name} została "
-"przyjęty, a pieniądze zostały dodane do portfela."
+msgstr "Twój wniosek o płatność w wysokości {amount} z {addressee_name} została przyjęty, a pieniądze zostały dodane do portfela."
 
 msgid "Withdraw the money"
 msgstr "Wypłać pieniądze"
@@ -149,9 +147,7 @@ msgstr "Przelew bankowy do portfela Liberapay nie powiódł się"
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr ""
-"Próba przelania {0} z Twojego konta bankowego zakończyła się niepowodzeniem "
-"z następującym komunikatem o błędzie:"
+msgstr "Próba przelania {0} z Twojego konta bankowego zakończyła się niepowodzeniem z następującym komunikatem o błędzie:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Możesz spróbować ponownie, ewentualnie używając innej metody płatności, klikając poniższy link:"
@@ -172,9 +168,7 @@ msgstr "{0} z {1} dołączył do Liberapay!"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
-msgstr ""
-"Twoja obietnica darowania {0} tygodniowo {1} zostanie teraz włączona, "
-"ponieważ dołączył do Liberapay. Hurra!"
+msgstr "Twoja obietnica darowania {0} tygodniowo {1} zostanie teraz włączona, ponieważ dołączył do Liberapay. Hurra!"
 
 #, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
@@ -645,9 +639,7 @@ msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason
 msgstr ""
 
 msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr ""
-"Jeśli potrzebujesz pomocy, możesz wysłać e-mail na adres: "
-"support@liberapay.com."
+msgstr "Jeśli potrzebujesz pomocy, możesz wysłać e-mail na adres: support@liberapay.com."
 
 msgid "Occupation"
 msgstr "Zawód"
@@ -1066,9 +1058,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
-msgstr ""
-"Tworząc konto Liberapay akceptujesz nasze {0} warunki korzystania z usługi "
-"{1}."
+msgstr "Tworząc konto Liberapay akceptujesz nasze {0} warunki korzystania z usługi {1}."
 
 msgid "Enter a username"
 msgstr "Wprowadź nazwę użytkownika"
@@ -1187,9 +1177,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr ""
-"{0} aktualnie otrzymuje {1} tygodniowo, by osiągnąć swój cel ({2} tygodniowo)"
-" potrzebuje Twojej pomocy."
+msgstr "{0} aktualnie otrzymuje {1} tygodniowo, by osiągnąć swój cel ({2} tygodniowo) potrzebuje Twojej pomocy."
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
@@ -1572,9 +1560,7 @@ msgid "Reject"
 msgstr "Odrzuć"
 
 msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
-msgstr ""
-"Faktura jest gotowa. Proszę sprawdzić, czy wszystko się zgadza, a następnie "
-"kliknąć przycisk poniżej, aby ją wysłać."
+msgstr "Faktura jest gotowa. Proszę sprawdzić, czy wszystko się zgadza, a następnie kliknąć przycisk poniżej, aby ją wysłać."
 
 msgid "This invoice has been paid."
 msgstr ""
@@ -1944,8 +1930,12 @@ msgid "Account Statement"
 msgstr ""
 
 #, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -1954,8 +1944,26 @@ msgid "Export as CSV"
 msgstr ""
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -2008,6 +2016,12 @@ msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer
 msgstr ""
 
 msgid "anonymous donation"
+msgstr ""
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
 msgstr ""
 
 #, python-brace-format
@@ -2423,8 +2437,7 @@ msgid "Why did my income decrease?"
 msgstr "Dlaczego mój przychód zmalał?"
 
 msgid "If your income decreased, one of the following happened:"
-msgstr ""
-"Jeśli Twój przychód zmalał, miała miejsce jedna z następujących sytuacji:"
+msgstr "Jeśli Twój przychód zmalał, miała miejsce jedna z następujących sytuacji:"
 
 msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
 msgstr ""
@@ -3260,3 +3273,4 @@ msgstr ""
 #, python-brace-format
 msgid "You are already logged in as {0}."
 msgstr "Jesteś już zalogowany jako {0}."
+

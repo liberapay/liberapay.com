@@ -1925,21 +1925,43 @@ msgid "Account Statement"
 msgstr "Výpis z účtu"
 
 #, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
-msgstr[0] "Celkem dáno: {0} pro {n} osobu"
-msgstr[1] "Celkem dáno: {0} pro {n} osoby"
-msgstr[2] "Celkem dáno: {0} pro {n} osob"
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Export as CSV"
 msgstr "Exportovat jako CSV"
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
-msgstr[0] "Celkem přijato: {0} od {n} osoby"
-msgstr[1] "Celkem přijato: {0} od {n} osob"
-msgstr[2] "Celkem přijato: {0} od {n} osob"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Status"
 msgstr "Stav"
@@ -1990,6 +2012,12 @@ msgstr ""
 
 msgid "anonymous donation"
 msgstr "anonymní darování"
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
+msgstr ""
 
 #, python-brace-format
 msgid "final gift to {0}"

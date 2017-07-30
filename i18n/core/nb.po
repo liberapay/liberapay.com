@@ -112,9 +112,7 @@ msgstr "Logg inn på Liberapay"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
-msgstr ""
-"Noen (forhåpentligvis deg) har bedt om å få adgang til {0} kontoen på "
-"Liberapay."
+msgstr "Noen (forhåpentligvis deg) har bedt om å få adgang til {0} kontoen på Liberapay."
 
 msgid "Follow this link to proceed:"
 msgstr "Følg denne lenken for å fortsette:"
@@ -146,9 +144,7 @@ msgstr "Bankoverførselen til Liberapay-lommeboken din ble dessverre mislykket"
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr ""
-"Forsøket på å overføre {0} fra bankkontoen din lyktes ikke på grunn av "
-"følgende feil:"
+msgstr "Forsøket på å overføre {0} fra bankkontoen din lyktes ikke på grunn av følgende feil:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr ""
@@ -1920,8 +1916,12 @@ msgid "Account Statement"
 msgstr ""
 
 #, python-brace-format
-msgid "Total given: {0} to {n} person"
-msgid_plural "Total given: {0} to {n} people"
+msgid "Total money sent: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations to {n} person"
+msgid_plural "{money_amount} in recurrent donations to {n} people"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1929,8 +1929,24 @@ msgid "Export as CSV"
 msgstr ""
 
 #, python-brace-format
-msgid "Total received: {0} from {n} donor"
-msgid_plural "Total received: {0} from {n} donors"
+msgid "{money_amount} in expense reimbursements to {n} person"
+msgid_plural "{money_amount} in expense reimbursements to {n} people"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{money_amount} in recurrent donations from {n} donor"
+msgid_plural "{money_amount} in recurrent donations from {n} donors"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{money_amount} in expense reimbursements from {n} organization"
+msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1982,6 +1998,12 @@ msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer
 msgstr ""
 
 msgid "anonymous donation"
+msgstr ""
+
+msgid "chargeback"
+msgstr ""
+
+msgid "debt repayment"
 msgstr ""
 
 #, python-brace-format
