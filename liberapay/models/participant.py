@@ -39,6 +39,7 @@ from liberapay.exceptions import (
     TooManyEmailAddresses,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
+    UsernameBeginsWithRestrictedCharacter,
     UsernameContainsInvalidCharacters,
     UsernameIsEmpty,
     UsernameIsRestricted,
@@ -1274,6 +1275,9 @@ class Participant(Model, MixinTeam):
 
         if set(suggested) - ASCII_ALLOWED_IN_USERNAME:
             raise UsernameContainsInvalidCharacters(suggested)
+
+        if suggested[0] == '.':
+            raise UsernameBeginsWithRestrictedCharacter(suggested)
 
         lowercased = suggested.lower()
 
