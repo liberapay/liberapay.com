@@ -1920,13 +1920,13 @@ msgstr "Relevé de compte"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
-msgstr ""
+msgstr "Total des dépenses : {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations to {n} person"
 msgid_plural "{money_amount} in recurrent donations to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} en dons récurrents pour {n} personne"
+msgstr[1] "{money_amount} en dons récurrents pour {n} personnes"
 
 msgid "Export as CSV"
 msgstr "Exporter en CSV"
@@ -1934,24 +1934,25 @@ msgstr "Exporter en CSV"
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} en remboursements de frais pour {n} personne"
+msgstr[1] "{money_amount} en remboursements de frais pour {n} personnes"
 
 #, python-brace-format
 msgid "Total money received: {0}"
-msgstr ""
+msgstr "Total des revenus : {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations from {n} donor"
 msgid_plural "{money_amount} in recurrent donations from {n} donors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} en dons récurrents provenant de {n} donateur"
+msgstr[1] "{money_amount} en dons récurrents provenant de {n} donateurs"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
 msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
-msgstr[0] ""
+msgstr[0] "{money_amount} en remboursements de frais provenant de {n} organisation"
 msgstr[1] ""
+"{money_amount} en remboursements de frais provenant de {n} organisations"
 
 msgid "Status"
 msgstr "État"
@@ -1994,7 +1995,7 @@ msgid "anonymous donation for your role in the {0} team"
 msgstr "don anonyme pour votre rôle dans l'équipe {0}"
 
 msgid "donation refund"
-msgstr "remboursement du don"
+msgstr "remboursement d'un don"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
@@ -2004,10 +2005,10 @@ msgid "anonymous donation"
 msgstr "don anonyme"
 
 msgid "chargeback"
-msgstr ""
+msgstr "rétractation"
 
 msgid "debt repayment"
-msgstr ""
+msgstr "remboursement d'une dette"
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -2018,7 +2019,7 @@ msgid "donation to {0} for their role in the {1} team"
 msgstr "don à {0} pour son rôle dans l'équipe {1}"
 
 msgid "refund of anonymous donation"
-msgstr "remboursement du don anonyme"
+msgstr "remboursement d'un don anonyme"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
