@@ -2144,11 +2144,18 @@ msgstr[1] "Ваши пожертвования обеспечены на {n} н�
 msgstr[2] "Ваши пожертвования обеспечены на {n} недель"
 
 #, python-brace-format
-msgid "Your donations will be funded for {0} weeks ({n} month)"
-msgid_plural "Your donations will be funded for {0} weeks ({n} months)"
-msgstr[0] "Ваши пожертвования обеспечены на следующее кол-во недель: {0} ({n} месяц)"
-msgstr[1] "Ваши пожертвования обеспечены на следующее кол-во недель: {0} ({n} месяца)"
-msgstr[2] "Ваши пожертвования обеспечены на следующее кол-во недель: {0} ({n} месяцев)"
+msgid "Your donations will be funded for {n} weeks ({0})"
+msgid_plural "Your donations will be funded for {n} weeks ({0})"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -2701,16 +2708,25 @@ msgid "Explore Your {0} Contacts"
 msgstr "Список ваших {0} контактов"
 
 #, python-brace-format
-msgid "Here are {0} random Liberapay users who have connected their {1} account:"
-msgstr "Вот {0} случайных пользователей Liberapay, которые подключили их аккаунты {1}:"
+msgid "Here are {n} random Liberapay users who have connected their {0} account:"
+msgid_plural ""
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
-msgid "This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order."
-msgstr "На этой странице показаны {0} пользователей Liberapay, которые подключили их аккаунты {1}, в порядке, обратном хронологическому."
+msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
+msgid_plural ""
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
-msgid "Here are the {0} Liberapay users who have connected their {1} account:"
-msgstr "Вот {0} пользователей Liberapay, которые подключили их аккаунт {1}:"
+msgid "Here is the {n} Liberapay user who has connected their {0} account:"
+msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "View More"
 msgstr "Показать ещё"
@@ -2977,20 +2993,32 @@ msgid "Recent Activity"
 msgstr "Недавняя активность"
 
 #, python-brace-format
-msgid "{0} user accounts have been created in the past month. The most recent was {1} ago."
-msgstr "{0} аккаунтов пользователей было создано в прошлом месяце. Последний создан {1} назад."
+msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
+msgid_plural ""
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr "{n} новых пожертвований было начато в прошлом месяце, что увеличило общее еженедельное финансирование на {money_amount}."
+msgid_plural ""
+msgstr[0] "{n} новых пожертвований было начато в прошлом месяце, что увеличило общее еженедельное финансирование на {money_amount}."
+msgstr[1] ""
+msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr "{n} новых {link_open}подарков{link_close} было сделано в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
+msgid_plural ""
+msgstr[0] "{n} новых {link_open}подарков{link_close} было сделано в прошлом месяце, что добавило {money_amount} к еженедельным пожертвованиям до востребования."
+msgstr[1] ""
+msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
-msgstr "{money_amount} было перечислено на прошлой неделе между {n} пользователями."
+msgid_plural ""
+msgstr[0] "{money_amount} было перечислено на прошлой неделе между {n} пользователями."
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "More stats"
 msgstr "Больше статистики"

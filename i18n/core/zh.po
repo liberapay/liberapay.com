@@ -2122,9 +2122,14 @@ msgid_plural "Your donations will be funded for {n} weeks"
 msgstr[0] "你的捐款將可資助到 {n} 週"
 
 #, python-brace-format
-msgid "Your donations will be funded for {0} weeks ({n} month)"
-msgid_plural "Your donations will be funded for {0} weeks ({n} months)"
-msgstr[0] "你的捐款將可資助{0} 週 ({n} 月)"
+msgid "Your donations will be funded for {n} weeks ({0})"
+msgid_plural "Your donations will be funded for {n} weeks ({0})"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] ""
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -2672,16 +2677,19 @@ msgid "Explore Your {0} Contacts"
 msgstr "找找你的 {0} 聯絡人"
 
 #, python-brace-format
-msgid "Here are {0} random Liberapay users who have connected their {1} account:"
-msgstr "這裏是隨機的 {0} Liberapay 用戶其連結了他們 {1} 帳戶："
+msgid "Here are {n} random Liberapay users who have connected their {0} account:"
+msgid_plural ""
+msgstr[0] ""
 
 #, python-brace-format
-msgid "This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order."
-msgstr "這個頁面顯示{0} Liberapay 用戶以逆向的時間順序連結自己的{1} 帳戶。"
+msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
+msgid_plural ""
+msgstr[0] ""
 
 #, python-brace-format
-msgid "Here are the {0} Liberapay users who have connected their {1} account:"
-msgstr "這是 {0} Liberapay 用戶連結了自己的 {1} 帳戶："
+msgid "Here is the {n} Liberapay user who has connected their {0} account:"
+msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
+msgstr[0] ""
 
 msgid "View More"
 msgstr "檢視更多"
@@ -2940,20 +2948,24 @@ msgid "Recent Activity"
 msgstr "最近活動"
 
 #, python-brace-format
-msgid "{0} user accounts have been created in the past month. The most recent was {1} ago."
-msgstr "上個月已有{0} 用戶帳戶建立，最近的一個是 {1} 以前。"
+msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
+msgid_plural ""
+msgstr[0] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr "上個月有{n} 新捐款啟動，提高了每週全部資助到達 {money_amount}。"
+msgid_plural ""
+msgstr[0] "上個月有{n} 新捐款啟動，提高了每週全部資助到達 {money_amount}。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr "上個月{n} 新增的 {link_open}捐款承諾{link_close} , 每週增加了 {money_amount} 可請求的捐款需求。"
+msgid_plural ""
+msgstr[0] "上個月{n} 新增的 {link_open}捐款承諾{link_close} , 每週增加了 {money_amount} 可請求的捐款需求。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
-msgstr "上週有{money_amount} 在 {n} 用戶之間流轉。"
+msgid_plural ""
+msgstr[0] "上週有{money_amount} 在 {n} 用戶之間流轉。"
 
 msgid "More stats"
 msgstr "更多統計"

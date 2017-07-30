@@ -2122,8 +2122,13 @@ msgid_plural "Your donations will be funded for {n} weeks"
 msgstr[0] ""
 
 #, python-brace-format
-msgid "Your donations will be funded for {0} weeks ({n} month)"
-msgid_plural "Your donations will be funded for {0} weeks ({n} months)"
+msgid "Your donations will be funded for {n} weeks ({0})"
+msgid_plural "Your donations will be funded for {n} weeks ({0})"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} month"
+msgid_plural "{n} months"
 msgstr[0] ""
 
 #, python-brace-format
@@ -2671,16 +2676,19 @@ msgid "Explore Your {0} Contacts"
 msgstr ""
 
 #, python-brace-format
-msgid "Here are {0} random Liberapay users who have connected their {1} account:"
-msgstr ""
+msgid "Here are {n} random Liberapay users who have connected their {0} account:"
+msgid_plural ""
+msgstr[0] ""
 
 #, python-brace-format
-msgid "This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order."
-msgstr ""
+msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
+msgid_plural ""
+msgstr[0] ""
 
 #, python-brace-format
-msgid "Here are the {0} Liberapay users who have connected their {1} account:"
-msgstr ""
+msgid "Here is the {n} Liberapay user who has connected their {0} account:"
+msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
+msgstr[0] ""
 
 msgid "View More"
 msgstr ""
@@ -2937,20 +2945,24 @@ msgid "Recent Activity"
 msgstr ""
 
 #, python-brace-format
-msgid "{0} user accounts have been created in the past month. The most recent was {1} ago."
-msgstr ""
+msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
+msgid_plural ""
+msgstr[0] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr ""
+msgid_plural ""
+msgstr[0] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr ""
+msgid_plural ""
+msgstr[0] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
-msgstr ""
+msgid_plural ""
+msgstr[0] ""
 
 msgid "More stats"
 msgstr ""
