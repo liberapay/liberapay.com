@@ -97,6 +97,7 @@ _i18n_clean:
 	           -e 's/^("Language-Team: .+? )<(.+)>\\n/\1"\n"<\2>\\n/' \
 	           -e 's/^#(, .+)?, python-format(, .+)?$$/#\1\2/' \
 	           -e '/^#: /d' "$$f" >"$$f.new"; \
+	    a=$$(<$$f.new); echo "$$a" >$$f.new; \
 	    mv "$$f.new" "$$f"; \
 	done
 
