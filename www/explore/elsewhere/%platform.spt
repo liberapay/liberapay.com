@@ -114,12 +114,12 @@ subhead = _("Social Networks")
     % if partial_list
         % if random
             <p>{{ ngettext(
-                "",
+                "Here are {n} random Liberapay users who have connected their {0} account:",
                 "Here are {n} random Liberapay users who have connected their {0} account:",
                 len(participants), platform.display_name) }}</p>
         % else
             <p>{{ ngettext(
-                "",
+                "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order.",
                 "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order.",
                 len(participants), platform.display_name
             ) }}</p>
