@@ -44,7 +44,7 @@ if platform:
     if order not in ('any', 'random', 'latest'):
         raise response.error(400, "bad order")
 
-    limit = min(parse_int(request.qs.get('limit') or 50), 200)
+    limit = max(min(parse_int(request.qs.get('limit') or 50), 200), 10)
     last_shown = parse_int(request.qs.get('last_shown'), default=INF)
     offset = parse_int(request.qs.get('offset') or 0)
 
@@ -113,15 +113,23 @@ subhead = _("Social Networks")
     % set participants = get_participants(random=random)
     % if partial_list
         % if random
-            <p>{{ _("Here are {0} random Liberapay users who have connected their {1} account:",
-                    len(participants), platform.display_name) }}</p>
-        % else
-            <p>{{ _("This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order.",
-                    len(participants), platform.display_name) }}</p>
-        % endif
-    % else
-        <p>{{ _("Here are the {0} Liberapay users who have connected their {1} account:",
+            <p>{{ ngettext(
+                "",
+                "Here are {n} random Liberapay users who have connected their {0} account:",
                 len(participants), platform.display_name) }}</p>
+        % else
+            <p>{{ ngettext(
+                "",
+                "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order.",
+                len(participants), platform.display_name
+            ) }}</p>
+        % endif
+    % elif participants
+        <p>{{ ngettext(
+            "Here is the {n} Liberapay user who has connected their {0} account:",
+            "Here are the {n} Liberapay users who have connected their {0} account:",
+            len(participants), platform.display_name
+        ) }}</p>
     % endif
     <ul class="people">
     % for p in participants
