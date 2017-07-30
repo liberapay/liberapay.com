@@ -2133,10 +2133,16 @@ msgstr[0] "Dine donationer vil kunne betales i {n} uge"
 msgstr[1] "Dine donationer vil kunne betales i {n} uger"
 
 #, python-brace-format
-msgid "Your donations will be funded for {0} weeks ({n} month)"
-msgid_plural "Your donations will be funded for {0} weeks ({n} months)"
-msgstr[0] "Dine donationer vil kunne betales i {0} uger ({n} måned)"
-msgstr[1] "Dine donationer vil kunne betales i {0} uger ({n} måneder)"
+msgid "Your donations will be funded for {n} weeks ({0})"
+msgid_plural "Your donations will be funded for {n} weeks ({0})"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -2687,16 +2693,22 @@ msgid "Explore Your {0} Contacts"
 msgstr "Udforsk Dine {0} Kontakter"
 
 #, python-brace-format
-msgid "Here are {0} random Liberapay users who have connected their {1} account:"
-msgstr "Her er {0} tilfældige Liberapay brugere som har forbundet deres {1} konto:"
+msgid "Here are {n} random Liberapay users who have connected their {0} account:"
+msgid_plural ""
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
-msgid "This page shows {0} Liberapay users who have connected their {1} account, in reverse chronological order."
-msgstr "Denne side viser {0} Liberapay brugere som har fobundet deres {1} konto, i modsat kronologisk orden."
+msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
+msgid_plural ""
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
-msgid "Here are the {0} Liberapay users who have connected their {1} account:"
-msgstr "Her er de {0} Liberapay brugere som har forbundet deres {1} konto:"
+msgid "Here is the {n} Liberapay user who has connected their {0} account:"
+msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "View More"
 msgstr "Se Mere"
@@ -2959,20 +2971,28 @@ msgid "Recent Activity"
 msgstr "Nylig Aktivitet"
 
 #, python-brace-format
-msgid "{0} user accounts have been created in the past month. The most recent was {1} ago."
-msgstr "{0} brugerkonti er blevet oprettet i den seneste måned. Den sidste var for {1} siden."
+msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
+msgid_plural ""
+msgstr[0] ""
+msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr "{n} nye donationer er startet i den seneste måned, hvilket øger den samlede ugentlige finansiering med {money_amount}."
+msgid_plural ""
+msgstr[0] "{n} nye donationer er startet i den seneste måned, hvilket øger den samlede ugentlige finansiering med {money_amount}."
+msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr "{n} nye {link_open}donationstilbud{link_close} er blevet fremsat i den forgangne måned, hvilket tilføjer {money_amount} af ugentlige donationer der venter på at blive inkasseret."
+msgid_plural ""
+msgstr[0] "{n} nye {link_open}donationstilbud{link_close} er blevet fremsat i den forgangne måned, hvilket tilføjer {money_amount} af ugentlige donationer der venter på at blive inkasseret."
+msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
-msgstr "{money_amount} blev overført sidste uge mellem {n} brugere."
+msgid_plural ""
+msgstr[0] "{money_amount} blev overført sidste uge mellem {n} brugere."
+msgstr[1] ""
 
 msgid "More stats"
 msgstr "Flere statistiker"
