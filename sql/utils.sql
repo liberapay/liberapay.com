@@ -4,7 +4,6 @@ AS $$
     SELECT row_number() over() as rank, value FROM unnest($1) value;
 $$ LANGUAGE sql STABLE;
 
-
 CREATE OR REPLACE FUNCTION min(a anyelement, b anyelement) RETURNS anyelement
 AS $$
     SELECT CASE WHEN (a < b) THEN a ELSE b END;

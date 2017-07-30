@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '39'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '40'::jsonb);
 
 
 -- app configuration
@@ -111,6 +111,11 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER fill_username BEFORE INSERT ON participants
     FOR EACH ROW WHEN (NEW.username IS NULL) EXECUTE PROCEDURE fill_username();
+
+CREATE OR REPLACE FUNCTION get_username(p_id bigint) RETURNS text
+AS $$
+    SELECT username FROM participants WHERE id = p_id;
+$$ LANGUAGE sql;
 
 
 -- elsewhere -- social network accounts attached to participants
@@ -249,7 +254,7 @@ CREATE TABLE invoice_events
 -- transfers -- balance transfers from one user to another
 
 CREATE TYPE transfer_context AS ENUM
-    ('tip', 'take', 'final-gift', 'refund', 'expense');
+    ('tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt');
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
 
@@ -530,6 +535,8 @@ CREATE TABLE cash_bundles
 , amount       numeric(35,2)  NOT NULL CHECK (amount > 0)
 , ts           timestamptz    NOT NULL
 , withdrawal   int            REFERENCES exchanges
+, disputed     boolean
+, locked_for   int            REFERENCES transfers
 , CONSTRAINT in_or_out CHECK ((owner IS NULL) <> (withdrawal IS NULL))
 );
 
@@ -574,6 +581,36 @@ CREATE TABLE newsletter_texts
 CREATE INDEX newsletter_texts_not_sent_idx
           ON newsletter_texts (scheduled_for ASC)
        WHERE sent_at IS NULL AND scheduled_for IS NOT NULL;
+
+
+-- disputes - when a payin is reversed by the payer's bank (AKA chargeback)
+
+CREATE TABLE disputes
+( id              bigint          PRIMARY KEY
+, creation_date   timestamptz     NOT NULL
+, type            text            NOT NULL
+, amount          numeric(35,2)   NOT NULL
+, status          text            NOT NULL
+, result_code     text
+, exchange_id     int             NOT NULL REFERENCES exchanges
+, participant     bigint          NOT NULL REFERENCES participants
+);
+
+
+-- debts - created when funds lost in a dispute can't be fully recovered
+
+CREATE TYPE debt_status AS ENUM ('due', 'paid', 'void');
+
+CREATE TABLE debts
+( id              serial          PRIMARY KEY
+, debtor          bigint          NOT NULL REFERENCES participants
+, creditor        bigint          NOT NULL REFERENCES participants
+, amount          numeric(35,2)   NOT NULL
+, origin          int             NOT NULL REFERENCES exchanges
+, status          debt_status     NOT NULL
+, settlement      int             REFERENCES transfers
+, CONSTRAINT settlement_chk CHECK ((status = 'paid') = (settlement IS NOT NULL))
+);
 
 
 -- composite types, keep this at the end of the file
