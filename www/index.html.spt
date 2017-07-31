@@ -248,6 +248,15 @@ recent = query_cache.one("""
         % endif
     </div>
 
+    <div class="section text-center">
+        <h2>{{ _("Thanks") }}</h2>
+        <p>{{ _("Liberapay benefits from sponsored accounts on the following open source services:") }}</p>
+        <p>
+        <a href="https://sentry.io/" class="s-logo"><img alt="Sentry" src="{{ website.asset('sponsors/sentry.png') }}" /></a>
+        <a href="https://weblate.org/" class="s-logo"><img alt="Weblate" src="{{ website.asset('sponsors/weblate.png') }}" height=40 /></a>
+        </p>
+    </div>
+
     <div class="section">
         <h2>{{ _("Recent Activity") }}</h2>
         % if recent.n_users > 1
