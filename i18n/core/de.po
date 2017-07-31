@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: German (https://hosted.weblate.org/projects/liberapay/core/de/)\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2017-07-31 08:58+0000\n"
+"Last-Translator: Kim <github@aggsol.de>\n"
+"Language-Team: German "
+"<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.16-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -1205,6 +1209,10 @@ msgstr "Ist diese Plattform legal und sicher?"
 #, python-brace-format
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr ""
+"Ja. Liberapay wird von einer gemeinnützig Organisation geführt, die {0}ihren "
+"Sitz{1} in Frankreich hat. Wir befolgen die Finanzmarktregeln der "
+"Europäischen Union. Die Sicherheit unseres Diestens ist von höchster "
+"Bedeutung für uns."
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "Sie haben noch keinen Profiltext in dieser Sprache geschrieben."
@@ -1758,8 +1766,9 @@ msgstr "Ihr Profil wurde aktualisiert."
 msgid "{username}'s Repositories"
 msgstr "{username}'s Repositories"
 
+#, fuzzy
 msgid "We can also import lists of repositories for your teams:"
-msgstr ""
+msgstr "Wie können auch Listen der Repositories Ihrer Teams importieren."
 
 #, python-brace-format
 msgid "You don't have any {platform} account connected to your profile."
@@ -1772,6 +1781,8 @@ msgstr "Verknüpfe ein {0}-Konto"
 #, python-brace-format
 msgid "A list of {n} repositories has been imported from your {platform} account, {time} ago."
 msgstr ""
+"Eine Liste von {n} Repositories wurde vor {time} von Ihrem {platform}-Konto "
+"importiert."
 
 msgid "No repositories found."
 msgstr "Keine Repositories gefunden."
@@ -1779,15 +1790,17 @@ msgstr "Keine Repositories gefunden."
 msgid "Next Page →"
 msgstr "Nächste Seite →"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Starred Repositories on {platform}"
-msgstr ""
+msgstr "Lieblings-Repositories auf {platform}"
 
+#, fuzzy
 msgid "Starred Repositories"
-msgstr ""
+msgstr "Lieblings-Repositories"
 
+#, fuzzy
 msgid "We can import a list of repositories you have starred from:"
-msgstr ""
+msgstr "Wir könne eine Liste Ihrer Lieblings-Repositories importieren von:"
 
 #, python-brace-format
 msgid "Your {platform} account needs to be reconnected."
@@ -1796,8 +1809,8 @@ msgstr "Ihr {platform}-Konto muss erneut verknüpft werden."
 #, python-brace-format
 msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sie haben {n} Lieblings-Repository auf {platform}."
+msgstr[1] "Sie haben {n} Lieblings-Repositories auf {platform}."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "Die eingegebene BIC ist ungültig."
@@ -1925,13 +1938,13 @@ msgstr "Kontoauszug"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
-msgstr ""
+msgstr "Gesamte Ausgaben: {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations to {n} person"
 msgid_plural "{money_amount} in recurrent donations to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} als wiederholte Spenden an {n} Person"
+msgstr[1] "{money_amount} als wiederholte Spenden an {n} Personen"
 
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
@@ -1939,24 +1952,24 @@ msgstr "Als CSV exportieren"
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} als erstatte Ausgaben an {n} Person"
+msgstr[1] "{money_amount} als erstatte Ausgaben an {n} Personen"
 
 #, python-brace-format
 msgid "Total money received: {0}"
-msgstr ""
+msgstr "Gesamtbetrag erhalten: {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations from {n} donor"
 msgid_plural "{money_amount} in recurrent donations from {n} donors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} als wiederholte Spende von {n} Spender"
+msgstr[1] "{money_amount} als wiederholte Spende von {n} Spendern"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
 msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} als erstatte Ausgaben von {n} Organisation"
+msgstr[1] "{money_amount} als erstatte Ausgaben von {n} Organisationen"
 
 msgid "Status"
 msgstr "Status"
@@ -2009,10 +2022,10 @@ msgid "anonymous donation"
 msgstr "anonyme Spende"
 
 msgid "chargeback"
-msgstr ""
+msgstr "Ausgleichsbuchung"
 
 msgid "debt repayment"
-msgstr ""
+msgstr "Schuldenrückzahlung"
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -2289,6 +2302,8 @@ msgstr "Sparkonto"
 
 msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
 msgstr ""
+"Der BIC oder SWIFT-Code hat eine Länge von 8 oder 11 alphanumerischen "
+"Zeichen. Die ersten 6 Zeichen sind Buchstaben. Beispiel: MARKDEFF"
 
 msgid "only letters (a-z) and digits (0-9) are allowed"
 msgstr "nur Buchstaben (a-z) und Ziffern (0-9) sind erlaubt"
@@ -2705,7 +2720,9 @@ msgstr "Entdecken Sie {0} Ihrer Kontakte"
 msgid "Here are {n} random Liberapay users who have connected their {0} account:"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
 msgstr[0] ""
+"Hier sind {n} zufällige Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben:"
 msgstr[1] ""
+"Hier sind {n} zufällige Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben:"
 
 #, python-brace-format
 msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
