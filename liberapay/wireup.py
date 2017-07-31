@@ -160,7 +160,6 @@ class AppConf(object):
         twitter_callback=str,
         twitter_id=str,
         twitter_secret=str,
-        update_global_stats_every=int,
     )
 
     def __init__(self, d):
