@@ -15,9 +15,13 @@ You have a question? Come ask us in [the salon](https://github.com/liberapay/sal
 
 ## Contributing to the translations
 
-[![We use Weblate for translations](https://hosted.weblate.org/widgets/liberapay/-/287x66-white.png)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+You can help translate Liberapay [via Weblate](https://hosted.weblate.org/engage/liberapay/). Current status:
 
-If you have questions about translating Liberapay, you can ask them [in the translation thread](https://github.com/liberapay/salon/issues/2) of the salon.
+[![global translation status](https://hosted.weblate.org/widgets/liberapay/-/287x66-white.png)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+
+[![translation status by language](https://hosted.weblate.org/widgets/liberapay/-/multi-auto.svg)](https://hosted.weblate.org/projects/liberapay/core/?utm_source=widget)
+
+If you have questions about translating Liberapay, you can ask them [in the salon](https://github.com/liberapay/salon/labels/i18n).
 
 
 ## Contributing to the code
