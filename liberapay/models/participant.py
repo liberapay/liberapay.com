@@ -685,7 +685,7 @@ class Participant(Model, MixinTeam):
                  WHERE participant = %s
                    AND id = %s
             """, (self.id, email))
-            email = r.address
+            email = r.address if r else None
         else:
             r = self.get_email(email)
         if r is None:
