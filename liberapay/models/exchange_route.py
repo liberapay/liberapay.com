@@ -51,10 +51,11 @@ class ExchangeRoute(Model):
     @classmethod
     def insert(cls, participant, network, address, error='', one_off=False):
         p_id = participant.id
+        remote_user_id = participant.mangopay_user_id
         r = cls.db.one("""
             INSERT INTO exchange_routes
-                        (participant, network, address, error, one_off)
-                 VALUES (%(p_id)s, %(network)s, %(address)s, %(error)s, %(one_off)s)
+                        (participant, network, address, error, one_off, remote_user_id)
+                 VALUES (%(p_id)s, %(network)s, %(address)s, %(error)s, %(one_off)s, %(remote_user_id)s)
               RETURNING exchange_routes.*::exchange_routes
         """, locals())
         r.__dict__['participant'] = participant

@@ -124,11 +124,12 @@ def charge(db, participant, amount, return_url):
     charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee
 
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
     payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
-    if not participant.mangopay_wallet_id:
-        create_wallet(db, participant)
     payin.CreditedWalletId = participant.mangopay_wallet_id
     payin.DebitedFunds = Money(int(charge_amount * 100), 'EUR')
     payin.CardId = route.address
@@ -161,11 +162,12 @@ def payin_bank_wire(db, participant, debit_amount):
 
     amount, fee, vat = skim_bank_wire(debit_amount)
 
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
     payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
-    if not participant.mangopay_wallet_id:
-        create_wallet(db, participant)
     payin.CreditedWalletId = participant.mangopay_wallet_id
     payin.DeclaredDebitedFunds = Money(int(debit_amount * 100), 'EUR')
     payin.DeclaredFees = Money(int(fee * 100), 'EUR')
@@ -193,12 +195,13 @@ def record_payout_refund(db, payout_refund):
     assert payout_refund.Fees == Money(int(fee * 100), 'EUR')
     route = ExchangeRoute.from_id(e_origin.route)
     participant = Participant.from_id(e_origin.participant)
+    wallet_id = e_origin.wallet_id
     return db.one("""
         INSERT INTO exchanges
-               (amount, fee, vat, participant, status, route, note, refund_ref)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+               (amount, fee, vat, participant, status, route, note, refund_ref, wallet_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
      RETURNING id
-    """, (amount, fee, vat, participant.id, 'created', route.id, None, e_origin.id))
+    """, (amount, fee, vat, participant.id, 'created', route.id, None, e_origin.id, wallet_id))
 
 
 def record_exchange(db, route, amount, fee, vat, participant, status, error=None):
@@ -221,12 +224,13 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
 
     with db.get_cursor() as cursor:
 
+        wallet_id = participant.mangopay_wallet_id
         e = cursor.one("""
             INSERT INTO exchanges
-                   (amount, fee, vat, participant, status, route, note)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+                   (amount, fee, vat, participant, status, route, note, wallet_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
          RETURNING *
-        """, (amount, fee, vat, participant.id, status, route.id, error))
+        """, (amount, fee, vat, participant.id, status, route.id, error, wallet_id))
 
         if status == 'failed':
             propagate_exchange(cursor, participant, e, route, error, 0)
@@ -285,6 +289,7 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
     if amount < 0 and new_balance < 0:
         raise NegativeBalance
 
+    wallet_id = participant.mangopay_wallet_id
     if amount < 0:
         bundles = cursor.all("""
             LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
@@ -307,6 +312,7 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
                     UPDATE cash_bundles
                        SET owner = NULL
                          , withdrawal = %s
+                         , wallet_id = NULL
                      WHERE id = %s
                 """, (exchange.id, b.id))
                 x -= b.amount
@@ -316,8 +322,8 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
                 assert x > 0
                 cursor.run("""
                     INSERT INTO cash_bundles
-                                (owner, origin, ts, amount, withdrawal)
-                         VALUES (NULL, %s, %s, %s, %s)
+                                (owner, origin, ts, amount, withdrawal, wallet_id)
+                         VALUES (NULL, %s, %s, %s, %s, NULL)
                 """, (b.origin, b.ts, x, exchange.id))
                 cursor.run("""
                     UPDATE cash_bundles
@@ -332,14 +338,15 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
             UPDATE cash_bundles b
                SET owner = %(p_id)s
                  , withdrawal = NULL
+                 , wallet_id = %(wallet_id)s
              WHERE withdrawal = %(e_id)s
-        """, dict(p_id=participant.id, e_id=orig_exchange_id))
+        """, dict(p_id=participant.id, e_id=orig_exchange_id, wallet_id=wallet_id))
     elif amount > 0:
         cursor.run("""
             INSERT INTO cash_bundles
-                        (owner, origin, amount, ts)
-                 VALUES (%s, %s, %s, %s)
-        """, (participant.id, exchange.id, amount, exchange.timestamp))
+                        (owner, origin, amount, ts, wallet_id)
+                 VALUES (%s, %s, %s, %s, %s)
+        """, (participant.id, exchange.id, amount, exchange.timestamp, wallet_id))
 
     participant.set_attributes(balance=new_balance)
 
@@ -349,31 +356,39 @@ def propagate_exchange(cursor, participant, exchange, route, error, amount):
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
-    t_id = prepare_transfer(db, tipper, tippee, amount, context, **kw)
     get = lambda id, col: db.one("SELECT {0} FROM participants WHERE id = %s".format(col), (id,))
+    wallet_from = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
+    wallet_to = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
+    t_id = prepare_transfer(
+        db, tipper, tippee, amount, context, wallet_from, wallet_to,
+        team=kw.get('team'), invoice=kw.get('invoice'), bundles=kw.get('bundles'),
+    )
     tr = Transfer()
     tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
     tr.CreditedUserId = kw.get('tippee_mango_id') or get(tippee, 'mangopay_user_id')
-    tr.CreditedWalletId = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
+    tr.CreditedWalletId = wallet_to
     if not tr.CreditedWalletId:
         tr.CreditedWalletId = create_wallet(db, Participant.from_id(tippee))
     tr.DebitedFunds = Money(int(amount * 100), 'EUR')
-    tr.DebitedWalletId = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
+    tr.DebitedWalletId = wallet_from
     tr.Fees = Money(0, 'EUR')
     tr.Tag = str(t_id)
     tr.save()
     return record_transfer_result(db, t_id, tr), t_id
 
 
-def prepare_transfer(db, tipper, tippee, amount, context, **kw):
+def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to,
+                     team=None, invoice=None, **kw):
     with db.get_cursor() as cursor:
         transfer = cursor.one("""
             INSERT INTO transfers
-                        (tipper, tippee, amount, context, team, invoice, status)
-                 VALUES (%s, %s, %s, %s, %s, %s, 'pre')
+                        (tipper, tippee, amount, context, team, invoice, status,
+                         wallet_from, wallet_to)
+                 VALUES (%s, %s, %s, %s, %s, %s, 'pre',
+                         %s, %s)
               RETURNING *
-        """, (tipper, tippee, amount, context, kw.get('team'), kw.get('invoice')))
-        lock_bundles(cursor, transfer, bundles=kw.get('bundles'))
+        """, (tipper, tippee, amount, context, team, invoice, wallet_from, wallet_to))
+        lock_bundles(cursor, transfer, **kw)
     return transfer.id
 
 
@@ -413,9 +428,9 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
                  WHERE id = %s;
 
                 INSERT INTO cash_bundles
-                            (owner, origin, amount, ts, locked_for)
-                     VALUES (%s, %s, %s, %s, %s);
-            """, (x, b.id, transfer.tipper, b.origin, x, b.ts, transfer.id))
+                            (owner, origin, amount, ts, locked_for, wallet_id)
+                     VALUES (%s, %s, %s, %s, %s, %s);
+            """, (x, b.id, transfer.tipper, b.origin, x, b.ts, transfer.id, b.wallet_id))
             break
 
 
@@ -429,12 +444,12 @@ def record_transfer_result(db, t_id, tr):
 def _record_transfer_result(db, t_id, status, error=None):
     balance = None
     with db.get_cursor() as c:
-        tipper, tippee, amount = c.one("""
+        tipper, tippee, amount, wallet_to = c.one("""
             UPDATE transfers
                SET status = %s
                  , error = %s
              WHERE id = %s
-         RETURNING tipper, tippee, amount
+         RETURNING tipper, tippee, amount, wallet_to
         """, (status, error, t_id))
         if status == 'succeeded':
             # Update the balances
@@ -455,10 +470,11 @@ def _record_transfer_result(db, t_id, status, error=None):
                 UPDATE cash_bundles
                    SET owner = %s
                      , locked_for = NULL
+                     , wallet_id = %s
                  WHERE owner = %s
                    AND locked_for = %s
              RETURNING *
-            """, (tippee, tipper, t_id))
+            """, (tippee, wallet_to, tipper, t_id))
             bundles_sum = sum(b.amount for b in bundles)
             assert bundles_sum == amount
         else:
@@ -542,8 +558,9 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     # can't exceed the original payin amount, so we can't settle the fee debt.
     original_owner = Participant.from_id(original_owner)
     t_id = prepare_transfer(
-        db, original_owner.id, chargebacks_account.id, exchange.amount,
-        'chargeback', prefer_bundles_from=exchange.id,
+        db, original_owner.id, chargebacks_account.id, exchange.amount, 'chargeback',
+        original_owner.mangopay_wallet_id, chargebacks_account.mangopay_wallet_id,
+        prefer_bundles_from=exchange.id,
     )
     tr = SettlementTransfer()
     tr.AuthorId = original_owner.mangopay_user_id
@@ -625,10 +642,10 @@ def split_bundle(cursor, b, amount):
     """, (amount, b.id))
     return NS(cursor.one("""
         INSERT INTO cash_bundles
-                    (owner, origin, amount, ts, withdrawal, disputed)
-             VALUES (%s, %s, %s, %s, %s, %s)
+                    (owner, origin, amount, ts, withdrawal, disputed, wallet_id)
+             VALUES (%s, %s, %s, %s, %s, %s, %s)
           RETURNING *;
-    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed))._asdict())
+    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed, b.wallet_id))._asdict())
 
 
 def swap_bundles(cursor, b1, b2):
@@ -640,12 +657,15 @@ def swap_bundles(cursor, b1, b2):
         UPDATE cash_bundles
            SET owner = %s
              , withdrawal = %s
+             , wallet_id = %s
          WHERE id = %s;
         UPDATE cash_bundles
            SET owner = %s
              , withdrawal = %s
+             , wallet_id = %s
          WHERE id = %s;
-    """, (b2.owner, b2.withdrawal, b1.id, b1.owner, b1.withdrawal, b2.id))
+    """, (b2.owner, b2.withdrawal, b2.wallet_id, b1.id,
+          b1.owner, b1.withdrawal, b1.wallet_id, b2.id))
     b1.owner, b2.owner = b2.owner, b1.owner
     b1.withdrawal, b2.withdrawal = b2.withdrawal, b1.withdrawal
 
@@ -656,18 +676,18 @@ def merge_cash_bundles(db, p_id):
     return db.one("""
         LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
         WITH regroup AS (
-                 SELECT owner, origin, sum(amount) AS amount, max(ts) AS ts
+                 SELECT owner, origin, wallet_id, sum(amount) AS amount, max(ts) AS ts
                    FROM cash_bundles
                   WHERE owner = %s
                     AND disputed IS NOT TRUE
                     AND locked_for IS NULL
-               GROUP BY owner, origin
+               GROUP BY owner, origin, wallet_id
                  HAVING count(*) > 1
              ),
              inserted AS (
                  INSERT INTO cash_bundles
-                             (owner, origin, amount, ts)
-                      SELECT owner, origin, amount, ts
+                             (owner, origin, amount, ts, wallet_id)
+                      SELECT owner, origin, amount, ts, wallet_id
                         FROM regroup
                    RETURNING *
              ),
@@ -679,6 +699,7 @@ def merge_cash_bundles(db, p_id):
                     AND b.origin = g.origin
                     AND b.disputed IS NOT TRUE
                     AND b.locked_for IS NULL
+                    AND b.wallet_id = g.wallet_id
               RETURNING b.*
              )
         SELECT (SELECT json_agg(d) FROM deleted d) AS before

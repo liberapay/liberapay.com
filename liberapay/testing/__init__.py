@@ -226,7 +226,7 @@ class Harness(unittest.TestCase):
 
 
     def make_transfer(self, tipper, tippee, amount, context='tip', team=None, status='succeeded'):
-        t_id = prepare_transfer(self.db, tipper, tippee, amount, context, team=team)
+        t_id = prepare_transfer(self.db, tipper, tippee, amount, context, '-1', '-2', team=team)
         _record_transfer_result(self.db, t_id, status)
         return t_id
 

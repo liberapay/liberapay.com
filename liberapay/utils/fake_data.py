@@ -131,6 +131,8 @@ def fake_transfer(db, tipper, tippee, amount, timestamp):
         amount=amount,
         context='tip',
         status='pre',
+        wallet_from='-%s' % tipper.id,
+        wallet_to='-%s' % tippee.id,
     )
     lock_bundles(db, t)
     _record_transfer_result(db, t.id, status)
@@ -148,6 +150,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
             address='-1',
             error='',
             one_off=False,
+            remote_user_id=participant.mangopay_user_id,
         )
     e = _fake_thing(
         db,
@@ -159,6 +162,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
         vat=vat,
         status='pre',
         route=route.id,
+        wallet_id=participant.mangopay_wallet_id,
     )
     record_exchange_result(db, e.id, 'succeeded', '', participant)
     return e

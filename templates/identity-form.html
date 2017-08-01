@@ -1,7 +1,66 @@
 
     <p>{{ _("We need to know who you are because of financial regulations.") }}</p>
 
-    % if participant.kind == 'organization'
+    % set p = 'LegalRepresentative' if participant.kind == 'organization' else ''
+
+    <label>
+        <span>{{ _('Given Name') }}</span>
+        <input name="FirstName" autocomplete="given-name" required size=20
+               class="form-control" value="{{ account[p+'FirstName'] }}" />
+    </label>
+
+    <label>
+        <span>{{ _('Family Name') }}</span>
+        <input name="LastName" autocomplete="family-name" required size=20
+               class="form-control" value="{{ account[p+'LastName'] }}" />
+    </label>
+
+    <br>
+    <label>
+        <span>{{ _("Country (residence)") }}</span>
+        <select name="CountryOfResidence" class="form-control" required>
+        <option></option>
+        % set country = account[p+'CountryOfResidence'] or request.country
+        % for each in locale.countries.items()
+            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
+        % endfor
+        </select>
+    </label>
+
+    <br>
+    <label>
+        <span>{{ _("Country (nationality)") }}</span>
+        <select name="Nationality" class="form-control" required>
+        <option></option>
+        % set country = account[p+'Nationality'] or request.country
+        % for each in locale.countries.items()
+            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
+        % endfor
+        </select>
+    </label>
+
+    <br>
+    <label>
+        <span>{{ _("Date of Birth") }}</span>
+        % set dob = account[p+'Birthday']
+        % set dob = dob and dob.isoformat()
+        <input name="Birthday" value="{{ dob or request.body.get('Birthday', '') }}"
+               pattern="[1-2][0-9]{3}-[0-9]{1,2}-[0-9]{1,2}"
+               placeholder="{{ _('YYYY-MM-DD') }}" title="{{ _('YYYY-MM-DD') }}"
+               class="form-control" size=10 required />
+    </label>
+
+    <br><br>
+    <p>{{ _("Are you acting as the representative of an organization?") }}</p>
+
+    <label class="form-group">
+        <input type="checkbox" name="organization" value="yes"
+               data-toggle="enable" data-target="#organization"
+               {{ 'checked' if participant.kind == 'organization' }} />
+        <span>{{ _("Yes, I represent a business or nonprofit.") }}</span>
+    </label>
+
+    <fieldset id="organization" {{ 'disabled' if participant.kind != 'organization' }}>
 
     <label>
         <span>{{ _("Organization Type") }}</span>
@@ -20,60 +79,9 @@
                class="form-control" value="{{ account.Name }}" />
     </label>
 
-    <br><br>
-    <p>{{ _("The following fields are about the organization's legal representative (you, probably).") }}</p>
-
-    % endif
-
-    % set p = 'LegalRepresentative' if participant.kind == 'organization' else ''
-
-    <label>
-        <span>{{ _('Given Name') }}</span>
-        <input name="{{ p }}FirstName" autocomplete="given-name" required size=20
-               class="form-control" value="{{ account[p+'FirstName'] }}" />
-    </label>
-
-    <label>
-        <span>{{ _('Family Name') }}</span>
-        <input name="{{ p }}LastName" autocomplete="family-name" required size=20
-               class="form-control" value="{{ account[p+'LastName'] }}" />
-    </label>
+    </fieldset>
 
     <br>
-    <label>
-        <span>{{ _("Country (residence)") }}</span>
-        <select name="{{ p }}CountryOfResidence" class="form-control" required>
-        <option></option>
-        % set country = account[p+'CountryOfResidence'] or request.country
-        % for each in locale.countries.items()
-            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
-        % endfor
-        </select>
-    </label>
-
-    <br>
-    <label>
-        <span>{{ _("Country (nationality)") }}</span>
-        <select name="{{ p }}Nationality" class="form-control" required>
-        <option></option>
-        % set country = account[p+'Nationality'] or request.country
-        % for each in locale.countries.items()
-            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
-        % endfor
-        </select>
-    </label>
-
-    <br>
-    <label>
-        <span>{{ _("Date of Birth") }}</span>
-        % set dob = account[p+'Birthday']
-        % set dob = dob and dob.isoformat()
-        <input name="{{ p }}Birthday" value="{{ dob or request.body.get('Birthday', '') }}"
-               pattern="[1-2][0-9]{3}-[0-9]{1,2}-[0-9]{1,2}"
-               placeholder="{{ _('YYYY-MM-DD') }}" title="{{ _('YYYY-MM-DD') }}"
-               class="form-control" size=10 required />
-    </label>
-
     <div class="form-group">
         <label>
             <input type="checkbox" name="terms" value="agree" required

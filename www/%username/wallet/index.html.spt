@@ -195,7 +195,7 @@ else:
         <td class="fees">{{ format_currency(event['fee'], '').strip() }}</td>
         <td class="bank">{{ format_delta(event['bank_delta']) }}</td>
     </tr>
-    % elif event['kind'] == 'transfer'
+    % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
     <tr>
         <td class="nature">
         % set context = event['context']

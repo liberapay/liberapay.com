@@ -23,7 +23,6 @@ password = 'password'
 good_data = {
     'sign-in.username': 'bob',
     'sign-in.password': password,
-    'sign-in.kind': 'individual',
     'sign-in.email': 'bob@example.com',
 }
 

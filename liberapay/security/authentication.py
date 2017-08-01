@@ -73,7 +73,7 @@ def sign_in_with_form_data(body, state):
 
     elif 'sign-in.email' in body:
         response = state['response']
-        kind = body.pop('sign-in.kind')
+        kind = body.pop('sign-in.kind', 'individual')
         if kind not in ('individual', 'organization'):
             raise response.error(400, 'bad kind')
         email = body.pop('sign-in.email')

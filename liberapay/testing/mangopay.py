@@ -73,16 +73,9 @@ def make_wallet(mangopay_user_id):
     return w
 
 
-with use_cassette('MangopayHarness'):
-    cls = MangopayHarness
-
-    cls.david_id = make_mangopay_account('David')
-    cls.david_wallet_id = make_wallet(cls.david_id).Id
-
-    cls.janet_id = make_mangopay_account('Janet')
-    cls.janet_wallet_id = make_wallet(cls.janet_id).Id
+def create_card(mangopay_user_id):
     cr = CardRegistration()
-    cr.UserId = cls.janet_id
+    cr.UserId = mangopay_user_id
     cr.Currency = 'EUR'
     cr.CardType = 'CB_VISA_MASTERCARD'
     cr.save()
@@ -95,8 +88,25 @@ with use_cassette('MangopayHarness'):
     )
     cr.RegistrationData = requests.post(cr.CardRegistrationURL, data).text
     cr.save()
+    return cr
+
+
+with use_cassette('MangopayOAuth'):
+    import mangopay
+    mangopay.get_default_handler().auth_manager.get_token()
+
+
+with use_cassette('MangopayHarness'):
+    cls = MangopayHarness
+
+    cls.david_id = make_mangopay_account('David')
+    cls.david_wallet_id = make_wallet(cls.david_id).Id
+
+    cls.janet_id = make_mangopay_account('Janet')
+    cls.janet_wallet_id = make_wallet(cls.janet_id).Id
+    cr = create_card(cls.janet_id)
     cls.card_id = cr.CardId
-    del cr, data
+    del cr
 
     cls.homer_id = make_mangopay_account('Homer')
     cls.homer_wallet_id = make_wallet(cls.homer_id).Id
