@@ -835,7 +835,7 @@ msgid "Profile"
 msgstr "Profiel"
 
 msgid "Giving"
-msgstr "Gegeven"
+msgstr "Geven"
 
 msgid "Receiving"
 msgstr "Ontvangen"
@@ -1083,7 +1083,10 @@ msgid "Update my nominal take"
 msgstr "Update mijn nominale deel"
 
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Onopgeëiste inkomsten blijven in de portemonnees van de donateurs, het wordt niet verzameld op het team account. Teams zijn namelijk geen rechtspersonen en kunnen geen geld houden in hun naam."
+msgstr ""
+"Niet-opgeëiste inkomsten blijven in de portemonnees van de donateurs, het "
+"wordt niet verzameld op het team account. Teams zijn namelijk geen "
+"rechtspersonen en kunnen geen geld houden in hun naam."
 
 msgid "Leftover"
 msgstr "Overgelaten geld"
@@ -2325,13 +2328,13 @@ msgid "And here's what it looks like with JavaScript turned off:"
 msgstr "En zo ziet het eruit als je JavaScript hebt uitgeschakeld:"
 
 msgid "Giving & Receiving Widgets"
-msgstr "Gegeven & ontvangen widgets"
+msgstr "Geven & ontvangen widgets"
 
 msgid "Use this code to add a Liberapay \"receiving\" widget on your website:"
 msgstr "Gebruik deze code om de Liberapay \"ontvangen\" widget op je website te zetten:"
 
 msgid "Or, if you'd like to include a \"giving\" widget, you can use this:"
-msgstr "Of je kan een \"gegeven\" widget gebruiken:"
+msgstr "Of je kan een \"geven\" widget gebruiken:"
 
 msgid "To contact us privately:"
 msgstr "Voor persoonlijk contact:"
@@ -2535,7 +2538,7 @@ msgstr "De betaaldag is wanneer donaties daadwerkelijk worden uitgevoerd. Het is
 
 #, python-brace-format
 msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay werd {0} geleden gelanceerd en heeft {1} mensen."
+msgstr "Liberapay werd {0} geleden gelanceerd en heeft {1} accounts."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
@@ -2695,19 +2698,27 @@ msgstr "Vind je {0} contacten"
 msgid "Here are {n} random Liberapay users who have connected their {0} account:"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
 msgstr[0] ""
+"Hier is {n} willekeurige Liberapay persoon die zich heeft verbonden met zijn "
+"{0} account:"
 msgstr[1] ""
+"Hier zijn {n} willekeurige Liberapay personen die zich hebben verbonden met "
+"hun {0} account:"
 
 #, python-brace-format
 msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
 msgstr[0] ""
+"Deze pagina toont {n} Liberapay persoon die zich heeft verbonden met zijn {0}"
+" account, in omgekeerde chronologische volgorde."
 msgstr[1] ""
+"Deze pagina toont {n} Liberapay personen die zich hebben verbonden met hun "
+"{0} account, in omgekeerde chronologische volgorde."
 
 #, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
 msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hier is {n} Liberapay persoon die zijn {0} account heeft verbonden:"
+msgstr[1] "Hier zijn {n} Liberapay personen die hun {0} account hebben verbonden:"
 
 msgid "View More"
 msgstr "Bekijk meer"
@@ -2973,25 +2984,37 @@ msgstr "Recente activiteiten"
 msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
 msgstr[0] ""
+"{n} nieuw account is er aangemaakt afgelopen maand. De meeste recente was {0}"
+" geleden."
 msgstr[1] ""
+"{n} nieuwe accounts zijn er aangemaakt afgelopen maand. De meeste recente "
+"was {0} geleden."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] "{n} nieuwe donaties zijn er gestart afgelopen maand. Wekelijks doneren mensen nu {money_amount}."
+msgstr[0] ""
+"{n} nieuwe donatie is er gestart afgelopen maand. Wekelijks doneren mensen "
+"nu {money_amount}."
 msgstr[1] ""
+"{n} nieuwe donaties zijn er gestart afgelopen maand. Wekelijks doneren "
+"mensen nu {money_amount}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "{n} nieuwe {link_open}toezeggingen{link_close} zijn er gemaakt afgelopen maand. Er staat nu {money_amount} aan wekelijkse donaties klaar om geclaimd te worden."
+msgstr[0] ""
+"{n} nieuwe {link_open}toezegging{link_close}, met een waarde van "
+"{money_amount} aan wekelijkse donatie, is er gemaakt afgelopen maand."
 msgstr[1] ""
+"{n} nieuwe {link_open}toezeggingen{link_close}, met een waarde van "
+"{money_amount} aan wekelijkse donaties, zijn er gemaakt afgelopen maand."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
 msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] "{money_amount} is er overgemaakt afgelopen week door {n} mensen."
-msgstr[1] ""
+msgstr[0] "{money_amount} is er afgelopen week overgemaakt door {n} mens."
+msgstr[1] "{money_amount} is er afgelopen week overgemaakt door {n} mensen."
 
 msgid "More stats"
 msgstr "Meer statistieken"
