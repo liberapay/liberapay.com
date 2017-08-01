@@ -499,6 +499,11 @@ CREATE TRIGGER upsert_mangopay_user_id
     AFTER INSERT OR UPDATE OF mangopay_user_id ON participants
     FOR EACH ROW WHEN (NEW.mangopay_user_id IS NOT NULL)
     EXECUTE PROCEDURE upsert_mangopay_user_id();
+INSERT INTO mangopay_users
+            (id, participant)
+     SELECT p.mangopay_user_id, p.id
+       FROM participants p
+      WHERE p.mangopay_user_id IS NOT NULL;
 ALTER TABLE transfers
     ADD COLUMN wallet_from text,
     ADD COLUMN wallet_to text;
