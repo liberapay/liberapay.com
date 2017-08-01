@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '40'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '41'::jsonb);
 
 
 -- app configuration
@@ -254,7 +254,7 @@ CREATE TABLE invoice_events
 -- transfers -- balance transfers from one user to another
 
 CREATE TYPE transfer_context AS ENUM
-    ('tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt');
+    ('tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt', 'account-switch');
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
 
@@ -270,9 +270,12 @@ CREATE TABLE transfers
 , error       text
 , refund_ref  bigint              REFERENCES transfers
 , invoice     int                 REFERENCES invoices
+, wallet_from text                NOT NULL
+, wallet_to   text                NOT NULL
 , CONSTRAINT team_chk CHECK (NOT (context='take' AND team IS NULL))
-, CONSTRAINT self_chk CHECK (tipper <> tippee)
+, CONSTRAINT self_chk CHECK ((tipper <> tippee) = (context <> 'account-switch'))
 , CONSTRAINT expense_chk CHECK (NOT (context='expense' AND invoice IS NULL))
+, CONSTRAINT wallets_chk CHECK (wallet_from <> wallet_to)
  );
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
@@ -317,6 +320,7 @@ CREATE TABLE exchange_routes
 , address       text           NOT NULL CHECK (address <> '')
 , error         text           NOT NULL
 , one_off       boolean        NOT NULL
+, remote_user_id   text           NOT NULL
 , UNIQUE (participant, network, address)
 );
 
@@ -344,6 +348,7 @@ CREATE TABLE exchanges
 , route             bigint               NOT NULL REFERENCES exchange_routes
 , vat               numeric(35,2)        NOT NULL
 , refund_ref        bigint               REFERENCES exchanges
+, wallet_id         text                 NOT NULL
  );
 
 CREATE INDEX exchanges_participant_idx ON exchanges (participant);
@@ -537,7 +542,9 @@ CREATE TABLE cash_bundles
 , withdrawal   int            REFERENCES exchanges
 , disputed     boolean
 , locked_for   int            REFERENCES transfers
+, wallet_id    text
 , CONSTRAINT in_or_out CHECK ((owner IS NULL) <> (withdrawal IS NULL))
+, CONSTRAINT wallet_chk CHECK ((wallet_id IS NULL) = (owner IS NULL))
 );
 
 CREATE INDEX cash_bundles_owner_idx ON cash_bundles (owner);
@@ -611,6 +618,29 @@ CREATE TABLE debts
 , settlement      int             REFERENCES transfers
 , CONSTRAINT settlement_chk CHECK ((status = 'paid') = (settlement IS NOT NULL))
 );
+
+
+-- mangopay_users - links mangopay user accounts to our local participants
+
+CREATE TABLE mangopay_users
+( id            text     PRIMARY KEY
+, participant   bigint   NOT NULL REFERENCES participants
+);
+
+CREATE OR REPLACE FUNCTION upsert_mangopay_user_id() RETURNS trigger AS $$
+    BEGIN
+        INSERT INTO mangopay_users
+                    (id, participant)
+             VALUES (NEW.mangopay_user_id, NEW.id)
+        ON CONFLICT (id) DO NOTHING;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER upsert_mangopay_user_id
+    AFTER INSERT OR UPDATE OF mangopay_user_id ON participants
+    FOR EACH ROW WHEN (NEW.mangopay_user_id IS NOT NULL)
+    EXECUTE PROCEDURE upsert_mangopay_user_id();
 
 
 -- composite types, keep this at the end of the file
