@@ -566,7 +566,7 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     tr.AuthorId = original_owner.mangopay_user_id
     tr.CreditedUserId = chargebacks_account.mangopay_user_id
     tr.CreditedWalletId = chargebacks_account.mangopay_wallet_id
-    tr.DebitedFunds = Money(int(amount * 100), 'EUR')
+    tr.DebitedFunds = Money(int(exchange.amount * 100), 'EUR')
     tr.DebitedWalletId = original_owner.mangopay_wallet_id
     tr.Fees = Money(0, 'EUR')
     tr.RepudiationId = repudiation_id
