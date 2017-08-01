@@ -40,7 +40,7 @@ _ = lambda a: a
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                "-_")
+                                "-_.")
 
 AVATAR_QUERY = '?s=160&default=retro'
 AVATAR_SOURCES = 'libravatar bitbucket facebook github google mastodon twitter'.split()

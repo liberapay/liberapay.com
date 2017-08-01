@@ -89,6 +89,10 @@ class UsernameAlreadyTaken(ProblemChangingUsername):
     def msg(self, _):
         return _("The username '{0}' is already taken.", *self.args)
 
+class UsernameBeginsWithRestrictedCharacter(ProblemChangingUsername):
+    def msg(self, _):
+        return _("The username '{0}' begins with a restricted character.", *self.args)
+
 
 class ProblemChangingEmail(LazyResponse400): pass
 
