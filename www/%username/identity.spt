@@ -144,7 +144,7 @@ if request.method == 'POST':
                        AND mangopay_user_id = %s
                  RETURNING kind, mangopay_user_id, mangopay_wallet_id
                 """, (new_kind, account.Id, new_wallet_id, participant.id, old_account.Id))
-                if r.mangopay_user_id != account.Id:
+                if not r:
                     raise response.error(409, "race condition")
                 participant.set_attributes(**r._asdict())
                 participant.add_event(website.db, 'mangopay-account-change', {
@@ -175,16 +175,17 @@ if request.method == 'POST':
                 success = _("Your identity information has been updated.")
             elif body.get('terms') == 'agree':
                 account.save()
-                id = website.db.one("""
+                r = website.db.one("""
                     UPDATE participants
                        SET mangopay_user_id = %s
                          , kind = %s
                      WHERE id = %s
                        AND mangopay_user_id IS NULL
-                 RETURNING mangopay_user_id
+                 RETURNING mangopay_user_id, kind
                 """, (account.Id, new_kind, participant.id))
-                if id != account.Id:
+                if not r:
                     raise response.error(409, "race condition")
+                participant.set_attributes(**r._asdict())
                 participant.mark_notifications_as_read('identity_required')
                 success = _("Your identity information has been registered.")
             else:
