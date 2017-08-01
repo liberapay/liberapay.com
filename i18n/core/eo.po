@@ -713,12 +713,6 @@ msgstr ""
 msgid "We need to know who you are because of financial regulations."
 msgstr "Ni bezonas scii, kiu vi estas pro financaj regularoj."
 
-msgid "Organization Type"
-msgstr "Organizo Tipo"
-
-msgid "Organization Name"
-msgstr "Organizo Nomo"
-
 msgid "Given Name"
 msgstr "Donita Nomo"
 
@@ -736,6 +730,18 @@ msgstr "Naskiĝdato"
 
 msgid "YYYY-MM-DD"
 msgstr "JJJJ-MM-TT"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Ĉu vi reprezentas organizaĵon?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Jes, mi reprezentas firmon aŭ senprofitan organizaĵon."
+
+msgid "Organization Type"
+msgstr "Organizo Tipo"
+
+msgid "Organization Name"
+msgstr "Organizo Nomo"
 
 #, python-brace-format
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
@@ -1034,19 +1040,6 @@ msgstr "Elsaluti"
 
 msgid "Please input your email address:"
 msgstr "Bonvolu enigi vian retpoŝtadreson:"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "Ĉu vi reprezentas organizaĵon?"
-
-msgid "No, I want to create a personal account."
-msgstr "Ne, mi volas krei personan konton."
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Jes, mi reprezentas firmon aŭ senprofitan organizaĵon."
-
-#, python-brace-format
-msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
-msgstr ""
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -1468,6 +1461,15 @@ msgstr ""
 "\n"
 "Tio nepovas malfariĝi!"
 
+msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
+msgstr ""
+
+msgid "We can't change the type of your account during payday, please try again in a few minutes."
+msgstr ""
+
+msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
+msgstr ""
+
 msgid "Invalid date of birth."
 msgstr "Nevalida daton de naskiĝo."
 
@@ -1483,6 +1485,9 @@ msgstr ""
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "Vi devas konsenti MangoPay Kondiĉoj por Uzado."
 
+msgid "JavaScript is required"
+msgstr "JavaScript estas postulita"
+
 msgid "Level 2"
 msgstr ""
 
@@ -1492,9 +1497,6 @@ msgstr ""
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
 msgstr ""
-
-msgid "JavaScript is required"
-msgstr "JavaScript estas postulita"
 
 msgid "Income Shares"
 msgstr "Inspezoj Akcioj"
@@ -1878,6 +1880,12 @@ msgstr "Konto"
 
 msgid "Account type"
 msgstr "Tipo de konto"
+
+msgid "modify"
+msgstr ""
+
+msgid "not modifiable"
+msgstr ""
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"

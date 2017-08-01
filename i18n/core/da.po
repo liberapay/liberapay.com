@@ -711,12 +711,6 @@ msgstr ""
 msgid "We need to know who you are because of financial regulations."
 msgstr "Vi er nødt til at vide hvem du er på grund af de finansielle regler."
 
-msgid "Organization Type"
-msgstr "Organisations type"
-
-msgid "Organization Name"
-msgstr "Organisations navn"
-
 msgid "Given Name"
 msgstr "Fornavn"
 
@@ -734,6 +728,18 @@ msgstr "Fødselsdag"
 
 msgid "YYYY-MM-DD"
 msgstr "ÅÅÅÅ-MM-DD"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Optræder du som repræsentant for en organisation?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Ja, jeg repræsenterer en organisation eller nonprofit."
+
+msgid "Organization Type"
+msgstr "Organisations type"
+
+msgid "Organization Name"
+msgstr "Organisations navn"
 
 #, python-brace-format
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
@@ -1030,19 +1036,6 @@ msgstr "Log ud"
 
 msgid "Please input your email address:"
 msgstr "Skriv venligst din e-mail adresse:"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "Optræder du som repræsentant for en organisation?"
-
-msgid "No, I want to create a personal account."
-msgstr "Nej, jeg vil oprette en personlig konto."
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Ja, jeg repræsenterer en organisation eller nonprofit."
-
-#, python-brace-format
-msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
-msgstr "Hvis du ønsker at oprette en konto til et kollektiv der ikke har status af juridisk enhed, skal du først oprette en personlig konto, og derefter {0}skab et team{1}."
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -1462,6 +1455,15 @@ msgstr ""
 "\n"
 "Det kan ikke fortrydes!"
 
+msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
+msgstr ""
+
+msgid "We can't change the type of your account during payday, please try again in a few minutes."
+msgstr ""
+
+msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
+msgstr ""
+
 msgid "Invalid date of birth."
 msgstr "Ugyldig fødselsdato."
 
@@ -1477,6 +1479,9 @@ msgstr "Din identitets-information er blevet registreret."
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "Du skal indvillige i MangoPays servicevilkår."
 
+msgid "JavaScript is required"
+msgstr "JavaScript er påkrævet"
+
 msgid "Level 2"
 msgstr ""
 
@@ -1486,9 +1491,6 @@ msgstr ""
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
 msgstr ""
-
-msgid "JavaScript is required"
-msgstr "JavaScript er påkrævet"
 
 msgid "Income Shares"
 msgstr "Indkomst Andele"
@@ -1872,6 +1874,12 @@ msgstr "Konto"
 
 msgid "Account type"
 msgstr "Konto type"
+
+msgid "modify"
+msgstr ""
+
+msgid "not modifiable"
+msgstr ""
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"

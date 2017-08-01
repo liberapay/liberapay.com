@@ -711,12 +711,6 @@ msgstr "De maximale grote van elk bestand is {0}MB."
 msgid "We need to know who you are because of financial regulations."
 msgstr "We zijn verplicht te weten wie je bent als gevolg van de financiële regelgeving."
 
-msgid "Organization Type"
-msgstr "Organisatie type"
-
-msgid "Organization Name"
-msgstr "Organisatie naam"
-
 msgid "Given Name"
 msgstr "Voornaam"
 
@@ -734,6 +728,18 @@ msgstr "Geboortedatum"
 
 msgid "YYYY-MM-DD"
 msgstr "YYYY-MM-DD"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Handel je als vertegenwoordiger van een organisatie?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Ja, ik vertegenwoordig een bedrijf of non-profit."
+
+msgid "Organization Type"
+msgstr "Organisatie type"
+
+msgid "Organization Name"
+msgstr "Organisatie naam"
 
 #, python-brace-format
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
@@ -1031,19 +1037,6 @@ msgstr "Uitloggen"
 msgid "Please input your email address:"
 msgstr "Vul alsjeblieft je emailadres in:"
 
-msgid "Are you acting as the representative of an organization?"
-msgstr "Handel je als vertegenwoordiger van een organisatie?"
-
-msgid "No, I want to create a personal account."
-msgstr "Nee, ik wil een persoonlijke account aanmaken."
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Ja, ik vertegenwoordig een bedrijf of non-profit."
-
-#, python-brace-format
-msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
-msgstr "Als je een account wilt maken voor een collectief dat niet een juridische entiteit heeft, maak dan eerst een persoonlijk account, en {0}maak vervolgens een team{1}."
-
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Met het maken van een Liberapay account ga je akkoord met onze {0}servicevoorwaarden{1}."
@@ -1083,10 +1076,7 @@ msgid "Update my nominal take"
 msgstr "Update mijn nominale deel"
 
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr ""
-"Niet-opgeëiste inkomsten blijven in de portemonnees van de donateurs, het "
-"wordt niet verzameld op het team account. Teams zijn namelijk geen "
-"rechtspersonen en kunnen geen geld houden in hun naam."
+msgstr "Niet-opgeëiste inkomsten blijven in de portemonnees van de donateurs, het wordt niet verzameld op het team account. Teams zijn namelijk geen rechtspersonen en kunnen geen geld houden in hun naam."
 
 msgid "Leftover"
 msgstr "Overgelaten geld"
@@ -1465,6 +1455,15 @@ msgstr ""
 "\n"
 "Dit kan niet ongedaan gemaakt worden!"
 
+msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
+msgstr ""
+
+msgid "We can't change the type of your account during payday, please try again in a few minutes."
+msgstr ""
+
+msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
+msgstr ""
+
 msgid "Invalid date of birth."
 msgstr "Geboortedatum is ongeldig."
 
@@ -1480,6 +1479,9 @@ msgstr "Je identiteitsinformatie is geregistreerd."
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "Je moet akkoord gaan met MangoPay's servicevoorwaarden."
 
+msgid "JavaScript is required"
+msgstr "JavaScript is nodig"
+
 msgid "Level 2"
 msgstr "Level 2"
 
@@ -1489,9 +1491,6 @@ msgstr "Je hebt het identiteitsverificatieproces afgerond, het bedrag dat je per
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
 msgstr "Als je meer geeft dan {0} in een jaar, meer ontvangt dan {1} per jaar of als je account tekenen van verdachte activiteiten toont moet je extra informatie verstrekken:"
-
-msgid "JavaScript is required"
-msgstr "JavaScript is nodig"
 
 msgid "Income Shares"
 msgstr "Inkomensaandelen"
@@ -1875,6 +1874,12 @@ msgstr "Account"
 
 msgid "Account type"
 msgstr "Accounttype"
+
+msgid "modify"
+msgstr ""
+
+msgid "not modifiable"
+msgstr ""
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
@@ -2697,22 +2702,14 @@ msgstr "Vind je {0} contacten"
 #, python-brace-format
 msgid "Here are {n} random Liberapay users who have connected their {0} account:"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
-msgstr[0] ""
-"Hier is {n} willekeurige Liberapay persoon die zich heeft verbonden met zijn "
-"{0} account:"
-msgstr[1] ""
-"Hier zijn {n} willekeurige Liberapay personen die zich hebben verbonden met "
-"hun {0} account:"
+msgstr[0] "Hier is {n} willekeurige Liberapay persoon die zich heeft verbonden met zijn {0} account:"
+msgstr[1] "Hier zijn {n} willekeurige Liberapay personen die zich hebben verbonden met hun {0} account:"
 
 #, python-brace-format
 msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] ""
-"Deze pagina toont {n} Liberapay persoon die zich heeft verbonden met zijn {0}"
-" account, in omgekeerde chronologische volgorde."
-msgstr[1] ""
-"Deze pagina toont {n} Liberapay personen die zich hebben verbonden met hun "
-"{0} account, in omgekeerde chronologische volgorde."
+msgstr[0] "Deze pagina toont {n} Liberapay persoon die zich heeft verbonden met zijn {0} account, in omgekeerde chronologische volgorde."
+msgstr[1] "Deze pagina toont {n} Liberapay personen die zich hebben verbonden met hun {0} account, in omgekeerde chronologische volgorde."
 
 #, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
@@ -2983,32 +2980,20 @@ msgstr "Recente activiteiten"
 #, python-brace-format
 msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] ""
-"{n} nieuw account is er aangemaakt afgelopen maand. De meeste recente was {0}"
-" geleden."
-msgstr[1] ""
-"{n} nieuwe accounts zijn er aangemaakt afgelopen maand. De meeste recente "
-"was {0} geleden."
+msgstr[0] "{n} nieuw account is er aangemaakt afgelopen maand. De meeste recente was {0} geleden."
+msgstr[1] "{n} nieuwe accounts zijn er aangemaakt afgelopen maand. De meeste recente was {0} geleden."
 
 #, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] ""
-"{n} nieuwe donatie is er gestart afgelopen maand. Wekelijks doneren mensen "
-"nu {money_amount}."
-msgstr[1] ""
-"{n} nieuwe donaties zijn er gestart afgelopen maand. Wekelijks doneren "
-"mensen nu {money_amount}."
+msgstr[0] "{n} nieuwe donatie is er gestart afgelopen maand. Wekelijks doneren mensen nu {money_amount}."
+msgstr[1] "{n} nieuwe donaties zijn er gestart afgelopen maand. Wekelijks doneren mensen nu {money_amount}."
 
 #, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] ""
-"{n} nieuwe {link_open}toezegging{link_close}, met een waarde van "
-"{money_amount} aan wekelijkse donatie, is er gemaakt afgelopen maand."
-msgstr[1] ""
-"{n} nieuwe {link_open}toezeggingen{link_close}, met een waarde van "
-"{money_amount} aan wekelijkse donaties, zijn er gemaakt afgelopen maand."
+msgstr[0] "{n} nieuwe {link_open}toezegging{link_close}, met een waarde van {money_amount} aan wekelijkse donatie, is er gemaakt afgelopen maand."
+msgstr[1] "{n} nieuwe {link_open}toezeggingen{link_close}, met een waarde van {money_amount} aan wekelijkse donaties, zijn er gemaakt afgelopen maand."
 
 #, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."

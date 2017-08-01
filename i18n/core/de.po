@@ -714,12 +714,6 @@ msgstr "Die maximale Größe jeder Datei ist {0}MB."
 msgid "We need to know who you are because of financial regulations."
 msgstr "Wir müssen wissen wer Sie sind, um den Finanzvorschriften zu genügen."
 
-msgid "Organization Type"
-msgstr "Art der Organisation"
-
-msgid "Organization Name"
-msgstr "Name der Organisation"
-
 msgid "Given Name"
 msgstr "Vorname"
 
@@ -737,6 +731,18 @@ msgstr "Geburtsdatum"
 
 msgid "YYYY-MM-DD"
 msgstr "JJJJ-MM-TT"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Sind Sie der Repräsentant/Vertreter einer Organisation?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Ja, ich vertete ein Unternehmen oder eine Non-Profit-Organisation."
+
+msgid "Organization Type"
+msgstr "Art der Organisation"
+
+msgid "Organization Name"
+msgstr "Name der Organisation"
 
 #, python-brace-format
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
@@ -1034,19 +1040,6 @@ msgstr "Abmelden"
 msgid "Please input your email address:"
 msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein:"
 
-msgid "Are you acting as the representative of an organization?"
-msgstr "Sind Sie der Repräsentant/Vertreter einer Organisation?"
-
-msgid "No, I want to create a personal account."
-msgstr "Nein, Ich möchte ein persönliches Konto."
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Ja, ich vertete ein Unternehmen oder eine Non-Profit-Organisation."
-
-#, python-brace-format
-msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
-msgstr "Wenn Sie ein Konto für eine Gruppe eröffnen möchten, die keine keine juristische Person ist, dann erstellen sie erst ein persönliches Konto und {0}erstellen dann ein Team{1}."
-
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Durch Erstellen eines Liberapay-Kontos stimmen Sie unseren {0}Nutzungsbedingunen{1} zu."
@@ -1204,11 +1197,7 @@ msgstr "Ist diese Plattform legal und sicher?"
 
 #, python-brace-format
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
-msgstr ""
-"Ja. Liberapay wird von einer gemeinnützig Organisation geführt, die {0}ihren "
-"Sitz{1} in Frankreich hat. Wir befolgen die Finanzmarktregeln der "
-"Europäischen Union. Die Sicherheit unseres Diestens ist von höchster "
-"Bedeutung für uns."
+msgstr "Ja. Liberapay wird von einer gemeinnützig Organisation geführt, die {0}ihren Sitz{1} in Frankreich hat. Wir befolgen die Finanzmarktregeln der Europäischen Union. Die Sicherheit unseres Diestens ist von höchster Bedeutung für uns."
 
 msgid "You don't have a profile statement in this language yet."
 msgstr "Sie haben noch keinen Profiltext in dieser Sprache geschrieben."
@@ -1469,6 +1458,15 @@ msgstr ""
 "\n"
 "Das kann NICHT rückgängig gemacht werden!"
 
+msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
+msgstr ""
+
+msgid "We can't change the type of your account during payday, please try again in a few minutes."
+msgstr ""
+
+msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
+msgstr ""
+
 msgid "Invalid date of birth."
 msgstr "Ungültiges Geburtsdatum."
 
@@ -1484,6 +1482,9 @@ msgstr "Ihre Personalien wurden registriert."
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "Sie müssen MangoPays allgemeinen Geschäftsbedingungen zustimmen."
 
+msgid "JavaScript is required"
+msgstr "JavaScript ist erforderlich"
+
 msgid "Level 2"
 msgstr "Stufe 2"
 
@@ -1493,9 +1494,6 @@ msgstr "Sie haben den Prozess des Identitätsnachweises abgeschlossen. Die Geldm
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
 msgstr "Wenn Sie mehr als {0} pro Jahr spenden oder mehr als {1} pro Jahr erhalten oder Ihr Konto verdächtige Aktivitäten aufweist, dann müssen Sie weitere Angaben machen:"
-
-msgid "JavaScript is required"
-msgstr "JavaScript ist erforderlich"
 
 msgid "Income Shares"
 msgstr "Ausschüttungsanteile"
@@ -1776,9 +1774,7 @@ msgstr "Verknüpfe ein {0}-Konto"
 
 #, python-brace-format
 msgid "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr ""
-"Eine Liste von {n} Repositories wurde vor {time} von Ihrem {platform}-Konto "
-"importiert."
+msgstr "Eine Liste von {n} Repositories wurde vor {time} von Ihrem {platform}-Konto importiert."
 
 msgid "No repositories found."
 msgstr "Keine Repositories gefunden."
@@ -1886,6 +1882,12 @@ msgstr "Konto"
 
 msgid "Account type"
 msgstr "Kontotyp"
+
+msgid "modify"
+msgstr ""
+
+msgid "not modifiable"
+msgstr ""
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
@@ -2297,9 +2299,7 @@ msgid "savings"
 msgstr "Sparkonto"
 
 msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr ""
-"Der BIC oder SWIFT-Code hat eine Länge von 8 oder 11 alphanumerischen "
-"Zeichen. Die ersten 6 Zeichen sind Buchstaben. Beispiel: MARKDEFF"
+msgstr "Der BIC oder SWIFT-Code hat eine Länge von 8 oder 11 alphanumerischen Zeichen. Die ersten 6 Zeichen sind Buchstaben. Beispiel: MARKDEFF"
 
 msgid "only letters (a-z) and digits (0-9) are allowed"
 msgstr "nur Buchstaben (a-z) und Ziffern (0-9) sind erlaubt"
@@ -2715,20 +2715,14 @@ msgstr "Entdecken Sie {0} Ihrer Kontakte"
 #, python-brace-format
 msgid "Here are {n} random Liberapay users who have connected their {0} account:"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
-msgstr[0] ""
-"Hier ist {n} zufällige Liberapay-Nutzerin, die ihr {0}-Konto verknüpft hat:"
-msgstr[1] ""
-"Hier sind {n} zufällige Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben:"
+msgstr[0] "Hier ist {n} zufällige Liberapay-Nutzerin, die ihr {0}-Konto verknüpft hat:"
+msgstr[1] "Hier sind {n} zufällige Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben:"
 
 #, python-brace-format
 msgid "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] ""
-"Diese Seite zeigt {n} Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben, "
-"in umgekehrter chronologischer Reihenfolge."
-msgstr[1] ""
-"Diese Seite zeigt {n} Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben, "
-"in umgekehrter chronologischer Reihenfolge."
+msgstr[0] "Diese Seite zeigt {n} Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben, in umgekehrter chronologischer Reihenfolge."
+msgstr[1] "Diese Seite zeigt {n} Liberapay-Nutzer, die ihr {0}-Konto verknüpft haben, in umgekehrter chronologischer Reihenfolge."
 
 #, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
@@ -3009,10 +3003,8 @@ msgstr "Letzte Aktivitäten"
 #, python-brace-format
 msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] ""
-"{n} Nutzerkonten wurde im vergangenen Monat angelegt. Der letzte war vor {0}."
-msgstr[1] ""
-"{n} Nutzerkonten wurde im vergangenen Monat angelegt. Der letzte war vor {0}."
+msgstr[0] "{n} Nutzerkonten wurde im vergangenen Monat angelegt. Der letzte war vor {0}."
+msgstr[1] "{n} Nutzerkonten wurde im vergangenen Monat angelegt. Der letzte war vor {0}."
 
 #, fuzzy, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
@@ -3282,8 +3274,7 @@ msgstr[1] "Passende Repositorys gefunden"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
-msgstr ""
-"{username} hat ein Repository genannt {repo_name} auf dem {platform}-Konto"
+msgstr "{username} hat ein Repository genannt {repo_name} auf dem {platform}-Konto"
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"

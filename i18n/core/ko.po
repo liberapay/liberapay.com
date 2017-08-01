@@ -708,12 +708,6 @@ msgstr "각 파일의 최대 용량은 {0}MB입니다."
 msgid "We need to know who you are because of financial regulations."
 msgstr "금융 제재 때문에 당신의 신원에 대한 정보가 필요합니다."
 
-msgid "Organization Type"
-msgstr "조직의 종류"
-
-msgid "Organization Name"
-msgstr "조직 이름"
-
 msgid "Given Name"
 msgstr "이름"
 
@@ -731,6 +725,18 @@ msgstr "생년월일"
 
 msgid "YYYY-MM-DD"
 msgstr "YYYY-MM-DD"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "조직의 대표자로서 행동하십니까?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "예, 사업체나 비영리기구를 대표합니다."
+
+msgid "Organization Type"
+msgstr "조직의 종류"
+
+msgid "Organization Name"
+msgstr "조직 이름"
 
 #, python-brace-format
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
@@ -1026,19 +1032,6 @@ msgstr "로그아웃"
 
 msgid "Please input your email address:"
 msgstr "이메일 계정을 입력해 주세요:"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "조직의 대표자로서 행동하십니까?"
-
-msgid "No, I want to create a personal account."
-msgstr "아뇨, 개인용 계정을 만들고 싶습니다."
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "예, 사업체나 비영리기구를 대표합니다."
-
-#, python-brace-format
-msgid "If you want to create an account for a collective that doesn't have a legal entity, create a personal account first, then {0}create a team{1}."
-msgstr "법인격을 가지지 않은 모임의 계정을 만들 계획이라면, 개인 계정을 만든 후 {0}팀을 만드세요{1}."
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -1457,6 +1450,15 @@ msgstr ""
 "\n"
 "되돌릴 수 없습니다!"
 
+msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
+msgstr ""
+
+msgid "We can't change the type of your account during payday, please try again in a few minutes."
+msgstr ""
+
+msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
+msgstr ""
+
 msgid "Invalid date of birth."
 msgstr "유효하지 않은 생년월일."
 
@@ -1472,6 +1474,9 @@ msgstr "신원 정보가 등록되었습니다."
 msgid "You have to agree to MangoPay's Terms of Service."
 msgstr "MangoPay의 이용 약관에 동의해야 합니다."
 
+msgid "JavaScript is required"
+msgstr "자바스크립트를 활성화해야 합니다"
+
 msgid "Level 2"
 msgstr "2단계"
 
@@ -1481,9 +1486,6 @@ msgstr "신원 확인 절차를 완료하였으므로 연간 기부하거나 기
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
 msgstr "연간 {0} 이상 기부하거나, 연간 {1} 이상 기부받거나, 계정에서 수상한 행위가 감지될 경우, 추가적인 정보를 제공해야 합니다:"
-
-msgid "JavaScript is required"
-msgstr "자바스크립트를 활성화해야 합니다"
 
 msgid "Income Shares"
 msgstr "수익 분배"
@@ -1866,6 +1868,12 @@ msgstr "계정"
 
 msgid "Account type"
 msgstr "계정 종류"
+
+msgid "modify"
+msgstr ""
+
+msgid "not modifiable"
+msgstr ""
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
