@@ -149,6 +149,7 @@ payday_id = request.path['id'].split('.', 1)[0]
 title = "Payday"
 
 if payday_id:
+    request.allow('GET')
     try:
         payday_id = int(payday_id)
     except ValueError:
@@ -172,16 +173,23 @@ else:
     override_checks = website.env.override_payday_checks
 
 if request.method == 'POST':
-    if not payday_is_running and not payday_needs_to_run and not override_checks:
-        raise response.error(403, "it's not time to run payday")
     action = request.body['action']
     if action not in ('run_payday', 'rerun_payday'):
         raise response.error(400, "bad action")
     rerun = action == 'rerun_payday'
-    if not rerun and payday_is_running:
-        # Payday has already been started, redirect
-        response.redirect('/admin/payday/%s' % last_payday.id)
-    p_id = payday_id if rerun else (last_payday.id + 1 if last_payday else 1)
+    if rerun:
+        if not last_payday:
+            raise response.error(400, "no payday to rerun")
+        if last_payday.stage is None:
+            raise response.error(409, "payday has already finished running")
+        p_id = last_payday.id
+    else:
+        if payday_is_running:
+            # Payday has already been started, redirect
+            response.redirect('/admin/payday/%s' % last_payday.id)
+        if not payday_needs_to_run and not override_checks:
+            raise response.error(403, "it's not time to run payday")
+        p_id = last_payday.id + 1 if last_payday else 1
     log_file = open(payday_log_path(p_id)+'.part', 'a')
     exec_payday(log_file)
     response.redirect('/admin/payday/%s' % p_id)
@@ -196,7 +204,7 @@ if request.method == 'POST':
              data-log-url="{{ request.path.raw+'.txt' }}"
              data-rerun="#payday-rerun"
              data-msg-success="Payday has been successfully run \o/"></pre>
-        <form action="" class="hidden" id="payday-rerun" method="POST">
+        <form action="/admin/payday/" class="hidden" id="payday-rerun" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <button class="btn btn-danger btn-lg" name="action" value="rerun_payday">Rerun payday</button>
         </form>
