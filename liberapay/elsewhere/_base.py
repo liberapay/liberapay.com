@@ -269,7 +269,7 @@ class Platform(object):
             raise NotImplementedError(
                 "%s lookup is not available for %s" % (self.display_name, key)
             )
-        path = path.format(**{key: value, 'domain': domain})
+        path = path.format(**{key: quote(value), 'domain': domain})
         def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
                 raise UserNotFound(value, key)
