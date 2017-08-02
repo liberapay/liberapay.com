@@ -1,10 +1,13 @@
-% macro auth_button(platform, action, user_id='', btn_cls='btn btn-primary', participant=None)
+% macro auth_button(platform, action, user_id='', user_id_type=None, btn_cls='btn btn-primary', participant=None)
     <form action="/on/{{ platform }}/redirect" method="post"
           class="auth-button {{ platform }}">
         <input type="hidden" name="action" value="{{ action }}" />
         % set then=b64encode_s(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip()
         <input type="hidden" name="then" value="{{ then }}" />
         <input type="hidden" name="user_id" value="{{ user_id }}" />
+        % if user_id_type
+        <input type="hidden" name="user_id_type" value="{{ user_id_type }}" />
+        % endif
         <input type="hidden" name="p_id" value="{{ participant and participant.id or '' }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <button class="{{ btn_cls }}">{{ caller() }}</button>
