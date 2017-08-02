@@ -1,45 +1,16 @@
 from datetime import date, timedelta
 import mmap
 import os
-from subprocess import Popen
-import sys
 from threading import Lock
 
+from liberapay.billing.payday import exec_payday
 from liberapay.exceptions import LoginRequired
 from liberapay.utils import pid_exists
 
 ONE_WEEK = timedelta(days=7)
 S3_BUCKET = website.app_conf.s3_payday_logs_bucket
 
-devnull = open(os.devnull)
-root = website.project_root
-
 payday_log_path = lambda i: website.env.log_dir+'/payday-%i.txt' % i
-
-def payday_preexec():
-    # Tweak env
-    from os import environ
-    environ['CACHE_STATIC'] = 'no'
-    environ['CLEAN_ASSETS'] = 'no'
-    environ['RUN_CRON_JOBS'] = 'no'
-    environ['PYTHONPATH'] = root
-    # Write PID file
-    pid_file = open(website.env.log_dir+'/payday.pid', 'w')
-    pid_file.write(str(os.getpid()))
-
-def exec_payday(log_file):
-    # Fork twice, like a traditional unix daemon
-    if os.fork():
-        return
-    if os.fork():
-        os.execlp('true', 'true')
-    # Fork again and exec
-    Popen(
-        [sys.executable, '-u', 'liberapay/billing/payday.py'],
-        stdin=devnull, stdout=log_file, stderr=log_file,
-        close_fds=True, cwd=root, preexec_fn=payday_preexec,
-    )
-    os.execlp('true', 'true')
 
 def parse_int(s, **kw):
     try:

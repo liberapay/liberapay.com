@@ -36,6 +36,22 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert r.code == 403
         assert r.text == "it's not time to run payday"
 
+    @mock.patch('liberapay.billing.payday.exec_payday')
+    @mock.patch.object(Payday, 'transfer_for_real')
+    def test_payday_can_be_restarted_after_crash(self, transfer_for_real, exec_payday):
+        transfer_for_real.side_effect = Foobar
+        self.janet.set_tip_to(self.homer, '6.00')
+        with self.assertRaises(Foobar):
+            Payday.start().run()
+        # Check that the web interface allows relaunching
+        admin = self.make_participant('admin', privileges=1)
+        r = self.client.PxST('/admin/payday', data={'action': 'rerun_payday'}, auth_as=admin)
+        assert r.code == 302
+        assert exec_payday.call_count == 1
+        # Test actually relaunching
+        transfer_for_real.side_effect = None
+        Payday.start().run()
+
     def test_payday_id_is_serial(self):
         for i in range(1, 4):
             self.db.run("SELECT nextval('paydays_id_seq')")

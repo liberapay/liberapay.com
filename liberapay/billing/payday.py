@@ -6,6 +6,8 @@ from datetime import date
 from decimal import Decimal, ROUND_UP
 import os
 import os.path
+from subprocess import Popen
+import sys
 
 from babel.dates import format_timedelta
 import pando.utils
@@ -879,6 +881,34 @@ def create_payday_issue():
                     (id, public_log, ts_start)
              VALUES (%s, %s, NULL)
     """, (next_payday_id, next_issue['html_url']))
+
+
+def payday_preexec():  # pragma: no cover
+    # Tweak env
+    from os import environ
+    environ['CACHE_STATIC'] = 'no'
+    environ['CLEAN_ASSETS'] = 'no'
+    environ['RUN_CRON_JOBS'] = 'no'
+    environ['PYTHONPATH'] = website.project_root
+    # Write PID file
+    pid_file = open(website.env.log_dir+'/payday.pid', 'w')
+    pid_file.write(str(os.getpid()))
+
+
+def exec_payday(log_file):  # pragma: no cover
+    # Fork twice, like a traditional unix daemon
+    if os.fork():
+        return
+    if os.fork():
+        os.execlp('true', 'true')
+    # Fork again and exec
+    devnull = open(os.devnull)
+    Popen(
+        [sys.executable, '-u', 'liberapay/billing/payday.py'],
+        stdin=devnull, stdout=log_file, stderr=log_file,
+        close_fds=True, cwd=website.project_root, preexec_fn=payday_preexec,
+    )
+    os.execlp('true', 'true')
 
 
 def main(override_payday_checks=False):
