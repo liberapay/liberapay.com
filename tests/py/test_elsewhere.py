@@ -142,8 +142,17 @@ class TestElsewhere(Harness):
             if not hasattr(platform, 'api_user_name_info_path') or not platform.single_domain:
                 continue
             r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
+            assert r.code == 404
             expected = error % (user_name, platform.display_name)
             assert expected in r.text
+
+    def test_user_pages_xss(self):
+        user_name = ">'>\"><img src=x onerror=alert(0)>"
+        for platform in self.platforms:
+            if not hasattr(platform, 'api_user_name_info_path') or not platform.single_domain:
+                continue
+            r = self.client.GET("/on/%s/%s/" % (platform.name, user_name), raise_immediately=False)
+            assert r.code in (400, 404)
 
     def test_tip_form_is_in_pledge_page(self):
         self.make_elsewhere('twitter', -1, 'alice')
