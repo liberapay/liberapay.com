@@ -359,6 +359,8 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     get = lambda id, col: db.one("SELECT {0} FROM participants WHERE id = %s".format(col), (id,))
     wallet_from = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
     wallet_to = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
+    if not wallet_to:
+        wallet_to = create_wallet(db, Participant.from_id(tippee))
     t_id = prepare_transfer(
         db, tipper, tippee, amount, context, wallet_from, wallet_to,
         team=kw.get('team'), invoice=kw.get('invoice'), bundles=kw.get('bundles'),
@@ -367,8 +369,6 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
     tr.CreditedUserId = kw.get('tippee_mango_id') or get(tippee, 'mangopay_user_id')
     tr.CreditedWalletId = wallet_to
-    if not tr.CreditedWalletId:
-        tr.CreditedWalletId = create_wallet(db, Participant.from_id(tippee))
     tr.DebitedFunds = Money(int(amount * 100), 'EUR')
     tr.DebitedWalletId = wallet_from
     tr.Fees = Money(0, 'EUR')
