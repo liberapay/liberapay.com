@@ -31,6 +31,7 @@ from liberapay.exceptions import (
     BadEmailAddress,
     BadPasswordSize,
     CannotRemovePrimaryEmail,
+    EmailAlreadyAttachedToSelf,
     EmailAlreadyTaken,
     EmailNotVerified,
     NonexistingElsewhere,
@@ -124,6 +125,15 @@ class Participant(Model, MixinTeam):
         return p
 
     def make_team(self, name, email=None, email_lang=None, throttle_takes=True):
+        if email and not self.email:
+            email_is_attached_to_self = self.db.one("""
+                SELECT true AS a
+                  FROM emails
+                 WHERE participant = %s
+                   AND address = %s
+            """, (self.id, email))
+            if email_is_attached_to_self:
+                raise EmailAlreadyAttachedToSelf(email)
         with self.db.get_cursor() as c:
             t = c.one("""
                 INSERT INTO participants
@@ -133,9 +143,9 @@ class Participant(Model, MixinTeam):
             """, (throttle_takes,))
             t.change_username(name, c)
             t.add_member(self, c)
-        if email:
-            t.set_email_lang(email_lang)
-            t.add_email(email)
+            if email:
+                t.set_email_lang(email_lang, cursor=c)
+                t.add_email(email, cursor=c)
         return t
 
     @classmethod

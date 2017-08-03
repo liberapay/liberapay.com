@@ -119,6 +119,11 @@ class BadEmailAddress(ProblemChangingEmail):
     def msg(self, _):
         return _("'{0}' is not a valid email address.", *self.args)
 
+class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
+    code = 409
+    def msg(self, _):
+        return _("The email address {0} is already connected to your account.", *self.args)
+
 
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):

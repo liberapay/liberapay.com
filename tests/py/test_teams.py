@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from liberapay.exceptions import EmailAlreadyTaken
+from liberapay.exceptions import EmailAlreadyAttachedToSelf, EmailAlreadyTaken
 from liberapay.models._mixin_team import InactiveParticipantAdded
 from liberapay.models.participant import Participant
 from liberapay.testing import Harness
@@ -129,7 +129,6 @@ class Tests2(Harness):
         data = {'name': 'Team', 'email': email}
         r = self.client.PxST('/about/teams', data, auth_as=alice)
         assert r.code == 409
-        error = 'The email address %s is already attached to your account.' % email
-        assert r.text == error
+        assert isinstance(r, EmailAlreadyAttachedToSelf)
         t = Participant.from_username('Team')
         assert not t
