@@ -12,7 +12,10 @@ if participant.status != 'stub':
     response.redirect('/%s/' % participant.username)
 
 title = friendly_name = account.friendly_name
-user_id = account.user_id if not account.domain else account.address
+if not account.domain:
+    user_id, user_id_type = account.user_id, None
+else:
+    user_id, user_id_type = account.address, 'user_name'
 locked = participant.goal == -1
 is_team = account.is_team
 allow_team_connect = hasattr(platform, 'is_team_member')
@@ -100,7 +103,7 @@ if is_team:
                             platform.display_name) }}</p>
                 % endif
 
-                % call auth_button(platform.name, 'unlock', user_id)
+                % call auth_button(platform.name, 'unlock', user_id, user_id_type)
                     {{ _("Unlock") }}
                 % endcall
             % endif
@@ -187,7 +190,7 @@ if is_team:
                 <p>{{ _("Are you an administrator of this {0} team account? Connect it "
                         "to your Liberapay account.",
                         platform.display_name) }}</p>
-                % call auth_button(platform.name, 'connect', user_id)
+                % call auth_button(platform.name, 'connect', user_id, user_id_type)
                     {{ _("Connect team account") }}
                 % endcall
             % elif not locked
@@ -198,7 +201,7 @@ if is_team:
                 % else
                     <p>{{ _("Connect this {0} account to your Liberapay profile.",
                             platform.display_name) }}</p>
-                    % call auth_button(platform.name, 'connect', user_id)
+                    % call auth_button(platform.name, 'connect', user_id, user_id_type)
                         {{ _("Connect") }}
                     % endcall
                 % endif
@@ -212,7 +215,7 @@ if is_team:
                         "locked accounts.",
                         platform.display_name) }}</p>
 
-                % call auth_button(platform.name, 'lock', user_id, btn_cls='btn btn-danger')
+                % call auth_button(platform.name, 'lock', user_id, user_id_type, btn_cls='btn btn-danger')
                     {{ _("Lock") }}
                 % endcall
             % endif

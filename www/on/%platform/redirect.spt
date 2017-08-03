@@ -33,9 +33,10 @@ if action == 'connect' and user.ANON:
 p = Participant.from_id(p_id) if p_id else user
 
 domain = ''
-if user_id and body.get('user_id_type') == 'user_name':
+if user_id:
     if platform.single_domain:
-        user_id = '>' + user_id.lstrip('@')
+        if body.get('user_id_type') == 'user_name':
+            user_id = '>' + user_id.lstrip('@')
     else:
         user_id = user_id.lstrip('@')
         split = user_id.rsplit('@', 1)

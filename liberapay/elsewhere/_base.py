@@ -21,7 +21,7 @@ from requests_oauthlib import OAuth1Session, OAuth2Session
 from liberapay.exceptions import LazyResponse
 from liberapay.website import website
 
-from ._exceptions import UserNotFound
+from ._exceptions import BadUserId, UserNotFound
 from ._extractors import not_available
 
 
@@ -269,10 +269,12 @@ class Platform(object):
             raise NotImplementedError(
                 "%s lookup is not available for %s" % (self.display_name, key)
             )
-        path = path.format(**{key: value, 'domain': domain})
+        path = path.format(**{key: quote(value), 'domain': domain})
         def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
                 raise UserNotFound(value, key)
+            if response.status_code in (400, 401, 403, 414):
+                raise BadUserId(value, key)
             self.api_error_handler(response, is_user_session, domain)
         response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
         info = self.api_parser(response)

@@ -147,4 +147,90 @@ interactions:
       transfer-encoding: [chunked]
       vary: ['Authorization, Accept-Language, Cookie']
     status: {code: 404, message: NOT FOUND}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://bitbucket.org:443/api/2.0/users/%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+      content-type: [text/html; charset=utf-8]
+      etag: ['"d41d8cd98f00b204e9800998ecf8427e"']
+      strict-transport-security: [max-age=31536000; includeSubDomains; preload]
+      www-authenticate: [Basic realm="Bitbucket.org HTTP"]
+    status: {code: 401, message: Unauthorized}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://graph.facebook.com:443/%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAx3NwQrCMAwA0F8J8eAGOxR2kYID0V3dwZsIUttMC9symxQm4r+Lvh94b6SUOKF9
+        40gi7k5osVhtTF3CiUcC7kEfBG6ITkjgxRkSPTOJUoDAMLECLVHUQrNuLthcsjH1Po53kOS3C/D0
+        H7ZuoKSFKRusUF/z7+l2WR/t4mnWyBNW6DkQ2o2pK+xvmpynawxo8RByf+5yezwJfj5fWS8J1LQA
+        AAA=
+    headers:
+      access-control-allow-origin: ['*']
+      cache-control: [no-store]
+      content-encoding: [gzip]
+      content-length: ['173']
+      content-type: [application/json; charset=UTF-8]
+      expires: ['Sat, 01 Jan 2000 00:00:00 GMT']
+      facebook-api-version: [v2.4]
+      pragma: [no-cache]
+      vary: [Accept-Encoding]
+      www-authenticate: ['OAuth "Facebook Platform" "not_found" "(#803) Some of the
+          aliases you requested do not exist: >''>\"><img src=x onerror=alert(0)>"']
+    status: {code: 404, message: Not Found}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.github.com:443/users/%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E?client_id=18891d01e40e5aef93b8&client_secret=46f75669895e96029d57b64832d6f2c8e6291a0e
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA6tWyk0tLk5MT1WyUvLLL1Fwyy/NS1HSUUrJTy7NTc0rSSzJzM+LLy3KAcpnlJQU
+        FFvp66eklqXm5BekFumlZ5ZklCbpJefn6pcZK9UCAP6TTUJNAAAA
+    headers:
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, X-GitHub-OTP, X-RateLimit-Limit,
+          X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes,
+          X-Poll-Interval']
+      content-encoding: [gzip]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      status: [404 Not Found]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      transfer-encoding: [chunked]
+    status: {code: 404, message: Not Found}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.twitter.com:443/1.1/users/show.json?screen_name=%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAKpWSi0qyi8qVrKKrlZKzk9JVbIyNdBRyk0tLk5MB3KUQotTixTy8ksU0vJL81L0
+        lGpjawEAAAD//wMALXKZXjQAAAA=
+    headers:
+      cache-control: ['no-cache, no-store, must-revalidate, pre-check=0, post-check=0']
+      content-disposition: [attachment; filename=json.json]
+      content-encoding: [gzip]
+      content-length: ['77']
+      content-type: [application/json; charset=utf-8]
+      expires: ['Tue, 31 Mar 1981 05:00:00 GMT']
+      last-modified: ['Wed, 02 Aug 2017 10:05:52 GMT']
+      pragma: [no-cache]
+      set-cookie: ['personalization_id="v1_F5AyyusrcruryDw/6ks8jA=="; Expires=Fri,
+          02 Aug 2019 10:05:52 UTC; Path=/; Domain=.twitter.com', 'guest_id=v1%3A150166835243900291;
+          Expires=Fri, 02 Aug 2019 10:05:52 UTC; Path=/; Domain=.twitter.com']
+      status: [404 Not Found]
+      strict-transport-security: [max-age=631138519]
+    status: {code: 404, message: Not Found}
 version: 1

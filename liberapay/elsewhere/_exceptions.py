@@ -9,3 +9,7 @@ class CantReadMembership(ElsewhereError):
 
 class UserNotFound(ElsewhereError):
     pass
+
+
+class BadUserId(ElsewhereError):
+    pass
