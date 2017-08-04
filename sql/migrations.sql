@@ -537,3 +537,6 @@ UPDATE exchanges e
 ALTER TABLE exchanges
     ALTER COLUMN wallet_id DROP DEFAULT,
     ALTER COLUMN wallet_id SET NOT NULL;
+
+-- migration #42
+DELETE FROM app_conf WHERE key = 'update_global_stats_every';
