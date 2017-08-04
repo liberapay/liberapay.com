@@ -25,7 +25,6 @@ from postgres.cursors import SimpleCursorBase
 
 from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired, InvalidNumber
 from liberapay.models.community import Community
-from liberapay.utils.i18n import Money
 from liberapay.website import website
 
 
@@ -173,21 +172,6 @@ def b64encode_s(s):
             prefix = b'.'
     r = prefix + b64encode(s, b'-_').replace(b'=', b'~')
     return r.decode('ascii') if PY3 else r
-
-
-def update_global_stats(website):
-    website.gnusers = website.db.one("""
-        SELECT count(*)
-          FROM participants
-         WHERE status = 'active'
-           AND kind IN ('individual', 'organization');
-    """)
-    transfer_volume = website.db.one("""
-        SELECT coalesce(sum(amount), 0)
-          FROM current_tips
-         WHERE is_funded
-    """)
-    website.gmonthly_volume = Money(transfer_volume * 52 / 12, 'EUR')
 
 
 def _execute(this, sql, params=[]):

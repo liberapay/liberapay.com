@@ -6,7 +6,12 @@ from __future__ import division, print_function, unicode_literals
 title = _("Stats")
 db = website.db
 escrow = db.one("SELECT sum(balance) FROM participants", default=0)
-nusers = website.gnusers
+nusers = website.db_qc5.one("""
+    SELECT count(*)
+      FROM participants
+     WHERE status = 'active'
+       AND kind IN ('individual', 'organization', 'group');
+""")
 transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
 tips_stats = db.one("""
     SELECT count(*), avg(amount), sum(amount)

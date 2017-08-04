@@ -32,6 +32,7 @@ recent = query_cache.one("""
                JOIN participants p ON p.id = t.tippee
               WHERE t.ctime > (now() - INTERVAL '30 days')
                 AND t.amount > 0
+                AND t.is_funded
          )
        , _donations AS (SELECT * FROM _tips WHERE status = 'active')
        , _pledges AS (SELECT * FROM _tips WHERE status = 'stub')
@@ -67,10 +68,7 @@ recent = query_cache.one("""
     <div class="jumbotron section">
     <p><img src="{{ website.asset('liberapay/icon-v2_yellow-r.svg') }}" height=100 width=100 /></p>
     <p>{{ _("Liberapay is a recurrent donations platform.") }}</p>
-    <p>{{ _(
-        "We currently have {0} users donating {1} per month.",
-        website.gnusers, website.gmonthly_volume,
-    ) }}</p>
+    <p>{{ _("We help you fund the creators and projects you appreciate.") }}</p>
     </div>
 
     <div class="row section">
