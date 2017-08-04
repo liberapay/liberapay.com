@@ -97,10 +97,12 @@ class UsernameBeginsWithRestrictedCharacter(ProblemChangingUsername):
 class ProblemChangingEmail(LazyResponse400): pass
 
 class EmailAlreadyTaken(ProblemChangingEmail):
+    code = 409
     def msg(self, _):
         return _("{0} is already connected to a different Liberapay account.", *self.args)
 
 class CannotRemovePrimaryEmail(ProblemChangingEmail):
+    code = 403
     def msg(self, _):
         return _("You cannot remove your primary email address.")
 
@@ -109,12 +111,18 @@ class EmailNotVerified(ProblemChangingEmail):
         return _("The email address '{0}' is not verified.", *self.args)
 
 class TooManyEmailAddresses(ProblemChangingEmail):
+    code = 403
     def msg(self, _):
         return _("You've reached the maximum number of email addresses we allow.")
 
 class BadEmailAddress(ProblemChangingEmail):
     def msg(self, _):
         return _("'{0}' is not a valid email address.", *self.args)
+
+class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
+    code = 409
+    def msg(self, _):
+        return _("The email address {0} is already connected to your account.", *self.args)
 
 
 class BadPasswordSize(LazyResponse400):

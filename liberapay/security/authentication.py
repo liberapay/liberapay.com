@@ -54,7 +54,12 @@ def sign_in_with_form_data(body, state):
         else:
             email = id
             p = Participant._from_thing('lower(email)', email.lower())
-            if p:
+            if p and p.kind == 'group':
+                state['log-in.error'] = _(
+                    "{0} is linked to a team account. It's not possible to log in as a team.",
+                    email
+                )
+            elif p:
                 p.start_session()
                 qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
                 p.send_email(

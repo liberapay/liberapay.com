@@ -181,6 +181,15 @@ class TestLogIn(EmailHarness):
         r = self.client.GxT('/?log-in.id=%s&log-in.token=x' % alice.id)
         assert r.code == 400
 
+    def test_email_login_team_account(self):
+        email = 'team@example.net'
+        self.make_participant('team', email=email, kind='group')
+        data = {'log-in.id': email}
+        r = self.client.POST('/log-in', data, raise_immediately=False)
+        assert SESSION not in r.headers.cookie
+        Participant.dequeue_emails()
+        assert not self.get_emails()
+
 
 class TestSignIn(EmailHarness):
 

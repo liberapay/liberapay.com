@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from liberapay.exceptions import EmailAlreadyAttachedToSelf, EmailAlreadyTaken
 from liberapay.models._mixin_team import InactiveParticipantAdded
 from liberapay.models.participant import Participant
 from liberapay.testing import Harness
@@ -111,3 +112,23 @@ class Tests2(Harness):
         assert t.nmembers == 1
         assert t.status == 'active'
         assert t.goal == None
+
+    def test_create_team_with_verified_email(self):
+        alice = self.make_participant('alice')
+        email = 'bob@example.org'
+        self.make_participant('bob', email=email)
+        data = {'name': 'Team', 'email': email}
+        r = self.client.PxST('/about/teams', data, auth_as=alice)
+        assert r.code == 409
+        assert isinstance(r, EmailAlreadyTaken)
+
+    def test_create_team_with_same_unverified_email_as_creator(self):
+        alice = self.make_participant('alice')
+        email = 'alice@example.com'
+        alice.add_email(email)
+        data = {'name': 'Team', 'email': email}
+        r = self.client.PxST('/about/teams', data, auth_as=alice)
+        assert r.code == 409
+        assert isinstance(r, EmailAlreadyAttachedToSelf)
+        t = Participant.from_username('Team')
+        assert not t
