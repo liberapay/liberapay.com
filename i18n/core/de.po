@@ -381,6 +381,10 @@ msgid "'{0}' is not a valid email address."
 msgstr "'{0}' ist keine gültige E-Mail-Adresse."
 
 #, python-brace-format
+msgid "The email address {0} is already connected to your account."
+msgstr ""
+
+#, python-brace-format
 msgid "The password must be at least {0} and at most {1} characters long."
 msgstr "Das Passwort muss zwischen {0} und {1} Zeichen lang sein."
 
@@ -440,6 +444,10 @@ msgid "You are not allowed to do this because your account is currently suspende
 msgstr "Sie können dies nicht tun, weil Ihr Konto zur Zeit suspendiert ist."
 
 #, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr ""
+
+#, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Anscheinend gibt es keinen Nutzer namens {0} auf {1}."
 
@@ -449,6 +457,10 @@ msgstr "Falscher Benutzername oder falsches Passwort."
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
 msgstr "\"{0}\" ist keine gültige E-Mail-Adresse."
+
+#, python-brace-format
+msgid "{0} is linked to a team account. It's not possible to log in as a team."
+msgstr ""
 
 #, python-brace-format
 msgid "We didn't find any account whose primary email address is {0}."
@@ -1464,20 +1476,13 @@ msgstr ""
 
 #, fuzzy
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr ""
-"Wollen Sie den Kontotypen wirklich ändern? Aus rechtlichen Gründen müssen "
-"wir Ihnen ein neues Konto bei unserem Zahlungspartner anlegen und das Geld "
-"von ihrem alten Konto umbuchen."
+msgstr "Wollen Sie den Kontotypen wirklich ändern? Aus rechtlichen Gründen müssen wir Ihnen ein neues Konto bei unserem Zahlungspartner anlegen und das Geld von ihrem alten Konto umbuchen."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr ""
-"Wie können an einem Zahltag nicht Ihren Kontotypen ändern. Bitte versuchen "
-"Sie es später noch einmal."
+msgstr "Wie können an einem Zahltag nicht Ihren Kontotypen ändern. Bitte versuchen Sie es später noch einmal."
 
 msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
-msgstr ""
-"Wollen Sie wirklich Ihre personenbezogenen Daten ändern? Wenn Sie das "
-"machen, dann müssen Sie Ihre Identität erneut verifizieren."
+msgstr "Wollen Sie wirklich Ihre personenbezogenen Daten ändern? Wenn Sie das machen, dann müssen Sie Ihre Identität erneut verifizieren."
 
 msgid "Invalid date of birth."
 msgstr "Ungültiges Geburtsdatum."
@@ -2430,10 +2435,7 @@ msgstr "Gibt es einen minimalen oder maximalen Betrag, den ich spenden oder erha
 
 #, python-brace-format
 msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr ""
-"Es gibt keine Einschränkungen auf den Betrag, den Sie spenden oder erhalten "
-"können. Aber aus rechtlichen Gründen müssen Sie ein Ausweisdokument "
-"vorweisen, wenn Sie im Jahr mehr als {0} spenden oder {1} erhalten wollen."
+msgstr "Es gibt keine Einschränkungen auf den Betrag, den Sie spenden oder erhalten können. Aber aus rechtlichen Gründen müssen Sie ein Ausweisdokument vorweisen, wenn Sie im Jahr mehr als {0} spenden oder {1} erhalten wollen."
 
 #, fuzzy, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
@@ -2889,9 +2891,8 @@ msgstr "Sprache mit dem Namen"
 msgid "Liberapay is a recurrent donations platform."
 msgstr "Liberapay ist eine Plattform für wiederkehrende Spenden."
 
-#, python-brace-format
-msgid "We currently have {0} users donating {1} per month."
-msgstr "Wir haben {0} Benutzer, die {1} pro Monat spenden."
+msgid "We help you fund the creators and projects you appreciate."
+msgstr ""
 
 msgid "Receive"
 msgstr "Erhalten"
@@ -3011,6 +3012,12 @@ msgstr[1] "Es gibt zur Zeit {n} Sponsoren von Liberapay. Dieser Abschnitt ist un
 
 msgid "The list below is rotated pseudorandomly."
 msgstr "Die folgende Liste ist pseudo-zufällig gedreht."
+
+msgid "Thanks"
+msgstr ""
+
+msgid "Liberapay benefits from sponsored accounts on the following open source services:"
+msgstr ""
 
 msgid "Recent Activity"
 msgstr "Letzte Aktivitäten"
