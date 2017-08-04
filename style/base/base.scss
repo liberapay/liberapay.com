@@ -713,3 +713,18 @@ span.help-title {
         background-color: #eee;
     }
 }
+
+.s-logo {
+    display: block;
+    margin: 1.5em 0;
+    & > img {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .s-logo {
+        display: inline-block;
+        margin: 0.8em 3ex;
+    }
+}
