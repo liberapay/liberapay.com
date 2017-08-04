@@ -360,7 +360,7 @@ msgstr "Имя пользователя '{0}' уже занято."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
-msgstr ""
+msgstr "Имя пользователя '{0}' начинается с запрещённого символа."
 
 #, python-brace-format
 msgid "{0} is already connected to a different Liberapay account."
@@ -1009,7 +1009,7 @@ msgid "Mission accomplished!"
 msgstr "Цель достигнута!"
 
 msgid "Share:"
-msgstr "Доля:"
+msgstr "Поделиться:"
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1466,12 +1466,19 @@ msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr ""
+"Вы уверены, что хотите поменять тип аккаунта? В силу юридических причин нам "
+"придётся создать для вас новый аккаунт в платёжной системе наших партнёров, "
+"и перечислить деньги с вашего старого аккаунта."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
 msgstr ""
+"Мы не можем сменить тип аккаунта во время дня выплат, попробуйте ещё раз "
+"через несколько минут."
 
 msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
 msgstr ""
+"Вы уверены, что хотите поменять вашу личную информацию? В этом случае вам "
+"может понадобиться пройти идентификацию личности ещё раз."
 
 msgid "Invalid date of birth."
 msgstr "Неверная дата рождения."
@@ -1886,10 +1893,10 @@ msgid "Account type"
 msgstr "Тип аккаунта"
 
 msgid "modify"
-msgstr ""
+msgstr "изменить"
 
 msgid "not modifiable"
-msgstr ""
+msgstr "не изменяемо"
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
@@ -3007,9 +3014,15 @@ msgstr "Недавняя активность"
 #, python-brace-format
 msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] "В прошлом месяце был создан {n} пользовательский аккаунт. Последний создан {0} тому назад."
-msgstr[1] "В прошлом месяце было создано {n} пользовательских аккаунта. Последний создан {0} тому назад."
-msgstr[2] "В прошлом месяце было создано {n} пользовательских аккаунтов. Последний создан {0} тому назад."
+msgstr[0] ""
+"В прошлом месяце был создан {n} пользовательский аккаунт. Последний создан "
+"{0} назад."
+msgstr[1] ""
+"В прошлом месяце было создано {n} пользовательских аккаунта. Последний "
+"создан {0} назад."
+msgstr[2] ""
+"В прошлом месяце было создано {n} пользовательских аккаунтов. Последний "
+"создан {0} назад."
 
 #, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."

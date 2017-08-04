@@ -360,7 +360,7 @@ msgstr "Der Benutzername '{0}' ist bereits vergeben."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
-msgstr ""
+msgstr "Der Benutzername '{0}' beginnt mit einem unzulässigen Zeichen."
 
 #, python-brace-format
 msgid "{0} is already connected to a different Liberapay account."
@@ -1462,14 +1462,22 @@ msgstr ""
 "\n"
 "Das kann NICHT rückgängig gemacht werden!"
 
+#, fuzzy
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr ""
+"Wollen Sie den Kontotypen wirklich ändern? Aus rechtlichen Gründen müssen "
+"wir Ihnen ein neues Konto bei unserem Zahlungspartner anlegen und das Geld "
+"von ihrem alten Konto umbuchen."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
 msgstr ""
+"Wie können an einem Zahltag nicht Ihren Kontotypen ändern. Bitte versuchen "
+"Sie es später noch einmal."
 
 msgid "Are you sure you want to change your identity information? If you do you may have to go through the identity verification process again."
 msgstr ""
+"Wollen Sie wirklich Ihre personenbezogenen Daten ändern? Wenn Sie das "
+"machen, dann müssen Sie Ihre Identität erneut verifizieren."
 
 msgid "Invalid date of birth."
 msgstr "Ungültiges Geburtsdatum."
@@ -1888,10 +1896,10 @@ msgid "Account type"
 msgstr "Kontotyp"
 
 msgid "modify"
-msgstr ""
+msgstr "Ändern"
 
 msgid "not modifiable"
-msgstr ""
+msgstr "Nicht änderbar"
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
@@ -2422,7 +2430,10 @@ msgstr "Gibt es einen minimalen oder maximalen Betrag, den ich spenden oder erha
 
 #, python-brace-format
 msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr "Es gibt keine Einschränkungen auf die Gesamtmenge geben oder empfangen werden können, aber aus rechtlichen Gründen benötigen Sie Ausweispapiere zu bieten, wenn Sie mehr als {0} geben oder mehr als {1}, pro Jahr erhalten."
+msgstr ""
+"Es gibt keine Einschränkungen auf den Betrag, den Sie spenden oder erhalten "
+"können. Aber aus rechtlichen Gründen müssen Sie ein Ausweisdokument "
+"vorweisen, wenn Sie im Jahr mehr als {0} spenden oder {1} erhalten wollen."
 
 #, fuzzy, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
