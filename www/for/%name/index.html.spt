@@ -104,9 +104,10 @@ title = pretty_name = community.pretty_name
         <p>{{ ngettext("{n} subscriber", "{n} subscribers", community.nsubscribers) }}</p>
     </form>
 
-    <section class="community-sidebar">{{ markdown.render(
-        community.participant.get_statement(request.accept_langs, 'sidebar')[0] or ''
-    ) }}</section>
+    % set sidebar = community.participant.get_statement(request.accept_langs, 'sidebar')
+    <section class="community-sidebar" lang="{{ sidebar.lang or '' }}">{{
+        markdown.render(sidebar.content or '')
+    }}</section>
 
 </div>
 </div>

@@ -10,7 +10,7 @@ title = participant.username
 
 lang = request.qs.get('lang')
 if lang:
-    statement = participant.get_statement([lang])[0]
+    statement = participant.get_statement(lang)
 else:
     statement, lang = participant.get_statement(request.accept_langs)
 
@@ -45,9 +45,11 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             % endfor
             </ul>
         </span>
+        % elif lang != locale.language
+        <span class="pull-right btn-sm">{{ locale.languages_2[lang] }}</span>
         % endif
         </h3>
-        <section class="profile-statement">
+        <section class="profile-statement" lang="{{ lang }}">
             {{ markdown.render(statement) }}
         </section>
     % endif
