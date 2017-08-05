@@ -78,7 +78,7 @@ if request.method == 'POST':
     if account.Id and account.kyc_level != 'LIGHT' and not confirmed:
         confirm = _(
             "Are you sure you want to change your identity information? If you "
-            "do you may have to go through the identity verification process "
+            "do, you may have to go through the identity verification process "
             "again."
         )
         response.render('templates/confirm.spt', state, msg=confirm, back_to='', cls='warning')
