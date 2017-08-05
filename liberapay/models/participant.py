@@ -377,6 +377,7 @@ class Participant(Model, MixinTeam):
         r = self.db.one("""
             UPDATE statements
                SET content=%s
+                 , mtime=now()
              WHERE participant=%s
                AND type=%s
                AND lang=%s
@@ -387,8 +388,8 @@ class Participant(Model, MixinTeam):
             try:
                 self.db.run("""
                     INSERT INTO statements
-                                (lang, content, participant, search_conf, type)
-                         VALUES (%s, %s, %s, %s, %s)
+                                (lang, content, participant, search_conf, type, ctime, mtime)
+                         VALUES (%s, %s, %s, %s, %s, now(), now())
                 """, (lang, statement, self.id, search_conf, type))
             except IntegrityError:
                 return self.upsert_statement(lang, statement)
