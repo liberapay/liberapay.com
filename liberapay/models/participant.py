@@ -386,25 +386,15 @@ class Participant(Model, MixinTeam):
                    AND lang=%s
             """, (self.id, type, lang))
             return
-        r = self.db.one("""
-            UPDATE statements
-               SET content=%s
-                 , mtime=now()
-             WHERE participant=%s
-               AND type=%s
-               AND lang=%s
-         RETURNING true
-        """, (statement, self.id, type, lang))
-        if not r:
-            search_conf = i18n.SEARCH_CONFS.get(lang, 'simple')
-            try:
-                self.db.run("""
-                    INSERT INTO statements
-                                (lang, content, participant, search_conf, type, ctime, mtime)
-                         VALUES (%s, %s, %s, %s, %s, now(), now())
-                """, (lang, statement, self.id, search_conf, type))
-            except IntegrityError:
-                return self.upsert_statement(lang, statement)
+        search_conf = i18n.SEARCH_CONFS.get(lang, 'simple')
+        self.db.run("""
+            INSERT INTO statements
+                        (lang, content, participant, search_conf, type, ctime, mtime)
+                 VALUES (%s, %s, %s, %s, %s, now(), now())
+            ON CONFLICT (participant, type, lang) DO UPDATE
+                    SET content = excluded.content
+                      , mtime = excluded.mtime
+        """, (lang, statement, self.id, search_conf, type))
 
 
     # Stubs
