@@ -194,6 +194,7 @@ def _check_bundles_grouped_by_withdrawal_against_exchanges(cursor):
 
 
 def run_migrations(db):
+    naive_re = re.compile(r';\n(?=[A-Z])')
     v = 0
     db_meta = db.one("SELECT to_regclass('db_meta')")
     if db_meta:
@@ -212,7 +213,8 @@ def run_migrations(db):
             conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             try:
                 cursor = conn.cursor()
-                cursor.execute(sql)
+                for query in naive_re.split(sql):
+                    cursor.execute(query)
             except (IntegrityError, ProgrammingError):
                 traceback.print_exc()
                 r = input('Have you already run this migration? (y/N) ')
