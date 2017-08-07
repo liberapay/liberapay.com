@@ -21,7 +21,7 @@ if request.method == 'POST':
 else:
     lang = request.qs.get('lang')
     if lang:
-        statement = participant.get_statement([lang])[0]
+        statement = participant.get_statement(lang)
     else:
         statement, lang = participant.get_statement(request.accept_langs)
 

@@ -8,10 +8,10 @@ communities_top = query_cache.all("""
     SELECT c.*, replace(name, '_', ' ') AS pretty_name
          , ( SELECT content
                FROM statements
-               JOIN enumerate(string_to_array(%s, ' ')) langs ON langs.value = statements.lang
+          LEFT JOIN enumerate(string_to_array(%s, ' ')) langs ON langs.value = statements.lang
               WHERE participant = c.participant
                 AND type = 'subtitle'
-           ORDER BY langs.rank
+           ORDER BY langs.rank NULLS LAST, statements.id
               LIMIT 1
            ) AS subtitle
       FROM communities c

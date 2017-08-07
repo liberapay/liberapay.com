@@ -19,8 +19,8 @@ if request.method == 'POST':
 else:
     lang = request.qs.get('lang')
     if lang:
-        subtitle = c.participant.get_statement([lang], 'subtitle')[0]
-        sidebar = c.participant.get_statement([lang], 'sidebar')[0]
+        subtitle = c.participant.get_statement(lang, 'subtitle')
+        sidebar = c.participant.get_statement(lang, 'sidebar')
     else:
         subtitle, lang = c.participant.get_statement(request.accept_langs, 'subtitle')
         sidebar, lang = c.participant.get_statement(request.accept_langs, 'sidebar')
