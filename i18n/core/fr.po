@@ -1989,7 +1989,7 @@ msgstr "Le montant qui devrait apparaître sur votre relevé de compte bancaire.
 msgid "Amount in bank"
 msgstr "Montant en banque"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Weekly Payday #{0}"
 msgstr "Payday #{0}"
 
@@ -2553,9 +2553,11 @@ msgstr "Portefeuilles"
 msgid "A user's money is held in their wallets. We currently only support one wallet per user, and only one currency (the euro) in that wallet."
 msgstr "L'argent d'un utilisateur est conservé dans son portefeuille. Nous n'autorisons actuellement qu'un portefeuille par utilisateur, et qu'une seule monnaie (l'euro) dans celui-ci."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Payday is when donations are actually executed. It's a program ({0}this one{1}) that we run every Wednesday."
-msgstr "« Payday » est le nom du programme qui effectue les dons entre les utilisateurs chaque mercredi ({0}code source{1})."
+msgstr ""
+"« Payday » est le nom du programme qui effectue les dons entre les "
+"utilisateurs chaque mercredi ({0}code source{1})."
 
 #, python-brace-format
 msgid "Liberapay was launched {0} ago and has {1} users."
@@ -2565,9 +2567,11 @@ msgstr "Liberapay a été lancé il y a {0} et a {1} utilisateurs."
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} sont stockés dans Liberapay."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr "Le dernier « payday » a eu lieu il y a {0} et a transféré {1} entre {2} utilisateurs."
+msgstr ""
+"Le dernier « payday » a eu lieu il y a {0} et a transféré {1} entre {2} "
+"utilisateurs."
 
 #, python-brace-format
 msgid "{0} participants gave money."
@@ -2644,7 +2648,12 @@ msgstr "Les équipes n'ont pas de hiérarchie, tous les membres sont égaux et d
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Vous pouvez modifier vos parts depuis {0}votre gestionnaire d'équipes{1}. Il contient des tableaux qui montrent les parts nominales de tous les membres pour le prochain et le précédent jours de paie, ainsi qu'une estimation du montant réel d'argent que chaque membre recevra durant le prochain jour de paie."
+msgstr ""
+"Vous pouvez modifier vos parts depuis {0}votre gestionnaire d'équipes{1}. Il "
+"contient des tableaux qui montrent les parts nominales de tous les membres "
+"pour le prochain et le précédent jour de paie, ainsi qu'une estimation du "
+"montant réel d'argent que chaque membre recevra durant le prochain jour de "
+"paie."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, les montants réels sont calculés par le système : d'abord il fait la somme des parts nominales, puis il calcule le pourcentage que chaque part représente, et enfin il applique ces pourcentages au revenu disponible. Les parts nominales agissent aussi en maximums : les montants réels ne sont jamais supérieurs aux montants nominaux, même si le revenu de l'équipe le permettrait."
