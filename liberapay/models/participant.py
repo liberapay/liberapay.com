@@ -798,14 +798,6 @@ class Participant(Model, MixinTeam):
         website.log_email(message)
         return n
 
-    def queue_email(self, spt_name, **context):
-        context = serialize(context)
-        self.db.run("""
-            INSERT INTO email_queue
-                        (participant, spt_name, context)
-                 VALUES (%s, %s, %s)
-        """, (self.id, spt_name, context))
-
     @classmethod
     def dequeue_emails(cls):
         with cls.db.get_cursor() as cursor:
@@ -815,13 +807,16 @@ class Participant(Model, MixinTeam):
     def _dequeue_emails(cls, cursor):
         fetch_messages = lambda last_id: cursor.all("""
             SELECT *
-              FROM email_queue
+              FROM notifications
              WHERE id > %s
+               AND email AND email_sent IS NOT true
           ORDER BY id ASC
              LIMIT 60
         """, (last_id,))
-        delete = lambda m: cls.db.run(
-            "DELETE FROM email_queue WHERE id = %s", (m.id,)
+        dequeue = lambda m: cls.db.run(
+            "DELETE FROM notifications WHERE id = %s" if not m.web else
+            "UPDATE notifications SET email_sent = true WHERE id = %s",
+            (m.id,)
         )
         last_id = 0
         while True:
@@ -833,15 +828,15 @@ class Participant(Model, MixinTeam):
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
                 if not email:
-                    delete(msg)
+                    dequeue(msg)
                     continue
                 try:
-                    r = p.send_email(msg.spt_name, email, **d)
+                    r = p.send_email(msg.event, email, **d)
                     assert r == 1
                 except Exception as e:
                     website.tell_sentry(e, {})
                 else:
-                    delete(msg)
+                    dequeue(msg)
                 sleep(1)
             last_id = messages[-1].id
 
@@ -860,21 +855,18 @@ class Participant(Model, MixinTeam):
     # Notifications
     # =============
 
-    def notify(self, event, force_email=False, web=True, **context):
-        if force_email or self.email_notif_bits & EVENTS.get(event).bit:
-            self.queue_email(event, **context)
-        if web:
-            return self.add_notification(event, **context)
-
-    def add_notification(self, event, **context):
+    def notify(self, event, force_email=False, email=True, web=True, **context):
+        email = email and (force_email or self.email_notif_bits & EVENTS.get(event).bit > 0)
         p_id = self.id
         context = serialize(context)
         n_id = self.db.one("""
-            INSERT INTO notification_queue
-                        (participant, event, context)
-                 VALUES (%(p_id)s, %(event)s, %(context)s)
+            INSERT INTO notifications
+                        (participant, event, context, web, email)
+                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s)
               RETURNING id;
         """, locals())
+        if not web:
+            return n_id
         pending_notifs = self.db.one("""
             UPDATE participants
                SET pending_notifs = pending_notifs + 1
@@ -888,11 +880,12 @@ class Participant(Model, MixinTeam):
         p_id = self.id
         r = self.db.one("""
             WITH updated AS (
-                UPDATE notification_queue
+                UPDATE notifications
                    SET is_new = false
                  WHERE participant = %(p_id)s
                    AND id = %(n_id)s
                    AND is_new
+                   AND web
              RETURNING id
             )
             UPDATE participants
@@ -913,10 +906,11 @@ class Participant(Model, MixinTeam):
 
         r = self.db.one("""
             WITH updated AS (
-                UPDATE notification_queue
+                UPDATE notifications
                    SET is_new = false
                  WHERE participant = %(p_id)s
                    AND is_new
+                   AND web
                    {0}
              RETURNING id
             )
@@ -931,9 +925,10 @@ class Participant(Model, MixinTeam):
         p_id = self.id
         r = self.db.one("""
             WITH deleted AS (
-                DELETE FROM notification_queue
+                DELETE FROM notifications
                  WHERE id = %(n_id)s
                    AND participant = %(p_id)s
+                   AND web
              RETURNING is_new
             )
             UPDATE participants
@@ -963,8 +958,9 @@ class Participant(Model, MixinTeam):
     def get_notifs(self):
         return self.db.all("""
             SELECT id, event, context, is_new, ts
-              FROM notification_queue
+              FROM notifications
              WHERE participant = %s
+               AND web
           ORDER BY is_new DESC, id DESC
         """, (self.id,))
 
@@ -1128,9 +1124,9 @@ class Participant(Model, MixinTeam):
                     for s in cls.get_subscriptions(msg.sender):
                         context = dict(msg.context, unsubscribe_url=s.unsubscribe_url)
                         count += cursor.one("""
-                            INSERT INTO email_queue
-                                        (participant, spt_name, context)
-                                 SELECT p.id, 'newsletter', %s
+                            INSERT INTO notifications
+                                        (participant, event, context, web, email)
+                                 SELECT p.id, 'newsletter', %s, false, true
                                    FROM participants p
                                   WHERE p.id = %s
                                     AND p.email IS NOT NULL
