@@ -94,6 +94,7 @@ EVENTS = [
     Event('team_invite', 32, _("When someone invites me to join a team")),
     Event('payin_bankwire_failed', 64, _("When a bank wire transfer to my Liberapay wallet fails")),
     Event('payin_bankwire_succeeded', 128, _("When a bank wire transfer to my Liberapay wallet succeeds")),
+    Event('payin_bankwire_expired', 256, _("When a bank wire transfer to my Liberapay wallet expires")),
 ]
 check_bits([e.bit for e in EVENTS])
 EVENTS = OrderedDict((e.name, e) for e in EVENTS)

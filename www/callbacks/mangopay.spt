@@ -226,7 +226,9 @@ elif cls:
                 """, e._asdict())
                 if ignore:
                     raise response.json(200, {'notification': 'no (duplicate payin)'})
-            p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
+                p.notify('payin_bankwire_expired', exchange=e._asdict())
+            else:
+                p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
         else:
             raise response.json(200, {'notification': 'no (payin too old)'})
     elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
