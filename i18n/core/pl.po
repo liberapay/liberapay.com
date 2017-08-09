@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-08-08 18:27+0000\n"
+"PO-Revision-Date: 2017-08-09 12:42+0000\n"
 "Last-Translator: Paweł Szymon Kosiński <email@pskosinski.pl>\n"
 "Language-Team: Polish "
 "<https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
@@ -880,7 +880,7 @@ msgid "Wallet"
 msgstr "Portfel"
 
 msgid "Add money"
-msgstr ""
+msgstr "Dodaj pieniądze"
 
 msgid "Withdraw money"
 msgstr "Wypłać pieniądze"
@@ -1012,7 +1012,7 @@ msgid "Modify your donation ({0})"
 msgstr ""
 
 msgid "Donate"
-msgstr "Wesprzyj"
+msgstr "Wspieraj"
 
 msgid "This user doesn't accept donations."
 msgstr "Ten użytkownik nie przyjmuje dotacji."
@@ -2152,6 +2152,8 @@ msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr ""
+"Wyślemy Ci e-mail gdy tylko dowiemy się czy Twoja płatność się powiodła czy "
+"też nie."
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr ""
@@ -2387,7 +2389,7 @@ msgid "To contact us privately:"
 msgstr ""
 
 msgid "Send us an email"
-msgstr ""
+msgstr "Wyślij nam e-mail"
 
 msgid "We are currently able to answer in English and French."
 msgstr ""
@@ -2942,7 +2944,7 @@ msgstr "By otrzymać pieniądze, zrób coś wspaniałego i powiedz o tym innym:"
 
 #, python-brace-format
 msgid "{0}Fill out your profile{1}."
-msgstr ""
+msgstr "{0}Wypełnij swój profil{1}."
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
@@ -2950,6 +2952,8 @@ msgstr ""
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr ""
+"Skontaktuj się z osobami korzystającymi z Twojej pracy i poproś je o "
+"wsparcie."
 
 msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr ""
@@ -2961,41 +2965,51 @@ msgid "How it works for donors"
 msgstr "Z punktu widzenia darczyńcy"
 
 msgid "1. Set up a donation"
-msgstr ""
+msgstr "1. Ustaw dotację"
 
 msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
 msgstr ""
+"Znajdź kogoś komu chcesz przekazywać pieniądze, wybierz kwotę i okres ("
+"tygodniowo, miesięcznie lub rocznie)."
 
 msgid "2. Add money"
-msgstr ""
+msgstr "2. Dodaj pieniądze"
 
 #, python-brace-format
 msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
 msgstr ""
+"Na Liberapay dotacje są fundowane z góry. Ty kontrolujesz ile pieniędzy "
+"złożysz i kiedy. Czym więcej pieniędzy złożysz jedną transakcją tym mniej "
+"wyniosą {0}opłaty za transakcję{1}."
 
 msgid "3. Keep your donation funded"
-msgstr ""
+msgstr "3. Pamiętaj o zasilaniu konta"
 
 msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
 msgstr ""
+"Gdy na Twoim koncie nie będzie już wystarczająco dużo środków by pokryć "
+"wszystkie dotacje, wyślemy Ci powiadomienie e-mailem, byś mógł ponownie "
+"dodać pieniądze. Możesz także anulować dotację."
 
 msgid "How it works for creators"
 msgstr "Z punktu widzenia twórcy"
 
 msgid "1. Create your account"
-msgstr ""
+msgstr "1. Stwórz własne konto"
 
 msgid "An email address is all you'll need. No PayPal account required."
-msgstr ""
+msgstr "Wszystko czego potrzebujesz to adres e-mail. Nie wymagamy konto PayPal."
 
 msgid "2. Fill out your profile"
-msgstr ""
+msgstr "2. Wypełnij swój profil"
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
 msgstr ""
+"Wyjaśnij czym się zajmujesz, dlaczego zdecydowałeś się prosić o dotacje, do "
+"czego użyjesz zebranych pieniędzy, itp."
 
 msgid "3. Reach out to your audience"
-msgstr ""
+msgstr "3. Wyjdź na przeciw publiki"
 
 msgid "How it works internally"
 msgstr "Jak to działa od środka"
@@ -3021,13 +3035,22 @@ msgstr "Sponsorzy"
 #, python-brace-format
 msgid "Donations from businesses and nonprofits are welcome on Liberapay. If you have any questions, don't hesitate to {0}contact us{1}."
 msgstr ""
+"Dotacje od firm i organizacji non-profit są bardzo mile widziane na "
+"Liberapay. Jeśli masz jakiekolwiek pytania śmiało {0}skontaktuj się z "
+"nami{1}."
 
 #, python-brace-format
 msgid "There is currently {n} sponsor on the platform, this section is our way of thanking them."
 msgid_plural "There are currently {n} sponsors on the platform, this section is our way of thanking them."
 msgstr[0] ""
+"Aktualnie platforma ma {n} sponsora, poniższa sekcja jest wyrazem naszych "
+"podziękowań."
 msgstr[1] ""
+"Aktualnie platforma ma {n} sponsorów, poniższa sekcja jest wyrazem naszych "
+"podziękowań."
 msgstr[2] ""
+"Aktualnie platforma ma {n} sponsorów, poniższa sekcja jest wyrazem naszych "
+"podziękowań."
 
 msgid "The list below is rotated pseudorandomly."
 msgstr ""
@@ -3047,29 +3070,57 @@ msgstr "Najnowsze aktywności"
 msgid "{n} user accounts have been created in the past month. The most recent was {0} ago."
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
 msgstr[0] ""
+"{n} konto użytkownika zostało stworzone w ciągu ostatniego miesiąca. "
+"Najnowsze {0} temu."
 msgstr[1] ""
+"{n} konta użytkowników zostały stworzone w ciągu ostatniego miesiąca. "
+"Najnowsze {0} temu."
 msgstr[2] ""
+"{n} kont użytkowników zostało stworzonych w ciągu ostatniego miesiąca. "
+"Najnowsze {0} temu."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
 msgstr[0] ""
+"{n} nowa regularna dotacja została rozpoczęta w ciągu ostatniego miesiąca, "
+"zwiększając całkowitą tygodniową pulę finansowania o {money_amount}."
 msgstr[1] ""
+"{n} nowe regularne dotacje została rozpoczęte w ciągu ostatniego miesiąca, "
+"zwiększając całkowitą tygodniową pulę finansowania o {money_amount}."
 msgstr[2] ""
+"{n} nowych regularnych dotacji została rozpoczętych w ciągu ostatniego "
+"miesiąca, zwiększając całkowitą tygodniową pulę finansowania o "
+"{money_amount}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "{n} nowych {link_open}deklaracji{link_close} zostało złożonych w ciągu ostatniego miesiąca, dodając {money_amount} do puli tygodniowych dotacji, które czekają na wzięcie."
+msgstr[0] ""
+"{n} nowa {link_open}deklaracja{link_close} została złożona w ciągu "
+"ostatniego miesiąca, dodając {money_amount} do puli tygodniowych dotacji, "
+"które czekają na wzięcie."
 msgstr[1] ""
+"{n} nowe {link_open}deklaracje{link_close} zostały złożone w ciągu "
+"ostatniego miesiąca, dodając {money_amount} do puli tygodniowych dotacji, "
+"które czekają na wzięcie."
 msgstr[2] ""
+"{n} nowych {link_open}deklaracji{link_close} zostało złożonych w ciągu "
+"ostatniego miesiąca, dodając {money_amount} do puli tygodniowych dotacji, "
+"które czekają na wzięcie."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
 msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] "{money_amount} zostało przekazanych w ciągu ostatniego tygodnia pomiędzy {n} użytkownikami."
+msgstr[0] ""
+"{money_amount} zostało przekazane w ciągu ostatniego tygodnia pomiędzy {n} "
+"użytkownikami."
 msgstr[1] ""
+"{money_amount} zostały przekazane w ciągu ostatniego tygodnia pomiędzy {n} "
+"użytkownikami."
 msgstr[2] ""
+"{money_amount} zostało przekazanych w ciągu ostatniego tygodnia pomiędzy {n} "
+"użytkownikami."
 
 msgid "More stats"
 msgstr "Więcej statystyk"
