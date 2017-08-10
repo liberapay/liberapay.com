@@ -632,6 +632,43 @@ span.help-title {
     background: transparent;
 }
 
+.alert-header {
+    border-bottom: 1px solid;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: $font-size-base;
+    justify-content: space-between;
+    line-height: $line-height-computed;
+    margin: -15px -15px 11px;
+    padding: 10px 15px 10px;
+    position: relative;
+    & > .title {
+        margin-right: 2ex;
+    }
+    .close {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+    }
+    & > small {
+        font-size: 90%;
+        line-height: inherit;
+        margin-right: 5ex;
+    }
+}
+.alert-danger > .alert-header {
+    border-bottom-color: $state-danger-border;
+}
+.alert-info > .alert-header {
+    border-bottom-color: $state-info-border;
+}
+.alert-success > .alert-header {
+    border-bottom-color: $state-success-border;
+}
+.alert-warning > .alert-header {
+    border-bottom-color: $state-warning-border;
+}
+
 .overlayed {
     position: relative;
     a.overlay {

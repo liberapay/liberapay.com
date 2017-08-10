@@ -962,7 +962,7 @@ class Participant(Model, MixinTeam):
 
     def get_notifs(self):
         return self.db.all("""
-            SELECT id, event, context, is_new
+            SELECT id, event, context, is_new, ts
               FROM notification_queue
              WHERE participant = %s
           ORDER BY is_new DESC, id DESC
@@ -977,16 +977,17 @@ class Participant(Model, MixinTeam):
         notifs = notifs or self.get_notifs()
 
         r = []
-        for id, event, notif_context, is_new in notifs:
+        for id, event, notif_context, is_new, ts in notifs:
             try:
                 notif_context = deserialize(notif_context)
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)
                 spt = website.emails[event]
+                subject = spt['subject'].render(context).strip()
                 html = spt['text/html'].render(context).strip()
                 typ = notif_context.get('type', 'info')
-                r.append(dict(id=id, html=html, type=typ, is_new=is_new))
+                r.append(dict(id=id, subject=subject, html=html, type=typ, is_new=is_new, ts=ts))
             except Exception as e:
                 website.tell_sentry(e, state)
         return r
