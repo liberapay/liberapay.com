@@ -115,6 +115,8 @@ class Platform(object):
                 url += '?' if '?' not in url else '&'
                 url += api_app_auth_params.format(**self.__dict__)
         kw.setdefault('timeout', self.api_timeout)
+        if hasattr(self, 'api_headers'):
+            kw.setdefault('headers', {}).update(self.api_headers)
         response = sess.request(method, url, **kw)
 
         if not is_user_session:
@@ -431,6 +433,8 @@ class PlatformOAuth2(Platform):
 
     can_auth_with_client_credentials = None
 
+    session_class = OAuth2Session
+
     def __init__(self, *args, **kw):
         Platform.__init__(self, *args, **kw)
         if self.can_auth_with_client_credentials:
@@ -441,7 +445,7 @@ class PlatformOAuth2(Platform):
             sess = self.app_sessions.get(domain)
             if not sess:
                 client_id = self.get_credentials(domain)[0]
-                sess = OAuth2Session(client=BackendApplicationClient(client_id))
+                sess = self.session_class(client=BackendApplicationClient(client_id))
                 self.app_sessions[domain] = sess
             if not sess.token:
                 access_token_url = self.access_token_url.format(domain=domain)
@@ -455,10 +459,10 @@ class PlatformOAuth2(Platform):
     def get_auth_session(self, domain, state=None, token=None, token_updater=None):
         callback_url = self.callback_url.format(domain=domain)
         client_id = self.get_credentials(domain)[0]
-        return OAuth2Session(client_id, state=state, token=token,
-                             token_updater=token_updater,
-                             redirect_uri=callback_url,
-                             scope=self.oauth_default_scope)
+        return self.session_class(
+            client_id, state=state, token=token, token_updater=token_updater,
+            redirect_uri=callback_url, scope=self.oauth_default_scope
+        )
 
     def get_auth_url(self, domain, **kw):
         sess = self.get_auth_session(domain)

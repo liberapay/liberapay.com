@@ -292,3 +292,58 @@ google = lambda: {
     }],
     "objectType": "person"
 }
+
+twitch = lambda: {
+    "_id": 44322889,
+    "bio": "Just a gamer playing games and chatting. :)",
+    "created_at": "2013-06-03T19:12:02Z",
+    "display_name": "dallas",
+    "email": "email-address@provider.com",
+    "email_verified": True,
+    "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/dallas-profile_image-1a2c906ee2c35f12-300x300.png",
+    "name": "dallas",
+    "notifications": {
+        "email": False,
+        "push": True
+    },
+    "partnered": False,
+    "twitter_connected": False,
+    "type": "staff",
+    "updated_at": "2016-12-14T01:01:44Z"
+}
+
+youtube = lambda: {
+    "kind": "youtube#channelListResponse",
+    "etag": "\"m2yskBQFythfE4irbTIeOgYYfBU/RRgkDTZYdqaPKhXcfRMXr0TeCTQ\"",
+    "pageInfo": {
+        "totalResults": 1,
+        "resultsPerPage": 1
+    },
+    "items": [
+        {
+            "kind": "youtube#channel",
+            "etag": "\"m2yskBQFythfE4irbTIeOgYYfBU/XIm1NyrN6U0KU-diy-M_tCBVXD0\"",
+            "id": "UCSNwnIgctQU9kQluQu7WrPA",
+            "snippet": {
+                "title": "Liberapay Official",
+                "description": "Liberapay is a platform for recurrent donations, run by a nonprofit organization based in France.",
+                "publishedAt": "2017-02-05T09:09:44.000Z",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://yt3.ggpht.com/-3Aqgv0E2nQg/AAAAAAAAAAI/AAAAAAAAAAA/fELUZkAUgV0/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
+                    },
+                    "medium": {
+                        "url": "https://yt3.ggpht.com/-3Aqgv0E2nQg/AAAAAAAAAAI/AAAAAAAAAAA/fELUZkAUgV0/s240-c-k-no-mo-rj-c0xffffff/photo.jpg"
+                    },
+                    "high": {
+                        "url": "https://yt3.ggpht.com/-3Aqgv0E2nQg/AAAAAAAAAAI/AAAAAAAAAAA/fELUZkAUgV0/s240-c-k-no-mo-rj-c0xffffff/photo.jpg"
+                    }
+                },
+                "localized": {
+                    "title": "Liberapay Official",
+                    "description": "Liberapay is a platform for recurrent donations, run by a nonprofit organization based in France."
+                }
+            }
+        }
+    ]
+}
