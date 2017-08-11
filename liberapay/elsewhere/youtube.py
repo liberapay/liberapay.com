@@ -16,7 +16,7 @@ class Youtube(PlatformOAuth2):
     user_type = 'channel'
 
     # Auth attributes
-    auth_url = 'https://accounts.google.com/o/oauth2/auth'
+    auth_url = 'https://accounts.google.com/o/oauth2/auth?access_type=offline'
     access_token_url = 'https://accounts.google.com/o/oauth2/token'
     oauth_default_scope = ['https://www.googleapis.com/auth/youtube.readonly']
 
