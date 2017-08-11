@@ -5,7 +5,7 @@ interactions:
       "US", "FirstName": "K\u00e0thryn", "Email": "janeway@example.org"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/natural
   response:
     body: {string: "{\"Address\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"FirstName\":\"K\xE0thryn\",\"LastName\":\"Janeway\",\"Birthday\":790214400,\"Nationality\":\"IS\",\"CountryOfResidence\":\"US\",\"Occupation\":null,\"IncomeRange\":null,\"ProofOfIdentity\":null,\"ProofOfAddress\":null,\"Capacity\":\"NORMAL\",\"PersonType\":\"NATURAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"29643572\",\"Tag\":\"/~4/\",\"CreationDate\":1500542772}"}
     headers:
@@ -19,7 +19,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643572/KYC/documents
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643572/KYC/documents
   response:
     body: {string: !!python/unicode '[]'}
     headers:
@@ -36,7 +36,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643572
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643572
   response:
     body: {string: "{\"Address\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"FirstName\":\"K\xE0thryn\",\"LastName\":\"Janeway\",\"Birthday\":790214400,\"Nationality\":\"IS\",\"CountryOfResidence\":\"US\",\"Occupation\":null,\"IncomeRange\":null,\"ProofOfIdentity\":null,\"ProofOfAddress\":null,\"Capacity\":\"NORMAL\",\"PersonType\":\"NATURAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"29643572\",\"Tag\":\"/~4/\",\"CreationDate\":1500542772}"}
     headers:
@@ -50,7 +50,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643572/KYC/documents
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643572/KYC/documents
   response:
     body: {string: !!python/unicode '[]'}
     headers:
@@ -67,7 +67,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643572
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643572
   response:
     body: {string: "{\"Address\":{\"AddressLine1\":null,\"AddressLine2\":null,\"City\":null,\"Region\":null,\"PostalCode\":null,\"Country\":null},\"FirstName\":\"K\xE0thryn\",\"LastName\":\"Janeway\",\"Birthday\":790214400,\"Nationality\":\"IS\",\"CountryOfResidence\":\"US\",\"Occupation\":null,\"IncomeRange\":null,\"ProofOfIdentity\":null,\"ProofOfAddress\":null,\"Capacity\":\"NORMAL\",\"PersonType\":\"NATURAL\",\"Email\":\"janeway@example.org\",\"KYCLevel\":\"LIGHT\",\"Id\":\"29643572\",\"Tag\":\"/~4/\",\"CreationDate\":1500542772}"}
     headers:
@@ -83,7 +83,7 @@ interactions:
       "Kathryn", "Email": "janeway@example.org"}'
     headers: {}
     method: PUT
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural/29643572
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/natural/29643572
   response:
     body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Kathryn","LastName":"Janeway","Birthday":0,"Nationality":"US","CountryOfResidence":"US","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"Capacity":"NORMAL","PersonType":"NATURAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"29643572","Tag":"/~4/","CreationDate":1500542772}'}
     headers:
@@ -97,7 +97,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643572/KYC/documents
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643572/KYC/documents
   response:
     body: {string: !!python/unicode '[]'}
     headers:
@@ -114,7 +114,7 @@ interactions:
     body: '{"Description": "4", "Owners": ["29643572"], "Currency": "EUR"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets
   response:
     body: {string: !!python/unicode '{"Description":"4","Owners":["29643572"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"29643578","Tag":null,"CreationDate":1500542773}'}
     headers:
@@ -128,7 +128,7 @@ interactions:
     body: '{"Currency": "EUR", "UserId": "29643572", "CardType": "CB_VISA_MASTERCARD"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cardregistrations
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cardregistrations
   response:
     body: {string: !!python/unicode '{"Id":"29643579","Tag":null,"CreationDate":1500542773,"UserId":"29643572","AccessKey":"1X0m87dmM2LiwFgxPLBJ","PreregistrationData":"S8HjKhXaPXeNlzbaHMqIvzHbZQ9esrwqVQbdkjz2DjjXD8j1QdAETFCD0LycW-VmS4wCy-yiraxeE65tmxOe8A","RegistrationData":null,"CardId":null,"CardType":"CB_VISA_MASTERCARD","CardRegistrationURL":"https://homologation-webpayment.payline.com/webpayment/getToken","ResultCode":null,"ResultMessage":null,"Currency":"EUR","Status":"CREATED"}'}
     headers:
@@ -142,7 +142,7 @@ interactions:
     body: cardNumber=3569990000000132&cardCvx=123&data=S8HjKhXaPXeNlzbaHMqIvzHbZQ9esrwqVQbdkjz2DjjXD8j1QdAETFCD0LycW-VmS4wCy-yiraxeE65tmxOe8A&cardExpirationDate=1234&accessKeyRef=1X0m87dmM2LiwFgxPLBJ
     headers: {}
     method: POST
-    uri: https://homologation-webpayment.payline.com:443/webpayment/getToken
+    uri: https://homologation-webpayment.payline.com/webpayment/getToken
   response:
     body: {string: !!python/unicode data=h_vedXouHHyTkPJNolkKQALwSK0xuwADI4xBkoO1oH7RlVqpAmJktAvFAf10t2IXqsKQtfuRoSWlNgw-2SkiKaZzvAggk2kcxKwMSxJ4YKd6eaCEkcPylsYfQxmQLY94CF7FtEXlS1-2Mb9wRcudSQ}
     headers:
@@ -162,7 +162,7 @@ interactions:
       "Currency": "EUR", "CreationDate": 1500508800, "PreregistrationData": "S8HjKhXaPXeNlzbaHMqIvzHbZQ9esrwqVQbdkjz2DjjXD8j1QdAETFCD0LycW-VmS4wCy-yiraxeE65tmxOe8A"}'
     headers: {}
     method: PUT
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cardregistrations/29643579
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cardregistrations/29643579
   response:
     body: {string: !!python/unicode '{"Id":"29643579","Tag":null,"CreationDate":1500542773,"UserId":"29643572","AccessKey":"1X0m87dmM2LiwFgxPLBJ","PreregistrationData":"S8HjKhXaPXeNlzbaHMqIvzHbZQ9esrwqVQbdkjz2DjjXD8j1QdAETFCD0LycW-VmS4wCy-yiraxeE65tmxOe8A","RegistrationData":"data=h_vedXouHHyTkPJNolkKQALwSK0xuwADI4xBkoO1oH7RlVqpAmJktAvFAf10t2IXqsKQtfuRoSWlNgw-2SkiKaZzvAggk2kcxKwMSxJ4YKd6eaCEkcPylsYfQxmQLY94CF7FtEXlS1-2Mb9wRcudSQ","CardId":"29643581","CardType":"CB_VISA_MASTERCARD","CardRegistrationURL":"https://homologation-webpayment.payline.com/webpayment/getToken","ResultCode":"000000","ResultMessage":"Success","Currency":"EUR","Status":"VALIDATED"}'}
     headers:
@@ -179,7 +179,7 @@ interactions:
       "29643578"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/payins/card/direct
   response:
     body: {string: !!python/unicode '{"Id":"29643584","Tag":"288788584","CreationDate":1500542774,"AuthorId":"29643572","CreditedUserId":"29643572","DebitedFunds":{"Currency":"EUR","Amount":2065},"CreditedFunds":{"Currency":"EUR","Amount":2000},"Fees":{"Currency":"EUR","Amount":65},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1500542775,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"29643578","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"29643581","SecureModeReturnURL":null,"SecureModeRedirectURL":null,"SecureModeNeeded":false,"StatementDescriptor":null}'}
     headers:
@@ -193,7 +193,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643572
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643572
   response:
     body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Kathryn","LastName":"Janeway","Birthday":0,"Nationality":"US","CountryOfResidence":"US","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"Capacity":"NORMAL","PersonType":"NATURAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"29643572","Tag":"/~4/","CreationDate":1500542772}'}
     headers:
@@ -211,7 +211,7 @@ interactions:
       "US"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/legal
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/legal
   response:
     body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"BUSINESS","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":0,"LegalRepresentativeNationality":"US","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"29643587","Tag":"/~4/","CreationDate":1500542775}'}
     headers:
@@ -225,7 +225,7 @@ interactions:
     body: '{"Description": "4", "Owners": ["29643587"], "Currency": "EUR"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets
   response:
     body: {string: !!python/unicode '{"Description":"4","Owners":["29643587"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"29643588","Tag":null,"CreationDate":1500542776}'}
     headers:
@@ -241,7 +241,7 @@ interactions:
       "EUR", "Amount": 2000}, "AuthorId": "29643572", "CreditedWalletId": "29643588"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/transfers
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/transfers
   response:
     body: {string: !!python/unicode '{"Id":"29643590","Tag":"288788584","CreationDate":1500542776,"AuthorId":"29643572","CreditedUserId":"29643587","DebitedFunds":{"Currency":"EUR","Amount":2000},"CreditedFunds":{"Currency":"EUR","Amount":2000},"Fees":{"Currency":"EUR","Amount":0},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1500542776,"Type":"TRANSFER","Nature":"REGULAR","DebitedWalletId":"29643578","CreditedWalletId":"29643588"}'}
     headers:
@@ -255,7 +255,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643587/KYC/documents
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643587/KYC/documents
   response:
     body: {string: !!python/unicode '[]'}
     headers:
@@ -272,7 +272,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643587
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643587
   response:
     body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"BUSINESS","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":0,"LegalRepresentativeNationality":"US","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"29643587","Tag":"/~4/","CreationDate":1500542775}'}
     headers:
@@ -290,7 +290,7 @@ interactions:
       "US"}'
     headers: {}
     method: PUT
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/legal/29643587
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/legal/29643587
   response:
     body: {string: !!python/unicode '{"HeadquartersAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"LegalRepresentativeAddress":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"Name":"Starfleet","LegalPersonType":"ORGANIZATION","LegalRepresentativeFirstName":"Kathryn","LegalRepresentativeLastName":"Janeway","LegalRepresentativeEmail":null,"LegalRepresentativeBirthday":0,"LegalRepresentativeNationality":"US","LegalRepresentativeCountryOfResidence":"US","ProofOfRegistration":null,"ShareholderDeclaration":null,"Statute":null,"LegalRepresentativeProofOfIdentity":null,"PersonType":"LEGAL","Email":"janeway@example.org","KYCLevel":"LIGHT","Id":"29643587","Tag":"/~4/","CreationDate":1500542775}'}
     headers:
@@ -304,7 +304,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/29643587/KYC/documents
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/29643587/KYC/documents
   response:
     body: {string: !!python/unicode '[]'}
     headers:
@@ -321,7 +321,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cards/29643581
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cards/29643581
   response:
     body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":true,"Currency":"EUR","Validity":"VALID","UserId":"29643572","Id":"29643581","Tag":null,"CreationDate":1500542774,"Fingerprint":"7806f342b2e04993844bd0cb04335ee6"}'}
     headers:
@@ -338,7 +338,7 @@ interactions:
       1500508800, "CardProvider": "MASTERCARD"}'
     headers: {}
     method: PUT
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cards/29643581
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cards/29643581
   response:
     body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":false,"Currency":"EUR","Validity":"VALID","UserId":"29643572","Id":"29643581","Tag":null,"CreationDate":1500542774,"Fingerprint":"7806f342b2e04993844bd0cb04335ee6"}'}
     headers:

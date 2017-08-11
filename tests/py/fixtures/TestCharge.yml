@@ -6,7 +6,7 @@ interactions:
       "CardId": "-1"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/payins/card/direct
   response:
     body: {string: !!python/unicode '{"Message":"One or several required parameters
         are missing or incorrect. An incorrect resource ID also raises this kind of
@@ -23,7 +23,7 @@ interactions:
     body: '{"Currency": "EUR", "Owners": ["20717491"], "Description": "2"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets
   response:
     body: {string: !!python/unicode '{"Description":"2","Owners":["20717491"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"20717543","Tag":null,"CreationDate":1486643891}'}
     headers:
@@ -40,7 +40,7 @@ interactions:
       "CardId": "20717494"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/card/direct
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/payins/card/direct
   response:
     body: {string: !!python/unicode '{"Id":"20717544","Tag":"141066470","CreationDate":1486643891,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"EUR","Amount":5129},"CreditedFunds":{"Currency":"EUR","Amount":5000},"Fees":{"Currency":"EUR","Amount":129},"Status":"SUCCEEDED","ResultCode":"000000","ResultMessage":"Success","ExecutionDate":1486643894,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717543","DebitedWalletId":null,"PaymentType":"CARD","ExecutionType":"DIRECT","SecureMode":"DEFAULT","CardId":"20717494","SecureModeReturnURL":null,"SecureModeRedirectURL":null,"SecureModeNeeded":false,"StatementDescriptor":null}'}
     headers:

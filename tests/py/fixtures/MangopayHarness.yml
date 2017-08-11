@@ -5,7 +5,7 @@ interactions:
       "PersonType": "NATURAL"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/natural
   response:
     body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"David","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"20717489","Tag":null,"CreationDate":1486643834}'}
     headers:
@@ -19,7 +19,7 @@ interactions:
     body: '{"Currency": "EUR", "Owners": ["20717489"], "Description": "test wallet"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets
   response:
     body: {string: !!python/unicode '{"Description":"test wallet","Owners":["20717489"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"20717490","Tag":null,"CreationDate":1486643835}'}
     headers:
@@ -35,7 +35,7 @@ interactions:
       "PersonType": "NATURAL"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/natural
   response:
     body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Janet","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"20717491","Tag":null,"CreationDate":1486643835}'}
     headers:
@@ -49,7 +49,7 @@ interactions:
     body: '{"Currency": "EUR", "Owners": ["20717491"], "Description": "test wallet"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets
   response:
     body: {string: !!python/unicode '{"Description":"test wallet","Owners":["20717491"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"20717492","Tag":null,"CreationDate":1486643835}'}
     headers:
@@ -63,7 +63,7 @@ interactions:
     body: '{"Currency": "EUR", "CardType": "CB_VISA_MASTERCARD", "UserId": "20717491"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cardregistrations
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cardregistrations
   response:
     body: {string: !!python/unicode '{"Id":"20717493","Tag":null,"CreationDate":1486643836,"UserId":"20717491","AccessKey":"1X0m87dmM2LiwFgxPLBJ","PreregistrationData":"3HqPlFutoDFNG4POzHjI-EJvs0hRfGcdwqOkKhA_2caJalbkNxO1w8vGQ7EVYHklS4wCy-yiraxeE65tmxOe8A","RegistrationData":null,"CardId":null,"CardType":"CB_VISA_MASTERCARD","CardRegistrationURL":"https://homologation-webpayment.payline.com/webpayment/getToken","ResultCode":null,"ResultMessage":null,"Currency":"EUR","Status":"CREATED"}'}
     headers:
@@ -77,7 +77,7 @@ interactions:
     body: cardExpirationDate=1234&data=3HqPlFutoDFNG4POzHjI-EJvs0hRfGcdwqOkKhA_2caJalbkNxO1w8vGQ7EVYHklS4wCy-yiraxeE65tmxOe8A&cardNumber=3569990000000132&cardCvx=123&accessKeyRef=1X0m87dmM2LiwFgxPLBJ
     headers: {}
     method: POST
-    uri: https://homologation-webpayment.payline.com:443/webpayment/getToken
+    uri: https://homologation-webpayment.payline.com/webpayment/getToken
   response:
     body: {string: !!python/unicode data=zOuEJSfzxAo1kG_ispVi9ULg7yYLkeFMUYCxEVMRMoBGgcfgbh3J977hrrf95vhP5W33Sc5ADgYtH05up6wRFdc2GAZ6UnizlE2PDw3UzRJLUzpAFJfmVS1nYQ6h6tH6itqiOziq3ql-zEa3CerCpg}
     headers:
@@ -96,7 +96,7 @@ interactions:
       "Currency": "EUR", "CardType": "CB_VISA_MASTERCARD", "CreationDate": 1486598400}'
     headers: {}
     method: PUT
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/cardregistrations/20717493
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cardregistrations/20717493
   response:
     body: {string: !!python/unicode '{"Id":"20717493","Tag":null,"CreationDate":1486643836,"UserId":"20717491","AccessKey":"1X0m87dmM2LiwFgxPLBJ","PreregistrationData":"3HqPlFutoDFNG4POzHjI-EJvs0hRfGcdwqOkKhA_2caJalbkNxO1w8vGQ7EVYHklS4wCy-yiraxeE65tmxOe8A","RegistrationData":"data=zOuEJSfzxAo1kG_ispVi9ULg7yYLkeFMUYCxEVMRMoBGgcfgbh3J977hrrf95vhP5W33Sc5ADgYtH05up6wRFdc2GAZ6UnizlE2PDw3UzRJLUzpAFJfmVS1nYQ6h6tH6itqiOziq3ql-zEa3CerCpg","CardId":"20717494","CardType":"CB_VISA_MASTERCARD","CardRegistrationURL":"https://homologation-webpayment.payline.com/webpayment/getToken","ResultCode":"000000","ResultMessage":"Success","Currency":"EUR","Status":"VALIDATED"}'}
     headers:
@@ -112,7 +112,7 @@ interactions:
       "PersonType": "NATURAL"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/natural
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/natural
   response:
     body: {string: !!python/unicode '{"Address":{"AddressLine1":null,"AddressLine2":null,"City":null,"Region":null,"PostalCode":null,"Country":null},"FirstName":"Homer","LastName":"Foobar","Birthday":0,"Nationality":"BE","CountryOfResidence":"BE","Occupation":null,"IncomeRange":null,"ProofOfIdentity":null,"ProofOfAddress":null,"PersonType":"NATURAL","Email":"nobody@example.net","KYCLevel":"LIGHT","Id":"20717495","Tag":null,"CreationDate":1486643837}'}
     headers:
@@ -126,7 +126,7 @@ interactions:
     body: '{"Currency": "EUR", "Owners": ["20717495"], "Description": "test wallet"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets
   response:
     body: {string: !!python/unicode '{"Description":"test wallet","Owners":["20717495"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"20717496","Tag":null,"CreationDate":1486643837}'}
     headers:
@@ -143,7 +143,7 @@ interactions:
       "Type": "IBAN"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/users/20717495/bankaccounts/IBAN
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717495/bankaccounts/IBAN
   response:
     body: {string: !!python/unicode '{"OwnerAddress":{"AddressLine1":"Somewhere","AddressLine2":null,"City":"The
         City of Light","Region":null,"PostalCode":"75001","Country":"FR"},"IBAN":"FR1420041010050500013M02606","BIC":"PSSTFRPPLIL","UserId":"20717495","OwnerName":"Homer
