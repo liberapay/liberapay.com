@@ -84,6 +84,14 @@ if [ -e sql/branch.sql ]; then
     git add sql/{schema,migrations,app-conf-*}.sql
     git commit -m "merge branch.sql"
 
+    # Check modifications to schema.sql
+    echo "Testing sql/schema.sql..."
+    while ! make test-schema; do
+        read -p "Please fix sql/schema.sql, then press Enter to continue... " enter
+        echo "Retesting sql/schema.sql..."
+    done
+    echo "Done. sql/schema.sql seems to be okay."
+
     # Deployment options
     if yesno "Should branch.sql be applied before deploying instead of after?"; then
         run_sql="before"
