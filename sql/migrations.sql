@@ -549,3 +549,7 @@ ALTER TABLE statements
 ALTER TABLE statements
     ALTER COLUMN ctime DROP DEFAULT,
     ALTER COLUMN mtime DROP DEFAULT;
+
+-- migration #44
+ALTER TABLE notification_queue ADD COLUMN ts timestamptz;
+ALTER TABLE notification_queue ALTER COLUMN ts SET DEFAULT now();
