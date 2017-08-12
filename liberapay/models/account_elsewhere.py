@@ -244,7 +244,7 @@ class AccountElsewhere(Model):
             UPDATE elsewhere
                SET token = %s
              WHERE id=%s
-        """, (token, self.id))
+        """, (json.dumps(token), self.id))
         self.set_attributes(token=token)
 
 

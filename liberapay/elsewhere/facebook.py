@@ -16,6 +16,7 @@ class Facebook(PlatformOAuth2):
     # Auth attributes
     auth_url = 'https://www.facebook.com/dialog/oauth'
     access_token_url = 'https://graph.facebook.com/oauth/access_token'
+    refresh_token_url = None
     oauth_default_scope = ['public_profile,email,user_friends']
 
     # API attributes

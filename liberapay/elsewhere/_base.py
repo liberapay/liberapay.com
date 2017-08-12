@@ -458,9 +458,15 @@ class PlatformOAuth2(Platform):
 
     def get_auth_session(self, domain, state=None, token=None, token_updater=None):
         callback_url = self.callback_url.format(domain=domain)
-        client_id = self.get_credentials(domain)[0]
+        client_id, client_secret = self.get_credentials(domain)
+        credentials = dict(client_id=client_id, client_secret=client_secret)
+        if token and token.get('refresh_token'):
+            refresh_url = getattr(self, 'refresh_token_url', self.access_token_url)
+        else:
+            refresh_url = None
         return self.session_class(
             client_id, state=state, token=token, token_updater=token_updater,
+            auto_refresh_url=refresh_url, auto_refresh_kwargs=credentials,
             redirect_uri=callback_url, scope=self.oauth_default_scope
         )
 
