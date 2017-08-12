@@ -217,9 +217,13 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
     def test_payin_bank_wire_callback(self, Get):
         homer = self.homer
         route = ExchangeRoute.insert(homer, 'mango-bw', 'x')
-        for status in ('failed', 'succeeded'):
+        cases = (
+            ('failed', '000001', 'FOO'),
+            ('failed', '101109', 'The payment period has expired'),
+            ('succeeded', '000000', None),
+        )
+        for status, result_code, error in cases:
             status_up = status.upper()
-            error = 'FOO' if status == 'failed' else None
             e_id = record_exchange(self.db, route, 11, 0, 0, homer, 'pre')
             assert homer.balance == 0
             homer.close(None)
@@ -227,7 +231,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             qs = "EventType=PAYIN_NORMAL_"+status_up+"&RessourceId=123456790"
             payin = BankWirePayIn()
             payin.Status = status_up
-            payin.ResultCode = '000001' if error else '000000'
+            payin.ResultCode = result_code
             payin.ResultMessage = error
             payin.AuthorId = homer.mangopay_user_id
             payin.PaymentType = 'BANK_WIRE'
@@ -248,7 +252,8 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             emails = self.get_emails()
             assert len(emails) == 1
             assert emails[0]['to'][0] == 'homer <%s>' % homer.email
-            assert status[:4] in emails[0]['subject']
+            expected = 'expired' if result_code == '101109' else status[:4]
+            assert expected in emails[0]['subject']
             self.db.self_check()
             homer.update_status('active')  # reset for next loop run
 

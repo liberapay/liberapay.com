@@ -808,17 +808,24 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def dequeue_emails(cls):
-        fetch_messages = lambda: cls.db.all("""
+        with cls.db.get_cursor() as cursor:
+            cls._dequeue_emails(cursor)
+
+    @classmethod
+    def _dequeue_emails(cls, cursor):
+        fetch_messages = lambda last_id: cursor.all("""
             SELECT *
               FROM email_queue
+             WHERE id > %s
           ORDER BY id ASC
              LIMIT 60
-        """)
+        """, (last_id,))
         delete = lambda m: cls.db.run(
             "DELETE FROM email_queue WHERE id = %s", (m.id,)
         )
+        last_id = 0
         while True:
-            messages = fetch_messages()
+            messages = fetch_messages(last_id)
             if not messages:
                 break
             for msg in messages:
@@ -836,6 +843,7 @@ class Participant(Model, MixinTeam):
                 else:
                     delete(msg)
                 sleep(1)
+            last_id = messages[-1].id
 
     def set_email_lang(self, accept_lang, cursor=None):
         if not accept_lang:
@@ -954,7 +962,7 @@ class Participant(Model, MixinTeam):
 
     def get_notifs(self):
         return self.db.all("""
-            SELECT id, event, context, is_new
+            SELECT id, event, context, is_new, ts
               FROM notification_queue
              WHERE participant = %s
           ORDER BY is_new DESC, id DESC
@@ -969,16 +977,17 @@ class Participant(Model, MixinTeam):
         notifs = notifs or self.get_notifs()
 
         r = []
-        for id, event, notif_context, is_new in notifs:
+        for id, event, notif_context, is_new, ts in notifs:
             try:
                 notif_context = deserialize(notif_context)
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)
                 spt = website.emails[event]
+                subject = spt['subject'].render(context).strip()
                 html = spt['text/html'].render(context).strip()
                 typ = notif_context.get('type', 'info')
-                r.append(dict(id=id, html=html, type=typ, is_new=is_new))
+                r.append(dict(id=id, subject=subject, html=html, type=typ, is_new=is_new, ts=ts))
             except Exception as e:
                 website.tell_sentry(e, state)
         return r

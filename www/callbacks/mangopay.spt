@@ -213,7 +213,24 @@ elif cls:
     # Notify the user
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
         if e.timestamp > (utcnow() - NOTIFICATION_TIMEOUT):
-            p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
+            expired = payio.ResultCode == '101109'
+            if expired:
+                ignore = website.db.one("""
+                    SELECT count(*) > 0 AS ignore
+                      FROM exchanges e
+                     WHERE e.participant = %(participant)s
+                       AND e.amount > 0
+                       AND e.status = 'succeeded'
+                       AND e.timestamp > %(timestamp)s - INTERVAL '20 minutes'
+                       AND e.timestamp < %(timestamp)s + INTERVAL '12 hours'
+                """, e._asdict())
+                if ignore:
+                    raise response.json(200, {'notification': 'no (duplicate payin)'})
+                p.notify('payin_bankwire_expired', exchange=e._asdict())
+            else:
+                p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
+        else:
+            raise response.json(200, {'notification': 'no (payin too old)'})
     elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
         p.notify('withdrawal_'+status, exchange=e._asdict(), force_email=reopen)
     elif event == 'PAYOUT_REFUND' and status == 'succeeded':
