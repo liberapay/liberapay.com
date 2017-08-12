@@ -207,12 +207,11 @@ class Platform(object):
         extract the relevant information by calling the platform's extractors
         (`x_user_name`, `x_user_id`, etc).
 
-        `source` must be the domain from which the data was obtained. If it
-        doesn't match the account's domain, then the returned object only
-        contains the account's `domain` and `user_name`, nothing else.
+        `source` must be the domain from which the data was obtained.
 
         Returns a `UserInfo`. The `user_id` attribute is guaranteed to have a
-        unique non-empty value.
+        unique non-empty value, except when `source` doesn't match the account's
+        domain, in which case `user_id` is `None`.
         """
         r = UserInfo(platform=self.name)
         info = self.x_user_info(r, info, info)
@@ -227,10 +226,9 @@ class Platform(object):
             r.user_id = self.x_user_id(r, info)
         else:
             r.user_id = None
-            return r
-        assert r.user_id is not None
-        r.user_id = str(r.user_id)
-        assert len(r.user_id) > 0
+        if r.user_id is not None:
+            r.user_id = str(r.user_id)
+            assert len(r.user_id) > 0
         r.display_name = self.x_display_name(r, info, None)
         r.email = self.x_email(r, info, None)
         r.avatar_url = self.x_avatar_url(r, info, None)
@@ -269,7 +267,7 @@ class Platform(object):
         path = getattr(self, path, None)
         if not path:
             raise NotImplementedError(
-                "%s lookup is not available for %s" % (self.display_name, key)
+                "%s lookup is not available for %s" % (key, self.display_name)
             )
         path = path.format(**{key: quote(value), 'domain': domain})
         def error_handler(response, is_user_session, domain):

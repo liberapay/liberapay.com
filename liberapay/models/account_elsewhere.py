@@ -268,7 +268,7 @@ def get_account_elsewhere(website, state, api_lookup=True):
         account = AccountElsewhere._from_thing(key, platform.name, uid, domain)
     except UnknownAccountElsewhere:
         account = None
-    if not account or not account.user_id:
+    if not account:
         if not account and not api_lookup:
             raise response.error(404)
         try:
