@@ -521,7 +521,7 @@ CREATE TABLE notification_queue
 , event         text     NOT NULL
 , context       bytea    NOT NULL
 , is_new        boolean  NOT NULL DEFAULT TRUE
-, ts            timestamptz  DEFAULT now();
+, ts            timestamptz  DEFAULT now()
 );
 
 
