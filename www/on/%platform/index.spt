@@ -14,7 +14,7 @@ platform = getattr(website.platforms, request.path['platform'], None)
 if platform is None or platform not in website.friends_platforms:
     raise response.error(404)
 
-title = _("Friend Finder")
+title = _("Social Explorer")
 subhead = platform.display_name
 
 account = None

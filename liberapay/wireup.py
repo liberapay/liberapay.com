@@ -157,6 +157,8 @@ class AppConf(object):
         smtp_username=str,
         smtp_password=str,
         smtp_use_tls=bool,
+        twitch_id=str,
+        twitch_secret=str,
         twitter_callback=str,
         twitter_id=str,
         twitter_secret=str,
@@ -370,11 +372,20 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
         if hasattr(cls, 'register_app'):
             callback_url = canonical_url + '/on/' + cls.name + ':{domain}/associate'
             platforms.append(cls(None, None, callback_url, **conf))
+        elif hasattr(cls, 'based_on'):
+            based_on = cls.based_on
+            callback_url = canonical_url + '/on/' + cls.name + '/associate'
+            platforms.append(cls(
+                getattr(app_conf, based_on + '_id'),
+                getattr(app_conf, based_on + '_secret'),
+                callback_url,
+                **conf
+            ))
         else:
             platforms.append(cls(
                 conf.pop('id'),
                 conf.pop('secret'),
-                conf.pop('callback'),
+                conf.pop('callback', canonical_url + '/on/' + cls.name + '/associate'),
                 **conf
             ))
 

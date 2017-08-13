@@ -5,7 +5,7 @@ interactions:
       "EUR", "Amount": 1006}}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/bankwire/direct
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/payins/bankwire/direct
   response:
     body: {string: !!python/unicode '{"Id":"20717550","Tag":"47472655","CreationDate":1486643895,"ResultCode":null,"ResultMessage":null,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":null,"CreditedFunds":null,"Fees":null,"Status":"CREATED","ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null,"PaymentType":"BANK_WIRE","ExecutionType":"DIRECT","DeclaredDebitedFunds":{"Currency":"EUR","Amount":1006},"DeclaredFees":{"Currency":"EUR","Amount":6},"WireReference":"07e196626d","BankAccount":{"OwnerAddress":{"AddressLine1":"1
         Mango Street","AddressLine2":null,"City":"Paris","Region":null,"PostalCode":"75010","Country":"FR"},"Type":"IBAN","OwnerName":"MANGOPAY","IBAN":"FR7618829754160173622224251","BIC":"CMBRFR2BCME"}}'}
@@ -20,7 +20,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/payins/20717550
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/payins/20717550
   response:
     body: {string: !!python/unicode '{"Id":"20717550","Tag":"47472655","CreationDate":1486643895,"ResultCode":null,"ResultMessage":null,"AuthorId":"20717491","CreditedUserId":"20717491","DebitedFunds":{"Currency":"XXX","Amount":0},"CreditedFunds":{"Currency":"XXX","Amount":0},"Fees":{"Currency":"XXX","Amount":0},"Status":"CREATED","ExecutionDate":null,"Type":"PAYIN","Nature":"REGULAR","CreditedWalletId":"20717492","DebitedWalletId":null,"PaymentType":"BANK_WIRE","ExecutionType":"DIRECT","DeclaredDebitedFunds":{"Currency":"EUR","Amount":1006},"DeclaredFees":{"Currency":"EUR","Amount":6},"WireReference":"07e196626d","BankAccount":{"OwnerAddress":{"AddressLine1":"1
         Mango Street","AddressLine2":null,"City":"Paris","Region":null,"PostalCode":"75010","Country":"FR"},"Type":"IBAN","OwnerName":"MANGOPAY","IBAN":"FR7618829754160173622224251","BIC":"CMBRFR2BCME"}}'}
@@ -35,7 +35,7 @@ interactions:
     body: '{"Currency": "EUR", "Owners": ["20717491"], "Description": "2"}'
     headers: {}
     method: POST
-    uri: https://api.sandbox.mangopay.com:443/v2.01/liberapay-dev/wallets
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/wallets
   response:
     body: {string: !!python/unicode '{"Description":"2","Owners":["20717491"],"Balance":{"Currency":"EUR","Amount":0},"Currency":"EUR","FundsType":"DEFAULT","Id":"20717552","Tag":null,"CreationDate":1486643896}'}
     headers:

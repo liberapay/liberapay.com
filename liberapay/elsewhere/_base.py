@@ -115,6 +115,8 @@ class Platform(object):
                 url += '?' if '?' not in url else '&'
                 url += api_app_auth_params.format(**self.__dict__)
         kw.setdefault('timeout', self.api_timeout)
+        if hasattr(self, 'api_headers'):
+            kw.setdefault('headers', {}).update(self.api_headers)
         response = sess.request(method, url, **kw)
 
         if not is_user_session:
@@ -205,12 +207,11 @@ class Platform(object):
         extract the relevant information by calling the platform's extractors
         (`x_user_name`, `x_user_id`, etc).
 
-        `source` must be the domain from which the data was obtained. If it
-        doesn't match the account's domain, then the returned object only
-        contains the account's `domain` and `user_name`, nothing else.
+        `source` must be the domain from which the data was obtained.
 
         Returns a `UserInfo`. The `user_id` attribute is guaranteed to have a
-        unique non-empty value.
+        unique non-empty value, except when `source` doesn't match the account's
+        domain, in which case `user_id` is `None`.
         """
         r = UserInfo(platform=self.name)
         info = self.x_user_info(r, info, info)
@@ -225,10 +226,9 @@ class Platform(object):
             r.user_id = self.x_user_id(r, info)
         else:
             r.user_id = None
-            return r
-        assert r.user_id is not None
-        r.user_id = str(r.user_id)
-        assert len(r.user_id) > 0
+        if r.user_id is not None:
+            r.user_id = str(r.user_id)
+            assert len(r.user_id) > 0
         r.display_name = self.x_display_name(r, info, None)
         r.email = self.x_email(r, info, None)
         r.avatar_url = self.x_avatar_url(r, info, None)
@@ -267,7 +267,7 @@ class Platform(object):
         path = getattr(self, path, None)
         if not path:
             raise NotImplementedError(
-                "%s lookup is not available for %s" % (self.display_name, key)
+                "%s lookup is not available for %s" % (key, self.display_name)
             )
         path = path.format(**{key: quote(value), 'domain': domain})
         def error_handler(response, is_user_session, domain):
@@ -431,6 +431,8 @@ class PlatformOAuth2(Platform):
 
     can_auth_with_client_credentials = None
 
+    session_class = OAuth2Session
+
     def __init__(self, *args, **kw):
         Platform.__init__(self, *args, **kw)
         if self.can_auth_with_client_credentials:
@@ -441,7 +443,7 @@ class PlatformOAuth2(Platform):
             sess = self.app_sessions.get(domain)
             if not sess:
                 client_id = self.get_credentials(domain)[0]
-                sess = OAuth2Session(client=BackendApplicationClient(client_id))
+                sess = self.session_class(client=BackendApplicationClient(client_id))
                 self.app_sessions[domain] = sess
             if not sess.token:
                 access_token_url = self.access_token_url.format(domain=domain)
@@ -454,11 +456,17 @@ class PlatformOAuth2(Platform):
 
     def get_auth_session(self, domain, state=None, token=None, token_updater=None):
         callback_url = self.callback_url.format(domain=domain)
-        client_id = self.get_credentials(domain)[0]
-        return OAuth2Session(client_id, state=state, token=token,
-                             token_updater=token_updater,
-                             redirect_uri=callback_url,
-                             scope=self.oauth_default_scope)
+        client_id, client_secret = self.get_credentials(domain)
+        credentials = dict(client_id=client_id, client_secret=client_secret)
+        if token and token.get('refresh_token'):
+            refresh_url = getattr(self, 'refresh_token_url', self.access_token_url)
+        else:
+            refresh_url = None
+        return self.session_class(
+            client_id, state=state, token=token, token_updater=token_updater,
+            auto_refresh_url=refresh_url, auto_refresh_kwargs=credentials,
+            redirect_uri=callback_url, scope=self.oauth_default_scope
+        )
 
     def get_auth_url(self, domain, **kw):
         sess = self.get_auth_session(domain)
