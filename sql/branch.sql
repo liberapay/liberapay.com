@@ -1,4 +1,3 @@
--- [before deployment]
 BEGIN;
     ALTER TABLE notification_queue
         ADD COLUMN email boolean NOT NULL DEFAULT FALSE,
@@ -11,7 +10,7 @@ BEGIN;
         WHERE (email AND email_sent IS NOT true);
 END;
 
--- [after deployment]
+SELECT 'after deployment';
 BEGIN;
     LOCK TABLE email_queue IN ACCESS EXCLUSIVE MODE;
     DROP VIEW notification_queue;
@@ -47,7 +46,5 @@ BEGIN;
     SELECT (SELECT count(*) FROM deleted) AS n_deleted
          , (SELECT count(*) FROM updated) AS n_updated
          , (SELECT count(*) FROM inserted) AS n_inserted;
+    DROP TABLE email_queue;
 END;
-
--- [later]
-DROP TABLE email_queue;  -- make sure it's empty first

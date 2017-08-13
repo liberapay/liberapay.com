@@ -20,6 +20,14 @@ yesno () {
     return 0
 }
 
+read_after () {
+    while read line; do [ "$line" = "$1" ] && break; done; cat
+}
+
+read_until () {
+    while read line; do [ "$line" = "$1" ] && break || echo "$line"; done
+}
+
 require () {
     if [ ! `which $1` ]; then
         echo "The '$1' command was not found."
@@ -45,6 +53,8 @@ prev="$(git describe --tags --match '[0-9]*' | cut -d- -f1)"
 version="$((prev + 1))"
 
 # Check for a branch.sql
+branch_after=sql/branch-after.sql
+branch_before=sql/branch-before.sql
 if [ -e sql/branch.sql ]; then
     if [ "$(git show :sql/branch.sql)" != "$(<sql/branch.sql)" ]; then
         echo "sql/branch.sql has been modifed" && exit 1
@@ -92,30 +102,55 @@ if [ -e sql/branch.sql ]; then
     done
     echo "Done. sql/schema.sql seems to be okay."
 
-    # Deployment options
-    if yesno "Should branch.sql be applied before deploying instead of after?"; then
-        run_sql="before"
+    # Deployment stages
+    echo "Splitting $branch_c in two..."
+    cat $branch_c | read_until "SELECT 'after deployment';" >$branch_before
+    cat $branch_c | read_after "SELECT 'after deployment';" >$branch_after
+    if [ -s $branch_before -o -s $branch_after ]; then
+        echo "Done. Here is the result:" ; echo
+        if [ -s $branch_before ]; then
+            echo "--> $branch_before contains:" ; cat $branch_before ; echo
+        else
+            echo "--> $branch_before is empty"
+        fi
+        if [ -s $branch_after ]; then
+            echo "--> $branch_after contains:" ; cat $branch_after ; echo
+        else
+            echo "--> $branch_after is empty" ; echo
+        fi
     else
-        run_sql="after"
+        echo "failure! $branch_before and $branch_after are both empty!"
+        exit 1
     fi
+
+    rm $branch_c
 fi
+run_schema_diff="$(test -s $branch_before -o -s $branch_after && echo "yes")"
 
 # Ask confirmation and bump the version
 yesno "Tag and deploy version $version?" || exit
 git tag $version
 
 # Deploy
-[ "${run_sql-}" = "before" ] && eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_c
+if [ -s $branch_before ]; then
+    echo "Running $branch_before..."
+    eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_before
+fi
+[ -e $branch_before ] && rm $branch_before
 eb deploy liberapay-prod --label $version
-[ "${run_sql-}" = "after" ] && eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_c
-[ "${branch_c-}" != "" ] && rm -f $branch_c
+if [ -s $branch_after ]; then
+    echo "Running $branch_after..."
+    eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_after
+fi
+[ -e $branch_after ] && rm $branch_after
 
 # Push to GitHub
 git push
 git push --tags
 
 # Check for schema drift
-if [[ ${run_sql-} ]]; then
+if [ "$run_schema_diff" = 'yes' ]; then
+    echo "Checking for schema drift..."
     if ! make schema-diff; then
         echo "schema.sql doesn't match the production DB, please fix it"
         exit 1
