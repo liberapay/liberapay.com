@@ -81,7 +81,7 @@ if [ -e sql/branch.sql ]; then
     # Merge branch.sql into migrations.sql
     out=sql/migrations.sql
     echo -e '\n-- migration' "#$new_version" >>$out
-    ./env/bin/python -c "print(open('$branch_c').read().strip())" >>$out
+    echo "$(<$branch_c)" | head --lines=-1 >>$out
 
     # Merge branch.sql into schema.sql
     sed -i -r -e "s/$schema_version_re/\1 '$new_version'/" sql/schema.sql
