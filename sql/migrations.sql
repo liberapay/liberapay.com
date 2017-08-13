@@ -553,3 +553,8 @@ ALTER TABLE statements
 -- migration #44
 ALTER TABLE notification_queue ADD COLUMN ts timestamptz;
 ALTER TABLE notification_queue ALTER COLUMN ts SET DEFAULT now();
+
+-- migration #45
+INSERT INTO app_conf (key, value) VALUES
+    ('twitch_id', '"9ro3g4slh0de5yijy6rqb2p0jgd7hi"'::jsonb),
+    ('twitch_secret', '"o090sc7828d7gljtrqc5n4vcpx3bfx"'::jsonb);
