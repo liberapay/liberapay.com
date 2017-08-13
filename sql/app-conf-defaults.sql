@@ -47,6 +47,8 @@ INSERT INTO app_conf (key, value) VALUES
     ('s3_region', '"eu-west-1"'::jsonb),
     ('send_newsletters_every', '60'::jsonb),
     ('socket_timeout', '10.0'::jsonb),
+    ('twitch_id', '"9ro3g4slh0de5yijy6rqb2p0jgd7hi"'::jsonb),
+    ('twitch_secret', '"o090sc7828d7gljtrqc5n4vcpx3bfx"'::jsonb),
     ('twitter_callback', '"http://127.0.0.1:8339/on/twitter/associate"'::jsonb),
     ('twitter_id', '"h8bBZtoPNz63S5RkZdbo9R5zb"'::jsonb),
     ('twitter_secret', '"Jye64vkWxa2dQu64feTnk0BM3j4JO8ZlTa4EQvMDwrweLkwPaw"'::jsonb);
