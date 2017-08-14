@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-08-14 08:48+0000\n"
+"PO-Revision-Date: 2017-08-14 08:53+0000\n"
 "Last-Translator: pskosinski <email@pskosinski.pl>\n"
 "Language-Team: Polish "
 "<https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
@@ -440,7 +440,9 @@ msgid "The transaction's fee would exceed its amount."
 msgstr "Opłata za transakcję przekroczyłaby jej wartość."
 
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
-msgstr "Przykro nam, ale trwa właśnie payday i nie możemy wypłacać pieniędzy podczas tego procesu. Spróbuj ponownie za kilka godzin."
+msgstr ""
+"Przykro nam, ale trwa właśnie dzień wypłaty (payday) i nie możemy wypłacać "
+"pieniędzy podczas tego procesu. Spróbuj ponownie za kilka godzin."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1505,7 +1507,9 @@ msgid "Are you sure you want to change the type of your account? For legal reaso
 msgstr "Czy jesteś pewien, że chcesz zmienić typ Twojego konta? Ze względów prawnych będziemy musieli stworzyć dla Ciebie nowe konto w systemie naszego partnera płatności i przetransferować pieniądze z Twojego starego konta."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr "Nie możemy zmienić typu Twojego konta gdy trwa payday, spróbuj ponownie za kilka minut."
+msgstr ""
+"Nie możemy zmienić typu Twojego konta gdy trwa dzień wypłaty (payday), "
+"spróbuj ponownie za kilka minut."
 
 msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
 msgstr "Czy na pewno chcesz zmienić informacje na temat Twojej tożsamości? Jeśli tak, być może będziesz musiał przejść ponownie proces weryfikacji tożsamości."
@@ -1860,7 +1864,9 @@ msgid "Try Again Later"
 msgstr "Spróbuj ponownie później"
 
 msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Przykro nam, ale trwa właśnie payday i nie możemy zamykać kont podczas tego procesu. Spróbuj ponownie za kilka godzin."
+msgstr ""
+"Przykro nam, ale trwa właśnie dzień wypłaty (payday) i nie możemy zamykać "
+"kont podczas tego procesu. Spróbuj ponownie za kilka godzin."
 
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
@@ -2466,7 +2472,11 @@ msgstr "Nie ma ograniczeń co do całkowitej wysokości dotacji które przekazuj
 
 #, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "Minimum jakie możesz przekazywać innemu użytkownikowi to {0}. By zminimalizować koszty obsługi płatności pobieramy z Twojej karty kredytowej jednorazowo co najmniej {1} (pieniądze są przechowywane w Twoim portfelu Liberapay i przesyłane do innych podczas payday)."
+msgstr ""
+"Minimum jakie możesz przekazywać innemu użytkownikowi to {0}. By "
+"zminimalizować koszty obsługi płatności pobieramy z Twojej karty kredytowej "
+"jednorazowo co najmniej {1} (pieniądze są przechowywane w Twoim portfelu "
+"Liberapay i przesyłane do innych podczas dnia wypłaty, znanego jako payday)."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
@@ -2608,7 +2618,9 @@ msgstr "{0} jest zdeponowane na Liberapay."
 
 #, python-brace-format
 msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr "Ostatni payday miał miejsce {0} temu i przesłano wtedy {1} pomiędzy {2} użytkownikami."
+msgstr ""
+"Ostatni dzień wypłaty (payday) miał miejsce {0} temu i przesłano wtedy {1} "
+"pomiędzy {2} użytkownikami."
 
 #, python-brace-format
 msgid "{0} participants gave money."
@@ -2686,7 +2698,12 @@ msgstr "Zespoły nie mają hierarchii, wszyscy członkowie są równi i ustawiaj
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Możesz zmienić wysokość Twoich poborów z poziomu {0}Twojego kokpitu zespołów{1}. Zawiera on tabele pokazujące nominalne pobory wszystkich członków podczas następnego i poprzedniego payday'a, jak i prognozy rzeczywistych kwot jakie oni otrzymają podczas następnego payday'a."
+msgstr ""
+"Możesz zmienić wysokość Twoich poborów z poziomu {0}Twojego kokpitu "
+"zespołów{1}. Zawiera on tabele pokazujące nominalne pobory wszystkich "
+"członków podczas następnego i poprzedniego dnia wypłaty (payday), jak i "
+"prognozy rzeczywistych kwot jakie oni otrzymają podczas następnego dnia "
+"wypłaty."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nominalne pobory to surowe liczby wprowadzane przez samych członków, natomiast rzeczywiste pobory są wyliczane w następujący sposób: najpierw wszystkie nominalne pobory są do siebie dodawane, następnie oblicza się jaki procent każdy pobór reprezentuje i na koniec na podstawie tych procentów dzielony jest dostępny przychód. Nominalne pobory to wartości maksymalne: rzeczywiste pobory nigdy nie są wyższe niż nominalne, nawet jeżeli dostępny jest jeszcze dodatkowy przychód."
@@ -2698,13 +2715,29 @@ msgid "Regulation of take amounts"
 msgstr "Regulacja wysokości poboru"
 
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Gdy tak funkcja jest włączona dla danego zespołu, jego członkowie nie mogą zwiększyć ich poborów na wyższe niż maksima wyliczone na podstawie nominalnych poborów z czasu poprzedniego payday'a. Mechanizm ten ma za zadanie zachęcać do zapraszania nowych osób wnoszących wkład do dołączenia do zespołu, pilnując by nie pobierali nieproporcjonalnie wysokiej części przychodu zespołu w ciągu pierwszych tygodni ich członkostwa."
+msgstr ""
+"Gdy tak funkcja jest włączona dla danego zespołu, jego członkowie nie mogą "
+"zwiększyć ich poborów na wyższe niż maksima wyliczone na podstawie "
+"nominalnych poborów z czasu poprzedniego dnia wypłaty (payday). Mechanizm "
+"ten ma za zadanie zachęcać do zapraszania nowych osób wnoszących wkład do "
+"dołączenia do zespołu, pilnując by nie pobierali nieproporcjonalnie wysokiej "
+"części przychodu zespołu w ciągu pierwszych tygodni ich członkostwa."
 
 msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limit ten działa następująco: zawsze możesz zwiększyć swój pobór do 1.00 jeśli był od tego mniejszy, podwoić swój pobór w stosunku do poprzedniego tygodnia, zwiększyć swój pobór by wziąć pozostałość przychodu zespołu, jak i zwiększyć swój pobór do poziomu mediany poboru z ostatniego payday'a. Możliwość która w Twoim przypadku da w rezultacie najwyższą wartość będzie Twoim maksymalnym poborem podczas aktualnego tygodnia."
+msgstr ""
+"Limit ten działa następująco: zawsze możesz zwiększyć swój pobór do 1.00 "
+"jeśli był od tego mniejszy, podwoić swój pobór w stosunku do poprzedniego "
+"tygodnia, zwiększyć swój pobór by wziąć pozostałość przychodu zespołu, jak i "
+"zwiększyć swój pobór do poziomu mediany poboru z ostatniego dnia wypłaty "
+"(payday). Możliwość która w Twoim przypadku da w rezultacie najwyższą "
+"wartość będzie Twoim maksymalnym poborem podczas aktualnego tygodnia."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Pobory nie są limitowane gdy zespół składa się z tylko jednego członka lub gdy pobory z ostatniego tygodnia wynosiły zero (co ma miejsce w przypadku nowych zespołów, które zostały stworzone po ostatnim payday'u)."
+msgstr ""
+"Pobory nie są limitowane gdy zespół składa się z tylko jednego członka lub "
+"gdy pobory z ostatniego tygodnia wynosiły zero (co ma miejsce w przypadku "
+"nowych zespołów, które zostały stworzone po ostatnim dniu wypłaty, znanym "
+"także jako payday)."
 
 msgid "Removing team membership"
 msgstr "Opuszczanie zespołu"
