@@ -87,12 +87,10 @@ if [ -e sql/branch.sql ]; then
     sed -i -r -e "s/$schema_version_re/\1 '$new_version'/" sql/schema.sql
     echo -e '\n' | cat - sql/branch.sql >>sql/schema.sql
 
-    # Let the user do the rest, then commit
+    # Let the user do the rest
     git rm sql/branch.sql
     echo "sql/branch.sql has been merged into sql/schema.sql and sql/migrations.sql"
     read -p "Please make the necessary manual modifications to those files now, then press Enter to continue... " enter
-    git add sql/{schema,migrations,app-conf-*}.sql
-    git commit -m "merge branch.sql"
 
     # Check modifications to schema.sql
     echo "Testing sql/schema.sql..."
@@ -101,6 +99,10 @@ if [ -e sql/branch.sql ]; then
         echo "Retesting sql/schema.sql..."
     done
     echo "Done. sql/schema.sql seems to be okay."
+
+    # Commit changes
+    git add sql/{schema,migrations,app-conf-*}.sql
+    git commit -m "merge branch.sql"
 
     # Deployment stages
     echo "Splitting $branch_c in two..."
@@ -144,10 +146,6 @@ if [ -s $branch_after ]; then
 fi
 [ -e $branch_after ] && rm $branch_after
 
-# Push to GitHub
-git push
-git push --tags
-
 # Check for schema drift
 if [ "$run_schema_diff" = 'yes' ]; then
     echo "Checking for schema drift..."
@@ -156,3 +154,7 @@ if [ "$run_schema_diff" = 'yes' ]; then
         exit 1
     fi
 fi
+
+# Push to GitHub
+git push
+git push --tags
