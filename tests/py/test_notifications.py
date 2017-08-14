@@ -6,16 +6,16 @@ class TestNotifications(Harness):
 
     def test_add_notifications(self):
         alice = self.make_participant('alice')
-        alice.add_notification('abcd')
-        alice.add_notification('1234')
+        alice.notify('abcd', email=False)
+        alice.notify('1234', email=False)
         assert alice.pending_notifs == 2
 
     def test_remove_notification(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
-        alice.add_notification('abcd')
-        id = alice.add_notification('1234')
-        alice.add_notification('bcde')
+        alice.notify('abcd', email=False)
+        id = alice.notify('1234', email=False)
+        alice.notify('bcde', email=False)
 
         # check that bob can't remove alice's notification
         bob.remove_notification(id)
@@ -36,9 +36,10 @@ class TestNotifications(Harness):
             """).load(jinja_env_html, None)
         }
         alice = self.make_participant('alice')
-        alice.add_notification('test_event')
-        alice.add_notification(
+        alice.notify('test_event', email=False)
+        alice.notify(
             'team_invite',
+            email=False,
             team='team',
             team_url='fake_url',
             inviter='bob',
@@ -54,15 +55,15 @@ class TestNotifications(Harness):
 
     def test_render_unknown_notification(self):
         alice = self.make_participant('alice')
-        alice.add_notification('fake_event_name')
+        alice.notify('fake_event_name', email=False)
         r = self.client.GET('/alice/notifications.html', auth_as=alice,
                             sentry_reraise=False).text
         assert 'fake_event_name' not in r
 
     def test_marking_notifications_as_read_avoids_race_condition(self):
         alice = self.make_participant('alice')
-        n1 = alice.add_notification('low_balance')
-        n2 = alice.add_notification('low_balance')
+        n1 = alice.notify('low_balance', email=False)
+        n2 = alice.notify('low_balance', email=False)
         assert alice.pending_notifs == 2
 
         data = {'mark_all_as_read': 'true', 'until': str(n1)}
@@ -71,9 +72,10 @@ class TestNotifications(Harness):
 
         notifications = self.db.all("""
             SELECT id, event, context, is_new
-              FROM notification_queue
+              FROM notifications
              WHERE participant = %s
                AND is_new = true
+               AND web
           ORDER BY id DESC
         """, (alice.id,))
         assert len(notifications) == 1

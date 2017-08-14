@@ -241,23 +241,26 @@ class TestEmail(EmailHarness):
         assert 'foo&#39;bar' in last_email['html']
         assert '&#39;' not in last_email['text']
 
+    def queue_email(self, participant, event, **context):
+        return participant.notify(event, force_email=True, web=False, **context)
+
     def test_can_dequeue_an_email(self):
         larry = self.make_participant('larry', email='larry@example.com')
-        larry.queue_email("verification", link='https://example.com/larry')
+        self.queue_email(larry, "verification", link='https://example.com/larry')
 
-        assert self.db.one("SELECT spt_name FROM email_queue") == "verification"
+        assert self.db.one("SELECT event FROM notifications") == "verification"
         Participant.dequeue_emails()
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'larry <larry@example.com>'
         assert last_email['subject'] == "Email address verification - Liberapay"
-        assert self.db.one("SELECT spt_name FROM email_queue") is None
+        assert self.db.one("SELECT event FROM notifications") is None
 
     def test_dequeueing_an_email_without_address_just_skips_it(self):
         larry = self.make_participant('larry')
-        larry.queue_email("verification")
+        self.queue_email(larry, "verification")
 
-        assert self.db.one("SELECT spt_name FROM email_queue") == "verification"
+        assert self.db.one("SELECT event FROM notifications") == "verification"
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
-        assert self.db.one("SELECT spt_name FROM email_queue") is None
+        assert self.db.one("SELECT event FROM notifications") is None
