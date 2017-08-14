@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '45'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '46'::jsonb);
 
 
 -- app configuration
@@ -503,26 +503,23 @@ CREATE TRIGGER search_vector_update
     tsvector_update_trigger_column(search_vector, search_conf, content);
 
 
--- emails waiting to be sent
+-- notifications, waiting to be displayed or sent via email
 
-CREATE TABLE email_queue
-( id            serial   PRIMARY KEY
-, participant   bigint   NOT NULL REFERENCES participants
-, spt_name      text     NOT NULL
-, context       bytea    NOT NULL
-);
-
-
--- web notifications waiting to be displayed
-
-CREATE TABLE notification_queue
+CREATE TABLE notifications
 ( id            serial   PRIMARY KEY
 , participant   bigint   NOT NULL REFERENCES participants
 , event         text     NOT NULL
 , context       bytea    NOT NULL
 , is_new        boolean  NOT NULL DEFAULT TRUE
 , ts            timestamptz  DEFAULT now()
+, email         boolean  NOT NULL
+, web           boolean  NOT NULL
+, email_sent    boolean
+, CONSTRAINT destination_chk CHECK (email OR web)
 );
+
+CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
+    WHERE (email AND email_sent IS NOT true);
 
 
 -- cache of participant balances at specific times

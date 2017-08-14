@@ -558,3 +558,17 @@ ALTER TABLE notification_queue ALTER COLUMN ts SET DEFAULT now();
 INSERT INTO app_conf (key, value) VALUES
     ('twitch_id', '"9ro3g4slh0de5yijy6rqb2p0jgd7hi"'::jsonb),
     ('twitch_secret', '"o090sc7828d7gljtrqc5n4vcpx3bfx"'::jsonb);
+
+-- migration #46
+ALTER TABLE notification_queue
+    ADD COLUMN email boolean NOT NULL DEFAULT FALSE,
+    ADD COLUMN web boolean NOT NULL DEFAULT TRUE,
+    ADD CONSTRAINT destination_chk CHECK (email OR web),
+    ADD COLUMN email_sent boolean;
+ALTER TABLE notification_queue RENAME TO notifications;
+CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
+    WHERE (email AND email_sent IS NOT true);
+ALTER TABLE notifications
+    ALTER COLUMN email DROP DEFAULT,
+    ALTER COLUMN web DROP DEFAULT;
+DROP TABLE email_queue;
