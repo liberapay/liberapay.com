@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech (https://hosted.weblate.org/projects/liberapay/core/cs/)\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: 2017-08-16 10:45+0000\n"
+"Last-Translator: Michal Čihař <michal@cihar.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>"
+"\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 2.17-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -141,14 +145,14 @@ msgid "Bank wire to your Liberapay wallet"
 msgstr "Bankovní převod do vaší peněženky Liberapay"
 
 msgid "The bank wire to your Liberapay wallet has expired"
-msgstr ""
+msgstr "Bankovní převod do vaší peněženky Liberapay vypršel"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
 msgstr ""
 
 msgid "If you forgot to do it you can initiate a new payment:"
-msgstr ""
+msgstr "Pokud jste na to zapomněli, můžete zahájit novou platbu:"
 
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Převod do vaší peněženky na Liberapay selhal"
@@ -276,7 +280,7 @@ msgid "When a bank wire transfer to my Liberapay wallet expires"
 msgstr ""
 
 msgid "Expense Report"
-msgstr ""
+msgstr "Vyúčtování"
 
 msgid "Draft"
 msgstr "Koncept"
@@ -593,7 +597,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
-msgstr ""
+msgstr "{0} vlastní na jiných platformách následující účty:"
 
 msgid "Name of the team"
 msgstr "Název týmu"
@@ -656,24 +660,26 @@ msgstr[2] ""
 
 #, python-brace-format
 msgid "Document #{id} is awaiting validation."
-msgstr ""
+msgstr "Dokument #{id} čeká na ověření."
 
 #, python-brace-format
 msgid "Document #{id} has been validated."
-msgstr ""
+msgstr "Dokument #{id} byl ověřen."
 
 #, python-brace-format
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
 msgstr ""
+"Dokument #{id} byl zamítnut: {refused_reason_type} - "
+"{refused_reason_message}."
 
 msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr ""
+msgstr "Pokud potřebujete pomoc, můžete poslat e-mail na support@liberapay.com."
 
 msgid "Occupation"
-msgstr ""
+msgstr "Povolání"
 
 msgid "Your main professional activity."
-msgstr ""
+msgstr "Vaše hlavní profesní činnost."
 
 msgid "Income Range"
 msgstr "Příjmy"
@@ -691,47 +697,48 @@ msgid "Between {0} and {1}"
 msgstr "Mezi {0} a {1}"
 
 msgid "How much money you earn per year, approximately."
-msgstr ""
+msgstr "Kolik peněz přibližně vyděláte za rok."
 
 msgid "Postal Address"
 msgstr "Poštovní adresa"
 
 msgid "Identity Proof"
-msgstr ""
+msgstr "Doklad totožnosti"
 
 msgid "Passport, or ID Card (front and back), or UK driving licence."
 msgstr ""
+"Cestovní pas, občanský průkaz (přední i zadní strana) nebo řidičský průkaz."
 
 msgid "Organization Information"
-msgstr ""
+msgstr "Informace o organizaci"
 
 msgid "Headquarters Address"
-msgstr ""
+msgstr "Adresa sídla"
 
 msgid "Articles of Association"
-msgstr ""
+msgstr "Stanovy"
 
 msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
 msgstr ""
 
 msgid "Registration Proof"
-msgstr ""
+msgstr "Důkaz registrace"
 
 msgid "Extract from the Company Register issued within the last three months."
-msgstr ""
+msgstr "Výpis z obchodního rejstříku vydaný během posledních tří měsíců."
 
 msgid "Proof of registration from the official authority."
-msgstr ""
+msgstr "Doklad o registraci od úředního orgánu."
 
 msgid "Shareholder Declaration"
-msgstr ""
+msgstr "Prohlášení akcionáře"
 
 #, python-brace-format
 msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
 msgstr ""
 
 msgid "Legal Representative Information"
-msgstr ""
+msgstr "Informace o právním zástupci"
 
 msgid "The following fields are about the organization's legal representative (you, probably)."
 msgstr "Následující pole jsou o zákonném zástupci organizace (pravděpodobně o vás)."
@@ -741,11 +748,11 @@ msgstr "E-mail"
 
 #, python-brace-format
 msgid "The following file formats are supported: {0}."
-msgstr ""
+msgstr "Jsou podporovány následující formáty souborů: {0}."
 
 #, python-brace-format
 msgid "The maximum size of each file is {0}MB."
-msgstr ""
+msgstr "Maximální velikost každého souboru je {0} MB."
 
 msgid "We need to know who you are because of financial regulations."
 msgstr "Potřebujeme vědět kdo jste kvůli finančním nařízením."
@@ -785,10 +792,10 @@ msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Souhlasím s {0}podmínkami služby MangoPay{1}"
 
 msgid "The following repositories are currently displayed on your profile:"
-msgstr ""
+msgstr "Následující repozitáře jsou aktuálně zobrazeny na vašem profilu:"
 
 msgid "We can import a list of your team's repositories from:"
-msgstr ""
+msgstr "Můžeme importovat seznam repozitářů vašeho týmu z:"
 
 msgid "We can import a list of your repositories from:"
 msgstr "Můžeme importovat vaše repozitáře z:"
@@ -1044,7 +1051,7 @@ msgid "Share:"
 msgstr "Sdílejte:"
 
 msgid "(fork)"
-msgstr "(fork)"
+msgstr "(odštěpeno)"
 
 msgid "Updated this week"
 msgstr "Upraveno tento týden"
@@ -1144,7 +1151,7 @@ msgid "You are currently donating {0} per week to {1}. You can select or input a
 msgstr ""
 
 msgid "Please select or input an amount:"
-msgstr ""
+msgstr "Prosím vyberte nebo zadejte částku:"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1157,10 +1164,10 @@ msgid "Modify the donation"
 msgstr "Upravit příspěvek"
 
 msgid "Next step →"
-msgstr ""
+msgstr "Další krok →"
 
 msgid "Stop the donation"
-msgstr ""
+msgstr "Zastavit příspěvek"
 
 msgid "Subscribe"
 msgstr "Přihlásit se"
@@ -1205,7 +1212,7 @@ msgid "{0} currently receives {1} per week."
 msgstr ""
 
 msgid "Recipient Identity"
-msgstr ""
+msgstr "Totožnost příjemce"
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
@@ -1215,13 +1222,13 @@ msgid "Frequently Asked Questions"
 msgstr "Často kladené otázky"
 
 msgid "What payment methods are available?"
-msgstr ""
+msgstr "Jaké platební metody jsou k dispozici?"
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
 msgstr ""
 
 msgid "How do recurrent donations work?"
-msgstr ""
+msgstr "Jak fungují opakující se příspěvky?"
 
 msgid "Can I make a one-time donation?"
 msgstr "Můžu přispět jednorázově?"
@@ -1230,7 +1237,7 @@ msgid "No, but you can stop your donation at any time, and it will de facto ceas
 msgstr ""
 
 msgid "Is this platform legit and secure?"
-msgstr ""
+msgstr "Je tato platforma legitimní a bezpečná?"
 
 #, python-brace-format
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
@@ -2532,9 +2539,10 @@ msgstr "Liberapay je nezisková organizace, kterou {0}v roce 2015 ve Francii{1} 
 msgid "Legal Information"
 msgstr "Právní informace"
 
-#, fuzzy
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
-msgstr "Tento web je provozován Liberapay, neziskovou organizací založenou v roce 2015 a registrovanou ve Francii."
+msgstr ""
+"Tento web je provozován Liberapay, neziskovou organizací založenou v roce "
+"2015 a registrovanou ve Francii (identifikátor: W144000981)."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
 msgstr "Liberapay je registrován jako distributor elektronických peněz v Evropské unii. S pomocí našich partnerů sledujeme transakce pro možné podvody, praní špinavých peněz a financování terorismu, tak, jak to vyžadují finanční nařízení."
@@ -3066,12 +3074,12 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
 msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] "Mezi {n} uživateli bylo minulý týden převedeno {money_amount}."
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Mezi {n} uživatelem bylo minulý týden převedeno {money_amount}."
+msgstr[1] "Mezi {n} uživateli bylo minulý týden převedeno {money_amount}."
+msgstr[2] "Mezi {n} uživateli bylo minulý týden převedeno {money_amount}."
 
 msgid "More stats"
 msgstr "Další statistiky"
@@ -3168,15 +3176,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} accepts donations"
-msgstr ""
+msgstr "{0} přijímá příspěvky"
 
 #, python-brace-format
 msgid "{0} opted out of Liberapay"
-msgstr ""
+msgstr "{0} nechce používat Liberapay"
 
 #, python-brace-format
 msgid "{0} hasn't joined Liberapay yet"
-msgstr ""
+msgstr "{0} ještě nezačal používat Liberapay"
 
 #, python-brace-format
 msgid "Are you {0}?"
@@ -3218,7 +3226,7 @@ msgid "{0} returned an error, please try again later."
 msgstr "{0} skončilo s chybou, opakujte akci později."
 
 msgid "Social Explorer"
-msgstr ""
+msgstr "Průzkumník sociálních sítí"
 
 #, python-brace-format
 msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0} friends."
@@ -3322,9 +3330,9 @@ msgstr[2] "Nalezeny odpovídající názvy společenství"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nalezen odpovídající repozitář"
+msgstr[1] "Nalezeny odpovídající repozitáře"
+msgstr[2] "Nalezeny odpovídající repozitáře"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
