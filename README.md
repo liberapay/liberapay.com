@@ -49,7 +49,8 @@ The python code inside simplates is only for request-specific logic, common back
 Firstly, make sure you have the following dependencies installed:
 
 - python ≥ 2.7.12 (the code is compatible with python 3, but production still runs on python 2 for now)
-- postgresql 9.6.1 (see [the official download & install docs](https://www.postgresql.org/download/))
+  - including the C headers of python and libffi, which are packaged separately in many Linux distributions
+- postgresql 9.6 (see [the official download & install docs](https://www.postgresql.org/download/))
 - make
 
 Then run:
