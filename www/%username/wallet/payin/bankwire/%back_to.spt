@@ -58,7 +58,10 @@ weekly = donations - participant.receiving
 if weekly > 0:
     funded = participant.balance // weekly
     min_weeks = (constants.PAYIN_BANK_WIRE_MIN / weekly).to_integral_value(ROUND_UP)
-    max_weeks = min(52, constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly)
+    max_weeks = min(
+        max(constants.PAYIN_BANK_WIRE_TARGET // weekly, 52),
+        constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly
+    )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks] or [min_weeks]
 

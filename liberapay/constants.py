@@ -158,7 +158,8 @@ PARTICIPANT_KINDS = {
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
-PAYIN_BANK_WIRE_MIN = Decimal('2.00')
+PAYIN_BANK_WIRE_MIN = Decimal('2.00')  # fee ≈ 0.99%
+PAYIN_BANK_WIRE_TARGET = Decimal('5.00')  # fee ≈ 0.6%
 PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
 PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
 
