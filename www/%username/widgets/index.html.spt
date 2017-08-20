@@ -17,7 +17,7 @@ profile_url = participant.url()
     <p>{{ _("Use this code to add a donation button on your website:") }}</p>
 
     <pre>&lt;script src="{{ profile_url }}widgets/button.js"&gt;&lt;/script&gt;
-{#     #}&lt;noscript&gt;&lt;a href="{{ profile_url }}donate" role="button"&gt;&lt;img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"&gt;&lt;/a&gt;&lt;/noscript&gt;</pre>
+{#     #}&lt;noscript&gt;&lt;a href="{{ profile_url }}donate"&gt;&lt;img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"&gt;&lt;/a&gt;&lt;/noscript&gt;</pre>
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
