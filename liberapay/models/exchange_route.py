@@ -24,14 +24,16 @@ class ExchangeRoute(Model):
     @classmethod
     def from_network(cls, participant, network):
         participant_id = participant.id
-        r = cls.db.one("""
+        r = cls.db.all("""
             SELECT r.*::exchange_routes
-              FROM current_exchange_routes r
+              FROM exchange_routes r
              WHERE participant = %(participant_id)s
                AND network = %(network)s
+               AND COALESCE(error, '') <> 'invalidated'
+          ORDER BY r.id DESC
         """, locals())
-        if r:
-            r.__dict__['participant'] = participant
+        for route in r:
+            route.__dict__['participant'] = participant
         return r
 
     @classmethod

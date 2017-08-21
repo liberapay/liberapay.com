@@ -49,12 +49,12 @@ if request.method == 'POST':
     amount = parse_decimal(request.body['amount'])
     if amount <= 0:
         raise response.error(400, _("The amount cannot be zero."))
-    route = ExchangeRoute.from_network(participant, 'mango-ba')
-    if not route:
+    routes = ExchangeRoute.from_network(participant, 'mango-ba')
+    if not routes:
         raise response.error(400, "no route")
     ignore_high_fee = body.get('confirmed') == 'true'
     try:
-        exchange = payout(website.db, route, amount, ignore_high_fee)
+        exchange = payout(website.db, routes[0], amount, ignore_high_fee)
     except TransactionFeeTooHigh as e:
         msg = _(
             "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?",
@@ -78,10 +78,10 @@ if show_form or not success:
 
 if show_form:
     mp_account = participant.get_mangopay_account()
-    route = ExchangeRoute.from_network(participant, 'mango-ba')
-    if route:
+    routes = ExchangeRoute.from_network(participant, 'mango-ba')
+    if routes:
         bank_account = BankAccount.get(
-            route.address, user_id=participant.mangopay_user_id
+            routes[0].address, user_id=participant.mangopay_user_id
         )
         ba_type = bank_account.Type
         country = get_bank_account_country(bank_account)

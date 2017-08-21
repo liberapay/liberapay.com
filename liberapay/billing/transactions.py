@@ -160,9 +160,14 @@ def payin_bank_wire(db, participant, debit_amount):
     arrive in the wallet.
     """
 
-    route = ExchangeRoute.from_network(participant, 'mango-bw')
-    if not route:
-        route = ExchangeRoute.insert(participant, 'mango-bw', 'x')
+    route = db.one("""
+        INSERT INTO exchange_routes
+                    (participant, network, address, one_off, error, remote_user_id)
+             VALUES (%s, 'mango-bw', 'x', false, '', %s)
+        ON CONFLICT (participant, network, address) DO UPDATE
+                SET one_off = false  -- dummy update
+          RETURNING *
+    """, (participant.id, participant.mangopay_user_id))
 
     amount, fee, vat = skim_bank_wire(debit_amount)
 

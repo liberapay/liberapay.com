@@ -140,8 +140,10 @@ def fake_transfer(db, tipper, tippee, amount, timestamp):
 
 
 def fake_exchange(db, participant, amount, fee, vat, timestamp):
-    route = ExchangeRoute.from_network(participant, 'mango-cc')
-    if not route:
+    routes = ExchangeRoute.from_network(participant, 'mango-cc')
+    if routes:
+        route = routes[0]
+    else:
         route = _fake_thing(
             db,
             "exchange_routes",

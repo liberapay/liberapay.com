@@ -33,7 +33,9 @@ if request.method == 'GET' and 'transactionId' in request.qs:
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
 exchange = None
-route = ExchangeRoute.from_network(participant, 'mango-cc')
+routes = ExchangeRoute.from_network(participant, 'mango-cc')
+route = routes[0] if routes else None
+del routes
 
 card = Card.get(route.address) if route else None
 if card:
