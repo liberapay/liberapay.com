@@ -109,17 +109,18 @@ def payout(db, participant, amount, ignore_high_fee=False):
         return record_exchange_result(db, e_id, 'failed', error, participant)
 
 
-def charge(db, participant, amount, return_url):
-    """Charge the participant's credit card.
+def charge(db, route, amount, return_url):
+    """Charge the given credit card (`route`).
 
     Amount should be the nominal amount. We'll compute fees below this function
     and add it to amount to end up with charge_amount.
 
     """
     typecheck(amount, Decimal)
-
-    route = ExchangeRoute.from_network(participant, 'mango-cc')
     assert route
+    assert route.network == 'mango-cc'
+
+    participant = route.participant
 
     charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee

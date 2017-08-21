@@ -85,7 +85,7 @@ if request.method == 'POST':
         ))
     return_url = website.canonical_url + request.path.raw
     try:
-        exchange = charge(website.db, participant, amount, return_url)
+        exchange = charge(website.db, route, amount, return_url)
     except Redirect as e:
         response.redirect(e.url)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
