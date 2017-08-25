@@ -260,7 +260,8 @@ msgid "When a transfer to my bank account fails"
 msgstr "Wenn die Überweisung auf mein Bankkonto fehlschlägt"
 
 msgid "When someone I pledge to joins Liberapay"
-msgstr "Wenn jemand, dem ich etwas verspreche, sich bei Liberapay anmeldet"
+msgstr ""
+"Wenn jemand, dem ich eine Spende verspreche, sich bei Liberapay anmeldet"
 
 msgid "When someone invites me to join a team"
 msgstr "Wenn mich jemand dazu einlädt, einem Team beizutreten"
@@ -2580,7 +2581,7 @@ msgid "A user's money is held in their wallets. We currently only support one wa
 msgstr "Eines Benutzers Geld findet sich im Portemonnaie. Wir unterstützen zurzeit nur eine Brieftasche pro User und nur eine Währung (Euro) in das Portemonnaie."
 
 msgid "Payday"
-msgstr ""
+msgstr "Zahltag"
 
 #, python-brace-format
 msgid "Payday is when donations are actually executed. It's a program ({0}this one{1}) that we run every Wednesday."
@@ -2588,7 +2589,7 @@ msgstr "Am Zahltag werden die Spenden tatsächlich gebucht. Es ist ein Programm 
 
 #, python-brace-format
 msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay wurde vor {0} gestartetet und hat {1} Benutzer."
+msgstr "Liberapay wurde vor {0} gegründet und hat {1} Benutzer."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
@@ -2678,8 +2679,19 @@ msgstr "Sie können Ihre Entnahme im {0}Dashboard für Teams{1} ändern. Die dor
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Die nominellen Entnahmen werden von den Mitgliedern selbst bestimmt. Die tatsächlichen Auszalungen werden vom System berechnet: Zuerst summiert es die nominellen Entnahmen, dann berechnet es den Prozentsatz, dem jede Entnahme entspricht. Anschließend wendet es diese Prozentsätze auf die verfügbaren Einnahmen an. Nominelle Entnahmen können auch als Maxima verstanden werden: Die tatsächliche Auszahlung ist nie höher als die nominelle Entnahme, selbst wenn zusätzliches Einkommen zur Verfügung stünde."
 
+#, fuzzy
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the staibility of the team's income."
 msgstr ""
+"Sie wundern sich vielleicht, warum wir nominelle Entnahmen als Maxima "
+"anstelle von Prozenten verwenden. Maxima erlauben Teams eine Überschuß (oder "
+"Rest) zu erzielen. Erstens bildet dies einen Puffer um die Einnahmen der "
+"Teammitgleider zu stabilisieren. Zweitens mindern neue Mitglieder zuerst den "
+"Puffer bevor sie die Einnahmen der anderen Mitglieder mindern. Drittens "
+"erlaubt es unserer Software die Beträge die tatsächlich von Spendern "
+"überwiesen werden anzupassen. Die gleicht den Betrag eines Spenders über die "
+"Zeit aus und macht das System gerechter. Außerdem ermutigt es für Teams zu "
+"spenden, die ihr Spendenziel schon erreicht haben. Die stabilisiert das "
+"Einkommen des Teams weiter."
 
 msgid "Regulation of take amounts"
 msgstr "Regelung der Entnahmebeträge"
@@ -2820,7 +2832,11 @@ msgid "Create an organization account"
 msgstr "Erstellen Sie ein Konto für eine Organisation"
 
 msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
-msgstr "Mit Liberapay können sie Spenden an Menschen versprechen, die noch nicht Mitglied sind. Die Spende wird automatisch gestartet, sobald diese sich registrieren um die Spende zu empfangen. Wir senden Ihnen eine Benachrichtigung, wenn das passiert."
+msgstr ""
+"Mit Liberapay können sie Spenden an Menschen versprechen, die noch nicht "
+"Mitglied sind. Die Spende wird automatisch gestartet, sobald diese sich "
+"registrieren um die Spende zu empfangen. Wir schicken Ihnen eine "
+"Benachrichtigung, wenn das passiert."
 
 msgid "Recent pledges"
 msgstr "Jüngsten Zusagen"
@@ -2828,16 +2844,16 @@ msgstr "Jüngsten Zusagen"
 msgid "There are no pledges right now."
 msgstr "Es gibt zur Zeit keine versprochenen Spenden."
 
-#, fuzzy
 msgid "Make a pledge"
-msgstr "Eine Spende versprechen"
+msgstr "Eine Spende zusagen"
 
 msgid "Do you have someone in mind?"
 msgstr "Haben Sie jemanden im Sinn?"
 
-#, fuzzy
 msgid "We can help you find pledgees if you connect your accounts:"
-msgstr "Wir helfen Ihnen Spendenempfänger zu finden, wenn Sie Ihre Konten verknüpfen:"
+msgstr ""
+"Wir helfen Ihnen mögliche Spendenempfänger zu finden, wenn Sie Ihre Konten "
+"verknüpfen:"
 
 #, python-brace-format
 msgid "A team allows members of a project to receive money and share it, without having to set up a legal entity. {0}Learn more…{1}"
@@ -3050,11 +3066,17 @@ msgid_plural "{n} new donations have been started in the past month, increasing 
 msgstr[0] "{n} neue Spenden wurden im letzten Monat eingerichtet. Diese erhöhen die wöchentliche Finazierung um {money_amount}."
 msgstr[1] ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "{n} neue {link_open}Spendenzusagen{link_close} wurden im letzten Monat gemacht. Diese erhöhen die wöchtenlichen Spenden, die noch eingefordert werden müssen, um {money_amount}."
+msgstr[0] ""
+"{n} neue {link_open}Spendenzusage{link_close} wurden im letzten Monat "
+"gemacht. Diese erhöhen die wöchtenlichen Spenden, die noch eingefordert "
+"werden müssen, um {money_amount}."
 msgstr[1] ""
+"{n} neue {link_open}Spendenzusagen{link_close} wurden im letzten Monat "
+"gemacht. Diese erhöhen die wöchtenlichen Spenden, die noch eingefordert "
+"werden müssen, um {money_amount}."
 
 #, fuzzy, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
@@ -3188,7 +3210,10 @@ msgstr "Ihnen gefällt nicht was Sie sehen?"
 
 #, python-brace-format
 msgid "If you are an owner of this {0} account, you can explicitly opt out of Liberapay by locking it. We don't allow new pledges to locked accounts."
-msgstr "Wenn Sie ein Besitzer dieses {0} Konto sind, können Sie sich explizit von Liberapay entscheiden, indem sie zu sperren. Wir erlauben keine neuen Zusagen gesperrte Konten."
+msgstr ""
+"Wenn Sie der Besitzer des {0} Kontos sind, können Sie sich explizit gegen "
+"Liberapay entscheiden, indem sie es sperren. Wir erlauben keine neuen "
+"Versprechen für gesperrte Konten."
 
 msgid "Lock"
 msgstr "Sperren"
@@ -3324,7 +3349,9 @@ msgid "Didn't find who you were looking for?"
 msgstr "Haben Sie die gesuchte Person nicht gefunden?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
-msgstr "Sie können auch versprechen Menschen zu spenden, die Liberapay noch nicht beigetreten sind:"
+msgstr ""
+"Sie können auch versprechen an Menschen zu spenden, die Liberapay noch nicht "
+"beigetreten sind:"
 
 msgid "Sign In"
 msgstr "Anmelden"
