@@ -32,16 +32,15 @@ title = _("Please Confirm")
 <div class="on-confirm">
 
     <p><img class="platform-icon" src="{{ account.platform_data.icon }}" />
-    {{ _("{0} is connected to {1} on Liberapay.",
+    {{ _("{0} is connected to {1} on Liberapay. Transfer it?",
          '<span class="highlight">%s</span>'|safe % account.friendly_name,
          ('<a href="/{0}/">{0}</a>'|safe).format(other.username)) }}
-    {{ _("Transfer it?") }}
     </p>
 
-    <h3>{{ _("How the accounts are now") }}</h3>
+    <h4>{{ _("How the accounts are now") }}</h4>
 
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-4">
             <b>{{ p.username }}</b><br />
             % for account in user_accounts
                 <img src="{{ account.platform_data.icon }}"
@@ -50,7 +49,7 @@ title = _("Please Confirm")
                 {{ account.friendly_name }}<br />
             % endfor
         </div>
-        <div class="col-sm-2 other">
+        <div class="col-sm-4 other">
             <b>{{ other.username }}</b><br />
             % for other_account in other_accounts
                 <img src="{{ other_account.platform_data.icon }}"
@@ -64,10 +63,10 @@ title = _("Please Confirm")
     </div>
 
 
-    <h3>{{ _("How the accounts will be after the transfer") }}</h3>
+    <h4>{{ _("How the accounts will be after the transfer") }}</h4>
 
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-4">
             <b>{{ p.username }}</b><br />
             % for user_account in user_accounts
                 % if user_account != abandoned_account
@@ -88,7 +87,7 @@ title = _("Please Confirm")
                 </span>
             </span>
         </div>
-        <div class="col-sm-2 other">
+        <div class="col-sm-4 other">
             <b>{{ other.username }}</b><br />
             % for other_account in other_accounts
                 % if other_account.platform != account.platform
@@ -102,8 +101,8 @@ title = _("Please Confirm")
             % endfor
         </div>
         % if abandoned_account
-        <div class="abandoned">
-            {{ _("Abandoned:") }}<br/><br/>
+        <div class="col-sm-4 abandoned">
+            {{ _("Abandoned:") }}<br/>
             <span class="account-elsewhere">
                 <img src="{{ abandoned_account.platform_data.icon }}" />
                 {{ abandoned_account.friendly_name }}<br />
@@ -113,14 +112,13 @@ title = _("Please Confirm")
     </div>
 
 
-    <h3>{{ _("Transfer it?") }}</h3>
-
+    <hr>
     <form action="/on/take-over.html" method="POST">
         <input type="hidden" name="account_id" value="{{ account_id }}" />
         <input type="hidden" name="p_id" value="{{ p.id }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <button name="should_transfer" value="yes" class="btn btn-success">{{ _("Yes") }}</button>
-        <button name="should_transfer" value="no" class="btn btn-default" >{{ _("No") }}</button>
+        <button name="should_transfer" value="yes" class="btn btn-success">{{ _("Transfer the account") }}</button>
+        <button name="should_transfer" value="no" class="btn btn-default" >{{ _("Cancel") }}</button>
     </form>
 
 </div>
