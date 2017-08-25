@@ -218,3 +218,7 @@ class Tests2(Harness):
     def test_no_trailing_slash_redirects(self):
         r = self.client.GET('/foo', raise_immediately=False)
         assert r.code == 404, r.text
+
+    def test_null_byte_results_in_400(self):
+        r = self.client.GET('/foo%00', raise_immediately=False)
+        assert r.code == 400, r.text
