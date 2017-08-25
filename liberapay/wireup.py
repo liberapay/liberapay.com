@@ -298,6 +298,14 @@ def make_sentry_teller(env):
                     # Don't reraise this in tests
                     allow_reraise = False
 
+        if isinstance(exception, ValueError):
+            if 'cannot contain NUL (0x00) characters' in str(exception):
+                # https://github.com/liberapay/liberapay.com/issues/675
+                response = state.get('response') or pando.Response()
+                response.code = 400
+                response.body = str(exception)
+                return {'exception': None}
+
         if not sentry:
             # No Sentry, log to stderr instead
             traceback.print_exc()
