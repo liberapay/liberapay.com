@@ -127,7 +127,7 @@ if [ -e sql/branch.sql ]; then
 
     rm $branch_c
 fi
-run_schema_diff="$(test -s $branch_before -o -s $branch_after && echo "yes")"
+run_schema_diff="$(test -s $branch_before -o -s $branch_after && echo "yes" || true)"
 
 # Ask confirmation and bump the version
 yesno "Tag and deploy version $version?" || exit
