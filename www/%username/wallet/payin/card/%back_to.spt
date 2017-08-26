@@ -216,7 +216,7 @@ title = _("Add money")
     % endif
 
 
-    <h3>{{ _("Credit card") }}</h3>
+    <h3>{{ _("Card") }}</h3>
 
     % if card
     <div>
@@ -228,24 +228,29 @@ title = _("Add money")
     <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
           data-msg-cors-fail='{{ _("The request failed. Please make sure your browser is up-to-date, and disable "
                                    "any extension that blocks requests (e.g. NoScript), then try again.") }}'>
-        <div>
+        <div class="payment-card">
+            <div class="card-number"><div class="input-wrapper">
             <input id="card_number" class="form-control" required
-                   placeholder="{{ _('Credit Card Number') }}" />
+                   placeholder="{{ _('Card number') }}"
+                   title="{{ _('The main number on the card, between 8 and 19 digits') }}"
+                   data-toggle="tooltip" data-placement="top" data-trigger="focus" />
             <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
-        </div>
-        <div class="form-inline">
-            <div class="inline-block">
+            </div></div>
+
+            <div class="card-expiry"><div class="input-wrapper">
             <input id="expiration_date" class="form-control"
-                   placeholder="{{ _('MM/YY') }}" title="{{ _('Expiration Date') }}"
+                   placeholder="{{ _('MM/YY') }}" title="{{ _('Expiration date (4 digits)') }}"
+                   data-toggle="tooltip" data-placement="top" data-trigger="focus"
                    required maxlength=6 />
             <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
-            </div>
+            </div></div>
 
-            <div class="inline-block">
+            <div class="cvv"><div class="input-wrapper">
             <input id="cvv" class="form-control" required placeholder="{{ _('CVV') }}"
-                   title="{{ _('Verification code (3 digits located on the back of the card)') }}" />
+                   title="{{ _('Verification code, usually 3 digits located on the back of the card') }}"
+                   data-toggle="tooltip" data-placement="top" data-trigger="focus" />
             <span class="invalid-msg">{{ _("This verification code is invalid.") }}</span>
-            </div>
+            </div></div>
         </div>
         <label>
             <input type="checkbox" id="keep" checked />

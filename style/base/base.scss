@@ -464,18 +464,24 @@ a.dropdown-toggle {
     vertical-align: middle;
 }
 
-#credit-card input {
-    margin-bottom: 5px;
-}
-#card_number {
-    width: 15em;
-}
-#expiration_date {
-    margin-right: 0.8em;
-    width: 6em;
-}
-#cvv {
-    width: 5em;
+.payment-card {
+    background-color: #eaeaea;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    height: 171px;
+    margin: 0.5em 0;
+    padding: 1em 0;
+    position: relative;
+    width: 270px;
+    & > .card-number {
+        margin: 25px 0 10px 0;
+        padding: 0 15px;
+    }
+    & > .card-expiry, & > .cvv {
+        float: left;
+        padding: 0 15px;
+        width: 50%;
+    }
 }
 
 label:not([for]) {
@@ -504,6 +510,9 @@ label:not([for]) {
     margin-bottom: 15px;
 }
 
+.input-wrapper {
+    position: relative;
+}
 input.invalid {
     box-shadow: rgb(255, 0, 0) 0 0 1.5px 1px;
 }
@@ -511,40 +520,38 @@ input.invalid:focus {
     box-shadow: rgba(255, 0, 0, 0.4) 0 0 2px 2px;
 }
 .invalid-msg {
-    $background: #eee;
-    $border: #aaa;
+    $background: $tooltip-bg;
     background: $background;
-    border: 1px solid $border;
     border-radius: 5px;
     display: none;
-    margin: 6px 0 0 -6px;
-    padding: 12px;
+    font-size: $font-size-small;
+    margin: 8px -8px 0;
+    padding: 6px 8px;
     position: absolute;
 
-    &::after, &::before {
-        background: transparent;
+    &::after {
         border-style: solid outset solid solid;
+        border-width: 7px;
         border-color: transparent;
+        border-bottom-color: $background;
         content: '';
         height: 0;
-        left: 4px;
+        left: 50%;
+        margin-left: -7px;
         position: absolute;
-        top: -16px;
+        top: -14px;
         width: 0;
     }
-    &::after {
-        border-width: 7px;
-        border-bottom-color: $background;
-        margin-left: 1px;
-        margin-top: 2px;
-    }
-    &::before {
-        border-width: 8px;
-        border-bottom-color: $border;
-    }
+}
+.invalid-msg {
+    color: #faa;
 }
 input.invalid:focus + .invalid-msg {
     display: block;
+    z-index: 1000;
+}
+input.invalid + .tooltip {
+    display: none !important;
 }
 
 td.text-warning {
