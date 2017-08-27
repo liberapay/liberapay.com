@@ -193,13 +193,36 @@ Liberapay.payments.ba.submit = function () {
 
 Liberapay.payments.cc = {};
 
+Liberapay.payments.cc.check = function() {
+    Liberapay.forms.clearInvalid($('#credit-card'));
+
+    var card = Liberapay.payments.cc.form.check();
+    if (card.status.pan == null) card.status.pan = 'abnormal';
+    if (card.status.cvn == null) card.status.cvn = 'valid';
+    var card_number_status = card.status.pan.split(':', 1)[0];
+    var expiry_status = card.status.expiry.split(':', 1)[0];
+    var cvv_status = card.status.cvn.split(':', 1)[0];
+
+    Liberapay.forms.setValidity($('#card_number'), card_number_status);
+    Liberapay.forms.setValidity($('#expiration_date'), expiry_status);
+    Liberapay.forms.setValidity($('#cvv'), cvv_status);
+
+    return card;
+}
+
 Liberapay.payments.cc.init = function() {
     Liberapay.payments.init();
-    PaymentCards.formatInputs(
+    var form = new PaymentCards.Form(
         document.querySelector('#card_number'),
         document.querySelector('#expiration_date'),
         document.querySelector('#cvv')
     );
+    Liberapay.payments.cc.form = form;
+
+    var onBlur = Liberapay.payments.cc.check;
+    form.inputs.pan.addEventListener('blur', onBlur);
+    form.inputs.expiry.addEventListener('blur', onBlur);
+    form.inputs.cvn.addEventListener('blur', onBlur);
 };
 
 Liberapay.payments.cc.onError = function(response) {
@@ -224,27 +247,8 @@ Liberapay.payments.cc.onError = function(response) {
 
 Liberapay.payments.cc.submit = function() {
 
-    Liberapay.forms.clearInvalid($('#credit-card'));
-
-    function val(field) {
-        return $('#'+field).val().replace(/[^\d]/g, '');
-    }
-
-    var card_number = val('card_number');
-    var cvv = val('cvv');
-    var card_expiration = val('expiration_date');
-
-    var status = PaymentCards.checkCard(card_number, card_expiration, cvv);
-    if (status.pan == null) status.pan = 'abnormal';
-    if (status.cvn == null) status.cvn = 'valid';
-    var card_number_status = status.pan.split(':', 1)[0];
-    var expiry_status = status.expiry.split(':', 1)[0];
-    var cvv_status = status.cvn.split(':', 1)[0];
-
-    Liberapay.forms.setValidity($('#card_number'), card_number_status);
-    Liberapay.forms.setValidity($('#expiration_date'), expiry_status);
-    Liberapay.forms.setValidity($('#cvv'), cvv_status);
-
+    var card = Liberapay.payments.cc.check();
+    var status = card.status;
     if (status.pan != 'valid' || status.expiry != 'valid' || status.cvn != 'valid') {
         Liberapay.payments.error();
         Liberapay.forms.focusInvalid($('#credit-card'));
@@ -252,9 +256,9 @@ Liberapay.payments.cc.submit = function() {
     }
 
     var cardData = {
-        cardNumber: card_number,
-        cardCvx: cvv,
-        cardExpirationDate: card_expiration,
+        cardNumber: card.pan,
+        cardCvx: card.cvn,
+        cardExpirationDate: card.expiry,
     };
 
     jQuery.ajax({

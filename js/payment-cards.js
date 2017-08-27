@@ -156,7 +156,10 @@ var PaymentCards = function () {
     }
 
     function checkExpiry(expiry) {
-        if (typeof expiry != 'string' || expiry.length != 4) {
+        if (expiry.length == 0) {
+            return 'empty';
+        }
+        if (expiry.length != 4) {
             return 'invalid: bad format';
         }
         month = parseInt(expiry.slice(0, 2), 10);
@@ -190,10 +193,12 @@ var PaymentCards = function () {
         var r = {
             pan: null, expiry: checkExpiry(expiry), cvn: null, range: range,
         };
-        if (pan.length < 8) r.pan = 'invalid: too short';
+        if (pan.length == 0) r.pan = 'empty';
+        else if (pan.length < 8) r.pan = 'invalid: too short';
         else if (pan.length > 19) r.pan = 'invalid: too long';
         else if (!luhnCheck(pan)) r.pan = 'abnormal: luhn check failure';
-        if (cvn.length < 3) r.cvn = 'abnormal: too short';
+        if (cvn.length == 0) r.cvn = 'empty';
+        else if (cvn.length < 3) r.cvn = 'abnormal: too short';
         if (!range) return r;
         if (range.panLengths.indexOf(pan.length) == -1) {
             r.pan = r.pan || 'abnormal: bad length';
@@ -203,6 +208,22 @@ var PaymentCards = function () {
         }
         r.pan = r.pan || 'valid';
         r.cvn = r.cvn || 'valid';
+        return r;
+    }
+
+    function Form(panInput, expiryInput, cvnInput) {
+        formatInputs(panInput, expiryInput, cvnInput);
+        this.inputs = {pan: panInput, expiry: expiryInput, cvn: cvnInput};
+        return this;
+    }
+
+    Form.prototype.check = function () {
+        var r = {};
+        r.pan = this.inputs.pan.value.replace(/\D/g, '');
+        r.expiry = this.inputs.expiry.value.replace(/\D/g, '');
+        r.cvn = this.inputs.cvn.value.replace(/\D/g, '');
+        r.status = checkCard(r.pan, r.expiry, r.cvn);
+        r.range = r.status.range;
         return r;
     }
 
@@ -216,5 +237,6 @@ var PaymentCards = function () {
         luhnCheck: luhnCheck,
         rangesArray: rangesArray,
         restrictNumeric: restrictNumeric,
+        Form: Form,
     };
 }();
