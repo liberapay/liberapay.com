@@ -104,6 +104,8 @@ if funded > 0 and user == participant:
 title = _("Add money")
 
 [---] text/html
+% from "templates/icons.html" import glyphicon
+
 % extends "templates/panel.html"
 
 % block panel_body
@@ -265,10 +267,16 @@ title = _("Add money")
 
             <div class="card-brand"></div>
         </div>
+        <div class="aside">
         <label>
             <input type="checkbox" id="keep" checked />
             {{ _("Remember the card number for next time") }}
         </label>
+        <p class="help-block">{{ glyphicon('lock') }} {{ _(
+            "Your card data is sent directly to our payment partner's system "
+            "through an encrypted connection."
+        ) }}</p>
+        </div>
     </fieldset>
 
     <br>

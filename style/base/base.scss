@@ -469,7 +469,7 @@ a.dropdown-toggle {
     border: 1px solid #ddd;
     border-radius: 8px;
     height: 171px;
-    margin: 0.5em 0;
+    margin: 0.5em 1em 0.5em 0;
     padding: 1em 0;
     position: relative;
     width: 270px;
@@ -491,6 +491,17 @@ a.dropdown-toggle {
         &:empty {
             display: none;
         }
+    }
+}
+
+#credit-card {
+    display: flex;
+    direction: row;
+    flex-wrap: wrap;
+    & > .aside {
+        flex-basis: 320px;
+        flex-grow: 3;
+        padding: 0.5em 0;
     }
 }
 
