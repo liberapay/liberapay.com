@@ -219,10 +219,19 @@ Liberapay.payments.cc.init = function() {
     );
     Liberapay.payments.cc.form = form;
 
-    var onBlur = Liberapay.payments.cc.check;
+    function onBlur() {
+        var card = Liberapay.payments.cc.check();
+        if (!!card.range) {
+            $('.card-brand').text(card.range.brand);
+        }
+    }
     form.inputs.pan.addEventListener('blur', onBlur);
     form.inputs.expiry.addEventListener('blur', onBlur);
     form.inputs.cvn.addEventListener('blur', onBlur);
+
+    form.inputs.pan.addEventListener('input', function () {
+        $('.card-brand').text('');
+    });
 };
 
 Liberapay.payments.cc.onError = function(response) {

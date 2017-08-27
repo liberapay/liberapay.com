@@ -482,6 +482,16 @@ a.dropdown-toggle {
         padding: 0 15px;
         width: 50%;
     }
+    & > .card-brand {
+        bottom: 0;
+        color: #888;
+        padding: 3px 6px;
+        position: absolute;
+        right: 15px;
+        &:empty {
+            display: none;
+        }
+    }
 }
 
 label:not([for]) {
