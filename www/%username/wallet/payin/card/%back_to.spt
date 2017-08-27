@@ -234,6 +234,9 @@ title = _("Add money")
                    placeholder="{{ _('Card number') }}"
                    title="{{ _('The main number on the card, between 8 and 19 digits') }}"
                    data-toggle="tooltip" data-placement="top" data-trigger="focus" />
+            <span class="abnormal-msg">{{ _(
+                "This card number seems to be invalid, are you sure you didn't make a mistake?"
+            ) }}</span>
             <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
             </div></div>
 
@@ -249,7 +252,10 @@ title = _("Add money")
             <input id="cvv" class="form-control" required placeholder="{{ _('CVV') }}"
                    title="{{ _('Verification code, usually 3 digits located on the back of the card') }}"
                    data-toggle="tooltip" data-placement="top" data-trigger="focus" />
-            <span class="invalid-msg">{{ _("This verification code is invalid.") }}</span>
+            <span class="abnormal-msg">{{ _(
+                "This verification code seems to be invalid, are you sure you "
+                "didn't make a mistake?"
+            ) }}</span>
             </div></div>
         </div>
         <label>

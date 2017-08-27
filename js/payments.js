@@ -234,16 +234,18 @@ Liberapay.payments.cc.submit = function() {
     var cvv = val('cvv');
     var card_expiration = val('expiration_date');
 
-    var card_validity = PaymentCards.validateCard(card_number, card_expiration, cvv);
-    var is_card_number_invalid = card_validity.pan !== 'valid';
-    var is_expiry_invalid = card_validity.expiry !== 'valid';
-    var is_cvv_invalid = card_validity.cvn !== 'valid';
+    var status = PaymentCards.checkCard(card_number, card_expiration, cvv);
+    if (status.pan == null) status.pan = 'abnormal';
+    if (status.cvn == null) status.cvn = 'valid';
+    var card_number_status = status.pan.split(':', 1)[0];
+    var expiry_status = status.expiry.split(':', 1)[0];
+    var cvv_status = status.cvn.split(':', 1)[0];
 
-    Liberapay.forms.setInvalid($('#card_number'), is_card_number_invalid);
-    Liberapay.forms.setInvalid($('#expiration_date'), is_expiry_invalid);
-    Liberapay.forms.setInvalid($('#cvv'), is_cvv_invalid);
+    Liberapay.forms.setValidity($('#card_number'), card_number_status);
+    Liberapay.forms.setValidity($('#expiration_date'), expiry_status);
+    Liberapay.forms.setValidity($('#cvv'), cvv_status);
 
-    if (is_card_number_invalid || is_expiry_invalid || is_cvv_invalid) {
+    if (status.pan != 'valid' || status.expiry != 'valid' || status.cvn != 'valid') {
         Liberapay.payments.error();
         Liberapay.forms.focusInvalid($('#credit-card'));
         return false;

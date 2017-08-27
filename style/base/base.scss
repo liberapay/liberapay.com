@@ -513,13 +513,19 @@ label:not([for]) {
 .input-wrapper {
     position: relative;
 }
+input.abnormal {
+    box-shadow: $state-warning-border 0 0 2px 2px;
+}
+input.abnormal:focus {
+    box-shadow: rgba($state-warning-border, 0.6) 0 0 3px 3px;
+}
 input.invalid {
     box-shadow: rgb(255, 0, 0) 0 0 1.5px 1px;
 }
 input.invalid:focus {
     box-shadow: rgba(255, 0, 0, 0.4) 0 0 2px 2px;
 }
-.invalid-msg {
+.abnormal-msg, .invalid-msg {
     $background: $tooltip-bg;
     background: $background;
     border-radius: 5px;
@@ -543,14 +549,17 @@ input.invalid:focus {
         width: 0;
     }
 }
+.abnormal-msg {
+    color: #fd9;
+}
 .invalid-msg {
     color: #faa;
 }
-input.invalid:focus + .invalid-msg {
+input.abnormal:focus ~ .abnormal-msg, input.invalid:focus ~ .invalid-msg {
     display: block;
     z-index: 1000;
 }
-input.invalid + .tooltip {
+input.abnormal + .tooltip, input.invalid + .tooltip {
     display: none !important;
 }
 
