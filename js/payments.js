@@ -250,9 +250,11 @@ Liberapay.payments.cc.submit = function() {
     var card = Liberapay.payments.cc.check();
     var status = card.status;
     if (status.pan != 'valid' || status.expiry != 'valid' || status.cvn != 'valid') {
-        Liberapay.payments.error();
-        Liberapay.forms.focusInvalid($('#credit-card'));
-        return false;
+        if (!confirm($('#credit-card').data('msg-confirm-submit'))) {
+            Liberapay.payments.error();
+            Liberapay.forms.focusInvalid($('#credit-card'));
+            return false;
+        }
     }
 
     var cardData = {

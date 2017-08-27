@@ -226,8 +226,13 @@ title = _("Add money")
     % endif
 
     <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
-          data-msg-cors-fail='{{ _("The request failed. Please make sure your browser is up-to-date, and disable "
-                                   "any extension that blocks requests (e.g. NoScript), then try again.") }}'>
+          data-msg-confirm-submit='{{ _(
+              "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
+          ) }}'
+          data-msg-cors-fail='{{ _(
+              "The request failed. Please make sure your browser is up-to-date, and disable "
+              "any extension that blocks requests (e.g. NoScript), then try again."
+          ) }}'>
         <div class="payment-card">
             <div class="card-number"><div class="input-wrapper">
             <input id="card_number" class="form-control" required
