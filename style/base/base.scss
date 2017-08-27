@@ -493,11 +493,9 @@ a.dropdown-toggle {
         }
     }
 }
-
-#credit-card {
+.payment-card-row {
     display: flex;
-    direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     & > .aside {
         flex-basis: 320px;
         flex-grow: 3;
