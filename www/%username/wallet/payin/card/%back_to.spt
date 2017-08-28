@@ -238,7 +238,7 @@ title = _("Add money")
         <div class="payment-card-row">
         <div class="payment-card">
             <div class="card-number"><div class="input-wrapper">
-            <input id="card_number" class="form-control" required
+            <input id="card_number" class="form-control" required autocomplete="cc-number"
                    placeholder="{{ _('Card number') }}"
                    title="{{ _('The main number on the card, between 8 and 19 digits') }}"
                    data-toggle="tooltip" data-placement="top" data-trigger="focus" />
@@ -249,15 +249,15 @@ title = _("Add money")
             </div></div>
 
             <div class="card-expiry"><div class="input-wrapper">
-            <input id="expiration_date" class="form-control"
+            <input id="expiration_date" class="form-control" required autocomplete="cc-exp"
                    placeholder="{{ _('MM/YY') }}" title="{{ _('Expiration date (4 digits)') }}"
-                   data-toggle="tooltip" data-placement="top" data-trigger="focus"
-                   required maxlength=6 />
+                   data-toggle="tooltip" data-placement="top" data-trigger="focus" />
             <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
             </div></div>
 
             <div class="cvv"><div class="input-wrapper">
-            <input id="cvv" class="form-control" required placeholder="{{ _('CVV') }}"
+            <input id="cvv" class="form-control" required autocomplete="cc-csc"
+                   placeholder="{{ _('CVV') }}"
                    title="{{ _('Verification code, usually 3 digits located on the back of the card') }}"
                    data-toggle="tooltip" data-placement="top" data-trigger="focus" />
             <span class="abnormal-msg">{{ _(
