@@ -197,15 +197,12 @@ Liberapay.payments.cc.check = function() {
     Liberapay.forms.clearInvalid($('#credit-card'));
 
     var card = Liberapay.payments.cc.form.check();
-    if (card.status.pan == null) card.status.pan = 'abnormal';
-    if (card.status.cvn == null) card.status.cvn = 'valid';
-    var card_number_status = card.status.pan.split(':', 1)[0];
-    var expiry_status = card.status.expiry.split(':', 1)[0];
-    var cvv_status = card.status.cvn.split(':', 1)[0];
+    if (card.pan.status == null) card.pan.status = 'abnormal';
+    if (card.cvn.status == null) card.cvn.status = 'valid';
 
-    Liberapay.forms.setValidity($('#card_number'), card_number_status);
-    Liberapay.forms.setValidity($('#expiration_date'), expiry_status);
-    Liberapay.forms.setValidity($('#cvv'), cvv_status);
+    Liberapay.forms.setValidity($('#card_number'), card.pan.status);
+    Liberapay.forms.setValidity($('#expiration_date'), card.expiry.status);
+    Liberapay.forms.setValidity($('#cvv'), card.cvn.status);
 
     return card;
 }
@@ -221,9 +218,7 @@ Liberapay.payments.cc.init = function() {
 
     function onBlur() {
         var card = Liberapay.payments.cc.check();
-        if (!!card.range) {
-            $('.card-brand').text(card.range.brand);
-        }
+        $('.card-brand').text(card.brand);
     }
     form.inputs.pan.addEventListener('blur', onBlur);
     form.inputs.expiry.addEventListener('blur', onBlur);
@@ -257,8 +252,7 @@ Liberapay.payments.cc.onError = function(response) {
 Liberapay.payments.cc.submit = function() {
 
     var card = Liberapay.payments.cc.check();
-    var status = card.status;
-    if (status.pan != 'valid' || status.expiry != 'valid' || status.cvn != 'valid') {
+    if (card.pan.status != 'valid' || card.expiry.status != 'valid' || card.cvn.status != 'valid') {
         if (!confirm($('#credit-card').data('msg-confirm-submit'))) {
             Liberapay.payments.error();
             Liberapay.forms.focusInvalid($('#credit-card'));
@@ -267,9 +261,9 @@ Liberapay.payments.cc.submit = function() {
     }
 
     var cardData = {
-        cardNumber: card.pan,
-        cardCvx: card.cvn,
-        cardExpirationDate: card.expiry,
+        cardNumber: card.pan.value,
+        cardCvx: card.cvn.value,
+        cardExpirationDate: card.expiry.value,
     };
 
     jQuery.ajax({

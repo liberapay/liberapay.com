@@ -1,16 +1,4 @@
-/*
- * This module has been inspired by various other projects, including:
- * - https://github.com/jessepollak/payment
- * - https://github.com/stripe/jquery.payment
- * - https://github.com/Mangopay/cardregistration-js-kit
- * - https://github.com/wangjohn/creditly
- *
- * This module does not depend on jQuery, and it does not support old browsers.
- *
- * Terminology:
- * - PAN = Primary Account Number - https://en.wikipedia.org/wiki/ISO/IEC_7812
- * - CVN = Card Verification Number - https://en.wikipedia.org/wiki/Card_security_code
- */
+// https://github.com/liberapay/payment-cards.js
 
 var PaymentCards = function () {
 
@@ -87,6 +75,7 @@ var PaymentCards = function () {
     }
 
     function restrictNumeric(input, maxLength, formatter) {
+        if (!input.addEventListener) return;
         input.addEventListener('keypress', function(e) {
             if (e.metaKey || e.ctrlKey || e.which < 32) {
                 return;
@@ -97,7 +86,7 @@ var PaymentCards = function () {
             if (/^\d+$/.test(String.fromCharCode(e.which)) == false) {
                 return e.preventDefault();
             }
-        });
+        }, false);
         if (!formatter) {
             return;
         }
@@ -107,7 +96,7 @@ var PaymentCards = function () {
             if (newValueFormatted != newValue) {
                 input.value = newValueFormatted;
             }
-        });
+        }, false);
     }
 
     function addSeparators(string, positions, separator) {
@@ -130,7 +119,7 @@ var PaymentCards = function () {
             var spacing = getSpacing(inputValue) || defaultSpacing;
             return addSeparators(inputValue, spacing, ' ');
         });
-        restrictNumeric(expiryInput, 4, function (inputValue) {
+        restrictNumeric(expiryInput, 6, function (inputValue) {
             return addSeparators(inputValue, [2], '/');
         });
         restrictNumeric(cvnInput, 4);
@@ -155,59 +144,66 @@ var PaymentCards = function () {
         return sum % 10 === 0;
     }
 
+    function e(value, status, message, subfield) {
+        return {value: value, status: status, message: message, subfield: subfield}
+    }
+
     function checkExpiry(expiry) {
         if (expiry.length == 0) {
-            return 'empty';
+            return e(expiry, 'empty');
         }
-        if (expiry.length != 4) {
-            return 'invalid: bad format';
+        split = expiry.split(/\D/g);
+        if (split.length != 2 || split[0].length != 2) {
+            return e(expiry, 'invalid', 'bad format');
         }
-        month = parseInt(expiry.slice(0, 2), 10);
-        year = parseInt(expiry.slice(2), 10);
+        month = parseInt(split[0], 10);
+        year = parseInt(split[1], 10);
         if (month % 1 !== 0) {
-            return 'invalid:month: not an integer';
+            return e(expiry, 'invalid', 'not an integer', 'month');
         }
         if (year % 1 !== 0) {
-            return 'invalid:year: not an integer';
+            return e(expiry, 'invalid', 'not an integer', 'year');
         }
         if (month < 1 || month > 12) {
-            return 'invalid:month: out of range';
+            return e(expiry, 'invalid', 'out of range', 'month');
         }
         var currentDate = new Date();
         var currentYear = currentDate.getFullYear();
-        year = year + Math.floor(currentYear / 100) * 100;
+        if (year < 100) year = year + Math.floor(currentYear / 100) * 100;
         if (year < currentYear) {
-            return 'invalid:year: in the past';
+            return e(expiry, 'invalid', 'in the past', 'year');
         }
         if (year == currentYear) {
             var currentMonth = currentDate.getMonth() + 1;
             if (month < currentMonth) {
-                return 'invalid:month: in the past';
+                return e(expiry, 'invalid', 'in the past', 'month');
             }
         }
-        return 'valid';
+        return e(expiry.replace(/\D/g, ''), 'valid');
     }
 
     function checkCard(pan, expiry, cvn) {
         var range = getRange(pan);
-        var r = {
-            pan: null, expiry: checkExpiry(expiry), cvn: null, range: range,
-        };
-        if (pan.length == 0) r.pan = 'empty';
-        else if (pan.length < 8) r.pan = 'invalid: too short';
-        else if (pan.length > 19) r.pan = 'invalid: too long';
-        else if (!luhnCheck(pan)) r.pan = 'abnormal: luhn check failure';
-        if (cvn.length == 0) r.cvn = 'empty';
-        else if (cvn.length < 3) r.cvn = 'abnormal: too short';
-        if (!range) return r;
-        if (range.panLengths.indexOf(pan.length) == -1) {
-            r.pan = r.pan || 'abnormal: bad length';
+        var r = {expiry: checkExpiry(expiry), range: range};
+        if (pan.length == 0) r.pan = e(pan, 'empty');
+        else if (pan.length < 8) r.pan = e(pan, 'invalid', 'too short');
+        else if (pan.length > 19) r.pan = e(pan, 'invalid', 'too long');
+        else if (!luhnCheck(pan)) r.pan = e(pan, 'abnormal', 'luhn check failure');
+        if (cvn.length == 0) r.cvn = e(cvn, 'empty');
+        else if (cvn.length < 3) r.cvn = e(cvn, 'abnormal', 'too short');
+        if (!range) {
+            r.pan = r.pan || e(pan, null);
+            r.cvn = r.cvn || e(cvn, null);
+            return r;
         }
-        if (range.cvnLengths.indexOf(cvn.length) == -1) {
-            r.cvn = r.cvn || 'abnormal: bad length';
+        if (!r.pan && range.panLengths.indexOf(pan.length) == -1) {
+            r.pan = e(pan, 'abnormal', 'bad length');
         }
-        r.pan = r.pan || 'valid';
-        r.cvn = r.cvn || 'valid';
+        if (!r.cvn && range.cvnLengths.indexOf(cvn.length) == -1) {
+            r.cvn = e(cvn, 'abnormal', 'bad length');
+        }
+        r.pan = r.pan || e(pan, 'valid');
+        r.cvn = r.cvn || e(cvn, 'valid');
         return r;
     }
 
@@ -218,12 +214,12 @@ var PaymentCards = function () {
     }
 
     Form.prototype.check = function () {
-        var r = {};
-        r.pan = this.inputs.pan.value.replace(/\D/g, '');
-        r.expiry = this.inputs.expiry.value.replace(/\D/g, '');
-        r.cvn = this.inputs.cvn.value.replace(/\D/g, '');
-        r.status = checkCard(r.pan, r.expiry, r.cvn);
-        r.range = r.status.range;
+        var r = checkCard(
+            this.inputs.pan.value.replace(/\D/g, ''),
+            this.inputs.expiry.value,
+            this.inputs.cvn.value.replace(/\D/g, '')
+        );
+        r.brand = r.range ? r.range.brand : null;
         return r;
     }
 
