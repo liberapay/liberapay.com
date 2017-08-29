@@ -78,12 +78,19 @@ var PaymentCards = function () {
         if (!input.addEventListener) return;
         input.addEventListener('keypress', function(e) {
             if (e.metaKey || e.ctrlKey || e.which < 32) {
+                // Don't interfere with things like copy-pasting
                 return;
             }
             if (input.value.replace(/\D/g, '').length === maxLength) {
+                // Enforce maxLength
+                if (input.selectionStart != input.selectionEnd) {
+                    // Allow overwriting selected digits
+                    return;
+                }
                 return e.preventDefault();
             }
             if (/^\d+$/.test(String.fromCharCode(e.which)) == false) {
+                // Reject non-numeric characters
                 return e.preventDefault();
             }
         }, false);
@@ -94,7 +101,19 @@ var PaymentCards = function () {
             var newValue = input.value;
             var newValueFormatted = formatter(newValue.replace(/\D/g, ''));
             if (newValueFormatted != newValue) {
+                var pos = input.selectionStart;
                 input.value = newValueFormatted;
+                if (pos == newValue.length) return;
+                // Restore cursor position
+                // To determine the correct offset we count the number of digits
+                // up to the cursor position, then we loop through the new
+                // formatted string until we reach the same number of digits.
+                pos = newValue.slice(0, pos).replace(/\D/g, '').length;
+                var newPos = 0, len = newValueFormatted.length;
+                for (var nDigits = 0; newPos < len && nDigits < pos; newPos++) {
+                    if (/\d/.test(newValueFormatted.charAt(newPos))) nDigits++;
+                }
+                input.selectionStart = newPos; input.selectionEnd = newPos;
             }
         }, false);
     }
@@ -108,9 +127,9 @@ var PaymentCards = function () {
             parts.push(string.slice(j, positions[i]));
             j = positions[i];
         }
-        // This adds whatever's left, it can be an empty string, in which case
-        // the string will have a separator at the end
-        parts.push(string.slice(j));
+        // This adds whatever's left, unless it's an empty string
+        var leftover = string.slice(j);
+        if (leftover.length > 0) parts.push(leftover);
         return parts.join(separator);
     }
 
