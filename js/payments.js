@@ -15,13 +15,10 @@ Liberapay.payments = {};
 
 Liberapay.payments.init = function() {
     $('#delete').submit(Liberapay.payments.deleteRoute);
-    $('input[type="digits"]').on('keypress', function(e) {
-        if (e.metaKey || e.ctrlKey || e.which < 32) return true;
-        if (!(/^[\d\s]+$/.test(String.fromCharCode(e.which)))) e.preventDefault();
+    $('input[type="digits"]').each(function() {
         var $input = $(this);
-        var length = $input.val().replace(/[^\d]/g, "").length;
         var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
-        if (maxdigits && length >= maxdigits) e.preventDefault();
+        PaymentCards.restrictNumeric(this, maxdigits);
     });
     $('fieldset.hidden').prop('disabled', true);
     $('button[data-modify]').click(function() {
@@ -196,13 +193,40 @@ Liberapay.payments.ba.submit = function () {
 
 Liberapay.payments.cc = {};
 
+Liberapay.payments.cc.check = function() {
+    Liberapay.forms.clearInvalid($('#credit-card'));
+
+    var card = Liberapay.payments.cc.form.check();
+    if (card.pan.status == null) card.pan.status = 'abnormal';
+    if (card.cvn.status == null) card.cvn.status = 'valid';
+
+    Liberapay.forms.setValidity($('#card_number'), card.pan.status);
+    Liberapay.forms.setValidity($('#expiration_date'), card.expiry.status);
+    Liberapay.forms.setValidity($('#cvv'), card.cvn.status);
+
+    return card;
+}
+
 Liberapay.payments.cc.init = function() {
     Liberapay.payments.init();
-    Liberapay.payments.cc.formatInputs(
-        $('#card_number'),
-        $('#expiration_date'),
-        $('#cvv')
+    var form = new PaymentCards.Form(
+        document.querySelector('#card_number'),
+        document.querySelector('#expiration_date'),
+        document.querySelector('#cvv')
     );
+    Liberapay.payments.cc.form = form;
+
+    function onBlur() {
+        var card = Liberapay.payments.cc.check();
+        $('.card-brand').text(card.brand);
+    }
+    form.inputs.pan.addEventListener('blur', onBlur);
+    form.inputs.expiry.addEventListener('blur', onBlur);
+    form.inputs.cvn.addEventListener('blur', onBlur);
+
+    form.inputs.pan.addEventListener('input', function () {
+        $('.card-brand').text('');
+    });
 };
 
 Liberapay.payments.cc.onError = function(response) {
@@ -225,127 +249,22 @@ Liberapay.payments.cc.onError = function(response) {
     Liberapay.notification(msg + ' (Error code: '+response.ResultCode+')' + debugInfo, 'error', -1);
 };
 
-Liberapay.payments.cc.formatInputs = function (cardNumberInput, expirationDateInput, cvvInput) {
-    /* This code was originally taken from https://github.com/wangjohn/creditly */
-
-    function getInputValue(e, element) {
-        var inputValue = element.val().trim();
-        inputValue = inputValue + String.fromCharCode(e.which);
-        return inputValue.replace(/[^\d]/g, "");
-    }
-
-    function isEscapedKeyStroke(e) {
-        return e.metaKey || e.ctrlKey || e.which < 32;
-    }
-
-    function isNumberEvent(e) {
-        return (/^\d+$/.test(String.fromCharCode(e.which)));
-    }
-
-    function onlyAllowNumeric(e, maximumLength, element) {
-        e.preventDefault();
-        // Ensure that it is a number and stop the keypress
-        if (!isNumberEvent(e)) {
-            return false;
-        }
-        return true;
-    }
-
-    var isAmericanExpress = function(number) {
-        return number.match("^(34|37)");
-    };
-
-    function shouldProcessInput(e, maximumLength, element) {
-        var target = e.currentTarget;
-        if (getInputValue(e, element).length > maximumLength) {
-            e.preventDefault();
-            return false;
-        }
-        if ((target.selectionStart !== target.value.length)) {
-            return false;
-        }
-        return (!isEscapedKeyStroke(e)) && onlyAllowNumeric(e, maximumLength, element);
-    }
-
-    function addSeparators(string, positions, separator) {
-        // positions isn't supposed to contain the maximum length as its last
-        // element, if it does you'll get a separator at the end of string
-        var separator = separator || ' ';
-        var parts = [];
-        var j = 0;
-        var slen = string.length;
-        for (var i=0; i<positions.length && slen >= positions[i]; i++) {
-            // This loop adds all the complete parts in the array
-            parts.push(string.slice(j, positions[i]));
-            j = positions[i];
-        }
-        // This adds whatever's left, it can be an empty string, in which case
-        // the string will have a separator at the end
-        parts.push(string.slice(j));
-        return parts.join(separator);
-    }
-
-    var americanExpressSpaces = [4, 10];
-    var defaultSpaces = [4, 8, 12];
-
-    cardNumberInput.on("keypress", function(e) {
-        var number = getInputValue(e, cardNumberInput);
-        var isAmericanExpressCard = isAmericanExpress(number);
-        var maximumLength = (isAmericanExpressCard ? 15 : 16);
-        if (shouldProcessInput(e, maximumLength, cardNumberInput)) {
-            var newInput;
-            newInput = isAmericanExpressCard ?
-                addSeparators(number, americanExpressSpaces) :
-                addSeparators(number, defaultSpaces);
-            cardNumberInput.val(newInput);
-        }
-    });
-
-    expirationDateInput.on("keypress", function(e) {
-        var maximumLength = 4;
-        if (shouldProcessInput(e, maximumLength, expirationDateInput)) {
-            var newInput = getInputValue(e, expirationDateInput);
-            expirationDateInput.val(addSeparators(newInput, [2], '/'));
-        }
-    });
-
-    cvvInput.on("keypress", function(e) {
-        var number = getInputValue(e, cardNumberInput);
-        var isAmericanExpressCard = isAmericanExpress(number);
-        var maximumLength = (isAmericanExpressCard ? 4 : 3);
-        if (shouldProcessInput(e, maximumLength, cvvInput)) {
-            var newInput = getInputValue(e, cvvInput);
-            cvvInput.val(newInput);
-        }
-    });
-}
-
 Liberapay.payments.cc.submit = function() {
 
-    Liberapay.forms.clearInvalid($('#credit-card'));
-
-    function val(field) {
-        return $('#'+field).val().replace(/[^\d]/g, '');
+    var card = Liberapay.payments.cc.check();
+    if (card.pan.status != 'valid' || card.expiry.status != 'valid' || card.cvn.status != 'valid') {
+        if (!confirm($('#credit-card').data('msg-confirm-submit'))) {
+            Liberapay.payments.error();
+            Liberapay.forms.focusInvalid($('#credit-card'));
+            return false;
+        }
     }
 
     var cardData = {
-        cardType: 'CB_VISA_MASTERCARD',
-        cardNumber: val('card_number'),
-        cardCvx: val('cvv'),
-        cardExpirationDate: val('expiration_date'),
+        cardNumber: card.pan.value,
+        cardCvx: card.cvn.value,
+        cardExpirationDate: card.expiry.value,
     };
-
-    var is_card_number_invalid = mangoPay._validation._cardNumberValidator._validate(cardData.cardNumber) !== true;
-    var is_expiry_invalid = mangoPay._validation._expirationDateValidator._validate(cardData.cardExpirationDate, new Date()) !== true;
-
-    Liberapay.forms.setInvalid($('#card_number'), is_card_number_invalid);
-    Liberapay.forms.setInvalid($('#expiration_date'), is_expiry_invalid);
-
-    if (is_card_number_invalid || is_expiry_invalid) {
-        Liberapay.payments.error();
-        Liberapay.forms.focusInvalid($('#credit-card'));
-        return false;
-    }
 
     jQuery.ajax({
         url: '/'+Liberapay.username+'/routes/credit-card.json',

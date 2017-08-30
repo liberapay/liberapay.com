@@ -56,11 +56,11 @@ var mangoPay = {
             }
 
             // Validate card data
-            var isCardValid = mangoPay.cardRegistration._validateCardData(cardData);
-            if (isCardValid !== true) {
-                errorCallback(isCardValid);
-                return;
-            };
+            // var isCardValid = mangoPay.cardRegistration._validateCardData(cardData);
+            // if (isCardValid !== true) {
+            //     errorCallback(isCardValid);
+            //     return;
+            // };
 
             // Try to register card in two steps: get Payline token and then finish card registration with MangoPay API
             mangoPay.cardRegistration._tokenizeCard(

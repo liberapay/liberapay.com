@@ -2,14 +2,16 @@ Liberapay.forms = {};
 
 Liberapay.forms.clearInvalid = function($form) {
     $form.find('.invalid').removeClass('invalid');
+    $form.find('.abnormal').removeClass('abnormal');
 };
 
 Liberapay.forms.focusInvalid = function($form) {
-    $form.find('.invalid').eq(0).focus();
+    $form.find('.invalid, .abnormal').eq(0).focus();
 };
 
-Liberapay.forms.setInvalid = function($input, invalid) {
-    $input.toggleClass('invalid', invalid);
+Liberapay.forms.setValidity = function($input, validity) {
+    $input.toggleClass('invalid', validity == 'invalid');
+    $input.toggleClass('abnormal', validity == 'abnormal');
 };
 
 Liberapay.forms.jsSubmit = function() {

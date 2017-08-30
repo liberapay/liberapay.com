@@ -104,6 +104,8 @@ if funded > 0 and user == participant:
 title = _("Add money")
 
 [---] text/html
+% from "templates/icons.html" import glyphicon
+
 % extends "templates/panel.html"
 
 % block panel_body
@@ -216,7 +218,7 @@ title = _("Add money")
     % endif
 
 
-    <h3>{{ _("Credit card") }}</h3>
+    <h3>{{ _("Card") }}</h3>
 
     % if card
     <div>
@@ -226,27 +228,57 @@ title = _("Add money")
     % endif
 
     <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
-          data-msg-cors-fail='{{ _("The request failed. Please make sure your browser is up-to-date, and disable "
-                                   "any extension that blocks requests (e.g. NoScript), then try again.") }}'>
-        <div>
-            <input id="card_number" class="form-control" required
-                   placeholder="{{ _('Credit Card Number') }}" />
+          data-msg-confirm-submit='{{ _(
+              "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
+          ) }}'
+          data-msg-cors-fail='{{ _(
+              "The request failed. Please make sure your browser is up-to-date, and disable "
+              "any extension that blocks requests (e.g. NoScript), then try again."
+          ) }}'>
+        <div class="payment-card-row">
+        <div class="payment-card">
+            <div class="card-number"><div class="input-wrapper">
+            <input id="card_number" class="form-control" required autocomplete="cc-number"
+                   placeholder="{{ _('Card number') }}"
+                   title="{{ _('The main number on the card, between 8 and 19 digits') }}"
+                   data-toggle="tooltip" data-placement="top" data-trigger="focus" />
+            <span class="abnormal-msg">{{ _(
+                "This card number seems to be invalid, are you sure you didn't make a mistake?"
+            ) }}</span>
             <span class="invalid-msg">{{ _("This card number is invalid.") }}</span>
-        </div>
-        <div class="form-inline">
-            <input id="expiration_date" class="form-control"
-                   placeholder="{{ _('MM/YY') }}" title="{{ _('Expiration Date') }}"
-                   required maxlength=6 />
-            <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
+            </div></div>
 
-            <input id="cvv" class="form-control" required placeholder="{{ _('CVV') }}"
-                   title="{{ _('Verification code (3 digits located on the back of the card)') }}" />
-            <span class="invalid-msg">{{ _("This verification code is invalid.") }}</span>
+            <div class="card-expiry"><div class="input-wrapper">
+            <input id="expiration_date" class="form-control" required autocomplete="cc-exp"
+                   placeholder="{{ _('MM/YY') }}" title="{{ _('Expiration date (4 digits)') }}"
+                   data-toggle="tooltip" data-placement="top" data-trigger="focus" />
+            <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
+            </div></div>
+
+            <div class="cvv"><div class="input-wrapper">
+            <input id="cvv" class="form-control" required autocomplete="cc-csc"
+                   placeholder="{{ _('CVV') }}"
+                   title="{{ _('Verification code, usually 3 digits located on the back of the card') }}"
+                   data-toggle="tooltip" data-placement="top" data-trigger="focus" />
+            <span class="abnormal-msg">{{ _(
+                "This verification code seems to be invalid, are you sure you "
+                "didn't make a mistake?"
+            ) }}</span>
+            </div></div>
+
+            <div class="card-brand"></div>
         </div>
+        <div class="aside">
         <label>
             <input type="checkbox" id="keep" checked />
             {{ _("Remember the card number for next time") }}
         </label>
+        <p class="help-block">{{ glyphicon('lock') }} {{ _(
+            "Your card data is sent directly to our payment partner's system "
+            "through an encrypted connection."
+        ) }}</p>
+        </div>
+        </div>
     </fieldset>
 
     <br>
@@ -265,7 +297,7 @@ title = _("Add money")
 % if show_form
 <p class="alert alert-info">
     <a href="https://www.mangopay.com/legal-notices/">
-        <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" />
+        <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" class="contain" />
     </a>
 </p>
 % endif
