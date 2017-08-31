@@ -9,6 +9,10 @@ Liberapay.forms.focusInvalid = function($form) {
     $form.find('.invalid, .abnormal').eq(0).focus();
 };
 
+Liberapay.forms.setInvalid = function($input, invalid) {
+    $input.toggleClass('invalid', invalid);
+};
+
 Liberapay.forms.setValidity = function($input, validity) {
     $input.toggleClass('invalid', validity == 'invalid');
     $input.toggleClass('abnormal', validity == 'abnormal');
