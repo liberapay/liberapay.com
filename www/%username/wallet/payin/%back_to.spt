@@ -27,12 +27,12 @@ can_payin = weekly > 0 and funded < 52
 if funded > 0 and user == participant:
     participant.mark_notifications_as_read('low_balance')
 
-title = _("Add money")
+title = _("Adding Money")
 
 [---] text/html
-% extends "templates/panel.html"
+% extends "templates/base-thin.html"
 
-% block panel_body
+% block thin_content
 
     <p>
         % if donations == 0
@@ -106,11 +106,8 @@ title = _("Add money")
 
     % endif
 
-% endblock
-
-% block under_panel
 % if can_payin
-<p class="alert alert-info">
+<p class="powered-by">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" class="contain" />
     </a>

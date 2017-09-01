@@ -105,12 +105,12 @@ if show_form:
 if user == participant:
     participant.mark_notifications_as_read('withdrawal_failed')
 
-title = _("Withdraw money")
+title = _("Withdrawing Money")
 
 [---] text/html
-% extends "templates/panel.html"
+% extends "templates/base-thin.html"
 
-% block panel_body
+% block thin_content
 <form id="payout" action="javascript:" method="POST"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
@@ -195,6 +195,7 @@ title = _("Withdraw money")
         </p>
         <button class="btn btn-default btn-sm" type="button" data-modify="#bank-account">{{ _("Modify") }}</button>
     </div>
+    <br>
     % endif
 
     <fieldset id="bank-account" class="{{ 'hidden' if bank_account else '' }}">
@@ -341,21 +342,17 @@ title = _("Withdraw money")
 
     </fieldset>
 
-    <br>
-    <button class="btn btn-success">{{ _("Go") }}</button>
-
-    % if back_to
-        <a href="{{ response.sanitize_untrusted_url(back_to) }}"
+    <div class="proceed">
+        <button class="btn btn-lg btn-success">{{ _("Proceed") }}</button>
+        <a href="{{ response.sanitize_untrusted_url(back_to) or participant.path('wallet') }}"
            class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
-    % endif
+    </div>
     % endif
 
 </form>
-% endblock
 
-% block under_panel
 % if show_form
-<p class="alert alert-info">
+<p class="powered-by">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" class="contain" />
     </a>
