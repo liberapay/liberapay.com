@@ -24,7 +24,7 @@ if weekly > 0:
 back_to = b64decode_s(request.path['back_to'], default=None)
 can_payin = weekly > 0 and funded < 52
 
-if funded > 0 and user == participant:
+if user == participant:
     participant.mark_notifications_as_read('low_balance')
 
 title = _("Adding Money")

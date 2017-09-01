@@ -100,7 +100,7 @@ back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
 
-if funded > 0 and user == participant:
+if user == participant:
     participant.mark_notifications_as_read('low_balance')
 
 title = _("Adding Money")
