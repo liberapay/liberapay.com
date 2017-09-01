@@ -308,7 +308,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_result_restores_balance_on_error(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 30, 0, homer)
-        e_id = record_exchange(self.db, ba, D('-27.06'), D('0.81'), 0, homer, 'pre')
+        e_id = record_exchange(self.db, ba, D('-27.06'), D('0.81'), 0, homer, 'pre').id
         assert homer.balance == D('02.13')
         record_exchange_result(self.db, e_id, 'failed', 'SOME ERROR', homer)
         homer = Participant.from_username('homer')
@@ -317,7 +317,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_result_restores_balance_on_error_with_invalidated_route(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 37, 0, homer)
-        e_id = record_exchange(self.db, ba, D('-32.45'), D('0.86'), 0, homer, 'pre')
+        e_id = record_exchange(self.db, ba, D('-32.45'), D('0.86'), 0, homer, 'pre').id
         assert homer.balance == D('3.69')
         ba.update_error('invalidated')
         record_exchange_result(self.db, e_id, 'failed', 'oops', homer)
@@ -328,7 +328,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 50, 0, homer)
-        e_id = record_exchange(self.db, ba, D('-43.98'), D('1.60'), 0, homer, 'pre')
+        e_id = record_exchange(self.db, ba, D('-43.98'), D('1.60'), 0, homer, 'pre').id
         assert homer.balance == D('4.42')
         record_exchange_result(self.db, e_id, 'succeeded', None, homer)
         homer = Participant.from_username('homer')
@@ -337,7 +337,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_result_updates_balance_for_positive_amounts(self):
         janet, cc = self.janet, self.janet_route
         self.make_exchange('mango-cc', 4, 0, janet)
-        e_id = record_exchange(self.db, cc, D('31.59'), D('0.01'), 0, janet, 'pre')
+        e_id = record_exchange(self.db, cc, D('31.59'), D('0.01'), 0, janet, 'pre').id
         assert janet.balance == D('4.00')
         record_exchange_result(self.db, e_id, 'succeeded', None, janet)
         janet = Participant.from_username('janet')

@@ -136,7 +136,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             status_up = status.upper()
             error = 'FOO' if status == 'failed' else None
             self.make_exchange('mango-cc', 10, 0, homer)
-            e_id = record_exchange(self.db, ba, -10, 0, 0, homer, 'pre')
+            e_id = record_exchange(self.db, ba, -10, 0, 0, homer, 'pre').id
             assert homer.balance == 0
             homer.close(None)
             assert homer.status == 'closed'
@@ -172,7 +172,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         for status in ('failed', 'succeeded'):
             # Create the payout
             self.make_exchange('mango-cc', 10, 0, homer)
-            e_id = record_exchange(self.db, ba, -9, 1, 0, homer, 'pre')
+            e_id = record_exchange(self.db, ba, -9, 1, 0, homer, 'pre').id
             assert homer.balance == 0
             homer.close(None)
             assert homer.status == 'closed'
@@ -224,7 +224,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         )
         for status, result_code, error in cases:
             status_up = status.upper()
-            e_id = record_exchange(self.db, route, 11, 0, 0, homer, 'pre')
+            e_id = record_exchange(self.db, route, 11, 0, 0, homer, 'pre').id
             assert homer.balance == 0
             homer.close(None)
             assert homer.status == 'closed'
@@ -268,7 +268,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
     def _test_payin_bank_wire_callback_amount_mismatch(self, Get, fee):
         homer = self.homer
         route = ExchangeRoute.insert(homer, 'mango-bw', 'x')
-        e_id = record_exchange(self.db, route, 11, 0, 0, homer, 'pre')
+        e_id = record_exchange(self.db, route, 11, 0, 0, homer, 'pre').id
         assert homer.balance == 0
         homer.close(None)
         assert homer.status == 'closed'

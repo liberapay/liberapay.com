@@ -94,7 +94,7 @@ def payout(db, route, amount, ignore_high_fee=False):
         raise TransactionFeeTooHigh(fee_percent, fee, amount)
 
     # Try to dance with MangoPay
-    e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre')
+    e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre').id
     payout = BankWirePayOut()
     payout.AuthorId = participant.mangopay_user_id
     payout.DebitedFunds = Money(int(amount * 100), 'EUR')
@@ -131,7 +131,7 @@ def charge(db, route, amount, return_url):
     if not participant.mangopay_wallet_id:
         create_wallet(db, participant)
 
-    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
+    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre').id
     payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = participant.mangopay_wallet_id
@@ -174,7 +174,7 @@ def payin_bank_wire(db, participant, debit_amount):
     if not participant.mangopay_wallet_id:
         create_wallet(db, participant)
 
-    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
+    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre').id
     payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = participant.mangopay_wallet_id
@@ -247,7 +247,7 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
             amount -= fee
             propagate_exchange(cursor, participant, e, '', amount)
 
-    return e.id
+    return e
 
 
 def record_exchange_result(db, exchange_id, status, error, participant):
