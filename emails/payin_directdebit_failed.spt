@@ -1,0 +1,13 @@
+{{ _("Your direct debit payment for Liberapay has failed") }}
+
+[---] text/html
+<p>{{ _(
+    "The attempt to transfer {0} from your bank account has failed with the following error message:",
+    Money(exchange.amount + exchange.fee, 'EUR')
+) }}</p>
+
+<pre>{{ exchange.note }}</pre>
+
+<p>{{ _("You can try again, possibly with another payment method, by clicking on the link below:") }}</p>
+
+<p><a href="{{ participant.url('wallet/payin/') }}">{{ _("Try again") }}</a></p>
