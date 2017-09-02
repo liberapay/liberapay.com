@@ -49,9 +49,12 @@ if request.method == 'POST':
     amount = parse_decimal(request.body['amount'])
     if amount <= 0:
         raise response.error(400, _("The amount cannot be zero."))
+    route = ExchangeRoute.from_network(participant, 'mango-ba')
+    if not route:
+        raise response.error(400, "no route")
     ignore_high_fee = body.get('confirmed') == 'true'
     try:
-        exchange = payout(website.db, participant, amount, ignore_high_fee)
+        exchange = payout(website.db, route, amount, ignore_high_fee)
     except TransactionFeeTooHigh as e:
         msg = _(
             "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?",

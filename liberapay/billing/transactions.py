@@ -68,9 +68,14 @@ def test_hook():
     return
 
 
-def payout(db, participant, amount, ignore_high_fee=False):
+def payout(db, route, amount, ignore_high_fee=False):
+    """Withdraw money to the specified bank account (`route`).
+    """
     assert amount > 0
+    assert route
+    assert route.network == 'mango-ba'
 
+    participant = route.participant
     if participant.is_suspended:
         raise AccountSuspended()
 
@@ -78,8 +83,6 @@ def payout(db, participant, amount, ignore_high_fee=False):
     if payday:
         raise PaydayIsRunning
 
-    route = ExchangeRoute.from_network(participant, 'mango-ba')
-    assert route
     ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
 
     # Do final calculations

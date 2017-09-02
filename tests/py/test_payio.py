@@ -49,11 +49,11 @@ class TestPayouts(MangopayHarness):
         self.janet.close('downstream')
         self.homer = self.homer.refetch()
         assert self.homer.balance == 46
-        exchange = payout(self.db, self.homer, D('30.00'))
+        exchange = payout(self.db, self.homer_route, D('30.00'))
         assert exchange.note is None
         assert exchange.status == 'created'
-        homer = Participant.from_id(self.homer.id)
-        assert self.homer.balance == homer.balance == 16
+        self.homer = self.homer.refetch()
+        assert self.homer.balance == 16
         self.db.self_check()
 
     @mock.patch('mangopay.resources.BankAccount.get')
@@ -61,28 +61,28 @@ class TestPayouts(MangopayHarness):
         self.make_exchange('mango-cc', 8, 0, self.homer)
         gba.return_value = self.bank_account_outside_sepa
         with self.assertRaises(FeeExceedsAmount):
-            payout(self.db, self.homer, D('0.10'))
+            payout(self.db, self.homer_route, D('0.10'))
 
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_payout_failure(self, test_hook):
         test_hook.side_effect = Foobar
         self.make_exchange('mango-cc', 20, 0, self.homer)
-        exchange = payout(self.db, self.homer, D('1.00'))
+        exchange = payout(self.db, self.homer_route, D('1.00'))
         assert exchange.status == 'failed'
         homer = Participant.from_id(self.homer.id)
         assert homer.get_bank_account_error() == exchange.note == "Foobar()"
         assert self.homer.balance == homer.balance == 20
 
-    def test_payout_no_bank_account(self):
+    def test_payout_no_route(self):
         self.make_exchange('mango-cc', 20, 0, self.david)
         with self.assertRaises(AssertionError):
-            payout(self.db, self.david, D('1.00'))
+            payout(self.db, None, D('1.00'))
 
     def test_payout_invalidated_bank_account(self):
         self.make_exchange('mango-cc', 20, 0, self.homer)
         self.homer_route.invalidate()
         with self.assertRaises(AssertionError):
-            payout(self.db, self.homer, D('10.00'))
+            payout(self.db, self.homer_route, D('10.00'))
 
     @mock.patch('mangopay.resources.BankAccount.get')
     def test_payout_quarantine(self, gba):
@@ -90,13 +90,13 @@ class TestPayouts(MangopayHarness):
         gba.return_value = self.bank_account
         with mock.patch.multiple(transactions, QUARANTINE='1 month'):
             with self.assertRaises(NotEnoughWithdrawableMoney):
-                payout(self.db, self.homer, D('32.00'))
+                payout(self.db, self.homer_route, D('32.00'))
 
     def test_payout_during_payday(self):
         self.make_exchange('mango-cc', 200, 0, self.homer)
         Payday.start()
         with self.assertRaises(PaydayIsRunning):
-            payout(self.db, self.homer, D('97.35'))
+            payout(self.db, self.homer_route, D('97.35'))
 
     def test_payout_suspended_user(self):
         self.make_exchange('mango-cc', 20, 0, self.homer)
@@ -107,7 +107,7 @@ class TestPayouts(MangopayHarness):
         """, (self.homer.id,))
         self.homer.set_attributes(is_suspended=True)
         with self.assertRaises(AccountSuspended):
-            payout(self.db, self.homer, D('10.00'))
+            payout(self.db, self.homer_route, D('10.00'))
 
 
 class TestCharge(MangopayHarness):
@@ -405,7 +405,7 @@ class TestSync(MangopayHarness):
              mock.patch('liberapay.billing.transactions.test_hook') as test_hook:
             rer.side_effect = test_hook.side_effect = Foobar
             with self.assertRaises(Foobar):
-                payout(self.db, self.homer, D('35.00'))
+                payout(self.db, self.homer_route, D('35.00'))
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
