@@ -76,22 +76,23 @@ title = _("Frequently Asked Questions")
 
     {{ dt(_("What are the payment processing fees?"), 'fees') }}
 
-    <dd>{{ _(
-        "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
+    <dd>
+    <p>{{ _(
+        "Adding money to Liberapay incurs a fee of:\n"
+        "• {0}% + {1} when the payment method is a credit or debit card;\n"
+        "• {2}% when it's a bank wire;\n"
+        "• {3} when it's a direct debit.",
         constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
         Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
-    ) + " " + _(
-        "Adding money to Liberapay via bank wire incurs a fee of {0}% from our "
-        "payment processor.",
         constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100,
-    ) + " " + _(
-        "Adding money to Liberapay via direct debit incurs a fee of {0}.",
         Money(constants.FEE_PAYIN_DIRECT_DEBIT.fix * (constants.FEE_VAT + 1), 'EUR'),
-    ) }}<br>{{ _(
+    ).replace('\n', '<br>'|safe) }}</p>
+    <p>{{ _(
         "Withdrawing money to a SEPA bank account is free, transfers to other "
         "countries cost {0} per transfer. Additional fee from your bank may apply.",
         Money(constants.FEE_PAYOUT_OUTSIDE_SEPA.fix * (constants.FEE_VAT + 1), 'EUR'),
-    ) }}</dd>
+    ) }}</p>
+    </dd>
 
 
     {{ dt(_("Is there a minimum or maximum amount I can give or receive?"), 'maximum-amount') }}
