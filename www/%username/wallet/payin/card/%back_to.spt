@@ -24,9 +24,12 @@ AMOUNT_MAX = Money(PAYIN_CARD_MAX, 'EUR')
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if request.method == 'GET' and 'transactionId' in request.qs:
-    payin = PayIn.get(request.qs['transactionId'])
+    try:
+        payin = PayIn.get(request.qs['transactionId'])
+    except PayIn.DoesNotExist:
+        raise response.error(400, "bad transactionId: does not exist")
     if payin.AuthorId != participant.mangopay_user_id:
-        raise response.error(403)
+        raise response.error(403, "bad transactionId: user mistmatch")
     status = payin.Status.lower()
     error = repr_error(payin)
     record_exchange_result(website.db, payin.Tag, status, error, participant)

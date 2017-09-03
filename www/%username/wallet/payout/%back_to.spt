@@ -11,29 +11,11 @@ from liberapay.billing.transactions import payout
 from liberapay.constants import SEPA
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import b64decode_s, get_participant
+from liberapay.utils import (
+    b64decode_s, get_participant, get_owner_address, get_owner_name, obfuscate
+)
 
 NOT_OTHER = set('US CA GB'.split()).union(SEPA)
-
-def get_owner_name(account):
-    if account.PersonType == 'NATURAL':
-        return account.FirstName + ' ' + account.LastName
-    else:
-        return account.Name
-
-def get_owner_address(bank_account, mp_account):
-    if bank_account:
-        addr = bank_account.OwnerAddress
-    elif mp_account.PersonType == 'NATURAL':
-        addr = mp_account.Address
-    else:
-        addr = mp_account.HeadquartersAddress
-    if not addr.Country:
-        return None
-    return addr
-
-def obfuscate(n, x, y):
-    return n[:x] + 'x'*len(n[x:y]) + n[y:]
 
 [---]
 

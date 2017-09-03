@@ -140,12 +140,12 @@ Liberapay.payments.ba.submit = function () {
     Liberapay.forms.clearInvalid($ba);
 
     var $iban = $('input[name="IBAN"]');
-    var is_iban_invalid = !$('#iban').prop('disabled') && IBAN.isValid($iban.val()) === false;
+    var is_iban_invalid = $('#iban').prop('disabled') === false && IBAN.isValid($iban.val()) === false;
     Liberapay.forms.setInvalid($iban, is_iban_invalid);
 
     var $bban = $('#bban input[name="AccountNumber"]');
     var country = $('#bban select[name="Country"]').val();
-    var is_bban_invalid = !$('#bban').prop('disabled') && IBAN.isValidBBAN(country, $bban.val()) === false;
+    var is_bban_invalid = $('#bban').prop('disabled') === false && IBAN.isValidBBAN(country, $bban.val()) === false;
     Liberapay.forms.setInvalid($bban, is_bban_invalid);
 
     var invalids = 0;

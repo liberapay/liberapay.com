@@ -7,9 +7,10 @@ from decimal import Decimal, ROUND_UP
 from pando.utils import typecheck
 
 from liberapay.constants import (
-    D_CENT, D_ZERO,
+    D_CENT,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
-    FEE_PAYIN_BANK_WIRE,
+    FEE_PAYIN_BANK_WIRE, PAYIN_BANK_WIRE_MIN,
+    FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN,
     FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, SEPA,
     FEE_VAT,
 )
@@ -41,8 +42,9 @@ def upcharge(amount, fees, min_amount):
     return charge_amount, fee, vat
 
 
-upcharge_bank_wire = lambda amount: upcharge(amount, FEE_PAYIN_BANK_WIRE, D_ZERO)
+upcharge_bank_wire = lambda amount: upcharge(amount, FEE_PAYIN_BANK_WIRE, PAYIN_BANK_WIRE_MIN)
 upcharge_card = lambda amount: upcharge(amount, FEE_PAYIN_CARD, PAYIN_CARD_MIN)
+upcharge_direct_debit = lambda amount: upcharge(amount, FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN)
 
 
 def skim_amount(amount, fees):

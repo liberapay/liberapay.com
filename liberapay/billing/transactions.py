@@ -6,13 +6,15 @@ from decimal import Decimal
 
 from mangopay.exceptions import APIError
 from mangopay.resources import (
-    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, SettlementTransfer,
-    Transaction, Transfer, Wallet,
+    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, DirectDebitDirectPayIn,
+    SettlementTransfer, Transaction, Transfer, Wallet,
 )
 from mangopay.utils import Money
 from pando.utils import typecheck
 
-from liberapay.billing.fees import skim_bank_wire, skim_credit, upcharge_card
+from liberapay.billing.fees import (
+    skim_bank_wire, skim_credit, upcharge_card, upcharge_direct_debit
+)
 from liberapay.constants import FEE_PAYOUT_WARN, QUARANTINE
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
@@ -149,6 +151,69 @@ def charge(db, route, amount, return_url):
 
     if payin.SecureModeRedirectURL:
         raise Redirect(payin.SecureModeRedirectURL)
+
+    return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+
+
+def prepare_direct_debit(db, route, amount):
+    """Prepare to debit a bank account.
+    """
+    typecheck(amount, Decimal)
+
+    assert route.network == 'mango-ba'
+
+    participant = route.participant
+
+    debit_amount, fee, vat = upcharge_direct_debit(amount)
+    amount = debit_amount - fee
+
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+
+    status = 'pre' if route.mandate else 'pre-mandate'
+    return record_exchange(db, route, amount, fee, vat, participant, status)
+
+
+def execute_direct_debit(db, exchange, route):
+    """Execute a prepared direct debit.
+    """
+    assert exchange.route == route.id
+    assert route
+    assert route.network == 'mango-ba'
+    assert route.mandate
+
+    participant = route.participant
+    assert exchange.participant == participant.id
+
+    if exchange.status == 'pre-mandate':
+        exchange = db.one("""
+            UPDATE exchanges
+               SET status = 'pre'
+             WHERE id = %s
+               AND status = %s
+         RETURNING *
+        """, (exchange.id, exchange.status))
+        assert exchange, 'race condition'
+
+    assert exchange.status == 'pre'
+
+    amount, fee = exchange.amount, exchange.fee
+    debit_amount = amount + fee
+
+    e_id = exchange.id
+    payin = DirectDebitDirectPayIn()
+    payin.AuthorId = participant.mangopay_user_id
+    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.DebitedFunds = Money(int(debit_amount * 100), 'EUR')
+    payin.MandateId = route.mandate
+    payin.Fees = Money(int(fee * 100), 'EUR')
+    payin.Tag = str(e_id)
+    try:
+        test_hook()
+        payin.save()
+    except Exception as e:
+        error = repr_exception(e)
+        return record_exchange_result(db, e_id, 'failed', error, participant)
 
     return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
 
