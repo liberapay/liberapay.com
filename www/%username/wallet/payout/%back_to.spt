@@ -278,7 +278,7 @@ title = _("Withdrawing Money")
 
                 <label>
                     <span>{{ _("Country") }}</span>
-                    <select name="Country" class="form-control" required>
+                    <select name="Country" class="form-control country" required>
                     <option></option>
                     % for code, name in locale.countries.items()
                         % set disable = code in NOT_OTHER

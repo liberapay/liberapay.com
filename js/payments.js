@@ -27,6 +27,18 @@ Liberapay.payments.init = function() {
         $btn.parent().addClass('hidden');
     });
     $('form#payin, form#payout').submit(Liberapay.payments.submit);
+    $('select.country').on('change', function () {
+        var newValue = $(this).val();
+        $(this).data('value-was-copied', null);
+        if (this.name != 'CountryOfResidence') return;
+        $('select.country').val(function (i, value) {
+            if (value == '' || $(this).data('value-was-copied')) {
+                $(this).data('value-was-copied', true);
+                return newValue;
+            }
+            return value;
+        })
+    });
 }
 
 Liberapay.payments.deleteRoute = function(e) {

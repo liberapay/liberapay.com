@@ -18,7 +18,7 @@
     <br>
     <label>
         <span>{{ _("Country (residence)") }}</span>
-        <select name="CountryOfResidence" class="form-control" required>
+        <select name="CountryOfResidence" class="form-control country" required>
         <option></option>
         % set country = account[p+'CountryOfResidence'] or request.country
         % for each in locale.countries.items()
@@ -30,7 +30,7 @@
     <br>
     <label>
         <span>{{ _("Country (nationality)") }}</span>
-        <select name="Nationality" class="form-control" required>
+        <select name="Nationality" class="form-control country" required>
         <option></option>
         % set country = account[p+'Nationality'] or request.country
         % for each in locale.countries.items()
