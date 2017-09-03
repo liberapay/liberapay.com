@@ -97,10 +97,12 @@ if is_team:
                             "Liberapay.",
                             platform.display_name) }}</p>
                 % else
-                    <p>{{ _("If you are {0} on {1}, you can unlock your account to allow "
-                            "people to pledge tips to you on Liberapay.",
-                            '<a href="%s">%s</a>'|safe % (account.html_url, friendly_name),
-                            platform.display_name) }}</p>
+                    <p>{{ _(
+                        "If you are {username} on {platform}, you can unlock your account "
+                        "to allow people to pledge to donate to you on Liberapay.",
+                        username='<a href="%s">%s</a>'|safe % (account.html_url, friendly_name),
+                        platform=platform.display_name
+                    ) }}</p>
                 % endif
 
                 % call auth_button(platform.name, 'unlock', user_id, user_id_type)
