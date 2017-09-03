@@ -66,6 +66,14 @@ title = _("Frequently Asked Questions")
 </dl>
 <dl class="col-md-6">
 
+    {{ dt(_("What payment methods are available?"), 'payment-methods') }}
+
+    <dd>{{ _(
+        "We currently support most credit and debit cards (VISA and MasterCard), as "
+        "well as bank wires (in euros) and direct debits (SEPA only). More options "
+        "will be added in the future."
+    ) }}</dd>
+
     {{ dt(_("What are the payment processing fees?"), 'fees') }}
 
     <dd>{{ _(
