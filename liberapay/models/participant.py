@@ -49,7 +49,6 @@ from liberapay.exceptions import (
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
-from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     deserialize, erase_cookie, serialize, set_cookie,
@@ -1001,12 +1000,6 @@ class Participant(Model, MixinTeam):
 
     # Exchange-related stuff
     # ======================
-
-    def get_bank_account_error(self):
-        return getattr(ExchangeRoute.from_network(self, 'mango-ba'), 'error', None)
-
-    def get_credit_card_error(self):
-        return getattr(ExchangeRoute.from_network(self, 'mango-cc'), 'error', None)
 
     @property
     def withdrawable_balance(self):

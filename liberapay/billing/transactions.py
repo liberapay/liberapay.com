@@ -237,10 +237,10 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
         """, (amount, fee, vat, participant.id, status, route.id, error, wallet_id))
 
         if status == 'failed':
-            propagate_exchange(cursor, participant, e, route, error, 0)
+            propagate_exchange(cursor, participant, e, error, 0)
         elif amount < 0:
             amount -= fee
-            propagate_exchange(cursor, participant, e, route, '', amount)
+            propagate_exchange(cursor, participant, e, '', amount)
 
     return e.id
 
@@ -255,34 +255,25 @@ def record_exchange_result(db, exchange_id, status, error, participant):
                  , note=%(error)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
-         RETURNING id, amount, fee, vat, participant, recorder, note, status
-                 , timestamp, refund_ref
-                 , ( SELECT r.*::exchange_routes
-                       FROM exchange_routes r
-                      WHERE r.id = e.route
-                   ) AS route
+         RETURNING *
         """, locals())
         if not e:
             return
         assert participant.id == e.participant
-        assert isinstance(e.route, ExchangeRoute)
 
         amount = e.amount
         if amount < 0:
             amount = -amount + max(e.fee, 0) if status == 'failed' else 0
         else:
             amount = amount - min(e.fee, 0) if status == 'succeeded' else 0
-        propagate_exchange(cursor, participant, e, e.route, error, amount)
+        propagate_exchange(cursor, participant, e, error, amount)
 
         return e
 
 
-def propagate_exchange(cursor, participant, exchange, route, error, amount):
-    """Propagates an exchange's result to the participant's balance and the
-    route's status.
+def propagate_exchange(cursor, participant, exchange, error, amount):
+    """Propagates an exchange's result to the participant's balance.
     """
-    route.update_error(error or '')
-
     new_balance = cursor.one("""
         UPDATE participants
            SET balance=(balance + %s)

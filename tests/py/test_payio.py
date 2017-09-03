@@ -70,7 +70,7 @@ class TestPayouts(MangopayHarness):
         exchange = payout(self.db, self.homer_route, D('1.00'))
         assert exchange.status == 'failed'
         homer = Participant.from_id(self.homer.id)
-        assert homer.get_bank_account_error() == exchange.note == "Foobar()"
+        assert exchange.note == "Foobar()"
         assert self.homer.balance == homer.balance == 20
 
     def test_payout_no_route(self):
@@ -120,7 +120,6 @@ class TestCharge(MangopayHarness):
         assert exchange.amount
         assert exchange.status == 'failed'
         janet = Participant.from_id(self.janet.id)
-        assert self.janet.get_credit_card_error() == 'Foobar()'
         assert self.janet.balance == janet.balance == 0
 
     @mock.patch('mangopay.resources.PayIn.save', autospec=True)
@@ -132,7 +131,6 @@ class TestCharge(MangopayHarness):
         assert exchange.amount
         assert exchange.status == 'failed'
         janet = self.janet.refetch()
-        assert self.janet.get_credit_card_error() == error
         assert self.janet.balance == janet.balance == 0
 
     def test_charge_success_and_wallet_creation(self):
@@ -306,7 +304,6 @@ class TestRecordExchange(MangopayHarness):
         record_exchange(self.db, self.janet_route, D("10.00"), D("0.01"), 0, self.janet, 'failed', 'OOPS')
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == 0
-        assert self.janet_route.error == 'OOPS'
 
     def test_record_exchange_result_restores_balance_on_error(self):
         homer, ba = self.homer, self.homer_route
@@ -326,7 +323,7 @@ class TestRecordExchange(MangopayHarness):
         record_exchange_result(self.db, e_id, 'failed', 'oops', homer)
         homer = Participant.from_username('homer')
         assert homer.balance == D('37.00')
-        assert ba.error == homer.get_bank_account_error() == 'invalidated'
+        assert ba.error == 'invalidated'
 
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
         homer, ba = self.homer, self.homer_route
