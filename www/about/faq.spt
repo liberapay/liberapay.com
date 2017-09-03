@@ -76,6 +76,9 @@ title = _("Frequently Asked Questions")
         "Adding money to Liberapay via bank wire incurs a fee of {0}% from our "
         "payment processor.",
         constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100,
+    ) + " " + _(
+        "Adding money to Liberapay via direct debit incurs a fee of {0}.",
+        Money(constants.FEE_PAYIN_DIRECT_DEBIT.fix * (constants.FEE_VAT + 1), 'EUR'),
     ) }}<br>{{ _(
         "Withdrawing money to a SEPA bank account is free, transfers to other "
         "countries cost {0} per transfer. Additional fee from your bank may apply.",
