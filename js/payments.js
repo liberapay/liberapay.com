@@ -95,6 +95,9 @@ Liberapay.payments.error = function(jqXHR, textStatus, errorThrown) {
 };
 
 Liberapay.payments.onSuccess = function(data) {
+    if (data && data.route_id) {
+        $('#amount input[name="route_id"]').val(data.route_id);
+    }
     $('#amount').parents('form').off('submit');  // prevents infinite loop
     $('#amount').wrap('<form action="" method="POST">').parent().submit();
 };

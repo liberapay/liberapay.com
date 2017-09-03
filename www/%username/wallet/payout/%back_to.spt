@@ -159,6 +159,7 @@ title = _("Withdraw money")
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="route_id" value="{{ routes[0].id if routes else '' }}" />
         <div class="input-group">
             <input name="amount" value="{{ format_decimal(recommended_withdrawal) }}"
                    class="form-control" size=6 required />

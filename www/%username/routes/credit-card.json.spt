@@ -29,9 +29,10 @@ else:
         raise response.error(403)
     old_routes = ExchangeRoute.from_network(participant, 'mango-cc')
     one_off = body.get('keep') != 'true'
-    ExchangeRoute.insert(participant, 'mango-cc', card.Id, one_off=one_off)
+    r = ExchangeRoute.insert(participant, 'mango-cc', card.Id, one_off=one_off)
     for old_route in old_routes:
         old_route.invalidate()
+    out = {"route_id": r.id}
 
 [---] application/json via json_dump
 out
