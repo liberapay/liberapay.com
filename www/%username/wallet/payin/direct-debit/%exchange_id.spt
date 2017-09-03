@@ -287,6 +287,8 @@ title = _("Adding Money")
     % endif
 
     <fieldset id="bank-account" class="{{ 'hidden' if bank_account else '' }}">
+        % include "templates/sandbox-warning.html"
+
         <input type="hidden" name="Type" value="IBAN" />
 
         <label>

@@ -241,6 +241,7 @@ title = _("Adding Money")
               "The request failed. Please make sure your browser is up-to-date, and disable "
               "any extension that blocks requests (e.g. NoScript), then try again."
           ) }}'>
+        % include "templates/sandbox-warning.html"
         <div class="payment-card-row">
         <div class="payment-card">
             <div class="card-number"><div class="input-wrapper">

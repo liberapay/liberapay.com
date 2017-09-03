@@ -182,6 +182,8 @@ title = _("Withdrawing Money")
 
     <fieldset id="bank-account" class="{{ 'hidden' if bank_account else '' }}">
 
+        % include "templates/sandbox-warning.html"
+
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="{{ 'active' if ba_type == 'IBAN' else '' }}">
                 <a href="#iban" aria-controls="iban" role="tab" data-toggle="tab">{{ _("SEPA / IBAN") }}</a></li>

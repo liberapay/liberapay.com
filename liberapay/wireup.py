@@ -151,6 +151,7 @@ class AppConf(object):
         s3_region=str,
         s3_payday_logs_bucket=str,
         send_newsletters_every=int,
+        show_sandbox_warning=bool,
         socket_timeout=float,
         smtp_host=str,
         smtp_port=int,
