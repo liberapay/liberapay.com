@@ -19,6 +19,7 @@ Liberapay.forms.setValidity = function($input, validity) {
 };
 
 Liberapay.forms.jsSubmit = function() {
+    // Initialize forms with the `js-submit` class
     function submit(e) {
         e.preventDefault();
         var form = this.form || this;
@@ -56,6 +57,24 @@ Liberapay.forms.jsSubmit = function() {
     }
     $('.js-submit').submit(submit);
     $('.js-submit button').filter(':not([type]), [type="submit"]').click(submit);
+    // Prevent accidental double-submits of all other forms
+    $('form:not(.js-submit)').on('submit', function (e) {
+        // Check that the form hasn't already been submitted recently
+        var $form = $(this);
+        if ($form.data('js-submit-disable')) {
+            e.preventDefault();
+            return false;
+        }
+        // Prevent submitting again
+        $form.data('js-submit-disable', true);
+        var $inputs = $form.find(':not(:disabled)');
+        setTimeout(function () { $inputs.prop('disabled', true); }, 100);
+        // Unlock if the user comes back to the page
+        $(window).on('focus pageshow', function () {
+            $form.data('js-submit-disable', false);
+            $inputs.prop('disabled', false);
+        });
+    });
 };
 
 Liberapay.forms.success = function($form, $inputs, button) { return function(data) {
