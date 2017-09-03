@@ -83,7 +83,7 @@ title = _("Adding Money")
                 <h4>{{ _("Bank Wire") }}<br>
                     <small>{{ _("To a Euro account") }}</small></h4>
                 <p>
-                    {{ _("Cheapest for small amounts") }}<br>
+                    {{ _("Cheapest for small amounts¹") }}<br>
                     {{ _("Fee: {0}%",
                          constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100) }}
                 </p>
@@ -111,6 +111,11 @@ title = _("Adding Money")
         "The fees are those of our payment processors, Liberapay is only funded "
         "by the donations to {0}its own account{1}.",
         '<a href="/Liberapay/">'|safe, '</a>'|safe
+    ) }}</p>
+
+    <p>{{ _(
+        "¹ Unless your bank also charges you for the transfer. We have no control "
+        "or visibility over that."
     ) }}</p>
 
     % if back_to
