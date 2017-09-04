@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-09-04 07:47+0000\n"
+"PO-Revision-Date: 2017-09-04 08:05+0000\n"
 "Last-Translator: Yongmin Hong <revi@pobox.com>\n"
 "Language-Team: Korean "
 "<https://hosted.weblate.org/projects/liberapay/core/ko/>\n"
@@ -591,10 +591,11 @@ msgstr "다른 곳의 계정"
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr ""
+"다른 플랫폼에서 가지고 있는 계정을 연결하게 되면 다른 사람이 당신을 찾기 쉽게 되며, 당신이 누구인지 확인하기 쉽게 해 줍니다."
 
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
-msgstr ""
+msgstr "{0} 님은 다른 플랫폼에서 다음 계정을 소유하고 있습니다:"
 
 msgid "Name of the team"
 msgstr "팀의 이름"
@@ -1493,12 +1494,14 @@ msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr ""
+"계정의 종류를 정말 바꾸시겠습니까? 법적인 이유로 결제 대행사의 시스템에서 새 계정을 생성하고 기존 계정에서 새 계정으로 자금을 이체하게 "
+"됩니다."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr ""
+msgstr "Payday 중에는 계정의 종류를 변경할 수 있습니다. 몇 분 후에 다시 시도해 주십시오."
 
 msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
-msgstr ""
+msgstr "정말 신원 정보를 변경하시겠습니까? 신원 확인 절차를 다시 밟아야 할 수 있습니다."
 
 msgid "Invalid date of birth."
 msgstr "유효하지 않은 생년월일."
@@ -1911,10 +1914,10 @@ msgid "Account type"
 msgstr "계정 종류"
 
 msgid "modify"
-msgstr ""
+msgstr "수정"
 
 msgid "not modifiable"
-msgstr ""
+msgstr "수정할 수 없음"
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
@@ -1963,7 +1966,7 @@ msgstr "계정 대차표"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
-msgstr ""
+msgstr "총 보낸 금액: {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations to {n} person"
@@ -1980,7 +1983,7 @@ msgstr[0] ""
 
 #, python-brace-format
 msgid "Total money received: {0}"
-msgstr ""
+msgstr "총 받은 금액: {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations from {n} donor"
@@ -2043,10 +2046,10 @@ msgid "anonymous donation"
 msgstr "익명 기여"
 
 msgid "chargeback"
-msgstr ""
+msgstr "chargeback"
 
 msgid "debt repayment"
-msgstr ""
+msgstr "부채 상환"
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -2173,12 +2176,12 @@ msgstr[0] "{n} 주 동안 기부금이 지급됩니다"
 #, python-brace-format
 msgid "Your donations will be funded for {n} weeks ({0})"
 msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] ""
+msgstr[0] "당신의 기부금은 {n} 주 동안의 기부금을 충당합니다 ({0})"
 
 #, python-brace-format
 msgid "{n} month"
 msgid_plural "{n} months"
-msgstr[0] ""
+msgstr[0] "{n}개월"
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -2200,22 +2203,22 @@ msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1
 msgstr "신용카드/체크카드에서 입금하게 되면 {0}%+{1} 의 수수료가 부과됩니다."
 
 msgid "Card"
-msgstr ""
+msgstr "카드"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr ""
+msgstr "경고: 입력한 카드 값 중 일부가 유효하지 않은 것으로 보입니다. 계속할까요?"
 
 msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
 msgstr "요청이 실패하였습니다. 브라우저가 최신 상태이고, 요청을 차단하는 확장 기능 (예: NoScript)를 비활성화한 다음에 다시 시도해 주세요."
 
 msgid "Card number"
-msgstr ""
+msgstr "카드 번호"
 
 msgid "The main number on the card, between 8 and 19 digits"
-msgstr ""
+msgstr "카드 번호, 8~19자리"
 
 msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
+msgstr "카드 번호가 유효하지 않은 것으로 보입니다. 오타가 없나요?"
 
 msgid "This card number is invalid."
 msgstr "이 카드 번호는 유효한 번호가 아닙니다."
@@ -2224,7 +2227,7 @@ msgid "MM/YY"
 msgstr "MM/YY"
 
 msgid "Expiration date (4 digits)"
-msgstr ""
+msgstr "유효 기간 (4자리)"
 
 msgid "This expiration date is invalid."
 msgstr "이 만료일은 유효한 값이 아닙니다."
@@ -2233,16 +2236,16 @@ msgid "CVV"
 msgstr "CVV"
 
 msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr ""
+msgstr "확인 코드 (카드 뒤 3자리 숫자)"
 
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
+msgstr "확인 코드가 유효하지 않은 것으로 보입니다, 오타가 없나요?"
 
 msgid "Remember the card number for next time"
 msgstr "다음 결제를 위해 카드 번호 기억하기"
 
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr ""
+msgstr "카드 데이터는 암호화된 수단을 통해 결제 대행사의 시스템으로 직접 전송됩니다."
 
 msgid "The amount cannot be zero."
 msgstr "금액이 0일 수 없습니다."
@@ -2579,7 +2582,7 @@ msgid "A user's money is held in their wallets. We currently only support one wa
 msgstr "사용자의 자금은 지갑에 보관됩니다. 현재 한 사용자당 하나의 지갑만을 가질 수 있으며, 한 가지 화폐 (유로)만 지원합니다."
 
 msgid "Payday"
-msgstr ""
+msgstr "지불일"
 
 #, python-brace-format
 msgid "Payday is when donations are actually executed. It's a program ({0}this one{1}) that we run every Wednesday."
