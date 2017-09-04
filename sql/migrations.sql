@@ -572,3 +572,15 @@ ALTER TABLE notifications
     ALTER COLUMN email DROP DEFAULT,
     ALTER COLUMN web DROP DEFAULT;
 DROP TABLE email_queue;
+
+-- migration #47
+DROP VIEW current_exchange_routes CASCADE;
+ALTER TABLE exchange_routes ADD COLUMN ctime timestamptz;
+UPDATE exchange_routes r
+       SET ctime = (
+               SELECT min(e.timestamp)
+                 FROM exchanges e
+                WHERE e.route = r.id
+           )
+     WHERE ctime IS NULL;
+ALTER TABLE exchange_routes ALTER COLUMN ctime SET DEFAULT now();
