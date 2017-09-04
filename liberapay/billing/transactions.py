@@ -503,7 +503,10 @@ def record_transfer_result(db, t_id, tr):
     error = repr_error(tr)
     status = tr.Status.lower()
     assert (not error) ^ (status == 'failed')
-    return _record_transfer_result(db, t_id, status, error)
+    r = _record_transfer_result(db, t_id, status, error)
+    if status == 'failed':
+        raise TransferError(error)
+    return r
 
 
 def _record_transfer_result(db, t_id, status, error=None):
@@ -540,8 +543,6 @@ def _record_transfer_result(db, t_id, status, error=None):
                    AND locked_for = %s
              RETURNING *
             """, (tippee, wallet_to, tipper, t_id))
-            bundles_sum = sum(b.amount for b in bundles)
-            assert bundles_sum == amount
         else:
             # Unlock the bundles
             bundles = c.all("""
@@ -549,11 +550,12 @@ def _record_transfer_result(db, t_id, status, error=None):
                    SET locked_for = NULL
                  WHERE owner = %s
                    AND locked_for = %s
+             RETURNING *
             """, (tipper, t_id))
-    if balance is not None:
-        merge_cash_bundles(db, tippee)
-        return balance
-    raise TransferError(error)
+        bundles_sum = sum(b.amount for b in bundles)
+        assert bundles_sum == amount
+    merge_cash_bundles(db, tippee)
+    return balance
 
 
 def lock_disputed_funds(cursor, exchange, amount):
@@ -787,7 +789,11 @@ def sync_with_mangopay(db):
     """
     check_db(db)
 
-    exchanges = db.all("SELECT * FROM exchanges WHERE status = 'pre'")
+    exchanges = db.all("""
+        SELECT *, (e.timestamp < current_timestamp - interval '1 day') AS is_old
+          FROM exchanges e
+         WHERE e.status = 'pre'
+    """)
     for e in exchanges:
         p = Participant.from_id(e.participant)
         transactions = Transaction.all(user_id=p.mangopay_user_id)
@@ -799,16 +805,15 @@ def sync_with_mangopay(db):
             status = t.Status.lower()
             assert (not error) ^ (status == 'failed')
             record_exchange_result(db, e.id, status, error, p)
-        else:
-            # The exchange didn't happen
-            if e.amount < 0:
-                # Mark it as failed if it was a credit
-                record_exchange_result(db, e.id, 'failed', 'interrupted', p)
-            else:
-                # Otherwise forget about it
-                db.run("DELETE FROM exchanges WHERE id=%s", (e.id,))
+        elif e.is_old:
+            # The exchange didn't happen, mark it as failed
+            record_exchange_result(db, e.id, 'failed', 'interrupted', p)
 
-    transfers = db.all("SELECT * FROM transfers WHERE status = 'pre'")
+    transfers = db.all("""
+        SELECT *, (t.timestamp < current_timestamp - interval '1 day') AS is_old
+          FROM transfers t
+         WHERE t.status = 'pre'
+    """)
     for t in transfers:
         tipper = Participant.from_id(t.tipper)
         transactions = Transaction.all(user_id=tipper.mangopay_user_id)
@@ -816,14 +821,8 @@ def sync_with_mangopay(db):
         assert len(transactions) < 2
         if transactions:
             record_transfer_result(db, t.id, transactions[0])
-        else:
-            # The transfer didn't happen, remove it
-            db.run("""
-                UPDATE cash_bundles
-                   SET locked_for = NULL
-                 WHERE owner = %s
-                   AND locked_for = %s
-            """, (t.tipper, t.id))
-            db.run("DELETE FROM transfers WHERE id = %s", (t.id,))
+        elif t.is_old:
+            # The transfer didn't happen, mark it as failed
+            _record_transfer_result(db, t.id, 'failed', 'interrupted')
 
     check_db(db)

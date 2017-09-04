@@ -370,7 +370,13 @@ class TestCashBundles(FakeTransfersHarness, MangopayHarness):
 
 class TestSync(MangopayHarness):
 
-    def test_sync_with_mangopay(self):
+    def throw_transactions_back_in_time(self):
+        self.db.run("""
+            UPDATE exchanges SET timestamp = timestamp - interval '1 week';
+            UPDATE transfers SET timestamp = timestamp - interval '1 week';
+        """)
+
+    def test_1_sync_with_mangopay_records_exchange_success(self):
         with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             with self.assertRaises(Foobar):
@@ -382,7 +388,7 @@ class TestSync(MangopayHarness):
         assert exchange.status == 'succeeded'
         assert Participant.from_username('janet').balance == PAYIN_CARD_MIN
 
-    def test_sync_with_mangopay_deletes_charges_that_didnt_happen(self):
+    def test_2_sync_with_mangopay_handles_payins_that_didnt_happen(self):
         pass  # this is for pep8
         with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer, \
              mock.patch('liberapay.billing.transactions.DirectPayIn.save', autospec=True) as save:
@@ -391,12 +397,14 @@ class TestSync(MangopayHarness):
                 charge(self.db, self.janet_route, D('33.67'), 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
+        self.throw_transactions_back_in_time()
         sync_with_mangopay(self.db)
-        exchanges = self.db.all("SELECT * FROM exchanges")
-        assert not exchanges
+        exchange = self.db.one("SELECT * FROM exchanges")
+        assert exchange.status == 'failed'
+        assert exchange.note == 'interrupted'
         assert Participant.from_username('janet').balance == 0
 
-    def test_sync_with_mangopay_reverts_credits_that_didnt_happen(self):
+    def test_5_sync_with_mangopay_reverts_payouts_that_didnt_happen(self):
         self.make_exchange('mango-cc', 41, 0, self.homer)
         with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer, \
              mock.patch('liberapay.billing.transactions.test_hook') as test_hook:
@@ -405,13 +413,14 @@ class TestSync(MangopayHarness):
                 payout(self.db, self.homer_route, D('35.00'))
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'pre'
+        self.throw_transactions_back_in_time()
         sync_with_mangopay(self.db)
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'failed'
         homer = self.homer.refetch()
         assert homer.balance == homer.withdrawable_balance == 41
 
-    def test_sync_with_mangopay_transfers(self):
+    def test_4_sync_with_mangopay_records_transfer_success(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
         with mock.patch('liberapay.billing.transactions.record_transfer_result') as rtr:
             rtr.side_effect = Foobar()
@@ -425,7 +434,7 @@ class TestSync(MangopayHarness):
         assert Participant.from_username('david').balance == 10
         assert Participant.from_username('janet').balance == 0
 
-    def test_sync_with_mangopay_deletes_transfers_that_didnt_happen(self):
+    def test_3_sync_with_mangopay_handles_transfers_that_didnt_happen(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
         with mock.patch('liberapay.billing.transactions.record_transfer_result') as rtr, \
              mock.patch('liberapay.billing.transactions.Transfer.save', autospec=True) as save:
@@ -434,8 +443,10 @@ class TestSync(MangopayHarness):
                 transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
         t = self.db.one("SELECT * FROM transfers")
         assert t.status == 'pre'
+        self.throw_transactions_back_in_time()
         sync_with_mangopay(self.db)
-        transfers = self.db.all("SELECT * FROM transfers")
-        assert not transfers
+        t = self.db.one("SELECT * FROM transfers")
+        assert t.status == 'failed'
+        assert t.error == 'interrupted'
         assert Participant.from_username('david').balance == 0
         assert Participant.from_username('janet').balance == 10
