@@ -68,9 +68,14 @@ def test_hook():
     return
 
 
-def payout(db, participant, amount, ignore_high_fee=False):
+def payout(db, route, amount, ignore_high_fee=False):
+    """Withdraw money to the specified bank account (`route`).
+    """
     assert amount > 0
+    assert route
+    assert route.network == 'mango-ba'
 
+    participant = route.participant
     if participant.is_suspended:
         raise AccountSuspended()
 
@@ -78,8 +83,6 @@ def payout(db, participant, amount, ignore_high_fee=False):
     if payday:
         raise PaydayIsRunning
 
-    route = ExchangeRoute.from_network(participant, 'mango-ba')
-    assert route
     ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
 
     # Do final calculations
@@ -109,17 +112,18 @@ def payout(db, participant, amount, ignore_high_fee=False):
         return record_exchange_result(db, e_id, 'failed', error, participant)
 
 
-def charge(db, participant, amount, return_url):
-    """Charge the participant's credit card.
+def charge(db, route, amount, return_url):
+    """Charge the given credit card (`route`).
 
     Amount should be the nominal amount. We'll compute fees below this function
     and add it to amount to end up with charge_amount.
 
     """
     typecheck(amount, Decimal)
-
-    route = ExchangeRoute.from_network(participant, 'mango-cc')
     assert route
+    assert route.network == 'mango-cc'
+
+    participant = route.participant
 
     charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee
@@ -156,9 +160,14 @@ def payin_bank_wire(db, participant, debit_amount):
     arrive in the wallet.
     """
 
-    route = ExchangeRoute.from_network(participant, 'mango-bw')
-    if not route:
-        route = ExchangeRoute.insert(participant, 'mango-bw', 'x')
+    route = db.one("""
+        INSERT INTO exchange_routes
+                    (participant, network, address, one_off, error, remote_user_id)
+             VALUES (%s, 'mango-bw', 'x', false, '', %s)
+        ON CONFLICT (participant, network, address) DO UPDATE
+                SET one_off = false  -- dummy update
+          RETURNING *
+    """, (participant.id, participant.mangopay_user_id))
 
     amount, fee, vat = skim_bank_wire(debit_amount)
 
@@ -233,10 +242,10 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
         """, (amount, fee, vat, participant.id, status, route.id, error, wallet_id))
 
         if status == 'failed':
-            propagate_exchange(cursor, participant, e, route, error, 0)
+            propagate_exchange(cursor, participant, e, error, 0)
         elif amount < 0:
             amount -= fee
-            propagate_exchange(cursor, participant, e, route, '', amount)
+            propagate_exchange(cursor, participant, e, '', amount)
 
     return e.id
 
@@ -251,34 +260,25 @@ def record_exchange_result(db, exchange_id, status, error, participant):
                  , note=%(error)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
-         RETURNING id, amount, fee, vat, participant, recorder, note, status
-                 , timestamp, refund_ref
-                 , ( SELECT r.*::exchange_routes
-                       FROM exchange_routes r
-                      WHERE r.id = e.route
-                   ) AS route
+         RETURNING *
         """, locals())
         if not e:
             return
         assert participant.id == e.participant
-        assert isinstance(e.route, ExchangeRoute)
 
         amount = e.amount
         if amount < 0:
             amount = -amount + max(e.fee, 0) if status == 'failed' else 0
         else:
             amount = amount - min(e.fee, 0) if status == 'succeeded' else 0
-        propagate_exchange(cursor, participant, e, e.route, error, amount)
+        propagate_exchange(cursor, participant, e, error, amount)
 
         return e
 
 
-def propagate_exchange(cursor, participant, exchange, route, error, amount):
-    """Propagates an exchange's result to the participant's balance and the
-    route's status.
+def propagate_exchange(cursor, participant, exchange, error, amount):
+    """Propagates an exchange's result to the participant's balance.
     """
-    route.update_error(error or '')
-
     new_balance = cursor.one("""
         UPDATE participants
            SET balance=(balance + %s)

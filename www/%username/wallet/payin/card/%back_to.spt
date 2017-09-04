@@ -33,7 +33,9 @@ if request.method == 'GET' and 'transactionId' in request.qs:
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
 exchange = None
-route = ExchangeRoute.from_network(participant, 'mango-cc')
+routes = ExchangeRoute.from_network(participant, 'mango-cc')
+route = routes[0] if routes else None
+del routes
 
 card = Card.get(route.address) if route else None
 if card:
@@ -85,7 +87,7 @@ if request.method == 'POST':
         ))
     return_url = website.canonical_url + request.path.raw
     try:
-        exchange = charge(website.db, participant, amount, return_url)
+        exchange = charge(website.db, route, amount, return_url)
     except Redirect as e:
         response.redirect(e.url)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
@@ -160,6 +162,7 @@ title = _("Add money")
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="route_id" value="{{ route.id if route else '' }}" />
         <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
         <ul class="list-group radio-group">
         % for weeks in weeks_list

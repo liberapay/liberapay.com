@@ -49,8 +49,8 @@ class TestIdentity(Harness):
         # Add some money for the next test
         create_wallet(self.db, janeway)
         cr = create_card(janeway.mangopay_user_id)
-        ExchangeRoute.insert(janeway, 'mango-cc', cr.CardId)
-        charge(self.db, janeway, D('20.00'), 'http://127.0.0.1/')
+        route = ExchangeRoute.insert(janeway, 'mango-cc', cr.CardId)
+        charge(self.db, route, D('20.00'), 'http://127.0.0.1/')
 
         # Switch to a legal user
         data = dict(data2)

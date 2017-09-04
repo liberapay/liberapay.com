@@ -215,8 +215,10 @@ class Harness(unittest.TestCase):
     def make_exchange(self, route, amount, fee, participant, status='succeeded', error='', vat=0):
         if not isinstance(route, ExchangeRoute):
             network = route
-            route = ExchangeRoute.from_network(participant, network)
-            if not route:
+            routes = ExchangeRoute.from_network(participant, network)
+            if routes:
+                route = routes[0]
+            else:
                 from .mangopay import MangopayHarness
                 route = ExchangeRoute.insert(participant, network, MangopayHarness.card_id)
                 assert route

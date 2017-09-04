@@ -19,7 +19,8 @@ class TestRoutes(MangopayHarness):
         self.hit('janet', 'delete', 'mango-cc', self.card_id)
 
         janet = Participant.from_username('janet')
-        assert janet.get_credit_card_error() == 'invalidated'
+        cards = ExchangeRoute.from_network(janet, 'mango-cc')
+        assert not cards
         assert janet.mangopay_user_id
 
     def test_delete_bank_account(self):
@@ -27,9 +28,9 @@ class TestRoutes(MangopayHarness):
 
         homer = Participant.from_username('homer')
         route = ExchangeRoute.from_address(homer, 'mango-ba', self.bank_account.Id)
-        assert route.error == homer.get_bank_account_error() == 'invalidated'
+        assert route.error == 'invalidated'
         assert homer.mangopay_user_id
 
         # Check that update_error doesn't update an invalidated route
         route.update_error('some error')
-        assert route.error == homer.get_bank_account_error() == 'invalidated'
+        assert route.error == 'invalidated'
