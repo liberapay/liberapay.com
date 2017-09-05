@@ -13,8 +13,10 @@ from liberapay.billing.fees import (
 )
 from liberapay.billing.transactions import (
     charge,
+    execute_direct_debit,
     payin_bank_wire,
     payout,
+    prepare_direct_debit,
     record_exchange,
     record_exchange_result,
     sync_with_mangopay,
@@ -226,6 +228,73 @@ class TestPayinBankWire(MangopayHarness):
         assert exchange.status == 'failed'
         janet = self.janet.refetch()
         assert self.janet.balance == janet.balance == 0
+
+
+class TestDirectDebit(MangopayHarness):
+
+    def test_direct_debit_form(self):
+        path = b'/janet/wallet/payin/direct-debit'
+        self.janet.set_tip_to(self.david, '10.00')
+        r = self.client.GET(path, auth_as=self.janet)
+        assert r.code == 200
+
+    @mock.patch('liberapay.models.participant.Participant.url')
+    def test_direct_debit_creation(self, url):
+        path = b'/homer/wallet/payin/direct-debit'
+        data = {'amount': '100.00'}
+
+        url.return_value = b'https://liberapay.com' + path
+
+        r = self.client.PxST(path, data, auth_as=self.homer)
+        assert r.code == 403  # rejected because homer has no donations set up
+
+        self.homer.set_tip_to(self.david, '10.00')
+        r = self.client.GET(path, auth_as=self.homer)
+        assert b'FRxxxxxxxxxxxxxxxxxxxxx2606' in r.body, r.text
+
+        r = self.client.PxST(path, data, auth_as=self.homer)
+        assert r.code == 302, r.text
+        redir = r.headers[b'Location']
+        assert redir.startswith(b'https://api.sandbox.mangopay.com/')
+
+        exchange = self.db.one("SELECT * FROM exchanges")
+        assert exchange.status == 'pre-mandate'
+        route = ExchangeRoute.from_id(exchange.route)
+
+        path += ('/%s?MandateId=%s' % (exchange.id, route.mandate)).encode('ascii')
+        r = self.client.GET(path, auth_as=self.homer)
+        assert r.code == 200
+
+        exchange = self.db.one("SELECT * FROM exchanges")
+        assert exchange.status == 'failed'
+        assert exchange.note == '001833: The Status of this Mandate does not allow for payments'
+
+    @mock.patch('liberapay.billing.transactions.test_hook')
+    def test_direct_debit_exception_and_wallet_creation(self, test_hook):
+        test_hook.side_effect = Foobar
+        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
+        self.homer.set_attributes(mangopay_wallet_id=None)
+        exchange = prepare_direct_debit(self.db, self.homer_route, D('50'))
+        assert exchange.status == 'pre-mandate'
+        self.homer_route.set_mandate('-1')
+        exchange = execute_direct_debit(self.db, exchange, self.homer_route)
+        assert exchange.note == 'Foobar()'
+        assert exchange.status == 'failed'
+        homer = self.homer.refetch()
+        assert self.homer.balance == homer.balance == 0
+
+    @mock.patch('mangopay.resources.PayIn.save', autospec=True)
+    def test_direct_debit_failure(self, save):
+        save.side_effect = fail_payin
+        exchange = prepare_direct_debit(self.db, self.homer_route, D('1.00'))
+        self.homer_route.set_mandate('-2')
+        exchange = execute_direct_debit(self.db, exchange, self.homer_route)
+        error = "1: oops"
+        assert exchange.note == error
+        assert exchange.amount
+        assert exchange.status == 'failed'
+        homer = self.homer.refetch()
+        assert self.homer.balance == homer.balance == 0
 
 
 class TestFees(MangopayHarness):
