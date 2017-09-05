@@ -152,10 +152,6 @@ msgstr ""
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Bankoverførslen til din Liberapay tegnebog er mislykkedes"
 
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Forsøget på at overføre {0} fra din bankkonto er mislykkedes med følgende fejlmeddelelse:"
-
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Du kan nu prøve igen, muligvis med en anden betalingsmetode, ved at klikke på linket herunder:"
 
@@ -168,6 +164,12 @@ msgstr "Vi er glade for at kunne meddele at overførslen fra din bankkonto er ly
 
 msgid "View receipt"
 msgstr "Se kvittering"
+
+msgid "The direct debit payment to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The direct debit payment to your Liberapay wallet has succeeded"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -274,6 +276,12 @@ msgstr "Når en bankoverførsel til min Liberapay-tegnebog lykkedes"
 #, fuzzy
 msgid "When a bank wire transfer to my Liberapay wallet expires"
 msgstr "Når en bankoverførelse til min Liberapay-tegnebog mislykkes"
+
+msgid "When a direct debit from my bank account fails"
+msgstr ""
+
+msgid "When a direct debit from my bank account succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Udgift rapport"
@@ -1059,6 +1067,9 @@ msgstr ""
 msgid "Pledge"
 msgstr "Donationstilbud"
 
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr ""
+
 msgid "Search Liberapay"
 msgstr "Søg på Liberapay"
 
@@ -1214,7 +1225,7 @@ msgstr "Ofte Spurgte Spørgsmål"
 msgid "What payment methods are available?"
 msgstr ""
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
 
 msgid "How do recurrent donations work?"
@@ -1751,6 +1762,9 @@ msgstr "Marker alle notifikationer som læst"
 msgid "No notifications to show."
 msgstr "Ingen notifikationer at vise."
 
+msgid "Direct Debit"
+msgstr ""
+
 msgid "Bank Wire"
 msgstr "Bankoverførsel"
 
@@ -1940,6 +1954,9 @@ msgstr "Din donation til {0} er blevet stoppet."
 msgid "Export History"
 msgstr "Eksporter Historie"
 
+msgid "awaiting confirmation"
+msgstr ""
+
 msgid "preparing"
 msgstr "gør klar"
 
@@ -2076,6 +2093,9 @@ msgstr "donation til {0}"
 msgid "No transactions to show."
 msgstr "Ingen transaktioner at vise."
 
+msgid "Adding Money"
+msgstr ""
+
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Du har ikke oprettet nogen donationer endnu, når du har vil du blive husket på at tilføje penge til din konto."
 
@@ -2095,16 +2115,29 @@ msgstr "Gebyrer: {0}% + {1}"
 msgid "To a Euro account"
 msgstr "Til en Euro konto"
 
-msgid "Cheaper but cumbersome"
-msgstr "Billigere men besværligt"
+msgid "Cheapest for small amounts¹"
+msgstr ""
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Gebyr: {0}%"
 
+msgid "SEPA only"
+msgstr ""
+
+msgid "Best for regular payments"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "Gebyrerne går til dem der står for betalingsoverførslerne, Liberapay er kun finansieret via donationer til {0}vores egen konto{1}."
+
+msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
+msgstr ""
 
 msgid "Go back"
 msgstr "Gå tilbage"
@@ -2193,6 +2226,9 @@ msgstr[1] "{n} måneder"
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Valgfrit beløb (min={0}, max={1})"
 
+msgid "Proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr "{0} er blevet hævet på dit kreditkort, {1} gik til din Liberapay tegnebog, {2} blev betalt i transaktionsgebyr."
@@ -2253,12 +2289,49 @@ msgstr "Husk kort-nummeret til næste gang"
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr ""
 
+#, python-brace-format
+msgid "{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
+msgstr ""
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Forsøget på at overføre {0} fra din bankkonto er mislykkedes med følgende fejlmeddelelse:"
+
+#, python-brace-format
+msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
+msgstr ""
+
+msgid "Bank Account"
+msgstr ""
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "Use another account"
+msgstr ""
+
+msgid "This IBAN is invalid."
+msgstr "Denne IBAN-kode er ugyldig."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Følgende felter handler om den lovlige ejer af bankkontoen."
+
+msgid "Name"
+msgstr "Navn"
+
 msgid "The amount cannot be zero."
 msgstr "Beløbet kan ikke være nul."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "Transaktionsgebyret vil blive højt: {0}% ({1}/{2}). Fortsæt alligevel?"
+
+msgid "Withdrawing Money"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2289,9 +2362,6 @@ msgstr "Du skal beholde mindst {0} i din tegnebog for at finansiere dine donatio
 
 msgid "Bank account"
 msgstr "Bankkonto"
-
-msgid "IBAN"
-msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Routing nummer"
@@ -2329,9 +2399,6 @@ msgstr "UK"
 msgid "Other"
 msgstr "Andre"
 
-msgid "This IBAN is invalid."
-msgstr "Denne IBAN-kode er ugyldig."
-
 msgid "checking"
 msgstr "Checker"
 
@@ -2346,12 +2413,6 @@ msgstr "Kun bogstaver (a-z) og tal (0-9) er tilladt"
 
 msgid "This account number is invalid."
 msgstr "Dette kontonummer er ugyldigt."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Følgende felter handler om den lovlige ejer af bankkontoen."
-
-msgid "Name"
-msgstr "Navn"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
@@ -2452,6 +2513,20 @@ msgstr "Ja. Liberapay drives fra Frankrig og overholder EU's finansielle bestemm
 msgid "What are the payment processing fees?"
 msgstr "Hvad er overførselsgebyrerne?"
 
+#, python-brace-format
+msgid ""
+"Adding money to Liberapay incurs a fee of:\n"
+"• {0}% + {1} when the payment method is a credit or debit card;\n"
+"• {2}% when it's a bank wire;\n"
+"• {3} when it's a direct debit."
+msgstr ""
+
+msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
+msgstr ""
+
+msgid "There are no fees for transfers between Liberapay users."
+msgstr ""
+
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Er der et minimum- eller maksimumsbeløb, som jeg kan give eller modtage?"
 
@@ -2478,18 +2553,6 @@ msgstr "Er donationer via Liberapay skattefradrag-berettigede?"
 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Næppe, men det kommer an på dit lands skatteregler."
-
-msgid "Why did my income decrease?"
-msgstr "Hvorfor faldt min indkomst?"
-
-msgid "If your income decreased, one of the following happened:"
-msgstr "Hvis din indkomst er faldet er der sket en af følgende ting:"
-
-msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
-msgstr "En af dine donorer har med vilje nedsat eller nulstillet deres donation til dig, eller deres konto er lukket."
-
-msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
-msgstr "En af dine donorer havde utilstrækkeligt med penge i deres Liberapay tegnebog til at finansiere deres donation til dig."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Du kan få opdateringer fra os på følgende sociale medier:"

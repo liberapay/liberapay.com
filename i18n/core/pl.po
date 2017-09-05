@@ -153,10 +153,6 @@ msgstr "Jeśli zapomniałeś to zrobić, możesz zainicjować nową płatność:
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Przelew bankowy do Twojego portfela Liberapay nie powiódł się"
 
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Próba przelania {0} z Twojego konta bankowego zakończyła się niepowodzeniem z następującym komunikatem o błędzie:"
-
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Możesz spróbować ponownie, ewentualnie używając innej metody płatności, klikając poniższy link:"
 
@@ -169,6 +165,12 @@ msgstr "Z radością informujemy, że udało się dokonać transferu z konta ban
 
 msgid "View receipt"
 msgstr "Wyświetl potwierdzenie"
+
+msgid "The direct debit payment to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The direct debit payment to your Liberapay wallet has succeeded"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -274,6 +276,12 @@ msgstr "Kiedy przelew do mojego portfela Liberapay zakończy się pomyślnie"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
 msgstr "Kiedy przelew do mojego portfela Liberapay wygaśnie"
+
+msgid "When a direct debit from my bank account fails"
+msgstr ""
+
+msgid "When a direct debit from my bank account succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Raport z wydatków"
@@ -1062,6 +1070,9 @@ msgstr "Pokaż na swoim profilu"
 msgid "Pledge"
 msgstr "Wesprzyj"
 
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr ""
+
 msgid "Search Liberapay"
 msgstr "Przeszukaj Liberapay"
 
@@ -1217,8 +1228,8 @@ msgstr "Często zadawane pytania"
 msgid "What payment methods are available?"
 msgstr "Jakie metody płatności są dostępne?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
-msgstr "Aktualnie obsługujemy większość kart kredytowych i debetowych (VISA i MasterCard) jak i przelewy bankowe (w euro). W przyszłości dodamy więcej opcji."
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Jak dokładnie działają regularne dotacje?"
@@ -1755,6 +1766,9 @@ msgstr "Oznacz wszystkie powiadomienia jako przeczytane"
 msgid "No notifications to show."
 msgstr "Brak powiadomień."
 
+msgid "Direct Debit"
+msgstr ""
+
 msgid "Bank Wire"
 msgstr "Przelew bankowy"
 
@@ -1945,6 +1959,9 @@ msgstr "Twoja dotacja dla {0} została zatrzymana."
 msgid "Export History"
 msgstr "Eksportuj historię"
 
+msgid "awaiting confirmation"
+msgstr ""
+
 msgid "preparing"
 msgstr "przygotowywanie"
 
@@ -2085,6 +2102,9 @@ msgstr "dotacja dla {0}"
 msgid "No transactions to show."
 msgstr "Brak transakcji do wyświetlenia."
 
+msgid "Adding Money"
+msgstr ""
+
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Nie ustawiłeś jeszcze żadnych dotacji, gdy tylko to zrobisz zostaniesz poproszony o dodanie pieniędzy do Twojego konta."
 
@@ -2104,16 +2124,29 @@ msgstr "Opłaty: {0}% + {1}"
 msgid "To a Euro account"
 msgstr "Na konto w euro"
 
-msgid "Cheaper but cumbersome"
-msgstr "Tańsze, ale mniej wygodne"
+msgid "Cheapest for small amounts¹"
+msgstr ""
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Opłata: {0}%"
 
+msgid "SEPA only"
+msgstr ""
+
+msgid "Best for regular payments"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "Opłaty za transakcje są pobierane przez podmioty obsługujące dla nas płatności, Liberapay jest finansowane za pomocą dotacji przekazywanych {0}na jego własne konto{1}."
+
+msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
+msgstr ""
 
 msgid "Go back"
 msgstr "Wróć"
@@ -2205,6 +2238,9 @@ msgstr[2] "{n} miesięcy"
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Własna kwota (minimum={0}, maksimum={1})"
 
+msgid "Proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr "{0} zostało pobrane z Twojej karty kredytowej, {1} trafiło do Twojego portfela Liberapay, a {2} pokryło opłaty obsługi transakcji."
@@ -2265,12 +2301,49 @@ msgstr "Zapamiętaj numer karty na przyszłość"
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr ""
 
+#, python-brace-format
+msgid "{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
+msgstr ""
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Próba przelania {0} z Twojego konta bankowego zakończyła się niepowodzeniem z następującym komunikatem o błędzie:"
+
+#, python-brace-format
+msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
+msgstr ""
+
+msgid "Bank Account"
+msgstr ""
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "Use another account"
+msgstr ""
+
+msgid "This IBAN is invalid."
+msgstr "Podany numer IBAN jest niepoprawny."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Poniższe pola dotyczą legalnego właściciela konta bankowego."
+
+msgid "Name"
+msgstr "Imię i nazwisko"
+
 msgid "The amount cannot be zero."
 msgstr "Kwota nie może wynosić zero."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "Opłata za transakcję będzie wysoka: {0}% ({1}/{2}). Czy kontynuować?"
+
+msgid "Withdrawing Money"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2301,9 +2374,6 @@ msgstr "Powinieneś mieć w portfelu co najmniej {0} by pokryć wszystkie dotacj
 
 msgid "Bank account"
 msgstr "Konto bankowe"
-
-msgid "IBAN"
-msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Numer instytucji (Routing Number)"
@@ -2341,9 +2411,6 @@ msgstr "Wielka Brytania"
 msgid "Other"
 msgstr "Inne"
 
-msgid "This IBAN is invalid."
-msgstr "Podany numer IBAN jest niepoprawny."
-
 msgid "checking"
 msgstr "bieżące"
 
@@ -2358,12 +2425,6 @@ msgstr "dozwolone są tylko litery (a-z) i cyfry (0-9)"
 
 msgid "This account number is invalid."
 msgstr "Podany numer konta jest niepoprawny."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Poniższe pola dotyczą legalnego właściciela konta bankowego."
-
-msgid "Name"
-msgstr "Imię i nazwisko"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
@@ -2464,6 +2525,20 @@ msgstr "Tak. Liberapay to organizacja francuska i stosuje się do przepisów fin
 msgid "What are the payment processing fees?"
 msgstr "Ile wynoszą opłaty za obsługę płatności?"
 
+#, python-brace-format
+msgid ""
+"Adding money to Liberapay incurs a fee of:\n"
+"• {0}% + {1} when the payment method is a credit or debit card;\n"
+"• {2}% when it's a bank wire;\n"
+"• {3} when it's a direct debit."
+msgstr ""
+
+msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
+msgstr ""
+
+msgid "There are no fees for transfers between Liberapay users."
+msgstr ""
+
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Czy istnieje minimalna lub maksymalna kwota jaką mogę przekazywać lub otrzymywać?"
 
@@ -2490,18 +2565,6 @@ msgstr "Czy mogę odpisać od podatku dotacje przekazywane poprzez Liberapay?"
 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Prawdopodobnie nie, jednak zależy to od prawa podatkowego Twojego kraju."
-
-msgid "Why did my income decrease?"
-msgstr "Dlaczego mój przychód zmalał?"
-
-msgid "If your income decreased, one of the following happened:"
-msgstr "Jeśli Twój przychód zmalał, miała miejsce jedna z następujących sytuacji:"
-
-msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
-msgstr "Osoba Cię dotująca zmniejszyła lub wyzerowała wysokość przekazywanej Ci dotacji, albo jej konto zostało zamknięte."
-
-msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
-msgstr "Osoba Cię dotująca nie miała wystarczająco środków w swoim portfelu Liberapay by pokryć przekazywaną Ci dotację."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Najnowsze informacje na temat naszej działalności możesz znaleźć w następujących sieciach społecznościowych:"

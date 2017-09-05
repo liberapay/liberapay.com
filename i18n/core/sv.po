@@ -152,10 +152,6 @@ msgstr "Om du glömde bort att göra det kan du starta en ny betalning:"
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Banköverföringen till din Liberapay plånbok har misslyckas"
 
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Försöket att överföra {0} från ditt bankkonto har misslyckats med följande felmeddelande:"
-
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Du kan försöka igen, möjligtvis med en annan betalningsmetod, genom att klicka på länken nedan:"
 
@@ -168,6 +164,12 @@ msgstr "Vi är glada att meddela att överföringen från ditt bankkonto har lyc
 
 msgid "View receipt"
 msgstr "Se kvittot"
+
+msgid "The direct debit payment to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The direct debit payment to your Liberapay wallet has succeeded"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -273,6 +275,12 @@ msgstr "När en banköverföring till min Liberapay plånbok lyckas"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
 msgstr "När en banköverföring till min Liberapay plånbok går ut"
+
+msgid "When a direct debit from my bank account fails"
+msgstr ""
+
+msgid "When a direct debit from my bank account succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Utgiftsrapport"
@@ -1058,6 +1066,9 @@ msgstr "Visa på din profil"
 msgid "Pledge"
 msgstr "Löften"
 
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr ""
+
 msgid "Search Liberapay"
 msgstr "Sök på Liberapay"
 
@@ -1213,8 +1224,8 @@ msgstr "Frågor och svar"
 msgid "What payment methods are available?"
 msgstr "Villka betalningsmetoder är tillgängliga?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
-msgstr "Vi stöder just nu de flesta kredit och bankkort (VISA och MasterCard), såväl som banköverföringar (i euros). Fler alternativ kommer läggas till i framtiden."
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Hur fungerar återkommande donationer?"
@@ -1747,6 +1758,9 @@ msgstr ""
 msgid "No notifications to show."
 msgstr ""
 
+msgid "Direct Debit"
+msgstr ""
+
 msgid "Bank Wire"
 msgstr ""
 
@@ -1936,6 +1950,9 @@ msgstr ""
 msgid "Export History"
 msgstr ""
 
+msgid "awaiting confirmation"
+msgstr ""
+
 msgid "preparing"
 msgstr ""
 
@@ -2072,6 +2089,9 @@ msgstr ""
 msgid "No transactions to show."
 msgstr ""
 
+msgid "Adding Money"
+msgstr ""
+
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr ""
 
@@ -2091,15 +2111,28 @@ msgstr ""
 msgid "To a Euro account"
 msgstr ""
 
-msgid "Cheaper but cumbersome"
+msgid "Cheapest for small amounts¹"
 msgstr ""
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr ""
 
+msgid "SEPA only"
+msgstr ""
+
+msgid "Best for regular payments"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
+msgstr ""
+
+msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr ""
 
 msgid "Go back"
@@ -2189,6 +2222,9 @@ msgstr[1] ""
 msgid "Custom amount (min={0}, max={1})"
 msgstr ""
 
+msgid "Proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr ""
@@ -2249,11 +2285,48 @@ msgstr ""
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr ""
 
+#, python-brace-format
+msgid "{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
+msgstr ""
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Försöket att överföra {0} från ditt bankkonto har misslyckats med följande felmeddelande:"
+
+#, python-brace-format
+msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
+msgstr ""
+
+msgid "Bank Account"
+msgstr ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "Use another account"
+msgstr ""
+
+msgid "This IBAN is invalid."
+msgstr ""
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
 msgid "The amount cannot be zero."
 msgstr ""
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
+msgstr ""
+
+msgid "Withdrawing Money"
 msgstr ""
 
 #, python-brace-format
@@ -2284,9 +2357,6 @@ msgid "You should keep at least {0} in your wallet to fund your donations this w
 msgstr ""
 
 msgid "Bank account"
-msgstr ""
-
-msgid "IBAN"
 msgstr ""
 
 msgid "Routing Number"
@@ -2325,9 +2395,6 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-msgid "This IBAN is invalid."
-msgstr ""
-
 msgid "checking"
 msgstr ""
 
@@ -2341,12 +2408,6 @@ msgid "only letters (a-z) and digits (0-9) are allowed"
 msgstr ""
 
 msgid "This account number is invalid."
-msgstr ""
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr ""
-
-msgid "Name"
 msgstr ""
 
 #, python-brace-format
@@ -2448,6 +2509,20 @@ msgstr ""
 msgid "What are the payment processing fees?"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Adding money to Liberapay incurs a fee of:\n"
+"• {0}% + {1} when the payment method is a credit or debit card;\n"
+"• {2}% when it's a bank wire;\n"
+"• {3} when it's a direct debit."
+msgstr ""
+
+msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
+msgstr ""
+
+msgid "There are no fees for transfers between Liberapay users."
+msgstr ""
+
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr ""
 
@@ -2473,18 +2548,6 @@ msgid "Are donations through Liberapay tax-deductible?"
 msgstr ""
 
 msgid "Probably not, but it depends on the tax rules of your country."
-msgstr ""
-
-msgid "Why did my income decrease?"
-msgstr ""
-
-msgid "If your income decreased, one of the following happened:"
-msgstr ""
-
-msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
-msgstr ""
-
-msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
 msgstr ""
 
 msgid "You can get updates from us on the following social networks:"

@@ -153,10 +153,6 @@ msgstr "Pokud jste na to zapomněli, můžete zahájit novou platbu:"
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Převod do vaší peněženky na Liberapay selhal"
 
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Pokus o převod z vašeho bankovního účtu {0} se nezdařil s následující chybovou zprávou:"
-
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Můžete to zkusit znovu, doporučujeme zkusit jinou platební metodu, kliknutím na odkaz níže:"
 
@@ -169,6 +165,12 @@ msgstr "S radostí oznamujeme, že převod z vašeho bankovního účtu proběhl
 
 msgid "View receipt"
 msgstr "Zobrazit účtenku"
+
+msgid "The direct debit payment to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The direct debit payment to your Liberapay wallet has succeeded"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -273,6 +275,12 @@ msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Když uspěje bankovní převod do peněženky Liberapay"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
+msgstr ""
+
+msgid "When a direct debit from my bank account fails"
+msgstr ""
+
+msgid "When a direct debit from my bank account succeeds"
 msgstr ""
 
 msgid "Expense Report"
@@ -1062,6 +1070,9 @@ msgstr "Zobrazit na profilu"
 msgid "Pledge"
 msgstr "Příslib"
 
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr ""
+
 msgid "Search Liberapay"
 msgstr "Hledat na Liberapay"
 
@@ -1217,7 +1228,7 @@ msgstr "Často kladené otázky"
 msgid "What payment methods are available?"
 msgstr "Jaké platební metody jsou k dispozici?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
 
 msgid "How do recurrent donations work?"
@@ -1755,6 +1766,9 @@ msgstr "Označit všechna oznámení jako přečtená"
 msgid "No notifications to show."
 msgstr "Žádná oznámení k zobrazení."
 
+msgid "Direct Debit"
+msgstr ""
+
 msgid "Bank Wire"
 msgstr "Bankovní převod"
 
@@ -1945,6 +1959,9 @@ msgstr "Váš dar pro {0} byl zastaven."
 msgid "Export History"
 msgstr "Exportovat historii"
 
+msgid "awaiting confirmation"
+msgstr ""
+
 msgid "preparing"
 msgstr "připravuji"
 
@@ -2085,6 +2102,9 @@ msgstr "dar na {0}"
 msgid "No transactions to show."
 msgstr "Žádné transakce k zobrazení."
 
+msgid "Adding Money"
+msgstr ""
+
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Ještě jste nenastavili žádné příspěvky, ale jakmile to uděláte, budete vyzváni k převodu peněz na váš účet."
 
@@ -2104,16 +2124,29 @@ msgstr "Poplatky: {0}% + {1}"
 msgid "To a Euro account"
 msgstr "K účtu v eurech"
 
-msgid "Cheaper but cumbersome"
-msgstr "Levnější, ale těžkopádné"
+msgid "Cheapest for small amounts¹"
+msgstr ""
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Poplatek: {0}%"
 
+msgid "SEPA only"
+msgstr ""
+
+msgid "Best for regular payments"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "Poplatky jsou pouze pro naše zprostředkovatele plateb, Liberapay je pouze financováno z darů na {0}náš vlastní účet{1}."
+
+msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
+msgstr ""
 
 msgid "Go back"
 msgstr "Vrátit se zpět"
@@ -2205,6 +2238,9 @@ msgstr[2] "{n} měsíců"
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Vlastní částka (min = {0}, max = {1})"
 
+msgid "Proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr "{0} bylo převedeno z vaší platební karty, {1} odešlo do peněženky Liberapay a {2} bylo zaplaceno za transakční poplatky."
@@ -2265,12 +2301,49 @@ msgstr "Zapamatujte si číslo karty pro příště"
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr ""
 
+#, python-brace-format
+msgid "{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
+msgstr ""
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Pokus o převod z vašeho bankovního účtu {0} se nezdařil s následující chybovou zprávou:"
+
+#, python-brace-format
+msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
+msgstr ""
+
+msgid "Bank Account"
+msgstr ""
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "Use another account"
+msgstr ""
+
+msgid "This IBAN is invalid."
+msgstr "Tento kód IBAN je neplatný."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Následující údaje jsou o zákonném vlastníku bankovního účtu."
+
+msgid "Name"
+msgstr "Jméno"
+
 msgid "The amount cannot be zero."
 msgstr "Částka nemůže být nulová."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "Poplatek transakce by byl vysoký: {0}% ({1} / {2}). Chcete přesto pokračovat?"
+
+msgid "Withdrawing Money"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2301,9 +2374,6 @@ msgstr "Měli byste mít  v peněžence alespoň {0} pro financování vašich p
 
 msgid "Bank account"
 msgstr "Bankovní účet"
-
-msgid "IBAN"
-msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Směrovací číslo"
@@ -2341,9 +2411,6 @@ msgstr "Spojené království"
 msgid "Other"
 msgstr "Ostatní"
 
-msgid "This IBAN is invalid."
-msgstr "Tento kód IBAN je neplatný."
-
 msgid "checking"
 msgstr "kontroluji"
 
@@ -2358,12 +2425,6 @@ msgstr "jsou povolena pouze písmena (a-z) a číslice (0-9)"
 
 msgid "This account number is invalid."
 msgstr "Toto číslo účtu je neplatné."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Následující údaje jsou o zákonném vlastníku bankovního účtu."
-
-msgid "Name"
-msgstr "Jméno"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
@@ -2464,6 +2525,20 @@ msgstr "Ano. Liberapay sídlí ve Francii a pracuje v souladu s nařízeními Ev
 msgid "What are the payment processing fees?"
 msgstr "Jaké jsou poplatky za zpracování plateb?"
 
+#, python-brace-format
+msgid ""
+"Adding money to Liberapay incurs a fee of:\n"
+"• {0}% + {1} when the payment method is a credit or debit card;\n"
+"• {2}% when it's a bank wire;\n"
+"• {3} when it's a direct debit."
+msgstr ""
+
+msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
+msgstr ""
+
+msgid "There are no fees for transfers between Liberapay users."
+msgstr ""
+
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Existuje minimální nebo maximální částka, kterou lze darovat nebo dostat?"
 
@@ -2490,18 +2565,6 @@ msgstr "Jsou příspěvky prostřednictvím Liberapay daňově uznatelné?"
 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Asi ne, ale to záleží na daňových předpisech vaší země."
-
-msgid "Why did my income decrease?"
-msgstr "Proč se můj příjem snižuje?"
-
-msgid "If your income decreased, one of the following happened:"
-msgstr "Jestli se váš příjem snížil, mohlo dojít k jednomu z následujících:"
-
-msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
-msgstr "Nějaký dárce úmyslně snížil nebo zrušil příspěvek pro vás, nebo byl jeho účet zrušen."
-
-msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
-msgstr "Dárce neměl dostatek prostředků na účtu na Liberapay pro zaplacení příspěvku pro vás."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Novinky od nás můžete najít na následujících sociálních sítích:"

@@ -151,10 +151,6 @@ msgstr ""
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "銀行無法順利電滙到你的 Liberapay 錢包"
 
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "從你銀行帳戶轉帳 {0} 失敗，並出現以下錯誤訊息："
-
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "你可以再試一次，或是利用其它的付款方式，請點擊以下連結："
 
@@ -167,6 +163,12 @@ msgstr "恭喜你成功地從銀行完成轉 帳。從你送出的 {0} ，{1} �
 
 msgid "View receipt"
 msgstr "檢視收款條"
+
+msgid "The direct debit payment to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The direct debit payment to your Liberapay wallet has succeeded"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -271,6 +273,12 @@ msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "當銀行成功地匯款到我的 Liberapay 電子錢包"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
+msgstr ""
+
+msgid "When a direct debit from my bank account fails"
+msgstr ""
+
+msgid "When a direct debit from my bank account succeeds"
 msgstr ""
 
 msgid "Expense Report"
@@ -1054,6 +1062,9 @@ msgstr ""
 msgid "Pledge"
 msgstr "承諾"
 
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr ""
+
 msgid "Search Liberapay"
 msgstr "在 Liberapay 上搜尋"
 
@@ -1209,7 +1220,7 @@ msgstr "常見問題"
 msgid "What payment methods are available?"
 msgstr ""
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
 
 msgid "How do recurrent donations work?"
@@ -1745,6 +1756,9 @@ msgstr "所有的通知標為已讀"
 msgid "No notifications to show."
 msgstr "無通知可顯示。"
 
+msgid "Direct Debit"
+msgstr ""
+
 msgid "Bank Wire"
 msgstr "銀行轉帳"
 
@@ -1933,6 +1947,9 @@ msgstr "你給予 {0} 的捐款已停止了。"
 msgid "Export History"
 msgstr "滙出歷史記錄"
 
+msgid "awaiting confirmation"
+msgstr ""
+
 msgid "preparing"
 msgstr "準備"
 
@@ -2065,6 +2082,9 @@ msgstr "捐贈給 {0}"
 msgid "No transactions to show."
 msgstr "無交易可顯示。"
 
+msgid "Adding Money"
+msgstr ""
+
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "你尚未設定任何捐贈，一旦你進行了捐款，你就會被要求在帳戶裏儲值金額。"
 
@@ -2084,16 +2104,29 @@ msgstr "手續費： {0}% + {1}"
 msgid "To a Euro account"
 msgstr "對歐元帳戶"
 
-msgid "Cheaper but cumbersome"
-msgstr "較便宜但麻煩"
+msgid "Cheapest for small amounts¹"
+msgstr ""
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "手續費： {0}%"
 
+msgid "SEPA only"
+msgstr ""
+
+msgid "Best for regular payments"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "這些手續費是來自我們付款處理器, Liberapay 本身只靠 {0}自身帳戶{1}的捐款。"
+
+msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
+msgstr ""
 
 msgid "Go back"
 msgstr "返回"
@@ -2179,6 +2212,9 @@ msgstr[0] "{n} 月"
 msgid "Custom amount (min={0}, max={1})"
 msgstr "自定金額 (min={0}, max={1})"
 
+msgid "Proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr "{0} 已從你的信用卡， {1} 轉入到你的liberapay 錢包， {2} 則是支付的手續費。"
@@ -2239,12 +2275,49 @@ msgstr "記住卡號以利下回使用"
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr ""
 
+#, python-brace-format
+msgid "{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
+msgstr ""
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "從你銀行帳戶轉帳 {0} 失敗，並出現以下錯誤訊息："
+
+#, python-brace-format
+msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
+msgstr ""
+
+msgid "Bank Account"
+msgstr ""
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "Use another account"
+msgstr ""
+
+msgid "This IBAN is invalid."
+msgstr "這個 IBAN 無效。"
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "下列欄位是關於銀行帳戶的法定所有者。"
+
+msgid "Name"
+msgstr "名字"
+
 msgid "The amount cannot be zero."
 msgstr "金額不能為零。"
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "交易手續費將高達 {0}% ({1}/{2})。繼續進行嗎？"
+
+msgid "Withdrawing Money"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2275,9 +2348,6 @@ msgstr "本過你的電子錢包至少要有{0} 以夠資助相關捐款。"
 
 msgid "Bank account"
 msgstr "銀行帳戶"
-
-msgid "IBAN"
-msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "路由號碼"
@@ -2315,9 +2385,6 @@ msgstr "英國"
 msgid "Other"
 msgstr "其它國家"
 
-msgid "This IBAN is invalid."
-msgstr "這個 IBAN 無效。"
-
 msgid "checking"
 msgstr "檢查中"
 
@@ -2332,12 +2399,6 @@ msgstr "只能使用英文字母 (a-z) 和數字(0-9)"
 
 msgid "This account number is invalid."
 msgstr "帳戶號碼無效。"
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "下列欄位是關於銀行帳戶的法定所有者。"
-
-msgid "Name"
-msgstr "名字"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
@@ -2438,6 +2499,20 @@ msgstr "是的，Liberapay 位於法國須要遵守歐盟的財務規範。我�
 msgid "What are the payment processing fees?"
 msgstr "什麼是付款處理費用？"
 
+#, python-brace-format
+msgid ""
+"Adding money to Liberapay incurs a fee of:\n"
+"• {0}% + {1} when the payment method is a credit or debit card;\n"
+"• {2}% when it's a bank wire;\n"
+"• {3} when it's a direct debit."
+msgstr ""
+
+msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
+msgstr ""
+
+msgid "There are no fees for transfers between Liberapay users."
+msgstr ""
+
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "是否有可捐款或收款的最高與最低額度限制？"
 
@@ -2464,18 +2539,6 @@ msgstr "透過 Liberapay進行的捐款可以減稅嗎？"
 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "恐怕不行，但這要視你國家的規定而論。"
-
-msgid "Why did my income decrease?"
-msgstr "為何我的收入減少了？"
-
-msgid "If your income decreased, one of the following happened:"
-msgstr "如果你得到的收入減少，可能是下列情況："
-
-msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
-msgstr "某一個捐助者有意地減少或停止對你的捐助，或是他們的帳戶已停用。"
-
-msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
-msgstr "捐助者的Liberapay電子錢包沒有足夠的金額來資付給你的捐款。"
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "你可以透過以下社交平台來取得我們的最近狀況："

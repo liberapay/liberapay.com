@@ -155,10 +155,6 @@ msgstr ""
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "La banko drato al via Liberapay monujo fiaskis"
 
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "La provo delokigi {0} el via banka konto malsukcesis kun la jena eraro mesaĝon:"
-
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Vi povas provi denove, eble kun alia pago metodo, alklakante la ligilon sube:"
 
@@ -171,6 +167,12 @@ msgstr "Ni estas feliĉaj raporti ke la delokigo el via banka konto sukcesis. El
 
 msgid "View receipt"
 msgstr "Vido kvitanco"
+
+msgid "The direct debit payment to your Liberapay wallet has failed"
+msgstr ""
+
+msgid "The direct debit payment to your Liberapay wallet has succeeded"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -277,6 +279,12 @@ msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Kiam banko ĝiro al miaj Liberapay monujo sukcesas"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
+msgstr ""
+
+msgid "When a direct debit from my bank account fails"
+msgstr ""
+
+msgid "When a direct debit from my bank account succeeds"
 msgstr ""
 
 msgid "Expense Report"
@@ -1076,6 +1084,9 @@ msgstr ""
 msgid "Pledge"
 msgstr "Promeso"
 
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr ""
+
 msgid "Search Liberapay"
 msgstr "Serĉi Liberapay"
 
@@ -1237,7 +1248,7 @@ msgstr "Oftaj demandoj"
 msgid "What payment methods are available?"
 msgstr ""
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros). More options will be added in the future."
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
 
 msgid "How do recurrent donations work?"
@@ -1778,6 +1789,9 @@ msgstr "Marku ĉiujn sciigojn kiel legita"
 msgid "No notifications to show."
 msgstr "Neniu sciigoj montri."
 
+msgid "Direct Debit"
+msgstr ""
+
 msgid "Bank Wire"
 msgstr "Banko Drato"
 
@@ -1909,32 +1923,20 @@ msgstr "Ni tuj vakigas plejparto de la informoj en via profilo."
 
 #, fuzzy
 msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
-msgstr ""
-"Aĵoj kio ni purigas tuj inkluzivas vian profilon deklaroj, iu ajn financado "
-"metas, la donacoj ke vi ricevas, kaj tiujn ke vi donas. Vi ankaŭ estos "
-"forigita el iu ajn komunumoj kaj teamoj el kiu vi estis ano."
+msgstr "Aĵoj kio ni purigas tuj inkluzivas vian profilon deklaroj, iu ajn financado metas, la donacoj ke vi ricevas, kaj tiujn ke vi donas. Vi ankaŭ estos forigita el iu ajn komunumoj kaj teamoj el kiu vi estis ano."
 
 #, fuzzy, python-brace-format
 msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
-msgstr ""
-"Ni specife {0}ne{1} forviŝas vian pasintan donadon kaj ricevadon historion "
-"en la retejo, ĉar tio informoj ankaŭ apartenas egale al aliaj uzantoj (tiuj "
-"kiujn vi donis al kaj ricevis el)."
+msgstr "Ni specife {0}ne{1} forviŝas vian pasintan donadon kaj ricevadon historion en la retejo, ĉar tio informoj ankaŭ apartenas egale al aliaj uzantoj (tiuj kiujn vi donis al kaj ricevis el)."
 
 msgid "Username, email and password"
 msgstr "Uzantnomo, retpoŝto kaj pasvorto"
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr ""
-"Ni povas doni vian salutnomon al iu alia se ili demandas ĝin, sed ne por "
-"almenaŭ jaro post vi fermas vian konton (krom se ni determinas ke vi estis "
-"malobservanta varmarkon)."
+msgstr "Ni povas doni vian salutnomon al iu alia se ili demandas ĝin, sed ne por almenaŭ jaro post vi fermas vian konton (krom se ni determinas ke vi estis malobservanta varmarkon)."
 
 msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr ""
-"Ni ne viŝos vian retadreson kaj pasvorton tuj, do dum momento vi povos "
-"remalfermi vian konton simple ensalutante, ĝis via konto estos definitive "
-"arkivita."
+msgstr "Ni ne viŝos vian retadreson kaj pasvorton tuj, do dum momento vi povos remalfermi vian konton simple ensalutante, ĝis via konto estos definitive arkivita."
 
 msgid "Ready?"
 msgstr "Preta ?"
@@ -1984,6 +1986,9 @@ msgstr ""
 
 msgid "Export History"
 msgstr "Eksporti historio"
+
+msgid "awaiting confirmation"
+msgstr ""
 
 msgid "preparing"
 msgstr "antaŭ"
@@ -2123,10 +2128,11 @@ msgstr "donaco al {0}"
 msgid "No transactions to show."
 msgstr "Neniu transakcioj montri."
 
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
+msgid "Adding Money"
 msgstr ""
-"Vi ne ankoraŭ aranĝis donacoj, kiam vi faros tion vi estos petata aldoni "
-"monon al via konto."
+
+msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
+msgstr "Vi ne ankoraŭ aranĝis donacoj, kiam vi faros tion vi estos petata aldoni monon al via konto."
 
 msgid "Your donations are funded by your income."
 msgstr "Viaj donacoj estas financita per via enspezo."
@@ -2144,16 +2150,29 @@ msgstr "Kotizoj: {0}% + {1}"
 msgid "To a Euro account"
 msgstr "Al Eŭro konton"
 
-msgid "Cheaper but cumbersome"
-msgstr "Malmultekosta sed maloportuna"
+msgid "Cheapest for small amounts¹"
+msgstr ""
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Kotizo: {0}%"
 
+msgid "SEPA only"
+msgstr ""
+
+msgid "Best for regular payments"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "La kotizoj estas tiuj de niaj provizantoj de pagservoj, Librapay estas nur financita per la donacoj al {0} lia propra konto {1}."
+
+msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
+msgstr ""
 
 msgid "Go back"
 msgstr "Reiru"
@@ -2211,9 +2230,7 @@ msgstr "Peto en progreso, bonvolu atendi …"
 
 #, fuzzy, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr ""
-"Aldoni monon al Liberapay per banko delokigo kostas pago de {0} % pro nia "
-"provizanto de pagservoj."
+msgstr "Aldoni monon al Liberapay per banko delokigo kostas pago de {0} % pro nia provizanto de pagservoj."
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr ""
@@ -2242,6 +2259,9 @@ msgstr[1] ""
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
+msgstr ""
+
+msgid "Proceed"
 msgstr ""
 
 #, fuzzy, python-brace-format
@@ -2304,12 +2324,49 @@ msgstr "Memoru la karto nombro por sekvanta tempo"
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr ""
 
+#, python-brace-format
+msgid "{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
+msgstr ""
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "La provo delokigi {0} el via banka konto malsukcesis kun la jena eraro mesaĝon:"
+
+#, python-brace-format
+msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
+msgstr ""
+
+msgid "Bank Account"
+msgstr ""
+
+msgid "IBAN"
+msgstr "Banko Konto Numero (IBAN: International Bank Account Number)"
+
+msgid "Use another account"
+msgstr ""
+
+msgid "This IBAN is invalid."
+msgstr "Ĉi IBAN estas nevalida."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "La jenaj kampoj estas ĉirkaŭ la laŭleĝa posedanto de la bankkonto."
+
+msgid "Name"
+msgstr "Nomo"
+
 msgid "The amount cannot be zero."
 msgstr "La kvanto ne povas esti nulo."
 
 #, fuzzy, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "La transakcio kotizo estus alta: {0}% ({1} / {2}). Procedi ĉiuokaze ?"
+
+msgid "Withdrawing Money"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2341,9 +2398,6 @@ msgstr "Vi devas konservi almenaŭ {0} en via monujo por financi viajn donacojn 
 
 msgid "Bank account"
 msgstr "Bankokonto"
-
-msgid "IBAN"
-msgstr "Banko Konto Numero (IBAN: International Bank Account Number)"
 
 msgid "Routing Number"
 msgstr "Enkursiga numero"
@@ -2381,9 +2435,6 @@ msgstr "UK"
 msgid "Other"
 msgstr "Oliaj"
 
-msgid "This IBAN is invalid."
-msgstr "Ĉi IBAN estas nevalida."
-
 msgid "checking"
 msgstr "kontrolanta"
 
@@ -2398,12 +2449,6 @@ msgstr "nur literojn (a-z) kaj ciferoj (0-9) estas permesataj"
 
 msgid "This account number is invalid."
 msgstr "Ĉi konto nombro estas nevalida."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "La jenaj kampoj estas ĉirkaŭ la laŭleĝa posedanto de la bankkonto."
-
-msgid "Name"
-msgstr "Nomo"
 
 #, python-brace-format
 msgid "I donate {0}{1}{2}"
@@ -2506,6 +2551,20 @@ msgstr ""
 msgid "What are the payment processing fees?"
 msgstr "Kio estas la kotizoj de la provizanto de pagservoj?"
 
+#, python-brace-format
+msgid ""
+"Adding money to Liberapay incurs a fee of:\n"
+"• {0}% + {1} when the payment method is a credit or debit card;\n"
+"• {2}% when it's a bank wire;\n"
+"• {3} when it's a direct debit."
+msgstr ""
+
+msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
+msgstr ""
+
+msgid "There are no fees for transfers between Liberapay users."
+msgstr ""
+
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Cxu ekzistas minimuma aŭ maksimuma sumo mi povas doni aŭ ricevi ?"
 
@@ -2532,20 +2591,6 @@ msgstr "Estas donacoj tra Librapay impostistoj subtraheblaj ?"
 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probable ne, sed ĝi dependas de la imposto reguloj de via lando."
-
-msgid "Why did my income decrease?"
-msgstr "Kial mia enspezoj malpliigis ?"
-
-msgid "If your income decreased, one of the following happened:"
-msgstr "Se via enspezo malpliiĝas, unu el la sekvaj okazis:"
-
-#, fuzzy
-msgid "A donor to you intentionally decreased or zeroed their donation to you, or their account was closed."
-msgstr "A organdonacanto al vi intence malpliigi aŭ zeroed ilia donaco por vi, aŭ ilia konto estis fermita."
-
-#, fuzzy
-msgid "A donor to you had insufficient funds in their Liberapay wallet to fund their donation to you."
-msgstr "A organdonacanto al vi havis nesufiĉan fondusoj en ilia Liberapay monujo financi iliajn donaco por vi."
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
