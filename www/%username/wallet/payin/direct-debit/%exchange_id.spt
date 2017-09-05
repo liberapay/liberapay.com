@@ -175,8 +175,8 @@ title = _("Adding Money")
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if exchange.status == 'succeeded' else
             _("A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees.",
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if exchange.status == 'created' else
-            _("The attempt to initiate a direct debit of {0} has failed. Error message: {1}",
-              Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
+            _("The attempt to transfer {0} from your bank account has failed with the following error message:",
+              Money(exchange.amount + exchange.fee, 'EUR')) + ' ' + str(exchange.note)
         }}</div>
         % if exchange.status == 'succeeded'
         <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View Receipt") }}</a>

@@ -1,9 +1,9 @@
-{{ _("Your direct debit payment for Liberapay has succeeded") }}
+{{ _("The direct debit payment to your Liberapay wallet has succeeded") }}
 
 [---] text/html
 <p>{{ _(
     "We're happy to report that the transfer from your bank account has succeeded. "
-    "Of the {0} that were debited, {1} went into your Liberapay wallet, and {2} were paid in fees."
+    "Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
     , Money(exchange.amount + exchange.fee, 'EUR')
     , Money(exchange.amount, 'EUR')
     , Money(exchange.fee, 'EUR')
