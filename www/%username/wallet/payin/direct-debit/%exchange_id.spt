@@ -171,7 +171,7 @@ title = _("Adding Money")
 
     % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
-            _("{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees.",
+            _("{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees.",
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if exchange.status == 'succeeded' else
             _("A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees.",
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if exchange.status == 'created' else
