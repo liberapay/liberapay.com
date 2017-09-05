@@ -46,6 +46,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('s3_secret_key', '""'::jsonb),
     ('s3_region', '"eu-west-1"'::jsonb),
     ('send_newsletters_every', '60'::jsonb),
+    ('show_sandbox_warning', 'true'::jsonb),
     ('socket_timeout', '10.0'::jsonb),
     ('twitch_id', '"9ro3g4slh0de5yijy6rqb2p0jgd7hi"'::jsonb),
     ('twitch_secret', '"o090sc7828d7gljtrqc5n4vcpx3bfx"'::jsonb),

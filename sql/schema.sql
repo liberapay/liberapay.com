@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '47'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '48'::jsonb);
 
 
 -- app configuration
@@ -322,13 +322,14 @@ CREATE TABLE exchange_routes
 , one_off       boolean        NOT NULL
 , remote_user_id   text           NOT NULL
 , ctime            timestamptz    DEFAULT now()
+, mandate          text           CHECK (mandate <> '')
 , UNIQUE (participant, network, address)
 );
 
 
 -- exchanges -- when a participant moves cash between Liberapay and their bank
 
-CREATE TYPE exchange_status AS ENUM ('pre', 'created', 'failed', 'succeeded');
+CREATE TYPE exchange_status AS ENUM ('pre', 'created', 'failed', 'succeeded', 'pre-mandate');
 
 CREATE TABLE exchanges
 ( id                serial               PRIMARY KEY
