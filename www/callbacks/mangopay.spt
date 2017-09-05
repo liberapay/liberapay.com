@@ -231,6 +231,8 @@ elif cls:
                 p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
         else:
             raise response.json(200, {'notification': 'no (payin too old)'})
+    elif event == 'PAYIN_NORMAL' and payio.PaymentType == 'DIRECT_DEBIT':
+        p.notify('payin_directdebit_'+status, exchange=e._asdict(), force_email=reopen)
     elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
         p.notify('withdrawal_'+status, exchange=e._asdict(), force_email=reopen)
     elif event == 'PAYOUT_REFUND' and status == 'succeeded':

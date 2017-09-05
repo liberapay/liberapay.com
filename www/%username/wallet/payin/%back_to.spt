@@ -24,15 +24,15 @@ if weekly > 0:
 back_to = b64decode_s(request.path['back_to'], default=None)
 can_payin = weekly > 0 and funded < 52
 
-if funded > 0 and user == participant:
+if user == participant:
     participant.mark_notifications_as_read('low_balance')
 
-title = _("Add money")
+title = _("Adding Money")
 
 [---] text/html
-% extends "templates/panel.html"
+% extends "templates/base-thin.html"
 
-% block panel_body
+% block thin_content
 
     <p>
         % if donations == 0
@@ -83,11 +83,25 @@ title = _("Add money")
                 <h4>{{ _("Bank Wire") }}<br>
                     <small>{{ _("To a Euro account") }}</small></h4>
                 <p>
-                    {{ _("Cheaper but cumbersome") }}<br>
+                    {{ _("Cheapest for small amounts¹") }}<br>
                     {{ _("Fee: {0}%",
                          constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100) }}
                 </p>
                 <a class="overlay" href="{{ base_path }}/bankwire/{{ b64encode_s(back_to) }}"></a>
+            </div></div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="panel panel-default"><div class="panel-body overlayed">
+                <p class="payment-icon">{{ fontawesome('exchange') }}</p>
+                <h4>{{ _("Direct Debit") }}<br><small>{{ _("SEPA only") }}</small></h4>
+                <p>
+                    {{ _("Best for regular payments") }}<br>
+                    {{ _("Fee: {0}",
+                         Money(constants.FEE_PAYIN_DIRECT_DEBIT.fix * (constants.FEE_VAT + 1), 'EUR'),
+                    ) }}
+                </p>
+                <a class="overlay" href="{{ base_path }}/direct-debit/"></a>
             </div></div>
         </div>
 
@@ -99,6 +113,11 @@ title = _("Add money")
         '<a href="/Liberapay/">'|safe, '</a>'|safe
     ) }}</p>
 
+    <p>{{ _(
+        "¹ Unless your bank also charges you for the transfer. We have no control "
+        "or visibility over that."
+    ) }}</p>
+
     % if back_to
         <a href="{{ response.sanitize_untrusted_url(back_to) }}"
            class="btn btn-default pull-right">{{ _("Go back") }}</a>
@@ -106,11 +125,8 @@ title = _("Add money")
 
     % endif
 
-% endblock
-
-% block under_panel
 % if can_payin
-<p class="alert alert-info">
+<p class="powered-by">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" class="contain" />
     </a>

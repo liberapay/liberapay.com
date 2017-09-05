@@ -27,6 +27,18 @@ Liberapay.payments.init = function() {
         $btn.parent().addClass('hidden');
     });
     $('form#payin, form#payout').submit(Liberapay.payments.submit);
+    $('select.country').on('change', function () {
+        var newValue = $(this).val();
+        $(this).data('value-was-copied', null);
+        if (this.name != 'CountryOfResidence') return;
+        $('select.country').val(function (i, value) {
+            if (value == '' || $(this).data('value-was-copied')) {
+                $(this).data('value-was-copied', true);
+                return newValue;
+            }
+            return value;
+        })
+    });
 }
 
 Liberapay.payments.deleteRoute = function(e) {
@@ -140,12 +152,12 @@ Liberapay.payments.ba.submit = function () {
     Liberapay.forms.clearInvalid($ba);
 
     var $iban = $('input[name="IBAN"]');
-    var is_iban_invalid = !$('#iban').prop('disabled') && IBAN.isValid($iban.val()) === false;
+    var is_iban_invalid = $('#iban').prop('disabled') === false && IBAN.isValid($iban.val()) === false;
     Liberapay.forms.setInvalid($iban, is_iban_invalid);
 
     var $bban = $('#bban input[name="AccountNumber"]');
     var country = $('#bban select[name="Country"]').val();
-    var is_bban_invalid = !$('#bban').prop('disabled') && IBAN.isValidBBAN(country, $bban.val()) === false;
+    var is_bban_invalid = $('#bban').prop('disabled') === false && IBAN.isValidBBAN(country, $bban.val()) === false;
     Liberapay.forms.setInvalid($bban, is_bban_invalid);
 
     var invalids = 0;

@@ -204,6 +204,33 @@ def is_card_expired(exp_year, exp_month):
     return exp_year < cur_year or exp_year == cur_year and exp_month < cur_month
 
 
+def get_owner_name(account):
+    if not account:
+        return ''
+    if account.PersonType == 'NATURAL':
+        return account.FirstName + ' ' + account.LastName
+    else:
+        return account.Name
+
+
+def get_owner_address(bank_account, mp_account):
+    if not mp_account:
+        return ''
+    if bank_account:
+        addr = bank_account.OwnerAddress
+    elif mp_account.PersonType == 'NATURAL':
+        addr = mp_account.Address
+    else:
+        addr = mp_account.HeadquartersAddress
+    if not addr.Country:
+        return None
+    return addr
+
+
+def obfuscate(n, x, y):
+    return n[:x] + 'x'*len(n[x:y]) + n[y:]
+
+
 def ensure_str(s):
     if isinstance(s, str):
         return s

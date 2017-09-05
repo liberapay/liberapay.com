@@ -66,21 +66,41 @@ title = _("Frequently Asked Questions")
 </dl>
 <dl class="col-md-6">
 
-    {{ dt(_("What are the payment processing fees?"), 'fees') }}
+    {{ dt(_("What payment methods are available?"), 'payment-methods') }}
 
     <dd>{{ _(
-        "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
+        "We currently support most credit and debit cards (VISA and MasterCard), as "
+        "well as bank wires (in euros) and direct debits (SEPA only). More options "
+        "will be added in the future."
+    ) }}</dd>
+
+    {{ dt(_("What are the payment processing fees?"), 'fees') }}
+
+    <dd>
+    <p>{{ _(
+        "Adding money to Liberapay incurs a fee of:\n"
+        "• {0}% + {1} when the payment method is a credit or debit card;\n"
+        "• {2}% when it's a bank wire;\n"
+        "• {3} when it's a direct debit.",
         constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
         Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
-    ) + " " + _(
-        "Adding money to Liberapay via bank wire incurs a fee of {0}% from our "
-        "payment processor.",
         constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100,
-    ) }}<br>{{ _(
+        Money(constants.FEE_PAYIN_DIRECT_DEBIT.fix * (constants.FEE_VAT + 1), 'EUR'),
+    ).replace('\n', '<br>'|safe) }}</p>
+    <p>{{ _(
         "Withdrawing money to a SEPA bank account is free, transfers to other "
         "countries cost {0} per transfer. Additional fee from your bank may apply.",
         Money(constants.FEE_PAYOUT_OUTSIDE_SEPA.fix * (constants.FEE_VAT + 1), 'EUR'),
-    ) }}</dd>
+    ) }}</p>
+    <p>{{ _(
+        "The fees listed above are only those from our payment processors, your "
+        "bank can also charge you for each transaction, especially international "
+        "ones. We have no control or visibility over your bank's fees."
+    ) }}</p>
+    <p>{{ _(
+        "There are no fees for transfers between Liberapay users."
+    ) }}</p>
+    </dd>
 
 
     {{ dt(_("Is there a minimum or maximum amount I can give or receive?"), 'maximum-amount') }}
@@ -116,21 +136,6 @@ title = _("Frequently Asked Questions")
     {{ dt(_("Are donations through Liberapay tax-deductible?"), 'tax-deductible') }}
 
     <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
-
-
-    {{ dt(_("Why did my income decrease?"), 'income-decrease') }}
-
-    <dd>{{ _("If your income decreased, one of the following happened:") }}
-
-      <ol>
-        <li>{{ _("A donor to you intentionally decreased or zeroed their donation "
-                 "to you, or their account was closed.") }}</li>
-
-        <li>{{ _("A donor to you had insufficient funds in their Liberapay wallet "
-                 "to fund their donation to you.") }}</li>
-
-      </ol>
-    </dd>
 
 </dl>
 </div>

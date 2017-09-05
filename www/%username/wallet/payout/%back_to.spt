@@ -11,29 +11,11 @@ from liberapay.billing.transactions import payout
 from liberapay.constants import SEPA
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import b64decode_s, get_participant
+from liberapay.utils import (
+    b64decode_s, get_participant, get_owner_address, get_owner_name, obfuscate
+)
 
 NOT_OTHER = set('US CA GB'.split()).union(SEPA)
-
-def get_owner_name(account):
-    if account.PersonType == 'NATURAL':
-        return account.FirstName + ' ' + account.LastName
-    else:
-        return account.Name
-
-def get_owner_address(bank_account, mp_account):
-    if bank_account:
-        addr = bank_account.OwnerAddress
-    elif mp_account.PersonType == 'NATURAL':
-        addr = mp_account.Address
-    else:
-        addr = mp_account.HeadquartersAddress
-    if not addr.Country:
-        return None
-    return addr
-
-def obfuscate(n, x, y):
-    return n[:x] + 'x'*len(n[x:y]) + n[y:]
 
 [---]
 
@@ -105,12 +87,12 @@ if show_form:
 if user == participant:
     participant.mark_notifications_as_read('withdrawal_failed')
 
-title = _("Withdraw money")
+title = _("Withdrawing Money")
 
 [---] text/html
-% extends "templates/panel.html"
+% extends "templates/base-thin.html"
 
-% block panel_body
+% block thin_content
 <form id="payout" action="javascript:" method="POST"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
@@ -195,9 +177,12 @@ title = _("Withdraw money")
         </p>
         <button class="btn btn-default btn-sm" type="button" data-modify="#bank-account">{{ _("Modify") }}</button>
     </div>
+    <br>
     % endif
 
     <fieldset id="bank-account" class="{{ 'hidden' if bank_account else '' }}">
+
+        % include "templates/sandbox-warning.html"
 
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="{{ 'active' if ba_type == 'IBAN' else '' }}">
@@ -295,7 +280,7 @@ title = _("Withdraw money")
 
                 <label>
                     <span>{{ _("Country") }}</span>
-                    <select name="Country" class="form-control" required>
+                    <select name="Country" class="form-control country" required>
                     <option></option>
                     % for code, name in locale.countries.items()
                         % set disable = code in NOT_OTHER
@@ -341,21 +326,17 @@ title = _("Withdraw money")
 
     </fieldset>
 
-    <br>
-    <button class="btn btn-success">{{ _("Go") }}</button>
-
-    % if back_to
-        <a href="{{ response.sanitize_untrusted_url(back_to) }}"
+    <div class="proceed">
+        <button class="btn btn-lg btn-success">{{ _("Proceed") }}</button>
+        <a href="{{ response.sanitize_untrusted_url(back_to) or participant.path('wallet') }}"
            class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
-    % endif
+    </div>
     % endif
 
 </form>
-% endblock
 
-% block under_panel
 % if show_form
-<p class="alert alert-info">
+<p class="powered-by">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" class="contain" />
     </a>

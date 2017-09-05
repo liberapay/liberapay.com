@@ -95,6 +95,8 @@ EVENTS = [
     Event('payin_bankwire_failed', 64, _("When a bank wire transfer to my Liberapay wallet fails")),
     Event('payin_bankwire_succeeded', 128, _("When a bank wire transfer to my Liberapay wallet succeeds")),
     Event('payin_bankwire_expired', 256, _("When a bank wire transfer to my Liberapay wallet expires")),
+    Event('payin_directdebit_failed', 512, _("When a direct debit from my bank account fails")),
+    Event('payin_directdebit_succeeded', 1024, _("When a direct debit from my bank account succeeds")),
 ]
 check_bits([e.bit for e in EVENTS])
 EVENTS = OrderedDict((e.name, e) for e in EVENTS)
@@ -103,6 +105,7 @@ EVENTS_S = ' '.join(EVENTS.keys())
 # https://www.mangopay.com/pricing/
 FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), Decimal(0))  # 0.5%
 FEE_PAYIN_CARD = Fees(Decimal('0.018'), Decimal('0.18'))  # 1.8% + €0.18
+FEE_PAYIN_DIRECT_DEBIT = Fees(Decimal(0), Decimal('0.80'))  # €0.80
 FEE_PAYOUT = Fees(Decimal(0), Decimal(0))
 FEE_PAYOUT_OUTSIDE_SEPA = Fees(Decimal(0), Decimal('2.5'))
 FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
@@ -162,6 +165,8 @@ PAYIN_BANK_WIRE_MIN = Decimal('2.00')  # fee ≈ 0.99%
 PAYIN_BANK_WIRE_TARGET = Decimal('5.00')  # fee ≈ 0.6%
 PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
 PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
+PAYIN_DIRECT_DEBIT_MIN = Decimal('25.00')  # fee ≈ 3.6%
+PAYIN_DIRECT_DEBIT_TARGET = Decimal('99.00')  # fee ≈ 0.94%
 
 PERIOD_CONVERSION_RATES = {
     'weekly': Decimal(1),

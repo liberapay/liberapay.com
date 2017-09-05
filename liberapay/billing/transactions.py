@@ -6,13 +6,15 @@ from decimal import Decimal
 
 from mangopay.exceptions import APIError
 from mangopay.resources import (
-    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, SettlementTransfer,
-    Transaction, Transfer, Wallet,
+    BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, DirectDebitDirectPayIn,
+    SettlementTransfer, Transaction, Transfer, Wallet,
 )
 from mangopay.utils import Money
 from pando.utils import typecheck
 
-from liberapay.billing.fees import skim_bank_wire, skim_credit, upcharge_card
+from liberapay.billing.fees import (
+    skim_bank_wire, skim_credit, upcharge_card, upcharge_direct_debit
+)
 from liberapay.constants import FEE_PAYOUT_WARN, QUARANTINE
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
@@ -94,7 +96,7 @@ def payout(db, route, amount, ignore_high_fee=False):
         raise TransactionFeeTooHigh(fee_percent, fee, amount)
 
     # Try to dance with MangoPay
-    e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre')
+    e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre').id
     payout = BankWirePayOut()
     payout.AuthorId = participant.mangopay_user_id
     payout.DebitedFunds = Money(int(amount * 100), 'EUR')
@@ -131,7 +133,7 @@ def charge(db, route, amount, return_url):
     if not participant.mangopay_wallet_id:
         create_wallet(db, participant)
 
-    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
+    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre').id
     payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = participant.mangopay_wallet_id
@@ -149,6 +151,69 @@ def charge(db, route, amount, return_url):
 
     if payin.SecureModeRedirectURL:
         raise Redirect(payin.SecureModeRedirectURL)
+
+    return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+
+
+def prepare_direct_debit(db, route, amount):
+    """Prepare to debit a bank account.
+    """
+    typecheck(amount, Decimal)
+
+    assert route.network == 'mango-ba'
+
+    participant = route.participant
+
+    debit_amount, fee, vat = upcharge_direct_debit(amount)
+    amount = debit_amount - fee
+
+    if not participant.mangopay_wallet_id:
+        create_wallet(db, participant)
+
+    status = 'pre' if route.mandate else 'pre-mandate'
+    return record_exchange(db, route, amount, fee, vat, participant, status)
+
+
+def execute_direct_debit(db, exchange, route):
+    """Execute a prepared direct debit.
+    """
+    assert exchange.route == route.id
+    assert route
+    assert route.network == 'mango-ba'
+    assert route.mandate
+
+    participant = route.participant
+    assert exchange.participant == participant.id
+
+    if exchange.status == 'pre-mandate':
+        exchange = db.one("""
+            UPDATE exchanges
+               SET status = 'pre'
+             WHERE id = %s
+               AND status = %s
+         RETURNING *
+        """, (exchange.id, exchange.status))
+        assert exchange, 'race condition'
+
+    assert exchange.status == 'pre'
+
+    amount, fee = exchange.amount, exchange.fee
+    debit_amount = amount + fee
+
+    e_id = exchange.id
+    payin = DirectDebitDirectPayIn()
+    payin.AuthorId = participant.mangopay_user_id
+    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.DebitedFunds = Money(int(debit_amount * 100), 'EUR')
+    payin.MandateId = route.mandate
+    payin.Fees = Money(int(fee * 100), 'EUR')
+    payin.Tag = str(e_id)
+    try:
+        test_hook()
+        payin.save()
+    except Exception as e:
+        error = repr_exception(e)
+        return record_exchange_result(db, e_id, 'failed', error, participant)
 
     return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
 
@@ -174,7 +239,7 @@ def payin_bank_wire(db, participant, debit_amount):
     if not participant.mangopay_wallet_id:
         create_wallet(db, participant)
 
-    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre')
+    e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre').id
     payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = participant.mangopay_wallet_id
@@ -247,7 +312,7 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
             amount -= fee
             propagate_exchange(cursor, participant, e, '', amount)
 
-    return e.id
+    return e
 
 
 def record_exchange_result(db, exchange_id, status, error, participant):
@@ -438,7 +503,10 @@ def record_transfer_result(db, t_id, tr):
     error = repr_error(tr)
     status = tr.Status.lower()
     assert (not error) ^ (status == 'failed')
-    return _record_transfer_result(db, t_id, status, error)
+    r = _record_transfer_result(db, t_id, status, error)
+    if status == 'failed':
+        raise TransferError(error)
+    return r
 
 
 def _record_transfer_result(db, t_id, status, error=None):
@@ -475,8 +543,6 @@ def _record_transfer_result(db, t_id, status, error=None):
                    AND locked_for = %s
              RETURNING *
             """, (tippee, wallet_to, tipper, t_id))
-            bundles_sum = sum(b.amount for b in bundles)
-            assert bundles_sum == amount
         else:
             # Unlock the bundles
             bundles = c.all("""
@@ -484,11 +550,12 @@ def _record_transfer_result(db, t_id, status, error=None):
                    SET locked_for = NULL
                  WHERE owner = %s
                    AND locked_for = %s
+             RETURNING *
             """, (tipper, t_id))
-    if balance is not None:
-        merge_cash_bundles(db, tippee)
-        return balance
-    raise TransferError(error)
+        bundles_sum = sum(b.amount for b in bundles)
+        assert bundles_sum == amount
+    merge_cash_bundles(db, tippee)
+    return balance
 
 
 def lock_disputed_funds(cursor, exchange, amount):
@@ -722,7 +789,11 @@ def sync_with_mangopay(db):
     """
     check_db(db)
 
-    exchanges = db.all("SELECT * FROM exchanges WHERE status = 'pre'")
+    exchanges = db.all("""
+        SELECT *, (e.timestamp < current_timestamp - interval '1 day') AS is_old
+          FROM exchanges e
+         WHERE e.status = 'pre'
+    """)
     for e in exchanges:
         p = Participant.from_id(e.participant)
         transactions = Transaction.all(user_id=p.mangopay_user_id)
@@ -734,16 +805,15 @@ def sync_with_mangopay(db):
             status = t.Status.lower()
             assert (not error) ^ (status == 'failed')
             record_exchange_result(db, e.id, status, error, p)
-        else:
-            # The exchange didn't happen
-            if e.amount < 0:
-                # Mark it as failed if it was a credit
-                record_exchange_result(db, e.id, 'failed', 'interrupted', p)
-            else:
-                # Otherwise forget about it
-                db.run("DELETE FROM exchanges WHERE id=%s", (e.id,))
+        elif e.is_old:
+            # The exchange didn't happen, mark it as failed
+            record_exchange_result(db, e.id, 'failed', 'interrupted', p)
 
-    transfers = db.all("SELECT * FROM transfers WHERE status = 'pre'")
+    transfers = db.all("""
+        SELECT *, (t.timestamp < current_timestamp - interval '1 day') AS is_old
+          FROM transfers t
+         WHERE t.status = 'pre'
+    """)
     for t in transfers:
         tipper = Participant.from_id(t.tipper)
         transactions = Transaction.all(user_id=tipper.mangopay_user_id)
@@ -751,14 +821,8 @@ def sync_with_mangopay(db):
         assert len(transactions) < 2
         if transactions:
             record_transfer_result(db, t.id, transactions[0])
-        else:
-            # The transfer didn't happen, remove it
-            db.run("""
-                UPDATE cash_bundles
-                   SET locked_for = NULL
-                 WHERE owner = %s
-                   AND locked_for = %s
-            """, (t.tipper, t.id))
-            db.run("DELETE FROM transfers WHERE id = %s", (t.id,))
+        elif t.is_old:
+            # The transfer didn't happen, mark it as failed
+            _record_transfer_result(db, t.id, 'failed', 'interrupted')
 
     check_db(db)

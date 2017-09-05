@@ -33,7 +33,7 @@
 
     <label>
         <span>{{ _("Country") }}</span>
-        <select name="{{ prefix }}Address.Country" class="form-control" required>
+        <select name="{{ prefix }}Address.Country" class="form-control country" required>
             <option></option>
             % set country = country or saved.Country
             % for code, name in locale.countries.items()

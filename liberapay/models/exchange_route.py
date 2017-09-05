@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from mangopay.resources import Card
+from mangopay.resources import Card, Mandate
 from postgres.orm import Model
 
 
@@ -70,7 +70,19 @@ class ExchangeRoute(Model):
                 card.Active = False
                 card.save()
                 assert card.Active is False, card.Active
+        if self.mandate:
+            mandate = Mandate.get(self.mandate)
+            if mandate.Status in ('SUBMITTED', 'ACTIVE'):
+                mandate.cancel()
         self.update_error('invalidated')
+
+    def set_mandate(self, mandate_id):
+        self.db.run("""
+            UPDATE exchange_routes
+               SET mandate = %s
+             WHERE id = %s
+        """, (mandate_id, self.id))
+        self.set_attributes(mandate=mandate_id)
 
     def update_error(self, new_error):
         id = self.id

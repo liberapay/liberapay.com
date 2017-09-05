@@ -24,9 +24,12 @@ AMOUNT_MAX = Money(PAYIN_CARD_MAX, 'EUR')
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if request.method == 'GET' and 'transactionId' in request.qs:
-    payin = PayIn.get(request.qs['transactionId'])
+    try:
+        payin = PayIn.get(request.qs['transactionId'])
+    except PayIn.DoesNotExist:
+        raise response.error(400, "bad transactionId: does not exist")
     if payin.AuthorId != participant.mangopay_user_id:
-        raise response.error(403)
+        raise response.error(403, "bad transactionId: user mistmatch")
     status = payin.Status.lower()
     error = repr_error(payin)
     record_exchange_result(website.db, payin.Tag, status, error, participant)
@@ -100,17 +103,17 @@ back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
 
-if funded > 0 and user == participant:
+if user == participant:
     participant.mark_notifications_as_read('low_balance')
 
-title = _("Add money")
+title = _("Adding Money")
 
 [---] text/html
 % from "templates/icons.html" import glyphicon
 
-% extends "templates/panel.html"
+% extends "templates/base-thin.html"
 
-% block panel_body
+% block thin_content
 <form id="payin" action="javascript:" method="POST"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
@@ -238,6 +241,7 @@ title = _("Add money")
               "The request failed. Please make sure your browser is up-to-date, and disable "
               "any extension that blocks requests (e.g. NoScript), then try again."
           ) }}'>
+        % include "templates/sandbox-warning.html"
         <div class="payment-card-row">
         <div class="payment-card">
             <div class="card-number"><div class="input-wrapper">
@@ -284,21 +288,17 @@ title = _("Add money")
         </div>
     </fieldset>
 
-    <br>
-    <button class="btn btn-success">{{ _("Go") }}</button>
-
-    % if back_to
-        <a href="{{ response.sanitize_untrusted_url(back_to) }}"
+    <div class="proceed">
+        <button class="btn btn-lg btn-success">{{ _("Proceed") }}</button>
+        <a href="{{ participant.path('wallet/payin/' + b64encode_s(back_to or '')) }}"
            class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
-    % endif
+    </div>
     % endif
 
 </form>
-% endblock
 
-% block under_panel
 % if show_form
-<p class="alert alert-info">
+<p class="powered-by">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" class="contain" />
     </a>

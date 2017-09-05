@@ -35,6 +35,8 @@
 
 {{ fine_uploader_template(cls='', dropzone=False, edit_filenames=False) }}
 
+% include "templates/sandbox-warning.html"
+
 % if participant.kind == 'individual'
 
     <label>

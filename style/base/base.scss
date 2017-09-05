@@ -88,6 +88,13 @@ body {
     }
 }
 
+.thin-title {
+    color: #666;
+    font-size: $font-size-h4;
+    margin: 0.5em 0 1.25em;
+    text-align: center;
+}
+
 .btn-donate {
     $base-color: #ffee16;
     background-color: $base-color;
@@ -321,6 +328,9 @@ ul.emails {
         }
     }
 }
+.faq dd > p {
+    margin-bottom: 0.33em;
+}
 
 h2, h3, h4, h5, h6 {
     &:target {
@@ -501,6 +511,18 @@ a.dropdown-toggle {
         flex-grow: 3;
         padding: 0.5em 0;
     }
+}
+
+.proceed {
+    margin-top: 1em;
+    .btn:not(.btn-lg) {
+        margin-top: 0.5em;
+    }
+}
+
+.powered-by {
+    margin-top: 4em;
+    text-align: center;
 }
 
 label:not([for]) {
