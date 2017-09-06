@@ -8,7 +8,7 @@ from mangopay.resources import BankAccount
 
 from liberapay.billing.transactions import repr_exception, APIError
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import get_participant
+from liberapay.utils import check_address, get_participant
 
 BA_KEYS = (
     'IBAN', 'BIC', 'AccountNumber', 'SortCode', 'ABA', 'DepositAccountType',
@@ -26,11 +26,14 @@ body = request.body
 ba_type = body['Type']
 if ba_type not in BANK_ACCOUNT_TYPE_CHOICES:
     raise response.error(400, "bad Type")
+addr = {k: body['OwnerAddress.' + k] for k in constants.POSTAL_ADDRESS_KEYS}
+if not check_address(addr):
+    raise response.error(400, _("You haven't filled all the required fields."))
 ba = BankAccount(
     UserId=participant.mangopay_user_id,
     Type=ba_type,
     OwnerName=body['OwnerName'],
-    OwnerAddress={k: body['OwnerAddress.' + k] for k in constants.POSTAL_ADDRESS_KEYS},
+    OwnerAddress=addr,
     **{k: body[k] for k in BA_KEYS if k in body}
 )
 if ba.BIC and not ISO_9362_RE.match(ba.BIC.upper()):

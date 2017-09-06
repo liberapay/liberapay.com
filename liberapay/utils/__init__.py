@@ -391,3 +391,12 @@ def read_decimal_or_400(s):
         return Decimal(s)
     except (InvalidOperation, ValueError):
         raise InvalidNumber(s)
+
+
+def check_address(addr):
+    for k in ('AddressLine1', 'City', 'PostalCode', 'Country'):
+        if not addr.get(k):
+            return False
+    if addr['Country'] == 'US' and not addr.get('Region'):
+        return False
+    return True
