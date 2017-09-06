@@ -100,14 +100,14 @@ title = _("Withdrawing Money")
 
     % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
-            _("{0} have been taken from your liberapay wallet. "
+            _("{0} have been taken from your Liberapay wallet. "
               "If the transfer is successful {1} will land in your bank account and {2} will be paid in fees.",
               Money(-exchange.amount + exchange.fee, 'EUR'), Money(-exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
             _("The attempt to send {0} to your bank account has failed. Error message: {1}", Money(-exchange.amount, 'EUR'), exchange.note)
         }}</div>
     % endif
     <p>
-        {{ _("You have {0} in your liberapay wallet.", Money(participant.balance, 'EUR')) }}
+        {{ _("You have {0} in your Liberapay wallet.", Money(participant.balance, 'EUR')) }}
         % if not success
             % if participant.balance > withdrawable
                 % if withdrawable == 0

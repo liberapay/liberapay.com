@@ -121,7 +121,7 @@ title = _("Adding Money")
 
     % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
-            _("{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees.",
+            _("{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees.",
               Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
             _("The attempt to take {0} from your credit card has failed. Error message: {1}", Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
         }}</div>
