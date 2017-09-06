@@ -7,7 +7,7 @@ from six.moves.urllib.parse import urlsplit, urlunsplit, quote as urlquote
 
 from aspen.http.request import Path
 from aspen.request_processor.algorithm import dispatch_path_to_filesystem
-from aspen.request_processor.dispatcher import NotFound, RedirectFromSlashless
+from aspen.request_processor.dispatcher import NotFound, RedirectFromSlashless, UnindexedDirectory
 from pando import Response
 from pando.http.request import Line
 from requests.exceptions import ConnectionError, Timeout
@@ -98,6 +98,8 @@ def _dispatch_path_to_filesystem(website, request=None):
         return dispatch_path_to_filesystem(
             request_processor=request_processor, path=path, querystring=qs
         )
+    except UnindexedDirectory:
+        raise
     except NotFound:
         raw_path = getattr(path, 'raw', '')
         if len(raw_path) < 3 or raw_path[-1] != '/' or raw_path[-2] == '/':
