@@ -55,6 +55,8 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if slug.startswith('~'):
         thing = 'id'
         value = slug[1:]
+        if not value.isdigit():
+            raise response.error(404)
         participant = user if user and str(user.id) == value else None
     else:
         thing = 'lower(username)'
