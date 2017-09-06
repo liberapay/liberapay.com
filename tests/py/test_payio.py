@@ -161,7 +161,7 @@ class TestCharge(MangopayHarness):
         assert self.janet.balance == janet.balance == 0
 
     def test_charge_bad_card(self):
-        self.db.run("UPDATE exchange_routes SET address = '-1'")
+        self.janet_route.set_attributes(address='-1')
         exchange = charge(self.db, self.janet_route, D('10.00'), 'http://localhost/')
         assert '"CardId":"The value -1 is not valid"' in exchange.note
 
