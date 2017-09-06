@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: French (https://hosted.weblate.org/projects/liberapay/core/fr/)\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
+"PO-Revision-Date: 2017-09-06 10:59+0000\n"
+"Last-Translator: Changaco <changaco@changaco.oy.lc>\n"
+"Language-Team: French "
+"<https://hosted.weblate.org/projects/liberapay/core/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.17-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -158,18 +162,22 @@ msgstr "Vous pouvez réessayer, peut-être avec une autre méthode de paiement, 
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Le virement vers votre compte Liberapay a réussi"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Nous sommes heureux de vous annoncer que le transfert depuis votre compte bancaire a été effectué avec succès. Des {0} que vous avez envoyé, {1} sont arrivés dans votre portefeuille Liberapay, et {2} sont partis en frais de transaction."
+msgstr ""
+"Nous sommes heureux de vous annoncer que le transfert depuis votre compte "
+"bancaire a été effectué avec succès. Des {0} que ont été envoyés, {1} sont "
+"arrivés dans votre portefeuille Liberapay, et {2} sont partis en frais de "
+"transaction."
 
 msgid "View receipt"
 msgstr "Voir le reçu"
 
 msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr ""
+msgstr "Le prélèvement bancaire vers votre compte Liberapay a échoué"
 
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr ""
+msgstr "Le prélèvement bancaire vers votre compte Liberapay a réussi"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -277,10 +285,10 @@ msgid "When a bank wire transfer to my Liberapay wallet expires"
 msgstr "Quand un virement vers mon portefeuille Liberapay expire"
 
 msgid "When a direct debit from my bank account fails"
-msgstr ""
+msgstr "Quant un prélèvement sur mon compte bancaire échoue"
 
 msgid "When a direct debit from my bank account succeeds"
-msgstr ""
+msgstr "Quant un prélèvement sur mon compte bancaire réussit"
 
 msgid "Expense Report"
 msgstr "Note de frais"
@@ -1068,6 +1076,8 @@ msgstr "Promettre"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr ""
+"Vous utilisez Liberapay en mode bac à sable, ne saisissez aucune information "
+"personnelle réelle !"
 
 msgid "Search Liberapay"
 msgstr "Chercher dans Liberapay"
@@ -1226,6 +1236,10 @@ msgstr "Quels moyens de paiement sont acceptés ?"
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
+"Notre système gère actuellement la plupart des cartes bancaires (CB, Visa, "
+"et MasterCard), ainsi que les virements bancaires (en euros) et les "
+"prélèvements bancaires (SEPA uniquement). D'autres options seront ajoutées "
+"dans le futur."
 
 msgid "How do recurrent donations work?"
 msgstr "Comment les dons récurrents fonctionnent-ils ?"
@@ -1762,7 +1776,7 @@ msgid "No notifications to show."
 msgstr "Aucune notification à afficher."
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "Prélèvement bancaire"
 
 msgid "Bank Wire"
 msgstr "Virement bancaire"
@@ -1954,7 +1968,7 @@ msgid "Export History"
 msgstr "Exporter l'historique"
 
 msgid "awaiting confirmation"
-msgstr ""
+msgstr "en attente de confirmation"
 
 msgid "preparing"
 msgstr "en préparation"
@@ -2093,7 +2107,7 @@ msgid "No transactions to show."
 msgstr "Aucune transaction à afficher."
 
 msgid "Adding Money"
-msgstr ""
+msgstr "Ajout d'argent"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Vous n'avez mis en place aucun don, quand vous l'aurez fait il vous sera demandé d'ajouter de l'argent à votre compte."
@@ -2115,21 +2129,21 @@ msgid "To a Euro account"
 msgstr "Vers un compte Euro"
 
 msgid "Cheapest for small amounts¹"
-msgstr ""
+msgstr "Le moins cher pour les petits montants¹"
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Frais : {0} %"
 
 msgid "SEPA only"
-msgstr ""
+msgstr "SEPA uniquement"
 
 msgid "Best for regular payments"
-msgstr ""
+msgstr "Le meilleur pour les paiements réguliers"
 
 #, python-brace-format
 msgid "Fee: {0}"
-msgstr ""
+msgstr "Frais : {0}"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
@@ -2137,6 +2151,8 @@ msgstr "Les frais sont ceux de nos opérateurs de paiement, Liberapay n'est fina
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr ""
+"¹ Sauf si votre banque vous facture aussi le transfert. Nous n'avons aucun "
+"contrôle ni aucune visibilité sur cela."
 
 msgid "Go back"
 msgstr "Retour"
@@ -2226,7 +2242,7 @@ msgid "Custom amount (min={0}, max={1})"
 msgstr "Autre montant (min={0}, max={1})"
 
 msgid "Proceed"
-msgstr ""
+msgstr "Continuer"
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your liberapay wallet, {2} were paid in transaction fees."
@@ -2291,10 +2307,15 @@ msgstr "Les données de votre carte sont envoyées directement au système de no
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your liberapay wallet, {2} were paid in transaction fees."
 msgstr ""
+"{0} ont été débités de votre compte bancaire, {1} sont arrivés dans votre "
+"compte liberapay, {2} sont partis en frais de transaction."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr ""
+"Un prélèvement bancaire de {0} a été amorcé. Si le transfert réussit {1} "
+"arriveront dans votre compte Liberapay et {2} partiront en frais de "
+"transaction."
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
@@ -2303,15 +2324,17 @@ msgstr "La tentative de transfert de {0} depuis votre compte bancaire a échoué
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr ""
+"Ajouter de l'argent par prélèvement bancaire coûte {0} en frais de "
+"transaction."
 
 msgid "Bank Account"
-msgstr ""
+msgstr "Compte bancaire"
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "Use another account"
-msgstr ""
+msgstr "Utiliser un autre compte"
 
 msgid "This IBAN is invalid."
 msgstr "Cet IBAN est invalide."
@@ -2330,7 +2353,7 @@ msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "Les frais de transaction seraient élevés : {0} % ({1}/{2}). Continuer quand même ?"
 
 msgid "Withdrawing Money"
-msgstr ""
+msgstr "Retrait d'argent"
 
 #, python-brace-format
 msgid "{0} have been taken from your liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2519,12 +2542,21 @@ msgid ""
 "• {2}% when it's a bank wire;\n"
 "• {3} when it's a direct debit."
 msgstr ""
+"Les frais de transaction pour l'ajout d'argent dans votre compte Liberapay "
+"sont :\n"
+"• {0}% + {1} quand la méthode de paiement est une carte bancaire ;\n"
+"• {2}% quand il s'agit d'un virement bancaire ;\n"
+"• {3} quand il s'agit d'un prélèvement bancaire."
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
 msgstr ""
+"Les frais de transaction listés ci-dessus sont uniquement ceux de nos "
+"opérateurs de paiement, votre banque peut aussi vous facturer chaque "
+"transaction, particulièrement celles qui sont internationales. Nous n'avons "
+"aucun contrôle ni aucune visibilité sur les tarifs de votre banque."
 
 msgid "There are no fees for transfers between Liberapay users."
-msgstr ""
+msgstr "Il n'y a pas de frais sur les transferts entre utilisateurs Liberapay."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Y a-t-il un montant minimum ou maximum que je peux donner ou recevoir ?"
@@ -3197,9 +3229,12 @@ msgstr "{0} s'est désinscrit de Liberapay"
 msgid "If you are an administrator of this {0} team account, you can unlock it to allow people to pledge tips to your team on Liberapay."
 msgstr "Si vous êtes un administrateur de cette équipe sur {0}, vous pouvez la déverrouiller pour autoriser les utilisateurs de Liberapay à vous faire des promesses de don."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you are {username} on {platform}, you can unlock your account to allow people to pledge to donate to you on Liberapay."
-msgstr "Si vous êtes {username} sur {platform}, vous pouvez déverrouiller votre compte pour autoriser les utilisateurs de Liberapay à vous faire des promesses de don."
+msgstr ""
+"Si vous êtes {username} sur {platform}, vous pouvez déverrouiller votre "
+"compte pour autoriser les utilisateurs de Liberapay à vous faire des "
+"promesses de don."
 
 msgid "Unlock"
 msgstr "Déverrouiller"
