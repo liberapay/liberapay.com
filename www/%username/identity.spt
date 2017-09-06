@@ -125,7 +125,7 @@ if request.method == 'POST':
                 account.save()
                 old_wallet_id = participant.mangopay_wallet_id
                 if last_change:
-                    new_wallet_id = last_change['old_wallet_id']
+                    new_wallet_id = last_change.payload['old_wallet_id']
                 elif old_wallet_id:
                     w = Wallet()
                     w.Owners = [account.Id]
