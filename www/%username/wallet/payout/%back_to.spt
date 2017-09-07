@@ -17,6 +17,8 @@ from liberapay.utils import (
 
 NOT_OTHER = set('US CA GB'.split()).union(SEPA)
 
+currency = 'EUR'
+
 [---]
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
@@ -72,7 +74,7 @@ if show_form:
             getattr(mp_account, 'LegalRepresentativeCountryOfResidence', None) or
             getattr(mp_account, 'CountryOfResidence', None)
         )
-        if country in ('US', 'GB', 'CA'):
+        if country in ('US', 'CA') or country == 'GB' and currency != 'EUR':
             ba_type = country
         elif country in constants.SEPA:
             ba_type = 'IBAN'
@@ -191,8 +193,10 @@ title = _("Withdrawing Money")
                 <a href="#usa" aria-controls="usa" role="tab" data-toggle="tab">{{ _("USA") }}</a></li>
             <li role="presentation" class="{{ 'active' if ba_type == 'CA' else '' }}">
                 <a href="#canada" aria-controls="canada" role="tab" data-toggle="tab">{{ _("Canada") }}</a></li>
+            % if currency != 'EUR'
             <li role="presentation" class="{{ 'active' if ba_type == 'GB' else '' }}">
                 <a href="#uk" aria-controls="uk" role="tab" data-toggle="tab">{{ _("UK") }}</a></li>
+            % endif
             <li role="presentation" class="{{ 'active' if ba_type == 'OTHER' else '' }}">
                 <a href="#bban" aria-controls="bban" role="tab" data-toggle="tab">{{ _("Other") }}</a></li>
         </ul>
@@ -259,6 +263,7 @@ title = _("Withdrawing Money")
                 </label>
             </fieldset>
 
+            % if currency != 'EUR'
             <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'GB' else '' }}" id="uk">
                 <input type="hidden" name="Type" value="GB" />
 
@@ -274,6 +279,7 @@ title = _("Withdrawing Money")
                            type="digits" size=14 />
                 </label>
             </fieldset>
+            % endif
 
             <fieldset role="tabpanel" class="tab-pane {{ 'active' if ba_type == 'OTHER' else '' }}" id="bban">
                 <input type="hidden" name="Type" value="OTHER" />
