@@ -636,27 +636,19 @@ class Participant(Model, MixinTeam):
         if len(self.get_emails()) > 9:
             raise TooManyEmailAddresses(email)
 
-        added_time = utcnow()
-        try:
-            with self.db.get_cursor(cursor) as c:
-                self.add_event(c, 'add_email', email)
-                email_row = c.one("""
-                    INSERT INTO emails
-                                (address, nonce, added_time, participant)
-                         VALUES (%s, %s, %s, %s)
-                      RETURNING *
-                """, (email, str(uuid.uuid4()), added_time, self.id))
-        except IntegrityError:
-            email_row = (cursor or self.db).one("""
-                UPDATE emails
-                   SET added_time=%s
-                 WHERE participant=%s
-                   AND address=%s
-                   AND verified IS NULL
-             RETURNING *
-            """, (added_time, self.id, email))
+        with self.db.get_cursor(cursor) as c:
+            self.add_event(c, 'add_email', email)
+            email_row = c.one("""
+                INSERT INTO emails AS e
+                            (address, nonce, added_time, participant)
+                     VALUES (%s, %s, current_timestamp, %s)
+                ON CONFLICT (participant, address) DO UPDATE
+                        SET added_time = excluded.added_time
+                      WHERE e.verified IS NULL
+                  RETURNING *
+            """, (email, str(uuid.uuid4()), self.id))
             if not email_row:
-                return self.add_email(email)
+                return 0
 
         old_email = self.email or self.get_any_email()
         scheme = website.canonical_scheme
