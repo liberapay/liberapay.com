@@ -132,6 +132,14 @@ class VerificationEmailAlreadySent(LazyResponseXXX):
             email_address=self.args[0]
         )
 
+class TooManyEmailVerifications(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You are not allowed to add another email address right now, please "
+            "try again in a few days."
+        )
+
 
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):

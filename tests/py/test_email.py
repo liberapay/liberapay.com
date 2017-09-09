@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from liberapay.exceptions import (
     BadEmailAddress, CannotRemovePrimaryEmail, EmailAlreadyTaken,
-    EmailNotVerified, TooManyEmailAddresses,
+    EmailNotVerified, TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
@@ -185,12 +185,22 @@ class TestEmail(EmailHarness):
         email_alice = Participant.from_username('alice').email
         assert email_alice == 'alice@example.com'
 
-    def test_cannot_add_too_many_emails(self):
+    def test_cannot_add_too_many_emails_per_day(self):
         self.alice.add_email('alice@example.com')
         self.alice.add_email('alice@example.net')
         self.alice.add_email('alice@example.org')
         self.alice.add_email('alice@example.co.uk')
         self.alice.add_email('alice@example.io')
+        with self.assertRaises(TooManyEmailVerifications):
+            self.alice.add_email('alice@example.coop')
+
+    def test_cannot_add_too_many_emails_ever(self):
+        self.alice.add_email('alice@example.com')
+        self.alice.add_email('alice@example.net')
+        self.alice.add_email('alice@example.org')
+        self.alice.add_email('alice@example.co.uk')
+        self.alice.add_email('alice@example.io')
+        self.db.run("DELETE FROM rate_limiting")
         self.alice.add_email('alice@example.co')
         self.alice.add_email('alice@example.eu')
         self.alice.add_email('alice@example.asia')

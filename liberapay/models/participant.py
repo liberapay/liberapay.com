@@ -38,6 +38,7 @@ from liberapay.exceptions import (
     NoSelfTipping,
     NoTippee,
     TooManyEmailAddresses,
+    TooManyEmailVerifications,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -656,6 +657,10 @@ class Participant(Model, MixinTeam):
             )
             if remaining is None:
                 raise VerificationEmailAlreadySent(email)
+            # Limit number of verification emails per participant to 5 per day
+            remaining = self.db.hit_rate_limit('~%s:add_email' % self.id, 5, 60*60*24)
+            if remaining is None:
+                raise TooManyEmailVerifications()
 
         old_email = self.email or self.get_any_email()
         scheme = website.canonical_scheme
