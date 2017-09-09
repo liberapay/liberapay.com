@@ -72,6 +72,7 @@ DOMAIN_RE = re.compile(r'''
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
+EMAIL_VERIFICATION_TIMEOUT_SECONDS = EMAIL_VERIFICATION_TIMEOUT.total_seconds()
 EMAIL_RE = re.compile(r'''
     # This is the regexp used by MangoPay (as of February 2017).
     # It rejects some valid but exotic addresses.

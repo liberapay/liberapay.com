@@ -22,8 +22,8 @@ from psycopg2.extras import Json
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
     DONATION_WEEKLY_MAX, DONATION_WEEKLY_MIN, EMAIL_RE,
-    EMAIL_VERIFICATION_TIMEOUT, EVENTS, PASSWORD_MAX_SIZE,
-    PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
+    EMAIL_VERIFICATION_TIMEOUT, EMAIL_VERIFICATION_TIMEOUT_SECONDS, EVENTS,
+    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
 from liberapay.exceptions import (
@@ -45,6 +45,7 @@ from liberapay.exceptions import (
     UsernameIsEmpty,
     UsernameIsRestricted,
     UsernameTooLong,
+    VerificationEmailAlreadySent,
 )
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
@@ -649,6 +650,12 @@ class Participant(Model, MixinTeam):
             """, (email, str(uuid.uuid4()), self.id))
             if not email_row:
                 return 0
+            # Limit number of verification emails per address to 2 per day
+            remaining = self.db.hit_rate_limit(
+                'add_email:'+email, 2, EMAIL_VERIFICATION_TIMEOUT_SECONDS
+            )
+            if remaining is None:
+                raise VerificationEmailAlreadySent(email)
 
         old_email = self.email or self.get_any_email()
         scheme = website.canonical_scheme

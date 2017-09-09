@@ -265,6 +265,12 @@ def show_table(db, table):
 DB.show_table = SimpleCursorBase.show_table = show_table
 
 
+def hit_rate_limit(db, key, cap, period):
+    return db.one("SELECT hit_rate_limit(%s, %s, %s)", (key, cap, period))
+
+DB.hit_rate_limit = SimpleCursorBase.hit_rate_limit = hit_rate_limit
+
+
 if __name__ == '__main__':
     from liberapay import wireup
     db = wireup.minimal_algorithm.run()['db']

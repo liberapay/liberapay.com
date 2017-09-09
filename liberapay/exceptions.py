@@ -124,6 +124,14 @@ class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
     def msg(self, _):
         return _("The email address {0} is already connected to your account.", *self.args)
 
+class VerificationEmailAlreadySent(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "A verification email has already been sent to {email_address} recently.",
+            email_address=self.args[0]
+        )
+
 
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):
