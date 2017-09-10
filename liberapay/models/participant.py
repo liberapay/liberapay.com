@@ -750,6 +750,9 @@ class Participant(Model, MixinTeam):
             self.add_event(c, 'remove_email', address)
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.id, address))
+            n_left = c.one("SELECT count(*) FROM emails WHERE participant=%s", (self.id,))
+            if n_left == 0:
+                raise CannotRemovePrimaryEmail()
 
     def send_email(self, spt_name, email, **context):
         self.fill_notification_context(context)
