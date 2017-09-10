@@ -95,6 +95,7 @@ if env.run_cron_jobs and conf:
     cron(conf.send_newsletters_every, Participant.send_newsletters, True)
     cron(conf.refetch_repos_every, refetch_repos, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
+    cron(conf.clean_up_counters_every, website.db.clean_up_counters, True)
 
 
 # Website Algorithm

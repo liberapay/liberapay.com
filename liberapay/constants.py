@@ -72,7 +72,6 @@ DOMAIN_RE = re.compile(r'''
 ELSEWHERE_ACTIONS = {'connect', 'lock', 'unlock'}
 
 EMAIL_VERIFICATION_TIMEOUT = timedelta(hours=24)
-EMAIL_VERIFICATION_TIMEOUT_SECONDS = EMAIL_VERIFICATION_TIMEOUT.total_seconds()
 EMAIL_RE = re.compile(r'''
     # This is the regexp used by MangoPay (as of February 2017).
     # It rejects some valid but exotic addresses.
@@ -192,6 +191,11 @@ PRIVILEGES = dict(admin=1, run_payday=2)
 check_bits(list(PRIVILEGES.values()))
 
 QUARANTINE = timedelta(weeks=4)
+
+RATE_LIMITS = {
+    'add_email.source': (5, 60*60*24),  # 5 per day
+    'add_email.target': (2, 60*60*24),  # 2 per day
+}
 
 SEPA = set("""
     AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV

@@ -22,7 +22,7 @@ from psycopg2.extras import Json
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
     DONATION_WEEKLY_MAX, DONATION_WEEKLY_MIN, EMAIL_RE,
-    EMAIL_VERIFICATION_TIMEOUT, EMAIL_VERIFICATION_TIMEOUT_SECONDS, EVENTS,
+    EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
@@ -651,14 +651,12 @@ class Participant(Model, MixinTeam):
             """, (email, str(uuid.uuid4()), self.id))
             if not email_row:
                 return 0
-            # Limit number of verification emails per address to 2 per day
-            remaining = self.db.hit_rate_limit(
-                'add_email:'+email, 2, EMAIL_VERIFICATION_TIMEOUT_SECONDS
-            )
+            # Limit number of verification emails per address
+            remaining = self.db.hit_rate_limit('add_email.target', email)
             if remaining is None:
                 raise VerificationEmailAlreadySent(email)
-            # Limit number of verification emails per participant to 5 per day
-            remaining = self.db.hit_rate_limit('~%s:add_email' % self.id, 5, 60*60*24)
+            # Limit number of verification emails per participant
+            remaining = self.db.hit_rate_limit('add_email.source', self.id)
             if remaining is None:
                 raise TooManyEmailVerifications()
 

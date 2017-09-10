@@ -12,6 +12,8 @@ from postgres.cursors import SimpleCursorBase
 from psycopg2 import IntegrityError, ProgrammingError
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
+from liberapay.constants import RATE_LIMITS
+
 
 @contextmanager
 def just_yield(obj):
@@ -265,10 +267,26 @@ def show_table(db, table):
 DB.show_table = SimpleCursorBase.show_table = show_table
 
 
-def hit_rate_limit(db, key, cap, period):
-    return db.one("SELECT hit_rate_limit(%s, %s, %s)", (key, cap, period))
+def hit_rate_limit(db, key_prefix, key_unique):
+    try:
+        cap, period = RATE_LIMITS[key_prefix]
+        key = '%s:%s' % (key_prefix, key_unique)
+        return db.one("SELECT hit_rate_limit(%s, %s, %s)", (key, cap, period))
+    except Exception as e:
+        from liberapay.website import website
+        website.tell_sentry(e, {})
+        return -1
 
 DB.hit_rate_limit = SimpleCursorBase.hit_rate_limit = hit_rate_limit
+
+
+def clean_up_counters(db):
+    n = 0
+    for key_prefix, (cap, period) in RATE_LIMITS.items():
+        n += db.one("SELECT clean_up_counters(%s, %s)", (key_prefix+':%', period))
+    return n
+
+DB.clean_up_counters = clean_up_counters
 
 
 if __name__ == '__main__':

@@ -40,3 +40,7 @@ SELECT hit_rate_limit('test', 2, 0.2) = 0;      -- 6th hit - allowed, the counte
 SELECT hit_rate_limit('test', 2, 0.2) is null;  -- 7th hit - blocked
 SELECT pg_sleep(0.1);
 SELECT clean_up_counters('test', 0.01) = 1;
+
+
+INSERT INTO app_conf (key, value) VALUES
+    ('clean_up_counters_every', '3600'::jsonb);
