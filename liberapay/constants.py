@@ -195,6 +195,9 @@ QUARANTINE = timedelta(weeks=4)
 RATE_LIMITS = {
     'add_email.source': (5, 60*60*24),  # 5 per day
     'add_email.target': (2, 60*60*24),  # 2 per day
+    'log-in.email': (10, 60*60*24),  # 10 per day
+    'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
+    'log-in.email.verified': (10, 60*60*24),  # 10 per day
 }
 
 SEPA = set("""

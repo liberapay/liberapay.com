@@ -141,6 +141,15 @@ class TooManyEmailVerifications(LazyResponseXXX):
         )
 
 
+class TooManyLoginEmails(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You have consumed your quota of email logins, please try again tomorrow, "
+            "or contact support@liberapay.com."
+        )
+
+
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):
         return _("The password must be at least {0} and at most {1} characters long.",
