@@ -61,12 +61,8 @@ def sign_in_with_form_data(body, state):
                 )
             elif p:
                 if not p.get_email(email.lower()).verified:
-                    remaining = website.db.hit_rate_limit('log-in.email.not-verified', email)
-                    if remaining is None:
-                        raise TooManyLoginEmails(email)
-                remaining = website.db.hit_rate_limit('log-in.email', p.id)
-                if remaining is None:
-                    raise TooManyLoginEmails(p.id)
+                    website.db.hit_rate_limit('log-in.email.not-verified', TooManyLoginEmails)
+                website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
                 p.start_session()
                 qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
                 p.send_email(

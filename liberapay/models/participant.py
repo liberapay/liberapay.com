@@ -652,13 +652,9 @@ class Participant(Model, MixinTeam):
             if not email_row:
                 return 0
             # Limit number of verification emails per address
-            remaining = self.db.hit_rate_limit('add_email.target', email)
-            if remaining is None:
-                raise VerificationEmailAlreadySent(email)
+            self.db.hit_rate_limit('add_email.target', email, VerificationEmailAlreadySent)
             # Limit number of verification emails per participant
-            remaining = self.db.hit_rate_limit('add_email.source', self.id)
-            if remaining is None:
-                raise TooManyEmailVerifications()
+            self.db.hit_rate_limit('add_email.source', self.id, TooManyEmailVerifications)
 
         old_email = self.email or self.get_any_email()
         scheme = website.canonical_scheme

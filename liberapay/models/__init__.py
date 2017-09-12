@@ -267,15 +267,18 @@ def show_table(db, table):
 DB.show_table = SimpleCursorBase.show_table = show_table
 
 
-def hit_rate_limit(db, key_prefix, key_unique):
+def hit_rate_limit(db, key_prefix, key_unique, exception=None):
     try:
         cap, period = RATE_LIMITS[key_prefix]
         key = '%s:%s' % (key_prefix, key_unique)
-        return db.one("SELECT hit_rate_limit(%s, %s, %s)", (key, cap, period))
+        r = db.one("SELECT hit_rate_limit(%s, %s, %s)", (key, cap, period))
     except Exception as e:
         from liberapay.website import website
         website.tell_sentry(e, {})
         return -1
+    if r is None and exception is not None:
+        raise exception(key_unique)
+    return r
 
 DB.hit_rate_limit = SimpleCursorBase.hit_rate_limit = hit_rate_limit
 
