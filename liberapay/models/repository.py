@@ -44,6 +44,12 @@ def upsert_repos(cursor, repos, participant, info_fetched_at):
         on_conflict_set = ','.join('{0}=excluded.{0}'.format(col) for col in cols)
         cols = ','.join(cols)
         placeholders = ('%s,'*len(vals))[:-1]
+        cursor.run("""
+            DELETE FROM repositories
+             WHERE platform = %s
+               AND slug = %s
+               AND remote_id <> %s
+        """, (repo.platform, repo.slug, repo.remote_id))
         r.append(cursor.one("""
             INSERT INTO repositories
                         ({0})
