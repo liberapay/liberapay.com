@@ -258,6 +258,48 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             homer.update_status('active')  # reset for next loop run
 
     @patch('mangopay.resources.PayIn.get')
+    def test_payin_bank_wire_callback_unexpected(self, Get):
+        homer = self.homer
+        cases = (
+            ('failed', '000001', 'FOO'),
+            ('succeeded', '000000', None),
+        )
+        for status, result_code, error in cases:
+            status_up = status.upper()
+            assert homer.balance == 0
+            homer.close(None)
+            assert homer.status == 'closed'
+            qs = "EventType=PAYIN_NORMAL_"+status_up+"&RessourceId=123456790"
+            payin = BankWirePayIn()
+            payin.Status = status_up
+            payin.ResultCode = result_code
+            payin.ResultMessage = error
+            payin.AuthorId = homer.mangopay_user_id
+            payin.PaymentType = 'BANK_WIRE'
+            payin.DebitedFunds = Money(242, 'EUR')
+            payin.DeclaredDebitedFunds = payin.DebitedFunds
+            payin.DeclaredFees = Money(2, 'EUR')
+            payin.Fees = Money(2, 'EUR')
+            payin.CreditedFunds = Money(0, 'XXX') if error else Money(240, 'EUR')
+            payin.CreditedWalletId = homer.mangopay_wallet_id
+            Get.return_value = payin
+            r = self.callback(qs)
+            assert r.code == 200, r.text
+            homer = homer.refetch()
+            if status == 'succeeded':
+                assert homer.balance == D('2.40')
+                assert homer.status == 'active'
+            else:
+                assert homer.balance == 0
+                assert homer.status == 'closed'
+            emails = self.get_emails()
+            assert len(emails) == 1
+            assert emails[0]['to'][0] == 'homer <%s>' % homer.email
+            assert status[:4] in emails[0]['subject']
+            self.db.self_check()
+            homer.update_status('active')  # reset for next loop run
+
+    @patch('mangopay.resources.PayIn.get')
     def test_payin_bank_wire_callback_amount_mismatch(self, Get):
         self._test_payin_bank_wire_callback_amount_mismatch(Get, 2)
 
