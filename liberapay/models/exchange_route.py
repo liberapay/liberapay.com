@@ -63,6 +63,19 @@ class ExchangeRoute(Model):
         r.__dict__['participant'] = participant
         return r
 
+    @classmethod
+    def upsert_bankwire_route(cls, participant):
+        r = cls.db.one("""
+            INSERT INTO exchange_routes AS r
+                        (participant, network, address, one_off, error, remote_user_id)
+                 VALUES (%s, 'mango-bw', 'x', false, '', %s)
+            ON CONFLICT (participant, network, address) DO UPDATE
+                    SET one_off = false  -- dummy update
+              RETURNING r
+        """, (participant.id, participant.mangopay_user_id))
+        r.__dict__['participant'] = participant
+        return r
+
     def invalidate(self, obj=None):
         if self.network == 'mango-cc':
             card = obj or Card.get(self.address)

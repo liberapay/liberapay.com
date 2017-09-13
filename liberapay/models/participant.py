@@ -464,6 +464,9 @@ class Participant(Model, MixinTeam):
         transfers = []
         distributed = D_ZERO
 
+        if not total:
+            raise self.NoOneToGiveFinalGiftTo
+
         for tip in tips:
             rate = tip.amount / total
             pro_rated = (self.balance * rate).quantize(D_CENT, ROUND_DOWN)
