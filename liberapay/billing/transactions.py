@@ -225,14 +225,7 @@ def payin_bank_wire(db, participant, debit_amount):
     arrive in the wallet.
     """
 
-    route = db.one("""
-        INSERT INTO exchange_routes
-                    (participant, network, address, one_off, error, remote_user_id)
-             VALUES (%s, 'mango-bw', 'x', false, '', %s)
-        ON CONFLICT (participant, network, address) DO UPDATE
-                SET one_off = false  -- dummy update
-          RETURNING *
-    """, (participant.id, participant.mangopay_user_id))
+    route = ExchangeRoute.upsert_bankwire_route(participant)
 
     amount, fee, vat = skim_bank_wire(debit_amount)
 
@@ -255,6 +248,25 @@ def payin_bank_wire(db, participant, debit_amount):
 
     e = record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
     return payin, e
+
+
+def record_unexpected_payin(db, payin):
+    """Record an unexpected bank wire payin.
+    """
+    assert payin.PaymentType == 'BANK_WIRE'
+    amount = Decimal(payin.DebitedFunds.Amount) / Decimal(100)
+    paid_fee = Decimal(payin.Fees.Amount) / Decimal(100)
+    vat = skim_bank_wire(amount)[2]
+    wallet_id = payin.CreditedWalletId
+    participant = Participant.from_mangopay_user_id(payin.AuthorId)
+    assert participant.mangopay_wallet_id == wallet_id
+    route = ExchangeRoute.upsert_bankwire_route(participant)
+    return db.one("""
+        INSERT INTO exchanges
+               (amount, fee, vat, participant, status, route, note, wallet_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+     RETURNING id
+    """, (amount, paid_fee, vat, participant.id, 'created', route.id, None, wallet_id))
 
 
 def record_payout_refund(db, payout_refund):
