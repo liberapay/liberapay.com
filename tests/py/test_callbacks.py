@@ -261,13 +261,15 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
     def test_payin_bank_wire_callback_unexpected(self, Get):
         homer = self.homer
         cases = (
-            ('failed', '000001', 'FOO'),
-            ('succeeded', '000000', None),
+            ('failed', '000001', 'FOO', 0),
+            ('succeeded', '000000', None, 5),
+            ('succeeded', '000000', None, 2),
         )
-        for status, result_code, error in cases:
+        for status, result_code, error, fee in cases:
             status_up = status.upper()
+            homer.set_tip_to(self.janet, D('1.00'))
+            homer.close('downstream')
             assert homer.balance == 0
-            homer.close(None)
             assert homer.status == 'closed'
             qs = "EventType=PAYIN_NORMAL_"+status_up+"&RessourceId=123456790"
             payin = BankWirePayIn()
@@ -278,16 +280,21 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             payin.PaymentType = 'BANK_WIRE'
             payin.DebitedFunds = Money(242, 'EUR')
             payin.DeclaredDebitedFunds = payin.DebitedFunds
-            payin.DeclaredFees = Money(2, 'EUR')
-            payin.Fees = Money(2, 'EUR')
-            payin.CreditedFunds = Money(0, 'XXX') if error else Money(240, 'EUR')
+            payin.DeclaredFees = Money(fee, 'EUR')
+            payin.Fees = Money(fee, 'EUR')
+            payin.CreditedFunds = Money(0, 'XXX') if error else Money(242 - fee, 'EUR')
             payin.CreditedWalletId = homer.mangopay_wallet_id
             Get.return_value = payin
             r = self.callback(qs)
             assert r.code == 200, r.text
+            amount = D(242 - fee) / D(100)
+            e = self.db.one("SELECT * FROM exchanges ORDER BY timestamp DESC lIMIT 1")
+            assert e.status == status
+            assert e.amount == amount
+            assert e.fee == D(fee) / D(100)
             homer = homer.refetch()
             if status == 'succeeded':
-                assert homer.balance == D('2.40')
+                assert homer.balance == amount
                 assert homer.status == 'active'
             else:
                 assert homer.balance == 0
