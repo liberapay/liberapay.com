@@ -49,7 +49,7 @@ class GitHub(PlatformOAuth2):
     x_repo_name = key('name')
     x_repo_slug = key('full_name')
     x_repo_description = key('description')
-    x_repo_last_update = key('updated_at')
+    x_repo_last_update = key('pushed_at')
     x_repo_is_fork = key('fork')
     x_repo_stars_count = key('stargazers_count')
     x_repo_owner_id = key('owner', clean=lambda d: d['id'])
