@@ -308,7 +308,7 @@ class Platform(object):
         r.platform = self.name
         r.name = self.x_repo_name(r, info)
         r.slug = self.x_repo_slug(r, info)
-        r.remote_id = self.x_repo_id(r, info)
+        r.remote_id = str(self.x_repo_id(r, info))
         r.owner_id = self.x_repo_owner_id(r, info, None)
         r.description = self.x_repo_description(r, info, None)
         r.last_update = self.x_repo_last_update(r, info, None)
