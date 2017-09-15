@@ -1,12 +1,15 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2017-09-16 10:46+0000\n"
+"Last-Translator: Kim <github@aggsol.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.17-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -159,9 +162,12 @@ msgstr "Sie können es erneut versuchen, möglicherweise mit einer anderen Zahlu
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Die Überweisung auf Ihr Liberapay-Konto war erfolgreich"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Wir sind froh, Ihnen mitteilen zu können, dass die Banküberweisung erfolgreich war. Von den {0}, die Sie gesendet haben, gingen {1} in ihre Liberapay-Brieftasche und {2} wurden als Gebühren bezahlt."
+msgstr ""
+"Wir sind froh, Ihnen mitteilen zu können, dass die Banküberweisung "
+"erfolgreich war. Von den {0} gingen {1} auf ihr Liberapay-Konto und {2} "
+"Gebühren wurden bezahlt."
 
 msgid "View receipt"
 msgstr "Beleg anzeigen"
@@ -1069,6 +1075,8 @@ msgstr "Versprechen"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr ""
+"Sie befinden sich im Sandbox-Modus. Geben Sie keine echten Zahlungs- oder "
+"Personendaten ein!"
 
 msgid "Search Liberapay"
 msgstr "Durchsuche Liberapay"
@@ -2136,9 +2144,10 @@ msgstr "Gebühr: {0}"
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "Die Gebühren entsprechen der unserer Zahlungsdienstleister. Liberapay wird nur durch Spenden finanziert, die auf dem {0}eigenen Konto{1} eingehen."
 
-#, fuzzy
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Außer wenn Ihre Bank weiter Gebühren für die Überweisung verlangt. Bitte fragen Sie bei Ihrer Bank nach."
+msgstr ""
+"¹ Außer, wenn Ihre Bank weitere Gebühren für die Überweisung verlangt. Bitte "
+"fragen Sie bei Ihrer Bank nach."
 
 msgid "Go back"
 msgstr "Zurück"
@@ -2297,6 +2306,8 @@ msgstr "{0} wurden von Ihrem Bankkonto eingezogen. {1} gingen davon auf ihr Libe
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr ""
+"Eine Lastschrift über {0} wurde angefordert. Wenn diese erfolgreich ist, "
+"dann werden Ihnen {1} gutgeschrieben und {2} Gebühren bezahlt."
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
@@ -2305,6 +2316,7 @@ msgstr "Der Versuch, {0} von Ihrem Bankkonto zu transferieren, ist mit der folge
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr ""
+"Das Hinzufügen von Geld zu Liberapay per Lastschrift kostet {0} Gebühren."
 
 msgid "Bank Account"
 msgstr "Bankkonto"
@@ -2521,9 +2533,16 @@ msgid ""
 "• {2}% when it's a bank wire;\n"
 "• {3} when it's a direct debit."
 msgstr ""
+"Geld auf Liberapay zu transferieren kostet folgende Gebühren:\n"
+"• {0}% + {1} bei Zahlung per Kredikarte;\n"
+"• {2}% Überweisung;\n"
+"• {3} Lastschrift."
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
 msgstr ""
+"Die oben genannten Gebühren entsprechen den Gebühren unseres "
+"Zahlungsdienstleisters. Es können weitere Bankgebühren anfallen. Wie haben "
+"keine Einsicht oder Kontrolle über die Gebühren Ihrer Bank."
 
 msgid "There are no fees for transfers between Liberapay users."
 msgstr "Es fallen keine Gebühren an, wenn Nutzer auf Liberapay untereinander Geld überweisen."
@@ -2751,7 +2770,17 @@ msgstr "Die nominellen Entnahmen werden von den Mitgliedern selbst bestimmt. Die
 
 #, fuzzy
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the staibility of the team's income."
-msgstr "Sie wundern sich vielleicht, warum wir nominelle Entnahmen als Maxima anstelle von Prozenten verwenden. Maxima erlauben Teams eine Überschuß (oder Rest) zu erzielen. Erstens bildet dies einen Puffer um die Einnahmen der Teammitgleider zu stabilisieren. Zweitens mindern neue Mitglieder zuerst den Puffer bevor sie die Einnahmen der anderen Mitglieder mindern. Drittens erlaubt es unserer Software die Beträge die tatsächlich von Spendern überwiesen werden anzupassen. Die gleicht den Betrag eines Spenders über die Zeit aus und macht das System gerechter. Außerdem ermutigt es für Teams zu spenden, die ihr Spendenziel schon erreicht haben. Die stabilisiert das Einkommen des Teams weiter."
+msgstr ""
+"Sie wundern sich vielleicht, warum wir nominelle Entnahmen als Maxima "
+"anstelle von Prozenten verwenden. Maxima erlauben Teams eine Überschuß (oder "
+"Rest) zu erzielen. Erstens bildet dies einen Puffer um die Einnahmen der "
+"Teammitgleider zu stabilisieren. Zweitens verringern neue Mitglieder zuerst "
+"den Puffer, bevor sie die Einnahmen der anderen Mitglieder mindern. Drittens "
+"erlaubt unsere Software die Beträge, die tatsächlich von Spendern überwiesen "
+"werden, anzupassen. Dies gleicht den Betrag eines Spenders über die Zeit aus "
+"und macht das Spendensystem gerechter. Außerdem ermutigt es Spender für "
+"Teams zu spenden, die ihr Spendenziel schon erreicht haben. Denn dies "
+"stabilisiert das Einkommen des Teams weiter."
 
 msgid "Regulation of take amounts"
 msgstr "Regelung der Entnahmebeträge"
@@ -3007,9 +3036,9 @@ msgstr "Um Geld zu erhalten machen Sie etwas großartiges und erzählen Sie davo
 msgid "{0}Fill out your profile{1}."
 msgstr "{0}Füllen Sie Ihr Profil aus{1}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr "{0}Binden Sie unsere Widgets{1} auf Ihrem Blog / Ihrer Webseite ein."
+msgstr "{0}Platzieren Sie unsere Widgets{1} auf Ihrem Blog / Ihrer Webseite."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Kontaktieren Sie die Menschen, die von Ihrer Arbeit profitieren und bitten sie Sie zu unterstützen."
