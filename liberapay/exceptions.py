@@ -149,6 +149,14 @@ class TooManyLoginEmails(LazyResponseXXX):
             "or contact support@liberapay.com."
         )
 
+class TooManyPasswordLogins(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "There have been too many attempts to log in to this account recently, "
+            "please try again in a few hours or log in via email."
+        )
+
 
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):

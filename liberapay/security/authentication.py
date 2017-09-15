@@ -7,7 +7,7 @@ from six.moves.urllib.parse import urlencode
 from pando import Response
 
 from liberapay.constants import SESSION, SESSION_TIMEOUT
-from liberapay.exceptions import LoginRequired, TooManyLoginEmails
+from liberapay.exceptions import LoginRequired, TooManyLoginEmails, TooManyPasswordLogins
 from liberapay.models.participant import Participant
 
 
@@ -42,6 +42,7 @@ def sign_in_with_form_data(body, state):
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
         if password:
+            website.db.hit_rate_limit('log-in.password', k, TooManyPasswordLogins)
             p = Participant.authenticate(
                 k, 'password',
                 id, password,
