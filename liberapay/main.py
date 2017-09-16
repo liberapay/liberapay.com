@@ -1,5 +1,6 @@
 from __future__ import division
 
+from ipaddress import ip_address
 import os
 import signal
 import string
@@ -24,9 +25,9 @@ from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.state_chain import (
-    create_response_object, canonize, insert_constants, _dispatch_path_to_filesystem,
-    merge_exception_into_response, return_500_for_exception, turn_socket_error_into_50X,
-    overwrite_status_code_of_gateway_errors,
+    attach_environ_to_request, create_response_object, canonize, insert_constants,
+    _dispatch_path_to_filesystem, merge_exception_into_response, return_500_for_exception,
+    turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
 from liberapay.website import website
@@ -105,6 +106,7 @@ noop = lambda: None
 algorithm = website.algorithm
 algorithm.functions = [
     algorithm['parse_environ_into_request'],
+    attach_environ_to_request,
     algorithm['insert_variables_for_aspen'],
     algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
@@ -151,6 +153,37 @@ algorithm.functions = [
 
 # Monkey patch aspen and pando
 # ============================
+
+if hasattr(pando.http.request.Request, 'source'):
+    raise Warning('pando.http.request.Request.source already exists')
+def _source(self):
+    def f():
+        addr = ip_address(self.environ[b'REMOTE_ADDR'].decode('ascii'))
+        trusted_proxies = getattr(self.website, 'trusted_proxies', None)
+        forwarded_for = self.headers.get(b'X-Forwarded-For')
+        if not trusted_proxies or not forwarded_for:
+            return addr
+        for networks in trusted_proxies:
+            is_trusted = False
+            for network in networks:
+                is_trusted = addr.is_private if network == 'private' else addr in network
+                if is_trusted:
+                    break
+            if not is_trusted:
+                return addr
+            i = forwarded_for.rfind(b',')
+            try:
+                addr = ip_address(forwarded_for[i+1:].decode('ascii').strip())
+            except (UnicodeDecodeError, ValueError):
+                return addr
+            if i == -1:
+                return addr
+            forwarded_for = forwarded_for[:i]
+        return addr
+    r = f()
+    self.__dict__['source'] = r
+    return r
+pando.http.request.Request.source = property(_source)
 
 if hasattr(pando.Response, 'encode_url'):
     raise Warning('pando.Response.encode_url() already exists')

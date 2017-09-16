@@ -43,4 +43,5 @@ SELECT clean_up_counters('test', 0.01) = 1;
 
 
 INSERT INTO app_conf (key, value) VALUES
-    ('clean_up_counters_every', '3600'::jsonb);
+    ('clean_up_counters_every', '3600'::jsonb),
+    ('trusted_proxies', '[]'::jsonb);

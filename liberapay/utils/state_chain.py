@@ -16,6 +16,11 @@ from .. import constants
 from ..exceptions import LazyResponse
 
 
+def attach_environ_to_request(environ, request, website):
+    request.environ = environ
+    request.website = website
+
+
 def create_response_object(request, website):
     response = Response()
     response.request = request
