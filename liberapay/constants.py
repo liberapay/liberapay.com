@@ -199,6 +199,9 @@ RATE_LIMITS = {
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
     'log-in.password': (3, 60*60),  # 3 per hour
+    'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address
+    'sign-up.ip-net': (15, 15*60),  # 15 per 15 minutes per IP network
+    'sign-up.ip-version': (15, 15*60),  # 15 per 15 minutes per IP version
 }
 
 SEPA = set("""

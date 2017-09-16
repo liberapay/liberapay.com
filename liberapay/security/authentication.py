@@ -7,8 +7,11 @@ from six.moves.urllib.parse import urlencode
 from pando import Response
 
 from liberapay.constants import SESSION, SESSION_TIMEOUT
-from liberapay.exceptions import LoginRequired, TooManyLoginEmails, TooManyPasswordLogins
+from liberapay.exceptions import (
+    LoginRequired, TooManyLoginEmails, TooManyPasswordLogins, TooManySignUps
+)
 from liberapay.models.participant import Participant
+from liberapay.utils import get_ip_net
 
 
 class _ANON(object):
@@ -88,6 +91,10 @@ def sign_in_with_form_data(body, state):
         email = body.pop('sign-in.email')
         if not email:
             raise response.error(400, 'email is required')
+        src_addr = state['request'].source
+        website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
+        website.db.hit_rate_limit('sign-up.ip-net', get_ip_net(src_addr), TooManySignUps)
+        website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
         with website.db.get_cursor() as c:
             p = Participant.make_active(
                 kind, body.pop('sign-in.username', None),

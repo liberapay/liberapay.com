@@ -158,6 +158,18 @@ class TooManyPasswordLogins(LazyResponseXXX):
         )
 
 
+class TooManySignUps(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "Too many accounts have been created recently. This either means that "
+            "a lot of people are trying to join Liberapay today, or that an attacker "
+            "is trying to overload our system. As a result we have to ask you to come "
+            "back later (e.g. in a few hours), or send an email to support@liberapay.com. "
+            "We apologize for the inconvenience."
+        )
+
+
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):
         return _("The password must be at least {0} and at most {1} characters long.",

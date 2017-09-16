@@ -411,3 +411,10 @@ def mkdir_p(path):
         if e.errno == errno.EEXIST and os.path.isdir(path):
             return
         raise
+
+
+def get_ip_net(addr):
+    if addr.max_prefixlen == 32:
+        return '.'.join(str(addr).split('.', 3)[:2])
+    else:
+        return hexlify(addr.packed[:4])
