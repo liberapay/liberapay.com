@@ -35,7 +35,7 @@ def upsert_repos(cursor, repos, participant, info_fetched_at):
         return repos
     r = []
     for repo in repos:
-        if not repo.owner_id:
+        if not repo.owner_id or not repo.last_update:
             continue
         repo.participant = participant.id
         repo.extra_info = json.dumps(repo.extra_info)
