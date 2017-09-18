@@ -139,7 +139,7 @@ msgid "Bank wire to your Liberapay wallet"
 msgstr "Liberapay 지갑으로 계좌 이체"
 
 msgid "The bank wire to your Liberapay wallet has expired"
-msgstr ""
+msgstr "Liberapay로의 자동 이체가 만료되었습니다"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
@@ -157,18 +157,20 @@ msgstr "다시 시도하거나, 다른 지불 방법을 사용하거나, 아래 
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Liberapay로의 계좌 이체가 성공하였습니다"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "은행 계좌에서의 이체가 성공하였음을 알리게 되어 기쁘게 생각합니다. 보내신 금액 {0} 중에서 {1} 만큼이 Liberapay 계좌로 입금되었고 {2} 만큼은 수수료로 지불되었습니다."
+msgstr ""
+"은행 계좌에서의 이체가 성공하였음을 알리게 되어 기쁘게 생각합니다. 보내신 금액 {0} 중에서 {1} 만큼이 Liberapay 계좌로 "
+"입금되었고 {2} 만큼은 수수료로 지불되었습니다."
 
 msgid "View receipt"
 msgstr "영수증 보기"
 
 msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr ""
+msgstr "Liberapay로의 실시간 계좌 이체가 실패하였습니다"
 
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr ""
+msgstr "Liberapay로의 실시간 계좌 이체가 성공적으로 이루어졌습니다"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -276,10 +278,10 @@ msgid "When a bank wire transfer to my Liberapay wallet expires"
 msgstr "Liberapay로의 계좌 이체가 만료될 때"
 
 msgid "When a direct debit from my bank account fails"
-msgstr ""
+msgstr "은행 계좌에서 실시간 계좌 이체가 실패할 때"
 
 msgid "When a direct debit from my bank account succeeds"
-msgstr ""
+msgstr "은행 계좌에서 실시간 계좌 이체가 성공할 때"
 
 msgid "Expense Report"
 msgstr "비용 보고서"
@@ -1063,7 +1065,7 @@ msgid "Pledge"
 msgstr "공약"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr ""
+msgstr "샌드박스 모드에 있습니다, 실제 결제 정보 또는 개인 정보를 입력하지 마십시오!"
 
 msgid "Search Liberapay"
 msgstr "Liberapay 검색"
@@ -1222,6 +1224,8 @@ msgstr "어떤 지불 방식을 사용할 수 있나요?"
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
+"현재 대부분의 신용 카드 및 직불 카드 (비자 및 마스타카드), 계좌 이체 (유로화) 및 자동 이체 (SEPA 전용)를 지원합니다. "
+"미래에 추가 옵션을 지원할 예정입니다."
 
 msgid "How do recurrent donations work?"
 msgstr "지속적인 기부는 어떻게 작동하나요?"
@@ -1757,7 +1761,7 @@ msgid "No notifications to show."
 msgstr "확인할 알림이 없습니다."
 
 msgid "Direct Debit"
-msgstr ""
+msgstr "자동 이체"
 
 msgid "Bank Wire"
 msgstr "은행 이체"
@@ -1948,7 +1952,7 @@ msgid "Export History"
 msgstr "역사 내보내기"
 
 msgid "awaiting confirmation"
-msgstr ""
+msgstr "확인 대기 중"
 
 msgid "preparing"
 msgstr "진행 전"
@@ -1980,7 +1984,7 @@ msgstr "총 보낸 금액: {0}"
 #, python-brace-format
 msgid "{money_amount} in recurrent donations to {n} person"
 msgid_plural "{money_amount} in recurrent donations to {n} people"
-msgstr[0] ""
+msgstr[0] "{n} 명에게 {money_amount} 만큼 반복 기부 중"
 
 msgid "Export as CSV"
 msgstr "CSV로 내보내기"
@@ -1988,7 +1992,7 @@ msgstr "CSV로 내보내기"
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
-msgstr[0] ""
+msgstr[0] "{n} 명에게 {money_amount} 만큼 비용 지불"
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -1997,12 +2001,12 @@ msgstr "총 받은 금액: {0}"
 #, python-brace-format
 msgid "{money_amount} in recurrent donations from {n} donor"
 msgid_plural "{money_amount} in recurrent donations from {n} donors"
-msgstr[0] ""
+msgstr[0] "{n} 명으로부터 {money_amount} 만큼 반복 기부 받음"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
 msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
-msgstr[0] ""
+msgstr[0] "{n} 조직으로부터 {money_amount} 만큼 비용 지불 받음"
 
 msgid "Status"
 msgstr "상태"
@@ -2083,7 +2087,7 @@ msgid "No transactions to show."
 msgstr "보여줄 거래가 없습니다."
 
 msgid "Adding Money"
-msgstr ""
+msgstr "자금 추가"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "기여를 설정하지 않았습니다. 기여를 설정하게 되면 계좌에 자금을 추가하기 위한 옵션이 추가됩니다."
@@ -2105,28 +2109,28 @@ msgid "To a Euro account"
 msgstr "유로 계좌로 이체"
 
 msgid "Cheapest for small amounts¹"
-msgstr ""
+msgstr "소액에서 가장 쌈¹"
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "수수료: {0}%"
 
 msgid "SEPA only"
-msgstr ""
+msgstr "SEPA 전용"
 
 msgid "Best for regular payments"
-msgstr ""
+msgstr "정기 지불에 가장 좋음"
 
 #, python-brace-format
 msgid "Fee: {0}"
-msgstr ""
+msgstr "수수료: {0}"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "수수료는 결제 대행업체에 의해 부과되며, Liberapay는 {0}Liberapay의 계좌에{1} 기부된 기부액에 의해서만 운영됩니다."
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr ""
+msgstr "¹ 은행에서 이체에 대해 과금하지 않을 경우. 이러한 수수료에 대한 통제권이나 지식이 없습니다."
 
 msgid "Go back"
 msgstr "뒤로 가기"
@@ -2213,7 +2217,7 @@ msgid "Custom amount (min={0}, max={1})"
 msgstr "맞춤 금액 (최소={0}, 최대={1})"
 
 msgid "Proceed"
-msgstr ""
+msgstr "진행"
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
@@ -2278,10 +2282,13 @@ msgstr "카드 데이터는 암호화된 수단을 통해 결제 대행사의 �
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
 msgstr ""
+"{0} 만큼이 은행 계좌에서 이체되었으며, {1} 만큼이 Liberapay 계좌로 입금되었고, {2} 만큼이 수수료로 지출되었습니다."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr ""
+"{0} 만큼의 자동 이체가 시작되었습니다. 이체가 성공적이라면 {1} 만큼이 Liberapay 계좌로 입금되고 {2} 만큼이 수수료로 "
+"지불될 것입니다."
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
@@ -2289,16 +2296,16 @@ msgstr "당신의 은행 계좌에서 {0} 만큼을 이체하려는 시도가 �
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr ""
+msgstr "Liberapay로 자동 이체로 입금하게 되면 {0} 만큼의 수수료가 부과됩니다."
 
 msgid "Bank Account"
-msgstr ""
+msgstr "은행 계좌"
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "Use another account"
-msgstr ""
+msgstr "다른 계좌 사용"
 
 msgid "This IBAN is invalid."
 msgstr "이 IBAN은 유효하지 않습니다."
@@ -2317,7 +2324,7 @@ msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "거래 수수료가 높을 것으로 예상됩니다: {0}% ({1}/{2}). 계속 진행할까요?"
 
 msgid "Withdrawing Money"
-msgstr ""
+msgstr "자금 인출"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2506,12 +2513,18 @@ msgid ""
 "• {2}% when it's a bank wire;\n"
 "• {3} when it's a direct debit."
 msgstr ""
+"Liberapay에 자금을 추가하면 다음 수수료가 부과됩니다:\n"
+"• 신용카드 또는 직불카드로 결제할 경우 {0}% + {1} ;\n"
+"• 계좌 이체로 입금할 경우 {2}%;\n"
+"• 자동 이체로 입금할 경우 {3}."
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
 msgstr ""
+"위에 표시된 수수료는 당사의 지불 처리자의 수수료일 뿐이며, 귀하의 은행 또한 각 거래에 대한 수수료를 징수할 수 있습니다. 특히 국제 "
+"거래의 경우 그러하며, 당사는 귀하의 은행 수수료에 대한 통제권 또는 지식이 없습니다."
 
 msgid "There are no fees for transfers between Liberapay users."
-msgstr ""
+msgstr "Liberapay 사용자 간의 거래에 대한 수수료는 없습니다."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "주거나 받을 수 있는 금액에 하한선이나 상한선이 있나요?"
@@ -2581,9 +2594,8 @@ msgstr "Liberapay는 {0}2015년에 프랑스{1}에서 {2}와(과) {3}에 의해 
 msgid "Legal Information"
 msgstr "법적 정보"
 
-#, fuzzy
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
-msgstr "이 웹사이트는 2015년에 프랑스에서 법인이 설립된 비영리기구인 Liberapay에 의해 운영됩니다."
+msgstr "이 웹사이트는 2015년에 프랑스에서 법인이 설립된 비영리기구 Liberapay에 의해 운영됩니다."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
 msgstr "Liberapay는 유럽연합에 전자화폐 지불자로 등록되어 있습니다. 당사 파트너의 도움 하에 금융제재에 따라 사기, 자금세탁, 테러리즘에 사용될 가능성이 있는 자금을 감시하고 있습니다."
@@ -3087,10 +3099,10 @@ msgid "{n} new {link_open}pledges{link_close} have been made in the past month, 
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
 msgstr[0] ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} were transferred last week between {n} users."
 msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] ""
+msgstr[0] "지난 주에 {n} 사용자가 {money_amount} 만큼을 이체했습니다."
 
 msgid "More stats"
 msgstr ""
