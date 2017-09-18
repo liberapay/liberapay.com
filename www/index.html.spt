@@ -259,21 +259,21 @@ recent = query_cache.one("""
         <h2>{{ _("Recent Activity") }}</h2>
         % if recent.n_users > 1
         <p>{{ glyphicon('user') }} <span>{{ ngettext(
-            "{n} user accounts have been created in the past month. The most recent was {0} ago.",
+            "",
             "{n} user accounts have been created in the past month. The most recent was {0} ago.",
             recent.n_users, to_age(recent.newest_user_ts)
         ) }}</span></p>
         % endif
         % if recent.n_donations > 1
         <p>{{ glyphicon('gift') }} <span>{{ ngettext(
-            "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}.",
+            "",
             "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}.",
             n=recent.n_donations, money_amount=Money(recent.donations_amount, 'EUR')
         ) }}</span></p>
         % endif
         % if recent.n_pledges > 1
         <p>{{ glyphicon('thumbs-up') }} <span>{{ ngettext(
-            "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
+            "",
             "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
             n=recent.n_pledges,
             link_open='<a href="/explore/pledges">'|safe,
@@ -283,7 +283,7 @@ recent = query_cache.one("""
         % endif
         % if recent.newest_payday_transfer_volume
         <p>{{ glyphicon('transfer') }} <span>{{ ngettext(
-            "{money_amount} were transferred last week between {n} users.",
+            "",
             "{money_amount} were transferred last week between {n} users.",
             money_amount=Money(recent.newest_payday_transfer_volume, 'EUR'),
             n=recent.newest_payday_nactive,
