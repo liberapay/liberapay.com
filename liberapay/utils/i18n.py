@@ -4,6 +4,7 @@ from __future__ import print_function, unicode_literals
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
+from hashlib import md5
 from io import BytesIO
 import re
 from unicodedata import combining, normalize
@@ -316,6 +317,24 @@ def add_helpers_to_context(context, loc):
     context['getdoc'] = getdoc
 
 
+def extract_custom(extractor, *args, **kw):
+    for match in extractor(*args, **kw):
+        msg = match[2]
+        if isinstance(msg, tuple) and msg[0] == '':
+            unused = "<unused singular (hash=%s)>" % md5(msg[1]).hexdigest()
+            msg = (unused, msg[1], msg[2])
+            match = (match[0], match[1], msg, match[3])
+        yield match
+
+
+def extract_jinja2_custom(*args, **kw):
+    return extract_custom(jinja2.ext.babel_extract, *args, **kw)
+
+
+def extract_python_custom(*args, **kw):
+    return extract_custom(extract_python, *args, **kw)
+
+
 def extract_spt(fileobj, *args, **kw):
     pages = list(split_and_escape(fileobj.read().decode('utf8')))
     npages = len(pages)
@@ -326,9 +345,9 @@ def extract_spt(fileobj, *args, **kw):
         python_page = i < 3 and i < npages and not page.header
         json_page = renderer in ('json_dump', 'jsonp_dump')
         if python_page or json_page:
-            extractor = extract_python
+            extractor = extract_python_custom
         else:
-            extractor = jinja2.ext.babel_extract
+            extractor = extract_jinja2_custom
         if extractor:
             for match in extractor(f, *args, **kw):
                 yield match
