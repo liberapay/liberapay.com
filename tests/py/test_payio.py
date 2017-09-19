@@ -35,6 +35,7 @@ from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 
 
 def fail_payin(payin):
+    payin.Id = -1
     payin.SecureModeRedirectURL = None
     payin.ResultCode = '1'
     payin.ResultMessage = 'oops'
@@ -369,17 +370,12 @@ class TestRecordExchange(MangopayHarness):
         with pytest.raises(NegativeBalance):
             record_exchange(self.db, self.homer_route, D("-10.00"), D("0.41"), 0, self.homer, 'pre')
 
-    def test_record_exchange_failure(self):
-        record_exchange(self.db, self.janet_route, D("10.00"), D("0.01"), 0, self.janet, 'failed', 'OOPS')
-        janet = Participant.from_id(self.janet.id)
-        assert self.janet.balance == janet.balance == 0
-
     def test_record_exchange_result_restores_balance_on_error(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 30, 0, homer)
         e_id = record_exchange(self.db, ba, D('-27.06'), D('0.81'), 0, homer, 'pre').id
         assert homer.balance == D('02.13')
-        record_exchange_result(self.db, e_id, 'failed', 'SOME ERROR', homer)
+        record_exchange_result(self.db, e_id, -e_id, 'failed', 'SOME ERROR', homer)
         homer = Participant.from_username('homer')
         assert homer.balance == D('30.00')
 
@@ -389,7 +385,7 @@ class TestRecordExchange(MangopayHarness):
         e_id = record_exchange(self.db, ba, D('-32.45'), D('0.86'), 0, homer, 'pre').id
         assert homer.balance == D('3.69')
         ba.update_error('invalidated')
-        record_exchange_result(self.db, e_id, 'failed', 'oops', homer)
+        record_exchange_result(self.db, e_id, -e_id, 'failed', 'oops', homer)
         homer = Participant.from_username('homer')
         assert homer.balance == D('37.00')
         assert ba.error == 'invalidated'
@@ -399,7 +395,7 @@ class TestRecordExchange(MangopayHarness):
         self.make_exchange('mango-cc', 50, 0, homer)
         e_id = record_exchange(self.db, ba, D('-43.98'), D('1.60'), 0, homer, 'pre').id
         assert homer.balance == D('4.42')
-        record_exchange_result(self.db, e_id, 'succeeded', None, homer)
+        record_exchange_result(self.db, e_id, -e_id, 'succeeded', None, homer)
         homer = Participant.from_username('homer')
         assert homer.balance == D('4.42')
 
@@ -408,7 +404,7 @@ class TestRecordExchange(MangopayHarness):
         self.make_exchange('mango-cc', 4, 0, janet)
         e_id = record_exchange(self.db, cc, D('31.59'), D('0.01'), 0, janet, 'pre').id
         assert janet.balance == D('4.00')
-        record_exchange_result(self.db, e_id, 'succeeded', None, janet)
+        record_exchange_result(self.db, e_id, -e_id, 'succeeded', None, janet)
         janet = Participant.from_username('janet')
         assert janet.balance == D('35.59')
 

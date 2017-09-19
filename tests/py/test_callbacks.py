@@ -141,7 +141,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             homer.close(None)
             assert homer.status == 'closed'
             qs = "EventType=PAYOUT_NORMAL_"+status_up+"&RessourceId=123456790"
-            payout = BankWirePayOut()
+            payout = BankWirePayOut(Id=-1)
             payout.Status = status_up
             payout.ResultCode = '000001' if error else '000000'
             payout.ResultMessage = error
@@ -176,7 +176,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             assert homer.balance == 0
             homer.close(None)
             assert homer.status == 'closed'
-            payout = BankWirePayOut()
+            payout = BankWirePayOut(Id=-1)
             payout.Status = 'SUCCEEDED'
             payout.ResultCode = '000000'
             payout.AuthorId = homer.mangopay_user_id
@@ -185,7 +185,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             # Create the refund
             status_up = status.upper()
             error = 'FOO' if status == 'failed' else None
-            refund = Refund()
+            refund = Refund(Id=-1)
             refund.DebitedFunds = Money(900, 'EUR')
             refund.Fees = Money(-100, 'EUR')
             refund.Status = status_up
@@ -229,7 +229,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             homer.close(None)
             assert homer.status == 'closed'
             qs = "EventType=PAYIN_NORMAL_"+status_up+"&RessourceId=123456790"
-            payin = BankWirePayIn()
+            payin = BankWirePayIn(Id=-1)
             payin.Status = status_up
             payin.ResultCode = result_code
             payin.ResultMessage = error
@@ -272,7 +272,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             assert homer.balance == 0
             assert homer.status == 'closed'
             qs = "EventType=PAYIN_NORMAL_"+status_up+"&RessourceId=123456790"
-            payin = BankWirePayIn()
+            payin = BankWirePayIn(Id=-1)
             payin.Status = status_up
             payin.ResultCode = result_code
             payin.ResultMessage = error
@@ -322,7 +322,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         homer.close(None)
         assert homer.status == 'closed'
         qs = "EventType=PAYIN_NORMAL_SUCCEEDED&RessourceId=123456790"
-        payin = BankWirePayIn()
+        payin = BankWirePayIn(Id=-1)
         payin.Status = 'SUCCEEDED'
         payin.ResultCode = '000000'
         payin.ResultMessage = None

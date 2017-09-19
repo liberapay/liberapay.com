@@ -166,7 +166,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
         route=route.id,
         wallet_id=participant.mangopay_wallet_id,
     )
-    record_exchange_result(db, e.id, 'succeeded', '', participant)
+    record_exchange_result(db, e.id, -e.id, 'succeeded', '', participant)
     return e
 
 

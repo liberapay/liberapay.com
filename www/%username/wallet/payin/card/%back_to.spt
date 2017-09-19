@@ -32,7 +32,7 @@ if request.method == 'GET' and 'transactionId' in request.qs:
         raise response.error(403, "bad transactionId: user mistmatch")
     status = payin.Status.lower()
     error = repr_error(payin)
-    record_exchange_result(website.db, payin.Tag, status, error, participant)
+    record_exchange_result(website.db, payin.Tag, payin.Id, status, error, participant)
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
 exchange = None

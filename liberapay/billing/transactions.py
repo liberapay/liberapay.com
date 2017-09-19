@@ -108,10 +108,12 @@ def payout(db, route, amount, ignore_high_fee=False):
     try:
         test_hook()
         payout.save()
-        return record_exchange_result(db, e_id, payout.Status.lower(), repr_error(payout), participant)
+        return record_exchange_result(
+            db, e_id, payout.Id, payout.Status.lower(), repr_error(payout), participant
+        )
     except Exception as e:
         error = repr_exception(e)
-        return record_exchange_result(db, e_id, 'failed', error, participant)
+        return record_exchange_result(db, e_id, '', 'failed', error, participant)
 
 
 def charge(db, route, amount, return_url):
@@ -147,12 +149,14 @@ def charge(db, route, amount, return_url):
         payin.save()
     except Exception as e:
         error = repr_exception(e)
-        return record_exchange_result(db, e_id, 'failed', error, participant)
+        return record_exchange_result(db, e_id, '', 'failed', error, participant)
 
     if payin.SecureModeRedirectURL:
         raise Redirect(payin.SecureModeRedirectURL)
 
-    return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+    return record_exchange_result(
+        db, e_id, payin.Id, payin.Status.lower(), repr_error(payin), participant
+    )
 
 
 def prepare_direct_debit(db, route, amount):
@@ -213,9 +217,11 @@ def execute_direct_debit(db, exchange, route):
         payin.save()
     except Exception as e:
         error = repr_exception(e)
-        return record_exchange_result(db, e_id, 'failed', error, participant)
+        return record_exchange_result(db, e_id, '', 'failed', error, participant)
 
-    return record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+    return record_exchange_result(
+        db, e_id, payin.Id, payin.Status.lower(), repr_error(payin), participant
+    )
 
 
 def payin_bank_wire(db, participant, debit_amount):
@@ -244,9 +250,11 @@ def payin_bank_wire(db, participant, debit_amount):
         payin.save()
     except Exception as e:
         error = repr_exception(e)
-        return None, record_exchange_result(db, e_id, 'failed', error, participant)
+        return None, record_exchange_result(db, e_id, '', 'failed', error, participant)
 
-    e = record_exchange_result(db, e_id, payin.Status.lower(), repr_error(payin), participant)
+    e = record_exchange_result(
+        db, e_id, payin.Id, payin.Status.lower(), repr_error(payin), participant
+    )
     return payin, e
 
 
@@ -263,10 +271,10 @@ def record_unexpected_payin(db, payin):
     route = ExchangeRoute.upsert_bankwire_route(participant)
     return db.one("""
         INSERT INTO exchanges
-               (amount, fee, vat, participant, status, route, note, wallet_id)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+               (amount, fee, vat, participant, status, route, note, remote_id, wallet_id)
+        VALUES (%s, %s, %s, %s, 'created', %s, NULL, %s, %s)
      RETURNING id
-    """, (amount, paid_fee, vat, participant.id, 'created', route.id, None, wallet_id))
+    """, (amount, paid_fee, vat, participant.id, route.id, payin.Id, wallet_id))
 
 
 def record_payout_refund(db, payout_refund):
@@ -281,13 +289,14 @@ def record_payout_refund(db, payout_refund):
     assert payout_refund.Fees == Money(int(fee * 100), 'EUR')
     route = ExchangeRoute.from_id(e_origin.route)
     participant = Participant.from_id(e_origin.participant)
+    remote_id = payout_refund.Id
     wallet_id = e_origin.wallet_id
     return db.one("""
         INSERT INTO exchanges
-               (amount, fee, vat, participant, status, route, note, refund_ref, wallet_id)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+               (amount, fee, vat, participant, status, route, note, refund_ref, remote_id, wallet_id)
+        VALUES (%s, %s, %s, %s, 'created', %s, NULL, %s, %s, %s)
      RETURNING id
-    """, (amount, fee, vat, participant.id, 'created', route.id, None, e_origin.id, wallet_id))
+    """, (amount, fee, vat, participant.id, route.id, e_origin.id, remote_id, wallet_id))
 
 
 def record_exchange(db, route, amount, fee, vat, participant, status, error=None):
@@ -305,6 +314,7 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
         vat     The amount of VAT included in the fee. Always positive.
 
     """
+    assert status.startswith('pre')
     if participant.is_suspended:
         raise AccountSuspended()
 
@@ -318,16 +328,14 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
          RETURNING *
         """, (amount, fee, vat, participant.id, status, route.id, error, wallet_id))
 
-        if status == 'failed':
-            propagate_exchange(cursor, participant, e, error, 0)
-        elif amount < 0:
+        if amount < 0:
             amount -= fee
             propagate_exchange(cursor, participant, e, '', amount)
 
     return e
 
 
-def record_exchange_result(db, exchange_id, status, error, participant):
+def record_exchange_result(db, exchange_id, remote_id, status, error, participant):
     """Updates the status of an exchange.
     """
     with db.get_cursor() as cursor:
@@ -335,6 +343,7 @@ def record_exchange_result(db, exchange_id, status, error, participant):
             UPDATE exchanges e
                SET status=%(status)s
                  , note=%(error)s
+                 , remote_id=%(remote_id)s
              WHERE id=%(exchange_id)s
                AND status <> %(status)s
          RETURNING *
@@ -816,10 +825,10 @@ def sync_with_mangopay(db):
             error = repr_error(t)
             status = t.Status.lower()
             assert (not error) ^ (status == 'failed')
-            record_exchange_result(db, e.id, status, error, p)
+            record_exchange_result(db, e.id, t.Id, status, error, p)
         elif e.is_old:
             # The exchange didn't happen, mark it as failed
-            record_exchange_result(db, e.id, 'failed', 'interrupted', p)
+            record_exchange_result(db, e.id, '', 'failed', 'interrupted', p)
 
     transfers = db.all("""
         SELECT *, (t.timestamp < current_timestamp - interval '1 day') AS is_old
