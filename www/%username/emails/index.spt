@@ -14,7 +14,7 @@ base_path = participant.path('emails/')
 
 % block content
 
-    <h3>{{ _("Email Addresses (Private)") }}</h3>
+    <h3>{{ ngettext("Email Address (Private)", "Email Addresses (Private)", len(emails)) }}</h3>
 
     <form action="{{ base_path }}modify.json" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
