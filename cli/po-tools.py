@@ -24,6 +24,27 @@ if sys.argv[1] == 'reflag':
     with open(pot_path, 'wb') as pot:
         write_po(pot, catalog, width=0)
 
+elif sys.argv[1] == 'pluralize':
+    po_path = sys.argv[2]
+    old_msg = sys.argv[3]
+    new_msg = (sys.argv[4], sys.argv[5])
+    print('pluralizing a message in PO file', po_path)
+    # read PO file
+    lang = po_path.rsplit('/', 1)[-1].split('.', 1)[0]
+    with open(po_path, 'rb') as po:
+        catalog = read_po(po, locale=lang)
+    # replace old msg
+    m = catalog.get(old_msg)
+    if m.string:
+        m.id = new_msg
+        assert not isinstance(m.string, tuple)
+        if m.string and catalog.num_plurals != 1:
+            m.flags.add('fuzzy')
+        m.string = (m.string,) * catalog.num_plurals
+        # write back
+        with open(po_path, 'wb') as po:
+            write_po(po, catalog, width=0)
+
 else:
     print("unknown command")
     raise SystemExit(1)
