@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '48'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '49'::jsonb);
 
 
 -- app configuration
@@ -344,6 +344,9 @@ CREATE TABLE exchanges
 , vat               numeric(35,2)        NOT NULL
 , refund_ref        bigint               REFERENCES exchanges
 , wallet_id         text                 NOT NULL
+, remote_id         text
+, CONSTRAINT remote_id_null_chk CHECK ((status::text LIKE 'pre%') = (remote_id IS NULL))
+, CONSTRAINT remote_id_empty_chk CHECK (NOT (status <> 'failed' AND remote_id = ''))
  );
 
 CREATE INDEX exchanges_participant_idx ON exchanges (participant);
