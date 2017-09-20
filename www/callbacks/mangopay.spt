@@ -200,7 +200,7 @@ elif cls:
     if reopen:
         p.update_status('active')
     assert e_id
-    record_exchange_result(website.db, e_id, status, error, p)
+    record_exchange_result(website.db, e_id, payio.Id, status, error, p)
     e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
 
     # Attempt to transfer the money to the user's current wallet

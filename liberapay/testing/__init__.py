@@ -223,7 +223,7 @@ class Harness(unittest.TestCase):
                 route = ExchangeRoute.insert(participant, network, MangopayHarness.card_id)
                 assert route
         e_id = record_exchange(self.db, route, amount, fee, vat, participant, 'pre').id
-        record_exchange_result(self.db, e_id, status, error, participant)
+        record_exchange_result(self.db, e_id, -e_id, status, error, participant)
         return e_id
 
 

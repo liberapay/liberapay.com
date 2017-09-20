@@ -122,7 +122,7 @@ if request.method == 'POST':
         response.redirect(mandate.RedirectURL)
     elif mandate.Status == 'FAILED':
         error = repr_error(mandate)
-        record_exchange_result(website.db, exchange.id, 'failed', error, participant)
+        record_exchange_result(website.db, exchange.id, '', 'failed', error, participant)
     else:
         execute_direct_debit(website.db, exchange, route)
     response.redirect(return_url)
@@ -137,7 +137,7 @@ elif request.method == 'GET' and 'MandateId' in request.qs:
         if mandate.Status == 'FAILED':
             route.set_mandate(None)
             error = repr_error(mandate)
-            exchange = record_exchange_result(website.db, exchange.id, 'failed', error, participant)
+            exchange = record_exchange_result(website.db, exchange.id, '', 'failed', error, participant)
         else:
             exchange = execute_direct_debit(website.db, exchange, route)
 
