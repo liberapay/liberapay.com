@@ -402,3 +402,19 @@ def check_address(addr):
     if addr['Country'] == 'US' and not addr.get('Region'):
         return False
     return True
+
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as e:
+        if e.errno == errno.EEXIST and os.path.isdir(path):
+            return
+        raise
+
+
+def get_ip_net(addr):
+    if addr.max_prefixlen == 32:
+        return '.'.join(str(addr).split('.', 3)[:2])
+    else:
+        return hexlify(addr.packed[:4])

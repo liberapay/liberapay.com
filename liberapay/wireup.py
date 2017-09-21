@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from collections import OrderedDict
+from ipaddress import ip_network
 import json
 import logging
 import os
@@ -8,9 +9,12 @@ import re
 import socket
 import signal
 from subprocess import call
+from time import time
 import traceback
 
 from six import text_type as str
+from six.moves.urllib.parse import quote as urlquote
+from six.moves.urllib.request import urlretrieve
 
 from algorithm import Algorithm
 import pando
@@ -35,7 +39,7 @@ from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
 from liberapay.security.authentication import ANON
-from liberapay.utils import find_files, markdown
+from liberapay.utils import find_files, markdown, mkdir_p
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (
@@ -116,6 +120,7 @@ class AppConf(object):
         bountysource_id=None.__class__,
         bountysource_secret=str,
         check_db_every=int,
+        clean_up_counters_every=int,
         dequeue_emails_every=int,
         facebook_callback=str,
         facebook_id=str,
@@ -158,6 +163,7 @@ class AppConf(object):
         smtp_username=str,
         smtp_password=str,
         smtp_use_tls=bool,
+        trusted_proxies=list,
         twitch_id=str,
         twitch_secret=str,
         twitter_callback=str,
@@ -201,6 +207,33 @@ def app_conf(db):
     if app_conf:
         socket.setdefaulttimeout(app_conf.socket_timeout)
     return {'app_conf': app_conf}
+
+
+def trusted_proxies(app_conf, env):
+    if not app_conf:
+        return
+    def parse_network(net):
+        if net == 'private':
+            return [net]
+        elif net.startswith('https://'):
+            d = env.log_dir + '/trusted_proxies/'
+            mkdir_p(d)
+            filename = d + urlquote(net, '')
+            skip_download = (
+                os.path.exists(filename) and
+                os.stat(filename).st_size > 0 and
+                os.stat(filename).st_mtime > time() - 60*60*24*7
+            )
+            if not skip_download:
+                urlretrieve(net, filename)
+            with open(filename, 'rb') as f:
+                return [ip_network(x) for x in f.read().decode('ascii').strip().split()]
+        else:
+            return [ip_network(net)]
+    return {'trusted_proxies': [
+        sum((parse_network(net) for net in networks), [])
+        for networks in (app_conf.trusted_proxies or ())
+    ]}
 
 
 def mail(app_conf, project_root='.'):
@@ -600,6 +633,7 @@ full_algorithm = Algorithm(
     accounts_elsewhere,
     load_scss_variables,
     s3,
+    trusted_proxies,
 )
 
 

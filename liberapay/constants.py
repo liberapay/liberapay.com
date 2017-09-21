@@ -192,6 +192,18 @@ check_bits(list(PRIVILEGES.values()))
 
 QUARANTINE = timedelta(weeks=4)
 
+RATE_LIMITS = {
+    'add_email.source': (5, 60*60*24),  # 5 per day
+    'add_email.target': (2, 60*60*24),  # 2 per day
+    'log-in.email': (10, 60*60*24),  # 10 per day
+    'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
+    'log-in.email.verified': (10, 60*60*24),  # 10 per day
+    'log-in.password': (3, 60*60),  # 3 per hour
+    'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address
+    'sign-up.ip-net': (15, 15*60),  # 15 per 15 minutes per IP network
+    'sign-up.ip-version': (15, 15*60),  # 15 per 15 minutes per IP version
+}
+
 SEPA = set("""
     AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
     MC MT NL NO PL PT RO SE SI SK

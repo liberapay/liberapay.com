@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from liberapay.exceptions import (
     BadEmailAddress, CannotRemovePrimaryEmail, EmailAlreadyTaken,
-    EmailNotVerified, TooManyEmailAddresses,
+    EmailNotVerified, TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
@@ -28,17 +28,19 @@ class TestEmail(EmailHarness):
     def get_address_id(self, addr):
         return self.db.one("SELECT id FROM emails WHERE address = %s", (addr,))
 
-    def verify_email(self, email, nonce, should_fail=False):
+    def hit_verify(self, email, nonce, should_fail=False):
         addr_id = self.get_address_id(email) or ''
         url = '/alice/emails/verify.html?email=%s&nonce=%s' % (addr_id, nonce)
         G = self.client.GxT if should_fail else self.client.GET
         return G(url, auth_as=self.alice)
 
-    def verify_and_change_email(self, old_email, new_email):
-        self.hit_email_spt('add-email', old_email)
-        nonce = self.alice.get_email(old_email).nonce
-        self.verify_email(old_email, nonce)
-        self.hit_email_spt('add-email', new_email)
+    def verify_email(self, email):
+        nonce = self.alice.get_email(email).nonce
+        self.hit_verify(email, nonce)
+
+    def add_and_verify_email(self, email):
+        self.hit_email_spt('add-email', email)
+        self.verify_email(email)
 
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
@@ -72,7 +74,8 @@ class TestEmail(EmailHarness):
         assert expected in last_email['text']
 
     def test_adding_second_email_sends_verification_notice(self):
-        self.verify_and_change_email('alice1@example.com', 'alice2@example.com')
+        self.add_and_verify_email('alice1@example.com')
+        self.hit_email_spt('add-email', 'alice2@example.com')
         assert self.mailer.call_count == 3
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'alice <alice1@example.com>'
@@ -92,7 +95,7 @@ class TestEmail(EmailHarness):
         assert response.code == 400
 
     def test_verify_email_without_adding_email(self):
-        response = self.verify_email('', 'sample-nonce')
+        response = self.hit_verify('', 'sample-nonce')
         assert 'Missing Info' in response.text
 
     def test_verify_email_wrong_nonce(self):
@@ -100,7 +103,7 @@ class TestEmail(EmailHarness):
         nonce = 'fake-nonce'
         r = self.alice.verify_email('alice@example.com', nonce)
         assert r == emails.VERIFICATION_FAILED
-        self.verify_email('alice@example.com', nonce)
+        self.hit_verify('alice@example.com', nonce)
         expected = None
         actual = Participant.from_username('alice').email
         assert expected == actual
@@ -130,7 +133,7 @@ class TestEmail(EmailHarness):
     def test_verify_email(self):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = self.alice.get_email('alice@example.com').nonce
-        self.verify_email('alice@example.com', nonce)
+        self.hit_verify('alice@example.com', nonce)
         expected = 'alice@example.com'
         actual = Participant.from_username('alice').email
         assert expected == actual
@@ -148,23 +151,17 @@ class TestEmail(EmailHarness):
         assert addr == actual
 
     def test_verified_email_is_not_changed_after_update(self):
-        self.verify_and_change_email('alice@example.com', 'alice@example.net')
+        self.add_and_verify_email('alice@example.com')
+        self.alice.add_email('alice@example.net')
         expected = 'alice@example.com'
         actual = Participant.from_username('alice').email
         assert expected == actual
 
     def test_get_emails(self):
-        self.verify_and_change_email('alice@example.com', 'alice@example.net')
+        self.add_and_verify_email('alice@example.com')
+        self.alice.add_email('alice@example.net')
         emails = self.alice.get_emails()
         assert len(emails) == 2
-
-    def test_verify_email_after_update(self):
-        self.verify_and_change_email('alice@example.com', 'alice@example.net')
-        nonce = self.alice.get_email('alice@example.net').nonce
-        self.verify_email('alice@example.net', nonce)
-        expected = 'alice@example.com'
-        actual = Participant.from_username('alice').email
-        assert expected == actual
 
     def test_nonce_is_reused_when_resending_email(self):
         self.hit_email_spt('add-email', 'alice@example.com')
@@ -183,17 +180,27 @@ class TestEmail(EmailHarness):
         with self.assertRaises(EmailAlreadyTaken):
             bob.add_email('alice@example.com')
             nonce = bob.get_email('alice@example.com').nonce
-            bob.verify_email('alice@example.com', nonce)
+            bob.hit_verify('alice@example.com', nonce)
 
         email_alice = Participant.from_username('alice').email
         assert email_alice == 'alice@example.com'
 
-    def test_cannot_add_too_many_emails(self):
+    def test_cannot_add_too_many_emails_per_day(self):
         self.alice.add_email('alice@example.com')
         self.alice.add_email('alice@example.net')
         self.alice.add_email('alice@example.org')
         self.alice.add_email('alice@example.co.uk')
         self.alice.add_email('alice@example.io')
+        with self.assertRaises(TooManyEmailVerifications):
+            self.alice.add_email('alice@example.coop')
+
+    def test_cannot_add_too_many_emails_ever(self):
+        self.alice.add_email('alice@example.com')
+        self.alice.add_email('alice@example.net')
+        self.alice.add_email('alice@example.org')
+        self.alice.add_email('alice@example.co.uk')
+        self.alice.add_email('alice@example.io')
+        self.db.run("DELETE FROM rate_limiting")
         self.alice.add_email('alice@example.co')
         self.alice.add_email('alice@example.eu')
         self.alice.add_email('alice@example.asia')
@@ -207,28 +214,35 @@ class TestEmail(EmailHarness):
         assert self.alice.get_any_email() == 'Alice&Bob@example.info'
 
     def test_emails_page_shows_emails(self):
-        self.verify_and_change_email('alice@example.com', 'alice@example.net')
+        self.add_and_verify_email('alice@example.com')
+        self.alice.add_email('alice@example.net')
         body = self.client.GET("/alice/emails/", auth_as=self.alice).text
         assert 'alice@example.com' in body
         assert 'alice@example.net' in body
 
     def test_set_primary(self):
-        self.verify_and_change_email('alice@example.com', 'alice@example.net')
-        self.verify_and_change_email('alice@example.net', 'alice@example.org')
-        self.hit_email_spt('set-primary', 'alice@example.com')
+        self.add_and_verify_email('alice@example.com')
+        self.add_and_verify_email('alice@example.net')
+        self.hit_email_spt('set-primary', 'alice@example.com')  # noop
+        self.hit_email_spt('set-primary', 'alice@example.net')
 
     def test_cannot_set_primary_to_unverified(self):
         with self.assertRaises(EmailNotVerified):
             self.hit_email_spt('set-primary', 'alice@example.com')
 
     def test_remove_email(self):
-        # Can remove unverified
+        # Cannot remove unverified primary
         self.hit_email_spt('add-email', 'alice@example.com')
-        self.hit_email_spt('remove', 'alice@example.com')
+        with self.assertRaises(CannotRemovePrimaryEmail):
+            self.hit_email_spt('remove', 'alice@example.com')
 
-        # Can remove verified
-        self.verify_and_change_email('alice@example.com', 'alice@example.net')
-        self.verify_and_change_email('alice@example.net', 'alice@example.org')
+        # Can remove extra unverified
+        self.hit_email_spt('add-email', 'alice@example.org')
+        self.hit_email_spt('remove', 'alice@example.org')
+
+        # Can remove extra verified
+        self.verify_email('alice@example.com')
+        self.add_and_verify_email('alice@example.net')
         self.hit_email_spt('remove', 'alice@example.net')
 
         # Cannot remove primary

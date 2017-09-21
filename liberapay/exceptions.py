@@ -124,6 +124,51 @@ class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
     def msg(self, _):
         return _("The email address {0} is already connected to your account.", *self.args)
 
+class VerificationEmailAlreadySent(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "A verification email has already been sent to {email_address} recently.",
+            email_address=self.args[0]
+        )
+
+class TooManyEmailVerifications(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You are not allowed to add another email address right now, please "
+            "try again in a few days."
+        )
+
+
+class TooManyLoginEmails(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You have consumed your quota of email logins, please try again tomorrow, "
+            "or contact support@liberapay.com."
+        )
+
+class TooManyPasswordLogins(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "There have been too many attempts to log in to this account recently, "
+            "please try again in a few hours or log in via email."
+        )
+
+
+class TooManySignUps(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "Too many accounts have been created recently. This either means that "
+            "a lot of people are trying to join Liberapay today, or that an attacker "
+            "is trying to overload our system. As a result we have to ask you to come "
+            "back later (e.g. in a few hours), or send an email to support@liberapay.com. "
+            "We apologize for the inconvenience."
+        )
+
 
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):

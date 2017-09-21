@@ -22,8 +22,8 @@ from psycopg2.extras import Json
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
     DONATION_WEEKLY_MAX, DONATION_WEEKLY_MIN, EMAIL_RE,
-    EMAIL_VERIFICATION_TIMEOUT, EVENTS, PASSWORD_MAX_SIZE,
-    PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
+    EMAIL_VERIFICATION_TIMEOUT, EVENTS,
+    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
 from liberapay.exceptions import (
@@ -38,6 +38,7 @@ from liberapay.exceptions import (
     NoSelfTipping,
     NoTippee,
     TooManyEmailAddresses,
+    TooManyEmailVerifications,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -45,6 +46,7 @@ from liberapay.exceptions import (
     UsernameIsEmpty,
     UsernameIsRestricted,
     UsernameTooLong,
+    VerificationEmailAlreadySent,
 )
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
@@ -636,27 +638,23 @@ class Participant(Model, MixinTeam):
         if len(self.get_emails()) > 9:
             raise TooManyEmailAddresses(email)
 
-        added_time = utcnow()
-        try:
-            with self.db.get_cursor(cursor) as c:
-                self.add_event(c, 'add_email', email)
-                email_row = c.one("""
-                    INSERT INTO emails
-                                (address, nonce, added_time, participant)
-                         VALUES (%s, %s, %s, %s)
-                      RETURNING *
-                """, (email, str(uuid.uuid4()), added_time, self.id))
-        except IntegrityError:
-            email_row = (cursor or self.db).one("""
-                UPDATE emails
-                   SET added_time=%s
-                 WHERE participant=%s
-                   AND address=%s
-                   AND verified IS NULL
-             RETURNING *
-            """, (added_time, self.id, email))
+        with self.db.get_cursor(cursor) as c:
+            self.add_event(c, 'add_email', email)
+            email_row = c.one("""
+                INSERT INTO emails AS e
+                            (address, nonce, added_time, participant)
+                     VALUES (%s, %s, current_timestamp, %s)
+                ON CONFLICT (participant, address) DO UPDATE
+                        SET added_time = excluded.added_time
+                      WHERE e.verified IS NULL
+                  RETURNING *
+            """, (email, str(uuid.uuid4()), self.id))
             if not email_row:
-                return self.add_email(email)
+                return 0
+            # Limit number of verification emails per address
+            self.db.hit_rate_limit('add_email.target', email, VerificationEmailAlreadySent)
+            # Limit number of verification emails per participant
+            self.db.hit_rate_limit('add_email.source', self.id, TooManyEmailVerifications)
 
         old_email = self.email or self.get_any_email()
         scheme = website.canonical_scheme
@@ -758,6 +756,9 @@ class Participant(Model, MixinTeam):
             self.add_event(c, 'remove_email', address)
             c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
                   (self.id, address))
+            n_left = c.one("SELECT count(*) FROM emails WHERE participant=%s", (self.id,))
+            if n_left == 0:
+                raise CannotRemovePrimaryEmail()
 
     def send_email(self, spt_name, email, **context):
         self.fill_notification_context(context)
