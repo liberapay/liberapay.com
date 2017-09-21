@@ -7,7 +7,7 @@ from decimal import Decimal
 from mangopay.exceptions import APIError
 from mangopay.resources import (
     BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, DirectDebitDirectPayIn,
-    SettlementTransfer, Transaction, Transfer, Wallet,
+    SettlementTransfer, Transfer, User, Wallet,
 )
 from mangopay.utils import Money
 from pando.utils import typecheck
@@ -817,8 +817,9 @@ def sync_with_mangopay(db):
     """)
     for e in exchanges:
         p = Participant.from_id(e.participant)
-        transactions = Transaction.all(user_id=p.mangopay_user_id)
-        transactions = [x for x in transactions if x.Tag == str(e.id)]
+        transactions = [x for x in User(id=p.mangopay_user_id).transactions.all(
+            Sort='CreationDate:DESC', Type=('PAYIN' if e.amount > 0 else 'PAYOUT')
+        ) if x.Tag == str(e.id)]
         assert len(transactions) < 2
         if transactions:
             t = transactions[0]
@@ -837,8 +838,9 @@ def sync_with_mangopay(db):
     """)
     for t in transfers:
         tipper = Participant.from_id(t.tipper)
-        transactions = Transaction.all(user_id=tipper.mangopay_user_id)
-        transactions = [x for x in transactions if x.Type == 'TRANSFER' and x.Tag == str(t.id)]
+        transactions = [x for x in User(id=tipper.mangopay_user_id).transactions.all(
+            Sort='CreationDate:DESC', Type='TRANSFER'
+        ) if x.Tag == str(t.id)]
         assert len(transactions) < 2
         if transactions:
             record_transfer_result(db, t.id, transactions[0])
