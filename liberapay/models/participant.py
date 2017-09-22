@@ -1311,9 +1311,37 @@ class Participant(Model, MixinTeam):
                     """, (suggested, self.id))
                 except IntegrityError:
                     raise UsernameAlreadyTaken(suggested)
+                assert (suggested, lowercased) == actual  # sanity check
+
+                # Deal with redirections
+                last_rename = self.get_last_event_of_type('set_username')
+                if last_rename:
+                    old_username = last_rename.payload
+                    prefixes = {
+                        'old': '/%s/' % old_username.lower(),
+                        'new': '/%s/' % suggested.lower(),
+                    }
+                    # Delete and update previous redirections
+                    c.run("""
+                        DELETE FROM redirections WHERE from_prefix = %(new)s || '%%';
+                        UPDATE redirections
+                           SET to_prefix = %(new)s
+                             , mtime = now()
+                         WHERE to_prefix = %(old)s;
+                    """, prefixes)
+                    # Add a redirection if the old name was in use long enough (1 hour)
+                    active_period = utcnow() - last_rename.ts
+                    if active_period.total_seconds() > 3600:
+                        c.run("""
+                            INSERT INTO redirections
+                                        (from_prefix, to_prefix)
+                                 VALUES (%(old)s || '%%', %(new)s)
+                            ON CONFLICT (from_prefix) DO UPDATE
+                                    SET to_prefix = excluded.to_prefix
+                                      , mtime = now()
+                        """, prefixes)
 
                 self.add_event(c, 'set_username', suggested)
-                assert (suggested, lowercased) == actual  # sanity check
                 self.set_attributes(username=suggested)
 
         return suggested

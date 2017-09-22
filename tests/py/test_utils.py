@@ -54,11 +54,13 @@ class Tests(Harness):
         p = self.make_participant(None)
         p.change_username('alice')
         # 1st username change
+        self.db.run("UPDATE events SET ts = ts - interval '30 days'")
         p.change_username('bob')
         r = self.GxT('/alice')
         assert r.code == 302
         assert r.headers[b'Location'] == b'/bob'
         # 2nd username change
+        self.db.run("UPDATE events SET ts = ts - interval '30 days'")
         p.change_username('carl')
         r = self.GxT('/alice')
         assert r.code == 302
@@ -67,6 +69,7 @@ class Tests(Harness):
         assert r.code == 302
         assert r.headers[b'Location'] == b'/carl'
         # 3rd username change: back to the original
+        self.db.run("UPDATE events SET ts = ts - interval '30 days'")
         p.change_username('alice')
         r = self.client.GET('/alice')
         assert r.code == 200
