@@ -596,3 +596,34 @@ ALTER TABLE exchanges ADD COLUMN remote_id text;
 ALTER TABLE exchanges
     ADD CONSTRAINT remote_id_null_chk CHECK ((status::text LIKE 'pre%') = (remote_id IS NULL)),
     ADD CONSTRAINT remote_id_empty_chk CHECK (NOT (status <> 'failed' AND remote_id = ''));
+
+-- migration #50
+CREATE UNLOGGED TABLE rate_limiting
+( key       text          PRIMARY KEY
+, counter   int           NOT NULL
+, ts        timestamptz   NOT NULL
+);
+CREATE OR REPLACE FUNCTION compute_leak(cap int, period float, last_leak timestamptz) RETURNS int AS $$
+    SELECT trunc(cap * extract(epoch FROM current_timestamp - last_leak) / period)::int;
+$$ LANGUAGE sql STABLE;
+CREATE OR REPLACE FUNCTION hit_rate_limit(key text, cap int, period float) RETURNS int AS $$
+    INSERT INTO rate_limiting AS r
+                (key, counter, ts)
+         VALUES (key, 1, current_timestamp)
+    ON CONFLICT (key) DO UPDATE
+            SET counter = r.counter + 1 - least(compute_leak(cap, period, r.ts), r.counter)
+              , ts = current_timestamp
+          WHERE (r.counter - compute_leak(cap, period, r.ts)) < cap
+      RETURNING cap - counter;
+$$ LANGUAGE sql;
+CREATE OR REPLACE FUNCTION clean_up_counters(pattern text, period float) RETURNS bigint AS $$
+    WITH deleted AS (
+        DELETE FROM rate_limiting
+              WHERE key LIKE pattern
+                AND ts < (current_timestamp - make_interval(secs => period))
+          RETURNING 1
+    ) SELECT count(*) FROM deleted;
+$$ LANGUAGE sql;
+INSERT INTO app_conf (key, value) VALUES
+    ('clean_up_counters_every', '3600'::jsonb),
+    ('trusted_proxies', '[]'::jsonb);

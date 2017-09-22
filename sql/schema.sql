@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '49'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '50'::jsonb);
 
 
 -- app configuration
@@ -640,6 +640,39 @@ CREATE TRIGGER upsert_mangopay_user_id
     AFTER INSERT OR UPDATE OF mangopay_user_id ON participants
     FOR EACH ROW WHEN (NEW.mangopay_user_id IS NOT NULL)
     EXECUTE PROCEDURE upsert_mangopay_user_id();
+
+
+-- rate limiting
+
+CREATE UNLOGGED TABLE rate_limiting
+( key       text          PRIMARY KEY
+, counter   int           NOT NULL
+, ts        timestamptz   NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION compute_leak(cap int, period float, last_leak timestamptz) RETURNS int AS $$
+    SELECT trunc(cap * extract(epoch FROM current_timestamp - last_leak) / period)::int;
+$$ LANGUAGE sql STABLE;
+
+CREATE OR REPLACE FUNCTION hit_rate_limit(key text, cap int, period float) RETURNS int AS $$
+    INSERT INTO rate_limiting AS r
+                (key, counter, ts)
+         VALUES (key, 1, current_timestamp)
+    ON CONFLICT (key) DO UPDATE
+            SET counter = r.counter + 1 - least(compute_leak(cap, period, r.ts), r.counter)
+              , ts = current_timestamp
+          WHERE (r.counter - compute_leak(cap, period, r.ts)) < cap
+      RETURNING cap - counter;
+$$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION clean_up_counters(pattern text, period float) RETURNS bigint AS $$
+    WITH deleted AS (
+        DELETE FROM rate_limiting
+              WHERE key LIKE pattern
+                AND ts < (current_timestamp - make_interval(secs => period))
+          RETURNING 1
+    ) SELECT count(*) FROM deleted;
+$$ LANGUAGE sql;
 
 
 -- composite types, keep this at the end of the file
