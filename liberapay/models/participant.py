@@ -39,6 +39,7 @@ from liberapay.exceptions import (
     NoTippee,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
+    TooManyUsernameChanges,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -1301,6 +1302,7 @@ class Participant(Model, MixinTeam):
 
         if suggested != self.username:
             with self.db.get_cursor(cursor) as c:
+                c.hit_rate_limit('change_username', self.id, TooManyUsernameChanges)
                 try:
                     # Will raise IntegrityError if the desired username is taken.
                     actual = c.one("""
