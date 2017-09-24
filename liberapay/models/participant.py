@@ -1302,18 +1302,21 @@ class Participant(Model, MixinTeam):
 
         if suggested != self.username:
             with self.db.get_cursor(cursor) as c:
-                c.hit_rate_limit('change_username', self.id, TooManyUsernameChanges)
                 try:
                     # Will raise IntegrityError if the desired username is taken.
                     actual = c.one("""
                         UPDATE participants
                            SET username=%s
                          WHERE id=%s
+                           AND username <> %s
                      RETURNING username, lower(username)
-                    """, (suggested, self.id))
+                    """, (suggested, self.id, suggested))
                 except IntegrityError:
                     raise UsernameAlreadyTaken(suggested)
+                if actual is None:
+                    return suggested
                 assert (suggested, lowercased) == actual  # sanity check
+                c.hit_rate_limit('change_username', self.id, TooManyUsernameChanges)
 
                 # Deal with redirections
                 last_rename = self.get_last_event_of_type('set_username')
