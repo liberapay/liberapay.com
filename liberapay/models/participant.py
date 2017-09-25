@@ -1500,33 +1500,23 @@ class Participant(Model, MixinTeam):
 
     def upsert_community_membership(self, on, c_id):
         p_id = self.id
-        self.db.run("""
-            DO $$
-            DECLARE
-                cname text;
-            BEGIN
-                BEGIN
-                    INSERT INTO community_memberships
-                                (community, participant, is_on)
-                         VALUES (%(c_id)s, %(p_id)s, %(on)s);
-                    IF (FOUND) THEN RETURN; END IF;
-                EXCEPTION WHEN unique_violation THEN
-                    GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
-                    IF (cname <> 'community_memberships_participant_community_key') THEN
-                        RAISE;
-                    END IF;
-                END;
+        if on:
+            self.db.run("""
+                INSERT INTO community_memberships
+                            (community, participant, is_on)
+                     VALUES (%(c_id)s, %(p_id)s, %(on)s)
+                ON CONFLICT (participant, community) DO UPDATE
+                        SET is_on = excluded.is_on
+                          , mtime = current_timestamp
+            """, locals())
+        else:
+            self.db.run("""
                 UPDATE community_memberships
                    SET is_on = %(on)s
-                     , mtime = CURRENT_TIMESTAMP
+                     , mtime = current_timestamp
                  WHERE community = %(c_id)s
                    AND participant = %(p_id)s;
-                IF (NOT FOUND) THEN
-                    RAISE 'upsert in community_memberships failed';
-                END IF;
-            END;
-            $$ LANGUAGE plpgsql;
-        """, locals())
+            """, locals())
 
     def get_communities(self):
         return self.db.all("""
