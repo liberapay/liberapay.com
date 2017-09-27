@@ -93,6 +93,14 @@ class UsernameBeginsWithRestrictedCharacter(ProblemChangingUsername):
     def msg(self, _):
         return _("The username '{0}' begins with a restricted character.", *self.args)
 
+class TooManyUsernameChanges(ProblemChangingUsername):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You've already changed your username many times recently, please "
+            "retry later (e.g. in a week) or contact support@liberapay.com."
+        )
+
 
 class ProblemChangingEmail(LazyResponse400): pass
 

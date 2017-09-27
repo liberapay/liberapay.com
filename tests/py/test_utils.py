@@ -27,33 +27,58 @@ class Tests(Harness):
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
-    def test_get_participant_raises_404_for_missing_id(self):
-        state = self.client.GET('/~/', return_after='handle_dispatch_exception',
+    def GxT(self, path):
+        state = self.client.GET(path, return_after='handle_dispatch_exception',
                                 want='state')
         with self.assertRaises(Response) as cm:
             utils.get_participant(state, restrict=False)
-        r = cm.exception
+        return cm.exception
+
+    def test_get_participant_raises_404_for_missing_id(self):
+        r = self.GxT('/~/')
         assert r.code == 404
 
     def test_get_participant_canonicalizes(self):
         self.make_participant('alice')
-        state = self.client.GET('/Alice/?foo=bar', return_after='handle_dispatch_exception',
-                                want='state')
-        with self.assertRaises(Response) as cm:
-            utils.get_participant(state, restrict=False)
-        r = cm.exception
+        r = self.GxT('/Alice/?foo=bar')
         assert r.code == 302
         assert r.headers[b'Location'] == b'/alice/?foo=bar'
 
     def test_get_participant_canonicalizes_id_to_username(self):
         self.make_participant('alice')
-        state = self.client.GET('/~1/?x=2', return_after='handle_dispatch_exception',
-                                want='state')
-        with self.assertRaises(Response) as cm:
-            utils.get_participant(state, restrict=False)
-        r = cm.exception
+        r = self.GxT('/~1/?x=2')
         assert r.code == 302
         assert r.headers[b'Location'] == b'/alice/?x=2'
+
+    def test_get_participant_redirects_after_username_change(self):
+        p = self.make_participant(None)
+        p.change_username('alice')
+        # 1st username change
+        self.db.run("UPDATE events SET ts = ts - interval '30 days'")
+        p.change_username('bob')
+        r = self.GxT('/alice')
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/bob'
+        # 2nd username change
+        self.db.run("UPDATE events SET ts = ts - interval '30 days'")
+        p.change_username('carl')
+        r = self.GxT('/alice')
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/carl'
+        r = self.GxT('/bob')
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/carl'
+        # 3rd username change: back to the original
+        self.db.run("UPDATE events SET ts = ts - interval '30 days'")
+        p.change_username('alice')
+        r = self.client.GET('/alice')
+        assert r.code == 200
+        r = self.GxT('/bob')
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/alice'
+        r = self.GxT('/carl')
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/alice'
 
     def test_is_expired(self):
         expiration = datetime.utcnow() - timedelta(days=40)

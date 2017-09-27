@@ -67,6 +67,8 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         from liberapay.models.participant import Participant  # avoid circular import
         participant = Participant._from_thing(thing, value) if value else None
         if participant is None:
+            if thing == 'lower(username)':
+                look_up_redirections(request, response)
             raise response.error(404)
         elif participant.kind == 'community':
             c_name = Participant.db.one("""
@@ -133,6 +135,18 @@ def get_community(state, restrict=False):
             raise response.error(403, _("You are not authorized to access this page."))
 
     return c
+
+
+def look_up_redirections(request, response):
+    path = request.path.raw
+    r = website.db.one("""
+        SELECT *
+          FROM redirections
+         WHERE %s LIKE from_prefix
+    """, (path.lower(),))
+    if r:
+        location = r.to_prefix + path[len(r.from_prefix.rstrip('%')):]
+        response.redirect(location.rstrip('/'))
 
 
 def b64decode_s(s, **kw):

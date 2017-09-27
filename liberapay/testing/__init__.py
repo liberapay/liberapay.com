@@ -172,6 +172,8 @@ class Harness(unittest.TestCase):
             kw.setdefault('mangopay_user_id', -i)
             kw.setdefault('mangopay_wallet_id', -i)
         kw.setdefault('status', 'active')
+        if username:
+            kw['username'] = username
         if 'join_time' not in kw:
             kw['join_time'] = utcnow()
         cols, vals = zip(*kw.items())
@@ -179,10 +181,10 @@ class Harness(unittest.TestCase):
         placeholders = ', '.join(['%s']*len(vals))
         participant = self.db.one("""
             INSERT INTO participants
-                        (username, {0})
-                 VALUES (%s, {1})
+                        ({0})
+                 VALUES ({1})
               RETURNING participants.*::participants
-        """.format(cols, placeholders), (username,)+vals)
+        """.format(cols, placeholders), vals)
 
         self.db.run("""
             INSERT INTO elsewhere
