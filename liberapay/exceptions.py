@@ -205,7 +205,8 @@ class BadAmount(LazyResponse400):
         period = self.args[1]
         return _(BAD_AMOUNT_MESSAGES[period], self.args[0], *DONATION_LIMITS[period])
 
-class UserDoesntAcceptTips(LazyResponse400):
+class UserDoesntAcceptTips(LazyResponseXXX):
+    code = 403
     def msg(self, _):
         return _("The user {0} doesn't accept donations.", *self.args)
 

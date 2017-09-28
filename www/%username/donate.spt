@@ -1,7 +1,11 @@
+from liberapay.exceptions import UserDoesntAcceptTips
 from liberapay.utils import get_participant
 
 [---]
 participant = get_participant(state, restrict=False)
+if participant.goal == -1:
+    raise response.error(403, UserDoesntAcceptTips(participant.username))
+
 title = _("Donate to {0}", participant.username)
 
 [---] text/html
