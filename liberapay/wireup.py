@@ -459,6 +459,16 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     return {'platforms': platforms, 'friends_platforms': friends_platforms}
 
 
+def replace_unused_singulars(c):
+    for m in list(c):
+        msg = m.id
+        if not isinstance(msg, tuple):
+            continue
+        if msg[0].startswith('<unused singular (hash='):
+            del c[msg[0]]
+            c[msg[1]] = m
+
+
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     # Load the locales
     localeDir = os.path.join(project_root, 'i18n', 'core')
@@ -473,6 +483,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 l = locales[lang.lower()] = Locale(lang)
                 c = l.catalog = read_po(f)
                 c.plural_func = get_function_from_rule(c.plural_expr)
+                replace_unused_singulars(c)
                 try:
                     l.countries = make_sorted_dict(COUNTRIES, l.territories)
                 except KeyError:
