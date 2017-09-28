@@ -6,15 +6,11 @@
     % if nofollow or noindex
     <meta name="robots" content="{{ ','.join(noindex + nofollow) }}" />
     % endif
-    <meta name="description" content="{{ _("{0}'s profile in Liberapay", participant.username) }}">
-    <meta name="og:title" content="{{ participant.username }}">
-    <meta name="og:type" content="profile">
-    <meta name="og:url" content="{{ website.canonical_scheme + '://' + request.hostname + '/' + participant.username }}">
-    <meta name="og:image" content="{{ participant.avatar_url }}">
-    <meta name="og:description" content="???">
-    % for l_completion, l_code, l_name, l_url in website.lang_list
-        <meta name="og:locale:alternate" content="{{ l_code }}">
-    % endfor
-    <meta name="og:site_name" content="Liberapay">
-    <meta name="profile:username" content="{{ participant.username }}">
+    <meta property="og:title" content="{{ full_title }}">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="{{ website.canonical_scheme + '://' + request.hostname + '/' + participant.username }}">
+    <meta property="og:image" content="{{ participant.avatar_url }}">
+    <meta property="og:site_name" content="Liberapay">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@liberapaye">
 % endblock

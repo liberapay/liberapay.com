@@ -1,7 +1,7 @@
 """Show information about a single participant. It might be you!
 """
 
-from liberapay.utils import get_participant, markdown
+from liberapay.utils import excerpt_intro, get_participant, markdown
 
 [-----------------------------------------------------------------------------]
 
@@ -13,6 +13,7 @@ if lang:
     statement = participant.get_statement(lang)
 else:
     statement, lang = participant.get_statement(request.accept_langs)
+statement = markdown.render(statement) if statement else None
 
 langs = participant.get_statement_langs()
 
@@ -22,6 +23,13 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % extends "templates/profile.html"
 
 % from "templates/repos.html" import show_repo with context
+
+% block head_early
+{{ super() }}
+% if statement
+    <meta property="og:description" content="{{ excerpt_intro(statement.striptags()) }}">
+% endif
+% endblock
 
 % block profile_btn
 % if user and user.controls(participant)
@@ -50,7 +58,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         % endif
         </h3>
         <section class="profile-statement" lang="{{ lang }}">
-            {{ markdown.render(statement) }}
+            {{ statement }}
         </section>
     % endif
     % if participant.kind == 'group'
