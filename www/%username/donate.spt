@@ -6,7 +6,7 @@ participant = get_participant(state, restrict=False)
 if participant.goal == -1:
     raise response.error(403, UserDoesntAcceptTips(participant.username))
 
-title = _("Donate to {0}", participant.username)
+full_title = _("Donate to {0} via Liberapay", participant.username)
 
 [---] text/html
 % extends "templates/profile-base.html"
