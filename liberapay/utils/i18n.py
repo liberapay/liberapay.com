@@ -174,7 +174,7 @@ def get_text(context, loc, s, *a, **kw):
 def n_get_text(state, loc, s, p, n, *a, **kw):
     escape = state['escape']
     n = n or 0
-    msg = loc.catalog.get((s, p))
+    msg = loc.catalog.get((s, p) if s else p)
     s2 = None
     if msg:
         try:

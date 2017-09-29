@@ -118,7 +118,8 @@ title = _("{username}'s Repositories", username=participant.username)
         % endcall
     % else
         <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
-        <p>{{ _(
+        <p>{{ ngettext(
+            "",
             "A list of {n} repositories has been imported from your {platform} account, "
             "{time} ago."
             , n=total_count, platform=platform.display_name, time=to_age(last_fetch.ts)
