@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '50'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '51'::jsonb);
 
 
 -- app configuration
@@ -673,6 +673,18 @@ CREATE OR REPLACE FUNCTION clean_up_counters(pattern text, period float) RETURNS
           RETURNING 1
     ) SELECT count(*) FROM deleted;
 $$ LANGUAGE sql;
+
+
+-- redirections
+
+CREATE TABLE redirections
+( from_prefix   text          PRIMARY KEY
+, to_prefix     text          NOT NULL
+, ctime         timestamptz   NOT NULL DEFAULT now()
+, mtime         timestamptz   NOT NULL DEFAULT now()
+);
+
+CREATE INDEX redirections_to_prefix_idx ON redirections (to_prefix);
 
 
 -- composite types, keep this at the end of the file

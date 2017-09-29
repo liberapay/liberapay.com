@@ -627,3 +627,12 @@ $$ LANGUAGE sql;
 INSERT INTO app_conf (key, value) VALUES
     ('clean_up_counters_every', '3600'::jsonb),
     ('trusted_proxies', '[]'::jsonb);
+
+-- migration #51
+CREATE TABLE redirections
+( from_prefix   text          PRIMARY KEY
+, to_prefix     text          NOT NULL
+, ctime         timestamptz   NOT NULL DEFAULT now()
+, mtime         timestamptz   NOT NULL DEFAULT now()
+);
+CREATE INDEX redirections_to_prefix_idx ON redirections (to_prefix);
