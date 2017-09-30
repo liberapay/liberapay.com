@@ -1316,11 +1316,11 @@ class Participant(Model, MixinTeam):
                 if actual is None:
                     return suggested
                 assert (suggested, lowercased) == actual  # sanity check
-                c.hit_rate_limit('change_username', self.id, TooManyUsernameChanges)
 
                 # Deal with redirections
                 last_rename = self.get_last_event_of_type('set_username')
                 if last_rename:
+                    c.hit_rate_limit('change_username', self.id, TooManyUsernameChanges)
                     old_username = last_rename.payload
                     prefixes = {
                         'old': '/%s/' % old_username.lower(),
