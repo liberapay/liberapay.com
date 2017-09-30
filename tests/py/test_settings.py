@@ -97,3 +97,21 @@ class TestUsername(Harness):
         r = self.change_username(username)
         assert r.code == 400
         assert "The username &#39;%s&#39; is too long." % username in r.text, r.text
+
+    def test_change_team_name(self):
+        team = self.make_participant(None, kind='group')
+        team.change_username('team')
+        alice = self.make_participant('alice')
+        team.add_member(alice)
+        bob = self.make_participant('bob')
+        team.add_member(bob)
+        r = self.client.POST('/team/settings/edit', {'username': 'Team'},
+                             auth_as=alice, raise_immediately=False)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/Team/edit'
+        team = team.refetch()
+        assert team.username == 'Team'
+        alice = alice.refetch()
+        assert alice.pending_notifs == 0
+        bob = bob.refetch()
+        assert bob.pending_notifs == 1
