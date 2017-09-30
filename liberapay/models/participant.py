@@ -1334,17 +1334,18 @@ class Participant(Model, MixinTeam):
                              , mtime = now()
                          WHERE to_prefix = %(old)s;
                     """, prefixes)
-                    # Add a redirection if the old name was in use long enough (1 hour)
-                    active_period = utcnow() - last_rename.ts
-                    if active_period.total_seconds() > 3600:
-                        c.run("""
-                            INSERT INTO redirections
-                                        (from_prefix, to_prefix)
-                                 VALUES (%(old)s || '%%', %(new)s)
-                            ON CONFLICT (from_prefix) DO UPDATE
-                                    SET to_prefix = excluded.to_prefix
-                                      , mtime = now()
-                        """, prefixes)
+                    if prefixes['old'] != prefixes['new']:
+                        # Add a redirection if the old name was in use long enough (1 hour)
+                        active_period = utcnow() - last_rename.ts
+                        if active_period.total_seconds() > 3600:
+                            c.run("""
+                                INSERT INTO redirections
+                                            (from_prefix, to_prefix)
+                                     VALUES (%(old)s || '%%', %(new)s)
+                                ON CONFLICT (from_prefix) DO UPDATE
+                                        SET to_prefix = excluded.to_prefix
+                                          , mtime = now()
+                            """, prefixes)
 
                 self.add_event(c, 'set_username', suggested)
                 self.set_attributes(username=suggested)
