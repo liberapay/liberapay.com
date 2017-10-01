@@ -119,9 +119,8 @@ title = _("{username}'s Repositories", username=participant.username)
     % else
         <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
         <p>{{ ngettext(
-            "",
-            "A list of {n} repositories has been imported from your {platform} account, "
-            "{time} ago."
+            "We found {n} repository in your {platform} account, {time} ago.",
+            "A list of {n} repositories has been imported from your {platform} account, {time} ago."
             , n=total_count, platform=platform.display_name, time=to_age(last_fetch.ts)
         ) }}</p>
         <hr>
