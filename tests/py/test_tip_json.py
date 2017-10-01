@@ -64,7 +64,7 @@ class TestTipJson(Harness):
 
         response = self.tip(bob, "alice", "10.00", raise_immediately=False)
         assert "doesn't accept donations" in response.text, response.text
-        assert response.code == 400
+        assert response.code == 403
 
     def test_tip_to_unclaimed(self):
         alice = self.make_elsewhere('twitter', 1, 'alice')

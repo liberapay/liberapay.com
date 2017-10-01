@@ -209,6 +209,7 @@ def log_cursor(f):
 def excerpt_intro(text, length=175, append='…'):
     if not text:
         return ''
+    text = text.lstrip().split('\n', 1)[0]
     if len(text) > length:
         return text[:length] + append
     return text

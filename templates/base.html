@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ locale.language }}">
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+<head prefix="og: http://ogp.me/ns#">
     % if locale.completion < 0.5
         <meta name="robots" content="noindex,nofollow" />
     % endif
     {% block head_early %}{% endblock %}
-    <title>{% if title %}{% if subhead %}{{ subhead }} - {% endif %}{{ title }} - {% endif %}Liberapay</title>
+    % set full_title = full_title or ' - '.join(map(str, filter(None, (subhead, title, 'Liberapay'))))
+    <title>{{ full_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">

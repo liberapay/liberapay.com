@@ -6,4 +6,11 @@
     % if nofollow or noindex
     <meta name="robots" content="{{ ','.join(noindex + nofollow) }}" />
     % endif
+    <meta property="og:title" content="{{ full_title }}">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="{{ website.canonical_scheme + '://' + request.hostname + '/' + participant.username }}">
+    <meta property="og:image" content="{{ participant.avatar_url }}">
+    <meta property="og:site_name" content="Liberapay">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@liberapaye">
 % endblock

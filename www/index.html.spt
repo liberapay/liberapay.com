@@ -56,11 +56,14 @@ recent = query_cache.one("""
 
 % block head
     <link type="application/opensearchdescription+xml" rel="search" href="/opensearch.osdd" />
-    <meta name="description" content="{{ _('Liberapay is a recurrent donations platform.') }}" />
-    <meta name="og:type" content="website" />
-    <meta name="og:url" content="https://{{ request.hostname }}/" />
-    <meta name="og:title" content="Liberapay" />
-    <meta name="og:image" content="{{ website.asset('liberapay/icon-v2_yellow-r.200.png') }}" />
+    <meta property="og:description"
+          content="{{ _('We help you fund the creators and projects you appreciate.') }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://{{ request.hostname }}/" />
+    <meta property="og:title" content="Liberapay" />
+    <meta property="og:image" content="{{ website.asset('liberapay/icon-v2_yellow-r.200.png') }}" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@liberapaye" />
 % endblock
 
 % block content

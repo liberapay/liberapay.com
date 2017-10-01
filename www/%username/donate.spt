@@ -1,8 +1,12 @@
+from liberapay.exceptions import UserDoesntAcceptTips
 from liberapay.utils import get_participant
 
 [---]
 participant = get_participant(state, restrict=False)
-title = _("Donate to {0}", participant.username)
+if participant.goal == -1:
+    raise response.error(403, UserDoesntAcceptTips(participant.username))
+
+full_title = _("Donate to {0} via Liberapay", participant.username)
 
 [---] text/html
 % extends "templates/profile-base.html"
@@ -10,6 +14,13 @@ title = _("Donate to {0}", participant.username)
 % from 'templates/elsewhere.html' import account_elsewhere with context
 % from 'templates/profile-goal-bar.html' import profile_goal_bar with context
 % from 'templates/your-tip.html' import tip_form with context
+
+% block head_early
+{{ super() }}
+    <meta property="og:description"
+          content="{{ _('Support {username}\'s work with a recurrent donation.',
+                        username=participant.username) }}">
+% endblock
 
 {% block heading %}{% endblock %}
 

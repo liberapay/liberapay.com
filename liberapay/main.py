@@ -6,6 +6,7 @@ import signal
 import string
 from threading import Timer
 
+from six import text_type
 from six.moves import builtins
 from six.moves.urllib.parse import quote as urlquote
 
@@ -54,6 +55,7 @@ def _assert(x):
     return x
 
 website.renderer_factories['jinja2'].Renderer.global_context.update(builtins.__dict__)
+website.renderer_factories['jinja2'].Renderer.global_context['str'] = text_type
 website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_* renderers.
     'assert': _assert,
