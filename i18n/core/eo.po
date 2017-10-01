@@ -203,6 +203,13 @@ msgstr "Akcepti"
 msgid "Refuse"
 msgstr "Rifuzi"
 
+msgid "A team you're a member of has been renamed"
+msgstr ""
+
+#, python-brace-format
+msgid "The team “{0}” has been renamed to “{1}” by {2}."
+msgstr ""
+
 msgid "Email address verification - Liberapay"
 msgstr "Kontrolo de retpoŝtadreso – Liberapay"
 
@@ -471,9 +478,7 @@ msgstr "La transakcio kotizon superus lian kvanton."
 
 #, fuzzy
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
-msgstr ""
-"Pardonu, ni funkciigas payday nun, kaj ni ne starigis fari kompensopagoj dum "
-"payday estas funkciiganta. Bonvolu kontrolu reen en kelkaj horoj."
+msgstr "Pardonu, ni funkciigas payday nun, kaj ni ne starigis fari kompensopagoj dum payday estas funkciiganta. Bonvolu kontrolu reen en kelkaj horoj."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1245,6 +1250,14 @@ msgid "Dashboard"
 msgstr ""
 
 #, python-brace-format
+msgid "Donate to {0} via Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Support {username}'s work with a recurrent donation."
+msgstr ""
+
+#, python-brace-format
 msgid "Donate to {0}"
 msgstr "Donaci al {0}"
 
@@ -1474,9 +1487,7 @@ msgstr "Informaĵo estas manka"
 
 #, fuzzy
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr ""
-"Bonvole kontrolu ke la ligilo kiu vi klakis aŭ kopi-batis ne estis "
-"distranĉita aŭ ŝanĝita iel."
+msgstr "Bonvole kontrolu ke la ligilo kiu vi klakis aŭ kopi-batis ne estis distranĉita aŭ ŝanĝita iel."
 
 msgid "Password"
 msgstr "Pasvorto"
@@ -1618,6 +1629,10 @@ msgstr "Via take estas nun {0} (vi ne povas iri pli alte tiu semajno)."
 #, fuzzy, python-brace-format
 msgid "Your take is now {0}."
 msgstr "Via take estas nun {0}."
+
+#, python-brace-format
+msgid "{username}'s profile"
+msgstr ""
 
 msgid "Income history"
 msgstr "Enspezoj historio"
@@ -1878,7 +1893,7 @@ msgid "Connect {0} account"
 msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=9ea6ad9dc44c474a26cd53ed653c5178)>"
+msgid "We found {n} repository in your {platform} account, {time} ago."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
 msgstr[0] ""
 msgstr[1] ""
@@ -1927,9 +1942,7 @@ msgstr "Reprovu poste"
 
 #, fuzzy
 msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr ""
-"Pardonu, ni estas funkciiganta payday nun, kaj ni ne starigis fermi kontoj "
-"dum payday estas funkciiganta. Bonvolu kontroli reen en kelkaj horoj."
+msgstr "Pardonu, ni estas funkciiganta payday nun, kaj ni ne starigis fermi kontoj dum payday estas funkciiganta. Bonvolu kontroli reen en kelkaj horoj."
 
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
@@ -2802,11 +2815,7 @@ msgstr "Mono kopiis el LiberaPay"
 
 #, fuzzy
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
-msgstr ""
-"Liberapay teamo kunordigas donacoj el multoblaj donacantoj al multoblaj "
-"donees.  Donacantoj elekti kiom ili volas doni, donees decidas kiel dividi "
-"la monon, Liberapay komputas kaj plenumas la delokigojn el la donacantoj al "
-"la donees."
+msgstr "Liberapay teamo kunordigas donacoj el multoblaj donacantoj al multoblaj donees.  Donacantoj elekti kiom ili volas doni, donees decidas kiel dividi la monon, Liberapay komputas kaj plenumas la delokigojn el la donacantoj al la donees."
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
 msgstr "Teamoj por peer-to-peer donacoj, ili ne povas esti uzata de jura ento distribui donacoj al liaj membroj."
@@ -3066,11 +3075,11 @@ msgstr "Maksimuma longo estas {0}."
 msgid "Language of the name"
 msgstr "Lingvo de la nomo"
 
-msgid "Liberapay is a recurrent donations platform."
-msgstr "Librapay estas recurrente donacoj platformo."
-
 msgid "We help you fund the creators and projects you appreciate."
 msgstr ""
+
+msgid "Liberapay is a recurrent donations platform."
+msgstr "Librapay estas recurrente donacoj platformo."
 
 msgid "Receive"
 msgstr "Ricevi"

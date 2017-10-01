@@ -200,6 +200,13 @@ msgstr "Принять"
 msgid "Refuse"
 msgstr "Отказаться"
 
+msgid "A team you're a member of has been renamed"
+msgstr ""
+
+#, python-brace-format
+msgid "The team “{0}” has been renamed to “{1}” by {2}."
+msgstr ""
+
 msgid "Email address verification - Liberapay"
 msgstr "Подтверждение адреса электронной почты - Liberapay"
 
@@ -384,10 +391,7 @@ msgid "The username '{0}' begins with a restricted character."
 msgstr "Имя пользователя '{0}' начинается с запрещённого символа."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
-msgstr ""
-"Вы уже изменили имя пользователя несколько раз за последнее время, "
-"пожалуйста, попробуйте ещё раз позже (например, через неделю) или свяжитесь "
-"с support@liberapay.com."
+msgstr "Вы уже изменили имя пользователя несколько раз за последнее время, пожалуйста, попробуйте ещё раз позже (например, через неделю) или свяжитесь с support@liberapay.com."
 
 #, python-brace-format
 msgid "{0} is already connected to a different Liberapay account."
@@ -1223,6 +1227,14 @@ msgid "Dashboard"
 msgstr "Панель управления"
 
 #, python-brace-format
+msgid "Donate to {0} via Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Support {username}'s work with a recurrent donation."
+msgstr ""
+
+#, python-brace-format
 msgid "Donate to {0}"
 msgstr "Сделать пожертвование для {0}"
 
@@ -1591,6 +1603,10 @@ msgstr "Ваша выручка в данный момент составляе�
 msgid "Your take is now {0}."
 msgstr "Ваша выручка в данный момент составляет {0}."
 
+#, python-brace-format
+msgid "{username}'s profile"
+msgstr ""
+
 msgid "Income history"
 msgstr "История прибыли"
 
@@ -1847,12 +1863,12 @@ msgstr "У вас нет аккаунтов {platform}, подключённых
 msgid "Connect {0} account"
 msgstr "Подключить аккаунт {0}"
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=9ea6ad9dc44c474a26cd53ed653c5178)>"
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Список {n} репозиториев импортирован из вашего аккаунта {platform} {time} назад."
-msgstr[1] "Список {n} репозиториев импортирован из вашего аккаунта {platform} {time} назад."
-msgstr[2] "Список {n} репозиториев импортирован из вашего аккаунта {platform} {time} назад."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "No repositories found."
 msgstr "Репозитории не найдены."
@@ -3021,11 +3037,11 @@ msgstr "Максимальная длина - {0}."
 msgid "Language of the name"
 msgstr "Язык названия"
 
-msgid "Liberapay is a recurrent donations platform."
-msgstr "Liberapay - это платформа для периодических пожертвований."
-
 msgid "We help you fund the creators and projects you appreciate."
 msgstr "Мы помогаем вам финансировать авторов и проекты, которые вы цените."
+
+msgid "Liberapay is a recurrent donations platform."
+msgstr "Liberapay - это платформа для периодических пожертвований."
 
 msgid "Receive"
 msgstr "Получайте пожертвования"
