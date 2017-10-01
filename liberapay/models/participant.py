@@ -123,7 +123,7 @@ class Participant(Model, MixinTeam):
                   RETURNING participants.*::participants
             """.format(cols, placeholders), vals)
             if username:
-                p.change_username(username, c)
+                p.change_username(username, cursor=c)
         return p
 
     def make_team(self, name, email=None, email_lang=None, throttle_takes=True):
@@ -143,7 +143,7 @@ class Participant(Model, MixinTeam):
                      VALUES ('group', 'active', now(), %s)
                   RETURNING participants.*::participants
             """, (throttle_takes,))
-            t.change_username(name, c)
+            t.change_username(name, cursor=c)
             t.add_member(self, c)
             if email:
                 t.set_email_lang(email_lang, cursor=c)
@@ -1280,7 +1280,7 @@ class Participant(Model, MixinTeam):
     # More Random Stuff
     # =================
 
-    def change_username(self, suggested, cursor=None):
+    def change_username(self, suggested, cursor=None, recorder=None):
         suggested = suggested and suggested.strip()
 
         if not suggested:
@@ -1316,11 +1316,11 @@ class Participant(Model, MixinTeam):
                 if actual is None:
                     return suggested
                 assert (suggested, lowercased) == actual  # sanity check
-                c.hit_rate_limit('change_username', self.id, TooManyUsernameChanges)
 
                 # Deal with redirections
                 last_rename = self.get_last_event_of_type('set_username')
                 if last_rename:
+                    c.hit_rate_limit('change_username', self.id, TooManyUsernameChanges)
                     old_username = last_rename.payload
                     prefixes = {
                         'old': '/%s/' % old_username.lower(),
@@ -1334,20 +1334,37 @@ class Participant(Model, MixinTeam):
                              , mtime = now()
                          WHERE to_prefix = %(old)s;
                     """, prefixes)
-                    # Add a redirection if the old name was in use long enough (1 hour)
-                    active_period = utcnow() - last_rename.ts
-                    if active_period.total_seconds() > 3600:
-                        c.run("""
-                            INSERT INTO redirections
-                                        (from_prefix, to_prefix)
-                                 VALUES (%(old)s || '%%', %(new)s)
-                            ON CONFLICT (from_prefix) DO UPDATE
-                                    SET to_prefix = excluded.to_prefix
-                                      , mtime = now()
-                        """, prefixes)
+                    if prefixes['old'] != prefixes['new']:
+                        # Add a redirection if the old name was in use long enough (1 hour)
+                        active_period = utcnow() - last_rename.ts
+                        if active_period.total_seconds() > 3600:
+                            c.run("""
+                                INSERT INTO redirections
+                                            (from_prefix, to_prefix)
+                                     VALUES (%(old)s || '%%', %(new)s)
+                                ON CONFLICT (from_prefix) DO UPDATE
+                                        SET to_prefix = excluded.to_prefix
+                                          , mtime = now()
+                            """, prefixes)
 
                 self.add_event(c, 'set_username', suggested)
                 self.set_attributes(username=suggested)
+
+            if last_rename and self.kind == 'group':
+                assert isinstance(recorder, Participant)
+                members = self.db.all("""
+                    SELECT p
+                      FROM current_takes t
+                      JOIN participants p ON p.id = t.member
+                     WHERE t.team = %s
+                """, (self.id,))
+                for m in members:
+                    if m != recorder:
+                        m.notify(
+                            'team_rename', email=False, web=True,
+                            old_name=old_username, new_name=suggested,
+                            renamed_by=recorder.username,
+                        )
 
         return suggested
 

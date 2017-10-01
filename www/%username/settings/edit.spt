@@ -9,11 +9,11 @@ request.allow('POST')
 body = request.body
 out = {}
 
-p = get_participant(state, restrict=True)
-if user != p:
-    raise response.error(403)
+p = get_participant(state, restrict=True, allow_member=True)
 
 if 'new-password' in body:
+    if not p.is_person:
+        raise response.error(403)
     if p.session_token and p.session_token.endswith('.em'):
         pass  # user logged in via email, allow resetting password
     elif not p.password:
@@ -28,6 +28,8 @@ if 'new-password' in body:
     out['msg'] = _("Your password has been changed.")
 
 elif 'privacy' in body:
+    if not p.is_person:
+        raise response.error(403)
     fields = body['privacy'].split()
     for field in fields:
         if field not in PRIVACY_FIELDS:
@@ -44,7 +46,7 @@ elif 'privacy' in body:
     out['msg'] = _("Your privacy settings have been changed.")
 
 elif 'username' in body:
-    p.change_username(body['username'])
+    p.change_username(body['username'], recorder=user)
     response.redirect(p.path('edit'))
 
 if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
