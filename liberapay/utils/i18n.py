@@ -10,13 +10,13 @@ import re
 from unicodedata import combining, normalize
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
-from babel.core import LOCALE_ALIASES, Locale
+from babel.core import LOCALE_ALIASES, Locale as _Locale
 from babel.dates import format_date, format_datetime, format_timedelta
 from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
-    get_decimal_symbol, NumberFormatError, parse_decimal
+    NumberFormatError, parse_decimal
 )
 import jinja2.ext
 from pando.utils import utcnow
@@ -34,6 +34,48 @@ class Age(timedelta):
         if len(a) == 1 and not kw and isinstance(a[0], timedelta):
             return timedelta.__new__(cls, a[0].days, a[0].seconds, a[0].microseconds)
         return timedelta.__new__(cls, *a, **kw)
+
+
+class Locale(_Locale):
+
+    def __init__(self, *a, **kw):
+        super(Locale, self).__init__(*a, **kw)
+        self.decimal_symbol = self.number_symbols.get('decimal', '.')
+
+    def format_currency(self, number, currency, format=None, trailing_zeroes=True):
+        s = format_currency(number, currency, format, locale=self)
+        if not trailing_zeroes:
+            s = s.replace(self.decimal_symbol + '00', '')
+        return s
+
+    def format_date(self, *a):
+        return format_date(*a, locale=self)
+
+    def format_datetime(self, *a):
+        return format_datetime(*a, locale=self)
+
+    def format_decimal(self, *a):
+        return format_decimal(*a, locale=self)
+
+    def format_delta(self, s, *a):
+        return format_decimal(s, *a, format='+#,##0.00;-#,##0.00', locale=self)
+
+    def format_number(self, *a):
+        return format_number(*a, locale=self)
+
+    def format_percent(self, *a):
+        return format_percent(*a, locale=self)
+
+    def parse_decimal_or_400(self, s, *a):
+        try:
+            return parse_decimal(s, *a, locale=self)
+        except (InvalidOperation, NumberFormatError, ValueError):
+            raise InvalidNumber(s)
+
+    def to_age_str(self, o, **kw):
+        if not isinstance(o, datetime):
+            kw.setdefault('granularity', 'day')
+        return format_timedelta(to_age(o), locale=self, **kw)
 
 
 ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
@@ -142,7 +184,7 @@ def i_format(loc, s, *a, **kw):
             elif isinstance(o, int):
                 c[k] = format_number(o, locale=loc)
             elif isinstance(o, Money):
-                c[k] = format_money(*o, locale=loc)
+                c[k] = loc.format_currency(*o)
             elif isinstance(o, Age):
                 c[k] = format_timedelta(o, locale=loc, **o.format_args)
             elif isinstance(o, timedelta):
@@ -188,6 +230,15 @@ def n_get_text(state, loc, s, p, n, *a, **kw):
     if isinstance(s2, bytes):
         s2 = s2.decode('ascii')
     return i_format(loc, escape(s2), *a, **kw)
+
+
+def getdoc(state, name):
+    versions = state['website'].docs[name]
+    for lang in state['request'].accept_langs:
+        doc = versions.get(lang)
+        if doc:
+            return doc
+    return versions['en']
 
 
 def to_age(dt, **kw):
@@ -245,13 +296,6 @@ def match_lang(languages):
     return LOCALE_EN
 
 
-def format_money(number, currency, format=None, locale='en', trailing_zeroes=True):
-    s = format_currency(number, currency, format, locale=locale)
-    if not trailing_zeroes:
-        s = s.replace(get_decimal_symbol(locale)+'00', '')
-    return s
-
-
 def get_lang_options(request, locale, previously_used_langs, add_multi=False):
     pref_langs = set(request.accept_langs + previously_used_langs)
     langs = OrderedDict()
@@ -270,51 +314,28 @@ def set_up_i18n(website, request, state):
     add_helpers_to_context(state, loc)
 
 
+def _return_(a):
+    return a
+
+
 def add_helpers_to_context(context, loc):
-    context['escape'] = lambda s: s  # to be overriden by renderers
-    context['locale'] = loc
-    context['decimal_symbol'] = get_decimal_symbol(locale=loc)
-    context['_'] = lambda s, *a, **kw: get_text(context, loc, s, *a, **kw)
-    context['ngettext'] = lambda *a, **kw: n_get_text(context, loc, *a, **kw)
-    context['Money'] = Money
-    context['format_number'] = lambda *a: format_number(*a, locale=loc)
-    context['format_decimal'] = lambda *a: format_decimal(*a, locale=loc)
-    context['format_currency'] = lambda *a, **kw: format_money(*a, locale=loc, **kw)
-    context['format_percent'] = lambda *a: format_percent(*a, locale=loc)
-    context['format_datetime'] = lambda *a: format_datetime(*a, locale=loc)
-    context['format_date'] = lambda *a: format_date(*a, locale=loc)
-    context['get_lang_options'] = lambda *a, **kw: get_lang_options(context['request'], loc, *a, **kw)
-    context['to_age'] = to_age
-
-    def format_delta(s, *a):
-        return format_decimal(s, *a, format='+#,##0.00;-#,##0.00', locale=loc)
-
-    context['format_delta'] = format_delta
-
-    def parse_decimal_or_400(s, *a):
-        try:
-            return parse_decimal(s, *a, locale=loc)
-        except (InvalidOperation, NumberFormatError, ValueError):
-            raise InvalidNumber(s)
-
-    context['parse_decimal'] = parse_decimal_or_400
-
-    def to_age_str(o, **kw):
-        if not isinstance(o, datetime):
-            kw.setdefault('granularity', 'day')
-        return format_timedelta(to_age(o), locale=loc, **kw)
-
-    context['to_age_str'] = to_age_str
-
-    def getdoc(name):
-        versions = context['website'].docs[name]
-        for lang in context['request'].accept_langs:
-            doc = versions.get(lang)
-            if doc:
-                return doc
-        return versions['en']
-
-    context['getdoc'] = getdoc
+    context.update(
+        escape=_return_,  # to be overriden by renderers
+        locale=loc,
+        Money=Money,
+        to_age=to_age,
+        _=lambda s, *a, **kw: get_text(context, kw.pop('loc', loc), s, *a, **kw),
+        ngettext=lambda *a, **kw: n_get_text(context, kw.pop('loc', loc), *a, **kw),
+        format_currency=loc.format_currency,
+        format_date=loc.format_date,
+        format_datetime=loc.format_datetime,
+        format_decimal=loc.format_decimal,
+        format_delta=loc.format_delta,
+        format_number=loc.format_number,
+        format_percent=loc.format_percent,
+        parse_decimal=loc.parse_decimal_or_400,
+        to_age_str=loc.to_age_str,
+    )
 
 
 def extract_custom(extractor, *args, **kw):

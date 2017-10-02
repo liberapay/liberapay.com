@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 
 from liberapay.utils import get_participant, markdown
-from liberapay.utils.i18n import LANGUAGES_2
+from liberapay.utils.i18n import LANGUAGES_2, get_lang_options
 
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
@@ -25,7 +25,7 @@ else:
     else:
         statement, lang = participant.get_statement(request.accept_langs)
 
-select_langs = get_lang_options(participant.get_statement_langs())
+select_langs = get_lang_options(request, locale, participant.get_statement_langs())
 lang = lang or locale.language
 stmt_placeholder = _("You don't have a profile statement in this language yet.")
 confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
