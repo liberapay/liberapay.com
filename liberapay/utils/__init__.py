@@ -206,12 +206,21 @@ def log_cursor(f):
     return wrapper
 
 
-def excerpt_intro(text, length=175, append='…'):
+def excerpt_intro(text, length=175):
     if not text:
         return ''
-    text = text.lstrip().split('\n', 1)[0]
+    text = text.lstrip().split('\n', 1)[0].rstrip()
     if len(text) > length:
-        return text[:length] + append
+        text = text[:length]
+        if text[-1] == '.':
+            # don't add an ellipsis directly after a dot
+            return text + ' […]'
+        if text[-1] != ' ':
+            # try to avoid cutting a word
+            i = text.rfind(' ')
+            if i > 0.9 * length:
+                text = text[:i+1]
+        return text + '…'
     return text
 
 
