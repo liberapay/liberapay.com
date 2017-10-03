@@ -197,7 +197,8 @@ title = _username
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                 <input type="hidden" name="lang" value="{{ lang }}" />
 
-                <p>{{ _("Current language: {0}", locale.languages.get(lang, lang.upper())) }}</p>
+                <p>{{ _("Current language: {0}",
+                        '<b>%s</b>'|safe % locale.languages.get(lang, lang.upper())) }}</p>
 
                 <div class="form-group">
                 <input name="summary" class="form-control" size=60
