@@ -1,6 +1,7 @@
 FROM debian:8
 
-RUN apt-get update && apt-get install build-essential wget libpq-dev python-dev postgresql-client -y
+RUN apt-get update && \
+    apt-get install -y build-essential wget libpq-dev libffi-dev python-dev postgresql-client
 
 RUN wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py && python /tmp/get-pip.py
 
