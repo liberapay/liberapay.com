@@ -209,7 +209,13 @@ def log_cursor(f):
 def excerpt_intro(text, length=175):
     if not text:
         return ''
-    text = text.lstrip().split('\n', 1)[0].rstrip()
+    if isinstance(text, Markup):
+        i = text.find('</p>')
+        if i != -1:
+            text = text[:i]
+        text = text.striptags().strip()
+    else:
+        text = text.lstrip().split('\n', 1)[0].rstrip()
     if len(text) > length:
         text = text[:length]
         if text[-1] == '.':

@@ -159,7 +159,7 @@ title = _username
                 <section class="profile-statement">{{ rendered_stmt }}</section>
                 <hr>
                 <h5>{{ _("Excerpt that will be used in social media:") }}</h5>
-                <p>{{ excerpt_intro(rendered_stmt.striptags()) }}</p>
+                <p>{{ excerpt_intro(rendered_stmt) }}</p>
                 <hr>
                 <button class="btn btn-default">{{ _("Edit") }}</button>
                 <button class="btn btn-success" name="save" value="true">{{ _("Save") }}</button>
