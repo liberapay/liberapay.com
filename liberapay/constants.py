@@ -232,6 +232,8 @@ STANDARD_TIPS = (
     make_standard_tip(_("Maximum"), DONATION_WEEKLY_MAX),
 )
 
+SUMMARY_MAX_SIZE = 100
+
 USERNAME_MAX_SIZE = 32
 
 del _
