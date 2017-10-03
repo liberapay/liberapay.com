@@ -14,6 +14,7 @@ if lang:
 else:
     statement, lang = participant.get_statement(request.accept_langs)
 statement = markdown.render(statement) if statement else None
+summary = participant.get_statement(lang, 'summary')
 
 langs = participant.get_statement_langs()
 
@@ -26,8 +27,8 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block head_early
 {{ super() }}
-% if statement
-    <meta property="og:description" content="{{ excerpt_intro(statement) }}">
+% if statement or summary
+    <meta property="og:description" content="{{ excerpt_intro(statement) or summary }}">
 % endif
 % endblock
 
