@@ -1,5 +1,5 @@
 from liberapay.utils import get_community
-from liberapay.utils.i18n import LANGUAGES_2
+from liberapay.utils.i18n import LANGUAGES_2, get_lang_options
 
 [---]
 
@@ -25,7 +25,7 @@ else:
         subtitle, lang = c.participant.get_statement(request.accept_langs, 'subtitle')
         sidebar, lang = c.participant.get_statement(request.accept_langs, 'sidebar')
 
-select_langs = get_lang_options(c.participant.get_statement_langs('subtitle'))
+select_langs = get_lang_options(request, locale, c.participant.get_statement_langs('subtitle'))
 lang = lang or c.lang
 if lang not in select_langs:
     lang = next(iter(select_langs.keys()))

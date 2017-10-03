@@ -1,6 +1,6 @@
 from liberapay.exceptions import AuthRequired
 from liberapay.models.community import name_maxlength, normalize
-from liberapay.utils.i18n import LANGUAGES_2
+from liberapay.utils.i18n import LANGUAGES_2, get_lang_options
 
 [---]
 
@@ -19,7 +19,7 @@ else:
     name = normalize(request.qs.get('name', ''))
     body = {}
 
-select_langs = get_lang_options([], add_multi=True)
+select_langs = get_lang_options(request, locale, [], add_multi=True)
 lang = lang or next(iter(select_langs.keys()))
 
 title = _("Start a new community")

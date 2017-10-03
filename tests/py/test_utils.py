@@ -90,12 +90,12 @@ class Tests(Harness):
 
     def test_format_currency_without_trailing_zeroes(self):
         expected = '$16'
-        actual = i18n.format_money(16, 'USD', locale='en', trailing_zeroes=False)
+        actual = i18n.LOCALE_EN.format_currency(16, 'USD', trailing_zeroes=False)
         assert actual == expected
 
     def test_format_currency_defaults_to_trailing_zeroes(self):
         expected = '$16.00'
-        actual = i18n.format_money(16, 'USD', locale='en')
+        actual = i18n.LOCALE_EN.format_currency(16, 'USD')
         assert actual == expected
 
     # Markdown

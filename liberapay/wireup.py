@@ -18,7 +18,6 @@ from six.moves.urllib.request import urlretrieve
 
 from algorithm import Algorithm
 import pando
-from babel.core import Locale
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
@@ -43,7 +42,7 @@ from liberapay.utils import find_files, markdown, mkdir_p
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (
-    ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES,
+    ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES, Locale,
     get_function_from_rule, make_sorted_dict
 )
 from liberapay.utils.query_cache import QueryCache
