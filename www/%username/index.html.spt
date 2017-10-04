@@ -27,7 +27,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % block head_early
 {{ super() }}
 % if statement
-    <meta property="og:description" content="{{ excerpt_intro(statement.striptags()) }}">
+    <meta property="og:description" content="{{ excerpt_intro(statement) }}">
 % endif
 % endblock
 

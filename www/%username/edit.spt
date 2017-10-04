@@ -1,7 +1,7 @@
 # coding: utf8
 from __future__ import print_function, unicode_literals
 
-from liberapay.utils import get_participant, markdown
+from liberapay.utils import excerpt_intro, get_participant, markdown
 from liberapay.utils.i18n import LANGUAGES_2, get_lang_options
 
 [---]
@@ -151,12 +151,16 @@ title = _username
 
             <div class="alert alert-info">{{ _("This is a preview.") }}</div>
 
+            % set rendered_stmt = markdown.render(statement)
             <form action="#statement" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                 <input type="hidden" name="lang" value="{{ lang }}" />
                 <textarea class="hidden" name="statement">{{ statement }}</textarea>
-                <section class="profile-statement">{{ markdown.render(statement) }}</section>
-                <br>
+                <section class="profile-statement">{{ rendered_stmt }}</section>
+                <hr>
+                <h5>{{ _("Excerpt that will be used in social media:") }}</h5>
+                <p>{{ excerpt_intro(rendered_stmt) }}</p>
+                <hr>
                 <button class="btn btn-default">{{ _("Edit") }}</button>
                 <button class="btn btn-success" name="save" value="true">{{ _("Save") }}</button>
             </form>
