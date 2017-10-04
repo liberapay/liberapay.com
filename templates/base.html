@@ -4,8 +4,8 @@
     % if locale.completion < 0.5
         <meta name="robots" content="noindex,nofollow" />
     % endif
-    {% block head_early %}{% endblock %}
     % set full_title = full_title or ' - '.join(map(str, filter(None, (subhead, title, 'Liberapay'))))
+    {% block head_early %}{% endblock %}
     <title>{{ full_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
