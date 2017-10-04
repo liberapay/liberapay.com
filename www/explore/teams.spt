@@ -8,17 +8,18 @@ teams = query_cache.all("""
 
     SELECT t.*
          , p.*::participants AS participant
+         , s.content AS summary
       FROM ( SELECT team AS id, count(member) AS nmembers
                FROM current_takes
            GROUP BY team
             ) AS t
-      JOIN participants p
-        ON p.id = t.id
+      JOIN participants p ON p.id = t.id
+ LEFT JOIN statements s ON s.participant = p.id AND s.type = 'summary' AND s.lang = %s
      WHERE (p.goal >= 0 OR p.goal IS NULL)
        AND p.hide_from_lists = 0
   ORDER BY receiving DESC, join_time DESC
 
-""")
+""", (locale.language,))
 nteams = len(teams)
 title = _("Explore")
 subhead = _("Teams")
@@ -44,7 +45,7 @@ subhead = _("Teams")
 <div class="row">
     % for team in teams
     <div class="col-md-6">
-        {{ profile_box_embedded(team.participant, nmembers=team.nmembers) }}
+        {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
     </div>
     % endfor
 </div>

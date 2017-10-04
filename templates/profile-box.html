@@ -8,9 +8,9 @@
     % endcall
 % endmacro
 
-% macro profile_box_embedded(participant, nmembers=None)
+% macro profile_box_embedded(participant, summary, nmembers=None)
     % call profile_box(participant, embedded=True)
-        {{ profile_box_embedded_col2(participant, nmembers=nmembers) }}
+        {{ profile_box_embedded_col2(participant, summary, nmembers=nmembers) }}
     % endcall
 % endmacro
 
@@ -93,12 +93,16 @@
     % endif
 % endmacro
 
-% macro profile_box_embedded_col2(participant, nmembers=None)
+% macro profile_box_embedded_col2(participant, summary, nmembers=None)
     % set username = participant.username
     % set receiving = participant.receiving
     % set goal = participant.goal
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
+
+    % if summary
+    <p class="summary">{{ summary }}</p>
+    % endif
 
     % if participant.hide_receiving
     % elif goal == None

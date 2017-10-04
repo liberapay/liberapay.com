@@ -5,8 +5,9 @@ query_cache = website.db_qc5
 [---]
 
 orgs_receiving = query_cache.all("""
-    SELECT p
+    SELECT p, s.content AS summary
       FROM participants p
+ LEFT JOIN statements s ON s.participant = p.id AND s.type = 'summary' AND s.lang = %s
      WHERE p.kind = 'organization'
        AND p.status = 'active'
        AND (p.goal > 0 OR p.goal IS NULL)
@@ -15,7 +16,7 @@ orgs_receiving = query_cache.all("""
        AND p.receiving > 0
   ORDER BY p.receiving DESC, p.join_time DESC
      LIMIT 30
-""")
+""", (locale.language,))
 title = _("Explore")
 subhead = _("Organizations")
 
@@ -29,9 +30,9 @@ subhead = _("Organizations")
 % if orgs_receiving
 <p>{{ _("The top {0} organizations on Liberapay are:", len(orgs_receiving)) }}</p>
 <div class="row">
-    % for p in orgs_receiving
+    % for p, summary in orgs_receiving
     <div class="col-md-6">
-        {{ profile_box_embedded(p) }}
+        {{ profile_box_embedded(p, summary) }}
     </div>
     % endfor
 </div>
