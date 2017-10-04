@@ -141,7 +141,11 @@ title = _("Adding Money")
             % from "templates/buttons.html" import find_donees with context
             {{ find_donees() }}
         % elif weekly <= 0
-            {{ _("Your donations are funded by your income.") }}
+            {{ _(
+                "We don't allow adding money when your donations are already "
+                "funded by your income. If this is a problem for you please "
+                "send an email to support@liberapay.com explaining why."
+            ) }}
         % elif funded > 0
             {{ ngettext("Your donations are only funded for another week.",
                         "Your donations are funded for another {n} weeks.",
