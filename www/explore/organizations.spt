@@ -13,7 +13,6 @@ orgs_receiving = query_cache.all("""
        AND p.hide_receiving IS NOT TRUE
        AND p.hide_from_lists = 0
        AND p.receiving > 0
-       AND EXISTS (SELECT 1 FROM statements s WHERE s.participant = p.id)
   ORDER BY p.receiving DESC, p.join_time DESC
      LIMIT 30
 """)
