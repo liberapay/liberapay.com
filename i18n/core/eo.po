@@ -998,10 +998,7 @@ msgstr "Homoj kiuj kontribuos al la komunaĵo bezonas vin subteni ilian laboron.
 
 #, fuzzy
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr ""
-"Liberapay la rikura donacoj sistemo estas desegnita provizi stalon "
-"crowdfunded bazan enspezon al kreintoj, ebligante ilin teni faranta grandan "
-"laboron kiu profitigas ĉiuj. Pretas kontribui? Tiam ni komencu:"
+msgstr "Liberapay la rikura donacoj sistemo estas desegnita provizi stalon crowdfunded bazan enspezon al kreintoj, ebligante ilin teni faranta grandan laboron kiu profitigas ĉiuj. Pretas kontribui? Tiam ni komencu:"
 
 msgid "Address"
 msgstr "Adreso"
@@ -1363,6 +1360,9 @@ msgstr "Aserto"
 
 msgid "This is a preview."
 msgstr "Jen antaŭrigardo."
+
+msgid "Excerpt that will be used in social media:"
+msgstr ""
 
 msgid "Edit"
 msgstr "Redakti"
@@ -2029,6 +2029,18 @@ msgstr "Vi nun estas donacanta {0} monate al {1}. Dankon!"
 msgid "You are now donating {0} per year to {1}. Thank you!"
 msgstr "Vi nun estas donacanta {0} jare al {1}. Dankon!"
 
+#, python-brace-format
+msgid "You have now pledged to donate {0} per week to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "You have now pledged to donate {0} per month to {1}. Thank you!"
+msgstr ""
+
+#, python-brace-format
+msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
+msgstr ""
+
 msgid "The donation amount is missing."
 msgstr ""
 
@@ -2587,15 +2599,10 @@ msgstr "Liberapay estas nur por donacoj, signifante ke transakcioj ne devas esti
 
 #, fuzzy
 msgid "Liberapay is an open project structured around a non-profit organization, which sets it apart from commercial platforms like Patreon and Tipeee."
-msgstr ""
-"Liberapay estas malferma projekto strukturita ĉirkaŭ ne-profita organizo, "
-"kiu diferencigas ĝin el komercaj platformoj kiel Patreon kaj Tippee."
+msgstr "Liberapay estas malferma projekto strukturita ĉirkaŭ ne-profita organizo, kiu diferencigas ĝin el komercaj platformoj kiel Patreon kaj Tippee."
 
 msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create an account without having to wait for us to approve it, and we won't kick you out unless you break the law or the terms of service."
-msgstr ""
-"Kontraste aliaj ne-profita platformoj, Liberapay estas neŭtrala. Vi povas "
-"krei konton, sen devi atendi ke ni aprobas ĝin, kaj ni ne forpelos vin krom "
-"se vi rompas la leĝon aŭ la terminojn de servo."
+msgstr "Kontraste aliaj ne-profita platformoj, Liberapay estas neŭtrala. Vi povas krei konton, sen devi atendi ke ni aprobas ĝin, kaj ni ne forpelos vin krom se vi rompas la leĝon aŭ la terminojn de servo."
 
 #, python-brace-format
 msgid "If you'd like more details, the snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
@@ -2692,9 +2699,7 @@ msgstr "Kiu estas Liberapay ?"
 
 #, python-brace-format
 msgid "Liberapay is a non-profit organization {0}founded in 2015 in France{1} by {2} and {3}."
-msgstr ""
-"Liberapay estas ne-profita organizo {0} fondita en 2015 en Francio{1} de {2} "
-"kaj {3}."
+msgstr "Liberapay estas ne-profita organizo {0} fondita en 2015 en Francio{1} de {2} kaj {3}."
 
 msgid "Legal Information"
 msgstr "Laŭleĝa informo"
@@ -3182,9 +3187,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
-msgstr ""
-"Liberapay estas funkciigita travideble de {1} ne-profita organizo {0}, ĝia "
-"{2} fontkodo {0} estas publika."
+msgstr "Liberapay estas funkciigita travideble de {1} ne-profita organizo {0}, ĝia {2} fontkodo {0} estas publika."
 
 #, python-brace-format
 msgid "We rely on your support to keep Liberapay running and {link_start}improving{link_end}."
