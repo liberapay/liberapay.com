@@ -47,7 +47,7 @@ if query:
                             , ts_rank_cd(search_vector, query) AS rank
                          FROM statements NATURAL JOIN queries
                         WHERE lang IN %(langs)s
-                          AND type = 'profile'
+                          AND type IN ('profile', 'summary')
                           AND search_vector @@ query
                      ORDER BY rank DESC
                         LIMIT 10
