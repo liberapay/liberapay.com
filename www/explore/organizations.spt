@@ -5,9 +5,15 @@ query_cache = website.db_qc5
 [---]
 
 orgs_receiving = query_cache.all("""
-    SELECT p, s.content AS summary
+    SELECT p
+         , ( SELECT s.content
+               FROM statements s
+              WHERE s.participant = p.id
+                AND s.type = 'summary'
+           ORDER BY s.lang = %s DESC, s.id
+              LIMIT 1
+           ) AS summary
       FROM participants p
- LEFT JOIN statements s ON s.participant = p.id AND s.type = 'summary' AND s.lang = %s
      WHERE p.kind = 'organization'
        AND p.status = 'active'
        AND (p.goal > 0 OR p.goal IS NULL)
