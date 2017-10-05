@@ -40,7 +40,7 @@ if query:
                        SELECT rank
                             , lang
                             , ts_headline(search_conf, content, query,
-                                          'StartSel=**,StopSel=**,MaxFragments=1') AS excerpt
+                                          'StartSel=**,StopSel=**,MaxFragments=1,ShortWord=0') AS excerpt
                    ) a)) AS excerpts
               FROM (
                        SELECT participant, lang, content, search_conf, query
