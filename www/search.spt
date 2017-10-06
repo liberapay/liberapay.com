@@ -25,7 +25,7 @@ if query:
         """, locals())
 
     if scope in (None, 'statements'):
-        langs = tuple(l for l in request.accept_langs if l in LANGUAGES_2)
+        langs = tuple(l for l in request.accept_langs[:3] if l in LANGUAGES_2)
         search_confs = list(set(SEARCH_CONFS.get(lang, 'simple') for lang in langs))
         results['statements'] = website.db.all("""
             WITH queries AS (
@@ -40,14 +40,14 @@ if query:
                        SELECT rank
                             , lang
                             , ts_headline(search_conf, content, query,
-                                          'StartSel=**,StopSel=**,MaxFragments=1') AS excerpt
+                                          'StartSel=**,StopSel=**,MaxFragments=1,ShortWord=0') AS excerpt
                    ) a)) AS excerpts
               FROM (
                        SELECT participant, lang, content, search_conf, query
                             , ts_rank_cd(search_vector, query) AS rank
                          FROM statements NATURAL JOIN queries
                         WHERE lang IN %(langs)s
-                          AND type = 'profile'
+                          AND type IN ('profile', 'summary')
                           AND search_vector @@ query
                      ORDER BY rank DESC
                         LIMIT 10

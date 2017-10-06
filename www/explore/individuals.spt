@@ -6,6 +6,13 @@ query_cache = website.db_qc5
 
 individuals = query_cache.all("""
     SELECT p
+         , ( SELECT s.content
+               FROM statements s
+              WHERE s.participant = p.id
+                AND s.type = 'summary'
+           ORDER BY s.lang = %s DESC, s.id
+              LIMIT 1
+           ) AS summary
       FROM participants p
      WHERE p.kind = 'individual'
        AND p.status = 'active'
@@ -13,10 +20,9 @@ individuals = query_cache.all("""
        AND p.hide_receiving IS NOT TRUE
        AND p.hide_from_lists = 0
        AND p.receiving > 0
-       AND EXISTS (SELECT 1 FROM statements s WHERE s.participant = p.id)
   ORDER BY p.receiving DESC, p.join_time DESC
      LIMIT 30
-""")
+""", (locale.language,))
 title = _("Explore")
 subhead = _("Individuals")
 
@@ -30,9 +36,9 @@ subhead = _("Individuals")
 % if individuals
 <p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
 <div class="row">
-    % for p in individuals
+    % for p, summary in individuals
     <div class="col-md-6">
-        {{ profile_box_embedded(p) }}
+        {{ profile_box_embedded(p, summary) }}
     </div>
     % endfor
 </div>
