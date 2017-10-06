@@ -185,16 +185,15 @@ img.account-type {
     }
 }
 
-.profile-box {
+.profile-box, .profile-box-embedded {
     h1, h4 {
         color: $brand-primary;
         font-size: 20px;
         margin: 0 0 10px;
     }
-    h4 + p.summary {
-        color: $gray-light;
-        margin-top: -5px;
-    }
+}
+
+.profile-box {
     .radio {
         margin-top: 0;
     }
@@ -212,6 +211,63 @@ img.account-type {
     max-width: 450px;
     .progress {
         margin-bottom: 1em;
+    }
+}
+
+.profile-box-row {
+    margin-right: -15px;
+}
+
+@media (max-width: $screen-md-min - 1) {
+    .profile-box-row {
+        text-align: center;
+    }
+}
+
+.profile-box-wrapper {
+    display: inline-block;
+    max-width: 100%;
+    padding-right: 22px;
+    vertical-align: top;
+}
+
+.profile-box-embedded {
+    border-radius: 6px;
+    text-align: center;
+    width: 320px;
+    h4 {
+        margin-top: 5px;
+    }
+    .avatar-cutter-120 {
+        border-radius: 10px;
+    }
+    .summary {
+        color: $gray-light;
+        height: 3 * $line-height-computed;
+        margin: 1em 0 $line-height-computed;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .numbers {
+        display: flex;
+        justify-content: space-around;
+        & > dl {
+            margin: 0 10px 0 0;
+            & > dt {
+                color: $gray;
+                font-size: 85%;
+                margin-bottom: 5px;
+            }
+            & > dd {
+                color: $btn-info-bg;
+                font-size: $font-size-large;
+                line-height: 1em;
+                & > small {
+                    color: $gray-light;
+                    font-size: $font-size-small;
+                }
+            }
+        }
     }
 }
 
@@ -749,11 +805,6 @@ span.help-title {
     }
 }
 
-.profile-box-embedded .panel-body {
-    min-height: 139px;
-}
-
-
 @media (max-width: $screen-sm-min - 1) {
     .col-right {
         clear: both;
@@ -774,6 +825,14 @@ span.help-title {
         }
         .profile-goal-bar {
             margin: auto;
+        }
+    }
+    .profile-box-embedded {
+        max-width: 100%;
+        min-width: 250px;
+        width: auto;
+        & > .panel-body {
+            max-width: 320px;
         }
     }
 }
