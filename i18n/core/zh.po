@@ -1288,8 +1288,9 @@ msgstr ""
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr ""
 
-msgid "You don't have a profile statement in this language yet."
-msgstr "你尚無此語言版本的個人介紹聲明。"
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr ""
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "你尚未儲存變更，確定要放棄嗎？"
@@ -1350,15 +1351,21 @@ msgstr ""
 msgid "Edit"
 msgstr "編輯"
 
-msgid "Tell us how you're making the world better."
-msgstr "告訴我們你如何讓這個世界變得更好。"
+msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+msgstr ""
 
-msgid "Liberapay allows you to have profile statements in multiple languages. Use the selector below to switch between them."
-msgstr "Liberapay 可讓你設定多語版的個人介紹聲明。利用下方這個選擇器來切換它們。"
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr "Liberapay 可以多國化你的文字內容。使用下方的選擇器來切換語言。"
 
 #, python-brace-format
 msgid "Current language: {0}"
 msgstr "目前語言: {0}"
+
+msgid "Short description"
+msgstr "簡短描述"
+
+msgid "Full statement"
+msgstr ""
 
 msgid "Markdown supported."
 msgstr "支援Markdown語法。"
@@ -2158,9 +2165,8 @@ msgstr ""
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "你尚未設定任何捐贈，一旦你進行了捐款，你就會被要求在帳戶裏儲值金額。"
 
-#, fuzzy
-msgid "Your donations are funded by your income."
-msgstr "你進行的捐款是由你得到的收入所資助。"
+msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
+msgstr ""
 
 #, fuzzy
 msgid "Please choose a payment method:"
@@ -2611,9 +2617,7 @@ msgstr "並沒有限制用戶可以給予或收取的總額，但因法律原因
 
 #, fuzzy, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr ""
-"捐予任何用戶的最低金額是 {0}.。為了減少處理手續費，我們每次至少自用戶的信用卡收取 {1}(這筆錢會儲存在用戶的Liberapay "
-"電子錢包並在付款日時轉任至其它受贈用戶的帳戶錢包)。"
+msgstr "捐予任何用戶的最低金額是 {0}.。為了減少處理手續費，我們每次至少自用戶的信用卡收取 {1}(這筆錢會儲存在用戶的Liberapay 電子錢包並在付款日時轉任至其它受贈用戶的帳戶錢包)。"
 
 #, fuzzy, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
@@ -2641,9 +2645,7 @@ msgstr "你可以透過以下社交平台來取得我們的最近狀況："
 
 #, fuzzy, python-brace-format
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
-msgstr ""
-"你也可以追踪{1}Liberapay 軟體{0}的開發進展， {2}了解Liberapay 法律實體{0}，以及{3}Liberapay "
-"團隊的日常討論{0}。"
+msgstr "你也可以追踪{1}Liberapay 軟體{0}的開發進展， {2}了解Liberapay 法律實體{0}，以及{3}Liberapay 團隊的日常討論{0}。"
 
 #, fuzzy
 msgid "What is Liberapay?"
@@ -2663,15 +2665,11 @@ msgstr "捐款是公開的，所有給出以及收取的金額會預設為公開
 
 #, fuzzy, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. So, recipients get the full value of the donations, but there are {2}payment processing fees{0} when moving money in or out of Liberapay."
-msgstr ""
-"Liberapay 不會收取付款的分毫，我們的服務是靠著自身 {1}的帳戶{0}來資 "
-"助。因此，收款者可以取得全額的捐款，不過當把錢滙入或滙出Liberapay時，仍然有一筆{2}交易手續費要支付給處理器 {0}。"
+msgstr "Liberapay 不會收取付款的分毫，我們的服務是靠著自身 {1}的帳戶{0}來資 助。因此，收款者可以取得全額的捐款，不過當把錢滙入或滙出Liberapay時，仍然有一筆{2}交易手續費要支付給處理器 {0}。"
 
 #, fuzzy, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
-msgstr ""
-"Liberapay 是一個開放專案，你可以協助我們：{1}翻譯{0}，{2}改善程式碼{0}，以及 {3}管理它的法律實體{0}。如果符合這三點，"
-"你可以加入 {4} Liberapay 團隊{0} 並收取用戶捐助給我們的捐款以維持本服務繼續運作。"
+msgstr "Liberapay 是一個開放專案，你可以協助我們：{1}翻譯{0}，{2}改善程式碼{0}，以及 {3}管理它的法律實體{0}。如果符合這三點，你可以加入 {4} Liberapay 團隊{0} 並收取用戶捐助給我們的捐款以維持本服務繼續運作。"
 
 #, fuzzy
 msgid "Why should you donate?"
@@ -2695,9 +2693,7 @@ msgstr "這個網站由 Liberapay 負責管理，它是一個 2015 於法國成�
 
 #, fuzzy
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
-msgstr ""
-"Liberapay 在歐盟註冊登記為 電子金流的代理商。 靠著一群企業伙伴的協助，我們可以監控由財務規 "
-"管單位要求的詐欺、洗錢、恐怖組織金流等非法經濟活動。"
+msgstr "Liberapay 在歐盟註冊登記為 電子金流的代理商。 靠著一群企業伙伴的協助，我們可以監控由財務規 管單位要求的詐欺、洗錢、恐怖組織金流等非法經濟活動。"
 
 #, fuzzy
 msgid "Postal address:"
@@ -2847,9 +2843,7 @@ msgstr "你可以在所屬團隊{1}的操控版來改變自己收取的份額 {0
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
-msgstr ""
-"名目上的收取是成員所輸入的粗略數字，而真實收取則是由系統計算：首先它會加總名目收取，然後再計算每份收取代表的百分比，最後再將此百分比依可得收入轉算。名目收"
-"取通常代表最大：而實際收取不會高過名目，即便有多出來的收入。"
+msgstr "名目上的收取是成員所輸入的粗略數字，而真實收取則是由系統計算：首先它會加總名目收取，然後再計算每份收取代表的百分比，最後再將此百分比依可得收入轉算。名目收取通常代表最大：而實際收取不會高過名目，即便有多出來的收入。"
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the staibility of the team's income."
 msgstr ""
@@ -3016,12 +3010,6 @@ msgstr "建立團隊"
 #, python-brace-format
 msgid "{0} community settings"
 msgstr "{0} 社群設定"
-
-msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr "Liberapay 可以多國化你的文字內容。使用下方的選擇器來切換語言。"
-
-msgid "Short description"
-msgstr "簡短描述"
 
 msgid "Sidebar text"
 msgstr "側邊欄的文字"

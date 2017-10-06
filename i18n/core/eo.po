@@ -1305,8 +1305,9 @@ msgstr ""
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr ""
 
-msgid "You don't have a profile statement in this language yet."
-msgstr "Vi ne ankoraŭ havas profilon en tiu lingvo."
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr ""
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "Vi ne konservis viajn ŝanĝojn. Ĉu vi estas certa ke vi volas nuligi ilin?"
@@ -1367,15 +1368,22 @@ msgstr ""
 msgid "Edit"
 msgstr "Redakti"
 
-msgid "Tell us how you're making the world better."
-msgstr "Rakontu al ni kiamaniere vi faras la mondon esti pli bono."
+msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+msgstr ""
 
-msgid "Liberapay allows you to have profile statements in multiple languages. Use the selector below to switch between them."
-msgstr "Liberapay permesas vin havi profilajn deklarojn en multaj lingvoj. Uzu la elektilo sub interbaskuli ilin."
+#, fuzzy
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr "Liberapay permesas internaciigi viajn tekstojn. Uzu la elektilon sube por ŝanĝi inter lingvoj."
 
 #, python-brace-format
 msgid "Current language: {0}"
 msgstr "Nuna lingvo: {0}"
+
+msgid "Short description"
+msgstr "Mallonga priskribo"
+
+msgid "Full statement"
+msgstr ""
 
 msgid "Markdown supported."
 msgstr "Markdown subtenita."
@@ -1528,10 +1536,7 @@ msgstr "Liberapay ne prenos tranĉo de pagoj kaj nur financita de la donacoj al 
 
 #, fuzzy
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr ""
-"Konstrui Liberapay estas multa laboro, kaj ne ankoraŭ estas multe por fari, "
-"sed niaj programistoj, tradukantoj, kaj aliaj kontribuantoj estas severe "
-"underpaid, kaj ĝin desaceleración nia progreso."
+msgstr "Konstrui Liberapay estas multa laboro, kaj ne ankoraŭ estas multe por fari, sed niaj programistoj, tradukantoj, kaj aliaj kontribuantoj estas severe underpaid, kaj ĝin desaceleración nia progreso."
 
 msgid "Donations"
 msgstr "Donacaji"
@@ -2203,8 +2208,8 @@ msgstr ""
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Vi ne ankoraŭ aranĝis donacoj, kiam vi faros tion vi estos petata aldoni monon al via konto."
 
-msgid "Your donations are funded by your income."
-msgstr "Viaj donacoj estas financitaj per via enspezo."
+msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
+msgstr ""
 
 msgid "Please choose a payment method:"
 msgstr "Bonvolu elekti pago metodo:"
@@ -2238,9 +2243,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr ""
-"La kotizoj estas tiuj de niaj provizantoj de pagservoj, Librapay estas nur "
-"financita per la donacoj al {0}lia propra konto{1}."
+msgstr "La kotizoj estas tiuj de niaj provizantoj de pagservoj, Librapay estas nur financita per la donacoj al {0}lia propra konto{1}."
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr ""
@@ -3046,13 +3049,6 @@ msgstr "Krei teamon"
 #, python-brace-format
 msgid "{0} community settings"
 msgstr "{0} komunumo agordojn"
-
-#, fuzzy
-msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr "Liberapay permesas internaciigi viajn tekstojn. Uzu la elektilon sube por ŝanĝi inter lingvoj."
-
-msgid "Short description"
-msgstr "Mallonga priskribo"
 
 msgid "Sidebar text"
 msgstr "Sidebar teksto"

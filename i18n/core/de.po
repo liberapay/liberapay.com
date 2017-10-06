@@ -1278,8 +1278,9 @@ msgstr "Ist diese Plattform legal und sicher?"
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr "Ja. Liberapay wird von einer gemeinnützig Organisation geführt, die {0}ihren Sitz{1} in Frankreich hat. Wir befolgen die Finanzmarktregeln der Europäischen Union. Die Sicherheit unseres Diestens ist von höchster Bedeutung für uns."
 
-msgid "You don't have a profile statement in this language yet."
-msgstr "Sie haben noch keinen Profiltext in dieser Sprache geschrieben."
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr ""
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "Ihre Änderungen wurden noch nicht gespeichert. Sind Sie sicher, dass Sie diese verwerfen wollen?"
@@ -1340,15 +1341,21 @@ msgstr "Textausschnitt für soziale Medien:"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-msgid "Tell us how you're making the world better."
-msgstr "Erzählen Sie uns wie Sie die Welt besser machen."
+msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+msgstr ""
 
-msgid "Liberapay allows you to have profile statements in multiple languages. Use the selector below to switch between them."
-msgstr "Liberapay ermöglicht es dir, Profilmitteilungen in mehreren Sprachen zu haben. Nutze die Auswahl unten um zwischen den Sprachen zu wechseln."
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr "Liberapay ermöglicht es Ihnen, Ihre Texte zu internationalisieren. Verwenden Sie die Auswahl um zwischen Sprachen zu wechseln."
 
 #, python-brace-format
 msgid "Current language: {0}"
 msgstr "Aktuelle Sprache: {0}"
+
+msgid "Short description"
+msgstr "Kurze Beschreibung"
+
+msgid "Full statement"
+msgstr ""
 
 msgid "Markdown supported."
 msgstr "Markdown support."
@@ -1864,10 +1871,8 @@ msgstr "Verknüpfe ein {0}-Konto"
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {time} ago."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] ""
-"Wir haben {n} Repository aif Ihrem {platform}-Konto gefunden, vor {time}."
-msgstr[1] ""
-"Wir haben {n} Repositories auf Ihrem {platform}-Konto gefunden, vor {time}."
+msgstr[0] "Wir haben {n} Repository aif Ihrem {platform}-Konto gefunden, vor {time}."
+msgstr[1] "Wir haben {n} Repositories auf Ihrem {platform}-Konto gefunden, vor {time}."
 
 msgid "No repositories found."
 msgstr "Keine Repositories gefunden."
@@ -2158,8 +2163,8 @@ msgstr "Geld hinzufügen"
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Sie haben keine Spenden noch einrichten, wenn Sie das tun werden Sie Geld auf Ihr Konto hinzuzufügen gefragt."
 
-msgid "Your donations are funded by your income."
-msgstr "Ihre Spenden werden durch Ihre Einnahmen finanziert."
+msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
+msgstr ""
 
 msgid "Please choose a payment method:"
 msgstr "Bitte wählen Sie eine Zahlungsmethode:"
@@ -2983,12 +2988,6 @@ msgstr "Ein Team erstellen"
 #, python-brace-format
 msgid "{0} community settings"
 msgstr "{0} Einstellungen für Gemeinschaften"
-
-msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr "Liberapay ermöglicht es Ihnen, Ihre Texte zu internationalisieren. Verwenden Sie die Auswahl um zwischen Sprachen zu wechseln."
-
-msgid "Short description"
-msgstr "Kurze Beschreibung"
 
 msgid "Sidebar text"
 msgstr "Text in der Seitenleiste"

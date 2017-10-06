@@ -1273,8 +1273,9 @@ msgstr "합법이예요? 안전합니까?"
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr "예, Liberapay는 프랑스에 {0}소재한 비영리기구{1}에 의해 운영되며, 유럽 연합의 금융 제재를 준수합니다. 서비스의 보안은 저희에게 있어 가장 중요한 요소이기도 합니다."
 
-msgid "You don't have a profile statement in this language yet."
-msgstr "이 언어로 된 프로필 문구가 없습니다."
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr ""
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "바뀐 내용을 저장하지 않았습니다. 바뀐 내용을 버릴까요?"
@@ -1335,15 +1336,21 @@ msgstr ""
 msgid "Edit"
 msgstr "고치기"
 
-msgid "Tell us how you're making the world better."
-msgstr "어떻게 세상을 더 낫게 만들고 있는지 알려주세요."
+msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+msgstr ""
 
-msgid "Liberapay allows you to have profile statements in multiple languages. Use the selector below to switch between them."
-msgstr "Liberapay는 여러 언어로 사용자 문구를 사용할 수 있도록 허용합니다. 아래의 언어 선택기로 언어를 변환하세요."
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr ""
 
 #, python-brace-format
 msgid "Current language: {0}"
 msgstr "현재 언어: {0}"
+
+msgid "Short description"
+msgstr ""
+
+msgid "Full statement"
+msgstr ""
 
 msgid "Markdown supported."
 msgstr "마크다운 지원됨."
@@ -2143,8 +2150,8 @@ msgstr "자금 추가"
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "기여를 설정하지 않았습니다. 기여를 설정하게 되면 계좌에 자금을 추가하기 위한 옵션이 추가됩니다."
 
-msgid "Your donations are funded by your income."
-msgstr "수입에 의해 지출이 충당됩니다."
+msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
+msgstr ""
 
 msgid "Please choose a payment method:"
 msgstr "결제 방식을 선택해 주세요:"
@@ -2956,12 +2963,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} community settings"
-msgstr ""
-
-msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr ""
-
-msgid "Short description"
 msgstr ""
 
 msgid "Sidebar text"

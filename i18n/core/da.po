@@ -1278,8 +1278,9 @@ msgstr ""
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr ""
 
-msgid "You don't have a profile statement in this language yet."
-msgstr "Du har ikke nogen profilerklæring på dette sprog endnu."
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr ""
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "Du har ikke savet ændringerne endnu, er du sikker på at du vil droppe dem?"
@@ -1340,15 +1341,21 @@ msgstr ""
 msgid "Edit"
 msgstr "Rediger"
 
-msgid "Tell us how you're making the world better."
-msgstr "Fortæl hvordan du har tænkt dig at gøre verden til et bedre sted at leve i."
+msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+msgstr ""
 
-msgid "Liberapay allows you to have profile statements in multiple languages. Use the selector below to switch between them."
-msgstr "Liberapay giver dig mulighed for at få profil-erklæringer på flere sprog. Brug vælgeren nedenfor til at skifte mellem dem."
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
+msgstr "Liberapay giver dig mulighed for at skrive dine tekster på flere sprog. Brug vælgeren nedenfor til at skifte mellem sprog."
 
 #, python-brace-format
 msgid "Current language: {0}"
 msgstr "Nuværende sprog: {0}"
+
+msgid "Short description"
+msgstr "Kort beskrivelse"
+
+msgid "Full statement"
+msgstr ""
 
 msgid "Markdown supported."
 msgstr "Markdown understøttet."
@@ -2157,8 +2164,8 @@ msgstr ""
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Du har ikke oprettet nogen donationer endnu, når du har vil du blive husket på at tilføje penge til din konto."
 
-msgid "Your donations are funded by your income."
-msgstr "Dine donationer er finansieret af din indkomst."
+msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
+msgstr ""
 
 msgid "Please choose a payment method:"
 msgstr "Vælg venligst en betalingsmetode:"
@@ -2978,12 +2985,6 @@ msgstr "Lav et team"
 #, python-brace-format
 msgid "{0} community settings"
 msgstr "{0} fælleskabets indstillinger"
-
-msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr "Liberapay giver dig mulighed for at skrive dine tekster på flere sprog. Brug vælgeren nedenfor til at skifte mellem sprog."
-
-msgid "Short description"
-msgstr "Kort beskrivelse"
 
 msgid "Sidebar text"
 msgstr "Sidepanel tekst"

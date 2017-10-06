@@ -1275,7 +1275,8 @@ msgstr ""
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr ""
 
-msgid "You don't have a profile statement in this language yet."
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
 msgstr ""
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
@@ -1337,14 +1338,20 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-msgid "Tell us how you're making the world better."
+msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr ""
 
-msgid "Liberapay allows you to have profile statements in multiple languages. Use the selector below to switch between them."
+msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
 msgstr ""
 
 #, python-brace-format
 msgid "Current language: {0}"
+msgstr ""
+
+msgid "Short description"
+msgstr ""
+
+msgid "Full statement"
 msgstr ""
 
 msgid "Markdown supported."
@@ -2142,7 +2149,7 @@ msgstr ""
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr ""
 
-msgid "Your donations are funded by your income."
+msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr ""
 
 msgid "Please choose a payment method:"
@@ -2951,12 +2958,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} community settings"
-msgstr ""
-
-msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr ""
-
-msgid "Short description"
 msgstr ""
 
 msgid "Sidebar text"
