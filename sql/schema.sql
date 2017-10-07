@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '51'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '52'::jsonb);
 
 
 -- app configuration
@@ -478,7 +478,7 @@ CREATE UNIQUE INDEX emails_address_verified_key ON emails (lower(address), verif
 
 -- profile statements
 
-CREATE TYPE stmt_type AS ENUM ('profile', 'sidebar', 'subtitle');
+CREATE TYPE stmt_type AS ENUM ('profile', 'sidebar', 'subtitle', 'summary');
 
 CREATE TABLE statements
 ( participant    bigint      NOT NULL REFERENCES participants

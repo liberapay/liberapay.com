@@ -636,3 +636,6 @@ CREATE TABLE redirections
 , mtime         timestamptz   NOT NULL DEFAULT now()
 );
 CREATE INDEX redirections_to_prefix_idx ON redirections (to_prefix);
+
+-- migration #52
+ALTER TYPE stmt_type ADD VALUE IF NOT EXISTS 'summary';
