@@ -52,15 +52,6 @@ if is_team:
 <div class="row">
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
-    % if participant.receiving
-    <div class="alert alert-success">{{ ngettext(
-        "A Liberapay user has pledged to donate {0} per week to {1}.",
-        "{n} Liberapay users have pledged to donate a total of {0} per week to {1}.",
-        participant.npatrons,
-        Money(participant.receiving, 'EUR'), friendly_name
-    ) }}</div>
-    % endif
-
     <p><a class="btn btn-default" href="/explore/pledges/">← {{ _("Explore pledges") }}</a></p>
 
             <p>{{ _(
@@ -82,11 +73,17 @@ if is_team:
             </div>
             </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading text-center">
-            <h3 class="panel-title">{{ _("Donate to {0}", friendly_name) }}</h3>
-        </div>
-        <div class="panel-body">
+    % if participant.receiving
+    <div class="alert alert-success">{{ ngettext(
+        "A Liberapay user has pledged to donate {0} per week to {1}.",
+        "{n} Liberapay users have pledged to donate a total of {0} per week to {1}.",
+        participant.npatrons,
+        Money(participant.receiving, 'EUR'), friendly_name
+    ) }}</div>
+    % endif
+
+            <br>
+            <h4 class="text-center">{{ _("Donate to {0}", friendly_name) }}</h4>
 
             % if allow_pledges
                 <p>{{ _(
@@ -116,13 +113,9 @@ if is_team:
                 % endcall
             % endif
 
-        </div>
-    </div>
-
     % if is_team and members and not locked
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ team_description }}</div>
-        <div class="panel-body">
+            <br><br>
+            <h4 class="text-center">{{ team_description }}</h4>
 
             <p>{{ _("You can donate directly to the team's members:") }}</p>
 
@@ -187,13 +180,12 @@ if is_team:
 
             </tbody>
             </table>
-        </div>
-    </div>
     % endif
 
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _("Are you {0}?", friendly_name) }}</div>
-        <div class="panel-body">
+        <br><br>
+        <div class="text-center">
+            <h4>{{ _("Are you {0}?", friendly_name) }}</h4>
+
             % if is_team and allow_team_connect and not locked
                 <p>{{ _("Are you an administrator of this {0} team account? Connect it "
                         "to your Liberapay account.",
@@ -228,19 +220,17 @@ if is_team:
                 % endcall
             % endif
         </div>
-    </div>
 
     % if user.ANON
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ _("What is Liberapay?") }}</div>
+        <br><br>
+        <div class="text-center">
+        <h4>{{ _("What is Liberapay?") }}</h4>
 
-        <div class="panel-body">
         <p>{{ _("Liberapay is a way to thank and support your favorite artists, "
                 "musicians, writers, programmers, etc. by setting up a small weekly "
                 "cash gift to them.") }}
         <a href="/about/">{{ _("Learn more") }}</a></p>
         </div>
-    </div>
     % endif
 </div>
 </div>
