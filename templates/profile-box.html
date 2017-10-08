@@ -74,21 +74,27 @@
     % endif
 % endmacro
 
-% macro profile_box_embedded(participant, summary, nmembers=None)
+% macro profile_box_embedded_wrapper(participant, path)
 <div class="profile-box-wrapper">
     <div class="panel panel-default profile-box-embedded"
-         href="{{ participant.path('') }}">
+         href="{{ path }}">
         <div class="panel-body">
-            <a href="{{ participant.path('') }}" class="avatar-inline">{{
+            <a href="{{ path }}" class="avatar-inline">{{
                 avatar_img(participant, size=120)
             }}</a>
-            {{ profile_box_embedded_content(participant, summary, nmembers=nmembers) }}
+            {{ caller() }}
         </div>
     </div>
 </div>
 % endmacro
 
-% macro profile_box_embedded_content(participant, summary, nmembers=None)
+% macro profile_box_embedded(participant, summary, nmembers=None)
+    % call profile_box_embedded_wrapper(participant, participant.path(''))
+        {{ profile_box_embedded_participant(participant, summary, nmembers=nmembers) }}
+    % endcall
+% endmacro
+
+% macro profile_box_embedded_participant(participant, summary, nmembers=None)
     % set username = participant.username
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
@@ -114,4 +120,32 @@
         </dl>
         % endif
     </div>
+% endmacro
+
+% macro profile_box_embedded_elsewhere(e)
+    % set path = e.liberapay_path
+    % call profile_box_embedded_wrapper(e.participant, path)
+        % set p = e.participant
+
+        <h4><a href="{{ path }}">
+            <img class="platform-icon" src="{{ e.platform_data.icon }}" />
+            <span>{{ e.friendly_name }}</span>
+        </a></h4>
+
+        <p class="summary">{{ e.get_excerpt() or '' }}</p>
+
+        <div class="numbers">
+            <dl>
+                <dt>{{ _("Pledges") }}</dt>
+                <dd>{{ format_number(p.npatrons) }}</dd>
+            </dl>
+            % if not p.hide_receiving
+            <dl>
+                <dt>{{ _("Sum") }}</dt>
+                <dd>{{ format_currency(p.receiving, 'EUR') }}<br>
+                    <small>{{ _("per week") }}</small></dd>
+            </dl>
+            % endif
+        </div>
+    % endcall
 % endmacro

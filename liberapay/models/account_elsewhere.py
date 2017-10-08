@@ -12,9 +12,10 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-from liberapay.constants import AVATAR_QUERY
+from liberapay.constants import AVATAR_QUERY, SUMMARY_MAX_SIZE
 from liberapay.elsewhere._exceptions import BadUserId, UserNotFound
 from liberapay.security.crypto import constant_time_compare
+from liberapay.utils import excerpt_intro
 from liberapay.website import website
 
 
@@ -200,6 +201,10 @@ class AccountElsewhere(Model):
         return '~' + self.user_id + ((':' + self.domain) if self.domain else '')
 
     @property
+    def liberapay_path(self):
+        return '/on/%s/%s' % (self.platform, self.liberapay_slug)
+
+    @property
     def liberapay_url(self):
         scheme = website.canonical_scheme
         host = website.canonical_host
@@ -242,6 +247,9 @@ class AccountElsewhere(Model):
         r = self.platform_data.x_description(None, self.extra_info, '')
         self.__dict__['description'] = r
         return r
+
+    def get_excerpt(self, size=SUMMARY_MAX_SIZE):
+        return excerpt_intro(self.description, size)
 
     def save_token(self, token):
         """Saves the given access token in the database.
