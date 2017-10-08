@@ -185,6 +185,10 @@ img.account-type {
     }
 }
 
+p.summary {
+    color: $gray-light;
+}
+
 .profile-box, .profile-box-embedded {
     h1, h4 {
         color: $brand-primary;
@@ -240,9 +244,12 @@ img.account-type {
     }
     h4 {
         margin-top: 5px;
+        line-height: 23px;
+        max-height: 2 * 23px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .summary {
-        color: $gray-light;
         height: 3 * $line-height-computed;
         margin: 1em 0 $line-height-computed;
         overflow: hidden;

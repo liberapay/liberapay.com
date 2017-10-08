@@ -63,24 +63,30 @@ if is_team:
 
     <p><a class="btn btn-default" href="/explore/pledges/">← {{ _("Explore pledges") }}</a></p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ friendly_name }}</div>
-        <div class="panel-body">
-
             <p>{{ _(
                 "This page is dedicated to the {platform} user {user_name}:"
                 , platform=platform.display_name
                 , user_name=friendly_name
             ) }}</p>
-            <div class="text-center">
-                <div class="inline-block"><a href="{{ account.html_url}}">{{ avatar_img(account, size=120) }}</a></div>
-                <br>
+            <div class="panel panel-default profile-box">
+            <div class="panel-body">
+                <div class="avatar-col"><a href="{{ account.html_url}}">{{ avatar_img(account, size=120) }}</a></div>
+                <div class="col-right">
+                % set summary = account.get_excerpt(150)
+                % if summary
+                <p class="summary">{{ summary }}</p>
+                % endif
                 <a href="{{ account.html_url}}">
                     <span class="fa fa-external-link" aria-hidden="true"></span> {{ _("Profile on {0}", platform.display_name) }}</a>
+                </div>
+            </div>
             </div>
 
-            <hr />
-            <h3 class="text-center">{{ _("Donate to {0}", friendly_name) }}</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <h3 class="panel-title">{{ _("Donate to {0}", friendly_name) }}</h3>
+        </div>
+        <div class="panel-body">
 
             % if allow_pledges
                 <p>{{ _(
