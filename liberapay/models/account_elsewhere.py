@@ -237,6 +237,12 @@ class AccountElsewhere(Model):
             return '%s (%s)' % (r, user_name)
         return r
 
+    @property
+    def description(self):
+        r = self.platform_data.x_description(None, self.extra_info, '')
+        self.__dict__['description'] = r
+        return r
+
     def save_token(self, token):
         """Saves the given access token in the database.
         """

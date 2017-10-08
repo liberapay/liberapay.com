@@ -41,6 +41,7 @@ class GitLab(PlatformOAuth2):
     x_display_name = key('name')
     x_email = key('email')
     x_avatar_url = key('avatar_url')
+    x_description = key('bio')
 
     # Repo info extractors
     x_repo_id = key('id')

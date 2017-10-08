@@ -43,6 +43,7 @@ class GitHub(PlatformOAuth2):
     x_gravatar_id = key('gravatar_id')
     x_avatar_url = key('avatar_url')
     x_is_team = key('type', clean=lambda t: t.lower() == 'organization')
+    x_description = key('bio')
 
     # Repo info extractors
     x_repo_id = key('id')

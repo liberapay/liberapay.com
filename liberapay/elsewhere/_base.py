@@ -67,6 +67,7 @@ class Platform(object):
     x_gravatar_id = not_available
     x_avatar_url = not_available
     x_is_team = not_available
+    x_description = not_available
 
     required_attrs = ('account_url', 'display_name', 'name')
 
