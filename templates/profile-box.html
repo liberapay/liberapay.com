@@ -30,7 +30,7 @@
     <div class="numbers">
         <dl>
             <dt>{{ _("Patrons") }}</dt>
-            <dd>{{ format_number(participant.npatrons) }}</dd>
+            <dd>{{ format_number(participant.npatrons + participant.nteampatrons) }}</dd>
         </dl>
         % if not participant.hide_receiving
         <dl>

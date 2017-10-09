@@ -713,18 +713,19 @@ class Payday(object):
                AND p.status <> 'stub';
 
             UPDATE participants p
-               SET npatrons = p2.npatrons
+               SET nteampatrons = p2.nteampatrons
               FROM ( SELECT p2.id
-                          , ( SELECT count(*)
+                          , ( SELECT count(DISTINCT t.tipper)
                                 FROM payday_transfers t
                                WHERE t.tippee = p2.id
-                            ) AS npatrons
+                                 AND t.context = 'take'
+                            ) AS nteampatrons
                        FROM participants p2
+                      WHERE p2.status <> 'stub'
+                        AND p2.kind IN ('individual', 'organization')
                    ) p2
              WHERE p.id = p2.id
-               AND p.npatrons <> p2.npatrons
-               AND p.status <> 'stub'
-               AND p.kind IN ('individual', 'organization');
+               AND p.nteampatrons <> p2.nteampatrons;
 
             UPDATE participants p
                SET npatrons = p2.npatrons
@@ -735,10 +736,10 @@ class Payday(object):
                                  AND t.is_funded
                             ) AS npatrons
                        FROM participants p2
+                      WHERE p2.status <> 'stub'
                    ) p2
              WHERE p.id = p2.id
-               AND p.npatrons <> p2.npatrons
-               AND p.kind = 'group';
+               AND p.npatrons <> p2.npatrons;
 
             """)
         self.clean_up()
