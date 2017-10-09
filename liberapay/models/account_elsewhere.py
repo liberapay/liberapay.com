@@ -244,7 +244,10 @@ class AccountElsewhere(Model):
 
     @property
     def description(self):
-        r = self.platform_data.x_description(None, self.extra_info, '')
+        if self.extra_info:
+            r = self.platform_data.x_description(None, self.extra_info, '')
+        else:
+            r = ''
         self.__dict__['description'] = r
         return r
 
