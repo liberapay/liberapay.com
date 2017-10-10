@@ -40,11 +40,11 @@ class MixinTeam(object):
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
-            INSERT INTO takes (ctime, member, team, amount, recorder) (
-                SELECT ctime, member, %(id)s, NULL, %(id)s
-                  FROM current_takes
-                 WHERE team=%(id)s
-            );
+            INSERT INTO takes
+                        (ctime, member, team, amount, recorder)
+                 SELECT ctime, member, %(id)s, NULL, %(id)s
+                   FROM current_takes
+                  WHERE team=%(id)s
         """, dict(id=self.id))
 
     def member_of(self, team):
@@ -132,18 +132,19 @@ class MixinTeam(object):
             # Insert the new take
             cursor.run("""
 
-                INSERT INTO takes (ctime, member, team, amount, recorder)
-                 VALUES ( COALESCE (( SELECT ctime
-                                        FROM takes
-                                       WHERE member=%(member)s
-                                         AND team=%(team)s
-                                       LIMIT 1
-                                     ), CURRENT_TIMESTAMP)
-                        , %(member)s
-                        , %(team)s
-                        , %(amount)s
-                        , %(recorder)s
-                         )
+                INSERT INTO takes
+                            (ctime, member, team, amount, recorder)
+                     SELECT COALESCE((
+                                SELECT ctime
+                                  FROM takes
+                                 WHERE member=%(member)s
+                                   AND team=%(team)s
+                                 LIMIT 1
+                            ), current_timestamp)
+                          , %(member)s
+                          , %(team)s
+                          , %(amount)s
+                          , %(recorder)s
 
             """, dict(member=member.id, team=self.id, amount=take,
                       recorder=recorder.id))
