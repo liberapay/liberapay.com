@@ -40,7 +40,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block content
     % if statement
-        <h3 class="banderole info" id="statement">{{ _("Statement") }}
+        <h3 id="statement">{{ _("Statement") }}
         % if len(langs) > 1
         <span class="dropdown-hover pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
@@ -69,7 +69,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
     % set repos = participant.get_repos_for_profile()
     % if repos
-    <h3 class="banderole default">{{ _("Repositories") }}</h3>
+    <h3 class="default">{{ _("Repositories") }}</h3>
     % for repo in repos
         {{ show_repo(repo) }}
     % endfor
@@ -81,13 +81,18 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % endif
 
     % if show_income
-        <h3 class="banderole default" id="income">{{ _("Income history") }}</h3>
+        <h3 class="flex space-between">
+            {{ _("Income history") }}
+            <button class="btn btn-default" type="button"
+                    data-charts="{{ participant.path('charts.json') }}"
+                    data-msg-empty="{{ _('No data to show.') }}">
+                    {{ _("View income history") }}
+            </button>
+        </h3>
         <noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
-        <button class="btn btn-default" type="button"
-                data-charts="{{ participant.path('charts.json') }}"
-                data-msg-empty="{{ _('No data to show.') }}">{{
-            _("View income history")
-        }}</button>
+
+        <div id="income"></div>
+
         <div>
             <div class="chart-wrapper">
                 <a name="gifts"></a>

@@ -1,4 +1,3 @@
-
 .contain {
     max-width: 100%;
 }
@@ -21,4 +20,26 @@
 
 .paragraph {
     margin-bottom: ($line-height-computed / 2);
+}
+
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin: 24px -50vw;
+  overflow: visible;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.padded {
+    margin: 100px auto;
 }

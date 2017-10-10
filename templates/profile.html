@@ -1,28 +1,88 @@
 % extends "templates/profile-base.html"
 % from 'templates/profile-box.html' import profile_box_full with context
+% from 'templates/avatar-url.html' import avatar_img with context
+% from "templates/profile-goal-bar.html" import profile_goal_bar with context
 
 % block before_content
 {% block profile_btn %}{% endblock %}
 <div class="row">
 <div class="col-xs-12 col-md-8 col-md-offset-2">
-    % block box
-        {{ profile_box_full(participant) }}
-    % endblock
+    <header class="text-center padded">
+        {{ avatar_img(participant, size=120) }}
+        <h2>{{ participant.username }}</h2>
+        <p>{{ summary }}</p>
+    </header>
+
+    <div class="full-width banderole default">
+        <div class="container">
+            <div class="col-xs-12 col-md-8 col-md-offset-2 flex space-between">
+                % set username = participant.username
+                % set giving = participant.giving
+                % set receiving = participant.receiving
+                % set goal = participant.goal
+                % set giving_str = Money(giving, 'EUR')
+                % set receiving_str = Money(receiving, 'EUR')
+                % set goal_str = goal and Money(goal, 'EUR')
+
+                % if participant.hide_giving or participant.hide_receiving
+                    <p>{{ _("{0} doesn't publish how much they give and receive.", username) }}</p>
+                % elif goal == None
+                    % if participant.kind != 'group'
+                        <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
+                    % else
+                        <p>{{ _("{0} receives {1} per week.", username, receiving_str, giving_str) }}</p>
+                    % endif
+                % elif goal > 0
+                    % if receiving == 0
+                        <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}</p>
+                        <p>{{ _("Be the first to contribute!") }}</p>
+                    % else
+                        <p>
+                            {{ _("Goal: {0}", Money(p.goal, 'EUR')) }},
+                            {{ _("Income: {0}/week", Money(p.receiving, 'EUR')) }}
+                        </p>
+                    % endif
+                % else
+                    <p>{{ _("{0} gives {1} per week.", username, giving_str) }}</p>
+                % endif
+
+                % if participant.accepts_tips
+                    % set tip = user.get_tip_to(participant)
+                    % set donate_path = participant.path('donate')
+                    % if tip['amount']
+                        <a class="btn btn-default" href="{{ donate_path }}">{{
+                            _("Modify your donation ({0})", Money(tip['amount'], 'EUR'))
+                        }}</a>
+                    % else
+                        <a class="btn btn-donate {{ 'btn-lg' if goal is none or receiving < goal else '' }}"
+                           href="{{ donate_path }}">
+                            {{ glyphicon('thumbs-up') }}
+                            <span>{{ _("Donate") }}</span>
+                        </a>
+                    % endif
+                % else
+                    <p>{{ _("This user doesn't accept donations.") }}</p>
+                % endif
+            </div>
+        </div>
+    </div>
 
     % if not edit
-    <div class="profile-share">
-        <span>{{ _("Share:") }}</span>
-        <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}">
-            <i class="fa fa-lg fa-facebook-square"></i>
-        </a>
-        <a class="btn" href="https://twitter.com/intent/tweet?url={{ urlquote(participant.url()) }}">
-            <i class="fa fa-lg fa-twitter"></i>
-        </a>
-        <a class="btn" href="https://plus.google.com/share?url={{ urlquote(participant.url()) }}">
-            <i class="fa fa-lg fa-google-plus"></i>
-        </a>
+    <div class="flex space-between">
+        <p>{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
+        <div>
+            <span>{{ _('Share:') }}</span>
+            <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}">
+                <i class="fa fa-lg fa-facebook-square"></i>
+            </a>
+            <a class="btn" href="https://twitter.com/intent/tweet?url={{ urlquote(participant.url()) }}">
+                <i class="fa fa-lg fa-twitter"></i>
+            </a>
+            <a class="btn" href="https://plus.google.com/share?url={{ urlquote(participant.url()) }}">
+                <i class="fa fa-lg fa-google-plus"></i>
+            </a>
+        </div>
     </div>
-    <div class="clearfix"></div>
     % endif
 % endblock
 

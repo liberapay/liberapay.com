@@ -30,6 +30,10 @@ body {
     }
 }
 
+@mixin transition {
+    transition: all 0.1s ease-in;
+}
+
 #main {
     min-height: 75%;
 }
@@ -95,22 +99,16 @@ body {
     text-align: center;
 }
 
+.btn {
+    @include transition;
+}
+
 .btn-donate {
     $base-color: #ffee16;
     background-color: $base-color;
-    border-color: darken($base-color, 10%);
-    &.btn-lg {
-        border: none;
-        box-shadow: 0 0 5px $base-color;
-    }
     color: #1a171b;
     &:hover {
         background-color: lighten($base-color, 20%);
-        border-color: $base-color;
-        &.btn-lg {
-            border: none;
-            box-shadow: 0 0 5px lighten($base-color, 20%);
-        }
     }
 }
 
@@ -200,14 +198,6 @@ p.summary {
 .profile-box {
     .radio {
         margin-top: 0;
-    }
-}
-
-.profile-share {
-    float: right;
-    margin-top: -10px;
-    & > span {
-         vertical-align: middle;
     }
 }
 
@@ -401,6 +391,7 @@ ul.emails {
 }
 
 h2, h3, h4, h5, h6 {
+    margin-top: 1.5em;
     &:target {
         background-color: rgba(yellow, 0.2);
         animation: target-flash 1.5s 1;
@@ -430,7 +421,6 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
     }
 }
 .profile-statement {
-    font-family: Georgia, Times, "Times New Roman", serif;
     h1, h2, h3, h4 {
         color: #956410;
     }
