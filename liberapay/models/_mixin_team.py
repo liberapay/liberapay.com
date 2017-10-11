@@ -182,6 +182,9 @@ class MixinTeam(object):
 
     def recompute_actual_takes(self, cursor, member=None):
         """Get the tips and takes for this team and recompute the actual amounts.
+
+        To avoid deadlocks the given `cursor` should have already acquired an
+        exclusive lock on the `takes` table.
         """
         from liberapay.billing.payday import Payday
         tips = [NS(t._asdict()) for t in cursor.all("""
