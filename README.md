@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg?branch=master)](https://travis-ci.org/liberapay/liberapay.com)
 [![Weblate](https://hosted.weblate.org/widgets/liberapay/-/shields-badge.svg)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+[![Gitter](https://badges.gitter.im/liberapay/salon.svg)](https://gitter.im/liberapay/salon?utm_source=badge)
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/liberapay/donate)
 
 [Liberapay](http://liberapay.com) is a recurrent donations platform.
@@ -10,7 +11,9 @@ It's a fork of Gittip/Gratipay, see [this post](https://github.com/liberapay/sal
 
 ## Contact
 
-You have a question? Come ask us in [the salon](https://github.com/liberapay/salon) or in the IRC channel #liberapay on [Freenode](http://webchat.freenode.net/).
+You want to chat? [Join us on Gitter](https://gitter.im/liberapay/salon). (If you use IRC, [Gitter has a gateway](https://irc.gitter.im/), and we're also in the #liberapay channel on Freenode.)
+
+Alternatively you can post a message in [our GitHub salon](https://github.com/liberapay/salon).
 
 
 ## Contributing to the translations
