@@ -38,8 +38,8 @@
                         <p>{{ _("Be the first to contribute!") }}</p>
                     % else
                         <p>
-                            {{ _("Goal: {0}", Money(p.goal, 'EUR')) }},
-                            {{ _("Income: {0}/week", Money(p.receiving, 'EUR')) }}
+                            {{ _("Goal: {0}", Money(participant.goal, 'EUR')) }},
+                            {{ _("Income: {0}/week", Money(participant.receiving, 'EUR')) }}
                         </p>
                     % endif
                 % else
