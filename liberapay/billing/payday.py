@@ -498,8 +498,9 @@ class Payday(object):
             log(msg % (t.id, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id))
             transfer(db, **t.__dict__)
 
-    def clean_up(self):
-        self.db.run("""
+    @classmethod
+    def clean_up(cls):
+        cls.db.run("""
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
@@ -661,11 +662,13 @@ class Payday(object):
         for payday_id in ids:
             cls.update_stats(payday_id)
 
-    def update_cached_amounts(self):
+    @classmethod
+    def update_cached_amounts(cls):
         now = pando.utils.utcnow()
-        with self.db.get_cursor() as cursor:
-            self.prepare(cursor, now)
-            self.transfer_virtually(cursor, now)
+        with cls.db.get_cursor() as cursor:
+            cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            cls.prepare(cursor, now)
+            cls.transfer_virtually(cursor, now)
             cursor.run("""
 
             UPDATE tips t
@@ -776,7 +779,7 @@ class Payday(object):
                AND p.npatrons <> p2.npatrons;
 
             """)
-        self.clean_up()
+        cls.clean_up()
         log("Updated receiving amounts.")
 
     def mark_stage_done(self):

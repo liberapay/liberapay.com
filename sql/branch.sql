@@ -17,4 +17,10 @@ CREATE OR REPLACE VIEW current_takes AS
        ORDER BY member, team, mtime DESC
     ) AS anon WHERE amount IS NOT NULL;
 
+INSERT INTO app_conf VALUES ('update_cached_amounts_every', '86400'::jsonb);
+
 END;
+
+SELECT 'after deployment';
+
+ALTER TABLE takes ADD CONSTRAINT null_amounts_chk CHECK ((actual_amount IS NULL) = (amount IS NULL));
