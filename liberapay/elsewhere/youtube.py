@@ -37,3 +37,4 @@ class Youtube(PlatformOAuth2):
     x_user_id = any_key(('snippet', 'resourceId', 'channelId'), 'id')
     x_display_name = any_key(('snippet', 'title'))
     x_avatar_url = any_key(('snippet', 'thumbnails', 'medium', 'url'))
+    x_description = any_key(('snippet', 'description'))

@@ -59,3 +59,4 @@ class Twitch(PlatformOAuth2):
     x_display_name = key('display_name')
     x_email = key('email')
     x_avatar_url = key('logo')
+    x_description = key('description')

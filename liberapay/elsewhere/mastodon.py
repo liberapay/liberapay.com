@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from markupsafe import Markup
 from pando import Response
 import requests
 
@@ -12,6 +13,10 @@ from liberapay.elsewhere._paginators import header_links_paginator
 
 def extract_domain_from_url(url):
     return urlsplit(url).hostname
+
+
+def striptags(s):
+    return s and Markup(s).striptags()
 
 
 class Mastodon(PlatformOAuth2):
@@ -48,6 +53,7 @@ class Mastodon(PlatformOAuth2):
     x_user_name = key('username')
     x_display_name = key('display_name')
     x_avatar_url = key('avatar_static')
+    x_description = key('note', clean=striptags)
 
     def x_user_info(self, extracted, info, default):
         if 'accounts' in info:

@@ -19,7 +19,7 @@ class Tests(Harness):
 
     def test_community_member_shows_up_on_community_listing(self):
         html = self.client.GET('/for/C++/').text
-        assert html.count('alice') == 2  # entry in New Participants
+        assert html.count('alice') == 4  # entry in New Members
 
 
 class TestCommunitiesJson(Harness):

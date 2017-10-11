@@ -3,34 +3,15 @@
 % from "templates/profile-goal-bar.html" import profile_goal_bar with context
 
 % macro profile_box_full(participant)
-    % call profile_box(participant)
-        {{ profile_box_full_col2(participant) }}
-    % endcall
-% endmacro
-
-% macro profile_box_embedded(participant, summary, nmembers=None)
-    % call profile_box(participant, embedded=True)
-        {{ profile_box_embedded_col2(participant, summary, nmembers=nmembers) }}
-    % endcall
-% endmacro
-
-% macro profile_box(participant, embedded=False)
-    <div class="panel panel-default profile-box {{ 'profile-box-embedded' if embedded }}"
-         {% if embedded %} href="{{ participant.path('') }}" {% endif %}>
+    <div class="panel panel-default profile-box">
         <div class="panel-body">
             <div class="avatar-col">
-                % if embedded
-                    <a href="{{ participant.path('') }}">{{
-                        avatar_img(participant, size=120)
-                    }}</a>
-                % else
-                    {{ avatar_img(participant, size=120) }}
-                % endif
+                {{ avatar_img(participant, size=120) }}
 
                 % if edit
                     <a class="btn btn-default" href="#avatar"
                         >{{ _("Modify your avatar") }}</a>
-                % elif participant.join_time and not embedded
+                % elif participant.join_time
                 <p class="join-time">{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
                 % endif
                 % if participant.status == 'closed'
@@ -39,7 +20,7 @@
             </div>
 
             <div class="col-right">
-                {{ caller() }}
+                {{ profile_box_full_col2(participant) }}
             </div>
         </div>
     </div>
@@ -93,27 +74,78 @@
     % endif
 % endmacro
 
-% macro profile_box_embedded_col2(participant, summary, nmembers=None)
+% macro profile_box_embedded_wrapper(participant, path)
+<div class="profile-box-wrapper">
+    <div class="panel panel-default profile-box-embedded"
+         href="{{ path }}">
+        <div class="panel-body">
+            <a href="{{ path }}" class="avatar-inline">{{
+                avatar_img(participant, size=120)
+            }}</a>
+            {{ caller() }}
+        </div>
+    </div>
+</div>
+% endmacro
+
+% macro profile_box_embedded(participant, summary, nmembers=None)
+    % call profile_box_embedded_wrapper(participant, participant.path(''))
+        {{ profile_box_embedded_participant(participant, summary, nmembers=nmembers) }}
+    % endcall
+% endmacro
+
+% macro profile_box_embedded_participant(participant, summary, nmembers=None)
     % set username = participant.username
-    % set receiving = participant.receiving
-    % set goal = participant.goal
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
 
-    % if summary
-    <p class="summary">{{ summary }}</p>
-    % endif
+    <p class="summary">{{ summary or '' }}</p>
 
-    % if participant.hide_receiving
-    % elif goal == None
-        <p>{{ _("Income: {0}/week", Money(receiving, 'EUR')) }}</p>
-    % elif goal > 0
-        {{ profile_goal_bar(participant) }}
-    % else
-        <p>{{ _("This user doesn't accept donations.") }}</p>
-    % endif
+    <div class="numbers">
+        <dl>
+            <dt>{{ _("Patrons") }}</dt>
+            <dd>{{ format_number(participant.npatrons) }}</dd>
+        </dl>
+        % if not participant.hide_receiving
+        <dl>
+            <dt>{{ _("Income") }}</dt>
+            <dd>{{ format_currency(participant.receiving, 'EUR') }}<br>
+                <small>{{ _("per week") }}</small></dd>
+        </dl>
+        % endif
+        % if nmembers
+        <dl>
+            <dt>{{ _("Members") }}</dt>
+            <dd>{{ format_number(nmembers) }}</dd>
+        </dl>
+        % endif
+    </div>
+% endmacro
 
-    % if nmembers
-        {{ ngettext("{n} member", "{n} members", nmembers) }}
-    % endif
+% macro profile_box_embedded_elsewhere(e)
+    % set path = e.liberapay_path
+    % call profile_box_embedded_wrapper(e.participant, path)
+        % set p = e.participant
+
+        <h4><a href="{{ path }}">
+            <img class="platform-icon" src="{{ e.platform_data.icon }}" />
+            <span>{{ e.friendly_name }}</span>
+        </a></h4>
+
+        <p class="summary">{{ e.get_excerpt() or '' }}</p>
+
+        <div class="numbers">
+            <dl>
+                <dt>{{ _("Pledges") }}</dt>
+                <dd>{{ format_number(p.npatrons) }}</dd>
+            </dl>
+            % if not p.hide_receiving
+            <dl>
+                <dt>{{ _("Sum") }}</dt>
+                <dd>{{ format_currency(p.receiving, 'EUR') }}<br>
+                    <small>{{ _("per week") }}</small></dd>
+            </dl>
+            % endif
+        </div>
+    % endcall
 % endmacro

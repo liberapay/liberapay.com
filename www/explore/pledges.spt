@@ -2,22 +2,26 @@
 
 [---]
 
+latest = request.qs.get('order') == 'ctime:desc'
+col1, col2 = 'p.receiving', 'ctime'
+if latest:
+    col1, col2 = col2, col1
 pledgees = website.db.all("""
-    SELECT p.receiving, p.avatar_url, e.platform, e.user_name, e.domain
+    SELECT (e, p)::elsewhere_with_participant
          , (SELECT ctime FROM current_tips WHERE tippee = p.id ORDER BY ctime DESC LIMIT 1) as ctime
       FROM participants p
       JOIN elsewhere e ON e.participant = p.id
      WHERE p.status = 'stub'
        AND p.receiving > 0
        AND p.hide_from_lists = 0
-  ORDER BY ctime DESC
-     LIMIT 20
-""")
+  ORDER BY {0} DESC, {1} DESC
+     LIMIT 18
+""".format(col1, col2))
 title = _("Explore")
 subhead = _("Pledges")
 
 [---] text/html
-% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+% from 'templates/profile-box.html' import profile_box_embedded_elsewhere with context
 
 % extends "templates/explore.html"
 
@@ -29,39 +33,26 @@ subhead = _("Pledges")
     "to receive it. We'll send you a notification when that happens."
 ) }}</p>
 
-<div class="row">
-<div class="col-md-6">
-    <h3 class="banderole default">{{ _("Recent pledges") }}</h3>
+    <h3 class="banderole default">{{ _("Recent pledges") if latest else _("Top pledges") }}</h3>
     % if pledgees
-        <ul class="people">
-        % for p in pledgees
-            % set slug = p.user_name + ('@' + p.domain if p.domain else '')
-            <li class="mini-user">
-                <a href="/on/{{ p.platform }}/{{ slug }}/">
-                    {{ avatar_img(p) }}
-                    <div class="name">{{ p.user_name }}</div>
-                    <div class="amount">{{ format_currency(p.receiving, 'EUR') }}</div>
-                </a>
-            </li>
+        <div class="profile-box-row">
+        % for p, ctime in pledgees
+            {{ profile_box_embedded_elsewhere(p) }}
         % endfor
-        </ul>
+        </div>
     % else
         <p>{{ _("There are no pledges right now.") }}</p>
     % endif
-</div>
 
-<div class="col-md-6">
     <h3 class="banderole success">{{ _("Make a pledge") }}</h3>
     <p>{{ _("Do you have someone in mind?") }}</p>
     % include "templates/jump.html"
 
     <p>{{ _("We can help you find pledgees if you connect your accounts:") }}</p>
-    <p>
+    <p class="buttons">
     % for p in website.friends_platforms
         <a class="btn btn-default" href="/on/{{ p.name }}/">{{ p.display_name }}</a>
     % endfor
     </p>
-</div>
-</div>
 
 % endblock

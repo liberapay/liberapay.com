@@ -47,11 +47,9 @@ subhead = _("Teams")
     nteams
 ) }}</p>
 
-<div class="row">
+<div class="profile-box-row">
     % for team in teams
-    <div class="col-md-6">
         {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
-    </div>
     % endfor
 </div>
 

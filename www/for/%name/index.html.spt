@@ -10,25 +10,34 @@ community = get_community(state, restrict=False)
 participant = community.participant  # used by profile-base.html
 
 try:
-    limit = min(int(request.qs.get('limit', 50)), 100)
+    limit = min(int(request.qs.get('limit', 18)), 60)
     offset = int(request.qs.get('offset', 0))
 except ValueError:
     raise response.error(400)
+if limit not in (18, 60):
+    raise response.error(400, "bad `limit` value in querystring")
 
 members = query_cache.all("""
-    SELECT username, cc.ctime, avatar_url
+    SELECT p
+         , ( SELECT s.content
+               FROM statements s
+              WHERE s.participant = p.id
+                AND s.type = 'summary'
+           ORDER BY s.lang = %s DESC, s.id
+              LIMIT 1
+           ) AS summary
       FROM participants p
       JOIN community_memberships cc ON cc.participant = p.id AND cc.community = %s
      WHERE cc.is_on
   ORDER BY cc.ctime DESC
      LIMIT %s
     OFFSET %s
-""", (community.id, limit, offset))
+""", (locale.language, community.id, limit, offset))
 
 title = pretty_name = community.pretty_name
 
 [---]
-% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
+% from 'templates/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/profile-base.html"
 
@@ -72,17 +81,11 @@ title = pretty_name = community.pretty_name
 
     % if members
     <h3>{{ _("New Members") }}</h3>
-    <ul class="people">
-        % for m in members
-        <li class="mini-user">
-            <a href="/{{ m.username }}/">
-                {{ avatar_img(m) }}
-                <div class="name">{{ m.username }}</div>
-                <div class="age">{{ to_age_str(m.ctime, add_direction=True) }}</div>
-            </a>
-        </li>
+    <div class="profile-box-row">
+        % for m, summary in members
+            {{ profile_box_embedded(m, summary) }}
         % endfor
-    </ul>
+    </div>
     % endif
 
 </div>

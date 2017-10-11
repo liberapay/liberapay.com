@@ -21,7 +21,7 @@ individuals = query_cache.all("""
        AND p.hide_from_lists = 0
        AND p.receiving > 0
   ORDER BY p.receiving DESC, p.join_time DESC
-     LIMIT 30
+     LIMIT 18
 """, (locale.language,))
 title = _("Explore")
 subhead = _("Individuals")
@@ -35,11 +35,9 @@ subhead = _("Individuals")
 
 % if individuals
 <p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
-<div class="row">
+<div class="profile-box-row">
     % for p, summary in individuals
-    <div class="col-md-6">
         {{ profile_box_embedded(p, summary) }}
-    </div>
     % endfor
 </div>
 % else

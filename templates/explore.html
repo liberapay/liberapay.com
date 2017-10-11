@@ -1,5 +1,14 @@
 % extends "templates/base.html"
+
+% block head_early
+{{ super() }}
+    % if len(request.qs) > 0
+        <meta name="robots" content="noindex" />
+    % endif
+% endblock
+
 {% block heading %}{% endblock %}
+
 % block subnav
     % if request.path.raw != '/explore/'
     % from "templates/nav.html" import nav_explore with context
