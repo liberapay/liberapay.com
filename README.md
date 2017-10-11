@@ -5,9 +5,7 @@
 [![Gitter](https://badges.gitter.im/liberapay/salon.svg)](https://gitter.im/liberapay/salon?utm_source=badge)
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/liberapay/donate)
 
-[Liberapay](http://liberapay.com) is a recurrent donations platform.
-
-It's a fork of Gittip/Gratipay, see [this post](https://github.com/liberapay/salon/issues/8) for the differences between the two.
+[Liberapay](http://liberapay.com) is a recurrent donations platform. We help you fund the creators and projects you appreciate.
 
 ## Contact
 
@@ -31,7 +29,7 @@ If you have questions about translating Liberapay, you can ask them [in the salo
 
 ### Introduction
 
-Liberapay is a fork of [Gratipay](https://github.com/gratipay/gratipay.com), so it uses the web micro-framework [Aspen](http://aspen.io/), which is based on filesystem routing and [simplates](http://simplates.org/). Don't worry, it's quite simple. For example to make Liberapay return a `Hello $user, your id is $userid` message for requests to the URL `/$user/hello`, you only need to create the file `www/%username/hello.spt` with this inside:
+Liberapay was originally forked from [Gratipay](https://github.com/gratipay/gratipay.com) and inherited its web micro-framework [Pando](https://github.com/AspenWeb/pando.py) (*né* Aspen), which is based on filesystem routing and [simplates](http://simplates.org/). Don't worry, it's quite simple. For example to make Liberapay return a `Hello $user, your id is $userid` message for requests to the URL `/$user/hello`, you only need to create the file `www/%username/hello.spt` with this inside:
 
 ```
 from liberapay.utils import get_participant
