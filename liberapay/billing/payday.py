@@ -340,7 +340,8 @@ class Payday(object):
               FROM payday_takes t
              WHERE t.team = %(team_id)s;
         """, args)]
-        for t in Payday.resolve_takes(tips, takes):
+        transfers, leftover = Payday.resolve_takes(tips, takes)
+        for t in transfers:
             cursor.run("SELECT transfer(%s, %s, %s, 'take', %s, NULL)",
                        (t.tipper, t.member, t.amount, team_id))
 
@@ -350,8 +351,9 @@ class Payday(object):
         """
         total_income = sum(t.full_amount for t in tips)
         total_takes = sum(t.amount for t in takes)
+        leftover = max(total_income - total_takes, 0)
         if total_income == 0 or total_takes == 0:
-            return
+            return (), leftover
         takes_ratio = min(total_income / total_takes, 1)
         for take in takes:
             take.amount = round_up(take.amount * takes_ratio)
@@ -409,6 +411,7 @@ class Payday(object):
                     leeway_ratio = min(delta / leeway, 1)
                     tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
         # Loop: compute the adjusted donation amounts, and do the transfers
+        transfers = []
         for tip in tips:
             if adjust_tips:
                 tip_amount = round_up(tip.amount + tip.leeway * leeway_ratio)
@@ -423,11 +426,12 @@ class Payday(object):
                 if take.amount == 0 or tip.tipper == take.member:
                     continue
                 transfer_amount = min(tip.amount, take.amount)
-                yield TakeTransfer(tip.tipper, take.member, transfer_amount)
+                transfers.append(TakeTransfer(tip.tipper, take.member, transfer_amount))
                 tip.amount -= transfer_amount
                 take.amount -= transfer_amount
                 if tip.amount == 0:
                     break
+        return transfers, leftover
 
     @staticmethod
     def pay_invoices(cursor, ts_start):
@@ -670,6 +674,21 @@ class Payday(object):
              WHERE t.id = t2.id
                AND t.is_funded <> t2.is_funded;
 
+            UPDATE takes t
+               SET actual_amount = t2.actual_amount
+              FROM ( SELECT t2.id
+                          , COALESCE((
+                                SELECT sum(amount)
+                                  FROM payday_transfers tr
+                                 WHERE tr.team = t2.team
+                                   AND tr.tippee = t2.member
+                                   AND tr.context = 'take'
+                            ), 0) AS actual_amount
+                       FROM current_takes t2
+                   ) t2
+             WHERE t.id = t2.id
+               AND t.actual_amount <> t2.actual_amount;
+
             UPDATE participants p
                SET giving = p2.giving
               FROM ( SELECT p2.id
@@ -712,6 +731,20 @@ class Payday(object):
              WHERE p.id = p2.id
                AND p.receiving <> p2.receiving
                AND p.status <> 'stub';
+
+            UPDATE participants p
+               SET leftover = p2.leftover
+              FROM ( SELECT p2.id
+                          , p2.receiving - COALESCE((
+                                SELECT sum(amount)
+                                  FROM payday_transfers t
+                                 WHERE t.tippee = p2.id
+                                    OR t.team = p2.id
+                            ), 0) AS leftover
+                       FROM participants p2
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.leftover <> p2.leftover;
 
             UPDATE participants p
                SET nteampatrons = p2.nteampatrons

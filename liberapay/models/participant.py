@@ -1502,8 +1502,6 @@ class Participant(Model, MixinTeam):
         return updated
 
     def update_receiving(self, cursor=None):
-        if self.kind == 'group':
-            old_takes = self.compute_actual_takes(cursor=cursor)
         r = (cursor or self.db).one("""
             WITH our_tips AS (
                      SELECT amount
@@ -1523,8 +1521,8 @@ class Participant(Model, MixinTeam):
         """, dict(id=self.id))
         self.set_attributes(receiving=r.receiving, npatrons=r.npatrons)
         if self.kind == 'group':
-            new_takes = self.compute_actual_takes(cursor=cursor)
-            self.update_taking(old_takes, new_takes, cursor=cursor)
+            with self.db.get_cursor(cursor) as c:
+                self.recompute_actual_takes(c)
 
 
     def set_tip_to(self, tippee, periodic_amount, period='weekly',
