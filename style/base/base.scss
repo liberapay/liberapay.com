@@ -112,6 +112,15 @@ body {
     }
 }
 
+.btn-donating {
+    $base-color: lighten(#f6c915, 5%);
+    background-color: $base-color;
+    color: #1a171b;
+    &:hover {
+        background-color: lighten($base-color, 10%);
+    }
+}
+
 input.amount {
     min-width: 5em;
     max-width: 8em;

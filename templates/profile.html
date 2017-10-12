@@ -50,14 +50,12 @@
                     % set tip = user.get_tip_to(participant)
                     % set donate_path = participant.path('donate')
                     % if tip['amount']
-                        <a class="btn btn-default" href="{{ donate_path }}">{{
-                            _("Modify your donation ({0})", Money(tip['amount'], 'EUR'))
+                        <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
+                            _("Donating ({amount})", amount=Money(tip.amount, 'EUR'))
                         }}</a>
                     % else
-                        <a class="btn btn-donate {{ 'btn-lg' if goal is none or receiving < goal else '' }}"
-                           href="{{ donate_path }}">
-                            {{ glyphicon('thumbs-up') }}
-                            <span>{{ _("Donate") }}</span>
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">
+                            {{ _("Donate") }}
                         </a>
                     % endif
                 % else
