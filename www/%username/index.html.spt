@@ -69,7 +69,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
     % set repos = participant.get_repos_for_profile()
     % if repos
-    <h3 class="default">{{ _("Repositories") }}</h3>
+    <h3>{{ _("Repositories") }}</h3>
     % for repo in repos
         {{ show_repo(repo) }}
     % endfor

@@ -1,5 +1,5 @@
 <div>
-    <h3>{{ _("Members") }}</h3>
+    <h3 class="{{ 'banderole default' if edit else '' }}">{{ _("Members") }}</h3>
     % from "templates/avatar-url.html" import avatar_img with context
     % set takes = participant.get_current_takes()
     <ul class="people">
