@@ -13,6 +13,8 @@ if lang:
     statement = participant.get_statement(lang)
 else:
     statement, lang = participant.get_statement(request.accept_langs)
+    if not statement:
+        lang = locale.language
 statement = markdown.render(statement) if statement else None
 summary = participant.get_statement(lang, 'summary')
 
