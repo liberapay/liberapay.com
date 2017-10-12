@@ -1,12 +1,12 @@
 % extends "templates/profile-base.html"
 % from 'templates/profile-box.html' import profile_box_full with context
 % from 'templates/avatar-url.html' import avatar_img with context
-% from "templates/profile-goal-bar.html" import profile_goal_bar with context
 
 % block before_content
 {% block profile_btn %}{% endblock %}
 <div class="row">
 <div class="col-xs-12 col-md-8 col-md-offset-2">
+% if participant.accepts_tips
     <header class="text-center padded">
         {{ avatar_img(participant, size=120) }}
         <h2>{{ participant.username }}</h2>
@@ -46,7 +46,6 @@
                     <p>{{ _("{0} gives {1} per week.", username, giving_str) }}</p>
                 % endif
 
-                % if participant.accepts_tips
                     % set tip = user.get_tip_to(participant)
                     % set donate_path = participant.path('donate')
                     % if tip['amount']
@@ -58,14 +57,13 @@
                             {{ _("Donate") }}
                         </a>
                     % endif
-                % else
-                    <p>{{ _("This user doesn't accept donations.") }}</p>
-                % endif
                 </div>
             </div>
         </div>
     </div>
-
+% else
+    {{ profile_box_full(participant) }}
+% endif
 % endblock
 
 % block after_content
