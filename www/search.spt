@@ -116,16 +116,14 @@ if query:
         <h3>{{ ngettext("Found a matching username",
                         "Found matching usernames",
                         len(usernames)) }}</h3>
-        <ul class="people">
         % for result in usernames
-        <li class="mini-user">
+        <div class="mini-user">
             <a href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="name">{{ result.username }}</div>
             </a>
-        </li>
+        </div>
         % endfor
-        </ul>
     </div>
     % endif
 

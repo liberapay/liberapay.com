@@ -300,22 +300,22 @@ ul.memberships {
     }
 }
 
-ul.people {
-    margin: 0;
-    padding: 0;
-}
-
-li.mini-user {
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.mini-user {
     display: inline-block;
-    margin-bottom: 5px;
-    padding: 5px;
-    text-align: center;
-    vertical-align: top;
-    width: 110px;
+    margin: 0 20px 25px;
+    width: 104px;
+    .avatar-cutter-98 {
+        border: 3px solid $gray-lighter;
+        border-radius: 20%;
+        box-sizing: content-box;
+        display: block;
+    }
     .name {
+        display: block;
+        margin-top: 5px;
+        max-height: 2 * $line-height-computed;
         overflow: hidden;
+        text-align: center;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
