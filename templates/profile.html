@@ -61,26 +61,11 @@
                 % else
                     <p>{{ _("This user doesn't accept donations.") }}</p>
                 % endif
+                </div>
             </div>
         </div>
     </div>
 
-    % if not edit
-    <div class="flex space-between">
-        <div>
-            <span>{{ _('Share:') }}</span>
-            <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}">
-                <i class="fa fa-lg fa-facebook-square"></i>
-            </a>
-            <a class="btn" href="https://twitter.com/intent/tweet?url={{ urlquote(participant.url()) }}">
-                <i class="fa fa-lg fa-twitter"></i>
-            </a>
-            <a class="btn" href="https://plus.google.com/share?url={{ urlquote(participant.url()) }}">
-                <i class="fa fa-lg fa-google-plus"></i>
-            </a>
-        </div>
-    </div>
-    % endif
 % endblock
 
 % block after_content
