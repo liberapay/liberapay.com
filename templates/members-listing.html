@@ -11,8 +11,8 @@
         </div>
     % endfor
     <br>
-    <p><a class="btn btn-default" href="{{ participant.path('income/') }}"
-          >{{ _("View income shares") }}</a></p>
+    <a class="btn btn-default" href="{{ participant.path('income/') }}"
+        >{{ _("View income shares") }}</a><br>
     % if edit
         <br>
         % include "templates/team-invite.html"
