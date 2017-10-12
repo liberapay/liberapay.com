@@ -391,7 +391,6 @@ ul.emails {
 }
 
 h2, h3, h4, h5, h6 {
-    margin-top: 1.5em;
     &:target {
         background-color: rgba(yellow, 0.2);
         animation: target-flash 1.5s 1;
@@ -421,6 +420,7 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
     }
 }
 .profile-statement {
+    font-family: $font-family-serif;
     h1, h2, h3, h4 {
         color: #956410;
     }
