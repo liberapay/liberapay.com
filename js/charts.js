@@ -14,7 +14,7 @@ Liberapay.charts.make = function(series, button) {
     } else if (button && $(button).data('msg-empty')) {
         var $btn = $(button);
         $btn.attr('disabled', '').prop('disabled');
-        $('#income').text(' ' + $btn.data('msg-empty'));
+        $btn.after($('<span>').text(' '+$btn.data('msg-empty')));
         return;
     } else {
         return;
