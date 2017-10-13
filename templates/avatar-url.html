@@ -5,8 +5,10 @@
 {# Using a new value for the size argument below requires creating the
    corresponding avatar-cutter-$size class. #}
 % macro avatar_img(account, size=98)
-<img class="avatar-cutter-{{ size }} avatar" src="{{ avatar_url(account) }}"
-    onerror="this.src = '{{ website.asset('avatar-default.png') }}'" />
+<div class="avatar-cutter-{{ size }}"><div class="avatar-centerer">
+<img class="avatar" src="{{ avatar_url(account) }}"
+     onerror="this.src = '{{ website.asset('avatar-default.png') }}'" />
+</div></div>
 % endmacro
 
 % macro avatar_default()
