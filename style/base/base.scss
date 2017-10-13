@@ -30,6 +30,10 @@ body {
     }
 }
 
+@mixin transition {
+    transition: all 0.1s ease-in;
+}
+
 #main {
     min-height: 75%;
 }
@@ -95,22 +99,25 @@ body {
     text-align: center;
 }
 
+.btn {
+    @include transition;
+}
+
 .btn-donate {
     $base-color: #ffee16;
     background-color: $base-color;
-    border-color: darken($base-color, 10%);
-    &.btn-lg {
-        border: none;
-        box-shadow: 0 0 5px $base-color;
-    }
     color: #1a171b;
     &:hover {
         background-color: lighten($base-color, 20%);
-        border-color: $base-color;
-        &.btn-lg {
-            border: none;
-            box-shadow: 0 0 5px lighten($base-color, 20%);
-        }
+    }
+}
+
+.btn-donating {
+    $base-color: lighten(#f6c915, 5%);
+    background-color: $base-color;
+    color: #1a171b;
+    &:hover {
+        background-color: lighten($base-color, 10%);
     }
 }
 
@@ -185,6 +192,32 @@ img.account-type {
     }
 }
 
+.profile-header {
+    color: $gray-dark;
+    margin: 60px auto 40px;
+    text-align: center;
+    .avatar-cutter-120 {
+        border: 4px solid $gray-lighter;
+        border-radius: 20%;
+        box-sizing: content-box;
+        display: inline-block;
+    }
+    & > h1 {
+        font-size: $font-size-h3;
+        margin: 60px 0 10px;
+    }
+    & > .summary {
+        color: $gray;
+        font-size: $font-size-medium;
+        min-height: $font-size-medium * $line-height-base;
+    }
+}
+.profile-header-bar {
+    background: $panel-default-heading-bg;
+    font-size: $font-size-medium;
+    margin-bottom: 30px;
+}
+
 p.summary {
     color: $gray-light;
 }
@@ -200,14 +233,6 @@ p.summary {
 .profile-box {
     .radio {
         margin-top: 0;
-    }
-}
-
-.profile-share {
-    float: right;
-    margin-top: -10px;
-    & > span {
-         vertical-align: middle;
     }
 }
 
@@ -310,22 +335,22 @@ ul.memberships {
     }
 }
 
-ul.people {
-    margin: 0;
-    padding: 0;
-}
-
-li.mini-user {
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.mini-user {
     display: inline-block;
-    margin-bottom: 5px;
-    padding: 5px;
-    text-align: center;
-    vertical-align: top;
-    width: 110px;
+    margin: 0 20px 25px;
+    width: 104px;
+    .avatar-cutter-98 {
+        border: 3px solid $gray-lighter;
+        border-radius: 20%;
+        box-sizing: content-box;
+        display: block;
+    }
     .name {
+        display: block;
+        margin-top: 5px;
+        max-height: 2 * $line-height-computed;
         overflow: hidden;
+        text-align: center;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -430,7 +455,7 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
     }
 }
 .profile-statement {
-    font-family: Georgia, Times, "Times New Roman", serif;
+    font-family: $font-family-serif;
     h1, h2, h3, h4 {
         color: #956410;
     }

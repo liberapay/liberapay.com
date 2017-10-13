@@ -19,6 +19,7 @@ from babel.numbers import (
     NumberFormatError, parse_decimal
 )
 import jinja2.ext
+from markupsafe import Markup
 from pando.utils import utcnow
 
 from liberapay.exceptions import InvalidNumber
@@ -26,6 +27,14 @@ from liberapay.website import website
 
 
 Money = namedtuple('Money', 'amount currency')
+Wrap = namedtuple('Wrap', 'value wrapper')
+
+
+BOLD = Markup('<b>%s</b>')
+
+
+def Bold(value):
+    return Wrap(value, BOLD)
 
 
 class Age(timedelta):
@@ -179,6 +188,7 @@ def i_format(loc, s, *a, **kw):
         a = list(a)
     for c, f in [(a, enumerate), (kw, dict.items)]:
         for k, o in f(c):
+            o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
             if isinstance(o, Decimal):
                 c[k] = format_decimal(o, locale=loc)
             elif isinstance(o, int):
@@ -191,6 +201,8 @@ def i_format(loc, s, *a, **kw):
                 c[k] = format_timedelta(o, locale=loc)
             elif isinstance(o, datetime):
                 c[k] = format_datetime(o, locale=loc)
+            if wrapper:
+                c[k] = wrapper % c[k]
     return s.format(*a, **kw)
 
 
@@ -215,6 +227,7 @@ def get_text(context, loc, s, *a, **kw):
 
 def n_get_text(state, loc, s, p, n, *a, **kw):
     escape = state['escape']
+    n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
     n = n or 0
     msg = loc.catalog.get((s, p) if s else p)
     s2 = None
@@ -227,6 +240,8 @@ def n_get_text(state, loc, s, p, n, *a, **kw):
         loc = LOCALE_EN
         s2 = s if n == 1 else p
     kw['n'] = format_number(n, locale=loc) or n
+    if wrapper:
+        kw['n'] = wrapper % kw['n']
     if isinstance(s2, bytes):
         s2 = s2.decode('ascii')
     return i_format(loc, escape(s2), *a, **kw)
@@ -322,6 +337,7 @@ def add_helpers_to_context(context, loc):
     context.update(
         escape=_return_,  # to be overriden by renderers
         locale=loc,
+        Bold=Bold,
         Money=Money,
         to_age=to_age,
         _=lambda s, *a, **kw: get_text(context, kw.pop('loc', loc), s, *a, **kw),

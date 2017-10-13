@@ -1,29 +1,96 @@
 % extends "templates/profile-base.html"
-% from 'templates/profile-box.html' import profile_box_full with context
+
+% from 'templates/avatar-url.html' import avatar_img with context
 
 % block before_content
 {% block profile_btn %}{% endblock %}
 <div class="row">
-<div class="col-xs-12 col-md-8 col-md-offset-2">
-    % block box
-        {{ profile_box_full(participant) }}
-    % endblock
-
-    % if not edit
-    <div class="profile-share">
-        <span>{{ _("Share:") }}</span>
-        <a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ urlquote(participant.url()) }}">
-            <i class="fa fa-lg fa-facebook-square"></i>
-        </a>
-        <a class="btn" href="https://twitter.com/intent/tweet?url={{ urlquote(participant.url()) }}">
-            <i class="fa fa-lg fa-twitter"></i>
-        </a>
-        <a class="btn" href="https://plus.google.com/share?url={{ urlquote(participant.url()) }}">
-            <i class="fa fa-lg fa-google-plus"></i>
-        </a>
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+% if participant.accepts_tips
+    <div class="profile-header">
+        {{ avatar_img(participant, size=120) }}
+        <h1>{{ participant.username }}</h1>
+        <p class="summary">{{ summary or '' }}</p>
     </div>
-    <div class="clearfix"></div>
-    % endif
+
+    <div class="profile-header-bar full-width">
+        <div class="container">
+        <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <div class="flex-row space-between wrap">
+                % set username = participant.username
+                % set npatrons = Bold(participant.npatrons)
+                % set receiving = participant.receiving
+                % set goal = participant.goal
+                % set receiving_str = Bold(Money(receiving, 'EUR'))
+                % set goal_str = goal and Bold(Money(goal, 'EUR'))
+
+                <div class="flex-col expand-xs text-center-xs">
+                % if participant.hide_receiving
+                    {{ ngettext(
+                        "{0} has {n} patron.",
+                        "{0} has {n} patrons.",
+                        npatrons, username
+                    ) }}
+                % elif goal and not receiving
+                    {{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}
+                % else
+                    {{ ngettext(
+                        "{0} receives {1} per week from {n} patron.",
+                        "{0} receives {1} per week from {n} patrons.",
+                        npatrons, username, receiving_str
+                    ) }}
+                    % if goal
+                        {{ _("Goal: {0}", goal_str).replace(' ', '&nbsp;'|safe) }}
+                    % endif
+                % endif
+                </div>
+
+                <div class="flex-col expand-xs text-center-xs">
+                    % set tip = user.get_tip_to(participant)
+                    % set donate_path = participant.path('donate')
+                    % if tip['amount']
+                        <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
+                            _("Donating ({amount})", amount=Money(tip.amount, 'EUR'))
+                        }}</a>
+                    % else
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">
+                            {{ _("Donate") }}
+                        </a>
+                    % endif
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </div>
+% else
+    <div class="panel panel-default profile-box">
+        <div class="panel-body">
+            <div class="avatar-col">
+                {{ avatar_img(participant, size=120) }}
+
+                % if participant.join_time
+                <p class="join-time">{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
+                % endif
+                % if participant.status == 'closed'
+                <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
+                % endif
+            </div>
+
+            <div class="col-right">
+                % set username = participant.username
+                % if participant.hide_giving
+                    <p>{{ _("{0} doesn't publish how much they give.", username) }}</p>
+                % else
+                    <p>{{ _("{0} gives {1} per week.", username, Money(participant.giving, 'EUR')) }}</p>
+                % endif
+
+                <p>{{ _("This user doesn't accept donations.") }}</p>
+            </div>
+        </div>
+    </div>
+% endif
 % endblock
 
 % block after_content

@@ -1,6 +1,6 @@
 % set teams = participant.get_teams()
 % if teams or edit
-    <h3 class="banderole default">{{ _("Teams") }}</h3>
+    <h3 class="{{ 'banderole default' if edit else '' }}">{{ _("Teams") }}</h3>
     <ul class="team memberships">
         % for team in teams
         <li>
