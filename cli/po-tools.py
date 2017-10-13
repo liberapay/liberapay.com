@@ -64,6 +64,28 @@ elif sys.argv[1] == 'fuzz':
         with open(po_path, 'wb') as po:
             write_po(po, catalog, width=0)
 
+elif sys.argv[1] == 'unflag-empty-fuzzy':
+    po_path = sys.argv[2]
+    print('removing fuzzy flags on empty messages in PO file', po_path)
+    # read PO file
+    lang = po_path.rsplit('/', 1)[-1].split('.', 1)[0]
+    with open(po_path, 'rb') as po:
+        catalog = read_po(po, locale=lang)
+    # replace old msg
+    for m in catalog:
+        if m.fuzzy and not m.string:
+            m.flags.discard('fuzzy')
+        msg = m.id
+        contains_brace = any(
+            '{' in s for s in (msg if isinstance(msg, tuple) else (msg,))
+        )
+        if contains_brace:
+            m.flags.add('python-brace-format')
+        m.flags.discard('python-format')
+    # write back
+    with open(po_path, 'wb') as po:
+        write_po(po, catalog, width=0)
+
 else:
     print("unknown command")
     raise SystemExit(1)
