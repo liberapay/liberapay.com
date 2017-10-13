@@ -16,6 +16,9 @@
     .text-center-xs {
         text-align: center;
     }
+    .expand-xs {
+        width: 100%;
+    }
 }
 
 .paragraph {
@@ -31,15 +34,20 @@
     overflow: visible;
 }
 
-.flex {
+.flex-row {
     display: flex;
     align-items: center;
+    margin-right: -10px;
+}
+
+.flex-col {
+    margin: 10px 10px 10px 0;
 }
 
 .space-between {
     justify-content: space-between;
 }
 
-.padded {
-    margin: 100px auto;
+.wrap {
+    flex-wrap: wrap;
 }

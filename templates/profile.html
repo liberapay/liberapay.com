@@ -5,7 +5,7 @@
 % block before_content
 {% block profile_btn %}{% endblock %}
 <div class="row">
-<div class="col-xs-12 col-md-8 col-md-offset-2">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 % if participant.accepts_tips
     <div class="profile-header">
         {{ avatar_img(participant, size=120) }}
@@ -15,7 +15,9 @@
 
     <div class="profile-header-bar full-width">
         <div class="container">
-            <div class="col-xs-12 col-md-8 col-md-offset-2 flex space-between">
+        <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <div class="flex-row space-between wrap">
                 % set username = participant.username
                 % set giving = participant.giving
                 % set receiving = participant.receiving
@@ -24,6 +26,7 @@
                 % set receiving_str = Money(receiving, 'EUR')
                 % set goal_str = goal and Money(goal, 'EUR')
 
+                <div class="flex-col expand-xs text-center-xs">
                 % if participant.hide_giving or participant.hide_receiving
                     <p>{{ _("{0} doesn't publish how much they give and receive.", username) }}</p>
                 % elif goal == None
@@ -45,7 +48,9 @@
                 % else
                     <p>{{ _("{0} gives {1} per week.", username, giving_str) }}</p>
                 % endif
+                </div>
 
+                <div class="flex-col expand-xs text-center-xs">
                     % set tip = user.get_tip_to(participant)
                     % set donate_path = participant.path('donate')
                     % if tip['amount']
@@ -59,6 +64,8 @@
                     % endif
                 </div>
             </div>
+        </div>
+        </div>
         </div>
     </div>
 % else
