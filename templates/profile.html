@@ -19,34 +19,30 @@
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
             <div class="flex-row space-between wrap">
                 % set username = participant.username
-                % set giving = participant.giving
+                % set npatrons = Bold(participant.npatrons)
                 % set receiving = participant.receiving
                 % set goal = participant.goal
-                % set giving_str = Money(giving, 'EUR')
-                % set receiving_str = Money(receiving, 'EUR')
-                % set goal_str = goal and Money(goal, 'EUR')
+                % set receiving_str = Bold(Money(receiving, 'EUR'))
+                % set goal_str = goal and Bold(Money(goal, 'EUR'))
 
                 <div class="flex-col expand-xs text-center-xs">
-                % if participant.hide_giving or participant.hide_receiving
-                    <p>{{ _("{0} doesn't publish how much they give and receive.", username) }}</p>
-                % elif goal == None
-                    % if participant.kind != 'group'
-                        <p>{{ _("{0} receives {1} and gives {2} per week.", username, receiving_str, giving_str) }}</p>
-                    % else
-                        <p>{{ _("{0} receives {1} per week.", username, receiving_str, giving_str) }}</p>
-                    % endif
-                % elif goal > 0
-                    % if receiving == 0
-                        <p>{{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}</p>
-                        <p>{{ _("Be the first to contribute!") }}</p>
-                    % else
-                        <p>
-                            {{ _("Goal: {0}", Money(participant.goal, 'EUR')) }},
-                            {{ _("Income: {0}/week", Money(participant.receiving, 'EUR')) }}
-                        </p>
-                    % endif
+                % if participant.hide_receiving
+                    {{ ngettext(
+                        "{0} has {n} patron.",
+                        "{0} has {n} patrons.",
+                        npatrons, username
+                    ) }}
+                % elif goal and not receiving
+                    {{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}
                 % else
-                    <p>{{ _("{0} gives {1} per week.", username, giving_str) }}</p>
+                    {{ ngettext(
+                        "{0} receives {1} per week from {n} patron.",
+                        "{0} receives {1} per week from {n} patrons.",
+                        npatrons, username, receiving_str
+                    ) }}
+                    % if goal
+                        {{ _("Goal: {0}", goal_str).replace(' ', '&nbsp;'|safe) }}
+                    % endif
                 % endif
                 </div>
 
