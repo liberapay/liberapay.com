@@ -1031,8 +1031,50 @@ msgstr ""
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
-msgid "Modify your avatar"
+msgid "Patrons"
 msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "per week"
+msgstr ""
+
+msgid "Sum"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Goal: {0}"
+msgstr "目標：{0}"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr ""
+
+#, fuzzy
+msgid "Mission accomplished!"
+msgstr "目標達成!"
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "{0} は週 {1} 受け取るのが目標です。"
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr ""
+
+msgid "Donate"
+msgstr "寄付する"
 
 #, python-brace-format
 msgid "Joined {0} ago."
@@ -1043,57 +1085,15 @@ msgid "Closed {0} ago."
 msgstr ""
 
 #, python-brace-format
-msgid "{0} doesn't publish how much they give and receive."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} receives {1} and gives {2} per week."
-msgstr "{0} は週に {1} 受け取り、{2} 寄付しています。"
-
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} は週に {1} 受け取っています。"
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "{0} は週 {1} 受け取るのが目標です。"
-
-msgid "Be the first to contribute!"
+msgid "{0} doesn't publish how much they give."
 msgstr ""
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
 msgstr ""
 
-#, python-brace-format
-msgid "Modify your donation ({0})"
-msgstr ""
-
-msgid "Donate"
-msgstr "寄付する"
-
 msgid "This user doesn't accept donations."
 msgstr ""
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr ""
-
-#, python-brace-format
-msgid "{n} member"
-msgid_plural "{n} members"
-msgstr[0] ""
-
-#, fuzzy, python-brace-format
-msgid "Goal: {0}"
-msgstr "目標：{0}"
-
-#, fuzzy
-msgid "Mission accomplished!"
-msgstr "目標達成!"
-
-msgid "Share:"
-msgstr "共有："
 
 msgid "(fork)"
 msgstr ""
@@ -1187,9 +1187,6 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-msgid "per week"
-msgstr ""
-
 msgid "per month"
 msgstr ""
 
@@ -1263,6 +1260,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
+msgstr ""
+
+msgid "Be the first to contribute!"
 msgstr ""
 
 #, python-brace-format
@@ -1630,7 +1630,11 @@ msgstr ""
 msgid "{username}'s profile"
 msgstr ""
 
-msgid "Income history"
+msgid "History"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} joined {1} ago."
 msgstr ""
 
 msgid "No data to show."
@@ -1709,9 +1713,6 @@ msgid "Send"
 msgstr ""
 
 msgid "Accept and Pay"
-msgstr ""
-
-msgid "History"
 msgstr ""
 
 #, python-brace-format
@@ -1858,6 +1859,10 @@ msgstr ""
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr ""
+
+#, python-brace-format
+msgid "{0} receives {1} per week."
+msgstr "{0} は週に {1} 受け取っています。"
 
 msgid "You are not a member of any team."
 msgstr ""
@@ -2961,6 +2966,9 @@ msgstr ""
 msgid "Recent pledges"
 msgstr ""
 
+msgid "Top pledges"
+msgstr ""
+
 msgid "There are no pledges right now."
 msgstr ""
 
@@ -3223,11 +3231,6 @@ msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
 msgstr[0] ""
 
-#, python-brace-format
-msgid "A Liberapay user has pledged to donate {0} per week to {1}."
-msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] ""
-
 msgid "Explore pledges"
 msgstr ""
 
@@ -3238,6 +3241,11 @@ msgstr ""
 #, python-brace-format
 msgid "Profile on {0}"
 msgstr ""
+
+#, python-brace-format
+msgid "A Liberapay user has pledged to donate {0} per week to {1}."
+msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
@@ -3407,6 +3415,11 @@ msgstr[0] ""
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} member"
+msgid_plural "{n} members"
 msgstr[0] ""
 
 msgid "Found a matching repository"

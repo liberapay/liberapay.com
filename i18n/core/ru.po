@@ -1012,8 +1012,53 @@ msgstr "Сохранить изменения"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Ссылка на профили Liberapay осуществляется с разрешения администрации сайта."
 
-msgid "Modify your avatar"
-msgstr "Изменить аватар"
+msgid "Patrons"
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "per week"
+msgstr "в неделю"
+
+msgid "Sum"
+msgstr ""
+
+#, python-brace-format
+msgid "Goal: {0}"
+msgstr "Цель: {0}"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Доход: {0}/неделю"
+
+msgid "Mission accomplished!"
+msgstr "Цель достигнута!"
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "Цель {0} - получать {1} в неделю."
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr ""
+
+msgid "Donate"
+msgstr "Поддержать"
 
 #, python-brace-format
 msgid "Joined {0} ago."
@@ -1024,58 +1069,15 @@ msgid "Closed {0} ago."
 msgstr "Закрыт {0} назад."
 
 #, python-brace-format
-msgid "{0} doesn't publish how much they give and receive."
-msgstr "{0} не публикует информации о том, сколько он(а) отдают и получает."
-
-#, python-brace-format
-msgid "{0} receives {1} and gives {2} per week."
-msgstr "{0} получает {1} и отдаёт {2} в неделю."
-
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} получает {1} в неделю."
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "Цель {0} - получать {1} в неделю."
-
-msgid "Be the first to contribute!"
-msgstr "Будьте первым, кто сделает пожертвование!"
+msgid "{0} doesn't publish how much they give."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
 msgstr "{0} отдаёт {1} в неделю."
 
-#, python-brace-format
-msgid "Modify your donation ({0})"
-msgstr "Изменить размер пожертвования ({0})"
-
-msgid "Donate"
-msgstr "Поддержать"
-
 msgid "This user doesn't accept donations."
 msgstr "Этот пользователь не принимает пожертвования."
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Доход: {0}/неделю"
-
-#, python-brace-format
-msgid "{n} member"
-msgid_plural "{n} members"
-msgstr[0] "{n} участник"
-msgstr[1] "{n} участника"
-msgstr[2] "{n} участников"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Цель: {0}"
-
-msgid "Mission accomplished!"
-msgstr "Цель достигнута!"
-
-msgid "Share:"
-msgstr "Поделиться:"
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1167,9 +1169,6 @@ msgstr "Остановить"
 msgid "Amount"
 msgstr "Сумма"
 
-msgid "per week"
-msgstr "в неделю"
-
 msgid "per month"
 msgstr "в месяц"
 
@@ -1244,6 +1243,9 @@ msgstr "Этот аккаунт временно отключён, пожерт�
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
 msgstr "В данный момент {0} получает {1} в неделю, ему(ей) нужна ваша помощь, чтобы достичь цели финансирования ({2} в неделю)."
+
+msgid "Be the first to contribute!"
+msgstr "Будьте первым, кто сделает пожертвование!"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
@@ -1345,9 +1347,7 @@ msgid "Edit"
 msgstr "Редактировать"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
-msgstr ""
-"Опишите свою работу, почему вы просите делать пожертвования, и т.д. Нам "
-"нужно как краткое, так и полное описание."
+msgstr "Опишите свою работу, почему вы просите делать пожертвования, и т.д. Нам нужно как краткое, так и полное описание."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
 msgstr "Liberapay позволяет делать ваши тексты интернациональными. Используйте переключатель внизу, чтобы выбрать язык."
@@ -1619,8 +1619,12 @@ msgstr "Ваша выручка в данный момент составляе�
 msgid "{username}'s profile"
 msgstr "Профиль {username}"
 
-msgid "Income history"
-msgstr "История прибыли"
+msgid "History"
+msgstr "История"
+
+#, python-brace-format
+msgid "{0} joined {1} ago."
+msgstr ""
 
 msgid "No data to show."
 msgstr "Нет данных для отображения."
@@ -1699,9 +1703,6 @@ msgstr "Отправить"
 
 msgid "Accept and Pay"
 msgstr "Принять и оплатить"
-
-msgid "History"
-msgstr "История"
 
 #, python-brace-format
 msgid "Message: {0}"
@@ -1847,6 +1848,10 @@ msgstr "Итого:"
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr "ID транзакции: {0}"
+
+#, python-brace-format
+msgid "{0} receives {1} per week."
+msgstr "{0} получает {1} в неделю."
 
 msgid "You are not a member of any team."
 msgstr "Вы не состоите ни в одной команде."
@@ -2177,11 +2182,7 @@ msgid "You haven't set up any donations yet, once you do you'll be prompted to a
 msgstr "Вы ещё не настроили пожертвования. Как только вы это сделаете, вас попросят добавить деньги на аккаунт."
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr ""
-"Вы не можете добавлять деньги, если ваши пожертвования полностью "
-"обеспечиваются за счёт пожертвований, которые делают вам. Если это проблема "
-"для вас, пожалуйста, отправьте письмо на support@liberapay.com и объясните, "
-"почему."
+msgstr "Вы не можете добавлять деньги, если ваши пожертвования полностью обеспечиваются за счёт пожертвований, которые делают вам. Если это проблема для вас, пожалуйста, отправьте письмо на support@liberapay.com и объясните, почему."
 
 msgid "Please choose a payment method:"
 msgstr "Выберите способ оплаты:"
@@ -2985,6 +2986,9 @@ msgstr "Liberapay позволяет делать подарки людям, к�
 msgid "Recent pledges"
 msgstr "Недавние подарки"
 
+msgid "Top pledges"
+msgstr ""
+
 msgid "There are no pledges right now."
 msgstr "В данный момент нет подарков."
 
@@ -3270,13 +3274,6 @@ msgstr[0] "{0} - команда с {n} открытым участником"
 msgstr[1] "{0} - команда с {n} открытыми участниками"
 msgstr[2] "{0} - команда с {n} открытыми участниками"
 
-#, python-brace-format
-msgid "A Liberapay user has pledged to donate {0} per week to {1}."
-msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] "Пользователь Liberapay пообещал делать пожертвование в {0} в неделю для {1}."
-msgstr[1] "{n} пользователя Liberapay пообещали делать пожертвования на общую сумму в {0} в неделю для {1}."
-msgstr[2] "{n} пользователей Liberapay пообещали делать пожертвования на общую сумму в {0} в неделю для {1}."
-
 msgid "Explore pledges"
 msgstr "Список подарков"
 
@@ -3287,6 +3284,13 @@ msgstr "Эта страница посвящена пользователю {use
 #, python-brace-format
 msgid "Profile on {0}"
 msgstr "Профиль на {0}"
+
+#, python-brace-format
+msgid "A Liberapay user has pledged to donate {0} per week to {1}."
+msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
+msgstr[0] "Пользователь Liberapay пообещал делать пожертвование в {0} в неделю для {1}."
+msgstr[1] "{n} пользователя Liberapay пообещали делать пожертвования на общую сумму в {0} в неделю для {1}."
+msgstr[2] "{n} пользователей Liberapay пообещали делать пожертвования на общую сумму в {0} в неделю для {1}."
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
@@ -3463,6 +3467,13 @@ msgid_plural "Found matching community names"
 msgstr[0] "Найти совпадающее название сообщества"
 msgstr[1] "Найти совпадающие названия сообществ"
 msgstr[2] "Найти совпадающие названия сообществ"
+
+#, python-brace-format
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] "{n} участник"
+msgstr[1] "{n} участника"
+msgstr[2] "{n} участников"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"

@@ -1009,8 +1009,51 @@ msgstr "Salvar as alterações"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
-msgid "Modify your avatar"
-msgstr "Modificar seu avatar"
+msgid "Patrons"
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "per week"
+msgstr "por semana"
+
+msgid "Sum"
+msgstr ""
+
+#, python-brace-format
+msgid "Goal: {0}"
+msgstr "Objetivo: {0}"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Renda: {0} / semana"
+
+msgid "Mission accomplished!"
+msgstr "Missão cumprida!"
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "objetivo do {0} é receber {1} por semana."
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr ""
+
+msgid "Donate"
+msgstr "Doar"
 
 #, python-brace-format
 msgid "Joined {0} ago."
@@ -1021,57 +1064,15 @@ msgid "Closed {0} ago."
 msgstr "{0} fechado atrás."
 
 #, python-brace-format
-msgid "{0} doesn't publish how much they give and receive."
-msgstr "{0} não divulga quanto eles dar e recebem."
-
-#, python-brace-format
-msgid "{0} receives {1} and gives {2} per week."
-msgstr "{0} {1} de recebe e dá {2} por semana."
-
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} recebe {1} por semana."
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "objetivo do {0} é receber {1} por semana."
-
-msgid "Be the first to contribute!"
-msgstr "Seja o primeiro a contribuir!"
+msgid "{0} doesn't publish how much they give."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
 msgstr "Dá a {0} {1} por semana."
 
-#, python-brace-format
-msgid "Modify your donation ({0})"
-msgstr "Modificar a sua doação ({0})"
-
-msgid "Donate"
-msgstr "Doar"
-
 msgid "This user doesn't accept donations."
 msgstr "Este usuário não aceita doações."
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Renda: {0} / semana"
-
-#, python-brace-format
-msgid "{n} member"
-msgid_plural "{n} members"
-msgstr[0] "{n} membro"
-msgstr[1] "{n}membro"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Objetivo: {0}"
-
-msgid "Mission accomplished!"
-msgstr "Missão cumprida!"
-
-msgid "Share:"
-msgstr "Compartilhar:"
 
 msgid "(fork)"
 msgstr ""
@@ -1164,9 +1165,6 @@ msgstr ""
 msgid "Amount"
 msgstr "Quantidade"
 
-msgid "per week"
-msgstr "por semana"
-
 msgid "per month"
 msgstr ""
 
@@ -1241,6 +1239,9 @@ msgstr "Esta conta está temporariamente suspenso, doações a ele não serão p
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
 msgstr ""
+
+msgid "Be the first to contribute!"
+msgstr "Seja o primeiro a contribuir!"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
@@ -1613,8 +1614,12 @@ msgstr "Sua parte é agora {0}."
 msgid "{username}'s profile"
 msgstr ""
 
-msgid "Income history"
-msgstr "História da renda"
+msgid "History"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} joined {1} ago."
+msgstr ""
 
 msgid "No data to show."
 msgstr "Sem dados para mostrar."
@@ -1692,9 +1697,6 @@ msgid "Send"
 msgstr ""
 
 msgid "Accept and Pay"
-msgstr ""
-
-msgid "History"
 msgstr ""
 
 #, python-brace-format
@@ -1841,6 +1843,10 @@ msgstr "Total:"
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr "ID da transação: {0}"
+
+#, python-brace-format
+msgid "{0} receives {1} per week."
+msgstr "{0} recebe {1} por semana."
 
 msgid "You are not a member of any team."
 msgstr "Você não é um membro de qualquer equipe."
@@ -2959,6 +2965,9 @@ msgstr "Liberapay permite que você candidato doar para as pessoas que ainda nã
 msgid "Recent pledges"
 msgstr "Últimos candidatos"
 
+msgid "Top pledges"
+msgstr ""
+
 msgid "There are no pledges right now."
 msgstr "Agora existem sem inscritas."
 
@@ -3235,12 +3244,6 @@ msgid_plural "{0} is a team with {n} public members"
 msgstr[0] "{0} é um time com {n} membro público"
 msgstr[1] "{0} é um time com {n} membros públicos"
 
-#, fuzzy, python-brace-format
-msgid "A Liberapay user has pledged to donate {0} per week to {1}."
-msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] "Um usuário de Liberapay se comprometeu a doar {0} por semana para {1}."
-msgstr[1] "{n} usuários de Liberapay se comprometeu a doar {0} por semana para {1}."
-
 msgid "Explore pledges"
 msgstr "Explore os candidatos"
 
@@ -3251,6 +3254,12 @@ msgstr ""
 #, python-brace-format
 msgid "Profile on {0}"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "A Liberapay user has pledged to donate {0} per week to {1}."
+msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
+msgstr[0] "Um usuário de Liberapay se comprometeu a doar {0} por semana para {1}."
+msgstr[1] "{n} usuários de Liberapay se comprometeu a doar {0} por semana para {1}."
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
@@ -3424,6 +3433,12 @@ msgid "Found a matching community name"
 msgid_plural "Found matching community names"
 msgstr[0] "Encontrado um nome de comunidade correspondente"
 msgstr[1] "Encontrados nomes de comunidades correspondentes"
+
+#, python-brace-format
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] "{n} membro"
+msgstr[1] "{n}membro"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"

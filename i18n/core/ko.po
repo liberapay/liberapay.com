@@ -389,9 +389,7 @@ msgid "The username '{0}' begins with a restricted character."
 msgstr "사용자 이름 '{0}'은/는 제한된 문자로 시작합니다."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
-msgstr ""
-"계정 이름을 최근에 너무 자주 바꾸셨습니다. 나중에 (예: 다음 주) 다시 시도하거나 support@liberapay.com 에 연락해 "
-"주세요."
+msgstr "계정 이름을 최근에 너무 자주 바꾸셨습니다. 나중에 (예: 다음 주) 다시 시도하거나 support@liberapay.com 에 연락해 주세요."
 
 #, python-brace-format
 msgid "{0} is already connected to a different Liberapay account."
@@ -429,10 +427,7 @@ msgid "There have been too many attempts to log in to this account recently, ple
 msgstr "최근에 이 계정으로 로그인하려는 시도가 너무 많이 있었습니다. 몇 시간 후에 다시 시도하거나 이메일로 로그인해 주세요."
 
 msgid "Too many accounts have been created recently. This either means that a lot of people are trying to join Liberapay today, or that an attacker is trying to overload our system. As a result we have to ask you to come back later (e.g. in a few hours), or send an email to support@liberapay.com. We apologize for the inconvenience."
-msgstr ""
-"최근에 너무 많은 계정이 생성되었습니다. 이것은 오늘 많은 사람이 Liberapay에 가입하고 있거나, 악의적인 의도를 가진 사람이 "
-"저희의 시스템을 공격하려는 의도일 수 있습니다. 나중에 (예: 몇 시간 후에) 돌아오시거나 support@liberapay.com 으로 "
-"이메일을 보내 주세요. 불편을 끼쳐 드려 죄송합니다."
+msgstr "최근에 너무 많은 계정이 생성되었습니다. 이것은 오늘 많은 사람이 Liberapay에 가입하고 있거나, 악의적인 의도를 가진 사람이 저희의 시스템을 공격하려는 의도일 수 있습니다. 나중에 (예: 몇 시간 후에) 돌아오시거나 support@liberapay.com 으로 이메일을 보내 주세요. 불편을 끼쳐 드려 죄송합니다."
 
 #, python-brace-format
 msgid "The password must be at least {0} and at most {1} characters long."
@@ -1011,8 +1006,49 @@ msgstr "바뀐 내용 저장"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
-msgid "Modify your avatar"
-msgstr "아바타 변경하기"
+msgid "Patrons"
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "per week"
+msgstr "매주"
+
+msgid "Sum"
+msgstr ""
+
+#, python-brace-format
+msgid "Goal: {0}"
+msgstr "목표: {0}"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "수입: {0}/주"
+
+msgid "Mission accomplished!"
+msgstr "목표 달성!"
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "{0} 님의 목표는 매주 {1} 만큼을 받는 것입니다."
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr ""
+
+msgid "Donate"
+msgstr "기부하기"
 
 #, python-brace-format
 msgid "Joined {0} ago."
@@ -1023,56 +1059,15 @@ msgid "Closed {0} ago."
 msgstr "{0} 전에 닫힘."
 
 #, python-brace-format
-msgid "{0} doesn't publish how much they give and receive."
-msgstr "{0} 님은 자신의 기부 내역을 공개하지 않습니다."
-
-#, python-brace-format
-msgid "{0} receives {1} and gives {2} per week."
-msgstr "{0} 님은 매주 {1} 만큼을 기부받고 {2} 만큼을 기부합니다."
-
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} 님은 매주 {1} 만큼을 받습니다."
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "{0} 님의 목표는 매주 {1} 만큼을 받는 것입니다."
-
-msgid "Be the first to contribute!"
-msgstr "첫 기여자가 되어 보세요!"
+msgid "{0} doesn't publish how much they give."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
 msgstr "{0} 님은 매주 {1} 만큼을 기부합니다."
 
-#, python-brace-format
-msgid "Modify your donation ({0})"
-msgstr "기부액 수정하기 ({0})"
-
-msgid "Donate"
-msgstr "기부하기"
-
 msgid "This user doesn't accept donations."
 msgstr "이 사용자는 기부를 받지 않습니다."
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "수입: {0}/주"
-
-#, python-brace-format
-msgid "{n} member"
-msgid_plural "{n} members"
-msgstr[0] "{n} 회원"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "목표: {0}"
-
-msgid "Mission accomplished!"
-msgstr "목표 달성!"
-
-msgid "Share:"
-msgstr "공유:"
 
 msgid "(fork)"
 msgstr "(포크)"
@@ -1164,9 +1159,6 @@ msgstr "중지"
 msgid "Amount"
 msgstr "금액"
 
-msgid "per week"
-msgstr "매주"
-
 msgid "per month"
 msgstr "매달"
 
@@ -1241,6 +1233,9 @@ msgstr "이 계정은 일시적으로 정지되었으며, 기부금은 처리되
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
 msgstr "{0} 님은 현재 매주 {1} 만큼을 받고 있으며, 목표 금액 (매주 {2})을 달성하기 위해 당신의 도움이 필요합니다."
+
+msgid "Be the first to contribute!"
+msgstr "첫 기여자가 되어 보세요!"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
@@ -1610,8 +1605,12 @@ msgstr "지분은 {0} 입니다."
 msgid "{username}'s profile"
 msgstr "{username} 님의 프로필"
 
-msgid "Income history"
-msgstr "수익 기록"
+msgid "History"
+msgstr "역사"
+
+#, python-brace-format
+msgid "{0} joined {1} ago."
+msgstr ""
 
 msgid "No data to show."
 msgstr "보여줄 데이터가 없습니다."
@@ -1690,9 +1689,6 @@ msgstr "발송"
 
 msgid "Accept and Pay"
 msgstr "승인하고 지불"
-
-msgid "History"
-msgstr "역사"
 
 #, python-brace-format
 msgid "Message: {0}"
@@ -1838,6 +1834,10 @@ msgstr "총 금액:"
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr "거래 ID:{0}"
+
+#, python-brace-format
+msgid "{0} receives {1} per week."
+msgstr "{0} 님은 매주 {1} 만큼을 받습니다."
 
 msgid "You are not a member of any team."
 msgstr "어떤 팀에도 소속되어 있지 않습니다."
@@ -2942,6 +2942,9 @@ msgstr ""
 msgid "Recent pledges"
 msgstr ""
 
+msgid "Top pledges"
+msgstr ""
+
 msgid "There are no pledges right now."
 msgstr ""
 
@@ -3204,11 +3207,6 @@ msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
 msgstr[0] ""
 
-#, python-brace-format
-msgid "A Liberapay user has pledged to donate {0} per week to {1}."
-msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] ""
-
 msgid "Explore pledges"
 msgstr ""
 
@@ -3219,6 +3217,11 @@ msgstr ""
 #, python-brace-format
 msgid "Profile on {0}"
 msgstr ""
+
+#, python-brace-format
+msgid "A Liberapay user has pledged to donate {0} per week to {1}."
+msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
@@ -3389,6 +3392,11 @@ msgstr[0] "일치하는 사용자 이름 존재"
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
 msgstr[0] "일치하는 커뮤니티 이름 찾음"
+
+#, python-brace-format
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] "{n} 회원"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"

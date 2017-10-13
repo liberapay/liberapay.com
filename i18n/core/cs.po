@@ -1012,8 +1012,53 @@ msgstr "Uložit změny"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Odkazování Liberapay profilů podléhá schválení správcem."
 
-msgid "Modify your avatar"
-msgstr "Upravte si váš avatar"
+msgid "Patrons"
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "per week"
+msgstr "týdně"
+
+msgid "Sum"
+msgstr ""
+
+#, python-brace-format
+msgid "Goal: {0}"
+msgstr "Cíl: {0}"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Příjmy: {0} / týden"
+
+msgid "Mission accomplished!"
+msgstr "Mise splněna!"
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "{0} by chtěl dostávat {1} týdně."
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr ""
+
+msgid "Donate"
+msgstr "Přispívejte"
 
 #, python-brace-format
 msgid "Joined {0} ago."
@@ -1024,58 +1069,15 @@ msgid "Closed {0} ago."
 msgstr "Uzavřen před {0}."
 
 #, python-brace-format
-msgid "{0} doesn't publish how much they give and receive."
-msgstr "{0} nezveřejňuje kolik dostává nebo dává."
-
-#, python-brace-format
-msgid "{0} receives {1} and gives {2} per week."
-msgstr "{0} dostává {1} a dává {2} týdně."
-
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} dostává {1} týdně."
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "{0} by chtěl dostávat {1} týdně."
-
-msgid "Be the first to contribute!"
-msgstr "Buďte první, kdo přispěje!"
+msgid "{0} doesn't publish how much they give."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
 msgstr "{0} dává {1} týdně."
 
-#, python-brace-format
-msgid "Modify your donation ({0})"
-msgstr "Upravte svůj dar ({0})"
-
-msgid "Donate"
-msgstr "Přispívejte"
-
 msgid "This user doesn't accept donations."
 msgstr "Tento uživatel nechce přijímat příspěvky."
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Příjmy: {0} / týden"
-
-#, python-brace-format
-msgid "{n} member"
-msgid_plural "{n} members"
-msgstr[0] "{n} člen"
-msgstr[1] "{n} členi"
-msgstr[2] "{n} členů"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Cíl: {0}"
-
-msgid "Mission accomplished!"
-msgstr "Mise splněna!"
-
-msgid "Share:"
-msgstr "Sdílejte:"
 
 msgid "(fork)"
 msgstr "(odštěpeno)"
@@ -1167,9 +1169,6 @@ msgstr "Zastavit"
 msgid "Amount"
 msgstr "Částka"
 
-msgid "per week"
-msgstr "týdně"
-
 msgid "per month"
 msgstr "měsíčně"
 
@@ -1244,6 +1243,9 @@ msgstr "Tento účet je dočasně pozastaven, příspěvky pro něj nebudou zpra
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
 msgstr ""
+
+msgid "Be the first to contribute!"
+msgstr "Buďte první, kdo přispěje!"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
@@ -1618,8 +1620,12 @@ msgstr "Váš podíl je nyní {0}."
 msgid "{username}'s profile"
 msgstr ""
 
-msgid "Income history"
-msgstr "Historie příjmů"
+msgid "History"
+msgstr "Historie"
+
+#, python-brace-format
+msgid "{0} joined {1} ago."
+msgstr ""
 
 msgid "No data to show."
 msgstr "Není co zobrazit."
@@ -1698,9 +1704,6 @@ msgstr "Odeslat"
 
 msgid "Accept and Pay"
 msgstr "Přijmout a zaplatit"
-
-msgid "History"
-msgstr "Historie"
 
 #, python-brace-format
 msgid "Message: {0}"
@@ -1846,6 +1849,10 @@ msgstr "Celkem:"
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr "ID transakce: {0}"
+
+#, python-brace-format
+msgid "{0} receives {1} per week."
+msgstr "{0} dostává {1} týdně."
 
 msgid "You are not a member of any team."
 msgstr "Nejste členem žádného týmu."
@@ -2976,6 +2983,9 @@ msgstr "Liberapay vám umožní přislíbit příspěvek lidem, kteří se ješt
 msgid "Recent pledges"
 msgstr "Nedávné přísliby"
 
+msgid "Top pledges"
+msgstr ""
+
 msgid "There are no pledges right now."
 msgstr "Nejsou zde žádné přísliby."
 
@@ -3261,13 +3271,6 @@ msgstr[0] "{0} je tým s {n} veřejným členem"
 msgstr[1] "{0} je tým s {n} veřejnými členy"
 msgstr[2] "{0} je tým s {n} veřejnými členy"
 
-#, python-brace-format
-msgid "A Liberapay user has pledged to donate {0} per week to {1}."
-msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] "Uživatel Liberapay se zavázal přispět {0} týdně pro {1}."
-msgstr[1] "{n} uživatelé Liberapay se zavázali přispět {0} týdně pro {1}."
-msgstr[2] "{n} uživatelů Liberapay se zavázalo přispět {0} týdně pro {1}."
-
 msgid "Explore pledges"
 msgstr "Projít přísliby"
 
@@ -3278,6 +3281,13 @@ msgstr ""
 #, python-brace-format
 msgid "Profile on {0}"
 msgstr "Profil na {0}"
+
+#, python-brace-format
+msgid "A Liberapay user has pledged to donate {0} per week to {1}."
+msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
+msgstr[0] "Uživatel Liberapay se zavázal přispět {0} týdně pro {1}."
+msgstr[1] "{n} uživatelé Liberapay se zavázali přispět {0} týdně pro {1}."
+msgstr[2] "{n} uživatelů Liberapay se zavázalo přispět {0} týdně pro {1}."
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
@@ -3454,6 +3464,13 @@ msgid_plural "Found matching community names"
 msgstr[0] "Nalezen odpovídající název společenství"
 msgstr[1] "Nalezeny odpovídající názvy společenství"
 msgstr[2] "Nalezeny odpovídající názvy společenství"
+
+#, python-brace-format
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] "{n} člen"
+msgstr[1] "{n} členi"
+msgstr[2] "{n} členů"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"

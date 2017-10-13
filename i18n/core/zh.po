@@ -1110,8 +1110,49 @@ msgstr "儲存變更"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "* Liberapay 個人介紹的參考須通過管理者的批淮。"
 
-msgid "Modify your avatar"
-msgstr "修改大頭照"
+msgid "Patrons"
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "per week"
+msgstr "每週"
+
+msgid "Sum"
+msgstr ""
+
+#, python-brace-format
+msgid "Goal: {0}"
+msgstr "目標: {0}"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "收入: {0} /每週"
+
+msgid "Mission accomplished!"
+msgstr "達成任務！"
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "{0} 的目標是每週收到 {1} 捐款贊助。"
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr ""
+
+msgid "Donate"
+msgstr "損款"
 
 #, python-brace-format
 msgid "Joined {0} ago."
@@ -1122,56 +1163,15 @@ msgid "Closed {0} ago."
 msgstr "{0} 前關閉。"
 
 #, python-brace-format
-msgid "{0} doesn't publish how much they give and receive."
-msgstr "{0} 不願公開他們所捐贈與收取的資訊。"
-
-#, python-brace-format
-msgid "{0} receives {1} and gives {2} per week."
-msgstr "{0} 每週收到 {1} 贊助並另捐款 {2} 金額。"
-
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} 每週收到 {1} 捐款贊助。"
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "{0} 的目標是每週收到 {1} 捐款贊助。"
-
-msgid "Be the first to contribute!"
-msgstr "成為第一個贊助者！"
+msgid "{0} doesn't publish how much they give."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
 msgstr "{0} 每週捐款 {1}。"
 
-#, python-brace-format
-msgid "Modify your donation ({0})"
-msgstr "修改你的捐款 ({0})"
-
-msgid "Donate"
-msgstr "損款"
-
 msgid "This user doesn't accept donations."
 msgstr "這名用户不接受捐款。"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "收入: {0} /每週"
-
-#, python-brace-format
-msgid "{n} member"
-msgid_plural "{n} members"
-msgstr[0] "{n} 成員"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "目標: {0}"
-
-msgid "Mission accomplished!"
-msgstr "達成任務！"
-
-msgid "Share:"
-msgstr "分享："
 
 msgid "(fork)"
 msgstr ""
@@ -1263,9 +1263,6 @@ msgstr ""
 msgid "Amount"
 msgstr "數額"
 
-msgid "per week"
-msgstr "每週"
-
 msgid "per month"
 msgstr "每月"
 
@@ -1340,6 +1337,9 @@ msgstr "這個帳戶暫時被停權，因此目前無法受理捐款事宜。"
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
 msgstr ""
+
+msgid "Be the first to contribute!"
+msgstr "成為第一個贊助者！"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
@@ -1709,8 +1709,12 @@ msgstr "你現在的收取是 {0}。"
 msgid "{username}'s profile"
 msgstr ""
 
-msgid "Income history"
-msgstr "收入記錄"
+msgid "History"
+msgstr "記錄"
+
+#, python-brace-format
+msgid "{0} joined {1} ago."
+msgstr ""
 
 msgid "No data to show."
 msgstr "無資料可顯示。"
@@ -1789,9 +1793,6 @@ msgstr "傳送"
 
 msgid "Accept and Pay"
 msgstr "接受與支付"
-
-msgid "History"
-msgstr "記錄"
 
 #, python-brace-format
 msgid "Message: {0}"
@@ -1937,6 +1938,10 @@ msgstr "總數："
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr "交易 ID： {0}"
+
+#, python-brace-format
+msgid "{0} receives {1} per week."
+msgstr "{0} 每週收到 {1} 捐款贊助。"
 
 msgid "You are not a member of any team."
 msgstr "你並不是任何團隊的成員。"
@@ -3072,6 +3077,9 @@ msgstr "Liberapay 可讓用戶承諾捐助那些尚未加入本站的人員。�
 msgid "Recent pledges"
 msgstr "最近的捐款承諾"
 
+msgid "Top pledges"
+msgstr ""
+
 msgid "There are no pledges right now."
 msgstr "目前並無承諾。"
 
@@ -3359,11 +3367,6 @@ msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
 msgstr[0] "{0} 團隊有 {n} 公開成員"
 
-#, fuzzy, python-brace-format
-msgid "A Liberapay user has pledged to donate {0} per week to {1}."
-msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] "{n}Liberapay 用戶承諾每週捐助 {0}給 {1}。"
-
 #, fuzzy
 msgid "Explore pledges"
 msgstr "探索捐款承諾"
@@ -3375,6 +3378,11 @@ msgstr ""
 #, python-brace-format
 msgid "Profile on {0}"
 msgstr "{0} 的介紹頁"
+
+#, fuzzy, python-brace-format
+msgid "A Liberapay user has pledged to donate {0} per week to {1}."
+msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
+msgstr[0] "{n}Liberapay 用戶承諾每週捐助 {0}給 {1}。"
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
@@ -3545,6 +3553,11 @@ msgstr[0] "找到相符的用戶名稱"
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
 msgstr[0] "找到相符的社群名稱"
+
+#, python-brace-format
+msgid "{n} member"
+msgid_plural "{n} members"
+msgstr[0] "{n} 成員"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
