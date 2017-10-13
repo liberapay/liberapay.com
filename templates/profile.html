@@ -7,13 +7,13 @@
 <div class="row">
 <div class="col-xs-12 col-md-8 col-md-offset-2">
 % if participant.accepts_tips
-    <header class="text-center padded">
+    <div class="profile-header">
         {{ avatar_img(participant, size=120) }}
-        <h2>{{ participant.username }}</h2>
-        <p>{{ summary }}</p>
-    </header>
+        <h1>{{ participant.username }}</h1>
+        <p class="summary">{{ summary or '' }}</p>
+    </div>
 
-    <div class="full-width banderole default">
+    <div class="profile-header-bar full-width">
         <div class="container">
             <div class="col-xs-12 col-md-8 col-md-offset-2 flex space-between">
                 % set username = participant.username
