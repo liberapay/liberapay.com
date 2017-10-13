@@ -45,6 +45,25 @@ elif sys.argv[1] == 'pluralize':
         with open(po_path, 'wb') as po:
             write_po(po, catalog, width=0)
 
+elif sys.argv[1] == 'fuzz':
+    po_path = sys.argv[2]
+    old_msg = sys.argv[3]
+    new_msg = sys.argv[4]
+    print('switching a message in PO file', po_path)
+    # read PO file
+    lang = po_path.rsplit('/', 1)[-1].split('.', 1)[0]
+    with open(po_path, 'rb') as po:
+        catalog = read_po(po, locale=lang)
+    # replace old msg
+    m = catalog.get(old_msg)
+    if m.string:
+        assert not isinstance(m.id, tuple)
+        m.id = new_msg
+        m.flags.add('fuzzy')
+        # write back
+        with open(po_path, 'wb') as po:
+            write_po(po, catalog, width=0)
+
 else:
     print("unknown command")
     raise SystemExit(1)
