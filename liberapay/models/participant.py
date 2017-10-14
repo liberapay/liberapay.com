@@ -21,7 +21,7 @@ from psycopg2.extras import Json
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
-    DONATION_WEEKLY_MAX, DONATION_WEEKLY_MIN, EMAIL_RE,
+    DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
@@ -1562,8 +1562,10 @@ class Participant(Model, MixinTeam):
         periodic_amount = Decimal(periodic_amount)  # May raise InvalidOperation
         amount = periodic_amount * PERIOD_CONVERSION_RATES[period]
 
-        if periodic_amount != 0 and amount < DONATION_WEEKLY_MIN or amount > DONATION_WEEKLY_MAX:
-            raise BadAmount(periodic_amount, period)
+        if periodic_amount != 0:
+            limits = DONATION_LIMITS['EUR']['weekly']  # TODO
+            if amount < limits[0] or amount > limits[1]:
+                raise BadAmount(periodic_amount, period, limits)
 
         amount = amount.quantize(D_CENT, rounding=ROUND_UP)
 

@@ -117,13 +117,13 @@ title = _("Frequently Asked Questions")
         "The minimum you can give any user is {0}. To minimize processing fees, "
         "we charge your credit card at least {1} at a time (the money is stored "
         "in your Liberapay wallet and transferred to others during Payday)."
-        , Money(constants.DONATION_WEEKLY_MIN, 'EUR')
+        , constants.DONATION_LIMITS[currency]['weekly'][0]
         , Money(constants.PAYIN_CARD_MIN, 'EUR')
     ) }}<br>
     {{ _(
         "The maximum you can give any one user is {0} per week. This helps to "
         "stabilize income by reducing how dependent it is on a few large patrons."
-        , Money(constants.DONATION_WEEKLY_MAX, 'EUR')
+        , constants.DONATION_LIMITS[currency]['weekly'][1]
     ) }}
     </dd>
 

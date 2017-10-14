@@ -55,15 +55,18 @@ D_INF = Decimal('inf')
 D_UNIT = Decimal('1.00')
 D_ZERO = Decimal('0.00')
 
-DONATION_LIMITS_WEEKLY = (Decimal('0.01'), Decimal('100.00'))
-DONATION_LIMITS = {
-    'weekly': DONATION_LIMITS_WEEKLY,
+DONATION_LIMITS_WEEKLY_EUR_USD = (Decimal('0.01'), Decimal('100.00'))
+DONATION_LIMITS_EUR_USD = {
+    'weekly': DONATION_LIMITS_WEEKLY_EUR_USD,
     'monthly': tuple((x * Decimal(52) / Decimal(12)).quantize(D_CENT, rounding=ROUND_UP)
-                     for x in DONATION_LIMITS_WEEKLY),
+                     for x in DONATION_LIMITS_WEEKLY_EUR_USD),
     'yearly': tuple((x * Decimal(52)).quantize(D_CENT)
-                    for x in DONATION_LIMITS_WEEKLY),
+                    for x in DONATION_LIMITS_WEEKLY_EUR_USD),
 }
-DONATION_WEEKLY_MIN, DONATION_WEEKLY_MAX = DONATION_LIMITS_WEEKLY
+DONATION_LIMITS = {
+    'EUR': {k: (Money(v[0], 'EUR'), Money(v[1], 'EUR')) for k, v in DONATION_LIMITS_EUR_USD.items()},
+    'USD': {k: (Money(v[0], 'USD'), Money(v[1], 'USD')) for k, v in DONATION_LIMITS_EUR_USD.items()},
+}
 
 DOMAIN_RE = re.compile(r'''
     ^
@@ -232,7 +235,7 @@ STANDARD_TIPS_EUR_USD = (
     (_("Small"), Decimal('0.25')),
     (_("Medium"), Decimal('1.00')),
     (_("Large"), Decimal('5.00')),
-    (_("Maximum"), DONATION_WEEKLY_MAX),
+    (_("Maximum"), DONATION_LIMITS_EUR_USD['weekly'][1]),
 )
 STANDARD_TIPS = {
     'EUR': [make_standard_tip(label, weekly, 'EUR') for label, weekly in STANDARD_TIPS_EUR_USD],
