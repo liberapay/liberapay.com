@@ -208,12 +208,17 @@ class MixinTeam(object):
         """, (self.id,))]
         # Recompute the takes
         takes_sum = {}
+        tippers = {}
         transfers, new_leftover = Payday.resolve_takes(tips, takes)
         for t in transfers:
             if t.member in takes_sum:
                 takes_sum[t.member] += t.amount
             else:
                 takes_sum[t.member] = t.amount
+            if t.member in tippers:
+                tippers[t.member].add(t.tipper)
+            else:
+                tippers[t.member] = set((t.tipper,))
         # Update the leftover
         cursor.run("UPDATE participants SET leftover = %s WHERE id = %s",
                    (new_leftover, self.id))
@@ -231,12 +236,19 @@ class MixinTeam(object):
                        SET actual_amount = %(actual_amount)s
                      WHERE id = %(id)s
                 """, take.__dict__)
+                ntippers = len(tippers.get(member_id, ()))
                 cursor.run("""
                     UPDATE participants
                        SET taking = (taking + %(diff)s)
                          , receiving = (receiving + %(diff)s)
+                         , nteampatrons = (
+                               CASE WHEN (receiving + %(diff)s) = 0 THEN 0
+                                    WHEN nteampatrons < %(ntippers)s THEN %(ntippers)s
+                                    ELSE nteampatrons
+                               END
+                           )
                      WHERE id=%(member_id)s
-                """, dict(member_id=member_id, diff=diff))
+                """, dict(member_id=member_id, diff=diff, ntippers=ntippers))
             if member and member.id == member_id:
                 r = cursor.one(
                     "SELECT taking, receiving FROM participants WHERE id = %s",
