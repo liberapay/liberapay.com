@@ -3,7 +3,7 @@
 [---] text/html
 <p>{{ _(
     "Your request for a payment of {amount} from {addressee_name} has been rejected."
-    , addressee_name=addressee_name, amount=Money(invoice.amount, 'EUR')
+    , addressee_name=addressee_name, amount=LegacyMoney(invoice.amount)
 ) }}</p>
 
 <p>{{ _("Reason: “{0}”", rejection_message) }}</p>

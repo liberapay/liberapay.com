@@ -3,7 +3,7 @@
 [---] text/html
 <p>{{ _(
     "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived.",
-    date=exchange.timestamp.date(), money_amount=Money(exchange.amount + exchange.fee, 'EUR')
+    date=exchange.timestamp.date(), money_amount=LegacyMoney(exchange.amount + exchange.fee)
 ) }}</p>
 
 <p>{{ _("If you forgot to do it you can initiate a new payment:") }}</p>

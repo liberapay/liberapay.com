@@ -5,7 +5,7 @@
     "We are ready to receive the funds. Please send exactly {0} to the "
     "following account using the reference code below so we'll know the "
     "money came from you:",
-    Money(exchange.amount + exchange.fee, 'EUR')
+    LegacyMoney(exchange.amount + exchange.fee)
 ) }}</p>
 
 <p>

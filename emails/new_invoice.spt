@@ -3,7 +3,7 @@
 [---] text/html
 <p>{{ _(
     "{sender_name} has submitted an invoice for a payment of {amount}.",
-    sender_name=sender_name, amount=Money(invoice.amount, 'EUR')
+    sender_name=sender_name, amount=LegacyMoney(invoice.amount)
 ) }}</p>
 
 <p>{{ _("Description: {0}", invoice.description) }}</p>

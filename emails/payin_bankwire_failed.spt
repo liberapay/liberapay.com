@@ -3,7 +3,7 @@
 [---] text/html
 <p>{{ _(
     "The attempt to transfer {0} from your bank account has failed with the following error message:",
-    Money(exchange.amount + exchange.fee, 'EUR')
+    LegacyMoney(exchange.amount + exchange.fee)
 ) }}</p>
 
 <pre>{{ exchange.note }}</pre>

@@ -1,7 +1,7 @@
-{{ _("You have received {0} this week", Money(total, 'EUR')) }}
+{{ _("You have received {0} this week", LegacyMoney(total)) }}
 
 [---] text/html
-<p>{{ _("{0} were given to you personally.", Money(personal, 'EUR')) }}</p>
+<p>{{ _("{0} were given to you personally.", LegacyMoney(personal)) }}</p>
 
 % if not by_team
     % set teams = participant.get_teams()
@@ -14,22 +14,22 @@
     % endif
 % elif len(by_team) == 1
     % set team, amount = list(by_team.items())[0]
-    <p>{{ _("{0} were given to you for your role in the {1} team.", Money(amount, 'EUR'), team) }}</p>
+    <p>{{ _("{0} were given to you for your role in the {1} team.", LegacyMoney(amount), team) }}</p>
 % else
-    <p>{{ _("{0} were given to you for your roles in the following teams:", Money(sum(by_team.values()), 'EUR')) }}</p>
+    <p>{{ _("{0} were given to you for your roles in the following teams:", LegacyMoney(sum(by_team.values()))) }}</p>
     <ul>
     % for team, amount in by_team.items()
-        <li>{{ _("{0}: {1}", team, Money(amount, 'EUR')) }}</li>
+        <li>{{ _("{0}: {1}", team, LegacyMoney(amount)) }}</li>
     % endfor
     </ul>
 % endif
 
-<p>{{ _("You now have {0} in your wallet.", Money(new_balance, 'EUR')) }}</p>
+<p>{{ _("You now have {0} in your wallet.", LegacyMoney(new_balance)) }}</p>
 
 <p><a href="{{ participant.url('wallet/') }}">{{ _("See your account's transaction logs") }}</a></p>
 
 [---] text/plain
-{{ _("{0} were given to you personally.", Money(personal, 'EUR')) }}
+{{ _("{0} were given to you personally.", LegacyMoney(personal)) }}
 
 % if not by_team
     % set teams = participant.get_teams()
@@ -42,14 +42,14 @@
     % endif
 % elif len(by_team) == 1
     % set team, amount = list(by_team.items())[0]
-    {{- _("{0} were given to you for your role in the {1} team.", Money(amount, 'EUR'), team) }}
+    {{- _("{0} were given to you for your role in the {1} team.", LegacyMoney(amount), team) }}
 % else
-    {{- _("{0} were given to you for your roles in the following teams:", Money(sum(by_team.values()), 'EUR')) }}
+    {{- _("{0} were given to you for your roles in the following teams:", LegacyMoney(sum(by_team.values()))) }}
     % for team, amount in by_team.items()
-        {{- _("- {0}: {1}", team, Money(amount, 'EUR')) }}
+        {{- _("- {0}: {1}", team, LegacyMoney(amount)) }}
     % endfor
 % endif
 
-{{ _("You now have {0} in your wallet.", Money(new_balance, 'EUR')) }}
+{{ _("You now have {0} in your wallet.", LegacyMoney(new_balance)) }}
 
 {{ _("See your account's transaction logs") }}: {{ participant.url('wallet/') }}

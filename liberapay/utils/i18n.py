@@ -19,6 +19,7 @@ from babel.numbers import (
     NumberFormatError, parse_decimal
 )
 import jinja2.ext
+from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
@@ -26,7 +27,10 @@ from liberapay.exceptions import InvalidNumber
 from liberapay.website import website
 
 
-Money = namedtuple('Money', 'amount currency')
+def LegacyMoney(o):
+    return o if isinstance(o, Money) else Money(o, 'EUR')
+
+
 Wrap = namedtuple('Wrap', 'value wrapper')
 
 
@@ -202,7 +206,7 @@ def i_format(loc, s, *a, **kw):
             elif isinstance(o, datetime):
                 c[k] = format_datetime(o, locale=loc)
             if wrapper:
-                c[k] = wrapper % c[k]
+                c[k] = wrapper % (c[k],)
     return s.format(*a, **kw)
 
 
