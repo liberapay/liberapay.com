@@ -122,6 +122,7 @@ algorithm.functions = [
     csrf.extract_token_from_cookie,
     csrf.reject_forgeries,
     authentication.authenticate_user_if_possible,
+    i18n.add_currency_to_state,
 
     _dispatch_path_to_filesystem,
     algorithm['handle_dispatch_exception'],

@@ -47,6 +47,8 @@ AVATAR_SOURCES = 'libravatar bitbucket facebook github google mastodon twitter'.
 
 BIRTHDAY = date(2015, 5, 22)
 
+CURRENCIES = set(('EUR', 'USD'))
+
 D_CENT = Decimal('0.01')
 D_INF = Decimal('inf')
 D_UNIT = Decimal('1.00')

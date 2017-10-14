@@ -23,6 +23,7 @@ from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
+from liberapay.constants import CURRENCIES
 from liberapay.exceptions import InvalidNumber
 from liberapay.website import website
 
@@ -356,6 +357,16 @@ def add_helpers_to_context(context, loc):
         parse_decimal=loc.parse_decimal_or_400,
         to_age_str=loc.to_age_str,
     )
+
+
+def add_currency_to_state(request, user):
+    cookie = request.headers.cookie.get(str('currency'))
+    if cookie and cookie.value in CURRENCIES:
+        return {'currency': cookie.value}
+    if user:
+        return {'currency': user.main_currency}
+    else:
+        return {'currency': 'EUR'}
 
 
 def extract_custom(extractor, *args, **kw):
