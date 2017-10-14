@@ -63,7 +63,7 @@ def sign_in_with_form_data(body, state):
                     email
                 )
             elif p:
-                if not p.get_email(email.lower()).verified:
+                if not p.get_email(email).verified:
                     website.db.hit_rate_limit('log-in.email.not-verified', TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
                 p.start_session()
