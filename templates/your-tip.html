@@ -26,7 +26,7 @@
 % macro tip_input(tip, disabled='', small=False)
     <div class="form-inline inline-block">
     <div class="input-group">
-        <div class="input-group-addon">€</div>
+        <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
         <input type="text" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
                value="{{ format_decimal(tip.periodic_amount) if tip.periodic_amount else '' }}"
@@ -70,22 +70,22 @@
         <p>{{ _("Please select or input an amount:") }}</p>
     % endif
     <ul class="list-group radio-group">
-    % for std_tip in constants.STANDARD_TIPS
+    % for std_tip in constants.STANDARD_TIPS[currency]
         % set amount_is_a_match = std_tip.weekly == tip.amount
         % if amount_is_a_match
             {{ tip_is_standard.append(True) or '' }}
         % endif
         <li class="list-group-item">
         <label>
-            <input type="radio" name="selected_amount" value="{{ std_tip.weekly }}"
+            <input type="radio" name="selected_amount" value="{{ std_tip.weekly.amount }}"
                    class="hidden-xs" {{ 'checked' if amount_is_a_match }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(std_tip.label) }}</h5>
                 <p class="list-group-item-text">{{ _(
                     "{0} per week ~ {1} per month ~ {2} per year",
-                    Money(std_tip.weekly, 'EUR'),
-                    Money(std_tip.monthly, 'EUR'),
-                    Money(std_tip.yearly, 'EUR'),
+                    std_tip.weekly,
+                    std_tip.monthly,
+                    std_tip.yearly,
                 ) }}</p>
             </div>
         </label>

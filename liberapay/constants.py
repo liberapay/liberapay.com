@@ -218,22 +218,26 @@ SESSION_REFRESH = timedelta(hours=1)
 SESSION_TIMEOUT = timedelta(hours=6)
 
 
-def make_standard_tip(label, weekly):
+def make_standard_tip(label, weekly, currency):
     return StandardTip(
         label,
-        weekly,
-        weekly / PERIOD_CONVERSION_RATES['monthly'],
-        weekly / PERIOD_CONVERSION_RATES['yearly'],
+        Money(weekly, currency),
+        Money(weekly / PERIOD_CONVERSION_RATES['monthly'], currency),
+        Money(weekly / PERIOD_CONVERSION_RATES['yearly'], currency),
     )
 
 
-STANDARD_TIPS = (
-    make_standard_tip(_("Symbolic"), Decimal('0.01')),
-    make_standard_tip(_("Small"), Decimal('0.25')),
-    make_standard_tip(_("Medium"), Decimal('1.00')),
-    make_standard_tip(_("Large"), Decimal('5.00')),
-    make_standard_tip(_("Maximum"), DONATION_WEEKLY_MAX),
+STANDARD_TIPS_EUR_USD = (
+    (_("Symbolic"), Decimal('0.01')),
+    (_("Small"), Decimal('0.25')),
+    (_("Medium"), Decimal('1.00')),
+    (_("Large"), Decimal('5.00')),
+    (_("Maximum"), DONATION_WEEKLY_MAX),
 )
+STANDARD_TIPS = {
+    'EUR': [make_standard_tip(label, weekly, 'EUR') for label, weekly in STANDARD_TIPS_EUR_USD],
+    'USD': [make_standard_tip(label, weekly, 'USD') for label, weekly in STANDARD_TIPS_EUR_USD],
+}
 
 SUMMARY_MAX_SIZE = 100
 
