@@ -1,4 +1,4 @@
-from __future__ import print_function, unicode_literals
+from __future__ import division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
 from decimal import ROUND_DOWN, ROUND_UP
@@ -25,7 +25,7 @@ from liberapay.constants import (
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
-    SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
+    SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE, ZERO
 )
 from liberapay.exceptions import (
     BadAmount,
@@ -57,7 +57,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    deserialize, erase_cookie, serialize, set_cookie,
+    NS, deserialize, erase_cookie, serialize, set_cookie,
     emails, i18n, markdown,
 )
 from liberapay.website import website
@@ -536,13 +536,14 @@ class Participant(Model, MixinTeam):
                        FROM participants p
                       WHERE p.id=t.tippee
                     ) AS tippee
+                 , t.amount
               FROM current_tips t
              WHERE tipper = %s
                AND amount > 0
 
         """, (self.id,))
-        for tippee in tippees:
-            self.set_tip_to(tippee, Money(0, 'EUR'), update_self=False, cursor=cursor)
+        for tippee, amount in tippees:
+            self.set_tip_to(tippee, amount.zero(), update_self=False, cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user.
@@ -553,13 +554,14 @@ class Participant(Model, MixinTeam):
                        FROM participants p
                       WHERE p.id=t.tipper
                     ) AS tipper
+                 , t.amount
               FROM current_tips t
              WHERE tippee = %s
                AND amount > 0
 
         """, (self.id,))
-        for tipper in tippers:
-            tipper.set_tip_to(self, Money(0, 'EUR'), update_tippee=False, cursor=cursor)
+        for tipper, amount in tippers:
+            tipper.set_tip_to(self, amount.zero(), update_tippee=False, cursor=cursor)
 
     def clear_takes(self, cursor):
         """Leave all teams by zeroing all takes.
@@ -1476,7 +1478,7 @@ class Participant(Model, MixinTeam):
             if tip.amount > fake_balance:
                 is_funded = False
             else:
-                fake_balance -= tip.amount
+                fake_balance -= tip.amount.amount
                 is_funded = True
             if tip.is_funded == is_funded:
                 continue
@@ -1491,7 +1493,7 @@ class Participant(Model, MixinTeam):
         giving = (cursor or self.db).one("""
             UPDATE participants p
                SET giving = COALESCE((
-                     SELECT sum(amount)
+                     SELECT sum((amount).amount)
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
@@ -1521,7 +1523,7 @@ class Participant(Model, MixinTeam):
                      )
                 UPDATE participants p
                    SET receiving = (COALESCE((
-                           SELECT sum(amount)
+                           SELECT sum((amount).amount)
                              FROM our_tips
                        ), 0) + taking)
                      , npatrons = COALESCE((SELECT count(*) FROM our_tips), 0)
@@ -1592,8 +1594,8 @@ class Participant(Model, MixinTeam):
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
-        """, dict(tipper=self.id, tippee=tippee.id, amount=amount.amount,
-                  period=period, periodic_amount=periodic_amount.amount))._asdict()
+        """, dict(tipper=self.id, tippee=tippee.id, amount=amount,
+                  period=period, periodic_amount=periodic_amount))._asdict()
 
         if update_self:
             # Update giving amount of tipper
@@ -1609,30 +1611,32 @@ class Participant(Model, MixinTeam):
 
 
     @staticmethod
-    def _zero_tip_dict(tippee):
-        if isinstance(tippee, Participant):
-            tippee = tippee.id
-        return dict(amount=D_ZERO, is_funded=False, tippee=tippee,
-                    period='weekly', periodic_amount=D_ZERO)
+    def _zero_tip_dict(tippee, currency=None):
+        if not isinstance(tippee, Participant):
+            tippee = Participant.from_id(tippee)
+        if not tippee.accept_all_currencies or not currency:
+            currency = tippee.main_currency
+        zero = ZERO[currency]
+        return dict(amount=zero, is_funded=False, tippee=tippee.id,
+                    period='weekly', periodic_amount=zero)
 
 
-    def get_tip_to(self, tippee):
+    def get_tip_to(self, tippee, currency=None):
         """Given a participant (or their id), returns a dict.
         """
-        default = self._zero_tip_dict(tippee)
-        tippee = default['tippee']
-        if self.id == tippee:
-            return default
-        return self.db.one("""\
-
+        if not isinstance(tippee, Participant):
+            tippee = Participant.from_id(tippee)
+        r = self.db.one("""\
             SELECT *
               FROM tips
              WHERE tipper=%s
                AND tippee=%s
           ORDER BY mtime DESC
              LIMIT 1
-
-        """, (self.id, tippee), back_as=dict, default=default)
+        """, (self.id, tippee.id), back_as=dict)
+        if r:
+            return r
+        return self._zero_tip_dict(tippee, currency)
 
 
     def get_tip_distribution(self):
@@ -1651,13 +1655,13 @@ class Participant(Model, MixinTeam):
                     amount,
                     number_of_tippers_for_this_amount,
                     total_amount_given_at_this_amount,
+                    total_amount_given_at_this_amount_converted_to_reference_currency,
                     proportion_of_tips_at_this_amount,
                     proportion_of_total_amount_at_this_amount
                 ]
 
         """
-        SQL = """
-
+        recs = self.db.all("""
             SELECT amount
                  , count(amount) AS ncontributing
               FROM ( SELECT DISTINCT ON (tipper)
@@ -1671,33 +1675,32 @@ class Participant(Model, MixinTeam):
                     ) AS foo
              WHERE amount > 0
           GROUP BY amount
-          ORDER BY amount
-
-        """
-
+          ORDER BY (amount).amount
+        """, (self.id,))
         tip_amounts = []
-
-        npatrons = 0.0  # float to trigger float division
-        contributed = D_ZERO
-        for rec in self.db.all(SQL, (self.id,)):
+        npatrons = 0
+        currency = self.main_currency
+        contributed = ZERO[currency]
+        for rec in recs:
             tip_amounts.append([
                 rec.amount,
                 rec.ncontributing,
                 rec.amount * rec.ncontributing,
             ])
-            contributed += tip_amounts[-1][2]
+            tip_amounts[-1].append(tip_amounts[-1][2].convert(currency))
+            contributed += tip_amounts[-1][3]
             npatrons += rec.ncontributing
 
         for row in tip_amounts:
             row.append((row[1] / npatrons) if npatrons > 0 else 0)
-            row.append((row[2] / contributed) if contributed > 0 else 0)
+            row.append((row[3] / contributed) if contributed > 0 else 0)
 
         return tip_amounts, npatrons, contributed
 
 
     def get_giving_for_profile(self):
 
-        tips = self.db.all("""\
+        tips = [NS(r._asdict()) for r in self.db.all("""\
 
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
@@ -1720,12 +1723,10 @@ class Participant(Model, MixinTeam):
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo
-            ORDER BY amount DESC
-                   , username
 
-        """, (self.id,))
+        """, (self.id,))]
 
-        pledges = self.db.all("""\
+        pledges = [NS(r._asdict()) for r in self.db.all("""\
 
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
@@ -1744,22 +1745,24 @@ class Participant(Model, MixinTeam):
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo
-            ORDER BY amount DESC
-                   , ctime DESC
 
-        """, (self.id,))
+        """, (self.id,))]
 
+        for t in tips:
+            t.converted_amount = t.amount.convert(self.main_currency)
+        for t in pledges:
+            t.converted_amount = t.amount.convert(self.main_currency)
+        tips = sorted(tips, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
+        pledges = sorted(pledges, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
 
-        # Compute the total
-
-        total = sum([t.amount for t in tips])
+        total = sum([t.converted_amount for t in tips])
         if not total:
-            # If tips is an empty list, total is int 0. We want a Decimal.
-            total = D_ZERO
+            # If tips is an empty list, total is int 0. We want a Money amount.
+            total = ZERO[self.main_currency]
 
-        pledges_total = sum([t.amount for t in pledges])
+        pledges_total = sum([t.converted_amount for t in pledges])
         if not pledges_total:
-            pledges_total = D_ZERO
+            pledges_total = ZERO[self.main_currency]
 
         return tips, total, pledges, pledges_total
 
@@ -1890,7 +1893,7 @@ class Participant(Model, MixinTeam):
 
         ZERO_OUT_OLD_TIPS_RECEIVING = """
             INSERT INTO tips (ctime, tipper, tippee, amount, period, periodic_amount)
-                SELECT ctime, tipper, tippee, 0 AS amount, period, 0 AS periodic_amount
+                SELECT ctime, tipper, tippee, zero(amount), period, zero(periodic_amount)
                   FROM temp_tips
                  WHERE tippee=%s
         """
@@ -2110,7 +2113,7 @@ class Participant(Model, MixinTeam):
                 my_tip = 'self'
             else:
                 my_tip = inquirer.get_tip_to(self)['amount']
-            output['my_tip'] = str(my_tip)
+            output['my_tip'] = my_tip
 
         # Key: elsewhere
         accounts = self.get_accounts_elsewhere()

@@ -81,7 +81,7 @@ if show_form:
     donations = participant.get_giving_for_profile()[1]
     recommended_withdrawal = min(
         withdrawable,
-        max(participant.balance - donations, constants.D_ZERO)
+        max(participant.balance - donations.amount, constants.D_ZERO)
     )
 
 if user == participant:
@@ -138,7 +138,7 @@ title = _("Withdrawing Money")
     <h3>{{ _("Amount") }}</h3>
 
     % if donations
-        <p>{{ _("You should keep at least {0} in your wallet to fund your donations this week.", Money(donations, 'EUR')) }}</p>
+        <p>{{ _("You should keep at least {0} in your wallet to fund your donations this week.", donations) }}</p>
     % endif
 
     <fieldset id="amount" class="form-inline">

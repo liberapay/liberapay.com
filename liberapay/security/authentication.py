@@ -19,7 +19,7 @@ class _ANON(object):
     is_admin = False
     id = None
     __bool__ = __nonzero__ = lambda *a: False
-    get_tip_to = lambda self, tippee: Participant._zero_tip_dict(tippee)
+    get_tip_to = staticmethod(Participant._zero_tip_dict)
     __repr__ = lambda self: '<ANON>'
 
 

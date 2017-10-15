@@ -188,7 +188,7 @@ class MixinTeam(object):
         """
         from liberapay.billing.payday import Payday
         tips = [NS(t._asdict()) for t in cursor.all("""
-            SELECT t.id, t.tipper, t.amount AS full_amount
+            SELECT t.id, t.tipper, (t.amount).amount AS full_amount
                  , COALESCE((
                        SELECT sum((tr.amount).amount)
                          FROM transfers tr

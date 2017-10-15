@@ -33,9 +33,9 @@ class TestTipJson(Harness):
         # Confirm we get back the right amounts.
         first_data = json.loads(response1.text)
         second_data = json.loads(response2.text)
-        assert first_data['amount'] == "1.00"
+        assert first_data['amount'] == {"amount": "1.00", "currency": "EUR"}
         assert first_data['total_giving'] == "1.00"
-        assert second_data['amount'] == "3.00"
+        assert second_data['amount'] == {"amount": "3.00", "currency": "EUR"}
         assert second_data['total_giving'] == "4.00"
 
     def test_set_tip_out_of_range(self):
@@ -72,12 +72,12 @@ class TestTipJson(Harness):
         response = self.tip(bob, alice.participant.username, "10.00")
         data = json.loads(response.text)
         assert response.code == 200
-        assert data['amount'] == "10.00"
+        assert data['amount'] == {"amount": "10.00", "currency": "EUR"}
         assert "alice" in data['msg']
 
         # Stop pledging
         response = self.tip(bob, alice.participant.username, "0.00")
         data = json.loads(response.text)
         assert response.code == 200
-        assert data['amount'] == "0.00"
+        assert data['amount'] == {"amount": "0.00", "currency": "EUR"}
         assert "alice" in data['msg']

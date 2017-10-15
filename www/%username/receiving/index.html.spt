@@ -68,15 +68,17 @@ teams = website.db.all("""
 <div class="col-md-6">
     <h3>{{ _("Tips Received, by Amount") }}</h3>
     <table class="tip-distribution">
-        % for amount, ncontributors, summed, pcontributors, psummed in tip_distribution
+        % for amount, ncontributors, summed, summed_converted, pcontributors, psummed in tip_distribution
         <tr>
-            <td class="currency-symbol">€</td>
-            <td class="amount">{{ amount }}</td>
+            <td class="amount">{{ format_currency(*amount) }}</td>
             <td colspan="2"></td>
             <td class="count">
                 <span class="green bar" style="width: {{ psummed * 240 }}pt"></span>
                 {{ format_percent(psummed) }}
-                <span class="number">({{ format_currency(summed, 'EUR') }})</span>
+                <span class="number">({{ format_currency(*summed) }})</span>
+                % if summed_converted != summed
+                <span class="number">(~{{ format_money(summed_converted) }})</span>
+                % endif
             </td>
         </tr>
         % endfor

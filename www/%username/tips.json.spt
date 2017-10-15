@@ -32,7 +32,7 @@ if request.method == 'POST':
         old_tips = participant.get_current_tips()
         for tip in old_tips:
             if tip['username'] not in seen:
-                participant.set_tip_to(tip['username'], Money(0, 'EUR'), tip['period'])
+                participant.set_tip_to(tip['username'], tip['amount'].zero(), tip['period'])
 
 else:
     tips, total, pledges, pledges_total = participant.get_giving_for_profile()
@@ -42,9 +42,9 @@ else:
         if tip.amount == 0:
             continue
         out.append({ "username": tip.username
-                   , "amount": str(tip.amount)
+                   , "amount": tip.amount
                    , "period": str(tip.period)
-                   , "periodic_amount": str(tip.periodic_amount)
+                   , "periodic_amount": tip.periodic_amount
                     })
 
 [---] application/json via json_dump

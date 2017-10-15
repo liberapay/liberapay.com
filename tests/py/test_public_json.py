@@ -62,7 +62,7 @@ class Tests(Harness):
         data = json.loads(raw)
 
         assert data['receiving'] == '1.00'
-        assert data['my_tip'] == '1.00'
+        assert data['my_tip'] == {"amount": "1.00", "currency": "EUR"}
 
     def test_authenticated_user_doesnt_get_other_peoples_tips(self):
         alice = self.make_participant('alice', balance=100)
@@ -79,7 +79,7 @@ class Tests(Harness):
         data = json.loads(raw)
 
         assert data['receiving'] == '16.00'
-        assert data['my_tip'] == '1.00'
+        assert data['my_tip'] == {"amount": "1.00", "currency": "EUR"}
 
     def test_authenticated_user_gets_zero_if_they_dont_tip(self):
         alice = self.make_participant('alice', balance=100)
@@ -93,7 +93,7 @@ class Tests(Harness):
         data = json.loads(raw)
 
         assert data['receiving'] == '3.00'
-        assert data['my_tip'] == '0.00'
+        assert data['my_tip'] == {"amount": "0.00", "currency": "EUR"}
 
     def test_authenticated_user_gets_self_for_self(self):
         alice = self.make_participant('alice', balance=100)

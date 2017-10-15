@@ -51,7 +51,7 @@
                     % set donate_path = participant.path('donate')
                     % if tip['amount']
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
-                            _("Donating ({amount})", amount=Money(tip.amount, 'EUR'))
+                            _("Donating ({amount})", amount=tip.amount)
                         }}</a>
                     % else
                         <a class="btn btn-donate btn-lg" href="{{ donate_path }}">

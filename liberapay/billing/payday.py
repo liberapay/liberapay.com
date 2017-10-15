@@ -179,7 +179,7 @@ class Payday(object):
         CREATE UNIQUE INDEX ON payday_participants (id);
 
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
-            SELECT t.id, tipper, tippee, amount, (p2.kind = 'group') AS to_team
+            SELECT t.id, tipper, tippee, (amount).amount, (p2.kind = 'group') AS to_team
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -860,7 +860,7 @@ class Payday(object):
             SELECT p.*::participants
               FROM participants p
              WHERE balance < (
-                     SELECT sum(amount)
+                     SELECT sum((amount).amount)
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
                       WHERE t.tipper = p.id

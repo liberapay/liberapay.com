@@ -54,13 +54,13 @@ currency = request.qs.get('currency', currency)
 if currency not in PAYIN_BANK_WIRE_MIN:
     raise response.error(400, "`currency` value in querystring is invalid or non-supported")
 donations = participant.get_giving_for_profile()[1]
-weekly = donations - participant.receiving
+weekly = donations - Money(participant.receiving, 'EUR')
 if weekly > 0:
-    funded = participant.balance // weekly
-    min_weeks = (constants.PAYIN_BANK_WIRE_MIN[currency].amount / weekly).to_integral_value(ROUND_UP)
+    funded = participant.balance // weekly.amount
+    min_weeks = (constants.PAYIN_BANK_WIRE_MIN[currency] / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
-        max(constants.PAYIN_BANK_WIRE_TARGET[currency].amount // weekly, 52),
-        constants.PAYIN_BANK_WIRE_MAX[currency].amount // weekly
+        max(constants.PAYIN_BANK_WIRE_TARGET[currency] // weekly, 52),
+        constants.PAYIN_BANK_WIRE_MAX[currency] // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks] or [min_weeks]
@@ -215,7 +215,7 @@ title = _("Adding Money")
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_bank_wire(Money(amount, 'EUR'))
+            % set charge_amount, fees, vat = upcharge_bank_wire(amount)
             % set _months = weeks / D('4.33')
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">

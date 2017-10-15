@@ -13,3 +13,13 @@ BEGIN;
     ALTER TABLE exchanges ALTER COLUMN vat TYPE currency_amount USING (vat, 'EUR');
     ALTER TABLE transfers ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
 END;
+
+BEGIN;
+    DROP VIEW current_tips;
+    ALTER TABLE tips ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+    ALTER TABLE tips ALTER COLUMN periodic_amount TYPE currency_amount USING (periodic_amount, 'EUR');
+    CREATE VIEW current_tips AS
+        SELECT DISTINCT ON (tipper, tippee) *
+          FROM tips
+      ORDER BY tipper, tippee, mtime DESC;
+END;
