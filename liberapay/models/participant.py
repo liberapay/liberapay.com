@@ -733,8 +733,8 @@ class Participant(Model, MixinTeam):
             SELECT *
               FROM emails
              WHERE participant=%s
-               AND address=%s
-        """, (self.id, email))
+               AND lower(address)=%s
+        """, (self.id, email.lower()))
 
     def get_emails(self):
         return self.db.all("""
