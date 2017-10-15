@@ -307,29 +307,29 @@ class TestFees(MangopayHarness):
 
     def test_upcharge_full_in_rounded_case(self):
         actual = upcharge_card(EUR('5.00'))
-        expected = upcharge_card(EUR(PAYIN_CARD_MIN))
+        expected = upcharge_card(PAYIN_CARD_MIN['EUR'])
         assert actual == expected
 
     def test_upcharge_at_min(self):
-        actual = upcharge_card(EUR(PAYIN_CARD_MIN))
+        actual = upcharge_card(PAYIN_CARD_MIN['EUR'])
         expected = (EUR('15.54'), EUR('0.54'), EUR('0.08'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.035')  # less than 3.5% fee
 
     def test_upcharge_at_target(self):
-        actual = upcharge_card(EUR(PAYIN_CARD_TARGET))
+        actual = upcharge_card(PAYIN_CARD_TARGET['EUR'])
         expected = (EUR('94.19'), EUR('2.19'), EUR('0.32'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.024')  # less than 2.4% fee
 
     def test_upcharge_at_one_cent(self):
         actual = upcharge_card(EUR('0.01'))
-        expected = upcharge_card(EUR(PAYIN_CARD_MIN))
+        expected = upcharge_card(PAYIN_CARD_MIN['EUR'])
         assert actual == expected
 
     def test_upcharge_at_min_minus_one_cent(self):
-        actual = upcharge_card(EUR(PAYIN_CARD_MIN) - EUR('0.01'))
-        expected = upcharge_card(EUR(PAYIN_CARD_MIN))
+        actual = upcharge_card(PAYIN_CARD_MIN['EUR'] - EUR('0.01'))
+        expected = upcharge_card(PAYIN_CARD_MIN['EUR'])
         assert actual == expected
 
     def test_skim_credit(self):
@@ -442,16 +442,17 @@ class TestSync(MangopayHarness):
         """)
 
     def test_1_sync_with_mangopay_records_exchange_success(self):
+        amount = PAYIN_CARD_MIN['EUR'].amount
         with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             with self.assertRaises(Foobar):
-                charge(self.db, self.janet_route, PAYIN_CARD_MIN, 'http://localhost/')
+                charge(self.db, self.janet_route, amount, 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'succeeded'
-        assert Participant.from_username('janet').balance == PAYIN_CARD_MIN
+        assert Participant.from_username('janet').balance == amount
 
     def test_2_sync_with_mangopay_handles_payins_that_didnt_happen(self):
         pass  # this is for pep8

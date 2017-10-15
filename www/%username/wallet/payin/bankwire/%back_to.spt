@@ -12,9 +12,6 @@ from liberapay.exceptions import InvalidNumber
 from liberapay.utils import b64decode_s, get_participant
 from liberapay.utils.i18n import Money
 
-AMOUNT_MIN = upcharge_bank_wire(Money(PAYIN_BANK_WIRE_MIN, 'EUR'))[0]
-AMOUNT_MAX = upcharge_bank_wire(Money(KYC_PAYIN_YEARLY_THRESHOLD, 'EUR'))[0]
-
 NOTIF_BIT_FAIL = EVENTS['payin_bankwire_failed'].bit
 NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
 
@@ -53,13 +50,16 @@ if request.method == 'POST' and request.body.get('action') == 'email':
 exchange, payin = None, None
 
 funded = float('inf')
+currency = request.qs.get('currency', currency)
+if currency not in PAYIN_BANK_WIRE_MIN:
+    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
 donations = participant.get_giving_for_profile()[1]
 weekly = donations - participant.receiving
 if weekly > 0:
     funded = participant.balance // weekly
-    min_weeks = (constants.PAYIN_BANK_WIRE_MIN / weekly).to_integral_value(ROUND_UP)
+    min_weeks = (constants.PAYIN_BANK_WIRE_MIN[currency].amount / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
-        max(constants.PAYIN_BANK_WIRE_TARGET // weekly, 52),
+        max(constants.PAYIN_BANK_WIRE_TARGET[currency].amount // weekly, 52),
         constants.KYC_PAYIN_YEARLY_THRESHOLD // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
@@ -80,13 +80,15 @@ if request.method == 'POST':
         except:
             pass
     try:
-        amount = D(amount)
+        amount = Money(amount, currency)
     except (InvalidOperation, ValueError):
         raise InvalidNumber(amount)
-    if amount < AMOUNT_MIN.amount or amount > AMOUNT_MAX.amount:
+    amount_min = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MIN[currency])[0]
+    amount_max = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MAX[currency])[0]
+    if amount < amount_min or amount > amount_max:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",
-            amount, AMOUNT_MIN, AMOUNT_MAX
+            amount, amount_min, amount_max
         ))
     payin, exchange = payin_bank_wire(website.db, participant, amount)
     redir = request.path.raw+'?exchange_id=%s' % exchange.id

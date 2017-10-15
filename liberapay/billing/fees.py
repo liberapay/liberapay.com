@@ -13,13 +13,14 @@ from liberapay.constants import (
 )
 
 
-def upcharge(amount, fees, min_amount):
+def upcharge(amount, fees, min_amounts):
     """Given an amount, return a higher amount and the difference.
     """
     assert isinstance(amount, Money), type(amount)
 
     fees = fees if isinstance(fees, Fees) else fees[amount.currency]
 
+    min_amount = min_amounts[amount.currency]
     if amount < min_amount:
         amount = min_amount
 

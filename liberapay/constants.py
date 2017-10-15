@@ -196,12 +196,29 @@ PARTICIPANT_KINDS = {
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
-PAYIN_BANK_WIRE_MIN = Decimal('2.00')  # fee ≈ 0.99%
-PAYIN_BANK_WIRE_TARGET = Decimal('5.00')  # fee ≈ 0.6%
-PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
-PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
-PAYIN_DIRECT_DEBIT_MIN = Decimal('25.00')  # fee ≈ 3.6%
-PAYIN_DIRECT_DEBIT_TARGET = Decimal('99.00')  # fee ≈ 0.94%
+PAYIN_BANK_WIRE_MIN = {k: Money('2.00', k) for k in ('EUR', 'USD')}  # fee ≈ 0.99%
+PAYIN_BANK_WIRE_TARGET = {k: Money('5.00', k) for k in ('EUR', 'USD')}  # fee ≈ 0.6%
+PAYIN_BANK_WIRE_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
+PAYIN_CARD_MIN = {
+    'EUR': Money('15.00', 'EUR'),  # fee ≈ 3.5%
+    'USD': Money('20.00', 'USD'),  # fee ≈ 4.58%
+}
+PAYIN_CARD_TARGET = {
+    'EUR': Money('92.00', 'EUR'),  # fee ≈ 2.33%
+    'USD': Money('95.00', 'USD'),  # fee ≈ 3.27%
+}
+PAYIN_CARD_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
+PAYIN_DIRECT_DEBIT_MIN_EUR_GBP = Decimal('25.00')  # fee ≈ 3.6%
+PAYIN_DIRECT_DEBIT_MIN = {
+    'EUR': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'EUR'),
+    'GBP': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'GBP'),
+}
+PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP = Decimal('99.00')  # fee ≈ 0.94%
+PAYIN_DIRECT_DEBIT_TARGET = {
+    'EUR': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'EUR'),
+    'GBP': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'GBP'),
+}
+PAYIN_DIRECT_DEBIT_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
 
 PERIOD_CONVERSION_RATES = {
     'weekly': Decimal(1),
