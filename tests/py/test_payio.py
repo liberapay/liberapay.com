@@ -30,7 +30,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.testing import Foobar
+from liberapay.testing import EUR, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 
 
@@ -48,7 +48,7 @@ class TestPayouts(MangopayHarness):
     def test_payout(self):
         e = charge(self.db, self.janet_route, D('46.00'), 'http://localhost/')
         assert e.status == 'succeeded', e.note
-        self.janet.set_tip_to(self.homer, '42.00')
+        self.janet.set_tip_to(self.homer, EUR('42.00'))
         self.janet.close('downstream')
         self.homer = self.homer.refetch()
         assert self.homer.balance == 46
@@ -196,7 +196,7 @@ class TestPayinBankWire(MangopayHarness):
         r = self.client.PxST(path, data, auth_as=self.janet)
         assert r.code == 403  # rejected because janet has no donations set up
 
-        self.janet.set_tip_to(self.david, '10.00')
+        self.janet.set_tip_to(self.david, EUR('10.00'))
         r = self.client.PxST(path, data, auth_as=self.janet)
         assert r.code == 302, r.text
         redir = r.headers[b'Location']
@@ -235,7 +235,7 @@ class TestDirectDebit(MangopayHarness):
 
     def test_direct_debit_form(self):
         path = b'/janet/wallet/payin/direct-debit'
-        self.janet.set_tip_to(self.david, '10.00')
+        self.janet.set_tip_to(self.david, EUR('10.00'))
         r = self.client.GET(path, auth_as=self.janet)
         assert r.code == 200
 
@@ -249,7 +249,7 @@ class TestDirectDebit(MangopayHarness):
         r = self.client.PxST(path, data, auth_as=self.homer)
         assert r.code == 403  # rejected because homer has no donations set up
 
-        self.homer.set_tip_to(self.david, '10.00')
+        self.homer.set_tip_to(self.david, EUR('10.00'))
         r = self.client.GET(path, auth_as=self.homer)
         assert b'FRxxxxxxxxxxxxxxxxxxxxx2606' in r.body, r.text
 

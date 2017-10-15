@@ -8,6 +8,7 @@ import pytest
 from liberapay.billing.payday import Payday
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
+from liberapay.testing import EUR
 from liberapay.testing.mangopay import FakeTransfersHarness
 
 
@@ -21,8 +22,8 @@ class TestClosing(FakeTransfersHarness):
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
 
-        alice.set_tip_to(bob, D('3.00'))
-        carl.set_tip_to(alice, D('2.00'))
+        alice.set_tip_to(bob, EUR('3.00'))
+        carl.set_tip_to(alice, EUR('2.00'))
 
         team.add_member(alice)
         team.add_member(bob)
@@ -54,7 +55,7 @@ class TestClosing(FakeTransfersHarness):
     def test_can_post_to_close_page(self):
         alice = self.make_participant('alice', balance=7)
         bob = self.make_participant('bob')
-        alice.set_tip_to(bob, D('10.00'))
+        alice.set_tip_to(bob, EUR('10.00'))
 
         data = {'disburse_to': 'downstream'}
         response = self.client.PxST('/alice/settings/close', auth_as=alice, data=data)
@@ -76,8 +77,8 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        alice.set_tip_to(bob, D('3.00'))
-        alice.set_tip_to(carl, D('2.00'))
+        alice.set_tip_to(bob, EUR('3.00'))
+        alice.set_tip_to(carl, EUR('2.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert Participant.from_username('bob').balance == D('6.00')
@@ -88,8 +89,8 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_stub()
         carl = self.make_stub()
-        alice.set_tip_to(bob, D('3.00'))
-        alice.set_tip_to(carl, D('2.00'))
+        alice.set_tip_to(bob, EUR('3.00'))
+        alice.set_tip_to(carl, EUR('2.00'))
         with self.db.get_cursor() as cursor:
             with pytest.raises(alice.NoOneToGiveFinalGiftTo):
                 alice.distribute_balance_as_final_gift(cursor)
@@ -101,8 +102,8 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_stub()
-        alice.set_tip_to(bob, D('3.00'))
-        alice.set_tip_to(carl, D('2.00'))
+        alice.set_tip_to(bob, EUR('3.00'))
+        alice.set_tip_to(carl, EUR('2.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert Participant.from_id(bob.id).balance == D('10.00')
@@ -113,8 +114,8 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        alice.set_tip_to(bob, D('0.00'))
-        alice.set_tip_to(carl, D('2.00'))
+        alice.set_tip_to(bob, EUR('0.00'))
+        alice.set_tip_to(carl, EUR('2.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (bob.id,)) == 1
@@ -126,8 +127,8 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=D('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        alice.set_tip_to(bob, D('3.00'))
-        alice.set_tip_to(carl, D('6.00'))
+        alice.set_tip_to(bob, EUR('3.00'))
+        alice.set_tip_to(carl, EUR('6.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert Participant.from_username('bob').balance == D('3.33')
@@ -138,8 +139,8 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=D('0.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        alice.set_tip_to(bob, D('3.00'))
-        alice.set_tip_to(carl, D('6.00'))
+        alice.set_tip_to(bob, EUR('3.00'))
+        alice.set_tip_to(carl, EUR('6.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert self.db.one("SELECT count(*) FROM tips") == 2
@@ -152,7 +153,7 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=D('0.01'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        alice.set_tip_to(team, D('3.00'))
+        alice.set_tip_to(team, EUR('3.00'))
         team.set_take_for(alice, 1, team)
         team.set_take_for(bob, 1, team)
         team.set_take_for(carl, D('0.01'), team)
@@ -167,7 +168,7 @@ class TestClosing(FakeTransfersHarness):
 
     def test_ctg_clears_tips_giving(self):
         alice = self.make_participant('alice')
-        alice.set_tip_to(self.make_participant('bob'), D('1.00'))
+        alice.set_tip_to(self.make_participant('bob'), EUR('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tipper=%s AND amount > 0",
                                     (alice.id,))
@@ -179,8 +180,8 @@ class TestClosing(FakeTransfersHarness):
     def test_ctg_doesnt_duplicate_zero_tips(self):
         alice = self.make_participant('alice')
         bob = self.make_stub()
-        alice.set_tip_to(bob, D('1.00'))
-        alice.set_tip_to(bob, D('0.00'))
+        alice.set_tip_to(bob, EUR('1.00'))
+        alice.set_tip_to(bob, EUR('0.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tipper=%s", (alice.id,))
         assert ntips() == 2
         with self.db.get_cursor() as cursor:
@@ -197,11 +198,11 @@ class TestClosing(FakeTransfersHarness):
 
     def test_ctg_clears_multiple_tips_giving(self):
         alice = self.make_participant('alice')
-        alice.set_tip_to(self.make_participant('bob'), D('1.00'))
-        alice.set_tip_to(self.make_participant('carl'), D('1.00'))
-        alice.set_tip_to(self.make_participant('darcy'), D('1.00'))
-        alice.set_tip_to(self.make_participant('evelyn'), D('1.00'))
-        alice.set_tip_to(self.make_participant('francis'), D('1.00'))
+        alice.set_tip_to(self.make_participant('bob'), EUR('1.00'))
+        alice.set_tip_to(self.make_participant('carl'), EUR('1.00'))
+        alice.set_tip_to(self.make_participant('darcy'), EUR('1.00'))
+        alice.set_tip_to(self.make_participant('evelyn'), EUR('1.00'))
+        alice.set_tip_to(self.make_participant('francis'), EUR('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tipper=%s AND amount > 0",
                                     (alice.id,))
@@ -215,7 +216,7 @@ class TestClosing(FakeTransfersHarness):
 
     def test_ctr_clears_tips_receiving(self):
         alice = self.make_participant('alice')
-        self.make_participant('bob').set_tip_to(alice, D('1.00'))
+        self.make_participant('bob').set_tip_to(alice, EUR('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tippee=%s AND amount > 0",
                                     (alice.id,))
@@ -227,8 +228,8 @@ class TestClosing(FakeTransfersHarness):
     def test_ctr_doesnt_duplicate_zero_tips(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
-        bob.set_tip_to(alice, D('1.00'))
-        bob.set_tip_to(alice, D('0.00'))
+        bob.set_tip_to(alice, EUR('1.00'))
+        bob.set_tip_to(alice, EUR('0.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (alice.id,))
         assert ntips() == 2
         with self.db.get_cursor() as cursor:
@@ -245,11 +246,11 @@ class TestClosing(FakeTransfersHarness):
 
     def test_ctr_clears_multiple_tips_receiving(self):
         alice = self.make_stub()
-        self.make_participant('bob').set_tip_to(alice, D('1.00'))
-        self.make_participant('carl').set_tip_to(alice, D('2.00'))
-        self.make_participant('darcy').set_tip_to(alice, D('3.00'))
-        self.make_participant('evelyn').set_tip_to(alice, D('4.00'))
-        self.make_participant('francis').set_tip_to(alice, D('5.00'))
+        self.make_participant('bob').set_tip_to(alice, EUR('1.00'))
+        self.make_participant('carl').set_tip_to(alice, EUR('2.00'))
+        self.make_participant('darcy').set_tip_to(alice, EUR('3.00'))
+        self.make_participant('evelyn').set_tip_to(alice, EUR('4.00'))
+        self.make_participant('francis').set_tip_to(alice, EUR('5.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
                                     "WHERE tippee=%s AND amount > 0",
                                     (alice.id,))

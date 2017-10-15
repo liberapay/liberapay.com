@@ -5,7 +5,7 @@ from decimal import Decimal as D
 from psycopg2 import InternalError
 
 from liberapay.billing.payday import Payday
-from liberapay.testing import Harness
+from liberapay.testing import EUR, Harness
 from liberapay.models.participant import Participant
 
 
@@ -18,7 +18,7 @@ class Tests(Harness):
         team = self.make_participant(username, kind='group', **kw)
         if Participant.from_username('Daddy Warbucks') is None:
             self.warbucks = self.make_participant('Daddy Warbucks', balance=1000)
-        self.warbucks.set_tip_to(team, '100')
+        self.warbucks.set_tip_to(team, EUR('100'))
         return team
 
     def make_team_of_one(self, username=TEAM, **kw):
@@ -70,21 +70,21 @@ class Tests(Harness):
 
     def test_take_can_double_but_not_a_penny_more(self):
         team, alice, bob = self.make_team_of_two()
-        self.warbucks.set_tip_to(team, '20')
+        self.warbucks.set_tip_to(team, EUR('20'))
         self.take_last_week(team, alice, '40.00')
         actual = team.set_take_for(alice, D('80.01'), alice)
         assert actual == 80
 
     def test_increase_is_based_on_nominal_take_last_week(self):
         team, alice, bob = self.make_team_of_two()
-        self.warbucks.set_tip_to(team, '15.03')
+        self.warbucks.set_tip_to(team, EUR('15.03'))
         self.take_last_week(team, alice, '20.00', actual_amount='15.03')
         team.set_take_for(alice, D('35.00'), team, check_max=False)
         assert team.set_take_for(alice, D('42.00'), alice) == 40
 
     def test_if_last_week_is_less_than_one_can_increase_to_one(self):
         team, alice, bob = self.make_team_of_two()
-        self.warbucks.set_tip_to(team, '0.50')
+        self.warbucks.set_tip_to(team, EUR('0.50'))
         self.take_last_week(team, alice, '0.01')
         actual = team.set_take_for(alice, D('42.00'), team)
         assert actual == 1
@@ -124,14 +124,14 @@ class Tests(Harness):
     def test_taking_and_receiving_are_updated_correctly(self):
         team, alice = self.make_team_of_one()
         self.take_last_week(team, alice, '40.00')
-        self.warbucks.set_tip_to(team, D('42.00'))
+        self.warbucks.set_tip_to(team, EUR('42.00'))
         team.set_take_for(alice, D('42.00'), alice)
         assert alice.taking == 42
         assert alice.receiving == 42
-        self.warbucks.set_tip_to(alice, D('10.00'))
+        self.warbucks.set_tip_to(alice, EUR('10.00'))
         assert alice.taking == 42
         assert alice.receiving == 52
-        self.warbucks.set_tip_to(team, D('50.00'))
+        self.warbucks.set_tip_to(team, EUR('50.00'))
         assert team.receiving == 50
         team.set_take_for(alice, D('50.00'), alice)
         assert alice.taking == 50
@@ -155,7 +155,7 @@ class Tests(Harness):
         self.take_last_week(team, alice, '40.00')
         team.set_take_for(alice, D('42.00'), alice)
 
-        self.warbucks.set_tip_to(team, D('10.00'))  # hard times
+        self.warbucks.set_tip_to(team, EUR('10.00'))  # hard times
         alice = Participant.from_username('alice')
         assert alice.receiving == alice.taking == 10
 

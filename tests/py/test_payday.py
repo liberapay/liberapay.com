@@ -9,7 +9,7 @@ from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.billing.transactions import create_debt
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
-from liberapay.testing import Foobar
+from liberapay.testing import EUR, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
 
@@ -40,7 +40,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     @mock.patch.object(Payday, 'transfer_for_real')
     def test_payday_can_be_restarted_after_crash(self, transfer_for_real, exec_payday):
         transfer_for_real.side_effect = Foobar
-        self.janet.set_tip_to(self.homer, '6.00')
+        self.janet.set_tip_to(self.homer, EUR('6.00'))
         with self.assertRaises(Foobar):
             Payday.start().run()
         # Check that the web interface allows relaunching
@@ -60,7 +60,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert id == i
 
     def test_payday_moves_money(self):
-        self.janet.set_tip_to(self.homer, '6.00')  # under $10!
+        self.janet.set_tip_to(self.homer, EUR('6.00'))  # under $10!
         self.make_exchange('mango-cc', 10, 0, self.janet)
         Payday.start().run()
 
@@ -81,17 +81,17 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         emma = Participant.make_stub(username='emma')
         team2 = self.make_participant('team2', kind='group')
         team2.add_member(dana)
-        alice.set_tip_to(dana, '3.00')
-        alice.set_tip_to(bob, '6.00')
-        alice.set_tip_to(emma, '0.50')
-        alice.set_tip_to(team, '1.20')
-        alice.set_tip_to(team2, '0.49')
-        bob.set_tip_to(alice, '5.00')
+        alice.set_tip_to(dana, EUR('3.00'))
+        alice.set_tip_to(bob, EUR('6.00'))
+        alice.set_tip_to(emma, EUR('0.50'))
+        alice.set_tip_to(team, EUR('1.20'))
+        alice.set_tip_to(team2, EUR('0.49'))
+        bob.set_tip_to(alice, EUR('5.00'))
         team.add_member(bob)
         team.set_take_for(bob, D('1.00'), team)
-        bob.set_tip_to(dana, '2.00')  # funded by bob's take
-        bob.set_tip_to(emma, '7.00')  # not funded, insufficient receiving
-        carl.set_tip_to(dana, '2.08')  # not funded, insufficient balance
+        bob.set_tip_to(dana, EUR('2.00'))  # funded by bob's take
+        bob.set_tip_to(emma, EUR('7.00'))  # not funded, insufficient receiving
+        carl.set_tip_to(dana, EUR('2.08'))  # not funded, insufficient balance
 
         def check():
             alice = Participant.from_username('alice')
@@ -177,7 +177,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
         prev = alice
         for user in reversed(users):
-            prev.set_tip_to(user, '1.00')
+            prev.set_tip_to(user, EUR('1.00'))
             prev = user
 
         def check():
@@ -275,7 +275,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def test_payday_doesnt_process_tips_when_goal_is_negative(self):
         self.make_exchange('mango-cc', 20, 0, self.janet)
-        self.janet.set_tip_to(self.homer, 13)
+        self.janet.set_tip_to(self.homer, EUR('13.00'))
         self.db.run("UPDATE participants SET goal = -1 WHERE username='homer'")
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
@@ -287,8 +287,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def test_payday_doesnt_make_null_transfers(self):
         alice = self.make_participant('alice')
-        alice.set_tip_to(self.homer, 1)
-        alice.set_tip_to(self.homer, 0)
+        alice.set_tip_to(self.homer, EUR('1.00'))
+        alice.set_tip_to(self.homer, EUR(0))
         a_team = self.make_participant('a_team', kind='group')
         a_team.add_member(alice)
         Payday.start().run()
@@ -297,8 +297,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def test_transfer_tips(self):
         self.make_exchange('mango-cc', 1, 0, self.david)
-        self.david.set_tip_to(self.janet, D('0.51'))
-        self.david.set_tip_to(self.homer, D('0.50'))
+        self.david.set_tip_to(self.janet, EUR('0.51'))
+        self.david.set_tip_to(self.homer, EUR('0.50'))
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
@@ -312,10 +312,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def test_transfer_tips_whole_graph(self):
         alice = self.make_participant('alice', balance=50)
-        alice.set_tip_to(self.homer, D('50'))
-        self.homer.set_tip_to(self.janet, D('20'))
-        self.janet.set_tip_to(self.david, D('5'))
-        self.david.set_tip_to(self.homer, D('20'))  # Should be unfunded
+        alice.set_tip_to(self.homer, EUR('50'))
+        self.homer.set_tip_to(self.janet, EUR('20'))
+        self.janet.set_tip_to(self.david, EUR('5'))
+        self.david.set_tip_to(self.homer, EUR('20'))  # Should be unfunded
 
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
@@ -334,7 +334,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob = self.make_participant('bob')
         a_team.set_take_for(bob, D('0.01'), a_team)
         charlie = self.make_participant('charlie', balance=1000)
-        charlie.set_tip_to(a_team, D('1.01'))
+        charlie.set_tip_to(a_team, EUR('1.01'))
 
         payday = Payday.start()
 
@@ -370,7 +370,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob = self.make_participant('bob')
         team.set_take_for(bob, D('1.00'), team)
         charlie = self.make_participant('charlie', balance=1000)
-        charlie.set_tip_to(team, D('0.26'))
+        charlie.set_tip_to(team, EUR('0.26'))
 
         Payday.start().run()
 
@@ -396,9 +396,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob = self.make_participant('bob')
         team.set_take_for(bob, D('0.21'), team)
         charlie = self.make_participant('charlie', balance=10)
-        charlie.set_tip_to(team, D('5.00'))
+        charlie.set_tip_to(team, EUR('5.00'))
         dan = self.make_participant('dan', balance=10)
-        dan.set_tip_to(team, D('5.00'))
+        dan.set_tip_to(team, EUR('5.00'))
 
         Payday.start().run()
 
@@ -420,7 +420,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob = self.make_participant('bob')
         team.set_take_for(bob, D('0.21'), team)
         charlie = self.make_participant('charlie', balance=10)
-        charlie.set_tip_to(team, D('2.00'))
+        charlie.set_tip_to(team, EUR('2.00'))
 
         print("> Step 1: three weeks of donations from charlie only")
         print()
@@ -441,7 +441,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
               "reduced while dan catches up")
         print()
         dan = self.make_participant('dan', balance=10)
-        dan.set_tip_to(team, D('2.00'))
+        dan.set_tip_to(team, EUR('2.00'))
 
         for i in range(6):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
@@ -481,9 +481,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob = self.make_participant('bob')
         team.set_take_for(bob, D('0.21'), team)
         charlie = self.make_participant('charlie', balance=10)
-        charlie.set_tip_to(team, D('1.00'))
+        charlie.set_tip_to(team, EUR('1.00'))
         dan = self.make_participant('dan', balance=10)
-        dan.set_tip_to(team, D('3.00'))
+        dan.set_tip_to(team, EUR('3.00'))
 
         print("> Step 1: three weeks of donations from early donors")
         print()
@@ -505,7 +505,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
               "donors automatically decrease while the new donor catches up")
         print()
         emma = self.make_participant('emma', balance=10)
-        emma.set_tip_to(team, D('1.00'))
+        emma.set_tip_to(team, EUR('1.00'))
 
         Payday.start().run(recompute_stats=0, update_cached_amounts=False)
         print()
@@ -561,9 +561,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob = self.make_participant('bob')
         team.set_take_for(bob, D('0.01'), team)
         charlie = self.make_participant('charlie', balance=10)
-        charlie.set_tip_to(team, D('0.02'))
+        charlie.set_tip_to(team, EUR('0.02'))
         dan = self.make_participant('dan', balance=10)
-        dan.set_tip_to(team, D('0.02'))
+        dan.set_tip_to(team, EUR('0.02'))
 
         print("> Step 1: three weeks of donations from early donors")
         print()
@@ -585,7 +585,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
               "donors automatically decrease while the new donor catches up")
         print()
         emma = self.make_participant('emma', balance=10)
-        emma.set_tip_to(team, D('0.02'))
+        emma.set_tip_to(team, EUR('0.02'))
 
         for i in range(6):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
@@ -610,7 +610,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob = self.make_participant('bob')
         team.set_take_for(bob, D('0.50'), team)
         charlie = self.make_participant('charlie', balance=10)
-        charlie.set_tip_to(team, D('0.52'))
+        charlie.set_tip_to(team, EUR('0.52'))
 
         print("> Step 1: three weeks of donations from early donor")
         print()
@@ -632,7 +632,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
               "but the leftover is small so the adjustments are limited")
         print()
         dan = self.make_participant('dan', balance=10)
-        dan.set_tip_to(team, D('0.52'))
+        dan.set_tip_to(team, EUR('0.52'))
 
         for i in range(3):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
@@ -652,10 +652,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', balance=8)
-        alice.set_tip_to(team, D('2.00'))
+        alice.set_tip_to(team, EUR('2.00'))
         team.set_take_for(alice, D('0.25'), team)
         bob = self.make_participant('bob', balance=10)
-        bob.set_tip_to(team, D('2.00'))
+        bob.set_tip_to(team, EUR('2.00'))
         team.set_take_for(bob, D('0.75'), team)
 
         Payday.start().run()
@@ -672,7 +672,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
-        alice.set_tip_to(team, D('1.00'))  # unfunded tip
+        alice.set_tip_to(team, EUR('1.00'))  # unfunded tip
         bob = self.make_participant('bob')
         team.set_take_for(bob, D('1.00'), team)
 
@@ -718,7 +718,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     def test_it_handles_invoices_correctly(self):
         org = self.make_participant('org', kind='organization', allow_invoices=True)
         self.make_exchange('mango-cc', 60, 0, self.janet)
-        self.janet.set_tip_to(org, '50.00')
+        self.janet.set_tip_to(org, EUR('50.00'))
         self.db.run("UPDATE participants SET allow_invoices = true WHERE id = %s",
                     (self.janet.id,))
         self.make_invoice(self.janet, org, '40.02', 'accepted')
@@ -764,10 +764,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def test_it_notifies_participants(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
-        self.janet.set_tip_to(self.david, '4.50')
-        self.janet.set_tip_to(self.homer, '3.50')
+        self.janet.set_tip_to(self.david, EUR('4.50'))
+        self.janet.set_tip_to(self.homer, EUR('3.50'))
         team = self.make_participant('team', kind='group', email='team@example.com')
-        self.janet.set_tip_to(team, '0.25')
+        self.janet.set_tip_to(team, EUR('0.25'))
         team.add_member(self.david)
         team.set_take_for(self.david, D('0.23'), team)
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
@@ -775,7 +775,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         kalel = self.make_participant(
             'kalel', mangopay_user_id=None, email='kalel@example.org',
         )
-        self.janet.set_tip_to(kalel, '0.10')
+        self.janet.set_tip_to(kalel, EUR('0.10'))
         Payday.start().run()
         david = self.david.refetch()
         assert david.balance == D('4.73')

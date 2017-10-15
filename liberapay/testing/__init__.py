@@ -8,6 +8,7 @@ import unittest
 from os.path import dirname, join, realpath
 
 from aspen import resources
+from mangopay.utils import Money
 from pando.utils import utcnow
 from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
@@ -29,6 +30,10 @@ from liberapay.testing.vcr import use_cassette
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
 WWW_ROOT = str(realpath(join(TOP, 'www')))
 PROJECT_ROOT = str(TOP)
+
+
+def EUR(amount):
+    return Money(amount, 'EUR')
 
 
 class ClientWithAuth(Client):

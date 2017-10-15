@@ -1561,9 +1561,6 @@ class Participant(Model, MixinTeam):
         if self.id == tippee.id:
             raise NoSelfTipping
 
-        if not isinstance(periodic_amount, Money):
-            # TODO drop this
-            periodic_amount = Money(periodic_amount, 'EUR')
         amount = periodic_amount * PERIOD_CONVERSION_RATES[period]
 
         if periodic_amount != 0:
