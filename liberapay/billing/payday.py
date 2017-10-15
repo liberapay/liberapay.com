@@ -2,6 +2,7 @@
 
 from __future__ import print_function, unicode_literals
 
+from collections import namedtuple
 from datetime import date
 from decimal import Decimal, ROUND_UP
 import os
@@ -26,6 +27,9 @@ log = print
 
 def round_up(d):
     return d.quantize(constants.D_CENT, rounding=ROUND_UP)
+
+
+TakeTransfer = namedtuple('TakeTransfer', 'tipper member amount')
 
 
 class NoPayday(Exception):
@@ -302,7 +306,7 @@ class Payday(object):
             SELECT id FROM payday_participants WHERE kind = 'group';
         """)
         for team_id in teams:
-            Payday.resolve_takes(cursor, team_id)
+            Payday.transfer_takes(cursor, team_id)
         cursor.run("""
             SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
@@ -310,34 +314,18 @@ class Payday(object):
         Payday.pay_invoices(cursor, ts_start)
 
     @staticmethod
-    def resolve_takes(cursor, team_id):
-        """Resolve many-to-many donations (team takes)
+    def transfer_takes(cursor, team_id):
+        """Resolve and transfer takes for the specified team
         """
         args = dict(team_id=team_id)
-        total_income = cursor.one("""
-            WITH funded AS (
-                 UPDATE payday_tips
-                    SET is_funded = true
-                   FROM payday_participants p
-                  WHERE p.id = tipper
-                    AND tippee = %(team_id)s
-                    AND p.new_balance >= amount
-              RETURNING amount
-            )
-            SELECT COALESCE(sum(amount), 0) FROM funded;
-        """, args)
-        total_takes = cursor.one("""
-            SELECT COALESCE(sum(t.amount), 0)
-              FROM payday_takes t
-             WHERE t.team = %(team_id)s
-        """, args)
-        if total_income == 0 or total_takes == 0:
-            return
-        args['takes_ratio'] = min(total_income / total_takes, 1)
-        tips_ratio = args['tips_ratio'] = min(total_takes / total_income, 1)
         tips = [NS(t._asdict()) for t in cursor.all("""
-            SELECT t.id, t.tipper, (round_up(t.amount * %(tips_ratio)s, 2)) AS amount
-                 , t.amount AS full_amount
+            UPDATE payday_tips AS t
+               SET is_funded = true
+              FROM payday_participants p
+             WHERE p.id = tipper
+               AND tippee = %(team_id)s
+               AND p.new_balance >= amount
+         RETURNING t.id, t.tipper, t.amount AS full_amount
                  , COALESCE((
                        SELECT sum(tr.amount)
                          FROM transfers tr
@@ -346,16 +334,30 @@ class Payday(object):
                           AND tr.context = 'take'
                           AND tr.status = 'succeeded'
                    ), 0) AS past_transfers_sum
-              FROM payday_tips t
-              JOIN payday_participants p ON p.id = t.tipper
-             WHERE t.tippee = %(team_id)s
-               AND p.new_balance >= t.amount
         """, args)]
         takes = [NS(t._asdict()) for t in cursor.all("""
-            SELECT t.member, (round_up(t.amount * %(takes_ratio)s, 2)) AS amount
+            SELECT t.member, t.amount
               FROM payday_takes t
              WHERE t.team = %(team_id)s;
         """, args)]
+        transfers, leftover = Payday.resolve_takes(tips, takes)
+        for t in transfers:
+            cursor.run("SELECT transfer(%s, %s, %s, 'take', %s, NULL)",
+                       (t.tipper, t.member, t.amount, team_id))
+
+    @staticmethod
+    def resolve_takes(tips, takes):
+        """Resolve many-to-many donations (team takes)
+        """
+        total_income = sum(t.full_amount for t in tips)
+        total_takes = sum(t.amount for t in takes)
+        leftover = max(total_income - total_takes, 0)
+        if total_income == 0 or total_takes == 0:
+            return (), leftover
+        takes_ratio = min(total_income / total_takes, 1)
+        for take in takes:
+            take.amount = round_up(take.amount * takes_ratio)
+        tips_ratio = min(total_takes / total_income, 1)
         adjust_tips = tips_ratio != 1
         if adjust_tips:
             # The team has a leftover, so donation amounts can be adjusted.
@@ -409,6 +411,7 @@ class Payday(object):
                     leeway_ratio = min(delta / leeway, 1)
                     tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
         # Loop: compute the adjusted donation amounts, and do the transfers
+        transfers = []
         for tip in tips:
             if adjust_tips:
                 tip_amount = round_up(tip.amount + tip.leeway * leeway_ratio)
@@ -417,16 +420,18 @@ class Payday(object):
                 assert tip_amount > 0
                 assert tip_amount <= tip.full_amount
                 tip.amount = tip_amount
+            else:
+                tip.amount = round_up(tip.full_amount * tips_ratio)
             for take in takes:
                 if take.amount == 0 or tip.tipper == take.member:
                     continue
                 transfer_amount = min(tip.amount, take.amount)
-                cursor.run("SELECT transfer(%s, %s, %s, 'take', %s, NULL)",
-                           (tip.tipper, take.member, transfer_amount, team_id))
+                transfers.append(TakeTransfer(tip.tipper, take.member, transfer_amount))
                 tip.amount -= transfer_amount
                 take.amount -= transfer_amount
                 if tip.amount == 0:
                     break
+        return transfers, leftover
 
     @staticmethod
     def pay_invoices(cursor, ts_start):
@@ -493,8 +498,9 @@ class Payday(object):
             log(msg % (t.id, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id))
             transfer(db, **t.__dict__)
 
-    def clean_up(self):
-        self.db.run("""
+    @classmethod
+    def clean_up(cls):
+        cls.db.run("""
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
@@ -656,11 +662,13 @@ class Payday(object):
         for payday_id in ids:
             cls.update_stats(payday_id)
 
-    def update_cached_amounts(self):
+    @classmethod
+    def update_cached_amounts(cls):
         now = pando.utils.utcnow()
-        with self.db.get_cursor() as cursor:
-            self.prepare(cursor, now)
-            self.transfer_virtually(cursor, now)
+        with cls.db.get_cursor() as cursor:
+            cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            cls.prepare(cursor, now)
+            cls.transfer_virtually(cursor, now)
             cursor.run("""
 
             UPDATE tips t
@@ -668,6 +676,21 @@ class Payday(object):
               FROM payday_tips t2
              WHERE t.id = t2.id
                AND t.is_funded <> t2.is_funded;
+
+            UPDATE takes t
+               SET actual_amount = t2.actual_amount
+              FROM ( SELECT t2.id
+                          , COALESCE((
+                                SELECT sum(amount)
+                                  FROM payday_transfers tr
+                                 WHERE tr.team = t2.team
+                                   AND tr.tippee = t2.member
+                                   AND tr.context = 'take'
+                            ), 0) AS actual_amount
+                       FROM current_takes t2
+                   ) t2
+             WHERE t.id = t2.id
+               AND t.actual_amount <> t2.actual_amount;
 
             UPDATE participants p
                SET giving = p2.giving
@@ -713,18 +736,33 @@ class Payday(object):
                AND p.status <> 'stub';
 
             UPDATE participants p
-               SET npatrons = p2.npatrons
+               SET leftover = p2.leftover
               FROM ( SELECT p2.id
-                          , ( SELECT count(*)
-                                FROM payday_transfers t
-                               WHERE t.tippee = p2.id
-                            ) AS npatrons
+                          , p2.receiving - COALESCE((
+                                SELECT sum(amount)
+                                  FROM payday_transfers t
+                                 WHERE t.tippee = p2.id
+                                    OR t.team = p2.id
+                            ), 0) AS leftover
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
-               AND p.npatrons <> p2.npatrons
-               AND p.status <> 'stub'
-               AND p.kind IN ('individual', 'organization');
+               AND p.leftover <> p2.leftover;
+
+            UPDATE participants p
+               SET nteampatrons = p2.nteampatrons
+              FROM ( SELECT p2.id
+                          , ( SELECT count(DISTINCT t.tipper)
+                                FROM payday_transfers t
+                               WHERE t.tippee = p2.id
+                                 AND t.context = 'take'
+                            ) AS nteampatrons
+                       FROM participants p2
+                      WHERE p2.status <> 'stub'
+                        AND p2.kind IN ('individual', 'organization')
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.nteampatrons <> p2.nteampatrons;
 
             UPDATE participants p
                SET npatrons = p2.npatrons
@@ -735,13 +773,13 @@ class Payday(object):
                                  AND t.is_funded
                             ) AS npatrons
                        FROM participants p2
+                      WHERE p2.status <> 'stub'
                    ) p2
              WHERE p.id = p2.id
-               AND p.npatrons <> p2.npatrons
-               AND p.kind = 'group';
+               AND p.npatrons <> p2.npatrons;
 
             """)
-        self.clean_up()
+        cls.clean_up()
         log("Updated receiving amounts.")
 
     def mark_stage_done(self):

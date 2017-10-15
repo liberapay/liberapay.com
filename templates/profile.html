@@ -19,7 +19,7 @@
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
             <div class="flex-row space-between wrap">
                 % set username = participant.username
-                % set npatrons = Bold(participant.npatrons)
+                % set npatrons = Bold(participant.npatrons + participant.nteampatrons)
                 % set receiving = participant.receiving
                 % set goal = participant.goal
                 % set receiving_str = Bold(Money(receiving, 'EUR'))

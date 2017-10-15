@@ -1502,29 +1502,29 @@ class Participant(Model, MixinTeam):
         return updated
 
     def update_receiving(self, cursor=None):
-        if self.kind == 'group':
-            old_takes = self.compute_actual_takes(cursor=cursor)
-        r = (cursor or self.db).one("""
-            WITH our_tips AS (
-                     SELECT amount
-                       FROM current_tips
-                      WHERE tippee = %(id)s
-                        AND amount > 0
-                        AND is_funded
-                 )
-            UPDATE participants p
-               SET receiving = (COALESCE((
-                       SELECT sum(amount)
-                         FROM our_tips
-                   ), 0) + taking)
-                 , npatrons = COALESCE((SELECT count(*) FROM our_tips), 0)
-             WHERE p.id = %(id)s
-         RETURNING receiving, npatrons
-        """, dict(id=self.id))
-        self.set_attributes(receiving=r.receiving, npatrons=r.npatrons)
-        if self.kind == 'group':
-            new_takes = self.compute_actual_takes(cursor=cursor)
-            self.update_taking(old_takes, new_takes, cursor=cursor)
+        with self.db.get_cursor(cursor) as c:
+            if self.kind == 'group':
+                c.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            r = c.one("""
+                WITH our_tips AS (
+                         SELECT amount
+                           FROM current_tips
+                          WHERE tippee = %(id)s
+                            AND amount > 0
+                            AND is_funded
+                     )
+                UPDATE participants p
+                   SET receiving = (COALESCE((
+                           SELECT sum(amount)
+                             FROM our_tips
+                       ), 0) + taking)
+                     , npatrons = COALESCE((SELECT count(*) FROM our_tips), 0)
+                 WHERE p.id = %(id)s
+             RETURNING receiving, npatrons
+            """, dict(id=self.id))
+            self.set_attributes(receiving=r.receiving, npatrons=r.npatrons)
+            if self.kind == 'group':
+                self.recompute_actual_takes(c)
 
 
     def set_tip_to(self, tippee, periodic_amount, period='weekly',

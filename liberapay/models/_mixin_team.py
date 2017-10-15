@@ -3,10 +3,11 @@
 from __future__ import division, print_function, unicode_literals
 
 from collections import OrderedDict
-from decimal import Decimal, ROUND_UP
+from decimal import Decimal
 from statistics import median
 
-from liberapay.constants import D_CENT, D_INF, D_UNIT, D_ZERO
+from liberapay.constants import D_INF, D_UNIT, D_ZERO
+from liberapay.utils import NS
 
 
 class MemberLimitReached(Exception): pass
@@ -32,7 +33,7 @@ class MixinTeam(object):
     def add_member(self, member, cursor=None):
         """Add a member to this team.
         """
-        if len(self.get_current_takes()) == 149:
+        if self.nmembers >= 149:
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
@@ -40,11 +41,11 @@ class MixinTeam(object):
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
-            INSERT INTO takes (ctime, member, team, amount, recorder) (
-                SELECT ctime, member, %(id)s, NULL, %(id)s
-                  FROM current_takes
-                 WHERE team=%(id)s
-            );
+            INSERT INTO takes
+                        (ctime, member, team, amount, actual_amount, recorder)
+                 SELECT ctime, member, %(id)s, NULL, NULL, %(id)s
+                   FROM current_takes
+                  WHERE team=%(id)s
         """, dict(id=self.id))
 
     def member_of(self, team):
@@ -121,10 +122,8 @@ class MixinTeam(object):
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
-            # Compute the current takes
-            old_takes = self.compute_actual_takes(cursor)
             # Throttle the new take, if there is more than one member
-            if take and check_max and len(old_takes) > 1 and take > 1:
+            if take and check_max and self.nmembers > 1 and take > 1:
                 last_week = self.get_takes_last_week()
                 max_this_week = self.compute_max_this_week(member.id, last_week)
                 if take > max_this_week:
@@ -132,51 +131,38 @@ class MixinTeam(object):
             # Insert the new take
             cursor.run("""
 
-                INSERT INTO takes (ctime, member, team, amount, recorder)
-                 VALUES ( COALESCE (( SELECT ctime
-                                        FROM takes
-                                       WHERE member=%(member)s
-                                         AND team=%(team)s
-                                       LIMIT 1
-                                     ), CURRENT_TIMESTAMP)
-                        , %(member)s
-                        , %(team)s
-                        , %(amount)s
-                        , %(recorder)s
-                         )
+                INSERT INTO takes
+                            (ctime, member, team, amount, actual_amount, recorder)
+                     SELECT COALESCE((
+                                SELECT ctime
+                                  FROM takes
+                                 WHERE member=%(member)s
+                                   AND team=%(team)s
+                                 LIMIT 1
+                            ), current_timestamp)
+                          , %(member)s
+                          , %(team)s
+                          , %(amount)s
+                          , CASE WHEN %(amount)s IS NULL THEN NULL ELSE
+                                COALESCE((
+                                    SELECT actual_amount
+                                      FROM takes
+                                     WHERE member=%(member)s
+                                       AND team=%(team)s
+                                  ORDER BY mtime DESC
+                                     LIMIT 1
+                                ), 0)
+                            END
+                          , %(recorder)s
 
             """, dict(member=member.id, team=self.id, amount=take,
                       recorder=recorder.id))
-            # Compute the new takes
-            new_takes = self.compute_actual_takes(cursor)
-            # Update receiving amounts in the participants table
-            self.update_taking(old_takes, new_takes, cursor, member)
+            # Recompute the actual takes and update the cached amounts
+            self.recompute_actual_takes(cursor, member=member)
             # Update is_funded on member's tips
             member.update_giving(cursor)
 
         return take
-
-    def update_taking(self, old_takes, new_takes, cursor=None, member=None):
-        """Update `taking` amounts based on the difference between `old_takes`
-        and `new_takes`.
-        """
-        for p_id in set(old_takes.keys()).union(new_takes.keys()):
-            old = old_takes.get(p_id, {}).get('actual_amount', D_ZERO)
-            new = new_takes.get(p_id, {}).get('actual_amount', D_ZERO)
-            diff = new - old
-            if diff != 0:
-                (cursor or self.db).run("""
-                    UPDATE participants
-                       SET taking = (taking + %(diff)s)
-                         , receiving = (receiving + %(diff)s)
-                     WHERE id=%(p_id)s
-                """, dict(p_id=p_id, diff=diff))
-            if member and p_id == member.id:
-                r = (cursor or self.db).one(
-                    "SELECT taking, receiving FROM participants WHERE id = %s",
-                    (p_id,)
-                )
-                member.set_attributes(**r._asdict())
 
     def get_current_takes(self, cursor=None):
         """Return a list of member takes for a team.
@@ -185,7 +171,7 @@ class MixinTeam(object):
         TAKES = """
             SELECT p.id AS member_id, p.username AS member_name, p.avatar_url
                  , (p.mangopay_user_id IS NOT NULL) AS is_identified
-                 , t.amount, t.ctime, t.mtime
+                 , t.amount, t.actual_amount, t.ctime, t.mtime
               FROM current_takes t
               JOIN participants p ON p.id = member
              WHERE t.team=%(team)s
@@ -194,24 +180,82 @@ class MixinTeam(object):
         records = (cursor or self.db).all(TAKES, dict(team=self.id))
         return [r._asdict() for r in records]
 
-    def compute_actual_takes(self, cursor=None):
-        """Get the takes, compute the actual amounts, and return an OrderedDict.
+    def recompute_actual_takes(self, cursor, member=None):
+        """Get the tips and takes for this team and recompute the actual amounts.
+
+        To avoid deadlocks the given `cursor` should have already acquired an
+        exclusive lock on the `takes` table.
         """
-        actual_takes = OrderedDict()
-        nominal_takes = self.get_current_takes(cursor=cursor)
-        balance = self.receiving
-        total_takes = sum(t['amount'] for t in nominal_takes if t['is_identified'])
-        ratio = min(balance / total_takes, 1) if total_takes else 0
-        for take in nominal_takes:
-            nominal = take['nominal_take'] = take.pop('amount')
-            actual = take['actual_amount'] = min(
-                (nominal * ratio).quantize(D_CENT, rounding=ROUND_UP),
-                balance
-            ) if take['is_identified'] else D_ZERO
-            balance -= actual
-            actual_takes[take['member_id']] = take
-        actual_takes.leftover = balance
-        return actual_takes
+        from liberapay.billing.payday import Payday
+        tips = [NS(t._asdict()) for t in cursor.all("""
+            SELECT t.id, t.tipper, t.amount AS full_amount
+                 , COALESCE((
+                       SELECT sum(tr.amount)
+                         FROM transfers tr
+                        WHERE tr.tipper = t.tipper
+                          AND tr.team = %(team_id)s
+                          AND tr.context = 'take'
+                          AND tr.status = 'succeeded'
+                   ), 0) AS past_transfers_sum
+              FROM current_tips t
+             WHERE t.tippee = %(team_id)s
+               AND t.is_funded
+        """, dict(team_id=self.id))]
+        takes = [NS(r._asdict()) for r in (cursor or self.db).all("""
+            SELECT *
+              FROM current_takes
+             WHERE team = %s
+        """, (self.id,))]
+        # Recompute the takes
+        takes_sum = {}
+        tippers = {}
+        transfers, new_leftover = Payday.resolve_takes(tips, takes)
+        for t in transfers:
+            if t.member in takes_sum:
+                takes_sum[t.member] += t.amount
+            else:
+                takes_sum[t.member] = t.amount
+            if t.member in tippers:
+                tippers[t.member].add(t.tipper)
+            else:
+                tippers[t.member] = set((t.tipper,))
+        # Update the leftover
+        cursor.run("UPDATE participants SET leftover = %s WHERE id = %s",
+                   (new_leftover, self.id))
+        self.set_attributes(leftover=new_leftover)
+        # Update the cached amounts (actual_amount, taking, and receiving)
+        for take in takes:
+            member_id = take.member
+            old_amount = take.actual_amount or D_ZERO
+            new_amount = takes_sum.get(take.member, D_ZERO)
+            diff = new_amount - old_amount
+            if diff != 0:
+                take.actual_amount = new_amount
+                cursor.run("""
+                    UPDATE takes
+                       SET actual_amount = %(actual_amount)s
+                     WHERE id = %(id)s
+                """, take.__dict__)
+                ntippers = len(tippers.get(member_id, ()))
+                cursor.run("""
+                    UPDATE participants
+                       SET taking = (taking + %(diff)s)
+                         , receiving = (receiving + %(diff)s)
+                         , nteampatrons = (
+                               CASE WHEN (receiving + %(diff)s) = 0 THEN 0
+                                    WHEN nteampatrons < %(ntippers)s THEN %(ntippers)s
+                                    ELSE nteampatrons
+                               END
+                           )
+                     WHERE id=%(member_id)s
+                """, dict(member_id=member_id, diff=diff, ntippers=ntippers))
+            if member and member.id == member_id:
+                r = cursor.one(
+                    "SELECT taking, receiving FROM participants WHERE id = %s",
+                    (member_id,)
+                )
+                member.set_attributes(**r._asdict())
+        return takes
 
     @property
     def nmembers(self):
@@ -225,15 +269,15 @@ class MixinTeam(object):
     def get_members(self):
         """Return an OrderedDict of member dicts.
         """
-        takes = self.compute_actual_takes()
+        takes = self.get_current_takes()
         last_week = self.get_takes_last_week()
         members = OrderedDict()
-        members.leftover = takes.leftover
-        for take in takes.values():
+        members.leftover = self.leftover
+        for take in takes:
             member = {}
             m_id = member['id'] = take['member_id']
             member['username'] = take['member_name']
-            member['nominal_take'] = take['nominal_take']
+            member['nominal_take'] = take['amount']
             member['actual_amount'] = take['actual_amount']
             member['last_week'] = last_week.get(m_id, D_ZERO)
             x = self.compute_max_this_week(m_id, last_week)

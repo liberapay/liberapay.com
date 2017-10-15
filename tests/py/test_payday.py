@@ -101,31 +101,42 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             emma = Participant.from_username('emma')
             assert alice.giving == D('10.69')
             assert alice.receiving == D('5.00')
+            assert alice.npatrons == 1
+            assert alice.nteampatrons == 0
             assert bob.giving == D('7.00')
             assert bob.receiving == D('7.00')
             assert bob.taking == D('1.00')
+            assert bob.npatrons == 1
+            assert bob.nteampatrons == 1
             assert carl.giving == D('0.00')
             assert carl.receiving == D('0.00')
+            assert carl.npatrons == 0
+            assert carl.nteampatrons == 0
             assert dana.receiving == D('5.00')
             assert dana.npatrons == 2
+            assert dana.nteampatrons == 0
             assert emma.receiving == D('0.50')
             assert emma.npatrons == 1
+            assert emma.nteampatrons == 0
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
             assert funded_tips == [3, 6, 0.5, D('1.20'), D('0.49'), 5, 2]
 
             team = Participant.from_username('team')
             assert team.receiving == D('1.20')
             assert team.npatrons == 1
+            assert team.leftover == D('0.20')
 
             team2 = Participant.from_username('team2')
             assert team2.receiving == D('0.49')
             assert team2.npatrons == 1
+            assert team2.leftover == D('0.49')
 
             janet = self.janet.refetch()
             assert janet.giving == 0
             assert janet.receiving == 0
             assert janet.taking == 0
             assert janet.npatrons == 0
+            assert janet.nteampatrons == 0
 
         # Pre-test check
         check()
