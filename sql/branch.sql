@@ -23,3 +23,43 @@ BEGIN;
           FROM tips
       ORDER BY tipper, tippee, mtime DESC;
 END;
+
+CREATE FUNCTION EUR(numeric) RETURNS currency_amount AS $$
+    BEGIN RETURN ($1, 'EUR'); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+BEGIN;
+    DROP VIEW sponsors;
+    ALTER TABLE participants
+        ALTER COLUMN goal DROP DEFAULT,
+        ALTER COLUMN goal TYPE currency_amount USING EUR(goal),
+        ALTER COLUMN goal SET DEFAULT NULL;
+    ALTER TABLE participants
+        ALTER COLUMN giving DROP DEFAULT,
+        ALTER COLUMN giving TYPE currency_amount USING EUR(giving),
+        ALTER COLUMN giving SET DEFAULT ('0.00', 'EUR');
+    ALTER TABLE participants
+        ALTER COLUMN receiving DROP DEFAULT,
+        ALTER COLUMN receiving TYPE currency_amount USING EUR(receiving),
+        ALTER COLUMN receiving SET DEFAULT ('0.00', 'EUR');
+    ALTER TABLE participants
+        ALTER COLUMN taking DROP DEFAULT,
+        ALTER COLUMN taking TYPE currency_amount USING EUR(taking),
+        ALTER COLUMN taking SET DEFAULT ('0.00', 'EUR');
+    ALTER TABLE participants
+        ALTER COLUMN leftover DROP DEFAULT,
+        ALTER COLUMN leftover TYPE currency_amount USING EUR(leftover),
+        ALTER COLUMN leftover SET DEFAULT ('0.00', 'EUR');
+    CREATE VIEW sponsors AS
+        SELECT *
+          FROM participants p
+         WHERE status = 'active'
+           AND kind = 'organization'
+           AND giving > receiving
+           AND giving >= 10
+           AND hide_from_lists = 0
+           AND profile_noindex = 0
+        ;
+END;
+
+DROP FUNCTION EUR(numeric);

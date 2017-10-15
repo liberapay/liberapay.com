@@ -83,12 +83,12 @@ total_receiving = tipper.receiving
 out["amount"] = amount
 out["npatrons"] = tippee.npatrons
 out["tippee_id"] = tippee.id
-out["total_giving"] = str(total_giving)
-out["total_receiving"] = str(total_receiving)
+out["total_giving"] = total_giving
+out["total_receiving"] = total_receiving
 
 if not tippee.hide_receiving:
     total_receiving_tippee = tippee.receiving
-    out["total_receiving_tippee"] = str(total_receiving_tippee)
+    out["total_receiving_tippee"] = total_receiving_tippee
 else:
     out["total_receiving_tippee"] = None
 

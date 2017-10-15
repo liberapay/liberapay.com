@@ -80,7 +80,7 @@ if is_team:
         "A Liberapay user has pledged to donate {0} per week to {1}.",
         "{n} Liberapay users have pledged to donate a total of {0} per week to {1}.",
         participant.npatrons,
-        Money(participant.receiving, 'EUR'), friendly_name
+        participant.receiving, friendly_name
     ) }}</div>
     % endif
 

@@ -62,7 +62,7 @@
             <td></td>
             <td></td>
             <td class="{{ 'info' if members.leftover else '' }}"
-                >{{ format_currency(members.leftover, 'EUR') }}</td>
+                >{{ format_currency(*members.leftover) }}</td>
         </tr>
       </tbody>
     </table>

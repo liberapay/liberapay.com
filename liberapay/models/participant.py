@@ -235,7 +235,7 @@ class Participant(Model, MixinTeam):
         if r:
             return r
         return cls.make_stub(
-            goal=-1,
+            goal=Money(-1, 'EUR'),
             hide_from_search=3,
             hide_from_lists=3,
             join_time=utcnow(),
@@ -590,8 +590,8 @@ class Participant(Model, MixinTeam):
                  , avatar_url=NULL
                  , session_token=NULL
                  , session_expires=now()
-                 , giving=0
-                 , receiving=0
+                 , giving=zero(giving)
+                 , receiving=zero(receiving)
                  , npatrons=0
              WHERE id=%(id)s
          RETURNING *;
@@ -1440,7 +1440,7 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor(cursor) as c:
             goal = 'goal'
             if status == 'closed':
-                goal = '-1'
+                goal = '(-1, main_currency)'
             elif status == 'active':
                 goal = 'NULL'
             r = c.one("""
@@ -1472,10 +1472,10 @@ class Participant(Model, MixinTeam):
                AND t.amount > 0
           ORDER BY p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
-        fake_balance = self.balance + self.receiving
+        fake_balance = self.balance + self.receiving.amount
         updated = []
         for tip in tips:
-            if tip.amount > fake_balance:
+            if tip.amount.amount > fake_balance:
                 is_funded = False
             else:
                 fake_balance -= tip.amount.amount
@@ -1493,7 +1493,7 @@ class Participant(Model, MixinTeam):
         giving = (cursor or self.db).one("""
             UPDATE participants p
                SET giving = COALESCE((
-                     SELECT sum((amount).amount)
+                     SELECT sum(amount, %(currency)s)
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
@@ -1501,10 +1501,10 @@ class Participant(Model, MixinTeam):
                         AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
                         AND amount > 0
                         AND is_funded
-                   ), 0)
+                   ), zero(p.giving))
              WHERE p.id = %(id)s
          RETURNING giving
-        """, dict(id=self.id))
+        """, dict(id=self.id, currency=self.main_currency))
         self.set_attributes(giving=giving)
 
         return updated
@@ -1513,6 +1513,7 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor(cursor) as c:
             if self.kind == 'group':
                 c.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            zero = ZERO[self.main_currency]
             r = c.one("""
                 WITH our_tips AS (
                          SELECT amount
@@ -1522,14 +1523,14 @@ class Participant(Model, MixinTeam):
                             AND is_funded
                      )
                 UPDATE participants p
-                   SET receiving = (COALESCE((
-                           SELECT sum((amount).amount)
-                             FROM our_tips
-                       ), 0) + taking)
+                   SET receiving = (
+                           COALESCE((SELECT sum(amount, %(currency)s) FROM our_tips), %(zero)s) +
+                           COALESCE(taking, %(zero)s)
+                       )
                      , npatrons = COALESCE((SELECT count(*) FROM our_tips), 0)
                  WHERE p.id = %(id)s
              RETURNING receiving, npatrons
-            """, dict(id=self.id))
+            """, dict(id=self.id, currency=self.main_currency, zero=zero))
             self.set_attributes(receiving=r.receiving, npatrons=r.npatrons)
             if self.kind == 'group':
                 self.recompute_actual_takes(c)
@@ -1978,7 +1979,7 @@ class Participant(Model, MixinTeam):
                         DELETE FROM participants WHERE id = %(dead)s;
                     EXCEPTION WHEN OTHERS THEN
                         UPDATE participants
-                           SET goal = -1
+                           SET goal = (-1, main_currency)
                          WHERE id = %(dead)s;
                     END;
                     $$ LANGUAGE plpgsql;
@@ -2076,7 +2077,7 @@ class Participant(Model, MixinTeam):
         #   3.00 - user wishes to receive at least this amount
         if self.goal != 0:
             if self.goal and self.goal > 0:
-                goal = str(self.goal)
+                goal = self.goal
             else:
                 goal = None
             output['goal'] = goal
@@ -2086,7 +2087,7 @@ class Participant(Model, MixinTeam):
         #   null - user is receiving anonymously
         #   3.00 - user receives this amount in tips
         if not self.hide_receiving:
-            receiving = str(self.receiving)
+            receiving = self.receiving
         else:
             receiving = None
         output['receiving'] = receiving
@@ -2096,7 +2097,7 @@ class Participant(Model, MixinTeam):
         #   null - user is giving anonymously
         #   3.00 - user gives this amount in tips
         if not self.hide_giving:
-            giving = str(self.giving)
+            giving = self.giving
         else:
             giving = None
         output['giving'] = giving

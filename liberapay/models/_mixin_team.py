@@ -6,6 +6,8 @@ from collections import OrderedDict
 from decimal import Decimal
 from statistics import median
 
+from mangopay.utils import Money
+
 from liberapay.constants import D_INF, D_UNIT, D_ZERO
 from liberapay.utils import NS
 
@@ -96,7 +98,7 @@ class MixinTeam(object):
         sum_last_week = sum(last_week.values())
         if sum_last_week == 0:
             return D_INF
-        initial_leftover = self.receiving - sum_last_week
+        initial_leftover = self.receiving.amount - sum_last_week
         nonzero_last_week = [a for a in last_week.values() if a]
         member_last_week = last_week.get(member_id, 0)
         return max(
@@ -248,7 +250,7 @@ class MixinTeam(object):
                                END
                            )
                      WHERE id=%(member_id)s
-                """, dict(member_id=member_id, diff=diff, ntippers=ntippers))
+                """, dict(member_id=member_id, diff=Money(diff, 'EUR'), ntippers=ntippers))
             if member and member.id == member_id:
                 r = cursor.one(
                     "SELECT taking, receiving FROM participants WHERE id = %s",

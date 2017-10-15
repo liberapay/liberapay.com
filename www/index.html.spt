@@ -13,7 +13,7 @@ if not website.db:
 
 sponsors = query_cache.all("""
     SELECT username, giving, avatar_url
-      FROM ( SELECT * FROM sponsors ORDER BY random() * giving DESC LIMIT 10 ) foo
+      FROM ( SELECT * FROM sponsors ORDER BY giving * random()::numeric DESC LIMIT 10 ) foo
   ORDER BY giving DESC
 """)
 nsponsors = query_cache.one("SELECT count(*) FROM sponsors")
@@ -96,7 +96,7 @@ recent = query_cache.one("""
         % else
 
             <p><a href="/{{ user.username }}/receiving/">{{
-                _("You receive {0} per week.", Money(user.receiving, 'EUR'))
+                _("You receive {0} per week.", user.receiving)
             }}</a></p>
 
             % if not user.accepts_tips
@@ -240,7 +240,7 @@ recent = query_cache.one("""
                     <a href="/{{ p.username }}/">
                         {{ avatar_img(p) }}
                         <div class="name">{{ p.username }}</div>
-                        <div class="amount">{{ format_currency(p.giving, 'EUR') }}</div>
+                        <div class="amount">{{ format_money(p.giving) }}</div>
                     </a>
                 </div>
             % endfor

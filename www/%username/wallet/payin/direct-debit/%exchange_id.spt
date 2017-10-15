@@ -56,7 +56,7 @@ if route is not None:
 
 funded = float('inf')
 donations = participant.get_giving_for_profile()[1]
-weekly = donations - Money(participant.receiving, 'EUR')
+weekly = donations - participant.receiving
 currency = request.qs.get('currency', currency)
 if currency not in PAYIN_DIRECT_DEBIT_MIN:
     raise response.error(400, "`currency` value in querystring is invalid or non-supported")

@@ -42,18 +42,18 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
             <p>{{ _(
                 "{0} currently receives {1} per week, they need your help to reach "
                 "their funding goal ({2} per week)."
-                , participant.username, Money(receiving, 'EUR'), Money(goal, 'EUR')
+                , participant.username, receiving, goal
             ) }}</p>
             % else
             <p>{{ _(
                 "{0}'s goal is to receive {1} per week."
-                , participant.username, Money(goal, 'EUR')
+                , participant.username, goal
             ) }} {{ _("Be the first to contribute!") }}</p>
             % endif
         % else
             <p>{{ _(
                 "{0} currently receives {1} per week."
-                , participant.username, Money(receiving, 'EUR')
+                , participant.username, receiving
             ) }}</p>
         % endif
     % endif

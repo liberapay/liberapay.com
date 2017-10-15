@@ -351,7 +351,7 @@ class Payday(object):
         """
         total_income = sum(t.full_amount for t in tips)
         total_takes = sum(t.amount for t in takes)
-        leftover = max(total_income - total_takes, 0)
+        leftover = Money(max(total_income - total_takes, 0), 'EUR')
         if total_income == 0 or total_takes == 0:
             return (), leftover
         takes_ratio = min(total_income / total_takes, 1)
@@ -695,12 +695,12 @@ class Payday(object):
             UPDATE participants p
                SET giving = p2.giving
               FROM ( SELECT p2.id
-                          , COALESCE((
+                          , (COALESCE((
                                 SELECT sum(amount)
                                   FROM payday_tips t
                                  WHERE t.tipper = p2.id
                                    AND t.is_funded
-                            ), 0) AS giving
+                            ), 0), 'EUR')::currency_amount AS giving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -709,12 +709,12 @@ class Payday(object):
             UPDATE participants p
                SET taking = p2.taking
               FROM ( SELECT p2.id
-                          , COALESCE((
+                          , (COALESCE((
                                 SELECT sum((t.amount).amount)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context = 'take'
-                            ), 0) AS taking
+                            ), 0), 'EUR')::currency_amount AS taking
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -723,12 +723,12 @@ class Payday(object):
             UPDATE participants p
                SET receiving = p2.receiving
               FROM ( SELECT p2.id
-                          , p2.taking + COALESCE((
+                          , p2.taking + (COALESCE((
                                 SELECT sum(amount)
                                   FROM payday_tips t
                                  WHERE t.tippee = p2.id
                                    AND t.is_funded
-                            ), 0) AS receiving
+                            ), 0), 'EUR')::currency_amount AS receiving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -739,11 +739,11 @@ class Payday(object):
                SET leftover = p2.leftover
               FROM ( SELECT p2.id
                           , p2.receiving - COALESCE((
-                                SELECT sum((t.amount).amount)
+                                SELECT sum(t.amount, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                     OR t.team = p2.id
-                            ), 0) AS leftover
+                            ), zero(p2.receiving)) AS leftover
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id

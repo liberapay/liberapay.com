@@ -42,7 +42,7 @@ if not freeload:
     Liberapay_goal = getattr(Liberapay, 'goal', None)
     Liberapay_tip = participant.get_tip_to(Liberapay or participant)
 
-weekly = total - Money(participant.receiving, 'EUR')
+weekly = total - participant.receiving
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
@@ -69,7 +69,7 @@ weekly = total - Money(participant.receiving, 'EUR')
         % endif
     </p>
 % else
-    <p>{{ _("You give {0} per week.", Money(participant.giving, "EUR")) }}</p>
+    <p>{{ _("You give {0} per week.", participant.giving) }}</p>
 % endif
 
 % if not freeload and not Liberapay_tip.amount

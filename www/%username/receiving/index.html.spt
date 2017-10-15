@@ -22,7 +22,7 @@ teams = website.db.all("""
 % from "templates/team-members.html" import team_takes_table with context
 % block content
 
-% set receiving = Money(participant.receiving, "EUR")
+% set receiving = participant.receiving
 % if participant == user
 <p>{{ _("You receive {0} per week.", receiving) }}</p>
 % else
@@ -46,7 +46,7 @@ teams = website.db.all("""
         </h4>
         <p>{{ _("{0} receives {1} per week",
                 '<a href="%s">%s</a>'|safe % (team.path(''), team.username),
-                Money(team.receiving, "EUR")) }}</p>
+                team.receiving) }}</p>
         {{ team_takes_table(team, cls='table-condensed') }}
     % endfor
 % else

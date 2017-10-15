@@ -13,7 +13,7 @@ elif goal == "custom":
     goal = request.body["goal_custom"]
 
 if goal is not None:
-    goal = parse_decimal(goal)
+    goal = Money(parse_decimal(goal), participant.main_currency).round_down()
 
 back_to = participant.path('edit')
 if goal == -1 and not request.body.get("confirmed"):

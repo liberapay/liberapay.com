@@ -17,7 +17,7 @@ subhead = _("Income Shares")
 % from "templates/team-members.html" import team_takes_table with context
 % block content
 
-% set receiving = Money(participant.receiving, "EUR")
+% set receiving = participant.receiving
 <p>{{ _("{0} receives {1} per week", participant.username, receiving) }}</p>
 
 % if participant.kind == 'group'

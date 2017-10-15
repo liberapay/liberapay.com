@@ -51,7 +51,7 @@ currency = request.qs.get('currency', currency)
 if currency not in PAYIN_CARD_MIN:
     raise response.error(400, "`currency` value in querystring is invalid or non-supported")
 donations = participant.get_giving_for_profile()[1]
-weekly = donations - Money(participant.receiving, 'EUR')
+weekly = donations - participant.receiving
 amount_min = PAYIN_CARD_MIN[currency]
 amount_max = skim_amount(constants.PAYIN_CARD_MAX[currency], FEE_PAYIN_CARD[currency])[0]
 if weekly > 0:
