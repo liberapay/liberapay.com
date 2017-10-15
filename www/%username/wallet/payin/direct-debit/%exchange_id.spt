@@ -23,9 +23,8 @@ from liberapay.utils.i18n import Money
 # https://docs.mangopay.com/endpoints/v2.01/mandates#e231_create-a-mandate
 MANDATE_LANGS = {'en', 'fr', 'nl', 'de', 'es', 'it', 'pl'}
 
-PAYIN_DIRECT_DEBIT_MAX = skim_amount(KYC_PAYIN_YEARLY_THRESHOLD, FEE_PAYIN_DIRECT_DEBIT)[0]
 AMOUNT_MIN = Money(PAYIN_DIRECT_DEBIT_MIN, 'EUR')
-AMOUNT_MAX = Money(PAYIN_DIRECT_DEBIT_MAX, 'EUR')
+AMOUNT_MAX = skim_amount(Money(KYC_PAYIN_YEARLY_THRESHOLD, 'EUR'), FEE_PAYIN_DIRECT_DEBIT['EUR'])[0]
 
 [---]
 
@@ -68,7 +67,7 @@ if weekly > 0:
     min_weeks = (PAYIN_DIRECT_DEBIT_MIN / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
         max(constants.PAYIN_DIRECT_DEBIT_TARGET // weekly, 52),
-        PAYIN_DIRECT_DEBIT_MAX // weekly
+        AMOUNT_MAX.amount // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
@@ -214,7 +213,7 @@ title = _("Adding Money")
     % if show_form
     <p>{{ _(
         "Adding money to Liberapay via direct debit incurs a fee of {0}.",
-        Money(constants.FEE_PAYIN_DIRECT_DEBIT.fix * (constants.FEE_VAT + 1), 'EUR'),
+        constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat,
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
@@ -226,7 +225,7 @@ title = _("Adding Money")
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_direct_debit(amount)
+            % set charge_amount, fees, vat = upcharge_direct_debit(Money(amount, 'EUR'))
             % set _months = weeks / D('4.33')
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">
@@ -235,7 +234,7 @@ title = _("Adding Money")
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
                     "{0} ({2}% fee included)",
-                    Money(charge_amount, 'EUR'),
+                    charge_amount,
                     None,
                     (fees / charge_amount * 100).quantize(constants.D_CENT),
                 ) }}</h5>

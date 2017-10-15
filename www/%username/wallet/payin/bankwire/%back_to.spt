@@ -12,8 +12,8 @@ from liberapay.exceptions import InvalidNumber
 from liberapay.utils import b64decode_s, get_participant
 from liberapay.utils.i18n import Money
 
-AMOUNT_MIN = Money(upcharge_bank_wire(PAYIN_BANK_WIRE_MIN)[0], 'EUR')
-AMOUNT_MAX = Money(upcharge_bank_wire(KYC_PAYIN_YEARLY_THRESHOLD)[0], 'EUR')
+AMOUNT_MIN = upcharge_bank_wire(Money(PAYIN_BANK_WIRE_MIN, 'EUR'))[0]
+AMOUNT_MAX = upcharge_bank_wire(Money(KYC_PAYIN_YEARLY_THRESHOLD, 'EUR'))[0]
 
 NOTIF_BIT_FAIL = EVENTS['payin_bankwire_failed'].bit
 NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
@@ -202,7 +202,7 @@ title = _("Adding Money")
     <p>{{ _(
         "Adding money to Liberapay via bank wire incurs a fee of {0}% from our "
         "payment processor.",
-        constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100,
+        constants.FEE_PAYIN_BANK_WIRE.with_vat,
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
@@ -213,16 +213,16 @@ title = _("Adding Money")
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_bank_wire(amount)
+            % set charge_amount, fees, vat = upcharge_bank_wire(Money(amount, 'EUR'))
             % set _months = weeks / D('4.33')
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">
             <label>
-                <input type="radio" name="amount" value="{{ charge_amount }}" class="hidden-xs" />
+                <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" />
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
                     "{0} ({2}% fee included)",
-                    Money(charge_amount, 'EUR'),
+                    charge_amount,
                     None,
                     (fees / charge_amount * 100).quantize(constants.D_CENT),
                 ) }}</h5>

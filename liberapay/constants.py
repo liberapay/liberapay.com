@@ -31,7 +31,16 @@ def check_bits(bits):
 
 Event = namedtuple('Event', 'name bit title')
 
-Fees = namedtuple('Fees', ('var', 'fix'))
+
+class Fees(namedtuple('Fees', ('var', 'fix'))):
+    VAT = Decimal('0.17')  # 17% (Luxembourg rate)
+    VAT_1 = VAT + 1
+
+    @property
+    def with_vat(self):
+        r = (self.var * self.VAT_1 * 100, self.fix * self.VAT_1)
+        return r[0] if not r[1] else r[1] if not r[0] else r
+
 
 StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
 
@@ -109,13 +118,33 @@ EVENTS = OrderedDict((e.name, e) for e in EVENTS)
 EVENTS_S = ' '.join(EVENTS.keys())
 
 # https://www.mangopay.com/pricing/
-FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), Decimal(0))  # 0.5%
-FEE_PAYIN_CARD = Fees(Decimal('0.018'), Decimal('0.18'))  # 1.8% + €0.18
-FEE_PAYIN_DIRECT_DEBIT = Fees(Decimal(0), Decimal('0.80'))  # €0.80
-FEE_PAYOUT = Fees(Decimal(0), Decimal(0))
-FEE_PAYOUT_OUTSIDE_SEPA = Fees(Decimal(0), Decimal('2.5'))
+SEPA = set("""
+    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
+    MC MT NL NO PL PT RO SE SI SK
+""".split())
+FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), 0)  # 0.5%
+FEE_PAYIN_CARD = {
+    'EUR': Fees(Decimal('0.018'), Money('0.18', 'EUR')),  # 1.8% + €0.18
+    'USD': Fees(Decimal('0.025'), Money('0.30', 'USD')),  # 2.5% + $0.30
+}
+FEE_PAYIN_DIRECT_DEBIT = {
+    'EUR': Fees(0, Money('0.80', 'EUR')),  # €0.80
+    'GBP': Fees(0, Money('0.80', 'GBP')),  # £0.80
+}
+FEE_PAYOUT = {
+    'EUR': {
+        'domestic': (SEPA, Fees(0, 0)),
+        'foreign': Fees(0, Money('2.50', 'EUR')),
+    },
+    'GBP': {
+        'domestic': ({'GB'}, Fees(0, Money('0.45', 'GBP'))),
+        'foreign': Fees(0, Money('1.90', 'GBP')),
+    },
+    'USD': {
+        '*': Fees(0, Money('3.00', 'USD')),
+    },
+}
 FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
-FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 
 INVOICE_DOC_MAX_SIZE = 5000000
 INVOICE_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'png']
@@ -210,11 +239,6 @@ RATE_LIMITS = {
     'sign-up.ip-net': (15, 15*60),  # 15 per 15 minutes per IP network
     'sign-up.ip-version': (15, 15*60),  # 15 per 15 minutes per IP version
 }
-
-SEPA = set("""
-    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
-    MC MT NL NO PL PT RO SE SI SK
-""".split())
 
 SESSION = str('session')  # bytes in python2, unicode in python3
 SESSION_REFRESH = timedelta(hours=1)

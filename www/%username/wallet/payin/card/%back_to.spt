@@ -15,9 +15,8 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant, is_card_expired
 from liberapay.utils.i18n import Money
 
-PAYIN_CARD_MAX = skim_amount(KYC_PAYIN_YEARLY_THRESHOLD, FEE_PAYIN_CARD)[0]
 AMOUNT_MIN = Money(PAYIN_CARD_MIN, 'EUR')
-AMOUNT_MAX = Money(PAYIN_CARD_MAX, 'EUR')
+AMOUNT_MAX = skim_amount(Money(KYC_PAYIN_YEARLY_THRESHOLD, 'EUR'), FEE_PAYIN_CARD['EUR'])[0]
 
 [---]
 
@@ -58,7 +57,7 @@ if weekly > 0:
     min_weeks = (constants.PAYIN_CARD_MIN / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
         max(constants.PAYIN_CARD_TARGET // weekly, 52),
-        PAYIN_CARD_MAX // weekly
+        AMOUNT_MAX.amount // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
@@ -161,8 +160,7 @@ title = _("Adding Money")
     % if show_form
     <p>{{ _(
         "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
-        constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
+        *constants.FEE_PAYIN_CARD[currency].with_vat
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
@@ -174,7 +172,7 @@ title = _("Adding Money")
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_card(amount)
+            % set charge_amount, fees, vat = upcharge_card(Money(amount, 'EUR'))
             % set _months = weeks / D('4.33')
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">
@@ -183,7 +181,7 @@ title = _("Adding Money")
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
                     "{0} ({2}% fee included)",
-                    Money(charge_amount, 'EUR'),
+                    charge_amount,
                     None,
                     (fees / charge_amount * 100).quantize(constants.D_CENT),
                 ) }}</h5>

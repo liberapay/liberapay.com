@@ -63,9 +63,6 @@ title = _("Frequently Asked Questions")
         "and they help us block fraud, money laundering, and terrorism financing."
     ) }}</dd>
 
-</dl>
-<dl class="col-md-6">
-
     {{ dt(_("What payment methods are available?"), 'payment-methods') }}
 
     <dd>{{ _(
@@ -74,23 +71,37 @@ title = _("Frequently Asked Questions")
         "will be added in the future."
     ) }}</dd>
 
+</dl>
+<dl class="col-md-6">
+
     {{ dt(_("What are the payment processing fees?"), 'fees') }}
 
     <dd>
+    <p>{{ _("The fees depend on the payment method as well as the currency.") }}</p>
+    <p>{{ _("When adding money into Liberapay the fees are:") }}</p>
+    <table class="table table-bordered table-condensed text-center">
+        <tr>
+            <th>
+            <th class="text-center">{{ locale.currencies['EUR'] }}
+            <th class="text-center">{{ locale.currencies['USD'] }}
+        <tr>
+            <th>{{ _("Card") }}
+            <td>{{ _("{0}% + {1}", *constants.FEE_PAYIN_CARD['EUR'].with_vat) }}
+            <td>{{ _("{0}% + {1}", *constants.FEE_PAYIN_CARD['USD'].with_vat) }}
+        <tr>
+            <th>{{ _("Bank wire") }}
+            <td colspan=2>{{ _("{0}%", constants.FEE_PAYIN_BANK_WIRE.with_vat) }}
+        <tr>
+            <th>{{ _("Direct debit") }}
+            <td>{{ format_currency(*constants.FEE_PAYIN_DIRECT_DEBIT['EUR'].with_vat) }}
+            <td>{{ _("not supported") }}
+    </table>
     <p>{{ _(
-        "Adding money to Liberapay incurs a fee of:\n"
-        "• {0}% + {1} when the payment method is a credit or debit card;\n"
-        "• {2}% when it's a bank wire;\n"
-        "• {3} when it's a direct debit.",
-        constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
-        constants.FEE_PAYIN_BANK_WIRE.var * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_PAYIN_DIRECT_DEBIT.fix * (constants.FEE_VAT + 1), 'EUR'),
-    ).replace('\n', '<br>'|safe) }}</p>
-    <p>{{ _(
-        "Withdrawing money to a SEPA bank account is free, transfers to other "
-        "countries cost {0} per transfer. Additional fee from your bank may apply.",
-        Money(constants.FEE_PAYOUT_OUTSIDE_SEPA.fix * (constants.FEE_VAT + 1), 'EUR'),
+        "Withdrawing euros to a SEPA bank account is free, transfers to other "
+        "countries cost {0} each. Withdrawing US dollars costs {1} per transfer "
+        "regardless of the destination country.",
+        constants.FEE_PAYOUT['EUR']['foreign'].with_vat,
+        constants.FEE_PAYOUT['USD']['*'].with_vat,
     ) }}</p>
     <p>{{ _(
         "The fees listed above are only those from our payment processors, your "

@@ -149,17 +149,16 @@ elif cls:
     if e_status == status:
         raise response.success(200, "already done")
     if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        if status == 'succeeded':
-            expected = payio.DeclaredDebitedFunds.Amount - payio.DeclaredFees.Amount
-            assert payio.CreditedFunds.Currency == 'EUR'
-        else:
-            expected = 0
-        credited_amount = payio.CreditedFunds.Amount
+        expected = (payio.DeclaredDebitedFunds - payio.DeclaredFees) / D(100)
+        if status != 'succeeded':
+            expected = expected.zero()
+        credited_amount = payio.CreditedFunds / D(100)
+        if credited_amount == Money(0, 'XXX'):
+            credited_amount.currency = expected.currency
         if credited_amount != expected or not payio.Tag:
             # Check the fee
-            credited_amount = D(credited_amount) / D(100)
-            paid_fees = D(payio.Fees.Amount) / D(100)
-            debited_amount = D(payio.DebitedFunds.Amount) / D(100)
+            paid_fees = payio.Fees / D(100)
+            debited_amount = payio.DebitedFunds / D(100)
             standard_fee, new_vat = skim_bank_wire(debited_amount)[1:]
             if abs(paid_fees - standard_fee) > D('0.01'):
                 try:
@@ -169,8 +168,8 @@ elif cls:
         if credited_amount != expected:
             # The user didn't send the expected amount of money
             note = (
-                'amount mismatch: expected %sc€ (fee %sc€)' %
-                (payio.DeclaredDebitedFunds.Amount, payio.DeclaredFees.Amount)
+                'amount mismatch: expected %s (fee %s)' %
+                (payio.DeclaredDebitedFunds, payio.DeclaredFees)
             )
             website.db.run("""
                 UPDATE exchanges
@@ -179,7 +178,7 @@ elif cls:
                      , vat = %s
                      , note = %s
                  WHERE id = %s
-            """, (credited_amount, paid_fees, new_vat, note, e_id))
+            """, (credited_amount.amount, paid_fees.amount, new_vat.amount, note, e_id))
 
     if payio.AuthorId == website.app_conf.mangopay_client_id:
         if event == 'PAYOUT_NORMAL' and status == 'succeeded':
