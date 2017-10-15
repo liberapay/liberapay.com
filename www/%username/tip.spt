@@ -55,6 +55,10 @@ if request.method == 'POST':
             amount = parse_decimal(amount)
         else:
             raise response.error(400, _("The donation amount is missing."))
+    currency = request.body.get('currency', 'EUR')
+    if currency not in constants.STANDARD_TIPS:
+        raise response.error(400, "`currency` value in body is invalid or non-supported")
+    amount = Money(amount, currency)
     out = tipper.set_tip_to(tippee, amount, period)
     if out['amount'] == 0:
         out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)

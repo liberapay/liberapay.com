@@ -210,6 +210,16 @@ class UserDoesntAcceptTips(LazyResponseXXX):
     def msg(self, _):
         return _("The user {0} doesn't accept donations.", *self.args)
 
+class BadDonationCurrency(LazyResponseXXX):
+    code = 403
+    def msg(self, _):
+        tippee, rejected_currency = self.args
+        return _(
+            "Donations to {username} must be in {main_currency}, not {rejected_currency}.",
+            username=tippee.username, main_currency=tippee.main_currency,
+            rejected_currency=rejected_currency,
+        )
+
 
 class NonexistingElsewhere(LazyResponse400):
     def msg(self, _):

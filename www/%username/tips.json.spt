@@ -14,21 +14,25 @@ if request.method == 'POST':
     for tip in new_tips:
         seen.add(tip['username'])
         one = {"username": tip['username']}
+        currency = tip.get('currency', 'EUR')
+        if currency not in constants.STANDARD_TIPS:
+            raise response.error(400,"`currency` value '%s' in body is invalid or non-supported" % currency)
         try:
+            amount = Money(parse_decimal(tip['amount']), currency)
             amount = participant.set_tip_to(
-                tip['username'], parse_decimal(tip['amount']), tip['period'],
+                tip['username'], amount, tip['period'],
             )['amount']
         except Exception as exc:
             amount = "error"
             one['error'] = exc.__class__.__name__
-        one['amount'] = str(amount)
+        one['amount'] = amount
         out.append(one)
 
     if request.qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
         old_tips = participant.get_current_tips()
         for tip in old_tips:
             if tip['username'] not in seen:
-                participant.set_tip_to(tip['username'], '0.00', tip['period'])
+                participant.set_tip_to(tip['username'], Money(0, 'EUR'), tip['period'])
 
 else:
     tips, total, pledges, pledges_total = participant.get_giving_for_profile()
