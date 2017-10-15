@@ -10,9 +10,7 @@ from liberapay.billing.transactions import (
     prepare_direct_debit, execute_direct_debit, record_exchange_result,
     repr_error, repr_exception,
 )
-from liberapay.constants import (
-    FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN, KYC_PAYIN_YEARLY_THRESHOLD
-)
+from liberapay.constants import FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN
 from liberapay.exceptions import InvalidNumber
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import (

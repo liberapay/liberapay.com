@@ -121,8 +121,8 @@ title = _("Frequently Asked Questions")
         "There are no restrictions on the total amount you can give or receive, "
         "but for legal reasons you will need to provide identity documents if "
         "you give more than {0}, or receive more than {1}, per year."
-        , Money(constants.KYC_PAYIN_YEARLY_THRESHOLD, 'EUR')
-        , Money(constants.KYC_PAYOUT_YEARLY_THRESHOLD, 'EUR')
+        , constants.KYC_PAYIN_YEARLY_THRESHOLD
+        , constants.KYC_PAYOUT_YEARLY_THRESHOLD
     ) }}<br>
     {{ _(
         "The minimum you can give any user is {0}. To minimize processing fees, "

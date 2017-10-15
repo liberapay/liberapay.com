@@ -9,7 +9,7 @@ from liberapay.billing.fees import skim_amount, upcharge_card
 from liberapay.billing.transactions import (
     charge, record_exchange_result, repr_error,
 )
-from liberapay.constants import FEE_PAYIN_CARD, PAYIN_CARD_MIN, KYC_PAYIN_YEARLY_THRESHOLD
+from liberapay.constants import FEE_PAYIN_CARD, PAYIN_CARD_MIN
 from liberapay.exceptions import InvalidNumber, Redirect
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant, is_card_expired

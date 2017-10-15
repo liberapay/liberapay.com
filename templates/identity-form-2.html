@@ -54,7 +54,6 @@
             % set saved = account.IncomeRange
             % set prev_threshold = None
             % for i, threshold in constants.KYC_INCOME_THRESHOLDS
-                % set threshold = Money(threshold, 'EUR')
                 <option value="{{ i }}" {{ 'selected' if i == saved else '' }}>{{
                     _("Less than {0}", threshold) if loop.first else
                     _("More than {0}", threshold) if loop.last else

@@ -174,16 +174,16 @@ KYC_DOC_MAX_SIZE = 7000000
 KYC_DOC_MAX_SIZE_MB = int(KYC_DOC_MAX_SIZE / 1000000)
 KYC_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'gif', 'png']
 KYC_DOCS_EXTS_STR = ', '.join(KYC_DOCS_EXTS)
-KYC_INCOME_THRESHOLDS = (
+KYC_INCOME_THRESHOLDS = [(i, Money(a, 'EUR')) for i, a in (
     (1, 18000),
     (2, 30000),
     (3, 50000),
     (4, 80000),
     (5, 120000),
     (6, 120000),
-)
-KYC_PAYIN_YEARLY_THRESHOLD = Decimal('2500')
-KYC_PAYOUT_YEARLY_THRESHOLD = Decimal('1000')
+)]
+KYC_PAYIN_YEARLY_THRESHOLD = Money('2500', 'EUR')
+KYC_PAYOUT_YEARLY_THRESHOLD = Money('1000', 'EUR')
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
