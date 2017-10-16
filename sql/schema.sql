@@ -23,7 +23,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '52'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '53'::jsonb);
 
 
 -- app configuration
@@ -59,8 +59,8 @@ CREATE TABLE participants
 
 , avatar_url            text
 , giving                numeric(35,2)           NOT NULL DEFAULT 0
-, receiving             numeric(35,2)           NOT NULL DEFAULT 0
-, taking                numeric(35,2)           NOT NULL DEFAULT 0
+, receiving             numeric(35,2)           NOT NULL DEFAULT 0 CHECK (receiving >= 0)
+, taking                numeric(35,2)           NOT NULL DEFAULT 0 CHECK (taking >= 0)
 , npatrons              integer                 NOT NULL DEFAULT 0
 
 , email_notif_bits      int                     NOT NULL DEFAULT 2147483647
@@ -82,6 +82,9 @@ CREATE TABLE participants
 , allow_invoices        boolean
 
 , throttle_takes        boolean                 NOT NULL DEFAULT TRUE
+
+, nteampatrons          int                     NOT NULL DEFAULT 0
+, leftover              numeric(35,2)           NOT NULL DEFAULT 0 CHECK (leftover >= 0)
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
@@ -413,7 +416,9 @@ CREATE TABLE takes
 , team              bigint               NOT NULL REFERENCES participants
 , amount            numeric(35,2)        DEFAULT 1
 , recorder          bigint               NOT NULL REFERENCES participants
+, actual_amount     numeric(35,2)
 , CONSTRAINT not_negative CHECK (amount IS NULL OR amount >= 0)
+, CONSTRAINT null_amounts_chk CHECK ((actual_amount IS NULL) = (amount IS NULL))
  );
 
 CREATE OR REPLACE FUNCTION check_member() RETURNS trigger AS $$
