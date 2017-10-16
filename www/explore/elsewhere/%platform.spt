@@ -145,7 +145,7 @@ subhead = _("Social Networks")
     % endfor
     </div>
 
-    % set last_id = participants[-1].id if participants and not random else INF
+    % set last_id = participants[-1][0].id if participants and not random else INF
     % if partial_list
         <br>
         % if last_id > platform_extra['min_id']
