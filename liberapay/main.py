@@ -20,12 +20,13 @@ from pando.utils import maybe_encode
 
 from liberapay import utils, wireup
 from liberapay.billing.payday import Payday, create_payday_issue
-from liberapay.cron import Cron, Weekly
+from liberapay.cron import Cron, Daily, Weekly
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
+from liberapay.utils.currencies import fetch_currency_exchange_rates
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, canonize, insert_constants,
     _dispatch_path_to_filesystem, merge_exception_into_response, return_500_for_exception,
@@ -94,7 +95,7 @@ elif env.clean_assets:
 # =============
 
 conf = website.app_conf
-if env.run_cron_jobs and conf:
+if conf:
     cron = Cron(website)
     cron(conf.check_db_every, website.db.self_check, True)
     cron(conf.dequeue_emails_every, Participant.dequeue_emails, True)
@@ -103,6 +104,7 @@ if env.run_cron_jobs and conf:
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
     cron(conf.clean_up_counters_every, website.db.clean_up_counters, True)
     cron(conf.update_cached_amounts_every, Payday.update_cached_amounts, True)
+    cron(Daily(hour=16), lambda: fetch_currency_exchange_rates(website.db), True)
 
 
 # Website Algorithm

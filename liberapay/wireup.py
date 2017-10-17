@@ -42,6 +42,7 @@ from liberapay.models.repository import Repository
 from liberapay.models import DB
 from liberapay.security.authentication import ANON
 from liberapay.utils import find_files, markdown, mkdir_p
+from liberapay.utils.currencies import get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (
@@ -636,6 +637,10 @@ def s3(env):
     return {'s3': s3}
 
 
+def currency_exchange_rates(db):
+    return {'currency_exchange_rates': get_currency_exchange_rates(db)}
+
+
 minimal_algorithm = Algorithm(
     env,
     make_sentry_teller,
@@ -657,6 +662,7 @@ full_algorithm = Algorithm(
     load_scss_variables,
     s3,
     trusted_proxies,
+    currency_exchange_rates,
 )
 
 

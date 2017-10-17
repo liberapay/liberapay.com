@@ -238,3 +238,33 @@ CREATE OPERATOR <= (
     commutator = >=,
     negator = >
 );
+
+
+-- Exchange rates
+
+CREATE TABLE currency_exchange_rates
+( source_currency   currency   NOT NULL
+, target_currency   currency   NOT NULL
+, rate              numeric    NOT NULL
+, UNIQUE (source_currency, target_currency)
+);
+
+
+-- Currency conversion function
+
+CREATE FUNCTION convert(currency_amount, currency) RETURNS currency_amount AS $$
+    DECLARE
+        rate numeric;
+    BEGIN
+        IF ($1.currency = $2) THEN RETURN $1; END IF;
+        rate := (
+            SELECT r.rate
+              FROM currency_exchange_rates r
+             WHERE r.source_currency = $1.currency
+        );
+        IF (rate IS NULL) THEN
+            RAISE 'missing exchange rate %->%', $1.currency, $2;
+        END IF;
+        RETURN ($1.amount / rate, $2);
+    END;
+$$ LANGUAGE plpgsql STRICT;

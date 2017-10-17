@@ -15,3 +15,7 @@ END;
 $$;
 
 DROP FUNCTION update_app_conf(text, jsonb);
+
+INSERT INTO currency_exchange_rates
+     VALUES ('EUR', 'USD', 1.2)
+          , ('USD', 'EUR', 1 / 1.2);
