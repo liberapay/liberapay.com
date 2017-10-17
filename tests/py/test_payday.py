@@ -738,7 +738,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     def test_payday_tries_to_settle_debts(self):
         # First, test a small debt which can be settled
         e1_id = self.make_exchange('mango-cc', 10, 0, self.janet)
-        debt = create_debt(self.db, self.janet.id, self.homer.id, 5, e1_id)
+        debt = create_debt(self.db, self.janet.id, self.homer.id, EUR(5), e1_id)
         e2_id = self.make_exchange('mango-cc', 20, 0, self.janet)
         Payday.start().run()
         balances = dict(self.db.all("SELECT username, balance FROM participants"))
@@ -751,7 +751,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert debt.status == 'paid'
         # Second, test a big debt that can't be settled
         self.make_exchange('mango-ba', -15, 0, self.janet)
-        debt2 = create_debt(self.db, self.janet.id, self.homer.id, 20, e2_id)
+        debt2 = create_debt(self.db, self.janet.id, self.homer.id, EUR(20), e2_id)
         Payday.start().run()
         balances = dict(self.db.all("SELECT username, balance FROM participants"))
         assert balances == {
