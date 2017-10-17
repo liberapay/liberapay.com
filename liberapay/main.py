@@ -12,6 +12,7 @@ from six.moves.urllib.parse import quote as urlquote
 
 import aspen
 import aspen.http.mapping
+from mangopay.utils import Money
 import pando
 from pando import json
 from pando.algorithms.website import fill_response_with_output
@@ -39,6 +40,8 @@ application = website  # for stupid WSGI implementations
 
 # Configure renderers
 # ===================
+
+json.register_encoder(Money, lambda m: {'amount': str(m.amount), 'currency': m.currency})
 
 website.renderer_default = 'unspecified'  # require explicit renderer, to avoid escaping bugs
 
