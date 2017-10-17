@@ -168,7 +168,7 @@ if request.method == 'POST':
                 participant.refetch()
                 if participant.balance:
                     transfer(
-                        website.db, participant.id, participant.id, participant.balance,
+                        website.db, participant.id, participant.id, Money(participant.balance, 'EUR'),
                         'account-switch', tipper_mango_id=old_account.Id,
                         tipper_wallet_id=old_wallet_id,
                     )

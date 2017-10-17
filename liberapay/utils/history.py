@@ -26,27 +26,29 @@ def get_end_of_year_balance(db, participant, year, current_year):
     start_balance = get_end_of_year_balance(db, participant, year-1, current_year)
     delta = db.one("""
         SELECT (
-                  SELECT COALESCE(sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE 0 END)), 0) AS a
+                  SELECT COALESCE(sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE zero(fee) END)),
+                                  (0,'EUR')::currency_amount) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount > 0
                      AND status = 'succeeded'
                ) + (
-                  SELECT COALESCE(sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE 0 END)), 0) AS a
+                  SELECT COALESCE(sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE zero(fee) END)),
+                                  (0,'EUR')::currency_amount) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount < 0
                      AND status <> 'failed'
                ) + (
-                  SELECT COALESCE(sum(-amount), 0) AS a
+                  SELECT COALESCE(sum(-amount), (0,'EUR')::currency_amount) AS a
                     FROM transfers
                    WHERE tipper = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND status = 'succeeded'
                ) + (
-                  SELECT COALESCE(sum(amount), 0) AS a
+                  SELECT COALESCE(sum(-amount), (0,'EUR')::currency_amount) AS a
                     FROM transfers
                    WHERE tippee = %(id)s
                      AND extract(year from timestamp) = %(year)s
@@ -59,10 +61,10 @@ def get_end_of_year_balance(db, participant, year, current_year):
             INSERT INTO balances_at
                         (participant, at, balance)
                  VALUES (%s, %s, %s)
-        """, (participant.id, datetime(year+1, 1, 1), balance))
+        """, (participant.id, datetime(year+1, 1, 1), balance.amount))
     except IntegrityError:
         pass
-    return balance
+    return balance.amount
 
 
 def iter_payday_events(db, participant, year=None):

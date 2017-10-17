@@ -520,7 +520,7 @@ class Participant(Model, MixinTeam):
         db = self.db
         tipper = self.id
         for tippee, amount, team in transfers:
-            balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
+            balance = transfer(db, tipper, tippee, Money(amount, 'EUR'), 'final-gift', team=team,
                                tipper_mango_id=self.mangopay_user_id,
                                tipper_wallet_id=self.mangopay_wallet_id)[0]
 
@@ -1018,7 +1018,7 @@ class Participant(Model, MixinTeam):
     def withdrawable_balance(self):
         from liberapay.billing.transactions import QUARANTINE
         return self.db.one("""
-            SELECT COALESCE(sum(amount), 0)
+            SELECT COALESCE(sum((amount).amount), 0)
               FROM cash_bundles
              WHERE owner = %s
                AND ts < now() - INTERVAL %s
@@ -1275,7 +1275,7 @@ class Participant(Model, MixinTeam):
             return False
         from liberapay.billing.transactions import transfer
         balance = transfer(
-            self.db, self.id, invoice.sender, invoice.amount, invoice.nature,
+            self.db, self.id, invoice.sender, Money(invoice.amount, 'EUR'), invoice.nature,
             invoice=invoice.id,
             tipper_mango_id=self.mangopay_user_id,
             tipper_wallet_id=self.mangopay_wallet_id,

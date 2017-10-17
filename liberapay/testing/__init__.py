@@ -89,7 +89,7 @@ class Harness(unittest.TestCase):
         SELECT tablename
           FROM pg_tables
          WHERE schemaname='public'
-           AND tablename NOT IN ('db_meta', 'app_conf', 'payday_transfers')
+           AND tablename NOT IN ('db_meta', 'app_conf', 'payday_transfers', 'currency_exchange_rates')
     """)
     seq = itertools.count(0)
 
@@ -229,6 +229,9 @@ class Harness(unittest.TestCase):
                 from .mangopay import MangopayHarness
                 route = ExchangeRoute.insert(participant, network, MangopayHarness.card_id)
                 assert route
+        amount = amount if isinstance(amount, Money) else Money(amount, 'EUR')
+        fee = fee if isinstance(fee, Money) else Money(fee, amount.currency)
+        vat = vat if isinstance(vat, Money) else Money(vat, fee.currency)
         e_id = record_exchange(self.db, route, amount, fee, vat, participant, 'pre').id
         record_exchange_result(self.db, e_id, -e_id, status, error, participant)
         return e_id

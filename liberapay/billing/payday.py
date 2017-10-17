@@ -15,7 +15,7 @@ import pando.utils
 import requests
 
 from liberapay import constants
-from liberapay.billing.transactions import transfer
+from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.utils import NS, group_by
@@ -215,7 +215,7 @@ class Payday(object):
         ( id serial
         , tipper bigint
         , tippee bigint
-        , amount numeric(35,2)
+        , amount currency_amount
         , context transfer_context
         , team bigint
         , invoice int
@@ -239,7 +239,7 @@ class Payday(object):
                 IF (NOT FOUND) THEN RAISE 'tippee %% not found', $2; END IF;
                 INSERT INTO payday_transfers
                             (tipper, tippee, amount, context, team, invoice)
-                     VALUES ($1, $2, $3, $4, $5, $6);
+                     VALUES ($1, $2, ($3, 'EUR'), $4, $5, $6);
             END;
         $$ LANGUAGE plpgsql;
 
@@ -327,7 +327,7 @@ class Payday(object):
                AND p.new_balance >= amount
          RETURNING t.id, t.tipper, t.amount AS full_amount
                  , COALESCE((
-                       SELECT sum(tr.amount)
+                       SELECT sum((tr.amount).amount)
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
@@ -521,7 +521,7 @@ class Payday(object):
                       JOIN participants p_debtor ON p_debtor.id = d.debtor
                       JOIN participants p_creditor ON p_creditor.id = d.creditor
                      WHERE d.status = 'due'
-                       AND p_debtor.balance >= d.amount
+                       AND p_debtor.balance >= (d.amount).amount
                        AND p_creditor.status = 'active'
                      LIMIT 1
                        FOR UPDATE OF d
@@ -597,11 +597,11 @@ class Payday(object):
                  , ntippees = (SELECT count(DISTINCT tippee) FROM our_transfers)
                  , ntips = (SELECT count(*) FROM our_tips)
                  , ntakes = (SELECT count(*) FROM our_takes)
-                 , take_volume = (SELECT COALESCE(sum(amount), 0) FROM our_takes)
+                 , take_volume = (SELECT COALESCE(sum((amount).amount), 0) FROM our_takes)
                  , ntransfers = (SELECT count(*) FROM our_transfers)
-                 , transfer_volume = (SELECT COALESCE(sum(amount), 0) FROM our_transfers)
+                 , transfer_volume = (SELECT COALESCE(sum((amount).amount), 0) FROM our_transfers)
                  , transfer_volume_refunded = (
-                       SELECT COALESCE(sum(amount), 0)
+                       SELECT COALESCE(sum((amount).amount), 0)
                          FROM our_transfers
                         WHERE refund_ref IS NOT NULL
                    )
@@ -621,26 +621,26 @@ class Payday(object):
                               ), '') <> '"closed"'
                    )
                  , week_deposits = (
-                       SELECT COALESCE(sum(amount), 0)
+                       SELECT COALESCE(sum((amount).amount), 0)
                          FROM week_exchanges
                         WHERE amount > 0
                           AND refund_ref IS NULL
                           AND status = 'succeeded'
                    )
                  , week_deposits_refunded = (
-                       SELECT COALESCE(sum(amount), 0)
+                       SELECT COALESCE(sum((amount).amount), 0)
                          FROM week_exchanges
                         WHERE amount > 0
                           AND refunded
                    )
                  , week_withdrawals = (
-                       SELECT COALESCE(-sum(amount), 0)
+                       SELECT COALESCE(-sum((amount).amount), 0)
                          FROM week_exchanges
                         WHERE amount < 0
                           AND refund_ref IS NULL
                    )
                  , week_withdrawals_refunded = (
-                       SELECT COALESCE(sum(amount), 0)
+                       SELECT COALESCE(sum((amount).amount), 0)
                          FROM week_exchanges
                         WHERE amount < 0
                           AND refunded
@@ -681,7 +681,7 @@ class Payday(object):
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
                           , COALESCE((
-                                SELECT sum(amount)
+                                SELECT sum((tr.amount).amount)
                                   FROM payday_transfers tr
                                  WHERE tr.team = t2.team
                                    AND tr.tippee = t2.member
@@ -710,7 +710,7 @@ class Payday(object):
                SET taking = p2.taking
               FROM ( SELECT p2.id
                           , COALESCE((
-                                SELECT sum(amount)
+                                SELECT sum((t.amount).amount)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context = 'take'
@@ -739,7 +739,7 @@ class Payday(object):
                SET leftover = p2.leftover
               FROM ( SELECT p2.id
                           , p2.receiving - COALESCE((
-                                SELECT sum(amount)
+                                SELECT sum((t.amount).amount)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                     OR t.team = p2.id
@@ -820,14 +820,17 @@ class Payday(object):
             successes = [t for t in transfers if t['status'] == 'succeeded']
             if not successes:
                 continue
-            by_team = {k: sum(t['amount'] for t in v)
+            p = Participant.from_id(tippee_id)
+            for t in transfers:
+                t['amount'] = Money(**t['amount'])
+                t['converted_amount'] = t['amount'].convert(p.main_currency)
+            by_team = {k: sum(t['converted_amount'] if k is None else t['amount'] for t in v)
                        for k, v in group_by(successes, 'team').items()}
             personal = by_team.pop(None, 0)
             by_team = {Participant.from_id(k).username: v for k, v in by_team.items()}
-            p = Participant.from_id(tippee_id)
             p.notify(
                 'income',
-                total=sum(t['amount'] for t in successes),
+                total=sum(t['converted_amount'] for t in successes),
                 personal=personal,
                 by_team=by_team,
                 new_balance=p.balance,

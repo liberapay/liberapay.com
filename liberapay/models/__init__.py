@@ -75,7 +75,7 @@ def _check_balances_against_transactions(cursor):
           from (
             select id, sum(a) as expected
               from (
-                      select participant as id, sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE 0 END)) as a
+                      select participant as id, sum(CASE WHEN (fee < 0) THEN amount - fee ELSE amount END) as a
                         from exchanges
                        where amount > 0
                          and status = 'succeeded'
@@ -83,7 +83,7 @@ def _check_balances_against_transactions(cursor):
 
                        union all
 
-                      select participant as id, sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE 0 END)) as a
+                      select participant as id, sum(CASE WHEN (fee > 0) THEN amount - fee ELSE amount END) as a
                         from exchanges
                        where amount < 0
                          and status <> 'failed'
@@ -136,10 +136,10 @@ def _check_bundles_grouped_by_origin_against_exchanges(cursor):
              , (CASE WHEN (e.amount < 0 OR e.status <> 'succeeded' OR (
                               e.amount > 0 AND e.refund_ref IS NOT NULL
                           ))
-                     THEN 0
-                     ELSE e.amount - (CASE WHEN (e.fee < 0) THEN e.fee ELSE 0 END)
+                     THEN zero(e.amount)
+                     ELSE e.amount - (CASE WHEN (e.fee < 0) THEN e.fee ELSE zero(e.fee) END)
                 END) as total_expected
-             , (COALESCE(in_wallets, 0) + COALESCE(withdrawn, 0)) as total_found
+             , (COALESCE(in_wallets, zero(e.amount)) + COALESCE(withdrawn, zero(e.amount))) as total_found
              , in_wallets
              , withdrawn
           FROM exchanges e
@@ -176,10 +176,10 @@ def _check_bundles_grouped_by_withdrawal_against_exchanges(cursor):
                                WHERE e2.refund_ref = e.id
                                  AND e2.status = 'succeeded'
                           ))
-                     THEN 0
-                     ELSE -e.amount + (CASE WHEN (e.fee < 0) THEN 0 ELSE e.fee END)
+                     THEN zero(e.amount)
+                     ELSE -e.amount + (CASE WHEN (e.fee < 0) THEN zero(e.fee) ELSE e.fee END)
                 END) as total_expected
-             , COALESCE(withdrawn, 0) as total_found
+             , COALESCE(withdrawn, zero(e.amount)) as total_found
           FROM exchanges e
           LEFT JOIN (
                   SELECT b.withdrawal, sum(b.amount) as withdrawn

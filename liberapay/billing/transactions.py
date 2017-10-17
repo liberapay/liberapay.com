@@ -199,7 +199,7 @@ def execute_direct_debit(db, exchange, route):
 
     assert exchange.status == 'pre'
 
-    amount, fee = Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')
+    amount, fee = exchange.amount, exchange.fee
     debit_amount = amount + fee
 
     e_id = exchange.id
@@ -264,18 +264,18 @@ def record_unexpected_payin(db, payin):
     assert payin.PaymentType == 'BANK_WIRE'
     debited_amount = payin.DebitedFunds / Decimal(100)
     paid_fee = payin.Fees / Decimal(100)
-    vat = skim_bank_wire(debited_amount)[2].amount
+    vat = skim_bank_wire(debited_amount)[2]
     wallet_id = payin.CreditedWalletId
     participant = Participant.from_mangopay_user_id(payin.AuthorId)
     assert participant.mangopay_wallet_id == wallet_id
     route = ExchangeRoute.upsert_bankwire_route(participant)
-    amount = (debited_amount - paid_fee).amount
+    amount = debited_amount - paid_fee
     return db.one("""
         INSERT INTO exchanges
                (amount, fee, vat, participant, status, route, note, remote_id, wallet_id)
         VALUES (%s, %s, %s, %s, 'created', %s, NULL, %s, %s)
      RETURNING id
-    """, (amount, paid_fee.amount, vat, participant.id, route.id, payin.Id, wallet_id))
+    """, (amount, paid_fee, vat, participant.id, route.id, payin.Id, wallet_id))
 
 
 def record_payout_refund(db, payout_refund):
@@ -286,8 +286,8 @@ def record_payout_refund(db, payout_refund):
         # Already recorded
         return e_refund_id
     amount, fee, vat = -e_origin.amount, -e_origin.fee, -e_origin.vat
-    assert payout_refund.DebitedFunds == Money(int(amount * 100), 'EUR')
-    assert payout_refund.Fees == Money(int(fee * 100), 'EUR')
+    assert payout_refund.DebitedFunds / 100 == amount
+    assert payout_refund.Fees / 100 == fee
     route = ExchangeRoute.from_id(e_origin.route)
     participant = Participant.from_id(e_origin.participant)
     remote_id = payout_refund.Id
@@ -318,10 +318,6 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
     assert status.startswith('pre')
     if participant.is_suspended:
         raise AccountSuspended()
-
-    amount = getattr(amount, 'amount', amount)
-    fee = getattr(fee, 'amount', fee)
-    vat = getattr(vat, 'amount', vat)
 
     with db.get_cursor() as cursor:
 
@@ -359,9 +355,9 @@ def record_exchange_result(db, exchange_id, remote_id, status, error, participan
 
         amount = e.amount
         if amount < 0:
-            amount = -amount + max(e.fee, 0) if status == 'failed' else 0
+            amount = -amount + max(e.fee, 0) if status == 'failed' else amount.zero()
         else:
-            amount = amount - min(e.fee, 0) if status == 'succeeded' else 0
+            amount = amount - min(e.fee, 0) if status == 'succeeded' else amount.zero()
         propagate_exchange(cursor, participant, e, error, amount)
 
         return e
@@ -375,7 +371,7 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
            SET balance=(balance + %s)
          WHERE id=%s
      RETURNING balance
-    """, (amount, participant.id))
+    """, (amount.amount, participant.id))
 
     if amount < 0 and new_balance < 0:
         raise NegativeBalance
@@ -396,7 +392,7 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
         withdrawable = sum(b.amount for b in bundles)
         x = -amount
         if x > withdrawable:
-            raise NotEnoughWithdrawableMoney(Money(withdrawable, 'EUR'))
+            raise NotEnoughWithdrawableMoney(withdrawable)
         for b in bundles:
             if x >= b.amount:
                 cursor.run("""
@@ -460,9 +456,9 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
     tr.CreditedUserId = kw.get('tippee_mango_id') or get(tippee, 'mangopay_user_id')
     tr.CreditedWalletId = wallet_to
-    tr.DebitedFunds = Money(int(amount * 100), 'EUR')
+    tr.DebitedFunds = amount.int()
     tr.DebitedWalletId = wallet_from
-    tr.Fees = Money(0, 'EUR')
+    tr.Fees = Money(0, amount.currency)
     tr.Tag = str(t_id)
     tr.save()
     return record_transfer_result(db, t_id, tr), t_id
@@ -543,7 +539,7 @@ def _record_transfer_result(db, t_id, status, error=None):
                SET status = %s
                  , error = %s
              WHERE id = %s
-         RETURNING tipper, tippee, amount, wallet_to
+         RETURNING tipper, tippee, (amount).amount, wallet_to
         """, (status, error, t_id))
         if status == 'succeeded':
             # Update the balances
@@ -659,7 +655,7 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     tr.AuthorId = original_owner.mangopay_user_id
     tr.CreditedUserId = chargebacks_account.mangopay_user_id
     tr.CreditedWalletId = chargebacks_account.mangopay_wallet_id
-    tr.DebitedFunds = Money(int(exchange.amount * 100), 'EUR')
+    tr.DebitedFunds = exchange.amount.int()
     tr.DebitedWalletId = original_owner.mangopay_wallet_id
     tr.Fees = Money(0, 'EUR')
     tr.RepudiationId = repudiation_id

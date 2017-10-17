@@ -117,7 +117,7 @@ title = _("Adding Money")
     % if exchange and exchange.status == 'failed'
         <div class="alert alert-danger">{{
             _("The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}",
-              Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
+              exchange.amount + exchange.fee, exchange.note)
         }}</div>
     % endif
 
@@ -150,7 +150,7 @@ title = _("Adding Money")
             "We are ready to receive the funds. Please send exactly {0} to the "
             "following account using the reference code below so we'll know the "
             "money came from you:",
-            Money(exchange.amount + exchange.fee, 'EUR')
+            exchange.amount + exchange.fee
         ) }}</p>
         <dl>
             <dt>{{ _("IBAN (International Bank Account Number)") }}</dt>

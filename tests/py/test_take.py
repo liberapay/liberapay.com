@@ -44,7 +44,7 @@ class Tests(Harness):
             self.db.run("""
                 INSERT INTO transfers (tipper, tippee, amount, context, status, team, wallet_from, wallet_to)
                 VALUES (%(tipper)s, %(tippee)s, %(amount)s, 'take', 'succeeded', %(team)s, '-1', '-2')
-            """, dict(tipper=self.warbucks.id, tippee=member.id, amount=actual_amount, team=team.id))
+            """, dict(tipper=self.warbucks.id, tippee=member.id, amount=EUR(actual_amount), team=team.id))
         self.db.run("UPDATE paydays SET ts_end=now() WHERE ts_end < ts_start")
 
     def test_random_schmoe_is_not_member_of_team(self):
@@ -204,5 +204,5 @@ class Tests(Harness):
         self.db.run("""
             INSERT INTO transfers (tipper, tippee, amount, context, status, team, wallet_from, wallet_to)
             VALUES (%(tipper)s, %(id)s, %(amount)s, 'take', 'succeeded', %(team)s, '-1', '-2')
-        """, dict(tipper=self.warbucks.id, id=alice.id, amount=take_this_week, team=team.id))
+        """, dict(tipper=self.warbucks.id, id=alice.id, amount=EUR(take_this_week), team=team.id))
         assert team.get_takes_last_week()[alice.id] == 30

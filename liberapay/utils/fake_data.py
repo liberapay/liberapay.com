@@ -5,6 +5,7 @@ import string
 import sys
 
 from faker import Factory
+from mangopay.utils import Money
 from psycopg2 import IntegrityError
 
 from liberapay.billing.transactions import (
@@ -232,9 +233,10 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
             tipper, tippee = random.sample(participants, 2)
         sys.stdout.write("\rMaking Transfers (%i/%i)" % (i+1, num_transfers))
         sys.stdout.flush()
-        amount = random_money_amount(min_amount, max_amount)
+        amount = Money(random_money_amount(min_amount, max_amount), 'EUR')
+        zero = amount.zero()
         ts = faker.date_time_this_year()
-        fake_exchange(db, tipper, amount, 0, 0, (ts - datetime.timedelta(days=1)))
+        fake_exchange(db, tipper, amount, zero, zero, (ts - datetime.timedelta(days=1)))
         transfers.append(fake_transfer(db, tipper, tippee, amount, ts))
     print("")
 
@@ -270,7 +272,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
             'nparticipants': len(week_participants),
             'ntippers': len(tippers),
             'nactive': len(actives),
-            'transfer_volume': sum(x.amount for x in week_transfers),
+            'transfer_volume': sum(x.amount.amount for x in week_transfers),
             'public_log': '',
         }
         _fake_thing(db, "paydays", **payday)

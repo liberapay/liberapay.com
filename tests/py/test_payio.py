@@ -416,11 +416,11 @@ class TestCashBundles(FakeTransfersHarness, MangopayHarness):
         assert bundles_count() == 0
         self.make_exchange('mango-cc', 45, 0, self.janet)
         assert bundles_count() == 1
-        transfer(self.db, self.janet.id, self.homer.id, D('10.00'), 'tip')
+        transfer(self.db, self.janet.id, self.homer.id, EUR('10.00'), 'tip')
         assert bundles_count() == 2
-        transfer(self.db, self.homer.id, self.janet.id, D('5.00'), 'tip')
+        transfer(self.db, self.homer.id, self.janet.id, EUR('5.00'), 'tip')
         assert bundles_count() == 2
-        transfer(self.db, self.homer.id, self.janet.id, D('5.00'), 'tip')
+        transfer(self.db, self.homer.id, self.janet.id, EUR('5.00'), 'tip')
         assert bundles_count() == 1
         self.db.self_check()
 
@@ -491,7 +491,7 @@ class TestSync(MangopayHarness):
         with mock.patch('liberapay.billing.transactions.record_transfer_result') as rtr:
             rtr.side_effect = Foobar()
             with self.assertRaises(Foobar):
-                transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
+                transfer(self.db, self.janet.id, self.david.id, EUR('10.00'), 'tip')
         t = self.db.one("SELECT * FROM transfers")
         assert t.status == 'pre'
         sync_with_mangopay(self.db)
@@ -506,7 +506,7 @@ class TestSync(MangopayHarness):
              mock.patch('liberapay.billing.transactions.Transfer.save', autospec=True) as save:
             rtr.side_effect = save.side_effect = Foobar
             with self.assertRaises(Foobar):
-                transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
+                transfer(self.db, self.janet.id, self.david.id, EUR('10.00'), 'tip')
         t = self.db.one("SELECT * FROM transfers")
         assert t.status == 'pre'
         self.throw_transactions_back_in_time()

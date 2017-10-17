@@ -178,7 +178,7 @@ elif cls:
                      , vat = %s
                      , note = %s
                  WHERE id = %s
-            """, (credited_amount.amount, paid_fees.amount, new_vat.amount, note, e_id))
+            """, (credited_amount, paid_fees, new_vat, note, e_id))
 
     if payio.AuthorId == website.app_conf.mangopay_client_id:
         if event == 'PAYOUT_NORMAL' and status == 'succeeded':
@@ -209,7 +209,7 @@ elif cls:
         balance = w.Balance.Amount
         if balance:
             transfer(
-                website.db, p.id, p.id, balance, 'account-switch',
+                website.db, p.id, p.id, Money(balance, 'EUR'), 'account-switch',
                 tipper_mango_id=w.Owners[0].Id, tipper_wallet_id=w.Id,
             )
 

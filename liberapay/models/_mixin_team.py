@@ -190,7 +190,7 @@ class MixinTeam(object):
         tips = [NS(t._asdict()) for t in cursor.all("""
             SELECT t.id, t.tipper, t.amount AS full_amount
                  , COALESCE((
-                       SELECT sum(tr.amount)
+                       SELECT sum((tr.amount).amount)
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
