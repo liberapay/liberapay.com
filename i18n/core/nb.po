@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Norwegian (https://hosted.weblate.org/projects/liberapay/core/nb/)\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2017-10-18 21:47+0000\n"
+"Last-Translator: Tale Haukbjørk <tale@haukbjork.net>\n"
+"Language-Team: Norwegian Bokmål "
+"<https://hosted.weblate.org/projects/liberapay/core/nb/>\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.17\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -139,9 +143,10 @@ msgstr "{sender_name} har sendt inn en faktura for betaling på {amount}."
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Bankoverføring til din Liberapay-lommebok"
 
-#, fuzzy
 msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Bankforbindelsen til din Liberapay-lommebok er gått ut på dato."
+msgstr ""
+"Bankforbindelsen til din Liberapay-lommebok har tatt for lang tid og er gått "
+"ut"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
@@ -874,7 +879,7 @@ msgid "Money"
 msgstr ""
 
 msgid "Teams"
-msgstr ""
+msgstr "Teams"
 
 msgid "Stats"
 msgstr ""
@@ -1128,10 +1133,10 @@ msgid "Invite"
 msgstr ""
 
 msgid "Explore teams"
-msgstr ""
+msgstr "Utforsk teams"
 
 msgid "About teams"
-msgstr ""
+msgstr "Om teams"
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1157,6 +1162,9 @@ msgstr ""
 
 msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
 msgstr ""
+"Uavkrevde inntekter blir i lommeboken til giveren, og samles ikke på teamets "
+"konto. Siden teams ikke er juridiske personer kan vi ikke oppbevare penger i "
+"deres navn."
 
 msgid "Leftover"
 msgstr ""
@@ -1951,6 +1959,9 @@ msgstr ""
 
 msgid "Things we clear immediately include your profile statements, any funding goal, the donations you're receiving, and those you're giving. You'll also be removed from any communities and teams you were a part of."
 msgstr ""
+"Ting vi fjerner med en gang omfatter profilteksten din, finansieringsmål, "
+"donasjoner du mottar og det du gir vekk. Du blir også fjernet fra alle "
+"fellesskap og teams du har vært med i."
 
 #, python-brace-format
 msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
@@ -2693,6 +2704,8 @@ msgstr ""
 #, python-brace-format
 msgid "{0} is our payments partner, you have to accept their terms of service to be able to fully use Liberapay."
 msgstr ""
+"{0} er betalingspartneren vår, og du er nødt til å godta servicevilkårene "
+"deres for å kunne bruke Liberapay fullt ut."
 
 msgid "You need to log in to access this page."
 msgstr ""
@@ -2765,44 +2778,46 @@ msgid "Number of open individual and organization accounts on Liberapay"
 msgstr ""
 
 msgid "Active Users"
-msgstr ""
+msgstr "Aktive brukere"
 
 msgid "Users that gave and/or received money within Liberapay (per week)"
-msgstr ""
+msgstr "Brukere som ga og/eller mottok penger i Liberapay (per uke)"
 
 msgid "Weekly Gifts (€)"
-msgstr ""
+msgstr "Ukentlige gaver (€)"
 
 msgid "Money transferred within Liberapay (per week)"
-msgstr ""
+msgstr "Penger overført inne i Liberapay (per uke)"
 
 msgid "Deposits (€)"
-msgstr ""
+msgstr "Innskudd (€)"
 
 msgid "Money moved into Liberapay"
-msgstr ""
+msgstr "Penger flyttet inn i Liberapay"
 
 msgid "Withdrawals (€)"
-msgstr ""
+msgstr "Uttak (€)"
 
 msgid "Money moved out of Liberapay"
-msgstr ""
+msgstr "Penger flyttet ut av Liberapay"
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
 msgstr ""
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
 msgstr ""
+"Teams er for peer-to-peer-donasjoner, og kan ikke brukes av en juridisk "
+"enhet for å fordele donasjoner til sine medlemmer."
 
 msgid "Creating a team"
-msgstr ""
+msgstr "Å skape et team"
 
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
-msgstr ""
+msgstr "Du må {0}logge inn på din egen konto{1} først."
 
 msgid "Becoming a team member"
-msgstr ""
+msgstr "Hvordan bli medlem i et team"
 
 msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
 msgstr ""
@@ -2812,10 +2827,16 @@ msgstr ""
 
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr ""
+"Det er ikke noe hierarki i et team. Alle medlemmer er likeverdige og "
+"fastsetter sin egen andel."
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
 msgstr ""
+"Du kan endre din andel fra {0}ditt teams kontrollpanel{1}. Den inneholder "
+"tabeller som viser alle medlemmers nominelle andeler for neste og forrige "
+"betalingsdag, samt et overslag over de faktiske beløp de kommer til å motta "
+"på neste betalingsdag."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr ""
@@ -2840,7 +2861,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "You can leave a team from {0}your teams dashboard{1}."
-msgstr ""
+msgstr "Du kan forlate et team fra {0}ditt teams kontrollpanel{1}."
 
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
 msgstr ""
@@ -2917,7 +2938,7 @@ msgid "A team is a group of users working on a specific project."
 msgstr ""
 
 msgid "Explore Teams"
-msgstr ""
+msgstr "Utforsk teams"
 
 msgid "Great nonprofits and companies trying to improve the world."
 msgstr ""
@@ -2985,8 +3006,8 @@ msgstr ""
 #, python-brace-format
 msgid "There is {n} team on Liberapay:"
 msgid_plural "There are {n} teams on Liberapay:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Det er {n} team på Liberapay:"
+msgstr[1] "Det er {n} teams på Liberapay:"
 
 msgid "Create a team"
 msgstr ""
