@@ -1725,11 +1725,7 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , t.mtime
-                     , p.join_time
-                     , p.username
-                     , e.platform
-                     , e.user_name
-                     , e.domain
+                     , (e, p)::elsewhere_with_participant AS e_account
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                   JOIN elsewhere e ON e.participant = t.tippee
@@ -1739,7 +1735,7 @@ class Participant(Model, MixinTeam):
                      , t.mtime DESC
             ) AS foo
             ORDER BY amount DESC
-                   , lower(user_name)
+                   , ctime DESC
 
         """, (self.id,))
 
