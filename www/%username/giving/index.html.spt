@@ -182,11 +182,11 @@ weekly = total - participant.receiving
         </tfoot>
         <tbody>
         % for tip in pledges
-            % set slug = tip.user_name + ('@' + tip.domain if tip.domain else '')
+            % set e = tip.e_account
             <tr>
                 <td class="recipient">
-                    <img class="platform-icon" src="{{ website.asset('platforms/%s.16.png' % tip.platform) }}" />
-                    <a href="/on/{{ tip.platform }}/{{ slug }}/">{{ tip.user_name }}</a>
+                    <img class="platform-icon" src="{{ e.platform_data.icon }}" />
+                    <a href="{{ e.liberapay_path }}">{{ e.friendly_name }}</a>
                 </td>
                 <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
                 <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>

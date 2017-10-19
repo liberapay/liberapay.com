@@ -406,13 +406,16 @@ class Participant(Model, MixinTeam):
 
     def resolve_stub(self):
         rec = self.db.one("""
-            SELECT platform, user_name, domain
+            SELECT platform, user_id, user_name, domain
               FROM elsewhere
              WHERE participant = %s
         """, (self.id,))
         if rec:
-            slug = quote(rec.user_name) + ('@' + rec.domain if rec.domain else '')
-            return '/on/%s/%s/' % (quote(rec.platform), slug)
+            if rec.user_name:
+                slug = quote(rec.user_name) + ('@' + rec.domain if rec.domain else '')
+            else:
+                slug = '~' + quote(rec.user_id) + (':' + rec.domain if rec.domain else '')
+            return '/on/%s/%s/' % (rec.platform, slug)
         return None
 
 
@@ -1725,11 +1728,7 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , t.mtime
-                     , p.join_time
-                     , p.username
-                     , e.platform
-                     , e.user_name
-                     , e.domain
+                     , (e, p)::elsewhere_with_participant AS e_account
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                   JOIN elsewhere e ON e.participant = t.tippee
@@ -1739,7 +1738,7 @@ class Participant(Model, MixinTeam):
                      , t.mtime DESC
             ) AS foo
             ORDER BY amount DESC
-                   , lower(user_name)
+                   , ctime DESC
 
         """, (self.id,))
 
