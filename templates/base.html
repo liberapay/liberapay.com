@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ website.asset('fontawesome/4.5.0/css/font-awesome.min.css') }}" type="text/css">
+    <noscript>
+        <style>
+            label[for=navbar-toggle-cbox] { cursor: pointer; }
+            #navbar-toggle-cbox:checked ~ .collapse { display: block; }
+            #toggle-navbar-link { display: none; }
+        </style>
+    </noscript>
     % if request.method in ('GET', 'HEAD') and response.code == 200
         <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri }}" />
         % for l_completion, l_code, l_name, l_url in website.lang_list
@@ -49,14 +56,21 @@
     <nav class="navbar navbar-liberapay navbar-static-top navbar-collapse"
          id="navbar">
         <div class="container">
+            <input aria-controls="navbar-liberapay-collapse" id="navbar-toggle-cbox" role="button" type="checkbox" style="display: none">
             <ul class="nav navbar-nav pull-right navbar-always">
                 <li class="collapsed">
-                    <a role="button" class="collapsed" data-toggle="collapse"
-                       data-target="#navbar-liberapay-collapse" data-parent="#navbar"
-                       aria-expanded="false">
+                    <a id="toggle-navbar-link" role="button" class="collapsed"
+                       data-toggle="collapse" data-target="#navbar-liberapay-collapse"
+                       data-parent="#navbar" aria-expanded="false">
                         <span class="sr-only">{{ _("Toggle navigation") }}</span>
                         {{ glyphicon('menu-hamburger') }}
                     </a>
+                    <noscript>
+                        <label class="navbar-toggle" for="navbar-toggle-cbox" data-toggle="collapse" data-target="#navbar-liberapay-collapse">
+                            <span class="sr-only">{{ _("Toggle navigation") }}</span>
+                            {{ glyphicon('menu-hamburger') }}
+                        </label>
+                    </noscript>
                 </li>
                 % include "templates/navbar-common.html"
             % if not user.ANON
