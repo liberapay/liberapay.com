@@ -363,7 +363,7 @@ class Tests(Harness):
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', balance=100)
-        bob = self.make_participant('bob', taking=Decimal('42.00'))
+        bob = self.make_participant('bob', taking=EUR('42.00'))
         alice.set_tip_to(bob, EUR('3.00'))
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
 
@@ -372,7 +372,7 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, EUR('3.00'))
 
-        bob.update_goal(Decimal('-1'))
+        bob.update_goal(EUR('-1'))
         assert bob.receiving == 0
         assert bob.npatrons == 0
         alice = Participant.from_id(alice.id)
@@ -382,7 +382,7 @@ class Tests(Harness):
 
     def test_cant_pledge_to_locked_accounts(self):
         alice = self.make_participant('alice', balance=100)
-        bob = self.make_stub(goal=-1)
+        bob = self.make_stub(goal=EUR(-1))
         with self.assertRaises(UserDoesntAcceptTips):
             alice.set_tip_to(bob, EUR('3.00'))
 

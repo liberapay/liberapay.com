@@ -153,12 +153,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
              WHERE p.id = t.tippee
                AND p.mangopay_user_id IS NOT NULL;
             UPDATE participants
-               SET giving = 10000
-                 , taking = 10000
+               SET giving = (10000,'EUR')
+                 , taking = (10000,'EUR')
              WHERE mangopay_user_id IS NOT NULL;
             UPDATE participants
                SET npatrons = 10000
-                 , receiving = 10000
+                 , receiving = (10000,'EUR')
              WHERE status = 'active';
         """)
         Payday.start().update_cached_amounts()
@@ -276,7 +276,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     def test_payday_doesnt_process_tips_when_goal_is_negative(self):
         self.make_exchange('mango-cc', 20, 0, self.janet)
         self.janet.set_tip_to(self.homer, EUR('13.00'))
-        self.db.run("UPDATE participants SET goal = -1 WHERE username='homer'")
+        self.db.run("UPDATE participants SET goal = (-1,null) WHERE username='homer'")
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
