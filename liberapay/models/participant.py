@@ -1,7 +1,6 @@
 from __future__ import division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
-from decimal import ROUND_DOWN, ROUND_UP
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
@@ -21,7 +20,7 @@ from psycopg2 import IntegrityError
 from psycopg2.extras import Json
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
@@ -472,14 +471,14 @@ class Participant(Model, MixinTeam):
         tips = [t for t in tips if t.is_identified and not t.is_suspended]
         total = sum(t.amount for t in tips)
         transfers = []
-        distributed = D_ZERO
+        distributed = ZERO['EUR']
 
         if not total:
             raise self.NoOneToGiveFinalGiftTo
 
         for tip in tips:
             rate = tip.amount / total
-            pro_rated = (self.balance * rate).quantize(D_CENT, ROUND_DOWN)
+            pro_rated = (Money(self.balance, 'EUR') * rate).round_down()
             if pro_rated == 0:
                 continue
             if tip.kind == 'group':
@@ -497,7 +496,7 @@ class Participant(Model, MixinTeam):
                 for take in takes:
                     nominal = take['amount']
                     actual = min(
-                        (nominal * ratio).quantize(D_CENT, rounding=ROUND_UP),
+                        (nominal * ratio).round_up(),
                         balance
                     )
                     if actual == 0:
@@ -520,7 +519,7 @@ class Participant(Model, MixinTeam):
         db = self.db
         tipper = self.id
         for tippee, amount, team in transfers:
-            balance = transfer(db, tipper, tippee, Money(amount, 'EUR'), 'final-gift', team=team,
+            balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
                                tipper_mango_id=self.mangopay_user_id,
                                tipper_wallet_id=self.mangopay_wallet_id)[0]
 

@@ -1,6 +1,6 @@
 # coding: utf8
 
-from __future__ import print_function, unicode_literals
+from __future__ import division, print_function, unicode_literals
 
 from collections import namedtuple
 from datetime import date
@@ -179,7 +179,7 @@ class Payday(object):
         CREATE UNIQUE INDEX ON payday_participants (id);
 
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
-            SELECT t.id, tipper, tippee, (amount).amount, (p2.kind = 'group') AS to_team
+            SELECT t.id, tipper, tippee, amount, (p2.kind = 'group') AS to_team
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -225,21 +225,21 @@ class Payday(object):
 
         -- Prepare a statement that makes and records a transfer
 
-        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int)
+        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, currency_amount, transfer_context, bigint, int)
         RETURNS void AS $$
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;
                 UPDATE payday_participants
-                   SET new_balance = (new_balance - $3)
+                   SET new_balance = (new_balance - $3.amount)
                  WHERE id = $1;
                 IF (NOT FOUND) THEN RAISE 'tipper %% not found', $1; END IF;
                 UPDATE payday_participants
-                   SET new_balance = (new_balance + $3)
+                   SET new_balance = (new_balance + $3.amount)
                  WHERE id = $2;
                 IF (NOT FOUND) THEN RAISE 'tippee %% not found', $2; END IF;
                 INSERT INTO payday_transfers
                             (tipper, tippee, amount, context, team, invoice)
-                     VALUES ($1, $2, ($3, 'EUR'), $4, $5, $6);
+                     VALUES ($1, $2, $3, $4, $5, $6);
             END;
         $$ LANGUAGE plpgsql;
 
@@ -255,7 +255,7 @@ class Payday(object):
                       FROM payday_participants p
                      WHERE id = NEW.tipper
                 );
-                IF (NEW.amount <= tipper.new_balance) THEN
+                IF ((NEW.amount).amount <= tipper.new_balance) THEN
                     EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL, NULL);
                     RETURN NEW;
                 END IF;
@@ -324,16 +324,16 @@ class Payday(object):
               FROM payday_participants p
              WHERE p.id = tipper
                AND tippee = %(team_id)s
-               AND p.new_balance >= amount
+               AND p.new_balance >= (amount).amount
          RETURNING t.id, t.tipper, t.amount AS full_amount
                  , COALESCE((
-                       SELECT sum((tr.amount).amount)
+                       SELECT sum(tr.amount)
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
                           AND tr.context = 'take'
                           AND tr.status = 'succeeded'
-                   ), 0) AS past_transfers_sum
+                   ), zero(t.amount)) AS past_transfers_sum
         """, args)]
         takes = [NS(t._asdict()) for t in cursor.all("""
             SELECT t.member, t.amount
@@ -349,14 +349,15 @@ class Payday(object):
     def resolve_takes(tips, takes):
         """Resolve many-to-many donations (team takes)
         """
-        total_income = sum(t.full_amount for t in tips)
-        total_takes = sum(t.amount for t in takes)
-        leftover = Money(max(total_income - total_takes, 0), 'EUR')
+        zero = constants.ZERO['EUR']
+        total_income = sum(t.full_amount for t in tips) or zero
+        total_takes = sum(t.amount for t in takes) or zero
+        leftover = max(total_income - total_takes, zero)
         if total_income == 0 or total_takes == 0:
             return (), leftover
         takes_ratio = min(total_income / total_takes, 1)
         for take in takes:
-            take.amount = round_up(take.amount * takes_ratio)
+            take.amount = (take.amount * takes_ratio).round_up()
         tips_ratio = min(total_takes / total_income, 1)
         adjust_tips = tips_ratio != 1
         if adjust_tips:
@@ -380,7 +381,7 @@ class Payday(object):
                 for tip in tips:
                     tip.weeks_to_catch_up = max_weeks - tip.weeks
                     tip.ratio = min(min_tip_ratio + tip.weeks_to_catch_up, 1)
-                    tip.amount = round_up(tip.full_amount * tip.ratio)
+                    tip.amount = (tip.full_amount * tip.ratio).round_up()
                 naive_amounts_sum = sum(tip.amount for tip in tips)
                 total_to_transfer = min(total_takes, total_income)
                 delta = total_to_transfer - naive_amounts_sum
@@ -398,7 +399,7 @@ class Payday(object):
                         # untouched the ones that are already low
                         for tip in tips:
                             if tip.ratio > min_tip_ratio:
-                                min_tip_amount = round_up(tip.full_amount * min_tip_ratio)
+                                min_tip_amount = (tip.full_amount * min_tip_ratio).round_up()
                                 tip.leeway = min_tip_amount - tip.amount
                             else:
                                 tip.leeway = 0
@@ -414,14 +415,14 @@ class Payday(object):
         transfers = []
         for tip in tips:
             if adjust_tips:
-                tip_amount = round_up(tip.amount + tip.leeway * leeway_ratio)
+                tip_amount = (tip.amount + tip.leeway * leeway_ratio).round_up()
                 if tip_amount == 0:
                     continue
                 assert tip_amount > 0
                 assert tip_amount <= tip.full_amount
                 tip.amount = tip_amount
             else:
-                tip.amount = round_up(tip.full_amount * tips_ratio)
+                tip.amount = (tip.full_amount * tips_ratio).round_up()
             for take in takes:
                 if take.amount == 0 or tip.tipper == take.member:
                     continue
@@ -457,7 +458,7 @@ class Payday(object):
             if payer_balance < i.amount:
                 continue
             cursor.run("""
-                SELECT transfer(%(addressee)s, %(sender)s, %(amount)s,
+                SELECT transfer(%(addressee)s, %(sender)s, (%(amount)s,'EUR')::currency_amount,
                                 %(nature)s::transfer_context, NULL, %(id)s);
                 UPDATE invoices
                    SET status = 'paid'
@@ -503,7 +504,7 @@ class Payday(object):
         cls.db.run("""
             DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
-            DROP FUNCTION transfer(bigint, bigint, numeric, transfer_context, bigint, int);
+            DROP FUNCTION transfer(bigint, bigint, currency_amount, transfer_context, bigint, int);
         """)
 
     @staticmethod
@@ -681,12 +682,12 @@ class Payday(object):
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
                           , COALESCE((
-                                SELECT sum((tr.amount).amount)
+                                SELECT sum(tr.amount)
                                   FROM payday_transfers tr
                                  WHERE tr.team = t2.team
                                    AND tr.tippee = t2.member
                                    AND tr.context = 'take'
-                            ), 0) AS actual_amount
+                            ), zero(t2.actual_amount)) AS actual_amount
                        FROM current_takes t2
                    ) t2
              WHERE t.id = t2.id
@@ -695,12 +696,12 @@ class Payday(object):
             UPDATE participants p
                SET giving = p2.giving
               FROM ( SELECT p2.id
-                          , (COALESCE((
+                          , COALESCE((
                                 SELECT sum(amount)
                                   FROM payday_tips t
                                  WHERE t.tipper = p2.id
                                    AND t.is_funded
-                            ), 0), 'EUR')::currency_amount AS giving
+                            ), zero(p2.giving)) AS giving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -709,12 +710,12 @@ class Payday(object):
             UPDATE participants p
                SET taking = p2.taking
               FROM ( SELECT p2.id
-                          , (COALESCE((
-                                SELECT sum((t.amount).amount)
+                          , COALESCE((
+                                SELECT sum(t.amount)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context = 'take'
-                            ), 0), 'EUR')::currency_amount AS taking
+                            ), zero(p2.taking)) AS taking
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -723,12 +724,12 @@ class Payday(object):
             UPDATE participants p
                SET receiving = p2.receiving
               FROM ( SELECT p2.id
-                          , p2.taking + (COALESCE((
+                          , p2.taking + COALESCE((
                                 SELECT sum(amount)
                                   FROM payday_tips t
                                  WHERE t.tippee = p2.id
                                    AND t.is_funded
-                            ), 0), 'EUR')::currency_amount AS receiving
+                            ), zero(p2.taking)) AS receiving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id

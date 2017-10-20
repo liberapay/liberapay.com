@@ -62,4 +62,22 @@ BEGIN;
         ;
 END;
 
+BEGIN;
+    DROP VIEW current_takes;
+    ALTER TABLE takes
+        ALTER COLUMN amount DROP DEFAULT,
+        ALTER COLUMN amount TYPE currency_amount USING EUR(amount),
+        ALTER COLUMN amount SET DEFAULT NULL;
+    ALTER TABLE takes
+        ALTER COLUMN actual_amount DROP DEFAULT,
+        ALTER COLUMN actual_amount TYPE currency_amount USING EUR(actual_amount),
+        ALTER COLUMN actual_amount SET DEFAULT NULL;
+    CREATE VIEW current_takes AS
+        SELECT * FROM (
+             SELECT DISTINCT ON (member, team) t.*
+               FROM takes t
+           ORDER BY member, team, mtime DESC
+        ) AS anon WHERE amount IS NOT NULL;
+END;
+
 DROP FUNCTION EUR(numeric);

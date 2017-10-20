@@ -285,6 +285,8 @@ STANDARD_TIPS = {
 
 SUMMARY_MAX_SIZE = 100
 
+TAKE_THROTTLING_THRESHOLD = {k: Money('1.00', k) for k in ('EUR', 'USD')}
+
 USERNAME_MAX_SIZE = 32
 
 ZERO = {c: Money(D_ZERO, c) for c in ('EUR', 'USD', None)}
