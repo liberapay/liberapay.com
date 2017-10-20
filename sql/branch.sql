@@ -123,6 +123,37 @@ END;
 
 DROP FUNCTION EUR(numeric);
 
+BEGIN;
+    ALTER TABLE paydays
+        ALTER COLUMN transfer_volume DROP DEFAULT,
+        ALTER COLUMN transfer_volume TYPE currency_basket USING (transfer_volume, '0.00'),
+        ALTER COLUMN transfer_volume SET DEFAULT ('0.00', '0.00');
+    ALTER TABLE paydays
+        ALTER COLUMN take_volume DROP DEFAULT,
+        ALTER COLUMN take_volume TYPE currency_basket USING (take_volume, '0.00'),
+        ALTER COLUMN take_volume SET DEFAULT ('0.00', '0.00');
+    ALTER TABLE paydays
+        ALTER COLUMN week_deposits DROP DEFAULT,
+        ALTER COLUMN week_deposits TYPE currency_basket USING (week_deposits, '0.00'),
+        ALTER COLUMN week_deposits SET DEFAULT ('0.00', '0.00');
+    ALTER TABLE paydays
+        ALTER COLUMN week_withdrawals DROP DEFAULT,
+        ALTER COLUMN week_withdrawals TYPE currency_basket USING (week_withdrawals, '0.00'),
+        ALTER COLUMN week_withdrawals SET DEFAULT ('0.00', '0.00');
+    ALTER TABLE paydays
+        ALTER COLUMN transfer_volume_refunded DROP DEFAULT,
+        ALTER COLUMN transfer_volume_refunded TYPE currency_basket USING (transfer_volume_refunded, '0.00'),
+        ALTER COLUMN transfer_volume_refunded SET DEFAULT ('0.00', '0.00');
+    ALTER TABLE paydays
+        ALTER COLUMN week_deposits_refunded DROP DEFAULT,
+        ALTER COLUMN week_deposits_refunded TYPE currency_basket USING (week_deposits_refunded, '0.00'),
+        ALTER COLUMN week_deposits_refunded SET DEFAULT ('0.00', '0.00');
+    ALTER TABLE paydays
+        ALTER COLUMN week_withdrawals_refunded DROP DEFAULT,
+        ALTER COLUMN week_withdrawals_refunded TYPE currency_basket USING (week_withdrawals_refunded, '0.00'),
+        ALTER COLUMN week_withdrawals_refunded SET DEFAULT ('0.00', '0.00');
+END;
+
 CREATE FUNCTION recompute_balance(bigint) RETURNS currency_amount AS $$
     UPDATE participants p
        SET balance = (

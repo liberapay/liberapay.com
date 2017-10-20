@@ -142,14 +142,15 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()
         self.run_payday()
 
+        zero = {'amount': '0.00', 'currency': 'EUR'}
         expected = {
             "date": today(),
-            "transfer_volume": '3.00',
+            "transfer_volume": {'amount': '3.00', 'currency': 'EUR'},
             "nactive": '3',
             "nparticipants": '4',
             "nusers": '4',
-            "week_deposits": '0.00',
-            "week_withdrawals": '0.00',
+            "week_deposits": zero,
+            "week_withdrawals": zero,
             "xTitle": utcnow().strftime('%Y-%m-%d'),
         }
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]

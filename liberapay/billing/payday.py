@@ -607,11 +607,11 @@ class Payday(object):
                  , ntippees = (SELECT count(DISTINCT tippee) FROM our_transfers)
                  , ntips = (SELECT count(*) FROM our_tips)
                  , ntakes = (SELECT count(*) FROM our_takes)
-                 , take_volume = (SELECT COALESCE(sum((amount).amount), 0) FROM our_takes)
+                 , take_volume = (SELECT basket_sum(amount) FROM our_takes)
                  , ntransfers = (SELECT count(*) FROM our_transfers)
-                 , transfer_volume = (SELECT COALESCE(sum((amount).amount), 0) FROM our_transfers)
+                 , transfer_volume = (SELECT basket_sum(amount) FROM our_transfers)
                  , transfer_volume_refunded = (
-                       SELECT COALESCE(sum((amount).amount), 0)
+                       SELECT basket_sum(amount)
                          FROM our_transfers
                         WHERE refund_ref IS NOT NULL
                    )
@@ -631,26 +631,26 @@ class Payday(object):
                               ), '') <> '"closed"'
                    )
                  , week_deposits = (
-                       SELECT COALESCE(sum((amount).amount), 0)
+                       SELECT basket_sum(amount)
                          FROM week_exchanges
                         WHERE amount > 0
                           AND refund_ref IS NULL
                           AND status = 'succeeded'
                    )
                  , week_deposits_refunded = (
-                       SELECT COALESCE(sum((amount).amount), 0)
+                       SELECT basket_sum(amount)
                          FROM week_exchanges
                         WHERE amount > 0
                           AND refunded
                    )
                  , week_withdrawals = (
-                       SELECT COALESCE(-sum((amount).amount), 0)
+                       SELECT basket_sum(-amount)
                          FROM week_exchanges
                         WHERE amount < 0
                           AND refund_ref IS NULL
                    )
                  , week_withdrawals_refunded = (
-                       SELECT COALESCE(sum((amount).amount), 0)
+                       SELECT basket_sum(amount)
                          FROM week_exchanges
                         WHERE amount < 0
                           AND refunded
@@ -706,7 +706,7 @@ class Payday(object):
                SET giving = p2.giving
               FROM ( SELECT p2.id
                           , COALESCE((
-                                SELECT sum(amount)
+                                SELECT sum(amount, p2.main_currency)
                                   FROM payday_tips t
                                  WHERE t.tipper = p2.id
                                    AND t.is_funded
@@ -720,7 +720,7 @@ class Payday(object):
                SET taking = p2.taking
               FROM ( SELECT p2.id
                           , COALESCE((
-                                SELECT sum(t.amount)
+                                SELECT sum(t.amount, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context = 'take'
@@ -734,7 +734,7 @@ class Payday(object):
                SET receiving = p2.receiving
               FROM ( SELECT p2.id
                           , p2.taking + COALESCE((
-                                SELECT sum(amount)
+                                SELECT sum(amount, p2.main_currency)
                                   FROM payday_tips t
                                  WHERE t.tippee = p2.id
                                    AND t.is_funded

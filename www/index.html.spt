@@ -286,7 +286,7 @@ recent = query_cache.one("""
         <p>{{ glyphicon('transfer') }} <span>{{ ngettext(
             "",
             "{money_amount} were transferred last week between {n} users.",
-            money_amount=Money(recent.newest_payday_transfer_volume, 'EUR'),
+            money_amount=recent.newest_payday_transfer_volume,
             n=recent.newest_payday_nactive,
         ) }}</span></p>
         % endif
