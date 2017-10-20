@@ -77,8 +77,7 @@ elif event == 'DISPUTE':
         exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
         p_id = exchange.participant
     dispute_type = dispute.DisputeType
-    assert dispute.DisputedFunds.Currency == 'EUR'
-    dispute_amount = dispute.DisputedFunds.Amount / 100
+    dispute_amount = dispute.DisputedFunds / 100
     result_code = dispute.ResultCode
     new_dispute = not r
     with website.db.get_cursor() as cursor:

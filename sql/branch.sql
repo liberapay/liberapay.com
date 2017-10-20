@@ -8,6 +8,7 @@ ALTER TABLE participants ADD COLUMN accept_all_currencies boolean NOT NULL DEFAU
 BEGIN;
     ALTER TABLE cash_bundles ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
     ALTER TABLE debts ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+    ALTER TABLE disputes ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
     ALTER TABLE exchanges ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
     ALTER TABLE exchanges ALTER COLUMN fee TYPE currency_amount USING (fee, 'EUR');
     ALTER TABLE exchanges ALTER COLUMN vat TYPE currency_amount USING (vat, 'EUR');
