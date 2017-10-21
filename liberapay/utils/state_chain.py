@@ -17,6 +17,7 @@ from ..exceptions import LazyResponse
 
 
 def attach_environ_to_request(environ, request, website):
+    request.country = request.headers.get('CF-IPCountry')
     request.environ = environ
     request.website = website
 
