@@ -26,12 +26,47 @@ BEGIN;
       ORDER BY tipper, tippee, mtime DESC;
 END;
 
+BEGIN;
+
+    CREATE TABLE wallets
+    ( remote_id         text              NOT NULL UNIQUE
+    , balance           currency_amount   NOT NULL CHECK (balance >= 0)
+    , owner             bigint            NOT NULL REFERENCES participants
+    , remote_owner_id   text              NOT NULL
+    , is_current        boolean           DEFAULT TRUE
+    );
+
+    CREATE UNIQUE INDEX ON wallets (owner, (balance::currency), is_current);
+    CREATE UNIQUE INDEX ON wallets (remote_owner_id, (balance::currency));
+
+    INSERT INTO wallets
+                (remote_id, balance, owner, remote_owner_id)
+         SELECT p.mangopay_wallet_id
+              , (p.balance, 'EUR')::currency_amount
+              , p.id
+              , p.mangopay_user_id
+           FROM participants p
+          WHERE p.mangopay_wallet_id IS NOT NULL;
+
+    INSERT INTO wallets
+                (remote_id, balance, owner, remote_owner_id, is_current)
+         SELECT e.payload->'old_wallet_id'
+              , ('0.00', 'EUR')::currency_amount
+              , e.participant
+              , e.payload->'old_user_id'
+              , false
+           FROM "events" e
+          WHERE e.type = 'mangopay-account-change';
+
+END;
+
 CREATE FUNCTION EUR(numeric) RETURNS currency_amount AS $$
     BEGIN RETURN ($1, 'EUR'); END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 
 BEGIN;
     DROP VIEW sponsors;
+    ALTER TABLE participants DROP COLUMN mangopay_wallet_id;
     ALTER TABLE participants
         ALTER COLUMN goal DROP DEFAULT,
         ALTER COLUMN goal TYPE currency_amount USING EUR(goal),
@@ -83,3 +118,14 @@ BEGIN;
 END;
 
 DROP FUNCTION EUR(numeric);
+
+CREATE FUNCTION recompute_balance(bigint) RETURNS numeric AS $$
+    UPDATE participants p
+       SET balance = (
+               SELECT (sum(w.balance, p.main_currency)).amount
+                 FROM wallets w
+                WHERE w.owner = p.id
+           )
+     WHERE id = $1
+ RETURNING balance;
+$$ LANGUAGE SQL STRICT;

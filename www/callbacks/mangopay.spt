@@ -202,14 +202,15 @@ elif cls:
     e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
 
     # Attempt to transfer the money to the user's current wallet
-    if affects_balance and e.wallet_id != p.mangopay_wallet_id:
+    current_wallet_id = p.get_current_wallet(e.amount.currency).remote_id
+    if affects_balance and e.wallet_id != current_wallet_id:
         w = Wallet.get(e.wallet_id)
-        assert w.Balance.Currency == 'EUR'
-        balance = w.Balance.Amount
+        balance = w.Balance
         if balance:
             transfer(
-                website.db, p.id, p.id, Money(balance, 'EUR'), 'account-switch',
+                website.db, p.id, p.id, balance, 'account-switch',
                 tipper_mango_id=w.Owners[0].Id, tipper_wallet_id=w.Id,
+                tippee_mango_id=p.mangopay_user_id, tippee_wallet_id=current_wallet_id,
             )
 
     # Notify the user

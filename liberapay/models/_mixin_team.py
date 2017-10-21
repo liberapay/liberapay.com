@@ -172,7 +172,7 @@ class MixinTeam(object):
         assert self.kind == 'group'
         TAKES = """
             SELECT p.id AS member_id, p.username AS member_name, p.avatar_url
-                 , (p.mangopay_user_id IS NOT NULL) AS is_identified
+                 , (p.mangopay_user_id IS NOT NULL) AS is_identified, p.is_suspended
                  , t.amount, t.actual_amount, t.ctime, t.mtime
               FROM current_takes t
               JOIN participants p ON p.id = member

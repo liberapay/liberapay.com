@@ -284,7 +284,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             payin.DeclaredFees = Money(fee, 'EUR')
             payin.Fees = Money(fee, 'EUR')
             payin.CreditedFunds = Money(0, 'XXX') if error else Money(242 - fee, 'EUR')
-            payin.CreditedWalletId = homer.mangopay_wallet_id
+            payin.CreditedWalletId = self.homer_wallet_id
             Get.return_value = payin
             r = self.callback(qs)
             assert r.code == 200, r.text

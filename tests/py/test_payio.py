@@ -137,8 +137,7 @@ class TestCharge(MangopayHarness):
         assert self.janet.balance == janet.balance == 0
 
     def test_charge_success_and_wallet_creation(self):
-        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
-        self.janet.set_attributes(mangopay_wallet_id=None)
+        self.db.run("DELETE FROM wallets WHERE owner = %s", (self.janet.id,))
         exchange = charge(self.db, self.janet_route, D('20'), 'http://localhost/')
         janet = Participant.from_id(self.janet.id)
         assert exchange.note is None
@@ -211,8 +210,7 @@ class TestPayinBankWire(MangopayHarness):
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_payinbank_wire_exception_and_wallet_creation(self, test_hook):
         test_hook.side_effect = Foobar
-        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
-        self.janet.set_attributes(mangopay_wallet_id=None)
+        self.db.run("DELETE FROM wallets WHERE owner = %s", (self.janet.id,))
         exchange = payin_bank_wire(self.db, self.janet, D('50'))[1]
         assert exchange.note == 'Foobar()'
         assert exchange.status == 'failed'
@@ -273,8 +271,7 @@ class TestDirectDebit(MangopayHarness):
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_direct_debit_exception_and_wallet_creation(self, test_hook):
         test_hook.side_effect = Foobar
-        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
-        self.homer.set_attributes(mangopay_wallet_id=None)
+        self.db.run("DELETE FROM wallets WHERE owner = %s", (self.homer.id,))
         exchange = prepare_direct_debit(self.db, self.homer_route, D('50'))
         assert exchange.status == 'pre-mandate'
         self.homer_route.set_mandate('-1')

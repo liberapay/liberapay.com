@@ -225,25 +225,32 @@ class Participant(Model, MixinTeam):
                 return p
 
     @classmethod
-    def get_chargebacks_account(cls):
-        r = cls.db.one("""
+    def get_chargebacks_account(cls, currency):
+        p = cls.db.one("""
             SELECT p
               FROM participants p
              WHERE mangopay_user_id = 'CREDIT'
         """)
-        if r:
-            return r
-        return cls.make_stub(
-            goal=Money(-1, 'EUR'),
-            hide_from_search=3,
-            hide_from_lists=3,
-            join_time=utcnow(),
-            kind='organization',
-            mangopay_user_id='CREDIT',
-            mangopay_wallet_id='CREDIT_EUR',
-            status='active',
-            username='_chargebacks_',
-        )
+        if not p:
+            p = cls.make_stub(
+                goal=Money(-1, currency),
+                hide_from_search=3,
+                hide_from_lists=3,
+                join_time=utcnow(),
+                kind='organization',
+                mangopay_user_id='CREDIT',
+                status='active',
+                username='_chargebacks_',
+            )
+        wallet = cls.db.one("""
+            INSERT INTO wallets
+                        (remote_id, balance, owner, remote_owner_id)
+                 VALUES (%s, %s, %s, 'CREDIT')
+            ON CONFLICT (remote_id) DO UPDATE
+                    SET remote_owner_id = 'CREDIT'  -- dummy update
+              RETURNING *
+        """, ('CREDIT_' + currency, ZERO[currency], p.id))
+        return p, wallet
 
     def refetch(self):
         return self._from_thing('id', self.id)
@@ -469,61 +476,69 @@ class Participant(Model, MixinTeam):
 
         tips = self.get_giving_for_profile()[0]
         tips = [t for t in tips if t.is_identified and not t.is_suspended]
-        total = sum(t.amount for t in tips)
-        transfers = []
-        distributed = ZERO['EUR']
-
-        if not total:
-            raise self.NoOneToGiveFinalGiftTo
-
         for tip in tips:
-            rate = tip.amount / total
-            pro_rated = (Money(self.balance, 'EUR') * rate).round_down()
-            if pro_rated == 0:
-                continue
             if tip.kind == 'group':
-                team_id = tip.tippee
-                team = Participant.from_id(team_id)
-                takes = [
-                    t for t in team.get_current_takes(cursor=cursor)
-                    if t['is_identified'] and t['amount'] and t['member_id'] != self.id
+                tip.team = Participant.from_id(tip.tippee)
+                tip.takes = [
+                    t for t in tip.team.get_current_takes(cursor=cursor)
+                    if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
-                if not takes:
+                tip.total_takes = sum(t['amount'] for t in tip.takes)
+        tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
+        transfers = []
+
+        for wallet in self.get_current_wallets():
+            if wallet.balance == 0:
+                continue
+            currency = wallet.balance.currency
+            tips_in_this_currency = [t for t in tips if t.amount.currency == currency]
+            total = sum(t.amount for t in tips_in_this_currency) or ZERO[currency]
+            transfers = []
+            distributed = ZERO[currency]
+            initial_balance = wallet.balance
+
+            if not total:
+                continue
+
+            for tip in tips:
+                rate = tip.amount / total
+                pro_rated = (initial_balance * rate).round_down()
+                if pro_rated == 0:
                     continue
-                balance = pro_rated
-                total_takes = sum(t['amount'] for t in takes)
-                ratio = balance / total_takes if total_takes else 0
-                for take in takes:
-                    nominal = take['amount']
-                    actual = min(
-                        (nominal * ratio).round_up(),
-                        balance
-                    )
-                    if actual == 0:
-                        continue
-                    balance -= actual
-                    transfers.append([take['member_id'], actual, team_id])
-                assert balance == 0
-            else:
-                transfers.append([tip.tippee, pro_rated, None])
-            distributed += pro_rated
+                if tip.kind == 'group':
+                    team_id = tip.tippee
+                    balance = pro_rated
+                    for take in tip.takes:
+                        nominal = take['amount']
+                        actual = min(
+                            (pro_rated * (nominal / tip.total_takes)).round_up(),
+                            balance
+                        )
+                        if actual == 0:
+                            continue
+                        balance -= actual
+                        transfers.append([take['member_id'], actual, team_id, wallet])
+                    assert balance == 0
+                else:
+                    transfers.append([tip.tippee, pro_rated, None, wallet])
+                distributed += pro_rated
+
+            diff = initial_balance - distributed
+            if diff != 0 and transfers:
+                transfers[0][1] += diff  # Give it to the first receiver.
 
         if not transfers:
             raise self.NoOneToGiveFinalGiftTo
 
-        diff = self.balance - distributed
-        if diff != 0:
-            transfers[0][1] += diff  # Give it to the highest receiver.
-
         from liberapay.billing.transactions import transfer
         db = self.db
         tipper = self.id
-        for tippee, amount, team in transfers:
+        for tippee, amount, team, wallet in transfers:
             balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
                                tipper_mango_id=self.mangopay_user_id,
-                               tipper_wallet_id=self.mangopay_wallet_id)[0]
+                               tipper_wallet_id=wallet.remote_id)[0]
 
-        assert balance == 0
+        assert balance == 0  # TODO handle this
         self.set_attributes(balance=balance)
 
     def clear_tips_giving(self, cursor):
@@ -1012,8 +1027,8 @@ class Participant(Model, MixinTeam):
             )
 
 
-    # Exchange-related stuff
-    # ======================
+    # Wallets and balances
+    # ====================
 
     def get_withdrawable_amount(self, currency):
         from liberapay.billing.transactions import QUARANTINE
@@ -1029,6 +1044,28 @@ class Participant(Model, MixinTeam):
 
     def can_withdraw(self, amount):
         return self.get_withdrawable_amount(amount.currency) >= amount
+
+    def get_current_wallet(self, currency=None, create=False):
+        currency = currency or self.main_currency
+        w = self.db.one("""
+            SELECT *
+              FROM wallets
+             WHERE owner = %s
+               AND balance::currency = %s
+               AND is_current
+        """, (self.id, currency))
+        if w or not create:
+            return w
+        from liberapay.billing.transactions import create_wallet
+        return create_wallet(self.db, self, currency)
+
+    def get_current_wallets(self):
+        return self.db.all("""
+            SELECT *
+              FROM wallets
+             WHERE owner = %s
+               AND is_current
+        """, (self.id,))
 
 
     # Events
@@ -1275,14 +1312,15 @@ class Participant(Model, MixinTeam):
 
     def pay_invoice(self, invoice):
         assert self.id == invoice.addressee
-        if Money(self.balance, 'EUR') < invoice.amount:
+        wallet = self.get_current_wallet(invoice.amount.currency)
+        if not wallet or wallet.balance < invoice.amount:
             return False
         from liberapay.billing.transactions import transfer
         balance = transfer(
             self.db, self.id, invoice.sender, invoice.amount, invoice.nature,
             invoice=invoice.id,
             tipper_mango_id=self.mangopay_user_id,
-            tipper_wallet_id=self.mangopay_wallet_id,
+            tipper_wallet_id=wallet.remote_id,
         )[0]
         self.update_invoice_status(invoice.id, 'paid')
         self.set_attributes(balance=balance)

@@ -13,7 +13,6 @@ from liberapay.billing.transactions import (
 )
 from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.models.participant import Participant
 from liberapay.models import community
 
 
@@ -24,12 +23,16 @@ faker = Factory.create()
 
 
 def _fake_thing(db, tablename, **kw):
+    _cast = kw.pop('_cast', False)
     cols, vals = zip(*kw.items())
     cols = ', '.join(cols)
     placeholders = ', '.join(['%s']*len(vals))
+    if _cast:
+        tablename += ' AS r'
+    returning = 'r' if _cast else '*'
     return db.one("""
-        INSERT INTO {} ({}) VALUES ({}) RETURNING *
-    """.format(tablename, cols, placeholders), vals)
+        INSERT INTO {} ({}) VALUES ({}) RETURNING {}
+    """.format(tablename, cols, placeholders, returning), vals)
 
 
 def fake_text_id(size=6, chars=string.ascii_lowercase + string.digits):
@@ -51,7 +54,7 @@ def fake_participant(db, kind=None):
     kind = kind or random.choice(('individual', 'organization'))
     is_a_person = kind in ('individual', 'organization')
     try:
-        _fake_thing(
+        p = _fake_thing(
             db,
             "participants",
             username=username,
@@ -64,13 +67,22 @@ def fake_participant(db, kind=None):
             join_time=faker.date_time_this_year(),
             kind=kind,
             mangopay_user_id=username,
-            mangopay_wallet_id='-1',
+            _cast=True,
         )
     except IntegrityError:
         return fake_participant(db)
 
-    # Call participant constructor to perform other DB initialization
-    return Participant.from_username(username)
+    # Create wallet
+    _fake_thing(
+        db,
+        "wallets",
+        remote_id='-%i' % p.id,
+        balance=Money(p.balance, 'EUR'),
+        owner=p.id,
+        remote_owner_id=p.mangopay_user_id,
+    )
+
+    return p
 
 
 def fake_community(db, creator):
@@ -166,7 +178,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
         vat=vat,
         status='pre',
         route=route.id,
-        wallet_id=participant.mangopay_wallet_id,
+        wallet_id='-%i' % participant.id,
     )
     record_exchange_result(db, e.id, -e.id, 'succeeded', '', participant)
     return e

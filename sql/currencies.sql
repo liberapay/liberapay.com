@@ -74,6 +74,12 @@ CREATE AGGREGATE sum(currency_amount) (
 
 -- Convenience functions
 
+CREATE FUNCTION get_currency(currency_amount) RETURNS currency AS $$
+    BEGIN RETURN $1.currency; END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE CAST (currency_amount as currency) WITH FUNCTION get_currency(currency_amount);
+
 CREATE FUNCTION zero(currency_amount) RETURNS currency_amount AS $$
     BEGIN RETURN ('0.00'::numeric, $1.currency); END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;

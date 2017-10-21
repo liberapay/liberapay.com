@@ -66,47 +66,45 @@ def _check_tips(cursor):
 
 def _check_balances_against_transactions(cursor):
     """
-    Recalculates balances for all participants from transfers and exchanges.
-
-    https://github.com/gratipay/gratipay.com/issues/1118
+    Recalculates balances for all wallets from transfers and exchanges.
     """
     b = cursor.all("""
-        select p.id, expected, balance as actual
+        select wallet_id, expected, balance as actual
           from (
-            select id, sum(a) as expected
+            select wallet_id, sum(a) as expected
               from (
-                      select participant as id, sum(CASE WHEN (fee < 0) THEN amount - fee ELSE amount END) as a
+                      select wallet_id, sum(CASE WHEN (fee < 0) THEN amount - fee ELSE amount END) as a
                         from exchanges
                        where amount > 0
                          and status = 'succeeded'
-                    group by participant
+                    group by wallet_id
 
                        union all
 
-                      select participant as id, sum(CASE WHEN (fee > 0) THEN amount - fee ELSE amount END) as a
+                      select wallet_id, sum(CASE WHEN (fee > 0) THEN amount - fee ELSE amount END) as a
                         from exchanges
                        where amount < 0
                          and status <> 'failed'
-                    group by participant
+                    group by wallet_id
 
                        union all
 
-                      select tipper as id, sum(-amount) as a
+                      select wallet_from as wallet_id, sum(-amount) as a
                         from transfers
                        where status = 'succeeded'
-                    group by tipper
+                    group by wallet_from
 
                        union all
 
-                      select tippee as id, sum(amount) as a
+                      select wallet_to as wallet_id, sum(amount) as a
                         from transfers
                        where status = 'succeeded'
-                    group by tippee
+                    group by wallet_to
                     ) as foo
-            group by id
+            group by wallet_id
           ) as foo2
-        join participants p on p.id = foo2.id
-        where expected <> p.balance
+        join wallets w on w.remote_id = foo2.wallet_id
+        where expected <> w.balance
     """)
     assert len(b) == 0, "conflicting balances:\n" + '\n'.join(str(r) for r in b)
 
@@ -115,14 +113,15 @@ def _check_bundles_against_balances(cursor):
     """Check that balances and cash bundles are coherent.
     """
     b = cursor.all("""
-        SELECT owner, bundles_total, balance
+        SELECT wallet_id, bundles_total, w.balance
           FROM (
-              SELECT owner, sum(amount) AS bundles_total
+              SELECT wallet_id, sum(amount) AS bundles_total
                 FROM cash_bundles b
-            GROUP BY owner
+               WHERE wallet_id IS NOT NULL
+            GROUP BY wallet_id
           ) foo
-          JOIN participants p ON p.id = owner
-         WHERE bundles_total <> balance
+          JOIN wallets w ON w.remote_id = wallet_id
+         WHERE bundles_total <> w.balance
     """)
     assert len(b) == 0, "bundles are out of whack:\n" + '\n'.join(str(r) for r in b)
 

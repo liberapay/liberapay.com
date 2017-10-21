@@ -113,13 +113,17 @@ class Payday(object):
             return
         get_transfers = lambda: [NS(t._asdict()) for t in self.db.all("""
             SELECT t.*
-                 , p.mangopay_user_id AS tipper_mango_id
-                 , p2.mangopay_user_id AS tippee_mango_id
-                 , p.mangopay_wallet_id AS tipper_wallet_id
-                 , p2.mangopay_wallet_id AS tippee_wallet_id
+                 , w.remote_owner_id AS tipper_mango_id
+                 , w2.remote_owner_id AS tippee_mango_id
+                 , w.remote_id AS tipper_wallet_id
+                 , w2.remote_id AS tippee_wallet_id
               FROM payday_transfers t
-              JOIN participants p ON p.id = t.tipper
-              JOIN participants p2 ON p2.id = t.tippee
+              JOIN wallets w ON w.owner = t.tipper AND
+                   w.balance::currency = t.amount::currency AND
+                   w.is_current IS TRUE
+              JOIN wallets w2 ON w2.owner = t.tippee AND
+                   w2.balance::currency = t.amount::currency AND
+                   w2.is_current IS TRUE
           ORDER BY t.id
         """)]
         if self.stage == 2:
@@ -514,15 +518,20 @@ class Payday(object):
                 debt = cursor.one("""
                     SELECT d.id, d.debtor AS tipper, d.creditor AS tippee, d.amount
                          , 'debt' AS context
-                         , p_debtor.mangopay_user_id AS tipper_mango_id
-                         , p_debtor.mangopay_wallet_id AS tipper_wallet_id
-                         , p_creditor.mangopay_user_id AS tippee_mango_id
-                         , p_creditor.mangopay_wallet_id AS tippee_wallet_id
+                         , w_debtor.remote_owner_id AS tipper_mango_id
+                         , w_debtor.remote_id AS tipper_wallet_id
+                         , w_creditor.remote_owner_id AS tippee_mango_id
+                         , w_creditor.remote_id AS tippee_wallet_id
                       FROM debts d
-                      JOIN participants p_debtor ON p_debtor.id = d.debtor
+                      JOIN wallets w_debtor ON w_debtor.owner = d.debtor AND
+                           w_debtor.balance::currency = d.amount::currency AND
+                           w_debtor.is_current IS TRUE
+                      JOIN wallets w_creditor ON w_creditor.owner = d.creditor AND
+                           w_creditor.balance::currency = d.amount::currency AND
+                           w_creditor.is_current IS TRUE
                       JOIN participants p_creditor ON p_creditor.id = d.creditor
                      WHERE d.status = 'due'
-                       AND p_debtor.balance >= (d.amount).amount
+                       AND w_debtor.balance >= d.amount
                        AND p_creditor.status = 'active'
                      LIMIT 1
                        FOR UPDATE OF d
