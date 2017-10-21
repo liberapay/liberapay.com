@@ -1015,17 +1015,20 @@ class Participant(Model, MixinTeam):
     # Exchange-related stuff
     # ======================
 
-    @property
-    def withdrawable_balance(self):
+    def get_withdrawable_amount(self, currency):
         from liberapay.billing.transactions import QUARANTINE
         return self.db.one("""
-            SELECT COALESCE(sum((amount).amount), 0)
+            SELECT sum(amount)
               FROM cash_bundles
              WHERE owner = %s
                AND ts < now() - INTERVAL %s
                AND disputed IS NOT TRUE
                AND locked_for IS NULL
-        """, (self.id, QUARANTINE))
+               AND (amount).currency = %s
+        """, (self.id, QUARANTINE, currency)) or ZERO[currency]
+
+    def can_withdraw(self, amount):
+        return self.get_withdrawable_amount(amount.currency) >= amount
 
 
     # Events
@@ -1272,11 +1275,11 @@ class Participant(Model, MixinTeam):
 
     def pay_invoice(self, invoice):
         assert self.id == invoice.addressee
-        if self.balance < invoice.amount:
+        if Money(self.balance, 'EUR') < invoice.amount:
             return False
         from liberapay.billing.transactions import transfer
         balance = transfer(
-            self.db, self.id, invoice.sender, Money(invoice.amount, 'EUR'), invoice.nature,
+            self.db, self.id, invoice.sender, invoice.amount, invoice.nature,
             invoice=invoice.id,
             tipper_mango_id=self.mangopay_user_id,
             tipper_wallet_id=self.mangopay_wallet_id,

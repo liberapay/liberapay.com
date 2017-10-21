@@ -690,6 +690,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         invoice_data = {
             'nature': 'expense',
             'amount': amount,
+            'currency': 'EUR',
             'description': 'lorem ipsum',
             'details': '',
         }

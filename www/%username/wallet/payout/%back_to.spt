@@ -55,7 +55,7 @@ elif 'exchange_id' in request.qs:
 success = getattr(exchange, 'status', None) in ('created', 'succeeded')
 show_form = participant.balance > 0 and not success
 if show_form or not success:
-    withdrawable = participant.withdrawable_balance
+    withdrawable = participant.get_withdrawable_amount(currency)
     show_form = withdrawable > 0
 
 if show_form:
@@ -80,7 +80,7 @@ if show_form:
             ba_type = 'OTHER'
     donations = participant.get_giving_for_profile()[1]
     recommended_withdrawal = min(
-        withdrawable,
+        withdrawable.amount,
         max(participant.balance - donations.amount, constants.D_ZERO)
     )
 
@@ -109,12 +109,12 @@ title = _("Withdrawing Money")
     <p>
         {{ _("You have {0} in your Liberapay wallet.", Money(participant.balance, 'EUR')) }}
         % if not success
-            % if participant.balance > withdrawable
+            % if Money(participant.balance, 'EUR') > withdrawable
                 % if withdrawable == 0
                     {{ _("Unfortunately you cannot withdraw that money yet, it is still in quarantine.") }}
                 % else
                     {{ _("Out of that, {0} is available for withdrawal, the rest is still in quarantine.",
-                         Money(withdrawable, 'EUR')) }}
+                         withdrawable) }}
                 % endif
                 </p><p>
                 {{ _("We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience.", constants.QUARANTINE) }}

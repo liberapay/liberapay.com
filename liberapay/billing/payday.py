@@ -455,10 +455,10 @@ class Payday(object):
                   FROM payday_participants p
                  WHERE id = %s
             """, (i.addressee,))
-            if payer_balance < i.amount:
+            if Money(payer_balance, 'EUR') < i.amount:
                 continue
             cursor.run("""
-                SELECT transfer(%(addressee)s, %(sender)s, (%(amount)s,'EUR')::currency_amount,
+                SELECT transfer(%(addressee)s, %(sender)s, %(amount)s,
                                 %(nature)s::transfer_context, NULL, %(id)s);
                 UPDATE invoices
                    SET status = 'paid'

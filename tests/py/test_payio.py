@@ -145,9 +145,9 @@ class TestCharge(MangopayHarness):
         assert exchange.amount == 20
         assert exchange.status == 'succeeded'
         assert self.janet.balance == janet.balance == 20
-        assert janet.withdrawable_balance == 20
+        assert janet.get_withdrawable_amount('EUR') == 20
         with mock.patch.multiple(transactions, QUARANTINE='1 month'):
-            assert janet.withdrawable_balance == 0
+            assert janet.get_withdrawable_amount('EUR') == 0
             self.db.self_check()
 
     @mock.patch('mangopay.resources.PayIn.save', autospec=True)
@@ -484,7 +484,7 @@ class TestSync(MangopayHarness):
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'failed'
         homer = self.homer.refetch()
-        assert homer.balance == homer.withdrawable_balance == 41
+        assert homer.balance == homer.get_withdrawable_amount('EUR') == 41
 
     def test_4_sync_with_mangopay_records_transfer_success(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)

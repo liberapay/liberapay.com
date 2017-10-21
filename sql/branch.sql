@@ -12,6 +12,7 @@ BEGIN;
     ALTER TABLE exchanges ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
     ALTER TABLE exchanges ALTER COLUMN fee TYPE currency_amount USING (fee, 'EUR');
     ALTER TABLE exchanges ALTER COLUMN vat TYPE currency_amount USING (vat, 'EUR');
+    ALTER TABLE invoices ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
     ALTER TABLE transfers ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
 END;
 
