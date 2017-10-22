@@ -59,10 +59,10 @@ if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
 
 if participant == user:
-    BALANCE = _("Your balance is {0}.", Money(participant.balance, "EUR"))
+    BALANCE = _("Your balance is {0}.", participant.balance)
     participant.mark_notifications_as_read('income')
 else:
-    BALANCE = _("Their balance is {0}.", Money(participant.balance, "EUR"))
+    BALANCE = _("Their balance is {0}.", participant.balance)
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"

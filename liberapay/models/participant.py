@@ -1067,6 +1067,15 @@ class Participant(Model, MixinTeam):
                AND is_current
         """, (self.id,))
 
+    def get_balance_in(self, currency):
+        return self.db.one("""
+            SELECT balance
+              FROM wallets
+             WHERE owner = %s
+               AND balance::currency = %s
+               AND is_current
+        """, (self.id, currency)) or ZERO[currency]
+
 
     # Events
     # ======
@@ -1497,6 +1506,30 @@ class Participant(Model, MixinTeam):
                 self.clear_tips_receiving(c)
                 self.update_receiving(c)
 
+    def get_giving_in(self, currency):
+        return self.db.one("""
+            SELECT sum(t.amount)
+              FROM current_tips t
+             WHERE t.tipper = %s
+               AND t.amount::currency = %s
+        """, (self.id, currency)) or ZERO[currency]
+
+    def get_receiving_in(self, currency, cursor=None):
+        r = (cursor or self.db).one("""
+            SELECT sum(t.amount)
+              FROM current_tips t
+             WHERE t.tippee = %s
+               AND t.amount::currency = %s
+               AND t.is_funded
+        """, (self.id, currency)) or ZERO[currency]
+        r += (cursor or self.db).one("""
+            SELECT sum(t.actual_amount)
+              FROM current_takes t
+             WHERE t.member = %s
+               AND t.amount::currency = %s
+        """, (self.id, currency)) or ZERO[currency]
+        return r
+
     def update_giving_and_tippees(self, cursor):
         updated_tips = self.update_giving(cursor)
         for tip in updated_tips:
@@ -1512,22 +1545,25 @@ class Participant(Model, MixinTeam):
                AND t.amount > 0
           ORDER BY p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
-        fake_balance = self.balance + self.receiving.amount
         updated = []
-        for tip in tips:
-            if tip.amount.amount > fake_balance:
-                is_funded = False
-            else:
-                fake_balance -= tip.amount.amount
-                is_funded = True
-            if tip.is_funded == is_funded:
-                continue
-            updated.append((cursor or self.db).one("""
-                UPDATE tips
-                   SET is_funded = %s
-                 WHERE id = %s
-             RETURNING *
-            """, (is_funded, tip.id)))
+        for wallet in self.get_current_wallets():
+            fake_balance = wallet.balance
+            currency = fake_balance.currency
+            fake_balance += self.get_receiving_in(currency, cursor)
+            for tip in (t for t in tips if t.amount.currency == currency):
+                if tip.amount > fake_balance:
+                    is_funded = False
+                else:
+                    fake_balance -= tip.amount
+                    is_funded = True
+                if tip.is_funded == is_funded:
+                    continue
+                updated.append((cursor or self.db).one("""
+                    UPDATE tips
+                       SET is_funded = %s
+                     WHERE id = %s
+                 RETURNING *
+                """, (is_funded, tip.id)))
 
         # Update giving on participant
         giving = (cursor or self.db).one("""

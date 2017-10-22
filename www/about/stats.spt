@@ -1,6 +1,8 @@
 # coding: utf8
 from __future__ import division, print_function, unicode_literals
 
+from liberapay.utils.currencies import MoneyBasket
+
 db = website.db
 db_qc5 = website.db_qc5
 
@@ -8,7 +10,7 @@ db_qc5 = website.db_qc5
 
 title = _("Stats")
 zero = constants.ZERO[currency]
-escrow = db.one("SELECT sum(balance) FROM participants", default=0)
+escrow = db_qc5.one("SELECT basket_sum(balance) FROM wallets") or MoneyBasket()
 nusers = db_qc5.one("""
     SELECT count(*)
       FROM participants
@@ -101,7 +103,7 @@ def out():
     <p>{{ _("Liberapay was launched {0} ago and has {1} users.",
             to_age(constants.LAUNCH_TIME), nusers) }}</p>
 
-    <p>{{ _("{0} is escrowed within Liberapay.", Money(escrow, 'EUR')) }}</p>
+    <p>{{ _("{0} is escrowed within Liberapay.", escrow) }}</p>
 
     % if last_payday
     <p>

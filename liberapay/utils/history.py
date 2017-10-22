@@ -9,7 +9,7 @@ from ..website import website
 
 def get_end_of_year_balance(db, participant, year, current_year):
     if year == current_year:
-        return participant.balance
+        return participant.balance.amount
     if year < participant.join_time.year:
         return Decimal('0.00')
 

@@ -52,9 +52,9 @@ weekly = total - participant.receiving
 % block content
 
 % if weekly > 0
-    % set funded = participant.balance // weekly.amount
+    % set funded = participant.balance // weekly
     <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
-        {{ _("You have {0} in your Liberapay wallet.", Money(participant.balance, 'EUR')) }}
+        {{ _("You have {0} in your Liberapay wallet.", participant.balance) }}
         % if funded > 0
             {{ ngettext("Your donations are only funded for another week.",
                         "Your donations are funded for another {n} weeks.",

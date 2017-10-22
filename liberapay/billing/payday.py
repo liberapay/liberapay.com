@@ -234,11 +234,11 @@ class Payday(object):
             BEGIN
                 IF ($3 = 0) THEN RETURN; END IF;
                 UPDATE payday_participants
-                   SET new_balance = (new_balance - $3.amount)
+                   SET new_balance = (new_balance - $3)
                  WHERE id = $1;
                 IF (NOT FOUND) THEN RAISE 'tipper %% not found', $1; END IF;
                 UPDATE payday_participants
-                   SET new_balance = (new_balance + $3.amount)
+                   SET new_balance = (new_balance + $3)
                  WHERE id = $2;
                 IF (NOT FOUND) THEN RAISE 'tippee %% not found', $2; END IF;
                 INSERT INTO payday_transfers
@@ -259,7 +259,7 @@ class Payday(object):
                       FROM payday_participants p
                      WHERE id = NEW.tipper
                 );
-                IF ((NEW.amount).amount <= tipper.new_balance) THEN
+                IF (NEW.amount <= tipper.new_balance) THEN
                     EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL, NULL);
                     RETURN NEW;
                 END IF;
@@ -328,7 +328,7 @@ class Payday(object):
               FROM payday_participants p
              WHERE p.id = tipper
                AND tippee = %(team_id)s
-               AND p.new_balance >= (amount).amount
+               AND p.new_balance >= amount
          RETURNING t.id, t.tipper, t.amount AS full_amount
                  , COALESCE((
                        SELECT sum(tr.amount)
@@ -459,7 +459,7 @@ class Payday(object):
                   FROM payday_participants p
                  WHERE id = %s
             """, (i.addressee,))
-            if Money(payer_balance, 'EUR') < i.amount:
+            if payer_balance < i.amount:
                 continue
             cursor.run("""
                 SELECT transfer(%(addressee)s, %(sender)s, %(amount)s,
@@ -867,17 +867,19 @@ class Payday(object):
 
         # Low-balance notifications
         participants = self.db.all("""
-            SELECT p.*::participants
-              FROM participants p
-             WHERE balance < (
-                     SELECT sum((amount).amount)
+            SELECT p, needed
+              FROM (
+                     SELECT t.tipper, sum(t.amount) AS needed
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
-                      WHERE t.tipper = p.id
-                        AND p2.mangopay_user_id IS NOT NULL
+                      WHERE p2.mangopay_user_id IS NOT NULL
                         AND p2.status = 'active'
                         AND p2.is_suspended IS NOT true
-                   )
+                   GROUP BY t.tipper, t.amount::currency
+                   ) a
+              JOIN participants p ON p.id = a.tipper
+              JOIN wallets w ON w.owner = p.id AND w.balance::currency = needed::currency
+             WHERE w.balance < needed
                AND EXISTS (
                      SELECT 1
                        FROM transfers t
@@ -887,8 +889,8 @@ class Payday(object):
                         AND t.status = 'succeeded'
                    )
         """, (previous_ts_end, self.ts_end))
-        for p in participants:
-            p.notify('low_balance', low_balance=p.balance)
+        for p, needed in participants:
+            p.notify('low_balance', low_balance=p.balance, needed=needed)
 
 
 def create_payday_issue():

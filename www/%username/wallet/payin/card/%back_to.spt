@@ -50,12 +50,13 @@ funded = float('inf')
 currency = request.qs.get('currency', currency)
 if currency not in PAYIN_CARD_MIN:
     raise response.error(400, "`currency` value in querystring is invalid or non-supported")
-donations = participant.get_giving_for_profile()[1]
-weekly = donations - participant.receiving
+balance = participant.get_balance_in(currency)
+donations = participant.get_giving_in(currency)
+weekly = donations - participant.get_receiving_in(currency)
 amount_min = PAYIN_CARD_MIN[currency]
 amount_max = skim_amount(constants.PAYIN_CARD_MAX[currency], FEE_PAYIN_CARD[currency])[0]
 if weekly > 0:
-    funded = participant.balance // weekly.amount
+    funded = balance // weekly
     min_weeks = (amount_min / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
         max(constants.PAYIN_CARD_TARGET[currency] // weekly, 52),

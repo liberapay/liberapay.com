@@ -16,10 +16,14 @@ if 'transactionId' in request.qs or 'exchange_id' in request.qs or \
     )
 
 funded = float('inf')
-donations = participant.get_giving_for_profile()[1]
-weekly = donations - participant.receiving
+currency = request.qs.get('currency', currency)
+if currency not in constants.CURRENCIES:
+    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+balance = participant.get_balance_in(currency)
+donations = participant.get_giving_in(currency)
+weekly = donations - participant.get_receiving_in(currency)
 if weekly > 0:
-    funded = participant.balance // weekly.amount
+    funded = balance // weekly
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 can_payin = weekly > 0 and funded < 52

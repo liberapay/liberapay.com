@@ -7,7 +7,6 @@ import mock
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.billing.transactions import create_debt
-from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
@@ -251,21 +250,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     def test_end_raises_NoPayday(self):
         with self.assertRaises(NoPayday):
             Payday().end()
-
-    def test_payday_cant_make_balances_more_negative(self):
-        self.db.run("""
-            UPDATE participants SET balance = -10 WHERE username='janet'
-        """)
-        payday = Payday.start()
-        with self.db.get_cursor() as cursor:
-            payday.prepare(cursor, payday.ts_start)
-            cursor.run("""
-                UPDATE payday_participants
-                   SET new_balance = -50
-                 WHERE username IN ('janet', 'homer')
-            """)
-            with self.assertRaises(NegativeBalance):
-                payday.check_balances(cursor)
 
     @staticmethod
     def get_new_balances(cursor):

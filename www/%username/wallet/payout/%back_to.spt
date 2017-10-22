@@ -24,11 +24,14 @@ exchange = None
 bank_account = None
 
 back_to = b64decode_s(request.path['back_to'], default=None)
+currency = request.qs.get('currency', currency)
+if currency not in constants.CURRENCIES:
+    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
 
 if request.method == 'POST':
     body = request.body
 
-    amount = parse_decimal(request.body['amount'])
+    amount = Money(parse_decimal(request.body['amount']), currency)
     if amount <= 0:
         raise response.error(400, _("The amount cannot be zero."))
     routes = ExchangeRoute.from_network(participant, 'mango-ba')
@@ -52,8 +55,9 @@ elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
+balance = participant.get_balance_in(currency)
 success = getattr(exchange, 'status', None) in ('created', 'succeeded')
-show_form = participant.balance > 0 and not success
+show_form = balance > 0 and not success
 if show_form or not success:
     withdrawable = participant.get_withdrawable_amount(currency)
     show_form = withdrawable > 0
@@ -78,11 +82,11 @@ if show_form:
             ba_type = 'IBAN'
         else:
             ba_type = 'OTHER'
-    donations = participant.get_giving_for_profile()[1]
+    donations = participant.get_giving_in(currency)
     recommended_withdrawal = min(
-        withdrawable.amount,
-        max(participant.balance - donations.amount, constants.D_ZERO)
-    )
+        withdrawable,
+        max(balance - donations, constants.ZERO[currency])
+    ).amount
 
 if user == participant:
     participant.mark_notifications_as_read('withdrawal_failed')
@@ -107,9 +111,9 @@ title = _("Withdrawing Money")
         }}</div>
     % endif
     <p>
-        {{ _("You have {0} in your Liberapay wallet.", Money(participant.balance, 'EUR')) }}
+        {{ _("You have {0} in your Liberapay wallet.", balance) }}
         % if not success
-            % if Money(participant.balance, 'EUR') > withdrawable
+            % if balance > withdrawable
                 % if withdrawable == 0
                     {{ _("Unfortunately you cannot withdraw that money yet, it is still in quarantine.") }}
                 % else

@@ -87,6 +87,10 @@ BEGIN;
         ALTER COLUMN leftover DROP DEFAULT,
         ALTER COLUMN leftover TYPE currency_amount USING EUR(leftover),
         ALTER COLUMN leftover SET DEFAULT ('0.00', 'EUR');
+    ALTER TABLE participants
+        ALTER COLUMN balance DROP DEFAULT,
+        ALTER COLUMN balance TYPE currency_amount USING EUR(balance),
+        ALTER COLUMN balance SET DEFAULT ('0.00', 'EUR');
     CREATE VIEW sponsors AS
         SELECT *
           FROM participants p
@@ -119,13 +123,20 @@ END;
 
 DROP FUNCTION EUR(numeric);
 
-CREATE FUNCTION recompute_balance(bigint) RETURNS numeric AS $$
+CREATE FUNCTION recompute_balance(bigint) RETURNS currency_amount AS $$
     UPDATE participants p
        SET balance = (
-               SELECT (sum(w.balance, p.main_currency)).amount
+               SELECT sum(w.balance, p.main_currency)
                  FROM wallets w
                 WHERE w.owner = p.id
            )
      WHERE id = $1
  RETURNING balance;
 $$ LANGUAGE SQL STRICT;
+
+DELETE FROM notifications WHERE event = 'low_balance';
+
+BEGIN;
+    ALTER TABLE balances_at ALTER COLUMN balance TYPE currency_basket USING (balance, '0.00');
+    ALTER TABLE balances_at RENAME COLUMN balance TO balances;
+END;

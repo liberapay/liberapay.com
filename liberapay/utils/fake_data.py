@@ -60,7 +60,7 @@ def fake_participant(db, kind=None):
             username=username,
             password=None if not is_a_person else 'x',
             email=username+'@example.org',
-            balance=0,
+            balance=Money('0.00', 'EUR'),
             hide_giving=is_a_person and (random.randrange(5) == 0),
             hide_receiving=is_a_person and (random.randrange(5) == 0),
             status='active',
@@ -77,7 +77,7 @@ def fake_participant(db, kind=None):
         db,
         "wallets",
         remote_id='-%i' % p.id,
-        balance=Money(p.balance, 'EUR'),
+        balance=p.balance,
         owner=p.id,
         remote_owner_id=p.mangopay_user_id,
     )
