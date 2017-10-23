@@ -6,9 +6,9 @@ import json
 
 from liberapay.billing.payday import Payday
 from liberapay.models.participant import Participant
-from liberapay.testing import EUR, Harness
+from liberapay.testing import EUR, USD, Harness
 from liberapay.testing.mangopay import FakeTransfersHarness
-from liberapay.utils.history import get_end_of_year_balance, iter_payday_events
+from liberapay.utils.history import get_end_of_year_balances, iter_payday_events
 
 
 def make_history(harness):
@@ -91,18 +91,18 @@ class TestHistory(FakeTransfersHarness):
         events = list(iter_payday_events(self.db, bob, now.year))
         assert len(events) == 9
         assert events[0]['kind'] == 'totals'
-        assert events[0]['regular_donations']['sent'] == 0
-        assert events[0]['regular_donations']['received'] == 12
+        assert not events[0]['regular_donations']['sent']
+        assert events[0]['regular_donations']['received'].eur == 12
         assert events[1]['kind'] == 'day-open'
         assert events[1]['payday_number'] == 3
-        assert events[2]['balance'] == 12
+        assert events[2]['balances'].eur == 12
         assert events[-1]['kind'] == 'day-close'
-        assert events[-1]['balance'] == 0
+        assert events[-1]['balances'].eur == 0
 
         alice = Participant.from_id(alice.id)
         assert alice.balance == 4990
         events = list(iter_payday_events(self.db, alice, now.year))
-        assert events[0]['regular_donations']['sent'] == 10
+        assert events[0]['regular_donations']['sent'].eur == 10
         assert len(events) == 11
 
         carl = Participant.from_id(carl.id)
@@ -118,20 +118,20 @@ class TestHistory(FakeTransfersHarness):
         events = list(iter_payday_events(self.db, alice))
         assert len(events) == 5
         assert events[0]['kind'] == 'day-open'
-        assert events[0]['balance'] == 50
+        assert events[0]['balances'].eur == 50
         assert events[1]['kind'] == 'credit'
-        assert events[1]['balance'] == 50
+        assert events[1]['balances'].eur == 50
         assert events[2]['kind'] == 'charge'
-        assert events[2]['balance'] == 50
+        assert events[2]['balances'].eur == 50
         assert events[3]['kind'] == 'charge'
-        assert events[3]['balance'] == 50
+        assert events[3]['balances'].eur == 50
         assert events[4]['kind'] == 'day-close'
-        assert events[4]['balance'] == 0
+        assert events[4]['balances'].eur == 0
 
-    def test_get_end_of_year_balance(self):
+    def test_get_end_of_year_balances(self):
         make_history(self)
-        balance = get_end_of_year_balance(self.db, self.alice, self.past_year, datetime.now().year)
-        assert balance == 10
+        balances = get_end_of_year_balances(self.db, self.alice, self.past_year, datetime.now().year)
+        assert list(balances) == [EUR('10.00'), USD('0.00')]
 
 
 class TestExport(Harness):

@@ -55,6 +55,9 @@ class Locale(_Locale):
     def __init__(self, *a, **kw):
         super(Locale, self).__init__(*a, **kw)
         self.decimal_symbol = self.number_symbols.get('decimal', '.')
+        delta_p = self.currency_formats['standard'].pattern
+        assert ';' not in delta_p
+        self.currency_delta_pattern = '+{0};-{0}'.format(delta_p)
 
     def format_currency(self, number, currency, format=None, trailing_zeroes=True):
         s = format_currency(number, currency, format, locale=self)
@@ -71,8 +74,11 @@ class Locale(_Locale):
     def format_decimal(self, *a):
         return format_decimal(*a, locale=self)
 
-    def format_delta(self, s, *a):
-        return format_decimal(s, *a, format='+#,##0.00;-#,##0.00', locale=self)
+    def format_currency_delta(self, money, *a):
+        return format_currency(
+            money.amount, money.currency, *a,
+            format=self.currency_delta_pattern, locale=self
+        )
 
     def format_number(self, *a):
         return format_number(*a, locale=self)
@@ -351,7 +357,7 @@ def add_helpers_to_context(context, loc):
         format_date=loc.format_date,
         format_datetime=loc.format_datetime,
         format_decimal=loc.format_decimal,
-        format_delta=loc.format_delta,
+        format_currency_delta=loc.format_currency_delta,
         format_number=loc.format_number,
         format_percent=loc.format_percent,
         parse_decimal=loc.parse_decimal_or_400,

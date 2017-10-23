@@ -36,6 +36,10 @@ def EUR(amount):
     return Money(amount, 'EUR')
 
 
+def USD(amount):
+    return Money(amount, 'USD')
+
+
 class ClientWithAuth(Client):
 
     def __init__(self, *a, **kw):
