@@ -7,6 +7,7 @@ from decimal import Decimal, ROUND_UP
 import re
 
 from jinja2 import StrictUndefined
+from mangopay.utils import Money
 from pando.utils import utc
 
 
@@ -237,5 +238,7 @@ STANDARD_TIPS = (
 SUMMARY_MAX_SIZE = 100
 
 USERNAME_MAX_SIZE = 32
+
+ZERO = {c: Money(D_ZERO, c) for c in ('EUR', 'USD', None)}
 
 del _

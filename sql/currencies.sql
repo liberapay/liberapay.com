@@ -240,6 +240,98 @@ CREATE OPERATOR <= (
 );
 
 
+-- Basket type: amounts in multiple currencies
+
+CREATE TYPE currency_basket AS (EUR numeric, USD numeric);
+
+CREATE FUNCTION currency_basket_add(currency_basket, currency_amount)
+RETURNS currency_basket AS $$
+    BEGIN
+        IF ($2.currency = 'EUR') THEN
+            RETURN ($1.EUR + $2.amount, $1.USD);
+        ELSIF ($2.currency = 'USD') THEN
+            RETURN ($1.EUR, $1.USD + $2.amount);
+        ELSE
+            RAISE 'unknown currency %', $2.currency;
+        END IF;
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE OPERATOR + (
+    leftarg = currency_basket,
+    rightarg = currency_amount,
+    procedure = currency_basket_add,
+    commutator = +
+);
+
+CREATE FUNCTION currency_basket_add(currency_basket, currency_basket)
+RETURNS currency_basket AS $$
+    BEGIN RETURN ($1.EUR + $2.EUR, $1.USD + $2.USD); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE OPERATOR + (
+    leftarg = currency_basket,
+    rightarg = currency_basket,
+    procedure = currency_basket_add,
+    commutator = +
+);
+
+CREATE FUNCTION currency_basket_sub(currency_basket, currency_amount)
+RETURNS currency_basket AS $$
+    BEGIN
+        IF ($2.currency = 'EUR') THEN
+            RETURN ($1.EUR - $2.amount, $1.USD);
+        ELSIF ($2.currency = 'USD') THEN
+            RETURN ($1.EUR, $1.USD - $2.amount);
+        ELSE
+            RAISE 'unknown currency %', $2.currency;
+        END IF;
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE OPERATOR - (
+    leftarg = currency_basket,
+    rightarg = currency_amount,
+    procedure = currency_basket_sub
+);
+
+CREATE FUNCTION currency_basket_sub(currency_basket, currency_basket)
+RETURNS currency_basket AS $$
+    BEGIN RETURN ($1.EUR - $2.EUR, $1.USD - $2.USD); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE OPERATOR - (
+    leftarg = currency_basket,
+    rightarg = currency_basket,
+    procedure = currency_basket_sub
+);
+
+CREATE FUNCTION currency_basket_contains(currency_basket, currency_amount)
+RETURNS boolean AS $$
+    BEGIN
+        IF ($2.currency = 'EUR') THEN
+            RETURN ($1.EUR >= $2.amount);
+        ELSIF ($2.currency = 'USD') THEN
+            RETURN ($1.USD >= $2.amount);
+        ELSE
+            RAISE 'unknown currency %', $2.currency;
+        END IF;
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE OPERATOR >= (
+    leftarg = currency_basket,
+    rightarg = currency_amount,
+    procedure = currency_basket_contains
+);
+
+CREATE AGGREGATE basket_sum(currency_amount) (
+    sfunc = currency_basket_add,
+    stype = currency_basket,
+    initcond = '(0.00,0.00)'
+);
+
+
 -- Exchange rates
 
 CREATE TABLE currency_exchange_rates

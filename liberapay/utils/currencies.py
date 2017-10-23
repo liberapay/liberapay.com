@@ -6,7 +6,7 @@ from mangopay.utils import Money
 import requests
 import xmltodict
 
-from liberapay.constants import D_CENT, D_ZERO
+from liberapay.constants import D_CENT, D_ZERO, ZERO
 from liberapay.website import website
 
 
@@ -28,6 +28,62 @@ Money.int = lambda m: Money(int(m.amount * 100), m.currency)
 Money.round_down = lambda m: Money(m.amount.quantize(D_CENT, rounding=ROUND_DOWN), m.currency)
 Money.round_up = lambda m: Money(m.amount.quantize(D_CENT, rounding=ROUND_UP), m.currency)
 Money.zero = lambda m: Money(D_ZERO, m.currency)
+
+
+class MoneyBasket(object):
+
+    def __init__(self, eur=ZERO['EUR'], usd=ZERO['USD']):
+        assert eur.currency == 'EUR'
+        assert usd.currency == 'USD'
+        self.eur = eur
+        self.usd = usd
+
+    def __iter__(self):
+        return iter((self.eur, self.usd))
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return False
+
+    def __add__(self, other):
+        r = self.__class__(self.eur, self.usd)
+        if isinstance(other, self.__class__):
+            for k, v in other.__dict__.items():
+                if k in r.__dict__:
+                    r.__dict__[k] += v
+                else:
+                    r.__dict__[k] = v
+        elif isinstance(other, Money):
+            k = other.currency.lower()
+            if k in r.__dict__:
+                r.__dict__[k] += other
+            else:
+                r.__dict__[k] = other
+        else:
+            raise TypeError(other)
+        return r
+
+    def __sub__(self, other):
+        r = self.__class__(self.eur, self.usd)
+        if isinstance(other, self.__class__):
+            for k, v in other.__dict__.items():
+                if k in r.__dict__:
+                    r.__dict__[k] -= v
+                else:
+                    r.__dict__[k] = -v
+        elif isinstance(other, Money):
+            k = other.currency.lower()
+            if k in r.__dict__:
+                r.__dict__[k] -= other
+            else:
+                r.__dict__[k] = -other
+        else:
+            raise TypeError(other)
+        return r
+
+    def __repr__(self):
+        return b'%s[%s, %s]' % (self.__class__.__name__, self.eur, self.usd)
 
 
 def fetch_currency_exchange_rates(db):
