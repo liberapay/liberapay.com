@@ -253,9 +253,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     @staticmethod
     def get_new_balances(cursor):
-        return {id: new_balance for id, new_balance in cursor.all(
-            "SELECT id, new_balance FROM payday_participants"
-        )}
+        return {
+            id: [m for m in balances if m.amount]
+            for id, balances in cursor.all("SELECT id, balances FROM payday_participants")
+        }
 
     def test_payday_doesnt_process_tips_when_goal_is_negative(self):
         self.make_exchange('mango-cc', 20, 0, self.janet)
@@ -266,8 +267,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[self.janet.id] == 20
-            assert new_balances[self.homer.id] == 0
+            assert new_balances[self.janet.id] == [EUR(20)]
+            assert new_balances[self.homer.id] == []
 
     def test_payday_doesnt_make_null_transfers(self):
         alice = self.make_participant('alice')
@@ -288,9 +289,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[self.david.id] == D('0.49')
-            assert new_balances[self.janet.id] == D('0.51')
-            assert new_balances[self.homer.id] == 0
+            assert new_balances[self.david.id] == [EUR('0.49')]
+            assert new_balances[self.janet.id] == [EUR('0.51')]
+            assert new_balances[self.homer.id] == []
             nulls = cursor.all("SELECT * FROM payday_tips WHERE is_funded IS NULL")
             assert not nulls
 
@@ -306,10 +307,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[alice.id] == D('0')
-            assert new_balances[self.homer.id] == D('30')
-            assert new_balances[self.janet.id] == D('15')
-            assert new_balances[self.david.id] == D('5')
+            assert new_balances[alice.id] == []
+            assert new_balances[self.homer.id] == [EUR('30')]
+            assert new_balances[self.janet.id] == [EUR('15')]
+            assert new_balances[self.david.id] == [EUR('5')]
 
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', kind='group')

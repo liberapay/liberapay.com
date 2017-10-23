@@ -211,7 +211,7 @@ class MixinTeam(object):
         # Recompute the takes
         takes_sum = {}
         tippers = {}
-        transfers, new_leftover = Payday.resolve_takes(tips, takes)
+        transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
         for t in transfers:
             if t.member in takes_sum:
                 takes_sum[t.member] += t.amount
