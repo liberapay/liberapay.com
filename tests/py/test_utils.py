@@ -3,8 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import datetime
 from datetime import timedelta
 
-from pando.http.response import Response
+from mangopay.utils import Money
 from markupsafe import escape
+from pando.http.response import Response
 
 from liberapay import utils
 from liberapay.testing import Harness
@@ -90,12 +91,12 @@ class Tests(Harness):
 
     def test_format_currency_without_trailing_zeroes(self):
         expected = '$16'
-        actual = i18n.LOCALE_EN.format_currency(16, 'USD', trailing_zeroes=False)
+        actual = i18n.LOCALE_EN.format_money(Money(16, 'USD'), trailing_zeroes=False)
         assert actual == expected
 
     def test_format_currency_defaults_to_trailing_zeroes(self):
         expected = '$16.00'
-        actual = i18n.LOCALE_EN.format_currency(16, 'USD')
+        actual = i18n.LOCALE_EN.format_money(Money(16, 'USD'))
         assert actual == expected
 
     # Markdown

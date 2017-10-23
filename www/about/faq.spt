@@ -93,7 +93,7 @@ title = _("Frequently Asked Questions")
             <td colspan=2>{{ _("{0}%", constants.FEE_PAYIN_BANK_WIRE.with_vat) }}
         <tr>
             <th>{{ _("Direct debit") }}
-            <td>{{ format_currency(*constants.FEE_PAYIN_DIRECT_DEBIT['EUR'].with_vat) }}
+            <td>{{ format_money(constants.FEE_PAYIN_DIRECT_DEBIT['EUR'].with_vat) }}
             <td>{{ _("not supported") }}
     </table>
     <p>{{ _(

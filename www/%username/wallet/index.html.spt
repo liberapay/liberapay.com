@@ -179,13 +179,15 @@ else:
         </td>
         <td class="status" title="{{ _('balance at the end of the day') }}">
         % for balance in event['balances']
-             {{ format_currency(*balance) }} {{ '+' if not loop.last }}
+            % if balance or balance.currency == participant.main_currency
+                {{ format_money(balance) }} {{ '+' if not loop.last }}
+            % endif
         % endfor
         </td>
         <td class="wallet">
         % for delta in event['wallet_delta']
             % if delta.amount or delta.currency == participant.main_currency
-                {{ format_currency_delta(delta) }}<br>
+                {{ format_money_delta(delta) }}<br>
             % endif
         % endfor
         </td>
@@ -211,9 +213,9 @@ else:
         </td>
         <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
             >{{ translated_status[event['status']] }}</td>
-        <td class="wallet">{{ format_currency_delta(event['wallet_delta']) }}</td>
-        <td class="fees">{{ format_currency(*event['fee']) }}</td>
-        <td class="bank">{{ format_currency_delta(event['bank_delta']) }}</td>
+        <td class="wallet">{{ format_money_delta(event['wallet_delta']) }}</td>
+        <td class="fees">{{ format_money(event['fee']) }}</td>
+        <td class="bank">{{ format_money_delta(event['bank_delta']) }}</td>
     </tr>
     % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
     <tr>
@@ -272,7 +274,7 @@ else:
         </td>
         <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
             >{{ translated_status[event['status']] }}</td>
-        <td class="wallet">{{ format_currency_delta(event['wallet_delta']) }}</td>
+        <td class="wallet">{{ format_money_delta(event['wallet_delta']) }}</td>
         <td class="fees"></td>
         <td class="bank"></td>
 

@@ -49,7 +49,7 @@
             % else
                 <td class="{{ 'text-'+cell_cls }}">{{ format_decimal(member.nominal_take, '#,##0.00') }}</td>
             % endif
-            <td>{{ format_currency(*member.actual_amount) }}</td>
+            <td>{{ format_money(member.actual_amount) }}</td>
         </tr>
         % endfor
         <tr class="leftover">
@@ -62,7 +62,7 @@
             <td></td>
             <td></td>
             <td class="{{ 'info' if members.leftover else '' }}"
-                >{{ format_currency(*members.leftover) }}</td>
+                >{{ format_money(members.leftover) }}</td>
         </tr>
       </tbody>
     </table>

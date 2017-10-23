@@ -125,15 +125,15 @@ account = participant.get_mangopay_account()
     <table>
         <tr>
             <th>{{ _("Amount:") }}</th>
-            <td>{{ format_currency(*exchange.amount) }}</td>
+            <td>{{ format_money(exchange.amount) }}</td>
         </tr>
         <tr>
             <th>{{ _("Fee:") }}</th>
-            <td>{{ format_currency(*exchange.fee) }}</td>
+            <td>{{ format_money(exchange.fee) }}</td>
         </tr>
         <tr class="total">
             <th>{{ _("Total:") }}</th>
-            <td>{{ format_currency(*(exchange.fee + exchange.amount)) }}</td>
+            <td>{{ format_money((exchange.fee + exchange.amount)) }}</td>
         </tr>
     </table>
 
