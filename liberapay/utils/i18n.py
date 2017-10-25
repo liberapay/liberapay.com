@@ -10,7 +10,7 @@ import re
 from unicodedata import combining, normalize
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
-from babel.core import LOCALE_ALIASES, Locale as _Locale
+import babel.core
 from babel.dates import format_date, format_datetime, format_timedelta
 from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
@@ -51,7 +51,7 @@ class Age(timedelta):
         return timedelta.__new__(cls, *a, **kw)
 
 
-class Locale(_Locale):
+class Locale(babel.core.Locale):
 
     def __init__(self, *a, **kw):
         super(Locale, self).__init__(*a, **kw)
@@ -109,7 +109,7 @@ class Locale(_Locale):
         return format_timedelta(to_age(o), locale=self, **kw)
 
 
-ALIASES = {k: v.lower() for k, v in LOCALE_ALIASES.items()}
+ALIASES = {k: v.lower() for k, v in babel.core.LOCALE_ALIASES.items()}
 ALIASES_R = {v: k for k, v in ALIASES.items()}
 
 
@@ -136,6 +136,12 @@ COUNTRY_CODES = """
 """.split()
 
 COUNTRIES = make_sorted_dict(COUNTRY_CODES, Locale('en').territories)
+
+CURRENCIES_MAP = {
+    k: v[-1][0]
+    for k, v in babel.core.get_global('territory_currencies').items()
+    if v[-1][0] in CURRENCIES
+}
 
 LANGUAGE_CODES_2 = """
     aa af ak am ar as az be bg bm bn bo br bs ca cs cy da de dz ee el en eo es
@@ -392,7 +398,7 @@ def add_currency_to_state(request, user):
     if user:
         return {'currency': user.main_currency}
     else:
-        return {'currency': 'EUR'}
+        return {'currency': CURRENCIES_MAP.get(request.country) or 'EUR'}
 
 
 def extract_custom(extractor, *args, **kw):
