@@ -360,3 +360,48 @@ CREATE FUNCTION convert(currency_amount, currency) RETURNS currency_amount AS $$
         RETURN ($1.amount / rate, $2);
     END;
 $$ LANGUAGE plpgsql STRICT;
+
+
+-- Fuzzy sum of amounts in various currencies
+
+CREATE FUNCTION currency_amount_fuzzy_sum_sfunc(
+    currency_amount, currency_amount, currency
+) RETURNS currency_amount AS $$
+    BEGIN RETURN ($1.amount + (convert($2, $3)).amount, $3); END;
+$$ LANGUAGE plpgsql STRICT;
+
+CREATE AGGREGATE sum(currency_amount, currency) (
+    sfunc = currency_amount_fuzzy_sum_sfunc,
+    stype = currency_amount,
+    initcond = '(0,)'
+);
+
+
+-- Fuzzy average of amounts in various currencies
+
+CREATE TYPE currency_amount_fuzzy_avg_state AS (
+    _sum numeric, _count int, target currency
+);
+
+CREATE FUNCTION currency_amount_fuzzy_avg_sfunc(
+    currency_amount_fuzzy_avg_state, currency_amount, currency
+) RETURNS currency_amount_fuzzy_avg_state AS $$
+    BEGIN
+        IF ($2.currency = $3) THEN
+            RETURN ($1._sum + $2.amount, $1._count + 1, $3);
+        END IF;
+        RETURN ($1._sum + (convert($2, $3)).amount, $1._count + 1, $3);
+    END;
+$$ LANGUAGE plpgsql STRICT;
+
+CREATE FUNCTION currency_amount_fuzzy_avg_ffunc(currency_amount_fuzzy_avg_state)
+RETURNS currency_amount AS $$
+    BEGIN RETURN ((CASE WHEN $1._count = 0 THEN 0 ELSE $1._sum / $1._count END), $1.target); END;
+$$ LANGUAGE plpgsql STRICT;
+
+CREATE AGGREGATE avg(currency_amount, currency) (
+    sfunc = currency_amount_fuzzy_avg_sfunc,
+    finalfunc = currency_amount_fuzzy_avg_ffunc,
+    stype = currency_amount_fuzzy_avg_state,
+    initcond = '(0,0,)'
+);
