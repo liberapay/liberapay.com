@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-10-24 10:45+0000\n"
+"PO-Revision-Date: 2017-10-27 11:45+0000\n"
 "Last-Translator: tuxayo/Victor Grousset <victor@tuxayo.net>\n"
 "Language-Team: Esperanto "
 "<https://hosted.weblate.org/projects/liberapay/core/eo/>\n"
@@ -167,7 +167,10 @@ msgstr "La banko drato al via Liberapay monujo sukcesis"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Ni estas feliĉaj raporti ke la delokigo el via bankkonto sukcesis. El la {0} kiu vi sendis, {1} iris en via Liberapay monujo kaj {2} estis pagitaj en honorarioj."
+msgstr ""
+"Ni estas feliĉaj raporti ke la delokigo el via bankkonto sukcesis. El la {0} "
+"kiu vi sendis, {1} iris en via Liberapay monujo kaj {2} estis pagitaj en "
+"peradkostoj."
 
 msgid "View receipt"
 msgstr "Vido kvitanco"
@@ -412,10 +415,10 @@ msgstr "Vi ne povas forigi vian primaran retadreson."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
-msgstr "La retadreso '{0}' ne kontrolitaj."
+msgstr "La retadreso '{0}' ne estas kontrolita."
 
 msgid "You've reached the maximum number of email addresses we allow."
-msgstr "Vi atingis la maksimuman nombron de retadresoj ni permesus."
+msgstr "Vi atingis la maksimuman nombron de retadresoj ni permesas."
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
@@ -475,9 +478,8 @@ msgstr "Ekzistas ne sufiĉe da mono en via monujo."
 msgid "You can't withdraw more than {0} at this time."
 msgstr "Vi ne povas retiri pli ol {0} ĉe tiu tempo."
 
-#, fuzzy
 msgid "The transaction's fee would exceed its amount."
-msgstr "La transakcio kotizon superus lian kvanton."
+msgstr "La transakcio peradkosto superus lian kvanton."
 
 #, fuzzy
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
@@ -1874,7 +1876,7 @@ msgid "Amount:"
 msgstr "Kvanto:"
 
 msgid "Fee:"
-msgstr "Kotizo:"
+msgstr "Peradkosto:"
 
 msgid "Total:"
 msgstr "Sumo:"
@@ -2136,7 +2138,7 @@ msgid "Status"
 msgstr "Stato"
 
 msgid "Fees"
-msgstr "Kotizoj"
+msgstr "Peradkostoj"
 
 msgid "The amount you should see on your bank account statement."
 msgstr ""
@@ -2229,7 +2231,7 @@ msgstr "Facila kaj tuja"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
-msgstr "Kotizoj: {0}% + {1}"
+msgstr "Peradkostoj: {0}% + {1}"
 
 msgid "To a Euro account"
 msgstr "Al Eŭro konton"
@@ -2239,7 +2241,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Fee: {0}%"
-msgstr "Kotizo: {0}%"
+msgstr "Peradkosto: {0}%"
 
 msgid "SEPA only"
 msgstr ""
@@ -2253,7 +2255,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "La kotizoj estas tiuj de niaj provizantoj de pagservoj, Librapay estas nur financita per la donacoj al {0}lia propra konto{1}."
+msgstr ""
+"La peradkostoj estas tiuj de niaj provizantoj de pagservoj, Librapay estas "
+"nur financita per la donacoj al {0}lia propra konto{1}."
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr ""
@@ -2314,14 +2318,16 @@ msgstr "Peto en progreso, bonvolu atendi …"
 
 #, fuzzy, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Aldoni monon al Liberapay per banko delokigo kostas pago de {0} % pro nia provizanto de pagservoj."
+msgstr ""
+"Aldoni monon al Liberapay per banko delokigo kaŭzas peradkosto de {0}% pro "
+"nia provizanto de pagservoj."
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr ""
 
 #, python-brace-format
 msgid "{0} ({2}% fee included)"
-msgstr "{0} ({2}% kotizo inkluzivita)"
+msgstr "{0} ({2}% peradkosto inkluzivita)"
 
 #, python-brace-format
 msgid "Your donations will be funded for {n} week"
@@ -2348,9 +2354,11 @@ msgstr ""
 msgid "Proceed"
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} estis prenita el via kreditkarto, {1} iris al via Liberapay monujo, {2} estis pagitaj en transakcio kotizoj."
+msgstr ""
+"{0} estis prenita el via kreditkarto, {1} iris al via Liberapay monujo, {2} "
+"estis pagitaj en transakcio peradkostoj."
 
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
@@ -2445,16 +2453,18 @@ msgstr "Nomo"
 msgid "The amount cannot be zero."
 msgstr "La kvanto ne povas esti nulo."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "La transakcio kotizo estus alta: {0}% ({1}/{2}). Procedi ĉiuokaze ?"
+msgstr "La transakcio peradkosto estus alta: {0}% ({1}/{2}). Procedi ĉiuokaze ?"
 
 msgid "Withdrawing Money"
 msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
-msgstr "{0} estis prenita el via Liberapay monujo. Se la delokigo estas sukcesa {1} surteriĝos en via bankkonto kaj {2} estos pagita en kotizoj."
+msgstr ""
+"{0} estis prenita el via Liberapay monujo. Se la delokigo estas sukcesa {1} "
+"surteriĝos en via bankkonto kaj {2} estos pagita en peradkostoj."
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
@@ -2637,9 +2647,8 @@ msgstr ""
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr ""
 
-#, fuzzy
 msgid "What are the payment processing fees?"
-msgstr "Kio estas la kotizoj de la provizanto de pagservoj?"
+msgstr "Kio estas la peradkostoj de la provizanto de pagservoj?"
 
 #, python-brace-format
 msgid ""
@@ -2664,7 +2673,11 @@ msgstr "Estas neniuj restriktoj pri la totala kvanto ke vi povas doni aŭ ricevi
 
 #, fuzzy, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "La minimumo vi povas doni ajnan uzanton estas {0}. Por minimumigi prilaborado kotizoj, ni ordonas via kreditkarto almenaŭ {1} je fojo (la mono estas stokita en via Liberapay monujo kaj delokigita al aliaj dum Payday)."
+msgstr ""
+"La minimumo vi povas doni ajnan uzanton estas {0}. Por minimumigi "
+"prilaborado peradkostoj, ni ordonas via kreditkarto almenaŭ {1} je fojo (la "
+"mono estas stokita en via Liberapay monujo kaj delokigita al aliaj dum "
+"Payday)."
 
 #, fuzzy, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
@@ -2708,7 +2721,11 @@ msgstr "Donacoj estas publikaj. Defaŭlte, la totala kvanto vi doni kaj la total
 
 #, fuzzy, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. So, recipients get the full value of the donations, but there are {2}payment processing fees{0} when moving money in or out of Liberapay."
-msgstr "Liberapay ne prenas tranĉo de pagoj, la servo estas financita de la donacoj al {1} lia propra konto {0}. Do, ricevantoj akiri la plenan valoron de la donacoj, sed estas {2} pagservo prilaborado kotizoj {0} movinte monon en aŭ ekster Liberapay."
+msgstr ""
+"Liberapay ne prenas tranĉo de pagoj, la servo estas financita de la donacoj "
+"al {1} lia propra konto {0}. Do, ricevantoj akiri la plenan valoron de la "
+"donacoj, sed estas {2} pagservo prilaborado peradkostoj {0} movinte monon en "
+"aŭ ekster Liberapay."
 
 #, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
