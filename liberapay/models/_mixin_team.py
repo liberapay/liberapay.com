@@ -200,13 +200,18 @@ class MixinTeam(object):
                           AND tr.status = 'succeeded'
                    ), zero(t.amount)) AS past_transfers_sum
               FROM current_tips t
+              JOIN participants p ON p.id = t.tipper
              WHERE t.tippee = %(team_id)s
                AND t.is_funded
+               AND p.is_suspended IS NOT true
         """, dict(team_id=self.id))]
         takes = [NS(r._asdict()) for r in (cursor or self.db).all("""
-            SELECT *
-              FROM current_takes
-             WHERE team = %s
+            SELECT t.*
+              FROM current_takes t
+              JOIN participants p ON p.id = t.member
+             WHERE t.team = %s
+               AND p.is_suspended IS NOT true
+               AND p.mangopay_user_id IS NOT NULL
         """, (self.id,))]
         # Recompute the takes
         takes_sum = {}
