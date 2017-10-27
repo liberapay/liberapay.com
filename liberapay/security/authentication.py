@@ -75,6 +75,7 @@ def sign_in_with_form_data(body, state):
                     link_validity=SESSION_TIMEOUT,
                 )
                 state['log-in.email-sent-to'] = email
+                raise LoginRequired
             else:
                 state['log-in.error'] = _(
                     "We didn't find any account whose primary email address is {0}.",

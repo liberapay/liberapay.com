@@ -52,7 +52,7 @@ def extract_token_from_cookie(request):
 
 
 def reject_forgeries(request, response, csrf_token):
-    if csrf_token is None:
+    if csrf_token is None or (request.path.raw == '/migrate' and not request.qs):
         # CSRF protection is turned off for this request
         return
 
