@@ -27,11 +27,6 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import group_by, NS
 
 
-Money.__eq__ = lambda a, b: isinstance(b, Money) and a.__dict__ == b.__dict__
-Money.__iter__ = lambda m: iter((m.amount, m.currency))
-Money.__repr__ = lambda m: '<Money Amount=%(amount)r Currency=%(currency)r>' % m.__dict__
-
-
 QUARANTINE = '%s days' % QUARANTINE.days
 
 
