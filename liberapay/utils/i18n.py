@@ -25,6 +25,7 @@ from pando.utils import utcnow
 
 from liberapay.constants import CURRENCIES
 from liberapay.exceptions import InvalidNumber
+from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
 
 
@@ -73,6 +74,12 @@ class Locale(_Locale):
 
     def format_decimal(self, *a):
         return format_decimal(*a, locale=self)
+
+    def format_money_basket(self, basket):
+        return ', '.join(
+            format_currency(money.amount, money.currency, locale=self)
+            for money in basket if money
+        ) or '0'
 
     def format_money_delta(self, money, *a):
         return format_currency(
@@ -206,6 +213,8 @@ def i_format(loc, s, *a, **kw):
                 c[k] = format_number(o, locale=loc)
             elif isinstance(o, Money):
                 c[k] = loc.format_money(o)
+            elif isinstance(o, MoneyBasket):
+                c[k] = loc.format_money_basket(o)
             elif isinstance(o, Age):
                 c[k] = format_timedelta(o, locale=loc, **o.format_args)
             elif isinstance(o, timedelta):
