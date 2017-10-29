@@ -240,6 +240,7 @@ title = _("Adding Money")
     % endif
 
     <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
+          data-currency="{{ currency }}"
           data-msg-confirm-submit='{{ _(
               "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
           ) }}'
