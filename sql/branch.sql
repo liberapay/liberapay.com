@@ -3,7 +3,11 @@ BEGIN;
 END;
 
 ALTER TABLE participants ADD COLUMN main_currency currency NOT NULL DEFAULT 'EUR';
-ALTER TABLE participants ADD COLUMN accept_all_currencies boolean NOT NULL DEFAULT FALSE;
+ALTER TABLE participants ADD COLUMN accept_all_currencies boolean;
+
+UPDATE participants
+   SET accept_all_currencies = true
+ WHERE status = 'stub';
 
 BEGIN;
     ALTER TABLE cash_bundles ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');

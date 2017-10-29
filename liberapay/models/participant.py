@@ -112,6 +112,7 @@ class Participant(Model, MixinTeam):
             'kind': kind,
             'status': 'active',
             'join_time': now,
+            'accept_all_currencies': False,
         }
         if password:
             d['password'] = cls.hash_password(password)
