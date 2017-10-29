@@ -19,14 +19,19 @@ from babel.numbers import (
     NumberFormatError, parse_decimal
 )
 import jinja2.ext
+from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
+from liberapay.constants import CURRENCIES
 from liberapay.exceptions import InvalidNumber
 from liberapay.website import website
 
 
-Money = namedtuple('Money', 'amount currency')
+def LegacyMoney(o):
+    return o if isinstance(o, Money) else Money(o, 'EUR')
+
+
 Wrap = namedtuple('Wrap', 'value wrapper')
 
 
@@ -202,7 +207,7 @@ def i_format(loc, s, *a, **kw):
             elif isinstance(o, datetime):
                 c[k] = format_datetime(o, locale=loc)
             if wrapper:
-                c[k] = wrapper % c[k]
+                c[k] = wrapper % (c[k],)
     return s.format(*a, **kw)
 
 
@@ -352,6 +357,16 @@ def add_helpers_to_context(context, loc):
         parse_decimal=loc.parse_decimal_or_400,
         to_age_str=loc.to_age_str,
     )
+
+
+def add_currency_to_state(request, user):
+    cookie = request.headers.cookie.get(str('currency'))
+    if cookie and cookie.value in CURRENCIES:
+        return {'currency': cookie.value}
+    if user:
+        return {'currency': user.main_currency}
+    else:
+        return {'currency': 'EUR'}
 
 
 def extract_custom(extractor, *args, **kw):

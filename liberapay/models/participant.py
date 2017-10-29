@@ -769,6 +769,7 @@ class Participant(Model, MixinTeam):
     def send_email(self, spt_name, email, **context):
         self.fill_notification_context(context)
         context['email'] = email
+        context['LegacyMoney'] = i18n.LegacyMoney
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
         locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(context, locale)

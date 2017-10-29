@@ -12,6 +12,7 @@ from subprocess import call
 from time import time
 import traceback
 
+_str = str
 from six import text_type as str
 from six.moves.urllib.parse import quote as urlquote
 from six.moves.urllib.request import urlretrieve
@@ -23,7 +24,9 @@ from babel.numbers import parse_pattern
 import boto3
 from environment import Environment, is_yesish
 from mailshake import DummyMailer, SMTPMailer
+from mangopay.utils import Money
 import psycopg2
+from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 import raven
 import sass
 
@@ -39,6 +42,7 @@ from liberapay.models.repository import Repository
 from liberapay.models import DB
 from liberapay.security.authentication import ANON
 from liberapay.utils import find_files, markdown, mkdir_p
+from liberapay.utils.currencies import MoneyBasket, get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (
@@ -96,6 +100,27 @@ def database(env, tell_sentry):
     for model in models:
         db.register_model(model)
     liberapay.billing.payday.Payday.db = db
+
+    def adapt_money(m):
+        return AsIs('(%s,%s)::currency_amount' % (adapt(m.amount), adapt(m.currency)))
+    register_adapter(Money, adapt_money)
+
+    def cast_currency_amount(v, cursor):
+        return None if v is None else Money(*v[1:-1].split(','))
+    oid = db.one("SELECT 'currency_amount'::regtype::oid")
+    register_type(new_type((oid,), _str('currency_amount'), cast_currency_amount))
+
+    def adapt_money_basket(b):
+        return AsIs('(%s,%s)::currency_basket' % (b.eur.amount, b.usd.amount))
+    register_adapter(MoneyBasket, adapt_money_basket)
+
+    def cast_currency_basket(v, cursor):
+        if v is None:
+            return None
+        eur, usd = v[1:-1].split(',')
+        return MoneyBasket(Money(eur, 'EUR'), Money(usd, 'USD'))
+    oid = db.one("SELECT 'currency_basket'::regtype::oid")
+    register_type(new_type((oid,), _str('currency_basket'), cast_currency_basket))
 
     use_qc = not env.override_query_cache
     qc1 = QueryCache(db, threshold=(1 if use_qc else 0))
@@ -624,6 +649,10 @@ def s3(env):
     return {'s3': s3}
 
 
+def currency_exchange_rates(db):
+    return {'currency_exchange_rates': get_currency_exchange_rates(db)}
+
+
 minimal_algorithm = Algorithm(
     env,
     make_sentry_teller,
@@ -645,6 +674,7 @@ full_algorithm = Algorithm(
     load_scss_variables,
     s3,
     trusted_proxies,
+    currency_exchange_rates,
 )
 
 

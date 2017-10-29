@@ -7,6 +7,7 @@ from decimal import Decimal, ROUND_UP
 import re
 
 from jinja2 import StrictUndefined
+from mangopay.utils import Money
 from pando.utils import utc
 
 
@@ -46,6 +47,8 @@ AVATAR_QUERY = '?s=160&default=retro'
 AVATAR_SOURCES = 'libravatar bitbucket facebook github google mastodon twitter'.split()
 
 BIRTHDAY = date(2015, 5, 22)
+
+CURRENCIES = set(('EUR', 'USD'))
 
 D_CENT = Decimal('0.01')
 D_INF = Decimal('inf')
@@ -235,5 +238,7 @@ STANDARD_TIPS = (
 SUMMARY_MAX_SIZE = 100
 
 USERNAME_MAX_SIZE = 32
+
+ZERO = {c: Money(D_ZERO, c) for c in ('EUR', 'USD', None)}
 
 del _

@@ -311,7 +311,7 @@ title = _("Adding Money")
         </label><br>
 
         % from "templates/postal-addresses.html" import postal_address_form with context
-        {{ postal_address_form(prefix='Owner', saved=get_owner_address(bank_account, mp_account), country=country) }}
+        {{ postal_address_form(prefix='Owner', saved=get_owner_address(bank_account, mp_account), country=request.country) }}
     </fieldset>
 
     <div class="proceed">

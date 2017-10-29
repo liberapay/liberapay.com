@@ -17,8 +17,6 @@ from liberapay.utils import (
 
 NOT_OTHER = set('US CA GB'.split()).union(SEPA)
 
-currency = 'EUR'
-
 [---]
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
