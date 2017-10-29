@@ -31,8 +31,12 @@ if request.method == 'GET' and 'transactionId' in request.qs:
     record_exchange_result(website.db, payin.Tag, payin.Id, status, error, participant)
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
+currency = request.qs.get('currency', currency)
+if currency not in PAYIN_CARD_MIN:
+    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+
 exchange = None
-routes = ExchangeRoute.from_network(participant, 'mango-cc')
+routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
 route = routes[0] if routes else None
 del routes
 
@@ -47,9 +51,6 @@ if card:
         card = None
 
 funded = float('inf')
-currency = request.qs.get('currency', currency)
-if currency not in PAYIN_CARD_MIN:
-    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
 balance = participant.get_balance_in(currency)
 donations = participant.get_giving_in(currency)
 weekly = donations - participant.get_receiving_in(currency)

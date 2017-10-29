@@ -171,3 +171,9 @@ BEGIN;
     ALTER TABLE balances_at ALTER COLUMN balance TYPE currency_basket USING (balance, '0.00');
     ALTER TABLE balances_at RENAME COLUMN balance TO balances;
 END;
+
+BEGIN;
+    ALTER TABLE exchange_routes ADD COLUMN currency currency;
+    UPDATE exchange_routes SET currency = 'EUR' WHERE network = 'mango-cc';
+    ALTER TABLE exchange_routes ADD CONSTRAINT currency_chk CHECK ((currency IS NULL) = (network <> 'mango-cc'));
+END;

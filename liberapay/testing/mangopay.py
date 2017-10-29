@@ -23,7 +23,7 @@ class MangopayHarness(Harness):
             'janet', mangopay_user_id=self.janet_id,
             mangopay_wallet_id=self.janet_wallet_id, email='janet@example.net'
         )
-        self.janet_route = ExchangeRoute.insert(self.janet, 'mango-cc', self.card_id)
+        self.janet_route = ExchangeRoute.insert(self.janet, 'mango-cc', self.card_id, currency='EUR')
         self.homer = self.make_participant(
             'homer', mangopay_user_id=self.homer_id,
             mangopay_wallet_id=self.homer_wallet_id, email='homer@example.com'

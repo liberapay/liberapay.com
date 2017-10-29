@@ -216,7 +216,10 @@ class Harness(unittest.TestCase):
                      VALUES (%s, %s, true, now())
             """, (participant.id, kw['email']))
         if 'last_bill_result' in kw2:
-            ExchangeRoute.insert(participant, 'mango-cc', '-1', kw2['last_bill_result'])
+            ExchangeRoute.insert(
+                participant, 'mango-cc', '-1', kw2['last_bill_result'],
+                currency=participant.main_currency
+            )
         if 'balance' in kw2 and kw2['balance'] != 0:
             self.make_exchange('mango-cc', kw2['balance'], 0, participant)
 
@@ -232,18 +235,20 @@ class Harness(unittest.TestCase):
 
 
     def make_exchange(self, route, amount, fee, participant, status='succeeded', error='', vat=0):
+        amount = amount if isinstance(amount, Money) else Money(amount, 'EUR')
+        fee = fee if isinstance(fee, Money) else Money(fee, amount.currency)
+        vat = vat if isinstance(vat, Money) else Money(vat, fee.currency)
         if not isinstance(route, ExchangeRoute):
             network = route
-            routes = ExchangeRoute.from_network(participant, network)
+            currency = amount.currency if network == 'mango-cc' else None
+            routes = ExchangeRoute.from_network(participant, network, currency=currency)
             if routes:
                 route = routes[0]
             else:
                 from .mangopay import MangopayHarness
-                route = ExchangeRoute.insert(participant, network, MangopayHarness.card_id)
+                address = MangopayHarness.card_id if network == 'mango-cc' else -participant.id
+                route = ExchangeRoute.insert(participant, network, address, currency=currency)
                 assert route
-        amount = amount if isinstance(amount, Money) else Money(amount, 'EUR')
-        fee = fee if isinstance(fee, Money) else Money(fee, amount.currency)
-        vat = vat if isinstance(vat, Money) else Money(vat, fee.currency)
         e_id = record_exchange(self.db, route, amount, fee, vat, participant, 'pre').id
         record_exchange_result(self.db, e_id, -e_id, status, error, participant)
         return e_id

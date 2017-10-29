@@ -154,7 +154,7 @@ def fake_transfer(db, tipper, tippee, amount, timestamp):
 
 
 def fake_exchange(db, participant, amount, fee, vat, timestamp):
-    routes = ExchangeRoute.from_network(participant, 'mango-cc')
+    routes = ExchangeRoute.from_network(participant, 'mango-cc', currency='EUR')
     if routes:
         route = routes[0]
     else:
@@ -167,6 +167,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
             error='',
             one_off=False,
             remote_user_id=participant.mangopay_user_id,
+            currency='EUR',
         )
     e = _fake_thing(
         db,

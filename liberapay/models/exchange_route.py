@@ -22,7 +22,7 @@ class ExchangeRoute(Model):
         """, locals())
 
     @classmethod
-    def from_network(cls, participant, network):
+    def from_network(cls, participant, network, currency=None):
         participant_id = participant.id
         r = cls.db.all("""
             SELECT r.*::exchange_routes
@@ -30,6 +30,7 @@ class ExchangeRoute(Model):
              WHERE participant = %(participant_id)s
                AND network = %(network)s
                AND COALESCE(error, '') <> 'invalidated'
+               AND COALESCE(currency::text, '') = COALESCE(%(currency)s::text, '')
           ORDER BY r.id DESC
         """, locals())
         for route in r:
@@ -51,13 +52,14 @@ class ExchangeRoute(Model):
         return r
 
     @classmethod
-    def insert(cls, participant, network, address, error='', one_off=False):
+    def insert(cls, participant, network, address, error='', one_off=False, currency=None):
         p_id = participant.id
         remote_user_id = participant.mangopay_user_id
         r = cls.db.one("""
             INSERT INTO exchange_routes
-                        (participant, network, address, error, one_off, remote_user_id)
-                 VALUES (%(p_id)s, %(network)s, %(address)s, %(error)s, %(one_off)s, %(remote_user_id)s)
+                        (participant, network, address, error, one_off, remote_user_id, currency)
+                 VALUES (%(p_id)s, %(network)s, %(address)s, %(error)s, %(one_off)s,
+                         %(remote_user_id)s, %(currency)s)
               RETURNING exchange_routes.*::exchange_routes
         """, locals())
         r.__dict__['participant'] = participant

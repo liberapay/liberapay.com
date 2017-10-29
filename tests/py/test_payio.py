@@ -171,7 +171,7 @@ class TestCharge(MangopayHarness):
 
     def test_charge_invalidated_card(self):
         bob = self.make_participant('bob')
-        route = ExchangeRoute.insert(bob, 'mango-cc', '-1', error='invalidated')
+        route = ExchangeRoute.insert(bob, 'mango-cc', '-1', error='invalidated', currency='EUR')
         with self.assertRaises(AssertionError):
             charge(self.db, route, D('10.00'), 'http://localhost/')
 
