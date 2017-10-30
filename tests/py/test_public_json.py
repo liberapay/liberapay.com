@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 
 import json
 
-from liberapay.testing import Harness
+from liberapay.testing import EUR, Harness
 
 
 class Tests(Harness):
@@ -11,7 +11,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
 
-        alice.set_tip_to(bob, '1.00')
+        alice.set_tip_to(bob, EUR('1.00'))
 
         data = json.loads(self.client.GET('/bob/public.json').text)
         assert data['receiving'] == '1.00'
@@ -23,7 +23,7 @@ class Tests(Harness):
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
         alice = self.make_participant('alice', balance=100, hide_giving=True)
         bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '1.00')
+        alice.set_tip_to(bob, EUR('1.00'))
         data = json.loads(self.client.GET('/alice/public.json').text)
 
         assert data['giving'] == None
@@ -31,7 +31,7 @@ class Tests(Harness):
     def test_anonymous_gets_null_receiving_if_user_anonymous(self):
         alice = self.make_participant('alice', balance=100, hide_receiving=True)
         bob = self.make_participant('bob')
-        alice.set_tip_to(bob, '1.00')
+        alice.set_tip_to(bob, EUR('1.00'))
         data = json.loads(self.client.GET('/alice/public.json').text)
 
         assert data['receiving'] == None
@@ -55,7 +55,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
 
-        alice.set_tip_to(bob, '1.00')
+        alice.set_tip_to(bob, EUR('1.00'))
 
         raw = self.client.GET('/bob/public.json', auth_as=alice).text
 
@@ -70,9 +70,9 @@ class Tests(Harness):
         carl = self.make_participant('carl', balance=100)
         dana = self.make_participant('dana')
 
-        alice.set_tip_to(dana, '1.00')
-        bob.set_tip_to(dana, '3.00')
-        carl.set_tip_to(dana, '12.00')
+        alice.set_tip_to(dana, EUR('1.00'))
+        bob.set_tip_to(dana, EUR('3.00'))
+        carl.set_tip_to(dana, EUR('12.00'))
 
         raw = self.client.GET('/dana/public.json', auth_as=alice).text
 
@@ -86,7 +86,7 @@ class Tests(Harness):
         bob = self.make_participant('bob', balance=100)
         carl = self.make_participant('carl')
 
-        bob.set_tip_to(carl, '3.00')
+        bob.set_tip_to(carl, EUR('3.00'))
 
         raw = self.client.GET('/carl/public.json', auth_as=alice).text
 
@@ -99,7 +99,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
 
-        alice.set_tip_to(bob, '3.00')
+        alice.set_tip_to(bob, EUR('3.00'))
 
         raw = self.client.GET('/bob/public.json', auth_as=bob).text
 
@@ -118,7 +118,7 @@ class Tests(Harness):
         alice = self.make_participant('alice', balance=100)
         bob = self.make_participant('bob')
 
-        alice.set_tip_to(bob, '3.00')
+        alice.set_tip_to(bob, EUR('3.00'))
 
         raw = self.client.GET('/bob/public.json?callback=foo', auth_as=bob).text
 

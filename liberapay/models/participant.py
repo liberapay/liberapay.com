@@ -1,7 +1,7 @@
 from __future__ import print_function, unicode_literals
 
 from base64 import b64decode, b64encode
-from decimal import Decimal, ROUND_DOWN, ROUND_UP
+from decimal import ROUND_DOWN, ROUND_UP
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
@@ -13,6 +13,7 @@ from six.moves.urllib.parse import quote, urlencode
 import aspen_jinja2_renderer
 from html2text import html2text
 import mangopay
+from mangopay.utils import Money
 from markupsafe import escape as htmlescape
 from pando.utils import utcnow
 from postgres.orm import Model
@@ -21,13 +22,14 @@ from psycopg2.extras import Json
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
-    DONATION_WEEKLY_MAX, DONATION_WEEKLY_MIN, EMAIL_RE,
+    DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
 )
 from liberapay.exceptions import (
     BadAmount,
+    BadDonationCurrency,
     BadEmailAddress,
     BadPasswordSize,
     CannotRemovePrimaryEmail,
@@ -540,7 +542,7 @@ class Participant(Model, MixinTeam):
 
         """, (self.id,))
         for tippee in tippees:
-            self.set_tip_to(tippee, '0.00', update_self=False, cursor=cursor)
+            self.set_tip_to(tippee, Money(0, 'EUR'), update_self=False, cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user.
@@ -557,7 +559,7 @@ class Participant(Model, MixinTeam):
 
         """, (self.id,))
         for tipper in tippers:
-            tipper.set_tip_to(self, '0.00', update_tippee=False, cursor=cursor)
+            tipper.set_tip_to(self, Money(0, 'EUR'), update_tippee=False, cursor=cursor)
 
     def clear_takes(self, cursor):
         """Leave all teams by zeroing all takes.
@@ -1559,16 +1561,20 @@ class Participant(Model, MixinTeam):
         if self.id == tippee.id:
             raise NoSelfTipping
 
-        periodic_amount = Decimal(periodic_amount)  # May raise InvalidOperation
         amount = periodic_amount * PERIOD_CONVERSION_RATES[period]
 
-        if periodic_amount != 0 and amount < DONATION_WEEKLY_MIN or amount > DONATION_WEEKLY_MAX:
-            raise BadAmount(periodic_amount, period)
+        if periodic_amount != 0:
+            limits = DONATION_LIMITS[amount.currency]['weekly']
+            if amount < limits[0] or amount > limits[1]:
+                raise BadAmount(periodic_amount, period, limits)
 
-        amount = amount.quantize(D_CENT, rounding=ROUND_UP)
+        amount = amount.round_up()
 
-        if not tippee.accepts_tips and amount != 0:
-            raise UserDoesntAcceptTips(tippee.username)
+        if amount != 0:
+            if not tippee.accepts_tips:
+                raise UserDoesntAcceptTips(tippee.username)
+            if not tippee.accept_all_currencies and amount.currency != tippee.main_currency:
+                raise BadDonationCurrency(tippee, amount.currency)
 
         # Insert tip
         t = (cursor or self.db).one("""\
@@ -1586,8 +1592,8 @@ class Participant(Model, MixinTeam):
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
-        """, dict(tipper=self.id, tippee=tippee.id, amount=amount,
-                  period=period, periodic_amount=periodic_amount))._asdict()
+        """, dict(tipper=self.id, tippee=tippee.id, amount=amount.amount,
+                  period=period, periodic_amount=periodic_amount.amount))._asdict()
 
         if update_self:
             # Update giving amount of tipper

@@ -30,7 +30,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.testing import Foobar
+from liberapay.testing import EUR, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 
 
@@ -48,7 +48,7 @@ class TestPayouts(MangopayHarness):
     def test_payout(self):
         e = charge(self.db, self.janet_route, D('46.00'), 'http://localhost/')
         assert e.status == 'succeeded', e.note
-        self.janet.set_tip_to(self.homer, '42.00')
+        self.janet.set_tip_to(self.homer, EUR('42.00'))
         self.janet.close('downstream')
         self.homer = self.homer.refetch()
         assert self.homer.balance == 46
@@ -191,12 +191,12 @@ class TestPayinBankWire(MangopayHarness):
 
     def test_payin_bank_wire_creation(self):
         path = b'/janet/wallet/payin/bankwire/'
-        data = {'amount': str(upcharge_bank_wire(D('10.00'))[0])}
+        data = {'amount': str(upcharge_bank_wire(EUR('10.00'))[0].amount)}
 
         r = self.client.PxST(path, data, auth_as=self.janet)
         assert r.code == 403  # rejected because janet has no donations set up
 
-        self.janet.set_tip_to(self.david, '10.00')
+        self.janet.set_tip_to(self.david, EUR('10.00'))
         r = self.client.PxST(path, data, auth_as=self.janet)
         assert r.code == 302, r.text
         redir = r.headers[b'Location']
@@ -235,7 +235,7 @@ class TestDirectDebit(MangopayHarness):
 
     def test_direct_debit_form(self):
         path = b'/janet/wallet/payin/direct-debit'
-        self.janet.set_tip_to(self.david, '10.00')
+        self.janet.set_tip_to(self.david, EUR('10.00'))
         r = self.client.GET(path, auth_as=self.janet)
         assert r.code == 200
 
@@ -249,7 +249,7 @@ class TestDirectDebit(MangopayHarness):
         r = self.client.PxST(path, data, auth_as=self.homer)
         assert r.code == 403  # rejected because homer has no donations set up
 
-        self.homer.set_tip_to(self.david, '10.00')
+        self.homer.set_tip_to(self.david, EUR('10.00'))
         r = self.client.GET(path, auth_as=self.homer)
         assert b'FRxxxxxxxxxxxxxxxxxxxxx2606' in r.body, r.text
 
@@ -301,44 +301,44 @@ class TestDirectDebit(MangopayHarness):
 class TestFees(MangopayHarness):
 
     def test_upcharge_basically_works(self):
-        actual = upcharge_card(D('20.00'))
-        expected = (D('20.65'), D('0.65'), D('0.10'))
+        actual = upcharge_card(EUR('20.00'))
+        expected = (EUR('20.65'), EUR('0.65'), EUR('0.10'))
         assert actual == expected
 
     def test_upcharge_full_in_rounded_case(self):
-        actual = upcharge_card(D('5.00'))
-        expected = upcharge_card(PAYIN_CARD_MIN)
+        actual = upcharge_card(EUR('5.00'))
+        expected = upcharge_card(PAYIN_CARD_MIN['EUR'])
         assert actual == expected
 
     def test_upcharge_at_min(self):
-        actual = upcharge_card(PAYIN_CARD_MIN)
-        expected = (D('15.54'), D('0.54'), D('0.08'))
+        actual = upcharge_card(PAYIN_CARD_MIN['EUR'])
+        expected = (EUR('15.54'), EUR('0.54'), EUR('0.08'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.035')  # less than 3.5% fee
 
     def test_upcharge_at_target(self):
-        actual = upcharge_card(PAYIN_CARD_TARGET)
-        expected = (D('94.19'), D('2.19'), D('0.32'))
+        actual = upcharge_card(PAYIN_CARD_TARGET['EUR'])
+        expected = (EUR('94.19'), EUR('2.19'), EUR('0.32'))
         assert actual == expected
         assert actual[1] / actual[0] < D('0.024')  # less than 2.4% fee
 
     def test_upcharge_at_one_cent(self):
-        actual = upcharge_card(D('0.01'))
-        expected = upcharge_card(PAYIN_CARD_MIN)
+        actual = upcharge_card(EUR('0.01'))
+        expected = upcharge_card(PAYIN_CARD_MIN['EUR'])
         assert actual == expected
 
     def test_upcharge_at_min_minus_one_cent(self):
-        actual = upcharge_card(PAYIN_CARD_MIN - D('0.01'))
-        expected = upcharge_card(PAYIN_CARD_MIN)
+        actual = upcharge_card(PAYIN_CARD_MIN['EUR'] - EUR('0.01'))
+        expected = upcharge_card(PAYIN_CARD_MIN['EUR'])
         assert actual == expected
 
     def test_skim_credit(self):
-        actual = skim_credit(D('10.00'), self.bank_account)
-        assert actual == (D('10.00'), D('0.00'), D('0.00'))
+        actual = skim_credit(EUR('10.00'), self.bank_account)
+        assert actual == (EUR('10.00'), EUR('0.00'), EUR('0.00'))
 
     def test_skim_credit_outside_sepa(self):
-        actual = skim_credit(D('10.00'), self.bank_account_outside_sepa)
-        assert actual == (D('7.07'), D('2.93'), D('0.43'))
+        actual = skim_credit(EUR('10.00'), self.bank_account_outside_sepa)
+        assert actual == (EUR('7.07'), EUR('2.93'), EUR('0.43'))
 
 
 class TestRecordExchange(MangopayHarness):
@@ -442,16 +442,17 @@ class TestSync(MangopayHarness):
         """)
 
     def test_1_sync_with_mangopay_records_exchange_success(self):
+        amount = PAYIN_CARD_MIN['EUR'].amount
         with mock.patch('liberapay.billing.transactions.record_exchange_result') as rer:
             rer.side_effect = Foobar()
             with self.assertRaises(Foobar):
-                charge(self.db, self.janet_route, PAYIN_CARD_MIN, 'http://localhost/')
+                charge(self.db, self.janet_route, amount, 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
         sync_with_mangopay(self.db)
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'succeeded'
-        assert Participant.from_username('janet').balance == PAYIN_CARD_MIN
+        assert Participant.from_username('janet').balance == amount
 
     def test_2_sync_with_mangopay_handles_payins_that_didnt_happen(self):
         pass  # this is for pep8

@@ -6,7 +6,7 @@ import json
 
 from liberapay.billing.payday import Payday
 from liberapay.models.participant import Participant
-from liberapay.testing import Harness
+from liberapay.testing import EUR, Harness
 from liberapay.testing.mangopay import FakeTransfersHarness
 from liberapay.utils.history import get_end_of_year_balance, iter_payday_events
 
@@ -53,9 +53,9 @@ class TestHistory(FakeTransfersHarness):
         carl = self.make_participant('carl')
         david = self.make_participant('david')
         self.make_exchange('mango-cc', 10000, 0, david)
-        david.set_tip_to(team, Decimal('1.00'))
+        david.set_tip_to(team, EUR('1.00'))
         team.set_take_for(bob, Decimal('1.00'), team)
-        alice.set_tip_to(bob, Decimal('5.00'))
+        alice.set_tip_to(bob, EUR('5.00'))
 
         assert bob.balance == 0
         for i in range(2):

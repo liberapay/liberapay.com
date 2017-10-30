@@ -1,4 +1,5 @@
 from liberapay.models.participant import Participant
+from liberapay.testing import EUR
 from liberapay.testing.emails import EmailHarness
 
 
@@ -13,8 +14,8 @@ class TestTransactionalEmails(EmailHarness):
     def test_take_over_sends_notifications_to_patrons(self):
         dan_twitter = self.make_elsewhere('twitter', 1, 'dan')
 
-        self.alice.set_tip_to(self.dan, '100')  # Alice shouldn't receive an email.
-        self.bob.set_tip_to(dan_twitter, '100')  # Bob should receive an email.
+        self.alice.set_tip_to(self.dan, EUR('100'))  # Alice shouldn't receive an email.
+        self.bob.set_tip_to(dan_twitter, EUR('100'))  # Bob should receive an email.
 
         self.dan.take_over(dan_twitter, have_confirmation=True)
 

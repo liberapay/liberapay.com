@@ -2,25 +2,25 @@
 """
 from __future__ import division, print_function, unicode_literals
 
-from decimal import Decimal, ROUND_UP
-
-from pando.utils import typecheck
+from mangopay.utils import Money
 
 from liberapay.constants import (
-    D_CENT,
     PAYIN_CARD_MIN, FEE_PAYIN_CARD,
     FEE_PAYIN_BANK_WIRE, PAYIN_BANK_WIRE_MIN,
     FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN,
-    FEE_PAYOUT, FEE_PAYOUT_OUTSIDE_SEPA, SEPA,
-    FEE_VAT,
+    FEE_PAYOUT,
+    Fees,
 )
 
 
-def upcharge(amount, fees, min_amount):
+def upcharge(amount, fees, min_amounts):
     """Given an amount, return a higher amount and the difference.
     """
-    typecheck(amount, Decimal)
+    assert isinstance(amount, Money), type(amount)
 
+    fees = fees if isinstance(fees, Fees) else fees[amount.currency]
+
+    min_amount = min_amounts[amount.currency]
     if amount < min_amount:
         amount = min_amount
 
@@ -30,14 +30,14 @@ def upcharge(amount, fees, min_amount):
     fee = charge_amount - amount
 
     # + VAT
-    vat = fee * FEE_VAT
+    vat = fee * Fees.VAT
     charge_amount += vat
     fee += vat
 
     # Round
-    charge_amount = charge_amount.quantize(D_CENT, rounding=ROUND_UP)
-    fee = fee.quantize(D_CENT, rounding=ROUND_UP)
-    vat = vat.quantize(D_CENT, rounding=ROUND_UP)
+    charge_amount = charge_amount.round_up()
+    fee = fee.round_up()
+    vat = vat.round_up()
 
     return charge_amount, fee, vat
 
@@ -51,10 +51,10 @@ def skim_amount(amount, fees):
     """Given a nominal amount, compute the fees, taxes, and the actual amount.
     """
     fee = amount * fees.var + fees.fix
-    vat = fee * FEE_VAT
+    vat = fee * Fees.VAT
     fee += vat
-    fee = fee.quantize(D_CENT, rounding=ROUND_UP)
-    vat = vat.quantize(D_CENT, rounding=ROUND_UP)
+    fee = fee.round_up()
+    vat = vat.round_up()
     return amount - fee, fee, vat
 
 
@@ -76,10 +76,15 @@ def skim_credit(amount, ba):
 
     The returned amount can be negative, look out for that.
     """
-    typecheck(amount, Decimal)
+    assert isinstance(amount, Money), type(amount)
+    fees = FEE_PAYOUT[amount.currency]
     country = get_bank_account_country(ba)
-    if country in SEPA:
-        fee = FEE_PAYOUT
+    if 'domestic' in fees:
+        countries, domestic_fee = fees['domestic']
+        if country in countries:
+            fee = domestic_fee
+        else:
+            fee = fees['foreign']
     else:
-        fee = FEE_PAYOUT_OUTSIDE_SEPA
+        fee = fees['*']
     return skim_amount(amount, fee)

@@ -31,7 +31,16 @@ def check_bits(bits):
 
 Event = namedtuple('Event', 'name bit title')
 
-Fees = namedtuple('Fees', ('var', 'fix'))
+
+class Fees(namedtuple('Fees', ('var', 'fix'))):
+    VAT = Decimal('0.17')  # 17% (Luxembourg rate)
+    VAT_1 = VAT + 1
+
+    @property
+    def with_vat(self):
+        r = (self.var * self.VAT_1 * 100, self.fix * self.VAT_1)
+        return r[0] if not r[1] else r[1] if not r[0] else r
+
 
 StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
 
@@ -55,15 +64,18 @@ D_INF = Decimal('inf')
 D_UNIT = Decimal('1.00')
 D_ZERO = Decimal('0.00')
 
-DONATION_LIMITS_WEEKLY = (Decimal('0.01'), Decimal('100.00'))
-DONATION_LIMITS = {
-    'weekly': DONATION_LIMITS_WEEKLY,
+DONATION_LIMITS_WEEKLY_EUR_USD = (Decimal('0.01'), Decimal('100.00'))
+DONATION_LIMITS_EUR_USD = {
+    'weekly': DONATION_LIMITS_WEEKLY_EUR_USD,
     'monthly': tuple((x * Decimal(52) / Decimal(12)).quantize(D_CENT, rounding=ROUND_UP)
-                     for x in DONATION_LIMITS_WEEKLY),
+                     for x in DONATION_LIMITS_WEEKLY_EUR_USD),
     'yearly': tuple((x * Decimal(52)).quantize(D_CENT)
-                    for x in DONATION_LIMITS_WEEKLY),
+                    for x in DONATION_LIMITS_WEEKLY_EUR_USD),
 }
-DONATION_WEEKLY_MIN, DONATION_WEEKLY_MAX = DONATION_LIMITS_WEEKLY
+DONATION_LIMITS = {
+    'EUR': {k: (Money(v[0], 'EUR'), Money(v[1], 'EUR')) for k, v in DONATION_LIMITS_EUR_USD.items()},
+    'USD': {k: (Money(v[0], 'USD'), Money(v[1], 'USD')) for k, v in DONATION_LIMITS_EUR_USD.items()},
+}
 
 DOMAIN_RE = re.compile(r'''
     ^
@@ -106,13 +118,33 @@ EVENTS = OrderedDict((e.name, e) for e in EVENTS)
 EVENTS_S = ' '.join(EVENTS.keys())
 
 # https://www.mangopay.com/pricing/
-FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), Decimal(0))  # 0.5%
-FEE_PAYIN_CARD = Fees(Decimal('0.018'), Decimal('0.18'))  # 1.8% + €0.18
-FEE_PAYIN_DIRECT_DEBIT = Fees(Decimal(0), Decimal('0.80'))  # €0.80
-FEE_PAYOUT = Fees(Decimal(0), Decimal(0))
-FEE_PAYOUT_OUTSIDE_SEPA = Fees(Decimal(0), Decimal('2.5'))
+SEPA = set("""
+    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
+    MC MT NL NO PL PT RO SE SI SK
+""".split())
+FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), 0)  # 0.5%
+FEE_PAYIN_CARD = {
+    'EUR': Fees(Decimal('0.018'), Money('0.18', 'EUR')),  # 1.8% + €0.18
+    'USD': Fees(Decimal('0.025'), Money('0.30', 'USD')),  # 2.5% + $0.30
+}
+FEE_PAYIN_DIRECT_DEBIT = {
+    'EUR': Fees(0, Money('0.80', 'EUR')),  # €0.80
+    'GBP': Fees(0, Money('0.80', 'GBP')),  # £0.80
+}
+FEE_PAYOUT = {
+    'EUR': {
+        'domestic': (SEPA, Fees(0, 0)),
+        'foreign': Fees(0, Money('2.50', 'EUR')),
+    },
+    'GBP': {
+        'domestic': ({'GB'}, Fees(0, Money('0.45', 'GBP'))),
+        'foreign': Fees(0, Money('1.90', 'GBP')),
+    },
+    'USD': {
+        '*': Fees(0, Money('3.00', 'USD')),
+    },
+}
 FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
-FEE_VAT = Decimal('0.17')  # 17% (Luxembourg rate)
 
 INVOICE_DOC_MAX_SIZE = 5000000
 INVOICE_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'png']
@@ -142,16 +174,16 @@ KYC_DOC_MAX_SIZE = 7000000
 KYC_DOC_MAX_SIZE_MB = int(KYC_DOC_MAX_SIZE / 1000000)
 KYC_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'gif', 'png']
 KYC_DOCS_EXTS_STR = ', '.join(KYC_DOCS_EXTS)
-KYC_INCOME_THRESHOLDS = (
+KYC_INCOME_THRESHOLDS = [(i, Money(a, 'EUR')) for i, a in (
     (1, 18000),
     (2, 30000),
     (3, 50000),
     (4, 80000),
     (5, 120000),
     (6, 120000),
-)
-KYC_PAYIN_YEARLY_THRESHOLD = Decimal('2500')
-KYC_PAYOUT_YEARLY_THRESHOLD = Decimal('1000')
+)]
+KYC_PAYIN_YEARLY_THRESHOLD = Money('2500', 'EUR')
+KYC_PAYOUT_YEARLY_THRESHOLD = Money('1000', 'EUR')
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
@@ -164,12 +196,29 @@ PARTICIPANT_KINDS = {
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
-PAYIN_BANK_WIRE_MIN = Decimal('2.00')  # fee ≈ 0.99%
-PAYIN_BANK_WIRE_TARGET = Decimal('5.00')  # fee ≈ 0.6%
-PAYIN_CARD_MIN = Decimal("15.00")  # fee ≈ 3.5%
-PAYIN_CARD_TARGET = Decimal("92.00")  # fee ≈ 2.33%
-PAYIN_DIRECT_DEBIT_MIN = Decimal('25.00')  # fee ≈ 3.6%
-PAYIN_DIRECT_DEBIT_TARGET = Decimal('99.00')  # fee ≈ 0.94%
+PAYIN_BANK_WIRE_MIN = {k: Money('2.00', k) for k in ('EUR', 'USD')}  # fee ≈ 0.99%
+PAYIN_BANK_WIRE_TARGET = {k: Money('5.00', k) for k in ('EUR', 'USD')}  # fee ≈ 0.6%
+PAYIN_BANK_WIRE_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
+PAYIN_CARD_MIN = {
+    'EUR': Money('15.00', 'EUR'),  # fee ≈ 3.5%
+    'USD': Money('20.00', 'USD'),  # fee ≈ 4.58%
+}
+PAYIN_CARD_TARGET = {
+    'EUR': Money('92.00', 'EUR'),  # fee ≈ 2.33%
+    'USD': Money('95.00', 'USD'),  # fee ≈ 3.27%
+}
+PAYIN_CARD_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
+PAYIN_DIRECT_DEBIT_MIN_EUR_GBP = Decimal('25.00')  # fee ≈ 3.6%
+PAYIN_DIRECT_DEBIT_MIN = {
+    'EUR': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'EUR'),
+    'GBP': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'GBP'),
+}
+PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP = Decimal('99.00')  # fee ≈ 0.94%
+PAYIN_DIRECT_DEBIT_TARGET = {
+    'EUR': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'EUR'),
+    'GBP': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'GBP'),
+}
+PAYIN_DIRECT_DEBIT_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
 
 PERIOD_CONVERSION_RATES = {
     'weekly': Decimal(1),
@@ -208,32 +257,31 @@ RATE_LIMITS = {
     'sign-up.ip-version': (15, 15*60),  # 15 per 15 minutes per IP version
 }
 
-SEPA = set("""
-    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
-    MC MT NL NO PL PT RO SE SI SK
-""".split())
-
 SESSION = str('session')  # bytes in python2, unicode in python3
 SESSION_REFRESH = timedelta(hours=1)
 SESSION_TIMEOUT = timedelta(hours=6)
 
 
-def make_standard_tip(label, weekly):
+def make_standard_tip(label, weekly, currency):
     return StandardTip(
         label,
-        weekly,
-        weekly / PERIOD_CONVERSION_RATES['monthly'],
-        weekly / PERIOD_CONVERSION_RATES['yearly'],
+        Money(weekly, currency),
+        Money(weekly / PERIOD_CONVERSION_RATES['monthly'], currency),
+        Money(weekly / PERIOD_CONVERSION_RATES['yearly'], currency),
     )
 
 
-STANDARD_TIPS = (
-    make_standard_tip(_("Symbolic"), Decimal('0.01')),
-    make_standard_tip(_("Small"), Decimal('0.25')),
-    make_standard_tip(_("Medium"), Decimal('1.00')),
-    make_standard_tip(_("Large"), Decimal('5.00')),
-    make_standard_tip(_("Maximum"), DONATION_WEEKLY_MAX),
+STANDARD_TIPS_EUR_USD = (
+    (_("Symbolic"), Decimal('0.01')),
+    (_("Small"), Decimal('0.25')),
+    (_("Medium"), Decimal('1.00')),
+    (_("Large"), Decimal('5.00')),
+    (_("Maximum"), DONATION_LIMITS_EUR_USD['weekly'][1]),
 )
+STANDARD_TIPS = {
+    'EUR': [make_standard_tip(label, weekly, 'EUR') for label, weekly in STANDARD_TIPS_EUR_USD],
+    'USD': [make_standard_tip(label, weekly, 'USD') for label, weekly in STANDARD_TIPS_EUR_USD],
+}
 
 SUMMARY_MAX_SIZE = 100
 

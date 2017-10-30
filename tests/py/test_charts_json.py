@@ -6,6 +6,7 @@ import json
 from pando.utils import utcnow
 
 from liberapay.billing.payday import Payday
+from liberapay.testing import EUR
 from liberapay.testing.mangopay import FakeTransfersHarness
 
 
@@ -25,8 +26,8 @@ class TestChartsJson(FakeTransfersHarness):
         self.make_exchange('mango-cc', 10, 0, self.bob)
         self.make_participant('notactive')
 
-        self.alice.set_tip_to(self.carl, '1.00')
-        self.bob.set_tip_to(self.carl, '2.00')
+        self.alice.set_tip_to(self.carl, EUR('1.00'))
+        self.bob.set_tip_to(self.carl, EUR('2.00'))
 
     def run_payday(self):
         Payday.start().run(recompute_stats=1)
@@ -46,8 +47,8 @@ class TestChartsJson(FakeTransfersHarness):
     def test_second_payday_comes_through(self):
         self.run_payday()   # first
 
-        self.alice.set_tip_to(self.carl, '5.00')
-        self.bob.set_tip_to(self.carl, '0.00')
+        self.alice.set_tip_to(self.carl, EUR('5.00'))
+        self.bob.set_tip_to(self.carl, EUR('0.00'))
 
         self.run_payday()   # second
 
@@ -63,12 +64,12 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()   # first
 
         # Oops! Sorry, Carl. :-(
-        self.alice.set_tip_to(self.carl, '0.00')
-        self.bob.set_tip_to(self.carl, '0.00')
+        self.alice.set_tip_to(self.carl, EUR('0.00'))
+        self.bob.set_tip_to(self.carl, EUR('0.00'))
         self.run_payday()   # second
 
         # Bouncing back ...
-        self.alice.set_tip_to(self.carl, '5.00')
+        self.alice.set_tip_to(self.carl, EUR('5.00'))
         self.run_payday()   # third
 
         expected = [
@@ -124,8 +125,8 @@ class TestChartsJson(FakeTransfersHarness):
         team = self.make_participant('team', kind='group')
         team.set_take_for(self.bob, 0.1, team)
         team.set_take_for(self.carl, 1, team)
-        self.alice.set_tip_to(team, '0.30')
-        self.bob.set_tip_to(team, '0.59')
+        self.alice.set_tip_to(team, EUR('0.30'))
+        self.bob.set_tip_to(team, EUR('0.59'))
 
         self.run_payday()
 

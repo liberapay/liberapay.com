@@ -90,7 +90,8 @@ def fake_tip(db, tipper, tippee):
     """Create a fake tip.
     """
     period = random.choice(DONATION_PERIODS)
-    periodic_amount = random_money_amount(*DONATION_LIMITS[period])
+    limits = [l.amount for l in DONATION_LIMITS['EUR'][period]]
+    periodic_amount = random_money_amount(*limits)
     amount = (periodic_amount * PERIOD_CONVERSION_RATES[period]).quantize(D_CENT)
     return _fake_thing(
         db,
@@ -222,7 +223,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
         tips.append(fake_tip(db, tipper, tippee))
 
     # Transfers
-    min_amount, max_amount = DONATION_LIMITS['weekly']
+    min_amount, max_amount = [l.amount for l in DONATION_LIMITS['EUR']['weekly']]
     transfers = []
     for i in range(num_transfers):
         tipper, tippee = random.sample(participants, 2)

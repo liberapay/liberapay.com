@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from dependency_injection import resolve_dependencies
 from pando import Response
 
-from .constants import DONATION_LIMITS, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
+from .constants import PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
 
 
 class Redirect(Exception):
@@ -202,13 +202,23 @@ del _
 
 class BadAmount(LazyResponse400):
     def msg(self, _):
-        period = self.args[1]
-        return _(BAD_AMOUNT_MESSAGES[period], self.args[0], *DONATION_LIMITS[period])
+        amount, period, limits = self.args
+        return _(BAD_AMOUNT_MESSAGES[period], amount, *limits)
 
 class UserDoesntAcceptTips(LazyResponseXXX):
     code = 403
     def msg(self, _):
         return _("The user {0} doesn't accept donations.", *self.args)
+
+class BadDonationCurrency(LazyResponseXXX):
+    code = 403
+    def msg(self, _):
+        tippee, rejected_currency = self.args
+        return _(
+            "Donations to {username} must be in {main_currency}, not {rejected_currency}.",
+            username=tippee.username, main_currency=tippee.main_currency,
+            rejected_currency=rejected_currency,
+        )
 
 
 class NonexistingElsewhere(LazyResponse400):

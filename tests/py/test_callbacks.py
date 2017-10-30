@@ -11,6 +11,7 @@ from liberapay.billing.payday import Payday
 from liberapay.billing.transactions import Money, record_exchange
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.csrf import CSRF_TOKEN
+from liberapay.testing import EUR
 from liberapay.testing.emails import EmailHarness
 from liberapay.testing.mangopay import fake_transfer, FakeTransfersHarness, MangopayHarness
 from liberapay.utils import utcnow
@@ -43,7 +44,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         payin = PayIn(tag=str(e_id))
         get_payin.return_value = payin
         # Transfer some of the money to homer
-        self.janet.set_tip_to(self.homer, D('3.68'))
+        self.janet.set_tip_to(self.homer, EUR('3.68'))
         Payday.start().run()
         # Withdraw some of the money
         self.make_exchange('mango-ba', D('-2.68'), 0, self.homer)
@@ -100,7 +101,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         payin = PayIn(tag=str(e_id))
         get_payin.return_value = payin
         # Transfer some of the money to homer
-        self.janet.set_tip_to(self.homer, D('3.68'))
+        self.janet.set_tip_to(self.homer, EUR('3.68'))
         Payday.start().run()
         # Withdraw some of the money
         self.make_exchange('mango-ba', D('-2.68'), 0, self.homer)
@@ -267,7 +268,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         )
         for status, result_code, error, fee in cases:
             status_up = status.upper()
-            homer.set_tip_to(self.janet, D('1.00'))
+            homer.set_tip_to(self.janet, EUR('1.00'))
             homer.close('downstream')
             assert homer.balance == 0
             assert homer.status == 'closed'

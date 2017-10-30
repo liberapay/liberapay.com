@@ -9,15 +9,11 @@ from liberapay.billing.fees import skim_amount, upcharge_card
 from liberapay.billing.transactions import (
     charge, record_exchange_result, repr_error,
 )
-from liberapay.constants import FEE_PAYIN_CARD, PAYIN_CARD_MIN, KYC_PAYIN_YEARLY_THRESHOLD
+from liberapay.constants import FEE_PAYIN_CARD, PAYIN_CARD_MIN
 from liberapay.exceptions import InvalidNumber, Redirect
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, get_participant, is_card_expired
 from liberapay.utils.i18n import Money
-
-PAYIN_CARD_MAX = skim_amount(KYC_PAYIN_YEARLY_THRESHOLD, FEE_PAYIN_CARD)[0]
-AMOUNT_MIN = Money(PAYIN_CARD_MIN, 'EUR')
-AMOUNT_MAX = Money(PAYIN_CARD_MAX, 'EUR')
 
 [---]
 
@@ -51,14 +47,19 @@ if card:
         card = None
 
 funded = float('inf')
+currency = request.qs.get('currency', currency)
+if currency not in PAYIN_CARD_MIN:
+    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
 donations = participant.get_giving_for_profile()[1]
 weekly = donations - participant.receiving
+amount_min = PAYIN_CARD_MIN[currency]
+amount_max = skim_amount(constants.PAYIN_CARD_MAX[currency], FEE_PAYIN_CARD[currency])[0]
 if weekly > 0:
     funded = participant.balance // weekly
-    min_weeks = (constants.PAYIN_CARD_MIN / weekly).to_integral_value(ROUND_UP)
+    min_weeks = (amount_min.amount / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
-        max(constants.PAYIN_CARD_TARGET // weekly, 52),
-        PAYIN_CARD_MAX // weekly
+        max(constants.PAYIN_CARD_TARGET[currency].amount // weekly, 52),
+        amount_max.amount // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
@@ -83,10 +84,11 @@ if request.method == 'POST':
         amount = D(amount)
     except (InvalidOperation, ValueError):
         raise InvalidNumber(amount)
-    if amount < AMOUNT_MIN.amount or amount > AMOUNT_MAX.amount:
+    amount = Money(amount, currency)
+    if amount < amount_min.amount or amount > amount_max.amount:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",
-            amount, AMOUNT_MIN, AMOUNT_MAX
+            amount, amount_min, amount_max
         ))
     return_url = website.canonical_url + request.path.raw
     try:
@@ -161,8 +163,7 @@ title = _("Adding Money")
     % if show_form
     <p>{{ _(
         "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
-        constants.FEE_PAYIN_CARD.var * (constants.FEE_VAT + 1) * 100,
-        Money(constants.FEE_PAYIN_CARD.fix * (constants.FEE_VAT + 1), 'EUR'),
+        *constants.FEE_PAYIN_CARD[currency].with_vat
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
@@ -174,16 +175,16 @@ title = _("Adding Money")
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_card(amount)
+            % set charge_amount, fees, vat = upcharge_card(Money(amount, 'EUR'))
             % set _months = weeks / D('4.33')
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">
             <label>
-                <input type="radio" name="amount" value="{{ amount }}" class="hidden-xs" />
+                <input type="radio" name="amount" value="{{ amount.amount }}" class="hidden-xs" />
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
                     "{0} ({2}% fee included)",
-                    Money(charge_amount, 'EUR'),
+                    charge_amount,
                     None,
                     (fees / charge_amount * 100).quantize(constants.D_CENT),
                 ) }}</h5>

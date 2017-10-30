@@ -10,7 +10,6 @@ from mangopay.resources import (
     SettlementTransfer, Transfer, User, Wallet,
 )
 from mangopay.utils import Money
-from pando.utils import typecheck
 
 from liberapay.billing.fees import (
     skim_bank_wire, skim_credit, upcharge_card, upcharge_direct_debit
@@ -84,6 +83,7 @@ def payout(db, route, amount, ignore_high_fee=False):
     ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
 
     # Do final calculations
+    amount = Money(amount, 'EUR') if isinstance(amount, Decimal) else amount
     credit_amount, fee, vat = skim_credit(amount, ba)
     if credit_amount <= 0 and fee > 0:
         raise FeeExceedsAmount
@@ -95,9 +95,9 @@ def payout(db, route, amount, ignore_high_fee=False):
     e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre').id
     payout = BankWirePayOut()
     payout.AuthorId = participant.mangopay_user_id
-    payout.DebitedFunds = Money(int(amount * 100), 'EUR')
+    payout.DebitedFunds = amount.int()
     payout.DebitedWalletId = participant.mangopay_wallet_id
-    payout.Fees = Money(int(fee * 100), 'EUR')
+    payout.Fees = fee.int()
     payout.BankAccountId = route.address
     payout.BankWireRef = str(e_id)
     payout.Tag = str(e_id)
@@ -119,12 +119,13 @@ def charge(db, route, amount, return_url):
     and add it to amount to end up with charge_amount.
 
     """
-    typecheck(amount, Decimal)
+    assert isinstance(amount, (Decimal, Money)), type(amount)
     assert route
     assert route.network == 'mango-cc'
 
     participant = route.participant
 
+    amount = Money(amount, 'EUR') if isinstance(amount, Decimal) else amount
     charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee
 
@@ -135,10 +136,10 @@ def charge(db, route, amount, return_url):
     payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = participant.mangopay_wallet_id
-    payin.DebitedFunds = Money(int(charge_amount * 100), 'EUR')
+    payin.DebitedFunds = charge_amount.int()
     payin.CardId = route.address
     payin.SecureModeReturnURL = return_url
-    payin.Fees = Money(int(fee * 100), 'EUR')
+    payin.Fees = fee.int()
     payin.Tag = str(e_id)
     try:
         test_hook()
@@ -158,12 +159,13 @@ def charge(db, route, amount, return_url):
 def prepare_direct_debit(db, route, amount):
     """Prepare to debit a bank account.
     """
-    typecheck(amount, Decimal)
+    assert isinstance(amount, (Decimal, Money)), type(amount)
 
     assert route.network == 'mango-ba'
 
     participant = route.participant
 
+    amount = Money(amount, 'EUR') if isinstance(amount, Decimal) else amount
     debit_amount, fee, vat = upcharge_direct_debit(amount)
     amount = debit_amount - fee
 
@@ -197,16 +199,16 @@ def execute_direct_debit(db, exchange, route):
 
     assert exchange.status == 'pre'
 
-    amount, fee = exchange.amount, exchange.fee
+    amount, fee = Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')
     debit_amount = amount + fee
 
     e_id = exchange.id
     payin = DirectDebitDirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = participant.mangopay_wallet_id
-    payin.DebitedFunds = Money(int(debit_amount * 100), 'EUR')
+    payin.DebitedFunds = debit_amount.int()
     payin.MandateId = route.mandate
-    payin.Fees = Money(int(fee * 100), 'EUR')
+    payin.Fees = fee.int()
     payin.Tag = str(e_id)
     try:
         test_hook()
@@ -229,6 +231,8 @@ def payin_bank_wire(db, participant, debit_amount):
 
     route = ExchangeRoute.upsert_bankwire_route(participant)
 
+    if not isinstance(debit_amount, Money):
+        debit_amount = Money(debit_amount, 'EUR')
     amount, fee, vat = skim_bank_wire(debit_amount)
 
     if not participant.mangopay_wallet_id:
@@ -238,8 +242,8 @@ def payin_bank_wire(db, participant, debit_amount):
     payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = participant.mangopay_wallet_id
-    payin.DeclaredDebitedFunds = Money(int(debit_amount * 100), 'EUR')
-    payin.DeclaredFees = Money(int(fee * 100), 'EUR')
+    payin.DeclaredDebitedFunds = debit_amount.int()
+    payin.DeclaredFees = fee.int()
     payin.Tag = str(e_id)
     try:
         test_hook()
@@ -258,19 +262,20 @@ def record_unexpected_payin(db, payin):
     """Record an unexpected bank wire payin.
     """
     assert payin.PaymentType == 'BANK_WIRE'
-    amount = Decimal(payin.DebitedFunds.Amount) / Decimal(100)
-    paid_fee = Decimal(payin.Fees.Amount) / Decimal(100)
-    vat = skim_bank_wire(amount)[2]
+    debited_amount = payin.DebitedFunds / Decimal(100)
+    paid_fee = payin.Fees / Decimal(100)
+    vat = skim_bank_wire(debited_amount)[2].amount
     wallet_id = payin.CreditedWalletId
     participant = Participant.from_mangopay_user_id(payin.AuthorId)
     assert participant.mangopay_wallet_id == wallet_id
     route = ExchangeRoute.upsert_bankwire_route(participant)
+    amount = (debited_amount - paid_fee).amount
     return db.one("""
         INSERT INTO exchanges
                (amount, fee, vat, participant, status, route, note, remote_id, wallet_id)
         VALUES (%s, %s, %s, %s, 'created', %s, NULL, %s, %s)
      RETURNING id
-    """, (amount, paid_fee, vat, participant.id, route.id, payin.Id, wallet_id))
+    """, (amount, paid_fee.amount, vat, participant.id, route.id, payin.Id, wallet_id))
 
 
 def record_payout_refund(db, payout_refund):
@@ -313,6 +318,10 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
     assert status.startswith('pre')
     if participant.is_suspended:
         raise AccountSuspended()
+
+    amount = getattr(amount, 'amount', amount)
+    fee = getattr(fee, 'amount', fee)
+    vat = getattr(vat, 'amount', vat)
 
     with db.get_cursor() as cursor:
 

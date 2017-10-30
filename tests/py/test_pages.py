@@ -3,7 +3,6 @@
 from __future__ import print_function, unicode_literals
 
 from collections import OrderedDict
-from decimal import Decimal as D
 import os
 import re
 
@@ -13,6 +12,7 @@ import pytest
 
 from liberapay.billing.payday import Payday
 from liberapay.constants import SESSION
+from liberapay.testing import EUR
 from liberapay.testing.mangopay import MangopayHarness
 from liberapay.utils import b64encode_s, find_files
 from liberapay.wireup import NoDB
@@ -105,8 +105,8 @@ class TestPages(BrowseTestHarness):
     def test_active_participant_can_browse(self):
         self.browse_setup()
         bob = self.make_participant('bob', balance=50)
-        bob.set_tip_to(self.david, D('1.00'))
-        self.david.set_tip_to(bob, D('0.50'))
+        bob.set_tip_to(self.david, EUR('1.00'))
+        self.david.set_tip_to(bob, EUR('0.50'))
         self.browse(auth_as=self.david)
 
     def test_homepage_in_all_supported_langs(self):
@@ -194,7 +194,7 @@ class TestPages(BrowseTestHarness):
     def test_giving_page(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
-        alice.set_tip_to(bob, "1.00")
+        alice.set_tip_to(bob, EUR('1.00'))
         actual = self.client.GET("/alice/giving/", auth_as=alice).text
         expected = "bob"
         assert expected in actual
@@ -202,7 +202,7 @@ class TestPages(BrowseTestHarness):
     def test_giving_page_shows_pledges(self):
         alice = self.make_participant('alice')
         emma = self.make_elsewhere('github', 58946, 'emma').participant
-        alice.set_tip_to(emma, "1.00")
+        alice.set_tip_to(emma, EUR('1.00'))
         actual = self.client.GET("/alice/giving/", auth_as=alice).text
         expected1 = "emma"
         expected2 = "Pledges"
@@ -212,8 +212,8 @@ class TestPages(BrowseTestHarness):
     def test_giving_page_shows_cancelled(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
-        alice.set_tip_to(bob, "1.00")
-        alice.set_tip_to(bob, "0.00")
+        alice.set_tip_to(bob, EUR('1.00'))
+        alice.set_tip_to(bob, EUR('0.00'))
         actual = self.client.GET("/alice/giving/", auth_as=alice).text
         assert "bob" in actual
         assert "Cancelled" in actual

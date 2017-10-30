@@ -7,7 +7,7 @@ import mock
 
 from liberapay.elsewhere._base import UserInfo
 from liberapay.models.account_elsewhere import AccountElsewhere
-from liberapay.testing import Harness
+from liberapay.testing import EUR, Harness
 import liberapay.testing.elsewhere as user_info_examples
 from liberapay.utils import b64encode_s
 
@@ -117,7 +117,7 @@ class TestElsewhere(Harness):
         alice = self.make_elsewhere('github', 1, 'alice').participant
         bob = self.make_participant('bob', balance=100)
         amount = D('14.97')
-        bob.set_tip_to(alice, amount)
+        bob.set_tip_to(alice, EUR(amount))
         assert alice.receiving == amount
         r = self.client.GET('/on/github/alice/')
         assert str(amount) in r.text, r.text
