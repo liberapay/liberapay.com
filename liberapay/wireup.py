@@ -234,9 +234,9 @@ def app_conf(db):
     return {'app_conf': app_conf}
 
 
-def trusted_proxies(app_conf, env):
+def trusted_proxies(app_conf, env, tell_sentry):
     if not app_conf:
-        return
+        return {'trusted_proxies': []}
     def parse_network(net):
         if net == 'private':
             return [net]
@@ -255,10 +255,14 @@ def trusted_proxies(app_conf, env):
                 return [ip_network(x) for x in f.read().decode('ascii').strip().split()]
         else:
             return [ip_network(net)]
-    return {'trusted_proxies': [
-        sum((parse_network(net) for net in networks), [])
-        for networks in (app_conf.trusted_proxies or ())
-    ]}
+    try:
+        return {'trusted_proxies': [
+            sum((parse_network(net) for net in networks), [])
+            for networks in (app_conf.trusted_proxies or ())
+        ]}
+    except Exception as e:
+        tell_sentry(e, {})
+        return {'trusted_proxies': []}
 
 
 def mail(app_conf, project_root='.'):
