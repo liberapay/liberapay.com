@@ -211,7 +211,7 @@ title = _("Adding Money")
                     "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
                 ) }}</h5>
                 <div class="input-group">
-                    <div class="input-group-addon">€</div>
+                    <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
                     <input class="form-control amount" name="amount_custom" placeholder="{{ _('Amount') }}" />
                 </div>
                 </div>

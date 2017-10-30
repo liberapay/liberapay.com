@@ -151,7 +151,7 @@ title = _("Withdrawing Money")
         <div class="input-group">
             <input name="amount" value="{{ format_decimal(recommended_withdrawal) }}"
                    class="form-control" size=6 required />
-            <div class="input-group-addon">€</div>
+            <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
         </div>
     </fieldset>
 
