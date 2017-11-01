@@ -25,9 +25,6 @@ msgstr "Iu volas donaci al vi en Liberapay, sed vi bezonas plenigi la identeco f
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Se vi ne deziras ricevi donacojn en Liberapay, vi povas malakcepti ilin ŝanĝante vian profilon laŭe."
 
-msgid "Edit your profile"
-msgstr "Ŝanĝi vian profilon"
-
 #, fuzzy, python-brace-format
 msgid "You have received {0} this week"
 msgstr "Vi ricevis {0} ĉi-semajne"
@@ -164,10 +161,7 @@ msgstr "La banko drato al via Liberapay monujo sukcesis"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr ""
-"Ni estas feliĉaj raporti ke la delokigo el via bankkonto sukcesis. El la {0} "
-"kiu vi sendis, {1} iris en via Liberapay monujo kaj {2} estis pagitaj en "
-"peradkostoj."
+msgstr "Ni estas feliĉaj raporti ke la delokigo el via bankkonto sukcesis. El la {0} kiu vi sendis, {1} iris en via Liberapay monujo kaj {2} estis pagitaj en peradkostoj."
 
 msgid "View receipt"
 msgstr "Vido kvitanco"
@@ -393,19 +387,11 @@ msgid "The username '{0}' is restricted."
 msgstr "La salutnomo '{0}' estas limigita."
 
 #, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr "La salutnomo '{0}' estas jam prenita."
-
-#, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
 msgstr ""
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr ""
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} estas jam konektita al malsama Liberapay konto."
 
 msgid "You cannot remove your primary email address."
 msgstr "Vi ne povas forigi vian primaran retadreson."
@@ -467,6 +453,10 @@ msgstr "'{0}' estas nevalida jara donaco (min = {1}, maks={2})"
 #, python-brace-format
 msgid "The user {0} doesn't accept donations."
 msgstr "La uzanto {0} ne akceptas donacojn."
+
+#, python-brace-format
+msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
+msgstr ""
 
 msgid "There isn't enough money in your wallet."
 msgstr "Ekzistas ne sufiĉe da mono en via monujo."
@@ -988,9 +978,7 @@ msgid "Last"
 msgstr "Lastaj"
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr ""
-"Agordinte pasvorton vi povos ensaluti rekte, anstataŭ atendi ligilo sendita "
-"per retpoŝto. Memoru, ke Liberapay estas mona servo, uzu fortikan pasvorton!"
+msgstr "Agordinte pasvorton vi povos ensaluti rekte, anstataŭ atendi ligilo sendita per retpoŝto. Memoru, ke Liberapay estas mona servo, uzu fortikan pasvorton!"
 
 msgid "Current password"
 msgstr "Aktuala pasvorto"
@@ -1542,9 +1530,6 @@ msgstr "Liberapay ne prenos tranĉo de pagoj kaj nur financita de la donacoj al 
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
 msgstr "Konstrui Liberapay estas multa laboro, kaj ne ankoraŭ estas multe por fari, sed niaj programistoj, tradukantoj, kaj aliaj kontribuantoj estas severe underpaid, kaj ĝin desaceleración nia progreso."
 
-msgid "Donations"
-msgstr "Donacaji"
-
 msgid "Recipient"
 msgstr "Ricevanto"
 
@@ -1633,9 +1618,7 @@ msgid "{0} receives {1} per week"
 msgstr "{0} ricevas {1} semajne"
 
 msgid "You can't receive money until you've filled the identity form in your account settings."
-msgstr ""
-"Vi ne povas ricevi monon ĝis vi plenigas la identecon formularon en via "
-"konto agordoj."
+msgstr "Vi ne povas ricevi monon ĝis vi plenigas la identecon formularon en via konto agordoj."
 
 #, python-brace-format
 msgid "You are not a member of the {0} team."
@@ -2008,10 +1991,7 @@ msgid "We may give your username to someone else if they ask for it, but not for
 msgstr "Ni povas doni vian salutnomon al iu alia se ili demandas ĝin, sed ne por almenaŭ jaro post vi fermas vian konton (krom se ni determinas ke vi estis malobservanta varmarkon)."
 
 msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr ""
-"Ni ne viŝos vian retpoŝtadreson kaj pasvorton tuj, do dum momento vi povos "
-"remalfermi vian konton simple ensalutante, ĝis via konto estos definitive "
-"arkivita."
+msgstr "Ni ne viŝos vian retpoŝtadreson kaj pasvorton tuj, do dum momento vi povos remalfermi vian konton simple ensalutante, ĝis via konto estos definitive arkivita."
 
 msgid "Ready?"
 msgstr "Preta ?"
@@ -2235,10 +2215,13 @@ msgstr "Facila kaj tuja"
 msgid "Fees: {0}% + {1}"
 msgstr "Peradkostoj: {0}% + {1}"
 
-msgid "To a Euro account"
-msgstr "Al Eŭro konton"
+msgid "To an account in Europe"
+msgstr ""
 
 msgid "Cheapest for small amounts¹"
+msgstr ""
+
+msgid "Cheaper¹ but cumbersome"
 msgstr ""
 
 #, python-brace-format
@@ -2257,9 +2240,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr ""
-"La peradkostoj estas tiuj de niaj provizantoj de pagservoj, Librapay estas "
-"nur financita per la donacoj al {0}lia propra konto{1}."
+msgstr "La peradkostoj estas tiuj de niaj provizantoj de pagservoj, Librapay estas nur financita per la donacoj al {0}lia propra konto{1}."
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr ""
@@ -2307,8 +2288,7 @@ msgid "Email me this information"
 msgstr "Sendu tiu ĉi informo al mi retletere"
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr ""
-"Ni sendos al vi retleteron kiam ni scios ĉu via pago sukcesis aŭ malsukcesis."
+msgstr "Ni sendos al vi retleteron kiam ni scios ĉu via pago sukcesis aŭ malsukcesis."
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "Vi malebligis kelkajn aŭ ĉiujn retpoŝto sciigoj pri banko dratoj."
@@ -2321,9 +2301,7 @@ msgstr "Peto en progreso, bonvolu atendi …"
 
 #, fuzzy, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr ""
-"Aldoni monon al Liberapay per banko delokigo kaŭzas peradkosto de {0}% pro "
-"nia provizanto de pagservoj."
+msgstr "Aldoni monon al Liberapay per banko delokigo kaŭzas peradkosto de {0}% pro nia provizanto de pagservoj."
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr ""
@@ -2354,14 +2332,9 @@ msgstr[1] ""
 msgid "Custom amount (min={0}, max={1})"
 msgstr ""
 
-msgid "Proceed"
-msgstr ""
-
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
-"{0} estis prenita el via kreditkarto, {1} iris al via Liberapay monujo, {2} "
-"estis pagitaj en transakcio peradkostoj."
+msgstr "{0} estis prenita el via kreditkarto, {1} iris al via Liberapay monujo, {2} estis pagitaj en transakcio peradkostoj."
 
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
@@ -2465,9 +2438,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
-msgstr ""
-"{0} estis prenita el via Liberapay monujo. Se la delokigo estas sukcesa {1} "
-"surteriĝos en via bankkonto kaj {2} estos pagita en peradkostoj."
+msgstr "{0} estis prenita el via Liberapay monujo. Se la delokigo estas sukcesa {1} surteriĝos en via bankkonto kaj {2} estos pagita en peradkostoj."
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
@@ -2486,7 +2457,7 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr "Ni kvarantenas monon por {0} protekti nin kontraŭ kreditkarto fraŭdo, pardonon pro la ĝeno."
 
 #, python-brace-format
-msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer. Additional fee from your bank may apply."
+msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
 msgstr ""
 
 #, python-brace-format
@@ -2627,9 +2598,7 @@ msgstr "Liberapay estas desegnita por longdaŭra stabila financado kaj nur subte
 
 #, fuzzy
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
-msgstr ""
-"Kio estas la diferencoj inter Liberapay kaj aliaj recurrentes crowdfunding "
-"platformoj kiel Patreon ?"
+msgstr "Kio estas la diferencoj inter Liberapay kaj aliaj recurrentes crowdfunding platformoj kiel Patreon ?"
 
 msgid "Liberapay is only for donations, meaning that transactions must not be linked to a contract nor a promise of recompense."
 msgstr "Liberapay estas nur por donacoj, signifante ke transakcioj ne devas esti ligitaj al kontrakto nek promeso de rekompenco."
@@ -2654,12 +2623,27 @@ msgstr ""
 msgid "What are the payment processing fees?"
 msgstr "Kio estas la peradkostoj de la provizanto de pagservoj?"
 
+msgid "The fees depend on the payment method as well as the currency."
+msgstr ""
+
+msgid "When adding money into Liberapay the fees are:"
+msgstr ""
+
 #, python-brace-format
-msgid ""
-"Adding money to Liberapay incurs a fee of:\n"
-"• {0}% + {1} when the payment method is a credit or debit card;\n"
-"• {2}% when it's a bank wire;\n"
-"• {3} when it's a direct debit."
+msgid "{0}% + {1}"
+msgstr ""
+
+msgid "Bank wire"
+msgstr ""
+
+#, python-brace-format
+msgid "{0}%"
+msgstr ""
+
+msgid "Direct debit"
+msgstr ""
+
+msgid "not supported"
 msgstr ""
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
@@ -2677,11 +2661,7 @@ msgstr "Estas neniuj restriktoj pri la totala kvanto ke vi povas doni aŭ ricevi
 
 #, fuzzy, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr ""
-"La minimumo vi povas doni ajnan uzanton estas {0}. Por minimumigi "
-"prilaborado peradkostoj, ni ordonas via kreditkarto almenaŭ {1} je fojo (la "
-"mono estas stokita en via Liberapay monujo kaj delokigita al aliaj dum "
-"Payday)."
+msgstr "La minimumo vi povas doni ajnan uzanton estas {0}. Por minimumigi prilaborado peradkostoj, ni ordonas via kreditkarto almenaŭ {1} je fojo (la mono estas stokita en via Liberapay monujo kaj delokigita al aliaj dum Payday)."
 
 #, fuzzy, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
@@ -2725,11 +2705,7 @@ msgstr "Donacoj estas publikaj. Defaŭlte, la totala kvanto vi doni kaj la total
 
 #, fuzzy, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. So, recipients get the full value of the donations, but there are {2}payment processing fees{0} when moving money in or out of Liberapay."
-msgstr ""
-"Liberapay ne prenas tranĉo de pagoj, la servo estas financita de la donacoj "
-"al {1} lia propra konto {0}. Do, ricevantoj akiri la plenan valoron de la "
-"donacoj, sed estas {2} pagservo prilaborado peradkostoj {0} movinte monon en "
-"aŭ ekster Liberapay."
+msgstr "Liberapay ne prenas tranĉo de pagoj, la servo estas financita de la donacoj al {1} lia propra konto {0}. Do, ricevantoj akiri la plenan valoron de la donacoj, sed estas {2} pagservo prilaborado peradkostoj {0} movinte monon en aŭ ekster Liberapay."
 
 #, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
@@ -3297,6 +3273,166 @@ msgid "Follow us"
 msgstr "Sekvu nin"
 
 msgid "Log In"
+msgstr ""
+
+#, python-brace-format
+msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
+msgstr ""
+
+msgid "Migrating from Gratipay"
+msgstr ""
+
+#, python-brace-format
+msgid "Welcome, {username}!"
+msgstr ""
+
+#, python-brace-format
+msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
+msgstr ""
+
+#, python-brace-format
+msgid "Here is an overview of what we will import from {platform}:"
+msgstr ""
+
+msgid "basic account data (username, avatar, some privacy settings, etc)"
+msgstr ""
+
+msgid "profile descriptions"
+msgstr ""
+
+msgid "teams (we will create them for you)"
+msgstr ""
+
+msgid "ongoing donations (if the donee hasn't joined Liberapay yet a pledge will be created instead)"
+msgstr ""
+
+#, python-brace-format
+msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)"
+msgstr ""
+
+#, python-brace-format
+msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
+msgstr ""
+
+msgid "and what we cannot import:"
+msgstr ""
+
+msgid "any saved credit card number"
+msgstr ""
+
+msgid "any money currently in the account"
+msgstr ""
+
+msgid "the account's history (ledger, etc)"
+msgstr ""
+
+msgid "any paypal address (our payment processor doesn't support paypal yet)"
+msgstr ""
+
+msgid "Proceed"
+msgstr ""
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr "La salutnomo '{0}' estas jam prenita."
+
+msgid "Does this existing account belong to you?"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr "{0} estas jam konektita al malsama Liberapay konto."
+
+msgid "If this address belongs to you please log in before continuing:"
+msgstr ""
+
+msgid "Otherwise please input an email address which does belong to you:"
+msgstr ""
+
+#, python-brace-format
+msgid "The data import from {platform} has been successfully completed."
+msgstr ""
+
+#, python-brace-format
+msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
+msgstr ""
+
+#, python-brace-format
+msgid "{n} profile statement was imported."
+msgid_plural "{n} profile statements were imported."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} elsewhere account was imported:"
+msgid_plural "{n} elsewhere accounts were imported:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
+msgstr ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
+msgstr ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
+msgstr ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
+msgstr ""
+
+msgid "Edit your profile"
+msgstr "Ŝanĝi vian profilon"
+
+msgid "Manage this team"
+msgstr ""
+
+#, python-brace-format
+msgid "This team was not recreated because an account named \"{0}\" already exists."
+msgstr ""
+
+msgid "No teams were imported."
+msgstr ""
+
+msgid "Donations"
+msgstr "Donacaji"
+
+#, python-brace-format
+msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
+msgstr ""
+
+msgid "Manage your donations"
+msgstr ""
+
+msgid "Email addresses"
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} has been linked to your Liberapay account."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} was already linked to your account."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} could not be linked to your account because it was already connected to another account."
 msgstr ""
 
 #, python-brace-format

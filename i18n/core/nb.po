@@ -23,9 +23,6 @@ msgstr "Noen vil donere til deg på Liberapay, men du er nødt til å fylle ut i
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Hvis du ikke vil motta donasjoner via Liberapay kan du avvise dem i innstillingene på profilen din."
 
-msgid "Edit your profile"
-msgstr "Rediger profilen din"
-
 #, python-brace-format
 msgid "You have received {0} this week"
 msgstr "Du har mottatt {0} denne uken"
@@ -387,21 +384,11 @@ msgid "The username '{0}' is restricted."
 msgstr "Brukernavnet \"{0}\" er ikke tillatt."
 
 #, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr "Brukernavnet \"{0}\" er allerede i bruk."
-
-#, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
 msgstr "Brukernavnet\"{0}\" starter med et forbudt tegn."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
-msgstr ""
-"Du har endret brukernavnet ditt mange ganger i det siste. Vær vennlig og "
-"prøv igjen om en ukes tid, eller kontakt support@liberapay.com."
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} er allerede knyttet til en annen Liberapay-konto."
+msgstr "Du har endret brukernavnet ditt mange ganger i det siste. Vær vennlig og prøv igjen om en ukes tid, eller kontakt support@liberapay.com."
 
 msgid "You cannot remove your primary email address."
 msgstr "Du kan ikke fjerne den primære e-postadressen din."
@@ -426,27 +413,16 @@ msgid "A verification email has already been sent to {email_address} recently."
 msgstr "Det ble nylig sendt en e-post om verifisering til {email_address}."
 
 msgid "You are not allowed to add another email address right now, please try again in a few days."
-msgstr ""
-"Du kan ikke legge til en ny e-postadresse akkurat nå. Prøv igjen om et par "
-"dager."
+msgstr "Du kan ikke legge til en ny e-postadresse akkurat nå. Prøv igjen om et par dager."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
-msgstr ""
-"Du har nådd den daglige grensen for innlogginger via e-post . Prøv igjen i "
-"morgen eller kontakt support@liberapay.com."
+msgstr "Du har nådd den daglige grensen for innlogginger via e-post . Prøv igjen i morgen eller kontakt support@liberapay.com."
 
 msgid "There have been too many attempts to log in to this account recently, please try again in a few hours or log in via email."
-msgstr ""
-"Det har vært for mange innloggingsforsøk på denne kontoen i det siste. Prøv "
-"igjen om et par timer eller logg inn via e-post."
+msgstr "Det har vært for mange innloggingsforsøk på denne kontoen i det siste. Prøv igjen om et par timer eller logg inn via e-post."
 
 msgid "Too many accounts have been created recently. This either means that a lot of people are trying to join Liberapay today, or that an attacker is trying to overload our system. As a result we have to ask you to come back later (e.g. in a few hours), or send an email to support@liberapay.com. We apologize for the inconvenience."
-msgstr ""
-"Det har blitt åpnet for mange kontoer i det siste. Dette betyr enten at "
-"mange personer prøver å bli medlem på Liberapay i dag, eller at noen prøver "
-"å angripe systemet vårt. Derfor må vi be seg om å komme tilbake senere, "
-"kanskje om et par timer, eller sende en e-post til support@liberapay.com. Vi "
-"beklager det inntrufne."
+msgstr "Det har blitt åpnet for mange kontoer i det siste. Dette betyr enten at mange personer prøver å bli medlem på Liberapay i dag, eller at noen prøver å angripe systemet vårt. Derfor må vi be seg om å komme tilbake senere, kanskje om et par timer, eller sende en e-post til support@liberapay.com. Vi beklager det inntrufne."
 
 #, python-brace-format
 msgid "The password must be at least {0} and at most {1} characters long."
@@ -475,6 +451,10 @@ msgstr "'{0}' er ikke et gyldig årlig donasjonsbeløp (min={1}, max={2})"
 msgid "The user {0} doesn't accept donations."
 msgstr "{0} tar ikke imot donasjoner."
 
+#, python-brace-format
+msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
+msgstr ""
+
 msgid "There isn't enough money in your wallet."
 msgstr "Det er ikke nok penger i lommeboken din."
 
@@ -486,9 +466,7 @@ msgid "The transaction's fee would exceed its amount."
 msgstr "Overføringsgebyret vil overstige beløpet."
 
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
-msgstr ""
-"Beklager, men akkurat nå er det lønningsdag hos oss, og vi kan ikke gjøre "
-"utbetalinger mens det foregår. Kom tilbake om et par timer."
+msgstr "Beklager, men akkurat nå er det lønningsdag hos oss, og vi kan ikke gjøre utbetalinger mens det foregår. Kom tilbake om et par timer."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -504,9 +482,7 @@ msgstr "\"{0}\" er ikke et gyldig navn på et fellesskap."
 
 #, python-brace-format
 msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr ""
-"Overføringen av pengene var dessverre mislykket. Ta kontakt med support@"
-"liberapay.com hvis problemet forsetter. Feilmelding: {0}"
+msgstr "Overføringen av pengene var dessverre mislykket. Ta kontakt med support@liberapay.com hvis problemet forsetter. Feilmelding: {0}"
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Du kan ikke gjøre dette, for kontoen din er suspendert inntil videre."
@@ -528,8 +504,7 @@ msgstr "\"{0}\" er ikke en gyldig e-postadresse."
 
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
-msgstr ""
-"{0} er knyttet til en team-konto. Det er ikke mulig å logge inn som et team."
+msgstr "{0} er knyttet til en team-konto. Det er ikke mulig å logge inn som et team."
 
 #, python-brace-format
 msgid "We didn't find any account whose primary email address is {0}."
@@ -560,10 +535,7 @@ msgid "Gateway Timeout"
 msgstr "Gateway timeout"
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
-msgstr ""
-"Behandlingen av forespørselen din slo feil, for serveren vår klarte ikke å "
-"kommunisere med en tjeneste på en annen maskin. Dette er et midlertidig "
-"problem, så prøv igjen senere."
+msgstr "Behandlingen av forespørselen din slo feil, for serveren vår klarte ikke å kommunisere med en tjeneste på en annen maskin. Dette er et midlertidig problem, så prøv igjen senere."
 
 msgid "This account is closed"
 msgstr "Dette kontoen er stengt"
@@ -578,9 +550,7 @@ msgid "Log in"
 msgstr "Logg inn"
 
 msgid "You need an account for this. Please fill one of the forms below."
-msgstr ""
-"Du trenger en konto for å gjøre dette. Vær vennlig og fyll inn skjemaene "
-"under."
+msgstr "Du trenger en konto for å gjøre dette. Vær vennlig og fyll inn skjemaene under."
 
 msgid "Create an account"
 msgstr "Opprett en konto"
@@ -1265,9 +1235,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr ""
-"{0} mottar {1} i uken, og trenger din hjelp for å nå finansieringsmålet sitt "
-"({2} i uken)."
+msgstr "{0} mottar {1} i uken, og trenger din hjelp for å nå finansieringsmålet sitt ({2} i uken)."
 
 msgid "Be the first to contribute!"
 msgstr ""
@@ -1316,8 +1284,7 @@ msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr ""
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
-msgstr ""
-"Jeg er takknemlig for gaver, men har ikke noe spesifikt finansieringsmål."
+msgstr "Jeg er takknemlig for gaver, men har ikke noe spesifikt finansieringsmål."
 
 msgid "I'm here as a patron."
 msgstr ""
@@ -1330,8 +1297,7 @@ msgid "My goal is to receive {0}"
 msgstr "Mitt mål er å motta {0}"
 
 msgid "We're grateful for gifts, but don't have a specific funding goal."
-msgstr ""
-"Vi er takknemlige for gaver, men har ikke noe spesifikt finansieringsmål."
+msgstr "Vi er takknemlige for gaver, men har ikke noe spesifikt finansieringsmål."
 
 msgid "We're here as a patron."
 msgstr ""
@@ -1537,9 +1503,6 @@ msgid "Liberapay does not take a cut of payments and is only funded by the donat
 msgstr ""
 
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr ""
-
-msgid "Donations"
 msgstr ""
 
 msgid "Recipient"
@@ -2210,10 +2173,13 @@ msgstr ""
 msgid "Fees: {0}% + {1}"
 msgstr ""
 
-msgid "To a Euro account"
+msgid "To an account in Europe"
 msgstr ""
 
 msgid "Cheapest for small amounts¹"
+msgstr ""
+
+msgid "Cheaper¹ but cumbersome"
 msgstr ""
 
 #, python-brace-format
@@ -2322,9 +2288,6 @@ msgstr[1] ""
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
-msgstr ""
-
-msgid "Proceed"
 msgstr ""
 
 #, python-brace-format
@@ -2451,7 +2414,7 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr ""
 
 #, python-brace-format
-msgid "Withdrawing money to a SEPA bank account is free, transfers to other countries cost {0} per transfer. Additional fee from your bank may apply."
+msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
 msgstr ""
 
 #, python-brace-format
@@ -2611,12 +2574,27 @@ msgstr ""
 msgid "What are the payment processing fees?"
 msgstr ""
 
+msgid "The fees depend on the payment method as well as the currency."
+msgstr ""
+
+msgid "When adding money into Liberapay the fees are:"
+msgstr ""
+
 #, python-brace-format
-msgid ""
-"Adding money to Liberapay incurs a fee of:\n"
-"• {0}% + {1} when the payment method is a credit or debit card;\n"
-"• {2}% when it's a bank wire;\n"
-"• {3} when it's a direct debit."
+msgid "{0}% + {1}"
+msgstr ""
+
+msgid "Bank wire"
+msgstr ""
+
+#, python-brace-format
+msgid "{0}%"
+msgstr ""
+
+msgid "Direct debit"
+msgstr ""
+
+msgid "not supported"
 msgstr ""
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
@@ -2650,26 +2628,20 @@ msgid "Are donations through Liberapay tax-deductible?"
 msgstr ""
 
 msgid "Probably not, but it depends on the tax rules of your country."
-msgstr ""
-"Antakeligvis ikke, men det kommer an på skattelovgivningen i landet ditt."
+msgstr "Antakeligvis ikke, men det kommer an på skattelovgivningen i landet ditt."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Du kan få oppdateringer fra oss på følgende sosiale medier:"
 
 #, python-brace-format
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
-msgstr ""
-"Du kan også følge med på {1}utviklingen av Liberapays programvare{0}, {2}"
-"eventyrene til Liberapays juridiske avdeling{0}, og {3}generelle diskusjoner "
-"hos Liberapays team{0}."
+msgstr "Du kan også følge med på {1}utviklingen av Liberapays programvare{0}, {2}eventyrene til Liberapays juridiske avdeling{0}, og {3}generelle diskusjoner hos Liberapays team{0}."
 
 msgid "What is Liberapay?"
 msgstr "Hva er Liberapay?"
 
 msgid "Liberapay is a way to donate money recurrently to people whose work you appreciate."
-msgstr ""
-"Liberapay er en måte å jevnlig donere penger til mennesker du liker arbeidet "
-"til."
+msgstr "Liberapay er en måte å jevnlig donere penger til mennesker du liker arbeidet til."
 
 #, python-brace-format
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
@@ -2684,11 +2656,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
-msgstr ""
-"Liberapay er et åpent prosjekt. Du kan hjelpe oss med å {1}oversette det{0}, "
-"{2}forbedre koden{0} og {3}hjelpe med det juridiske arbeidet{0}. Hvis du "
-"gjør det kan du delta i {4}Liberapay-teamet{0} og motta en del av pengene "
-"som brukerne donerer for å holde tjenesten i gang."
+msgstr "Liberapay er et åpent prosjekt. Du kan hjelpe oss med å {1}oversette det{0}, {2}forbedre koden{0} og {3}hjelpe med det juridiske arbeidet{0}. Hvis du gjør det kan du delta i {4}Liberapay-teamet{0} og motta en del av pengene som brukerne donerer for å holde tjenesten i gang."
 
 msgid "Why should you donate?"
 msgstr "Hvorfor skal jeg donere?"
@@ -2947,8 +2915,7 @@ msgid "Explore other platforms:"
 msgstr ""
 
 msgid "Liberapay provides several ways of finding great people to donate to:"
-msgstr ""
-"Liberapay har flere metoder for å finne fantastiske mennesker å donere til:"
+msgstr "Liberapay har flere metoder for å finne fantastiske mennesker å donere til:"
 
 msgid "A team is a group of users working on a specific project."
 msgstr ""
@@ -2995,10 +2962,7 @@ msgid "Create an organization account"
 msgstr ""
 
 msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
-msgstr ""
-"Liberapay lar deg tilby donasjoner til folk som ikke er medlemmer ennå. "
-"Donasjonen starter automatisk hvis de registrerer seg. Vi gir deg beskjed "
-"når det skjer."
+msgstr "Liberapay lar deg tilby donasjoner til folk som ikke er medlemmer ennå. Donasjonen starter automatisk hvis de registrerer seg. Vi gir deg beskjed når det skjer."
 
 msgid "Recent pledges"
 msgstr ""
@@ -3241,6 +3205,166 @@ msgid "Log In"
 msgstr ""
 
 #, python-brace-format
+msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
+msgstr ""
+
+msgid "Migrating from Gratipay"
+msgstr ""
+
+#, python-brace-format
+msgid "Welcome, {username}!"
+msgstr ""
+
+#, python-brace-format
+msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
+msgstr ""
+
+#, python-brace-format
+msgid "Here is an overview of what we will import from {platform}:"
+msgstr ""
+
+msgid "basic account data (username, avatar, some privacy settings, etc)"
+msgstr ""
+
+msgid "profile descriptions"
+msgstr ""
+
+msgid "teams (we will create them for you)"
+msgstr ""
+
+msgid "ongoing donations (if the donee hasn't joined Liberapay yet a pledge will be created instead)"
+msgstr ""
+
+#, python-brace-format
+msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)"
+msgstr ""
+
+#, python-brace-format
+msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
+msgstr ""
+
+msgid "and what we cannot import:"
+msgstr ""
+
+msgid "any saved credit card number"
+msgstr ""
+
+msgid "any money currently in the account"
+msgstr ""
+
+msgid "the account's history (ledger, etc)"
+msgstr ""
+
+msgid "any paypal address (our payment processor doesn't support paypal yet)"
+msgstr ""
+
+msgid "Proceed"
+msgstr ""
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr "Brukernavnet \"{0}\" er allerede i bruk."
+
+msgid "Does this existing account belong to you?"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr "{0} er allerede knyttet til en annen Liberapay-konto."
+
+msgid "If this address belongs to you please log in before continuing:"
+msgstr ""
+
+msgid "Otherwise please input an email address which does belong to you:"
+msgstr ""
+
+#, python-brace-format
+msgid "The data import from {platform} has been successfully completed."
+msgstr ""
+
+#, python-brace-format
+msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
+msgstr ""
+
+#, python-brace-format
+msgid "{n} profile statement was imported."
+msgid_plural "{n} profile statements were imported."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} elsewhere account was imported:"
+msgid_plural "{n} elsewhere accounts were imported:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
+msgstr ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
+msgstr ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
+msgstr ""
+
+#, python-brace-format
+msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
+msgstr ""
+
+msgid "Edit your profile"
+msgstr "Rediger profilen din"
+
+msgid "Manage this team"
+msgstr ""
+
+#, python-brace-format
+msgid "This team was not recreated because an account named \"{0}\" already exists."
+msgstr ""
+
+msgid "No teams were imported."
+msgstr ""
+
+msgid "Donations"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
+msgstr ""
+
+msgid "Manage your donations"
+msgstr ""
+
+msgid "Email addresses"
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} has been linked to your Liberapay account."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} was already linked to your account."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {0} could not be linked to your account because it was already connected to another account."
+msgstr ""
+
+#, python-brace-format
 msgid ""
 "We were unable to determine if you are a member of the {0} team on {1}.\n"
 "\n"
@@ -3292,8 +3416,7 @@ msgstr ""
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
 msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
 msgstr[0] "En Liberapay-bruker tilbyr seg å donere {0} i uken til {1}."
-msgstr[1] ""
-"{n} Liberpay-brukere tilbyr seg å donere til sammen {0} ukentlig til {1}."
+msgstr[1] "{n} Liberpay-brukere tilbyr seg å donere til sammen {0} ukentlig til {1}."
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
@@ -3305,9 +3428,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "If you are {username} on {platform}, you can unlock your account to allow people to pledge to donate to you on Liberapay."
-msgstr ""
-"Hvis du er {username} på {platform} kan du åpne kontoen din slik at folk kan "
-"tilby deg donasjoner på Liberapay."
+msgstr "Hvis du er {username} på {platform} kan du åpne kontoen din slik at folk kan tilby deg donasjoner på Liberapay."
 
 msgid "Unlock"
 msgstr ""
