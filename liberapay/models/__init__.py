@@ -295,7 +295,13 @@ if __name__ == '__main__':
     from liberapay import wireup
     db = wireup.minimal_algorithm.run()['db']
     print('Checking DB...')
-    db.self_check()
+    try:
+        db.self_check()
+    except:
+        traceback.print_exc()
+        r = input('The DB self-check failed, proceed anyway? (y/N) ')
+        if r != 'y':
+            sys.exit(1)
     r = run_migrations(db)
     if r:
         print('Checking DB...')
