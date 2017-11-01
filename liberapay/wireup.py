@@ -107,8 +107,11 @@ def database(env, tell_sentry):
 
     def cast_currency_amount(v, cursor):
         return None if v is None else Money(*v[1:-1].split(','))
-    oid = db.one("SELECT 'currency_amount'::regtype::oid")
-    register_type(new_type((oid,), _str('currency_amount'), cast_currency_amount))
+    try:
+        oid = db.one("SELECT 'currency_amount'::regtype::oid")
+        register_type(new_type((oid,), _str('currency_amount'), cast_currency_amount))
+    except psycopg2.ProgrammingError:
+        pass
 
     def adapt_money_basket(b):
         return AsIs('(%s,%s)::currency_basket' % (b.eur.amount, b.usd.amount))
@@ -119,8 +122,11 @@ def database(env, tell_sentry):
             return None
         eur, usd = v[1:-1].split(',')
         return MoneyBasket(Money(eur, 'EUR'), Money(usd, 'USD'))
-    oid = db.one("SELECT 'currency_basket'::regtype::oid")
-    register_type(new_type((oid,), _str('currency_basket'), cast_currency_basket))
+    try:
+        oid = db.one("SELECT 'currency_basket'::regtype::oid")
+        register_type(new_type((oid,), _str('currency_basket'), cast_currency_basket))
+    except psycopg2.ProgrammingError:
+        pass
 
     use_qc = not env.override_query_cache
     qc1 = QueryCache(db, threshold=(1 if use_qc else 0))
