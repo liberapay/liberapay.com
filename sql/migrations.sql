@@ -655,3 +655,502 @@ CREATE OR REPLACE VIEW current_takes AS
     ) AS anon WHERE amount IS NOT NULL;
 INSERT INTO app_conf VALUES ('update_cached_amounts_every', '86400'::jsonb);
 ALTER TABLE takes ADD CONSTRAINT null_amounts_chk CHECK ((actual_amount IS NULL) = (amount IS NULL));
+
+-- migration #54
+CREATE TYPE currency AS ENUM ('EUR', 'USD');
+CREATE TYPE currency_amount AS (amount numeric, currency currency);
+CREATE FUNCTION currency_amount_add(currency_amount, currency_amount)
+RETURNS currency_amount AS $$
+    BEGIN
+        IF ($1.currency <> $2.currency) THEN
+            RAISE 'currency mistmatch: % != %', $1.currency, $2.currency;
+        END IF;
+        RETURN ($1.amount + $2.amount, $1.currency);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR + (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_add,
+    commutator = +
+);
+CREATE FUNCTION currency_amount_sub(currency_amount, currency_amount)
+RETURNS currency_amount AS $$
+    BEGIN
+        IF ($1.currency <> $2.currency) THEN
+            RAISE 'currency mistmatch: % != %', $1.currency, $2.currency;
+        END IF;
+        RETURN ($1.amount - $2.amount, $1.currency);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR - (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_sub
+);
+CREATE FUNCTION currency_amount_neg(currency_amount)
+RETURNS currency_amount AS $$
+    BEGIN RETURN (-$1.amount, $1.currency); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR - (
+    rightarg = currency_amount,
+    procedure = currency_amount_neg
+);
+CREATE FUNCTION currency_amount_mul(currency_amount, numeric)
+RETURNS currency_amount AS $$
+    BEGIN
+        RETURN ($1.amount * $2, $1.currency);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR * (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_mul,
+    commutator = *
+);
+CREATE AGGREGATE sum(currency_amount) (
+    sfunc = currency_amount_add,
+    stype = currency_amount
+);
+CREATE FUNCTION get_currency(currency_amount) RETURNS currency AS $$
+    BEGIN RETURN $1.currency; END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE CAST (currency_amount as currency) WITH FUNCTION get_currency(currency_amount);
+CREATE FUNCTION zero(currency) RETURNS currency_amount AS $$
+    BEGIN RETURN ('0.00'::numeric, $1); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE FUNCTION zero(currency_amount) RETURNS currency_amount AS $$
+    BEGIN RETURN ('0.00'::numeric, $1.currency); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE FUNCTION currency_amount_eq(currency_amount, currency_amount)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.currency = $2.currency AND $1.amount = $2.amount); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR = (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_eq,
+    commutator = =
+);
+CREATE FUNCTION currency_amount_ne(currency_amount, currency_amount)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.currency <> $2.currency OR $1.amount <> $2.amount); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR <> (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_ne,
+    commutator = <>
+);
+CREATE FUNCTION currency_amount_gt(currency_amount, currency_amount)
+RETURNS boolean AS $$
+    BEGIN
+        IF ($1.currency <> $2.currency) THEN
+            RAISE 'currency mistmatch: % != %', $1.currency, $2.currency;
+        END IF;
+        RETURN ($1.amount > $2.amount);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR > (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_gt,
+    commutator = <,
+    negator = <=
+);
+CREATE FUNCTION currency_amount_gte(currency_amount, currency_amount)
+RETURNS boolean AS $$
+    BEGIN
+        IF ($1.currency <> $2.currency) THEN
+            RAISE 'currency mistmatch: % != %', $1.currency, $2.currency;
+        END IF;
+        RETURN ($1.amount >= $2.amount);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR >= (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_gte,
+    commutator = <=,
+    negator = <
+);
+CREATE FUNCTION currency_amount_lt(currency_amount, currency_amount)
+RETURNS boolean AS $$
+    BEGIN
+        IF ($1.currency <> $2.currency) THEN
+            RAISE 'currency mistmatch: % != %', $1.currency, $2.currency;
+        END IF;
+        RETURN ($1.amount < $2.amount);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR < (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_lt,
+    commutator = >,
+    negator = >=
+);
+CREATE FUNCTION currency_amount_lte(currency_amount, currency_amount)
+RETURNS boolean AS $$
+    BEGIN
+        IF ($1.currency <> $2.currency) THEN
+            RAISE 'currency mistmatch: % != %', $1.currency, $2.currency;
+        END IF;
+        RETURN ($1.amount <= $2.amount);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR <= (
+    leftarg = currency_amount,
+    rightarg = currency_amount,
+    procedure = currency_amount_lte,
+    commutator = >=,
+    negator = >
+);
+CREATE FUNCTION currency_amount_eq_numeric(currency_amount, numeric)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.amount = $2); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR = (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_eq_numeric,
+    commutator = =
+);
+CREATE FUNCTION currency_amount_ne_numeric(currency_amount, numeric)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.amount <> $2); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR <> (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_ne_numeric,
+    commutator = <>
+);
+CREATE FUNCTION currency_amount_gt_numeric(currency_amount, numeric)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.amount > $2); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR > (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_gt_numeric,
+    commutator = <,
+    negator = <=
+);
+CREATE FUNCTION currency_amount_gte_numeric(currency_amount, numeric)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.amount >= $2); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR >= (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_gte_numeric,
+    commutator = <=,
+    negator = <
+);
+CREATE FUNCTION currency_amount_lt_numeric(currency_amount, numeric)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.amount < $2); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR < (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_lt_numeric,
+    commutator = >,
+    negator = >=
+);
+CREATE FUNCTION currency_amount_lte_numeric(currency_amount, numeric)
+RETURNS boolean AS $$
+    BEGIN RETURN ($1.amount <= $2); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR <= (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_lte_numeric,
+    commutator = >=,
+    negator = >
+);
+CREATE TYPE currency_basket AS (EUR numeric, USD numeric);
+CREATE FUNCTION currency_basket_add(currency_basket, currency_amount)
+RETURNS currency_basket AS $$
+    BEGIN
+        IF ($2.currency = 'EUR') THEN
+            RETURN ($1.EUR + $2.amount, $1.USD);
+        ELSIF ($2.currency = 'USD') THEN
+            RETURN ($1.EUR, $1.USD + $2.amount);
+        ELSE
+            RAISE 'unknown currency %', $2.currency;
+        END IF;
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR + (
+    leftarg = currency_basket,
+    rightarg = currency_amount,
+    procedure = currency_basket_add,
+    commutator = +
+);
+CREATE FUNCTION currency_basket_add(currency_basket, currency_basket)
+RETURNS currency_basket AS $$
+    BEGIN RETURN ($1.EUR + $2.EUR, $1.USD + $2.USD); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR + (
+    leftarg = currency_basket,
+    rightarg = currency_basket,
+    procedure = currency_basket_add,
+    commutator = +
+);
+CREATE FUNCTION currency_basket_sub(currency_basket, currency_amount)
+RETURNS currency_basket AS $$
+    BEGIN
+        IF ($2.currency = 'EUR') THEN
+            RETURN ($1.EUR - $2.amount, $1.USD);
+        ELSIF ($2.currency = 'USD') THEN
+            RETURN ($1.EUR, $1.USD - $2.amount);
+        ELSE
+            RAISE 'unknown currency %', $2.currency;
+        END IF;
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR - (
+    leftarg = currency_basket,
+    rightarg = currency_amount,
+    procedure = currency_basket_sub
+);
+CREATE FUNCTION currency_basket_sub(currency_basket, currency_basket)
+RETURNS currency_basket AS $$
+    BEGIN RETURN ($1.EUR - $2.EUR, $1.USD - $2.USD); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR - (
+    leftarg = currency_basket,
+    rightarg = currency_basket,
+    procedure = currency_basket_sub
+);
+CREATE FUNCTION currency_basket_contains(currency_basket, currency_amount)
+RETURNS boolean AS $$
+    BEGIN
+        IF ($2.currency = 'EUR') THEN
+            RETURN ($1.EUR >= $2.amount);
+        ELSIF ($2.currency = 'USD') THEN
+            RETURN ($1.USD >= $2.amount);
+        ELSE
+            RAISE 'unknown currency %', $2.currency;
+        END IF;
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+CREATE OPERATOR >= (
+    leftarg = currency_basket,
+    rightarg = currency_amount,
+    procedure = currency_basket_contains
+);
+CREATE AGGREGATE basket_sum(currency_amount) (
+    sfunc = currency_basket_add,
+    stype = currency_basket,
+    initcond = '(0.00,0.00)'
+);
+CREATE TABLE currency_exchange_rates
+( source_currency   currency   NOT NULL
+, target_currency   currency   NOT NULL
+, rate              numeric    NOT NULL
+, UNIQUE (source_currency, target_currency)
+);
+CREATE FUNCTION convert(currency_amount, currency) RETURNS currency_amount AS $$
+    DECLARE
+        rate numeric;
+    BEGIN
+        IF ($1.currency = $2) THEN RETURN $1; END IF;
+        rate := (
+            SELECT r.rate
+              FROM currency_exchange_rates r
+             WHERE r.source_currency = $1.currency
+        );
+        IF (rate IS NULL) THEN
+            RAISE 'missing exchange rate %->%', $1.currency, $2;
+        END IF;
+        RETURN ($1.amount / rate, $2);
+    END;
+$$ LANGUAGE plpgsql STRICT;
+CREATE FUNCTION currency_amount_fuzzy_sum_sfunc(
+    currency_amount, currency_amount, currency
+) RETURNS currency_amount AS $$
+    BEGIN RETURN ($1.amount + (convert($2, $3)).amount, $3); END;
+$$ LANGUAGE plpgsql STRICT;
+CREATE AGGREGATE sum(currency_amount, currency) (
+    sfunc = currency_amount_fuzzy_sum_sfunc,
+    stype = currency_amount,
+    initcond = '(0,)'
+);
+CREATE TYPE currency_amount_fuzzy_avg_state AS (
+    _sum numeric, _count int, target currency
+);
+CREATE FUNCTION currency_amount_fuzzy_avg_sfunc(
+    currency_amount_fuzzy_avg_state, currency_amount, currency
+) RETURNS currency_amount_fuzzy_avg_state AS $$
+    BEGIN
+        IF ($2.currency = $3) THEN
+            RETURN ($1._sum + $2.amount, $1._count + 1, $3);
+        END IF;
+        RETURN ($1._sum + (convert($2, $3)).amount, $1._count + 1, $3);
+    END;
+$$ LANGUAGE plpgsql STRICT;
+CREATE FUNCTION currency_amount_fuzzy_avg_ffunc(currency_amount_fuzzy_avg_state)
+RETURNS currency_amount AS $$
+    BEGIN RETURN ((CASE WHEN $1._count = 0 THEN 0 ELSE $1._sum / $1._count END), $1.target); END;
+$$ LANGUAGE plpgsql STRICT;
+CREATE AGGREGATE avg(currency_amount, currency) (
+    sfunc = currency_amount_fuzzy_avg_sfunc,
+    finalfunc = currency_amount_fuzzy_avg_ffunc,
+    stype = currency_amount_fuzzy_avg_state,
+    initcond = '(0,0,)'
+);
+ALTER TABLE participants ADD COLUMN main_currency currency NOT NULL DEFAULT 'EUR';
+ALTER TABLE participants ADD COLUMN accept_all_currencies boolean;
+UPDATE participants
+   SET accept_all_currencies = true
+ WHERE status = 'stub';
+ALTER TABLE cash_bundles ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+ALTER TABLE debts ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+ALTER TABLE disputes ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+ALTER TABLE exchanges ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+ALTER TABLE exchanges ALTER COLUMN fee TYPE currency_amount USING (fee, 'EUR');
+ALTER TABLE exchanges ALTER COLUMN vat TYPE currency_amount USING (vat, 'EUR');
+ALTER TABLE invoices ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+ALTER TABLE transfers ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+DROP VIEW current_tips;
+ALTER TABLE tips ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
+ALTER TABLE tips ALTER COLUMN periodic_amount TYPE currency_amount USING (periodic_amount, 'EUR');
+CREATE VIEW current_tips AS
+        SELECT DISTINCT ON (tipper, tippee) *
+          FROM tips
+      ORDER BY tipper, tippee, mtime DESC;
+CREATE TABLE wallets
+    ( remote_id         text              NOT NULL UNIQUE
+    , balance           currency_amount   NOT NULL CHECK (balance >= 0)
+    , owner             bigint            NOT NULL REFERENCES participants
+    , remote_owner_id   text              NOT NULL
+    , is_current        boolean           DEFAULT TRUE
+    );
+CREATE UNIQUE INDEX ON wallets (owner, (balance::currency), is_current);
+CREATE UNIQUE INDEX ON wallets (remote_owner_id, (balance::currency));
+INSERT INTO wallets
+                (remote_id, balance, owner, remote_owner_id)
+         SELECT p.mangopay_wallet_id
+              , (p.balance, 'EUR')::currency_amount
+              , p.id
+              , p.mangopay_user_id
+           FROM participants p
+          WHERE p.mangopay_wallet_id IS NOT NULL;
+INSERT INTO wallets
+                (remote_id, balance, owner, remote_owner_id, is_current)
+         SELECT e.payload->'old_wallet_id'
+              , ('0.00', 'EUR')::currency_amount
+              , e.participant
+              , e.payload->'old_user_id'
+              , false
+           FROM "events" e
+          WHERE e.type = 'mangopay-account-change';
+CREATE FUNCTION EUR(numeric) RETURNS currency_amount AS $$
+    BEGIN RETURN ($1, 'EUR'); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+DROP VIEW sponsors;
+ALTER TABLE participants DROP COLUMN mangopay_wallet_id;
+ALTER TABLE participants
+        ALTER COLUMN goal DROP DEFAULT,
+        ALTER COLUMN goal TYPE currency_amount USING EUR(goal),
+        ALTER COLUMN goal SET DEFAULT NULL;
+ALTER TABLE participants
+        ALTER COLUMN giving DROP DEFAULT,
+        ALTER COLUMN giving TYPE currency_amount USING EUR(giving);
+ALTER TABLE participants
+        ALTER COLUMN receiving DROP DEFAULT,
+        ALTER COLUMN receiving TYPE currency_amount USING EUR(receiving);
+ALTER TABLE participants
+        ALTER COLUMN taking DROP DEFAULT,
+        ALTER COLUMN taking TYPE currency_amount USING EUR(taking);
+ALTER TABLE participants
+        ALTER COLUMN leftover DROP DEFAULT,
+        ALTER COLUMN leftover TYPE currency_amount USING EUR(leftover);
+ALTER TABLE participants
+        ALTER COLUMN balance DROP DEFAULT,
+        ALTER COLUMN balance TYPE currency_amount USING EUR(balance);
+CREATE FUNCTION initialize_amounts() RETURNS trigger AS $$
+        BEGIN
+            NEW.giving = COALESCE(NEW.giving, zero(NEW.main_currency));
+            NEW.receiving = COALESCE(NEW.receiving, zero(NEW.main_currency));
+            NEW.taking = COALESCE(NEW.taking, zero(NEW.main_currency));
+            NEW.leftover = COALESCE(NEW.leftover, zero(NEW.main_currency));
+            NEW.balance = COALESCE(NEW.balance, zero(NEW.main_currency));
+            RETURN NEW;
+        END;
+    $$ LANGUAGE plpgsql;
+CREATE TRIGGER initialize_amounts BEFORE INSERT ON participants
+        FOR EACH ROW EXECUTE PROCEDURE initialize_amounts();
+CREATE VIEW sponsors AS
+        SELECT *
+          FROM participants p
+         WHERE status = 'active'
+           AND kind = 'organization'
+           AND giving > receiving
+           AND giving >= 10
+           AND hide_from_lists = 0
+           AND profile_noindex = 0
+        ;
+DROP VIEW current_takes;
+ALTER TABLE takes
+        ALTER COLUMN amount DROP DEFAULT,
+        ALTER COLUMN amount TYPE currency_amount USING EUR(amount),
+        ALTER COLUMN amount SET DEFAULT NULL;
+ALTER TABLE takes
+        ALTER COLUMN actual_amount DROP DEFAULT,
+        ALTER COLUMN actual_amount TYPE currency_amount USING EUR(actual_amount),
+        ALTER COLUMN actual_amount SET DEFAULT NULL;
+CREATE VIEW current_takes AS
+        SELECT * FROM (
+             SELECT DISTINCT ON (member, team) t.*
+               FROM takes t
+           ORDER BY member, team, mtime DESC
+        ) AS anon WHERE amount IS NOT NULL;
+DROP FUNCTION EUR(numeric);
+ALTER TABLE paydays
+        ALTER COLUMN transfer_volume DROP DEFAULT,
+        ALTER COLUMN transfer_volume TYPE currency_basket USING (transfer_volume, '0.00'),
+        ALTER COLUMN transfer_volume SET DEFAULT ('0.00', '0.00');
+ALTER TABLE paydays
+        ALTER COLUMN take_volume DROP DEFAULT,
+        ALTER COLUMN take_volume TYPE currency_basket USING (take_volume, '0.00'),
+        ALTER COLUMN take_volume SET DEFAULT ('0.00', '0.00');
+ALTER TABLE paydays
+        ALTER COLUMN week_deposits DROP DEFAULT,
+        ALTER COLUMN week_deposits TYPE currency_basket USING (week_deposits, '0.00'),
+        ALTER COLUMN week_deposits SET DEFAULT ('0.00', '0.00');
+ALTER TABLE paydays
+        ALTER COLUMN week_withdrawals DROP DEFAULT,
+        ALTER COLUMN week_withdrawals TYPE currency_basket USING (week_withdrawals, '0.00'),
+        ALTER COLUMN week_withdrawals SET DEFAULT ('0.00', '0.00');
+ALTER TABLE paydays
+        ALTER COLUMN transfer_volume_refunded DROP DEFAULT,
+        ALTER COLUMN transfer_volume_refunded TYPE currency_basket USING (transfer_volume_refunded, '0.00'),
+        ALTER COLUMN transfer_volume_refunded SET DEFAULT ('0.00', '0.00');
+ALTER TABLE paydays
+        ALTER COLUMN week_deposits_refunded DROP DEFAULT,
+        ALTER COLUMN week_deposits_refunded TYPE currency_basket USING (week_deposits_refunded, '0.00'),
+        ALTER COLUMN week_deposits_refunded SET DEFAULT ('0.00', '0.00');
+ALTER TABLE paydays
+        ALTER COLUMN week_withdrawals_refunded DROP DEFAULT,
+        ALTER COLUMN week_withdrawals_refunded TYPE currency_basket USING (week_withdrawals_refunded, '0.00'),
+        ALTER COLUMN week_withdrawals_refunded SET DEFAULT ('0.00', '0.00');
+CREATE FUNCTION recompute_balance(bigint) RETURNS currency_amount AS $$
+    UPDATE participants p
+       SET balance = (
+               SELECT sum(w.balance, p.main_currency)
+                 FROM wallets w
+                WHERE w.owner = p.id
+           )
+     WHERE id = $1
+ RETURNING balance;
+$$ LANGUAGE SQL STRICT;
+DELETE FROM notifications WHERE event = 'low_balance';
+ALTER TABLE balances_at ALTER COLUMN balance TYPE currency_basket USING (balance, '0.00');
+ALTER TABLE balances_at RENAME COLUMN balance TO balances;
+ALTER TABLE exchange_routes ADD COLUMN currency currency;
+UPDATE exchange_routes SET currency = 'EUR' WHERE network = 'mango-cc';
+ALTER TABLE exchange_routes ADD CONSTRAINT currency_chk CHECK ((currency IS NULL) = (network <> 'mango-cc'));

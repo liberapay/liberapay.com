@@ -20,10 +20,12 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 \i sql/update_counts.sql
 
+\i sql/currencies.sql
+
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '53'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '54'::jsonb);
 
 
 -- app configuration
@@ -48,19 +50,18 @@ CREATE TABLE participants
 , session_expires       timestamptz             DEFAULT (now() + INTERVAL '6 hours')
 , join_time             timestamptz             DEFAULT NULL
 
-, balance               numeric(35,2)           NOT NULL DEFAULT 0.0
-, goal                  numeric(35,2)           DEFAULT NULL
+, balance               currency_amount         NOT NULL
+, goal                  currency_amount         DEFAULT NULL
 , mangopay_user_id      text                    DEFAULT NULL UNIQUE
-, mangopay_wallet_id    text                    DEFAULT NULL
 
 , hide_giving           boolean                 NOT NULL DEFAULT FALSE
 , hide_receiving        boolean                 NOT NULL DEFAULT FALSE
 , hide_from_search      int                     NOT NULL DEFAULT 0
 
 , avatar_url            text
-, giving                numeric(35,2)           NOT NULL DEFAULT 0
-, receiving             numeric(35,2)           NOT NULL DEFAULT 0 CHECK (receiving >= 0)
-, taking                numeric(35,2)           NOT NULL DEFAULT 0 CHECK (taking >= 0)
+, giving                currency_amount         NOT NULL
+, receiving             currency_amount         NOT NULL CHECK (receiving >= 0)
+, taking                currency_amount         NOT NULL CHECK (taking >= 0)
 , npatrons              integer                 NOT NULL DEFAULT 0
 
 , email_notif_bits      int                     NOT NULL DEFAULT 2147483647
@@ -84,14 +85,17 @@ CREATE TABLE participants
 , throttle_takes        boolean                 NOT NULL DEFAULT TRUE
 
 , nteampatrons          int                     NOT NULL DEFAULT 0
-, leftover              numeric(35,2)           NOT NULL DEFAULT 0 CHECK (leftover >= 0)
+, leftover              currency_amount         NOT NULL CHECK (leftover >= 0)
+
+, main_currency         currency                NOT NULL DEFAULT 'EUR'
+, accept_all_currencies boolean
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
 , CONSTRAINT goal_chk CHECK (NOT (kind IN ('group', 'community') AND status='active' AND goal IS NOT NULL AND goal <= 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
-, CONSTRAINT mangopay_chk CHECK (NOT ((mangopay_user_id IS NULL OR mangopay_wallet_id IS NULL) AND balance <> 0))
+, CONSTRAINT mangopay_chk CHECK (NOT (mangopay_user_id IS NULL AND balance <> 0))
 , CONSTRAINT secret_team_chk CHECK (NOT (kind IN ('group', 'community') AND hide_receiving))
  );
 
@@ -119,6 +123,20 @@ CREATE OR REPLACE FUNCTION get_username(p_id bigint) RETURNS text
 AS $$
     SELECT username FROM participants WHERE id = p_id;
 $$ LANGUAGE sql;
+
+CREATE FUNCTION initialize_amounts() RETURNS trigger AS $$
+    BEGIN
+        NEW.giving = COALESCE(NEW.giving, zero(NEW.main_currency));
+        NEW.receiving = COALESCE(NEW.receiving, zero(NEW.main_currency));
+        NEW.taking = COALESCE(NEW.taking, zero(NEW.main_currency));
+        NEW.leftover = COALESCE(NEW.leftover, zero(NEW.main_currency));
+        NEW.balance = COALESCE(NEW.balance, zero(NEW.main_currency));
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER initialize_amounts BEFORE INSERT ON participants
+    FOR EACH ROW EXECUTE PROCEDURE initialize_amounts();
 
 
 -- elsewhere -- social network accounts attached to participants
@@ -190,15 +208,15 @@ CREATE INDEX repositories_trgm_idx ON repositories
 CREATE TYPE donation_period AS ENUM ('weekly', 'monthly', 'yearly');
 
 CREATE TABLE tips
-( id           serial           PRIMARY KEY
-, ctime        timestamptz      NOT NULL
-, mtime        timestamptz      NOT NULL DEFAULT CURRENT_TIMESTAMP
-, tipper       bigint           NOT NULL REFERENCES participants
-, tippee       bigint           NOT NULL REFERENCES participants
-, amount       numeric(35,2)    NOT NULL CHECK (amount >= 0)
-, is_funded    boolean          NOT NULL DEFAULT false
-, period       donation_period  NOT NULL
-, periodic_amount numeric(35,2) NOT NULL
+( id                serial            PRIMARY KEY
+, ctime             timestamptz       NOT NULL
+, mtime             timestamptz       NOT NULL DEFAULT CURRENT_TIMESTAMP
+, tipper            bigint            NOT NULL REFERENCES participants
+, tippee            bigint            NOT NULL REFERENCES participants
+, amount            currency_amount   NOT NULL CHECK (amount >= 0)
+, is_funded         boolean           NOT NULL DEFAULT false
+, period            donation_period   NOT NULL
+, periodic_amount   currency_amount   NOT NULL
 , CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
  );
 
@@ -237,7 +255,7 @@ CREATE TABLE invoices
 , sender        bigint            NOT NULL REFERENCES participants
 , addressee     bigint            NOT NULL REFERENCES participants
 , nature        invoice_nature    NOT NULL
-, amount        numeric(35,2)     NOT NULL CHECK (amount > 0)
+, amount        currency_amount   NOT NULL CHECK (amount > 0)
 , description   text              NOT NULL
 , details       text
 , documents     jsonb             NOT NULL
@@ -254,6 +272,31 @@ CREATE TABLE invoice_events
 );
 
 
+-- wallets
+
+CREATE TABLE wallets
+( remote_id         text              NOT NULL UNIQUE
+, balance           currency_amount   NOT NULL CHECK (balance >= 0)
+, owner             bigint            NOT NULL REFERENCES participants
+, remote_owner_id   text              NOT NULL
+, is_current        boolean           DEFAULT TRUE
+);
+
+CREATE UNIQUE INDEX ON wallets (owner, (balance::currency), is_current);
+CREATE UNIQUE INDEX ON wallets (remote_owner_id, (balance::currency));
+
+CREATE FUNCTION recompute_balance(bigint) RETURNS currency_amount AS $$
+    UPDATE participants p
+       SET balance = (
+               SELECT sum(w.balance, p.main_currency)
+                 FROM wallets w
+                WHERE w.owner = p.id
+           )
+     WHERE id = $1
+ RETURNING balance;
+$$ LANGUAGE SQL STRICT;
+
+
 -- transfers -- balance transfers from one user to another
 
 CREATE TYPE transfer_context AS ENUM
@@ -266,7 +309,7 @@ CREATE TABLE transfers
 , timestamp   timestamptz         NOT NULL DEFAULT CURRENT_TIMESTAMP
 , tipper      bigint              NOT NULL REFERENCES participants
 , tippee      bigint              NOT NULL REFERENCES participants
-, amount      numeric(35,2)       NOT NULL CHECK (amount > 0)
+, amount      currency_amount     NOT NULL CHECK (amount > 0)
 , context     transfer_context    NOT NULL
 , team        bigint              REFERENCES participants
 , status      transfer_status     NOT NULL
@@ -296,16 +339,16 @@ CREATE TABLE paydays
 , ntippees              bigint           NOT NULL DEFAULT 0
 , ntips                 bigint           NOT NULL DEFAULT 0
 , ntransfers            bigint           NOT NULL DEFAULT 0
-, transfer_volume       numeric(35,2)    NOT NULL DEFAULT 0.00
+, transfer_volume       currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
 , ntakes                bigint           NOT NULL DEFAULT 0
-, take_volume           numeric(35,2)    NOT NULL DEFAULT 0.00
+, take_volume           currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
 , nactive               bigint           NOT NULL DEFAULT 0
 , nusers                bigint           NOT NULL DEFAULT 0
-, week_deposits         numeric(35,2)    NOT NULL DEFAULT 0
-, week_withdrawals      numeric(35,2)    NOT NULL DEFAULT 0
-, transfer_volume_refunded   numeric(35,2)
-, week_deposits_refunded     numeric(35,2)
-, week_withdrawals_refunded  numeric(35,2)
+, week_deposits         currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
+, week_withdrawals      currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
+, transfer_volume_refunded   currency_basket   DEFAULT ('0.00', '0.00')
+, week_deposits_refunded     currency_basket   DEFAULT ('0.00', '0.00')
+, week_withdrawals_refunded  currency_basket   DEFAULT ('0.00', '0.00')
 , stage                 int              DEFAULT 1
 , public_log            text             NOT NULL
  );
@@ -326,7 +369,9 @@ CREATE TABLE exchange_routes
 , remote_user_id   text           NOT NULL
 , ctime            timestamptz    DEFAULT now()
 , mandate          text           CHECK (mandate <> '')
+, currency         currency
 , UNIQUE (participant, network, address)
+, CONSTRAINT currency_chk CHECK ((currency IS NULL) = (network <> 'mango-cc'))
 );
 
 
@@ -337,14 +382,14 @@ CREATE TYPE exchange_status AS ENUM ('pre', 'created', 'failed', 'succeeded', 'p
 CREATE TABLE exchanges
 ( id                serial               PRIMARY KEY
 , timestamp         timestamptz          NOT NULL DEFAULT CURRENT_TIMESTAMP
-, amount            numeric(35,2)        NOT NULL CHECK (amount <> 0)
-, fee               numeric(35,2)        NOT NULL
+, amount            currency_amount      NOT NULL CHECK (amount <> 0)
+, fee               currency_amount      NOT NULL
 , participant       bigint               NOT NULL REFERENCES participants
 , recorder          bigint               REFERENCES participants
 , note              text
 , status            exchange_status      NOT NULL
 , route             bigint               NOT NULL REFERENCES exchange_routes
-, vat               numeric(35,2)        NOT NULL
+, vat               currency_amount      NOT NULL
 , refund_ref        bigint               REFERENCES exchanges
 , wallet_id         text                 NOT NULL
 , remote_id         text
@@ -414,9 +459,9 @@ CREATE TABLE takes
 , mtime             timestamptz          NOT NULL DEFAULT CURRENT_TIMESTAMP
 , member            bigint               NOT NULL REFERENCES participants
 , team              bigint               NOT NULL REFERENCES participants
-, amount            numeric(35,2)        DEFAULT 1
+, amount            currency_amount      DEFAULT NULL
 , recorder          bigint               NOT NULL REFERENCES participants
-, actual_amount     numeric(35,2)
+, actual_amount     currency_amount
 , CONSTRAINT not_negative CHECK (amount IS NULL OR amount >= 0)
 , CONSTRAINT null_amounts_chk CHECK ((actual_amount IS NULL) = (amount IS NULL))
  );
@@ -528,9 +573,9 @@ CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
 -- cache of participant balances at specific times
 
 CREATE TABLE balances_at
-( participant  bigint         NOT NULL REFERENCES participants
-, at           timestamptz    NOT NULL
-, balance      numeric(35,2)  NOT NULL
+( participant  bigint            NOT NULL REFERENCES participants
+, at           timestamptz       NOT NULL
+, balances     currency_basket   NOT NULL
 , UNIQUE (participant, at)
 );
 
@@ -538,14 +583,14 @@ CREATE TABLE balances_at
 -- all the money that has ever entered the system
 
 CREATE TABLE cash_bundles
-( id           bigserial      PRIMARY KEY
-, owner        bigint         REFERENCES participants
-, origin       bigint         NOT NULL REFERENCES exchanges
-, amount       numeric(35,2)  NOT NULL CHECK (amount > 0)
-, ts           timestamptz    NOT NULL
-, withdrawal   int            REFERENCES exchanges
+( id           bigserial         PRIMARY KEY
+, owner        bigint            REFERENCES participants
+, origin       bigint            NOT NULL REFERENCES exchanges
+, amount       currency_amount   NOT NULL CHECK (amount > 0)
+, ts           timestamptz       NOT NULL
+, withdrawal   int               REFERENCES exchanges
 , disputed     boolean
-, locked_for   int            REFERENCES transfers
+, locked_for   int               REFERENCES transfers
 , wallet_id    text
 , CONSTRAINT in_or_out CHECK ((owner IS NULL) <> (withdrawal IS NULL))
 , CONSTRAINT wallet_chk CHECK ((wallet_id IS NULL) = (owner IS NULL))
@@ -600,7 +645,7 @@ CREATE TABLE disputes
 ( id              bigint          PRIMARY KEY
 , creation_date   timestamptz     NOT NULL
 , type            text            NOT NULL
-, amount          numeric(35,2)   NOT NULL
+, amount          currency_amount NOT NULL
 , status          text            NOT NULL
 , result_code     text
 , exchange_id     int             NOT NULL REFERENCES exchanges
@@ -616,7 +661,7 @@ CREATE TABLE debts
 ( id              serial          PRIMARY KEY
 , debtor          bigint          NOT NULL REFERENCES participants
 , creditor        bigint          NOT NULL REFERENCES participants
-, amount          numeric(35,2)   NOT NULL
+, amount          currency_amount NOT NULL
 , origin          int             NOT NULL REFERENCES exchanges
 , status          debt_status     NOT NULL
 , settlement      int             REFERENCES transfers
