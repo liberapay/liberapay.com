@@ -233,7 +233,10 @@ title = _("Migrating from Gratipay")
 % extends "templates/base-thin.html"
 
 % block thin_content
-    % if step == '1'
+    % if step == '1' and not username
+        <p class="alert alert-warning">{{ _("Oops, you need to go back to Gratipay and log in before starting the migration.") }}</p>
+
+    % elif step == '1'
         <form action="?step=2" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             % include "templates/form-repost.html"
