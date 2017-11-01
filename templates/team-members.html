@@ -11,7 +11,7 @@
             "Your nominal take from the {0} team is limited to {1} this week. "
             "{2}Why?{3}",
             team.username,
-            format_decimal(members[user.id]['max_this_week'], '#,##0.00'),
+            format_decimal(members[user.id]['max_this_week'].amount, '#,##0.00'),
             '<a href="/about/teams#throttling">'|safe, '</a>'|safe
         ) }}</p>
     % endif
