@@ -177,15 +177,11 @@ else:
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif
         </td>
-        <td class="status" title="{{ _('balance at the end of the day') }}">
-        % for balance in event['balances']
-            % if balance or balance.currency == participant.main_currency
-                {{ format_money(balance) }} {{ '+' if not loop.last }}
-            % endif
-        % endfor
-        </td>
+        <td class="status" title="{{ _('balance at the end of the day') }}">{{
+            locale.format_money_basket(event['balances'])
+        }}</td>
         <td class="wallet">
-        % for delta in event['wallet_delta']
+        % for delta in event['wallet_deltas']
             % if delta.amount or delta.currency == participant.main_currency
                 {{ format_money_delta(delta) }}<br>
             % endif
