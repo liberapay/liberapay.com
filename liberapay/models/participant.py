@@ -14,10 +14,10 @@ from html2text import html2text
 import mangopay
 from mangopay.utils import Money
 from markupsafe import escape as htmlescape
+from pando import json
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
-from psycopg2.extras import Json
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY,
@@ -112,6 +112,7 @@ class Participant(Model, MixinTeam):
             'kind': kind,
             'status': 'active',
             'join_time': now,
+            'accept_all_currencies': False,
         }
         if password:
             d['password'] = cls.hash_password(password)
@@ -1086,7 +1087,7 @@ class Participant(Model, MixinTeam):
                         (participant, type, payload, recorder)
                  VALUES (%s, %s, %s, %s)
               RETURNING *
-        """, (self.id, type, Json(payload), recorder))
+        """, (self.id, type, json.dumps(payload), recorder))
 
     def get_last_event_of_type(self, type):
         return self.db.one("""

@@ -153,7 +153,7 @@ class MixinTeam(object):
                                        AND team=%(team)s
                                   ORDER BY mtime DESC
                                      LIMIT 1
-                                ), zero(%(amount)s))
+                                ), zero(%(amount)s::currency_amount))
                             END
                           , %(recorder)s
 

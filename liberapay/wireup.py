@@ -600,6 +600,8 @@ def env():
         RUN_CRON_JOBS=is_yesish,
         OVERRIDE_PAYDAY_CHECKS=is_yesish,
         OVERRIDE_QUERY_CACHE=is_yesish,
+        GRATIPAY_BASE_URL=str,
+        SECRET_FOR_GRATIPAY=str,
     )
 
     logging.basicConfig(level=getattr(logging, env.logging_level.upper()))

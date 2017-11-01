@@ -3,7 +3,11 @@ BEGIN;
 END;
 
 ALTER TABLE participants ADD COLUMN main_currency currency NOT NULL DEFAULT 'EUR';
-ALTER TABLE participants ADD COLUMN accept_all_currencies boolean NOT NULL DEFAULT FALSE;
+ALTER TABLE participants ADD COLUMN accept_all_currencies boolean;
+
+UPDATE participants
+   SET accept_all_currencies = true
+ WHERE status = 'stub';
 
 BEGIN;
     ALTER TABLE cash_bundles ALTER COLUMN amount TYPE currency_amount USING (amount, 'EUR');
@@ -73,24 +77,33 @@ BEGIN;
         ALTER COLUMN goal SET DEFAULT NULL;
     ALTER TABLE participants
         ALTER COLUMN giving DROP DEFAULT,
-        ALTER COLUMN giving TYPE currency_amount USING EUR(giving),
-        ALTER COLUMN giving SET DEFAULT ('0.00', 'EUR');
+        ALTER COLUMN giving TYPE currency_amount USING EUR(giving);
     ALTER TABLE participants
         ALTER COLUMN receiving DROP DEFAULT,
-        ALTER COLUMN receiving TYPE currency_amount USING EUR(receiving),
-        ALTER COLUMN receiving SET DEFAULT ('0.00', 'EUR');
+        ALTER COLUMN receiving TYPE currency_amount USING EUR(receiving);
     ALTER TABLE participants
         ALTER COLUMN taking DROP DEFAULT,
-        ALTER COLUMN taking TYPE currency_amount USING EUR(taking),
-        ALTER COLUMN taking SET DEFAULT ('0.00', 'EUR');
+        ALTER COLUMN taking TYPE currency_amount USING EUR(taking);
     ALTER TABLE participants
         ALTER COLUMN leftover DROP DEFAULT,
-        ALTER COLUMN leftover TYPE currency_amount USING EUR(leftover),
-        ALTER COLUMN leftover SET DEFAULT ('0.00', 'EUR');
+        ALTER COLUMN leftover TYPE currency_amount USING EUR(leftover);
     ALTER TABLE participants
         ALTER COLUMN balance DROP DEFAULT,
-        ALTER COLUMN balance TYPE currency_amount USING EUR(balance),
-        ALTER COLUMN balance SET DEFAULT ('0.00', 'EUR');
+        ALTER COLUMN balance TYPE currency_amount USING EUR(balance);
+
+    CREATE FUNCTION initialize_amounts() RETURNS trigger AS $$
+        BEGIN
+            NEW.giving = COALESCE(NEW.giving, zero(NEW.main_currency));
+            NEW.receiving = COALESCE(NEW.receiving, zero(NEW.main_currency));
+            NEW.taking = COALESCE(NEW.taking, zero(NEW.main_currency));
+            NEW.leftover = COALESCE(NEW.leftover, zero(NEW.main_currency));
+            NEW.balance = COALESCE(NEW.balance, zero(NEW.main_currency));
+            RETURN NEW;
+        END;
+    $$ LANGUAGE plpgsql;
+    CREATE TRIGGER initialize_amounts BEFORE INSERT ON participants
+        FOR EACH ROW EXECUTE PROCEDURE initialize_amounts();
+
     CREATE VIEW sponsors AS
         SELECT *
           FROM participants p
