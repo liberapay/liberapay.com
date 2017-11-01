@@ -55,19 +55,20 @@ if route is not None:
     route.__dict__['participant'] = participant
 
 funded = float('inf')
-donations = participant.get_giving_for_profile()[1]
-weekly = donations - participant.receiving
 currency = request.qs.get('currency', currency)
 if currency not in PAYIN_DIRECT_DEBIT_MIN:
     raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+balance = participant.get_balance_in(currency)
+donations = participant.get_giving_in(currency)
+weekly = donations - participant.get_receiving_in(currency)
 amount_min = PAYIN_DIRECT_DEBIT_MIN[currency]
 amount_max = skim_amount(constants.PAYIN_DIRECT_DEBIT_MAX[currency], FEE_PAYIN_DIRECT_DEBIT[currency])[0]
 if weekly > 0:
-    funded = participant.balance // weekly
-    min_weeks = (amount_min.amount / weekly).to_integral_value(ROUND_UP)
+    funded = balance // weekly
+    min_weeks = (amount_min / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
         max(constants.PAYIN_DIRECT_DEBIT_TARGET[currency] // weekly, 52),
-        amount_max.amount // weekly
+        amount_max // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
@@ -171,11 +172,11 @@ title = _("Adding Money")
     % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees.",
-              Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if exchange.status == 'succeeded' else
+              exchange.amount + exchange.fee, exchange.amount, exchange.fee) if exchange.status == 'succeeded' else
             _("A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees.",
-              Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if exchange.status == 'created' else
+              exchange.amount + exchange.fee, exchange.amount, exchange.fee) if exchange.status == 'created' else
             _("The attempt to transfer {0} from your bank account has failed with the following error message:",
-              Money(exchange.amount + exchange.fee, 'EUR')) + ' ' + str(exchange.note)
+              exchange.amount + exchange.fee) + ' ' + str(exchange.note)
         }}</div>
         % if exchange.status == 'succeeded'
         <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View Receipt") }}</a>
@@ -225,12 +226,12 @@ title = _("Adding Money")
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_direct_debit(Money(amount, 'EUR'))
+            % set charge_amount, fees, vat = upcharge_direct_debit(amount)
             % set _months = weeks / D('4.33')
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">
             <label>
-                <input type="radio" name="amount" value="{{ amount }}" class="hidden-xs" />
+                <input type="radio" name="amount" value="{{ amount.amount }}" class="hidden-xs" />
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
                     "{0} ({2}% fee included)",
@@ -259,7 +260,7 @@ title = _("Adding Money")
                     "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
                 ) }}</h5>
                 <div class="input-group">
-                    <div class="input-group-addon">€</div>
+                    <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
                     <input class="form-control amount" name="amount_custom" placeholder="{{ _('Amount') }}" />
                 </div>
                 </div>

@@ -60,7 +60,7 @@ subhead = participant.username
         <h3>{{ _("Wallet") }}</h3>
 
         <p>{{ _("You have {0} in your wallet. What should we do with it?",
-                Money(participant.balance, 'EUR')) }}</p>
+                participant.balance) }}</p>
 
         <ul>
 

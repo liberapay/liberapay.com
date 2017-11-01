@@ -17,7 +17,7 @@ from liberapay.billing import transactions
 from liberapay.billing.transactions import (
     record_exchange, record_exchange_result, prepare_transfer, _record_transfer_result
 )
-from liberapay.constants import SESSION
+from liberapay.constants import SESSION, ZERO
 from liberapay.elsewhere._base import UserInfo
 from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
@@ -34,6 +34,10 @@ PROJECT_ROOT = str(TOP)
 
 def EUR(amount):
     return Money(amount, 'EUR')
+
+
+def USD(amount):
+    return Money(amount, 'USD')
 
 
 class ClientWithAuth(Client):
@@ -89,7 +93,7 @@ class Harness(unittest.TestCase):
         SELECT tablename
           FROM pg_tables
          WHERE schemaname='public'
-           AND tablename NOT IN ('db_meta', 'app_conf', 'payday_transfers')
+           AND tablename NOT IN ('db_meta', 'app_conf', 'payday_transfers', 'currency_exchange_rates')
     """)
     seq = itertools.count(0)
 
@@ -165,7 +169,7 @@ class Harness(unittest.TestCase):
         platform = kw.pop('elsewhere', 'github')
         domain = kw.pop('domain', '')
         kw2 = {}
-        for key in ('last_bill_result', 'balance'):
+        for key in ('last_bill_result', 'balance', 'mangopay_wallet_id'):
             if key in kw:
                 kw2[key] = kw.pop(key)
 
@@ -175,7 +179,6 @@ class Harness(unittest.TestCase):
             kw.setdefault('session_token', username)
             i = next(self.seq)
             kw.setdefault('mangopay_user_id', -i)
-            kw.setdefault('mangopay_wallet_id', -i)
         kw.setdefault('status', 'active')
         if username:
             kw['username'] = username
@@ -197,6 +200,15 @@ class Harness(unittest.TestCase):
                  VALUES (%s,%s,%s,%s,%s)
         """, (platform, participant.id, username, participant.id, domain))
 
+        if kind not in ('group', 'community') and participant.mangopay_user_id:
+            wallet_id = kw2.get('mangopay_wallet_id', -participant.id)
+            zero = ZERO[participant.main_currency]
+            self.db.run("""
+                INSERT INTO wallets
+                            (remote_id, balance, owner, remote_owner_id)
+                     VALUES (%s, %s, %s, %s)
+            """, (wallet_id, zero, participant.id, participant.mangopay_user_id))
+
         if 'email' in kw:
             self.db.run("""
                 INSERT INTO emails
@@ -204,7 +216,10 @@ class Harness(unittest.TestCase):
                      VALUES (%s, %s, true, now())
             """, (participant.id, kw['email']))
         if 'last_bill_result' in kw2:
-            ExchangeRoute.insert(participant, 'mango-cc', '-1', kw2['last_bill_result'])
+            ExchangeRoute.insert(
+                participant, 'mango-cc', '-1', kw2['last_bill_result'],
+                currency=participant.main_currency
+            )
         if 'balance' in kw2 and kw2['balance'] != 0:
             self.make_exchange('mango-cc', kw2['balance'], 0, participant)
 
@@ -220,14 +235,19 @@ class Harness(unittest.TestCase):
 
 
     def make_exchange(self, route, amount, fee, participant, status='succeeded', error='', vat=0):
+        amount = amount if isinstance(amount, Money) else Money(amount, 'EUR')
+        fee = fee if isinstance(fee, Money) else Money(fee, amount.currency)
+        vat = vat if isinstance(vat, Money) else Money(vat, fee.currency)
         if not isinstance(route, ExchangeRoute):
             network = route
-            routes = ExchangeRoute.from_network(participant, network)
+            currency = amount.currency if network == 'mango-cc' else None
+            routes = ExchangeRoute.from_network(participant, network, currency=currency)
             if routes:
                 route = routes[0]
             else:
                 from .mangopay import MangopayHarness
-                route = ExchangeRoute.insert(participant, network, MangopayHarness.card_id)
+                address = MangopayHarness.card_id if network == 'mango-cc' else -participant.id
+                route = ExchangeRoute.insert(participant, network, address, currency=currency)
                 assert route
         e_id = record_exchange(self.db, route, amount, fee, vat, participant, 'pre').id
         record_exchange_result(self.db, e_id, -e_id, status, error, participant)
@@ -235,7 +255,10 @@ class Harness(unittest.TestCase):
 
 
     def make_transfer(self, tipper, tippee, amount, context='tip', team=None, status='succeeded'):
-        t_id = prepare_transfer(self.db, tipper, tippee, amount, context, '-1', '-2', team=team)
+        wallet_from, wallet_to = '-%i' % tipper, '-%i' % tippee
+        t_id = prepare_transfer(
+            self.db, tipper, tippee, amount, context, wallet_from, wallet_to, team=team
+        )
         _record_transfer_result(self.db, t_id, status)
         return t_id
 

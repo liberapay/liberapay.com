@@ -137,17 +137,16 @@ class TestCharge(MangopayHarness):
         assert self.janet.balance == janet.balance == 0
 
     def test_charge_success_and_wallet_creation(self):
-        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
-        self.janet.set_attributes(mangopay_wallet_id=None)
+        self.db.run("DELETE FROM wallets WHERE owner = %s", (self.janet.id,))
         exchange = charge(self.db, self.janet_route, D('20'), 'http://localhost/')
         janet = Participant.from_id(self.janet.id)
         assert exchange.note is None
         assert exchange.amount == 20
         assert exchange.status == 'succeeded'
         assert self.janet.balance == janet.balance == 20
-        assert janet.withdrawable_balance == 20
+        assert janet.get_withdrawable_amount('EUR') == 20
         with mock.patch.multiple(transactions, QUARANTINE='1 month'):
-            assert janet.withdrawable_balance == 0
+            assert janet.get_withdrawable_amount('EUR') == 0
             self.db.self_check()
 
     @mock.patch('mangopay.resources.PayIn.save', autospec=True)
@@ -172,7 +171,7 @@ class TestCharge(MangopayHarness):
 
     def test_charge_invalidated_card(self):
         bob = self.make_participant('bob')
-        route = ExchangeRoute.insert(bob, 'mango-cc', '-1', error='invalidated')
+        route = ExchangeRoute.insert(bob, 'mango-cc', '-1', error='invalidated', currency='EUR')
         with self.assertRaises(AssertionError):
             charge(self.db, route, D('10.00'), 'http://localhost/')
 
@@ -211,8 +210,7 @@ class TestPayinBankWire(MangopayHarness):
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_payinbank_wire_exception_and_wallet_creation(self, test_hook):
         test_hook.side_effect = Foobar
-        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
-        self.janet.set_attributes(mangopay_wallet_id=None)
+        self.db.run("DELETE FROM wallets WHERE owner = %s", (self.janet.id,))
         exchange = payin_bank_wire(self.db, self.janet, D('50'))[1]
         assert exchange.note == 'Foobar()'
         assert exchange.status == 'failed'
@@ -273,8 +271,7 @@ class TestDirectDebit(MangopayHarness):
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_direct_debit_exception_and_wallet_creation(self, test_hook):
         test_hook.side_effect = Foobar
-        self.db.run("UPDATE participants SET mangopay_wallet_id = NULL")
-        self.homer.set_attributes(mangopay_wallet_id=None)
+        self.db.run("DELETE FROM wallets WHERE owner = %s", (self.homer.id,))
         exchange = prepare_direct_debit(self.db, self.homer_route, D('50'))
         assert exchange.status == 'pre-mandate'
         self.homer_route.set_mandate('-1')
@@ -346,7 +343,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_doesnt_update_balance_for_positive_amounts(self):
         record_exchange(
             self.db, self.janet_route,
-            amount=D("0.59"), fee=D("0.41"), vat=D("0.00"),
+            amount=EUR("0.59"), fee=EUR("0.41"), vat=EUR("0.00"),
             participant=self.janet, status='pre',
         )
         janet = Participant.from_username('janet')
@@ -357,9 +354,9 @@ class TestRecordExchange(MangopayHarness):
         record_exchange(
             self.db,
             self.homer_route,
-            amount=D('-35.84'),
-            fee=D('0.75'),
-            vat=D('0.00'),
+            amount=EUR('-35.84'),
+            fee=EUR('0.75'),
+            vat=EUR('0.00'),
             participant=self.homer,
             status='pre',
         )
@@ -368,12 +365,12 @@ class TestRecordExchange(MangopayHarness):
 
     def test_record_exchange_fails_if_negative_balance(self):
         with pytest.raises(NegativeBalance):
-            record_exchange(self.db, self.homer_route, D("-10.00"), D("0.41"), 0, self.homer, 'pre')
+            record_exchange(self.db, self.homer_route, EUR("-10.00"), EUR("0.41"), EUR(0), self.homer, 'pre')
 
     def test_record_exchange_result_restores_balance_on_error(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 30, 0, homer)
-        e_id = record_exchange(self.db, ba, D('-27.06'), D('0.81'), 0, homer, 'pre').id
+        e_id = record_exchange(self.db, ba, EUR('-27.06'), EUR('0.81'), EUR(0), homer, 'pre').id
         assert homer.balance == D('02.13')
         record_exchange_result(self.db, e_id, -e_id, 'failed', 'SOME ERROR', homer)
         homer = Participant.from_username('homer')
@@ -382,7 +379,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_result_restores_balance_on_error_with_invalidated_route(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 37, 0, homer)
-        e_id = record_exchange(self.db, ba, D('-32.45'), D('0.86'), 0, homer, 'pre').id
+        e_id = record_exchange(self.db, ba, EUR('-32.45'), EUR('0.86'), EUR(0), homer, 'pre').id
         assert homer.balance == D('3.69')
         ba.update_error('invalidated')
         record_exchange_result(self.db, e_id, -e_id, 'failed', 'oops', homer)
@@ -393,7 +390,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 50, 0, homer)
-        e_id = record_exchange(self.db, ba, D('-43.98'), D('1.60'), 0, homer, 'pre').id
+        e_id = record_exchange(self.db, ba, EUR('-43.98'), EUR('1.60'), EUR(0), homer, 'pre').id
         assert homer.balance == D('4.42')
         record_exchange_result(self.db, e_id, -e_id, 'succeeded', None, homer)
         homer = Participant.from_username('homer')
@@ -402,7 +399,7 @@ class TestRecordExchange(MangopayHarness):
     def test_record_exchange_result_updates_balance_for_positive_amounts(self):
         janet, cc = self.janet, self.janet_route
         self.make_exchange('mango-cc', 4, 0, janet)
-        e_id = record_exchange(self.db, cc, D('31.59'), D('0.01'), 0, janet, 'pre').id
+        e_id = record_exchange(self.db, cc, EUR('31.59'), EUR('0.01'), EUR(0), janet, 'pre').id
         assert janet.balance == D('4.00')
         record_exchange_result(self.db, e_id, -e_id, 'succeeded', None, janet)
         janet = Participant.from_username('janet')
@@ -416,11 +413,11 @@ class TestCashBundles(FakeTransfersHarness, MangopayHarness):
         assert bundles_count() == 0
         self.make_exchange('mango-cc', 45, 0, self.janet)
         assert bundles_count() == 1
-        transfer(self.db, self.janet.id, self.homer.id, D('10.00'), 'tip')
+        transfer(self.db, self.janet.id, self.homer.id, EUR('10.00'), 'tip')
         assert bundles_count() == 2
-        transfer(self.db, self.homer.id, self.janet.id, D('5.00'), 'tip')
+        transfer(self.db, self.homer.id, self.janet.id, EUR('5.00'), 'tip')
         assert bundles_count() == 2
-        transfer(self.db, self.homer.id, self.janet.id, D('5.00'), 'tip')
+        transfer(self.db, self.homer.id, self.janet.id, EUR('5.00'), 'tip')
         assert bundles_count() == 1
         self.db.self_check()
 
@@ -484,14 +481,14 @@ class TestSync(MangopayHarness):
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'failed'
         homer = self.homer.refetch()
-        assert homer.balance == homer.withdrawable_balance == 41
+        assert homer.balance == homer.get_withdrawable_amount('EUR') == 41
 
     def test_4_sync_with_mangopay_records_transfer_success(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
         with mock.patch('liberapay.billing.transactions.record_transfer_result') as rtr:
             rtr.side_effect = Foobar()
             with self.assertRaises(Foobar):
-                transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
+                transfer(self.db, self.janet.id, self.david.id, EUR('10.00'), 'tip')
         t = self.db.one("SELECT * FROM transfers")
         assert t.status == 'pre'
         sync_with_mangopay(self.db)
@@ -506,7 +503,7 @@ class TestSync(MangopayHarness):
              mock.patch('liberapay.billing.transactions.Transfer.save', autospec=True) as save:
             rtr.side_effect = save.side_effect = Foobar
             with self.assertRaises(Foobar):
-                transfer(self.db, self.janet.id, self.david.id, D('10.00'), 'tip')
+                transfer(self.db, self.janet.id, self.david.id, EUR('10.00'), 'tip')
         t = self.db.one("SELECT * FROM transfers")
         assert t.status == 'pre'
         self.throw_transactions_back_in_time()

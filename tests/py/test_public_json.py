@@ -14,11 +14,11 @@ class Tests(Harness):
         alice.set_tip_to(bob, EUR('1.00'))
 
         data = json.loads(self.client.GET('/bob/public.json').text)
-        assert data['receiving'] == '1.00'
+        assert data['receiving'] == {"amount": "1.00", "currency": "EUR"}
         assert 'my_tip' not in data
 
         data = json.loads(self.client.GET('/alice/public.json').text)
-        assert data['giving'] == '1.00'
+        assert data['giving'] == {"amount": "1.00", "currency": "EUR"}
 
     def test_anonymous_gets_null_giving_if_user_anonymous(self):
         alice = self.make_participant('alice', balance=100, hide_giving=True)
@@ -37,7 +37,7 @@ class Tests(Harness):
         assert data['receiving'] == None
 
     def test_anonymous_does_not_get_goal_if_user_regifts(self):
-        self.make_participant('alice', balance=100, goal=0)
+        self.make_participant('alice', balance=100, goal=EUR(0))
         data = json.loads(self.client.GET('/alice/public.json').text)
         assert 'goal' not in data
 
@@ -47,9 +47,9 @@ class Tests(Harness):
         assert data['goal'] == None
 
     def test_anonymous_gets_user_goal_if_set(self):
-        self.make_participant('alice', balance=100, goal=1)
+        self.make_participant('alice', balance=100, goal=EUR('1.00'))
         data = json.loads(self.client.GET('/alice/public.json').text)
-        assert data['goal'] == '1.00'
+        assert data['goal'] == {"amount": "1.00", "currency": "EUR"}
 
     def test_authenticated_user_gets_their_tip(self):
         alice = self.make_participant('alice', balance=100)
@@ -61,8 +61,8 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert data['receiving'] == '1.00'
-        assert data['my_tip'] == '1.00'
+        assert data['receiving'] == {"amount": "1.00", "currency": "EUR"}
+        assert data['my_tip'] == {"amount": "1.00", "currency": "EUR"}
 
     def test_authenticated_user_doesnt_get_other_peoples_tips(self):
         alice = self.make_participant('alice', balance=100)
@@ -78,8 +78,8 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert data['receiving'] == '16.00'
-        assert data['my_tip'] == '1.00'
+        assert data['receiving'] == {"amount": "16.00", "currency": "EUR"}
+        assert data['my_tip'] == {"amount": "1.00", "currency": "EUR"}
 
     def test_authenticated_user_gets_zero_if_they_dont_tip(self):
         alice = self.make_participant('alice', balance=100)
@@ -92,8 +92,8 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert data['receiving'] == '3.00'
-        assert data['my_tip'] == '0.00'
+        assert data['receiving'] == {"amount": "3.00", "currency": "EUR"}
+        assert data['my_tip'] == {"amount": "0.00", "currency": "EUR"}
 
     def test_authenticated_user_gets_self_for_self(self):
         alice = self.make_participant('alice', balance=100)
@@ -105,7 +105,7 @@ class Tests(Harness):
 
         data = json.loads(raw)
 
-        assert data['receiving'] == '3.00'
+        assert data['receiving'] == {"amount": "3.00", "currency": "EUR"}
         assert data['my_tip'] == 'self'
 
     def test_access_control_allow_origin_header_is_asterisk(self):
@@ -132,12 +132,18 @@ class Tests(Harness):
             "user_name": "bob"
         }
     },
-    "giving": "0.00",
+    "giving": {
+        "amount": "0.00",
+        "currency": "EUR"
+    },
     "goal": null,
     "id": %(user_id)s,
     "kind": "individual",
     "my_tip": "self",
     "npatrons": 1,
-    "receiving": "3.00",
+    "receiving": {
+        "amount": "3.00",
+        "currency": "EUR"
+    },
     "username": "bob"
 });''' % dict(user_id=bob.id, elsewhere_id=bob.get_accounts_elsewhere()['github'].id)

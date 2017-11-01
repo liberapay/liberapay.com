@@ -15,7 +15,6 @@ class TestIdentity(Harness):
     def test_identity_form(self):
         janeway = self.make_participant(
             'janeway', email='janeway@example.org', mangopay_user_id=None,
-            mangopay_wallet_id=None,
         )
         assert janeway.mangopay_user_id is None
 
@@ -47,9 +46,9 @@ class TestIdentity(Harness):
         assert janeway2.mangopay_user_id == janeway.mangopay_user_id
 
         # Add some money for the next test
-        create_wallet(self.db, janeway)
+        create_wallet(self.db, janeway, 'EUR')
         cr = create_card(janeway.mangopay_user_id)
-        route = ExchangeRoute.insert(janeway, 'mango-cc', cr.CardId)
+        route = ExchangeRoute.insert(janeway, 'mango-cc', cr.CardId, currency='EUR')
         charge(self.db, route, D('20.00'), 'http://127.0.0.1/')
 
         # Switch to a legal user

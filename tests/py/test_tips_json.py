@@ -57,16 +57,16 @@ class TestTipsJson(Harness):
                                     auth_as=test_tipper,
                                     xhr=True,
                                     )
-
+        data = json.loads(response.text)
         assert response.code == 200
-        assert json.loads(response.text)['amount'] == '1.00'
+        assert data['amount'] == {"amount": "1.00", "currency": "EUR"}
 
         response = self.client.GET('/test_tipper/tips.json', auth_as=test_tipper)
         data = json.loads(response.text)[0]
 
         assert response.code == 200
         assert data['username'] == 'test_tippee1'
-        assert data['amount'] == '1.00'
+        assert data['amount'] == {"amount": "1.00", "currency": "EUR"}
 
     def test_also_prune_as_1(self):
         self.also_prune_variant('1')

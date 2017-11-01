@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from six.moves.http_cookies import SimpleCookie
 
+from mangopay.utils import Money
 import pytest
 
 from liberapay.constants import SESSION, SESSION_REFRESH
@@ -188,7 +189,7 @@ class TestStub(Harness):
                 self.stub.change_username(name)
 
     def test_getting_tips_not_made(self):
-        expected = Decimal('0.00')
+        expected = EUR('0.00')
         user2 = self.make_participant('user2')
         actual = self.stub.get_tip_to(user2)['amount']
         assert actual == expected
@@ -264,15 +265,15 @@ class Tests(Harness):
         alice.set_tip_to(bob, EUR('1.00'))
 
         actual = alice.get_tip_to(bob)['amount']
-        assert actual == Decimal('1.00')
+        assert actual == EUR('1.00')
 
     def test_stt_works_for_pledges(self):
         alice = self.make_participant('alice', balance=1)
         bob = self.make_stub()
         t = alice.set_tip_to(bob, EUR('10.00'))
         assert isinstance(t, dict)
-        assert isinstance(t['amount'], Decimal)
-        assert t['amount'] == 10
+        assert isinstance(t['amount'], Money)
+        assert t['amount'] == EUR(10)
         assert t['is_funded'] is False
         assert t['is_pledge'] is True
         assert t['first_time_tipper'] is True
@@ -362,7 +363,7 @@ class Tests(Harness):
 
     def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
         alice = self.make_participant('alice', balance=100)
-        bob = self.make_participant('bob', taking=Decimal('42.00'))
+        bob = self.make_participant('bob', taking=EUR('42.00'))
         alice.set_tip_to(bob, EUR('3.00'))
         assert Participant.from_username('bob').receiving == bob.receiving == Decimal('45.00')
 
@@ -371,7 +372,7 @@ class Tests(Harness):
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, EUR('3.00'))
 
-        bob.update_goal(Decimal('-1'))
+        bob.update_goal(EUR('-1'))
         assert bob.receiving == 0
         assert bob.npatrons == 0
         alice = Participant.from_id(alice.id)
@@ -381,7 +382,7 @@ class Tests(Harness):
 
     def test_cant_pledge_to_locked_accounts(self):
         alice = self.make_participant('alice', balance=100)
-        bob = self.make_stub(goal=-1)
+        bob = self.make_stub(goal=EUR(-1))
         with self.assertRaises(UserDoesntAcceptTips):
             alice.set_tip_to(bob, EUR('3.00'))
 

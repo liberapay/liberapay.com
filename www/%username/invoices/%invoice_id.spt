@@ -79,7 +79,7 @@ if request.method == 'POST':
             invoice=invoice,
             addressee_name=addressee.username,
             accepted_by=user.username,
-            withdrawable=(participant.withdrawable_balance >= invoice.amount),
+            withdrawable=participant.can_withdraw(invoice.amount),
             force_email=True,
         )
     elif action == 'reject':
@@ -138,7 +138,7 @@ title = _("Invoice #{0}", i_id)
 <p>{{ _("From: {0}", sender.username) }}</p>
 <p>{{ _("To: {0}", addressee.username) }}</p>
 <p>{{ _("Date: {0}", invoice.ctime.date()) }}</p>
-<p>{{ _("Amount: {0}", Money(invoice.amount, 'EUR')) }}</p>
+<p>{{ _("Amount: {0}", invoice.amount) }}</p>
 <p>{{ _("Description: {0}", invoice.description) }}</p>
 % if invoice.details
 <p>{{ _("Details:") }}</p>

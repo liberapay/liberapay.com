@@ -17,17 +17,16 @@ if team.kind != 'group':
 if not user.mangopay_user_id:
     raise response.error(403, _("You can't receive money until you've filled the identity form in your account settings."))
 
-take = parse_decimal(request.body['take'])
+take = Money(parse_decimal(request.body['take']), team.main_currency)
 if take < 0:
     raise response.error(400, "bad take: negative amounts are not allowed")
 new_take = team.set_take_for(user, take, user)
 if new_take is None:
     raise response.error(403, _("You are not a member of the {0} team.", team.username))
 if new_take < take:
-    msg = _("Your take is now {0} (you can't go higher this week).",
-            Money(new_take, 'EUR'))
+    msg = _("Your take is now {0} (you can't go higher this week).", new_take)
 else:
-    msg = _("Your take is now {0}.", Money(new_take, 'EUR'))
+    msg = _("Your take is now {0}.", new_take)
 
 back_to = request.qs.get('back_to') or team.path('income/')
 back_to = _modify_query(back_to, 'success', b64encode_s(msg))

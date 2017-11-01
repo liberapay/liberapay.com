@@ -98,7 +98,7 @@ if action == 'connect':
         response.redirect('/on/confirm.html?id=%s&p_id=%s' % (account.id, connect_to.id))
 
 elif action in {'lock', 'unlock'}:
-    account.participant.update_goal(-1 if action == 'lock' else None)
+    account.participant.update_goal(Money(-1, 'EUR') if action == 'lock' else None)
 
 else:
     raise response.error(400)

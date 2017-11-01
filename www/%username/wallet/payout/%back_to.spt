@@ -24,11 +24,14 @@ exchange = None
 bank_account = None
 
 back_to = b64decode_s(request.path['back_to'], default=None)
+currency = request.qs.get('currency', currency)
+if currency not in constants.CURRENCIES:
+    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
 
 if request.method == 'POST':
     body = request.body
 
-    amount = parse_decimal(request.body['amount'])
+    amount = Money(parse_decimal(request.body['amount']), currency)
     if amount <= 0:
         raise response.error(400, _("The amount cannot be zero."))
     routes = ExchangeRoute.from_network(participant, 'mango-ba')
@@ -52,10 +55,11 @@ elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
+balance = participant.get_balance_in(currency)
 success = getattr(exchange, 'status', None) in ('created', 'succeeded')
-show_form = participant.balance > 0 and not success
+show_form = balance > 0 and not success
 if show_form or not success:
-    withdrawable = participant.withdrawable_balance
+    withdrawable = participant.get_withdrawable_amount(currency)
     show_form = withdrawable > 0
 
 if show_form:
@@ -78,11 +82,11 @@ if show_form:
             ba_type = 'IBAN'
         else:
             ba_type = 'OTHER'
-    donations = participant.get_giving_for_profile()[1]
+    donations = participant.get_giving_in(currency)
     recommended_withdrawal = min(
         withdrawable,
-        max(participant.balance - donations, constants.D_ZERO)
-    )
+        max(balance - donations, constants.ZERO[currency])
+    ).amount
 
 if user == participant:
     participant.mark_notifications_as_read('withdrawal_failed')
@@ -102,19 +106,19 @@ title = _("Withdrawing Money")
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your Liberapay wallet. "
               "If the transfer is successful {1} will land in your bank account and {2} will be paid in fees.",
-              Money(-exchange.amount + exchange.fee, 'EUR'), Money(-exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
-            _("The attempt to send {0} to your bank account has failed. Error message: {1}", Money(-exchange.amount, 'EUR'), exchange.note)
+              -exchange.amount + exchange.fee, -exchange.amount, exchange.fee) if success else
+            _("The attempt to send {0} to your bank account has failed. Error message: {1}", -exchange.amount, exchange.note)
         }}</div>
     % endif
     <p>
-        {{ _("You have {0} in your Liberapay wallet.", Money(participant.balance, 'EUR')) }}
+        {{ _("You have {0} in your Liberapay wallet.", balance) }}
         % if not success
-            % if participant.balance > withdrawable
+            % if balance > withdrawable
                 % if withdrawable == 0
                     {{ _("Unfortunately you cannot withdraw that money yet, it is still in quarantine.") }}
                 % else
                     {{ _("Out of that, {0} is available for withdrawal, the rest is still in quarantine.",
-                         Money(withdrawable, 'EUR')) }}
+                         withdrawable) }}
                 % endif
                 </p><p>
                 {{ _("We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience.", constants.QUARANTINE) }}
@@ -138,7 +142,7 @@ title = _("Withdrawing Money")
     <h3>{{ _("Amount") }}</h3>
 
     % if donations
-        <p>{{ _("You should keep at least {0} in your wallet to fund your donations this week.", Money(donations, 'EUR')) }}</p>
+        <p>{{ _("You should keep at least {0} in your wallet to fund your donations this week.", donations) }}</p>
     % endif
 
     <fieldset id="amount" class="form-inline">
@@ -147,7 +151,7 @@ title = _("Withdrawing Money")
         <div class="input-group">
             <input name="amount" value="{{ format_decimal(recommended_withdrawal) }}"
                    class="form-control" size=6 required />
-            <div class="input-group-addon">€</div>
+            <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
         </div>
     </fieldset>
 

@@ -9,9 +9,9 @@ charts = [r._asdict() for r in query_cache.all("""\
          , nparticipants::text
          , nusers::text
          , nactive::text
-         , transfer_volume::text
-         , week_deposits::text
-         , week_withdrawals::text
+         , transfer_volume
+         , week_deposits
+         , week_withdrawals
       FROM paydays p
      WHERE stage IS NULL
   ORDER BY ts_start DESC
@@ -19,6 +19,8 @@ charts = [r._asdict() for r in query_cache.all("""\
 """)]
 for c in charts:
     c['xTitle'] = c.pop('xtitle')  # postgres doesn't respect case here
+    for k in ('transfer_volume', 'week_deposits', 'week_withdrawals'):
+        c[k] = c[k].eur + c[k].usd.convert('EUR')
 
 response.headers[b"Access-Control-Allow-Origin"] = b"*"
 

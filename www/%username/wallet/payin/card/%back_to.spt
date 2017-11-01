@@ -31,8 +31,12 @@ if request.method == 'GET' and 'transactionId' in request.qs:
     record_exchange_result(website.db, payin.Tag, payin.Id, status, error, participant)
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
+currency = request.qs.get('currency', currency)
+if currency not in PAYIN_CARD_MIN:
+    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+
 exchange = None
-routes = ExchangeRoute.from_network(participant, 'mango-cc')
+routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
 route = routes[0] if routes else None
 del routes
 
@@ -47,19 +51,17 @@ if card:
         card = None
 
 funded = float('inf')
-currency = request.qs.get('currency', currency)
-if currency not in PAYIN_CARD_MIN:
-    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
-donations = participant.get_giving_for_profile()[1]
-weekly = donations - participant.receiving
+balance = participant.get_balance_in(currency)
+donations = participant.get_giving_in(currency)
+weekly = donations - participant.get_receiving_in(currency)
 amount_min = PAYIN_CARD_MIN[currency]
 amount_max = skim_amount(constants.PAYIN_CARD_MAX[currency], FEE_PAYIN_CARD[currency])[0]
 if weekly > 0:
-    funded = participant.balance // weekly
-    min_weeks = (amount_min.amount / weekly).to_integral_value(ROUND_UP)
+    funded = balance // weekly
+    min_weeks = (amount_min / weekly).to_integral_value(ROUND_UP)
     max_weeks = min(
-        max(constants.PAYIN_CARD_TARGET[currency].amount // weekly, 52),
-        amount_max.amount // weekly
+        max(constants.PAYIN_CARD_TARGET[currency] // weekly, 52),
+        amount_max // weekly
     )
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
@@ -124,8 +126,8 @@ title = _("Adding Money")
     % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees.",
-              Money(exchange.amount + exchange.fee, 'EUR'), Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')) if success else
-            _("The attempt to take {0} from your credit card has failed. Error message: {1}", Money(exchange.amount + exchange.fee, 'EUR'), exchange.note)
+              exchange.amount + exchange.fee, exchange.amount, exchange.fee) if success else
+            _("The attempt to take {0} from your credit card has failed. Error message: {1}", exchange.amount + exchange.fee, exchange.note)
         }}</div>
         % if success
         <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View Receipt") }}</a>
@@ -175,7 +177,7 @@ title = _("Adding Money")
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
-            % set charge_amount, fees, vat = upcharge_card(Money(amount, 'EUR'))
+            % set charge_amount, fees, vat = upcharge_card(amount)
             % set _months = weeks / D('4.33')
             % set months = _months.quantize(D('1'))
             <li class="list-group-item">
@@ -209,7 +211,7 @@ title = _("Adding Money")
                     "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
                 ) }}</h5>
                 <div class="input-group">
-                    <div class="input-group-addon">€</div>
+                    <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
                     <input class="form-control amount" name="amount_custom" placeholder="{{ _('Amount') }}" />
                 </div>
                 </div>
@@ -239,6 +241,7 @@ title = _("Adding Money")
     % endif
 
     <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
+          data-currency="{{ currency }}"
           data-msg-confirm-submit='{{ _(
               "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
           ) }}'

@@ -40,7 +40,7 @@ npledges = len(pledges)
 if not freeload:
     Liberapay = Participant.from_username('Liberapay')
     Liberapay_goal = getattr(Liberapay, 'goal', None)
-    Liberapay_tip = participant.get_tip_to(getattr(Liberapay, 'id', -1))
+    Liberapay_tip = participant.get_tip_to(Liberapay or participant)
 
 weekly = total - participant.receiving
 
@@ -54,7 +54,7 @@ weekly = total - participant.receiving
 % if weekly > 0
     % set funded = participant.balance // weekly
     <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
-        {{ _("You have {0} in your Liberapay wallet.", Money(participant.balance, 'EUR')) }}
+        {{ _("You have {0} in your Liberapay wallet.", participant.balance) }}
         % if funded > 0
             {{ ngettext("Your donations are only funded for another week.",
                         "Your donations are funded for another {n} weeks.",
@@ -69,7 +69,7 @@ weekly = total - participant.receiving
         % endif
     </p>
 % else
-    <p>{{ _("You give {0} per week.", Money(participant.giving, "EUR")) }}</p>
+    <p>{{ _("You give {0} per week.", participant.giving) }}</p>
 % endif
 
 % if not freeload and not Liberapay_tip.amount
@@ -121,9 +121,9 @@ weekly = total - participant.receiving
                 <th></th>
                 <th class="total">{{ _(
                     "{0} per week ~ {1} per month ~ {2} per year",
-                    Money(total, 'EUR'),
-                    Money(total / constants.PERIOD_CONVERSION_RATES['monthly'], 'EUR'),
-                    Money(total / constants.PERIOD_CONVERSION_RATES['yearly'], 'EUR'),
+                    total,
+                    total / constants.PERIOD_CONVERSION_RATES['monthly'],
+                    total / constants.PERIOD_CONVERSION_RATES['yearly'],
                 ) }}</th>
                 <th></th>
                 <th></th>
@@ -172,9 +172,9 @@ weekly = total - participant.receiving
                 <th></th>
                 <th class="total">{{ _(
                     "{0} per week ~ {1} per month ~ {2} per year",
-                    Money(pledges_total, 'EUR'),
-                    Money(pledges_total / constants.PERIOD_CONVERSION_RATES['monthly'], 'EUR'),
-                    Money(pledges_total / constants.PERIOD_CONVERSION_RATES['yearly'], 'EUR'),
+                    pledges_total,
+                    pledges_total / constants.PERIOD_CONVERSION_RATES['monthly'],
+                    pledges_total / constants.PERIOD_CONVERSION_RATES['yearly'],
                 ) }}</th>
                 <th></th>
                 <th></th>

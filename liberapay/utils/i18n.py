@@ -25,6 +25,7 @@ from pando.utils import utcnow
 
 from liberapay.constants import CURRENCIES
 from liberapay.exceptions import InvalidNumber
+from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
 
 
@@ -55,9 +56,12 @@ class Locale(_Locale):
     def __init__(self, *a, **kw):
         super(Locale, self).__init__(*a, **kw)
         self.decimal_symbol = self.number_symbols.get('decimal', '.')
+        delta_p = self.currency_formats['standard'].pattern
+        assert ';' not in delta_p
+        self.currency_delta_pattern = '+{0};-{0}'.format(delta_p)
 
-    def format_currency(self, number, currency, format=None, trailing_zeroes=True):
-        s = format_currency(number, currency, format, locale=self)
+    def format_money(self, m, format=None, trailing_zeroes=True):
+        s = format_currency(m.amount, m.currency, format, locale=self)
         if not trailing_zeroes:
             s = s.replace(self.decimal_symbol + '00', '')
         return s
@@ -71,8 +75,17 @@ class Locale(_Locale):
     def format_decimal(self, *a):
         return format_decimal(*a, locale=self)
 
-    def format_delta(self, s, *a):
-        return format_decimal(s, *a, format='+#,##0.00;-#,##0.00', locale=self)
+    def format_money_basket(self, basket):
+        return ', '.join(
+            format_currency(money.amount, money.currency, locale=self)
+            for money in basket if money
+        ) or '0'
+
+    def format_money_delta(self, money, *a):
+        return format_currency(
+            money.amount, money.currency, *a,
+            format=self.currency_delta_pattern, locale=self
+        )
 
     def format_number(self, *a):
         return format_number(*a, locale=self)
@@ -199,7 +212,9 @@ def i_format(loc, s, *a, **kw):
             elif isinstance(o, int):
                 c[k] = format_number(o, locale=loc)
             elif isinstance(o, Money):
-                c[k] = loc.format_currency(*o)
+                c[k] = loc.format_money(o)
+            elif isinstance(o, MoneyBasket):
+                c[k] = loc.format_money_basket(o)
             elif isinstance(o, Age):
                 c[k] = format_timedelta(o, locale=loc, **o.format_args)
             elif isinstance(o, timedelta):
@@ -347,11 +362,11 @@ def add_helpers_to_context(context, loc):
         to_age=to_age,
         _=lambda s, *a, **kw: get_text(context, kw.pop('loc', loc), s, *a, **kw),
         ngettext=lambda *a, **kw: n_get_text(context, kw.pop('loc', loc), *a, **kw),
-        format_currency=loc.format_currency,
         format_date=loc.format_date,
         format_datetime=loc.format_datetime,
         format_decimal=loc.format_decimal,
-        format_delta=loc.format_delta,
+        format_money=loc.format_money,
+        format_money_delta=loc.format_money_delta,
         format_number=loc.format_number,
         format_percent=loc.format_percent,
         parse_decimal=loc.parse_decimal_or_400,

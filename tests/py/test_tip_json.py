@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 
 import json
 
-from liberapay.testing import Harness
+from liberapay.testing import EUR, Harness
 
 
 class TestTipJson(Harness):
@@ -33,10 +33,10 @@ class TestTipJson(Harness):
         # Confirm we get back the right amounts.
         first_data = json.loads(response1.text)
         second_data = json.loads(response2.text)
-        assert first_data['amount'] == "1.00"
-        assert first_data['total_giving'] == "1.00"
-        assert second_data['amount'] == "3.00"
-        assert second_data['total_giving'] == "4.00"
+        assert first_data['amount'] == {"amount": "1.00", "currency": "EUR"}
+        assert first_data['total_giving'] == {"amount": "1.00", "currency": "EUR"}
+        assert second_data['amount'] == {"amount": "3.00", "currency": "EUR"}
+        assert second_data['total_giving'] == {"amount": "4.00", "currency": "EUR"}
 
     def test_set_tip_out_of_range(self):
         self.make_participant("alice")
@@ -59,7 +59,7 @@ class TestTipJson(Harness):
         assert response.code == 400
 
     def test_set_tip_to_patron(self):
-        self.make_participant("alice", goal='-1')
+        self.make_participant("alice", goal=EUR(-1))
         bob = self.make_participant("bob")
 
         response = self.tip(bob, "alice", "10.00", raise_immediately=False)
@@ -72,12 +72,12 @@ class TestTipJson(Harness):
         response = self.tip(bob, alice.participant.username, "10.00")
         data = json.loads(response.text)
         assert response.code == 200
-        assert data['amount'] == "10.00"
+        assert data['amount'] == {"amount": "10.00", "currency": "EUR"}
         assert "alice" in data['msg']
 
         # Stop pledging
         response = self.tip(bob, alice.participant.username, "0.00")
         data = json.loads(response.text)
         assert response.code == 200
-        assert data['amount'] == "0.00"
+        assert data['amount'] == {"amount": "0.00", "currency": "EUR"}
         assert "alice" in data['msg']

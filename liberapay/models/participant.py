@@ -1,7 +1,6 @@
-from __future__ import print_function, unicode_literals
+from __future__ import division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
-from decimal import ROUND_DOWN, ROUND_UP
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
@@ -21,11 +20,11 @@ from psycopg2 import IntegrityError
 from psycopg2.extras import Json
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, D_CENT, D_ZERO,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
-    SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE
+    SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE, ZERO
 )
 from liberapay.exceptions import (
     BadAmount,
@@ -57,7 +56,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    deserialize, erase_cookie, serialize, set_cookie,
+    NS, deserialize, erase_cookie, serialize, set_cookie,
     emails, i18n, markdown,
 )
 from liberapay.website import website
@@ -226,25 +225,32 @@ class Participant(Model, MixinTeam):
                 return p
 
     @classmethod
-    def get_chargebacks_account(cls):
-        r = cls.db.one("""
+    def get_chargebacks_account(cls, currency):
+        p = cls.db.one("""
             SELECT p
               FROM participants p
              WHERE mangopay_user_id = 'CREDIT'
         """)
-        if r:
-            return r
-        return cls.make_stub(
-            goal=-1,
-            hide_from_search=3,
-            hide_from_lists=3,
-            join_time=utcnow(),
-            kind='organization',
-            mangopay_user_id='CREDIT',
-            mangopay_wallet_id='CREDIT_EUR',
-            status='active',
-            username='_chargebacks_',
-        )
+        if not p:
+            p = cls.make_stub(
+                goal=Money(-1, currency),
+                hide_from_search=3,
+                hide_from_lists=3,
+                join_time=utcnow(),
+                kind='organization',
+                mangopay_user_id='CREDIT',
+                status='active',
+                username='_chargebacks_',
+            )
+        wallet = cls.db.one("""
+            INSERT INTO wallets
+                        (remote_id, balance, owner, remote_owner_id)
+                 VALUES (%s, %s, %s, 'CREDIT')
+            ON CONFLICT (remote_id) DO UPDATE
+                    SET remote_owner_id = 'CREDIT'  -- dummy update
+              RETURNING *
+        """, ('CREDIT_' + currency, ZERO[currency], p.id))
+        return p, wallet
 
     def refetch(self):
         return self._from_thing('id', self.id)
@@ -470,61 +476,69 @@ class Participant(Model, MixinTeam):
 
         tips = self.get_giving_for_profile()[0]
         tips = [t for t in tips if t.is_identified and not t.is_suspended]
-        total = sum(t.amount for t in tips)
-        transfers = []
-        distributed = D_ZERO
-
-        if not total:
-            raise self.NoOneToGiveFinalGiftTo
-
         for tip in tips:
-            rate = tip.amount / total
-            pro_rated = (self.balance * rate).quantize(D_CENT, ROUND_DOWN)
-            if pro_rated == 0:
-                continue
             if tip.kind == 'group':
-                team_id = tip.tippee
-                team = Participant.from_id(team_id)
-                takes = [
-                    t for t in team.get_current_takes(cursor=cursor)
-                    if t['is_identified'] and t['amount'] and t['member_id'] != self.id
+                tip.team = Participant.from_id(tip.tippee)
+                tip.takes = [
+                    t for t in tip.team.get_current_takes(cursor=cursor)
+                    if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
-                if not takes:
+                tip.total_takes = sum(t['amount'] for t in tip.takes)
+        tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
+        transfers = []
+
+        for wallet in self.get_current_wallets():
+            if wallet.balance == 0:
+                continue
+            currency = wallet.balance.currency
+            tips_in_this_currency = [t for t in tips if t.amount.currency == currency]
+            total = sum(t.amount for t in tips_in_this_currency) or ZERO[currency]
+            transfers = []
+            distributed = ZERO[currency]
+            initial_balance = wallet.balance
+
+            if not total:
+                continue
+
+            for tip in tips:
+                rate = tip.amount / total
+                pro_rated = (initial_balance * rate).round_down()
+                if pro_rated == 0:
                     continue
-                balance = pro_rated
-                total_takes = sum(t['amount'] for t in takes)
-                ratio = balance / total_takes if total_takes else 0
-                for take in takes:
-                    nominal = take['amount']
-                    actual = min(
-                        (nominal * ratio).quantize(D_CENT, rounding=ROUND_UP),
-                        balance
-                    )
-                    if actual == 0:
-                        continue
-                    balance -= actual
-                    transfers.append([take['member_id'], actual, team_id])
-                assert balance == 0
-            else:
-                transfers.append([tip.tippee, pro_rated, None])
-            distributed += pro_rated
+                if tip.kind == 'group':
+                    team_id = tip.tippee
+                    balance = pro_rated
+                    for take in tip.takes:
+                        nominal = take['amount']
+                        actual = min(
+                            (pro_rated * (nominal / tip.total_takes)).round_up(),
+                            balance
+                        )
+                        if actual == 0:
+                            continue
+                        balance -= actual
+                        transfers.append([take['member_id'], actual, team_id, wallet])
+                    assert balance == 0
+                else:
+                    transfers.append([tip.tippee, pro_rated, None, wallet])
+                distributed += pro_rated
+
+            diff = initial_balance - distributed
+            if diff != 0 and transfers:
+                transfers[0][1] += diff  # Give it to the first receiver.
 
         if not transfers:
             raise self.NoOneToGiveFinalGiftTo
 
-        diff = self.balance - distributed
-        if diff != 0:
-            transfers[0][1] += diff  # Give it to the highest receiver.
-
         from liberapay.billing.transactions import transfer
         db = self.db
         tipper = self.id
-        for tippee, amount, team in transfers:
+        for tippee, amount, team, wallet in transfers:
             balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
                                tipper_mango_id=self.mangopay_user_id,
-                               tipper_wallet_id=self.mangopay_wallet_id)[0]
+                               tipper_wallet_id=wallet.remote_id)[0]
 
-        assert balance == 0
+        assert balance == 0  # TODO handle this
         self.set_attributes(balance=balance)
 
     def clear_tips_giving(self, cursor):
@@ -536,13 +550,14 @@ class Participant(Model, MixinTeam):
                        FROM participants p
                       WHERE p.id=t.tippee
                     ) AS tippee
+                 , t.amount
               FROM current_tips t
              WHERE tipper = %s
                AND amount > 0
 
         """, (self.id,))
-        for tippee in tippees:
-            self.set_tip_to(tippee, Money(0, 'EUR'), update_self=False, cursor=cursor)
+        for tippee, amount in tippees:
+            self.set_tip_to(tippee, amount.zero(), update_self=False, cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user.
@@ -553,13 +568,14 @@ class Participant(Model, MixinTeam):
                        FROM participants p
                       WHERE p.id=t.tipper
                     ) AS tipper
+                 , t.amount
               FROM current_tips t
              WHERE tippee = %s
                AND amount > 0
 
         """, (self.id,))
-        for tipper in tippers:
-            tipper.set_tip_to(self, Money(0, 'EUR'), update_tippee=False, cursor=cursor)
+        for tipper, amount in tippers:
+            tipper.set_tip_to(self, amount.zero(), update_tippee=False, cursor=cursor)
 
     def clear_takes(self, cursor):
         """Leave all teams by zeroing all takes.
@@ -588,8 +604,8 @@ class Participant(Model, MixinTeam):
                  , avatar_url=NULL
                  , session_token=NULL
                  , session_expires=now()
-                 , giving=0
-                 , receiving=0
+                 , giving=zero(giving)
+                 , receiving=zero(receiving)
                  , npatrons=0
              WHERE id=%(id)s
          RETURNING *;
@@ -1011,20 +1027,54 @@ class Participant(Model, MixinTeam):
             )
 
 
-    # Exchange-related stuff
-    # ======================
+    # Wallets and balances
+    # ====================
 
-    @property
-    def withdrawable_balance(self):
+    def get_withdrawable_amount(self, currency):
         from liberapay.billing.transactions import QUARANTINE
         return self.db.one("""
-            SELECT COALESCE(sum(amount), 0)
+            SELECT sum(amount)
               FROM cash_bundles
              WHERE owner = %s
                AND ts < now() - INTERVAL %s
                AND disputed IS NOT TRUE
                AND locked_for IS NULL
-        """, (self.id, QUARANTINE))
+               AND (amount).currency = %s
+        """, (self.id, QUARANTINE, currency)) or ZERO[currency]
+
+    def can_withdraw(self, amount):
+        return self.get_withdrawable_amount(amount.currency) >= amount
+
+    def get_current_wallet(self, currency=None, create=False):
+        currency = currency or self.main_currency
+        w = self.db.one("""
+            SELECT *
+              FROM wallets
+             WHERE owner = %s
+               AND balance::currency = %s
+               AND is_current
+        """, (self.id, currency))
+        if w or not create:
+            return w
+        from liberapay.billing.transactions import create_wallet
+        return create_wallet(self.db, self, currency)
+
+    def get_current_wallets(self):
+        return self.db.all("""
+            SELECT *
+              FROM wallets
+             WHERE owner = %s
+               AND is_current
+        """, (self.id,))
+
+    def get_balance_in(self, currency):
+        return self.db.one("""
+            SELECT balance
+              FROM wallets
+             WHERE owner = %s
+               AND balance::currency = %s
+               AND is_current
+        """, (self.id, currency)) or ZERO[currency]
 
 
     # Events
@@ -1271,14 +1321,15 @@ class Participant(Model, MixinTeam):
 
     def pay_invoice(self, invoice):
         assert self.id == invoice.addressee
-        if self.balance < invoice.amount:
+        wallet = self.get_current_wallet(invoice.amount.currency)
+        if not wallet or wallet.balance < invoice.amount:
             return False
         from liberapay.billing.transactions import transfer
         balance = transfer(
             self.db, self.id, invoice.sender, invoice.amount, invoice.nature,
             invoice=invoice.id,
             tipper_mango_id=self.mangopay_user_id,
-            tipper_wallet_id=self.mangopay_wallet_id,
+            tipper_wallet_id=wallet.remote_id,
         )[0]
         self.update_invoice_status(invoice.id, 'paid')
         self.set_attributes(balance=balance)
@@ -1438,7 +1489,7 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor(cursor) as c:
             goal = 'goal'
             if status == 'closed':
-                goal = '-1'
+                goal = '(-1, main_currency)'
             elif status == 'active':
                 goal = 'NULL'
             r = c.one("""
@@ -1455,6 +1506,30 @@ class Participant(Model, MixinTeam):
                 self.clear_tips_receiving(c)
                 self.update_receiving(c)
 
+    def get_giving_in(self, currency):
+        return self.db.one("""
+            SELECT sum(t.amount)
+              FROM current_tips t
+             WHERE t.tipper = %s
+               AND t.amount::currency = %s
+        """, (self.id, currency)) or ZERO[currency]
+
+    def get_receiving_in(self, currency, cursor=None):
+        r = (cursor or self.db).one("""
+            SELECT sum(t.amount)
+              FROM current_tips t
+             WHERE t.tippee = %s
+               AND t.amount::currency = %s
+               AND t.is_funded
+        """, (self.id, currency)) or ZERO[currency]
+        r += (cursor or self.db).one("""
+            SELECT sum(t.actual_amount)
+              FROM current_takes t
+             WHERE t.member = %s
+               AND t.amount::currency = %s
+        """, (self.id, currency)) or ZERO[currency]
+        return r
+
     def update_giving_and_tippees(self, cursor):
         updated_tips = self.update_giving(cursor)
         for tip in updated_tips:
@@ -1470,28 +1545,31 @@ class Participant(Model, MixinTeam):
                AND t.amount > 0
           ORDER BY p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
-        fake_balance = self.balance + self.receiving
         updated = []
-        for tip in tips:
-            if tip.amount > fake_balance:
-                is_funded = False
-            else:
-                fake_balance -= tip.amount
-                is_funded = True
-            if tip.is_funded == is_funded:
-                continue
-            updated.append((cursor or self.db).one("""
-                UPDATE tips
-                   SET is_funded = %s
-                 WHERE id = %s
-             RETURNING *
-            """, (is_funded, tip.id)))
+        for wallet in self.get_current_wallets():
+            fake_balance = wallet.balance
+            currency = fake_balance.currency
+            fake_balance += self.get_receiving_in(currency, cursor)
+            for tip in (t for t in tips if t.amount.currency == currency):
+                if tip.amount > fake_balance:
+                    is_funded = False
+                else:
+                    fake_balance -= tip.amount
+                    is_funded = True
+                if tip.is_funded == is_funded:
+                    continue
+                updated.append((cursor or self.db).one("""
+                    UPDATE tips
+                       SET is_funded = %s
+                     WHERE id = %s
+                 RETURNING *
+                """, (is_funded, tip.id)))
 
         # Update giving on participant
         giving = (cursor or self.db).one("""
             UPDATE participants p
                SET giving = COALESCE((
-                     SELECT sum(amount)
+                     SELECT sum(amount, %(currency)s)
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
@@ -1499,10 +1577,10 @@ class Participant(Model, MixinTeam):
                         AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
                         AND amount > 0
                         AND is_funded
-                   ), 0)
+                   ), zero(p.giving))
              WHERE p.id = %(id)s
          RETURNING giving
-        """, dict(id=self.id))
+        """, dict(id=self.id, currency=self.main_currency))
         self.set_attributes(giving=giving)
 
         return updated
@@ -1511,6 +1589,7 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor(cursor) as c:
             if self.kind == 'group':
                 c.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            zero = ZERO[self.main_currency]
             r = c.one("""
                 WITH our_tips AS (
                          SELECT amount
@@ -1520,14 +1599,14 @@ class Participant(Model, MixinTeam):
                             AND is_funded
                      )
                 UPDATE participants p
-                   SET receiving = (COALESCE((
-                           SELECT sum(amount)
-                             FROM our_tips
-                       ), 0) + taking)
+                   SET receiving = (
+                           COALESCE((SELECT sum(amount, %(currency)s) FROM our_tips), %(zero)s) +
+                           COALESCE(taking, %(zero)s)
+                       )
                      , npatrons = COALESCE((SELECT count(*) FROM our_tips), 0)
                  WHERE p.id = %(id)s
              RETURNING receiving, npatrons
-            """, dict(id=self.id))
+            """, dict(id=self.id, currency=self.main_currency, zero=zero))
             self.set_attributes(receiving=r.receiving, npatrons=r.npatrons)
             if self.kind == 'group':
                 self.recompute_actual_takes(c)
@@ -1592,8 +1671,8 @@ class Participant(Model, MixinTeam):
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
-        """, dict(tipper=self.id, tippee=tippee.id, amount=amount.amount,
-                  period=period, periodic_amount=periodic_amount.amount))._asdict()
+        """, dict(tipper=self.id, tippee=tippee.id, amount=amount,
+                  period=period, periodic_amount=periodic_amount))._asdict()
 
         if update_self:
             # Update giving amount of tipper
@@ -1609,30 +1688,32 @@ class Participant(Model, MixinTeam):
 
 
     @staticmethod
-    def _zero_tip_dict(tippee):
-        if isinstance(tippee, Participant):
-            tippee = tippee.id
-        return dict(amount=D_ZERO, is_funded=False, tippee=tippee,
-                    period='weekly', periodic_amount=D_ZERO)
+    def _zero_tip_dict(tippee, currency=None):
+        if not isinstance(tippee, Participant):
+            tippee = Participant.from_id(tippee)
+        if not tippee.accept_all_currencies or not currency:
+            currency = tippee.main_currency
+        zero = ZERO[currency]
+        return dict(amount=zero, is_funded=False, tippee=tippee.id,
+                    period='weekly', periodic_amount=zero)
 
 
-    def get_tip_to(self, tippee):
+    def get_tip_to(self, tippee, currency=None):
         """Given a participant (or their id), returns a dict.
         """
-        default = self._zero_tip_dict(tippee)
-        tippee = default['tippee']
-        if self.id == tippee:
-            return default
-        return self.db.one("""\
-
+        if not isinstance(tippee, Participant):
+            tippee = Participant.from_id(tippee)
+        r = self.db.one("""\
             SELECT *
               FROM tips
              WHERE tipper=%s
                AND tippee=%s
           ORDER BY mtime DESC
              LIMIT 1
-
-        """, (self.id, tippee), back_as=dict, default=default)
+        """, (self.id, tippee.id), back_as=dict)
+        if r:
+            return r
+        return self._zero_tip_dict(tippee, currency)
 
 
     def get_tip_distribution(self):
@@ -1651,13 +1732,13 @@ class Participant(Model, MixinTeam):
                     amount,
                     number_of_tippers_for_this_amount,
                     total_amount_given_at_this_amount,
+                    total_amount_given_at_this_amount_converted_to_reference_currency,
                     proportion_of_tips_at_this_amount,
                     proportion_of_total_amount_at_this_amount
                 ]
 
         """
-        SQL = """
-
+        recs = self.db.all("""
             SELECT amount
                  , count(amount) AS ncontributing
               FROM ( SELECT DISTINCT ON (tipper)
@@ -1671,33 +1752,32 @@ class Participant(Model, MixinTeam):
                     ) AS foo
              WHERE amount > 0
           GROUP BY amount
-          ORDER BY amount
-
-        """
-
+          ORDER BY (amount).amount
+        """, (self.id,))
         tip_amounts = []
-
-        npatrons = 0.0  # float to trigger float division
-        contributed = D_ZERO
-        for rec in self.db.all(SQL, (self.id,)):
+        npatrons = 0
+        currency = self.main_currency
+        contributed = ZERO[currency]
+        for rec in recs:
             tip_amounts.append([
                 rec.amount,
                 rec.ncontributing,
                 rec.amount * rec.ncontributing,
             ])
-            contributed += tip_amounts[-1][2]
+            tip_amounts[-1].append(tip_amounts[-1][2].convert(currency))
+            contributed += tip_amounts[-1][3]
             npatrons += rec.ncontributing
 
         for row in tip_amounts:
             row.append((row[1] / npatrons) if npatrons > 0 else 0)
-            row.append((row[2] / contributed) if contributed > 0 else 0)
+            row.append((row[3] / contributed) if contributed > 0 else 0)
 
         return tip_amounts, npatrons, contributed
 
 
     def get_giving_for_profile(self):
 
-        tips = self.db.all("""\
+        tips = [NS(r._asdict()) for r in self.db.all("""\
 
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
@@ -1720,12 +1800,10 @@ class Participant(Model, MixinTeam):
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo
-            ORDER BY amount DESC
-                   , username
 
-        """, (self.id,))
+        """, (self.id,))]
 
-        pledges = self.db.all("""\
+        pledges = [NS(r._asdict()) for r in self.db.all("""\
 
             SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
@@ -1744,22 +1822,24 @@ class Participant(Model, MixinTeam):
               ORDER BY tippee
                      , t.mtime DESC
             ) AS foo
-            ORDER BY amount DESC
-                   , ctime DESC
 
-        """, (self.id,))
+        """, (self.id,))]
 
+        for t in tips:
+            t.converted_amount = t.amount.convert(self.main_currency)
+        for t in pledges:
+            t.converted_amount = t.amount.convert(self.main_currency)
+        tips = sorted(tips, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
+        pledges = sorted(pledges, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
 
-        # Compute the total
-
-        total = sum([t.amount for t in tips])
+        total = sum([t.converted_amount for t in tips])
         if not total:
-            # If tips is an empty list, total is int 0. We want a Decimal.
-            total = D_ZERO
+            # If tips is an empty list, total is int 0. We want a Money amount.
+            total = ZERO[self.main_currency]
 
-        pledges_total = sum([t.amount for t in pledges])
+        pledges_total = sum([t.converted_amount for t in pledges])
         if not pledges_total:
-            pledges_total = D_ZERO
+            pledges_total = ZERO[self.main_currency]
 
         return tips, total, pledges, pledges_total
 
@@ -1890,7 +1970,7 @@ class Participant(Model, MixinTeam):
 
         ZERO_OUT_OLD_TIPS_RECEIVING = """
             INSERT INTO tips (ctime, tipper, tippee, amount, period, periodic_amount)
-                SELECT ctime, tipper, tippee, 0 AS amount, period, 0 AS periodic_amount
+                SELECT ctime, tipper, tippee, zero(amount), period, zero(periodic_amount)
                   FROM temp_tips
                  WHERE tippee=%s
         """
@@ -1975,7 +2055,7 @@ class Participant(Model, MixinTeam):
                         DELETE FROM participants WHERE id = %(dead)s;
                     EXCEPTION WHEN OTHERS THEN
                         UPDATE participants
-                           SET goal = -1
+                           SET goal = (-1, main_currency)
                          WHERE id = %(dead)s;
                     END;
                     $$ LANGUAGE plpgsql;
@@ -2073,7 +2153,7 @@ class Participant(Model, MixinTeam):
         #   3.00 - user wishes to receive at least this amount
         if self.goal != 0:
             if self.goal and self.goal > 0:
-                goal = str(self.goal)
+                goal = self.goal
             else:
                 goal = None
             output['goal'] = goal
@@ -2083,7 +2163,7 @@ class Participant(Model, MixinTeam):
         #   null - user is receiving anonymously
         #   3.00 - user receives this amount in tips
         if not self.hide_receiving:
-            receiving = str(self.receiving)
+            receiving = self.receiving
         else:
             receiving = None
         output['receiving'] = receiving
@@ -2093,7 +2173,7 @@ class Participant(Model, MixinTeam):
         #   null - user is giving anonymously
         #   3.00 - user gives this amount in tips
         if not self.hide_giving:
-            giving = str(self.giving)
+            giving = self.giving
         else:
             giving = None
         output['giving'] = giving
@@ -2110,7 +2190,7 @@ class Participant(Model, MixinTeam):
                 my_tip = 'self'
             else:
                 my_tip = inquirer.get_tip_to(self)['amount']
-            output['my_tip'] = str(my_tip)
+            output['my_tip'] = my_tip
 
         # Key: elsewhere
         accounts = self.get_accounts_elsewhere()

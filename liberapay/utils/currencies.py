@@ -85,6 +85,18 @@ class MoneyBasket(object):
     def __repr__(self):
         return b'%s[%s, %s]' % (self.__class__.__name__, self.eur, self.usd)
 
+    def __bool__(self):
+        return any(v for v in self.__dict__.values())
+
+    __nonzero__ = __bool__
+
+    @classmethod
+    def sum(cls, amounts):
+        r = cls(Money('0.00', 'EUR'), usd=Money('0.00', 'USD'))
+        for a in amounts:
+            r.__dict__[a.currency.lower()].amount += a.amount
+        return r
+
 
 def fetch_currency_exchange_rates(db):
     currencies = set(db.one("SELECT array_to_json(enum_range(NULL::currency))"))

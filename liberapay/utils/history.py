@@ -1,68 +1,69 @@
 from datetime import datetime
-from decimal import Decimal
 
 from pando import Response
-from psycopg2 import IntegrityError
 
 from ..website import website
+from .currencies import MoneyBasket
 
 
-def get_end_of_year_balance(db, participant, year, current_year):
+def get_end_of_year_balances(db, participant, year, current_year):
     if year == current_year:
-        return participant.balance
+        return db.one("""
+            SELECT basket_sum(balance)
+              FROM wallets
+             WHERE owner = %s
+               AND is_current
+        """, (participant.id,))
     if year < participant.join_time.year:
-        return Decimal('0.00')
+        return MoneyBasket()
 
-    balance = db.one("""
-        SELECT balance
+    balances = db.one("""
+        SELECT balances
           FROM balances_at
          WHERE participant = %s
            AND "at" = %s
     """, (participant.id, datetime(year+1, 1, 1)))
-    if balance is not None:
-        return balance
+    if balances is not None:
+        return balances
 
     id = participant.id
-    start_balance = get_end_of_year_balance(db, participant, year-1, current_year)
-    delta = db.one("""
+    balances = get_end_of_year_balances(db, participant, year-1, current_year)
+    balances += db.one("""
         SELECT (
-                  SELECT COALESCE(sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE 0 END)), 0) AS a
+                  SELECT basket_sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE zero(fee) END)) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount > 0
                      AND status = 'succeeded'
                ) + (
-                  SELECT COALESCE(sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE 0 END)), 0) AS a
+                  SELECT basket_sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE zero(fee) END)) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND amount < 0
                      AND status <> 'failed'
                ) + (
-                  SELECT COALESCE(sum(-amount), 0) AS a
+                  SELECT basket_sum(-amount) AS a
                     FROM transfers
                    WHERE tipper = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND status = 'succeeded'
                ) + (
-                  SELECT COALESCE(sum(amount), 0) AS a
+                  SELECT basket_sum(amount) AS a
                     FROM transfers
                    WHERE tippee = %(id)s
                      AND extract(year from timestamp) = %(year)s
                      AND status = 'succeeded'
                ) AS delta
     """, locals())
-    balance = start_balance + delta
-    try:
-        db.run("""
-            INSERT INTO balances_at
-                        (participant, at, balance)
-                 VALUES (%s, %s, %s)
-        """, (participant.id, datetime(year+1, 1, 1), balance))
-    except IntegrityError:
-        pass
-    return balance
+    db.run("""
+        INSERT INTO balances_at
+                    (participant, at, balances)
+             VALUES (%s, %s, %s)
+        ON CONFLICT (participant, at) DO NOTHING
+    """, (participant.id, datetime(year+1, 1, 1), balances))
+    return balances
 
 
 def iter_payday_events(db, participant, year=None):
@@ -102,14 +103,14 @@ def iter_payday_events(db, participant, year=None):
         yield dict(
             kind='totals',
             regular_donations=dict(
-                sent=sum(t['amount'] for t in regular_donations if t['tipper'] == id),
-                received=sum(t['amount'] for t in regular_donations if t['tippee'] == id),
+                sent=MoneyBasket.sum(t['amount'] for t in regular_donations if t['tipper'] == id),
+                received=MoneyBasket.sum(t['amount'] for t in regular_donations if t['tippee'] == id),
                 npatrons=len(set(t['tipper'] for t in regular_donations if t['tippee'] == id)),
                 ntippees=len(set(t['tippee'] for t in regular_donations if t['tipper'] == id)),
             ),
             reimbursements=dict(
-                sent=sum(t['amount'] for t in reimbursements if t['tipper'] == id),
-                received=sum(t['amount'] for t in reimbursements if t['tippee'] == id),
+                sent=MoneyBasket.sum(t['amount'] for t in reimbursements if t['tipper'] == id),
+                received=MoneyBasket.sum(t['amount'] for t in reimbursements if t['tippee'] == id),
                 npayers=len(set(t['tipper'] for t in reimbursements if t['tippee'] == id)),
                 nrecipients=len(set(t['tippee'] for t in reimbursements if t['tipper'] == id)),
             ),
@@ -123,25 +124,25 @@ def iter_payday_events(db, participant, year=None):
       ORDER BY ts_start ASC
     """)
 
-    balance = get_end_of_year_balance(db, participant, year, current_year)
+    balances = get_end_of_year_balances(db, participant, year, current_year)
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)
     day_events, day_open = None, None  # for pyflakes
     for event in events:
 
-        event['balance'] = balance
+        event['balances'] = balances
 
         event_date = event['timestamp'].date()
         if event_date != prev_date:
             if prev_date:
-                day_open['wallet_delta'] = day_open['balance'] - balance
+                day_open['wallet_deltas'] = day_open['balances'] - balances
                 yield day_open
                 for e in day_events:
                     yield e
-                yield dict(kind='day-close', balance=balance)
+                yield dict(kind='day-close', balances=balances)
             day_events = []
-            day_open = dict(kind='day-open', date=event_date, balance=balance)
+            day_open = dict(kind='day-open', date=event_date, balances=balances)
             if payday_dates:
                 while payday_dates and payday_dates[-1] > event_date:
                     payday_dates.pop()
@@ -156,13 +157,13 @@ def iter_payday_events(db, participant, year=None):
                 event['bank_delta'] = -event['amount'] - max(event['fee'], 0)
                 event['wallet_delta'] = event['amount'] - min(event['fee'], 0)
                 if event['status'] == 'succeeded':
-                    balance -= event['wallet_delta']
+                    balances -= event['wallet_delta']
             else:
                 kind = 'payin-refund' if event['refund_ref'] else 'credit'
                 event['bank_delta'] = -event['amount'] - min(event['fee'], 0)
                 event['wallet_delta'] = event['amount'] - max(event['fee'], 0)
                 if event['status'] != 'failed':
-                    balance -= event['wallet_delta']
+                    balances -= event['wallet_delta']
         else:
             kind = 'transfer'
             if event['tippee'] == id:
@@ -170,18 +171,18 @@ def iter_payday_events(db, participant, year=None):
             else:
                 event['wallet_delta'] = -event['amount']
             if event['status'] == 'succeeded':
-                balance -= event['wallet_delta']
+                balances -= event['wallet_delta']
             if event['context'] == 'expense':
                 event['invoice_url'] = participant.path('invoices/%s' % event['invoice'])
         event['kind'] = kind
 
         day_events.append(event)
 
-    day_open['wallet_delta'] = day_open['balance'] - balance
+    day_open['wallet_delta'] = day_open['balances'] - balances
     yield day_open
     for e in day_events:
         yield e
-    yield dict(kind='day-close', balance=balance)
+    yield dict(kind='day-close', balances=balances)
 
 
 def export_history(participant, year, mode, key, back_as='namedtuple', require_key=False):
@@ -192,7 +193,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
     if mode == 'aggregate':
         out['given'] = lambda: db.all("""
             SELECT (%(base_url)s || t.tippee::text) AS donee_url,
-                   min(p.username) AS donee_username, sum(t.amount) AS amount
+                   min(p.username) AS donee_username, basket_sum(t.amount) AS amount
               FROM transfers t
               JOIN participants p ON p.id = t.tippee
              WHERE t.tipper = %(id)s
@@ -204,7 +205,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
         """, params, back_as=back_as)
         out['reimbursed'] = lambda: db.all("""
             SELECT (%(base_url)s || t.tippee::text) AS recipient_url,
-                   min(p.username) AS recipient_username, sum(t.amount) AS amount
+                   min(p.username) AS recipient_username, basket_sum(t.amount) AS amount
               FROM transfers t
               JOIN participants p ON p.id = t.tippee
              WHERE t.tipper = %(id)s
@@ -215,7 +216,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
             SELECT (%(base_url)s || t.team::text) AS team_url,
-                   min(p.username) AS team_username, sum(t.amount) AS amount
+                   min(p.username) AS team_username, basket_sum(t.amount) AS amount
               FROM transfers t
               JOIN participants p ON p.id = t.team
              WHERE t.tippee = %(id)s

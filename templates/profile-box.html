@@ -35,7 +35,7 @@
         % if not participant.hide_receiving
         <dl>
             <dt>{{ _("Income") }}</dt>
-            <dd>{{ format_currency(participant.receiving, 'EUR') }}<br>
+            <dd>{{ format_money(participant.receiving) }}<br>
                 <small>{{ _("per week") }}</small></dd>
         </dl>
         % endif
@@ -68,7 +68,7 @@
             % if not p.hide_receiving
             <dl>
                 <dt>{{ _("Sum") }}</dt>
-                <dd>{{ format_currency(p.receiving, 'EUR') }}<br>
+                <dd>{{ format_money(p.receiving) }}<br>
                     <small>{{ _("per week") }}</small></dd>
             </dl>
             % endif

@@ -1,10 +1,9 @@
     <table class="tip-distribution">
-        % for amount, ncontributors, summed, pcontributors, psummed in tip_distribution
+        % for amount, ncontributors, summed, summed_converted, pcontributors, psummed in tip_distribution
         <tr>
-            <td class="currency-symbol">€</td>
-            <td class="amount">{{ amount }}</td>
+            <td class="amount">{{ format_money(amount) }}</td>
             <td class="count">
-                <span class="bar" style="width:{{ pcontributors * 240 }}pt"></span>
+                <span class="bar blue" style="width:{{ pcontributors * 240 }}pt"></span>
                 {{ "%5.1f" % (pcontributors * 100) }}%
                 <span class="number">({{ ncontributors }})</span>
             </td>

@@ -13,7 +13,7 @@ if not website.db:
 
 sponsors = query_cache.all("""
     SELECT username, giving, avatar_url
-      FROM ( SELECT * FROM sponsors ORDER BY random() * giving DESC LIMIT 10 ) foo
+      FROM ( SELECT * FROM sponsors ORDER BY giving * random()::numeric DESC LIMIT 10 ) foo
   ORDER BY giving DESC
 """)
 nsponsors = query_cache.one("SELECT count(*) FROM sponsors")
@@ -40,12 +40,12 @@ recent = query_cache.one("""
     SELECT (SELECT count(*) FROM _users) AS n_users
          , (SELECT max(join_time) FROM _users) AS newest_user_ts
          , (SELECT count(*) FROM _donations) AS n_donations
-         , (SELECT sum(amount) FROM _donations) AS donations_amount
+         , (SELECT sum(amount, %s) FROM _donations) AS donations_amount
          , (SELECT count(*) FROM _pledges) AS n_pledges
-         , (SELECT sum(amount) FROM _pledges) AS pledges_amount
+         , (SELECT sum(amount, %s) FROM _pledges) AS pledges_amount
          , (SELECT transfer_volume FROM _payday) AS newest_payday_transfer_volume
          , (SELECT nactive FROM _payday) AS newest_payday_nactive
-""")
+""", (currency, currency))
 
 [---]
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context
@@ -96,7 +96,7 @@ recent = query_cache.one("""
         % else
 
             <p><a href="/{{ user.username }}/receiving/">{{
-                _("You receive {0} per week.", Money(user.receiving, 'EUR'))
+                _("You receive {0} per week.", user.receiving)
             }}</a></p>
 
             % if not user.accepts_tips
@@ -240,7 +240,7 @@ recent = query_cache.one("""
                     <a href="/{{ p.username }}/">
                         {{ avatar_img(p) }}
                         <div class="name">{{ p.username }}</div>
-                        <div class="amount">{{ format_currency(p.giving, 'EUR') }}</div>
+                        <div class="amount">{{ format_money(p.giving) }}</div>
                     </a>
                 </div>
             % endfor
@@ -269,7 +269,7 @@ recent = query_cache.one("""
         <p>{{ glyphicon('gift') }} <span>{{ ngettext(
             "",
             "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}.",
-            n=recent.n_donations, money_amount=Money(recent.donations_amount, 'EUR')
+            n=recent.n_donations, money_amount=recent.donations_amount
         ) }}</span></p>
         % endif
         % if recent.n_pledges > 1
@@ -279,14 +279,14 @@ recent = query_cache.one("""
             n=recent.n_pledges,
             link_open='<a href="/explore/pledges">'|safe,
             link_close='</a>'|safe,
-            money_amount=Money(recent.pledges_amount, 'EUR'),
+            money_amount=recent.pledges_amount,
         ) }}</span></p>
         % endif
         % if recent.newest_payday_transfer_volume
         <p>{{ glyphicon('transfer') }} <span>{{ ngettext(
             "",
             "{money_amount} were transferred last week between {n} users.",
-            money_amount=Money(recent.newest_payday_transfer_volume, 'EUR'),
+            money_amount=recent.newest_payday_transfer_volume,
             n=recent.newest_payday_nactive,
         ) }}</span></p>
         % endif

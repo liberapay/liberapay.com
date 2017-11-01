@@ -284,7 +284,7 @@ Liberapay.payments.cc.submit = function() {
     jQuery.ajax({
         url: '/'+Liberapay.username+'/routes/credit-card.json',
         type: "POST",
-        data: {CardType: 'CB_VISA_MASTERCARD', Currency: 'EUR'},
+        data: {CardType: 'CB_VISA_MASTERCARD', Currency: $('#credit-card').data('currency')},
         dataType: "json",
         success: Liberapay.payments.cc.register(cardData),
         error: Liberapay.payments.error,

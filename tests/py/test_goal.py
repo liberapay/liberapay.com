@@ -54,7 +54,7 @@ class Tests(Harness):
              WHERE type = 'set_goal'
           ORDER BY ts DESC
         """)
-        assert actual == ['400', None, '1100.00', '0', '100']
+        assert actual == ['400.00 EUR', None, '1100.00 EUR', '0.00 EUR', '100.00 EUR']
 
     def test_team_member_can_change_team_goal(self):
         team = self.make_participant('team', kind='group')

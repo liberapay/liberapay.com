@@ -1,20 +1,25 @@
 # coding: utf8
 from __future__ import division, print_function, unicode_literals
 
+from liberapay.utils.currencies import MoneyBasket
+
+db = website.db
+db_qc5 = website.db_qc5
+
 [--------------------------------------------------------]
 
 title = _("Stats")
-db = website.db
-escrow = db.one("SELECT sum(balance) FROM participants", default=0)
-nusers = website.db_qc5.one("""
+zero = constants.ZERO[currency]
+escrow = db_qc5.one("SELECT basket_sum(balance) FROM wallets") or MoneyBasket()
+nusers = db_qc5.one("""
     SELECT count(*)
       FROM participants
      WHERE status = 'active'
        AND kind IN ('individual', 'organization', 'group');
 """)
-transfer_volume = db.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1", default=0)
-tips_stats = db.one("""
-    SELECT count(*), avg(amount), sum(amount)
+transfer_volume = db_qc5.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1") or 0
+tips_stats = db_qc5.one("""
+    SELECT count(*), avg(amount, %s), sum(amount, %s)
       FROM current_tips
       JOIN participants p ON p.id = tipper
       JOIN participants p2 ON p2.id = tippee
@@ -22,12 +27,12 @@ tips_stats = db.one("""
        AND is_funded
        AND p.status = 'active'
        AND p2.status = 'active'
-""")
+""", (currency, currency))
 tip_n = getattr(tips_stats, 'count', None) or 0
-average_tip = getattr(tips_stats, 'avg', None) or 0
-total_backed_tips = getattr(tips_stats, 'sum', None) or 0
+average_tip = (getattr(tips_stats, 'avg', None) or zero).round_up()
+total_backed_tips = (getattr(tips_stats, 'sum', None) or zero).round_up()
 
-average_tippees = int(db.one("""\
+average_tippees = int(db_qc5.one("""\
     SELECT round(avg(ntippees))
       FROM ( SELECT count(tippee) as NTIPPEES
                FROM current_tips
@@ -39,7 +44,7 @@ average_tippees = int(db.one("""\
                 AND p2.status = 'active'
            GROUP BY tipper
            ) AS bar
-""", default=0))
+""") or 0)
 
 TIP_DISTRIBUTION = """
     SELECT amount, count(amount)
@@ -55,7 +60,7 @@ TIP_DISTRIBUTION = """
 """
 
 def get_tip_distribution():
-    tip_distribution = db.all(TIP_DISTRIBUTION)
+    tip_distribution = db_qc5.all(TIP_DISTRIBUTION)
     r = {}
     for row in tip_distribution:
         percentage = row.count * 1.0 / tip_n
@@ -98,13 +103,13 @@ def out():
     <p>{{ _("Liberapay was launched {0} ago and has {1} users.",
             to_age(constants.LAUNCH_TIME), nusers) }}</p>
 
-    <p>{{ _("{0} is escrowed within Liberapay.", Money(escrow, 'EUR')) }}</p>
+    <p>{{ _("{0} is escrowed within Liberapay.", escrow) }}</p>
 
     % if last_payday
     <p>
         {{ _(
             "The last payday was {0} ago and transferred {1} between {2} users.",
-            to_age(last_payday.ts_start), Money(transfer_volume, 'EUR'), nactive
+            to_age(last_payday.ts_start), transfer_volume, nactive
         ) }}<br />
         {{ _("{0} participants gave money.", ngivers) }}<br />
         {{ _("{0} received money.", nreceivers) }}<br />
@@ -114,7 +119,7 @@ def out():
 
     <p>{{ ngettext("On average, people who donate give {0} each to one other user.",
                    "On average, people who donate give {0} each to {n} other users.",
-                   average_tippees, Money(average_tip, 'EUR')) }}</p>
+                   average_tippees, average_tip) }}</p>
 
     % if last_payday
     <noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>

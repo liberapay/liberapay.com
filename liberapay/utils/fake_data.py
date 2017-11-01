@@ -5,6 +5,7 @@ import string
 import sys
 
 from faker import Factory
+from mangopay.utils import Money
 from psycopg2 import IntegrityError
 
 from liberapay.billing.transactions import (
@@ -12,7 +13,6 @@ from liberapay.billing.transactions import (
 )
 from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.models.participant import Participant
 from liberapay.models import community
 
 
@@ -23,12 +23,16 @@ faker = Factory.create()
 
 
 def _fake_thing(db, tablename, **kw):
+    _cast = kw.pop('_cast', False)
     cols, vals = zip(*kw.items())
     cols = ', '.join(cols)
     placeholders = ', '.join(['%s']*len(vals))
+    if _cast:
+        tablename += ' AS r'
+    returning = 'r' if _cast else '*'
     return db.one("""
-        INSERT INTO {} ({}) VALUES ({}) RETURNING *
-    """.format(tablename, cols, placeholders), vals)
+        INSERT INTO {} ({}) VALUES ({}) RETURNING {}
+    """.format(tablename, cols, placeholders, returning), vals)
 
 
 def fake_text_id(size=6, chars=string.ascii_lowercase + string.digits):
@@ -50,26 +54,35 @@ def fake_participant(db, kind=None):
     kind = kind or random.choice(('individual', 'organization'))
     is_a_person = kind in ('individual', 'organization')
     try:
-        _fake_thing(
+        p = _fake_thing(
             db,
             "participants",
             username=username,
             password=None if not is_a_person else 'x',
             email=username+'@example.org',
-            balance=0,
+            balance=Money('0.00', 'EUR'),
             hide_giving=is_a_person and (random.randrange(5) == 0),
             hide_receiving=is_a_person and (random.randrange(5) == 0),
             status='active',
             join_time=faker.date_time_this_year(),
             kind=kind,
             mangopay_user_id=username,
-            mangopay_wallet_id='-1',
+            _cast=True,
         )
     except IntegrityError:
         return fake_participant(db)
 
-    # Call participant constructor to perform other DB initialization
-    return Participant.from_username(username)
+    # Create wallet
+    _fake_thing(
+        db,
+        "wallets",
+        remote_id='-%i' % p.id,
+        balance=p.balance,
+        owner=p.id,
+        remote_owner_id=p.mangopay_user_id,
+    )
+
+    return p
 
 
 def fake_community(db, creator):
@@ -100,9 +113,9 @@ def fake_tip(db, tipper, tippee):
         mtime=faker.date_time_this_month(),
         tipper=tipper.id,
         tippee=tippee.id,
-        amount=amount,
+        amount=Money(amount, 'EUR'),
         period=period,
-        periodic_amount=periodic_amount,
+        periodic_amount=Money(periodic_amount, 'EUR'),
     )
 
 
@@ -141,7 +154,7 @@ def fake_transfer(db, tipper, tippee, amount, timestamp):
 
 
 def fake_exchange(db, participant, amount, fee, vat, timestamp):
-    routes = ExchangeRoute.from_network(participant, 'mango-cc')
+    routes = ExchangeRoute.from_network(participant, 'mango-cc', currency='EUR')
     if routes:
         route = routes[0]
     else:
@@ -154,6 +167,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
             error='',
             one_off=False,
             remote_user_id=participant.mangopay_user_id,
+            currency='EUR',
         )
     e = _fake_thing(
         db,
@@ -165,7 +179,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
         vat=vat,
         status='pre',
         route=route.id,
-        wallet_id=participant.mangopay_wallet_id,
+        wallet_id='-%i' % participant.id,
     )
     record_exchange_result(db, e.id, -e.id, 'succeeded', '', participant)
     return e
@@ -232,9 +246,10 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
             tipper, tippee = random.sample(participants, 2)
         sys.stdout.write("\rMaking Transfers (%i/%i)" % (i+1, num_transfers))
         sys.stdout.flush()
-        amount = random_money_amount(min_amount, max_amount)
+        amount = Money(random_money_amount(min_amount, max_amount), 'EUR')
+        zero = amount.zero()
         ts = faker.date_time_this_year()
-        fake_exchange(db, tipper, amount, 0, 0, (ts - datetime.timedelta(days=1)))
+        fake_exchange(db, tipper, amount, zero, zero, (ts - datetime.timedelta(days=1)))
         transfers.append(fake_transfer(db, tipper, tippee, amount, ts))
     print("")
 
@@ -270,7 +285,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
             'nparticipants': len(week_participants),
             'ntippers': len(tippers),
             'nactive': len(actives),
-            'transfer_volume': sum(x.amount for x in week_transfers),
+            'transfer_volume': '(%s,0.00)' % sum(x.amount.amount for x in week_transfers),
             'public_log': '',
         }
         _fake_thing(db, "paydays", **payday)

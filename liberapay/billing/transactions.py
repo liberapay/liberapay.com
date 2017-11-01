@@ -46,19 +46,18 @@ def repr_exception(e):
         return repr(e)
 
 
-def create_wallet(db, participant):
+def create_wallet(db, participant, currency):
     w = Wallet()
     w.Owners = [participant.mangopay_user_id]
     w.Description = str(participant.id)
-    w.Currency = 'EUR'
+    w.Currency = currency
     w.save()
-    db.run("""
-        UPDATE participants
-           SET mangopay_wallet_id = %s
-         WHERE id = %s
-    """, (w.Id, participant.id))
-    participant.set_attributes(mangopay_wallet_id=w.Id)
-    return w.Id
+    return db.one("""
+        INSERT INTO wallets
+                    (remote_id, balance, owner, remote_owner_id)
+             VALUES (%s, %s, %s, %s)
+          RETURNING *
+    """, (w.Id, w.Balance, participant.id, participant.mangopay_user_id))
 
 
 def test_hook():
@@ -96,7 +95,7 @@ def payout(db, route, amount, ignore_high_fee=False):
     payout = BankWirePayOut()
     payout.AuthorId = participant.mangopay_user_id
     payout.DebitedFunds = amount.int()
-    payout.DebitedWalletId = participant.mangopay_wallet_id
+    payout.DebitedWalletId = participant.get_current_wallet(amount.currency).remote_id
     payout.Fees = fee.int()
     payout.BankAccountId = route.address
     payout.BankWireRef = str(e_id)
@@ -129,13 +128,11 @@ def charge(db, route, amount, return_url):
     charge_amount, fee, vat = upcharge_card(amount)
     amount = charge_amount - fee
 
-    if not participant.mangopay_wallet_id:
-        create_wallet(db, participant)
-
+    wallet = participant.get_current_wallet(amount.currency, create=True)
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre').id
     payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
-    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.CreditedWalletId = wallet.remote_id
     payin.DebitedFunds = charge_amount.int()
     payin.CardId = route.address
     payin.SecureModeReturnURL = return_url
@@ -169,9 +166,6 @@ def prepare_direct_debit(db, route, amount):
     debit_amount, fee, vat = upcharge_direct_debit(amount)
     amount = debit_amount - fee
 
-    if not participant.mangopay_wallet_id:
-        create_wallet(db, participant)
-
     status = 'pre' if route.mandate else 'pre-mandate'
     return record_exchange(db, route, amount, fee, vat, participant, status)
 
@@ -199,13 +193,13 @@ def execute_direct_debit(db, exchange, route):
 
     assert exchange.status == 'pre'
 
-    amount, fee = Money(exchange.amount, 'EUR'), Money(exchange.fee, 'EUR')
+    amount, fee = exchange.amount, exchange.fee
     debit_amount = amount + fee
 
     e_id = exchange.id
     payin = DirectDebitDirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
-    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.CreditedWalletId = exchange.wallet_id
     payin.DebitedFunds = debit_amount.int()
     payin.MandateId = route.mandate
     payin.Fees = fee.int()
@@ -235,13 +229,11 @@ def payin_bank_wire(db, participant, debit_amount):
         debit_amount = Money(debit_amount, 'EUR')
     amount, fee, vat = skim_bank_wire(debit_amount)
 
-    if not participant.mangopay_wallet_id:
-        create_wallet(db, participant)
-
+    wallet = participant.get_current_wallet(amount.currency, create=True)
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre').id
     payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
-    payin.CreditedWalletId = participant.mangopay_wallet_id
+    payin.CreditedWalletId = wallet.remote_id
     payin.DeclaredDebitedFunds = debit_amount.int()
     payin.DeclaredFees = fee.int()
     payin.Tag = str(e_id)
@@ -264,18 +256,19 @@ def record_unexpected_payin(db, payin):
     assert payin.PaymentType == 'BANK_WIRE'
     debited_amount = payin.DebitedFunds / Decimal(100)
     paid_fee = payin.Fees / Decimal(100)
-    vat = skim_bank_wire(debited_amount)[2].amount
+    vat = skim_bank_wire(debited_amount)[2]
     wallet_id = payin.CreditedWalletId
     participant = Participant.from_mangopay_user_id(payin.AuthorId)
-    assert participant.mangopay_wallet_id == wallet_id
+    current_wallet = participant.get_current_wallet(debited_amount.currency)
+    assert current_wallet.remote_id == wallet_id
     route = ExchangeRoute.upsert_bankwire_route(participant)
-    amount = (debited_amount - paid_fee).amount
+    amount = debited_amount - paid_fee
     return db.one("""
         INSERT INTO exchanges
                (amount, fee, vat, participant, status, route, note, remote_id, wallet_id)
         VALUES (%s, %s, %s, %s, 'created', %s, NULL, %s, %s)
      RETURNING id
-    """, (amount, paid_fee.amount, vat, participant.id, route.id, payin.Id, wallet_id))
+    """, (amount, paid_fee, vat, participant.id, route.id, payin.Id, wallet_id))
 
 
 def record_payout_refund(db, payout_refund):
@@ -286,8 +279,8 @@ def record_payout_refund(db, payout_refund):
         # Already recorded
         return e_refund_id
     amount, fee, vat = -e_origin.amount, -e_origin.fee, -e_origin.vat
-    assert payout_refund.DebitedFunds == Money(int(amount * 100), 'EUR')
-    assert payout_refund.Fees == Money(int(fee * 100), 'EUR')
+    assert payout_refund.DebitedFunds / 100 == amount
+    assert payout_refund.Fees / 100 == fee
     route = ExchangeRoute.from_id(e_origin.route)
     participant = Participant.from_id(e_origin.participant)
     remote_id = payout_refund.Id
@@ -319,13 +312,9 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
     if participant.is_suspended:
         raise AccountSuspended()
 
-    amount = getattr(amount, 'amount', amount)
-    fee = getattr(fee, 'amount', fee)
-    vat = getattr(vat, 'amount', vat)
-
     with db.get_cursor() as cursor:
 
-        wallet_id = participant.mangopay_wallet_id
+        wallet_id = participant.get_current_wallet(amount.currency, create=True).remote_id
         e = cursor.one("""
             INSERT INTO exchanges
                    (amount, fee, vat, participant, status, route, note, wallet_id)
@@ -359,9 +348,9 @@ def record_exchange_result(db, exchange_id, remote_id, status, error, participan
 
         amount = e.amount
         if amount < 0:
-            amount = -amount + max(e.fee, 0) if status == 'failed' else 0
+            amount = -amount + max(e.fee, 0) if status == 'failed' else amount.zero()
         else:
-            amount = amount - min(e.fee, 0) if status == 'succeeded' else 0
+            amount = amount - min(e.fee, 0) if status == 'succeeded' else amount.zero()
         propagate_exchange(cursor, participant, e, error, amount)
 
         return e
@@ -370,17 +359,18 @@ def record_exchange_result(db, exchange_id, remote_id, status, error, participan
 def propagate_exchange(cursor, participant, exchange, error, amount):
     """Propagates an exchange's result to the participant's balance.
     """
+    wallet_id = exchange.wallet_id
     new_balance = cursor.one("""
-        UPDATE participants
-           SET balance=(balance + %s)
-         WHERE id=%s
+        UPDATE wallets
+           SET balance = (balance + %s)
+         WHERE remote_id = %s
+           AND (balance + %s) >= 0
      RETURNING balance
-    """, (amount, participant.id))
+    """, (amount, wallet_id, amount))
 
-    if amount < 0 and new_balance < 0:
+    if new_balance is None:
         raise NegativeBalance
 
-    wallet_id = participant.mangopay_wallet_id
     if amount < 0:
         bundles = cursor.all("""
             LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
@@ -396,7 +386,7 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
         withdrawable = sum(b.amount for b in bundles)
         x = -amount
         if x > withdrawable:
-            raise NotEnoughWithdrawableMoney(Money(withdrawable, 'EUR'))
+            raise NotEnoughWithdrawableMoney(withdrawable)
         for b in bundles:
             if x >= b.amount:
                 cursor.run("""
@@ -439,6 +429,7 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
                  VALUES (%s, %s, %s, %s, %s)
         """, (participant.id, exchange.id, amount, exchange.timestamp, wallet_id))
 
+    new_balance = cursor.one("SELECT recompute_balance(%s)", (participant.id,))
     participant.set_attributes(balance=new_balance)
 
     if amount != 0:
@@ -447,22 +438,27 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
-    get = lambda id, col: db.one("SELECT {0} FROM participants WHERE id = %s".format(col), (id,))
-    wallet_from = kw.get('tipper_wallet_id') or get(tipper, 'mangopay_wallet_id')
-    wallet_to = kw.get('tippee_wallet_id') or get(tippee, 'mangopay_wallet_id')
-    if not wallet_to:
-        wallet_to = create_wallet(db, Participant.from_id(tippee))
+    try:
+        tipper_wallet = NS(dict(remote_id=kw['tipper_wallet_id'], remote_owner_id=kw['tipper_mango_id']))
+    except KeyError:
+        tipper_wallet = Participant.from_id(tipper).get_current_wallet(amount.currency)
+    try:
+        tippee_wallet = NS(dict(remote_id=kw['tippee_wallet_id'], remote_owner_id=kw['tippee_mango_id']))
+    except KeyError:
+        tippee_wallet = Participant.from_id(tippee).get_current_wallet(amount.currency, create=True)
+    wallet_from = tipper_wallet.remote_id
+    wallet_to = tippee_wallet.remote_id
     t_id = prepare_transfer(
         db, tipper, tippee, amount, context, wallet_from, wallet_to,
         team=kw.get('team'), invoice=kw.get('invoice'), bundles=kw.get('bundles'),
     )
     tr = Transfer()
-    tr.AuthorId = kw.get('tipper_mango_id') or get(tipper, 'mangopay_user_id')
-    tr.CreditedUserId = kw.get('tippee_mango_id') or get(tippee, 'mangopay_user_id')
+    tr.AuthorId = tipper_wallet.remote_owner_id
+    tr.CreditedUserId = tippee_wallet.remote_owner_id
     tr.CreditedWalletId = wallet_to
-    tr.DebitedFunds = Money(int(amount * 100), 'EUR')
+    tr.DebitedFunds = amount.int()
     tr.DebitedWalletId = wallet_from
-    tr.Fees = Money(0, 'EUR')
+    tr.Fees = Money(0, amount.currency)
     tr.Tag = str(t_id)
     tr.save()
     return record_transfer_result(db, t_id, tr), t_id
@@ -538,25 +534,27 @@ def record_transfer_result(db, t_id, tr):
 def _record_transfer_result(db, t_id, status, error=None):
     balance = None
     with db.get_cursor() as c:
-        tipper, tippee, amount, wallet_to = c.one("""
+        tipper, tippee, amount, wallet_from, wallet_to = c.one("""
             UPDATE transfers
                SET status = %s
                  , error = %s
              WHERE id = %s
-         RETURNING tipper, tippee, amount, wallet_to
+         RETURNING tipper, tippee, amount, wallet_from, wallet_to
         """, (status, error, t_id))
         if status == 'succeeded':
             # Update the balances
             balance = c.one("""
 
-                UPDATE participants
+                UPDATE wallets
                    SET balance = balance + %(amount)s
-                 WHERE id = %(tippee)s;
+                 WHERE remote_id = %(wallet_to)s;
 
-                UPDATE participants
+                UPDATE wallets
                    SET balance = balance - %(amount)s
-                 WHERE id = %(tipper)s
-             RETURNING balance;
+                 WHERE remote_id = %(wallet_from)s;
+
+                SELECT recompute_balance(%(tippee)s);
+                SELECT recompute_balance(%(tipper)s);
 
             """, locals())
             # Transfer the locked bundles to the recipient
@@ -625,7 +623,8 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
                 continue
             try_to_swap_bundle(cursor, b, original_owner)
     # Move the funds back to the original wallet
-    chargebacks_account = Participant.get_chargebacks_account()
+    currency = exchange.amount.currency
+    chargebacks_account, credit_wallet = Participant.get_chargebacks_account(currency)
     LiberapayOrg = Participant.from_username('LiberapayOrg')
     assert LiberapayOrg
     grouped = group_by(disputed_bundles, lambda b: (b.owner, b.withdrawal))
@@ -650,18 +649,19 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     # We have to do a SettlementTransfer instead of a normal Transfer. The amount
     # can't exceed the original payin amount, so we can't settle the fee debt.
     original_owner = Participant.from_id(original_owner)
+    from_wallet = original_owner.get_current_wallet(currency).remote_id
+    to_wallet = credit_wallet.remote_id
     t_id = prepare_transfer(
         db, original_owner.id, chargebacks_account.id, exchange.amount, 'chargeback',
-        original_owner.mangopay_wallet_id, chargebacks_account.mangopay_wallet_id,
-        prefer_bundles_from=exchange.id,
+        from_wallet, to_wallet, prefer_bundles_from=exchange.id,
     )
     tr = SettlementTransfer()
     tr.AuthorId = original_owner.mangopay_user_id
     tr.CreditedUserId = chargebacks_account.mangopay_user_id
-    tr.CreditedWalletId = chargebacks_account.mangopay_wallet_id
-    tr.DebitedFunds = Money(int(exchange.amount * 100), 'EUR')
-    tr.DebitedWalletId = original_owner.mangopay_wallet_id
-    tr.Fees = Money(0, 'EUR')
+    tr.CreditedWalletId = to_wallet
+    tr.DebitedFunds = exchange.amount.int()
+    tr.DebitedWalletId = from_wallet
+    tr.Fees = Money(0, currency)
     tr.RepudiationId = repudiation_id
     tr.Tag = str(t_id)
     tr.save()

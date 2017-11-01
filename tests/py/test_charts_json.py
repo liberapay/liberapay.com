@@ -39,7 +39,7 @@ class TestChartsJson(FakeTransfersHarness):
     def test_first_payday_comes_through(self):
         self.run_payday()   # first
 
-        expected = [{"date": today(), "npatrons": 2, "receipts": 3.00}]
+        expected = [{"date": today(), "npatrons": 2, "receipts": {"amount": "3.00", "currency": "EUR"}}]
         actual = json.loads(self.client.GET('/carl/charts.json').text)
 
         assert actual == expected
@@ -53,8 +53,8 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()   # second
 
         expected = [
-            {"date": today(), "npatrons": 1, "receipts": 5.00},  # most recent first
-            {"date": today(), "npatrons": 2, "receipts": 3.00},
+            {"date": today(), "npatrons": 1, "receipts": {"amount": "5.00", "currency": "EUR"}},  # most recent first
+            {"date": today(), "npatrons": 2, "receipts": {"amount": "3.00", "currency": "EUR"}},
         ]
         actual = json.loads(self.client.GET('/carl/charts.json').text)
 
@@ -73,9 +73,9 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()   # third
 
         expected = [
-            {"date": today(), "npatrons": 1, "receipts": 5.00},  # most recent first
-            {"date": today(), "npatrons": 0, "receipts": 0.00},
-            {"date": today(), "npatrons": 2, "receipts": 3.00},
+            {"date": today(), "npatrons": 1, "receipts": {"amount": "5.00", "currency": "EUR"}},  # most recent first
+            {"date": today(), "npatrons": 0, "receipts": {"amount": "0.00", "currency": "EUR"}},
+            {"date": today(), "npatrons": 2, "receipts": {"amount": "3.00", "currency": "EUR"}},
         ]
         actual = json.loads(self.client.GET('/carl/charts.json').text)
 
@@ -85,7 +85,7 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()   # first
 
         # Do an out-of-band transfer.
-        self.make_transfer(self.alice.id, self.carl.id, 4)
+        self.make_transfer(self.alice.id, self.carl.id, EUR('4.00'))
 
         self.run_payday()   # second
         self.run_payday()   # third
@@ -94,17 +94,17 @@ class TestChartsJson(FakeTransfersHarness):
             {
                 "date": today(),
                 "npatrons": 2,  # most recent first
-                "receipts": 3.00,
+                "receipts": {"amount": "3.00", "currency": "EUR"},
             },
             {
                 "date": today(),
                 "npatrons": 2,
-                "receipts": 7.00,
+                "receipts": {"amount": "7.00", "currency": "EUR"},
             },
             {
                 "date": today(),
                 "npatrons": 2,
-                "receipts": 3.00,
+                "receipts": {"amount": "3.00", "currency": "EUR"},
             },
         ]
         actual = json.loads(self.client.GET('/carl/charts.json').text)
@@ -130,7 +130,7 @@ class TestChartsJson(FakeTransfersHarness):
 
         self.run_payday()
 
-        expected = [{"date": today(), "npatrons": 2, "receipts": 0.89}]
+        expected = [{"date": today(), "npatrons": 2, "receipts": {"amount": "0.89", "currency": "EUR"}}]
         actual = json.loads(self.client.GET('/team/charts.json').text)
 
         assert actual == expected
@@ -142,14 +142,15 @@ class TestChartsJson(FakeTransfersHarness):
         self.run_payday()
         self.run_payday()
 
+        zero = {'amount': '0.00', 'currency': 'EUR'}
         expected = {
             "date": today(),
-            "transfer_volume": '3.00',
+            "transfer_volume": {'amount': '3.00', 'currency': 'EUR'},
             "nactive": '3',
             "nparticipants": '4',
             "nusers": '4',
-            "week_deposits": '0.00',
-            "week_withdrawals": '0.00',
+            "week_deposits": zero,
+            "week_withdrawals": zero,
             "xTitle": utcnow().strftime('%Y-%m-%d'),
         }
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]

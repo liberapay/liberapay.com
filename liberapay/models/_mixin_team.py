@@ -3,10 +3,11 @@
 from __future__ import division, print_function, unicode_literals
 
 from collections import OrderedDict
-from decimal import Decimal
 from statistics import median
 
-from liberapay.constants import D_INF, D_UNIT, D_ZERO
+from mangopay.utils import Money
+
+from liberapay.constants import ZERO, TAKE_THROTTLING_THRESHOLD
 from liberapay.utils import NS
 
 
@@ -37,7 +38,7 @@ class MixinTeam(object):
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, D_ZERO, self, cursor=cursor)
+        self.set_take_for(member, ZERO[self.main_currency], self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
@@ -92,18 +93,18 @@ class MixinTeam(object):
         were all zero last week or if throttling is disabled.
         """
         if not self.throttle_takes:
-            return D_INF
+            return
         sum_last_week = sum(last_week.values())
         if sum_last_week == 0:
-            return D_INF
+            return
         initial_leftover = self.receiving - sum_last_week
-        nonzero_last_week = [a for a in last_week.values() if a]
-        member_last_week = last_week.get(member_id, 0)
+        nonzero_last_week = [a.amount for a in last_week.values() if a]
+        member_last_week = last_week.get(member_id, ZERO[self.main_currency])
         return max(
             member_last_week * 2,
             member_last_week + initial_leftover,
-            median(nonzero_last_week or (0,)),
-            D_UNIT
+            Money(median(nonzero_last_week or (0,)), self.main_currency),
+            TAKE_THROTTLING_THRESHOLD[self.main_currency]
         )
 
     def set_take_for(self, member, take, recorder, check_max=True, cursor=None):
@@ -116,17 +117,18 @@ class MixinTeam(object):
             if cur_take is None:
                 return None
 
-        if not isinstance(take, (None.__class__, Decimal)):
-            take = Decimal(take)
+        if not isinstance(take, (None.__class__, Money)):
+            take = Money(take, self.main_currency)  # TODO drop this
 
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
             # Throttle the new take, if there is more than one member
-            if take and check_max and self.nmembers > 1 and take > 1:
+            threshold = TAKE_THROTTLING_THRESHOLD[self.main_currency]
+            if take and check_max and self.nmembers > 1 and take > threshold:
                 last_week = self.get_takes_last_week()
                 max_this_week = self.compute_max_this_week(member.id, last_week)
-                if take > max_this_week:
+                if max_this_week is not None and take > max_this_week:
                     take = max_this_week
             # Insert the new take
             cursor.run("""
@@ -151,7 +153,7 @@ class MixinTeam(object):
                                        AND team=%(team)s
                                   ORDER BY mtime DESC
                                      LIMIT 1
-                                ), 0)
+                                ), zero(%(amount)s))
                             END
                           , %(recorder)s
 
@@ -170,7 +172,7 @@ class MixinTeam(object):
         assert self.kind == 'group'
         TAKES = """
             SELECT p.id AS member_id, p.username AS member_name, p.avatar_url
-                 , (p.mangopay_user_id IS NOT NULL) AS is_identified
+                 , (p.mangopay_user_id IS NOT NULL) AS is_identified, p.is_suspended
                  , t.amount, t.actual_amount, t.ctime, t.mtime
               FROM current_takes t
               JOIN participants p ON p.id = member
@@ -196,20 +198,25 @@ class MixinTeam(object):
                           AND tr.team = %(team_id)s
                           AND tr.context = 'take'
                           AND tr.status = 'succeeded'
-                   ), 0) AS past_transfers_sum
+                   ), zero(t.amount)) AS past_transfers_sum
               FROM current_tips t
+              JOIN participants p ON p.id = t.tipper
              WHERE t.tippee = %(team_id)s
                AND t.is_funded
+               AND p.is_suspended IS NOT true
         """, dict(team_id=self.id))]
         takes = [NS(r._asdict()) for r in (cursor or self.db).all("""
-            SELECT *
-              FROM current_takes
-             WHERE team = %s
+            SELECT t.*
+              FROM current_takes t
+              JOIN participants p ON p.id = t.member
+             WHERE t.team = %s
+               AND p.is_suspended IS NOT true
+               AND p.mangopay_user_id IS NOT NULL
         """, (self.id,))]
         # Recompute the takes
         takes_sum = {}
         tippers = {}
-        transfers, new_leftover = Payday.resolve_takes(tips, takes)
+        transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
         for t in transfers:
             if t.member in takes_sum:
                 takes_sum[t.member] += t.amount
@@ -224,10 +231,11 @@ class MixinTeam(object):
                    (new_leftover, self.id))
         self.set_attributes(leftover=new_leftover)
         # Update the cached amounts (actual_amount, taking, and receiving)
+        zero = ZERO[self.main_currency]
         for take in takes:
             member_id = take.member
-            old_amount = take.actual_amount or D_ZERO
-            new_amount = takes_sum.get(take.member, D_ZERO)
+            old_amount = take.actual_amount or zero
+            new_amount = takes_sum.get(take.member, zero)
             diff = new_amount - old_amount
             if diff != 0:
                 take.actual_amount = new_amount
@@ -273,15 +281,16 @@ class MixinTeam(object):
         last_week = self.get_takes_last_week()
         members = OrderedDict()
         members.leftover = self.leftover
+        zero = ZERO[self.main_currency]
         for take in takes:
             member = {}
             m_id = member['id'] = take['member_id']
             member['username'] = take['member_name']
-            member['nominal_take'] = take['amount']
+            member['nominal_take'] = take['amount'].amount
             member['actual_amount'] = take['actual_amount']
-            member['last_week'] = last_week.get(m_id, D_ZERO)
+            member['last_week'] = last_week.get(m_id, zero).amount
             x = self.compute_max_this_week(m_id, last_week)
-            member['max_this_week'] = x if x.is_finite() else None
+            member['max_this_week'] = x
             members[member['id']] = member
         return members
 

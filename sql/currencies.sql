@@ -49,6 +49,20 @@ CREATE OPERATOR - (
     procedure = currency_amount_neg
 );
 
+CREATE FUNCTION currency_amount_mul(currency_amount, numeric)
+RETURNS currency_amount AS $$
+    BEGIN
+        RETURN ($1.amount * $2, $1.currency);
+    END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE OPERATOR * (
+    leftarg = currency_amount,
+    rightarg = numeric,
+    procedure = currency_amount_mul,
+    commutator = *
+);
+
 
 -- Aggregate functions
 
@@ -60,8 +74,14 @@ CREATE AGGREGATE sum(currency_amount) (
 
 -- Convenience functions
 
+CREATE FUNCTION get_currency(currency_amount) RETURNS currency AS $$
+    BEGIN RETURN $1.currency; END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE CAST (currency_amount as currency) WITH FUNCTION get_currency(currency_amount);
+
 CREATE FUNCTION zero(currency_amount) RETURNS currency_amount AS $$
-    BEGIN RETURN (0::numeric, $1.currency); END;
+    BEGIN RETURN ('0.00'::numeric, $1.currency); END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 
 

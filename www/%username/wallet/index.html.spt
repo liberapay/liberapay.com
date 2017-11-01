@@ -59,10 +59,10 @@ if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
 
 if participant == user:
-    BALANCE = _("Your balance is {0}.", Money(participant.balance, "EUR"))
+    BALANCE = _("Your balance is {0}.", participant.balance)
     participant.mark_notifications_as_read('income')
 else:
-    BALANCE = _("Their balance is {0}.", Money(participant.balance, "EUR"))
+    BALANCE = _("Their balance is {0}.", participant.balance)
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
@@ -91,56 +91,64 @@ else:
     % set regular_donations = totals['regular_donations']
     % set reimbursements = totals['reimbursements']
     % set total_sent = regular_donations['sent'] + reimbursements['sent']
-    {{ _("Total money sent: {0}", Money(total_sent, 'EUR')) }}<br>
+    {{ _("Total money sent: {0}", total_sent) }}<br>
     % if total_sent
     <ul>
     % if regular_donations['sent']
+    % for money_amount in regular_donations['sent']
     <li>
     {{ ngettext(
         "{money_amount} in recurrent donations to {n} person",
         "{money_amount} in recurrent donations to {n} people",
         regular_donations['ntippees'],
-        money_amount=Money(regular_donations['sent'], "EUR")
+        money_amount=money_amount
     ) }}
         (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
     </li>
+    % endfor
     % endif
     % if reimbursements['sent']
+    % for money_amount in reimbursements['sent']
     <li>
     {{ ngettext(
         "{money_amount} in expense reimbursements to {n} person",
         "{money_amount} in expense reimbursements to {n} people",
         reimbursements['nrecipients'],
-        money_amount=Money(reimbursements['sent'], "EUR")
+        money_amount=money_amount
     ) }}
         (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=reimbursed&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
     </li>
+    % endfor
     % endif
     </ul>
     % endif
     % set total_received = regular_donations['received'] + reimbursements['received']
-    {{ _("Total money received: {0}", Money(total_received, 'EUR')) }}
+    {{ _("Total money received: {0}", total_received) }}
     % if total_received
     <ul>
     % if regular_donations['received']
+    % for money_amount in regular_donations['received']
     <li>{{ ngettext(
         "{money_amount} in recurrent donations from {n} donor",
         "{money_amount} in recurrent donations from {n} donors",
         regular_donations['npatrons'],
-        money_amount=Money(regular_donations['received'], "EUR")
+        money_amount=money_amount
     ) }}</li>
+    % endfor
     % endif
     % if reimbursements['received']
+    % for money_amount in reimbursements['received']
     <li>{{ ngettext(
         "{money_amount} in expense reimbursements from {n} organization",
         "{money_amount} in expense reimbursements from {n} organizations",
         reimbursements['npayers'],
-        money_amount=Money(reimbursements['received'], "EUR")
+        money_amount=money_amount
     ) }}</li>
+    % endfor
     % endif
     </ul>
     % endif
@@ -169,8 +177,20 @@ else:
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif
         </td>
-        <td class="status" title="{{ _('balance at the end of the day') }}">{{ format_currency(event['balance'], 'EUR') }}</td>
-        <td class="wallet">{{ format_delta(event['wallet_delta']) }}</td>
+        <td class="status" title="{{ _('balance at the end of the day') }}">
+        % for balance in event['balances']
+            % if balance or balance.currency == participant.main_currency
+                {{ format_money(balance) }} {{ '+' if not loop.last }}
+            % endif
+        % endfor
+        </td>
+        <td class="wallet">
+        % for delta in event['wallet_delta']
+            % if delta.amount or delta.currency == participant.main_currency
+                {{ format_money_delta(delta) }}<br>
+            % endif
+        % endfor
+        </td>
         <td class="fees"></td>
         <td class="bank"></td>
     </tr>
@@ -193,9 +213,9 @@ else:
         </td>
         <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
             >{{ translated_status[event['status']] }}</td>
-        <td class="wallet">{{ format_delta(event['wallet_delta']) }}</td>
-        <td class="fees">{{ format_currency(event['fee'], '').strip() }}</td>
-        <td class="bank">{{ format_delta(event['bank_delta']) }}</td>
+        <td class="wallet">{{ format_money_delta(event['wallet_delta']) }}</td>
+        <td class="fees">{{ format_money(event['fee']) }}</td>
+        <td class="bank">{{ format_money_delta(event['bank_delta']) }}</td>
     </tr>
     % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
     <tr>
@@ -254,7 +274,7 @@ else:
         </td>
         <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
             >{{ translated_status[event['status']] }}</td>
-        <td class="wallet">{{ format_delta(event['wallet_delta']) }}</td>
+        <td class="wallet">{{ format_money_delta(event['wallet_delta']) }}</td>
         <td class="fees"></td>
         <td class="bank"></td>
 

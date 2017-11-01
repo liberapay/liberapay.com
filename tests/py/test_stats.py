@@ -16,13 +16,13 @@ class TestChartOfReceiving(Harness):
 
     def test_get_tip_distribution_handles_a_tip(self):
         self.alice.set_tip_to(self.bob, EUR('3.00'))
-        expected = ([[Decimal('3.00'), 1, Decimal('3.00'), 1.0, Decimal('1')]],
-                    1.0, Decimal('3.00'))
+        expected = ([[EUR('3.00'), 1, EUR('3.00'), EUR('3.00'), 1.0, Decimal('1')]],
+                    1, EUR('3.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
 
     def test_get_tip_distribution_handles_no_tips(self):
-        expected = ([], 0.0, Decimal('0.00'))
+        expected = ([], 0.0, EUR('0.00'))
         actual = self.alice.get_tip_distribution()
         assert actual == expected
 
@@ -31,9 +31,9 @@ class TestChartOfReceiving(Harness):
         self.alice.set_tip_to(self.bob, EUR('1.00'))
         carl.set_tip_to(self.bob, EUR('3.00'))
         expected = ([
-            [Decimal('1.00'), 1, Decimal('1.00'), 0.5, Decimal('0.25')],
-            [Decimal('3.00'), 1, Decimal('3.00'), 0.5, Decimal('0.75')]
-        ], 2.0, Decimal('4.00'))
+            [EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 0.5, Decimal('0.25')],
+            [EUR('3.00'), 1, EUR('3.00'), EUR('3.00'), 0.5, Decimal('0.75')]
+        ], 2, EUR('4.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
 
@@ -41,8 +41,8 @@ class TestChartOfReceiving(Harness):
         bad_cc = self.make_participant('bad_cc', last_bill_result='Failure!')
         self.alice.set_tip_to(self.bob, EUR('1.00'))
         bad_cc.set_tip_to(self.bob, EUR('3.00'))
-        expected = ([[Decimal('1.00'), 1, Decimal('1.00'), 1, Decimal('1')]],
-                    1.0, Decimal('1.00'))
+        expected = ([[EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 1, Decimal('1')]],
+                    1, EUR('1.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
 
@@ -50,8 +50,8 @@ class TestChartOfReceiving(Harness):
         missing_cc = self.make_participant('missing_cc')
         self.alice.set_tip_to(self.bob, EUR('1.00'))
         missing_cc.set_tip_to(self.bob, EUR('3.00'))
-        expected = ([[Decimal('1.00'), 1, Decimal('1.00'), 1, Decimal('1')]],
-                    1.0, Decimal('1.00'))
+        expected = ([[EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 1, Decimal('1')]],
+                    1.0, EUR('1.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
 

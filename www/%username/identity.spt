@@ -126,34 +126,20 @@ if request.method == 'POST':
                     if old_account.LegalRepresentativeAddress.country:
                         account.Address = old_account.LegalRepresentativeAddress
                 account.save()
-                old_wallet_id = participant.mangopay_wallet_id
-                if last_change:
-                    new_wallet_id = last_change.payload['old_wallet_id']
-                elif old_wallet_id:
-                    w = Wallet()
-                    w.Owners = [account.Id]
-                    w.Description = str(participant.id)
-                    w.Currency = 'EUR'
-                    w.save()
-                    new_wallet_id = w.Id
-                else:
-                    new_wallet_id = None
                 r = website.db.one("""
                     UPDATE participants
                        SET kind = %s
                          , mangopay_user_id = %s
-                         , mangopay_wallet_id = %s
                      WHERE id = %s
                        AND mangopay_user_id = %s
-                 RETURNING kind, mangopay_user_id, mangopay_wallet_id
-                """, (new_kind, account.Id, new_wallet_id, participant.id, old_account.Id))
+                 RETURNING kind, mangopay_user_id
+                """, (new_kind, account.Id, participant.id, old_account.Id))
                 if not r:
                     raise response.error(409, "race condition")
                 participant.set_attributes(**r._asdict())
                 participant.add_event(website.db, 'mangopay-account-change', {
                     'old_user_id': old_account.Id,
                     'old_user_type': old_account.PersonType,
-                    'old_wallet_id': old_wallet_id,
                 })
                 # Invalidate exchange routes
                 routes = website.db.all("""
@@ -165,12 +151,18 @@ if request.method == 'POST':
                 for route in routes:
                     route.invalidate()
                 # Transfer the money
-                participant.refetch()
-                if participant.balance:
+                old_wallets = website.db.all("""
+                    UPDATE wallets
+                       SET is_current = null
+                     WHERE remote_owner_id = %s
+                 RETURNING *
+                """, (old_account.Id,))
+                for w in (w for w in old_wallets if w.balance):
                     transfer(
-                        website.db, participant.id, participant.id, participant.balance,
+                        website.db, participant.id, participant.id, w.balance,
                         'account-switch', tipper_mango_id=old_account.Id,
-                        tipper_wallet_id=old_wallet_id,
+                        tipper_wallet_id=w.remote_id,
+                        tippee_mango_id=account.Id,
                     )
                 success = _("Your identity information has been updated.")
             elif account.Id:

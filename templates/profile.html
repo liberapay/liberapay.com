@@ -22,8 +22,6 @@
                 % set npatrons = Bold(participant.npatrons + participant.nteampatrons)
                 % set receiving = participant.receiving
                 % set goal = participant.goal
-                % set receiving_str = Bold(Money(receiving, 'EUR'))
-                % set goal_str = goal and Bold(Money(goal, 'EUR'))
 
                 <div class="flex-col expand-xs text-center-xs">
                 % if participant.hide_receiving
@@ -33,15 +31,15 @@
                         npatrons, username
                     ) }}
                 % elif goal and not receiving
-                    {{ _("{0}'s goal is to receive {1} per week.", username, goal_str) }}
+                    {{ _("{0}'s goal is to receive {1} per week.", username, Bold(goal)) }}
                 % else
                     {{ ngettext(
                         "{0} receives {1} per week from {n} patron.",
                         "{0} receives {1} per week from {n} patrons.",
-                        npatrons, username, receiving_str
+                        npatrons, username, Bold(receiving)
                     ) }}
                     % if goal
-                        {{ _("Goal: {0}", goal_str).replace(' ', '&nbsp;'|safe) }}
+                        {{ _("Goal: {0}", Bold(goal)).replace(' ', '&nbsp;'|safe) }}
                     % endif
                 % endif
                 </div>
@@ -51,7 +49,7 @@
                     % set donate_path = participant.path('donate')
                     % if tip['amount']
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
-                            _("Donating ({amount})", amount=Money(tip.amount, 'EUR'))
+                            _("Donating ({amount})", amount=tip.amount)
                         }}</a>
                     % else
                         <a class="btn btn-donate btn-lg" href="{{ donate_path }}">
@@ -83,7 +81,7 @@
                 % if participant.hide_giving
                     <p>{{ _("{0} doesn't publish how much they give.", username) }}</p>
                 % else
-                    <p>{{ _("{0} gives {1} per week.", username, Money(participant.giving, 'EUR')) }}</p>
+                    <p>{{ _("{0} gives {1} per week.", username, participant.giving) }}</p>
                 % endif
 
                 <p>{{ _("This user doesn't accept donations.") }}</p>

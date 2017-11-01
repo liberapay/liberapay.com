@@ -46,7 +46,10 @@ if request.method == 'POST':
     invoice_nature = body['nature']
     if invoice_nature != 'expense':
         raise response.error(400, "bad `nature` value (in POST data)")
-    amount = parse_decimal(body['amount'])
+    currency = body['currency']
+    if currency not in constants.CURRENCIES:
+        raise response.error(400, "`currency` value in body is invalid or non-supported")
+    amount = Money(parse_decimal(body['amount']), currency)
     if amount <= 0:
         raise response.error(400, "`amount` must be greater than 0")
     description = body['description'].strip()
@@ -89,6 +92,7 @@ title = _("Invoice {someone}", someone=addressee.username)
 
 <form action="javascript:" method="POST" id="invoice-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="currency" value="{{ currency }}" />
 
     <h4>{{ _("Nature") }}</h4>
     <select class="form-control" name="nature">
@@ -102,8 +106,8 @@ title = _("Invoice {someone}", someone=addressee.username)
     <div class="input-group">
         <input type="text" name="amount" class="amount form-control"
                placeholder="{{ _('Amount') }}" required
-               value="{{ format_decimal(invoice.amount) if invoice else '' }}" />
-        <div class="input-group-addon">€</div>
+               value="{{ format_decimal(invoice.amount.amount) if invoice else '' }}" />
+        <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
     </div>
 
     <h4>{{ _("Description") }}</h4>

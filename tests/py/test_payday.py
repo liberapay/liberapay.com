@@ -7,7 +7,6 @@ import mock
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.billing.transactions import create_debt
-from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
@@ -153,12 +152,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
              WHERE p.id = t.tippee
                AND p.mangopay_user_id IS NOT NULL;
             UPDATE participants
-               SET giving = 10000
-                 , taking = 10000
+               SET giving = (10000,'EUR')
+                 , taking = (10000,'EUR')
              WHERE mangopay_user_id IS NOT NULL;
             UPDATE participants
                SET npatrons = 10000
-                 , receiving = 10000
+                 , receiving = (10000,'EUR')
              WHERE status = 'active';
         """)
         Payday.start().update_cached_amounts()
@@ -252,38 +251,24 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         with self.assertRaises(NoPayday):
             Payday().end()
 
-    def test_payday_cant_make_balances_more_negative(self):
-        self.db.run("""
-            UPDATE participants SET balance = -10 WHERE username='janet'
-        """)
-        payday = Payday.start()
-        with self.db.get_cursor() as cursor:
-            payday.prepare(cursor, payday.ts_start)
-            cursor.run("""
-                UPDATE payday_participants
-                   SET new_balance = -50
-                 WHERE username IN ('janet', 'homer')
-            """)
-            with self.assertRaises(NegativeBalance):
-                payday.check_balances(cursor)
-
     @staticmethod
     def get_new_balances(cursor):
-        return {id: new_balance for id, new_balance in cursor.all(
-            "SELECT id, new_balance FROM payday_participants"
-        )}
+        return {
+            id: [m for m in balances if m.amount]
+            for id, balances in cursor.all("SELECT id, balances FROM payday_participants")
+        }
 
     def test_payday_doesnt_process_tips_when_goal_is_negative(self):
         self.make_exchange('mango-cc', 20, 0, self.janet)
         self.janet.set_tip_to(self.homer, EUR('13.00'))
-        self.db.run("UPDATE participants SET goal = -1 WHERE username='homer'")
+        self.db.run("UPDATE participants SET goal = (-1,null) WHERE username='homer'")
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[self.janet.id] == 20
-            assert new_balances[self.homer.id] == 0
+            assert new_balances[self.janet.id] == [EUR(20)]
+            assert new_balances[self.homer.id] == []
 
     def test_payday_doesnt_make_null_transfers(self):
         alice = self.make_participant('alice')
@@ -304,9 +289,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[self.david.id] == D('0.49')
-            assert new_balances[self.janet.id] == D('0.51')
-            assert new_balances[self.homer.id] == 0
+            assert new_balances[self.david.id] == [EUR('0.49')]
+            assert new_balances[self.janet.id] == [EUR('0.51')]
+            assert new_balances[self.homer.id] == []
             nulls = cursor.all("SELECT * FROM payday_tips WHERE is_funded IS NULL")
             assert not nulls
 
@@ -322,10 +307,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[alice.id] == D('0')
-            assert new_balances[self.homer.id] == D('30')
-            assert new_balances[self.janet.id] == D('15')
-            assert new_balances[self.david.id] == D('5')
+            assert new_balances[alice.id] == []
+            assert new_balances[self.homer.id] == [EUR('30')]
+            assert new_balances[self.janet.id] == [EUR('15')]
+            assert new_balances[self.david.id] == [EUR('5')]
 
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', kind='group')
@@ -690,6 +675,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         invoice_data = {
             'nature': 'expense',
             'amount': amount,
+            'currency': 'EUR',
             'description': 'lorem ipsum',
             'details': '',
         }
@@ -738,7 +724,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     def test_payday_tries_to_settle_debts(self):
         # First, test a small debt which can be settled
         e1_id = self.make_exchange('mango-cc', 10, 0, self.janet)
-        debt = create_debt(self.db, self.janet.id, self.homer.id, 5, e1_id)
+        debt = create_debt(self.db, self.janet.id, self.homer.id, EUR(5), e1_id)
         e2_id = self.make_exchange('mango-cc', 20, 0, self.janet)
         Payday.start().run()
         balances = dict(self.db.all("SELECT username, balance FROM participants"))
@@ -751,7 +737,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert debt.status == 'paid'
         # Second, test a big debt that can't be settled
         self.make_exchange('mango-ba', -15, 0, self.janet)
-        debt2 = create_debt(self.db, self.janet.id, self.homer.id, 20, e2_id)
+        debt2 = create_debt(self.db, self.janet.id, self.homer.id, EUR(20), e2_id)
         Payday.start().run()
         balances = dict(self.db.all("SELECT username, balance FROM participants"))
         assert balances == {
