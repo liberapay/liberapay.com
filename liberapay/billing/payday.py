@@ -176,8 +176,8 @@ class Payday(object):
                  , kind
                  , main_currency
               FROM participants p
-         LEFT JOIN wallets eur_w ON eur_w.owner = p.id AND eur_w.balance::currency = 'EUR'
-         LEFT JOIN wallets usd_w ON usd_w.owner = p.id AND usd_w.balance::currency = 'USD'
+         LEFT JOIN wallets eur_w ON eur_w.owner = p.id AND eur_w.balance::currency = 'EUR' AND eur_w.is_current
+         LEFT JOIN wallets usd_w ON usd_w.owner = p.id AND usd_w.balance::currency = 'USD' AND usd_w.is_current
              WHERE join_time < %(ts_start)s
                AND (mangopay_user_id IS NOT NULL OR kind = 'group')
                AND is_suspended IS NOT true
