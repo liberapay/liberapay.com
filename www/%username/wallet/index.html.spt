@@ -96,32 +96,36 @@ else:
     <ul>
     % if regular_donations['sent']
     % for money_amount in regular_donations['sent']
+    % if money_amount
     <li>
     {{ ngettext(
         "{money_amount} in recurrent donations to {n} person",
         "{money_amount} in recurrent donations to {n} people",
-        regular_donations['ntippees'],
+        regular_donations['ntippees'][money_amount.currency],
         money_amount=money_amount
     ) }}
         (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
     </li>
+    % endif
     % endfor
     % endif
     % if reimbursements['sent']
     % for money_amount in reimbursements['sent']
+    % if money_amount
     <li>
     {{ ngettext(
         "{money_amount} in expense reimbursements to {n} person",
         "{money_amount} in expense reimbursements to {n} people",
-        reimbursements['nrecipients'],
+        reimbursements['nrecipients'][money_amount.currency],
         money_amount=money_amount
     ) }}
         (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=reimbursed&amp;mode=aggregate">{{
             _("Export as CSV")
         }}</a>)
     </li>
+    % endif
     % endfor
     % endif
     </ul>
@@ -132,22 +136,26 @@ else:
     <ul>
     % if regular_donations['received']
     % for money_amount in regular_donations['received']
+    % if money_amount
     <li>{{ ngettext(
         "{money_amount} in recurrent donations from {n} donor",
         "{money_amount} in recurrent donations from {n} donors",
-        regular_donations['npatrons'],
+        regular_donations['npatrons'][money_amount.currency],
         money_amount=money_amount
     ) }}</li>
+    % endif
     % endfor
     % endif
     % if reimbursements['received']
     % for money_amount in reimbursements['received']
+    % if money_amount
     <li>{{ ngettext(
         "{money_amount} in expense reimbursements from {n} organization",
         "{money_amount} in expense reimbursements from {n} organizations",
-        reimbursements['npayers'],
+        reimbursements['npayers'][money_amount.currency],
         money_amount=money_amount
     ) }}</li>
+    % endif
     % endfor
     % endif
     </ul>
