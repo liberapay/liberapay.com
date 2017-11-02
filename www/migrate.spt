@@ -127,13 +127,19 @@ elif step == '2':
             for pi in data.pop('payment_instructions'):
                 tippee = Participant._from_thing('lower(email)', pi['email_address'].lower())
                 if not tippee:
-                    elsewhere_accounts = AccountElsewhere.get_many(e['platform'], [
-                        UserInfo(**dict(e, domain='')) for e in pi['elsewhere_accounts']
-                    ])
-                    if elsewhere_accounts:
-                        elsewhere = elsewhere_accounts[0]
-                        tippee = elsewhere.participant
-                    else:
+                    elsewhere = cursor.one("""
+                        SELECT (e, p)::elsewhere_with_participant
+                          FROM elsewhere e
+                          JOIN participants p ON p.id = e.participant
+                          JOIN jsonb_array_elements(%s::jsonb) a ON a->>0 = e.platform AND a->>1 = e.user_id
+                         WHERE e.domain = ''
+                      ORDER BY p.npatrons DESC
+                             , e.platform = 'github' DESC
+                             , e.platform = 'twitter' DESC
+                             , e.id
+                         LIMIT 1
+                    """, (json.dumps([[e['platform'], e['user_id']] for e in pi['elsewhere_accounts']]),))
+                    if not elsewhere:
                         tippee = cursor.one("""
                             INSERT INTO participants
                                         (accept_all_currencies, main_currency, avatar_url)
@@ -148,6 +154,7 @@ elif step == '2':
                                          %(is_team)s, %(avatar_url)s, %(extra_info)s, '', %(p_id)s)
                               RETURNING elsewhere::elsewhere_with_participant
                         """, dict(e, p_id=tippee.id))
+                    tippee = elsewhere.participant
                 if tippee.accepts_tips:
                     amount = Money(pi['amount'], 'USD')
                     if not tippee.accept_all_currencies:
