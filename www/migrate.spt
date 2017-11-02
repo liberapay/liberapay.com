@@ -143,12 +143,18 @@ elif step == '2':
                          LIMIT 1
                     """, (json.dumps([[e['platform'], e['user_id']] for e in pi['elsewhere_accounts']]),))
                     if not elsewhere:
-                        e = [e for e in pi['elsewhere_accounts'] if e['platform'] in pledge_platforms]
+                        e = None
+                        for d in pi['elsewhere_accounts']:
+                            if d['platform'] not in pledge_platforms:
+                                continue
+                            try:
+                                platform = getattr(website.platforms, d['platform'])
+                                e = platform.get_user_info('', 'user_id', d['user_id'])
+                                break
+                            except:
+                                continue
                         if not e:
                             continue
-                        e = e[0]
-                        platform = getattr(website.platforms, e['platform'])
-                        e = platform.get_user_info('', 'user_id', e['user_id'])
                         tippee = cursor.one("""
                             INSERT INTO participants
                                         (accept_all_currencies, main_currency, avatar_url)
