@@ -127,7 +127,8 @@ elif step == '2':
             pledges = result['pledges'] = []
             rejected_tips = result['rejected_tips'] = []
             for pi in data.pop('payment_instructions'):
-                tippee = Participant._from_thing('lower(email)', pi['email_address'].lower())
+                email = pi['email_address']
+                tippee = Participant._from_thing('lower(email)', email.lower()) if email else None
                 if not tippee:
                     elsewhere = cursor.one("""
                         SELECT (e, p)::elsewhere_with_participant
