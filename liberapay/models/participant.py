@@ -1569,7 +1569,7 @@ class Participant(Model, MixinTeam):
         # Update giving on participant
         giving = (cursor or self.db).one("""
             UPDATE participants p
-               SET giving = COALESCE((
+               SET giving = coalesce_currency_amount((
                      SELECT sum(amount, %(currency)s)
                        FROM current_tips
                        JOIN participants p2 ON p2.id = tippee
@@ -1578,7 +1578,7 @@ class Participant(Model, MixinTeam):
                         AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
                         AND amount > 0
                         AND is_funded
-                   ), zero(p.giving))
+                   ), p.main_currency)
              WHERE p.id = %(id)s
          RETURNING giving
         """, dict(id=self.id, currency=self.main_currency))
@@ -1600,9 +1600,9 @@ class Participant(Model, MixinTeam):
                             AND is_funded
                      )
                 UPDATE participants p
-                   SET receiving = (
-                           COALESCE((SELECT sum(amount, %(currency)s) FROM our_tips), %(zero)s) +
-                           COALESCE(taking, %(zero)s)
+                   SET receiving = taking + coalesce_currency_amount(
+                           (SELECT sum(amount, %(currency)s) FROM our_tips),
+                           %(currency)s
                        )
                      , npatrons = COALESCE((SELECT count(*) FROM our_tips), 0)
                  WHERE p.id = %(id)s

@@ -334,14 +334,14 @@ class Payday(object):
                AND tippee = %(team_id)s
                AND p.balances >= amount
          RETURNING t.id, t.tipper, t.amount AS full_amount
-                 , COALESCE((
-                       SELECT sum(tr.amount)
+                 , coalesce_currency_amount((
+                       SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
                           AND tr.context = 'take'
                           AND tr.status = 'succeeded'
-                   ), zero(t.amount)) AS past_transfers_sum
+                   ), t.amount::currency) AS past_transfers_sum
         """, args)]
         takes = [NS(t._asdict()) for t in cursor.all("""
             SELECT t.member, t.amount
@@ -704,12 +704,12 @@ class Payday(object):
             UPDATE participants p
                SET giving = p2.giving
               FROM ( SELECT p2.id
-                          , COALESCE((
+                          , coalesce_currency_amount((
                                 SELECT sum(amount, p2.main_currency)
                                   FROM payday_tips t
                                  WHERE t.tipper = p2.id
                                    AND t.is_funded
-                            ), zero(p2.giving)) AS giving
+                            ), p2.main_currency) AS giving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -718,12 +718,12 @@ class Payday(object):
             UPDATE participants p
                SET taking = p2.taking
               FROM ( SELECT p2.id
-                          , COALESCE((
+                          , coalesce_currency_amount((
                                 SELECT sum(t.amount, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context = 'take'
-                            ), zero(p2.taking)) AS taking
+                            ), p2.main_currency) AS taking
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -732,12 +732,12 @@ class Payday(object):
             UPDATE participants p
                SET receiving = p2.receiving
               FROM ( SELECT p2.id
-                          , p2.taking + COALESCE((
+                          , p2.taking + coalesce_currency_amount((
                                 SELECT sum(amount, p2.main_currency)
                                   FROM payday_tips t
                                  WHERE t.tippee = p2.id
                                    AND t.is_funded
-                            ), zero(p2.taking)) AS receiving
+                            ), p2.main_currency) AS receiving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -747,12 +747,12 @@ class Payday(object):
             UPDATE participants p
                SET leftover = p2.leftover
               FROM ( SELECT p2.id
-                          , p2.receiving - COALESCE((
+                          , p2.receiving - coalesce_currency_amount((
                                 SELECT sum(t.amount, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                     OR t.team = p2.id
-                            ), zero(p2.receiving)) AS leftover
+                            ), p2.main_currency) AS leftover
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
