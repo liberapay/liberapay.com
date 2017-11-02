@@ -8,6 +8,8 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.utils.i18n import SEARCH_CONFS
 
+pledge_platforms = {'github', 'twitter'}
+
 gratipay_migrate_url = website.env.gratipay_base_url + '/~%s/migrate'
 gratipay_team_image_url = website.env.gratipay_base_url + '/%s/image?size=large'
 
@@ -140,20 +142,28 @@ elif step == '2':
                          LIMIT 1
                     """, (json.dumps([[e['platform'], e['user_id']] for e in pi['elsewhere_accounts']]),))
                     if not elsewhere:
+                        e = [e for e in pi['elsewhere_accounts'] if e['platform'] in pledge_platforms]
+                        if not e:
+                            continue
+                        e = e[0]
+                        platform = getattr(website.platforms, e['platform'])
+                        e = platform.get_user_info('', 'user_id', e['user_id'])
                         tippee = cursor.one("""
                             INSERT INTO participants
                                         (accept_all_currencies, main_currency, avatar_url)
                                  VALUES (true, 'USD', %s)
                               RETURNING participants
-                        """, (e['avatar_url'],))
+                        """, (e.avatar_url,))
                         elsewhere = cursor.one("""
                             INSERT INTO elsewhere
                                         (platform, user_id, user_name, display_name, email,
                                          is_team, avatar_url, extra_info, domain, participant)
-                                 VALUES (%(platform)s, %(user_id)s, %(user_name)s, %(display_name)s, %(email)s,
-                                         %(is_team)s, %(avatar_url)s, %(extra_info)s, '', %(p_id)s)
+                                 VALUES (%s, %s, %s, %s, %s,
+                                         %s, %s, %s, '', %s)
                               RETURNING elsewhere::elsewhere_with_participant
-                        """, dict(e, p_id=tippee.id))
+                        """, (e.platform, e.user_id, e.user_name, e.display_name, e.email,
+                              e.is_team, e.avatar_url, json.dumps(e.extra_info), tippee.id))
+                        del e
                     tippee = elsewhere.participant
                 if tippee.accepts_tips:
                     amount = Money(pi['amount'], 'USD')
