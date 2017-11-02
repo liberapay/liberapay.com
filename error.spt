@@ -7,6 +7,7 @@ from liberapay.utils.i18n import HTTP_ERRORS
 
 [----------------------------------------]
 
+sentry_ident = state.get('sentry_ident')
 code = response.code
 msg = _(HTTP_ERRORS.get(code, status_strings.get(code, '')))
 try:
@@ -30,13 +31,25 @@ if code == 500 and not err:
         % include response.html_template
     % else
         <p>{{ msg }}</p>
+        % if website.show_tracebacks
         <pre>{{ err }}</pre>
+        % else
+        <div class="alert alert-danger">{{ err }}</div>
+        % endif
+        % if sentry_ident
+            <p>{{ _(
+                "The details of this error have been recorded. If you decide to contact us "
+                "please include the following error identification code in your message: {0}.",
+                '<code>%s</code>'|safe % sentry_ident
+            ) }}</p>
+        % endif
     % endif
 % endblock
 [----------------------------------------] application/json via json_dump
 { "error_code": code
 , "error_message_short": msg
 , "error_message_long": err
+, "error_id": sentry_ident
  }
 [----------------------------------------] text/plain
 {{err or msg}}
