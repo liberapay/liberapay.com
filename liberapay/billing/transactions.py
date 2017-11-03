@@ -438,13 +438,11 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
-    try:
-        tipper_wallet = NS(dict(remote_id=kw['tipper_wallet_id'], remote_owner_id=kw['tipper_mango_id']))
-    except KeyError:
+    tipper_wallet = NS(remote_id=kw.get('tipper_wallet_id'), remote_owner_id=kw.get('tipper_mango_id'))
+    if not all(tipper_wallet.__dict__.values()):
         tipper_wallet = Participant.from_id(tipper).get_current_wallet(amount.currency)
-    try:
-        tippee_wallet = NS(dict(remote_id=kw['tippee_wallet_id'], remote_owner_id=kw['tippee_mango_id']))
-    except KeyError:
+    tippee_wallet = NS(remote_id=kw.get('tippee_wallet_id'), remote_owner_id=kw.get('tippee_mango_id'))
+    if not all(tippee_wallet.__dict__.values()):
         tippee_wallet = Participant.from_id(tippee).get_current_wallet(amount.currency, create=True)
     wallet_from = tipper_wallet.remote_id
     wallet_to = tippee_wallet.remote_id

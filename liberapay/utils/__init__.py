@@ -32,8 +32,8 @@ BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
 class NS(object):
-    def __init__(self, d):
-        self.__dict__.update(d)
+    def __init__(self, *d, **kw):
+        self.__dict__.update(*d, **kw)
 
 
 def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,
