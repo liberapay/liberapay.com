@@ -256,14 +256,14 @@ class Payday(object):
 
         CREATE OR REPLACE FUNCTION process_tip() RETURNS trigger AS $$
             DECLARE
-                tipper payday_participants;
+                tipper_balances currency_basket;
             BEGIN
-                tipper := (
-                    SELECT p.*::payday_participants
+                tipper_balances := (
+                    SELECT balances
                       FROM payday_participants p
                      WHERE id = NEW.tipper
                 );
-                IF (tipper.balances >= NEW.amount) THEN
+                IF (tipper_balances >= NEW.amount) THEN
                     EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL, NULL);
                     RETURN NEW;
                 END IF;
@@ -847,7 +847,7 @@ class Payday(object):
 
         # Identity-required notifications
         participants = self.db.all("""
-            SELECT p.*::participants
+            SELECT p
               FROM participants p
              WHERE mangopay_user_id IS NULL
                AND kind IN ('individual', 'organization')
