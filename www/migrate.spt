@@ -181,6 +181,8 @@ elif step == '2':
                               e.is_team, e.avatar_url, json.dumps(e.extra_info), tippee.id))
                         del e
                     tippee = elsewhere.participant
+                if tippee == p:
+                    continue
                 if tippee.accepts_tips:
                     amount = Money(pi['amount'], 'USD')
                     if not tippee.accept_all_currencies:
