@@ -858,7 +858,7 @@ class Payday(object):
                        JOIN participants p2 ON p2.id = t.tipper
                       WHERE t.tippee = p.id
                         AND t.amount > 0
-                        AND p2.balance > t.amount
+                        AND t.is_funded
                    )
         """)
         for p in participants:
