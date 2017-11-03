@@ -118,10 +118,10 @@ class Payday(object):
                  , w.remote_id AS tipper_wallet_id
                  , w2.remote_id AS tippee_wallet_id
               FROM payday_transfers t
-              JOIN wallets w ON w.owner = t.tipper AND
+         LEFT JOIN wallets w ON w.owner = t.tipper AND
                    w.balance::currency = t.amount::currency AND
                    w.is_current IS TRUE
-              JOIN wallets w2 ON w2.owner = t.tippee AND
+         LEFT JOIN wallets w2 ON w2.owner = t.tippee AND
                    w2.balance::currency = t.amount::currency AND
                    w2.is_current IS TRUE
           ORDER BY t.id
@@ -525,7 +525,7 @@ class Payday(object):
                       JOIN wallets w_debtor ON w_debtor.owner = d.debtor AND
                            w_debtor.balance::currency = d.amount::currency AND
                            w_debtor.is_current IS TRUE
-                      JOIN wallets w_creditor ON w_creditor.owner = d.creditor AND
+                 LEFT JOIN wallets w_creditor ON w_creditor.owner = d.creditor AND
                            w_creditor.balance::currency = d.amount::currency AND
                            w_creditor.is_current IS TRUE
                       JOIN participants p_creditor ON p_creditor.id = d.creditor
@@ -877,8 +877,8 @@ class Payday(object):
                    GROUP BY t.tipper, t.amount::currency
                    ) a
               JOIN participants p ON p.id = a.tipper
-              JOIN wallets w ON w.owner = p.id AND w.balance::currency = needed::currency
-             WHERE w.balance < needed
+         LEFT JOIN wallets w ON w.owner = p.id AND w.balance::currency = needed::currency
+             WHERE COALESCE(w.balance, zero(needed)) < needed
                AND EXISTS (
                      SELECT 1
                        FROM transfers t
