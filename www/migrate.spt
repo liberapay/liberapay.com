@@ -424,6 +424,7 @@ title = _("Migrating from Gratipay")
         <h3>{{ _("Donations") }}</h3>
         <ul class="status-list">
         % for pi, donation in result.donations
+            % if donation['amount']['amount'] > 0
             <li class="ok-success">{{ _(
                 "Your donation of {money_amount} per week to {name} on {platform} "
                 "has been recreated on Liberapay and allocated to {name2} based on "
@@ -431,8 +432,10 @@ title = _("Migrating from Gratipay")
                 money_amount=Money(**donation['amount']), name=pi['name'], platform=platform,
                 name2=('<a href="/~%s">%s</a>'|safe % (donation['tippee'], donation['tippee_name'])),
             ) }}</li>
+            % endif
         % endfor
         % for pi, pledge in result.pledges
+            % if pledge['amount']['amount'] > 0
             <li class="ok-info">{{ _(
                 "Your donation of {money_amount} per week to {name} on {platform} "
                 "has been recreated on Liberapay as a pledge to the {elsewhere_platform} "
@@ -441,8 +444,10 @@ title = _("Migrating from Gratipay")
                 elsewhere_platform=pledge['platform'],
                 name2=('<a href="/~%s">%s</a>'|safe % (pledge['tippee'], pledge['tippee_name'])),
             ) }}</li>
+            % endif
         % endfor
         % for pi, tippee_id, tippee_username in result.rejected_tips
+            % if float(pi['amount']) > 0
             <li class="not-ok-danger">{{ _(
                 "Your donation of {money_amount} per week to {name} on {platform} "
                 "was not recreated because {name2} has opted out of receiving "
@@ -450,6 +455,7 @@ title = _("Migrating from Gratipay")
                 money_amount=Money(pi['amount'], 'USD'), name=pi['name'], platform=platform,
                 name2=('<a href="/~%s">%s</a>'|safe % (pledge['tippee'], pledge['tippee_name'])),
             ) }}</li>
+            % endif
         % endfor
         </ul>
         <p class="buttons">
