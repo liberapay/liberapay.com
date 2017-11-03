@@ -61,6 +61,11 @@ class Cron(object):
                         func()
                     except Exception as e:
                         self.website.tell_sentry(e, {})
+                        # retry in 5 minutes
+                        sleep(300)
+                    else:
+                        # success, sleep until tomorrow
+                        sleep(3600 * 23)
             else:
                 while True:
                     try:
