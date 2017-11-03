@@ -5,7 +5,7 @@ import requests
 from liberapay.elsewhere._base import UserInfo
 from liberapay.exceptions import LoginRequired, UsernameAlreadyTaken
 from liberapay.models.account_elsewhere import AccountElsewhere
-from liberapay.models.participant import Participant
+from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.utils.i18n import SEARCH_CONFS
 
 pledge_platforms = {'github', 'twitter'}
@@ -84,6 +84,7 @@ elif step == '2':
                 p = user
                 cursor.run("SELECT id FROM participants WHERE id = %s FOR UPDATE", (p.id,))
             p.add_event(cursor, 'gratipay_import', orig_data)
+            # Emails
             emails = result['emails'] = []
             existing_emails = {e.address: e for e in p.get_emails()}
             for e in data.pop('email_addresses'):
@@ -99,6 +100,7 @@ elif step == '2':
                       RETURNING id
                 """, dict(e, p_id=p.id))
                 emails.append((e['address'], e['verified'], 'conflict' if i is None else 'added'))
+            # Elsewhere
             elsewhere = result['elsewhere'] = []
             skip = dict(cursor.all("""
                 SELECT platform, user_id FROM elsewhere WHERE participant = %s
@@ -113,16 +115,23 @@ elif step == '2':
                         elsewhere.append(('self-conflict', e))
                     continue
                 e['extra_info'] = json.dumps(e['extra_info'])
-                row = cursor.one("""
+                added = cursor.one("""
                     INSERT INTO elsewhere
                                 (platform, user_id, user_name, display_name, email,
                                  is_team, extra_info, domain, participant)
                          VALUES (%(platform)s, %(user_id)s, %(user_name)s, %(display_name)s, %(email)s,
                                  %(is_team)s, %(extra_info)s, '', %(p_id)s)
                     ON CONFLICT (platform, user_id, domain) DO NOTHING
-                      RETURNING *
+                      RETURNING true AS added
                 """, dict(e, p_id=p.id))
-                elsewhere.append(('added', e) if row else ('conflict', e))
+                if not added:
+                    try:
+                        p.take_over((e['platform'], '', e['user_id']))
+                        added = True
+                    except NeedConfirmation:
+                        pass
+                elsewhere.append(('added', e) if added else ('conflict', e))
+            # Donations/pledges
             donations = result['donations'] = []
             pledges = result['pledges'] = []
             rejected_tips = result['rejected_tips'] = []
@@ -186,6 +195,7 @@ elif step == '2':
                         donations.append((pi, d))
                 else:
                     rejected_tips.append((pi, tippee.id, tippee.username))
+            # Statements
             statements = result['statements'] = {True: 0, False: 0}
             for s in data.pop('statements'):
                 search_conf = SEARCH_CONFS.get(s['lang'], 'simple')
