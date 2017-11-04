@@ -256,6 +256,10 @@ msgstr "Du kan prøve igjen: {0}"
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Det ser ut til at du har funnet en feil! Vi beklager og fikser det så fort som mulig!"
 
+#, python-brace-format
+msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
+msgstr ""
+
 msgid "When I receive money"
 msgstr "Når jeg mottar penger"
 
@@ -2213,9 +2217,7 @@ msgid "The email has been sent."
 msgstr ""
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr ""
-"Hvorfor prøver du å legge mer penger i lommeboken din? Vær vennlig og "
-"kontakt support@liberapay.com hvis du har en god grunn."
+msgstr "Hvorfor prøver du å legge mer penger i lommeboken din? Vær vennlig og kontakt support@liberapay.com hvis du har en god grunn."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2294,9 +2296,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
-"{0} ble hevet fra kredittkortet ditt, {1} landet i Liberapay-lommeboken din, "
-"og {2} ble betalt i gebyrer."
+msgstr "{0} ble hevet fra kredittkortet ditt, {1} landet i Liberapay-lommeboken din, og {2} ble betalt i gebyrer."
 
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
@@ -2356,9 +2356,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
-"{0} ble debitert fra bankkontoen din, {1} landet i Liberapay-lommeboken din, "
-"og {2} ble betalt i gebyrer."
+msgstr "{0} ble debitert fra bankkontoen din, {1} landet i Liberapay-lommeboken din, og {2} ble betalt i gebyrer."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
@@ -2402,9 +2400,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
-msgstr ""
-"{0} ble hevet fra Liberapay-lommeboken din. Hvis transaksjonen er vellykket "
-"blir {1} satt inn på bankkontoen din og {2} bli betalt i gebyrer."
+msgstr "{0} ble hevet fra Liberapay-lommeboken din. Hvis transaksjonen er vellykket blir {1} satt inn på bankkontoen din og {2} bli betalt i gebyrer."
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
@@ -2427,9 +2423,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
-msgstr ""
-"Du bør beholde minst {0} i lommeboken din for å ha råd til donasjonene dine "
-"denne uken."
+msgstr "Du bør beholde minst {0} i lommeboken din for å ha råd til donasjonene dine denne uken."
 
 msgid "Bank account"
 msgstr ""
@@ -2572,7 +2566,7 @@ msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create a
 msgstr ""
 
 #, python-brace-format
-msgid "If you'd like more details, the snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
+msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
 msgstr ""
 
 msgid "Does Liberapay respect financial regulations?"
@@ -3219,6 +3213,9 @@ msgid "Fetching your account data from {platform} has failed (error code {x}). I
 msgstr ""
 
 msgid "Migrating from Gratipay"
+msgstr ""
+
+msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
 msgstr ""
 
 #, python-brace-format

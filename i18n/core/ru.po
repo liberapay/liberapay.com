@@ -254,6 +254,10 @@ msgstr "Можете попробовать ещё раз: {0}"
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Похоже, вы нашли баг! Приносим извинения за причинённые неудобства, мы исправим его как можно скорее!"
 
+#, python-brace-format
+msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
+msgstr ""
+
 msgid "When I receive money"
 msgstr "Когда я получаю деньги"
 
@@ -449,9 +453,7 @@ msgstr "Пользователь {0} не принимает пожертвов�
 
 #, python-brace-format
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
-msgstr ""
-"Пожертвования для {username} должны быть в {main_currency}, не в "
-"{rejected_currency}."
+msgstr "Пожертвования для {username} должны быть в {main_currency}, не в {rejected_currency}."
 
 msgid "There isn't enough money in your wallet."
 msgstr "В вашем кошельке недостаточно денег."
@@ -2431,10 +2433,7 @@ msgstr "Мы держим деньги в карантине {0}, чтобы з�
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr ""
-"Перевод евро на счёт в единой зоне платежей в евро (SEPA) бесплатно, "
-"переводы в другие страны стоят {0} каждый. Перевод американских долларов "
-"стоит {1} за перевод вне зависимости от страны назначения."
+msgstr "Перевод евро на счёт в единой зоне платежей в евро (SEPA) бесплатно, переводы в другие страны стоят {0} каждый. Перевод американских долларов стоит {1} за перевод вне зависимости от страны назначения."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
@@ -2581,8 +2580,8 @@ msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create a
 msgstr "В отличие от других некоммерческих сайтов, Liberapay нейтрален. Вы можете создать аккаунт, не ожидая подтверждения от нас, и мы не выгоним вас, если вы не будете нарушать закон или условия использования."
 
 #, python-brace-format
-msgid "If you'd like more details, the snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
-msgstr "Если вам нужно больше подробностей, парни из snowdrift.coop собрали {0}большой список{1} краудфандинговых платформ и различий между ними."
+msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
+msgstr ""
 
 msgid "Does Liberapay respect financial regulations?"
 msgstr "Соблюдает ли Liberapay финансовый регламент?"
@@ -3241,12 +3240,13 @@ msgstr "Войти"
 
 #, python-brace-format
 msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
-msgstr ""
-"Получение данных вашего профиля из {platform} не удалось (код ошибки {x}). "
-"Если проблема сохраняется, свяжитесь с support@liberapay.com."
+msgstr "Получение данных вашего профиля из {platform} не удалось (код ошибки {x}). Если проблема сохраняется, свяжитесь с support@liberapay.com."
 
 msgid "Migrating from Gratipay"
 msgstr "Миграция с Gratiapay"
+
+msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
+msgstr ""
 
 #, python-brace-format
 msgid "Welcome, {username}!"
@@ -3254,18 +3254,14 @@ msgstr "Добро пожаловать, {username}!"
 
 #, python-brace-format
 msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr ""
-"Подтвердите, что вы хотите, чтобы мы создали аккаунт Liberapay для вас и "
-"импортировали данные из {platform}."
+msgstr "Подтвердите, что вы хотите, чтобы мы создали аккаунт Liberapay для вас и импортировали данные из {platform}."
 
 #, python-brace-format
 msgid "Here is an overview of what we will import from {platform}:"
 msgstr "Вот обзор того, что будет импортировано из {platform}:"
 
 msgid "basic account data (username, avatar, some privacy settings, etc)"
-msgstr ""
-"базовые данные аккаунта (имя пользователя, аватар, некоторые настройки "
-"конфиденциальности и т. д.)"
+msgstr "базовые данные аккаунта (имя пользователя, аватар, некоторые настройки конфиденциальности и т. д.)"
 
 msgid "profile descriptions"
 msgstr "описание профиля"
@@ -3274,15 +3270,11 @@ msgid "teams (we will create them for you)"
 msgstr "команды (мы создадим их для вас)"
 
 msgid "ongoing donations (if the donee hasn't joined Liberapay yet a pledge will be created instead)"
-msgstr ""
-"будущие пожертвования (если дарополучатель ещё не присоединился к Liberapay, "
-"вместо этого будет создан подарок)"
+msgstr "будущие пожертвования (если дарополучатель ещё не присоединился к Liberapay, вместо этого будет создан подарок)"
 
 #, python-brace-format
 msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)"
-msgstr ""
-"другие аккаунты (например, если ваш Twitter-аккаунт соединён с аккаунтом "
-"{platform}, он также будет связан с Liberapay)"
+msgstr "другие аккаунты (например, если ваш Twitter-аккаунт соединён с аккаунтом {platform}, он также будет связан с Liberapay)"
 
 #, python-brace-format
 msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
