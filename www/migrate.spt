@@ -24,6 +24,7 @@ if step == '1':
     username = request.body['username']
 
 elif step == '2':
+    request.allow('POST')
     body = request.body
     conflict = None
     if user.ANON:
