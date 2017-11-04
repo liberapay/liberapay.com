@@ -191,14 +191,14 @@ class MixinTeam(object):
         from liberapay.billing.payday import Payday
         tips = [NS(t._asdict()) for t in cursor.all("""
             SELECT t.id, t.tipper, t.amount AS full_amount
-                 , COALESCE((
-                       SELECT sum(tr.amount)
+                 , coalesce_currency_amount((
+                       SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
                           AND tr.context = 'take'
                           AND tr.status = 'succeeded'
-                   ), zero(t.amount)) AS past_transfers_sum
+                   ), t.amount::currency) AS past_transfers_sum
               FROM current_tips t
               JOIN participants p ON p.id = t.tipper
              WHERE t.tippee = %(team_id)s

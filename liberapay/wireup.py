@@ -106,7 +106,7 @@ def database(env, tell_sentry):
     register_adapter(Money, adapt_money)
 
     def cast_currency_amount(v, cursor):
-        return None if v is None else Money(*v[1:-1].split(','))
+        return None if v in (None, '(,)') else Money(*v[1:-1].split(','))
     try:
         oid = db.one("SELECT 'currency_amount'::regtype::oid")
         register_type(new_type((oid,), _str('currency_amount'), cast_currency_amount))

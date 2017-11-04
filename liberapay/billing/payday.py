@@ -118,10 +118,10 @@ class Payday(object):
                  , w.remote_id AS tipper_wallet_id
                  , w2.remote_id AS tippee_wallet_id
               FROM payday_transfers t
-              JOIN wallets w ON w.owner = t.tipper AND
+         LEFT JOIN wallets w ON w.owner = t.tipper AND
                    w.balance::currency = t.amount::currency AND
                    w.is_current IS TRUE
-              JOIN wallets w2 ON w2.owner = t.tippee AND
+         LEFT JOIN wallets w2 ON w2.owner = t.tippee AND
                    w2.balance::currency = t.amount::currency AND
                    w2.is_current IS TRUE
           ORDER BY t.id
@@ -256,14 +256,14 @@ class Payday(object):
 
         CREATE OR REPLACE FUNCTION process_tip() RETURNS trigger AS $$
             DECLARE
-                tipper payday_participants;
+                tipper_balances currency_basket;
             BEGIN
-                tipper := (
-                    SELECT p.*::payday_participants
+                tipper_balances := (
+                    SELECT balances
                       FROM payday_participants p
                      WHERE id = NEW.tipper
                 );
-                IF (tipper.balances >= NEW.amount) THEN
+                IF (tipper_balances >= NEW.amount) THEN
                     EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL, NULL);
                     RETURN NEW;
                 END IF;
@@ -334,14 +334,14 @@ class Payday(object):
                AND tippee = %(team_id)s
                AND p.balances >= amount
          RETURNING t.id, t.tipper, t.amount AS full_amount
-                 , COALESCE((
-                       SELECT sum(tr.amount)
+                 , coalesce_currency_amount((
+                       SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
                           AND tr.context = 'take'
                           AND tr.status = 'succeeded'
-                   ), zero(t.amount)) AS past_transfers_sum
+                   ), t.amount::currency) AS past_transfers_sum
         """, args)]
         takes = [NS(t._asdict()) for t in cursor.all("""
             SELECT t.member, t.amount
@@ -525,7 +525,7 @@ class Payday(object):
                       JOIN wallets w_debtor ON w_debtor.owner = d.debtor AND
                            w_debtor.balance::currency = d.amount::currency AND
                            w_debtor.is_current IS TRUE
-                      JOIN wallets w_creditor ON w_creditor.owner = d.creditor AND
+                 LEFT JOIN wallets w_creditor ON w_creditor.owner = d.creditor AND
                            w_creditor.balance::currency = d.amount::currency AND
                            w_creditor.is_current IS TRUE
                       JOIN participants p_creditor ON p_creditor.id = d.creditor
@@ -704,12 +704,12 @@ class Payday(object):
             UPDATE participants p
                SET giving = p2.giving
               FROM ( SELECT p2.id
-                          , COALESCE((
+                          , coalesce_currency_amount((
                                 SELECT sum(amount, p2.main_currency)
                                   FROM payday_tips t
                                  WHERE t.tipper = p2.id
                                    AND t.is_funded
-                            ), zero(p2.giving)) AS giving
+                            ), p2.main_currency) AS giving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -718,12 +718,12 @@ class Payday(object):
             UPDATE participants p
                SET taking = p2.taking
               FROM ( SELECT p2.id
-                          , COALESCE((
+                          , coalesce_currency_amount((
                                 SELECT sum(t.amount, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context = 'take'
-                            ), zero(p2.taking)) AS taking
+                            ), p2.main_currency) AS taking
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -732,12 +732,12 @@ class Payday(object):
             UPDATE participants p
                SET receiving = p2.receiving
               FROM ( SELECT p2.id
-                          , p2.taking + COALESCE((
+                          , p2.taking + coalesce_currency_amount((
                                 SELECT sum(amount, p2.main_currency)
                                   FROM payday_tips t
                                  WHERE t.tippee = p2.id
                                    AND t.is_funded
-                            ), zero(p2.taking)) AS receiving
+                            ), p2.main_currency) AS receiving
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -747,12 +747,12 @@ class Payday(object):
             UPDATE participants p
                SET leftover = p2.leftover
               FROM ( SELECT p2.id
-                          , p2.receiving - COALESCE((
+                          , p2.receiving - coalesce_currency_amount((
                                 SELECT sum(t.amount, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                     OR t.team = p2.id
-                            ), zero(p2.receiving)) AS leftover
+                            ), p2.main_currency) AS leftover
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -847,7 +847,7 @@ class Payday(object):
 
         # Identity-required notifications
         participants = self.db.all("""
-            SELECT p.*::participants
+            SELECT p
               FROM participants p
              WHERE mangopay_user_id IS NULL
                AND kind IN ('individual', 'organization')
@@ -858,7 +858,7 @@ class Payday(object):
                        JOIN participants p2 ON p2.id = t.tipper
                       WHERE t.tippee = p.id
                         AND t.amount > 0
-                        AND p2.balance > t.amount
+                        AND t.is_funded
                    )
         """)
         for p in participants:
@@ -877,8 +877,8 @@ class Payday(object):
                    GROUP BY t.tipper, t.amount::currency
                    ) a
               JOIN participants p ON p.id = a.tipper
-              JOIN wallets w ON w.owner = p.id AND w.balance::currency = needed::currency
-             WHERE w.balance < needed
+         LEFT JOIN wallets w ON w.owner = p.id AND w.balance::currency = needed::currency
+             WHERE COALESCE(w.balance, zero(needed)) < needed
                AND EXISTS (
                      SELECT 1
                        FROM transfers t

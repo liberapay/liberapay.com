@@ -4,6 +4,7 @@ from pando import Response
 
 from ..website import website
 from .currencies import MoneyBasket
+from . import group_by
 
 
 def get_end_of_year_balances(db, participant, year, current_year):
@@ -100,19 +101,25 @@ def iter_payday_events(db, participant, year=None):
         successes = [t for t in transfers if t['status'] == 'succeeded' and not t['refund_ref']]
         regular_donations = [t for t in successes if t['context'] in ('tip', 'take')]
         reimbursements = [t for t in successes if t['context'] == 'expense']
+        regular_donations_by_currency = group_by(regular_donations, lambda t: t['amount'].currency)
+        reimbursements_by_currency = group_by(reimbursements, lambda t: t['amount'].currency)
         yield dict(
             kind='totals',
             regular_donations=dict(
                 sent=MoneyBasket.sum(t['amount'] for t in regular_donations if t['tipper'] == id),
                 received=MoneyBasket.sum(t['amount'] for t in regular_donations if t['tippee'] == id),
-                npatrons=len(set(t['tipper'] for t in regular_donations if t['tippee'] == id)),
-                ntippees=len(set(t['tippee'] for t in regular_donations if t['tipper'] == id)),
+                npatrons={k: len(set(t['tipper'] for t in transfers if t['tippee'] == id))
+                          for k, transfers in regular_donations_by_currency.items()},
+                ntippees={k: len(set(t['tippee'] for t in transfers if t['tipper'] == id))
+                          for k, transfers in regular_donations_by_currency.items()},
             ),
             reimbursements=dict(
                 sent=MoneyBasket.sum(t['amount'] for t in reimbursements if t['tipper'] == id),
                 received=MoneyBasket.sum(t['amount'] for t in reimbursements if t['tippee'] == id),
-                npayers=len(set(t['tipper'] for t in reimbursements if t['tippee'] == id)),
-                nrecipients=len(set(t['tippee'] for t in reimbursements if t['tipper'] == id)),
+                npayers={k: len(set(t['tipper'] for t in transfers if t['tippee'] == id))
+                         for k, transfers in reimbursements_by_currency.items()},
+                nrecipients={k: len(set(t['tippee'] for t in transfers if t['tipper'] == id))
+                             for k, transfers in reimbursements_by_currency.items()},
             ),
         )
         del successes, regular_donations, reimbursements

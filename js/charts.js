@@ -20,6 +20,10 @@ Liberapay.charts.make = function(series, button) {
         return;
     }
 
+    function parsePoint(o) {
+        return parseFloat(o.amount || o);
+    }
+
     // Reverse the series.
     // ===================
     // For historical reasons the API is descending when we want ascending.
@@ -53,7 +57,7 @@ Liberapay.charts.make = function(series, button) {
 
     var maxes = charts.map(function(chart) {
         return series.reduce(function(previous, current) {
-            return Math.max(previous, current[chart.data('chart')]);
+            return Math.max(previous, parsePoint(current[chart.data('chart')]));
         }, 0);
     });
 
@@ -67,7 +71,7 @@ Liberapay.charts.make = function(series, button) {
     charts.forEach(function(chart, chart_index) {
         chart.css('min-width', (series.length * 5) + 'px');
         series.forEach(function(point, index) {
-            var y = parseFloat(point[chart.data('chart')]);
+            var y = parsePoint(point[chart.data('chart')]);
             var bar = $('<div>').addClass('bar');
             var shaded = $('<div>').addClass('shaded');
             shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
