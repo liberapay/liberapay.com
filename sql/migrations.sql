@@ -1154,3 +1154,22 @@ ALTER TABLE balances_at RENAME COLUMN balance TO balances;
 ALTER TABLE exchange_routes ADD COLUMN currency currency;
 UPDATE exchange_routes SET currency = 'EUR' WHERE network = 'mango-cc';
 ALTER TABLE exchange_routes ADD CONSTRAINT currency_chk CHECK ((currency IS NULL) = (network <> 'mango-cc'));
+
+-- migration #55
+CREATE FUNCTION coalesce_currency_amount(currency_amount, currency) RETURNS currency_amount AS $$
+    BEGIN RETURN (COALESCE($1.amount, '0.00'::numeric), COALESCE($1.currency, $2)); END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+CREATE OR REPLACE FUNCTION initialize_amounts() RETURNS trigger AS $$
+    BEGIN
+        NEW.giving = coalesce_currency_amount(NEW.giving, NEW.main_currency);
+        NEW.receiving = coalesce_currency_amount(NEW.receiving, NEW.main_currency);
+        NEW.taking = coalesce_currency_amount(NEW.taking, NEW.main_currency);
+        NEW.leftover = coalesce_currency_amount(NEW.leftover, NEW.main_currency);
+        NEW.balance = coalesce_currency_amount(NEW.balance, NEW.main_currency);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+DROP TRIGGER initialize_amounts ON participants;
+CREATE TRIGGER initialize_amounts
+    BEFORE INSERT OR UPDATE ON participants
+    FOR EACH ROW EXECUTE PROCEDURE initialize_amounts();

@@ -74,6 +74,10 @@ CREATE AGGREGATE sum(currency_amount) (
 
 -- Convenience functions
 
+CREATE FUNCTION coalesce_currency_amount(currency_amount, currency) RETURNS currency_amount AS $$
+    BEGIN RETURN (COALESCE($1.amount, '0.00'::numeric), COALESCE($1.currency, $2)); END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
 CREATE FUNCTION get_currency(currency_amount) RETURNS currency AS $$
     BEGIN RETURN $1.currency; END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;

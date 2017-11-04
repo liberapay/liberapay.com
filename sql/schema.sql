@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '54'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '55'::jsonb);
 
 
 -- app configuration
@@ -126,16 +126,16 @@ $$ LANGUAGE sql;
 
 CREATE FUNCTION initialize_amounts() RETURNS trigger AS $$
     BEGIN
-        NEW.giving = COALESCE(NEW.giving, zero(NEW.main_currency));
-        NEW.receiving = COALESCE(NEW.receiving, zero(NEW.main_currency));
-        NEW.taking = COALESCE(NEW.taking, zero(NEW.main_currency));
-        NEW.leftover = COALESCE(NEW.leftover, zero(NEW.main_currency));
-        NEW.balance = COALESCE(NEW.balance, zero(NEW.main_currency));
+        NEW.giving = coalesce_currency_amount(NEW.giving, NEW.main_currency);
+        NEW.receiving = coalesce_currency_amount(NEW.receiving, NEW.main_currency);
+        NEW.taking = coalesce_currency_amount(NEW.taking, NEW.main_currency);
+        NEW.leftover = coalesce_currency_amount(NEW.leftover, NEW.main_currency);
+        NEW.balance = coalesce_currency_amount(NEW.balance, NEW.main_currency);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
-
-CREATE TRIGGER initialize_amounts BEFORE INSERT ON participants
+CREATE TRIGGER initialize_amounts
+    BEFORE INSERT OR UPDATE ON participants
     FOR EACH ROW EXECUTE PROCEDURE initialize_amounts();
 
 
