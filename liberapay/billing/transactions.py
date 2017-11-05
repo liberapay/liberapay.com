@@ -273,7 +273,7 @@ def record_unexpected_payin(db, payin):
 
 def record_payout_refund(db, payout_refund):
     orig_payout = BankWirePayOut.get(payout_refund.InitialTransactionId)
-    e_origin = db.one("SELECT * FROM exchanges WHERE id = %s" % (orig_payout.Tag,))
+    e_origin = db.one("SELECT * FROM exchanges WHERE id = %s", (orig_payout.Tag,))
     e_refund_id = db.one("SELECT id FROM exchanges WHERE refund_ref = %s", (e_origin.id,))
     if e_refund_id:
         # Already recorded
