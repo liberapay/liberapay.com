@@ -19,6 +19,15 @@ from liberapay.utils import utcnow
 
 class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
+    def setUp(self):
+        super(TestMangopayCallbacks, self).setUp()
+        self.cwp_patch = patch('liberapay.billing.transactions.check_wallet_balance')
+        self.cwp_patch.__enter__()
+
+    def tearDown(self):
+        self.cwp_patch.__exit__()
+        super(TestMangopayCallbacks, self).tearDown()
+
     def callback(self, qs, **kw):
         kw.setdefault('HTTP_ACCEPT', b'application/json')
         kw.setdefault('raise_immediately', False)
