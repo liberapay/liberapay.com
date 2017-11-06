@@ -106,8 +106,8 @@ if conf:
     cron(Weekly(weekday=3, hour=1), check_all_balances, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
     cron(conf.clean_up_counters_every, website.db.clean_up_counters, True)
-    cron(conf.update_cached_amounts_every, Payday.update_cached_amounts, True)
     cron(Daily(hour=16), lambda: fetch_currency_exchange_rates(website.db), True)
+    cron(Daily(hour=17), Payday.update_cached_amounts, True)
 
 
 # Website Algorithm
