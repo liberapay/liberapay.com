@@ -32,8 +32,10 @@ if request.method == 'GET' and 'transactionId' in request.qs:
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
 currency = request.qs.get('currency', currency)
+if request.method == 'POST':
+    currency = request.body.get('currency', currency)
 if currency not in PAYIN_CARD_MIN:
-    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+    raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
 
 exchange = None
 routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
@@ -173,6 +175,7 @@ title = _("Adding Money")
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="route_id" value="{{ route.id if route else '' }}" />
+        <input type="hidden" name="currency" value="{{ currency }}" />
         <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
         <ul class="list-group radio-group">
         % for weeks in weeks_list

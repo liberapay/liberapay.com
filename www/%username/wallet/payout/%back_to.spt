@@ -24,9 +24,12 @@ exchange = None
 bank_account = None
 
 back_to = b64decode_s(request.path['back_to'], default=None)
+
 currency = request.qs.get('currency', currency)
+if request.method == 'POST':
+    currency = request.body.get('currency', currency)
 if currency not in constants.CURRENCIES:
-    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+    raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
 
 if request.method == 'POST':
     body = request.body
@@ -148,6 +151,7 @@ title = _("Withdrawing Money")
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="route_id" value="{{ routes[0].id if routes else '' }}" />
+        <input type="hidden" name="currency" value="{{ currency }}" />
         <div class="input-group">
             <input name="amount" value="{{ format_decimal(recommended_withdrawal) }}"
                    class="form-control" size=6 required />
