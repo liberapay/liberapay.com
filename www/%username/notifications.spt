@@ -1,4 +1,4 @@
-from liberapay.utils import get_participant
+from liberapay.utils import get_int, get_participant
 
 get_unread = lambda notifs: [n for n in notifs if n['is_new']]
 
@@ -11,10 +11,7 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     body = request.body
     if body.get('mark_all_as_read') == 'true':
-        try:
-            until = int(body.get('until', 0))
-        except ValueError:
-            raise response.error(400, 'bad `until` value')
+        until = get_int(body, 'until', 0)
         participant.mark_notifications_as_read(until=until)
     else:
         participant.remove_notification(body['remove'])

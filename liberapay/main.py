@@ -166,6 +166,10 @@ algorithm.functions = [
 # Monkey patch aspen and pando
 # ============================
 
+if hasattr(aspen.http.mapping.Mapping, 'get_int'):
+    raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
+aspen.http.mapping.Mapping.get_int = utils.get_int
+
 if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
 def _source(self):

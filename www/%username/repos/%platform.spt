@@ -46,10 +46,7 @@ if platform_name:
     if account:
         event_type = 'fetch_repos:%s' % account.id
         last_fetch = participant.get_last_event_of_type(event_type)
-        try:
-            offset = max(int(request.qs.get('offset', 0)), 0)
-        except (TypeError, ValueError):
-            offset = 0
+        offset = max(request.qs.get_int('offset', 0), 0)
         if last_fetch and last_fetch.ts > utcnow() - THREE_DAYS:
             repos = participant.get_repos_on_platform(
                 platform.name, limit=LIMIT, offset=offset

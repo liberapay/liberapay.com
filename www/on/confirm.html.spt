@@ -7,7 +7,9 @@ from liberapay.models.participant import Participant
 if user.ANON:
     raise LoginRequired
 
-account_id, p_id = request.qs['id'], request.qs.get('p_id')
+account_id, p_id = request.qs.get_int('id'), request.qs.get_int('p_id')
+if not account_id:
+    raise response.error(400, 'missing id')
 account = AccountElsewhere.from_id(account_id)
 token = request.headers.cookie.get('connect_%s' % account_id)
 if not token or not account.check_connect_token(token.value):

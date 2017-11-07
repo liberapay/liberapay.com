@@ -5,7 +5,7 @@ import json
 
 from liberapay.exceptions import AuthRequired
 from liberapay.models.participant import Participant
-from liberapay.utils import b64encode_s
+from liberapay.utils import b64encode_s, parse_int
 
 COOKIE_TIMEOUT = timedelta(minutes=5)
 
@@ -30,7 +30,7 @@ if action not in constants.ELSEWHERE_ACTIONS:
 if action == 'connect' and user.ANON:
     raise AuthRequired
 
-p = Participant.from_id(p_id) if p_id else user
+p = Participant.from_id(parse_int(p_id)) if p_id else user
 
 domain = ''
 if user_id:
