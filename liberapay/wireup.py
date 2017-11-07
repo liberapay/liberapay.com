@@ -199,7 +199,6 @@ class AppConf(object):
         twitter_callback=str,
         twitter_id=str,
         twitter_secret=str,
-        update_cached_amounts_every=int,
     )
 
     def __init__(self, d):
