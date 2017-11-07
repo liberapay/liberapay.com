@@ -281,6 +281,8 @@ def get_account_elsewhere(website, state, api_lookup=True):
             uid = uid[1:]
     split = uid.rsplit('@', 1)
     uid, domain = split if len(split) == 2 else (uid, '')
+    if domain and platform.single_domain:
+        raise response.error(404)
     try:
         account = AccountElsewhere._from_thing(key, platform.name, uid, domain)
     except UnknownAccountElsewhere:
