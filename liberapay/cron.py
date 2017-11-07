@@ -31,14 +31,14 @@ class Cron(object):
             if isinstance(period, Weekly):
                 while True:
                     now = datetime.utcnow()
-                    then = now.replace(hour=period.hour, minute=0, second=0)
+                    then = now.replace(hour=period.hour, minute=10, second=0)
                     days = (now.isoweekday() - period.weekday) % 7
                     if days:
                         then += timedelta(days=days)
                     seconds = (then - now).total_seconds()
                     if seconds > 0:
                         sleep(seconds)
-                    elif seconds < -3600:
+                    elif seconds < -60:
                         sleep(86400 * 6)
                         continue
                     try:
@@ -49,12 +49,12 @@ class Cron(object):
             elif isinstance(period, Daily):
                 while True:
                     now = datetime.utcnow()
-                    then = now.replace(hour=period.hour, minute=0, second=0)
+                    then = now.replace(hour=period.hour, minute=5, second=0)
                     seconds = (then - now).total_seconds()
                     if seconds > 0:
                         # later today
                         sleep(seconds)
-                    elif seconds < -3600:
+                    elif seconds < -60:
                         # tomorrow
                         sleep(3600 * 24 + seconds)
                     try:

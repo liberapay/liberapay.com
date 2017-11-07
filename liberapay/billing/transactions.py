@@ -3,6 +3,7 @@
 from __future__ import division, print_function, unicode_literals
 
 from decimal import Decimal
+from time import sleep
 
 from mangopay.exceptions import APIError
 from mangopay.resources import (
@@ -852,3 +853,28 @@ def sync_with_mangopay(db):
             _record_transfer_result(db, t.id, 'failed', 'interrupted')
 
     check_db(db)
+
+
+def check_wallet_balance(w, state={}):
+    remote_wallet = Wallet.get(w.remote_id)
+    remote_balance = remote_wallet.balance / 100
+    try:
+        assert remote_balance == w.balance, (
+            "balances don't match for user #%s (liberapay id %s), wallet #%s contains %s, we expected %s" %
+            (w.remote_owner_id, w.owner, w.remote_id, remote_balance, w.balance)
+        )
+    except AssertionError as e:
+        from liberapay.website import website
+        website.tell_sentry(e, state, allow_reraise=False)
+
+
+def check_all_balances():
+    from liberapay.website import website
+    wallets = website.db.all("""
+        SELECT *
+          FROM wallets
+         WHERE NOT remote_id LIKE 'CREDIT_%'
+    """)
+    for w in wallets:
+        check_wallet_balance(w)
+        sleep(0.1)
