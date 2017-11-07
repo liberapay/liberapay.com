@@ -30,7 +30,7 @@ if action not in constants.ELSEWHERE_ACTIONS:
 if action == 'connect' and user.ANON:
     raise AuthRequired
 
-p = Participant.from_id(parse_int(p_id)) if p_id else user
+p = (Participant.from_id(parse_int(p_id)) if p_id else None) or user
 
 domain = ''
 if user_id:
