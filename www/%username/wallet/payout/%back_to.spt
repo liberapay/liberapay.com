@@ -25,22 +25,20 @@ bank_account = None
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 
-currency = request.qs.get('currency', currency)
+currency = request.qs.get('currency')
 if request.method == 'POST':
-    currency = request.body.get('currency', currency)
-if currency not in constants.CURRENCIES:
+    currency = request.body.get('currency', currency or state['currency'])
+if currency is not None and currency not in constants.CURRENCIES:
     raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
 
 if request.method == 'POST':
-    body = request.body
-
     amount = Money(parse_decimal(request.body['amount']), currency)
     if amount <= 0:
         raise response.error(400, _("The amount cannot be zero."))
     routes = ExchangeRoute.from_network(participant, 'mango-ba')
     if not routes:
         raise response.error(400, "no route")
-    ignore_high_fee = body.get('confirmed') == 'true'
+    ignore_high_fee = request.body.get('confirmed') == 'true'
     try:
         exchange = payout(website.db, routes[0], amount, ignore_high_fee)
     except TransactionFeeTooHigh as e:
@@ -57,13 +55,25 @@ if request.method == 'POST':
 elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
+    currency = exchange.amount.currency
 
-balance = participant.get_balance_in(currency)
-success = getattr(exchange, 'status', None) in ('created', 'succeeded')
-show_form = balance > 0 and not success
-if show_form or not success:
-    withdrawable = participant.get_withdrawable_amount(currency)
-    show_form = withdrawable > 0
+if not currency:
+    balances = participant.get_balances()
+    currencies = balances.currencies_present
+    if len(currencies) == 1:
+        currency = currencies[0]
+    elif len(currencies) == 0:
+        currency = state['currency']
+    else:
+        show_form = False
+
+if currency:
+    balance = participant.get_balance_in(currency)
+    success = getattr(exchange, 'status', None) in ('created', 'succeeded')
+    show_form = balance > 0 and not success
+    if show_form or not success:
+        withdrawable = participant.get_withdrawable_amount(currency)
+        show_form = withdrawable > 0
 
 if show_form:
     mp_account = participant.get_mangopay_account()
@@ -103,7 +113,9 @@ title = _("Withdrawing Money")
 <form id="payout" action="javascript:" method="POST"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
+    % if show_form
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+    % endif
 
     % if exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
@@ -113,6 +125,8 @@ title = _("Withdrawing Money")
             _("The attempt to send {0} to your bank account has failed. Error message: {1}", -exchange.amount, exchange.note)
         }}</div>
     % endif
+
+    % if currency
     <p>
         {{ _("You have {0} in your Liberapay wallet.", balance) }}
         % if not success
@@ -132,8 +146,15 @@ title = _("Withdrawing Money")
         <p><a href="{{ response.sanitize_untrusted_url(back_to) }}"
               class="btn btn-success">{{ _("Go back") }}</a></p>
     % endif
-
-    % if show_form
+    % else
+    <p>{{ _("You have {0} in your Liberapay wallet.", balances) }}</p>
+    <p>{{ _("Which currency do you want to withdraw?") }}</p>
+    <p class="buttons">
+    % for currency in currencies
+        <a class="btn btn-default btn-lg" href="?currency={{ currency }}"
+            >{{ locale.currencies.get(currency, currency) }} ({{ locale.currency_symbols.get(currency, currency) }})</a>
+    % endfor
+    </p>
     <p>{{ _(
         "Withdrawing euros to a SEPA bank account is free, transfers to other "
         "countries cost {0} each. Withdrawing US dollars costs {1} per transfer "
@@ -141,6 +162,21 @@ title = _("Withdrawing Money")
         constants.FEE_PAYOUT['EUR']['foreign'].with_vat,
         constants.FEE_PAYOUT['USD']['*'].with_vat,
     ) }}</p>
+    % endif
+
+    % if show_form
+    % if currency == 'EUR'
+    <p>{{ _(
+        "Withdrawing euros to a SEPA bank account is free, transfers to other "
+        "countries cost {0} each.",
+        constants.FEE_PAYOUT['EUR']['foreign'].with_vat,
+    ) }}</p>
+    % elif currency == 'USD'
+    <p>{{ _(
+        "Withdrawing US dollars costs {0} per transfer, whatever the destination country is.",
+        constants.FEE_PAYOUT['USD']['*'].with_vat,
+    ) }}</p>
+    % endif
 
     <h3>{{ _("Amount") }}</h3>
 

@@ -59,6 +59,7 @@ from liberapay.utils import (
     NS, deserialize, erase_cookie, serialize, set_cookie,
     emails, i18n, markdown,
 )
+from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
 
 
@@ -1081,6 +1082,14 @@ class Participant(Model, MixinTeam):
                AND balance::currency = %s
                AND is_current
         """, (self.id, currency)) or ZERO[currency]
+
+    def get_balances(self):
+        return self.db.one("""
+            SELECT basket_sum(balance)
+              FROM wallets
+             WHERE owner = %s
+               AND is_current
+        """, (self.id,)) or MoneyBasket()
 
 
     # Events
