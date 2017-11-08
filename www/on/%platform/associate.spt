@@ -13,7 +13,7 @@ from liberapay.utils import b64decode_s, parse_int
 
 split = request.path['platform'].split(':', 1)
 platform_name, domain = split if len(split) == 2 else (split[0], '')
-platform = getattr(website.platforms, platform_name, None)
+platform = website.platforms.get(platform_name)
 if platform is None:
     raise response.error(404)
 if domain and not constants.DOMAIN_RE.match(domain):

@@ -25,7 +25,7 @@ platforms = OrderedDict(
 )
 
 platform_name = request.path['platform']
-platform = getattr(website.platforms, platform_name, None)
+platform = website.platforms.get(platform_name)
 if platform_name and not platform:
     raise response.error(404)
 

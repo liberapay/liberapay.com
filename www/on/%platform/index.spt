@@ -10,7 +10,7 @@ p = None
 del p
 
 [---]
-platform = getattr(website.platforms, request.path['platform'], None)
+platform = website.platforms.get(request.path['platform'])
 if platform is None or platform not in website.friends_platforms:
     raise response.error(404)
 

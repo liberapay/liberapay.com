@@ -13,7 +13,7 @@ COOKIE_TIMEOUT = timedelta(minutes=5)
 
 request.allow('POST')
 
-platform = getattr(website.platforms, request.path['platform'], None)
+platform = website.platforms.get(request.path['platform'])
 if platform is None:
     raise response.error(404)
 

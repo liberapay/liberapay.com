@@ -268,7 +268,7 @@ class AccountElsewhere(Model):
 def get_account_elsewhere(website, state, api_lookup=True):
     path = state['request'].line.uri.path
     response = state['response']
-    platform = getattr(website.platforms, path['platform'], None)
+    platform = website.platforms.get(path['platform'])
     if platform is None:
         raise response.error(404)
     uid = path['user_name']
