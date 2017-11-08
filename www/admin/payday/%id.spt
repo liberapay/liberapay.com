@@ -5,20 +5,12 @@ from threading import Lock
 
 from liberapay.billing.payday import exec_payday
 from liberapay.exceptions import LoginRequired
-from liberapay.utils import pid_exists
+from liberapay.utils import parse_int, pid_exists
 
 ONE_WEEK = timedelta(days=7)
 S3_BUCKET = website.app_conf.s3_payday_logs_bucket
 
 payday_log_path = lambda i: website.env.log_dir+'/payday-%i.txt' % i
-
-def parse_int(s, **kw):
-    try:
-        return int(s)
-    except ValueError:
-        if 'default' in kw:
-            return kw['default']
-        raise response.error(400, "'%s' is not a valid integer" % s)
 
 MAXLEN = mmap.PAGESIZE * 100
 

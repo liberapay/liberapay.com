@@ -17,13 +17,9 @@ if action not in ('subscribe', 'unsubscribe'):
 subscribe = action == 'subscribe'
 subscriber = user
 
-subscription_id = request.qs.get('id')
+subscription_id = request.qs.get_int('id')
 token = request.qs.get('token')
 if subscription_id and token:
-    try:
-        subscription_id = int(subscription_id)
-    except ValueError:
-        raise response.error(400, "bad `id` in querystring")
     subscription = website.db.one("""
         SELECT *
           FROM subscriptions

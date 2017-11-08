@@ -428,6 +428,9 @@ class PlatformRegistry(object):
         self._hasattr_cache[attr] = r
         return r
 
+    def get(self, k, default=None):
+        return self.__dict__.get(k, default)
+
     def hasattr(self, attr):
         r = self._hasattr_cache.get(attr)
         return r or self._cache_hasattr(attr)

@@ -9,11 +9,8 @@ query_cache = website.db_qc1
 community = get_community(state, restrict=False)
 participant = community.participant  # used by profile-base.html
 
-try:
-    limit = min(int(request.qs.get('limit', 18)), 60)
-    offset = int(request.qs.get('offset', 0))
-except ValueError:
-    raise response.error(400)
+limit = min(request.qs.get_int('limit', 18), 60)
+offset = request.qs.get_int('offset', 0)
 if limit not in (18, 60):
     raise response.error(400, "bad `limit` value in querystring")
 

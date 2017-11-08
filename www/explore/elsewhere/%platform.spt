@@ -4,14 +4,6 @@ from collections import OrderedDict
 
 query_cache = website.db_qc5
 
-def parse_int(o, **kw):
-    try:
-        return int(o)
-    except (ValueError, TypeError):
-        if 'default' in kw:
-            return kw['default']
-        raise response.error(400, "'%s' is not a valid integer" % o)
-
 INF = float('inf')
 
 [---]
@@ -33,7 +25,7 @@ platforms = OrderedDict(
 )
 
 platform_name = request.path['platform']
-platform = getattr(website.platforms, platform_name, None)
+platform = website.platforms.get(platform_name)
 if platform_name and not platform:
     raise response.error(404)
 
@@ -44,11 +36,11 @@ if platform:
     if order not in ('any', 'random', 'latest'):
         raise response.error(400, "bad order")
 
-    limit = min(parse_int(request.qs.get('limit') or 18), 60)
+    limit = min(request.qs.get_int('limit', 18), 60)
     if limit not in (18, 60):
         raise response.error(400, "bad `limit` value in querystring")
-    last_shown = parse_int(request.qs.get('last_shown'), default=INF)
-    offset = parse_int(request.qs.get('offset') or 0)
+    last_shown = request.qs.get_int('last_shown', INF)
+    offset = request.qs.get_int('offset') or 0
 
     def get_participants(random):
         return query_cache.all("""

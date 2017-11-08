@@ -10,10 +10,7 @@ title = participant.username
 subhead = _("Export History")
 
 current_year = datetime.utcnow().year
-try:
-    year = int(request.qs.get('year', current_year))
-except ValueError:
-    raise response.error(400, "bad year")
+year = request.qs.get_int('year', current_year)
 
 key = request.qs.get('key')
 mode = request.qs.get('mode')

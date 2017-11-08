@@ -10,11 +10,8 @@ if not community:
     # Community not found
     raise response.error(404)
 
-try:
-    limit = min(int(request.qs.get('limit', 10)), 100)
-    offset = int(request.qs.get('offset', 0))
-except ValueError:
-    raise response.error(400)
+limit = min(request.qs.get_int('limit', 10), 100)
+offset = request.qs.get_int('offset', 0)
 
 community_members = community.get_members(limit=limit, offset=offset)
 

@@ -7,13 +7,13 @@ from liberapay.elsewhere._exceptions import CantReadMembership
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation, Participant
-from liberapay.utils import b64decode_s
+from liberapay.utils import b64decode_s, parse_int
 
 [-----------------------------]
 
 split = request.path['platform'].split(':', 1)
 platform_name, domain = split if len(split) == 2 else (split[0], '')
-platform = getattr(website.platforms, platform_name, None)
+platform = website.platforms.get(platform_name)
 if platform is None:
     raise response.error(404)
 if domain and not constants.DOMAIN_RE.match(domain):
@@ -87,7 +87,7 @@ if action_user_id and account_user_id != action_user_id:
     account = claimed_account
 
 if action == 'connect':
-    connect_to = Participant.from_id(p_id) if p_id else user
+    connect_to = Participant.from_id(parse_int(p_id)) if p_id else user
     if not user.controls(connect_to):
         raise response.error(403, "can't connect to an account you don't control")
     try:

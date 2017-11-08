@@ -203,6 +203,11 @@ class Participant(Model, MixinTeam):
         if k1 in ('username', 'email'):
             k1 = 'lower(%s)' % k1
             v1 = v1.lower()
+        elif k1 == 'id':
+            try:
+                v1 = int(v1)
+            except (ValueError, TypeError):
+                return
         p = cls._from_thing(k1, v1)
         if not p:
             return
