@@ -222,7 +222,7 @@ title = _("Adding Money")
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="route_id" value="{{ route.id if route else '' }}" />
-        <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
+        <p>{{ _("Please select a precomputed amount or input a custom one. Transfers are made immediately.") }}</p>
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks
