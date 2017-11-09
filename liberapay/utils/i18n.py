@@ -76,7 +76,7 @@ class Locale(_Locale):
         return format_decimal(*a, locale=self)
 
     def format_money_basket(self, basket):
-        return ', '.join(
+        return ' + '.join(
             format_currency(money.amount, money.currency, locale=self)
             for money in basket if money
         ) or '0'

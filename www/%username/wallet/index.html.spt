@@ -186,11 +186,15 @@ else:
             locale.format_money_basket(event['balances'])
         }}</td>
         <td class="wallet">
-        % for delta in event['wallet_deltas']
-            % if delta.amount or delta.currency == participant.main_currency
+        % set wallet_deltas = event['wallet_deltas']
+        % if wallet_deltas
+        % set n = len(wallet_deltas.currencies_present)
+        % for delta in wallet_deltas
+            % if delta.amount or n == 0 and delta.currency == participant.main_currency
                 {{ format_money_delta(delta) }}<br>
             % endif
         % endfor
+        % endif
         </td>
         <td class="fees"></td>
         <td class="bank"></td>
