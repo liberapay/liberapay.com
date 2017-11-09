@@ -1065,8 +1065,8 @@ class Participant(Model, MixinTeam):
         from liberapay.billing.transactions import create_wallet
         return create_wallet(self.db, self, currency)
 
-    def get_current_wallets(self):
-        return self.db.all("""
+    def get_current_wallets(self, cursor=None):
+        return (cursor or self.db).all("""
             SELECT *
               FROM wallets
              WHERE owner = %s
@@ -1552,7 +1552,7 @@ class Participant(Model, MixinTeam):
           ORDER BY p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
         updated = []
-        for wallet in self.get_current_wallets():
+        for wallet in self.get_current_wallets(cursor):
             fake_balance = wallet.balance
             currency = fake_balance.currency
             fake_balance += self.get_receiving_in(currency, cursor)
