@@ -481,7 +481,7 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips = self.get_giving_for_profile()[0]
+        tips = self.get_giving_details()[0]
         tips = [t for t in tips if t.is_identified and not t.is_suspended]
         for tip in tips:
             if tip.kind == 'group':
@@ -1790,11 +1790,12 @@ class Participant(Model, MixinTeam):
         return tip_amounts, npatrons, contributed
 
 
-    def get_giving_for_profile(self):
+    def get_giving_details(self):
+        """Get details of current outgoing donations and pledges.
+        """
 
         tips = [NS(r._asdict()) for r in self.db.all("""\
 
-            SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
                      , period
@@ -1814,13 +1815,11 @@ class Participant(Model, MixinTeam):
                    AND p.status = 'active'
               ORDER BY tippee
                      , t.mtime DESC
-            ) AS foo
 
         """, (self.id,))]
 
         pledges = [NS(r._asdict()) for r in self.db.all("""\
 
-            SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
                      , period
@@ -1836,7 +1835,6 @@ class Participant(Model, MixinTeam):
                    AND p.status = 'stub'
               ORDER BY tippee
                      , t.mtime DESC
-            ) AS foo
 
         """, (self.id,))]
 
@@ -1846,15 +1844,8 @@ class Participant(Model, MixinTeam):
             t.converted_amount = t.amount.convert(self.main_currency)
         tips = sorted(tips, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
         pledges = sorted(pledges, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
-
-        total = sum([t.converted_amount for t in tips])
-        if not total:
-            # If tips is an empty list, total is int 0. We want a Money amount.
-            total = ZERO[self.main_currency]
-
-        pledges_total = sum([t.converted_amount for t in pledges])
-        if not pledges_total:
-            pledges_total = ZERO[self.main_currency]
+        total = Money.sum((t.converted_amount for t in tips), self.main_currency)
+        pledges_total = Money.sum((t.converted_amount for t in pledges), self.main_currency)
 
         return tips, total, pledges, pledges_total
 

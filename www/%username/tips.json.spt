@@ -35,8 +35,7 @@ if request.method == 'POST':
                 participant.set_tip_to(tip['username'], tip['amount'].zero(), tip['period'])
 
 else:
-    tips, total, pledges, pledges_total = participant.get_giving_for_profile()
-
+    tips, total, pledges, pledges_total = participant.get_giving_details()
     out = []
     for tip in chain(tips, pledges):
         if tip.amount == 0:

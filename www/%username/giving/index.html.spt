@@ -25,7 +25,7 @@ if request.method == 'POST':
     else:
         raise response.error(400)
 
-tips, total, pledges, pledges_total = participant.get_giving_for_profile()
+tips, total, pledges, pledges_total = participant.get_giving_details()
 title = participant.username
 subhead = _("Giving")
 cancelled_tips = [x for x in tips if x.amount == 0 and x.mtime >= recently]
