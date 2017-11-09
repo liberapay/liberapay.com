@@ -12,6 +12,11 @@ if t not in ('giving.js', 'receiving.js'):
 
 participant = get_participant(state, restrict=False, redirect_canon=False)
 goal = participant.goal
+show_goal = goal and goal > participant.receiving
+
+receiving_markup = "{0}{1}{2}{3}".format(span_open, participant.receiving, span_close, br)
+giving_markup = "{0}{1}{2}{3}".format(span_open, participant.giving, span_close, br)
+goal_markup = "{0}{1}{2}".format(span_open, goal, span_close)
 
 if participant.hide_giving and t != 'receiving.js' or \
    participant.hide_receiving and t != 'giving.js':
@@ -36,12 +41,12 @@ response.headers[b'Vary'] = b'Accept-Language'
     ><span style="display: block; padding: 0 15px;"
         ><span style="color: #f6c915; position: absolute; left: -2px;">&#10132;</span
         >{% if participant.kind == 'individual' %}{{
-            _("I donate {0}{1}{2}", span_open, participant.giving, span_close) if t == 'giving.js' else
-                (_("I receive {0}{1}{2}{3} per week,{3} my goal is {0}{4}{2}", span_open, participant.receiving, span_close, br, goal) if goal else
-                 _("I receive {0}{1}{2}", span_open, participant.receiving, span_close))
+            _("I donate {0} per week", giving_markup) if t == 'giving.js' else
+                _("I receive {0} per week,{1} my goal is {2}", receiving_markup, br, goal_markup) if show_goal else
+                 _("I receive {0} per week", receiving_markup)
         }}{% else %}{{
-            _("We donate {0}{1}{2}", span_open, participant.giving, span_close) if t == 'giving.js' else
-            (_("We receive {0}{1}{2}{3} per week,{3} my goal is {0}{4}{2}", span_open, participant.receiving, span_close, br, goal) if goal else
-             _("We receive {0}{1}{2}", span_open, participant.receiving, span_close))
+            _("We donate {0} per week", giving_markup) if t == 'giving.js' else
+                _("We receive {0} per week,{1} my goal is {2}", receiving_markup, br, goal_markup) if show_goal else
+                _("We receive {0} per week", receiving_markup)
         }}{% endif %}</span
 ></a>
