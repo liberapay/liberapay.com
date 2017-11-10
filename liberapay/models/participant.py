@@ -1857,29 +1857,6 @@ class Participant(Model, MixinTeam):
                AND amount>0
         """, (self.id,))
 
-    def get_current_tips(self):
-        """Get the tips this participant is currently sending to others.
-        """
-        return self.db.all("""
-            SELECT * FROM (
-                SELECT DISTINCT ON (tippee)
-                       amount
-                     , period
-                     , periodic_amount
-                     , tippee
-                     , t.ctime
-                     , p.username
-                     , p.join_time
-                  FROM tips t
-                  JOIN participants p ON p.id = t.tippee
-                 WHERE tipper = %s
-              ORDER BY tippee
-                     , t.mtime DESC
-            ) AS foo
-            ORDER BY amount DESC
-                   , tippee
-        """, (self.id,), back_as=dict)
-
 
     def get_age_in_seconds(self):
         if self.join_time is not None:

@@ -28,12 +28,6 @@ if request.method == 'POST':
         one['amount'] = amount
         out.append(one)
 
-    if request.qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
-        old_tips = participant.get_current_tips()
-        for tip in old_tips:
-            if tip['username'] not in seen:
-                participant.set_tip_to(tip['username'], tip['amount'].zero(), tip['period'])
-
 else:
     tips, total, pledges, pledges_total = participant.get_giving_details()
     out = []
