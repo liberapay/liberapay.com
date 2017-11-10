@@ -90,6 +90,10 @@ class MoneyBasket(object):
 
     __nonzero__ = __bool__
 
+    @property
+    def currencies_present(self):
+        return [m.currency for m in self if m.amount]
+
     @classmethod
     def sum(cls, amounts):
         r = cls(Money('0.00', 'EUR'), usd=Money('0.00', 'USD'))

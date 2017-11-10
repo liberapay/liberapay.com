@@ -54,10 +54,13 @@ else:
 if route is not None:
     route.__dict__['participant'] = participant
 
-funded = float('inf')
 currency = request.qs.get('currency', currency)
+if request.method == 'POST':
+    currency = request.body.get('currency', currency)
 if currency not in PAYIN_DIRECT_DEBIT_MIN:
-    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+    raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
+
+funded = float('inf')
 balance = participant.get_balance_in(currency)
 donations = participant.get_giving_in(currency)
 weekly = donations - participant.get_receiving_in(currency)
@@ -222,6 +225,7 @@ title = _("Adding Money")
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="route_id" value="{{ route.id if route else '' }}" />
+        <input type="hidden" name="currency" value="{{ currency }}" />
         <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
         <ul class="list-group radio-group">
         % for weeks in weeks_list
