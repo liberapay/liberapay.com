@@ -99,6 +99,10 @@ class Locale(_Locale):
         except (InvalidOperation, NumberFormatError, ValueError):
             raise InvalidNumber(s)
 
+    @staticmethod
+    def title(s):
+        return s[0].upper() + s[1:] if s and s[0].islower() else s
+
     def to_age_str(self, o, **kw):
         if not isinstance(o, datetime):
             kw.setdefault('granularity', 'day')

@@ -27,7 +27,7 @@ if request.method == 'POST':
         out.append(one)
 
 else:
-    tips, total, pledges, pledges_total = participant.get_giving_details()
+    tips, pledges = participant.get_giving_details()
     out = []
     for tip in tips:
         if tip.amount == 0:

@@ -4,7 +4,7 @@ from decimal import Decimal
 from pando.utils import utcnow
 
 from liberapay.models.participant import Participant
-from liberapay.utils import get_participant
+from liberapay.utils import get_participant, group_by
 
 
 THIRTY_DAYS = timedelta(days=30)
@@ -25,7 +25,7 @@ if request.method == 'POST':
     else:
         raise response.error(400)
 
-tips, total, pledges, pledges_total = participant.get_giving_details()
+tips, pledges = participant.get_giving_details()
 title = participant.username
 subhead = _("Giving")
 cancelled_tips = [x for x in tips if x.amount == 0 and x.mtime >= recently]
@@ -35,15 +35,28 @@ ncancelled = len(cancelled_tips) + len(cancelled_pledges)
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
+tips_by_currency = group_by(tips, lambda t: t.amount.currency)
+tips_by_currency = {
+    currency: (tips, Money.sum((t.amount for t in tips), currency))
+    for currency, tips in tips_by_currency.items()
+}
+del tips
+n_tip_currencies = len(tips_by_currency)
+
 pledges = [t for t in pledges if t.amount > 0]
 npledges = len(pledges)
+pledges_by_currency = group_by(pledges, lambda t: t.amount.currency)
+pledges_by_currency = {
+    currency: (pledges, Money.sum((t.amount for t in pledges), currency))
+    for currency, pledges in pledges_by_currency.items()
+}
+del pledges
+n_pledge_currencies = len(tips_by_currency)
 
 if not freeload:
     Liberapay = Participant.from_username('Liberapay')
     Liberapay_goal = getattr(Liberapay, 'goal', None)
     Liberapay_tip = participant.get_tip_to(Liberapay or participant)
-
-weekly = total - participant.receiving
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
@@ -51,27 +64,6 @@ weekly = total - participant.receiving
 % from "templates/your-tip.html" import tip_form with context
 
 % block content
-
-% if weekly > 0
-    % set funded = participant.balance // weekly
-    <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
-        {{ _("You have {0} in your Liberapay wallet.", participant.balance) }}
-        % if funded > 0
-            {{ ngettext("Your donations are only funded for another week.",
-                        "Your donations are funded for another {n} weeks.",
-                        funded) }}
-        % else
-            {{ _("You need to transfer money to your wallet to fund your donations.") }}
-        % endif
-        % if funded < 52
-            <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}"
-               href="{{ participant.path('wallet/payin/'+b64encode_s(request.path.raw)) }}"
-               >{{ _("Add money") }}</a>
-        % endif
-    </p>
-% else
-    <p>{{ _("You give {0} per week.", participant.giving) }}</p>
-% endif
 
 % if not freeload and not Liberapay_tip.amount
 <br>
@@ -89,14 +81,14 @@ weekly = total - participant.receiving
             "donations to {0}its own account{1}, please consider chipping in:",
             '<a href="/Liberapay/">'|safe, '</a>'|safe,
         ) }}</p>
-        {{ tip_form(tip=Liberapay_tip, inline=True) }}
-        <p> </p>
+        <a href="/Liberapay/donate" class="btn btn-donate">{{ _("Support Liberapay") }}</a>
         % if Liberapay_goal and Liberapay.receiving < Liberapay_goal * Decimal('0.5')
-            <p>{{ _(
+            <p> </p>
+            {{ _(
                 "Building Liberapay is a lot of work, and there still is much to "
                 "do, but our developers, translators, and other contributors are "
                 "severely underpaid, and it's slowing down our progress."
-            ) }}</p>
+            ) }}
         % endif
     </div>
 </div>
@@ -107,6 +99,47 @@ weekly = total - participant.receiving
 % if ntips
 <div class="col-lg-12">
     <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
+    <p>{{ _("You give {0} per week.", participant.giving) }}</p>
+    % for currency, t in tips_by_currency.items()
+    % set tips, total = t
+    % set currency_name = locale.currencies.get(currency, currency)
+    % if n_tip_currencies > 1
+    <h4>{{ locale.title(currency_name) }} ({{ locale.currency_symbols.get(currency, currency) }})</h4>
+    % endif
+    % set receiving = participant.get_receiving_in(currency)
+    % set weekly = total - receiving
+    % if weekly > 0
+        % set balance = participant.get_balance_in(currency)
+        % set funded = balance // weekly
+        <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
+            {{ _("You have {0} in your Liberapay wallet.", balance) }}
+            % if funded > 0
+                {{ ngettext("Your donations are only funded for another week.",
+                            "Your donations are funded for another {n} weeks.",
+                            funded) if n_tip_currencies == 1 else
+                   ngettext("Your donations in {currency} are only funded for another week.",
+                            "Your donations in {currency} are funded for another {n} weeks.",
+                            funded, currency=currency_name) }}
+            % else
+                {{ _("You need to transfer money to your wallet to fund your donations.")
+                   if n_tip_currencies == 1 else
+                   _("You need to transfer money to your wallet to fund your donations in {currency}.",
+                     currency=currency_name) }}
+            % endif
+            % if funded < 52
+                <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}"
+                   href="{{ participant.path('wallet/payin/'+b64encode_s(request.path.raw)) }}?currency={{ currency }}"
+                   >{{ _("Add money") }}</a>
+            % endif
+        </p>
+    % elif weekly < 0
+        <p>{{
+            _("Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week).",
+              income=receiving, donations_amount=donations) if n_tip_currencies == 1 else
+            _("Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week).",
+              currency=currency_name, income=receiving, donations_amount=donations)
+        }}</p>
+    % endif
     <table class="table">
         <thead>
             <tr>
@@ -153,12 +186,19 @@ weekly = total - participant.receiving
         % endfor
         </tbody>
     </table>
+    % endfor
 </div>
 % endif
 
 % if npledges
 <div class="col-lg-11">
-    <h3>{{ _("Pledges") }} (N={{ len(pledges) }})</h3>
+    <h3>{{ _("Pledges") }} (N={{ npledges }})</h3>
+    % for currency, t in pledges_by_currency.items()
+    % set pledges, total = t
+    % if n_pledge_currencies > 1
+    <h4>{{ locale.title(locale.currencies.get(currency, currency)) }}
+        ({{ locale.currency_symbols.get(currency, currency) }})</h4>
+    % endif
     <table class="table">
         <thead>
             <tr>
@@ -173,9 +213,9 @@ weekly = total - participant.receiving
                 <th></th>
                 <th class="total">{{ _(
                     "{0} per week ~ {1} per month ~ {2} per year",
-                    pledges_total,
-                    pledges_total / constants.PERIOD_CONVERSION_RATES['monthly'],
-                    pledges_total / constants.PERIOD_CONVERSION_RATES['yearly'],
+                    total,
+                    total / constants.PERIOD_CONVERSION_RATES['monthly'],
+                    total / constants.PERIOD_CONVERSION_RATES['yearly'],
                 ) }}</th>
                 <th></th>
                 <th></th>
@@ -196,6 +236,7 @@ weekly = total - participant.receiving
         % endfor
         </tbody>
     </table>
+    % endfor
 </div>
 % endif
 

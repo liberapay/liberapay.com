@@ -1848,16 +1848,7 @@ class Participant(Model, MixinTeam):
 
         """, (self.id,))]
 
-        for t in tips:
-            t.converted_amount = t.amount.convert(self.main_currency)
-        for t in pledges:
-            t.converted_amount = t.amount.convert(self.main_currency)
-        tips = sorted(tips, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
-        pledges = sorted(pledges, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
-        total = Money.sum((t.converted_amount for t in tips), self.main_currency)
-        pledges_total = Money.sum((t.converted_amount for t in pledges), self.main_currency)
-
-        return tips, total, pledges, pledges_total
+        return tips, pledges
 
     def get_tips_receiving(self):
         return self.db.all("""
