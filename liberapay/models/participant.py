@@ -481,8 +481,16 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips = self.get_giving_details()[0]
-        tips = [t for t in tips if t.is_identified and not t.is_suspended]
+        tips = [NS(r._asdict()) for r in self.db.all("""
+            SELECT amount, tippee, t.ctime, p.kind
+              FROM current_tips t
+              JOIN participants p ON p.id = t.tippee
+             WHERE tipper = %s
+               AND p.status = 'active'
+               AND (p.mangopay_user_id IS NOT NULL OR kind = 'group')
+               AND p.is_suspended IS NOT TRUE
+        """, (self.id,))]
+
         for tip in tips:
             if tip.kind == 'group':
                 tip.team = Participant.from_id(tip.tippee)
@@ -490,7 +498,7 @@ class Participant(Model, MixinTeam):
                     t for t in tip.team.get_current_takes(cursor=cursor)
                     if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
-                tip.total_takes = sum(t['amount'] for t in tip.takes)
+                tip.total_takes = Money.sum((t['amount'] for t in tip.takes), tip.team.main_currency)
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
         transfers = []
 
@@ -498,16 +506,18 @@ class Participant(Model, MixinTeam):
             if wallet.balance == 0:
                 continue
             currency = wallet.balance.currency
-            tips_in_this_currency = [t for t in tips if t.amount.currency == currency]
-            total = sum(t.amount for t in tips_in_this_currency) or ZERO[currency]
-            transfers = []
+            tips_in_this_currency = sorted(
+                [t for t in tips if t.amount.currency == currency],
+                key=lambda t: (t.amount, t.ctime), reverse=True
+            )
+            total = Money.sum((t.amount for t in tips_in_this_currency), currency)
             distributed = ZERO[currency]
             initial_balance = wallet.balance
 
             if not total:
                 continue
 
-            for tip in tips:
+            for tip in tips_in_this_currency:
                 rate = tip.amount / total
                 pro_rated = (initial_balance * rate).round_down()
                 if pro_rated == 0:
