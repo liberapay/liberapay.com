@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Danish (https://hosted.weblate.org/projects/liberapay/core/da/)\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2017-11-10 14:42+0000\n"
+"Last-Translator: jan madsen <jsm@janz.dk>\n"
+"Language-Team: Danish "
+"<https://hosted.weblate.org/projects/liberapay/core/da/>\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.18-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -141,7 +145,9 @@ msgstr "Bankoverførslen til din Liberapay tegnebog er udløbet"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "På {dato} har du bestemt at du ville overføre {penge_beløb} fra din bank konto til din Liberapay tegnebog, men pengene blev aldrig modtaget."
+msgstr ""
+"På {date} har du bestemt at du ville overføre {money_amount} fra din "
+"bankkonto til din Liberapay tegnebog, men pengene blev aldrig modtaget."
 
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "Hvis du har glemt at gøre det kan du starte en ny betaling:"
@@ -488,7 +494,7 @@ msgstr "Du kan ikke gøre dette da din konto er suspenderet for nuværende."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' Ser ikke ud til at være et gyldigt bruger id på {platform}"
+msgstr "'{0}' Ser ikke ud til at være et gyldigt bruger id på {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
@@ -692,10 +698,13 @@ msgstr "Dokument #{id} er blevet valideret."
 
 #, python-brace-format
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Dokument #{id} er blevet afvist: {afvist_grund_type} - {afvist_grund_besked}"
+msgstr ""
+"Dokument #{id} er blevet afvist: {refused_reason_type} - "
+"{refused_reason_message}."
 
 msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Hvis du har brug for hjælp, kan du sende en email til support@liberapay.com"
+msgstr ""
+"Hvis du har brug for hjælp, kan du sende en email til support@liberapay.com."
 
 msgid "Occupation"
 msgstr "Beskæftigelse"
@@ -1047,7 +1056,7 @@ msgstr[1] "{0} modtager {1} hver uge fra {n} bidragsydere."
 
 #, python-brace-format
 msgid "Donating ({amount})"
-msgstr "Doner ({Beløb})"
+msgstr "Doner ({amount})"
 
 msgid "Donate"
 msgstr "Doner"
@@ -3191,23 +3200,34 @@ msgid_plural "{n} user accounts have been created in the past month. The most re
 msgstr[0] ""
 msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] "{n} nye donationer er startet i den seneste måned, hvilket øger den samlede ugentlige finansiering med {money_amount}."
+msgstr[0] ""
+"{n} ny donation er startet i den seneste måned, hvilket øger den samlede "
+"ugentlige finansiering med {money_amount}."
 msgstr[1] ""
+"{n} nye donationer er startet i den seneste måned, hvilket øger den samlede "
+"ugentlige finansiering med {money_amount}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "{n} nye {link_open}donationstilbud{link_close} er blevet fremsat i den forgangne måned, hvilket tilføjer {money_amount} af ugentlige donationer der venter på at blive inkasseret."
+msgstr[0] ""
+"{n} nyt {link_open}donationstilbud{link_close} er blevet fremsat i den "
+"forgangne måned, hvilket tilføjer {money_amount} af ugentlige donationer der "
+"venter på at blive inkasseret."
 msgstr[1] ""
+"{n} nye {link_open}donationstilbud{link_close} er blevet fremsat i den "
+"forgangne måned, hvilket tilføjer {money_amount} af ugentlige donationer der "
+"venter på at blive inkasseret."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
 msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] "{money_amount} blev overført sidste uge mellem {n} brugere."
-msgstr[1] ""
+msgstr[0] ""
+"{money_amount} blev overført sidste uge mellem {n} bruger{money_amount}."
+msgstr[1] "{money_amount} blev overført sidste uge mellem {n} brugere."
 
 msgid "More stats"
 msgstr "Flere statistiker"
