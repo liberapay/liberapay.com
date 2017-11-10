@@ -29,7 +29,8 @@ tips, total, pledges, pledges_total = participant.get_giving_for_profile()
 title = participant.username
 subhead = _("Giving")
 cancelled_tips = [x for x in tips if x.amount == 0 and x.mtime >= recently]
-ncancelled_tips = len(cancelled_tips)
+cancelled_pledges = [x for x in pledges if x.amount == 0 and x.mtime >= recently]
+ncancelled = len(cancelled_tips) + len(cancelled_pledges)
 
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.amount > 0]
@@ -198,9 +199,9 @@ weekly = total - participant.receiving
 </div>
 % endif
 
-% if ncancelled_tips
+% if ncancelled
 <div class="col-lg-7">
-    <h3>{{ _("Recently Cancelled") }} (N={{ ncancelled_tips }})
+    <h3>{{ _("Recently Cancelled") }} (N={{ ncancelled }})
         <small>{{ _("within the last 30 days") }}</small></h3>
     <table class="table">
         <thead>
@@ -214,6 +215,17 @@ weekly = total - participant.receiving
             % for tip in cancelled_tips
             <tr>
                 <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
+                <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
+                <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
+            </tr>
+            % endfor
+            % for tip in cancelled_pledges
+            % set e = tip.e_account
+            <tr>
+                <td class="recipient">
+                    <img class="platform-icon" src="{{ e.platform_data.icon }}" />
+                    <a href="{{ e.liberapay_path }}">{{ e.friendly_name }}</a>
+                </td>
                 <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
                 <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             </tr>
