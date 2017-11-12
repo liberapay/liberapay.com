@@ -404,7 +404,7 @@ def make_sentry_teller(env):
         result = sentry.captureException(tags=tags, extra=extra)
 
         # Put the Sentry id in the state for logging, etc
-        state['sentry_ident'] = sentry.get_ident(result)
+        return {'sentry_ident': sentry.get_ident(result)}
 
     CustomUndefined._tell_sentry = staticmethod(tell_sentry)
 
