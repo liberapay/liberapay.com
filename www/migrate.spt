@@ -399,11 +399,10 @@ title = _("Migrating from Gratipay")
             result.statements[True]
         ) }}</p>
         % else
-        <div class="alert alert-danger">
-            <p>{{ _("The import of your profile statements failed.") }}</p>
-            <p>{{ _("The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
-                    result.statements) }}</p>
-        </div>
+        <div class="alert alert-danger">{{ _(
+            "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
+            result.statements
+        ) }}</div>
         % endif
         % if isinstance(result.elsewhere, list)
         <p>{{ ngettext(
@@ -444,11 +443,10 @@ title = _("Migrating from Gratipay")
         % endfor
         </ul>
         % else
-        <div class="alert alert-danger">
-            <p>{{ _("The import of your elsewhere accounts failed.") }}</p>
-            <p>{{ _("The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
-                    result.elsewhere) }}</p>
-        </div>
+        <div class="alert alert-danger">{{ _(
+            "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
+            result.elsewhere
+        ) }}</div>
         % endif
         <p><a class="btn btn-default" href="{{ p.path('edit') }}" target="_blank">{{ _("Edit your profile") }}</a></p>
 
@@ -456,11 +454,10 @@ title = _("Migrating from Gratipay")
         % for team_id, team_data in result.teams
             <h4>{{ team_data['slug'] }}</h4>
             % if team_id == 'error'
-                <div class="alert alert-danger">
-                    <p>{{ _("The creation of this team failed for an unknown reason.") }}</p>
-                    <p>{{ _("The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
-                            team_data['_error_id']) }}</p>
-                </div>
+                <div class="alert alert-danger">{{ _(
+                    "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
+                    team_data['_error_id']
+                ) }}</div>
             % elif team_id
                 <p><a class="btn btn-default" href="/~{{ team_id }}/edit" target="_blank">{{ _("Manage this team") }}</a></p>
             % else
@@ -519,11 +516,10 @@ title = _("Migrating from Gratipay")
         % endif
         </p>
         % else
-        <div class="alert alert-danger">
-            <p>{{ _("The import of your donations failed.") }}</p>
-            <p>{{ _("The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
-                    result.donations) }}</p>
-        </div>
+        <div class="alert alert-danger">{{ _(
+            "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}.",
+            result.donations
+        ) }}</div>
         % endif
 
         <h3>{{ _("Email addresses") }}</h3>
