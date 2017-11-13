@@ -227,8 +227,8 @@ elif step == '2':
 
         teams = result['teams'] = []
         for team_data in data.pop('teams'):
-            slug = team_data['slug']
             try:
+                slug = team_data['slug']
                 with website.db.get_cursor() as cursor:
                     if slug == data['username']:
                         result['self_username_conflict'] = data['username']

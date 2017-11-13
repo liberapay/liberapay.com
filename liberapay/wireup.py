@@ -381,7 +381,7 @@ def make_sentry_teller(env):
             # Reraise if allowed
             if env.sentry_reraise and allow_reraise:
                 raise
-            return
+            return {'sentry_ident': None}
 
         user = state.get('user')
         extra = {}
