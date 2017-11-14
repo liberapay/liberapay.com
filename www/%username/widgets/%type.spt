@@ -44,11 +44,11 @@ response.headers[b'Vary'] = b'Accept-Language'
         ><span style="color: #f6c915; position: absolute; left: -2px;">&#10132;</span
         >{% if participant.kind == 'individual' %}{{
             _("I donate {0} per week", giving) if t == 'giving.js' else
-            _("I receive {0} per week,{new_line} my goal is {1}", receiving, goal, new_line=br) if show_goal else
+            _("I receive {0} per week,{newline} my goal is {1}", receiving, goal, newline=br) if show_goal else
             _("I receive {0} per week", receiving)
         }}{% else %}{{
             _("We donate {0} per week", giving) if t == 'giving.js' else
-            _("We receive {0} per week,{new_line} our goal is {1}", receiving, goal, new_line=br) if show_goal else
+            _("We receive {0} per week,{newline} our goal is {1}", receiving, goal, newline=br) if show_goal else
             _("We receive {0} per week", receiving)
         }}{% endif %}</span
 ></a>
