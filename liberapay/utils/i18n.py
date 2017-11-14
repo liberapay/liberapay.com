@@ -201,6 +201,10 @@ def get_function_from_rule(rule):
     return eval('lambda n: ' + rule, {'__builtins__': {}})
 
 
+def _decode(o):
+    return o.decode('ascii') if isinstance(o, bytes) else o
+
+
 def i_format(loc, s, *a, **kw):
     if a:
         a = list(a)
@@ -226,23 +230,24 @@ def i_format(loc, s, *a, **kw):
     return s.format(*a, **kw)
 
 
-def get_text(context, loc, s, *a, **kw):
-    escape = context['escape']
+def get_text(state, loc, s, *a, **kw):
+    escape = state['escape']
     msg = loc.catalog.get(s)
     s2 = None
     if msg:
         s2 = msg.string
         if isinstance(s2, tuple):
             s2 = s2[0]
-    if s2:
-        s = s2
-    else:
+    if not s2:
+        s2 = s
         loc = LOCALE_EN
     if a or kw:
-        if isinstance(s, bytes):
-            s = s.decode('ascii')
-        return i_format(loc, escape(s), *a, **kw)
-    return escape(s)
+        try:
+            return i_format(loc, escape(_decode(s2)), *a, **kw)
+        except Exception as e:
+            website.tell_sentry(e, state)
+            return i_format(LOCALE_EN, escape(_decode(s)), *a, **kw)
+    return escape(s2)
 
 
 def n_get_text(state, loc, s, p, n, *a, **kw):
@@ -262,9 +267,11 @@ def n_get_text(state, loc, s, p, n, *a, **kw):
     kw['n'] = format_number(n, locale=loc) or n
     if wrapper:
         kw['n'] = wrapper % kw['n']
-    if isinstance(s2, bytes):
-        s2 = s2.decode('ascii')
-    return i_format(loc, escape(s2), *a, **kw)
+    try:
+        return i_format(loc, escape(_decode(s2)), *a, **kw)
+    except Exception as e:
+        website.tell_sentry(e, state)
+        return i_format(LOCALE_EN, escape(_decode(s if n == 1 else p)), *a, **kw)
 
 
 def getdoc(state, name):
