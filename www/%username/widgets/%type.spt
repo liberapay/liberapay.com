@@ -15,9 +15,9 @@ participant = get_participant(state, restrict=False, redirect_canon=False)
 goal = participant.goal
 show_goal = goal and goal > participant.receiving
 
-receiving_markup = Wrap(participant.receiving, "{0}%s{1}{2}".format(span_open, span_close, br))
-giving_markup = Wrap(participant.giving, "{0}%s{1}{2}".format(span_open, span_close, br))
-goal_markup = Wrap(goal, "{0}%s{1}".format(span_open, span_close))
+receiving = Wrap(participant.receiving, "{0}%s{1}{2}".format(span_open, span_close, br))
+giving = Wrap(participant.giving, "{0}%s{1}{2}".format(span_open, span_close, br))
+goal = Wrap(goal, "{0}%s{1}".format(span_open, span_close))
 
 if participant.hide_giving and t != 'receiving.js' or \
    participant.hide_receiving and t != 'giving.js':
@@ -42,12 +42,12 @@ response.headers[b'Vary'] = b'Accept-Language'
     ><span style="display: block; padding: 0 15px;"
         ><span style="color: #f6c915; position: absolute; left: -2px;">&#10132;</span
         >{% if participant.kind == 'individual' %}{{
-            _("I donate {0} per week", giving_markup) if t == 'giving.js' else
-            _("I receive {0} per week,{new_line} my goal is {1}", receiving_markup, goal_markup, new_line=br) if show_goal else
-            _("I receive {0} per week", receiving_markup)
+            _("I donate {0} per week", giving) if t == 'giving.js' else
+            _("I receive {0} per week,{new_line} my goal is {1}", receiving, goal, new_line=br) if show_goal else
+            _("I receive {0} per week", receiving)
         }}{% else %}{{
-            _("We donate {0} per week", giving_markup) if t == 'giving.js' else
-            _("We receive {0} per week,{new_line} our goal is {1}", receiving_markup, goal_markup, new_line=br) if show_goal else
-            _("We receive {0} per week", receiving_markup)
+            _("We donate {0} per week", giving) if t == 'giving.js' else
+            _("We receive {0} per week,{new_line} our goal is {1}", receiving, goal, new_line=br) if show_goal else
+            _("We receive {0} per week", receiving)
         }}{% endif %}</span
 ></a>
