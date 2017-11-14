@@ -47,7 +47,7 @@ response.headers[b'Vary'] = b'Accept-Language'
             _("I receive {0} per week", receiving_markup)
         }}{% else %}{{
             _("We donate {0} per week", giving_markup) if t == 'giving.js' else
-            _("We receive {0} per week,{new_line} my goal is {2}", receiving_markup, goal_markup, new_line=br) if show_goal else
+            _("We receive {0} per week,{new_line} our goal is {2}", receiving_markup, goal_markup, new_line=br) if show_goal else
             _("We receive {0} per week", receiving_markup)
         }}{% endif %}</span
 ></a>
