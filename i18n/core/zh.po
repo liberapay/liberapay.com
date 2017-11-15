@@ -1,18 +1,22 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Chinese (https://hosted.weblate.org/projects/liberapay/core/zh/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2017-11-15 02:15+0000\n"
+"Last-Translator: Austin Huang <austinhuang0131@gmail.com>\n"
+"Language-Team: Chinese "
+"<https://hosted.weblate.org/projects/liberapay/core/zh/>\n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.18-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
 msgstr "歡迎,"
 
 msgid "Something not right? Reply to this email for help."
-msgstr "發現不對勁? 請回覆到這個電郵地址尋求幫助。"
+msgstr "發現不對勁? 請回覆這個電郵來尋求幫助。"
 
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "有人想在Liberapay上捐款給你"
@@ -29,7 +33,7 @@ msgstr "這星期你收到了 {0}"
 
 #, python-brace-format
 msgid "{0} were given to you personally."
-msgstr "{0}私人給予你。"
+msgstr "{0}是私人給予你的。"
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
 msgstr "你尚不是任何團隊的成員，因此你不會收到因參與團隊而得到的錢款。"
@@ -72,7 +76,7 @@ msgstr "你向{addressee_name} 請求支付{amount} 的金額已被接受了。"
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "不幸的是{0}電子錢包裏目前並沒有足夠的錢支付給你，一旦它有錢之後就會立即自動付款給你。"
+msgstr "很抱歉，{0}的電子錢包裏目前並沒有足夠的錢支付給你，一旦它有錢之後就會立即自動付款給你。"
 
 msgid "View the invoice"
 msgstr "檢示請款资料"
@@ -133,17 +137,17 @@ msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name}提交了一筆 {amount}錢款的請求。"
 
 msgid "Bank wire to your Liberapay wallet"
-msgstr "利用銀行轉 帳 到你的 Liberapay 電子錢包"
+msgstr "利用銀行轉帳到你的 Liberapay 電子錢包"
 
 msgid "The bank wire to your Liberapay wallet has expired"
-msgstr ""
+msgstr "到你的 Liberapay 電子錢包的電滙過期了"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "在{date}，你向我們表示你要從你的銀行帳戶對{money_amount}進行匯款，但是你的錢還沒到。"
+msgstr "在{date}，你向我們表示你要從你的銀行帳戶向Liberapay錢包匯款{money_amount}，但是我們沒有收到你的錢。"
 
 msgid "If you forgot to do it you can initiate a new payment:"
-msgstr ""
+msgstr "如果你忘記匯款了，你可以重新申請匯款："
 
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "銀行無法順利電滙到你的 Liberapay 錢包"
@@ -156,16 +160,16 @@ msgstr "銀行成功地轉 帳到你的 Liberapay錢包"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "恭喜你成功地從銀行完成轉 帳。從你送出的 {0} ，{1} 已進入到你的 Liberapay 帳戶，而 {2} 則為手續費。"
+msgstr "恭喜你成功地從銀行完成轉帳。從你送出的 {0} 中，{1} 已進入到你的 Liberapay 帳戶，而 {2} 則為手續費。"
 
 msgid "View receipt"
 msgstr "檢視收款條"
 
 msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr ""
+msgstr "銀行無法順利自動撥款到你的 Liberapay 錢包"
 
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr ""
+msgstr "銀行已順利自動撥款到你的 Liberapay 錢包"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -173,7 +177,7 @@ msgstr "{0} 來自{1} 已加入到 Liberapay！"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
-msgstr "你要求每週捐款 {0} 給 {1} 現在會開始生效因為他們已加入 Liberapay，太棒了！"
+msgstr "你每週給{1} 捐款 {0} 的保證現在開始生效了，因為他們加入了 Liberapay，太棒了！"
 
 #, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
@@ -190,24 +194,24 @@ msgid "See the team's profile"
 msgstr "檢視團隊的介紹頁"
 
 msgid "Accept"
-msgstr "同意接受"
+msgstr "接受"
 
 msgid "Refuse"
 msgstr "拒絕"
 
 msgid "A team you're a member of has been renamed"
-msgstr ""
+msgstr "你加入的一個團隊已經改名"
 
 #, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
-msgstr ""
+msgstr "團隊“{0}”已由{2}改名為“{1}”。"
 
 msgid "Email address verification - Liberapay"
 msgstr "電郵信箱認證 - Liberapay"
 
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
-msgstr "我們收到來自{0} 請求加入 Liberapay ，其電郵地址為 {1}。聽起來很熟悉吧？"
+msgstr "我們收到來自{0} 的加入 Liberapay 的請求，其電郵地址為 {1}。聽起來很熟悉吧？"
 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
@@ -254,7 +258,7 @@ msgstr "看來你發現了系統上的一個問題！抱歉造成的不便，我
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
-msgstr ""
+msgstr "該錯誤的詳細信息已被紀錄。若你希望聯繫我們，請在消息中提供以下的錯誤辨識碼：{0}。"
 
 msgid "When I receive money"
 msgstr "當我收到錢款"
@@ -281,13 +285,13 @@ msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "當銀行成功地匯款到我的 Liberapay 電子錢包"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr ""
+msgstr "當到我的 Liberapay 電子錢包的銀行匯款過期"
 
 msgid "When a direct debit from my bank account fails"
-msgstr ""
+msgstr "當銀行無法成功地自動撥款到我的 Liberapay 電子錢包"
 
 msgid "When a direct debit from my bank account succeeds"
-msgstr ""
+msgstr "當銀行成功地自動撥款到我的 Liberapay 電子錢包"
 
 msgid "Expense Report"
 msgstr "費用報告"
