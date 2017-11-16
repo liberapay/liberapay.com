@@ -29,7 +29,7 @@ profile_url = participant.url()
 
     <h3>{{ _("Giving & Receiving Widgets") }}</h3>
     % if participant.hide_receiving and participant.hide_giving
-        <p>{{ _("To enable widgets, uncheck 'hide' giving and/or receiving under Privacy at {0}.", profile_url) }}</p>
+        <p>{{ _("To enable widgets, uncheck 'hide' giving and/or receiving under Privacy in <a href=\"{0}\">your settings</a>."|safe, profile_url) }}</p>
     % endif
     % if not participant.hide_receiving
         <p>{{ _("Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:") }}</p>
