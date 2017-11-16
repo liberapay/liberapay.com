@@ -1,11 +1,16 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian (https://hosted.weblate.org/projects/liberapay/core/ru/)\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: 2017-11-17 22:49+0000\n"
+"Last-Translator: Vladislav Serkov <vladserkoff@protonmail.com>\n"
+"Language-Team: Russian "
+"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 2.18-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -2432,19 +2437,23 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr "Мы держим деньги в карантине {0}, чтобы защититься от мошеничества с кредитными картами. Приносим извинения за доставленные неудобства."
 
 msgid "Which currency do you want to withdraw?"
-msgstr ""
+msgstr "В какой валюте вы хотите вывести?"
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
 msgstr "Перевод евро на счёт в единой зоне платежей в евро (SEPA) бесплатно, переводы в другие страны стоят {0} каждый. Перевод американских долларов стоит {1} за перевод вне зависимости от страны назначения."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
 msgstr ""
+"Вывод евро на банковский счет в единой зоне платедей в евро бесплатный, "
+"переводы в другие страны стоят {0} каждый."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
 msgstr ""
+"Вывод долларов США стоит {0} за перевод, в независимости от страны "
+"получателя."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
@@ -3344,6 +3353,8 @@ msgstr[2] "Было импортировано{n} записей о профил
 #, python-brace-format
 msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
 msgstr ""
+"Сбой импорта, простите. Ошибка сохранена, и мы исправим ее как можно скорее. "
+"Идентификатор: {0}."
 
 #, python-brace-format
 msgid "{n} elsewhere account was imported:"
