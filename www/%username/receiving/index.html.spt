@@ -24,7 +24,14 @@ teams = website.db.all("""
 
 % set receiving = participant.receiving
 % if participant == user
-<p>{{ _("You receive {0} per week.", receiving) }}</p>
+<p>
+    {{ _("You receive {amount} per week ({link_open}{visibility}{link_close}).",
+        amount=receiving,
+        link_open='<a href="%s">'|safe % participant.path('settings'),
+        visibility=(_("hidden") if participant['hide_receiving'] else _("public")),
+        link_close='</a>'|safe,
+    ) }}
+</p>
 % else
 <p>{{ _("{0} receives {1} per week.", participant.username, receiving) }}</p>
 % endif
