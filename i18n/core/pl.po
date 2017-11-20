@@ -1516,7 +1516,7 @@ msgid "Recipient"
 msgstr "Odbiorca"
 
 msgid "Created"
-msgstr "Utworzone"
+msgstr "Utworzono"
 
 msgid "Modified"
 msgstr "Zmodyfikowano"
@@ -2174,7 +2174,7 @@ msgid "Adding Money"
 msgstr "Dodawanie pieniędzy"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Nie ustawiłeś jeszcze żadnych darowizn, gdy tylko to zrobisz, zostaniesz poproszony o dodanie pieniędzy do Twojego konta."
+msgstr "Nie ustawiłeś jeszcze żadnych darowizn. Gdy tylko to zrobisz, zostaniesz poproszony o dodanie pieniędzy do Twojego konta."
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Nie zezwalamy na dodawanie pieniędzy, jeśli Twoje darowizny są pokryte Twoim przychodem. Jeśli stanowi to dla Ciebie kłopot, prosimy o kontakt z support@liberapay.com i wyjaśnienie dlaczego."
@@ -2262,7 +2262,7 @@ msgid "Email me this information"
 msgstr "Wyślij mi tę informację e-mailem"
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Wyślemy Ci e-mail gdy tylko dowiemy się czy Twoja płatność się powiodła czy też nie."
+msgstr "Wyślemy Ci e-mail, gdy tylko dowiemy się, czy Twoja płatność się powiodła czy też nie."
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "Zablokowałeś niektóre albo wszystkie powiadomienia e-mail na temat przelewów bankowych."
@@ -2432,9 +2432,20 @@ msgstr "Z czego, {0} jest możliwe do wypłaty, a reszta nadal znajduje się w k
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
 msgstr "Trzymamy pieniądze w kwarantannie przez {0} by chronić się przed oszustwami z wykorzystaniem kart kredytowych, przepraszamy za niedogodności."
 
+msgid "Which currency do you want to withdraw?"
+msgstr "W której walucie chcesz wypłacić pieniądze?"
+
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
 msgstr "Wypłacanie pieniędzy w euro przelewem SEPA jest darmowe, a przelewanie pieniędzy na konta w innych państwach kosztuje {0} za każdy przelew. Wypłacanie dolarów amerykańskich kosztuje {1} za każdy przelew, niezależnie od państwa docelowego."
+
+#, python-brace-format
+msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
+msgstr "Wypłacanie euro na konto bankowe SEPA jest darmowe. Każdy transfer do innych państw kosztuje {0}."
+
+#, python-brace-format
+msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
+msgstr "Wypłacanie dolarów amerykańskich kosztuje {0} za każdy transfer, niezależnie od kraju docelowego."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
@@ -3133,13 +3144,13 @@ msgstr "2. Dodaj pieniądze"
 
 #, python-brace-format
 msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr "Na Liberapay darowizny są opłacane z góry. Ty decydujesz, ile pieniędzy włożysz i kiedy. Im więcej pieniędzy dodasz jedną transakcją, tym mniejszą część wyniosą {0}opłaty za transakcję{1}."
+msgstr "Na Liberapay darowizny są opłacane z góry. Ty decydujesz, ile pieniędzy wpłacisz i kiedy. Im więcej pieniędzy dodasz jedną transakcją, tym mniejszą część pochłoną {0}opłaty za transakcję{1}."
 
 msgid "3. Keep your donation funded"
 msgstr "3. Pamiętaj o zasilaniu konta"
 
 msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
-msgstr "Gdy na Twoim koncie nie będzie już wystarczająco dużo środków by pokryć wszystkie darowizny, wyślemy Ci powiadomienie e-mailem, byś mógł ponownie dodać pieniądze. Możesz także anulować darowizny."
+msgstr "Gdy na Twoim koncie nie będzie już wystarczająco dużo środków, by pokryć wszystkie darowizny, wyślemy Ci powiadomienie e-mailem, byś mógł ponownie dodać pieniądze. Możesz także anulować darowizny."
 
 msgid "How it works for creators"
 msgstr "Z punktu widzenia twórcy"
@@ -3330,6 +3341,10 @@ msgid_plural "{n} profile statements were imported."
 msgstr[0] "Zaimportowano {n} oświadczenie użytkownika."
 msgstr[1] "Zaimportowano {n} oświadczenia użytkownika."
 msgstr[2] "Zaimportowano {n} oświadczeń użytkownika."
+
+#, python-brace-format
+msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
+msgstr ""
 
 #, python-brace-format
 msgid "{n} elsewhere account was imported:"

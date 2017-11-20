@@ -1,3 +1,4 @@
+# coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from collections import OrderedDict
@@ -380,7 +381,7 @@ def make_sentry_teller(env):
             # Reraise if allowed
             if env.sentry_reraise and allow_reraise:
                 raise
-            return
+            return {'sentry_ident': None}
 
         user = state.get('user')
         extra = {}
@@ -403,7 +404,7 @@ def make_sentry_teller(env):
         result = sentry.captureException(tags=tags, extra=extra)
 
         # Put the Sentry id in the state for logging, etc
-        state['sentry_ident'] = sentry.get_ident(result)
+        return {'sentry_ident': sentry.get_ident(result)}
 
     CustomUndefined._tell_sentry = staticmethod(tell_sentry)
 
@@ -427,6 +428,9 @@ class PlatformRegistry(object):
         r = PlatformRegistry([p for p in self if getattr(p, attr, None)])
         self._hasattr_cache[attr] = r
         return r
+
+    def get(self, k, default=None):
+        return self.__dict__.get(k, default)
 
     def hasattr(self, attr):
         r = self._hasattr_cache.get(attr)
@@ -555,6 +559,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     # Patch the locales to look less formal
     locales['fr'].currency_formats['standard'] = parse_pattern('#,##0.00\u202f\xa4')
     locales['fr'].currency_symbols['USD'] = '$'
+    locales['fr'].currencies['USD'] = 'dollar états-unien'
 
     # Load the markdown files
     docs = {}

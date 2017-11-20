@@ -382,8 +382,9 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
                AND b.ts < now() - INTERVAL %s
                AND b.disputed IS NOT TRUE
                AND b.locked_for IS NULL
+               AND b.amount::currency = %s
           ORDER BY b.owner = e.participant DESC, b.ts
-        """, (participant.id, QUARANTINE))
+        """, (participant.id, QUARANTINE, amount.currency))
         withdrawable = sum(b.amount for b in bundles)
         x = -amount
         if x > withdrawable:

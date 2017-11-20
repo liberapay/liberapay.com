@@ -3,14 +3,6 @@
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 
-def parse_int(o, **kw):
-    try:
-        return int(o)
-    except (ValueError, TypeError):
-        if 'default' in kw:
-            return kw['default']
-        raise response.error(400, "'%s' is not a valid integer" % o)
-
 REFERENCING_ATTRS = ('profile_noindex', 'hide_from_lists', 'hide_from_search')
 
 [---]
@@ -40,7 +32,7 @@ participants = website.db.all("""
        AND (p.status <> 'stub' OR p.receiving > 0)
   ORDER BY p.id DESC
      LIMIT 150
-""", (parse_int(request.qs.get('last_showed'), default=float('inf')),))
+""", (request.qs.get_int('last_showed', float('inf')),))
 last_id = participants[-1][0].id if participants else 0
 
 title = "Users Admin"

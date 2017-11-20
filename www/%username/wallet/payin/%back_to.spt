@@ -79,7 +79,7 @@ title = _("Adding Money")
                     {{ _("Easy and instantaneous") }}<br>
                     {{ _("Fees: {0}% + {1}", *constants.FEE_PAYIN_CARD[currency].with_vat) }}
                 </p>
-                <a class="overlay" href="{{ base_path }}/card/{{ b64encode_s(back_to) }}"></a>
+                <a class="overlay" href="{{ base_path }}/card/{{ b64encode_s(back_to) }}?currency={{ currency }}"></a>
             </div></div>
         </div>
 
@@ -93,7 +93,7 @@ title = _("Adding Money")
                        _("Cheaper¹ but cumbersome") }}<br>
                     {{ _("Fee: {0}%", constants.FEE_PAYIN_BANK_WIRE.with_vat) }}
                 </p>
-                <a class="overlay" href="{{ base_path }}/bankwire/{{ b64encode_s(back_to) }}"></a>
+                <a class="overlay" href="{{ base_path }}/bankwire/{{ b64encode_s(back_to) }}?currency={{ currency }}"></a>
             </div></div>
         </div>
 
@@ -106,7 +106,7 @@ title = _("Adding Money")
                     {{ _("Best for regular payments") }}<br>
                     {{ _("Fee: {0}", constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat) }}
                 </p>
-                <a class="overlay" href="{{ base_path }}/direct-debit/"></a>
+                <a class="overlay" href="{{ base_path }}/direct-debit/?currency={{ currency }}"></a>
             </div></div>
         </div>
         % endif

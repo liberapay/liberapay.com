@@ -418,6 +418,25 @@ def build_s3_object_url(key):
     return endpoint + "/" + key + "?" + querystring + "&X-Amz-Signature=" + signature
 
 
+def get_int(d, k, default=None):
+    r = d.get(k)
+    if r is None:
+        return default
+    try:
+        return int(r)
+    except (ValueError, TypeError):
+        raise Response().error(400, "`%s` value %r is not a valid integer" % (k, r))
+
+
+def parse_int(o, **kw):
+    try:
+        return int(o)
+    except (ValueError, TypeError):
+        if 'default' in kw:
+            return kw['default']
+        raise Response().error(400, "%r is not a valid integer" % o)
+
+
 def read_decimal_or_400(s):
     try:
         return Decimal(s)

@@ -183,6 +183,7 @@ def _check_bundles_grouped_by_withdrawal_against_exchanges(cursor):
           LEFT JOIN (
                   SELECT b.withdrawal, sum(b.amount) as withdrawn
                     FROM cash_bundles b
+                   WHERE b.withdrawal IS NOT NULL
                 GROUP BY b.withdrawal
                ) AS b ON b.withdrawal = e.id
         )

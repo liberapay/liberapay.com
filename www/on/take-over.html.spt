@@ -1,6 +1,7 @@
 from liberapay.exceptions import LoginRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
+from liberapay.utils import get_int
 
 [---------]
 if user.ANON:
@@ -9,7 +10,7 @@ request.allow('POST')
 
 body = request.body
 
-p_id = body.get('p_id')
+p_id = get_int(body, 'p_id')
 participant = Participant.from_id(p_id) if p_id else user
 if not participant:
     raise response.error(400, 'bad p_id')
@@ -20,8 +21,8 @@ if body['should_transfer'] != 'yes':
 if not user.controls(participant):
     raise LoginRequired
 
-account_id = body['account_id']
-account = AccountElsewhere.from_id(account_id)
+account_id = get_int(body, 'account_id')
+account = AccountElsewhere.from_id(account_id) if account_id else None
 if not account:
     raise response.error(400, 'bad account_id "%s"' % account_id)
 

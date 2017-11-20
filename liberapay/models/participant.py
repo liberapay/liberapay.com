@@ -59,6 +59,7 @@ from liberapay.utils import (
     NS, deserialize, erase_cookie, serialize, set_cookie,
     emails, i18n, markdown,
 )
+from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
 
 
@@ -203,6 +204,11 @@ class Participant(Model, MixinTeam):
         if k1 in ('username', 'email'):
             k1 = 'lower(%s)' % k1
             v1 = v1.lower()
+        elif k1 == 'id':
+            try:
+                v1 = int(v1)
+            except (ValueError, TypeError):
+                return
         p = cls._from_thing(k1, v1)
         if not p:
             return
@@ -1060,8 +1066,8 @@ class Participant(Model, MixinTeam):
         from liberapay.billing.transactions import create_wallet
         return create_wallet(self.db, self, currency)
 
-    def get_current_wallets(self):
-        return self.db.all("""
+    def get_current_wallets(self, cursor=None):
+        return (cursor or self.db).all("""
             SELECT *
               FROM wallets
              WHERE owner = %s
@@ -1076,6 +1082,14 @@ class Participant(Model, MixinTeam):
                AND balance::currency = %s
                AND is_current
         """, (self.id, currency)) or ZERO[currency]
+
+    def get_balances(self):
+        return self.db.one("""
+            SELECT basket_sum(balance)
+              FROM wallets
+             WHERE owner = %s
+               AND is_current
+        """, (self.id,)) or MoneyBasket()
 
 
     # Events
@@ -1547,7 +1561,7 @@ class Participant(Model, MixinTeam):
           ORDER BY p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
         updated = []
-        for wallet in self.get_current_wallets():
+        for wallet in self.get_current_wallets(cursor):
             fake_balance = wallet.balance
             currency = fake_balance.currency
             fake_balance += self.get_receiving_in(currency, cursor)

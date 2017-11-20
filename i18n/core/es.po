@@ -255,7 +255,7 @@ msgstr "¡Parece que has encontrado un error! Perdona por la inconveniencia, ¡l
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
-msgstr ""
+msgstr "Los detalles de este error han sido registrados. Si decides contactarnos, incluye el siguiente código identificativo de error en tu mensaje: {0}."
 
 msgid "When I receive money"
 msgstr "Cuando reciba el dinero"
@@ -1585,7 +1585,7 @@ msgstr "Las acciones de distribución"
 
 #, python-brace-format
 msgid "{0} receives {1} per week"
-msgstr "{0} {1} recibe por semana"
+msgstr "{0} recibe {1} por semana"
 
 msgid "You can't receive money until you've filled the identity form in your account settings."
 msgstr "No puede recibir dinero hasta que haya llenado el formulario de identidad en la configuración de su cuenta."
@@ -1838,7 +1838,7 @@ msgstr "ID de transacción: {0}"
 
 #, python-brace-format
 msgid "{0} receives {1} per week."
-msgstr "{0} {1} recibe por semana."
+msgstr "{0} recibe {1} por semana."
 
 msgid "You are not a member of any team."
 msgstr "Usted no es un miembro de ningún equipo."
@@ -2415,9 +2415,20 @@ msgstr "Fuera de eso, {0} está disponible para la retirada, el resto todavía e
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
 msgstr "Nosotros ponemos en cuarentena dinero para {0} para protegernos de fraude de tarjetas de crédito, lo siento por las molestias."
 
+msgid "Which currency do you want to withdraw?"
+msgstr "¿Qué divisa deseas retirar?"
+
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
 msgstr "Retirar euros a una cuenta SEPA es gratis, las transferencias a otros países cuestan {0} cada una. Retirar dolares de Estados Unidos cuesta {1} por transferencia independientemente del país de destino."
+
+#, python-brace-format
+msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
+msgstr "La retirada de euros a una cuenta bancaria SEPA es gratuita, las transferencias a otros países cuestan {0} cada una."
+
+#, python-brace-format
+msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
+msgstr "La retirada de dólares americanos cuesta {0} por transferencia, sea cual sea el país de destino."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
@@ -2565,7 +2576,7 @@ msgstr "A diferencia de otras plataformas sin fines de lucro, Liberapay es neutr
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
-msgstr ""
+msgstr "Si te gustaría tener más detalles, los chicos de Snowdrift.coop han recopilado {0}una lista grande{1} de plataformas de micromecenazgo y las diferencias entre estas."
 
 msgid "Does Liberapay respect financial regulations?"
 msgstr "¿Respeta Liberapay las regulaciones financieras?"
@@ -3063,7 +3074,7 @@ msgstr "Crea tu cuenta"
 
 #, python-brace-format
 msgid "You receive {0} per week."
-msgstr "Recibe {0} por semana."
+msgstr "Recibes {0} por semana."
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
@@ -3216,7 +3227,7 @@ msgid "Migrating from Gratipay"
 msgstr "Migrando desde Gratipay"
 
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr ""
+msgstr "Oops, necesitas volver a Gratipay e iniciar sesión antes de comenzar la migración."
 
 #, python-brace-format
 msgid "Welcome, {username}!"
@@ -3298,6 +3309,10 @@ msgid "{n} profile statement was imported."
 msgid_plural "{n} profile statements were imported."
 msgstr[0] "{n} exposición de perfil fue importada."
 msgstr[1] "{n} exposiciones de perfil fueron importadas."
+
+#, python-brace-format
+msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
+msgstr ""
 
 #, python-brace-format
 msgid "{n} elsewhere account was imported:"

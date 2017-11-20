@@ -25,6 +25,8 @@ pending_payouts = website.db.one("""
        AND status = 'created'
 """, (participant.id,))
 
+balances = participant.get_balances()
+
 title = _("Close Account")
 subhead = participant.username
 
@@ -60,22 +62,17 @@ subhead = participant.username
         <h3>{{ _("Wallet") }}</h3>
 
         <p>{{ _("You have {0} in your wallet. What should we do with it?",
-                participant.balance) }}</p>
-
+                balances) }}</p>
         <ul>
-
             <li><a href="{{ participant.path('wallet/payout/'+b64encode_s(request.line.uri)) }}"
                     >{{ _("Withdraw it") }}</a></li>
-
             <li><label>
                 <input type="radio" name="disburse_to" value="downstream"
-                       {{ 'disabled' if not participant.get_giving_for_profile()[1] else '' }} />
+                       {{ 'disabled' if not participant.giving else '' }} />
                 {{ _("Give it to the {0}people I donate to{1}",
                      '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
             </label></li>
-
         </ul>
-
         <p>{{ _(
             "If neither option works for you, please contact support@liberapay.com."
         ) }}</p>

@@ -37,7 +37,7 @@ msgstr "어떤 팀에도 가입하지 않았기 때문에,팀에 참가하는 �
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "{0} 팀에서 돈이 지급되지 않았습니다."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
@@ -2399,8 +2399,19 @@ msgstr "이 중에서 {0} 은(는) 인출할 수 있고, 나머지는 아직 동
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
 msgstr "신용카드 사기로부터 플랫폼을 보호하기 위해 {0} 동안 자금을 동결합니다. 불편을 드려 죄송합니다."
 
+msgid "Which currency do you want to withdraw?"
+msgstr ""
+
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
+msgstr ""
+
+#, python-brace-format
+msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
+msgstr ""
+
+#, python-brace-format
+msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
 msgstr ""
 
 #, python-brace-format
@@ -3267,6 +3278,10 @@ msgstr ""
 msgid "{n} profile statement was imported."
 msgid_plural "{n} profile statements were imported."
 msgstr[0] ""
+
+#, python-brace-format
+msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
+msgstr ""
 
 #, python-brace-format
 msgid "{n} elsewhere account was imported:"

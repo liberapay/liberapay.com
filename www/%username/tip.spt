@@ -71,7 +71,10 @@ if request.method == 'POST':
         back_to += '&' if '?' in back_to else '?'
         back_to += 'success=' + b64encode_s(out["msg"])
         if out['amount'] and not out['is_funded'] and not out['is_pledge']:
-            response.redirect('/' + tipper.username + '/wallet/payin/' + b64encode_s(back_to))
+            response.redirect(
+                '/' + tipper.username + '/wallet/payin/' + b64encode_s(back_to) +
+                '?currency=' + currency
+            )
         response.redirect(back_to, trusted_url=False)
 else:
     out = tipper.get_tip_to(tippee)

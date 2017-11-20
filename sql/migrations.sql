@@ -1173,3 +1173,6 @@ DROP TRIGGER initialize_amounts ON participants;
 CREATE TRIGGER initialize_amounts
     BEFORE INSERT OR UPDATE ON participants
     FOR EACH ROW EXECUTE PROCEDURE initialize_amounts();
+
+-- migration #56
+DELETE FROM app_conf WHERE key = 'update_cached_amounts_every';

@@ -13,7 +13,7 @@ participant = get_participant(state, restrict=True)
 
 platform_name = request.path['platform']
 if platform_name:
-    platform = getattr(website.platforms, platform_name, None)
+    platform = website.platforms.get(platform_name)
     if not platform:
         raise response.error(404, "unknown platform")
     if not hasattr(platform, 'api_repos_path'):
