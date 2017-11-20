@@ -29,7 +29,10 @@ profile_url = participant.url()
 
     <h3>{{ _("Giving & Receiving Widgets") }}</h3>
     % if participant.hide_receiving and participant.hide_giving
-        <p>{{ _("To enable widgets, uncheck 'hide' giving and/or receiving under Privacy in <a href=\"{0}\">your settings</a>."|safe, profile_url) }}</p>
+        <p>{{ _("To enable widgets, uncheck 'hide' giving and/or receiving under Privacy in {link_open}your settings{link_close}.",
+            link_open='<a href="{0}">'|safe % profile_url,
+            link_close='</a>'|safe)
+        }}</p>
     % endif
     % if not participant.hide_receiving
         <p>{{ _("Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:") }}</p>
@@ -41,13 +44,13 @@ profile_url = participant.url()
         <p><script src="receiving.js"></script></p>
     % endif
     % if not participant.hide_giving
-    <p>{{ _("Use this code to add to your website a widget which displays the amount of you're giving on Liberapay:") }}</p>
+        <p>{{ _("Use this code to add to your website a widget which displays the amount of you're giving on Liberapay:") }}</p>
 
-    <pre>&lt;script src="{{ profile_url }}widgets/giving.js"&gt;&lt;/script&gt;</pre>
+        <pre>&lt;script src="{{ profile_url }}widgets/giving.js"&gt;&lt;/script&gt;</pre>
 
-    <p>{{ _("Here's what it looks like:") }}</p>
+        <p>{{ _("Here's what it looks like:") }}</p>
 
-    <p><script src="giving.js"></script></p>
+        <p><script src="giving.js"></script></p>
     % endif
 </div>
 % endblock
