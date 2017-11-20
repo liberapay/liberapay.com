@@ -55,7 +55,7 @@ weekly = total - participant.receiving
     {{ _("You give {amount} per week ({link_open}{visibility}{link_close}).",
         amount=participant.giving,
         link_open='<a href="%s">'|safe % participant.path('settings'),
-        visibility=(_("hidden") if participant['hide_giving'] else _("public")),
+        visibility=(_("secret") if participant['hide_giving'] else _("public")),
         link_close='</a>'|safe,
     ) }}
 </p>
