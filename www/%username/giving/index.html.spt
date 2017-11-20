@@ -51,6 +51,15 @@ weekly = total - participant.receiving
 
 % block content
 
+<p>
+    {{ _("You give {amount} per week ({link_open}{visibility}{link_close}).",
+        amount=participant.giving,
+        link_open='<a href="%s">'|safe % participant.path('settings'),
+        visibility=(_("hidden") if participant['hide_giving'] else _("public")),
+        link_close='</a>'|safe,
+    ) }}
+</p>
+
 % if weekly > 0
     % set funded = participant.balance // weekly
     <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
@@ -67,15 +76,6 @@ weekly = total - participant.receiving
                href="{{ participant.path('wallet/payin/'+b64encode_s(request.path.raw)) }}"
                >{{ _("Add money") }}</a>
         % endif
-    </p>
-% else
-    <p>
-        {{ _("You give {amount} per week ({link_open}{visibility}{link_close}).",
-            amount=participant.giving,
-            link_open='<a href="%s">'|safe % participant.path('settings'),
-            visibility=(_("hidden") if participant['hide_giving'] else _("public")),
-            link_close='</a>'|safe,
-        ) }}
     </p>
 % endif
 
