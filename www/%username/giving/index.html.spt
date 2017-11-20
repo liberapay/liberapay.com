@@ -69,7 +69,14 @@ weekly = total - participant.receiving
         % endif
     </p>
 % else
-    <p>{{ _("You give {0} per week.", participant.giving) }}</p>
+    <p>
+        {{ _("You give {amount} per week ({link_open}{visibility}{link_close}).",
+            amount=participant.giving,
+            link_open='<a href="%s">'|safe % participant.path('settings'),
+            visibility=(_("hidden") if participant['hide_giving'] else _("public")),
+            link_close='</a>'|safe,
+        ) }}
+    </p>
 % endif
 
 % if not freeload and not Liberapay_tip.amount
