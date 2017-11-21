@@ -25,6 +25,11 @@ subhead = _("Pledges")
 
 % extends "templates/explore.html"
 
+% block scripts
+{{ super() }}
+<script>$(document).ready(Liberapay.forms.detectPlatform);</script>
+% endblock
+
 % block content
 
 <p>{{ _(
