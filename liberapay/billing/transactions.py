@@ -673,14 +673,16 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
 def try_to_swap_bundle(cursor, b, original_owner):
     """Attempt to switch a disputed cash bundle with a "safe" one.
     """
+    currency = b.amount.currency
     swappable_origin_bundles = [NS(d._asdict()) for d in cursor.all("""
         SELECT *
           FROM cash_bundles
          WHERE owner = %s
            AND disputed IS NOT TRUE
            AND locked_for IS NULL
+           AND amount::currency = %s
       ORDER BY ts ASC
-    """, (original_owner,))]
+    """, (original_owner, currency))]
     try_to_swap_bundle_with(cursor, b, swappable_origin_bundles)
     merge_cash_bundles(cursor, original_owner)
     if b.withdrawal:
@@ -693,8 +695,9 @@ def try_to_swap_bundle(cursor, b, original_owner):
              WHERE owner = %s
                AND disputed IS NOT TRUE
                AND locked_for IS NULL
+               AND amount::currency = %s
           ORDER BY ts ASC, amount = %s DESC
-        """, (withdrawer, b.amount))]
+        """, (withdrawer, currency, b.amount))]
         # Note: we don't restrict the date in the query above, so a swapped
         # bundle can end up "withdrawn" before it was even created
         try_to_swap_bundle_with(cursor, b, swappable_recipient_bundles)
