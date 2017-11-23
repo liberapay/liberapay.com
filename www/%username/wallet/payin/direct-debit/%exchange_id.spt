@@ -47,10 +47,11 @@ else:
         SELECT r
           FROM exchange_routes r
          WHERE participant = %s
+           AND remote_user_id = %s
            AND network = 'mango-ba'
       ORDER BY mandate IS NOT NULL DESC, id DESC
          LIMIT 1
-    """, (participant.id,))
+    """, (participant.id, participant.mangopay_user_id))
 if route is not None:
     route.__dict__['participant'] = participant
 
