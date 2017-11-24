@@ -1046,9 +1046,9 @@ msgstr "{0} by chtěl dostávat {1} týdně."
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} dostává {1} za týden od {n} mecenáše."
+msgstr[1] "{0} dostává {1} za týden od {n} mecenášů."
+msgstr[2] "{0} dostává {1} za týden od {n} mecenášů."
 
 #, python-brace-format
 msgid "Donating ({amount})"
@@ -1240,13 +1240,14 @@ msgstr "Tento účet je dočasně pozastaven, příspěvky pro něj nebudou zpra
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
 msgstr ""
+"{0} dostává {1} za týden. Pomozte jim dosáhnout jejich cíle ({2} za týden)."
 
 msgid "Be the first to contribute!"
 msgstr "Buďte první, kdo přispěje!"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
-msgstr ""
+msgstr "{0} dostává {1} za týden."
 
 msgid "Recipient Identity"
 msgstr "Totožnost příjemce"
@@ -2607,33 +2608,36 @@ msgid "What are the payment processing fees?"
 msgstr "Jaké jsou poplatky za zpracování plateb?"
 
 msgid "The fees depend on the payment method as well as the currency."
-msgstr ""
+msgstr "Poplatky závisí na způsobu platby a měně."
 
 msgid "When adding money into Liberapay the fees are:"
-msgstr ""
+msgstr "Při posílání peněz na Liberapay jsou poplatky následující:"
 
 #, python-brace-format
 msgid "{0}% + {1}"
-msgstr ""
+msgstr "{0}% + {1}"
 
 msgid "Bank wire"
-msgstr ""
+msgstr "Bankovní převod"
 
 #, python-brace-format
 msgid "{0}%"
-msgstr ""
+msgstr "{0}%"
 
 msgid "Direct debit"
-msgstr ""
+msgstr "Inkaso"
 
 msgid "not supported"
-msgstr ""
+msgstr "není podporováno"
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
 msgstr ""
+"Poplatky uvedené výše jsou pouze poplatky našich platebních bran, vaše banka "
+"si také může účtovat poplatek takovou transakci (zejména mezinárodní). "
+"Nemáme žádný vliv na vaše bankovní poplatky."
 
 msgid "There are no fees for transfers between Liberapay users."
-msgstr ""
+msgstr "Za převody mezi uživateli Liberapay se nevybírají žádné poplatky."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Existuje minimální nebo maximální částka, kterou lze darovat nebo dostat?"
@@ -3083,7 +3087,7 @@ msgid "Language of the name"
 msgstr "Jazyk názvu"
 
 msgid "We help you fund the creators and projects you appreciate."
-msgstr ""
+msgstr "Pomáháme vám financovat tvůrce a projekty jichž si vážíte."
 
 msgid "Liberapay is a recurrent donations platform."
 msgstr "Liberapay je platforma pro pravidelné příspěvky."
@@ -3136,20 +3140,20 @@ msgid "How it works for donors"
 msgstr "Jak to funguje pro dárce"
 
 msgid "1. Set up a donation"
-msgstr ""
+msgstr "1. Nastavte svůj příspěvek"
 
 msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
 msgstr ""
 
 msgid "2. Add money"
-msgstr ""
+msgstr "2. Přidejte peníze"
 
 #, python-brace-format
 msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
 msgstr ""
 
 msgid "3. Keep your donation funded"
-msgstr ""
+msgstr "3. Udržujte prostředky pro vaše příspěvky"
 
 msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
 msgstr ""
@@ -3204,10 +3208,12 @@ msgid "The list below is rotated pseudorandomly."
 msgstr "Níže uvedený seznam je otočen pseudorandomly."
 
 msgid "Thanks"
-msgstr ""
+msgstr "Poděkování"
 
 msgid "Liberapay benefits from sponsored accounts on the following open source services:"
 msgstr ""
+"Liberapay využívá sponzorované účty na následující službách používajících "
+"svobodný software:"
 
 msgid "Recent Activity"
 msgstr "Nedávná aktivita"
