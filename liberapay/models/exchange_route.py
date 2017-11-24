@@ -24,10 +24,12 @@ class ExchangeRoute(Model):
     @classmethod
     def from_network(cls, participant, network, currency=None):
         participant_id = participant.id
+        mangopay_user_id = participant.mangopay_user_id
         r = cls.db.all("""
             SELECT r.*::exchange_routes
               FROM exchange_routes r
              WHERE participant = %(participant_id)s
+               AND remote_user_id = %(mangopay_user_id)s
                AND network = %(network)s
                AND COALESCE(error, '') <> 'invalidated'
                AND COALESCE(currency::text, '') = COALESCE(%(currency)s::text, '')

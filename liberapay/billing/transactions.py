@@ -483,6 +483,7 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
     assert transfer.status == 'pre'
     cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
     tipper, tippee = transfer.tipper, transfer.tippee
+    currency = transfer.amount.currency
     bundles = bundles or cursor.all("""
         SELECT b.*
           FROM cash_bundles b
@@ -490,6 +491,7 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
          WHERE b.owner = %(tipper)s
            AND b.withdrawal IS NULL
            AND b.locked_for IS NULL
+           AND b.amount::currency = %(currency)s
       ORDER BY b.origin = %(prefer_bundles_from)s DESC
              , e.participant = %(tippee)s DESC
              , b.ts
@@ -671,14 +673,16 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
 def try_to_swap_bundle(cursor, b, original_owner):
     """Attempt to switch a disputed cash bundle with a "safe" one.
     """
+    currency = b.amount.currency
     swappable_origin_bundles = [NS(d._asdict()) for d in cursor.all("""
         SELECT *
           FROM cash_bundles
          WHERE owner = %s
            AND disputed IS NOT TRUE
            AND locked_for IS NULL
+           AND amount::currency = %s
       ORDER BY ts ASC
-    """, (original_owner,))]
+    """, (original_owner, currency))]
     try_to_swap_bundle_with(cursor, b, swappable_origin_bundles)
     merge_cash_bundles(cursor, original_owner)
     if b.withdrawal:
@@ -691,8 +695,9 @@ def try_to_swap_bundle(cursor, b, original_owner):
              WHERE owner = %s
                AND disputed IS NOT TRUE
                AND locked_for IS NULL
+               AND amount::currency = %s
           ORDER BY ts ASC, amount = %s DESC
-        """, (withdrawer, b.amount))]
+        """, (withdrawer, currency, b.amount))]
         # Note: we don't restrict the date in the query above, so a swapped
         # bundle can end up "withdrawn" before it was even created
         try_to_swap_bundle_with(cursor, b, swappable_recipient_bundles)
