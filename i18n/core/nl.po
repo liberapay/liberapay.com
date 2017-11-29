@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-11-29 10:17+0000\n"
+"PO-Revision-Date: 2017-11-29 12:29+0000\n"
 "Last-Translator: Bart Groeneveld <bartgroeneveld@libertymail.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>"
 "\n"
@@ -1302,7 +1302,7 @@ msgstr "Ja. Liberapay wordt geleid door een non-profitorganisatie die {0}wetteli
 
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
-msgstr ""
+msgstr "De opgegeven samenvatting is te lang ({0} > {1})."
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "Je hebt je wijzigingen niet opgeslagen, weet je zeker dat je ze niet wilt opslaan?"
@@ -1358,13 +1358,15 @@ msgid "This is a preview."
 msgstr "Dit is een voorbeeld."
 
 msgid "Excerpt that will be used in social media:"
-msgstr ""
+msgstr "Knipsel dat zal worden gebruikt op sociale media:"
 
 msgid "Edit"
 msgstr "Bewerk"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr ""
+"Beschrijf je werk, waarom je vraagt om donaties, enzovoort. We hebben zowel "
+"een samenvatting nodig als een meer uitgebreide versie."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
 msgstr "Met Liberapay kan je je teksten vertalen in meerdere talen. Gebruik de onderstaande knop om te wisselen tussen de verschillende talen."
@@ -1377,7 +1379,7 @@ msgid "Short description"
 msgstr "Korte beschrijving"
 
 msgid "Full statement"
-msgstr ""
+msgstr "Het volledige verhaal"
 
 msgid "Markdown supported."
 msgstr "Markdown wordt ondersteund."
@@ -1630,14 +1632,14 @@ msgstr "Jouw deel van de opbrengst is {0}."
 
 #, python-brace-format
 msgid "{username}'s profile"
-msgstr ""
+msgstr "{username}s profiel"
 
 msgid "History"
 msgstr "Geschiedenis"
 
 #, python-brace-format
 msgid "{0} joined {1} ago."
-msgstr ""
+msgstr "{0} werd {1} geleden lid."
 
 msgid "No data to show."
 msgstr "Geen gegevens om te tonen."
@@ -1896,8 +1898,10 @@ msgstr "Verbind je {0} account"
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {time} ago."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] ""
+msgstr[0] "We vonden {n} repository op je {platform}-account, {time} geleden."
 msgstr[1] ""
+"Een lijst van {n} repositories is geïmporteerd van je {platform}-account, "
+"{time} geleden."
 
 msgid "No repositories found."
 msgstr "Geen repositories gevonden."
@@ -2023,15 +2027,15 @@ msgstr "Je doneert nu {0} per jaar aan {1}. Dankjewel!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per week to {1}. Thank you!"
-msgstr ""
+msgstr "Je hebt nu toegezegd {0} per week te doneren aan {1}. Dankjewel!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per month to {1}. Thank you!"
-msgstr ""
+msgstr "Je hebt nu toegezegd {0} per maand te doneren aan {1}. Dankjewel!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
-msgstr ""
+msgstr "Je hebt nu toegezegd {0} per jaar te doneren aan {1}. Dankjewel!"
 
 msgid "The donation amount is missing."
 msgstr "Het donatie bedrag mist."
@@ -2190,6 +2194,10 @@ msgstr "Je hebt nog geen donaties ingesteld. Zodra je dat doet wordt je gevraagd
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr ""
+"We staan niet toe om om geld toe te voegen aan je account wanneer je "
+"donaties al helemaal worden gedenkt door je inkomsten. Als dat een probleem "
+"voor je is, stuur dan een e-mail naar support@liberapay.com en leg ons uit "
+"waarom."
 
 msgid "Please choose a payment method:"
 msgstr "Kies een betalingsmethode:"
@@ -2202,27 +2210,27 @@ msgid "Fees: {0}% + {1}"
 msgstr "Kosten: {0}% + {1}"
 
 msgid "To an account in Europe"
-msgstr ""
+msgstr "Naar een account in Europa"
 
 msgid "Cheapest for small amounts¹"
-msgstr ""
+msgstr "Goedkoopst voor kleine bedragen¹"
 
 msgid "Cheaper¹ but cumbersome"
-msgstr ""
+msgstr "Goedkoper maar lastiger"
 
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Kosten: {0}%"
 
 msgid "SEPA only"
-msgstr ""
+msgstr "Alleen SEPA"
 
 msgid "Best for regular payments"
-msgstr ""
+msgstr "Beste voor regelmatige betalingen"
 
 #, python-brace-format
 msgid "Fee: {0}"
-msgstr ""
+msgstr "Provisie: {0}"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
@@ -2230,6 +2238,8 @@ msgstr "De kosten zijn voor de betalingsverwerker. Liberapay wordt gefinancierd 
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr ""
+"¹ Tenzij je bank jou ook kosten berekend voor de overboeking. Wij hebben "
+"daar geen controle of zicht op."
 
 msgid "Go back"
 msgstr "Ga terug"
@@ -2381,10 +2391,15 @@ msgstr "Je kaartgegevens worden direct doorgestuurd naar onze betalingsverwerker
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
 msgstr ""
+"{0} is van je bankrekening afgeschreven, {1} is naar je Liberapay-"
+"portemonnee gegaan, {2} is betaald als provisie."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr ""
+"Een incasso van {0} is gestart. Als de incasso succesvol is zal {1} worden "
+"toegevoegd aan je Liberapay-portemonnee en {2} zal worden betaald als "
+"provisie."
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
@@ -2393,15 +2408,17 @@ msgstr "De poging om de {0} van je bankrekening over te schrijven is mislukt met
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr ""
+"Geld toevoegen aan Liberapay via een automatische incasso zorgt voor een "
+"provisie van {0}."
 
 msgid "Bank Account"
-msgstr ""
+msgstr "Bankrekening"
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "Use another account"
-msgstr ""
+msgstr "Gebruik een ander account"
 
 msgid "This IBAN is invalid."
 msgstr "Deze IBAN is ongeldig."
@@ -2420,7 +2437,7 @@ msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "De transactiekosten zouden hoog zijn: {0}% ({1}/{2}). Toch doorgaan?"
 
 msgid "Withdrawing Money"
-msgstr ""
+msgstr "Geld opnemen"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2442,19 +2459,25 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr "We plaatsen je overboekingen {0} in quarantaine om onszelf te beschermen tegen creditcardfraude, onze excuses voor het ongemak."
 
 msgid "Which currency do you want to withdraw?"
-msgstr ""
+msgstr "In welke munteenheid wil je geld opnemen?"
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
 msgstr ""
+"Euro's opnemen naar een SEPA bankrekening is gratis, opnames naar andere "
+"landen kosten {0} per stuk. Dollars opnemen kost {1} per opname, ongeacht "
+"het land van bestemming."
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
 msgstr ""
+"Euro's opnemen naar een SEPA bankrekening is gratis, opnames naar andere "
+"landen kosten {0} per stuk."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
 msgstr ""
+"Opnemen van dollars kost {0} per opname, ongeacht het land van bestemming."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
@@ -2605,6 +2628,8 @@ msgstr "In tegenstelling tot andere non-profitplatformen is Liberapay neutraal. 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
 msgstr ""
+"Als je meer details wilt weten, de mensen van Snowdrift.coop hebben {0}een "
+"grote lijst{1} gemaakt van crowdfunding platformen en hun verschillen."
 
 msgid "Does Liberapay respect financial regulations?"
 msgstr "Respecteert Liberapay financiële regelgeving?"
@@ -2616,33 +2641,38 @@ msgid "What are the payment processing fees?"
 msgstr "Wat zijn de transactiekosten?"
 
 msgid "The fees depend on the payment method as well as the currency."
-msgstr ""
+msgstr "De provisie hangt af van de betaalmethode en de munteenheid."
 
 msgid "When adding money into Liberapay the fees are:"
-msgstr ""
+msgstr "Wanner je geld toevoegt aan Liberapay, dan is de provisie:"
 
 #, python-brace-format
 msgid "{0}% + {1}"
-msgstr ""
+msgstr "{0}% + {1}"
 
 msgid "Bank wire"
 msgstr ""
 
 #, python-brace-format
 msgid "{0}%"
-msgstr ""
+msgstr "{0}%"
 
 msgid "Direct debit"
-msgstr ""
+msgstr "Automatische incasso"
 
 msgid "not supported"
-msgstr ""
+msgstr "niet ondersteund"
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
 msgstr ""
+"De provisie zoals hierboven is alleen van onze betalingsverwerkers, je bank "
+"kan ook nog kosten in rekening brengen voor elke transactie, voor de "
+"internationale. Wij hebben geen controle of zicht op de provisie van je bank."
 
 msgid "There are no fees for transfers between Liberapay users."
 msgstr ""
+"Er wordt geen provisie in rekening gebracht voor transacties tussen "
+"Liberapay-gebruikers."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Is er een minimum of maximum bedrag dat ik kan geven of ontvangen ?"
@@ -3009,7 +3039,7 @@ msgid "Recent pledges"
 msgstr "Recente toezeggingen"
 
 msgid "Top pledges"
-msgstr ""
+msgstr "Top toezeggingen"
 
 msgid "There are no pledges right now."
 msgstr "Er zijn geen toezeggingen op dit moment."
@@ -3250,24 +3280,30 @@ msgstr "Log in"
 #, python-brace-format
 msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
 msgstr ""
+"Het ophalen van je accountgegevens van {platform} is niet gelukt (foutcode "
+"{x}). Als het probleem blijft, neem dan contact op met support@liberapay.com."
 
 msgid "Migrating from Gratipay"
-msgstr ""
+msgstr "Overstappen van Gratipay"
 
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
 msgstr ""
+"Oeps, je moet teruggaan naar Gratipay en daar aanmelden voor het starten van "
+"de migratie."
 
 #, python-brace-format
 msgid "Welcome, {username}!"
-msgstr ""
+msgstr "Welkom, {username}!"
 
 #, python-brace-format
 msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
 msgstr ""
+"Bevestig alsjeblieft dat je wilt dat wij een Liberapay-account voor je maken "
+"en data importeren van {platform}."
 
 #, python-brace-format
 msgid "Here is an overview of what we will import from {platform}:"
-msgstr ""
+msgstr "Hier is een overzicht van wat we zullen importeren van {platform}:"
 
 msgid "basic account data (username, avatar, some privacy settings, etc)"
 msgstr ""
