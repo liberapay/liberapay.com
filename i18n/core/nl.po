@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-11-29 12:45+0000\n"
-"Last-Translator: Bart Groeneveld <bartgroeneveld@libertymail.net>\n"
+"PO-Revision-Date: 2017-11-29 13:02+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>"
 "\n"
 "Language: nl\n"
@@ -161,7 +161,10 @@ msgstr "De overschrijving naar je Liberapay portemonnee is geslaagd"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "We zijn blij te kunnen melden dat de overschrijving vanaf je bankrekening is geslaagd. Van de {0} die je hebt overgeschreven is {1} in je Liberapay portemonnee geplaatst en {2} werd betaald voor de transactie."
+msgstr ""
+"We zijn blij te kunnen melden dat de overschrijving vanaf je bankrekening is "
+"geslaagd. Van de {0} die je hebt overgeschreven is {1} in je Liberapay "
+"portemonnee geplaatst en {2} werd betaald als provisie."
 
 msgid "View receipt"
 msgstr "Bekijk het ontvangstbewijs"
@@ -1031,7 +1034,7 @@ msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Het verwijzen van Liberapay profielen moet worden goedgekeurd door de beheerder."
 
 msgid "Patrons"
-msgstr "Sponsor"
+msgstr "Sponsors"
 
 msgid "Income"
 msgstr "Inkomen"
@@ -1056,8 +1059,8 @@ msgstr "Doel gehaald!"
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} heeft {n} sponsor."
+msgstr[1] "{0} heeft {n} sponsors."
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
@@ -1066,8 +1069,8 @@ msgstr "{0}'s doel is om {1} te ontvangen per week."
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} ontvangt {1} per week van {n} sponsor."
+msgstr[1] "{0} ontvangt {1} per week van {n} sponsors."
 
 #, python-brace-format
 msgid "Donating ({amount})"
@@ -1312,10 +1315,10 @@ msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Ik ben dankbaar voor donaties, maar ik heb geen specifiek inkomensdoel."
 
 msgid "I'm here as a patron."
-msgstr "Ik ben hier als donateur."
+msgstr "Ik ben hier als sponsor."
 
 msgid "I'm here as a patron, and politely decline to receive gifts."
-msgstr "Ik ben hier als donateur en wil geen donaties ontvangen."
+msgstr "Ik ben hier als sponsor en wil geen donaties ontvangen."
 
 #, python-brace-format
 msgid "My goal is to receive {0}"
@@ -1328,7 +1331,7 @@ msgid "We're here as a patron."
 msgstr "We zijn hier als patroon."
 
 msgid "We're here as a patron, and politely decline to receive gifts."
-msgstr "We zijn hier als donateur en zien respectvol af om donaties te ontvangen."
+msgstr "We zijn hier als sponsors en willen geen donaties ontvangen."
 
 #, python-brace-format
 msgid "Our goal is to receive {0}"
@@ -1359,7 +1362,7 @@ msgid "This is a preview."
 msgstr "Dit is een voorbeeld."
 
 msgid "Excerpt that will be used in social media:"
-msgstr "Knipsel dat zal worden gebruikt op sociale media:"
+msgstr "Fragment dat zal worden gebruikt op sociale media:"
 
 msgid "Edit"
 msgstr "Bewerk"
@@ -2100,8 +2103,8 @@ msgstr "Total geld ontvangen: {0}"
 #, python-brace-format
 msgid "{money_amount} in recurrent donations from {n} donor"
 msgid_plural "{money_amount} in recurrent donations from {n} donors"
-msgstr[0] "{money_amount} in periodieke donaties van {n} donateur"
-msgstr[1] "{money_amount} in periodieke donaties van {n} donateurs"
+msgstr[0] "{money_amount} in periodieke donaties van {n} sponsor"
+msgstr[1] "{money_amount} in periodieke donaties van {n} sponsors"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
@@ -2331,7 +2334,9 @@ msgstr "Aangepast bedrag (min = {0}, max = {1})"
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} is opgenomen van je creditcard, {1} ging naar je Liberapay portemonnee, {2} werd betaald aan transactiekosten."
+msgstr ""
+"{0} is opgenomen van je creditcard, {1} ging naar je Liberapay portemonnee, "
+"{2} is betaald als provisie."
 
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
@@ -2442,7 +2447,10 @@ msgstr "Geld opnemen"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
-msgstr "{0} is opgenomen uit je Liberapay portemonnee. Als de overschrijving succesvol is zal {1} op je bankrekening komen en {2} zal worden betaald aan transactiekosten."
+msgstr ""
+"{0} is opgenomen uit je Liberapay portemonnee. Als de overschrijving "
+"succesvol is zal {1} op je bankrekening komen en {2} zal worden betaald als "
+"provisie."
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
@@ -2667,8 +2675,9 @@ msgstr "niet ondersteund"
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
 msgstr ""
 "De provisie zoals hierboven is alleen van onze betalingsverwerkers, je bank "
-"kan ook nog kosten in rekening brengen voor elke transactie, voor de "
-"internationale. Wij hebben geen controle of zicht op de provisie van je bank."
+"kan ook nog kosten in rekening brengen voor elke transactie, in het "
+"bijzonder voor de internationale. Wij hebben geen over controle of zicht op "
+"de provisie van je bank."
 
 msgid "There are no fees for transfers between Liberapay users."
 msgstr ""
@@ -2717,7 +2726,10 @@ msgstr "Liberapay is een manier om periodiek geld te doneren aan mensen van wie 
 
 #, python-brace-format
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "Betalingen worden geleverd zonder verplichtingen. Je weet niet precies wie geeft en donaties worden afgetopt op {0} per week per donateur om ongepaste beïnvloeding te voorkomen."
+msgstr ""
+"Betalingen worden geleverd zonder verplichtingen. Je weet niet precies wie "
+"er geeft en donaties worden afgetopt op {0} per week per sponsor om "
+"ongepaste beïnvloeding te voorkomen."
 
 msgid "Donations are public. By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Donaties zijn openbaar. Standaard is het totale bedrag dat je geeft en het totale bedrag dat je ontvangt openbaar (je kunt dit ook aanpassen)."
@@ -2865,7 +2877,11 @@ msgid "Money moved out of Liberapay"
 msgstr "Geld opgenomen van Liberapay"
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
-msgstr "Een Liberapay team coördineert donaties van verschillende donateurs naar meerdere ontvangers. Donateurs kiezen hoeveel ze willen geven, ontvangers beslissen hoe ze het geld verdelen en Liberapay berekent en voert de transacties uit van donateur naar ontvanger."
+msgstr ""
+"Een Liberapay team coördineert donaties van verschillende sponsors naar "
+"meerdere ontvangers. Sponsors kiezen hoeveel ze willen geven, ontvangers "
+"beslissen hoe ze het geld verdelen en Liberapay berekent en voert de "
+"transacties uit van sponsor naar ontvanger."
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
 msgstr "Teams bestaan voor persoon-naar-persoon donaties. Ze kunnen niet worden gebruikt door een rechtspersoon om donaties te verspreiden onder haar leden."
@@ -3177,7 +3193,10 @@ msgstr "2. Maak geld over"
 
 #, python-brace-format
 msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr "Op Liberapay zijn donaties vooruitbetaald. Jij hebt controle over hoeveel geld je overmaakt en wanneer. Wanneer je meer geld tegelijk overmaakt betaal je soms minder {0}transactiekosten{1}."
+msgstr ""
+"Op Liberapay zijn donaties vooruitbetaald. Jij hebt controle over hoeveel "
+"geld je overmaakt en wanneer. Wanneer je meer geld tegelijk overmaakt betaal "
+"je soms minder {0}provisie{1}."
 
 msgid "3. Keep your donation funded"
 msgstr "3. Blijf je doelen financieren"
