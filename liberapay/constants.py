@@ -128,8 +128,8 @@ FEE_PAYIN_CARD = {
     'USD': Fees(Decimal('0.025'), Money('0.30', 'USD')),  # 2.5% + $0.30
 }
 FEE_PAYIN_DIRECT_DEBIT = {
-    'EUR': Fees(0, Money('0.80', 'EUR')),  # €0.80
-    'GBP': Fees(0, Money('0.80', 'GBP')),  # £0.80
+    'EUR': Fees(0, Money('0.50', 'EUR')),  # €0.50
+    'GBP': Fees(0, Money('0.50', 'GBP')),  # £0.50
 }
 FEE_PAYOUT = {
     'EUR': {
@@ -208,12 +208,12 @@ PAYIN_CARD_TARGET = {
     'USD': Money('95.00', 'USD'),  # fee ≈ 3.27%
 }
 PAYIN_CARD_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
-PAYIN_DIRECT_DEBIT_MIN_EUR_GBP = Decimal('25.00')  # fee ≈ 3.6%
+PAYIN_DIRECT_DEBIT_MIN_EUR_GBP = Decimal('15.00')  # fee ≈ 3.78%
 PAYIN_DIRECT_DEBIT_MIN = {
     'EUR': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'EUR'),
     'GBP': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'GBP'),
 }
-PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP = Decimal('99.00')  # fee ≈ 0.94%
+PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP = Decimal('99.00')  # fee ≈ 0.59%
 PAYIN_DIRECT_DEBIT_TARGET = {
     'EUR': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'EUR'),
     'GBP': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'GBP'),
