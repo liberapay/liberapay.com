@@ -69,6 +69,9 @@ if weekly > 0:
     weeks_list = sorted(set((min_weeks, 4, 13, 26, 39, max_weeks)))
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks] or [min_weeks]
 
+amount_min = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MIN[currency])[0]
+amount_max = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MAX[currency])[0]
+
 if request.method == 'POST':
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
@@ -87,8 +90,6 @@ if request.method == 'POST':
         amount = Money(amount, currency)
     except (InvalidOperation, ValueError):
         raise InvalidNumber(amount)
-    amount_min = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MIN[currency])[0]
-    amount_max = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MAX[currency])[0]
     if amount < amount_min or amount > amount_max:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",
@@ -251,7 +252,7 @@ title = _("Adding Money")
                 <input type="radio" name="amount" value="custom" class="hidden-xs" />
                 <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(
-                    "Custom amount (min={0}, max={1})", AMOUNT_MIN, AMOUNT_MAX,
+                    "Custom amount (min={0}, max={1})", amount_min, amount_max,
                 ) }}</h5>
                 <div class="input-group">
                     <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
