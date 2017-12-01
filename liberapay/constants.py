@@ -39,7 +39,7 @@ class Fees(namedtuple('Fees', ('var', 'fix'))):
     @property
     def with_vat(self):
         r = (self.var * self.VAT_1 * 100, self.fix * self.VAT_1)
-        return r[0] if not r[1] else r[1] if not r[0] else r
+        return r[0] if not r[1] else r[1].round_up() if not r[0] else r
 
 
 StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
