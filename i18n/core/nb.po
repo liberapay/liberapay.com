@@ -143,16 +143,16 @@ msgstr "Bankforbindelsen til din Liberapay-lommebok har tatt for lang tid og er 
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
 msgstr "Den {date} oppga du at du skulle overføre {money_amount} fra bankkontoen din til Liberapay-lommeboken din, men pengene kom aldri frem."
 
-#, fuzzy
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "I tilfelle du har glemt det, kan utføre en ny betaling:"
 
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Bankoverførselen til Liberapay-lommeboken din ble dessverre mislykket"
 
-#, fuzzy
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Du kan prøve igjen, muligens med en ny betalingsmetode, ved å klikke på lenken under:"
+msgstr ""
+"Du kan prøve igjen, muligens med en ny betalingsmetode, ved å klikke på "
+"lenken nedenfor:"
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Bankoverførselen til Liberapay-lommeboken din var vellykket"
@@ -189,9 +189,8 @@ msgstr "Du har blitt invitert inn i et team på Liberapay"
 msgid "{0} has invited you to join the {1} team."
 msgstr "{0} har invitert deg til å bli med i {1} team."
 
-#, fuzzy
 msgid "See the team's profile"
-msgstr "Se profilen til dette teamet"
+msgstr "Se profilen til dette laget"
 
 msgid "Accept"
 msgstr "Godta"
@@ -567,9 +566,11 @@ msgstr "Vi opplever for øyeblikket tekniske problemer. Som et resultat av dette
 
 msgid "Liberapay is currently in read-only mode as we are migrating the database. This shouldn't take more than a few minutes."
 msgstr ""
+"Liberapay er for øyeblikket skrivebeskyttet fordi vi flytter databasen. "
+"Dette burde ikke ta mer enn et par minutter."
 
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Slå navigasjon av/på"
 
 msgid "Homepage"
 msgstr "Hjemmeside"
@@ -604,8 +605,8 @@ msgstr "Gemenskaper"
 #, python-brace-format
 msgid "with {n} other"
 msgid_plural "with {n} others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "med {n} annen"
+msgstr[1] "med {n} andre"
 
 msgid "Leave"
 msgstr "Forlat"
@@ -624,10 +625,13 @@ msgstr "Kontoer annensteds hen"
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr ""
+"Når du forbinder kontoene dine på andre plattformer gjør du Liberapay-"
+"kontoen din lettere å finne, og det hjelper deg med å vise at du er den du "
+"utgir deg for å være."
 
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
-msgstr ""
+msgstr "{0} eier følgende kontoer på andre plattformer:"
 
 msgid "Name of the team"
 msgstr "Lagets navn"
@@ -678,8 +682,9 @@ msgstr "Nei"
 msgid "Yes"
 msgstr "Ja"
 
+#, fuzzy
 msgid "Ok"
-msgstr "OK"
+msgstr "Greit"
 
 #, python-brace-format
 msgid "You have uploaded {n} document of this type:"
@@ -724,7 +729,7 @@ msgid "Between {0} and {1}"
 msgstr "Mellom {0} og {1}"
 
 msgid "How much money you earn per year, approximately."
-msgstr "Hvor mye tjener du per år, omentrent"
+msgstr "Hvor mye tjener du per år, omtrent."
 
 msgid "Postal Address"
 msgstr "Postadresse"
@@ -733,7 +738,7 @@ msgid "Identity Proof"
 msgstr "Identitetsbevis"
 
 msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Pass eller ID-kort (for og bakside), eller førerkort fra Storbritannia"
+msgstr "Pass eller ID-kort (for og bakside), eller førerkort fra Storbritannia."
 
 msgid "Organization Information"
 msgstr "Organisasjonsinformasjon"
@@ -952,7 +957,7 @@ msgid "We're unable to process your request right now, sorry."
 msgstr ""
 
 msgid "Please try again in a few minutes."
-msgstr "Vent et par minutter"
+msgstr "Prøv igjen om et par minutter."
 
 msgid "Previous"
 msgstr "Forrige"
@@ -1468,7 +1473,7 @@ msgid "The verification code is invalid."
 msgstr "Bekreftelskoden er ugyldig."
 
 msgid "Missing Info"
-msgstr "Manglende info."
+msgstr "Manglende info"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr ""
@@ -1525,19 +1530,19 @@ msgid "No: the donee hasn't filled the identity form"
 msgstr ""
 
 msgid "No: the donee's account is temporarily suspended"
-msgstr ""
+msgstr "Nei: Mottakerens konto er midlertidig suspendert"
 
 msgid "No: insufficient funds"
-msgstr ""
+msgstr "Nei: Ikke nok penger"
 
 msgid "Recently Cancelled"
-msgstr ""
+msgstr "Nylig avbrutt"
 
 msgid "within the last 30 days"
-msgstr ""
+msgstr "i løpet av de siste 30 dagene"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "Avbrutt"
 
 msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
@@ -1553,30 +1558,32 @@ msgstr ""
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
 msgstr ""
+"Vi kan ikke endre kontotypen din på lønningsdager, men prøv igjen om et par "
+"minutter."
 
 msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
 msgstr ""
 
 msgid "Invalid date of birth."
-msgstr ""
+msgstr "Ugyldig fødselsdato."
 
 msgid "You haven't filled all the required fields."
-msgstr ""
+msgstr "Du har ikke fylt ut alle påkrevde felter."
 
 msgid "Your identity information has been updated."
-msgstr ""
+msgstr "Identitetsinformasjonen din er oppdatert."
 
 msgid "Your identity information has been registered."
-msgstr ""
+msgstr "Identitetsinformasjonen din er registert."
 
 msgid "You have to agree to MangoPay's Terms of Service."
-msgstr ""
+msgstr "Du må godta MangoPays brukervilkår."
 
 msgid "JavaScript is required"
-msgstr ""
+msgstr "JavaScript er nødvendig"
 
 msgid "Level 2"
-msgstr ""
+msgstr "Nivå 2"
 
 msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
 msgstr "Du har gjennomført identifikasjonsprosessen, og beløpet du kan gi eller motta årlig er ikke lenger begrenset."
@@ -3096,7 +3103,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr ""
+msgstr "{0}Sett inn miniprogrammene våre{1} på bloggen eller hjemmesiden din."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr ""
