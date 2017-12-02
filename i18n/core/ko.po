@@ -1,11 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Korean (https://hosted.weblate.org/projects/liberapay/core/ko/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2017-12-02 11:53+0000\n"
+"Last-Translator: Yongmin Hong <revi@pobox.com>\n"
+"Language-Team: Korean "
+"<https://hosted.weblate.org/projects/liberapay/core/ko/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.18-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -37,7 +41,7 @@ msgstr "어떤 팀에도 가입하지 않았기 때문에,팀에 참가하는 �
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] ""
+msgstr[0] "{n} 팀에서의 역할에 대해 지급된 돈이 없습니다."
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
@@ -254,7 +258,7 @@ msgstr "버그를 발견하신 것 같네요! 불편을 겪게 해드려 죄송�
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
-msgstr ""
+msgstr "이 오류의 세부 사항이 기록되었습니다. 저희에게 연락하기로 결정하셨다면 에러 식별자 {0} 을/를 알려주세요."
 
 msgid "When I receive money"
 msgstr "돈을 받을 때"
@@ -452,6 +456,8 @@ msgstr "{0} 사용자가 기부를 받지 않습니다."
 #, python-brace-format
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr ""
+"{username} 님에게 보내는 기부금은 {rejected_currency} 화폐가 아닌 {main_currency} (으)로 "
+"이루어져야 합니다."
 
 msgid "There isn't enough money in your wallet."
 msgstr "지갑에 충전된 돈이 부족합니다."
@@ -1004,16 +1010,16 @@ msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
 msgid "Patrons"
-msgstr ""
+msgstr "기부자"
 
 msgid "Income"
-msgstr ""
+msgstr "수입"
 
 msgid "per week"
 msgstr "매주"
 
 msgid "Sum"
-msgstr ""
+msgstr "총액"
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1029,7 +1035,7 @@ msgstr "목표 달성!"
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
+msgstr[0] "{n} 명이 {0} 님께 기부하고 있습니다."
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
@@ -1038,11 +1044,11 @@ msgstr "{0} 님의 목표는 매주 {1} 만큼을 받는 것입니다."
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] ""
+msgstr[0] "{0} 님은 {n} 명으로부터 매주 {1} 만큼을 받고 있습니다."
 
 #, python-brace-format
 msgid "Donating ({amount})"
-msgstr ""
+msgstr "기부 중 ({amount})"
 
 msgid "Donate"
 msgstr "기부하기"
@@ -1057,7 +1063,7 @@ msgstr "{0} 전에 닫힘."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
-msgstr ""
+msgstr "{0} 님은 자신의 기부 금액을 공개하지 않습니다."
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
@@ -1604,7 +1610,7 @@ msgstr "역사"
 
 #, python-brace-format
 msgid "{0} joined {1} ago."
-msgstr ""
+msgstr "{0} 님은 {1} 전에 가입했습니다."
 
 msgid "No data to show."
 msgstr "보여줄 데이터가 없습니다."
@@ -1837,10 +1843,10 @@ msgid "You are not a member of any team."
 msgstr "어떤 팀에도 소속되어 있지 않습니다."
 
 msgid "Tips Received, by Number of Tips"
-msgstr ""
+msgstr "받은 팁, 팁의 수 기준으로"
 
 msgid "Tips Received, by Amount"
-msgstr ""
+msgstr "받은 팁, 금액 기준으로"
 
 msgid "Your profile has been updated."
 msgstr "프로필이 업데이트되었습니다."
@@ -1863,7 +1869,7 @@ msgstr "{0} 계정 연결하기"
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {time} ago."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] ""
+msgstr[0] "{n} 개의 저장소를 {platform} 계정에서 {time} 전에 들여왔습니다."
 
 msgid "No repositories found."
 msgstr "저장소를 찾을 수 없습니다."
@@ -1988,15 +1994,15 @@ msgstr "매년 {0} 만큼을 {1} 에게 기부하고 있습니다. 감사합니�
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per week to {1}. Thank you!"
-msgstr ""
+msgstr "매 주 {0} 만큼을 {1} 에게 기부하기로 약정하셨습니다. 감사합니다!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per month to {1}. Thank you!"
-msgstr ""
+msgstr "매달 {0} 만큼을 {1} 에게 기부하기로 약정하셨습니다. 감사합니다!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
-msgstr ""
+msgstr "매년 {0} 만큼을 {1} 에게 기부하기로 약정하셨습니다. 감사합니다!"
 
 msgid "The donation amount is missing."
 msgstr "기부 금액이 없습니다."
@@ -2151,6 +2157,8 @@ msgstr "기여를 설정하지 않았습니다. 기여를 설정하게 되면 �
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr ""
+"당신의 기부금으로 기부할 금액을 전액 충당할 수 있을 때는 추가 입금을 할 수 없습니다. 문제가 있다면 support@"
+"liberapay.com에 이유를 설명해 주세요."
 
 msgid "Please choose a payment method:"
 msgstr "결제 방식을 선택해 주세요:"
@@ -2163,13 +2171,13 @@ msgid "Fees: {0}% + {1}"
 msgstr "수수료: {0}% + {1}"
 
 msgid "To an account in Europe"
-msgstr ""
+msgstr "유럽의 은행 계좌로 입금"
 
 msgid "Cheapest for small amounts¹"
 msgstr "소액에서 가장 쌈¹"
 
 msgid "Cheaper¹ but cumbersome"
-msgstr ""
+msgstr "싸지만¹ 복잡한 절차"
 
 #, python-brace-format
 msgid "Fee: {0}%"
@@ -2400,19 +2408,21 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr "신용카드 사기로부터 플랫폼을 보호하기 위해 {0} 동안 자금을 동결합니다. 불편을 드려 죄송합니다."
 
 msgid "Which currency do you want to withdraw?"
-msgstr ""
+msgstr "어느 화폐로 출금하시겠습니까?"
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
 msgstr ""
+"유로를 SEPA 계좌로 입금하는 데에는 수수료가 들지 않고, 다른 국가로 이체하는 데에는 {0} 만큼의 수수료가 발생합니다. 미국 달러를 "
+"인출하는 경우 거래당 {1} 만큼의 수수료가 도착지 국가와 관계없이 부과됩니다."
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr ""
+msgstr "유로를 SEPA 계좌로 인출하는 것은 무료이며, 다른 국가로의 이체는 {0} 만큼의 수수료가 부과됩니다."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr ""
+msgstr "미국 달러 인출은 도착지 국가와 관계없이 {0} 만큼의 수수료가 부과됩니다."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
