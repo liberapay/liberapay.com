@@ -113,6 +113,48 @@ title = _username
         {{ username_form() }}
     % endif
 
+<h3 class="banderole default" id="currencies">{{ _("Currencies") }}</h3>
+<form action="{{ participant.path('settings/edit') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <h5>{{ _("Main currency") }}</h5>
+    <div class="btn-group btn-group-radio">
+        % for c in constants.CURRENCIES
+        <label class="btn btn-default">
+            <input type="radio" name="main_currency" value="{{ c }}"
+                   {{ 'checked' if participant.main_currency == c else '' }} />
+            <div class="btn-text">
+                {{ locale.title(locale.currencies.get(c, c)) }}
+                ({{ locale.currency_symbols.get(c, c) }})
+            </div>
+        </label>
+        % endfor
+    </div>
+
+    <h5>{{ _("Other currencies") }}</h5>
+    % if participant.kind == 'group'
+    <p>{{ _("Team accounts are currently limited to a single currency.") }}</p>
+    % else
+    <p>{{ _("Do you want to accept or reject donations in currencies other than your main one?") }}</p>
+    <p>{{ _("Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors.") }}</p>
+    <div class="radio">
+        <label>
+            <input type="radio" name="accept_all_currencies" value="yes"
+                   {{ 'checked' if participant.accept_all_currencies else '' }} />
+            {{ _("Accept all currencies") }}
+        </label><br>
+
+        <label>
+            <input type="radio" name="accept_all_currencies" value="no"
+                   {{ 'checked' if not participant.accept_all_currencies else '' }} />
+            {{ _("Reject foreign currencies") }}
+        </label>
+    </div>
+    % endif
+
+    <button class="save btn btn-success">{{ _("Save") }}</button>
+</form>
+
 <h3 class="banderole default" id="goal">{{ _("Goal") }}</h3>
 <form action="goal" method="POST" class="goal">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
