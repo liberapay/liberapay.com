@@ -195,7 +195,7 @@ if request.method == 'POST':
 else:
     account = participant.get_mangopay_account()
 
-if account:
+if account and account.Id:
     already_uploaded = [doc for doc in account.documents.all() if doc.status != 'CREATED']
     already_uploaded = sorted(already_uploaded, key=lambda doc: -int(doc.id))
     already_uploaded = group_by(already_uploaded, 'type', attr=True)
