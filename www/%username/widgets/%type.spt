@@ -29,7 +29,7 @@ response.headers[b'Vary'] = b'Accept-Language'
 
 [---] application/javascript via jinja2_html_jswrapped
 <a href="{{ participant.url('' if t_is_giving else 'donate') }}"
-   style="border: 2px solid #f6c915; border-radius: 5px; color: #1a171b;
+   style="border: 2px solid #f6c915; border-radius: 5px; color: #1a171b; background: white;
           display: inline-block;
           font-family: Helvetica Neue,Helvetica,sans-serif; font-size: 14px;
           max-width: 150px; min-width: 110px;
