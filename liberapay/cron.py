@@ -67,6 +67,7 @@ class Cron(object):
                         # success, sleep until tomorrow
                         sleep(3600 * 23)
             else:
+                assert period >= 1
                 while True:
                     try:
                         func()
