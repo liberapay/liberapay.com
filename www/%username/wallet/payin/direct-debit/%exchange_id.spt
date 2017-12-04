@@ -57,6 +57,8 @@ if route is not None:
     route.__dict__['participant'] = participant
 
 currency = request.qs.get('currency', currency)
+if exchange:
+    currency = exchange.amount.currency
 if request.method == 'POST':
     currency = request.body.get('currency', currency)
 if currency not in PAYIN_DIRECT_DEBIT_MIN:

@@ -31,13 +31,19 @@ if request.method == 'GET' and 'transactionId' in request.qs:
     record_exchange_result(website.db, payin.Tag, payin.Id, status, error, participant)
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
+exchange = None
+if 'exchange_id' in request.qs:
+    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
+                              (request.qs['exchange_id'], participant.id))
+
 currency = request.qs.get('currency', currency)
+if exchange:
+    currency = exchange.amount.currency
 if request.method == 'POST':
     currency = request.body.get('currency', currency)
 if currency not in PAYIN_CARD_MIN:
     raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
 
-exchange = None
 routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
 route = routes[0] if routes else None
 del routes
@@ -100,10 +106,6 @@ if request.method == 'POST':
     except Redirect as e:
         response.redirect(e.url)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
-
-elif 'exchange_id' in request.qs:
-    exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'

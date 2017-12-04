@@ -48,8 +48,14 @@ if request.method == 'POST' and request.body.get('action') == 'email':
         response.redirect(request.line.uri)
 
 exchange, payin = None, None
+if 'exchange_id' in request.qs:
+    exchange, payin = get_exchange_payin(participant, request)
+    if exchange.status == 'succeeded':
+        response.redirect(participant.path('receipts/%s' % exchange.id))
 
 currency = request.qs.get('currency', currency)
+if exchange:
+    currency = exchange.amount.currency
 if request.method == 'POST':
     currency = request.body.get('currency', currency)
 if currency not in PAYIN_BANK_WIRE_MIN:
@@ -100,11 +106,6 @@ if request.method == 'POST':
     if payin and exchange.status == 'created':
         redir += '&payin_id=%s' % payin.Id
     response.redirect(redir)
-
-elif 'exchange_id' in request.qs:
-    exchange, payin = get_exchange_payin(participant, request)
-    if exchange.status == 'succeeded':
-        response.redirect(participant.path('receipts/%s' % exchange.id))
 
 back_to = b64decode_s(request.path['back_to'], default=None)
 show_form = weekly > 0 and funded < 52 and not payin
