@@ -7,6 +7,25 @@
 
 [Liberapay](http://liberapay.com) is a recurrent donations platform. We help you fund the creators and projects you appreciate.
 
+## Table of Contents
+
+- [Contact](#contact)
+- [Contributing to the translations](#contributing-to-the-translations)
+- [Contributing to the code](#contributing-to-the-code)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Running](#running)
+  - [SQL](#sql)
+  - [CSS and JavaScript](#css-and-javascript)
+  - [Testing *](#testing-)
+    - [Updating test fixtures](#updating-test-fixtures)
+  - [Tinkering with payments](#tinkering-with-payments)
+  - [Modifying python dependencies](#modifying-python-dependencies)
+  - [Deploying the app](#deploying-the-app)
+  - [Setting up a development environment using Docker](#setting-up-a-development-environment-using-docker)
+- [License](#license)
+
 ## Contact
 
 You want to chat? [Join us on Gitter](https://gitter.im/liberapay/salon). (If you use IRC, [Gitter has a gateway](https://irc.gitter.im/), and we're also in the #liberapay channel on Freenode.)
