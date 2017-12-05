@@ -131,7 +131,7 @@ class Participant(Model, MixinTeam):
                 p.change_username(username, cursor=c)
         return p
 
-    def make_team(self, name, email=None, email_lang=None, throttle_takes=True):
+    def make_team(self, name, currency, email=None, email_lang=None, throttle_takes=True):
         if email and not self.email:
             email_is_attached_to_self = self.db.one("""
                 SELECT true AS a
@@ -144,10 +144,10 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as c:
             t = c.one("""
                 INSERT INTO participants
-                            (kind, status, join_time, throttle_takes)
-                     VALUES ('group', 'active', now(), %s)
+                            (kind, status, join_time, throttle_takes, main_currency)
+                     VALUES ('group', 'active', now(), %s, %s)
                   RETURNING participants.*::participants
-            """, (throttle_takes,))
+            """, (throttle_takes, currency))
             t.change_username(name, cursor=c)
             t.add_member(self, c)
             if email:

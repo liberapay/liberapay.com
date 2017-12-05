@@ -1,0 +1,14 @@
+% macro currency_buttons(name, selected)
+    <div class="btn-group btn-group-radio">
+        % for c in constants.CURRENCIES
+        <label class="btn btn-default">
+            <input type="radio" name="{{ name }}" value="{{ c }}"
+                   {{ 'checked' if c == selected else '' }} />
+            <div class="btn-text">
+                {{ locale.title(locale.currencies.get(c, c)) }}
+                ({{ locale.currency_symbols.get(c, c) }})
+            </div>
+        </label>
+        % endfor
+    </div>
+% endmacro

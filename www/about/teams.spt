@@ -19,8 +19,10 @@ if request.method == 'POST':
             raise UsernameAlreadyTaken(name)
     else:
         email_lang = request.headers.get(b'Accept-Language')
+        team_currency = request.body.get('main_currency') or currency
+        team_email = request.body.get('email')
         throttle_takes = request.body.get('throttle_takes') == 'on'
-        t = user.make_team(name, request.body.get('email'), email_lang, throttle_takes)
+        t = user.make_team(name, team_currency, team_email, email_lang, throttle_takes)
     response.redirect('/'+t.username+'/edit')
 
 title = _("Teams")
