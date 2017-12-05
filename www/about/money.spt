@@ -1,3 +1,4 @@
+# coding: utf8
 [---]
 title = _("Money")
 [---] text/html
@@ -34,8 +35,15 @@ title = _("Money")
 <h3>{{ _("Wallets") }}</h3>
 
 <p>{{ _(
-    "A user's money is held in their wallets. We currently only support one "
-    "wallet per user, and only one currency (the euro) in that wallet."
+    "A user's money is held in their wallet. It's like an online bank account, "
+    "but more limited."
+) }}</p>
+
+<h3>{{ _("Currencies") }}</h3>
+
+<p>{{ _(
+    "We currently support two currencies: the euro (€) and the US dollar ($). "
+    "We do not handle crypto-currencies like bitcoin."
 ) }}</p>
 
 <h3>{{ _("Payday") }}</h3>
