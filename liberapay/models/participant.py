@@ -106,7 +106,7 @@ class Participant(Model, MixinTeam):
             """.format(x), vals)
 
     @classmethod
-    def make_active(cls, kind, username=None, password=None, cursor=None):
+    def make_active(cls, kind, username=None, password=None, currency=None, cursor=None):
         """Return a new active participant.
         """
         now = utcnow()
@@ -114,6 +114,7 @@ class Participant(Model, MixinTeam):
             'kind': kind,
             'status': 'active',
             'join_time': now,
+            'main_currency': currency or 'EUR',
             'accept_all_currencies': False,
         }
         if password:
