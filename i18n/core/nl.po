@@ -1,12 +1,15 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Dutch "
-"<https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2017-12-07 14:52+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>"
+"\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.18-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
@@ -182,11 +185,13 @@ msgid "Follow this link to view {0}'s profile:"
 msgstr "Volg deze link om het profiel van {0} te bekijken:"
 
 msgid "A team you're a member of has been modified"
-msgstr ""
+msgstr "Een team waar je lid van bent is aangepast"
 
 #, python-brace-format
 msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
 msgstr ""
+"De referentie valuta van het team \"{0}\" is gewijzigd van {1} naar {2} door "
+"{3}."
 
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Je bent uitgenodigd om lid te worden van een team op Liberapay"
@@ -496,6 +501,8 @@ msgstr "Dit is niet toegestaan op jouw account, omdat je momenteel geschorst ben
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr ""
+"Je hebt de valuta recent al aangepast, probeer het later opnieuw (bv. in een "
+"week) of neemt contact op met support@liberapay.com."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1120,7 +1127,7 @@ msgid "Please input your email address:"
 msgstr "Vul alsjeblieft je emailadres in:"
 
 msgid "and select your preferred currency:"
-msgstr ""
+msgstr "en selecteer de gewenste valuta:"
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -1335,28 +1342,32 @@ msgid "Have you linked to your Liberapay profile from other websites? Be sure to
 msgstr "Heb je je Liberapay profiel gelinkt vanaf andere websites? Let op dat je deze links actualiseert!"
 
 msgid "Currencies"
-msgstr ""
+msgstr "Valuta's"
 
 msgid "Main currency"
-msgstr ""
+msgstr "Hoofd valuta"
 
 msgid "Other currencies"
-msgstr ""
+msgstr "Overige valuta's"
 
 msgid "Team accounts are currently limited to a single currency."
-msgstr ""
+msgstr "Team accounts zijn op dit moment beperkt tot één valuta."
 
 msgid "Do you want to accept or reject donations in currencies other than your main one?"
 msgstr ""
+"Wil je donaties in andere valuta's dan je hoofd valuta accepteren of "
+"weigeren?"
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr ""
+"Het accepteren van vreemde valuta's kan dingen compliceren voor je, maar "
+"weigeren kan sommige donoren ontmoedigen."
 
 msgid "Accept all currencies"
-msgstr ""
+msgstr "Accepteer alle valuta's"
 
 msgid "Reject foreign currencies"
-msgstr ""
+msgstr "Weiger buitenlandse valuta's"
 
 msgid "Save"
 msgstr "Bewaar"
@@ -1523,7 +1534,7 @@ msgid "Liberapay does not take a cut of payments and is only funded by the donat
 msgstr "Liberapay ontvangt geen percentages van de donaties. Het wordt uitsluitend gefinancierd door de donaties op het {0}eigen account{1}. Overweeg ook te doneren:"
 
 msgid "Support Liberapay"
-msgstr ""
+msgstr "Ondersteun Liberapay"
 
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
 msgstr "Building Liberapay is een hoop werk, en er is nog steeds veel te doen, maar onze ontwikkelaars, vertalers en andere medewerkers zijn zwaar onderbetaald, en het vertragen van onze vooruitgang."
@@ -1545,8 +1556,8 @@ msgstr[1] "Je donaties zijn gefinancierd voor de komende {n} weken."
 #, python-brace-format
 msgid "Your donations in {currency} are only funded for another week."
 msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Je donaties in {currency} is nog een week gefinancierd."
+msgstr[1] "Je donaties in {currency} zijn nog voor {n} weken gefinancierd."
 
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr "Je hebt geld nodig in je portemonnee om je donaties te financieren."
@@ -1554,14 +1565,20 @@ msgstr "Je hebt geld nodig in je portemonnee om je donaties te financieren."
 #, python-brace-format
 msgid "You need to transfer money to your wallet to fund your donations in {currency}."
 msgstr ""
+"Je moet geld overmaken naar je portemonnee om je {currency} donaties te "
+"financieren."
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
 msgstr ""
+"Je donaties zijn gefinancierd door je inkomen: je ontvangt {income} en geeft "
+"{donations_amount} (per week)."
 
 #, python-brace-format
 msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
 msgstr ""
+"Je donaties in {currency} zijn gefinancierd door je inkomen: je ontvangt "
+"{income} en geeft {donations_amount} (per week)."
 
 msgid "Recipient"
 msgstr "Ontvanger"
@@ -2032,13 +2049,21 @@ msgstr "Je privacy instellingen zijn gewijzigd."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr ""
+"Bevestig de wijziging van je team's referentie valuta. De inkomensaandelen "
+"van de teamleden zal worden omgezet naar de nieuwe valuta op basis van de "
+"wisselkoers van vandaag en de leden zullen een notificatie ontvangen."
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr ""
+"Het is nog niet mogelijk om de valuta van een team te wijzigen dat al "
+"donaties ontvangt. Sorry."
 
 #, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr ""
+"Je ontvangt momenteel een equivalent van {money_amount} per week aan "
+"donaties in buitenlandse valuta. Deze donaties worden niet geconverteerd "
+"naar je hoofd valuta."
 
 msgid "Account"
 msgstr "Account"
@@ -2232,7 +2257,7 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "We staan niet toe om om geld toe te voegen aan je account wanneer je donaties al helemaal worden gedenkt door je inkomsten. Als dat een probleem voor je is, stuur dan een email naar support@liberapay.com en leg ons uit waarom."
 
 msgid "Please choose a payment method to add money:"
-msgstr ""
+msgstr "Kies een betaalmethode om geld toe te voegen:"
 
 msgid "Easy and instantaneous"
 msgstr "Gemakkelijk en direct"
@@ -2268,7 +2293,7 @@ msgid "You haven't set up any donations yet, once you do you'll be prompted to a
 msgstr "Je hebt nog geen donaties ingesteld. Zodra je dat doet wordt je gevraagd om geld toe te voegen aan je account."
 
 msgid "About Fees"
-msgstr ""
+msgstr "Over provisies"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
@@ -2649,6 +2674,8 @@ msgstr "In tegenstelling tot andere non-profitplatformen is Liberapay neutraal. 
 #, python-brace-format
 msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
 msgstr ""
+"Wij geven om internationalisering, onze dienst ondersteunt meerdere valuta's "
+"en is vertaald in vele talen ({link_open}je kunt bijdragen{link_close})."
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
@@ -2661,13 +2688,18 @@ msgid "Yes. Liberapay is based in France and complies with the European Union's 
 msgstr "Ja. Liberapay is gevestigd in Frankrijk en voldoet aan de Europese Unie financiële regelgeving. Onze betalingsverwerkers zijn gelicentieerd, en helpen ons om fraude, witwassen van geld en financiering van terrorisme te blokkeren."
 
 msgid "Which currencies are supported?"
-msgstr ""
+msgstr "Welke valuta's worden ondersteund?"
 
 msgid "We currently support two currencies: the euro (€) and the US dollar ($). We do not handle crypto-currencies like bitcoin."
 msgstr ""
+"We ondersteunen momenteel twee valuta's: de euro (€) en de Amerikaanse "
+"dollar ($). We ondersteunen geen cryptovaluta's zoals bitcoin."
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
+"We ondersteunen momenteel de meeste creditcard en betaalkaarten (VISA en "
+"MasterCard), bankoverschrijving en automatische incasso (SEPA). Meer opties "
+"zullen in de toekomst worden toegevoegd."
 
 msgid "What are the payment processing fees?"
 msgstr "Wat is de provisie?"
@@ -2822,6 +2854,8 @@ msgstr "Portemonnees"
 
 msgid "A user's money is held in their wallet. It's like an online bank account, but more limited."
 msgstr ""
+"Een persoon zijn geld wordt bewaard in zijn portemonnee. Het is als een "
+"online bankrekening, maar dan meer beperkt."
 
 msgid "Payday"
 msgstr "Betaaldag"
