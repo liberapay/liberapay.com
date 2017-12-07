@@ -181,6 +181,13 @@ msgstr "Ваше обещание делать пожертвование для
 msgid "Follow this link to view {0}'s profile:"
 msgstr "Перейдите по этой ссылке, чтобы просмотреть профиль {0}:"
 
+msgid "A team you're a member of has been modified"
+msgstr ""
+
+#, python-brace-format
+msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
+msgstr ""
+
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Вас пригласили в группу на Liberapay"
 
@@ -486,6 +493,9 @@ msgstr "К сожалению, перевод денег не удался. Св
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Операция запрещена, потому что ваш аккаунт деактивирован."
+
+msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1113,6 +1123,9 @@ msgstr "Выйти"
 msgid "Please input your email address:"
 msgstr "Введите ваш адрес электронной почты:"
 
+msgid "and select your preferred currency:"
+msgstr ""
+
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Создавая аккаунт Liberapay, вы принимаете наши {0}условия использования{1}."
@@ -1325,11 +1338,35 @@ msgstr "Если задать имя пользователя, то URL ваше
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Вы уже связали профиль Liberapay с другими сайтами? Не забудьте обновить эти ссылки!"
 
-msgid "Goal"
-msgstr "Цель"
+msgid "Currencies"
+msgstr ""
+
+msgid "Main currency"
+msgstr ""
+
+msgid "Other currencies"
+msgstr ""
+
+msgid "Team accounts are currently limited to a single currency."
+msgstr ""
+
+msgid "Do you want to accept or reject donations in currencies other than your main one?"
+msgstr ""
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr ""
+
+msgid "Accept all currencies"
+msgstr ""
+
+msgid "Reject foreign currencies"
+msgstr ""
 
 msgid "Save"
 msgstr "Сохранить"
+
+msgid "Goal"
+msgstr "Цель"
 
 msgid "Statement"
 msgstr "Описание"
@@ -1483,6 +1520,23 @@ msgstr "Управление адресами электронной почты"
 msgid "Events"
 msgstr "События"
 
+msgid "Liberapay needs your support"
+msgstr "Liberapay нужна ваша поддержка"
+
+#, python-brace-format
+msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
+msgstr "Liberapay не берёт комиссию с платежей и финансируется только за счёт пожертвований {0}на свой собственный аккаунт{1}, и мы будем рады вашей финансовой поддержке:"
+
+msgid "Support Liberapay"
+msgstr ""
+
+msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
+msgstr "Работать над Liberapay - тяжкий труд, и ещё многое предстоит сделать, но нашим разработчикам, переводчикам и другим участникам платят слишком мало, и это замедляет наш прогресс."
+
+#, python-brace-format
+msgid "You give {0} per week."
+msgstr "Вы отдаёте {0} в неделю."
+
 #, python-brace-format
 msgid "You have {0} in your Liberapay wallet."
 msgstr "В вашем кошельке Liberapay {0}."
@@ -1494,22 +1548,27 @@ msgstr[0] "Ваши пожертвования обеспечены деньга
 msgstr[1] "Ваши пожертвования обеспечены деньгами на {n} следующие недели."
 msgstr[2] "Ваши пожертвования обеспечены деньгами на {n} следующих недель."
 
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr "Вам нужно перевести деньги на кошелёк, чтобы обеспечить пожертвования деньгами."
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "Вы отдаёте {0} в неделю."
-
-msgid "Liberapay needs your support"
-msgstr "Liberapay нужна ваша поддержка"
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr ""
 
 #, python-brace-format
-msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
-msgstr "Liberapay не берёт комиссию с платежей и финансируется только за счёт пожертвований {0}на свой собственный аккаунт{1}, и мы будем рады вашей финансовой поддержке:"
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr ""
 
-msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr "Работать над Liberapay - тяжкий труд, и ещё многое предстоит сделать, но нашим разработчикам, переводчикам и другим участникам платят слишком мало, и это замедляет наш прогресс."
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr ""
 
 msgid "Recipient"
 msgstr "Получатель"
@@ -1980,6 +2039,16 @@ msgstr "Пароль был изменён."
 msgid "Your privacy settings have been changed."
 msgstr "Настройки приватности изменены."
 
+msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
+msgstr ""
+
+msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
+msgstr ""
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr ""
+
 msgid "Account"
 msgstr "Аккаунт"
 
@@ -2172,14 +2241,11 @@ msgstr "Нет транзакций для отображения."
 msgid "Adding Money"
 msgstr "Добавить деньги"
 
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Вы ещё не настроили пожертвования. Как только вы это сделаете, вас попросят добавить деньги на аккаунт."
-
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Вы не можете добавлять деньги, если ваши пожертвования полностью обеспечиваются за счёт пожертвований, которые делают вам. Если это проблема для вас, пожалуйста, отправьте письмо на support@liberapay.com и объясните, почему."
 
-msgid "Please choose a payment method:"
-msgstr "Выберите способ оплаты:"
+msgid "Please choose a payment method to add money:"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "Простой и молниеносный"
@@ -2211,15 +2277,18 @@ msgstr "Лучший вариант для регулярных платежей
 msgid "Fee: {0}"
 msgstr "Комиссия: {0}"
 
+msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
+msgstr "Вы ещё не настроили пожертвования. Как только вы это сделаете, вас попросят добавить деньги на аккаунт."
+
+msgid "About Fees"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "Комиссии взимаются нашими платёжными системами, Liberapay финансируется только за счёт пожертвований на {0}её аккаунт{1}."
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr "¹ В случае, если ваш банк также не взимает комиссию за перевод. Мы не знаем и не контролируем это."
-
-msgid "Go back"
-msgstr "Назад"
 
 msgid "An unknown error occurred."
 msgstr "Возникла неизвестная ошибка."
@@ -2268,6 +2337,9 @@ msgstr "Вы отключили часть или все уведомления 
 
 msgid "Change your email settings"
 msgstr "Изменить настройки email"
+
+msgid "Go back"
+msgstr "Назад"
 
 msgid "Request in progress, please wait…"
 msgstr "Запрос обрабатывается, пожалуйста, подождите…"
@@ -2591,6 +2663,10 @@ msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create a
 msgstr "В отличие от других некоммерческих сайтов, Liberapay нейтрален. Вы можете создать аккаунт, не ожидая подтверждения от нас, и мы не выгоним вас, если вы не будете нарушать закон или условия использования."
 
 #, python-brace-format
+msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
+msgstr ""
+
+#, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
 msgstr "Если вам нужно больше деталей, парни из Snowdrift.coop собрали {0}большой список{1} сайтов краудфандинга и отличий между ними."
 
@@ -2599,6 +2675,15 @@ msgstr "Соблюдает ли Liberapay финансовый регламен�
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "Да. Liberapay находится во Франции и подчиняется финансовому регламенту Евросоюза. Все наши платёжные системы лицензирован должным образом, они помогают нам бороться с мошеничеством и финансированием терроризма."
+
+msgid "Which currencies are supported?"
+msgstr ""
+
+msgid "We currently support two currencies: the euro (€) and the US dollar ($). We do not handle crypto-currencies like bitcoin."
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "Сколько составляет комиссия за перевод?"
@@ -2751,8 +2836,8 @@ msgstr "Мы гарантируем, что средства, которые в�
 msgid "Wallets"
 msgstr "Кошельки"
 
-msgid "A user's money is held in their wallets. We currently only support one wallet per user, and only one currency (the euro) in that wallet."
-msgstr "Деньги пользователя хранятся в его кошельке. В данный момент мы поддерживаем только один кошелёк на пользователя, и только одну валюту (евро) в этом кошельке."
+msgid "A user's money is held in their wallet. It's like an online bank account, but more limited."
+msgstr ""
 
 msgid "Payday"
 msgstr "День выплат"

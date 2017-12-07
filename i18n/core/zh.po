@@ -179,6 +179,13 @@ msgstr "你每週給{1} 捐款 {0} 的保證現在開始生效了，因為他們
 msgid "Follow this link to view {0}'s profile:"
 msgstr "依循這個連結可以檢視 {0} 的個人介紹頁面："
 
+msgid "A team you're a member of has been modified"
+msgstr ""
+
+#, python-brace-format
+msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
+msgstr ""
+
 msgid "You have been invited to join a team on Liberapay"
 msgstr "你被邀請加入Liberapay上面的一個團隊"
 
@@ -484,6 +491,9 @@ msgstr "這筆捐款的轉帳失敗了，如果問題一直無法解決，請聯
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "因為你的帳戶目前被停權，所以無法進行這個動作。"
+
+msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1103,6 +1113,9 @@ msgstr "登出"
 msgid "Please input your email address:"
 msgstr "請輸入電子郵件："
 
+msgid "and select your preferred currency:"
+msgstr ""
+
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "建立 Liberapay 帳戶你必須同意我們的 {0} 服務條款 {1}。"
@@ -1315,11 +1328,35 @@ msgstr "設定用戶名稱好讓你的介紹頁網址更為清楚。"
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "你是否從其它的網站連到自己的Liberapay介紹頁？確認更新了這些連結！"
 
-msgid "Goal"
-msgstr "目標"
+msgid "Currencies"
+msgstr ""
+
+msgid "Main currency"
+msgstr ""
+
+msgid "Other currencies"
+msgstr ""
+
+msgid "Team accounts are currently limited to a single currency."
+msgstr ""
+
+msgid "Do you want to accept or reject donations in currencies other than your main one?"
+msgstr ""
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr ""
+
+msgid "Accept all currencies"
+msgstr ""
+
+msgid "Reject foreign currencies"
+msgstr ""
 
 msgid "Save"
 msgstr "儲存"
+
+msgid "Goal"
+msgstr "目標"
 
 msgid "Statement"
 msgstr "聲明"
@@ -1471,6 +1508,23 @@ msgstr "管理你的電郵地址"
 msgid "Events"
 msgstr "事件"
 
+msgid "Liberapay needs your support"
+msgstr "Liberapay 需要大家的支持"
+
+#, python-brace-format
+msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
+msgstr "Liberapay 不會滅扣捐款，它只依靠 {0}自身帳戶{1} 的捐款，請考慮分配小部份捐款："
+
+msgid "Support Liberapay"
+msgstr ""
+
+msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
+msgstr "建置Liberapay要花許多心力，還有許多未竟事宜，但我們的開發人員，翻譯者以及其它的貢獻者卻是幾乎未得到任何報償，這也讓我們的進展慢了下來。"
+
+#, python-brace-format
+msgid "You give {0} per week."
+msgstr "你每週給予 {0} 。"
+
 #, python-brace-format
 msgid "You have {0} in your Liberapay wallet."
 msgstr "你的 Liberapay錢包裏有 {0} 。"
@@ -1480,22 +1534,25 @@ msgid "Your donations are only funded for another week."
 msgid_plural "Your donations are funded for another {n} weeks."
 msgstr[0] "你的捐款將持續{n}週。"
 
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] ""
+
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr "你需要轉帳到你的電子錢包以资助你的捐款。"
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "你每週給予 {0} 。"
-
-msgid "Liberapay needs your support"
-msgstr "Liberapay 需要大家的支持"
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr ""
 
 #, python-brace-format
-msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
-msgstr "Liberapay 不會滅扣捐款，它只依靠 {0}自身帳戶{1} 的捐款，請考慮分配小部份捐款："
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr ""
 
-msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr "建置Liberapay要花許多心力，還有許多未竟事宜，但我們的開發人員，翻譯者以及其它的貢獻者卻是幾乎未得到任何報償，這也讓我們的進展慢了下來。"
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr ""
 
 msgid "Recipient"
 msgstr "受贈者"
@@ -1962,6 +2019,16 @@ msgstr "你的密碼已作變更。"
 msgid "Your privacy settings have been changed."
 msgstr "你的隱私設定已做變更。"
 
+msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
+msgstr ""
+
+msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
+msgstr ""
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr ""
+
 msgid "Account"
 msgstr "帳戶"
 
@@ -2146,14 +2213,11 @@ msgstr "無交易可顯示。"
 msgid "Adding Money"
 msgstr "充值"
 
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "你尚未設定任何捐贈，一旦你進行了捐款，你就會被要求在帳戶裏儲值金額。"
-
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "在給你的捐助被用來捐助他人的情況下我們不允許你向你的帳號充值。若有困難請聯繫support@liberapay.com解釋原因。"
 
-msgid "Please choose a payment method:"
-msgstr "請選擇一種付款方式："
+msgid "Please choose a payment method to add money:"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "簡單與即時"
@@ -2185,15 +2249,18 @@ msgstr "定期付款的最佳方案"
 msgid "Fee: {0}"
 msgstr "費用：{0}"
 
+msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
+msgstr "你尚未設定任何捐贈，一旦你進行了捐款，你就會被要求在帳戶裏儲值金額。"
+
+msgid "About Fees"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "這些手續費是來自我們付款處理器, Liberapay 本身只靠 {0}自身帳戶{1}的捐款。"
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr "¹ 除非你的銀行對轉帳收費，我們無法控制或查看你的付款。"
-
-msgid "Go back"
-msgstr "返回"
 
 msgid "An unknown error occurred."
 msgstr "發生未知的錯誤。"
@@ -2242,6 +2309,9 @@ msgstr "你已取消了所有關於銀行滙款的電子郵件通知。"
 
 msgid "Change your email settings"
 msgstr "改變電子郵件設定"
+
+msgid "Go back"
+msgstr "返回"
 
 msgid "Request in progress, please wait…"
 msgstr "請求正在處理中，請稍待…"
@@ -2559,6 +2629,10 @@ msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create a
 msgstr "不像其它的非營利平台，Liberapay 是中立角色。你可以建立帳戶而不須經過我們的同意審查，除非你違背了法律或本站服務條款，我們不會把你踢除。"
 
 #, python-brace-format
+msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
+msgstr ""
+
+#, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
 msgstr "若你需要更多詳情，Snowdrift.coop的工作人員編寫了{0}一個完整的眾資平台列表{1}和它們之間的區別。"
 
@@ -2567,6 +2641,15 @@ msgstr "Liberapay 是否遵守財務規範呢？"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "是的，Liberapay 位於法國須要遵守歐盟的財務規範。我們的付款處理處皆有取得合適的許可執照，它們也會協助我們阻斷詐欺、洗錢或恐怖組織的金流。"
+
+msgid "Which currencies are supported?"
+msgstr ""
+
+msgid "We currently support two currencies: the euro (€) and the US dollar ($). We do not handle crypto-currencies like bitcoin."
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "什麼是付款處理費用？"
@@ -2719,8 +2802,8 @@ msgstr "我們保證你存放的基金在我們的監管下不會因為破產而
 msgid "Wallets"
 msgstr "電子錢包"
 
-msgid "A user's money is held in their wallets. We currently only support one wallet per user, and only one currency (the euro) in that wallet."
-msgstr "用戶的錢是保管在他們的電子錢包裏。我們目前只支援一名用戶有一個錢包，其只接受歐元。"
+msgid "A user's money is held in their wallet. It's like an online bank account, but more limited."
+msgstr ""
 
 msgid "Payday"
 msgstr "捐款日"

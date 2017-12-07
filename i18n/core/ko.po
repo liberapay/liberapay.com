@@ -179,6 +179,13 @@ msgstr "{1} 님이 Liberapay에 가입하셨으므로 {1}님에게 {0}만큼을 
 msgid "Follow this link to view {0}'s profile:"
 msgstr "링크를 통해 {0} 님의 프로필을 확인하세요:"
 
+msgid "A team you're a member of has been modified"
+msgstr ""
+
+#, python-brace-format
+msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
+msgstr ""
+
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Liberapay 내의 팀에 초대되었습니다"
 
@@ -484,6 +491,9 @@ msgstr "자금 이체가 실패하였습니다. 문제가 지속되면 support@l
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "계정이 현재 정지되어 있기 때문에 이 행위를 할 수 없습니다."
+
+msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1103,6 +1113,9 @@ msgstr "로그아웃"
 msgid "Please input your email address:"
 msgstr "이메일 계정을 입력해 주세요:"
 
+msgid "and select your preferred currency:"
+msgstr ""
+
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Liberapay 계정을 생성함으로써 {0}이용 약관{1}에 동의하는 것입니다."
@@ -1315,11 +1328,35 @@ msgstr "계정명을 선택하면 프로필의 URL이 더 멋져 보이게 합�
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "혹시 다른 사이트에서 Liberapay 프로필 페이지를 링크하신 적이 있으신가요? 그 링크를 업데이트해주세요!"
 
-msgid "Goal"
-msgstr "목표"
+msgid "Currencies"
+msgstr ""
+
+msgid "Main currency"
+msgstr ""
+
+msgid "Other currencies"
+msgstr ""
+
+msgid "Team accounts are currently limited to a single currency."
+msgstr ""
+
+msgid "Do you want to accept or reject donations in currencies other than your main one?"
+msgstr ""
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr ""
+
+msgid "Accept all currencies"
+msgstr ""
+
+msgid "Reject foreign currencies"
+msgstr ""
 
 msgid "Save"
 msgstr "저장"
+
+msgid "Goal"
+msgstr "목표"
 
 msgid "Statement"
 msgstr "성명 (statement)"
@@ -1471,6 +1508,23 @@ msgstr "이메일 주소 관리"
 msgid "Events"
 msgstr "이벤트"
 
+msgid "Liberapay needs your support"
+msgstr "Liberapay는 당신의 도움이 필요합니다"
+
+#, python-brace-format
+msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
+msgstr "Liberapay는 지불처리에서 한 푼도 가져가지 않으며, {0}Liberapay의 Liberapay 계정{1}에서만 자금을 충당합니다. 자금 충당을 도와주세요:"
+
+msgid "Support Liberapay"
+msgstr ""
+
+msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
+msgstr "Liberapay 플랫폼을 만드는 작업은 매우 많은 노동력을 필요로 하며 여전히 많은 할 일들이 남아있습니다만 저희의 개발자, 번역자, 그 외 기여자들은 자금이 많이 부족하며 이는 저희의 작업을 지연시키고 있습니다."
+
+#, python-brace-format
+msgid "You give {0} per week."
+msgstr "매주 {0} 만큼을 기부합니다."
+
 #, python-brace-format
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Liberapay 지갑에 {0} 만큼이 있습니다."
@@ -1480,22 +1534,25 @@ msgid "Your donations are only funded for another week."
 msgid_plural "Your donations are funded for another {n} weeks."
 msgstr[0] "다음 {n} 주 동안 기부금을 낼 만큼의 돈이 있습니다."
 
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] ""
+
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr "기부금을 내기 위해서 Liberapay 지갑으로 돈을 이체해야 합니다."
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "매주 {0} 만큼을 기부합니다."
-
-msgid "Liberapay needs your support"
-msgstr "Liberapay는 당신의 도움이 필요합니다"
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr ""
 
 #, python-brace-format
-msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
-msgstr "Liberapay는 지불처리에서 한 푼도 가져가지 않으며, {0}Liberapay의 Liberapay 계정{1}에서만 자금을 충당합니다. 자금 충당을 도와주세요:"
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr ""
 
-msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr "Liberapay 플랫폼을 만드는 작업은 매우 많은 노동력을 필요로 하며 여전히 많은 할 일들이 남아있습니다만 저희의 개발자, 번역자, 그 외 기여자들은 자금이 많이 부족하며 이는 저희의 작업을 지연시키고 있습니다."
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr ""
 
 msgid "Recipient"
 msgstr "받는이"
@@ -1962,6 +2019,16 @@ msgstr "비밀번호가 변경되었습니다."
 msgid "Your privacy settings have been changed."
 msgstr "프라이버시 설정이 변경되었습니다."
 
+msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
+msgstr ""
+
+msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
+msgstr ""
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr ""
+
 msgid "Account"
 msgstr "계정"
 
@@ -2146,14 +2213,11 @@ msgstr "보여줄 거래가 없습니다."
 msgid "Adding Money"
 msgstr "자금 추가"
 
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "기여를 설정하지 않았습니다. 기여를 설정하게 되면 계좌에 자금을 추가하기 위한 옵션이 추가됩니다."
-
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "당신의 기부금으로 기부할 금액을 전액 충당할 수 있을 때는 추가 입금을 할 수 없습니다. 문제가 있다면 support@liberapay.com에 이유를 설명해 주세요."
 
-msgid "Please choose a payment method:"
-msgstr "결제 방식을 선택해 주세요:"
+msgid "Please choose a payment method to add money:"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "쉽고 즉각적입니다"
@@ -2185,15 +2249,18 @@ msgstr "정기 지불에 가장 좋음"
 msgid "Fee: {0}"
 msgstr "수수료: {0}"
 
+msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
+msgstr "기여를 설정하지 않았습니다. 기여를 설정하게 되면 계좌에 자금을 추가하기 위한 옵션이 추가됩니다."
+
+msgid "About Fees"
+msgstr ""
+
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "수수료는 결제 대행업체에 의해 부과되며, Liberapay는 {0}Liberapay의 계좌에{1} 기부된 기부액에 의해서만 운영됩니다."
 
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
 msgstr "¹ 은행에서 이체에 대해 과금하지 않을 경우. 이러한 수수료에 대한 통제권이나 지식이 없습니다."
-
-msgid "Go back"
-msgstr "뒤로 가기"
 
 msgid "An unknown error occurred."
 msgstr "알 수 없는 오류가 발생했습니다."
@@ -2242,6 +2309,9 @@ msgstr "은행 계좌 이체에 대한 이메일 알림을 비활성화한 상�
 
 msgid "Change your email settings"
 msgstr "이메일 설정 변경하기"
+
+msgid "Go back"
+msgstr "뒤로 가기"
 
 msgid "Request in progress, please wait…"
 msgstr "요청 진행 중, 잠시만 기다려 주십시오…"
@@ -2561,6 +2631,10 @@ msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create a
 msgstr "다른 비영리 플랫폼과도 달리 Liberapay는 중립적입니다. 계정 생성을 승인받을 필요 없이 계정을 생성할 수 있고, 법률 또는 이용 약관을 위반하지 않는 한 사용자를 추방하지 않습니다."
 
 #, python-brace-format
+msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
+msgstr ""
+
+#, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
 msgstr ""
 
@@ -2569,6 +2643,15 @@ msgstr "Liberapay는 금융 제재를 존중합니까?"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
 msgstr "네, Liberapay는 프랑스에서 만들어졌으며 유럽연합의 금융제재를 따릅니다. 지불 대행자는 모든 허가를 취득하였으며 사기, 돈세탁, 테러와 관련된 자금 지원을 차단하는 데 도움을 주고 있습니다."
+
+msgid "Which currencies are supported?"
+msgstr ""
+
+msgid "We currently support two currencies: the euro (€) and the US dollar ($). We do not handle crypto-currencies like bitcoin."
+msgstr ""
+
+msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "지불 대행자 수수료가 뭡니까?"
@@ -2721,8 +2804,8 @@ msgstr "저희의 보호 하에 있는 자금은 저희 또는 저희의 자금�
 msgid "Wallets"
 msgstr "지갑"
 
-msgid "A user's money is held in their wallets. We currently only support one wallet per user, and only one currency (the euro) in that wallet."
-msgstr "사용자의 자금은 지갑에 보관됩니다. 현재 한 사용자당 하나의 지갑만을 가질 수 있으며, 한 가지 화폐 (유로)만 지원합니다."
+msgid "A user's money is held in their wallet. It's like an online bank account, but more limited."
+msgstr ""
 
 msgid "Payday"
 msgstr "지불일"
