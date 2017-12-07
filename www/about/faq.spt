@@ -47,6 +47,13 @@ title = _("Frequently Asked Questions")
                  "can create an account without having to wait for us to "
                  "approve it, and we won't kick you out unless you break the "
                  "law or the terms of service.") }}</li>
+        <li>{{ _(
+            "We care about internationalization, our service supports multiple "
+            "currencies and is translated into many languages ({link_open}you "
+            "can contribute{link_close}).",
+            link_open='<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
+            link_close='</a>'|safe
+        ) }}</li>
     </ol>
     <p>{{ _("If you'd like more details, the Snowdrift.coop folks have "
             "compiled {0}a big list{1} of crowdfunding platforms and the "
@@ -63,16 +70,23 @@ title = _("Frequently Asked Questions")
         "and they help us block fraud, money laundering, and terrorism financing."
     ) }}</dd>
 
-    {{ dt(_("What payment methods are available?"), 'payment-methods') }}
+    {{ dt(_("Which currencies are supported?"), 'currencies') }}
 
     <dd>{{ _(
-        "We currently support most credit and debit cards (VISA and MasterCard), as "
-        "well as bank wires (in euros) and direct debits (SEPA only). More options "
-        "will be added in the future."
+        "We currently support two currencies: the euro (€) and the US dollar ($). "
+        "We do not handle crypto-currencies like bitcoin."
     ) }}</dd>
 
 </dl>
 <dl class="col-md-6">
+
+    {{ dt(_("What payment methods are available?"), 'payment-methods') }}
+
+    <dd>{{ _(
+        "We currently support most credit and debit cards (VISA and MasterCard), as "
+        "well as bank wires and direct debits (SEPA only). More options "
+        "will be added in the future."
+    ) }}</dd>
 
     {{ dt(_("What are the payment processing fees?"), 'fees') }}
 

@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal, ROUND_DOWN, ROUND_UP
 
+from mangopay.exceptions import CurrencyMismatch
 from mangopay.utils import Money
 import requests
 import xmltodict
@@ -16,6 +17,14 @@ def _convert(self, c):
     amount = self.amount * website.currency_exchange_rates[(self.currency, c)]
     return Money(amount.quantize(D_CENT), c)
 
+def _sum(cls, amounts, currency):
+    a = ZERO[currency].amount
+    for m in amounts:
+        if m.currency != currency:
+            raise CurrencyMismatch(m.currency, currency, 'sum')
+        a += m.amount
+    return cls(a, currency)
+
 
 Money.__nonzero__ = Money.__bool__
 Money.__eq__ = lambda a, b: a.__dict__ == b.__dict__ if isinstance(b, Money) else a.amount == b
@@ -27,6 +36,7 @@ Money.convert = _convert
 Money.int = lambda m: Money(int(m.amount * 100), m.currency)
 Money.round_down = lambda m: Money(m.amount.quantize(D_CENT, rounding=ROUND_DOWN), m.currency)
 Money.round_up = lambda m: Money(m.amount.quantize(D_CENT, rounding=ROUND_UP), m.currency)
+Money.sum = classmethod(_sum)
 Money.zero = lambda m: Money(D_ZERO, m.currency)
 
 

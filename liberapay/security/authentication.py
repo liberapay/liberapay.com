@@ -6,7 +6,7 @@ from six.moves.urllib.parse import urlencode
 
 from pando import Response
 
-from liberapay.constants import SESSION, SESSION_TIMEOUT
+from liberapay.constants import CURRENCIES, SESSION, SESSION_TIMEOUT
 from liberapay.exceptions import (
     LoginRequired, TooManyLoginEmails, TooManySignUps
 )
@@ -91,6 +91,9 @@ def sign_in_with_form_data(body, state):
         email = body.pop('sign-in.email')
         if not email:
             raise response.error(400, 'email is required')
+        currency = body.pop('sign-in.currency', state.get('currency'))
+        if currency and currency not in CURRENCIES:
+            raise response.error(400, "`currency` value '%s' is invalid of non-supported" % currency)
         src_addr = state['request'].source
         website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-net', get_ip_net(src_addr), TooManySignUps)
@@ -98,7 +101,7 @@ def sign_in_with_form_data(body, state):
         with website.db.get_cursor() as c:
             p = Participant.make_active(
                 kind, body.pop('sign-in.username', None),
-                body.pop('sign-in.password', None), cursor=c,
+                body.pop('sign-in.password', None), currency=currency, cursor=c,
             )
             p.set_email_lang(state['request'].headers.get(b'Accept-Language'), cursor=c)
             p.add_email(email, cursor=c)

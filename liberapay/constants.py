@@ -57,7 +57,7 @@ AVATAR_SOURCES = 'libravatar bitbucket facebook github google mastodon twitter'.
 
 BIRTHDAY = date(2015, 5, 22)
 
-CURRENCIES = set(('EUR', 'USD'))
+CURRENCIES = ('EUR', 'USD')
 
 D_CENT = Decimal('0.01')
 D_INF = Decimal('inf')
@@ -247,6 +247,7 @@ QUARANTINE = timedelta(weeks=4)
 RATE_LIMITS = {
     'add_email.source': (5, 60*60*24),  # 5 per day
     'add_email.target': (2, 60*60*24),  # 2 per day
+    'change_currency': (4, 60*60*24*7),  # 4 per week
     'change_username': (7, 60*60*24*7),  # 7 per week
     'log-in.email': (10, 60*60*24),  # 10 per day
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day

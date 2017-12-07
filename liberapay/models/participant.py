@@ -38,6 +38,7 @@ from liberapay.exceptions import (
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
+    TooManyCurrencyChanges,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
     TooManyPasswordLogins,
@@ -105,7 +106,7 @@ class Participant(Model, MixinTeam):
             """.format(x), vals)
 
     @classmethod
-    def make_active(cls, kind, username=None, password=None, cursor=None):
+    def make_active(cls, kind, username=None, password=None, currency=None, cursor=None):
         """Return a new active participant.
         """
         now = utcnow()
@@ -113,6 +114,7 @@ class Participant(Model, MixinTeam):
             'kind': kind,
             'status': 'active',
             'join_time': now,
+            'main_currency': currency or 'EUR',
             'accept_all_currencies': False,
         }
         if password:
@@ -130,7 +132,7 @@ class Participant(Model, MixinTeam):
                 p.change_username(username, cursor=c)
         return p
 
-    def make_team(self, name, email=None, email_lang=None, throttle_takes=True):
+    def make_team(self, name, currency, email=None, email_lang=None, throttle_takes=True):
         if email and not self.email:
             email_is_attached_to_self = self.db.one("""
                 SELECT true AS a
@@ -143,10 +145,10 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as c:
             t = c.one("""
                 INSERT INTO participants
-                            (kind, status, join_time, throttle_takes)
-                     VALUES ('group', 'active', now(), %s)
+                            (kind, status, join_time, throttle_takes, main_currency)
+                     VALUES ('group', 'active', now(), %s, %s)
                   RETURNING participants.*::participants
-            """, (throttle_takes,))
+            """, (throttle_takes, currency))
             t.change_username(name, cursor=c)
             t.add_member(self, c)
             if email:
@@ -481,8 +483,16 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips = self.get_giving_for_profile()[0]
-        tips = [t for t in tips if t.is_identified and not t.is_suspended]
+        tips = [NS(r._asdict()) for r in self.db.all("""
+            SELECT amount, tippee, t.ctime, p.kind
+              FROM current_tips t
+              JOIN participants p ON p.id = t.tippee
+             WHERE tipper = %s
+               AND p.status = 'active'
+               AND (p.mangopay_user_id IS NOT NULL OR kind = 'group')
+               AND p.is_suspended IS NOT TRUE
+        """, (self.id,))]
+
         for tip in tips:
             if tip.kind == 'group':
                 tip.team = Participant.from_id(tip.tippee)
@@ -490,7 +500,7 @@ class Participant(Model, MixinTeam):
                     t for t in tip.team.get_current_takes(cursor=cursor)
                     if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
-                tip.total_takes = sum(t['amount'] for t in tip.takes)
+                tip.total_takes = Money.sum((t['amount'] for t in tip.takes), tip.team.main_currency)
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
         transfers = []
 
@@ -498,16 +508,18 @@ class Participant(Model, MixinTeam):
             if wallet.balance == 0:
                 continue
             currency = wallet.balance.currency
-            tips_in_this_currency = [t for t in tips if t.amount.currency == currency]
-            total = sum(t.amount for t in tips_in_this_currency) or ZERO[currency]
-            transfers = []
+            tips_in_this_currency = sorted(
+                [t for t in tips if t.amount.currency == currency],
+                key=lambda t: (t.amount, t.ctime), reverse=True
+            )
+            total = Money.sum((t.amount for t in tips_in_this_currency), currency)
             distributed = ZERO[currency]
             initial_balance = wallet.balance
 
             if not total:
                 continue
 
-            for tip in tips:
+            for tip in tips_in_this_currency:
                 rate = tip.amount / total
                 pro_rated = (initial_balance * rate).round_down()
                 if pro_rated == 0:
@@ -1351,6 +1363,58 @@ class Participant(Model, MixinTeam):
         return True
 
 
+    # Currencies
+    # ==========
+
+    def change_main_currency(self, new_currency, recorder):
+        old_currency = self.main_currency
+        p_id = self.id
+        recorder_id = recorder.id
+        with self.db.get_cursor() as cursor:
+            if not recorder.is_admin:
+                cursor.hit_rate_limit('change_currency', self.id, TooManyCurrencyChanges)
+            if self.kind == 'group':
+                cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            r = cursor.one("""
+                UPDATE participants
+                   SET main_currency = %(new_currency)s
+                     , balance = convert(balance, %(new_currency)s)
+                     , goal = convert(goal, %(new_currency)s)
+                     , giving = convert(giving, %(new_currency)s)
+                     , receiving = convert(receiving, %(new_currency)s)
+                     , taking = convert(taking, %(new_currency)s)
+                     , leftover = zero(%(new_currency)s::currency)
+                 WHERE id = %(p_id)s
+                   AND main_currency = %(old_currency)s
+             RETURNING id
+            """, locals())
+            if not r:
+                return
+            self.set_attributes(main_currency=new_currency)
+            if self.kind == 'group':
+                members = cursor.all("""
+                    INSERT INTO takes
+                                (ctime, member, team, amount, actual_amount, recorder)
+                         SELECT t.ctime, t.member, t.team
+                              , convert(amount, %(new_currency)s)
+                              , zero(%(new_currency)s::currency)
+                              , %(recorder_id)s
+                           FROM current_takes t
+                          WHERE t.team = %(p_id)s
+                      RETURNING (SELECT p FROM participants p WHERE p.id = takes.member)
+                """, locals())
+                self.recompute_actual_takes(cursor)
+                for m in members:
+                    m.notify(
+                        'team_currency_change', email=False, web=True,
+                        team_name=self.username, old_currency=old_currency,
+                        new_currency=new_currency, changed_by=recorder.username,
+                    )
+            self.add_event(cursor, 'change_main_currency', dict(
+                new_currency=new_currency, old_currency=old_currency
+            ), recorder=recorder_id)
+
+
     # More Random Stuff
     # =================
 
@@ -1790,11 +1854,12 @@ class Participant(Model, MixinTeam):
         return tip_amounts, npatrons, contributed
 
 
-    def get_giving_for_profile(self):
+    def get_giving_details(self):
+        """Get details of current outgoing donations and pledges.
+        """
 
         tips = [NS(r._asdict()) for r in self.db.all("""\
 
-            SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
                      , period
@@ -1814,13 +1879,11 @@ class Participant(Model, MixinTeam):
                    AND p.status = 'active'
               ORDER BY tippee
                      , t.mtime DESC
-            ) AS foo
 
         """, (self.id,))]
 
         pledges = [NS(r._asdict()) for r in self.db.all("""\
 
-            SELECT * FROM (
                 SELECT DISTINCT ON (tippee)
                        amount
                      , period
@@ -1836,27 +1899,10 @@ class Participant(Model, MixinTeam):
                    AND p.status = 'stub'
               ORDER BY tippee
                      , t.mtime DESC
-            ) AS foo
 
         """, (self.id,))]
 
-        for t in tips:
-            t.converted_amount = t.amount.convert(self.main_currency)
-        for t in pledges:
-            t.converted_amount = t.amount.convert(self.main_currency)
-        tips = sorted(tips, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
-        pledges = sorted(pledges, key=lambda t: (t.converted_amount, t.ctime), reverse=True)
-
-        total = sum([t.converted_amount for t in tips])
-        if not total:
-            # If tips is an empty list, total is int 0. We want a Money amount.
-            total = ZERO[self.main_currency]
-
-        pledges_total = sum([t.converted_amount for t in pledges])
-        if not pledges_total:
-            pledges_total = ZERO[self.main_currency]
-
-        return tips, total, pledges, pledges_total
+        return tips, pledges
 
     def get_tips_receiving(self):
         return self.db.all("""
@@ -1865,29 +1911,6 @@ class Participant(Model, MixinTeam):
              WHERE tippee=%s
                AND amount>0
         """, (self.id,))
-
-    def get_current_tips(self):
-        """Get the tips this participant is currently sending to others.
-        """
-        return self.db.all("""
-            SELECT * FROM (
-                SELECT DISTINCT ON (tippee)
-                       amount
-                     , period
-                     , periodic_amount
-                     , tippee
-                     , t.ctime
-                     , p.username
-                     , p.join_time
-                  FROM tips t
-                  JOIN participants p ON p.id = t.tippee
-                 WHERE tipper = %s
-              ORDER BY tippee
-                     , t.mtime DESC
-            ) AS foo
-            ORDER BY amount DESC
-                   , tippee
-        """, (self.id,), back_as=dict)
 
 
     def get_age_in_seconds(self):

@@ -12,7 +12,8 @@
 
 <h2 class="banderole success">{{ _("Create an account") }}</h2>
 <form action="" method="POST">
-    % include "templates/sign-up-form.html"
+    % from "templates/sign-up-form.html" import sign_up_form with context
+    {{ sign_up_form(select_currency=False) }}
 </form>
 
 <h2 class="banderole success">{{ _("Use an existing account") }}</h2>

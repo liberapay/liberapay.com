@@ -285,3 +285,12 @@ class AccountSuspended(LazyResponseXXX):
             "You are not allowed to do this because your account is currently "
             "suspended."
         )
+
+
+class TooManyCurrencyChanges(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You've already changed your main currency recently, please retry "
+            "later (e.g. in a week) or contact support@liberapay.com."
+        )

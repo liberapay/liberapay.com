@@ -882,9 +882,12 @@ span.help-title {
         & > .radio-label {
             padding: 10px 15px;
         }
-        & > .radio-label:hover, & > input[type="radio"]:checked + .radio-label {
+        & > .radio-label:hover {
             color: $list-group-link-hover-color;
             background-color: $list-group-hover-bg;
+        }
+        & > input[type="radio"]:checked + .radio-label {
+            background-color: #fafafa;
         }
     }
 }
@@ -894,13 +897,26 @@ span.help-title {
         display: none;
     }
     & > .btn {
+        overflow: hidden;
         padding: 0;
+        &:hover {
+            background-color: #fafafa;
+        }
     }
     .btn-text {
         padding: 6px 12px;
+        &:before {
+            content: '⚪ ';
+            color: #ddd;
+            margin-left: -3px;
+        }
     }
-    .btn-text:hover, input[type="radio"]:checked + .btn-text {
-        background-color: #eee;
+    input[type="radio"]:checked + .btn-text {
+        background-color: #f8f4ff;
+        &:before {
+            content: '⚫ ';
+            color: darken(#f8f4ff, 15%);
+        }
     }
 }
 

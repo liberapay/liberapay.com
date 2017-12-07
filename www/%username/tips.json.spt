@@ -1,5 +1,3 @@
-from itertools import chain
-
 from liberapay.utils import get_participant
 
 [-----------------------]
@@ -28,24 +26,45 @@ if request.method == 'POST':
         one['amount'] = amount
         out.append(one)
 
-    if request.qs.get('also_prune', 'false').lower() in ('true', '1', 'yes'):
-        old_tips = participant.get_current_tips()
-        for tip in old_tips:
-            if tip['username'] not in seen:
-                participant.set_tip_to(tip['username'], tip['amount'].zero(), tip['period'])
-
 else:
-    tips, total, pledges, pledges_total = participant.get_giving_for_profile()
-
+    tips, pledges = participant.get_giving_details()
     out = []
-    for tip in chain(tips, pledges):
+    for tip in tips:
         if tip.amount == 0:
             continue
-        out.append({ "username": tip.username
-                   , "amount": tip.amount
-                   , "period": str(tip.period)
-                   , "periodic_amount": tip.periodic_amount
-                    })
+        out.append({
+            "tippee": {
+                "id": tip.tippee,
+                "username": tip.username,
+                "kind": tip.kind,
+                "status": "active",
+            },
+            "amount": tip.amount,
+            "period": tip.period,
+            "periodic_amount": tip.periodic_amount,
+            "ctime": tip.ctime,
+            "mtime": tip.mtime,
+        })
+    for tip in pledges:
+        if tip.amount == 0:
+            continue
+        out.append({
+            "tippee": {
+                "id": tip.tippee,
+                "elsewhere": {
+                    "platform": tip.e_account.platform,
+                    "user_id": tip.e_account.user_id,
+                    "user_name": tip.e_account.user_name,
+                    "display_name": tip.e_account.display_name,
+                },
+                "status": "stub",
+            },
+            "amount": tip.amount,
+            "period": tip.period,
+            "periodic_amount": tip.periodic_amount,
+            "ctime": tip.ctime,
+            "mtime": tip.mtime,
+        })
 
 [---] application/json via json_dump
 out

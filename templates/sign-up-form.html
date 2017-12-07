@@ -1,3 +1,4 @@
+% macro sign_up_form(select_currency=True)
 % include "templates/form-repost.html"
 
 <p>{{ _("Please input your email address:") }}</p>
@@ -7,6 +8,14 @@
        placeholder="{{ _('Email') }}" />
 </div>
 
+% if select_currency
+<p>{{ _("and select your preferred currency:") }}</p>
+<div class="form-group">
+% from "templates/currencies.html" import currency_buttons with context
+{{ currency_buttons('sign-in.currency', currency) }}
+</div>
+% endif
+
 <button class="btn btn-default">{{ _("Go") }}</button>
 
 <br><br>
@@ -14,3 +23,4 @@
     "By creating a Liberapay account you accept our {0}Terms of Service{1}.",
     '<a href="/about/legal#terms">'|safe, '</a>'|safe,
 ) }}</p>
+% endmacro

@@ -15,18 +15,35 @@ if 'transactionId' in request.qs or 'exchange_id' in request.qs or \
         code=307
     )
 
-funded = float('inf')
-currency = request.qs.get('currency', currency)
-if currency not in constants.CURRENCIES:
+selected_currency = request.qs.get('currency')
+if selected_currency and selected_currency not in constants.CURRENCIES:
     raise response.error(400, "`currency` value in querystring is invalid or non-supported")
-balance = participant.get_balance_in(currency)
-donations = participant.get_giving_in(currency)
-weekly = donations - participant.get_receiving_in(currency)
-if weekly > 0:
-    funded = balance // weekly
+
+currencies = website.db.all("""
+    SELECT DISTINCT amount::currency
+      FROM current_tips
+     WHERE tipper = %s
+       AND amount > 0
+""", (participant.id,))
+n_currencies = len(currencies)
+sections = []
+show_footer = False
+for currency in currencies:
+    if selected_currency and currency != selected_currency:
+        continue
+    balance = participant.get_balance_in(currency)
+    donations = participant.get_giving_in(currency)
+    receiving = participant.get_receiving_in(currency)
+    weekly = donations - receiving
+    funded = balance // weekly if weekly > 0 else float('inf')
+    can_payin = weekly > 0 and funded < 52
+    sections.append((currency, balance, donations, receiving, weekly, funded, can_payin))
+    show_footer |= can_payin
+
+currency = None
+del currency
 
 back_to = b64decode_s(request.path['back_to'], default=None)
-can_payin = weekly > 0 and funded < 52
 
 if user == participant:
     participant.mark_notifications_as_read('low_balance')
@@ -38,16 +55,20 @@ title = _("Adding Money")
 
 % block thin_content
 
+% for currency, balance, donations, receiving, weekly, funded, can_payin in sections
+
+    % set currency_name = locale.currencies.get(currency, currency)
+    % if n_currencies > 1
+    <h4>{{ locale.title(currency_name) }} ({{ locale.currency_symbols.get(currency, currency) }})</h4>
+    % endif
+
     <p>
-        % if donations == 0
-            {{ _(
-                "You haven't set up any donations yet, once you do you'll be "
-                "prompted to add money to your account."
-            ) }}
+        % if weekly <= 0
+            {{ _("Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week).",
+                 income=receiving, donations_amount=donations) if n_currencies == 1 else
+               _("Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week).",
+                 currency=currency_name, income=receiving, donations_amount=donations) }}
             </p><p>
-            % from "templates/buttons.html" import find_donees with context
-            {{ find_donees() }}
-        % elif weekly <= 0
             {{ _(
                 "We don't allow adding money when your donations are already "
                 "funded by your income. If this is a problem for you please "
@@ -56,15 +77,21 @@ title = _("Adding Money")
         % elif funded > 0
             {{ ngettext("Your donations are only funded for another week.",
                         "Your donations are funded for another {n} weeks.",
-                        funded) }}
+                        funded) if n_currencies == 1 else
+               ngettext("Your donations in {currency} are only funded for another week.",
+                        "Your donations in {currency} are funded for another {n} weeks.",
+                        funded, currency=currency_name) }}
         % else
-            {{ _("You need to transfer money to your wallet to fund your donations.") }}
+            {{ _("You need to transfer money to your wallet to fund your donations.")
+               if n_currencies == 1 else
+               _("You need to transfer money to your wallet to fund your donations in {currency}.",
+                 currency=currency_name) }}
         % endif
     </p>
 
     % if can_payin
 
-    <p>{{ _("Please choose a payment method:") }}</p>
+    <p>{{ _("Please choose a payment method to add money:") }}</p>
 
     <div class="row payment-methods">
     % from "templates/icons.html" import fontawesome
@@ -113,6 +140,25 @@ title = _("Adding Money")
 
     </div>
 
+    % endif
+
+    <br>
+
+% else
+
+    <p>{{ _(
+        "You haven't set up any donations yet, once you do you'll be "
+        "prompted to add money to your account."
+    ) }}</p>
+    % from "templates/buttons.html" import find_donees with context
+    {{ find_donees() }}
+
+% endfor
+
+% if show_footer
+    % if n_currencies > 1
+        <h4>{{ _("About Fees") }}</h4>
+    % endif
     <p>{{ _(
         "The fees are those of our payment processors, Liberapay is only funded "
         "by the donations to {0}its own account{1}.",
@@ -124,14 +170,6 @@ title = _("Adding Money")
         "or visibility over that."
     ) }}</p>
 
-    % if back_to
-        <a href="{{ response.sanitize_untrusted_url(back_to) }}"
-           class="btn btn-default pull-right">{{ _("Go back") }}</a>
-    % endif
-
-    % endif
-
-% if can_payin
 <p class="powered-by">
     <a href="https://www.mangopay.com/legal-notices/">
         <img src="{{ website.asset('mangopay/powered-by-mangopay.png') }}" class="contain" />

@@ -28,7 +28,8 @@ no_navbar_sign_in = True
 
     <h2 class="banderole success">{{ _("Create an account") }}</h2>
     <form action="" method="POST">
-        % include "templates/sign-up-form.html"
+        % from "templates/sign-up-form.html" import sign_up_form with context
+        {{ sign_up_form(select_currency=True) }}
     </form>
 
     % endif

@@ -7,7 +7,7 @@ from liberapay.testing import Harness
 
 class TestTipsJson(Harness):
 
-    def also_prune_variant(self, also_prune, tippees=1):
+    def test_post(self):
 
         self.make_participant("test_tippee1")
         self.make_participant("test_tippee2")
@@ -28,7 +28,7 @@ class TestTipsJson(Harness):
         assert len(json.loads(response.text)) == 2
 
         data = [{'username': 'test_tippee2', 'amount': '1.00', 'period': 'weekly'}]
-        response = self.client.POST('/test_tipper/tips.json?also_prune=' + also_prune,
+        response = self.client.POST('/test_tipper/tips.json',
                                     body=json.dumps(data).encode('ascii'),
                                     content_type='application/json',
                                     auth_as=test_tipper,
@@ -38,7 +38,7 @@ class TestTipsJson(Harness):
 
         response = self.client.GET('/test_tipper/tips.json', auth_as=test_tipper)
         assert response.code == 200
-        assert len(json.loads(response.text)) == tippees
+        assert len(json.loads(response.text)) == 2
 
     def test_get_response(self):
         test_tipper = self.make_participant("test_tipper")
@@ -65,17 +65,5 @@ class TestTipsJson(Harness):
         data = json.loads(response.text)[0]
 
         assert response.code == 200
-        assert data['username'] == 'test_tippee1'
+        assert data['tippee']['username'] == 'test_tippee1'
         assert data['amount'] == {"amount": "1.00", "currency": "EUR"}
-
-    def test_also_prune_as_1(self):
-        self.also_prune_variant('1')
-
-    def test_also_prune_as_true(self):
-        self.also_prune_variant('true')
-
-    def test_also_prune_as_yes(self):
-        self.also_prune_variant('yes')
-
-    def test_also_prune_as_0(self):
-        self.also_prune_variant('0', 2)
