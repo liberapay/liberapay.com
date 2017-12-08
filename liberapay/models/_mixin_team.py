@@ -97,9 +97,10 @@ class MixinTeam(object):
         sum_last_week = sum(last_week.values())
         if sum_last_week == 0:
             return
+        sum_last_week = sum_last_week.convert(self.main_currency)
         initial_leftover = self.receiving - sum_last_week
-        nonzero_last_week = [a.amount for a in last_week.values() if a]
-        member_last_week = last_week.get(member_id, ZERO[self.main_currency])
+        nonzero_last_week = [a.convert(self.main_currency).amount for a in last_week.values() if a]
+        member_last_week = last_week.get(member_id, ZERO[self.main_currency]).convert(self.main_currency)
         return max(
             member_last_week * 2,
             member_last_week + initial_leftover,
