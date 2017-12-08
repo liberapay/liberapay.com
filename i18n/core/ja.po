@@ -17,9 +17,8 @@ msgstr "なにか問題があるなら、このメールに返信してくださ
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Liberapayであなたに寄付したいひとがいます"
 
-#, fuzzy
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "誰かがLiberapayであなたに寄付をしたいと思っています。合法的にお金の募集を開始するためには身分証明を記入してください。"
+msgstr "誰かがLiberapayであなたに寄付をしたいと思っています。合法的にお金の募集を開始するためには身分証明を登録してください。"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Liberapay で寄付を受けたくないときは、プロフィールを設定して受付を拒否してください。"
@@ -30,10 +29,10 @@ msgstr "あなたは今週{0}を受け取りました"
 
 #, python-brace-format
 msgid "{0} were given to you personally."
-msgstr ""
+msgstr "{0}は個人的に与えられました。"
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr ""
+msgstr "どのチームのメンバーでもないため、チームに参加するためのお金を受け取っていません。"
 
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
@@ -50,73 +49,73 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #, python-brace-format
 msgid "You now have {0} in your wallet."
-msgstr ""
+msgstr "あなたは今ウォレットに{0}を持っています。"
 
 msgid "See your account's transaction logs"
-msgstr ""
+msgstr "アカウントのトランザクションログを確認する"
 
 #, python-brace-format
 msgid "- {0}: {1}"
-msgstr ""
+msgstr "- {0}: {1}"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
-msgstr ""
+msgstr "{0}への請求書が承認されました - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr ""
+msgstr "{addressee_name}から{amount}の支払いが受け付けられました。"
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
 msgstr ""
 
 msgid "View the invoice"
-msgstr ""
+msgstr "請求書を表示する"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been accepted and paid - Liberapay"
-msgstr ""
+msgstr "{0}への請求書が承認されて支払われました - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr ""
+msgstr "{addressee_name}から{amount}の支払いが承認され、お金がウォレットに移動しました。"
 
 msgid "Withdraw the money"
-msgstr ""
+msgstr "お金を引き出す"
 
 msgid "However you cannot withdraw the money yet as it is still in quarantine."
 msgstr ""
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
-msgstr ""
+msgstr "{0}への請求書は拒否されました - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
-msgstr ""
+msgstr "{addressee_name}から{amount}の支払いが拒否されました。"
 
 #, python-brace-format
 msgid "Reason: “{0}”"
-msgstr ""
+msgstr "理由: 「{0}」"
 
 msgid "Log in to Liberapay"
-msgstr ""
+msgstr "Liberapayにログインする"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
 msgstr ""
 
 msgid "Follow this link to proceed:"
-msgstr ""
+msgstr "続行する場合はこのリンクをたどってください:"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
-msgstr ""
+msgstr "リンクは{0}にのみ有効です。"
 
 msgid "It's time to top up your Liberapay wallet"
 msgstr ""
@@ -127,11 +126,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
-msgstr ""
+msgstr "Liberapayの{0}からの請求書"
 
 #, python-brace-format
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
-msgstr ""
+msgstr "{sender_name}が{amount}の支払い請求書を提出しました。"
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr ""
@@ -147,20 +146,20 @@ msgid "If you forgot to do it you can initiate a new payment:"
 msgstr ""
 
 msgid "The bank wire to your Liberapay wallet has failed"
-msgstr ""
+msgstr "あなたのLiberapayウォレットへの銀行送金が失敗しました"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr ""
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr ""
+msgstr "Liberapayウォレットへの銀行振込が成功しました"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
 msgstr ""
 
 msgid "View receipt"
-msgstr ""
+msgstr "レシートを見る"
 
 msgid "The direct debit payment to your Liberapay wallet has failed"
 msgstr ""
@@ -170,7 +169,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
-msgstr ""
+msgstr "{1}から{0}がLiberapayに参加しました!"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
@@ -422,7 +421,7 @@ msgid "You are not allowed to add another email address right now, please try ag
 msgstr ""
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
-msgstr ""
+msgstr "あなたはメールログインの制限に達しました。明日また試すかsupport@liberapay.comまで問い合わせてください。"
 
 msgid "There have been too many attempts to log in to this account recently, please try again in a few hours or log in via email."
 msgstr ""
@@ -576,7 +575,6 @@ msgstr ""
 msgid "Toggle navigation"
 msgstr ""
 
-#, fuzzy
 msgid "Homepage"
 msgstr "ホームページ"
 
@@ -586,15 +584,12 @@ msgstr "探す"
 msgid "Search"
 msgstr "検索"
 
-#, fuzzy
 msgid "About"
 msgstr "Liberapayとは"
 
-#, fuzzy
 msgid "Contact Us"
 msgstr "お問い合わせ"
 
-#, fuzzy
 msgid "FAQ"
 msgstr "よくある質問"
 
@@ -607,7 +602,6 @@ msgstr ""
 msgid "Whose work do you appreciate? See if they're on Liberapay"
 msgstr ""
 
-#, fuzzy
 msgid "Communities"
 msgstr "コミュニティ"
 
@@ -622,15 +616,12 @@ msgstr ""
 msgid "Explore communities"
 msgstr "コミュニティを探す"
 
-#, fuzzy
 msgid "Cancel"
 msgstr "キャンセル"
 
-#, fuzzy
 msgid "Confirm"
 msgstr "確認"
 
-#, fuzzy
 msgid "Accounts Elsewhere"
 msgstr "ほかのアカウント"
 
@@ -641,11 +632,9 @@ msgstr ""
 msgid "{0} owns the following accounts on other platforms:"
 msgstr ""
 
-#, fuzzy
 msgid "Name of the team"
 msgstr "チームの名前"
 
-#, fuzzy
 msgid "Email of the team (optional)"
 msgstr "チームのメール（オプション）"
 
@@ -653,58 +642,45 @@ msgstr "チームのメール（オプション）"
 msgid "Enable {0}limits on team takes{1}"
 msgstr ""
 
-#, fuzzy
 msgid "Create"
 msgstr "作成"
 
-#, fuzzy
 msgid "Disconnect"
 msgstr "切断"
 
 msgid "This is not supported yet"
 msgstr ""
 
-#, fuzzy
 msgid "Connect"
 msgstr "接続"
 
-#, fuzzy
 msgid "Drop files here"
 msgstr "ここにファイルをドロップしてください"
 
-#, fuzzy
 msgid "Processing dropped files…"
 msgstr "ファイル削除中…"
 
-#, fuzzy
 msgid "Add a file"
 msgstr "ファイルの追加"
 
-#, fuzzy
 msgid "Edit filename"
 msgstr "ファイル名の編集"
 
-#, fuzzy
 msgid "Retry"
 msgstr "リトライ"
 
-#, fuzzy
 msgid "Delete"
 msgstr "削除"
 
-#, fuzzy
 msgid "Close"
 msgstr "閉じる"
 
-#, fuzzy
 msgid "No"
 msgstr "いいえ"
 
-#, fuzzy
 msgid "Yes"
 msgstr "はい"
 
-#, fuzzy
 msgid "Ok"
 msgstr "OK"
 
@@ -1049,7 +1025,7 @@ msgstr ""
 msgid "Sum"
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Goal: {0}"
 msgstr "目標：{0}"
 
@@ -1057,7 +1033,6 @@ msgstr "目標：{0}"
 msgid "Income: {0}/week"
 msgstr ""
 
-#, fuzzy
 msgid "Mission accomplished!"
 msgstr "目標達成!"
 
@@ -1123,9 +1098,8 @@ msgstr ""
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr ""
 
-#, fuzzy
 msgid "Search Liberapay"
-msgstr "Liberapay 検索"
+msgstr "Liberapay検索"
 
 msgid "Identity"
 msgstr ""
@@ -1133,7 +1107,6 @@ msgstr ""
 msgid "Log In or Create Account"
 msgstr "ログインまたはアカウントを作成"
 
-#, fuzzy
 msgid "Sign out"
 msgstr "ログアウト"
 
@@ -2634,20 +2607,18 @@ msgstr "Liberapay は{0}Liberapay上の寄付{1}で成り立っています。"
 msgid "Who can use Liberapay?"
 msgstr "誰が Liberapay を使うことができますか？"
 
-#, fuzzy
 msgid "In theory, anyone who has a bank account. In practice, payments may not work depending on where you live. Please contact us if you encounter any problems."
-msgstr "銀行口座を持つ人は誰でも利用できますが、お住まいの地域によっては支払いがうまくいかない場合があります。問題が発生した場合は私たちにお問い合わせください。"
+msgstr ""
+"銀行口座を持つ人は誰でも利用できますが、お住まいの地域によっては支払いがうまくいかない場合があります。問題が発生した場合は私たちにお問い合わせください。"
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
 msgstr "Liberapay は長期にわたる安定した資金源となるように設計しているため、継続的な寄付しか受け付けていません。"
 
-#, fuzzy
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
-msgstr "Liberapay とその他のクラウドファンディングサイト、例えば Patreon との違いはなんですか？"
+msgstr "Liberapayとその他のクラウドファンディングサイト、例えばPatreonとの違いはなんですか?"
 
-#, fuzzy
 msgid "Liberapay is only for donations, meaning that transactions must not be linked to a contract nor a promise of recompense."
-msgstr "Liberapay は寄付に限定しています。つまり何らかの契約や見返りの約束と結びつくことはありません。"
+msgstr "Liberapayは寄付に限定しています。つまり何らかの契約や見返りの約束と結びつくことはありません。"
 
 msgid "Liberapay is an open project structured around a non-profit organization, which sets it apart from commercial platforms like Patreon and Tipeee."
 msgstr ""
@@ -3412,7 +3383,6 @@ msgstr ""
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
 msgstr ""
 
-#, fuzzy
 msgid "Edit your profile"
 msgstr "プロフィールを編集"
 
@@ -3711,14 +3681,12 @@ msgstr ""
 msgid "Sign In"
 msgstr "ログイン"
 
-#, fuzzy
 msgid "Sign Out"
 msgstr "ログアウト"
 
-#, fuzzy
 msgid "Sign Up"
 msgstr "アカウント作成"
 
 #, python-brace-format
 msgid "You are already logged in as {0}."
-msgstr ""
+msgstr "あなたは既に{0}としてログインしています。"

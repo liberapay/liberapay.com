@@ -182,11 +182,12 @@ msgid "Follow this link to view {0}'s profile:"
 msgstr "Folgen Sie folgendem Link, um das Profil von {0} zu sehen:"
 
 msgid "A team you're a member of has been modified"
-msgstr ""
+msgstr "Eines Ihrer Teams wurde bearbeitet"
 
 #, python-brace-format
 msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
 msgstr ""
+"Die Basiswährung des Teams \"{0}\" wurde geändert von {1} auf {2} von {3}."
 
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Sie wurden eingeladen, einem Team auf Liberapay beizutreten"
@@ -496,6 +497,8 @@ msgstr "Sie können dies nicht tun, weil Ihr Konto zurzeit suspendiert ist."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr ""
+"Sie haben erst die Basiswährung geändert. Bitte versuchen Sie es später ("
+"z.B. in einer Woche) wieder oder kontaktieren Sie support@liberapay.com."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1120,7 +1123,7 @@ msgid "Please input your email address:"
 msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein:"
 
 msgid "and select your preferred currency:"
-msgstr ""
+msgstr "und wählen Sie ihre bevorzugte Währung:"
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -1335,28 +1338,30 @@ msgid "Have you linked to your Liberapay profile from other websites? Be sure to
 msgstr "Haben Sie auf anderen Webseiten Ihr Liberapay Profil verlinkt? Stellen Sie sicher, dass Sie diese Links erneuern!"
 
 msgid "Currencies"
-msgstr ""
+msgstr "Währungen"
 
 msgid "Main currency"
-msgstr ""
+msgstr "Basiswährung"
 
 msgid "Other currencies"
-msgstr ""
+msgstr "Andere Währungen"
 
 msgid "Team accounts are currently limited to a single currency."
-msgstr ""
+msgstr "Team-Konten sind zur Zeit auf eine Währung beschränkt."
 
 msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr ""
+msgstr "Wollen Sie Spenden in anderen Währungen akzeptieren oder ablehnen?"
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr ""
+"Fremdwährungen zu akzeptieren verkompliziert die Sache für Sie. Sie "
+"abzulehen, kann aber Unterstützer davon abhalten zu spenden."
 
 msgid "Accept all currencies"
-msgstr ""
+msgstr "Alle Währungen akzeptieren"
 
 msgid "Reject foreign currencies"
-msgstr ""
+msgstr "Fremdwährungen ablehnen"
 
 msgid "Save"
 msgstr "Speichern"
@@ -1523,7 +1528,7 @@ msgid "Liberapay does not take a cut of payments and is only funded by the donat
 msgstr "Liberapay behält keine Kommission auf Ihre Zahlungen ein und wird nur durch die Spenden an {0} sein eigenes Konto finanziert {1}, bitte helfen auch Sie:"
 
 msgid "Support Liberapay"
-msgstr ""
+msgstr "Liberapay unterstützen"
 
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
 msgstr "Liberapay zu entwickeln ist eine Menge Arbeit und es gibt noch viel zu tun. Unsere Entwickler, Übersetzer und anderen Mitwirkenden sind leider stark unterbezahlt und das verlangsamt unseren Fortschritt."
@@ -1545,8 +1550,8 @@ msgstr[1] "Ihre Spenden sind für weitere {n} Wochen finanziert."
 #, python-brace-format
 msgid "Your donations in {currency} are only funded for another week."
 msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ihre Spenden in {currency} sind nur noch für eine Wochen finanziert."
+msgstr[1] "Ihre Spenden in {currency} sind für {n} Wochen finanziert."
 
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr "Sie brauchen Geld, um Ihren Geldbeutel zu übertragen Ihre Spenden zu finanzieren."
@@ -1554,10 +1559,13 @@ msgstr "Sie brauchen Geld, um Ihren Geldbeutel zu übertragen Ihre Spenden zu fi
 #, python-brace-format
 msgid "You need to transfer money to your wallet to fund your donations in {currency}."
 msgstr ""
+"Sie müssen Geld auf Ihr Konto einzahlen um in {currency} spenden zu können."
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
 msgstr ""
+"Ihre Spenden sind von Ihren Einnahmen gedeckt: Sie erhalten {income} und "
+"spenden {donations_amount} (pro Woche)."
 
 #, python-brace-format
 msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
