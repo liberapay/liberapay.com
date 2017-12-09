@@ -39,7 +39,7 @@ class Twitch(PlatformOAuth2):
     # Auth attributes
     auth_url = 'https://api.twitch.tv/kraken/oauth2/authorize'
     access_token_url = 'https://api.twitch.tv/kraken/oauth2/token'
-    oauth_default_scope = ['channel_read']
+    oauth_default_scope = ['user_read']
     session_class = TwitchOAuthSession
 
     # API attributes
