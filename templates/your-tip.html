@@ -29,7 +29,7 @@
     <div class="input-group">
         % set currency = tip.amount.currency
         <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
-        <input type="text" name="amount" id="amount" placeholder="{{ _('Amount') }}"
+        <input type="number" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
                value="{{ format_decimal(tip.periodic_amount.amount) if tip.periodic_amount and not hide_amount else '' }}"
                {{ disabled }} />
