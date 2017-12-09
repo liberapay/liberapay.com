@@ -41,11 +41,11 @@ msgstr[0] ""
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
-msgstr ""
+msgstr "{0}は{1}チームのロールを割り当てられました。"
 
 #, python-brace-format
 msgid "{0} were given to you for your roles in the following teams:"
-msgstr ""
+msgstr "{0}は以下のチームであなたのロールを割り当てました:"
 
 #, python-brace-format
 msgid "{0}: {1}"
@@ -89,7 +89,7 @@ msgid "Withdraw the money"
 msgstr "お金を引き出す"
 
 msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr ""
+msgstr "しかしまだ隔離されているためお金を引き出すことができません。"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -108,7 +108,7 @@ msgstr "Liberapayにログインする"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
-msgstr ""
+msgstr "(あなたに希望を持った) 誰かがLiberapayの{0}アカウントへのアクセスを要求しました。"
 
 msgid "Follow this link to proceed:"
 msgstr "続行する場合はこのリンクをたどってください:"
@@ -118,11 +118,11 @@ msgid "Please note that the link is only valid for {0}."
 msgstr "リンクは{0}にのみ有効です。"
 
 msgid "It's time to top up your Liberapay wallet"
-msgstr ""
+msgstr "さああなたのLiberapayウォレットをいっぱいにする時です"
 
 #, python-brace-format
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr ""
+msgstr "Liberapayウォレットに残っているのは{0}ですが、来週の寄付には少なくとも{1}が必要です。"
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
@@ -133,23 +133,23 @@ msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name}が{amount}の支払い請求書を提出しました。"
 
 msgid "Bank wire to your Liberapay wallet"
-msgstr ""
+msgstr "Liberapayウォレットに銀行振込"
 
 msgid "The bank wire to your Liberapay wallet has expired"
-msgstr ""
+msgstr "Liberapayウォレットへの銀行振込の期限が切れています"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
 msgstr ""
 
 msgid "If you forgot to do it you can initiate a new payment:"
-msgstr ""
+msgstr "もし忘れてしまった場合は新しい支払いを開始できます:"
 
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "あなたのLiberapayウォレットへの銀行送金が失敗しました"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr ""
+msgstr "以下のリンクをクリックすると別の支払い方法で再試行できます:"
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Liberapayウォレットへの銀行振込が成功しました"
@@ -157,15 +157,17 @@ msgstr "Liberapayウォレットへの銀行振込が成功しました"
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
 msgstr ""
+"あなたの銀行口座への送金に成功したことをお知らせします。送金された{0}のうち{1}はあなたのLiberapayウォレットに入れられ、{2}は手数料として"
+"支払われました。"
 
 msgid "View receipt"
 msgstr "レシートを見る"
 
 msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr ""
+msgstr "Liberapayウォレットへの口座振替による支払いに失敗しました"
 
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr ""
+msgstr "Liberapayウォレットへの口座振替による支払いが成功しました"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -180,37 +182,37 @@ msgid "Follow this link to view {0}'s profile:"
 msgstr ""
 
 msgid "A team you're a member of has been modified"
-msgstr ""
+msgstr "あなたの所属するチームが変更されました"
 
 #, python-brace-format
 msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
 msgstr ""
 
 msgid "You have been invited to join a team on Liberapay"
-msgstr ""
+msgstr "Liberapayのチームに招待されています"
 
 #, python-brace-format
 msgid "{0} has invited you to join the {1} team."
 msgstr ""
 
 msgid "See the team's profile"
-msgstr ""
+msgstr "チームのプロフィールを見る"
 
 msgid "Accept"
-msgstr ""
+msgstr "承認"
 
 msgid "Refuse"
-msgstr ""
+msgstr "拒否"
 
 msgid "A team you're a member of has been renamed"
-msgstr ""
+msgstr "あなたの所属するチームの名前が変更されました"
 
 #, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
-msgstr ""
+msgstr "チーム「{0}」の名前は{2}によって「{1}」に変更されました。"
 
 msgid "Email address verification - Liberapay"
-msgstr ""
+msgstr "メールアドレスの確認 - Liberapay"
 
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
@@ -221,7 +223,7 @@ msgid "A Liberapay account was created on {0} with the email address {1}. Was it
 msgstr ""
 
 msgid "Yes, proceed"
-msgstr ""
+msgstr "実行します"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
