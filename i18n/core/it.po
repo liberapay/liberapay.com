@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-12-09 00:46+0000\n"
-"Last-Translator: Andrea Scarpino <me@andreascarpino.it>\n"
+"PO-Revision-Date: 2017-12-09 07:47+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian "
 "<https://hosted.weblate.org/projects/liberapay/core/it/>\n"
 "Language: it\n"
@@ -143,7 +143,7 @@ msgid "Bank wire to your Liberapay wallet"
 msgstr "Versamento sul tuo portafoglio Liberapay"
 
 msgid "The bank wire to your Liberapay wallet has expired"
-msgstr ""
+msgstr "Il versamento bancario sul tuo portafoglio Liberapay si è esaurito"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
@@ -153,7 +153,7 @@ msgstr ""
 "giunti a destinazione."
 
 msgid "If you forgot to do it you can initiate a new payment:"
-msgstr ""
+msgstr "Se hai dimenticato di farlo puoi iniziare un nuovo pagamento:"
 
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Il versamento sul tuo portafoglio Librapay non è andato a buon fine"
@@ -164,18 +164,23 @@ msgstr "Puoi provare di nuovo, magari con un altro mezzo di pagamento, cliccando
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Il versamento sul tuo portafoglio Liberapay è riuscito"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Abbiamo il piacere d'informarti che il trasferimento dal tuo conto bancario è riuscito. Dei {0} che hai inviato, {1} sono stati versati sul tuo portafoglio Liberapay, e {2} sono stati pagati in costi accessori."
+msgstr ""
+"Abbiamo il piacere d'informarti che il trasferimento dal tuo conto bancario "
+"è riuscito. Dei {0} che hai inviato, {1} sono stati versati sul tuo "
+"portafoglio Liberapay, e {2} sono stati pagati in costi accessori."
 
 msgid "View receipt"
 msgstr "Visualizza la ricevuta"
 
 msgid "The direct debit payment to your Liberapay wallet has failed"
 msgstr ""
+"Il pagamento con addebito diretto sul tuo portafoglio Liberapay è fallito"
 
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr ""
+"Il pagamento con addebito diretto sul tuo portafoglio Liberapay è riuscito"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -213,11 +218,11 @@ msgid "Refuse"
 msgstr "Rifiuto"
 
 msgid "A team you're a member of has been renamed"
-msgstr ""
+msgstr "Una squadra di cui fai parte ha cambiato nome"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
-msgstr ""
+msgstr "La squadra “{0}” ha cambiato nome in “{1}” per {2}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Verifica indirizzo email - Liberapay"
@@ -272,6 +277,9 @@ msgstr "Sembra che tu abbia trovato un bug! Ci dispiace per l'inconveniente, int
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr ""
+"I dettagli di questo errore sono stati registrati. Se decidi di contattarci, "
+"ti preghiamo di includere il seguente codice di identificazione di errore "
+"nel tuo messaggio: {0}."
 
 msgid "When I receive money"
 msgstr "Quando ricevo soldi"
@@ -298,13 +306,13 @@ msgid "When a bank wire transfer to my Liberapay wallet succeeds"
 msgstr "Quando un bonifico bancario al mio portafoglio Liberapay riesce"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr ""
+msgstr "Quando un trasferimento al mio portafoglio Liberapay si esaurisce"
 
 msgid "When a direct debit from my bank account fails"
-msgstr ""
+msgstr "Quando un addebito diretto dal mio conto bancario fallisce"
 
 msgid "When a direct debit from my bank account succeeds"
-msgstr ""
+msgstr "Quando un addebito diretto dal mio conto bancario ha esito positivo"
 
 msgid "Expense Report"
 msgstr "Report delle spese"
@@ -404,6 +412,9 @@ msgstr "L'username '{0}' comincia con un carattere ristretto."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr ""
+"Hai già cambiato il tuo nome utente molte volte recentemente, ti preghiamo "
+"di riprovare più tardi (per es. tra una settimana) o di contattare "
+"support@liberapay.com."
 
 msgid "You cannot remove your primary email address."
 msgstr "Non è possibile rimuovere il tuo indirizzo email principale."
@@ -426,15 +437,22 @@ msgstr "L'indirizzo email {0} è già collegato al tuo account."
 #, python-brace-format
 msgid "A verification email has already been sent to {email_address} recently."
 msgstr ""
+"Una email di verifica è stata già spedita recentemente a {email_address}."
 
 msgid "You are not allowed to add another email address right now, please try again in a few days."
 msgstr ""
+"Non ti è consentito aggiungere un altro indirizzo email per ora, prova "
+"ancora tra qualche giorno."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
 msgstr ""
+"Hai esaurito la tua quota di login email, per favore riprova domani, o "
+"contatta support@liberapay.com."
 
 msgid "There have been too many attempts to log in to this account recently, please try again in a few hours or log in via email."
 msgstr ""
+"Ci sono stati troppi tentativi di accesso a questo account di recente, si "
+"prega di riprovare in un paio di ore o via email."
 
 msgid "Too many accounts have been created recently. This either means that a lot of people are trying to join Liberapay today, or that an attacker is trying to overload our system. As a result we have to ask you to come back later (e.g. in a few hours), or send an email to support@liberapay.com. We apologize for the inconvenience."
 msgstr ""
@@ -944,9 +962,8 @@ msgstr "Prelevare denaro"
 msgid "Settings"
 msgstr "Impostazioni"
 
-#, fuzzy
 msgid "Emails"
-msgstr "Emails"
+msgstr "Email"
 
 msgid "Widgets"
 msgstr "Widget"
@@ -954,11 +971,9 @@ msgstr "Widget"
 msgid "Notifications"
 msgstr "Notifiche"
 
-#, fuzzy
 msgid "Create a new community"
 msgstr "Crea una nuova comunità"
 
-#, fuzzy
 msgid "Create a new team"
 msgstr "Crea una nuova squadra"
 
@@ -1076,11 +1091,11 @@ msgstr ""
 msgid "Donate"
 msgstr "Donare"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {0} ago."
 msgstr "Iscritto {0} fa."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {0} ago."
 msgstr "Chiuso {0} fa."
 
@@ -1425,7 +1440,6 @@ msgstr "Interruttore"
 msgid "Repositories"
 msgstr ""
 
-#, fuzzy
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -1447,11 +1461,10 @@ msgstr "Privacy"
 msgid "Email settings"
 msgstr "impostazioni e-mail"
 
-#, fuzzy
 msgid "Email Address (Private)"
 msgid_plural "Email Addresses (Private)"
 msgstr[0] "Indirizzo Email (Privato)"
-msgstr[1] "Indirizzo Email (Privato)"
+msgstr[1] "Indirizzi Email (Privati)"
 
 msgid "Primary"
 msgstr "Primario"
@@ -2180,7 +2193,6 @@ msgstr "Importo in banca"
 msgid "Weekly Payday #{0}"
 msgstr "Payday Weekly # {0}"
 
-#, fuzzy
 msgid "balance at the end of the day"
 msgstr "saldo alla fine della giornata"
 
@@ -2319,9 +2331,8 @@ msgstr "Siamo pronti a ricevere i fondi. Si prega di inviare esattamente {0} sul
 msgid "IBAN (International Bank Account Number)"
 msgstr "IBAN (International Bank Account Number)"
 
-#, fuzzy
 msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Bank Identifier Code)"
+msgstr "BIC (Codice di Identificazione Bancaria)"
 
 msgid "Wire Reference Code"
 msgstr "Codice di riferimento del bonifico"
@@ -2357,9 +2368,9 @@ msgstr "Effettuare un versamento a Liberapay tramite bonifico bancario comporta 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} ({2}% fee included)"
-msgstr "{0} ({2}% di tassa inclusa)"
+msgstr "{0} ({2}% di ricarichi inclusi)"
 
 #, python-brace-format
 msgid "Your donations will be funded for {n} week"
@@ -2462,7 +2473,6 @@ msgstr ""
 msgid "Bank Account"
 msgstr ""
 
-#, fuzzy
 msgid "IBAN"
 msgstr "IBAN"
 
@@ -2676,13 +2686,15 @@ msgstr ""
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
 msgstr ""
 
-#, fuzzy
 msgid "Does Liberapay respect financial regulations?"
 msgstr "Liberapay rispetta la legislazione vigente?"
 
-#, fuzzy
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
-msgstr "Si, Liberapay è basata in Francia e rispetta la legislazione dell'unione europea. I nostri partner di pagamento sono a loro volta pienamente autorizzati, ci aiutano a bloccare le frodi, il riciclo di denaro e il finanziamento del terrorismo."
+msgstr ""
+"Si, Liberapay è basata in Francia e rispetta la legislazione dell'unione "
+"europea. I nostri partner di pagamento sono a loro volta pienamente "
+"autorizzati, ci aiutano a bloccare le frodi, il riciclo di denaro e il "
+"finanziamento del terrorismo."
 
 msgid "Which currencies are supported?"
 msgstr ""
@@ -2793,9 +2805,10 @@ msgstr "LiberaPay è una organizzazione non-profit {0} fondata nel 2015 in Franc
 msgid "Legal Information"
 msgstr "Informazione legale"
 
-#, fuzzy
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
-msgstr "Questo sito è gestito da Liberapay, un'organizzazione non-profit fondata e legalmente registrata nel 2015 in Francia."
+msgstr ""
+"Questo sito è gestito da Liberapay, un'organizzazione non-profit fondata e "
+"legalmente registrata nel 2015 in Francia (id: W144000981)."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
 msgstr "Liberapay è registrata come distributrice di denaro nell'unione europea. Con l'aiuto dei nostri partner monitoriamo le transazioni al fine di evitare le frodi, il riciclo di denaro e il finanziamento del terrorism come richiesto dalla legislazione vigente."
@@ -2904,7 +2917,6 @@ msgstr "Articoli da regalo settimanali (€)"
 msgid "Money transferred within Liberapay (per week)"
 msgstr "Il denaro trasferito all'interno LiberaPay (a settimana)"
 
-#, fuzzy
 msgid "Deposits (€)"
 msgstr "I depositi (€)"
 
@@ -2998,7 +3010,6 @@ msgstr "Comunità principali nella tua lingua"
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "Siamo spiacenti, ma non ne abbiamo trovato nessuna. Vuoi crearne una?"
 
-#, fuzzy
 msgid "Which platform would you like to explore?"
 msgstr "Quale piattaforma vorresti esplorare?"
 
@@ -3008,11 +3019,11 @@ msgid_plural "{n} connected accounts"
 msgstr[0] "{n} account collegato"
 msgstr[1] "{n} account collegati"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Explore {0}"
 msgstr "Esplora {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Explore Your {0} Contacts"
 msgstr "Esplora i tuoi {0} contatti"
 
@@ -3037,7 +3048,6 @@ msgstr[1] ""
 msgid "View More"
 msgstr ""
 
-#, fuzzy
 msgid "Explore other platforms:"
 msgstr "Esplora altre piattaforme:"
 
@@ -3053,16 +3063,14 @@ msgstr "Esplora Squadre"
 msgid "Great nonprofits and companies trying to improve the world."
 msgstr "No-profit e aziende che cercano di migliorare il mondo in cui viviamo."
 
-#, fuzzy
 msgid "Explore Organizations"
 msgstr "Esplora le organizzazioni"
 
 msgid "People like you who contribute to the commons (art, knowledge, software, etc). "
 msgstr "Persone che come te contribuiscono alla cultura (arte, conoscenza, software, etc.). "
 
-#, fuzzy
 msgid "Explore Individuals"
-msgstr "Esplora individui"
+msgstr "Esplora gli individui"
 
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
 msgstr "Liberapay consente di impegnare fondi per persone che non hanno ancora un account sulla piattaforma."
@@ -3073,7 +3081,6 @@ msgstr "Esplora Pegni"
 msgid "Browse the accounts that Liberapay users have on other platforms. Find your contacts by connecting your own accounts."
 msgstr "Vedi gli account che gli utenti di Liberapay hanno su altre piattaforme. Trova i tuoi contatti collegando i tuoi account."
 
-#, fuzzy
 msgid "Explore Social Networks"
 msgstr "Esplora i social network"
 
