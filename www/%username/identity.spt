@@ -157,6 +157,11 @@ if request.method == 'POST':
                      WHERE remote_owner_id = %s
                  RETURNING *
                 """, (old_account.Id,))
+                website.db.run("""
+                    UPDATE wallets
+                       SET is_current = true
+                     WHERE remote_owner_id = %s
+                """, (account.Id,))
                 for w in (w for w in old_wallets if w.balance):
                     transfer(
                         website.db, participant.id, participant.id, w.balance,
