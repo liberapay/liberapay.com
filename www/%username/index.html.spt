@@ -117,6 +117,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         <script>
             $(function() {
                 $('[data-charts]').click(function() {
+                    this.disabled = true;
                     Liberapay.charts.load($(this).data('charts'), this);
                 });
             });
