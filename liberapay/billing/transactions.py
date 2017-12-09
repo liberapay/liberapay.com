@@ -251,6 +251,10 @@ def payin_bank_wire(db, participant, debit_amount):
     return payin, e
 
 
+def cancel_bank_wire_payin(db, exchange, payin, participant):
+    record_exchange_result(db, exchange.id, payin.Id, 'failed', "canceled", participant)
+
+
 def record_unexpected_payin(db, payin):
     """Record an unexpected bank wire payin.
     """
