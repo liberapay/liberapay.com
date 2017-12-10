@@ -6,7 +6,7 @@ from decimal import Decimal as D, InvalidOperation, ROUND_UP
 from mangopay.resources import BankWirePayIn
 
 from liberapay.billing.fees import upcharge_bank_wire
-from liberapay.billing.transactions import payin_bank_wire
+from liberapay.billing.transactions import cancel_bank_wire_payin, payin_bank_wire
 from liberapay.constants import EVENTS, PAYIN_BANK_WIRE_MIN
 from liberapay.exceptions import InvalidNumber
 from liberapay.utils import b64decode_s, get_participant
@@ -33,19 +33,26 @@ def get_exchange_payin(participant, request):
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
-if request.method == 'POST' and request.body.get('action') == 'email':
+if request.method == 'POST' and 'action' in request.body:
     exchange, payin = get_exchange_payin(participant, request)
-    sent = participant.send_email(
-        'payin_bankwire_created',
-        (participant.email or participant.get_any_email()),
-        exchange=exchange._asdict(), payin=payin,
-    )
-    if not sent:
-        raise response.error(500, _("An unknown error occurred."))
-    if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
-        raise response.json({'msg': _("The email has been sent.")})
-    else:
+    action = request.body['action']
+    if action == 'email':
+        sent = participant.send_email(
+            'payin_bankwire_created',
+            (participant.email or participant.get_any_email()),
+            exchange=exchange._asdict(), payin=payin,
+        )
+        if not sent:
+            raise response.error(500, _("An unknown error occurred."))
+        if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
+            raise response.json({'msg': _("The email has been sent.")})
+        else:
+            response.redirect(request.line.uri)
+    elif action == 'cancel':
+        cancel_bank_wire_payin(website.db, exchange, payin, participant)
         response.redirect(request.line.uri)
+    else:
+        raise response.error(400, "bad `action` value '%s' in body" % action)
 
 exchange, payin = None, None
 if 'exchange_id' in request.qs:
@@ -121,10 +128,16 @@ title = _("Adding Money")
 % block thin_content
 
     % if exchange and exchange.status == 'failed'
+        % if exchange.note == 'canceled'
+        <div class="alert alert-info">{{ _("This bank wire has been canceled.") }}</div>
+        <a class="btn btn-default" href="{{ participant.path('wallet/payin') }}"
+           >{{ _("Go back") }}</a>
+        % else
         <div class="alert alert-danger">{{
             _("The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}",
               exchange.amount + exchange.fee, exchange.note)
         }}</div>
+        % endif
     % endif
 
     % if not show_form and not payin
@@ -150,7 +163,7 @@ title = _("Adding Money")
         % endif
     </p>
 
-    % elif payin
+    % elif payin and exchange.status == 'created'
 
         <p>{{ _(
             "We are ready to receive the funds. Please send exactly {0} to the "
@@ -196,10 +209,12 @@ title = _("Adding Money")
                >{{ _("Change your email settings") }}</a>
         % endif
 
-        % if back_to
-            <a href="{{ response.sanitize_untrusted_url(back_to) }}"
-               class="btn btn-default pull-right">{{ _("Go back") }}</a>
-        % endif
+        <p>{{ _("Changed your mind? Cancel the payment to avoid receiving a failure notification next month:") }}</p>
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="action" value="cancel" />
+            <button class="btn btn-danger">{{ _("Cancel") }}</button>
+        </form>
 
     % elif show_form
     <form id="payin" action="javascript:" method="POST"
