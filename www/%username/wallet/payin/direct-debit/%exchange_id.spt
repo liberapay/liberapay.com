@@ -123,7 +123,10 @@ if request.method == 'POST':
         try:
             mandate.save()
         except Exception as e:
-            raise response.error(400, repr_exception(e))
+            error = repr_exception(e)
+            record_exchange_result(website.db, exchange.id, '', 'failed', error, participant)
+            website.tell_sentry(e, state)
+            response.redirect(return_url)
     if mandate.Status == 'CREATED':
         route.set_mandate(mandate.Id)
         response.redirect(mandate.RedirectURL)
