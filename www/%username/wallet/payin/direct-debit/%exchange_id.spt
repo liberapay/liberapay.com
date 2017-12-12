@@ -18,6 +18,10 @@ from liberapay.utils import (
 )
 from liberapay.utils.i18n import Money
 
+_ = lambda a: a
+EUR_DEBIT_NOT_AVAILABLE = _("Euro direct debits are only available from within the Eurozone.")
+del _
+
 # https://docs.mangopay.com/endpoints/v2.01/mandates#e231_create-a-mandate
 MANDATE_LANGS = {'en', 'fr', 'nl', 'de', 'es', 'it', 'pl'}
 
@@ -124,6 +128,10 @@ if request.method == 'POST':
             mandate.save()
         except Exception as e:
             error = repr_exception(e)
+            if currency == 'EUR':
+                ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
+                if ba.Country not in constants.EUROZONE:
+                    error = EUR_DEBIT_NOT_AVAILABLE
             record_exchange_result(website.db, exchange.id, '', 'failed', error, participant)
             website.tell_sentry(e, state)
             response.redirect(return_url)
@@ -186,7 +194,7 @@ title = _("Adding Money")
             _("A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees.",
               exchange.amount + exchange.fee, exchange.amount, exchange.fee) if exchange.status == 'created' else
             _("The attempt to transfer {0} from your bank account has failed with the following error message:",
-              exchange.amount + exchange.fee) + ' ' + str(exchange.note)
+              exchange.amount + exchange.fee) + ' ' + _(str(exchange.note))
         }}</div>
         % if exchange.status == 'succeeded'
         <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View Receipt") }}</a>
