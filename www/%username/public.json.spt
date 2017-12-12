@@ -1,9 +1,11 @@
 from liberapay.utils import get_participant
 
-[-----------------------------------------------------------------------------]
+[---]
 
 participant = get_participant(state, restrict=False)
 response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
+response.headers[b'Cache-Control'] = b'public, max-age=600'
+
 [---] application/json via jsonp_dump
-participant.to_dict(details=True, inquirer=user)
+participant.to_dict(details=True)

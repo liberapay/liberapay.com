@@ -51,63 +51,6 @@ class Tests(Harness):
         data = json.loads(self.client.GET('/alice/public.json').text)
         assert data['goal'] == {"amount": "1.00", "currency": "EUR"}
 
-    def test_authenticated_user_gets_their_tip(self):
-        alice = self.make_participant('alice', balance=100)
-        bob = self.make_participant('bob')
-
-        alice.set_tip_to(bob, EUR('1.00'))
-
-        raw = self.client.GET('/bob/public.json', auth_as=alice).text
-
-        data = json.loads(raw)
-
-        assert data['receiving'] == {"amount": "1.00", "currency": "EUR"}
-        assert data['my_tip'] == {"amount": "1.00", "currency": "EUR"}
-
-    def test_authenticated_user_doesnt_get_other_peoples_tips(self):
-        alice = self.make_participant('alice', balance=100)
-        bob = self.make_participant('bob', balance=100)
-        carl = self.make_participant('carl', balance=100)
-        dana = self.make_participant('dana')
-
-        alice.set_tip_to(dana, EUR('1.00'))
-        bob.set_tip_to(dana, EUR('3.00'))
-        carl.set_tip_to(dana, EUR('12.00'))
-
-        raw = self.client.GET('/dana/public.json', auth_as=alice).text
-
-        data = json.loads(raw)
-
-        assert data['receiving'] == {"amount": "16.00", "currency": "EUR"}
-        assert data['my_tip'] == {"amount": "1.00", "currency": "EUR"}
-
-    def test_authenticated_user_gets_zero_if_they_dont_tip(self):
-        alice = self.make_participant('alice', balance=100)
-        bob = self.make_participant('bob', balance=100)
-        carl = self.make_participant('carl')
-
-        bob.set_tip_to(carl, EUR('3.00'))
-
-        raw = self.client.GET('/carl/public.json', auth_as=alice).text
-
-        data = json.loads(raw)
-
-        assert data['receiving'] == {"amount": "3.00", "currency": "EUR"}
-        assert data['my_tip'] == {"amount": "0.00", "currency": "EUR"}
-
-    def test_authenticated_user_gets_self_for_self(self):
-        alice = self.make_participant('alice', balance=100)
-        bob = self.make_participant('bob')
-
-        alice.set_tip_to(bob, EUR('3.00'))
-
-        raw = self.client.GET('/bob/public.json', auth_as=bob).text
-
-        data = json.loads(raw)
-
-        assert data['receiving'] == {"amount": "3.00", "currency": "EUR"}
-        assert data['my_tip'] == 'self'
-
     def test_access_control_allow_origin_header_is_asterisk(self):
         self.make_participant('alice', balance=100)
         response = self.client.GET('/alice/public.json')
@@ -139,7 +82,6 @@ class Tests(Harness):
     "goal": null,
     "id": %(user_id)s,
     "kind": "individual",
-    "my_tip": "self",
     "npatrons": 1,
     "receiving": {
         "amount": "3.00",
