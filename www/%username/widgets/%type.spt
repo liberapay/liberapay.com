@@ -1,29 +1,38 @@
 from markupsafe import Markup
 
 from liberapay.utils import get_participant
+from liberapay.utils.i18n import Wrap
 
-A, B = Markup('<br><span style="font-size: 125%">'), Markup('</span>')
+span_open, span_close, br = Markup('<br><span style="font-size: 125%%">'), Markup('</span>'), Markup('<br>')
 
 [---]
 
 t = request.path['type']
 if t not in ('giving.js', 'receiving.js'):
-    raise response.error(400)
+    raise response.error(404)
+t_is_giving = t == 'giving.js'
 
 participant = get_participant(state, restrict=False, redirect_canon=False)
+goal = participant.goal
+show_goal = goal and goal > participant.receiving
 
-if participant.hide_giving and t != 'receiving.js' or \
-   participant.hide_receiving and t != 'giving.js':
+receiving = Wrap(participant.receiving, "{0}%s{1}{2}".format(span_open, span_close, br))
+giving = Wrap(participant.giving, "{0}%s{1}{2}".format(span_open, span_close, br))
+goal = Wrap(goal, "{0}%s{1}".format(span_open, span_close))
+
+if participant.hide_giving and t_is_giving or \
+   participant.hide_receiving and not t_is_giving:
     raise response.error(403)
 
 response.headers[b'Cache-Control'] = b'public, max-age=600'
 response.headers[b'Vary'] = b'Accept-Language'
 
 [---] application/javascript via jinja2_html_jswrapped
-<a href="{{ participant.url('donate') }}"
+<a href="{{ participant.url('' if t_is_giving else 'donate') }}"
    style="border: 2px solid #f6c915; border-radius: 5px; color: #1a171b;
           display: inline-block;
           font-family: Helvetica Neue,Helvetica,sans-serif; font-size: 14px;
+          max-width: 150px; min-width: 110px;
           position: relative; text-align: center; text-decoration: none;"
     ><span style="background-color: #f6c915; display: block;
                   font-family: Ubuntu,Arial,sans-serif;
@@ -32,13 +41,15 @@ response.headers[b'Vary'] = b'Accept-Language'
         ><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}"
               height="20" width="20" style="vertical-align: middle;" />
         <span style="vertical-align: middle;">LiberaPay</span></span
-    ><span style="display: block; padding: 0 15px;"
+    ><span style="display: block; padding: 5px 15px 2px;"
         ><span style="color: #f6c915; position: absolute; left: -2px;">&#10132;</span
         >{% if participant.kind == 'individual' %}{{
-            _("I donate {0}{1}{2}", A, participant.giving, B) if t[0] == 'g' else
-            _("I receive {0}{1}{2}", A, participant.receiving, B)
+            _("I donate {0} per week", giving) if t_is_giving else
+            _("I receive {0} per week,{newline} my goal is {1}", receiving, goal, newline=br) if show_goal else
+            _("I receive {0} per week", receiving)
         }}{% else %}{{
-            _("We donate {0}{1}{2}", A, participant.giving, B) if t[0] == 'g' else
-            _("We receive {0}{1}{2}", A, participant.receiving, B)
+            _("We donate {0} per week", giving) if t_is_giving else
+            _("We receive {0} per week,{newline} our goal is {1}", receiving, goal, newline=br) if show_goal else
+            _("We receive {0} per week", receiving)
         }}{% endif %}</span
 ></a>

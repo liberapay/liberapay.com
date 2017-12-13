@@ -47,6 +47,35 @@ recent = query_cache.one("""
          , (SELECT nactive FROM _payday) AS newest_payday_nactive
 """, (currency, currency))
 
+recentweek = query_cache.one("""
+    WITH _users AS (
+             SELECT join_time
+               FROM participants
+              WHERE join_time > (now() - INTERVAL '7 days')
+                AND status = 'active'
+                AND kind <> 'community'
+         )
+       , _tips AS (
+             SELECT t.amount, p.status
+               FROM current_tips t
+               JOIN participants p ON p.id = t.tippee
+              WHERE t.ctime > (now() - INTERVAL '7 days')
+                AND t.amount > 0
+                AND t.is_funded
+         )
+       , _donations AS (SELECT * FROM _tips WHERE status = 'active')
+       , _pledges AS (SELECT * FROM _tips WHERE status = 'stub')
+       , _payday AS (SELECT * FROM paydays ORDER BY ts_end DESC LIMIT 1)
+    SELECT (SELECT count(*) FROM _users) AS n_users
+         , (SELECT max(join_time) FROM _users) AS newest_user_ts
+         , (SELECT count(*) FROM _donations) AS n_donations
+         , (SELECT sum(amount, %s) FROM _donations) AS donations_amount
+         , (SELECT count(*) FROM _pledges) AS n_pledges
+         , (SELECT sum(amount, %s) FROM _pledges) AS pledges_amount
+         , (SELECT transfer_volume FROM _payday) AS newest_payday_transfer_volume
+         , (SELECT nactive FROM _payday) AS newest_payday_nactive
+""", (currency, currency))
+
 [---]
 % from 'templates/avatar-url.html' import avatar_img, avatar_default with context
 % from "templates/icons.html" import fontawesome, glyphicon
@@ -258,34 +287,61 @@ recent = query_cache.one("""
 
     <div class="section">
         <h2>{{ _("Recent Activity") }}</h2>
+        <h3>{{ _("In the past month") }}</h3>
         % if recent.n_users > 1
         <p>{{ glyphicon('user') }} <span>{{ ngettext(
             "",
-            "{n} user accounts have been created in the past month. The most recent was {0} ago.",
+            "{n} user accounts have been created. The most recent was {0} ago.",
             recent.n_users, to_age(recent.newest_user_ts)
         ) }}</span></p>
         % endif
         % if recent.n_donations > 1
         <p>{{ glyphicon('gift') }} <span>{{ ngettext(
             "",
-            "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}.",
+            "{n} new donations have been started, increasing total weekly funding by {money_amount}.",
             n=recent.n_donations, money_amount=recent.donations_amount
         ) }}</span></p>
         % endif
         % if recent.n_pledges > 1
         <p>{{ glyphicon('thumbs-up') }} <span>{{ ngettext(
             "",
-            "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
+            "{n} new {link_open}pledges{link_close} have been made, adding {money_amount} of weekly donations waiting to be claimed.",
             n=recent.n_pledges,
             link_open='<a href="/explore/pledges">'|safe,
             link_close='</a>'|safe,
             money_amount=recent.pledges_amount,
         ) }}</span></p>
         % endif
+
+        <h3>{{ _("In the past week") }}</h3>        
+        % if recentweek.n_users > 1
+        <p>{{ glyphicon('user') }} <span>{{ ngettext(
+            "",
+            "{n} user accounts have been created. The most recent was {0} ago.",
+            recentweek.n_users, to_age(recentweek.newest_user_ts)
+        ) }}</span></p>
+        % endif
+        % if recentweek.n_donations > 1
+        <p>{{ glyphicon('gift') }} <span>{{ ngettext(
+            "",
+            "{n} new donations have been started, increasing total weekly funding by {money_amount}.",
+            n=recentweek.n_donations, money_amount=recentweek.donations_amount
+        ) }}</span></p>
+        % endif
+        % if recentweek.n_pledges > 1
+        <p>{{ glyphicon('thumbs-up') }} <span>{{ ngettext(
+            "",
+            "{n} new {link_open}pledges{link_close} have been made, adding {money_amount} of weekly donations waiting to be claimed.",
+            n=recentweek.n_pledges,
+            link_open='<a href="/explore/pledges">'|safe,
+            link_close='</a>'|safe,
+            money_amount=recentweek.pledges_amount,
+        ) }}</span></p>
+        % endif
         % if recent.newest_payday_transfer_volume
         <p>{{ glyphicon('transfer') }} <span>{{ ngettext(
             "",
-            "{money_amount} were transferred last week between {n} users.",
+            "{money_amount} were transferred between {n} users.",
             money_amount=recent.newest_payday_transfer_volume,
             n=recent.newest_payday_nactive,
         ) }}</span></p>
