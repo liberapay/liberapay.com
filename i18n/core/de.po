@@ -1561,7 +1561,9 @@ msgstr "Ihre Spenden sind von Ihren Einnahmen gedeckt: Sie erhalten {income} und
 
 #, python-brace-format
 msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Ihre Spenden in {currency} sind von Ihren Einnahmen gedeckt: Sie erhalten {income} und spenden {donations_amount} (pro Woche)."
+msgstr ""
+"Ihre Spenden in {currency} sind durch Ihre Einnahmen finanziert: Sie "
+"erhalten {income} und spenden selbst {donations_amount} (pro Woche)."
 
 msgid "Recipient"
 msgstr "Empfänger"
@@ -1783,7 +1785,7 @@ msgid "Invoice {someone}"
 msgstr "Rechnung {someone}"
 
 msgid "Nature"
-msgstr "Natur"
+msgstr "Typ"
 
 msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr "(Liberapay unterstützt zurzeit nur eine Art von Rechnungen.)"
@@ -2004,13 +2006,19 @@ msgstr "Dinge, die wir sofort zu löschen, sind Ihr Profilauszug, alle Finanzier
 
 #, python-brace-format
 msgid "We specifically {0}don't{1} delete your past giving and receiving history on the site, because that information also belongs equally to other users (the ones you gave to and received from)."
-msgstr "Wir löschen absichtlich {0}nicht{1} ihre vergangenen Kontobewegungen auf der Website. Diese Informationen gehören allen Nutzern gleichberechtig (denen Sie spendeten und von denen Sie Spenden erhalten haben)."
+msgstr ""
+"Wir löschen absichtlich {0}nicht{1} ihre vergangenen Kontobewegungen auf der "
+"Website. Diese Informationen gehören allen Nutzern gleichberechtigt (denen "
+"Sie spendeten und von denen Sie Spenden erhalten haben)."
 
 msgid "Username, email and password"
 msgstr "Benutzername, E-Mail und Passwort"
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr "Wir können Ihren Benutzernamen an jemand anderen geben, wenn sie danach fragen, aber nicht zumindest für ein Jahr, nachdem Sie Ihr Konto schließen (es sei denn, wir feststellen, dass Sie eine Marke habe zu verletzen)."
+msgstr ""
+"Ihren Benutzernamen können wir an jemand anderen wieder vergeben, wenn ein "
+"neuer Nutzer dies anfragt. Allerdings erst nach einem Jahr nachdem Sie ihr "
+"Konto geschlossen haben (außer es fand eine Rechteverletzung statt)."
 
 msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
 msgstr "Wir löschen Ihre E-Mail-Adresse und Passwort nicht sofort, so dass Sie für eine Weile Ihr Konto wieder eröffnen können, indem Sie sich einfach anmelden bis Ihr Konto endgültig archiviert wurde."
@@ -2032,13 +2040,20 @@ msgstr "Ihre Privatsphäre-Einstellungen wurden geändert."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr ""
+"Bitte bestätigen Sie die Änderung der Währung für dieses Team. Die Entnahmen "
+"aller Teammitglieder werden mit dem heutigen Wechselkurs in die neue Währung "
+"umgerechnet. Eine Benachrichtigung wird an alle Mitglieder gesendet."
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr ""
+"Leider ist es nicht möglich die Währung eines Teams zu ändern, das bereits "
+"Spenden erhält."
 
 #, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr ""
+"Sie erhalten zur Zeit {money_amount} pro Woche in Fremdwährungen. Diese "
+"Spenden können nicht auf Ihre gewählte Währung umgestellt werden."
 
 msgid "Account"
 msgstr "Konto"
@@ -2232,7 +2247,7 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "Wir erlauben es nicht weiteres Geld einzuzahlen, wenn Ihre Spenden bereits durch Ihre Einnahmen gedeckt sind. Sollte dies ein Problem für Sie sein, dann schreiben Sie uns eine E-Mail an support@liberapay.com und erklären warum."
 
 msgid "Please choose a payment method to add money:"
-msgstr ""
+msgstr "Bitte wählen Sie die Zahlungsart um Geld aufzuladen:"
 
 msgid "Easy and instantaneous"
 msgstr "Einfache und sofortige"
@@ -2265,10 +2280,12 @@ msgid "Fee: {0}"
 msgstr "Gebühr: {0}"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Sie haben keine Spenden noch einrichten, wenn Sie das tun werden Sie Geld auf Ihr Konto hinzuzufügen gefragt."
+msgstr ""
+"Sie haben noch keine Spenden eingerichtet. Sobald Sie das tun, werden Sie "
+"gebeten, Ihrem Konto Geld hinzuzufügen."
 
 msgid "About Fees"
-msgstr ""
+msgstr "Über Gebühren"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
@@ -2291,7 +2308,7 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' ist kein gültiger Betrag (min={1}, max={2})"
 
 msgid "This bank wire has been canceled."
-msgstr ""
+msgstr "Diese Banküberweisung wurde storniert."
 
 msgid "Go back"
 msgstr "Zurück"
@@ -2333,6 +2350,8 @@ msgstr "Ändern Sie ihre E-Mail-Einstellungen"
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
 msgstr ""
+"Haben Sie es sich anders überlegt? Brechen Sie die Zahlung ab um zu "
+"vermeiden nächsten Monat eine Fehlermeldung zu erhalten:"
 
 msgid "Request in progress, please wait…"
 msgstr "Anfrage läuft, bitte warten…"
@@ -2655,6 +2674,10 @@ msgstr "Im Gegensatz zu anderen Non-Profit-Plattformen ist Liberapay neutral. Si
 #, python-brace-format
 msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
 msgstr ""
+"Internationale Verständigung ist uns wichtig! Unser Dienst kann mit "
+"verschiedenen Währungen genutzt werden und die Oberfläche wurde in viele "
+"Sprachen übersetzt. ({link_open}Sie können mithelfen die Übersetzungen noch "
+"besser zu machen{link_close})."
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
@@ -2667,13 +2690,18 @@ msgid "Yes. Liberapay is based in France and complies with the European Union's 
 msgstr "Ja. Liberapay hat ihren Sitz in Frankreich und unterliegt den Finanzregeln der Europäischen Union. Unsere Zahlungsdienstleister sind lizensiert und helfen uns Betrug, Geldwäsche und Terrorfinazierung zu verhindern."
 
 msgid "Which currencies are supported?"
-msgstr ""
+msgstr "Welche Währungen werden unterstützt?"
 
 msgid "We currently support two currencies: the euro (€) and the US dollar ($). We do not handle crypto-currencies like bitcoin."
 msgstr ""
+"Wir ünterstützen zur Zeit zwei Währungen: Euro(€) und US-Dollar($). Wir "
+"handeln nicht mit Crypto- Währungen wie Bitcoin."
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
 msgstr ""
+"Wir unterstützen zur Zeit die meisten Kredit- und Debitkarten  (VISA und "
+"Mastercard), außerdem Wire Transferes und Überweisungen (nur SEPA). Weitere "
+"Optionen werden in der Zukunft hinzukommen."
 
 msgid "What are the payment processing fees?"
 msgstr "Wie hoch sind die Gebühren zur Bearbeitung einer Zahlung?"
@@ -2828,6 +2856,8 @@ msgstr "Brieftaschen"
 
 msgid "A user's money is held in their wallet. It's like an online bank account, but more limited."
 msgstr ""
+"Das Geld des Benutzers wird in dessen Brieftasche verwaltet. Die Brieftasche "
+"ist wie ein Konto aber mit weniger Funktionen."
 
 msgid "Payday"
 msgstr "Zahltag"

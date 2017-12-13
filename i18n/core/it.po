@@ -183,9 +183,11 @@ msgstr "Segui questo link per vedere il profilo di {0}:"
 msgid "A team you're a member of has been modified"
 msgstr "E' stata modificata una squadra di cui fai parte"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
 msgstr ""
+"La valuta di riferimento usata dalla squadra \"{0}1\" ha cabiato da {1}2 a "
+"{2}3 grazie a {3}4."
 
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Sei stato/a invitato/a a unirti ad una squadra su Liberapay"
@@ -206,9 +208,9 @@ msgstr "Rifiuto"
 msgid "A team you're a member of has been renamed"
 msgstr "Una squadra di cui fai parte ha cambiato nome"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
-msgstr "La squadra “{0}” ha cambiato nome in “{1}” per {2}."
+msgstr "La squadra “{0}” ha cambiato nome in “{1}” grazie a  {2}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Verifica indirizzo email - Liberapay"
@@ -429,6 +431,11 @@ msgstr "Ci sono stati troppi tentativi di accesso a questo account di recente, s
 
 msgid "Too many accounts have been created recently. This either means that a lot of people are trying to join Liberapay today, or that an attacker is trying to overload our system. As a result we have to ask you to come back later (e.g. in a few hours), or send an email to support@liberapay.com. We apologize for the inconvenience."
 msgstr ""
+"Troppi account sono rtati creati recentemente. Questo significa che o molta "
+"gente sta tentando di unirsi a Liberapay o che un aggressore sta cercando di "
+"intasare il nostro sistema. Per questo dobbiamo chiederti di tornare oiu "
+"tardi (es. tra poche ore), o inviare una mail a support@liberapay.com. Ci "
+"scusiamo per l'inconveniente."
 
 #, python-brace-format
 msgid "The password must be at least {0} and at most {1} characters long."
@@ -460,6 +467,8 @@ msgstr "L'utente {0} non accetta donazioni."
 #, python-brace-format
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr ""
+"Donazioni a {usuario} devono essere in {main_currenty}, non in "
+"{rejected_currency}."
 
 msgid "There isn't enough money in your wallet."
 msgstr "Non c'è abbastanza soldi nel portafoglio."
