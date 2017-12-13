@@ -151,7 +151,7 @@ if query:
     <div>
         <h3>{{ ngettext("Found a matching repository",
                         "Found matching repositories",
-                        len(statements)) }}</h3>
+                        len(repositories)) }}</h3>
         % for repo in repositories
             % set owner = repo.owner
             <div class="paragraph">

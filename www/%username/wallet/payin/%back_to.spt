@@ -128,7 +128,7 @@ title = _("Adding Money")
         <div class="col-sm-6">
             <div class="panel panel-default"><div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('exchange') }}</p>
-                <h4>{{ _("Direct Debit") }}<br><small>{{ _("SEPA only") }}</small></h4>
+                <h4>{{ _("Direct Debit") }}<br><small>{{ _("Eurozone only") }}</small></h4>
                 <p>
                     {{ _("Best for regular payments") }}<br>
                     {{ _("Fee: {0}", constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat) }}

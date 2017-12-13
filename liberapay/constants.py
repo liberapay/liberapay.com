@@ -100,6 +100,9 @@ EMAIL_RE = re.compile(r'''
 
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
+EUROZONE = set("AT BE CY DE EE ES FI FR GR IE IT LT LU LV MT NL PT SI SK".split())
+SEPA = EUROZONE | set("BG CH CZ DK GB GI HR HU IS LI MC NO PL RO SE".split())
+
 EVENTS = [
     Event('income', 1, _("When I receive money")),
     Event('low_balance', 2, _("When there isn't enough money in my wallet to cover my donations")),
@@ -118,10 +121,6 @@ EVENTS = OrderedDict((e.name, e) for e in EVENTS)
 EVENTS_S = ' '.join(EVENTS.keys())
 
 # https://www.mangopay.com/pricing/
-SEPA = set("""
-    AT BE BG CH CY CZ DE DK EE ES ES FI FR GB GI GR HR HU IE IS IT LI LT LU LV
-    MC MT NL NO PL PT RO SE SI SK
-""".split())
 FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), 0)  # 0.5%
 FEE_PAYIN_CARD = {
     'EUR': Fees(Decimal('0.018'), Money('0.18', 'EUR')),  # 1.8% + €0.18
