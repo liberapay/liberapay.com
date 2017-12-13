@@ -1,12 +1,15 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2017-12-13 08:49+0000\n"
+"Last-Translator: Besenyei Máté <besenyeim@gmail.com>\n"
 "Language-Team: Hungarian "
 "<https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.18-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #, fuzzy
@@ -33,33 +36,34 @@ msgstr "Ha nem akar adományokat fogadni a Liberapayen, elutasíthatja őket pro
 msgid "You have received {0} this week"
 msgstr "Ezen a héten {0} összegű adomány érkezett"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} were given to you personally."
-msgstr ""
+msgstr "{0} összeget adományoztak önnek személyesen."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
 msgstr "Mivel ön nem tagja egyetlen csoportnak sem, csoportokban való részvételért nem kapott pénzt."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] ""
+msgstr[0] "Nem kapott pénzt a {0} csapatban betöltött szerepéért."
+msgstr[1] "Nem kapott pénzt a {n} csapatokban betöltött szerepeiért."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
-msgstr ""
+msgstr "{0} összeget kapott a {1} csapatban betöltött szerepéért."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} were given to you for your roles in the following teams:"
-msgstr ""
+msgstr "{0} összeget kapott a szerepeiért a következő csapatokban:"
 
 #, python-brace-format
 msgid "{0}: {1}"
-msgstr ""
+msgstr "{0}: {1}"
 
 #, python-brace-format
 msgid "You now have {0} in your wallet."
-msgstr ""
+msgstr "A tárcájában {0} van jelenleg."
 
 #, fuzzy
 msgid "See your account's transaction logs"
@@ -67,7 +71,7 @@ msgstr "Számlatörténet megtekintése"
 
 #, python-brace-format
 msgid "- {0}: {1}"
-msgstr ""
+msgstr "- {0}: {1}"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
@@ -77,9 +81,11 @@ msgstr ""
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
 msgstr ""
+"Sajnos a {0} tárca nem tartalmaz elegendő pénzt, de amint megtörténik, "
+"automatikusan ki fogjuk fizetni."
 
 msgid "View the invoice"
 msgstr "Számla megtekintése"
@@ -92,11 +98,13 @@ msgstr ""
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
 msgstr ""
 
+#, fuzzy
 msgid "Withdraw the money"
-msgstr ""
+msgstr "Pénz kivétele"
 
+#, fuzzy
 msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr ""
+msgstr "Nem tudja kivenni a pénzt, mert még karanténban van."
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -108,28 +116,30 @@ msgstr ""
 
 #, python-brace-format
 msgid "Reason: “{0}”"
-msgstr ""
+msgstr "Oka: „{0}”"
 
 msgid "Log in to Liberapay"
-msgstr ""
+msgstr "Bejelentkezés a Liberapay-be"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
-msgstr ""
+msgstr "Valaki (temélhetőleg ön) fozzáférést kért a {0} számlához Liberapay-en."
 
 msgid "Follow this link to proceed:"
-msgstr ""
+msgstr "Kövesse ezt a linket a folytatáshoz:"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
-msgstr ""
+msgstr "Kérjük, vegye figyelembe, hogy a link csak eddig érvényes: {0}."
 
 msgid "It's time to top up your Liberapay wallet"
-msgstr ""
+msgstr "Itt az ideje, hogy feltöltse Liberapay számláját"
 
 #, python-brace-format
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr ""
+"Önnek {0} maradt a Liberapay számláján, de legalább {1} szükséges a jövő "
+"heti adományozásokhoz."
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
