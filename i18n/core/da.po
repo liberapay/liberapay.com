@@ -2253,8 +2253,8 @@ msgstr "Billigere¹ men besværlig"
 msgid "Fee: {0}%"
 msgstr "Gebyr: {0}%"
 
-msgid "SEPA only"
-msgstr "Kun SEPA"
+msgid "Eurozone only"
+msgstr ""
 
 msgid "Best for regular payments"
 msgstr "Bedst for almindelige betalinger"
@@ -2428,6 +2428,9 @@ msgstr "Husk kort-nummeret til næste gang"
 
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr "Dine kortdata sendes direkte til vores betalingspartners system via en krypteret forbindelse."
+
+msgid "Euro direct debits are only available from within the Eurozone."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
@@ -2776,9 +2779,7 @@ msgstr "Juridisk information"
 
 #, fuzzy
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
-msgstr ""
-"Denne hjemmeside bestyres af Liberapay, en nonprofit-organisation grundlagt "
-"juridiske i 2015 i Frankrig (ID: W144000981)."
+msgstr "Denne hjemmeside bestyres af Liberapay, en nonprofit-organisation grundlagt juridiske i 2015 i Frankrig (ID: W144000981)."
 
 msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
 msgstr "Liberapay er registreret som distributør af e-penge i EU. Med hjælp fra vores partnere overvåger vi transaktioner for mulig bedrageri, hvidvaskning af penge og finansiering af terrorisme som krævet i finansforordningerne."
@@ -2929,13 +2930,7 @@ msgstr "Du kan ændre din andel fra {0}dit teams kontrolpanel{1}. Den indeholder
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
-msgstr ""
-"De nominelle andele er de rå tal, som medlemmerne indtaster selv. De "
-"faktiske andele beregnes af systemet: først opsummerer det de nominelle "
-"andele, så beregnes den procentdel, som hver repræsenterer, og endelig "
-"anvender disse procentsatser til den disponible indkomst. Nominelle andele "
-"fungerer også som maksimumsbeløb: de faktiske andele er aldrig højere end de "
-"nominelle, selvom der er ekstra indtægter til rådighed."
+msgstr "De nominelle andele er de rå tal, som medlemmerne indtaster selv. De faktiske andele beregnes af systemet: først opsummerer det de nominelle andele, så beregnes den procentdel, som hver repræsenterer, og endelig anvender disse procentsatser til den disponible indkomst. Nominelle andele fungerer også som maksimumsbeløb: de faktiske andele er aldrig højere end de nominelle, selvom der er ekstra indtægter til rådighed."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the stability of the team's income."
 msgstr "Du undrer dig måske over hvorfor vi behandler nominelle andele som maksimumbeløb i stedet for simple procentdele. Det er fordi maksimumbeløb giver et team mulighed for at have ubrugt indkomst (kaldet \"resterende\") og det er godt på flere måder. For det første giver det en \"stødpude\", der stabiliserer team-medlemmernes indkomst. For det andet letter det integrationen af nye medlemmer i et team, fordi deres andel tages fra resterende i stedet for at påvirke de øvrige medlemmers indkomst. For det tredje tillader det vores software at justere de beløb som donorer rent faktisk overfører til holdets medlemmer på en måde der afbalancerer donorernes bidrag over tid hvilket gør systemet mere retfærdigt. Endelig tilskynder det til at donere til et team, selvom det allerede har nået sit finansieringsmål, hvilket er godt for stabiliteten af holdets indkomst."
@@ -2948,20 +2943,11 @@ msgstr "Når denne funktion er aktiveret for et team, kan dets medlemmer ikke h�
 
 #, fuzzy
 msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
-"Grænsen virker på følgende måde: Du kan altid øge din andel til 1,00 hvis "
-"den var under det. Du kan fordoble din andel i forhold til den foregående "
-"uge, du kan hæve din andel for at hæve holdets resterende indkomst, og du "
-"kan bringe din andel til niveauet for median-andelen for forrige "
-"betalingsdag. Uanset hvilken af disse muligheder der er størst, er dit "
-"maksimum for ugen."
+msgstr "Grænsen virker på følgende måde: Du kan altid øge din andel til 1,00 hvis den var under det. Du kan fordoble din andel i forhold til den foregående uge, du kan hæve din andel for at hæve holdets resterende indkomst, og du kan bringe din andel til niveauet for median-andelen for forrige betalingsdag. Uanset hvilken af disse muligheder der er størst, er dit maksimum for ugen."
 
 #, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr ""
-"Andele er ikke begrænset hvis holdet kun har et medlem, eller hvis den "
-"foregående uges andele alle var nul (hvilket er tilfældet for et nyt team, "
-"der er oprettet efter den seneste betalingsdag)."
+msgstr "Andele er ikke begrænset hvis holdet kun har et medlem, eller hvis den foregående uges andele alle var nul (hvilket er tilfældet for et nyt team, der er oprettet efter den seneste betalingsdag)."
 
 #, fuzzy
 msgid "Removing team membership"
@@ -3424,9 +3410,7 @@ msgstr[1] "{n} profil-erklæringer blev importeret."
 
 #, fuzzy, python-brace-format
 msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr ""
-"Importen mislykkedes desværre. Fejlen er blevet registreret, vi løser det "
-"hurtigst muligt. ID: {0}."
+msgstr "Importen mislykkedes desværre. Fejlen er blevet registreret, vi løser det hurtigst muligt. ID: {0}."
 
 #, python-brace-format
 msgid "{n} elsewhere account was imported:"
