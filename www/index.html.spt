@@ -3,8 +3,15 @@
 from math import ceil
 
 from liberapay.models.participant import Participant
+from liberapay.utils.i18n import LANGUAGES_2
 
 query_cache = website.db_qc5
+
+n_langs = len(website.lang_list)
+n_langs_2 = len(LANGUAGES_2)
+n_good_translations = len([t[0] for t in website.lang_list if t[0] >= 0.95])
+
+platforms_with_repos = [p.display_name for p in website.platforms.hasattr('api_repos_path')]
 
 [---]
 
@@ -219,6 +226,95 @@ recent = query_cache.one("""
     </div>
 
     <div class="section">
+        <h2>{{ _("Features") }}</h2>
+        <dl class="row homepage-pitch">
+            <div class="col-sm-4">
+                <dt>
+                    <span class="fa fa-group" aria-hidden="true"></span><br>
+                    <a href="/explore/pledges">{{ _("Teams") }}</a>
+                </dt>
+                <dd>{{ _(
+                    "A team allows members of a project to receive money and share it, without "
+                    "having to set up a legal entity. {0}Learn more…{1}",
+                    '<a href="/about/teams">'|safe, '</a>'|safe
+                ) }}</dd>
+            </div>
+            <div class="col-sm-4">
+                <dt>
+                    <span class="fa fa-language" aria-hidden="true"></span><br>
+                    {{ _("Multiple languages") }}
+                </dt>
+                <dd>
+                {{ ngettext(
+                    "Our service is currently available in {n} language.",
+                    "Our service is currently available in {n} languages.",
+                    n_good_translations
+                ) }}
+                % if n_langs > n_good_translations
+                {{ ngettext(
+                    "It's also partially translated into {n} other language ({link_open}you can contribute{link_close}).",
+                    "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close}).",
+                    n_langs - n_good_translations,
+                    link_open='<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
+                    link_close='</a>'|safe,
+                ) }}
+                % endif
+                {{ ngettext(
+                    "",
+                    "Your profile descriptions and other texts can be published in up to {n} languages.",
+                    n_langs_2
+                ) }}
+                </dd>
+            </div>
+            <div class="col-sm-4">
+                <dt>
+                    <sub><span class="fa fa-eur" aria-hidden="true"></span></sub>
+                    <sup><span class="fa fa-usd" aria-hidden="true"></span></sup>
+                    <br>
+                    {{ _("Multiple currencies") }}
+                </dt>
+                <dd>{{ _(
+                    "We currently support two currencies: the euro (€) and the US dollar ($). "
+                    "We do not handle crypto-currencies like bitcoin."
+                ) }}</dd>
+            </div>
+        </dl>
+        <dl class="row homepage-pitch">
+            <div class="col-sm-5 col-sm-offset-1">
+                <dt>
+                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span><br>
+                    <a href="/explore/elsewhere">{{ _("Integrations") }}</a>
+                </dt>
+                <dd>
+                {{ ngettext(
+                    "",
+                    "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms.",
+                    len(website.platforms) - 3,
+                    platform1=website.platforms.list[0].display_name,
+                    platform2=website.platforms.list[1].display_name,
+                    platform3=website.platforms.list[2].display_name
+                ) }}
+                {{ _(
+                    "You can also easily list on your profile the repositories you contribute to on {platforms_list}.",
+                    platforms_list=format_list(platforms_with_repos)
+                ) }}
+                </dd>
+            </div>
+            <div class="col-sm-5">
+                <dt>
+                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span><br>
+                    <a href="/explore/pledges">{{ _("Pledges") }}</a>
+                </dt>
+                <dd>{{ _(
+                    "Liberapay allows you to pledge to donate to people who haven't joined "
+                    "the site yet. The donation will automatically start if they sign up "
+                    "to receive it. We'll send you a notification when that happens."
+                ) }}</dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="section">
         <h2>{{ _("Sponsors") }}</h2>
         <p>{{ _(
             "Donations from businesses and nonprofits are welcome on Liberapay. If "
@@ -275,7 +371,7 @@ recent = query_cache.one("""
         ) }}</span></p>
         % endif
         % if recent.n_pledges > 1
-        <p>{{ glyphicon('thumbs-up') }} <span>{{ ngettext(
+        <p>{{ glyphicon('heart') }} <span>{{ ngettext(
             "",
             "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
             n=recent.n_pledges,
