@@ -1,12 +1,5 @@
-
 msgid ""
-msgstr ""
-"Language-Team: Italian (https://hosted.weblate.org/projects/liberapay/core/it/)\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+msgstr "PO-Revision-Date: 2017-12-16 12:01+0000\nLast-Translator: Claudio Maradonna <claudio@unitoo.pw>\nLanguage-Team: Italian <https://hosted.weblate.org/projects/liberapay/core/it/>\nLanguage: it\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 2.18\nGenerated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
 msgstr "Saluti,"
@@ -1020,7 +1013,7 @@ msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "* Il riferimento dei profili Liberapay è soggetto all'approvazione di un amministratore."
 
 msgid "Patrons"
-msgstr ""
+msgstr "Donatori"
 
 msgid "Income"
 msgstr "Introito"
@@ -1045,8 +1038,8 @@ msgstr "Missione compiuta !"
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} ha {n} donatore."
+msgstr[1] "{0} ha {n} donatori."
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
@@ -1055,8 +1048,8 @@ msgstr "L'obiettivo di {0} è quello di ricevere {1} ogni settimana."
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} riceve {1} a settimana da {n} donatore."
+msgstr[1] "{0} riceve {1} a settimana da {n} donatori."
 
 #, python-brace-format
 msgid "Donating ({amount})"
@@ -1090,7 +1083,7 @@ msgstr "(ramo)"
 msgid "Updated this week"
 msgstr "Aggiornato questa settimana"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {0} ago"
 msgstr "Aggiornato {0} fa"
 
@@ -1551,8 +1544,8 @@ msgstr[1] "Le vostre donazioni sono finanziate per altre {n} settimane."
 #, python-brace-format
 msgid "Your donations in {currency} are only funded for another week."
 msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le tue donazioni in {currency} sono disponibili solo per un'altra settimana."
+msgstr[1] "Le tue donazioni in {currency} sono disponibili solo per {n} settimane."
 
 msgid "You need to transfer money to your wallet to fund your donations."
 msgstr "Devi trasferire denaro nel tuo portafoglio per finanziare le tue donazioni."
@@ -1923,8 +1916,9 @@ msgstr "Il tuo profilo è stato aggiornato."
 msgid "{username}'s Repositories"
 msgstr "Repositories di {username}"
 
+#, fuzzy
 msgid "We can also import lists of repositories for your teams:"
-msgstr ""
+msgstr "Possiamo anche importare una lista di repository per le squadre:"
 
 #, python-brace-format
 msgid "You don't have any {platform} account connected to your profile."
@@ -1937,8 +1931,8 @@ msgstr "Connetti account {0}"
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {time} ago."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Abbiamo trovato {n} repository nell'account {platform}, {time} fa."
+msgstr[1] "{n} repositories sono stati importati dall'account {platform}, {time} ago."
 
 msgid "No repositories found."
 msgstr "Nessun repository trovato."
@@ -1946,25 +1940,27 @@ msgstr "Nessun repository trovato."
 msgid "Next Page →"
 msgstr "Prossima Pagina →"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Starred Repositories on {platform}"
-msgstr ""
+msgstr "Repositories Premiati su {platform}"
 
+#, fuzzy
 msgid "Starred Repositories"
-msgstr ""
+msgstr "Repositories Premiati"
 
+#, fuzzy
 msgid "We can import a list of repositories you have starred from:"
-msgstr ""
+msgstr "Possiamo importare una lista di repositories premiati da:"
 
 #, python-brace-format
 msgid "Your {platform} account needs to be reconnected."
 msgstr "Il tuo account {platform} ha bisogno di essere ricollegato."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hai premiato {n} repository su {platform}."
+msgstr[1] "Hai premiato {n} repositories su {platform}."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "Il BIC fornito sembra non essere valido."
@@ -2038,15 +2034,16 @@ msgstr "La tua password è stata modificata."
 msgid "Your privacy settings have been changed."
 msgstr "Le impostazioni di privacy sono state modificate."
 
+#, fuzzy
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
-msgstr ""
+msgstr "Si prega di confermare la modifica della valuta di riferimento di questa squadra. Tutte le valute di ogni membro saranno convertite tenendo conto del tasso di scambio odierno, inoltre ogni membro riceverà una notifica relativa al cambio."
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
-msgstr ""
+msgstr "Non è possibile modificare la valuta di una squadra che sta ricevendo donazioni. Ci dispiace."
 
 #, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr ""
+msgstr "Stai ricevendo l'equivalente di {money_amount} a settimana da donazioni con valuta straniera. Queste donazioni non saranno convertite nella tua valuta principale."
 
 msgid "Account"
 msgstr "Conto"
@@ -2055,10 +2052,10 @@ msgid "Account type"
 msgstr "Tipo di account"
 
 msgid "modify"
-msgstr ""
+msgstr "modifica"
 
 msgid "not modifiable"
-msgstr ""
+msgstr "non modificabile"
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
@@ -2074,18 +2071,18 @@ msgstr "Stai donando {0} a {1} ogni anno. Grazie!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per week to {1}. Thank you!"
-msgstr ""
+msgstr "Ti sei impegnato a donare {0} ogni settimana a {1}. Grazie!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per month to {1}. Thank you!"
-msgstr ""
+msgstr "Ti sei impegnato a donare {0} ogni mese a {1}. Grazie!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
-msgstr ""
+msgstr "Ti sei impegnato a donare {0} ogni anno a {1}. Grazie!"
 
 msgid "The donation amount is missing."
-msgstr ""
+msgstr "L'ammontare della donazione è mancante."
 
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
@@ -2095,7 +2092,7 @@ msgid "Export History"
 msgstr "Storia Export"
 
 msgid "awaiting confirmation"
-msgstr ""
+msgstr "attesa di conferma"
 
 msgid "preparing"
 msgstr "in preparazione"
@@ -2122,13 +2119,13 @@ msgstr "Estratto Conto"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
-msgstr ""
+msgstr "Totale economico inviato: {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations to {n} person"
 msgid_plural "{money_amount} in recurrent donations to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} come donazione ricorrente a {n} persona"
+msgstr[1] "{money_amount} come donazione ricorrente a {n} persone"
 
 msgid "Export as CSV"
 msgstr "Esporta come CSV"
@@ -2136,24 +2133,24 @@ msgstr "Esporta come CSV"
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} come rimborso spese a {n} persona"
+msgstr[1] "{money_amount} come rimborso spese a {n} persone"
 
 #, python-brace-format
 msgid "Total money received: {0}"
-msgstr ""
+msgstr "Totale economico ricevuto: {0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations from {n} donor"
 msgid_plural "{money_amount} in recurrent donations from {n} donors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} come donazione ricorrente da {n} donatore"
+msgstr[1] "{money_amount} come donazione ricorrente da {n} donatori"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
 msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} come rimborso spese da {n} organizzazione"
+msgstr[1] "{money_amount} come rimborso spese da {n} organizzazioni"
 
 msgid "Status"
 msgstr "Stato"
@@ -2200,16 +2197,17 @@ msgstr "rimborso donazione"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
-msgstr ""
+msgstr "rimborso {link_open}spese #{invoice_id}{link_close} da {payer}"
 
 msgid "anonymous donation"
 msgstr "donazione anonima"
 
+#, fuzzy
 msgid "chargeback"
-msgstr ""
+msgstr "rimborso"
 
 msgid "debt repayment"
-msgstr ""
+msgstr "rimborso del debito"
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -2222,9 +2220,9 @@ msgstr "donazione a {0} per il loro ruolo nella squadra {1}"
 msgid "refund of anonymous donation"
 msgstr "il rimborso di donazione anonima"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
-msgstr ""
+msgstr "{link_open}fattura #{invoice_id}{link_close} a {payee}"
 
 #, python-brace-format
 msgid "donation to {0}"
@@ -2233,14 +2231,16 @@ msgstr "donazione a {0}"
 msgid "No transactions to show."
 msgstr "Nessuna transazione da mostrare."
 
+#, fuzzy
 msgid "Adding Money"
-msgstr ""
+msgstr "Aggiunta Economica"
 
+#, fuzzy
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr ""
+msgstr "Non permettiamo ricariche economiche quando le donazioni sono coperte dal tuo introito. Se questo dovesse essere un problema per te si prega di inviare una email a support@liberapay.com con le tue motivazioni."
 
 msgid "Please choose a payment method to add money:"
-msgstr ""
+msgstr "Si prega di scegliere un metodo di pagamento per aggiungere i soldi:"
 
 msgid "Easy and instantaneous"
 msgstr "Facile e immediato"
@@ -2250,7 +2250,7 @@ msgid "Fees: {0}% + {1}"
 msgstr "Tasse: {0}% + {1}"
 
 msgid "To an account in Europe"
-msgstr ""
+msgstr "Verso un account in Europa"
 
 msgid "Cheapest for small amounts¹"
 msgstr ""
@@ -2263,27 +2263,29 @@ msgid "Fee: {0}%"
 msgstr "Costo: {0}%"
 
 msgid "Eurozone only"
-msgstr ""
+msgstr "Solo zona Euro"
 
 msgid "Best for regular payments"
-msgstr ""
+msgstr "Il migliore per i pagamenti regolari"
 
 #, python-brace-format
 msgid "Fee: {0}"
-msgstr ""
+msgstr "Quota: {0}"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Non hai ancora impostato eventuali donazioni, una volta che fate ti verrà richiesto di aggiungere soldi sul tuo conto."
 
+#, fuzzy
 msgid "About Fees"
-msgstr ""
+msgstr "Riguardo le Quote"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
 msgstr "Le tasse sono quelli dei nostri processori di pagamento, Liberapay è finanziato solo dalle donazioni a {0} proprio conto {1}."
 
+#, fuzzy
 msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr ""
+msgstr "¹ A meno che la banca non detragga già qualcosa per il trasferimento. Noi non possiamo verificarlo."
 
 msgid "An unknown error occurred."
 msgstr "Si è verificato un errore sconosciuto."
@@ -2296,10 +2298,10 @@ msgstr "Perché stai cercando di mettere più soldi nel portafoglio? Per coretes
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
-msgstr ""
+msgstr "'{0}' non è una somma accettabile (min={1}, max={2})"
 
 msgid "This bank wire has been canceled."
-msgstr ""
+msgstr "Questo bonifico bancario è stato cancellato."
 
 msgid "Go back"
 msgstr "Torna indietro"
@@ -2340,7 +2342,7 @@ msgid "Change your email settings"
 msgstr "Modificare le impostazioni e-mail"
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr ""
+msgstr "Hai cambiato idea? Elimina il pagamento per evitare di ricevere una notifica di avvertimento il prossimo mese:"
 
 msgid "Request in progress, please wait…"
 msgstr "Richiesta in corso, attendere prego …"
@@ -2350,7 +2352,7 @@ msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our pay
 msgstr "Effettuare un versamento a Liberapay tramite bonifico bancario comporta un costo di {0}% dal nostro sistema di pagamento."
 
 msgid "Please select a precomputed amount or input a custom one."
-msgstr ""
+msgstr "Si prega di selezionare un importo pre-inserito o di immetterne uno personalizzato."
 
 #, python-brace-format
 msgid "{0} ({2}% fee included)"
@@ -2359,24 +2361,24 @@ msgstr "{0} ({2}% di ricarichi inclusi)"
 #, python-brace-format
 msgid "Your donations will be funded for {n} week"
 msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le tue donazioni saranno emissibili per {n} settimana"
+msgstr[1] "Le tue donazioni saranno emissibili per {n} settimane"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
 msgid_plural "Your donations will be funded for {n} weeks ({0})"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "Le tue donazioni saranno emissibili per {n} settimane ({0})"
 
 #, python-brace-format
 msgid "{n} month"
 msgid_plural "{n} months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} mese"
+msgstr[1] "{n} mesi"
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
-msgstr ""
+msgstr "Ammontare personalizzato (min={0}, max={1})"
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
@@ -2394,22 +2396,22 @@ msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1
 msgstr "L'aggiunta di soldi per Liberapay tramite carta di credito / debito comporta un costo di {0}% + {1}."
 
 msgid "Card"
-msgstr ""
+msgstr "Carta"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr ""
+msgstr "Attenzione: alcuni dati della carta immessa sembrano non essere validi. Procedere comunque?"
 
 msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
 msgstr "La richiesta non è riuscita. Si prega di assicurarsi che il proprio browser è up-to-date, e disabilitare un'estensione che blocca le richieste (ad esempio NoScript), quindi riprovare."
 
 msgid "Card number"
-msgstr ""
+msgstr "Numero della carta"
 
 msgid "The main number on the card, between 8 and 19 digits"
-msgstr ""
+msgstr "Il numero principale della carta, tra 8 e 19 cifre"
 
 msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
+msgstr "Questa carta sembra non valida, sei sicuro di non aver commesso errori?"
 
 msgid "This card number is invalid."
 msgstr "Il numero della carta di credito non è valido."
@@ -2418,7 +2420,7 @@ msgid "MM/YY"
 msgstr "MM/AA"
 
 msgid "Expiration date (4 digits)"
-msgstr ""
+msgstr "Data di scadenza (4 cifre)"
 
 msgid "This expiration date is invalid."
 msgstr "Questa data di scadenza non è valida."
@@ -2427,23 +2429,23 @@ msgid "CVV"
 msgstr "CVV"
 
 msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr ""
+msgstr "Code di verifica, solitamente 3 cifre situate sul retro della carta"
 
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
+msgstr "Questo codice di verifica sembra non valido, sei sicuro di non aver commesso errori?"
 
 msgid "Remember the card number for next time"
 msgstr "Ricordate il numero di carta per la prossima volta"
 
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr ""
+msgstr "I dati della tua carta sono inviati al nostro sistema di pagamento attraverso una connessione cifrata."
 
 msgid "Euro direct debits are only available from within the Eurozone."
-msgstr ""
+msgstr "Addebiti diretti in Euro sono disponibili solo all'interno della zona Euro."
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
+msgstr "{0} sono stati prelevati dal tuo conto bancario, {1} sono stati depositati sul tuo portafogli Liberapay, {2} sono stati trattenuti come compenso."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
@@ -2455,16 +2457,16 @@ msgstr "Il tentativo di trasferire {0} dal tuo conto bancario non è riuscito, r
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr ""
+msgstr "Aggiungere soldi a Liberapay tramite un addebito diretto comporta un compenso di {0}."
 
 msgid "Bank Account"
-msgstr ""
+msgstr "Conto Bancario"
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "Use another account"
-msgstr ""
+msgstr "Usa un altro account"
 
 msgid "This IBAN is invalid."
 msgstr "Questo IBAN non è valido."
@@ -2483,7 +2485,7 @@ msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
 msgstr "La tassa di transazione sarebbe elevato: {0}% ({1} / {2}). Procedere comunque?"
 
 msgid "Withdrawing Money"
-msgstr ""
+msgstr "Ritira Soldi"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -2505,11 +2507,11 @@ msgid "We quarantine money for {0} to protect ourselves from credit card fraud, 
 msgstr "Abbiamo quarantena soldi per {0} per proteggerci dalle frodi con carta di credito, mi spiace per l'inconveniente."
 
 msgid "Which currency do you want to withdraw?"
-msgstr ""
+msgstr "Da quale valuta vuoi ritirare?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr ""
+msgstr "Ritirare euro da un conto SEPA è gratuito, trasferirli in un altro paese costa {0} ognuno. Ritirare dollari americani costa {1} per ogni trasferimento a prescindere dal paese di destinazione."
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
