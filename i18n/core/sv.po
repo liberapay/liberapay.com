@@ -427,8 +427,14 @@ msgstr "Du har förbrukat din kvot av email inloggningar, var god försök igen 
 msgid "There have been too many attempts to log in to this account recently, please try again in a few hours or log in via email."
 msgstr "Det har varit för många försök att logga in på detta konto nyligen, var god försök igen om några timmar eller logga in via email."
 
+#, fuzzy
 msgid "Too many accounts have been created recently. This either means that a lot of people are trying to join Liberapay today, or that an attacker is trying to overload our system. As a result we have to ask you to come back later (e.g. in a few hours), or send an email to support@liberapay.com. We apologize for the inconvenience."
 msgstr ""
+"För många nya konton har skapats under en kort tid. Detta innebär antingen "
+"att många nya användare försöker ansluta sig till Liberapay idag, eller att "
+"någon försöker överlasta vårt system. Därför ber vi dig försöka igen senare ("
+"t.ex. om några timmar). Alternativt kan du skicka e-post till support@"
+"liberapay.com. Vi ber om ursäkt om detta orsakar besvär för dig."
 
 #, python-brace-format
 msgid "The password must be at least {0} and at most {1} characters long."
@@ -1601,8 +1607,12 @@ msgstr ""
 "\n"
 "Det kan inte ångras!"
 
+#, fuzzy
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr ""
+"Är du säker på att du vill ändra kontotyp? På grund av lagkrav måste vi "
+"skapa ett nytt konto till dig hos vår betaltjänst och föra över pengarna "
+"från ditt gamla konto till det nya."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
 msgstr "Vi kan inte ändra din kontotyp under utbetalningsdagen, var god försök igen om några minuter."
@@ -1634,9 +1644,12 @@ msgstr "Level 2"
 msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
 msgstr "Du har slutfört identitetverifieringsprocessen, det totala beloppet pengar du kan ge och ta emot per år är inte längre begränsat."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
 msgstr ""
+"Du måste tillhandahålla ytterligare information om du donerar mer än {0} per "
+"år, eller tar emot mer än {1} per år, eller om det finns tecken på misstänkt "
+"aktivitet på ditt konto."
 
 msgid "Income Shares"
 msgstr "Inkomst andelar"
@@ -1802,8 +1815,11 @@ msgstr "Detaljer om fakturan (t.ex. nedbrytning av beloppet till dess komponente
 msgid "Documents (private)"
 msgstr "Dokument (privat)"
 
+#, fuzzy
 msgid "A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened."
 msgstr ""
+"Det är mer sannolikt att en begäran om återbetalning accepteras om du kan "
+"styrka att transaktionen har skett."
 
 #, python-brace-format
 msgid "Only the administrators of {0} will be able to download these files."
@@ -1972,8 +1988,12 @@ msgstr "Stäng Konto"
 msgid "Try Again Later"
 msgstr "Försök Igen Senare"
 
+#, fuzzy
 msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
 msgstr ""
+"Vi håller för närvarande på med överföringar av donationer mellan konton och "
+"dessvärre kan vi inte avluta konton under tiden detta sker. Vänligen försök "
+"igen om några timmar."
 
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
@@ -2487,9 +2507,9 @@ msgstr ""
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "Av det är {0} tillgängligt för uttag, resten är fortfarande i karantin."
+msgstr "Av det är {0} tillgängligt för uttag, resten är fortfarande i karantän."
 
 #, python-brace-format
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
@@ -2807,8 +2827,9 @@ msgstr ""
 msgid "You need to log in to access this page."
 msgstr "Du måste logga in för att se denna sida."
 
+#, fuzzy
 msgid "Quarantine"
-msgstr "Karantin"
+msgstr "Karantän"
 
 msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
 msgstr ""
@@ -2965,7 +2986,7 @@ msgstr "Starta ett nytt nätverk"
 msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
 msgstr[0] "Det finns {n} nätverk på Liberapay."
-msgstr[1] "Det finns {n} nätverk poa Liberapay."
+msgstr[1] "Det finns {n} nätverk på Liberapay."
 
 msgid "Search communities"
 msgstr "Sök nätverk"

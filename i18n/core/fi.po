@@ -538,13 +538,11 @@ msgstr "Liikaa palvelupyyntöjä"
 msgid "Internal Server Error"
 msgstr "Palvelimen sisäinen virhe"
 
-#, fuzzy
 msgid "Upstream Error"
-msgstr "Upstream Error"
+msgstr "Tietolähdehäiriö"
 
-#, fuzzy
 msgid "Gateway Timeout"
-msgstr "Gateway Timeout"
+msgstr "Gateway ei vastaa"
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Pyyntösi käsittely epäonnistui, koska palvelimemme ei saanut yhteyttä toisella koneella sijaitsevaan palveluun. Tämä on tilapäinen häiriö. Yritä myöhemmin uudelleen."
@@ -577,7 +575,7 @@ msgid "Liberapay is currently in read-only mode as we are migrating the database
 msgstr "Liberapay-palveluun ei voi tällä hetkellä tehdä muutoksia, koska siirrämme tietokantaa. Tässä kestänee vain muutama minuutti."
 
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Navigaatio pois/esiin"
 
 msgid "Homepage"
 msgstr "Kotisivu"
@@ -645,7 +643,7 @@ msgstr "Ryhmän sähköpostiosoite (vapaaehtoinen)"
 
 #, python-brace-format
 msgid "Enable {0}limits on team takes{1}"
-msgstr ""
+msgstr "Aktivoi {0}rajat ryhmän nostoille{1}"
 
 msgid "Create"
 msgstr "Luo"
@@ -750,10 +748,13 @@ msgid "Headquarters Address"
 msgstr "Päämajan osoite"
 
 msgid "Articles of Association"
-msgstr ""
+msgstr "Yhtiöjärjestys"
 
 msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
 msgstr ""
+"Virallinen yhtiöjärjestys (Säädös) — virallinen yrittäjän antama lausuma, "
+"josta ilmenee seuraavat tiedot: yrityksen nimi, toimiala, rekisteröity "
+"osoite, osakeomistus."
 
 msgid "Registration Proof"
 msgstr "(Yhteisön) rekisteröintitodistus"
@@ -765,17 +766,18 @@ msgid "Proof of registration from the official authority."
 msgstr "Rekisteröinnin todiste viralliselta taholta."
 
 msgid "Shareholder Declaration"
-msgstr ""
+msgstr "Osakkeenhaltijan ilmoitus"
 
 #, python-brace-format
 msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr ""
+msgstr "Lataa ja täytä {link_start}osakkeenomistajan ilmoituslomake{link_end}."
 
 msgid "Legal Representative Information"
-msgstr ""
+msgstr "Laillisen edustajan tiedot"
 
 msgid "The following fields are about the organization's legal representative (you, probably)."
 msgstr ""
+"Seuraavat kentät koskevat yhtiön laillista edustajaa (todennäköisesti sinua)."
 
 msgid "Email"
 msgstr "Sähköpostiosoite"
@@ -869,7 +871,7 @@ msgid "Members"
 msgstr "Jäsenet"
 
 msgid "View income shares"
-msgstr ""
+msgstr "Näytä tulo-osuudet"
 
 msgid "Introduction"
 msgstr "Esittely"
@@ -1011,7 +1013,7 @@ msgid "Country"
 msgstr "Maa"
 
 msgid "Admin override is on.*"
-msgstr ""
+msgstr "Admin-ohitus käytössä.*"
 
 msgid "Save changes"
 msgstr "Talleta muutokset"
@@ -1058,9 +1060,9 @@ msgid_plural "{0} receives {1} per week from {n} patrons."
 msgstr[0] "Käyttäjä {0} saa {1} viikossa yhdeltä tukijalta."
 msgstr[1] "Käyttäjä {0} saa {1} viikossa {n} tukijalta."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donating ({amount})"
-msgstr "Lahjoitetaan ({amount})"
+msgstr "Lahjoittaa ({amount})"
 
 msgid "Donate"
 msgstr "Lahjoita"
@@ -1085,7 +1087,7 @@ msgid "This user doesn't accept donations."
 msgstr "Tämä käyttäjä ei ota vastaan lahjoituksia."
 
 msgid "(fork)"
-msgstr ""
+msgstr "(haara)"
 
 msgid "Updated this week"
 msgstr "Päivitetty tällä viikolla"
@@ -1214,7 +1216,7 @@ msgstr "Keskeytä tilaus"
 
 #, python-brace-format
 msgid "Subscribe to updates from {0}?"
-msgstr ""
+msgstr "Tilaatko yhteisön {0} tiedotteet?"
 
 msgid "← Go back"
 msgstr "← Paluu"
@@ -1283,6 +1285,8 @@ msgstr "Voinko tehdä kertaluonteisen lahjoituksen?"
 
 msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
 msgstr ""
+"Ei, mutta voit keskeyttää lahjoituksen milloin vain haluat. Lahjoitus "
+"käytännössä keskeytyy myös, mikäli et lisää tilillesi tarvittaessa katetta."
 
 msgid "Is this platform legit and secure?"
 msgstr "Onko tämä palvelu luotettava ja turvallinen?"
@@ -1642,7 +1646,7 @@ msgid "If you give more than {0} in a year, or receive more than {1} in a year, 
 msgstr "Jos annat yli {0} vuodessa, tai vastaanotat yli {1} vuodessa, tai tililläsi ilmenee epäilystä herättävää toimintaa, sinun pitää antaa lisätietoja:"
 
 msgid "Income Shares"
-msgstr ""
+msgstr "Tulo-osuudet"
 
 #, python-brace-format
 msgid "{0} receives {1} per week"
@@ -1810,7 +1814,7 @@ msgstr "Korvauspyyntö hyväksytään todennäköisemmin, jos toimitat todisteen
 
 #, python-brace-format
 msgid "Only the administrators of {0} will be able to download these files."
-msgstr ""
+msgstr "Vain ryhmän {0} ylläpitäjät voivat ladata nämä tiedostot."
 
 #, python-brace-format
 msgid "Allowed file extensions: {0}. Maximum file size: {1}MB."
@@ -1905,10 +1909,10 @@ msgid "You are not a member of any team."
 msgstr "Et ole minkään ryhmän jäsen."
 
 msgid "Tips Received, by Number of Tips"
-msgstr ""
+msgstr "Lahjoituksia saatu, määrän mukaan"
 
 msgid "Tips Received, by Amount"
-msgstr ""
+msgstr "Lahjoituksia saatu, summan mukaan"
 
 msgid "Your profile has been updated."
 msgstr "Profiilisi on päivitetty."
@@ -1931,8 +1935,8 @@ msgstr "Liitä {0}-tili"
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {time} ago."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Löysimme {n} repositorion {platform}-tililtäsi, {time} sitten."
+msgstr[1] "Toimme {n} repositoriota {platform}-tililtäsi, {time} sitten."
 
 msgid "No repositories found."
 msgstr "Repositorioita ei löytynyt."
@@ -2121,8 +2125,8 @@ msgstr "Rahaa lähetetty yhteensä: {0}"
 #, python-brace-format
 msgid "{money_amount} in recurrent donations to {n} person"
 msgid_plural "{money_amount} in recurrent donations to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} toistuvassa lahjoituksessa {n} henkilölle"
+msgstr[1] "{money_amount} toistuvissa lahjoituksissa {n} henkilölle"
 
 msgid "Export as CSV"
 msgstr "Lataa CSV-tiedostona"
@@ -2130,8 +2134,8 @@ msgstr "Lataa CSV-tiedostona"
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{money_amount} kustannushyvityksessä {n} henkilölle"
+msgstr[1] "{money_amount} kustannushyvityksissä {n} henkilölle"
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -2211,7 +2215,7 @@ msgstr "viimeinen lahja→{0}"
 
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
-msgstr ""
+msgstr "lahjoitus käyttäjälle {0} roolinsa tähden ryhmässä {1}"
 
 msgid "refund of anonymous donation"
 msgstr "nimettömän lahjoituksen palautus"
@@ -2257,7 +2261,7 @@ msgid "Fee: {0}%"
 msgstr "Kulut: {0} %"
 
 msgid "Eurozone only"
-msgstr ""
+msgstr "Vain euroalue"
 
 msgid "Best for regular payments"
 msgstr "Paras säännöllisiin maksuihin"
@@ -2312,9 +2316,8 @@ msgstr "IBAN (Kansainvälinen pankkitilinumero)"
 msgid "BIC (Bank Identifier Code)"
 msgstr "BIC (Pankkitunnistekoodi)"
 
-#, fuzzy
 msgid "Wire Reference Code"
-msgstr "Wire Reference Code"
+msgstr "Pankkisiirron viite (Wire Reference Code)"
 
 msgid "Bank Account Owner Name"
 msgstr "Pankkitilin haltijan nimi"
@@ -2354,14 +2357,14 @@ msgstr "{0} (sisältää {2}% kulun veloituksen)"
 #, python-brace-format
 msgid "Your donations will be funded for {n} week"
 msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lahjoituksillesi on katetta yhdeksi viikoksi"
+msgstr[1] "Lahjoituksillesi on katetta {n} viikoksi"
 
 #, python-brace-format
 msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
 msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "kääk"
+msgstr[1] "Lahjoituksillesi on katetta {n} viikoksi ({0})"
 
 #, python-brace-format
 msgid "{n} month"
@@ -2434,7 +2437,7 @@ msgid "Your card data is sent directly to our payment partner's system through a
 msgstr "Korttisi tiedot lähetetään suoraan maksukumppanimme järjestelmään salatun yhteyden läpi."
 
 msgid "Euro direct debits are only available from within the Eurozone."
-msgstr ""
+msgstr "Euromääräiset suoraveloitukset ovat käytettävissä vain euroalueella."
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
@@ -2624,7 +2627,6 @@ msgstr "Meillä ei tällä hetkellä ole puhelinnumeroa."
 msgid "To report a problem or make a suggestion in English:"
 msgstr "Ilmoittaaksesi ongelmasta tai ehdottaaksesi jotain englanniksi:"
 
-#, fuzzy
 msgid "Open an issue on GitHub"
 msgstr "Avaa issue Githubissa"
 
@@ -2793,7 +2795,7 @@ msgstr "Postiosoite:"
 
 #, fuzzy, python-brace-format
 msgid "This website is hosted on {0} by:"
-msgstr "This website is hosted on {0} by:"
+msgstr "Web-sivustomme sijaitsee {0}:n palvelimilla:"
 
 #, python-brace-format
 msgid "The publication director is Liberapay's legal representative, currently {0}."
@@ -2985,7 +2987,7 @@ msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "No voi että, ei löytynyt yhtään. Mitä jos aloittaisit sellaisen?"
 
 msgid "Which platform would you like to explore?"
-msgstr ""
+msgstr "Mitä palvelua haluat tutkia?"
 
 #, python-brace-format
 msgid "{n} connected account"
@@ -2995,35 +2997,39 @@ msgstr[1] "{n} yhdistettyä tiliä"
 
 #, python-brace-format
 msgid "Explore {0}"
-msgstr ""
+msgstr "Tutki palvelua {0}"
 
 #, python-brace-format
 msgid "Explore Your {0} Contacts"
-msgstr ""
+msgstr "Tutki {0}-yhteystietojasi"
 
 #, python-brace-format
 msgid "<unused singular (hash=913600022f5361dd8872dc74f6b023e8)>"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
-msgstr[0] ""
+msgstr[0] "kääk"
 msgstr[1] ""
+"Tässä on {n} satunnaisesti valittua Liberapay-käyttäjää, jotka ovat "
+"kytkeneet {0}-tilinsä:"
 
 #, python-brace-format
 msgid "<unused singular (hash=fa66aed7cc36b8a0d266394a9f2b8fef)>"
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] ""
+msgstr[0] "kääk"
 msgstr[1] ""
+"Tässä on {n} viimeisintä Liberapay-käyttäjää, jotka ovat kytkeneet "
+"{0}-tilinsä."
 
 #, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
 msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tässä on {n} Liberapay-käyttäjä, joka on kytkenyt {0}-tilinsä:"
+msgstr[1] "Tässä ovat {n} Liberapay-käyttäjää, jotka ovat kytkeneet {0}-tilinsä:"
 
 msgid "View More"
 msgstr "Näytä lisää"
 
 msgid "Explore other platforms:"
-msgstr ""
+msgstr "Tutki muita palveluita:"
 
 msgid "Liberapay provides several ways of finding great people to donate to:"
 msgstr "Liberapay-palvelu tarjoaa useita keinoja löytää upeita ihmisiä, joille lahjoittaa:"
@@ -3074,6 +3080,9 @@ msgstr ""
 
 msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
 msgstr ""
+"Liberapay mahdollistaa lahjoittamisen sellaisillekin, jotka eivät ole vielä "
+"liittyneet palveluun. Lahjoitus käynnistyy automaattisesti, jos tämä liittyy "
+"palveluun vastaanottaakseen sen. Tällöin lähetämme sinulle siitä tiedotuksen."
 
 msgid "Recent pledges"
 msgstr "Viimeaikaisia lupauksia"
@@ -3092,6 +3101,8 @@ msgstr "Onko mielessäsi joku?"
 
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr ""
+"Voimme auttaa lahjoituslupauksien vastaanottajien löytämisessä, jos kytket "
+"tilejäsi:"
 
 #, python-brace-format
 msgid "A team allows members of a project to receive money and share it, without having to set up a legal entity. {0}Learn more…{1}"
@@ -3108,7 +3119,7 @@ msgstr "Luo ryhmä"
 
 #, python-brace-format
 msgid "{0} community settings"
-msgstr ""
+msgstr "{0}-yhteisön asetukset"
 
 msgid "Sidebar text"
 msgstr "Sivupalkkiteksti"
@@ -3324,6 +3335,8 @@ msgstr ""
 
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
 msgstr ""
+"Näyttää siltä, että sinun pitää palata Gratipay-palveluun ja kirjautua "
+"siellä ensin, ennen kuin siirto aloitetaan."
 
 #, python-brace-format
 msgid "Welcome, {username}!"
@@ -3348,14 +3361,20 @@ msgstr "ryhmät (teemme ne sinulle)"
 
 msgid "ongoing donations (if the donee hasn't joined Liberapay yet a pledge will be created instead)"
 msgstr ""
+"jatkuvaa lahjoitusta (jos kohde ei ole vielä liittynyt Liberapay-palveluun, "
+"tehdään lahjoituslupaus)"
 
 #, python-brace-format
 msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)"
 msgstr ""
+"muuta tiliä (esim. jos Twitter-tilisi on kytketty {platform}-tiliisi, se "
+"kytketään myös Liberapay-palvelussa)"
 
 #, python-brace-format
 msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
 msgstr ""
+"sähköpostiosoitetta (emme pyydä vahvistamaan sen omistusta, kun se on jo "
+"varmistettu {platform}-palvelussa)"
 
 msgid "and what we cannot import:"
 msgstr "näitä emme voi tuoda:"
@@ -3399,38 +3418,51 @@ msgstr "Tietojan syöttäminen {platform}-palvelusta onnistui."
 #, python-brace-format
 msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
 msgstr ""
+"Tunnuksesi ”{0}” oli sama kuin ryhmäsi nimi, joten tunnustus osoitettiin "
+"ryhmälle henkilökohtaisen tilisi sijaan."
 
 #, python-brace-format
 msgid "{n} profile statement was imported."
 msgid_plural "{n} profile statements were imported."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} profiilinkuvaus tuotu."
+msgstr[1] "{n} profiilinkuvausta tuotu."
 
 #, python-brace-format
 msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
 msgstr ""
+"Tiedonsiirto valitettavasti epäonnistui. Virhe on tallennettu, ja korjaamme "
+"sen kun ehdimme. Tunniste: {0}."
 
 #, python-brace-format
 msgid "{n} elsewhere account was imported:"
 msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} tili muualta tuotu:"
+msgstr[1] "{n} tiliä muualta tuotu:"
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
 msgstr ""
+"Tunnus ”{account_name}” {elsewhere_platform}-palvelusta on kytketty "
+"Liberapay-profiiliisi."
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
 msgstr ""
+"Tunnus ”{account_name}” {elsewhere_platform}-palvelusta oli jo kytketty "
+"Liberapay-profiiliisi."
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
 msgstr ""
+"Tunnusta ”{account_name}” {elsewhere_platform}-palvelusta ei voitu kytkeä "
+"Liberapay-profiiliisi, koska siihen oli jo kytketty toinen "
+"{elsewhere_platform}-tili."
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
 msgstr ""
+"Tunnusta ”{account_name}” {elsewhere_platform}-palvelusta ei voitu kytkeä "
+"Liberapay-profiiliisi, koska se oli jo kytketty toiseen tiliin."
 
 msgid "Edit your profile"
 msgstr "Muokkaa profiiliasi"
@@ -3440,25 +3472,34 @@ msgstr "Hallinnoi tätä ryhmää"
 
 #, python-brace-format
 msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr ""
+msgstr "Ryhmää ei luotu uusiksi, koska tili nimeltä ”{0}” on jo olemassa."
 
 msgid "No teams were imported."
 msgstr "Ryhmiä ei tuotu."
 
 msgid "Donations"
-msgstr ""
+msgstr "Lahjoitukset"
 
 #, python-brace-format
 msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
 msgstr ""
+"Viikottainen {money_amount} lahjoituksesi {platform}-käyttäjälle {name} on "
+"luotu uusiksi Liberapay-palvelussa, ja varattu {name2}-tilille "
+"sähköpostiosoitteen perusteella."
 
 #, python-brace-format
 msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
 msgstr ""
+"Viikottainen {money_amount} lahjoituksesi {platform}-käyttäjälle {name} on "
+"luotu uusiksi Liberapay-palvelussa lupauslahjoituksena {elsewhere_platform}-"
+"käyttäjälle {name2}."
 
 #, python-brace-format
 msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
 msgstr ""
+"Viikottaista {money_amount} lahjoitustasi {platform}-käyttäjälle {name} ei "
+"luotu uusiksi Liberapay-palvelussa, koska {name2} ei ota vastaan "
+"lahjoituksia Liberapay-palvelussa."
 
 msgid "Manage your donations"
 msgstr "Hallinnoi lahjoituksiasi"
@@ -3468,15 +3509,17 @@ msgstr "Sähköpostiosoitteet"
 
 #, python-brace-format
 msgid "The email address {0} has been linked to your Liberapay account."
-msgstr ""
+msgstr "Sähköpostiosoite {0} on kytketty Liberapay-tiliisi."
 
 #, python-brace-format
 msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
 msgstr ""
+"Sähköpostiosoite {0} on kytketty Liberapay-tiliisi, mutta se pitää vielä "
+"varmentaa."
 
 #, python-brace-format
 msgid "The email address {0} was already linked to your account."
-msgstr ""
+msgstr "Sähköpostiosoite {0} oli jo kytketty tiliisl."
 
 #, python-brace-format
 msgid "The email address {0} could not be linked to your account because it was already connected to another account."
@@ -3552,7 +3595,7 @@ msgid "Unlock"
 msgstr ""
 
 msgid "You can donate directly to the team's members:"
-msgstr ""
+msgstr "Voit lahjoittaa ryhmän jäsenille suoraan:"
 
 #, python-brace-format
 msgid "{0} declines donations"
@@ -3576,38 +3619,44 @@ msgstr "Oletko {0}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
-msgstr ""
+msgstr "Oletko {0}-ryhmätilin hallinnoija? Yhdistä se Liberapay-tiliisi."
 
 msgid "Connect team account"
-msgstr ""
+msgstr "Yhdistä ryhmätili"
 
 msgid "We never collect money for you unless you join."
-msgstr ""
+msgstr "Emme koskaan kerää sinulle rahaa, ellet liity."
 
 #, python-brace-format
 msgid "Connect this {0} account to your Liberapay profile."
-msgstr ""
+msgstr "Yhdistä tämä {0}-tili Liberapay-profiiliisi."
 
 msgid "Don't like what you see?"
-msgstr ""
+msgstr "Etkö pidä näkemästäsi?"
 
 #, python-brace-format
 msgid "If you are an owner of this {0} account, you can explicitly opt out of Liberapay by locking it. We don't allow new pledges to locked accounts."
 msgstr ""
+"Jos olet tämän {0}-tilin omistaja, voit tieten tahtoen kieltäytyä Liberapay-"
+"palvelusta lukitsemalla sen. Emme salli uusia lahjoituslupauksia lukituille "
+"tileille."
 
 msgid "Lock"
-msgstr ""
+msgstr "Lukitse"
 
 msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
 msgstr ""
+"Liberapay-palvelu mahdollistaa suosikkiartistiesi, -muusikoidesi, -"
+"kirjailijoidesi, -ohjelmoijiesi jne. kiittämisen ja tukemisen pienellä "
+"viikoittaisella rahalahjalla."
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
-msgstr ""
+msgstr "{0} palautti seuraavan virheilmoituksen: {1}"
 
 #, python-brace-format
 msgid "{0} returned an error, please try again later."
-msgstr ""
+msgstr "{0} palautti virheen. Yritä myöhemmin uudelleen."
 
 msgid "Social Explorer"
 msgstr ""

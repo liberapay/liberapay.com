@@ -182,11 +182,13 @@ msgid "Follow this link to view {0}'s profile:"
 msgstr "Για εμφάνιση του προφίλ {0} ακολούθησε αυτόν τον σύνδεσμο:"
 
 msgid "A team you're a member of has been modified"
-msgstr ""
+msgstr "Μια ομάδα της οποίας είσαι μέλος έχει τροποποιηθεί"
 
 #, python-brace-format
 msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
 msgstr ""
+"Το νόμισμα αναφοράς που χρησιμοποιείται από την ομάδα \"{0}\" έχει αλλαχτεί "
+"από {1} σε {2} από {3}."
 
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Σε έχουν προσκαλέσει να γίνεις μέλος σε μια ομάδα στη Liberapay"
@@ -217,10 +219,15 @@ msgstr "Επιβεβαίωση διεύθυνσης ηλεκτρονικού τ�
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
 msgstr ""
+"Λάβαμε μια αίτηση για να συνδέσουμε την διεύθυνση ηλεκτρονικού ταχυδρομείου "
+"{0} στον λογαριασμό Liberapay του οποίου η τωρινή διεύθυνση είναι {1}. Σου "
+"θυμίζει κάτι;"
 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr ""
+"Ένας Liberapay λογαριασμός δημιουργήθηκε στις {0} με την διεύθυνση "
+"ηλεκτρονικού ταχυδρομείου {1}. Ήσουν εσύ;"
 
 msgid "Yes, proceed"
 msgstr "Ναι, προχώρησε"
@@ -246,6 +253,9 @@ msgstr "Η απόσυρση έχει ξεκινήσει"
 #, python-brace-format
 msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
 msgstr ""
+"Έχουμε ξεκινήσει μια μεταφορά {0} από το Liberapay πορτοφόλι σου στον "
+"τραπεζικό σου λογαριασμό. Παρακαλώ σημειώστε ότι μπορεί να χρειαστούν "
+"αρκετές εργάσιμες μέρες για την ολοκλήρωση της συναλλαγής."
 
 msgid "Withdrawal failure"
 msgstr "Η απόσυρση απέτυχε"
@@ -253,146 +263,162 @@ msgstr "Η απόσυρση απέτυχε"
 #, python-brace-format
 msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
 msgstr ""
+"Δοκιμάσαμε να μεταφέρουμε {0} από το Liberapay πορτοφόλι σου στον τραπεζικό "
+"σου λογαριασμό, αλλά η συναλλαγή απέτυχε με αυτό το μήνυμα:"
 
 #, python-brace-format
 msgid "You can try again: {0}"
-msgstr ""
+msgstr "Μπορείς να δοκιμάσεις ξανά: {0}"
 
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr ""
+"Φαίνεται ότι βρήκες κάποιο σφάλμα! Συγγνώμη για την ταλαιπωρία, θα το "
+"φτιάξουμε το συντομότερο!"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr ""
+"Οι λεπτομέρειες αυτού του σφάλματος έχουν καταγραφεί. Αν αποφασίσεις να "
+"επικοινωνήσεις μαζί μας παρακαλούμε να συμπεριλάβεις στο μήνυμά σου τον "
+"κωδικό αναγνώρισης σφάλματος που ακολουθεί: {0}."
 
 msgid "When I receive money"
-msgstr ""
+msgstr "Όταν παραλαμβάνω χρήματα"
 
 msgid "When there isn't enough money in my wallet to cover my donations"
 msgstr ""
+"Όταν δεν υπάρχουν αρκετά λεφτά στο πορτοφόλι μου για να καλύψουν τις δωρεές "
+"μου"
 
 msgid "When a transfer to my bank account is initiated"
-msgstr ""
+msgstr "Όταν ξεκινά μια μεταφορά στον τραπεζικό μου λογαριασμό"
 
 msgid "When a transfer to my bank account fails"
-msgstr ""
+msgstr "Όταν μια μεταφορά στον τραπεζικό μου λογαριασμό αποτυγχάνει"
 
 msgid "When someone I pledge to joins Liberapay"
-msgstr ""
+msgstr "Όταν κάποιος για τον οποίο έχω δεσμευτεί εντάσσεται στο Liberapay"
 
 msgid "When someone invites me to join a team"
-msgstr ""
+msgstr "Όταν κάποιος με προσκαλεί να ενταχτώ σε μια ομάδα"
 
 msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr ""
+msgstr "Όταν μια τραπεζική συναλλαγή στο Liberapay πορτοφόλι μου αποτυγχάνει"
 
 msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr ""
+msgstr "Όταν μια τραπεζική συναλλαγή στο Liberapay πορτοφόλι μου είναι επιτυχής"
 
 msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr ""
+msgstr "Όταν μια τραπεζική συναλλαγή στο Liberapay πορτοφόλι μου λήγει"
 
 msgid "When a direct debit from my bank account fails"
-msgstr ""
+msgstr "Όταν μια απευθείας χρέωση από τον τραπεζικό μου λογαριασμό αποτυγχάνει"
 
 msgid "When a direct debit from my bank account succeeds"
 msgstr ""
+"Όταν μια απευθείας χρέωση από τον τραπεζικό μου λογαριασμό είναι επιτυχής"
 
 msgid "Expense Report"
-msgstr ""
+msgstr "Αναφορά Εξόδων"
 
 msgid "Draft"
-msgstr ""
+msgstr "Προσχέδιο"
 
 msgid "Sent (awaiting approval)"
-msgstr ""
+msgstr "Απεστάλη (σε αναμονή έγκρισης)"
 
 msgid "Retracted"
-msgstr ""
+msgstr "Αποσύρθηκε"
 
 msgid "Accepted (awaiting payment)"
-msgstr ""
+msgstr "'Εγινε αποδεκτό (σε αναμονή πληρωμής)"
 
 msgid "Paid"
-msgstr ""
+msgstr "Πληρώθηκε"
 
 msgid "Rejected"
-msgstr ""
+msgstr "Απορρίφθηκε"
 
 msgid "Individual"
-msgstr ""
+msgstr "Άτομο"
 
 msgid "Organization"
-msgstr ""
+msgstr "Οργανισμός"
 
 msgid "Team"
-msgstr ""
+msgstr "Ομάδα"
 
 msgid "Hide total giving from others."
-msgstr ""
+msgstr "Απόκρυψη συνόλου που δίνεται."
 
 msgid "Hide total receiving from others."
-msgstr ""
+msgstr "Απόκρυψη συνόλου που λαμβάνεται."
 
 msgid "Hide myself from search results on Liberapay."
-msgstr ""
+msgstr "Απόκρυψη του εαυτού μου από αποτελέσματα αναζήτησης στην Liberapay."
 
 msgid "Tell web search engines not to index my profile."
 msgstr ""
+"Να ενημερώνονται οι μηχανές αναζήτησης διαδικτύου να μην προσθέτουν το "
+"προφίλ μου στο ευρετήριό τους."
 
 msgid "Prevent my profile from being listed on Liberapay."
-msgstr ""
+msgstr "Αποτροπή της καταχώρησης του προφίλ στην Liberapay."
 
 msgid "Symbolic"
-msgstr ""
+msgstr "Συμβολικό"
 
 msgid "Small"
-msgstr ""
+msgstr "Μικρό"
 
 msgid "Medium"
-msgstr ""
+msgstr "Μεσαίο"
 
 msgid "Large"
-msgstr ""
+msgstr "Μεγάλο"
 
 msgid "Maximum"
-msgstr ""
+msgstr "Μέγιστο"
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
 msgstr ""
+"Έχεις καταναλώσει το ποσοστό αιτημάτων σου, μπορείς να δοκιμάσεις ξανά σε "
+"{0}."
 
 msgid "You're making requests too fast, please try again later."
-msgstr ""
+msgstr "Κάνεις αιτήσεις πολύ γρήγορα, παρακαλώ δοκίμασε ξανά αργότερα."
 
 msgid "example@mastodon.social"
-msgstr ""
+msgstr "example@mastodon.social"
 
 #, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr ""
+"Είναι όντος ο {0} ένας {1} διακομιστής; Προσωρινά δεν συμπεριφέρεται σαν "
+"τέτοιος."
 
 msgid "You need to sign in first"
-msgstr ""
+msgstr "Απαιτείται να συνδεθείτε πρώτα"
 
 msgid "You need to provide a username!"
-msgstr ""
+msgstr "Απαιτείται να δώσετε ένα όνομα χρήστη!"
 
 #, python-brace-format
 msgid "The username '{0}' is too long."
-msgstr ""
+msgstr "Το όνομα χρήστη '{0}' είναι πολύ μακρύ."
 
 #, python-brace-format
 msgid "The username '{0}' contains invalid characters."
-msgstr ""
+msgstr "Το όνομα χρήστη '{0}' περιέχει μη έγκυρους χαρακτήρες."
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
-msgstr ""
+msgstr "Το όνομα χρήστη '{0}' δεν είναι διαθέσιμο."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
-msgstr ""
+msgstr "Το όνομα χρήστη '{0}' αρχίζει με ένα μη έγκυρο χαρακτήρα."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr ""
