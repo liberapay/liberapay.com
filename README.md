@@ -7,6 +7,8 @@
 
 [Liberapay](http://liberapay.com) is a recurrent donations platform. We help you fund the creators and projects you appreciate.
 
+Note: This webapp is not self-hostable.
+
 ## Table of Contents
 
 - [Contact](#contact)
@@ -164,6 +166,8 @@ We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_in
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
 
 ### Deploying the app
+
+Note: Liberapay cannot be self-hosted, this section is only meant to document how we deploy new versions.
 
 Liberapay is currently hosted on [AWS](https://aws.amazon.com/) (Ireland).
 
