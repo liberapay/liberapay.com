@@ -35,7 +35,16 @@ profile_url = participant.url()
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
+    % if participant.hide_receiving
+    <p class="alert alert-warning">{{ _(
+        "This widget is not available because it is not compatible with the "
+        "{link_open}privacy settings{link_close} you have chosen.",
+        link_open=('<a href="{0}settings#privacy">'|safe).format(profile_url),
+        link_close='</a>'|safe
+    ) }}</p>
+    % else
     <p><script src="receiving.js"></script></p>
+    % endif
 
     <p>{{ _("Or, if you'd like a widget that shows how much you're giving:") }}</p>
 
@@ -43,7 +52,16 @@ profile_url = participant.url()
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
+    % if participant.hide_giving
+    <p class="alert alert-warning">{{ _(
+        "This widget is not available because it is not compatible with the "
+        "{link_open}privacy settings{link_close} you have chosen.",
+        link_open=('<a href="{0}settings#privacy">'|safe).format(profile_url),
+        link_close='</a>'|safe
+    ) }}</p>
+    % else
     <p><script src="giving.js"></script></p>
+    % endif
 
 </div>
 % endblock
