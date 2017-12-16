@@ -135,9 +135,9 @@ if not freeload:
     % elif weekly < 0
         <p>{{
             _("Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week).",
-              income=receiving, donations_amount=donations) if n_tip_currencies == 1 else
+              income=receiving, donations_amount=total) if n_tip_currencies == 1 else
             _("Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week).",
-              currency=currency_name, income=receiving, donations_amount=donations)
+              currency=currency_name, income=receiving, donations_amount=total)
         }}</p>
     % endif
     <table class="table">
