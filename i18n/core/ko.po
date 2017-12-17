@@ -2552,20 +2552,28 @@ msgid "This account number is invalid."
 msgstr "이 계좌번호는 유효한 번호가 아닙니다."
 
 #, python-brace-format
-msgid "I donate {0}{1}{2}"
-msgstr "{0}{1}{2} 만큼 기부합니다"
+msgid "I donate {0} per week"
+msgstr ""
 
 #, python-brace-format
-msgid "I receive {0}{1}{2}"
-msgstr "{0}{1}{2} 만큼 기부받습니다"
+msgid "I receive {0} per week,{newline} my goal is {1}"
+msgstr ""
 
 #, python-brace-format
-msgid "We donate {0}{1}{2}"
-msgstr "{0}{1}{2} 만큼 기부합니다"
+msgid "I receive {0} per week"
+msgstr ""
 
 #, python-brace-format
-msgid "We receive {0}{1}{2}"
-msgstr "{0}{1}{2} 만큼 기부받습니다"
+msgid "We donate {0} per week"
+msgstr ""
+
+#, python-brace-format
+msgid "We receive {0} per week,{newline} our goal is {1}"
+msgstr ""
+
+#, python-brace-format
+msgid "We receive {0} per week"
+msgstr ""
 
 msgid "Donation Button"
 msgstr "기부 버튼"
@@ -2585,6 +2593,10 @@ msgstr "기부금 & 모금 중 위젯"
 #, fuzzy
 msgid "Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:"
 msgstr "여러분의 웹사이트에 Liberapay \"모금 중\" 위젯을 붙이고 싶다면 아래 코드를 쓰면 됩니다:"
+
+#, python-brace-format
+msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
+msgstr ""
 
 #, fuzzy
 msgid "Or, if you'd like a widget that shows how much you're giving:"

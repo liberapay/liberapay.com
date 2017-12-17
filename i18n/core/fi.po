@@ -2570,20 +2570,28 @@ msgid "This account number is invalid."
 msgstr "Tilinumerossa on virhe."
 
 #, python-brace-format
-msgid "I donate {0}{1}{2}"
-msgstr "Lahjoitan {0}{1}{2}"
+msgid "I donate {0} per week"
+msgstr ""
 
 #, python-brace-format
-msgid "I receive {0}{1}{2}"
-msgstr "Vastaanotan {0}{1}{2}"
+msgid "I receive {0} per week,{newline} my goal is {1}"
+msgstr ""
 
 #, python-brace-format
-msgid "We donate {0}{1}{2}"
-msgstr "Lahjoitamme {0}{1}{2}"
+msgid "I receive {0} per week"
+msgstr ""
 
 #, python-brace-format
-msgid "We receive {0}{1}{2}"
-msgstr "Vastaanotamme {0}{1}{2}"
+msgid "We donate {0} per week"
+msgstr ""
+
+#, python-brace-format
+msgid "We receive {0} per week,{newline} our goal is {1}"
+msgstr ""
+
+#, python-brace-format
+msgid "We receive {0} per week"
+msgstr ""
 
 msgid "Donation Button"
 msgstr "Lahjoitusnappi"
@@ -2602,6 +2610,10 @@ msgstr "Web-leikkeet antamiseen ja vastaanottamiseen"
 
 msgid "Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:"
 msgstr "Voit lisätä tämän koodinpätkän web-sivullesi näyttämään vastaanottamiesi lahjoitusten määrä Liberapay-palvelussa:"
+
+#, python-brace-format
+msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
+msgstr ""
 
 msgid "Or, if you'd like a widget that shows how much you're giving:"
 msgstr "Tai jos haluat pätkän, joka näyttää paljonko lahjoitat:"

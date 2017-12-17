@@ -2574,20 +2574,28 @@ msgid "This account number is invalid."
 msgstr "Este número de conta é inválido."
 
 #, python-brace-format
-msgid "I donate {0}{1}{2}"
-msgstr "Eu doo {0} {1} {2}"
+msgid "I donate {0} per week"
+msgstr ""
 
 #, python-brace-format
-msgid "I receive {0}{1}{2}"
-msgstr "Recebo {0} {1} {2}"
+msgid "I receive {0} per week,{newline} my goal is {1}"
+msgstr ""
 
 #, python-brace-format
-msgid "We donate {0}{1}{2}"
-msgstr "Doamos {0} {1} {2}"
+msgid "I receive {0} per week"
+msgstr ""
 
 #, python-brace-format
-msgid "We receive {0}{1}{2}"
-msgstr "Nós recebemos {0} {1} {2}"
+msgid "We donate {0} per week"
+msgstr ""
+
+#, python-brace-format
+msgid "We receive {0} per week,{newline} our goal is {1}"
+msgstr ""
+
+#, python-brace-format
+msgid "We receive {0} per week"
+msgstr ""
 
 msgid "Donation Button"
 msgstr "Botão de doação"
@@ -2607,6 +2615,10 @@ msgstr "Widgets de Doação e Recebimento"
 #, fuzzy
 msgid "Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:"
 msgstr "Use esse código para adicionar o widget \"recebendo\" do Liberapay no seu website."
+
+#, python-brace-format
+msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
+msgstr ""
 
 #, fuzzy
 msgid "Or, if you'd like a widget that shows how much you're giving:"
