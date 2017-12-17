@@ -1,4 +1,8 @@
+% if total.fuzzy
+{{ _("You have received approximately {0} this week", total) }}
+% else
 {{ _("You have received {0} this week", LegacyMoney(total)) }}
+% endif
 
 [---] text/html
 <p>{{ _("{0} were given to you personally.", LegacyMoney(personal)) }}</p>

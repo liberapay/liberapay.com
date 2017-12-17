@@ -30,7 +30,7 @@ from liberapay.website import website
 
 
 def LegacyMoney(o):
-    return o if isinstance(o, Money) else Money(o, 'EUR')
+    return o if isinstance(o, (Money, MoneyBasket)) else Money(o, 'EUR')
 
 
 Wrap = namedtuple('Wrap', 'value wrapper')
