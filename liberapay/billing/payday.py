@@ -868,7 +868,7 @@ class Payday(object):
 
         # Low-balance notifications
         participants = self.db.all("""
-            SELECT p, needed
+            SELECT p, COALESCE(w.balance, zero(needed)) AS balance, needed
               FROM (
                      SELECT t.tipper, sum(t.amount) AS needed
                        FROM current_tips t
@@ -888,10 +888,11 @@ class Payday(object):
                         AND t.timestamp > %s
                         AND t.timestamp <= %s
                         AND t.status = 'succeeded'
+                        AND t.amount::currency = needed::currency
                    )
         """, (previous_ts_end, self.ts_end))
-        for p, needed in participants:
-            p.notify('low_balance', low_balance=p.balance, needed=needed)
+        for p, balance, needed in participants:
+            p.notify('low_balance', low_balance=balance, needed=needed)
 
 
 def create_payday_issue():
