@@ -104,6 +104,19 @@ class MoneyBasket(object):
     def currencies_present(self):
         return [m.currency for m in self if m.amount]
 
+    def fuzzy_sum(self, currency):
+        a = ZERO[currency].amount
+        fuzzy = False
+        for m in self:
+            if m.currency == currency:
+                a += m.amount
+            else:
+                a += m.amount * website.currency_exchange_rates[(m.currency, currency)]
+                fuzzy = True
+        r = Money(a, currency)
+        r.fuzzy = fuzzy
+        return r
+
     @classmethod
     def sum(cls, amounts):
         r = cls(Money('0.00', 'EUR'), usd=Money('0.00', 'USD'))

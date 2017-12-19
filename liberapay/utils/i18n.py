@@ -30,7 +30,7 @@ from liberapay.website import website
 
 
 def LegacyMoney(o):
-    return o if isinstance(o, Money) else Money(o, 'EUR')
+    return o if isinstance(o, (Money, MoneyBasket)) else Money(o, 'EUR')
 
 
 Wrap = namedtuple('Wrap', 'value wrapper')
@@ -75,11 +75,31 @@ class Locale(babel.core.Locale):
     def format_decimal(self, *a):
         return format_decimal(*a, locale=self)
 
-    def format_money_basket(self, basket):
-        return ' + '.join(
+    def format_list(self, l):
+        n = len(l)
+        if n > 2:
+            last = n - 2
+            r = l[0]
+            for i, item in enumerate(l[1:]):
+                r = self.list_patterns[
+                    'start' if i == 0 else 'end' if i == last else 'middle'
+                ].format(r, item)
+            return r
+        elif n == 2:
+            return self.list_patterns['2'].format(*l)
+        else:
+            return l[0] if n == 1 else None
+
+    def format_money_basket(self, basket, sep=','):
+        items = (
             format_currency(money.amount, money.currency, locale=self)
             for money in basket if money
-        ) or '0'
+        )
+        if sep == ',':
+            r = self.format_list(list(items))
+        else:
+            r = sep.join(items)
+        return r or '0'
 
     def format_money_delta(self, money, *a):
         return format_currency(
@@ -382,6 +402,7 @@ def add_helpers_to_context(context, loc):
         format_date=loc.format_date,
         format_datetime=loc.format_datetime,
         format_decimal=loc.format_decimal,
+        format_list=loc.format_list,
         format_money=loc.format_money,
         format_money_delta=loc.format_money_delta,
         format_number=loc.format_number,

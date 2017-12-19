@@ -19,6 +19,7 @@ from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.models.participant import Participant
 from liberapay.utils import NS, group_by
+from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
 
 
@@ -817,32 +818,33 @@ class Payday(object):
         """, (self.ts_start,), default=constants.BIRTHDAY)
 
         # Income notifications
+        get_username = lambda i: self.db.one(
+            "SELECT username FROM participants WHERE id = %s", (i,)
+        )
         r = self.db.all("""
             SELECT tippee, json_agg(t) AS transfers
               FROM transfers t
              WHERE "timestamp" > %s
                AND "timestamp" <= %s
                AND context IN ('tip', 'take', 'final-gift')
+               AND status = 'succeeded'
           GROUP BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
-            successes = [t for t in transfers if t['status'] == 'succeeded']
-            if not successes:
-                continue
             p = Participant.from_id(tippee_id)
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
-                t['converted_amount'] = t['amount'].convert(p.main_currency)
-            by_team = {k: sum(t['converted_amount'] if k is None else t['amount'] for t in v)
-                       for k, v in group_by(successes, 'team').items()}
+            by_team = {k: MoneyBasket.sum(t['amount'] for t in v)
+                       for k, v in group_by(transfers, 'team').items()}
+            total = sum(by_team.values(), MoneyBasket())
             personal = by_team.pop(None, 0)
-            by_team = {Participant.from_id(k).username: v for k, v in by_team.items()}
+            by_team = {get_username(k): v for k, v in by_team.items()}
             p.notify(
                 'income',
-                total=sum(t['converted_amount'] for t in successes),
+                total=total.fuzzy_sum(p.main_currency),
                 personal=personal,
                 by_team=by_team,
-                new_balance=p.balance,
+                new_balance=p.get_balances(),
             )
 
         # Identity-required notifications
@@ -866,7 +868,7 @@ class Payday(object):
 
         # Low-balance notifications
         participants = self.db.all("""
-            SELECT p, needed
+            SELECT p, COALESCE(w.balance, zero(needed)) AS balance, needed
               FROM (
                      SELECT t.tipper, sum(t.amount) AS needed
                        FROM current_tips t
@@ -886,10 +888,11 @@ class Payday(object):
                         AND t.timestamp > %s
                         AND t.timestamp <= %s
                         AND t.status = 'succeeded'
+                        AND t.amount::currency = needed::currency
                    )
         """, (previous_ts_end, self.ts_end))
-        for p, needed in participants:
-            p.notify('low_balance', low_balance=p.balance, needed=needed)
+        for p, balance, needed in participants:
+            p.notify('low_balance', low_balance=balance, needed=needed)
 
 
 def create_payday_issue():
