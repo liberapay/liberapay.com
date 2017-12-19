@@ -55,11 +55,19 @@ years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
 
+balances = participant.get_balances()
+balance = balances.fuzzy_sum(participant.main_currency)
 if participant == user:
-    BALANCE = _("Your balance is {0}.", participant.balance)
+    if balance.fuzzy:
+        BALANCE = _(
+            "You have approximately {converted_amount} in your account (exactly: {exact_amounts}).",
+            converted_amount=balance, exact_amounts=balances
+        )
+    else:
+        BALANCE = _("You have {money_amount} in your account.", money_amount=balances)
     participant.mark_notifications_as_read('income')
 else:
-    BALANCE = _("Their balance is {0}.", participant.balance)
+    BALANCE = _("Their balance is {0}.", balance)
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
@@ -67,7 +75,7 @@ else:
 
 <p>{{ BALANCE }}</p>
 
-% if participant.balance > 0
+% if balance > 0
     <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
           >{{ _("Withdraw money") }}</a></p>
 % endif
