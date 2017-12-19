@@ -191,7 +191,7 @@ else:
             % endif
         </td>
         <td class="status" title="{{ _('balance at the end of the day') }}">{{
-            locale.format_money_basket(event['balances'])
+            locale.format_money_basket(event['balances'], sep=' + ')
         }}</td>
         <td class="wallet">
         % set wallet_deltas = event['wallet_deltas']

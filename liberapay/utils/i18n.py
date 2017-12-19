@@ -90,11 +90,16 @@ class Locale(babel.core.Locale):
         else:
             return l[0] if n == 1 else None
 
-    def format_money_basket(self, basket):
-        return ' + '.join(
+    def format_money_basket(self, basket, sep=','):
+        items = (
             format_currency(money.amount, money.currency, locale=self)
             for money in basket if money
-        ) or '0'
+        )
+        if sep == ',':
+            r = self.format_list(list(items))
+        else:
+            r = sep.join(items)
+        return r or '0'
 
     def format_money_delta(self, money, *a):
         return format_currency(
