@@ -70,9 +70,14 @@ class MoneyBasket(object):
                 r.__dict__[k] += other
             else:
                 r.__dict__[k] = other
+        elif other == 0:
+            return r
         else:
             raise TypeError(other)
         return r
+
+    def __radd__(self, other):
+        return self.__add__(other)
 
     def __sub__(self, other):
         r = self.__class__(self.eur, self.usd)
