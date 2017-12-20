@@ -57,8 +57,8 @@ Liberapay.forms.jsSubmit = function() {
     }
     $('.js-submit').submit(submit);
     $('.js-submit button').filter(':not([type]), [type="submit"]').click(submit);
-    // Prevent accidental double-submits of all other forms
-    $('form:not(.js-submit)').on('submit', function (e) {
+    // Prevent accidental double-submits of non-JS forms
+    $('form:not(.js-submit):not([action^="javascript:"])').on('submit', function (e) {
         // Check that the form hasn't already been submitted recently
         var $form = $(this);
         if ($form.data('js-submit-disable')) {
