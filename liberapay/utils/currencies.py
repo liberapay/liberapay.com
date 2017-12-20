@@ -110,7 +110,7 @@ class MoneyBasket(object):
         for m in self:
             if m.currency == currency:
                 a += m.amount
-            else:
+            elif m.amount:
                 a += m.amount * website.currency_exchange_rates[(m.currency, currency)]
                 fuzzy = True
         r = Money(a, currency)
