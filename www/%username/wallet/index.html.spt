@@ -255,6 +255,8 @@ else:
                 ) }}
             % elif context == 'tip'
                 {{ _("anonymous donation") }}
+            % elif context == 'final-gift'
+                {{ _("one-off donation from someone closing their account") }}
             % elif context == 'chargeback'
                 {{ _("chargeback") }}
             % elif context == 'debt'
