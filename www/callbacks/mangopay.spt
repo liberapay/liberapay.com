@@ -203,7 +203,7 @@ elif cls:
     e = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
 
     # Attempt to transfer the money to the user's current wallet
-    current_wallet_id = p.get_current_wallet(e.amount.currency).remote_id
+    current_wallet_id = getattr(p.get_current_wallet(e.amount.currency), 'remote_id', None)
     if affects_balance and e.wallet_id != current_wallet_id:
         w = Wallet.get(e.wallet_id)
         balance = w.Balance
