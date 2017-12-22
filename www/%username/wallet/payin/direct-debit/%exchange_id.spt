@@ -97,7 +97,7 @@ if request.method == 'POST':
     if amount == 'custom':
         amount = request.body['amount_custom']
         try:
-            amount = parse_decimal(amount)
+            amount = parse_decimal(amount).quantize(constants.D_CENT)
         except:
             pass
     try:
