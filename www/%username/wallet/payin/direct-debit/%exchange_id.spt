@@ -201,6 +201,10 @@ title = _("Adding Money")
         }}</div>
         % if exchange.status == 'succeeded'
         <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View Receipt") }}</a>
+        % elif exchange.status == 'created'
+        <div class="alert alert-info">{{ _(
+            "Direct debits take approximately 4 business days to complete."
+        ) }}</div>
         % endif
     % endif
 
@@ -236,6 +240,9 @@ title = _("Adding Money")
     <p>{{ _(
         "Adding money to Liberapay via direct debit incurs a fee of {0}.",
         constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat,
+    ) }}</p>
+    <p>{{ _(
+        "Direct debits take approximately 4 business days to complete."
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
