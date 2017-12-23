@@ -10,6 +10,15 @@ from liberapay.testing import Harness
 from liberapay.testing.mangopay import create_card
 
 
+user_data = {
+    'FirstName': 'Kàthryn',
+    'LastName': 'Janeway',
+    'CountryOfResidence': 'US',
+    'Nationality': 'IS',
+    'Birthday': '1995-01-16',
+}
+
+
 class TestIdentity(Harness):
 
     def test_identity_form(self):
@@ -19,13 +28,6 @@ class TestIdentity(Harness):
         assert janeway.mangopay_user_id is None
 
         # Create a mangopay natural user
-        user_data = {
-            'FirstName': 'Kàthryn',
-            'LastName': 'Janeway',
-            'CountryOfResidence': 'US',
-            'Nationality': 'IS',
-            'Birthday': '1995-01-16',
-        }
         data = dict(user_data, terms='agree')
         kw = dict(auth_as=janeway, raise_immediately=False, xhr=True)
         r = self.client.POST('/janeway/identity', data, **kw)
@@ -70,3 +72,25 @@ class TestIdentity(Harness):
         assert r.code == 200, r.text
         janeway2 = janeway.refetch()
         assert janeway2.mangopay_user_id == janeway.mangopay_user_id
+
+    def test_identity_form_with_bad_birthday(self):
+        janeway = self.make_participant(
+            'janeway', email='janeway@example.org', mangopay_user_id=None,
+        )
+        kw = dict(auth_as=janeway, raise_immediately=False, HTTP_ACCEPT='text/html')
+
+        data = dict(user_data, Birthday='16-01-1995', terms='agree')
+        r = self.client.POST('/janeway/identity', data, **kw)
+        assert "Invalid date of birth" in r.text
+
+        data = dict(data, Birthday='1995-16-01')
+        r = self.client.POST('/janeway/identity', data, **kw)
+        assert "Invalid date of birth" in r.text
+
+        data = dict(data, Birthday='bad')
+        r = self.client.POST('/janeway/identity', data, **kw)
+        assert "Invalid date of birth" in r.text
+
+        data = dict(data, Birthday='')
+        r = self.client.POST('/janeway/identity', data, **kw)
+        assert "You haven&#39;t filled all the required fields." in r.text
