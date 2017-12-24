@@ -179,6 +179,9 @@ title = _("Adding Money")
             <dt>{{ _("Wire Reference Code") }}</dt>
             <dd>{{ payin.WireReference }}</dd>
             <br>
+            <dt>{{ _("Destination Country") }}</dt>
+            % set dest_country = payin.BankAccount.IBAN[:2]
+            <dd>{{ locale.countries.get(dest_country, dest_country) }}</dd>
             <dt>{{ _("Bank Account Owner Name") }}</dt>
             <dd>{{ payin.BankAccount.OwnerName }}</dd>
             <dt>{{ _("Bank Account Owner Address") }}</dt>
