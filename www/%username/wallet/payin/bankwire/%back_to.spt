@@ -193,8 +193,13 @@ title = _("Adding Money")
             <input type="hidden" name="action" value="email" />
             <button class="btn btn-primary">{{ _("Email me this information") }}</button>
         </form>
-
         <br>
+
+        <p class="alert alert-warning">{{ _(
+            "Wire reference codes are not reusable. It's not yet possible to set up "
+            "a recurrent transfer from your bank account to Liberapay."
+        ) }}</p>
+
         % set notif_fail = NOTIF_BIT_FAIL.__and__(participant.email_notif_bits)
         % set notif_succ = NOTIF_BIT_SUCC.__and__(participant.email_notif_bits)
         % if notif_fail and notif_succ
