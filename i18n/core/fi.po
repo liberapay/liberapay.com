@@ -26,7 +26,7 @@ msgstr "Jos et halua vastaanottaa lahjoituksia Liberapay-palvelussa, voit hylät
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
-msgstr "Olet saanut noin {0} tällä viikolla"
+msgstr "Olet saanut tällä viikolla noin {0}"
 
 #, python-brace-format
 msgid "You have received {0} this week"
@@ -270,7 +270,7 @@ msgid "The details of this error have been recorded. If you decide to contact us
 msgstr "Virheen tiedot on tallennettu. Jos haluat ottaa meihin yhteyttä, sisällytä viestissäsi tämä virhetunniste: {0}."
 
 msgid "When I receive money"
-msgstr "Rahan vastaanottaminen"
+msgstr "Kun rahaa saapuu"
 
 msgid "When there isn't enough money in my wallet to cover my donations"
 msgstr "Kun lompakossa ei riitä kate lahjoituksiin"
@@ -865,7 +865,7 @@ msgid "Leave the previous field empty if your account doesn't have a password, o
 msgstr "Jätä edellinen kenttä tyhjäksi, jos tililläsi ei ole salasanaa tai olet hukannut sen. Lähetämme sinulle sähköpostitse kirjautumislinkin."
 
 msgid "You need to log in"
-msgstr "Sinun tulee kirjautua sisään"
+msgstr "Sisäänkirjautuminen vaaditaan"
 
 msgid "Members"
 msgstr "Jäseniä"
@@ -947,7 +947,7 @@ msgid "Widgets"
 msgstr "Leikkeet"
 
 msgid "Notifications"
-msgstr "Muistutukset"
+msgstr "Ilmoitukset"
 
 msgid "Create a new community"
 msgstr "Luo uusi yhteisö"
@@ -1336,7 +1336,7 @@ msgid "Setting a username makes the URL of your profile nicer."
 msgstr "Käyttäjätunnuksen asettaminen tekee profiilisi osoitteesta nätimmän."
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Oletko linkannut Liberapay-profiiliisi muilta web-sivuilta? Muistathan päivittää ne linkit!"
+msgstr "Oletko linkannut Liberapay-profiiliisi muilta web-sivuilta? Muistathan päivittää linkit!"
 
 msgid "Currencies"
 msgstr "Valuutat"
@@ -1354,7 +1354,7 @@ msgid "Do you want to accept or reject donations in currencies other than your m
 msgstr "Haluatko hyväksyä vai hylätä lahjoitukset muussa kuin päävaluutassasi?"
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "Vieraiden valuuttojen vastaanottaminen voi mutkistaa asioitasi, mutta niiden hylkääminen voi lannistaa osan lahjoittajista."
+msgstr "On yksinkertaisempaa ottaa vastaan vain kotivaluuttaa, mutta vieraiden valuuttojen hylkääminen voi karkoittaa osan lahjoittajista."
 
 msgid "Accept all currencies"
 msgstr "Hyväksy kaikki valuutat"
@@ -1462,7 +1462,7 @@ msgid "Add"
 msgstr "Lisää"
 
 msgid "Send me notifications via email:"
-msgstr "Lähetä muistutukset sähköpostilla:"
+msgstr "Lähetä ilmoitukset sähköpostilla:"
 
 msgid "You have already added and verified this address."
 msgstr "Olet jo lisännyt ja varmistanut tämän osoitteen."
@@ -1472,7 +1472,7 @@ msgid "A verification email has been sent to {0}."
 msgstr "Varmistussähköposti on lähetetty osoitteeseen {0}."
 
 msgid "Your notification settings have been changed."
-msgstr "Muistutusasetuksesi on tallennettu."
+msgstr "Ilmoitusasetuksesi on tallennettu."
 
 msgid "Success!"
 msgstr "Onnistui!"
@@ -1865,10 +1865,10 @@ msgid "You are now a member of the team."
 msgstr "Olet nyt ryhmän jäsen."
 
 msgid "Mark all notifications as read"
-msgstr "Merkitse kaikki muistutukset luetuiksi"
+msgstr "Merkitse kaikki ilmoitukset luetuiksi"
 
 msgid "No notifications to show."
-msgstr "Ei näytettäviä muistutuksia."
+msgstr "Ei näytettäviä ilmoituksia."
 
 msgid "Direct Debit"
 msgstr "Suoraveloitus"
@@ -2017,7 +2017,7 @@ msgid "We may give your username to someone else if they ask for it, but not for
 msgstr "Saatamme mainita käyttäjätunnuksesi jollekulle toiselle kysyttäessä, mutta emme ainakaan vuoteen tilisi sulkemisen jälkeen (paitsi jos saamme tietää, että olet loukannut tavaramerkkiä)."
 
 msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr "Emme tyhjennä sähköpostiosoitettasi ja salasanaasi välittömästi, joten jonkin aikaa pystyt avaamaan tilisi uusiksi yksinkertaisesti kirjautumaan sisään, siihen asti kunnes tilisi todella arkistoidaan."
+msgstr "Emme tyhjennä sähköpostiosoitettasi ja salasanaasi välittömästi, joten jonkin aikaa pystyt avaamaan tilisi uusiksi yksinkertaisesti kirjautumaan sisään siihen asti, kunnes tilisi todella arkistoidaan."
 
 msgid "Ready?"
 msgstr "Oletko valmis?"
@@ -2334,7 +2334,7 @@ msgid "We will send you an email once we know whether your payment has succeeded
 msgstr "Lähetämme sähköpostin sitten, kun tiedämme onko maksu onnistunut vai epäonnistunut."
 
 msgid "You have disabled some or all email notifications about bank wires."
-msgstr "Olet kieltänyt tietyt pankkisiirtoja koskevat sähköpostimuistutukset."
+msgstr "Olet kieltänyt tietyt pankkisiirtoja koskevat sähköposti-ilmoitukset."
 
 msgid "Change your email settings"
 msgstr "Muuta sähköpostiasetuksia"
@@ -2579,15 +2579,15 @@ msgstr "Tilinumerossa on virhe."
 
 #, python-brace-format
 msgid "I donate {0} per week"
-msgstr "Lahjoitan {0} viikossa"
+msgstr "Annan {0} viikossa"
 
 #, python-brace-format
 msgid "I receive {0} per week,{newline} my goal is {1}"
-msgstr "Vastaanotan {0} viikossa,{newline}tavoitteeni on {1}"
+msgstr "Saan {0} viikossa,{newline}tavoitteeni on {1}"
 
 #, python-brace-format
 msgid "I receive {0} per week"
-msgstr "Vastaanotan {0} viikossa"
+msgstr "Saan {0} viikossa"
 
 #, python-brace-format
 msgid "We donate {0} per week"
@@ -2974,7 +2974,7 @@ msgid "You can leave a team from {0}your teams dashboard{1}."
 msgstr "Voit jättää ryhmän {0}ryhmän hallintapaneelista käsin{1}."
 
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
-msgstr "Jäsenen erottaminen ryhmästä puuttuu vielä. Ota yhteyttä tukeen todisteiden kanssa, siitä että jäsen täytyy erottaa, ja siitä että tästä on muiden jäsenten kesken yhteisymmärrys."
+msgstr "Jäsenen erottaminen ryhmästä puuttuu vielä. Ota yhteyttä tukeen ja liitä mukaan todisteet siitä, että jäsenen erottamiselle on syy, ja siitä, että tästä on muiden jäsenten kesken yhteisymmärrys."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "Yhteisöjen avulla on mahdollista löytää ihmisiä, jotka tuottavat sinua kiinnostavia asioita. Voit myös tilata näiden uutiskirjeen pysyäksesi ajan tasalla."
