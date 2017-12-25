@@ -31,7 +31,7 @@ participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 exchange = None
 exchange_id = request.path['exchange_id']
-if exchange_id:
+if exchange_id and request.method != 'POST':
     if not exchange_id.isdigit():
         raise response.error(404, "bad exchange_id '%s': not an integer" % exchange_id)
     exchange = website.db.one("""
@@ -47,6 +47,7 @@ del exchange_id
 if exchange:
     route = ExchangeRoute.from_id(exchange.route)
 else:
+    route_id = request.body.get('route_id') if request.method == 'POST' else 0
     route = website.db.one("""
         SELECT r
           FROM exchange_routes r
@@ -54,9 +55,11 @@ else:
            AND remote_user_id = %s
            AND network = 'mango-ba'
            AND error <> 'invalidated'
-      ORDER BY mandate IS NOT NULL DESC, id DESC
+      ORDER BY id = %s DESC, mandate IS NOT NULL DESC, id DESC
          LIMIT 1
-    """, (participant.id, participant.mangopay_user_id))
+    """, (participant.id, participant.mangopay_user_id, route_id))
+    if route_id and not route:
+        raise response.error(400, "bad `route_id` value '%s' in body" % route_id)
 if route is not None:
     route.__dict__['participant'] = participant
 
@@ -97,7 +100,7 @@ if request.method == 'POST':
     if amount == 'custom':
         amount = request.body['amount_custom']
         try:
-            amount = parse_decimal(amount)
+            amount = parse_decimal(amount).quantize(constants.D_CENT)
         except:
             pass
     try:

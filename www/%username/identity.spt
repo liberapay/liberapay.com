@@ -69,10 +69,8 @@ if request.method == 'POST':
         account = NaturalUser() if participant.kind == 'individual' else LegalUser()
 
     if isinstance(account, NaturalUser):
-        p = ''
         keys = KEYS_NATURAL_L2 if level == '2' else KEYS_NATURAL
     else:
-        p = 'LegalRepresentative'
         keys = KEYS_LEGAL_L2 if level == '2' else KEYS_LEGAL
 
     if account.Id and account.kyc_level != 'LIGHT' and not confirmed:
@@ -88,17 +86,6 @@ if request.method == 'POST':
 
     account.Email = participant.email or participant.get_any_email()
 
-    dob = body.get(p+'Birthday', '')
-    if dob:
-        try:
-            year, month, day = map(int, dob.split('-'))
-            # the above raises ValueError if the number of parts isn't 3
-            # or if any part isn't an integer
-            dt = datetime(year, month, day)
-            body[p+'Birthday'] = int((dt - EPOCH).total_seconds())
-        except ValueError:
-            error = _("Invalid date of birth.")
-
     for k in keys:
         v = body.get(k)
         if k.endswith('Address'):
@@ -106,6 +93,16 @@ if request.method == 'POST':
             if not check_address(v):
                 error = _("You haven't filled all the required fields.")
                 break
+        elif k.endswith('Birthday') and v:
+            try:
+                year, month, day = map(int, v.split('-'))
+                # the above raises ValueError if the number of parts isn't 3
+                # or if any part isn't an integer
+                dt = datetime(year, month, day)
+                v = int((dt - EPOCH).total_seconds())
+            except ValueError:
+                error = _("Invalid date of birth.")
+                continue
         if v or v == 0:
             setattr(account, k, v)
         else:
