@@ -21,10 +21,8 @@ def get_exchange_payin(participant, request):
                               (request.qs['exchange_id'], participant.id))
     if not exchange:
         raise response.error(403)
-    if 'payin_id' in request.qs:
-        payin = BankWirePayIn.get(request.qs['payin_id'])
-        if payin.Tag != str(exchange.id):
-            raise response.error(403)
+    if exchange.remote_id:
+        payin = BankWirePayIn.get(exchange.remote_id)
     else:
         payin = None
     return exchange, payin
@@ -110,8 +108,6 @@ if request.method == 'POST':
         ))
     payin, exchange = payin_bank_wire(website.db, participant, amount)
     redir = request.path.raw+'?exchange_id=%s' % exchange.id
-    if payin and exchange.status == 'created':
-        redir += '&payin_id=%s' % payin.Id
     response.redirect(redir)
 
 back_to = b64decode_s(request.path['back_to'], default=None)
