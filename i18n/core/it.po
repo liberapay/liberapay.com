@@ -1,5 +1,5 @@
 msgid ""
-msgstr "PO-Revision-Date: 2017-12-26 08:58+0000\nLast-Translator: Davide Neri <davnerix@gmail.com>\nLanguage-Team: Italian (https://hosted.weblate.org/projects/liberapay/core/it/)\nLanguage: it\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 2.19-dev\nGenerated-By: Babel 2.3.4\n"
+msgstr "PO-Revision-Date: 2017-12-27 08:35+0000\nLast-Translator: Davide Neri <davnerix@gmail.com>\nLanguage-Team: Italian (https://hosted.weblate.org/projects/liberapay/core/it/)\nLanguage: it\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 2.19-dev\nGenerated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
 msgstr "Saluti,"
@@ -2372,18 +2372,18 @@ msgstr "Ammontare personalizzato (min={0}, max={1})"
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} sono state prese dalla carta di credito, {1} è andato al tuo portafoglio LiberaPay, {2} sono stati pagati a spese di transazione."
+msgstr "{0} sono stati prelevati dalla tua carta di credito, {1} sono stati depositati sul tuo portafogli Liberapay, {2} sono stati trattenuti come commissione."
 
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Il tentativo di prendere {0} dalla vostra carta di credito non è riuscita. Messaggio di errore: {1}"
+msgstr "Il tentativo di prelevare {0} dalla tua carta di credito non è andato a buon fine. Messaggio di errore: {1}"
 
 msgid "View Receipt"
-msgstr "Visualizza Ricevuta"
+msgstr "Visualizza ricevuta"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "L'aggiunta di soldi per Liberapay tramite carta di credito / debito comporta un costo di {0}% + {1}."
+msgstr "L'aggiunta di denaro a Liberapay tramite carta di credito/debito comporta una commissione di {0}% + {1}."
 
 msgid "Card"
 msgstr "Carta"
@@ -2392,16 +2392,16 @@ msgid "Warning: some of the card data you have input seems to be invalid. Procee
 msgstr "Attenzione: alcuni dati della carta immessa sembrano non essere validi. Procedere comunque?"
 
 msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "La richiesta non è riuscita. Si prega di assicurarsi che il proprio browser è up-to-date, e disabilitare un'estensione che blocca le richieste (ad esempio NoScript), quindi riprovare."
+msgstr "La richiesta non è riuscita. Si prega di assicurarsi che il proprio browser sia aggiornato, e di disabilitare qualunque estensione che blocca le richieste (ad esempio NoScript), quindi riprovare."
 
 msgid "Card number"
 msgstr "Numero della carta"
 
 msgid "The main number on the card, between 8 and 19 digits"
-msgstr "Il numero principale della carta, tra 8 e 19 cifre"
+msgstr "Il numero principale della carta, compreso tra 8 e 19 cifre"
 
 msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Questa carta sembra non valida, sei sicuro di non aver commesso errori?"
+msgstr "Il numero di questa carta non sembra essere valido, sei sicuro di non aver commesso errori?"
 
 msgid "This card number is invalid."
 msgstr "Il numero della carta di credito non è valido."
@@ -2419,19 +2419,19 @@ msgid "CVV"
 msgstr "CVV"
 
 msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "Code di verifica, solitamente 3 cifre situate sul retro della carta"
+msgstr "Code di verifica, solitamente di 3 cifre, situato sul retro della carta"
 
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Questo codice di verifica sembra non valido, sei sicuro di non aver commesso errori?"
+msgstr "Questo codice di verifica non sembra essere valido, sei sicuro di non aver commesso errori?"
 
 msgid "Remember the card number for next time"
-msgstr "Ricordate il numero di carta per la prossima volta"
+msgstr "Ricorda il numero di carta per la prossima volta"
 
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "I dati della tua carta sono inviati al nostro sistema di pagamento attraverso una connessione cifrata."
+msgstr "I dati della tua carta sono inviati direttamente al sistema di pagamento del nostro partner attraverso una connessione cifrata."
 
 msgid "Euro direct debits are only available from within the Eurozone."
-msgstr "Addebiti diretti in Euro sono disponibili solo all'interno della zona Euro."
+msgstr "Gli addebiti diretti in Euro sono disponibili solo all'interno della zona Euro."
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
@@ -2439,7 +2439,7 @@ msgstr "{0} sono stati prelevati dal tuo conto bancario, {1} sono stati deposita
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "Un addebito diretto di {0} è iniziato. Se il trasferimento avrà successo {1} saranno aggiunti al tuo portafoglio Liberapay e {2} sarà pagato tramite compensi."
+msgstr "È stato avviato un addebito diretto di {0}. Se il trasferimento avrà successo {1} saranno aggiunti al tuo portafoglio Liberapay e {2} saranno pagati come commissione."
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
@@ -2447,22 +2447,22 @@ msgstr "Il tentativo di trasferire {0} dal tuo conto bancario non è riuscito, r
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "Aggiungere soldi a Liberapay tramite un addebito diretto comporta un compenso di {0}."
+msgstr "Aggiungere denaro a Liberapay tramite un addebito diretto comporta una commissione di {0}."
 
 msgid "Bank Account"
-msgstr "Conto Bancario"
+msgstr "Conto bancario"
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "Use another account"
-msgstr "Usa un altro account"
+msgstr "Usa un altro conto"
 
 msgid "This IBAN is invalid."
 msgstr "Questo IBAN non è valido."
 
 msgid "The following fields are about the legal owner of the bank account."
-msgstr "I seguenti campi sono circa il legittimo proprietario del conto bancario."
+msgstr "I seguenti campi riguardano il legittimo proprietario del conto bancario."
 
 msgid "Name"
 msgstr "Nome"
@@ -2472,10 +2472,10 @@ msgstr "L'importo non può essere zero."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "La tassa di transazione sarebbe elevato: {0}% ({1} / {2}). Procedere comunque?"
+msgstr "La commissione per la transazione sarebbe elevata: {0}% ({1} / {2}). Procedere comunque?"
 
 msgid "Withdrawing Money"
-msgstr "Ritira Soldi"
+msgstr "Ritira denaro"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
