@@ -2304,9 +2304,6 @@ msgstr "'{0}' ist kein gültiger Betrag (min={1}, max={2})"
 msgid "This bank wire has been canceled."
 msgstr "Diese Banküberweisung wurde storniert."
 
-msgid "Go back"
-msgstr "Zurück"
-
 #, python-brace-format
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Der Versuch, eine Banküberweisung von {0} vorzubereiten ist gescheitert. Fehlermeldung: {1}"
@@ -3346,6 +3343,9 @@ msgstr "Migration von Gratipay"
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
 msgstr "Ups, Sie müssen sich vor der Migration wieder bei Gratipay anmelden."
 
+msgid "Go back"
+msgstr "Zurück"
+
 #, python-brace-format
 msgid "Welcome, {username}!"
 msgstr "Willkommen, {username}!"
@@ -3392,6 +3392,10 @@ msgstr "die Historie des Kontos (Kontos...)"
 
 msgid "any paypal address (our payment processor doesn't support paypal yet)"
 msgstr "jede Paypal-Adresse (unsere Zahlungsabwicklung unterstützt Paypal noch nicht)"
+
+#, python-brace-format
+msgid "Please input an email address (your {platform} account doesn't have a primary one):"
+msgstr ""
 
 msgid "Proceed"
 msgstr "Weiter"

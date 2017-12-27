@@ -2289,9 +2289,6 @@ msgstr "'{0}'不是可接受的額數 (min={1}, max={2})"
 msgid "This bank wire has been canceled."
 msgstr ""
 
-msgid "Go back"
-msgstr "返回"
-
 #, python-brace-format
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "{0}準備向銀行進行匯款的請求失敗了，錯誤訊息為： {1}"
@@ -3314,6 +3311,9 @@ msgstr "從Gratipay遷移"
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
 msgstr "你需要回到Gratipay且在那登入來啟動遷移。"
 
+msgid "Go back"
+msgstr "返回"
+
 #, python-brace-format
 msgid "Welcome, {username}!"
 msgstr "歡迎，{username}！"
@@ -3360,6 +3360,10 @@ msgstr "帳號歷史（帳戶明細等）"
 
 msgid "any paypal address (our payment processor doesn't support paypal yet)"
 msgstr "任何PayPal地址（我們的支付處理處不支持PayPal）"
+
+#, python-brace-format
+msgid "Please input an email address (your {platform} account doesn't have a primary one):"
+msgstr ""
 
 msgid "Proceed"
 msgstr "繼續"

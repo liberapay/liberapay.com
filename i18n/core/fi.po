@@ -2304,9 +2304,6 @@ msgstr "”{0}” ei ole kelvollinen määrä. Sallitut rajat: {1}—{2}"
 msgid "This bank wire has been canceled."
 msgstr "Pankkisiirto on peruuntunut."
 
-msgid "Go back"
-msgstr "Palaa"
-
 #, python-brace-format
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Pankkisiirron {0} valmistelu on epäonnistunut. Virheilmoitus: {1}"
@@ -3346,6 +3343,9 @@ msgstr "Tiedonsiirto Gratipay-palvelusta"
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
 msgstr "Näyttää siltä, että sinun pitää palata Gratipay-palveluun ja kirjautua siellä ensin, ennen kuin siirto aloitetaan."
 
+msgid "Go back"
+msgstr "Palaa"
+
 #, python-brace-format
 msgid "Welcome, {username}!"
 msgstr "Tervetuloa, {username}!"
@@ -3392,6 +3392,10 @@ msgstr "tilin tapahtumahistoriaa"
 
 msgid "any paypal address (our payment processor doesn't support paypal yet)"
 msgstr "mitään PayPal-osoitetta (maksunkäsittelijämme ei vielä tue PayPalia)"
+
+#, python-brace-format
+msgid "Please input an email address (your {platform} account doesn't have a primary one):"
+msgstr ""
 
 msgid "Proceed"
 msgstr "Toimeksi"
