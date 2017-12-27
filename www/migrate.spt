@@ -20,8 +20,7 @@ platform = 'Gratipay'
 step = request.qs.get('step', '1')
 
 if step == '1':
-    request.allow('POST')
-    username = request.body['username']
+    username = request.body.get('username')
 
 elif step == '2':
     request.allow('POST')
@@ -291,6 +290,7 @@ title = _("Migrating from Gratipay")
 % block thin_content
     % if step == '1' and not username
         <p class="alert alert-warning">{{ _("Oops, you need to go back to Gratipay and log in before starting the migration.") }}</p>
+        <a class="btn btn-primary btn-lg" href="https://gratipay.com/">{{ _("Go back") }}</a>
 
     % elif step == '1'
         <form action="?step=2" method="POST">
