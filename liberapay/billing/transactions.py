@@ -439,8 +439,8 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
     participant.set_attributes(balance=new_balance)
 
     if amount != 0:
-        participant.update_giving_and_tippees(cursor)
         merge_cash_bundles(cursor, participant.id)
+        participant.update_giving_and_tippees(cursor)
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
