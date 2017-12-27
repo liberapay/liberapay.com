@@ -321,7 +321,13 @@ title = _("Migrating from Gratipay")
                 <li>{{ _("the account's history (ledger, etc)") }}</li>
                 <li>{{ _("any paypal address (our payment processor doesn't support paypal yet)") }}</li>
             </ul>
-            <br>
+            % if '@' not in request.body['email_address']
+                <p>{{ _("Please input an email address (your {platform} account doesn't have a primary one):", platform=platform) }}</p>
+                <div class="form-group">
+                <input name="email_address" autocomplete="email" class="form-control" size=40
+                       required placeholder="{{ _('Email address') }}" />
+                </div>
+            % endif
             <button class="btn btn-primary btn-lg">{{ _("Proceed") }}</button>
             <br><br>
             <p class="alert alert-info">{{ _(
