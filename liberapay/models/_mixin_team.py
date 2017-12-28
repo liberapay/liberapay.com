@@ -246,10 +246,13 @@ class MixinTeam(object):
                      WHERE id = %(id)s
                 """, take.__dict__)
                 ntippers = len(tippers.get(member_id, ()))
-                member_currency = cursor.one(
-                    "SELECT main_currency FROM participants WHERE id = %s", (member_id,)
+                member_currency, old_taking = cursor.one(
+                    "SELECT main_currency, taking FROM participants WHERE id = %s", (member_id,)
                 )
                 diff = diff.convert(member_currency)
+                if old_taking + diff < 0:
+                    # Make sure currency fluctuation doesn't result in a negative number
+                    diff = -old_taking
                 cursor.run("""
                     UPDATE participants
                        SET taking = (taking + %(diff)s)
