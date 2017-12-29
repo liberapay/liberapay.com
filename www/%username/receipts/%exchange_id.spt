@@ -3,14 +3,6 @@ from mangopay.resources import BankAccount, Card
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant, obfuscate
 
-_ = lambda a: a
-PAYMENT_METHODS = {
-    'mango-ba': _("Direct Debit"),
-    'mango-bw': _("Bank Wire"),
-    'mango-cc': _("Credit Card"),
-}
-del _
-
 [---]
 
 participant = get_participant(state, restrict=True)
@@ -112,7 +104,7 @@ account = participant.get_mangopay_account()
             ({{ account.LegalRepresentativeFirstName }} {{ account.LegalRepresentativeLastName }})
         % endif
         <br>
-        {{ _("Payment method: {0}", _(PAYMENT_METHODS[route.network])) }}
+        {{ _("Payment method: {0}", _(constants.PAYMENT_METHODS[route.network])) }}
         % if card
         <br>
         {{ card.Alias }} ({{ card.CardProvider }})

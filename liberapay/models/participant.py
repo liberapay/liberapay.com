@@ -23,7 +23,8 @@ from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
-    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PERIOD_CONVERSION_RATES, PRIVILEGES,
+    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
+    PERIOD_CONVERSION_RATES, PRIVILEGES,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE, ZERO
 )
 from liberapay.exceptions import (
@@ -1236,6 +1237,13 @@ class Participant(Model, MixinTeam):
             assert '?' not in path
             query = '?' + urlencode(query)
         return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
+
+    def get_payin_url(self, network, e_id):
+        path = 'wallet/payin/%s' % PAYMENT_SLUGS[network]
+        if network == 'mango-ba':
+            return self.url(path + '/%s' % e_id)
+        else:
+            return self.url(path, dict(exchange_id=e_id))
 
     def get_teams(self):
         """Return a list of teams this user is a member of.

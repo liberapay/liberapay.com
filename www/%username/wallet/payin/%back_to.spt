@@ -1,7 +1,7 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from liberapay.utils import b64decode_s, get_participant, utcnow
+from liberapay.utils import b64decode_s, get_participant, group_by, utcnow
 
 [---]
 
@@ -26,6 +26,15 @@ currencies = website.db.all("""
        AND amount > 0
 """, (participant.id,))
 n_currencies = len(currencies)
+pending_payins = website.db.all("""
+    SELECT e.*, r.network
+      FROM exchanges e
+      JOIN exchange_routes r ON r.id = e.route
+     WHERE e.participant = %s
+       AND e.amount > 0
+       AND e.status = 'created'
+""", (participant.id,))
+pending_payins = group_by(pending_payins, lambda r: r.amount.currency)
 sections = []
 show_footer = False
 for currency in currencies:
@@ -88,6 +97,17 @@ title = _("Adding Money")
                  currency=currency_name) }}
         % endif
     </p>
+
+    % for e in pending_payins[currency]
+        <p class="alert alert-info">{{ _(
+            "You have a pending {payment_method} payment for {money_amount}. "
+            "{link_open}Details{link_close}",
+            payment_method=_(constants.PAYMENT_METHODS.get(e.network, e.network)).lower(),
+            money_amount=e.amount,
+            link_open='<a href="%s">'|safe % participant.get_payin_url(e.network, e.id),
+            link_close='</a>'|safe
+        ) }}</p>
+    % endfor
 
     % if can_payin
 

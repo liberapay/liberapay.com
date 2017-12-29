@@ -24,6 +24,12 @@
 </p>
 
 <p>
+    {{ _("Destination Country") }}<br>
+    % set dest_country = payin.BankAccount.IBAN[:2]
+    {{ locale.countries.get(dest_country, dest_country) }}
+</p>
+
+<p>
     {{ _("Bank Account Owner Name") }}<br>
     {{ payin.BankAccount.OwnerName }}
 </p>

@@ -179,6 +179,10 @@ title = _("Adding Money")
         <input type="hidden" name="route_id" value="{{ route.id if route else '' }}" />
         <input type="hidden" name="currency" value="{{ currency }}" />
         <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
+        <p>{{ _(
+            "Card payments are instantenous, and we will attempt to pull the full "
+            "amount you choose as soon as you click the \"Proceed\" button below."
+        ) }}</p>
         <ul class="list-group radio-group">
         % for weeks in weeks_list
             % set amount = weekly * weeks

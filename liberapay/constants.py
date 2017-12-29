@@ -219,6 +219,17 @@ PAYIN_DIRECT_DEBIT_TARGET = {
 }
 PAYIN_DIRECT_DEBIT_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
 
+PAYMENT_METHODS = {
+    'mango-ba': _("Direct Debit"),
+    'mango-bw': _("Bank Wire"),
+    'mango-cc': _("Credit Card"),
+}
+PAYMENT_SLUGS = {
+    'mango-ba': 'direct-debit',
+    'mango-bw': 'bankwire',
+    'mango-cc': 'card',
+}
+
 PERIOD_CONVERSION_RATES = {
     'weekly': Decimal(1),
     'monthly': Decimal(12) / Decimal(52),
