@@ -1877,15 +1877,6 @@ msgstr "Označit všechna oznámení jako přečtená"
 msgid "No notifications to show."
 msgstr "Žádná oznámení k zobrazení."
 
-msgid "Direct Debit"
-msgstr ""
-
-msgid "Bank Wire"
-msgstr "Bankovní převod"
-
-msgid "Credit Card"
-msgstr "Kreditní karta"
-
 msgid "Receipt"
 msgstr "Účtenka"
 
@@ -2255,8 +2246,15 @@ msgstr ""
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr ""
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr ""
+
+msgid "Credit Card"
+msgstr "Kreditní karta"
 
 msgid "Easy and instantaneous"
 msgstr "Jednoduché a okamžité"
@@ -2264,6 +2262,9 @@ msgstr "Jednoduché a okamžité"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "Poplatky: {0}% + {1}"
+
+msgid "Bank Wire"
+msgstr "Bankovní převod"
 
 msgid "To an account in Europe"
 msgstr ""
@@ -2279,6 +2280,9 @@ msgid "Fee: {0}%"
 msgstr "Poplatek: {0}%"
 
 msgid "Eurozone only"
+msgstr ""
+
+msgid "Direct Debit"
 msgstr ""
 
 msgid "Best for regular payments"
@@ -2334,6 +2338,9 @@ msgstr "BIC kód (Bank Identifier Code)"
 msgid "Wire Reference Code"
 msgstr "Variabilní symbol"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "Jméno vlastníka účtu"
 
@@ -2342,6 +2349,9 @@ msgstr "Adresa vlastníka účtu"
 
 msgid "Email me this information"
 msgstr "Zašlete mi tyto informace e-mailem"
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
+msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "Zašleme vám e-mail, jakmile budeme vědět, zda vaše platba je úspěšná nebo neúspěšná."
@@ -2361,6 +2371,9 @@ msgstr "Požadavek probíhá, čekejte prosím…"
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Přidání peněz na Liberapay bankovním převodem zahrnuje poplatek {0} % od našeho zprostředkovatele plateb."
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
+msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Vyberte částku nebo zadejte vlastní."
@@ -2408,6 +2421,9 @@ msgstr "Zobrazit účtenku"
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
 msgstr "Přidání peněz na Liberapay prostřednictvím kreditní nebo debetní karty zahrnuje poplatek {0} % + {1}."
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
+msgstr ""
 
 msgid "Card"
 msgstr "Karta"
@@ -2468,6 +2484,9 @@ msgstr ""
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "Pokus o převod z vašeho bankovního účtu {0} se nezdařil s následující chybovou zprávou:"
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

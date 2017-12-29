@@ -1872,15 +1872,6 @@ msgstr "Merk alle merknader som leste"
 msgid "No notifications to show."
 msgstr "Ingen merknader å vise."
 
-msgid "Direct Debit"
-msgstr "Direktebetaling"
-
-msgid "Bank Wire"
-msgstr "Bankoverføring"
-
-msgid "Credit Card"
-msgstr "Kredittkort"
-
 msgid "Receipt"
 msgstr "Kvittering"
 
@@ -2253,8 +2244,15 @@ msgstr "Innskudd av penger"
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Innskudd av penger tillates ikke når dine donasjoner allerede blir finansiert av din inntekt. Hvis dette er et problem for deg, send en e-post til support@liberapay.com og forklar hvorfor."
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr "Velg betalingsmetode for å legge til penger:"
+
+msgid "Credit Card"
+msgstr "Kredittkort"
 
 msgid "Easy and instantaneous"
 msgstr "Enkelt og øyeblikkelig"
@@ -2262,6 +2260,9 @@ msgstr "Enkelt og øyeblikkelig"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "Gebyr {0}% + {1}"
+
+msgid "Bank Wire"
+msgstr "Bankoverføring"
 
 msgid "To an account in Europe"
 msgstr "Til en konto i Europa"
@@ -2279,6 +2280,9 @@ msgstr "Gebyr: {0}%"
 #, fuzzy
 msgid "Eurozone only"
 msgstr "Kun i EØS"
+
+msgid "Direct Debit"
+msgstr "Direktebetaling"
 
 msgid "Best for regular payments"
 msgstr "Best for vedvarende betalinger"
@@ -2335,6 +2339,9 @@ msgstr "BIC (bankidentifikasjonskode)"
 msgid "Wire Reference Code"
 msgstr "Bankoverføringsreferansekode"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "Bankkontoinnehavers navn"
 
@@ -2343,6 +2350,9 @@ msgstr "Bankkontoinnehavers adresse"
 
 msgid "Email me this information"
 msgstr "Send meg denne informasjonen per e-post"
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
+msgstr ""
 
 #, fuzzy
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
@@ -2363,6 +2373,9 @@ msgstr "Forespørsel underveis, vent…"
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Innskudd i Liberapay-konto via bankoverføring er underlagt et gebyr på {0}% fra vår betalingspartner."
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
+msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Velg det forhåndsutregnede beløpet eller skriv inn noe selv."
@@ -2407,6 +2420,9 @@ msgstr "Vis kvittering"
 #, fuzzy, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
 msgstr "Ved innskudd av penger i Liberapay via kreditt- eller debet-kort påløper deg et gebyr på {0}% + {1}."
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
+msgstr ""
 
 #, fuzzy
 msgid "Card"
@@ -2470,6 +2486,9 @@ msgstr "En direkte debitering, pålydende {0} har blitt igangsatt. Hvis den er v
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "Forsøket på å overføre {0} fra bankkontoen din lyktes ikke på grunn av følgende feil:"
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

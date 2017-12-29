@@ -1870,15 +1870,6 @@ msgstr "Markeer alle meldingen als gelezen"
 msgid "No notifications to show."
 msgstr "Geen meldingen om te laten zien."
 
-msgid "Direct Debit"
-msgstr "Automatische incasso"
-
-msgid "Bank Wire"
-msgstr "Bankoverschrijving"
-
-msgid "Credit Card"
-msgstr "Creditcard"
-
 msgid "Receipt"
 msgstr "Ontvangstbewijs"
 
@@ -2242,8 +2233,15 @@ msgstr "Geld Toevoegen"
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "We staan niet toe om om geld toe te voegen aan je account wanneer je donaties al helemaal worden gedenkt door je inkomsten. Als dat een probleem voor je is, stuur dan een e-mail naar support@liberapay.com en leg ons uit waarom."
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr "Kies een betaalmethode om geld toe te voegen:"
+
+msgid "Credit Card"
+msgstr "Creditcard"
 
 msgid "Easy and instantaneous"
 msgstr "Gemakkelijk en direct"
@@ -2251,6 +2249,9 @@ msgstr "Gemakkelijk en direct"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "Provisie: {0}% + {1}"
+
+msgid "Bank Wire"
+msgstr "Bankoverschrijving"
 
 msgid "To an account in Europe"
 msgstr "Naar een account in Europa"
@@ -2267,6 +2268,9 @@ msgstr "Provisie: {0}%"
 
 msgid "Eurozone only"
 msgstr "Alleen eurozone"
+
+msgid "Direct Debit"
+msgstr "Automatische incasso"
 
 msgid "Best for regular payments"
 msgstr "Beste voor regelmatige betalingen"
@@ -2321,6 +2325,9 @@ msgstr "BIC (Bank Identifier Code)"
 msgid "Wire Reference Code"
 msgstr "Wire Referentie Code"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "Bankrekening eigenaar naam"
 
@@ -2329,6 +2336,9 @@ msgstr "Bankrekening eigenaar adres"
 
 msgid "Email me this information"
 msgstr "E-mail mij deze informatie"
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
+msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "Wij sturen je een e-mail zodra we weten of je betaling is gelukt of mislukt."
@@ -2348,6 +2358,9 @@ msgstr "Verzoek aan de gang, even geduld …"
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Geld overmaken naar Liberapay met een bankoverschrijving kost {0}% bij onze betalingsverwerker."
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
+msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Selecteer een bedrag of voer een aangepast bedrag in."
@@ -2392,6 +2405,9 @@ msgstr "Bekijk je ontvangstbewijs"
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
 msgstr "Geld overmaken naar Liberapay met een creditcard kost {0}% + {1} bij onze betalingsverwerker."
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
+msgstr ""
 
 msgid "Card"
 msgstr "Kaart"
@@ -2452,6 +2468,9 @@ msgstr "Een automatische incasso van {0} is gestart. Als de incasso succesvol is
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "De poging om de {0} van je bankrekening over te schrijven is mislukt met de volgende foutmelding:"
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

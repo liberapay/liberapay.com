@@ -1861,15 +1861,6 @@ msgstr "所有的通知標為已讀"
 msgid "No notifications to show."
 msgstr "無通知可顯示。"
 
-msgid "Direct Debit"
-msgstr "自動撥款"
-
-msgid "Bank Wire"
-msgstr "銀行轉帳"
-
-msgid "Credit Card"
-msgstr "信用卡"
-
 msgid "Receipt"
 msgstr "收據"
 
@@ -2227,8 +2218,15 @@ msgstr "充值"
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "在你收到的捐助足以被用來捐助他人的情況下我們不允許你向你的帳號充值。若有疑議請聯繫support@liberapay.com解釋原因。"
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr ""
+
+msgid "Credit Card"
+msgstr "信用卡"
 
 msgid "Easy and instantaneous"
 msgstr "簡單與即時"
@@ -2236,6 +2234,9 @@ msgstr "簡單與即時"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "手續費： {0}% + {1}"
+
+msgid "Bank Wire"
+msgstr "銀行轉帳"
 
 msgid "To an account in Europe"
 msgstr "向一個歐洲帳號"
@@ -2252,6 +2253,9 @@ msgstr "手續費： {0}%"
 
 msgid "Eurozone only"
 msgstr ""
+
+msgid "Direct Debit"
+msgstr "自動撥款"
 
 msgid "Best for regular payments"
 msgstr "定期付款的最佳方案"
@@ -2306,6 +2310,9 @@ msgstr "BIC (銀行識別碼)"
 msgid "Wire Reference Code"
 msgstr "滙款參考代碼"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "銀行帳戶持有人姓名"
 
@@ -2314,6 +2321,9 @@ msgstr "銀行帳戶持有人地址"
 
 msgid "Email me this information"
 msgstr "將這份資訊利用電郵寄給我"
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
+msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "一旦我們知道付款結果就會立即傳送給你一封電子郵件。"
@@ -2333,6 +2343,9 @@ msgstr "請求正在處理中，請稍待…"
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "透過銀行滙款到 Liberapay 帳戶將產生{0}% 手續費，這是要給支付處理器的費用。"
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
+msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "請選擇預先計算的金額或自定數目。"
@@ -2374,6 +2387,9 @@ msgstr "檢視收據"
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
 msgstr "透過信用卡/貸借卡儲存金額到 Liberapay 會產生 {0}% + {1}的手續費。"
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
+msgstr ""
 
 msgid "Card"
 msgstr "銀行卡"
@@ -2434,6 +2450,9 @@ msgstr "已請求{0}的自動撥款。若轉帳成功，其中 {1} 會轉入到�
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "從你銀行帳戶轉帳 {0} 失敗，並出現以下錯誤訊息："
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

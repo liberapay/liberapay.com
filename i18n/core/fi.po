@@ -1870,15 +1870,6 @@ msgstr "Merkitse kaikki ilmoitukset luetuiksi"
 msgid "No notifications to show."
 msgstr "Ei näytettäviä ilmoituksia."
 
-msgid "Direct Debit"
-msgstr "Suoraveloitus"
-
-msgid "Bank Wire"
-msgstr "Pankkisiirto"
-
-msgid "Credit Card"
-msgstr "Luottokortti"
-
 msgid "Receipt"
 msgstr "Kuitti"
 
@@ -2242,8 +2233,15 @@ msgstr "Rahan lisääminen"
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Kun lahjoituksesi saavat katteen jo tuloistasi, emme salli rahan lisäämistä. Jos tämä ei menettele, selitä meille miksi. Sähköposti: support@liberapay.com (englanniksi)."
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr "Valitse maksumenetelmä rahan lisäämiseksi:"
+
+msgid "Credit Card"
+msgstr "Luottokortti"
 
 msgid "Easy and instantaneous"
 msgstr "Helppo ja välitön"
@@ -2251,6 +2249,9 @@ msgstr "Helppo ja välitön"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "Kulut: {0} % + {1}"
+
+msgid "Bank Wire"
+msgstr "Pankkisiirto"
 
 msgid "To an account in Europe"
 msgstr "Eurooppalaiselle tilille"
@@ -2267,6 +2268,9 @@ msgstr "Kulut: {0} %"
 
 msgid "Eurozone only"
 msgstr "Vain euroalue"
+
+msgid "Direct Debit"
+msgstr "Suoraveloitus"
 
 msgid "Best for regular payments"
 msgstr "Paras säännöllisiin maksuihin"
@@ -2321,6 +2325,9 @@ msgstr "BIC (Pankkitunnistekoodi)"
 msgid "Wire Reference Code"
 msgstr "Pankkisiirron viite (Wire Reference Code)"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "Pankkitilin haltijan nimi"
 
@@ -2329,6 +2336,9 @@ msgstr "Pankkitilin haltijan osoite"
 
 msgid "Email me this information"
 msgstr "Lähetä minulle nämä tiedot sähköpostitse"
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
+msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "Lähetämme sähköpostin sitten, kun tiedämme onko maksu onnistunut vai epäonnistunut."
@@ -2348,6 +2358,9 @@ msgstr "Pyyntö on käsittelyssä, odota…"
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Rahan lisääminen Liberapay-lompakkoon pankkisiirrolla aiheuttaa {0} % kulun veloituksen maksunkäsittelijältämme."
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
+msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Valitse jokin näistä määristä, tai syötä vapaavalintainen määrä."
@@ -2392,6 +2405,9 @@ msgstr "Näytä kuitti"
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
 msgstr "Rahan lisääminen Liberapay-lompakkoon luottokortilla aiheuttaa {0} % + {1} kulun veloituksen maksunkäsittelijältämme."
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
+msgstr ""
 
 msgid "Card"
 msgstr "Kortti"
@@ -2452,6 +2468,9 @@ msgstr "{0} suoraveloitus on käynnistetty. Jos siirto onnistuu, {1} saapuu Libe
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "Yritys siirtää {0} pankkitililtäsi epäonnistui. Virheilmoitus:"
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

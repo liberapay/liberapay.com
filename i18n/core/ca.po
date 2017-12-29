@@ -1872,15 +1872,6 @@ msgstr ""
 msgid "No notifications to show."
 msgstr ""
 
-msgid "Direct Debit"
-msgstr "Pagament domiciliat"
-
-msgid "Bank Wire"
-msgstr "Transferència bancària"
-
-msgid "Credit Card"
-msgstr "Targeta de crèdit"
-
 msgid "Receipt"
 msgstr "Rebut"
 
@@ -2244,8 +2235,15 @@ msgstr ""
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "No permetem afegir diners si els donatius que feu ja es financen amb els ingressos que rebeu. Si això us representa una problema, si us plau, envieu-nos un correu electrònic a support@liberapay.com explicant el perquè."
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr "Trieu un mètode de pagament per a afegir diners:"
+
+msgid "Credit Card"
+msgstr "Targeta de crèdit"
 
 msgid "Easy and instantaneous"
 msgstr "Fàcil i instantàni"
@@ -2253,6 +2251,9 @@ msgstr "Fàcil i instantàni"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "Comissions: {0}% + {1}"
+
+msgid "Bank Wire"
+msgstr "Transferència bancària"
 
 msgid "To an account in Europe"
 msgstr "A un compte en Europa"
@@ -2269,6 +2270,9 @@ msgstr ""
 
 msgid "Eurozone only"
 msgstr "Només l'Eurozona"
+
+msgid "Direct Debit"
+msgstr "Pagament domiciliat"
 
 msgid "Best for regular payments"
 msgstr ""
@@ -2323,6 +2327,9 @@ msgstr "BIC (codi d'identificació bancària)"
 msgid "Wire Reference Code"
 msgstr "Codi de referència de la transferència"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "Nom del titular del compte bancari"
 
@@ -2330,6 +2337,9 @@ msgid "Bank Account Owner Address"
 msgstr "Adreça del titular del compte bancari"
 
 msgid "Email me this information"
+msgstr ""
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
 msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
@@ -2349,6 +2359,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
+msgstr ""
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
 msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
@@ -2393,6 +2406,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
+msgstr ""
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
 msgstr ""
 
 msgid "Card"
@@ -2454,6 +2470,9 @@ msgstr "S'ha iniciat un pagament domiciliat de {0}. Si la transferència es real
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "L'intent de transferir {0} del vostre compte bancari ha fallat amb el missatge d'error següent:"
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

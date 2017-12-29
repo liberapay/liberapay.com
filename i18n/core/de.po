@@ -1870,15 +1870,6 @@ msgstr "Alle Benachrichtigungen als gelesen markieren"
 msgid "No notifications to show."
 msgstr "Keine Benachrichtigungen."
 
-msgid "Direct Debit"
-msgstr "Lastschrift"
-
-msgid "Bank Wire"
-msgstr "Banküberweisung"
-
-msgid "Credit Card"
-msgstr "Kreditkarte"
-
 msgid "Receipt"
 msgstr "Rechnung"
 
@@ -2242,8 +2233,15 @@ msgstr "Geld hinzufügen"
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Wir erlauben es nicht weiteres Geld einzuzahlen, wenn Ihre Spenden bereits durch Ihre Einnahmen gedeckt sind. Sollte dies ein Problem für Sie sein, dann schreiben Sie uns eine E-Mail an support@liberapay.com und erklären warum."
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr "Bitte wählen Sie die Zahlungsart um Geld aufzuladen:"
+
+msgid "Credit Card"
+msgstr "Kreditkarte"
 
 msgid "Easy and instantaneous"
 msgstr "einfach und unverzüglich"
@@ -2251,6 +2249,9 @@ msgstr "einfach und unverzüglich"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "Gebühren: {0} % + {1}"
+
+msgid "Bank Wire"
+msgstr "Banküberweisung"
 
 msgid "To an account in Europe"
 msgstr "Auf ein Konto in Europa"
@@ -2267,6 +2268,9 @@ msgstr "Gebühr: {0} %"
 
 msgid "Eurozone only"
 msgstr "nur innerhalb der Eurozone"
+
+msgid "Direct Debit"
+msgstr "Lastschrift"
 
 msgid "Best for regular payments"
 msgstr "Ideal für regelmäßige Zahlungen"
@@ -2321,6 +2325,9 @@ msgstr "Bankleitzahl (BIC : Bank Identifier Code)"
 msgid "Wire Reference Code"
 msgstr "Verwendungszweck"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "Bankkonto Besitzername"
 
@@ -2329,6 +2336,9 @@ msgstr "Adresse des Kontobesitzers"
 
 msgid "Email me this information"
 msgstr "Schicken Sie mir diese Informationen per E-Mail"
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
+msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "Wir werden Ihnen eine E-Mail schicken, sobald wir wissen, ob Ihre Zahlung erfolgreich war oder fehlgeschlagen ist."
@@ -2348,6 +2358,9 @@ msgstr "Anfrage läuft, bitte warten…"
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Wenn Sie Ihr Guthaben bei Liberapay per Banküberweisung aufladen, dann fällt eine zusätzliche Gebühr von {0}% bei unserem Zahlungsdienstleister an."
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
+msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Bitte wählen Sie einen vorberechneten Betrag aus oder geben einen eigenen ein."
@@ -2392,6 +2405,9 @@ msgstr "Beleg ansehen"
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
 msgstr "Einzahlungen per Kreditkarte zu Liberapay verursacht eine Gebühr in Höhe von {0}% + {1}."
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
+msgstr ""
 
 msgid "Card"
 msgstr "Karte"
@@ -2452,6 +2468,9 @@ msgstr "Eine Lastschrift über {0} wurde angefordert. Wenn diese erfolgreich ist
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "Der Versuch, {0} von Ihrem Bankkonto zu transferieren, ist mit der folgenden  Fehlermeldung fehlgeschlagen:"
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

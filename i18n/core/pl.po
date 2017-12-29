@@ -1,5 +1,13 @@
+
 msgid ""
-msgstr "PO-Revision-Date: 2017-12-27 15:35+0000\nLast-Translator: pskosinski <email@pskosinski.pl>\nLanguage-Team: Polish <https://hosted.weblate.org/projects/liberapay/core/pl/>\nLanguage: pl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 2.19-dev\nGenerated-By: Babel 2.3.4\n"
+msgstr ""
+"Language-Team: Polish "
+"<https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
 msgstr "Witaj,"
@@ -1870,15 +1878,6 @@ msgstr "Oznacz wszystkie powiadomienia jako przeczytane"
 msgid "No notifications to show."
 msgstr "Brak powiadomień."
 
-msgid "Direct Debit"
-msgstr "Polecenie zapłaty"
-
-msgid "Bank Wire"
-msgstr "Przelew bankowy"
-
-msgid "Credit Card"
-msgstr "Karta kredytowa"
-
 msgid "Receipt"
 msgstr "Paragon"
 
@@ -2248,8 +2247,15 @@ msgstr "Dodawanie pieniędzy"
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Nie zezwalamy na dodawanie pieniędzy, jeśli Twoje darowizny są pokryte Twoim przychodem. Jeśli stanowi to dla Ciebie kłopot, prosimy o kontakt z support@liberapay.com i wyjaśnienie dlaczego."
 
+#, python-brace-format
+msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
+msgstr ""
+
 msgid "Please choose a payment method to add money:"
 msgstr "Wybierz metodę płatności aby dodać pieniądze:"
+
+msgid "Credit Card"
+msgstr "Karta kredytowa"
 
 msgid "Easy and instantaneous"
 msgstr "Łatwe i natychmiastowe"
@@ -2257,6 +2263,9 @@ msgstr "Łatwe i natychmiastowe"
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
 msgstr "Opłaty: {0}% + {1}"
+
+msgid "Bank Wire"
+msgstr "Przelew bankowy"
 
 msgid "To an account in Europe"
 msgstr "Na konto w Europie"
@@ -2273,6 +2282,9 @@ msgstr "Opłata: {0}%"
 
 msgid "Eurozone only"
 msgstr "Tylko strefa euro"
+
+msgid "Direct Debit"
+msgstr "Polecenie zapłaty"
 
 msgid "Best for regular payments"
 msgstr "Najlepsza opcja dla regularnych płatności"
@@ -2327,6 +2339,9 @@ msgstr "BIC (Business Identifier Code)"
 msgid "Wire Reference Code"
 msgstr "Kod referencyjny przelewu bankowego"
 
+msgid "Destination Country"
+msgstr ""
+
 msgid "Bank Account Owner Name"
 msgstr "Imię i nazwisko właściciela konta bankowego"
 
@@ -2335,6 +2350,9 @@ msgstr "Adres właściciela konta bankowego"
 
 msgid "Email me this information"
 msgstr "Wyślij mi tę informację e-mailem"
+
+msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
+msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "Wyślemy Ci e-mail, gdy tylko dowiemy się, czy Twoja płatność się powiodła czy też nie."
@@ -2354,6 +2372,9 @@ msgstr "Żądanie jest przetwarzane, prosimy o cierpliwość…"
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Dodanie pieniędzy do Liberapay za pomocą przelewu bankowego wymaga opłaty w wysokości {0}%, pobieranej przez podmiot obsługujący dla nas płatności."
+
+msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
+msgstr ""
 
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Wybierz sugerowaną kwotę lub wprowadź swoją własną."
@@ -2401,6 +2422,9 @@ msgstr "Pokaż paragon"
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
 msgstr "Dodanie pieniędzy do Liberapay za pomocą karty kredytowej/debetowej wymaga opłaty w wysokości {0}% + {1}."
+
+msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
+msgstr ""
 
 msgid "Card"
 msgstr "Karta"
@@ -2461,6 +2485,9 @@ msgstr "Polecenie zapłaty w wysokości {0} zostało zainicjowane. Jeśli transf
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr "Próba przelania {0} z Twojego konta bankowego zakończyła się niepowodzeniem z następującym komunikatem o błędzie:"
+
+msgid "Direct debits take approximately 4 business days to complete."
+msgstr ""
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
