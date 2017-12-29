@@ -2243,6 +2243,8 @@ class Participant(Model, MixinTeam):
         elsewhere = output['elsewhere'] = {}
         for platform, account in accounts.items():
             fields = ['id', 'user_id', 'user_name']
+            if not account.platform_data.single_domain:
+                fields.append('domain')
             elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
 
         return output
