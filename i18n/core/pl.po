@@ -1,5 +1,5 @@
 msgid ""
-msgstr "PO-Revision-Date: 2017-12-27 12:39+0000\nLast-Translator: pskosinski <email@pskosinski.pl>\nLanguage-Team: Polish <https://hosted.weblate.org/projects/liberapay/core/pl/>\nLanguage: pl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 2.19-dev\nGenerated-By: Babel 2.3.4\n"
+msgstr "PO-Revision-Date: 2017-12-27 15:35+0000\nLast-Translator: pskosinski <email@pskosinski.pl>\nLanguage-Team: Polish <https://hosted.weblate.org/projects/liberapay/core/pl/>\nLanguage: pl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 2.19-dev\nGenerated-By: Babel 2.3.4\n"
 
 msgid "Greetings,"
 msgstr "Witaj,"
@@ -26,7 +26,7 @@ msgstr "W tym tygodniu otrzymałeś {0}"
 
 #, python-brace-format
 msgid "{0} were given to you personally."
-msgstr "{0} otrzymałeś osobiście."
+msgstr "{0} zostało przekazane bezpośrednio Tobie."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
 msgstr "Nie jesteś członkiem żadnego zespołu, więc nie otrzymałeś żadnych pieniędzy za udział w zespołach."
@@ -34,13 +34,13 @@ msgstr "Nie jesteś członkiem żadnego zespołu, więc nie otrzymałeś żadnyc
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Nie otrzymałeś żadnych pieniędzy za twój wkład w zespole {0}."
+msgstr[0] "Nie otrzymałeś żadnych pieniędzy za twój wkład w zespół {0}."
 msgstr[1] "Nie otrzymałeś żadnych pieniędzy za twój wkład w {n} zespołach, do których należysz."
 msgstr[2] "Nie otrzymałeś żadnych pieniędzy za twój wkład w {n} zespołach, do których należysz."
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
-msgstr "Otrzymałeś {0} za swoją rolę w zespole {1}."
+msgstr "{0} zostało Ci przekazane za Twój wkład w zespół {1}."
 
 #, python-brace-format
 msgid "{0} were given to you for your roles in the following teams:"
@@ -52,10 +52,10 @@ msgstr "{0}:{1}"
 
 #, python-brace-format
 msgid "You now have {0} in your wallet."
-msgstr "Masz teraz {0} w portfelu."
+msgstr "Masz teraz w portfelu {0}."
 
 msgid "See your account's transaction logs"
-msgstr "Zobacz dzienniki transakcji na koncie"
+msgstr "Przejrzyj historię transakcji na Twoim koncie"
 
 #, python-brace-format
 msgid "- {0}: {1}"
@@ -2113,14 +2113,14 @@ msgstr "W tym tygodniu otrzymano około {converted_amount} (dokładnie: {exact_a
 
 #, python-brace-format
 msgid "You have {money_amount} in your account."
-msgstr "Masz {money_amount} na koncie."
+msgstr "Masz na koncie {money_amount}."
 
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Ich saldo to {0}."
 
 msgid "Account Statement"
-msgstr "Wyciąg konta"
+msgstr "Wyciąg z konta"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
@@ -2199,7 +2199,7 @@ msgstr "zwrot nieudanej wypłaty (treść błędu: {0})"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
-msgstr "anonimowa darowizna za Twój wkład w zespole {0}"
+msgstr "anonimowa darowizna za Twój wkład w zespół {0}"
 
 msgid "donation refund"
 msgstr "zwrot darowizny"
@@ -2226,7 +2226,7 @@ msgstr "końcowy dar dla {0}"
 
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
-msgstr "darowizna dla {0} za jego wkład w zespole {1}"
+msgstr "darowizna dla {0} za jego wkład w zespół {1}"
 
 msgid "refund of anonymous donation"
 msgstr "zwrot anonimowej darowizny"
@@ -3418,7 +3418,7 @@ msgstr "dowolny adres PayPal (nasz pośrednik nie obsługuje jeszcze PayPala)"
 
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr ""
+msgstr "Prosimy o wprowadzenie adresu e-mail (Twoje konto w serwisie {platform} nie ma ustawionego głównego adresu e-mail):"
 
 msgid "Proceed"
 msgstr "Przejdź dalej"
