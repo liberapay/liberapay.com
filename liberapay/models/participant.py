@@ -283,6 +283,7 @@ class Participant(Model, MixinTeam):
         l = len(password)
         if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
             raise BadPasswordSize
+        # Using SHA-256 as the HMAC algorithm (PBKDF2 + HMAC-SHA-256)
         algo = 'sha256'
         salt = urandom(32)
         rounds = website.app_conf.password_rounds
