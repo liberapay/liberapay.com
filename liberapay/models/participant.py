@@ -285,6 +285,7 @@ class Participant(Model, MixinTeam):
             raise BadPasswordSize
         # Using SHA-256 as the HMAC algorithm (PBKDF2 + HMAC-SHA-256)
         algo = 'sha256'
+        # Generate 32 random bytes for the salt
         salt = urandom(32)
         rounds = website.app_conf.password_rounds
         hashed = cls._hash_password(password, algo, salt, rounds)
