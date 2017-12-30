@@ -70,7 +70,6 @@ class Tests(Harness):
     "avatar": null,
     "elsewhere": {
         "github": {
-            "id": %(elsewhere_id)s,
             "user_id": "%(user_id)s",
             "user_name": "bob"
         }
