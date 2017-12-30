@@ -232,6 +232,11 @@ class Participant(Model, MixinTeam):
             salt, hashed = b64decode(salt), b64decode(hashed)
             if constant_time_compare(cls._hash_password(v2, algo, salt, rounds), hashed):
                 p.authenticated = True
+                if len(salt) < 32:
+                    # Update the password hash in the DB
+                    hashed = cls.hash_password(v2)
+                    cls.db.run("UPDATE participants SET password = %s WHERE id = %s",
+                               (hashed, p.id))
                 return p
 
     @classmethod
@@ -278,8 +283,10 @@ class Participant(Model, MixinTeam):
         l = len(password)
         if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
             raise BadPasswordSize
+        # Using SHA-256 as the HMAC algorithm (PBKDF2 + HMAC-SHA-256)
         algo = 'sha256'
-        salt = urandom(21)
+        # Generate 32 random bytes for the salt
+        salt = urandom(32)
         rounds = website.app_conf.password_rounds
         hashed = cls._hash_password(password, algo, salt, rounds)
         hashed = '$'.join((
