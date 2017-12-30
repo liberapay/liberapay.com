@@ -14,7 +14,7 @@ export APPNAME="${APPNAME-liberapay}"
 yesno () {
     proceed=""
     while [ "$proceed" != "y" ]; do
-        read -pr "$1 (y/n) " proceed
+        read -p"$1 (y/n) " proceed
         [ "$proceed" = "n" ] && return 1
     done
     return 0
@@ -90,12 +90,12 @@ if [ -e sql/branch.sql ]; then
     # Let the user do the rest
     git rm sql/branch.sql
     echo "sql/branch.sql has been merged into sql/schema.sql and sql/migrations.sql"
-    read -pr "Please make the necessary manual modifications to those files now, then press Enter to continue... " enter
+    read -p "Please make the necessary manual modifications to those files now, then press Enter to continue... " enter
 
     # Check modifications to schema.sql
     echo "Testing sql/schema.sql..."
     while ! make test-schema; do
-        read -pr "Please fix sql/schema.sql, then press Enter to continue... " enter
+        read -p "Please fix sql/schema.sql, then press Enter to continue... " enter
         echo "Retesting sql/schema.sql..."
     done
     echo "Done. sql/schema.sql seems to be okay."
