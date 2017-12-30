@@ -1,13 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 # Fail on errors and undefined variables
 set -eu
 
 # Be somewhere predictable
-cd "`dirname $0`"
+cd "$(dirname "$0")"
 
 # Constants
-export APPNAME=${APPNAME-liberapay}
+export APPNAME="${APPNAME-liberapay}"
 
 # Helpers
 
@@ -21,15 +21,15 @@ yesno () {
 }
 
 read_after () {
-    while read line; do [ "$line" = "$1" ] && break; done; cat
+    while read -r line; do [ "$line" = "$1" ] && break; done; cat
 }
 
 read_until () {
-    while read line; do [ "$line" = "$1" ] && break || echo "$line"; done
+    while read -r line; do [ "$line" = "$1" ] && break || echo "$line"; done
 }
 
 require () {
-    if [ ! `which $1` ]; then
+    if [ ! "$(which "$1")" ]; then
         echo "The '$1' command was not found."
         exit 1
     fi
@@ -62,7 +62,7 @@ if [ -e sql/branch.sql ]; then
 
     schema_version_re="('schema_version',) +'([0-9]+)'"
     schema_version=$(sed -n -r -e "s/.*$schema_version_re.*/\2/p" sql/schema.sql)
-    new_version=$(($schema_version + 1))
+    new_version=$((schema_version + 1))
 
     # Run branch.sql on the test DB in echo mode to get back a "compiled"
     # version on stdout without commands like \i
@@ -106,17 +106,17 @@ if [ -e sql/branch.sql ]; then
 
     # Deployment stages
     echo "Splitting $branch_c in two..."
-    cat $branch_c | read_until "SELECT 'after deployment';" >$branch_before
-    cat $branch_c | read_after "SELECT 'after deployment';" >$branch_after
-    if [ -s $branch_before -o -s $branch_after ]; then
+    cat "$branch_c" | read_until "SELECT 'after deployment';" > "$branch_before"
+    cat "$branch_c" | read_after "SELECT 'after deployment';" > "$branch_after"
+    if [ -s "$branch_before" ] || [ -s "$branch_after" ]; then
         echo "Done. Here is the result:" ; echo
-        if [ -s $branch_before ]; then
-            echo "--> $branch_before contains:" ; cat $branch_before ; echo
+        if [ -s "$branch_before" ]; then
+            echo "--> $branch_before contains:" ; cat "$branch_before" ; echo
         else
             echo "--> $branch_before is empty"
         fi
-        if [ -s $branch_after ]; then
-            echo "--> $branch_after contains:" ; cat $branch_after ; echo
+        if [ -s "$branch_after" ]; then
+            echo "--> $branch_after contains:" ; cat "$branch_after" ; echo
         else
             echo "--> $branch_after is empty" ; echo
         fi
