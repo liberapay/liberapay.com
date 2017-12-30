@@ -1,8 +1,0 @@
-#!/bin/bash -eu
-
-echo "Fetching resources from Git Large File Storage..."
-python -m git_lfs -vv "$HOME/git/$OPENSHIFT_APP_NAME.git" "$OPENSHIFT_REPO_DIR"
-
-echo "Removing unnecessary files..."
-cd "$OPENSHIFT_REPO_DIR"
-rm -rf Makefile pytest.ini ./*.env ./*.md ./*.sh sql/ tests/
