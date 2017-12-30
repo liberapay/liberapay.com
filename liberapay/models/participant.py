@@ -232,6 +232,11 @@ class Participant(Model, MixinTeam):
             salt, hashed = b64decode(salt), b64decode(hashed)
             if constant_time_compare(cls._hash_password(v2, algo, salt, rounds), hashed):
                 p.authenticated = True
+                if len(salt) < 32:
+                    # Update the password hash in the DB
+                    hashed = cls.hash_password(v2)
+                    cls.db.run("UPDATE participants SET password = %s WHERE id = %s",
+                               (hashed, p.id))
                 return p
 
     @classmethod
