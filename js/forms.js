@@ -91,3 +91,22 @@ Liberapay.forms.success = function($form, $inputs, button) { return function(dat
         window.location.href = window.location.href;
     }
 }};
+
+Liberapay.forms.platforms = {
+    'twitter': /^(https?:\/\/)?(www\.)?twitter\.com\/(\w+)/,
+    'github': /^(https?:\/\/)?(www\.)?github\.com\/(\w+)/,
+    'bitbucket': /^(https?:\/\/)?(www\.)?bitbucket\.org\/(\w+)/
+};
+
+Liberapay.forms.detectPlatform = function () {
+    $('#jump-user-name').on('input', function () {
+        var value = $('#jump-user-name').val();
+        Object.keys(Liberapay.forms.platforms).forEach(function (k) {
+            var match = value.match(Liberapay.forms.platforms[k]);
+            if (match) {
+                $('#jump-platform').val(k);
+                $('#jump-user-name').val(match[3]);
+            }
+        });
+    });
+};
