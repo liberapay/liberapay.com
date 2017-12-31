@@ -818,6 +818,7 @@ class Payday(object):
         """, (self.ts_start,), default=constants.BIRTHDAY)
 
         # Income notifications
+        n = 0
         get_username = lambda i: self.db.one(
             "SELECT username FROM participants WHERE id = %s", (i,)
         )
@@ -846,8 +847,11 @@ class Payday(object):
                 by_team=by_team,
                 new_balance=p.get_balances(),
             )
+            n += 1
+        log("Sent %i income notifications." % n)
 
         # Identity-required notifications
+        n = 0
         participants = self.db.all("""
             SELECT p
               FROM participants p
@@ -865,8 +869,11 @@ class Payday(object):
         """)
         for p in participants:
             p.notify('identity_required', force_email=True)
+            n += 1
+        log("Sent %i identity_required notifications." % n)
 
         # Low-balance notifications
+        n = 0
         participants = self.db.all("""
             SELECT p, COALESCE(w.balance, zero(needed)) AS balance, needed
               FROM (
@@ -895,6 +902,8 @@ class Payday(object):
         """, (previous_ts_end, self.ts_end))
         for p, balance, needed in participants:
             p.notify('low_balance', low_balance=balance, needed=needed)
+            n += 1
+        log("Sent %i low_balance notifications." % n)
 
 
 def create_payday_issue():
