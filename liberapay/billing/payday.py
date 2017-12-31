@@ -879,7 +879,9 @@ class Payday(object):
                    GROUP BY t.tipper, t.amount::currency
                    ) a
               JOIN participants p ON p.id = a.tipper
-         LEFT JOIN wallets w ON w.owner = p.id AND w.balance::currency = needed::currency
+         LEFT JOIN wallets w ON w.owner = p.id
+                            AND w.balance::currency = needed::currency
+                            AND w.is_current IS TRUE
              WHERE COALESCE(w.balance, zero(needed)) < needed
                AND EXISTS (
                      SELECT 1
