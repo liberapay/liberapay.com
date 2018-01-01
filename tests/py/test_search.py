@@ -47,3 +47,12 @@ class TestSearch(Harness):
         response = self.client.GET('/search.json?q=alice&scope=usernames')
         data = json.loads(response.text)['usernames']
         assert data == []
+
+    def test_search_unknown_languages(self):
+        alice = self.make_participant('alice')
+        alice.upsert_statement('en', "Foobar")
+        response = self.client.GET(
+            '/search.json?q=foobar', HTTP_ACCEPT_LANGUAGE="xxa,xxb,xxc,xxd,xxe"
+        )
+        data = json.loads(response.text)
+        assert len(data['statements']) == 1

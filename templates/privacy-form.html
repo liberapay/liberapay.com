@@ -5,7 +5,8 @@
         <input type="hidden" name="privacy" value="{{ constants.PRIVACY_FIELDS_S }}" />
         <div class="checkbox">
         % set has_override = set()
-        % for name, label in constants.PRIVACY_FIELDS.items()
+        % for name, (label, show_for_teams) in constants.PRIVACY_FIELDS.items()
+        % if show_for_teams or participant.kind != 'group'
         <label>
             <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name].__and__(1) else '' }} />
             {{ _(label) }}
@@ -15,6 +16,7 @@
             <span class="text-warning">({{ _("Admin override is on.*") }})</span>
         % endif
         <br />
+        % endif
         % endfor
         </div>
         <button class="btn btn-default">{{ _("Save changes") }}</button>

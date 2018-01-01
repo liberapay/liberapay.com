@@ -80,6 +80,9 @@ class TestIdentity(Harness):
         kw = dict(auth_as=janeway, raise_immediately=False, HTTP_ACCEPT='text/html')
 
         data = dict(user_data, Birthday='16-01-1995', terms='agree')
+        data['organization'] = 'yes'
+        data['LegalPersonType'] = 'ORGANIZATION'
+        data['Name'] = 'Starfleet'
         r = self.client.POST('/janeway/identity', data, **kw)
         assert "Invalid date of birth" in r.text
 
