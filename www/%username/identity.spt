@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from mangopay.resources import LegalUser, NaturalUser, User, Wallet
 from mangopay.utils import Address
@@ -7,7 +7,6 @@ from liberapay.billing.transactions import repr_exception, transfer, APIError
 from liberapay.constants import KYC_DOCS_EXTS
 from liberapay.utils import check_address, get_participant, group_by, to_javascript
 
-EPOCH = datetime(1970, 1, 1)
 KEYS_NATURAL = 'FirstName LastName CountryOfResidence Nationality Birthday'.split()
 KEYS_LEGAL = ['Name', 'LegalPersonType'] + ['LegalRepresentative'+k for k in KEYS_NATURAL]
 KEYS_NATURAL_L2 = 'Occupation IncomeRange Address'.split()
@@ -98,8 +97,7 @@ if request.method == 'POST':
                 year, month, day = map(int, v.split('-'))
                 # the above raises ValueError if the number of parts isn't 3
                 # or if any part isn't an integer
-                dt = datetime(year, month, day)
-                v = int((dt - EPOCH).total_seconds())
+                v = date(year, month, day)
             except ValueError:
                 error = _("Invalid date of birth.")
                 continue
