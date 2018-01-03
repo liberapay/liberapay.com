@@ -348,7 +348,7 @@ def record_exchange_result(db, exchange_id, remote_id, status, error, participan
          RETURNING *
         """, locals())
         if not e:
-            return
+            return cursor.one("SELECT * FROM exchanges WHERE id = %s", (exchange_id,))
         assert participant.id == e.participant
 
         amount = e.amount
