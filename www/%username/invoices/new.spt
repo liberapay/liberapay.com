@@ -104,7 +104,7 @@ title = _("Invoice {someone}", someone=addressee.username)
 
     <h4>{{ _("Amount") }}</h4>
     <div class="input-group">
-        <input type="text" name="amount" class="amount form-control"
+        <input type="number" name="amount" class="amount form-control"
                placeholder="{{ _('Amount') }}" required
                value="{{ format_decimal(invoice.amount.amount) if invoice else '' }}" />
         <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
