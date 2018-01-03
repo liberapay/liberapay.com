@@ -45,8 +45,8 @@
     <label>
         <span>{{ _("Date of Birth") }}</span>
         % set dob = account[p+'Birthday']
-        % set dob = dob and dob.isoformat()
-        <input name="Birthday" value="{{ dob or request.body.get('Birthday', '') }}"
+        % set dob = dob and dob.isoformat() or ''
+        <input name="Birthday" value="{{ request.body.get('Birthday', '') or dob }}"
                pattern="[1-2][0-9]{3}-[0-9]{1,2}-[0-9]{1,2}"
                placeholder="{{ _('YYYY-MM-DD') }}" title="{{ _('YYYY-MM-DD') }}"
                class="form-control" size=10 required />
