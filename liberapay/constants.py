@@ -207,6 +207,10 @@ PAYIN_CARD_TARGET = {
     'USD': Money('95.00', 'USD'),  # fee ≈ 3.27%
 }
 PAYIN_CARD_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
+PAYIN_DIRECT_DEBIT_COUNTRIES = {
+    # https://support.gocardless.com/hc/en-gb/articles/115005758445
+    'EUR': EUROZONE | set("MC SM".split()),
+}
 PAYIN_DIRECT_DEBIT_MIN_EUR_GBP = Decimal('15.00')  # fee ≈ 3.78%
 PAYIN_DIRECT_DEBIT_MIN = {
     'EUR': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'EUR'),
