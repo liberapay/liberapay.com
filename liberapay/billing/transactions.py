@@ -42,6 +42,9 @@ def repr_error(o):
 
 def repr_exception(e):
     if isinstance(e, APIError):
+        if isinstance(e.content, dict) and e.content.get('errors'):
+            errors = ' | '.join('%s (%s)' % (v, k) for k, v in e.content['errors'].items())
+            return '%s | Error ID: %s' % (errors, e.content['Id'])
         return '%s %s' % (e.code, e.args[0])
     else:
         return repr(e)
