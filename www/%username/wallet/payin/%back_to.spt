@@ -145,8 +145,10 @@ title = _("Adding Money")
         </div>
 
         % if direct_debit_available
+        % set recommended = request.country in constants.PAYIN_DIRECT_DEBIT_COUNTRIES[currency]
         <div class="col-sm-6">
-            <div class="panel panel-default"><div class="panel-body overlayed">
+            <div class="panel panel-default {{ 'not-recommended' if not recommended }}">
+            <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('exchange') }}</p>
                 <h4>{{ _("Direct Debit") }}<br><small>{{ _("Eurozone only") }}</small></h4>
                 <p>
@@ -154,7 +156,8 @@ title = _("Adding Money")
                     {{ _("Fee: {0}", constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat) }}
                 </p>
                 <a class="overlay" href="{{ base_path }}/direct-debit/?currency={{ currency }}"></a>
-            </div></div>
+            </div>
+            </div>
         </div>
         % endif
 
