@@ -134,4 +134,25 @@ interactions:
       expires: ['-1']
       pragma: [no-cache]
     status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717495/bankaccounts/20717497
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0xPy26DQBD7FeTzHmZ5pnsjVFGpaIog/QBUpoAEu9WyNEJR/r0ifSg3e2yP5Qte
+        z5pt2raW5xnqgl9YDJolFGoz8blnyxD3kg+ll3EUyAa3QuHUs7dBz3x4xdD1DgIVd4PRf8bSzK4Z
+        M9MyFJKISEIgM4t2dntwqHAVyPfp8UZk6BOFkiRRRBERyeCF/JhiCOzzDAplXZ8OVVkWeQGBt5lt
+        3kLBp0Qm4UME8bPs2Exb4ZOZ2HrPzQqB0/q5nW5dAvepZFOb7n+b5cYNRj82jqFkuIvjMNgFiUD6
+        7oYvhnJ24es3AAAA//8DABxNIjxEAQAA
+    headers:
+      cache-control: [no-cache]
+      cf-ray: [3d85f4e1aeb51571-CDG]
+      content-encoding: [gzip]
+      content-type: [application/json; charset=utf-8]
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
 version: 1
