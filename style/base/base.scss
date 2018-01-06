@@ -964,3 +964,16 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
     color: $state-danger-text;
     content: '\e014';
 }
+
+.not-recommended {
+    color: #888;
+    .payment-icon {
+        color: #ccc;
+    }
+    small {
+        color: $state-danger-text;
+        font-size: $font-size-medium;
+        font-weight: bold;
+        line-height: $font-size-medium * $line-height-base;
+    }
+}

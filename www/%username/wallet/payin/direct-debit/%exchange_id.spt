@@ -5,7 +5,7 @@ from decimal import Decimal as D, InvalidOperation, ROUND_UP
 
 from mangopay.resources import BankAccount, Mandate
 
-from liberapay.billing.fees import skim_amount, upcharge_direct_debit
+from liberapay.billing.fees import get_bank_account_country, skim_amount, upcharge_direct_debit
 from liberapay.billing.transactions import (
     prepare_direct_debit, execute_direct_debit, record_exchange_result,
     repr_error, repr_exception,
@@ -17,10 +17,6 @@ from liberapay.utils import (
     b64decode_s, get_owner_address, get_owner_name, get_participant, obfuscate
 )
 from liberapay.utils.i18n import Money
-
-_ = lambda a: a
-EUR_DEBIT_NOT_AVAILABLE = _("Euro direct debits are only available from within the Eurozone.")
-del _
 
 # https://docs.mangopay.com/endpoints/v2.01/mandates#e231_create-a-mandate
 MANDATE_LANGS = {'en', 'fr', 'nl', 'de', 'es', 'it', 'pl'}
@@ -112,6 +108,16 @@ if request.method == 'POST':
             "'{0}' is not an acceptable amount (min={1}, max={2})",
             amount, amount_min, amount_max
         ))
+
+    ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
+    country = get_bank_account_country(ba)
+    if country not in constants.PAYIN_DIRECT_DEBIT_COUNTRIES[currency]:
+        raise response.error(400, _(
+            "Direct debits in {currency} are not possible from {country}.",
+            currency=locale.currencies.get(currency, currency),
+            country=locale.countries.get(country, country),
+        ))
+
     mandate = Mandate.get(route.mandate) if route.mandate else None
     if mandate and mandate.Status == 'FAILED':
         route.set_mandate(None)
@@ -131,10 +137,6 @@ if request.method == 'POST':
             mandate.save()
         except Exception as e:
             error = repr_exception(e)
-            if currency == 'EUR':
-                ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
-                if ba.Country not in constants.EUROZONE:
-                    error = EUR_DEBIT_NOT_AVAILABLE
             record_exchange_result(website.db, exchange.id, '', 'failed', error, participant)
             website.tell_sentry(e, state)
             response.redirect(return_url)
