@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="{{ locale.language }}">
+<head prefix="og: http://ogp.me/ns#">
+    {% block head_early %}{% endblock %}
+    <title>{{ title or 'Liberapay' }}</title>
+    <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset('paper.css') }}" type="text/css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <header class="text-right">
+        <a class="btn btn-default btn-lg" href="javascript:print()">
+            <span class="glyphicon glyphicon-print"></span> {{ _("Print") }}
+        </a>
+    </header>
+
+    <div class="sheet"><div class="page">
+        % block header
+        <header class="flex">
+            <div>
+                <img src="{{ website.asset('liberapay/icon-v2_yellow-r.svg') }}" />
+                Liberapay
+            </div>
+            <div>support@liberapay.com</div>
+        </header>
+        % endblock
+
+        {% block content %}{% endblock %}
+    </div></div>
+
+</body>
+</html>
