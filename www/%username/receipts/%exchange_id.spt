@@ -1,4 +1,6 @@
-from mangopay.resources import BankAccount, Card
+from datetime import date
+
+from mangopay.resources import BankAccount, Card, PayIn, User
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import get_participant, obfuscate
@@ -30,108 +32,95 @@ if route.network == 'mango-cc':
 elif route.network == 'mango-ba':
     bank_account = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
 
-account = participant.get_mangopay_account()
+payin = PayIn.get(exchange.remote_id)
+account = User.get(payin.AuthorId)
+
+p = 'LegalRepresentative' if account.PersonType == 'LEGAL' else ''
+payer_name = ' '.join(getattr(account, p+k) for k in ('FirstName', 'LastName'))
+owner_name = account.Name if account.PersonType == 'LEGAL' else payer_name
+
+currency = exchange.amount.currency
+tips = website.db.all("""
+    SELECT DISTINCT ON (tippee)
+           t.amount
+         , t.tippee
+         , p.username
+      FROM tips t
+      JOIN participants p ON p.id = t.tippee
+     WHERE t.tipper = %s
+       AND t.amount::currency = %s
+       AND t.amount > 0
+       AND t.mtime <= %s
+       AND p.status = 'active'
+  ORDER BY tippee
+         , t.mtime DESC
+""", (participant.id, currency, exchange.timestamp))
+
+today = date.today()
+title = _("liberapay_receipt_{number}", number=str(today)+'_'+str(exchange.id))
 
 [---] text/html
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #EEE;
-    }
-    body, table {
-        font: normal 12pt/14pt 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-    #page {
-        width: 3in;
-        border: 1px solid black;
-        background: white;
-        margin: 1pc auto;
-    }
-    #page-padding {
-        padding: 0.25in;
-    }
-    h1 {
-        margin: 0;
-        padding: 1.5em 0 0.5em;
-    }
-    table {
-        margin: 1em 0;
-    }
-    th, td {
-        vertical-align: top;
-        margin: 0;
-        padding: 0;
-    }
-    th {
-        text-align: left;
-        padding-right: 1em;
-    }
-    td {
-        text-align: right;
-    }
-    .total {
-        font-size: 14pt;
-    }
-    #txnid {
-        border-top: 1px solid black;
-        margin: 0;
-        padding: 0;
-        font-size: 8.5pt;
-        line-height: 8.5pt;
-        text-transform: uppercase;
-        width: 100%;
-    }
-    #txnid p {
-        margin: 0;
-        padding: 3pt 0 0;
-        white-space: nowrap;
-    }
-</style>
-<div id="page"><div id="page-padding">
+% extends "templates/paper.html"
 
-    <div>
-        Liberapay (https://liberapay.com/)
-    </div>
+% block content
 
     <h1>{{ _("Receipt") }}</h1>
 
-    <div id="their-info">
-        % if participant.kind == 'individual'
-            {{ account.FirstName }} {{ account.LastName }}
-        % elif participant.kind == 'organization'
-            {{ account.Name }}
-            ({{ account.LegalRepresentativeFirstName }} {{ account.LegalRepresentativeLastName }})
-        % endif
-        <br>
-        {{ _("Payment method: {0}", _(constants.PAYMENT_METHODS[route.network])) }}
-        % if card
-        <br>
-        {{ card.Alias }} ({{ card.CardProvider }})
-        % elif bank_account and bank_account.Type == 'IBAN'
-        <br>
-        {{ obfuscate(bank_account.IBAN, 2, -4) }}
-        % endif
-    </div>
+    <p>{{ _(
+        "We confirm the receipt of a transfer initiated by {payer} on {date}."
+        , payer=payer_name
+        , date=exchange.timestamp.date()
+    ) }}</p>
 
-    <table>
+    <p>{{ _(
+        "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
+        , exchange.amount + exchange.fee
+        , exchange.amount
+        , exchange.fee
+        , owner_name=owner_name
+        , link=('<a class="printable" href="{0}">{0}</a>'|safe).format(participant.url())
+    ) }}</p>
+
+    % if tips
+    <h2>{{ _("Beneficiaries") }}</h2>
+    <p>{{ _(
+        "The money will fund the donations of {name} on Liberapay. The table below "
+        "shows the donations as they were when the payment was initiated ({datetime}, UTC)."
+        , name=owner_name, datetime=exchange.timestamp
+    ) }}</p>
+    <table class="table table-bordered">
         <tr>
-            <th>{{ _("Amount:") }}</th>
-            <td>{{ format_money(exchange.amount) }}</td>
+            <th>{{ _("Recipient") }}
+            <th class="text-right">{{ _("Amount per week") }}
         </tr>
+    % for tip in tips
         <tr>
-            <th>{{ _("Fee:") }}</th>
-            <td>{{ format_money(exchange.fee) }}</td>
+            <td><a href="{{ website.canonical_url }}/{{ tip.username }}">{{ tip.username }}</a>
+            <td class="text-right">{{ format_money(tip.amount) }}
         </tr>
-        <tr class="total">
-            <th>{{ _("Total:") }}</th>
-            <td>{{ format_money((exchange.fee + exchange.amount)) }}</td>
-        </tr>
+    % endfor
     </table>
+    % endif
 
-    <div id="txnid">
-        <p>{{ format_datetime(exchange.timestamp) }}</p>
-        <p>{{ _("Transaction ID: {0}", str(exchange.id)) }}</p>
-    </div>
+    <h2>{{ _("Payment Details") }}</h2>
+    {{ _("Payment method: {0}", _(constants.PAYMENT_METHODS[route.network])) }}<br>
+    % if card
+    {{ _(
+        "Debited card: {number} ({brand}, {country})"
+        , number=card.Alias
+        , brand=card.CardProvider
+        , country=card.Country
+    ) }}<br>
+    % elif bank_account and bank_account.Type == 'IBAN'
+    {{ _("Debited account: {0}", obfuscate(bank_account.IBAN, 2, -4)) }}<br>
+    % endif
+    {{ _("Execution date: {0}", payin.ExecutionDate) }}<br>
+    {{ _("Transaction ID: {0}", str(exchange.id)) }}<br>
 
-</div></div>
+    <footer>
+        <div>{{ format_date(today) }}</div>
+        <div><em>{{ _("This document is not an invoice.") }}</em></div>
+        <div></div>
+    </footer>
+
+% endblock
