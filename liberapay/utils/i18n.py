@@ -255,6 +255,8 @@ def i_format(loc, s, *a, **kw):
                 c[k] = format_timedelta(o, locale=loc)
             elif isinstance(o, datetime):
                 c[k] = format_datetime(o, locale=loc)
+            elif isinstance(o, date):
+                c[k] = format_date(o, locale=loc)
             if wrapper:
                 c[k] = wrapper % (c[k],)
     return s.format(*a, **kw)
