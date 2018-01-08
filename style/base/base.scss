@@ -1,10 +1,12 @@
-html, body {
+html {
     width: 100%;
     height: 100%;
+    overflow-y: scroll;
 }
 
 body {
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
     & > footer {
         display: flex;
         justify-content: space-around;
@@ -27,6 +29,9 @@ body {
                 }
             }
         }
+    }
+    & > .top {
+        order: -1;
     }
 }
 
@@ -478,12 +483,11 @@ section.invoice-details {
     }
 }
 
-#notification-area-bottom, #notification-area-top {
-    text-align: center;
-    z-index: 10;
-
     .notification {
+        line-height: 30px;
         padding: 10px;
+        text-align: center;
+        z-index: 10;
     }
 
     .notification-error {
@@ -497,7 +501,13 @@ section.invoice-details {
         border-color: $state-success-border;
         color: $state-success-text;
     }
+
+.notification-warning {
+    background-color: $state-warning-bg;
+    border-color: $state-warning-border;
+    color: $state-warning-text;
 }
+
 #notification-area-bottom {
     bottom: 0;
     left: 0;

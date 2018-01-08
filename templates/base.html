@@ -35,15 +35,15 @@
 <body id="{{ page_id or '' }}">
 
 % if not website.db
-<div id="notification-area-top"><div class="notification notification-error">{{ _(
+<div class="notification notification-error">{{ _(
     "We're currently experiencing technical failures. As a result most things don't work. "
     "Sorry for the inconvenience, we'll get everything back to normal ASAP."
-) }}</div></div>
+) }}</div>
 % elif db_is_readonly
-<div id="notification-area-top"><div class="notification notification-error">{{ _(
+<div class="notification notification-error">{{ _(
     "Liberapay is currently in read-only mode as we are migrating the database. "
     "This shouldn't take more than a few minutes."
-) }}</div></div>
+) }}</div>
 % endif
 
     <nav class="navbar navbar-liberapay navbar-static-top navbar-collapse"
@@ -150,6 +150,10 @@
 <div id="notification-area-bottom"><div class="notification notification-success">{{
     _success
 }}<span class="close">&times;</span></div></div>
+% endif
+
+% if state['partial_translation']
+    % include "_i18n_warning.html"
 % endif
 
 </body>
