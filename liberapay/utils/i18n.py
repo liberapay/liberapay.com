@@ -9,6 +9,8 @@ from io import BytesIO
 import re
 from unicodedata import combining, normalize
 
+from six import text_type
+
 from aspen.simplates.pagination import parse_specline, split_and_escape
 import babel.core
 from babel.dates import format_date, format_datetime, format_timedelta
@@ -241,7 +243,9 @@ def i_format(loc, s, *a, **kw):
     for c, f in [(a, enumerate), (kw, dict.items)]:
         for k, o in f(c):
             o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
-            if isinstance(o, Decimal):
+            if isinstance(o, text_type):
+                pass
+            elif isinstance(o, Decimal):
                 c[k] = format_decimal(o, locale=loc)
             elif isinstance(o, int):
                 c[k] = format_number(o, locale=loc)
