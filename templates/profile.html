@@ -2,7 +2,8 @@
 
 % from 'templates/avatar-url.html' import avatar_img with context
 
-% block before_content
+% block before_container
+<div class="container">
 {% block profile_btn %}{% endblock %}
 <div class="row">
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
@@ -12,8 +13,11 @@
         <h1>{{ participant.username }}</h1>
         <p class="summary">{{ summary or '' }}</p>
     </div>
+</div>
+</div>
+</div>
 
-    <div class="profile-header-bar full-width">
+    <div class="profile-header-bar">
         <div class="container">
         <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
@@ -88,7 +92,15 @@
             </div>
         </div>
     </div>
+</div>
+</div>
+</div>
 % endif
+% endblock
+
+% block before_content
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 % endblock
 
 % block after_content
