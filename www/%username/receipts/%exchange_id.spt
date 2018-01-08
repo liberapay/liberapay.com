@@ -3,7 +3,7 @@ from datetime import date
 from mangopay.resources import BankAccount, Card, PayIn, User
 
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import get_participant, obfuscate
+from liberapay.utils import get_participant, obfuscate, render
 
 [---]
 
@@ -58,6 +58,8 @@ tips = website.db.all("""
 
 today = date.today()
 title = _("liberapay_receipt_{number}", number=str(today)+'_'+str(exchange.id))
+
+output.body = render(globals(), allow_partial_i18n=False)
 
 [---] text/html
 % extends "templates/paper.html"

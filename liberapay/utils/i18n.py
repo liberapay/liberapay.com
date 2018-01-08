@@ -272,7 +272,9 @@ def get_text(state, loc, s, *a, **kw):
             s2 = s2[0]
     if not s2:
         s2 = s
-        loc = LOCALE_EN
+        if loc != LOCALE_EN:
+            loc = LOCALE_EN
+            state['partial_translation'] = True
     if a or kw:
         try:
             return i_format(loc, escape(_decode(s2)), *a, **kw)
@@ -294,8 +296,10 @@ def n_get_text(state, loc, s, p, n, *a, **kw):
         except Exception as e:
             website.tell_sentry(e, state)
     if not s2:
-        loc = LOCALE_EN
         s2 = s if n == 1 else p
+        if loc != LOCALE_EN:
+            loc = LOCALE_EN
+            state['partial_translation'] = True
     kw['n'] = format_number(n, locale=loc) or n
     if wrapper:
         kw['n'] = wrapper % kw['n']
