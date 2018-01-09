@@ -317,12 +317,3 @@ title = _("Adding Money")
 </p>
 % endif
 % endblock
-
-% block scripts
-{{ super() }}
-<script>
-    $(function() {
-        Liberapay.payments.init();
-    });
-</script>
-% endblock

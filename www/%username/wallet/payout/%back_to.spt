@@ -394,8 +394,3 @@ title = _("Withdrawing Money")
 </p>
 % endif
 % endblock
-
-% block scripts
-{{ super() }}
-<script>$(function() { Liberapay.payments.ba.init(); });</script>
-% endblock

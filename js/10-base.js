@@ -37,6 +37,7 @@ Liberapay.init = function() {
     Liberapay.auto_tail_log();
     Liberapay.charts.init();
     Liberapay.lookup.init();
+    Liberapay.payments.init();
 
     $('div[href]').css('cursor', 'pointer').click(function() {
         location.href = this.getAttribute('href');

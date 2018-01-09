@@ -14,6 +14,8 @@ Liberapay.payments = {};
 // ===========
 
 Liberapay.payments.init = function() {
+    var $form = $('form#payin, form#payout');
+    if ($form.length === 0) return;
     $('input[type="digits"]').each(function() {
         var $input = $(this);
         var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
@@ -25,8 +27,8 @@ Liberapay.payments.init = function() {
         $($btn.data('modify')).removeClass('hidden').prop('disabled', false);
         $btn.parent().addClass('hidden');
     });
-    Liberapay.payments.user_slug = $('form#payin, form#payout').data('user-slug');
-    $('form#payin, form#payout').submit(Liberapay.payments.submit);
+    Liberapay.payments.user_slug = $form.data('user-slug');
+    $form.submit(Liberapay.payments.submit);
     $('select.country').on('change', function () {
         var newValue = $(this).val();
         $(this).data('value-was-copied', null);
@@ -39,6 +41,8 @@ Liberapay.payments.init = function() {
             return value;
         })
     });
+    Liberapay.payments.ba.init();
+    Liberapay.payments.cc.init();
 }
 
 Liberapay.payments.wrap = function(f) {
@@ -119,7 +123,7 @@ Liberapay.payments.id.submit = function(success) {
 Liberapay.payments.ba = {};
 
 Liberapay.payments.ba.init = function() {
-    Liberapay.payments.init();
+    if ($('#bank-account').length === 0) return;
     $('fieldset.tab-pane:not(.active)').prop('disabled', true);
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $($(e.target).attr('href')).prop('disabled', false);
@@ -203,7 +207,11 @@ Liberapay.payments.cc.check = function() {
 }
 
 Liberapay.payments.cc.init = function() {
-    Liberapay.payments.init();
+    var $fieldset = $('#credit-card');
+    if ($fieldset.length === 0) return;
+    mangoPay.cardRegistration.baseURL = $fieldset.data('mangopay-url');
+    mangoPay.cardRegistration.clientId = $fieldset.data('mangopay-id');
+
     var form = new PaymentCards.Form(
         document.querySelector('#card_number'),
         document.querySelector('#expiration_date'),
