@@ -976,6 +976,9 @@ msgstr "Ensimmäinen"
 msgid "Last"
 msgstr "Viimeinen"
 
+msgid "Print"
+msgstr ""
+
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
 msgstr "Salasanan asettaminen mahdollistaa suorat kirjautumiset, niin ettei tarvitse odotella sähköpostiin saapuvaa kertakäyttöistä linkkiä. Muistathan, että Liberapay-palvelussa käsitellään rahaa, joten käytä vahvaa salasanaa!"
 
@@ -1870,25 +1873,56 @@ msgstr "Merkitse kaikki ilmoitukset luetuiksi"
 msgid "No notifications to show."
 msgstr "Ei näytettäviä ilmoituksia."
 
+#, python-brace-format
+msgid "liberapay_receipt_{number}"
+msgstr ""
+
 msgid "Receipt"
 msgstr "Kuitti"
+
+#, python-brace-format
+msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
+msgstr ""
+
+#, python-brace-format
+msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
+msgstr ""
+
+msgid "Beneficiaries"
+msgstr ""
+
+#, python-brace-format
+msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
+msgstr ""
+
+msgid "Amount per week"
+msgstr ""
+
+msgid "Payment Details"
+msgstr ""
 
 #, python-brace-format
 msgid "Payment method: {0}"
 msgstr "Maksumenetelmä: {0}"
 
-msgid "Amount:"
-msgstr "Määrä:"
+#, python-brace-format
+msgid "Debited card: {number} ({brand}, {country})"
+msgstr ""
 
-msgid "Fee:"
-msgstr "Kulut:"
+#, python-brace-format
+msgid "Debited account: {0}"
+msgstr ""
 
-msgid "Total:"
-msgstr "Yhteensä:"
+#, python-brace-format
+msgid "Execution date: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr "Tapahtumatunnus: {0}"
+
+msgid "This document is not an invoice."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} receives {1} per week."

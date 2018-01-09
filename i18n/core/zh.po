@@ -975,6 +975,9 @@ msgstr "第一"
 msgid "Last"
 msgstr "最後"
 
+msgid "Print"
+msgstr ""
+
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
 msgstr "設定密碼可讓你直接登入而不必等候透過電郵發送給你一個單次用連結。記住， Liberapay 是一種財務服務故請挑選高強度的密碼！"
 
@@ -1864,25 +1867,56 @@ msgstr "所有的通知標為已讀"
 msgid "No notifications to show."
 msgstr "無通知可顯示。"
 
+#, python-brace-format
+msgid "liberapay_receipt_{number}"
+msgstr ""
+
 msgid "Receipt"
 msgstr "收據"
+
+#, python-brace-format
+msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
+msgstr ""
+
+#, python-brace-format
+msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
+msgstr ""
+
+msgid "Beneficiaries"
+msgstr ""
+
+#, python-brace-format
+msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
+msgstr ""
+
+msgid "Amount per week"
+msgstr ""
+
+msgid "Payment Details"
+msgstr ""
 
 #, python-brace-format
 msgid "Payment method: {0}"
 msgstr "支付方式： {0}"
 
-msgid "Amount:"
-msgstr "金額："
+#, python-brace-format
+msgid "Debited card: {number} ({brand}, {country})"
+msgstr ""
 
-msgid "Fee:"
-msgstr "手續費："
+#, python-brace-format
+msgid "Debited account: {0}"
+msgstr ""
 
-msgid "Total:"
-msgstr "總數："
+#, python-brace-format
+msgid "Execution date: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "Transaction ID: {0}"
 msgstr "交易 ID： {0}"
+
+msgid "This document is not an invoice."
+msgstr ""
 
 #, python-brace-format
 msgid "{0} receives {1} per week."
