@@ -25,6 +25,7 @@ from postgres.cursors import SimpleCursorBase
 
 from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired, InvalidNumber
 from liberapay.models.community import Community
+from liberapay.utils.i18n import LOCALE_EN, add_helpers_to_context
 from liberapay.website import website
 
 
@@ -467,3 +468,30 @@ def get_ip_net(addr):
         return '.'.join(str(addr).split('.', 3)[:2])
     else:
         return hexlify(addr.packed[:4])
+
+
+def render(context, allow_partial_i18n=True):
+    """Render the next page and return the output.
+
+    This function is meant to be used in the second page of a simplate, e.g.:
+
+    ```
+    from liberapay.utils import render
+    [---]
+    output.body = render(globals(), allow_partial_i18n=False)
+    [---] text/html
+    ...
+    ```
+
+    If `allow_partial_i18n` is `False` and the output is a partially translated
+    page then a second rendering is done so that the final output is entirely in
+    English.
+    """
+    output, resource = context['output'], context['resource']
+    r = resource.renderers[output.media_type](context)
+    if allow_partial_i18n or not context['state'].get('partial_translation'):
+        return r
+    else:
+        # Fall back to English
+        add_helpers_to_context(context, LOCALE_EN)
+        return resource.renderers[output.media_type](context)

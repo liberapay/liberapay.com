@@ -1,0 +1,118 @@
+html, body {
+    color: #000;
+    width: 100%;
+    height: 100%;
+}
+a, a:hover, a:visited {
+    color: #000;
+    text-decoration: underline;
+}
+a.btn {
+    text-decoration: none;
+}
+a[href]:after {
+    content: " (" attr(href) ")";
+}
+abbr[title]:after {
+    content: " (" attr(title) ")";
+}
+a.printable:after,
+a[href^="#"]:after,
+a[href^="javascript:"]:after {
+    content: "";
+}
+pre, blockquote {
+    border: 1px solid #999;
+}
+thead {
+    display: table-header-group;
+}
+img {
+    max-width: 100% !important;
+}
+
+.page {
+    position: relative;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 16pt;
+    min-height: 281.5mm; // -0.5mm to avoid page overflow in Firefox 57
+    padding-bottom: 28pt;
+    & > header {
+        $border-color: #ccc;
+        border-bottom: 1px solid $border-color;
+        border-image: linear-gradient(to left, #fff, $border-color, #fff) 1;
+        display: flex;
+        font-family: $font-family-sans-serif;
+        font-size: 20pt;
+        justify-content: space-between;
+        line-height: 2cm;
+        padding-bottom: 5mm;
+        & > :last-child {
+            font-size: 17pt;
+        }
+        img {
+            height: 2cm;
+            margin-right: 2mm;
+        }
+    }
+    & > h1 {
+        text-align: center;
+    }
+    & > footer {
+        bottom: 0;
+        display: flex;
+        position: absolute;
+        width: 100%;
+        & > div {
+            width: 20%;
+            &:nth-child(2) {
+                text-align: center;
+                width: 60%;
+            }
+            &:nth-child(3) {
+                text-align: right;
+            }
+        }
+    }
+}
+
+h1 {
+    font-size: 24pt;
+    margin: 10mm 0 12pt;
+}
+h2 {
+    font-size: 18pt;
+    margin: 1.5em 0 0.5em;
+}
+
+@media screen {
+    body {
+        background: #eee;
+        margin: 0 auto;
+        padding: 5mm 0;
+        width: 21cm;
+    }
+    .sheet {
+        background-color: #fff;
+        border: 1px solid #444;
+        padding: 5mm 10mm 10mm;
+        margin: 5mm 0;
+    }
+}
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    body > header {
+        display: none;
+    }
+    .page {
+        page-break-after: always;
+    }
+    @page {
+        margin: 5mm 10mm 10mm;
+        size: A4;
+    }
+}
