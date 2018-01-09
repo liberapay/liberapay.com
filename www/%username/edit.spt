@@ -68,11 +68,6 @@ title = _username
 
 % extends "templates/base.html"
 
-% block scripts
-{{ super() }}
-<script>$(document).ready(Liberapay.profile.init);</script>
-% endblock
-
 {% block heading %}{% endblock %}
 
 % block content
