@@ -34,6 +34,7 @@ Liberapay.init = function() {
     }
     $('.notification .close').click(function(){ $(this).parent().fadeOut() });
 
+    Liberapay.charts.init();
     Liberapay.lookup.init();
 
     $('div[href]').css('cursor', 'pointer').click(function() {
