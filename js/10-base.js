@@ -36,6 +36,7 @@ Liberapay.init = function() {
 
     Liberapay.auto_tail_log();
     Liberapay.charts.init();
+    Liberapay.identity_docs_init();
     Liberapay.lookup.init();
     Liberapay.payments.init();
 
