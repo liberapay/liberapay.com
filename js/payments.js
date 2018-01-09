@@ -14,7 +14,6 @@ Liberapay.payments = {};
 // ===========
 
 Liberapay.payments.init = function() {
-    $('#delete').submit(Liberapay.payments.deleteRoute);
     $('input[type="digits"]').each(function() {
         var $input = $(this);
         var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
@@ -41,26 +40,6 @@ Liberapay.payments.init = function() {
         })
     });
 }
-
-Liberapay.payments.deleteRoute = function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    var $this = $(this);
-    var confirm_msg = $this.data('confirm');
-    if (confirm_msg && !confirm(confirm_msg)) {
-        return false;
-    }
-    jQuery.ajax(
-        { url: "/" + Liberapay.payments.user_slug + "/routes/delete.json"
-        , data: {network: $this.data('network'), address: $this.data('address')}
-        , type: "POST"
-        , success: function() { window.location.reload(); }
-        , error: Liberapay.error
-         }
-    );
-    return false;
-};
 
 Liberapay.payments.wrap = function(f) {
     return function() {
