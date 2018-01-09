@@ -26,6 +26,7 @@ Liberapay.payments.init = function() {
         $($btn.data('modify')).removeClass('hidden').prop('disabled', false);
         $btn.parent().addClass('hidden');
     });
+    Liberapay.payments.user_slug = $('form#payin, form#payout').data('user-slug');
     $('form#payin, form#payout').submit(Liberapay.payments.submit);
     $('select.country').on('change', function () {
         var newValue = $(this).val();
@@ -51,7 +52,7 @@ Liberapay.payments.deleteRoute = function(e) {
         return false;
     }
     jQuery.ajax(
-        { url: "/" + Liberapay.username + "/routes/delete.json"
+        { url: "/" + Liberapay.payments.user_slug + "/routes/delete.json"
         , data: {network: $this.data('network'), address: $this.data('address')}
         , type: "POST"
         , success: function() { window.location.reload(); }
@@ -123,7 +124,7 @@ Liberapay.payments.id = {};
 Liberapay.payments.id.submit = function(success) {
     var data = $('#identity').serializeArray();
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/identity',
+        url: '/'+Liberapay.payments.user_slug+'/identity',
         type: 'POST',
         data: data,
         dataType: 'json',
@@ -193,7 +194,7 @@ Liberapay.payments.ba.submit = function () {
     })
     data = data2;
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/routes/bank-account.json',
+        url: '/'+Liberapay.payments.user_slug+'/routes/bank-account.json',
         type: 'POST',
         data: data,
         dataType: 'json',
@@ -282,7 +283,7 @@ Liberapay.payments.cc.submit = function() {
     };
 
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/routes/credit-card.json',
+        url: '/'+Liberapay.payments.user_slug+'/routes/credit-card.json',
         type: "POST",
         data: {CardType: 'CB_VISA_MASTERCARD', Currency: $('#credit-card').data('currency')},
         dataType: "json",
@@ -306,7 +307,7 @@ Liberapay.payments.cc.associate = function (response) {
      * to the participant in our DB.
      */
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/routes/credit-card.json',
+        url: '/'+Liberapay.payments.user_slug+'/routes/credit-card.json',
         type: "POST",
         data: {CardId: response.CardId, keep: $('input#keep').prop('checked')},
         dataType: "json",

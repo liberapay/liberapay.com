@@ -188,6 +188,7 @@ title = _("Adding Money")
 
 % block thin_content
 <form id="payin" action="javascript:" method="POST"
+      data-user-slug="~{{ participant.id }}"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>

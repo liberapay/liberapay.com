@@ -111,6 +111,7 @@ title = _("Withdrawing Money")
 
 % block thin_content
 <form id="payout" action="javascript:" method="POST"
+      data-user-slug="~{{ participant.id }}"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
     % if show_form
