@@ -91,6 +91,13 @@ Liberapay.init = function() {
         var $target = $($checkbox.data('target'));
         $target.prop('disabled', !$checkbox.prop('checked'));
     });
+
+    $('[data-email]').one('mouseover click', function () {
+        $(this).attr('href', 'mailto:'+$(this).data('email'));
+    });
+    $('[data-email-reveal]').one('click', function () {
+        $(this).html($(this).data('email-reveal'));
+    });
 };
 
 $(function(){ Liberapay.init(); });

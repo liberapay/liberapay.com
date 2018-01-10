@@ -5,8 +5,7 @@ title = _("Contact")
 % block content
 
     <h4>{{ _("To contact us privately:") }}</h4>
-    <p><a class="btn btn-primary" data-addr="support&#64;liberapay.com"
-          onmouseover="$(this).attr('href', 'mailto:'+$(this).data('addr'))"
+    <p><a class="btn btn-primary" data-email="support&#64;liberapay.com"
           >{{ _("Send us an email") }}</a></p>
     <p>{{ _("We are currently able to answer in English and French.") }}</p>
     <p>{{ _("We currently don't have a phone number.") }}</p>
