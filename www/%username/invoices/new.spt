@@ -1,11 +1,12 @@
 # coding: utf8
 
+from pando import json
+
 from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
 from liberapay.exceptions import AuthRequired
-from liberapay.utils import get_participant, to_javascript
+from liberapay.utils import get_participant
 
 ALLOWED_EXTENSIONS_STR = ', '.join(INVOICE_DOCS_EXTS)
-ALLOWED_EXTENSIONS_JSON = to_javascript(INVOICE_DOCS_EXTS)
 MAX_SIZE_MB = int(INVOICE_DOC_MAX_SIZE / 1000000)
 
 [---]
@@ -90,7 +91,16 @@ title = _("Invoice {someone}", someone=addressee.username)
 
 <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
 
-<form action="javascript:" method="POST" id="invoice-form">
+<form action="javascript:" method="POST" id="invoice-form"
+      data-base-url="{{ addressee.path('invoices/') }}"
+      data-s3-endpoint="{{ website.app_conf.s3_endpoint }}"
+      data-s3-access-key="{{ website.app_conf.s3_public_access_key }}"
+      data-s3-region="{{ website.app_conf.s3_region }}"
+      data-allowed-extensions="{{ ALLOWED_EXTENSIONS_STR }}"
+      data-item-limit="{{ constants.INVOICE_DOCS_LIMIT }}"
+      data-max-size="{{ constants.INVOICE_DOC_MAX_SIZE }}"
+      data-already-uploaded="{{ json.dumps(already_uploaded or []) }}"
+      >
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     <input type="hidden" name="currency" value="{{ currency }}" />
 
@@ -143,103 +153,5 @@ title = _("Invoice {someone}", someone=addressee.username)
 % endblock
 
 % block scripts
-{# https://blog.fineuploader.com/2013/08/16/fine-uploader-s3-upload-directly-to-amazon-s3-from-your-browser/ #}
 <script src="{{ website.asset('fine-uploader/all.fine-uploader.min.js') }}"></script>
-<script>
-
-var base_path = {{ to_javascript(addressee.path('invoices/'))|safe }};
-var uploader = new qq.s3.FineUploader({
-    element: document.getElementById('fine-uploader'),
-    template: document.getElementById('qq-template'),
-    autoUpload: false,
-    request: {
-        endpoint: {{ to_javascript(website.app_conf.s3_endpoint)|safe }},
-        accessKey: {{ to_javascript(website.app_conf.s3_public_access_key)|safe }},
-    },
-    objectProperties: {
-        region: {{ to_javascript(website.app_conf.s3_region)|safe }},
-        key: function (fileId) {
-            var filename = uploader.getName(fileId);
-            return 'invoice_docs/' + uploader._invoice_id + '/' + filename
-        },
-    },
-    signature: {
-        endpoint: base_path + 'add-file?step=sign',
-        version: 4,
-        customHeaders: custom_headers,
-    },
-    uploadSuccess: {
-        endpoint: base_path + 'add-file?step=success',
-        customHeaders: custom_headers,
-    },
-    validation: {
-        allowedExtensions: {{ ALLOWED_EXTENSIONS_JSON|safe }},
-        itemLimit: {{ constants.INVOICE_DOCS_LIMIT }},
-        sizeLimit: {{ constants.INVOICE_DOC_MAX_SIZE }},
-    },
-    display: {
-        fileSizeOnSubmit: true,
-    },
-    text: {
-        fileInputTitle: '',
-    },
-    callbacks: {
-        onAllComplete: function (successes, failures) {
-            if (successes.length > 0 && failures.length == 0 && uploader._invoice_id) {
-                window.location.href = base_path + uploader._invoice_id;
-            }
-        },
-        onSubmitted: function () {
-            $('#invoice-form button').filter(':not([type]), [type="submit"]').prop('disabled', false);
-        },
-    },
-});
-
-% if already_uploaded
-uploader.addInitialFiles({{ to_javascript(already_uploaded)|safe }});
-% endif
-
-function custom_headers() { return {
-    'X-CSRF-TOKEN': Liberapay.getCookie('csrf_token'),
-    'X-Invoice-Id': uploader._invoice_id,
-}}
-
-function submit(e) {
-    e.preventDefault();
-    var $form = $('#invoice-form');
-    var form = $form.get(0);
-    if (form.reportValidity && form.reportValidity() == false) return;
-    var $inputs = $form.find(':not(:disabled)').filter(function () {
-        return $(this).parents('#fine-uploader').length == 0
-    });
-    var data = $form.serializeArray();
-    $inputs.prop('disabled', true);
-    jQuery.ajax({
-        url: '',
-        type: 'POST',
-        data: data,
-        dataType: 'json',
-        success: function(data) {
-            uploader._invoice_id = data.invoice_id;
-            history.pushState(null, null, location.pathname + '?id=' + data.invoice_id);
-            return upload_docs()
-        },
-        error: [
-            function () { $inputs.prop('disabled', false); },
-            Liberapay.error,
-        ],
-    });
-}
-$('#invoice-form').submit(submit);
-$('#invoice-form button').filter(':not([type]), [type="submit"]').click(submit);
-
-function upload_docs() {
-    if (uploader._storedIds.length !== 0) {
-        uploader.uploadStoredFiles();
-    } else {
-        window.location.href = base_path + uploader._invoice_id;
-    }
-}
-
-</script>
 % endblock

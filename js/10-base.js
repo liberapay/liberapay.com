@@ -39,6 +39,7 @@ Liberapay.init = function() {
     Liberapay.identity_docs_init();
     Liberapay.lookup.init();
     Liberapay.payments.init();
+    Liberapay.s3_uploader_init();
 
     $('div[href]').css('cursor', 'pointer').click(function() {
         location.href = this.getAttribute('href');
