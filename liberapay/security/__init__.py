@@ -46,7 +46,7 @@ def set_default_security_headers(website, response, request=None):
     if b'X-XSS-Protection' not in response.headers:
         response.headers[b'X-XSS-Protection'] = b'1; mode=block'
 
-    # https://www.w3.org/TR/referrer-policy/
+    # https://www.w3.org/TR/referrer-policy/#referrer-policy-strict-origin-when-cross-origin
     # https://caniuse.com/referrer-policy
     if b'Referrer-Policy' not in response.headers:
         response.headers[b'Referrer-Policy'] = b'strict-origin-when-cross-origin'
