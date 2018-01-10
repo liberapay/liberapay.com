@@ -34,7 +34,7 @@ def set_default_security_headers(website, response, request=None):
             b"script-src 'self' %(main_domain)s 'unsafe-inline';"
             b"style-src 'self' %(main_domain)s 'unsafe-inline';"
             b"connect-src *;"  # for credit card data
-            b"img-src *;"
+            b"img-src * blob: data:;"
             b"reflected-xss block;"
         ) % {b'main_domain': website.canonical_host.encode('ascii')}
         csp += website.env.csp_extra.encode()
