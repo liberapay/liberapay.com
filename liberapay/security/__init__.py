@@ -31,7 +31,7 @@ def set_default_security_headers(website, response, request=None):
     if b'content-security-policy' not in response.headers:
         csp = (
             b"default-src 'self' %(main_domain)s;"
-            b"script-src 'self' %(main_domain)s 'unsafe-inline';"
+            b"script-src 'self' %(main_domain)s;"
             b"style-src 'self' %(main_domain)s 'unsafe-inline';"
             b"connect-src 'self' *.liberapay.org *.mangopay.com *.payline.com;"
             b"form-action 'self';"
