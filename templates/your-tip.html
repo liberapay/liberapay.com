@@ -1,4 +1,4 @@
-% macro tip_form(tippee=None, tip=None, inline=False, disabled='')
+% macro tip_form(tippee, tip=None, inline=False, disabled='')
     % set pledging = tippee.__class__.__name__ == 'AccountElsewhere'
     % set tip = tip or user.get_tip_to(tippee.participant or tippee, currency)
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">

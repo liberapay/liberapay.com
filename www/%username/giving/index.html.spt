@@ -166,16 +166,18 @@ if not freeload:
         </tfoot>
         <tbody>
         % for tip in tips
-        % set inactive = not tip.is_identified or tip.is_suspended or not tip.is_funded
+        % set tippee = tip.tippee_p
+        % set inactive = not tip.is_identified or tippee.is_suspended or not tip.is_funded
         <tr>
-            <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
-            <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
+            % set username = tippee.username
+            <td class="recipient"><a href="/{{ username }}/">{{ username }}</a></td>
+            <td class="amount">{{ tip_form(tippee=tippee, tip=tip, inline=True) }}</td>
             <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             <td class="funded {{ 'danger' if inactive else '' }}">
                 % if not tip.is_identified
                     {{ _("No: the donee hasn't filled the identity form") }}</td>
-                % elif tip.is_suspended
+                % elif tippee.is_suspended
                     {{ _("No: the donee's account is temporarily suspended") }}
                 % elif not tip.is_funded
                     {{ _("No: insufficient funds") }}
@@ -229,7 +231,7 @@ if not freeload:
                     <img class="platform-icon" src="{{ e.platform_data.icon }}" />
                     <a href="{{ e.liberapay_path }}">{{ e.friendly_name }}</a>
                 </td>
-                <td class="amount">{{ tip_form(tip=tip, inline=True) }}</td>
+                <td class="amount">{{ tip_form(tippee=e, tip=tip, inline=True) }}</td>
                 <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
                 <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             </tr>
@@ -255,7 +257,8 @@ if not freeload:
         <tbody>
             % for tip in cancelled_tips
             <tr>
-                <td class="recipient"><a href="/{{ tip.username }}/">{{ tip.username }}</a></td>
+                % set username = tip.tippee_p.username
+                <td class="recipient"><a href="/{{ username }}/">{{ username }}</a></td>
                 <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
                 <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             </tr>

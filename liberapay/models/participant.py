@@ -1882,12 +1882,9 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , t.mtime
-                     , p.join_time
-                     , p.username
-                     , p.kind
+                     , p AS tippee_p
                      , t.is_funded
                      , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
-                     , p.is_suspended
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
