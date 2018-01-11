@@ -17,7 +17,7 @@
                     "input a new amount in {new_currency} below, or stop the "
                     "donation."
                     , money_amount=tip.amount, name=tippee_name
-                    , currency=tip_currency, new_currency=new_currency
+                    , currency=Currency(tip_currency), new_currency=Currency(new_currency)
                 ) }}</p>
             % endif
             {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch) }}
@@ -83,7 +83,7 @@
             "input a new amount in {new_currency} below, or stop the donation "
             "by clicking on the Stop button."
             , money_amount=tip.amount, name=tippee_name
-            , currency=tip.amount.currency, new_currency=new_currency
+            , currency=Currency(tip.amount.currency), new_currency=Currency(new_currency)
         ) }}</p>
         % else
         <p>{{ _(
