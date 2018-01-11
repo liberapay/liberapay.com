@@ -22,6 +22,9 @@ class _ANON(object):
     get_tip_to = staticmethod(Participant._zero_tip_dict)
     __repr__ = lambda self: '<ANON>'
 
+    def get_currency_for(self, tippee, tip):
+        return tip['amount'].currency
+
 
 ANON = _ANON()
 

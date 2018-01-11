@@ -1429,6 +1429,14 @@ class Participant(Model, MixinTeam):
                 new_currency=new_currency, old_currency=old_currency
             ), recorder=recorder_id)
 
+    def get_currency_for(self, tippee, tip):
+        if isinstance(tippee, AccountElsewhere):
+            tippee = tippee.participant
+        if tippee.accept_all_currencies:
+            return tip['amount'].currency
+        else:
+            return tippee.main_currency
+
 
     # More Random Stuff
     # =================
