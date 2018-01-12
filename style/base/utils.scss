@@ -46,3 +46,9 @@
 .wrap {
     flex-wrap: wrap;
 }
+
+@for $i from 0 through 100 {
+    .width-#{$i} {
+        width: $i * 1%;
+    }
+}
