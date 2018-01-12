@@ -5,7 +5,7 @@ from liberapay.utils import get_participant
 
 [-----------------------------------------------------------------------------]
 
-participant = get_participant(state, restrict=True)
+participant = get_participant(state, restrict=True, allow_member=True)
 title = participant.username
 subhead = _("Receiving")
 
@@ -28,6 +28,8 @@ teams = website.db.all("""
 % else
 <p>{{ _("{0} receives {1} per week.", participant.username, receiving) }}</p>
 % endif
+
+% if participant.is_person
 
 % if not participant.mangopay_user_id
     <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}</p>
@@ -57,6 +59,8 @@ teams = website.db.all("""
     <a class="btn btn-default" href="/explore/teams/">{{ _("Explore teams") }}</a>
 </p>
 <br>
+
+% endif
 
 % if participant.receiving > participant.taking
 % set tip_distribution = participant.get_tip_distribution()[0]
