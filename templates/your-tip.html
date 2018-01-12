@@ -1,12 +1,26 @@
-% macro tip_form(tippee=None, tip=None, inline=False, disabled='')
+% macro tip_form(tippee, tip=None, inline=False, disabled='')
     % set pledging = tippee.__class__.__name__ == 'AccountElsewhere'
     % set tip = tip or user.get_tip_to(tippee.participant or tippee, currency)
+    % set tip_currency = tip.amount.currency
+    % set new_currency = user.get_currency_for(tippee, tip)
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="currency" value="{{ tip.amount.currency }}" />
+        <input type="hidden" name="currency" value="{{ new_currency }}" />
         % if inline
             <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
-            {{ tip_input(tip, disabled, small=True) }}
+            % set currency_mismatch = new_currency != tip_currency
+            % if currency_mismatch and tip.amount > 0
+                % set tippee_name = tippee.friendly_name if pledging else tippee.username
+                <p class="text-warning small">{{ _(
+                    "You are currently donating {money_amount} per week to {name}, "
+                    "but they no longer accept donations in {currency}. You can "
+                    "input a new amount in {new_currency} below, or stop the "
+                    "donation."
+                    , money_amount=tip.amount, name=tippee_name
+                    , currency=Currency(tip_currency), new_currency=Currency(new_currency)
+                ) }}</p>
+            % endif
+            {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch) }}
             <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
                            btn-sm" {{ disabled }}>{{
                 _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
@@ -16,19 +30,17 @@
             <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Stop") }}</button>
             % endif
         % else
-            % set tippee_name = tippee.friendly_name if pledging else tippee.username
             <div class="form-group">
-                {{ tip_select(tip, tippee_name, disabled, pledging=pledging) }}
+                {{ tip_select(tip, new_currency, tippee, disabled, pledging=pledging) }}
             </div>
         % endif
     </form>
 % endmacro
 
-% macro tip_input(tip, disabled='', small=False, hide_amount=False)
+% macro tip_input(tip, new_currency, disabled='', small=False, hide_amount=False)
     <div class="form-inline inline-block">
     <div class="input-group">
-        % set currency = tip.amount.currency
-        <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
+        <div class="input-group-addon">{{ locale.currency_symbols.get(new_currency, new_currency) }}</div>
         <input type="text" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
                value="{{ format_decimal(tip.periodic_amount.amount) if tip.periodic_amount and not hide_amount else '' }}"
@@ -59,20 +71,33 @@
     </div>
 % endmacro
 
-% macro tip_select(tip, tippee_name, disabled='', small=False, pledging=False)
+% macro tip_select(tip, new_currency, tippee, disabled='', small=False, pledging=False)
     % set tip_is_standard = []
+    % set currency_mismatch = new_currency != tip.amount.currency
     % if tip.amount > 0
+        % set tippee_name = tippee.friendly_name if pledging else tippee.username
+        % if currency_mismatch
+        <p class="alert alert-warning">{{ _(
+            "You are currently donating {money_amount} per week to {name}, but "
+            "they no longer accept donations in {currency}. You can select or "
+            "input a new amount in {new_currency} below, or stop the donation "
+            "by clicking on the Stop button."
+            , money_amount=tip.amount, name=tippee_name
+            , currency=Currency(tip.amount.currency), new_currency=Currency(new_currency)
+        ) }}</p>
+        % else
         <p>{{ _(
             "You are currently donating {0} per week to {1}. You can select or "
             "input a different amount below, or stop the donation by clicking "
             "on the Stop button."
             , tip.amount, tippee_name
         ) }}</p>
+        % endif
     % else
         <p>{{ _("Please select or input an amount:") }}</p>
     % endif
     <ul class="list-group radio-group">
-    % for std_tip in constants.STANDARD_TIPS[tip.amount.currency]
+    % for std_tip in constants.STANDARD_TIPS[new_currency]
         % set amount_is_a_match = std_tip.weekly == tip.amount
         % if amount_is_a_match
             {{ tip_is_standard.append(True) or '' }}
@@ -94,13 +119,14 @@
         </li>
     % endfor
         % set period = request.qs.get('period') or tip.period
+        % set hide_amount = tip_is_standard or currency_mismatch
         <li class="list-group-item">
         <label>
             <input type="radio" name="selected_amount" value="custom" required
-                   class="hidden-xs" {{ 'checked' if tip.amount and not tip_is_standard }} />
+                   class="hidden-xs" {{ 'checked' if tip.amount and not hide_amount }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
-                {{ tip_input(tip, disabled, small=small, hide_amount=tip_is_standard) }}
+                {{ tip_input(tip, disabled, small=small, hide_amount=hide_amount) }}
             </div>
         </label>
         </li>

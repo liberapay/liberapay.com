@@ -32,11 +32,12 @@ else:
     for tip in tips:
         if tip.amount == 0:
             continue
+        tippee = tip.tippee_p
         out.append({
             "tippee": {
-                "id": tip.tippee,
-                "username": tip.username,
-                "kind": tip.kind,
+                "id": tippee.id,
+                "username": tippee.username,
+                "kind": tippee.kind,
                 "status": "active",
             },
             "amount": tip.amount,
@@ -48,14 +49,16 @@ else:
     for tip in pledges:
         if tip.amount == 0:
             continue
+        e = tip.e_account
+        tippee = e.participant
         out.append({
             "tippee": {
-                "id": tip.tippee,
+                "id": tippee.id,
                 "elsewhere": {
-                    "platform": tip.e_account.platform,
-                    "user_id": tip.e_account.user_id,
-                    "user_name": tip.e_account.user_name,
-                    "display_name": tip.e_account.display_name,
+                    "platform": e.platform,
+                    "user_id": e.user_id,
+                    "user_name": e.user_name,
+                    "display_name": e.display_name,
                 },
                 "status": "stub",
             },

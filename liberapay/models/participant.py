@@ -1429,6 +1429,14 @@ class Participant(Model, MixinTeam):
                 new_currency=new_currency, old_currency=old_currency
             ), recorder=recorder_id)
 
+    def get_currency_for(self, tippee, tip):
+        if isinstance(tippee, AccountElsewhere):
+            tippee = tippee.participant
+        if tippee.accept_all_currencies:
+            return tip['amount'].currency
+        else:
+            return tippee.main_currency
+
 
     # More Random Stuff
     # =================
@@ -1882,12 +1890,9 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , t.mtime
-                     , p.join_time
-                     , p.username
-                     , p.kind
+                     , p AS tippee_p
                      , t.is_funded
                      , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
-                     , p.is_suspended
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s

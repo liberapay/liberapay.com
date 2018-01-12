@@ -45,6 +45,10 @@ def Bold(value):
     return Wrap(value, BOLD)
 
 
+class Currency(str):
+    pass
+
+
 class Age(timedelta):
 
     def __new__(cls, *a, **kw):
@@ -263,6 +267,8 @@ def i_format(loc, s, *a, **kw):
                 c[k] = format_date(o, locale=loc)
             elif isinstance(o, Locale):
                 c[k] = loc.languages.get(o.language) or o.language.upper()
+            elif isinstance(o, Currency):
+                c[k] = loc.currencies.get(o, o)
             if wrapper:
                 c[k] = wrapper % (c[k],)
     return s.format(*a, **kw)
@@ -407,6 +413,7 @@ def add_helpers_to_context(context, loc):
         escape=_return_,  # to be overriden by renderers
         locale=loc,
         Bold=Bold,
+        Currency=Currency,
         Money=Money,
         to_age=to_age,
         _=lambda s, *a, **kw: get_text(context, kw.pop('loc', loc), s, *a, **kw),
