@@ -10,7 +10,7 @@
                 {{ _("Next") }} ⇢
             </a></li>
         % endif
-        <li style="clear: both"></li>
+        <li class="clearfix"></li>
         % if pages_urls.get('first')
             <li class="previous"><a href="?page={{ b64encode_s(pages_urls['first']) + hash }}">
                 ⇤ {{ _("First") }}

@@ -74,7 +74,7 @@ subhead = _("Communities")
 <div>
     % for community in communities_top
     <div class="community">
-        <h4 style="display: inline-block;">
+        <h4 class="inline-block">
             <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
             <small>{{ community.subtitle or '' }}</small>
         </h4>
@@ -88,7 +88,7 @@ subhead = _("Communities")
 % if communities_loc
     % for community in communities_loc
     <div class="community">
-        <h4 style="display: inline-block;">
+        <h4 class="inline-block">
             <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
             <small>{{ community.subtitle or '' }}</small>
         </h4>
