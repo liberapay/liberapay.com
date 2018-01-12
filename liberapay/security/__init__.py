@@ -20,7 +20,6 @@ def set_default_security_headers(website, response, request=None):
         b"connect-src 'self' *.liberapay.org *.mangopay.com *.payline.com;"
         b"form-action 'self';"
         b"img-src * blob: data:;"
-        b"reflected-xss block;"
     ) % {b'main_domain': website.canonical_host.encode('ascii')}
     csp += website.env.csp_extra.encode()
     if website.canonical_scheme == 'https':
