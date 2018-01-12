@@ -21,14 +21,21 @@ html > body .liberapay-btn {
     font-family: Helvetica Neue,Helvetica,sans-serif;
     font-size: 14px;
     font-weight: 700;
-    padding: 4px 6px;
+    line-height: 22px;
+    padding: 5px 7px 3px;
+    position: relative;
     text-decoration: none;
 }
 html > body .liberapay-btn:hover {
     background-color: #fbce1a;
 }
-.liberapay-btn > svg, .liberapay-btn > span {
-    vertical-align: middle;
+.liberapay-btn > svg {
+    position: absolute;
+    left: 7px;
+    top: 7px;
+}
+.liberapay-btn > span {
+    margin-left: 19px;
 }
 </style>
-<a class="liberapay-btn" href="{{ participant.url('donate') }}">{{ ICON }} <span>{{ _("Donate") }}</span></a>
+<a class="liberapay-btn" href="{{ participant.url('donate') }}">{{ ICON }}<span>{{ _("Donate") }}</span></a>
