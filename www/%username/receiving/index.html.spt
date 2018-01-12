@@ -62,7 +62,20 @@ teams = website.db.all("""
 <div class="row">
 <div class="col-md-6">
     <h3>{{ _("Tips Received, by Number of Tips") }}</h3>
-    % include "templates/tip-distribution.html"
+    <table class="tip-distribution">
+        % for amount, ncontributors, summed, summed_converted, pcontributors, psummed in tip_distribution
+        <tr>
+            <td class="amount">{{ format_money(amount) }}</td>
+            <td class="count">
+                <div class="wrapper">
+                <span class="bar width-{{ int(pcontributors * 100) }}"></span>
+                {{- format_percent(pcontributors) }}
+                <span class="number">({{ ncontributors }})</span>
+                </div>
+            </td>
+        </tr>
+        % endfor
+    </table>
 </div>
 
 <div class="col-md-6">
