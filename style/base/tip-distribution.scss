@@ -1,0 +1,24 @@
+.tip-distribution {
+    font-family: $font-family-monospace;
+    width: 100%;
+    .amount {
+        padding-right: 1ex;
+        text-align: right;
+    }
+    .count {
+        white-space: nowrap;
+        width: 100%;
+    }
+    .wrapper {
+        width: 60%;
+    }
+    .bar {
+        background: #9ea0ff;
+        display: inline-block;
+        height: $font-size-base * 0.75;
+        margin: 0 0.5ex -1px 0;
+        &.green {
+            background: $btn-success-bg;
+        }
+    }
+}

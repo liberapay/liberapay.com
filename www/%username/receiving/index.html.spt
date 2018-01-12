@@ -71,14 +71,15 @@ teams = website.db.all("""
         % for amount, ncontributors, summed, summed_converted, pcontributors, psummed in tip_distribution
         <tr>
             <td class="amount">{{ format_money(amount) }}</td>
-            <td colspan="2"></td>
             <td class="count">
-                <span class="green bar" style="width: {{ psummed * 240 }}pt"></span>
-                {{ format_percent(psummed) }}
+                <div class="wrapper">
+                <span class="green bar width-{{ int(psummed * 100) }}"></span>
+                {{- format_percent(psummed) }}
                 <span class="number">({{ format_money(summed) }})</span>
                 % if summed_converted != summed
                 <span class="number">(~{{ format_money(summed_converted) }})</span>
                 % endif
+                </div>
             </td>
         </tr>
         % endfor
