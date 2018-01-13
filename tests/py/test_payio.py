@@ -499,7 +499,7 @@ class TestSync(MangopayHarness):
 
     def test_3_sync_with_mangopay_handles_transfers_that_didnt_happen(self):
         self.make_exchange('mango-cc', 10, 0, self.janet)
-        with mock.patch('liberapay.billing.transactions.record_transfer_result') as rtr, \
+        with mock.patch('liberapay.billing.transactions._record_transfer_result') as rtr, \
              mock.patch('liberapay.billing.transactions.Transfer.save', autospec=True) as save:
             rtr.side_effect = save.side_effect = Foobar
             with self.assertRaises(Foobar):
