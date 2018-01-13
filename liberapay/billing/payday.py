@@ -132,7 +132,8 @@ class Payday(object):
             done = self.db.all("""
                 SELECT *
                   FROM transfers t
-                 WHERE t.timestamp >= %(ts_start)s;
+                 WHERE t.timestamp >= %(ts_start)s
+                   AND status = 'succeeded'
             """, dict(ts_start=self.ts_start))
             done = set((t.tipper, t.tippee, t.context, t.team) for t in done)
             transfers = [t for t in transfers if (t.tipper, t.tippee, t.context, t.team) not in done]
