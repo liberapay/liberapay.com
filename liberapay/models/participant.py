@@ -1432,6 +1432,8 @@ class Participant(Model, MixinTeam):
     def get_currency_for(self, tippee, tip):
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
+        if isinstance(tip, NS):
+            tip = tip.__dict__
         if tippee.accept_all_currencies:
             return tip['amount'].currency
         else:
