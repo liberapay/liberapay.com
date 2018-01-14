@@ -50,6 +50,7 @@ from liberapay.utils.i18n import (
     get_function_from_rule, make_sorted_dict
 )
 from liberapay.utils.query_cache import QueryCache
+from liberapay.version import get_version
 
 
 def canonical(env):
@@ -330,9 +331,20 @@ def username_restrictions(www_root):
 
 
 def make_sentry_teller(env):
-    sentry = raven.Client(env.sentry_dsn) if env.sentry_dsn else None
-
-    if not sentry:
+    if env.sentry_dsn:
+        try:
+            release = get_version()
+            if '-' in release:
+                release = None
+        except:
+            release = None
+        sentry = raven.Client(
+            env.sentry_dsn,
+            environment=env.instance_type,
+            release=release,
+        )
+    else:
+        sentry = None
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
     def tell_sentry(exception, state, allow_reraise=True):
@@ -624,6 +636,7 @@ def env():
         OVERRIDE_QUERY_CACHE=is_yesish,
         GRATIPAY_BASE_URL=str,
         SECRET_FOR_GRATIPAY=str,
+        INSTANCE_TYPE=str,
     )
 
     logging.basicConfig(level=getattr(logging, env.logging_level.upper()))
