@@ -9,6 +9,7 @@ import os
 import os.path
 from subprocess import Popen
 import sys
+from time import sleep
 
 from babel.dates import format_timedelta
 import pando.utils
@@ -499,9 +500,13 @@ class Payday(object):
     def transfer_for_real(self, transfers):
         db = self.db
         print("Starting transfers (n=%i)" % len(transfers))
-        msg = "Executing transfer #%i (amount=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s)"
+        msg = "Executing transfer #%i (amount=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s) %s"
         for t in transfers:
-            log(msg % (t.id, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id))
+            delay = getattr(self, 'transfer_delay', 0)
+            when = 'in %.2f seconds' if delay else 'now'
+            log(msg % (t.id, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id, when))
+            if delay:
+                sleep(delay)
             transfer(db, **t.__dict__)
 
     @classmethod

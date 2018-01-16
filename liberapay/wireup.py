@@ -33,6 +33,7 @@ import sass
 
 from liberapay import elsewhere
 import liberapay.billing.payday
+import liberapay.billing.watcher
 from liberapay.constants import CustomUndefined
 from liberapay.exceptions import NeedDatabase
 from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
@@ -324,6 +325,9 @@ def billing(app_conf):
 
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/118
     mangopay.resources.LegalUser.person_type = 'LEGAL'
+
+    # https://github.com/Mangopay/mangopay2-python-sdk/issues/144
+    mangopay.signals.request_finished.connect(liberapay.billing.watcher.on_response)
 
 
 def username_restrictions(www_root):
