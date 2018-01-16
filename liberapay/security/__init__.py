@@ -15,11 +15,10 @@ def set_default_security_headers(website, response, request=None):
     # https://scotthelme.co.uk/content-security-policy-an-introduction/
     csp = (
         b"default-src 'self' %(main_domain)s;"
-        b"script-src 'self' %(main_domain)s;"
-        b"style-src 'self' %(main_domain)s;"
         b"connect-src 'self' *.liberapay.org *.mangopay.com *.payline.com;"
         b"form-action 'self';"
         b"img-src * blob: data:;"
+        b"object-src 'none';"
     ) % {b'main_domain': website.canonical_host.encode('ascii')}
     csp += website.env.csp_extra.encode()
     if website.canonical_scheme == 'https':
