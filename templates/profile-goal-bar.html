@@ -6,10 +6,9 @@
             <span class="goal pull-right">{{ _("Goal: {0}", p.goal) }}</span>
             {{ _("Income: {0}/week", p.receiving) }}
             % set progress_cls = CLASSES[min(int(p.receiving / p.goal), 1)]
+            % set width = min(int(p.receiving / p.goal * 100), 100)
             <div class="progress">
-                <div class="progress-bar progress-bar-{{ progress_cls }}"
-                     style="min-width: {{ '2px' if p.receiving > 0 else 0 }};
-                            width: {{ min(p.receiving / p.goal * 100, 100) }}%;">{{
+                <div class="progress-bar progress-bar-{{ progress_cls }} width-{{ width }}">{{
                     _("Mission accomplished!") if p.receiving >= p.goal else ''
                 }}</div>
             </div>

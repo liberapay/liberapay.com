@@ -1,3 +1,4 @@
+import json
 import os
 js_root = os.path.join(website.project_root, 'js')
 [---]
@@ -10,5 +11,9 @@ for filename in sorted(os.listdir(js_root)):
         with open(os.path.join(js_root, filename), 'rb') as f:
             catted.append(f.read().decode('utf8'))
 js = "\n".join(catted)
-[---] via stdlib_format
-{js}
+[---] via jinja2
+Liberapay = {
+    avatar_default_url: {{ json.dumps(website.asset('avatar-default.png')) }}
+};
+
+{{ js }}

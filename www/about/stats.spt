@@ -91,13 +91,6 @@ def out():
 
 % extends "templates/about.html"
 
-% block scripts
-% if last_payday
-    <script>Liberapay.charts.load('/about/charts.json');</script>
-% endif
-{{ super() }}
-% endblock
-
 % block content
 
     <p>{{ _("Liberapay was launched {0} ago and has {1} users.",
@@ -124,7 +117,7 @@ def out():
     % if last_payday
     <noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
 
-    <div class="row">
+    <div class="row" data-charts-autoload="/about/charts.json">
         <div class="chart-wrapper col-md-6">
             <a name="users"></a>
             <h3>{{ _("Open Accounts") }}</h3>

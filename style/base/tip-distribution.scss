@@ -1,0 +1,37 @@
+.tip-distribution {
+    font-family: $font-family-monospace;
+    width: 100%;
+    .number {
+        padding-right: 1ex;
+        text-align: right;
+    }
+    .percentages {
+        white-space: nowrap;
+        width: 70%;
+    }
+    .wrapper {
+        width: 50%;
+    }
+    .bar {
+        background: #9ea0ff;
+        display: inline-block;
+        height: $font-size-base * 0.75;
+        margin: 0 0.5ex -1px 0;
+        &.green {
+            background: $btn-success-bg;
+        }
+    }
+}
+@media (max-width: $screen-sm-min - 1) {
+    .tip-distribution {
+        .percentages {
+            white-space: normal;
+        }
+        .wrapper {
+            width: 100%;
+        }
+        .bar {
+            display: block;
+        }
+    }
+}

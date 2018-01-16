@@ -146,8 +146,7 @@ if is_team:
                                 _("{0} accepts donations", username_link|safe)
                             }}</span>
                             % if not declines_gifts
-                                <div class="inline-block pull-right no-float-xs"
-                                     style="line-height: {{ size }}px">
+                                <div class="inline-block pull-right no-float-xs line-height-{{ size }}">
                                 <a class="btn btn-donate btn-lg"
                                    href="{{ member.participant.path('donate') }}"
                                    >{{ _("Donate") }}</a>
@@ -168,8 +167,7 @@ if is_team:
                                 _("{0} hasn't joined Liberapay yet", friendly_name_link|safe)
                             }}</span>
                             % if not declines_gifts
-                                <div class="inline-block pull-right no-float-xs"
-                                     style="line-height: {{ size }}px">
+                                <div class="inline-block pull-right no-float-xs line-height-{{ size }}">
                                 <a class="btn btn-donate" href="{{ url }}">{{ _("Pledge") }}</a>
                                 </div>
                             % endif

@@ -76,14 +76,14 @@ title = _("Security")
 % extends "templates/about.html"
 % block content
 
-    <p>If you have found a security issue, and it's not <a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ASelf-defense">already known</a>, then please send a report to <a onclick="$(this).html('admin&amp;#64;liberapay.com')">[click to see email address]</a>.</p>
+    <p>If you have found a security issue, and it's not <a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ASelf-defense">already known</a>, then please send a report to <a data-email-reveal="admin&amp;#64;liberapay.com">[click to see email address]</a>.</p>
 
     <p>We will investigate legitimate reports and make every effort to quickly resolve any vulnerability. To encourage responsible reporting, we will not take legal action against you nor ask law enforcement to investigate you providing you comply with the following guideline:</p>
-    
+
     <ul>
         <li>Make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our services.</li>
     </ul>
-    
+
     <h3>Exclusions</h3>
 
     <p>The following test types are excluded from the scope:</p>

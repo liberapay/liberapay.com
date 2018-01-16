@@ -6,8 +6,7 @@
    corresponding avatar-cutter-$size class. #}
 % macro avatar_img(account, size=98)
 <div class="avatar-cutter-{{ size }}"><div class="avatar-centerer">
-<img class="avatar" src="{{ avatar_url(account) }}"
-     onerror="this.src = '{{ website.asset('avatar-default.png') }}'" />
+<img class="avatar" src="{{ avatar_url(account) }}" />
 </div></div>
 % endmacro
 
