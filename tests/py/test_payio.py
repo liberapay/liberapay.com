@@ -1,11 +1,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from datetime import datetime
 from decimal import Decimal as D
 
 import mock
+from pando.utils import utc
 import pytest
 
-from liberapay.billing import transactions
+from liberapay.billing import transactions, watcher
 from liberapay.billing.fees import (
     skim_credit,
     upcharge_bank_wire,
@@ -23,7 +25,7 @@ from liberapay.billing.transactions import (
     transfer,
 )
 from liberapay.billing.payday import Payday
-from liberapay.constants import PAYIN_CARD_MIN, PAYIN_CARD_TARGET
+from liberapay.constants import EPOCH, PAYIN_CARD_MIN, PAYIN_CARD_TARGET
 from liberapay.exceptions import (
     NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
     FeeExceedsAmount, AccountSuspended, Redirect,
@@ -31,7 +33,8 @@ from liberapay.exceptions import (
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, Foobar
-from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
+from liberapay.testing.mangopay import FakeTransfersHarness, Harness, MangopayHarness
+from liberapay.utils import NS
 
 
 def fail_payin(payin):
@@ -513,3 +516,32 @@ class TestSync(MangopayHarness):
         assert t.error == 'interrupted'
         assert Participant.from_username('david').balance == 0
         assert Participant.from_username('janet').balance == 10
+
+
+class TestMangopayWatcher(Harness):
+
+    def on_response(self, *consumed):
+        assert len(consumed) <= 4
+        c1, c2, c3, c4 = (consumed * 4)[:4]
+        remaining = (2300 - c1, 4500 - c2, 8800 - c3, 105600 - c4)
+        now = datetime.utcnow().replace(tzinfo=utc)
+        ts_now = int((now - EPOCH).total_seconds())
+        reset = (ts_now + 15*60, ts_now + 30*60, ts_now + 60*60, ts_now + 24*60*60)
+        watcher.on_response(None, result=NS(headers={
+            'X-RateLimit': ', '.join(map(str, consumed)),
+            'X-RateLimit-Remaining': ', '.join(map(str, remaining)),
+            'X-RateLimit-Reset': ', '.join(map(str, reset)),
+        }))
+
+    def test_mangopay_watcher_tells_payday_to_slow_down(self):
+        self.on_response(1)
+        assert Payday.transfer_delay == 0
+        self.on_response(int(0.61 * 2300))
+        assert Payday.transfer_delay > 1
+        self.on_response(int(0.85 * 2300))
+        assert Payday.transfer_delay > 2
+
+    def test_mangopay_watcher_handles_errors_gracefully(self):
+        with mock.patch.object(self.website, 'tell_sentry') as tell_sentry:
+            watcher.on_response(None, result=None)
+            assert tell_sentry.called
