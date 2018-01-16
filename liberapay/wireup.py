@@ -41,7 +41,6 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
-from liberapay.security.authentication import ANON
 from liberapay.utils import find_files, markdown, mkdir_p
 from liberapay.utils.currencies import MoneyBasket, get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
@@ -51,6 +50,7 @@ from liberapay.utils.i18n import (
     get_function_from_rule, make_sorted_dict
 )
 from liberapay.utils.query_cache import QueryCache
+from liberapay.version import get_version
 
 
 def canonical(env):
@@ -331,9 +331,20 @@ def username_restrictions(www_root):
 
 
 def make_sentry_teller(env):
-    sentry = raven.Client(env.sentry_dsn) if env.sentry_dsn else None
-
-    if not sentry:
+    if env.sentry_dsn:
+        try:
+            release = get_version()
+            if '-' in release:
+                release = None
+        except:
+            release = None
+        sentry = raven.Client(
+            env.sentry_dsn,
+            environment=env.instance_type,
+            release=release,
+        )
+    else:
+        sentry = None
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
     def tell_sentry(exception, state, allow_reraise=True):
@@ -383,25 +394,34 @@ def make_sentry_teller(env):
                 raise
             return {'sentry_ident': None}
 
-        user = state.get('user')
-        extra = {}
-        if user is None:
-            user_id = 'no user'
-        elif user is ANON:
-            user_id = 'ANON'
-        elif not hasattr(user, 'id'):
-            user_id = 'no id'
-        else:
-            user_id = user.id
-            extra['user_url'] = 'https://liberapay.com/~{}/'.format(user_id)
+        # Prepare context data
+        sentry_data = {}
+        if state:
+            try:
+                sentry_data['tags'] = {
+                    'lang': getattr(state.get('locale'), 'language', None),
+                }
+                request = state.get('request')
+                user_data = sentry_data['user'] = {}
+                if request is not None:
+                    user_data['ip_address'] = str(request.source)
+                    sentry_data['request'] = {
+                        'method': request.method,
+                        'url': request.line.uri,
+                        'headers': {
+                            k: b', '.join(v) for k, v in request.headers.items()
+                            if k != b'Cookie'
+                        },
+                    }
+                user = state.get('user')
+                if isinstance(user, Participant):
+                    user_data['id'] = getattr(user, 'id', None)
+                    user_data['username'] = getattr(user, 'username', None)
+            except Exception as e:
+                tell_sentry(e, {})
 
         # Tell Sentry
-        tags = {
-            'user_id': user_id,
-            'username': getattr(user, 'username', None),
-        }
-        extra['request_line'] = getattr(state.get('request'), 'line', None)
-        result = sentry.captureException(tags=tags, extra=extra)
+        result = sentry.captureException(data=sentry_data)
 
         # Put the Sentry id in the state for logging, etc
         return {'sentry_ident': sentry.get_ident(result)}
@@ -616,6 +636,7 @@ def env():
         OVERRIDE_QUERY_CACHE=is_yesish,
         GRATIPAY_BASE_URL=str,
         SECRET_FOR_GRATIPAY=str,
+        INSTANCE_TYPE=str,
     )
 
     logging.basicConfig(level=getattr(logging, env.logging_level.upper()))
