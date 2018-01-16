@@ -189,8 +189,8 @@ class Platform(object):
             return
         percent_remaining = remaining/limit
         if percent_remaining < 0.5:
-            reset_delta = reset - datetime.now().replace(tz=utc)
-            reset_delta = format_timedelta(reset_delta, locale='en')
+            reset_delta = reset - datetime.utcnow().replace(tzinfo=utc)
+            reset_delta = format_timedelta(reset_delta, add_direction=True, locale='en')
             log_msg = (
                 '{0}: {1:.1%} of ratelimit has been consumed, '
                 '{2} requests remaining, resets {3}.'
