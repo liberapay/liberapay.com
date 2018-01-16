@@ -104,60 +104,24 @@ title = _("Security")
         <li>Issues in third-party services should be reported to the respective team.</li>
     </ul>
 
-    <p>The following <b>issue types</b> are excluded from scope:</p>
+    <p>The following <b>issue types</b> are excluded from scope:</p> 
 
-    <table class="table">
-    <tr>
-    <td>Low severity issues that can be detected with tools such as <a href="https://www.hardenize.com/">Hardenize</a> and <a href="https://securityheaders.io/">Security Headers</a>.</td>
-    <td>We run regular scans with these services and try to improve our score gradually.</td>
-    </tr>
-    <tr>
-       <td>Content injection issues.</td>
-       <td>The severity of this issue is so low that it does not warrant a report.</td>
-    </tr>
-    <tr>
-       <td>Cross-site Request Forgery (CSRF) with minimal security implications (Logout CSRF, etc.).</td>
-       <td>In order for CSRF to be a valid issue it must affect some important action such as deleting one’s account.</td>
-    </tr>
-    <tr>
-       <td>Missing cookie flags on non-security-sensitive cookies.</td>
-       <td>These type of issues do not present a major risk and are usually picked up by scanners.</td>
-    </tr>
-    <tr>
-       <td>UI and UX bugs (including spelling mistakes).</td>
-       <td>No comment.</td>
-    </tr>
-    <tr>
-       <td>401 injection.</td>
-       <td>This is usually an accepted risk.</td>
-    </tr>
-    <tr>
-       <td>Stack traces that disclose information.</td>
-       <td>Most of our projects are open-source therefore this information is usually public knowledge. <strong>That said, if you discover a stack trace that discloses information which is not located in our GitHub repositories, please do submit a report.</strong></td>
-    </tr>
-    <tr>
-       <td>Host header issues without an accompanying proof-of-concept demonstrating vulnerability.</td>
-       <td>Please provide an proof of concept.</td>
-    </tr>
-    <tr>
-       <td>Open ports without an accompanying proof-of-concept demonstrating vulnerability.</td>
-       <td>Same as above.</td>
-    </tr>
-    <tr>
-       <td>Banner grabbing issues (figuring out what web server we use, etc.).</td>
-       <td>We will happily share what web servers we are running.</td>
-    </tr>
-    <tr>
-       <td>Missing <code>X-Frame-Options</code> header (Clickjacking)</td>
-       <td>The lack of <code>X-Frame-Options</code> does not always indicate that a security vulnerability is present. This is an optional header that is only necessary on endpoints where there UI is rendered to invoke state changing actions. We recommend reading this informative post by David Ross: <a href="https://plus.google.com/u/0/+DavidRossX/posts/jVrtTRd5yKP">https://plus.google.com/u/0/+DavidRossX/posts/jVrtTRd5yKP</a></td>
-    </tr>
-    </table>
+    <ul>
+       <li><strong>Network-level Denial of Service (DoS/DDoS) vulnerabilities.</strong> We do not want you to disrupt any of our services.</li>
+       <li><strong>Low severity issues that can be detected with tools such as Hardenize and Security Headers.</strong> We run regular scans with these services and try to improve our score gradually.</li>
+       <li><strong>Content injection issues.</strong> The severity of this issue is so low that it does not warrant a report.</li>
+       <li><strong>Cross-site Request Forgery (CSRF) with minimal security implications (Logout CSRF, etc.).</strong> In order for CSRF to be a valid issue it must affect some important action such as deleting one’s account.</li>
+       <li><strong>Missing cookie flags on non-security-sensitive cookies.</strong> These type of issues do not present a major risk and are usually picked up by scanners.</li>
+       <li><strong>UI and UX bugs (including spelling mistakes).</strong></li>
+       <li><strong>401 injection.</strong> This is usually an accepted risk.</li>
+       <li><strong>Stack traces that disclose information.</strong> Most of our projects are open-source therefore this information is usually public knowledge. That said, if you discover a stack trace that discloses information which is not located in our GitHub repositories, please do submit a report.</li>
+       <li><strong>Host header issues without an accompanying proof-of-concept demonstrating vulnerability.</strong></li>
+       <li><strong>Open ports without an accompanying proof-of-concept demonstrating vulnerability.</strong></li>
+       <li><strong>Banner grabbing issues (figuring out what web server we use, etc.).</strong> We will happily share what web servers we are running.</li>
+       <li><strong>Missing X-Frame-Options header (Clickjacking).</strong> The lack of X-Frame-Options does not always indicate that a security vulnerability is present. This is an optional header that is only necessary on endpoints where there UI is rendered to invoke state changing actions. We recommend reading this informative post by David Ross: <a href="https://plus.google.com/u/0/+DavidRossX/posts/jVrtTRd5yKP">https://plus.google.com/u/0/+DavidRossX/posts/jVrtTRd5yKP</a></li>
+    </ul>
 
     <p>We encourage hackers to read <a href="https://leanpub.com/web-hacking-101">Web Hacking 101</a> and <a href="https://leanpub.com/ltr101-breaking-into-infosec">Breaking into Information Security: Learning the Ropes 101</a> to get a good idea of the type of issues that we are looking for.</p>
-
-    <p>Liberapay has never given permission/authorization (either implied or explicit) to an individual or group of individuals to extract personal information or content of Liberapay customers and publicize this information out in the open, public-facing Internet without customer consent, nor has Liberapay ever given permission for programs or data belonging to Liberapay to be modified or corrupted in order to extract and publicly disclose data belonging to Liberapay.</p>
-
-    <p>Liberapay reserves the right to change its terms at any time without prior notification.</p>
 
     <h3>Hall of Fame</h3>
 
