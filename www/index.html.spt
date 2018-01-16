@@ -70,8 +70,11 @@ recent = query_cache.one("""
 
     <div class="jumbotron section">
     <p><img src="{{ website.asset('liberapay/icon-v2_yellow-r.svg') }}" height=100 width=100 /></p>
-    <h2>{{ _("Liberapay is a recurrent donations platform.") }}</h2>
-    <h2>{{ _("We help you fund the creators and projects you appreciate.") }}</h2>
+    <h2>{{ _("Liberapay is a recurrent donations platform") }}</h2>
+    <p>{{ _("We help you fund the creators and projects you appreciate") }}</p>
+    <div class="buttons"><a class="btn btn-default btn-lg" href="/sign-up">
+        <span>{{ _("Create an account") }}</span>
+    </a></div>
     </div>
 
     <div class="row section">
@@ -90,7 +93,7 @@ recent = query_cache.one("""
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
             <div class="buttons"><a class="btn btn-success btn-lg" href="/sign-up">
-                {{ glyphicon('log-in') }} <span>{{ _("Create your account") }}</span>
+                {{ glyphicon('log-in') }} <span>{{ _("Create an account") }}</span>
             </a></div>
 
         % else
@@ -296,12 +299,10 @@ recent = query_cache.one("""
     </div>
 
     <div class="section no-border">
-        <h2></h2>
         <p class="buttons">
             <a class="btn btn-info btn-lg" href="/about/">
                 {{ glyphicon('info-sign') }} <span>{{ _("Learn more") }}</span>
             </a>
-            <br>
             <a class="btn btn-info btn-lg" href="/about/feeds">
                 {{ fontawesome('feed') }} <span>{{ _("Follow us") }}</span>
             </a>

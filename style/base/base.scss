@@ -84,20 +84,28 @@ body {
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;*/
-            background: #2947B3;
+            background: #fff;
             border-radius: 0;
             margin: 0;
             padding: 70px;
             text-transform: uppercase;
             & > h2 {
-                color: #fff;
+                color: #444;
                 text-align: left;
                 font-weight: bold;
+            }
+            & > p {
+                color: #ccc;
+                text-align: left;
             }
             & img {
                 height: 80px;
                 margin-bottom: 15px;
                 width: auto;
+            }
+            & .buttons {
+                text-transform: none;
+                text-align: left;
             }
         }
     }
@@ -110,6 +118,10 @@ body {
         .btn {
             margin: 0 0.66em 0.66em 0;
         }
+    }
+    .section:last-child .buttons {
+        text-align: center;
+        margin: 0 auto;
     }
 }
 
@@ -133,7 +145,7 @@ body {
 }
 
 .btn-donate {
-    $base-color: #ffee16;
+    $base-color: #F6C915;
     background-color: $base-color;
     color: #1a171b;
     &:hover {
