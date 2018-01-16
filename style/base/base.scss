@@ -10,11 +10,19 @@ body {
     & > footer {
         display: flex;
         justify-content: space-around;
-        margin: 100px auto 20px auto;
+        margin-top: 100px;
+        background: #fafafa;
+        padding: 80px;
+        font-weight: bold;
 
         @media (max-width: $screen-sm-min) {
             flex-direction: column;
             text-align: center;
+        }
+
+        & > p {
+            display: inline-block;
+            margin: 16px 0;
         }
 
         & > ul {
@@ -25,14 +33,23 @@ body {
                 display: inline-block;
                 & > a {
                     display: inline-block;
-                    padding: 10px;
+                    margin: 16px;
+                    color: rgba(37,49,55,.76);
                 }
             }
         }
     }
+
     & > .top {
         order: -1;
     }
+}
+
+.footer-logo {
+    display: block;
+    margin: 0 auto;
+    height: 50px;
+    width: auto;
 }
 
 @mixin transition {
@@ -63,11 +80,25 @@ body {
             border: none;
         }
         &.jumbotron {
-            background: transparent;
+            /*background: url("https://images.unsplash.com/photo-1505015160083-00f1e35b6ab8?dpr=1&auto=format&fit=crop&w=1000&q=80&cs=tinysrgb");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;*/
+            background: #2947B3;
             border-radius: 0;
             margin: 0;
-            padding-top: 70px;
-            text-align: center;
+            padding: 70px;
+            text-transform: uppercase;
+            & > h2 {
+                color: #fff;
+                text-align: left;
+                font-weight: bold;
+            }
+            & img {
+                height: 80px;
+                margin-bottom: 15px;
+                width: auto;
+            }
         }
     }
     h2 {
@@ -101,10 +132,6 @@ body {
     text-align: center;
 }
 
-.btn {
-    @include transition;
-}
-
 .btn-donate {
     $base-color: #ffee16;
     background-color: $base-color;
@@ -133,6 +160,11 @@ input.amount {
 
 .input-group-addon, .input-group-btn {
     width: auto !important;
+}
+
+.input-group-btn .btn:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .input-group select.form-control {
@@ -425,6 +457,25 @@ ul.emails {
 }
 .faq dd > p {
     margin-bottom: 0.33em;
+}
+
+a {
+    text-decoration: none;
+    border-bottom: 2px solid #eee;
+    -webkit-transition: all 0.15s ease;
+    -moz-transition: all 0.15s ease;
+    -ms-transition: all 0.15s ease;
+    -o-transition: all 0.15s ease;
+    transition: all 0.15s ease;
+}
+
+a:hover {
+    text-decoration: none;
+    border-bottom: 2px solid #23527c;
+}
+
+a:focus {
+    text-decoration: none;
 }
 
 h2, h3, h4, h5, h6 {
@@ -755,6 +806,10 @@ table.team {
     }
 }
 
+.form-control {
+    height: 38px;
+}
+
 .table td > form > input.form-control {
     height: 30px;
     margin: -7px 0;
@@ -773,6 +828,23 @@ p.event {
 
 .buttons .btn {
     margin-bottom: 5px;
+}
+
+.btn {
+    border: none;
+    transition: all .15s ease;
+    &:hover {
+        border-bottom: 0;
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+    }
+}
+
+.btn-default {
+    border: 2px solid #eee;
+    &:hover {
+        border: 2px solid #adadad;
+    }
 }
 
 .glyphicon + span {
@@ -929,8 +1001,13 @@ span.help-title {
 .s-logo {
     display: block;
     margin: 1.5em 0;
+    border-bottom: 0;
     & > img {
         max-width: 100%;
+    }
+
+    &:hover {
+        border-bottom: 0;
     }
 }
 
