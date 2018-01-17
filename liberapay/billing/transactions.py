@@ -467,8 +467,7 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.DebitedWalletId = wallet_from
     tr.Fees = Money(0, amount.currency)
     tr.Tag = str(t_id)
-    tr.save()
-    return record_transfer_result(db, t_id, tr), t_id
+    return execute_transfer(db, t_id, tr), t_id
 
 
 def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to,
@@ -530,12 +529,24 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
             break
 
 
-def record_transfer_result(db, t_id, tr):
+def execute_transfer(db, t_id, tr):
+    try:
+        tr.save()
+    except APIError as e:
+        error = repr_exception(e)
+        _record_transfer_result(db, t_id, 'failed', error)
+        from liberapay.website import website
+        website.tell_sentry(e, {})
+        raise TransferError(error)
+    return record_transfer_result(db, t_id, tr, _raise=True)
+
+
+def record_transfer_result(db, t_id, tr, _raise=False):
     error = repr_error(tr)
     status = tr.Status.lower()
     assert (not error) ^ (status == 'failed')
     r = _record_transfer_result(db, t_id, status, error)
-    if status == 'failed':
+    if _raise and status == 'failed':
         raise TransferError(error)
     return r
 
@@ -673,8 +684,7 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     tr.Fees = Money(0, currency)
     tr.RepudiationId = repudiation_id
     tr.Tag = str(t_id)
-    tr.save()
-    return record_transfer_result(db, t_id, tr)
+    return execute_transfer(db, t_id, tr)
 
 
 def try_to_swap_bundle(cursor, b, original_owner):
