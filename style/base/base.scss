@@ -107,6 +107,9 @@ body {
                 text-transform: none;
                 text-align: left;
             }
+            @media (max-width: $screen-sm-min) {
+                padding: 0;
+            }
         }
     }
     h2 {
@@ -172,10 +175,10 @@ input.amount {
 
 .input-group-addon, .input-group-btn {
     width: auto !important;
+    border-radius: 0;
 }
 
 .input-group-btn .btn:hover {
-    transform: none;
     box-shadow: none;
 }
 
@@ -225,6 +228,10 @@ button.close {
 
 img.account-type {
     height: 32px;
+}
+
+.panel {
+    border-radius: 0;
 }
 
 .panel-body {
@@ -546,6 +553,11 @@ section.invoice-details {
     }
 }
 
+pre {
+    border-radius: 0;
+    background: #f6f8fa;
+}
+
 .notification {
     padding: 14px;
     text-align: center;
@@ -820,6 +832,7 @@ table.team {
 
 .form-control {
     height: 38px;
+    border-radius: 0;
 }
 
 .table td > form > input.form-control {
@@ -842,21 +855,25 @@ p.event {
     margin-bottom: 5px;
 }
 
-.btn {
-    border: none;
+a.btn, .btn {
+    border: 2px solid rgba(0, 0, 0, 0);
+    border-radius: 0;
     transition: all .15s ease;
     &:hover {
-        border-bottom: 0;
-        transform: translateY(-1px);
         box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
     }
 }
 
-.btn-default {
+a.btn.btn-default, .btn.btn-default {
     border: 2px solid #eee;
     &:hover {
         border: 2px solid #adadad;
+        box-shadow: none;
     }
+}
+
+a.liberapay-btn {
+    border-bottom: 0;
 }
 
 .glyphicon + span {

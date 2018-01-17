@@ -73,7 +73,7 @@ recent = query_cache.one("""
     <h2>{{ _("Liberapay is a recurrent donations platform") }}</h2>
     <p>{{ _("We help you fund the creators and projects you appreciate") }}</p>
     <div class="buttons"><a class="btn btn-default btn-lg" href="/sign-up">
-        <span>{{ _("Create an account") }}</span>
+        <span>{{ _("Create an account") }} &rarr;</span>
     </a></div>
     </div>
 
@@ -93,7 +93,7 @@ recent = query_cache.one("""
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
             <div class="buttons"><a class="btn btn-success btn-lg" href="/sign-up">
-                {{ glyphicon('log-in') }} <span>{{ _("Create an account") }}</span>
+                <span>{{ _("Create an account") }}</span>
             </a></div>
 
         % else
@@ -199,7 +199,7 @@ recent = query_cache.one("""
             </div>
         </dl>
         <p class="text-center"><br><a class="btn btn-success btn-lg" href="/sign-up">
-            {{ glyphicon('log-in') }} <span>{{ _("Create your account") }}</span>
+            <span>{{ _("Create an account") }}</span>
         </a></p>
     </div>
 
@@ -221,7 +221,7 @@ recent = query_cache.one("""
               >{{ glyphicon('thumbs-up') }} <span>{{ _("Fund Liberapay") }}</span></a></p>
     </div>
 
-    <div class="section">
+    <div class="section text-center">
         <h2>{{ _("Sponsors") }}</h2>
         <p>{{ _(
             "Donations from businesses and nonprofits are welcome on Liberapay. If "
@@ -261,7 +261,7 @@ recent = query_cache.one("""
         </p>
     </div>
 
-    <div class="section">
+    <div class="section text-center">
         <h2>{{ _("Recent Activity") }}</h2>
         % if recent.n_users > 1
         <p>{{ glyphicon('user') }} <span>{{ ngettext(
@@ -295,15 +295,15 @@ recent = query_cache.one("""
             n=recent.newest_payday_nactive,
         ) }}</span></p>
         % endif
-        <p><a href="/about/stats" class="btn btn-info">{{ glyphicon('stats') }} <span>{{ _("More stats") }}</span></a></p>
+        <p><a href="/about/stats" class="btn btn-default">{{ glyphicon('stats') }} <span>{{ _("More stats") }}</span></a></p>
     </div>
 
     <div class="section no-border">
         <p class="buttons">
-            <a class="btn btn-info btn-lg" href="/about/">
+            <a class="btn btn-default btn-lg" href="/about/">
                 {{ glyphicon('info-sign') }} <span>{{ _("Learn more") }}</span>
             </a>
-            <a class="btn btn-info btn-lg" href="/about/feeds">
+            <a class="btn btn-default btn-lg" href="/about/feeds">
                 {{ fontawesome('feed') }} <span>{{ _("Follow us") }}</span>
             </a>
         </p>
