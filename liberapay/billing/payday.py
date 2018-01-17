@@ -503,7 +503,7 @@ class Payday(object):
         msg = "Executing transfer #%i (amount=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s) %s"
         for t in transfers:
             delay = getattr(self, 'transfer_delay', 0)
-            when = 'in %.2f seconds' if delay else 'now'
+            when = 'in %.2f seconds' % delay if delay else 'now'
             log(msg % (t.id, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id, when))
             if delay:
                 sleep(delay)
