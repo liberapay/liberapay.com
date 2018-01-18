@@ -80,45 +80,46 @@ title = _("Security")
 
     <p>If you have found a security issue, and it's not <a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ASelf-defense">already known</a>, then please send a report to <a data-email-reveal="admin&amp;#64;liberapay.com">[click to see email address]</a>.</p>
 
-    <p>We will investigate legitimate reports and make every effort to quickly resolve any vulnerability. To encourage responsible reporting, we will not take legal action against you nor ask law enforcement to investigate you providing you comply with the following guideline:</p>
+    <h3>Policy</h3>
 
-    <ul>
-        <li>Make a good faith effort to avoid privacy violations, destruction of data, and interruption or degradation of our services.</li>
-    </ul>
+    <p>We will investigate legitimate reports and make every effort to quickly resolve any vulnerability. To encourage responsible reporting, we will not take legal action against you nor ask law enforcement to investigate you provided you make a good faith effort to <b>avoid causing harm to us, our users, and anyone else</b>. This includes avoiding privacy violations, destruction of data, and interruption or degradation of services.</li>
 
-    <h3>Exclusions</h3>
+    <h4>Scope</h4>
 
     <p>The following <b>test types</b> are excluded from the scope:</p>
 
     <ul>
-        <li>Findings from physical testing such as office access (e.g. open doors, tailgating).</li>
-
-        <li>Findings derived primarily from social engineering (e.g. phishing, vishing).</li>
-
-        <li>Reports that state that software is out of date or vulnerable without a proof of concept.</li>
-
-        <li>Highly speculative reports about theoretical damage. Be concrete.</li>
-
-        <li>Vulnerabilities as reported by automated tools without additional analysis as to how they are an issue.</li>
-
-        <li>Issues in third-party services should be reported to the respective team.</li>
+        <li><b>flooding</b> (e.g. denial of service attempts, unthrottled vulnerability scans)</li>
+        <li><b>physical testing</b> such as office access (e.g. open doors, tailgating)</li>
+        <li><b>social engineering</b> (e.g. phishing, vishing)</li>
     </ul>
 
-    <p>The following <b>issue types</b> are excluded from scope:</p> 
+    <p>The following <b>issue types</b> are excluded from scope:</p>
 
     <ul>
-       <li><strong>Network-level Denial of Service (DoS/DDoS) vulnerabilities.</strong> We do not want you to disrupt any of our services.</li>
-       <li><strong>Low severity issues that can be detected with tools such as Hardenize and Security Headers.</strong> We run regular scans with these services and try to improve our score gradually.</li>
-       <li><strong>Content injection issues.</strong> The severity of this issue is so low that it does not warrant a report.</li>
-       <li><strong>Cross-site Request Forgery (CSRF) with minimal security implications (Logout CSRF, etc.).</strong> In order for CSRF to be a valid issue it must affect some important action such as deleting one’s account.</li>
-       <li><strong>Missing cookie flags on non-security-sensitive cookies.</strong> These type of issues do not present a major risk and are usually picked up by scanners.</li>
-       <li><strong>UI and UX bugs (including spelling mistakes).</strong></li>
-       <li><strong>401 injection.</strong> This is usually an accepted risk.</li>
-       <li><strong>Stack traces that disclose information.</strong> Most of our projects are open-source therefore this information is usually public knowledge. That said, if you discover a stack trace that discloses information which is not located in our GitHub repositories, please do submit a report.</li>
-       <li><strong>Host header issues without an accompanying proof-of-concept demonstrating vulnerability.</strong></li>
-       <li><strong>Open ports without an accompanying proof-of-concept demonstrating vulnerability.</strong></li>
-       <li><strong>Banner grabbing issues (figuring out what web server we use, etc.).</strong> We will happily share what web servers we are running.</li>
-       <li><strong>Missing X-Frame-Options header (Clickjacking).</strong> The lack of X-Frame-Options does not always indicate that a security vulnerability is present. This is an optional header that is only necessary on endpoints where there UI is rendered to invoke state changing actions. We recommend reading this informative post by David Ross: <a href="https://plus.google.com/u/0/+DavidRossX/posts/jVrtTRd5yKP">https://plus.google.com/u/0/+DavidRossX/posts/jVrtTRd5yKP</a></li>
+        <li><b>Low severity issues</b>, including:
+            <ul>
+                <li>Issues that can be detected with tools such as Hardenize and Security Headers. We run regular scans with these services and try to improve our score gradually.</li>
+                <li>Content injection issues.</li>
+                <li>Cross-site Request Forgery (CSRF) with minimal security implications (Logout CSRF, etc.). In order for CSRF to be a valid issue it must affect some important action such as deleting one’s account.</li>
+                <li>Missing cookie flags on non-security-sensitive cookies.</li>
+            </ul>
+        </li>
+        <li><b>Disclosure of non-sensitive information</b>. Our software is open source and we don't believe in security through obscurity.
+            <ul>
+                <li>Stack traces containing only public information.</li>
+                <li>Banner grabbing issues (figuring out what web server we use, etc.).</li>
+            </ul>
+        </li>
+        <li><b>Theoretical issues</b> without an accompanying proof-of-concept demonstrating vulnerability, including:
+            <ul>
+                <li><code>Host</code> header issues</li>
+                <li>open ports</li>
+                <li>out-of-date software</li>
+            </ul>
+        </li>
+        <li><b>Issues with no security implications</b> (e.g. spelling mistakes), they should be reported publicly <a href="https://github.com/liberapay/liberapay.com/issues/new">on GitHub</a>.</li>
+        <li><b>Issues in third-party services</b>, they should be reported to the respective team.</p>
     </ul>
 
     <p>We encourage hackers to read <a href="https://leanpub.com/web-hacking-101">Web Hacking 101</a> and <a href="https://leanpub.com/ltr101-breaking-into-infosec">Breaking into Information Security: Learning the Ropes 101</a> to get a good idea of the type of issues that we are looking for.</p>
