@@ -14,14 +14,19 @@ if not user.is_admin:
     raise response.error(403)
 
 if request.method == 'POST':
+    event_data = {}
     p = Participant.from_id(request.body['p_id'])
     updated = 0
     for attr in REFERENCING_ATTRS:
         value = request.body.get(attr)
         if value is None:
             continue
-        p.update_bit(attr, 2, value == 'on')
-        updated += 1
+        r = p.update_bit(attr, 2, value == 'on')
+        if r:
+            updated += 1
+            event_data[attr] = value == 'on'
+    if event_data:
+        p.add_event(website.db, 'visibility_override', event_data, user.id)
     raise response.json({'msg': "Done, %i bits have been updated." % updated})
 
 participants = website.db.all("""

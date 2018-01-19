@@ -2290,11 +2290,15 @@ class Participant(Model, MixinTeam):
             op = '&'
         r = self.db.one("""
             UPDATE participants
-               SET {column} = {column} {op} %s
-             WHERE id = %s
+               SET {column} = {column} {op} %(mask)s
+             WHERE id = %(p_id)s
+               AND {column} <> {column} {op} %(mask)s
          RETURNING {column}
-        """.format(column=column, op=op), (mask, self.id))
+        """.format(column=column, op=op), dict(mask=mask, p_id=self.id))
+        if r is None:
+            return 0
         self.set_attributes(**{column: r})
+        return 1
 
 
 class NeedConfirmation(Exception):
