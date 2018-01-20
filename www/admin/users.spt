@@ -29,26 +29,30 @@ if request.method == 'POST':
         p.add_event(website.db, 'visibility_override', event_data, user.id)
     raise response.json({'msg': "Done, %i bits have been updated." % updated})
 
-participants = website.db.all("""
-    SELECT p
-         , (SELECT c.name FROM communities c WHERE c.participant = p.id) AS c_name
-         , ( SELECT row_to_json(e)
-               FROM ( SELECT e.*, p2.username AS recorder_name
-                        FROM events e
-                   LEFT JOIN participants p2 ON p2.id = e.recorder
-                       WHERE e.participant = p.id
-                         AND e.type = 'visibility_override'
-                    ORDER BY ts DESC
-                       LIMIT 1
-                    ) e
-           ) as last_change
-      FROM participants p
-     WHERE p.id < %s
-       AND (p.status <> 'stub' OR p.receiving > 0)
-  ORDER BY p.id DESC
-     LIMIT 150
-""", (request.qs.get_int('last_showed', float('inf')),))
-last_id = participants[-1][0].id if participants else 0
+mode = request.qs.get('mode', 'all')
+if mode == 'all':
+    participants = website.db.all("""
+        SELECT p
+             , (SELECT c.name FROM communities c WHERE c.participant = p.id) AS c_name
+             , ( SELECT row_to_json(e)
+                   FROM ( SELECT e.*, p2.username AS recorder_name
+                            FROM events e
+                       LEFT JOIN participants p2 ON p2.id = e.recorder
+                           WHERE e.participant = p.id
+                             AND e.type = 'visibility_override'
+                        ORDER BY ts DESC
+                           LIMIT 1
+                        ) e
+               ) as last_change
+          FROM participants p
+         WHERE p.id < %s
+           AND (p.status <> 'stub' OR p.receiving > 0)
+      ORDER BY p.id DESC
+         LIMIT 150
+    """, (request.qs.get_int('last_showed', float('inf')),))
+    last_id = participants[-1][0].id if participants else 0
+else:
+    raise response.error(400, "unknown `mode` value %r in querystring" % mode)
 
 title = "Users Admin"
 
