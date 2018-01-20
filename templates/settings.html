@@ -13,7 +13,7 @@
         ('/emails/', _('Emails')),
         ('/widgets/', _('Widgets')),
     ] + ([
-        ('/events', 'Events')
+        ('/admin', 'Admin')
     ] if user.is_admin else []) %}
     % from "templates/nav.html" import nav with context
     <div class="collapse-md">

@@ -8,21 +8,22 @@ def get_recorder_name(x):
     else:
         return website.db_qc5.one("SELECT username FROM participants WHERE id = %s", (x,))
 
-[-----------------------------------------------------------------------------]
+[---]
 
 participant = get_participant(state, restrict=True)
 title = participant.username
-subhead = _("Events")
+subhead = "Admin"
 
 events = website.db.all("""
     SELECT * FROM events WHERE participant = %s ORDER BY ts DESC
 """, (participant.id,))
 
-[-----------------------------------------------------------------------------]
+[---] text/html
 % extends "templates/settings.html"
 % block content
 
-<br>
+<h3>Events</h3>
+
 <table class="table monospace">
     <tr>
         <th>ts</th>
