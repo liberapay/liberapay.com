@@ -24,7 +24,7 @@ from liberapay.constants import (
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
-    PERIOD_CONVERSION_RATES, PRIVILEGES,
+    PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST, ZERO,
 )
@@ -2305,6 +2305,9 @@ class Participant(Model, MixinTeam):
             return 0
         self.set_attributes(**{column: r})
         return 1
+
+    def get_active_overrides(self):
+        return [attr for attr in PROFILE_VISIBILITY_ATTRS if getattr(self, attr).__and__(2)]
 
 
 class NeedConfirmation(Exception):
