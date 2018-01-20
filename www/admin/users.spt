@@ -3,8 +3,6 @@
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 
-REFERENCING_ATTRS = ('profile_noindex', 'hide_from_lists', 'hide_from_search')
-
 [---]
 
 if user.ANON:
@@ -17,7 +15,7 @@ if request.method == 'POST':
     event_data = {}
     p = Participant.from_id(request.body['p_id'])
     updated = 0
-    for attr in REFERENCING_ATTRS:
+    for attr in constants.PROFILE_VISIBILITY_ATTRS:
         value = request.body.get(attr)
         if value is None:
             continue
@@ -63,7 +61,7 @@ title = "Users Admin"
     <div class="col-md-10">
         <form action="javascript:" method="POST" class="js-submit">
             <input type="hidden" name="p_id" value="{{ p.id }}">
-            % for attr in REFERENCING_ATTRS
+            % for attr in constants.PROFILE_VISIBILITY_ATTRS
                 % set value = getattr(p, attr)
                 <label>
                     <input type="checkbox" name="{{ attr }}" {{ 'checked' if value.__and__(2) }} />
