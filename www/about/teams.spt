@@ -69,7 +69,7 @@ title = _("Teams")
 ) }}</p>
 
 <p>{{ _(
-    "You can change your takes from {0}your teams dashboard{1}. It contains "
+    "You can change your takes on {0}your team's dashboard{1}. It contains "
     "tables that show the nominal takes of all members for the next and "
     "previous payday, as well as an estimate of the actual amounts of money "
     "they'll receive in the next payday.",
@@ -81,7 +81,7 @@ title = _("Teams")
     "The nominal takes are the raw numbers that the members input themselves, "
     "the actual takes are computed by the system: first it sums up the nominal "
     "takes, then it computes the percentage that each take represents, and "
-    "finally it applies those percentages to the available income. Nominal "
+    "finally, it applies those percentages to the available income. Nominal "
     "takes also act as maximums: the actual takes are never higher than the "
     "nominal ones, even if additional income is available."
 ) }}</p>
@@ -96,7 +96,7 @@ title = _("Teams")
     "the income of the other members. Thirdly, it allows our software to adjust "
     "the amounts that donors actually transfer to the team's members, in a way "
     "that balances the donors' contributions over time, thus making the system "
-    "more fair. Finally, it encourages donating to a team even if it has "
+    "fairer. Finally, it encourages donating to a team even if it has "
     "already reached its funding goal, which is good for the stability of the "
     "team's income."
 ) }}</p>
@@ -129,7 +129,7 @@ title = _("Teams")
 <h3>{{ _("Removing team membership") }}</h3>
 
 <p>{{ _(
-    "You can leave a team from {0}your teams dashboard{1}.",
+    "You can leave a team from {0}your team's dashboard{1}.",
     '<a href="/about/me/receiving/#teams">'|safe,
     '</a>'|safe
 ) }}</p>

@@ -91,7 +91,7 @@ title = _username
                    maxlength="{{ constants.USERNAME_MAX_SIZE }}"
                    placeholder="{{ _('Username') }}"/>
             <div class="input-group-btn">
-                <button class="btn btn-{{ 'warning' if _username else 'success' }}">{{
+                <button class="btn btn-{{ 'warning' if _username else 'default' }}">{{
                     _("Modify" if _username else "Go")
                 }}</button>
             </div>
@@ -137,7 +137,7 @@ title = _username
     </div>
     % endif
 
-    <button class="save btn btn-success">{{ _("Save") }}</button>
+    <button class="save btn btn-default">{{ _("Save") }}</button>
 </form>
 
 <h3 class="banderole default" id="goal">{{ _("Goal") }}</h3>
@@ -180,7 +180,7 @@ title = _username
         % endif
     </div>
 
-    <button class="save btn btn-success">{{ _("Save") }}</button>
+    <button class="save btn btn-default">{{ _("Save") }}</button>
 </form>
 
         <h3 class="banderole default" id="statement">{{ _("Statement") }}</h3>
@@ -205,7 +205,7 @@ title = _username
                 <p>{{ excerpt_intro(rendered_stmt) }}</p>
                 <hr>
                 <button class="btn btn-default">{{ _("Edit") }}</button>
-                <button class="btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+                <button class="btn btn-default" name="save" value="true">{{ _("Save") }}</button>
             </form>
 
         % else
@@ -247,7 +247,7 @@ title = _username
                 </div>
 
                 <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
-                <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+                <button class="save btn btn-default" name="save" value="true">{{ _("Save") }}</button>
             </form>
 
             <br>
@@ -310,7 +310,7 @@ title = _username
                    type="email" size=30
                    placeholder="{{ participant.email or participant.get_any_email() or '' }}"
                    value="{{ participant.avatar_email or '' }}" />
-            <button class="save btn btn-success">{{ _("Save") }}</button>
+            <button class="save btn btn-default">{{ _("Save") }}</button>
         </div>
     </form>
 

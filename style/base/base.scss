@@ -10,11 +10,19 @@ body {
     & > footer {
         display: flex;
         justify-content: space-around;
-        margin: 100px auto 20px auto;
+        margin-top: 100px;
+        background: #fafafa;
+        padding: 80px;
+        font-weight: bold;
 
         @media (max-width: $screen-sm-min) {
             flex-direction: column;
             text-align: center;
+        }
+
+        & > p {
+            display: inline-block;
+            margin: 16px 0;
         }
 
         & > ul {
@@ -25,14 +33,23 @@ body {
                 display: inline-block;
                 & > a {
                     display: inline-block;
-                    padding: 10px;
+                    margin: 16px;
+                    color: rgba(37,49,55,.76);
                 }
             }
         }
     }
+
     & > .top {
         order: -1;
     }
+}
+
+.footer-logo {
+    display: block;
+    margin: 0 auto;
+    height: 50px;
+    width: auto;
 }
 
 @mixin transition {
@@ -63,11 +80,36 @@ body {
             border: none;
         }
         &.jumbotron {
-            background: transparent;
+            /*background: url("https://images.unsplash.com/photo-1505015160083-00f1e35b6ab8?dpr=1&auto=format&fit=crop&w=1000&q=80&cs=tinysrgb");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;*/
+            background: #fff;
             border-radius: 0;
             margin: 0;
-            padding-top: 70px;
-            text-align: center;
+            padding: 70px;
+            text-transform: uppercase;
+            & > h2 {
+                color: #444;
+                text-align: left;
+                font-weight: bold;
+            }
+            & > p {
+                color: #ccc;
+                text-align: left;
+            }
+            & img {
+                height: 80px;
+                margin-bottom: 15px;
+                width: auto;
+            }
+            & .buttons {
+                text-transform: none;
+                text-align: left;
+            }
+            @media (max-width: $screen-sm-min) {
+                padding: 0;
+            }
         }
     }
     h2 {
@@ -79,6 +121,10 @@ body {
         .btn {
             margin: 0 0.66em 0.66em 0;
         }
+    }
+    .section:last-child .buttons {
+        text-align: center;
+        margin: 0 auto;
     }
 }
 
@@ -101,12 +147,8 @@ body {
     text-align: center;
 }
 
-.btn {
-    @include transition;
-}
-
 .btn-donate {
-    $base-color: #ffee16;
+    $base-color: #F6C915;
     background-color: $base-color;
     color: #1a171b;
     &:hover {
@@ -133,6 +175,11 @@ input.amount {
 
 .input-group-addon, .input-group-btn {
     width: auto !important;
+    border-radius: 0;
+}
+
+.input-group-btn .btn:hover {
+    box-shadow: none;
 }
 
 .input-group select.form-control {
@@ -183,6 +230,10 @@ img.account-type {
     height: 32px;
 }
 
+.panel {
+    border-radius: 0;
+}
+
 .panel-body {
     .avatar-col {
         float: left;
@@ -200,7 +251,7 @@ img.account-type {
     text-align: center;
     .avatar-cutter-120 {
         border: 4px solid $gray-lighter;
-        border-radius: 20%;
+        border-radius: 50%;
         box-sizing: content-box;
         display: inline-block;
     }
@@ -347,7 +398,7 @@ input.search {
     width: 104px;
     .avatar-cutter-98 {
         border: 3px solid $gray-lighter;
-        border-radius: 20%;
+        border-radius: 50%;
         box-sizing: content-box;
         display: block;
     }
@@ -431,6 +482,25 @@ ul.emails {
     margin-bottom: 0.33em;
 }
 
+a {
+    text-decoration: none;
+    border-bottom: 2px solid #eee;
+    -webkit-transition: all 0.15s ease;
+    -moz-transition: all 0.15s ease;
+    -ms-transition: all 0.15s ease;
+    -o-transition: all 0.15s ease;
+    transition: all 0.15s ease;
+}
+
+a:hover {
+    text-decoration: none;
+    border-bottom: 2px solid #23527c;
+}
+
+a:focus {
+    text-decoration: none;
+}
+
 h2, h3, h4, h5, h6 {
     &:target {
         background-color: rgba(yellow, 0.2);
@@ -485,6 +555,11 @@ section.invoice-details {
             padding: 0.3em 0.4em;
         }
     }
+}
+
+pre {
+    border-radius: 0;
+    background: #f6f8fa;
 }
 
 .notification {
@@ -759,6 +834,11 @@ table.team {
     }
 }
 
+.form-control {
+    height: 38px;
+    border-radius: 0;
+}
+
 .table td > form > input.form-control {
     height: 30px;
     margin: -7px 0;
@@ -777,6 +857,27 @@ p.event {
 
 .buttons .btn {
     margin-bottom: 5px;
+}
+
+a.btn, .btn {
+    border: 2px solid rgba(0, 0, 0, 0);
+    border-radius: 0;
+    transition: all .15s ease;
+    &:hover {
+        box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+    }
+}
+
+a.btn.btn-default, .btn.btn-default {
+    border: 2px solid #eee;
+    &:hover {
+        border: 2px solid #adadad;
+        box-shadow: none;
+    }
+}
+
+a.liberapay-btn {
+    border-bottom: 0;
 }
 
 .glyphicon + span {
@@ -933,8 +1034,13 @@ span.help-title {
 .s-logo {
     display: block;
     margin: 1.5em 0;
+    border-bottom: 0;
     & > img {
         max-width: 100%;
+    }
+
+    &:hover {
+        border-bottom: 0;
     }
 }
 

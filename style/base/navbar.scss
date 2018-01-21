@@ -8,8 +8,8 @@
 }
 
 .navbar-liberapay {
-    background: #f6c915;
     border: none;
+    border-bottom: 2px solid #eee;
     color: #222;
 
     .navbar-nav li {
@@ -18,8 +18,7 @@
             border: none;
             color: inherit;
             &:hover, &:active, &:focus {
-                background: #444;
-                color: #f9f9f9;
+                background: #eee;
                 img {
                     background: #f9f9f9;
                 }
@@ -51,7 +50,7 @@
             padding: $navbar-padding-vertical $navbar-padding-horizontal;
         }
         .dropdown-menu {
-            background-color: #f6c915;
+            background-color: #fff;
             border: none;
             border-radius: 0;
             position: absolute;
@@ -93,7 +92,7 @@
 }
 
 .navbar .avatar-cutter-28 {
-    border-radius: 2px;
+    border-radius: 50%;
     display: inline-block;
     margin: -8px 2px -8px 0;
 }
