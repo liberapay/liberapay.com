@@ -222,6 +222,7 @@ title = _("Adding Money")
 
     % elif show_form
     <form id="payin" action="javascript:" method="POST"
+          data-user-slug="~{{ participant.id }}"
           data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
@@ -315,13 +316,4 @@ title = _("Adding Money")
     </a>
 </p>
 % endif
-% endblock
-
-% block scripts
-{{ super() }}
-<script>
-    $(function() {
-        Liberapay.payments.init();
-    });
-</script>
 % endblock

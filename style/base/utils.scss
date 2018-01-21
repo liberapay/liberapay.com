@@ -21,6 +21,10 @@
     }
 }
 
+.no-margin-top {
+    margin-top: 0 !important;
+}
+
 .paragraph {
     margin-bottom: ($line-height-computed / 2);
 }
@@ -41,4 +45,10 @@
 
 .wrap {
     flex-wrap: wrap;
+}
+
+@for $i from 0 through 100 {
+    .width-#{$i} {
+        width: $i * 1%;
+    }
 }

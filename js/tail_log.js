@@ -69,3 +69,7 @@ Liberapay.tail_log = function($pre) {
         }
     });
 };
+
+Liberapay.auto_tail_log = function () {
+    $('[data-log-url]').each(function () { Liberapay.tail_log($(this)); });
+}

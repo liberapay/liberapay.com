@@ -1,5 +1,15 @@
 Liberapay.charts = {};
 
+Liberapay.charts.init = function() {
+    $('[data-charts]').click(function() {
+        this.disabled = true;
+        Liberapay.charts.load($(this).data('charts'), this);
+    });
+    $('[data-charts-autoload]').each(function() {
+        Liberapay.charts.load($(this).data('charts-autoload'));
+    });
+}
+
 Liberapay.charts.load = function(url, button) {
     jQuery.get(url, function(series) {
         $(function() {
