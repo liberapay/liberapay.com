@@ -1,58 +1,43 @@
 [---]
 [---] text/css via scss
 /*!
- * Bootstrap v3.3.6 (http://getbootstrap.com)
- * Copyright 2011-2015 Twitter, Inc.
+ * Bootstrap v4.0.0 (https://getbootstrap.com)
+ * Copyright 2011-2018 The Bootstrap Authors
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-// Core variables and mixins
 @import "style/variables";
 @import "style/bootstrap/mixins";
-
-// Reset and dependencies
-@import "style/bootstrap/normalize";
-@import "style/bootstrap/print";
-@import "style/bootstrap/glyphicons";
-
-// Core CSS
-@import "style/bootstrap/scaffolding";
+@import "style/bootstrap/root";
+@import "style/bootstrap/reboot";
 @import "style/bootstrap/type";
+@import "style/bootstrap/images";
 @import "style/bootstrap/code";
 @import "style/bootstrap/grid";
 @import "style/bootstrap/tables";
 @import "style/bootstrap/forms";
 @import "style/bootstrap/buttons";
-
-// Components
-@import "style/bootstrap/component-animations";
-@import "style/bootstrap/dropdowns";
-@import "style/bootstrap/button-groups";
-@import "style/bootstrap/input-groups";
-@import "style/bootstrap/navs";
+@import "style/bootstrap/transitions";
+@import "style/bootstrap/dropdown";
+@import "style/bootstrap/button-group";
+@import "style/bootstrap/input-group";
+@import "style/bootstrap/custom-forms";
+@import "style/bootstrap/nav";
 @import "style/bootstrap/navbar";
-@import "style/bootstrap/breadcrumbs";
+@import "style/bootstrap/card";
+@import "style/bootstrap/breadcrumb";
 @import "style/bootstrap/pagination";
-@import "style/bootstrap/pager";
-@import "style/bootstrap/labels";
-@import "style/bootstrap/badges";
+@import "style/bootstrap/badge";
 @import "style/bootstrap/jumbotron";
-@import "style/bootstrap/thumbnails";
-@import "style/bootstrap/alerts";
-@import "style/bootstrap/progress-bars";
+@import "style/bootstrap/alert";
+@import "style/bootstrap/progress";
 @import "style/bootstrap/media";
 @import "style/bootstrap/list-group";
-@import "style/bootstrap/panels";
-@import "style/bootstrap/responsive-embed";
-@import "style/bootstrap/wells";
 @import "style/bootstrap/close";
-
-// Components w/ JavaScript
-@import "style/bootstrap/modals";
+@import "style/bootstrap/modal";
 @import "style/bootstrap/tooltip";
-@import "style/bootstrap/popovers";
+@import "style/bootstrap/popover";
 @import "style/bootstrap/carousel";
-
-// Utility classes
 @import "style/bootstrap/utilities";
-@import "style/bootstrap/responsive-utilities";
+@import "style/bootstrap/print";
