@@ -154,19 +154,23 @@ _i18n_merge:
 
 bootstrap-upgrade:
 	@if [ -z "$(version)" ]; then echo "You forgot the 'version=x.x.x' argument."; exit 1; fi
-	wget https://github.com/twbs/bootstrap-sass/archive/v$(version).tar.gz -O bootstrap-sass-$(version).tar.gz
-	tar -xaf bootstrap-sass-$(version).tar.gz
-	rm -rf www/assets/bootstrap/{fonts,js}/*
-	mv bootstrap-sass-$(version)/assets/javascripts/bootstrap.min.js www/assets/bootstrap/js
-	mv bootstrap-sass-$(version)/assets/fonts/bootstrap/* www/assets/bootstrap/fonts
-	rm -rf style/bootstrap
-	mv bootstrap-sass-$(version)/assets/stylesheets/bootstrap style
+	wget https://github.com/twbs/bootstrap/archive/v$(version).tar.gz -O bootstrap-$(version).tar.gz
+	tar -xaf bootstrap-$(version).tar.gz
+	rm -rf www/assets/bootstrap/js/*
+	mv bootstrap-$(version)/dist/js/bootstrap.min.js www/assets/bootstrap/js
+	rm -rf style/bootstrap/*
+	mv bootstrap-$(version)/scss/{_*,*/} style/bootstrap
+	mv style/{bootstrap/_,}functions.scss
 	mv style/{bootstrap/_,}variables.scss
-	git add style/bootstrap www/assets/bootstrap
+	git add style/functions.scss style/bootstrap www/assets/bootstrap
+	echo -e "[---]\n[---] text/css via scss" | cat - bootstrap-$(version)/scss/bootstrap.scss \
+	    | sed -e 's|^@import "|@import "style/bootstrap/|' -e 's|"style/bootstrap/functions"|style/functions|' -e 's|"style/bootstrap/variables"|style/variables|' \
+	    >www/assets/bootstrap/css/bootstrap.css.spt
+	git add -p www/assets/bootstrap/css/bootstrap.css.spt
 	git commit -m "upgrade Bootstrap to $(version)"
 	git commit -p style/variables.scss -m "merge upstream changes into variables.scss"
 	git checkout -q HEAD style/variables.scss
-	rm -rf bootstrap-sass-$(version){,.tar.gz}
+	rm -rf bootstrap-$(version){,.tar.gz}
 
 stripe-bridge:
 	PYTHONPATH=. $(with_local_env) $(env_py) cli/stripe-bridge.py
