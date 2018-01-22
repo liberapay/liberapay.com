@@ -180,7 +180,7 @@ elif step == '2':
                 SELECT platform, user_id FROM elsewhere WHERE participant = %s
             """, (p.id,)))
             for e in data.pop('elsewhere'):
-                if e['platform'] not in website.platforms.__dict__:
+                if e['platform'] not in website.platforms:
                     continue
                 if e['platform'] in skip:
                     if skip[e['platform']] == e['user_id']:

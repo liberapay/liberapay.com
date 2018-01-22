@@ -1,7 +1,6 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from collections import OrderedDict
 from ipaddress import ip_network
 import json
 import logging
@@ -439,14 +438,19 @@ class PlatformRegistry(object):
     """Registry of platforms we support.
     """
     def __init__(self, platforms):
-        self.__dict__ = OrderedDict((p.name, p) for p in platforms)
+        self.list = platforms
+        self.dict = dict((p.name, p) for p in platforms)
+        self.__dict__.update(self.dict)
         self._hasattr_cache = {}
 
     def __contains__(self, platform):
-        return platform.name in self.__dict__
+        return platform.name in self.dict
 
     def __iter__(self):
-        return iter(self.__dict__.values())
+        return iter(self.list)
+
+    def __len__(self):
+        return len(self.list)
 
     def _cache_hasattr(self, attr):
         r = PlatformRegistry([p for p in self if getattr(p, attr, None)])
@@ -454,7 +458,7 @@ class PlatformRegistry(object):
         return r
 
     def get(self, k, default=None):
-        return self.__dict__.get(k, default)
+        return self.dict.get(k, default)
 
     def hasattr(self, attr):
         r = self._hasattr_cache.get(attr)
