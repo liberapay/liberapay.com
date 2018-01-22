@@ -1,23 +1,23 @@
 
 .banderole {
-    font-size: $font-size-large;
+    font-size: $font-size-lg;
     margin-top: 30px;
     padding: 10px 15px;
     &.default {
-        background: $panel-default-heading-bg;
+        background: $gray-100;
         color: #333;
     }
     &.info {
-        background: $state-info-bg;
-        color: $state-info-text;
+        background: theme-color-level(info, -10);
+        color: theme-color-level(info, 6);
     }
     &.primary {
-        background: $brand-primary;
+        background: $primary;
         color: #fff;
     }
     &.success {
-        background: $state-success-bg;
-        color: $state-success-text;
+        background: theme-color-level(success, -10);
+        color: theme-color-level(success, 6);
     }
 
     .btn-sm {

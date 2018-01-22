@@ -13,7 +13,7 @@ body {
         justify-content: space-around;
         margin: 100px auto 20px auto;
 
-        @media (max-width: $screen-sm-min) {
+        @include media-breakpoint-down(md) {
             flex-direction: column;
             text-align: center;
         }
@@ -31,7 +31,7 @@ body {
             }
         }
         & > ul.icons > li > a {
-            font-size: $font-size-base + 2px;
+            font-size: $font-size-base + 0.125rem;
             padding: 9px 12px;
         }
     }
@@ -52,7 +52,7 @@ body {
 #homepage {
     > .navbar-liberapay {
         background-color: transparent;
-        color: $gray-light;
+        color: $gray-600;
         .dropdown-menu {
             color: #1a171b;
         }
@@ -71,6 +71,7 @@ body {
         &.jumbotron {
             background: transparent;
             border-radius: 0;
+            font-size: $h4-font-size;
             margin: 0;
             padding-top: 70px;
             text-align: center;
@@ -94,7 +95,7 @@ body {
         text-align: center;
     }
     dt {
-        font-size: $font-size-large;
+        font-size: $font-size-lg;
         font-weight: 200;
         margin-bottom: 10px;
     }
@@ -107,7 +108,7 @@ body {
 
 .thin-title {
     color: #666;
-    font-size: $font-size-h4;
+    font-size: $h4-font-size;
 }
 
 .btn {
@@ -220,7 +221,7 @@ a.account-link[href="#not-available"] {
 .profile-header {
     align-items: center;
     clear: both;
-    color: $gray-dark;
+    color: $gray-800;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -229,33 +230,33 @@ a.account-link[href="#not-available"] {
     padding-bottom: 30px;
     text-align: center;
     .avatar-cutter-120 {
-        border: 4px solid $gray-lighter;
+        border: 4px solid $gray-200;
         border-radius: 20%;
         box-sizing: content-box;
         display: inline-block;
     }
     & > h1 {
-        font-size: $font-size-h2;
+        font-size: $h2-font-size;
         margin: 1em 0;
     }
     & > .summary {
-        color: $gray;
+        color: $gray-700;
         font-size: $font-size-md;
     }
 }
 .profile-header-bar {
-    background: $panel-default-heading-bg;
+    background: $gray-100;
     font-size: $font-size-md;
     margin-bottom: 30px;
 }
 
 p.summary {
-    color: $gray-light;
+    color: $gray-600;
 }
 
 .profile-box, .profile-box-embedded {
     h1, h4 {
-        color: $brand-primary;
+        color: $primary;
         font-size: 20px;
         margin: 0 0 10px;
     }
@@ -307,17 +308,17 @@ p.summary {
         & > dl {
             margin: 0 10px 0 0;
             & > dt {
-                color: $gray;
+                color: $gray-700;
                 font-size: 85%;
                 margin-bottom: 5px;
             }
             & > dd {
-                color: $btn-info-bg;
-                font-size: $font-size-large;
+                color: $info;
+                font-size: $font-size-lg;
                 line-height: 1em;
                 & > small {
-                    color: $gray-light;
-                    font-size: $font-size-small;
+                    color: $gray-600;
+                    font-size: $font-size-sm;
                 }
             }
         }
@@ -347,7 +348,7 @@ p.summary {
         }
     }
     .glyphicon-star {
-        color: $gray-light;
+        color: $gray-600;
         font-size: 80%;
     }
     .description {
@@ -359,7 +360,7 @@ p.summary {
     }
 }
 
-@media (max-width: $screen-xs-min - 1) {
+@include media-breakpoint-down(xs) {
     .inline-boxes > .inline-box {
         display: block;
         margin-right: 0;
@@ -375,7 +376,7 @@ p.summary {
     }
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
     .inline-box.repo {
         width: 540px;
     }
@@ -422,7 +423,7 @@ input.search {
     margin: 0 20px 25px;
     width: 104px;
     .avatar-cutter-98 {
-        border: 3px solid $gray-lighter;
+        border: 3px solid $gray-200;
         border-radius: 20%;
         box-sizing: content-box;
         display: block;
@@ -521,12 +522,12 @@ h2, h3, h4, h5, h6 {
 
 section.profile-statement, section.community-sidebar, section.invoice-details {
     h1 {
-        font-size: $font-size-h3;
-        margin: $font-size-h3 0 10px;
+        font-size: $h3-font-size;
+        margin: $h3-font-size 0 10px;
     }
     h2 {
-        font-size: $font-size-h4;
-        margin: $font-size-h4 0 10px;
+        font-size: $h4-font-size;
+        margin: $h4-font-size 0 10px;
     }
     h3 {
         font-size: $font-size-md;
@@ -541,12 +542,12 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
     }
 }
 .profile-statement {
-    font-family: $font-family-serif;
+    font-family: 'Georgia', 'Times New Roman', 'Times', serif;
     h1, h2, h3, h4 {
         color: #956410;
     }
     &.embedded {
-        border-left: 2px solid $gray-lighter;
+        border-left: 2px solid $gray-200;
         padding-left: 2ex;
     }
     &.raw {
@@ -559,7 +560,7 @@ section.community-sidebar {
     }
 }
 section.invoice-details {
-    border-left: 2px solid $gray-light;
+    border-left: 2px solid $gray-600;
     margin: 0 0 1em 1.5em;
     padding-left: 0.5em;
 
@@ -577,21 +578,21 @@ section.invoice-details {
 }
 
 .notification-error {
-    background-color: $state-danger-bg;
-    border-top: 1px solid $state-danger-border;
-    color: $state-danger-text;
+    background-color: theme-color-level(danger, -10);
+    border-top: 1px solid theme-color-level(danger, -9);
+    color: theme-color-level(danger, 6);
 }
 
 .notification-success {
-    background-color: $state-success-bg;
-    border-color: $state-success-border;
-    color: $state-success-text;
+    background-color: theme-color-level(success, -10);
+    border-color: theme-color-level(success, -9);
+    color: theme-color-level(success, 6);
 }
 
 .notification-warning {
-    background-color: $state-warning-bg;
-    border-color: $state-warning-border;
-    color: $state-warning-text;
+    background-color: theme-color-level(warning, -10);
+    border-color: theme-color-level(warning, -9);
+    color: theme-color-level(warning, 6);
 }
 
 #notification-area-bottom {
@@ -666,7 +667,7 @@ a.dropdown-toggle {
     }
 }
 
-@media (max-width: $screen-md-min - 1) {
+@include media-breakpoint-down(sm) {
     #history {
         display: block;
         .balances, .fees, .bank, .method, .id {
@@ -858,23 +859,23 @@ span.help-title {
     padding: 11px 15px 0;
 }
 .alert-danger > .alert-body {
-    border-top-color: $state-danger-border;
+    border-top-color: theme-color-level(danger, -9);
 }
 .alert-info > .alert-body {
-    border-top-color: $state-info-border;
+    border-top-color: theme-color-level(info, -9);
 }
 .alert-success > .alert-body {
-    border-top-color: $state-success-border;
+    border-top-color: theme-color-level(success, -9);
 }
 .alert-warning > .alert-body {
-    border-top-color: $state-warning-border;
+    border-top-color: theme-color-level(warning, -9);
 }
 
 .hover-danger:hover {
-    color: $state-danger-text !important;
+    color: theme-color-level(danger, 6) !important;
 }
 .hover-info:hover {
-    color: $state-info-text !important;
+    color: theme-color-level(info, 6) !important;
 }
 
 .overlaid {
@@ -910,13 +911,13 @@ span.help-title {
         }
     }
     small.text-warning, small.text-danger {
-        font-size: $font-size-medium;
+        font-size: $font-size-md;
         font-weight: bold;
-        line-height: $font-size-medium * $line-height-base;
+        line-height: $font-size-md * $line-height-base;
     }
 }
 
-@media (max-width: $screen-sm-min - 1) {
+@include media-breakpoint-down(md) {
     .col-right {
         clear: both;
         margin-left: 0 !important;
@@ -941,7 +942,7 @@ span.help-title {
 }
 
 .payment-icons {
-    font-size: $font-size-large;
+    font-size: $font-size-lg;
     text-wrap: nowrap;
     vertical-align: middle;
 }
@@ -954,7 +955,7 @@ span.help-title {
     }
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(md) {
     .s-logo {
         display: inline-block;
         margin: 0.8em 3ex;
@@ -978,19 +979,19 @@ ul.status-list {
     }
 }
 ul.list-yes > li::before, ul.status-list > li.ok-success::before {
-    color: $state-success-text;
+    color: theme-color-level(success, 6);
     content: '\e013';
 }
 ul.status-list > li.ok-info::before {
-    color: $state-info-text;
+    color: theme-color-level(info, 6);
     content: '\e013';
 }
 ul.status-list > li.not-ok-warning::before {
-    color: $state-warning-text;
+    color: theme-color-level(warning, 6);
     content: '\e013';
 }
 ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
-    color: $state-danger-text;
+    color: theme-color-level(danger, 6);
     content: '\e014';
 }
 
@@ -1002,7 +1003,7 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
     margin: 5px 10px 10px 0;
     & > .recipient {
         display: flex;
-        font-size: $font-size-large;
+        font-size: $font-size-lg;
         font-weight: 500;
         max-width: 100%;
         & > .col-1 {
@@ -1033,7 +1034,7 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
         }
     }
     small {
-        color: $gray-light;
+        color: $gray-600;
         font-size: $font-size-sm;
     }
     & > p:last-child {
@@ -1091,7 +1092,7 @@ code.gray {
     }
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
     .payment-instrument {
         align-items: center;
         display: flex;

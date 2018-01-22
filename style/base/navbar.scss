@@ -2,8 +2,8 @@
 .navbar-nav {
     margin: 0;
     & > li > a {
-        padding-bottom: $navbar-padding-vertical;
-        padding-top: $navbar-padding-vertical;
+        padding-bottom: $navbar-padding-y;
+        padding-top: $navbar-padding-y;
     }
 }
 
@@ -48,7 +48,7 @@
         }
         .navbar-btn {
             margin: 0;
-            padding: $navbar-padding-vertical $navbar-padding-horizontal;
+            padding: $navbar-padding-y $navbar-padding-x;
         }
         .dropdown-menu {
             background-color: #f6c915;
@@ -63,7 +63,7 @@
             }
             form .navbar-btn {
                 border-radius: 0;
-                padding: 3px $navbar-padding-horizontal;
+                padding: 3px $navbar-padding-x;
                 text-align: left;
                 width: 100%;
             }
@@ -107,7 +107,7 @@
     display: none;
 }
 
-@media (max-width: $grid-float-breakpoint - 1) {
+@include media-breakpoint-down(md) {
     .navbar > .container {
         position: relative;
     }

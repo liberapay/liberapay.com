@@ -1,10 +1,10 @@
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
     .columns-sm-2 {
         column-count: 2;
         column-gap: 10px;
     }
 }
-@media (min-width: $screen-md-min) {
+@include media-breakpoint-up(md) {
     .columns-md-3 {
         column-count: 3;
         column-gap: 10px;

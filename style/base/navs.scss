@@ -171,26 +171,26 @@
     max-width: 100%;
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
     .content-col {
         min-width: 480px;
         max-width: 720px;
     }
 }
-@media (min-width: $screen-md-min) {
+@include media-breakpoint-up(md) {
     .content-col {
         min-width: 720px;
         max-width: 940px;
     }
 }
-@media (min-width: $screen-lg-min) {
+@include media-breakpoint-up(lg) {
     .content-col {
         min-width: 940px;
         max-width: 1150px;
     }
 }
 
-@media (max-width: $screen-sm-min - 1) {
+@include media-breakpoint-down(sm) {
     .content-with-nav {
         display: block;  // instead of `flex`
         padding: 0 1ex;
@@ -235,7 +235,7 @@
         &.tabs-left {
             margin-top: 0;
             & > .nav-col > .nav > li.active > a {
-                background-color: $nav-link-hover-bg;
+                background-color: $gray-200;
                 color: $link-hover-color;
             }
             & > .content-col {

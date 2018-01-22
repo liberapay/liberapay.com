@@ -90,10 +90,10 @@ label:not([for]) {
     position: relative;
 }
 input.abnormal {
-    box-shadow: $state-warning-border 0 0 2px 2px;
+    box-shadow: theme-color-level(warning, -9) 0 0 2px 2px;
 }
 input.abnormal:focus {
-    box-shadow: rgba($state-warning-border, 0.6) 0 0 3px 3px;
+    box-shadow: rgba(theme-color-level(warning, -9), 0.6) 0 0 3px 3px;
 }
 input.invalid {
     box-shadow: rgb(255, 0, 0) 0 0 1.5px 1px;
@@ -106,7 +106,7 @@ input.invalid:focus {
     background: $background;
     border-radius: 5px;
     display: none;
-    font-size: $font-size-small;
+    font-size: $font-size-sm;
     margin: 8px -8px 0;
     padding: 6px 8px;
     position: absolute;
@@ -159,8 +159,8 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
             }
         }
         & > .radio-label:hover, & > input[type="radio"]:hover + .radio-label {
-            color: $list-group-link-hover-color;
-            background-color: $list-group-hover-bg;
+            color: $list-group-action-hover-color;
+            background-color: $list-group-action-active-bg;
         }
         & > input[type="radio"]:checked + .radio-label {
             background-color: $list-group-hover-bg;
@@ -168,7 +168,7 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
     }
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
     .radio-group .list-group-item > label {
         & > input[type="radio"] {
             float: none;

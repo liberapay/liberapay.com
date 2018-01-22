@@ -16,7 +16,7 @@
     font-size: $font-size-md;
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
     .card {
         display: inline-block;
         margin-right: 1em;
@@ -27,7 +27,7 @@
     }
 }
 
-@media (max-width: $screen-sm-min) {
+@include media-breakpoint-down(xs) {
     .card-xs-vanish {
         border-radius: 0;
         border-style: dashed;
