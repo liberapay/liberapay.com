@@ -296,7 +296,7 @@ p.summary {
         text-overflow: ellipsis;
     }
     .summary {
-        height: 3 * $line-height-computed;
+        height: 3 * $line-height-base-rem;
         margin: 1em 0 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -304,7 +304,7 @@ p.summary {
     .numbers {
         display: flex;
         justify-content: space-around;
-        margin: $line-height-computed 0 0;
+        margin: $line-height-base-rem 0 0;
         & > dl {
             margin: 0 10px 0 0;
             & > dt {
@@ -324,7 +324,7 @@ p.summary {
         }
     }
     & > .panel-body > .btn {
-        margin: $line-height-computed 0 0;
+        margin: $line-height-base-rem 0 0;
     }
     .btn-donate {
         color: #7f6e06;
@@ -431,7 +431,7 @@ input.search {
     .name {
         display: block;
         margin-top: 5px;
-        max-height: 2 * $line-height-computed;
+        max-height: 2 * $line-height-base-rem;
         overflow: hidden;
         text-align: center;
         text-overflow: ellipsis;
@@ -826,7 +826,7 @@ span.help-title {
     flex-wrap: wrap;
     font-size: $font-size-base;
     justify-content: space-between;
-    line-height: $line-height-computed;
+    line-height: $line-height-base-rem;
     margin: 0;
     padding: 10px 15px 10px;
     position: relative;
