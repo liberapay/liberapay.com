@@ -5,6 +5,7 @@ html {
 }
 
 body {
+    margin: 0;
     display: flex;
     flex-direction: column;
     & > footer {
@@ -60,6 +61,17 @@ body {
     min-height: 75%;
 }
 
+.container {
+    padding: 0;
+    margin: 0 auto;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 100%;
+    }
+}
+
 #homepage {
     > .navbar-liberapay {
         background-color: transparent;
@@ -73,11 +85,14 @@ body {
     }
     .section {
         $border-color: #f6c915;
-        border-bottom: 1px solid $border-color;
+        //border-bottom: 1px solid $border-color;
         border-image: linear-gradient(to left, #fff, $border-color, #fff) 1;
-        padding: 50px 0 70px;
+        padding: 50px 35px 70px 35px;
         &.no-border {
             border: none;
+        }
+        @media (max-width: $screen-sm-min) {
+            padding: 15px;
         }
         &.jumbotron {
             /*background: url("https://images.unsplash.com/photo-1505015160083-00f1e35b6ab8?dpr=1&auto=format&fit=crop&w=1000&q=80&cs=tinysrgb");
@@ -108,8 +123,20 @@ body {
                 text-align: left;
             }
             @media (max-width: $screen-sm-min) {
-                padding: 0;
+                padding: 20px;
             }
+        }
+    }
+    .sponsored-by {
+        background: #f6f6f6;
+        & > p:first-child {
+            opacity: 0.5;
+        }
+        & .s-logo {
+            opacity: 0.5;
+        }
+        & .s-logo:hover {
+            opacity: 1;
         }
     }
     h2 {
@@ -1032,6 +1059,10 @@ span.help-title {
     margin: 1.5em 0;
     border-bottom: 0;
     & > img {
+        -webkit-filter: grayscale(1);
+        -webkit-filter: grayscale(100%);
+        filter: gray;
+        filter: grayscale(100%);
         max-width: 100%;
     }
 

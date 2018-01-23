@@ -77,6 +77,15 @@ recent = query_cache.one("""
     </a></div>
     </div>
 
+    <div class="section text-center sponsored-by">
+        <p>{{ _("Sponsored by") }}</p>
+        <p>
+        <a href="https://sentry.io/" class="s-logo"><img alt="Sentry" src="{{ website.asset('sponsors/sentry.png') }}" /></a>
+        <a href="https://weblate.org/" class="s-logo"><img alt="Weblate" src="{{ website.asset('sponsors/weblate.png') }}" height=40 /></a>
+        <a href="https://bitwarden.com/" class="s-logo"><img alt="Bitwarden" src="{{ website.asset('sponsors/bitwarden.png') }}" /></a>
+        </p>
+    </div>
+
     <div class="row section">
     <div class="col-md-6">
         <h2 class="text-primary">{{ _("Donate") }}</h2>
@@ -248,17 +257,6 @@ recent = query_cache.one("""
                 </div>
             % endfor
         % endif
-    </div>
-
-    <div class="section text-center">
-        <h2>{{ _("Thanks") }}</h2>
-        <p>{{ _("Liberapay benefits from sponsored accounts on the following open source services:") }}</p>
-        <p>
-        <a href="https://sentry.io/" class="s-logo"><img alt="Sentry" src="{{ website.asset('sponsors/sentry.png') }}" /></a>
-        <a href="https://weblate.org/" class="s-logo"><img alt="Weblate" src="{{ website.asset('sponsors/weblate.png') }}" height=40 /></a>
-        </p><p>
-        <a href="https://bitwarden.com/" class="s-logo"><img alt="Bitwarden" src="{{ website.asset('sponsors/bitwarden.png') }}" /></a>
-        </p>
     </div>
 
     <div class="section text-center">
