@@ -62,7 +62,6 @@ body {
 }
 
 .container {
-    padding: 0;
     margin: 0 auto;
 }
 
@@ -80,13 +79,13 @@ body {
             color: #222;
         }
     }
+    .container {
+        padding: 0;
+    }
     #main {
         font-size: $font-size-medium;
     }
     .section {
-        $border-color: #f6c915;
-        //border-bottom: 1px solid $border-color;
-        border-image: linear-gradient(to left, #fff, $border-color, #fff) 1;
         padding: 50px 35px 70px 35px;
         max-width: 100%;
         &.no-border {
