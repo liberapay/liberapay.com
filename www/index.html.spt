@@ -88,14 +88,14 @@ recent = query_cache.one("""
 
     <div class="row section">
     <div class="col-md-6">
-        <h2 class="text-primary">{{ _("Donate") }}</h2>
+        <h2>🎉 {{ _("Donate") }}</h2>
         % include "templates/pitch-donors.html"
         % from "templates/buttons.html" import find_donees with context
         <div class="buttons">{{ find_donees() }}</div>
     </div>
 
     <div class="col-md-6">
-        <h2 class="text-success">{{ _("Receive") }}</h2>
+        <h2>💰 {{ _("Receive") }}</h2>
 
         % if user.ANON
 
@@ -135,7 +135,7 @@ recent = query_cache.one("""
     </div>
     </div>
 
-    <div class="section">
+    <div class="section grey">
         <h2 class="text-info">{{ _("How it works for donors") }}</h2>
         <dl class="row homepage-pitch">
             <div class="col-sm-4">
@@ -212,7 +212,7 @@ recent = query_cache.one("""
         </a></p>
     </div>
 
-    <div class="section text-center">
+    <div class="section text-center grey">
         <h2>{{ _("How it works internally") }}</h2>
         <p>{{ _(
             "Liberapay is run transparently by a {1}non-profit organization{0}, "
@@ -259,7 +259,7 @@ recent = query_cache.one("""
         % endif
     </div>
 
-    <div class="section text-center">
+    <div class="section text-center grey">
         <h2>{{ _("Recent Activity") }}</h2>
         % if recent.n_users > 1
         <p>{{ glyphicon('user') }} <span>{{ ngettext(

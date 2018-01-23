@@ -88,6 +88,7 @@ body {
         //border-bottom: 1px solid $border-color;
         border-image: linear-gradient(to left, #fff, $border-color, #fff) 1;
         padding: 50px 35px 70px 35px;
+        max-width: 100%;
         &.no-border {
             border: none;
         }
@@ -153,6 +154,10 @@ body {
         text-align: center;
         margin: 0 auto;
     }
+}
+
+.grey {
+    background: #f6f6f6;
 }
 
 .homepage-pitch {
