@@ -1,5 +1,7 @@
 # coding: utf8
 
+from dateutil.parser import parse as parse_date
+
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 
@@ -30,6 +32,16 @@ if request.method == 'POST':
 participants = website.db.all("""
     SELECT p
          , (SELECT c.name FROM communities c WHERE c.participant = p.id) AS c_name
+         , ( SELECT row_to_json(e)
+               FROM ( SELECT e.*, p2.username AS recorder_name
+                        FROM events e
+                   LEFT JOIN participants p2 ON p2.id = e.recorder
+                       WHERE e.participant = p.id
+                         AND e.type = 'visibility_override'
+                    ORDER BY ts DESC
+                       LIMIT 1
+                    ) e
+           ) as last_change
       FROM participants p
      WHERE p.id < %s
        AND (p.status <> 'stub' OR p.receiving > 0)
@@ -49,7 +61,7 @@ title = "Users Admin"
 
 <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-% for p, c_name in participants
+% for p, c_name, last_change in participants
 <div class="row user-admin">
     <div class="col-md-2 mini-user-admin">
         <a href="/{{ p.username }}/">
@@ -72,6 +84,13 @@ title = "Users Admin"
             <button class="btn btn-warning">{{ _("Save") }}</button>
         </form>
         <br>
+        % if last_change
+        <span class="text-muted">{{ _(
+            "Last changed {timedelta} ago by {username}.",
+            username=last_change.recorder_name,
+            timedelta=to_age(parse_date(last_change.ts))
+        ) }}</span>
+        % endif
     </div>
 </div>
 <br>
