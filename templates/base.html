@@ -22,12 +22,6 @@
         <link rel="canonical" href="{{ website.canonical_scheme + '://' + request.hostname + request.canonical_path }}" />
     % endif
     {% block head %}{% endblock %}
-    <script>
-        // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
-        if (window.location.hash == '#_=_') {
-            window.location.hash = ''; // leaves a # behind
-        }
-    </script>
 </head>
 % from "templates/icons.html" import glyphicon, icon_span
 % from 'templates/nav.html' import nav, nav_about, nav_explore with context
@@ -134,15 +128,6 @@
 <script src="{{ website.asset('jquery.min.js') }}"></script>
 <script src="{{ website.asset('bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ website.asset('base.js') }}"></script>
-
-<script>
-    $(function(){
-        % if not user.ANON
-        Liberapay.username = {{ to_javascript(user.username)|safe }};
-        % endif
-        Liberapay.init();
-    });
-</script>
 
 {% block scripts %}{% endblock %}
 

@@ -14,7 +14,8 @@ Liberapay.payments = {};
 // ===========
 
 Liberapay.payments.init = function() {
-    $('#delete').submit(Liberapay.payments.deleteRoute);
+    var $form = $('form#payin, form#payout');
+    if ($form.length === 0) return;
     $('input[type="digits"]').each(function() {
         var $input = $(this);
         var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
@@ -26,7 +27,8 @@ Liberapay.payments.init = function() {
         $($btn.data('modify')).removeClass('hidden').prop('disabled', false);
         $btn.parent().addClass('hidden');
     });
-    $('form#payin, form#payout').submit(Liberapay.payments.submit);
+    Liberapay.payments.user_slug = $form.data('user-slug');
+    $form.submit(Liberapay.payments.submit);
     $('select.country').on('change', function () {
         var newValue = $(this).val();
         $(this).data('value-was-copied', null);
@@ -39,27 +41,9 @@ Liberapay.payments.init = function() {
             return value;
         })
     });
+    Liberapay.payments.ba.init();
+    Liberapay.payments.cc.init();
 }
-
-Liberapay.payments.deleteRoute = function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    var $this = $(this);
-    var confirm_msg = $this.data('confirm');
-    if (confirm_msg && !confirm(confirm_msg)) {
-        return false;
-    }
-    jQuery.ajax(
-        { url: "/" + Liberapay.username + "/routes/delete.json"
-        , data: {network: $this.data('network'), address: $this.data('address')}
-        , type: "POST"
-        , success: function() { window.location.reload(); }
-        , error: Liberapay.error
-         }
-    );
-    return false;
-};
 
 Liberapay.payments.wrap = function(f) {
     return function() {
@@ -123,7 +107,7 @@ Liberapay.payments.id = {};
 Liberapay.payments.id.submit = function(success) {
     var data = $('#identity').serializeArray();
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/identity',
+        url: '/'+Liberapay.payments.user_slug+'/identity',
         type: 'POST',
         data: data,
         dataType: 'json',
@@ -139,7 +123,7 @@ Liberapay.payments.id.submit = function(success) {
 Liberapay.payments.ba = {};
 
 Liberapay.payments.ba.init = function() {
-    Liberapay.payments.init();
+    if ($('#bank-account').length === 0) return;
     $('fieldset.tab-pane:not(.active)').prop('disabled', true);
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $($(e.target).attr('href')).prop('disabled', false);
@@ -193,7 +177,7 @@ Liberapay.payments.ba.submit = function () {
     })
     data = data2;
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/routes/bank-account.json',
+        url: '/'+Liberapay.payments.user_slug+'/routes/bank-account.json',
         type: 'POST',
         data: data,
         dataType: 'json',
@@ -223,7 +207,11 @@ Liberapay.payments.cc.check = function() {
 }
 
 Liberapay.payments.cc.init = function() {
-    Liberapay.payments.init();
+    var $fieldset = $('#credit-card');
+    if ($fieldset.length === 0) return;
+    mangoPay.cardRegistration.baseURL = $fieldset.data('mangopay-url');
+    mangoPay.cardRegistration.clientId = $fieldset.data('mangopay-id');
+
     var form = new PaymentCards.Form(
         document.querySelector('#card_number'),
         document.querySelector('#expiration_date'),
@@ -282,7 +270,7 @@ Liberapay.payments.cc.submit = function() {
     };
 
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/routes/credit-card.json',
+        url: '/'+Liberapay.payments.user_slug+'/routes/credit-card.json',
         type: "POST",
         data: {CardType: 'CB_VISA_MASTERCARD', Currency: $('#credit-card').data('currency')},
         dataType: "json",
@@ -306,7 +294,7 @@ Liberapay.payments.cc.associate = function (response) {
      * to the participant in our DB.
      */
     jQuery.ajax({
-        url: '/'+Liberapay.username+'/routes/credit-card.json',
+        url: '/'+Liberapay.payments.user_slug+'/routes/credit-card.json',
         type: "POST",
         data: {CardId: response.CardId, keep: $('input#keep').prop('checked')},
         dataType: "json",

@@ -1,5 +1,3 @@
-Liberapay = {};
-
 Liberapay.getCookie = function(key) {
     var o = new RegExp("(?:^|; ?)" + escape(key) + "=([^;]+)").exec(document.cookie);
     return o && unescape(o[1]);
@@ -19,6 +17,11 @@ Liberapay.init = function() {
 
     Liberapay.forms.jsSubmit();
 
+    // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
+    if (window.location.hash == '#_=_') {
+        window.location.hash = ''; // leaves a # behind
+    }
+
     var success_re = /([?&])success=[^&]*/;
     if (success_re.test(location.search)) {
         history.replaceState(null, null,
@@ -29,7 +32,12 @@ Liberapay.init = function() {
     }
     $('.notification .close').click(function(){ $(this).parent().fadeOut() });
 
+    Liberapay.auto_tail_log();
+    Liberapay.charts.init();
+    Liberapay.identity_docs_init();
     Liberapay.lookup.init();
+    Liberapay.payments.init();
+    Liberapay.s3_uploader_init();
 
     $('div[href]').css('cursor', 'pointer').click(function() {
         location.href = this.getAttribute('href');
@@ -68,6 +76,9 @@ Liberapay.init = function() {
 
     $('[data-toggle="tooltip"]').tooltip();
 
+    $('.radio input:not([type="radio"])').on('click change', function() {
+        $(this).parents('label').children('input[type="radio"]').prop('checked', true);
+    });
     $('.radio-group input:not([type="radio"])').on('click change', function() {
         $(this).parents('label').children('input[type="radio"]').prop('checked', true);
     });
@@ -80,7 +91,16 @@ Liberapay.init = function() {
         var $target = $($checkbox.data('target'));
         $target.prop('disabled', !$checkbox.prop('checked'));
     });
+
+    $('[data-email]').one('mouseover click', function () {
+        $(this).attr('href', 'mailto:'+$(this).data('email'));
+    });
+    $('[data-email-reveal]').one('click', function () {
+        $(this).html($(this).data('email-reveal'));
+    });
 };
+
+$(function(){ Liberapay.init(); });
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
     var msg = null;

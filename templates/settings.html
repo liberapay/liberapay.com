@@ -7,7 +7,9 @@
         ('/wallet/', _('Wallet')),
         ('/settings/', _('Settings')),
         ('/identity', _('Identity')),
-    ] if participant.is_person else []) + [
+    ] if participant.is_person else [
+        ('/receiving/', _('Receiving')),
+    ]) + [
         ('/emails/', _('Emails')),
         ('/widgets/', _('Widgets')),
     ] + ([

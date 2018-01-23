@@ -123,6 +123,7 @@ title = _("Adding Money")
 
 % block thin_content
 <form id="payin" action="javascript:" method="POST"
+      data-user-slug="~{{ participant.id }}"
       data-msg-loading="{{ _('Request in progress, please wait…') }}">
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
@@ -250,6 +251,8 @@ title = _("Adding Money")
     % endif
 
     <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
+          data-mangopay-url="{{ website.app_conf.mangopay_base_url }}"
+          data-mangopay-id="{{ website.app_conf.mangopay_client_id }}"
           data-currency="{{ currency }}"
           data-msg-confirm-submit='{{ _(
               "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
@@ -321,15 +324,4 @@ title = _("Adding Money")
     </a>
 </p>
 % endif
-% endblock
-
-% block scripts
-{{ super() }}
-<script>
-    mangoPay.cardRegistration.baseURL = {{ to_javascript(website.app_conf.mangopay_base_url)|safe }};
-    mangoPay.cardRegistration.clientId = {{ to_javascript(website.app_conf.mangopay_client_id)|safe }};
-    $(function() {
-        Liberapay.payments.cc.init();
-    });
-</script>
 % endblock

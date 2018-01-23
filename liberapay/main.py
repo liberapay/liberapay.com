@@ -124,6 +124,7 @@ algorithm.functions = [
     create_response_object,
 
     canonize,
+    set_default_security_headers,
     i18n.set_up_i18n,
     insert_constants,
     authentication.start_user_as_anon,
@@ -151,7 +152,6 @@ algorithm.functions = [
     authentication.add_auth_to_response,
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,
-    set_default_security_headers,
 
     algorithm['delegate_error_to_simplate'],
     tell_sentry,

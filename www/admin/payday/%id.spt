@@ -163,7 +163,7 @@ if request.method == 'POST':
 % block content
     % if payday_id
         <noscript class="alert alert-danger">JavaScript is required</noscript>
-        <pre class="console" id="payday-log"
+        <pre class="console"
              data-log-url="{{ request.path.raw+'.txt' }}"
              data-rerun="#payday-rerun"
              data-msg-success="Payday has been successfully run \o/"></pre>
@@ -203,13 +203,6 @@ if request.method == 'POST':
                 <a href="/admin/payday/{{ i }}">Payday #{{ i }}</a><br>
             % endfor
         % endif
-    % endif
-% endblock
-
-% block scripts
-    {{ super() }}
-    % if payday_id
-        <script>$(function(){ Liberapay.tail_log($('#payday-log')) })</script>
     % endif
 % endblock
 

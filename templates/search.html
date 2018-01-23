@@ -2,8 +2,7 @@
     <form action="/search" class="search" method="get">
         <div class="form-group">
             <div class="input-group">
-                <input type="text" name="q" class="form-control"
-                       style="width: 250px;"
+                <input type="text" name="q" class="form-control search"
                        placeholder="{{ _('Search Liberapay') }}"
                        value="{{ query or '' }}"
                        {{ 'autofocus' if autofocus else '' }}

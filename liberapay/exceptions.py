@@ -59,8 +59,7 @@ class LazyResponseXXX(LazyResponse):
         self.lazy_body = self.msg
         self.args = args
 
-    # https://github.com/liberapay/liberapay.com/issues/365
-    # __str__ = Exception.__str__
+    __str__ = Exception.__str__
 
 
 class LazyResponse400(LazyResponseXXX):
