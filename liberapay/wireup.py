@@ -77,11 +77,13 @@ class CSP(bytes):
 
     def __new__(cls, x):
         if isinstance(x, dict):
-            self = bytes.__new__(cls, b';'.join(b' '.join(t) for t in x.items()) + b';')
+            self = bytes.__new__(cls, b';'.join(b' '.join(t).rstrip() for t in x.items()) + b';')
             self.directives = dict(x)
         else:
             self = bytes.__new__(cls, x)
-            self.directives = dict(d.split(b' ', 1) for d in self.split(b';') if d)
+            self.directives = dict(
+                (d.split(b' ', 1) + [b''])[:2] for d in self.split(b';') if d
+            )
         return self
 
     def allow(self, directive, value):

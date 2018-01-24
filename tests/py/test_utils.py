@@ -10,6 +10,7 @@ from pando.http.response import Response
 from liberapay import utils
 from liberapay.testing import Harness
 from liberapay.utils import i18n, markdown, b64encode_s, b64decode_s
+from liberapay.wireup import CSP
 
 
 class Tests(Harness):
@@ -198,3 +199,12 @@ class Tests(Harness):
 
     def test_b64decode_s_returns_default_if_passed_on_error(self):
         assert b64decode_s('abcd', default='error') == 'error'
+
+    # CSP
+    # ===
+
+    def test_csp_handles_valueless_directives_correctly(self):
+        csp = b"default-src 'self';upgrade-insecure-requests;"
+        csp2 = CSP(csp)
+        assert csp == csp2
+        assert csp2.directives[b'upgrade-insecure-requests'] == b''
