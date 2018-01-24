@@ -98,6 +98,13 @@ class TestUsername(Harness):
         assert r.code == 400
         assert "The username &#39;%s&#39; is too long." % username in r.text, r.text
 
+    def test_forbidden_suffix(self):
+        username = "keybase.txt"
+        r = self.change_username(username)
+        assert r.code == 400
+        expected = "The username &#39;%s&#39; ends with the forbidden suffix &#39;.txt&#39;." % username
+        assert expected in r.text, r.text
+
     def test_change_team_name(self):
         team = self.make_participant(None, kind='group')
         team.change_username('team')
