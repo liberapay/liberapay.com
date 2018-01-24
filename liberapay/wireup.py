@@ -67,6 +67,20 @@ def canonical(env):
     return locals()
 
 
+def csp(canonical_host, canonical_scheme, env):
+    csp = (
+        b"default-src 'self' %(main_domain)s;"
+        b"connect-src 'self' *.liberapay.org *.mangopay.com *.payline.com;"
+        b"form-action 'self';"
+        b"img-src * blob: data:;"
+        b"object-src 'none';"
+    ) % {b'main_domain': canonical_host.encode('ascii')}
+    csp += env.csp_extra.encode()
+    if canonical_scheme == 'https':
+        csp += b"upgrade-insecure-requests;"
+    return {'csp': csp}
+
+
 class NoDB(object):
 
     def __getattr__(self, attr):
@@ -709,6 +723,7 @@ full_algorithm = Algorithm(
     make_sentry_teller,
     database,
     canonical,
+    csp,
     app_conf,
     mail,
     billing,
