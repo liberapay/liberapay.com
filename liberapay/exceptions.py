@@ -92,6 +92,10 @@ class UsernameBeginsWithRestrictedCharacter(ProblemChangingUsername):
     def msg(self, _):
         return _("The username '{0}' begins with a restricted character.", *self.args)
 
+class UsernameEndsWithForbiddenSuffix(ProblemChangingUsername):
+    def msg(self, _):
+        return _("The username '{0}' ends with the forbidden suffix '{1}'.", *self.args)
+
 class TooManyUsernameChanges(ProblemChangingUsername):
     code = 429
     def msg(self, _):
