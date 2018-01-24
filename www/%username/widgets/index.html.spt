@@ -9,7 +9,7 @@ profile_url = participant.url()
 
 # The widgets use inline styles, tell the browser to accept them
 csp = response.headers[b'Content-Security-Policy']
-csp = csp.replace(b'style-src ', b"style-src 'unsafe-inline' ")
+csp = csp.allow(b'style-src', b"'unsafe-inline'")
 response.headers[b'Content-Security-Policy'] = csp
 
 [---]
