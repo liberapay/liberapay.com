@@ -30,7 +30,8 @@ from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching
 from liberapay.utils.currencies import MoneyBasket, fetch_currency_exchange_rates
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, canonize, insert_constants,
-    _dispatch_path_to_filesystem, merge_exception_into_response, return_500_for_exception,
+    _dispatch_path_to_filesystem, merge_exception_into_response,
+    bypass_csp_for_form_redirects, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
@@ -149,6 +150,7 @@ algorithm.functions = [
     turn_socket_error_into_50X,
     algorithm['get_response_for_exception'],
 
+    bypass_csp_for_form_redirects,
     authentication.add_auth_to_response,
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,

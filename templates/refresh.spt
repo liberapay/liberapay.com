@@ -1,0 +1,13 @@
+[---]
+response.code = 200
+target = response.headers.pop(b'Location')
+[---] text/html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="0;url={{ target }}">
+</head>
+<body>
+    <a href="{{ target }}">Redirecting...</a>
+</body>
+</html>
