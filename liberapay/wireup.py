@@ -99,7 +99,6 @@ def csp(canonical_host, canonical_scheme, env):
     csp = (
         b"default-src 'self' %(main_domain)s;"
         b"connect-src 'self' *.liberapay.org *.mangopay.com *.payline.com;"
-        b"form-action 'self';"
         b"img-src * blob: data:;"
         b"object-src 'none';"
     ) % {b'main_domain': canonical_host.encode('ascii')}
