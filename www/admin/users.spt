@@ -1,9 +1,9 @@
 # coding: utf8
 
+from dateutil.parser import parse as parse_date
+
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
-
-REFERENCING_ATTRS = ('profile_noindex', 'hide_from_lists', 'hide_from_search')
 
 [---]
 
@@ -14,19 +14,34 @@ if not user.is_admin:
     raise response.error(403)
 
 if request.method == 'POST':
+    event_data = {}
     p = Participant.from_id(request.body['p_id'])
     updated = 0
-    for attr in REFERENCING_ATTRS:
+    for attr in constants.PROFILE_VISIBILITY_ATTRS:
         value = request.body.get(attr)
         if value is None:
             continue
-        p.update_bit(attr, 2, value == 'on')
-        updated += 1
+        r = p.update_bit(attr, 2, value == 'on')
+        if r:
+            updated += 1
+            event_data[attr] = value == 'on'
+    if event_data:
+        p.add_event(website.db, 'visibility_override', event_data, user.id)
     raise response.json({'msg': "Done, %i bits have been updated." % updated})
 
 participants = website.db.all("""
     SELECT p
          , (SELECT c.name FROM communities c WHERE c.participant = p.id) AS c_name
+         , ( SELECT row_to_json(e)
+               FROM ( SELECT e.*, p2.username AS recorder_name
+                        FROM events e
+                   LEFT JOIN participants p2 ON p2.id = e.recorder
+                       WHERE e.participant = p.id
+                         AND e.type = 'visibility_override'
+                    ORDER BY ts DESC
+                       LIMIT 1
+                    ) e
+           ) as last_change
       FROM participants p
      WHERE p.id < %s
        AND (p.status <> 'stub' OR p.receiving > 0)
@@ -46,7 +61,7 @@ title = "Users Admin"
 
 <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-% for p, c_name in participants
+% for p, c_name, last_change in participants
 <div class="row user-admin">
     <div class="col-md-2 mini-user-admin">
         <a href="/{{ p.username }}/">
@@ -58,7 +73,7 @@ title = "Users Admin"
     <div class="col-md-10">
         <form action="javascript:" method="POST" class="js-submit">
             <input type="hidden" name="p_id" value="{{ p.id }}">
-            % for attr in REFERENCING_ATTRS
+            % for attr in constants.PROFILE_VISIBILITY_ATTRS
                 % set value = getattr(p, attr)
                 <label>
                     <input type="checkbox" name="{{ attr }}" {{ 'checked' if value.__and__(2) }} />
@@ -69,6 +84,13 @@ title = "Users Admin"
             <button class="btn btn-warning">{{ _("Save") }}</button>
         </form>
         <br>
+        % if last_change
+        <span class="text-muted">{{ _(
+            "Last changed {timedelta} ago by {username}.",
+            username=last_change.recorder_name,
+            timedelta=to_age(parse_date(last_change.ts))
+        ) }}</span>
+        % endif
     </div>
 </div>
 <br>
