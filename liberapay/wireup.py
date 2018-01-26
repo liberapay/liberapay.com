@@ -617,7 +617,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     lang_list = sorted(
         (
             (l.completion, l.language, l.language_name.title(), loc_url % l.language)
-            for l in set(locales.values()) if l.completion
+            for l in set(locales.values()) if l.completion > 0.5
         ),
         key=lambda t: (-t[0], t[1]),
     )
