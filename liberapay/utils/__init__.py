@@ -14,6 +14,7 @@ from operator import getitem
 import os
 import pickle
 import re
+import socket
 
 from six import PY3
 from six.moves.urllib.parse import quote as urlquote
@@ -495,3 +496,10 @@ def render(context, allow_partial_i18n=True):
         # Fall back to English
         add_helpers_to_context(context, LOCALE_EN)
         return resource.renderers[output.media_type](context)
+
+
+def resolve(domain, port):
+    try:
+        return socket.getaddrinfo(domain, port)
+    except socket.gaierror:
+        return
