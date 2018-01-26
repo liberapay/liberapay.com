@@ -173,6 +173,21 @@ def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None)
     return {'response': response, 'exception': None}
 
 
+def bypass_csp_for_form_redirects(response, state, request=None):
+    if not request:
+        return
+    # https://github.com/liberapay/liberapay.com/issues/952
+    if request.method == 'POST' and response.code == 302:
+        target = response.headers[b'Location']
+        if target[:1] in (b'/', b'.'):
+            # Not an external redirect
+            return
+        try:
+            response.render('templates/refresh.spt', state)
+        except Response:
+            pass
+
+
 def return_500_for_exception(website, exception, response=None):
     response = response or Response()
     response.code = 500
