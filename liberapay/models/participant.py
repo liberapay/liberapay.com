@@ -25,7 +25,8 @@ from liberapay.constants import (
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
-    SESSION, SESSION_REFRESH, SESSION_TIMEOUT, USERNAME_MAX_SIZE, ZERO
+    SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
+    USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST, ZERO,
 )
 from liberapay.exceptions import (
     BadAmount,
@@ -48,6 +49,7 @@ from liberapay.exceptions import (
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
     UsernameContainsInvalidCharacters,
+    UsernameEndsWithForbiddenSuffix,
     UsernameIsEmpty,
     UsernameIsRestricted,
     UsernameTooLong,
@@ -1457,6 +1459,10 @@ class Participant(Model, MixinTeam):
 
         if suggested[0] == '.':
             raise UsernameBeginsWithRestrictedCharacter(suggested)
+
+        suffix = suggested[suggested.rfind('.'):]
+        if suffix in USERNAME_SUFFIX_BLACKLIST:
+            raise UsernameEndsWithForbiddenSuffix(suggested, suffix)
 
         lowercased = suggested.lower()
 
