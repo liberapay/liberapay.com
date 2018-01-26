@@ -85,7 +85,8 @@ Liberapay.forms.success = function($form, $inputs, button) { return function(dat
         return $e.fadeOut(null, $e.remove);
     }
     var msg = data && data.msg || $form.data('success');
-    if (msg) {
+    var on_success = $form.data('on-success');
+    if (msg && on_success != 'reload') {
         Liberapay.notification(msg, 'success');
     } else {
         window.location.href = window.location.href;

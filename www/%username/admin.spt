@@ -23,6 +23,21 @@ events = website.db.all("""
 % extends "templates/settings.html"
 % block content
 
+<h3>Profile visibility</h3>
+
+<form action="javascript:/admin/users" method="POST" class="js-submit" data-on-success="reload">
+    <input type="hidden" name="p_id" value="{{ participant.id }}">
+    % for attr in constants.PROFILE_VISIBILITY_ATTRS
+        % set value = getattr(participant, attr)
+        <label>
+            <input type="checkbox" name="{{ attr }}" {{ 'checked' if value.__and__(2) }} />
+            {{ attr }} (user value: {{ bool(value.__and__(1)) }})
+        </label>
+        <br>
+    % endfor
+    <button class="btn btn-warning">{{ _("Save") }}</button>
+</form>
+
 <h3>Events</h3>
 
 <table class="table monospace">
