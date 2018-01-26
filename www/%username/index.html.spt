@@ -51,7 +51,11 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             <ul class="dropdown-menu" role="menu">
             % for l in langs
                 <li class="{{ 'active' if l == lang else '' }}">
-                    <a href="?lang={{ l }}#statement">{{ locale.languages_2[l] }}</a>
+                    % if l in website.subdomains
+                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}">{{ locale.languages_2[l] }}</a>
+                    % else
+                    <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate">{{ locale.languages_2[l] }}</a>
+                    % endif
                 </li>
             % endfor
             </ul>
