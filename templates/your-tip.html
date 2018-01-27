@@ -126,7 +126,7 @@
                    class="hidden-xs" {{ 'checked' if tip.amount and not hide_amount }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
-                {{ tip_input(tip, disabled, small=small, hide_amount=hide_amount) }}
+                {{ tip_input(tip, new_currency, disabled, small=small, hide_amount=hide_amount) }}
             </div>
         </label>
         </li>
