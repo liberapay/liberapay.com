@@ -13,12 +13,14 @@
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ website.asset('fontawesome/4.5.0/css/font-awesome.min.css') }}" type="text/css">
+    % block head_alternates
     % if request.method in ('GET', 'HEAD') and response.code == 200
         <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri }}" />
         % for l_completion, l_code, l_name, l_url in website.lang_list
             <link rel="alternate" hreflang="{{ l_code }}" href="{{ l_url }}{{ request.line.uri }}" />
         % endfor
     % endif
+    % endblock
     % if request.canonical_path
         <link rel="canonical" href="{{ website.canonical_scheme + '://' + request.hostname + request.canonical_path }}" />
     % endif
@@ -53,7 +55,9 @@
                         {{ glyphicon('menu-hamburger') }}
                     </a>
                 </li>
+                % block navbar_alternates
                 % include "templates/navbar-common.html"
+                % endblock
             % if not user.ANON
                 % include "templates/navbar-logged-in.html"
             % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
