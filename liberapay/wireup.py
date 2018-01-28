@@ -41,7 +41,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
-from liberapay.utils import find_files, markdown, mkdir_p
+from liberapay.utils import find_files, markdown, mkdir_p, resolve
 from liberapay.utils.currencies import MoneyBasket, get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
@@ -611,10 +611,13 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             continue
         l.completion = percent([m.string for m in l.catalog if m.id and not m.fuzzy], len(l.catalog))
     loc_url = canonical_scheme+'://%s.'+canonical_host
+    domain, port = (canonical_host.split(':') + [None])[:2]
+    port = int(port) if port else socket.getservbyname(canonical_scheme, 'tcp')
+    subdomains = {k: loc_url % k for k in locales if resolve(k + '.' + domain, port)}
     lang_list = sorted(
         (
             (l.completion, l.language, l.language_name.title(), loc_url % l.language)
-            for l in set(locales.values()) if l.completion
+            for l in set(locales.values()) if l.completion > 0.5
         ),
         key=lambda t: (-t[0], t[1]),
     )
@@ -645,7 +648,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 md = heading_re.sub(r'##\1', md)
             docs.setdefault(doc, {}).__setitem__(lang, markdown.render(md))
 
-    return {'docs': docs, 'lang_list': lang_list, 'locales': locales}
+    return {'docs': docs, 'lang_list': lang_list, 'locales': locales, 'subdomains': subdomains}
 
 
 def asset_url_generator(env, asset_url, tell_sentry, www_root):
