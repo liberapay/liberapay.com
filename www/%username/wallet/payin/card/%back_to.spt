@@ -51,16 +51,6 @@ else:
     route = routes[0] if routes else None
     del routes
 
-card = Card.get(route.address) if route else None
-if card:
-    inactive = card.Validity != 'UNKNOWN' and card.Active is False
-    invalid = card.Validity == 'INVALID'
-    used_one_off = card.Validity == 'VALID' and route.one_off
-    month, year = int(card.ExpirationDate[:2]), int(card.ExpirationDate[2:]) + 2000
-    if inactive or invalid or used_one_off or is_card_expired(year, month):
-        route.invalidate(card)
-        card = None
-
 funded = float('inf')
 balance = participant.get_balance_in(currency)
 donations = participant.get_giving_in(currency)
@@ -121,6 +111,16 @@ if exchange and exchange.status == 'failed' and exchange.note[:7] in ('001599:',
 back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
+
+card = Card.get(route.address) if route else None
+if card:
+    inactive = card.Validity != 'UNKNOWN' and card.Active is False
+    invalid = card.Validity == 'INVALID'
+    used_one_off = card.Validity == 'VALID' and route.one_off
+    month, year = int(card.ExpirationDate[:2]), int(card.ExpirationDate[2:]) + 2000
+    if inactive or invalid or used_one_off or is_card_expired(year, month):
+        route.invalidate(card)
+        card = None
 
 if user == participant:
     participant.mark_notifications_as_read('low_balance')
