@@ -32,7 +32,7 @@ if request.method == 'GET' and 'transactionId' in request.qs:
     response.redirect(request.path.raw+'?exchange_id=%s' % payin.Tag)
 
 exchange = None
-if 'exchange_id' in request.qs:
+if 'exchange_id' in request.qs and request.method != 'POST':
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs['exchange_id'], participant.id))
 
@@ -44,19 +44,12 @@ if request.method == 'POST':
 if currency not in PAYIN_CARD_MIN:
     raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
 
-routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
-route = routes[0] if routes else None
-del routes
-
-card = Card.get(route.address) if route else None
-if card:
-    inactive = card.Validity != 'UNKNOWN' and card.Active is False
-    invalid = card.Validity == 'INVALID'
-    used_one_off = card.Validity == 'VALID' and route.one_off
-    month, year = int(card.ExpirationDate[:2]), int(card.ExpirationDate[2:]) + 2000
-    if inactive or invalid or used_one_off or is_card_expired(year, month):
-        route.invalidate(card)
-        card = None
+if exchange:
+    route = ExchangeRoute.from_id(exchange.route)
+else:
+    routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
+    route = routes[0] if routes else None
+    del routes
 
 funded = float('inf')
 balance = participant.get_balance_in(currency)
@@ -107,9 +100,27 @@ if request.method == 'POST':
         response.redirect(e.url)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
+reinput_card = False
+if exchange and exchange.status == 'failed' and exchange.note[:7] in ('001599:', '009499:'):
+    is_old_route = not route.one_off and website.db.one("""
+        SELECT count(*) > 1 AS r FROM exchanges WHERE participant = %s AND route = %s
+    """, (participant.id, route.id))
+    if is_old_route:
+        reinput_card = True
+
 back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
+
+card = Card.get(route.address) if route else None
+if card:
+    inactive = card.Validity != 'UNKNOWN' and card.Active is False
+    invalid = card.Validity == 'INVALID'
+    used_one_off = card.Validity == 'VALID' and route.one_off
+    month, year = int(card.ExpirationDate[:2]), int(card.ExpirationDate[2:]) + 2000
+    if inactive or invalid or used_one_off or is_card_expired(year, month):
+        route.invalidate(card)
+        card = None
 
 if user == participant:
     participant.mark_notifications_as_read('low_balance')
@@ -128,7 +139,12 @@ title = _("Adding Money")
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-    % if exchange
+    % if reinput_card
+        <div class="alert alert-{{ 'success' if success else 'danger' }}">{{ _(
+            "The saved card data was not sufficient to complete the payment, "
+            "please input your full card details to retry."
+        ) }}</div>
+    % elif exchange
         <div class="alert alert-{{ 'success' if success else 'danger' }}">{{
             _("{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees.",
               exchange.amount + exchange.fee, exchange.amount, exchange.fee) if success else
@@ -168,17 +184,23 @@ title = _("Adding Money")
     % endif
 
     % if show_form
+
+    % if not reinput_card
     <p>{{ _(
         "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}.",
         *constants.FEE_PAYIN_CARD[currency].with_vat
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
+    % endif
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="route_id" value="{{ route.id if route else '' }}" />
         <input type="hidden" name="currency" value="{{ currency }}" />
+        % if reinput_card
+        <input type="hidden" name="amount" value="{{ exchange.amount.amount }}" />
+        % else
         <p>{{ _("Please select a precomputed amount or input a custom one.") }}</p>
         <p>{{ _(
             "Card payments are instantenous, and we will attempt to pull the full "
@@ -228,6 +250,7 @@ title = _("Adding Money")
             </label>
             </li>
         </ul>
+        % endif
     </fieldset>
 
 
@@ -241,6 +264,8 @@ title = _("Adding Money")
     % endif
 
 
+    % if not reinput_card
+
     <h3>{{ _("Card") }}</h3>
 
     % if card
@@ -250,7 +275,9 @@ title = _("Adding Money")
     </div>
     % endif
 
-    <fieldset id="credit-card" class="{{ 'hidden' if card else '' }}"
+    % endif
+
+    <fieldset id="credit-card" class="{{ 'hidden' if card and not reinput_card else '' }}"
           data-mangopay-url="{{ website.app_conf.mangopay_base_url }}"
           data-mangopay-id="{{ website.app_conf.mangopay_client_id }}"
           data-currency="{{ currency }}"
