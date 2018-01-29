@@ -1,6 +1,6 @@
 [---]
 response.code = 200
-target = response.headers.pop(b'Location')
+target = response.headers.pop(b'Location').decode()
 [---] text/html
 <!DOCTYPE html>
 <html>
