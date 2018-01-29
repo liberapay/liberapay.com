@@ -174,7 +174,7 @@ def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None)
 
 
 def bypass_csp_for_form_redirects(response, state, request=None):
-    if not request:
+    if request is None:
         return
     # https://github.com/liberapay/liberapay.com/issues/952
     if request.method == 'POST' and response.code == 302:
