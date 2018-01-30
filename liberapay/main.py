@@ -12,6 +12,7 @@ from six.moves.urllib.parse import quote as urlquote
 
 import aspen
 import aspen.http.mapping
+from aspen.request_processor.dispatcher import DispatchResult, DispatchStatus
 from mangopay.utils import Money
 import pando
 from pando import json
@@ -260,6 +261,10 @@ if hasattr(pando.Response, 'render'):
     raise Warning('pando.Response.render() already exists')
 def _render(response, path, state, **extra):
     state.update(extra)
+    if 'dispatch_result' not in state:
+        state['dispatch_result'] = DispatchResult(
+            DispatchStatus.okay, path, {}, "Response.render()", {}, False
+        )
     request_processor = state['request_processor']
     output = aspen.resources.get(request_processor, path).render(state)
     fill_response_with_output(output, response, request_processor)

@@ -254,10 +254,9 @@ class TestDirectDebit(MangopayHarness):
         r = self.client.GET(path, auth_as=self.homer)
         assert b'FRxxxxxxxxxxxxxxxxxxxxx2606' in r.body, r.text
 
-        r = self.client.PxST(path, data, auth_as=self.homer)
-        assert r.code == 302, r.text
-        redir = r.headers[b'Location']
-        assert redir.startswith(b'https://api.sandbox.mangopay.com/')
+        r = self.client.POST(path, data, auth_as=self.homer, raise_immediately=False)
+        assert r.code == 200, r.text
+        assert ';url=https://api.sandbox.mangopay.com/' in r.text
 
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre-mandate'
