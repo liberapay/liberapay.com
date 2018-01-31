@@ -21,12 +21,20 @@
     }
 }
 
+.monospace {
+    font-family: $font-family-monospace;
+}
+
 .no-margin-top {
     margin-top: 0 !important;
 }
 
 .paragraph {
     margin-bottom: ($line-height-computed / 2);
+}
+
+.pre-wrap {
+    white-space: pre-wrap;
 }
 
 .flex-row {

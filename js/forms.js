@@ -26,7 +26,7 @@ Liberapay.forms.jsSubmit = function() {
         if (form.reportValidity && form.reportValidity() == false) return;
         var $form = $(form);
         var target = $form.attr('action');
-        var js_only = target == 'javascript:';
+        var js_only = target.substr(0, 11) == 'javascript:';
         var data = $form.serializeArray();
         if (js_only) {
             // workaround for http://stackoverflow.com/q/11424037/2729778
@@ -44,7 +44,7 @@ Liberapay.forms.jsSubmit = function() {
         var $inputs = $form.find(':not(:disabled)');
         $inputs.prop('disabled', true);
         jQuery.ajax({
-            url: js_only ? '' : target,
+            url: js_only ? target.substr(11) : target,
             type: 'POST',
             data: data,
             dataType: 'json',
@@ -85,7 +85,8 @@ Liberapay.forms.success = function($form, $inputs, button) { return function(dat
         return $e.fadeOut(null, $e.remove);
     }
     var msg = data && data.msg || $form.data('success');
-    if (msg) {
+    var on_success = $form.data('on-success');
+    if (msg && on_success != 'reload') {
         Liberapay.notification(msg, 'success');
     } else {
         window.location.href = window.location.href;

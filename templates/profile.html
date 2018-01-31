@@ -8,7 +8,6 @@
 
 % block before_container
 <div class="container">
-{% block profile_btn %}{% endblock %}
 <div class="row">
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 % if participant.accepts_tips
@@ -17,10 +16,40 @@
         <h1>{{ participant.username }}</h1>
         <p class="summary">{{ summary or '' }}</p>
     </div>
-</div>
-</div>
-</div>
+% else
+    <div class="panel panel-default profile-box">
+        <div class="panel-body">
+            <div class="avatar-col">
+                {{ avatar_img(participant, size=120) }}
 
+                % if participant.join_time
+                <p class="join-time">{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
+                % endif
+                % if participant.status == 'closed'
+                <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
+                % endif
+            </div>
+
+            <div class="col-right">
+                % set username = participant.username
+                % if participant.hide_giving
+                    <p>{{ _("{0} doesn't publish how much they give.", username) }}</p>
+                % else
+                    <p>{{ _("{0} gives {1} per week.", username, participant.giving) }}</p>
+                % endif
+
+                <p>{{ _("This user doesn't accept donations.") }}</p>
+            </div>
+        </div>
+    </div>
+% endif
+</div>
+<div class="col-md-1 col-lg-2">
+{% block profile_btn %}{% endblock %}
+</div>
+</div>
+</div>
+% if participant.accepts_tips
     <div class="profile-header-bar">
         <div class="container">
         <div class="row">
@@ -70,35 +99,6 @@
         </div>
         </div>
     </div>
-% else
-    <div class="panel panel-default profile-box">
-        <div class="panel-body">
-            <div class="avatar-col">
-                {{ avatar_img(participant, size=120) }}
-
-                % if participant.join_time
-                <p class="join-time">{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
-                % endif
-                % if participant.status == 'closed'
-                <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
-                % endif
-            </div>
-
-            <div class="col-right">
-                % set username = participant.username
-                % if participant.hide_giving
-                    <p>{{ _("{0} doesn't publish how much they give.", username) }}</p>
-                % else
-                    <p>{{ _("{0} gives {1} per week.", username, participant.giving) }}</p>
-                % endif
-
-                <p>{{ _("This user doesn't accept donations.") }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-</div>
 % endif
 % endblock
 

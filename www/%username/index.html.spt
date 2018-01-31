@@ -39,8 +39,18 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % endblock
 
 % block profile_btn
-% if user and user.controls(participant)
-    <a href="{{ participant.path('edit') }}" class="btn btn-primary btn-lg pull-right">{{ _("Edit") }}</a>
+% if user
+<div class="pull-right text-center">
+% if user.controls(participant)
+    <p><a href="{{ participant.path('edit') }}" class="btn btn-primary btn-lg">{{ _("Edit") }}</a></p>
+% endif
+% if user.is_admin
+    % set status = 'success' if not overrides else 'warning' if len(overrides) == 1 else 'danger'
+    <p><a class="btn btn-default btn-lg" href="{{ participant.path('admin') }}">Admin</a></p>
+    <p class="text-center"
+        >Current isolation level: {{ len(participant.get_active_overrides()) }}</p>
+% endif
+</div>
 % endif
 % endblock
 
