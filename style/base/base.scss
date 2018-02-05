@@ -459,6 +459,9 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
         font-size: $font-size-base;
         margin: $font-size-base 0 10px;
     }
+    img {
+        max-width: 100%;
+    }
 }
 .profile-statement {
     font-family: $font-family-serif;
@@ -469,9 +472,6 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
 section.community-sidebar {
     h1, h2, h3, h4 {
         color: #888;
-    }
-    img {
-        max-width: 100%;
     }
 }
 section.invoice-details {
