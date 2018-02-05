@@ -1061,6 +1061,25 @@ msgid "Mission accomplished!"
 msgstr "Mise splněna!"
 
 #, python-brace-format
+msgid "Joined {0} ago."
+msgstr "Přidal se před {0}."
+
+#, python-brace-format
+msgid "Closed {0} ago."
+msgstr "Uzavřen před {0}."
+
+#, python-brace-format
+msgid "{0} doesn't publish how much they give."
+msgstr "{0} nezveřejňuje kolik dává."
+
+#, python-brace-format
+msgid "{0} gives {1} per week."
+msgstr "{0} dává {1} týdně."
+
+msgid "This user doesn't accept donations."
+msgstr "Tento uživatel nechce přijímat příspěvky."
+
+#, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
 msgstr[0] "{0} má {n} mecenáše."
@@ -1084,25 +1103,6 @@ msgstr "Přispívá ({amount})"
 
 msgid "Donate"
 msgstr "Přispívejte"
-
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "Přidal se před {0}."
-
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "Uzavřen před {0}."
-
-#, python-brace-format
-msgid "{0} doesn't publish how much they give."
-msgstr "{0} nezveřejňuje kolik dává."
-
-#, python-brace-format
-msgid "{0} gives {1} per week."
-msgstr "{0} dává {1} týdně."
-
-msgid "This user doesn't accept donations."
-msgstr "Tento uživatel nechce přijímat příspěvky."
 
 msgid "(fork)"
 msgstr "(odštěpeno)"
@@ -1250,6 +1250,9 @@ msgstr "← Jít zpět"
 msgid "Please confirm"
 msgstr "Prosím potvrďte"
 
+msgid "Save"
+msgstr "Uložit"
+
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
 msgstr "Nebyli jsme schopni získat vašeho avatara z {0}."
@@ -1387,9 +1390,6 @@ msgstr "Přijímat všechny měny"
 
 msgid "Reject foreign currencies"
 msgstr "Odmítat cizí měny"
-
-msgid "Save"
-msgstr "Uložit"
 
 msgid "Goal"
 msgstr "Cíl"
@@ -1542,9 +1542,6 @@ msgstr "Heslo"
 
 msgid "Manage your email addresses"
 msgstr "Spravujte svoje emailové adresy"
-
-msgid "Events"
-msgstr "Události"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay potřebuje vaši podporu"
@@ -2930,6 +2927,12 @@ msgstr "Podmínky používání elektronických peněz MangoPay"
 #, python-brace-format
 msgid "{0} is our payments partner, you have to accept their terms of service to be able to fully use Liberapay."
 msgstr "{0} je náš partner pro zpracování plateb, budete muset akceptovat jejich podmínky služby, abyste mohli plně využívat Liberapay."
+
+msgid "Privacy Policy"
+msgstr ""
+
+msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
+msgstr ""
 
 msgid "You need to log in to access this page."
 msgstr "Pro přístup k této stránce se musíte přihlásit."

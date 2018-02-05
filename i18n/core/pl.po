@@ -1062,6 +1062,25 @@ msgid "Mission accomplished!"
 msgstr "Misja wykonana!"
 
 #, python-brace-format
+msgid "Joined {0} ago."
+msgstr "Dołączył {0} temu."
+
+#, python-brace-format
+msgid "Closed {0} ago."
+msgstr "Zamknięto {0} temu."
+
+#, python-brace-format
+msgid "{0} doesn't publish how much they give."
+msgstr "{0} nie udostępnia informacji na temat tego ile przekazuje."
+
+#, python-brace-format
+msgid "{0} gives {1} per week."
+msgstr "{0} daje {1} tygodniowo."
+
+msgid "This user doesn't accept donations."
+msgstr "Ten użytkownik nie przyjmuje darowizn."
+
+#, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
 msgstr[0] "{0} ma {n} patrona."
@@ -1085,25 +1104,6 @@ msgstr "Dotujesz ({amount})"
 
 msgid "Donate"
 msgstr "Wspieraj"
-
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "Dołączył {0} temu."
-
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "Zamknięto {0} temu."
-
-#, python-brace-format
-msgid "{0} doesn't publish how much they give."
-msgstr "{0} nie udostępnia informacji na temat tego ile przekazuje."
-
-#, python-brace-format
-msgid "{0} gives {1} per week."
-msgstr "{0} daje {1} tygodniowo."
-
-msgid "This user doesn't accept donations."
-msgstr "Ten użytkownik nie przyjmuje darowizn."
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1251,6 +1251,9 @@ msgstr "← Wstecz"
 msgid "Please confirm"
 msgstr "Prosimy o potwierdzenie"
 
+msgid "Save"
+msgstr "Zapisz"
+
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
 msgstr "Nie udało się pobrać Twojego awatara z {0}."
@@ -1388,9 +1391,6 @@ msgstr "Przyjmuj wszystkie waluty"
 
 msgid "Reject foreign currencies"
 msgstr "Odrzucaj obce waluty"
-
-msgid "Save"
-msgstr "Zapisz"
 
 msgid "Goal"
 msgstr "Cel"
@@ -1543,9 +1543,6 @@ msgstr "Hasło"
 
 msgid "Manage your email addresses"
 msgstr "Zarządzaj swoimi adresami e-mail"
-
-msgid "Events"
-msgstr "Wydarzenia"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay potrzebuje Twojego wsparcia"
@@ -2931,6 +2928,12 @@ msgstr "Warunki korzystania z usługi świadczonej przez MangoPay Electronic Mon
 #, python-brace-format
 msgid "{0} is our payments partner, you have to accept their terms of service to be able to fully use Liberapay."
 msgstr "{0} jest naszym partnerem obsługującym płatności. By korzystać w pełni z Liberapay musisz zaakceptować ich warunki korzystania z usługi."
+
+msgid "Privacy Policy"
+msgstr ""
+
+msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
+msgstr ""
 
 msgid "You need to log in to access this page."
 msgstr "Musisz się zalogować by zobaczyć tę stronę."

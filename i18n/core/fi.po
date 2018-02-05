@@ -1059,6 +1059,25 @@ msgid "Mission accomplished!"
 msgstr "Päämäärä on saavutettu!"
 
 #, python-brace-format
+msgid "Joined {0} ago."
+msgstr "Liittynyt {0} sitten."
+
+#, python-brace-format
+msgid "Closed {0} ago."
+msgstr "Suljettu {0} sitten."
+
+#, python-brace-format
+msgid "{0} doesn't publish how much they give."
+msgstr "{0} ei julkaise antamiensa lahjoitusten summaa."
+
+#, python-brace-format
+msgid "{0} gives {1} per week."
+msgstr "{0} lahjoittaa viikoittain {1}."
+
+msgid "This user doesn't accept donations."
+msgstr "Tämä käyttäjä ei ota vastaan lahjoituksia."
+
+#, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
 msgstr[0] "Käyttäjällä {0} on {n} tukija."
@@ -1080,25 +1099,6 @@ msgstr "Lahjoitat ({amount})"
 
 msgid "Donate"
 msgstr "Lahjoita"
-
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "Liittynyt {0} sitten."
-
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "Suljettu {0} sitten."
-
-#, python-brace-format
-msgid "{0} doesn't publish how much they give."
-msgstr "{0} ei julkaise antamiensa lahjoitusten summaa."
-
-#, python-brace-format
-msgid "{0} gives {1} per week."
-msgstr "{0} lahjoittaa viikoittain {1}."
-
-msgid "This user doesn't accept donations."
-msgstr "Tämä käyttäjä ei ota vastaan lahjoituksia."
 
 msgid "(fork)"
 msgstr "(haara)"
@@ -1246,6 +1246,9 @@ msgstr "← Paluu"
 msgid "Please confirm"
 msgstr "Vahvista toimenpide"
 
+msgid "Save"
+msgstr "Tallenna"
+
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
 msgstr "Emme onnistuneet lataamaan avatar-kuvaasi palvelusta {0}."
@@ -1383,9 +1386,6 @@ msgstr "Hyväksy kaikki valuutat"
 
 msgid "Reject foreign currencies"
 msgstr "Hylkää vieraat valuutat"
-
-msgid "Save"
-msgstr "Tallenna"
 
 msgid "Goal"
 msgstr "Tavoite"
@@ -1537,9 +1537,6 @@ msgstr "Salasana"
 
 msgid "Manage your email addresses"
 msgstr "Hallinnoi sähköpostiosoitteitasi"
-
-msgid "Events"
-msgstr "Tapahtumat"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay tarvitsee tukeasi"
@@ -2914,6 +2911,12 @@ msgstr "MangoPay elektronisen rahan käyttöehdot"
 #, python-brace-format
 msgid "{0} is our payments partner, you have to accept their terms of service to be able to fully use Liberapay."
 msgstr "{0} on maksukumppanimme; sinun pitää hyväksyä heidän palveluehtonsa voidaksesi täysin käyttää Liberapay-palvelua."
+
+msgid "Privacy Policy"
+msgstr ""
+
+msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
+msgstr ""
 
 msgid "You need to log in to access this page."
 msgstr "Sinun pitää kirjautua käyttääksesi tätä sivua."
