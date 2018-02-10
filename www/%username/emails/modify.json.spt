@@ -22,7 +22,10 @@ elif 'set-primary' in body:
 elif 'remove' in body:
     participant.remove_email(body['remove'])
 elif 'set_email_lang' in body:
-    participant.set_email_lang(body['set_email_lang'])
+    email_lang = body['set_email_lang']
+    if email_lang not in website.locales:
+        raise response.error(400, "bad `set_email_lang` value '%s' in body" % email_lang)
+    participant.set_email_lang(email_lang)
 else:
     raise response.error(400, 'nothing to do')
 
