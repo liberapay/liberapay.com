@@ -605,11 +605,13 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
 
     # Prepare a unique and sorted list for use in the language switcher
     percent = lambda l, total: sum((percent(s, len(s)) if isinstance(s, tuple) else 1) for s in l if s) / total
-    for l in locales.values():
+    for l in list(locales.values()):
         if l.language == 'en':
             l.completion = 1
             continue
         l.completion = percent([m.string for m in l.catalog if m.id and not m.fuzzy], len(l.catalog))
+        if l.completion == 0:
+            del locales[l.language]
     loc_url = canonical_scheme+'://%s.'+canonical_host
     domain, port = (canonical_host.split(':') + [None])[:2]
     port = int(port) if port else socket.getservbyname(canonical_scheme, 'tcp')
