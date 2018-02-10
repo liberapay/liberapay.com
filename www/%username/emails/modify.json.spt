@@ -6,7 +6,7 @@ request.allow("POST")
 participant = get_participant(state, restrict=True, allow_member=True)
 
 if not participant.email_lang:
-    participant.set_email_lang(request.headers.get(b"Accept-Language"))
+    participant.set_email_lang(locale.language)
 
 body = request.body
 out = {}
