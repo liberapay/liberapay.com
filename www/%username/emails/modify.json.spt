@@ -21,6 +21,8 @@ elif 'set-primary' in body:
     participant.update_email(body['set-primary'])
 elif 'remove' in body:
     participant.remove_email(body['remove'])
+elif 'set_email_lang' in body:
+    participant.set_email_lang(body['set_email_lang'])
 else:
     raise response.error(400, 'nothing to do')
 
