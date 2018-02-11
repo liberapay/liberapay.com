@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '58'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '59'::jsonb);
 
 
 -- app configuration
