@@ -1897,18 +1897,19 @@ msgstr "Kvittering"
 
 #, python-brace-format
 msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr ""
+msgstr "Vi bekrefter kvitteringen på overførsel igangsatt av {payer} den {date}."
 
 #, python-brace-format
 msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr ""
+msgstr "Av {0} som ble sendt, {1} ble satt inn på kontoen til {owner_name} ({link}), og {2} ble betalt i transaksjonsgebyr."
 
+#, fuzzy
 msgid "Beneficiaries"
-msgstr ""
+msgstr "Mottakere"
 
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
-msgstr ""
+msgstr "Pengene vil finansiere donasjonene fra {name} på Liberapay. Tabellen nedenfor viser donasjonene som de var da betalingen ble igangsatt ({datetime}, UTC)."
 
 msgid "Amount per week"
 msgstr "Beløp per uke"
@@ -1930,7 +1931,7 @@ msgstr "Belastet konto: {0}"
 
 #, python-brace-format
 msgid "Execution date: {0}"
-msgstr ""
+msgstr "Utførselsdato: {0}"
 
 #, python-brace-format
 msgid "Transaction ID: {0}"
@@ -1950,24 +1951,26 @@ msgid "Details of Donations"
 msgstr "Donasjonsdetaljer"
 
 msgid "The table below lists the donations you receive, grouped by amount."
-msgstr ""
+msgstr "Tabellen nedenfor viser donasjoner du mottar, gruppert etter beløp."
 
+#, fuzzy
 msgid "Tip Amount"
-msgstr ""
+msgstr "Donasjonsbeløp"
 
 msgid "Count"
-msgstr ""
+msgstr "Antall"
 
+#, fuzzy
 msgid "Percentages"
-msgstr ""
+msgstr "Prosenter"
 
 #, python-brace-format
 msgid "{x_percent} of donations"
-msgstr ""
+msgstr "{x_percent} av donasjoner"
 
 #, python-brace-format
 msgid "{x_percent} of total income"
-msgstr ""
+msgstr "{x_percent} av total inntekt"
 
 msgid "Your profile has been updated."
 msgstr "Profilen din har blitt oppdatert."
@@ -2459,7 +2462,7 @@ msgid "Custom amount (min={0}, max={1})"
 msgstr "Valgfritt beløp (min={0}, max={1})"
 
 msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr ""
+msgstr "Lagrede kortdata var ikke tilstrekkelige for fullføring av betaling, skriv inn kortdataen igjen for å prøve på nytt."
 
 #, python-brace-format
 msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
@@ -2528,7 +2531,7 @@ msgstr "Din kortdata blir sendt direkte til vår betalingpartners system, gjenno
 
 #, python-brace-format
 msgid "Direct debits in {currency} are not possible from {country}."
-msgstr ""
+msgstr "Direkte debitering i {currency} er ikke tilgjengelig fra {country}."
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
@@ -2926,10 +2929,10 @@ msgid "{0} is our payments partner, you have to accept their terms of service to
 msgstr "{0} er betalingspartneren vår, og du er nødt til å godta servicevilkårene deres for å kunne bruke Liberapay fullt ut."
 
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Personvernspraksis"
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
-msgstr ""
+msgstr "Vi gjør vårt beste for å beskytte alles personvern: Vi prøver ikke å spor dem som besøker nettsiden, og bestreber innsamling av kun den dataen vi faktisk trenger, og selger den ikke til noen."
 
 msgid "You need to log in to access this page."
 msgstr "Du må logge inn for å få tilgang til denne siden."
@@ -3095,7 +3098,7 @@ msgstr "Å kaste et medlem ut av et lage er ikke implementert enda. Kontakt bruk
 
 #, python-brace-format
 msgid "Last changed {timedelta} ago by {username}."
-msgstr ""
+msgstr "Sist endret for {timedelta} siden av {username}."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "Gemenskaper lar deg finne folk som jobber på ting du bryr deg om. Du kan også abonnere på deres nyhetsbrev for å holde deg informert."
@@ -3408,20 +3411,20 @@ msgstr "Flere språk"
 #, python-brace-format
 msgid "Our service is currently available in {n} language."
 msgid_plural "Our service is currently available in {n} languages."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tjenesten vår er for tiden tilgjengelig på {n} språk."
+msgstr[1] "Tjenesten vår er for tiden tilgjengelig på {n} språk."
 
 #, python-brace-format
 msgid "It's also partially translated into {n} other language ({link_open}you can contribute{link_close})."
 msgid_plural "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close})."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Det er også delvis oversatt til {n} annet språk ({link_open}du kan bidra{link_close})."
+msgstr[1] "Det er også delvis oversatt til {n} andre språk ({link_open}du kan bidra{link_close})."
 
 #, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
 msgid_plural "Your profile descriptions and other texts can be published in up to {n} languages."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
+msgstr[1] "Dine profilbeskrivelser og andre tekster kan publiseres på opptil {n} språk."
 
 msgid "Multiple currencies"
 msgstr "Flere valutaer"
@@ -3430,14 +3433,15 @@ msgstr "Flere valutaer"
 msgid "We currently support two currencies: the euro (€) and the US dollar ($). We do not handle crypto-currencies like bitcoin."
 msgstr "Det er i øyeblikket støtte for to valutaer: Euro (€) og amerikanske dollar ($). Kryptovaluta som bitcoin støttes ikke."
 
+#, fuzzy
 msgid "Integrations"
-msgstr ""
+msgstr "Integrasjoner"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
+msgstr[1] "Du kan lenke din profil fra kontoer du eier på {platform1}, {platform2}, {platform3}, og {n} andre plattformer."
 
 #, python-brace-format
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
