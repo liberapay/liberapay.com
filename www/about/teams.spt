@@ -18,7 +18,7 @@ if request.method == 'POST':
         else:
             raise UsernameAlreadyTaken(name)
     else:
-        email_lang = request.headers.get(b'Accept-Language')
+        email_lang = locale.language
         team_currency = request.body.get('main_currency') or currency
         team_email = request.body.get('email')
         throttle_takes = request.body.get('throttle_takes') == 'on'

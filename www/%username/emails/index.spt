@@ -1,5 +1,11 @@
+from collections import OrderedDict
+
 from liberapay.constants import EVENTS, EVENTS_S
 from liberapay.utils import get_participant
+
+EMAIL_LANGS = OrderedDict(sorted([
+    (l.language, l.language_name.title()) for l in set(website.locales.values())
+], key=lambda t: t[1]))
 
 [---]
 
@@ -9,8 +15,12 @@ subhead = _("Email settings")
 emails = participant.get_emails()
 base_path = participant.path('emails/')
 
+email_locale = website.locales[participant.email_lang]
+
 [---] text/html
 % extends "templates/settings.html"
+
+% from "templates/select-lang.html" import lang_options with context
 
 % block content
 
@@ -70,5 +80,22 @@ base_path = participant.path('emails/')
         </div>
         <button class="btn btn-default">{{ _("Save changes") }}</button>
     </form>
+
+    <br>
+    <h4>{{ _("Language") }}</h4>
+    <form action="{{ base_path }}modify.json" method="POST" class="form-inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <select class="form-control" name="set_email_lang">{{
+            lang_options(EMAIL_LANGS, email_locale.language)
+        }}</select>
+        <button class="btn btn-default">{{ _("Save") }}</button>
+    </form>
+    % if email_locale.completion < 0.5
+        <br>
+        <p class="alert alert-warning">{{ _(
+            "The {language} translation of Liberapay is not yet complete, you may "
+            "receive emails in English instead.", language=email_locale
+        ) }}</p>
+    % endif
 
 % endblock

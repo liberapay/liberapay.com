@@ -896,16 +896,12 @@ class Participant(Model, MixinTeam):
                 sleep(1)
             last_id = messages[-1].id
 
-    def set_email_lang(self, accept_lang, cursor=None):
-        if not accept_lang:
-            return
-        if isinstance(accept_lang, bytes):
-            accept_lang = accept_lang.decode('ascii', 'replace')
+    def set_email_lang(self, lang, cursor=None):
         (cursor or self.db).run(
             "UPDATE participants SET email_lang=%s WHERE id=%s",
-            (accept_lang, self.id)
+            (lang, self.id)
         )
-        self.set_attributes(email_lang=accept_lang)
+        self.set_attributes(email_lang=lang)
 
 
     # Notifications

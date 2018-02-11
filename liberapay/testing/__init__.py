@@ -184,6 +184,7 @@ class Harness(unittest.TestCase):
             kw['username'] = username
         if 'join_time' not in kw:
             kw['join_time'] = utcnow()
+        kw.setdefault('email_lang', 'en')
         cols, vals = zip(*kw.items())
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
