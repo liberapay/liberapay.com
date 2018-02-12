@@ -623,6 +623,44 @@ def lock_disputed_funds(cursor, exchange, amount):
         try_to_swap_bundle(cursor, b, original_owner)
 
 
+def return_payin_bundles_to_origin(db, exchange, last_resort_payer, create_debts=True):
+    """Transfer money linked to a specific payin back to the original owner.
+    """
+    currency = exchange.amount.currency
+    chargebacks_account = Participant.get_chargebacks_account(currency)[0]
+    original_owner = exchange.participant
+    origin_wallet = db.one("SELECT * FROM wallets WHERE remote_id = %s", (exchange.wallet_id,))
+    transfer_kw = dict(
+        tippee_wallet_id=origin_wallet.remote_id,
+        tippee_mango_id=origin_wallet.remote_owner_id,
+    )
+    payin_bundles = [NS(d._asdict()) for d in db.all("""
+        SELECT *
+          FROM cash_bundles
+         WHERE origin = %s
+           AND disputed = true
+    """, (exchange.id,))]
+    grouped = group_by(payin_bundles, lambda b: (b.owner, b.withdrawal))
+    for (current_owner, withdrawal), bundles in grouped.items():
+        assert current_owner != chargebacks_account.id
+        if current_owner == original_owner:
+            continue
+        amount = sum(b.amount for b in bundles)
+        if current_owner is None:
+            if not last_resort_payer or not create_debts:
+                continue
+            bundles = None
+            withdrawer = db.one("SELECT participant FROM exchanges WHERE id = %s", (withdrawal,))
+            payer = last_resort_payer.id
+            create_debt(db, withdrawer, payer, amount, exchange.id)
+            create_debt(db, original_owner, withdrawer, amount, exchange.id)
+        else:
+            payer = current_owner
+            if create_debts:
+                create_debt(db, original_owner, payer, amount, exchange.id)
+        transfer(db, payer, original_owner, amount, 'chargeback', bundles=bundles, **transfer_kw)
+
+
 def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     """Recover as much money as possible from a payin which has been reverted.
     """
@@ -647,22 +685,7 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     chargebacks_account, credit_wallet = Participant.get_chargebacks_account(currency)
     LiberapayOrg = Participant.from_username('LiberapayOrg')
     assert LiberapayOrg
-    grouped = group_by(disputed_bundles, lambda b: (b.owner, b.withdrawal))
-    for (owner, withdrawal), bundles in grouped.items():
-        assert owner != chargebacks_account.id
-        if owner == original_owner:
-            continue
-        amount = sum(b.amount for b in bundles)
-        if owner is None:
-            bundles = None
-            withdrawer = db.one("SELECT participant FROM exchanges WHERE id = %s", (withdrawal,))
-            payer = LiberapayOrg.id
-            create_debt(db, withdrawer, payer, amount, exchange.id)
-            create_debt(db, original_owner, withdrawer, amount, exchange.id)
-        else:
-            payer = owner
-            create_debt(db, original_owner, payer, amount, exchange.id)
-        transfer(db, payer, original_owner, amount, 'chargeback', bundles=bundles)
+    return_payin_bundles_to_origin(db, exchange, LiberapayOrg, create_debts=True)
     # Add a debt for the fee
     create_debt(db, original_owner, LiberapayOrg.id, exchange.fee, exchange.id)
     # Send the funds to the credit wallet
