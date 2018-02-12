@@ -21,6 +21,7 @@ from liberapay.billing.transactions import (
     prepare_direct_debit,
     record_exchange,
     record_exchange_result,
+    refund_payin,
     sync_with_mangopay,
     transfer,
 )
@@ -295,6 +296,32 @@ class TestDirectDebit(MangopayHarness):
         assert exchange.status == 'failed'
         homer = self.homer.refetch()
         assert self.homer.balance == homer.balance == 0
+
+
+class TestPayinRefund(MangopayHarness):
+
+    def test_refund_payin(self):
+        self.make_participant(
+            'LiberapayOrg', kind='organization', balance=EUR('100.00'),
+            mangopay_user_id='0', mangopay_wallet_id='0',
+        )
+        exchange = charge(self.db, self.janet_route, EUR('20'), 'http://localhost/')
+        # Dry run
+        msg, e_refund = refund_payin(self.db, exchange, dry_run=True)
+        assert msg.startswith('[dry run] partial refund ')
+        assert e_refund is None
+        # For real
+        msg, e_refund = refund_payin(self.db, exchange)
+        assert msg == 'succeeded'
+        assert e_refund.amount == -exchange.amount
+        assert e_refund.fee == exchange.fee.zero()
+        janet = self.janet.refetch()
+        assert janet.balance == 0
+        self.db.self_check()
+        # Again
+        msg, e_refund_2 = refund_payin(self.db, exchange)
+        assert msg == 'already done'
+        assert e_refund_2.id == e_refund.id
 
 
 class TestFees(MangopayHarness):
