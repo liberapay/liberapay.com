@@ -1,0 +1,53 @@
+interactions:
+- request:
+    body: !!python/unicode '{"CreditedWalletId": "43046470", "SecureModeReturnURL":
+      "http://localhost/", "Fees": {"Currency": "EUR", "Amount": 65}, "DebitedFunds":
+      {"Currency": "EUR", "Amount": 2065}, "SecureMode": "DEFAULT", "AuthorId": "43046469",
+      "Tag": "584343568", "CardId": "43046475"}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/payins/card/direct
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4yQS2vCQBSF/8tZzyI2D3V2YTIWQUUSQ+lymrm1gZjIPKAi/vcS09aUSuksz3fu
+        uXfOGUsNjigMomQaz8CwU3twxLMojMI46RVhSLm6azPlCHwST2ZROJ+HAUPq3VtnbglRMh/8unak
+        S0u/WEYvPVr4VlvwM4Q3htrqBA5Z5mBID51vHfhDkMSXW9Z/BoLgwrAg+tt3jS2cct6CoyiFkDKT
+        GRhysr5xotMEjuD6vtU1Wav2PSh8VZG1YJDvVPk7xUwYdqdj792mz8sNGDbKedMLuXwsV2k+KulJ
+        NQ25UU3T4FbTDba+aRi26nSg1n2mizTPxmd8ytkyl2IHhoIqb2g9/CeTi7Rc9bJQRo/3xT+sOTlv
+        2jJffe0cI10bqtxduCHSpMFfVWNpKJj6WzOylamPrjPDzOUDAAD//wMA+qzbL3ICAAA=
+    headers:
+      cache-control: [no-cache]
+      cf-ray: [3ebfaefa0e1414d3-CDG]
+      content-encoding: [gzip]
+      content-type: [application/json; charset=utf-8]
+      expect-ct: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"DebitedFunds": {"Currency": "EUR", "Amount": 2000},
+      "Tag": "584343569", "AuthorId": "43046469", "Payin": "43046758", "Fees": {"Currency":
+      "EUR", "Amount": 0}}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/payins/43046758/refunds
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4yRX0+DMBTFv8t57gMbsD+8IXSmyUTDIGa+LBWukwSLoW3isuy7m84pJC7GvvXe
+        X8+9PecIUSNC4HvBbD7zwVDIPSKEi8AP/HC2BEPSkzRNp1JpCNEknCwCf7n0pwyxNa9dPygE33zd
+        GKpLTeeesm3LkNKzK66sqjWiIxLb96SqAyLwMgdD/NZZZRBNPc87DSr/frAi+ptz0MZIYzUibMok
+        4TzlKRhy0rY1SVcTInjn81O9I63l3jU2tqpIazDwD6rsdUeKw7tjH+LtfVmAIZPG9q6S81WZuWFC
+        NaaRbdFLpWXlVEYJhIurxKAqsqvAaMxtuY7dry9+P8q2JTOKaO6NIhq6XyHl9GJVnZPUnXJeju8/
+        TvxGL/uJTBQiXosnnu5utrtkLXhW4HT6BAAA//8DAHV+XxRlAgAA
+    headers:
+      cache-control: [no-cache]
+      cf-ray: [3ebfaf044bb914d3-CDG]
+      content-encoding: [gzip]
+      content-type: [application/json; charset=utf-8]
+      expect-ct: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
+      expires: ['-1']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+version: 1

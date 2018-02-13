@@ -8,7 +8,7 @@ from time import sleep
 from mangopay.exceptions import APIError
 from mangopay.resources import (
     BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, DirectDebitDirectPayIn,
-    SettlementTransfer, Transfer, User, Wallet,
+    PayInRefund, SettlementTransfer, Transfer, User, Wallet,
 )
 from mangopay.utils import Money
 
@@ -364,7 +364,7 @@ def record_exchange_result(db, exchange_id, remote_id, status, error, participan
         return e
 
 
-def propagate_exchange(cursor, participant, exchange, error, amount):
+def propagate_exchange(cursor, participant, exchange, error, amount, bundles=None):
     """Propagates an exchange's result to the participant's balance.
     """
     wallet_id = exchange.wallet_id
@@ -380,7 +380,7 @@ def propagate_exchange(cursor, participant, exchange, error, amount):
         raise NegativeBalance
 
     if amount < 0:
-        bundles = cursor.all("""
+        bundles = bundles or cursor.all("""
             LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
             SELECT b.*
               FROM cash_bundles b
@@ -623,6 +623,138 @@ def lock_disputed_funds(cursor, exchange, amount):
         try_to_swap_bundle(cursor, b, original_owner)
 
 
+def refund_payin(db, exchange, create_debts=False, refund_fee=False, dry_run=False):
+    """Refund a specific payin.
+    """
+    assert exchange.status == 'succeeded' and exchange.remote_id, exchange
+    e_refund = db.one("SELECT e.* FROM exchanges e WHERE e.refund_ref = %s", (exchange.id,))
+    if e_refund and e_refund.status == 'succeeded':
+        return 'already done', e_refund
+
+    # Lock the bundles and try to swap them
+    with db.get_cursor() as cursor:
+        cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+        bundles = [NS(d._asdict()) for d in cursor.all("""
+            UPDATE cash_bundles
+               SET disputed = true
+             WHERE origin = %s
+         RETURNING *
+        """, (exchange.id,))]
+        bundles_sum = sum(b.amount for b in bundles)
+        assert bundles_sum == exchange.amount
+        original_owner = exchange.participant
+        for b in bundles:
+            if b.owner == original_owner:
+                continue
+            try_to_swap_bundle(cursor, b, original_owner)
+
+    # Move the funds back to the original wallet
+    LiberapayOrg = Participant.from_username('LiberapayOrg')
+    assert LiberapayOrg
+    return_payin_bundles_to_origin(db, exchange, LiberapayOrg, create_debts)
+
+    # Add a debt for the fee
+    if create_debts and refund_fee:
+        create_debt(db, original_owner, LiberapayOrg.id, exchange.fee, exchange.id)
+
+    # Compute and check the amount
+    wallet = db.one("SELECT * FROM wallets WHERE remote_id = %s", (exchange.wallet_id,))
+    if e_refund and e_refund.status == 'pre':
+        amount = -e_refund.amount
+    else:
+        amount = min(wallet.balance, exchange.amount)
+        if amount <= 0:
+            return ('not enough money: wallet balance = %s' % wallet.balance), None
+
+    # Stop here if this is a dry run
+    zero = exchange.fee.zero()
+    fee, vat = (exchange.fee, exchange.vat) if refund_fee else (zero, zero)
+    if dry_run:
+        msg = (
+            '[dry run] full refund of payin #%s (liberapay id %s): amount = %s, fee = %s' %
+            (exchange.remote_id, exchange.id, exchange.amount, exchange.fee)
+        ) if amount + fee == exchange.amount + exchange.fee else (
+            '[dry run] partial refund of payin #%s (liberapay id %s): %s of %s, fee %s of %s' %
+            (exchange.remote_id, exchange.id, amount, exchange.amount, fee, exchange.fee)
+        )
+        return msg, None
+
+    # Record the refund attempt
+    participant = Participant.from_id(exchange.participant)
+    if not (e_refund and e_refund.status == 'pre'):
+        with db.get_cursor() as cursor:
+            cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+            bundles = [NS(d._asdict()) for d in cursor.all("""
+                SELECT *
+                  FROM cash_bundles
+                 WHERE origin = %s
+                   AND wallet_id = %s
+                   AND disputed = true
+            """, (exchange.id, exchange.wallet_id))]
+            e_refund = cursor.one("""
+                INSERT INTO exchanges
+                            (participant, amount, fee, vat, route, status, refund_ref, wallet_id)
+                     VALUES (%s, %s, %s, %s, %s, 'pre', %s, %s)
+                  RETURNING *
+            """, (participant.id, -amount, -fee, -vat, exchange.route, exchange.id, exchange.wallet_id))
+            propagate_exchange(cursor, participant, e_refund, None, e_refund.amount, bundles=bundles)
+
+    # Submit the refund
+    m_refund = PayInRefund(payin_id=exchange.remote_id)
+    m_refund.AuthorId = wallet.remote_owner_id
+    m_refund.Tag = str(e_refund.id)
+    m_refund.DebitedFunds = amount.int()
+    m_refund.Fees = -fee.int()
+    try:
+        m_refund.save()
+    except Exception as e:
+        error = repr_exception(e)
+        e_refund = record_exchange_result(db, e_refund.id, '', 'failed', error, participant)
+        return 'exception', e_refund
+    e_refund = record_exchange_result(
+        db, e_refund.id, m_refund.Id, m_refund.Status.lower(), repr_error(m_refund), participant
+    )
+    return e_refund.status, e_refund
+
+
+def return_payin_bundles_to_origin(db, exchange, last_resort_payer, create_debts=True):
+    """Transfer money linked to a specific payin back to the original owner.
+    """
+    currency = exchange.amount.currency
+    chargebacks_account = Participant.get_chargebacks_account(currency)[0]
+    original_owner = exchange.participant
+    origin_wallet = db.one("SELECT * FROM wallets WHERE remote_id = %s", (exchange.wallet_id,))
+    transfer_kw = dict(
+        tippee_wallet_id=origin_wallet.remote_id,
+        tippee_mango_id=origin_wallet.remote_owner_id,
+    )
+    payin_bundles = [NS(d._asdict()) for d in db.all("""
+        SELECT *
+          FROM cash_bundles
+         WHERE origin = %s
+           AND disputed = true
+    """, (exchange.id,))]
+    grouped = group_by(payin_bundles, lambda b: (b.owner, b.withdrawal))
+    for (current_owner, withdrawal), bundles in grouped.items():
+        assert current_owner != chargebacks_account.id
+        if current_owner == original_owner:
+            continue
+        amount = sum(b.amount for b in bundles)
+        if current_owner is None:
+            if not last_resort_payer or not create_debts:
+                continue
+            bundles = None
+            withdrawer = db.one("SELECT participant FROM exchanges WHERE id = %s", (withdrawal,))
+            payer = last_resort_payer.id
+            create_debt(db, withdrawer, payer, amount, exchange.id)
+            create_debt(db, original_owner, withdrawer, amount, exchange.id)
+        else:
+            payer = current_owner
+            if create_debts:
+                create_debt(db, original_owner, payer, amount, exchange.id)
+        transfer(db, payer, original_owner, amount, 'chargeback', bundles=bundles, **transfer_kw)
+
+
 def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     """Recover as much money as possible from a payin which has been reverted.
     """
@@ -647,22 +779,7 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     chargebacks_account, credit_wallet = Participant.get_chargebacks_account(currency)
     LiberapayOrg = Participant.from_username('LiberapayOrg')
     assert LiberapayOrg
-    grouped = group_by(disputed_bundles, lambda b: (b.owner, b.withdrawal))
-    for (owner, withdrawal), bundles in grouped.items():
-        assert owner != chargebacks_account.id
-        if owner == original_owner:
-            continue
-        amount = sum(b.amount for b in bundles)
-        if owner is None:
-            bundles = None
-            withdrawer = db.one("SELECT participant FROM exchanges WHERE id = %s", (withdrawal,))
-            payer = LiberapayOrg.id
-            create_debt(db, withdrawer, payer, amount, exchange.id)
-            create_debt(db, original_owner, withdrawer, amount, exchange.id)
-        else:
-            payer = owner
-            create_debt(db, original_owner, payer, amount, exchange.id)
-        transfer(db, payer, original_owner, amount, 'chargeback', bundles=bundles)
+    return_payin_bundles_to_origin(db, exchange, LiberapayOrg, create_debts=True)
     # Add a debt for the fee
     create_debt(db, original_owner, LiberapayOrg.id, exchange.fee, exchange.id)
     # Send the funds to the credit wallet
