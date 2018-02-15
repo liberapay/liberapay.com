@@ -24,7 +24,7 @@ class TestTipJson(Harness):
         # We need accounts
         self.make_participant("test_tippee1")
         self.make_participant("test_tippee2")
-        test_tipper = self.make_participant("test_tipper", balance=100)
+        test_tipper = self.make_participant("test_tipper", balance=EUR(100))
 
         # Then, add a $1.50 and $3.00 tip
         response1 = self.tip(test_tipper, "test_tippee1", "1.00")

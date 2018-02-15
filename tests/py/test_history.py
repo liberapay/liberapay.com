@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import datetime
-from decimal import Decimal
 import json
 
 from liberapay.billing.payday import Payday
@@ -54,7 +53,7 @@ class TestHistory(FakeTransfersHarness):
         david = self.make_participant('david')
         self.make_exchange('mango-cc', 10000, 0, david)
         david.set_tip_to(team, EUR('1.00'))
-        team.set_take_for(bob, Decimal('1.00'), team)
+        team.set_take_for(bob, EUR('1.00'), team)
         alice.set_tip_to(bob, EUR('5.00'))
 
         assert bob.balance == 0

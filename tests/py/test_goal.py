@@ -1,8 +1,6 @@
 from __future__ import print_function, unicode_literals
 
-from decimal import Decimal
-
-from liberapay.testing import Harness
+from liberapay.testing import EUR, Harness
 
 
 class Tests(Harness):
@@ -46,7 +44,7 @@ class Tests(Harness):
         self.change_goal("custom", "400")
 
         actual = self.db.one("SELECT goal FROM participants")
-        assert actual == Decimal("400.00")
+        assert actual == EUR('400.00')
 
         actual = self.db.all("""
             SELECT payload
@@ -65,4 +63,4 @@ class Tests(Harness):
             auth_as=self.alice
         )
         assert r.code == 302
-        assert team.refetch().goal == Decimal('99.99')
+        assert team.refetch().goal == EUR('99.99')

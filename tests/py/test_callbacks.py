@@ -1,7 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from decimal import Decimal as D
-
 from mock import patch
 
 from mangopay.resources import BankWirePayOut, BankWirePayIn, Dispute, PayIn, Refund
@@ -38,11 +36,11 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
     @patch('mangopay.resources.SettlementTransfer.save', autospec=True)
     def test_dispute_callback_lost(self, save, get_payin, get_dispute):
         self.make_participant(
-            'LiberapayOrg', kind='organization', balance=D('100.00'),
+            'LiberapayOrg', kind='organization', balance=EUR('100.00'),
             mangopay_user_id='0', mangopay_wallet_id='0',
         )
         save.side_effect = fake_transfer
-        e_id = self.make_exchange('mango-cc', D('16'), D('1'), self.janet)
+        e_id = self.make_exchange('mango-cc', EUR('16'), EUR('1'), self.janet)
         dispute = Dispute()
         dispute.Id = '-1'
         dispute.CreationDate = utcnow()
@@ -56,10 +54,10 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         self.janet.set_tip_to(self.homer, EUR('3.68'))
         Payday.start().run()
         # Withdraw some of the money
-        self.make_exchange('mango-ba', D('-2.68'), 0, self.homer)
+        self.make_exchange('mango-ba', EUR('-2.68'), 0, self.homer)
         # Add a bit of money that will remain undisputed, to test bundle swapping
-        self.make_exchange('mango-cc', D('0.32'), 0, self.janet)
-        self.make_exchange('mango-cc', D('0.55'), 0, self.homer)
+        self.make_exchange('mango-cc', EUR('0.32'), 0, self.janet)
+        self.make_exchange('mango-cc', EUR('0.55'), 0, self.homer)
         # Call back
         self.db.self_check()
         for status in ('CREATED', 'CLOSED'):
@@ -73,11 +71,11 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         # Check final state
         balances = dict(self.db.all("SELECT username, balance FROM participants"))
         assert balances == {
-            '_chargebacks_': D('16.00'),
+            '_chargebacks_': EUR('16.00'),
             'david': 0,
             'homer': 0,
             'janet': 0,
-            'LiberapayOrg': D('98.19'),
+            'LiberapayOrg': EUR('98.19'),
         }
         debts = dict(((r[0], r[1]), r[2]) for r in self.db.all("""
             SELECT p_debtor.username AS debtor, p_creditor.username AS creditor, sum(d.amount)
@@ -88,9 +86,9 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
           GROUP BY p_debtor.username, p_creditor.username
         """))
         assert debts == {
-            ('janet', 'LiberapayOrg'): D('1.00'),
-            ('janet', 'homer'): D('3.36'),
-            ('homer', 'LiberapayOrg'): D('1.81'),
+            ('janet', 'LiberapayOrg'): EUR('1.00'),
+            ('janet', 'homer'): EUR('3.36'),
+            ('homer', 'LiberapayOrg'): EUR('1.81'),
         }
 
     @patch('mangopay.resources.Dispute.get')
@@ -99,7 +97,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
     def test_dispute_callback_won(self, save, get_payin, get_dispute):
         self.make_participant('LiberapayOrg', kind='organization')
         save.side_effect = fake_transfer
-        e_id = self.make_exchange('mango-cc', D('16'), D('1'), self.janet)
+        e_id = self.make_exchange('mango-cc', EUR('16'), EUR('1'), self.janet)
         dispute = Dispute()
         dispute.Id = '-1'
         dispute.CreationDate = utcnow()
@@ -113,9 +111,9 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         self.janet.set_tip_to(self.homer, EUR('3.68'))
         Payday.start().run()
         # Withdraw some of the money
-        self.make_exchange('mango-ba', D('-2.68'), 0, self.homer)
+        self.make_exchange('mango-ba', EUR('-2.68'), 0, self.homer)
         # Add money that will remain undisputed, to test bundle swapping
-        self.make_exchange('mango-cc', D('2.69'), 0, self.janet)
+        self.make_exchange('mango-cc', EUR('2.69'), 0, self.janet)
         # Call back
         self.db.self_check()
         for status in ('CREATED', 'CLOSED'):
@@ -134,8 +132,8 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         balances = dict(self.db.all("SELECT username, balance FROM participants"))
         assert balances == {
             'david': 0,
-            'homer': D('1.00'),
-            'janet': D('15.01'),
+            'homer': EUR('1.00'),
+            'janet': EUR('15.01'),
             'LiberapayOrg': 0,
         }
 
@@ -297,11 +295,11 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
             Get.return_value = payin
             r = self.callback(qs)
             assert r.code == 200, r.text
-            amount = D(242 - fee) / D(100)
+            amount = EUR(242 - fee) / 100
             e = self.db.one("SELECT * FROM exchanges ORDER BY timestamp DESC lIMIT 1")
             assert e.status == status
             assert e.amount == amount
-            assert e.fee == D(fee) / D(100)
+            assert e.fee == EUR(fee) / 100
             homer = homer.refetch()
             if status == 'succeeded':
                 assert homer.balance == amount
@@ -348,9 +346,9 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         r = self.callback(qs)
         assert r.code == 200, r.text
         e = self.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
-        assert e.amount == D(payin.CreditedFunds.Amount) / D(100)
-        assert e.fee == D(fee) / D(100)
-        assert e.vat == D('0.01')
+        assert e.amount == payin.CreditedFunds / 100
+        assert e.fee == EUR(fee) / 100
+        assert e.vat == EUR('0.01')
         assert e.status == 'succeeded'
         homer = homer.refetch()
         assert homer.balance == e.amount

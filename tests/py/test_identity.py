@@ -2,11 +2,9 @@
 
 from __future__ import print_function, unicode_literals
 
-from decimal import Decimal as D
-
 from liberapay.billing.transactions import charge, create_wallet
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.testing import Harness
+from liberapay.testing import EUR, Harness
 from liberapay.testing.mangopay import create_card
 
 
@@ -51,7 +49,7 @@ class TestIdentity(Harness):
         create_wallet(self.db, janeway, 'EUR')
         cr = create_card(janeway.mangopay_user_id)
         route = ExchangeRoute.insert(janeway, 'mango-cc', cr.CardId, currency='EUR')
-        charge(self.db, route, D('20.00'), 'http://127.0.0.1/')
+        charge(self.db, route, EUR('20.00'), 'http://127.0.0.1/')
 
         # Switch to a legal user
         data = dict(data2)
