@@ -123,8 +123,8 @@ class TestChartsJson(FakeTransfersHarness):
 
     def test_charts_work_for_teams(self):
         team = self.make_participant('team', kind='group')
-        team.set_take_for(self.bob, 0.1, team)
-        team.set_take_for(self.carl, 1, team)
+        team.set_take_for(self.bob, EUR('0.10'), team)
+        team.set_take_for(self.carl, EUR('1.00'), team)
         self.alice.set_tip_to(team, EUR('0.30'))
         self.bob.set_tip_to(team, EUR('0.59'))
 

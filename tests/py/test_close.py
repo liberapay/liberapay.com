@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import date
-from decimal import Decimal as D
 
 import pytest
 
@@ -18,7 +17,7 @@ class TestClosing(FakeTransfersHarness):
 
     def test_close_closes(self):
         team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=D('10.00'))
+        alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
 
@@ -36,7 +35,7 @@ class TestClosing(FakeTransfersHarness):
         assert len(team.get_current_takes()) == 1
 
     def test_close_raises_for_unknown_disbursement_strategy(self):
-        alice = self.make_participant('alice', balance=D('0.00'))
+        alice = self.make_participant('alice', balance=EUR('0.00'))
         with pytest.raises(alice.UnknownDisbursementStrategy):
             alice.close('cheese')
 
@@ -53,7 +52,7 @@ class TestClosing(FakeTransfersHarness):
         assert 'Try Again Later' in body
 
     def test_can_post_to_close_page(self):
-        alice = self.make_participant('alice', balance=7)
+        alice = self.make_participant('alice', balance=EUR(7))
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, EUR('10.00'))
 
@@ -74,19 +73,19 @@ class TestClosing(FakeTransfersHarness):
     # dbafg - distribute_balance_as_final_gift
 
     def test_dbafg_distributes_balance_as_final_gift(self):
-        alice = self.make_participant('alice', balance=D('10.00'))
+        alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('2.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
-        assert Participant.from_username('bob').balance == D('6.00')
-        assert Participant.from_username('carl').balance == D('4.00')
-        assert Participant.from_username('alice').balance == D('0.00')
+        assert Participant.from_username('bob').balance == EUR('6.00')
+        assert Participant.from_username('carl').balance == EUR('4.00')
+        assert Participant.from_username('alice').balance == EUR('0.00')
 
     def test_dbafg_needs_claimed_tips(self):
-        alice = self.make_participant('alice', balance=D('10.00'))
+        alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_stub()
         carl = self.make_stub()
         alice.set_tip_to(bob, EUR('3.00'))
@@ -94,24 +93,24 @@ class TestClosing(FakeTransfersHarness):
         with self.db.get_cursor() as cursor:
             with pytest.raises(alice.NoOneToGiveFinalGiftTo):
                 alice.distribute_balance_as_final_gift(cursor)
-        assert Participant.from_id(bob.id).balance == D('0.00')
-        assert Participant.from_id(carl.id).balance == D('0.00')
-        assert Participant.from_id(alice.id).balance == D('10.00')
+        assert Participant.from_id(bob.id).balance == EUR('0.00')
+        assert Participant.from_id(carl.id).balance == EUR('0.00')
+        assert Participant.from_id(alice.id).balance == EUR('10.00')
 
     def test_dbafg_gives_all_to_claimed(self):
-        alice = self.make_participant('alice', balance=D('10.00'))
+        alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_stub()
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('2.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
-        assert Participant.from_id(bob.id).balance == D('10.00')
-        assert Participant.from_id(carl.id).balance == D('0.00')
-        assert Participant.from_id(alice.id).balance == D('0.00')
+        assert Participant.from_id(bob.id).balance == EUR('10.00')
+        assert Participant.from_id(carl.id).balance == EUR('0.00')
+        assert Participant.from_id(alice.id).balance == EUR('0.00')
 
     def test_dbafg_skips_zero_tips(self):
-        alice = self.make_participant('alice', balance=D('10.00'))
+        alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('0.00'))
@@ -119,24 +118,24 @@ class TestClosing(FakeTransfersHarness):
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (bob.id,)) == 1
-        assert Participant.from_username('bob').balance == D('0.00')
-        assert Participant.from_username('carl').balance == D('10.00')
-        assert Participant.from_username('alice').balance == D('0.00')
+        assert Participant.from_username('bob').balance == EUR('0.00')
+        assert Participant.from_username('carl').balance == EUR('10.00')
+        assert Participant.from_username('alice').balance == EUR('0.00')
 
     def test_dbafg_favors_highest_tippee_in_rounding_errors(self):
-        alice = self.make_participant('alice', balance=D('10.00'))
+        alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('6.00'))
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
-        assert Participant.from_username('bob').balance == D('3.33')
-        assert Participant.from_username('carl').balance == D('6.67')
-        assert Participant.from_username('alice').balance == D('0.00')
+        assert Participant.from_username('bob').balance == EUR('3.33')
+        assert Participant.from_username('carl').balance == EUR('6.67')
+        assert Participant.from_username('alice').balance == EUR('0.00')
 
     def test_dbafg_with_zero_balance_is_a_noop(self):
-        alice = self.make_participant('alice', balance=D('0.00'))
+        alice = self.make_participant('alice', balance=EUR('0.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('3.00'))
@@ -144,23 +143,23 @@ class TestClosing(FakeTransfersHarness):
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert self.db.one("SELECT count(*) FROM tips") == 2
-        assert Participant.from_username('bob').balance == D('0.00')
-        assert Participant.from_username('carl').balance == D('0.00')
-        assert Participant.from_username('alice').balance == D('0.00')
+        assert Participant.from_username('bob').balance == EUR('0.00')
+        assert Participant.from_username('carl').balance == EUR('0.00')
+        assert Participant.from_username('alice').balance == EUR('0.00')
 
     def test_dbafg_distributes_to_team(self):
         team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=D('0.01'))
+        alice = self.make_participant('alice', balance=EUR('0.01'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(team, EUR('3.00'))
-        team.set_take_for(alice, 1, team)
-        team.set_take_for(bob, 1, team)
-        team.set_take_for(carl, D('0.01'), team)
+        team.set_take_for(alice, EUR('1.00'), team)
+        team.set_take_for(bob, EUR('1.00'), team)
+        team.set_take_for(carl, EUR('0.01'), team)
         with self.db.get_cursor() as cursor:
             alice.distribute_balance_as_final_gift(cursor)
         assert alice.balance == 0
-        assert bob.refetch().balance == D('0.01')
+        assert bob.refetch().balance == EUR('0.01')
         assert carl.refetch().balance == 0
 
 

@@ -118,8 +118,7 @@ class MixinTeam(object):
             if cur_take is None:
                 return None
 
-        if not isinstance(take, (None.__class__, Money)):
-            take = Money(take, self.main_currency)  # TODO drop this
+        assert isinstance(take, (None.__class__, Money))
 
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions

@@ -104,7 +104,7 @@ class TestPages(BrowseTestHarness):
 
     def test_active_participant_can_browse(self):
         self.browse_setup()
-        bob = self.make_participant('bob', balance=50)
+        bob = self.make_participant('bob', balance=EUR(50))
         bob.set_tip_to(self.david, EUR('1.00'))
         self.david.set_tip_to(bob, EUR('0.50'))
         self.browse(auth_as=self.david)

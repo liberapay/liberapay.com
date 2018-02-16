@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import datetime
-from decimal import Decimal as D
 
 import mock
 from pando.utils import utc
@@ -50,13 +49,13 @@ def fail_payin(payin):
 class TestPayouts(MangopayHarness):
 
     def test_payout(self):
-        e = charge(self.db, self.janet_route, D('46.00'), 'http://localhost/')
+        e = charge(self.db, self.janet_route, EUR('46.00'), 'http://localhost/')
         assert e.status == 'succeeded', e.note
         self.janet.set_tip_to(self.homer, EUR('42.00'))
         self.janet.close('downstream')
         self.homer = self.homer.refetch()
         assert self.homer.balance == 46
-        exchange = payout(self.db, self.homer_route, D('30.00'))
+        exchange = payout(self.db, self.homer_route, EUR('30.00'))
         assert exchange.note is None
         assert exchange.status == 'created'
         self.homer = self.homer.refetch()
@@ -68,13 +67,13 @@ class TestPayouts(MangopayHarness):
         self.make_exchange('mango-cc', 8, 0, self.homer)
         gba.return_value = self.bank_account_outside_sepa
         with self.assertRaises(FeeExceedsAmount):
-            payout(self.db, self.homer_route, D('0.10'))
+            payout(self.db, self.homer_route, EUR('0.10'))
 
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_payout_failure(self, test_hook):
         test_hook.side_effect = Foobar
         self.make_exchange('mango-cc', 20, 0, self.homer)
-        exchange = payout(self.db, self.homer_route, D('1.00'))
+        exchange = payout(self.db, self.homer_route, EUR('1.00'))
         assert exchange.status == 'failed'
         homer = Participant.from_id(self.homer.id)
         assert exchange.note == "Foobar()"
@@ -83,13 +82,13 @@ class TestPayouts(MangopayHarness):
     def test_payout_no_route(self):
         self.make_exchange('mango-cc', 20, 0, self.david)
         with self.assertRaises(AssertionError):
-            payout(self.db, None, D('1.00'))
+            payout(self.db, None, EUR('1.00'))
 
     def test_payout_invalidated_bank_account(self):
         self.make_exchange('mango-cc', 20, 0, self.homer)
         self.homer_route.invalidate()
         with self.assertRaises(AssertionError):
-            payout(self.db, self.homer_route, D('10.00'))
+            payout(self.db, self.homer_route, EUR('10.00'))
 
     @mock.patch('mangopay.resources.BankAccount.get')
     def test_payout_quarantine(self, gba):
@@ -97,13 +96,13 @@ class TestPayouts(MangopayHarness):
         gba.return_value = self.bank_account
         with mock.patch.multiple(transactions, QUARANTINE='1 month'):
             with self.assertRaises(NotEnoughWithdrawableMoney):
-                payout(self.db, self.homer_route, D('32.00'))
+                payout(self.db, self.homer_route, EUR('32.00'))
 
     def test_payout_during_payday(self):
         self.make_exchange('mango-cc', 200, 0, self.homer)
         Payday.start()
         with self.assertRaises(PaydayIsRunning):
-            payout(self.db, self.homer_route, D('97.35'))
+            payout(self.db, self.homer_route, EUR('97.35'))
 
     def test_payout_suspended_user(self):
         self.make_exchange('mango-cc', 20, 0, self.homer)
@@ -114,7 +113,7 @@ class TestPayouts(MangopayHarness):
         """, (self.homer.id,))
         self.homer.set_attributes(is_suspended=True)
         with self.assertRaises(AccountSuspended):
-            payout(self.db, self.homer_route, D('10.00'))
+            payout(self.db, self.homer_route, EUR('10.00'))
 
 
 class TestCharge(MangopayHarness):
@@ -122,7 +121,7 @@ class TestCharge(MangopayHarness):
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_charge_exception(self, test_hook):
         test_hook.side_effect = Foobar
-        exchange = charge(self.db, self.janet_route, D('1.00'), 'http://localhost/')
+        exchange = charge(self.db, self.janet_route, EUR('1.00'), 'http://localhost/')
         assert exchange.note == "Foobar()"
         assert exchange.amount
         assert exchange.status == 'failed'
@@ -132,7 +131,7 @@ class TestCharge(MangopayHarness):
     @mock.patch('mangopay.resources.PayIn.save', autospec=True)
     def test_charge_failure(self, save):
         save.side_effect = fail_payin
-        exchange = charge(self.db, self.janet_route, D('1.00'), 'http://localhost/')
+        exchange = charge(self.db, self.janet_route, EUR('1.00'), 'http://localhost/')
         error = "1: oops"
         assert exchange.note == error
         assert exchange.amount
@@ -142,7 +141,7 @@ class TestCharge(MangopayHarness):
 
     def test_charge_success_and_wallet_creation(self):
         self.db.run("DELETE FROM wallets WHERE owner = %s", (self.janet.id,))
-        exchange = charge(self.db, self.janet_route, D('20'), 'http://localhost/')
+        exchange = charge(self.db, self.janet_route, EUR('20'), 'http://localhost/')
         janet = Participant.from_id(self.janet.id)
         assert exchange.note is None
         assert exchange.amount == 20
@@ -160,24 +159,24 @@ class TestCharge(MangopayHarness):
             return payin
         save.side_effect = add_redirect_url_to_payin
         with self.assertRaises(Redirect):
-            charge(self.db, self.janet_route, D('100'), 'http://localhost/')
+            charge(self.db, self.janet_route, EUR('100'), 'http://localhost/')
         janet = Participant.from_id(self.janet.id)
         assert self.janet.balance == janet.balance == 0
 
     def test_charge_bad_card(self):
         self.janet_route.set_attributes(address='-1')
-        exchange = charge(self.db, self.janet_route, D('10.00'), 'http://localhost/')
+        exchange = charge(self.db, self.janet_route, EUR('10.00'), 'http://localhost/')
         assert exchange.note.startswith('The value -1 is not valid (CardId) | Error ID: ')
 
     def test_charge_no_card(self):
         with self.assertRaises(AssertionError):
-            charge(self.db, None, D('10.00'), 'http://localhost/')
+            charge(self.db, None, EUR('10.00'), 'http://localhost/')
 
     def test_charge_invalidated_card(self):
         bob = self.make_participant('bob')
         route = ExchangeRoute.insert(bob, 'mango-cc', '-1', error='invalidated', currency='EUR')
         with self.assertRaises(AssertionError):
-            charge(self.db, route, D('10.00'), 'http://localhost/')
+            charge(self.db, route, EUR('10.00'), 'http://localhost/')
 
     def test_charge_suspended_user(self):
         self.db.run("""
@@ -187,7 +186,7 @@ class TestCharge(MangopayHarness):
         """, (self.janet.id,))
         self.janet.set_attributes(is_suspended=True)
         with self.assertRaises(AccountSuspended):
-            charge(self.db, self.janet_route, D('10.00'), 'http://localhost/')
+            charge(self.db, self.janet_route, EUR('10.00'), 'http://localhost/')
 
 
 class TestPayinBankWire(MangopayHarness):
@@ -215,7 +214,7 @@ class TestPayinBankWire(MangopayHarness):
     def test_payinbank_wire_exception_and_wallet_creation(self, test_hook):
         test_hook.side_effect = Foobar
         self.db.run("DELETE FROM wallets WHERE owner = %s", (self.janet.id,))
-        exchange = payin_bank_wire(self.db, self.janet, D('50'))[1]
+        exchange = payin_bank_wire(self.db, self.janet, EUR('50'))[1]
         assert exchange.note == 'Foobar()'
         assert exchange.status == 'failed'
         janet = self.janet.refetch()
@@ -224,7 +223,7 @@ class TestPayinBankWire(MangopayHarness):
     @mock.patch('mangopay.resources.PayIn.save', autospec=True)
     def test_payin_bank_wire_failure(self, save):
         save.side_effect = fail_payin
-        exchange = payin_bank_wire(self.db, self.janet, D('1.00'))[1]
+        exchange = payin_bank_wire(self.db, self.janet, EUR('1.00'))[1]
         error = "1: oops"
         assert exchange.note == error
         assert exchange.amount
@@ -275,7 +274,7 @@ class TestDirectDebit(MangopayHarness):
     def test_direct_debit_exception_and_wallet_creation(self, test_hook):
         test_hook.side_effect = Foobar
         self.db.run("DELETE FROM wallets WHERE owner = %s", (self.homer.id,))
-        exchange = prepare_direct_debit(self.db, self.homer_route, D('50'))
+        exchange = prepare_direct_debit(self.db, self.homer_route, EUR('50'))
         assert exchange.status == 'pre-mandate'
         self.homer_route.set_mandate('-1')
         exchange = execute_direct_debit(self.db, exchange, self.homer_route)
@@ -287,7 +286,7 @@ class TestDirectDebit(MangopayHarness):
     @mock.patch('mangopay.resources.PayIn.save', autospec=True)
     def test_direct_debit_failure(self, save):
         save.side_effect = fail_payin
-        exchange = prepare_direct_debit(self.db, self.homer_route, D('1.00'))
+        exchange = prepare_direct_debit(self.db, self.homer_route, EUR('1.00'))
         self.homer_route.set_mandate('-2')
         exchange = execute_direct_debit(self.db, exchange, self.homer_route)
         error = "1: oops"
@@ -340,13 +339,13 @@ class TestFees(MangopayHarness):
         actual = upcharge_card(PAYIN_CARD_MIN['EUR'])
         expected = (EUR('15.54'), EUR('0.54'), EUR('0.08'))
         assert actual == expected
-        assert actual[1] / actual[0] < D('0.035')  # less than 3.5% fee
+        assert actual[1] / actual[0] < EUR('0.035')  # less than 3.5% fee
 
     def test_upcharge_at_target(self):
         actual = upcharge_card(PAYIN_CARD_TARGET['EUR'])
         expected = (EUR('94.19'), EUR('2.19'), EUR('0.32'))
         assert actual == expected
-        assert actual[1] / actual[0] < D('0.024')  # less than 2.4% fee
+        assert actual[1] / actual[0] < EUR('0.024')  # less than 2.4% fee
 
     def test_upcharge_at_one_cent(self):
         actual = upcharge_card(EUR('0.01'))
@@ -376,7 +375,7 @@ class TestRecordExchange(MangopayHarness):
             participant=self.janet, status='pre',
         )
         janet = Participant.from_username('janet')
-        assert self.janet.balance == janet.balance == D('0.00')
+        assert self.janet.balance == janet.balance == EUR('0.00')
 
     def test_record_exchange_updates_balance_for_negative_amounts(self):
         self.make_exchange('mango-cc', 50, 0, self.homer)
@@ -390,7 +389,7 @@ class TestRecordExchange(MangopayHarness):
             status='pre',
         )
         homer = Participant.from_username('homer')
-        assert homer.balance == D('13.41')
+        assert homer.balance == EUR('13.41')
 
     def test_record_exchange_fails_if_negative_balance(self):
         with pytest.raises(NegativeBalance):
@@ -400,39 +399,39 @@ class TestRecordExchange(MangopayHarness):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 30, 0, homer)
         e_id = record_exchange(self.db, ba, EUR('-27.06'), EUR('0.81'), EUR(0), homer, 'pre').id
-        assert homer.balance == D('02.13')
+        assert homer.balance == EUR('02.13')
         record_exchange_result(self.db, e_id, -e_id, 'failed', 'SOME ERROR', homer)
         homer = Participant.from_username('homer')
-        assert homer.balance == D('30.00')
+        assert homer.balance == EUR('30.00')
 
     def test_record_exchange_result_restores_balance_on_error_with_invalidated_route(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 37, 0, homer)
         e_id = record_exchange(self.db, ba, EUR('-32.45'), EUR('0.86'), EUR(0), homer, 'pre').id
-        assert homer.balance == D('3.69')
+        assert homer.balance == EUR('3.69')
         ba.update_error('invalidated')
         record_exchange_result(self.db, e_id, -e_id, 'failed', 'oops', homer)
         homer = Participant.from_username('homer')
-        assert homer.balance == D('37.00')
+        assert homer.balance == EUR('37.00')
         assert ba.error == 'invalidated'
 
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
         homer, ba = self.homer, self.homer_route
         self.make_exchange('mango-cc', 50, 0, homer)
         e_id = record_exchange(self.db, ba, EUR('-43.98'), EUR('1.60'), EUR(0), homer, 'pre').id
-        assert homer.balance == D('4.42')
+        assert homer.balance == EUR('4.42')
         record_exchange_result(self.db, e_id, -e_id, 'succeeded', None, homer)
         homer = Participant.from_username('homer')
-        assert homer.balance == D('4.42')
+        assert homer.balance == EUR('4.42')
 
     def test_record_exchange_result_updates_balance_for_positive_amounts(self):
         janet, cc = self.janet, self.janet_route
         self.make_exchange('mango-cc', 4, 0, janet)
         e_id = record_exchange(self.db, cc, EUR('31.59'), EUR('0.01'), EUR(0), janet, 'pre').id
-        assert janet.balance == D('4.00')
+        assert janet.balance == EUR('4.00')
         record_exchange_result(self.db, e_id, -e_id, 'succeeded', None, janet)
         janet = Participant.from_username('janet')
-        assert janet.balance == D('35.59')
+        assert janet.balance == EUR('35.59')
 
 
 class TestCashBundles(FakeTransfersHarness, MangopayHarness):
@@ -486,7 +485,7 @@ class TestSync(MangopayHarness):
              mock.patch('liberapay.billing.transactions.DirectPayIn.save', autospec=True) as save:
             rer.side_effect = save.side_effect = Foobar
             with self.assertRaises(Foobar):
-                charge(self.db, self.janet_route, D('33.67'), 'http://localhost/')
+                charge(self.db, self.janet_route, EUR('33.67'), 'http://localhost/')
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre'
         self.throw_transactions_back_in_time()
@@ -502,7 +501,7 @@ class TestSync(MangopayHarness):
              mock.patch('liberapay.billing.transactions.test_hook') as test_hook:
             rer.side_effect = test_hook.side_effect = Foobar
             with self.assertRaises(Foobar):
-                payout(self.db, self.homer_route, D('35.00'))
+                payout(self.db, self.homer_route, EUR('35.00'))
         exchange = self.db.one("SELECT * FROM exchanges WHERE amount < 0")
         assert exchange.status == 'pre'
         self.throw_transactions_back_in_time()
