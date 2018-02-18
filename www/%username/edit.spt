@@ -112,29 +112,41 @@ title = _username
 <form action="{{ participant.path('settings/edit') }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
+    % if participant.kind == 'group'
+
     <h5>{{ _("Main currency") }}</h5>
     % from "templates/currencies.html" import currency_buttons with context
     {{ currency_buttons('main_currency', participant.main_currency) }}
 
     <h5>{{ _("Other currencies") }}</h5>
-    % if participant.kind == 'group'
     <p>{{ _("Team accounts are currently limited to a single currency.") }}</p>
-    % else
-    <p>{{ _("Do you want to accept or reject donations in currencies other than your main one?") }}</p>
-    <p>{{ _("Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors.") }}</p>
-    <div class="radio">
-        <label>
-            <input type="radio" name="accept_all_currencies" value="yes"
-                   {{ 'checked' if participant.accept_all_currencies else '' }} />
-            {{ _("Accept all currencies") }}
-        </label><br>
 
-        <label>
-            <input type="radio" name="accept_all_currencies" value="no"
-                   {{ 'checked' if not participant.accept_all_currencies else '' }} />
-            {{ _("Reject foreign currencies") }}
-        </label>
-    </div>
+    % else
+
+    <p>{{ _("Which currencies should your donors be allowed to send you, and which one do you prefer?") }}</p>
+    <table class="table table-condensed">
+    % for c in constants.CURRENCIES
+    <tr>
+        <td>
+        {{ locale.title(locale.currencies.get(c, c)) }}
+                ({{ locale.currency_symbols.get(c, c) }})
+        </td>
+        <td><label>
+            <input type="checkbox" name="accepted_currencies:{{ c }}" value="yes"
+                   {{ 'checked' if c in participant.accepted_currencies else '' }} />
+            {{ _("accept") }}
+        </label></td>
+        <td><label>
+            <input type="radio" name="main_currency" value="{{ c }}"
+                   {{ 'checked' if c == participant.main_currency else '' }} />
+            {{ _("prefer") }}
+        </label></td>
+    </tr>
+    % endfor
+    </table>
+
+    <p>{{ _("Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors.") }}</p>
+
     % endif
 
     <button class="save btn btn-success">{{ _("Save") }}</button>

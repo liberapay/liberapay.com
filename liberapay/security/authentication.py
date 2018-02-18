@@ -10,6 +10,7 @@ from liberapay.constants import CURRENCIES, SESSION, SESSION_TIMEOUT
 from liberapay.exceptions import (
     LoginRequired, TooManyLoginEmails, TooManySignUps
 )
+from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.utils import get_ip_net
 
@@ -22,8 +23,10 @@ class _ANON(object):
     get_tip_to = staticmethod(Participant._zero_tip_dict)
     __repr__ = lambda self: '<ANON>'
 
-    def get_currency_for(self, tippee, tip):
-        return tip['amount'].currency
+    def get_currencies_for(self, tippee, tip):
+        if isinstance(tippee, AccountElsewhere):
+            tippee = tippee.participant
+        return tip['amount'].currency, tippee.accepted_currencies
 
 
 ANON = _ANON()
@@ -94,8 +97,8 @@ def sign_in_with_form_data(body, state):
         email = body.pop('sign-in.email')
         if not email:
             raise response.error(400, 'email is required')
-        currency = body.pop('sign-in.currency', state.get('currency'))
-        if currency and currency not in CURRENCIES:
+        currency = body.pop('sign-in.currency', 'EUR')
+        if currency not in CURRENCIES:
             raise response.error(400, "`currency` value '%s' is invalid of non-supported" % currency)
         src_addr = state['request'].source
         website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
@@ -103,8 +106,8 @@ def sign_in_with_form_data(body, state):
         website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
         with website.db.get_cursor() as c:
             p = Participant.make_active(
-                kind, body.pop('sign-in.username', None),
-                body.pop('sign-in.password', None), currency=currency, cursor=c,
+                kind, currency, body.pop('sign-in.username', None),
+                body.pop('sign-in.password', None), cursor=c,
             )
             p.set_email_lang(state['locale'].language, cursor=c)
             p.add_email(email, cursor=c)

@@ -2,7 +2,7 @@
     % set pledging = tippee.__class__.__name__ == 'AccountElsewhere'
     % set tip = tip or user.get_tip_to(tippee.participant or tippee, currency)
     % set tip_currency = tip.amount.currency
-    % set new_currency = user.get_currency_for(tippee, tip)
+    % set new_currency, accepted_currencies = user.get_currencies_for(tippee, tip)
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="currency" value="{{ new_currency }}" />
