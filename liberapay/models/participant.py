@@ -10,6 +10,7 @@ import uuid
 from six.moves.urllib.parse import quote, urlencode
 
 import aspen_jinja2_renderer
+from cached_property import cached_property
 from html2text import html2text
 import mangopay
 from mangopay.utils import Money
@@ -368,7 +369,7 @@ class Participant(Model, MixinTeam):
     def has_privilege(self, p):
         return self.privileges & PRIVILEGES[p]
 
-    @property
+    @cached_property
     def is_admin(self):
         return self.privileges & PRIVILEGES['admin']
 
@@ -642,7 +643,7 @@ class Participant(Model, MixinTeam):
         """, dict(id=self.id, email=self.email))
         self.set_attributes(**r._asdict())
 
-    @property
+    @cached_property
     def closed_time(self):
         return self.db.one("""
             SELECT ts
