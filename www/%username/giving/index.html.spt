@@ -37,7 +37,10 @@ tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
-    currency: (tips, Money.sum((t.amount for t in tips), currency))
+    currency: (
+        sorted(tips, key=lambda t: (-t.amount.amount, t.tippee_p.username)),
+        Money.sum((t.amount for t in tips), currency)
+    )
     for currency, tips in tips_by_currency.items()
 }
 del tips
@@ -47,7 +50,10 @@ pledges = [t for t in pledges if t.amount > 0]
 npledges = len(pledges)
 pledges_by_currency = group_by(pledges, lambda t: t.amount.currency)
 pledges_by_currency = {
-    currency: (pledges, Money.sum((t.amount for t in pledges), currency))
+    currency: (
+        sorted(pledges, key=lambda t: (-t.amount.amount, t.e_account.friendly_name)),
+        Money.sum((t.amount for t in pledges), currency)
+    )
     for currency, pledges in pledges_by_currency.items()
 }
 del pledges
