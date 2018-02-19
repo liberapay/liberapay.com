@@ -934,6 +934,56 @@ span.help-title {
     }
 }
 
+.radio-revealers {
+    display: flex;
+    flex-wrap: wrap;
+}
+.radio-revealer {
+    left: -1000vw;
+    position: absolute;
+    &:focus + label {
+        border: 1px dotted;
+    }
+}
+.radio-revealer + label {
+    margin-bottom: 1em;
+    order: -1;
+    overflow: hidden;
+    padding: 6px 12px;
+    &:before {
+        content: '⚪ ';
+        color: #ddd;
+        margin-left: -3px;
+    }
+    &:not(:first-of-type) {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        margin-left: -1px;
+    }
+    &:not(:last-of-type) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+    &:hover {
+        background-color: #fafafa;
+    }
+}
+.radio-revealer:checked + label {
+    background-color: #f8f4ff;
+    &:before {
+        content: '⚫ ';
+        color: darken(#f8f4ff, 15%);
+    }
+}
+
+.radio-revealer + label + .radio-revealed {
+    display: none;
+}
+.radio-revealer:checked + label + .radio-revealed {
+    display: block;
+    width: 100%;
+}
+
 .s-logo {
     display: block;
     margin: 1.5em 0;
