@@ -8,27 +8,27 @@
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="currency" value="{{ new_currency }}" />
-            <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
-            % if currency_mismatch
-                % set tippee_name = tippee.friendly_name if pledging else tippee.username
-                <p class="text-warning small">{{ _(
-                    "You are currently donating {money_amount} per week to {name}, "
-                    "but they no longer accept donations in {currency}. You can "
-                    "input a new amount in {new_currency} below, or stop the "
-                    "donation."
-                    , money_amount=tip.amount, name=tippee_name
-                    , currency=Currency(tip_currency), new_currency=Currency(new_currency)
-                ) }}</p>
-            % endif
-            {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch) }}
-            <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
-                           btn-sm" {{ disabled }}>{{
-                _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
-            }}</button>
-            % if tip.amount > 0
-            &nbsp;&nbsp;
-            <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Stop") }}</button>
-            % endif
+        <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
+        % if currency_mismatch
+            % set tippee_name = tippee.friendly_name if pledging else tippee.username
+            <p class="text-warning small">{{ _(
+                "You are currently donating {money_amount} per week to {name}, "
+                "but they no longer accept donations in {currency}. You can "
+                "input a new amount in {new_currency} below, or stop the "
+                "donation."
+                , money_amount=tip.amount, name=tippee_name
+                , currency=Currency(tip_currency), new_currency=Currency(new_currency)
+            ) }}</p>
+        % endif
+        {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch) }}
+        <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
+                       btn-sm" {{ disabled }}>{{
+            _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
+        }}</button>
+        % if tip.amount > 0
+        &nbsp;&nbsp;
+        <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Stop") }}</button>
+        % endif
     </form>
     % else
         % if tip.amount > 0
