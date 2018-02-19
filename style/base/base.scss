@@ -904,7 +904,8 @@ span.help-title {
 
 .btn-group-radio {
     input[type="radio"] {
-        display: none;
+        left: -1000vw;
+        position: absolute;
     }
     & > .btn {
         overflow: hidden;
@@ -927,6 +928,9 @@ span.help-title {
             content: '⚫ ';
             color: darken(#f8f4ff, 15%);
         }
+    }
+    input[type="radio"]:focus + .btn-text {
+        background-color: #fafafa;
     }
 }
 
