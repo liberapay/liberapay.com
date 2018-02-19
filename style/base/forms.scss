@@ -160,54 +160,53 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
     }
 }
 
-// Radio revealers: radio buttons that act like tabs
+// Radio tabs: radio buttons that act like tabs
 
-.radio-revealers {
+.radio-tabs {
     display: flex;
     flex-wrap: wrap;
-}
-.radio-revealer {
-    left: -1000vw;
-    position: absolute;
-    &:focus + label {
-        border: 1px dotted;
+    & > .tab-controller {
+        left: -1000vw;
+        position: absolute;
+        &:focus + label {
+            border: 1px dotted;
+        }
     }
-}
-.radio-revealer + label {
-    margin-bottom: 1em;
-    order: -1;
-    overflow: hidden;
-    padding: 6px 12px;
-    &:before {
-        content: '⚪ ';
-        color: #ddd;
-        margin-left: -3px;
+    & > .tab-controller + label {
+        margin-bottom: 1em;
+        order: -1;
+        overflow: hidden;
+        padding: 6px 12px;
+        &:before {
+            content: '⚪ ';
+            color: #ddd;
+            margin-left: -3px;
+        }
+        &:not(:first-of-type) {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            margin-left: -1px;
+        }
+        &:not(:last-of-type) {
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+        &:hover {
+            background-color: #fafafa;
+        }
     }
-    &:not(:first-of-type) {
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-        margin-left: -1px;
+    & > .tab-controller:checked + label {
+        background-color: #f8f4ff;
+        &:before {
+            content: '⚫ ';
+            color: darken(#f8f4ff, 15%);
+        }
     }
-    &:not(:last-of-type) {
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
+    & > .tab-controller + label + .tab-content {
+        display: none;
+        width: 100%;
     }
-    &:hover {
-        background-color: #fafafa;
+    & > .tab-controller:checked + label + .tab-content {
+        display: block;
     }
-}
-.radio-revealer:checked + label {
-    background-color: #f8f4ff;
-    &:before {
-        content: '⚫ ';
-        color: darken(#f8f4ff, 15%);
-    }
-}
-
-.radio-revealer + label + .radio-revealed {
-    display: none;
-}
-.radio-revealer:checked + label + .radio-revealed {
-    display: block;
-    width: 100%;
 }

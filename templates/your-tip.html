@@ -53,16 +53,16 @@
         % else
             <p>{{ _("Please select or input an amount:") }}</p>
         % endif
-        <div class="radio-revealers">
+        <div class="radio-tabs">
         % for c in accepted_currencies
             <input type="radio" name="currency" value="{{ c }}"
-                   class="radio-revealer" id="currency-{{ c }}"
+                   class="tab-controller" id="currency-{{ c }}"
                    {{ 'checked' if c == new_currency }} />
             <label class="btn btn-default" for="currency-{{ c }}">
                 {{ locale.title(locale.currencies.get(c, c)) }}
                 ({{ locale.currency_symbols.get(c, c) }})
             </label>
-            <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="radio-revealed your-tip">
+            <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="tab-content your-tip">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                 <input type="hidden" name="currency" value="{{ c }}" />
 
