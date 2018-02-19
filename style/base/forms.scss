@@ -1,4 +1,23 @@
 
+.input-group-btn > select.btn {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: $gray-lighter;
+}
+
+.input-group > .input-group-btn > select.btn {
+    // Fix height for Firefox
+    height: 36px;
+}
+
+.input-group-sm > .input-group-btn > select.btn {
+    // Fix height for Firefox
+    height: 33px;
+    // Override a Bootstrap rule that breaks alignment in Chromium
+    line-height: inherit;
+}
+
 .input-group-addon, .input-group-btn {
     width: auto !important;
 }
