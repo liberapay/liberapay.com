@@ -63,18 +63,21 @@ elif 'main_currency' in body:
     old_currency = p.main_currency
     change_currency = new_currency != old_currency
     if p.kind == 'group':
-        accept_all_currencies = False
+        new_accepted = p.accepted_currencies
+        change_policy = False
     else:
-        accept_all_currencies = body.get('accept_all_currencies') == 'yes'
-    change_policy = accept_all_currencies != p.accept_all_currencies and p.kind != 'group'
-    if (change_currency or change_policy) and not accept_all_currencies:
+        new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
+        change_policy = new_accepted != p.accepted_currencies
+        if new_currency not in new_accepted:
+            raise response.error(400, _("The submitted settings are incoherent."))
+    if change_currency or change_policy:
         foreign_donations = website.db.all("""
             SELECT t.*
               FROM current_tips t
              WHERE t.tippee = %s
                AND t.amount > 0
-               AND t.amount::currency <> %s
-        """, (p.id, new_currency))
+               AND t.amount::currency NOT IN %s
+        """, (p.id, tuple(new_accepted)))
         if foreign_donations and p.kind == 'group':
             raise response.error(501, _(
                 "It's not yet possible to modify the currency of a team which is already "
@@ -94,10 +97,10 @@ elif 'main_currency' in body:
     if change_policy:
         website.db.run("""
             UPDATE participants
-               SET accept_all_currencies = %s
+               SET accepted_currencies = %s
              WHERE id = %s
-        """, (accept_all_currencies, p.id))
-        p.set_attributes(accept_all_currencies=accept_all_currencies)
+        """, (','.join(new_accepted), p.id))
+        p.set_attributes(accepted_currencies=new_accepted)
     response.redirect(p.path('edit'))
 
 else:

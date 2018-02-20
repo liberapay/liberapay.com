@@ -139,8 +139,8 @@ elif step == '2':
                         with website.db.get_cursor() as cursor:
                             tippee = cursor.one("""
                             INSERT INTO participants
-                                        (accept_all_currencies, main_currency, avatar_url)
-                                 VALUES (true, 'USD', %s)
+                                        (main_currency, avatar_url)
+                                 VALUES ('USD', %s)
                               RETURNING participants
                             """, (e.avatar_url,))
                             elsewhere = cursor.one("""
@@ -158,7 +158,7 @@ elif step == '2':
                     continue
                 if tippee.accepts_tips:
                     amount = Money(pi['amount'], 'USD')
-                    if not tippee.accept_all_currencies:
+                    if 'USD' not in tippee.accepted_currencies:
                         amount = amount.convert(tippee.main_currency)
                     d = p.set_tip_to(tippee, amount)
                     if tippee.status == 'stub':

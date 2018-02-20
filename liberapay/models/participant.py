@@ -10,6 +10,7 @@ import uuid
 from six.moves.urllib.parse import quote, urlencode
 
 import aspen_jinja2_renderer
+from cached_property import cached_property
 from html2text import html2text
 import mangopay
 from mangopay.utils import Money
@@ -20,7 +21,7 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
@@ -74,6 +75,10 @@ class Participant(Model, MixinTeam):
     ANON = False
     EMAIL_VERIFICATION_TIMEOUT = EMAIL_VERIFICATION_TIMEOUT
 
+    def __init__(self, record):
+        super(Participant, self).__init__(record)
+        self.__dict__['_accepted_currencies'] = self.__dict__.pop('accepted_currencies')
+
     def __eq__(self, other):
         if not isinstance(other, Participant):
             return False
@@ -109,7 +114,7 @@ class Participant(Model, MixinTeam):
             """.format(x), vals)
 
     @classmethod
-    def make_active(cls, kind, username=None, password=None, currency=None, cursor=None):
+    def make_active(cls, kind, currency, username=None, password=None, cursor=None):
         """Return a new active participant.
         """
         now = utcnow()
@@ -117,8 +122,8 @@ class Participant(Model, MixinTeam):
             'kind': kind,
             'status': 'active',
             'join_time': now,
-            'main_currency': currency or 'EUR',
-            'accept_all_currencies': False,
+            'main_currency': currency,
+            'accepted_currencies': currency,
         }
         if password:
             d['password'] = cls.hash_password(password)
@@ -368,7 +373,7 @@ class Participant(Model, MixinTeam):
     def has_privilege(self, p):
         return self.privileges & PRIVILEGES[p]
 
-    @property
+    @cached_property
     def is_admin(self):
         return self.privileges & PRIVILEGES['admin']
 
@@ -642,7 +647,7 @@ class Participant(Model, MixinTeam):
         """, dict(id=self.id, email=self.email))
         self.set_attributes(**r._asdict())
 
-    @property
+    @cached_property
     def closed_time(self):
         return self.db.one("""
             SELECT ts
@@ -1379,6 +1384,11 @@ class Participant(Model, MixinTeam):
     # Currencies
     # ==========
 
+    @cached_property
+    def accepted_currencies(self):
+        v = self._accepted_currencies
+        return CURRENCIES if v is None else set(v.split(','))
+
     def change_main_currency(self, new_currency, recorder):
         old_currency = self.main_currency
         p_id = self.id
@@ -1427,15 +1437,17 @@ class Participant(Model, MixinTeam):
                 new_currency=new_currency, old_currency=old_currency
             ), recorder=recorder_id)
 
-    def get_currency_for(self, tippee, tip):
+    def get_currencies_for(self, tippee, tip):
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
         if isinstance(tip, NS):
             tip = tip.__dict__
-        if tippee.accept_all_currencies:
-            return tip['amount'].currency
+        tip_currency = tip['amount'].currency
+        accepted = tippee.accepted_currencies
+        if tip_currency in accepted:
+            return tip_currency, accepted
         else:
-            return tippee.main_currency
+            return tippee.main_currency, accepted
 
 
     # More Random Stuff
@@ -1758,7 +1770,7 @@ class Participant(Model, MixinTeam):
         if amount != 0:
             if not tippee.accepts_tips:
                 raise UserDoesntAcceptTips(tippee.username)
-            if not tippee.accept_all_currencies and amount.currency != tippee.main_currency:
+            if amount.currency not in tippee.accepted_currencies:
                 raise BadDonationCurrency(tippee, amount.currency)
 
         # Insert tip
@@ -1797,7 +1809,7 @@ class Participant(Model, MixinTeam):
     def _zero_tip_dict(tippee, currency=None):
         if not isinstance(tippee, Participant):
             tippee = Participant.from_id(tippee)
-        if not tippee.accept_all_currencies or not currency:
+        if not currency or currency not in tippee.accepted_currencies:
             currency = tippee.main_currency
         zero = ZERO[currency]
         return dict(amount=zero, is_funded=False, tippee=tippee.id,

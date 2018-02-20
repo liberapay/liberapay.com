@@ -432,6 +432,9 @@ def add_helpers_to_context(context, loc):
 
 
 def add_currency_to_state(request, user):
+    qs_currency = request.qs.get('currency')
+    if qs_currency in CURRENCIES:
+        return {'currency': qs_currency}
     cookie = request.headers.cookie.get(str('currency'))
     if cookie and cookie.value in CURRENCIES:
         return {'currency': cookie.value}

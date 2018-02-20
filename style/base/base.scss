@@ -131,28 +131,6 @@ input.amount {
     }
 }
 
-.input-group-addon, .input-group-btn {
-    width: auto !important;
-}
-
-.input-group select.form-control {
-    width: auto;
-}
-
-.input-group-addon:not(:first-child) {
-    border-left: none;
-}
-
-.radio > .with-input-group-sm {
-    & > input[type=radio] {
-        top: 5px;
-    }
-    & > div {
-        display: inline-block;
-        vertical-align: middle;
-    }
-}
-
 .langs select {
     margin: 5px 0;
 }
@@ -628,85 +606,6 @@ a.dropdown-toggle {
     text-align: center;
 }
 
-label:not([for]) {
-    font-weight: normal;
-    vertical-align: top;
-    span:first-child {
-        font-weight: 700;
-    }
-}
-
-.form-group-small {
-    margin-bottom: 5px;
-    > label {
-        margin-bottom: 0;
-    }
-}
-
-.input-help {
-    display: inline-block;
-    padding: 5px;
-    vertical-align: middle;
-}
-
-.block-labels label {
-    display: block;
-    margin-bottom: 15px;
-}
-
-.input-wrapper {
-    position: relative;
-}
-input.abnormal {
-    box-shadow: $state-warning-border 0 0 2px 2px;
-}
-input.abnormal:focus {
-    box-shadow: rgba($state-warning-border, 0.6) 0 0 3px 3px;
-}
-input.invalid {
-    box-shadow: rgb(255, 0, 0) 0 0 1.5px 1px;
-}
-input.invalid:focus {
-    box-shadow: rgba(255, 0, 0, 0.4) 0 0 2px 2px;
-}
-.abnormal-msg, .invalid-msg {
-    $background: $tooltip-bg;
-    background: $background;
-    border-radius: 5px;
-    display: none;
-    font-size: $font-size-small;
-    margin: 8px -8px 0;
-    padding: 6px 8px;
-    position: absolute;
-
-    &::after {
-        border-style: solid outset solid solid;
-        border-width: 7px;
-        border-color: transparent;
-        border-bottom-color: $background;
-        content: '';
-        height: 0;
-        left: 50%;
-        margin-left: -7px;
-        position: absolute;
-        top: -14px;
-        width: 0;
-    }
-}
-.abnormal-msg {
-    color: #fd9;
-}
-.invalid-msg {
-    color: #faa;
-}
-input.abnormal:focus ~ .abnormal-msg, input.invalid:focus ~ .invalid-msg {
-    display: block;
-    z-index: 1000;
-}
-input.abnormal + .tooltip, input.invalid + .tooltip {
-    display: none !important;
-}
-
 td.text-warning {
     font-weight: bold;
 }
@@ -876,56 +775,6 @@ span.help-title {
         width: auto;
         & > .panel-body {
             max-width: 320px;
-        }
-    }
-}
-
-.radio-group .list-group-item {
-    padding: 0;
-    & > label {
-        display: block;
-        margin: 0;
-        & > input[type="radio"] {
-            float: right;
-            margin: 25px 15px 4px;
-        }
-        & > .radio-label {
-            padding: 10px 15px;
-        }
-        & > .radio-label:hover {
-            color: $list-group-link-hover-color;
-            background-color: $list-group-hover-bg;
-        }
-        & > input[type="radio"]:checked + .radio-label {
-            background-color: #fafafa;
-        }
-    }
-}
-
-.btn-group-radio {
-    input[type="radio"] {
-        display: none;
-    }
-    & > .btn {
-        overflow: hidden;
-        padding: 0;
-        &:hover {
-            background-color: #fafafa;
-        }
-    }
-    .btn-text {
-        padding: 6px 12px;
-        &:before {
-            content: '⚪ ';
-            color: #ddd;
-            margin-left: -3px;
-        }
-    }
-    input[type="radio"]:checked + .btn-text {
-        background-color: #f8f4ff;
-        &:before {
-            content: '⚫ ';
-            color: darken(#f8f4ff, 15%);
         }
     }
 }
