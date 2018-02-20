@@ -1279,7 +1279,7 @@ UPDATE participants
    SET accepted_currencies = (
            CASE WHEN accept_all_currencies THEN 'EUR,USD' ELSE main_currency::text END
        )
- WHERE accept_all_currencies IS NOT NULL;
+ WHERE status <> 'stub';
 DROP VIEW sponsors;
 CREATE OR REPLACE VIEW sponsors AS
     SELECT username, giving, avatar_url
