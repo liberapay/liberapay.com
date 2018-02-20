@@ -125,6 +125,9 @@ if [ -e sql/branch.sql ]; then
         exit 1
     fi
 
+    # Backup
+    if yesno "Take a DB backup?"; then ./backup.sh; fi
+
     rm $branch_c
 fi
 run_schema_diff="$(test -s $branch_before -o -s $branch_after && echo "yes" || true)"
