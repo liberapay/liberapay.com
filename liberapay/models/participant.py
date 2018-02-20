@@ -1,7 +1,6 @@
 from __future__ import division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
-from collections import OrderedDict
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5
 from os import urandom
@@ -1388,9 +1387,7 @@ class Participant(Model, MixinTeam):
     @cached_property
     def accepted_currencies(self):
         v = self._accepted_currencies
-        if v is None:
-            return CURRENCIES
-        return OrderedDict((c, None) for c in v.split(','))
+        return CURRENCIES if v is None else set(v.split(','))
 
     def change_main_currency(self, new_currency, recorder):
         old_currency = self.main_currency

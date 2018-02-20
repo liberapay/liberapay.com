@@ -11,6 +11,10 @@ from mangopay.utils import Money
 from pando.utils import utc
 
 
+def ordered_set(keys):
+    return OrderedDict((k, None) for k in keys)
+
+
 class CustomUndefined(StrictUndefined):
     __bool__ = __nonzero__ = lambda self: False
 
@@ -57,7 +61,7 @@ AVATAR_SOURCES = 'libravatar bitbucket facebook github google mastodon twitter'.
 
 BIRTHDAY = date(2015, 5, 22)
 
-CURRENCIES = ('EUR', 'USD')
+CURRENCIES = ordered_set(['EUR', 'USD'])
 
 D_CENT = Decimal('0.01')
 D_INF = Decimal('inf')
