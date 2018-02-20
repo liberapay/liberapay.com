@@ -1198,15 +1198,6 @@ msgstr "Змінити"
 msgid "Stop"
 msgstr "Зупинити"
 
-msgid "Amount"
-msgstr "Сума"
-
-msgid "per month"
-msgstr "в місяць"
-
-msgid "per year"
-msgstr "в рік"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
 msgstr "В даний момент ви жертвуєте {money_amount} в тиждень для {name}, але він або вона більше не приймає пожертвування в валюті {currency}. Ви можете обрати або увести нове значення в валюті {new_currency} або припинити робити пожертвування, натиснувши кнопку Зупинити."
@@ -1217,6 +1208,15 @@ msgstr "В даний момент ви робите пожертвування 
 
 msgid "Please select or input an amount:"
 msgstr "Будь ласка оберіть або введіть суму:"
+
+msgid "Amount"
+msgstr "Сума"
+
+msgid "per month"
+msgstr "в місяць"
+
+msgid "per year"
+msgstr "в рік"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1379,17 +1379,17 @@ msgstr "Інши валюти"
 msgid "Team accounts are currently limited to a single currency."
 msgstr "Аккаунти команд в поточний момент можуть використовувати тільки одну валюту."
 
-msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr "Ви бажаєте приймати або відхиляти пожертвування в валютах, котрі не збігаються з вашою основною?"
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "Можливість приймати іноземні валюти можуть поскладнити вам життя, але якщо відхиляти їх, то це може збентежити деяких спонсорів."
-
-msgid "Accept all currencies"
-msgstr "Приймати усі валюти"
-
-msgid "Reject foreign currencies"
-msgstr "Відхиляти іноземні валюти"
 
 msgid "Goal"
 msgstr "Мета"
@@ -2110,6 +2110,9 @@ msgstr "Налаштунки приватності змінено."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr "Будь ласка, підтвердіть зміну валюту цієї команди. Частки усіх учасників команди будут конвертовані в цю нову валюту, використовуючи сьогоднішній курс обміну валют, та усім учасникам будут надіслані повідомлення."
+
+msgid "The submitted settings are incoherent."
+msgstr ""
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr "Ще немає можливості змінювати валюту команди, яка вже приймає пожертвування. Вибачте."
@@ -3260,7 +3263,9 @@ msgstr[2] "Ця спільнота була створена {0} тому та �
 msgid ""
 "Are you a contributor in the {0} community? Then join it on Liberapay!\n"
 "Soon you'll be able to advertise your community projects here and post status updates about your work."
-msgstr "Ви вносите внесок в спільноту {0}? Тоді приєднайтеся до нього в Liberapay!\nПісля цього ви можете рекламувати проекти вашій спільноти та публікувати оновлення про стан вашої роботи."
+msgstr ""
+"Ви вносите внесок в спільноту {0}? Тоді приєднайтеся до нього в Liberapay!\n"
+"Після цього ви можете рекламувати проекти вашій спільноти та публікувати оновлення про стан вашої роботи."
 
 msgid "Join"
 msgstr "Приєднатися"
@@ -3693,7 +3698,10 @@ msgid ""
 "We were unable to determine if you are a member of the {0} team on {1}.\n"
 "\n"
 "Please {2}check that you gave us the necessary permissions{3}."
-msgstr "Ми не змогли визначити, чи є ви учасником команди {0} в {1}\n\n{2}Перевірте, що ви дали нам усі необхідні права{3}."
+msgstr ""
+"Ми не змогли визначити, чи є ви учасником команди {0} в {1}\n"
+"\n"
+"{2}Перевірте, що ви дали нам усі необхідні права{3}."
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"

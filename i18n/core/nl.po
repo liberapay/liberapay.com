@@ -1194,15 +1194,6 @@ msgstr "Bewerken"
 msgid "Stop"
 msgstr "Stop"
 
-msgid "Amount"
-msgstr "Bedrag"
-
-msgid "per month"
-msgstr "per maand"
-
-msgid "per year"
-msgstr "per jaar"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
 msgstr "Je doneert momenteel {money_amount} per week aan {name}, maar dit account accepteert geen donaties meer in {currency}. Je kunt hieronder een nieuw {new_currency} bedrag selecteren of stop de donatie door op de Stop-knop te klikken."
@@ -1213,6 +1204,15 @@ msgstr "Momenteel doneer je {0} per week aan {1}. Je kan een ander bedrag select
 
 msgid "Please select or input an amount:"
 msgstr "Selecteer of vul een bedrag in:"
+
+msgid "Amount"
+msgstr "Bedrag"
+
+msgid "per month"
+msgstr "per maand"
+
+msgid "per year"
+msgstr "per jaar"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1375,17 +1375,17 @@ msgstr "Overige valuta's"
 msgid "Team accounts are currently limited to a single currency."
 msgstr "Team accounts zijn op dit moment beperkt tot één valuta."
 
-msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr "Wil je donaties in andere valuta's dan je hoofd valuta accepteren of weigeren?"
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "Het accepteren van vreemde valuta's kan dingen compliceren voor je, maar weigeren kan sommige donoren ontmoedigen."
-
-msgid "Accept all currencies"
-msgstr "Accepteer alle valuta's"
-
-msgid "Reject foreign currencies"
-msgstr "Weiger buitenlandse valuta's"
 
 msgid "Goal"
 msgstr "Doel"
@@ -2101,6 +2101,9 @@ msgstr "Je privacy instellingen zijn gewijzigd."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr "Bevestig de wijziging van je team's referentie valuta. De inkomensaandelen van de teamleden zal worden omgezet naar de nieuwe valuta op basis van de wisselkoers van vandaag en de leden zullen een notificatie ontvangen."
+
+msgid "The submitted settings are incoherent."
+msgstr ""
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr "Het is nog niet mogelijk om de valuta van een team te wijzigen dat al donaties ontvangt. Sorry."

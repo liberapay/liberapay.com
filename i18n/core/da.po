@@ -1193,15 +1193,6 @@ msgstr "Modificer"
 msgid "Stop"
 msgstr "Stop"
 
-msgid "Amount"
-msgstr "Beløb"
-
-msgid "per month"
-msgstr "per måned"
-
-msgid "per year"
-msgstr "per år"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
 msgstr "Du donerer for øjeblikket {money_amount} pr. Uge til {name}, men de accepterer ikke længere donationer i {currency}. Du kan indtaste et nyt beløb i {new_currency} nedenfor eller stoppe donationen ved at klikke på stopknappen."
@@ -1212,6 +1203,15 @@ msgstr "Dine nuværende bidrag {0} hver uge til {1}. Du kan vælge eller indtast
 
 msgid "Please select or input an amount:"
 msgstr "Venligst vælg eller indtast et beløb:"
+
+msgid "Amount"
+msgstr "Beløb"
+
+msgid "per month"
+msgstr "per måned"
+
+msgid "per year"
+msgstr "per år"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1374,17 +1374,17 @@ msgstr "Andre valutaer"
 msgid "Team accounts are currently limited to a single currency."
 msgstr "Team kontoer er for nuværende begrænset til en enkelt møntfod."
 
-msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr "Ønsker du at modtage eller afvise donationer i andre valutaer en din foretrukne møntfod?"
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "At acceptere fremmede valutaer kan komplicere tingene for dig, men at afvise dem kan afskrække nogle donorer."
-
-msgid "Accept all currencies"
-msgstr "Accepter alle valutaer"
-
-msgid "Reject foreign currencies"
-msgstr "Afvis fremmede valutaer"
 
 msgid "Goal"
 msgstr "Mål"
@@ -2100,6 +2100,9 @@ msgstr "Dine privatlivsindstillinger er blevet ændret."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr "Bekræft venligst ændringen af dette holds referencemøntfod. Anparterne af alle holdmedlemmer vil blive konverteret til den nye valuta baseret på dagens valutakurs, og en meddelelse vil blive sendt til alle medlemmer."
+
+msgid "The submitted settings are incoherent."
+msgstr ""
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr "Det er endnu ikke muligt at ændre møntfoden for et hold der allerede modtager donationer. Undskyld."

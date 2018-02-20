@@ -1194,15 +1194,6 @@ msgstr "Muuta"
 msgid "Stop"
 msgstr "Pysäytä"
 
-msgid "Amount"
-msgstr "Määrä"
-
-msgid "per month"
-msgstr "kuukaudessa"
-
-msgid "per year"
-msgstr "vuodessa"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
 msgstr "Lahjoitat {money_amount} viikoittain käyttäjälle {name}, mutta tämä ei enää ota vastaan {currency}-määräisiä lahjoituksia. Voit valita tai syöttää alle uuden summan {new_currency}-valuutassa tai keskeyttää lahjoituksen klikkaamalla Stop-nappia."
@@ -1213,6 +1204,15 @@ msgstr "Tällä hetkellä lahjoitat {0} viikoittain kohteeseen {1}. Voit valita 
 
 msgid "Please select or input an amount:"
 msgstr "Valitse tai syötä määrä:"
+
+msgid "Amount"
+msgstr "Määrä"
+
+msgid "per month"
+msgstr "kuukaudessa"
+
+msgid "per year"
+msgstr "vuodessa"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1375,17 +1375,17 @@ msgstr "Muut valuutat"
 msgid "Team accounts are currently limited to a single currency."
 msgstr "Ryhmätunnukset on tällä hetkellä rajattu yhteen valuuttaan."
 
-msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr "Haluatko hyväksyä vai hylätä lahjoitukset muussa kuin päävaluutassasi?"
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "On yksinkertaisempaa ottaa vastaan vain kotivaluuttaa, mutta vieraiden valuuttojen hylkääminen voi karkoittaa osan lahjoittajista."
-
-msgid "Accept all currencies"
-msgstr "Hyväksy kaikki valuutat"
-
-msgid "Reject foreign currencies"
-msgstr "Hylkää vieraat valuutat"
 
 msgid "Goal"
 msgstr "Tavoite"
@@ -2101,6 +2101,9 @@ msgstr "Yksityisyysasetuksesi on muutettu."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr "Vahvista ryhmän viitevaluutan muutos. Kaikkien ryhmän jäsenten osuudet muunnetaan uuteen valuuttaan päivän vaihtokurssin mukaan, ja kaikille jäsenille lähetetään asiasta tiedote."
+
+msgid "The submitted settings are incoherent."
+msgstr ""
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr "Vielä ei ole mahdollista muuttaa sellaisen ryhmän valuuttaa, joka jo vastaanottaa lahjoituksia. Anteeksi."

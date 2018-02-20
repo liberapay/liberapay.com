@@ -1193,15 +1193,6 @@ msgstr "Modifica"
 msgid "Stop"
 msgstr "Atura"
 
-msgid "Amount"
-msgstr "Quantitat"
-
-msgid "per month"
-msgstr "mensualment"
-
-msgid "per year"
-msgstr "anualment"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
 msgstr "Esteu donant {money_amount} setmanalment a {name}, però aquest compte ja no accepta donatius en {currency}. Podeu seleccionar o indicar a sota una quantitat nova en {new_currency}, o aturar el donatiu fent clic en el botó «Atura»."
@@ -1212,6 +1203,15 @@ msgstr "Actualment esteu donant {0} a {1} setmanalment. Podeu seleccionar o intr
 
 msgid "Please select or input an amount:"
 msgstr "Seleccioneu o introduïu una quantitat:"
+
+msgid "Amount"
+msgstr "Quantitat"
+
+msgid "per month"
+msgstr "mensualment"
+
+msgid "per year"
+msgstr "anualment"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1374,17 +1374,17 @@ msgstr "Altres divises"
 msgid "Team accounts are currently limited to a single currency."
 msgstr "Actualment, els comptes d'equip estan limitats a una única divisa."
 
-msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr "Voleu acceptar o rebutjar els donatius en divises diferents de la vostra?"
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "Acceptar divises estrangeres pot complicar-vos les coses, però rebutjar-les pot desencoratjar alguns donants."
-
-msgid "Accept all currencies"
-msgstr "Accepta totes les divises"
-
-msgid "Reject foreign currencies"
-msgstr "Rebutja divises estrangeres"
 
 msgid "Goal"
 msgstr "Objectiu"
@@ -2100,6 +2100,9 @@ msgstr "S'ha canviat la configuració de privadesa."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr "Confirmeu el canvi de divisa de referència d'aquest equip. Les participacions de tots els membres de l'equip es convertiran a la divisa nova fent servir el tipus de canvi d'avui i s'enviarà una notificació a tots els membres."
+
+msgid "The submitted settings are incoherent."
+msgstr ""
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr "Encara no és possible modificar la divisa d'un equip que ja està rebent donatius. Ho lamentem."

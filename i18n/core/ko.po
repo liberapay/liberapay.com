@@ -1189,15 +1189,6 @@ msgstr "수정하기"
 msgid "Stop"
 msgstr "중지"
 
-msgid "Amount"
-msgstr "금액"
-
-msgid "per month"
-msgstr "매달"
-
-msgid "per year"
-msgstr "매년"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
 msgstr ""
@@ -1208,6 +1199,15 @@ msgstr "{1} 님께 매주 {0} 만큼을 기부하고 있습니다. 다른 금액
 
 msgid "Please select or input an amount:"
 msgstr "선택하거나 값을 넣어 주세요:"
+
+msgid "Amount"
+msgstr "금액"
+
+msgid "per month"
+msgstr "매달"
+
+msgid "per year"
+msgstr "매년"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1370,18 +1370,18 @@ msgstr "다른 화폐"
 msgid "Team accounts are currently limited to a single currency."
 msgstr "현재 팀 계정은 하나의 화폐만 사용할 수 있습니다."
 
-msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr "주 화폐가 아닌 화폐로 들어오는 기부를 받아들이시겠습니까?"
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
 
 #, fuzzy
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "외화 기부를 받는 것은 번거로울 수 있으나, 거부하는 것은 일부 기부자들의 기부를 어렵게 할 수 있습니다."
-
-msgid "Accept all currencies"
-msgstr "모든 화폐 수락"
-
-msgid "Reject foreign currencies"
-msgstr "다른 화폐 거부"
 
 msgid "Goal"
 msgstr "목표"
@@ -2097,6 +2097,9 @@ msgstr "프라이버시 설정이 변경되었습니다."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr "이 팀의 기준 화폐 변경을 확인해 주십시오. 모든 팀원의 지분은 오늘의 환율로 새 화폐로 변경된 후 모든 구성원에게 알림이 발송됩니다."
+
+msgid "The submitted settings are incoherent."
+msgstr ""
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr "현재로써는 이미 기부를 받고 있는 팀의 화폐를 변경할 수 없습니다. 죄송합니다."

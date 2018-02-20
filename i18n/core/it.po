@@ -1193,15 +1193,6 @@ msgstr "Modifica"
 msgid "Stop"
 msgstr "Interrompi"
 
-msgid "Amount"
-msgstr "Ammontare"
-
-msgid "per month"
-msgstr "al mese"
-
-msgid "per year"
-msgstr "all'anno"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
 msgstr "Attualmente stai donando {money_amount} ogni settimana a {name}, ma questo soggetto non accetta più donazioni in {currency}. Puoi selezionare o inserire un nuovo ammontare in {new_currency} qui sotto, o interrompere la donazione facendo clic sul tasto \"Interrompi\"."
@@ -1212,6 +1203,15 @@ msgstr "Attualmente stai donando {0} ogni settimana a {1}. Qui di seguito puoi s
 
 msgid "Please select or input an amount:"
 msgstr "Seleziona o inserisci un importo:"
+
+msgid "Amount"
+msgstr "Ammontare"
+
+msgid "per month"
+msgstr "al mese"
+
+msgid "per year"
+msgstr "all'anno"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1374,17 +1374,17 @@ msgstr "Altre valute"
 msgid "Team accounts are currently limited to a single currency."
 msgstr "I conti delle squadre sono attualmente limitati ad una singola valuta."
 
-msgid "Do you want to accept or reject donations in currencies other than your main one?"
-msgstr "Vuoi accettare o rifiutare donazioni con una valuta differente dalla tua valuta principale?"
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "Accettare valute straniere ti può complicare le cose, ma rifiutarle può scoraggiare i donatori."
-
-msgid "Accept all currencies"
-msgstr "Accetta tutte le valute"
-
-msgid "Reject foreign currencies"
-msgstr "Rifiuta le valute straniere"
 
 msgid "Goal"
 msgstr "Obiettivo"
@@ -2100,6 +2100,9 @@ msgstr "Le tue impostazioni di privacy sono state modificate."
 
 msgid "Please confirm the modification of this team's reference currency. The takes of all team members will be converted to the new currency using today's exchange rate, and a notification will be sent to all members."
 msgstr "Si prega di confermare la modifica della valuta di riferimento di questa squadra. Le quote di tutti i membri saranno convertite nella nuova valuta tenendo conto del tasso di cambio odierno, inoltre ogni membro riceverà una notifica relativa al cambiamento."
+
+msgid "The submitted settings are incoherent."
+msgstr ""
 
 msgid "It's not yet possible to modify the currency of a team which is already receiving donations. Sorry."
 msgstr "Non è possibile modificare la valuta di una squadra che sta ricevendo donazioni. Ci dispiace."
