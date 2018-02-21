@@ -69,6 +69,15 @@ if participant == user:
 else:
     BALANCE = _("Their balance is {0}.", balance)
 
+if user.is_admin:
+    mp_dashboard_url = website.app_conf.mangopay_base_url.replace('api.', 'dashboard.')
+    wallets = website.db.all("""
+        SELECT *
+          FROM wallets
+         WHERE owner = %s
+      ORDER BY is_current NULLS LAST, balance DESC
+    """, (participant.id,))
+
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
 % block content
@@ -78,6 +87,29 @@ else:
 % if balance > 0
     <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
           >{{ _("Withdraw money") }}</a></p>
+% endif
+
+% if user.is_admin
+    <h3>Admin</h3>
+    <p>User ID: {{ participant.id }}</p>
+    <p>Wallets:</p>
+    <table class="table-bordered table-condensed monospace text-right">
+        <tr>
+            <th>remote_id</th>
+            <th>balance</th>
+            <th>is_current</th>
+            <th>remote_owner_id</th>
+        </tr>
+        % for w in wallets
+        <tr>
+            % set user_url = '%s/Users/%s' % (mp_dashboard_url, w.remote_owner_id)
+            <td><a href="{{ user_url }}/Wallets/{{ w.remote_id }}">{{ w.remote_id }}</a></td>
+            <td>{{ w.balance }}</td>
+            <td>{{ 'yes' if w.is_current else 'no' }}</td>
+            <td><a href="{{ user_url }}">{{ w.remote_owner_id }}</a></td>
+        </tr>
+        % endfor
+    </table>
 % endif
 
 <h3>{{ _("Account Statement") }}</h3>
