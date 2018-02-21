@@ -92,7 +92,7 @@ title = _("Invoice {someone}", someone=addressee.username)
 <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
 
 <form action="javascript:" method="POST" id="invoice-form"
-      data-base-url="{{ addressee.path('invoices/') }}"
+      data-base-path="{{ addressee.path('invoices/') }}"
       data-s3-endpoint="{{ website.app_conf.s3_endpoint }}"
       data-s3-access-key="{{ website.app_conf.s3_public_access_key }}"
       data-s3-region="{{ website.app_conf.s3_region }}"
