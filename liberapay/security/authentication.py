@@ -47,7 +47,7 @@ def sign_in_with_form_data(body, state):
     _, website = state['_'], state['website']
 
     if body.get('log-in.id'):
-        id = body.pop('log-in.id')
+        id = body.pop('log-in.id').strip()
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
         if password:
