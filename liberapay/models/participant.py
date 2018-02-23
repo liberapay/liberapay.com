@@ -41,6 +41,7 @@ from liberapay.exceptions import (
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
+    TooManyAttempts,
     TooManyCurrencyChanges,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
@@ -207,7 +208,7 @@ class Participant(Model, MixinTeam):
         """, (mangopay_user_id,))
 
     @classmethod
-    def authenticate(cls, k1, k2, v1=None, v2=None):
+    def authenticate(cls, k1, k2, v1=None, v2=None, context='log-in'):
         assert k1 in ('id', 'username', 'email')
         if not (v1 and v2):
             return
@@ -233,7 +234,10 @@ class Participant(Model, MixinTeam):
         elif k2 == 'password':
             if not p.password:
                 return
-            cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
+            if context == 'log-in':
+                cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
+            elif context == 'change_password':
+                cls.db.hit_rate_limit('change_password', p.id, TooManyAttempts)
             algo, rounds, salt, hashed = p.password.split('$', 3)
             rounds = int(rounds)
             salt, hashed = b64decode(salt), b64decode(hashed)

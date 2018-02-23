@@ -297,3 +297,13 @@ class TooManyCurrencyChanges(LazyResponseXXX):
             "You've already changed your main currency recently, please retry "
             "later (e.g. in a week) or contact support@liberapay.com."
         )
+
+
+class TooManyAttempts(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "There have been too many attempts to perform this action recently, please "
+            "retry later (e.g. in a week) or contact support@liberapay.com if you "
+            "require assistance."
+        )
