@@ -47,7 +47,7 @@ def sign_in_with_form_data(body, state):
     _, website = state['_'], state['website']
 
     if body.get('log-in.id'):
-        id = body.pop('log-in.id')
+        id = body.pop('log-in.id').strip()
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
         if password:
@@ -70,7 +70,7 @@ def sign_in_with_form_data(body, state):
                 )
             elif p:
                 if not p.get_email(email).verified:
-                    website.db.hit_rate_limit('log-in.email.not-verified', TooManyLoginEmails)
+                    website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
                 p.start_session()
                 qs = {'log-in.id': p.id, 'log-in.token': p.session_token}

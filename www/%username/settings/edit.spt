@@ -19,9 +19,10 @@ if 'new-password' in body:
     elif not p.password:
         pass  # user doesn't have a password yet, allow adding one
     else:
-        p = Participant.authenticate('username', 'password',
-                                     request.path['username'],
-                                     body['cur-password'])
+        p = Participant.authenticate(
+            'username', 'password', request.path['username'], body['cur-password'],
+            context='change_password'
+        )
         if not p:
             raise response.error(403, _("Incorrect password"))
     p.update_password(body['new-password'])
