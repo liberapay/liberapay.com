@@ -10,7 +10,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
-msgstr ""
+msgstr "Den {language} översättningen av denna sida är inte färdig ännu."
 
 msgid "Greetings,"
 msgstr "Välkommen,"
@@ -29,7 +29,7 @@ msgstr "Om du inte vill ta emot donationer på Liberapay kan du avvisa dem genom
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
-msgstr ""
+msgstr "Du har mottagit ungefär {0} denna vecka"
 
 #, python-brace-format
 msgid "You have received {0} this week"
@@ -326,6 +326,7 @@ msgstr "Betald"
 msgid "Rejected"
 msgstr "Avvisad"
 
+#, fuzzy
 msgid "Individual"
 msgstr "Individ"
 
@@ -403,7 +404,7 @@ msgstr "Användarnamnet '{0}' börjar med ett begränsat tecken."
 
 #, python-brace-format
 msgid "The username '{0}' ends with the forbidden suffix '{1}'."
-msgstr ""
+msgstr "Användarnamnet '{0}' slutar med det förbjudna ändelsen '{1}'."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har redan ändrat ditt användarnamn flera gånger nyligen, var got försök igen senare (t.ex. om en vecka) eller kontakta support@liberapay.com."
@@ -828,7 +829,7 @@ msgid "Organization Type"
 msgstr "Organisationstyp"
 
 msgid "Business"
-msgstr ""
+msgstr "Företag"
 
 msgid "Organization"
 msgstr "Organisation"
@@ -990,7 +991,7 @@ msgid "Last"
 msgstr "Sista"
 
 msgid "Print"
-msgstr ""
+msgstr "Skriv ut"
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
 msgstr "Om du anger ett lösenord kan du logga in direkt, istället för att vänta på en engångsinloggningslänk skickad via e-mail. Kom ihåg att Liberapay är en finansiell tjänst, använd ett starkt lösenord!"
@@ -1188,7 +1189,7 @@ msgstr "Överblivet"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr ""
+msgstr "Du donerar för närvarande {money_amount} per vecka till {name}, men de har slutat godta donationer i {currency}. Du kan ange ett nytt belopp i {new_currency} nedan, eller sluta donera."
 
 msgid "Modify"
 msgstr "Ändra"
@@ -1198,7 +1199,7 @@ msgstr "Sluta"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr ""
+msgstr "Du donerar för närvarande {money_amount} per vecka till {name}, men de har slutat godta donationer i {currency}. Du kan välja eller ange ett nytt belopp i {new_currency} nedan, eller sluta donera genom att klicka på Sluta-knappen."
 
 #, python-brace-format
 msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
@@ -1378,13 +1379,13 @@ msgid "Team accounts are currently limited to a single currency."
 msgstr "Teamkonton är förnuvarande begränsade till endast en valuta."
 
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
-msgstr ""
+msgstr "Vilka valutor ska dina donatorer få skicka till dig, och vilken föredrar du?"
 
 msgid "accept"
-msgstr ""
+msgstr "godta"
 
 msgid "prefer"
-msgstr ""
+msgstr "föredra"
 
 msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
 msgstr "Att acceptera utländska valutor kan göra det mer komplicerat för dig, men att avvisa dem kan avskräcka vissa donatorer."
@@ -1489,11 +1490,11 @@ msgid "Send me notifications via email:"
 msgstr "Sänd mig notifieringar via e-mail:"
 
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
-msgstr ""
+msgstr "Den {language} översättningen av Liberapay är ännu inte färdig, det kan hända att du får mejl på engelska istället."
 
 msgid "You have already added and verified this address."
 msgstr "Du har redan lagt till och verifierat denna e-mail adress."
@@ -1900,31 +1901,32 @@ msgstr "Inga notifieringar att visa."
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
-msgstr ""
+msgstr "liberapay_kvitto_{number}"
 
 msgid "Receipt"
 msgstr "Kvitto"
 
 #, python-brace-format
 msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr ""
+msgstr "Vi bekräftar mottagningen av en överföring från {payer} {date}."
 
 #, python-brace-format
 msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr ""
+msgstr "Bland de {0} som skickades gick {1} till {owner_name}s konto ({link}) och {2} till transaktionsavgifter."
 
+#, fuzzy
 msgid "Beneficiaries"
-msgstr ""
+msgstr "Mottagare"
 
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
-msgstr ""
+msgstr "Pengarna kommer att finansiera {name}s donationer på Liberapay. Tabellen nedan visar donationerna som de var när överföringen startades ({datetime}), UTC)."
 
 msgid "Amount per week"
-msgstr ""
+msgstr "Belopp per vecka"
 
 msgid "Payment Details"
-msgstr ""
+msgstr "Betalningsdetaljer"
 
 #, python-brace-format
 msgid "Payment method: {0}"
@@ -1932,26 +1934,26 @@ msgstr "Betalningsmetod: {0}"
 
 #, python-brace-format
 msgid "Debited card: {number} ({brand}, {country})"
-msgstr ""
+msgstr "Debaterat kort: {number} ({brand}, {country})"
 
 #, python-brace-format
 msgid "Debited account: {0}"
-msgstr ""
+msgstr "Debiterat konto: {0}"
 
 #, python-brace-format
 msgid "Execution date: {0}"
-msgstr ""
+msgstr "Överföringsdatum: {0}"
 
 #, python-brace-format
 msgid "Transaction ID: {0}"
-msgstr "Transaktions ID: {0}"
+msgstr "Transaktionsid: {0}"
 
 msgid "This document is not an invoice."
-msgstr ""
+msgstr "Detta dokument är inte en faktura."
 
 #, python-brace-format
 msgid "{0} receives {1} per week."
-msgstr "{0} mottar {1} per vecka."
+msgstr "{0} tar emot {1} per vecka."
 
 msgid "You are not a member of any team."
 msgstr "Du är inte medlem i något team."
