@@ -7,9 +7,10 @@ import mock
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.billing.transactions import create_debt
 from liberapay.models.participant import Participant
-from liberapay.testing import EUR, Foobar
+from liberapay.testing import EUR, USD, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
+from liberapay.utils.currencies import MoneyBasket
 
 
 class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
@@ -664,6 +665,144 @@ class TestPaydayForTeams(FakeTransfersHarness):
             'team': EUR('0.00'),
         }
         assert d == expected
+
+    # Two currencies
+    # ==============
+
+    def set_up_team_with_two_currencies(self):
+        team = self.team = self.make_participant(
+            'team', kind='group', accepted_currencies='EUR,USD'
+        )
+        self.alice = self.make_participant('alice', main_currency='EUR',
+                                           accepted_currencies='EUR,USD')
+        team.set_take_for(self.alice, EUR('1.00'), team)
+        self.bob = self.make_participant('bob', main_currency='USD',
+                                         accepted_currencies='EUR,USD')
+        team.set_take_for(self.bob, EUR('1.00'), team)
+        self.donor1_eur = self.make_participant('donor1_eur', balance=EUR(100))
+        self.donor2_usd = self.make_participant('donor2_usd', balance=USD(100))
+        self.donor3_eur = self.make_participant('donor3_eur', balance=EUR(100))
+        self.donor4_usd = self.make_participant('donor4_usd', balance=USD(100))
+
+    def test_transfer_takes_with_two_currencies(self):
+        self.set_up_team_with_two_currencies()
+        self.donor1_eur.set_tip_to(self.team, EUR('0.50'))
+        self.donor2_usd.set_tip_to(self.team, USD('0.60'))
+        self.donor3_eur.set_tip_to(self.team, EUR('0.50'))
+        self.donor4_usd.set_tip_to(self.team, USD('0.60'))
+
+        Payday.start().shuffle()
+
+        expected = {
+            'alice': MoneyBasket(EUR('1.00')),
+            'bob': MoneyBasket(USD('1.20')),
+            'donor1_eur': MoneyBasket(EUR('99.50')),
+            'donor2_usd': MoneyBasket(USD('99.40')),
+            'donor3_eur': MoneyBasket(EUR('99.50')),
+            'donor4_usd': MoneyBasket(USD('99.40')),
+        }
+        actual = self.get_balances()
+        assert expected == actual
+
+    def test_wellfunded_team_with_two_balanced_currencies(self):
+        self.set_up_team_with_two_currencies()
+        self.donor1_eur.set_tip_to(self.team, EUR('1.00'))
+        self.donor2_usd.set_tip_to(self.team, USD('1.20'))
+        self.donor3_eur.set_tip_to(self.team, EUR('1.00'))
+        self.donor4_usd.set_tip_to(self.team, USD('1.20'))
+
+        Payday.start().shuffle()
+
+        expected = {
+            'alice': MoneyBasket(EUR('1.00')),
+            'bob': MoneyBasket(USD('1.20')),
+            'donor1_eur': MoneyBasket(EUR('99.50')),
+            'donor2_usd': MoneyBasket(USD('99.40')),
+            'donor3_eur': MoneyBasket(EUR('99.50')),
+            'donor4_usd': MoneyBasket(USD('99.40')),
+        }
+        actual = self.get_balances()
+        assert expected == actual
+
+    def test_exactly_funded_team_with_two_unbalanced_currencies(self):
+        self.set_up_team_with_two_currencies()
+        self.donor1_eur.set_tip_to(self.team, EUR('0.75'))
+        self.donor2_usd.set_tip_to(self.team, USD('0.30'))
+        self.donor3_eur.set_tip_to(self.team, EUR('0.75'))
+        self.donor4_usd.set_tip_to(self.team, USD('0.30'))
+
+        Payday.start().shuffle()
+
+        expected = {
+            'alice': MoneyBasket(EUR('1.00')),
+            'bob': MoneyBasket(EUR('0.50'), USD('0.60')),
+            'donor1_eur': MoneyBasket(EUR('99.25')),
+            'donor2_usd': MoneyBasket(USD('99.70')),
+            'donor3_eur': MoneyBasket(EUR('99.25')),
+            'donor4_usd': MoneyBasket(USD('99.70')),
+        }
+        actual = self.get_balances()
+        assert expected == actual
+
+    def test_wellfunded_team_with_two_unbalanced_currencies(self):
+        self.set_up_team_with_two_currencies()
+        self.donor1_eur.set_tip_to(self.team, EUR('1.50'))
+        self.donor2_usd.set_tip_to(self.team, USD('0.60'))
+        self.donor3_eur.set_tip_to(self.team, EUR('1.50'))
+        self.donor4_usd.set_tip_to(self.team, USD('0.60'))
+
+        Payday.start().shuffle()
+
+        expected = {
+            'alice': MoneyBasket(EUR('1.00')),
+            'bob': MoneyBasket(EUR('0.50'), USD('0.60')),
+            'donor1_eur': MoneyBasket(EUR('99.25')),
+            'donor2_usd': MoneyBasket(USD('99.70')),
+            'donor3_eur': MoneyBasket(EUR('99.25')),
+            'donor4_usd': MoneyBasket(USD('99.70')),
+        }
+        actual = self.get_balances()
+        assert expected == actual
+
+    def test_underfunded_team_with_two_balanced_currencies(self):
+        self.set_up_team_with_two_currencies()
+        self.donor1_eur.set_tip_to(self.team, EUR('0.25'))
+        self.donor2_usd.set_tip_to(self.team, USD('0.30'))
+        self.donor3_eur.set_tip_to(self.team, EUR('0.25'))
+        self.donor4_usd.set_tip_to(self.team, USD('0.30'))
+
+        Payday.start().shuffle()
+
+        expected = {
+            'alice': MoneyBasket(EUR('0.50')),
+            'bob': MoneyBasket(USD('0.60')),
+            'donor1_eur': MoneyBasket(EUR('99.75')),
+            'donor2_usd': MoneyBasket(USD('99.70')),
+            'donor3_eur': MoneyBasket(EUR('99.75')),
+            'donor4_usd': MoneyBasket(USD('99.70')),
+        }
+        actual = self.get_balances()
+        assert expected == actual
+
+    def test_underfunded_team_with_two_unbalanced_currencies(self):
+        self.set_up_team_with_two_currencies()
+        self.donor1_eur.set_tip_to(self.team, EUR('0.10'))
+        self.donor2_usd.set_tip_to(self.team, USD('0.25'))
+        self.donor3_eur.set_tip_to(self.team, EUR('0.10'))
+        self.donor4_usd.set_tip_to(self.team, USD('0.25'))
+
+        Payday.start().shuffle()
+
+        expected = {
+            'alice': MoneyBasket(EUR('0.20'), USD('0.13')),
+            'bob': MoneyBasket(USD('0.37')),
+            'donor1_eur': MoneyBasket(EUR('99.90')),
+            'donor2_usd': MoneyBasket(USD('99.75')),
+            'donor3_eur': MoneyBasket(EUR('99.90')),
+            'donor4_usd': MoneyBasket(USD('99.75')),
+        }
+        actual = self.get_balances()
+        assert expected == actual
 
 
 class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):

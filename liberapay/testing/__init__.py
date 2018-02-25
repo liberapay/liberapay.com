@@ -185,6 +185,9 @@ class Harness(unittest.TestCase):
         if 'join_time' not in kw:
             kw['join_time'] = utcnow()
         kw.setdefault('email_lang', 'en')
+        kw.setdefault('main_currency', 'EUR')
+        kw.setdefault('accepted_currencies', kw['main_currency'])
+
         cols, vals = zip(*kw.items())
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
@@ -262,6 +265,15 @@ class Harness(unittest.TestCase):
         )
         _record_transfer_result(self.db, t_id, status)
         return t_id
+
+
+    def get_balances(self):
+        return dict(self.db.all("""
+            SELECT p.username, basket_sum(w.balance) AS balances
+              FROM wallets w
+              JOIN participants p ON p.id = w.owner
+          GROUP BY p.username
+        """))
 
 
 class Foobar(Exception): pass
