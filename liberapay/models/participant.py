@@ -21,7 +21,7 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_ZERO,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
@@ -1645,12 +1645,11 @@ class Participant(Model, MixinTeam):
                AND t.amount::currency = %s
                AND t.is_funded
         """, (self.id, currency)) or ZERO[currency]
-        r += (cursor or self.db).one("""
-            SELECT sum(t.actual_amount)
+        r += Money((cursor or self.db).one("""
+            SELECT sum((t.actual_amount).{0})
               FROM current_takes t
              WHERE t.member = %s
-               AND t.amount::currency = %s
-        """, (self.id, currency)) or ZERO[currency]
+        """.format(currency), (self.id,)) or D_ZERO, currency)
         return r
 
     def update_giving_and_tippees(self, cursor):

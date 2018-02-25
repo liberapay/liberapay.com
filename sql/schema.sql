@@ -129,7 +129,6 @@ CREATE FUNCTION initialize_amounts() RETURNS trigger AS $$
         NEW.giving = coalesce_currency_amount(NEW.giving, NEW.main_currency);
         NEW.receiving = coalesce_currency_amount(NEW.receiving, NEW.main_currency);
         NEW.taking = coalesce_currency_amount(NEW.taking, NEW.main_currency);
-        NEW.leftover = coalesce_currency_amount(NEW.leftover, NEW.main_currency);
         NEW.balance = coalesce_currency_amount(NEW.balance, NEW.main_currency);
         RETURN NEW;
     END;

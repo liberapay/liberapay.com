@@ -142,7 +142,7 @@ class MoneyBasket(object):
     def currencies_present(self):
         return self.amounts.keys()
 
-    def fuzzy_sum(self, currency):
+    def fuzzy_sum(self, currency, rounding=ROUND_UP):
         a = ZERO[currency].amount
         fuzzy = False
         for m in self:
@@ -151,7 +151,7 @@ class MoneyBasket(object):
             elif m.amount:
                 a += m.amount * website.currency_exchange_rates[(m.currency, currency)]
                 fuzzy = True
-        r = Money(a, currency)
+        r = Money(a.quantize(D_CENT, rounding=rounding), currency)
         r.fuzzy = fuzzy
         return r
 

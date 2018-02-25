@@ -363,7 +363,7 @@ class Payday(object):
         zero = constants.ZERO[currency]
         total_income = sum(t.full_amount for t in tips) or zero
         total_takes = sum(t.amount for t in takes) or zero
-        leftover = max(total_income - total_takes, zero)
+        leftover = MoneyBasket(max(total_income - total_takes, zero))
         if total_income == 0 or total_takes == 0:
             return (), leftover
         takes_ratio = min(total_income / total_takes, 1)
@@ -696,13 +696,13 @@ class Payday(object):
             UPDATE takes t
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
-                          , COALESCE((
-                                SELECT sum(tr.amount)
+                          , (
+                                SELECT basket_sum(tr.amount)
                                   FROM payday_transfers tr
                                  WHERE tr.team = t2.team
                                    AND tr.tippee = t2.member
                                    AND tr.context = 'take'
-                            ), zero(t2.actual_amount)) AS actual_amount
+                            ) AS actual_amount
                        FROM current_takes t2
                    ) t2
              WHERE t.id = t2.id
@@ -754,12 +754,17 @@ class Payday(object):
             UPDATE participants p
                SET leftover = p2.leftover
               FROM ( SELECT p2.id
-                          , p2.receiving - coalesce_currency_amount((
-                                SELECT sum(t.amount, p2.main_currency)
+                          , (
+                                SELECT basket_sum(t.amount)
+                                  FROM payday_tips t
+                                 WHERE t.tippee = p2.id
+                                   AND t.is_funded
+                            ) - (
+                                SELECT basket_sum(t.amount)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                     OR t.team = p2.id
-                            ), p2.main_currency) AS leftover
+                            ) AS leftover
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id

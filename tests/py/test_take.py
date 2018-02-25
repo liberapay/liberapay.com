@@ -5,6 +5,7 @@ from psycopg2 import InternalError
 from liberapay.billing.payday import Payday
 from liberapay.testing import EUR, Harness
 from liberapay.models.participant import Participant
+from liberapay.utils.currencies import MoneyBasket
 
 
 TEAM = 'A Team'
@@ -117,7 +118,7 @@ class Tests(Harness):
         assert len(members) == 1
         assert members[alice.id]['username'] == 'alice'
         assert members[alice.id]['nominal_take'] == 42
-        assert members[alice.id]['actual_amount'] == 42
+        assert members[alice.id]['actual_amount'] == MoneyBasket(EUR(42))
 
     def test_taking_and_receiving_are_updated_correctly(self):
         team, alice = self.make_team_of_one()
@@ -170,7 +171,7 @@ class Tests(Harness):
         assert alice.receiving == alice.taking == 40
 
         for m in team.get_members().values():
-            assert m['nominal_take'] == m['actual_amount']
+            assert m['nominal_take'] == m['actual_amount'].amounts['EUR']
 
     def test_changes_to_others_take_can_increase_members_take(self):
         team, alice, bob = self.make_team_of_two()
