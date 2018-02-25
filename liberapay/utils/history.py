@@ -106,16 +106,16 @@ def iter_payday_events(db, participant, year=None):
         yield dict(
             kind='totals',
             regular_donations=dict(
-                sent=MoneyBasket.sum(t['amount'] for t in regular_donations if t['tipper'] == id),
-                received=MoneyBasket.sum(t['amount'] for t in regular_donations if t['tippee'] == id),
+                sent=MoneyBasket(t['amount'] for t in regular_donations if t['tipper'] == id),
+                received=MoneyBasket(t['amount'] for t in regular_donations if t['tippee'] == id),
                 npatrons={k: len(set(t['tipper'] for t in transfers if t['tippee'] == id))
                           for k, transfers in regular_donations_by_currency.items()},
                 ntippees={k: len(set(t['tippee'] for t in transfers if t['tipper'] == id))
                           for k, transfers in regular_donations_by_currency.items()},
             ),
             reimbursements=dict(
-                sent=MoneyBasket.sum(t['amount'] for t in reimbursements if t['tipper'] == id),
-                received=MoneyBasket.sum(t['amount'] for t in reimbursements if t['tippee'] == id),
+                sent=MoneyBasket(t['amount'] for t in reimbursements if t['tipper'] == id),
+                received=MoneyBasket(t['amount'] for t in reimbursements if t['tippee'] == id),
                 npayers={k: len(set(t['tipper'] for t in transfers if t['tippee'] == id))
                          for k, transfers in reimbursements_by_currency.items()},
                 nrecipients={k: len(set(t['tippee'] for t in transfers if t['tipper'] == id))

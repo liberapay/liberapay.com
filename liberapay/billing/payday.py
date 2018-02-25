@@ -841,7 +841,7 @@ class Payday(object):
             p = Participant.from_id(tippee_id)
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
-            by_team = {k: MoneyBasket.sum(t['amount'] for t in v)
+            by_team = {k: MoneyBasket(t['amount'] for t in v)
                        for k, v in group_by(transfers, 'team').items()}
             total = sum(by_team.values(), MoneyBasket())
             personal = by_team.pop(None, 0)

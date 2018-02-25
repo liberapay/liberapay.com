@@ -51,12 +51,16 @@ Money.zero = lambda m: Money(D_ZERO, m.currency)
 
 class MoneyBasket(object):
 
-    def __init__(self, *amounts, **decimals):
+    def __init__(self, *args, **decimals):
         self.amounts = OrderedDict(
             (currency, decimals.get(currency, D_ZERO)) for currency in CURRENCIES
         )
-        for a in amounts:
-            self.amounts[a.currency] += a.amount
+        for arg in args:
+            if isinstance(arg, Money):
+                self.amounts[arg.currency] += arg.amount
+            else:
+                for m in arg:
+                    self.amounts[m.currency] += m.amount
 
     def __iter__(self):
         return (Money(amount, currency) for currency, amount in self.amounts.items())
@@ -138,10 +142,6 @@ class MoneyBasket(object):
         r = Money(a, currency)
         r.fuzzy = fuzzy
         return r
-
-    @classmethod
-    def sum(cls, amounts):
-        return cls(*amounts)
 
 
 def fetch_currency_exchange_rates(db):
