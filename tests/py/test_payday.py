@@ -311,6 +311,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert new_balances[self.janet.id] == [EUR('15')]
             assert new_balances[self.david.id] == [EUR('5')]
 
+
+class TestPaydayForTeams(FakeTransfersHarness):
+
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', kind='group')
         alice = self.make_participant('alice')
@@ -347,7 +350,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
                 assert p.balance == 0
 
     def test_underfunded_team(self):
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         team.set_take_for(alice, EUR('1.00'), team)
@@ -373,7 +375,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         - takes are maximums
         - donors all pay their share, the first donor doesn't pay everything
         """
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         team.set_take_for(alice, EUR('0.79'), team)
@@ -397,7 +398,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert d == expected
 
     def test_wellfunded_team_with_early_donor(self):
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         team.set_take_for(alice, EUR('0.79'), team)
@@ -458,7 +458,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert d == expected
 
     def test_wellfunded_team_with_two_early_donors(self):
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         team.set_take_for(alice, EUR('0.79'), team)
@@ -538,7 +537,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert d == expected
 
     def test_wellfunded_team_with_two_early_donors_and_low_amounts(self):
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         team.set_take_for(alice, EUR('0.01'), team)
@@ -587,7 +585,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert d == expected
 
     def test_wellfunded_team_with_early_donor_and_small_leftover(self):
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         team.set_take_for(alice, EUR('0.50'), team)
@@ -633,7 +630,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert d == expected
 
     def test_mutual_tipping_through_teams(self):
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', balance=EUR(8))
         alice.set_tip_to(team, EUR('2.00'))
@@ -653,7 +649,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert d == expected
 
     def test_unfunded_tip_to_team_doesnt_cause_NegativeBalance(self):
-        self.clear_tables()
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
         alice.set_tip_to(team, EUR('1.00'))  # unfunded tip
@@ -669,6 +664,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             'team': EUR('0.00'),
         }
         assert d == expected
+
+
+class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
     def make_invoice(self, sender, addressee, amount, status):
         invoice_data = {
