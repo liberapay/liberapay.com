@@ -205,7 +205,7 @@ class MixinTeam(object):
                AND p.is_suspended IS NOT true
         """, dict(team_id=self.id))]
         takes = [NS(r._asdict()) for r in (cursor or self.db).all("""
-            SELECT t.*
+            SELECT t.*, p.main_currency, p.accepted_currencies
               FROM current_takes t
               JOIN participants p ON p.id = t.member
              WHERE t.team = %s
