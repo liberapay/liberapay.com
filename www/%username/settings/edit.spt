@@ -2,9 +2,9 @@ from liberapay.constants import PRIVACY_FIELDS
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant
 
-import pwnedpasswords
 import passwordmeter
 from hashlib import sha1
+import requests
 [---]
 
 request.allow('POST')
@@ -30,7 +30,14 @@ if 'new-password' in body:
             raise response.error(403, _("Incorrect password"))
 
     passhash = sha1(body['new-password'].encode("utf-8")).hexdigest().upper()
-    count = pwnedpasswords.check(passhash)
+
+    URL = "https://api.pwnedpasswords.com/pwnedpassword/"+passhash
+    r = requests.get(url = URL)
+    if r.status_code == 200:
+        count = int(r.text[1:])
+    else:
+        count = 0
+
     strength, improvements = passwordmeter.test(body['new-password'])
 
     if strength > 0.3 and count < 2000 :
