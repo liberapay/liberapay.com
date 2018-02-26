@@ -153,7 +153,7 @@ class TestLogIn(EmailHarness):
         # ↑ checks that original path and query are preserved
 
         # Check that we can change our password
-        password = 'new-password'
+        password = 'New-Password'
         r = self.client.POST(
             '/alice/settings/edit',
             {'new-password': password},
