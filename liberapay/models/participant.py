@@ -625,7 +625,7 @@ class Participant(Model, MixinTeam):
              WHERE member=%s
         """, (self.id,))
         for t in teams:
-            t.set_take_for(self, None, self, cursor)
+            t.set_take_for(self, None, self, cursor=cursor)
 
     def clear_personal_information(self, cursor):
         """Clear personal information such as statements and goal.
