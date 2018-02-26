@@ -2,6 +2,9 @@ from liberapay.constants import PRIVACY_FIELDS
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant
 
+import pwnedpasswords
+import passwordmeter
+from hashlib import sha1
 [---]
 
 request.allow('POST')
@@ -25,8 +28,16 @@ if 'new-password' in body:
         )
         if not p:
             raise response.error(403, _("Incorrect password"))
-    p.update_password(body['new-password'])
-    out['msg'] = _("Your password has been changed.")
+
+    passhash = sha1(body['new-password'].encode("utf-8")).hexdigest().upper()
+    count = pwnedpasswords.check(passhash)
+    strength, improvements = passwordmeter.test(body['new-password'])
+
+    if strength > 0.3 and count < 2000 :
+        p.update_password(body['new-password'])
+        out['msg'] = _("Your password has been changed.")
+    else:
+        out['msg'] = _("Weak password, try choosing a combination of letters, symbols, and numbers.")
 
 elif 'privacy' in body:
     if not p.is_person:
