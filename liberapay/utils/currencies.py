@@ -27,6 +27,17 @@ def _sum(cls, amounts, currency):
         a += m.amount
     return cls(a, currency)
 
+def _Money_init(self, amount=D_ZERO, currency=None):
+    if not isinstance(amount, Decimal):
+        amount = Decimal(str(amount))
+        # Why `str(amount)`? Because:
+        # >>> Decimal(0.23)
+        # Decimal('0.2300000000000000099920072216264088638126850128173828125')
+        # >>> Decimal(str(0.23))
+        # Decimal('0.23')
+    self.amount = amount
+    self.currency = currency
+
 def _Money_eq(self, other):
     if isinstance(other, self.__class__):
         return self.__dict__ == other.__dict__
@@ -35,6 +46,7 @@ def _Money_eq(self, other):
     return other == self
 
 
+Money.__init__ = _Money_init
 Money.__nonzero__ = Money.__bool__
 Money.__eq__ = _Money_eq
 Money.__iter__ = lambda m: iter((m.amount, m.currency))
