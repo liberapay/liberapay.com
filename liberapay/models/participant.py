@@ -476,15 +476,16 @@ class Participant(Model, MixinTeam):
     def close(self, disbursement_strategy):
         """Close the participant's account.
         """
-        with self.db.get_cursor() as cursor:
-            if disbursement_strategy is None:
-                pass  # No balance, supposedly. final_check will make sure.
-            elif disbursement_strategy == 'downstream':
-                # This in particular needs to come before clear_tips_giving.
-                self.distribute_balance_as_final_gift(cursor)
-            else:
-                raise self.UnknownDisbursementStrategy
 
+        if disbursement_strategy is None:
+            pass  # No balance, supposedly. final_check will make sure.
+        elif disbursement_strategy == 'downstream':
+            # This in particular needs to come before clear_tips_giving.
+            self.distribute_balance_as_final_gift()
+        else:
+            raise self.UnknownDisbursementStrategy
+
+        with self.db.get_cursor() as cursor:
             self.clear_tips_giving(cursor)
             self.clear_tips_receiving(cursor)
             self.clear_takes(cursor)
@@ -496,7 +497,7 @@ class Participant(Model, MixinTeam):
 
     class NoOneToGiveFinalGiftTo(Exception): pass
 
-    def distribute_balance_as_final_gift(self, cursor):
+    def distribute_balance_as_final_gift(self):
         """Distribute a balance as a final gift.
         """
         if self.balance == 0:
@@ -516,7 +517,7 @@ class Participant(Model, MixinTeam):
             if tip.kind == 'group':
                 tip.team = Participant.from_id(tip.tippee)
                 tip.takes = [
-                    t for t in tip.team.get_current_takes(cursor=cursor)
+                    t for t in tip.team.get_current_takes()
                     if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
                 tip.total_takes = Money.sum((t['amount'] for t in tip.takes), tip.team.main_currency)
