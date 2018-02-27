@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from psycopg2 import InternalError
 
 from liberapay.billing.payday import Payday
-from liberapay.testing import EUR, Harness
+from liberapay.testing import EUR, USD, Harness
 from liberapay.models.participant import Participant
 from liberapay.utils.currencies import MoneyBasket
 
@@ -187,6 +187,13 @@ class Tests(Harness):
         team.set_take_for(bob, EUR('75.00'), bob)
         alice = Participant.from_username('alice')
         assert alice.receiving == alice.taking == 25
+
+    def test_can_change_take_currency(self):
+        team, alice, bob = self.make_team_of_two()
+        self.take_last_week(team, alice, EUR('30.00'))
+        team.set_take_for(alice, USD('20.00'), alice)
+        self.take_last_week(team, bob, USD('42.00'))
+        team.set_take_for(bob, EUR('70.00'), bob)
 
     # get_takes_last_week - gtlw
 

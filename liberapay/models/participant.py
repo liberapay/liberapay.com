@@ -1680,6 +1680,14 @@ class Participant(Model, MixinTeam):
         """.format(currency), (self.id,)) or D_ZERO, currency)
         return r
 
+    def get_exact_receiving(self):
+        return self.db.one("""
+            SELECT basket_sum(t.amount)
+              FROM current_tips t
+             WHERE t.tippee = %s
+               AND t.is_funded
+        """, (self.id,))
+
     def update_giving_and_tippees(self, cursor):
         updated_tips = self.update_giving(cursor)
         for tip in updated_tips:

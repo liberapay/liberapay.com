@@ -1,3 +1,5 @@
+# coding: utf8
+
 """Teams are groups of participants.
 """
 from __future__ import division, print_function, unicode_literals
@@ -62,7 +64,7 @@ class MixinTeam(object):
         """Get the users' nominal takes last week. Used in throttling.
         """
         assert self.kind == 'group'
-        takes = {t.member: t.amount for t in self.db.all("""
+        takes = OrderedDict((t.member, t.amount) for t in self.db.all("""
 
             SELECT DISTINCT ON (member) member, amount, mtime
               FROM takes
@@ -75,7 +77,9 @@ class MixinTeam(object):
                    )
           ORDER BY member, mtime DESC
 
-        """, (self.id,)) if t.amount}
+        """, (self.id,)) if t.amount)
+        takes.sum = MoneyBasket(takes.values())
+        takes.initial_leftover = self.get_exact_receiving() - takes.sum
         return takes
 
     def get_take_for(self, member):
@@ -86,25 +90,17 @@ class MixinTeam(object):
             (member.id, self.id)
         )
 
-    def compute_max_this_week(self, member_id, last_week):
+    def compute_max_this_week(self, member_id, last_week, currency):
         """2x the member's take last week, or the member's take last week + the
-        leftover, or last week's median take, or 1.00, or infinity if the takes
-        were all zero last week or if throttling is disabled.
+        leftover, or last week's median take, or one currency unit (e.g. €1.00).
         """
-        if not self.throttle_takes:
-            return
-        sum_last_week = sum(last_week.values())
-        if sum_last_week == 0:
-            return
-        sum_last_week = sum_last_week.convert(self.main_currency)
-        initial_leftover = self.receiving - sum_last_week
-        nonzero_last_week = [a.convert(self.main_currency).amount for a in last_week.values() if a]
-        member_last_week = last_week.get(member_id, ZERO[self.main_currency]).convert(self.main_currency)
+        nonzero_last_week = [a.convert(currency).amount for a in last_week.values() if a]
+        member_last_week = last_week.get(member_id, ZERO[currency]).convert(currency)
         return max(
             member_last_week * 2,
-            member_last_week + initial_leftover,
-            Money(median(nonzero_last_week or (0,)), self.main_currency),
-            TAKE_THROTTLING_THRESHOLD[self.main_currency]
+            member_last_week + last_week.initial_leftover.fuzzy_sum(currency),
+            Money(median(nonzero_last_week or (0,)), currency),
+            TAKE_THROTTLING_THRESHOLD[currency]
         )
 
     def set_take_for(self, member, take, recorder, check_max=True, cursor=None):
@@ -123,12 +119,15 @@ class MixinTeam(object):
             # Lock to avoid race conditions
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
             # Throttle the new take, if there is more than one member
-            threshold = TAKE_THROTTLING_THRESHOLD[self.main_currency]
-            if take and check_max and self.nmembers > 1 and take > threshold:
-                last_week = self.get_takes_last_week()
-                max_this_week = self.compute_max_this_week(member.id, last_week)
-                if max_this_week is not None and take > max_this_week:
-                    take = max_this_week
+            if take and check_max and self.throttle_takes and self.nmembers > 1:
+                if take > TAKE_THROTTLING_THRESHOLD[take.currency]:
+                    last_week = self.get_takes_last_week()
+                    if last_week.sum:
+                        max_this_week = self.compute_max_this_week(
+                            member.id, last_week, take.currency
+                        )
+                        if take > max_this_week:
+                            take = max_this_week
             # Insert the new take
             cursor.run("""
 
@@ -278,7 +277,9 @@ class MixinTeam(object):
         """Return an OrderedDict of member dicts.
         """
         takes = self.get_current_takes()
+        nmembers = len(takes)
         last_week = self.get_takes_last_week()
+        compute_max = self.throttle_takes and nmembers > 1 and last_week.sum
         members = OrderedDict()
         members.leftover = self.leftover
         zero = ZERO[self.main_currency]
@@ -289,7 +290,10 @@ class MixinTeam(object):
             member['nominal_take'] = take['amount'].amount
             member['actual_amount'] = take['actual_amount']
             member['last_week'] = last_week.get(m_id, zero).amount
-            x = self.compute_max_this_week(m_id, last_week)
+            if compute_max:
+                x = self.compute_max_this_week(m_id, last_week, take['amount'].currency)
+            else:
+                x = None
             member['max_this_week'] = x
             members[member['id']] = member
         return members
