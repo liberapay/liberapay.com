@@ -29,22 +29,33 @@ if 'new-password' in body:
         if not p:
             raise response.error(403, _("Incorrect password"))
 
-    passhash = sha1(body['new-password'].encode("utf-8")).hexdigest().upper()
+    if body.get('confirmed') != 'true':
+        passhash = sha1(body['new-password'].encode("utf-8")).hexdigest().upper()
+        passhash_short = passhash[:5]
+        URL = "https://api.pwnedpasswords.com/range/"+passhash_short
 
-    URL = "https://api.pwnedpasswords.com/pwnedpassword/"+passhash
-    r = requests.get(url = URL)
-    if r.status_code == 200:
-        count = int(r.text[1:])
-    else:
+        r = requests.get(url = URL)
         count = 0
+        for line in r.text.split("\n"):
+            suffix = line.split(":")[0]
+            if passhash_short + suffix == passhash:
+                count = int(line.split(":")[1].strip())
+        strength, improvements = passwordmeter.test(body['new-password'])
 
-    strength, improvements = passwordmeter.test(body['new-password'])
-
-    if strength > 0.3 and count < 2000 :
-        p.update_password(body['new-password'])
-        out['msg'] = _("Your password has been changed.")
-    else:
-        out['msg'] = _("Weak password, try choosing a combination of letters, symbols, and numbers.")
+        back_to = p.path('settings')
+        if strength > 0.3 and count < 2000 :
+            msg = _(
+                "Are you sure you want to change your password?"
+            )
+            raise response.render('templates/confirm.spt', state, cls='warning', msg=msg, back_to=back_to)
+        else:
+            msg = _(
+                "The new password is not strong enough. We recommend you to choose a combination of letters, symbols, and numbers."
+                "Are you sure you want to change your password?"
+            )
+            raise response.render('templates/confirm.spt', state, msg=msg, back_to=back_to)
+    p.update_password(body['new-password'])
+    out['msg'] = _("Your password has been changed")
 
 elif 'privacy' in body:
     if not p.is_person:

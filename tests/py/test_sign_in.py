@@ -156,7 +156,8 @@ class TestLogIn(EmailHarness):
         password = 'New-Password'
         r = self.client.POST(
             '/alice/settings/edit',
-            {'new-password': password},
+            {'new-password': password,
+             'confirmed': 'true'},
             cookies=r.headers.cookie,
             raise_immediately=False,
         )
