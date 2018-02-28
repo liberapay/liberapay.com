@@ -1645,6 +1645,8 @@ class Participant(Model, MixinTeam):
                AND t.amount::currency = %s
                AND t.is_funded
         """, (self.id, currency)) or ZERO[currency]
+        if currency not in CURRENCIES:
+            raise ValueError(currency)
         r += Money((cursor or self.db).one("""
             SELECT sum((t.actual_amount).{0})
               FROM current_takes t
