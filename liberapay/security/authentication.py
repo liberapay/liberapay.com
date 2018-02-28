@@ -5,6 +5,9 @@ import binascii
 from six.moves.urllib.parse import urlencode
 
 from pando import Response
+from pando.utils import utcnow
+
+from datetime import timedelta
 
 from liberapay.constants import CURRENCIES, SESSION, SESSION_TIMEOUT
 from liberapay.exceptions import (
@@ -14,6 +17,9 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.utils import get_ip_net
 
+import passwordmeter
+from hashlib import sha1
+import requests
 
 class _ANON(object):
     ANON = True
@@ -57,6 +63,28 @@ def sign_in_with_form_data(body, state):
             )
             if not p:
                 state['log-in.error'] = _("Bad username or password.")
+            else:   #Check strength of current password.
+                last_password_check = p.get_last_event_of_type('password-check')
+                if (not last_password_check) or utcnow() - last_password_check.ts > timedelta(days=30):
+                    passhash = sha1(password.encode("utf-8")).hexdigest().upper()
+                    passhash_short = passhash[:5]
+                    URL = "https://api.pwnedpasswords.com/range/"+passhash_short
+
+                    r = requests.get(url = URL)
+                    count = 0
+                    for line in r.text.split("\n"):
+                        suffix = line.split(":")[0]
+                        if passhash_short + suffix == passhash:
+                            count = int(line.split(":")[1].strip())
+                    strength, improvements = passwordmeter.test(password)
+                    if strength < 0.3:
+                        state['password-check'] = _("We have detected that your current password is weak and recommended you to change it.")
+                    elif count > 500:
+                        state['password-check'] = _("We have detected that your current password is commonly used and recommend you to change it.")
+                    elif count > 0:
+                        state['password-check'] = _("We have detected that your current password has been compromised in leaks on the internet and recommend you to change it.")
+                    p.add_event(website.db.get_cursor(), 'password-check', None)
+
         elif k == 'username':
             state['log-in.error'] = _("\"{0}\" is not a valid email address.", id)
             return

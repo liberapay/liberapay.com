@@ -45,26 +45,28 @@ if 'new-password' in body:
         back_to = p.path('settings')
         if strength < 0.3 :
             msg = _(
-                "The new password is weak. We recommend you to choose a combination of letters, symbols, and numbers."
+                "The new password is weak. We recommend you to choose a combination of letters, symbols, and numbers. "
                 "Are you sure you want to change your password?"
             )
             raise response.render('templates/confirm.spt', state, msg=msg, back_to=back_to)
         elif count > 500 :
             msg = _(
-                "The new password is found to be commonly used by other people. We recommend you to choose something more unique."
+                "The new password is found to be commonly used by other people. We recommend you to choose something more unique. "
                 "Are you sure you want to change your password?"
             )
             raise response.render('templates/confirm.spt', state, msg=msg, back_to=back_to)
         elif count > 0 :
             msg = _(
-                "The new password has been found be compromised in leaks on the internet."
+                "The new password has been compromised in leaks on the internet before. "
                 "Are you sure you want to change your password?"
             )
             raise response.render('templates/confirm.spt', state, msg=msg, cls='warning', back_to=back_to)
         else:
             p.update_password(body['new-password'])
+            p.add_event(website.db.get_cursor(), 'password-check', None)
             out['msg'] = _("Your password has been changed.")
     else:
+        p.add_event(website.db.get_cursor(), 'password-check', None)
         p.update_password(body['new-password'])
         out['msg'] = _("Your password has been changed.")
 
