@@ -63,10 +63,10 @@ if 'new-password' in body:
             raise response.render('templates/confirm.spt', state, msg=msg, cls='warning', back_to=back_to)
         else:
             p.update_password(body['new-password'])
-            p.add_event(website.db.get_cursor(), 'password-check', None)
+            p.add_event(website.db, 'password-check', None)
             out['msg'] = _("Your password has been changed.")
     else:
-        p.add_event(website.db.get_cursor(), 'password-check', None)
+        p.add_event(website.db, 'password-check', None)
         p.update_password(body['new-password'])
         out['msg'] = _("Your password has been changed.")
 
