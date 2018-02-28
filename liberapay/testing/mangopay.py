@@ -1,11 +1,14 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import itertools
+
 from mangopay.resources import (
     BankAccount, CardRegistration, NaturalUser, Wallet,
 )
 import mock
 import requests
 
+from liberapay.constants import ZERO
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import Harness
 from liberapay.testing.vcr import use_cassette
@@ -38,7 +41,14 @@ def fake_transfer(tr):
     tr.Id = -1
 
 
+def fake_wallet(w):
+    w.Balance = ZERO[w.Currency]
+    w.Id = -next(FakeTransfersHarness.wallet_id_serial)
+
+
 class FakeTransfersHarness(Harness):
+
+    wallet_id_serial = itertools.count(1000000)
 
     def setUp(self):
         super(FakeTransfersHarness, self).setUp()
@@ -46,9 +56,14 @@ class FakeTransfersHarness(Harness):
         _mock = self.transfer_patch.__enter__()
         _mock.side_effect = fake_transfer
         self.transfer_mock = _mock
+        self.wallet_patch = mock.patch('mangopay.resources.Wallet.save', autospec=True)
+        _mock = self.wallet_patch.__enter__()
+        _mock.side_effect = fake_wallet
+        self.wallet_mock = _mock
 
     def tearDown(self):
         self.transfer_patch.__exit__()
+        self.wallet_patch.__exit__()
         super(FakeTransfersHarness, self).tearDown()
 
 

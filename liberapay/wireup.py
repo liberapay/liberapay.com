@@ -1,6 +1,7 @@
 # coding: utf8
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from decimal import Decimal
 from ipaddress import ip_network
 import json
 import logging
@@ -157,14 +158,14 @@ def database(env, tell_sentry):
         pass
 
     def adapt_money_basket(b):
-        return AsIs('(%s,%s)::currency_basket' % (b.eur.amount, b.usd.amount))
+        return AsIs('(%s,%s)::currency_basket' % (b.amounts['EUR'], b.amounts['USD']))
     register_adapter(MoneyBasket, adapt_money_basket)
 
     def cast_currency_basket(v, cursor):
         if v is None:
             return None
         eur, usd = v[1:-1].split(',')
-        return MoneyBasket(Money(eur, 'EUR'), Money(usd, 'USD'))
+        return MoneyBasket(EUR=Decimal(eur), USD=Decimal(usd))
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
         register_type(new_type((oid,), _str('currency_basket'), cast_currency_basket))

@@ -5,6 +5,7 @@ from __future__ import division, print_function, unicode_literals
 from collections import namedtuple
 from datetime import date
 from decimal import Decimal, ROUND_UP
+from itertools import chain
 import os
 import os.path
 from subprocess import Popen
@@ -178,6 +179,7 @@ class Payday(object):
                  , goal
                  , kind
                  , main_currency
+                 , accepted_currencies
               FROM participants p
          LEFT JOIN wallets eur_w ON eur_w.owner = p.id AND eur_w.balance::currency = 'EUR' AND eur_w.is_current
          LEFT JOIN wallets usd_w ON usd_w.owner = p.id AND usd_w.balance::currency = 'USD' AND usd_w.is_current
@@ -347,8 +349,9 @@ class Payday(object):
                    ), t.amount::currency) AS past_transfers_sum
         """, args)]
         takes = [NS(t._asdict()) for t in cursor.all("""
-            SELECT t.member, t.amount
+            SELECT t.member, t.amount, p.main_currency, p.accepted_currencies
               FROM payday_takes t
+              JOIN payday_participants p ON p.id = t.member
              WHERE t.team = %(team_id)s;
         """, args)]
         transfers, leftover = Payday.resolve_takes(tips, takes, currency)
@@ -357,19 +360,34 @@ class Payday(object):
                        (t.tipper, t.member, t.amount, team_id))
 
     @staticmethod
-    def resolve_takes(tips, takes, currency):
+    def resolve_takes(tips, takes, ref_currency):
         """Resolve many-to-many donations (team takes)
         """
-        zero = constants.ZERO[currency]
-        total_income = sum(t.full_amount for t in tips) or zero
-        total_takes = sum(t.amount for t in takes) or zero
-        leftover = max(total_income - total_takes, zero)
-        if total_income == 0 or total_takes == 0:
-            return (), leftover
-        takes_ratio = min(total_income / total_takes, 1)
+        total_income = MoneyBasket(t.full_amount for t in tips)
+        if total_income == 0:
+            return (), total_income
+        takes = [t for t in takes if t.amount > 0]
+        total_takes = MoneyBasket(t.amount for t in takes)
+        if total_takes == 0:
+            return (), total_income
+        fuzzy_income_sum = total_income.fuzzy_sum(ref_currency)
+        fuzzy_takes_sum = total_takes.fuzzy_sum(ref_currency)
+        tips_by_currency = group_by(tips, lambda t: t.full_amount.currency)
+        takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
+        takes_by_secondary_currency = {c: [] for c in tips_by_currency}
+        takes_ratio = min(fuzzy_income_sum / fuzzy_takes_sum, 1)
         for take in takes:
             take.amount = (take.amount * takes_ratio).round_up()
-        tips_ratio = min(total_takes / total_income, 1)
+            take.accepted_currencies = take.accepted_currencies.split(',')
+            for accepted in take.accepted_currencies:
+                skip = (
+                    accepted == take.main_currency or
+                    accepted not in takes_by_secondary_currency
+                )
+                if skip:
+                    continue
+                takes_by_secondary_currency[accepted].append(take)
+        tips_ratio = min(fuzzy_takes_sum / fuzzy_income_sum, 1)
         adjust_tips = tips_ratio != 1
         if adjust_tips:
             # The team has a leftover, so donation amounts can be adjusted.
@@ -393,8 +411,8 @@ class Payday(object):
                     tip.weeks_to_catch_up = max_weeks - tip.weeks
                     tip.ratio = min(min_tip_ratio + tip.weeks_to_catch_up, 1)
                     tip.amount = (tip.full_amount * tip.ratio).round_up()
-                naive_amounts_sum = sum(tip.amount for tip in tips)
-                total_to_transfer = min(total_takes, total_income)
+                naive_amounts_sum = MoneyBasket(tip.amount for tip in tips).fuzzy_sum(ref_currency)
+                total_to_transfer = min(fuzzy_takes_sum, fuzzy_income_sum)
                 delta = total_to_transfer - naive_amounts_sum
                 if delta == 0:
                     # The sum of the naive amounts computed in the previous loop
@@ -413,13 +431,13 @@ class Payday(object):
                                 min_tip_amount = (tip.full_amount * min_tip_ratio).round_up()
                                 tip.leeway = min_tip_amount - tip.amount
                             else:
-                                tip.leeway = 0
+                                tip.leeway = tip.amount.zero()
                     else:
                         # The naive amounts are too low: we can raise all the
                         # tips that aren't already at their maximum
                         for tip in tips:
                             tip.leeway = tip.full_amount - tip.amount
-                    leeway = sum(tip.leeway for tip in tips)
+                    leeway = MoneyBasket(tip.leeway for tip in tips).fuzzy_sum(ref_currency)
                     leeway_ratio = min(delta / leeway, 1)
                     tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
         # Loop: compute the adjusted donation amounts, and do the transfers
@@ -434,15 +452,24 @@ class Payday(object):
                 tip.amount = tip_amount
             else:
                 tip.amount = (tip.full_amount * tips_ratio).round_up()
-            for take in takes:
+            tip_currency = tip.amount.currency
+            sorted_takes = chain(
+                takes_by_preferred_currency.get(tip_currency, ()),
+                takes_by_secondary_currency.get(tip_currency, ())
+            )
+            for take in sorted_takes:
                 if take.amount == 0 or tip.tipper == take.member:
                     continue
-                transfer_amount = min(tip.amount, take.amount)
+                transfer_amount = min(tip.amount, take.amount.convert(tip_currency))
                 transfers.append(TakeTransfer(tip.tipper, take.member, transfer_amount))
+                if transfer_amount == tip.amount:
+                    take.amount -= transfer_amount.convert(take.amount.currency)
+                else:
+                    take.amount = take.amount.zero()
                 tip.amount -= transfer_amount
-                take.amount -= transfer_amount
                 if tip.amount == 0:
                     break
+        leftover = total_income - MoneyBasket(t.amount for t in transfers)
         return transfers, leftover
 
     @staticmethod
@@ -696,13 +723,13 @@ class Payday(object):
             UPDATE takes t
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
-                          , COALESCE((
-                                SELECT sum(tr.amount)
+                          , (
+                                SELECT basket_sum(tr.amount)
                                   FROM payday_transfers tr
                                  WHERE tr.team = t2.team
                                    AND tr.tippee = t2.member
                                    AND tr.context = 'take'
-                            ), zero(t2.actual_amount)) AS actual_amount
+                            ) AS actual_amount
                        FROM current_takes t2
                    ) t2
              WHERE t.id = t2.id
@@ -754,12 +781,17 @@ class Payday(object):
             UPDATE participants p
                SET leftover = p2.leftover
               FROM ( SELECT p2.id
-                          , p2.receiving - coalesce_currency_amount((
-                                SELECT sum(t.amount, p2.main_currency)
+                          , (
+                                SELECT basket_sum(t.amount)
+                                  FROM payday_tips t
+                                 WHERE t.tippee = p2.id
+                                   AND t.is_funded
+                            ) - (
+                                SELECT basket_sum(t.amount)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                     OR t.team = p2.id
-                            ), p2.main_currency) AS leftover
+                            ) AS leftover
                        FROM participants p2
                    ) p2
              WHERE p.id = p2.id
@@ -841,7 +873,7 @@ class Payday(object):
             p = Participant.from_id(tippee_id)
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
-            by_team = {k: MoneyBasket.sum(t['amount'] for t in v)
+            by_team = {k: MoneyBasket(t['amount'] for t in v)
                        for k, v in group_by(transfers, 'team').items()}
             total = sum(by_team.values(), MoneyBasket())
             personal = by_team.pop(None, 0)

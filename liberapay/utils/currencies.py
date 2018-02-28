@@ -1,13 +1,15 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from collections import OrderedDict
 from decimal import Decimal, ROUND_DOWN, ROUND_UP
+from numbers import Number
 
 from mangopay.exceptions import CurrencyMismatch
 from mangopay.utils import Money
 import requests
 import xmltodict
 
-from liberapay.constants import D_CENT, D_ZERO, ZERO
+from liberapay.constants import CURRENCIES, D_CENT, D_ZERO, ZERO
 from liberapay.website import website
 
 
@@ -25,9 +27,28 @@ def _sum(cls, amounts, currency):
         a += m.amount
     return cls(a, currency)
 
+def _Money_init(self, amount=D_ZERO, currency=None):
+    if not isinstance(amount, Decimal):
+        amount = Decimal(str(amount))
+        # Why `str(amount)`? Because:
+        # >>> Decimal(0.23)
+        # Decimal('0.2300000000000000099920072216264088638126850128173828125')
+        # >>> Decimal(str(0.23))
+        # Decimal('0.23')
+    self.amount = amount
+    self.currency = currency
 
+def _Money_eq(self, other):
+    if isinstance(other, self.__class__):
+        return self.__dict__ == other.__dict__
+    if isinstance(other, (Decimal, Number)):
+        return self.amount == other
+    return other == self
+
+
+Money.__init__ = _Money_init
 Money.__nonzero__ = Money.__bool__
-Money.__eq__ = lambda a, b: a.__dict__ == b.__dict__ if isinstance(b, Money) else a.amount == b
+Money.__eq__ = _Money_eq
 Money.__iter__ = lambda m: iter((m.amount, m.currency))
 Money.__repr__ = lambda m: '<Money "%s">' % m
 Money.__str__ = lambda m: '%(amount)s %(currency)s' % m.__dict__
@@ -42,34 +63,43 @@ Money.zero = lambda m: Money(D_ZERO, m.currency)
 
 class MoneyBasket(object):
 
-    def __init__(self, eur=ZERO['EUR'], usd=ZERO['USD']):
-        assert eur.currency == 'EUR'
-        assert usd.currency == 'USD'
-        self.eur = eur
-        self.usd = usd
+    def __init__(self, *args, **decimals):
+        self.amounts = OrderedDict(
+            (currency, decimals.get(currency, D_ZERO)) for currency in CURRENCIES
+        )
+        for arg in args:
+            if isinstance(arg, Money):
+                self.amounts[arg.currency] += arg.amount
+            else:
+                for m in arg:
+                    self.amounts[m.currency] += m.amount
 
     def __iter__(self):
-        return iter((self.eur, self.usd))
+        return (Money(amount, currency) for currency, amount in self.amounts.items())
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
+            return self.amounts == other.amounts
+        elif isinstance(other, Money):
+            return self.amounts == MoneyBasket(other).amounts
+        elif other == 0:
+            return all(v == 0 for v in self.amounts.values())
         return False
 
     def __add__(self, other):
-        r = self.__class__(self.eur, self.usd)
+        r = self.__class__(**self.amounts)
         if isinstance(other, self.__class__):
-            for k, v in other.__dict__.items():
-                if k in r.__dict__:
-                    r.__dict__[k] += v
+            for currency, amount in other.amounts.items():
+                if currency in r.amounts:
+                    r.amounts[currency] += amount
                 else:
-                    r.__dict__[k] = v
+                    r.amounts[currency] = amount
         elif isinstance(other, Money):
-            k = other.currency.lower()
-            if k in r.__dict__:
-                r.__dict__[k] += other
+            currency = other.currency
+            if currency in r.amounts:
+                r.amounts[currency] += other
             else:
-                r.__dict__[k] = other
+                r.amounts[currency] = other
         elif other == 0:
             return r
         else:
@@ -80,36 +110,39 @@ class MoneyBasket(object):
         return self.__add__(other)
 
     def __sub__(self, other):
-        r = self.__class__(self.eur, self.usd)
+        r = self.__class__(**self.amounts)
         if isinstance(other, self.__class__):
-            for k, v in other.__dict__.items():
-                if k in r.__dict__:
-                    r.__dict__[k] -= v
+            for currency, v in other.amounts.items():
+                if currency in r.amounts:
+                    r.amounts[currency] -= v
                 else:
-                    r.__dict__[k] = -v
+                    r.amounts[currency] = -v
         elif isinstance(other, Money):
-            k = other.currency.lower()
-            if k in r.__dict__:
-                r.__dict__[k] -= other
+            currency = other.currency
+            if currency in r.amounts:
+                r.amounts[currency] -= other
             else:
-                r.__dict__[k] = -other
+                r.amounts[currency] = -other
         else:
             raise TypeError(other)
         return r
 
     def __repr__(self):
-        return b'%s[%s, %s]' % (self.__class__.__name__, self.eur, self.usd)
+        return '%s[%s]' % (
+            self.__class__.__name__,
+            ', '.join('%s %s' % (a, c) for c, a in self.amounts.items())
+        )
 
     def __bool__(self):
-        return any(v for v in self.__dict__.values())
+        return any(v for v in self.amounts.values())
 
     __nonzero__ = __bool__
 
     @property
     def currencies_present(self):
-        return [m.currency for m in self if m.amount]
+        return self.amounts.keys()
 
-    def fuzzy_sum(self, currency):
+    def fuzzy_sum(self, currency, rounding=ROUND_UP):
         a = ZERO[currency].amount
         fuzzy = False
         for m in self:
@@ -118,15 +151,8 @@ class MoneyBasket(object):
             elif m.amount:
                 a += m.amount * website.currency_exchange_rates[(m.currency, currency)]
                 fuzzy = True
-        r = Money(a, currency)
+        r = Money(a.quantize(D_CENT, rounding=rounding), currency)
         r.fuzzy = fuzzy
-        return r
-
-    @classmethod
-    def sum(cls, amounts):
-        r = cls(Money('0.00', 'EUR'), usd=Money('0.00', 'USD'))
-        for a in amounts:
-            r.__dict__[a.currency.lower()].amount += a.amount
         return r
 
 

@@ -5,10 +5,9 @@ from __future__ import division, print_function, unicode_literals
 from collections import OrderedDict
 from statistics import median
 
-from mangopay.utils import Money
-
 from liberapay.constants import ZERO, TAKE_THROTTLING_THRESHOLD
-from liberapay.utils import NS
+from liberapay.utils import NS, group_by
+from liberapay.utils.currencies import Money, MoneyBasket
 
 
 class MemberLimitReached(Exception): pass
@@ -153,7 +152,7 @@ class MixinTeam(object):
                                        AND team=%(team)s
                                   ORDER BY mtime DESC
                                      LIMIT 1
-                                ), zero(%(amount)s::currency_amount))
+                                ), empty_currency_basket())
                             END
                           , %(recorder)s
 
@@ -206,7 +205,7 @@ class MixinTeam(object):
                AND p.is_suspended IS NOT true
         """, dict(team_id=self.id))]
         takes = [NS(r._asdict()) for r in (cursor or self.db).all("""
-            SELECT t.*
+            SELECT t.*, p.main_currency, p.accepted_currencies
               FROM current_takes t
               JOIN participants p ON p.id = t.member
              WHERE t.team = %s
@@ -214,24 +213,18 @@ class MixinTeam(object):
                AND p.mangopay_user_id IS NOT NULL
         """, (self.id,))]
         # Recompute the takes
-        takes_sum = {}
-        tippers = {}
         transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
-        for t in transfers:
-            if t.member in takes_sum:
-                takes_sum[t.member] += t.amount
-            else:
-                takes_sum[t.member] = t.amount
-            if t.member in tippers:
-                tippers[t.member].add(t.tipper)
-            else:
-                tippers[t.member] = set((t.tipper,))
+        transfers_by_member = group_by(transfers, lambda t: t.member)
+        takes_sum = {k: MoneyBasket(t.amount for t in tr_list)
+                     for k, tr_list in transfers_by_member.items()}
+        tippers = {k: set(t.tipper for t in tr_list)
+                   for k, tr_list in transfers_by_member.items()}
         # Update the leftover
         cursor.run("UPDATE participants SET leftover = %s WHERE id = %s",
                    (new_leftover, self.id))
         self.set_attributes(leftover=new_leftover)
         # Update the cached amounts (actual_amount, taking, and receiving)
-        zero = ZERO[self.main_currency]
+        zero = MoneyBasket()
         for take in takes:
             member_id = take.member
             old_amount = take.actual_amount or zero
@@ -248,7 +241,7 @@ class MixinTeam(object):
                 member_currency, old_taking = cursor.one(
                     "SELECT main_currency, taking FROM participants WHERE id = %s", (member_id,)
                 )
-                diff = diff.convert(member_currency)
+                diff = diff.fuzzy_sum(member_currency)
                 if old_taking + diff < 0:
                     # Make sure currency fluctuation doesn't result in a negative number
                     diff = -old_taking

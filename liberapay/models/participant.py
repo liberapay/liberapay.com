@@ -21,7 +21,7 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_ZERO,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
@@ -476,15 +476,16 @@ class Participant(Model, MixinTeam):
     def close(self, disbursement_strategy):
         """Close the participant's account.
         """
-        with self.db.get_cursor() as cursor:
-            if disbursement_strategy is None:
-                pass  # No balance, supposedly. final_check will make sure.
-            elif disbursement_strategy == 'downstream':
-                # This in particular needs to come before clear_tips_giving.
-                self.distribute_balance_as_final_gift(cursor)
-            else:
-                raise self.UnknownDisbursementStrategy
 
+        if disbursement_strategy is None:
+            pass  # No balance, supposedly. final_check will make sure.
+        elif disbursement_strategy == 'downstream':
+            # This in particular needs to come before clear_tips_giving.
+            self.distribute_balance_as_final_gift()
+        else:
+            raise self.UnknownDisbursementStrategy
+
+        with self.db.get_cursor() as cursor:
             self.clear_tips_giving(cursor)
             self.clear_tips_receiving(cursor)
             self.clear_takes(cursor)
@@ -496,7 +497,7 @@ class Participant(Model, MixinTeam):
 
     class NoOneToGiveFinalGiftTo(Exception): pass
 
-    def distribute_balance_as_final_gift(self, cursor):
+    def distribute_balance_as_final_gift(self):
         """Distribute a balance as a final gift.
         """
         if self.balance == 0:
@@ -516,7 +517,7 @@ class Participant(Model, MixinTeam):
             if tip.kind == 'group':
                 tip.team = Participant.from_id(tip.tippee)
                 tip.takes = [
-                    t for t in tip.team.get_current_takes(cursor=cursor)
+                    t for t in tip.team.get_current_takes()
                     if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
                 tip.total_takes = Money.sum((t['amount'] for t in tip.takes), tip.team.main_currency)
@@ -625,7 +626,7 @@ class Participant(Model, MixinTeam):
              WHERE member=%s
         """, (self.id,))
         for t in teams:
-            t.set_take_for(self, None, self, cursor)
+            t.set_take_for(self, None, self, cursor=cursor)
 
     def clear_personal_information(self, cursor):
         """Clear personal information such as statements and goal.
@@ -1644,12 +1645,13 @@ class Participant(Model, MixinTeam):
                AND t.amount::currency = %s
                AND t.is_funded
         """, (self.id, currency)) or ZERO[currency]
-        r += (cursor or self.db).one("""
-            SELECT sum(t.actual_amount)
+        if currency not in CURRENCIES:
+            raise ValueError(currency)
+        r += Money((cursor or self.db).one("""
+            SELECT sum((t.actual_amount).{0})
               FROM current_takes t
              WHERE t.member = %s
-               AND t.amount::currency = %s
-        """, (self.id, currency)) or ZERO[currency]
+        """.format(currency), (self.id,)) or D_ZERO, currency)
         return r
 
     def update_giving_and_tippees(self, cursor):
