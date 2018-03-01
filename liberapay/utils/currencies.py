@@ -99,9 +99,9 @@ class MoneyBasket(object):
         elif isinstance(other, Money):
             currency = other.currency
             if currency in r.amounts:
-                r.amounts[currency] += other
+                r.amounts[currency] += other.amount
             else:
-                r.amounts[currency] = other
+                r.amounts[currency] = other.amount
         elif other == 0:
             return r
         else:
@@ -122,9 +122,9 @@ class MoneyBasket(object):
         elif isinstance(other, Money):
             currency = other.currency
             if currency in r.amounts:
-                r.amounts[currency] -= other
+                r.amounts[currency] -= other.amount
             else:
-                r.amounts[currency] = -other
+                r.amounts[currency] = -other.amount
         else:
             raise TypeError(other)
         return r
