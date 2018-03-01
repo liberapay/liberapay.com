@@ -336,7 +336,8 @@ class Participant(Model, MixinTeam):
             suffix = line.split(":")[0]
             if passhash_short + suffix == passhash:
                 count = int(line.split(":")[1].strip())
-        strength = passwordmeter.test(password)[0]
+        meter = passwordmeter.Meter(settings=dict(factors='length,charmix,variety,casemix,phrase'))
+        strength = meter.test(password)[0]
         if strength < 0.3:
             status = 'weak'
         elif count > 500:
