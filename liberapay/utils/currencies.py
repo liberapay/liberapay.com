@@ -43,7 +43,9 @@ def _Money_eq(self, other):
         return self.__dict__ == other.__dict__
     if isinstance(other, (Decimal, Number)):
         return self.amount == other
-    return other == self
+    if isinstance(other, MoneyBasket):
+        return other.__eq__(self)
+    return False
 
 
 Money.__init__ = _Money_init
