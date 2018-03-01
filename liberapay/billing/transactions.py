@@ -1009,6 +1009,7 @@ def check_wallet_balance(w, state={}):
 
 
 def check_all_balances():
+    from liberapay.billing.payday import Payday
     from liberapay.website import website
     wallets = website.db.all("""
         SELECT *
@@ -1017,4 +1018,4 @@ def check_all_balances():
     """)
     for w in wallets:
         check_wallet_balance(w)
-        sleep(0.1)
+        sleep(max(getattr(Payday, 'transfer_delay', 0), 0.1))
