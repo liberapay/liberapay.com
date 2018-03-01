@@ -276,6 +276,19 @@ CREATE OPERATOR <= (
 
 CREATE TYPE currency_basket AS (EUR numeric, USD numeric);
 
+CREATE FUNCTION empty_currency_basket() RETURNS currency_basket AS $$
+    BEGIN RETURN ('0.00'::numeric, '0.00'::numeric); END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE FUNCTION make_currency_basket(currency_amount) RETURNS currency_basket AS $$
+    BEGIN RETURN (CASE
+        WHEN $1.currency = 'EUR' THEN ($1.amount, '0.00'::numeric)
+                                 ELSE ('0.00'::numeric, $1.amount)
+    END); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
+CREATE CAST (currency_amount as currency_basket) WITH FUNCTION make_currency_basket(currency_amount);
+
 CREATE FUNCTION currency_basket_add(currency_basket, currency_amount)
 RETURNS currency_basket AS $$
     BEGIN
@@ -358,6 +371,12 @@ CREATE OPERATOR >= (
 );
 
 CREATE AGGREGATE basket_sum(currency_amount) (
+    sfunc = currency_basket_add,
+    stype = currency_basket,
+    initcond = '(0.00,0.00)'
+);
+
+CREATE AGGREGATE sum(currency_basket) (
     sfunc = currency_basket_add,
     stype = currency_basket,
     initcond = '(0.00,0.00)'

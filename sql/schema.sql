@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '61'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '62'::jsonb);
 
 
 -- app configuration
@@ -85,7 +85,7 @@ CREATE TABLE participants
 , throttle_takes        boolean                 NOT NULL DEFAULT TRUE
 
 , nteampatrons          int                     NOT NULL DEFAULT 0
-, leftover              currency_amount         NOT NULL CHECK (leftover >= 0)
+, leftover              currency_basket
 
 , main_currency         currency                NOT NULL DEFAULT 'EUR'
 , accepted_currencies   text
@@ -460,7 +460,7 @@ CREATE TABLE takes
 , team              bigint               NOT NULL REFERENCES participants
 , amount            currency_amount      DEFAULT NULL
 , recorder          bigint               NOT NULL REFERENCES participants
-, actual_amount     currency_amount
+, actual_amount     currency_basket
 , CONSTRAINT not_negative CHECK (amount IS NULL OR amount >= 0)
 , CONSTRAINT null_amounts_chk CHECK ((actual_amount IS NULL) = (amount IS NULL))
  );
