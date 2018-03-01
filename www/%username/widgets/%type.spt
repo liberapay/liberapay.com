@@ -24,7 +24,7 @@ if participant.hide_giving and t_is_giving or \
    participant.hide_receiving and not t_is_giving:
     raise response.error(403)
 
-response.headers[b'Cache-Control'] = b'public, max-age=600'
+response.headers[b'Cache-Control'] = b'public, max-age=3600'
 response.headers[b'Vary'] = b'Accept-Language'
 
 [---] application/javascript via jinja2_html_jswrapped
