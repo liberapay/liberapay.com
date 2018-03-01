@@ -1,8 +1,9 @@
 from __future__ import division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
+from datetime import timedelta
 from email.utils import formataddr
-from hashlib import pbkdf2_hmac, md5
+from hashlib import pbkdf2_hmac, md5, sha1
 from os import urandom
 from time import sleep
 import uuid
@@ -17,8 +18,10 @@ from mangopay.utils import Money
 from markupsafe import escape as htmlescape
 from pando import json
 from pando.utils import utcnow
+import passwordmeter
 from postgres.orm import Model
 from psycopg2 import IntegrityError
+import requests
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_ZERO,
@@ -318,6 +321,36 @@ class Participant(Model, MixinTeam):
                      , password_mtime = CURRENT_TIMESTAMP
                  WHERE id = %(p_id)s;
             """, locals())
+
+    def check_password(self, password, context):
+        if context == 'login':
+            last_password_check = self.get_last_event_of_type('password-check')
+            if last_password_check and utcnow() - last_password_check.ts < timedelta(days=180):
+                return
+        passhash = sha1(password.encode("utf-8")).hexdigest().upper()
+        passhash_short = passhash[:5]
+        URL = "https://api.pwnedpasswords.com/range/"+passhash_short
+        r = requests.get(url=URL)
+        count = 0
+        for line in r.text.split("\n"):
+            suffix = line.split(":")[0]
+            if passhash_short + suffix == passhash:
+                count = int(line.split(":")[1].strip())
+        strength = passwordmeter.test(password)[0]
+        if strength < 0.3:
+            status = 'weak'
+        elif count > 500:
+            status = 'common'
+        elif count > 0:
+            status = 'compromised'
+        else:
+            status = 'strong'
+        if context == 'login' and status != 'strong':
+            self.notify('password_warning', email=False, password_status=status)
+            self.add_event(website.db, 'password-check', None)
+            return
+        elif context == 'update_password':
+            return status
 
 
     # Session Management
