@@ -97,6 +97,8 @@ class Locale(babel.core.Locale):
             return l[0] if n == 1 else None
 
     def format_money_basket(self, basket, sep=','):
+        if basket is None:
+            return '0'
         items = (
             format_currency(money.amount, money.currency, locale=self)
             for money in basket if money
