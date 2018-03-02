@@ -1766,8 +1766,8 @@ class Participant(Model, MixinTeam):
         amount = periodic_amount * PERIOD_CONVERSION_RATES[period]
 
         if periodic_amount != 0:
-            limits = DONATION_LIMITS[amount.currency]['weekly']
-            if amount < limits[0] or amount > limits[1]:
+            limits = DONATION_LIMITS[periodic_amount.currency][period]
+            if periodic_amount < limits[0] or periodic_amount > limits[1]:
                 raise BadAmount(periodic_amount, period, limits)
 
         amount = amount.round_up()
