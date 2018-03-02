@@ -140,6 +140,18 @@ class MoneyBasket(object):
 
     __nonzero__ = __bool__
 
+    def __setstate__(self, state):
+        """Backward-compatible unpickling
+
+        The original version of `MoneyBasket` stored `Money` objects in its
+        `__dict__`, whereas the current version stores `Decimal`s in the
+        `amounts` attribute.
+        """
+        if 'amounts' in state:
+            self.__dict__ = state
+        else:
+            self.amounts = {m.currency: m.amount for m in state.values()}
+
     @property
     def currencies_present(self):
         return self.amounts.keys()
