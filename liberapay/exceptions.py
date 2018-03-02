@@ -21,6 +21,13 @@ class LazyResponse(Response):
         f = self.lazy_body
         self.body = f(*resolve_dependencies(f, state).as_args)
 
+    def render_in_english(self):
+        f = self.lazy_body
+        fake_state = {}
+        from liberapay.utils.i18n import LOCALE_EN, add_helpers_to_context
+        add_helpers_to_context(fake_state, LOCALE_EN)
+        return f(*resolve_dependencies(f, fake_state).as_args)
+
 
 class AuthRequired(LazyResponse):
 
