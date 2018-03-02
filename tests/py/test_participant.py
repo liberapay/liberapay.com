@@ -287,17 +287,21 @@ class Tests(Harness):
         assert t['is_pledge'] is False
         assert t['first_time_tipper'] is True
 
-    def test_stt_works_for_monthly_donations(self):
-        alice = self.make_participant('alice', balance=EUR(100))
-        bob = self.make_participant('bob')
-        t = alice.set_tip_to(bob, EUR('4.33'), 'monthly')
-        assert t['amount'] == 1
+    def test_stt_converts_monthly_and_yearly_amounts_correctly(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob', accepted_currencies='EUR,USD')
 
-    def test_stt_works_for_yearly_donations(self):
-        alice = self.make_participant('alice', balance=EUR(100))
-        bob = self.make_participant('bob')
-        t = alice.set_tip_to(bob, EUR('104'), 'yearly')
-        assert t['amount'] == 2
+        t = alice.set_tip_to(bob, EUR('0.05'), 'monthly')
+        assert t['amount'] == EUR('0.01')
+
+        t = alice.set_tip_to(bob, USD('433.34'), 'monthly')
+        assert t['amount'] == USD('100.00')
+
+        t = alice.set_tip_to(bob, USD('0.52'), 'yearly')
+        assert t['amount'] == USD('0.01')
+
+        t = alice.set_tip_to(bob, EUR('5200.00'), 'yearly')
+        assert t['amount'] == EUR('100.00')
 
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', balance=EUR(100))
