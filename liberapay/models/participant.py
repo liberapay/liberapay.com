@@ -1411,7 +1411,6 @@ class Participant(Model, MixinTeam):
                      , giving = convert(giving, %(new_currency)s)
                      , receiving = convert(receiving, %(new_currency)s)
                      , taking = convert(taking, %(new_currency)s)
-                     , leftover = zero(%(new_currency)s::currency)
                  WHERE id = %(p_id)s
                    AND main_currency = %(old_currency)s
              RETURNING id
