@@ -18,7 +18,6 @@ from mangopay.utils import Money
 from markupsafe import escape as htmlescape
 from pando import json
 from pando.utils import utcnow
-import passwordmeter
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 import requests
@@ -338,18 +337,14 @@ class Participant(Model, MixinTeam):
             suffix = line.split(":")[0]
             if passhash_short + suffix == passhash:
                 count = int(line.split(":")[1].strip())
-        meter = passwordmeter.Meter(settings=dict(factors='length,charmix,variety,casemix,phrase'))
-        strength = meter.test(password)[0]
-        if strength < 0.3:
-            status = 'weak'
-        elif count > 500:
+        if count > 500:
             status = 'common'
         elif count > 0:
             status = 'compromised'
         else:
-            status = 'strong'
+            status = 'okay'
         if context == 'login':
-            if status != 'strong':
+            if status != 'okay':
                 self.notify('password_warning', email=False, type='warning', password_status=status)
             self.add_event(website.db, 'password-check', None)
         return status
