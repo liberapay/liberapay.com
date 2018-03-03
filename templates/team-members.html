@@ -1,7 +1,7 @@
 % set CLASSES = ('info', 'success', 'warning', 'danger')
 
 % macro get_cls(m)
-    {{ CLASSES[min(max(int(m['nominal_take'] / (m['last_week'] or 1) * 2 - 1), 0), 3)] }}
+    {{ CLASSES[min(max(int(m['nominal_take'] / (m['last_week'].convert(m['nominal_take'].currency) or 1) * 2 - 1), 0), 3)] }}
 % endmacro
 
 % macro team_takes_table(team, cls='')
@@ -11,7 +11,7 @@
             "Your nominal take from the {0} team is limited to {1} this week. "
             "{2}Why?{3}",
             team.username,
-            format_decimal(members[user.id]['max_this_week'].amount, '#,##0.00'),
+            members[user.id]['max_this_week'],
             '<a href="/about/teams#throttling">'|safe, '</a>'|safe
         ) }}</p>
     % endif
@@ -33,21 +33,24 @@
         % for member in members.values()
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
-            <td>{{ format_decimal(member.last_week, '#,##0.00') }}</td>
-            % set cell_cls = get_cls(member) if member.nominal_take != member.last_week else ''
+            <td>{{ format_money(member.last_week) }}</td>
+            % set nominal_take = member.nominal_take
+            % set cell_cls = get_cls(member) if nominal_take != member.last_week else ''
             % if member.id == user.id
                 <td class="{{ cell_cls or 'active' }}">
                     <form action="/~{{ team.id }}/income/take?back_to={{ urlquote(request.line.uri) }}"
                           method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                         <div class="input-group">
-                            <input class="form-control" name="take" value="{{ format_decimal(member.nominal_take, '#,##0.00') }}" />
+                            % set c = nominal_take.currency
+                            <div class="input-group-addon">{{ locale.currency_symbols.get(c, c) }}</div>
+                            <input class="form-control" name="take" value="{{ format_decimal(nominal_take.amount, '#,##0.00') }}" />
                             <span class="input-group-btn"><button class="btn btn-default" title="{{ _("Update my nominal take") }}" type="submit"><i class="fa fa-edit"></i></button></span>
                         </div>
                     </form>
                 </td>
             % else
-                <td class="{{ 'text-'+cell_cls }}">{{ format_decimal(member.nominal_take, '#,##0.00') }}</td>
+                <td class="{{ 'text-'+cell_cls }}">{{ format_money(nominal_take) }}</td>
             % endif
             <td>{{ locale.format_money_basket(member.actual_amount) }}</td>
         </tr>

@@ -287,9 +287,9 @@ class MixinTeam(object):
             member = {}
             m_id = member['id'] = take['member_id']
             member['username'] = take['member_name']
-            member['nominal_take'] = take['amount'].amount
+            member['nominal_take'] = take['amount']
             member['actual_amount'] = take['actual_amount']
-            member['last_week'] = last_week.get(m_id, zero).amount
+            member['last_week'] = last_week.get(m_id, zero)
             if compute_max:
                 x = self.compute_max_this_week(m_id, last_week, take['amount'].currency)
             else:
