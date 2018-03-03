@@ -28,34 +28,19 @@ if 'new-password' in body:
 
     # Check the password
     password_status = None
-    confirmed = body.get('confirmed') == 'true'
-    if not confirmed:
-        back_to = p.path('settings')
+    ignore_warning = body.get('ignore_warning') == 'true'
+    if not ignore_warning:
         try:
             password_status = p.check_password(body['new-password'], context='update_password')
         except Exception as e:
             website.tell_sentry(e, state)
-        if password_status == 'weak':
-            msg = _(
-                "The new password is weak. We recommend you to choose a combination of letters, symbols, and numbers. "
-                "Are you sure you want to change your password?"
+        if password_status and password_status != 'strong':
+            raise response.render(
+                'templates/password-warning.spt', state,
+                password_status=password_status, back_to=p.path('settings'),
             )
-            raise response.render('templates/confirm.spt', state, msg=msg, back_to=back_to)
-        elif password_status == 'common':
-            msg = _(
-                "The new password is found to be commonly used by other people. "
-                "We recommend you to choose something more unique. "
-                "Are you sure you want to change your password?"
-            )
-            raise response.render('templates/confirm.spt', state, msg=msg, back_to=back_to)
-        elif password_status == 'compromised':
-            msg = _(
-                "The new password has been compromised in leaks on the internet before. "
-                "Are you sure you want to change your password?"
-            )
-            raise response.render('templates/confirm.spt', state, msg=msg, cls='warning', back_to=back_to)
 
-    checked = password_status is not None or confirmed
+    checked = password_status is not None or ignore_warning
     p.update_password(body['new-password'], checked=checked)
     out['msg'] = _("Your password has been changed.")
 
