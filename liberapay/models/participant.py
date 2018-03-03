@@ -350,7 +350,7 @@ class Participant(Model, MixinTeam):
             status = 'strong'
         if context == 'login':
             if status != 'strong':
-                self.notify('password_warning', email=False, password_status=status)
+                self.notify('password_warning', email=False, type='warning', password_status=status)
             self.add_event(website.db, 'password-check', None)
         return status
 
