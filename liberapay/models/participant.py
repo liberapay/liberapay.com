@@ -1763,16 +1763,12 @@ class Participant(Model, MixinTeam):
         if self.id == tippee.id:
             raise NoSelfTipping
 
-        amount = periodic_amount * PERIOD_CONVERSION_RATES[period]
+        amount = (periodic_amount * PERIOD_CONVERSION_RATES[period]).round_down()
 
         if periodic_amount != 0:
-            limits = DONATION_LIMITS[amount.currency]['weekly']
-            if amount < limits[0] or amount > limits[1]:
+            limits = DONATION_LIMITS[periodic_amount.currency][period]
+            if periodic_amount < limits[0] or periodic_amount > limits[1]:
                 raise BadAmount(periodic_amount, period, limits)
-
-        amount = amount.round_up()
-
-        if amount != 0:
             if not tippee.accepts_tips:
                 raise UserDoesntAcceptTips(tippee.username)
             if amount.currency not in tippee.accepted_currencies:

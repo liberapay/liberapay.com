@@ -1,3 +1,5 @@
+# coding: utf8
+
 from __future__ import print_function, unicode_literals
 
 from six.moves.http_cookies import SimpleCookie
@@ -19,7 +21,7 @@ from liberapay.exceptions import (
     UsernameTooLong,
 )
 from liberapay.models.participant import NeedConfirmation, Participant
-from liberapay.testing import EUR, Harness
+from liberapay.testing import EUR, USD, Harness
 
 
 class TestNeedConfirmation(Harness):
@@ -285,17 +287,21 @@ class Tests(Harness):
         assert t['is_pledge'] is False
         assert t['first_time_tipper'] is True
 
-    def test_stt_works_for_monthly_donations(self):
-        alice = self.make_participant('alice', balance=EUR(100))
-        bob = self.make_participant('bob')
-        t = alice.set_tip_to(bob, EUR('4.33'), 'monthly')
-        assert t['amount'] == 1
+    def test_stt_converts_monthly_and_yearly_amounts_correctly(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob', accepted_currencies='EUR,USD')
 
-    def test_stt_works_for_yearly_donations(self):
-        alice = self.make_participant('alice', balance=EUR(100))
-        bob = self.make_participant('bob')
-        t = alice.set_tip_to(bob, EUR('104'), 'yearly')
-        assert t['amount'] == 2
+        t = alice.set_tip_to(bob, EUR('0.05'), 'monthly')
+        assert t['amount'] == EUR('0.01')
+
+        t = alice.set_tip_to(bob, USD('433.34'), 'monthly')
+        assert t['amount'] == USD('100.00')
+
+        t = alice.set_tip_to(bob, USD('0.52'), 'yearly')
+        assert t['amount'] == USD('0.01')
+
+        t = alice.set_tip_to(bob, EUR('5200.00'), 'yearly')
+        assert t['amount'] == EUR('100.00')
 
     def test_stt_returns_False_for_second_time_tipper(self):
         alice = self.make_participant('alice', balance=EUR(100))
@@ -313,8 +319,30 @@ class Tests(Harness):
     def test_stt_doesnt_allow_just_any_ole_amount(self):
         alice = self.make_participant('alice', balance=EUR(100))
         bob = self.make_participant('bob')
-        with pytest.raises(BadAmount):
-            alice.set_tip_to(bob, EUR('1000.00'))
+
+        with self.assertRaises(BadAmount) as cm:
+            alice.set_tip_to(bob, EUR('0.001'))
+        expected = "'€0.00' is not a valid weekly donation amount (min=€0.01, max=€100.00)"
+        actual = cm.exception.render_in_english()
+        assert actual == expected
+
+        with self.assertRaises(BadAmount) as cm:
+            alice.set_tip_to(bob, USD('1000.00'))
+        expected = "'$1,000.00' is not a valid weekly donation amount (min=$0.01, max=$100.00)"
+        actual = cm.exception.render_in_english()
+        assert actual == expected
+
+        with self.assertRaises(BadAmount) as cm:
+            alice.set_tip_to(bob, USD('0.01'), 'yearly')
+        expected = "'$0.01' is not a valid yearly donation amount (min=$0.52, max=$5,200.00)"
+        actual = cm.exception.render_in_english()
+        assert actual == expected
+
+        with self.assertRaises(BadAmount) as cm:
+            alice.set_tip_to(bob, EUR('10000'), 'yearly')
+        expected = "'€10,000.00' is not a valid yearly donation amount (min=€0.52, max=€5,200.00)"
+        actual = cm.exception.render_in_english()
+        assert actual == expected
 
     def test_stt_fails_to_tip_unknown_people(self):
         alice = self.make_participant('alice', balance=EUR(100))
