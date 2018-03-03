@@ -329,14 +329,14 @@ class Participant(Model, MixinTeam):
             if last_password_check and utcnow() - last_password_check.ts < timedelta(days=180):
                 return
         passhash = sha1(password.encode("utf-8")).hexdigest().upper()
-        passhash_short = passhash[:5]
-        URL = "https://api.pwnedpasswords.com/range/"+passhash_short
-        r = requests.get(url=URL)
+        passhash_prefix, passhash_suffix = passhash[:5], passhash[5:]
+        url = "https://api.pwnedpasswords.com/range/" + passhash_prefix
+        r = requests.get(url=url)
         count = 0
-        for line in r.text.split("\n"):
-            suffix = line.split(":")[0]
-            if passhash_short + suffix == passhash:
-                count = int(line.split(":")[1].strip())
+        for line in r.text.split():
+            parts = line.split(":")
+            if parts[0] == passhash_suffix:
+                count = int(parts[1])
         if count > 500:
             status = 'common'
         elif count > 0:
