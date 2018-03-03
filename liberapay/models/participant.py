@@ -311,7 +311,7 @@ class Participant(Model, MixinTeam):
         ))
         return hashed
 
-    def update_password(self, password, cursor=None):
+    def update_password(self, password, cursor=None, checked=False):
         hashed = self.hash_password(password)
         p_id = self.id
         with self.db.get_cursor(cursor) as c:
@@ -321,6 +321,8 @@ class Participant(Model, MixinTeam):
                      , password_mtime = CURRENT_TIMESTAMP
                  WHERE id = %(p_id)s;
             """, locals())
+            if checked:
+                self.add_event(c, 'password-check', None)
 
     def check_password(self, password, context):
         if context == 'login':
@@ -346,12 +348,11 @@ class Participant(Model, MixinTeam):
             status = 'compromised'
         else:
             status = 'strong'
-        if context == 'login' and status != 'strong':
-            self.notify('password_warning', email=False, password_status=status)
+        if context == 'login':
+            if status != 'strong':
+                self.notify('password_warning', email=False, password_status=status)
             self.add_event(website.db, 'password-check', None)
-            return
-        elif context == 'update_password':
-            return status
+        return status
 
 
     # Session Management

@@ -26,7 +26,10 @@ if 'new-password' in body:
         if not p:
             raise response.error(403, _("Incorrect password"))
 
-    if body.get('confirmed') != 'true':
+    # Check the password
+    password_status = None
+    confirmed = body.get('confirmed') == 'true'
+    if not confirmed:
         back_to = p.path('settings')
         try:
             password_status = p.check_password(body['new-password'], context='update_password')
@@ -51,14 +54,10 @@ if 'new-password' in body:
                 "Are you sure you want to change your password?"
             )
             raise response.render('templates/confirm.spt', state, msg=msg, cls='warning', back_to=back_to)
-        else:
-            p.update_password(body['new-password'])
-            p.add_event(website.db, 'password-check', None)
-            out['msg'] = _("Your password has been changed.")
-    else:
-        #p.add_event(website.db, 'password-check', None)
-        p.update_password(body['new-password'])
-        out['msg'] = _("Your password has been changed.")
+
+    checked = password_status is not None or confirmed
+    p.update_password(body['new-password'], checked=checked)
+    out['msg'] = _("Your password has been changed.")
 
 elif 'privacy' in body:
     if not p.is_person:
