@@ -43,7 +43,6 @@ from liberapay.exceptions import (
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
-    TooManyAttempts,
     TooManyCurrencyChanges,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
@@ -238,8 +237,6 @@ class Participant(Model, MixinTeam):
                 return
             if context == 'log-in':
                 cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
-            elif context == 'change_password':
-                cls.db.hit_rate_limit('change_password', p.id, TooManyAttempts)
             algo, rounds, salt, hashed = p.password.split('$', 3)
             rounds = int(rounds)
             salt, hashed = b64decode(salt), b64decode(hashed)

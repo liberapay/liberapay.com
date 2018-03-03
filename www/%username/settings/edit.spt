@@ -1,4 +1,5 @@
 from liberapay.constants import PRIVACY_FIELDS
+from liberapay.exceptions import TooManyAttempts
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant
 
@@ -14,6 +15,8 @@ p = get_participant(state, restrict=True, allow_member=True)
 if 'new-password' in body:
     if not p.is_person:
         raise response.error(403)
+
+    # Check the old password, if necessary
     if p.session_token and p.session_token.endswith('.em'):
         pass  # user logged in via email, allow resetting password
     elif not p.password:
@@ -26,10 +29,11 @@ if 'new-password' in body:
         if not p:
             raise response.error(403, _("Incorrect password"))
 
-    # Check the password
+    # Check the new password
     password_status = None
     ignore_warning = body.get('ignore_warning') == 'true'
     if not ignore_warning:
+        website.db.hit_rate_limit('check_password', p.id, TooManyAttempts)
         try:
             password_status = p.check_password(body['new-password'], context='update_password')
         except Exception as e:
@@ -40,6 +44,8 @@ if 'new-password' in body:
                 password_status=password_status, back_to=p.path('settings'),
             )
 
+    # Update the password
+    website.db.hit_rate_limit('change_password', p.id, TooManyAttempts)
     checked = password_status is not None or ignore_warning
     p.update_password(body['new-password'], checked=checked)
     out['msg'] = _("Your password has been changed.")
