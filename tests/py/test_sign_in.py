@@ -126,6 +126,19 @@ class TestLogIn(EmailHarness):
         alice.update_password(password)
         self.log_in_and_check(alice, password.encode('utf8'))
 
+    def test_password_is_checked_during_log_in(self):
+        password = 'password'
+        alice = self.make_participant('alice')
+        alice.update_password(password, checked=False)
+        # Log in twice, the password should only be checked once
+        self.log_in('alice', password)
+        self.log_in('alice', password)
+        notifs = alice.render_notifications(dict(_=str.format))
+        assert len(notifs) == 1
+        notif = notifs[0]
+        assert notif['subject'] == "The password of your Liberapay account is weak"
+        assert notif['type'] == "warning"
+
     def test_email_login(self):
         email = 'alice@example.net'
         alice = self.make_participant('alice')
@@ -153,11 +166,10 @@ class TestLogIn(EmailHarness):
         # ↑ checks that original path and query are preserved
 
         # Check that we can change our password
-        password = 'New-Password'
+        password = 'correct-horse-battery-staple'
         r = self.client.POST(
             '/alice/settings/edit',
-            {'new-password': password,
-             'ignore_warning': 'true'},
+            {'new-password': password},
             cookies=r.headers.cookie,
             raise_immediately=False,
         )

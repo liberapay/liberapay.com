@@ -307,7 +307,7 @@ class Participant(Model, MixinTeam):
         ))
         return hashed
 
-    def update_password(self, password, cursor=None, checked=False):
+    def update_password(self, password, cursor=None, checked=True):
         hashed = self.hash_password(password)
         p_id = self.id
         with self.db.get_cursor(cursor) as c:
