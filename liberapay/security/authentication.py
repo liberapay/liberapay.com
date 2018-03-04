@@ -57,6 +57,12 @@ def sign_in_with_form_data(body, state):
             )
             if not p:
                 state['log-in.error'] = _("Bad username or password.")
+            else:
+                try:
+                    p.check_password(password, context='login')
+                except Exception as e:
+                    website.tell_sentry(e, state)
+
         elif k == 'username':
             state['log-in.error'] = _("\"{0}\" is not a valid email address.", id)
             return

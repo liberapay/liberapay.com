@@ -270,6 +270,7 @@ RATE_LIMITS = {
     'change_currency': (4, 60*60*24*7),  # 4 per week
     'change_password': (7, 60*60*24*7),  # 7 per week
     'change_username': (7, 60*60*24*7),  # 7 per week
+    'check_password': (25, 60*60*24*7),  # 25 per week
     'log-in.email': (10, 60*60*24),  # 10 per day
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day

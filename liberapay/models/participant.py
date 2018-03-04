@@ -1,8 +1,9 @@
 from __future__ import division, print_function, unicode_literals
 
 from base64 import b64decode, b64encode
+from datetime import timedelta
 from email.utils import formataddr
-from hashlib import pbkdf2_hmac, md5
+from hashlib import pbkdf2_hmac, md5, sha1
 from os import urandom
 from time import sleep
 import uuid
@@ -19,6 +20,7 @@ from pando import json
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
+import requests
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_ZERO,
@@ -41,7 +43,6 @@ from liberapay.exceptions import (
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
-    TooManyAttempts,
     TooManyCurrencyChanges,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
@@ -236,8 +237,6 @@ class Participant(Model, MixinTeam):
                 return
             if context == 'log-in':
                 cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
-            elif context == 'change_password':
-                cls.db.hit_rate_limit('change_password', p.id, TooManyAttempts)
             algo, rounds, salt, hashed = p.password.split('$', 3)
             rounds = int(rounds)
             salt, hashed = b64decode(salt), b64decode(hashed)
@@ -308,7 +307,7 @@ class Participant(Model, MixinTeam):
         ))
         return hashed
 
-    def update_password(self, password, cursor=None):
+    def update_password(self, password, cursor=None, checked=True):
         hashed = self.hash_password(password)
         p_id = self.id
         with self.db.get_cursor(cursor) as c:
@@ -318,6 +317,34 @@ class Participant(Model, MixinTeam):
                      , password_mtime = CURRENT_TIMESTAMP
                  WHERE id = %(p_id)s;
             """, locals())
+            if checked:
+                self.add_event(c, 'password-check', None)
+
+    def check_password(self, password, context):
+        if context == 'login':
+            last_password_check = self.get_last_event_of_type('password-check')
+            if last_password_check and utcnow() - last_password_check.ts < timedelta(days=180):
+                return
+        passhash = sha1(password.encode("utf-8")).hexdigest().upper()
+        passhash_prefix, passhash_suffix = passhash[:5], passhash[5:]
+        url = "https://api.pwnedpasswords.com/range/" + passhash_prefix
+        r = requests.get(url=url)
+        count = 0
+        for line in r.text.split():
+            parts = line.split(":")
+            if parts[0] == passhash_suffix:
+                count = int(parts[1])
+        if count > 500:
+            status = 'common'
+        elif count > 0:
+            status = 'compromised'
+        else:
+            status = 'okay'
+        if context == 'login':
+            if status != 'okay':
+                self.notify('password_warning', email=False, type='warning', password_status=status)
+            self.add_event(website.db, 'password-check', None)
+        return status
 
 
     # Session Management
