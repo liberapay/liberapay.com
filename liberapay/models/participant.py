@@ -1428,8 +1428,6 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as cursor:
             if not recorder.is_admin:
                 cursor.hit_rate_limit('change_currency', self.id, TooManyCurrencyChanges)
-            if self.kind == 'group':
-                cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
             r = cursor.one("""
                 UPDATE participants
                    SET main_currency = %(new_currency)s
@@ -1447,17 +1445,11 @@ class Participant(Model, MixinTeam):
             self.set_attributes(main_currency=new_currency)
             if self.kind == 'group':
                 members = cursor.all("""
-                    INSERT INTO takes
-                                (ctime, member, team, amount, actual_amount, recorder)
-                         SELECT t.ctime, t.member, t.team
-                              , convert(amount, %(new_currency)s)
-                              , zero(%(new_currency)s::currency)
-                              , %(recorder_id)s
-                           FROM current_takes t
-                          WHERE t.team = %(p_id)s
-                      RETURNING (SELECT p FROM participants p WHERE p.id = takes.member)
+                    SELECT p
+                      FROM takes t
+                      JOIN participants p ON p.id = t.member
+                     WHERE t.team = %(p_id)s
                 """, locals())
-                self.recompute_actual_takes(cursor)
                 for m in members:
                     m.notify(
                         'team_currency_change', email=False, web=True,
