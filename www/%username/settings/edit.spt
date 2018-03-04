@@ -73,13 +73,6 @@ elif 'username' in body:
     response.redirect(p.path('edit'))
 
 elif 'main_currency' in body:
-    if p.kind == 'group' and body.get('confirmed') != 'true':
-        back_to = p.path('edit')
-        msg = _(
-            "Please confirm the modification of this team's reference currency. "
-            "A notification will be sent to all members if you do."
-        )
-        raise response.render('templates/confirm.spt', state, cls='warning', msg=msg, back_to=back_to)
     new_currency = body['main_currency']
     old_currency = p.main_currency
     change_currency = new_currency != old_currency

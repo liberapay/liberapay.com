@@ -1443,19 +1443,6 @@ class Participant(Model, MixinTeam):
             if not r:
                 return
             self.set_attributes(main_currency=new_currency)
-            if self.kind == 'group':
-                members = cursor.all("""
-                    SELECT p
-                      FROM takes t
-                      JOIN participants p ON p.id = t.member
-                     WHERE t.team = %(p_id)s
-                """, locals())
-                for m in members:
-                    m.notify(
-                        'team_currency_change', email=False, web=True,
-                        team_name=self.username, old_currency=old_currency,
-                        new_currency=new_currency, changed_by=recorder.username,
-                    )
             self.add_event(cursor, 'change_main_currency', dict(
                 new_currency=new_currency, old_currency=old_currency
             ), recorder=recorder_id)
