@@ -86,13 +86,16 @@ if request.method == 'POST':
 title = _("Invoice {someone}", someone=addressee.username)
 
 [---] text/html
+% from "templates/currencies.html" import currency_buttons with context
+
 % extends "templates/base.html"
+
 % block content
 
 <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
 
 <form action="javascript:" method="POST" id="invoice-form"
-      data-base-url="{{ addressee.path('invoices/') }}"
+      data-base-path="{{ addressee.path('invoices/') }}"
       data-s3-endpoint="{{ website.app_conf.s3_endpoint }}"
       data-s3-access-key="{{ website.app_conf.s3_public_access_key }}"
       data-s3-region="{{ website.app_conf.s3_region }}"
@@ -113,11 +116,12 @@ title = _("Invoice {someone}", someone=addressee.username)
     <p class="help-block">{{ _("(Liberapay only supports one kind of invoice for now.)") }}</p>
 
     <h4>{{ _("Amount") }}</h4>
-    <div class="input-group">
+    <div class="form-group form-inline">
         <input type="text" name="amount" class="amount form-control"
                placeholder="{{ _('Amount') }}" required
                value="{{ format_decimal(invoice.amount.amount) if invoice else '' }}" />
-        <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
+        &nbsp;&nbsp;
+        {{ currency_buttons('currency', currency) }}
     </div>
 
     <h4>{{ _("Description") }}</h4>
