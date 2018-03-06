@@ -64,8 +64,7 @@ elif event == 'DISPUTE':
         dispute = Dispute.get(RessourceId)
     except Dispute.DoesNotExist:
         raise response.error(400, "bad RessourceId: DoesNotExist")
-    if status != dispute.Status:
-        raise response.error(400, "status mismatch")
+    status = dispute.Status
     r = website.db.one("SELECT * FROM disputes WHERE id = %s", (RessourceId,))
     if r and r.status == status:
         raise response.success(200, "already done")
