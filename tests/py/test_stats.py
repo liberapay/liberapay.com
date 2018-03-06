@@ -11,7 +11,7 @@ class TestChartOfReceiving(Harness):
     def setUp(self):
         Harness.setUp(self)
         for participant in ['alice', 'bob']:
-            p = self.make_participant(participant, balance=EUR(100))
+            p = self.make_participant(participant, balance=EUR(10))
             setattr(self, participant, p)
 
     def test_get_tip_distribution_handles_a_tip(self):
@@ -52,6 +52,13 @@ class TestChartOfReceiving(Harness):
         missing_cc.set_tip_to(self.bob, EUR('3.00'))
         expected = ([[EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 1, Decimal('1')]],
                     1.0, EUR('1.00'))
+        actual = self.bob.get_tip_distribution()
+        assert actual == expected
+
+    def test_get_tip_distribution_ignores_old_or_nonfunded_tip(self):
+        self.alice.set_tip_to(self.bob, EUR('3.00'))  # funded
+        self.alice.set_tip_to(self.bob, EUR('100.00'))  # not funded
+        expected = ([], 0, EUR('0.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
 
