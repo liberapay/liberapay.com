@@ -521,14 +521,9 @@ class Participant(Model, MixinTeam):
     class AccountNotEmpty(Exception): pass
 
     def final_check(self, cursor):
-        """Sanity-check that balance and tips have been dealt with.
+        """Sanity-check that balance has been dealt with.
         """
         if self.balance != 0:
-            raise self.AccountNotEmpty
-        incoming = cursor.one("""
-            SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0
-        """, (self.id,))
-        if incoming > 0:
             raise self.AccountNotEmpty
 
     class UnknownDisbursementStrategy(Exception): pass
@@ -547,7 +542,6 @@ class Participant(Model, MixinTeam):
 
         with self.db.get_cursor() as cursor:
             self.clear_tips_giving(cursor)
-            self.clear_tips_receiving(cursor)
             self.clear_takes(cursor)
             if self.kind == 'group':
                 self.remove_all_members(cursor)
@@ -1673,8 +1667,23 @@ class Participant(Model, MixinTeam):
             c.run("UPDATE participants SET goal=%s WHERE id=%s", (goal, self.id))
             self.set_attributes(goal=goal)
             if not self.accepts_tips:
-                self.clear_tips_receiving(c)
-                self.update_receiving(c)
+                tippers = c.all("""
+                    SELECT p
+                      FROM current_tips t
+                      JOIN participants p ON p.id = t.tipper
+                     WHERE t.tippee = %s
+                       AND t.amount > 0
+                """, (self.id,))
+                for tipper in tippers:
+                    tipper.update_giving(cursor=c)
+                r = c.one("""
+                    UPDATE participants
+                       SET receiving = zero(receiving)
+                         , npatrons = 0
+                     WHERE id = %s
+                 RETURNING receiving, npatrons
+                """, (self.id,))
+                self.set_attributes(**r._asdict())
 
     def update_status(self, status, cursor=None):
         with self.db.get_cursor(cursor) as c:
@@ -1694,7 +1703,6 @@ class Participant(Model, MixinTeam):
             self.set_attributes(**r._asdict())
             self.add_event(c, 'set_status', status)
             if not self.accepts_tips:
-                self.clear_tips_receiving(c)
                 self.update_receiving(c)
 
     def get_giving_in(self, currency):
@@ -1774,6 +1782,7 @@ class Participant(Model, MixinTeam):
                        JOIN participants p2 ON p2.id = tippee
                       WHERE tipper = %(id)s
                         AND p2.status = 'active'
+                        AND (p2.goal IS NULL OR p2.goal >= 0)
                         AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
                         AND amount > 0
                         AND is_funded
