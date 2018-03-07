@@ -53,6 +53,10 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', 'alice@accentué.com')
         assert self.alice.get_any_email() == punycode_email
 
+    def test_participant_cannot_add_email_with_unicode_local_part(self):
+        r = self.hit_email_spt('add-email', 'tête@exemple.fr', should_fail=True)
+        assert r.code == 400
+
     def test_participant_cant_add_bad_email(self):
         bad = (
             'a\nb@example.net',
