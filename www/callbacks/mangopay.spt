@@ -98,14 +98,17 @@ elif event == 'DISPUTE':
                  WHERE origin = %s
             """, (e_id,))
     r = website.db.one("""
-        INSERT INTO disputes
+        INSERT INTO disputes AS current
                     (id, creation_date, type, amount, status, result_code, exchange_id, participant)
              VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (id) DO UPDATE
                 SET status = excluded.status
                   , result_code = excluded.result_code
+              WHERE current.status <> excluded.status
           RETURNING *
     """, (dispute.Id, dispute.CreationDate, dispute_type, dispute_amount, status, result_code, e_id, p_id))
+    if not r:
+        raise response.success(200, "already done")
     # Notify admin
     disputed_funds = website.db.render("""
         SELECT owner, withdrawer, sum(amount) AS amount
