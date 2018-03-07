@@ -704,7 +704,7 @@ class Participant(Model, MixinTeam):
             Returns the number of emails sent.
         """
 
-        # normalize the address: strip it, lowercase the domain name, and
+        # normalize the address: strip it, then lowercase and encode the domain name
         email = email.strip()
         i = email.rfind('@') + 1
         email = email[:i] + email[i:].lower().encode('idna').decode()
