@@ -1890,13 +1890,14 @@ class Participant(Model, MixinTeam):
               FROM ( SELECT DISTINCT ON (tipper)
                             amount
                           , tipper
+                          , is_funded
                        FROM tips
                       WHERE tippee=%s
-                        AND is_funded
                    ORDER BY tipper
                           , mtime DESC
                     ) AS foo
              WHERE amount > 0
+               AND is_funded
           GROUP BY amount
           ORDER BY (amount).amount
         """, (self.id,))
