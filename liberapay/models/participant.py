@@ -692,10 +692,10 @@ class Participant(Model, MixinTeam):
              WHERE subscriber = %s
         """, (self.id,))
 
-    def clear_personal_information(self, cursor):
+    def clear_personal_information(self):
         """Clear personal information such as statements and goal.
         """
-        r = cursor.one("""
+        r = self.db.one("""
 
             DELETE FROM community_memberships WHERE participant=%(id)s;
             DELETE FROM subscriptions WHERE subscriber=%(id)s;
@@ -705,9 +705,6 @@ class Participant(Model, MixinTeam):
             UPDATE participants
                SET goal=NULL
                  , avatar_url=NULL
-                 , giving=zero(giving)
-                 , receiving=zero(receiving)
-                 , npatrons=0
              WHERE id=%(id)s
          RETURNING *;
 

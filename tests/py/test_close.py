@@ -260,15 +260,11 @@ class TestClosing(FakeTransfersHarness):
             hide_receiving=True,
             avatar_url='img-url',
             email='alice@example.com',
-            giving=EUR(20),
-            receiving=EUR(40),
-            npatrons=21,
         )
         alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')
 
-        with self.db.get_cursor() as cursor:
-            alice.clear_personal_information(cursor)
+        alice.clear_personal_information()
         new_alice = Participant.from_username('alice')
 
         assert alice.get_statement(['en']) == (None, None)
@@ -277,9 +273,6 @@ class TestClosing(FakeTransfersHarness):
         assert alice.hide_receiving == new_alice.hide_receiving == True
         assert alice.avatar_url == new_alice.avatar_url == None
         assert alice.email == new_alice.email
-        assert alice.giving == new_alice.giving == 0
-        assert alice.receiving == new_alice.receiving == 0
-        assert alice.npatrons == new_alice.npatrons == 0
         emails = alice.get_emails()
         assert len(emails) == 1
         assert emails[0].address == 'alice@example.com'
@@ -294,7 +287,6 @@ class TestClosing(FakeTransfersHarness):
 
         assert Community.from_name('test').nmembers == 2  # sanity check
 
-        with self.db.get_cursor() as cursor:
-            alice.clear_personal_information(cursor)
+        alice.clear_personal_information()
 
         assert Community.from_name('test').nmembers == 1
