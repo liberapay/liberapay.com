@@ -710,6 +710,7 @@ class Participant(Model, MixinTeam):
 
         """, dict(id=self.id, email=self.email))
         self.set_attributes(**r._asdict())
+        self.add_event(self.db, 'erase_personal_information', None)
 
     @cached_property
     def closed_time(self):
@@ -2438,3 +2439,35 @@ class NeedConfirmation(Exception):
     def __bool__(self):
         return any(self._all)
     __nonzero__ = __bool__
+
+
+def clean_up_closed_accounts():
+    participants = website.db.all("""
+        SELECT p, closed_time
+          FROM (
+                 SELECT p
+                      , ( SELECT e2.ts
+                            FROM events e2
+                           WHERE e2.participant = p.id
+                             AND e2.type = 'set_status'
+                             AND e2.payload = '"closed"'
+                        ORDER BY e2.ts DESC
+                           LIMIT 1
+                        ) AS closed_time
+                   FROM participants p
+                  WHERE p.status = 'closed'
+                    AND p.kind IN ('individual', 'organization')
+               ) a
+         WHERE closed_time < (current_timestamp - INTERVAL '7 days')
+           AND NOT EXISTS (
+                   SELECT e.id
+                     FROM events e
+                    WHERE e.participant = (p).id
+                      AND e.type = 'erase_personal_information'
+                      AND e.ts > closed_time
+               )
+    """)
+    for p, closed_time in participants:
+        sleep(0.1)
+        print("Deleting data of account ~%i (closed on %s)..." % (p.id, closed_time))
+        p.clear_personal_information()
