@@ -48,9 +48,9 @@ class TestEmail(EmailHarness):
         response = self.hit_email_spt('add-email', 'alice@example.com')
         assert response.text == '{}'
 
-    def test_participant_can_add_email_with_special_chars(self):
-        punycode_email = 'alice@' + u'accentué.com'.encode('idna').decode()
-        self.hit_email_spt('add-email', u'alice@accentué.com')
+    def test_participant_can_add_email_with_unicode_domain_name(self):
+        punycode_email = 'alice@' + 'accentué.com'.encode('idna').decode()
+        self.hit_email_spt('add-email', 'alice@accentué.com')
         assert self.alice.get_any_email() == punycode_email
 
     def test_participant_cant_add_bad_email(self):
@@ -145,9 +145,9 @@ class TestEmail(EmailHarness):
         actual = Participant.from_username('alice').email
         assert expected == actual
 
-    def test_verify_email_special_chars(self):
-        punycode_email = 'alice@' + u'accentué.com'.encode('idna').decode()
-        self.hit_email_spt('add-email', u'alice@accentué.com')
+    def test_verify_email_with_unicode_domain(self):
+        punycode_email = 'alice@' + 'accentué.fr'.encode('idna').decode()
+        self.alice.add_email(punycode_email)
         nonce = self.alice.get_email(punycode_email).nonce
         self.hit_verify(punycode_email, nonce)
         actual = Participant.from_username('alice').email
