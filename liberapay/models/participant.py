@@ -545,7 +545,7 @@ class Participant(Model, MixinTeam):
             self.clear_takes(cursor)
             if self.kind == 'group':
                 self.remove_all_members(cursor)
-            self.clear_personal_information(cursor)
+            self.clear_subscriptions(cursor)
             self.final_check(cursor)
             self.update_status('closed', cursor)
 
@@ -681,6 +681,16 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         for t in teams:
             t.set_take_for(self, None, self, cursor=cursor)
+
+    def clear_subscriptions(self, cursor):
+        """Unsubscribe from all newsletters.
+        """
+        cursor.run("""
+            UPDATE subscriptions
+               SET is_on = false
+                 , mtime = current_timestamp
+             WHERE subscriber = %s
+        """, (self.id,))
 
     def clear_personal_information(self, cursor):
         """Clear personal information such as statements and goal.
