@@ -90,37 +90,26 @@ subhead = participant.username
         % endif
 
 
-        <h3>{{ _("Personal Information") }}</h3>
-
-        <p>{{ _("We immediately clear out most of the information in your profile.") }}</p>
+        <h3>{{ _("Data retention") }}</h3>
 
         <p>{{ _(
-            "Things we clear immediately include your profile statements, any "
-            "funding goal, the donations you're receiving, and those you're "
-            "giving. You'll also be removed from any communities and teams you "
-            "were a part of."
+            "We will start to erase the personal data attached to your account "
+            "7 days after it is closed. This delay is meant to protect your "
+            "account from an accidental or malicious closure."
         ) }}</p>
 
         <p>{{ _(
-            "We specifically {0}don't{1} delete your past giving and receiving "
-            "history on the site, because that information also belongs equally "
-            "to other users (the ones you gave to and received from).",
-            '<em>'|safe, '</em>'|safe
+            "Identity information and transaction records are kept for as long "
+            "as is necessary to comply with all legal obligations."
         ) }}</p>
 
 
-        <h3>{{ _("Username, email and password") }}</h3>
+        <h3>{{ _("Username") }}</h3>
 
         <p>{{ _(
             "We may give your username to someone else if they ask for it, but "
             "not for at least a year after you close your account (unless we "
             "determine that you've been infringing a trademark)."
-        ) }}</p>
-
-        <p>{{ _(
-            "We don't erase your email address and password immediately, so "
-            "for a while you'll be able to reopen your account by simply "
-            "logging in, until your account is definitively archived."
         ) }}</p>
 
 

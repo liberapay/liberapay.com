@@ -40,7 +40,7 @@ class TestClosing(FakeTransfersHarness):
     def test_close_page_is_usually_available(self):
         alice = self.make_participant('alice')
         body = self.client.GET('/alice/settings/close', auth_as=alice).text
-        assert 'Personal Information' in body
+        assert '<h3>Username' in body
 
     def test_close_page_is_not_available_during_payday(self):
         Payday.start()
