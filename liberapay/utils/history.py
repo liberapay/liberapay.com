@@ -7,8 +7,19 @@ from .currencies import MoneyBasket
 from . import group_by
 
 
-def get_end_of_year_balances(db, participant, year, current_year):
-    if year == current_year:
+def month_minus_one(year, month):
+    return (year - 1, 12) if month == 1 else (year, month - 1)
+
+
+def month_plus_one(year, month):
+    return (year + 1, 1) if month == 12 else (year, month + 1)
+
+
+def get_end_of_month_balances(db, participant, year, month, today):
+    if month == -1:
+        month = 12
+
+    if year == today.year and month == today.month:
         return db.one("""
             SELECT basket_sum(balance)
               FROM wallets
@@ -18,23 +29,26 @@ def get_end_of_year_balances(db, participant, year, current_year):
     if year < participant.join_time.year:
         return MoneyBasket()
 
+    next_month = month_plus_one(year, month)
     balances = db.one("""
         SELECT balances
           FROM balances_at
          WHERE participant = %s
            AND "at" = %s
-    """, (participant.id, datetime(year+1, 1, 1)))
+    """, (participant.id, datetime(*next_month, day=1)))
     if balances is not None:
         return balances
 
     id = participant.id
-    balances = get_end_of_year_balances(db, participant, year-1, current_year)
+    prev_month = month_minus_one(year, month)
+    balances = get_end_of_month_balances(db, participant, *prev_month, today=today)
     balances += db.one("""
         SELECT (
                   SELECT basket_sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE zero(fee) END)) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND extract(month from timestamp) = %(month)s
                      AND amount > 0
                      AND status = 'succeeded'
                ) + (
@@ -42,6 +56,7 @@ def get_end_of_year_balances(db, participant, year, current_year):
                     FROM exchanges
                    WHERE participant = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND extract(month from timestamp) = %(month)s
                      AND amount < 0
                      AND status <> 'failed'
                ) + (
@@ -49,12 +64,14 @@ def get_end_of_year_balances(db, participant, year, current_year):
                     FROM transfers
                    WHERE tipper = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND extract(month from timestamp) = %(month)s
                      AND status = 'succeeded'
                ) + (
                   SELECT basket_sum(amount) AS a
                     FROM transfers
                    WHERE tippee = %(id)s
                      AND extract(year from timestamp) = %(year)s
+                     AND extract(month from timestamp) = %(month)s
                      AND status = 'succeeded'
                ) AS delta
     """, locals())
@@ -63,15 +80,16 @@ def get_end_of_year_balances(db, participant, year, current_year):
                     (participant, at, balances)
              VALUES (%s, %s, %s)
         ON CONFLICT (participant, at) DO NOTHING
-    """, (participant.id, datetime(year+1, 1, 1), balances))
+    """, (participant.id, datetime(*next_month, day=1), balances))
     return balances
 
 
-def iter_payday_events(db, participant, year=None):
+def iter_payday_events(db, participant, year=None, month=-1):
     """Yields payday events for the given participant.
     """
-    current_year = datetime.utcnow().year
-    year = year or current_year
+    today = datetime.utcnow().date()
+    year = year or today.year
+    month = month or today.month
 
     id = participant.id
     exchanges = db.all("""
@@ -79,6 +97,7 @@ def iter_payday_events(db, participant, year=None):
           FROM exchanges
          WHERE participant=%(id)s
            AND extract(year from timestamp) = %(year)s
+           AND (%(month)s < 0 OR extract(month from timestamp) = %(month)s)
     """, locals(), back_as=dict)
     transfers = db.all("""
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
@@ -86,12 +105,14 @@ def iter_payday_events(db, participant, year=None):
           JOIN participants p ON p.id = tipper
          WHERE t.tippee=%(id)s
            AND extract(year from t.timestamp) = %(year)s
+           AND (%(month)s < 0 OR extract(month from t.timestamp) = %(month)s)
         UNION ALL
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers t
           JOIN participants p ON p.id = tippee
          WHERE t.tipper=%(id)s
            AND extract(year from t.timestamp) = %(year)s
+           AND (%(month)s < 0 OR extract(month from t.timestamp) = %(month)s)
     """, locals(), back_as=dict)
 
     if not (exchanges or transfers):
@@ -131,7 +152,7 @@ def iter_payday_events(db, participant, year=None):
       ORDER BY ts_start ASC
     """)
 
-    balances = get_end_of_year_balances(db, participant, year, current_year)
+    balances = get_end_of_month_balances(db, participant, year, month, today)
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)
