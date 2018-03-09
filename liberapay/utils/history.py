@@ -1,77 +1,93 @@
+from calendar import monthrange
 from datetime import datetime
 
 from pando import Response
+from pando.utils import utc, utcnow
 
 from ..website import website
 from .currencies import MoneyBasket
 from . import group_by
 
 
-def month_minus_one(year, month):
-    return (year - 1, 12) if month == 1 else (year, month - 1)
+def get_start_of_current_utc_day():
+    now = utcnow()
+    return datetime(now.year, now.month, now.day, tzinfo=utc)
 
 
-def month_plus_one(year, month):
-    return (year + 1, 1) if month == 12 else (year, month + 1)
+def month_minus_one(year, month, day):
+    year, month = (year - 1, 12) if month == 1 else (year, month - 1)
+    day = min(day, monthrange(year, month)[1])
+    return datetime(year, month, day, tzinfo=utc)
 
 
-def get_end_of_month_balances(db, participant, year, month, today):
-    if month == -1:
-        month = 12
+def month_plus_one(year, month, day):
+    year, month = (year + 1, 1) if month == 12 else (year, month + 1)
+    day = min(day, monthrange(year, month)[1])
+    return datetime(year, month, day, tzinfo=utc)
 
-    if year == today.year and month == today.month:
+
+def get_end_of_period_balances(db, participant, period_start, today, start_day):
+    if isinstance(period_start, datetime):
+        year, month = period_start.year, period_start.month
+        period_end = month_plus_one(year, month, start_day)
+        prev_period_start = month_minus_one(year, month, start_day)
+    else:
+        year = period_start
+        period_start = datetime(year, 1, 1, tzinfo=utc)
+        period_end = datetime(year + 1, 1, 1, tzinfo=utc)
+        prev_period_start = year - 1
+
+    if period_end > today:
         return db.one("""
             SELECT basket_sum(balance)
               FROM wallets
              WHERE owner = %s
                AND is_current
         """, (participant.id,))
-    if year < participant.join_time.year:
+    if period_end < participant.join_time:
         return MoneyBasket()
 
-    next_month = month_plus_one(year, month)
     balances = db.one("""
         SELECT balances
           FROM balances_at
          WHERE participant = %s
            AND "at" = %s
-    """, (participant.id, datetime(*next_month, day=1)))
+    """, (participant.id, period_end))
     if balances is not None:
         return balances
 
     id = participant.id
-    prev_month = month_minus_one(year, month)
-    balances = get_end_of_month_balances(db, participant, *prev_month, today=today)
+    balances = get_end_of_period_balances(db, participant, prev_period_start, today, start_day)
     balances += db.one("""
         SELECT (
                   SELECT basket_sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE zero(fee) END)) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
-                     AND extract(year from timestamp) = %(year)s
-                     AND extract(month from timestamp) = %(month)s
+                     AND timestamp >= %(period_start)s
+                     AND timestamp < %(period_end)s
                      AND amount > 0
                      AND status = 'succeeded'
                ) + (
                   SELECT basket_sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE zero(fee) END)) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
-                     AND extract(year from timestamp) = %(year)s
-                     AND extract(month from timestamp) = %(month)s
+                     AND timestamp >= %(period_start)s
+                     AND timestamp < %(period_end)s
                      AND amount < 0
                      AND status <> 'failed'
                ) + (
                   SELECT basket_sum(-amount) AS a
                     FROM transfers
                    WHERE tipper = %(id)s
-                     AND extract(year from timestamp) = %(year)s
-                     AND extract(month from timestamp) = %(month)s
+                     AND timestamp >= %(period_start)s
+                     AND timestamp < %(period_end)s
                      AND status = 'succeeded'
                ) + (
                   SELECT basket_sum(amount) AS a
                     FROM transfers
                    WHERE tippee = %(id)s
-                     AND extract(year from timestamp) = %(year)s
-                     AND extract(month from timestamp) = %(month)s
+                     AND timestamp >= %(period_start)s
+                     AND timestamp < %(period_end)s
                      AND status = 'succeeded'
                ) AS delta
     """, locals())
@@ -80,14 +96,14 @@ def get_end_of_month_balances(db, participant, year, month, today):
                     (participant, at, balances)
              VALUES (%s, %s, %s)
         ON CONFLICT (participant, at) DO NOTHING
-    """, (participant.id, datetime(*next_month, day=1), balances))
+    """, (participant.id, period_end, balances))
     return balances
 
 
 def iter_payday_events(db, participant, year=None, month=-1):
     """Yields payday events for the given participant.
     """
-    today = datetime.utcnow().date()
+    today = get_start_of_current_utc_day()
     year = year or today.year
     month = month or today.month
 
@@ -152,7 +168,14 @@ def iter_payday_events(db, participant, year=None, month=-1):
       ORDER BY ts_start ASC
     """)
 
-    balances = get_end_of_month_balances(db, participant, year, month, today)
+    if month == -1:
+        period_start = year
+        start_day = None
+    else:
+        start_day = participant.join_time.day
+        max_month_day = monthrange(year, month)[1]
+        period_start = datetime(year, month, min(start_day, max_month_day), tzinfo=utc)
+    balances = get_end_of_period_balances(db, participant, period_start, today, start_day)
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)

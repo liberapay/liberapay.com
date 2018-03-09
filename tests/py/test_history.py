@@ -7,11 +7,13 @@ from liberapay.billing.payday import Payday
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, USD, Harness
 from liberapay.testing.mangopay import FakeTransfersHarness
-from liberapay.utils.history import get_end_of_month_balances, iter_payday_events
+from liberapay.utils.history import (
+    get_end_of_period_balances, get_start_of_current_utc_day, iter_payday_events
+)
 
 
 def make_history(harness):
-    alice = harness.make_participant('alice', join_time=datetime(2001, 1, 1, 0, 0, 0))
+    alice = harness.make_participant('alice', join_time=datetime(2016, 1, 1, 0, 0, 0))
     harness.alice = alice
     harness.make_exchange('mango-cc', 50, 0, alice)
     harness.make_exchange('mango-cc', 12, 0, alice, status='failed')
@@ -73,8 +75,8 @@ class TestHistory(FakeTransfersHarness):
 
         Payday().start()
 
-        # Make sure events are all in the current month
-        delta = '%s days' % (27 - (now - datetime(now.year, now.month, 1)).days)
+        # Make sure events are all in the same year
+        delta = '%s days' % (364 - (now - datetime(now.year, 1, 1)).days)
         self.db.run("""
             UPDATE exchanges
                SET timestamp = "timestamp" + interval %(delta)s;
@@ -127,10 +129,10 @@ class TestHistory(FakeTransfersHarness):
         assert events[4]['kind'] == 'day-close'
         assert events[4]['balances'] == 0
 
-    def test_get_end_of_month_balances(self):
+    def test_get_end_of_period_balances(self):
         make_history(self)
-        today = datetime.utcnow().date()
-        balances = get_end_of_month_balances(self.db, self.alice, self.past_year, 12, today)
+        today = get_start_of_current_utc_day()
+        balances = get_end_of_period_balances(self.db, self.alice, self.past_year, today, 1)
         assert list(balances) == [EUR('10.00'), USD('0.00')]
 
 
