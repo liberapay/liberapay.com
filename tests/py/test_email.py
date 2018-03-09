@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from liberapay.exceptions import (
@@ -45,6 +47,15 @@ class TestEmail(EmailHarness):
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
         assert response.text == '{}'
+
+    def test_participant_can_add_email_with_unicode_domain_name(self):
+        punycode_email = 'alice@' + 'accentué.com'.encode('idna').decode()
+        self.hit_email_spt('add-email', 'alice@accentué.com')
+        assert self.alice.get_any_email() == punycode_email
+
+    def test_participant_cannot_add_email_with_unicode_local_part(self):
+        r = self.hit_email_spt('add-email', 'tête@exemple.fr', should_fail=True)
+        assert r.code == 400
 
     def test_participant_cant_add_bad_email(self):
         bad = (
@@ -137,6 +148,14 @@ class TestEmail(EmailHarness):
         expected = 'alice@example.com'
         actual = Participant.from_username('alice').email
         assert expected == actual
+
+    def test_verify_email_with_unicode_domain(self):
+        punycode_email = 'alice@' + 'accentué.fr'.encode('idna').decode()
+        self.alice.add_email(punycode_email)
+        nonce = self.alice.get_email(punycode_email).nonce
+        self.hit_verify(punycode_email, nonce)
+        actual = Participant.from_username('alice').email
+        assert punycode_email == actual
 
     def test_email_verification_is_backwards_compatible(self):
         """Test email verification still works with unencoded email in verification link.
