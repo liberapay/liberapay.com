@@ -293,7 +293,8 @@ title = _("Adding Money")
                 ) }}</h5>
                 <div class="input-group">
                     <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
-                    <input class="form-control amount" name="amount_custom" placeholder="{{ _('Amount') }}" />
+                    <input type="tel" inputmode="decimal" class="form-control amount"
+                           name="amount_custom" placeholder="{{ _('Amount') }}" />
                 </div>
                 </div>
             </label>

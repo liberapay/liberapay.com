@@ -84,7 +84,7 @@
     <div class="form-inline inline-block">
     <div class="input-group">
         <div class="input-group-addon">{{ locale.currency_symbols.get(new_currency, new_currency) }}</div>
-        <input type="text" name="amount" id="amount" placeholder="{{ _('Amount') }}"
+        <input type="tel" inputmode="decimal" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
                value="{{ format_decimal(tip.periodic_amount.amount) if tip.periodic_amount and not hide_amount else '' }}"
                {{ disabled }} />

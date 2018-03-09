@@ -117,7 +117,7 @@ title = _("Invoice {someone}", someone=addressee.username)
 
     <h4>{{ _("Amount") }}</h4>
     <div class="form-group form-inline">
-        <input type="text" name="amount" class="amount form-control"
+        <input type="tel" inputmode="decimal" name="amount" class="amount form-control"
                placeholder="{{ _('Amount') }}" required
                value="{{ format_decimal(invoice.amount.amount) if invoice else '' }}" />
         &nbsp;&nbsp;
