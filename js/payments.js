@@ -16,11 +16,6 @@ Liberapay.payments = {};
 Liberapay.payments.init = function() {
     var $form = $('form#payin, form#payout');
     if ($form.length === 0) return;
-    $('input[type="digits"]').each(function() {
-        var $input = $(this);
-        var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
-        PaymentCards.restrictNumeric(this, maxdigits);
-    });
     $('fieldset.hidden').prop('disabled', true);
     $('button[data-modify]').click(function() {
         var $btn = $(this);
@@ -129,6 +124,11 @@ Liberapay.payments.ba.init = function() {
         $($(e.target).attr('href')).prop('disabled', false);
         $($(e.relatedTarget).attr('href')).prop('disabled', true);
     });
+    $('input[inputmode="numeric"]').each(function() {
+        var $input = $(this);
+        var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
+        PaymentCards.restrictNumeric(this, maxdigits);
+    });
 };
 
 Liberapay.payments.ba.submit = function () {
@@ -145,7 +145,7 @@ Liberapay.payments.ba.submit = function () {
     Liberapay.forms.setInvalid($bban, is_bban_invalid);
 
     var invalids = 0;
-    $('input[type="digits"]').each(function() {
+    $('input[inputmode="numeric"]').each(function() {
         var $input = $(this);
         if ($input.parents(':disabled').length) return;
         var digits = $input.attr('digits');
