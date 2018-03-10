@@ -10,23 +10,50 @@ from . import group_by
 
 
 def get_start_of_current_utc_day():
+    """Returns a `datetime` for the start of the current day in the UTC timezone.
+    """
     now = utcnow()
     return datetime(now.year, now.month, now.day, tzinfo=utc)
 
 
 def month_minus_one(year, month, day):
+    """Returns a `datetime` for the start of the given day in the previous month.
+
+    >>> month_minus_one(2012, 3, 29)  # doctest: +ELLIPSIS
+    datetime.datetime(2012, 2, 29, 0, 0, tzinfo=...)
+    >>> month_minus_one(2012, 5, 31)  # doctest: +ELLIPSIS
+    datetime.datetime(2012, 4, 30, 0, 0, tzinfo=...)
+    """
     year, month = (year - 1, 12) if month == 1 else (year, month - 1)
     day = min(day, monthrange(year, month)[1])
     return datetime(year, month, day, tzinfo=utc)
 
 
 def month_plus_one(year, month, day):
+    """Returns a `datetime` for the start of the given day in the following month.
+
+    >>> month_plus_one(2012, 1, 31)  # doctest: +ELLIPSIS
+    datetime.datetime(2012, 2, 29, 0, 0, tzinfo=...)
+    >>> month_plus_one(2013, 1, 31)  # doctest: +ELLIPSIS
+    datetime.datetime(2013, 2, 28, 0, 0, tzinfo=...)
+    """
     year, month = (year + 1, 1) if month == 12 else (year, month + 1)
     day = min(day, monthrange(year, month)[1])
     return datetime(year, month, day, tzinfo=utc)
 
 
 def get_end_of_period_balances(db, participant, period_start, today, start_day):
+    """Get the participant's balances (`MoneyBasket`) at the end of the given period.
+
+    If `period_start` is an `int` then it is treated as a year number and the
+    return value will be the user's balance at the end of that year. In this
+    mode `start_day` is not used.
+
+    If `period_start` is a `datetime` then the return value will be the user's
+    balance one month later. `start_day` represents the target day of the month,
+    if `start_day` doesn't exist in a month (e.g. February 30) then the last day
+    of that month is used instead (e.g. February 28 or 29 depending on the year).
+    """
     if isinstance(period_start, datetime):
         year, month = period_start.year, period_start.month
         period_end = month_plus_one(year, month, start_day)
