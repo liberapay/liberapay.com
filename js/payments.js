@@ -127,7 +127,7 @@ Liberapay.payments.ba.init = function() {
     $('input[inputmode="numeric"]').each(function() {
         var $input = $(this);
         var maxdigits = $input.attr('maxdigits') || $input.attr('digits');
-        PaymentCards.restrictNumeric(this, maxdigits);
+        PaymentCards.restrictNumeric(this, +maxdigits);
     });
 };
 
