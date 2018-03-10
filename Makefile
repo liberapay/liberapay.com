@@ -69,10 +69,12 @@ tests: test
 pytest: env
 	PYTHONPATH=. $(py_test) ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
+	$(py_test) --doctest-modules liberapay
 
 pytest-cov: env
 	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
+	$(py_test) --doctest-modules liberapay
 
 pytest-re: env
 	PYTHONPATH=. $(py_test) --lf ./tests/py/
