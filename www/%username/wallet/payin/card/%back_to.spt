@@ -294,6 +294,7 @@ title = _("Adding Money")
         <div class="payment-card">
             <div class="card-number"><div class="input-wrapper">
             <input id="card_number" class="form-control" required autocomplete="cc-number"
+                   type="tel" inputmode="numeric"
                    placeholder="{{ _('Card number') }}"
                    title="{{ _('The main number on the card, between 8 and 19 digits') }}"
                    data-toggle="tooltip" data-placement="top" data-trigger="focus" />
@@ -305,6 +306,7 @@ title = _("Adding Money")
 
             <div class="card-expiry"><div class="input-wrapper">
             <input id="expiration_date" class="form-control" required autocomplete="cc-exp"
+                   type="tel" inputmode="numeric"
                    placeholder="{{ _('MM/YY') }}" title="{{ _('Expiration date (4 digits)') }}"
                    data-toggle="tooltip" data-placement="top" data-trigger="focus" />
             <span class="invalid-msg">{{ _("This expiration date is invalid.") }}</span>
@@ -312,6 +314,7 @@ title = _("Adding Money")
 
             <div class="cvv"><div class="input-wrapper">
             <input id="cvv" class="form-control" required autocomplete="cc-csc"
+                   type="tel" inputmode="numeric"
                    placeholder="{{ _('CVV') }}"
                    title="{{ _('Verification code, usually 3 digits located on the back of the card') }}"
                    data-toggle="tooltip" data-placement="top" data-trigger="focus" />
