@@ -42,28 +42,11 @@ def month_plus_one(year, month, day):
     return datetime(year, month, day, tzinfo=utc)
 
 
-def get_end_of_period_balances(db, participant, period_start, today, start_day):
+def get_end_of_period_balances(db, participant, period_end, today):
     """Get the participant's balances (`MoneyBasket`) at the end of the given period.
 
-    If `period_start` is an `int` then it is treated as a year number and the
-    return value will be the user's balance at the end of that year. In this
-    mode `start_day` is not used.
-
-    If `period_start` is a `datetime` then the return value will be the user's
-    balance one month later. `start_day` represents the target day of the month,
-    if `start_day` doesn't exist in a month (e.g. February 30) then the last day
-    of that month is used instead (e.g. February 28 or 29 depending on the year).
+    `period_end` and `today` should be UTC `datetime` objects.
     """
-    if isinstance(period_start, datetime):
-        year, month = period_start.year, period_start.month
-        period_end = month_plus_one(year, month, start_day)
-        prev_period_start = month_minus_one(year, month, start_day)
-    else:
-        year = period_start
-        period_start = datetime(year, 1, 1, tzinfo=utc)
-        period_end = datetime(year + 1, 1, 1, tzinfo=utc)
-        prev_period_start = year - 1
-
     if period_end > today:
         return db.one("""
             SELECT basket_sum(balance)
@@ -84,13 +67,14 @@ def get_end_of_period_balances(db, participant, period_start, today, start_day):
         return balances
 
     id = participant.id
-    balances = get_end_of_period_balances(db, participant, prev_period_start, today, start_day)
+    prev_period_end = month_minus_one(period_end.year, period_end.month, participant.join_time.day)
+    balances = get_end_of_period_balances(db, participant, prev_period_end, today)
     balances += db.one("""
         SELECT (
                   SELECT basket_sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE zero(fee) END)) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
-                     AND timestamp >= %(period_start)s
+                     AND timestamp >= %(prev_period_end)s
                      AND timestamp < %(period_end)s
                      AND amount > 0
                      AND status = 'succeeded'
@@ -98,7 +82,7 @@ def get_end_of_period_balances(db, participant, period_start, today, start_day):
                   SELECT basket_sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE zero(fee) END)) AS a
                     FROM exchanges
                    WHERE participant = %(id)s
-                     AND timestamp >= %(period_start)s
+                     AND timestamp >= %(prev_period_end)s
                      AND timestamp < %(period_end)s
                      AND amount < 0
                      AND status <> 'failed'
@@ -106,14 +90,14 @@ def get_end_of_period_balances(db, participant, period_start, today, start_day):
                   SELECT basket_sum(-amount) AS a
                     FROM transfers
                    WHERE tipper = %(id)s
-                     AND timestamp >= %(period_start)s
+                     AND timestamp >= %(prev_period_end)s
                      AND timestamp < %(period_end)s
                      AND status = 'succeeded'
                ) + (
                   SELECT basket_sum(amount) AS a
                     FROM transfers
                    WHERE tippee = %(id)s
-                     AND timestamp >= %(period_start)s
+                     AND timestamp >= %(prev_period_end)s
                      AND timestamp < %(period_end)s
                      AND status = 'succeeded'
                ) AS delta
@@ -134,28 +118,37 @@ def iter_payday_events(db, participant, year=None, month=-1):
     year = year or today.year
     month = month or today.month
 
+    if month == -1:
+        period_start = datetime(year, 1, 1, tzinfo=utc)
+        period_end = datetime(year + 1, 1, 1, tzinfo=utc)
+    else:
+        start_day = participant.join_time.day
+        max_month_day = monthrange(year, month)[1]
+        period_start = datetime(year, month, min(start_day, max_month_day), tzinfo=utc)
+        period_end = month_plus_one(year, month, start_day)
+
     id = participant.id
     exchanges = db.all("""
         SELECT *
           FROM exchanges
          WHERE participant=%(id)s
-           AND extract(year from timestamp) = %(year)s
-           AND (%(month)s < 0 OR extract(month from timestamp) = %(month)s)
+           AND timestamp >= %(period_start)s
+           AND timestamp < %(period_end)s
     """, locals(), back_as=dict)
     transfers = db.all("""
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers t
           JOIN participants p ON p.id = tipper
          WHERE t.tippee=%(id)s
-           AND extract(year from t.timestamp) = %(year)s
-           AND (%(month)s < 0 OR extract(month from t.timestamp) = %(month)s)
+           AND t.timestamp >= %(period_start)s
+           AND t.timestamp < %(period_end)s
         UNION ALL
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers t
           JOIN participants p ON p.id = tippee
          WHERE t.tipper=%(id)s
-           AND extract(year from t.timestamp) = %(year)s
-           AND (%(month)s < 0 OR extract(month from t.timestamp) = %(month)s)
+           AND t.timestamp >= %(period_start)s
+           AND t.timestamp < %(period_end)s
     """, locals(), back_as=dict)
 
     if not (exchanges or transfers):
@@ -195,14 +188,7 @@ def iter_payday_events(db, participant, year=None, month=-1):
       ORDER BY ts_start ASC
     """)
 
-    if month == -1:
-        period_start = year
-        start_day = None
-    else:
-        start_day = participant.join_time.day
-        max_month_day = monthrange(year, month)[1]
-        period_start = datetime(year, month, min(start_day, max_month_day), tzinfo=utc)
-    balances = get_end_of_period_balances(db, participant, period_start, today, start_day)
+    balances = get_end_of_period_balances(db, participant, period_end, today)
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)

@@ -132,7 +132,8 @@ class TestHistory(FakeTransfersHarness):
     def test_get_end_of_period_balances(self):
         make_history(self)
         today = get_start_of_current_utc_day()
-        balances = get_end_of_period_balances(self.db, self.alice, self.past_year, today, 1)
+        period_end = today.replace(month=1, day=1)
+        balances = get_end_of_period_balances(self.db, self.alice, period_end, today)
         assert list(balances) == [EUR('10.00'), USD('0.00')]
 
 
