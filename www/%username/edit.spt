@@ -163,7 +163,7 @@ title = _username
             <span>{{ GOAL_PARTS[0] }}</span>
             <div><div class="input-group">
                 <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
-                <input type="text" name="goal_custom" id="goal-custom"
+                <input type="tel" inputmode="decimal" name="goal_custom" id="goal-custom"
                        class="amount form-control input-sm"
                        value="{{ format_decimal(participant.goal.amount) if participant.goal and participant.goal > 0 else '' }}" />
                 <div class="input-group-addon">{{ _("per week") }}</div>

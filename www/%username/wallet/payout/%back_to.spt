@@ -191,6 +191,7 @@ title = _("Withdrawing Money")
         <input type="hidden" name="currency" value="{{ currency }}" />
         <div class="input-group">
             <input name="amount" value="{{ format_decimal(recommended_withdrawal) }}"
+                   type="tel" inputmode="decimal"
                    class="form-control" size=6 required />
             <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
         </div>
@@ -264,7 +265,7 @@ title = _("Withdrawing Money")
                 <label>
                     <span>{{ _("Routing Number") }}</span>
                     <input name="ABA" class="form-control" required size=12
-                           type="digits" digits=9 title="9 digits" />
+                           type="tel" inputmode="numeric" digits=9 title="9 digits" />
                 </label>
 
                 <label>
@@ -292,19 +293,19 @@ title = _("Withdrawing Money")
                 <label>
                     <span>{{ _("Institution Number") }}</span>
                     <input name="InstitutionNumber" class="form-control" required
-                           type="digits" mindigits=3 maxdigits=4 size=4 title="3 or 4 digits" />
+                           type="tel" inputmode="numeric" mindigits=3 maxdigits=4 size=4 title="3 or 4 digits" />
                 </label>
 
                 <label>
                     <span>{{ _("Branch Code") }}</span>
                     <input name="BranchCode" class="form-control" required
-                           type="digits" digits=5 size=5 title="5 digits" />
+                           type="tel" inputmode="numeric" digits=5 size=5 title="5 digits" />
                 </label>
 
                 <label>
                     <span>{{ _("Account Number") }}</span>
                     <input name="AccountNumber" class="form-control" required
-                           type="digits" maxdigits=20 size=25 title="up to 20 digits" />
+                           type="tel" inputmode="numeric" maxdigits=20 size=25 title="up to 20 digits" />
                 </label>
             </fieldset>
 
@@ -315,13 +316,13 @@ title = _("Withdrawing Money")
                 <label>
                     <span>{{ _("Sort Code") }}</span>
                     <input name="SortCode" class="form-control" required
-                           type="digits" digits=6 size=6 title="6 digits" />
+                           type="tel" inputmode="numeric" digits=6 size=6 title="6 digits" />
                 </label>
 
                 <label>
                     <span>{{ _("Account Number") }}</span>
                     <input name="AccountNumber" class="form-control" required
-                           type="digits" size=14 />
+                           type="tel" inputmode="numeric" size=14 />
                 </label>
             </fieldset>
             % endif

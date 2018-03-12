@@ -47,8 +47,9 @@
         % set dob = account[p+'Birthday']
         % set dob = dob and dob.isoformat() or ''
         <input name="Birthday" value="{{ request.body.get('Birthday', '') or dob }}"
+               type="date" autocomplete="bday"
                pattern="[1-2][0-9]{3}-[0-9]{1,2}-[0-9]{1,2}"
-               placeholder="{{ _('YYYY-MM-DD') }}" title="{{ _('YYYY-MM-DD') }}"
+               placeholder="{{ _('YYYY-MM-DD') }}"
                class="form-control" size=10 required />
     </label>
 
