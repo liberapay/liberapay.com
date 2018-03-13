@@ -1,5 +1,6 @@
 from calendar import monthrange
 from datetime import datetime
+from itertools import chain
 
 from pando import Response
 from pando.utils import utc, utcnow
@@ -109,6 +110,19 @@ def get_end_of_period_balances(db, participant, period_end, today):
         ON CONFLICT (participant, at) DO NOTHING
     """, (participant.id, period_end, balances))
     return balances
+
+
+def get_ledger_events(db, participant, year=None, month=-1):
+    events = iter_payday_events(db, participant, year, month)
+    try:
+        totals = next(events)
+        if totals['kind'] != 'totals':
+            # it's not what we expected, put it back
+            events = chain((totals,), events)
+            totals = None
+    except StopIteration:
+        totals, events = None, ()
+    return totals, events
 
 
 def iter_payday_events(db, participant, year=None, month=-1):
