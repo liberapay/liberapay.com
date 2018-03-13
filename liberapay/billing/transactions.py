@@ -331,8 +331,13 @@ def record_exchange(db, route, amount, fee, vat, participant, status, error=None
         """, (amount, fee, vat, participant.id, status, route.id, error, wallet_id))
 
         if amount < 0:
-            amount -= fee
-            propagate_exchange(cursor, participant, e, '', amount)
+            delta = amount - fee
+            cursor.run("""
+                INSERT INTO exchange_events
+                       (timestamp, exchange, status, error, wallet_delta)
+                VALUES (current_timestamp, %s, %s, NULL, %s)
+            """, (e.id, status, delta))
+            propagate_exchange(cursor, participant, e, '', delta)
 
     return e
 
@@ -356,10 +361,17 @@ def record_exchange_result(db, exchange_id, remote_id, status, error, participan
 
         amount = e.amount
         if amount < 0:
-            amount = -amount + max(e.fee, 0) if status == 'failed' else amount.zero()
+            delta = -amount + max(e.fee, 0) if status == 'failed' else amount.zero()
         else:
-            amount = amount - min(e.fee, 0) if status == 'succeeded' else amount.zero()
-        propagate_exchange(cursor, participant, e, error, amount)
+            delta = amount - min(e.fee, 0) if status == 'succeeded' else amount.zero()
+        propagate_exchange(cursor, participant, e, error, delta)
+
+        if status != 'created':
+            cursor.run("""
+                INSERT INTO exchange_events
+                       (timestamp, exchange, status, error, wallet_delta)
+                VALUES (current_timestamp, %s, %s, %s, %s)
+            """, (exchange_id, status, error, delta))
 
         return e
 
