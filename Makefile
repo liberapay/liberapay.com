@@ -55,7 +55,7 @@ run: env
 	PATH=$(env_bin):$$PATH $(with_local_env) $(env_py) app.py
 
 py: env
-	PYTHONPATH=. $(with_local_env) $(env_py) -i liberapay/main.py
+	PYTHONPATH=. $(with_local_env) $(env_py) -i $${main-liberapay/main.py}
 
 test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test

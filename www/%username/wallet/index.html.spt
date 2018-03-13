@@ -195,8 +195,8 @@ if user.is_admin:
 <table class="table table-condensed" id="history">
 <thead>
     <tr>
-        <th class="nature"></th>
-        <th class="status">{{ _("Status") }}</th>
+        <th class="nature">{{ _("Description") }}</th>
+        <th>{{ _("End of day balance") }}</th>
         <th class="wallet">{{ _("Amount") }}</th>
         <th class="fees"><a href="/about/faq#fees">{{ _("Fees") }}</a></th>
         <th class="bank" title="{{ _('The amount you should see on your bank account statement.') }}"
@@ -213,11 +213,11 @@ if user.is_admin:
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif
         </td>
-        <td class="status" title="{{ _('balance at the end of the day') }}">{{
+        <td>{{
             locale.format_money_basket(event['balances'], sep=' + ')
         }}</td>
         <td class="wallet">
-        % set wallet_deltas = event['wallet_deltas']
+        % set wallet_deltas = event['wallet_delta']
         % if wallet_deltas
         % set n = len(wallet_deltas.currencies_present)
         % for delta in wallet_deltas
@@ -231,31 +231,39 @@ if user.is_admin:
         <td class="bank"></td>
     </tr>
     % elif 'fee' in event
-    <tr>
-        <td class="nature">
+    <tr class="{{ 'zero' if not event['wallet_delta'] }}">
+        <td class="nature" colspan="2">
         % if event['kind'] == 'payin-refund'
-            {{ event['note'] or _("refund") }}
+            {{ event['error'] or _("refund") }}
         % elif event['kind'] in ('credit', 'charge')
             {{ _("withdrawal") if event['kind'] == 'credit' else _("deposit") }}
-            % if event['note']
-                &mdash; {{ _("error message: {0}", event['note']) if event['status'] == 'failed' else event['note'] }}
-            % endif
         % elif event['kind'] == 'payout-refund'
-            {{ _("refund of failed withdrawal (error message: {0})", event['note']) }}
+            {{ _("refund of failed withdrawal (error message: {0})", event['error']) }}
+        % endif
+        % if event['status'] != 'succeeded'
+            % if event['error'] == 'canceled'
+                &mdash; <span class="text text-warning">{{ _("canceled") }}</span>
+            % elif not (event['kind'] == 'credit' and event['status'] == 'pre')
+                &mdash;
+                <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+                    translated_status[event['status']]
+                }}</span>
+                % if event['error']
+                    &mdash; {{ _("error message: {0}", event['error']) }}
+                % endif
+            % endif
         % endif
         % if event['status'] == 'succeeded' and event['kind'] == 'charge'
-            (<a href="{{ participant.path('receipts/') }}{{ event['id'] }}">{{ _("Receipt").lower() }}</a>)
+            (<a href="{{ participant.path('receipts/') }}{{ event['exchange_id'] }}">{{ _("Receipt").lower() }}</a>)
         % endif
         </td>
-        <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
-            >{{ translated_status[event['status']] }}</td>
-        <td class="wallet">{{ format_money_delta(event['wallet_delta']) }}</td>
+        <td class="wallet">{{ format_money_delta(event['wallet_delta'] or event['amount']) }}</td>
         <td class="fees">{{ format_money(event['fee']) }}</td>
         <td class="bank">{{ format_money_delta(event['bank_delta']) }}</td>
     </tr>
     % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
-    <tr>
-        <td class="nature">
+    <tr class="{{ 'zero' if not event['wallet_delta'] }}">
+        <td class="nature" colspan="2">
         % set context = event['context']
         % if event['tippee'] == participant.id
             % if admin_override
@@ -309,10 +317,17 @@ if user.is_admin:
                 {{ _("debt repayment") }}
             % endif
         % endif
+        % if event['status'] != 'succeeded'
+            &mdash;
+            <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+                translated_status[event['status']]
+            }}</span>
+            % if event['error']
+                &mdash; {{ _("error message: {0}", event['error']) }}
+            % endif
+        % endif
         </td>
-        <td class="status text-{{ STATUS_MAP.get(event['status'], 'info') }}"
-            >{{ translated_status[event['status']] }}</td>
-        <td class="wallet">{{ format_money_delta(event['wallet_delta']) }}</td>
+        <td class="wallet">{{ format_money_delta(event['amount']) }}</td>
         <td class="fees"></td>
         <td class="bank"></td>
 

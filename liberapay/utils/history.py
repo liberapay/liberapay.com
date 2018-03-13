@@ -72,21 +72,12 @@ def get_end_of_period_balances(db, participant, period_end, today):
     balances = get_end_of_period_balances(db, participant, prev_period_end, today)
     balances += db.one("""
         SELECT (
-                  SELECT basket_sum(amount - (CASE WHEN (fee < 0) THEN fee ELSE zero(fee) END)) AS a
-                    FROM exchanges
-                   WHERE participant = %(id)s
-                     AND timestamp >= %(prev_period_end)s
-                     AND timestamp < %(period_end)s
-                     AND amount > 0
-                     AND status = 'succeeded'
-               ) + (
-                  SELECT basket_sum(amount - (CASE WHEN (fee > 0) THEN fee ELSE zero(fee) END)) AS a
-                    FROM exchanges
-                   WHERE participant = %(id)s
-                     AND timestamp >= %(prev_period_end)s
-                     AND timestamp < %(period_end)s
-                     AND amount < 0
-                     AND status <> 'failed'
+                  SELECT basket_sum(ee.wallet_delta) AS a
+                    FROM exchanges e
+                    JOIN exchange_events ee ON ee.exchange = e.id
+                   WHERE e.participant = %(id)s
+                     AND ee.timestamp >= %(prev_period_end)s
+                     AND ee.timestamp < %(period_end)s
                ) + (
                   SELECT basket_sum(-amount) AS a
                     FROM transfers
@@ -143,11 +134,16 @@ def iter_payday_events(db, participant, year=None, month=-1):
 
     id = participant.id
     exchanges = db.all("""
-        SELECT *
-          FROM exchanges
-         WHERE participant=%(id)s
-           AND timestamp >= %(period_start)s
-           AND timestamp < %(period_end)s
+        SELECT ee.timestamp, ee.status, ee.error, ee.wallet_delta
+             , e.amount, e.fee, e.recorder, e.refund_ref, e.timestamp AS ctime
+             , e.id AS exchange_id
+          FROM exchanges e
+          JOIN exchange_events ee ON ee.exchange = e.id
+         WHERE e.participant = %(id)s
+           AND ee.timestamp >= %(period_start)s
+           AND ee.timestamp < %(period_end)s
+           AND ee.status <> 'created'
+           AND (ee.status = e.status OR ee.wallet_delta <> 0)
     """, locals(), back_as=dict)
     transfers = db.all("""
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
@@ -230,18 +226,19 @@ def iter_payday_events(db, participant, year=None, month=-1):
             prev_date = event_date
 
         if 'fee' in event:
+            balances -= event['wallet_delta']
             if event['amount'] > 0:
                 kind = 'payout-refund' if event['refund_ref'] else 'charge'
                 event['bank_delta'] = -event['amount'] - max(event['fee'], 0)
-                event['wallet_delta'] = event['amount'] - min(event['fee'], 0)
-                if event['status'] == 'succeeded':
-                    balances -= event['wallet_delta']
             else:
-                kind = 'payin-refund' if event['refund_ref'] else 'credit'
+                if event['refund_ref']:
+                    kind = 'payin-refund'
+                elif event['status'] == 'failed':
+                    kind = 'payout-refund'
+                    event['status'] = 'succeeded'
+                else:
+                    kind = 'credit'
                 event['bank_delta'] = -event['amount'] - min(event['fee'], 0)
-                event['wallet_delta'] = event['amount'] - max(event['fee'], 0)
-                if event['status'] != 'failed':
-                    balances -= event['wallet_delta']
         else:
             kind = 'transfer'
             if event['tippee'] == id:

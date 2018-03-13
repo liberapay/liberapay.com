@@ -22,6 +22,8 @@ def make_history(harness):
     harness.db.run("""
         UPDATE exchanges
            SET timestamp = "timestamp" - interval '1 year';
+        UPDATE exchange_events
+           SET timestamp = "timestamp" - interval '1 year';
         UPDATE cash_bundles
            SET ts = ts - interval '1 year';
     """)
