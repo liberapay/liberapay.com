@@ -1,6 +1,6 @@
 from calendar import monthrange
-from datetime import datetime
-from itertools import chain
+from collections import namedtuple
+from datetime import datetime, timedelta
 
 from pando import Response
 from pando.utils import utc, utcnow
@@ -8,6 +8,12 @@ from pando.utils import utc, utcnow
 from ..website import website
 from .currencies import MoneyBasket
 from . import group_by
+
+
+ONE_SECOND = timedelta(seconds=1)
+
+
+Ledger = namedtuple('Ledger', 'totals start end entries')
 
 
 def get_start_of_current_utc_day():
@@ -103,26 +109,26 @@ def get_end_of_period_balances(db, participant, period_end, today):
     return balances
 
 
-def get_ledger_events(db, participant, year=None, month=-1):
-    events = iter_payday_events(db, participant, year, month)
-    try:
-        totals = next(events)
-        if totals['kind'] != 'totals':
-            # it's not what we expected, put it back
-            events = chain((totals,), events)
-            totals = None
-    except StopIteration:
-        totals, events = None, ()
-    return totals, events
+def get_ledger(db, participant, year=None, month=-1, reverse=True, minimize=False, past_only=False):
+    """Returns a `Ledger` object representing the participant's account history.
 
+    When `year` is `None` the current year is used.
 
-def iter_payday_events(db, participant, year=None, month=-1):
-    """Yields payday events for the given participant.
+    When `month` is `None` the current month is used,
+    when it's `-1` the returned object includes data for the whole year.
+
+    When `past_only` is `True` the return value is `None` if the requested month
+    or year isn't finished (or hasn't even begun).
+
+    The `reverse` argument controls the order of the returned entries, when it's
+    `True` the events are in reverse chronological order.
+
+    The `minimize` argument controls whether events that don't affect the
+    balance are skipped or not.
     """
     today = get_start_of_current_utc_day()
     year = year or today.year
     month = month or today.month
-
     if month == -1:
         period_start = datetime(year, 1, 1, tzinfo=utc)
         period_end = datetime(year + 1, 1, 1, tzinfo=utc)
@@ -131,8 +137,30 @@ def iter_payday_events(db, participant, year=None, month=-1):
         max_month_day = monthrange(year, month)[1]
         period_start = datetime(year, month, min(start_day, max_month_day), tzinfo=utc)
         period_end = month_plus_one(year, month, start_day)
+    if past_only and period_end > today:
+        return None
 
+    events = list(iter_payday_events(
+        db, participant, period_start, period_end, today, minimize
+    ))
+    totals, start, end = None, None, None
+    if events:
+        if events[0]['kind'] == 'totals':
+            totals, events = events[0], events[1:]
+        if events[0]['kind'] == 'period-end':
+            end, events = events[0], events[1:]
+        if events[-1]['kind'] == 'period-start':
+            events, start = events[:-1], events[-1]
+    if not reverse:
+        events.reverse()
+    return Ledger(totals, start, end, events)
+
+
+def iter_payday_events(db, participant, period_start, period_end, today, minimize=False):
+    """Yields payday events for the given participant.
+    """
     id = participant.id
+    params = locals()
     exchanges = db.all("""
         SELECT ee.timestamp, ee.status, ee.error, ee.wallet_delta
              , e.amount, e.fee, e.recorder, e.refund_ref, e.timestamp AS ctime
@@ -142,9 +170,8 @@ def iter_payday_events(db, participant, year=None, month=-1):
          WHERE e.participant = %(id)s
            AND ee.timestamp >= %(period_start)s
            AND ee.timestamp < %(period_end)s
-           AND ee.status <> 'created'
-           AND (ee.status = e.status OR ee.wallet_delta <> 0)
-    """, locals(), back_as=dict)
+           AND (ee.wallet_delta <> 0 OR (ee.status = 'failed' AND NOT %(minimize)s))
+    """, params, back_as=dict)
     transfers = db.all("""
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers t
@@ -152,6 +179,7 @@ def iter_payday_events(db, participant, year=None, month=-1):
          WHERE t.tippee=%(id)s
            AND t.timestamp >= %(period_start)s
            AND t.timestamp < %(period_end)s
+           AND (t.status = 'succeeded' OR NOT %(minimize)s)
         UNION ALL
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers t
@@ -159,10 +187,8 @@ def iter_payday_events(db, participant, year=None, month=-1):
          WHERE t.tipper=%(id)s
            AND t.timestamp >= %(period_start)s
            AND t.timestamp < %(period_end)s
-    """, locals(), back_as=dict)
-
-    if not (exchanges or transfers):
-        return
+           AND (t.status = 'succeeded' OR NOT %(minimize)s)
+    """, params, back_as=dict)
 
     if transfers:
         successes = [t for t in transfers if t['status'] == 'succeeded' and not t['refund_ref']]
@@ -199,6 +225,9 @@ def iter_payday_events(db, participant, year=None, month=-1):
     """)
 
     balances = get_end_of_period_balances(db, participant, period_end, today)
+    period_end -= ONE_SECOND
+    yield dict(kind='period-end', date=period_end.date(), balances=balances)
+
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)
@@ -210,13 +239,13 @@ def iter_payday_events(db, participant, year=None, month=-1):
         event_date = event['timestamp'].date()
         if event_date != prev_date:
             if prev_date:
-                day_open['wallet_deltas'] = day_open['balances'] - balances
+                day_open['wallet_delta'] = day_open['balances'] - balances
                 yield day_open
                 for e in day_events:
                     yield e
-                yield dict(kind='day-close', balances=balances)
+                yield dict(kind='day-start', balances=balances)
             day_events = []
-            day_open = dict(kind='day-open', date=event_date, balances=balances)
+            day_open = dict(kind='day-end', date=event_date, balances=balances)
             if payday_dates:
                 while payday_dates and payday_dates[-1] > event_date:
                     payday_dates.pop()
@@ -226,7 +255,6 @@ def iter_payday_events(db, participant, year=None, month=-1):
             prev_date = event_date
 
         if 'fee' in event:
-            balances -= event['wallet_delta']
             if event['amount'] > 0:
                 kind = 'payout-refund' if event['refund_ref'] else 'charge'
                 event['bank_delta'] = -event['amount'] - max(event['fee'], 0)
@@ -241,23 +269,28 @@ def iter_payday_events(db, participant, year=None, month=-1):
                 event['bank_delta'] = -event['amount'] - min(event['fee'], 0)
         else:
             kind = 'transfer'
-            if event['tippee'] == id:
+            if event['tippee'] != id:
+                event['amount'] = -event['amount']
+            if event['status'] == 'succeeded':
                 event['wallet_delta'] = event['amount']
             else:
-                event['wallet_delta'] = -event['amount']
-            if event['status'] == 'succeeded':
-                balances -= event['wallet_delta']
+                event['wallet_delta'] = 0
             if event['context'] == 'expense':
                 event['invoice_url'] = participant.path('invoices/%s' % event['invoice'])
         event['kind'] = kind
 
+        balances -= event['wallet_delta']
+
         day_events.append(event)
 
-    day_open['wallet_delta'] = day_open['balances'] - balances
-    yield day_open
-    for e in day_events:
-        yield e
-    yield dict(kind='day-close', balances=balances)
+    if day_open:
+        day_open['wallet_delta'] = day_open['balances'] - balances
+        yield day_open
+        for e in day_events:
+            yield e
+        yield dict(kind='day-start', balances=balances)
+
+    yield dict(kind='period-start', date=period_start.date(), balances=balances)
 
 
 def export_history(participant, year, mode, key, back_as='namedtuple', require_key=False):

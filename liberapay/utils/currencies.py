@@ -89,6 +89,8 @@ class MoneyBasket(object):
         return False
 
     def __add__(self, other):
+        if other is 0:
+            return self
         r = self.__class__(**self.amounts)
         if isinstance(other, self.__class__):
             for currency, amount in other.amounts.items():
@@ -112,6 +114,8 @@ class MoneyBasket(object):
         return self.__add__(other)
 
     def __sub__(self, other):
+        if other is 0:
+            return self
         r = self.__class__(**self.amounts)
         if isinstance(other, self.__class__):
             for currency, v in other.amounts.items():

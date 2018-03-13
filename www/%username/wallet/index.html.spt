@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from liberapay.utils import get_participant
-from liberapay.utils.history import get_ledger_events
+from liberapay.utils.history import get_ledger
 
 STATUS_MAP = {
     'failed': 'danger',
@@ -41,7 +41,7 @@ if not year:
     """, dict(p_id=participant.id))
     year = last_event_year or current_year
 
-totals, events = get_ledger_events(website.db, participant, year)
+totals, start, end, events = get_ledger(website.db, participant, year)
 years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
@@ -205,7 +205,7 @@ if user.is_admin:
 </thead>
 <tbody>
 % for event in events
-    % if event['kind'] == 'day-open'
+    % if event['kind'] == 'day-end'
     <tr class="day-open">
         <td class="nature">
             {{ format_date(event['date'], 'long') }}
