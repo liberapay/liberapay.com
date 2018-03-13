@@ -237,7 +237,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
         collapse = False
         event['balances'] = balances
 
-        event_date = event['timestamp'].date()
+        event_date = event['date'] = event['timestamp'].date()
         if event_date != prev_date:
             if prev_date:
                 day_open['wallet_delta'] = day_open['balances'] - balances

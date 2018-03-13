@@ -1,0 +1,233 @@
+# coding: utf8
+
+from datetime import datetime
+
+from liberapay.utils import get_participant, render
+from liberapay.utils.history import get_ledger
+
+STATUS_MAP = {
+    'failed': 'danger',
+    'succeeded': 'success',
+}
+
+[---]
+
+participant = get_participant(state, restrict=True)
+title = _("Account Statement")
+
+now = datetime.utcnow()
+today = now.date()
+year = request.qs.get_int('year', now.year)
+month = request.qs.get_int('month', (now.month - 1) or 12)
+
+join_time = participant.join_time
+if (year, month) < (join_time.year, join_time.year):
+    raise response.error(400, "the requested month predates the account's creation")
+
+ledger = get_ledger(
+    website.db, participant, year, month, reverse=False, minimize=True, past_only=True
+)
+if ledger is None:
+    raise response.error(400, "end date is in the future")
+totals, start, end, events = ledger
+
+translated_status = {
+    'failed': _('failed'),
+    'succeeded': _('succeeded')
+}
+
+output.body = render(globals(), allow_partial_i18n=False)
+
+[---] text/html
+% extends "templates/paper.html"
+
+% block content
+
+    <br><br>
+    <div class="row">
+        <div class="col-xs-6">
+            <h1>
+                {{ _("Account Statement") }}<br>
+                <small>{{ format_date(start['date'], 'long') }} → {{ format_date(end['date'], 'long') }}</small>
+            </h1>
+            <p class="text-muted">{{ _("Account number: {0}", participant.id) }}</p>
+        </div>
+        <address class="col-xs-6 monospace">
+        % set account = participant.get_mangopay_account()
+        % if account.PersonType == 'LEGAL'
+            {{ account.Name }}<br>
+        % else
+            {{ account.FirstName }} {{ account.LastName }}<br>
+        % endif
+        % set postal_address = account.HeadquartersAddress or account.Address
+        % if postal_address.Country
+            {{ postal_address.AddressLine1 }}<br>
+            % if postal_address.AddressLine2
+            {{ postal_address.AddressLine2 }}<br>
+            % endif
+            {{ postal_address.PostalCode }} {{ postal_address.City }}<br>
+            {{ locale.countries.get(postal_address.Country, postal_address.Country) }}
+        % endif
+        </address>
+    </div>
+    <br>
+
+    % if totals
+        % set regular_donations = totals['regular_donations']
+        % set reimbursements = totals['reimbursements']
+        % set total_sent = regular_donations['sent'] + reimbursements['sent']
+        {{ _("Total money sent: {0}", total_sent) }}<br>
+        % if total_sent
+        <ul>
+        % if regular_donations['sent']
+        % for money_amount in regular_donations['sent']
+        % if money_amount
+        <li>{{ ngettext(
+            "{money_amount} in recurrent donations to {n} person",
+            "{money_amount} in recurrent donations to {n} people",
+            regular_donations['ntippees'][money_amount.currency],
+            money_amount=money_amount
+        ) }}</li>
+        % endif
+        % endfor
+        % endif
+        % if reimbursements['sent']
+        % for money_amount in reimbursements['sent']
+        % if money_amount
+        <li>{{ ngettext(
+            "{money_amount} in expense reimbursements to {n} person",
+            "{money_amount} in expense reimbursements to {n} people",
+            reimbursements['nrecipients'][money_amount.currency],
+            money_amount=money_amount
+        ) }}</li>
+        % endif
+        % endfor
+        % endif
+        </ul>
+        % endif
+        % set total_received = regular_donations['received'] + reimbursements['received']
+        {{ _("Total money received: {0}", total_received) }}
+        % if total_received
+        <ul>
+        % if regular_donations['received']
+        % for money_amount in regular_donations['received']
+        % if money_amount
+        <li>{{ ngettext(
+            "{money_amount} in recurrent donations from {n} donor",
+            "{money_amount} in recurrent donations from {n} donors",
+            regular_donations['npatrons'][money_amount.currency],
+            money_amount=money_amount
+        ) }}</li>
+        % endif
+        % endfor
+        % endif
+        % if reimbursements['received']
+        % for money_amount in reimbursements['received']
+        % if money_amount
+        <li>{{ ngettext(
+            "{money_amount} in expense reimbursements from {n} organization",
+            "{money_amount} in expense reimbursements from {n} organizations",
+            reimbursements['npayers'][money_amount.currency],
+            money_amount=money_amount
+        ) }}</li>
+        % endif
+        % endfor
+        % endif
+        </ul>
+        % endif
+    <br>
+    % endif
+
+    % if events
+    <table class="table table-bordered numeric-table">
+    <thead>
+        <tr>
+            <th>{{ _("Description") }}</th>
+            <th>{{ _("Debit") }}</th>
+            <th>{{ _("Credit") }}</th>
+            <th>{{ _("Date") }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td colspan="4" class="text-center">{{
+            _("Balance at the beginning: {0}", start['balances'])
+        }}</td></tr>
+    % for event in events
+        % if 'fee' in event
+        <tr>
+            <td>
+            % if event['kind'] == 'payin-refund'
+                {{ event['error'] or _("refund") }}
+            % elif event['kind'] in ('credit', 'charge')
+                {{ _("withdrawal") if event['kind'] == 'credit' else _("deposit") }}
+            % elif event['kind'] == 'payout-refund'
+                {{ _("refund of failed withdrawal (error message: {0})", event['error']) }}
+            % endif
+            % if event['status'] != 'succeeded'
+                % if event['error'] == 'canceled'
+                    &mdash; <span class="text text-warning">{{ _("canceled") }}</span>
+                % elif not (event['kind'] == 'credit' and event['status'] == 'pre')
+                    &mdash;
+                    <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+                        translated_status[event['status']]
+                    }}</span>
+                    % if event['error']
+                        &mdash; {{ _("error message: {0}", event['error']) }}
+                    % endif
+                % endif
+            % elif event['fee']
+                &mdash; {{ _("Fee: {0}", event['fee']).lower() }}
+            % endif
+            </td>
+            <td>{{ format_money(abs(event['wallet_delta'])) if event['wallet_delta'] < 0 else '' }}</td>
+            <td>{{ format_money(event['wallet_delta']) if event['wallet_delta'] > 0 else '' }}</td>
+            <td>{{ format_date(event['date'], 'short_yearless') }}</td>
+        </tr>
+        % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
+        <tr>
+            <td>
+            % set context = event['context']
+            % set to = event['username']
+            % if context == 'final-gift'
+                {{ _("final gift to {0}", to) }}
+            % elif context == 'take'
+                {{ _("donation to {0} for their role in the {1} team", to, event['team_name']) }}
+            % elif context == 'refund'
+                {{ _("refund of anonymous donation") }}
+            % elif context == 'expense'
+                {{ _("payment of {link_open}expense #{invoice_id}{link_close} to {payee}",
+                     link_open='<a href="%s">'|safe % event['invoice_url'],
+                     invoice_id=event['invoice'],
+                     link_close='</a>'|safe,
+                     payee=to,
+                ) }}
+            % elif context == 'tip'
+                {{ _("donation to {0}", to) }}
+            % elif context == 'chargeback'
+                {{ _("chargeback") }}
+            % elif context == 'debt'
+                {{ _("debt repayment") }}
+            % endif
+            </td>
+            <td>{{ format_money(abs(event['wallet_delta'])) if event['wallet_delta'] < 0 else '' }}</td>
+            <td>{{ format_money(event['wallet_delta']) if event['wallet_delta'] > 0 else '' }}</td>
+            <td>{{ format_date(event['date'], 'short_yearless') }}</td>
+        </tr>
+        % endif
+    % endfor
+        <tr><td colspan="4" class="text-center">{{
+            _("Balance at the end: {0}", end['balances'])
+        }}</td></tr>
+    </tbody>
+    </table>
+    % else
+        <p>{{ _("There were no transactions during this period.") }}</p>
+        <p>{{ _("Account balance: {0}", start['balances']) }}</p>
+    % endif
+    <footer>
+        <div>{{ format_date(today, 'long') }}</div>
+        <div><em>This document is not official, it's only a prototype.</em></div>
+        <div></div>
+    </footer>
+
+% endblock
