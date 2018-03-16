@@ -23,9 +23,9 @@ teams = query_cache.all("""
      WHERE (p.goal >= 0 OR p.goal IS NULL)
        AND p.hide_from_lists = 0
   ORDER BY receiving DESC, join_time DESC
+     LIMIT 18
 
 """, (locale.language,))
-nteams = len(teams)
 title = _("Explore")
 subhead = _("Teams")
 
@@ -42,9 +42,9 @@ subhead = _("Teams")
 ) }}</p>
 
 <p>{{ ngettext(
-    "There is {n} team on Liberapay:",
-    "There are {n} teams on Liberapay:",
-    nteams
+    "The top team on Liberapay is:",
+    "The top {n} teams on Liberapay are:",
+    len(teams)
 ) }}</p>
 
 <div class="profile-box-row">
