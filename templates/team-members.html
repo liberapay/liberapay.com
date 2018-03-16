@@ -42,8 +42,24 @@
                           method="POST">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                         <div class="input-group">
-                            % set c = nominal_take.currency
-                            <div class="input-group-addon">{{ locale.currency_symbols.get(c, c) }}</div>
+                            % set take_currency = nominal_take.currency
+                            % set currencies = user.accepted_currencies
+                            % if len(currencies) > 1
+                                <div class="input-group-btn">
+                                    <select class="btn btn-default" name="currency">
+                                    % for c in constants.CURRENCIES
+                                        % if c in currencies
+                                        <option value="{{ c }}" {{ 'selected' if c == take_currency }}>{{
+                                            locale.currency_symbols.get(c, c)
+                                        }}</option>
+                                        % endif
+                                    % endfor
+                                    </select>
+                                </div>
+                            % else
+                                <div class="input-group-addon">{{ locale.currency_symbols.get(take_currency, take_currency) }}</div>
+                                <input type="hidden" name="currency" value="{{ take_currency }}" />
+                            % endif
                             <input class="form-control" name="take" value="{{ format_decimal(nominal_take.amount, '#,##0.00') }}" />
                             <div class="input-group-btn">
                                 <button class="btn btn-default" title="{{ _('Update my nominal take') }}"
