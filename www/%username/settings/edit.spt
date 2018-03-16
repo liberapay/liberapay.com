@@ -76,14 +76,10 @@ elif 'main_currency' in body:
     new_currency = body['main_currency']
     old_currency = p.main_currency
     change_currency = new_currency != old_currency
-    if p.kind == 'group':
-        new_accepted = p.accepted_currencies
-        change_policy = False
-    else:
-        new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
-        change_policy = new_accepted != p.accepted_currencies
-        if new_currency not in new_accepted:
-            raise response.error(400, _("The submitted settings are incoherent."))
+    new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
+    change_policy = new_accepted != p.accepted_currencies
+    if new_currency not in new_accepted:
+        raise response.error(400, _("The submitted settings are incoherent."))
     if change_currency or change_policy:
         foreign_donations = website.db.all("""
             SELECT t.*
@@ -92,11 +88,6 @@ elif 'main_currency' in body:
                AND t.amount > 0
                AND t.amount::currency NOT IN %s
         """, (p.id, tuple(new_accepted)))
-        if foreign_donations and p.kind == 'group':
-            raise response.error(501, _(
-                "It's not yet possible to modify the currency of a team which is already "
-                "receiving donations. Sorry."
-            ))
         if foreign_donations and body.get('confirmed') != 'true':
             back_to = p.path('edit')
             total = Money.sum((t.amount.convert(new_currency) for t in foreign_donations), new_currency)
