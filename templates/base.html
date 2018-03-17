@@ -26,7 +26,7 @@
     % endif
     {% block head %}{% endblock %}
 </head>
-% from "templates/icons.html" import glyphicon, icon_span
+% from "templates/icons.html" import fontawesome, glyphicon, icon_span
 % from 'templates/nav.html' import nav, nav_about, nav_explore with context
 % from 'templates/search.html' import search_form with context
 <body id="{{ page_id or '' }}">
@@ -119,13 +119,13 @@
             <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
             <li><a href="/about/legal">{{ _("Legal") }}</a></li>
         </ul>
-        <ul>
-            <li><a href="https://medium.com/liberapay-blog">Medium</a></li>
-            <li><a href="https://mastodon.xyz/@Liberapay">Mastodon</a></li>
-            <li><a href="https://framasphere.org/u/liberapay">Diaspora*</a></li>
-            <li><a href="https://github.com/liberapay/liberapay.com">GitHub</a></li>
-            <li><a href="https://twitter.com/liberapay">Twitter</a></li>
-            <li><a href="https://www.facebook.com/Liberapay-472128142945598/">Facebook</a></li>
+        <ul class="icons">
+            <li><a href="https://medium.com/liberapay-blog">{{ fontawesome('medium', 'Medium') }}</a></li>
+            <li><a href="https://mastodon.xyz/@Liberapay">{{ fontawesome('mastodon', 'Mastodon') }}</a></li>
+            <li><a href="https://framasphere.org/u/liberapay">{{ fontawesome('diaspora', 'Diaspora*') }}</a></li>
+            <li><a href="https://github.com/liberapay/liberapay.com">{{ fontawesome('github', 'GitHub') }}</a></li>
+            <li><a href="https://twitter.com/liberapay">{{ fontawesome('twitter', 'Twitter') }}</a></li>
+            <li><a href="https://www.facebook.com/Liberapay-472128142945598/">{{ fontawesome('facebook', 'Facebook') }}</a></li>
         </ul>
     </footer>
 
