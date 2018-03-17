@@ -69,9 +69,7 @@
             <ul class="nav navbar-nav">
                 % if page_id != 'homepage'
                 <li class="hidden-xs">
-                    <a class="navbar-brand" href="/">
-                        <img src="{{ website.asset('liberapay/icon-v2_black.svg') }}"
-                             alt="&nbsp;Liberapay&nbsp;" /></a></li>
+                    <a class="navbar-brand" href="/">{{ fontawesome('liberapay', _("Homepage")) }}</a></li>
                 <li class="visible-xs">
                     <a href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
                 % endif
