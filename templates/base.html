@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="{{ website.asset('liberapay/icon-v2_yellow-r.200.png') }}">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ website.asset('fontawesome/4.5.0/css/font-awesome.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset('forkawesome/1.0.11/css/fork-awesome.min.css') }}" type="text/css">
     % block head_alternates
     % if request.method in ('GET', 'HEAD') and response.code == 200
         <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri }}" />
@@ -26,7 +26,7 @@
     % endif
     {% block head %}{% endblock %}
 </head>
-% from "templates/icons.html" import glyphicon, icon_span
+% from "templates/icons.html" import fontawesome, glyphicon, icon_span
 % from 'templates/nav.html' import nav, nav_about, nav_explore with context
 % from 'templates/search.html' import search_form with context
 <body id="{{ page_id or '' }}">
@@ -69,9 +69,7 @@
             <ul class="nav navbar-nav">
                 % if page_id != 'homepage'
                 <li class="hidden-xs">
-                    <a class="navbar-brand" href="/">
-                        <img src="{{ website.asset('liberapay/icon-v2_black.svg') }}"
-                             alt="&nbsp;Liberapay&nbsp;" /></a></li>
+                    <a class="navbar-brand" href="/">{{ fontawesome('liberapay', _("Homepage")) }}</a></li>
                 <li class="visible-xs">
                     <a href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
                 % endif
@@ -119,12 +117,13 @@
             <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
             <li><a href="/about/legal">{{ _("Legal") }}</a></li>
         </ul>
-        <ul>
-            <li><a href="https://mastodon.rocks/@Liberapay">Mastodon</a></li>
-            <li><a href="https://framasphere.org/u/liberapay">Diaspora*</a></li>
-            <li><a href="https://github.com/liberapay/liberapay.com">GitHub</a></li>
-            <li><a href="https://twitter.com/liberapay">Twitter</a></li>
-            <li><a href="https://www.facebook.com/Liberapay-472128142945598/">Facebook</a></li>
+        <ul class="icons">
+            <li><a href="https://medium.com/liberapay-blog">{{ fontawesome('medium', 'Medium') }}</a></li>
+            <li><a href="https://mastodon.xyz/@Liberapay">{{ fontawesome('mastodon', 'Mastodon') }}</a></li>
+            <li><a href="https://framasphere.org/u/liberapay">{{ fontawesome('diaspora', 'Diaspora*') }}</a></li>
+            <li><a href="https://github.com/liberapay/liberapay.com">{{ fontawesome('github', 'GitHub') }}</a></li>
+            <li><a href="https://twitter.com/liberapay">{{ fontawesome('twitter', 'Twitter') }}</a></li>
+            <li><a href="https://www.facebook.com/Liberapay-472128142945598/">{{ fontawesome('facebook', 'Facebook') }}</a></li>
         </ul>
     </footer>
 
