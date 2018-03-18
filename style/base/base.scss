@@ -472,7 +472,6 @@ section.invoice-details {
 .notification {
     padding: 14px;
     text-align: center;
-    z-index: 10;
 }
 
 .notification-error {
@@ -498,6 +497,7 @@ section.invoice-details {
     left: 0;
     position: fixed;
     right: 0;
+    z-index: 10000;
 }
 
 .dropdown-hover {
@@ -633,7 +633,8 @@ table.team {
     }
     td:not(:first-child) {
         text-align: right;
-        width: 8em;
+        min-width: 8em;
+        max-width: 11em;
     }
     input {
         text-align: inherit;

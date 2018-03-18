@@ -112,17 +112,6 @@ title = _username
 <form action="{{ participant.path('settings/edit') }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
-    % if participant.kind == 'group'
-
-    <h5>{{ _("Main currency") }}</h5>
-    % from "templates/currencies.html" import currency_buttons with context
-    {{ currency_buttons('main_currency', participant.main_currency) }}
-
-    <h5>{{ _("Other currencies") }}</h5>
-    <p>{{ _("Team accounts are currently limited to a single currency.") }}</p>
-
-    % else
-
     <p>{{ _("Which currencies should your donors be allowed to send you, and which one do you prefer?") }}</p>
     <table class="table table-condensed">
     % for c in constants.CURRENCIES
@@ -146,8 +135,6 @@ title = _username
     </table>
 
     <p>{{ _("Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors.") }}</p>
-
-    % endif
 
     <button class="save btn btn-success">{{ _("Save") }}</button>
 </form>

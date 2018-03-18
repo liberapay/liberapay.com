@@ -7,7 +7,6 @@
     % if inline
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="currency" value="{{ new_currency }}" />
         <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
         % if currency_mismatch
             % set tippee_name = tippee.friendly_name if pledging else tippee.username
@@ -20,7 +19,8 @@
                 , currency=Currency(tip_currency), new_currency=Currency(new_currency)
             ) }}</p>
         % endif
-        {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch) }}
+        {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch,
+                     accepted_currencies=accepted_currencies) }}
         <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
                        btn-sm" {{ disabled }}>{{
             _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
@@ -80,10 +80,24 @@
     % endif
 % endmacro
 
-% macro tip_input(tip, new_currency, disabled='', small=False, hide_amount=False)
+% macro tip_input(tip, new_currency, disabled='', small=False, hide_amount=False, accepted_currencies=None)
     <div class="form-inline inline-block">
-    <div class="input-group">
+    <div class="input-group {{ 'input-group-sm' if small else '' }}">
+        % if accepted_currencies and len(accepted_currencies) > 1
+        <div class="input-group-btn">
+            <select class="btn btn-default" name="currency">
+            % for c in constants.CURRENCIES
+                <option value="{{ c }}" {{ 'selected' if c == new_currency }}
+                        {{ 'disabled' if c not in accepted_currencies }}>{{
+                    locale.currency_symbols.get(c, c)
+                }}</option>
+            % endfor
+            </select>
+        </div>
+        % else
         <div class="input-group-addon">{{ locale.currency_symbols.get(new_currency, new_currency) }}</div>
+        <input type="hidden" name="currency" value="{{ new_currency }}" />
+        % endif
         <input type="tel" inputmode="decimal" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
                value="{{ format_decimal(tip.periodic_amount.amount) if tip.periodic_amount and not hide_amount else '' }}"

@@ -1428,8 +1428,6 @@ class Participant(Model, MixinTeam):
         with self.db.get_cursor() as cursor:
             if not recorder.is_admin:
                 cursor.hit_rate_limit('change_currency', self.id, TooManyCurrencyChanges)
-            if self.kind == 'group':
-                cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
             r = cursor.one("""
                 UPDATE participants
                    SET main_currency = %(new_currency)s
@@ -1445,25 +1443,6 @@ class Participant(Model, MixinTeam):
             if not r:
                 return
             self.set_attributes(main_currency=new_currency)
-            if self.kind == 'group':
-                members = cursor.all("""
-                    INSERT INTO takes
-                                (ctime, member, team, amount, actual_amount, recorder)
-                         SELECT t.ctime, t.member, t.team
-                              , convert(amount, %(new_currency)s)
-                              , zero(%(new_currency)s::currency)
-                              , %(recorder_id)s
-                           FROM current_takes t
-                          WHERE t.team = %(p_id)s
-                      RETURNING (SELECT p FROM participants p WHERE p.id = takes.member)
-                """, locals())
-                self.recompute_actual_takes(cursor)
-                for m in members:
-                    m.notify(
-                        'team_currency_change', email=False, web=True,
-                        team_name=self.username, old_currency=old_currency,
-                        new_currency=new_currency, changed_by=recorder.username,
-                    )
             self.add_event(cursor, 'change_main_currency', dict(
                 new_currency=new_currency, old_currency=old_currency
             ), recorder=recorder_id)
@@ -1679,6 +1658,14 @@ class Participant(Model, MixinTeam):
              WHERE t.member = %s
         """.format(currency), (self.id,)) or D_ZERO, currency)
         return r
+
+    def get_exact_receiving(self):
+        return self.db.one("""
+            SELECT basket_sum(t.amount)
+              FROM current_tips t
+             WHERE t.tippee = %s
+               AND t.is_funded
+        """, (self.id,))
 
     def update_giving_and_tippees(self, cursor):
         updated_tips = self.update_giving(cursor)

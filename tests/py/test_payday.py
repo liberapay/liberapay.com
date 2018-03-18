@@ -704,6 +704,26 @@ class TestPaydayForTeams(FakeTransfersHarness):
         actual = self.get_balances()
         assert expected == actual
 
+    def test_transfer_takes_with_two_currencies_on_both_sides(self):
+        self.set_up_team_with_two_currencies()
+        self.team.set_take_for(self.alice, USD('0.01'), self.alice)
+        self.team.set_take_for(self.bob, EUR('0.01'), self.bob)
+        self.donor1_eur.set_tip_to(self.team, EUR('0.01'))
+        self.donor2_usd.set_tip_to(self.team, USD('0.01'))
+
+        Payday.start().shuffle()
+
+        expected = {
+            'alice': MoneyBasket(EUR('0.01')),
+            'bob': MoneyBasket(USD('0.01')),
+            'donor1_eur': MoneyBasket(EUR('99.99')),
+            'donor2_usd': MoneyBasket(USD('99.99')),
+            'donor3_eur': MoneyBasket(EUR('100')),
+            'donor4_usd': MoneyBasket(USD('100')),
+        }
+        actual = self.get_balances()
+        assert expected == actual
+
     def test_wellfunded_team_with_two_balanced_currencies(self):
         self.set_up_team_with_two_currencies()
         self.donor1_eur.set_tip_to(self.team, EUR('1.00'))
