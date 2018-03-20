@@ -190,7 +190,7 @@ If you don't want to install directly dependencies on your machine, you can spin
     # the application should be available on http://localhost:8339
     docker-compose up
 
-You can also run tests in the DOcker environment:
+You can also run tests in the Docker environment:
 
     docker-compose -f docker/tests.yml run tests
 
