@@ -43,7 +43,7 @@
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                         <div class="input-group">
                             % set take_currency = nominal_take.currency
-                            % set currencies = user.accepted_currencies
+                            % set currencies = set([take_currency, user.main_currency, team.main_currency])
                             % if len(currencies) > 1
                                 <div class="input-group-btn">
                                     <select class="btn btn-default" name="currency">
