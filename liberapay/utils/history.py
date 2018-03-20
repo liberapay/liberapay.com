@@ -234,6 +234,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
     day_events, day_open = None, None  # for pyflakes
     for event in events:
 
+        collapse = False
         event['balances'] = balances
 
         event_date = event['timestamp'].date()
@@ -267,6 +268,10 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
                 else:
                     kind = 'credit'
                 event['bank_delta'] = -event['amount'] - min(event['fee'], 0)
+            if day_events:
+                if day_events[-1].get('exchange_id') == event['exchange_id']:
+                    # Collapse similar events
+                    collapse = True
         else:
             kind = 'transfer'
             if event['tippee'] != id:
@@ -280,6 +285,16 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
         event['kind'] = kind
 
         balances -= event['wallet_delta']
+
+        if collapse:
+            event, prev_event = day_events.pop(), event
+            event['wallet_delta'] += prev_event['wallet_delta']
+            if event['wallet_delta'] == 0 and event['kind'] == 'payout-refund':
+                # This is a withdrawal which failed immediately
+                if minimize:
+                    continue
+                event['kind'] = 'credit'
+                event['status'] = 'failed'
 
         day_events.append(event)
 
