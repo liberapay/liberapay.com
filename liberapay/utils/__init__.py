@@ -420,14 +420,17 @@ def build_s3_object_url(key):
     return endpoint + "/" + key + "?" + querystring + "&X-Amz-Signature=" + signature
 
 
-def get_int(d, k, default=None):
+def get_int(d, k, default=None, minimum=None):
     r = d.get(k)
     if r is None:
         return default
     try:
-        return int(r)
+        r = int(r)
     except (ValueError, TypeError):
         raise Response().error(400, "`%s` value %r is not a valid integer" % (k, r))
+    if minimum is not None and r < minimum:
+        raise Response().error(400, "`%s` value %r is less than %i" % (k, r, minimum))
+    return r
 
 
 def parse_int(o, **kw):

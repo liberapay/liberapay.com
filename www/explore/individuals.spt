@@ -1,32 +1,48 @@
 # coding: utf8
 
-query_cache = website.db_qc5
+from math import ceil
 
 [---]
 
-individuals = query_cache.all("""
-    SELECT p
-         , ( SELECT s.content
-               FROM statements s
-              WHERE s.participant = p.id
-                AND s.type = 'summary'
-           ORDER BY s.lang = %s DESC, s.id
-              LIMIT 1
-           ) AS summary
-      FROM participants p
-     WHERE p.kind = 'individual'
-       AND p.status = 'active'
-       AND (p.goal > 0 OR p.goal IS NULL)
-       AND p.hide_receiving IS NOT TRUE
-       AND p.hide_from_lists = 0
-       AND p.receiving > 0
-  ORDER BY p.receiving DESC, p.join_time DESC
-     LIMIT 18
-""", (locale.language,))
+per_page = 18
+current_page = request.qs.get_int('page', default=1, minimum=1)
+with website.db.get_cursor() as cursor:
+    nindividuals = cursor.one("""
+        CREATE TEMP TABLE individuals ON COMMIT DROP AS
+            SELECT p
+                 , ( SELECT s.content
+                       FROM statements s
+                      WHERE s.participant = p.id
+                        AND s.type = 'summary'
+                   ORDER BY s.lang = %s DESC, s.id
+                      LIMIT 1
+                   ) AS summary
+              FROM participants p
+             WHERE p.kind = 'individual'
+               AND p.status = 'active'
+               AND (p.goal > 0 OR p.goal IS NULL)
+               AND p.hide_receiving IS NOT TRUE
+               AND p.hide_from_lists = 0
+               AND p.receiving > 0;
+
+        SELECT count(1) FROM individuals;
+    """, (locale.language,))
+    last_page = max(int(ceil(nindividuals / per_page)), 1)
+    if current_page > last_page:
+        response.redirect("?page=%i" % last_page)
+    individuals = cursor.all("""
+        SELECT *
+          FROM individuals i
+      ORDER BY (i.p).receiving DESC, (i.p).join_time DESC
+         LIMIT %s
+        OFFSET %s
+    """, (per_page, (current_page - 1) * per_page))
+
 title = _("Explore")
 subhead = _("Individuals")
 
 [---] text/html
+% from 'templates/pagination.html' import simple_pager with context
 % from 'templates/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/explore.html"
@@ -34,12 +50,21 @@ subhead = _("Individuals")
 % block content
 
 % if individuals
-<p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
-<div class="profile-box-row">
-    % for p, summary in individuals
-        {{ profile_box_embedded(p, summary) }}
-    % endfor
-</div>
+    % if current_page == 1
+        <p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
+    % else
+        <p>{{ _(
+            "List of individuals on Liberapay, page {number} of {total}:"
+            , number=current_page, total=last_page
+        ) }}</p>
+    % endif
+    <div class="profile-box-row">
+        % for p, summary in individuals
+            {{ profile_box_embedded(p, summary) }}
+        % endfor
+    </div>
+    {{ simple_pager(current_page, last_page) }}
+    <br>
 % else
 <p>{{ _("Nothing to show.") }}</p>
 % endif

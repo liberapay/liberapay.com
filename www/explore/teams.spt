@@ -5,9 +5,7 @@ from math import ceil
 [---]
 
 per_page = 18
-current_page = request.qs.get_int('page') or 1
-if current_page <= 0:
-    response.error(400, "bad `page` value '%s' in querystring" % current_page)
+current_page = request.qs.get_int('page', default=1, minimum=1)
 with website.db.get_cursor() as cursor:
     nteams = cursor.one("""
         CREATE TEMP TABLE teams ON COMMIT DROP AS
