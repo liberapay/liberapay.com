@@ -33,8 +33,14 @@
 # Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
 # Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
 # Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
 msgid ""
-msgstr "PO-Revision-Date: 2018-03-21 21:20+0000\nLast-Translator: Daniel Șerbănescu <daniel@serbanescu.dk>\nLanguage-Team: Gnome Romanian Translation Team\nLanguage: ro\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\nX-Generator: Weblate 2.20-dev\nGenerated-By: Babel 2.3.4\n"
+msgstr "PO-Revision-Date: 2018-03-22 20:45+0000\nLast-Translator: Daniel Șerbănescu <daniel@serbanescu.dk>\nLanguage-Team: Gnome Romanian Translation Team\nLanguage: ro\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\nX-Generator: Weblate 2.20-dev\nGenerated-By: Babel 2.3.4\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -2255,9 +2261,9 @@ msgstr "Exportă ca CSV"
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{money_amount} în costuri de restituire către {n} persoană"
+msgstr[1] "{money_amount} în costuri de restituire către {n} persoane"
+msgstr[2] "{money_amount} în costuri de restituire către {n} de persoane"
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -2273,9 +2279,9 @@ msgstr[2] "{money_amount} în donații recurente de la {n} de donatori"
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
 msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{money_amount} în costuri de restituire de la {n} organizație"
+msgstr[1] "{money_amount} în costuri de restituire de la {n} organizații"
+msgstr[2] "{money_amount} în costuri de restituire de la {n} de organizații"
 
 msgid "Status"
 msgstr "Stare"
@@ -2322,7 +2328,7 @@ msgstr "restituire a donației"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
-msgstr ""
+msgstr "restituirea {link_open}costului nr.{invoice_id}{link_close} de la {payer}"
 
 msgid "anonymous donation"
 msgstr "donație anonimă"
@@ -2349,7 +2355,7 @@ msgstr "restituirea donației anonime"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
-msgstr ""
+msgstr "plata {link_open}costului nr.{invoice_id}{link_close} către {payee}"
 
 #, python-brace-format
 msgid "donation to {0}"
@@ -2597,22 +2603,22 @@ msgstr "Debite directe în {currency} nu sunt posibile din {country}."
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
+msgstr "{0} au fost debitați din contul bancar, {1} au ajuns în portofelul Liberapay, {2} au fost plătiți în taxe de tranzacții."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr ""
+msgstr "Un debit direct de {0} a fost inițiat. Dacă transferul reușește {1} vor ajunge în portofelul dumneavoastră Liberapay și {2} vor fi plătiți ca taxe."
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr ""
+msgstr "Încercarea de a trasfera {0} din contul dumneavoastră bancar a eșuat cu următorul mesaj:"
 
 msgid "Direct debits take approximately 4 business days to complete."
-msgstr ""
+msgstr "Debitele directe durează aproximativ 4 zile lucrătoare."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr ""
+msgstr "Adăugarea banilor în Liberapay prin debit direct implică o taxă de {0}."
 
 msgid "Bank Account"
 msgstr ""
@@ -2637,54 +2643,54 @@ msgstr "Suma nu poate fi zero."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr ""
+msgstr "Taxa de trazacție va fi mare: {0}% ({1}/{2}). Continuați oricum?"
 
 msgid "Withdrawing Money"
 msgstr "Extragere bani"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
-msgstr ""
+msgstr "{0} au fost luați din portofelul dumneavoastră Liberapay. Dacă transferul reușește {1} vor ajunge în contul dumneavoastră bancar și {2} vor fi plătiți ca taxe."
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr ""
+msgstr "Încercarea de a trimite {0} către contul bancar a eșuat. Mesaj de eroare: {1}"
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr ""
+msgstr "Din păcate nu puteți extrage bani încă, pentru că sunt în carantină."
 
 #, python-brace-format
 msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr ""
+msgstr "Din asta, {0} sunt disponibili pentru extragere, restul sunt încă în carantină."
 
 #, python-brace-format
 msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr ""
+msgstr "Punem banii în carantină pentru {0} pentru a ne proteja de fraude cu credite de card, ne pare rău pentru inconveniență."
 
 msgid "Which currency do you want to withdraw?"
-msgstr ""
+msgstr "Ce valudă doriți să extrageți?"
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr ""
+msgstr "Extragerea de euro într-un cont bancar SEPA este gratuită, transferuri către alte țări costă {0} pentru fiecare. Extragerea de dolari americani costă {1} pe transfer indiferent de țara destinație."
 
 #, python-brace-format
 msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr ""
+msgstr "Extragerea de euro într-un cont bancar SEPA este gratuită, transferuri către alte țări costă {0} pentru fiecare."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr ""
+msgstr "Extragerea de dolari americani costă {0} pe transfer indiferent de țara destinație."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
-msgstr ""
+msgstr "Ar trebui să păstrați cel puțin {0} în portofelul dumneavoastră pentru a finanța donațiile din această săptămână."
 
 msgid "Bank account"
 msgstr ""
 
 msgid "Routing Number"
-msgstr ""
+msgstr "Număr de rută"
 
 msgid "Account Number"
 msgstr "Număr de cont"
@@ -2702,7 +2708,7 @@ msgid "Branch Code"
 msgstr "Codul sucursalei"
 
 msgid "Sort Code"
-msgstr ""
+msgstr "Cod de clasificare"
 
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
@@ -2720,16 +2726,16 @@ msgid "Other"
 msgstr "Alta"
 
 msgid "checking"
-msgstr ""
+msgstr "verificare"
 
 msgid "savings"
 msgstr "economii"
 
 msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr ""
+msgstr "Codurile SWIFT sunt de 8 sau 11 caractere. Primele 6 caractere sunt litere, restul pot fi litere sau cifre. Exemplu: CMBRFR2BCME"
 
 msgid "only letters (a-z) and digits (0-9) are allowed"
-msgstr ""
+msgstr "numai litere (a-z) și cifre (0-9) sunt permise"
 
 msgid "This account number is invalid."
 msgstr "Acest număr de cont este nevalid."
@@ -2774,14 +2780,14 @@ msgid "Giving & Receiving Widgets"
 msgstr "Widgeturi de dăruire și primire"
 
 msgid "Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:"
-msgstr ""
+msgstr "Utilizați acest cod pentru a adăuga pe situl dumneavoastră un widget care afișează suma de donații pe care o primiți pe Liberapay:"
 
 #, python-brace-format
 msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
-msgstr ""
+msgstr "Acest widget nu este disponibil pentru că nu este compatibil cu {link_open}politica de confidențialitate{link_close} pe care ați ales-o."
 
 msgid "Or, if you'd like a widget that shows how much you're giving:"
-msgstr ""
+msgstr "Sau, dacă doriți un widget care arată cât de mult dăruiți:"
 
 msgid "To contact us privately:"
 msgstr "Pentru a ne contacta în privat:"
@@ -2815,51 +2821,51 @@ msgid "Who can use Liberapay?"
 msgstr "Cine poate folosi Liberapay?"
 
 msgid "In theory, anyone who has a bank account. In practice, payments may not work depending on where you live. Please contact us if you encounter any problems."
-msgstr ""
+msgstr "În teorie, oricine are un cont bancar. În practică, plățile s-ar putea să nu funcționeze în funcție de unde locuiți. Contactați-ne dacă întâmpinați probleme."
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
-msgstr ""
+msgstr "Liberapay este concepută pentru finațare stabilă pe termen lung și suportă numai daruri recurente."
 
 msgid "What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"
-msgstr ""
+msgstr "Care sunt diferențele între Liberapay și alte platforme recurente de finanțare cum ar fi Patreon?"
 
 msgid "Liberapay is only for donations, meaning that transactions must not be linked to a contract nor a promise of recompense."
-msgstr ""
+msgstr "Liberapay este numai pentru donații, aceasta înseamnă că tranzacțiile nu trebuiesc conectate la un contract sau promisiune de recompensă."
 
 msgid "Liberapay is an open project structured around a non-profit organization, which sets it apart from commercial platforms like Patreon and Tipeee."
-msgstr ""
+msgstr "Liberapay este un proiect deschis structurat în jurul unei organizații non-profit, fapt ce o diferențiază de platforme comerciale cum ar fi Patreon și Tipeee."
 
 msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create an account without having to wait for us to approve it, and we won't kick you out unless you break the law or the terms of service."
-msgstr ""
+msgstr "În contrast cu alte platforme non-profit, Liberapay este neutrală. Puteți creea un cont fără să aștepați după aprobarea noastră, și noi nu vă vom expulza, doar în cazul în care încălcați legea sau termenii și condițiile."
 
 #, python-brace-format
 msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
-msgstr ""
+msgstr "Ne pasă de internaționalizare, serviciul nostru suportă valute multiple și este tradus în multe limbi ({link_open}puteți chiar contribui{link_close})."
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
-msgstr ""
+msgstr "Dacă doriți mai multe detalii, cei de la Snowdrift.coop au compilat {0}o listă mare{1} de platforme de finanțare crowdfunding și diferențele dintre ele."
 
 msgid "Does Liberapay respect financial regulations?"
-msgstr ""
+msgstr "Respectă Liberapay regulațiile financiare?"
 
 msgid "Yes. Liberapay is based in France and complies with the European Union's financial regulations. Our payment processors are all properly licensed, and they help us block fraud, money laundering, and terrorism financing."
-msgstr ""
+msgstr "Da. Liberapay este bazată în Franța și respectă regulațiile financiare ale Uniunii Europene. Procesorii noștri de plăți sunt licențiați corespunzător, și ei ne ajută să blocăm frauda, spălarea de bani, și finanțarea terorismului."
 
 msgid "Which currencies are supported?"
-msgstr ""
+msgstr "Ce valute sunt suportate?"
 
 msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
-msgstr ""
+msgstr "Momentan suportăm majoritatea cardurilor de credit și de debit (VISA și MasterCard), precum și transferuri bancare și debite directe (numai SEPA). Mai multe opțiuni vor fi adăugate în viitor."
 
 msgid "What are the payment processing fees?"
-msgstr ""
+msgstr "Care sunt taxele de procesare ale plăților?"
 
 msgid "The fees depend on the payment method as well as the currency."
-msgstr ""
+msgstr "Taxele depind de metoda de plată și de valută."
 
 msgid "When adding money into Liberapay the fees are:"
-msgstr ""
+msgstr "Când adăugați bani în Liberapay taxele sunt:"
 
 #, python-brace-format
 msgid "{0}% + {1}"
@@ -2879,31 +2885,31 @@ msgid "not supported"
 msgstr "nesuportat"
 
 msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
-msgstr ""
+msgstr "Taxele listate mai sus sun numai cele de la procesorii noștri de plăți, banca dumneavoastră vă poate taxa de asemenea pentru fiecare tranzacție, în special cele internaționale. Nu avem niciun control nici vizibilitate asupra taxelor băncii dumneavoastră."
 
 msgid "There are no fees for transfers between Liberapay users."
-msgstr ""
+msgstr "Nu există taxe la transferuri între utilizatorii Liberapay."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
-msgstr ""
+msgstr "Există o sumă minimă sau maximă pe care o pot dărui sau primi?"
 
 #, python-brace-format
 msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr ""
+msgstr "Nu există restricții la suma toată pe care o dăruiți sau primiți, dar din motive legale va trebui să oferiți documente de identitate dacă dăruiți mai mult de {0}, sau primiți mai mult de {1}, pe an."
 
 #, python-brace-format
 msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr ""
+msgstr "Minimul pe care îl puteți dărui ca utilizator este {0}. Pentru a minimiza taxele, vă facturăm cardul de credit cel puțin {1} o dată (banii sunt stocați în portofelul liberapay și sunt transferați către ceilalți în timpul zilei de plată)."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
-msgstr ""
+msgstr "Suma maximă pe care o puteți dărui unui utilizator este de {0} pe săptămână. Aceasta ajută la stabilizarea venitului reducând dependența lui de câțiva donatori mai mari."
 
 msgid "Do I have to pay taxes on the income I receive from Liberapay?"
-msgstr ""
+msgstr "Trebuie să plătesc taxe pe venitul pe care îl primesc de la Liberapay?"
 
 msgid "We don't know, it's up to you to figure out your country's tax rules."
-msgstr ""
+msgstr "Nu știm, depinde de dumneavoastră să cercetați regulile de taxe și impozite ale țării dumneavoastră."
 
 msgid "Are donations through Liberapay tax-deductible?"
 msgstr ""
@@ -2912,14 +2918,14 @@ msgid "Probably not, but it depends on the tax rules of your country."
 msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
-msgstr ""
+msgstr "Puteți primi actualizări de la noi pe următoarele rețele sociale:"
 
 #, python-brace-format
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr ""
 
 msgid "What is Liberapay?"
-msgstr ""
+msgstr "Ce este Liberapay?"
 
 msgid "Liberapay is a way to donate money recurrently to people whose work you appreciate."
 msgstr ""
@@ -3021,27 +3027,27 @@ msgstr ""
 
 #, python-brace-format
 msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr ""
+msgstr "Liberapay a fost lansată acum {0} și are {1} utilizatori."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
-msgstr ""
+msgstr "{0} sunt ținuți în escrow în Liberapay."
 
 #, python-brace-format
 msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr ""
+msgstr "Ultima zi de plată a fost acum {0} și au fost transferați {1} între {2} utilizatori."
 
 #, python-brace-format
 msgid "{0} participants gave money."
-msgstr ""
+msgstr "{0} participanți au dăruit bani."
 
 #, python-brace-format
 msgid "{0} received money."
-msgstr ""
+msgstr "{0} au primit bani."
 
 #, python-brace-format
 msgid "{0} did both."
-msgstr ""
+msgstr "{0} au și dăriut și primit."
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3057,7 +3063,7 @@ msgid "Number of open individual and organization accounts on Liberapay"
 msgstr ""
 
 msgid "Active Users"
-msgstr ""
+msgstr "Utilizatori activi"
 
 msgid "Users that gave and/or received money within Liberapay (per week)"
 msgstr ""
