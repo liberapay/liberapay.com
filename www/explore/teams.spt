@@ -1,51 +1,73 @@
 # coding: utf8
 
-query_cache = website.db_qc1
+from math import ceil
 
 [---]
 
-teams = query_cache.all("""
+per_page = 18
+current_page = request.qs.get_int('page') or 1
+if current_page <= 0:
+    response.error(400, "bad `page` value '%s' in querystring" % current_page)
+with website.db.get_cursor() as cursor:
+    nteams = cursor.one("""
+        CREATE TEMP TABLE teams ON COMMIT DROP AS
+            SELECT p AS participant
+                 , t.*
+                 , ( SELECT s.content
+                       FROM statements s
+                      WHERE s.participant = p.id
+                        AND s.type = 'summary'
+                   ORDER BY s.lang = %s DESC, s.id
+                      LIMIT 1
+                   ) AS summary
+              FROM ( SELECT team AS id, count(member) AS nmembers
+                       FROM current_takes
+                   GROUP BY team
+                    ) AS t
+              JOIN participants p ON p.id = t.id
+             WHERE (p.goal >= 0 OR p.goal IS NULL)
+               AND p.hide_from_lists = 0;
 
-    SELECT t.*
-         , p.*::participants AS participant
-         , ( SELECT s.content
-               FROM statements s
-              WHERE s.participant = p.id
-                AND s.type = 'summary'
-           ORDER BY s.lang = %s DESC, s.id
-              LIMIT 1
-           ) AS summary
-      FROM ( SELECT team AS id, count(member) AS nmembers
-               FROM current_takes
-           GROUP BY team
-            ) AS t
-      JOIN participants p ON p.id = t.id
-     WHERE (p.goal >= 0 OR p.goal IS NULL)
-       AND p.hide_from_lists = 0
-  ORDER BY receiving DESC, join_time DESC
-     LIMIT 18
+        SELECT count(1) FROM teams;
+    """, (locale.language,))
+    last_page = max(int(ceil(nteams / per_page)), 1)
+    if current_page > last_page:
+        response.redirect("?page=%i" % last_page)
+    teams = cursor.all("""
+        SELECT *
+          FROM teams t
+      ORDER BY (t.participant).receiving DESC, (t.participant).join_time DESC
+         LIMIT %s
+        OFFSET %s
+    """, (per_page, (current_page - 1) * per_page))
 
-""", (locale.language,))
 title = _("Explore")
 subhead = _("Teams")
 
 [---] text/html
+% from 'templates/pagination.html' import simple_pager with context
 % from 'templates/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/explore.html"
 
 % block content
+% if current_page == 1
 <p>{{ _(
     "A team allows members of a project to receive money and share it, without "
     "having to set up a legal entity. {0}Learn more…{1}",
     '<a href="/about/teams">'|safe, '</a>'|safe
 ) }}</p>
-
 <p>{{ ngettext(
     "The top team on Liberapay is:",
     "The top {n} teams on Liberapay are:",
     len(teams)
 ) }}</p>
+% else
+<p>{{ _(
+    "List of teams on Liberapay, page {number} of {total}:"
+    , number=current_page, total=last_page
+) }}</p>
+% endif
 
 <div class="profile-box-row">
     % for team in teams
@@ -53,5 +75,8 @@ subhead = _("Teams")
     % endfor
 </div>
 
+{{ simple_pager(current_page, last_page) }}
+
+<br>
 <p><a class="btn btn-primary btn-lg" href="/about/teams">{{ _("Create a team") }}</a></p>
 % endblock
