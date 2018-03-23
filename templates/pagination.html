@@ -25,6 +25,7 @@
 % endmacro
 
 % macro simple_pager(current_page, last_page)
+    % if last_page != 1
     <ul class="pager">
         % if current_page > 1
             <li class="previous"><a href="{{ request.path.raw if current_page == 2 else '?page=%i' % (current_page - 1) }}">
@@ -37,4 +38,5 @@
             </a></li>
         % endif
     </ul>
+    % endif
 % endmacro

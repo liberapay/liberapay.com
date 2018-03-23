@@ -1,26 +1,39 @@
 # coding: utf8
 
+from math import ceil
+
 [---]
 
-latest = request.qs.get('order') == 'ctime:desc'
-col1, col2 = 'p.receiving', 'ctime'
-if latest:
-    col1, col2 = col2, col1
-pledgees = website.db.all("""
-    SELECT (e, p)::elsewhere_with_participant
-         , (SELECT ctime FROM current_tips WHERE tippee = p.id ORDER BY ctime DESC LIMIT 1) as ctime
-      FROM participants p
-      JOIN elsewhere e ON e.participant = p.id
-     WHERE p.status = 'stub'
-       AND p.receiving > 0
-       AND p.hide_from_lists = 0
-  ORDER BY {0} DESC, {1} DESC
-     LIMIT 18
-""".format(col1, col2))
+per_page = 18
+current_page = request.qs.get_int('page', default=1, minimum=1)
+with website.db.get_cursor() as cursor:
+    npledgees = cursor.one("""
+        CREATE TEMP TABLE pledgees ON COMMIT DROP AS
+            SELECT e, p
+              FROM participants p
+              JOIN elsewhere e ON e.participant = p.id
+             WHERE p.status = 'stub'
+               AND p.receiving > 0
+               AND p.hide_from_lists = 0;
+
+        SELECT count(1) FROM pledgees;
+    """, (locale.language,))
+    last_page = max(int(ceil(npledgees / per_page)), 1)
+    if current_page > last_page:
+        response.redirect("?page=%i" % last_page)
+    pledgees = cursor.all("""
+        SELECT (e, p)::elsewhere_with_participant
+          FROM pledgees
+      ORDER BY (p).receiving DESC, (e).id DESC
+         LIMIT %s
+        OFFSET %s
+    """, (per_page, (current_page - 1) * per_page))
+
 title = _("Explore")
 subhead = _("Pledges")
 
 [---] text/html
+% from 'templates/pagination.html' import simple_pager with context
 % from 'templates/profile-box.html' import profile_box_embedded_elsewhere with context
 
 % extends "templates/explore.html"
@@ -33,13 +46,14 @@ subhead = _("Pledges")
     "to receive it. We'll send you a notification when that happens."
 ) }}</p>
 
-    <h3 class="banderole default">{{ _("Recent pledges") if latest else _("Top pledges") }}</h3>
+    <h3 class="banderole default">{{ _("Top pledges") }}</h3>
     % if pledgees
         <div class="profile-box-row">
-        % for p, ctime in pledgees
+        % for p in pledgees
             {{ profile_box_embedded_elsewhere(p) }}
         % endfor
         </div>
+        {{ simple_pager(current_page, last_page) }}
     % else
         <p>{{ _("There are no pledges right now.") }}</p>
     % endif
