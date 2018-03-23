@@ -1,0 +1,79 @@
+from math import ceil
+
+[---]
+
+per_page = 20
+current_page = request.qs.get_int('page', default=1, minimum=1)
+with website.db.get_cursor() as cursor:
+    nrepos = cursor.one("""
+        CREATE TEMP TABLE repos ON COMMIT DROP AS
+            SELECT r, p
+              FROM repositories r
+              JOIN elsewhere e ON e.platform = r.platform AND e.domain = '' AND e.user_id = r.owner_id
+              JOIN participants p ON p.id = e.participant
+             WHERE r.stars_count > 1
+               AND r.show_on_profile
+               AND p.status = 'active';
+
+        SELECT count(1) FROM repos;
+    """, (locale.language,))
+    last_page = max(int(ceil(nrepos / per_page)), 1)
+    if current_page > last_page:
+        response.redirect("?page=%i" % last_page)
+    repos = cursor.all("""
+        SELECT *
+          FROM repos
+      ORDER BY (r).stars_count DESC, (r).id DESC
+         LIMIT %s
+        OFFSET %s
+    """, (per_page, (current_page - 1) * per_page))
+
+title = _("Explore")
+subhead = _("Repositories")
+
+[---] text/html
+% from 'templates/pagination.html' import simple_pager with context
+
+% extends "templates/explore.html"
+
+% block content
+
+% if current_page == 1
+<p>{{ ngettext(
+    "The most popular repository currently linked to a Liberapay account is:",
+    "The {n} most popular repositories currently linked to a Liberapay account are:",
+    len(repos)
+) }}</p>
+% else
+<p>{{ _(
+    "List of repositories currently linked to a Liberapay account, page {number} of {total}:"
+    , number=current_page, total=last_page
+) }}</p>
+% endif
+
+% for repo, owner in repos
+    <div class="repo">
+        <h4>
+            <a href="{{ repo.url }}">{{ repo.name }}</a>
+            {{ _("(fork)") if repo.is_fork else '' }}
+            &nbsp;&nbsp;<small>{{ glyphicon('star') }}</small> {{ repo.stars_count }}
+            % set last_update = to_age(repo.last_update, granularity='week')
+            &nbsp;&nbsp;<small>{{
+                _("Updated this week") if last_update.days > -7 else
+                _("Updated {0} ago", last_update)
+            }}</small>
+        </h4>
+        <p>{{ repo.description or '' }}</p>
+        <a class="btn btn-donate" href="{{ owner.path('donate') }}"
+           >{{ _("Donate") }}</a>
+    </div>
+% endfor
+
+{{ simple_pager(current_page, last_page) }}
+
+<br><br>
+<p class="buttons text-center">
+    <a class="btn btn-primary btn-lg" href="/about/me/repos/starred">{{ _("Browse your favorite repositories") }}</a>
+    <a class="btn btn-default btn-lg" href="/about/me/repos">{{ _("Link your repositories to your profile") }}</a>
+</p>
+% endblock

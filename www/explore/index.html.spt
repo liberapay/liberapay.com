@@ -51,6 +51,19 @@ title = _("Explore")
     </div>
 
     <div class="card card-default card-md">
+        <h3 class="text-info">{{ _("Repositories") }}
+            <small title="{{ _("A repository contains a project's data, for example the source code of an application.") }}"
+                   data-toggle="tooltip" data-placement="top"
+                   >{{ glyphicon('question-sign') }}</small>
+        </h3>
+        <p>{{ _(
+            "See the most popular repositories belonging to Liberapay users, and "
+            "browse lists of repos that you've starred on other platforms."
+        ) }}</p>
+        <p><a class="btn btn-info btn-lg" href="/explore/elsewhere">{{ _("Explore Repositories") }}</a></p>
+    </div>
+
+    <div class="card card-default card-md">
         <h3 class="text-info">{{ _("Social Networks") }}</h3>
         <p>{{ _(
             "Browse the accounts that Liberapay users have on other platforms. "
