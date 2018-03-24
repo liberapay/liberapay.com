@@ -51,23 +51,27 @@ subhead = _("Repositories")
 ) }}</p>
 % endif
 
+<div class="inline-boxes">
 % for repo, owner in repos
-    <div class="repo">
+    <div class="inline-box repo">
+    <div class="panel panel-default">
+    <div class="panel-body">
         <h4>
             <a href="{{ repo.url }}">{{ repo.name }}</a>
             {{ _("(fork)") if repo.is_fork else '' }}
-            &nbsp;&nbsp;<small>{{ glyphicon('star') }}</small> {{ repo.stars_count }}
-            % set last_update = to_age(repo.last_update, granularity='week')
-            &nbsp;&nbsp;<small>{{
-                _("Updated this week") if last_update.days > -7 else
-                _("Updated {0} ago", last_update)
-            }}</small>
+            &nbsp;&nbsp;<small>{{ _(
+                "by {author_name}",
+                author_name='<a href="%s">%s</a>'|safe % (owner.path(''), owner.username)
+            ) }}</small>
+            &nbsp;&nbsp;{{ glyphicon('star', _("Stars")) }} {{ repo.stars_count }}
         </h4>
-        <p>{{ repo.description or '' }}</p>
-        <a class="btn btn-donate" href="{{ owner.path('donate') }}"
-           >{{ _("Donate") }}</a>
+        <p class="description">{{ repo.description or '' }}</p>
+        <a class="btn btn-donate" href="{{ owner.path('donate') }}">{{ _("Donate") }}</a>
+    </div>
+    </div>
     </div>
 % endfor
+</div>
 
 {{ simple_pager(current_page, last_page) }}
 

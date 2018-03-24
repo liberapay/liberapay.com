@@ -2,8 +2,11 @@
     <span class="{{ classes }}" aria-hidden="true"></span>
 % endmacro
 
-% macro glyphicon(name)
+% macro glyphicon(name, sr='')
     <span class="glyphicon glyphicon-{{ name }}" aria-hidden="true"></span>
+    % if sr
+        <span class="sr-only">{{ sr }}</span>
+    % endif
 % endmacro
 
 % macro fontawesome(name, sr='')

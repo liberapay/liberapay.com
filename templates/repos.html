@@ -1,7 +1,6 @@
 % from "templates/icons.html" import glyphicon
 
 % macro show_repo(repo, donate=False, edit=False, unlist=False)
-<div class="repo">
     <h4>
         <a href="{{ repo.url }}">{{ repo.name }}</a>
         {{ _("(fork)") if repo.is_fork else '' }}
@@ -34,5 +33,4 @@
                     '/on/%s/%s' % (repo.platform, repo.slug.replace('/', '?repo=')) }}"
            >{{ _("Donate") if claimed else _("Pledge") }}</a>
     % endif
-</div>
 % endmacro

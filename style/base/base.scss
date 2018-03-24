@@ -287,6 +287,43 @@ p.summary {
     }
 }
 
+.repo {
+    text-align: left;
+    width: 450px;
+    & > .panel {
+        border-radius: 6px;
+    }
+    h4 {
+        margin-top: 0.3em;
+    }
+    .glyphicon-star {
+        color: $gray-light;
+        font-size: 80%;
+    }
+    .description {
+        margin: 1em 0;
+    }
+}
+
+@media (max-width: $screen-md-min - 1) {
+    .inline-box.repo {
+        display: block;
+        margin-right: 22px;
+        width: auto;
+        & > .panel {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 450px;
+        }
+    }
+}
+
+@media (min-width: $screen-lg-min) {
+    .inline-box.repo {
+        width: 550px;
+    }
+}
+
 .btn.pull-right {
     margin-bottom: 1em;
 }
