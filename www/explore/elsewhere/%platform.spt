@@ -97,7 +97,7 @@ subhead = _("Social Networks")
 
     % if platform in website.friends_platforms
     <p class="text-center">
-        <a class="btn btn-{{ 'primary' if account else 'default' }} btn-lg"
+        <a class="btn btn-{{ 'primary' if account else 'default' }} btn-lg btn-wrap"
            href="/on/{{ platform_name }}">{{
             _("Explore Your {0} Contacts", platform.display_name)
         }}</a>
