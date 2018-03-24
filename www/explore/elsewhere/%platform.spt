@@ -130,7 +130,7 @@ subhead = _("Social Networks")
             len(participants), platform.display_name
         ) }}</p>
     % endif
-    <div class="profile-box-row">
+    <div class="inline-boxes">
     % for p, summary in participants
         {{ profile_box_embedded(p, summary) }}
     % endfor

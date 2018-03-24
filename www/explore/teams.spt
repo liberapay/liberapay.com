@@ -67,7 +67,7 @@ subhead = _("Teams")
 ) }}</p>
 % endif
 
-<div class="profile-box-row">
+<div class="inline-boxes">
     % for team in teams
         {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
     % endfor

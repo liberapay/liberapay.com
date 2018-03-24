@@ -48,7 +48,7 @@ subhead = _("Pledges")
 
     <h3 class="banderole default">{{ _("Top pledges") }}</h3>
     % if pledgees
-        <div class="profile-box-row">
+        <div class="inline-boxes">
         % for p in pledgees
             {{ profile_box_embedded_elsewhere(p) }}
         % endfor

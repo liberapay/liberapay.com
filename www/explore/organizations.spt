@@ -58,7 +58,7 @@ subhead = _("Organizations")
             , number=current_page, total=last_page
         ) }}</p>
     % endif
-    <div class="profile-box-row">
+    <div class="inline-boxes">
         % for p, summary in organizations
             {{ profile_box_embedded(p, summary) }}
         % endfor

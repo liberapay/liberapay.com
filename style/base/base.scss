@@ -227,20 +227,20 @@ p.summary {
     }
 }
 
-.profile-box-row {
-    margin-right: -15px;
+.inline-boxes {
+    margin-right: -22px;
 }
 
 @media (max-width: $screen-md-min - 1) {
-    .profile-box-row {
+    .inline-boxes {
         text-align: center;
     }
 }
 
-.profile-box-wrapper {
+.inline-boxes > .inline-box {
     display: inline-block;
     max-width: 100%;
-    padding-right: 22px;
+    margin-right: 22px;
     vertical-align: top;
 }
 
