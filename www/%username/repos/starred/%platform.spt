@@ -79,12 +79,15 @@ else:
                 total_count, platform=platform.display_name
             ) }}</p>
         % endif
+        <div class="inline-boxes">
         % for repo in repos
-            {{ show_repo(repo, donate=True) }}
-            <hr>
+            <div class="inline-box repo"><div class="panel panel-default"><div class="panel-body">{{
+                show_repo(repo, donate=True)
+            }}</div></div></div>
         % else
             <p>{{ _("No repositories found.") }}</p>
         % endfor
+        </div>
         % if next_page
             <br>
             <a class="btn btn-default btn-lg" href="?page={{ b64encode_s(next_page) }}">{{ _("Next Page →") }}</a>
