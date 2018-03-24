@@ -57,13 +57,15 @@ subhead = _("Repositories")
     <div class="panel panel-default">
     <div class="panel-body">
         <h4>
-            <a href="{{ repo.url }}">{{ repo.name }}</a>
-            {{ _("(fork)") if repo.is_fork else '' }}
-            &nbsp;&nbsp;<small>{{ _(
+            <span class="inline-block">
+                <a href="{{ repo.url }}">{{ repo.name }}</a>
+                {{ _("(fork)") if repo.is_fork else '' }}
+            </span>
+            <span class="inline-block"><small>{{ _(
                 "by {author_name}",
                 author_name='<a href="%s">%s</a>'|safe % (owner.path(''), owner.username)
-            ) }}</small>
-            &nbsp;&nbsp;{{ glyphicon('star', _("Stars")) }} {{ repo.stars_count }}
+            ) }}</small></span>
+            <span class="inline-block text-nowrap">{{ glyphicon('star', _("Stars")) }} {{ repo.stars_count }}</span>
         </h4>
         <p class="description">{{ repo.description or '' }}</p>
         <a class="btn btn-donate" href="{{ owner.path('donate') }}">{{ _("Donate") }}</a>

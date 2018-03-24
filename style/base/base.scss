@@ -294,14 +294,17 @@ p.summary {
         border-radius: 6px;
     }
     h4 {
-        margin-top: 0.3em;
+        margin: 0.3em 0 0;
+        & > span.inline-block {
+            margin: 0 1ex 0.6em 0;
+        }
     }
     .glyphicon-star {
         color: $gray-light;
         font-size: 80%;
     }
     .description {
-        margin: 1em 0;
+        margin: 0.2em 0 1em;
     }
 }
 
