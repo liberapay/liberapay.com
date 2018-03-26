@@ -29,7 +29,7 @@ msgstr "Liberapay で寄付を受けたくないときは、プロフィール�
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
-msgstr ""
+msgstr "今週の収入が{0}くらいです"
 
 #, python-brace-format
 msgid "You have received {0} this week"
@@ -45,7 +45,7 @@ msgstr "どのチームのメンバーでもないため、チームに参加す
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] ""
+msgstr[0] "あなたは{n}チーム中からお金は受けなかった。"
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
@@ -80,7 +80,7 @@ msgstr "{addressee_name}から{amount}の支払いが受け付けられました
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr ""
+msgstr "すみません。今、{0}のLiberapayウォレットはお金が不十分ですけど、もし未来であるならば入金は自動です。"
 
 msgid "View the invoice"
 msgstr "請求書を表示する"
@@ -141,11 +141,11 @@ msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name}が{amount}の支払い請求書を提出しました。"
 
 msgid "The password of your Liberapay account is weak"
-msgstr ""
+msgstr "あなたのLiberapayのパスワードが弱いです"
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
-msgstr ""
+msgstr "今でパスワードを{link_start}変わってください{link_end}。"
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Liberapayウォレットに銀行振込"
@@ -188,11 +188,11 @@ msgstr "{1}から{0}がLiberapayに参加しました!"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
-msgstr ""
+msgstr "{1}はLiberapayに入っただから、毎週に{1}に{0}を贈ると言質は今から有効になった。やった！"
 
 #, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
-msgstr ""
+msgstr "このリンクは{0}のプロファールにクリックする。"
 
 msgid "A team you're a member of has been modified"
 msgstr "あなたの所属するチームが変更されました"
@@ -251,7 +251,7 @@ msgid "We are connecting {0} to the {1} account on Liberapay. This is a notifica
 msgstr ""
 
 msgid "Withdrawal initiated"
-msgstr ""
+msgstr "出金は始まった"
 
 #, python-brace-format
 msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
@@ -312,7 +312,7 @@ msgid "Expense Report"
 msgstr ""
 
 msgid "Draft"
-msgstr ""
+msgstr "ドラフト"
 
 msgid "Sent (awaiting approval)"
 msgstr ""
@@ -333,7 +333,7 @@ msgid "Individual"
 msgstr ""
 
 msgid "Team"
-msgstr ""
+msgstr "チーム"
 
 msgid "Hide total giving from others."
 msgstr ""
@@ -354,23 +354,23 @@ msgid "Symbolic"
 msgstr ""
 
 msgid "Small"
-msgstr ""
+msgstr "小"
 
 msgid "Medium"
-msgstr ""
+msgstr "中"
 
 msgid "Large"
-msgstr ""
+msgstr "大"
 
 msgid "Maximum"
-msgstr ""
+msgstr "最大"
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again in {0}."
 msgstr ""
 
 msgid "You're making requests too fast, please try again later."
-msgstr ""
+msgstr "レクレストが早いだから、あとに試してください。"
 
 msgid "example@mastodon.social"
 msgstr ""
@@ -380,10 +380,10 @@ msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr ""
 
 msgid "You need to sign in first"
-msgstr ""
+msgstr "サインインしってください"
 
 msgid "You need to provide a username!"
-msgstr ""
+msgstr "ユーザーは所要です！"
 
 #, python-brace-format
 msgid "The username '{0}' is too long."
@@ -391,7 +391,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The username '{0}' contains invalid characters."
-msgstr ""
+msgstr "このユーザー名は'{0}'でダメな字があります。"
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
@@ -399,11 +399,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
-msgstr ""
+msgstr "ユーザー名は'{0}'と一番目の字がダメです。"
 
 #, python-brace-format
 msgid "The username '{0}' ends with the forbidden suffix '{1}'."
-msgstr ""
+msgstr "ユーザー名は'{0}'と終わりで'{1}'がダメです。"
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr ""
@@ -420,7 +420,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
-msgstr ""
+msgstr "'{0}'は妥当じゃないマールアドレスです。"
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -447,11 +447,11 @@ msgid "The password must be at least {0} and at most {1} characters long."
 msgstr ""
 
 msgid "You can't donate to yourself."
-msgstr ""
+msgstr "あなたに施させない。"
 
 #, python-brace-format
 msgid "There is no user named {0}."
-msgstr ""
+msgstr "'{0}'はユーザーがない。"
 
 #, python-brace-format
 msgid "'{0}' is not a valid weekly donation amount (min={1}, max={2})"
@@ -488,11 +488,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
-msgstr ""
+msgstr "\"{0}\"は筋じゃない。"
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
-msgstr ""
+msgstr "\"{0}\"のコミュニティがまだあります。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid community name."
@@ -520,11 +520,11 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr ""
 
 msgid "Bad username or password."
-msgstr ""
+msgstr "ユーザーかパスワードが悪いです。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
-msgstr ""
+msgstr "\"{0}\"とはダメのマールです。"
 
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
@@ -535,16 +535,16 @@ msgid "We didn't find any account whose primary email address is {0}."
 msgstr ""
 
 msgid "This login link is expired or invalid."
-msgstr ""
+msgstr "このリンクは締め切った。"
 
 msgid "You are not authorized to access this page."
 msgstr ""
 
 msgid "Forbidden"
-msgstr ""
+msgstr "禁止"
 
 msgid "Not Found"
-msgstr ""
+msgstr "見つけません"
 
 msgid "Too Many Requests"
 msgstr ""
@@ -565,19 +565,19 @@ msgid "This account is closed"
 msgstr ""
 
 msgid "Are you the account owner?"
-msgstr ""
+msgstr "これが自分のアカウントですか？"
 
 msgid "Log in to reopen your account."
 msgstr ""
 
 msgid "Log in"
-msgstr ""
+msgstr "サインイン"
 
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr ""
 
 msgid "Create an account"
-msgstr ""
+msgstr "アカウントを作れ"
 
 msgid "Use an existing account"
 msgstr ""
@@ -616,7 +616,7 @@ msgid "Find great people to donate to"
 msgstr ""
 
 msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr ""
+msgstr "好きな仕事は誰が認めるか？Liberapayで見つける"
 
 msgid "Communities"
 msgstr "コミュニティ"
@@ -624,10 +624,10 @@ msgstr "コミュニティ"
 #, python-brace-format
 msgid "with {n} other"
 msgid_plural "with {n} others"
-msgstr[0] ""
+msgstr[0] "{n}人と"
 
 msgid "Leave"
-msgstr ""
+msgstr "出る"
 
 msgid "Explore communities"
 msgstr "コミュニティを探す"
@@ -788,7 +788,7 @@ msgid "The following fields are about the organization's legal representative (y
 msgstr ""
 
 msgid "Email"
-msgstr ""
+msgstr "メール"
 
 #, python-brace-format
 msgid "The following file formats are supported: {0}."
@@ -802,22 +802,22 @@ msgid "We need to know who you are because of financial regulations."
 msgstr ""
 
 msgid "Given Name"
-msgstr ""
+msgstr "名"
 
 msgid "Family Name"
-msgstr ""
+msgstr "姓"
 
 msgid "Country (residence)"
-msgstr ""
+msgstr "国 (生きる)"
 
 msgid "Country (nationality)"
-msgstr ""
+msgstr "国（生まれた）"
 
 msgid "Date of Birth"
-msgstr ""
+msgstr "生年月日"
 
 msgid "YYYY-MM-DD"
-msgstr ""
+msgstr "YYYY-MM-DD"
 
 msgid "Are you acting as the representative of an organization?"
 msgstr "組織の代表としてアカウントを作成しますか？"
@@ -851,23 +851,23 @@ msgid "We can import a list of your repositories from:"
 msgstr ""
 
 msgid "username"
-msgstr ""
+msgstr "ユーザー名"
 
 msgid "Go"
-msgstr ""
+msgstr "行く"
 
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr ""
 
 msgid "Carry on"
-msgstr ""
+msgstr "続く"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
-msgstr ""
+msgstr "まだ{0}をサインインじゃなかった。"
 
 msgid "Try again"
-msgstr ""
+msgstr "もう一回"
 
 msgid "Email address"
 msgstr "メールアドレス"
@@ -891,7 +891,7 @@ msgid "Introduction"
 msgstr ""
 
 msgid "Money"
-msgstr ""
+msgstr "お金"
 
 msgid "Teams"
 msgstr ""
@@ -924,14 +924,14 @@ msgid "Social Networks"
 msgstr ""
 
 msgid "Switch to another language"
-msgstr ""
+msgstr "違うな言語に変わって"
 
 #, python-brace-format
 msgid "{0} ({1} complete)"
 msgstr ""
 
 msgid "Help us translate Liberapay"
-msgstr ""
+msgstr "翻訳はLiberapayと助けって"
 
 msgid "Profile"
 msgstr ""
@@ -955,7 +955,7 @@ msgid "Settings"
 msgstr ""
 
 msgid "Emails"
-msgstr ""
+msgstr "メール"
 
 msgid "Widgets"
 msgstr ""
@@ -970,7 +970,7 @@ msgid "Create a new team"
 msgstr ""
 
 msgid "Service Unavailable"
-msgstr ""
+msgstr "サービスがありません"
 
 msgid "We're unable to process your request right now, sorry."
 msgstr ""
@@ -979,31 +979,31 @@ msgid "Please try again in a few minutes."
 msgstr ""
 
 msgid "Previous"
-msgstr ""
+msgstr "先"
 
 msgid "Next"
-msgstr ""
+msgstr "次"
 
 msgid "First"
-msgstr ""
+msgstr "初"
 
 msgid "Last"
-msgstr ""
+msgstr "終"
 
 msgid "Print"
-msgstr ""
+msgstr "プリンと"
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
 msgstr ""
 
 msgid "Current password"
-msgstr ""
+msgstr "今のパスワード"
 
 msgid "New password"
-msgstr ""
+msgstr "新しいパスワード"
 
 msgid "This new password is not safe"
-msgstr ""
+msgstr "この新しいパスワードが安心じゃないです"
 
 msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
 msgstr ""
@@ -1018,7 +1018,7 @@ msgid "Do you still want to use this password?"
 msgstr ""
 
 msgid "No, cancel"
-msgstr ""
+msgstr "キャンセル"
 
 msgid "Yes, proceed"
 msgstr "実行します"
@@ -1066,7 +1066,7 @@ msgid "Income"
 msgstr ""
 
 msgid "per week"
-msgstr ""
+msgstr "毎週"
 
 msgid "Sum"
 msgstr ""
@@ -1084,11 +1084,11 @@ msgstr "目標達成!"
 
 #, python-brace-format
 msgid "Joined {0} ago."
-msgstr ""
+msgstr "{0}前に入った。"
 
 #, python-brace-format
 msgid "Closed {0} ago."
-msgstr ""
+msgstr "{0}前に出た。"
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1096,7 +1096,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} gives {1} per week."
-msgstr ""
+msgstr "{0}は毎週に{1}を施して。"
 
 msgid "This user doesn't accept donations."
 msgstr ""
@@ -1104,7 +1104,7 @@ msgstr ""
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
+msgstr[0] "{0}の恩人は{n}人です。"
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
@@ -1123,7 +1123,7 @@ msgid "Donate"
 msgstr "寄付する"
 
 msgid "(fork)"
-msgstr ""
+msgstr "（フォーク）"
 
 msgid "Updated this week"
 msgstr ""
@@ -1148,7 +1148,7 @@ msgid "Search Liberapay"
 msgstr "Liberapay検索"
 
 msgid "Identity"
-msgstr ""
+msgstr "ID"
 
 msgid "Log In or Create Account"
 msgstr "ログインまたはアカウントを作成"
@@ -1211,10 +1211,10 @@ msgid "You are currently donating {money_amount} per week to {name}, but they no
 msgstr ""
 
 msgid "Modify"
-msgstr ""
+msgstr "変わる"
 
 msgid "Stop"
-msgstr ""
+msgstr "止"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
@@ -1231,10 +1231,10 @@ msgid "Amount"
 msgstr ""
 
 msgid "per month"
-msgstr ""
+msgstr "毎月"
 
 msgid "per year"
-msgstr ""
+msgstr "毎年"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
@@ -1247,16 +1247,16 @@ msgid "Modify the donation"
 msgstr ""
 
 msgid "Next step →"
-msgstr ""
+msgstr "次のステップ→"
 
 msgid "Stop the donation"
-msgstr ""
+msgstr "寄贈は止まる"
 
 msgid "Subscribe"
-msgstr ""
+msgstr "サブスクライブ"
 
 msgid "Unsubscribe"
-msgstr ""
+msgstr "アンサブスクライブ"
 
 #, python-brace-format
 msgid "Subscribe to updates from {0}?"
@@ -1306,7 +1306,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
-msgstr ""
+msgstr "今、{0}は毎週に{1}を受ける。"
 
 msgid "Recipient Identity"
 msgstr ""
@@ -1316,7 +1316,7 @@ msgid "We have confirmed through an automated verification process that {0} has 
 msgstr ""
 
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "よくある質問"
 
 msgid "What payment methods are available?"
 msgstr ""
@@ -1374,10 +1374,10 @@ msgid "Our goal is to receive {0}"
 msgstr ""
 
 msgid "View"
-msgstr ""
+msgstr "見"
 
 msgid "Username"
-msgstr ""
+msgstr "ユーザー名"
 
 msgid "Setting a username makes the URL of your profile nicer."
 msgstr ""
@@ -1441,16 +1441,16 @@ msgid "Preview"
 msgstr ""
 
 msgid "Switch to another language:"
-msgstr ""
+msgstr "違うな言語に変わって:"
 
 msgid "Switch"
-msgstr ""
+msgstr "変える"
 
 msgid "Repositories"
 msgstr ""
 
 msgid "Avatar"
-msgstr ""
+msgstr "アバター"
 
 msgid "Modify your Libravatar"
 msgstr ""
@@ -1465,7 +1465,7 @@ msgid "Avatar email (for Libravatar only)"
 msgstr ""
 
 msgid "Privacy"
-msgstr ""
+msgstr "プライバシ"
 
 msgid "Email settings"
 msgstr ""
@@ -1493,17 +1493,17 @@ msgid "Set as primary"
 msgstr ""
 
 msgid "Add"
-msgstr ""
+msgstr "加"
 
 msgid "Send me notifications via email:"
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "言語"
 
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
-msgstr ""
+msgstr "{language}の翻訳はできらない。マールは英語であります。"
 
 msgid "You have already added and verified this address."
 msgstr ""
@@ -1552,7 +1552,7 @@ msgid "Please check that the link you clicked on or copy-pasted hasn't been trun
 msgstr ""
 
 msgid "Password"
-msgstr ""
+msgstr "パスワード"
 
 msgid "Manage your email addresses"
 msgstr ""
@@ -1700,17 +1700,17 @@ msgstr ""
 
 #, python-brace-format
 msgid "{username}'s profile"
-msgstr ""
+msgstr "{username}のプロファイル"
 
 msgid "History"
 msgstr ""
 
 #, python-brace-format
 msgid "{0} joined {1} ago."
-msgstr ""
+msgstr "{0}は{1}前に入った。"
 
 msgid "No data to show."
-msgstr ""
+msgstr "データはない。"
 
 msgid "View income history"
 msgstr ""
@@ -1719,7 +1719,7 @@ msgid "Euros Received Per Week"
 msgstr ""
 
 msgid "weeks"
-msgstr ""
+msgstr "週"
 
 msgid "Number of Patrons Per Week"
 msgstr ""
@@ -1779,7 +1779,7 @@ msgid "Documents:"
 msgstr ""
 
 msgid "Download"
-msgstr ""
+msgstr "ダウンロード"
 
 msgid "Send"
 msgstr ""
@@ -1867,7 +1867,7 @@ msgid "You are not a member of this team."
 msgstr ""
 
 msgid "User not found."
-msgstr ""
+msgstr "ユーザーは見つけなかった。"
 
 msgid "A team can't join a team"
 msgstr ""
@@ -1908,7 +1908,7 @@ msgid "liberapay_receipt_{number}"
 msgstr ""
 
 msgid "Receipt"
-msgstr ""
+msgstr "レシート"
 
 #, python-brace-format
 msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
@@ -2011,7 +2011,7 @@ msgid "No repositories found."
 msgstr ""
 
 msgid "Next Page →"
-msgstr ""
+msgstr "次のページ→"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -2081,7 +2081,7 @@ msgid "We specifically {0}don't{1} delete your past giving and receiving history
 msgstr ""
 
 msgid "Username, email and password"
-msgstr ""
+msgstr "ユーザー名とメールとパスワード"
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
 msgstr ""
@@ -2090,16 +2090,16 @@ msgid "We don't erase your email address and password immediately, so for a whil
 msgstr ""
 
 msgid "Ready?"
-msgstr ""
+msgstr "できた？"
 
 msgid "Yes, close my Liberapay account"
 msgstr ""
 
 msgid "Incorrect password"
-msgstr ""
+msgstr "パスワードが正しくない"
 
 msgid "Your password has been changed."
-msgstr ""
+msgstr "あなたのパスワードが変わった。"
 
 msgid "Your privacy settings have been changed."
 msgstr ""
@@ -2118,10 +2118,10 @@ msgid "Account type"
 msgstr ""
 
 msgid "modify"
-msgstr ""
+msgstr "変わる"
 
 msgid "not modifiable"
-msgstr ""
+msgstr "変われない"
 
 #, python-brace-format
 msgid "You are now donating {0} per week to {1}. Thank you!"
@@ -2454,7 +2454,7 @@ msgstr[0] ""
 #, python-brace-format
 msgid "{n} month"
 msgid_plural "{n} months"
-msgstr[0] ""
+msgstr[0] "{n}月間"
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -2472,7 +2472,7 @@ msgid "The attempt to take {0} from your credit card has failed. Error message: 
 msgstr ""
 
 msgid "View Receipt"
-msgstr ""
+msgstr "レシートを見て"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -2482,7 +2482,7 @@ msgid "Card payments are instantenous, and we will attempt to pull the full amou
 msgstr ""
 
 msgid "Card"
-msgstr ""
+msgstr "カード"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr ""
@@ -2491,7 +2491,7 @@ msgid "The request failed. Please make sure your browser is up-to-date, and disa
 msgstr ""
 
 msgid "Card number"
-msgstr ""
+msgstr "カード番号"
 
 msgid "The main number on the card, between 8 and 19 digits"
 msgstr ""
@@ -2500,10 +2500,10 @@ msgid "This card number seems to be invalid, are you sure you didn't make a mist
 msgstr ""
 
 msgid "This card number is invalid."
-msgstr ""
+msgstr "カード番号は正しくないです。"
 
 msgid "MM/YY"
-msgstr ""
+msgstr "MM/YY"
 
 msgid "Expiration date (4 digits)"
 msgstr ""
@@ -2512,7 +2512,7 @@ msgid "This expiration date is invalid."
 msgstr ""
 
 msgid "CVV"
-msgstr ""
+msgstr "CVV"
 
 msgid "Verification code, usually 3 digits located on the back of the card"
 msgstr ""
@@ -2550,22 +2550,22 @@ msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr ""
 
 msgid "Bank Account"
-msgstr ""
+msgstr "銀行"
 
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 msgid "Use another account"
-msgstr ""
+msgstr "違うな口座を使う"
 
 msgid "This IBAN is invalid."
-msgstr ""
+msgstr "このIBANは正しくないです。"
 
 msgid "The following fields are about the legal owner of the bank account."
 msgstr ""
 
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 msgid "The amount cannot be zero."
 msgstr ""
@@ -2616,19 +2616,19 @@ msgid "You should keep at least {0} in your wallet to fund your donations this w
 msgstr ""
 
 msgid "Bank account"
-msgstr ""
+msgstr "銀行"
 
 msgid "Routing Number"
 msgstr ""
 
 msgid "Account Number"
-msgstr ""
+msgstr "銀行番号"
 
 msgid "Bank Account Type"
 msgstr ""
 
 msgid "Bank Name"
-msgstr ""
+msgstr "銀行の名前"
 
 msgid "Institution Number"
 msgstr ""
@@ -2643,13 +2643,13 @@ msgid "SEPA / IBAN"
 msgstr ""
 
 msgid "USA"
-msgstr ""
+msgstr "アメリカ"
 
 msgid "Canada"
-msgstr ""
+msgstr "カナダ"
 
 msgid "UK"
-msgstr ""
+msgstr "英吉利"
 
 msgid "Other"
 msgstr ""
@@ -2798,14 +2798,14 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0}% + {1}"
-msgstr ""
+msgstr "{0}% + {1}"
 
 msgid "Bank wire"
 msgstr ""
 
 #, python-brace-format
 msgid "{0}%"
-msgstr ""
+msgstr "{0}%"
 
 msgid "Direct debit"
 msgstr ""
@@ -2878,7 +2878,7 @@ msgid "Why should you donate?"
 msgstr ""
 
 msgid "Who is Liberapay?"
-msgstr ""
+msgstr "Liberapayは誰？"
 
 #, python-brace-format
 msgid "Liberapay is a non-profit organization {0}founded in 2015 in France{1} by {2} and {3}."
@@ -2936,7 +2936,7 @@ msgid "If despite our fraud prevention efforts you receive money whose origin is
 msgstr ""
 
 msgid "Safety"
-msgstr ""
+msgstr "安全"
 
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr ""
@@ -3020,7 +3020,7 @@ msgid "Teams are for peer-to-peer donations, they can't be used by a legal entit
 msgstr ""
 
 msgid "Creating a team"
-msgstr ""
+msgstr "チームは作って"
 
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
@@ -3078,7 +3078,7 @@ msgid "Communities allow you to find people that work on things you care about. 
 msgstr ""
 
 msgid "Start a new community"
-msgstr ""
+msgstr "コミュニティは始める"
 
 #, python-brace-format
 msgid "There is {n} community on Liberapay."
@@ -3226,7 +3226,7 @@ msgid ""
 msgstr ""
 
 msgid "Join"
-msgstr ""
+msgstr "入る"
 
 msgid "New Members"
 msgstr ""
@@ -3415,7 +3415,7 @@ msgid "The list below is rotated pseudorandomly."
 msgstr ""
 
 msgid "Thanks"
-msgstr ""
+msgstr "ありがとう"
 
 msgid "Liberapay benefits from sponsored accounts on the following open source services:"
 msgstr ""
@@ -3450,10 +3450,10 @@ msgid "Learn more"
 msgstr ""
 
 msgid "Follow us"
-msgstr ""
+msgstr "フォロー"
 
 msgid "Log In"
-msgstr ""
+msgstr "サインイン"
 
 #, python-brace-format
 msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
@@ -3470,7 +3470,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Welcome, {username}!"
-msgstr ""
+msgstr "{username}、ようこそ！"
 
 #, python-brace-format
 msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
@@ -3520,7 +3520,7 @@ msgid "Please input an email address (your {platform} account doesn't have a pri
 msgstr ""
 
 msgid "Proceed"
-msgstr ""
+msgstr "続く"
 
 #, python-brace-format
 msgid "The username '{0}' is already taken."
@@ -3644,7 +3644,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Are you really {0}?"
-msgstr ""
+msgstr "あなたは本当に{0}ですか？"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
@@ -3810,7 +3810,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} username"
-msgstr ""
+msgstr "{0}ユーザー名"
 
 #, python-brace-format
 msgid "Please enter the address of the {0} account you would like to connect:"
