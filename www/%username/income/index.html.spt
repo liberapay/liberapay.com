@@ -15,6 +15,11 @@ subhead = _("Income Shares")
 [-----------------------------------------------------------------------------]
 % extends "templates/profile.html"
 % from "templates/team-members.html" import team_takes_table with context
+
+% block head_early
+    <meta name="robots" content="noindex" />
+% endblock
+
 % block content
 
 % set receiving = participant.receiving
