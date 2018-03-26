@@ -994,6 +994,9 @@ msgstr "Ensimmäinen"
 msgid "Last"
 msgstr "Viimeinen"
 
+msgid "View More"
+msgstr "Näytä lisää"
+
 msgid "Print"
 msgstr "Tulosta"
 
@@ -3155,9 +3158,6 @@ msgid_plural "Here are the {n} Liberapay users who have connected their {0} acco
 msgstr[0] "Tässä on {n} Liberapay-käyttäjä, joka on kytkenyt {0}-tilinsä:"
 msgstr[1] "Tässä ovat {n} Liberapay-käyttäjää, jotka ovat kytkeneet {0}-tilinsä:"
 
-msgid "View More"
-msgstr "Näytä lisää"
-
 msgid "Explore other platforms:"
 msgstr "Tutki muita palveluita:"
 
@@ -3202,14 +3202,19 @@ msgid "The top {0} individuals on Liberapay are:"
 msgstr "Suosituimmat {0} henkilöä Liberapay-palvelussa ovat:"
 
 #, python-brace-format
+msgid "List of individuals on Liberapay, page {number} of {total}:"
+msgstr ""
+
+#, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
 msgstr "Suosituimmat {0} järjestöä Liberapay-palvelussa ovat:"
 
+#, python-brace-format
+msgid "List of organizations on Liberapay, page {number} of {total}:"
+msgstr ""
+
 msgid "Create an organization account"
 msgstr "Luo järjestötili"
-
-msgid "Recent pledges"
-msgstr "Viimeaikaisia lupauksia"
 
 msgid "Top pledges"
 msgstr "Suurimmat lupaukset"
@@ -3227,10 +3232,14 @@ msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Voimme auttaa lahjoituslupauksien vastaanottajien löytämisessä, jos kytket tilejäsi:"
 
 #, python-brace-format
-msgid "There is {n} team on Liberapay:"
-msgid_plural "There are {n} teams on Liberapay:"
-msgstr[0] "Liberapay-palvelussa on {n} ryhmä:"
-msgstr[1] "Liberapay-palvelussa on {n} ryhmää:"
+msgid "The top team on Liberapay is:"
+msgid_plural "The top {n} teams on Liberapay are:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "List of teams on Liberapay, page {number} of {total}:"
+msgstr ""
 
 msgid "Create a team"
 msgstr "Luo ryhmä"

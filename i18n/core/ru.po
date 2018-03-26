@@ -996,6 +996,9 @@ msgstr "В начало"
 msgid "Last"
 msgstr "В конец"
 
+msgid "View More"
+msgstr "Показать ещё"
+
 msgid "Print"
 msgstr "Печать"
 
@@ -3177,9 +3180,6 @@ msgstr[0] "Вот {n} пользователь Liberapay, который под�
 msgstr[1] "Вот {n} пользователя Liberapay, которые подключили свои аккаунты {0}:"
 msgstr[2] "Вот {n} пользователей Liberapay, которые подключили свои аккаунты {0}:"
 
-msgid "View More"
-msgstr "Показать ещё"
-
 msgid "Explore other platforms:"
 msgstr "Список других платформ:"
 
@@ -3224,14 +3224,19 @@ msgid "The top {0} individuals on Liberapay are:"
 msgstr "Топ {0} частных лиц на Liberapay:"
 
 #, python-brace-format
+msgid "List of individuals on Liberapay, page {number} of {total}:"
+msgstr ""
+
+#, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
 msgstr "Топ {0} организации на Liberapay:"
 
+#, python-brace-format
+msgid "List of organizations on Liberapay, page {number} of {total}:"
+msgstr ""
+
 msgid "Create an organization account"
 msgstr "Создать аккаунт организации"
-
-msgid "Recent pledges"
-msgstr "Недавние подарки"
 
 msgid "Top pledges"
 msgstr "Самые дорогие подарки"
@@ -3249,11 +3254,15 @@ msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Мы можем помочь найти тех, кого вы хотите спонсировать, если вы подключите ваши аккаунты:"
 
 #, python-brace-format
-msgid "There is {n} team on Liberapay:"
-msgid_plural "There are {n} teams on Liberapay:"
-msgstr[0] "На Liberapay {n} команда:"
-msgstr[1] "На Liberapay {n} команды:"
-msgstr[2] "На Liberapay {n} команд:"
+msgid "The top team on Liberapay is:"
+msgid_plural "The top {n} teams on Liberapay are:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "List of teams on Liberapay, page {number} of {total}:"
+msgstr ""
 
 msgid "Create a team"
 msgstr "Создать команду"

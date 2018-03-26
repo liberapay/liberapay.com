@@ -996,6 +996,9 @@ msgstr "První"
 msgid "Last"
 msgstr "Poslední"
 
+msgid "View More"
+msgstr "Zobrazit více"
+
 msgid "Print"
 msgstr "Vytisknout"
 
@@ -3179,9 +3182,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "View More"
-msgstr "Zobrazit více"
-
 msgid "Explore other platforms:"
 msgstr "Prozkoumejte další platformy:"
 
@@ -3226,14 +3226,19 @@ msgid "The top {0} individuals on Liberapay are:"
 msgstr "Nejlepšími {0}  jednotlivci na Liberapay jsou:"
 
 #, python-brace-format
+msgid "List of individuals on Liberapay, page {number} of {total}:"
+msgstr ""
+
+#, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
 msgstr "Nejlepšími {0} organizacemi na Liberapay jsou:"
 
+#, python-brace-format
+msgid "List of organizations on Liberapay, page {number} of {total}:"
+msgstr ""
+
 msgid "Create an organization account"
 msgstr "Vytvořit účet organizace"
-
-msgid "Recent pledges"
-msgstr "Nedávné přísliby"
 
 msgid "Top pledges"
 msgstr "Největší přísliby"
@@ -3251,11 +3256,15 @@ msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Můžeme vám poradit komu přispět, když připojíte svoje účty:"
 
 #, python-brace-format
-msgid "There is {n} team on Liberapay:"
-msgid_plural "There are {n} teams on Liberapay:"
-msgstr[0] "Na Liberapay je {n} tým:"
-msgstr[1] "Na Liberapay jsou {n} týmy:"
-msgstr[2] "Na Liberapay je {n} týmů:"
+msgid "The top team on Liberapay is:"
+msgid_plural "The top {n} teams on Liberapay are:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "List of teams on Liberapay, page {number} of {total}:"
+msgstr ""
 
 msgid "Create a team"
 msgstr "Vytvořte tým"

@@ -990,6 +990,9 @@ msgstr "第一"
 msgid "Last"
 msgstr "最後"
 
+msgid "View More"
+msgstr "檢視更多"
+
 msgid "Print"
 msgstr "列印"
 
@@ -3131,9 +3134,6 @@ msgid "Here is the {n} Liberapay user who has connected their {0} account:"
 msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
 msgstr[0] "以下為那{n}個擁有{0}帳號的Liberapay用戶："
 
-msgid "View More"
-msgstr "檢視更多"
-
 msgid "Explore other platforms:"
 msgstr "探查其它平台："
 
@@ -3178,14 +3178,19 @@ msgid "The top {0} individuals on Liberapay are:"
 msgstr "Liberapay 上領先的{0} 個人是："
 
 #, python-brace-format
+msgid "List of individuals on Liberapay, page {number} of {total}:"
+msgstr ""
+
+#, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
 msgstr "Liberapay 上領先的 {0} 個組織是："
 
+#, python-brace-format
+msgid "List of organizations on Liberapay, page {number} of {total}:"
+msgstr ""
+
 msgid "Create an organization account"
 msgstr "建立一個組織帳戶"
-
-msgid "Recent pledges"
-msgstr "最近的捐款承諾"
 
 msgid "Top pledges"
 msgstr "承諾總和最高"
@@ -3203,9 +3208,13 @@ msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "如果連結到你的其它社交帳戶，我們可以協助你找到可資助的對象："
 
 #, python-brace-format
-msgid "There is {n} team on Liberapay:"
-msgid_plural "There are {n} teams on Liberapay:"
-msgstr[0] "Liberapay上有 {n}個團隊："
+msgid "The top team on Liberapay is:"
+msgid_plural "The top {n} teams on Liberapay are:"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "List of teams on Liberapay, page {number} of {total}:"
+msgstr ""
 
 msgid "Create a team"
 msgstr "建立團隊"
