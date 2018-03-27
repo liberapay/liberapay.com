@@ -1,22 +1,24 @@
 % from "templates/icons.html" import glyphicon
 
 % macro show_repo(repo, donate=False, edit=False, unlist=False)
-<div class="repo">
     <h4>
+        <span class="inline-block">
         <a href="{{ repo.url }}">{{ repo.name }}</a>
         {{ _("(fork)") if repo.is_fork else '' }}
+        </span>
         % if repo.stars_count != None
-        &nbsp;&nbsp;<small>{{ glyphicon('star') }} {{ repo.stars_count }}</small>
+        <span class="inline-block text-nowrap"><small>{{ glyphicon('star') }} {{ repo.stars_count }}</small></span>
         % endif
         % set last_update = to_age(repo.last_update, granularity='week')
-        &nbsp;&nbsp;<small>{{
+        <span class="inline-block"><small>{{
             _("Updated this week") if last_update.days > -7 else
             _("Updated {0} ago", last_update)
-        }}</small>
+        }}</small></span>
         % if unlist
-        &nbsp;&nbsp;
+        <span class="inline-block">
         <button class="btn btn-warning btn-sm" name="show_on_profile:{{ repo.id }}"
                 value="off">{{ _("Unlist") }}</button>
+        </span>
         % endif
     </h4>
     <p>{{ repo.description or '' }}</p>
@@ -34,5 +36,4 @@
                     '/on/%s/%s' % (repo.platform, repo.slug.replace('/', '?repo=')) }}"
            >{{ _("Donate") if claimed else _("Pledge") }}</a>
     % endif
-</div>
 % endmacro

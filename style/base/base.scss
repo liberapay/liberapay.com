@@ -227,20 +227,20 @@ p.summary {
     }
 }
 
-.profile-box-row {
-    margin-right: -15px;
+.inline-boxes {
+    margin-right: -22px;
 }
 
 @media (max-width: $screen-md-min - 1) {
-    .profile-box-row {
+    .inline-boxes {
         text-align: center;
     }
 }
 
-.profile-box-wrapper {
+.inline-boxes > .inline-box {
     display: inline-block;
     max-width: 100%;
-    padding-right: 22px;
+    margin-right: 22px;
     vertical-align: top;
 }
 
@@ -284,6 +284,46 @@ p.summary {
                 }
             }
         }
+    }
+}
+
+.repo {
+    text-align: left;
+    width: 450px;
+    & > .panel {
+        border-radius: 6px;
+    }
+    h4 {
+        margin: 0.3em 0 0;
+        & > span.inline-block {
+            margin: 0 1ex 0.6em 0;
+        }
+    }
+    .glyphicon-star {
+        color: $gray-light;
+        font-size: 80%;
+    }
+    .description {
+        margin: 0.2em 0 1em;
+    }
+}
+
+@media (max-width: $screen-md-min - 1) {
+    .inline-box.repo {
+        display: block;
+        margin-right: 22px;
+        width: auto;
+        & > .panel {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 450px;
+        }
+    }
+}
+
+@media (min-width: $screen-lg-min) {
+    .inline-box.repo {
+        width: 550px;
     }
 }
 
@@ -679,8 +719,13 @@ p.event {
     margin-bottom: 0.5em;
 }
 
-.buttons .btn {
-    margin-bottom: 5px;
+.buttons > .btn {
+    margin: 0 5px 10px 0;
+    white-space: normal;
+}
+
+.btn-wrap {
+    white-space: normal;
 }
 
 .glyphicon + span {

@@ -78,7 +78,7 @@ title = pretty_name = community.pretty_name
 
     % if members
     <h3>{{ _("New Members") }}</h3>
-    <div class="profile-box-row">
+    <div class="inline-boxes">
         % for m, summary in members
             {{ profile_box_embedded(m, summary) }}
         % endfor

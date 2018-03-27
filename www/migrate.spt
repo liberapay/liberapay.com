@@ -350,7 +350,6 @@ title = _("Migrating from Gratipay")
                     <button class="btn btn-default btn-lg"
                             name="log-in.id" value="{{ existing_account.email }}"
                             >{{ _("Yes") }}</button>
-                    &nbsp;
                     <button class="btn btn-default btn-lg"
                             name="ignore-conflict" value="true"
                             >{{ _("No") }}</button>
@@ -517,7 +516,7 @@ title = _("Migrating from Gratipay")
         <p class="buttons">
             <a class="btn btn-default" href="{{ p.path('giving') }}" target="_blank">{{ _("Manage your donations") }}</a>
         % if len(result.donations) and p.balance == 0
-            &nbsp;&nbsp;
+            &nbsp;
             <a class="btn btn-default" href="{{ p.path('wallet/payin/') }}" target="_blank">{{ _("Add money") }}</a>
         % endif
         </p>
