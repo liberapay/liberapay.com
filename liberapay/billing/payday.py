@@ -438,8 +438,12 @@ class Payday(object):
                         for tip in tips:
                             tip.leeway = tip.full_amount - tip.amount
                     leeway = MoneyBasket(tip.leeway for tip in tips).fuzzy_sum(ref_currency)
-                    leeway_ratio = min(delta / leeway, 1)
-                    tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
+                    if leeway == 0:
+                        # We don't actually have any leeway, give up
+                        adjust_tips = False
+                    else:
+                        leeway_ratio = min(delta / leeway, 1)
+                        tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
         # Loop: compute the adjusted donation amounts, and do the transfers
         transfers = []
         for tip in tips:
