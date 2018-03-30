@@ -625,6 +625,13 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
         key=lambda t: (-t[0], t[1]),
     )
 
+    # Add year-less date format
+    year_re = re.compile(r'(^y+[^a-zA-Z]+|[^a-zA-Z]+y+$)')
+    for l in locales.values():
+        short_format = l.date_formats['short'].pattern
+        assert short_format[0] == 'y' or short_format[-1] == 'y', (l.language, short_format)
+        l.date_formats['short_yearless'] = year_re.sub('', short_format)
+
     # Add aliases
     for k, v in list(locales.items()):
         locales.setdefault(ALIASES.get(k, k), v)
