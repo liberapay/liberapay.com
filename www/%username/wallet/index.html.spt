@@ -1,8 +1,7 @@
 from datetime import datetime
-from itertools import chain
 
 from liberapay.utils import get_participant
-from liberapay.utils.history import iter_payday_events
+from liberapay.utils.history import get_ledger_events
 
 STATUS_MAP = {
     'failed': 'danger',
@@ -42,15 +41,7 @@ if not year:
     """, dict(p_id=participant.id))
     year = last_event_year or current_year
 
-events = iter_payday_events(website.db, participant, year)
-try:
-    totals = next(events)
-    if totals['kind'] != 'totals':
-        # it's not what we expected, put it back
-        events = chain((totals,), events)
-        totals = None
-except StopIteration:
-    totals, events = None, ()
+totals, events = get_ledger_events(website.db, participant, year)
 years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
