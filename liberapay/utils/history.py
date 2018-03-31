@@ -239,7 +239,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
 
         event_date = event['date'] = event['timestamp'].date()
         if event_date != prev_date:
-            if prev_date:
+            if prev_date and day_events:
                 day_open['wallet_delta'] = day_open['balances'] - balances
                 yield day_open
                 for e in day_events:
@@ -273,6 +273,8 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
                     # Collapse similar events
                     collapse = True
         else:
+            if event['context'] == 'account-switch':
+                continue
             kind = 'transfer'
             if event['tippee'] != id:
                 event['amount'] = -event['amount']
@@ -298,7 +300,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
 
         day_events.append(event)
 
-    if day_open:
+    if day_open and day_events:
         day_open['wallet_delta'] = day_open['balances'] - balances
         yield day_open
         for e in day_events:

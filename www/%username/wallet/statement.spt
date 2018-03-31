@@ -183,7 +183,7 @@ output.body = render(globals(), allow_partial_i18n=False)
             <td>{{ format_money(event['wallet_delta']) if event['wallet_delta'] > 0 else '' }}</td>
             <td>{{ format_date(event['date'], 'short_yearless') }}</td>
         </tr>
-        % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
+        % elif event['kind'] == 'transfer'
         <tr>
             <td>
             % set context = event['context']

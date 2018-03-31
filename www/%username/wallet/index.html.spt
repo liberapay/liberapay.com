@@ -261,7 +261,7 @@ if user.is_admin:
         <td class="fees">{{ format_money(event['fee']) }}</td>
         <td class="bank">{{ format_money_delta(event['bank_delta']) }}</td>
     </tr>
-    % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
+    % elif event['kind'] == 'transfer'
     <tr class="{{ 'zero' if not event['wallet_delta'] }}">
         <td class="description" colspan="2">
         % set context = event['context']
