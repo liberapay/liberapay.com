@@ -1335,3 +1335,14 @@ CREATE AGGREGATE sum(currency_basket) (
 CREATE FUNCTION empty_currency_basket() RETURNS currency_basket AS $$
     BEGIN RETURN ('0.00'::numeric, '0.00'::numeric); END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- migration #63
+CREATE TABLE exchange_events
+( id             bigserial         PRIMARY KEY
+, timestamp      timestamptz       NOT NULL DEFAULT current_timestamp
+, exchange       int               NOT NULL REFERENCES exchanges
+, status         exchange_status   NOT NULL
+, error          text
+, wallet_delta   currency_amount
+, UNIQUE (exchange, status)
+);

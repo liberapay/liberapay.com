@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '62'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '63'::jsonb);
 
 
 -- app configuration
@@ -397,6 +397,16 @@ CREATE TABLE exchanges
  );
 
 CREATE INDEX exchanges_participant_idx ON exchanges (participant);
+
+CREATE TABLE exchange_events
+( id             bigserial         PRIMARY KEY
+, timestamp      timestamptz       NOT NULL DEFAULT current_timestamp
+, exchange       int               NOT NULL REFERENCES exchanges
+, status         exchange_status   NOT NULL
+, error          text
+, wallet_delta   currency_amount
+, UNIQUE (exchange, status)
+);
 
 
 -- communities -- groups of participants
