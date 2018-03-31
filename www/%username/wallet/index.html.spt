@@ -114,7 +114,7 @@ if user.is_admin:
 <br>
 % endif
 
-<div class="row col-md-10">
+<div class="row col-lg-10">
 % if totals
     % set regular_donations = totals['regular_donations']
     % set reimbursements = totals['reimbursements']
@@ -195,8 +195,8 @@ if user.is_admin:
 <table class="table table-condensed" id="history">
 <thead>
     <tr>
-        <th class="nature">{{ _("Description") }}</th>
-        <th>{{ _("End of day balance") }}</th>
+        <th>{{ _("Description") }}</th>
+        <th class="balances">{{ _("End of day balance") }}</th>
         <th class="wallet">{{ _("Amount") }}</th>
         <th class="fees"><a href="/about/faq#fees">{{ _("Fees") }}</a></th>
         <th class="bank" title="{{ _('The amount you should see on your bank account statement.') }}"
@@ -207,13 +207,13 @@ if user.is_admin:
 % for event in events
     % if event['kind'] == 'day-end'
     <tr class="day-open">
-        <td class="nature">
+        <td class="date">
             {{ format_date(event['date'], 'long') }}
             % if event['payday_number']
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif
         </td>
-        <td>{{
+        <td class="balances">{{
             locale.format_money_basket(event['balances'], sep=' + ')
         }}</td>
         <td class="wallet">
@@ -222,7 +222,7 @@ if user.is_admin:
         % set n = len(wallet_deltas.currencies_present)
         % for delta in wallet_deltas
             % if delta.amount or n == 0 and delta.currency == participant.main_currency
-                {{ format_money_delta(delta) }}<br>
+                {{ format_money_delta(delta) }}
             % endif
         % endfor
         % endif
@@ -232,7 +232,7 @@ if user.is_admin:
     </tr>
     % elif 'fee' in event
     <tr class="{{ 'zero' if not event['wallet_delta'] }}">
-        <td class="nature" colspan="2">
+        <td class="description" colspan="2">
         % if event['kind'] == 'payin-refund'
             {{ event['error'] or _("refund") }}
         % elif event['kind'] in ('credit', 'charge')
@@ -263,7 +263,7 @@ if user.is_admin:
     </tr>
     % elif event['kind'] == 'transfer' and event['context'] != 'account-switch'
     <tr class="{{ 'zero' if not event['wallet_delta'] }}">
-        <td class="nature" colspan="2">
+        <td class="description" colspan="2">
         % set context = event['context']
         % if event['tippee'] == participant.id
             % if admin_override

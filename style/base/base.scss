@@ -580,22 +580,39 @@ a.dropdown-toggle {
         &[title] {
             cursor: help;
         }
-    }
-    td {
-        border-top-style: dashed;
-    }
-    .day-open {
-        font-weight: bold;
-        td {
-            border-top-style: solid;
+        &:first-child {
+            text-align: left;
         }
     }
-    .nature, .status {
-        text-align: left;
+    > tbody > tr {
+        border-top: 1px dashed #ddd;
+    }
+    td, th {
+        border: none;
+    }
+    .day-open {
+        border-top-style: solid;
+        font-weight: bold;
     }
     tr.zero {
         .wallet, .fees, .bank {
             color: #999;
+        }
+    }
+}
+
+@media (max-width: $screen-md-min - 1) {
+    #history {
+        display: block;
+        .balances, .fees, .bank {
+            display: none;
+        }
+        thead, tbody, td {
+            display: block;
+        }
+        tr {
+            display: flex;
+            justify-content: space-between;
         }
     }
 }
