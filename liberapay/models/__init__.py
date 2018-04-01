@@ -73,19 +73,10 @@ def _check_balances_against_transactions(cursor):
           from (
             select wallet_id, sum(a) as expected
               from (
-                      select wallet_id, sum(CASE WHEN (fee < 0) THEN amount - fee ELSE amount END) as a
-                        from exchanges
-                       where amount > 0
-                         and status = 'succeeded'
-                    group by wallet_id
-
-                       union all
-
-                      select wallet_id, sum(CASE WHEN (fee > 0) THEN amount - fee ELSE amount END) as a
-                        from exchanges
-                       where amount < 0
-                         and status <> 'failed'
-                    group by wallet_id
+                      select e.wallet_id, sum(ee.wallet_delta) as a
+                        from exchanges e
+                        join exchange_events ee on ee.exchange = e.id
+                    group by e.wallet_id
 
                        union all
 
