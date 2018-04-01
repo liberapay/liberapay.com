@@ -1,5 +1,6 @@
 from __future__ import division, print_function, unicode_literals
 
+from libravatar import libravatar_url
 from base64 import b64decode, b64encode
 from datetime import timedelta
 from email.utils import formataddr
@@ -1566,8 +1567,7 @@ class Participant(Model, MixinTeam):
         if platform == 'libravatar' or platform is None and email:
             if not email:
                 return
-            avatar_id = md5(email.strip().lower().encode('utf8')).hexdigest()
-            avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
+            avatar_url = libravatar_url(email)
             avatar_url += AVATAR_QUERY
 
         elif platform is None:
