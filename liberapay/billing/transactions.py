@@ -709,6 +709,11 @@ def refund_payin(db, exchange, create_debts=False, refund_fee=False, dry_run=Fal
                      VALUES (%s, %s, %s, %s, %s, 'pre', %s, %s)
                   RETURNING *
             """, (participant.id, -amount, -fee, -vat, exchange.route, exchange.id, exchange.wallet_id))
+            cursor.run("""
+                INSERT INTO exchange_events
+                            (timestamp, exchange, status, wallet_delta)
+                     VALUES (%s, %s, 'pre', %s)
+            """, (e_refund.timestamp, e_refund.id, e_refund.amount - e_refund.fee))
             propagate_exchange(cursor, participant, e_refund, None, e_refund.amount, bundles=bundles)
 
     # Submit the refund
