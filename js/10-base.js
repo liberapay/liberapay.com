@@ -39,6 +39,10 @@ Liberapay.init = function() {
     Liberapay.payments.init();
     Liberapay.s3_uploader_init();
 
+    $('div[href]').css('cursor', 'pointer').click(function() {
+        window.location.assign(this.getAttribute('href'));
+    });
+    
     $('.navbar .dropdown-hover').removeClass('dropdown-hover');
 
     $('.dropdown-toggle-form').click(function() {
