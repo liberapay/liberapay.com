@@ -128,9 +128,6 @@ class Platform(object):
         if error_handler is True:
             error_handler = self.api_error_handler
         status = response.status_code
-        if status == 401 and isinstance(self, PlatformOAuth1) and is_user_session:
-            # https://tools.ietf.org/html/rfc5849#section-3.2
-            raise TokenExpiredError
         if status not in (200, 201) and error_handler:
             error_handler(response, is_user_session, domain)
 
@@ -150,6 +147,9 @@ class Platform(object):
         status = response.status_code
         if status == 404:
             raise Response(404, response.text)
+        if status == 401 and is_user_session:
+            # https://tools.ietf.org/html/rfc5849#section-3.2
+            raise TokenExpiredError
         if status == 429 and is_user_session:
             limit, remaining, reset = self.get_ratelimit_headers(response)
             def msg(_, to_age):
@@ -274,6 +274,8 @@ class Platform(object):
         def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
                 raise UserNotFound(value, key)
+            if response.status_code == 401 and is_user_session:
+                raise TokenExpiredError
             if response.status_code in (400, 401, 403, 414):
                 raise BadUserId(value, key)
             self.api_error_handler(response, is_user_session, domain)
