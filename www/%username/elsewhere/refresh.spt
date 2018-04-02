@@ -1,3 +1,5 @@
+from oauthlib.oauth2 import TokenExpiredError
+
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.utils import get_participant
 
@@ -9,10 +11,27 @@ if not user.is_admin:
 participant = get_participant(state, restrict=True)
 accounts = participant.get_accounts_elsewhere()
 i = 0
+errors = []
 for account in accounts.values():
     sess = account.get_auth_session()  # try to use a session of theirs if possible
-    AccountElsewhere.upsert(account.platform_data.get_user_info(account.domain, 'user_id', account.user_id, sess))
+    platform = account.platform_data
+    try:
+        try:
+            info = platform.get_user_info(account.domain, 'user_id', account.user_id, sess)
+        except TokenExpiredError:
+            info = platform.get_user_info(account.domain, 'user_id', account.user_id)
+    except Exception as e:
+        errors.append(str(e))
+        continue
+    AccountElsewhere.upsert(info)
     i += 1
 
-[---] text/html
+[---] text/plain
 Updated {{i}} accounts.
+
+% if errors
+Errors:
+% for msg in errors
+- {{ msg }}
+% endfor
+% endif
