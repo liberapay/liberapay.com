@@ -78,6 +78,12 @@ def refetch_repos():
         sess = account.get_auth_session()
         start_time = utcnow()
         logger.debug(
+            "Refetching profile data for participant ~%s from %s account %s" %
+            (participant.id, account.platform, account.user_id)
+        )
+        account = account.refresh_user_info()
+        sleep(1)
+        logger.debug(
             "Refetching repository data for participant ~%s from %s account %s" %
             (participant.id, account.platform, account.user_id)
         )

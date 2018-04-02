@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
+from oauthlib.oauth2 import TokenExpiredError
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -263,6 +264,20 @@ class AccountElsewhere(Model):
              WHERE id=%s
         """, (json.dumps(token), self.id))
         self.set_attributes(token=token)
+
+    def refresh_user_info(self):
+        """Refetch the account's info from the platform and update it in the DB.
+
+        Returns a new `AccountElsewhere` instance containing the updated data.
+        """
+        platform = self.platform_data
+        sess = self.get_auth_session()
+        try:
+            info = platform.get_user_info(self.domain, 'user_id', self.user_id, sess)
+        except TokenExpiredError:
+            self.db.run("UPDATE elsewhere SET token = NULL WHERE id = %s", (self.id,))
+            info = platform.get_user_info(self.domain, 'user_id', self.user_id)
+        return self.upsert(info)
 
 
 def get_account_elsewhere(website, state, api_lookup=True):
