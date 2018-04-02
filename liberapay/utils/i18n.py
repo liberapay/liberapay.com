@@ -72,8 +72,10 @@ class Locale(babel.core.Locale):
             s = s.replace(self.decimal_symbol + '00', '')
         return s
 
-    def format_date(self, *a):
-        return format_date(*a, locale=self)
+    def format_date(self, date, format='medium'):
+        if format.endswith('_yearless'):
+            format = self.date_formats[format]
+        return format_date(date, format, locale=self)
 
     def format_datetime(self, *a):
         return format_datetime(*a, locale=self)

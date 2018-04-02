@@ -37,6 +37,7 @@ class DB(Postgres):
 def check_db(cursor):
     """Runs all available self checks on the given cursor.
     """
+    _check_exchange_events(cursor)
     _check_balances_against_transactions(cursor)
     _check_tips(cursor)
     _check_bundles_against_balances(cursor)
@@ -64,6 +65,33 @@ def _check_tips(cursor):
     assert conflicting_tips == 0, conflicting_tips
 
 
+def _check_exchange_events(cursor):
+    """
+    Check coherence between the `exchanges` and `exchange_events` tables.
+    """
+    b = cursor.all("""
+        SELECT id AS exchange_id, expected_sum, actual_sum
+          FROM (
+                 SELECT e.id
+                      , ( CASE
+                            WHEN (e.amount > 0 AND e.status = 'succeeded')
+                                 THEN (CASE WHEN (fee < 0) THEN amount - fee ELSE amount END)
+                            WHEN (e.amount < 0 AND e.status <> 'failed')
+                                 THEN (CASE WHEN (fee > 0) THEN amount - fee ELSE amount END)
+                            ELSE zero(e.amount)
+                        END ) as expected_sum
+                      , coalesce_currency_amount(
+                            sum(ee.wallet_delta), e.amount::currency
+                        ) as actual_sum
+                   FROM exchanges e
+                   JOIN exchange_events ee ON ee.exchange = e.id
+               GROUP BY e.id
+              ) as foo
+        WHERE expected_sum <> actual_sum
+    """)
+    assert len(b) == 0, "incoherent exchange records:\n" + '\n'.join(str(r) for r in b)
+
+
 def _check_balances_against_transactions(cursor):
     """
     Recalculates balances for all wallets from transfers and exchanges.
@@ -73,19 +101,10 @@ def _check_balances_against_transactions(cursor):
           from (
             select wallet_id, sum(a) as expected
               from (
-                      select wallet_id, sum(CASE WHEN (fee < 0) THEN amount - fee ELSE amount END) as a
-                        from exchanges
-                       where amount > 0
-                         and status = 'succeeded'
-                    group by wallet_id
-
-                       union all
-
-                      select wallet_id, sum(CASE WHEN (fee > 0) THEN amount - fee ELSE amount END) as a
-                        from exchanges
-                       where amount < 0
-                         and status <> 'failed'
-                    group by wallet_id
+                      select e.wallet_id, sum(ee.wallet_delta) as a
+                        from exchanges e
+                        join exchange_events ee on ee.exchange = e.id
+                    group by e.wallet_id
 
                        union all
 
