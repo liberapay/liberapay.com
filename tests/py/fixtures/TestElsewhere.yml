@@ -29,7 +29,6 @@ interactions:
       last-modified: ['Tue, 26 May 2015 18:51:47 GMT']
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
-      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
@@ -59,7 +58,6 @@ interactions:
       etag: [W/"7e1bcc65d400d193c9e55e41e2c7beaa"]
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
-      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
@@ -107,7 +105,6 @@ interactions:
       content-type: [application/json; charset=utf-8]
       status: [404 Not Found]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
-      transfer-encoding: [chunked]
     status: {code: 404, message: Not Found}
 - request:
     body: null
@@ -144,7 +141,6 @@ interactions:
       content-encoding: [gzip]
       content-language: [en]
       content-type: [application/json; charset=utf-8]
-      transfer-encoding: [chunked]
       vary: ['Authorization, Accept-Language, Cookie']
     status: {code: 404, message: NOT FOUND}
 - request:
@@ -206,7 +202,6 @@ interactions:
       content-type: [application/json; charset=utf-8]
       status: [404 Not Found]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
-      transfer-encoding: [chunked]
     status: {code: 404, message: Not Found}
 - request:
     body: null
@@ -233,4 +228,50 @@ interactions:
       status: [404 Not Found]
       strict-transport-security: [max-age=631138519]
     status: {code: 404, message: Not Found}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://gitlab.com/api/v3/users?username=adhsjakdjsdkjsajdhksda
+  response:
+    body: {string: !!python/unicode '[]'}
+    headers:
+      cache-control: ['max-age=0, private, must-revalidate']
+      content-length: ['2']
+      content-type: [application/json]
+      etag: [W/"d751713988987e9331980363e24189ce"]
+      link: ['<https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=adhsjakdjsdkjsajdhksda&with_custom_attributes=false>;
+          rel="first", <https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=adhsjakdjsdkjsajdhksda&with_custom_attributes=false>;
+          rel="last"']
+      ratelimit-limit: ['600']
+      ratelimit-observed: ['1']
+      ratelimit-remaining: ['599']
+      ratelimit-reset: ['1522687244']
+      ratelimit-resettime: ['Tue, 02 Apr 2018 16:40:44 GMT']
+      strict-transport-security: [max-age=31536000]
+      vary: [Origin]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://gitlab.com/api/v3/users?username=%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
+  response:
+    body: {string: !!python/unicode '[]'}
+    headers:
+      cache-control: ['max-age=0, private, must-revalidate']
+      content-length: ['2']
+      content-type: [application/json]
+      etag: [W/"d751713988987e9331980363e24189ce"]
+      link: ['<https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=%3E%27%3E%22%3E%3Cimg+src%3Dx+onerror%3Dalert%280%29%3E&with_custom_attributes=false>;
+          rel="first", <https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=%3E%27%3E%22%3E%3Cimg+src%3Dx+onerror%3Dalert%280%29%3E&with_custom_attributes=false>;
+          rel="last"']
+      ratelimit-limit: ['600']
+      ratelimit-observed: ['2']
+      ratelimit-remaining: ['598']
+      ratelimit-reset: ['1522687245']
+      ratelimit-resettime: ['Tue, 02 Apr 2018 16:40:45 GMT']
+      strict-transport-security: [max-age=31536000]
+      vary: [Origin]
+    status: {code: 200, message: OK}
 version: 1
