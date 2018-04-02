@@ -281,6 +281,11 @@ class Platform(object):
             self.api_error_handler(response, is_user_session, domain)
         response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
         info = self.api_parser(response)
+        if not info:
+            raise UserNotFound(value, key)
+        if isinstance(info, list):
+            assert len(info) == 1, info
+            info = info[0]
         return self.extract_user_info(info, domain)
 
     def get_user_self_info(self, domain, sess):

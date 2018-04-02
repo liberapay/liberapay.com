@@ -18,22 +18,21 @@ class GitLab(PlatformOAuth2):
     # GitLab uses https://github.com/doorkeeper-gem/doorkeeper
     auth_url = 'https://gitlab.com/oauth/authorize'
     access_token_url = 'https://gitlab.com/oauth/token'
-    can_auth_with_client_credentials = True
+
+    # can_auth_with_client_credentials = True
+    # https://gitlab.com/gitlab-org/gitlab-ce/issues/13795
 
     # API attributes
     # http://doc.gitlab.com/ce/api/
     api_format = 'json'
     api_paginator = header_links_paginator(total_header='X-Total')
     api_url = 'https://gitlab.com/api/v3'
-    # api_user_info_path = '/users/{user_id}'
-    # api_user_name_info_path = '/users?username={user_name}'
+    api_user_info_path = '/users/{user_id}'
+    api_user_name_info_path = '/users?username={user_name}'
     api_user_self_info_path = '/user'
-    # api_team_members_path = '/groups/{user_name}/members'
+    api_team_members_path = '/groups/{user_name}/members'
     api_repos_path = '/projects?owned=true&visibility=public&order_by=last_activity_at&per_page=100'
     api_starred_path = '/projects?starred=true&visibility=public'
-
-    # The commented out paths are because we need this:
-    # https://gitlab.com/gitlab-org/gitlab-ce/issues/13795
 
     # User info extractors
     x_user_id = key('id')
