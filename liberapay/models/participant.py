@@ -1567,7 +1567,7 @@ class Participant(Model, MixinTeam):
         if platform == 'libravatar' or platform is None and email:
             if not email:
                 return
-            avatar_url = libravatar_url(email)
+            avatar_url = libravatar_url(email, https=True)
             avatar_url += AVATAR_QUERY
 
         elif platform is None:
