@@ -1,6 +1,5 @@
 from __future__ import division, print_function, unicode_literals
 
-from libravatar import libravatar_url
 from base64 import b64decode, b64encode
 from datetime import timedelta
 from email.utils import formataddr
@@ -14,6 +13,7 @@ from six.moves.urllib.parse import quote, urlencode
 import aspen_jinja2_renderer
 from cached_property import cached_property
 from html2text import html2text
+from libravatar import libravatar_url
 import mangopay
 from mangopay.utils import Money
 from markupsafe import escape as htmlescape
