@@ -4,7 +4,7 @@ from libravatar import libravatar_url
 from base64 import b64decode, b64encode
 from datetime import timedelta
 from email.utils import formataddr
-from hashlib import pbkdf2_hmac, md5, sha1
+from hashlib import pbkdf2_hmac, sha1
 from os import urandom
 from time import sleep
 import uuid
