@@ -17,6 +17,9 @@ class GitLab(PlatformOAuth2):
     # GitLab uses https://github.com/doorkeeper-gem/doorkeeper
     auth_url = 'https://gitlab.com/oauth/authorize'
     access_token_url = 'https://gitlab.com/oauth/token'
+    oauth_default_scope = ['read_user']
+    # The `read_user` scope doesn't let us see the user's public repositories.
+    # See https://github.com/liberapay/liberapay.com/issues/892
 
     # can_auth_with_client_credentials = True
     # https://gitlab.com/gitlab-org/gitlab-ce/issues/13795
