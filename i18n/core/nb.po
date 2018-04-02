@@ -2245,8 +2245,8 @@ msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
 msgstr[0] "{money_amount} i utgiftskompensasjon fra {n} organisasjon"
 msgstr[1] "{money_amount} i utgiftskompensasjon fra {n} organisasjoner"
 
-msgid "Status"
-msgstr "Status"
+msgid "End of day balance"
+msgstr ""
 
 msgid "Fees"
 msgstr "Gebyrer"
@@ -2261,9 +2261,6 @@ msgstr "Beløp i banken"
 msgid "Weekly Payday #{0}"
 msgstr "Ukentlig lønningsdag #{0}"
 
-msgid "balance at the end of the day"
-msgstr "saldo ved dagens slutt"
-
 msgid "refund"
 msgstr "tilbakebetaling"
 
@@ -2274,12 +2271,15 @@ msgid "deposit"
 msgstr "innskudd"
 
 #, python-brace-format
-msgid "error message: {0}"
-msgstr "feilmelding: {0}"
-
-#, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
 msgstr "tilbakebetaling av mislykket utbetaling (feilmelding: {0})"
+
+msgid "canceled"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "feilmelding: {0}"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2323,8 +2323,8 @@ msgstr "betaling av {link_open}utgift {invoice_id}{link_close} til {payee}"
 msgid "donation to {0}"
 msgstr "donasjon til {0}"
 
-msgid "No transactions to show."
-msgstr "Ingen transaksjoner å vise."
+msgid "There were no transactions during this period."
+msgstr ""
 
 msgid "Adding Money"
 msgstr "Innskudd av penger"
@@ -2374,10 +2374,6 @@ msgstr "Direktebetaling"
 
 msgid "Best for regular payments"
 msgstr "Best for vedvarende betalinger"
-
-#, python-brace-format
-msgid "Fee: {0}"
-msgstr "Gebyr: {0}"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Du har ikke satt opp noen donasjoner enda, når du gjør det vil du bli spurt om å utføre et innskudd på kontoen din."
@@ -2705,6 +2701,35 @@ msgstr "kun bokstaver (a-z) og tall (0-9) tillates"
 
 msgid "This account number is invalid."
 msgstr "Kontonummeret er ugyldig."
+
+#, python-brace-format
+msgid "Account number: {0}"
+msgstr ""
+
+msgid "Debit"
+msgstr ""
+
+msgid "Credit"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+#, python-brace-format
+msgid "Balance at the beginning: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr "Gebyr: {0}"
+
+#, python-brace-format
+msgid "Balance at the end: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Account balance: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "I donate {0} per week"

@@ -2238,8 +2238,8 @@ msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
 msgstr[0] "{money_amount} en remboursements de frais provenant de {n} organisation"
 msgstr[1] "{money_amount} en remboursements de frais provenant de {n} organisations"
 
-msgid "Status"
-msgstr "État"
+msgid "End of day balance"
+msgstr ""
 
 msgid "Fees"
 msgstr "Frais"
@@ -2254,9 +2254,6 @@ msgstr "Montant en banque"
 msgid "Weekly Payday #{0}"
 msgstr "Jour de paie hebdomadaire n° {0}"
 
-msgid "balance at the end of the day"
-msgstr "montant disponible à la fin de la journée"
-
 msgid "refund"
 msgstr "remboursement"
 
@@ -2267,12 +2264,15 @@ msgid "deposit"
 msgstr "dépôt"
 
 #, python-brace-format
-msgid "error message: {0}"
-msgstr "message d'erreur : {0}"
-
-#, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
 msgstr "remboursement du retrait échoué (message d'erreur : {0})"
+
+msgid "canceled"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "message d'erreur : {0}"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2316,8 +2316,8 @@ msgstr "paiement de la {link_open}note de frais n°{invoice_id}{link_close} à {
 msgid "donation to {0}"
 msgstr "don à {0}"
 
-msgid "No transactions to show."
-msgstr "Aucune transaction à afficher."
+msgid "There were no transactions during this period."
+msgstr ""
 
 msgid "Adding Money"
 msgstr "Ajout d'argent"
@@ -2366,10 +2366,6 @@ msgstr "Prélèvement bancaire"
 
 msgid "Best for regular payments"
 msgstr "Parfait pour des paiements réguliers"
-
-#, python-brace-format
-msgid "Fee: {0}"
-msgstr "Frais : {0}"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Vous n'avez mis en place aucun don, quand vous l'aurez fait il vous sera demandé d'ajouter de l'argent à votre compte."
@@ -2691,6 +2687,35 @@ msgstr "Seuls les lettres (a-z) et les chiffres (0-9) sont autorisés"
 
 msgid "This account number is invalid."
 msgstr "Ce numéro de compte est invalide."
+
+#, python-brace-format
+msgid "Account number: {0}"
+msgstr ""
+
+msgid "Debit"
+msgstr ""
+
+msgid "Credit"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+#, python-brace-format
+msgid "Balance at the beginning: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr "Frais : {0}"
+
+#, python-brace-format
+msgid "Balance at the end: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Account balance: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "I donate {0} per week"

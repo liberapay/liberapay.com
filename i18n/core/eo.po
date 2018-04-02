@@ -2278,8 +2278,8 @@ msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Status"
-msgstr "Stato"
+msgid "End of day balance"
+msgstr ""
 
 msgid "Fees"
 msgstr "Peradkostoj"
@@ -2294,9 +2294,6 @@ msgstr ""
 msgid "Weekly Payday #{0}"
 msgstr "Semajna Pagotago # {0}"
 
-msgid "balance at the end of the day"
-msgstr ""
-
 msgid "refund"
 msgstr "repagon"
 
@@ -2307,12 +2304,15 @@ msgid "deposit"
 msgstr ""
 
 #, python-brace-format
-msgid "error message: {0}"
+msgid "refund of failed withdrawal (error message: {0})"
+msgstr "repagon de malsukcesa retiro (erarmesaĝon: {0})"
+
+msgid "canceled"
 msgstr ""
 
 #, python-brace-format
-msgid "refund of failed withdrawal (error message: {0})"
-msgstr "repagon de malsukcesa retiro (erarmesaĝon: {0})"
+msgid "error message: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2357,9 +2357,8 @@ msgstr ""
 msgid "donation to {0}"
 msgstr "donaco al {0}"
 
-#, fuzzy
-msgid "No transactions to show."
-msgstr "Neniu transakcioj por montri."
+msgid "There were no transactions during this period."
+msgstr ""
 
 msgid "Adding Money"
 msgstr ""
@@ -2407,10 +2406,6 @@ msgid "Direct Debit"
 msgstr "Rekta Debeto"
 
 msgid "Best for regular payments"
-msgstr ""
-
-#, python-brace-format
-msgid "Fee: {0}"
 msgstr ""
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
@@ -2734,6 +2729,35 @@ msgstr "nur literojn (a-z) kaj ciferoj (0-9) estas permesataj"
 
 msgid "This account number is invalid."
 msgstr "Ĉi konto nombro estas nevalida."
+
+#, python-brace-format
+msgid "Account number: {0}"
+msgstr ""
+
+msgid "Debit"
+msgstr ""
+
+msgid "Credit"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+#, python-brace-format
+msgid "Balance at the beginning: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Balance at the end: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Account balance: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "I donate {0} per week"

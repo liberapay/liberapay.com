@@ -2254,8 +2254,8 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Status"
-msgstr "Stav"
+msgid "End of day balance"
+msgstr ""
 
 msgid "Fees"
 msgstr "Poplatky"
@@ -2270,9 +2270,6 @@ msgstr "Částka v bance"
 msgid "Weekly Payday #{0}"
 msgstr "Týdenní výplata #{0}"
 
-msgid "balance at the end of the day"
-msgstr "zůstatek na konci dne"
-
 msgid "refund"
 msgstr "náhrada"
 
@@ -2283,12 +2280,15 @@ msgid "deposit"
 msgstr "vklad"
 
 #, python-brace-format
-msgid "error message: {0}"
-msgstr "chybová zpráva: {0}"
-
-#, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
 msgstr "vrácení neúspěšného výběru (došlo k chybě: {0})"
+
+msgid "canceled"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "chybová zpráva: {0}"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2332,8 +2332,8 @@ msgstr ""
 msgid "donation to {0}"
 msgstr "dar na {0}"
 
-msgid "No transactions to show."
-msgstr "Žádné transakce k zobrazení."
+msgid "There were no transactions during this period."
+msgstr ""
 
 msgid "Adding Money"
 msgstr "Přidání peněz"
@@ -2382,10 +2382,6 @@ msgstr ""
 
 msgid "Best for regular payments"
 msgstr "Nejvhodnější pro pravidelné platby"
-
-#, python-brace-format
-msgid "Fee: {0}"
-msgstr "Poplatek: {0}"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Ještě jste nenastavili žádné příspěvky, ale jakmile to uděláte, budete vyzváni k převodu peněz na váš účet."
@@ -2710,6 +2706,35 @@ msgstr "jsou povolena pouze písmena (a-z) a číslice (0-9)"
 
 msgid "This account number is invalid."
 msgstr "Toto číslo účtu je neplatné."
+
+#, python-brace-format
+msgid "Account number: {0}"
+msgstr ""
+
+msgid "Debit"
+msgstr ""
+
+msgid "Credit"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+#, python-brace-format
+msgid "Balance at the beginning: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr "Poplatek: {0}"
+
+#, python-brace-format
+msgid "Balance at the end: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Account balance: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "I donate {0} per week"

@@ -2238,8 +2238,8 @@ msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
 msgstr[0] "{money_amount} em reembolsos de despesas de {n} organização"
 msgstr[1] "{money_amount} em reembolsos de despesas de {n} organizações"
 
-msgid "Status"
-msgstr "Situação"
+msgid "End of day balance"
+msgstr ""
 
 msgid "Fees"
 msgstr "Taxas"
@@ -2254,9 +2254,6 @@ msgstr "Valor no banco"
 msgid "Weekly Payday #{0}"
 msgstr "Dia de pagamento semanal #{0}"
 
-msgid "balance at the end of the day"
-msgstr "saldo no fim do dia"
-
 msgid "refund"
 msgstr "restituição"
 
@@ -2267,12 +2264,15 @@ msgid "deposit"
 msgstr "deposite"
 
 #, python-brace-format
-msgid "error message: {0}"
-msgstr "mensagem de erro: {0}"
-
-#, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
 msgstr "restituição de retirada falhou (mensagem de erro: {0})"
+
+msgid "canceled"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "mensagem de erro: {0}"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2316,8 +2316,8 @@ msgstr "pagamento de {link_open}despesa #{invoice_id}{link_close} a {payee}"
 msgid "donation to {0}"
 msgstr "doação para {0}"
 
-msgid "No transactions to show."
-msgstr "Nenhuma transação para exibir."
+msgid "There were no transactions during this period."
+msgstr ""
 
 msgid "Adding Money"
 msgstr "Adição de dinheiro"
@@ -2366,10 +2366,6 @@ msgstr "Débito direto"
 
 msgid "Best for regular payments"
 msgstr "O melhor para pagamentos regulares"
-
-#, python-brace-format
-msgid "Fee: {0}"
-msgstr "Taxa: {0}"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Você não configurar quaisquer doações, no entanto, uma vez que você fizer você será solicitado a adicionar dinheiro à sua conta."
@@ -2691,6 +2687,35 @@ msgstr "apenas letras (a-z) e números (0-9) são permitidos"
 
 msgid "This account number is invalid."
 msgstr "Este número de conta é inválido."
+
+#, python-brace-format
+msgid "Account number: {0}"
+msgstr ""
+
+msgid "Debit"
+msgstr ""
+
+msgid "Credit"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+#, python-brace-format
+msgid "Balance at the beginning: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr "Taxa: {0}"
+
+#, python-brace-format
+msgid "Balance at the end: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Account balance: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "I donate {0} per week"

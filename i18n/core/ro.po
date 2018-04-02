@@ -2252,8 +2252,8 @@ msgstr[0] "{money_amount} în costuri de restituire de la {n} organizație"
 msgstr[1] "{money_amount} în costuri de restituire de la {n} organizații"
 msgstr[2] "{money_amount} în costuri de restituire de la {n} de organizații"
 
-msgid "Status"
-msgstr "Stare"
+msgid "End of day balance"
+msgstr ""
 
 msgid "Fees"
 msgstr "Taxe"
@@ -2268,9 +2268,6 @@ msgstr "Sumă în bancă"
 msgid "Weekly Payday #{0}"
 msgstr "Ziua de plată săptămânală nr.{0}"
 
-msgid "balance at the end of the day"
-msgstr "soldul la sfârșitul zilei"
-
 msgid "refund"
 msgstr "restituire"
 
@@ -2281,12 +2278,15 @@ msgid "deposit"
 msgstr "depunere"
 
 #, python-brace-format
-msgid "error message: {0}"
-msgstr "mesaj de eroare: {0}"
-
-#, python-brace-format
 msgid "refund of failed withdrawal (error message: {0})"
 msgstr "restituirea extragerii eșuate (mesaj de eroare: {0})"
+
+msgid "canceled"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "mesaj de eroare: {0}"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -2330,8 +2330,8 @@ msgstr "plata {link_open}costului nr.{invoice_id}{link_close} către {payee}"
 msgid "donation to {0}"
 msgstr "donație către {0}"
 
-msgid "No transactions to show."
-msgstr "Nicio tranzacție de afișat."
+msgid "There were no transactions during this period."
+msgstr ""
 
 msgid "Adding Money"
 msgstr "Adăugarea banilor"
@@ -2380,10 +2380,6 @@ msgstr "Debit direct"
 
 msgid "Best for regular payments"
 msgstr "Cel mai bun pentru plăți regulate"
-
-#, python-brace-format
-msgid "Fee: {0}"
-msgstr "Taxă: {0}"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Nu ați configurat nicio donație încă, odată ce veți face acest lucru vi se va cere să adăugați bani în contul dumneavoastră."
@@ -2708,6 +2704,35 @@ msgstr "numai litere (a-z) și cifre (0-9) sunt permise"
 
 msgid "This account number is invalid."
 msgstr "Acest număr de cont este nevalid."
+
+#, python-brace-format
+msgid "Account number: {0}"
+msgstr ""
+
+msgid "Debit"
+msgstr ""
+
+msgid "Credit"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+#, python-brace-format
+msgid "Balance at the beginning: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Fee: {0}"
+msgstr "Taxă: {0}"
+
+#, python-brace-format
+msgid "Balance at the end: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Account balance: {0}"
+msgstr ""
 
 #, python-brace-format
 msgid "I donate {0} per week"
