@@ -14,6 +14,7 @@ from psycopg2 import IntegrityError
 import xmltodict
 
 from liberapay.constants import AVATAR_QUERY, SUMMARY_MAX_SIZE
+from liberapay.cron import logger
 from liberapay.elsewhere._exceptions import BadUserId, UserNotFound
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import excerpt_intro
@@ -95,6 +96,8 @@ class AccountElsewhere(Model):
     def upsert(cls, i):
         """Insert or update a user's info.
         """
+
+        i.info_fetched_at = utcnow()
 
         # Clean up avatar_url
         if i.avatar_url:
@@ -320,3 +323,21 @@ def get_account_elsewhere(website, state, api_lookup=True):
             raise response.error(404, err)
         account = AccountElsewhere.upsert(user_info)
     return platform, account
+
+
+def refetch_elsewhere_data():
+    account = website.db.one("""
+        SELECT (e, p)::elsewhere_with_participant
+          FROM elsewhere e
+          JOIN participants p ON p.id = e.participant
+         WHERE e.info_fetched_at < now() - interval '180 days'
+      ORDER BY e.info_fetched_at ASC
+         LIMIT 1
+    """)
+    if not account:
+        return
+    logger.debug(
+        "Refetching data of %s account %s (participant %i)" %
+        (account.platform, account.user_id, account.participant.id)
+    )
+    account.refresh_user_info()

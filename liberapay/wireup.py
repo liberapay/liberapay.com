@@ -223,6 +223,7 @@ class AppConf(object):
         password_rounds=int,
         payday_label=str,
         payday_repo=str,
+        refetch_elsewhere_data_every=int,
         refetch_repos_every=int,
         s3_endpoint=str,
         s3_public_access_key=str,

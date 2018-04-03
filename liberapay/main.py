@@ -23,6 +23,7 @@ from liberapay import utils, wireup
 from liberapay.billing.payday import Payday, create_payday_issue
 from liberapay.billing.transactions import check_all_balances
 from liberapay.cron import Cron, Daily, Weekly
+from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant
 from liberapay.models.repository import refetch_repos
@@ -104,6 +105,7 @@ if conf:
     cron(conf.check_db_every, website.db.self_check, True)
     cron(conf.dequeue_emails_every, Participant.dequeue_emails, True)
     cron(conf.send_newsletters_every, Participant.send_newsletters, True)
+    cron(conf.refetch_elsewhere_data_every, refetch_elsewhere_data, True)
     cron(conf.refetch_repos_every, refetch_repos, True)
     cron(Weekly(weekday=3, hour=1), check_all_balances, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
