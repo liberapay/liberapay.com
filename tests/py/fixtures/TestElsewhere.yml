@@ -274,4 +274,61 @@ interactions:
       strict-transport-security: [max-age=31536000]
       vary: [Origin]
     status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode client_secret=o090sc7828d7gljtrqc5n4vcpx3bfx&grant_type=client_credentials&client_id=9ro3g4slh0de5yijy6rqb2p0jgd7hi
+    headers: {}
+    method: POST
+    uri: https://id.twitch.tv/oauth2/token
+  response:
+    body: {string: !!python/unicode '{"access_token":"7a5d9eyq0lqh49c3e181a82ltvukjd","expires_in":4775216}
+
+'}
+    headers:
+      access-control-allow-origin: ['*']
+      content-length: ['71']
+      content-type: [application/json]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.twitch.tv/helix/users?login=adhsjakdjsdkjsajdhksda
+  response:
+    body: {string: !!python/unicode '{"data":[]}'}
+    headers:
+      access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, must-revalidate, private']
+      content-length: ['11']
+      content-type: [application/json; charset=utf-8]
+      expires: ['0']
+      front-end-https: ['on']
+      pragma: [no-cache]
+      ratelimit-limit: ['120']
+      ratelimit-remaining: ['119']
+      ratelimit-reset: ['1522748040']
+      timing-allow-origin: ['https://www.twitch.tv']
+      twitch-trace-id: [7322efd13b06536bc68825a652c0bd7c]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.twitch.tv/helix/users?login=%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
+  response:
+    body: {string: !!python/unicode '{"error":"Bad Request","status":400,"message":"Error
+        (400): Invalid login parameter requested: \u003e''\u003e\"\u003e\u003cimg
+        src=x onerror=alert(0)\u003e"}'}
+    headers:
+      access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, must-revalidate, private']
+      content-length: ['156']
+      content-type: [application/json; charset=utf-8]
+      expires: ['0']
+      pragma: [no-cache]
+      ratelimit-limit: ['120']
+      ratelimit-remaining: ['118']
+      ratelimit-reset: ['1522748045']
+      timing-allow-origin: ['https://www.twitch.tv']
+      twitch-trace-id: [4b231f9a03bb260aab1940523ef8a49a]
+    status: {code: 400, message: Bad Request}
 version: 1
