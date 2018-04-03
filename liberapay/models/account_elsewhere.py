@@ -333,7 +333,8 @@ def refetch_elsewhere_data():
         SELECT (e, p)::elsewhere_with_participant
           FROM elsewhere e
           JOIN participants p ON p.id = e.participant
-         WHERE e.info_fetched_at < now() - interval '180 days'
+         WHERE e.info_fetched_at < now() - interval '90 days'
+           AND (p.status = 'active' OR p.receiving > 0)
            AND check_rate_limit(%s || e.platform || ':' || e.user_id, %s, %s)
       ORDER BY e.info_fetched_at ASC
          LIMIT 1

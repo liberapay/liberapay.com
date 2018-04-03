@@ -71,6 +71,7 @@ def refetch_repos():
           FROM repositories r
          WHERE r.info_fetched_at < now() - interval '6 days'
            AND r.participant IS NOT NULL
+           AND r.show_on_profile
            AND check_rate_limit(%s || r.participant::text || ':' || r.platform, %s, %s)
       ORDER BY r.info_fetched_at ASC
          LIMIT 1
