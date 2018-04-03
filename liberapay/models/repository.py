@@ -117,6 +117,13 @@ def refetch_repos():
         event_type = 'fetch_repos:%s' % account.id
         payload = dict(partial_list=bool(next_page), deleted_count=deleted_count)
         participant.add_event(cursor, event_type, payload)
+        cursor.run("""
+            DELETE FROM events
+             WHERE participant = %s
+               AND type = %s
+               AND (NOT payload ? 'deleted_count' OR payload->'deleted_count' = '0')
+               AND ts < (current_timestamp - interval '6 days')
+        """, (participant.id, event_type))
 
     # The update was successful, clean up the rate_limiting table
     website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))
