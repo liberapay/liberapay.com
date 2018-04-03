@@ -13,7 +13,7 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-from liberapay.constants import AVATAR_QUERY, SUMMARY_MAX_SIZE
+from liberapay.constants import AVATAR_QUERY, RATE_LIMITS, SUMMARY_MAX_SIZE
 from liberapay.cron import logger
 from liberapay.elsewhere._exceptions import BadUserId, UserNotFound
 from liberapay.security.crypto import constant_time_compare
@@ -326,18 +326,26 @@ def get_account_elsewhere(website, state, api_lookup=True):
 
 
 def refetch_elsewhere_data():
+    # Note: the rate_limiting table is used to avoid blocking on errors
+    rl_prefix = 'refetch_elsewhere_data'
+    rl_cap, rl_period = RATE_LIMITS[rl_prefix]
     account = website.db.one("""
         SELECT (e, p)::elsewhere_with_participant
           FROM elsewhere e
           JOIN participants p ON p.id = e.participant
          WHERE e.info_fetched_at < now() - interval '180 days'
+           AND check_rate_limit(%s || e.platform || ':' || e.user_id, %s, %s)
       ORDER BY e.info_fetched_at ASC
          LIMIT 1
-    """)
+    """, (rl_prefix + ':', rl_cap, rl_period))
     if not account:
         return
+    rl_key = '%s:%s' % (account.platform, account.user_id)
+    website.db.hit_rate_limit(rl_prefix, rl_key)
     logger.debug(
         "Refetching data of %s account %s (participant %i)" %
         (account.platform, account.user_id, account.participant.id)
     )
     account.refresh_user_info()
+    # The update was successful, clean up the rate_limiting table
+    website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))
