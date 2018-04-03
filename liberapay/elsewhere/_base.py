@@ -216,6 +216,8 @@ class Platform(object):
         """
         r = UserInfo(platform=self.name)
         info = self.x_user_info(r, info, info)
+        if not info:
+            return
         r.domain = self.x_domain(r, info, '')
         assert r.domain is not None
         if not self.single_domain:
@@ -286,7 +288,10 @@ class Platform(object):
         if isinstance(info, list):
             assert len(info) == 1, info
             info = info[0]
-        return self.extract_user_info(info, domain)
+        r = self.extract_user_info(info, domain)
+        if r is None:
+            raise UserNotFound(value, key)
+        return r
 
     def get_user_self_info(self, domain, sess):
         """Get the authenticated user's info from the API.
