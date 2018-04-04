@@ -123,15 +123,15 @@ class AccountElsewhere(Model):
             # We do this with a transaction so that if the insert fails, the
             # participant we reserved for them is rolled back as well.
             with cls.db.get_cursor() as cursor:
-                id = cursor.one("""
-                    INSERT INTO participants DEFAULT VALUES RETURNING id
-                """)
                 account = cursor.one("""
+                    WITH p AS (
+                             INSERT INTO participants DEFAULT VALUES RETURNING id
+                         )
                     INSERT INTO elsewhere
                                 (participant, {0})
-                         VALUES (%s, {1})
+                         VALUES ((SELECT id FROM p), {1})
                       RETURNING elsewhere.*::elsewhere_with_participant
-                """.format(cols, placeholders), (id,)+vals)
+                """.format(cols, placeholders), vals)
         except IntegrityError:
             # The account is already in the DB, update it instead
             if i.user_name and i.user_id:
