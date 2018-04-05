@@ -6,6 +6,7 @@ from collections import OrderedDict
 import os
 import re
 
+from mangopay.resources import DirectPayIn
 from mock import patch
 from pando import json, Response
 import pytest
@@ -102,7 +103,9 @@ class TestPages(BrowseTestHarness):
         self.browse_setup()
         self.browse(auth_as=self.david)
 
-    def test_active_participant_can_browse(self):
+    @patch('mangopay.resources.PayIn.get')
+    def test_active_participant_can_browse(self, get_payin):
+        get_payin.return_value = DirectPayIn()
         self.browse_setup()
         bob = self.make_participant('bob', balance=EUR(50))
         bob.set_tip_to(self.david, EUR('1.00'))

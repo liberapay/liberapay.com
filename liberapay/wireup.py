@@ -372,6 +372,12 @@ def billing(app_conf):
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/144
     mangopay.signals.request_finished.connect(liberapay.billing.watcher.on_response)
 
+    # https://github.com/Mangopay/mangopay2-python-sdk/issues/157
+    cls = mangopay.resources.DirectPayIn
+    field = mangopay.fields.Field(api_name='Billing')
+    field.add_to_class(cls, 'billing')
+    cls._meta.api_names[field.api_name] = field.name
+
 
 def username_restrictions(www_root):
     return {'restricted_usernames': os.listdir(www_root)}

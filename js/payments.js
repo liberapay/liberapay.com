@@ -90,7 +90,12 @@ Liberapay.payments.onSuccess = function(data) {
         $('#amount input[name="route_id"]').val(data.route_id);
     }
     $('#amount').parents('form').off('submit');  // prevents infinite loop
-    $('#amount').wrap('<form action="" method="POST">').parent().submit();
+    var $form = $('#amount').wrap('<form action="" method="POST">').parent();
+    var addr = $('#billing-address').attr('disabled', false).serializeArray();
+    $.each(addr, function () {
+        $('<input type="hidden">').attr('name', this.name).val(this.value).appendTo($form);
+    });
+    $form.submit();
 };
 
 

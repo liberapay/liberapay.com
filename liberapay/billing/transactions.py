@@ -115,7 +115,7 @@ def payout(db, route, amount, ignore_high_fee=False):
         return record_exchange_result(db, e_id, '', 'failed', error, participant)
 
 
-def charge(db, route, amount, return_url):
+def charge(db, route, amount, return_url, billing_address=None):
     """Charge the given credit card (`route`).
 
     Amount should be the nominal amount. We'll compute fees below this function
@@ -136,6 +136,8 @@ def charge(db, route, amount, return_url):
     e_id = record_exchange(db, route, amount, fee, vat, participant, 'pre').id
     payin = DirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
+    if billing_address:
+        payin.Billing = {'Address': billing_address}
     payin.CreditedWalletId = wallet.remote_id
     payin.DebitedFunds = charge_amount.int()
     payin.CardId = route.address

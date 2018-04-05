@@ -12,7 +12,7 @@ from liberapay.billing.transactions import (
 from liberapay.constants import FEE_PAYIN_CARD, PAYIN_CARD_MIN
 from liberapay.exceptions import InvalidNumber, Redirect
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import b64decode_s, get_participant, is_card_expired
+from liberapay.utils import b64decode_s, check_address, get_participant, is_card_expired
 from liberapay.utils.i18n import Money
 
 [---]
@@ -93,9 +93,20 @@ if request.method == 'POST':
             "'{0}' is not an acceptable amount (min={1}, max={2})",
             amount, amount_min, amount_max
         ))
+
+    body = request.body
+    billing_address = {
+        k: body.get('BillingAddress.' + k) for k in constants.POSTAL_ADDRESS_KEYS
+    }
+    nonempty = {k for k, v in billing_address.items() if v}
+    if not nonempty or nonempty == {'Country'}:
+        billing_address = None
+    elif not check_address(billing_address):
+        raise response.error(400, _("The provided postal address is incomplete."))
+
     return_url = website.canonical_url + request.path.raw
     try:
-        exchange = charge(website.db, route, amount, return_url)
+        exchange = charge(website.db, route, amount, return_url, billing_address)
     except Redirect as e:
         response.redirect(e.url)
     response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
@@ -111,6 +122,25 @@ if exchange and exchange.status == 'failed' and exchange.note[:7] in ('001599:',
 back_to = b64decode_s(request.path['back_to'], default=None)
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
+
+billing_address = None
+if show_form and route:
+    previous_payin_id = website.db.one("""
+        SELECT e.remote_id
+          FROM exchanges e
+          JOIN exchange_routes r ON r.id = e.route
+         WHERE e.participant = %s
+           AND r.network = 'mango-cc'
+      ORDER BY e.timestamp DESC
+         LIMIT 1
+    """, (participant.id,))
+    if previous_payin_id:
+        billing_address = (PayIn.get(previous_payin_id).Billing or {}).get('Address', {})
+        if not billing_address.get('Country'):
+            billing_address = None
+    if not billing_address:
+        mp_account = participant.get_mangopay_account()
+        billing_address = getattr(mp_account, 'Address', None)
 
 card = Card.get(route.address) if route else None
 if card:
@@ -263,6 +293,39 @@ title = _("Adding Money")
     % include "templates/identity-form.html"
     </fieldset>
     % endif
+
+
+    <h3>{{ _("Billing Address (optional)") }}</h3>
+    <p>{{ _(
+        "Card payments can sometimes be rejected when a billing address isn't "
+        "provided, or if it doesn't match the card holder's address of record. "
+        "To our knowledge only cards issued in the United States, the United "
+        "Kingdom and Australia are currently checked in this manner."
+    ) }}</p>
+    <div>
+        % if billing_address
+        <p>
+            <h5>{{ _("Saved address:") }}</h5>
+            {{ billing_address.AddressLine1 }}<br>
+            % if billing_address.AddressLine2
+                {{ billing_address.AddressLine2 }}<br>
+            % endif
+            {{ billing_address.PostalCode }} {{ billing_address.City }}<br>
+            % if billing_address.Region
+                {{ billing_address.Region }}<br>
+            % endif
+            {{ locale.countries.get(billing_address.Country, billing_address.Country) }}
+        </p>
+        % endif
+        <button class="btn btn-default btn-sm" type="button" data-modify="#billing-address">{{
+            _("Modify") if billing_address else _("Input the billing address")
+        }}</button>
+    </div>
+    <fieldset id="billing-address" class="hidden">
+        % include "templates/sandbox-warning.html"
+        % from "templates/postal-addresses.html" import postal_address_form with context
+        {{ postal_address_form('Billing', saved=billing_address, country=request.country) }}
+    </fieldset>
 
 
     % if not reinput_card
