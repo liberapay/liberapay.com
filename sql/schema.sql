@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '63'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '64'::jsonb);
 
 
 -- app configuration
@@ -157,6 +157,7 @@ CREATE TABLE elsewhere
 , connect_token         text
 , connect_expires       timestamptz
 , domain                text            NOT NULL -- NULL would break the unique indexes
+, info_fetched_at       timestamptz     NOT NULL DEFAULT current_timestamp
 , UNIQUE (participant, platform)
 , CONSTRAINT user_id_chk CHECK (user_id IS NOT NULL OR domain <> '' AND user_name IS NOT NULL)
 );
@@ -731,6 +732,15 @@ CREATE OR REPLACE FUNCTION clean_up_counters(pattern text, period float) RETURNS
                 AND ts < (current_timestamp - make_interval(secs => period))
           RETURNING 1
     ) SELECT count(*) FROM deleted;
+$$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION check_rate_limit(key text, cap int, period float) RETURNS boolean AS $$
+    SELECT coalesce(
+        ( SELECT counter - least(compute_leak(cap, period, r.ts), r.counter)
+            FROM rate_limiting AS r
+           WHERE r.key = key
+        ), 0
+    ) < cap;
 $$ LANGUAGE sql;
 
 
