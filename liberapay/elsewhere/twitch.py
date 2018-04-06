@@ -1,31 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from requests_oauthlib import OAuth2Session
-
 from liberapay.elsewhere._base import PlatformOAuth2
 from liberapay.elsewhere._extractors import key
-from liberapay.elsewhere._paginators import query_param_paginator
-
-
-class SpecialDict(dict):
-
-    __nonzero__ = __bool__ = lambda self: True
-
-    def __setitem__(self, k, v):
-        if k.lower() == 'authorization' and v and v.startswith('Bearer '):
-            v = 'OAuth' + v[6:]
-        return dict.__setitem__(self, k, v)
-
-
-class TwitchOAuthSession(OAuth2Session):
-    """
-    Twitch's OAuth implementation isn't standard-compliant, it expects `OAuth`
-    as the request authorization type instead of `Bearer`.
-    """
-
-    def request(self, *args, **kw):
-        kw['headers'] = SpecialDict(kw['headers'])
-        return super(TwitchOAuthSession, self).request(*args, **kw)
+from liberapay.elsewhere._paginators import cursor_paginator
 
 
 class Twitch(PlatformOAuth2):
@@ -37,26 +14,29 @@ class Twitch(PlatformOAuth2):
     user_type = 'channel'
 
     # Auth attributes
-    auth_url = 'https://api.twitch.tv/kraken/oauth2/authorize'
-    access_token_url = 'https://api.twitch.tv/kraken/oauth2/token'
-    oauth_default_scope = ['channel_read']
-    session_class = TwitchOAuthSession
+    # https://dev.twitch.tv/docs/authentication/
+    auth_url = 'https://id.twitch.tv/oauth2/authorize'
+    access_token_url = 'https://id.twitch.tv/oauth2/token'
+    can_auth_with_client_credentials = True
 
     # API attributes
-    api_headers = {'Accept': 'application/vnd.twitchtv.v5+json'}
     api_format = 'json'
-    api_paginator = query_param_paginator('cursor', next='_cursor', total='_total')
-    api_url = 'https://api.twitch.tv/kraken'
-    api_user_info_path = '/channels/{user_id}'
-    api_user_self_info_path = '/channel'
-    api_friends_path = '/users/{user_id}/follows/channels'
-    api_search_path = '/search/channels?query={query}'
+    api_paginator = cursor_paginator(
+        ('pagination', 'cursor'), page='data', next='after', prev='before'
+    )
+    api_url = 'https://api.twitch.tv/helix'
+    api_user_info_path = '/users?id={user_id}'
+    api_user_name_info_path = '/users?login={user_name}'
+    api_user_self_info_path = '/users'
+
+    # api_friends_path = '/users/follows?from_id={user_id}'
+    # This endpoint only returns user IDs, not a list of user info objects
 
     # User info extractors
-    x_user_info = key('channel')
-    x_user_id = key('_id')
-    x_user_name = key('name')
+    x_user_info = key('data', clean=lambda o: o[0] if isinstance(o, list) and len(o) == 1 else o)
+    x_user_id = key('id')
+    x_user_name = key('login')
     x_display_name = key('display_name')
     x_email = key('email')
-    x_avatar_url = key('logo')
+    x_avatar_url = key('profile_image_url')
     x_description = key('description')

@@ -5,6 +5,7 @@ from time import sleep
 
 from postgres.orm import Model
 
+from liberapay.constants import RATE_LIMITS
 from liberapay.cron import logger
 from liberapay.models.participant import Participant
 from liberapay.utils import utcnow
@@ -62,25 +63,40 @@ def upsert_repos(cursor, repos, participant, info_fetched_at):
 
 
 def refetch_repos():
+    # Note: the rate_limiting table is used to avoid blocking on errors
+    rl_prefix = 'refetch_repos'
+    rl_cap, rl_period = RATE_LIMITS[rl_prefix]
+    repo = website.db.one("""
+        SELECT r.participant, r.platform
+          FROM repositories r
+         WHERE r.info_fetched_at < now() - interval '6 days'
+           AND r.participant IS NOT NULL
+           AND r.show_on_profile
+           AND check_rate_limit(%s || r.participant::text || ':' || r.platform, %s, %s)
+      ORDER BY r.info_fetched_at ASC
+         LIMIT 1
+    """, (rl_prefix + ':', rl_cap, rl_period))
+    if not repo:
+        return
+
+    rl_key = '%s:%s' % (repo.participant, repo.platform)
+    website.db.hit_rate_limit(rl_prefix, rl_key)
+    participant = Participant.from_id(repo.participant)
+    account = participant.get_account_elsewhere(repo.platform)
+    sess = account.get_auth_session()
+    logger.debug(
+        "Refetching profile data for participant ~%s from %s account %s" %
+        (participant.id, account.platform, account.user_id)
+    )
+    account = account.refresh_user_info()
+    sleep(1)
+
+    logger.debug(
+        "Refetching repository data for participant ~%s from %s account %s" %
+        (participant.id, account.platform, account.user_id)
+    )
+    start_time = utcnow()
     with website.db.get_cursor() as cursor:
-        repo = cursor.one("""
-            SELECT r.participant, r.platform
-              FROM repositories r
-             WHERE r.info_fetched_at < now() - interval '6 days'
-               AND r.participant IS NOT NULL
-          ORDER BY r.info_fetched_at ASC
-             LIMIT 1
-        """)
-        if not repo:
-            return
-        participant = Participant.from_id(repo.participant)
-        account = participant.get_account_elsewhere(repo.platform)
-        sess = account.get_auth_session()
-        start_time = utcnow()
-        logger.debug(
-            "Refetching repository data for participant ~%s from %s account %s" %
-            (participant.id, account.platform, account.user_id)
-        )
         next_page = None
         for i in range(10):
             r = account.platform_data.get_repos(account, page_url=next_page, sess=sess)
@@ -102,3 +118,13 @@ def refetch_repos():
         event_type = 'fetch_repos:%s' % account.id
         payload = dict(partial_list=bool(next_page), deleted_count=deleted_count)
         participant.add_event(cursor, event_type, payload)
+        cursor.run("""
+            DELETE FROM events
+             WHERE participant = %s
+               AND type = %s
+               AND (NOT payload ? 'deleted_count' OR payload->'deleted_count' = '0')
+               AND ts < (current_timestamp - interval '6 days')
+        """, (participant.id, event_type))
+
+    # The update was successful, clean up the rate_limiting table
+    website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))

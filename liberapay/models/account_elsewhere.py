@@ -7,12 +7,14 @@ import xml.etree.ElementTree as ET
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
+from oauthlib.oauth2 import TokenExpiredError
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-from liberapay.constants import AVATAR_QUERY, SUMMARY_MAX_SIZE
+from liberapay.constants import AVATAR_QUERY, RATE_LIMITS, SUMMARY_MAX_SIZE
+from liberapay.cron import logger
 from liberapay.elsewhere._exceptions import BadUserId, UserNotFound
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import excerpt_intro
@@ -95,6 +97,8 @@ class AccountElsewhere(Model):
         """Insert or update a user's info.
         """
 
+        i.info_fetched_at = utcnow()
+
         # Clean up avatar_url
         if i.avatar_url:
             scheme, netloc, path, query, fragment = urlsplit(i.avatar_url)
@@ -119,15 +123,15 @@ class AccountElsewhere(Model):
             # We do this with a transaction so that if the insert fails, the
             # participant we reserved for them is rolled back as well.
             with cls.db.get_cursor() as cursor:
-                id = cursor.one("""
-                    INSERT INTO participants DEFAULT VALUES RETURNING id
-                """)
                 account = cursor.one("""
+                    WITH p AS (
+                             INSERT INTO participants DEFAULT VALUES RETURNING id
+                         )
                     INSERT INTO elsewhere
                                 (participant, {0})
-                         VALUES (%s, {1})
+                         VALUES ((SELECT id FROM p), {1})
                       RETURNING elsewhere.*::elsewhere_with_participant
-                """.format(cols, placeholders), (id,)+vals)
+                """.format(cols, placeholders), vals)
         except IntegrityError:
             # The account is already in the DB, update it instead
             if i.user_name and i.user_id:
@@ -264,6 +268,20 @@ class AccountElsewhere(Model):
         """, (json.dumps(token), self.id))
         self.set_attributes(token=token)
 
+    def refresh_user_info(self):
+        """Refetch the account's info from the platform and update it in the DB.
+
+        Returns a new `AccountElsewhere` instance containing the updated data.
+        """
+        platform = self.platform_data
+        sess = self.get_auth_session()
+        try:
+            info = platform.get_user_info(self.domain, 'user_id', self.user_id, sess)
+        except TokenExpiredError:
+            self.db.run("UPDATE elsewhere SET token = NULL WHERE id = %s", (self.id,))
+            info = platform.get_user_info(self.domain, 'user_id', self.user_id)
+        return self.upsert(info)
+
 
 def get_account_elsewhere(website, state, api_lookup=True):
     path = state['request'].line.uri.path
@@ -305,3 +323,30 @@ def get_account_elsewhere(website, state, api_lookup=True):
             raise response.error(404, err)
         account = AccountElsewhere.upsert(user_info)
     return platform, account
+
+
+def refetch_elsewhere_data():
+    # Note: the rate_limiting table is used to avoid blocking on errors
+    rl_prefix = 'refetch_elsewhere_data'
+    rl_cap, rl_period = RATE_LIMITS[rl_prefix]
+    account = website.db.one("""
+        SELECT (e, p)::elsewhere_with_participant
+          FROM elsewhere e
+          JOIN participants p ON p.id = e.participant
+         WHERE e.info_fetched_at < now() - interval '90 days'
+           AND (p.status = 'active' OR p.receiving > 0)
+           AND check_rate_limit(%s || e.platform || ':' || e.user_id, %s, %s)
+      ORDER BY e.info_fetched_at ASC
+         LIMIT 1
+    """, (rl_prefix + ':', rl_cap, rl_period))
+    if not account:
+        return
+    rl_key = '%s:%s' % (account.platform, account.user_id)
+    website.db.hit_rate_limit(rl_prefix, rl_key)
+    logger.debug(
+        "Refetching data of %s account %s (participant %i)" %
+        (account.platform, account.user_id, account.participant.id)
+    )
+    account.refresh_user_info()
+    # The update was successful, clean up the rate_limiting table
+    website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))

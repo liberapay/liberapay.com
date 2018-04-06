@@ -2,6 +2,8 @@
 """
 from __future__ import unicode_literals
 
+from functools import reduce
+from operator import getitem
 try:
     from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 except ImportError:
@@ -40,7 +42,6 @@ links_keys = set('prev next first last'.split())
 
 def query_param_paginator(param, **kw):
     # https://developers.google.com/+/api/#pagination
-    # https://dev.twitter.com/overview/api/cursoring
     page_key = kw.get('page')
     total_key = kw.get('total')
     links_keys_map = tuple((k, v) for k, v in kw.items() if k in links_keys)
@@ -57,6 +58,34 @@ def query_param_paginator(param, **kw):
             lists = [a for a in parsed.values() if isinstance(a, list)]
             assert len(lists) == 1
             page = next(iter(lists))
+        total_count = parsed.get(total_key, -1) if links else len(page)
+        return page, total_count, links
+    return f
+
+
+def cursor_paginator(cursor_key, **kw):
+    # https://dev.twitch.tv/docs/api/reference/
+    if not isinstance(cursor_key, tuple):
+        cursor_key = (cursor_key,)
+    page_key = kw.get('page')
+    total_key = kw.get('total')
+    links_keys_map = tuple((k, v) for k, v in kw.items() if k in links_keys)
+    def f(self, response, parsed):
+        url = _strip_prefix(self.api_url, response.request.url)
+        try:
+            cursor = reduce(getitem, cursor_key, parsed)
+        except KeyError:
+            cursor = None
+        if cursor:
+            links = {k: _modify_query(url, k2, cursor) for k, k2 in links_keys_map}
+        else:
+            links = {}
+        if page_key:
+            page = parsed[page_key]
+        else:
+            lists = [a for a in parsed.values() if isinstance(a, list)]
+            assert len(lists) == 1
+            page = lists[0]
         total_count = parsed.get(total_key, -1) if links else len(page)
         return page, total_count, links
     return f

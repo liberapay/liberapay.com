@@ -128,9 +128,6 @@ class Platform(object):
         if error_handler is True:
             error_handler = self.api_error_handler
         status = response.status_code
-        if status == 401 and isinstance(self, PlatformOAuth1) and is_user_session:
-            # https://tools.ietf.org/html/rfc5849#section-3.2
-            raise TokenExpiredError
         if status not in (200, 201) and error_handler:
             error_handler(response, is_user_session, domain)
 
@@ -150,6 +147,9 @@ class Platform(object):
         status = response.status_code
         if status == 404:
             raise Response(404, response.text)
+        if status == 401 and is_user_session:
+            # https://tools.ietf.org/html/rfc5849#section-3.2
+            raise TokenExpiredError
         if status == 429 and is_user_session:
             limit, remaining, reset = self.get_ratelimit_headers(response)
             def msg(_, to_age):
@@ -216,6 +216,8 @@ class Platform(object):
         """
         r = UserInfo(platform=self.name)
         info = self.x_user_info(r, info, info)
+        if not info:
+            return
         r.domain = self.x_domain(r, info, '')
         assert r.domain is not None
         if not self.single_domain:
@@ -274,12 +276,22 @@ class Platform(object):
         def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
                 raise UserNotFound(value, key)
+            if response.status_code == 401 and is_user_session:
+                raise TokenExpiredError
             if response.status_code in (400, 401, 403, 414):
                 raise BadUserId(value, key)
             self.api_error_handler(response, is_user_session, domain)
         response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
         info = self.api_parser(response)
-        return self.extract_user_info(info, domain)
+        if not info:
+            raise UserNotFound(value, key)
+        if isinstance(info, list):
+            assert len(info) == 1, info
+            info = info[0]
+        r = self.extract_user_info(info, domain)
+        if r is None:
+            raise UserNotFound(value, key)
+        return r
 
     def get_user_self_info(self, domain, sess):
         """Get the authenticated user's info from the API.
