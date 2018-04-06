@@ -21,7 +21,7 @@ year = request.qs.get_int('year', now.year)
 month = request.qs.get_int('month', (now.month - 1) or 12)
 
 join_time = participant.join_time
-if (year, month) < (join_time.year, join_time.year):
+if (year, month) < (join_time.year, join_time.month):
     raise response.error(400, "the requested month predates the account's creation")
 
 ledger = get_ledger(
