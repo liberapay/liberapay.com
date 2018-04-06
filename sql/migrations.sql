@@ -1353,11 +1353,11 @@ ALTER TABLE elsewhere
     ALTER COLUMN info_fetched_at SET DEFAULT current_timestamp;
 INSERT INTO app_conf VALUES
     ('refetch_elsewhere_data_every', '120'::jsonb);
-CREATE OR REPLACE FUNCTION check_rate_limit(key text, cap int, period float) RETURNS boolean AS $$
+CREATE OR REPLACE FUNCTION check_rate_limit(k text, cap int, period float) RETURNS boolean AS $$
     SELECT coalesce(
         ( SELECT counter - least(compute_leak(cap, period, r.ts), r.counter)
             FROM rate_limiting AS r
-           WHERE r.key = key
+           WHERE r.key = k
         ), 0
     ) < cap;
 $$ LANGUAGE sql;

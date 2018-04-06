@@ -734,11 +734,11 @@ CREATE OR REPLACE FUNCTION clean_up_counters(pattern text, period float) RETURNS
     ) SELECT count(*) FROM deleted;
 $$ LANGUAGE sql;
 
-CREATE OR REPLACE FUNCTION check_rate_limit(key text, cap int, period float) RETURNS boolean AS $$
+CREATE OR REPLACE FUNCTION check_rate_limit(k text, cap int, period float) RETURNS boolean AS $$
     SELECT coalesce(
         ( SELECT counter - least(compute_leak(cap, period, r.ts), r.counter)
             FROM rate_limiting AS r
-           WHERE r.key = key
+           WHERE r.key = k
         ), 0
     ) < cap;
 $$ LANGUAGE sql;
