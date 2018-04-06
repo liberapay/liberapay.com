@@ -187,26 +187,49 @@ output.body = render(globals(), allow_partial_i18n=False)
         <tr>
             <td>
             % set context = event['context']
-            % set to = event['username']
-            % if context == 'final-gift'
-                {{ _("final gift to {0}", to) }}
-            % elif context == 'take'
-                {{ _("donation to {0} for their role in the {1} team", to, event['team_name']) }}
-            % elif context == 'refund'
-                {{ _("refund of anonymous donation") }}
-            % elif context == 'expense'
-                {{ _("payment of {link_open}expense #{invoice_id}{link_close} to {payee}",
-                     link_open='<a href="%s">'|safe % event['invoice_url'],
-                     invoice_id=event['invoice'],
-                     link_close='</a>'|safe,
-                     payee=to,
-                ) }}
-            % elif context == 'tip'
-                {{ _("donation to {0}", to) }}
-            % elif context == 'chargeback'
-                {{ _("chargeback") }}
-            % elif context == 'debt'
-                {{ _("debt repayment") }}
+            % if event['tippee'] == participant.id
+                % if context == 'take'
+                    {{ _("anonymous donation for your role in the {0} team", event['team_name']) }}
+                % elif context == 'refund'
+                    {{ _("donation refund") }}
+                % elif context == 'expense'
+                    {{ _("reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}",
+                         link_open='',
+                         invoice_id=event['invoice'],
+                         link_close='',
+                         payer=event['username'],
+                    ) }}
+                % elif context == 'tip'
+                    {{ _("anonymous donation") }}
+                % elif context == 'final-gift'
+                    {{ _("one-off donation from someone closing their account") }}
+                % elif context == 'chargeback'
+                    {{ _("chargeback") }}
+                % elif context == 'debt'
+                    {{ _("debt repayment") }}
+                % endif
+            % else
+                % set to = event['username']
+                % if context == 'final-gift'
+                    {{ _("final gift to {0}", to) }}
+                % elif context == 'take'
+                    {{ _("donation to {0} for their role in the {1} team", to, event['team_name']) }}
+                % elif context == 'refund'
+                    {{ _("refund of anonymous donation") }}
+                % elif context == 'expense'
+                    {{ _("payment of {link_open}expense #{invoice_id}{link_close} to {payee}",
+                         link_open='',
+                         invoice_id=event['invoice'],
+                         link_close='',
+                         payee=to,
+                    ) }}
+                % elif context == 'tip'
+                    {{ _("donation to {0}", to) }}
+                % elif context == 'chargeback'
+                    {{ _("chargeback") }}
+                % elif context == 'debt'
+                    {{ _("debt repayment") }}
+                % endif
             % endif
             </td>
             <td>{{ format_money(abs(event['wallet_delta'])) if event['wallet_delta'] < 0 else '' }}</td>
