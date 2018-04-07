@@ -211,34 +211,37 @@ class Participant(Model, MixinTeam):
         if not (v1 and v2):
             return
         if k1 in ('username', 'email'):
-            k1 = 'lower(%s)' % k1
+            k1 = 'lower(p.%s)' % k1
             v1 = v1.lower()
         elif k1 == 'id':
             try:
                 v1 = int(v1)
             except (ValueError, TypeError):
                 return
-        p = cls._from_thing(k1, v1)
-        if not p:
-            return
         if k2 == 'session':
-            session = cls.db.one("""
-                SELECT *
-                  FROM user_sessions
-                 WHERE participant = %s
-                   AND expires_at > current_timestamp
-            """, (p.id,))
-            if not session:
+            r = cls.db.one("""
+                SELECT p, s.token
+                  FROM participants p
+                  JOIN user_sessions s ON s.participant = p.id
+                 WHERE {0} = %s
+                   AND s.expires_at > current_timestamp
+            """.format(k1), (v1,))
+            if not r:
                 return
-            if constant_time_compare(session.token, v2):
+            p, token = r
+            if constant_time_compare(token, v2):
                 p.authenticated = True
                 return p
         elif k2 == 'password':
-            password = cls.db.one(
-                "SELECT password FROM user_passwords WHERE participant = %s", (p.id,)
-            )
-            if not password:
+            r = cls.db.one("""
+                SELECT p, s.password
+                  FROM participants p
+                  JOIN user_passwords s ON s.participant = p.id
+                 WHERE {0} = %s
+            """.format(k1), (v1,))
+            if not r:
                 return
+            p, password = r
             if context == 'log-in':
                 cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
             algo, rounds, salt, hashed = password.split('$', 3)
