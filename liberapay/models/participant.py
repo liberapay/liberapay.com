@@ -206,39 +206,39 @@ class Participant(Model, MixinTeam):
         """, (mangopay_user_id,))
 
     @classmethod
-    def authenticate(cls, k1, k2, v1=None, v2=None, context='log-in'):
-        assert k1 in ('id', 'username', 'email')
-        if not (v1 and v2):
+    def authenticate(cls, type_of_id, type_of_secret, id=None, secret=None, context='log-in'):
+        assert type_of_id in ('id', 'username', 'email')
+        if not (id and secret):
             return
-        if k1 in ('username', 'email'):
-            k1 = 'lower(p.%s)' % k1
-            v1 = v1.lower()
-        elif k1 == 'id':
+        if type_of_id in ('username', 'email'):
+            type_of_id = 'lower(p.%s)' % type_of_id
+            id = id.lower()
+        elif type_of_id == 'id':
             try:
-                v1 = int(v1)
+                id = int(id)
             except (ValueError, TypeError):
                 return
-        if k2 == 'session':
+        if type_of_secret == 'session':
             r = cls.db.one("""
                 SELECT p, s.token
                   FROM participants p
                   JOIN user_sessions s ON s.participant = p.id
                  WHERE {0} = %s
                    AND s.expires_at > current_timestamp
-            """.format(k1), (v1,))
+            """.format(type_of_id), (id,))
             if not r:
                 return
             p, token = r
-            if constant_time_compare(token, v2):
+            if constant_time_compare(token, secret):
                 p.authenticated = True
                 return p
-        elif k2 == 'password':
+        elif type_of_secret == 'password':
             r = cls.db.one("""
                 SELECT p, s.password
                   FROM participants p
                   JOIN user_passwords s ON s.participant = p.id
                  WHERE {0} = %s
-            """.format(k1), (v1,))
+            """.format(type_of_id), (id,))
             if not r:
                 return
             p, password = r
@@ -247,11 +247,11 @@ class Participant(Model, MixinTeam):
             algo, rounds, salt, hashed = password.split('$', 3)
             rounds = int(rounds)
             salt, hashed = b64decode(salt), b64decode(hashed)
-            if constant_time_compare(cls._hash_password(v2, algo, salt, rounds), hashed):
+            if constant_time_compare(cls._hash_password(secret, algo, salt, rounds), hashed):
                 p.authenticated = True
                 if len(salt) < 32:
                     # Update the password hash in the DB
-                    hashed = cls.hash_password(v2)
+                    hashed = cls.hash_password(secret)
                     cls.db.run("UPDATE user_passwords SET secret = %s WHERE participant = %s",
                                (hashed, p.id))
                 return p
