@@ -17,9 +17,9 @@ if 'new-password' in body:
         raise response.error(403)
 
     # Check the old password, if necessary
-    if p.session_token and p.session_token.endswith('.em'):
+    if p.session and p.session.token.endswith('.em'):
         pass  # user logged in via email, allow resetting password
-    elif not p.password:
+    elif not p.has_password:
         pass  # user doesn't have a password yet, allow adding one
     else:
         p = Participant.authenticate(

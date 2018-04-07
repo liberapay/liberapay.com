@@ -60,9 +60,8 @@ class ClientWithAuth(Client):
         # user authentication
         auth_as = kw.pop('auth_as', None)
         if auth_as:
-            assert auth_as.session_token
             cookies = kw.setdefault('cookies', {})
-            cookies[SESSION] = '%s:%s' % (auth_as.id, auth_as.session_token)
+            cookies[SESSION] = '%s:%s' % (auth_as.id, auth_as.session.token)
 
         return Client.build_wsgi_environ(self, *a, **kw)
 
@@ -174,9 +173,8 @@ class Harness(unittest.TestCase):
                 kw2[key] = kw.pop(key)
 
         kind = kw.setdefault('kind', 'individual')
-        if kind not in ('group', 'community'):
-            kw.setdefault('password', 'x')
-            kw.setdefault('session_token', username)
+        is_person = kind not in ('group', 'community')
+        if is_person:
             i = next(self.seq)
             kw.setdefault('mangopay_user_id', -i)
         kw.setdefault('status', 'active')
@@ -198,13 +196,16 @@ class Harness(unittest.TestCase):
               RETURNING participants.*::participants
         """.format(cols, placeholders), vals)
 
+        if is_person:
+            participant.start_session()
+
         self.db.run("""
             INSERT INTO elsewhere
                         (platform, user_id, user_name, participant, domain)
                  VALUES (%s,%s,%s,%s,%s)
         """, (platform, participant.id, username, participant.id, domain))
 
-        if kind not in ('group', 'community') and participant.mangopay_user_id:
+        if is_person and participant.mangopay_user_id:
             wallet_id = kw2.get('mangopay_wallet_id', -participant.id)
             zero = ZERO[participant.main_currency]
             self.db.run("""

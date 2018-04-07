@@ -42,7 +42,7 @@ class TestLogIn(EmailHarness):
         p = p.refetch()
         # Basic checks
         assert r.code == 302
-        expected = str('%s:%s') % (p.id, p.session_token)
+        expected = str('%s:%s') % (p.id, p.session.token)
         sess_cookie = r.headers.cookie[SESSION]
         assert sess_cookie.value == expected
         expires = sess_cookie[str('expires')]
@@ -148,18 +148,18 @@ class TestLogIn(EmailHarness):
         data = {'log-in.id': email.upper()}
         r = self.client.POST('/', data, raise_immediately=False)
         alice = alice.refetch()
-        assert alice.session_token not in r.headers.raw.decode('ascii')
-        assert alice.session_token not in r.body.decode('utf8')
+        assert alice.session.token not in r.headers.raw.decode('ascii')
+        assert alice.session.token not in r.body.decode('utf8')
 
         Participant.dequeue_emails()
         last_email = self.get_last_email()
         assert last_email and last_email['subject'] == 'Log in to Liberapay'
-        assert 'log-in.token='+alice.session_token in last_email['text']
+        assert 'log-in.token='+alice.session.token in last_email['text']
 
         url = '/alice/?foo=bar&log-in.id=%s&log-in.token=%s'
-        r = self.client.GxT(url % (alice.id, alice.session_token))
+        r = self.client.GxT(url % (alice.id, alice.session.token))
         alice2 = alice.refetch()
-        assert alice2.session_token != alice.session_token
+        assert alice2.session.token != alice.session.token
         # ↑ this means that the link is only valid once
         assert r.code == 302
         assert r.headers[b'Location'] == b'http://localhost/alice/?foo=bar'

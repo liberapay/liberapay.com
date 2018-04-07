@@ -229,8 +229,8 @@ class Tests(Harness):
         alice.keep_signed_in(cookies)
         assert SESSION not in cookies
         cookies = SimpleCookie()
-        expires = alice.session_expires
-        alice.set_session_expires(expires - SESSION_REFRESH)
+        expires = alice.session.expires_at
+        alice.set_session_expires_at(expires - SESSION_REFRESH)
         alice.keep_signed_in(cookies)
         assert SESSION in cookies
 

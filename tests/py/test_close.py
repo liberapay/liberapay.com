@@ -1,7 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from datetime import date
-
 import pytest
 
 from liberapay.billing.payday import Payday
@@ -262,8 +260,6 @@ class TestClosing(FakeTransfersHarness):
             hide_receiving=True,
             avatar_url='img-url',
             email='alice@example.com',
-            session_token='deadbeef',
-            session_expires='2000-01-01',
             giving=EUR(20),
             receiving=EUR(40),
             npatrons=21,
@@ -284,8 +280,6 @@ class TestClosing(FakeTransfersHarness):
         assert alice.giving == new_alice.giving == 0
         assert alice.receiving == new_alice.receiving == 0
         assert alice.npatrons == new_alice.npatrons == 0
-        assert alice.session_token == new_alice.session_token == None
-        assert alice.session_expires.year == new_alice.session_expires.year == date.today().year
         emails = alice.get_emails()
         assert len(emails) == 1
         assert emails[0].address == 'alice@example.com'

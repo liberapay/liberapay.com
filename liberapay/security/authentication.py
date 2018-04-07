@@ -6,9 +6,11 @@ from six.moves.urllib.parse import urlencode
 
 from pando import Response
 
-from liberapay.constants import CURRENCIES, SESSION, SESSION_TIMEOUT
+from liberapay.constants import (
+    CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE, SESSION, SESSION_TIMEOUT
+)
 from liberapay.exceptions import (
-    LoginRequired, TooManyLoginEmails, TooManySignUps
+    BadPasswordSize, LoginRequired, TooManyLoginEmails, TooManySignUps
 )
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
@@ -79,7 +81,7 @@ def sign_in_with_form_data(body, state):
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
                 p.start_session()
-                qs = {'log-in.id': p.id, 'log-in.token': p.session_token}
+                qs = {'log-in.id': p.id, 'log-in.token': p.session.token}
                 p.send_email(
                     'login_link',
                     email,
@@ -106,17 +108,24 @@ def sign_in_with_form_data(body, state):
         currency = body.pop('sign-in.currency', 'EUR')
         if currency not in CURRENCIES:
             raise response.error(400, "`currency` value '%s' is invalid of non-supported" % currency)
+        password = body.pop('sign-in.password', None)
+        if password:
+            l = len(password)
+            if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
+                raise BadPasswordSize
         src_addr = state['request'].source
         website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-net', get_ip_net(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
         with website.db.get_cursor() as c:
             p = Participant.make_active(
-                kind, currency, body.pop('sign-in.username', None),
-                body.pop('sign-in.password', None), cursor=c,
+                kind, currency, body.pop('sign-in.username', None), cursor=c,
             )
             p.set_email_lang(state['locale'].language, cursor=c)
             p.add_email(email, cursor=c)
+        if password:
+            p.update_password(password)
+            p.check_password(password, context='login')
         p.authenticated = True
 
     return p
