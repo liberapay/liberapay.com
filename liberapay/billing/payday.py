@@ -922,7 +922,7 @@ class Payday(object):
                      SELECT t.tipper, sum(t.amount) AS needed
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
-                      WHERE p2.mangopay_user_id IS NOT NULL
+                      WHERE (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
                         AND p2.status = 'active'
                         AND p2.is_suspended IS NOT true
                    GROUP BY t.tipper, t.amount::currency
