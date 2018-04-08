@@ -1,5 +1,5 @@
 msgid ""
-msgstr "PO-Revision-Date: 2018-04-08 18:08+0000\nLast-Translator: Allan Nordhøy <epost@anotheragency.no>\nLanguage-Team: Norwegian (https://hosted.weblate.org/projects/liberapay/core/nb/)\nLanguage: nb\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 2.20\nGenerated-By: Babel 2.3.4\n"
+msgstr "PO-Revision-Date: 2018-04-08 18:16+0000\nLast-Translator: Allan Nordhøy <epost@anotheragency.no>\nLanguage-Team: Norwegian (https://hosted.weblate.org/projects/liberapay/core/nb/)\nLanguage: nb\nMIME-Version: 1.0\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 2.20\nGenerated-By: Babel 2.3.4\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -39,15 +39,15 @@ msgstr "Du er ikke medlem av noe lag, så du har ikke mottatt donasjoner for del
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
 msgstr[0] "Du ble ikke tildelt noen penger for deltagelsen din i {0}-laget."
-msgstr[1] "Du ble ikke tildelt noen penger for deltagelsen din i {n} laget."
+msgstr[1] "Du ble ikke tildelt noen penger for deltagelsen din i {n}-laget."
 
 #, python-brace-format
 msgid "{0} were given to you for your role in the {1} team."
-msgstr "{0} ble tildelt deg for din rolle i det {1} teamet."
+msgstr "{0} ble tildelt deg for din rolle i {1}-laget."
 
 #, python-brace-format
 msgid "{0} were given to you for your roles in the following teams:"
-msgstr "Du har fått {0} for din rolle i følgende team:"
+msgstr "Du har fått {0} for din rolle i følgende lag:"
 
 #, python-brace-format
 msgid "{0}: {1}"
@@ -70,11 +70,11 @@ msgstr "Din faktura til {0} har blitt godkjent - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr "Forespørselen din om å utbetale {amount} fra {addressee_name} er blitt godkjent."
+msgstr "Forespørselen din om å utbetale {amount} fra {addressee_name} har blitt godkjent."
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "Det er dessverre ikke nok penger i lommeboken til  {0} til at du kan bli betalt akkurat nå. Pengene vil bli utbetalt automatisk så snart det er penger i den."
+msgstr "Dessverre inneholder lommeboken til {0} ikke nok til at du kan bli betalt akkurat nå. Pengene vil bli utbetalt automatisk så snart det er penger i den."
 
 msgid "View the invoice"
 msgstr "Se faktura"
@@ -99,7 +99,7 @@ msgstr "Fakturaen din til {0} har blitt avvist - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
-msgstr "Forespørselen din om en utbetaling på {amount} fra {addressee_name} har blitt avvist."
+msgstr "Forespørselen din om utbetaling på {amount} fra {addressee_name} har blitt avvist."
 
 #, python-brace-format
 msgid "Reason: “{0}”"
@@ -110,7 +110,7 @@ msgstr "Logg inn på Liberapay"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
-msgstr "Noen (forhåpentligvis deg) har bedt om å få adgang til {0} kontoen på Liberapay."
+msgstr "Noen (forhåpentligvis deg) har bedt om adgang til {0}-kontoen på Liberapay."
 
 msgid "Follow this link to proceed:"
 msgstr "Følg denne lenken for å fortsette:"
@@ -145,27 +145,27 @@ msgid "Bank wire to your Liberapay wallet"
 msgstr "Bankoverføring til din Liberapay-lommebok"
 
 msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Bankforbindelsen til din Liberapay-lommebok har tatt for lang tid og er gått ut"
+msgstr "Bankforbindelsen til din Liberapay-lommebok har tatt for lang tid og er utløpt"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
 msgstr "Den {date} oppga du at du skulle overføre {money_amount} fra bankkontoen din til Liberapay-lommeboken din, men pengene kom aldri frem."
 
 msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "I tilfelle du har glemt det, kan utføre en ny betaling:"
+msgstr "I fall du har glemt det, kan utføre en ny betaling:"
 
 msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Bankoverførselen til Liberapay-lommeboken din ble dessverre mislykket"
+msgstr "Bankoverføringen til Liberapay-lommeboken din mislyktes"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Du kan prøve igjen, muligens med en ny betalingsmetode, ved å klikke på lenken nedenfor:"
+msgstr "Du kan prøve igjen, muligens med ny betalingsmetode, ved å klikke på lenken nedenfor:"
 
 msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Bankoverførselen til Liberapay-lommeboken din var vellykket"
+msgstr "Penger ble overført til Liberapay-lommeboken per bankoverføring"
 
 #, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Vi er glade for at kunne meddele at overførselen fra din bankkonto var vellykket. Av de {0} du har sendt ble {1} lagt til i din Liberapay-lommebok, mens {2} ble betalt i gebyrer."
+msgstr "Av de {0} du har sendt ble {1} lagt til i din Liberapay-lommebok, mens {2} ble betalt i gebyrer."
 
 msgid "View receipt"
 msgstr "Vis kvittering"
