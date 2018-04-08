@@ -43,7 +43,7 @@ Liberapay.init = function() {
         location.href = this.getAttribute('href');
         return false;
     });
-    
+
     $('.navbar .dropdown-hover').removeClass('dropdown-hover');
 
     $('.dropdown-toggle-form').click(function() {
