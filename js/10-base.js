@@ -40,7 +40,8 @@ Liberapay.init = function() {
     Liberapay.s3_uploader_init();
 
     $('div[href]').css('cursor', 'pointer').click(function() {
-        window.location.assign(this.getAttribute('href'));
+        location.href = this.getAttribute('href');
+        return false;
     });
     
     $('.navbar .dropdown-hover').removeClass('dropdown-hover');
