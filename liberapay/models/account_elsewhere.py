@@ -341,13 +341,13 @@ def refetch_elsewhere_data():
           JOIN participants p ON p.id = e.participant
          WHERE e.info_fetched_at < now() - interval '90 days'
            AND (p.status = 'active' OR p.receiving > 0)
-           AND check_rate_limit(%s || e.platform || ':' || e.user_id, %s, %s)
+           AND check_rate_limit(%s || e.id::text, %s, %s)
       ORDER BY e.info_fetched_at ASC
          LIMIT 1
     """, (rl_prefix + ':', rl_cap, rl_period))
     if not account:
         return
-    rl_key = '%s:%s' % (account.platform, account.user_id)
+    rl_key = str(account.id)
     website.db.hit_rate_limit(rl_prefix, rl_key)
     logger.debug(
         "Refetching data of %s account %s (participant %i)" %
