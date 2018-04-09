@@ -3,10 +3,12 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import json
 from time import sleep
 
+from oauthlib.oauth2 import TokenExpiredError
 from postgres.orm import Model
 
 from liberapay.constants import RATE_LIMITS
 from liberapay.cron import logger
+from liberapay.elsewhere._exceptions import UserNotFound
 from liberapay.models.participant import Participant
 from liberapay.utils import utcnow
 from liberapay.website import website
@@ -88,7 +90,10 @@ def refetch_repos():
         "Refetching profile data for participant ~%s from %s account %s" %
         (participant.id, account.platform, account.user_id)
     )
-    account = account.refresh_user_info()
+    try:
+        account = account.refresh_user_info()
+    except (TokenExpiredError, UserNotFound) as e:
+        logger.debug("The refetch failed: %s" % e)
     sleep(1)
 
     logger.debug(
