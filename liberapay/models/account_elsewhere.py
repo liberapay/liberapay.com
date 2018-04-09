@@ -276,10 +276,16 @@ class AccountElsewhere(Model):
         platform = self.platform_data
         sess = self.get_auth_session()
         try:
-            info = platform.get_user_info(self.domain, 'user_id', self.user_id, sess)
+            info = platform.get_user_self_info(self.domain, sess)
         except TokenExpiredError:
             self.db.run("UPDATE elsewhere SET token = NULL WHERE id = %s", (self.id,))
-            info = platform.get_user_info(self.domain, 'user_id', self.user_id)
+            if self.user_id and hasattr(self.platform_data, 'api_user_info_path'):
+                type_of_id, id_value = 'user_id', self.user_id
+            elif self.user_name and hasattr(self.platform_data, 'api_user_name_info_path'):
+                type_of_id, id_value = 'user_name', self.user_name
+            else:
+                raise
+            info = platform.get_user_info(self.domain, type_of_id, id_value)
         return self.upsert(info)
 
 
@@ -347,6 +353,10 @@ def refetch_elsewhere_data():
         "Refetching data of %s account %s (participant %i)" %
         (account.platform, account.user_id, account.participant.id)
     )
-    account.refresh_user_info()
+    try:
+        account.refresh_user_info()
+    except (TokenExpiredError, UserNotFound) as e:
+        logger.debug("The refetch failed: %s" % e)
+        return
     # The update was successful, clean up the rate_limiting table
     website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))
