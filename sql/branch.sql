@@ -1,46 +1,39 @@
-CREATE TABLE user_passwords
-( participant   bigint        PRIMARY KEY REFERENCES participants
-, password      text          NOT NULL
+CREATE TABLE user_secrets
+( participant   bigint        NOT NULL REFERENCES participants
+, id            int           NOT NULL
+, secret        text          NOT NULL
 , mtime         timestamptz   NOT NULL DEFAULT current_timestamp
+, UNIQUE (participant, id)
 );
 
-CREATE TABLE user_sessions
-( participant   bigint        PRIMARY KEY REFERENCES participants
-, token         text          NOT NULL
-, expires_at    timestamptz   NOT NULL DEFAULT current_timestamp
-);
+CREATE FUNCTION _upsert_user_secrets() RETURNS void AS $$
 
-CREATE FUNCTION _fill_new_tables() RETURNS void AS $$
-
-    INSERT INTO user_passwords
-                (participant, password, mtime)
-         SELECT p.id, p.password, p.password_mtime
+    INSERT INTO user_secrets
+         SELECT p.id, 0, p.password, p.password_mtime
            FROM participants p
           WHERE p.password IS NOT NULL
-       ORDER BY p.password_mtime ASC
-    ON CONFLICT (participant) DO UPDATE
-            SET password = excluded.password
+    ON CONFLICT (participant, id) DO UPDATE
+            SET secret = excluded.secret
               , mtime = excluded.mtime;
 
-    INSERT INTO user_sessions
-                (participant, token, expires_at)
-         SELECT p.id, session_token, p.session_expires
+    INSERT INTO user_secrets
+         SELECT p.id, 1, p.session_token, p.session_expires - interval '6 hours'
            FROM participants p
           WHERE p.session_token IS NOT NULL
-       ORDER BY p.session_expires ASC
-    ON CONFLICT (participant) DO UPDATE
-            SET token = excluded.token
-              , expires_at = excluded.expires_at;
+            AND p.session_expires >= (current_timestamp - interval '30 days')
+    ON CONFLICT (participant, id) DO UPDATE
+            SET secret = excluded.secret
+              , mtime = excluded.mtime;
 
 $$ LANGUAGE SQL;
 
-SELECT _fill_new_tables();
+SELECT _upsert_user_secrets();
 
 SELECT 'after deployment';
 
-SELECT _fill_new_tables();
+SELECT _upsert_user_secrets();
 
-DROP FUNCTION _fill_new_tables();
+DROP FUNCTION _upsert_user_secrets();
 
 ALTER TABLE participants
     DROP COLUMN password,

@@ -53,10 +53,8 @@ def sign_in_with_form_data(body, state):
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
         if password:
-            p = Participant.authenticate(
-                k, 'password',
-                id, password,
-            )
+            id = Participant.get_id_for(k, id)
+            p = Participant.authenticate(id, 0, password)
             if not p:
                 state['log-in.error'] = _("Bad username or password.")
             else:
@@ -70,7 +68,7 @@ def sign_in_with_form_data(body, state):
             return
         else:
             email = id
-            p = Participant._from_thing('lower(email)', email.lower())
+            p = Participant.from_email(email)
             if p and p.kind == 'group':
                 state['log-in.error'] = _(
                     "{0} is linked to a team account. It's not possible to log in as a team.",
@@ -81,7 +79,11 @@ def sign_in_with_form_data(body, state):
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
                 p.start_session()
-                qs = {'log-in.id': p.id, 'log-in.token': p.session.token}
+                qs = [
+                    ('log-in.id', p.id),
+                    ('log-in.key', p.session.id),
+                    ('log-in.token', p.session.secret)
+                ]
                 p.send_email(
                     'login_link',
                     email,
@@ -157,7 +159,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
             raise response.error(400, 'Malformed "Authorization" header')
         if not uid.isdigit():
             raise response.error(401, 'Invalid user id: expected an integer, got `%s`' % uid)
-        participant = Participant.authenticate('id', 'password', uid, pwd)
+        participant = Participant.authenticate(uid, 0, pwd)
         if not participant:
             raise response.error(401, 'Invalid credentials')
         return {'user': participant}
@@ -166,10 +168,13 @@ def authenticate_user_if_possible(request, response, state, user, _):
     # We want to try cookie auth first, but we want form auth to supersede it
     p = None
     if SESSION in request.headers.cookie:
-        creds = request.headers.cookie[SESSION].value.split(':', 1)
-        p = Participant.authenticate('id', 'session', *creds)
-        if p:
-            state['user'] = p
+        creds = request.headers.cookie[SESSION].value.split(':', 2)
+        if len(creds) == 2:
+            creds = [creds[0], 1, creds[1]]
+        if len(creds) == 3:
+            p = Participant.authenticate(*creds)
+            if p:
+                state['user'] = p
     session_p, p = p, None
     session_suffix = ''
     redirect_url = request.line.uri
@@ -187,8 +192,10 @@ def authenticate_user_if_possible(request, response, state, user, _):
                     raise LoginRequired
             redirect_url = body.get('sign-in.back-to') or redirect_url
     elif request.method == 'GET' and request.qs.get('log-in.id'):
-        id, token = request.qs.pop('log-in.id'), request.qs.pop('log-in.token')
-        p = Participant.authenticate('id', 'session', id, token)
+        id = request.qs.pop('log-in.id')
+        session_id = request.qs.pop('log-in.key', 1)
+        token = request.qs.pop('log-in.token', None)
+        p = Participant.authenticate(id, session_id, token)
         if not p and (not session_p or session_p.id != id):
             raise response.error(400, _("This login link is expired or invalid."))
         else:

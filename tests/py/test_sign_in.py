@@ -2,14 +2,12 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from datetime import timedelta
 from email.utils import parsedate
 from time import gmtime
 
 from six.moves.http_cookies import SimpleCookie
 
 from babel.messages.catalog import Message
-from pando.utils import utcnow
 
 from liberapay.constants import SESSION
 from liberapay.models.participant import Participant
@@ -36,13 +34,13 @@ class TestLogIn(EmailHarness):
 
     def log_in_and_check(self, p, password, **kw):
         r = self.log_in(p.username, password, **kw)
-        return self.check_login(r, p)
+        self.check_login(r, p)
 
     def check_login(self, r, p):
-        p = p.refetch()
         # Basic checks
         assert r.code == 302
-        expected = str('%s:%s') % (p.id, p.session.token)
+        p.extend_session_lifetime(1)  # trick to get p.session
+        expected = str('%i:%i:%s') % (p.id, p.session.id, p.session.secret)
         sess_cookie = r.headers.cookie[SESSION]
         assert sess_cookie.value == expected
         expires = sess_cookie[str('expires')]
@@ -50,7 +48,6 @@ class TestLogIn(EmailHarness):
         assert parsedate(expires) > gmtime()
         # More thorough check
         self.check_with_about_me(p.username, r.headers.cookie)
-        return p
 
     def check_with_about_me(self, username, cookies):
         r = self.client.GET('/about/me/', cookies=cookies, raise_immediately=False)
@@ -81,11 +78,10 @@ class TestLogIn(EmailHarness):
 
     def test_log_in_with_old_session(self):
         alice = self.make_participant('alice')
-        alice.update_session('x', utcnow() - timedelta(days=1))
+        self.db.run("UPDATE user_secrets SET mtime = mtime - interval '1 day'")
         alice.authenticated = True
         cookies = SimpleCookie()
         alice.sign_in(cookies)
-        print(cookies)
         self.check_with_about_me('alice', cookies)
 
     def test_log_in_switch_user(self):
@@ -101,7 +97,8 @@ class TestLogIn(EmailHarness):
         alice = self.make_participant('alice')
         alice.update_password(password)
         alice.update_status('closed')
-        alice2 = self.log_in_and_check(alice, password)
+        self.log_in_and_check(alice, password)
+        alice2 = alice.refetch()
         assert alice2.status == 'active'
         assert alice2.join_time == alice.join_time
 
@@ -147,23 +144,32 @@ class TestLogIn(EmailHarness):
 
         data = {'log-in.id': email.upper()}
         r = self.client.POST('/', data, raise_immediately=False)
-        alice = alice.refetch()
-        assert alice.session.token not in r.headers.raw.decode('ascii')
-        assert alice.session.token not in r.body.decode('utf8')
+        session = self.db.one("SELECT * FROM user_secrets WHERE participant = %s", (alice.id,))
+        assert session.secret not in r.headers.raw.decode('ascii')
+        assert session.secret not in r.body.decode('utf8')
 
         Participant.dequeue_emails()
         last_email = self.get_last_email()
         assert last_email and last_email['subject'] == 'Log in to Liberapay'
-        assert 'log-in.token='+alice.session.token in last_email['text']
+        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
+            alice.id, session.id, session.secret
+        )
+        assert qs in last_email['text']
 
-        url = '/alice/?foo=bar&log-in.id=%s&log-in.token=%s'
-        r = self.client.GxT(url % (alice.id, alice.session.token))
-        alice2 = alice.refetch()
-        assert alice2.session.token != alice.session.token
-        # ↑ this means that the link is only valid once
+        r = self.client.GxT('/alice/?foo=bar&' + qs)
         assert r.code == 302
         assert r.headers[b'Location'] == b'http://localhost/alice/?foo=bar'
         # ↑ checks that original path and query are preserved
+
+        old_secret = self.db.one("""
+            SELECT secret
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+               AND secret = %s
+        """, (alice.id, session.id, session.secret))
+        assert old_secret is None
+        # ↑ this means that the link is only valid once
 
         # Check that we can change our password
         password = 'correct-horse-battery-staple'
@@ -174,7 +180,7 @@ class TestLogIn(EmailHarness):
             raise_immediately=False,
         )
         assert r.code == 302
-        alice2 = Participant.authenticate('id', 'password', alice.id, password)
+        alice2 = Participant.authenticate(alice.id, 0, password)
         assert alice2 and alice2 == alice
 
     def test_email_login_bad_email(self):

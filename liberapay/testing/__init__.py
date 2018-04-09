@@ -61,7 +61,10 @@ class ClientWithAuth(Client):
         auth_as = kw.pop('auth_as', None)
         if auth_as:
             cookies = kw.setdefault('cookies', {})
-            cookies[SESSION] = '%s:%s' % (auth_as.id, auth_as.session.token)
+            sess = auth_as.session
+            if not sess:
+                sess = auth_as.start_session()
+            cookies[SESSION] = '%i:%i:%s' % (auth_as.id, sess.id, sess.secret)
 
         return Client.build_wsgi_environ(self, *a, **kw)
 
@@ -195,9 +198,6 @@ class Harness(unittest.TestCase):
                  VALUES ({1})
               RETURNING participants.*::participants
         """.format(cols, placeholders), vals)
-
-        if is_person:
-            participant.start_session()
 
         self.db.run("""
             INSERT INTO elsewhere

@@ -6,7 +6,6 @@ from aspen import resources
 from mock import MagicMock, patch
 
 from liberapay.constants import EPOCH
-from liberapay.models.participant import Participant
 from liberapay.testing import Harness
 from liberapay.utils import NS
 
@@ -58,8 +57,7 @@ class TestMigrate(Harness):
             assert r.code == 302
             assert r.headers[b'Location'] == b'?step=3'
         # Step 3
-        alice = Participant.from_id(1)
-        r = self.client.GET('/migrate?step=3', auth_as=alice)
+        r = self.client.GET('/migrate?step=3', cookies=r.headers.cookie)
         assert r.code == 200
 
     def test_migrate_without_initial_data(self):
