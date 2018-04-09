@@ -144,9 +144,10 @@ class Platform(object):
         return self.api_request('GET', domain, path, sess=sess, **kw)
 
     def api_error_handler(self, response, is_user_session, domain):
+        response_text = response.text  # for Sentry
         status = response.status_code
         if status == 404:
-            raise Response(404, response.text)
+            raise Response(404, response_text)
         if status == 401 and is_user_session:
             # https://tools.ietf.org/html/rfc5849#section-3.2
             raise TokenExpiredError
@@ -159,7 +160,7 @@ class Platform(object):
                     return _("You're making requests too fast, please try again later.")
             raise LazyResponse(status, msg)
         if status != 200:
-            logger.error('{} responded with {}:\n{}'.format(domain, status, response.text))
+            logger.error('{} responded with {}:\n{}'.format(domain, status, response_text))
             msg = lambda _: _("{0} returned an error, please try again later.", domain)
             raise LazyResponse(502, msg)
 
@@ -275,11 +276,11 @@ class Platform(object):
         path = path.format(**{key: quote(value), 'domain': domain})
         def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
-                raise UserNotFound(value, key)
+                raise UserNotFound(value, key, domain, self.name, response.text)
             if response.status_code == 401 and is_user_session:
                 raise TokenExpiredError
             if response.status_code in (400, 401, 403, 414) and uncertain:
-                raise BadUserId(value, key)
+                raise BadUserId(value, key, domain, self.name, response.text)
             self.api_error_handler(response, is_user_session, domain)
         response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
         info = self.api_parser(response)
