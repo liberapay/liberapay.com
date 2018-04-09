@@ -141,6 +141,8 @@ if show_form and route:
     if not billing_address:
         mp_account = participant.get_mangopay_account()
         billing_address = getattr(mp_account, 'Address', None)
+        if not getattr(billing_address, 'Country', None):
+            billing_address = None
 
 card = Card.get(route.address) if route else None
 if card:
