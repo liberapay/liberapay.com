@@ -2,14 +2,14 @@
 
 [---] text/html
 <p>{{ _(
-    "We are connecting {0} to the {1} account on Liberapay. This is a notification "
-    "sent to {2} because that is the primary email address we have on file.",
+    "Liberapay has associated {0} to the {1} account on Liberapay. This is a notification "
+    "sent to {2} because that is the registered primary email address for the account.",
     ('<b>%s</b>'|safe) % new_email,
     ('<b><a href="https://liberapay.com/{0}">{0}</a></b>'|safe).format(username),
     ('<b>%s</b>'|safe) % email
 ) }}</p>
 
 [---] text/plain
-{{ _("We are connecting {0} to the {1} account on Liberapay. This is a notification "
-     "sent to {2} because that is the primary email address we have on file.",
+{{ _("Liberapay has associated {0} to the {1} account on Liberapay. This is a notification "
+     "sent to {2} because that is the registered primary email address for the account.",
      new_email, username, email) }}

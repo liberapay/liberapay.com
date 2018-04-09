@@ -3,13 +3,13 @@
 [---] text/html
 % if old_email
 <p>{{ _(
-    "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?",
+    "Liberapay has received a request to change the email address for the account associated with {1} to {0}. Sound familiar?",
     ('<b>%s</b>'|safe) % email,
     ('<b>%s</b>'|safe) % old_email,
 ) }}</p>
 % else
 <p>{{ _(
-    "A Liberapay account was created on {0} with the email address {1}. Was it you?",
+    "A Liberapay account was created on {0} with the email address {1}. Your doing?",
     participant.join_time,
     ('<b>%s</b>'|safe) % email,
 ) }}</p>
@@ -25,17 +25,17 @@
 [---] text/plain
 % if old_email
 {{ _(
-    "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?",
+    "Liberapay has received a request to change the email address for the account associated with {1} to {0}associate the email address {0}. Sound familiar?",
     email, old_email,
 ) }}
 % else
 {{ _(
-    "A Liberapay account was created on {0} with the email address {1}. Was it you?",
+    "A Liberapay account was created on {0} with the email address {1}. Your doing?",
     participant.join_time, email,
 ) }}
 % endif
 
-{{ _("Follow this link to validate your email address:") }}
+{{ _("Follow this link to confirm:") }}
 
 {{ link }}
 

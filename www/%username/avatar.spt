@@ -19,7 +19,7 @@ if request.method == 'POST':
 
     r = participant.update_avatar(src+':')
     if not r:
-        raise response.error(400, _("We were unable to get an avatar for you from {0}.", src))
+        raise response.error(400, _("Could not fetch avatar for you from {0}.", src))
 
     msg = _("Your new avatar URL is: {0}", participant.avatar_url)
     if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':

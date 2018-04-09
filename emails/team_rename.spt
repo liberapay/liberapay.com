@@ -1,4 +1,4 @@
 {{ _("A team you're a member of has been renamed") }}
 
 [---] text/html
-<p>{{ _("The team “{0}” has been renamed to “{1}” by {2}.", old_name, new_name, renamed_by) }}</p>
+<p>{{ _("{2} changed the {0} team name to '{1}'.", old_name, new_name, renamed_by) }}</p>

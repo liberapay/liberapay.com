@@ -1,9 +1,8 @@
-{{ _("The bank wire to your Liberapay wallet has succeeded") }}
+{{ _("The bank wire to your Liberapay wallet cleared") }}
 
 [---] text/html
 <p>{{ _(
-    "We're happy to report that the transfer from your bank account has succeeded. "
-    "Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
+    "Of the {0} sent, {1} went into your Liberapay wallet, and {2} was paid in fees."
     , LegacyMoney(exchange.amount + exchange.fee)
     , LegacyMoney(exchange.amount)
     , LegacyMoney(exchange.fee)

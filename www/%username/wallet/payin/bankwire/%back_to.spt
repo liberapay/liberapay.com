@@ -203,7 +203,7 @@ title = _("Adding Money")
         % set notif_succ = NOTIF_BIT_SUCC.__and__(participant.email_notif_bits)
         % if notif_fail and notif_succ
             <p class="alert alert-info">{{ _(
-                "We will send you an email once we know whether your payment has succeeded or failed."
+                "Liberapay will send you an email once your payment either succeeds or fails."
             ) }}</p>
         % else
             <p class="alert alert-warning">{{ _(

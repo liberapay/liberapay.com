@@ -109,16 +109,16 @@ SEPA = EUROZONE | set("BG CH CZ DK GB GI HR HU IS LI MC NO PL RO SE".split())
 
 EVENTS = [
     Event('income', 1, _("When I receive money")),
-    Event('low_balance', 2, _("When there isn't enough money in my wallet to cover my donations")),
-    Event('withdrawal_created', 4, _("When a transfer to my bank account is initiated")),
-    Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
-    Event('pledgee_joined', 16, _("When someone I pledge to joins Liberapay")),
-    Event('team_invite', 32, _("When someone invites me to join a team")),
-    Event('payin_bankwire_failed', 64, _("When a bank wire transfer to my Liberapay wallet fails")),
-    Event('payin_bankwire_succeeded', 128, _("When a bank wire transfer to my Liberapay wallet succeeds")),
-    Event('payin_bankwire_expired', 256, _("When a bank wire transfer to my Liberapay wallet expires")),
-    Event('payin_directdebit_failed', 512, _("When a direct debit from my bank account fails")),
-    Event('payin_directdebit_succeeded', 1024, _("When a direct debit from my bank account succeeds")),
+    Event('low_balance', 2, _("Money in my wallet can't cover donations")),
+    Event('withdrawal_created', 4, _("Transfer to my bank account initiated")),
+    Event('withdrawal_failed', 8, _("Transfer to my bank account fails")),
+    Event('pledgee_joined', 16, _("Someone I pledge to joins Liberapay")),
+    Event('team_invite', 32, _("Someone invites to a team")),
+    Event('payin_bankwire_failed', 64, _("Bank wire transfer to my wallet fails")),
+    Event('payin_bankwire_succeeded', 128, _("Bank wire transfer to my wallet succeeds")),
+    Event('payin_bankwire_expired', 256, _("Bank wire transfer to my wallet expires")),
+    Event('payin_directdebit_failed', 512, _("Direct debit from my bank account fails")),
+    Event('payin_directdebit_succeeded', 1024, _("Direct debit from my bank account succeeds")),
 ]
 check_bits([e.bit for e in EVENTS])
 EVENTS = OrderedDict((e.name, e) for e in EVENTS)
@@ -249,11 +249,11 @@ POSTAL_ADDRESS_KEYS = (
 )
 
 PRIVACY_FIELDS = OrderedDict([
-    ('hide_giving', (_("Hide total giving from others."), False)),
-    ('hide_receiving', (_("Hide total receiving from others."), False)),
-    ('hide_from_search', (_("Hide this profile from search results on Liberapay."), True)),
+    ('hide_giving', (_("Hide total given from others."), False)),
+    ('hide_receiving', (_("Hide total received from others."), False)),
+    ('hide_from_search', (_("Hide this profile from searches on Liberapay."), True)),
     ('profile_noindex', (_("Tell web search engines not to index this profile."), True)),
-    ('hide_from_lists', (_("Prevent this profile from being listed on Liberapay."), True)),
+    ('hide_from_lists', (_("Don't list my profile on Liberapay."), True)),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 

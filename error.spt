@@ -19,8 +19,8 @@ if isinstance(response, LazyResponse):
     response.render_body(state)
 err = response.text
 if code == 500 and not err:
-    err = _("Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!")
-
+    err = _("Looks like you've found a bug. It 
+will be fixed as soon as possible.")
 [----------------------------------------] text/html
 % extends "templates/base.html"
 
@@ -38,7 +38,7 @@ if code == 500 and not err:
         % endif
         % if sentry_ident
             <p>{{ _(
-                "The details of this error have been recorded. If you decide to contact us "
+                "Details of this error has been recorded. In contacting Liberapay about it, "
                 "please include the following error identification code in your message: {0}.",
                 '<code>%s</code>'|safe % sentry_ident
             ) }}</p>

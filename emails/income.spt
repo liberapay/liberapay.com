@@ -10,10 +10,10 @@
 % if not by_team
     % set teams = participant.get_teams()
     % if not teams
-        <p>{{ _("You are not a member of any team, so you haven't received any money for participation in teams.") }}</p>
+        <p>{{ _("You are not part of any team, and as such have no take therein.") }}</p>
     % else
         <p>{{ ngettext("No money was given to you for your role in the {0} team.",
-                       "No money was given to you for your roles in the {n} teams you are a member of.",
+                       "No money was given to you for your roles in the {n} teams you are part of.",
                        len(teams), teams[0].name) }}</p>
     % endif
 % elif len(by_team) == 1
@@ -38,7 +38,7 @@
 % if not by_team
     % set teams = participant.get_teams()
     % if not teams
-        {{- _("You are not a member of any team, so you haven't received any money for participation in teams.") }}
+        {{- _("You are not part of any team, and as such have no take therein.") }}
     % else
         {{- ngettext("No money was given to you for your role in the {0} team.",
                      "No money was given to you for your roles in the {n} teams you are a member of.",

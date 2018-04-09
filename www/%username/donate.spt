@@ -40,7 +40,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
         % if goal
             % if receiving
             <p>{{ _(
-                "{0} currently receives {1} per week, they need your help to reach "
+                "{0} receives {1} per week, they need your help to reach "
                 "their funding goal ({2} per week)."
                 , participant.username, receiving, goal
             ) }}</p>
@@ -52,7 +52,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
             % endif
         % else
             <p>{{ _(
-                "{0} currently receives {1} per week."
+                "{0} receives {1} per week."
                 , participant.username, receiving
             ) }}</p>
         % endif
@@ -65,7 +65,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     % if e_accounts
         <h3>{{ _("Recipient Identity") }}</h3>
         <p>{{ _(
-            "We have confirmed through an automated verification process that "
+            "Through an automated verification process it has been established "
             "{0} has control of the following accounts on other platforms:",
             participant.username
         ) }}</p>
@@ -79,9 +79,9 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 
     <h4>{{ _("What payment methods are available?") }}</h4>
     <p>{{ _(
-        "We currently support most credit and debit cards (VISA and MasterCard), as "
+        "Most credit and debit cards (VISA and MasterCard) are supported, as "
         "well as bank wires (in euros) and direct debits (SEPA only). More options "
-        "will be added in the future."
+        "to be added in the future."
     ) }}</p>
 
     <h4>{{ _("How do recurrent donations work?") }}</h4>
@@ -107,7 +107,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     <h4>{{ _("Is this platform legit and secure?") }}</h4>
     <p>{{ _(
         "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} "
-        "in France, we comply with the European Union's financial regulations, and "
+        "in France, Liberapay complies with the European Union's financial regulations, and "
         "the security of our service is of paramount importance to us.",
         '<a href="/about/legal">'|safe, '</a>'|safe
     ) }}</p>

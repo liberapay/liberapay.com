@@ -2,7 +2,7 @@
 
 [---] text/html
 <p>{{ _(
-    "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:",
+    "Liberapay failed to transfer {0} from your Liberapay wallet to your bank account because:",
     LegacyMoney(-exchange.amount + exchange.fee)
 ) }}</p>
 
@@ -12,7 +12,7 @@
       style="{{ button_style('default') }}">{{ _("Try again") }}</a></p>
 
 [---] text/plain
-{{ _("We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:",
+{{ _("Liberapay failed to transfer {0} from your Liberapay wallet to your bank account because:",
      LegacyMoney(-exchange.amount + exchange.fee)) }}
 
 {{ exchange.note }}

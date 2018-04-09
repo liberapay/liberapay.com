@@ -35,18 +35,18 @@
             % set tippee_name = tippee.friendly_name if pledging else tippee.username
             % if currency_mismatch
             <p class="alert alert-warning">{{ _(
-                "You are currently donating {money_amount} per week to {name}, but "
-                "they no longer accept donations in {currency}. You can select or "
+                "You are donating {money_amount} per week to {name}, who "
+                "no longer accept donations in {currency}. Select or "
                 "input a new amount in {new_currency} below, or stop the donation "
-                "by clicking on the Stop button."
+                "by clicking on the \"Stop\" button."
                 , money_amount=tip.amount, name=tippee_name
                 , currency=Currency(tip.amount.currency), new_currency=Currency(c)
             ) }}</p>
             % else
             <p>{{ _(
-                "You are currently donating {0} per week to {1}. You can select or "
+                "You are donating {0} per week to {1}. Select or "
                 "input a different amount below, or stop the donation by clicking "
-                "on the Stop button."
+                "on the \"Stop\" button."
                 , tip.amount, tippee_name
             ) }}</p>
             % endif
