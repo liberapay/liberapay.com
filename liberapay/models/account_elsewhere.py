@@ -285,7 +285,7 @@ class AccountElsewhere(Model):
                 type_of_id, id_value = 'user_name', self.user_name
             else:
                 raise
-            info = platform.get_user_info(self.domain, type_of_id, id_value)
+            info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
         return self.upsert(info)
 
 

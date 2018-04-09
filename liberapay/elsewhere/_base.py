@@ -259,7 +259,7 @@ class Platform(object):
         members = [self.extract_user_info(m, domain) for m in members]
         return members, count, pages_urls
 
-    def get_user_info(self, domain, key, value, sess=None):
+    def get_user_info(self, domain, key, value, sess=None, uncertain=True):
         """Given a user_name or user_id, get the user's info from the API.
         """
         if key == 'user_id':
@@ -278,7 +278,7 @@ class Platform(object):
                 raise UserNotFound(value, key)
             if response.status_code == 401 and is_user_session:
                 raise TokenExpiredError
-            if response.status_code in (400, 401, 403, 414):
+            if response.status_code in (400, 401, 403, 414) and uncertain:
                 raise BadUserId(value, key)
             self.api_error_handler(response, is_user_session, domain)
         response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
