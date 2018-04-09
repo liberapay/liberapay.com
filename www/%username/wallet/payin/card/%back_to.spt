@@ -124,7 +124,7 @@ success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
 
 billing_address = None
-if show_form and route:
+if show_form:
     previous_payin_id = website.db.one("""
         SELECT e.remote_id
           FROM exchanges e
