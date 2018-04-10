@@ -1,6 +1,6 @@
 # coding: utf8
 
-from oauthlib.oauth2 import TokenExpiredError
+from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 
 from liberapay.models.repository import Repository
 from liberapay.utils import b64decode_s, get_participant
@@ -25,7 +25,7 @@ if platform_name:
         page_url = b64decode_s(request.qs.get('page', ''))
         try:
             r = platform.get_starred_repos(account, page_url=page_url, sess=sess)
-        except TokenExpiredError:
+        except (InvalidGrantError, TokenExpiredError):
             sess = None
         else:
             repos, total_count, next_page = r[0], r[1], r[2].get('next')

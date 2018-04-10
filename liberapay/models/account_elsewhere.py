@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
-from oauthlib.oauth2 import TokenExpiredError
+from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -281,7 +281,7 @@ class AccountElsewhere(Model):
             try:
                 info = platform.get_user_self_info(self.domain, sess)
                 return self.upsert(info)
-            except TokenExpiredError:
+            except (InvalidGrantError, TokenExpiredError):
                 self.db.run("UPDATE elsewhere SET token = NULL WHERE id = %s", (self.id,))
                 sess = None
         # We don't have a valid user token, try a non-authenticated request
