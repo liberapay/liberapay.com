@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import json
 from time import sleep
 
+from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from postgres.orm import Model
 
 from liberapay.constants import RATE_LIMITS
@@ -101,35 +102,39 @@ def refetch_repos():
         (participant.id, account.platform, account.user_id)
     )
     start_time = utcnow()
-    with website.db.get_cursor() as cursor:
-        next_page = None
-        for i in range(10):
-            r = account.platform_data.get_repos(account, page_url=next_page, sess=sess)
-            upsert_repos(cursor, r[0], participant, utcnow())
-            next_page = r[2].get('next')
-            if not next_page:
-                break
-            sleep(1)
-        deleted_count = cursor.one("""
-            WITH deleted AS (
-                     DELETE FROM repositories
-                      WHERE participant = %s
-                        AND platform = %s
-                        AND info_fetched_at < %s
-                  RETURNING id
-                 )
-            SELECT count(*) FROM deleted
-        """, (participant.id, account.platform, start_time))
-        event_type = 'fetch_repos:%s' % account.id
-        payload = dict(partial_list=bool(next_page), deleted_count=deleted_count)
-        participant.add_event(cursor, event_type, payload)
-        cursor.run("""
-            DELETE FROM events
-             WHERE participant = %s
-               AND type = %s
-               AND (NOT payload ? 'deleted_count' OR payload->'deleted_count' = '0')
-               AND ts < (current_timestamp - interval '6 days')
-        """, (participant.id, event_type))
+    try:
+        with website.db.get_cursor() as cursor:
+            next_page = None
+            for i in range(10):
+                r = account.platform_data.get_repos(account, page_url=next_page, sess=sess)
+                upsert_repos(cursor, r[0], participant, utcnow())
+                next_page = r[2].get('next')
+                if not next_page:
+                    break
+                sleep(1)
+            deleted_count = cursor.one("""
+                WITH deleted AS (
+                         DELETE FROM repositories
+                          WHERE participant = %s
+                            AND platform = %s
+                            AND info_fetched_at < %s
+                      RETURNING id
+                     )
+                SELECT count(*) FROM deleted
+            """, (participant.id, account.platform, start_time))
+            event_type = 'fetch_repos:%s' % account.id
+            payload = dict(partial_list=bool(next_page), deleted_count=deleted_count)
+            participant.add_event(cursor, event_type, payload)
+            cursor.run("""
+                DELETE FROM events
+                 WHERE participant = %s
+                   AND type = %s
+                   AND (NOT payload ? 'deleted_count' OR payload->'deleted_count' = '0')
+                   AND ts < (current_timestamp - interval '6 days')
+            """, (participant.id, event_type))
+    except (InvalidGrantError, TokenExpiredError) as e:
+        logger.debug("The refetch failed: %s" % e)
+        return
 
     # The update was successful, clean up the rate_limiting table
     website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))
