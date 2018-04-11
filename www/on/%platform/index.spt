@@ -1,4 +1,4 @@
-from oauthlib.oauth2 import TokenExpiredError
+from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.utils import b64decode_s
@@ -28,7 +28,7 @@ if account:
         page_url = b64decode_s(request.qs.get('page', ''))
         try:
             friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
-        except TokenExpiredError:
+        except (InvalidGrantError, TokenExpiredError):
             need_reconnect = True
         else:
             friends = AccountElsewhere.get_many(platform.name, friends)

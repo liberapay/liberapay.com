@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
-from oauthlib.oauth2 import TokenExpiredError
+from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -23,6 +23,8 @@ from liberapay.website import website
 
 CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
 
+
+class UnableToRefreshAccount(Exception): pass
 
 class UnknownAccountElsewhere(Exception): pass
 
@@ -275,17 +277,21 @@ class AccountElsewhere(Model):
         """
         platform = self.platform_data
         sess = self.get_auth_session()
-        try:
-            info = platform.get_user_self_info(self.domain, sess)
-        except TokenExpiredError:
-            self.db.run("UPDATE elsewhere SET token = NULL WHERE id = %s", (self.id,))
-            if self.user_id and hasattr(self.platform_data, 'api_user_info_path'):
-                type_of_id, id_value = 'user_id', self.user_id
-            elif self.user_name and hasattr(self.platform_data, 'api_user_name_info_path'):
-                type_of_id, id_value = 'user_name', self.user_name
-            else:
-                raise
-            info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
+        if sess:
+            try:
+                info = platform.get_user_self_info(self.domain, sess)
+                return self.upsert(info)
+            except (InvalidGrantError, TokenExpiredError):
+                self.db.run("UPDATE elsewhere SET token = NULL WHERE id = %s", (self.id,))
+                sess = None
+        # We don't have a valid user token, try a non-authenticated request
+        if self.user_id and hasattr(self.platform_data, 'api_user_info_path'):
+            type_of_id, id_value = 'user_id', self.user_id
+        elif self.user_name and hasattr(self.platform_data, 'api_user_name_info_path'):
+            type_of_id, id_value = 'user_name', self.user_name
+        else:
+            raise UnableToRefreshAccount
+        info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
         return self.upsert(info)
 
 
@@ -341,13 +347,13 @@ def refetch_elsewhere_data():
           JOIN participants p ON p.id = e.participant
          WHERE e.info_fetched_at < now() - interval '90 days'
            AND (p.status = 'active' OR p.receiving > 0)
-           AND check_rate_limit(%s || e.platform || ':' || e.user_id, %s, %s)
+           AND check_rate_limit(%s || e.id::text, %s, %s)
       ORDER BY e.info_fetched_at ASC
          LIMIT 1
     """, (rl_prefix + ':', rl_cap, rl_period))
     if not account:
         return
-    rl_key = '%s:%s' % (account.platform, account.user_id)
+    rl_key = str(account.id)
     website.db.hit_rate_limit(rl_prefix, rl_key)
     logger.debug(
         "Refetching data of %s account %s (participant %i)" %
@@ -355,7 +361,7 @@ def refetch_elsewhere_data():
     )
     try:
         account.refresh_user_info()
-    except (TokenExpiredError, UserNotFound) as e:
+    except (UnableToRefreshAccount, UserNotFound) as e:
         logger.debug("The refetch failed: %s" % e)
         return
     # The update was successful, clean up the rate_limiting table
