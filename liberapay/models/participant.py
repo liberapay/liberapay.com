@@ -395,7 +395,7 @@ class Participant(Model, MixinTeam):
     def start_session(self, suffix=''):
         """Start a new session for the user, invalidating the previous one.
         """
-        token = uuid.uuid4().hex + suffix
+        token = (b64encode(urandom(24), b'-_') + suffix.encode('ascii')).decode('ascii')
         self.upsert_session(1, token)
         return self.session
 
