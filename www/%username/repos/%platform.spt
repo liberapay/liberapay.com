@@ -2,6 +2,8 @@
 
 from datetime import timedelta
 
+from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
+
 from liberapay.models.repository import upsert_repos
 from liberapay.utils import get_participant, utcnow
 
@@ -57,7 +59,10 @@ if platform_name:
             with website.db.get_cursor() as cursor:
                 next_page = None
                 for i in range(3):
-                    r = platform.get_repos(account, page_url=next_page, sess=sess)
+                    try:
+                        r = platform.get_repos(account, page_url=next_page, sess=sess)
+                    except (InvalidGrantError, TokenExpiredError):
+                        response.render('templates/reconnect-elsewhere-account.spt', state, platform=platform)
                     repos += upsert_repos(cursor, r[0], participant, utcnow())
                     next_page = r[2].get('next')
                     if not next_page:
