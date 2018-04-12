@@ -6,6 +6,6 @@
     date=exchange.timestamp.date(), money_amount=LegacyMoney(exchange.amount + exchange.fee)
 ) }}</p>
 
-<p>{{ _("If you forgot to do it you can initiate a new bank wire:") }}</p>
+<p>{{ _("If you forgot to do it, you can initiate a new bank wire:") }}</p>
 
 <p><a href="{{ participant.url('wallet/payin/') }}">{{ _("Try again") }}</a></p>

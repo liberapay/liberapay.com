@@ -28,7 +28,7 @@
         % endfor
         </p>
         % if docs[0].status == 'REFUSED'
-            <p>{{ _("If you need assistance you can send an email to support@liberapay.com") }}</p>
+            <p>{{ _("Should you need assistance, email support@liberapay.com") }}</p>
         % endif
     % endif
 % endmacro
@@ -74,14 +74,14 @@
 
 % elif account.PersonType == 'LEGAL'
 
-    <h3>{{ _("Organization Information") }}</h3>
+    <h3>{{ _("Organization Info") }}</h3>
 
-    <h4>{{ _("Headquarters Address") }}</h4>
+    <h4>{{ _("Address of Headquarter") }}</h4>
     {{ postal_address_form(prefix='Headquarters', saved=account.HeadquartersAddress if account else None) }}
 
     % if account.LegalPersonType != 'SOLETRADER'
     <h4>{{ _("Articles of Association") }}</h4>
-    <p>{{ _("Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding.") }}</p>
+    <p>{{ _("Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following info is mentioned: business name, activity, registered address, shareholding.") }}</p>
     {{ file_input('ARTICLES_OF_ASSOCIATION') }}<br>
     % endif
 
@@ -103,7 +103,7 @@
     {{ file_input('SHAREHOLDER_DECLARATION') }}<br>
     % endif
 
-    <h3>{{ _("Legal Representative Information") }}</h3>
+    <h3>{{ _("Legal Representative Info") }}</h3>
     <p>{{ _("The following fields are about the organization's legal representative (you, probably).") }}</p>
 
     <label>

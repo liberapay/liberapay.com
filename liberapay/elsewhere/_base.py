@@ -205,7 +205,7 @@ class Platform(object):
     def extract_user_info(self, info, source):
         """
         Given a user_info object of variable type (depending on the platform),
-        extract the relevant information by calling the platform's extractors
+        extract the relevant info by calling the platform's extractors
         (`x_user_name`, `x_user_id`, etc).
 
         `source` must be the domain from which the data was obtained.

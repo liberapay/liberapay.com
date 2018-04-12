@@ -258,8 +258,8 @@ class PaydayIsRunning(LazyResponseXXX):
 
     def msg(self, _):
         return _(
-            "Sorry, payments can not be changed while payday payouts "
-            "are carried out. Please check back in a few hours."
+            "Sorry, payments can not be changed during payday payouts. "
+            "Please check back in a few hours."
         )
 
 

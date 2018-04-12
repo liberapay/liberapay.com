@@ -656,7 +656,7 @@ class Participant(Model, MixinTeam):
             t.set_take_for(self, None, self, cursor=cursor)
 
     def clear_personal_information(self, cursor):
-        """Clear personal information such as statements and goal.
+        """Clear personal info such as statements and goal.
         """
         r = cursor.one("""
 

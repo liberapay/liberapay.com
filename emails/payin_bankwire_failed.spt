@@ -2,12 +2,12 @@
 
 [---] text/html
 <p>{{ _(
-    "The attempt to transfer {0} from your bank account failed because:",
+    "The attempt to transfer {0} from your bank account failed:",
     LegacyMoney(exchange.amount + exchange.fee)
 ) }}</p>
 
 <pre>{{ exchange.note }}</pre>
 
-<p>{{ _("You can try again, possibly with another payment method, by clicking the link below:") }}</p>
+<p>{{ _("You can try again, possibly using a different payment method, by clicking the link below:") }}</p>
 
 <p><a href="{{ participant.url('wallet/payin/') }}">{{ _("Try again") }}</a></p>

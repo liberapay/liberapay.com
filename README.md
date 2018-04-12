@@ -124,7 +124,8 @@ That process is semi-automated by `release.sh`.
 
 ### CSS and JavaScript
 
-For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3](https://getbootstrap.com/). Stylesheets are in the `style/` directory and our JavaScript code is in `js/`. Our policy for both is to have as little as possible of them: the website should be almost entirely usable without JS, and our CSS should leverage Bootstrap as much as possible instead of containing lots of custom rules that would become a burden to maintain.
+For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3](https://getbootstrap.com/). Stylesheets are in the `style/` directory and our JavaScript code is in `js/`. Our policy for both is to have as little as possible 
+of them: The website should be almost entirely usable without JS, and our CSS should leverage Bootstrap as much as possible instead of containing lots of custom rules that would become a burden to maintain.
 
 We compile Bootstrap ourselves from the SASS source in the `style/bootstrap/`
 directory. We do that to be able to easily customize it by changing values in
@@ -147,7 +148,7 @@ you can also use the following commands:
 
 Some of our tests include interactions with external services. In order to speed up those tests we record the requests and responses automatically using [vcr](https://pypi.python.org/pypi/vcrpy). The records are in the `tests/py/fixtures` directory, one per test class.
 
-If you add or modify interactions with external services, then the tests will fail, because VCR will not find the new or modified request in the records, and will refuse to record the new request by default (see [Record Modes](https://vcrpy.readthedocs.io/en/latest/usage.html#record-modes) for more information). When that happens you can either switch the record mode from `once` to `new_episodes` (in `liberapay/testing/vcr.py`) or delete the obsolete fixture files.
+If you add or modify interactions with external services, then the tests will fail, because VCR will not find the new or modified request in the records, and will refuse to record the new request by default (see [Record Modes](https://vcrpy.readthedocs.io/en/latest/usage.html#record-modes) for more info). When that happens you can either switch the record mode from `once` to `new_episodes` (in `liberapay/testing/vcr.py`) or delete the obsolete fixture files.
 
 If the new interactions are with MangoPay you have to delete the file `tests/py/fixtures/MangopayOAuth.yml`, otherwise you'll be using an expired authentication token and the requests will be rejected.
 
@@ -161,7 +162,7 @@ We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_in
 
     pip install hashin
     hashin package==x.y -r requirements_base.txt -p 2.7 -p 3.6
-    # note: we have several requirements files, use the right one
+    # note: Liberapay has several requirement files, use the right one
 
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
 

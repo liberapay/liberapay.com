@@ -99,15 +99,15 @@ title = _("Security")
     <ul>
         <li><b>Low severity issues</b>, including:
             <ul>
-                <li>Issues that can be detected with tools such as Hardenize and Security Headers. We run regular scans with these services and try to improve our score gradually.</li>
+                <li>Issues that can be detected with tools such as Hardenize and Security Headers. Liberapay runs regular scans with these services and try to improve our score gradually.</li>
                 <li>Content injection issues.</li>
-                <li>Cross-site Request Forgery (CSRF) with minimal security implications (Logout CSRF, etc.). In order for CSRF to be a valid issue it must affect some important action such as deleting one’s account.</li>
+                <li>Cross-site Request Forgery (CSRF) with minimal security implications (Logout CSRF, etc.). In order for CSRF to be a valid issue it must affect some important action such as deleting one's account.</li>
                 <li>Missing cookie flags on non-security-sensitive cookies.</li>
             </ul>
         </li>
-        <li><b>Disclosure of non-sensitive information</b>. Our software is open source and we don't believe in security through obscurity.
+        <li><b>Disclosure of non-sensitive info</b>. Our software is libre software, and Liberapay does not believe in security through obscurity.
             <ul>
-                <li>Stack traces containing only public information.</li>
+                <li>Stack traces containing only public info.</li>
                 <li>Banner grabbing issues (figuring out what web server we use, etc.).</li>
             </ul>
         </li>
@@ -122,9 +122,10 @@ title = _("Security")
         <li><b>Issues in third-party services</b>, they should be reported to the respective team.</p>
     </ul>
 
-    <p>We encourage hackers to read <a href="https://leanpub.com/web-hacking-101">Web Hacking 101</a> and <a href="https://leanpub.com/ltr101-breaking-into-infosec">Breaking into Information Security: Learning the Ropes 101</a> to get a good idea of the type of issues that we are looking for.</p>
+    <p>Liberapay encourages hackers to read <a href="https://leanpub.com/web-hacking-101">Web Hacking 101</a> and <a href="https://leanpub.com/ltr101-breaking-into-infosec">Breaking into Information Security: Learning the Ropes 
+101</a> to get a good idea of the type of issues we are looking for.</p>
 
-    <p>We may modify the above guidelines at any time. Last update: January 18, 2018.</p>
+    <p>Liberapay may modify the above guidelines at any time. Last update: January 18, 2018.</p>
 
     <h3>Hall of Fame</h3>
 
@@ -142,7 +143,7 @@ title = _("Security")
     % endmacro
 
     <p>Thanks to the following researchers (most recent first) for having
-    reported security issues to us via email:</p>
+    reported security issues to us per email:</p>
 
     {{ show_hof(liberapay_hof) }}
 

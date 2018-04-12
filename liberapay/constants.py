@@ -249,11 +249,11 @@ POSTAL_ADDRESS_KEYS = (
 )
 
 PRIVACY_FIELDS = OrderedDict([
-    ('hide_giving', (_("Hide total given from others."), False)),
-    ('hide_receiving', (_("Hide total received from others."), False)),
-    ('hide_from_search', (_("Hide this profile from searches on Liberapay."), True)),
-    ('profile_noindex', (_("Tell web search engines not to index this profile."), True)),
-    ('hide_from_lists', (_("Don't list my profile on Liberapay."), True)),
+    ('hide_giving', (_("Hide given total."), False)),
+    ('hide_receiving', (_("Hide received total."), False)),
+    ('hide_from_search', (_("Unsearchable profile on Liberapay."), True)),
+    ('profile_noindex', (_("Tell web search engines not to index profile."), True)),
+    ('hide_from_lists', (_("Unlisted profile on Liberapay."), True)),
 ])
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 
