@@ -1,0 +1,129 @@
+# coding: utf8
+
+from liberapay.utils import excerpt_intro, get_participant, markdown
+from liberapay.utils.i18n import LANGUAGES_2, get_lang_options
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == 'POST':
+    lang = request.body['lang']
+    summary = request.body.get('summary') or ''
+    statement = request.body['statement']
+
+    if lang not in LANGUAGES_2:
+        raise response.error(400, "unknown lang")
+
+    if len(summary) > constants.SUMMARY_MAX_SIZE:
+        raise response.error(400, _(
+            "The submitted summary is too long ({0} > {1}).",
+            len(summary), constants.SUMMARY_MAX_SIZE)
+        )
+
+    if request.body.get('save') == 'true':
+        participant.upsert_statement(lang, summary, 'summary')
+        participant.upsert_statement(lang, statement, 'profile')
+        response.redirect(request.line.uri)
+
+else:
+    lang = request.qs.get('lang')
+    if lang:
+        if lang not in LANGUAGES_2:
+            raise response.error(400, "unknown lang")
+        statement = participant.get_statement(lang)
+    else:
+        statement, lang = participant.get_statement(request.accept_langs)
+        if not lang:
+            lang = locale.language
+    summary = participant.get_statement(lang, 'summary') or ''
+
+select_langs = get_lang_options(request, locale, participant.get_statement_langs())
+confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
+
+title = participant.username
+subhead = _("Statement")
+
+[---] text/html
+% from "templates/select-lang.html" import lang_options with context
+
+% extends "templates/profile-edit.html"
+
+% block form
+
+% if request.body.get('preview') == 'true'
+
+    <div class="alert alert-info">{{ _("This is a preview.") }}</div>
+
+    % set rendered_stmt = markdown.render(statement)
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="lang" value="{{ lang }}" />
+        % if summary
+        <input type="hidden" name="summary" value="{{ summary }}" />
+        <p class="summary">{{ summary }}</p>
+        <hr>
+        % endif
+        <textarea class="hidden" name="statement">{{ statement }}</textarea>
+        <section class="profile-statement">{{ rendered_stmt }}</section>
+        <hr>
+        <h5>{{ _("Excerpt that will be used in social media:") }}</h5>
+        <p>{{ excerpt_intro(rendered_stmt) }}</p>
+        <hr>
+        <button class="btn btn-default">{{ _("Edit") }}</button>
+        <button class="btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+    </form>
+
+% else
+
+    <p>{{ _(
+        "Describe your work, why you're asking for donations, etc. We need "
+        "both a short summary and a full statement."
+    ) }}</p>
+
+    <p>{{ _(
+        "Liberapay allows you to internationalize your texts. "
+        "Use the selector below to switch between languages.")
+    }}</p>
+
+    <form action="" method="POST" class="statement">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="lang" value="{{ lang }}" />
+
+        <p>{{ _("Current language: {0}",
+                '<b>%s</b>'|safe % locale.languages.get(lang, lang.upper())) }}</p>
+
+        <div class="form-group">
+        <input name="summary" class="form-control" size=60
+               maxlength="{{ constants.SUMMARY_MAX_SIZE }}"
+               placeholder="{{ _('Short description') }}"
+               value="{{ summary }}" />
+        </div>
+
+        <div class="form-group">
+        <textarea name="statement" rows="15"
+                  class="form-control profile-statement vertical-resize"
+                  placeholder="{{ _('Full statement') }}"
+                  data-confirm-discard="{{ confirm_discard }}"
+            >{{ statement or '' }}</textarea>
+        <p class="help-block pull-right">{{ _("Markdown supported.") }}
+            <a href="https://daringfireball.net/projects/markdown/basics"
+               target="_blank" rel="noopener noreferrer">{{ _("What is Markdown?") }}</a>
+        </p>
+        </div>
+
+        <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
+        <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+    </form>
+
+    <br>
+    {{ _("Switch to another language:") }}
+    <form action="" method="GET" class="form-inline langs">
+        <select class="form-control" name="lang">{{
+            lang_options(select_langs, lang)
+        }}</select>
+        <button class="btn btn-default">{{ _("Switch") }}</button>
+    </form>
+
+% endif
+
+% endblock

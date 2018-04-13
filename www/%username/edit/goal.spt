@@ -1,0 +1,71 @@
+# coding: utf8
+
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=True)
+
+if participant.kind == 'individual':
+    GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
+    PATRON = _("I'm here as a patron.")
+    PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
+    GOAL_RAW = _("My goal is to receive {0}")
+else:
+    GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
+    PATRON = _("We're here as a patron.")
+    PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
+    GOAL_RAW = _("Our goal is to receive {0}")
+
+GOAL_PARTS = GOAL_RAW.split("{0}")
+
+title = participant.username
+subhead = _("Goal")
+
+[---] text/html
+% extends "templates/profile-edit.html"
+
+% block form
+
+<form action="" method="POST" class="goal">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <div class="radio">
+        <label class="with-input-group-sm">
+            <input type="radio" name="goal" id="goal-yes" value="custom"
+                   {{ 'checked' if participant.goal and participant.goal > 0 else '' }}/>
+            <span>{{ GOAL_PARTS[0] }}</span>
+            <div><div class="input-group">
+                <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
+                <input type="tel" inputmode="decimal" name="goal_custom" id="goal-custom"
+                       class="amount form-control input-sm"
+                       value="{{ format_decimal(participant.goal.amount) if participant.goal and participant.goal > 0 else '' }}" />
+                <div class="input-group-addon">{{ _("per week") }}</div>
+            </div></div>
+            <span>{{ GOAL_PARTS[1] }}</span>
+        </label><br>
+
+        <label>
+            <input type="radio" name="goal" id="goal-null" value="null"
+                   {{ 'checked' if participant.goal == None else '' }} />
+            {{ GRATEFUL }}
+        </label><br>
+
+        % if participant.kind != 'group'
+        <label>
+            <input type="radio" name="goal" id="goal-0" value="0.00"
+                   {{ 'checked' if participant.goal == 0 else '' }} />
+            {{ PATRON }}
+        </label><br>
+
+        <label>
+            <input type="radio" name="goal" id="goal-negative" value="-1"
+                   {{ 'checked' if participant.goal and participant.goal < 0 else '' }} />
+            {{ PATRON_NO_GIFTS }}
+        </label>
+        % endif
+    </div>
+
+    <button class="save btn btn-success">{{ _("Save") }}</button>
+</form>
+
+% endblock

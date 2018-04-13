@@ -6,21 +6,6 @@
     display: inline-block;
 }
 
-@media (max-width: $screen-sm-min - 1) {
-    .block-xs {
-        display: block;
-    }
-    .no-float-xs {
-        float: none !important;
-    }
-    .text-center-xs {
-        text-align: center;
-    }
-    .expand-xs {
-        width: 100%;
-    }
-}
-
 .monospace {
     font-family: $font-family-monospace;
 }
@@ -39,8 +24,11 @@
 
 .flex-row {
     display: flex;
-    align-items: center;
     margin-right: -10px;
+}
+
+.align-items-center {
+    align-items: center;
 }
 
 .flex-col {
@@ -63,5 +51,20 @@
 @for $i from 0 through 100 {
     .width-#{$i} {
         width: $i * 1%;
+    }
+}
+
+@media (max-width: $screen-sm-min - 1) {
+    .block-xs {
+        display: block;
+    }
+    .no-float-xs {
+        float: none !important;
+    }
+    .text-center-xs {
+        text-align: center;
+    }
+    .expand-xs {
+        width: 100%;
     }
 }

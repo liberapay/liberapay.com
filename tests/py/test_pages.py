@@ -231,7 +231,7 @@ class TestPages(BrowseTestHarness):
         s = 'épopée'
         bs = s.encode('utf8')
         for msg in (s, bs):
-            r = self.client.GET('/alice/edit?success='+b64encode_s(msg),
+            r = self.client.GET('/alice/edit/username?success='+b64encode_s(msg),
                                 auth_as=alice)
             assert bs in r.body
 

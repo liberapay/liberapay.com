@@ -1,0 +1,46 @@
+# coding: utf8
+
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=True)
+
+title = participant.username
+subhead = _("Currencies")
+
+[---] text/html
+% extends "templates/profile-edit.html"
+
+% block form
+
+<form action="{{ participant.path('settings/edit') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <p>{{ _("Which currencies should your donors be allowed to send you, and which one do you prefer?") }}</p>
+    <table class="table table-condensed">
+    % for c in constants.CURRENCIES
+    <tr>
+        <td>
+        {{ locale.title(locale.currencies.get(c, c)) }}
+                ({{ locale.currency_symbols.get(c, c) }})
+        </td>
+        <td><label>
+            <input type="checkbox" name="accepted_currencies:{{ c }}" value="yes"
+                   {{ 'checked' if c in participant.accepted_currencies else '' }} />
+            {{ _("accept") }}
+        </label></td>
+        <td><label>
+            <input type="radio" name="main_currency" value="{{ c }}"
+                   {{ 'checked' if c == participant.main_currency else '' }} />
+            {{ _("prefer") }}
+        </label></td>
+    </tr>
+    % endfor
+    </table>
+
+    <p>{{ _("Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors.") }}</p>
+
+    <button class="save btn btn-success">{{ _("Save") }}</button>
+</form>
+
+% endblock
