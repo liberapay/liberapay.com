@@ -13,8 +13,8 @@
         <li {% if l_code == locale.language %} class="active" {% endif %}
             ><a href="{{ l_url }}{{ request.line.uri }}" rel="alternate" hreflang="{{ l_code }}"
                 >{{ _("{0}", l_name) }}</a
-            ><a href="https://hosted.weblate.org/languages/{{ l_code }}/liberapay/"
-                 >{{ _(" ({0} complete)", format_percent(l_completion)) }}</a></li>
+            >{% if l_completion <= 99 %}<a href="https://hosted.weblate.org/languages/{{ l_code }}/liberapay/"
+                 >{{ _(" ({0} complete)", format_percent(l_completion)) }}</a>{% endif %}</li>
     % endfor
         <li role="separator" class="divider"></li>
         <li><a href="https://hosted.weblate.org/engage/liberapay/?utm_source=liberapay-navbar"
