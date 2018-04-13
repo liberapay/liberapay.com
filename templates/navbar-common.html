@@ -14,7 +14,7 @@
             ><a href="{{ l_url }}{{ request.line.uri }}" rel="alternate" hreflang="{{ l_code }}"
                 >{{ _("{0}", l_name) }}</a
             >{% if l_completion <= 99 %}<a href="https://hosted.weblate.org/languages/{{ l_code }}/liberapay/"
-                 ><small>{{ _(" ({0} complete)", format_percent(l_completion)) }}</small></a>{% endif %}</li>
+                 ><span style="float:right><small>{{ _(" ({0} complete)", format_percent(l_completion)) }}</small></span></a>{% endif %}</li>
     % endfor
         <li role="separator" class="divider"></li>
         <li><a href="https://hosted.weblate.org/engage/liberapay/?utm_source=liberapay-navbar"
