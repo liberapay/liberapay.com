@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '64'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '65'::jsonb);
 
 
 -- app configuration
@@ -42,12 +42,8 @@ CREATE TABLE participants
 , username              text                    NOT NULL
 , email                 text
 , email_lang            text
-, password              text
-, password_mtime        timestamptz
 , kind                  participant_kind
 , status                participant_status      NOT NULL DEFAULT 'stub'
-, session_token         text
-, session_expires       timestamptz             DEFAULT (now() + INTERVAL '6 hours')
 , join_time             timestamptz             DEFAULT NULL
 
 , balance               currency_amount         NOT NULL
@@ -754,6 +750,17 @@ CREATE TABLE redirections
 );
 
 CREATE INDEX redirections_to_prefix_idx ON redirections (to_prefix);
+
+
+-- user passwords and sessions
+
+CREATE TABLE user_secrets
+( participant   bigint        NOT NULL REFERENCES participants
+, id            int           NOT NULL
+, secret        text          NOT NULL
+, mtime         timestamptz   NOT NULL DEFAULT current_timestamp
+, UNIQUE (participant, id)
+);
 
 
 -- composite types, keep this at the end of the file

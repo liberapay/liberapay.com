@@ -1361,3 +1361,32 @@ CREATE OR REPLACE FUNCTION check_rate_limit(k text, cap int, period float) RETUR
         ), 0
     ) < cap;
 $$ LANGUAGE sql;
+
+-- migration #65
+CREATE TABLE user_secrets
+( participant   bigint        NOT NULL REFERENCES participants
+, id            int           NOT NULL
+, secret        text          NOT NULL
+, mtime         timestamptz   NOT NULL DEFAULT current_timestamp
+, UNIQUE (participant, id)
+);
+INSERT INTO user_secrets
+     SELECT p.id, 0, p.password, p.password_mtime
+       FROM participants p
+      WHERE p.password IS NOT NULL
+ON CONFLICT (participant, id) DO UPDATE
+        SET secret = excluded.secret
+          , mtime = excluded.mtime;
+INSERT INTO user_secrets
+     SELECT p.id, 1, p.session_token, p.session_expires - interval '6 hours'
+       FROM participants p
+      WHERE p.session_token IS NOT NULL
+        AND p.session_expires >= (current_timestamp - interval '30 days')
+ON CONFLICT (participant, id) DO UPDATE
+        SET secret = excluded.secret
+          , mtime = excluded.mtime;
+ALTER TABLE participants
+    DROP COLUMN password,
+    DROP COLUMN password_mtime,
+    DROP COLUMN session_token,
+    DROP COLUMN session_expires;
