@@ -58,7 +58,6 @@ def fake_participant(db, kind=None):
             db,
             "participants",
             username=username,
-            password=None if not is_a_person else 'x',
             email=username+'@example.org',
             balance=Money('0.00', 'EUR'),
             hide_giving=is_a_person and (random.randrange(5) == 0),

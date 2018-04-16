@@ -77,6 +77,8 @@ class Participant(Model, MixinTeam):
     ANON = False
     EMAIL_VERIFICATION_TIMEOUT = EMAIL_VERIFICATION_TIMEOUT
 
+    session = None
+
     def __init__(self, record):
         super(Participant, self).__init__(record)
         self.__dict__['_accepted_currencies'] = self.__dict__.pop('accepted_currencies')
@@ -116,7 +118,7 @@ class Participant(Model, MixinTeam):
             """.format(x), vals)
 
     @classmethod
-    def make_active(cls, kind, currency, username=None, password=None, cursor=None):
+    def make_active(cls, kind, currency, username=None, cursor=None):
         """Return a new active participant.
         """
         now = utcnow()
@@ -127,9 +129,6 @@ class Participant(Model, MixinTeam):
             'main_currency': currency,
             'accepted_currencies': currency,
         }
-        if password:
-            d['password'] = cls.hash_password(password)
-            d['password_mtime'] = now
         cols, vals = zip(*d.items())
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
@@ -170,34 +169,29 @@ class Participant(Model, MixinTeam):
     def from_id(cls, id):
         """Return an existing participant based on id.
         """
-        return cls._from_thing("id", id)
+        return cls.db.one("SELECT p FROM participants p WHERE id = %s", (id,))
 
     @classmethod
-    def from_username(cls, username):
+    def from_username(cls, username, id_only=False):
         """Return an existing participant based on username.
         """
-        return cls._from_thing("lower(username)", username.lower())
+        return cls.db.one("""
+            SELECT {0} FROM participants p WHERE lower(username) = %s
+        """.format('p.id' if id_only else 'p'), (username.lower(),))
 
     @classmethod
-    def _from_thing(cls, thing, value):
-        assert thing in ("id", "lower(username)", "lower(email)")
-        if thing == 'lower(email)':
-            # This query looks for an unverified address if the participant
-            # doesn't have any verified address
-            return cls.db.one("""
-                SELECT p.*::participants
-                  FROM emails e
-                  JOIN participants p ON p.id = e.participant
-                 WHERE lower(e.address) = %s
-                   AND (p.email IS NULL OR lower(p.email) = lower(e.address))
-              ORDER BY p.email NULLS LAST, p.id ASC
-                 LIMIT 1
-            """, (value,))
+    def from_email(cls, email, id_only=False):
+        # This query looks for an unverified address if the participant
+        # doesn't have any verified address
         return cls.db.one("""
-            SELECT participants.*::participants
-              FROM participants
-             WHERE {}=%s
-        """.format(thing), (value,))
+            SELECT {0}
+              FROM emails e
+              JOIN participants p ON p.id = e.participant
+             WHERE lower(e.address) = %s
+               AND (p.email IS NULL OR lower(p.email) = lower(e.address))
+          ORDER BY p.email NULLS LAST, p.id ASC
+             LIMIT 1
+        """.format('p.id' if id_only else 'p'), (email.lower(),))
 
     @classmethod
     def from_mangopay_user_id(cls, mangopay_user_id):
@@ -209,44 +203,59 @@ class Participant(Model, MixinTeam):
         """, (mangopay_user_id,))
 
     @classmethod
-    def authenticate(cls, k1, k2, v1=None, v2=None, context='log-in'):
-        assert k1 in ('id', 'username', 'email')
-        if not (v1 and v2):
+    def get_id_for(cls, type_of_id, id_value):
+        return getattr(cls, 'from_' + type_of_id)(id_value, id_only=True)
+
+    @classmethod
+    def authenticate(cls, p_id, secret_id, secret, context='log-in'):
+        if not secret:
             return
-        if k1 in ('username', 'email'):
-            k1 = 'lower(%s)' % k1
-            v1 = v1.lower()
-        elif k1 == 'id':
-            try:
-                v1 = int(v1)
-            except (ValueError, TypeError):
-                return
-        p = cls._from_thing(k1, v1)
-        if not p:
+        try:
+            p_id = int(p_id)
+            secret_id = int(secret_id)
+        except (ValueError, TypeError):
             return
-        if k2 == 'session':
-            if not p.session_token:
+        if secret_id >= 1:  # session token
+            r = cls.db.one("""
+                SELECT p, s.secret, s.mtime
+                  FROM user_secrets s
+                  JOIN participants p ON p.id = s.participant
+                 WHERE s.participant = %s
+                   AND s.id = %s
+                   AND s.mtime > %s
+            """, (p_id, secret_id, utcnow() - SESSION_TIMEOUT))
+            if not r:
                 return
-            if p.session_expires < utcnow():
-                return
-            if constant_time_compare(p.session_token, v2):
+            p, stored_secret, mtime = r
+            if constant_time_compare(stored_secret, secret):
                 p.authenticated = True
+                p.session = NS(id=secret_id, secret=secret, mtime=mtime)
                 return p
-        elif k2 == 'password':
-            if not p.password:
+        elif secret_id == 0:  # user-input password
+            r = cls.db.one("""
+                SELECT p, s.secret
+                  FROM user_secrets s
+                  JOIN participants p ON p.id = s.participant
+                 WHERE s.participant = %s
+                   AND s.id = %s
+            """, (p_id, secret_id))
+            if not r:
                 return
+            p, stored_secret = r
             if context == 'log-in':
                 cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
-            algo, rounds, salt, hashed = p.password.split('$', 3)
+            algo, rounds, salt, hashed = stored_secret.split('$', 3)
             rounds = int(rounds)
             salt, hashed = b64decode(salt), b64decode(hashed)
-            if constant_time_compare(cls._hash_password(v2, algo, salt, rounds), hashed):
+            if constant_time_compare(cls._hash_password(secret, algo, salt, rounds), hashed):
                 p.authenticated = True
                 if len(salt) < 32:
                     # Update the password hash in the DB
-                    hashed = cls.hash_password(v2)
-                    cls.db.run("UPDATE participants SET password = %s WHERE id = %s",
-                               (hashed, p.id))
+                    hashed = cls.hash_password(secret)
+                    cls.db.run(
+                        "UPDATE user_secrets SET secret = %s WHERE participant = %s AND id = 0",
+                        (hashed, p.id)
+                    )
                 return p
 
     @classmethod
@@ -278,7 +287,9 @@ class Participant(Model, MixinTeam):
         return p, wallet
 
     def refetch(self):
-        return self._from_thing('id', self.id)
+        r = self.db.one("SELECT p FROM participants p WHERE id = %s", (self.id,))
+        r.session = self.session
+        return r
 
 
     # Password Management
@@ -290,9 +301,6 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def hash_password(cls, password):
-        l = len(password)
-        if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
-            raise BadPasswordSize
         # Using SHA-256 as the HMAC algorithm (PBKDF2 + HMAC-SHA-256)
         algo = 'sha256'
         # Generate 32 random bytes for the salt
@@ -308,17 +316,29 @@ class Participant(Model, MixinTeam):
         return hashed
 
     def update_password(self, password, cursor=None, checked=True):
+        l = len(password)
+        if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
+            raise BadPasswordSize
         hashed = self.hash_password(password)
         p_id = self.id
         with self.db.get_cursor(cursor) as c:
             c.run("""
-                UPDATE participants
-                   SET password = %(hashed)s
-                     , password_mtime = CURRENT_TIMESTAMP
-                 WHERE id = %(p_id)s;
+                INSERT INTO user_secrets
+                            (participant, id, secret)
+                     VALUES (%(p_id)s, 0, %(hashed)s)
+                ON CONFLICT (participant, id) DO UPDATE
+                        SET secret = excluded.secret
+                          , mtime = current_timestamp
             """, locals())
             if checked:
                 self.add_event(c, 'password-check', None)
+
+    @cached_property
+    def has_password(self):
+        return self.db.one(
+            "SELECT participant FROM user_secrets WHERE participant = %s AND id = 0",
+            (self.id,)
+        ) is not None
 
     def check_password(self, password, context):
         if context == 'login':
@@ -350,51 +370,59 @@ class Participant(Model, MixinTeam):
     # Session Management
     # ==================
 
-    def update_session(self, new_token, expires):
-        """Set ``session_token`` and ``session_expires``.
-        """
-        self.db.run("""
-            UPDATE participants
-               SET session_token=%s
-                 , session_expires=%s
-             WHERE id=%s
-        """, (new_token, expires, self.id))
-        self.set_attributes(session_token=new_token, session_expires=expires)
+    def upsert_session(self, session_id, new_token):
+        assert session_id >= 1
+        session = self.db.one("""
+            INSERT INTO user_secrets
+                        (participant, id, secret)
+                 VALUES (%s, %s, %s)
+            ON CONFLICT (participant, id) DO UPDATE
+                    SET secret = excluded.secret
+                      , mtime = excluded.mtime
+              RETURNING id, secret, mtime
+        """, (self.id, session_id, new_token))
+        self.session = session
 
-    def set_session_expires(self, expires):
-        """Set ``session_expires`` to the given datetime.
-        """
-        self.db.run("UPDATE participants SET session_expires=%s WHERE id=%s",
-                    (expires, self.id,))
-        self.set_attributes(session_expires=expires)
+    def extend_session_lifetime(self, session_id):
+        assert session_id >= 1
+        session = self.db.one("""
+            UPDATE user_secrets
+               SET mtime = current_timestamp
+             WHERE participant = %s
+               AND id = %s
+         RETURNING id, secret, mtime
+        """, (self.id, session_id))
+        self.session = session
 
     def start_session(self, suffix=''):
         """Start a new session for the user, invalidating the previous one.
         """
-        token = uuid.uuid4().hex + suffix
-        expires = utcnow() + SESSION_TIMEOUT
-        self.update_session(token, expires)
+        token = (b64encode(urandom(24), b'-_') + suffix.encode('ascii')).decode('ascii')
+        self.upsert_session(1, token)
+        return self.session
 
     def sign_in(self, cookies, suffix=''):
         assert self.authenticated
         self.start_session(suffix)
-        creds = '%s:%s' % (self.id, self.session_token)
-        set_cookie(cookies, SESSION, creds, self.session_expires)
+        creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
+        set_cookie(cookies, SESSION, creds, self.session.mtime + SESSION_TIMEOUT)
 
     def keep_signed_in(self, cookies):
         """Extend the user's current session.
         """
-        new_expires = utcnow() + SESSION_TIMEOUT
-        if new_expires - self.session_expires > SESSION_REFRESH:
-            self.set_session_expires(new_expires)
-            token = self.session_token
-            creds = '%s:%s' % (self.id, token)
-            set_cookie(cookies, SESSION, creds, expires=new_expires)
+        now = utcnow()
+        if now - self.session.mtime > SESSION_REFRESH:
+            session_id = self.session.id
+            self.extend_session_lifetime(session_id)
+            creds = '%i:%i:%s' % (self.id, session_id, self.session.secret)
+            set_cookie(cookies, SESSION, creds, expires=now + SESSION_TIMEOUT)
 
     def sign_out(self, cookies):
         """End the user's current session.
         """
-        self.update_session(None, None)
+        self.db.run("DELETE FROM user_secrets WHERE participant = %s AND id = %s",
+                    (self.id, self.session.id))
+        del self.session
         erase_cookie(cookies, SESSION)
 
 
@@ -668,8 +696,6 @@ class Participant(Model, MixinTeam):
             UPDATE participants
                SET goal=NULL
                  , avatar_url=NULL
-                 , session_token=NULL
-                 , session_expires=now()
                  , giving=zero(giving)
                  , receiving=zero(receiving)
                  , npatrons=0

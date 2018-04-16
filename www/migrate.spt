@@ -28,7 +28,7 @@ elif step == '2':
     conflict = None
     if user.ANON:
         email = body['email_address'] or ''
-        conflict = Participant._from_thing('lower(email)', email.lower())
+        conflict = Participant.from_email(email)
         if conflict:
             conflict = (conflict, 'email')
         else:
@@ -109,7 +109,7 @@ elif step == '2':
             rejected_tips = result['rejected_tips'] = []
             for pi in data.pop('payment_instructions'):
                 email = pi['email_address']
-                tippee = Participant._from_thing('lower(email)', email.lower()) if email else None
+                tippee = Participant.from_email(email) if email else None
                 if not tippee:
                     elsewhere = website.db.one("""
                         SELECT (e, p)::elsewhere_with_participant

@@ -61,15 +61,15 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
             raise response.error(404)
         participant = user if user and str(user.id) == value else None
     else:
-        thing = 'lower(username)'
+        thing = 'username'
         value = slug.lower()
         participant = user if user and user.username.lower() == value else None
 
     if participant is None:
         from liberapay.models.participant import Participant  # avoid circular import
-        participant = Participant._from_thing(thing, value) if value else None
+        participant = getattr(Participant, 'from_' + thing)(value) if value else None
         if participant is None:
-            if thing == 'lower(username)':
+            if thing == 'username':
                 look_up_redirections(request, response)
             raise response.error(404)
         elif participant.kind == 'community':
