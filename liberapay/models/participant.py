@@ -215,7 +215,7 @@ class Participant(Model, MixinTeam):
             secret_id = int(secret_id)
         except (ValueError, TypeError):
             return
-        if secret_id >= 1:
+        if secret_id >= 1:  # session token
             r = cls.db.one("""
                 SELECT p, s.secret, s.mtime
                   FROM user_secrets s
@@ -231,7 +231,7 @@ class Participant(Model, MixinTeam):
                 p.authenticated = True
                 p.session = NS(id=secret_id, secret=secret, mtime=mtime)
                 return p
-        elif secret_id == 0:
+        elif secret_id == 0:  # user-input password
             r = cls.db.one("""
                 SELECT p, s.secret
                   FROM user_secrets s
@@ -371,6 +371,7 @@ class Participant(Model, MixinTeam):
     # ==================
 
     def upsert_session(self, session_id, new_token):
+        assert session_id >= 1
         session = self.db.one("""
             INSERT INTO user_secrets
                         (participant, id, secret)
@@ -383,6 +384,7 @@ class Participant(Model, MixinTeam):
         self.session = session
 
     def extend_session_lifetime(self, session_id):
+        assert session_id >= 1
         session = self.db.one("""
             UPDATE user_secrets
                SET mtime = current_timestamp
