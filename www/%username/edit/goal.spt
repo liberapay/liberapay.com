@@ -1,9 +1,25 @@
 # coding: utf8
 
-from liberapay.utils import get_participant
+from liberapay.utils import form_post_success, get_participant
 
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == "POST":
+    goal = request.body["goal"]
+    if goal == "null":
+        goal = None
+    elif goal == "custom":
+        goal = request.body["goal_custom"]
+    if goal is not None:
+        goal = Money(parse_decimal(goal), participant.main_currency).round_down()
+    if goal == -1 and not request.body.get("confirmed"):
+        msg = _("Warning: Doing this will remove all the tips you are currently receiving."
+                "\n\nThat cannot be undone!")
+        response.render('templates/confirm.spt', state, msg=msg, back_to=request.path.raw)
+    else:
+        participant.update_goal(goal)
+        form_post_success(state)
 
 if participant.kind == 'individual':
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")

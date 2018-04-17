@@ -18,6 +18,15 @@
             <li class="not-a-tab"><a href="{{ participant.path('') }}">{{ _("View") }}</a></li>
         </ul>
     </div>
-    <div class="profile-edit">{% block form %}{% endblock %}</div>
+    <div class="profile-edit">
+        % if 'success' in request.qs
+            % set success = request.qs.pop('success')
+            <div class="alert alert-success">{{
+                b64decode_s(success) if success else
+                _("The changes have been saved.")
+            }}</div>
+        % endif
+        {% block form %}{% endblock %}
+    </div>
 </div>
 % endblock

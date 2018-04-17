@@ -1,6 +1,6 @@
 # coding: utf8
 
-from liberapay.utils import excerpt_intro, get_participant, markdown
+from liberapay.utils import excerpt_intro, form_post_success, get_participant, markdown
 from liberapay.utils.i18n import LANGUAGES_2, get_lang_options
 
 [---]
@@ -23,7 +23,7 @@ if request.method == 'POST':
     if request.body.get('save') == 'true':
         participant.upsert_statement(lang, summary, 'summary')
         participant.upsert_statement(lang, statement, 'profile')
-        response.redirect(request.line.uri)
+        form_post_success(state)
 
 else:
     lang = request.qs.get('lang')

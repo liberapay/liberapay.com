@@ -1,9 +1,27 @@
 # coding: utf8
 
-from liberapay.utils import get_participant
+from liberapay.utils import form_post_success, get_participant
 
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == 'POST':
+    src, email = request.body['src'], request.body.get('email') or None
+
+    if src not in constants.AVATAR_SOURCES:
+        raise response.error(400, 'bad src')
+
+    website.db.run("""
+        UPDATE participants SET avatar_email = %s WHERE id = %s
+    """, (email, participant.id))
+    participant.set_attributes(avatar_email=email)
+
+    r = participant.update_avatar(src+':')
+    if not r:
+        raise response.error(400, _("We were unable to get an avatar for you from {0}.", src))
+
+    msg = _("Your new avatar URL is: {0}", participant.avatar_url)
+    form_post_success(state, msg=msg)
 
 title = participant.username
 subhead = _("Avatar")
@@ -29,7 +47,7 @@ subhead = _("Avatar")
     </div>
     <br>
 
-    <form action="{{ participant.path('avatar') }}" method="POST"
+    <form action="" method="POST"
           class="form-inline js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 

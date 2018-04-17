@@ -1,9 +1,46 @@
 # coding: utf8
 
-from liberapay.utils import get_participant
+from liberapay.utils import form_post_success, get_participant
 
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == 'POST':
+    body = request.body
+    new_currency = body['main_currency']
+    old_currency = participant.main_currency
+    change_currency = new_currency != old_currency
+    new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
+    change_policy = new_accepted != participant.accepted_currencies
+    if new_currency not in new_accepted:
+        raise response.error(400, _("The submitted settings are incoherent."))
+    if change_currency or change_policy:
+        foreign_donations = website.db.all("""
+            SELECT t.*
+              FROM current_tips t
+             WHERE t.tippee = %s
+               AND t.amount > 0
+               AND t.amount::currency NOT IN %s
+        """, (participant.id, tuple(new_accepted)))
+        if foreign_donations and body.get('confirmed') != 'true':
+            back_to = participant.path('edit')
+            total = Money.sum((t.amount.convert(new_currency) for t in foreign_donations), new_currency)
+            msg = _(
+                "You currently receive the equivalent of {money_amount} per week from donations in "
+                "foreign currencies. These donations will not be converted to your main currency.",
+                money_amount=total
+            )
+            raise response.render('templates/confirm.spt', state, cls='info', msg=msg, back_to=back_to)
+    if change_currency:
+        participant.change_main_currency(new_currency, user)
+    if change_policy:
+        website.db.run("""
+            UPDATE participants
+               SET accepted_currencies = %s
+             WHERE id = %s
+        """, (','.join(new_accepted), participant.id))
+        participant.set_attributes(accepted_currencies=new_accepted)
+    form_post_success(state)
 
 title = participant.username
 subhead = _("Currencies")
@@ -13,7 +50,7 @@ subhead = _("Currencies")
 
 % block form
 
-<form action="{{ participant.path('settings/edit') }}" method="POST">
+<form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
     <p>{{ _("Which currencies should your donors be allowed to send you, and which one do you prefer?") }}</p>

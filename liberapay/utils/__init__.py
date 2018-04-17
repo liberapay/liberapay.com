@@ -24,6 +24,7 @@ from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
+from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired, InvalidNumber
 from liberapay.models.community import Community
 from liberapay.utils.i18n import LOCALE_EN, add_helpers_to_context
@@ -149,6 +150,20 @@ def look_up_redirections(request, response):
     if r:
         location = r.to_prefix + path[len(r.from_prefix.rstrip('%')):]
         response.redirect(location.rstrip('/'))
+
+
+def form_post_success(state, msg='', redirect_url=None):
+    """This function is meant to be called after a successful form POST.
+    """
+    request, response = state['request'], state['response']
+    if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
+        raise response.json({"msg": msg} if msg else {})
+    else:
+        if not redirect_url:
+            redirect_url = request.body.get('back_to') or request.path.raw
+            redirect_url = response.sanitize_untrusted_url(redirect_url)
+        redirect_url = _modify_query(redirect_url, 'success', b64encode_s(msg))
+        response.redirect(redirect_url)
 
 
 def b64decode_s(s, **kw):

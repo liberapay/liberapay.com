@@ -2,32 +2,7 @@ from liberapay.utils import get_participant
 
 [---]
 
-request.allow('GET', 'POST')
 participant = get_participant(state, restrict=True)
-
-out = {}
-
-if request.method == 'POST':
-
-    do = request.body['do']
-    try:
-        action, c_id = do.split(':', 1)
-        c_id = int(c_id)
-    except ValueError:
-        raise response.error(400)
-
-    if action not in ('join', 'leave'):
-        raise response.error(400)
-
-    is_on = action == 'join'
-    user.upsert_community_membership(is_on, c_id)
-
-    if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-        redir_url = request.body.get('back_to') or participant.path('edit')
-        response.redirect(redir_url, trusted_url=False)
-
-else:
-    out = participant.get_communities()
+response.redirect(participant.path('edit/communities'), code=307)
 
 [---] application/json
-out

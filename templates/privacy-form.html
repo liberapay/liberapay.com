@@ -1,5 +1,5 @@
 % macro privacy_form(participant)
-    <form action="{{ participant.path('settings/edit') }}" method="POST" class="js-submit">
+    <form action="{{ participant.path('edit/privacy') }}" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
         <input type="hidden" name="privacy" value="{{ constants.PRIVACY_FIELDS_S }}" />

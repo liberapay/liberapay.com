@@ -1,27 +1,5 @@
 from liberapay.utils import get_participant
-
 [---]
-
-request.allow("POST")
 participant = get_participant(state, restrict=True, allow_member=True)
-
-goal = request.body["goal"]
-
-if goal == "null":
-    goal = None
-elif goal == "custom":
-    goal = request.body["goal_custom"]
-
-if goal is not None:
-    goal = Money(parse_decimal(goal), participant.main_currency).round_down()
-
-back_to = participant.path('edit')
-if goal == -1 and not request.body.get("confirmed"):
-    msg = _("Warning: Doing this will remove all the tips you are currently receiving."
-            "\n\nThat cannot be undone!")
-    response.render('templates/confirm.spt', state, msg=msg, back_to=back_to)
-else:
-    participant.update_goal(goal)
-    response.redirect(back_to)
-
+response.redirect(participant.path('edit/goal'), code=307)
 [---] text/html

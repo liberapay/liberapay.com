@@ -1,9 +1,13 @@
 # coding: utf8
 
-from liberapay.utils import get_participant
+from liberapay.utils import form_post_success, get_participant
 
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == 'POST':
+    participant.change_username(request.body['username'], recorder=user)
+    form_post_success(state, redirect_url=participant.path('edit/username'))
 
 _username = participant.username if participant.username[0] != '~' else ''
 
@@ -15,9 +19,8 @@ subhead = _("Username")
 
 % block form
 
-    <form action="{{ participant.path('settings/edit') }}" method="POST">
+    <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
         % if not _username
         <p>{{ _("Setting a username makes the URL of your profile nicer.") }}</p>
         % endif

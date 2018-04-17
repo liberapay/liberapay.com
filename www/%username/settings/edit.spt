@@ -1,14 +1,12 @@
-from liberapay.constants import PRIVACY_FIELDS
 from liberapay.exceptions import TooManyAttempts
 from liberapay.models.participant import Participant
-from liberapay.utils import b64encode_s, get_participant
+from liberapay.utils import form_post_success, get_participant
 
 [---]
 
 request.allow('POST')
 
 body = request.body
-out = {}
 
 p = get_participant(state, restrict=True, allow_member=True)
 
@@ -47,80 +45,18 @@ if 'new-password' in body:
     website.db.hit_rate_limit('change_password', p.id, TooManyAttempts)
     checked = password_status is not None or ignore_warning
     p.update_password(body['new-password'], checked=checked)
-    out['msg'] = _("Your password has been changed.")
+    form_post_success(state, msg=_("Your password has been changed."))
 
 elif 'privacy' in body:
-    if not p.is_person:
-        raise response.error(403)
-    fields = body['privacy'].split()
-    for field in fields:
-        if field not in PRIVACY_FIELDS:
-            continue
-        value = body.get(field) == 'on'
-        if isinstance(getattr(p, field), bool):
-            website.db.run("""
-                UPDATE participants
-                   SET {0} = %s
-                 WHERE id = %s
-            """.format(field), (value, p.id))
-        else:
-            p.update_bit(field, 1, value)
-    out['msg'] = _("Your privacy settings have been changed.")
+    response.redirect(p.path('edit/privacy'), code=307)
 
 elif 'username' in body:
-    p.change_username(body['username'], recorder=user)
-    response.redirect(p.path('edit'))
+    response.redirect(p.path('edit/username'), code=307)
 
 elif 'main_currency' in body:
-    new_currency = body['main_currency']
-    old_currency = p.main_currency
-    change_currency = new_currency != old_currency
-    new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
-    change_policy = new_accepted != p.accepted_currencies
-    if new_currency not in new_accepted:
-        raise response.error(400, _("The submitted settings are incoherent."))
-    if change_currency or change_policy:
-        foreign_donations = website.db.all("""
-            SELECT t.*
-              FROM current_tips t
-             WHERE t.tippee = %s
-               AND t.amount > 0
-               AND t.amount::currency NOT IN %s
-        """, (p.id, tuple(new_accepted)))
-        if foreign_donations and body.get('confirmed') != 'true':
-            back_to = p.path('edit')
-            total = Money.sum((t.amount.convert(new_currency) for t in foreign_donations), new_currency)
-            msg = _(
-                "You currently receive the equivalent of {money_amount} per week from donations in "
-                "foreign currencies. These donations will not be converted to your main currency.",
-                money_amount=total
-            )
-            raise response.render('templates/confirm.spt', state, cls='info', msg=msg, back_to=back_to)
-    if change_currency:
-        p.change_main_currency(new_currency, user)
-    if change_policy:
-        website.db.run("""
-            UPDATE participants
-               SET accepted_currencies = %s
-             WHERE id = %s
-        """, (','.join(new_accepted), p.id))
-        p.set_attributes(accepted_currencies=new_accepted)
-    response.redirect(p.path('edit'))
+    response.redirect(p.path('edit/currencies'), code=307)
 
 else:
     raise response.error(400, "no known key found in body")
 
-if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-    back_to = body.get('back_to') or p.path('settings/')
-    try:
-        assert '?' not in back_to
-        assert '#' not in back_to
-        back_to += '?success=' + b64encode_s(out["msg"])
-    except Exception as e:
-        website.tell_sentry(e, state)
-    response.redirect(back_to, trusted_url=False)
-
 [---] text/html
-
-[---] application/json
-out

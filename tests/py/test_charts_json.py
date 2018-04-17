@@ -163,7 +163,7 @@ class TestChartsJson(FakeTransfersHarness):
     def test_anonymous_receiver(self):
         self.run_payday()
         self.run_payday()
-        self.client.PxST('/carl/settings/edit',
+        self.client.PxST('/carl/edit/privacy',
                          {'privacy': 'hide_receiving', 'hide_receiving': 'on'},
                          auth_as=self.carl)
 
