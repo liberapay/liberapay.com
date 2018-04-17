@@ -29,10 +29,6 @@ is_a_person = participant.kind not in ('group', 'community')
         <h3>{{ _("Password") }}</h3>
         % include "templates/password-form.html"
 
-        <h3 id="privacy">{{ _("Privacy") }}</h3>
-        % from "templates/privacy-form.html" import privacy_form with context
-        {{ privacy_form(participant) }}
-
         <div>
             <h3>{{ _("Close") }}</h3>
             <a class="btn btn-default" href="{{ participant.path('settings/close') }}">{{ _("Close Account") }}</a>
