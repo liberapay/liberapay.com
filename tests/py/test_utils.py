@@ -82,6 +82,9 @@ class Tests(Harness):
         assert r.code == 302
         assert r.headers[b'Location'] == b'/alice'
 
+    # Card expiration
+    # ===============
+
     def test_is_expired(self):
         expiration = datetime.utcnow() - timedelta(days=40)
         assert utils.is_card_expired(expiration.year, expiration.month)
@@ -89,6 +92,9 @@ class Tests(Harness):
     def test_not_expired(self):
         expiration = datetime.utcnow() + timedelta(days=100)
         assert not utils.is_card_expired(expiration.year, expiration.month)
+
+    # i18n
+    # ====
 
     def test_format_currency_without_trailing_zeroes(self):
         expected = '$16'
@@ -99,6 +105,11 @@ class Tests(Harness):
         expected = '$16.00'
         actual = i18n.LOCALE_EN.format_money(Money(16, 'USD'))
         assert actual == expected
+
+    def test_locales_share_message_keys(self):
+        msgkey1 = self.website.locales['de'].catalog['Save'].id
+        msgkey2 = self.website.locales['fr'].catalog['Save'].id
+        assert id(msgkey1) == id(msgkey2)
 
     # Markdown
     # ========
