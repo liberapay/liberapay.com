@@ -121,7 +121,7 @@ title = _("Adding Money")
         <div class="col-sm-6">
             <div class="panel panel-default"><div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
-                <h4>{{ _("Credit Card") }}<br><small>Visa / Mastercard / CB</small></h4>
+                <h4>{{ _("Credit/Debit Card") }}<br><small>Visa / Mastercard / CB</small></h4>
                 <p>
                     {{ _("Easy and instantaneous") }}<br>
                     {{ _("Fees: {0}% + {1}", *constants.FEE_PAYIN_CARD[currency].with_vat) }}
