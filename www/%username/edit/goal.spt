@@ -45,7 +45,7 @@ subhead = _("Goal")
 <form action="" method="POST" class="goal">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
-    <div class="radio">
+    <div class="radio no-margin-top">
         <label class="with-input-group-sm">
             <input type="radio" name="goal" id="goal-yes" value="custom"
                    {{ 'checked' if participant.goal and participant.goal > 0 else '' }}/>
