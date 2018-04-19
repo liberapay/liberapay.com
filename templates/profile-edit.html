@@ -2,11 +2,10 @@
 
 % extends "templates/base.html"
 
-{% block heading %}{% endblock %}
+{% block before_content %}{% endblock %}
 
-% block content
-<br>
-<div class="flex-row block-xs">
+% block before_container
+<div class="tabs-vertical">
     <div class="collapse-xs">
         <button class="btn" type="button"
                 data-toggle="collapse" data-target="#subnav-collapse"
@@ -18,7 +17,7 @@
             <li class="not-a-tab"><a href="{{ participant.path('') }}">{{ _("View") }}</a></li>
         </ul>
     </div>
-    <div class="profile-edit">
+    <div class="content-col">
         % if 'success' in request.qs
             % set success = request.qs.pop('success')
             <div class="alert alert-success">{{
