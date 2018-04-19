@@ -585,10 +585,28 @@ def replace_unused_singulars(c):
             c[msg[1]] = m
 
 
+def share_source_strings(catalog, shared_strings):
+    """Share message IDs between catalogs to save memory.
+    """
+    if not shared_strings:
+        shared_strings.update((m.id, m.id) for m in catalog)
+        return
+    for m in list(catalog):
+        if not m.id:
+            continue
+        if m.id in shared_strings:
+            m.id = shared_strings[m.id]
+            catalog.delete(m.id)
+            catalog[m.id] = m
+        else:
+            shared_strings[m.id] = m.id
+
+
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     # Load the locales
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
+    source_strings = {}
     for file in os.listdir(localeDir):
         try:
             parts = file.split(".")
@@ -598,6 +616,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             with open(os.path.join(localeDir, file)) as f:
                 l = locales[lang.lower()] = Locale(lang)
                 c = l.catalog = read_po(f)
+                share_source_strings(c, source_strings)
                 c.plural_func = get_function_from_rule(c.plural_expr)
                 replace_unused_singulars(c)
                 try:
@@ -610,6 +629,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
             tell_sentry(e, {})
+    del source_strings
 
     # Prepare a unique and sorted list for use in the language switcher
     percent = lambda l, total: sum((percent(s, len(s)) if isinstance(s, tuple) else 1) for s in l if s) / total
