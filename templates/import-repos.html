@@ -14,8 +14,8 @@
 % endif
 
 <p>{{
-    _("We can import a list of your team's repositories from:") if participant.kind == 'group' else
-    _("We can import a list of your repositories from:")
+    _("Liberpay can import a list of your team's repositories from:") if participant.kind == 'group' else
+    _("Liberpay can import a list of your repositories from:")
 }}</p>
 <p>
 % for platform in website.platforms.hasattr('api_repos_path')

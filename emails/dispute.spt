@@ -6,7 +6,7 @@ Dispute {{ dispute.id }} has been {{ dispute.result_code.lower() }}
 The status of dispute {{ dispute.id }} has changed to {{ dispute.status }}
 % endif
 [---] text/html
-<p>Dispute information:</p>
+<p>Dispute info:</p>
 <pre>
 % for k, v in dispute.items()
 {{ k }}: {{ v }}

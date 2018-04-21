@@ -39,7 +39,7 @@ if request.method == 'POST':
             if participant.balance and not confirmed:
                 confirm = _(
                     "Are you sure you want to change the type of your account? For legal "
-                    "reasons we will have to create a new account for you in our payment "
+                    "reasons Liberapay will have to create a new account for you in our payment "
                     "partner's system, and transfer the money from your old account."
                 )
                 response.render('templates/confirm.spt', state, msg=confirm, back_to='')
@@ -48,7 +48,7 @@ if request.method == 'POST':
             """) is not None
             if payday_is_running:
                 msg = _(
-                    "We can't change the type of your account during payday, please "
+                    "Your account type can not be changed during payday payouts, please "
                     "try again in a few minutes."
                 )
                 response.render('templates/retry-later.spt', state, msg=msg)
@@ -72,7 +72,7 @@ if request.method == 'POST':
 
     if account.Id and account.kyc_level != 'LIGHT' and not confirmed:
         confirm = _(
-            "Are you sure you want to change your identity information? If you "
+            "Are you sure you want to change your identity info? If you "
             "do, you may have to go through the identity verification process "
             "again."
         )
@@ -162,10 +162,10 @@ if request.method == 'POST':
                         tipper_wallet_id=w.remote_id,
                         tippee_mango_id=account.Id,
                     )
-                success = _("Your identity information has been updated.")
+                success = _("Your identity info has been updated.")
             elif account.Id:
                 account.save()
-                success = _("Your identity information has been updated.")
+                success = _("Your identity info has been updated.")
             elif body.get('terms') == 'agree':
                 account.save()
                 r = website.db.one("""
@@ -180,7 +180,7 @@ if request.method == 'POST':
                     raise response.error(409, "race condition")
                 participant.set_attributes(**r._asdict())
                 participant.mark_notifications_as_read('identity_required')
-                success = _("Your identity information has been registered.")
+                success = _("Your identity info has been registered.")
             else:
                 error = _("You have to agree to MangoPay's Terms of Service.")
         except APIError as err:
@@ -243,9 +243,8 @@ else:
     % endif
 
     <p>{{ _(
-        "If you give more than {0} in a year, or receive more than {1} in a year, "
-        "or if your account shows signs of suspicious activity, then you will have "
-        "to provide additional information:"
+        "You are required to provide additional info if you give more than {0} in a year, "
+        "receive more than {1} in a year, or your account shows signs of suspicious activity."
         , constants.KYC_PAYIN_YEARLY_THRESHOLD
         , constants.KYC_PAYOUT_YEARLY_THRESHOLD
     ) }}</p>

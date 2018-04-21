@@ -43,7 +43,7 @@ else:
 % block content
 % if not platform_name
 
-    <p>{{ _("We can import a list of repositories you have starred from:") }}</p>
+    <p>{{ _("A list of repositories you have starred can be imported from:") }}</p>
     <p>
     % for platform in website.platforms.hasattr('api_starred_path')
     <a class="btn btn-default btn-lg"

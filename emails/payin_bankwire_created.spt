@@ -2,8 +2,8 @@
 
 [---] text/html
 <p>{{ _(
-    "We are ready to receive the funds. Please send exactly {0} to the "
-    "following account using the reference code below so we'll know the "
+    "Liberapay is ready to receive the funds. Please send exactly {0} to the "
+    "following account using the reference code below so to confirm the "
     "money came from you:",
     LegacyMoney(exchange.amount + exchange.fee)
 ) }}</p>

@@ -117,12 +117,12 @@ class Harness(unittest.TestCase):
     def setUpVCR(cls):
         """Set up VCR.
 
-        We use the VCR library to freeze API calls. Frozen calls are stored in
+        Liberapay uses the VCR library to freeze API calls. Frozen calls are stored in
         tests/fixtures/ for your convenience (otherwise your first test run
         would take fooooorrr eeeevvveeerrrr). If you find that an API call has
         drifted from our frozen version of it, simply remove that fixture file
         and rerun. The VCR library should recreate the fixture with the new
-        information, and you can commit that with your updated tests.
+        info, and you can commit that with your updated tests.
 
         """
         cls.vcr_cassette = use_cassette(cls.__name__)

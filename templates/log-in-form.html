@@ -3,9 +3,9 @@
 % set email = state['log-in.email-sent-to']
 <div class="alert alert-success">
     <p>{{ _(
-        "We've sent you a single-use login link. Check your inbox, open the "
-        "provided link in a new tab, then come back to this page and click on "
-        "the button below to carry on with what you wanted to do."
+        "Check your inbox for a single-use login link, open the "
+        "link in it in a new tab, then come back to this page and click on "
+        "the button below to carry on."
     ) }}</p>
 
     <br>
@@ -20,7 +20,7 @@
 
 % set email = state['log-in.carry-on']
 <div class="alert alert-danger">
-    <p>{{ _("You're still not logged in as {0}.", email) }}</p>
+    <p>{{ _("You are still not logged in as {0}.", email) }}</p>
 
     <br>
     <form action="" method="POST">
@@ -53,7 +53,7 @@
 
 <p class="help-block">{{ _(
     "Leave the previous field empty if your account doesn't have a password, "
-    "or if you've lost it. We'll send you a login link via email."
+    "or if you've lost it. Liberapay will email a login link to you."
 ) }}</p>
 
 <button class="btn btn-default">{{ _("Go") }}</button>

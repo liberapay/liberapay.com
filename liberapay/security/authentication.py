@@ -93,7 +93,7 @@ def sign_in_with_form_data(body, state):
                 raise LoginRequired
             else:
                 state['log-in.error'] = _(
-                    "We didn't find any account whose primary email address is {0}.",
+                    "There are no accounts with {0} as primary address.",
                     email
                 )
             p = None

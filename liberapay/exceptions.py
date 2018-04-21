@@ -107,8 +107,8 @@ class TooManyUsernameChanges(ProblemChangingUsername):
     code = 429
     def msg(self, _):
         return _(
-            "You've already changed your username many times recently, please "
-            "retry later (e.g. in a week) or contact support@liberapay.com."
+            "You have changed your username too many times recently, please "
+            "try again later (e.g. in a week) or contact support@liberapay.com"
         )
 
 
@@ -163,8 +163,8 @@ class TooManyLoginEmails(LazyResponseXXX):
     code = 429
     def msg(self, _):
         return _(
-            "You have consumed your quota of email logins, please try again tomorrow, "
-            "or contact support@liberapay.com."
+            "You have exceeded your quota of email logins, please try again tomorrow, "
+            "or contact support@liberapay.com"
         )
 
 class TooManyPasswordLogins(LazyResponseXXX):
@@ -180,11 +180,10 @@ class TooManySignUps(LazyResponseXXX):
     code = 429
     def msg(self, _):
         return _(
-            "Too many accounts have been created recently. This either means that "
-            "a lot of people are trying to join Liberapay today, or that an attacker "
-            "is trying to overload our system. As a result we have to ask you to come "
-            "back later (e.g. in a few hours), or send an email to support@liberapay.com. "
-            "We apologize for the inconvenience."
+            "Too many recent account creations means either "
+            "a lot of people are trying to join Liberapay today, or an attack "
+            "trying to overload our system. Try again in a few hours, or email"
+            "support@liberapay.com"
         )
 
 
@@ -259,8 +258,8 @@ class PaydayIsRunning(LazyResponseXXX):
 
     def msg(self, _):
         return _(
-            "Sorry, we're running payday right now, and we're not set up to do "
-            "payouts while payday is running. Please check back in a few hours."
+            "Sorry, payments can not be changed during payday payouts. "
+            "Please check back in a few hours."
         )
 
 
@@ -301,8 +300,8 @@ class TooManyCurrencyChanges(LazyResponseXXX):
     code = 429
     def msg(self, _):
         return _(
-            "You've already changed your main currency recently, please retry "
-            "later (e.g. in a week) or contact support@liberapay.com."
+            "You have changed your main currency too recently, try "
+            "again in a week or contact support@liberapay.com"
         )
 
 
@@ -311,6 +310,6 @@ class TooManyAttempts(LazyResponseXXX):
     def msg(self, _):
         return _(
             "There have been too many attempts to perform this action recently, please "
-            "retry later (e.g. in a week) or contact support@liberapay.com if you "
-            "require assistance."
+            "try again in a week or contact support@liberapay.com "
+            "if you require assistance."
         )

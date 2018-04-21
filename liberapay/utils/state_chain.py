@@ -166,9 +166,8 @@ def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None)
     else:
         return
     response.body = _(
-        "Processing your request failed because our server was unable to communicate "
-        "with a service located on another machine. This is a temporary issue, please "
-        "try again later."
+        "Processing your request failed temporarily because the Liberapay server could not communicate "
+        "with a service located on another machine. Please try again later."
     )
     return {'response': response, 'exception': None}
 
