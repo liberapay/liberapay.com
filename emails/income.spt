@@ -5,7 +5,7 @@
 % endif
 
 [---] text/html
-<p>{{ _("{0} were given to you personally.", LegacyMoney(personal)) }}</p>
+<p>{{ _("{0} was given to you personally.", LegacyMoney(personal)) }}</p>
 
 % if not by_team
     % set teams = participant.get_teams()
@@ -18,9 +18,9 @@
     % endif
 % elif len(by_team) == 1
     % set team, amount = list(by_team.items())[0]
-    <p>{{ _("{0} were given to you for your role in the {1} team.", LegacyMoney(amount), team) }}</p>
+    <p>{{ _("{0} was given to you for your role in the {1} team.", LegacyMoney(amount), team) }}</p>
 % else
-    <p>{{ _("{0} were given to you for your roles in the following teams:", LegacyMoney(sum(by_team.values()))) }}</p>
+    <p>{{ _("{0} was given to you for your roles in the following teams:", LegacyMoney(sum(by_team.values()))) }}</p>
     <ul>
     % for team, amount in by_team.items()
         <li>{{ _("{0}: {1}", team, LegacyMoney(amount)) }}</li>
@@ -33,7 +33,7 @@
 <p><a href="{{ participant.url('wallet/') }}">{{ _("See your account's transaction logs") }}</a></p>
 
 [---] text/plain
-{{ _("{0} were given to you personally.", LegacyMoney(personal)) }}
+{{ _("{0} was given to you personally.", LegacyMoney(personal)) }}
 
 % if not by_team
     % set teams = participant.get_teams()
@@ -46,9 +46,9 @@
     % endif
 % elif len(by_team) == 1
     % set team, amount = list(by_team.items())[0]
-    {{- _("{0} were given to you for your role in the {1} team.", LegacyMoney(amount), team) }}
+    {{- _("{0} was given to you for your role in the {1} team.", LegacyMoney(amount), team) }}
 % else
-    {{- _("{0} were given to you for your roles in the following teams:", LegacyMoney(sum(by_team.values()))) }}
+    {{- _("{0} was given to you for your roles in the following teams:", LegacyMoney(sum(by_team.values()))) }}
     % for team, amount in by_team.items()
         {{- _("- {0}: {1}", team, LegacyMoney(amount)) }}
     % endfor
