@@ -104,7 +104,7 @@ if not freeload:
 
 % if ntips
 <div class="col-lg-12">
-    <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
+    <h3>{{ _("Donations") }} ({{ ntips }})</h3>
     <p>{{ _("You give {0} per week.", participant.giving) }}</p>
     % for currency, t in tips_by_currency.items()
     % set tips, total = t
@@ -200,7 +200,7 @@ if not freeload:
 
 % if npledges
 <div class="col-lg-11">
-    <h3>{{ _("Pledges") }} (N={{ npledges }})</h3>
+    <h3>{{ _("Pledges") }} ({{ npledges }})</h3>
     % for currency, t in pledges_by_currency.items()
     % set pledges, total = t
     % if n_pledge_currencies > 1
@@ -250,7 +250,7 @@ if not freeload:
 
 % if ncancelled
 <div class="col-lg-7">
-    <h3>{{ _("Recently Cancelled") }} (N={{ ncancelled }})
+    <h3>{{ _("Recently Cancelled") }} ({{ ncancelled }})
         <small>{{ _("within the last 30 days") }}</small></h3>
     <table class="table">
         <thead>
