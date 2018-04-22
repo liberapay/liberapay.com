@@ -335,6 +335,9 @@ msgstr "個人"
 msgid "Team"
 msgstr "團隊"
 
+msgid "Credit Card"
+msgstr "信用卡"
+
 msgid "Hide total giving from others."
 msgstr "不顯示別人給予的捐款。"
 
@@ -926,6 +929,24 @@ msgstr "代碼庫"
 msgid "Social Networks"
 msgstr "社交網站"
 
+msgid "Username"
+msgstr "用戶名稱"
+
+msgid "Avatar"
+msgstr "大頭照"
+
+msgid "Currencies"
+msgstr "幣種"
+
+msgid "Goal"
+msgstr "目標"
+
+msgid "Statement"
+msgstr "聲明"
+
+msgid "Privacy"
+msgstr "隱私"
+
 msgid "Switch to another language"
 msgstr "切換其它語言"
 
@@ -1056,15 +1077,6 @@ msgstr "字母數字 (不留空格)"
 msgid "Country"
 msgstr "國家"
 
-msgid "Admin override is on.*"
-msgstr "管理者否決權開啟*"
-
-msgid "Save changes"
-msgstr "儲存變更"
-
-msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr "* Liberapay 個人介紹的參考須通過管理者的批淮。"
-
 msgid "Patrons"
 msgstr "贊助者"
 
@@ -1076,6 +1088,12 @@ msgstr "每週"
 
 msgid "Sum"
 msgstr "總和"
+
+msgid "View"
+msgstr "檢視"
+
+msgid "The changes have been saved."
+msgstr ""
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1284,14 +1302,6 @@ msgstr "請確認"
 msgid "Save"
 msgstr "儲存"
 
-#, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "我們無法自 {0} 取得你的大頭照。"
-
-#, python-brace-format
-msgid "Your new avatar URL is: {0}"
-msgstr "你新頭像的網址是: {0}"
-
 msgid "Dashboard"
 msgstr "儀控表"
 
@@ -1354,11 +1364,52 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "是。Liberapay是一個{0}合法註冊{1}於法國的非營利性組織，我們遵守歐盟的金融規定，並且我們的服務安全是對我們來說第一重要的。"
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "提交的說明太長了（{0} > {1}）。"
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "我們無法自 {0} 取得你的大頭照。"
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "你尚未儲存變更，確定要放棄嗎？"
+#, python-brace-format
+msgid "Your new avatar URL is: {0}"
+msgstr "你新頭像的網址是: {0}"
+
+msgid "Modify your Libravatar"
+msgstr "修改你的 Librapay 頭像"
+
+msgid "What is Libravatar?"
+msgstr "什麼是Libravatar？"
+
+msgid "Avatar source"
+msgstr "大頭像來源"
+
+msgid "Avatar email (for Libravatar only)"
+msgstr "大頭像電郵 (僅為Libravatar 使用)"
+
+msgid "The submitted settings are incoherent."
+msgstr "您提交的设定不连贯。"
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr "你目前每週收到大約 {money_amount} 外國貨幣捐款。這些捐款不會轉換成你的主要貨幣。"
+
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr "你允许你的资助者用哪些货币捐款，且你希望他们选择哪些货币？"
+
+msgid "accept"
+msgstr "接受"
+
+msgid "prefer"
+msgstr "希望"
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr "接受其他幣種可能會使得你應對起來更複雜，但拒絕它們可能會影響一部分捐贈者。"
+
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"警告：這樣會移除你目前收到的所有小費。\n"
+"\n"
+"此動作無法還原！"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "我很感謝能收到禮物，並沒有特定的籌款目標。"
@@ -1386,47 +1437,30 @@ msgstr "在這裏我們是贊助者，禮帽地婉謝別人的捐款贈禮。"
 msgid "Our goal is to receive {0}"
 msgstr "我們的目標是收到 {0}"
 
-msgid "View"
-msgstr "檢視"
+msgid "Your privacy settings have been changed."
+msgstr "你的隱私設定已做變更。"
 
-msgid "Username"
-msgstr "用戶名稱"
+msgid "Admin override is on.*"
+msgstr "管理者否決權開啟*"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "設定用戶名稱好讓你的介紹頁網址更為清楚。"
+msgid "Save changes"
+msgstr "儲存變更"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "你是否從其它的網站連到自己的Liberapay介紹頁？確認更新了這些連結！"
+msgid "*The referencing of Liberapay profiles is subject to admin approval."
+msgstr "* Liberapay 個人介紹的參考須通過管理者的批淮。"
 
-msgid "Currencies"
-msgstr "幣種"
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr "提交的說明太長了（{0} > {1}）。"
 
-msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
-msgstr "你允许你的资助者用哪些货币捐款，且你希望他们选择哪些货币？"
-
-msgid "accept"
-msgstr "接受"
-
-msgid "prefer"
-msgstr "希望"
-
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "接受其他幣種可能會使得你應對起來更複雜，但拒絕它們可能會影響一部分捐贈者。"
-
-msgid "Goal"
-msgstr "目標"
-
-msgid "Statement"
-msgstr "聲明"
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "你尚未儲存變更，確定要放棄嗎？"
 
 msgid "This is a preview."
 msgstr "此為預覽。"
 
 msgid "Excerpt that will be used in social media:"
 msgstr "在社交媒體上使用的文字："
-
-msgid "Edit"
-msgstr "編輯"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "對你的工作及尋求捐款的原因等進行描述。我們需要一個簡短的摘要和一個完整說明。"
@@ -1459,23 +1493,11 @@ msgstr "切換到另一個語言："
 msgid "Switch"
 msgstr "切換"
 
-msgid "Avatar"
-msgstr "大頭照"
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr "設定用戶名稱好讓你的介紹頁網址更為清楚。"
 
-msgid "Modify your Libravatar"
-msgstr "修改你的 Librapay 頭像"
-
-msgid "What is Libravatar?"
-msgstr "什麼是Libravatar？"
-
-msgid "Avatar source"
-msgstr "大頭像來源"
-
-msgid "Avatar email (for Libravatar only)"
-msgstr "大頭像電郵 (僅為Libravatar 使用)"
-
-msgid "Privacy"
-msgstr "隱私"
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "你是否從其它的網站連到自己的Liberapay介紹頁？確認更新了這些連結！"
 
 msgid "Email settings"
 msgstr "電郵設定"
@@ -1643,15 +1665,6 @@ msgstr "最近30天內"
 msgid "Cancelled"
 msgstr "取消"
 
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"警告：這樣會移除你目前收到的所有小費。\n"
-"\n"
-"此動作無法還原！"
-
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "你確定切換帳戶種類？由於法律原因我們會在支付夥伴的系統中重新註冊帳號，並將錢從舊帳號中轉移出來。"
 
@@ -1714,6 +1727,9 @@ msgstr "你現在的收入是 {0}。"
 #, python-brace-format
 msgid "{username}'s profile"
 msgstr "{username}的個人檔案"
+
+msgid "Edit"
+msgstr "編輯"
 
 msgid "History"
 msgstr "記錄"
@@ -2114,16 +2130,6 @@ msgstr "密碼不正確"
 msgid "Your password has been changed."
 msgstr "你的密碼已作變更。"
 
-msgid "Your privacy settings have been changed."
-msgstr "你的隱私設定已做變更。"
-
-msgid "The submitted settings are incoherent."
-msgstr "您提交的设定不连贯。"
-
-#, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "你目前每週收到大約 {money_amount} 外國貨幣捐款。這些捐款不會轉換成你的主要貨幣。"
-
 msgid "Account"
 msgstr "帳戶"
 
@@ -2325,8 +2331,8 @@ msgstr "你有要給{money_amount}待處理的 {payment_method} 付款，{link_o
 msgid "Please choose a payment method to add money:"
 msgstr "請挑選付款方式來增加金額："
 
-msgid "Credit Card"
-msgstr "信用卡"
+msgid "Credit/Debit Card"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "簡單與即時"

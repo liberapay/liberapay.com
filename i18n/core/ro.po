@@ -337,6 +337,9 @@ msgstr "Individ"
 msgid "Team"
 msgstr "Echipă"
 
+msgid "Credit Card"
+msgstr "Card de credit"
+
 msgid "Hide total giving from others."
 msgstr "Ascunde suma totală oferită."
 
@@ -932,6 +935,24 @@ msgstr "Depozite"
 msgid "Social Networks"
 msgstr "Rețele sociale"
 
+msgid "Username"
+msgstr "Nume de utilizator"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Valute"
+
+msgid "Goal"
+msgstr "Țel"
+
+msgid "Statement"
+msgstr "Declarație"
+
+msgid "Privacy"
+msgstr "Confidențialitate"
+
 msgid "Switch to another language"
 msgstr "Comutați la altă limbă"
 
@@ -1062,15 +1083,6 @@ msgstr "Alfanumeric (fără spații)"
 msgid "Country"
 msgstr "Țară"
 
-msgid "Admin override is on.*"
-msgstr "Suprascirerea administratorilor este pornită.*"
-
-msgid "Save changes"
-msgstr "Salvează schimbările"
-
-msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr "*Procesul de referință al profilelor Liberapay este supusă aprobării administratorilor."
-
 msgid "Patrons"
 msgstr "Susținători"
 
@@ -1082,6 +1094,12 @@ msgstr "pe săptămână"
 
 msgid "Sum"
 msgstr "Sumă"
+
+msgid "View"
+msgstr "Vizualizează"
+
+msgid "The changes have been saved."
+msgstr ""
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1294,14 +1312,6 @@ msgstr "Confirmați vă rog"
 msgid "Save"
 msgstr "Salvează"
 
-#, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "Nu am putut să obținem un avatar pentru dumneavoastră de la {0}."
-
-#, python-brace-format
-msgid "Your new avatar URL is: {0}"
-msgstr "Noul URL al avatarului dumneavoastră este: {0}"
-
 msgid "Dashboard"
 msgstr "Tablou de bord"
 
@@ -1364,11 +1374,52 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "Da. Liberapay este condusă de o organizație non-profit {0}înregistrată legal{1} în Franța, noi respectăm reglementările financiare ale Uniunii Europene, iar securitatea serviciului nostru este extrem de importantă pentru noi."
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Sumarul trimis este prea lung ({0} > {1})."
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "Nu am putut să obținem un avatar pentru dumneavoastră de la {0}."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Nu ați salvat modificările, sunteți sigur că le anulați?"
+#, python-brace-format
+msgid "Your new avatar URL is: {0}"
+msgstr "Noul URL al avatarului dumneavoastră este: {0}"
+
+msgid "Modify your Libravatar"
+msgstr "Modificați-vă Libravatar-ul"
+
+msgid "What is Libravatar?"
+msgstr "Ce este Libravatar?"
+
+msgid "Avatar source"
+msgstr "Sursă de avatar"
+
+msgid "Avatar email (for Libravatar only)"
+msgstr "E-mail avatar (numai pentru Libravatar)"
+
+msgid "The submitted settings are incoherent."
+msgstr "Configurările trimise sunt incoerente."
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr "Primiți momentan echivalentul a {money_amount} pe săptămână din donații în valute străine. Aceste donații nu vor fi convertite în valuta dumneavoastră principală."
+
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr "Ce valută ar trebui donorii să vă trimită dumneavoastră, și ce valută preferați?"
+
+msgid "accept"
+msgstr "acceptă"
+
+msgid "prefer"
+msgstr "prefer"
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr "Acceptarea valutelor străine poate complica lucrurile pentru dumneavoastră, dar respingelea lor poate descuraja unii donatori."
+
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"Avertisment: Făcând asta va elimina toate donațiile pe care le primiți curent.\n"
+"\n"
+"Aceast lucru este ireversibil!"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Sunt deschis la daruri, dar nu am un țel de finanțare specific."
@@ -1396,47 +1447,30 @@ msgstr "Suntem aici ca susținători, și refuzăm politicos primirea darurilor.
 msgid "Our goal is to receive {0}"
 msgstr "Țelul nostru este să primim {0}"
 
-msgid "View"
-msgstr "Vizualizează"
+msgid "Your privacy settings have been changed."
+msgstr "Configurările de confidențialitate au fost modificate."
 
-msgid "Username"
-msgstr "Nume de utilizator"
+msgid "Admin override is on.*"
+msgstr "Suprascirerea administratorilor este pornită.*"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Stabilirea unui nume de utilizator face URL-ul profilului dumneavoastră mai atrăgător."
+msgid "Save changes"
+msgstr "Salvează schimbările"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Ați conectat profilul Liberapay pe alte situri? Asigurați-vă că ați actualizat și acele legături!"
+msgid "*The referencing of Liberapay profiles is subject to admin approval."
+msgstr "*Procesul de referință al profilelor Liberapay este supusă aprobării administratorilor."
 
-msgid "Currencies"
-msgstr "Valute"
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr "Sumarul trimis este prea lung ({0} > {1})."
 
-msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
-msgstr "Ce valută ar trebui donorii să vă trimită dumneavoastră, și ce valută preferați?"
-
-msgid "accept"
-msgstr "acceptă"
-
-msgid "prefer"
-msgstr "prefer"
-
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "Acceptarea valutelor străine poate complica lucrurile pentru dumneavoastră, dar respingelea lor poate descuraja unii donatori."
-
-msgid "Goal"
-msgstr "Țel"
-
-msgid "Statement"
-msgstr "Declarație"
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Nu ați salvat modificările, sunteți sigur că le anulați?"
 
 msgid "This is a preview."
 msgstr "Aceasta este o previzualizare."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Extras care va fi folosit pe mediile sociale:"
-
-msgid "Edit"
-msgstr "Editează"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Descrieți munca dumneavoastră, de ce cereți donații, etc. Avem nevoie de un sumar și o declarație completă."
@@ -1469,23 +1503,11 @@ msgstr "Comută la altă limbă:"
 msgid "Switch"
 msgstr "Comută"
 
-msgid "Avatar"
-msgstr "Avatar"
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr "Stabilirea unui nume de utilizator face URL-ul profilului dumneavoastră mai atrăgător."
 
-msgid "Modify your Libravatar"
-msgstr "Modificați-vă Libravatar-ul"
-
-msgid "What is Libravatar?"
-msgstr "Ce este Libravatar?"
-
-msgid "Avatar source"
-msgstr "Sursă de avatar"
-
-msgid "Avatar email (for Libravatar only)"
-msgstr "E-mail avatar (numai pentru Libravatar)"
-
-msgid "Privacy"
-msgstr "Confidențialitate"
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "Ați conectat profilul Liberapay pe alte situri? Asigurați-vă că ați actualizat și acele legături!"
 
 msgid "Email settings"
 msgstr "Configurări e-mail"
@@ -1659,15 +1681,6 @@ msgstr "în ultimele 30 de zile"
 msgid "Cancelled"
 msgstr "Anulat"
 
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"Avertisment: Făcând asta va elimina toate donațiile pe care le primiți curent.\n"
-"\n"
-"Aceast lucru este ireversibil!"
-
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Sunteți sigur că doriți să schimbați tipul contului? Pentru motive legale va trebui să creem un nou cont pentru dumneavoastră în sistemul de plăți al partenerilor noștri, și să transferăm banii din contul dumneavoastră vechi."
 
@@ -1730,6 +1743,9 @@ msgstr "Beneficiul dumneavoastră este acum {0}."
 #, python-brace-format
 msgid "{username}'s profile"
 msgstr "Profilul lui {username}"
+
+msgid "Edit"
+msgstr "Editează"
 
 msgid "History"
 msgstr "Istoric"
@@ -2134,16 +2150,6 @@ msgstr "Parolă incorectă"
 msgid "Your password has been changed."
 msgstr "Parola dumneavoastră a fost modificată."
 
-msgid "Your privacy settings have been changed."
-msgstr "Configurările de confidențialitate au fost modificate."
-
-msgid "The submitted settings are incoherent."
-msgstr "Configurările trimise sunt incoerente."
-
-#, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Primiți momentan echivalentul a {money_amount} pe săptămână din donații în valute străine. Aceste donații nu vor fi convertite în valuta dumneavoastră principală."
-
 msgid "Account"
 msgstr "Cont"
 
@@ -2353,8 +2359,8 @@ msgstr "Aveți o plată {payment_method} în așteptare de {money_amount}. {link
 msgid "Please choose a payment method to add money:"
 msgstr "Alegeți o metodă de plată pentru a adăuga fonduri:"
 
-msgid "Credit Card"
-msgstr "Card de credit"
+msgid "Credit/Debit Card"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "Ușor și instant"

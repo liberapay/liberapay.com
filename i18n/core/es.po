@@ -336,6 +336,9 @@ msgstr "Individuo"
 msgid "Team"
 msgstr "Equipo"
 
+msgid "Credit Card"
+msgstr "Tarjeta de crédito"
+
 msgid "Hide total giving from others."
 msgstr "No mostrar el total de tus aportaciones a otros."
 
@@ -929,6 +932,24 @@ msgstr "Repositorios"
 msgid "Social Networks"
 msgstr "Redes sociales"
 
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Monedas"
+
+msgid "Goal"
+msgstr "Objetivo"
+
+msgid "Statement"
+msgstr "Exposición"
+
+msgid "Privacy"
+msgstr "Privacidad"
+
 msgid "Switch to another language"
 msgstr "Cambiar idioma"
 
@@ -1059,15 +1080,6 @@ msgstr "Alfanumérica (sin espacios)"
 msgid "Country"
 msgstr "País"
 
-msgid "Admin override is on.*"
-msgstr "La anulación del automatismo por parte del administrador está activada.*"
-
-msgid "Save changes"
-msgstr "Guardar cambios"
-
-msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr "*La referencia de los perfiles de Liberapay está sujeta a la aprobación de administradores."
-
 msgid "Patrons"
 msgstr "Mecenas"
 
@@ -1079,6 +1091,12 @@ msgstr "por semana"
 
 msgid "Sum"
 msgstr "Total"
+
+msgid "View"
+msgstr "Ver"
+
+msgid "The changes have been saved."
+msgstr ""
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1289,14 +1307,6 @@ msgstr "Por favor, confirma"
 msgid "Save"
 msgstr "Guardar"
 
-#, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "No pudimos obtener un avatar para ti desde {0}."
-
-#, python-brace-format
-msgid "Your new avatar URL is: {0}"
-msgstr "El URL de tu avatar nuevo es: {0}"
-
 msgid "Dashboard"
 msgstr "Panel de control"
 
@@ -1359,11 +1369,52 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "Sí. Liberapay está gestionado por una organización sin ánimo de lucro {0}legistrada legalmente{1} en Francia, cumplimos con las regulaciones financieras de la Unión Europea, y la seguridad de nuestro servicio es de suma importancia para nosotros."
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "El resumen es demasiado largo ({0} > {1})."
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "No pudimos obtener un avatar para ti desde {0}."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "No has guardado tus cambios; ¿confirmas que quieres eliminarlos?"
+#, python-brace-format
+msgid "Your new avatar URL is: {0}"
+msgstr "El URL de tu avatar nuevo es: {0}"
+
+msgid "Modify your Libravatar"
+msgstr "Modificar tu Libravatar"
+
+msgid "What is Libravatar?"
+msgstr "¿Qué es Libravatar?"
+
+msgid "Avatar source"
+msgstr "Origen del avatar"
+
+msgid "Avatar email (for Libravatar only)"
+msgstr "Avatar de correo electrónico (para Libravatar solamente)"
+
+msgid "The submitted settings are incoherent."
+msgstr "Los ajustes enviados son incoherentes."
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr "Actualmente recibes el equivalente a {money_amount} por semana de donaciones en monedas extranjeras. Estas donaciones no serán convertidas a tu moneda principal."
+
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr "¿Qué monedas te deberían poder enviar tus donantes, y cuál prefieres?"
+
+msgid "accept"
+msgstr "aceptar"
+
+msgid "prefer"
+msgstr "preferir"
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr "Aceptar monedas extranjeras puede complicarte las cosas, pero rechazarlas puede disuadir a algunos donantes."
+
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"Atención: hacer esto eliminará todas las propinas que estás recibiendo actualmente.\n"
+"\n"
+"¡Esto no se puede deshacer!"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Agradezco los regalos, pero no tengo un objetivo en específico."
@@ -1391,47 +1442,30 @@ msgstr "Estamos aquí como mecenas, y rehusamos educadamente recibir regalos."
 msgid "Our goal is to receive {0}"
 msgstr "Nuestro objetivo es recibir {0}"
 
-msgid "View"
-msgstr "Ver"
+msgid "Your privacy settings have been changed."
+msgstr "Los ajustes de privacidad han sido cambiados."
 
-msgid "Username"
-msgstr "Nombre de usuario"
+msgid "Admin override is on.*"
+msgstr "La anulación del automatismo por parte del administrador está activada.*"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Establecer un nombre de usuario hace que el URL de tu perfil sea más bonito."
+msgid "Save changes"
+msgstr "Guardar cambios"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "¿Has enlazado tu perfil de Liberapay en otros sitios web? ¡Acuérdate de actualizar esos enlaces!"
+msgid "*The referencing of Liberapay profiles is subject to admin approval."
+msgstr "*La referencia de los perfiles de Liberapay está sujeta a la aprobación de administradores."
 
-msgid "Currencies"
-msgstr "Monedas"
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr "El resumen es demasiado largo ({0} > {1})."
 
-msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
-msgstr "¿Qué monedas te deberían poder enviar tus donantes, y cuál prefieres?"
-
-msgid "accept"
-msgstr "aceptar"
-
-msgid "prefer"
-msgstr "preferir"
-
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "Aceptar monedas extranjeras puede complicarte las cosas, pero rechazarlas puede disuadir a algunos donantes."
-
-msgid "Goal"
-msgstr "Objetivo"
-
-msgid "Statement"
-msgstr "Exposición"
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "No has guardado tus cambios; ¿confirmas que quieres eliminarlos?"
 
 msgid "This is a preview."
 msgstr "Esto es una previsualización."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Extracto que se usará en redes sociales:"
-
-msgid "Edit"
-msgstr "Editar"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Describe tu trabajo, por qué estás pidiendo donaciones, etc. Necesitamos un resumen corto y una exposición."
@@ -1464,23 +1498,11 @@ msgstr "Cambiar a otro idioma:"
 msgid "Switch"
 msgstr "Cambiar"
 
-msgid "Avatar"
-msgstr "Avatar"
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr "Establecer un nombre de usuario hace que el URL de tu perfil sea más bonito."
 
-msgid "Modify your Libravatar"
-msgstr "Modificar tu Libravatar"
-
-msgid "What is Libravatar?"
-msgstr "¿Qué es Libravatar?"
-
-msgid "Avatar source"
-msgstr "Origen del avatar"
-
-msgid "Avatar email (for Libravatar only)"
-msgstr "Avatar de correo electrónico (para Libravatar solamente)"
-
-msgid "Privacy"
-msgstr "Privacidad"
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "¿Has enlazado tu perfil de Liberapay en otros sitios web? ¡Acuérdate de actualizar esos enlaces!"
 
 msgid "Email settings"
 msgstr "Ajustes del correo electrónico"
@@ -1651,15 +1673,6 @@ msgstr "en los últimos 30 días"
 msgid "Cancelled"
 msgstr "Cancelado"
 
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"Atención: hacer esto eliminará todas las propinas que estás recibiendo actualmente.\n"
-"\n"
-"¡Esto no se puede deshacer!"
-
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "¿Estás seguro de que quieres cambiar el tipo de tu cuenta? Por razones legales tendremos que crear una nueva cuenta para ti en nuestro sistema de pagos asociado, y transferir el dinero desde tu vieja cuenta."
 
@@ -1722,6 +1735,9 @@ msgstr "Su toma es ahora {0}."
 #, python-brace-format
 msgid "{username}'s profile"
 msgstr "Perfil de {username}"
+
+msgid "Edit"
+msgstr "Editar"
 
 msgid "History"
 msgstr "Historial"
@@ -2124,16 +2140,6 @@ msgstr "Contraseña incorrecta"
 msgid "Your password has been changed."
 msgstr "Su contraseña ha sido cambiada."
 
-msgid "Your privacy settings have been changed."
-msgstr "Los ajustes de privacidad han sido cambiados."
-
-msgid "The submitted settings are incoherent."
-msgstr "Los ajustes enviados son incoherentes."
-
-#, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Actualmente recibes el equivalente a {money_amount} por semana de donaciones en monedas extranjeras. Estas donaciones no serán convertidas a tu moneda principal."
-
 msgid "Account"
 msgstr "Cuenta"
 
@@ -2339,8 +2345,8 @@ msgstr "Tienes un pago del tipo {payment_method} pendiente de {money_amount}. {l
 msgid "Please choose a payment method to add money:"
 msgstr "Selecciona un método de pago para añadir dinero:"
 
-msgid "Credit Card"
-msgstr "Tarjeta de crédito"
+msgid "Credit/Debit Card"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "Fácil e instantánea"

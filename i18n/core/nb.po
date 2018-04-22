@@ -336,6 +336,9 @@ msgstr "Personlig"
 msgid "Team"
 msgstr "Lag"
 
+msgid "Credit Card"
+msgstr "Kredittkort"
+
 msgid "Hide total giving from others."
 msgstr "Skjul dine gitte almisser fra allmuen."
 
@@ -929,6 +932,24 @@ msgstr "Pakkebrønner"
 msgid "Social Networks"
 msgstr "Sosiale nettverk"
 
+msgid "Username"
+msgstr "Brukernavn"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Valutaer"
+
+msgid "Goal"
+msgstr "Mål"
+
+msgid "Statement"
+msgstr "Budskap"
+
+msgid "Privacy"
+msgstr "Personvern"
+
 msgid "Switch to another language"
 msgstr "Bytt til et annet språk"
 
@@ -1061,15 +1082,6 @@ msgstr "Alfanumerisk (uten mellomrom)"
 msgid "Country"
 msgstr "Land"
 
-msgid "Admin override is on.*"
-msgstr "Administratoroverstyring er påslått.*"
-
-msgid "Save changes"
-msgstr "Lagre endringer"
-
-msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr "*Referering av Liberapay-profiler krever administratorgodkjennelse."
-
 msgid "Patrons"
 msgstr "Givere"
 
@@ -1081,6 +1093,12 @@ msgstr "per uke"
 
 msgid "Sum"
 msgstr "Sum"
+
+msgid "View"
+msgstr "Vis"
+
+msgid "The changes have been saved."
+msgstr ""
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1291,14 +1309,6 @@ msgstr "Bekreft"
 msgid "Save"
 msgstr "Lagre"
 
-#, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "Klarte ikke å hente en avatar til deg fra {0}."
-
-#, python-brace-format
-msgid "Your new avatar URL is: {0}"
-msgstr "Din nye avatarnettadresse er: {0}"
-
 msgid "Dashboard"
 msgstr "Oversikt"
 
@@ -1361,11 +1371,52 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "Ja. Liberapay er drevet av en veldedig organisasjon som er {0}registrert juridisk{1} i Frankrike, den overholder EUs finansielle reguleringer, og sikkerheten på tjenesten er av absolutt avgjørende viktighet for oss."
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Innsendt sammendrag er for langt ({0} > {1})."
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "Klarte ikke å hente en avatar til deg fra {0}."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Du har ikke lagret endringene dine, er du sikker på at du ønsker å forkaste dem?"
+#, python-brace-format
+msgid "Your new avatar URL is: {0}"
+msgstr "Din nye avatarnettadresse er: {0}"
+
+msgid "Modify your Libravatar"
+msgstr "Modifiser din Libravatar"
+
+msgid "What is Libravatar?"
+msgstr "Hva er Libravatar?"
+
+msgid "Avatar source"
+msgstr "Avatarkilde"
+
+msgid "Avatar email (for Libravatar only)"
+msgstr "Avatar-e-post (kun for Libravatar)"
+
+msgid "The submitted settings are incoherent."
+msgstr "Innsendte innstillinger går ikke overens."
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr "Du mottar i øyeblikket motsvarende {money_amount} per ike fra bidragsytere i utenlandsk valuta. Disse donasjonene vil bli konvertert til din hovedvaluta."
+
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr "Hvilke valutaer tar du imot, og hvilken foretrekker du?"
+
+msgid "accept"
+msgstr "godta"
+
+msgid "prefer"
+msgstr "foretrekk"
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr "Å godta utenlandsk valuta kan gjøre ting mer komplisert for deg, mens å avslå dem kan avskrekke enkelte bidragsytere."
+
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"Advarsel: Hvis du gjør dette kommer alle donasjoner du mottar til å forsvinne.\n"
+"\n"
+"Dette kan ikke angres!"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Jeg er takknemlig for gaver, men har ikke noe spesifikt finansieringsmål."
@@ -1393,47 +1444,30 @@ msgstr "Her for å gi og takker høflig nei til donasjoner."
 msgid "Our goal is to receive {0}"
 msgstr "Målet vårt er å motta {0}"
 
-msgid "View"
-msgstr "Vis"
+msgid "Your privacy settings have been changed."
+msgstr "Personvernsinnstillingene dine har blitt endret."
 
-msgid "Username"
-msgstr "Brukernavn"
+msgid "Admin override is on.*"
+msgstr "Administratoroverstyring er påslått.*"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Å sette et brukernavn for nettadressen for profilen din til å se bedre ut."
+msgid "Save changes"
+msgstr "Lagre endringer"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Har du lenket til Liberapay-profilen din på andre nettsider? Husk å oppdatere de lenkene!"
+msgid "*The referencing of Liberapay profiles is subject to admin approval."
+msgstr "*Referering av Liberapay-profiler krever administratorgodkjennelse."
 
-msgid "Currencies"
-msgstr "Valutaer"
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr "Innsendt sammendrag er for langt ({0} > {1})."
 
-msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
-msgstr "Hvilke valutaer tar du imot, og hvilken foretrekker du?"
-
-msgid "accept"
-msgstr "godta"
-
-msgid "prefer"
-msgstr "foretrekk"
-
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "Å godta utenlandsk valuta kan gjøre ting mer komplisert for deg, mens å avslå dem kan avskrekke enkelte bidragsytere."
-
-msgid "Goal"
-msgstr "Mål"
-
-msgid "Statement"
-msgstr "Budskap"
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Du har ikke lagret endringene dine, er du sikker på at du ønsker å forkaste dem?"
 
 msgid "This is a preview."
 msgstr "Dette er en forhåndsvisning."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Utdrag som vil brukes i sosiale media:"
-
-msgid "Edit"
-msgstr "Rediger"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Beskriv ditt arbeid, hvorfor du spør om bidrag, osv. Et kort sammendrag og en helhetlig erklæring trengs."
@@ -1466,23 +1500,11 @@ msgstr "Bytt til et annet språk:"
 msgid "Switch"
 msgstr "Bytt"
 
-msgid "Avatar"
-msgstr "Avatar"
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr "Å sette et brukernavn for nettadressen for profilen din til å se bedre ut."
 
-msgid "Modify your Libravatar"
-msgstr "Modifiser din Libravatar"
-
-msgid "What is Libravatar?"
-msgstr "Hva er Libravatar?"
-
-msgid "Avatar source"
-msgstr "Avatarkilde"
-
-msgid "Avatar email (for Libravatar only)"
-msgstr "Avatar-e-post (kun for Libravatar)"
-
-msgid "Privacy"
-msgstr "Personvern"
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "Har du lenket til Liberapay-profilen din på andre nettsider? Husk å oppdatere de lenkene!"
 
 msgid "Email settings"
 msgstr "E-postinnstillinger"
@@ -1653,15 +1675,6 @@ msgstr "i løpet av de siste 30 dagene"
 msgid "Cancelled"
 msgstr "Avbrutt"
 
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"Advarsel: Hvis du gjør dette kommer alle donasjoner du mottar til å forsvinne.\n"
-"\n"
-"Dette kan ikke angres!"
-
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på at du ønsker å endre din kontotype? Av juridiske hensyn må vi opprette en ny konto for deg i systemet til vår betalingspartner, og overføre pengene fra din nåværende konto."
 
@@ -1724,6 +1737,9 @@ msgstr "Din andel er nå {0}."
 #, python-brace-format
 msgid "{username}'s profile"
 msgstr "{username}s profil"
+
+msgid "Edit"
+msgstr "Rediger"
 
 msgid "History"
 msgstr "Historikk"
@@ -2129,16 +2145,6 @@ msgstr "Feil passord"
 msgid "Your password has been changed."
 msgstr "Passordet ditt har blitt endret."
 
-msgid "Your privacy settings have been changed."
-msgstr "Personvernsinnstillingene dine har blitt endret."
-
-msgid "The submitted settings are incoherent."
-msgstr "Innsendte innstillinger går ikke overens."
-
-#, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Du mottar i øyeblikket motsvarende {money_amount} per ike fra bidragsytere i utenlandsk valuta. Disse donasjonene vil bli konvertert til din hovedvaluta."
-
 msgid "Account"
 msgstr "Konto"
 
@@ -2344,8 +2350,8 @@ msgstr "Du har en ventende {payment_method} betaling på {money_amount}. {link_o
 msgid "Please choose a payment method to add money:"
 msgstr "Velg betalingsmetode for å legge til penger:"
 
-msgid "Credit Card"
-msgstr "Kredittkort"
+msgid "Credit/Debit Card"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "Enkelt og øyeblikkelig"

@@ -337,6 +337,9 @@ msgstr "Yksityinen"
 msgid "Team"
 msgstr "Ryhmä"
 
+msgid "Credit Card"
+msgstr "Luottokortti"
+
 msgid "Hide total giving from others."
 msgstr "Piilota annettujen lahjoitusten summa muilta."
 
@@ -930,6 +933,24 @@ msgstr "Repositoriot"
 msgid "Social Networks"
 msgstr "Sosiaaliset verkot"
 
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Valuutat"
+
+msgid "Goal"
+msgstr "Tavoite"
+
+msgid "Statement"
+msgstr "Kuvaus"
+
+msgid "Privacy"
+msgstr "Yksityisyydensuoja"
+
 msgid "Switch to another language"
 msgstr "Vaihda käyttökieltä"
 
@@ -1060,15 +1081,6 @@ msgstr "Aakkosin ja numeroin (ei välilyöntejä)"
 msgid "Country"
 msgstr "Maa"
 
-msgid "Admin override is on.*"
-msgstr "Admin-ohitus käytössä.*"
-
-msgid "Save changes"
-msgstr "Talleta muutokset"
-
-msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr "*Liberapay-profiileihin viittaaminen riippuu ylläpitäjän hyväksynnästä."
-
 msgid "Patrons"
 msgstr "Tukijoita"
 
@@ -1080,6 +1092,12 @@ msgstr "viikossa"
 
 msgid "Sum"
 msgstr "Yhteensä"
+
+msgid "View"
+msgstr "Näytä"
+
+msgid "The changes have been saved."
+msgstr ""
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1290,14 +1308,6 @@ msgstr "Vahvista toimenpide"
 msgid "Save"
 msgstr "Tallenna"
 
-#, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "Emme onnistuneet lataamaan avatar-kuvaasi palvelusta {0}."
-
-#, python-brace-format
-msgid "Your new avatar URL is: {0}"
-msgstr "Uusi avatar-osoitteesi on: {0}"
-
 msgid "Dashboard"
 msgstr "Hallintapaneeli"
 
@@ -1360,11 +1370,52 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "Kyllä. Liberapay-palvelua pyörittää Ranskassa {0}laillisesti rekisteröity{1} voittoa tavoittelematon yhdistys, joka noudattaa Euroopan Unionin rahankäsittelyyn liittyvää lainsäädäntöä, ja palvelumme tietoturva on meille ensisijaisen tärkeää."
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Syötetty tiivistelmä on liian pitkä ({0} > {1})."
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "Emme onnistuneet lataamaan avatar-kuvaasi palvelusta {0}."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Et ole tallentanut muutoksiasi. Haluatko varmasti hylätä ne?"
+#, python-brace-format
+msgid "Your new avatar URL is: {0}"
+msgstr "Uusi avatar-osoitteesi on: {0}"
+
+msgid "Modify your Libravatar"
+msgstr "Muuta Libravatariasi"
+
+msgid "What is Libravatar?"
+msgstr "Mikä on Libravatar?"
+
+msgid "Avatar source"
+msgstr "Avatarin lähde"
+
+msgid "Avatar email (for Libravatar only)"
+msgstr "Avatar-sähköposti (vain Libravatar)"
+
+msgid "The submitted settings are incoherent."
+msgstr "Asetuksesi ovat epäjohdonmukaiset."
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr "Tällä hetkellä vastaanotat {money_amount} arvosta lahjoituksia vieraissa valuutoissa viikoittain. Näitä lahjoituksia ei muunneta päävaluutallesi."
+
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr "Mitä valuuttoja sinulle saa lahjoittaa, ja mitä otat mieluiten vastaan?"
+
+msgid "accept"
+msgstr "kelpaa"
+
+msgid "prefer"
+msgstr "suositeltu"
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr "On yksinkertaisempaa ottaa vastaan vain kotivaluuttaa, mutta vieraiden valuuttojen hylkääminen voi karkoittaa osan lahjoittajista."
+
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"Huom: Tämä poistaa kaikki lahjat, joita tällä hetkellä vastaanotat.\n"
+"\n"
+"Toimenpidettä ei voi purkaa!"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Arvostan lahjoituksia, mutta minulla ei ole tiettyä rahoituspäämäärää."
@@ -1392,47 +1443,30 @@ msgstr "Olemme tällä tukijana, ja kohteliaasti kieltäydymme ottamasta vastaan
 msgid "Our goal is to receive {0}"
 msgstr "Tavoitteemme on saada {0}"
 
-msgid "View"
-msgstr "Näytä"
+msgid "Your privacy settings have been changed."
+msgstr "Yksityisyysasetuksesi on muutettu."
 
-msgid "Username"
-msgstr "Käyttäjätunnus"
+msgid "Admin override is on.*"
+msgstr "Admin-ohitus käytössä.*"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Käyttäjätunnuksen asettaminen tekee profiilisi osoitteesta nätimmän."
+msgid "Save changes"
+msgstr "Talleta muutokset"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Oletko linkannut Liberapay-profiiliisi muilta web-sivuilta? Muistathan päivittää linkit!"
+msgid "*The referencing of Liberapay profiles is subject to admin approval."
+msgstr "*Liberapay-profiileihin viittaaminen riippuu ylläpitäjän hyväksynnästä."
 
-msgid "Currencies"
-msgstr "Valuutat"
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr "Syötetty tiivistelmä on liian pitkä ({0} > {1})."
 
-msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
-msgstr "Mitä valuuttoja sinulle saa lahjoittaa, ja mitä otat mieluiten vastaan?"
-
-msgid "accept"
-msgstr "kelpaa"
-
-msgid "prefer"
-msgstr "suositeltu"
-
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "On yksinkertaisempaa ottaa vastaan vain kotivaluuttaa, mutta vieraiden valuuttojen hylkääminen voi karkoittaa osan lahjoittajista."
-
-msgid "Goal"
-msgstr "Tavoite"
-
-msgid "Statement"
-msgstr "Kuvaus"
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Et ole tallentanut muutoksiasi. Haluatko varmasti hylätä ne?"
 
 msgid "This is a preview."
 msgstr "Tämä on esikatselu."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Lainaus, jota käytetään sosiaalisessa mediassa:"
-
-msgid "Edit"
-msgstr "Muokkaa"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Kuvaile työtäsi, miksi pyydät lahjoituksia jne. Tarvitsemme lyhyen tiivistelmän sekä koko kuvauksen."
@@ -1465,23 +1499,11 @@ msgstr "Vaihda kieltä:"
 msgid "Switch"
 msgstr "Vaihda"
 
-msgid "Avatar"
-msgstr "Avatar"
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr "Käyttäjätunnuksen asettaminen tekee profiilisi osoitteesta nätimmän."
 
-msgid "Modify your Libravatar"
-msgstr "Muuta Libravatariasi"
-
-msgid "What is Libravatar?"
-msgstr "Mikä on Libravatar?"
-
-msgid "Avatar source"
-msgstr "Avatarin lähde"
-
-msgid "Avatar email (for Libravatar only)"
-msgstr "Avatar-sähköposti (vain Libravatar)"
-
-msgid "Privacy"
-msgstr "Yksityisyydensuoja"
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "Oletko linkannut Liberapay-profiiliisi muilta web-sivuilta? Muistathan päivittää linkit!"
 
 msgid "Email settings"
 msgstr "Sähköpostiasetukset"
@@ -1652,15 +1674,6 @@ msgstr "viimeisen 30 päivän aikana"
 msgid "Cancelled"
 msgstr "Peruutettu"
 
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"Huom: Tämä poistaa kaikki lahjat, joita tällä hetkellä vastaanotat.\n"
-"\n"
-"Toimenpidettä ei voi purkaa!"
-
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Haluatko varmasti muuttaa tilin tyyppiä? Lakiteknisistä syistä meidän pitää tehdä sinulle uusi tili maksukumppanimme järjestelmässä, ja siirtää raha vanhalta tililtäsi."
 
@@ -1723,6 +1736,9 @@ msgstr "Osuutesi on nyt {0}."
 #, python-brace-format
 msgid "{username}'s profile"
 msgstr "Käyttäjän {username} profiili"
+
+msgid "Edit"
+msgstr "Muokkaa"
 
 msgid "History"
 msgstr "Historia"
@@ -2125,16 +2141,6 @@ msgstr "Väärä salasana"
 msgid "Your password has been changed."
 msgstr "Salasanasi on vaihdettu."
 
-msgid "Your privacy settings have been changed."
-msgstr "Yksityisyysasetuksesi on muutettu."
-
-msgid "The submitted settings are incoherent."
-msgstr "Asetuksesi ovat epäjohdonmukaiset."
-
-#, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Tällä hetkellä vastaanotat {money_amount} arvosta lahjoituksia vieraissa valuutoissa viikoittain. Näitä lahjoituksia ei muunneta päävaluutallesi."
-
 msgid "Account"
 msgstr "Tili"
 
@@ -2340,8 +2346,8 @@ msgstr "Sinulla on jonossa {money_amount} arvoinen {payment_method}-maksu. {link
 msgid "Please choose a payment method to add money:"
 msgstr "Valitse maksumenetelmä rahan lisäämiseksi:"
 
-msgid "Credit Card"
-msgstr "Luottokortti"
+msgid "Credit/Debit Card"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "Helppo ja välitön"

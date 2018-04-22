@@ -335,6 +335,9 @@ msgstr "개인"
 msgid "Team"
 msgstr "팀"
 
+msgid "Credit Card"
+msgstr "신용카드"
+
 msgid "Hide total giving from others."
 msgstr "다른 사람들에게 받고 있는 금액을 숨깁니다."
 
@@ -927,6 +930,24 @@ msgstr "저장소"
 msgid "Social Networks"
 msgstr "사회적 관계망"
 
+msgid "Username"
+msgstr "사용자 이름"
+
+msgid "Avatar"
+msgstr "아바타"
+
+msgid "Currencies"
+msgstr "화폐"
+
+msgid "Goal"
+msgstr "목표"
+
+msgid "Statement"
+msgstr "성명 (statement)"
+
+msgid "Privacy"
+msgstr "개인 정보"
+
 msgid "Switch to another language"
 msgstr "다른 언어로 변경"
 
@@ -1057,15 +1078,6 @@ msgstr "영숫자 (스페이스 없이)"
 msgid "Country"
 msgstr "국가"
 
-msgid "Admin override is on.*"
-msgstr "관리자 오버라이드가 켜져 있습니다.*"
-
-msgid "Save changes"
-msgstr "바뀐 내용 저장"
-
-msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr ""
-
 msgid "Patrons"
 msgstr "기부자"
 
@@ -1077,6 +1089,12 @@ msgstr "매주"
 
 msgid "Sum"
 msgstr "총액"
+
+msgid "View"
+msgstr "보기"
+
+msgid "The changes have been saved."
+msgstr ""
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1285,14 +1303,6 @@ msgstr "확인이 필요합니다"
 msgid "Save"
 msgstr "저장"
 
-#, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "{0}에서 아바타를 가져올 수 없었습니다."
-
-#, python-brace-format
-msgid "Your new avatar URL is: {0}"
-msgstr "새 아바타 URL은 {0} 입니다"
-
 msgid "Dashboard"
 msgstr "대시보드"
 
@@ -1355,11 +1365,53 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "예, Liberapay는 프랑스에 {0}소재한 비영리기구{1}에 의해 운영되며, 유럽 연합의 금융 제재를 준수합니다. 서비스의 보안은 저희에게 있어 가장 중요한 요소이기도 합니다."
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "제출된 설명이 너무 깁니다 ({0} > {1})."
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "{0}에서 아바타를 가져올 수 없었습니다."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "바뀐 내용을 저장하지 않았습니다. 바뀐 내용을 버릴까요?"
+#, python-brace-format
+msgid "Your new avatar URL is: {0}"
+msgstr "새 아바타 URL은 {0} 입니다"
+
+msgid "Modify your Libravatar"
+msgstr "Libravata 바꾸기"
+
+msgid "What is Libravatar?"
+msgstr "Libravata가 뭐죠?"
+
+msgid "Avatar source"
+msgstr "아바타 출처"
+
+msgid "Avatar email (for Libravatar only)"
+msgstr "아바타 이메일 (Libravata용)"
+
+msgid "The submitted settings are incoherent."
+msgstr ""
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr "현재 다른 화폐로 {money_amount} 만큼의 기부를 받고 있습니다. 이 기부는 당신의 주 화폐로 변경되지 않습니다."
+
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr ""
+
+msgid "accept"
+msgstr ""
+
+msgid "prefer"
+msgstr ""
+
+#, fuzzy
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr "외화 기부를 받는 것은 번거로울 수 있으나, 거부하는 것은 일부 기부자들의 기부를 어렵게 할 수 있습니다."
+
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"경고: 이 행위는 현재 받고 있는 팁을 모두 중단시킵니다.\n"
+"\n"
+"되돌릴 수 없습니다!"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "기부는 감사합니다만, 구체적인 모금 목표는 딱히 없습니다."
@@ -1387,48 +1439,30 @@ msgstr "저희는 후원자이며, 죄송합니다만 기부는 받지 않겠습
 msgid "Our goal is to receive {0}"
 msgstr "저희의 기부 목표액은 {0} 입니다"
 
-msgid "View"
-msgstr "보기"
+msgid "Your privacy settings have been changed."
+msgstr "프라이버시 설정이 변경되었습니다."
 
-msgid "Username"
-msgstr "사용자 이름"
+msgid "Admin override is on.*"
+msgstr "관리자 오버라이드가 켜져 있습니다.*"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "계정명을 선택하면 프로필의 URL이 더 멋져 보이게 합니다."
+msgid "Save changes"
+msgstr "바뀐 내용 저장"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "혹시 다른 사이트에서 Liberapay 프로필 페이지를 링크하신 적이 있으신가요? 그 링크를 업데이트해주세요!"
-
-msgid "Currencies"
-msgstr "화폐"
-
-msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
-msgid "accept"
-msgstr ""
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr "제출된 설명이 너무 깁니다 ({0} > {1})."
 
-msgid "prefer"
-msgstr ""
-
-#, fuzzy
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "외화 기부를 받는 것은 번거로울 수 있으나, 거부하는 것은 일부 기부자들의 기부를 어렵게 할 수 있습니다."
-
-msgid "Goal"
-msgstr "목표"
-
-msgid "Statement"
-msgstr "성명 (statement)"
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "바뀐 내용을 저장하지 않았습니다. 바뀐 내용을 버릴까요?"
 
 msgid "This is a preview."
 msgstr "미리보기 중입니다."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "소셜 미디어에서 사용될 요약:"
-
-msgid "Edit"
-msgstr "고치기"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "당신이 하는 일을 요약하고, 왜 기부를 요청하는 지 설명해 주세요. 짧은 요약과 긴 성명이 모두 필요합니다."
@@ -1461,23 +1495,11 @@ msgstr "다른 언어로 전환하기:"
 msgid "Switch"
 msgstr "전환"
 
-msgid "Avatar"
-msgstr "아바타"
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr "계정명을 선택하면 프로필의 URL이 더 멋져 보이게 합니다."
 
-msgid "Modify your Libravatar"
-msgstr "Libravata 바꾸기"
-
-msgid "What is Libravatar?"
-msgstr "Libravata가 뭐죠?"
-
-msgid "Avatar source"
-msgstr "아바타 출처"
-
-msgid "Avatar email (for Libravatar only)"
-msgstr "아바타 이메일 (Libravata용)"
-
-msgid "Privacy"
-msgstr "개인 정보"
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "혹시 다른 사이트에서 Liberapay 프로필 페이지를 링크하신 적이 있으신가요? 그 링크를 업데이트해주세요!"
 
 msgid "Email settings"
 msgstr "이메일 설정"
@@ -1645,15 +1667,6 @@ msgstr "최근 30일 이내에"
 msgid "Cancelled"
 msgstr "취소됨"
 
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"경고: 이 행위는 현재 받고 있는 팁을 모두 중단시킵니다.\n"
-"\n"
-"되돌릴 수 없습니다!"
-
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "계정의 종류를 정말 바꾸시겠습니까? 법적인 이유로 결제 대행사의 시스템에서 새 계정을 생성하고 기존 계정에서 새 계정으로 자금을 이체하게 됩니다."
 
@@ -1716,6 +1729,9 @@ msgstr "지분은 {0} 입니다."
 #, python-brace-format
 msgid "{username}'s profile"
 msgstr "{username} 님의 프로필"
+
+msgid "Edit"
+msgstr "고치기"
 
 msgid "History"
 msgstr "역사"
@@ -2121,16 +2137,6 @@ msgstr "잘못된 비밀번호"
 msgid "Your password has been changed."
 msgstr "비밀번호가 변경되었습니다."
 
-msgid "Your privacy settings have been changed."
-msgstr "프라이버시 설정이 변경되었습니다."
-
-msgid "The submitted settings are incoherent."
-msgstr ""
-
-#, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "현재 다른 화폐로 {money_amount} 만큼의 기부를 받고 있습니다. 이 기부는 당신의 주 화폐로 변경되지 않습니다."
-
 msgid "Account"
 msgstr "계정"
 
@@ -2332,8 +2338,8 @@ msgstr ""
 msgid "Please choose a payment method to add money:"
 msgstr "계좌에 돈을 추가할 결제 방식을 선택해 주세요:"
 
-msgid "Credit Card"
-msgstr "신용카드"
+msgid "Credit/Debit Card"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "쉽고 즉각적입니다"

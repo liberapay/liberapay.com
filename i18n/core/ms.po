@@ -338,6 +338,9 @@ msgstr "Individu"
 msgid "Team"
 msgstr "Kumpulan"
 
+msgid "Credit Card"
+msgstr "Kad Kredit"
+
 msgid "Hide total giving from others."
 msgstr "Sembunyikan jumlah pemberian daripada paparan."
 
@@ -931,6 +934,24 @@ msgstr "Repositori"
 msgid "Social Networks"
 msgstr "Rangkaian Sosial"
 
+msgid "Username"
+msgstr "Nama pengguna"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Mata wang"
+
+msgid "Goal"
+msgstr "Matlamat"
+
+msgid "Statement"
+msgstr "Kenyataan"
+
+msgid "Privacy"
+msgstr "Privasi"
+
 msgid "Switch to another language"
 msgstr "Tukar ke bahasa lain"
 
@@ -1061,15 +1082,6 @@ msgstr "Abjad angka (tanpa selang)"
 msgid "Country"
 msgstr "Negara"
 
-msgid "Admin override is on.*"
-msgstr "Keutamaan pentadbir aktif.*"
-
-msgid "Save changes"
-msgstr "Simpan"
-
-msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr "*Perujukan profil Liberapay bergantung kepada kelulusan pentadbir."
-
 msgid "Patrons"
 msgstr "Pelanggan"
 
@@ -1081,6 +1093,12 @@ msgstr "setiap minggu"
 
 msgid "Sum"
 msgstr "Jumlah"
+
+msgid "View"
+msgstr "Lihat"
+
+msgid "The changes have been saved."
+msgstr ""
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1291,14 +1309,6 @@ msgstr "Sila sahkan"
 msgid "Save"
 msgstr "Simpan"
 
-#, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "Kami tidak boleh mendapatkan avatar untuk anda dari {0}."
-
-#, python-brace-format
-msgid "Your new avatar URL is: {0}"
-msgstr "URL avatar baru anda ialah: {0}"
-
 msgid "Dashboard"
 msgstr "Papan Pemuka"
 
@@ -1361,11 +1371,52 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "Ya. Liberapay dijalankan oleh organisasi bukan untung {0}didaftarkan secara sah{1} di Perancis, kami mematuhi peraturan kewangan Kesatuan Eropah, dan keselamatan perkhidmatan kami paling utama kepentingannya kepada kami."
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Ringkasan yang dihantar terlalu panjang ({0} > {1})."
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "Kami tidak boleh mendapatkan avatar untuk anda dari {0}."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Anda masih belum menyimpan perubahan, adakah anda pasti anda ingin membuangnya?"
+#, python-brace-format
+msgid "Your new avatar URL is: {0}"
+msgstr "URL avatar baru anda ialah: {0}"
+
+msgid "Modify your Libravatar"
+msgstr "Ubah Libravatar anda"
+
+msgid "What is Libravatar?"
+msgstr "Apakah itu Libravatar?"
+
+msgid "Avatar source"
+msgstr "Sumber avatar"
+
+msgid "Avatar email (for Libravatar only)"
+msgstr "Emel avatar (untuk Libravatar sahaja)"
+
+msgid "The submitted settings are incoherent."
+msgstr "Tetapan yang anda cuba simpan mempunyai ketidakserasian."
+
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
+msgstr "Anda kini menerima lebih kurang {money_amount} setiap minggu daripada derma dalam mata wang asing. Derma ini tidak akan ditukar ke mata wang utama anda."
+
+msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
+msgstr "Mata wang yang mana patut dibenarkan untuk pendermaan, dan yang mana diutamakan?"
+
+msgid "accept"
+msgstr "terima"
+
+msgid "prefer"
+msgstr "diutamakan"
+
+msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
+msgstr "Menerima mata wang asing boleh menyusahkan anda, tetapi menolak mata wang asing boleh membuatkan sesetengah penderma ubah fikiran."
+
+msgid ""
+"Warning: Doing this will remove all the tips you are currently receiving.\n"
+"\n"
+"That cannot be undone!"
+msgstr ""
+"Amaran: Perbuatan ini akan membuang semua tip yang anda sedang terima.\n"
+"\n"
+"Ia tidak boleh dibuat asal!"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Kalau dapat sedikit wang pun jadilah, saya tiada matlamat khusus."
@@ -1393,47 +1444,30 @@ msgstr "Kami di sini sebagai penderma, dan menolak sebarang pemberian wang kepad
 msgid "Our goal is to receive {0}"
 msgstr "Matlamat kami ialah untuk menerima {0}"
 
-msgid "View"
-msgstr "Lihat"
+msgid "Your privacy settings have been changed."
+msgstr "Tetapan privasi anda telah ditukar."
 
-msgid "Username"
-msgstr "Nama pengguna"
+msgid "Admin override is on.*"
+msgstr "Keutamaan pentadbir aktif.*"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Menetapkan nama pengguna membuatkan URL profil anda kelihatan lebih kemas."
+msgid "Save changes"
+msgstr "Simpan"
 
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Adakah anda telah kaitkan profil Liberapay anda dari laman web lain? Pastikan anda kemas kini pautan tersebut!"
+msgid "*The referencing of Liberapay profiles is subject to admin approval."
+msgstr "*Perujukan profil Liberapay bergantung kepada kelulusan pentadbir."
 
-msgid "Currencies"
-msgstr "Mata wang"
+#, python-brace-format
+msgid "The submitted summary is too long ({0} > {1})."
+msgstr "Ringkasan yang dihantar terlalu panjang ({0} > {1})."
 
-msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
-msgstr "Mata wang yang mana patut dibenarkan untuk pendermaan, dan yang mana diutamakan?"
-
-msgid "accept"
-msgstr "terima"
-
-msgid "prefer"
-msgstr "diutamakan"
-
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "Menerima mata wang asing boleh menyusahkan anda, tetapi menolak mata wang asing boleh membuatkan sesetengah penderma ubah fikiran."
-
-msgid "Goal"
-msgstr "Matlamat"
-
-msgid "Statement"
-msgstr "Kenyataan"
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Anda masih belum menyimpan perubahan, adakah anda pasti anda ingin membuangnya?"
 
 msgid "This is a preview."
 msgstr "Ini ialah pratonton."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Petikan yang akan digunakan di media sosial:"
-
-msgid "Edit"
-msgstr "Edit"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Jelaskan apa yang anda lakukan, kenapa anda minta derma, dll. Kami perlukan kedua-dua ringkasan pendek dan kenyataan penuh."
@@ -1466,23 +1500,11 @@ msgstr "Tukar ke bahasa lain:"
 msgid "Switch"
 msgstr "Tukar"
 
-msgid "Avatar"
-msgstr "Avatar"
+msgid "Setting a username makes the URL of your profile nicer."
+msgstr "Menetapkan nama pengguna membuatkan URL profil anda kelihatan lebih kemas."
 
-msgid "Modify your Libravatar"
-msgstr "Ubah Libravatar anda"
-
-msgid "What is Libravatar?"
-msgstr "Apakah itu Libravatar?"
-
-msgid "Avatar source"
-msgstr "Sumber avatar"
-
-msgid "Avatar email (for Libravatar only)"
-msgstr "Emel avatar (untuk Libravatar sahaja)"
-
-msgid "Privacy"
-msgstr "Privasi"
+msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
+msgstr "Adakah anda telah kaitkan profil Liberapay anda dari laman web lain? Pastikan anda kemas kini pautan tersebut!"
 
 msgid "Email settings"
 msgstr "Tetapan emel"
@@ -1653,15 +1675,6 @@ msgstr "dalam 30 hari lepas"
 msgid "Cancelled"
 msgstr "Dibatalkan"
 
-msgid ""
-"Warning: Doing this will remove all the tips you are currently receiving.\n"
-"\n"
-"That cannot be undone!"
-msgstr ""
-"Amaran: Perbuatan ini akan membuang semua tip yang anda sedang terima.\n"
-"\n"
-"Ia tidak boleh dibuat asal!"
-
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Adakah anda pasti anda ingin menukar jenis akaun anda? Atas sebab undang-undang kami perlu mencipta akaun baru untuk anda dalam sistem rakan pembayaran kami, dan pindahkan wang dari akaun lama anda."
 
@@ -1724,6 +1737,9 @@ msgstr "Anda boleh terima {0} pada waktu ini."
 #, python-brace-format
 msgid "{username}'s profile"
 msgstr "Profil {username}"
+
+msgid "Edit"
+msgstr "Edit"
 
 msgid "History"
 msgstr "Sejarah"
@@ -2126,16 +2142,6 @@ msgstr "Kata laluan tidak betul"
 msgid "Your password has been changed."
 msgstr "Kata laluan anda telah ditukar."
 
-msgid "Your privacy settings have been changed."
-msgstr "Tetapan privasi anda telah ditukar."
-
-msgid "The submitted settings are incoherent."
-msgstr "Tetapan yang anda cuba simpan mempunyai ketidakserasian."
-
-#, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Anda kini menerima lebih kurang {money_amount} setiap minggu daripada derma dalam mata wang asing. Derma ini tidak akan ditukar ke mata wang utama anda."
-
 msgid "Account"
 msgstr "Akaun"
 
@@ -2341,8 +2347,8 @@ msgstr "Anda mempunyai pembayaran {payment_method} belum selesai sebanyak {money
 msgid "Please choose a payment method to add money:"
 msgstr "Sila pilih kaedah pembayaran untuk menambah wang:"
 
-msgid "Credit Card"
-msgstr "Kad Kredit"
+msgid "Credit/Debit Card"
+msgstr ""
 
 msgid "Easy and instantaneous"
 msgstr "Senang dan pantas"
