@@ -7,6 +7,7 @@ html {
 body {
     display: flex;
     flex-direction: column;
+    min-height: 100%;
     & > footer {
         display: flex;
         justify-content: space-around;
@@ -44,6 +45,7 @@ body {
 }
 
 #main {
+    flex-grow: 1;
     min-height: 75%;
 }
 
@@ -144,14 +146,18 @@ textarea.vertical-resize {
 }
 
 div.account {
-    margin-bottom: 0.9em;
-    padding: 0.1em 0;
     .auth-button {
         display: inline-block;
     }
-}
-a.account-link {
-    text-decoration: none;
+    & > .account-link {
+        display: inline-block;
+        margin-bottom: 0.3em;
+        padding: 0.1em 0;
+        text-decoration: none;
+    }
+    & > form {
+        margin-bottom: 0.9em;
+    }
 }
 .account-username {
     margin-left: 0.5ex;
@@ -211,12 +217,6 @@ p.summary {
         color: $brand-primary;
         font-size: 20px;
         margin: 0 0 10px;
-    }
-}
-
-.profile-box {
-    .radio {
-        margin-top: 0;
     }
 }
 

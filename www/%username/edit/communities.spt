@@ -1,0 +1,34 @@
+# coding: utf8
+
+from liberapay.utils import form_post_success, get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=True)
+if participant.kind == 'group':
+    raise response.error(403)
+
+if request.method == 'POST':
+    do = request.body['do']
+    try:
+        action, c_id = do.split(':', 1)
+        c_id = int(c_id)
+    except ValueError:
+        raise response.error(400)
+    if action not in ('join', 'leave'):
+        raise response.error(400)
+    is_on = action == 'join'
+    user.upsert_community_membership(is_on, c_id)
+    form_post_success(state)
+
+title = participant.username
+subhead = _("Communities")
+
+[---] text/html
+% extends "templates/profile-edit.html"
+
+% block form
+
+    % set edit = True
+    % include "templates/community-listing.html"
+
+% endblock

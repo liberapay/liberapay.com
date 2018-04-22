@@ -30,30 +30,25 @@ class TestCommunitiesJson(Harness):
         self.c_id = str(self.alice.create_community('test').id)
 
     def test_post_bad_id_returns_400(self):
-        response = self.client.PxST('/alice/communities.json',
+        response = self.client.PxST('/alice/edit/communities',
                                     {'do': 'join:NaN'},
                                     auth_as=self.alice)
         assert response.code == 400
 
     def test_joining_and_leaving_community(self):
-        response = self.client.POST('/alice/communities.json',
+        response = self.client.PxST('/alice/edit/communities',
                                     {'do': 'join:'+self.c_id},
                                     auth_as=self.alice, xhr=True)
 
         r = json.loads(response.text)
         assert r == {}
 
-        response = self.client.POST('/alice/communities.json',
+        response = self.client.PxST('/alice/edit/communities',
                                     {'do': 'leave:'+self.c_id},
                                     auth_as=self.alice, xhr=True)
 
-        response = self.client.GET('/alice/communities.json', auth_as=self.alice)
-
-        assert len(json.loads(response.text)) == 0
-
-    def test_get_can_get_communities_for_user(self):
-        response = self.client.GET('/alice/communities.json', auth_as=self.alice)
-        assert len(json.loads(response.text)) == 0
+        communities = self.alice.get_communities()
+        assert len(communities) == 0
 
 
 class TestCommunityActions(Harness):
@@ -76,8 +71,8 @@ class TestCommunityActions(Harness):
 
         self.client.POST('/for/test/unsubscribe', auth_as=self.bob, xhr=True)
 
-        response = self.client.GET('/bob/communities.json', auth_as=self.bob)
-        assert len(json.loads(response.text)) == 0
+        communities = self.bob.get_communities()
+        assert len(communities) == 0
 
     def test_subscribe_and_unsubscribe_as_anon(self):
         response = self.client.POST('/for/test/subscribe', xhr=True, raise_immediately=False)
@@ -92,13 +87,13 @@ class TestCommunityActions(Harness):
 
         self.client.POST('/for/test/join', auth_as=self.bob, xhr=True)
 
-        response = self.client.GET('/bob/communities.json', auth_as=self.bob)
-        assert len(json.loads(response.text)) == 1
+        communities = self.bob.get_communities()
+        assert len(communities) == 1
 
         self.client.POST('/for/test/leave', auth_as=self.bob, xhr=True)
 
-        response = self.client.GET('/bob/communities.json', auth_as=self.bob)
-        assert len(json.loads(response.text)) == 0
+        communities = self.bob.get_communities()
+        assert len(communities) == 0
 
 
 class TestCommunityEdit(Harness):

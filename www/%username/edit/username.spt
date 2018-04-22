@@ -1,0 +1,47 @@
+# coding: utf8
+
+from liberapay.utils import form_post_success, get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == 'POST':
+    participant.change_username(request.body['username'], recorder=user)
+    form_post_success(state, redirect_url=participant.path('edit/username'))
+
+_username = participant.username if participant.username[0] != '~' else ''
+
+title = participant.username
+subhead = _("Username")
+
+[---] text/html
+% extends "templates/profile-edit.html"
+
+% block form
+
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        % if not _username
+        <p>{{ _("Setting a username makes the URL of your profile nicer.") }}</p>
+        % endif
+        <div class="form-group form-inline">
+        <div class="form-group">
+            <input name="username" class="form-control"
+                   value="{{ _username }}"
+                   maxlength="{{ constants.USERNAME_MAX_SIZE }}"
+                   placeholder="{{ _('Username') }}"/>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-{{ 'warning' if _username else 'success' }}">{{
+                _("Modify") if _username else _("Save")
+            }}</button>
+        </div>
+        </div>
+        % if _username
+        <div class="alert alert-warning">{{
+            _("Have you linked to your Liberapay profile from other websites? Be sure to update those links!")
+        }}</div>
+        % endif
+    </form>
+
+% endblock

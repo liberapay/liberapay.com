@@ -10,13 +10,13 @@ class Tests(Harness):
 
     def change_goal(self, goal, goal_custom="", auth_as="alice"):
         return self.client.PxST(
-            "/alice/goal",
+            "/alice/edit/goal",
             {'goal': goal, 'goal_custom': goal_custom},
             auth_as=self.alice if auth_as == 'alice' else auth_as
         )
 
     def test_changing_to_minus_1_asks_confirmation(self):
-        r = self.client.PxST('/alice/goal', {'goal': '-1'}, auth_as=self.alice)
+        r = self.client.PxST('/alice/edit/goal', {'goal': '-1'}, auth_as=self.alice)
         assert "Warning: Doing this will remove all the tips you are currently receiving." in r.text
 
     def test_wonky_custom_amounts_are_standardized(self):
@@ -58,7 +58,7 @@ class Tests(Harness):
         team = self.make_participant('team', kind='group')
         team.add_member(self.alice)
         r = self.client.PxST(
-            '/team/goal',
+            '/team/edit/goal',
             {'goal': 'custom', 'goal_custom': '99.99'},
             auth_as=self.alice
         )

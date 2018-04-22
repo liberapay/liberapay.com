@@ -9,8 +9,10 @@
                 <span class="account-username">{{ account.friendly_name_long }}</span>
             </a>
         % else
-            <img class="account-type" src="{{ platform.logo }}" />
-            <span class="account-username">{{ platform.display_name }}</span>
+            <span class="account-link">
+                <img class="account-type" src="{{ platform.logo }}" />
+                <span class="account-username">{{ platform.display_name }}</span>
+            </span>
         % endif
         % if edit
             &nbsp;&nbsp;&nbsp;

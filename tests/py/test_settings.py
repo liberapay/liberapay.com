@@ -17,7 +17,7 @@ class TestPrivacy(Harness):
         self.alice = self.make_participant('alice')
 
     def hit_edit(self, expected_code=302, **kw):
-        response = self.client.PxST("/alice/settings/edit", auth_as=self.alice, **kw)
+        response = self.client.PxST("/alice/edit/privacy", auth_as=self.alice, **kw)
         if response.code != expected_code:
             print(response.text)
         return response
@@ -59,7 +59,7 @@ class TestUsername(Harness):
         if auth_as:
             auth_as = self.make_participant(auth_as)
 
-        r = self.client.POST('/alice/settings/edit', {'username': new_username},
+        r = self.client.POST('/alice/edit/username', {'username': new_username},
                              auth_as=auth_as, raise_immediately=False)
         return r
 
@@ -112,10 +112,10 @@ class TestUsername(Harness):
         team.add_member(alice)
         bob = self.make_participant('bob')
         team.add_member(bob)
-        r = self.client.POST('/team/settings/edit', {'username': 'Team'},
+        r = self.client.POST('/team/edit/username', {'username': 'Team'},
                              auth_as=alice, raise_immediately=False)
         assert r.code == 302
-        assert r.headers[b'Location'] == b'/Team/edit'
+        assert r.headers[b'Location'].startswith(b'/Team/edit/username')
         team = team.refetch()
         assert team.username == 'Team'
         alice = alice.refetch()

@@ -55,3 +55,31 @@
         ('/communities', _('Communities')),
     ], base='/explore') }}
 % endmacro
+
+% macro nav_profile_edit(participant)
+    % if participant.is_person
+        {{ nav([
+            ('/username', _('Username')),
+            ('/avatar', _('Avatar')),
+            ('/currencies', _('Currencies')),
+            ('/goal', _('Goal')),
+            ('/statement', _('Statement')),
+            ('/elsewhere', _('Accounts Elsewhere')),
+            ('/repositories', _('Repositories')),
+            ('/teams', _('Teams')),
+            ('/communities', _('Communities')),
+            ('/privacy', _('Privacy')),
+        ], base=participant.path('edit')) }}
+    % else
+        {{ nav([
+            ('/username', _('Username')),
+            ('/avatar', _('Avatar')),
+            ('/currencies', _('Currencies')),
+            ('/goal', _('Goal')),
+            ('/statement', _('Statement')),
+            ('/elsewhere', _('Accounts Elsewhere')),
+            ('/repositories', _('Repositories')),
+            ('/privacy', _('Privacy')),
+        ], base=participant.path('edit')) }}
+    % endif
+% endmacro
