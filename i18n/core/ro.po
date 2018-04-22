@@ -888,7 +888,7 @@ msgid "You need to log in"
 msgstr "Trebuie să vă autentificați"
 
 msgid "Members"
-msgstr "Membrii"
+msgstr "Membri"
 
 msgid "View income shares"
 msgstr "Vizualizează cotele de venit"
@@ -1140,10 +1140,10 @@ msgstr "Donează"
 
 #, python-brace-format
 msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr ""
+msgstr "{platform} a respins cererea noastră de a accesa datele dumneavoastră. Reconectarea la contul din {platform} ar trebui să rezolve problema."
 
 msgid "Reconnect"
-msgstr ""
+msgstr "Reconectează"
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -2504,7 +2504,7 @@ msgid "Custom amount (min={0}, max={1})"
 msgstr "Sumă personalizată (min={0}, max={1})"
 
 msgid "The provided postal address is incomplete."
-msgstr ""
+msgstr "Adresa poștală furnizată este incompletă."
 
 msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
 msgstr "Datele de card salvate nu au fost suficiente pentru a completa plata, introduceți informațiile complete despre card pentru a reîncerca."
@@ -2528,16 +2528,16 @@ msgid "Card payments are instantenous, and we will attempt to pull the full amou
 msgstr "Plățile cu cardul au loc instant, și noi vom încerca să retragem suma întreagă pe care o alegeți imediat ce apăsați pe butonul „Continuă” de mai jos."
 
 msgid "Billing Address (optional)"
-msgstr ""
+msgstr "Adresa facturării (opțională)"
 
 msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr ""
+msgstr "Plățile cu cardul pot uneori fi respinse când o adresă de facturare nu este furnizată, sau dacă nu se potrivește cu adresa deținătorului de card. Din câte știm doar cardurile emise în Statele Unite, Regatul Unit și Australia sunt verificate în acest mod."
 
 msgid "Saved address:"
-msgstr ""
+msgstr "Adresa salvată:"
 
 msgid "Input the billing address"
-msgstr ""
+msgstr "Introduceți adresa de facturare"
 
 msgid "Card"
 msgstr "Card"
@@ -3135,7 +3135,7 @@ msgid "The nominal takes are the raw numbers that the members input themselves, 
 msgstr "Beneficiile nominale sunt numere brute pe care membrii le introduc singuri, beneficiile reale sunt computate de sistem: mai întâi se adună beneficiile nominale, apoi se computează procentele reprezentate de fiecare beneficiu, iar în final se aplică acele procente la venitul disponibil. Beneficiile nominale acționează ca maxime: beneficiile reale nu sunt niciodată mai mari decât cele nominale, chiar dacă sunt venituri disponibile."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the stability of the team's income."
-msgstr "Poate că vă întrebați de ce tratăm beneficiile nominale ca maxime în loc de procente. Este pentru că având maxime permite unei echipe să aibă venit nefolosit (numit „exces”), și asta este bine din mai multe motive. În primul rând, oferă un „tampon” care stabilizează venitul membrilor echipei. În al doilea rând, facilitează integrarea noilor membri într-o echipă, pentru că pe măsură ce ei își măresc beneficiile vor reduce excesul în loc să afecteze venitul altor membrii. În al treilea rând, permite programului nostru să ajusteze sumele pe care donatorii le transferă de fapt membrilor echipei, într-un fel asta echilibrează contribuțiile donatorilor pe măsură ce trece timpul, făcând sistemul mai cinstit. În final, încurajează donarea la o echipă chiar dacă aceasta și-a atins țelul de finanțare, ceea ce este bine pentru stabilitatea venitului echipei."
+msgstr "Poate că vă întrebați de ce tratăm beneficiile nominale ca maxime în loc de procente. Este pentru că având maxime permite unei echipe să aibă venit nefolosit (numit „exces”), și asta este bine din mai multe motive. În primul rând, oferă un „tampon” care stabilizează venitul membrilor echipei. În al doilea rând, facilitează integrarea noilor membri într-o echipă, pentru că pe măsură ce ei își măresc beneficiile vor reduce excesul în loc să afecteze venitul altor membri. În al treilea rând, permite programului nostru să ajusteze sumele pe care donatorii le transferă de fapt membrilor echipei, într-un fel asta echilibrează contribuțiile donatorilor pe măsură ce trece timpul, făcând sistemul mai cinstit. În final, încurajează donarea la o echipă chiar dacă aceasta și-a atins țelul de finanțare, ceea ce este bine pentru stabilitatea venitului echipei."
 
 msgid "Regulation of take amounts"
 msgstr "Reglementarea sumelor beneficiilor"
@@ -3157,7 +3157,7 @@ msgid "You can leave a team from {0}your teams dashboard{1}."
 msgstr "Puteți părăsi o echipă din {0}tabloul de bord al echipei{1}."
 
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
-msgstr "Eliminarea unui membru dintr-o echipă nu este implementată încă. Contactați echipa de suport cu dovezi că un membru trebuie eliminat și că există acord total între ceilalți membrii ai echipei."
+msgstr "Eliminarea unui membru dintr-o echipă nu este implementată încă. Contactați echipa de suport cu dovezi că un membru trebuie eliminat și că există acord total între ceilalți membri ai echipei."
 
 #, python-brace-format
 msgid "Last changed {timedelta} ago by {username}."
@@ -4034,8 +4034,8 @@ msgstr[2] "S-au găsit nume de comunități"
 msgid "{n} member"
 msgid_plural "{n} members"
 msgstr[0] "{n} membru"
-msgstr[1] "{n} membrii"
-msgstr[2] "{n} de membrii"
+msgstr[1] "{n} membri"
+msgstr[2] "{n} de membri"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
