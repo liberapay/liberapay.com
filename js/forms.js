@@ -78,7 +78,15 @@ Liberapay.forms.jsSubmit = function() {
 };
 
 Liberapay.forms.success = function($form, $inputs, button) { return function(data) {
-    $inputs.prop('disabled', false).filter('[type=password]').val('');
+    $inputs.prop('disabled', false);
+    if (data.confirm) {
+        if (window.confirm(data.confirm)) {
+            $form.append('<input type="hidden" name="confirmed" value="true" />');
+            $form.submit();
+        }
+        return;
+    }
+    $inputs.filter('[type=password]').val('');
     var on_success = $form.data('on-success');
     if (on_success && on_success.substr(0, 8) == 'fadeOut:') {
         var $e = $(button).parents(on_success.substr(8)).eq(0);
