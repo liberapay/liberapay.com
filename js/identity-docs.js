@@ -90,9 +90,9 @@ Liberapay.identity_docs_init = function () {
         });
     }
 
-    function submit(e) {
+    function submit(e, confirmed) {
         e.preventDefault();
-        if (form.reportValidity && form.reportValidity() == false) return;
+        if (!confirmed && form.reportValidity && form.reportValidity() == false) return;
         var data = $form.serializeArray();
         $inputs.prop('disabled', true);
         jQuery.ajax({
@@ -100,7 +100,15 @@ Liberapay.identity_docs_init = function () {
             type: 'POST',
             data: data,
             dataType: 'json',
-            success: function () {
+            success: function (data) {
+                $inputs.prop('disabled', false);
+                if (data.confirm) {
+                    if (window.confirm(data.confirm)) {
+                        $form.append('<input type="hidden" name="confirmed" value="true" />');
+                        return submit(e, true);
+                    };
+                    return;
+                }
                 var count = 0;
                 $.each(uploaders, function (i, uploader) {
                     console.log(uploader);
