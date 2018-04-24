@@ -1,7 +1,7 @@
 % set communities = participant.get_communities()
 % if communities or edit
     % if not edit
-    <h3 class="{{ 'banderole default' if edit else '' }}" id="communities">{{ _("Communities") }}</h3>
+    <h3 id="communities">{{ _("Communities") }}</h3>
     % endif
 % if edit
     <form action="/{{ participant.username }}/edit/communities" method="POST"
