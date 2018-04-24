@@ -112,6 +112,18 @@ class TooManyUsernameChanges(ProblemChangingUsername):
         )
 
 
+class ValueTooLong(LazyResponse400):
+    def msg(self, _):
+        return _("The value '{0}' is too long.", self.args[0])
+
+class ValueContainsForbiddenCharacters(LazyResponse400):
+    def msg(self, _, locale):
+        return _(
+            "The value '{0}' contains the following forbidden characters: {1}.",
+            self.args[0], locale.format_list(["'%s'" % c for c in self.args[1]])
+        )
+
+
 class ProblemChangingEmail(LazyResponse400): pass
 
 class EmailAlreadyTaken(ProblemChangingEmail):

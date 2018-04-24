@@ -6,6 +6,7 @@ from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5, sha1
 from os import urandom
 from time import sleep
+import unicodedata
 import uuid
 
 from six.moves.urllib.parse import quote, urlencode
@@ -28,7 +29,7 @@ from liberapay.constants import (
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
     PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
-    SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
+    PUBLIC_NAME_MAX_SIZE, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST, ZERO,
 )
 from liberapay.exceptions import (
@@ -57,6 +58,8 @@ from liberapay.exceptions import (
     UsernameIsEmpty,
     UsernameIsRestricted,
     UsernameTooLong,
+    ValueTooLong,
+    ValueContainsForbiddenCharacters,
     VerificationEmailAlreadySent,
 )
 from liberapay.models._mixin_team import MixinTeam
@@ -1582,6 +1585,38 @@ class Participant(Model, MixinTeam):
                         )
 
         return suggested
+
+    def change_public_name(self, new_public_name, cursor=None, recorder=None):
+        new_public_name = unicodedata.normalize('NFKC', new_public_name.strip())
+
+        if len(new_public_name) > PUBLIC_NAME_MAX_SIZE:
+            raise ValueTooLong(new_public_name, PUBLIC_NAME_MAX_SIZE)
+
+        def is_char_forbidden(char):
+            if char.isalnum() or char.isspace():
+                return False
+            # http://www.unicode.org/reports/tr44/tr44-4.html#General_Category_Values
+            category = unicodedata.category(char)
+            return category[:1] != 'P'
+
+        bad_chars = [c for c in set(new_public_name) if is_char_forbidden(c)]
+        if bad_chars:
+            raise ValueContainsForbiddenCharacters(new_public_name, bad_chars)
+
+        if new_public_name != self.public_name:
+            with self.db.get_cursor(cursor) as c:
+                r = c.one("""
+                    UPDATE participants
+                       SET public_name = %s
+                     WHERE id = %s
+                       AND (public_name IS NULL OR public_name <> %s)
+                 RETURNING id
+                """, (new_public_name, self.id, new_public_name))
+                if r:
+                    self.add_event(c, 'set_public_name', new_public_name)
+                    self.set_attributes(public_name=new_public_name)
+
+        return new_public_name
 
     def update_avatar(self, src=None, cursor=None):
         if self.status == 'stub':
