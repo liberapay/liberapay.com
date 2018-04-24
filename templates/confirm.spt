@@ -12,3 +12,6 @@
         <button class="btn btn-{{ cls }}">{{ _("Confirm") }}</button>
     </form>
 % endblock
+
+[---] application/json
+{"confirm": msg}
