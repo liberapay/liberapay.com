@@ -200,4 +200,4 @@ All arguments are passed to the underlying `py.test` command, so you can use `-x
 
 ## License
 
-[CC0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/)
+[CC0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/) (See [this discussion](https://github.com/liberapay/liberapay.com/issues/564) for details.)
