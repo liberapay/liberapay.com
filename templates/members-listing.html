@@ -1,5 +1,7 @@
 <div>
-    <h3 class="{{ 'banderole default' if edit else '' }}">{{ _("Members") }}</h3>
+    % if not edit
+    <h3>{{ _("Members") }}</h3>
+    % endif
     % from "templates/avatar-url.html" import avatar_img with context
     % set takes = participant.get_current_takes()
     % for t in takes
