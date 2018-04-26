@@ -13,6 +13,6 @@ services:
             - "8339:8339"
 
     db:
-        image: postgres:9.4
+        image: postgres:9.6
         volumes:
             - /var/lib/postgresql/data
