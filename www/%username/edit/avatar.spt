@@ -54,6 +54,7 @@ subhead = _("Avatar")
         <div class="form-group">
             <label for="avatar-src">{{ _("Avatar source") }}</label><br>
             <select class="form-control" name="src" id="avatar-src">
+                % set accounts = participant.get_accounts_elsewhere()
                 % for src in constants.AVATAR_SOURCES
                     <option value="{{ src }}" {% if src == participant.avatar_src %} selected {% endif %}
                             {% if src != 'libravatar' and src not in accounts %} disabled {% endif %}
