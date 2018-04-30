@@ -91,9 +91,10 @@ class TestElsewhere(Harness):
 
     def test_redirects(self):
         data = dict(action='lock', then='/', user_id='')
-        for platform in self.platforms:
+        for i, platform in enumerate(self.platforms):
             platform.get_auth_url = lambda *a, **kw: ('', '', '')
-            response = self.client.PxST('/on/%s/redirect' % platform.name, data)
+            response = self.client.PxST('/on/%s/redirect' % platform.name, data,
+                                        REMOTE_ADDR=b'0.0.0.%i' % i)
             assert response.code == 302
 
     def test_upsert(self):
