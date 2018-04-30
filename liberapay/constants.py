@@ -271,6 +271,8 @@ RATE_LIMITS = {
     'change_password': (7, 60*60*24*7),  # 7 per week
     'change_username': (7, 60*60*24*7),  # 7 per week
     'check_password': (25, 60*60*24*7),  # 25 per week
+    'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
+    'http-unsafe.user': (10, 10),  # 10 per 10 seconds
     'log-in.email': (10, 60*60*24),  # 10 per day
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day

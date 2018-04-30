@@ -314,3 +314,12 @@ class TooManyAttempts(LazyResponseXXX):
             "retry later (e.g. in a week) or contact support@liberapay.com if you "
             "require assistance."
         )
+
+
+class TooManyRequests(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You're sending requests at an unusually fast pace. Please retry in a few "
+            "seconds, and contact support@liberapay.com if the problem persists."
+        )
