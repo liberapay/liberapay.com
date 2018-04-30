@@ -114,9 +114,11 @@ def sign_in_with_form_data(body, state):
             l = len(password)
             if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
                 raise BadPasswordSize
-        src_addr = state['request'].source
+        request = state['request']
+        src_addr, src_country = request.source, request.country
         website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-net', get_ip_net(src_addr), TooManySignUps)
+        website.db.hit_rate_limit('sign-up.country', src_country, TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
         with website.db.get_cursor() as c:
             p = Participant.make_active(
