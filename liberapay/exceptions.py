@@ -188,6 +188,14 @@ class TooManySignUps(LazyResponseXXX):
         )
 
 
+class TooManyTeamsCreated(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "You've already created several teams recently, please come back in a week."
+        )
+
+
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):
         return _("The password must be at least {0} and at most {1} characters long.",

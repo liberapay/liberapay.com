@@ -277,6 +277,7 @@ RATE_LIMITS = {
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
     'log-in.password': (3, 60*60),  # 3 per hour
+    'make_team': (5, 60*60*24*7),  # 5 per week
     'refetch_elsewhere_data': (1, 60*60*24*7),  # retry after one week
     'refetch_repos': (1, 60*60*24),  # retry after one day
     'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address

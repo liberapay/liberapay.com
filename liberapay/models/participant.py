@@ -43,6 +43,7 @@ from liberapay.exceptions import (
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
+    TooManyTeamsCreated,
     TooManyCurrencyChanges,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
@@ -152,6 +153,7 @@ class Participant(Model, MixinTeam):
             if email_is_attached_to_self:
                 raise EmailAlreadyAttachedToSelf(email)
         with self.db.get_cursor() as c:
+            c.hit_rate_limit('make_team', self.id, TooManyTeamsCreated)
             t = c.one("""
                 INSERT INTO participants
                             (kind, status, join_time, throttle_takes, main_currency)
