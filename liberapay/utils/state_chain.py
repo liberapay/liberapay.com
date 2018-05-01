@@ -13,7 +13,7 @@ from pando.http.request import Line
 from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
-from ..exceptions import LazyResponse
+from ..exceptions import LazyResponse, TooManyRequests
 
 
 def attach_environ_to_request(environ, request, website):
@@ -128,6 +128,15 @@ def _dispatch_path_to_filesystem(website, request=None):
         )
         r['path'] = path
         return r
+
+
+def enforce_rate_limits(request, user, website):
+    if request.method in ('GET', 'HEAD'):
+        return
+    if user.id:
+        website.db.hit_rate_limit('http-unsafe.user', user.id, TooManyRequests)
+    else:
+        website.db.hit_rate_limit('http-unsafe.ip-addr', request.source, TooManyRequests)
 
 
 def merge_exception_into_response(state, exception, response=None):

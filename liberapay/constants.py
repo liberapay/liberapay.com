@@ -271,15 +271,19 @@ RATE_LIMITS = {
     'change_password': (7, 60*60*24*7),  # 7 per week
     'change_username': (7, 60*60*24*7),  # 7 per week
     'check_password': (25, 60*60*24*7),  # 25 per week
+    'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
+    'http-unsafe.user': (10, 10),  # 10 per 10 seconds
     'log-in.email': (10, 60*60*24),  # 10 per day
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
     'log-in.password': (3, 60*60),  # 3 per hour
+    'make_team': (5, 60*60*24*7),  # 5 per week
     'refetch_elsewhere_data': (1, 60*60*24*7),  # retry after one week
     'refetch_repos': (1, 60*60*24),  # retry after one day
     'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address
-    'sign-up.ip-net': (15, 15*60),  # 15 per 15 minutes per IP network
-    'sign-up.ip-version': (15, 15*60),  # 15 per 15 minutes per IP version
+    'sign-up.ip-net': (15, 60*60),  # 15 per hour per IP network
+    'sign-up.country': (5, 5*60),  # 5 per 5 minutes per country
+    'sign-up.ip-version': (15, 5*60),  # 15 per 5 minutes per IP version
 }
 
 SESSION = str('session')  # bytes in python2, unicode in python3
