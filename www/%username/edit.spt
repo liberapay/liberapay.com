@@ -8,9 +8,6 @@ participant = get_participant(state, restrict=True, allow_member=True)
 if request.method == 'POST':
     response.render('www/%username/edit/statement.spt', state)
 
-if participant.username[0] == '~':
-    response.redirect(participant.path('edit/username'))
-else:
-    response.redirect(participant.path('edit/currencies'))
+response.redirect(participant.path('edit/username'))
 
 [---] text/html
