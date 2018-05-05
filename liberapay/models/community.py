@@ -1,4 +1,5 @@
 import re
+import unicodedata
 
 from postgres.orm import Model
 from psycopg2 import IntegrityError
@@ -34,6 +35,7 @@ class Community(Model):
 
     @classmethod
     def create(cls, name, creator_id, lang='mul'):
+        name = unicodedata.normalize('NFKC', name)
         if name_re.match(name) is None:
             raise InvalidCommunityName(name)
         try:

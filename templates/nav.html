@@ -59,7 +59,7 @@
 % macro nav_profile_edit(participant)
     % if participant.is_person
         {{ nav([
-            ('/username', _('Username')),
+            ('/username', _('Name')),
             ('/avatar', _('Avatar')),
             ('/currencies', _('Currencies')),
             ('/goal', _('Goal')),
@@ -72,7 +72,7 @@
         ], base=participant.path('edit')) }}
     % else
         {{ nav([
-            ('/username', _('Username')),
+            ('/username', _('Name')),
             ('/avatar', _('Avatar')),
             ('/currencies', _('Currencies')),
             ('/goal', _('Goal')),

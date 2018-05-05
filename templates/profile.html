@@ -13,7 +13,11 @@
 % if participant.accepts_tips
     <div class="profile-header">
         {{ avatar_img(participant, size=120) }}
-        <h1>{{ participant.username }}</h1>
+        % if participant.public_name
+            <h1>{{ participant.public_name }}<br><small>@{{ participant.username }}</small></h1>
+        % else
+            <h1>{{ participant.username }}</h1>
+        % endif
         <p class="summary">{{ summary or '' }}</p>
     </div>
 % else

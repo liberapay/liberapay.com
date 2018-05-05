@@ -262,6 +262,8 @@ check_bits(list(PRIVILEGES.values()))
 
 PROFILE_VISIBILITY_ATTRS = ('profile_noindex', 'hide_from_lists', 'hide_from_search')
 
+PUBLIC_NAME_MAX_SIZE = 64
+
 QUARANTINE = timedelta(weeks=4)
 
 RATE_LIMITS = {

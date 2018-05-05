@@ -6,7 +6,12 @@ from liberapay.utils import form_post_success, get_participant
 participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
-    participant.change_username(request.body['username'], recorder=user)
+    new_username = request.body['username']
+    if new_username != participant.username:
+        participant.change_username(new_username, recorder=user)
+    new_public_name = request.body.get('public_name')
+    if new_public_name != participant.public_name:
+        participant.change_public_name(new_public_name, recorder=user)
     form_post_success(state, redirect_url=participant.path('edit/username'))
 
 _username = participant.username if participant.username[0] != '~' else ''
@@ -21,27 +26,50 @@ subhead = _("Username")
 
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        % if not _username
-        <p>{{ _("Setting a username makes the URL of your profile nicer.") }}</p>
-        % endif
-        <div class="form-group form-inline">
+
+        <h4 class="no-margin-top">{{ _("Username") }}</h4>
+        <p>{{ _("A unique name, required for users who wish to receive donations.") }}</p>
         <div class="form-group">
             <input name="username" class="form-control"
                    value="{{ _username }}"
                    maxlength="{{ constants.USERNAME_MAX_SIZE }}"
                    placeholder="{{ _('Username') }}"/>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-{{ 'warning' if _username else 'success' }}">{{
-                _("Modify") if _username else _("Save")
-            }}</button>
-        </div>
+            <p class="help-block">{{
+                _("Maximum length is {0}.", constants.USERNAME_MAX_SIZE) + " " +
+                _("Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_).")
+            }}</p>
         </div>
         % if _username
         <div class="alert alert-warning">{{
             _("Have you linked to your Liberapay profile from other websites? Be sure to update those links!")
         }}</div>
         % endif
+
+        <h4 class="no-margin-top">{{ _("Name (optional)") }}</h4>
+        <p>{{ _(
+            "A name to show alongside your username on your public profile page. "
+            "It doesn't have to be your legal name."
+        ) if participant.kind == 'individual' else _(
+            "The full name of your project or organization. It will be shown "
+            "alongside the username on the public profile page."
+        ) }}</p>
+        <div class="form-group">
+            <input name="public_name" class="form-control"
+                   value="{{ participant.public_name or '' }}"
+                   maxlength="{{ constants.PUBLIC_NAME_MAX_SIZE }}"
+                   placeholder="{{ _('Name') }}"/>
+            <p class="help-block">{{
+                _("Maximum length is {0}.", constants.PUBLIC_NAME_MAX_SIZE) + " " +
+                _("Allowed characters: alphanumerics, spaces, and punctuation.")
+            }}</p>
+        </div>
+
+        <br>
+        <div class="form-group">
+            <button class="btn btn-lg btn-success">{{
+                _("Save")
+            }}</button>
+        </div>
     </form>
 
 % endblock
