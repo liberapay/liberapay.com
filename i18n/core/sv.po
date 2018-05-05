@@ -412,6 +412,14 @@ msgstr "Användarnamnet '{0}' slutar med det förbjudna ändelsen '{1}'."
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har redan ändrat ditt användarnamn flera gånger nyligen, var god försök igen senare (t.ex. om en vecka) eller kontakta support@liberapay.com."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "Du kan inte ta bort din primära e-postadress."
 
@@ -938,8 +946,8 @@ msgstr "Repositories"
 msgid "Social Networks"
 msgstr "Sociala nätverk"
 
-msgid "Username"
-msgstr "Användarnamn"
+msgid "Name"
+msgstr "Namn"
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1504,11 +1512,33 @@ msgstr "Byt till ett annat språk:"
 msgid "Switch"
 msgstr "Byt"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Ett användarnamn gör URLen till din profil trevligare."
+msgid "Username"
+msgstr "Användarnamn"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Maximala längden är {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Har du länkat till din Liberapay profil från andra hemsidor? Kom ihåg att updatera de länkarna!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "E-mail inställningar"
@@ -2617,9 +2647,6 @@ msgstr "Detta IBAN är ogiltigt."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "Följande fält handlar om bankkontots ägare."
 
-msgid "Name"
-msgstr "Namn"
-
 msgid "The amount cannot be zero."
 msgstr "Beloppet kan inte vara noll."
 
@@ -3370,10 +3397,6 @@ msgstr[1] "{n} prenumeranter"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr ""
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maximala längden är {0}."
 
 msgid "Language of the name"
 msgstr "Namnets språk"

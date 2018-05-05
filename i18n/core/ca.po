@@ -412,6 +412,14 @@ msgstr "El nom d'usuari «{0}» acaba amb el sufix prohibit «{1}»."
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ja heu canviat el nom d'usuari massa vegades recentment. Torneu a intentar-ho més tard (p. ex. en una setmana) o contacteu amb support@liberapay.com."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "No podeu suprimir l'adreça electrònica primària."
 
@@ -938,8 +946,8 @@ msgstr "Repositoris"
 msgid "Social Networks"
 msgstr "Xarxes socials"
 
-msgid "Username"
-msgstr "Nom d'usuari"
+msgid "Name"
+msgstr "Nom"
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1504,11 +1512,33 @@ msgstr "Canvia a una altra llengua:"
 msgid "Switch"
 msgstr "Canvia"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "La tria d'un nom d'usuari fa més agradable l'URL del vostre perfil."
+msgid "Username"
+msgstr "Nom d'usuari"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "La longitud màxima és {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Heu connectat el perfil de Liberapay amb el d'altres llocs web? Assegureu-vos d'actualitzar aquests enllaços!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "Paràmetres del correu electrònic"
@@ -2617,9 +2647,6 @@ msgstr "Aquest IBAN no és vàlid."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "Els camps següents són en referència al titular legal del compte bancari."
 
-msgid "Name"
-msgstr "Nom"
-
 msgid "The amount cannot be zero."
 msgstr "La quantitat no pot ser zero."
 
@@ -3372,10 +3399,6 @@ msgstr[1] "{n} subscriptors"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "Useu guions baixos (_) en comptes d'espais. S'admeten tots els caràcters alfanumèrics d'Unicode, també els punts (.) i guionets (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "La longitud màxima és {0}."
 
 msgid "Language of the name"
 msgstr "Llengua del nom"

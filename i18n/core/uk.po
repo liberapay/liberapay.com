@@ -413,6 +413,14 @@ msgstr "Ім'я користувача {0} закінчується на заб�
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ви вже змінили і'мя користувача декілька разів за останній час, будь ласка, спробуйте ще раз пізніше (наприклад через тиждень) або зв'яжіться з support@liberapay.com."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "Ви не можете видалити основну адресу електронної пошти."
 
@@ -941,8 +949,8 @@ msgstr "Репозітарії"
 msgid "Social Networks"
 msgstr "Соціальні мережі"
 
-msgid "Username"
-msgstr "Ім'я користувача"
+msgid "Name"
+msgstr "Ім'я"
 
 msgid "Avatar"
 msgstr "Аватар"
@@ -1509,11 +1517,33 @@ msgstr "Перемкнути на іншу мову:"
 msgid "Switch"
 msgstr "Перемкнути"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Якщо задати ім'я користувача, то URL вашого профілю буде легше сприйняти."
+msgid "Username"
+msgstr "Ім'я користувача"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Максимальна довжина - {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Ви вже зв'язали профіль Liberapay з іншими сайтами? Не забудьте оновити ці посилання!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "Налаштування електронної пошти"
@@ -2634,9 +2664,6 @@ msgstr "Неправильний IBAN."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "Наступні поля про законного власника банківського рахунку."
 
-msgid "Name"
-msgstr "Ім'я"
-
 msgid "The amount cannot be zero."
 msgstr "Сума не може дорівнювати нулю."
 
@@ -3399,10 +3426,6 @@ msgstr[2] "{n} підписників"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "Використовуйте підкреслення (_) замість пробілів. Дозволені всі алфавітно-цифрові символи Юнікоду, в тому числі крапки (.) та дефіс (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Максимальна довжина - {0}."
 
 msgid "Language of the name"
 msgstr "Мова назви"

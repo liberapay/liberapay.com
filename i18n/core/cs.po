@@ -413,6 +413,14 @@ msgstr "Uživatelské jméno „{0}“ končí zakázanou příponou „{1}“."
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Už jste své uživatelské jméno změnili v poslední době mnohokrát, zkuste to prosím později (např. za týden) nebo se obraťte na support@liberapay.com."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "Nemůžete odebrat hlavní emailovou adresu."
 
@@ -941,8 +949,8 @@ msgstr "Repozitáře"
 msgid "Social Networks"
 msgstr "Sociální sítě"
 
-msgid "Username"
-msgstr "Uživatelské jméno"
+msgid "Name"
+msgstr "Jméno"
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1510,11 +1518,33 @@ msgstr "Přepnout do jiného jazyka:"
 msgid "Switch"
 msgstr "Přepnout"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Nastavením uživatelského jméno získáte hezčí URL vašeho profilu."
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Maximální délka je {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Sdíleli jste odkazy na Liberapay na jiných stránkách? Nezapomeňte tyto odkazy upravit!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "Nastavení emailu"
@@ -2637,9 +2667,6 @@ msgstr "Tento kód IBAN je neplatný."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "Následující údaje jsou o zákonném vlastníku bankovního účtu."
 
-msgid "Name"
-msgstr "Jméno"
-
 msgid "The amount cannot be zero."
 msgstr "Částka nemůže být nulová."
 
@@ -3402,10 +3429,6 @@ msgstr[2] "{n} odběratelů"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "Použije podtržítko (_) namísto mezery. Všechny alfanumerické znaky unicode jsou povoleny, stejně tak jako tečky (.) a pomlčky (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maximální délka je {0}."
 
 msgid "Language of the name"
 msgstr "Jazyk názvu"

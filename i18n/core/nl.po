@@ -413,6 +413,14 @@ msgstr "De gebruikersnaam '{0}' eindigt met een verboden achtervoegsel '{1}'."
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Je hebt je gebruikersnaam te vaak veranderd de afgelopen tijd. Probeer het later opnieuw (na bijvoorbeeld een week) of neem contact op met support@liberapay.com."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "Je kunt je primaire e-mailadres niet verwijder."
 
@@ -939,8 +947,8 @@ msgstr "Repositories"
 msgid "Social Networks"
 msgstr "Sociale netwerken"
 
-msgid "Username"
-msgstr "Gebruikersnaam"
+msgid "Name"
+msgstr "Naam"
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1505,11 +1513,33 @@ msgstr "Wijzig je taal:"
 msgid "Switch"
 msgstr "Verander"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Het instellen van een gebruikersnaam maakt de URL van je profiel mooier."
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Maximale lengte is {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Heb je je Liberapay profiel gelinkt vanaf andere websites? Let op dat je deze links actualiseert!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "Emailinstellingen"
@@ -2618,9 +2648,6 @@ msgstr "Deze IBAN is ongeldig."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "De volgende velden gaan over de juridische eigenaar van de bankrekening."
 
-msgid "Name"
-msgstr "Naam"
-
 msgid "The amount cannot be zero."
 msgstr "Het bedrag kan niet nul zijn."
 
@@ -3373,10 +3400,6 @@ msgstr[1] "{n} abonnees"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "Gebruik underscores (_) in plaats van spaties. Alle Unicode alfanumerieke karakters zijn toegestaan, alsmede punten en streepjes (.) (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maximale lengte is {0}."
 
 msgid "Language of the name"
 msgstr "Taal van de naam"

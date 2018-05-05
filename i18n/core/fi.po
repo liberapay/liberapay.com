@@ -413,6 +413,14 @@ msgstr "Käyttäjätunnuksen ’{0}’ lopussa oleva merkkisarja ’{1}’ ei ol
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Olet vaihtanut käyttäjätunnustasi liian usein viime aikoina. Yritä uudestaan myöhemmin (esim. viikon kuluttua), tai ota yhteyttä asiakaspalveluun: support@liberapay.com (englanniksi)."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "Pääasiallista sähköpostiosoitetta ei voi poistaa."
 
@@ -939,8 +947,8 @@ msgstr "Repositoriot"
 msgid "Social Networks"
 msgstr "Sosiaaliset verkot"
 
-msgid "Username"
-msgstr "Käyttäjätunnus"
+msgid "Name"
+msgstr "Nimi"
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1505,11 +1513,33 @@ msgstr "Vaihda kieltä:"
 msgid "Switch"
 msgstr "Vaihda"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Käyttäjätunnuksen asettaminen tekee profiilisi osoitteesta nätimmän."
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Maksimipituus on {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Oletko linkannut Liberapay-profiiliisi muilta web-sivuilta? Muistathan päivittää linkit!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "Sähköpostiasetukset"
@@ -2618,9 +2648,6 @@ msgstr "Tämä IBAN on virheellinen."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "Seuraavat kentät koskevat pankkitilin laillista haltijaa."
 
-msgid "Name"
-msgstr "Nimi"
-
 msgid "The amount cannot be zero."
 msgstr "Määrä ei voi olla nolla."
 
@@ -3373,10 +3400,6 @@ msgstr[1] "{n} tilaajaa"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "Käytä alleviivoja (_) välilyöntien sijaan. Kaikki unicoden alfanumeeriset merkit sallitaan, sekä myös pisteet (.) ja viivat (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maksimipituus on {0}."
 
 msgid "Language of the name"
 msgstr "Nimen kieli"

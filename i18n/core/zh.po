@@ -411,6 +411,14 @@ msgstr "用戶名稱「{0}」的結尾含有被禁用的後綴「{1}」。"
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "你近期已多次更改自己的用戶名稱，請以後（例如在一週後）重試，或聯繫 support@liberapay.com。"
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "你不能移除主要的電子郵件地址。"
 
@@ -935,8 +943,8 @@ msgstr "代碼庫"
 msgid "Social Networks"
 msgstr "社交網站"
 
-msgid "Username"
-msgstr "用戶名稱"
+msgid "Name"
+msgstr "名字"
 
 msgid "Avatar"
 msgstr "大頭照"
@@ -1499,11 +1507,33 @@ msgstr "切換到另一個語言："
 msgid "Switch"
 msgstr "切換"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "設定用戶名稱好讓你的介紹頁網址更為清楚。"
+msgid "Username"
+msgstr "用戶名稱"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "最大長度是 {0}。"
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "你是否從其它的網站連到自己的Liberapay介紹頁？確認更新了這些連結！"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "電郵設定"
@@ -2601,9 +2631,6 @@ msgstr "這個 IBAN 無效。"
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "下列欄位是關於銀行帳戶的法定所有者。"
 
-msgid "Name"
-msgstr "名字"
-
 msgid "The amount cannot be zero."
 msgstr "金額不能為零。"
 
@@ -3346,10 +3373,6 @@ msgstr[0] "{n} 訂閱者"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "使用取消訂閱 (_) 取代空格。可用任何萬國碼的字母，以及(.) 和 (-)。"
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "最大長度是 {0}。"
 
 msgid "Language of the name"
 msgstr "名稱的語言"

@@ -413,6 +413,14 @@ msgstr "Numele de utilizator „{0}” sfârșește cu sufixul interzis „{1}�
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ați schimbat deja numele de utilizator de multe ori în ultima vreme, încercați mai târziu (de ex. într-o săptămână) sau contactați support@liberapay.com."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "Nu puteți să eliminați adresa dumneavoastră primară de e-mail."
 
@@ -941,8 +949,8 @@ msgstr "Depozite"
 msgid "Social Networks"
 msgstr "Rețele sociale"
 
-msgid "Username"
-msgstr "Nume de utilizator"
+msgid "Name"
+msgstr "Nume"
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1509,11 +1517,33 @@ msgstr "Comută la altă limbă:"
 msgid "Switch"
 msgstr "Comută"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Stabilirea unui nume de utilizator face URL-ul profilului dumneavoastră mai atrăgător."
+msgid "Username"
+msgstr "Nume de utilizator"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Lungimea maximă este {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Ați conectat profilul Liberapay pe alte situri? Asigurați-vă că ați actualizat și acele legături!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "Configurări e-mail"
@@ -2635,9 +2665,6 @@ msgstr "Acest IBAN este nevalid."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "Următoarele câmpuri sunt despre deținătorul legal al contului bancar."
 
-msgid "Name"
-msgstr "Nume"
-
 msgid "The amount cannot be zero."
 msgstr "Suma nu poate fi zero."
 
@@ -3400,10 +3427,6 @@ msgstr[2] "{n} de abonați"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "Utilizați underscore (_) în loc de spații. Toate caractere alfanumerice unicode sunt permise, la fel și punctele (.) și cratimele (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Lungimea maximă este {0}."
 
 msgid "Language of the name"
 msgstr "Limba numelui"

@@ -414,6 +414,14 @@ msgstr "Nama pengguna '{0}' berakhir dengan akhiran terlarang '{1}'."
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Anda telah menukar nama pengguna terlalu kerap baru-baru ini, sila cuba lagi kemudian (cth. dalam seminggu) atau hubungi support@liberapay.com."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "Anda tidak boleh membuang alamat emel utama anda."
 
@@ -940,8 +948,8 @@ msgstr "Repositori"
 msgid "Social Networks"
 msgstr "Rangkaian Sosial"
 
-msgid "Username"
-msgstr "Nama pengguna"
+msgid "Name"
+msgstr "Nama"
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1506,11 +1514,33 @@ msgstr "Tukar ke bahasa lain:"
 msgid "Switch"
 msgstr "Tukar"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "Menetapkan nama pengguna membuatkan URL profil anda kelihatan lebih kemas."
+msgid "Username"
+msgstr "Nama pengguna"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Panjang maksimum ialah {0}."
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "Adakah anda telah kaitkan profil Liberapay anda dari laman web lain? Pastikan anda kemas kini pautan tersebut!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "Tetapan emel"
@@ -2619,9 +2649,6 @@ msgstr "IBAN ini tidak sah."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "Medan berikut berkaitan pemilik sah akaun bank."
 
-msgid "Name"
-msgstr "Nama"
-
 msgid "The amount cannot be zero."
 msgstr "Jumlah tidak boleh kosong."
 
@@ -3374,10 +3401,6 @@ msgstr[1] "{n} pelanggan"
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
 msgstr "Gunakan aksara garis bawah (_) untuk menggantikan selang penjarak. Semua aksara angka abjad boleh digunakan, dan juga titik (.) dan sengkang (-)."
-
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Panjang maksimum ialah {0}."
 
 msgid "Language of the name"
 msgstr "Bahasa nama"

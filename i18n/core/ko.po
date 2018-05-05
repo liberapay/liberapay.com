@@ -412,6 +412,14 @@ msgstr "'{0}' 사용자 이름은 금지된 단어 '{1}'을/를 포함합니다.
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "계정 이름을 최근에 너무 자주 바꾸셨습니다. 나중에 (예: 다음 주) 다시 시도하거나 support@liberapay.com 에 연락해 주세요."
 
+#, python-brace-format
+msgid "The value '{0}' is too long."
+msgstr ""
+
+#, python-brace-format
+msgid "The value '{0}' contains the following forbidden characters: {1}."
+msgstr ""
+
 msgid "You cannot remove your primary email address."
 msgstr "주 메일 계정을 삭제할 수 없습니다."
 
@@ -936,8 +944,8 @@ msgstr "저장소"
 msgid "Social Networks"
 msgstr "사회적 관계망"
 
-msgid "Username"
-msgstr "사용자 이름"
+msgid "Name"
+msgstr "이름"
 
 msgid "Avatar"
 msgstr "아바타"
@@ -1501,11 +1509,33 @@ msgstr "다른 언어로 전환하기:"
 msgid "Switch"
 msgstr "전환"
 
-msgid "Setting a username makes the URL of your profile nicer."
-msgstr "계정명을 선택하면 프로필의 URL이 더 멋져 보이게 합니다."
+msgid "Username"
+msgstr "사용자 이름"
+
+msgid "A unique name, required for users who wish to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr ""
+
+msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
+msgstr ""
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "혹시 다른 사이트에서 Liberapay 프로필 페이지를 링크하신 적이 있으신가요? 그 링크를 업데이트해주세요!"
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
+msgstr ""
+
+msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
+msgstr ""
+
+msgid "Allowed characters: alphanumerics, spaces, and punctuation."
+msgstr ""
 
 msgid "Email settings"
 msgstr "이메일 설정"
@@ -2608,9 +2638,6 @@ msgstr "이 IBAN은 유효하지 않습니다."
 msgid "The following fields are about the legal owner of the bank account."
 msgstr "아래 정보는 예금주에 관한 내용입니다."
 
-msgid "Name"
-msgstr "이름"
-
 msgid "The amount cannot be zero."
 msgstr "금액이 0일 수 없습니다."
 
@@ -3352,10 +3379,6 @@ msgid_plural "{n} subscribers"
 msgstr[0] ""
 
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
-msgstr ""
-
-#, python-brace-format
-msgid "Maximum length is {0}."
 msgstr ""
 
 msgid "Language of the name"
