@@ -1,7 +1,11 @@
 
     % include "templates/sandbox-warning.html"
 
-    <p>{{ _("We need to know who you are because of financial regulations.") }}</p>
+    <p>{{ _(
+        "We need to know who you are in order to comply with financial regulations. "
+        "Only authorized personnel will be able to see this information, we will not "
+        "show it to other users or anyone else unless required by law."
+    ) }}</p>
 
     % set p = 'LegalRepresentative' if participant.kind == 'organization' else ''
 
