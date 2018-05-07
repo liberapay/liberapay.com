@@ -1390,3 +1390,6 @@ ALTER TABLE participants
     DROP COLUMN password_mtime,
     DROP COLUMN session_token,
     DROP COLUMN session_expires;
+
+-- migration #66
+ALTER TABLE participants ADD COLUMN public_name text;

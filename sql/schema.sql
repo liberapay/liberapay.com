@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '65'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '66'::jsonb);
 
 
 -- app configuration
@@ -85,6 +85,8 @@ CREATE TABLE participants
 
 , main_currency         currency                NOT NULL DEFAULT 'EUR'
 , accepted_currencies   text
+
+, public_name           text
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
