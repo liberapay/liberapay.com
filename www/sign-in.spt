@@ -9,12 +9,11 @@ title = _("Sign In")
 no_navbar_sign_in = True
 
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/base-thin.html"
 
 {% block heading %}{% endblock %}
 
-% block content
-<div class="row"><div class="col-lg-8 col-lg-offset-2">
+% block thin_content
     % if state.get('log-in.email-sent-to') or state.get('log-in.carry-on')
     % include "templates/log-in-form.html"
     % else
@@ -30,5 +29,4 @@ no_navbar_sign_in = True
     <a class="btn btn-lg btn-default" href="/sign-up">{{ _("Create your account") }}</a>
 
     % endif
-</div></div>
 % endblock

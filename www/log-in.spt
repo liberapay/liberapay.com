@@ -8,16 +8,14 @@ if not user.ANON:
 title = _("Log In")
 
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/base-thin.html"
 
 {% block heading %}{% endblock %}
 
-% block content
-<div class="row"><div class="col-lg-8 col-lg-offset-2">
+% block thin_content
     % if state.get('log-in.email-sent-to') or state.get('log-in.carry-on')
     % else
     <h2 class="banderole default">{{ _("Log In") }}</h2>
     % endif
     % include "templates/log-in-form.html"
-</div></div>
 % endblock
