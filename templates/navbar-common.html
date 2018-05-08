@@ -1,5 +1,6 @@
 % from "templates/icons.html" import glyphicon
 
+% if request.method in ('GET', 'HEAD')
 <li class="dropdown dropdown-hover locale">
     <button class="dropdown-toggle navbar-btn" type="button"
             data-toggle="dropdown"
@@ -23,3 +24,4 @@
                {{ _("Help us translate Liberapay") }}</a></li>
     </ul>
 </li>
+% endif
