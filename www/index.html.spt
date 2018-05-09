@@ -94,7 +94,7 @@ recent = query_cache.one("""
 
         % if user.ANON
 
-            <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software?") }}</p>
+            <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software? Or something else that can be funded by recurrent donations?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
             <div class="buttons"><a class="btn btn-success btn-lg" href="/sign-up">
                 {{ glyphicon('log-in') }} <span>{{ _("Create your account") }}</span>
