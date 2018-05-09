@@ -936,7 +936,8 @@ msgstr "조직"
 msgid "Individuals"
 msgstr "개인"
 
-msgid "Pledges"
+#, fuzzy
+msgid "Unclaimed Donations"
 msgstr "공약"
 
 msgid "Repositories"
@@ -993,6 +994,9 @@ msgstr "인출"
 
 msgid "Settings"
 msgstr "설정"
+
+msgid "Identity"
+msgstr "신원"
 
 msgid "Emails"
 msgstr "이메일"
@@ -1102,6 +1106,9 @@ msgstr "수입"
 msgid "per week"
 msgstr "매주"
 
+msgid "Pledges"
+msgstr "공약"
+
 msgid "Sum"
 msgstr "총액"
 
@@ -1193,9 +1200,6 @@ msgstr "샌드박스 모드에 있습니다, 실제 결제 정보 또는 개인 
 
 msgid "Search Liberapay"
 msgstr "Liberapay 검색"
-
-msgid "Identity"
-msgstr "신원"
 
 msgid "Log In or Create Account"
 msgstr "로그인 또는 계정 만들기"
@@ -2741,6 +2745,9 @@ msgstr "영문자 (a-z)와 숫자 (0-9)만 사용할 수 있습니다"
 msgid "This account number is invalid."
 msgstr "이 계좌번호는 유효한 번호가 아닙니다."
 
+msgid "The bank account must belong to you, sending money to third parties is not allowed."
+msgstr ""
+
 #, python-brace-format
 msgid "Account number: {0}"
 msgstr ""
@@ -2866,9 +2873,6 @@ msgstr "Liberapay는 오직 기부만을 위한 사이트이며, 거래는 계�
 
 msgid "Liberapay is an open project structured around a non-profit organization, which sets it apart from commercial platforms like Patreon and Tipeee."
 msgstr "Liberapay는 비영리 기구를 중심으로 구성된 오픈 프로젝트이며 Patreon과 Tipeee와 같은 상업적 플랫폼과 차이가 있습니다."
-
-msgid "Unlike other non-profit platforms, Liberapay is neutral. You can create an account without having to wait for us to approve it, and we won't kick you out unless you break the law or the terms of service."
-msgstr "다른 비영리 플랫폼과도 달리 Liberapay는 중립적입니다. 계정 생성을 승인받을 필요 없이 계정을 생성할 수 있고, 법률 또는 이용 약관을 위반하지 않는 한 사용자를 추방하지 않습니다."
 
 #, python-brace-format
 msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
@@ -3301,7 +3305,7 @@ msgstr ""
 msgid "Top pledges"
 msgstr ""
 
-msgid "There are no pledges right now."
+msgid "There are no unclaimed donations right now."
 msgstr ""
 
 msgid "Make a pledge"
@@ -3394,7 +3398,7 @@ msgstr "Liberapay는 지속적인 기부 플랫폼입니다."
 msgid "Receive"
 msgstr ""
 
-msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software?"
+msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software? Or something else that can be funded by recurrent donations?"
 msgstr ""
 
 msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
@@ -3799,7 +3803,7 @@ msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
 msgstr[0] ""
 
-msgid "Explore pledges"
+msgid "Explore unclaimed donations"
 msgstr ""
 
 #, python-brace-format
@@ -4020,7 +4024,3 @@ msgstr "회원 가입"
 #, python-brace-format
 msgid "You are already logged in as {0}."
 msgstr "{0} 계정으로 로그인 되어 있습니다."
-
-#, fuzzy
-msgid "Unclaimed Donations"
-msgstr "공약"
