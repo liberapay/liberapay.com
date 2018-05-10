@@ -8,14 +8,11 @@ from mangopay.resources import BankAccount
 
 from liberapay.billing.fees import get_bank_account_country
 from liberapay.billing.transactions import payout
-from liberapay.constants import SEPA
 from liberapay.exceptions import TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import (
     b64decode_s, get_participant, get_owner_address, get_owner_name, obfuscate
 )
-
-NOT_OTHER = set('US CA GB'.split()).union(SEPA)
 
 [---]
 
@@ -335,7 +332,7 @@ title = _("Withdrawing Money")
                     <select name="Country" class="form-control country" required>
                     <option></option>
                     % for code, name in locale.countries.items()
-                        % set disable = code in NOT_OTHER
+                        % set disable = code in constants.SEPA
                         <option value="{{ code }}" {{ 'disabled' if disable }}
                                 {{ 'selected' if code == country and not disable }}
                                 >{{ name }}</option>
