@@ -157,6 +157,8 @@ We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to 
 
 ### Modifying python dependencies
 
+All new dependencies need to be audited to check that they don't contain malicious code or security vulnerabilities.
+
 We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_install/#hash-checking-mode) to protect ourselves from dependency tampering. Thus when adding or upgrading a dependency the new hashes need to computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
 
     pip install hashin
