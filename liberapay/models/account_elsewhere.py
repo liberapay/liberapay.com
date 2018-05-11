@@ -116,7 +116,9 @@ class AccountElsewhere(Model):
             i.extra_info = xmltodict.parse(ET.tostring(i.extra_info))
         i.extra_info = json.dumps(i.extra_info)
 
-        cols, vals = zip(*i.__dict__.items())
+        d = dict(i.__dict__)
+        d.pop('email', None)
+        cols, vals = zip(*d.items())
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
 
