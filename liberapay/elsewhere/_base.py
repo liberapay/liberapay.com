@@ -244,6 +244,7 @@ class Platform(object):
             if gravatar_id:
                 r.avatar_url = 'https://seccdn.libravatar.org/avatar/'+gravatar_id
         r.is_team = self.x_is_team(r, info, False)
+        r.description = self.x_description(r, info, None)
         r.extra_info = info
         return r
 

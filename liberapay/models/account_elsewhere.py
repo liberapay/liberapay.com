@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
+from markupsafe import Markup
 from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from pando.utils import utcnow
 from postgres.orm import Model
@@ -250,17 +251,8 @@ class AccountElsewhere(Model):
             return '%s (%s)' % (r, user_name)
         return r
 
-    @property
-    def description(self):
-        if self.extra_info:
-            r = self.platform_data.x_description(None, self.extra_info, '')
-        else:
-            r = ''
-        self.__dict__['description'] = r
-        return r
-
     def get_excerpt(self, size=SUMMARY_MAX_SIZE):
-        return excerpt_intro(self.description, size)
+        return excerpt_intro(Markup(self.description).striptags(), size)
 
     def save_token(self, token):
         """Saves the given access token in the database.

@@ -22,3 +22,4 @@ class OpenStreetMap(PlatformOAuth1):
     x_display_name = x_user_name
     x_email = not_available
     x_avatar_url = xpath('./user/img', attr='href')
+    x_description = xpath('./user/description')
