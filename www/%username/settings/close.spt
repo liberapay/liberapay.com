@@ -1,4 +1,4 @@
-from liberapay.utils import get_participant
+from liberapay.utils import b64encode_s, get_participant
 
 [---]
 
@@ -13,6 +13,8 @@ if request.method == 'POST' and not payday_is_running:
     if participant.balance and disburse_to is None:
         error = _("You still have money in this Liberapay account, please "
                   "choose a disbursement method below or contact support.")
+    elif disburse_to == 'payout':
+        response.redirect(participant.path('wallet/payout/'+b64encode_s(request.path.raw)))
     else:
         participant.close(disburse_to)
         response.redirect('/%s/' % participant.username)
@@ -63,16 +65,18 @@ subhead = participant.username
 
         <p>{{ _("You have {0} in your wallet. What should we do with it?",
                 balances) }}</p>
-        <ul>
-            <li><a href="{{ participant.path('wallet/payout/'+b64encode_s(request.line.uri)) }}"
-                    >{{ _("Withdraw it") }}</a></li>
-            <li><label>
+        <div class="paragraph">
+            <label>
+                <input type="radio" name="disburse_to" value="payout" />
+                {{ _("Withdraw it") }}
+            </label><br>
+            <label>
                 <input type="radio" name="disburse_to" value="downstream"
                        {{ 'disabled' if not participant.giving else '' }} />
                 {{ _("Give it to the {0}people I donate to{1}",
                      '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
-            </label></li>
-        </ul>
+            </label>
+        </div>
         <p>{{ _(
             "If neither option works for you, please contact support@liberapay.com."
         ) }}</p>
