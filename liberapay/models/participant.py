@@ -692,8 +692,8 @@ class Participant(Model, MixinTeam):
              WHERE subscriber = %s
         """, (self.id,))
 
-    def clear_personal_information(self):
-        """Clear personal information such as statements and goal.
+    def erase_personal_information(self):
+        """Erase forever the user's personal data (statements, goal, etc).
         """
         r = self.db.one("""
 
@@ -2455,4 +2455,4 @@ def clean_up_closed_accounts():
     for p, closed_time in participants:
         sleep(0.1)
         print("Deleting data of account ~%i (closed on %s)..." % (p.id, closed_time))
-        p.clear_personal_information()
+        p.erase_personal_information()

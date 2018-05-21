@@ -250,9 +250,9 @@ class TestClosing(FakeTransfersHarness):
         assert ntips() == 0
 
 
-    # cpi - clear_personal_information
+    # epi - erase_personal_information
 
-    def test_cpi_clears_personal_information(self):
+    def test_epi_deletes_personal_information(self):
         alice = self.make_participant(
             'alice',
             goal=EUR(100),
@@ -264,7 +264,7 @@ class TestClosing(FakeTransfersHarness):
         alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')
 
-        alice.clear_personal_information()
+        alice.erase_personal_information()
         new_alice = Participant.from_username('alice')
 
         assert alice.get_statement(['en']) == (None, None)
@@ -278,7 +278,7 @@ class TestClosing(FakeTransfersHarness):
         assert emails[0].address == 'alice@example.com'
         assert emails[0].verified
 
-    def test_cpi_clears_communities(self):
+    def test_epi_clears_communities(self):
         alice = self.make_participant('alice')
         c = alice.create_community('test')
         alice.upsert_community_membership(True, c.id)
@@ -287,6 +287,6 @@ class TestClosing(FakeTransfersHarness):
 
         assert Community.from_name('test').nmembers == 2  # sanity check
 
-        alice.clear_personal_information()
+        alice.erase_personal_information()
 
         assert Community.from_name('test').nmembers == 1
