@@ -1207,41 +1207,26 @@ class Participant(Model, MixinTeam):
 
     def upsert_subscription(self, on, publisher):
         subscriber = self.id
-        token = str(uuid.uuid4()) if on else None
-        r = self.db.one("""
-            DO $$
-            DECLARE
-                cname text;
-            BEGIN
-                IF (%(on)s) THEN
-                BEGIN
-                    INSERT INTO subscriptions
-                                (publisher, subscriber, is_on, token)
-                         VALUES (%(publisher)s, %(subscriber)s, %(on)s, %(token)s);
-                    IF (FOUND) THEN RETURN; END IF;
-                EXCEPTION WHEN unique_violation THEN
-                    GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
-                    IF (cname <> 'subscriptions_publisher_subscriber_key') THEN
-                        RAISE;
-                    END IF;
-                END;
-                END IF;
+        if on:
+            token = str(uuid.uuid4())
+            return self.db.one("""
+                INSERT INTO subscriptions
+                            (publisher, subscriber, is_on, token)
+                     VALUES (%(publisher)s, %(subscriber)s, %(on)s, %(token)s)
+                ON CONFLICT (publisher, subscriber) DO UPDATE
+                        SET is_on = excluded.is_on
+                          , mtime = current_timestamp
+                  RETURNING *
+            """, locals())
+        else:
+            return self.db.one("""
                 UPDATE subscriptions
                    SET is_on = %(on)s
                      , mtime = CURRENT_TIMESTAMP
                  WHERE publisher = %(publisher)s
-                   AND subscriber = %(subscriber)s;
-            END;
-            $$ LANGUAGE plpgsql;
-
-            SELECT *
-              FROM subscriptions
-             WHERE publisher = %(publisher)s
-               AND subscriber = %(subscriber)s;
-        """, locals())
-        if not r and on:
-            raise Exception('upsert in subscriptions failed')
-        return r
+                   AND subscriber = %(subscriber)s
+             RETURNING *
+            """, locals())
 
     def check_subscription_status(self, subscriber):
         return self.db.one("""
