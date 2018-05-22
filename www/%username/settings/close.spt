@@ -110,6 +110,7 @@ subhead = participant.username
         ) }}</p>
 
 
+        % if participant.username[0] != '~'
         <h3>{{ _("Username") }}</h3>
 
         <p>{{ _(
@@ -117,6 +118,7 @@ subhead = participant.username
             "not for at least a year after you close your account (unless we "
             "determine that you've been infringing a trademark)."
         ) }}</p>
+        % endif
 
 
         <h3>{{ _("Ready?") }}</h3>
