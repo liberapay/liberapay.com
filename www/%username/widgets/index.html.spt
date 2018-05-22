@@ -68,5 +68,25 @@ response.headers[b'Content-Security-Policy'] = csp
     <p><script src="giving.js"></script></p>
     % endif
 
+    <h3>{{ _("Shields.io Badges") }}</h3>
+
+    <p>{{ _("Use this code to add a badge to your website or GitHub:") }}</p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/receives/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/receives/{{ participant.username }}.svg?logo=liberapay"></p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/gives/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/gives/{{ participant.username }}.svg?logo=liberapay"></p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/patrons/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/patrons/{{ participant.username }}.svg?logo=liberapay"></p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/goal/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/goal/{{ participant.username }}.svg?logo=liberapay"></p>
+
 </div>
 % endblock
