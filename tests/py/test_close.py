@@ -4,7 +4,7 @@ import pytest
 
 from liberapay.billing.payday import Payday
 from liberapay.models.community import Community
-from liberapay.models.participant import Participant
+from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.testing import EUR
 from liberapay.testing.mangopay import FakeTransfersHarness
 
@@ -290,3 +290,32 @@ class TestClosing(FakeTransfersHarness):
         alice.erase_personal_information()
 
         assert Community.from_name('test').nmembers == 1
+
+
+    def test_clean_up_closed_accounts(self):
+        alice = self.make_participant(
+            'alice',
+            goal=EUR(555),
+            avatar_url='img-url',
+            email='alice@example.com',
+        )
+        alice.upsert_statement('en', 'not forgetting to be awesome!')
+        alice.add_email('alice@example.net')
+        alice.close(None)
+
+        cleaned = clean_up_closed_accounts()
+        assert cleaned == 0
+
+        self.db.run("UPDATE events SET ts = ts - interval '7 days'")
+        cleaned = clean_up_closed_accounts()
+        assert cleaned == 1
+
+        alice = alice.refetch()
+        assert alice.get_statement(['en']) == (None, None)
+        assert alice.goal == None
+        assert alice.avatar_url == None
+        assert alice.email == 'alice@example.com'
+        emails = alice.get_emails()
+        assert len(emails) == 1
+        assert emails[0].address == 'alice@example.com'
+        assert emails[0].verified

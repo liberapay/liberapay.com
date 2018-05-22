@@ -2456,3 +2456,4 @@ def clean_up_closed_accounts():
         sleep(0.1)
         print("Deleting data of account ~%i (closed on %s)..." % (p.id, closed_time))
         p.erase_personal_information()
+    return len(participants)
