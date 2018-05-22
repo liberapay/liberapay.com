@@ -24,7 +24,9 @@ pending_payouts = website.db.one("""
       FROM exchanges
      WHERE participant = %s
        AND amount < 0
-       AND status = 'created'
+       AND ( status = 'created' OR
+             status = 'succeeded' AND timestamp > (current_timestamp - interval '24 hours')
+           )
 """, (participant.id,))
 
 balances = participant.get_balances()
