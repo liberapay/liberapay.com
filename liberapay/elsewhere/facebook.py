@@ -31,6 +31,7 @@ class Facebook(PlatformOAuth2):
     x_user_id = key('id')
     x_display_name = key('name')
     x_email = key('email')
+    x_description = key('bio')
 
     def x_avatar_url(self, extracted, info, default):
         return 'https://graph.facebook.com/' + extracted.user_id + '/picture?width=256&height=256'

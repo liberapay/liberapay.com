@@ -96,7 +96,7 @@ def xpath(path, attr=None, clean=lambda a: a):
                 msg %= (path, self.name, ET.tostring(info))
                 logger.error(msg)
                 raise ValueError(msg)
-            v = l[0].get(attr) if attr else l[0]
+            v = l[0].get(attr) if attr else ET.tostring(l[0], encoding='utf8', method='text')
         except IndexError:
             if default:
                 return default[0]
