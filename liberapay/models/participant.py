@@ -700,11 +700,24 @@ class Participant(Model, MixinTeam):
             DELETE FROM community_memberships WHERE participant=%(id)s;
             DELETE FROM subscriptions WHERE subscriber=%(id)s;
             DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
+            DELETE FROM notifications WHERE participant=%(id)s;
             DELETE FROM statements WHERE participant=%(id)s;
+
+            DELETE FROM events
+             WHERE participant = %(id)s
+               AND (recorder IS NULL OR recorder = participant)
+               AND type NOT IN (
+                       'account-kind-change',
+                       'mangopay-account-change',
+                       'set_status'
+                   );
 
             UPDATE participants
                SET goal=NULL
                  , avatar_url=NULL
+                 , avatar_src=NULL
+                 , avatar_email=NULL
+                 , public_name=NULL
              WHERE id=%(id)s
          RETURNING *;
 

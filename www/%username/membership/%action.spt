@@ -83,7 +83,7 @@ elif action == 'leave':
 
 elif action == 'accept':
     with website.db.get_cursor() as c:
-        team.add_event(c, 'invite_accept', dict(invitee=user.id))
+        team.add_event(c, 'invite_accept', dict(invitee=user.id), user.id)
         team.add_member(user)
     msg = _("You are now a member of the team.")
     if notif_id:
@@ -91,7 +91,7 @@ elif action == 'accept':
 
 elif action == 'refuse':
     with website.db.get_cursor() as c:
-        team.add_event(c, 'invite_refuse', dict(invitee=user.id))
+        team.add_event(c, 'invite_refuse', dict(invitee=user.id), user.id)
     if notif_id:
         user.mark_notification_as_read(notif_id)
     response.redirect('/')

@@ -12,3 +12,9 @@ BEGIN;
     DELETE FROM tips t WHERE EXISTS (SELECT 1 FROM zeroed_tips z WHERE z.id = t.id);
 
 END;
+
+SELECT 'after deployment';
+
+UPDATE events
+   SET recorder = (payload->>'invitee')::int
+ WHERE type IN ('invite_accept', 'invite_refuse');
