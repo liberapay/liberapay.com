@@ -712,6 +712,18 @@ class Participant(Model, MixinTeam):
         self.set_attributes(**r._asdict())
         self.add_event(self.db, 'erase_personal_information', None)
 
+    def invalidate_exchange_routes(self):
+        """Disable any saved payment routes (cards, bank accounts).
+        """
+        routes = self.db.all("""
+            SELECT r
+              FROM exchange_routes r
+             WHERE participant = %s
+               AND coalesce(error, '') <> 'invalidated'
+        """, (self.id,))
+        for route in routes:
+            route.invalidate()
+
     @cached_property
     def closed_time(self):
         return self.db.one("""
@@ -2456,4 +2468,5 @@ def clean_up_closed_accounts():
         sleep(0.1)
         print("Deleting data of account ~%i (closed on %s)..." % (p.id, closed_time))
         p.erase_personal_information()
+        p.invalidate_exchange_routes()
     return len(participants)
