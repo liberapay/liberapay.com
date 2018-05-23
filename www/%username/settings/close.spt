@@ -17,6 +17,7 @@ if request.method == 'POST' and not payday_is_running:
         response.redirect(participant.path('wallet/payout/'+b64encode_s(request.path.raw)))
     else:
         participant.close(disburse_to)
+        participant.sign_out(response.headers.cookie)
         response.redirect('/%s/' % participant.username)
 
 pending_payouts = website.db.one("""
