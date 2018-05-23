@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '66'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '67'::jsonb);
 
 
 -- app configuration
@@ -147,7 +147,6 @@ CREATE TABLE elsewhere
 -- Note: we use "user_name" instead of "username" to avoid having the same
 --       column name in the participants and elsewhere tables.
 , display_name          text
-, email                 text
 , avatar_url            text
 , is_team               boolean         NOT NULL DEFAULT FALSE
 , extra_info            json
@@ -156,6 +155,7 @@ CREATE TABLE elsewhere
 , connect_expires       timestamptz
 , domain                text            NOT NULL -- NULL would break the unique indexes
 , info_fetched_at       timestamptz     NOT NULL DEFAULT current_timestamp
+, description           text
 , UNIQUE (participant, platform)
 , CONSTRAINT user_id_chk CHECK (user_id IS NOT NULL OR domain <> '' AND user_name IS NOT NULL)
 );
