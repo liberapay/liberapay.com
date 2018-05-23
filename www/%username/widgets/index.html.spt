@@ -68,9 +68,11 @@ response.headers[b'Content-Security-Policy'] = csp
     <p><script src="giving.js"></script></p>
     % endif
 
-    <h3>{{ _("Shields.io Badges") }}</h3>
+    <h3>{{ _("Badges from {0}Shields.io{1}", 
+        "<a href='https://shields.io'>"|safe,
+        "</a>"|safe) }}</h3>
 
-    <p>{{ _("Use this code to add a badge to your website or GitHub:") }}</p>
+    <p>{{ _("Use these code snippets to add a badge to your website or README:") }}</p>
 
     <pre>&lt;img src="http://img.shields.io/liberapay/receives/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
 
