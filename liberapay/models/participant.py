@@ -721,7 +721,7 @@ class Participant(Model, MixinTeam):
              WHERE id=%(id)s
          RETURNING *;
 
-        """, dict(id=self.id, email=self.email))
+        """, dict(id=self.id, email=self.email or self.get_any_email()))
         self.set_attributes(**r._asdict())
         self.add_event(self.db, 'erase_personal_information', None)
 
