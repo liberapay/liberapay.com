@@ -100,6 +100,12 @@ subhead = participant.username
         <h3>{{ _("Data retention") }}</h3>
 
         <p>{{ _(
+            "We don't erase your email address and password immediately, so "
+            "for a while you'll be able to reopen your account by simply "
+            "logging in, until your account is definitively archived."
+        ) }}</p>
+
+        <p>{{ _(
             "We will start to erase the personal data attached to your account "
             "7 days after it is closed. This delay is meant to protect your "
             "account from an accidental or malicious closure."
