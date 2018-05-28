@@ -1769,7 +1769,11 @@ class Participant(Model, MixinTeam):
               JOIN participants p2 ON p2.id = t.tippee
              WHERE t.tipper = %s
                AND t.amount > 0
-          ORDER BY p2.join_time IS NULL, t.ctime ASC
+          ORDER BY ( p2.status = 'active' AND
+                     (p2.goal IS NULL OR p2.goal >= 0) AND
+                     (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
+                   ) DESC
+                 , p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
         updated = []
         for wallet in self.get_current_wallets(cursor):
