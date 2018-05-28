@@ -521,14 +521,9 @@ class Participant(Model, MixinTeam):
     class AccountNotEmpty(Exception): pass
 
     def final_check(self, cursor):
-        """Sanity-check that balance and tips have been dealt with.
+        """Sanity-check that balance has been dealt with.
         """
         if self.balance != 0:
-            raise self.AccountNotEmpty
-        incoming = cursor.one("""
-            SELECT count(*) FROM current_tips WHERE tippee = %s AND amount > 0
-        """, (self.id,))
-        if incoming > 0:
             raise self.AccountNotEmpty
 
     class UnknownDisbursementStrategy(Exception): pass
@@ -547,11 +542,10 @@ class Participant(Model, MixinTeam):
 
         with self.db.get_cursor() as cursor:
             self.clear_tips_giving(cursor)
-            self.clear_tips_receiving(cursor)
             self.clear_takes(cursor)
             if self.kind == 'group':
                 self.remove_all_members(cursor)
-            self.clear_personal_information(cursor)
+            self.clear_subscriptions(cursor)
             self.final_check(cursor)
             self.update_status('closed', cursor)
 
@@ -688,27 +682,60 @@ class Participant(Model, MixinTeam):
         for t in teams:
             t.set_take_for(self, None, self, cursor=cursor)
 
-    def clear_personal_information(self, cursor):
-        """Clear personal information such as statements and goal.
+    def clear_subscriptions(self, cursor):
+        """Unsubscribe from all newsletters.
         """
-        r = cursor.one("""
+        cursor.run("""
+            UPDATE subscriptions
+               SET is_on = false
+                 , mtime = current_timestamp
+             WHERE subscriber = %s
+        """, (self.id,))
+
+    def erase_personal_information(self):
+        """Erase forever the user's personal data (statements, goal, etc).
+        """
+        r = self.db.one("""
 
             DELETE FROM community_memberships WHERE participant=%(id)s;
             DELETE FROM subscriptions WHERE subscriber=%(id)s;
             DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
+            DELETE FROM notifications WHERE participant=%(id)s;
             DELETE FROM statements WHERE participant=%(id)s;
+
+            DELETE FROM events
+             WHERE participant = %(id)s
+               AND (recorder IS NULL OR recorder = participant)
+               AND type NOT IN (
+                       'account-kind-change',
+                       'mangopay-account-change',
+                       'set_status'
+                   );
 
             UPDATE participants
                SET goal=NULL
                  , avatar_url=NULL
-                 , giving=zero(giving)
-                 , receiving=zero(receiving)
-                 , npatrons=0
+                 , avatar_src=NULL
+                 , avatar_email=NULL
+                 , public_name=NULL
              WHERE id=%(id)s
          RETURNING *;
 
-        """, dict(id=self.id, email=self.email))
+        """, dict(id=self.id, email=self.email or self.get_any_email()))
         self.set_attributes(**r._asdict())
+        self.add_event(self.db, 'erase_personal_information', None)
+
+    def invalidate_exchange_routes(self):
+        """Disable any saved payment routes (cards, bank accounts).
+        """
+        routes = self.db.all("""
+            SELECT r
+              FROM exchange_routes r
+             WHERE participant = %s
+               AND coalesce(error, '') <> 'invalidated'
+        """, (self.id,))
+        for route in routes:
+            route.invalidate()
 
     @cached_property
     def closed_time(self):
@@ -1205,41 +1232,26 @@ class Participant(Model, MixinTeam):
 
     def upsert_subscription(self, on, publisher):
         subscriber = self.id
-        token = str(uuid.uuid4()) if on else None
-        r = self.db.one("""
-            DO $$
-            DECLARE
-                cname text;
-            BEGIN
-                IF (%(on)s) THEN
-                BEGIN
-                    INSERT INTO subscriptions
-                                (publisher, subscriber, is_on, token)
-                         VALUES (%(publisher)s, %(subscriber)s, %(on)s, %(token)s);
-                    IF (FOUND) THEN RETURN; END IF;
-                EXCEPTION WHEN unique_violation THEN
-                    GET STACKED DIAGNOSTICS cname = CONSTRAINT_NAME;
-                    IF (cname <> 'subscriptions_publisher_subscriber_key') THEN
-                        RAISE;
-                    END IF;
-                END;
-                END IF;
+        if on:
+            token = str(uuid.uuid4())
+            return self.db.one("""
+                INSERT INTO subscriptions
+                            (publisher, subscriber, is_on, token)
+                     VALUES (%(publisher)s, %(subscriber)s, %(on)s, %(token)s)
+                ON CONFLICT (publisher, subscriber) DO UPDATE
+                        SET is_on = excluded.is_on
+                          , mtime = current_timestamp
+                  RETURNING *
+            """, locals())
+        else:
+            return self.db.one("""
                 UPDATE subscriptions
                    SET is_on = %(on)s
                      , mtime = CURRENT_TIMESTAMP
                  WHERE publisher = %(publisher)s
-                   AND subscriber = %(subscriber)s;
-            END;
-            $$ LANGUAGE plpgsql;
-
-            SELECT *
-              FROM subscriptions
-             WHERE publisher = %(publisher)s
-               AND subscriber = %(subscriber)s;
-        """, locals())
-        if not r and on:
-            raise Exception('upsert in subscriptions failed')
-        return r
+                   AND subscriber = %(subscriber)s
+             RETURNING *
+            """, locals())
 
     def check_subscription_status(self, subscriber):
         return self.db.one("""
@@ -1673,8 +1685,23 @@ class Participant(Model, MixinTeam):
             c.run("UPDATE participants SET goal=%s WHERE id=%s", (goal, self.id))
             self.set_attributes(goal=goal)
             if not self.accepts_tips:
-                self.clear_tips_receiving(c)
-                self.update_receiving(c)
+                tippers = c.all("""
+                    SELECT p
+                      FROM current_tips t
+                      JOIN participants p ON p.id = t.tipper
+                     WHERE t.tippee = %s
+                       AND t.amount > 0
+                """, (self.id,))
+                for tipper in tippers:
+                    tipper.update_giving(cursor=c)
+                r = c.one("""
+                    UPDATE participants
+                       SET receiving = zero(receiving)
+                         , npatrons = 0
+                     WHERE id = %s
+                 RETURNING receiving, npatrons
+                """, (self.id,))
+                self.set_attributes(**r._asdict())
 
     def update_status(self, status, cursor=None):
         with self.db.get_cursor(cursor) as c:
@@ -1694,7 +1721,6 @@ class Participant(Model, MixinTeam):
             self.set_attributes(**r._asdict())
             self.add_event(c, 'set_status', status)
             if not self.accepts_tips:
-                self.clear_tips_receiving(c)
                 self.update_receiving(c)
 
     def get_giving_in(self, currency):
@@ -1743,7 +1769,11 @@ class Participant(Model, MixinTeam):
               JOIN participants p2 ON p2.id = t.tippee
              WHERE t.tipper = %s
                AND t.amount > 0
-          ORDER BY p2.join_time IS NULL, t.ctime ASC
+          ORDER BY ( p2.status = 'active' AND
+                     (p2.goal IS NULL OR p2.goal >= 0) AND
+                     (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
+                   ) DESC
+                 , p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
         updated = []
         for wallet in self.get_current_wallets(cursor):
@@ -1769,14 +1799,15 @@ class Participant(Model, MixinTeam):
         giving = (cursor or self.db).one("""
             UPDATE participants p
                SET giving = coalesce_currency_amount((
-                     SELECT sum(amount, %(currency)s)
-                       FROM current_tips
-                       JOIN participants p2 ON p2.id = tippee
-                      WHERE tipper = %(id)s
+                     SELECT sum(t.amount, %(currency)s)
+                       FROM current_tips t
+                       JOIN participants p2 ON p2.id = t.tippee
+                      WHERE t.tipper = %(id)s
                         AND p2.status = 'active'
-                        AND (p2.mangopay_user_id IS NOT NULL OR kind = 'group')
-                        AND amount > 0
-                        AND is_funded
+                        AND (p2.goal IS NULL OR p2.goal >= 0)
+                        AND (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
+                        AND t.amount > 0
+                        AND t.is_funded
                    ), p.main_currency)
              WHERE p.id = %(id)s
          RETURNING giving
@@ -2422,3 +2453,37 @@ class NeedConfirmation(Exception):
     def __bool__(self):
         return any(self._all)
     __nonzero__ = __bool__
+
+
+def clean_up_closed_accounts():
+    participants = website.db.all("""
+        SELECT p, closed_time
+          FROM (
+                 SELECT p
+                      , ( SELECT e2.ts
+                            FROM events e2
+                           WHERE e2.participant = p.id
+                             AND e2.type = 'set_status'
+                             AND e2.payload = '"closed"'
+                        ORDER BY e2.ts DESC
+                           LIMIT 1
+                        ) AS closed_time
+                   FROM participants p
+                  WHERE p.status = 'closed'
+                    AND p.kind IN ('individual', 'organization')
+               ) a
+         WHERE closed_time < (current_timestamp - INTERVAL '7 days')
+           AND NOT EXISTS (
+                   SELECT e.id
+                     FROM events e
+                    WHERE e.participant = (p).id
+                      AND e.type = 'erase_personal_information'
+                      AND e.ts > closed_time
+               )
+    """)
+    for p, closed_time in participants:
+        sleep(0.1)
+        print("Deleting data of account ~%i (closed on %s)..." % (p.id, closed_time))
+        p.erase_personal_information()
+        p.invalidate_exchange_routes()
+    return len(participants)

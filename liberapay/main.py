@@ -25,7 +25,7 @@ from liberapay.billing.transactions import check_all_balances
 from liberapay.cron import Cron, Daily, Weekly
 from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
-from liberapay.models.participant import Participant
+from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
@@ -112,6 +112,7 @@ if conf:
     cron(conf.clean_up_counters_every, website.db.clean_up_counters, True)
     cron(Daily(hour=16), lambda: fetch_currency_exchange_rates(website.db), True)
     cron(Daily(hour=17), Payday.update_cached_amounts, True)
+    cron(Daily(hour=8), clean_up_closed_accounts, True)
 
 
 # Website Algorithm

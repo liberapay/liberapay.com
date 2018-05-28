@@ -182,14 +182,19 @@ if not freeload:
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             <td class="funded {{ 'danger' if inactive else '' }}">
                 % if not tip.is_identified
-                    {{ _("No: the donee hasn't filled the identity form") }}</td>
+                    {{ _("No: the donee hasn't filled the identity form") }}
                 % elif tippee.is_suspended
                     {{ _("No: the donee's account is temporarily suspended") }}
+                % elif tippee.status == 'closed'
+                    {{ _("No: the donee's account is closed") }}
+                % elif not tippee.accepts_tips
+                    {{ _("No: the recipient no longer accepts donations") }}
                 % elif not tip.is_funded
                     {{ _("No: insufficient funds") }}
                 % else
                     {{ _("Yes") }}
                 % endif
+            </td>
         </tr>
         % endfor
         </tbody>

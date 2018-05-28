@@ -4,7 +4,7 @@ import pytest
 
 from liberapay.billing.payday import Payday
 from liberapay.models.community import Community
-from liberapay.models.participant import Participant
+from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.testing import EUR
 from liberapay.testing.mangopay import FakeTransfersHarness
 
@@ -28,7 +28,7 @@ class TestClosing(FakeTransfersHarness):
 
         alice.close('downstream')
 
-        assert carl.get_tip_to(alice)['amount'] == 0
+        assert carl.get_tip_to(alice)['amount'] == EUR(2)
         assert alice.balance == 0
         assert len(team.get_current_takes()) == 1
 
@@ -40,7 +40,7 @@ class TestClosing(FakeTransfersHarness):
     def test_close_page_is_usually_available(self):
         alice = self.make_participant('alice')
         body = self.client.GET('/alice/settings/close', auth_as=alice).text
-        assert 'Personal Information' in body
+        assert '<h3>Username' in body
 
     def test_close_page_is_not_available_during_payday(self):
         Payday.start()
@@ -250,9 +250,9 @@ class TestClosing(FakeTransfersHarness):
         assert ntips() == 0
 
 
-    # cpi - clear_personal_information
+    # epi - erase_personal_information
 
-    def test_cpi_clears_personal_information(self):
+    def test_epi_deletes_personal_information(self):
         alice = self.make_participant(
             'alice',
             goal=EUR(100),
@@ -260,15 +260,11 @@ class TestClosing(FakeTransfersHarness):
             hide_receiving=True,
             avatar_url='img-url',
             email='alice@example.com',
-            giving=EUR(20),
-            receiving=EUR(40),
-            npatrons=21,
         )
         alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')
 
-        with self.db.get_cursor() as cursor:
-            alice.clear_personal_information(cursor)
+        alice.erase_personal_information()
         new_alice = Participant.from_username('alice')
 
         assert alice.get_statement(['en']) == (None, None)
@@ -277,15 +273,12 @@ class TestClosing(FakeTransfersHarness):
         assert alice.hide_receiving == new_alice.hide_receiving == True
         assert alice.avatar_url == new_alice.avatar_url == None
         assert alice.email == new_alice.email
-        assert alice.giving == new_alice.giving == 0
-        assert alice.receiving == new_alice.receiving == 0
-        assert alice.npatrons == new_alice.npatrons == 0
         emails = alice.get_emails()
         assert len(emails) == 1
         assert emails[0].address == 'alice@example.com'
         assert emails[0].verified
 
-    def test_cpi_clears_communities(self):
+    def test_epi_clears_communities(self):
         alice = self.make_participant('alice')
         c = alice.create_community('test')
         alice.upsert_community_membership(True, c.id)
@@ -294,7 +287,35 @@ class TestClosing(FakeTransfersHarness):
 
         assert Community.from_name('test').nmembers == 2  # sanity check
 
-        with self.db.get_cursor() as cursor:
-            alice.clear_personal_information(cursor)
+        alice.erase_personal_information()
 
         assert Community.from_name('test').nmembers == 1
+
+
+    def test_clean_up_closed_accounts(self):
+        alice = self.make_participant(
+            'alice',
+            goal=EUR(555),
+            avatar_url='img-url',
+            email='alice@example.com',
+        )
+        alice.upsert_statement('en', 'not forgetting to be awesome!')
+        alice.add_email('alice@example.net')
+        alice.close(None)
+
+        cleaned = clean_up_closed_accounts()
+        assert cleaned == 0
+
+        self.db.run("UPDATE events SET ts = ts - interval '7 days'")
+        cleaned = clean_up_closed_accounts()
+        assert cleaned == 1
+
+        alice = alice.refetch()
+        assert alice.get_statement(['en']) == (None, None)
+        assert alice.goal == None
+        assert alice.avatar_url == None
+        assert alice.email == 'alice@example.com'
+        emails = alice.get_emails()
+        assert len(emails) == 1
+        assert emails[0].address == 'alice@example.com'
+        assert emails[0].verified
