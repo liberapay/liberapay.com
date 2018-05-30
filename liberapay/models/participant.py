@@ -5,6 +5,7 @@ from datetime import timedelta
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5, sha1
 from os import urandom
+from threading import Lock
 from time import sleep
 import unicodedata
 import uuid
@@ -72,6 +73,9 @@ from liberapay.utils import (
 )
 from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
+
+
+email_lock = Lock()
 
 
 class Participant(Model, MixinTeam):
@@ -945,8 +949,9 @@ class Participant(Model, MixinTeam):
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
 
-        n = website.mailer.send(**message)
-        website.log_email(message)
+        with email_lock:
+            n = website.mailer.send(**message)
+            website.log_email(message)
         return n
 
     @classmethod
