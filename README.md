@@ -24,6 +24,7 @@ Note: This webapp is not self-hostable.
   - [CSS and JavaScript](#css-and-javascript)
   - [Testing](#testing)
     - [Updating test fixtures](#updating-test-fixtures)
+    - [Speeding up the tests](#speeding-up-the-tests)
   - [Tinkering with payments](#tinkering-with-payments)
   - [Modifying python dependencies](#modifying-python-dependencies)
   - [Deploying the app](#deploying-the-app)
@@ -156,6 +157,10 @@ Some of our tests include interactions with external services. In order to speed
 If you add or modify interactions with external services, then the tests will fail, because VCR will not find the new or modified request in the records, and will refuse to record the new request by default (see [Record Modes](https://vcrpy.readthedocs.io/en/latest/usage.html#record-modes) for more information). When that happens you can either switch the record mode from `once` to `new_episodes` (in `liberapay/testing/vcr.py`) or delete the obsolete fixture files.
 
 If the new interactions are with MangoPay you have to delete the file `tests/py/fixtures/MangopayOAuth.yml`, otherwise you'll be using an expired authentication token and the requests will be rejected.
+
+#### Speeding up the tests
+
+PostgreSQL is designed to prevent data loss, so by default it does a lot of synchronous disk writes. To reduce the number of those blocking writes our `recreate-schema.sh` script automatically switches the `synchronous_commit` option to `off` for the test database, however this doesn't completely disable syncing. If your PostgreSQL instance only contains data that you can afford to lose, then you can speed things up further by setting `fsync` to `off` in the server's configuration file (`postgresql.conf`).
 
 ### Tinkering with payments
 
