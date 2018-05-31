@@ -15,7 +15,7 @@ subhead = _("Email settings")
 emails = participant.get_emails()
 base_path = participant.path('emails/')
 
-email_locale = website.locales[participant.email_lang]
+email_locale = website.locales.get(participant.email_lang) or website.locales['en']
 
 [---] text/html
 % extends "templates/settings.html"
