@@ -19,6 +19,7 @@ Note: This webapp is not self-hostable.
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [Running](#running)
+    - [Payday](#payday)
   - [SQL](#sql)
   - [CSS and JavaScript](#css-and-javascript)
   - [Testing](#testing)
@@ -110,6 +111,10 @@ It should now be accessible at [http://localhost:8339/](http://localhost:8339/).
 You can create some fake users to make it look more like the real site:
 
     make data
+
+#### Payday
+
+To run a local payday open [http://localhost:8339/admin/payday](http://localhost:8339/admin/payday) and click the "Run payday" button. You can add `OVERRIDE_PAYDAY_CHECKS=yes` in the `local.env` file to disable the safety checks that prevent running payday at the wrong time.
 
 ### SQL
 
