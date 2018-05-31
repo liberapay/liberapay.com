@@ -908,6 +908,14 @@ class Payday(object):
                         AND t.amount > 0
                         AND t.is_funded
                    )
+               AND NOT EXISTS (
+                     SELECT 1
+                       FROM notifications n
+                      WHERE n.participant = p.id
+                        AND n.event = 'identity_required'
+                        AND n.ts > (current_timestamp - interval '6 months')
+                        AND (n.is_new OR n.email_sent IS TRUE)
+                   )
         """)
         for p in participants:
             p.notify('identity_required', force_email=True)
