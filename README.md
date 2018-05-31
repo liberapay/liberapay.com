@@ -27,6 +27,7 @@ Note: This webapp is not self-hostable.
     - [Speeding up the tests](#speeding-up-the-tests)
   - [Tinkering with payments](#tinkering-with-payments)
   - [Modifying python dependencies](#modifying-python-dependencies)
+  - [Processing personal data](#processing-personal-data)
   - [Deploying the app](#deploying-the-app)
   - [Setting up a development environment using Docker](#setting-up-a-development-environment-using-docker)
 - [License](#license)
@@ -177,6 +178,10 @@ We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_in
     # note: we have several requirements files, use the right one
 
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
+
+### Processing personal data
+
+When writing code that handles personal information keep in mind the principles enshrined in the [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
 ### Deploying the app
 
