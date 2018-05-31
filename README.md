@@ -20,7 +20,7 @@ Note: This webapp is not self-hostable.
   - [Running](#running)
   - [SQL](#sql)
   - [CSS and JavaScript](#css-and-javascript)
-  - [Testing *](#testing-)
+  - [Testing](#testing)
     - [Updating test fixtures](#updating-test-fixtures)
   - [Tinkering with payments](#tinkering-with-payments)
   - [Modifying python dependencies](#modifying-python-dependencies)
@@ -131,7 +131,7 @@ directory. We do that to be able to easily customize it by changing values in
 `style/variables.scss`. Modifying the files in `style/bootstrap/` is probably
 not a good idea.
 
-### Testing [![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg)](https://travis-ci.org/liberapay/liberapay.com)
+### Testing
 
 The easiest way to run the test suite is:
 
