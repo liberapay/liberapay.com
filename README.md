@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg?branch=master)](https://travis-ci.org/liberapay/liberapay.com)
 [![Weblate](https://hosted.weblate.org/widgets/liberapay/-/shields-badge.svg)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
 [![Gitter](https://badges.gitter.im/liberapay/salon.svg)](https://gitter.im/liberapay/salon?utm_source=badge)
+[![Income](https://img.shields.io/liberapay/receives/Liberapay.svg)](https://liberapay.com/Liberapay)
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/liberapay/donate)
 
 [Liberapay](http://liberapay.com) is a recurrent donations platform. We help you fund the creators and projects you appreciate.
@@ -18,12 +19,15 @@ Note: This webapp is not self-hostable.
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [Running](#running)
+    - [Payday](#payday)
   - [SQL](#sql)
   - [CSS and JavaScript](#css-and-javascript)
-  - [Testing *](#testing-)
+  - [Testing](#testing)
     - [Updating test fixtures](#updating-test-fixtures)
+    - [Speeding up the tests](#speeding-up-the-tests)
   - [Tinkering with payments](#tinkering-with-payments)
   - [Modifying python dependencies](#modifying-python-dependencies)
+  - [Processing personal data](#processing-personal-data)
   - [Deploying the app](#deploying-the-app)
   - [Setting up a development environment using Docker](#setting-up-a-development-environment-using-docker)
 - [License](#license)
@@ -110,6 +114,10 @@ You can create some fake users to make it look more like the real site:
 
     make data
 
+#### Payday
+
+To run a local payday open [http://localhost:8339/admin/payday](http://localhost:8339/admin/payday) and click the "Run payday" button. You can add `OVERRIDE_PAYDAY_CHECKS=yes` in the `local.env` file to disable the safety checks that prevent running payday at the wrong time.
+
 ### SQL
 
 The python code interacts with the database by sending raw SQL queries through
@@ -131,7 +139,7 @@ directory. We do that to be able to easily customize it by changing values in
 `style/variables.scss`. Modifying the files in `style/bootstrap/` is probably
 not a good idea.
 
-### Testing [![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg)](https://travis-ci.org/liberapay/liberapay.com)
+### Testing
 
 The easiest way to run the test suite is:
 
@@ -151,6 +159,10 @@ If you add or modify interactions with external services, then the tests will fa
 
 If the new interactions are with MangoPay you have to delete the file `tests/py/fixtures/MangopayOAuth.yml`, otherwise you'll be using an expired authentication token and the requests will be rejected.
 
+#### Speeding up the tests
+
+PostgreSQL is designed to prevent data loss, so by default it does a lot of synchronous disk writes. To reduce the number of those blocking writes our `recreate-schema.sh` script automatically switches the `synchronous_commit` option to `off` for the test database, however this doesn't completely disable syncing. If your PostgreSQL instance only contains data that you can afford to lose, then you can speed things up further by setting `fsync` to `off` in the server's configuration file (`postgresql.conf`).
+
 ### Tinkering with payments
 
 We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to modify that part of the code you'll need the [MangoPay API documentation](https://docs.mangopay.com/api-references/).
@@ -166,6 +178,10 @@ We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_in
     # note: we have several requirements files, use the right one
 
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
+
+### Processing personal data
+
+When writing code that handles personal information keep in mind the principles enshrined in the [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
 ### Deploying the app
 
