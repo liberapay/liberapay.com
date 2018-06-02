@@ -1,5 +1,5 @@
 <form action="/sign-out.html" method="POST"
-      {% if request.method not in ('GET', 'HEAD') %} target="_blank" {% endif %}>
+      {% if request.method not in ('GET', 'HEAD') %} target="_blank" rel="noopener noreferrer" {% endif %}>
     <input name="back_to" type="hidden" value="{{ request.line.uri }}" />
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
     <button class="btn navbar-btn" type="submit">
