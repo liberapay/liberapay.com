@@ -8,7 +8,7 @@
         % include "templates/form-repost.html"
         <input type="hidden" name="confirmed" value="true" />
         <div class="alert alert-{{ cls }}">{{ msg }}</div>
-        <a class="btn btn-default" href="{{ back_to }}">{{ _("Cancel") }}</a>
+        <a class="btn btn-default" href="{{ response.sanitize_untrusted_url(back_to) if back_to else '' }}">{{ _("Cancel") }}</a>
         <button class="btn btn-{{ cls }}">{{ _("Confirm") }}</button>
     </form>
 % endblock
