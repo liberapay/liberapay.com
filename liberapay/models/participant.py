@@ -1732,8 +1732,11 @@ class Participant(Model, MixinTeam):
         return self.db.one("""
             SELECT sum(t.amount)
               FROM current_tips t
+              JOIN participants p ON p.id = t.tippee
              WHERE t.tipper = %s
                AND t.amount::currency = %s
+               AND p.status = 'active'
+               AND (p.goal IS NULL OR p.goal >= 0)
         """, (self.id, currency)) or ZERO[currency]
 
     def get_receiving_in(self, currency, cursor=None):
