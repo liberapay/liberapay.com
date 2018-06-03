@@ -8,7 +8,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils import b64encode_s, emails
+from liberapay.utils import emails
 
 
 class TestEmail(EmailHarness):
@@ -156,18 +156,6 @@ class TestEmail(EmailHarness):
         self.hit_verify(punycode_email, nonce)
         actual = Participant.from_username('alice').email
         assert punycode_email == actual
-
-    def test_email_verification_is_backwards_compatible(self):
-        """Test email verification still works with unencoded email in verification link.
-        """
-        addr = 'alice@example.com'
-        self.hit_email_spt('add-email', addr)
-        nonce = self.alice.get_email(addr).nonce
-        email64 = b64encode_s(addr)
-        url = '/alice/emails/verify.html?email64=%s&nonce=%s' % (email64, nonce)
-        self.client.GET(url, auth_as=self.alice)
-        actual = Participant.from_username('alice').email
-        assert addr == actual
 
     def test_verified_email_is_not_changed_after_update(self):
         self.add_and_verify_email('alice@example.com')
