@@ -119,7 +119,7 @@ if exchange and exchange.status == 'failed' and exchange.note[:7] in ('001599:',
     if is_old_route:
         reinput_card = True
 
-back_to = b64decode_s(request.path['back_to'], default=None)
+back_to = b64decode_s(request.path['back_to'], default='')
 success = getattr(exchange, 'status', None) == 'succeeded'
 show_form = weekly > 0 and funded < 52 and not success
 

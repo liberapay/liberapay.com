@@ -110,7 +110,7 @@ if request.method == 'POST':
     redir = request.path.raw+'?exchange_id=%s' % exchange.id
     response.redirect(redir)
 
-back_to = b64decode_s(request.path['back_to'], default=None)
+back_to = b64decode_s(request.path['back_to'], default='')
 show_form = weekly > 0 and funded < 52 and not payin
 
 if user == participant:
