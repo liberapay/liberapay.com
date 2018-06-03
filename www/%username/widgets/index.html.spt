@@ -68,5 +68,29 @@ response.headers[b'Content-Security-Policy'] = csp
     <p><script src="giving.js"></script></p>
     % endif
 
+    <h3>{{ _(
+        "Badges from {link_open}Shields.io{link_close}",
+        link_open="<a href='https://shields.io'>"|safe,
+        link_close="</a>"|safe
+    ) }}</h3>
+
+    <p>{{ _("Use these code snippets to add a badge to your website or README:") }}</p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/receives/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/receives/{{ participant.username }}.svg?logo=liberapay"></p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/gives/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/gives/{{ participant.username }}.svg?logo=liberapay"></p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/patrons/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/patrons/{{ participant.username }}.svg?logo=liberapay"></p>
+
+    <pre>&lt;img src="http://img.shields.io/liberapay/goal/{{ participant.username }}.svg?logo=liberapay"&gt;</pre>
+
+    <p><img src="http://img.shields.io/liberapay/goal/{{ participant.username }}.svg?logo=liberapay"></p>
+
 </div>
 % endblock
