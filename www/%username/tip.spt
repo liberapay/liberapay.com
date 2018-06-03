@@ -49,7 +49,7 @@ if request.method == 'POST':
     else:
         period = request.body['period']
         if period not in constants.PERIOD_CONVERSION_RATES:
-            raise Response(400, "bad 'period' value '%s'" % period)
+            raise response.error(400, "bad 'period' value '%s'" % period)
         amount = request.body.get('amount')
         if amount:
             amount = parse_decimal(amount)
