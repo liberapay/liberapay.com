@@ -18,7 +18,7 @@ NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
 
 def get_exchange_payin(participant, request):
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
+                              (request.qs.get_int('exchange_id'), participant.id))
     if not exchange:
         raise response.error(403)
     if exchange.remote_id:

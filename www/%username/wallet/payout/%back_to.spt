@@ -51,7 +51,7 @@ if request.method == 'POST':
 
 elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
+                              (request.qs.get_int('exchange_id'), participant.id))
     currency = exchange.amount.currency
 
 if not currency:

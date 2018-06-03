@@ -21,7 +21,7 @@ participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if request.method == 'GET' and 'transactionId' in request.qs:
     try:
-        payin = PayIn.get(request.qs['transactionId'])
+        payin = PayIn.get(request.qs.get_int('transactionId'))
     except PayIn.DoesNotExist:
         raise response.error(400, "bad transactionId: does not exist")
     if payin.AuthorId != participant.mangopay_user_id:
@@ -34,7 +34,7 @@ if request.method == 'GET' and 'transactionId' in request.qs:
 exchange = None
 if 'exchange_id' in request.qs and request.method != 'POST':
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
+                              (request.qs.get_int('exchange_id'), participant.id))
 
 currency = request.qs.get('currency', currency)
 if exchange:
