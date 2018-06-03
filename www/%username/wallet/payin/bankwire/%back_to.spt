@@ -16,7 +16,7 @@ NOTIF_BIT_FAIL = EVENTS['payin_bankwire_failed'].bit
 NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
 
 
-def get_exchange_payin(participant, request):
+def get_exchange_payin(participant, request, response):
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
                               (request.qs.get_int('exchange_id'), participant.id))
     if not exchange:
@@ -32,7 +32,7 @@ def get_exchange_payin(participant, request):
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if request.method == 'POST' and 'action' in request.body:
-    exchange, payin = get_exchange_payin(participant, request)
+    exchange, payin = get_exchange_payin(participant, request, response)
     action = request.body['action']
     if action == 'email':
         sent = participant.send_email(
@@ -54,7 +54,7 @@ if request.method == 'POST' and 'action' in request.body:
 
 exchange, payin = None, None
 if 'exchange_id' in request.qs:
-    exchange, payin = get_exchange_payin(participant, request)
+    exchange, payin = get_exchange_payin(participant, request, response)
     if exchange.status == 'succeeded':
         response.redirect(participant.path('receipts/%s' % exchange.id))
 
