@@ -771,7 +771,8 @@ class Participant(Model, MixinTeam):
         i = email.rfind('@') + 1
         email = email[:i] + email[i:].lower().encode('idna').decode()
 
-        if not EMAIL_RE.match(email):
+        if not EMAIL_RE.match(email) or len(email) > 320:
+            # The length limit is from https://tools.ietf.org/html/rfc3696#section-3
             raise BadEmailAddress(email)
 
         # Check that this address isn't already verified

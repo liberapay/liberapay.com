@@ -22,7 +22,6 @@ def get_invite(team, p):
 
 [---]
 
-request.allow('GET', 'POST')
 if user.ANON:
     raise LoginRequired
 
@@ -47,6 +46,7 @@ elif not user.member_of(team):
     raise response.error(403, _("You are not a member of this team."))
 
 if action == 'invite':
+    request.allow('POST')
     invitee = Participant.from_username(request.body['username'])
     if not invitee:
         raise response.error(404, _("User not found."))

@@ -32,11 +32,7 @@ try:
     event, status = request.qs['EventType'].rsplit('_', 1)
 except ValueError:
     raise response.error(400, "bad EventType")
-RessourceId = request.qs['RessourceId']
-try:
-    int(RessourceId)
-except ValueError:
-    raise response.error(400, "bad RessourceId: not an integer")
+RessourceId = request.qs.get_int('RessourceId')
 
 cls = EVENT_TYPES.get(event)
 

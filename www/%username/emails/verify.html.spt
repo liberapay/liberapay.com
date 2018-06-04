@@ -9,10 +9,7 @@ from liberapay.utils import b64decode_s, emails, get_participant
 
 participant = get_participant(state, restrict=False)
 
-if 'email64' in request.qs:
-    email = b64decode_s(request.qs['email64'], default='')
-else:
-    email = request.qs.get('email', '')
+email = request.qs.get('email', '')
 nonce = request.qs.get('nonce', '')
 result = participant.verify_email(email, nonce)
 

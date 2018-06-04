@@ -52,7 +52,7 @@ for currency in currencies:
 currency = None
 del currency
 
-back_to = b64decode_s(request.path['back_to'], default=None)
+back_to = b64decode_s(request.path['back_to'], default='')
 
 if user == participant:
     participant.mark_notifications_as_read('low_balance')

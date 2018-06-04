@@ -435,9 +435,15 @@ def build_s3_object_url(key):
     return endpoint + "/" + key + "?" + querystring + "&X-Amz-Signature=" + signature
 
 
-def get_int(d, k, default=None, minimum=None):
-    r = d.get(k)
-    if r is None:
+NO_DEFAULT = object()
+
+
+def get_int(d, k, default=NO_DEFAULT, minimum=None):
+    try:
+        r = d[k]
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
         return default
     try:
         r = int(r)

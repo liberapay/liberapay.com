@@ -16,9 +16,9 @@ NOTIF_BIT_FAIL = EVENTS['payin_bankwire_failed'].bit
 NOTIF_BIT_SUCC = EVENTS['payin_bankwire_succeeded'].bit
 
 
-def get_exchange_payin(participant, request):
+def get_exchange_payin(participant, request, response):
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
+                              (request.qs.get_int('exchange_id'), participant.id))
     if not exchange:
         raise response.error(403)
     if exchange.remote_id:
@@ -32,7 +32,7 @@ def get_exchange_payin(participant, request):
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 if request.method == 'POST' and 'action' in request.body:
-    exchange, payin = get_exchange_payin(participant, request)
+    exchange, payin = get_exchange_payin(participant, request, response)
     action = request.body['action']
     if action == 'email':
         sent = participant.send_email(
@@ -54,7 +54,7 @@ if request.method == 'POST' and 'action' in request.body:
 
 exchange, payin = None, None
 if 'exchange_id' in request.qs:
-    exchange, payin = get_exchange_payin(participant, request)
+    exchange, payin = get_exchange_payin(participant, request, response)
     if exchange.status == 'succeeded':
         response.redirect(participant.path('receipts/%s' % exchange.id))
 
@@ -110,7 +110,7 @@ if request.method == 'POST':
     redir = request.path.raw+'?exchange_id=%s' % exchange.id
     response.redirect(redir)
 
-back_to = b64decode_s(request.path['back_to'], default=None)
+back_to = b64decode_s(request.path['back_to'], default='')
 show_form = weekly > 0 and funded < 52 and not payin
 
 if user == participant:

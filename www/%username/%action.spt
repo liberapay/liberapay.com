@@ -17,7 +17,7 @@ if action not in ('subscribe', 'unsubscribe'):
 subscribe = action == 'subscribe'
 subscriber = user
 
-subscription_id = request.qs.get_int('id')
+subscription_id = request.qs.get_int('id', None)
 token = request.qs.get('token')
 if subscription_id and token:
     subscription = website.db.one("""

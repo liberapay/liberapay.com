@@ -20,7 +20,7 @@ participant = get_participant(state, restrict=True, block_suspended_user=True)
 exchange = None
 bank_account = None
 
-back_to = b64decode_s(request.path['back_to'], default=None)
+back_to = b64decode_s(request.path['back_to'], default='')
 
 currency = request.qs.get('currency')
 if request.method == 'POST':
@@ -51,7 +51,7 @@ if request.method == 'POST':
 
 elif 'exchange_id' in request.qs:
     exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s AND participant = %s",
-                              (request.qs['exchange_id'], participant.id))
+                              (request.qs.get_int('exchange_id'), participant.id))
     currency = exchange.amount.currency
 
 if not currency:
@@ -380,7 +380,7 @@ title = _("Withdrawing Money")
 
     <div class="proceed">
         <button class="btn btn-lg btn-success">{{ _("Proceed") }}</button>
-        <a href="{{ response.sanitize_untrusted_url(back_to) or participant.path('wallet') }}"
+        <a href="{{ response.sanitize_untrusted_url(back_to or participant.path('wallet')) }}"
            class="btn btn-warning pull-right">{{ _("Cancel") }}</a>
     </div>
     % endif

@@ -20,6 +20,8 @@ if request.method == 'POST':
     else:
         email_lang = locale.language
         team_currency = request.body.get('main_currency') or currency
+        if team_currency not in constants.CURRENCIES:
+            raise response.error(400, "currency code %r is invalid or non-supported" % team_currency)
         team_email = request.body.get('email')
         throttle_takes = request.body.get('throttle_takes') == 'on'
         t = user.make_team(name, team_currency, team_email, email_lang, throttle_takes)
