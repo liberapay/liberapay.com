@@ -2325,7 +2325,7 @@ class Participant(Model, MixinTeam):
     # More Random Stuff
     # =================
 
-    def to_dict(self, details=False, inquirer=None):
+    def to_dict(self, details=False):
         output = {
             'id': self.id,
             'username': self.username,
@@ -2370,29 +2370,6 @@ class Participant(Model, MixinTeam):
         else:
             giving = None
         output['giving'] = giving
-
-        # Key: my_tip
-        # Values:
-        #   undefined - user is not authenticated
-        #   "self" - user == participant
-        #   null - user has never tipped this person
-        #   0.00 - user used to tip this person but now doesn't
-        #   3.00 - user tips this person this amount
-        if inquirer:
-            if inquirer.id == self.id:
-                my_tip = 'self'
-            else:
-                my_tip = inquirer.get_tip_to(self)['amount']
-            output['my_tip'] = my_tip
-
-        # Key: elsewhere
-        accounts = self.get_accounts_elsewhere()
-        elsewhere = output['elsewhere'] = {}
-        for platform, account in accounts.items():
-            fields = ['user_id', 'user_name']
-            if not account.platform_data.single_domain:
-                fields.append('domain')
-            elsewhere[platform] = {k: getattr(account, k, None) for k in fields}
 
         return output
 

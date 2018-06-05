@@ -172,7 +172,7 @@ class TestElsewhere(Harness):
             assert response.code == 200
 
             data = json.loads(response.text)
-            assert data['on'] == platform.name
+            assert data['npatrons'] == 0
 
     def test_public_json_opted_in(self):
         self.make_participant('alice', elsewhere='github')

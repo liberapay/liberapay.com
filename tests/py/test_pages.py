@@ -44,8 +44,7 @@ class BrowseTestHarness(MangopayHarness):
                      .replace('/%redirect_to', '/giving') \
                      .replace('/%back_to', '/') \
                      .replace('/payday/%id', '/payday/') \
-                     .replace('/%type', '/receiving.js') \
-                     .replace('/%endpoint', '/public')
+                     .replace('/%type', '/receiving.js')
             urls[url.replace('/%username/', '/david/')] = None
             urls[url.replace('/%username/', '/team/')] = None
         cls.urls = list(urls)

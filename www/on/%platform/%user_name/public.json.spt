@@ -1,0 +1,21 @@
+from liberapay.models.account_elsewhere import get_account_elsewhere
+
+[---]
+
+response.headers[b"Access-Control-Allow-Origin"] = b"*"
+
+platform, account = get_account_elsewhere(website, state, api_lookup=False)
+participant = account.participant
+
+if participant.status != 'stub':
+    raise response.redirect(participant.path('public.json'))
+
+out = {
+    "avatar": participant.avatar_url,
+    "description": account.description,
+    "npatrons": participant.npatrons,
+    "receiving": participant.receiving,
+}
+
+[---] application/json via json_dump
+out
