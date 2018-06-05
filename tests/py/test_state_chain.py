@@ -94,6 +94,7 @@ class Tests(Harness):
         assert cookie[str('expires')][-4:] == str(' GMT')
         assert cookie[str('path')] == str('/')
         assert cookie[str('secure')] is True
+        assert cookie[str('samesite')] == str('lax')
 
 
 class Tests2(Harness):

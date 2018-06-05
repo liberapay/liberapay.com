@@ -286,7 +286,7 @@ def ensure_str(s):
     return s.decode('ascii') if isinstance(s, bytes) else s.encode('ascii')
 
 
-def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
+def set_cookie(cookies, key, value, expires=None, httponly=True, path='/', samesite='lax'):
     key = ensure_str(key)
     cookies[key] = ensure_str(value)
     cookie = cookies[key]
@@ -300,6 +300,8 @@ def set_cookie(cookies, key, value, expires=None, httponly=True, path='/'):
         cookie[str('httponly')] = True
     if path:
         cookie[str('path')] = ensure_str(path)
+    if samesite:
+        cookie[str('samesite')] = ensure_str(samesite)
     if website.cookie_domain:
         cookie[str('domain')] = ensure_str(website.cookie_domain)
     if website.canonical_scheme == 'https':
