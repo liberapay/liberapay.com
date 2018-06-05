@@ -171,6 +171,14 @@ algorithm.functions = [
 ]
 
 
+# Monkey patch python's stdlib
+# ============================
+
+from six.moves.http_cookies import Morsel
+
+Morsel._reserved[str('samesite')] = str('SameSite')
+
+
 # Monkey patch aspen and pando
 # ============================
 
