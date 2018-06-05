@@ -56,35 +56,3 @@ class Tests(Harness):
         response = self.client.GET('/alice/public.json')
 
         assert response.headers[b'Access-Control-Allow-Origin'] == b'*'
-
-    def test_jsonp_works(self):
-        alice = self.make_participant('alice', balance=EUR(100))
-        bob = self.make_participant('bob')
-
-        alice.set_tip_to(bob, EUR('3.00'))
-
-        raw = self.client.GET('/bob/public.json?callback=foo', auth_as=bob).text
-
-        assert raw == '''\
-/**/ foo({
-    "avatar": null,
-    "elsewhere": {
-        "github": {
-            "user_id": "%(user_id)s",
-            "user_name": "bob"
-        }
-    },
-    "giving": {
-        "amount": "0.00",
-        "currency": "EUR"
-    },
-    "goal": null,
-    "id": %(user_id)s,
-    "kind": "individual",
-    "npatrons": 1,
-    "receiving": {
-        "amount": "3.00",
-        "currency": "EUR"
-    },
-    "username": "bob"
-});''' % dict(user_id=bob.id, elsewhere_id=bob.get_accounts_elsewhere()['github'].id)

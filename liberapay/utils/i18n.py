@@ -481,7 +481,7 @@ def extract_spt(fileobj, *args, **kw):
         content_type, renderer = parse_specline(page.header)
         extractor = None
         python_page = i < 3 and i < npages and not page.header
-        json_page = renderer in ('json_dump', 'jsonp_dump')
+        json_page = renderer == 'json_dump'
         if python_page or json_page:
             extractor = extract_python_custom
         else:
