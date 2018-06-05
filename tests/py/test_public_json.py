@@ -15,7 +15,6 @@ class Tests(Harness):
 
         data = json.loads(self.client.GET('/bob/public.json').text)
         assert data['receiving'] == {"amount": "1.00", "currency": "EUR"}
-        assert 'my_tip' not in data
 
         data = json.loads(self.client.GET('/alice/public.json').text)
         assert data['giving'] == {"amount": "1.00", "currency": "EUR"}
