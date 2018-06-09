@@ -212,6 +212,8 @@ output.body = render(globals(), allow_partial_i18n=False)
                     {{ _("chargeback") }}
                 % elif context == 'debt'
                     {{ _("debt repayment") }}
+                % elif context == 'swap'
+                    {{ _("currency exchange") }}
                 % endif
             % else
                 % set to = event['username']
@@ -234,6 +236,8 @@ output.body = render(globals(), allow_partial_i18n=False)
                     {{ _("chargeback") }}
                 % elif context == 'debt'
                     {{ _("debt repayment") }}
+                % elif context == 'swap'
+                    {{ _("currency exchange") }}
                 % endif
             % endif
             </td>
