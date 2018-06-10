@@ -577,11 +577,11 @@ def initiate_transfer(db, t_id):
 def execute_transfer(db, t_id, tr):
     try:
         tr.save()
-    except APIError as e:
+    except Exception as e:
         error = repr_exception(e)
         _record_transfer_result(db, t_id, 'failed', error)
         from liberapay.website import website
-        website.tell_sentry(e, {})
+        website.tell_sentry(e, {}, allow_reraise=False)
         raise TransferError(error)
     return record_transfer_result(db, t_id, tr, _raise=True)
 
