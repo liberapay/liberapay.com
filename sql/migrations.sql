@@ -1436,3 +1436,8 @@ DELETE FROM tips t WHERE EXISTS (SELECT 1 FROM zeroed_tips z WHERE z.id = t.id);
 UPDATE events
    SET recorder = (payload->>'invitee')::int
  WHERE type IN ('invite_accept', 'invite_refuse');
+
+-- migration #69
+ALTER TYPE transfer_context ADD VALUE 'swap';
+ALTER TABLE transfers ADD COLUMN counterpart int REFERENCES transfers;
+ALTER TABLE transfers ADD CONSTRAINT counterpart_chk CHECK ((counterpart IS NULL) = (context <> 'swap') OR (context = 'swap' AND status <> 'succeeded'));

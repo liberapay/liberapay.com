@@ -25,7 +25,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '68'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '69'::jsonb);
 
 
 -- app configuration
@@ -298,7 +298,7 @@ $$ LANGUAGE SQL STRICT;
 -- transfers -- balance transfers from one user to another
 
 CREATE TYPE transfer_context AS ENUM
-    ('tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt', 'account-switch');
+    ('tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt', 'account-switch', 'swap');
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
 
@@ -316,10 +316,12 @@ CREATE TABLE transfers
 , invoice     int                 REFERENCES invoices
 , wallet_from text                NOT NULL
 , wallet_to   text                NOT NULL
+, counterpart int                 REFERENCES transfers
 , CONSTRAINT team_chk CHECK (NOT (context='take' AND team IS NULL))
 , CONSTRAINT self_chk CHECK ((tipper <> tippee) = (context <> 'account-switch'))
 , CONSTRAINT expense_chk CHECK (NOT (context='expense' AND invoice IS NULL))
 , CONSTRAINT wallets_chk CHECK (wallet_from <> wallet_to)
+, CONSTRAINT counterpart_chk CHECK ((counterpart IS NULL) = (context <> 'swap') OR (context = 'swap' AND status <> 'succeeded'))
  );
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
