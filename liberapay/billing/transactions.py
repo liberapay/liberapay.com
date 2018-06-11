@@ -8,7 +8,7 @@ from time import sleep
 from mangopay.exceptions import APIError
 from mangopay.resources import (
     BankAccount, BankWirePayIn, BankWirePayOut, DirectPayIn, DirectDebitDirectPayIn,
-    PayInRefund, SettlementTransfer, Transfer, User, Wallet,
+    PayInRefund, SettlementTransfer, Transfer, TransferRefund, User, Wallet,
 )
 from mangopay.utils import Money
 
@@ -485,16 +485,17 @@ def transfer(db, tipper, tippee, amount, context, **kw):
 
 
 def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to,
-                     team=None, invoice=None, **kw):
+                     team=None, invoice=None, counterpart=None, refund_ref=None, **kw):
     with db.get_cursor() as cursor:
         transfer = cursor.one("""
             INSERT INTO transfers
                         (tipper, tippee, amount, context, team, invoice, status,
-                         wallet_from, wallet_to)
+                         wallet_from, wallet_to, counterpart, refund_ref)
                  VALUES (%s, %s, %s, %s, %s, %s, 'pre',
-                         %s, %s)
+                         %s, %s, %s, %s)
               RETURNING *
-        """, (tipper, tippee, amount, context, team, invoice, wallet_from, wallet_to))
+        """, (tipper, tippee, amount, context, team, invoice,
+              wallet_from, wallet_to, counterpart, refund_ref))
         lock_bundles(cursor, transfer, **kw)
     return transfer.id
 
@@ -543,14 +544,46 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
             break
 
 
+def initiate_transfer(db, t_id):
+    amount, status = db.one("""
+        SELECT t.amount, t.status
+          FROM transfers t
+         WHERE t.id = %s
+           AND t.status = 'pre'
+    """, (t_id,))
+    assert status == 'pre', (t_id, status)
+    tipper_wallet = db.one("""
+        SELECT w.remote_id, w.remote_owner_id
+          FROM transfers t
+          JOIN wallets w ON w.remote_id = t.wallet_from
+         WHERE t.id = %s
+    """, (t_id,))
+    tippee_wallet = db.one("""
+        SELECT w.remote_id, w.remote_owner_id
+          FROM transfers t
+          JOIN wallets w ON w.remote_id = t.wallet_to
+         WHERE t.id = %s
+    """, (t_id,))
+    tr = Transfer()
+    tr.AuthorId = tipper_wallet.remote_owner_id
+    tr.CreditedUserId = tippee_wallet.remote_owner_id
+    tr.CreditedWalletId = tippee_wallet.remote_id
+    tr.DebitedFunds = amount.int()
+    tr.DebitedWalletId = tipper_wallet.remote_id
+    tr.Fees = Money(0, amount.currency)
+    tr.Tag = str(t_id)
+    execute_transfer(db, t_id, tr)
+    return tr
+
+
 def execute_transfer(db, t_id, tr):
     try:
         tr.save()
-    except APIError as e:
+    except Exception as e:
         error = repr_exception(e)
         _record_transfer_result(db, t_id, 'failed', error)
         from liberapay.website import website
-        website.tell_sentry(e, {})
+        website.tell_sentry(e, {}, allow_reraise=False)
         raise TransferError(error)
     return record_transfer_result(db, t_id, tr, _raise=True)
 
@@ -614,6 +647,49 @@ def _record_transfer_result(db, t_id, status, error=None):
         assert bundles_sum == amount
     merge_cash_bundles(db, tippee)
     return balance
+
+
+def refund_transfer(db, remote_id):
+    tr = Transfer.get(remote_id)
+    t = db.one("SELECT * FROM transfers WHERE id = %s", (tr.Tag,))
+    refund_id = prepare_transfer(
+        db, t.tippee, t.tipper, t.amount, 'refund', t.wallet_to, t.wallet_from,
+        refund_ref=t.id
+    )
+    refund = TransferRefund(Transfer=tr, AuthorId=tr.AuthorId, Tag=refund_id)
+    execute_transfer(db, refund_id, refund)
+
+
+def swap_currencies(db, swapper1, swapper2, amount1, amount2):
+    wallet11 = swapper1.get_current_wallet(amount1.currency)
+    wallet12 = swapper1.get_current_wallet(amount2.currency, create=True)
+    wallet21 = swapper2.get_current_wallet(amount1.currency, create=True)
+    wallet22 = swapper2.get_current_wallet(amount2.currency)
+    assert wallet11.balance >= amount1, (wallet11, amount1)
+    assert wallet22.balance >= amount2, (wallet22, amount2)
+    t1 = prepare_transfer(
+        db, swapper1.id, swapper2.id, amount1, 'swap', wallet11.remote_id, wallet21.remote_id
+    )
+    try:
+        t2 = prepare_transfer(
+            db, swapper2.id, swapper1.id, amount2, 'swap', wallet22.remote_id, wallet12.remote_id,
+            counterpart=t1
+        )
+    except Exception:
+        _record_transfer_result(db, t1, 'failed', 'canceled')
+        raise
+    db.run("UPDATE transfers SET counterpart = %s WHERE id = %s", (t2, t1))
+    try:
+        tr1 = initiate_transfer(db, t1)
+    except Exception:
+        _record_transfer_result(db, t2, 'failed', 'canceled')
+        raise
+    try:
+        initiate_transfer(db, t2)
+    except Exception:
+        refund_transfer(db, tr1.Id)
+        raise
+    return t1, t2
 
 
 def lock_disputed_funds(cursor, exchange, amount):

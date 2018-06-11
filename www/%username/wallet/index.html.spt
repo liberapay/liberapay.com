@@ -292,6 +292,8 @@ if user.is_admin:
                 {{ _("chargeback") }}
             % elif context == 'debt'
                 {{ _("debt repayment") }}
+            % elif context == 'swap'
+                {{ _("currency exchange") }}
             % endif
         % else
             % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
@@ -315,6 +317,8 @@ if user.is_admin:
                 {{ _("chargeback") }}
             % elif context == 'debt'
                 {{ _("debt repayment") }}
+            % elif context == 'swap'
+                {{ _("currency exchange") }}
             % endif
         % endif
         % if event['status'] != 'succeeded'
