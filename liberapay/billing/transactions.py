@@ -545,11 +545,13 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
 
 
 def initiate_transfer(db, t_id):
-    amount = db.one("""
-        SELECT t.amount
+    amount, status = db.one("""
+        SELECT t.amount, t.status
           FROM transfers t
          WHERE t.id = %s
+           AND t.status = 'pre'
     """, (t_id,))
+    assert status == 'pre', (t_id, status)
     tipper_wallet = db.one("""
         SELECT w.remote_id, w.remote_owner_id
           FROM transfers t
