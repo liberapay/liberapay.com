@@ -232,7 +232,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://gitlab.com/api/v3/users?username=adhsjakdjsdkjsajdhksda
+    uri: https://gitlab.com/api/v4/users?username=adhsjakdjsdkjsajdhksda
   response:
     body: {string: !!python/unicode '[]'}
     headers:
@@ -240,8 +240,8 @@ interactions:
       content-length: ['2']
       content-type: [application/json]
       etag: [W/"d751713988987e9331980363e24189ce"]
-      link: ['<https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=adhsjakdjsdkjsajdhksda&with_custom_attributes=false>;
-          rel="first", <https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=adhsjakdjsdkjsajdhksda&with_custom_attributes=false>;
+      link: ['<https://gitlab.com/api/v4/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=adhsjakdjsdkjsajdhksda&with_custom_attributes=false>;
+          rel="first", <https://gitlab.com/api/v4/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=adhsjakdjsdkjsajdhksda&with_custom_attributes=false>;
           rel="last"']
       ratelimit-limit: ['600']
       ratelimit-observed: ['1']
@@ -255,7 +255,7 @@ interactions:
     body: null
     headers: {}
     method: GET
-    uri: https://gitlab.com/api/v3/users?username=%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
+    uri: https://gitlab.com/api/v4/users?username=%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
   response:
     body: {string: !!python/unicode '[]'}
     headers:
@@ -263,8 +263,8 @@ interactions:
       content-length: ['2']
       content-type: [application/json]
       etag: [W/"d751713988987e9331980363e24189ce"]
-      link: ['<https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=%3E%27%3E%22%3E%3Cimg+src%3Dx+onerror%3Dalert%280%29%3E&with_custom_attributes=false>;
-          rel="first", <https://gitlab.com/api/v3/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=%3E%27%3E%22%3E%3Cimg+src%3Dx+onerror%3Dalert%280%29%3E&with_custom_attributes=false>;
+      link: ['<https://gitlab.com/api/v4/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=%3E%27%3E%22%3E%3Cimg+src%3Dx+onerror%3Dalert%280%29%3E&with_custom_attributes=false>;
+          rel="first", <https://gitlab.com/api/v4/users?active=false&blocked=false&external=false&page=1&per_page=20&skip_ldap=false&username=%3E%27%3E%22%3E%3Cimg+src%3Dx+onerror%3Dalert%280%29%3E&with_custom_attributes=false>;
           rel="last"']
       ratelimit-limit: ['600']
       ratelimit-observed: ['2']

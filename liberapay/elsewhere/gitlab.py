@@ -26,7 +26,7 @@ class GitLab(PlatformOAuth2):
     # http://doc.gitlab.com/ce/api/
     api_format = 'json'
     api_paginator = header_links_paginator(total_header='X-Total')
-    api_url = 'https://gitlab.com/api/v3'
+    api_url = 'https://gitlab.com/api/v4'
     api_user_info_path = '/users/{user_id}'
     api_user_name_info_path = '/users?username={user_name}'
     api_user_self_info_path = '/user'
