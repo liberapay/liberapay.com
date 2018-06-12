@@ -275,9 +275,11 @@ RATE_LIMITS = {
     'check_password': (25, 60*60*24*7),  # 25 per week
     'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
     'http-unsafe.user': (10, 10),  # 10 per 10 seconds
+    'log-in.country': (10, 60),  # 10 per minute per country
     'log-in.email': (10, 60*60*24),  # 10 per day
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
+    'log-in.ip-addr': (5, 5*60),  # 5 per 5 minutes per IP address
     'log-in.password': (3, 60*60),  # 3 per hour
     'make_team': (5, 60*60*24*7),  # 5 per week
     'refetch_elsewhere_data': (1, 60*60*24*7),  # retry after one week

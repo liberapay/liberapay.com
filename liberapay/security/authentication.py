@@ -9,7 +9,7 @@ from liberapay.constants import (
     CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE, SESSION, SESSION_TIMEOUT
 )
 from liberapay.exceptions import (
-    BadPasswordSize, LoginRequired, TooManyLoginEmails, TooManySignUps
+    BadPasswordSize, LoginRequired, TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps
 )
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
@@ -48,6 +48,10 @@ def sign_in_with_form_data(body, state):
     _, website = state['_'], state['website']
 
     if body.get('log-in.id'):
+        request = state['request']
+        src_addr, src_country = request.source, request.country
+        website.db.hit_rate_limit('log-in.ip-addr', str(src_addr), TooManyLogInAttempts)
+        website.db.hit_rate_limit('log-in.country', src_country, TooManyLogInAttempts)
         id = body.pop('log-in.id').strip()
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
