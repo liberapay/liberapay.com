@@ -31,7 +31,8 @@ from liberapay.security import authentication, csrf, set_default_security_header
 from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
 from liberapay.utils.currencies import MoneyBasket, fetch_currency_exchange_rates
 from liberapay.utils.state_chain import (
-    attach_environ_to_request, create_response_object, canonize, insert_constants,
+    attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
+    canonize, insert_constants,
     _dispatch_path_to_filesystem, enforce_rate_limits, merge_exception_into_response,
     bypass_csp_for_form_redirects, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
@@ -128,6 +129,8 @@ algorithm.functions = [
     algorithm['raise_200_for_OPTIONS'],
     create_response_object,
 
+    reject_requests_bypassing_proxy,
+
     canonize,
     set_default_security_headers,
     i18n.set_up_i18n,
@@ -193,6 +196,7 @@ def _source(self):
         addr = ip_address(self.environ[b'REMOTE_ADDR'].decode('ascii'))
         trusted_proxies = getattr(self.website, 'trusted_proxies', None)
         forwarded_for = self.headers.get(b'X-Forwarded-For')
+        self.__dict__['bypasses_proxy'] = bool(trusted_proxies)
         if not trusted_proxies or not forwarded_for:
             return addr
         for networks in trusted_proxies:
@@ -209,13 +213,23 @@ def _source(self):
             except (UnicodeDecodeError, ValueError):
                 return addr
             if i == -1:
+                if networks is trusted_proxies[-1]:
+                    break
                 return addr
             forwarded_for = forwarded_for[:i]
+        self.__dict__['bypasses_proxy'] = False
         return addr
     r = f()
     self.__dict__['source'] = r
     return r
 pando.http.request.Request.source = property(_source)
+
+if hasattr(pando.http.request.Request, 'bypasses_proxy'):
+    raise Warning('pando.http.request.Request.bypasses_proxy already exists')
+def _bypasses_proxy(self):
+    self.source
+    return self.__dict__['bypasses_proxy']
+pando.http.request.Request.bypasses_proxy = property(_bypasses_proxy)
 
 if hasattr(pando.Response, 'encode_url'):
     raise Warning('pando.Response.encode_url() already exists')
