@@ -171,6 +171,15 @@ class TooManyEmailVerifications(LazyResponseXXX):
         )
 
 
+class TooManyLogInAttempts(LazyResponseXXX):
+    code = 429
+    def msg(self, _):
+        return _(
+            "There have been too many attempts to log in from your IP address or country "
+            "recently. Please try again in an hour and email support@liberapay.com if "
+            "the problem persists."
+        )
+
 class TooManyLoginEmails(LazyResponseXXX):
     code = 429
     def msg(self, _):
