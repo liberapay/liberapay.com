@@ -408,7 +408,10 @@ def get_lang_options(request, locale, previously_used_langs, add_multi=False):
     return langs
 
 
-def set_up_i18n(website, request, state):
+def set_up_i18n(state, request=None, exception=None):
+    if request is None:
+        add_helpers_to_context(state, LOCALE_EN)
+        return
     accept_lang = request.headers.get(b"Accept-Language", b"").decode('ascii', 'replace')
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)
