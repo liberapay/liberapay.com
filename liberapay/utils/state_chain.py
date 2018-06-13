@@ -5,6 +5,7 @@ import string
 
 from six.moves.urllib.parse import urlsplit, urlunsplit, quote as urlquote
 
+from aspen.exceptions import NegotiationFailure
 from aspen.http.request import Path
 from aspen.request_processor.algorithm import dispatch_path_to_filesystem
 from aspen.request_processor.dispatcher import NotFound, RedirectFromSlashless, UnindexedDirectory
@@ -144,6 +145,16 @@ def enforce_rate_limits(request, user, website):
         website.db.hit_rate_limit('http-unsafe.user', user.id, TooManyRequests)
     else:
         website.db.hit_rate_limit('http-unsafe.ip-addr', request.source, TooManyRequests)
+
+
+def handle_negotiation_exception(exception):
+    if isinstance(exception, NotFound):
+        response = Response(404)
+    elif isinstance(exception, NegotiationFailure):
+        response = Response(406, exception.message)
+    else:
+        return
+    return {'response': response, 'exception': None}
 
 
 def merge_exception_into_response(state, exception, response=None):

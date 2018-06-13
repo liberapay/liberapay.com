@@ -32,8 +32,8 @@ from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching
 from liberapay.utils.currencies import MoneyBasket, fetch_currency_exchange_rates
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
-    canonize, insert_constants,
-    _dispatch_path_to_filesystem, enforce_rate_limits, merge_exception_into_response,
+    canonize, insert_constants, _dispatch_path_to_filesystem, enforce_rate_limits,
+    handle_negotiation_exception, merge_exception_into_response,
     bypass_csp_for_form_redirects, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
@@ -153,6 +153,7 @@ algorithm.functions = [
     algorithm['load_resource_from_filesystem'],
     algorithm['render_resource'],
     algorithm['fill_response_with_output'],
+    handle_negotiation_exception,
 
     tell_sentry,
     merge_exception_into_response,
