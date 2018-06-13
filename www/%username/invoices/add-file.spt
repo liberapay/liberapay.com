@@ -6,11 +6,11 @@ import hmac
 import json
 
 from six import text_type as str
-from six.moves.urllib.parse import quote, urlsplit
+from six.moves.urllib.parse import urlsplit
 
 from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
 from liberapay.exceptions import AuthRequired
-from liberapay.utils import get_participant
+from liberapay.utils import get_participant, urlquote
 
 S3_SECRET_KEY = website.app_conf.s3_secret_key
 AWS4_SECRET_KEY = b'AWS4' + S3_SECRET_KEY.encode('ascii')
@@ -72,7 +72,7 @@ if step == 'sign':
     if length_range != SIZE_RANGE_STR:
         raise response.error(400, "bad `content-length-range`")
     key = 'invoice_docs/%s/%s' % (invoice.id, name)
-    if quote(conditions.get('key', '').encode('utf8')) != key:
+    if urlquote(conditions.get('key', '')) != key:
         raise response.error(400, "`conditions.key` must be '%s'" % key)
     policy = b64encode(json.dumps(body))
     try:
@@ -92,7 +92,7 @@ if step == 'sign':
     result['policy'] = policy
     result['signature'] = signature
 elif step == 'success':
-    name = quote(body['name'])
+    name = urlquote(body['name'])
     file_attrs = {
         'status': 'uploaded'
     }

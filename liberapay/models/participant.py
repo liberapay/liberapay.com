@@ -10,7 +10,7 @@ from time import sleep
 import unicodedata
 import uuid
 
-from six.moves.urllib.parse import quote, urlencode
+from six.moves.urllib.parse import urlencode
 
 import aspen_jinja2_renderer
 from cached_property import cached_property
@@ -68,7 +68,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    NS, deserialize, erase_cookie, serialize, set_cookie,
+    NS, deserialize, erase_cookie, serialize, set_cookie, urlquote,
     emails, i18n, markdown,
 )
 from liberapay.utils.currencies import MoneyBasket
@@ -512,9 +512,9 @@ class Participant(Model, MixinTeam):
         """, (self.id,))
         if rec:
             if rec.user_name:
-                slug = quote(rec.user_name) + ('@' + rec.domain if rec.domain else '')
+                slug = urlquote(rec.user_name) + ('@' + rec.domain if rec.domain else '')
             else:
-                slug = '~' + quote(rec.user_id) + (':' + rec.domain if rec.domain else '')
+                slug = '~' + urlquote(rec.user_id) + (':' + rec.domain if rec.domain else '')
             return '/on/%s/%s/' % (rec.platform, slug)
         return None
 

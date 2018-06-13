@@ -5,9 +5,8 @@ import hashlib
 import json
 import logging
 try:
-    from urllib.parse import quote, urlsplit
+    from urllib.parse import urlsplit
 except ImportError:
-    from urllib import quote
     from urlparse import urlsplit
 import xml.etree.ElementTree as ET
 
@@ -23,6 +22,7 @@ from liberapay.website import website
 
 from ._exceptions import BadUserId, UserNotFound
 from ._extractors import not_available
+from ._utils import urlquote
 
 
 logger = logging.getLogger('liberapay.elsewhere')
@@ -253,8 +253,8 @@ class Platform(object):
         """
         if not page_url:
             page_url = self.api_team_members_path.format(
-                user_id=quote(account.user_id),
-                user_name=quote(account.user_name or ''),
+                user_id=urlquote(account.user_id),
+                user_name=urlquote(account.user_name or ''),
             )
         r = self.api_get(domain, page_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
@@ -274,7 +274,7 @@ class Platform(object):
             raise NotImplementedError(
                 "%s lookup is not available for %s" % (key, self.display_name)
             )
-        path = path.format(**{key: quote(value), 'domain': domain})
+        path = path.format(**{key: urlquote(value), 'domain': domain})
         def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
                 raise UserNotFound(value, key, domain, self.name, response.text)
@@ -308,8 +308,8 @@ class Platform(object):
     def get_friends_for(self, account, page_url=None, sess=None):
         if not page_url:
             page_url = self.api_friends_path.format(
-                user_id=quote(account.user_id),
-                user_name=quote(account.user_name or ''),
+                user_id=urlquote(account.user_id),
+                user_name=urlquote(account.user_name or ''),
             )
         r = self.api_get(account.domain, page_url, sess=sess)
         friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
@@ -339,8 +339,8 @@ class Platform(object):
     def get_repos(self, account, page_url=None, sess=None):
         if not page_url:
             page_url = self.api_repos_path.format(
-                user_id=quote(account.user_id),
-                user_name=quote(account.user_name or ''),
+                user_id=urlquote(account.user_id),
+                user_name=urlquote(account.user_name or ''),
             )
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
@@ -352,8 +352,8 @@ class Platform(object):
     def get_starred_repos(self, account, sess, page_url=None):
         if not page_url:
             page_url = self.api_starred_path.format(
-                user_id=quote(account.user_id),
-                user_name=quote(account.user_name or ''),
+                user_id=urlquote(account.user_id),
+                user_name=urlquote(account.user_name or ''),
             )
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))

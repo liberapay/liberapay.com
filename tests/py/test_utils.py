@@ -1,3 +1,5 @@
+# coding: utf8
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import datetime
@@ -14,6 +16,9 @@ from liberapay.wireup import CSP
 
 
 class Tests(Harness):
+
+    # get_participant
+    # ===============
 
     def test_get_participant_gets_participant(self):
         expected = self.make_participant('alice')
@@ -210,6 +215,15 @@ class Tests(Harness):
 
     def test_b64decode_s_returns_default_if_passed_on_error(self):
         assert b64decode_s('abcd', default='error') == 'error'
+
+    # urlquote
+    # ========
+
+    def test_urlquote_handles_unicode(self):
+        from liberapay.elsewhere._utils import urlquote, urlquote_plus
+        assert urlquote('é') == '%C3%A9'
+        assert urlquote('foo é', ' ') == 'foo %C3%A9'
+        assert urlquote_plus('€ €') == '%E2%82%AC+%E2%82%AC'
 
     # CSP
     # ===

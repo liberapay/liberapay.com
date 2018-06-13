@@ -15,7 +15,6 @@ import traceback
 
 _str = str
 from six import text_type as str
-from six.moves.urllib.parse import quote as urlquote
 from six.moves.urllib.request import urlretrieve
 
 from algorithm import Algorithm
@@ -42,7 +41,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
-from liberapay.utils import find_files, markdown, mkdir_p, resolve
+from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
 from liberapay.utils.currencies import MoneyBasket, get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag

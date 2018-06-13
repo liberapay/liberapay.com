@@ -8,7 +8,6 @@ from threading import Timer
 
 from six import text_type
 from six.moves import builtins
-from six.moves.urllib.parse import quote as urlquote
 
 import aspen
 import aspen.http.mapping
@@ -28,7 +27,9 @@ from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
-from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
+from liberapay.utils import (
+    b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie, urlquote,
+)
 from liberapay.utils.currencies import MoneyBasket, fetch_currency_exchange_rates
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
@@ -235,7 +236,7 @@ pando.http.request.Request.bypasses_proxy = property(_bypasses_proxy)
 if hasattr(pando.Response, 'encode_url'):
     raise Warning('pando.Response.encode_url() already exists')
 def _encode_url(url):
-    return maybe_encode(urlquote(maybe_encode(url, 'utf8'), string.punctuation))
+    return maybe_encode(urlquote(url, string.punctuation))
 pando.Response.encode_url = staticmethod(_encode_url)
 
 if hasattr(pando.Response, 'error'):

@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 import socket
 import string
 
-from six.moves.urllib.parse import urlsplit, urlunsplit, quote as urlquote
+from six.moves.urllib.parse import urlsplit, urlunsplit
 
 from aspen.exceptions import NegotiationFailure
 from aspen.http.request import Path
@@ -15,6 +15,7 @@ from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
 from ..exceptions import LazyResponse, TooManyRequests
+from . import urlquote
 
 
 def attach_environ_to_request(environ, request, website):
@@ -128,7 +129,7 @@ def _dispatch_path_to_filesystem(website, request=None):
         request.canonical_path = raw_path
         return r
     except RedirectFromSlashless as exception:
-        path = urlquote(exception.message.encode('utf8'), string.punctuation)
+        path = urlquote(exception.message, string.punctuation)
         path = request.line.uri.path = Path(path)
         request.canonical_path = path.raw
         r = dispatch_path_to_filesystem(
