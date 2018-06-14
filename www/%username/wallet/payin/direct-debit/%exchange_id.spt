@@ -94,15 +94,12 @@ if request.method == 'POST':
 
     amount = request.body['amount']
     if amount == 'custom':
-        amount = request.body['amount_custom']
+        amount = locale.parse_money_amount(request.body['amount_custom'], currency)
+    else:
         try:
-            amount = parse_decimal(amount).quantize(constants.D_CENT)
-        except:
-            pass
-    try:
-        amount = Money(amount, currency)
-    except (InvalidOperation, ValueError):
-        raise InvalidNumber(amount)
+            amount = Money(amount, currency)
+        except (InvalidOperation, ValueError):
+            raise InvalidNumber(amount)
     if amount < amount_min or amount > amount_max:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",

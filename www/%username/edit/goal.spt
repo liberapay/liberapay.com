@@ -12,7 +12,7 @@ if request.method == "POST":
     elif goal == "custom":
         goal = request.body["goal_custom"]
     if goal is not None:
-        goal = Money(parse_decimal(goal), participant.main_currency).round_down()
+        goal = locale.parse_money_amount(goal, participant.main_currency)
     if goal == -1 and not request.body.get("confirmed"):
         msg = _("Warning: Doing this will remove all the tips you are currently receiving."
                 "\n\nThat cannot be undone!")

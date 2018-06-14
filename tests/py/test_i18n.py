@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from liberapay.exceptions import InvalidNumber
 from liberapay.testing import Harness
 from liberapay.utils.i18n import LOCALE_EN, Money
 
@@ -22,3 +23,15 @@ class Tests(Harness):
         msgkey1 = self.website.locales['de'].catalog['Save'].id
         msgkey2 = self.website.locales['fr'].catalog['Save'].id
         assert id(msgkey1) == id(msgkey2)
+
+    def test_parse_money_amount_rejects_overly_precise_numbers(self):
+        with self.assertRaises(InvalidNumber):
+            LOCALE_EN.parse_money_amount("100.00001", 'EUR')
+
+    def test_parse_money_amount_rejects_irregular_numbers(self):
+        with self.assertRaises(InvalidNumber):
+            LOCALE_EN.parse_money_amount(",100,100", 'USD')
+
+    def test_parse_money_amount_rejects_ambiguous_numbers(self):
+        with self.assertRaises(InvalidNumber):
+            LOCALE_EN.parse_money_amount("10,00", 'EUR')

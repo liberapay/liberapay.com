@@ -18,14 +18,13 @@ from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
-    NumberFormatError, parse_decimal
 )
 import jinja2.ext
 from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
-from liberapay.constants import CURRENCIES, D_CENT, D_MAX
+from liberapay.constants import CURRENCIES, D_MAX
 from liberapay.exceptions import InvalidNumber
 from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
@@ -61,7 +60,8 @@ class Locale(babel.core.Locale):
 
     def __init__(self, *a, **kw):
         super(Locale, self).__init__(*a, **kw)
-        self.decimal_symbol = self.number_symbols.get('decimal', '.')
+        self.decimal_symbol = self.number_symbols['decimal']
+        self.group_symbol = self.number_symbols['group']
         delta_p = self.currency_formats['standard'].pattern
         minus_sign = self.number_symbols.get('minusSign', '-')
         plus_sign = self.number_symbols.get('plusSign', '+')
@@ -90,8 +90,9 @@ class Locale(babel.core.Locale):
     def format_datetime(self, *a):
         return format_datetime(*a, locale=self)
 
-    def format_decimal(self, *a):
-        return format_decimal(*a, locale=self)
+    def format_decimal(self, *a, **kw):
+        kw['locale'] = self
+        return format_decimal(*a, **kw)
 
     def format_list(self, l):
         n = len(l)
@@ -133,16 +134,25 @@ class Locale(babel.core.Locale):
     def format_percent(self, *a):
         return format_percent(*a, locale=self)
 
-    def parse_decimal_or_400(self, s, maximum=D_MAX):
+    def parse_money_amount(self, string, currency, maximum=D_MAX):
         try:
-            r = parse_decimal(s, locale=self)
-        except (InvalidOperation, NumberFormatError, ValueError):
-            raise InvalidNumber(s)
-        if r.quantize(D_CENT) != r:
-            raise InvalidNumber(s)
-        if maximum is not None and r > maximum:
-            raise InvalidNumber(s)
-        return r
+            decimal = Decimal(
+                string.replace(self.group_symbol, '').replace(self.decimal_symbol, '.')
+            )
+        except (InvalidOperation, ValueError):
+            raise InvalidNumber(string)
+        if self.group_symbol in string:
+            proper = self.format_decimal(decimal, decimal_quantization=False)
+            if string != proper and string.rstrip('0') != (proper + self.decimal_symbol):
+                # Irregular number format (e.g. `10.00` in German)
+                raise InvalidNumber(string, proper)
+        if maximum is not None and decimal > maximum:
+            raise InvalidNumber(string)
+        money = Money(decimal, currency).round_down()
+        if money.amount != decimal:
+            # The input amount exceeds maximum precision (e.g. $0.001).
+            raise InvalidNumber(string)
+        return money
 
     @staticmethod
     def title(s):
@@ -455,7 +465,6 @@ def add_helpers_to_context(context, loc):
         format_money_delta=loc.format_money_delta,
         format_number=loc.format_number,
         format_percent=loc.format_percent,
-        parse_decimal=loc.parse_decimal_or_400,
         to_age_str=loc.to_age_str,
     )
 
