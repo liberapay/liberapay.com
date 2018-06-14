@@ -1,6 +1,6 @@
 /* This is a temporary hack. There is no reliable cross-browser way to replace
  * broken images. However we can remove the need for this by proxying images:
- * https://github.com/liberapay/liberapay.com/issues/202
+ * https://gitlab.com/liberapay/liberapay.com/issues/202
  */
 $('img.avatar').on('error', function () {
     this.src = Liberapay.avatar_default_url;

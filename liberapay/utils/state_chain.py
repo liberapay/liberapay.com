@@ -192,7 +192,7 @@ def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None)
 def bypass_csp_for_form_redirects(response, state, website, request=None):
     if request is None:
         return
-    # https://github.com/liberapay/liberapay.com/issues/952
+    # https://gitlab.com/liberapay/liberapay.com/issues/952
     if request.method == 'POST' and response.code == 302:
         target = response.headers[b'Location']
         is_internal = (
@@ -228,7 +228,7 @@ def overwrite_status_code_of_gateway_errors(response):
     """This function changes 502 and 504 response codes to 500.
 
     Why? Because CloudFlare masks our error page if we return a 502 or 504:
-    https://github.com/liberapay/liberapay.com/issues/592
+    https://gitlab.com/liberapay/liberapay.com/issues/592
     """
     if response.code in (502, 504):
         response.code = 500

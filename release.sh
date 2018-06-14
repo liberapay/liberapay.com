@@ -158,6 +158,6 @@ if [ "$run_schema_diff" = 'yes' ]; then
     fi
 fi
 
-# Push to GitHub
+# Push to GitLab
 git push
 git push --tags

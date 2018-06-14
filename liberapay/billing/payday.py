@@ -1031,7 +1031,7 @@ def main(override_payday_checks=False):
     from liberapay.billing.transactions import sync_with_mangopay
     from liberapay.main import website
 
-    # https://github.com/liberapay/salon/issues/19#issuecomment-191230689
+    # https://gitlab.com/liberapay/salon/issues/19#issuecomment-191230689
     from liberapay.billing.payday import Payday
 
     if not website.env.override_payday_checks and not override_payday_checks:

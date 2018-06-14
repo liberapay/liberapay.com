@@ -213,12 +213,12 @@ recent = query_cache.one("""
             "Liberapay is run transparently by a {1}non-profit organization{0}, "
             "its {2}source code{0} is public.",
             '</a>'|safe,
-            '<a href="https://github.com/liberapay/liberapay.org">'|safe,
-            '<a href="https://github.com/liberapay/liberapay.com">'|safe,
+            '<a href="https://gitlab.com/liberapay/liberapay.org">'|safe,
+            '<a href="https://gitlab.com/liberapay/liberapay.com">'|safe,
         ) }}</p>
         <p>{{ _(
             "We rely on your support to keep Liberapay running and {link_start}improving{link_end}.",
-            link_start='<a href="https://github.com/liberapay/liberapay.com/issues">'|safe,
+            link_start='<a href="https://gitlab.com/liberapay/liberapay.com/issues">'|safe,
             link_end='</a>'|safe,
         ) }}</p>
         <p><a href="/Liberapay/donate" class="btn btn-donate btn-lg"

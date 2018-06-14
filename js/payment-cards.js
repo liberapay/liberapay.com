@@ -1,4 +1,4 @@
-// https://github.com/liberapay/payment-cards.js
+// https://gitlab.com/liberapay/payment-cards.js
 
 var PaymentCards = function () {
 
