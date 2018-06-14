@@ -25,7 +25,7 @@ from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
-from liberapay.constants import CURRENCIES, D_MAX
+from liberapay.constants import CURRENCIES, D_CENT, D_MAX
 from liberapay.exceptions import InvalidNumber
 from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
@@ -123,10 +123,12 @@ class Locale(babel.core.Locale):
     def format_percent(self, *a):
         return format_percent(*a, locale=self)
 
-    def parse_decimal_or_400(self, s, *a, maximum=D_MAX):
+    def parse_decimal_or_400(self, s, maximum=D_MAX):
         try:
-            r = parse_decimal(s, *a, locale=self)
+            r = parse_decimal(s, locale=self)
         except (InvalidOperation, NumberFormatError, ValueError):
+            raise InvalidNumber(s)
+        if r.quantize(D_CENT) != r:
             raise InvalidNumber(s)
         if maximum is not None and r > maximum:
             raise InvalidNumber(s)
