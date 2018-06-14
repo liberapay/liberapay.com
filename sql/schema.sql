@@ -1,14 +1,3 @@
--------------------------------------------------------------------------------
---                             million trillion trillion
---                             |         trillion trillion
---                             |         |               trillion
---                             |         |               |   billion
---                             |         |               |   |   million
---                             |         |               |   |   |   thousand
---                             |         |               |   |   |   |
--- numeric(35,2) maxes out at $999,999,999,999,999,999,999,999,999,999,999.00.
-
-
 CREATE EXTENSION pg_trgm;
 
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
