@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import json
 
-from pando.exceptions import MalformedBody, UnknownBodyType
 from pando.http.request import Request
 from pando.http.response import Response
 
@@ -176,12 +175,12 @@ class Tests2(Harness):
         assert csrf._sanitize_token(token) is None
 
     def test_malformed_body(self):
-        with self.assertRaises(MalformedBody):
-            self.client.POST('/', body=b'a', content_type=b'application/json')
+        r = self.client.POST('/', body=b'\0', content_type=b'application/x-www-form-urlencoded')
+        assert r.code == 200
 
     def test_unknown_body_type(self):
-        with self.assertRaises(UnknownBodyType):
-            self.client.POST('/', body=b'x', content_type=b'unknown/x')
+        r = self.client.POST('/', body=b'x', content_type=b'unknown/x')
+        assert r.code == 200
 
     def test_non_dict_body(self):
         r = self.client.POST('/', body=b'[]', content_type=b'application/json')

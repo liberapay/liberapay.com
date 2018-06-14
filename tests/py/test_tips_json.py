@@ -67,3 +67,11 @@ class TestTipsJson(Harness):
         assert response.code == 200
         assert data['tippee']['username'] == 'test_tippee1'
         assert data['amount'] == {"amount": "1.00", "currency": "EUR"}
+
+    def test_malformed_body(self):
+        alice = self.make_participant('alice')
+        r = self.client.PxST(
+            '/alice/tips.json', body=b'a', content_type=b'application/json',
+            auth_as=alice,
+        )
+        assert r.code == 400

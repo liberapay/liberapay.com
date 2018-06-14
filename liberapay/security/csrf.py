@@ -12,6 +12,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from datetime import timedelta
 import re
 
+from pando.exceptions import UnknownBodyType
+
 from .crypto import constant_time_compare, get_random_string
 
 
@@ -62,8 +64,11 @@ def reject_forgeries(request, response, csrf_token):
         # Check non-cookie token for match.
         second_token = ""
         if request.line.method == "POST":
-            if isinstance(request.body, dict):
-                second_token = request.body.get('csrf_token', '')
+            try:
+                if isinstance(request.body, dict):
+                    second_token = request.body.get('csrf_token', '')
+            except UnknownBodyType:
+                pass
 
         if second_token == "":
             # Fall back to X-CSRF-TOKEN, to make things easier for AJAX,

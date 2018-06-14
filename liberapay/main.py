@@ -78,6 +78,12 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
 })
 
 
+# Configure body_parsers
+# ======================
+
+del website.body_parsers[website.media_type_json]
+
+
 # Wireup Algorithm
 # ================
 

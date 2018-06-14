@@ -1,3 +1,5 @@
+from pando import json
+
 from liberapay.utils import get_participant
 
 [-----------------------]
@@ -7,7 +9,10 @@ if user != participant:
 
 if request.method == 'POST':
     out = []
-    new_tips = request.body
+    try:
+        new_tips = json.loads(request.raw_body)
+    except Exception as e:
+        raise response.error(400, str(e))
     seen = set()
     for tip in new_tips:
         seen.add(tip['username'])
