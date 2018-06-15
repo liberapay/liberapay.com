@@ -1045,21 +1045,15 @@ def main(override_payday_checks=False):
         assert not r, "payday has already been run this week"
 
     # Prevent a race condition, by acquiring a DB lock
-    conn = website.db.get_connection().__enter__()
-    cursor = conn.cursor()
-    lock = cursor.one("SELECT pg_try_advisory_lock(1)")
-    assert lock, "failed to acquire the payday lock"
-
-    try:
-        sync_with_mangopay(website.db)
-        Payday.start().run(website.env.log_dir, website.env.keep_payday_logs)
-    except KeyboardInterrupt:  # pragma: no cover
-        pass
-    except Exception as e:  # pragma: no cover
-        website.tell_sentry(e, {}, allow_reraise=False)
-        raise
-    finally:
-        conn.close()
+    with website.db.lock('payday', blocking=False):
+        try:
+            sync_with_mangopay(website.db)
+            Payday.start().run(website.env.log_dir, website.env.keep_payday_logs)
+        except KeyboardInterrupt:  # pragma: no cover
+            pass
+        except Exception as e:  # pragma: no cover
+            website.tell_sentry(e, {}, allow_reraise=False)
+            raise
 
 
 if __name__ == '__main__':  # pragma: no cover
