@@ -501,6 +501,7 @@ def transfer(db, tipper, tippee, amount, context, **kw):
 def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to,
                      team=None, invoice=None, counterpart=None, refund_ref=None, **kw):
     with db.get_cursor() as cursor:
+        cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
         transfer = cursor.one("""
             INSERT INTO transfers
                         (tipper, tippee, amount, context, team, invoice, status,
@@ -516,7 +517,6 @@ def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to
 
 def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
     assert transfer.status == 'pre'
-    cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
     tipper, tippee = transfer.tipper, transfer.tippee
     currency = transfer.amount.currency
     if bundles:
