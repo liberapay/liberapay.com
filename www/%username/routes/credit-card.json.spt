@@ -24,7 +24,10 @@ if 'Currency' in body:
     out = {k[0].lower()+k[1:]: getattr(cr, k) for k in KEYS}
 
 else:
-    card = Card.get(body['CardId'])
+    try:
+        card = Card.get(body['CardId'])
+    except Card.DoesNotExist:
+        raise response.error(400, "bad CardId")
     if card.UserId != participant.mangopay_user_id:
         raise response.error(403)
     currency = card.Currency
