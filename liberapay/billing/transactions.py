@@ -381,6 +381,8 @@ def record_exchange_result(db, exchange_id, remote_id, status, error, participan
 def propagate_exchange(cursor, participant, exchange, error, amount, bundles=None):
     """Propagates an exchange's result to the participant's balance.
     """
+    cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+
     wallet_id = exchange.wallet_id
     new_balance = cursor.one("""
         UPDATE wallets
@@ -394,18 +396,30 @@ def propagate_exchange(cursor, participant, exchange, error, amount, bundles=Non
         raise NegativeBalance
 
     if amount < 0:
-        bundles = bundles or cursor.all("""
-            LOCK TABLE cash_bundles IN EXCLUSIVE MODE;
-            SELECT b.*
-              FROM cash_bundles b
-              JOIN exchanges e ON e.id = b.origin
-             WHERE b.owner = %s
-               AND b.ts < now() - INTERVAL %s
-               AND b.disputed IS NOT TRUE
-               AND b.locked_for IS NULL
-               AND b.amount::currency = %s
-          ORDER BY b.owner = e.participant DESC, b.ts
-        """, (participant.id, QUARANTINE, amount.currency))
+        if bundles:
+            # Refetch the bundles to ensure validity and prevent race conditions
+            bundles = cursor.all("""
+                SELECT b.*
+                  FROM cash_bundles b
+                  JOIN exchanges e ON e.id = b.origin
+                 WHERE b.owner = %s
+                   AND b.locked_for IS NULL
+                   AND b.amount::currency = %s
+                   AND b.id IN %s
+              ORDER BY b.owner = e.participant DESC, b.ts
+            """, (participant.id, amount.currency, tuple(bundles)))
+        else:
+            bundles = cursor.all("""
+                SELECT b.*
+                  FROM cash_bundles b
+                  JOIN exchanges e ON e.id = b.origin
+                 WHERE b.owner = %s
+                   AND b.ts < now() - INTERVAL %s
+                   AND b.disputed IS NOT TRUE
+                   AND b.locked_for IS NULL
+                   AND b.amount::currency = %s
+              ORDER BY b.owner = e.participant DESC, b.ts
+            """, (participant.id, QUARANTINE, amount.currency))
         withdrawable = sum(b.amount for b in bundles)
         x = -amount
         if x > withdrawable:
@@ -505,18 +519,32 @@ def lock_bundles(cursor, transfer, bundles=None, prefer_bundles_from=-1):
     cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
     tipper, tippee = transfer.tipper, transfer.tippee
     currency = transfer.amount.currency
-    bundles = bundles or cursor.all("""
-        SELECT b.*
-          FROM cash_bundles b
-          JOIN exchanges e ON e.id = b.origin
-         WHERE b.owner = %(tipper)s
-           AND b.withdrawal IS NULL
-           AND b.locked_for IS NULL
-           AND b.amount::currency = %(currency)s
-      ORDER BY b.origin = %(prefer_bundles_from)s DESC
-             , e.participant = %(tippee)s DESC
-             , b.ts
-    """, locals())
+    if bundles:
+        # Refetch the bundles to ensure validity and prevent race conditions
+        bundles = tuple(bundles)
+        bundles = cursor.all("""
+            SELECT b.*
+              FROM cash_bundles b
+             WHERE b.owner = %(tipper)s
+               AND b.withdrawal IS NULL
+               AND b.locked_for IS NULL
+               AND b.amount::currency = %(currency)s
+               AND b.id IN %(bundles)s
+          ORDER BY b.ts
+        """, locals())
+    else:
+        bundles = cursor.all("""
+            SELECT b.*
+              FROM cash_bundles b
+              JOIN exchanges e ON e.id = b.origin
+             WHERE b.owner = %(tipper)s
+               AND b.withdrawal IS NULL
+               AND b.locked_for IS NULL
+               AND b.amount::currency = %(currency)s
+          ORDER BY b.origin = %(prefer_bundles_from)s DESC
+                 , e.participant = %(tippee)s DESC
+                 , b.ts
+        """, locals())
     transferable = sum(b.amount for b in bundles)
     x = transfer.amount
     if x > transferable:
@@ -774,13 +802,13 @@ def refund_payin(db, exchange, create_debts=False, refund_fee=False, dry_run=Fal
     if not (e_refund and e_refund.status == 'pre'):
         with db.get_cursor() as cursor:
             cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
-            bundles = [NS(d._asdict()) for d in cursor.all("""
-                SELECT *
+            bundles = cursor.all("""
+                SELECT id
                   FROM cash_bundles
                  WHERE origin = %s
                    AND wallet_id = %s
                    AND disputed = true
-            """, (exchange.id, exchange.wallet_id))]
+            """, (exchange.id, exchange.wallet_id))
             e_refund = cursor.one("""
                 INSERT INTO exchanges
                             (participant, amount, fee, vat, route, status, refund_ref, wallet_id)
@@ -844,6 +872,7 @@ def return_payin_bundles_to_origin(db, exchange, last_resort_payer, create_debts
             create_debt(db, withdrawer, payer, amount, exchange.id)
             create_debt(db, original_owner, withdrawer, amount, exchange.id)
         else:
+            bundles = [b.id for b in bundles]
             payer = current_owner
             if create_debts:
                 create_debt(db, original_owner, payer, amount, exchange.id)
