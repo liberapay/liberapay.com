@@ -144,7 +144,6 @@ algorithm.functions = [
     i18n.set_up_i18n,
     insert_constants,
     authentication.start_user_as_anon,
-    csrf.extract_token_from_cookie,
     csrf.reject_forgeries,
     authentication.authenticate_user_if_possible,
     i18n.add_currency_to_state,

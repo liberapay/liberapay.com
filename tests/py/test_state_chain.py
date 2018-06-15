@@ -136,7 +136,7 @@ class Tests2(Harness):
     def test_no_csrf_cookie(self):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
-        assert "Bad CSRF cookie" in r.text
+        assert "cookie" in r.text
         assert csrf.CSRF_TOKEN in r.headers.cookie
 
     def test_no_csrf_cookie_unknown_method_on_asset(self):
@@ -147,7 +147,7 @@ class Tests2(Harness):
     def test_bad_csrf_cookie(self):
         r = self.client.POST('/', csrf_token='bad_token', raise_immediately=False)
         assert r.code == 403
-        assert "Bad CSRF cookie" in r.text
+        assert "The anti-CSRF tokens don't match." in r.text
         assert r.headers.cookie[csrf.CSRF_TOKEN].value != 'bad_token'
 
     def test_csrf_cookie_set_for_most_requests(self):
@@ -158,21 +158,21 @@ class Tests2(Harness):
         r = self.client.GET('/assets/base.css')
         assert csrf.CSRF_TOKEN not in r.headers.cookie
 
-    def test_sanitize_token_passes_through_good_token(self):
+    def test_check_token_validates_good_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'
-        assert csrf._sanitize_token(token) == token
+        assert csrf._check_token(token) is True
 
-    def test_sanitize_token_rejects_overlong_token(self):
+    def test_check_token_rejects_overlong_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeefffff'
-        assert csrf._sanitize_token(token) is None
+        assert csrf._check_token(token) is False
 
-    def test_sanitize_token_rejects_underlong_token(self):
+    def test_check_token_rejects_underlong_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeefff'
-        assert csrf._sanitize_token(token) is None
+        assert csrf._check_token(token) is False
 
-    def test_sanitize_token_rejects_goofy_token(self):
+    def test_check_token_rejects_goofy_token(self):
         token = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
-        assert csrf._sanitize_token(token) is None
+        assert csrf._check_token(token) is False
 
     def test_malformed_body(self):
         r = self.client.POST('/', body=b'\0', content_type=b'application/x-www-form-urlencoded')
