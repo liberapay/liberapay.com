@@ -19,6 +19,7 @@ from liberapay.utils import get_ip_net
 class _ANON(object):
     ANON = True
     is_admin = False
+    session = None
     id = None
     __bool__ = __nonzero__ = lambda *a: False
     get_tip_to = staticmethod(Participant._zero_tip_dict)
@@ -210,5 +211,5 @@ def add_auth_to_response(response, request=None, user=ANON):
         return  # assets never get auth headers
 
     if SESSION in request.headers.cookie:
-        if not user.ANON:
+        if user.session:
             user.keep_signed_in(response.headers.cookie)
