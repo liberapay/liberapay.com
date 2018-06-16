@@ -63,8 +63,18 @@ class Locale(babel.core.Locale):
         super(Locale, self).__init__(*a, **kw)
         self.decimal_symbol = self.number_symbols.get('decimal', '.')
         delta_p = self.currency_formats['standard'].pattern
-        assert ';' not in delta_p
-        self.currency_delta_pattern = '+{0};-{0}'.format(delta_p)
+        minus_sign = self.number_symbols.get('minusSign', '-')
+        plus_sign = self.number_symbols.get('plusSign', '+')
+        if ';' in delta_p:
+            pos, neg = delta_p.split(';')
+            assert len(neg) > len(pos)
+            assert minus_sign in neg
+            pos = neg.replace(minus_sign, plus_sign)
+            self.currency_delta_pattern = '%s;%s' % (pos, neg)
+        else:
+            self.currency_delta_pattern = (
+                '{0}{2};{1}{2}'.format(plus_sign, minus_sign, delta_p)
+            )
 
     def format_money(self, m, format=None, trailing_zeroes=True):
         s = format_currency(m.amount, m.currency, format, locale=self)
@@ -89,12 +99,12 @@ class Locale(babel.core.Locale):
             last = n - 2
             r = l[0]
             for i, item in enumerate(l[1:]):
-                r = self.list_patterns[
+                r = self.list_patterns['standard'][
                     'start' if i == 0 else 'end' if i == last else 'middle'
                 ].format(r, item)
             return r
         elif n == 2:
-            return self.list_patterns['2'].format(*l)
+            return self.list_patterns['standard']['2'].format(*l)
         else:
             return l[0] if n == 1 else None
 
