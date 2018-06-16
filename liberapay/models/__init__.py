@@ -313,6 +313,7 @@ DB.clean_up_counters = clean_up_counters
 
 DB_LOCKS = {
     'payday': 1,
+    'dispute_callback': 2,
 }
 
 @contextmanager

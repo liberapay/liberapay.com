@@ -61,50 +61,51 @@ elif event == 'DISPUTE':
     except Dispute.DoesNotExist:
         raise response.error(400, "bad RessourceId: DoesNotExist")
     status = dispute.Status
-    r = website.db.one("SELECT * FROM disputes WHERE id = %s", (RessourceId,))
-    if r and r.status == status:
-        raise response.success(200, "already done")
-    if r:
-        e_id, p_id = r.exchange_id, r.participant
-        exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
-    else:
-        assert dispute.InitialTransactionType == 'PAYIN'
-        payin = PayIn.get(dispute.InitialTransactionId)
-        e_id = int(payin.Tag)
-        exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
-        p_id = exchange.participant
-    dispute_type = dispute.DisputeType
-    dispute_amount = dispute.DisputedFunds / 100
-    result_code = dispute.ResultCode
-    new_dispute = not r
-    if new_dispute:
-        # Lock the disputed funds
-        with website.db.get_cursor() as cursor:
-            lock_disputed_funds(cursor, exchange, dispute_amount)
-    if status == 'CLOSED':
-        if result_code == 'LOST':
-            # Recover as much of the lost money as possible
-            recover_lost_funds(website.db, exchange, dispute_amount, dispute.RepudiationId)
+    with website.db.lock('dispute_callback'):
+        r = website.db.one("SELECT * FROM disputes WHERE id = %s", (RessourceId,))
+        if r and r.status == status:
+            raise response.success(200, "already done")
+        if r:
+            e_id, p_id = r.exchange_id, r.participant
+            exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
         else:
-            assert result_code == 'WON'
-            # Unlock the funds
-            website.db.run("""
-                UPDATE cash_bundles
-                   SET disputed = false
-                 WHERE origin = %s
-            """, (e_id,))
-    r = website.db.one("""
-        INSERT INTO disputes AS current
-                    (id, creation_date, type, amount, status, result_code, exchange_id, participant)
-             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (id) DO UPDATE
-                SET status = excluded.status
-                  , result_code = excluded.result_code
-              WHERE current.status <> excluded.status
-          RETURNING *
-    """, (dispute.Id, dispute.CreationDate, dispute_type, dispute_amount, status, result_code, e_id, p_id))
-    if not r:
-        raise response.success(200, "already done")
+            assert dispute.InitialTransactionType == 'PAYIN'
+            payin = PayIn.get(dispute.InitialTransactionId)
+            e_id = int(payin.Tag)
+            exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
+            p_id = exchange.participant
+        dispute_type = dispute.DisputeType
+        dispute_amount = dispute.DisputedFunds / 100
+        result_code = dispute.ResultCode
+        new_dispute = not r
+        if new_dispute:
+            # Lock the disputed funds
+            with website.db.get_cursor() as cursor:
+                lock_disputed_funds(cursor, exchange, dispute_amount)
+        if status == 'CLOSED':
+            if result_code == 'LOST':
+                # Recover as much of the lost money as possible
+                recover_lost_funds(website.db, exchange, dispute_amount, dispute.RepudiationId)
+            else:
+                assert result_code == 'WON'
+                # Unlock the funds
+                website.db.run("""
+                    UPDATE cash_bundles
+                       SET disputed = false
+                     WHERE origin = %s
+                """, (e_id,))
+        r = website.db.one("""
+            INSERT INTO disputes AS current
+                        (id, creation_date, type, amount, status, result_code, exchange_id, participant)
+                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (id) DO UPDATE
+                    SET status = excluded.status
+                      , result_code = excluded.result_code
+                  WHERE current.status <> excluded.status
+              RETURNING *
+        """, (dispute.Id, dispute.CreationDate, dispute_type, dispute_amount, status, result_code, e_id, p_id))
+        if not r:
+            raise response.success(200, "already done")
     # Notify admin
     disputed_funds = website.db.render("""
         SELECT owner, withdrawer, sum(amount) AS amount
