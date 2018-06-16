@@ -8,7 +8,6 @@ from threading import Timer
 
 from six import text_type
 from six.moves import builtins
-from six.moves.urllib.parse import quote as urlquote
 
 import aspen
 import aspen.http.mapping
@@ -28,12 +27,14 @@ from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
-from liberapay.utils import b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie
+from liberapay.utils import (
+    b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie, urlquote,
+)
 from liberapay.utils.currencies import MoneyBasket, fetch_currency_exchange_rates
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
-    canonize, insert_constants,
-    _dispatch_path_to_filesystem, enforce_rate_limits, merge_exception_into_response,
+    canonize, insert_constants, _dispatch_path_to_filesystem, enforce_rate_limits,
+    handle_negotiation_exception, merge_exception_into_response,
     bypass_csp_for_form_redirects, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
@@ -75,6 +76,12 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
     'to_javascript': utils.to_javascript,
     'urlquote': urlquote,
 })
+
+
+# Configure body_parsers
+# ======================
+
+del website.body_parsers[website.media_type_json]
 
 
 # Wireup Algorithm
@@ -153,6 +160,7 @@ algorithm.functions = [
     algorithm['load_resource_from_filesystem'],
     algorithm['render_resource'],
     algorithm['fill_response_with_output'],
+    handle_negotiation_exception,
 
     tell_sentry,
     merge_exception_into_response,
@@ -234,7 +242,7 @@ pando.http.request.Request.bypasses_proxy = property(_bypasses_proxy)
 if hasattr(pando.Response, 'encode_url'):
     raise Warning('pando.Response.encode_url() already exists')
 def _encode_url(url):
-    return maybe_encode(urlquote(maybe_encode(url, 'utf8'), string.punctuation))
+    return maybe_encode(urlquote(url, string.punctuation))
 pando.Response.encode_url = staticmethod(_encode_url)
 
 if hasattr(pando.Response, 'error'):

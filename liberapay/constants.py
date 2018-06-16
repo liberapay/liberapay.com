@@ -65,6 +65,7 @@ CURRENCIES = ordered_set(['EUR', 'USD'])
 
 D_CENT = Decimal('0.01')
 D_INF = Decimal('inf')
+D_MAX = Decimal('999999999999.99')
 D_UNIT = Decimal('1.00')
 D_ZERO = Decimal('0.00')
 

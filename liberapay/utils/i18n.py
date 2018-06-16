@@ -25,7 +25,7 @@ from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
-from liberapay.constants import CURRENCIES
+from liberapay.constants import CURRENCIES, D_CENT, D_MAX
 from liberapay.exceptions import InvalidNumber
 from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
@@ -123,11 +123,16 @@ class Locale(babel.core.Locale):
     def format_percent(self, *a):
         return format_percent(*a, locale=self)
 
-    def parse_decimal_or_400(self, s, *a):
+    def parse_decimal_or_400(self, s, maximum=D_MAX):
         try:
-            return parse_decimal(s, *a, locale=self)
+            r = parse_decimal(s, locale=self)
         except (InvalidOperation, NumberFormatError, ValueError):
             raise InvalidNumber(s)
+        if r.quantize(D_CENT) != r:
+            raise InvalidNumber(s)
+        if maximum is not None and r > maximum:
+            raise InvalidNumber(s)
+        return r
 
     @staticmethod
     def title(s):
@@ -408,7 +413,10 @@ def get_lang_options(request, locale, previously_used_langs, add_multi=False):
     return langs
 
 
-def set_up_i18n(website, request, state):
+def set_up_i18n(state, request=None, exception=None):
+    if request is None:
+        add_helpers_to_context(state, LOCALE_EN)
+        return
     accept_lang = request.headers.get(b"Accept-Language", b"").decode('ascii', 'replace')
     langs = request.accept_langs = list(parse_accept_lang(accept_lang))
     loc = match_lang(langs)

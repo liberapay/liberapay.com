@@ -20,7 +20,7 @@ class Tests(Harness):
         assert "Warning: Doing this will remove all the tips you are currently receiving." in r.text
 
     def test_wonky_custom_amounts_are_standardized(self):
-        self.change_goal("custom", ",100,100.00001")
+        self.change_goal("custom", ",100,100.0")
         alice = self.alice.from_id(self.alice.id)
         assert alice.goal == 100100
 

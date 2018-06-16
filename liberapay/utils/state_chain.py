@@ -3,8 +3,9 @@ from __future__ import print_function, unicode_literals
 import socket
 import string
 
-from six.moves.urllib.parse import urlsplit, urlunsplit, quote as urlquote
+from six.moves.urllib.parse import urlsplit, urlunsplit
 
+from aspen.exceptions import NegotiationFailure
 from aspen.http.request import Path
 from aspen.request_processor.algorithm import dispatch_path_to_filesystem
 from aspen.request_processor.dispatcher import NotFound, RedirectFromSlashless, UnindexedDirectory
@@ -14,6 +15,7 @@ from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
 from ..exceptions import LazyResponse, TooManyRequests
+from . import urlquote
 
 
 def attach_environ_to_request(environ, request, website):
@@ -127,7 +129,7 @@ def _dispatch_path_to_filesystem(website, request=None):
         request.canonical_path = raw_path
         return r
     except RedirectFromSlashless as exception:
-        path = urlquote(exception.message.encode('utf8'), string.punctuation)
+        path = urlquote(exception.message, string.punctuation)
         path = request.line.uri.path = Path(path)
         request.canonical_path = path.raw
         r = dispatch_path_to_filesystem(
@@ -144,6 +146,16 @@ def enforce_rate_limits(request, user, website):
         website.db.hit_rate_limit('http-unsafe.user', user.id, TooManyRequests)
     else:
         website.db.hit_rate_limit('http-unsafe.ip-addr', request.source, TooManyRequests)
+
+
+def handle_negotiation_exception(exception):
+    if isinstance(exception, NotFound):
+        response = Response(404)
+    elif isinstance(exception, NegotiationFailure):
+        response = Response(406, exception.message)
+    else:
+        return
+    return {'response': response, 'exception': None}
 
 
 def merge_exception_into_response(state, exception, response=None):
