@@ -311,6 +311,31 @@ def clean_up_counters(db):
 DB.clean_up_counters = clean_up_counters
 
 
+DB_LOCKS = {
+    'payday': 1,
+    'dispute_callback': 2,
+}
+
+@contextmanager
+def acquire_db_lock(db, lock_name, blocking=True):
+    lock_id = DB_LOCKS[lock_name]
+    with db.get_cursor() as cursor:
+        if blocking:
+            cursor.run("SELECT pg_advisory_lock(%s)", (lock_id,))
+        else:
+            locked = cursor.one("SELECT pg_try_advisory_lock(%s)", (lock_id,))
+            assert locked, "failed to acquire the %s lock" % lock_name
+        try:
+            yield cursor
+        finally:
+            try:
+                cursor.run("SELECT pg_advisory_unlock(%s)", (lock_id,))
+            except:
+                pass
+
+DB.lock = acquire_db_lock
+
+
 if __name__ == '__main__':
     from liberapay import wireup
     db = wireup.minimal_algorithm.run()['db']
