@@ -57,7 +57,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % block content
     % if statement
         <h3 id="statement">{{ _("Statement") }}
-        % if len(langs) > 1
+        {%- if len(langs) > 1 -%}
         <span class="dropdown-hover pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
                 {{ locale.languages_2[lang] }} <span class="caret"></span>
@@ -74,9 +74,9 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             % endfor
             </ul>
         </span>
-        % elif lang != locale.language
+        {% elif lang != locale.language %}
         <span class="pull-right btn-sm">{{ locale.languages_2[lang] }}</span>
-        % endif
+        {%- endif -%}
         </h3>
         <section class="profile-statement" lang="{{ lang }}">
             {{ statement }}
