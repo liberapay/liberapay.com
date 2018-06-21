@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# usage: DATABASE_URL=postgres://foo:bar@baz:5234/buz recreate-schema.sh
+# usage: DATABASE_URL=postgres://foo:bar@baz:5432/buz recreate-schema.sh
 
 # Exit on errors and undefined variables
 set -eu
