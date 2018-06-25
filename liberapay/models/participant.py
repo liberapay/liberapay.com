@@ -754,6 +754,20 @@ class Participant(Model, MixinTeam):
         """, (str(self.id),))
 
 
+    # Deleting
+    # ========
+
+    def delete(self):
+        if self.status != 'closed':
+            self.close(None)
+        with self.db.get_cursor() as cursor:
+            cursor.run("""
+                DELETE FROM emails WHERE participant = %(p_id)s;
+                DELETE FROM events WHERE participant = %(p_id)s;
+                DELETE FROM participants WHERE id = %(p_id)s;
+            """, dict(p_id=self.id))
+
+
     # Emails
     # ======
 
