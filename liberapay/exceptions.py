@@ -298,6 +298,24 @@ class InvalidNumber(LazyResponse400):
         return _('"{0}" is not a valid number.', *self.args)
 
 
+class AmbiguousNumber(LazyResponse400):
+
+    def __init__(self, ambiguous_string, suggestions):
+        Response.__init__(self, 400, '')
+        self.ambiguous_string = ambiguous_string
+        self.suggestions = suggestions
+
+    def lazy_body(self, _, locale):
+        if self.suggestions:
+            return _(
+                '"{0}" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?',
+                self.ambiguous_string,
+                list_of_suggestions=locale.format_list(self.suggestions, 'or')
+            )
+        else:
+            return _('"{0}" is not a properly formatted number.', self.ambiguous_string)
+
+
 class CommunityAlreadyExists(LazyResponse400):
     def msg(self, _):
         return _('The "{0}" community already exists.', *self.args)
