@@ -76,6 +76,9 @@ class MoneyBasket(object):
                 for m in arg:
                     self.amounts[m.currency] += m.amount
 
+    def __getitem__(self, currency):
+        return Money(self.amounts[currency], currency)
+
     def __iter__(self):
         return (Money(amount, currency) for currency, amount in self.amounts.items())
 
@@ -87,6 +90,30 @@ class MoneyBasket(object):
         elif other == 0:
             return all(v == 0 for v in self.amounts.values())
         return False
+
+    def __gt__(self, other):
+        if isinstance(other, self.__class__):
+            return all(a > b for a, b in zip(self.amounts, other.amounts))
+        elif isinstance(other, Money):
+            return self.amounts[other.currency] > other.amount
+        elif other == 0:
+            return any(v > 0 for v in self.amounts.values())
+        else:
+            raise TypeError(
+                "can't compare %r and %r" % (self.__class__, other.__class__)
+            )
+
+    def __ge__(self, other):
+        if isinstance(other, self.__class__):
+            return all(a >= b for a, b in zip(self.amounts, other.amounts))
+        elif isinstance(other, Money):
+            return self.amounts[other.currency] >= other.amount
+        elif other == 0:
+            return any(v >= 0 for v in self.amounts.values())
+        else:
+            raise TypeError(
+                "can't compare %r and %r" % (self.__class__, other.__class__)
+            )
 
     def __add__(self, other):
         if other is 0:

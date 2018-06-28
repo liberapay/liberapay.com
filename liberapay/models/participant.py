@@ -51,6 +51,7 @@ from liberapay.exceptions import (
     TooManyEmailVerifications,
     TooManyPasswordLogins,
     TooManyUsernameChanges,
+    TransferError,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -541,6 +542,8 @@ class Participant(Model, MixinTeam):
         elif disbursement_strategy == 'downstream':
             # This in particular needs to come before clear_tips_giving.
             self.distribute_balance_as_final_gift()
+        elif disbursement_strategy == 'payin-refund':
+            self.refund_balances()
         else:
             raise self.UnknownDisbursementStrategy
 
@@ -752,6 +755,60 @@ class Participant(Model, MixinTeam):
           ORDER BY ts DESC
              LIMIT 1
         """, (str(self.id),))
+
+
+    # Refunds
+    # =======
+
+    def refund_balances(self):
+        from liberapay.billing.transactions import refund_payin
+        payins = self.get_refundable_payins()
+        balances = self.get_balances()
+        for exchange in payins:
+            balance = balances[exchange.amount.currency]
+            amount = min(balance, exchange.amount)
+            status, e_refund = refund_payin(self.db, exchange, amount, self)
+            if status != 'succeeded':
+                raise TransferError(e_refund.note)
+
+    def get_refundable_balances(self):
+        return MoneyBasket(*[e.refundable_amount for e in self.get_refundable_payins()])
+
+    def get_refundable_payins(self):
+        """Get a list of the user's exchanges that can be refunded.
+
+        Notes on the time limits:
+        - Card payments older than 11 months can't be refunded.
+        - Refunding a SEPA direct debit is dangerous because the bank can pull
+          back the funds at the same time if the debit is disputed. In that case
+          the payer ends up with twice the amount of money he/she paid, and we
+          end up with a deficit. To protect ourselves from that we only refund
+          debits older than 9 weeks, because SEPA chargebacks happen within 8
+          weeks of the payment date.
+
+        """
+        return self.db.all("""
+            WITH x AS (
+                SELECT e.*
+                     , e.amount - coalesce_currency_amount((
+                           SELECT sum(e2.amount)
+                             FROM exchanges e2
+                            WHERE e2.participant = e.participant  -- indexed column
+                              AND e2.refund_ref = e.id
+                              AND e2.status = 'succeeded'
+                       ), e.amount::currency) AS refundable_amount
+                  FROM exchanges e
+                  JOIN exchange_routes r ON r.id = e.route
+                 WHERE e.participant = %s
+                   AND e.amount > 0
+                   AND e.status = 'succeeded'
+                   AND ( r.network = 'mango-cc' AND e.timestamp > (now() - interval '11 months') OR
+                         r.network = 'mango-ba' AND e.timestamp <= (now() - interval '9 weeks')
+                       )
+              ORDER BY e.amount DESC
+            )
+            SELECT * FROM x WHERE refundable_amount > 0;
+        """, (self.id,))
 
 
     # Deleting

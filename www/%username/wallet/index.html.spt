@@ -234,27 +234,28 @@ if user.is_admin:
     <tr class="{{ 'zero' if not event['wallet_delta'] }}">
         <td class="description" colspan="2">
         % if event['kind'] == 'payin-refund'
-            {{ event['error'] or _("refund") }}
+            % if event['error'] and event['status'] == 'succeeded'
+                {{ event['error'] }}
+            % else
+                {{ _("refund") }}
+            % endif
         % elif event['kind'] in ('credit', 'charge')
             {{ _("withdrawal") if event['kind'] == 'credit' else _("deposit") }}
         % elif event['kind'] == 'payout-refund'
             {{ _("refund of failed withdrawal (error message: {0})", event['error']) }}
         % endif
-        % if event['status'] != 'succeeded'
-            % if event['error'] == 'canceled'
-                &mdash; <span class="text text-warning">{{ _("canceled") }}</span>
-            % elif not (event['kind'] == 'credit' and event['status'] == 'pre')
-                &mdash;
-                <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
-                    translated_status[event['status']]
-                }}</span>
-                % if event['error']
-                    &mdash; {{ _("error message: {0}", event['error']) }}
-                % endif
-            % endif
-        % endif
-        % if event['status'] == 'succeeded' and event['kind'] == 'charge'
+        % if event['error'] == 'canceled'
+            &mdash; <span class="text text-warning">{{ _("canceled") }}</span>
+        % elif event['status'] == 'succeeded' and event['kind'] == 'charge'
             (<a href="{{ participant.path('receipts/') }}{{ event['exchange_id'] }}">{{ _("Receipt").lower() }}</a>)
+        % else
+            &mdash;
+            <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+                translated_status[event['status']]
+            }}</span>
+            % if event['error']
+                &mdash; {{ _("error message: {0}", event['error']) }}
+            % endif
         % endif
         </td>
         <td class="wallet">{{ format_money_delta(event['wallet_delta'] or event['amount']) }}</td>

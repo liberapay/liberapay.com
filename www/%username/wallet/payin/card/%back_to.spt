@@ -126,6 +126,8 @@ if show_form:
           FROM exchanges e
           JOIN exchange_routes r ON r.id = e.route
          WHERE e.participant = %s
+           AND e.amount > 0
+           AND e.refund_ref IS NULL
            AND r.network = 'mango-cc'
       ORDER BY e.timestamp DESC
          LIMIT 1
