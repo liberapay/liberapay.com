@@ -154,10 +154,8 @@ title = _("Withdrawing Money")
     % endfor
     </p>
     <p>{{ _(
-        "Withdrawing euros to a SEPA bank account is free, transfers to other "
-        "countries cost {0} each. Withdrawing US dollars costs {1} per transfer "
+        "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer "
         "regardless of the destination country.",
-        constants.FEE_PAYOUT['EUR']['foreign'].with_vat,
         constants.FEE_PAYOUT['USD']['*'].with_vat,
     ) }}</p>
     % endif
@@ -165,9 +163,7 @@ title = _("Withdrawing Money")
     % if show_form
     % if currency == 'EUR'
     <p>{{ _(
-        "Withdrawing euros to a SEPA bank account is free, transfers to other "
-        "countries cost {0} each.",
-        constants.FEE_PAYOUT['EUR']['foreign'].with_vat,
+        "There are no fees when withdrawing euros to your bank account."
     ) }}</p>
     % elif currency == 'USD'
     <p>{{ _(

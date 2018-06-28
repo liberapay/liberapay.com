@@ -140,7 +140,7 @@ FEE_PAYIN_DIRECT_DEBIT = {
 FEE_PAYOUT = {
     'EUR': {
         'domestic': (SEPA, Fees(0, 0)),
-        'foreign': Fees(0, Money('2.50', 'EUR')),
+        'foreign': Fees(0, 0),
     },
     'GBP': {
         'domestic': ({'GB'}, Fees(0, Money('0.45', 'GBP'))),
