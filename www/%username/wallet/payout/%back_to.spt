@@ -29,7 +29,7 @@ if currency is not None and currency not in constants.CURRENCIES:
     raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
 
 if request.method == 'POST':
-    amount = Money(parse_decimal(request.body['amount']), currency)
+    amount = locale.parse_money_amount(request.body['amount'], currency)
     if amount <= 0:
         raise response.error(400, _("The amount cannot be zero."))
     routes = ExchangeRoute.from_network(participant, 'mango-ba')

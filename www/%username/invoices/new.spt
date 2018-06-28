@@ -50,7 +50,7 @@ if request.method == 'POST':
     currency = body['currency']
     if currency not in constants.CURRENCIES:
         raise response.error(400, "`currency` value in body is invalid or non-supported")
-    amount = Money(parse_decimal(body['amount']), currency)
+    amount = locale.parse_money_amount(body['amount'], currency)
     if amount <= 0:
         raise response.error(400, "`amount` must be greater than 0")
     description = body['description'].strip()

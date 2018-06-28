@@ -18,15 +18,14 @@ from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
-    NumberFormatError, parse_decimal
 )
 import jinja2.ext
 from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
-from liberapay.constants import CURRENCIES, D_CENT, D_MAX
-from liberapay.exceptions import InvalidNumber
+from liberapay.constants import CURRENCIES, D_MAX
+from liberapay.exceptions import AmbiguousNumber, InvalidNumber
 from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
 
@@ -61,10 +60,20 @@ class Locale(babel.core.Locale):
 
     def __init__(self, *a, **kw):
         super(Locale, self).__init__(*a, **kw)
-        self.decimal_symbol = self.number_symbols.get('decimal', '.')
+        self.decimal_symbol = self.number_symbols['decimal']
         delta_p = self.currency_formats['standard'].pattern
-        assert ';' not in delta_p
-        self.currency_delta_pattern = '+{0};-{0}'.format(delta_p)
+        minus_sign = self.number_symbols.get('minusSign', '-')
+        plus_sign = self.number_symbols.get('plusSign', '+')
+        if ';' in delta_p:
+            pos, neg = delta_p.split(';')
+            assert len(neg) > len(pos)
+            assert minus_sign in neg
+            pos = neg.replace(minus_sign, plus_sign)
+            self.currency_delta_pattern = '%s;%s' % (pos, neg)
+        else:
+            self.currency_delta_pattern = (
+                '{0}{2};{1}{2}'.format(plus_sign, minus_sign, delta_p)
+            )
 
     def format_money(self, m, format=None, trailing_zeroes=True):
         s = format_currency(m.amount, m.currency, format, locale=self)
@@ -80,21 +89,22 @@ class Locale(babel.core.Locale):
     def format_datetime(self, *a):
         return format_datetime(*a, locale=self)
 
-    def format_decimal(self, *a):
-        return format_decimal(*a, locale=self)
+    def format_decimal(self, *a, **kw):
+        kw['locale'] = self
+        return format_decimal(*a, **kw)
 
-    def format_list(self, l):
+    def format_list(self, l, pattern='standard'):
         n = len(l)
         if n > 2:
             last = n - 2
             r = l[0]
             for i, item in enumerate(l[1:]):
-                r = self.list_patterns[
+                r = self.list_patterns[pattern][
                     'start' if i == 0 else 'end' if i == last else 'middle'
                 ].format(r, item)
             return r
         elif n == 2:
-            return self.list_patterns['2'].format(*l)
+            return self.list_patterns[pattern]['2'].format(*l)
         else:
             return l[0] if n == 1 else None
 
@@ -123,16 +133,35 @@ class Locale(babel.core.Locale):
     def format_percent(self, *a):
         return format_percent(*a, locale=self)
 
-    def parse_decimal_or_400(self, s, maximum=D_MAX):
+    def parse_money_amount(self, string, currency, maximum=D_MAX):
+        group_symbol = self.number_symbols['group']
+        decimal_symbol = self.number_symbols['decimal']
         try:
-            r = parse_decimal(s, locale=self)
-        except (InvalidOperation, NumberFormatError, ValueError):
-            raise InvalidNumber(s)
-        if r.quantize(D_CENT) != r:
-            raise InvalidNumber(s)
-        if maximum is not None and r > maximum:
-            raise InvalidNumber(s)
-        return r
+            decimal = Decimal(
+                string.replace(group_symbol, '').replace(decimal_symbol, '.')
+            )
+        except (InvalidOperation, ValueError):
+            raise InvalidNumber(string)
+        if group_symbol in string:
+            proper = self.format_decimal(decimal, decimal_quantization=False)
+            if string != proper and string.rstrip('0') != (proper + decimal_symbol):
+                # Irregular number format (e.g. `10.00` in German)
+                try:
+                    decimal_alt = Decimal(
+                        string.replace(decimal_symbol, '').replace(group_symbol, '.')
+                    )
+                except (InvalidOperation, ValueError):
+                    raise AmbiguousNumber(string, [proper])
+                else:
+                    proper_alt = self.format_decimal(decimal_alt, decimal_quantization=False)
+                    raise AmbiguousNumber(string, [proper, proper_alt])
+        if maximum is not None and decimal > maximum:
+            raise InvalidNumber(string)
+        money = Money(decimal, currency).round_down()
+        if money.amount != decimal:
+            # The input amount exceeds maximum precision (e.g. $0.001).
+            raise InvalidNumber(string)
+        return money
 
     @staticmethod
     def title(s):
@@ -445,7 +474,6 @@ def add_helpers_to_context(context, loc):
         format_money_delta=loc.format_money_delta,
         format_number=loc.format_number,
         format_percent=loc.format_percent,
-        parse_decimal=loc.parse_decimal_or_400,
         to_age_str=loc.to_age_str,
     )
 

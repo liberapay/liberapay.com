@@ -20,7 +20,7 @@ if not user.mangopay_user_id:
 new_currency = request.body.get('currency', team.main_currency)
 if new_currency not in constants.CURRENCIES:
     raise response.error(400, "`currency` value '%s' is invalid or non-supported" % new_currency)
-take = Money(parse_decimal(request.body['take']), new_currency)
+take = locale.parse_money_amount(request.body['take'], new_currency)
 if take < 0:
     raise response.error(400, "bad take: negative amounts are not allowed")
 new_take = team.set_take_for(user, take, user)

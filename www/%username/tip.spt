@@ -42,6 +42,9 @@ if tippee.status == 'stub':
 # =========================
 
 if request.method == 'POST':
+    currency = request.body.get('currency', 'EUR')
+    if currency not in constants.STANDARD_TIPS:
+        raise response.error(400, "`currency` value in body is invalid or non-supported")
     amount = request.body.get('selected_amount')
     if amount and amount != 'custom':
         period = 'weekly'
@@ -52,13 +55,9 @@ if request.method == 'POST':
             raise response.error(400, "bad 'period' value '%s'" % period)
         amount = request.body.get('amount')
         if amount:
-            amount = parse_decimal(amount)
+            amount = locale.parse_money_amount(amount, currency)
         else:
             raise response.error(400, _("The donation amount is missing."))
-    currency = request.body.get('currency', 'EUR')
-    if currency not in constants.STANDARD_TIPS:
-        raise response.error(400, "`currency` value in body is invalid or non-supported")
-    amount = Money(amount, currency)
     out = tipper.set_tip_to(tippee, amount, period)
     if out['amount'] == 0:
         out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
