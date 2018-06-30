@@ -81,3 +81,17 @@ class TestTipJson(Harness):
         assert response.code == 200
         assert data['amount'] == {"amount": "0.00", "currency": "EUR"}
         assert "alice" in data['msg']
+
+    def test_set_tip_standard_amount(self):
+        alice = self.make_participant("alice")
+        self.make_participant("bob")
+
+        r = self.client.POST(
+            "/bob/tip.json",
+            {'selected_amount': '1.00'},
+            auth_as=alice,
+            xhr=True,
+        )
+        assert r.code == 200
+        r_data = json.loads(r.text)
+        assert r_data['amount'] == {"amount": "1.00", "currency": "EUR"}
