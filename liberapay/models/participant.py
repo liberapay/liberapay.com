@@ -1965,20 +1965,23 @@ class Participant(Model, MixinTeam):
         # Insert tip
         t = (cursor or self.db).one("""\
 
+            WITH current_tip AS (
+                     SELECT *
+                       FROM current_tips
+                      WHERE tipper=%(tipper)s
+                        AND tippee=%(tippee)s
+                 )
             INSERT INTO tips
-                        (ctime, tipper, tippee, amount, period, periodic_amount)
-                 VALUES ( COALESCE (( SELECT ctime
-                                        FROM tips
-                                       WHERE (tipper=%(tipper)s AND tippee=%(tippee)s)
-                                       LIMIT 1
-                                      ), CURRENT_TIMESTAMP)
+                        (ctime, tipper, tippee, amount, period, periodic_amount, paid_in_advance)
+                 VALUES ( COALESCE((SELECT ctime FROM current_tip), CURRENT_TIMESTAMP)
                         , %(tipper)s, %(tippee)s, %(amount)s, %(period)s, %(periodic_amount)s
+                        , (SELECT convert(paid_in_advance, %(currency)s) FROM current_tip)
                          )
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
-        """, dict(tipper=self.id, tippee=tippee.id, amount=amount,
+        """, dict(tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
                   period=period, periodic_amount=periodic_amount))._asdict()
 
         if update_self:
@@ -2207,7 +2210,7 @@ class Participant(Model, MixinTeam):
 
         CREATE_TEMP_TABLE_FOR_TIPS = """
             CREATE TEMP TABLE temp_tips ON COMMIT drop AS
-                SELECT ctime, tipper, tippee, amount, period, periodic_amount, is_funded
+                SELECT *
                   FROM current_tips
                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
                    AND amount > 0;
@@ -2219,10 +2222,12 @@ class Participant(Model, MixinTeam):
             -- dead and the live account, then we keep the highest tip. We don't
             -- sum the amounts to prevent the new one from being above the
             -- maximum allowed.
-            INSERT INTO tips (ctime, tipper, tippee, amount, period, periodic_amount, is_funded)
+            INSERT INTO tips
+                        (ctime, tipper, tippee, amount, period,
+                         periodic_amount, is_funded, paid_in_advance)
                  SELECT DISTINCT ON (tipper)
                         ctime, tipper, %(live)s AS tippee, amount, period,
-                        periodic_amount, is_funded
+                        periodic_amount, is_funded, paid_in_advance
                    FROM temp_tips
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
