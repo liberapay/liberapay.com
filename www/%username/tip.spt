@@ -48,7 +48,7 @@ if request.method == 'POST':
     amount = request.body.get('selected_amount')
     if amount and amount != 'custom':
         period = 'weekly'
-        amount = read_decimal_or_400(amount)
+        amount = Money(read_decimal_or_400(amount), currency)
     else:
         period = request.body['period']
         if period not in constants.PERIOD_CONVERSION_RATES:
