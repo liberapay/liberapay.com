@@ -27,11 +27,13 @@ try:
         r = {"doc_id": doc.Id}
     elif action == 'add_page':
         data = b64encode(body['qqfile'].value)
-        page = Page(document=Document(id=body['doc_id']), user=mp_user, file=data)
+        doc_id = body.get_int('doc_id', minimum=1)
+        page = Page(document=Document(id=doc_id), user=mp_user, file=data)
         page.save()
         r = {"success": True}
     elif action == 'validate_doc':
-        doc = Document(id=body['doc_id'], user=mp_user, status='VALIDATION_ASKED')
+        doc_id = body.get_int('doc_id', minimum=1)
+        doc = Document(id=doc_id, user=mp_user, status='VALIDATION_ASKED')
         doc.save()
         r = {"success": True}
     else:
