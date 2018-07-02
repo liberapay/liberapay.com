@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -19,14 +19,23 @@ msgstr "Hei,"
 msgid "Something not right? Reply to this email for help."
 msgstr "Onko jossain ongelmia? Voit vastata tähän sähköpostiin kysyäksesi ohjeita."
 
+msgid "Change your email settings"
+msgstr "Muuta sähköpostiasetuksia"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Joku haluaa lahjoittaa sinulle Liberapay-palvelussa"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "Joku haluaa lahjoittaa sinulle Liberapay-palvelussa, mutta sinun täytyy täyttä henkilöllisyyslomake, ennen kuin voimme lain mukaan alkaa kerätä sinulle rahaa."
 
+msgid "Fill identity form"
+msgstr "Täytä henkilöllisyyslomake"
+
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Jos et halua vastaanottaa lahjoituksia Liberapay-palvelussa, voit hylätä ne muokkaamalla profiiliasi vastaavasti."
+
+msgid "Edit your profile"
+msgstr "Muokkaa profiiliasi"
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
@@ -134,6 +143,9 @@ msgstr "On aika panna rahaa Liberapay-lompakkoosi"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Liberapay-lompakossasi on jäljellä {0}, mutta seuraavan viikon lahjoituksiisi tarvitaan vähintään {1}."
 
+msgid "Add money"
+msgstr "Katteen lisäys"
+
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
 msgstr "Lasku lähettäjältä {0} Liberapay-palvelussa"
@@ -142,8 +154,21 @@ msgstr "Lasku lähettäjältä {0} Liberapay-palvelussa"
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} on toimittanut laskun {amount} maksusta."
 
+#, python-brace-format
+msgid "Description: {0}"
+msgstr "Kuvaus: {0}"
+
+msgid "Unsubscribe"
+msgstr "Keskeytä tilaus"
+
 msgid "The password of your Liberapay account is weak"
 msgstr "Liberapay-tilisi salasana on heikko"
+
+msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
+msgstr "Salasanasi on varsin yleinen. Se sijaitsee lukuisissa julki tulleissa salasanatietokannoissa, mikä tekee siitä turvattoman."
+
+msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
+msgstr "Salasanasi on turvaton. Se esiintyy monissa julki vuotaneissa salasanatietokannoissa."
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -151,6 +176,28 @@ msgstr "Sinun tulisi pikimmiten {link_start}vaihtaa salasanasi{link_end}."
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Siirrä rahaa Liberapay-lompakkoosi pankkisiirrolla"
+
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr "Olemme valmiita vastaanottamaan rahat. Lähetä tarkalleen {0} seuraavalle tilille käyttäen alla mainittua viitekoodia, jotta tiedämme, että raha tuli sinulta:"
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (Kansainvälinen pankkitilinumero)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Pankkitunnistekoodi)"
+
+msgid "Wire Reference Code"
+msgstr "Pankkisiirron viite (Wire Reference Code)"
+
+msgid "Destination Country"
+msgstr "Kohdemaa"
+
+msgid "Bank Account Owner Name"
+msgstr "Pankkitilin haltijan nimi"
+
+msgid "Bank Account Owner Address"
+msgstr "Pankkitilin haltijan osoite"
 
 msgid "The bank wire to your Liberapay wallet has expired"
 msgstr "Pankkisiirto Liberapay-lompakkoosi on vanhentunut"
@@ -162,8 +209,15 @@ msgstr "{date} ilmoitit, että aiot siirtää {money_amount} pankkitililtäsi Li
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "Jos unohdit tehdä siirron, voit käynnistää uuden maksun:"
 
+msgid "Try again"
+msgstr "Yritä uudelleen"
+
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Pankkisiirto Liberapay-lompakkoosi on epäonnistunut"
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Yritys siirtää {0} pankkitililtäsi epäonnistui. Virheilmoitus:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Voit yrittää uudelleen – käyttäen mahdollisesti eri maksumenetelmää – klikkaamalla alla olevaa linkkiä:"
@@ -236,6 +290,9 @@ msgstr "Olemme vastaanottaneet pyynnön liittää sähköpostiosoite {0} Liberap
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Liberapay-tili luotiin {0} sähköpostiosoitteella {1}. Olitko se sinä?"
+
+msgid "Yes, proceed"
+msgstr "Kyllä, jatka"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
@@ -334,8 +391,17 @@ msgstr "Hylätty"
 msgid "Individual"
 msgstr "Yksityinen"
 
+msgid "Organization"
+msgstr "Järjestö"
+
 msgid "Team"
 msgstr "Ryhmä"
+
+msgid "Direct Debit"
+msgstr "Suoraveloitus"
+
+msgid "Bank Wire"
+msgstr "Pankkisiirto"
 
 msgid "Credit Card"
 msgstr "Luottokortti"
@@ -377,6 +443,10 @@ msgstr "Olet tehnyt liian paljon palvelupyyntöjä; voit yrittää uudestaan vas
 msgid "You're making requests too fast, please try again later."
 msgstr "Aiheutat palvelupyyntöjä liian nopeasti; yritä myöhemmin uudelleen."
 
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} palautti virheen. Yritä myöhemmin uudelleen."
+
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -386,6 +456,12 @@ msgstr "Onko {0} todellakin {1}-palvelin? Se ei toimi niin kuin olisi."
 
 msgid "You need to sign in first"
 msgstr "Sinun pitää ensin kirjautua sisään"
+
+msgid "You need to log in"
+msgstr "Sisäänkirjautuminen vaaditaan"
+
+msgid "We're unable to process your request right now, sorry."
+msgstr "Anteeksi, mutta pyyntösi käsittely ei juuri nyt onnistu."
 
 msgid "You need to provide a username!"
 msgstr "Käyttäjänimi on pakollinen!"
@@ -401,6 +477,10 @@ msgstr "Käyttäjänimessä ”{0}” on erikoismerkkejä, jotka eivät kelpaa."
 #, python-brace-format
 msgid "The username '{0}' is restricted."
 msgstr "Käyttäjänimi ”{0}” on varattu muuhun käyttöön."
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr "Käyttäjätunnus ”{0}” on jo käytössä."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -420,6 +500,10 @@ msgstr "Arvo ’{0}’ on liian pitkä."
 #, python-brace-format
 msgid "The value '{0}' contains the following forbidden characters: {1}."
 msgstr "Arvo ’{0}’ sisältää seuraavia kiellettyjä merkkejä: {1}."
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr "{0} on jo liitetty muuhun Liberapay-tiliin."
 
 msgid "You cannot remove your primary email address."
 msgstr "Pääasiallista sähköpostiosoitetta ei voi poistaa."
@@ -492,6 +576,9 @@ msgstr "Käyttäjä {0} ei ota vastaan lahjoituksia."
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr "Lahjoitukset käyttäjälle {username} tulee tehdä valuutassa {main_currency}. {rejected_currency} ei kelpaa."
 
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr "Vaikuttaa siltä, että yrität poistaa jotain mitä ei ole olemassa."
+
 msgid "There isn't enough money in your wallet."
 msgstr "Lompakossasi ei riitä kate."
 
@@ -508,6 +595,14 @@ msgstr "Pahoittelemme, mutta meillä on juuri nyt käynnissä Maksupäivä. Maks
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
 msgstr "”{0}” ei ole kelvollinen luku. Tarkasta mm. käytetty desimaalierotin."
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number."
+msgstr ""
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -576,6 +671,9 @@ msgstr "Palvelimen sisäinen virhe"
 
 msgid "Upstream Error"
 msgstr "Tietolähdehäiriö"
+
+msgid "Service Unavailable"
+msgstr "Palveluhäiriö"
 
 msgid "Gateway Timeout"
 msgstr "Gateway ei vastaa"
@@ -855,9 +953,6 @@ msgstr "Järjestön tyyppi"
 msgid "Business"
 msgstr "Yritys"
 
-msgid "Organization"
-msgstr "Järjestö"
-
 msgid "Organization Name"
 msgstr "Järjestön nimi"
 
@@ -890,9 +985,6 @@ msgstr "Jatka"
 msgid "You're still not logged in as {0}."
 msgstr "Et edelleenkään ole kirjautunut tunnuksella {0}."
 
-msgid "Try again"
-msgstr "Yritä uudelleen"
-
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
@@ -901,9 +993,6 @@ msgstr "Salasana (ei pakollinen)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
 msgstr "Jätä edellinen kenttä tyhjäksi, jos tililläsi ei ole salasanaa tai olet hukannut sen. Lähetämme sinulle sähköpostitse kirjautumislinkin."
-
-msgid "You need to log in"
-msgstr "Sisäänkirjautuminen vaaditaan"
 
 msgid "Members"
 msgstr "Jäseniä"
@@ -990,9 +1079,6 @@ msgstr "Vastaanottaminen"
 msgid "Wallet"
 msgstr "Lompakko"
 
-msgid "Add money"
-msgstr "Katteen lisäys"
-
 msgid "Withdraw money"
 msgstr "Rahan nosto"
 
@@ -1016,12 +1102,6 @@ msgstr "Luo uusi yhteisö"
 
 msgid "Create a new team"
 msgstr "Luo uusi ryhmä"
-
-msgid "Service Unavailable"
-msgstr "Palveluhäiriö"
-
-msgid "We're unable to process your request right now, sorry."
-msgstr "Anteeksi, mutta pyyntösi käsittely ei juuri nyt onnistu."
 
 msgid "Please try again in a few minutes."
 msgstr "Yritä uudelleen muutaman minuutin kuluttua."
@@ -1056,12 +1136,6 @@ msgstr "Uusi salasana"
 msgid "This new password is not safe"
 msgstr "Tämä uusi salasana ei ole turvallinen"
 
-msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
-msgstr "Salasanasi on varsin yleinen. Se sijaitsee lukuisissa julki tulleissa salasanatietokannoissa, mikä tekee siitä turvattoman."
-
-msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr "Salasanasi on turvaton. Se esiintyy monissa julki vuotaneissa salasanatietokannoissa."
-
 msgid "We have detected that your current password is easy to guess, and thus insecure."
 msgstr "Salasanasi on helppo arvata, ja täten turvaton."
 
@@ -1070,9 +1144,6 @@ msgstr "Haluatko yhä käyttää tätä salasanaa?"
 
 msgid "No, cancel"
 msgstr "En, peruuta"
-
-msgid "Yes, proceed"
-msgstr "Kyllä, jatka"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Yhteistä hyvää rakentavat sisällöntuottajat tarvitsevat tukeasi. Ilmaisen ohjelmiston tuottamiseen, tiedon jakamiseen ilmaiseksi ym. kuluu aikaa ja rahaa: ei vain itse työhön alunperin, vaan myös sen pitkäaikaiseen ylläpitoon."
@@ -1311,9 +1382,6 @@ msgstr "Pysäytä lahjoitus"
 
 msgid "Subscribe"
 msgstr "Tilaa"
-
-msgid "Unsubscribe"
-msgstr "Keskeytä tilaus"
 
 #, python-brace-format
 msgid "Subscribe to updates from {0}?"
@@ -1854,10 +1922,6 @@ msgstr "Päiväys: {0}"
 msgid "Amount: {0}"
 msgstr "Määrä: {0}"
 
-#, python-brace-format
-msgid "Description: {0}"
-msgstr "Kuvaus: {0}"
-
 msgid "Details:"
 msgstr "Yksityiskohdat:"
 
@@ -2122,9 +2186,6 @@ msgstr[1] "Olet tähtimerkinnyt {n} repositoriota palvelussa {platform}."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "Syöttämäsi BIC-koodi näyttäisi olevan virheellinen."
-
-msgid "It seems you're trying to delete something that doesn't exist."
-msgstr "Vaikuttaa siltä, että yrität poistaa jotain mitä ei ole olemassa."
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Tällä Liberapay-tililläsi on yhä rahaa. Valitse alta jokin palautusmenetelmä, tai ota yhteyttä tukeen."
@@ -2400,9 +2461,6 @@ msgstr "Helppo ja välitön"
 msgid "Fees: {0}% + {1}"
 msgstr "Kulut: {0} % + {1}"
 
-msgid "Bank Wire"
-msgstr "Pankkisiirto"
-
 msgid "To an account in Europe"
 msgstr "Eurooppalaiselle tilille"
 
@@ -2418,9 +2476,6 @@ msgstr "Kulut: {0} %"
 
 msgid "Eurozone only"
 msgstr "Vain euroalue"
-
-msgid "Direct Debit"
-msgstr "Suoraveloitus"
 
 msgid "Best for regular payments"
 msgstr "Paras säännöllisiin maksuihin"
@@ -2458,28 +2513,6 @@ msgstr "Pankkisiirto on peruuntunut."
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Pankkisiirron {0} valmistelu on epäonnistunut. Virheilmoitus: {1}"
 
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Olemme valmiita vastaanottamaan rahat. Lähetä tarkalleen {0} seuraavalle tilille käyttäen alla mainittua viitekoodia, jotta tiedämme, että raha tuli sinulta:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Kansainvälinen pankkitilinumero)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Pankkitunnistekoodi)"
-
-msgid "Wire Reference Code"
-msgstr "Pankkisiirron viite (Wire Reference Code)"
-
-msgid "Destination Country"
-msgstr "Kohdemaa"
-
-msgid "Bank Account Owner Name"
-msgstr "Pankkitilin haltijan nimi"
-
-msgid "Bank Account Owner Address"
-msgstr "Pankkitilin haltijan osoite"
-
 msgid "Email me this information"
 msgstr "Lähetä minulle nämä tiedot sähköpostitse"
 
@@ -2491,9 +2524,6 @@ msgstr "Lähetämme sähköpostin sitten, kun tiedämme onko maksu onnistunut va
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "Olet kieltänyt tietyt pankkisiirtoja koskevat sähköposti-ilmoitukset."
-
-msgid "Change your email settings"
-msgstr "Muuta sähköpostiasetuksia"
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
 msgstr "Muutitko mieltäsi? Peruuta maksu, jottet saisi ensi kuussa virheilmoitusta:"
@@ -2629,10 +2659,6 @@ msgstr "{0} on veloitettu pankkitililtäsi. {1} meni Liberapay-lompakkoosi, {2} 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "{0} suoraveloitus on käynnistetty. Jos siirto onnistuu, {1} saapuu Liberapay-lompakkoosi ja {2} menee kuluihin."
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Yritys siirtää {0} pankkitililtäsi epäonnistui. Virheilmoitus:"
 
 msgid "Direct debits take approximately 4 business days to complete."
 msgstr "Suoraveloitusten toteutumisessa kestää suunnilleen neljä arkipäivää."
@@ -3480,9 +3506,6 @@ msgstr "Ota yhteyttä niihin, jotka hyötyvät työstäsi, ja pyydä heitä tuke
 msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr "Meidän pitää tietää sinusta tietoja ennen kuin voimme laillisesti alkaa kerätä rahaa sinulle."
 
-msgid "Fill identity form"
-msgstr "Täytä henkilöllisyyslomake"
-
 msgid "How it works for donors"
 msgstr "Toiminta lahjoittajien näkökulmasta"
 
@@ -3715,16 +3738,8 @@ msgstr "Syötä sähköpostiosoitteesi (tunnuksesi {platform}-palvelussa ei sis�
 msgid "Proceed"
 msgstr "Toimeksi"
 
-#, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr "Käyttäjätunnus ”{0}” on jo käytössä."
-
 msgid "Does this existing account belong to you?"
 msgstr "Kuuluuko tämä olemassaoleva tili sinulle?"
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} on jo liitetty muuhun Liberapay-tiliin."
 
 msgid "If this address belongs to you please log in before continuing:"
 msgstr "Jos osoite kuuluu sinulle, kirjaudu sisään ennen jatkamista:"
@@ -3771,9 +3786,6 @@ msgstr "Tunnusta ”{account_name}” {elsewhere_platform}-palvelusta ei voitu k
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
 msgstr "Tunnusta ”{account_name}” {elsewhere_platform}-palvelusta ei voitu kytkeä Liberapay-profiiliisi, koska se oli jo kytketty toiseen tiliin."
-
-msgid "Edit your profile"
-msgstr "Muokkaa profiiliasi"
 
 msgid "Manage this team"
 msgstr "Hallinnoi tätä ryhmää"
@@ -3948,10 +3960,6 @@ msgstr "Liberapay-palvelu mahdollistaa suosikkiartistiesi, -muusikoidesi, -kirja
 msgid "{0} returned this error message: {1}"
 msgstr "{0} palautti seuraavan virheilmoituksen: {1}"
 
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} palautti virheen. Yritä myöhemmin uudelleen."
-
 msgid "Social Explorer"
 msgstr "Sosiaalisten verkkojen tutkimustyökalu"
 
@@ -3995,8 +4003,8 @@ msgstr "piilotettu"
 msgid "{0} doesn't accept donations"
 msgstr "{0} ei ota vastaan lahjoituksia"
 
-msgid "The address you provided is not valid: it doesn't contain any â@â symbol."
-msgstr "Syöttämäsi osoite on virheellinen: Se ei sisällä ”@” -symbolia."
+msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not a valid domain name."

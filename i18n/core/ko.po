@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -18,14 +18,23 @@ msgstr "안녕하세요,"
 msgid "Something not right? Reply to this email for help."
 msgstr "뭔가 잘못됐나요? 이 이메일에 답변하여 도움을 얻으세요."
 
+msgid "Change your email settings"
+msgstr "이메일 설정 변경하기"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "누군가가 Liberapay에서 당신에게 기부하고 싶어합니다"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "누군가가 Liberapay에서 당신을 위해 기부하고 싶어하지만, 저희가 기부를 받아들이기 전에 신원 정보를 입력해야 합니다."
 
+msgid "Fill identity form"
+msgstr "신원 정보 입력"
+
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Liberapay에서 기부를 받기 원하지 않는다면, 프로필 설정을 조정함으로써 기부를 거절할 수 있습니다."
+
+msgid "Edit your profile"
+msgstr "프로필 수정하기"
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
@@ -132,6 +141,9 @@ msgstr "Liberapay 지갑을 충전할 시간입니다"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Liberapay 지갑에 {0} 만큼이 남아 있지만 다음 주의 기부를 진행하기 위해서 적어도 {1} 만큼이 필요합니다."
 
+msgid "Add money"
+msgstr "입금하기"
+
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
 msgstr "Liberapay의 {0} 에서 발송된 청구서"
@@ -140,8 +152,21 @@ msgstr "Liberapay의 {0} 에서 발송된 청구서"
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} 님이 {amount} 금액의 지불을 위한 청구서를 발송하였습니다."
 
+#, python-brace-format
+msgid "Description: {0}"
+msgstr "설명: {0}"
+
+msgid "Unsubscribe"
+msgstr "구독 해지"
+
 msgid "The password of your Liberapay account is weak"
 msgstr "Liberapay 비밀번호의 강도가 약합니다"
+
+msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
+msgstr "현재 사용하시는 비밀번호가 다른 사람들도 자주 사용하는 것으로 감지되었습니다. 여러 유출된 비밀번호 데이터베이스에 해당 비밀번호가 등장하는데, 이는 비밀번호의 안전성을 약화시킵니다."
+
+msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
+msgstr "현재 사용하시는 비밀번호가 유출되었음을 감지했습니다: 하나 이상의 공개된 데이터 유출본에서 이 비밀번호를 감지했습니다."
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -149,6 +174,28 @@ msgstr "지금 {link_start}비밀번호를 바꾸는 것{link_end}이 좋습니�
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Liberapay 지갑으로 계좌 이체"
+
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr "자금을 이체받을 준비가 되었습니다. 정확히 {0} 만큼을 아래의 계좌로 이체해 주세요. 아래의 확인 코드를 입력하셔야 입금한 사람이 당신인지 알 수 있습니다:"
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (국제 은행 계좌 번호)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (은행 식별 코드)"
+
+msgid "Wire Reference Code"
+msgstr "계좌 확인 코드"
+
+msgid "Destination Country"
+msgstr ""
+
+msgid "Bank Account Owner Name"
+msgstr "은행 계좌 소유주"
+
+msgid "Bank Account Owner Address"
+msgstr "은행 계좌 소유자 주소"
 
 msgid "The bank wire to your Liberapay wallet has expired"
 msgstr "Liberapay로의 자동 이체가 만료되었습니다"
@@ -160,8 +207,15 @@ msgstr "{date} 일에 은행 계좌에서 Liberapay 계좌로 {money_amount} 만
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "이체를 까먹으셨다면 새 결제를 시작할 수 있습니다:"
 
+msgid "Try again"
+msgstr "다시 시도하기"
+
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Liberapay 지갑으로의 은행 이체가 실패하였습니다"
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "당신의 은행 계좌에서 {0} 만큼을 이체하려는 시도가 실패하였습니다:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "다시 시도하거나, 다른 지불 방법을 사용하거나, 아래 링크를 사용해 볼 수 있습니다:"
@@ -234,6 +288,9 @@ msgstr "이 이메일 주소 {0} 을/를 Liberapay 계정 {1} 와/과 연결하�
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "{0} 에 {1} 이메일 주소로 Liberapay 계정이 생성되었습니다. 당신인가요?"
+
+msgid "Yes, proceed"
+msgstr "네, 진행합니다"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
@@ -332,8 +389,17 @@ msgstr "거부됨"
 msgid "Individual"
 msgstr "개인"
 
+msgid "Organization"
+msgstr "조직"
+
 msgid "Team"
 msgstr "팀"
+
+msgid "Direct Debit"
+msgstr "자동 이체"
+
+msgid "Bank Wire"
+msgstr "은행 이체"
 
 msgid "Credit Card"
 msgstr "신용카드"
@@ -375,6 +441,10 @@ msgstr "요청 허용량을 초과했습니다. {0} 후에 다시 시도할 수 
 msgid "You're making requests too fast, please try again later."
 msgstr "요청을 너무 빠르게 하고 있습니다, 잠시 후에 시도해 주세요."
 
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} 오류가 발생하였습니다. 다음에 다시 시도해 주세요."
+
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -384,6 +454,12 @@ msgstr "{0} 이 정말 {1} 서버입니까? {1} 서버처럼 행동하는 것 �
 
 msgid "You need to sign in first"
 msgstr "먼저 로그인해야 합니다"
+
+msgid "You need to log in"
+msgstr "로그인이 필요합니다"
+
+msgid "We're unable to process your request right now, sorry."
+msgstr "현재 요청을 처리할 수 없습니다. 죄송합니다."
 
 msgid "You need to provide a username!"
 msgstr "사용자 이름을 입력하세요!"
@@ -399,6 +475,10 @@ msgstr "'{0}' 사용자 이름은 사용할 수 없는 글자를 포함하고 �
 #, python-brace-format
 msgid "The username '{0}' is restricted."
 msgstr "'{0}' 사용자 이름은 제한되어 있습니다."
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr "누군가 '{0}' 사용자 이름을 이미 사용중입니다."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -418,6 +498,10 @@ msgstr "'{0}' 값이 너무 깁니다."
 #, python-brace-format
 msgid "The value '{0}' contains the following forbidden characters: {1}."
 msgstr "'{0}' 값이 금지된 단어를 포함하고 있습니다: {1}."
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr "{0} 은(는) 이미 다른 Liberapay 계정에 연동되어 있습니다."
 
 msgid "You cannot remove your primary email address."
 msgstr "주 메일 계정을 삭제할 수 없습니다."
@@ -490,6 +574,9 @@ msgstr "{0} 사용자가 기부를 받지 않습니다."
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr "{username} 님에게 보내는 기부금은 {rejected_currency} 화폐가 아닌 {main_currency} (으)로 이루어져야 합니다."
 
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr "존재하지 않는 걸 지우려고 하는 것 같군요."
+
 msgid "There isn't enough money in your wallet."
 msgstr "지갑에 충전된 돈이 부족합니다."
 
@@ -506,6 +593,14 @@ msgstr "지불 작업을 진행하고 있으며, 지불 작업 진행 중에는 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\"은 올바른 숫자가 아닙니다."
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number."
+msgstr ""
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -574,6 +669,9 @@ msgstr "서버 내부 오류"
 
 msgid "Upstream Error"
 msgstr "상부 에러"
+
+msgid "Service Unavailable"
+msgstr "서비스 이용 불가"
 
 msgid "Gateway Timeout"
 msgstr "게이트웨이 타임아웃"
@@ -851,9 +949,6 @@ msgstr "조직의 종류"
 msgid "Business"
 msgstr "사업체"
 
-msgid "Organization"
-msgstr "조직"
-
 msgid "Organization Name"
 msgstr "조직 이름"
 
@@ -886,9 +981,6 @@ msgstr "계속하기"
 msgid "You're still not logged in as {0}."
 msgstr "아직도 {0} 사용자로 로그인되어 있지 않습니다."
 
-msgid "Try again"
-msgstr "다시 시도하기"
-
 msgid "Email address"
 msgstr "이메일 주소"
 
@@ -897,9 +989,6 @@ msgstr "비밀번호 (선택)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
 msgstr "계정에 비밀번호가 없거나 비밀번호를 잃어버린 경우 비밀번호 칸을 빈칸으로 두세요. 로그인 링크는 이메일로 보내 드립니다."
-
-msgid "You need to log in"
-msgstr "로그인이 필요합니다"
 
 msgid "Members"
 msgstr "회원"
@@ -986,9 +1075,6 @@ msgstr "수익"
 msgid "Wallet"
 msgstr "지갑"
 
-msgid "Add money"
-msgstr "입금하기"
-
 msgid "Withdraw money"
 msgstr "인출"
 
@@ -1012,12 +1098,6 @@ msgstr "새 커뮤니티 만들기"
 
 msgid "Create a new team"
 msgstr "새 팀 만들기"
-
-msgid "Service Unavailable"
-msgstr "서비스 이용 불가"
-
-msgid "We're unable to process your request right now, sorry."
-msgstr "현재 요청을 처리할 수 없습니다. 죄송합니다."
 
 msgid "Please try again in a few minutes."
 msgstr "몇 분 후에 다시 시도해 주십시오."
@@ -1052,12 +1132,6 @@ msgstr "새 비밀번호"
 msgid "This new password is not safe"
 msgstr "새 비밀번호가 안전하지 않습니다"
 
-msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
-msgstr "현재 사용하시는 비밀번호가 다른 사람들도 자주 사용하는 것으로 감지되었습니다. 여러 유출된 비밀번호 데이터베이스에 해당 비밀번호가 등장하는데, 이는 비밀번호의 안전성을 약화시킵니다."
-
-msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr "현재 사용하시는 비밀번호가 유출되었음을 감지했습니다: 하나 이상의 공개된 데이터 유출본에서 이 비밀번호를 감지했습니다."
-
 msgid "We have detected that your current password is easy to guess, and thus insecure."
 msgstr "현재 사용하시는 비밀번호가 추측하기 쉬워 안전하지 않음을 감지했습니다."
 
@@ -1066,9 +1140,6 @@ msgstr "여전히 이 비밀번호를 사용하시겠습니까?"
 
 msgid "No, cancel"
 msgstr "아뇨, 취소합니다"
-
-msgid "Yes, proceed"
-msgstr "네, 진행합니다"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "공공의 이익을 위해 기여하는 사람들은 지원이 필요합니다. 자유 소프트웨어 제작, 자유로운 지식의 공유와 같은 일들은 시간을 소모하며, 초기 작업 외에도 유지보수에 자금을 필요로 합니다."
@@ -1305,9 +1376,6 @@ msgstr "기부 중지하기"
 
 msgid "Subscribe"
 msgstr "구독"
-
-msgid "Unsubscribe"
-msgstr "구독 해지"
 
 #, python-brace-format
 msgid "Subscribe to updates from {0}?"
@@ -1845,10 +1913,6 @@ msgstr "날짜: {0}"
 msgid "Amount: {0}"
 msgstr "금액: {0}"
 
-#, python-brace-format
-msgid "Description: {0}"
-msgstr "설명: {0}"
-
 msgid "Details:"
 msgstr "상세 정보:"
 
@@ -2111,9 +2175,6 @@ msgstr[0] "{platform} 에서 {n} 개의 저장소에 별표했습니다."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "제공한 BIC는 유효하지 않은 것으로 보입니다."
-
-msgid "It seems you're trying to delete something that doesn't exist."
-msgstr "존재하지 않는 걸 지우려고 하는 것 같군요."
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Liberapay 계정에 잔액이 존재합니다. 지출 방식을 선택하거나 고객지원에 연락하십시오."
@@ -2385,9 +2446,6 @@ msgstr "쉽고 즉각적입니다"
 msgid "Fees: {0}% + {1}"
 msgstr "수수료: {0}% + {1}"
 
-msgid "Bank Wire"
-msgstr "은행 이체"
-
 msgid "To an account in Europe"
 msgstr "유럽의 은행 계좌로 입금"
 
@@ -2403,9 +2461,6 @@ msgstr "수수료: {0}%"
 
 msgid "Eurozone only"
 msgstr "유로존 전용"
-
-msgid "Direct Debit"
-msgstr "자동 이체"
 
 msgid "Best for regular payments"
 msgstr "정기 지불에 가장 좋음"
@@ -2443,28 +2498,6 @@ msgstr "이 계좌 이체는 취소되었습니다."
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "{0} 을(를) 은행으로 계좌 이체하려는 시도가 실패했습니다. 에러 메시지: {1}"
 
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "자금을 이체받을 준비가 되었습니다. 정확히 {0} 만큼을 아래의 계좌로 이체해 주세요. 아래의 확인 코드를 입력하셔야 입금한 사람이 당신인지 알 수 있습니다:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (국제 은행 계좌 번호)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (은행 식별 코드)"
-
-msgid "Wire Reference Code"
-msgstr "계좌 확인 코드"
-
-msgid "Destination Country"
-msgstr ""
-
-msgid "Bank Account Owner Name"
-msgstr "은행 계좌 소유주"
-
-msgid "Bank Account Owner Address"
-msgstr "은행 계좌 소유자 주소"
-
 msgid "Email me this information"
 msgstr "이 정보를 내 이메일로 전송"
 
@@ -2476,9 +2509,6 @@ msgstr "지불이 성공하거나 실패했다는 사실을 알게 되면 이메
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "은행 계좌 이체에 대한 이메일 알림을 비활성화한 상태입니다."
-
-msgid "Change your email settings"
-msgstr "이메일 설정 변경하기"
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
 msgstr "마음을 바꾸었나요? 이체를 취소하면 다음 달에 이체 실패 알림을 받지 않습니다:"
@@ -2611,10 +2641,6 @@ msgstr "{0} 만큼이 은행 계좌에서 이체되었으며, {1} 만큼이 Libe
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "{0} 만큼의 자동 이체가 시작되었습니다. 이체가 성공적이라면 {1} 만큼이 Liberapay 계좌로 입금되고 {2} 만큼이 수수료로 지불될 것입니다."
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "당신의 은행 계좌에서 {0} 만큼을 이체하려는 시도가 실패하였습니다:"
 
 msgid "Direct debits take approximately 4 business days to complete."
 msgstr ""
@@ -3449,9 +3475,6 @@ msgstr "당신의 작업으로 수익을 볼 사람에게 연락해서 당신을
 msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr "법적인 문제로 인하여 당신을 위해 자금을 수집하기 전에 당신에 대해 알아야 합니다."
 
-msgid "Fill identity form"
-msgstr "신원 정보 입력"
-
 msgid "How it works for donors"
 msgstr ""
 
@@ -3675,16 +3698,8 @@ msgstr ""
 msgid "Proceed"
 msgstr "진행"
 
-#, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr "누군가 '{0}' 사용자 이름을 이미 사용중입니다."
-
 msgid "Does this existing account belong to you?"
 msgstr ""
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} 은(는) 이미 다른 Liberapay 계정에 연동되어 있습니다."
 
 msgid "If this address belongs to you please log in before continuing:"
 msgstr ""
@@ -3729,9 +3744,6 @@ msgstr ""
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
 msgstr ""
-
-msgid "Edit your profile"
-msgstr "프로필 수정하기"
 
 msgid "Manage this team"
 msgstr ""
@@ -3900,10 +3912,6 @@ msgstr ""
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
 msgstr ""
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} 오류가 발생하였습니다. 다음에 다시 시도해 주세요."
 
 msgid "Social Explorer"
 msgstr ""

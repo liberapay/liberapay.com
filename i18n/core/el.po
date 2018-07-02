@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -19,14 +19,23 @@ msgstr "Χαίρετε,"
 msgid "Something not right? Reply to this email for help."
 msgstr "Κάτι δεν είναι σωστό; Απαντήστε σε αυτό το μήνυμα για βοήθεια."
 
+msgid "Change your email settings"
+msgstr ""
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Κάποιος/α θέλει να δωρίσει σε σας στο Liberapay"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "Κάποιος θέλει να δωρίσει σε σας στο Liberapay, αλλά απαιτείται να συμπληρώσετε την φόρμα ταυτότητας πριν να μπορέσουμε νομίμως να αρχίσουμε να συλλέγουμε χρήματα για εσάς."
 
+msgid "Fill identity form"
+msgstr ""
+
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Αν δεν επιθυμείτε να λαμβάνεται δωρεές στο Liberapay, μπορείτε να τις απορρίψετε με το να  ρυθμίσετε ανάλογα το προφίλ σας."
+
+msgid "Edit your profile"
+msgstr ""
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
@@ -134,6 +143,9 @@ msgstr "Ήρθε η ώρα να ανανεώσεις το ποσό στο Libera
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Έχουν απομείνει {0} στο Liberapay πορτοφόλι σου, αλλά απαιτούνται τουλάχιστο {1} για να καλυφθούν οι δωρεές σου την επόμενη βδομάδα."
 
+msgid "Add money"
+msgstr "Προσθήκη χρημάτων"
+
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
 msgstr "Τιμολόγιο από {0} στην Liberapay"
@@ -142,8 +154,21 @@ msgstr "Τιμολόγιο από {0} στην Liberapay"
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "Έχει υποβληθεί ένα τιμολόγιο για πληρωμή {amount} από {sender_name}."
 
+#, python-brace-format
+msgid "Description: {0}"
+msgstr ""
+
+msgid "Unsubscribe"
+msgstr ""
+
 msgid "The password of your Liberapay account is weak"
 msgstr "Ο κωδικός πρόσβασης σας στο Liberapay είναι αδύναμος"
+
+msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
+msgstr "Έχουμε ανιχνεύσει ότι ο κωδικός πρόσβασης σου χρησιμοποιείται συχνά. Παρουσιάζεται πολλές φορές σε διάφορες βάσεις δεδομένων που έχουν διαρρεύσει, που τον καθιστά όχι ασφαλή."
+
+msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
+msgstr ""
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -151,6 +176,28 @@ msgstr "Πρέπει να {link_start}αλλάξετε τον κωδικό σα�
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Τραπεζική μεταφορά στο Liberapay πορτοφόλι σου"
+
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr ""
+
+msgid "IBAN (International Bank Account Number)"
+msgstr ""
+
+msgid "BIC (Bank Identifier Code)"
+msgstr ""
+
+msgid "Wire Reference Code"
+msgstr ""
+
+msgid "Destination Country"
+msgstr ""
+
+msgid "Bank Account Owner Name"
+msgstr ""
+
+msgid "Bank Account Owner Address"
+msgstr ""
 
 msgid "The bank wire to your Liberapay wallet has expired"
 msgstr "Η τραπεζική μεταφορά στο Liberapay πορτοφόλι σου έχει λήξει"
@@ -162,8 +209,15 @@ msgstr "Στις {date} δήλωσες ότι θα μετέφερες {money_amo
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "Αν ξέχασες να το κάνεις μπορείς να ξεκινήσεις μια νέα πληρωμή:"
 
+msgid "Try again"
+msgstr "Δοκιμάστε ξανά"
+
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Η τραπεζική μεταφορά στο Liberapay πορτοφόλι σου έχει αποτύχει"
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr ""
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Μπορείς να δοκιμάσεις ξανά, ίσως με μια άλλη μέθοδο πληρωμής, πατώντας στον πιο κάτω σύνδεσμο:"
@@ -236,6 +290,9 @@ msgstr "Λάβαμε μια αίτηση για να συνδέσουμε την
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Ένας Liberapay λογαριασμός δημιουργήθηκε στις {0} με την διεύθυνση ηλεκτρονικού ταχυδρομείου {1}. Ήσουν εσύ;"
+
+msgid "Yes, proceed"
+msgstr "Ναι, προχώρησε"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
@@ -334,8 +391,17 @@ msgstr "Απορρίφθηκε"
 msgid "Individual"
 msgstr "Άτομο"
 
+msgid "Organization"
+msgstr "Οργανισμός"
+
 msgid "Team"
 msgstr "Ομάδα"
+
+msgid "Direct Debit"
+msgstr ""
+
+msgid "Bank Wire"
+msgstr ""
 
 msgid "Credit Card"
 msgstr "Πιστωτική Κάρτα"
@@ -377,6 +443,10 @@ msgstr "Έχεις καταναλώσει το ποσοστό αιτημάτων
 msgid "You're making requests too fast, please try again later."
 msgstr "Κάνεις αιτήσεις πολύ γρήγορα, παρακαλώ δοκίμασε ξανά αργότερα."
 
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr ""
+
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -386,6 +456,12 @@ msgstr "Είναι όντος ο {0} ένας {1} διακομιστής; Προ
 
 msgid "You need to sign in first"
 msgstr "Απαιτείται να συνδεθείτε πρώτα"
+
+msgid "You need to log in"
+msgstr "Απαιτείται να συνδεθείς"
+
+msgid "We're unable to process your request right now, sorry."
+msgstr "Απολογούμαστε, δεν μπορούμε να προχωρήσουμε την αίτησή σου αυτή τη στιγμή."
 
 msgid "You need to provide a username!"
 msgstr "Απαιτείται να δώσετε ένα όνομα χρήστη!"
@@ -401,6 +477,10 @@ msgstr "Το όνομα χρήστη '{0}' περιέχει μη έγκυρου�
 #, python-brace-format
 msgid "The username '{0}' is restricted."
 msgstr "Το όνομα χρήστη '{0}' δεν είναι διαθέσιμο."
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr ""
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -420,6 +500,10 @@ msgstr "Η τιμή '{0}' είναι πολύ μακρυά."
 #, python-brace-format
 msgid "The value '{0}' contains the following forbidden characters: {1}."
 msgstr "Η τιμή '{0}' περιέχει τους ακόλουθους απαγορευμένους χαρακτήρες: {1}."
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr ""
 
 msgid "You cannot remove your primary email address."
 msgstr "Δεν μπορείς να αφαιρέσεις την κύρια σου διεύθυνση ηλεκτρονικού ταχυδρομείου."
@@ -492,6 +576,9 @@ msgstr "Ο χρήστης {0} δεν δέχεται δωρεές."
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr "Οι δωρεές στον {username} πρέπει να είναι σε {main_currency}, όχι {rejected_currency}."
 
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr ""
+
 msgid "There isn't enough money in your wallet."
 msgstr "Δεν υπάρχουν αρκετά λεφτά στο πορτοφόλι σου."
 
@@ -508,6 +595,14 @@ msgstr "Απολογούμαστε, αυτή τη στιγμή τρέχουμε 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
 msgstr "Το \"{0}\" δεν είναι έγκυρος αριθμός."
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number."
+msgstr ""
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -576,6 +671,9 @@ msgstr "Εσωτερικό σφάλμα διακομιστή"
 
 msgid "Upstream Error"
 msgstr "Σφάλμα σε ανώτερο κλιμάκιο"
+
+msgid "Service Unavailable"
+msgstr "Η υπηρεσία δεν είναι διαθέσιμη"
 
 msgid "Gateway Timeout"
 msgstr "Η πύλη έληξε"
@@ -855,9 +953,6 @@ msgstr "Τύπος Οργανισμού"
 msgid "Business"
 msgstr "Επιχείρηση"
 
-msgid "Organization"
-msgstr "Οργανισμός"
-
 msgid "Organization Name"
 msgstr "Όνομα Οργανισμού"
 
@@ -890,9 +985,6 @@ msgstr "Συνέχεια"
 msgid "You're still not logged in as {0}."
 msgstr "Δεν έχετε ακόμη συνδεθεί σαν {0}."
 
-msgid "Try again"
-msgstr "Δοκιμάστε ξανά"
-
 msgid "Email address"
 msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
 
@@ -901,9 +993,6 @@ msgstr "Κωδικός (προαιρετικός)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
 msgstr "Άφησε το προηγούμενο πεδίο κενό αν ο λογαριασμός σας δεν έχει κωδικό, ή αν τον έχετε χάσει. Θα σου στείλουμε ένα σύνδεσμο σύνδεσης μέσω ηλεκτρονικού ταχυδρομείου."
-
-msgid "You need to log in"
-msgstr "Απαιτείται να συνδεθείς"
 
 msgid "Members"
 msgstr "Μέλη"
@@ -990,9 +1079,6 @@ msgstr ""
 msgid "Wallet"
 msgstr "Πορτοφόλι"
 
-msgid "Add money"
-msgstr "Προσθήκη χρημάτων"
-
 msgid "Withdraw money"
 msgstr "Απόσυρση χρημάτων"
 
@@ -1016,12 +1102,6 @@ msgstr "Δημιουργία νέας κοινότητας"
 
 msgid "Create a new team"
 msgstr "Δημιουργία νέας ομάδας"
-
-msgid "Service Unavailable"
-msgstr "Η υπηρεσία δεν είναι διαθέσιμη"
-
-msgid "We're unable to process your request right now, sorry."
-msgstr "Απολογούμαστε, δεν μπορούμε να προχωρήσουμε την αίτησή σου αυτή τη στιγμή."
 
 msgid "Please try again in a few minutes."
 msgstr "Παρακαλούμε δοκίμασε ξανά σε λίγα λεπτά."
@@ -1056,12 +1136,6 @@ msgstr "Νέος κωδικός πρόσβασης"
 msgid "This new password is not safe"
 msgstr "Αυτός ο νέος κωδικός δεν είναι ασφαλείς"
 
-msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
-msgstr "Έχουμε ανιχνεύσει ότι ο κωδικός πρόσβασης σου χρησιμοποιείται συχνά. Παρουσιάζεται πολλές φορές σε διάφορες βάσεις δεδομένων που έχουν διαρρεύσει, που τον καθιστά όχι ασφαλή."
-
-msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr ""
-
 msgid "We have detected that your current password is easy to guess, and thus insecure."
 msgstr ""
 
@@ -1070,9 +1144,6 @@ msgstr ""
 
 msgid "No, cancel"
 msgstr ""
-
-msgid "Yes, proceed"
-msgstr "Ναι, προχώρησε"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr ""
@@ -1310,9 +1381,6 @@ msgid "Stop the donation"
 msgstr ""
 
 msgid "Subscribe"
-msgstr ""
-
-msgid "Unsubscribe"
 msgstr ""
 
 #, python-brace-format
@@ -1851,10 +1919,6 @@ msgstr ""
 msgid "Amount: {0}"
 msgstr ""
 
-#, python-brace-format
-msgid "Description: {0}"
-msgstr ""
-
 msgid "Details:"
 msgstr ""
 
@@ -2118,9 +2182,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "The BIC you provided appears to be invalid."
-msgstr ""
-
-msgid "It seems you're trying to delete something that doesn't exist."
 msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
@@ -2397,9 +2458,6 @@ msgstr ""
 msgid "Fees: {0}% + {1}"
 msgstr ""
 
-msgid "Bank Wire"
-msgstr ""
-
 msgid "To an account in Europe"
 msgstr ""
 
@@ -2414,9 +2472,6 @@ msgid "Fee: {0}%"
 msgstr ""
 
 msgid "Eurozone only"
-msgstr ""
-
-msgid "Direct Debit"
 msgstr ""
 
 msgid "Best for regular payments"
@@ -2455,28 +2510,6 @@ msgstr ""
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr ""
 
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr ""
-
-msgid "IBAN (International Bank Account Number)"
-msgstr ""
-
-msgid "BIC (Bank Identifier Code)"
-msgstr ""
-
-msgid "Wire Reference Code"
-msgstr ""
-
-msgid "Destination Country"
-msgstr ""
-
-msgid "Bank Account Owner Name"
-msgstr ""
-
-msgid "Bank Account Owner Address"
-msgstr ""
-
 msgid "Email me this information"
 msgstr ""
 
@@ -2487,9 +2520,6 @@ msgid "We will send you an email once we know whether your payment has succeeded
 msgstr ""
 
 msgid "You have disabled some or all email notifications about bank wires."
-msgstr ""
-
-msgid "Change your email settings"
 msgstr ""
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
@@ -2625,10 +2655,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr ""
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
 msgstr ""
 
 msgid "Direct debits take approximately 4 business days to complete."
@@ -3474,9 +3500,6 @@ msgstr ""
 msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr ""
 
-msgid "Fill identity form"
-msgstr ""
-
 msgid "How it works for donors"
 msgstr ""
 
@@ -3709,15 +3732,7 @@ msgstr ""
 msgid "Proceed"
 msgstr ""
 
-#, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr ""
-
 msgid "Does this existing account belong to you?"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
 msgstr ""
 
 msgid "If this address belongs to you please log in before continuing:"
@@ -3764,9 +3779,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr ""
-
-msgid "Edit your profile"
 msgstr ""
 
 msgid "Manage this team"
@@ -3939,10 +3951,6 @@ msgstr ""
 msgid "{0} returned this error message: {1}"
 msgstr ""
 
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr ""
-
 msgid "Social Explorer"
 msgstr ""
 
@@ -3986,7 +3994,7 @@ msgstr ""
 msgid "{0} doesn't accept donations"
 msgstr ""
 
-msgid "The address you provided is not valid: it doesn't contain any â@â symbol."
+msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
 msgstr ""
 
 #, python-brace-format

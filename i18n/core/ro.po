@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -18,14 +18,23 @@ msgstr "Salutări,"
 msgid "Something not right? Reply to this email for help."
 msgstr "Ceva în neregulă? Răspundeți acestui e-mail pentru ajutor."
 
+msgid "Change your email settings"
+msgstr "Schimbați-vă configurările de e-mail"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Cineva vrea să vă doneze pe Liberapay"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "Cineva vrea să vă doneze pe Liberapay, dar trebuie să completați formularul de identitate înainte ca noi să putem colecta legal bani pentru dumneavoastră."
 
+msgid "Fill identity form"
+msgstr "Completați formularul de identitate"
+
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Dacă nu doriți să primiți donații pe Liberapay, le puteți respinge editând profilul dumneavoastră în mod corespunzător."
+
+msgid "Edit your profile"
+msgstr "Editați-vă profilul"
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
@@ -134,6 +143,9 @@ msgstr "A venit timpul să încărcați portofelul dumneavoastră Liberapay"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Aveți {0} în portofelul Liberapay, dar este nevoide de cel puțin {1} pentru a acoperi donațiile de săptămâna viitoare."
 
+msgid "Add money"
+msgstr "Adaugă fonduri"
+
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
 msgstr "Factură de la {0} pe Liberapay"
@@ -142,8 +154,21 @@ msgstr "Factură de la {0} pe Liberapay"
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} a trimis o factură pentru plata a {amount}."
 
+#, python-brace-format
+msgid "Description: {0}"
+msgstr "Descriere: {0}"
+
+msgid "Unsubscribe"
+msgstr "Dezabonează-mă"
+
 msgid "The password of your Liberapay account is weak"
 msgstr "Parola contului dumeavoastră Liberapay este slabă"
+
+msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
+msgstr "Am detectat că parola este una obișnuită. Apare de mai multe ori în baze de date divulgate pe internet, ceea ce o face foarte nesigură."
+
+msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
+msgstr "Am detectat că parola dumneavoastră a fost compromisă: apare într-una sau mai multe baze de date divulgate public."
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -151,6 +176,28 @@ msgstr "Trebuie să {link_start}vă schimbați parola{link_end} acum."
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Transfer bancar către portofelul Liberapay"
+
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr "Suntem gata să primim fondurile. Trimiteți exact {0} la contul următor utilizând codul de referință de mai jos pentru ca să știm că banii au venit de la dumneavoastră:"
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (International Bank Account Number - Număr internațional de cont bancar)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Bank Identifier Code - Cod de identificare al băncii)"
+
+msgid "Wire Reference Code"
+msgstr "Cod referință transfer"
+
+msgid "Destination Country"
+msgstr "Țara destinație"
+
+msgid "Bank Account Owner Name"
+msgstr "Numele deținătorului contului bancar"
+
+msgid "Bank Account Owner Address"
+msgstr "Adresa deținătorului contului bancar"
 
 msgid "The bank wire to your Liberapay wallet has expired"
 msgstr "Transferul bancar către portofelul Liberapay a expirat"
@@ -162,8 +209,15 @@ msgstr "Pe data de {date} ați declarat că veți transfera {money_amount} din c
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "Dacă ați uitat să efectați trasferul puteți iniția o nouă plată:"
 
+msgid "Try again"
+msgstr "Reîncearcă"
+
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Transferul bancar către portofelul Liberapay a eșuat"
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Încercarea de a trasfera {0} din contul dumneavoastră bancar a eșuat cu următorul mesaj:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Puteți încerca din nou, cu un alt mod de plată, apăsând pe legătura de mai jos:"
@@ -236,6 +290,9 @@ msgstr "Am primit o cerere de asociere a adresei de e-mail {0} cu contul Liberap
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Un cont Liberapay a fost creeat pe {0} cu adresa de e-mail {1}. Ați fost dumneavoastră?"
+
+msgid "Yes, proceed"
+msgstr "Da, continuă"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
@@ -334,8 +391,17 @@ msgstr "Respins"
 msgid "Individual"
 msgstr "Individ"
 
+msgid "Organization"
+msgstr "Organizație"
+
 msgid "Team"
 msgstr "Echipă"
+
+msgid "Direct Debit"
+msgstr "Debit direct"
+
+msgid "Bank Wire"
+msgstr "Transfer bancar"
 
 msgid "Credit Card"
 msgstr "Card de credit"
@@ -377,6 +443,10 @@ msgstr "Ați consumat norma de cereri, puteți încerca din nou în {0}."
 msgid "You're making requests too fast, please try again later."
 msgstr "Ați făcut cereri prea rapid, încercați din nou mai târziu."
 
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} a returnat o eroare, încercați din nou mai târziu."
+
 msgid "example@mastodon.social"
 msgstr "exemplu@mastodon.social"
 
@@ -386,6 +456,12 @@ msgstr "Chiar este {0} un server {1}? Momentan nu se comportă ca un server."
 
 msgid "You need to sign in first"
 msgstr "Trebuie să vă autentificați mai întâi"
+
+msgid "You need to log in"
+msgstr "Trebuie să vă autentificați"
+
+msgid "We're unable to process your request right now, sorry."
+msgstr "Nu am putut procesa cererea dumneavoastră acum, ne pare rău."
 
 msgid "You need to provide a username!"
 msgstr "Trebuie să oferiți un nume de utilizator!"
@@ -401,6 +477,10 @@ msgstr "Numele de utilizator „{0}” conține caractere nevalide."
 #, python-brace-format
 msgid "The username '{0}' is restricted."
 msgstr "Numele de utilizator „{0}” este restricționat."
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr "Utilizatorul „{0}” este luat deja."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -420,6 +500,10 @@ msgstr ""
 #, python-brace-format
 msgid "The value '{0}' contains the following forbidden characters: {1}."
 msgstr ""
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr "{0} este deja conectată la un cont diferit de Liberapay."
 
 msgid "You cannot remove your primary email address."
 msgstr "Nu puteți să eliminați adresa dumneavoastră primară de e-mail."
@@ -492,6 +576,9 @@ msgstr "Utilizatorul {0} nu acceptă donații."
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr "Donațiile către {username} trebuie să fie în {main_currency}, nu în {rejected_currency}."
 
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr "Se pare că încercați să ștergeți ceva ce nu există."
+
 msgid "There isn't enough money in your wallet."
 msgstr "Nu există destui bani în portofelul dumneavoastră."
 
@@ -508,6 +595,14 @@ msgstr "Ne pare rău, dar în momentul de față executăm tranzacțiile zilei d
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
 msgstr "„{0}” nu este un număr valid."
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number."
+msgstr ""
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -576,6 +671,9 @@ msgstr "Eroare internă de server"
 
 msgid "Upstream Error"
 msgstr "Eroare upstream"
+
+msgid "Service Unavailable"
+msgstr "Serviciu indisponibil"
 
 msgid "Gateway Timeout"
 msgstr "Gateway Timeout"
@@ -858,9 +956,6 @@ msgstr "Tipul organizației"
 msgid "Business"
 msgstr "Companie"
 
-msgid "Organization"
-msgstr "Organizație"
-
 msgid "Organization Name"
 msgstr "Numele organizației"
 
@@ -893,9 +988,6 @@ msgstr "Continuă"
 msgid "You're still not logged in as {0}."
 msgstr "Încă nu sunteți autentificat ca {0}."
 
-msgid "Try again"
-msgstr "Reîncearcă"
-
 msgid "Email address"
 msgstr "Adresă e-mail"
 
@@ -904,9 +996,6 @@ msgstr "Parolă (opțională)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
 msgstr "Lăsați câmpul precedent gol dacă contul dumneavoastră nu are o parolă, sau dacă ați pierdut-o. Vă vom trimite o legătură de autentificare prin e-mail."
-
-msgid "You need to log in"
-msgstr "Trebuie să vă autentificați"
 
 msgid "Members"
 msgstr "Membri"
@@ -994,9 +1083,6 @@ msgstr "Primire"
 msgid "Wallet"
 msgstr "Portofel"
 
-msgid "Add money"
-msgstr "Adaugă fonduri"
-
 msgid "Withdraw money"
 msgstr "Extrage fonduri"
 
@@ -1020,12 +1106,6 @@ msgstr "Creează o comunitate nouă"
 
 msgid "Create a new team"
 msgstr "Creează o echipă nouă"
-
-msgid "Service Unavailable"
-msgstr "Serviciu indisponibil"
-
-msgid "We're unable to process your request right now, sorry."
-msgstr "Nu am putut procesa cererea dumneavoastră acum, ne pare rău."
 
 msgid "Please try again in a few minutes."
 msgstr "Încercați din nou în câteva minute."
@@ -1060,12 +1140,6 @@ msgstr "Noua parolă"
 msgid "This new password is not safe"
 msgstr "Această parolă nouă nu este sigură"
 
-msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
-msgstr "Am detectat că parola este una obișnuită. Apare de mai multe ori în baze de date divulgate pe internet, ceea ce o face foarte nesigură."
-
-msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr "Am detectat că parola dumneavoastră a fost compromisă: apare într-una sau mai multe baze de date divulgate public."
-
 msgid "We have detected that your current password is easy to guess, and thus insecure."
 msgstr "Am detectat că parola curentă a dumneavoastră este ușoară de ghicit, și de aceea nesigură."
 
@@ -1074,9 +1148,6 @@ msgstr "Totuși, doriți să utilizați această parolă?"
 
 msgid "No, cancel"
 msgstr "Nu, anulează"
-
-msgid "Yes, proceed"
-msgstr "Da, continuă"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Oamenii care contribuiesc la cultura publică au nevoie de dumneavoastră pentru a-și susține munca. Dezvoltarea programelor libere, distribuirea liberă a cunoștiințelor, sunt acțiuni ce durează timp și costă bani, nu numai pentru a face munca inițială, dar și pentru a o întreține de-alungul timpului."
@@ -1317,9 +1388,6 @@ msgstr "Oprește donația"
 
 msgid "Subscribe"
 msgstr "Abonează-mă"
-
-msgid "Unsubscribe"
-msgstr "Dezabonează-mă"
 
 #, python-brace-format
 msgid "Subscribe to updates from {0}?"
@@ -1863,10 +1931,6 @@ msgstr "Data: {0}"
 msgid "Amount: {0}"
 msgstr "Sumă: {0}"
 
-#, python-brace-format
-msgid "Description: {0}"
-msgstr "Descriere: {0}"
-
 msgid "Details:"
 msgstr "Detalii:"
 
@@ -2133,9 +2197,6 @@ msgstr[2] "Ați marcat cu stea {n} de depozite pe {platform}."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "BIC-ul oferită pare a fi nevalid."
-
-msgid "It seems you're trying to delete something that doesn't exist."
-msgstr "Se pare că încercați să ștergeți ceva ce nu există."
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Încă aveți bani în acest cont Liberapay, alegeți o metodă de vărsământ de mai jos sau contactați suportul."
@@ -2416,9 +2477,6 @@ msgstr "Ușor și instant"
 msgid "Fees: {0}% + {1}"
 msgstr "Taxe: {0}% + {1}"
 
-msgid "Bank Wire"
-msgstr "Transfer bancar"
-
 msgid "To an account in Europe"
 msgstr "Către un cont din Europa"
 
@@ -2434,9 +2492,6 @@ msgstr "Taxă: {0}%"
 
 msgid "Eurozone only"
 msgstr "Numai zona euro"
-
-msgid "Direct Debit"
-msgstr "Debit direct"
 
 msgid "Best for regular payments"
 msgstr "Cel mai bun pentru plăți regulate"
@@ -2474,28 +2529,6 @@ msgstr "Acest transfer bancar a fost anulat."
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Încercarea de a pregăti un trasfer bancar de {0} a eșuat. Mesaj de eroare: {1}"
 
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Suntem gata să primim fondurile. Trimiteți exact {0} la contul următor utilizând codul de referință de mai jos pentru ca să știm că banii au venit de la dumneavoastră:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (International Bank Account Number - Număr internațional de cont bancar)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Bank Identifier Code - Cod de identificare al băncii)"
-
-msgid "Wire Reference Code"
-msgstr "Cod referință transfer"
-
-msgid "Destination Country"
-msgstr "Țara destinație"
-
-msgid "Bank Account Owner Name"
-msgstr "Numele deținătorului contului bancar"
-
-msgid "Bank Account Owner Address"
-msgstr "Adresa deținătorului contului bancar"
-
 msgid "Email me this information"
 msgstr "Trimite-mi prin e-mail aceste informații"
 
@@ -2507,9 +2540,6 @@ msgstr "Vă vom trimite un e-mail odată ce vom ști dacă plata dumneavoastră 
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "Ați dezactivat o parte sau toate notificările prin e-mail despre transferuri bancare."
-
-msgid "Change your email settings"
-msgstr "Schimbați-vă configurările de e-mail"
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
 msgstr "V-ați răzgândit? Anulați plata pentru a evita o notificare de eșec luna viitoare:"
@@ -2648,10 +2678,6 @@ msgstr "{0} au fost debitați din contul bancar, {1} au ajuns în portofelul Lib
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Un debit direct de {0} a fost inițiat. Dacă transferul reușește {1} vor ajunge în portofelul dumneavoastră Liberapay și {2} vor fi plătiți ca taxe."
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Încercarea de a trasfera {0} din contul dumneavoastră bancar a eșuat cu următorul mesaj:"
 
 msgid "Direct debits take approximately 4 business days to complete."
 msgstr "Debitele directe durează aproximativ 4 zile lucrătoare."
@@ -3510,9 +3536,6 @@ msgstr "Contactați oamenii care beneficiază din munca dumneavoastră și cere�
 msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr "Trebuie să știm cine sunteți înainte ca să începem să colectăm bani pentru dumneavoastră în mod legal."
 
-msgid "Fill identity form"
-msgstr "Completați formularul de identitate"
-
 msgid "How it works for donors"
 msgstr "Cum funcționează pentru donatori"
 
@@ -3754,16 +3777,8 @@ msgstr "Introduceți o adresă de e-mail (contul de pe {platform} nu are o adres
 msgid "Proceed"
 msgstr "Continuă"
 
-#, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr "Utilizatorul „{0}” este luat deja."
-
 msgid "Does this existing account belong to you?"
 msgstr "Vă aparține acest cont existent?"
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} este deja conectată la un cont diferit de Liberapay."
 
 msgid "If this address belongs to you please log in before continuing:"
 msgstr "Dacă această adresă vă aparține autentificați-vă înainte de a continua:"
@@ -3812,9 +3827,6 @@ msgstr "Contul de {elsewhere_platform} cu numele „{account_name}” nu a putut
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
 msgstr "Contul de {elsewhere_platform} cu numele „{account_name}” nu a putut fi conectat la profilul dumneavoastră Liberapay pentru că a fost conectat deja la alt cont."
-
-msgid "Edit your profile"
-msgstr "Editați-vă profilul"
 
 msgid "Manage this team"
 msgstr "Administrează această echipă"
@@ -3992,10 +4004,6 @@ msgstr "Liberapay este un mod de a mulțumi și susține artiștii, muzicienii, 
 msgid "{0} returned this error message: {1}"
 msgstr "{0} a returnat acest mesaj de eroare: {1}"
 
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} a returnat o eroare, încercați din nou mai târziu."
-
 msgid "Social Explorer"
 msgstr "Explorator social"
 
@@ -4040,8 +4048,8 @@ msgstr "ascuns"
 msgid "{0} doesn't accept donations"
 msgstr "{0} nu acceptă donații"
 
-msgid "The address you provided is not valid: it doesn't contain any â@â symbol."
-msgstr "Adresa furnizată nu este validă: nu conține niciun simbol „@”."
+msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not a valid domain name."

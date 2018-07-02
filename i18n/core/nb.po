@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -18,14 +18,23 @@ msgstr "Velkommen,"
 msgid "Something not right? Reply to this email for help."
 msgstr "Er det noe som ikke stemmer? Svar på denne e-posten for å få hjelp."
 
+msgid "Change your email settings"
+msgstr "Endre dine e-postinnstillinger"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Noen vil donere til deg på Liberapay"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "Noen vil donere til deg på Liberapay, men du er nødt til å fylle ut identifiseringsskjemaet før penger kan samles inn penger for deg."
 
+msgid "Fill identity form"
+msgstr "Fyll ut identitetsskjemaet"
+
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Hvis du ikke vil motta donasjoner via Liberapay kan du avvise dem i innstillingene på profilen din."
+
+msgid "Edit your profile"
+msgstr "Rediger profilen din"
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
@@ -133,6 +142,9 @@ msgstr "Det er på tide å fylle på Liberapay-lommeboken din"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "Du har {0} igjen i Liberapay-lommeboken din, men du trenger minst {1} for å dekke neste ukes donasjoner."
 
+msgid "Add money"
+msgstr "Legg til penger"
+
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
 msgstr "Faktura fra {0} på Liberapay"
@@ -141,8 +153,21 @@ msgstr "Faktura fra {0} på Liberapay"
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} har sendt inn en faktura for betaling på {amount}."
 
+#, python-brace-format
+msgid "Description: {0}"
+msgstr "Beskrivelse: {0}"
+
+msgid "Unsubscribe"
+msgstr "Avslutt abonnement"
+
 msgid "The password of your Liberapay account is weak"
 msgstr "Passordet for Liberapay-kontoen din er svakt"
+
+msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
+msgstr "Liberapay har oppdaget at du benytter et ofte brukt passord. Det forekommer flere ganger i forskjellige lekkede databaser, noe som gjør det veldig usikkert."
+
+msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
+msgstr "Liberapay har oppdaget at passordet ditt har blitt kjent: Det opptrer i én eller flere offentlige datalekkasjer."
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -150,6 +175,28 @@ msgstr "Du bør {link_start}endre passordet ditt{link_end} nå."
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Bankoverføring til din Liberapay-lommebok"
+
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr "Klar til mottak av midler. Send akkurat {0} til følgende konto ved å bruke referansekoden nedenfor, slik av vi vet at pengene kom fra deg:"
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (internasjonalt bankkontonummer)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (bankidentifikasjonskode)"
+
+msgid "Wire Reference Code"
+msgstr "Bankoverføringsreferansekode"
+
+msgid "Destination Country"
+msgstr "Mottagerland"
+
+msgid "Bank Account Owner Name"
+msgstr "Bankkontoinnehavers navn"
+
+msgid "Bank Account Owner Address"
+msgstr "Bankkontoinnehavers adresse"
 
 msgid "The bank wire to your Liberapay wallet has expired"
 msgstr "Bankforbindelsen til din Liberapay-lommebok har tatt for lang tid og er utløpt"
@@ -161,8 +208,15 @@ msgstr "Den {date} oppga du at du skulle overføre {money_amount} fra bankkontoe
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "I fall du har glemt det, kan utføre en ny betaling:"
 
+msgid "Try again"
+msgstr "Prøv igjen"
+
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Bankoverføringen til Liberapay-lommeboken din mislyktes"
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Forsøket på å overføre {0} fra bankkontoen din mislyktes fordi:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Du kan prøve igjen, muligens med ny betalingsmetode, ved å klikke på lenken nedenfor:"
@@ -235,6 +289,9 @@ msgstr "Liberapay har mottatt en forespørsel om å knytte denne e-postadressen 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Noen har laget en Liberapay-konto den {0} med e-postadressen {1}. Var det deg?"
+
+msgid "Yes, proceed"
+msgstr "Ja, fortsett"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
@@ -333,8 +390,17 @@ msgstr "Avvist"
 msgid "Individual"
 msgstr "Personlig"
 
+msgid "Organization"
+msgstr "Organisasjon"
+
 msgid "Team"
 msgstr "Lag"
+
+msgid "Direct Debit"
+msgstr "Direktebetaling"
+
+msgid "Bank Wire"
+msgstr "Bankoverføring"
 
 msgid "Credit Card"
 msgstr "Kredittkort"
@@ -376,6 +442,10 @@ msgstr "Du har brukt opp forespørselskvoten, og kan prøve igjen om {0}."
 msgid "You're making requests too fast, please try again later."
 msgstr "Du sender forespørsler for fort, prøv igjen senere."
 
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} returnerte en feil, prøv igjen senere."
+
 msgid "example@mastodon.social"
 msgstr "eksempel@mastodon.social"
 
@@ -385,6 +455,12 @@ msgstr "Er {0} virkelig en {1}-tjener? Den oppfører ikke slik for øyeblikket."
 
 msgid "You need to sign in first"
 msgstr "Du må logge inn først"
+
+msgid "You need to log in"
+msgstr "Du må logge inn"
+
+msgid "We're unable to process your request right now, sorry."
+msgstr "Forespørselen din kan ikke behandles akkurat nå."
 
 msgid "You need to provide a username!"
 msgstr "Du må oppgi et brukernavn."
@@ -400,6 +476,10 @@ msgstr "Brukernavnet \"{0}\" inneholder ulovlige tegn."
 #, python-brace-format
 msgid "The username '{0}' is restricted."
 msgstr "Brukernavnet \"{0}\" er ikke tillatt."
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr "Brukernavnet \"{0}\" er allerede i bruk."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -419,6 +499,10 @@ msgstr "Verdien \"{0}\" er for lang."
 #, python-brace-format
 msgid "The value '{0}' contains the following forbidden characters: {1}."
 msgstr "Verdien \"{0}\" inneholder følgende forbudte tegn: {1}."
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr "{0} er allerede knyttet til en annen Liberapay-konto."
 
 msgid "You cannot remove your primary email address."
 msgstr "Du kan ikke fjerne den primære e-postadressen din."
@@ -491,6 +575,9 @@ msgstr "Brukeren {0} tar ikke imot donasjoner."
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr "Donasjoner til {username} må være i {main_currency}, ikke i {rejected_currency}."
 
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr "Det later til at du prøver å slette noe som ikke finnes."
+
 msgid "There isn't enough money in your wallet."
 msgstr "Det er ikke nok penger i lommeboken din."
 
@@ -507,6 +594,14 @@ msgstr "Beklager, men akkurat nå er det lønningsdag, og utbetalinger kan ikke 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" er ikke et gyldig tall."
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number."
+msgstr ""
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -575,6 +670,9 @@ msgstr "Intern tjenerfeil"
 
 msgid "Upstream Error"
 msgstr "Oppstrømsfeil"
+
+msgid "Service Unavailable"
+msgstr "Tjenesten er utilgjengelig"
 
 msgid "Gateway Timeout"
 msgstr "Tidsavbrud for portner"
@@ -854,9 +952,6 @@ msgstr "Organisasjonstype"
 msgid "Business"
 msgstr "Forretninger"
 
-msgid "Organization"
-msgstr "Organisasjon"
-
 msgid "Organization Name"
 msgstr "Organisasjonsnavn"
 
@@ -889,9 +984,6 @@ msgstr "Fortsett"
 msgid "You're still not logged in as {0}."
 msgstr "Du er fremdeles ikke innlogget som {0}."
 
-msgid "Try again"
-msgstr "Prøv igjen"
-
 msgid "Email address"
 msgstr "E-postadresse"
 
@@ -900,9 +992,6 @@ msgstr "Passord (valgfritt)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
 msgstr "La det forrige feltet stå tomt hvis kontoen din ikke har et passord, eller du har mistet det. En innloggingslenke vil bli sendt til deg per e-post."
-
-msgid "You need to log in"
-msgstr "Du må logge inn"
 
 msgid "Members"
 msgstr "Medlemmer"
@@ -989,9 +1078,6 @@ msgstr "Mottatt"
 msgid "Wallet"
 msgstr "Lommebok"
 
-msgid "Add money"
-msgstr "Legg til penger"
-
 msgid "Withdraw money"
 msgstr "Ta ut penger"
 
@@ -1015,12 +1101,6 @@ msgstr "Skap et ny fellesskap"
 
 msgid "Create a new team"
 msgstr "Opprett et nytt lag"
-
-msgid "Service Unavailable"
-msgstr "Tjenesten er utilgjengelig"
-
-msgid "We're unable to process your request right now, sorry."
-msgstr "Forespørselen din kan ikke behandles akkurat nå."
 
 msgid "Please try again in a few minutes."
 msgstr "Prøv igjen om et par minutter."
@@ -1055,12 +1135,6 @@ msgstr "Nytt passord"
 msgid "This new password is not safe"
 msgstr "Ditt nye passord er ikke sikkert"
 
-msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
-msgstr "Liberapay har oppdaget at du benytter et ofte brukt passord. Det forekommer flere ganger i forskjellige lekkede databaser, noe som gjør det veldig usikkert."
-
-msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr "Liberapay har oppdaget at passordet ditt har blitt kjent: Det opptrer i én eller flere offentlige datalekkasjer."
-
 msgid "We have detected that your current password is easy to guess, and thus insecure."
 msgstr "Det gjeldende passordet ditt er enkelt å gjette, og dermed usikkert."
 
@@ -1069,9 +1143,6 @@ msgstr "Ønsker du å fortsette å bruke dette passordet?"
 
 msgid "No, cancel"
 msgstr "Nei, avbryt"
-
-msgid "Yes, proceed"
-msgstr "Ja, fortsett"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Folk som bidrar til allmenningen trenger din støtte i sitt arbeid. Å skape fri programvare og å spre gratis kunnskap er ting som tar tid og koster penger. Dette gjelder ikke bare det innledende arbeidet, men også det å holde det ved like."
@@ -1310,9 +1381,6 @@ msgstr "Stopp donasjonen →"
 
 msgid "Subscribe"
 msgstr "Abonner"
-
-msgid "Unsubscribe"
-msgstr "Avslutt abonnement"
 
 #, python-brace-format
 msgid "Subscribe to updates from {0}?"
@@ -1853,10 +1921,6 @@ msgstr "Dato: {0}"
 msgid "Amount: {0}"
 msgstr "Beløp: {0}"
 
-#, python-brace-format
-msgid "Description: {0}"
-msgstr "Beskrivelse: {0}"
-
 msgid "Details:"
 msgstr "Detaljer:"
 
@@ -2122,9 +2186,6 @@ msgstr[1] "Du har stjernemerket {n} pakkebrønner på {platform}."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "BIC-koden du skrev inn ser ut til å være ugyldig."
-
-msgid "It seems you're trying to delete something that doesn't exist."
-msgstr "Det later til at du prøver å slette noe som ikke finnes."
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Du har fremdeles penger på denne Liberapay-kontoen, velg en utbetalingsmetode nedenfor eller kontakt brukerstøtte."
@@ -2401,9 +2462,6 @@ msgstr "Enkelt og øyeblikkelig"
 msgid "Fees: {0}% + {1}"
 msgstr "Gebyr {0}% + {1}"
 
-msgid "Bank Wire"
-msgstr "Bankoverføring"
-
 msgid "To an account in Europe"
 msgstr "Til en konto i Europa"
 
@@ -2419,9 +2477,6 @@ msgstr "Gebyr: {0}%"
 
 msgid "Eurozone only"
 msgstr "Kun i EØS"
-
-msgid "Direct Debit"
-msgstr "Direktebetaling"
 
 msgid "Best for regular payments"
 msgstr "Best for vedvarende betalinger"
@@ -2459,28 +2514,6 @@ msgstr "Denne bankoverføringen har blitt avbrutt."
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Forsøket på å forberede bankoverføringen av {0} har mislyktes. Feilmelding: {1}"
 
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Klar til mottak av midler. Send akkurat {0} til følgende konto ved å bruke referansekoden nedenfor, slik av vi vet at pengene kom fra deg:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (internasjonalt bankkontonummer)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (bankidentifikasjonskode)"
-
-msgid "Wire Reference Code"
-msgstr "Bankoverføringsreferansekode"
-
-msgid "Destination Country"
-msgstr "Mottagerland"
-
-msgid "Bank Account Owner Name"
-msgstr "Bankkontoinnehavers navn"
-
-msgid "Bank Account Owner Address"
-msgstr "Bankkontoinnehavers adresse"
-
 msgid "Email me this information"
 msgstr "Send meg denne informasjonen per e-post"
 
@@ -2492,9 +2525,6 @@ msgstr "Liberapay sender deg en e-post når det er klart om betalingen er vellyk
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "Du har skrudd av noen eller alle merknader om bankoverføringer."
-
-msgid "Change your email settings"
-msgstr "Endre dine e-postinnstillinger"
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
 msgstr "Har du ombestemt deg? Avbryt betalingen for å unngå å motta en feilmeldingsmerknad neste måned:"
@@ -2631,10 +2661,6 @@ msgstr "{0} ble debetert fra bankkontoen din, {1} tilfalt Liberapay-lommeboken d
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "En direkte debitering, pålydende {0} har blitt igangsatt. Hvis den lykkes, vil {1} være å finne i din Liberapay-lommebok, og {2} gå med til gebyrer."
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Forsøket på å overføre {0} fra bankkontoen din mislyktes fordi:"
 
 msgid "Direct debits take approximately 4 business days to complete."
 msgstr "Direkte debitering tar omtrent fire virkedager å gjennomføre."
@@ -3504,9 +3530,6 @@ msgstr "Kontakt dem som bidrar fra ditt arbeid, og be dem om å støtte deg."
 msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr "Vi trenger å vite hvem du er før vi kan med loven i hånd kan begynne å samle inn penger for deg."
 
-msgid "Fill identity form"
-msgstr "Fyll ut identitetsskjemaet"
-
 msgid "How it works for donors"
 msgstr "Hvordan det virker for bidragsytere"
 
@@ -3744,16 +3767,8 @@ msgstr "Oppgi en e-postadresse (din {platform}-konto har ikke en primær e-posta
 msgid "Proceed"
 msgstr "Fortsett"
 
-#, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr "Brukernavnet \"{0}\" er allerede i bruk."
-
 msgid "Does this existing account belong to you?"
 msgstr "Tilhører denne eksisterende kontoen deg?"
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} er allerede knyttet til en annen Liberapay-konto."
 
 msgid "If this address belongs to you please log in before continuing:"
 msgstr "Hvis adressen tilhører deg, logg inn før du fortsetter:"
@@ -3800,9 +3815,6 @@ msgstr "{elsewhere_platform}-kontoen \"{account_name}\" kunne ikke tilknyttes di
 #, fuzzy, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
 msgstr "{elsewhere_platform}-kontoen \"{account_name}\" kunne ikke tilknyttes til din Liberapay-profil fordi den allerede har blitt tilknyttet en annen konto."
-
-msgid "Edit your profile"
-msgstr "Rediger profilen din"
 
 msgid "Manage this team"
 msgstr "Administrer dette laget"
@@ -3976,10 +3988,6 @@ msgstr "Liberapay er en måte å takke og støtte dine favorittartister, musiker
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
 msgstr "{0} svarte med denne feilmeldingen: {1}"
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} returnerte en feil, prøv igjen senere."
 
 msgid "Social Explorer"
 msgstr "Sosial utforsker"

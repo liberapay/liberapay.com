@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -18,14 +18,23 @@ msgstr "Приветствуем,"
 msgid "Something not right? Reply to this email for help."
 msgstr "Что-то не так? Ответьте на это письмо, чтобы получить помощь."
 
+msgid "Change your email settings"
+msgstr "Изменить настройки email"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Кто-то хочет сделать вам пожертвование на Liberapay"
 
 msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
 msgstr "Кто-то хочет сделать вам пожертвование на Liberapay, но вам нужно заполнить идентификационную форму прежде, чем мы сможем собирать деньги для вас."
 
+msgid "Fill identity form"
+msgstr "Заполнить форму идентификации"
+
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Если вы не хотите получать пожертвования на Liberapay, вы можете отказаться от них, отредактировав свой профиль."
+
+msgid "Edit your profile"
+msgstr "Редактировать профиль"
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
@@ -134,6 +143,9 @@ msgstr "Время пополнить ваш кошелёк Liberapay"
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
 msgstr "У вас осталось {0} в кошельке Liberapay, но вам надо по меньшей мере {1}, чтобы иметь возможность делать пожертвования на следующей неделе."
 
+msgid "Add money"
+msgstr "Пополнить кошелёк"
+
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
 msgstr "Счёт от {0} на Liberapay"
@@ -142,8 +154,21 @@ msgstr "Счёт от {0} на Liberapay"
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
 msgstr "{sender_name} прислал счёт на оплату {amount}."
 
+#, python-brace-format
+msgid "Description: {0}"
+msgstr "Описание: {0}"
+
+msgid "Unsubscribe"
+msgstr "Отменить подписку"
+
 msgid "The password of your Liberapay account is weak"
 msgstr "У вас слабый пароль аккаунта Liberapay"
+
+msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
+msgstr "Мы обнаружили, что ваш пароль часто используется. Он много раз встречается в различных утёкших базах данных, что делает его очень ненадёжным."
+
+msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
+msgstr "Мы обнаружили, что ваш пароль скомпрометирован: он встречается в одной или более публичных утечек данных."
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -151,6 +176,28 @@ msgstr "Вам следует {link_start}поменять ваш пароль{l
 
 msgid "Bank wire to your Liberapay wallet"
 msgstr "Банковский перевод в ваш кошелёк Liberapay"
+
+#, python-brace-format
+msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
+msgstr "Мы готовы принять финансирование. Отправьте ровно {0} на указанный аккаунт, используя код ссылки ниже, чтобы мы знали, что деньги пришли от вас:"
+
+msgid "IBAN (International Bank Account Number)"
+msgstr "Номер международного банковского счета (IBAN)"
+
+msgid "BIC (Bank Identifier Code)"
+msgstr "БИК (Банковский идентификационный код)"
+
+msgid "Wire Reference Code"
+msgstr "Код ссылки для перевода"
+
+msgid "Destination Country"
+msgstr "Страна назначения"
+
+msgid "Bank Account Owner Name"
+msgstr "Имя владельца банковского счёта"
+
+msgid "Bank Account Owner Address"
+msgstr "Адрес владельца банковского счёта"
 
 msgid "The bank wire to your Liberapay wallet has expired"
 msgstr "Не удалось осуществить банковский перевод на ваш кошелёк Liberapay - истёк срок ожидания"
@@ -162,8 +209,15 @@ msgstr "{date} вы заявили, что собираетесь перевес
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "Если вы забыли сделать это, то можете инициировать новый платёж:"
 
+msgid "Try again"
+msgstr "Попробуйте ещё раз"
+
 msgid "The bank wire to your Liberapay wallet has failed"
 msgstr "Не удалось совершить банковский перевод в ваш кошелёк Liberapay"
+
+#, python-brace-format
+msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
+msgstr "Попытка перевода {0} с вашего счёта в банке не удалась, получено сообщение об ошибке:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Можете попробовать ещё раз, возможно, используя другой метод оплаты, кликнув на ссылку ниже:"
@@ -236,6 +290,9 @@ msgstr "Мы получили запрос на то, чтобы связать 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "{0} был создан аккаунт Liberapay с адресом электронной почты {1}. Это были вы?"
+
+msgid "Yes, proceed"
+msgstr "Да, продолжить"
 
 #, python-brace-format
 msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
@@ -334,8 +391,17 @@ msgstr "Отклонено"
 msgid "Individual"
 msgstr "Частное лицо"
 
+msgid "Organization"
+msgstr "Организация"
+
 msgid "Team"
 msgstr "Команда"
+
+msgid "Direct Debit"
+msgstr "Прямое дебетование"
+
+msgid "Bank Wire"
+msgstr "Банковский перевод"
 
 msgid "Credit Card"
 msgstr "Кредитная карта"
@@ -377,6 +443,10 @@ msgstr "Вы превысили предел запросов, попробуй�
 msgid "You're making requests too fast, please try again later."
 msgstr "Вы делаете запросы слишком быстро, попробуйте ещё раз чуть позже."
 
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} вернул ошибку, попробуйте ещё раз позже."
+
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -386,6 +456,12 @@ msgstr "{0} - это действительно сервер {1}? Он ведё�
 
 msgid "You need to sign in first"
 msgstr "Сначала необходимо войти в систему"
+
+msgid "You need to log in"
+msgstr "Вам необходимо войти"
+
+msgid "We're unable to process your request right now, sorry."
+msgstr "Извините, сейчас мы не можем обработать ваш запрос."
 
 msgid "You need to provide a username!"
 msgstr "Необходимо ввести имя пользователя!"
@@ -401,6 +477,10 @@ msgstr "Имя пользователя '{0}' содержит недопуст�
 #, python-brace-format
 msgid "The username '{0}' is restricted."
 msgstr "Имя пользователя '{0}' запрещено."
+
+#, python-brace-format
+msgid "The username '{0}' is already taken."
+msgstr "Имя пользователя '{0}' уже занято."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -420,6 +500,10 @@ msgstr "Значение '{0}' слишком велико."
 #, python-brace-format
 msgid "The value '{0}' contains the following forbidden characters: {1}."
 msgstr "Значение '{0}' содержит следующие запрещённые символы: {1}."
+
+#, python-brace-format
+msgid "{0} is already connected to a different Liberapay account."
+msgstr "{0} уже подключён к другой учётной записи Liberapay."
 
 msgid "You cannot remove your primary email address."
 msgstr "Вы не можете удалить основной адрес электронной почты."
@@ -492,6 +576,9 @@ msgstr "Пользователь {0} не принимает пожертвов�
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
 msgstr "Пожертвования для {username} должны быть в {main_currency}, не в {rejected_currency}."
 
+msgid "It seems you're trying to delete something that doesn't exist."
+msgstr "Похоже, вы пытаетесь удалить что-то, чего не существует."
+
 msgid "There isn't enough money in your wallet."
 msgstr "В вашем кошельке недостаточно денег."
 
@@ -508,6 +595,14 @@ msgstr "Сожалеем, но сегодня день выплат, и мы н�
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" не является корректным числом."
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{0}\" is not a properly formatted number."
+msgstr ""
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -576,6 +671,9 @@ msgstr "Внутренняя ошибка сервера"
 
 msgid "Upstream Error"
 msgstr "Ошибка передачи от вышестоящего сервера"
+
+msgid "Service Unavailable"
+msgstr "Сервис недоступен"
 
 msgid "Gateway Timeout"
 msgstr "Превышено время ожидания шлюза"
@@ -857,9 +955,6 @@ msgstr "Тип организации"
 msgid "Business"
 msgstr "Коммерческая"
 
-msgid "Organization"
-msgstr "Организация"
-
 msgid "Organization Name"
 msgstr "Название организации"
 
@@ -892,9 +987,6 @@ msgstr "Продолжить"
 msgid "You're still not logged in as {0}."
 msgstr "Вы всё ещё не вошли как {0}."
 
-msgid "Try again"
-msgstr "Попробуйте ещё раз"
-
 msgid "Email address"
 msgstr "Адрес электронной почты"
 
@@ -903,9 +995,6 @@ msgstr "Пароль (необязательно)"
 
 msgid "Leave the previous field empty if your account doesn't have a password, or if you've lost it. We'll send you a login link via email."
 msgstr "Не заполняйте это поле, если у вашего аккаунта нет пароля или если вы его забыли. Мы отправим вам ссылку для входа по почте."
-
-msgid "You need to log in"
-msgstr "Вам необходимо войти"
 
 msgid "Members"
 msgstr "Участники"
@@ -992,9 +1081,6 @@ msgstr "Доходы"
 msgid "Wallet"
 msgstr "Кошелёк"
 
-msgid "Add money"
-msgstr "Пополнить кошелёк"
-
 msgid "Withdraw money"
 msgstr "Снять деньги"
 
@@ -1018,12 +1104,6 @@ msgstr "Создать новое сообщество"
 
 msgid "Create a new team"
 msgstr "Создать новую команду"
-
-msgid "Service Unavailable"
-msgstr "Сервис недоступен"
-
-msgid "We're unable to process your request right now, sorry."
-msgstr "Извините, сейчас мы не можем обработать ваш запрос."
 
 msgid "Please try again in a few minutes."
 msgstr "Попробуйте ещё раз через несколько минут."
@@ -1058,12 +1138,6 @@ msgstr "Новый пароль"
 msgid "This new password is not safe"
 msgstr "Новый пароль небезопасен"
 
-msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
-msgstr "Мы обнаружили, что ваш пароль часто используется. Он много раз встречается в различных утёкших базах данных, что делает его очень ненадёжным."
-
-msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr "Мы обнаружили, что ваш пароль скомпрометирован: он встречается в одной или более публичных утечек данных."
-
 msgid "We have detected that your current password is easy to guess, and thus insecure."
 msgstr "Мы обнаружили, что ваш текущий пароль легко подобрать, поэтому он ненадёжен."
 
@@ -1072,9 +1146,6 @@ msgstr "Вы всё ещё хотите использовать этот пар
 
 msgid "No, cancel"
 msgstr "Нет, отмена"
-
-msgid "Yes, proceed"
-msgstr "Да, продолжить"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Людям, делающим вклад в развитие общества, нужны вы для того, чтобы поддержать их работу. Создание бесплатного программного обеспечения, распространение свободных знаний - эти вещи требуют времени и стоят денег, и не только для того, чтобы начать работу, но и чтобы иметь возможность продолжать её."
@@ -1315,9 +1386,6 @@ msgstr "Прекратить делать пожертвование"
 
 msgid "Subscribe"
 msgstr "Подписаться"
-
-msgid "Unsubscribe"
-msgstr "Отменить подписку"
 
 #, python-brace-format
 msgid "Subscribe to updates from {0}?"
@@ -1861,10 +1929,6 @@ msgstr "Дата: {0}"
 msgid "Amount: {0}"
 msgstr "Сумма: {0}"
 
-#, python-brace-format
-msgid "Description: {0}"
-msgstr "Описание: {0}"
-
 msgid "Details:"
 msgstr "Подробности:"
 
@@ -2131,9 +2195,6 @@ msgstr[2] "{n} репозиториев на сайте {platform} добавл�
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "Похоже, что введённый БИК не является корректным."
-
-msgid "It seems you're trying to delete something that doesn't exist."
-msgstr "Похоже, вы пытаетесь удалить что-то, чего не существует."
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "У вас остались деньги на этом аккаунте Liberapay, выберите способ выплаты ниже или свяжитесь со службой поддержки."
@@ -2413,9 +2474,6 @@ msgstr "Простой и молниеносный"
 msgid "Fees: {0}% + {1}"
 msgstr "Комиссии: {0}% + {1}"
 
-msgid "Bank Wire"
-msgstr "Банковский перевод"
-
 msgid "To an account in Europe"
 msgstr "Для счёта в Европе"
 
@@ -2431,9 +2489,6 @@ msgstr "Комиссия: {0}%"
 
 msgid "Eurozone only"
 msgstr "Только Еврозона"
-
-msgid "Direct Debit"
-msgstr "Прямое дебетование"
 
 msgid "Best for regular payments"
 msgstr "Лучший вариант для регулярных платежей"
@@ -2471,28 +2526,6 @@ msgstr "Этот банковский перевод был отменён."
 msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
 msgstr "Попытка подготовить банковский перевод {0} не удалась. Сообщение об ошибке: {1}"
 
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Мы готовы принять финансирование. Отправьте ровно {0} на указанный аккаунт, используя код ссылки ниже, чтобы мы знали, что деньги пришли от вас:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "Номер международного банковского счета (IBAN)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "БИК (Банковский идентификационный код)"
-
-msgid "Wire Reference Code"
-msgstr "Код ссылки для перевода"
-
-msgid "Destination Country"
-msgstr "Страна назначения"
-
-msgid "Bank Account Owner Name"
-msgstr "Имя владельца банковского счёта"
-
-msgid "Bank Account Owner Address"
-msgstr "Адрес владельца банковского счёта"
-
 msgid "Email me this information"
 msgstr "Отправить мне эту информацию по почте"
 
@@ -2504,9 +2537,6 @@ msgstr "Мы отправим вам письмо, как только узна�
 
 msgid "You have disabled some or all email notifications about bank wires."
 msgstr "Вы отключили часть или все уведомления на почту о банковских переводах."
-
-msgid "Change your email settings"
-msgstr "Изменить настройки email"
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
 msgstr "Передумали? Отмените платёж, чтобы не получить оповещение об ошибке в следущем месяце:"
@@ -2645,10 +2675,6 @@ msgstr "С вашего банковского счёта было снято {0
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Было инициировано прямое дебетование {0}. Если перевод пройдёт успешно, на ваш кошелёк Liberapay придёт {1}, и {2} уйдёт на оплату комиссий."
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Попытка перевода {0} с вашего счёта в банке не удалась, получено сообщение об ошибке:"
 
 msgid "Direct debits take approximately 4 business days to complete."
 msgstr "Прямое дебетование занимает примерно 4 рабочих дня."
@@ -3506,9 +3532,6 @@ msgstr "Свяжитесь с людьми, которые извлекают в
 msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr "Мы должны знать, кто вы, прежде, чем сможем легально начать собирать деньги для вас."
 
-msgid "Fill identity form"
-msgstr "Заполнить форму идентификации"
-
 msgid "How it works for donors"
 msgstr "Как это работает для спонсоров"
 
@@ -3750,16 +3773,8 @@ msgstr "Введите адрес электронной почты (у ваше
 msgid "Proceed"
 msgstr "Продолжить"
 
-#, python-brace-format
-msgid "The username '{0}' is already taken."
-msgstr "Имя пользователя '{0}' уже занято."
-
 msgid "Does this existing account belong to you?"
 msgstr "Этот существующий аккаунт принадлежит вам?"
-
-#, python-brace-format
-msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} уже подключён к другой учётной записи Liberapay."
 
 msgid "If this address belongs to you please log in before continuing:"
 msgstr "Если этот адрес принадлежит вас, то войдите в систему для продолжения:"
@@ -3808,9 +3823,6 @@ msgstr "Аккаунт {elsewhere_platform} \"{account_name}\" не может �
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
 msgstr "Аккаунт {elsewhere_platform} \"{account_name}\" не может быть связан с вашим профилем Liberapay, потому что он уже связан с другим аккаунтом."
-
-msgid "Edit your profile"
-msgstr "Редактировать профиль"
 
 msgid "Manage this team"
 msgstr "Управление этой командой"
@@ -3986,10 +3998,6 @@ msgstr "Liberapay - это способ поблагодарить и подде
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
 msgstr "{0} вернул сообщение об ошибке: {1}"
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} вернул ошибку, попробуйте ещё раз позже."
 
 msgid "Social Explorer"
 msgstr "Социальный обозреватель"
