@@ -131,16 +131,16 @@ title = _("Adding Money")
         </div>
 
         <div class="col-sm-6">
-            <div class="panel panel-default"><div class="panel-body overlayed">
+            <div class="panel panel-default not-recommended"><div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('bank') }}</p>
                 <h4>{{ _("Bank Wire") }}<br>
-                    <small>{{ _("To an account in Europe") }}</small></h4>
+                    <small>{{ _("Currently unavailable") }}</small></h4>
                 <p>
                     {{ _("Cheapest for small amounts¹") if direct_debit_available else
                        _("Cheaper¹ but cumbersome") }}<br>
                     {{ _("Fee: {0}%", constants.FEE_PAYIN_BANK_WIRE.with_vat) }}
                 </p>
-                <a class="overlay" href="{{ base_path }}/bankwire/{{ b64encode_s(back_to) }}?currency={{ currency }}"></a>
+                {#<a class="overlay" href="{{ base_path }}/bankwire/{{ b64encode_s(back_to) }}?currency={{ currency }}"></a>#}
             </div></div>
         </div>
 
