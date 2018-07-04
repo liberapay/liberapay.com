@@ -158,7 +158,7 @@ class MoneyBasket(object):
 
     @property
     def currencies_present(self):
-        return self.amounts.keys()
+        return [k for k, v in self.amounts.items() if v > 0]
 
     def fuzzy_sum(self, currency, rounding=ROUND_UP):
         a = ZERO[currency].amount
