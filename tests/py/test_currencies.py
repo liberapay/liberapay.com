@@ -19,6 +19,18 @@ class TestCurrencies(Harness):
         actual = original.convert(expected.currency)
         assert expected == actual
 
+    def test_MoneyBasket_currencies_present(self):
+        b = MoneyBasket()
+        assert b.currencies_present == []
+        b = MoneyBasket(USD=1)
+        assert b.currencies_present == ['USD']
+        b = MoneyBasket(EUR=0, USD=1)
+        assert b.currencies_present == ['USD']
+        b = MoneyBasket(EUR=-1, USD=1)
+        assert b.currencies_present == ['USD']
+        b = MoneyBasket(EUR=10, USD=1)
+        assert b.currencies_present == ['EUR', 'USD']
+
 
 class TestCurrencySwap(FakeTransfersHarness, MangopayHarness):
 
