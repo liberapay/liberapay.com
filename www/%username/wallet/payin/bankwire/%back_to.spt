@@ -84,6 +84,11 @@ amount_min = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MIN[currency])[0]
 amount_max = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MAX[currency])[0]
 
 if request.method == 'POST':
+    if not user.is_admin:
+        raise response.error(403, _(
+            "This payment method is currently unavailable. We apologize for the inconvenience."
+        ))
+
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
             "Why are you trying to put more money into your wallet? "
