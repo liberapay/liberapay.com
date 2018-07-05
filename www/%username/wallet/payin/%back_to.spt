@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from liberapay.utils import b64decode_s, get_participant, group_by, utcnow
 
+allow_bankwire = False
+
 [---]
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
@@ -134,7 +136,7 @@ title = _("Adding Money")
             <div class="panel panel-default not-recommended"><div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('bank') }}</p>
                 <h4>{{ _("Bank Wire") }}<br>
-                    <small>{{ _("Currently unavailable") }}</small></h4>
+                    <small>{{ _("To an account in Europe") if allow_bankwire else _("Currently unavailable") }}</small></h4>
                 <p>
                     {{ _("Cheapest for small amounts¹") if direct_debit_available else
                        _("Cheaper¹ but cumbersome") }}<br>
