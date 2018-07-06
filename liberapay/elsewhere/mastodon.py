@@ -16,7 +16,7 @@ class Mastodon(PlatformOAuth2):
     # Platform attributes
     name = 'mastodon'
     display_name = 'Mastodon'
-    account_url = 'https://{domain}/@{user_name}'
+    account_url = 'https://{domain}/users/{user_name}'
     single_domain = False
 
     def example_account_address(self, _):
