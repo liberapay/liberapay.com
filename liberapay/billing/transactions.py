@@ -643,12 +643,12 @@ def record_transfer_result(db, t_id, tr, _raise=False):
 def _record_transfer_result(db, t_id, status, error=None):
     balance = None
     with db.get_cursor() as c:
-        tipper, tippee, amount, wallet_from, wallet_to, context = c.one("""
+        tipper, tippee, amount, wallet_from, wallet_to, context, team = c.one("""
             UPDATE transfers
                SET status = %s
                  , error = %s
              WHERE id = %s
-         RETURNING tipper, tippee, amount, wallet_from, wallet_to, context
+         RETURNING tipper, tippee, amount, wallet_from, wallet_to, context, team
         """, (status, error, t_id))
         if status == 'succeeded':
             # Update the balances
@@ -677,13 +677,22 @@ def _record_transfer_result(db, t_id, status, error=None):
              RETURNING *
             """, (tippee, wallet_to, tipper, t_id))
             # Update the `tips.paid_in_advance` column
-            if context == 'tip-in-advance':
-                c.run("""
-                    UPDATE current_tips
-                       SET paid_in_advance = paid_in_advance + %(amount)s
-                     WHERE tipper = %(tipper)s
-                       AND tippee = %(tippee)s
+            if context in ('tip-in-advance', 'take-in-advance'):
+                tip_target = team if context == 'take-in-advance' else tippee
+                assert tip_target
+                r = c.one("""
+                    WITH current_tip AS (
+                             SELECT id
+                               FROM current_tips
+                              WHERE tipper = %(tipper)s
+                                AND tippee = %(tip_target)s
+                         )
+                    UPDATE tips
+                       SET paid_in_advance = coalesce(paid_in_advance, zero(amount)) + %(amount)s
+                     WHERE id = (SELECT id FROM current_tip)
+                 RETURNING paid_in_advance
                 """, locals())
+                assert r, locals()
         else:
             # Unlock the bundles
             bundles = c.all("""

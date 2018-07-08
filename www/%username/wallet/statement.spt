@@ -193,8 +193,16 @@ output.body = render(globals(), allow_partial_i18n=False)
             <td>
             % set context = event['context']
             % if event['tippee'] == participant.id
-                % if context == 'take'
+                % if context in ('take', 'take-in-advance')
                     {{ _("anonymous donation for your role in the {0} team", event['team_name']) }}
+                    % if event['unit_amount']
+                        % set weeks = int(event['amount'] / event['unit_amount'])
+                        ({{ ngettext(
+                            "{n} week of {money_amount}",
+                            "{n} weeks of {money_amount}",
+                            weeks, money_amount=event['unit_amount']
+                        ) }})
+                    % endif
                 % elif context == 'refund'
                     {{ _("donation refund") }}
                 % elif context == 'expense'
@@ -227,8 +235,16 @@ output.body = render(globals(), allow_partial_i18n=False)
                 % set to = event['username']
                 % if context == 'final-gift'
                     {{ _("final gift to {0}", to) }}
-                % elif context == 'take'
+                % elif context in ('take', 'take-in-advance')
                     {{ _("donation to {0} for their role in the {1} team", to, event['team_name']) }}
+                    % if event['unit_amount']
+                        % set weeks = int(abs(event['amount'] / event['unit_amount']))
+                        ({{ ngettext(
+                            "{n} week of {money_amount}",
+                            "{n} weeks of {money_amount}",
+                            weeks, money_amount=event['unit_amount']
+                        ) }})
+                    % endif
                 % elif context == 'refund'
                     {{ _("refund of anonymous donation") }}
                 % elif context == 'expense'
