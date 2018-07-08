@@ -498,6 +498,7 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     t_id = prepare_transfer(
         db, tipper, tippee, amount, context, wallet_from, wallet_to,
         team=kw.get('team'), invoice=kw.get('invoice'), bundles=kw.get('bundles'),
+        unit_amount=kw.get('unit_amount'),
     )
     tr = Transfer()
     tr.AuthorId = tipper_wallet.remote_owner_id
@@ -511,18 +512,19 @@ def transfer(db, tipper, tippee, amount, context, **kw):
 
 
 def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to,
-                     team=None, invoice=None, counterpart=None, refund_ref=None, **kw):
+                     team=None, invoice=None, counterpart=None, refund_ref=None,
+                     unit_amount=None, **kw):
     with db.get_cursor() as cursor:
         cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
         transfer = cursor.one("""
             INSERT INTO transfers
                         (tipper, tippee, amount, context, team, invoice, status,
-                         wallet_from, wallet_to, counterpart, refund_ref)
+                         wallet_from, wallet_to, counterpart, refund_ref, unit_amount)
                  VALUES (%s, %s, %s, %s, %s, %s, 'pre',
-                         %s, %s, %s, %s)
+                         %s, %s, %s, %s, %s)
               RETURNING *
         """, (tipper, tippee, amount, context, team, invoice,
-              wallet_from, wallet_to, counterpart, refund_ref))
+              wallet_from, wallet_to, counterpart, refund_ref, unit_amount))
         lock_bundles(cursor, transfer, **kw)
     return transfer.id
 
@@ -641,12 +643,12 @@ def record_transfer_result(db, t_id, tr, _raise=False):
 def _record_transfer_result(db, t_id, status, error=None):
     balance = None
     with db.get_cursor() as c:
-        tipper, tippee, amount, wallet_from, wallet_to = c.one("""
+        tipper, tippee, amount, wallet_from, wallet_to, context = c.one("""
             UPDATE transfers
                SET status = %s
                  , error = %s
              WHERE id = %s
-         RETURNING tipper, tippee, amount, wallet_from, wallet_to
+         RETURNING tipper, tippee, amount, wallet_from, wallet_to, context
         """, (status, error, t_id))
         if status == 'succeeded':
             # Update the balances
@@ -674,6 +676,14 @@ def _record_transfer_result(db, t_id, status, error=None):
                    AND locked_for = %s
              RETURNING *
             """, (tippee, wallet_to, tipper, t_id))
+            # Update the `tips.paid_in_advance` column
+            if context == 'tip-in-advance':
+                c.run("""
+                    UPDATE current_tips
+                       SET paid_in_advance = paid_in_advance + %(amount)s
+                     WHERE tipper = %(tipper)s
+                       AND tippee = %(tippee)s
+                """, locals())
         else:
             # Unlock the bundles
             bundles = c.all("""

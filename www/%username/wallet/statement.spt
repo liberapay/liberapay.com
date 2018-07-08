@@ -204,8 +204,16 @@ output.body = render(globals(), allow_partial_i18n=False)
                          link_close='',
                          payer=event['username'],
                     ) }}
-                % elif context == 'tip'
+                % elif context in ('tip', 'tip-in-advance')
                     {{ _("anonymous donation") }}
+                    % if event['unit_amount']
+                        % set weeks = int(event['amount'] / event['unit_amount'])
+                        ({{ ngettext(
+                            "{n} week of {money_amount}",
+                            "{n} weeks of {money_amount}",
+                            weeks, money_amount=event['unit_amount']
+                        ) }})
+                    % endif
                 % elif context == 'final-gift'
                     {{ _("one-off donation from someone closing their account") }}
                 % elif context == 'chargeback'
@@ -230,8 +238,16 @@ output.body = render(globals(), allow_partial_i18n=False)
                          link_close='',
                          payee=to,
                     ) }}
-                % elif context == 'tip'
+                % elif context in ('tip', 'tip-in-advance')
                     {{ _("donation to {0}", to) }}
+                    % if event['unit_amount']
+                        % set weeks = int(abs(event['amount'] / event['unit_amount']))
+                        ({{ ngettext(
+                            "{n} week of {money_amount}",
+                            "{n} weeks of {money_amount}",
+                            weeks, money_amount=event['unit_amount']
+                        ) }})
+                    % endif
                 % elif context == 'chargeback'
                     {{ _("chargeback") }}
                 % elif context == 'debt'
