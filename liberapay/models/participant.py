@@ -581,7 +581,7 @@ class Participant(Model, MixinTeam):
                     t for t in tip.team.get_current_takes()
                     if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
-                tip.total_takes = Money.sum((t['amount'] for t in tip.takes), tip.team.main_currency)
+                tip.total_takes = MoneyBasket(*[t['amount'] for t in tip.takes])
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
         transfers = []
 
@@ -608,10 +608,11 @@ class Participant(Model, MixinTeam):
                 if tip.kind == 'group':
                     team_id = tip.tippee
                     balance = pro_rated
+                    fuzzy_takes_sum = tip.total_takes.fuzzy_sum(tip.amount.currency)
                     for take in tip.takes:
                         nominal = take['amount']
                         actual = min(
-                            (pro_rated * (nominal / tip.total_takes)).round_up(),
+                            (pro_rated * (nominal / fuzzy_takes_sum)).round_up(),
                             balance
                         )
                         if actual == 0:
