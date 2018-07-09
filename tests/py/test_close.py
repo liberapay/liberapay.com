@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import pytest
 
 from liberapay.billing.payday import Payday
+from liberapay.exceptions import UnableToDistributeBalance
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.testing import EUR
@@ -68,78 +69,78 @@ class TestClosing(FakeTransfersHarness):
         assert 'Try Again Later' in body
 
 
-    # dbafg - distribute_balance_as_final_gift
+    # dbtd - distribute_balances_to_donees
 
-    def test_dbafg_distributes_balance_as_final_gift(self):
+    def test_dbtd_distributes_balance_as_final_gift(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('2.00'))
-        alice.distribute_balance_as_final_gift()
+        alice.distribute_balances_to_donees()
         assert Participant.from_username('bob').balance == EUR('6.00')
         assert Participant.from_username('carl').balance == EUR('4.00')
         assert Participant.from_username('alice').balance == EUR('0.00')
 
-    def test_dbafg_needs_claimed_tips(self):
+    def test_dbtd_needs_claimed_tips(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_stub()
         carl = self.make_stub()
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('2.00'))
-        with pytest.raises(alice.NoOneToGiveFinalGiftTo):
-            alice.distribute_balance_as_final_gift()
+        with pytest.raises(UnableToDistributeBalance):
+            alice.distribute_balances_to_donees()
         assert Participant.from_id(bob.id).balance == EUR('0.00')
         assert Participant.from_id(carl.id).balance == EUR('0.00')
         assert Participant.from_id(alice.id).balance == EUR('10.00')
 
-    def test_dbafg_gives_all_to_claimed(self):
+    def test_dbtd_gives_all_to_claimed(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_stub()
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('2.00'))
-        alice.distribute_balance_as_final_gift()
+        alice.distribute_balances_to_donees()
         assert Participant.from_id(bob.id).balance == EUR('10.00')
         assert Participant.from_id(carl.id).balance == EUR('0.00')
         assert Participant.from_id(alice.id).balance == EUR('0.00')
 
-    def test_dbafg_skips_zero_tips(self):
+    def test_dbtd_skips_zero_tips(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('0.00'))
         alice.set_tip_to(carl, EUR('2.00'))
-        alice.distribute_balance_as_final_gift()
+        alice.distribute_balances_to_donees()
         assert self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (bob.id,)) == 1
         assert Participant.from_username('bob').balance == EUR('0.00')
         assert Participant.from_username('carl').balance == EUR('10.00')
         assert Participant.from_username('alice').balance == EUR('0.00')
 
-    def test_dbafg_favors_highest_tippee_in_rounding_errors(self):
+    def test_dbtd_favors_highest_tippee_in_rounding_errors(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('6.00'))
-        alice.distribute_balance_as_final_gift()
+        alice.distribute_balances_to_donees()
         assert Participant.from_username('bob').balance == EUR('3.33')
         assert Participant.from_username('carl').balance == EUR('6.67')
         assert Participant.from_username('alice').balance == EUR('0.00')
 
-    def test_dbafg_with_zero_balance_is_a_noop(self):
+    def test_dbtd_with_zero_balance_is_a_noop(self):
         alice = self.make_participant('alice', balance=EUR('0.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         alice.set_tip_to(bob, EUR('3.00'))
         alice.set_tip_to(carl, EUR('6.00'))
-        alice.distribute_balance_as_final_gift()
+        alice.distribute_balances_to_donees()
         assert self.db.one("SELECT count(*) FROM tips") == 2
         assert Participant.from_username('bob').balance == EUR('0.00')
         assert Participant.from_username('carl').balance == EUR('0.00')
         assert Participant.from_username('alice').balance == EUR('0.00')
 
-    def test_dbafg_distributes_to_team(self):
+    def test_dbtd_distributes_to_team(self):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice', balance=EUR('0.01'))
         bob = self.make_participant('bob')
@@ -148,7 +149,7 @@ class TestClosing(FakeTransfersHarness):
         team.set_take_for(alice, EUR('1.00'), team)
         team.set_take_for(bob, EUR('1.00'), team)
         team.set_take_for(carl, EUR('0.01'), team)
-        alice.distribute_balance_as_final_gift()
+        alice.distribute_balances_to_donees()
         assert alice.balance == 0
         assert bob.refetch().balance == EUR('0.01')
         assert carl.refetch().balance == 0

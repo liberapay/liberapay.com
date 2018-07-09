@@ -52,6 +52,7 @@ from liberapay.exceptions import (
     TooManyPasswordLogins,
     TooManyUsernameChanges,
     TransferError,
+    UnableToDistributeBalance,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -541,7 +542,7 @@ class Participant(Model, MixinTeam):
             pass  # No balance, supposedly. final_check will make sure.
         elif disbursement_strategy == 'downstream':
             # This in particular needs to come before clear_tips_giving.
-            self.distribute_balance_as_final_gift()
+            self.distribute_balances_to_donees()
         elif disbursement_strategy == 'payin-refund':
             self.refund_balances()
         else:
@@ -556,10 +557,8 @@ class Participant(Model, MixinTeam):
             self.final_check(cursor)
             self.update_status('closed', cursor)
 
-    class NoOneToGiveFinalGiftTo(Exception): pass
-
-    def distribute_balance_as_final_gift(self):
-        """Distribute a balance as a final gift.
+    def distribute_balances_to_donees(self, final_gift=True):
+        """Distribute the user's balance(s) downstream.
         """
         if self.balance == 0:
             return
@@ -618,10 +617,10 @@ class Participant(Model, MixinTeam):
                         if actual == 0:
                             continue
                         balance -= actual
-                        transfers.append([take['member_id'], actual, team_id, wallet])
+                        transfers.append([take['member_id'], actual, team_id, wallet, nominal])
                     assert balance == 0
                 else:
-                    transfers.append([tip.tippee, pro_rated, None, wallet])
+                    transfers.append([tip.tippee, pro_rated, None, wallet, tip.amount])
                 distributed += pro_rated
 
             diff = initial_balance - distributed
@@ -629,18 +628,25 @@ class Participant(Model, MixinTeam):
                 transfers[0][1] += diff  # Give it to the first receiver.
 
         if not transfers:
-            raise self.NoOneToGiveFinalGiftTo
+            raise UnableToDistributeBalance(self.balance)
 
         from liberapay.billing.transactions import transfer
         db = self.db
         tipper = self.id
-        for tippee, amount, team, wallet in transfers:
-            balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
-                               tipper_mango_id=self.mangopay_user_id,
-                               tipper_wallet_id=wallet.remote_id)[0]
+        for tippee, amount, team, wallet, unit_amount in transfers:
+            if final_gift:
+                context = 'final-gift'
+            else:
+                context = 'take-in-advance' if team else 'tip-in-advance'
+            balance = transfer(
+                db, tipper, tippee, amount, context, team=team, unit_amount=unit_amount,
+                tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
+            )[0]
 
-        assert balance == 0  # TODO handle this
         self.set_attributes(balance=balance)
+
+        if balance != 0:
+            raise UnableToDistributeBalance(balance)
 
     def clear_tips_giving(self, cursor):
         """Zero out tips from a given user.
