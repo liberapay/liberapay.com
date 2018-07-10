@@ -25,12 +25,14 @@ pending_payouts = website.db.one("""
       FROM exchanges
      WHERE participant = %s
        AND amount < 0
+       AND refund_ref IS NULL
        AND ( status = 'created' OR
              status = 'succeeded' AND timestamp > (current_timestamp - interval '24 hours')
            )
 """, (participant.id,))
 
 balances = participant.get_balances()
+refundable_balances = participant.get_refundable_balances()
 
 title = _("Close Account")
 subhead = participant.username
@@ -70,15 +72,22 @@ subhead = participant.username
                 balances) }}</p>
         <div class="paragraph">
             <label>
-                <input type="radio" name="disburse_to" value="payout" />
-                {{ _("Withdraw it") }}
-            </label><br>
-            <label>
                 <input type="radio" name="disburse_to" value="downstream"
                        {{ 'disabled' if not participant.giving else '' }} />
                 {{ _("Give it to the {0}people I donate to{1}",
                      '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
+            </label><br>
+            % if refundable_balances >= balances
+            <label>
+                <input type="radio" name="disburse_to" value="payin-refund" />
+                {{ _("Refund it to my card or bank account") }}
+            </label><br>
+            % else
+            <label>
+                <input type="radio" name="disburse_to" value="payout" />
+                {{ _("Withdraw it to my bank account") }}
             </label>
+            % endif
         </div>
         <p>{{ _(
             "If neither option works for you, please contact support@liberapay.com."

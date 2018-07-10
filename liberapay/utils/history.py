@@ -170,7 +170,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
          WHERE e.participant = %(id)s
            AND ee.timestamp >= %(period_start)s
            AND ee.timestamp < %(period_end)s
-           AND (ee.wallet_delta <> 0 OR (ee.status = 'failed' AND NOT %(minimize)s))
+           AND (ee.wallet_delta <> 0 OR NOT %(minimize)s)
     """, params, back_as=dict)
     transfers = db.all("""
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name

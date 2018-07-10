@@ -396,6 +396,7 @@ def propagate_exchange(cursor, participant, exchange, error, amount, bundles=Non
         raise NegativeBalance
 
     if amount < 0:
+        refund_ref = exchange.refund_ref or -1
         if bundles:
             # Refetch the bundles to ensure validity and prevent race conditions
             bundles = cursor.all("""
@@ -406,8 +407,10 @@ def propagate_exchange(cursor, participant, exchange, error, amount, bundles=Non
                    AND b.locked_for IS NULL
                    AND b.amount::currency = %s
                    AND b.id IN %s
-              ORDER BY b.owner = e.participant DESC, b.ts
-            """, (participant.id, amount.currency, tuple(bundles)))
+              ORDER BY b.origin = %s DESC
+                     , b.owner = e.participant DESC
+                     , b.ts
+            """, (participant.id, amount.currency, tuple(bundles), refund_ref))
         else:
             bundles = cursor.all("""
                 SELECT b.*
@@ -418,8 +421,10 @@ def propagate_exchange(cursor, participant, exchange, error, amount, bundles=Non
                    AND b.disputed IS NOT TRUE
                    AND b.locked_for IS NULL
                    AND b.amount::currency = %s
-              ORDER BY b.owner = e.participant DESC, b.ts
-            """, (participant.id, QUARANTINE, amount.currency))
+              ORDER BY b.origin = %s DESC
+                     , b.owner = e.participant DESC
+                     , b.ts
+            """, (participant.id, QUARANTINE, amount.currency, refund_ref))
         withdrawable = sum(b.amount for b in bundles)
         x = -amount
         if x > withdrawable:
@@ -451,14 +456,21 @@ def propagate_exchange(cursor, participant, exchange, error, amount, bundles=Non
                 break
     elif amount > 0 and (exchange.amount < 0 or exchange.refund_ref):
         # failed withdrawal
-        orig_exchange_id = exchange.refund_ref or exchange.id
-        cursor.run("""
+        if exchange.refund_ref and exchange.status == 'succeeded':
+            # payout refund
+            orig_exchange_id = exchange.refund_ref
+        else:
+            # failed payout or payin refund
+            orig_exchange_id = exchange.id
+        bundles = cursor.all("""
             UPDATE cash_bundles b
                SET owner = %(p_id)s
                  , withdrawal = NULL
                  , wallet_id = %(wallet_id)s
              WHERE withdrawal = %(e_id)s
+         RETURNING b.*
         """, dict(p_id=participant.id, e_id=orig_exchange_id, wallet_id=wallet_id))
+        assert sum(b.amount for b in bundles) == amount
     elif amount > 0:
         cursor.run("""
             INSERT INTO cash_bundles
@@ -688,6 +700,47 @@ def refund_transfer(db, remote_id):
     execute_transfer(db, refund_id, refund)
 
 
+def refund_payin(db, exchange, amount, participant):
+    """Refund a specific payin.
+    """
+    assert participant.id == exchange.participant
+
+    # Record the refund attempt
+    fee = vat = amount.zero()
+    with db.get_cursor() as cursor:
+        cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+        e_refund = cursor.one("""
+            INSERT INTO exchanges
+                        (participant, amount, fee, vat, route, status, refund_ref, wallet_id)
+                 VALUES (%s, %s, %s, %s, %s, 'pre', %s, %s)
+              RETURNING *
+        """, (participant.id, -amount, fee, vat, exchange.route, exchange.id, exchange.wallet_id))
+        cursor.run("""
+            INSERT INTO exchange_events
+                        (timestamp, exchange, status, wallet_delta)
+                 VALUES (%s, %s, 'pre', %s)
+        """, (e_refund.timestamp, e_refund.id, e_refund.amount - e_refund.fee))
+        propagate_exchange(cursor, participant, e_refund, None, e_refund.amount)
+
+    # Submit the refund
+    wallet = db.one("SELECT * FROM wallets WHERE remote_id = %s", (exchange.wallet_id,))
+    m_refund = PayInRefund(payin_id=exchange.remote_id)
+    m_refund.AuthorId = wallet.remote_owner_id
+    m_refund.Tag = str(e_refund.id)
+    m_refund.DebitedFunds = amount.int()
+    m_refund.Fees = -fee.int()
+    try:
+        m_refund.save()
+    except Exception as e:
+        error = repr_exception(e)
+        e_refund = record_exchange_result(db, e_refund.id, '', 'failed', error, participant)
+        return 'exception', e_refund
+    e_refund = record_exchange_result(
+        db, e_refund.id, m_refund.Id, m_refund.Status.lower(), repr_error(m_refund), participant
+    )
+    return e_refund.status, e_refund
+
+
 def swap_currencies(db, swapper1, swapper2, amount1, amount2):
     wallet11 = swapper1.get_current_wallet(amount1.currency)
     wallet12 = swapper1.get_current_wallet(amount2.currency, create=True)
@@ -741,8 +794,8 @@ def lock_disputed_funds(cursor, exchange, amount):
         try_to_swap_bundle(cursor, b, original_owner)
 
 
-def refund_payin(db, exchange, create_debts=False, refund_fee=False, dry_run=False):
-    """Refund a specific payin.
+def refund_disputed_payin(db, exchange, create_debts=False, refund_fee=False, dry_run=False):
+    """Refund a specific disputed payin.
     """
     assert exchange.status == 'succeeded' and exchange.remote_id, exchange
     e_refund = db.one("SELECT e.* FROM exchanges e WHERE e.refund_ref = %s", (exchange.id,))
