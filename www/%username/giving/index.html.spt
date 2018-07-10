@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from pando.utils import utcnow
 
+from liberapay.constants import ZERO
 from liberapay.models.participant import Participant
 from liberapay.utils import get_participant, group_by
 
@@ -39,7 +40,8 @@ tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
     currency: (
         sorted(tips, key=lambda t: (-t.amount.amount, t.tippee_p.username)),
-        Money.sum((t.amount for t in tips), currency)
+        Money.sum((t.amount for t in tips), currency),
+        Money.sum((t.amount for t in tips if (t.paid_in_advance or ZERO[currency]) > t.amount), currency)
     )
     for currency, tips in tips_by_currency.items()
 }
@@ -107,14 +109,14 @@ if not freeload:
     <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
     <p>{{ _("You give {0} per week.", participant.giving) }}</p>
     % for currency, t in tips_by_currency.items()
-    % set tips, total = t
+    % set tips, total, paid_in_advance = t
     % set currency_name = locale.currencies.get(currency, currency)
     % if n_tip_currencies > 1
     <h4>{{ locale.title(currency_name) }} ({{ locale.currency_symbols.get(currency, currency) }})</h4>
     % endif
     % set receiving = participant.get_receiving_in(currency)
     % set weekly = total - receiving
-    % if weekly > 0
+    % if weekly > paid_in_advance
         % set balance = participant.get_balance_in(currency)
         % set funded = balance // weekly
         <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
