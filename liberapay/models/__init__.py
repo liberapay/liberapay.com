@@ -111,6 +111,7 @@ def _check_balances_against_transactions(cursor):
                       select wallet_from as wallet_id, sum(-amount) as a
                         from transfers
                        where status = 'succeeded'
+                         and virtual is not true
                     group by wallet_from
 
                        union all
@@ -118,6 +119,7 @@ def _check_balances_against_transactions(cursor):
                       select wallet_to as wallet_id, sum(amount) as a
                         from transfers
                        where status = 'succeeded'
+                         and virtual is not true
                     group by wallet_to
                     ) as foo
             group by wallet_id

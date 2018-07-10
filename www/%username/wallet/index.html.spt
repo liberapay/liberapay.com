@@ -31,7 +31,8 @@ if not year:
     last_event_year = website.db.one("""
         SELECT extract(year from timestamp)::int AS year
           FROM transfers
-         WHERE tipper = %(p_id)s OR tippee = %(p_id)s
+         WHERE (tipper = %(p_id)s OR tippee = %(p_id)s)
+           AND virtual IS NOT true
      UNION ALL
         SELECT extract(year from timestamp)::int AS year
           FROM exchanges
