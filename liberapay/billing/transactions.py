@@ -728,6 +728,11 @@ def refund_payin(db, exchange, amount, participant):
     fee = vat = amount.zero()
     with db.get_cursor() as cursor:
         cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+        bundles = cursor.all("""
+            SELECT b.id
+              FROM cash_bundles b
+             WHERE b.owner = %s
+        """, (participant.id,))
         e_refund = cursor.one("""
             INSERT INTO exchanges
                         (participant, amount, fee, vat, route, status, refund_ref, wallet_id)
@@ -739,7 +744,7 @@ def refund_payin(db, exchange, amount, participant):
                         (timestamp, exchange, status, wallet_delta)
                  VALUES (%s, %s, 'pre', %s)
         """, (e_refund.timestamp, e_refund.id, e_refund.amount - e_refund.fee))
-        propagate_exchange(cursor, participant, e_refund, None, e_refund.amount)
+        propagate_exchange(cursor, participant, e_refund, None, e_refund.amount, bundles=bundles)
 
     # Submit the refund
     wallet = db.one("SELECT * FROM wallets WHERE remote_id = %s", (exchange.wallet_id,))

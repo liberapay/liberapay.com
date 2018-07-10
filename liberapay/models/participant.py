@@ -770,10 +770,11 @@ class Participant(Model, MixinTeam):
     def refund_balances(self):
         from liberapay.billing.transactions import refund_payin
         payins = self.get_refundable_payins()
-        balances = self.get_balances()
         for exchange in payins:
-            balance = balances[exchange.amount.currency]
-            amount = min(balance, exchange.amount)
+            balance = self.get_balance_in(exchange.amount.currency)
+            if balance == 0:
+                continue
+            amount = min(balance, exchange.refundable_amount)
             status, e_refund = refund_payin(self.db, exchange, amount, self)
             if status != 'succeeded':
                 raise TransferError(e_refund.note)
@@ -798,9 +799,10 @@ class Participant(Model, MixinTeam):
             WITH x AS (
                 SELECT e.*
                      , e.amount - coalesce_currency_amount((
-                           SELECT sum(e2.amount)
+                           SELECT sum(-e2.amount)
                              FROM exchanges e2
                             WHERE e2.participant = e.participant  -- indexed column
+                              AND e2.amount < 0
                               AND e2.refund_ref = e.id
                               AND e2.status = 'succeeded'
                        ), e.amount::currency) AS refundable_amount
@@ -812,9 +814,11 @@ class Participant(Model, MixinTeam):
                    AND ( r.network = 'mango-cc' AND e.timestamp > (now() - interval '11 months') OR
                          r.network = 'mango-ba' AND e.timestamp <= (now() - interval '9 weeks')
                        )
-              ORDER BY e.amount DESC
-            )
-            SELECT * FROM x WHERE refundable_amount > 0;
+                 )
+            SELECT *
+              FROM x
+             WHERE refundable_amount > 0
+          ORDER BY refundable_amount DESC;
         """, (self.id,))
 
 
