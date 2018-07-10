@@ -1,0 +1,39 @@
+% if total.fuzzy
+{{ _("Your Liberapay income is approximately {money_amount} this week", money_amount=total) }}
+% else
+{{ _("Your Liberapay income is {money_amount} this week", money_amount=total) }}
+% endif
+
+[---] text/html
+<p>{{ _("Here is the breakdown of your income this week:") }}</p>
+<ul>
+% if personal
+    <li>{{ ngettext(
+        "Personal donations: {money_amount} from {n} donor.",
+        "Personal donations: {money_amount} from {n} donors.",
+        n=personal_npatrons, money_amount=personal
+    ) }}</li>
+% else
+    <li>{{ _("Personal donations: none.") }}</li>
+% endif
+% for name, (amount, npatrons) in by_team.items()
+    <li>{{ ngettext(
+        "Donations for your role in the {team_name} team: {money_amount} from {n} donor.",
+        "Donations for your role in the {team_name} team: {money_amount} from {n} donors.",
+        n=npatrons, money_amount=amount, team_name=name
+    ) }}</li>
+% else
+    <li>{{ _("Donations through teams: none (you are not a member of any team).") }}</li>
+% endfor
+</ul>
+
+<p>{{ _(
+    "NB: Donations through Liberapay are now paid in advance instead of being transferred "
+    "weekly. The numbers above match what you would have received this week under the old "
+    "system."
+) }}</p>
+
+% if mangopay_balance
+<p>{{ _("You have {money_amount} in your Mangopay wallet.", money_amount=mangopay_balance) }}</p>
+<p><a href="{{ participant.url('wallet/payout') }}" style="{{ button_style('primary') }}">{{ _("Withdraw money") }}</a></p>
+% endif

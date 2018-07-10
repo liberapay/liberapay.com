@@ -921,9 +921,6 @@ class Payday(object):
 
         # Income notifications
         n = 0
-        get_username = lambda i: self.db.one(
-            "SELECT username FROM participants WHERE id = %s", (i,)
-        )
         r = self.db.all("""
             SELECT tippee, json_agg(t) AS transfers
               FROM transfers t
@@ -937,17 +934,25 @@ class Payday(object):
             p = Participant.from_id(tippee_id)
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
-            by_team = {k: MoneyBasket(t['amount'] for t in v)
+            by_team = {k: (MoneyBasket(t['amount'] for t in v), len(set(t['tipper'] for t in v)))
                        for k, v in group_by(transfers, 'team').items()}
-            total = sum(by_team.values(), MoneyBasket())
-            personal = by_team.pop(None, 0)
-            by_team = {get_username(k): v for k, v in by_team.items()}
+            total = sum((t[0] for t in by_team.values()), MoneyBasket())
+            nothing = (MoneyBasket(), 0)
+            personal, personal_npatrons = by_team.pop(None, nothing)
+            teams = p.get_teams()
+            team_ids = set(t.id for t in teams) | set(by_team.keys())
+            team_names = {t.id: t.name for t in teams}
+            get_username = lambda i: team_names.get(i) or self.db.one(
+                "SELECT username FROM participants WHERE id = %s", (i,)
+            )
+            by_team = {get_username(t_id): by_team.get(t_id, nothing) for t_id in team_ids}
             p.notify(
-                'income',
+                'income~v2',
                 total=total.fuzzy_sum(p.main_currency),
                 personal=personal,
+                personal_npatrons=personal_npatrons,
                 by_team=by_team,
-                new_balance=p.get_balances(),
+                mangopay_balance=p.get_balances(),
             )
             n += 1
         log("Sent %i income notifications." % n)
