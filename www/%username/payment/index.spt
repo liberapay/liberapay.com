@@ -1,0 +1,41 @@
+from liberapay.utils import get_participant
+
+[---]
+
+participant = get_participant(state, restrict=True)
+
+accounts = {a.provider: a for a in website.db.all("""
+    SELECT *
+      FROM payment_accounts
+     WHERE participant = %s
+       AND is_current IS true
+""", (participant.id,))}
+
+title = participant.username
+subhead = _("Payment")
+
+[---] text/html
+% extends "templates/settings.html"
+
+% block content
+    <p>{{ _("This page allows you to manage your payment methods.") }}</p>
+
+    <h3>Stripe</h3>
+    % set account = accounts.get('stripe')
+    % if account
+        <p>{{ _(
+            "The {platform_name} account {account_id} is connected to your Liberapay account.",
+            platform_name='Stripe', account_id='<code>%s</code>'|safe % account.id
+        ) }}</p>
+    % endif
+
+    <form action="/payment-providers/stripe/connect" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
+        % if account
+        <button class="btn btn-default">{{ _("Reconnect {platform_name} account", platform_name='Stripe') }}</button>
+        % else
+        <button class="btn btn-primary">{{ _("Connect {platform_name} account", platform_name='Stripe') }}</button>
+        % endif
+    </form>
+% endblock
