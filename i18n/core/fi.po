@@ -630,7 +630,7 @@ msgstr "Lähetät pyyntöjä epätavallisen nopeaan tahtiin. Yritä muutaman sek
 
 #, python-brace-format
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr ""
+msgstr "Yritys jaotella kaikki lompakossasi oleva raha epäonnistui; {money_amount} jäi jäljelle."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -2212,10 +2212,10 @@ msgid "Give it to the {0}people I donate to{1}"
 msgstr "Anna se niille {0}joille lahjoitan{1}"
 
 msgid "Refund it to my card or bank account"
-msgstr ""
+msgstr "Hyvitä kortilleni tai pankkitililleni"
 
 msgid "Withdraw it to my bank account"
-msgstr ""
+msgstr "Nosta pankkitililleni"
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Jos kumpikaan näistä ei käy, ota yhteyttä asiakaspalveluun: support@liberapay.com (englanniksi)."
@@ -2294,10 +2294,10 @@ msgid "Your donation to {0} has been stopped."
 msgstr "Lahjoitus käyttäjälle {0} on pysäytetty."
 
 msgid "Emptying your wallet"
-msgstr ""
+msgstr "Lompakon tyhjentäminen"
 
 msgid "Your wallet is empty."
-msgstr ""
+msgstr "Lompakkosi on tyhjä."
 
 msgid "Export History"
 msgstr "Lataa historia"
@@ -2410,8 +2410,8 @@ msgstr "nimetön lahjoitus roolistasi ryhmässä {0}"
 #, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} viikko × {money_amount}"
+msgstr[1] "{n} viikkoa × {money_amount}"
 
 msgid "donation refund"
 msgstr "lahjoituksen palautus"
@@ -2741,10 +2741,10 @@ msgstr "Mitä valuuttaa haluat nostaa?"
 
 #, python-brace-format
 msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr ""
+msgstr "Euromääräiset nostot ovat ilmaisia. USA:n dollarien nostaminen maksaa {0} per siirto kohdemaasta riippumatta."
 
 msgid "There are no fees when withdrawing euros to your bank account."
-msgstr ""
+msgstr "Eurojen nostaminen pankkitilillesi ei aiheuta kuluja."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."

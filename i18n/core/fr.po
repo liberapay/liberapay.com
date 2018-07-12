@@ -629,7 +629,7 @@ msgstr "Vous enchaînez les requêtes trop rapidement. Veuillez réessayer dans 
 
 #, python-brace-format
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr ""
+msgstr "La tentative de distribuer la totalité de l'argent contenu dans votre portefeuille a échoué : il reste {money_amount}."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -2211,10 +2211,10 @@ msgid "Give it to the {0}people I donate to{1}"
 msgstr "Les verser aux {0}personnes auxquelles je fais des dons{1}"
 
 msgid "Refund it to my card or bank account"
-msgstr ""
+msgstr "Les rembourser vers ma carte ou mon compte bancaire"
 
 msgid "Withdraw it to my bank account"
-msgstr ""
+msgstr "Les transférer vers mon compte bancaire"
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Si aucune option ne vous convient, merci d'envoyer un email à support@liberapay.com."
@@ -2293,10 +2293,10 @@ msgid "Your donation to {0} has been stopped."
 msgstr "Votre don à {0} est arrêté."
 
 msgid "Emptying your wallet"
-msgstr ""
+msgstr "Vidage de votre portefeuille"
 
 msgid "Your wallet is empty."
-msgstr ""
+msgstr "Votre portefeuille est vide."
 
 msgid "Export History"
 msgstr "Exporter l'historique"
@@ -2409,8 +2409,8 @@ msgstr "don anonyme pour votre rôle dans l'équipe {0}"
 #, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} semaine × {money_amount}"
+msgstr[1] "{n} semaines × {money_amount}"
 
 msgid "donation refund"
 msgstr "remboursement d'un don"
@@ -2740,10 +2740,10 @@ msgstr "Quelle devise souhaitez-vous retirer ?"
 
 #, python-brace-format
 msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr ""
+msgstr "Retirer des euros est gratuit. Retirer des dollars états-uniens coûte {0} par transfert quel que soit le pays de destination."
 
 msgid "There are no fees when withdrawing euros to your bank account."
-msgstr ""
+msgstr "Il n'y a pas frais quand vous retirez des euros vers votre compte bancaire."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
