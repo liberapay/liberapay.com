@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from collections import OrderedDict
 from decimal import Decimal, ROUND_DOWN, ROUND_UP
 from numbers import Number
+import operator
 
 from mangopay.exceptions import CurrencyMismatch
 from mangopay.utils import Money
@@ -91,29 +92,32 @@ class MoneyBasket(object):
             return all(v == 0 for v in self.amounts.values())
         return False
 
-    def __gt__(self, other):
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def _compare(self, op, other):
         if isinstance(other, self.__class__):
-            return all(a > b for a, b in zip(self.amounts, other.amounts))
+            return all(op(a, b) for a, b in zip(self.amounts, other.amounts))
         elif isinstance(other, Money):
-            return self.amounts[other.currency] > other.amount
+            return op(self.amounts[other.currency], other.amount)
         elif other == 0:
-            return any(v > 0 for v in self.amounts.values())
+            return any(op(v, 0) for v in self.amounts.values())
         else:
             raise TypeError(
                 "can't compare %r and %r" % (self.__class__, other.__class__)
             )
 
     def __ge__(self, other):
-        if isinstance(other, self.__class__):
-            return all(a >= b for a, b in zip(self.amounts, other.amounts))
-        elif isinstance(other, Money):
-            return self.amounts[other.currency] >= other.amount
-        elif other == 0:
-            return any(v >= 0 for v in self.amounts.values())
-        else:
-            raise TypeError(
-                "can't compare %r and %r" % (self.__class__, other.__class__)
-            )
+        return self._compare(operator.ge, other)
+
+    def __gt__(self, other):
+        return self._compare(operator.gt, other)
+
+    def __le__(self, other):
+        return self._compare(operator.le, other)
+
+    def __lt__(self, other):
+        return self._compare(operator.lt, other)
 
     def __add__(self, other):
         if other is 0:
