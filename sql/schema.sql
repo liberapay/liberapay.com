@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '69'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '70'::jsonb);
 
 
 -- app configuration
@@ -204,7 +204,9 @@ CREATE TABLE tips
 , is_funded         boolean           NOT NULL DEFAULT false
 , period            donation_period   NOT NULL
 , periodic_amount   currency_amount   NOT NULL
+, paid_in_advance   currency_amount
 , CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
+, CONSTRAINT paid_in_advance_currency_chk CHECK (paid_in_advance::currency = amount::currency)
  );
 
 CREATE INDEX tips_tipper_idx ON tips (tipper, mtime DESC);
@@ -214,19 +216,6 @@ CREATE VIEW current_tips AS
     SELECT DISTINCT ON (tipper, tippee) *
       FROM tips
   ORDER BY tipper, tippee, mtime DESC;
-
--- Allow updating is_funded via the current_tips view for convenience
-CREATE FUNCTION update_tip() RETURNS trigger AS $$
-    BEGIN
-        UPDATE tips
-           SET is_funded = NEW.is_funded
-         WHERE id = NEW.id;
-        RETURN NULL;
-    END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_current_tip INSTEAD OF UPDATE ON current_tips
-    FOR EACH ROW EXECUTE PROCEDURE update_tip();
 
 
 -- invoices
@@ -286,8 +275,10 @@ $$ LANGUAGE SQL STRICT;
 
 -- transfers -- balance transfers from one user to another
 
-CREATE TYPE transfer_context AS ENUM
-    ('tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt', 'account-switch', 'swap');
+CREATE TYPE transfer_context AS ENUM (
+    'tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt', 'account-switch', 'swap',
+    'tip-in-advance', 'take-in-advance'
+);
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
 
@@ -306,11 +297,13 @@ CREATE TABLE transfers
 , wallet_from text                NOT NULL
 , wallet_to   text                NOT NULL
 , counterpart int                 REFERENCES transfers
+, unit_amount currency_amount
 , CONSTRAINT team_chk CHECK (NOT (context='take' AND team IS NULL))
 , CONSTRAINT self_chk CHECK ((tipper <> tippee) = (context <> 'account-switch'))
 , CONSTRAINT expense_chk CHECK (NOT (context='expense' AND invoice IS NULL))
 , CONSTRAINT wallets_chk CHECK (wallet_from <> wallet_to)
 , CONSTRAINT counterpart_chk CHECK ((counterpart IS NULL) = (context <> 'swap') OR (context = 'swap' AND status <> 'succeeded'))
+, CONSTRAINT unit_amount_currency_chk CHECK (unit_amount::currency = amount::currency)
  );
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
