@@ -370,3 +370,11 @@ class TooManyRequests(LazyResponseXXX):
             "You're sending requests at an unusually fast pace. Please retry in a few "
             "seconds, and contact support@liberapay.com if the problem persists."
         )
+
+
+class UnableToDistributeBalance(LazyResponse400):
+    def msg(self, _):
+        return _(
+            "The attempt to distribute all the money in your wallet failed: "
+            "{money_amount} remains.", money_amount=self.args[0]
+        )

@@ -25,7 +25,7 @@ from psycopg2 import IntegrityError
 import requests
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_ZERO,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_UNIT, D_ZERO,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
@@ -52,6 +52,7 @@ from liberapay.exceptions import (
     TooManyPasswordLogins,
     TooManyUsernameChanges,
     TransferError,
+    UnableToDistributeBalance,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -541,7 +542,7 @@ class Participant(Model, MixinTeam):
             pass  # No balance, supposedly. final_check will make sure.
         elif disbursement_strategy == 'downstream':
             # This in particular needs to come before clear_tips_giving.
-            self.distribute_balance_as_final_gift()
+            self.distribute_balances_to_donees()
         elif disbursement_strategy == 'payin-refund':
             self.refund_balances()
         else:
@@ -556,10 +557,8 @@ class Participant(Model, MixinTeam):
             self.final_check(cursor)
             self.update_status('closed', cursor)
 
-    class NoOneToGiveFinalGiftTo(Exception): pass
-
-    def distribute_balance_as_final_gift(self):
-        """Distribute a balance as a final gift.
+    def distribute_balances_to_donees(self, final_gift=True):
+        """Distribute the user's balance(s) downstream.
         """
         if self.balance == 0:
             return
@@ -577,11 +576,15 @@ class Participant(Model, MixinTeam):
         for tip in tips:
             if tip.kind == 'group':
                 tip.team = Participant.from_id(tip.tippee)
+                takes = tip.team.get_current_takes()
                 tip.takes = [
-                    t for t in tip.team.get_current_takes()
+                    t for t in takes
                     if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
-                tip.total_takes = Money.sum((t['amount'] for t in tip.takes), tip.team.main_currency)
+                if len(takes) == 1 and len(tip.takes) == 1 and tip.takes[0]['amount'] == 0:
+                    # Team of one with a zero take
+                    tip.takes[0]['amount'].amount = D_UNIT
+                tip.total_takes = MoneyBasket(*[t['amount'] for t in tip.takes])
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
         transfers = []
 
@@ -608,19 +611,20 @@ class Participant(Model, MixinTeam):
                 if tip.kind == 'group':
                     team_id = tip.tippee
                     balance = pro_rated
+                    fuzzy_takes_sum = tip.total_takes.fuzzy_sum(tip.amount.currency)
                     for take in tip.takes:
                         nominal = take['amount']
                         actual = min(
-                            (pro_rated * (nominal / tip.total_takes)).round_up(),
+                            (pro_rated * (nominal / fuzzy_takes_sum)).round_up(),
                             balance
                         )
                         if actual == 0:
                             continue
                         balance -= actual
-                        transfers.append([take['member_id'], actual, team_id, wallet])
+                        transfers.append([take['member_id'], actual, team_id, wallet, nominal])
                     assert balance == 0
                 else:
-                    transfers.append([tip.tippee, pro_rated, None, wallet])
+                    transfers.append([tip.tippee, pro_rated, None, wallet, tip.amount])
                 distributed += pro_rated
 
             diff = initial_balance - distributed
@@ -628,18 +632,25 @@ class Participant(Model, MixinTeam):
                 transfers[0][1] += diff  # Give it to the first receiver.
 
         if not transfers:
-            raise self.NoOneToGiveFinalGiftTo
+            raise UnableToDistributeBalance(self.balance)
 
         from liberapay.billing.transactions import transfer
         db = self.db
         tipper = self.id
-        for tippee, amount, team, wallet in transfers:
-            balance = transfer(db, tipper, tippee, amount, 'final-gift', team=team,
-                               tipper_mango_id=self.mangopay_user_id,
-                               tipper_wallet_id=wallet.remote_id)[0]
+        for tippee, amount, team, wallet, unit_amount in transfers:
+            if final_gift:
+                context = 'final-gift'
+            else:
+                context = 'take-in-advance' if team else 'tip-in-advance'
+            balance = transfer(
+                db, tipper, tippee, amount, context, team=team, unit_amount=unit_amount,
+                tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
+            )[0]
 
-        assert balance == 0  # TODO handle this
         self.set_attributes(balance=balance)
+
+        if balance != 0:
+            raise UnableToDistributeBalance(balance)
 
     def clear_tips_giving(self, cursor):
         """Zero out tips from a given user.
@@ -763,10 +774,11 @@ class Participant(Model, MixinTeam):
     def refund_balances(self):
         from liberapay.billing.transactions import refund_payin
         payins = self.get_refundable_payins()
-        balances = self.get_balances()
         for exchange in payins:
-            balance = balances[exchange.amount.currency]
-            amount = min(balance, exchange.amount)
+            balance = self.get_balance_in(exchange.amount.currency)
+            if balance == 0:
+                continue
+            amount = min(balance, exchange.refundable_amount)
             status, e_refund = refund_payin(self.db, exchange, amount, self)
             if status != 'succeeded':
                 raise TransferError(e_refund.note)
@@ -791,9 +803,10 @@ class Participant(Model, MixinTeam):
             WITH x AS (
                 SELECT e.*
                      , e.amount - coalesce_currency_amount((
-                           SELECT sum(e2.amount)
+                           SELECT sum(-e2.amount)
                              FROM exchanges e2
                             WHERE e2.participant = e.participant  -- indexed column
+                              AND e2.amount < 0
                               AND e2.refund_ref = e.id
                               AND e2.status = 'succeeded'
                        ), e.amount::currency) AS refundable_amount
@@ -805,9 +818,11 @@ class Participant(Model, MixinTeam):
                    AND ( r.network = 'mango-cc' AND e.timestamp > (now() - interval '11 months') OR
                          r.network = 'mango-ba' AND e.timestamp <= (now() - interval '9 weeks')
                        )
-              ORDER BY e.amount DESC
-            )
-            SELECT * FROM x WHERE refundable_amount > 0;
+                 )
+            SELECT *
+              FROM x
+             WHERE refundable_amount > 0
+          ORDER BY refundable_amount DESC;
         """, (self.id,))
 
 
@@ -1965,20 +1980,23 @@ class Participant(Model, MixinTeam):
         # Insert tip
         t = (cursor or self.db).one("""\
 
+            WITH current_tip AS (
+                     SELECT *
+                       FROM current_tips
+                      WHERE tipper=%(tipper)s
+                        AND tippee=%(tippee)s
+                 )
             INSERT INTO tips
-                        (ctime, tipper, tippee, amount, period, periodic_amount)
-                 VALUES ( COALESCE (( SELECT ctime
-                                        FROM tips
-                                       WHERE (tipper=%(tipper)s AND tippee=%(tippee)s)
-                                       LIMIT 1
-                                      ), CURRENT_TIMESTAMP)
+                        (ctime, tipper, tippee, amount, period, periodic_amount, paid_in_advance)
+                 VALUES ( COALESCE((SELECT ctime FROM current_tip), CURRENT_TIMESTAMP)
                         , %(tipper)s, %(tippee)s, %(amount)s, %(period)s, %(periodic_amount)s
+                        , (SELECT convert(paid_in_advance, %(currency)s) FROM current_tip)
                          )
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
-        """, dict(tipper=self.id, tippee=tippee.id, amount=amount,
+        """, dict(tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
                   period=period, periodic_amount=periodic_amount))._asdict()
 
         if update_self:
@@ -2098,6 +2116,7 @@ class Participant(Model, MixinTeam):
                      , t.mtime
                      , p AS tippee_p
                      , t.is_funded
+                     , t.paid_in_advance
                      , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
@@ -2207,7 +2226,7 @@ class Participant(Model, MixinTeam):
 
         CREATE_TEMP_TABLE_FOR_TIPS = """
             CREATE TEMP TABLE temp_tips ON COMMIT drop AS
-                SELECT ctime, tipper, tippee, amount, period, periodic_amount, is_funded
+                SELECT *
                   FROM current_tips
                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
                    AND amount > 0;
@@ -2219,10 +2238,12 @@ class Participant(Model, MixinTeam):
             -- dead and the live account, then we keep the highest tip. We don't
             -- sum the amounts to prevent the new one from being above the
             -- maximum allowed.
-            INSERT INTO tips (ctime, tipper, tippee, amount, period, periodic_amount, is_funded)
+            INSERT INTO tips
+                        (ctime, tipper, tippee, amount, period,
+                         periodic_amount, is_funded, paid_in_advance)
                  SELECT DISTINCT ON (tipper)
                         ctime, tipper, %(live)s AS tippee, amount, period,
-                        periodic_amount, is_funded
+                        periodic_amount, is_funded, paid_in_advance
                    FROM temp_tips
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.

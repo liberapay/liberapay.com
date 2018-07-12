@@ -32,7 +32,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.testing import EUR, Foobar
+from liberapay.testing import EUR, USD, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, Harness, MangopayHarness
 from liberapay.utils import NS
 
@@ -64,10 +64,12 @@ class TestPayouts(MangopayHarness):
 
     @mock.patch('mangopay.resources.BankAccount.get')
     def test_payout_amount_under_minimum(self, gba):
-        self.make_exchange('mango-cc', 8, 0, self.homer)
+        usd_user = self.make_participant('usd_user', main_currency='USD')
+        route = ExchangeRoute.insert(usd_user, 'mango-ba', 'fake ID')
+        self.make_exchange('mango-cc', USD(8), 0, usd_user)
         gba.return_value = self.bank_account_outside_sepa
         with self.assertRaises(FeeExceedsAmount):
-            payout(self.db, self.homer_route, EUR('0.10'))
+            payout(self.db, route, USD('0.10'))
 
     @mock.patch('liberapay.billing.transactions.test_hook')
     def test_payout_failure(self, test_hook):
@@ -366,7 +368,7 @@ class TestFees(MangopayHarness):
 
     def test_skim_credit_outside_sepa(self):
         actual = skim_credit(EUR('10.00'), self.bank_account_outside_sepa)
-        assert actual == (EUR('7.07'), EUR('2.93'), EUR('0.43'))
+        assert actual == (EUR('10.00'), EUR('0.00'), EUR('0.00'))
 
 
 class TestRecordExchange(MangopayHarness):

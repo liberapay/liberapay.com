@@ -498,6 +498,7 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     t_id = prepare_transfer(
         db, tipper, tippee, amount, context, wallet_from, wallet_to,
         team=kw.get('team'), invoice=kw.get('invoice'), bundles=kw.get('bundles'),
+        unit_amount=kw.get('unit_amount'),
     )
     tr = Transfer()
     tr.AuthorId = tipper_wallet.remote_owner_id
@@ -511,18 +512,19 @@ def transfer(db, tipper, tippee, amount, context, **kw):
 
 
 def prepare_transfer(db, tipper, tippee, amount, context, wallet_from, wallet_to,
-                     team=None, invoice=None, counterpart=None, refund_ref=None, **kw):
+                     team=None, invoice=None, counterpart=None, refund_ref=None,
+                     unit_amount=None, **kw):
     with db.get_cursor() as cursor:
         cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
         transfer = cursor.one("""
             INSERT INTO transfers
                         (tipper, tippee, amount, context, team, invoice, status,
-                         wallet_from, wallet_to, counterpart, refund_ref)
+                         wallet_from, wallet_to, counterpart, refund_ref, unit_amount)
                  VALUES (%s, %s, %s, %s, %s, %s, 'pre',
-                         %s, %s, %s, %s)
+                         %s, %s, %s, %s, %s)
               RETURNING *
         """, (tipper, tippee, amount, context, team, invoice,
-              wallet_from, wallet_to, counterpart, refund_ref))
+              wallet_from, wallet_to, counterpart, refund_ref, unit_amount))
         lock_bundles(cursor, transfer, **kw)
     return transfer.id
 
@@ -641,12 +643,12 @@ def record_transfer_result(db, t_id, tr, _raise=False):
 def _record_transfer_result(db, t_id, status, error=None):
     balance = None
     with db.get_cursor() as c:
-        tipper, tippee, amount, wallet_from, wallet_to = c.one("""
+        tipper, tippee, amount, wallet_from, wallet_to, context, team = c.one("""
             UPDATE transfers
                SET status = %s
                  , error = %s
              WHERE id = %s
-         RETURNING tipper, tippee, amount, wallet_from, wallet_to
+         RETURNING tipper, tippee, amount, wallet_from, wallet_to, context, team
         """, (status, error, t_id))
         if status == 'succeeded':
             # Update the balances
@@ -674,6 +676,23 @@ def _record_transfer_result(db, t_id, status, error=None):
                    AND locked_for = %s
              RETURNING *
             """, (tippee, wallet_to, tipper, t_id))
+            # Update the `tips.paid_in_advance` column
+            if context in ('tip-in-advance', 'take-in-advance'):
+                tip_target = team if context == 'take-in-advance' else tippee
+                assert tip_target
+                r = c.one("""
+                    WITH current_tip AS (
+                             SELECT id
+                               FROM current_tips
+                              WHERE tipper = %(tipper)s
+                                AND tippee = %(tip_target)s
+                         )
+                    UPDATE tips
+                       SET paid_in_advance = coalesce(paid_in_advance, zero(amount)) + %(amount)s
+                     WHERE id = (SELECT id FROM current_tip)
+                 RETURNING paid_in_advance
+                """, locals())
+                assert r, locals()
         else:
             # Unlock the bundles
             bundles = c.all("""
@@ -709,6 +728,11 @@ def refund_payin(db, exchange, amount, participant):
     fee = vat = amount.zero()
     with db.get_cursor() as cursor:
         cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
+        bundles = cursor.all("""
+            SELECT b.id
+              FROM cash_bundles b
+             WHERE b.owner = %s
+        """, (participant.id,))
         e_refund = cursor.one("""
             INSERT INTO exchanges
                         (participant, amount, fee, vat, route, status, refund_ref, wallet_id)
@@ -720,7 +744,7 @@ def refund_payin(db, exchange, amount, participant):
                         (timestamp, exchange, status, wallet_delta)
                  VALUES (%s, %s, 'pre', %s)
         """, (e_refund.timestamp, e_refund.id, e_refund.amount - e_refund.fee))
-        propagate_exchange(cursor, participant, e_refund, None, e_refund.amount)
+        propagate_exchange(cursor, participant, e_refund, None, e_refund.amount, bundles=bundles)
 
     # Submit the refund
     wallet = db.one("SELECT * FROM wallets WHERE remote_id = %s", (exchange.wallet_id,))
