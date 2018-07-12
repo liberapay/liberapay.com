@@ -97,7 +97,7 @@ class MoneyBasket(object):
 
     def _compare(self, op, other):
         if isinstance(other, self.__class__):
-            return all(op(a, b) for a, b in zip(self.amounts, other.amounts))
+            return all(op(a, b) for a, b in zip(self.amounts.values(), other.amounts.values()))
         elif isinstance(other, Money):
             return op(self.amounts[other.currency], other.amount)
         elif other == 0:
@@ -112,12 +112,6 @@ class MoneyBasket(object):
 
     def __gt__(self, other):
         return self._compare(operator.gt, other)
-
-    def __le__(self, other):
-        return self._compare(operator.le, other)
-
-    def __lt__(self, other):
-        return self._compare(operator.lt, other)
 
     def __add__(self, other):
         if other is 0:
