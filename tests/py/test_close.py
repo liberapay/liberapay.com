@@ -154,6 +154,16 @@ class TestClosing(FakeTransfersHarness):
         assert bob.refetch().balance == EUR('0.01')
         assert carl.refetch().balance == 0
 
+    def test_dbtd_distributes_to_team_of_one_with_zero_take(self):
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice', balance=EUR('0.12'))
+        bob = self.make_participant('bob')
+        alice.set_tip_to(team, EUR('3.00'))
+        team.add_member(bob)
+        alice.distribute_balances_to_donees()
+        assert alice.balance == 0
+        assert bob.refetch().balance == EUR('0.12')
+
 
     # ctg - clear_tips_giving
 

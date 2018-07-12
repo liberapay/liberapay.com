@@ -25,7 +25,7 @@ from psycopg2 import IntegrityError
 import requests
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_ZERO,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_UNIT, D_ZERO,
     DONATION_LIMITS, EMAIL_RE,
     EMAIL_VERIFICATION_TIMEOUT, EVENTS,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
@@ -576,10 +576,14 @@ class Participant(Model, MixinTeam):
         for tip in tips:
             if tip.kind == 'group':
                 tip.team = Participant.from_id(tip.tippee)
+                takes = tip.team.get_current_takes()
                 tip.takes = [
-                    t for t in tip.team.get_current_takes()
+                    t for t in takes
                     if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
                 ]
+                if len(takes) == 1 and len(tip.takes) == 1 and tip.takes[0]['amount'] == 0:
+                    # Team of one with a zero take
+                    tip.takes[0]['amount'].amount = D_UNIT
                 tip.total_takes = MoneyBasket(*[t['amount'] for t in tip.takes])
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
         transfers = []
