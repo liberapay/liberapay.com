@@ -628,6 +628,10 @@ msgid "You're sending requests at an unusually fast pace. Please retry in a few 
 msgstr "Esteu enviant massa peticions a un ritme inusualment ràpid. Torneu a intentar-ho en una segons i contacteu amb support@liberapay.com si el problema persisteix."
 
 #, python-brace-format
+msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "«{0}» no sembla pas un identificador vàlid d'usuari en {platform}."
 
@@ -2202,12 +2206,15 @@ msgstr "Estem executant el procés del dia de paga ara mateix i no podem tancar 
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Teniu {0} a la cartera. Què hem de fer-ne?"
 
-msgid "Withdraw it"
-msgstr "Retira-ho"
-
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
 msgstr "Dona-ho a les {0}persones a qui he fet donatius{1}"
+
+msgid "Refund it to my card or bank account"
+msgstr ""
+
+msgid "Withdraw it to my bank account"
+msgstr ""
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Si cap de les opcions no us és útil, contacteu amb support@liberapay.com."
@@ -2284,6 +2291,12 @@ msgstr "No hi ha cap quantitat de donatius."
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
 msgstr "S'ha aturat el vostre donatiu a {0}."
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Your wallet is empty."
+msgstr ""
 
 msgid "Export History"
 msgstr "Exporta l'historial"
@@ -2392,6 +2405,12 @@ msgstr "missatge d'error: {0}"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "donatiu anònim per al vostre rol en l'equip {0}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "donation refund"
 msgstr "reemborsament de donatiu"
@@ -2720,12 +2739,11 @@ msgid "Which currency do you want to withdraw?"
 msgstr "En quina divisa voleu retirar?"
 
 #, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr "Retirar euros a un compte bancari SEPA és gratuït. Les transferències a altres països costen {0} cadascuna. Les transferències en dòlars dels EUA costen {1} cadascuna independentment del país de destí."
+msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
+msgstr ""
 
-#, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr "La retirada d'euros en un compte bancari SEPA és gratuït, les transferències en altres països  costen {0} cadascuna."
+msgid "There are no fees when withdrawing euros to your bank account."
+msgstr ""
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."

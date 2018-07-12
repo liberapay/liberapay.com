@@ -628,6 +628,10 @@ msgid "You're sending requests at an unusually fast pace. Please retry in a few 
 msgstr "Estás enviando peticiones a un ritmo inusualmente rápido. Por favor, reinténtalo en unos segundos y contacta support@liberapay.com si el problema persiste."
 
 #, python-brace-format
+msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "'{0}' no parece ser un identificador válido en {platform}."
 
@@ -2202,12 +2206,15 @@ msgstr "Perdona, en este momento estamos ejecutando el día de pago, y no podemo
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Tienes {0} en su cartera. ¿Qué debemos hacer con él?"
 
-msgid "Withdraw it"
-msgstr "Retirarlo"
-
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
 msgstr "Dárselo a las {0}personas a las que estoy donando{1}"
+
+msgid "Refund it to my card or bank account"
+msgstr ""
+
+msgid "Withdraw it to my bank account"
+msgstr ""
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Si no te sirve ninguna de estas opciones, por favor, ponte en contacto con support@liberapay.com."
@@ -2284,6 +2291,12 @@ msgstr "Falta la cantidad de la donación."
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
 msgstr "Tu donación a {0} a sido cancelada."
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Your wallet is empty."
+msgstr ""
 
 msgid "Export History"
 msgstr "Exportar historial"
@@ -2392,6 +2405,12 @@ msgstr "mensaje de error: {0}"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "donación anónima por tu papel en el equipo de {0}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "donation refund"
 msgstr "restitución de donación"
@@ -2720,12 +2739,11 @@ msgid "Which currency do you want to withdraw?"
 msgstr "¿Qué divisa deseas retirar?"
 
 #, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr "Retirar euros a una cuenta SEPA es gratis, las transferencias a otros países cuestan {0} cada una. Retirar dólares estadounidenses cuesta {1} por transferencia independientemente del país de destino."
+msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
+msgstr ""
 
-#, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr "La retirada de euros a una cuenta bancaria SEPA es gratuita, las transferencias a otros países cuestan {0} cada una."
+msgid "There are no fees when withdrawing euros to your bank account."
+msgstr ""
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."

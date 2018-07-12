@@ -627,6 +627,10 @@ msgid "You're sending requests at an unusually fast pace. Please retry in a few 
 msgstr "您的网络请求发送次数异常频繁。请在几秒后重试，如果问题依旧存在，请联系 support@liberapay.com。"
 
 #, python-brace-format
+msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "‘{0}’不像是 {platform}的有效用戶名稱。"
 
@@ -2193,12 +2197,15 @@ msgstr "抱歉，我們正在執行付款日作業，因此無法關閉帳戶。
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "你的電子錢包裏有 {0} 。我們要如何處置它呢？"
 
-msgid "Withdraw it"
-msgstr "提領"
-
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
 msgstr "把它交付給 {0}I 捐贈給 {1}"
+
+msgid "Refund it to my card or bank account"
+msgstr ""
+
+msgid "Withdraw it to my bank account"
+msgstr ""
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "如果這些選項都不適合你，請聯絡用戶支援 support@liberapay.com。"
@@ -2275,6 +2282,12 @@ msgstr "找不到捐款金額。"
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
 msgstr "你給予 {0} 的捐款已停止。"
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Your wallet is empty."
+msgstr ""
 
 msgid "Export History"
 msgstr "導出歷史記錄"
@@ -2379,6 +2392,11 @@ msgstr "錯誤訊息： {0}"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "因你在 {0} 團隊的角色，所得到的匿名捐款"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
 
 msgid "donation refund"
 msgstr "捐贈退款"
@@ -2705,12 +2723,11 @@ msgid "Which currency do you want to withdraw?"
 msgstr "你想使用哪種貨幣取領？"
 
 #, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr "向SEPA帳戶取領歐元免手續費，向其他國家轉帳手續費每次{0}。用美元取領，無論轉往何國，手續費每次{1}。"
+msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
+msgstr ""
 
-#, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr "向SEPA帳戶取領歐元免手續費，向其他國家轉帳手續費每次{0}。"
+msgid "There are no fees when withdrawing euros to your bank account."
+msgstr ""
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."

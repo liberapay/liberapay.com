@@ -629,6 +629,10 @@ msgid "You're sending requests at an unusually fast pace. Please retry in a few 
 msgstr "Lähetät pyyntöjä epätavallisen nopeaan tahtiin. Yritä muutaman sekunnin kuluttua uudelleen. Ongelman jatkuessa ota yhteys osoitteeseen support@liberaypay.com."
 
 #, python-brace-format
+msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "”{0}” ei vaikuta olevan validi käyttäjätunnus {platform}-palvelussa."
 
@@ -2203,12 +2207,15 @@ msgstr "Pahoittelemme, mutta meillä on juuri nyt käynnissä Maksupäivä. Maks
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Lompakossasi on {0}. Mitä meidän pitäisi tehdä sen kanssa?"
 
-msgid "Withdraw it"
-msgstr "Nosta tämä summa"
-
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
 msgstr "Anna se niille {0}joille lahjoitan{1}"
+
+msgid "Refund it to my card or bank account"
+msgstr ""
+
+msgid "Withdraw it to my bank account"
+msgstr ""
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Jos kumpikaan näistä ei käy, ota yhteyttä asiakaspalveluun: support@liberapay.com (englanniksi)."
@@ -2285,6 +2292,12 @@ msgstr "Lahjoitussumma puuttuu."
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
 msgstr "Lahjoitus käyttäjälle {0} on pysäytetty."
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Your wallet is empty."
+msgstr ""
 
 msgid "Export History"
 msgstr "Lataa historia"
@@ -2393,6 +2406,12 @@ msgstr "virheilmoitus: {0}"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "nimetön lahjoitus roolistasi ryhmässä {0}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "donation refund"
 msgstr "lahjoituksen palautus"
@@ -2721,12 +2740,11 @@ msgid "Which currency do you want to withdraw?"
 msgstr "Mitä valuuttaa haluat nostaa?"
 
 #, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr "Eurojen nostaminen SEPA-tileille on ilmaista; muihin maihin siirrot maksavat {0} / kpl. Yhdysvaltain dollarien nostaminen maksaa {1} siirtoa kohti kohdemaasta riippumatta."
+msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
+msgstr ""
 
-#, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr "Eurojen nostaminen SEPA-tileille on ilmaista; muihin maihin siirrot maksavat {0} kpl."
+msgid "There are no fees when withdrawing euros to your bank account."
+msgstr ""
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."

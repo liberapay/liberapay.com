@@ -627,6 +627,10 @@ msgid "You're sending requests at an unusually fast pace. Please retry in a few 
 msgstr "너무 빠른 속도로 요청을 보내고 계십니다. 몇 초 후에 다시 시도해 보시고, 문제가 계속되면 support@liberapay.com 으로 연락해 주세요."
 
 #, python-brace-format
+msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "'{0}'은(는) {platform} 에서 유효한 사용자 ID로 보이지 않습니다."
 
@@ -2192,12 +2196,15 @@ msgstr "죄송합니다, 현재 지출일 일정을 처리하고 있으며, 아�
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "지갑에 {0} 이 있습니다. 어떻게 할까요?"
 
-msgid "Withdraw it"
-msgstr "출금하기"
-
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
 msgstr "{0}기부하는 사람들{1}에게 주기"
+
+msgid "Refund it to my card or bank account"
+msgstr ""
+
+msgid "Withdraw it to my bank account"
+msgstr ""
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "두 선택지 모두 불가능한 경우 support@liberapay.com 으로 연락해 주세요."
@@ -2274,6 +2281,12 @@ msgstr "기부 금액이 없습니다."
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
 msgstr "{0} 에게 하던 기부가 중단되었습니다."
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Your wallet is empty."
+msgstr ""
 
 msgid "Export History"
 msgstr "역사 내보내기"
@@ -2378,6 +2391,11 @@ msgstr "에러 메시지: {0}"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "{0} 팀에서의 역할에 따른 익명 기여"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
 
 msgid "donation refund"
 msgstr "기여 환불"
@@ -2703,12 +2721,11 @@ msgid "Which currency do you want to withdraw?"
 msgstr "어느 화폐로 출금하시겠습니까?"
 
 #, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr "유로를 SEPA 계좌로 입금하는 데에는 수수료가 들지 않고, 다른 국가로 이체하는 데에는 {0} 만큼의 수수료가 발생합니다. 미국 달러를 인출하는 경우 거래당 {1} 만큼의 수수료가 도착지 국가와 관계없이 부과됩니다."
+msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
+msgstr ""
 
-#, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr "유로를 SEPA 계좌로 인출하는 것은 무료이며, 다른 국가로의 이체는 {0} 만큼의 수수료가 부과됩니다."
+msgid "There are no fees when withdrawing euros to your bank account."
+msgstr ""
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."

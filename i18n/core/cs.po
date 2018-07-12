@@ -629,6 +629,10 @@ msgid "You're sending requests at an unusually fast pace. Please retry in a few 
 msgstr ""
 
 #, python-brace-format
+msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "„{0}“ se nezdá být platný identifikátor uživatele na {platform}."
 
@@ -2216,12 +2220,15 @@ msgstr "Omlouváme se, ale dnes zpracováváme platby, a během toho nemůžeme 
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "V peněžence máte {0}. Co s tím máme dělat?"
 
-msgid "Withdraw it"
-msgstr "Vybrat to"
-
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
 msgstr "Dejte to lidem, {0}kterým přispívám{1}"
+
+msgid "Refund it to my card or bank account"
+msgstr ""
+
+msgid "Withdraw it to my bank account"
+msgstr ""
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Pokud se vám ani jedna z možností nelíbí, prosíme obraťte se na support@liberapay.com."
@@ -2298,6 +2305,12 @@ msgstr "Částka příspěvku chybí."
 #, python-brace-format
 msgid "Your donation to {0} has been stopped."
 msgstr "Váš dar pro {0} byl zastaven."
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Your wallet is empty."
+msgstr ""
 
 msgid "Export History"
 msgstr "Exportovat historii"
@@ -2410,6 +2423,13 @@ msgstr "chybová zpráva: {0}"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "anonymní dar za vaši roli v týmu {0}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "donation refund"
 msgstr "vrácení daru"
@@ -2742,12 +2762,11 @@ msgid "Which currency do you want to withdraw?"
 msgstr "Jakou měnu chcete vybrat?"
 
 #, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each. Withdrawing US dollars costs {1} per transfer regardless of the destination country."
-msgstr "Výběr EUR na bankovní účet SEPA je zdarma, převody do jiných zemí stojí {0}. Výběr USD stojí {1} bez ohledu na cílovou zemi."
+msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
+msgstr ""
 
-#, python-brace-format
-msgid "Withdrawing euros to a SEPA bank account is free, transfers to other countries cost {0} each."
-msgstr "Výběr EUR na bankovní účet SEPA je zdarma, převody do jiných zemí stojí {0}."
+msgid "There are no fees when withdrawing euros to your bank account."
+msgstr ""
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
