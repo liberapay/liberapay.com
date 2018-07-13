@@ -599,6 +599,7 @@ class Participant(Model, MixinTeam):
             total = Money.sum((t.amount for t in tips_in_this_currency), currency)
             distributed = ZERO[currency]
             initial_balance = wallet.balance
+            transfers_in_this_currency = []
 
             if not total:
                 continue
@@ -614,22 +615,30 @@ class Participant(Model, MixinTeam):
                     fuzzy_takes_sum = tip.total_takes.fuzzy_sum(tip.amount.currency)
                     for take in tip.takes:
                         nominal = take['amount']
+                        fuzzy_nominal = nominal.convert(tip.amount.currency)
+                        take_percentage = fuzzy_nominal / fuzzy_takes_sum
                         actual = min(
-                            (pro_rated * (nominal / fuzzy_takes_sum)).round_up(),
+                            (pro_rated * take_percentage).round_up(),
                             balance
                         )
                         if actual == 0:
                             continue
                         balance -= actual
-                        transfers.append([take['member_id'], actual, team_id, wallet, nominal])
-                    assert balance == 0
+                        unit_amount = (tip.amount * take_percentage).round_up()
+                        transfers_in_this_currency.append(
+                            [take['member_id'], actual, team_id, wallet, unit_amount]
+                        )
                 else:
-                    transfers.append([tip.tippee, pro_rated, None, wallet, tip.amount])
+                    transfers_in_this_currency.append(
+                        [tip.tippee, pro_rated, None, wallet, tip.amount]
+                    )
                 distributed += pro_rated
 
             diff = initial_balance - distributed
-            if diff != 0 and transfers:
-                transfers[0][1] += diff  # Give it to the first receiver.
+            if diff != 0 and transfers_in_this_currency:
+                transfers_in_this_currency[0][1] += diff  # Give it to the first receiver.
+
+            transfers.extend(transfers_in_this_currency)
 
         if not transfers:
             raise UnableToDistributeBalance(self.balance)
