@@ -84,6 +84,11 @@ if weekly > 0:
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
 
 if request.method == 'POST':
+    if not user.is_admin:
+        raise response.error(403, _(
+            "This payment method is currently unavailable. We apologize for the inconvenience."
+        ))
+
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
             "Why are you trying to put more money into your wallet? "
