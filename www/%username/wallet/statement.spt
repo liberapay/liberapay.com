@@ -230,6 +230,8 @@ output.body = render(globals(), allow_partial_i18n=False)
                     {{ _("debt repayment") }}
                 % elif context == 'swap'
                     {{ _("currency exchange") }}
+                % elif context == 'fee-refund'
+                    {{ _("fee refund") }}
                 % endif
             % else
                 % set to = event['username']
@@ -270,6 +272,8 @@ output.body = render(globals(), allow_partial_i18n=False)
                     {{ _("debt repayment") }}
                 % elif context == 'swap'
                     {{ _("currency exchange") }}
+                % elif context == 'fee-refund'
+                    {{ _("fee refund") }}
                 % endif
             % endif
             </td>

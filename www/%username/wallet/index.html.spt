@@ -312,6 +312,8 @@ if user.is_admin:
                 {{ _("debt repayment") }}
             % elif context == 'swap'
                 {{ _("currency exchange") }}
+            % elif context == 'fee-refund'
+                {{ _("fee refund") }}
             % endif
         % else
             % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
@@ -353,6 +355,8 @@ if user.is_admin:
                 {{ _("debt repayment") }}
             % elif context == 'swap'
                 {{ _("currency exchange") }}
+            % elif context == 'fee-refund'
+                {{ _("fee refund") }}
             % endif
         % endif
         % if event['status'] != 'succeeded'
