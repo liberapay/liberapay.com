@@ -1,7 +1,7 @@
 {{ _("Liberapay is in trouble") }}
 
 [---] text/html
-<p>_("""\
+<p>{{ _("""\
 Our payment processor (Mangopay) is throwing us out, so we recommend that you {link1_start}evacuate the money from your account{link_end} before July 26th.
 
 Clicking on the link above will bring you to a new page titled “Emptying your wallet” and ask you to choose between two options.
@@ -26,4 +26,4 @@ You can find more information in {link3_start}this blog post{link_end}, and as a
 , link2_start='<a href="https://liberapay.com/about/me/receiving/">'|safe
 , link3_start='<a href="https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82">'|safe
 , link_end='</a>'|safe
-).strip().replace('\n\n', '</p>\n<p>'|safe)</p>
+).strip().replace('\n\n', '</p>\n<p>'|safe) }}</p>
