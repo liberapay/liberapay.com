@@ -27,8 +27,7 @@
     <label>
         <span>{{ _("Postal Code") }}</span>
         <input name="{{ prefix }}Address.PostalCode" class="form-control" required
-               size=6 pattern="[a-zA-Z0-9]+" title="{{ _('Alphanumeric (with no spaces)') }}"
-               value="{{ saved.PostalCode or '' }}" />
+               size=6 value="{{ saved.PostalCode or '' }}" />
     </label><br>
 
     <label>
