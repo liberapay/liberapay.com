@@ -1025,7 +1025,8 @@ class Participant(Model, MixinTeam):
                     context['body'] = markdown.render(context['body']).strip()
                 return spt[t].render(context).strip()
         else:
-            base_spt = context.get('base_spt', 'base')
+            base_spt = None if spt_name.startswith('once/') else 'base'
+            base_spt = context.get('base_spt', base_spt)
             base_spt = website.emails[base_spt] if base_spt else None
             bodies = {}
             def render(t, context):
