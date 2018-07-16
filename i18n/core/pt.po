@@ -161,7 +161,7 @@ msgid "Unsubscribe"
 msgstr "Cancelar Inscrição"
 
 msgid "Liberapay is in trouble"
-msgstr ""
+msgstr "O Liberapay está em apuros"
 
 #, python-brace-format
 msgid ""
@@ -185,6 +185,25 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
+"O nosso processador de pagamentos (Mangopay) está-nos a expulsar, por isso recomendamos que {link1_start}retire o dinheiro da sua conta{link_end} antes de 26 de julho.\n"
+"\n"
+"Clicando no link acima irá levá-lo a uma nova página intitulada \"Esvaziar sua carteira\" e pedir para escolher entre duas opções.\n"
+"\n"
+"Se usa o Liberapay como um doador, recomenda-se a primeira escolha, especialmente se pretende continuar a usar o Liberapay. Esta primeira opção distribui todo o dinheiro da sua carteira pelas as pessoas que eventualmente o iriam receber. Os destinatários serão capazes de ver que esta explosão de receita corresponde a várias semanas de doações.\n"
+"\n"
+"Por exemplo, se está a doar 1€ por semana a 2 criadores e tem 40€ na sua carteira, então cada criador receberá 20€ e daqui a 20 semanas irá receberá nosso e-mail habitual, lembrando-lhe que é hora de adicionar dinheiro novamente.\n"
+"\n"
+"Por favor note que o desembolso pode falhar por várias razões. Se receber uma mensagem de erro como \"Falha na tentativa de distribuir todo o dinheiro da sua carteira: faltam XX.XX.\", então o problema está provavelmente no lado do destinatário, por exemplo, alguém que ainda não preencheu o formulário de identidade ou de uma equipa que ainda não definiu como devem os rendimentos ser divididos por cada membro.\n"
+"\n"
+"A outra opção é ter o seu dinheiro de volta, se possível através de um reembolso, caso contrário por transferi-los para a sua conta bancária.\n"
+"\n"
+"Se recebe doações no Liberapay, pode querer esperar uma semana antes de retirar os seus rendimentos para dar aos seus patronos a oportunidade de transferir o restante das suas doações das carteiras deles para a sua.\n"
+"\n"
+"Vamos informá-lo assim que a integração com um novo processador de pagamentos estiver completa e se há alguma coisa que precisa de fazer para começar a receber doações no Liberapay novamente.\n"
+"\n"
+"Se é um membro de uma equipa deve garantir que a sua parte está definida e atualizada. Pode fazer isso na {link2_start}sua página \"Receber\"{link_end}.\n"
+"\n"
+"Pode encontrar mais informações {link3_start}neste blog post{link_end} e, como sempre, pode responder a este e-mail se precisar de ajuda.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "A password da sua conta Liberapay é fraca"
@@ -655,7 +674,7 @@ msgstr "Está a enviar pedidos a um ritmo invulgarmente rápido. Por favor volte
 
 #, python-brace-format
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr ""
+msgstr "Falha na tentativa de distribuir todo o dinheiro da sua carteira: faltam {money_amount}."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -2237,10 +2256,10 @@ msgid "Give it to the {0}people I donate to{1}"
 msgstr "Dê isso ao povo {0} eu doaria para {1}"
 
 msgid "Refund it to my card or bank account"
-msgstr ""
+msgstr "Reembolsá-lo ao meu cartão ou conta bancária"
 
 msgid "Withdraw it to my bank account"
-msgstr ""
+msgstr "Transferi-lo para a minha conta bancária"
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Se nenhuma das opções funciona para você, entre em contato com support@liberapay.com."
@@ -2319,10 +2338,10 @@ msgid "Your donation to {0} has been stopped."
 msgstr "Sua doação para {0} foi cessada."
 
 msgid "Emptying your wallet"
-msgstr ""
+msgstr "Esvaziar a carteira"
 
 msgid "Your wallet is empty."
-msgstr ""
+msgstr "A sua carteira está vazia."
 
 msgid "Export History"
 msgstr "Exporte o Histórico"
@@ -2435,8 +2454,8 @@ msgstr "doação anónima pelo seu papel na equipa {0}"
 #, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n}semana de {money_amount}"
+msgstr[1] "{n} semanas de {money_amount}"
 
 msgid "donation refund"
 msgstr "restituição de doação"
@@ -2766,10 +2785,10 @@ msgstr "Que moeda deseja levantar?"
 
 #, python-brace-format
 msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr ""
+msgstr "Levantar euros é gratuito. Levantar dólares custa {0} por transferência, independentemente do país de destino."
 
 msgid "There are no fees when withdrawing euros to your bank account."
-msgstr ""
+msgstr "Não há taxas quando levanta euros para a sua conta bancária."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."

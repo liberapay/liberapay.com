@@ -162,7 +162,7 @@ msgid "Unsubscribe"
 msgstr "Відмінити підписку"
 
 msgid "Liberapay is in trouble"
-msgstr ""
+msgstr "Liberapay в біді"
 
 #, python-brace-format
 msgid ""
@@ -186,6 +186,25 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
+"{link1_start}Наш платіжний процесор оплати (Mangopay) викидує нас, тому ми рекомендуємо вам {link1_start}почати забирати гроші з вашого аккаунту{link_end} до 26 Липня.\n"
+"\n"
+"Натиснувши на посилання вище, ви перейдете на нову сторінку під назвою \"Очищення гаманця\", та запросить вас обрати між двома варіантами.\n"
+"\n"
+"Якщо ви використовуєте Liberapay як донор, перший варіант є рекомендованим, особливо якщо ви бажаєте використовувати Liberapay і надалі. Цей перший варіант росповсюджує гроші з вашого гаманця особам, які звичайно отримають їх з часом. Одержувачі зможуть побачити раптовий імпульс прибутку, який співвідноситься декільком тижням пожертвувань.\n"
+"\n"
+"Наприклад, якщо ви жертвуєте $1 в тиждень двом творцям, та ви маєте $40 в вашому гаманці, тоді кожний творець зможе отримати $20, та через 20 тижнів ви отримаєте звичайного листа, нагадуючи, що прийшов час знову додати гроші.\n"
+"\n"
+"Будь ласка, зверніть увагу, що виплати може потерпіти невдачу з різних причин. Якщо ви отримаєте повідомлення про помилку як \"Спроба розповсюдити усі гроші з вашого аккаунту не вдалася: залишилося ХХ.ХХ.\", тоді проблема ймовірно на стороні одержувача, наприклад хтось не заповнив форму особистості або команда яка ще не вирішила яким чином прибуток повинен розподілятися між учасниками команди.\n"
+"\n"
+"Інший варіант це отримати гроші назад, якщо можливо через відшкодовування, інакше вивівши гроші на банківський рахунок.\n"
+"\n"
+"Якщо ви отримуєте пожертвування в Liberapay, ви можете почекати тиждень, перш ніж почати виводити ваш прибуток, задля того, щоб дати можливість патронам перевести залишки їх пожертвуваннь з іх гаманців до вашого.\n"
+"\n"
+"Ми проінформуємо вам якнайшвидше, коли інтеграція з новим платіжним процесором буде завершено та повідомимо чи є щось, що потрібно зробити, аби почати знову отримувати пожертвування в Liberapay.\n"
+"\n"
+"Якщо ви є учасником команди, ви повинні перевірити що ваша доля встановлена та оновлена. Ви можете зробити це через {link2_start}вашу сторінку \"Прибутки\"{link_end}.\n"
+"\n"
+"Ви можете знайти більше інформаціі в {link3_start}в цьому блог повідомленні{link_end}, та ви як завжди можете відповісти на цей лист, якщо вам потрібна допомога.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "Пароль вашого Liberapay аккаунта є слабким"
@@ -656,7 +675,7 @@ msgstr "Ви надсилаєте запити незвично швидкими
 
 #, python-brace-format
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr "Спроба розподілити гроші в вашому гаманці не вдалася: залишилося {money_amount}."
+msgstr "Спроба розповсюдити усі гроші з вашого аккаунту не вдалася: залишилося {money_amount}."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -2247,10 +2266,10 @@ msgid "Give it to the {0}people I donate to{1}"
 msgstr "Віддати її {0} людям, котрих я спонсорую {1}"
 
 msgid "Refund it to my card or bank account"
-msgstr "Повернути їх до вашого банковського аккаунта або картки"
+msgstr "Повернути їх до вашої банківської картки або рахунку"
 
 msgid "Withdraw it to my bank account"
-msgstr "Зняти їх до мого банковського аккаунту"
+msgstr "Зняти їх до мого банківського рахунку"
 
 msgid "If neither option works for you, please contact support@liberapay.com."
 msgstr "Якщо нічого з цих варіантів не підходить, зв'яжіться з support@liberapay.com."
@@ -2329,7 +2348,7 @@ msgid "Your donation to {0} has been stopped."
 msgstr "Ваше пожертвування {0} зупинено."
 
 msgid "Emptying your wallet"
-msgstr "Спорожнюємо ваш гаманець"
+msgstr "Очищення гаманця"
 
 msgid "Your wallet is empty."
 msgstr "Ваш гаманець пустий."
@@ -2449,9 +2468,9 @@ msgstr "анонімне пожертвування за вашу роль в к
 #, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} неділя з {money_amount}"
+msgstr[0] "{n} тиждень з {money_amount}"
 msgstr[1] ""
-msgstr[2] "{n} неділь з {money_amount}"
+msgstr[2] "{n} тижнів з {money_amount}"
 
 msgid "donation refund"
 msgstr "відшкодування пожертвувань"
@@ -2784,14 +2803,14 @@ msgstr "В якій валюті ви бажаєте вивести?"
 
 #, python-brace-format
 msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr "Зняття в євро безкоштовне. Зняття в долларах США буде коштувати {0}за переказ, незалежно від країни призначення."
+msgstr "Зняття в євро безкоштовне. Зняття в долларах США буде коштувати {0} за переказ, незалежно від країни призначення."
 
 msgid "There are no fees when withdrawing euros to your bank account."
-msgstr "Комісії при зняття євро в ваш банківський аккаунт немає."
+msgstr "Комісії при зняття євро в ваш банківський рахунок немає."
 
 #, python-brace-format
 msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr "Переказ доларів США коштує {0} за переказ, незалежно від країни отримувача."
+msgstr "Переказ доларів США коштує {0} за переказ, незалежно від країни одержувача."
 
 #, python-brace-format
 msgid "You should keep at least {0} in your wallet to fund your donations this week."
