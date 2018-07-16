@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2018-07-16 08:43+0000\n"
+"Last-Translator: Austin Huang <austinhuang0131@gmail.com>\n"
 "Language-Team: Chinese (https://hosted.weblate.org/projects/liberapay/core/zh/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.1-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -16,7 +19,7 @@ msgid "Greetings,"
 msgstr "欢迎,"
 
 msgid "Something not right? Reply to this email for help."
-msgstr "有什么问题吗？回复此电子邮件以获取帮助。"
+msgstr "遇到问题了吗？回复此电子邮件以获取帮助。"
 
 msgid "Change your email settings"
 msgstr "改變電子郵件設定"
@@ -160,7 +163,7 @@ msgid "Unsubscribe"
 msgstr "取消訂閱"
 
 msgid "Liberapay is in trouble"
-msgstr ""
+msgstr "Liberapay有麻烦了"
 
 #, python-brace-format
 msgid ""
@@ -184,9 +187,28 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
+"我们的支付服务提供商（Mangopay）正在抛弃我们，所以我们建议您在7月26日前{link1_start}从您的钱包中取出所有余额{link_end}。\n"
+"\n"
+"点击以上链接后您会被带到一个名为“掏空您的钱包”的页面且询问您在以下两种方案中选择：\n"
+"\n"
+"若您以资助者方式使用Liberapay，尤其您希望继续使用Liberapay，我们则推荐第一种方案。该方案将您所有的余额分配至您平时支持的创作者手中。收款的创作者会立即收到相当于数周的捐款额的大笔收入。\n"
+"\n"
+"举例说明，若您向两位创作者每周捐献$1，且您的钱包还剩$40，每位创作者则会收到$20，且20周后您将会在电邮中收到我们平时的充值通知。\n"
+"\n"
+"请注意支付可能会由于各种原因失败。若您收到“钱包余额分配失败：XX.XX仍在您的钱包中。”，则该问题应存在于收款者一侧，如未完成身份验证的个人，或是未设置成员收入分成的团队。\n"
+"\n"
+"另一种方案则是提现，若情况允许则通过信用卡退款，反则可向银行账户退款。\n"
+"\n"
+"若您在Liberapay上收到捐款，您需要等待一周才能提现，来保证您的支持者能有机会将他们的钱包余额打入您的钱包中。\n"
+"\n"
+"我们会在第一时间通知新支付服务提供商的启用，并且告诉您是否需要采取下一步行动来继续收到捐款。\n"
+"\n"
+"若您是一个团队的成员，您需确保最新的成员分成设定。您可通过{link2_start}“收款”页面{link_end}来设置。\n"
+"\n"
+"您可在{link3_start}本文{link_end}中了解更多信息，且您可回复本邮件来获取帮助。\n"
 
 msgid "The password of your Liberapay account is weak"
-msgstr "您的Liberapay密码安全比较不安全"
+msgstr "您的Liberapay密码安全相对不安全"
 
 msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
 msgstr "我们检测到您输入了一个极其常用的的密码。它在被泄露的数据库中出现多次，因此该密码非常不安全。"
@@ -555,7 +577,7 @@ msgid "You are not allowed to add another email address right now, please try ag
 msgstr "你現在不能增加其他電子郵件地址，請在幾天後重試。"
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "您的IP地址或国家最近已尝试登录多次。请在一小时后重试，若问题仍旧存在请联系support@liberapay.com。"
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
 msgstr "你已用完透過電子郵件帳號登入的次數，請明日重試，或聯繫 support@liberapay.com。"
@@ -622,11 +644,11 @@ msgstr "\"{0}\" 不是一個有效的數字。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
-msgstr ""
+msgstr "“{0}”不是一个使用正确格式的数字。或许您想输入{list_of_suggestions}？"
 
 #, python-brace-format
 msgid "\"{0}\" is not a properly formatted number."
-msgstr ""
+msgstr "“{0}”不是一个使用正确格式的数字。"
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -654,7 +676,7 @@ msgstr "您的网络请求发送次数异常频繁。请在几秒后重试，如
 
 #, python-brace-format
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr ""
+msgstr "钱包余额分配失败：{money_amount}仍在您的钱包中。"
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1056,9 +1078,8 @@ msgstr "組織"
 msgid "Individuals"
 msgstr "個人"
 
-#, fuzzy
 msgid "Unclaimed Donations"
-msgstr "捐款承諾"
+msgstr "未领取的捐款"
 
 msgid "Repositories"
 msgstr "代碼庫"
@@ -1087,9 +1108,9 @@ msgstr "隱私"
 msgid "Switch to another language"
 msgstr "切換其它語言"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "({x_percent} translated)"
-msgstr "({x_percent} 完成)"
+msgstr "({x_percent} 已翻译)"
 
 msgid "Help us translate Liberapay"
 msgstr "協助翻譯 Liberapay"
@@ -1218,7 +1239,7 @@ msgid "View"
 msgstr "檢視"
 
 msgid "The changes have been saved."
-msgstr ""
+msgstr "更改已保存。"
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1616,20 +1637,20 @@ msgid "Username"
 msgstr "用戶名稱"
 
 msgid "A unique name, required for users who wish to receive donations."
-msgstr ""
+msgstr "一个唯一的用户名，想要收款的用户必须填写该项。"
 
 #, python-brace-format
 msgid "Maximum length is {0}."
 msgstr "最大長度是 {0}。"
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
-msgstr ""
+msgstr "允许字符：拉丁字母及数字，点（.），横杠（-），及下划线（_）。"
 
 msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr "你是否從其它的網站連到自己的Liberapay介紹頁？確認更新了這些連結！"
 
 msgid "Name (optional)"
-msgstr ""
+msgstr "名字（可选）"
 
 msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
 msgstr ""
