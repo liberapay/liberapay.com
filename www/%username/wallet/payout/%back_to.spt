@@ -92,11 +92,7 @@ if show_form:
             ba_type = 'IBAN'
         else:
             ba_type = 'OTHER'
-    donations = participant.get_giving_in(currency)
-    recommended_withdrawal = min(
-        withdrawable,
-        max(balance - donations, constants.ZERO[currency])
-    ).amount
+    recommended_withdrawal = withdrawable.amount
 
 if user == participant:
     participant.mark_notifications_as_read('withdrawal_failed')
@@ -173,10 +169,6 @@ title = _("Withdrawing Money")
     % endif
 
     <h3>{{ _("Amount") }}</h3>
-
-    % if donations
-        <p>{{ _("You should keep at least {0} in your wallet to fund your donations this week.", donations) }}</p>
-    % endif
 
     <fieldset id="amount" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
