@@ -84,10 +84,7 @@ amount_min = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MIN[currency])[0]
 amount_max = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MAX[currency])[0]
 
 if request.method == 'POST':
-    if not user.is_admin:
-        raise response.error(403, _(
-            "This payment method is currently unavailable. We apologize for the inconvenience."
-        ))
+    website.check_payin_allowed(user, 'bankwire')
 
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
@@ -114,6 +111,9 @@ if request.method == 'POST':
 
 back_to = b64decode_s(request.path['back_to'], default='')
 show_form = weekly > 0 and funded < 52 and not payin
+
+if show_form:
+    website.check_payin_allowed(user, 'bankwire')
 
 if user == participant:
     participant.mark_notifications_as_read('low_balance')

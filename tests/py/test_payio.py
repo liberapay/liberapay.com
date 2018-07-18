@@ -194,9 +194,6 @@ class TestCharge(MangopayHarness):
 class TestPayinBankWire(MangopayHarness):
 
     def test_payin_bank_wire_creation(self):
-        # Currently only admins can create bankwire payins.
-        self.db.run("UPDATE participants SET privileges = 1 WHERE username = 'janet'")
-
         path = b'/janet/wallet/payin/bankwire/'
         data = {'amount': str(upcharge_bank_wire(EUR('10.00'))[0].amount)}
 
@@ -247,9 +244,6 @@ class TestDirectDebit(MangopayHarness):
 
     @mock.patch('liberapay.models.participant.Participant.url')
     def test_direct_debit_creation(self, url):
-        # Currently only admins can create direct debit payins.
-        self.db.run("UPDATE participants SET privileges = 1 WHERE username = 'homer'")
-
         path = b'/homer/wallet/payin/direct-debit'
         data = {'amount': '100.00'}
 

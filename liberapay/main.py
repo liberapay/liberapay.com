@@ -22,6 +22,7 @@ from liberapay import utils, wireup
 from liberapay.billing.payday import Payday, create_payday_issue
 from liberapay.billing.transactions import check_all_balances
 from liberapay.cron import Cron, Daily, Weekly
+from liberapay.exceptions import PayinMethodIsUnavailable, PayinsAreDisabled
 from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
@@ -39,7 +40,7 @@ from liberapay.utils.state_chain import (
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
-from liberapay.website import website
+from liberapay.website import Website, website
 
 
 application = website  # for stupid WSGI implementations
@@ -180,6 +181,20 @@ algorithm.functions = [
 
     tell_sentry,
 ]
+
+
+# Monkey patch Website
+# ====================
+
+def check_payin_allowed(website, user, method=None):
+    if user.is_admin:
+        return
+    if website.app_conf.payin_methods['*'] is False:
+        raise PayinsAreDisabled
+    if website.app_conf.payin_methods.get(method) is False:
+        raise PayinMethodIsUnavailable
+
+Website.check_payin_allowed = check_payin_allowed
 
 
 # Monkey patch python's stdlib

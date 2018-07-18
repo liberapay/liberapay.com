@@ -84,10 +84,7 @@ if weekly > 0:
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
 
 if request.method == 'POST':
-    if not user.is_admin:
-        raise response.error(403, _(
-            "This payment method is currently unavailable. We apologize for the inconvenience."
-        ))
+    website.check_payin_allowed(user, 'direct-debit')
 
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
@@ -170,6 +167,7 @@ success = getattr(exchange, 'status', None) in ('created', 'succeeded')
 show_form = weekly > 0 and funded < 52 and not success
 
 if show_form:
+    website.check_payin_allowed(user, 'direct-debit')
     bank_account = BankAccount.get(
         route.address, user_id=participant.mangopay_user_id
     ) if route else None

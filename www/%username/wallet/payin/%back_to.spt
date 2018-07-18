@@ -3,12 +3,15 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from liberapay.utils import b64decode_s, get_participant, group_by, utcnow
 
-allow_bankwire = False
-allow_directdebit = False
+allow_bankwire = website.app_conf.payin_methods.get('bankwire', True)
+allow_card = website.app_conf.payin_methods.get('card', True)
+allow_directdebit = website.app_conf.payin_methods.get('direct-debit', True)
 
 [---]
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
+
+website.check_payin_allowed(user)
 
 if 'transactionId' in request.qs or 'exchange_id' in request.qs or \
     request.method == 'POST':
@@ -122,9 +125,10 @@ title = _("Adding Money")
     % set direct_debit_available = currency in constants.FEE_PAYIN_DIRECT_DEBIT
 
         <div class="col-sm-6">
-            <div class="panel panel-default"><div class="panel-body overlayed">
+            <div class="panel panel-default {{ 'not-recommended' if not allow_card else '' }}">
+            <div class="panel-body {{ 'overlayed' if allow_card else '' }}">
                 <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
-                <h4>{{ _("Credit/Debit Card") }}<br><small>Visa / Mastercard / CB</small></h4>
+                <h4>{{ _("Credit/Debit Card") }}<br><small>{{ "Visa / Mastercard / CB" if allow_card else _("Currently unavailable") }}</small></h4>
                 <p>
                     {{ _("Easy and instantaneous") }}<br>
                     {{ _("Fees: {0}% + {1}", *constants.FEE_PAYIN_CARD[currency].with_vat) }}
@@ -204,4 +208,5 @@ title = _("Adding Money")
     </a>
 </p>
 % endif
+
 % endblock
