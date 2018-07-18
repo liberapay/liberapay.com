@@ -1455,3 +1455,6 @@ ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'tip-in-advance';
 ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'take-in-advance';
 ALTER TABLE transfers ADD COLUMN unit_amount currency_amount;
 ALTER TABLE transfers ADD CONSTRAINT unit_amount_currency_chk CHECK (unit_amount::currency = amount::currency);
+
+-- migration #71
+ALTER TABLE transfers ADD COLUMN virtual boolean;

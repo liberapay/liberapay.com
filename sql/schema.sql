@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '70'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '71'::jsonb);
 
 
 -- app configuration
@@ -298,6 +298,7 @@ CREATE TABLE transfers
 , wallet_to   text                NOT NULL
 , counterpart int                 REFERENCES transfers
 , unit_amount currency_amount
+, virtual     boolean
 , CONSTRAINT team_chk CHECK (NOT (context='take' AND team IS NULL))
 , CONSTRAINT self_chk CHECK ((tipper <> tippee) = (context <> 'account-switch'))
 , CONSTRAINT expense_chk CHECK (NOT (context='expense' AND invoice IS NULL))
