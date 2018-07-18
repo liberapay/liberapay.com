@@ -312,6 +312,80 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert new_balances[self.janet.id] == [EUR('15')]
             assert new_balances[self.david.id] == [EUR('5')]
 
+    def test_payday_handles_paid_in_advance(self):
+        self.make_exchange('mango-cc', EUR('2.00'), 0, self.janet)
+        self.janet.set_tip_to(self.david, EUR('0.60'))
+        team = self.make_participant('team', kind='group')
+        team.set_take_for(self.homer, EUR('0.40'), team)
+        self.janet.set_tip_to(team, EUR('0.40'))
+        self.janet.distribute_balances_to_donees(final_gift=False)
+
+        # Preliminary checks
+        janet = self.janet.refetch()
+        assert janet.balance == 0
+        tips = self.db.all("""
+            SELECT *
+              FROM current_tips
+             WHERE tipper = %s
+          ORDER BY id
+        """, (janet.id,))
+        assert len(tips) == 2
+        assert tips[0].paid_in_advance == EUR('1.20')
+        assert tips[1].paid_in_advance == EUR('0.80')
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 2
+        assert transfers[0].amount == EUR('1.20')
+        assert transfers[0].context == 'tip-in-advance'
+        assert transfers[1].amount == EUR('0.80')
+        assert transfers[1].context == 'take-in-advance'
+
+        # Now run a payday and check the results
+        Payday.start().run()
+        tips = self.db.all("""
+            SELECT *
+              FROM current_tips
+             WHERE tipper = %s
+          ORDER BY id
+        """, (janet.id,))
+        assert len(tips) == 2
+        assert tips[0].paid_in_advance == EUR('0.60')
+        assert tips[1].paid_in_advance == EUR('0.40')
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 4
+
+        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
+        emails = self.get_emails()
+        assert len(emails) == 2
+        assert emails[0]['to'][0] == 'david <%s>' % self.david.email
+        assert '0.60' in emails[0]['subject']
+        assert emails[1]['to'][0] == 'homer <%s>' % self.homer.email
+        assert '0.40' in emails[1]['text']
+
+        # Now run a second payday and check the results again
+        Payday.start().run()
+        tips = self.db.all("""
+            SELECT *
+              FROM current_tips
+             WHERE tipper = %s
+          ORDER BY id
+        """, (janet.id,))
+        assert len(tips) == 2
+        assert not tips[0].paid_in_advance
+        assert not tips[1].paid_in_advance
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 6
+
+        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
+        emails = self.get_emails()
+        assert len(emails) == 3
+        assert emails[0]['to'][0] == 'david <%s>' % self.david.email
+        assert '0.60' in emails[0]['subject']
+        assert emails[1]['to'][0] == 'homer <%s>' % self.homer.email
+        assert '0.40' in emails[1]['text']
+        assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
+        assert 'top up' in emails[2]['subject']
+        assert '1.00' in emails[2]['text']
+
 
 class TestPaydayForTeams(FakeTransfersHarness):
 
@@ -924,6 +998,7 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         janet = self.janet.refetch()
         assert janet.balance == EUR('1.77')
         assert janet.giving == EUR('0.25')
+        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
         assert len(emails) == 3
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email

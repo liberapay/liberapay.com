@@ -150,8 +150,8 @@ class Payday(object):
                        SET nparticipants = (SELECT count(*) FROM payday_participants)
                      WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz;
                 """)
+                self.mark_stage_done(cursor)
             self.clean_up()
-            self.mark_stage_done()
             transfers = get_transfers()
 
         self.transfer_for_real(transfers)
@@ -192,7 +192,8 @@ class Payday(object):
         CREATE UNIQUE INDEX ON payday_participants (id);
 
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
-            SELECT t.id, tipper, tippee, amount, (p2.kind = 'group') AS to_team
+            SELECT t.id, t.tipper, t.tippee, t.amount, (p2.kind = 'group') AS to_team
+                 , coalesce_currency_amount(t.paid_in_advance, t.amount::currency) AS paid_in_advance
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -229,6 +230,7 @@ class Payday(object):
         , tipper bigint
         , tippee bigint
         , amount currency_amount
+        , in_advance currency_amount
         , context transfer_context
         , team bigint
         , invoice int
@@ -238,48 +240,79 @@ class Payday(object):
 
         -- Prepare a statement that makes and records a transfer
 
-        CREATE OR REPLACE FUNCTION transfer(bigint, bigint, currency_amount, transfer_context, bigint, int)
+        CREATE OR REPLACE FUNCTION transfer(
+            a_tipper bigint,
+            a_tippee bigint,
+            a_amount currency_amount,
+            a_context transfer_context,
+            a_team bigint,
+            a_invoice int
+        )
         RETURNS void AS $$
+            DECLARE
+                in_advance currency_amount;
+                tip payday_tips;
+                transfer_amount currency_amount;
             BEGIN
-                IF ($3 = 0) THEN RETURN; END IF;
+                IF (a_amount = 0) THEN RETURN; END IF;
+                in_advance := zero(a_amount);
+                transfer_amount := a_amount;
+
+                IF (a_context IN ('tip', 'take')) THEN
+                    tip := (
+                        SELECT t
+                          FROM payday_tips t
+                         WHERE t.tipper = a_tipper
+                           AND t.tippee = COALESCE(a_team, a_tippee)
+                    );
+                    IF (tip IS NULL) THEN
+                        RAISE 'tip not found: %%, %%, %%', a_tipper, a_tippee, a_team;
+                    END IF;
+                    IF (tip.paid_in_advance > 0) THEN
+                        IF (tip.paid_in_advance >= transfer_amount) THEN
+                            in_advance := transfer_amount;
+                        ELSE
+                            in_advance := tip.paid_in_advance;
+                        END IF;
+                        transfer_amount := transfer_amount - in_advance;
+                    END IF;
+                END IF;
+
                 UPDATE payday_participants
-                   SET balances = (balances - $3)
-                 WHERE id = $1;
-                IF (NOT FOUND) THEN RAISE 'tipper %% not found', $1; END IF;
+                   SET balances = (balances - transfer_amount)
+                 WHERE id = a_tipper;
+                IF (NOT FOUND) THEN RAISE 'tipper %% not found', a_tipper; END IF;
                 UPDATE payday_participants
-                   SET balances = (balances + $3)
-                 WHERE id = $2;
-                IF (NOT FOUND) THEN RAISE 'tippee %% not found', $2; END IF;
+                   SET balances = (balances + transfer_amount)
+                 WHERE id = a_tippee;
+                IF (NOT FOUND) THEN RAISE 'tippee %% not found', a_tippee; END IF;
                 INSERT INTO payday_transfers
-                            (tipper, tippee, amount, context, team, invoice)
-                     VALUES ($1, $2, $3, $4, $5, $6);
+                            (tipper, tippee, amount, in_advance, context, team, invoice)
+                     VALUES (a_tipper, a_tippee, transfer_amount, in_advance, a_context, a_team, a_invoice);
             END;
         $$ LANGUAGE plpgsql;
 
 
-        -- Create a trigger to process tips
+        -- Create a function to check whether a tip is "funded" or not
 
-        CREATE OR REPLACE FUNCTION process_tip() RETURNS trigger AS $$
+        CREATE OR REPLACE FUNCTION check_tip_funding(payday_tips) RETURNS boolean AS $$
             DECLARE
                 tipper_balances currency_basket;
+                okay boolean = false;
             BEGIN
-                tipper_balances := (
-                    SELECT balances
-                      FROM payday_participants p
-                     WHERE id = NEW.tipper
-                );
-                IF (tipper_balances >= NEW.amount) THEN
-                    EXECUTE transfer(NEW.tipper, NEW.tippee, NEW.amount, 'tip', NULL, NULL);
-                    RETURN NEW;
+                IF ($1.is_funded IS true) THEN RETURN NULL; END IF;
+                okay := $1.paid_in_advance >= $1.amount;
+                IF (okay IS NOT true) THEN
+                    tipper_balances := (
+                        SELECT balances
+                          FROM payday_participants p
+                         WHERE id = $1.tipper
+                    );
+                    okay := tipper_balances >= ($1.amount - $1.paid_in_advance);
                 END IF;
-                RETURN NULL;
+                RETURN okay;
             END;
         $$ LANGUAGE plpgsql;
-
-        CREATE TRIGGER process_tip BEFORE UPDATE OF is_funded ON payday_tips
-            FOR EACH ROW
-            WHEN (NEW.is_funded IS true AND OLD.is_funded IS NOT true AND NEW.to_team IS NOT true)
-            EXECUTE PROCEDURE process_tip();
 
 
         -- Create a function to settle one-to-one donations
@@ -292,11 +325,12 @@ class Payday(object):
                 LOOP
                     i := i + 1;
                     WITH updated_rows AS (
-                         UPDATE payday_tips
+                         UPDATE payday_tips AS t
                             SET is_funded = true
                           WHERE is_funded IS NOT true
                             AND to_team IS NOT true
-                      RETURNING *
+                            AND check_tip_funding(t) IS true
+                      RETURNING id, transfer(tipper, tippee, amount, 'tip', NULL, NULL)
                     )
                     SELECT COUNT(*) FROM updated_rows INTO count;
                     IF (count = 0) THEN
@@ -334,10 +368,8 @@ class Payday(object):
         tips = [NS(t._asdict()) for t in cursor.all("""
             UPDATE payday_tips AS t
                SET is_funded = true
-              FROM payday_participants p
-             WHERE p.id = tipper
-               AND tippee = %(team_id)s
-               AND p.balances >= amount
+             WHERE tippee = %(team_id)s
+               AND check_tip_funding(t) IS true
          RETURNING t.id, t.tipper, t.amount AS full_amount
                  , coalesce_currency_amount((
                        SELECT sum(tr.amount, t.amount::currency)
@@ -531,19 +563,47 @@ class Payday(object):
     def transfer_for_real(self, transfers):
         db = self.db
         print("Starting transfers (n=%i)" % len(transfers))
-        msg = "Executing transfer #%i (amount=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s) %s"
+        msg = "%s transfer #%i (amount=%s in_advance=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s)%s"
         for t in transfers:
-            delay = getattr(self, 'transfer_delay', 0)
-            when = 'in %.2f seconds' % delay if delay else 'now'
-            log(msg % (t.id, t.amount, t.context, t.team, t.tipper_wallet_id, t.tippee_wallet_id, when))
+            if t.amount:
+                delay = getattr(self, 'transfer_delay', 0)
+                action = 'Executing'
+                when = ' in %.2f seconds' % delay if delay else ' now'
+            else:
+                delay = 0
+                action = 'Recording'
+                when = ''
+            log(msg % (action, t.id, t.amount, t.in_advance, t.context, t.team,
+                       t.tipper_wallet_id, t.tippee_wallet_id, when))
             if delay:
                 sleep(delay)
-            transfer(db, **t.__dict__)
+            if t.in_advance:
+                db.run("""
+                    INSERT INTO transfers
+                                (tipper, tippee, amount, context,
+                                 team, invoice, status,
+                                 wallet_from, wallet_to, virtual)
+                         VALUES (%(tipper)s, %(tippee)s, %(in_advance)s, %(context)s,
+                                 %(team)s, %(invoice)s, 'succeeded',
+                                 'x', 'y', true);
+
+                    WITH current_tip AS (
+                             SELECT t.id
+                               FROM current_tips t
+                              WHERE t.tipper = %(tipper)s
+                                AND t.tippee = COALESCE(%(team)s, %(tippee)s)
+                         )
+                    UPDATE tips t
+                       SET paid_in_advance = (t.paid_in_advance - %(in_advance)s)
+                      FROM current_tip t2
+                     WHERE t.id = t2.id;
+                """, t.__dict__)
+            if t.amount:
+                transfer(db, **t.__dict__)
 
     @classmethod
     def clean_up(cls):
         cls.db.run("""
-            DROP FUNCTION process_tip();
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, currency_amount, transfer_context, bigint, int);
         """)
@@ -834,8 +894,8 @@ class Payday(object):
         cls.clean_up()
         log("Updated receiving amounts.")
 
-    def mark_stage_done(self):
-        self.stage = self.db.one("""
+    def mark_stage_done(self, cursor=None):
+        self.stage = (cursor or self.db).one("""
             UPDATE paydays
                SET stage = stage + 1
              WHERE id = %s
@@ -933,6 +993,7 @@ class Payday(object):
                       WHERE (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
                         AND p2.status = 'active'
                         AND p2.is_suspended IS NOT true
+                        AND coalesce_currency_amount(t.paid_in_advance, t.amount::currency) < t.amount
                    GROUP BY t.tipper, t.amount::currency
                    ) a
               JOIN participants p ON p.id = a.tipper
@@ -951,7 +1012,7 @@ class Payday(object):
                    )
         """, (previous_ts_end, self.ts_end))
         for p, balance, needed in participants:
-            p.notify('low_balance', low_balance=balance, needed=needed)
+            p.notify('low_balance', low_balance=balance, needed=needed, email=False)
             n += 1
         log("Sent %i low_balance notifications." % n)
 

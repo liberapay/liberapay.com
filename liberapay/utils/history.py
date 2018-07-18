@@ -91,6 +91,7 @@ def get_end_of_period_balances(db, participant, period_end, today):
                      AND timestamp >= %(prev_period_end)s
                      AND timestamp < %(period_end)s
                      AND status = 'succeeded'
+                     AND virtual IS NOT true
                ) + (
                   SELECT basket_sum(amount) AS a
                     FROM transfers
@@ -98,6 +99,7 @@ def get_end_of_period_balances(db, participant, period_end, today):
                      AND timestamp >= %(prev_period_end)s
                      AND timestamp < %(period_end)s
                      AND status = 'succeeded'
+                     AND virtual IS NOT true
                ) AS delta
     """, locals())
     db.run("""
@@ -180,6 +182,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
            AND t.timestamp >= %(period_start)s
            AND t.timestamp < %(period_end)s
            AND (t.status = 'succeeded' OR NOT %(minimize)s)
+           AND t.virtual IS NOT true
         UNION ALL
         SELECT t.*, p.username, (SELECT username FROM participants WHERE id = team) AS team_name
           FROM transfers t
@@ -188,6 +191,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
            AND t.timestamp >= %(period_start)s
            AND t.timestamp < %(period_end)s
            AND (t.status = 'succeeded' OR NOT %(minimize)s)
+           AND t.virtual IS NOT true
     """, params, back_as=dict)
 
     if transfers:
@@ -324,8 +328,9 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE t.tipper = %(id)s
                AND extract(year from t.timestamp) = %(year)s
                AND t.status = 'succeeded'
-               AND t.context IN ('tip', 'take')
+               AND t.context IN ('tip', 'take', 'tip-in-advance', 'take-in-advance')
                AND t.refund_ref IS NULL
+               AND t.virtual IS NOT true
           GROUP BY t.tippee
         """, params, back_as=back_as)
         out['reimbursed'] = lambda: db.all("""
@@ -345,9 +350,10 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
               FROM transfers t
               JOIN participants p ON p.id = t.team
              WHERE t.tippee = %(id)s
-               AND t.context = 'take'
+               AND t.context IN ('take', 'take-in-advance')
                AND extract(year from t.timestamp) = %(year)s
                AND t.status = 'succeeded'
+               AND t.virtual IS NOT true
           GROUP BY t.team
         """, params, back_as=back_as)
     else:
@@ -366,6 +372,7 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
              WHERE t.tipper = %(id)s
                AND extract(year from t.timestamp) = %(year)s
                AND t.status = 'succeeded'
+               AND t.virtual IS NOT true
           ORDER BY t.id ASC
         """, params, back_as=back_as)
         out['taken'] = lambda: db.all("""
@@ -374,18 +381,20 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
               FROM transfers t
               JOIN participants p ON p.id = t.team
              WHERE t.tippee = %(id)s
-               AND t.context = 'take'
+               AND t.context IN ('take', 'take-in-advance')
                AND extract(year from t.timestamp) = %(year)s
                AND t.status = 'succeeded'
+               AND t.virtual IS NOT true
           ORDER BY t.id ASC
         """, params, back_as=back_as)
         out['received'] = lambda: db.all("""
             SELECT timestamp, amount, context
               FROM transfers
              WHERE tippee = %(id)s
-               AND context <> 'take'
+               AND context NOT IN ('take', 'take-in-advance')
                AND extract(year from timestamp) = %(year)s
                AND status = 'succeeded'
+               AND virtual IS NOT true
           ORDER BY id ASC
         """, params, back_as=back_as)
 
