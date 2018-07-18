@@ -1012,7 +1012,7 @@ class Payday(object):
                    )
         """, (previous_ts_end, self.ts_end))
         for p, balance, needed in participants:
-            p.notify('low_balance', low_balance=balance, needed=needed)
+            p.notify('low_balance', low_balance=balance, needed=needed, email=False)
             n += 1
         log("Sent %i low_balance notifications." % n)
 

@@ -353,6 +353,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
         assert len(transfers) == 4
 
+        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
         assert len(emails) == 2
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
@@ -374,6 +375,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
         assert len(transfers) == 6
 
+        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
         assert len(emails) == 3
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
@@ -996,6 +998,7 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         janet = self.janet.refetch()
         assert janet.balance == EUR('1.77')
         assert janet.giving == EUR('0.25')
+        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
         assert len(emails) == 3
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
