@@ -1458,3 +1458,6 @@ ALTER TABLE transfers ADD CONSTRAINT unit_amount_currency_chk CHECK (unit_amount
 
 -- migration #71
 ALTER TABLE transfers ADD COLUMN virtual boolean;
+
+-- migration #72
+INSERT INTO app_conf VALUES ('payin_methods', '{"*": false, "bankwire": false, "card": true, "direct-debit": false}'::jsonb);

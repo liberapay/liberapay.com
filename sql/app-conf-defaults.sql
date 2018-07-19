@@ -40,6 +40,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('password_rounds', '1'::jsonb),
     ('payday_repo', '"liberapay-bot/test"'::jsonb),
     ('payday_label', '"Payday"'::jsonb),
+    ('payin_methods', '{"*": false, "bankwire": false, "card": true, "direct-debit": false}'::jsonb),
     ('refetch_elsewhere_data_every', '120'::jsonb),
     ('refetch_repos_every', '60'::jsonb),
     ('s3_endpoint', '""'::jsonb),
