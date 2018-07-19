@@ -267,7 +267,7 @@ PROFILE_VISIBILITY_ATTRS = ('profile_noindex', 'hide_from_lists', 'hide_from_sea
 
 PUBLIC_NAME_MAX_SIZE = 64
 
-QUARANTINE = timedelta(weeks=4)
+QUARANTINE = timedelta(weeks=0)
 
 RATE_LIMITS = {
     'add_email.source': (5, 60*60*24),  # 5 per day
