@@ -6,6 +6,7 @@ title = _("Money")
 % block content
 <div class="row"><div class="col-md-8">
 
+% if constants.QUARANTINE.days > 0
 <h3>{{ _("Quarantine") }}</h3>
 
 <p>{{ _(
@@ -16,6 +17,7 @@ title = _("Money")
     "Concretely, you are prevented from withdrawing the quarantined money from "
     "your Liberapay account to your bank account."
 ) }}</p>
+% endif
 
 <h3>{{ _("Chargebacks") }}</h3>
 
