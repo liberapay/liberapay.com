@@ -194,9 +194,6 @@ class TestCharge(MangopayHarness):
 class TestPayinBankWire(MangopayHarness):
 
     def test_payin_bank_wire_creation(self):
-        # Currently only admins can create bankwire payins.
-        self.db.run("UPDATE participants SET privileges = 1 WHERE username = 'janet'")
-
         path = b'/janet/wallet/payin/bankwire/'
         data = {'amount': str(upcharge_bank_wire(EUR('10.00'))[0].amount)}
 

@@ -378,3 +378,24 @@ class UnableToDistributeBalance(LazyResponse400):
             "The attempt to distribute all the money in your wallet failed: "
             "{money_amount} remains.", money_amount=self.args[0]
         )
+
+
+class PayinMethodIsUnavailable(LazyResponseXXX):
+    code = 403
+    def msg(self, _):
+        return _("This payment method is currently unavailable. We apologize for the inconvenience.")
+
+
+class PayinsAreDisabled(LazyResponse):
+
+    def __init__(self):
+        Response.__init__(self, 403, '')
+        self.html_template = 'templates/no-payins.html'
+
+    def lazy_body(self, _):
+        return _(
+            "We're very sorry but incoming payments are currently disabled. "
+            "You can read {link_start}this blog post{link_end} to learn why.",
+            link_start='[',
+            link_end='](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82)'
+        )

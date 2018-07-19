@@ -141,6 +141,7 @@ def charge(db, route, amount, return_url, billing_address=None):
     payin.CreditedWalletId = wallet.remote_id
     payin.DebitedFunds = charge_amount.int()
     payin.CardId = route.address
+    payin.SecureMode = 'FORCE'
     payin.SecureModeReturnURL = return_url
     payin.Fees = fee.int()
     payin.Tag = str(e_id)

@@ -68,6 +68,8 @@ if weekly > 0:
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
 
 if request.method == 'POST':
+    website.check_payin_allowed(user, 'card')
+
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
             "Why are you trying to put more money into your wallet? "
@@ -121,6 +123,7 @@ show_form = weekly > 0 and funded < 52 and not success
 
 billing_address = None
 if show_form:
+    website.check_payin_allowed(user, 'card')
     previous_payin_id = website.db.one("""
         SELECT e.remote_id
           FROM exchanges e
