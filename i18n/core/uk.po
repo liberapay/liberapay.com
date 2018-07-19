@@ -677,6 +677,13 @@ msgstr "Ви надсилаєте запити незвично швидкими
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
 msgstr "Спроба розповсюдити усі гроші з вашого аккаунту не вдалася: залишилося {money_amount}."
 
+msgid "This payment method is currently unavailable. We apologize for the inconvenience."
+msgstr "Цей метод оплати в даний момент недоступний. Приносимо вибачення за доставлені незручності."
+
+#, python-brace-format
+msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
+msgstr ""
+
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "Схоже, '{0}' не є коректним ідентифікатором користувача в {platform}."
@@ -2529,6 +2536,9 @@ msgstr "Оберіть спосіб оплати, щоб додати гроші
 msgid "Credit/Debit Card"
 msgstr "Кредитна/Дебетова картка"
 
+msgid "Currently unavailable"
+msgstr "Недоступно в даний момент"
+
 msgid "Easy and instantaneous"
 msgstr "Легкий та миттєвий"
 
@@ -2538,9 +2548,6 @@ msgstr "Комісії: {0}% + {1}"
 
 msgid "To an account in Europe"
 msgstr "Для рахунків в Європі"
-
-msgid "Currently unavailable"
-msgstr "Недоступно в даний момент"
 
 msgid "Cheapest for small amounts¹"
 msgstr "Найдешевший для малих сум¹"
@@ -2576,9 +2583,6 @@ msgstr "Виникла невідома помилка."
 
 msgid "The email has been sent."
 msgstr "Електронний лист відправлено."
-
-msgid "This payment method is currently unavailable. We apologize for the inconvenience."
-msgstr "Цей метод оплати в даний момент недоступний. Приносимо вибачення за доставлені незручності."
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "Чому ви намагаєтесь додати гроші в гаманець? Зв'яжіться з support@liberapay.com, якщо у вас є вагома причина."

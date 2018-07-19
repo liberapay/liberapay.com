@@ -677,6 +677,13 @@ msgstr "Stai inviando richieste ad un ritmo troppo elevato. Si prega di riprovar
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
 msgstr "Il tentativo di distribuire tutto il denaro nel tuo portafoglio è fallito: rimangono {money_amount}."
 
+msgid "This payment method is currently unavailable. We apologize for the inconvenience."
+msgstr ""
+
+#, python-brace-format
+msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
+msgstr ""
+
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "\"{0}\" non sembra non essere un identificativo utente valido su {platform}."
@@ -2515,6 +2522,9 @@ msgstr "Si prega di scegliere un metodo di pagamento per aggiungere denaro:"
 msgid "Credit/Debit Card"
 msgstr "Carta di credito/debito"
 
+msgid "Currently unavailable"
+msgstr ""
+
 msgid "Easy and instantaneous"
 msgstr "Facile e immediato"
 
@@ -2524,9 +2534,6 @@ msgstr "Commissioni: {0}% + {1}"
 
 msgid "To an account in Europe"
 msgstr "Verso un conto in Europa"
-
-msgid "Currently unavailable"
-msgstr ""
 
 msgid "Cheapest for small amounts¹"
 msgstr "Il più economico per piccole somme¹"
@@ -2562,9 +2569,6 @@ msgstr "Si è verificato un errore sconosciuto."
 
 msgid "The email has been sent."
 msgstr "L'e-mail è stata inviata."
-
-msgid "This payment method is currently unavailable. We apologize for the inconvenience."
-msgstr ""
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "Perché stai cercando di aggiungere altro denaro nel portafoglio? Si prega di contattare support@liberapay.com se hai un motivo legittimo."
