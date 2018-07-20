@@ -116,14 +116,12 @@ recent = query_cache.one("""
                 <ol>
                     <li>{{ _("{0}Fill out your profile{1}.",
                              "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</li>
+                    <li>{{ _("{0}Configure a payment account{1}.",
+                             "<a href='/%s/payment'>"|safe % user.username, "</a>"|safe) }}</li>
                     <li>{{ _("{0}Embed our widgets{1} on your blog/website.",
                              "<a href='/%s/widgets/'>"|safe % user.username, "</a>"|safe) }}</li>
                     <li>{{ _("Contact the people who benefit from your work and ask them to support you.") }}</li>
                 </ol>
-                % if not user.mangopay_user_id
-                    <p>{{ _("We need to know who you are before we can legally start to collect money for you.") }}
-                       <a href="/{{ user.username }}/identity">{{ _("Fill identity form") }}</a></p>
-                % endif
             % endif
 
         % endif

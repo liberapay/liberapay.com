@@ -988,10 +988,6 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team.set_take_for(self.david, EUR('0.23'), team)
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
-        kalel = self.make_participant(
-            'kalel', mangopay_user_id=None, email='kalel@example.org',
-        )
-        self.janet.set_tip_to(kalel, EUR('0.10'))
         Payday.start().run()
         david = self.david.refetch()
         assert david.balance == EUR('4.73')
@@ -1000,14 +996,12 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert janet.giving == EUR('0.25')
         self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
-        assert len(emails) == 3
+        assert len(emails) == 2
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
         assert '4.73' in emails[0]['subject']
-        assert emails[1]['to'][0] == 'kalel <%s>' % kalel.email
-        assert 'identity form' in emails[1]['text']
-        assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
-        assert 'top up' in emails[2]['subject']
-        assert '1.77' in emails[2]['text']
+        assert emails[1]['to'][0] == 'janet <%s>' % self.janet.email
+        assert 'top up' in emails[1]['subject']
+        assert '1.77' in emails[1]['text']
 
     def test_log_upload(self):
         payday = Payday.start()
