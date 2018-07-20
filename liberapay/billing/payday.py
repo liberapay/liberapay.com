@@ -980,6 +980,7 @@ class Payday(object):
                         AND t.status = 'succeeded'
                         AND t.amount::currency = needed::currency
                    )
+          ORDER BY p.id
         """, (previous_ts_end, self.ts_end))
         for p, balance, needed in participants:
             p.notify('low_balance', low_balance=balance, needed=needed, email=False)
