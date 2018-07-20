@@ -107,8 +107,8 @@ recent = query_cache.one("""
             }}</a></p>
 
             % if not user.accepts_tips
-                <p>{{ _("You are currently refusing donations, you can change that {0}on your profile{1}.",
-                        "<a href='/%s/edit'>"|safe % user.username, "</a>"|safe) }}</p>
+                <p>{{ _("You are currently refusing donations, you can change that in {0}your profile settings{1}.",
+                        "<a href='/%s/edit/goal'>"|safe % user.username, "</a>"|safe) }}</p>
             % elif user.goal and user.receiving >= user.goal
                 <p>{{ _("Congratulations, you have reached your goal of receiving {0} per week!", user.goal) }}</p>
             % else
