@@ -6,6 +6,7 @@ import json
 from os import urandom
 
 import requests
+import stripe
 
 from liberapay.exceptions import AuthRequired, LoginRequired
 from liberapay.utils import b64decode_s, b64encode_s
@@ -78,21 +79,32 @@ elif 'state' in request.qs:
         raise response.error(502, _(
             "{0} returned an error, please try again later.", provider_name
         ))
-
     account_id = data_from_stripe['stripe_user_id']
+    account = stripe.Account.retrieve(account_id)
     with website.db.get_cursor() as cursor:
         cursor.run("""
             UPDATE payment_accounts
                SET is_current = NULL
              WHERE participant = %(p_id)s
-               AND provider = %(provider)s;
+               AND provider = %(provider)s
+               AND country = %(country)s;
 
             INSERT INTO payment_accounts
-                        (participant, provider, id)
-                 VALUES (%(p_id)s, %(provider)s, %(account_id)s)
+                        (participant, provider, country, id,
+                         default_currency, charges_enabled,
+                         display_name)
+                 VALUES (%(p_id)s, %(provider)s, %(country)s, %(account_id)s,
+                         %(default_currency)s, %(charges_enabled)s,
+                         %(display_name)s)
             ON CONFLICT (provider, id, participant) DO UPDATE
-                    SET is_current = true;
-        """, dict(p_id=connect_to.id, provider=provider, account_id=account_id))
+                    SET is_current = true
+                      , country = excluded.country
+                      , default_currency = excluded.default_currency
+                      , charges_enabled = excluded.charges_enabled
+                      , display_name = excluded.display_name;
+        """, dict(p_id=connect_to.id, provider=provider, country=account.country, account_id=account_id,
+                  default_currency=account.default_currency.upper(), charges_enabled=account.charges_enabled,
+                  display_name=account.display_name))
 
     response.erase_cookie(cookie_name)
     response.redirect(back_to)

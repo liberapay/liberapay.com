@@ -7,11 +7,15 @@ ALTER TABLE participants ADD COLUMN has_payment_account boolean;
 CREATE TABLE payment_accounts
 ( participant           bigint          NOT NULL REFERENCES participants
 , provider              text            NOT NULL
+, country               text            NOT NULL
 , id                    text            NOT NULL CHECK (id <> '')
 , is_current            boolean         DEFAULT TRUE CHECK (is_current IS NOT FALSE)
+, charges_enabled       boolean         NOT NULL
+, default_currency      text
+, display_name          text
 , token                 json
 , connection_ts         timestamptz     NOT NULL DEFAULT current_timestamp
-, UNIQUE (participant, provider, is_current)
+, UNIQUE (participant, provider, country, is_current)
 , UNIQUE (provider, id, participant)
 );
 
