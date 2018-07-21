@@ -24,6 +24,8 @@ subhead = _("Payment")
 % block content
     <p>{{ _("This page allows you to manage your payment methods.") }}</p>
 
+    % include "templates/sandbox-warning.html"
+
     <h3>Stripe</h3>
     % set accounts = accounts_by_provider.get('stripe', ())
     % if accounts
