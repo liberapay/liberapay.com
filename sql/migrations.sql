@@ -1500,3 +1500,6 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_has_payment_account
     AFTER INSERT OR UPDATE OR DELETE ON payment_accounts
     FOR EACH ROW EXECUTE PROCEDURE update_has_payment_account();
+
+-- migration #74
+ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'fee-refund';
