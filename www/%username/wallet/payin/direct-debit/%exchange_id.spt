@@ -50,7 +50,7 @@ else:
          WHERE participant = %s
            AND remote_user_id = %s
            AND network = 'mango-ba'
-           AND error <> 'invalidated'
+           AND status = 'chargeable'
       ORDER BY id = %s DESC, mandate IS NOT NULL DESC, id DESC
          LIMIT 1
     """, (participant.id, participant.mangopay_user_id, route_id))
@@ -84,7 +84,7 @@ if weekly > 0:
     weeks_list = [w for w in weeks_list if w >= min_weeks and w <= max_weeks]
 
 if request.method == 'POST':
-    website.check_payin_allowed(user, 'direct-debit')
+    website.check_payin_allowed(user, 'mango-ba')
 
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
@@ -167,7 +167,7 @@ success = getattr(exchange, 'status', None) in ('created', 'succeeded')
 show_form = weekly > 0 and funded < 52 and not success
 
 if show_form:
-    website.check_payin_allowed(user, 'direct-debit')
+    website.check_payin_allowed(user, 'mango-ba')
     bank_account = BankAccount.get(
         route.address, user_id=participant.mangopay_user_id
     ) if route else None

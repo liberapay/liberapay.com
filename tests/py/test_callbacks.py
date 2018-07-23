@@ -224,7 +224,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
     @patch('mangopay.resources.PayIn.get')
     def test_payin_bank_wire_callback(self, Get):
         homer = self.homer
-        route = ExchangeRoute.insert(homer, 'mango-bw', 'x')
+        route = ExchangeRoute.insert(homer, 'mango-bw', 'x', 'chargeable')
         cases = (
             ('failed', '000001', 'FOO'),
             ('failed', '101109', 'The payment period has expired'),
@@ -324,7 +324,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
 
     def _test_payin_bank_wire_callback_amount_mismatch(self, Get, fee):
         homer = self.homer
-        route = ExchangeRoute.insert(homer, 'mango-bw', 'x')
+        route = ExchangeRoute.insert(homer, 'mango-bw', 'x', 'chargeable')
         e_id = record_exchange(self.db, route, EUR(11), EUR(0), EUR(0), homer, 'pre').id
         assert homer.balance == 0
         homer.close(None)

@@ -689,7 +689,11 @@ def _record_transfer_result(db, t_id, status, error=None):
                                 AND tippee = %(tip_target)s
                          )
                     UPDATE tips
-                       SET paid_in_advance = coalesce(paid_in_advance, zero(amount)) + %(amount)s
+                       SET paid_in_advance = (
+                               coalesce_currency_amount(paid_in_advance, amount::currency) +
+                               convert(%(amount)s, amount::currency)
+                           )
+                         , is_funded = true
                      WHERE id = (SELECT id FROM current_tip)
                  RETURNING paid_in_advance
                 """, locals())

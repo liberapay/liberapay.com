@@ -33,7 +33,7 @@ else:
     currency = card.Currency
     old_routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
     one_off = body.get('keep') != 'true'
-    r = ExchangeRoute.insert(participant, 'mango-cc', card.Id, one_off=one_off, currency=currency)
+    r = ExchangeRoute.insert(participant, 'mango-cc', card.Id, 'chargeable', one_off=one_off, currency=currency)
     for old_route in old_routes:
         old_route.invalidate()
     out = {"route_id": r.id}

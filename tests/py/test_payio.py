@@ -65,7 +65,7 @@ class TestPayouts(MangopayHarness):
     @mock.patch('mangopay.resources.BankAccount.get')
     def test_payout_amount_under_minimum(self, gba):
         usd_user = self.make_participant('usd_user', main_currency='USD')
-        route = ExchangeRoute.insert(usd_user, 'mango-ba', 'fake ID')
+        route = ExchangeRoute.insert(usd_user, 'mango-ba', 'fake ID', 'chargeable')
         self.make_exchange('mango-cc', USD(8), 0, usd_user)
         gba.return_value = self.bank_account_outside_sepa
         with self.assertRaises(FeeExceedsAmount):
@@ -176,7 +176,7 @@ class TestCharge(MangopayHarness):
 
     def test_charge_invalidated_card(self):
         bob = self.make_participant('bob')
-        route = ExchangeRoute.insert(bob, 'mango-cc', '-1', error='invalidated', currency='EUR')
+        route = ExchangeRoute.insert(bob, 'mango-cc', '-1', 'canceled', currency='EUR')
         with self.assertRaises(AssertionError):
             charge(self.db, route, EUR('10.00'), 'http://localhost/')
 
@@ -411,11 +411,11 @@ class TestRecordExchange(MangopayHarness):
         self.make_exchange('mango-cc', 37, 0, homer)
         e_id = record_exchange(self.db, ba, EUR('-32.45'), EUR('0.86'), EUR(0), homer, 'pre').id
         assert homer.balance == EUR('3.69')
-        ba.update_error('invalidated')
+        ba.update_status('canceled')
         record_exchange_result(self.db, e_id, -e_id, 'failed', 'oops', homer)
         homer = Participant.from_username('homer')
         assert homer.balance == EUR('37.00')
-        assert ba.error == 'invalidated'
+        assert ba.status == 'canceled'
 
     def test_record_exchange_result_doesnt_restore_balance_on_success(self):
         homer, ba = self.homer, self.homer_route

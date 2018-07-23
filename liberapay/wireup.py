@@ -98,7 +98,7 @@ class CSP(bytes):
 def csp(canonical_host, canonical_scheme, env):
     csp = (
         b"default-src 'self' %(main_domain)s;"
-        b"connect-src 'self' *.liberapay.org *.mangopay.com *.payline.com;"
+        b"connect-src 'self' *.liberapay.org;"
         b"form-action 'self';"
         b"img-src * blob: data:;"
         b"object-src 'none';"
@@ -239,6 +239,7 @@ class AppConf(object):
         smtp_password=str,
         smtp_use_tls=bool,
         stripe_connect_id=str,
+        stripe_publishable_key=str,
         stripe_secret_key=str,
         trusted_proxies=list,
         twitch_id=str,

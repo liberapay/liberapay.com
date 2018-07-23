@@ -136,7 +136,7 @@ if not freeload:
             % endif
             % if funded < 52
                 <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}"
-                   href="{{ participant.path('wallet/payin/'+b64encode_s(request.path.raw)) }}?currency={{ currency }}"
+                   href="{{ participant.path('giving/pay') }}"
                    >{{ _("Add money") }}</a>
             % endif
         </p>

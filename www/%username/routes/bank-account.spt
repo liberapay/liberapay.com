@@ -43,7 +43,7 @@ try:
 except APIError as err:
     raise response.error(400, repr_exception(err))
 else:
-    route = ExchangeRoute.insert(participant, 'mango-ba', ba.Id)
+    route = ExchangeRoute.insert(participant, 'mango-ba', ba.Id, 'chargeable')
 
 [---] application/json
 {"route_id": route.id}

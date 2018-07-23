@@ -358,7 +358,7 @@ class Tests(Harness):
     def test_only_funded_tips_count(self):
         alice = self.make_participant('alice', balance=EUR(100))
         bob = self.make_participant('bob')
-        carl = self.make_participant('carl', last_bill_result="Fail!")
+        carl = self.make_participant('carl', route_status='canceled')
         dana = self.make_participant('dana')
         alice.set_tip_to(dana, EUR('3.00'))
         alice.set_tip_to(bob, EUR('6.00'))
