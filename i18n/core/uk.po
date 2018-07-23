@@ -1134,6 +1134,9 @@ msgstr "Витрати"
 msgid "Receiving"
 msgstr "Прибутки"
 
+msgid "Payment"
+msgstr ""
+
 msgid "Wallet"
 msgstr "Гаманець"
 
@@ -1829,8 +1832,8 @@ msgstr "Змінено"
 msgid "Active?"
 msgstr "Активно?"
 
-msgid "No: the donee hasn't filled the identity form"
-msgstr "Ні: отримувач не заповнив форму ідентифікації"
+msgid "No: the donee hasn't configured any payment method"
+msgstr ""
 
 msgid "No: the donee's account is temporarily suspended"
 msgstr "Ні: аккаунт отримувача тимчасово деактивовано"
@@ -2116,6 +2119,28 @@ msgstr "Відмітити усі повідомлення як прочитан
 msgid "No notifications to show."
 msgstr "Немає сповіщень для показу."
 
+msgid "This page allows you to manage your payment methods."
+msgstr ""
+
+#, python-brace-format
+msgid "Account ID: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Country: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Currency: {0}"
+msgstr ""
+
+msgid "This account cannot receive payments."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr ""
+
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
 msgstr "рахунок_liberapay_{number}"
@@ -2170,6 +2195,12 @@ msgstr "Цей документ не є рахунком."
 #, python-brace-format
 msgid "{0} receives {1} per week."
 msgstr "{0} отримує {1} в тиждень."
+
+msgid "You can't receive money until you've configured a payment account."
+msgstr ""
+
+msgid "Configure payments"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "Ви не перебуваєте в жодній команді."
@@ -3590,14 +3621,15 @@ msgid "{0}Fill out your profile{1}."
 msgstr "{0}Заповнити профіль{1}."
 
 #, python-brace-format
+msgid "{0}Configure a payment account{1}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
 msgstr "{0}вбудувати віджети{1} в ваш блог/сайт."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Зв'яжіться з людьми, які витягають вигоду з вашої роботи, та попросіть їх підтримати вас."
-
-msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "Ми повинні знати, хто ви, перш ніж ми зможемо легально почати збирати гроші для вас."
 
 msgid "How it works for donors"
 msgstr "Як це працює для спонсорів"

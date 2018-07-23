@@ -1132,6 +1132,9 @@ msgstr "Ausgaben"
 msgid "Receiving"
 msgstr "Einnahmen"
 
+msgid "Payment"
+msgstr ""
+
 msgid "Wallet"
 msgstr "Brieftasche"
 
@@ -1822,8 +1825,8 @@ msgstr "Geändert"
 msgid "Active?"
 msgstr "Aktiv?"
 
-msgid "No: the donee hasn't filled the identity form"
-msgstr "Nein: Der Empfänger hat das Identitätsformular nicht ausgefüllt"
+msgid "No: the donee hasn't configured any payment method"
+msgstr ""
 
 msgid "No: the donee's account is temporarily suspended"
 msgstr "Nein: Das Konto des Empfängers ist vorübergehend gesperrt"
@@ -2109,6 +2112,28 @@ msgstr "Alle Benachrichtigungen als gelesen markieren"
 msgid "No notifications to show."
 msgstr "Keine Benachrichtigungen."
 
+msgid "This page allows you to manage your payment methods."
+msgstr ""
+
+#, python-brace-format
+msgid "Account ID: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Country: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Currency: {0}"
+msgstr ""
+
+msgid "This account cannot receive payments."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr ""
+
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_quittung_{number}"
@@ -2163,6 +2188,12 @@ msgstr "Dieses Dokument ist keine Rechnung."
 #, python-brace-format
 msgid "{0} receives {1} per week."
 msgstr "{0} erhält {1} pro Woche."
+
+msgid "You can't receive money until you've configured a payment account."
+msgstr ""
+
+msgid "Configure payments"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "Sie sind nicht Mitglied eines Teams."
@@ -3563,14 +3594,15 @@ msgid "{0}Fill out your profile{1}."
 msgstr "{0}Füllen Sie Ihr Profil aus{1}."
 
 #, python-brace-format
+msgid "{0}Configure a payment account{1}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
 msgstr "{0}Fügen Sie unsere Widgets{1} auf Ihrem Blog oder Ihrer Webseite hinzu."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Kontaktieren Sie die Menschen, die von Ihrer Arbeit profitieren und bitten sie Sie zu unterstützen."
-
-msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "Damit wir legal Geld für Sie sammeln können, müssen wir wissen wer Sie sind."
 
 msgid "How it works for donors"
 msgstr "Der Ablauf für Spender"

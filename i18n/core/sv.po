@@ -1114,6 +1114,9 @@ msgstr "Givande"
 msgid "Receiving"
 msgstr "Mottagande"
 
+msgid "Payment"
+msgstr ""
+
 msgid "Wallet"
 msgstr "Plånbok"
 
@@ -1804,8 +1807,8 @@ msgstr "Modifierad"
 msgid "Active?"
 msgstr "Aktiv?"
 
-msgid "No: the donee hasn't filled the identity form"
-msgstr "Nej: mottagaren har inte fyllt i identitetsformuläret"
+msgid "No: the donee hasn't configured any payment method"
+msgstr ""
 
 msgid "No: the donee's account is temporarily suspended"
 msgstr "Nej: mottagarens konto är tillfälligt avstängt"
@@ -2091,6 +2094,28 @@ msgstr "Markera alla notifieringar som lästa"
 msgid "No notifications to show."
 msgstr "Inga notifieringar att visa."
 
+msgid "This page allows you to manage your payment methods."
+msgstr ""
+
+#, python-brace-format
+msgid "Account ID: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Country: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Currency: {0}"
+msgstr ""
+
+msgid "This account cannot receive payments."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr ""
+
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_kvitto_{number}"
@@ -2145,6 +2170,12 @@ msgstr "Detta dokument är inte en faktura."
 #, python-brace-format
 msgid "{0} receives {1} per week."
 msgstr "{0} tar emot {1} per vecka."
+
+msgid "You can't receive money until you've configured a payment account."
+msgstr ""
+
+msgid "Configure payments"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "Du är inte medlem i något team."
@@ -3542,13 +3573,14 @@ msgid "{0}Fill out your profile{1}."
 msgstr "{0}Fyll i din profil{1}."
 
 #, python-brace-format
+msgid "{0}Configure a payment account{1}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
 msgstr "{0}Bädda in våra widgets{1} på din blogg/hemsida."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
-msgstr ""
-
-msgid "We need to know who you are before we can legally start to collect money for you."
 msgstr ""
 
 msgid "How it works for donors"

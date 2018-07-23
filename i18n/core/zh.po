@@ -1128,6 +1128,9 @@ msgstr "捐贈"
 msgid "Receiving"
 msgstr "收取"
 
+msgid "Payment"
+msgstr ""
+
 msgid "Wallet"
 msgstr "錢包"
 
@@ -1813,8 +1816,8 @@ msgstr "修改"
 msgid "Active?"
 msgstr "活躍的？"
 
-msgid "No: the donee hasn't filled the identity form"
-msgstr "否：受贈者尚未填寫這個身份表"
+msgid "No: the donee hasn't configured any payment method"
+msgstr ""
 
 msgid "No: the donee's account is temporarily suspended"
 msgstr "否： 受贈者的帳戶暫時被停權"
@@ -2100,6 +2103,28 @@ msgstr "所有的通知標為已讀"
 msgid "No notifications to show."
 msgstr "無通知可顯示。"
 
+msgid "This page allows you to manage your payment methods."
+msgstr ""
+
+#, python-brace-format
+msgid "Account ID: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Country: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Currency: {0}"
+msgstr ""
+
+msgid "This account cannot receive payments."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr ""
+
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_receipt_{number}"
@@ -2154,6 +2179,12 @@ msgstr "此文件不是發票。"
 #, python-brace-format
 msgid "{0} receives {1} per week."
 msgstr "{0} 每週收到 {1} 捐款贊助。"
+
+msgid "You can't receive money until you've configured a payment account."
+msgstr ""
+
+msgid "Configure payments"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "你並不是任何團隊的成員。"
@@ -3536,14 +3567,15 @@ msgid "{0}Fill out your profile{1}."
 msgstr "{0}填寫你的個人介紹頁{1}."
 
 #, python-brace-format
+msgid "{0}Configure a payment account{1}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
 msgstr "在你的部落格（博客）或網站上{0}嵌入我們的小工具{1}。"
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "連繫那些因為你的付出而受惠的人並請求他們支持你的工作。"
-
-msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "在開始代表你收取捐款之前，我們必須先知道你是誰。"
 
 msgid "How it works for donors"
 msgstr "如何為捐款者工作"

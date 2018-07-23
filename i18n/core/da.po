@@ -1113,6 +1113,9 @@ msgstr "Givet"
 msgid "Receiving"
 msgstr "Modtaget"
 
+msgid "Payment"
+msgstr ""
+
 msgid "Wallet"
 msgstr "Tegnebog"
 
@@ -1803,8 +1806,8 @@ msgstr "Modificeret"
 msgid "Active?"
 msgstr "Aktiv?"
 
-msgid "No: the donee hasn't filled the identity form"
-msgstr "Nej: giveren har ikke udfyldt sin identitetsformular"
+msgid "No: the donee hasn't configured any payment method"
+msgstr ""
 
 msgid "No: the donee's account is temporarily suspended"
 msgstr "Nej: Givers konto er midlertidigt suspenderet"
@@ -2090,6 +2093,28 @@ msgstr "Marker alle notifikationer som læst"
 msgid "No notifications to show."
 msgstr "Ingen notifikationer at vise."
 
+msgid "This page allows you to manage your payment methods."
+msgstr ""
+
+#, python-brace-format
+msgid "Account ID: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Country: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Currency: {0}"
+msgstr ""
+
+msgid "This account cannot receive payments."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr ""
+
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_faktura_{number}"
@@ -2144,6 +2169,12 @@ msgstr "Dette dokument er ikke en faktura."
 #, python-brace-format
 msgid "{0} receives {1} per week."
 msgstr "{0} modtager {1} per uge."
+
+msgid "You can't receive money until you've configured a payment account."
+msgstr ""
+
+msgid "Configure payments"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "Du er ikke medlem a noget team."
@@ -3546,14 +3577,15 @@ msgid "{0}Fill out your profile{1}."
 msgstr "{0}Udfyld din profil{1}."
 
 #, python-brace-format
+msgid "{0}Configure a payment account{1}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
 msgstr "{0}Indsæt vore widgets{1} på din blog/hjemmeside."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Kontakt de mennesker, der har gavn eller glæde af dit arbejde og bede dem om at støtte dig."
-
-msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "Af juridiske grunde skal vi vide hvem du er før vi kan begynde at samle penge til dig."
 
 msgid "How it works for donors"
 msgstr "Hvordan det virker for donorer"

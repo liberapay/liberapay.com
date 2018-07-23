@@ -1131,6 +1131,9 @@ msgstr "Donando"
 msgid "Receiving"
 msgstr "Recibiendo"
 
+msgid "Payment"
+msgstr ""
+
 msgid "Wallet"
 msgstr "Cartera"
 
@@ -1821,8 +1824,8 @@ msgstr "Modificado"
 msgid "Active?"
 msgstr "¿Activo?"
 
-msgid "No: the donee hasn't filled the identity form"
-msgstr "No: el donatario no ha llenado el formulario de identidad"
+msgid "No: the donee hasn't configured any payment method"
+msgstr ""
 
 msgid "No: the donee's account is temporarily suspended"
 msgstr "No: la cuenta del donatario está temporalmente suspendida"
@@ -2108,6 +2111,28 @@ msgstr "Marcar todas las notificaciones como leídas"
 msgid "No notifications to show."
 msgstr "No hay notificaciones que mostrar."
 
+msgid "This page allows you to manage your payment methods."
+msgstr ""
+
+#, python-brace-format
+msgid "Account ID: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Country: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Currency: {0}"
+msgstr ""
+
+msgid "This account cannot receive payments."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr ""
+
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
 msgstr "recibo_liberapay_{number}"
@@ -2162,6 +2187,12 @@ msgstr "Este documento no es una factura."
 #, python-brace-format
 msgid "{0} receives {1} per week."
 msgstr "{0} recibe {1} por semana."
+
+msgid "You can't receive money until you've configured a payment account."
+msgstr ""
+
+msgid "Configure payments"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "No eres miembro de ningún equipo."
@@ -3562,14 +3593,15 @@ msgid "{0}Fill out your profile{1}."
 msgstr "{0}Rellena tu perfil{1}."
 
 #, python-brace-format
+msgid "{0}Configure a payment account{1}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
 msgstr "{0}Coloca nuestros widgets{1} en tu blog/sitio web."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Contacta con las personas que se benefician de tu trabajo y pídeles que te apoyen."
-
-msgid "We need to know who you are before we can legally start to collect money for you."
-msgstr "Tenemos que saber quién eres antes de que podamos empezar por ley a recabar dinero para ti."
 
 msgid "How it works for donors"
 msgstr "Cómo funciona para los donantes"
