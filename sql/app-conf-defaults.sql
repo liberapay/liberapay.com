@@ -51,6 +51,8 @@ INSERT INTO app_conf (key, value) VALUES
     ('send_newsletters_every', '60'::jsonb),
     ('show_sandbox_warning', 'true'::jsonb),
     ('socket_timeout', '10.0'::jsonb),
+    ('stripe_connect_id', '"ca_DEYxiYHBHZtGj32l9uczcsunbQOcRq8H"'::jsonb),
+    ('stripe_secret_key', '"sk_test_QTUa8AqWXyU2feC32glNgDQd"'::jsonb),
     ('trusted_proxies', '[]'::jsonb),
     ('twitch_id', '"9ro3g4slh0de5yijy6rqb2p0jgd7hi"'::jsonb),
     ('twitch_secret', '"o090sc7828d7gljtrqc5n4vcpx3bfx"'::jsonb),

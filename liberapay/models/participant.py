@@ -2127,7 +2127,7 @@ class Participant(Model, MixinTeam):
                      , p AS tippee_p
                      , t.is_funded
                      , t.paid_in_advance
-                     , (p.has_payment_account OR p.kind = 'group') AS has_payment_account
+                     , (p.has_payment_account IS true OR p.kind = 'group') AS has_payment_account
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
