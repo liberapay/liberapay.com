@@ -1,0 +1,112 @@
+# coding: utf8
+
+from base64 import b32encode
+from datetime import timedelta
+import json
+from os import urandom
+
+import requests
+import stripe
+
+from liberapay.exceptions import AuthRequired, LoginRequired
+from liberapay.utils import b64decode_s, b64encode_s
+
+STRIPE_URL = 'https://connect.stripe.com/oauth/authorize?response_type=code&client_id=%s&scope=read_write&state=' % website.app_conf.stripe_connect_id
+
+[---]
+
+provider = request.path['provider']
+if provider != 'stripe':
+    raise response.error(404)
+provider_name = 'Stripe'
+
+if user.ANON:
+    raise AuthRequired
+
+if request.method == 'POST':
+    back_to = request.body['back_to']
+    p_id = request.body.get_int('p_id', default=None)
+    query_id = b32encode(urandom(15))
+    url = STRIPE_URL + query_id
+    cookie_name = (provider + '_' + query_id).encode('ascii')
+    cookie_value = b64encode_s(json.dumps([back_to, p_id]))
+    response.set_cookie(cookie_name, cookie_value, expires=constants.SESSION_TIMEOUT)
+    response.redirect(url)
+
+elif 'error' in request.qs:
+    # The OAuth failed
+    error_message = request.qs.get('error_message') or request.qs.get('error_description')
+    code = 400 if request.qs['error'] == 'access_denied' else 502
+    raise response.error(code, _(
+        "{0} returned this error message: {1}", provider_name, error_message
+    ))
+
+elif 'state' in request.qs:
+    if user.ANON:
+        raise LoginRequired
+
+    # Get the query id from the querystring
+    query_id = request.qs['state']
+
+    # Get the cookie that matches the query id
+    cookie_name = str(provider + '_' + query_id)
+    try:
+        cookie_value = request.headers.cookie[cookie_name].value
+    except KeyError:
+        raise response.error(400, 'Missing cookie')
+    if not cookie_value:
+        raise response.error(400, 'Empty cookie')
+    cookie_obj = json.loads(b64decode_s(cookie_value))
+    back_to, p_id = cookie_obj
+
+    connect_to = Participant.from_id(p_id) if isinstance(p_id, int) else user
+    if not user.controls(connect_to):
+        raise response.error(403, "can't connect to an account you don't control")
+
+    # Request the OAuth token
+    post_data = {
+        "client_secret": website.app_conf.stripe_secret_key,
+        "code": request.qs['code'],
+        "grant_type": "authorization_code",
+    }
+    stripe_response = requests.post('https://connect.stripe.com/oauth/token', data=post_data)
+    if stripe_response.status_code != 200:
+        raise response.error(502, _(
+            "{0} returned an error, please try again later.", provider_name
+        ))
+    data_from_stripe = stripe_response.json()
+    if 'stripe_user_id' not in data_from_stripe:
+        raise response.error(502, _(
+            "{0} returned an error, please try again later.", provider_name
+        ))
+    account_id = data_from_stripe['stripe_user_id']
+    account = stripe.Account.retrieve(account_id)
+    with website.db.get_cursor() as cursor:
+        cursor.run("""
+            UPDATE payment_accounts
+               SET is_current = NULL
+             WHERE participant = %(p_id)s
+               AND provider = %(provider)s
+               AND country = %(country)s;
+
+            INSERT INTO payment_accounts
+                        (participant, provider, country, id,
+                         default_currency, charges_enabled,
+                         display_name)
+                 VALUES (%(p_id)s, %(provider)s, %(country)s, %(account_id)s,
+                         %(default_currency)s, %(charges_enabled)s,
+                         %(display_name)s)
+            ON CONFLICT (provider, id, participant) DO UPDATE
+                    SET is_current = true
+                      , country = excluded.country
+                      , default_currency = excluded.default_currency
+                      , charges_enabled = excluded.charges_enabled
+                      , display_name = excluded.display_name;
+        """, dict(p_id=connect_to.id, provider=provider, country=account.country, account_id=account_id,
+                  default_currency=account.default_currency.upper(), charges_enabled=account.charges_enabled,
+                  display_name=account.display_name))
+
+    response.erase_cookie(cookie_name)
+    response.redirect(back_to)
+
+[---] text/html

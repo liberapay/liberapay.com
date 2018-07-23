@@ -238,6 +238,8 @@ class AppConf(object):
         smtp_username=str,
         smtp_password=str,
         smtp_use_tls=bool,
+        stripe_connect_id=str,
+        stripe_secret_key=str,
         trusted_proxies=list,
         twitch_id=str,
         twitch_secret=str,
@@ -377,6 +379,11 @@ def billing(app_conf):
     field = mangopay.fields.Field(api_name='Billing')
     field.add_to_class(cls, 'billing')
     cls._meta.api_names[field.api_name] = field.name
+
+
+def stripe(app_conf):
+    import stripe
+    stripe.api_key = app_conf.stripe_secret_key
 
 
 def username_restrictions(www_root):
@@ -795,6 +802,7 @@ full_algorithm = Algorithm(
     app_conf,
     mail,
     billing,
+    stripe,
     username_restrictions,
     load_i18n,
     asset_url_generator,

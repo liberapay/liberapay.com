@@ -952,36 +952,6 @@ class Payday(object):
             n += 1
         log("Sent %i income notifications." % n)
 
-        # Identity-required notifications
-        n = 0
-        participants = self.db.all("""
-            SELECT p
-              FROM participants p
-             WHERE mangopay_user_id IS NULL
-               AND kind IN ('individual', 'organization')
-               AND (p.goal IS NULL OR p.goal >= 0)
-               AND EXISTS (
-                     SELECT 1
-                       FROM current_tips t
-                       JOIN participants p2 ON p2.id = t.tipper
-                      WHERE t.tippee = p.id
-                        AND t.amount > 0
-                        AND t.is_funded
-                   )
-               AND NOT EXISTS (
-                     SELECT 1
-                       FROM notifications n
-                      WHERE n.participant = p.id
-                        AND n.event = 'identity_required'
-                        AND n.ts > (current_timestamp - interval '6 months')
-                        AND (n.is_new OR n.email_sent IS TRUE)
-                   )
-        """)
-        for p in participants:
-            p.notify('identity_required', force_email=True)
-            n += 1
-        log("Sent %i identity_required notifications." % n)
-
         # Low-balance notifications
         n = 0
         participants = self.db.all("""
@@ -1010,6 +980,7 @@ class Payday(object):
                         AND t.status = 'succeeded'
                         AND t.amount::currency = needed::currency
                    )
+          ORDER BY p.id
         """, (previous_ts_end, self.ts_end))
         for p, balance, needed in participants:
             p.notify('low_balance', low_balance=balance, needed=needed, email=False)

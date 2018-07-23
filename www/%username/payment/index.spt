@@ -1,0 +1,63 @@
+from markupsafe import Markup
+
+from liberapay.utils import get_participant, group_by
+
+CODE = Markup('<code>%s</code>')
+
+[---]
+
+participant = get_participant(state, restrict=True)
+
+accounts_by_provider = group_by(website.db.all("""
+    SELECT *
+      FROM payment_accounts
+     WHERE participant = %s
+       AND is_current IS true
+""", (participant.id,)), lambda a: a.provider)
+
+title = participant.username
+subhead = _("Payment")
+
+[---] text/html
+% extends "templates/settings.html"
+
+% block content
+    <p>{{ _("This page allows you to manage your payment methods.") }}</p>
+
+    % include "templates/sandbox-warning.html"
+
+    <h3>Stripe</h3>
+    % set accounts = accounts_by_provider.get('stripe', ())
+    % if accounts
+    <div>
+        % for account in accounts
+        <div class="card card-default">
+            % if account.display_name
+            <h4>{{ account.display_name }}</h4>
+            {{ _("Account ID: {0}", account.id) }}<br>
+            % else
+            <h4>{{ account.id }}</h4>
+            % endif
+            <p>
+            {{ _("Country: {0}", locale.countries.get(account.country, account.country)) }}<br>
+            % if account.default_currency
+            {{ _("Currency: {0}", locale.currencies.get(account.default_currency, account.default_currency)) }}<br>
+            % endif
+            </p>
+            % if not account.charges_enabled
+            <span class="text-danger">{{ _("This account cannot receive payments.") }}</span>
+            % endif
+        </div>
+        % endfor
+    </div>
+    <br>
+    % endif
+
+    <form action="/payment-providers/stripe/connect" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
+        <button class="btn btn-{{ 'default' if accounts else 'primary' }}">{{
+            _("Connect {platform_name} account", platform_name='Stripe')
+        }}</button>
+    </form>
+% endblock

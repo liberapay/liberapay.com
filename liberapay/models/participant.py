@@ -2127,7 +2127,7 @@ class Participant(Model, MixinTeam):
                      , p AS tippee_p
                      , t.is_funded
                      , t.paid_in_advance
-                     , (p.mangopay_user_id IS NOT NULL OR kind = 'group') AS is_identified
+                     , (p.has_payment_account OR p.kind = 'group') AS has_payment_account
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
