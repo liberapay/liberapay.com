@@ -1105,7 +1105,9 @@ class Participant(Model, MixinTeam):
     # =============
 
     def notify(self, event, force_email=False, email=True, web=True, **context):
-        email = email and (force_email or self.email_notif_bits & EVENTS.get(event).bit > 0)
+        if email and not force_email:
+            bit = EVENTS.get(event.split('~', 1)[0]).bit
+            email = self.email_notif_bits & bit > 0
         p_id = self.id
         context = serialize(context)
         n_id = self.db.one("""
