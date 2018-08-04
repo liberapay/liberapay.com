@@ -45,7 +45,7 @@ if currency not in PAYIN_CARD_MIN:
     raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
 
 if exchange:
-    route = ExchangeRoute.from_id(exchange.route)
+    route = ExchangeRoute.from_id(participant, exchange.route)
 else:
     routes = ExchangeRoute.from_network(participant, 'mango-cc', currency=currency)
     route = routes[0] if routes else None

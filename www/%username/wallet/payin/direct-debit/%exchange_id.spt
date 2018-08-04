@@ -41,7 +41,7 @@ if exchange_id and request.method != 'POST':
 del exchange_id
 
 if exchange:
-    route = ExchangeRoute.from_id(exchange.route)
+    route = ExchangeRoute.from_id(participant, exchange.route)
 else:
     route_id = request.body.get('route_id') if request.method == 'POST' else 0
     route = website.db.one("""

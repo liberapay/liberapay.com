@@ -262,7 +262,7 @@ class TestDirectDebit(MangopayHarness):
 
         exchange = self.db.one("SELECT * FROM exchanges")
         assert exchange.status == 'pre-mandate'
-        route = ExchangeRoute.from_id(exchange.route)
+        route = ExchangeRoute.from_id(self.homer, exchange.route)
 
         path += ('/%s?MandateId=%s' % (exchange.id, route.mandate)).encode('ascii')
         r = self.client.GET(path, auth_as=self.homer)

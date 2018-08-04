@@ -26,11 +26,11 @@ exchange = website.db.one("""
 if exchange is None or exchange.status != 'succeeded':
     raise response.error(404)
 
-route = ExchangeRoute.from_id(exchange.route)
+route = ExchangeRoute.from_id(participant, exchange.route)
 if route.network == 'mango-cc':
     card = Card.get(route.address)
 elif route.network == 'mango-ba':
-    bank_account = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
+    bank_account = BankAccount.get(route.address, user_id=route.remote_user_id)
 
 if int(exchange.remote_id) > 0:
     payin = PayIn.get(exchange.remote_id)

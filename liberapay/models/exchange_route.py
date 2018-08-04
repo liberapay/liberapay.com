@@ -14,19 +14,23 @@ class ExchangeRoute(Model):
     __nonzero__ = __bool__
 
     @classmethod
-    def from_id(cls, id):
-        return cls.db.one("""
-            SELECT r.*::exchange_routes
+    def from_id(cls, participant, id):
+        route = cls.db.one("""
+            SELECT r
               FROM exchange_routes r
-             WHERE id = %(id)s
-        """, locals())
+             WHERE r.id = %(r_id)s
+               AND r.participant = %(p_id)s
+        """, dict(r_id=id, p_id=participant.id))
+        if route:
+            route.__dict__['participant'] = participant
+        return route
 
     @classmethod
     def from_network(cls, participant, network, currency=None):
         participant_id = participant.id
         mangopay_user_id = participant.mangopay_user_id
         r = cls.db.all("""
-            SELECT r.*::exchange_routes
+            SELECT r
               FROM exchange_routes r
              WHERE participant = %(participant_id)s
                AND remote_user_id = %(mangopay_user_id)s
@@ -43,7 +47,7 @@ class ExchangeRoute(Model):
     def from_address(cls, participant, network, address):
         participant_id = participant.id
         r = cls.db.one("""
-            SELECT r.*::exchange_routes
+            SELECT r
               FROM exchange_routes r
              WHERE participant = %(participant_id)s
                AND network = %(network)s
