@@ -1,0 +1,34 @@
+% if len(donations) == 1
+{{ _("It's time to renew your donation to {username} on Liberapay", username=donations[0].tippee_username) }}
+% else
+{{ _("It's time to renew your donations on Liberapay") }}
+% endif
+
+[---] text/html
+% if len(donations) == 1
+% set tip = donations[0]
+<p>{{ _(
+    "Your donation of {amount} to {recipient} is awaiting payment.",
+    amount=tip.periodic_amount, recipient=tip.tippee_username
+) }}</p>
+% else
+<p>{{ ngettext(
+    "You have {n} donation waiting to be renewed:",
+    "You have {n} donations waiting to be renewed:",
+    n=len(donations)
+) }}</p>
+<ul>
+% for tip in donations
+    <li>{{ _(
+        "{amount} to {username}",
+        amount=tip.periodic_amount, username=tip.tippee_username
+    ) }}</li>
+% endfor
+</ul>
+% endif
+
+<p><a href="{{ participant.url('giving/pay') }}" style="{{ button_style('primary') }}">{{
+    ngettext("Renew this donation", "Renew these donations", len(donations)) }}</a></p>
+
+<p><a href="{{ participant.url('giving/') }}" style="{{ button_style('default') }}">{{
+    _("Manage your donations") }}</a></p>

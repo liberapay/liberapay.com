@@ -226,6 +226,9 @@ if route:
     if not route:
         response.redirect(request.line.uri)
 
+if user == payer:
+    payer.mark_notifications_as_read('donate_reminder')
+
 # https://stripe.com/docs/security#content-security-policy
 csp = response.headers[b'Content-Security-Policy']
 csp = csp.allow(b'connect-src', b"api.stripe.com")

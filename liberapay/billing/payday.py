@@ -957,40 +957,49 @@ class Payday(object):
             n += 1
         log("Sent %i income notifications." % n)
 
-        # Low-balance notifications
+        # Donation renewal notifications
         n = 0
         participants = self.db.all("""
-            SELECT p, COALESCE(w.balance, zero(needed)) AS balance, needed
+            SELECT (SELECT p FROM participants p WHERE p.id = t.tipper) AS p
+                 , json_agg((SELECT a FROM (
+                       SELECT t.periodic_amount, t.tippee_username
+                   ) a))
               FROM (
-                     SELECT t.tipper, sum(t.amount) AS needed
+                     SELECT t.*, p2.username AS tippee_username
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
-                      WHERE (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
+                      WHERE t.amount > 0
+                        AND ( t.paid_in_advance IS NULL OR
+                              t.paid_in_advance < t.amount
+                            )
                         AND p2.status = 'active'
                         AND p2.is_suspended IS NOT true
-                        AND coalesce_currency_amount(t.paid_in_advance, t.amount::currency) < t.amount
-                   GROUP BY t.tipper, t.amount::currency
-                   ) a
-              JOIN participants p ON p.id = a.tipper
-         LEFT JOIN wallets w ON w.owner = p.id
-                            AND w.balance::currency = needed::currency
-                            AND w.is_current IS TRUE
-             WHERE COALESCE(w.balance, zero(needed)) < needed
-               AND EXISTS (
+                        AND p2.has_payment_account
+                   ) t
+             WHERE EXISTS (
                      SELECT 1
-                       FROM transfers t
-                      WHERE t.tipper = p.id
-                        AND t.timestamp > %s
-                        AND t.timestamp <= %s
-                        AND t.status = 'succeeded'
-                        AND t.amount::currency = needed::currency
+                       FROM transfers tr
+                      WHERE tr.tipper = t.tipper
+                        AND COALESCE(tr.team, tr.tippee) = t.tippee
+                        AND tr.context IN ('tip', 'take')
+                        AND tr.status = 'succeeded'
                    )
-          ORDER BY p.id
-        """, (previous_ts_end, self.ts_end))
-        for p, balance, needed in participants:
-            p.notify('low_balance', low_balance=balance, needed=needed, email=False)
+               AND (
+                     SELECT count(*)
+                       FROM notifications n
+                      WHERE n.participant = t.tipper
+                        AND n.event = 'donate_reminder'
+                        AND n.is_new
+                   ) < 4
+          GROUP BY t.tipper
+          ORDER BY t.tipper
+        """)
+        for p, donations in participants:
+            for tip in donations:
+                tip['periodic_amount'] = Money(**tip['periodic_amount'])
+            p.notify('donate_reminder', donations=donations)
             n += 1
-        log("Sent %i low_balance notifications." % n)
+        log("Sent %i donate_reminder notifications." % n)
 
 
 def create_payday_issue():
