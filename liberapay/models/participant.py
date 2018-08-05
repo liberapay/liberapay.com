@@ -2138,6 +2138,10 @@ class Participant(Model, MixinTeam):
                      , t.is_funded
                      , t.paid_in_advance
                      , p.has_payment_account
+                     , ( t.paid_in_advance IS NULL OR
+                         t.paid_in_advance < (t.periodic_amount * 0.75) OR
+                         t.paid_in_advance < (t.amount * 4)
+                       ) AS awaits_renewal
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
@@ -2168,6 +2172,21 @@ class Participant(Model, MixinTeam):
         """, (self.id,))]
 
         return tips, pledges
+
+    def get_tips_awaiting_renewal(self):
+        return [NS(r._asdict()) for r in self.db.all("""
+            SELECT t.*, p AS tippee_p
+              FROM current_tips t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %s
+               AND t.amount > 0
+               AND ( t.paid_in_advance IS NULL OR
+                     t.paid_in_advance < (t.periodic_amount * 0.75) OR
+                     t.paid_in_advance < (t.amount * 4)
+                   )
+          ORDER BY (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
+                 , t.ctime
+        """, (self.id,))]
 
     def get_tips_receiving(self):
         return self.db.all("""

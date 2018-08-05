@@ -36,12 +36,12 @@ ncancelled = len(cancelled_tips) + len(cancelled_pledges)
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
+ntips_awaiting_renewal = sum(t.awaits_renewal for t in tips)
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
     currency: (
         sorted(tips, key=lambda t: (-t.amount.amount, t.tippee_p.username)),
-        Money.sum((t.amount for t in tips), currency),
-        Money.sum((t.amount for t in tips if (t.paid_in_advance or ZERO[currency]) > t.amount), currency)
+        Money.sum((t.amount for t in tips), currency)
     )
     for currency, tips in tips_by_currency.items()
 }
@@ -108,39 +108,27 @@ if not freeload:
 <div class="col-lg-12">
     <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
     <p>{{ _("You give {0} per week.", participant.giving) }}</p>
+    % if ntips_awaiting_renewal
+        <div class="alert alert-warning">
+        {{ ngettext(
+            "You have {n} donation awaiting payment.",
+            "You have {n} donations awaiting payment.",
+            n=ntips_awaiting_renewal
+        ) }}
+        &nbsp;
+        <a class="btn btn-success" href="{{ participant.path('giving/pay') }}">{{
+            ngettext("Renew this donation", "Renew these donations", ntips_awaiting_renewal)
+        }}</a>
+        </div>
+    % endif
     % for currency, t in tips_by_currency.items()
-    % set tips, total, paid_in_advance = t
+    % set tips, total = t
     % set currency_name = locale.currencies.get(currency, currency)
     % if n_tip_currencies > 1
     <h4>{{ locale.title(currency_name) }} ({{ locale.currency_symbols.get(currency, currency) }})</h4>
     % endif
     % set receiving = participant.get_receiving_in(currency)
-    % set weekly = total - receiving
-    % if weekly > paid_in_advance
-        % set balance = participant.get_balance_in(currency)
-        % set funded = balance // weekly
-        <p class="{{ 'text-success' if funded > 3 else 'alert alert-warning' }}">
-            {{ _("You have {0} in your Liberapay wallet.", balance) }}
-            % if funded > 0
-                {{ ngettext("Your donations are only funded for another week.",
-                            "Your donations are funded for another {n} weeks.",
-                            funded) if n_tip_currencies == 1 else
-                   ngettext("Your donations in {currency} are only funded for another week.",
-                            "Your donations in {currency} are funded for another {n} weeks.",
-                            funded, currency=currency_name) }}
-            % else
-                {{ _("You need to transfer money to your wallet to fund your donations.")
-                   if n_tip_currencies == 1 else
-                   _("You need to transfer money to your wallet to fund your donations in {currency}.",
-                     currency=currency_name) }}
-            % endif
-            % if funded < 52
-                <a class="btn {{ 'btn-default btn-sm' if funded > 3 else 'btn-primary' }}"
-                   href="{{ participant.path('giving/pay') }}"
-                   >{{ _("Add money") }}</a>
-            % endif
-        </p>
-    % elif weekly < 0
+    % if receiving > total
         <p>{{
             _("Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week).",
               income=receiving, donations_amount=total) if n_tip_currencies == 1 else
@@ -194,7 +182,7 @@ if not freeload:
                 % elif not tippee.accepts_tips
                     {{ _("No: the recipient no longer accepts donations") }}
                 % elif not tip.is_funded
-                    {{ _("No: insufficient funds") }}
+                    {{ _("No: awaiting payment") }}
                 % else
                     {{ _("Yes") }}
                 % endif

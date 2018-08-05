@@ -185,19 +185,7 @@ if tippee_id:
         raise response.error(400, _("This donation is not active."))
     donations = [tip]
 else:
-    donations = [NS(r._asdict()) for r in website.db.all("""
-        SELECT p AS tippee_p, t.*
-          FROM current_tips t
-          JOIN participants p ON p.id = t.tippee
-         WHERE t.tipper = %s
-           AND t.amount > 0
-           AND ( t.paid_in_advance IS NULL OR
-                 t.paid_in_advance < (t.periodic_amount * 0.75) OR
-                 t.paid_in_advance < (t.amount * 3)
-               )
-      ORDER BY (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
-             , t.ctime
-    """, (payer.id,))]
+    donations = payer.get_tips_awaiting_renewal()
 donations, donations_not_fundable = partition(
     donations, lambda t: t.tippee_p.has_payment_account and not t.tippee_p.is_suspended
 )
