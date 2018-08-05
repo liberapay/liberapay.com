@@ -183,7 +183,9 @@ if not freeload:
             <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             <td class="funded {{ 'danger' if inactive else '' }}">
-                % if not tip.has_payment_account
+                % if tip.tippee_p.kind == 'group'
+                    {{ _("No: donations to teams are currently inoperative") }}
+                % elif not tip.has_payment_account
                     {{ _("No: the donee hasn't configured any payment method") }}
                 % elif tippee.is_suspended
                     {{ _("No: the donee's account is temporarily suspended") }}
