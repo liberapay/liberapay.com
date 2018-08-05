@@ -19,6 +19,7 @@ title = _("Frequently Asked Questions")
              '</a>'|safe) }}</dd>
 
 
+    <!--
     {{ dt(_("Who can use Liberapay?"), 'who-can-use') }}
 
     <dd>{{ _(
@@ -26,6 +27,7 @@ title = _("Frequently Asked Questions")
         "work depending on where you live. Please contact us if you encounter any "
         "problems."
     ) }}</dd>
+    -->
 
 
     {{ dt(_("Can I make a one-time donation?"), 'one-time-gift') }}
@@ -100,65 +102,27 @@ title = _("Frequently Asked Questions")
     {{ dt(_("What payment methods are available?"), 'payment-methods') }}
 
     <dd>{{ _(
-        "We currently support most credit and debit cards (VISA and MasterCard), as "
-        "well as bank wires and direct debits (SEPA only). More options "
-        "will be added in the future."
+        "We currently support credit and debit cards (VISA, MasterCard, etc). "
+        "SEPA direct debits will be operational soon. More options will be "
+        "added in the future."
     ) }}</dd>
 
     {{ dt(_("What are the payment processing fees?"), 'fees') }}
 
-    <dd>
-    <p>{{ _("The fees depend on the payment method as well as the currency.") }}</p>
-    <p>{{ _("When adding money into Liberapay the fees are:") }}</p>
-    <table class="table table-bordered table-condensed text-center">
-        <tr>
-            <th>
-            <th class="text-center">{{ locale.currencies['EUR'] }}
-            <th class="text-center">{{ locale.currencies['USD'] }}
-        <tr>
-            <th>{{ _("Card") }}
-            <td>{{ _("{0}% + {1}", *constants.FEE_PAYIN_CARD['EUR'].with_vat) }}
-            <td>{{ _("{0}% + {1}", *constants.FEE_PAYIN_CARD['USD'].with_vat) }}
-        <tr>
-            <th>{{ _("Bank wire") }}
-            <td colspan=2>{{ _("{0}%", constants.FEE_PAYIN_BANK_WIRE.with_vat) }}
-        <tr>
-            <th>{{ _("Direct debit") }}
-            <td>{{ format_money(constants.FEE_PAYIN_DIRECT_DEBIT['EUR'].with_vat) }}
-            <td>{{ _("not supported") }}
-    </table>
-    <p>{{ _(
-        "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer "
-        "regardless of the destination country.",
-        constants.FEE_PAYOUT['USD']['*'].with_vat,
-    ) }}</p>
-    <p>{{ _(
-        "The fees listed above are only those from our payment processors, your "
-        "bank can also charge you for each transaction, especially international "
-        "ones. We have no control or visibility over your bank's fees."
-    ) }}</p>
-    <p>{{ _(
-        "There are no fees for transfers between Liberapay users."
-    ) }}</p>
-    </dd>
+    <dd>{{ _(
+        "The fees vary by payment processor, payment method, countries and "
+        "currencies. The average is expected to be below 5% in all cases."
+    ) }}</dd>
 
 
     {{ dt(_("Is there a minimum or maximum amount I can give or receive?"), 'maximum-amount') }}
 
     <dd>
     {{ _(
-        "There are no restrictions on the total amount you can give or receive, "
-        "but for legal reasons you will need to provide identity documents if "
-        "you give more than {0}, or receive more than {1}, per year."
-        , constants.KYC_PAYIN_YEARLY_THRESHOLD
-        , constants.KYC_PAYOUT_YEARLY_THRESHOLD
-    ) }}<br>
-    {{ _(
-        "The minimum you can give any user is {0}. To minimize processing fees, "
-        "we charge your credit card at least {1} at a time (the money is stored "
-        "in your Liberapay wallet and transferred to others during Payday)."
+        "The minimum you can give any user is {0} per week, but in order to "
+        "minimize processing fees you will be asked to pay for multiple weeks "
+        "in advance."
         , constants.DONATION_LIMITS[currency]['weekly'][0]
-        , constants.PAYIN_CARD_MIN[currency]
     ) }}<br>
     {{ _(
         "The maximum you can give any one user is {0} per week. This helps to "
