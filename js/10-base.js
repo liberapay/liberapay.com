@@ -38,6 +38,7 @@ Liberapay.init = function() {
     Liberapay.lookup.init();
     Liberapay.payments.init();
     Liberapay.s3_uploader_init();
+    Liberapay.stripe_init();
 
     $('div[href]').css('cursor', 'pointer').click(function() {
         location.href = this.getAttribute('href');
@@ -114,6 +115,17 @@ Liberapay.error = function(jqXHR, textStatus, errorThrown) {
     }
     Liberapay.notification(msg, 'error', -1);
 }
+
+Liberapay.wrap = function(f) {
+    return function() {
+        try {
+            return f.apply(this, arguments);
+        } catch (e) {
+            console.log(e);
+            Liberapay.notification(e, 'error', -1);
+        }
+    }
+};
 
 Liberapay.jsonml = function(jsonml) {
     var node  = document.createElement(jsonml[0]);

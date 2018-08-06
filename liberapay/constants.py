@@ -8,6 +8,7 @@ import re
 
 from jinja2 import StrictUndefined
 from mangopay.utils import Money
+from markupsafe import Markup
 from pando.utils import utc
 
 
@@ -152,6 +153,8 @@ FEE_PAYOUT = {
 }
 FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 
+HTML_A = Markup('<a href="%s">%s</a>')
+
 INVOICE_DOC_MAX_SIZE = 5000000
 INVOICE_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'png']
 INVOICE_DOCS_LIMIT = 10
@@ -230,6 +233,24 @@ PAYIN_DIRECT_DEBIT_TARGET = {
 }
 PAYIN_DIRECT_DEBIT_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
 
+# https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts
+PAYIN_STRIPE_MIN_POSSIBLE = {  # fee > 50%
+    'EUR': Money('0.50', 'EUR'),
+    'USD': Money('0.50', 'USD'),
+}
+PAYIN_STRIPE_MIN_RECOMMENDED = {  # fee < 8%
+    'EUR': Money('10.00', 'EUR'),
+    'USD': Money('12.00', 'USD'),
+}
+PAYIN_STRIPE_LOW_FEE = {  # fee < 6%
+    'EUR': Money('40.00', 'EUR'),
+    'USD': Money('48.00', 'USD'),
+}
+PAYIN_STRIPE_MAX_POSSIBLE = {  # fee < 5%
+    'EUR': Money('999999.99', 'EUR'),
+    'USD': Money('999999.99', 'USD'),
+}
+
 PAYMENT_METHODS = {
     'mango-ba': _("Direct Debit"),
     'mango-bw': _("Bank Wire"),
@@ -249,6 +270,9 @@ PERIOD_CONVERSION_RATES = {
 
 POSTAL_ADDRESS_KEYS = (
     'AddressLine1', 'AddressLine2', 'City', 'Region', 'PostalCode', 'Country'
+)
+POSTAL_ADDRESS_KEYS_STRIPE = (
+    'line1', 'line2', 'city', 'state', 'postal_code', 'country'
 )
 
 PRIVACY_FIELDS = OrderedDict([

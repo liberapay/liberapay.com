@@ -163,7 +163,7 @@ def fake_exchange(db, participant, amount, fee, vat, timestamp):
             participant=participant.id,
             network='mango-cc',
             address='-1',
-            error='',
+            status='chargeable',
             one_off=False,
             remote_user_id=participant.mangopay_user_id,
             currency='EUR',

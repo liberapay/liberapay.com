@@ -38,7 +38,7 @@ class TestChartOfReceiving(Harness):
         assert actual == expected
 
     def test_get_tip_distribution_ignores_bad_cc(self):
-        bad_cc = self.make_participant('bad_cc', last_bill_result='Failure!')
+        bad_cc = self.make_participant('bad_cc', route_status='failed')
         self.alice.set_tip_to(self.bob, EUR('1.00'))
         bad_cc.set_tip_to(self.bob, EUR('3.00'))
         expected = ([[EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 1, Decimal('1')]],

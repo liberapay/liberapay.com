@@ -292,8 +292,8 @@ def record_payout_refund(db, payout_refund):
     amount, fee, vat = -e_origin.amount, -e_origin.fee, -e_origin.vat
     assert payout_refund.DebitedFunds / 100 == amount
     assert payout_refund.Fees / 100 == fee
-    route = ExchangeRoute.from_id(e_origin.route)
     participant = Participant.from_id(e_origin.participant)
+    route = ExchangeRoute.from_id(participant, e_origin.route)
     remote_id = payout_refund.Id
     wallet_id = e_origin.wallet_id
     return db.one("""
@@ -689,7 +689,11 @@ def _record_transfer_result(db, t_id, status, error=None):
                                 AND tippee = %(tip_target)s
                          )
                     UPDATE tips
-                       SET paid_in_advance = coalesce(paid_in_advance, zero(amount)) + %(amount)s
+                       SET paid_in_advance = (
+                               coalesce_currency_amount(paid_in_advance, amount::currency) +
+                               convert(%(amount)s, amount::currency)
+                           )
+                         , is_funded = true
                      WHERE id = (SELECT id FROM current_tip)
                  RETURNING paid_in_advance
                 """, locals())

@@ -40,9 +40,5 @@ class TestRoutes(MangopayHarness):
 
         homer = Participant.from_username('homer')
         route = ExchangeRoute.from_address(homer, 'mango-ba', self.bank_account.Id)
-        assert route.error == 'invalidated'
+        assert route.status == 'canceled'
         assert homer.mangopay_user_id
-
-        # Check that update_error doesn't update an invalidated route
-        route.update_error('some error')
-        assert route.error == 'invalidated'

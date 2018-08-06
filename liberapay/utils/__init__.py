@@ -35,8 +35,12 @@ BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
 class NS(object):
+
     def __init__(self, *d, **kw):
         self.__dict__.update(*d, **kw)
+
+    def __str__(self):
+        return 'NS(%s)' % self.__dict__
 
 
 def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,
@@ -529,3 +533,13 @@ def resolve(domain, port):
         return socket.getaddrinfo(domain, port)
     except socket.gaierror:
         return
+
+
+def partition(l, predicate):
+    a, b = [], []
+    for e in l:
+        if predicate(e):
+            a.append(e)
+        else:
+            b.append(e)
+    return a, b

@@ -139,7 +139,7 @@ if request.method == 'POST':
                     SELECT r
                       FROM exchange_routes r
                      WHERE participant = %s
-                       AND error <> 'invalidated'
+                       AND status = 'chargeable'
                 """, (participant.id,))
                 for route in routes:
                     route.invalidate()

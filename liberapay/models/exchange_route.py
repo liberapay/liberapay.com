@@ -9,29 +9,36 @@ class ExchangeRoute(Model):
     typname = "exchange_routes"
 
     def __bool__(self):
-        return self.error != 'invalidated'
+        return self.status in ('pending', 'chargeable')
 
     __nonzero__ = __bool__
 
     @classmethod
-    def from_id(cls, id):
-        return cls.db.one("""
-            SELECT r.*::exchange_routes
+    def from_id(cls, participant, id):
+        route = cls.db.one("""
+            SELECT r
               FROM exchange_routes r
-             WHERE id = %(id)s
-        """, locals())
+             WHERE r.id = %(r_id)s
+               AND r.participant = %(p_id)s
+        """, dict(r_id=id, p_id=participant.id))
+        if route:
+            route.__dict__['participant'] = participant
+        return route
 
     @classmethod
     def from_network(cls, participant, network, currency=None):
         participant_id = participant.id
-        mangopay_user_id = participant.mangopay_user_id
+        if network.startswith('mango-'):
+            remote_user_id = participant.mangopay_user_id
+        elif network.startswith('stripe-'):
+            remote_user_id = None
         r = cls.db.all("""
-            SELECT r.*::exchange_routes
+            SELECT r
               FROM exchange_routes r
              WHERE participant = %(participant_id)s
-               AND remote_user_id = %(mangopay_user_id)s
-               AND network = %(network)s
-               AND COALESCE(error, '') <> 'invalidated'
+               AND COALESCE(remote_user_id = %(remote_user_id)s, true)
+               AND network::text = %(network)s
+               AND status = 'chargeable'
                AND COALESCE(currency::text, '') = COALESCE(%(currency)s::text, '')
           ORDER BY r.id DESC
         """, locals())
@@ -43,7 +50,7 @@ class ExchangeRoute(Model):
     def from_address(cls, participant, network, address):
         participant_id = participant.id
         r = cls.db.one("""
-            SELECT r.*::exchange_routes
+            SELECT r
               FROM exchange_routes r
              WHERE participant = %(participant_id)s
                AND network = %(network)s
@@ -54,15 +61,18 @@ class ExchangeRoute(Model):
         return r
 
     @classmethod
-    def insert(cls, participant, network, address, error='', one_off=False, currency=None):
+    def insert(cls, participant, network, address, status,
+               one_off=False, remote_user_id=None, country=None, currency=None):
         p_id = participant.id
-        remote_user_id = participant.mangopay_user_id
+        if network.startswith('mango-'):
+            remote_user_id = participant.mangopay_user_id
         r = cls.db.one("""
-            INSERT INTO exchange_routes
-                        (participant, network, address, error, one_off, remote_user_id, currency)
-                 VALUES (%(p_id)s, %(network)s, %(address)s, %(error)s, %(one_off)s,
-                         %(remote_user_id)s, %(currency)s)
-              RETURNING exchange_routes.*::exchange_routes
+            INSERT INTO exchange_routes AS r
+                        (participant, network, address, status,
+                         one_off, remote_user_id, country, currency)
+                 VALUES (%(p_id)s, %(network)s, %(address)s, %(status)s,
+                         %(one_off)s, %(remote_user_id)s, %(country)s, %(currency)s)
+              RETURNING r
         """, locals())
         r.__dict__['participant'] = participant
         return r
@@ -71,8 +81,8 @@ class ExchangeRoute(Model):
     def upsert_bankwire_route(cls, participant):
         r = cls.db.one("""
             INSERT INTO exchange_routes AS r
-                        (participant, network, address, one_off, error, remote_user_id)
-                 VALUES (%s, 'mango-bw', 'x', false, '', %s)
+                        (participant, network, address, one_off, status, remote_user_id)
+                 VALUES (%s, 'mango-bw', 'x', false, 'chargeable', %s)
             ON CONFLICT (participant, network, address) DO UPDATE
                     SET one_off = false  -- dummy update
               RETURNING r
@@ -91,7 +101,7 @@ class ExchangeRoute(Model):
             mandate = Mandate.get(self.mandate)
             if mandate.Status in ('SUBMITTED', 'ACTIVE'):
                 mandate.cancel()
-        self.update_error('invalidated')
+        self.update_status('canceled')
 
     def set_mandate(self, mandate_id):
         self.db.run("""
@@ -101,14 +111,13 @@ class ExchangeRoute(Model):
         """, (mandate_id, self.id))
         self.set_attributes(mandate=mandate_id)
 
-    def update_error(self, new_error):
+    def update_status(self, new_status):
         id = self.id
-        old_error = self.error
-        if old_error == 'invalidated':
+        if new_status == self.status:
             return
         self.db.run("""
             UPDATE exchange_routes
-               SET error = %(new_error)s
+               SET status = %(new_status)s
              WHERE id = %(id)s
         """, locals())
-        self.set_attributes(error=new_error)
+        self.set_attributes(status=new_status)

@@ -134,6 +134,10 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
         }
         & > .radio-label {
             padding: 10px 15px;
+            & > .list-group-item-heading > small {
+                font-size: 100%;
+                margin-left: 1ex;
+            }
         }
         & > .radio-label:hover {
             color: $list-group-link-hover-color;

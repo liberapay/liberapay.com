@@ -171,7 +171,7 @@ class Harness(unittest.TestCase):
         platform = kw.pop('elsewhere', 'github')
         domain = kw.pop('domain', '')
         kw2 = {}
-        for key in ('last_bill_result', 'balance', 'mangopay_wallet_id'):
+        for key in ('route_status', 'balance', 'mangopay_wallet_id'):
             if key in kw:
                 kw2[key] = kw.pop(key)
 
@@ -220,9 +220,9 @@ class Harness(unittest.TestCase):
                             (participant, address, verified, verified_time)
                      VALUES (%s, %s, true, now())
             """, (participant.id, kw['email']))
-        if 'last_bill_result' in kw2:
+        if 'route_status' in kw2:
             ExchangeRoute.insert(
-                participant, 'mango-cc', '-1', kw2['last_bill_result'],
+                participant, 'mango-cc', '-1', kw2['route_status'],
                 currency=participant.main_currency
             )
         if 'balance' in kw2 and kw2['balance'] != 0:
@@ -252,7 +252,7 @@ class Harness(unittest.TestCase):
             else:
                 from .mangopay import MangopayHarness
                 address = MangopayHarness.card_id if network == 'mango-cc' else -participant.id
-                route = ExchangeRoute.insert(participant, network, address, currency=currency)
+                route = ExchangeRoute.insert(participant, network, address, 'chargeable', currency=currency)
                 assert route
         e_id = record_exchange(self.db, route, amount, fee, vat, participant, 'pre').id
         record_exchange_result(self.db, e_id, -e_id, status, error, participant)

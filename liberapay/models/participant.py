@@ -27,7 +27,7 @@ import requests
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_UNIT, D_ZERO,
     DONATION_LIMITS, EMAIL_RE,
-    EMAIL_VERIFICATION_TIMEOUT, EVENTS,
+    EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
     PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
     PUBLIC_NAME_MAX_SIZE, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
@@ -759,7 +759,7 @@ class Participant(Model, MixinTeam):
             SELECT r
               FROM exchange_routes r
              WHERE participant = %s
-               AND coalesce(error, '') <> 'invalidated'
+               AND status = 'chargeable'
         """, (self.id,))
         for route in routes:
             route.invalidate()
@@ -1883,12 +1883,15 @@ class Participant(Model, MixinTeam):
                  , p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
         updated = []
-        for wallet in self.get_current_wallets(cursor):
-            fake_balance = wallet.balance
-            currency = fake_balance.currency
+        currencies = set(t.amount.currency for t in tips)
+        balances = {w.balance.currency: w.balance for w in self.get_current_wallets(cursor)}
+        for currency in currencies:
+            fake_balance = balances.get(currency, ZERO[currency])
             fake_balance += self.get_receiving_in(currency, cursor)
             for tip in (t for t in tips if t.amount.currency == currency):
-                if tip.amount > fake_balance:
+                if tip.amount <= (tip.paid_in_advance or 0):
+                    is_funded = True
+                elif tip.amount > fake_balance:
                     is_funded = False
                 else:
                     fake_balance -= tip.amount
@@ -1910,11 +1913,16 @@ class Participant(Model, MixinTeam):
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
                       WHERE t.tipper = %(id)s
-                        AND p2.status = 'active'
-                        AND (p2.goal IS NULL OR p2.goal >= 0)
-                        AND (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
                         AND t.amount > 0
-                        AND t.is_funded
+                        AND ( p2.status = 'active' AND
+                              (p2.goal IS NULL OR p2.goal >= 0) AND
+                              (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group') AND
+                              t.is_funded
+                              OR
+                              coalesce_currency_amount(
+                                  t.paid_in_advance, t.amount::currency
+                              ) >= t.amount
+                            )
                    ), p.main_currency)
              WHERE p.id = %(id)s
          RETURNING giving
@@ -2129,7 +2137,11 @@ class Participant(Model, MixinTeam):
                      , p AS tippee_p
                      , t.is_funded
                      , t.paid_in_advance
-                     , (p.has_payment_account IS true OR p.kind = 'group') AS has_payment_account
+                     , p.has_payment_account
+                     , ( t.paid_in_advance IS NULL OR
+                         t.paid_in_advance < (t.periodic_amount * 0.75) OR
+                         t.paid_in_advance < (t.amount * 4)
+                       ) AS awaits_renewal
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
@@ -2161,6 +2173,21 @@ class Participant(Model, MixinTeam):
 
         return tips, pledges
 
+    def get_tips_awaiting_renewal(self):
+        return [NS(r._asdict()) for r in self.db.all("""
+            SELECT t.*, p AS tippee_p
+              FROM current_tips t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %s
+               AND t.amount > 0
+               AND ( t.paid_in_advance IS NULL OR
+                     t.paid_in_advance < (t.periodic_amount * 0.75) OR
+                     t.paid_in_advance < (t.amount * 4)
+                   )
+          ORDER BY (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
+                 , t.ctime
+        """, (self.id,))]
+
     def get_tips_receiving(self):
         return self.db.all("""
             SELECT *
@@ -2175,6 +2202,9 @@ class Participant(Model, MixinTeam):
             return (utcnow() - self.join_time).total_seconds()
         return -1
 
+
+    # Payment accounts
+    # ================
 
     def get_mangopay_account(self):
         """Fetch the mangopay account for this participant.
@@ -2479,6 +2509,9 @@ class Participant(Model, MixinTeam):
 
     def path(self, path):
         return '/%s/%s' % (self.username, path)
+
+    def link(self, path='', query=''):
+        return HTML_A % (self.url(path, query), self.username)
 
     @property
     def is_person(self):
