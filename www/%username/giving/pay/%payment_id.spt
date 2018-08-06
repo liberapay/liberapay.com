@@ -39,14 +39,6 @@ if request.method == 'POST':
         except (InvalidOperation, ValueError):
             raise InvalidNumber(amount)
 
-    amount_min = constants.PAYIN_STRIPE_MIN_POSSIBLE[payin_currency]
-    amount_max = constants.PAYIN_STRIPE_MAX_POSSIBLE[payin_currency]
-    if amount < amount_min or amount > amount_max:
-        raise response.error(400, _(
-            "'{0}' is not an acceptable amount (min={1}, max={2})",
-            amount, amount_min, amount_max
-        ))
-
     tip = website.db.one("""
         SELECT t.*, p AS tippee_p
           FROM tips t
@@ -57,6 +49,14 @@ if request.method == 'POST':
     if not tip:
         raise response.error(400, "bad `tip` value in request body")
     beneficiary = tip.tippee_p
+
+    amount_min = max(constants.PAYIN_STRIPE_MIN_POSSIBLE[payin_currency], tip.amount)
+    amount_max = constants.PAYIN_STRIPE_MAX_POSSIBLE[payin_currency]
+    if amount < amount_min or amount > amount_max:
+        raise response.error(400, _(
+            "'{0}' is not an acceptable amount (min={1}, max={2})",
+            amount, amount_min, amount_max
+        ))
 
     destination = website.db.one("""
         SELECT *
@@ -334,6 +334,7 @@ title = _("Funding your donations")
             <input type="hidden" name="currency" value="{{ tip.amount.currency }}" />
             <input type="hidden" name="tip" value="{{ tip.id }}" />
             <ul class="list-group radio-group">
+            % set show_fee_notice = len(tip.multipliers) > 1 and (tip.periodic_amount * tip.multipliers[0]) < tip.low_fee_amount
             % for multiplier in tip.multipliers
                 % set charge_amount = tip.periodic_amount * multiplier
                 <li class="list-group-item">
@@ -341,12 +342,14 @@ title = _("Funding your donations")
                     <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ format_money(charge_amount) }}
+                    % if show_fee_notice
                     % if charge_amount < tip.min_recommended_amount
                         <small class="text-warning">{{ _("(not recommended, high fee percentage)") }}</small>
                     % elif charge_amount < tip.low_fee_amount
                         <small class="text-info">{{ _("(okay, moderate fee percentage)") }}</small>
                     % else
                         <small class="text-success">{{ _("(recommended, low fee percentage)") }}</small>
+                    % endif
                     % endif
                     </h5>
                     <p class="list-group-item-text">{{ ngettext(
@@ -365,7 +368,9 @@ title = _("Funding your donations")
                     <input type="radio" name="amount" value="custom" class="hidden-xs" />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ _(
-                        "Custom amount (min={0}, max={1})", tip.min_possible_amount, tip.max_possible_amount,
+                        "Custom amount (min={0}, max={1})",
+                        max(tip.min_possible_amount, tip.amount),
+                        tip.max_possible_amount,
                     ) }}</h5>
                     <div class="input-group">
                         <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
