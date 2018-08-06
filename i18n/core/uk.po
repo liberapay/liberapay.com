@@ -1539,8 +1539,8 @@ msgstr "Поширені запитання"
 msgid "What payment methods are available?"
 msgstr "Які методи оплати доступні?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
-msgstr "В даний момент ми підтримуємо більшість кредитних та дебетових карт (VISA та MasterCard), а також банківські перекази (в євро) та пряме дебетування (тільки в єдиній зоні платежів в євро (SEPA)). В майбутньому буде додано більше варіантів оплати."
+msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Як працюють періодичні пожертвування?"
@@ -1826,29 +1826,17 @@ msgid "You give {0} per week."
 msgstr "Ви віддаєте {0} в тиждень."
 
 #, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "У вашому гаманці Liberapay {0}."
+msgid "You have {n} donation awaiting payment."
+msgid_plural "You have {n} donations awaiting payment."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Ваші пожертвування забезпечені грошами тільки на наступний тиждень."
-msgstr[1] "Ваші пожертвування забезпечені грошами тільки на {n} наступні тижні."
-msgstr[2] "Ваші пожертвування забезпечені грошами тільки на {n} наступних тижнів."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Ваші пожертвування в {currency} забезпечені тільки на наступний тиждень."
-msgstr[1] "Ваші пожертвування в {currency} забезпечені тільки на {n} наступні тижні."
-msgstr[2] "Ваші пожертвування в {currency} забезпечені тільки на {n} наступних тижнів."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Вам потрібно перевести гроші на гаманець, щоб забезпечити пожертвування грошами."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Вам потрібно перевести гроші в ваш гаманець, щоб забезпечити ваші пожертвування в валюті {currency}."
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1870,6 +1858,9 @@ msgstr "Змінено"
 msgid "Active?"
 msgstr "Активно?"
 
+msgid "No: donations to teams are currently inoperative"
+msgstr ""
+
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Ні: одержувач не налаштував жодного методу оплати"
 
@@ -1882,8 +1873,8 @@ msgstr "Ні: аккаунт отримувача закрито"
 msgid "No: the recipient no longer accepts donations"
 msgstr "Ні: отримувач більше не приймає пожертвування"
 
-msgid "No: insufficient funds"
-msgstr "Ні: не вистачає коштів"
+msgid "No: awaiting payment"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "Недавно відхилені"
@@ -1893,6 +1884,117 @@ msgstr "за останні 30 днів"
 
 msgid "Cancelled"
 msgstr "Відхилено"
+
+#, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr "'{0}' не є допустимою сумою (мінімум={1}, максимум={2})"
+
+msgid "This donation is not active."
+msgstr ""
+
+msgid "Funding your donations"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {charge_amount} was successful."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment failed. Error message: “{0}”"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr "Кредитна/Дебетова картка"
+
+msgid "Easy and instantaneous"
+msgstr "Легкий та миттєвий"
+
+msgid "Eurozone only"
+msgstr "Тільки Єврозона"
+
+msgid "Best for regular payments"
+msgstr "Кращий варіант для регулярних платежів"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
+msgstr ""
+
+msgid "Please select or input a payment amount:"
+msgstr ""
+
+msgid "(not recommended, high fee percentage)"
+msgstr ""
+
+msgid "(okay, moderate fee percentage)"
+msgstr ""
+
+msgid "(recommended, low fee percentage)"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {n} week."
+msgid_plural "Next payment in {n} weeks."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Next payment in {n} month."
+msgid_plural "Next payment in {n} months."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Next payment in {n} year."
+msgid_plural "Next payment in {n} years."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr "Довільна сума (мінімум={0}, максимум={1})"
+
+#, python-brace-format
+msgid "We will charge your {brand} card (last four digits: {last4})."
+msgstr ""
+
+msgid "Use another card"
+msgstr ""
+
+msgid "Please input your card number:"
+msgstr ""
+
+#, python-brace-format
+msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
+msgstr ""
+
+msgid "Remember the card number for next time"
+msgstr "Використати цей номер картки в наступний раз"
+
+msgid "Initiate the payment"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Ви впевнені, що бажаєте змінити тип аккаунту? Через юридичні причини нам доведеться створити для вас новий аккаунт в платіжній системі наших партнерів, та нарахувати гроші з вашого старого аккаунту."
@@ -2599,20 +2701,35 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "Ви не можете додавати гроші, якщо ваші пожертвування повністю забезпечуються за рахунок пожертвувань, які роблять вам. Якщо це проблема для вас, будь ласка, надішліть листа на адресу support@liberapay.com та поясніть чому."
 
 #, python-brace-format
+msgid "Your donations are only funded for another week."
+msgid_plural "Your donations are funded for another {n} weeks."
+msgstr[0] "Ваші пожертвування забезпечені грошами тільки на наступний тиждень."
+msgstr[1] "Ваші пожертвування забезпечені грошами тільки на {n} наступні тижні."
+msgstr[2] "Ваші пожертвування забезпечені грошами тільки на {n} наступних тижнів."
+
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] "Ваші пожертвування в {currency} забезпечені тільки на наступний тиждень."
+msgstr[1] "Ваші пожертвування в {currency} забезпечені тільки на {n} наступні тижні."
+msgstr[2] "Ваші пожертвування в {currency} забезпечені тільки на {n} наступних тижнів."
+
+msgid "You need to transfer money to your wallet to fund your donations."
+msgstr "Вам потрібно перевести гроші на гаманець, щоб забезпечити пожертвування грошами."
+
+#, python-brace-format
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr "Вам потрібно перевести гроші в ваш гаманець, щоб забезпечити ваші пожертвування в валюті {currency}."
+
+#, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
 msgstr "У вас незавершений платіж {payment_method} на {money_amount}, {link_open}Детальніше{link_close}"
 
 msgid "Please choose a payment method to add money:"
 msgstr "Оберіть спосіб оплати, щоб додати гроші:"
 
-msgid "Credit/Debit Card"
-msgstr "Кредитна/Дебетова картка"
-
 msgid "Currently unavailable"
 msgstr "Недоступно в даний момент"
-
-msgid "Easy and instantaneous"
-msgstr "Легкий та миттєвий"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2630,12 +2747,6 @@ msgstr "Дешевше¹, але незручно"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Комісія: {0}%"
-
-msgid "Eurozone only"
-msgstr "Тільки Єврозона"
-
-msgid "Best for regular payments"
-msgstr "Кращий варіант для регулярних платежів"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Ви ще не налаштували пожертвування. Як тільки ви це зробите, вас попросять додати гроші в аккаунт."
@@ -2658,10 +2769,6 @@ msgstr "Електронний лист відправлено."
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "Чому ви намагаєтесь додати гроші в гаманець? Зв'яжіться з support@liberapay.com, якщо у вас є вагома причина."
-
-#, python-brace-format
-msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
-msgstr "'{0}' не є допустимою сумою (мінімум={1}, максимум={2})"
 
 msgid "This bank wire has been canceled."
 msgstr "Цей банківський переказ було відхилено."
@@ -2722,10 +2829,6 @@ msgid_plural "{n} months"
 msgstr[0] "{n} місяць"
 msgstr[1] "{n} місяці"
 msgstr[2] "{n} місяців"
-
-#, python-brace-format
-msgid "Custom amount (min={0}, max={1})"
-msgstr "Довільна сума (мінімум={0}, максимум={1})"
 
 msgid "The provided postal address is incomplete."
 msgstr "Надана поштова адреса є неповною."
@@ -2802,9 +2905,6 @@ msgstr "Код підтвердження, зазвичай 3 цифри на з
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
 msgstr "Схоже, код підтвердження неправильний, ви впевнені, що не зробили помилок?"
 
-msgid "Remember the card number for next time"
-msgstr "Використати цей номер картки в наступний раз"
-
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr "Дані вашої карти надсилаються напряму в нашу партнерську платіжну систему з використанням захищеного з'єднання."
 
@@ -2859,6 +2959,10 @@ msgstr "{0} було знято з вашого гаманця Liberapay. Якщ
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
 msgstr "Спроба нарахувати {0} на ваш банківський рахунок не вдалася. Повідомлення про помилку: {1}"
+
+#, python-brace-format
+msgid "You have {0} in your Liberapay wallet."
+msgstr "У вашому гаманці Liberapay {0}."
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr "На жаль, поки ви не можете зняти ці гроші, так як вони ще в карантині."
@@ -3104,51 +3208,19 @@ msgstr "Обіцянка яка з'єднанна до аккаунта в ін�
 msgid "Which currencies are supported?"
 msgstr "Які валюти підтримуються?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
-msgstr "В даний момент ми підтримуємо більшість кредитних та дебетових карт (VISA та MasterCard), а також банківські перекази та пряме дебетування (тільки в єдиній зоні платежів євро). В майбутньому буде додано більше варіантів."
-
 msgid "What are the payment processing fees?"
 msgstr "Скільки складає комісія за переказ?"
 
-msgid "The fees depend on the payment method as well as the currency."
-msgstr "Комісія залежить від способу оплати, та також від валюти."
-
-msgid "When adding money into Liberapay the fees are:"
-msgstr "Коли гроші додаються в Liberapay, комісії такі:"
-
-#, python-brace-format
-msgid "{0}% + {1}"
-msgstr "{0}% + {1}"
-
-msgid "Bank wire"
-msgstr "Банківський переказ"
-
-#, python-brace-format
-msgid "{0}%"
-msgstr "{0}%"
-
-msgid "Direct debit"
-msgstr "Пряме дебетування"
-
-msgid "not supported"
-msgstr "не підтримується"
-
-msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
-msgstr "Вказані вище комісії - це тільки комісії наших платіжних систем, ваш банк може стягувати з вас додаткову комісію за кожний переказ, особливо за міжнародний. Ми не контролюємо та не знаємо про комісії вашого банку."
-
-msgid "There are no fees for transfers between Liberapay users."
-msgstr "За перекази між користувачами Liberapay комісія не стягується."
+#
+msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+msgstr ""
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Чи існує мінімальна або максимальна сума, яку я можу віддавати або отримувати?"
 
 #, python-brace-format
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr "Загальна сума яку ви можете віддавати або отримувати, не обмежена, але з юридичних причин, вам потрібно буде надати документи, які засвідчують особу, якщо ви віддаєте більше ніж {0}, або отримуєте більше ніж {1} в рік."
-
-#, python-brace-format
-msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "Мінімальна сума, яку ви можете віддати будь-якому користувачу, складає {0}. Щоб мінімізувати комісію за переказ, ми знімаємо з вашої кредитної карти мінімум {1} за раз (гроші зберігаються в вашому гаманці Liberapay та переказуються іншим в час дня виплат)."
+msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
+msgstr ""
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."

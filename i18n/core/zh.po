@@ -1525,8 +1525,8 @@ msgstr "常見問題"
 msgid "What payment methods are available?"
 msgstr "有什麼可用的付款方式？"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
-msgstr "我們目前支持大部分信用卡和借記卡（VISA和萬事達卡），以及電匯（歐元）和自動撥款（限SEPA）。今後會增加更多選項。"
+msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "定期捐款是如何進行的？"
@@ -1810,25 +1810,13 @@ msgid "You give {0} per week."
 msgstr "你每週給予 {0} 。"
 
 #, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "你的 Liberapay錢包裏有 {0} 。"
+msgid "You have {n} donation awaiting payment."
+msgid_plural "You have {n} donations awaiting payment."
+msgstr[0] ""
 
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "你的捐款將持續{n}週。"
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "你的{currency}捐款將持續{n}週。"
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "你需要轉帳到你的電子錢包以资助你的捐款。"
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "若要使用{currency}捐款，你需要轉賬到你的錢包中。"
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1850,6 +1838,9 @@ msgstr "修改"
 msgid "Active?"
 msgstr "活躍的？"
 
+msgid "No: donations to teams are currently inoperative"
+msgstr ""
+
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1862,8 +1853,8 @@ msgstr "否：受赠者的账户已关闭"
 msgid "No: the recipient no longer accepts donations"
 msgstr "否：受赠者不再接受捐款"
 
-msgid "No: insufficient funds"
-msgstr "否：金額不足"
+msgid "No: awaiting payment"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "最近取消"
@@ -1873,6 +1864,112 @@ msgstr "最近30天內"
 
 msgid "Cancelled"
 msgstr "取消"
+
+#, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr "'{0}'不是可接受的額數 (min={1}, max={2})"
+
+msgid "This donation is not active."
+msgstr ""
+
+msgid "Funding your donations"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {charge_amount} was successful."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment failed. Error message: “{0}”"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+#, fuzzy
+msgid "Credit/Debit Card"
+msgstr "信用卡"
+
+msgid "Easy and instantaneous"
+msgstr "簡單與即時"
+
+msgid "Eurozone only"
+msgstr "限於歐元區"
+
+msgid "Best for regular payments"
+msgstr "定期付款的最佳方案"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
+msgstr ""
+
+msgid "Please select or input a payment amount:"
+msgstr ""
+
+msgid "(not recommended, high fee percentage)"
+msgstr ""
+
+msgid "(okay, moderate fee percentage)"
+msgstr ""
+
+msgid "(recommended, low fee percentage)"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {n} week."
+msgid_plural "Next payment in {n} weeks."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Next payment in {n} month."
+msgid_plural "Next payment in {n} months."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Next payment in {n} year."
+msgid_plural "Next payment in {n} years."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr "自定金額 (min={0}, max={1})"
+
+#, python-brace-format
+msgid "We will charge your {brand} card (last four digits: {last4})."
+msgstr ""
+
+msgid "Use another card"
+msgstr ""
+
+msgid "Please input your card number:"
+msgstr ""
+
+#, python-brace-format
+msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
+msgstr ""
+
+msgid "Remember the card number for next time"
+msgstr "記住卡號以利下回使用"
+
+msgid "Initiate the payment"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "你確定切換帳戶種類？由於法律原因我們會在支付夥伴的系統中重新註冊帳號，並將錢從舊帳號中轉移出來。"
@@ -2565,21 +2662,31 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "在你收到的捐助足以被用來捐助他人的情況下我們不允許你向你的帳號充值。若有疑議請聯繫support@liberapay.com解釋原因。"
 
 #, python-brace-format
+msgid "Your donations are only funded for another week."
+msgid_plural "Your donations are funded for another {n} weeks."
+msgstr[0] "你的捐款將持續{n}週。"
+
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] "你的{currency}捐款將持續{n}週。"
+
+msgid "You need to transfer money to your wallet to fund your donations."
+msgstr "你需要轉帳到你的電子錢包以资助你的捐款。"
+
+#, python-brace-format
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr "若要使用{currency}捐款，你需要轉賬到你的錢包中。"
+
+#, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
 msgstr "你有要給{money_amount}待處理的 {payment_method} 付款，{link_open}相關細節{link_close}"
 
 msgid "Please choose a payment method to add money:"
 msgstr "請挑選付款方式來增加金額："
 
-#, fuzzy
-msgid "Credit/Debit Card"
-msgstr "信用卡"
-
 msgid "Currently unavailable"
 msgstr ""
-
-msgid "Easy and instantaneous"
-msgstr "簡單與即時"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2597,12 +2704,6 @@ msgstr "更便宜但麻煩"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "手續費： {0}%"
-
-msgid "Eurozone only"
-msgstr "限於歐元區"
-
-msgid "Best for regular payments"
-msgstr "定期付款的最佳方案"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "你尚未設定任何捐贈，一旦你進行了捐款，你就會被要求在帳戶裏儲值金額。"
@@ -2625,10 +2726,6 @@ msgstr "電子郵件已送出。"
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "為何你的電子錢包要放入更多錢呢？如果有正當理由，可連絡 support@liberapay.com。"
-
-#, python-brace-format
-msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
-msgstr "'{0}'不是可接受的額數 (min={1}, max={2})"
 
 msgid "This bank wire has been canceled."
 msgstr "銀行電滙被取消。"
@@ -2683,10 +2780,6 @@ msgstr[0] "你的捐款將可資助{0} 週 ({n})"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} 月"
-
-#, python-brace-format
-msgid "Custom amount (min={0}, max={1})"
-msgstr "自定金額 (min={0}, max={1})"
 
 msgid "The provided postal address is incomplete."
 msgstr "被提供的地址未完整。"
@@ -2763,9 +2856,6 @@ msgstr "驗證碼，通常是位於卡反面的3位數字"
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
 msgstr "驗證碼似乎無效，你確定輸入無誤？"
 
-msgid "Remember the card number for next time"
-msgstr "記住卡號以利下回使用"
-
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr "你的銀行卡數據是以加密連結直接傳輸到我們的支付夥伴的系統上的。"
 
@@ -2820,6 +2910,10 @@ msgstr "你的 Liberapay 錢包被取走了{0}元。如果滙款成功，將有 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
 msgstr "企圖轉 {0} 到你銀行戶頭 的這筆交易失敗了，回傳的錯誤訊息為： {1}"
+
+#, python-brace-format
+msgid "You have {0} in your Liberapay wallet."
+msgstr "你的 Liberapay錢包裏有 {0} 。"
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr "不幸的是你尚不能提領這筆錢，它仍在隔離觀察期。"
@@ -3064,51 +3158,19 @@ msgstr ""
 msgid "Which currencies are supported?"
 msgstr "支援哪些貨幣呢？"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
-msgstr "我們支援大部份的信用卡和借貸卡 (VISA 與 MasterCard)，以及銀行電滙和直接扣款(僅接受 SEPA )．未來會加入更多選項。"
-
 msgid "What are the payment processing fees?"
 msgstr "什麼是付款處理費用？"
 
-msgid "The fees depend on the payment method as well as the currency."
-msgstr "手續費取決於付款方式及貨幣。"
-
-msgid "When adding money into Liberapay the fees are:"
-msgstr "向Liberapay充值時的手續費有："
-
-#, python-brace-format
-msgid "{0}% + {1}"
-msgstr "{0}% + {1}"
-
-msgid "Bank wire"
-msgstr "銀行電匯"
-
-#, python-brace-format
-msgid "{0}%"
-msgstr "{0}%"
-
-msgid "Direct debit"
-msgstr "自動撥款"
-
-msgid "not supported"
-msgstr "不支持"
-
-msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
-msgstr "以上費用來自我們的支付處理處，你的銀行也可能對你的交易，尤其是國際交易，收取手續費。我們無法控制或查看你的銀行費用。"
-
-msgid "There are no fees for transfers between Liberapay users."
-msgstr "在Liberapay用戶之間轉帳沒有手續費。"
+#
+msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+msgstr ""
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "是否有可捐款或收款的最高與最低額度限制？"
 
 #, python-brace-format
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr "並沒有限制用戶可以給予或收取的總額，但因法律原因如果每年給予超過{0} 或收取{1} 。用戶須要提供身份證明。"
-
-#, python-brace-format
-msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "捐予任何用戶的最低金額是 {0}.。為了減少處理手續費，我們每次至少自用戶的信用卡收取 {1}(這筆錢會儲存在用戶的Liberapay 電子錢包並在付款日時轉任至其它受贈用戶的帳戶錢包)。"
+msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
+msgstr ""
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."

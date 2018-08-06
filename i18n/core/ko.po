@@ -1506,8 +1506,8 @@ msgstr "자주 묻는 질문"
 msgid "What payment methods are available?"
 msgstr "어떤 지불 방식을 사용할 수 있나요?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
-msgstr "현재 대부분의 신용 카드 및 직불 카드 (비자 및 마스타카드), 계좌 이체 (유로화) 및 자동 이체 (SEPA 전용)를 지원합니다. 미래에 추가 옵션을 지원할 예정입니다."
+msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "지속적인 기부는 어떻게 작동하나요?"
@@ -1791,25 +1791,13 @@ msgid "You give {0} per week."
 msgstr "매주 {0} 만큼을 기부합니다."
 
 #, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "Liberapay 지갑에 {0} 만큼이 있습니다."
+msgid "You have {n} donation awaiting payment."
+msgid_plural "You have {n} donations awaiting payment."
+msgstr[0] ""
 
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "다음 {n} 주 동안 기부금을 낼 만큼의 돈이 있습니다."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "{currency} 로 이루어지는 기부가 다음 {n} 주간 유효합니다."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "기부금을 내기 위해서 Liberapay 지갑으로 돈을 이체해야 합니다."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "{currency} 로 이루어지는 기부를 유지하기 위해 지갑에 돈을 입금해야 합니다."
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1831,6 +1819,9 @@ msgstr "수정됨"
 msgid "Active?"
 msgstr "활동 중입니까?"
 
+msgid "No: donations to teams are currently inoperative"
+msgstr ""
+
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1843,8 +1834,8 @@ msgstr "아니오: 기부받는 사람의 계정이 닫혔습니다"
 msgid "No: the recipient no longer accepts donations"
 msgstr "아니오: 받는 사람이 더이상 기부를 받지 않습니다"
 
-msgid "No: insufficient funds"
-msgstr "아니오: 자금 부족"
+msgid "No: awaiting payment"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "최근 취소됨"
@@ -1854,6 +1845,111 @@ msgstr "최근 30일 이내에"
 
 msgid "Cancelled"
 msgstr "취소됨"
+
+#, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr "'{0}'은 허용된 금액이 아닙니다 (최소={1} 최대={2})"
+
+msgid "This donation is not active."
+msgstr ""
+
+msgid "Funding your donations"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {charge_amount} was successful."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment failed. Error message: “{0}”"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr "신용/직불카드"
+
+msgid "Easy and instantaneous"
+msgstr "쉽고 즉각적입니다"
+
+msgid "Eurozone only"
+msgstr "유로존 전용"
+
+msgid "Best for regular payments"
+msgstr "정기 지불에 가장 좋음"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
+msgstr ""
+
+msgid "Please select or input a payment amount:"
+msgstr ""
+
+msgid "(not recommended, high fee percentage)"
+msgstr ""
+
+msgid "(okay, moderate fee percentage)"
+msgstr ""
+
+msgid "(recommended, low fee percentage)"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {n} week."
+msgid_plural "Next payment in {n} weeks."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Next payment in {n} month."
+msgid_plural "Next payment in {n} months."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Next payment in {n} year."
+msgid_plural "Next payment in {n} years."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr "맞춤 금액 (최소={0}, 최대={1})"
+
+#, python-brace-format
+msgid "We will charge your {brand} card (last four digits: {last4})."
+msgstr ""
+
+msgid "Use another card"
+msgstr ""
+
+msgid "Please input your card number:"
+msgstr ""
+
+#, python-brace-format
+msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
+msgstr ""
+
+msgid "Remember the card number for next time"
+msgstr "다음 결제를 위해 카드 번호 기억하기"
+
+msgid "Initiate the payment"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "계정의 종류를 정말 바꾸시겠습니까? 법적인 이유로 결제 대행사의 시스템에서 새 계정을 생성하고 기존 계정에서 새 계정으로 자금을 이체하게 됩니다."
@@ -2546,20 +2642,31 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "당신의 기부금으로 기부할 금액을 전액 충당할 수 있을 때는 추가 입금을 할 수 없습니다. 문제가 있다면 support@liberapay.com에 이유를 설명해 주세요."
 
 #, python-brace-format
+msgid "Your donations are only funded for another week."
+msgid_plural "Your donations are funded for another {n} weeks."
+msgstr[0] "다음 {n} 주 동안 기부금을 낼 만큼의 돈이 있습니다."
+
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] "{currency} 로 이루어지는 기부가 다음 {n} 주간 유효합니다."
+
+msgid "You need to transfer money to your wallet to fund your donations."
+msgstr "기부금을 내기 위해서 Liberapay 지갑으로 돈을 이체해야 합니다."
+
+#, python-brace-format
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr "{currency} 로 이루어지는 기부를 유지하기 위해 지갑에 돈을 입금해야 합니다."
+
+#, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
 msgstr "대기 중인 {money_amount} 만큼의 {payment_method}거래가 있습니다. {link_open}자세한 정보{link_close}"
 
 msgid "Please choose a payment method to add money:"
 msgstr "계좌에 돈을 추가할 결제 방식을 선택해 주세요:"
 
-msgid "Credit/Debit Card"
-msgstr "신용/직불카드"
-
 msgid "Currently unavailable"
 msgstr "현재 사용 불가능"
-
-msgid "Easy and instantaneous"
-msgstr "쉽고 즉각적입니다"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2577,12 +2684,6 @@ msgstr "싸지만¹ 복잡한 절차"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "수수료: {0}%"
-
-msgid "Eurozone only"
-msgstr "유로존 전용"
-
-msgid "Best for regular payments"
-msgstr "정기 지불에 가장 좋음"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "기여를 설정하지 않았습니다. 기여를 설정하게 되면 계좌에 자금을 추가하기 위한 옵션이 추가됩니다."
@@ -2605,10 +2706,6 @@ msgstr "이메일이 발송되었습니다."
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "무슨 이유로 지갑에 더 많은 돈을 넣고 계십니까? 합리적인 이유가 있다면 support@liberapay.com에 연락해 주십시오."
-
-#, python-brace-format
-msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
-msgstr "'{0}'은 허용된 금액이 아닙니다 (최소={1} 최대={2})"
 
 msgid "This bank wire has been canceled."
 msgstr "이 계좌 이체는 취소되었습니다."
@@ -2663,10 +2760,6 @@ msgstr[0] "당신의 기부금은 {n} 주 동안의 기부금을 충당합니다
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n}개월"
-
-#, python-brace-format
-msgid "Custom amount (min={0}, max={1})"
-msgstr "맞춤 금액 (최소={0}, 최대={1})"
 
 msgid "The provided postal address is incomplete."
 msgstr "우편번호가 정확하지 않습니다."
@@ -2743,9 +2836,6 @@ msgstr "확인 코드 (카드 뒤 3자리 숫자)"
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
 msgstr "확인 코드가 유효하지 않은 것으로 보입니다, 오타가 없나요?"
 
-msgid "Remember the card number for next time"
-msgstr "다음 결제를 위해 카드 번호 기억하기"
-
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr "카드 데이터는 암호화된 수단을 통해 결제 대행사의 시스템으로 직접 전송됩니다."
 
@@ -2800,6 +2890,10 @@ msgstr "{0} 만큼이 Liberapay 계좌에서 출금되었습니다. 이체가 �
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
 msgstr "{0} 을(를) 은행 계좌로 이체하는 작업이 실패하였습니다. 에러 메시지: {1}"
+
+#, python-brace-format
+msgid "You have {0} in your Liberapay wallet."
+msgstr "Liberapay 지갑에 {0} 만큼이 있습니다."
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr "이 돈은 아직 동결되어 있기 때문에 인출할 수 없습니다."
@@ -3044,51 +3138,19 @@ msgstr "공약은 다른 플랫폼의 계정 (예: {platform})에 연결되며, 
 msgid "Which currencies are supported?"
 msgstr "어느 화폐가 지원되나요?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
-msgstr "현재 대부분의 신용카드와 직불카드 (비자와 마스타카드), 은행 이체와 즉시 출금 (SEPA 전용)을 지원합니다. 더 많은 옵션이 추후에 지원될 예정입니다."
-
 msgid "What are the payment processing fees?"
 msgstr "지불 대행자 수수료가 뭡니까?"
 
-msgid "The fees depend on the payment method as well as the currency."
-msgstr "수수료는 화폐와 결제 방식에 의해 결정됩니다."
-
-msgid "When adding money into Liberapay the fees are:"
-msgstr "Liberapay에 돈을 입금할 때 수수료는 다음과 같습니다:"
-
-#, python-brace-format
-msgid "{0}% + {1}"
-msgstr "{0}% + {1}"
-
-msgid "Bank wire"
-msgstr "은행 이체"
-
-#, python-brace-format
-msgid "{0}%"
-msgstr "{0}%"
-
-msgid "Direct debit"
-msgstr "즉시 출금"
-
-msgid "not supported"
-msgstr "지윈되지 않음"
-
-msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
-msgstr "위에 표시된 수수료는 당사의 지불 처리자의 수수료일 뿐이며, 귀하의 은행 또한 각 거래에 대한 수수료를 징수할 수 있습니다. 특히 국제 거래의 경우 그러하며, 당사는 귀하의 은행 수수료에 대한 통제권 또는 지식이 없습니다."
-
-msgid "There are no fees for transfers between Liberapay users."
-msgstr "Liberapay 사용자 간의 거래에 대한 수수료는 없습니다."
+#
+msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+msgstr ""
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "주거나 받을 수 있는 금액에 하한선이나 상한선이 있나요?"
 
 #, python-brace-format
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr "기부하거나 기부받을 수 있는 금액에는 제한선이 없습니다만, 매년 {0} 이상을 기부하거나 {1} 이상을 기부받는다면 법률적인 이유로 신원과 관련된 문서를 제공해야 합니다."
-
-#, python-brace-format
-msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "다른 사용자에게 줄 수 있는 금액의 하한선은 {0}입니다. 지불 대행 수수료를 절감하기 위해, 신용카드 거래마다 {1} 이상의 금애을 청구합니다 (차액은 Liberapay 계좌에 저금되어 지불일에 이체됩니다)."
+msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
+msgstr ""
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."

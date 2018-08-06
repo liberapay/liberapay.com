@@ -1533,8 +1533,8 @@ msgstr "Häufig gestellte Fragen"
 msgid "What payment methods are available?"
 msgstr "Welche Zahlungsarten sind verfügbar?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
-msgstr "Wir unterstützen momentan Kreditkarten (VISA, Mastercard), Überweisungen (in Euro) und Lastschriften (nur SEPA). Weitere Möglichkeiten werden in Zukunft folgen."
+msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Wie funktionieren periodische Spenden?"
@@ -1819,27 +1819,15 @@ msgid "You give {0} per week."
 msgstr "Sie spenden {0} pro Woche."
 
 #, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "Sie haben {0} im Liberapay Geldbeutel."
+msgid "You have {n} donation awaiting payment."
+msgid_plural "You have {n} donations awaiting payment."
+msgstr[0] ""
+msgstr[1] ""
 
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Ihre Spenden sind nur für eine weitere Woche finanziert."
-msgstr[1] "Ihre Spenden sind für weitere {n} Wochen finanziert."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Ihre Spenden in {currency} sind nur noch für eine Wochen finanziert."
-msgstr[1] "Ihre Spenden in {currency} sind für {n} Wochen finanziert."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Sie müssen noch Geld in ihren Geldbeutel überweisen, um ihre Spenden zu finanzieren."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Sie müssen Geld auf Ihr Konto einzahlen um in {currency} spenden zu können."
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1861,6 +1849,9 @@ msgstr "Geändert"
 msgid "Active?"
 msgstr "Aktiv?"
 
+msgid "No: donations to teams are currently inoperative"
+msgstr ""
+
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Nein: der Empfänger hat keine Zahlungsmethode eingestellt"
 
@@ -1873,8 +1864,8 @@ msgstr "Nein: Das Konto des Empfängers wurde geschlossen"
 msgid "No: the recipient no longer accepts donations"
 msgstr "Nein: Der Empfänger akzeptiert keine Spenden mehr"
 
-msgid "No: insufficient funds"
-msgstr "Nein: Nicht ausreichende Mittel"
+msgid "No: awaiting payment"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "In letzter Zeit abgebrochen"
@@ -1884,6 +1875,114 @@ msgstr "innerhalb der letzten 30 Tage"
 
 msgid "Cancelled"
 msgstr "Abgebrochen"
+
+#, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr "'{0}' ist kein gültiger Betrag (min={1}, max={2})"
+
+msgid "This donation is not active."
+msgstr ""
+
+msgid "Funding your donations"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {charge_amount} was successful."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment failed. Error message: “{0}”"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr "Kredit- oder Bankkarte"
+
+msgid "Easy and instantaneous"
+msgstr "einfach und unverzüglich"
+
+msgid "Eurozone only"
+msgstr "nur innerhalb der Eurozone"
+
+msgid "Best for regular payments"
+msgstr "Ideal für regelmäßige Zahlungen"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
+msgstr ""
+
+msgid "Please select or input a payment amount:"
+msgstr ""
+
+msgid "(not recommended, high fee percentage)"
+msgstr ""
+
+msgid "(okay, moderate fee percentage)"
+msgstr ""
+
+msgid "(recommended, low fee percentage)"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {n} week."
+msgid_plural "Next payment in {n} weeks."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Next payment in {n} month."
+msgid_plural "Next payment in {n} months."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Next payment in {n} year."
+msgid_plural "Next payment in {n} years."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr "Eigener Betrag (min={0}, max={1})"
+
+#, python-brace-format
+msgid "We will charge your {brand} card (last four digits: {last4})."
+msgstr ""
+
+msgid "Use another card"
+msgstr ""
+
+msgid "Please input your card number:"
+msgstr ""
+
+#, python-brace-format
+msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
+msgstr ""
+
+msgid "Remember the card number for next time"
+msgstr "Die Nummer der Karte für das nächste Mal merken"
+
+msgid "Initiate the payment"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Wollen Sie den Kontotypen wirklich ändern? Aus rechtlichen Gründen müssen wir Ihnen ein neues Konto bei unserem Zahlungspartner anlegen und das Geld von ihrem alten Konto umbuchen."
@@ -2583,20 +2682,33 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "Wir erlauben es nicht weiteres Geld einzuzahlen, wenn Ihre Spenden bereits durch Ihre Einnahmen gedeckt sind. Sollte dies ein Problem für Sie sein, dann schreiben Sie uns eine E-Mail an support@liberapay.com und erklären warum."
 
 #, python-brace-format
+msgid "Your donations are only funded for another week."
+msgid_plural "Your donations are funded for another {n} weeks."
+msgstr[0] "Ihre Spenden sind nur für eine weitere Woche finanziert."
+msgstr[1] "Ihre Spenden sind für weitere {n} Wochen finanziert."
+
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] "Ihre Spenden in {currency} sind nur noch für eine Wochen finanziert."
+msgstr[1] "Ihre Spenden in {currency} sind für {n} Wochen finanziert."
+
+msgid "You need to transfer money to your wallet to fund your donations."
+msgstr "Sie müssen noch Geld in ihren Geldbeutel überweisen, um ihre Spenden zu finanzieren."
+
+#, python-brace-format
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr "Sie müssen Geld auf Ihr Konto einzahlen um in {currency} spenden zu können."
+
+#, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
 msgstr "Sie haben eine wartende {payment_method} Zahlung über {money_amount}. {link_open}Details{link_close}"
 
 msgid "Please choose a payment method to add money:"
 msgstr "Bitte wählen Sie die Zahlungsart um Geld aufzuladen:"
 
-msgid "Credit/Debit Card"
-msgstr "Kredit- oder Bankkarte"
-
 msgid "Currently unavailable"
 msgstr "Derzeit nicht verfügbar"
-
-msgid "Easy and instantaneous"
-msgstr "einfach und unverzüglich"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2614,12 +2726,6 @@ msgstr "Günstiger¹ aber aufwändig"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Gebühr: {0} %"
-
-msgid "Eurozone only"
-msgstr "nur innerhalb der Eurozone"
-
-msgid "Best for regular payments"
-msgstr "Ideal für regelmäßige Zahlungen"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Sie haben noch keine Spenden eingerichtet. Sobald Sie das tun, werden Sie gebeten, Ihrem Konto Geld hinzuzufügen."
@@ -2642,10 +2748,6 @@ msgstr "Die E-Mail wurde versand."
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "Warum versuchen Sie mehr Geld in den Geldbeutel zu zahlen? Bitte kontaktieren Sie support@liberapay.com, wenn Sie einen legitimen dazu Grund haben."
-
-#, python-brace-format
-msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
-msgstr "'{0}' ist kein gültiger Betrag (min={1}, max={2})"
 
 msgid "This bank wire has been canceled."
 msgstr "Diese Banküberweisung wurde storniert."
@@ -2703,10 +2805,6 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} Monat"
 msgstr[1] "{n} Monate"
-
-#, python-brace-format
-msgid "Custom amount (min={0}, max={1})"
-msgstr "Eigener Betrag (min={0}, max={1})"
 
 msgid "The provided postal address is incomplete."
 msgstr "Die angegebene Anschrift ist unvollständig."
@@ -2783,9 +2881,6 @@ msgstr "Verifizierungscode, normalerweise 3 Ziffern auf der Rückseite der Karte
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
 msgstr "Dieser Verifizierungscode scheint ungültig zu sein, sind Sie sicher, dass Sie keinen Fehler gemacht haben?"
 
-msgid "Remember the card number for next time"
-msgstr "Die Nummer der Karte für das nächste Mal merken"
-
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr "Ihre Kartendaten werden über eine verschlüsselte Verbindung direkt an das System unseres Zahlungspartners übermittelt."
 
@@ -2840,6 +2935,10 @@ msgstr "{0} wurden aus Ihrer Liberapay Brieftasche genommen. Wenn die Übertragu
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
 msgstr "Der Versuch {0} auf Ihr Bankkonto zu überweisen, ist fehlgeschlagen. Fehlermeldung : {1}"
+
+#, python-brace-format
+msgid "You have {0} in your Liberapay wallet."
+msgstr "Sie haben {0} im Liberapay Geldbeutel."
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr "Leider können Sie sich zur Zeit dieses Geld nicht auszahlen lassen, da es noch unter Quarantäne steht."
@@ -3085,51 +3184,19 @@ msgstr "Eine versprochene Spende ist an ein Konto auf einer anderen Plattform (z
 msgid "Which currencies are supported?"
 msgstr "Welche Währungen werden unterstützt?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
-msgstr "Wir unterstützen zur Zeit die meisten Kredit- und Debitkarten  (VISA und Mastercard), außerdem Wire Transferes und Überweisungen (nur SEPA). Weitere Optionen werden in der Zukunft hinzukommen."
-
 msgid "What are the payment processing fees?"
 msgstr "Wie hoch sind die Gebühren zur Bearbeitung einer Zahlung?"
 
-msgid "The fees depend on the payment method as well as the currency."
-msgstr "Die Gebühren sind abhängig von der Zahlungsart und der Währung."
-
-msgid "When adding money into Liberapay the fees are:"
-msgstr "Die Gebühren für das Hinzufügen von Geld zu Liberapay betragen:"
-
-#, python-brace-format
-msgid "{0}% + {1}"
-msgstr "{0}% + {1}"
-
-msgid "Bank wire"
-msgstr "Banküberweisung"
-
-#, python-brace-format
-msgid "{0}%"
-msgstr "{0}%"
-
-msgid "Direct debit"
-msgstr "Lastschriftverfahren"
-
-msgid "not supported"
-msgstr "nicht unterstützt"
-
-msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
-msgstr "Die oben genannten Gebühren entsprechen denen unseres Zahlungsdienstleisters. Es können weitere Bankgebühren anfallen. Wir haben keinen Überblick oder Einfluss auf die Gebühren Ihrer Bank."
-
-msgid "There are no fees for transfers between Liberapay users."
-msgstr "Es fallen keine Gebühren an, wenn Nutzer auf Liberapay untereinander Geld überweisen."
+#
+msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+msgstr ""
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Gibt es einen minimalen oder maximalen Betrag, den ich spenden oder erhalten kann?"
 
 #, python-brace-format
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr "Es gibt keine Einschränkungen auf den Betrag, den Sie spenden oder erhalten können. Aber aus rechtlichen Gründen müssen Sie ein Ausweisdokument vorweisen, wenn Sie im Jahr mehr als {0} spenden oder {1} erhalten wollen."
-
-#, python-brace-format
-msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "Der minimale Spendenbetrag, den Sie einem Nutzer geben können, beträgt {0}. Zur Minimierung der Bearbeitungsgebühren belasten wir Ihre Kreditkarte mit mindestens {1} auf einmal (das Geld wird Ihrem Liberapay-Konto gutgeschrieben und am Zahltag verteilt)."
+msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
+msgstr ""
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."

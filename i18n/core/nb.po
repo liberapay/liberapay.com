@@ -1532,8 +1532,8 @@ msgstr "Ofte stilte spørsmål"
 msgid "What payment methods are available?"
 msgstr "Hvilke betalingsmetoder er tilgjengelige?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
-msgstr "For øyeblikket godtar Liberapay debetkort (både VISA og MasterCard), bankoverføring (i euro) og direktebetalinger (kun SEPA). Flere alternativer vil komme til i fremtiden."
+msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Hvordan fungerer vedvarende donasjoner?"
@@ -1818,27 +1818,15 @@ msgid "You give {0} per week."
 msgstr "Du gir {0} per uke."
 
 #, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "Du har {0} i Liberapay-lommeboken din."
+msgid "You have {n} donation awaiting payment."
+msgid_plural "You have {n} donations awaiting payment."
+msgstr[0] ""
+msgstr[1] ""
 
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Dine donasjoner er bare finansiert i ei uke til."
-msgstr[1] "Dine donasjoner er finansiert i {n} uker til."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Dine donasjoner i {currency} er kun finansiert i ei uke til."
-msgstr[1] "Dine donasjoner i {currency} er finansiert i {n} uker til."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Du må overføre penger til lommeboken din for å kunne donere."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Du må overføre penger til lommeboken din for å finansiere donasjoner i {currency}."
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1860,6 +1848,9 @@ msgstr "Endret"
 msgid "Active?"
 msgstr "Aktiv?"
 
+msgid "No: donations to teams are currently inoperative"
+msgstr ""
+
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1872,8 +1863,8 @@ msgstr "Nei: Donørens konto er lukket"
 msgid "No: the recipient no longer accepts donations"
 msgstr "Nei: Mottakerens konto godtar ikke lenger donasjoner"
 
-msgid "No: insufficient funds"
-msgstr "Nei: Ikke nok penger"
+msgid "No: awaiting payment"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "Nylig avbrutt"
@@ -1883,6 +1874,114 @@ msgstr "i løpet av de siste 30 dagene"
 
 msgid "Cancelled"
 msgstr "Avbrutt"
+
+#, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr "\"{0}\" er ikke et akseptabelt beløp (min={1}, maks={2})"
+
+msgid "This donation is not active."
+msgstr ""
+
+msgid "Funding your donations"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {charge_amount} was successful."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment failed. Error message: “{0}”"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr "Kreditt-/debet-kort"
+
+msgid "Easy and instantaneous"
+msgstr "Enkelt og øyeblikkelig"
+
+msgid "Eurozone only"
+msgstr "Kun i EØS"
+
+msgid "Best for regular payments"
+msgstr "Best for vedvarende betalinger"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
+msgstr ""
+
+msgid "Please select or input a payment amount:"
+msgstr ""
+
+msgid "(not recommended, high fee percentage)"
+msgstr ""
+
+msgid "(okay, moderate fee percentage)"
+msgstr ""
+
+msgid "(recommended, low fee percentage)"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {n} week."
+msgid_plural "Next payment in {n} weeks."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Next payment in {n} month."
+msgid_plural "Next payment in {n} months."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Next payment in {n} year."
+msgid_plural "Next payment in {n} years."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr "Valgfritt beløp (min={0}, max={1})"
+
+#, python-brace-format
+msgid "We will charge your {brand} card (last four digits: {last4})."
+msgstr ""
+
+msgid "Use another card"
+msgstr ""
+
+msgid "Please input your card number:"
+msgstr ""
+
+#, python-brace-format
+msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
+msgstr ""
+
+msgid "Remember the card number for next time"
+msgstr "Husk kortnummeret til neste gang"
+
+msgid "Initiate the payment"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på at du ønsker å endre din kontotype? Av juridiske hensyn må vi opprette en ny konto for deg i systemet til vår betalingspartner, og overføre pengene fra din nåværende konto."
@@ -2584,20 +2683,33 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "Innskudd av penger tillates ikke når dine donasjoner allerede blir finansiert av din inntekt. Hvis dette er et problem for deg, send en e-post til support@liberapay.com og forklar hvorfor."
 
 #, python-brace-format
+msgid "Your donations are only funded for another week."
+msgid_plural "Your donations are funded for another {n} weeks."
+msgstr[0] "Dine donasjoner er bare finansiert i ei uke til."
+msgstr[1] "Dine donasjoner er finansiert i {n} uker til."
+
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] "Dine donasjoner i {currency} er kun finansiert i ei uke til."
+msgstr[1] "Dine donasjoner i {currency} er finansiert i {n} uker til."
+
+msgid "You need to transfer money to your wallet to fund your donations."
+msgstr "Du må overføre penger til lommeboken din for å kunne donere."
+
+#, python-brace-format
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr "Du må overføre penger til lommeboken din for å finansiere donasjoner i {currency}."
+
+#, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
 msgstr "Du har en ventende {payment_method} betaling på {money_amount}. {link_open}Detaljer{link_close}"
 
 msgid "Please choose a payment method to add money:"
 msgstr "Velg betalingsmetode for å legge til penger:"
 
-msgid "Credit/Debit Card"
-msgstr "Kreditt-/debet-kort"
-
 msgid "Currently unavailable"
 msgstr "Ikke tilgjengelig nå"
-
-msgid "Easy and instantaneous"
-msgstr "Enkelt og øyeblikkelig"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2615,12 +2727,6 @@ msgstr "Billigere¹ men kronglete"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Gebyr: {0}%"
-
-msgid "Eurozone only"
-msgstr "Kun i EØS"
-
-msgid "Best for regular payments"
-msgstr "Best for vedvarende betalinger"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Du har ikke satt opp noen donasjoner enda, når du gjør det vil du bli spurt om å utføre et innskudd på kontoen din."
@@ -2643,10 +2749,6 @@ msgstr "E-posten har blitt sendt."
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "Hvorfor prøver du å legge mer penger i lommeboken din? Kontakt support@liberapay.com hvis du har en god grunn."
-
-#, python-brace-format
-msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
-msgstr "\"{0}\" er ikke et akseptabelt beløp (min={1}, maks={2})"
 
 msgid "This bank wire has been canceled."
 msgstr "Denne bankoverføringen har blitt avbrutt."
@@ -2704,10 +2806,6 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} måned"
 msgstr[1] "{n} måneder"
-
-#, python-brace-format
-msgid "Custom amount (min={0}, max={1})"
-msgstr "Valgfritt beløp (min={0}, max={1})"
 
 msgid "The provided postal address is incomplete."
 msgstr "Den angitte postadressen er ufullstendig."
@@ -2785,9 +2883,6 @@ msgstr "Bekreftelseskode, vanligvis 3 siffer på baksiden av kortet"
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
 msgstr "Denne bekreftelseskoden ser ut til å være ugyldig, er du sikker på at du ikke har gjort en feil?"
 
-msgid "Remember the card number for next time"
-msgstr "Husk kortnummeret til neste gang"
-
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr "Din kortdata blir sendt direkte til vår betalingpartners system, gjennom en kryptert forbindelse."
 
@@ -2843,6 +2938,10 @@ msgstr "{0} ble hevet fra Liberapay-lommeboken din. Hvis transaksjonen lykkes bl
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
 msgstr "Forsøket på å sende {0} til din bankkonto har mislyktes. Feilmelding: {1}"
+
+#, python-brace-format
+msgid "You have {0} in your Liberapay wallet."
+msgstr "Du har {0} i Liberapay-lommeboken din."
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr "Du kan beklageligvis ikke ta ut de pengene enda, de er i karantene."
@@ -3092,51 +3191,19 @@ msgstr "Et donasjonstilbud er lenket til en konto på en annen plattform (f.eks 
 msgid "Which currencies are supported?"
 msgstr "Hvilke valutaer støttes?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
-msgstr "De fleste kreditt- og debet-kort (VISA og MasterCard) støttes, sågar også bankoverføringer og direkte debet (kun SEPA). Flere valg vil tilkomme i fremtiden."
-
 msgid "What are the payment processing fees?"
 msgstr "Hva beløper betalingsgebyrene seg til?"
 
-msgid "The fees depend on the payment method as well as the currency."
-msgstr "Gebyrene avhenger avbetalingsmetoden, sågar også valutaen."
-
-msgid "When adding money into Liberapay the fees are:"
-msgstr "Ved innskudd av penger i Liberapay er gebyrene:"
-
-#, python-brace-format
-msgid "{0}% + {1}"
-msgstr "{0}% + {1}"
-
-msgid "Bank wire"
-msgstr "Bankoverføring"
-
-#, python-brace-format
-msgid "{0}%"
-msgstr "{0}%"
-
-msgid "Direct debit"
-msgstr "Direktebetaling"
-
-msgid "not supported"
-msgstr "støttes ikke"
-
-msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
-msgstr "Gebyrene listet opp ovenfor er dem betalingspartnerene våre tar, din bank kan også komme til å belaste deg for hver overføring, spesielt internasjonale. Liberapay har ingen kontroll eller innsyn i din banks gebyrer."
-
-msgid "There are no fees for transfers between Liberapay users."
-msgstr "Det er ingen gebyrer for overføringer mellom Liberapay-brukere."
+#
+msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+msgstr ""
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Er det et minimum- eller maksimums-beløp jeg kan gi eller ta imot?"
 
 #, python-brace-format
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr "Det finnes ingen begrensninger på totalbeløpet du kan gi eller motta, men av juridiske grunner må du vise til identitetspapirer hvis du vil gi mer enn {0}, eller motta mer enn {1} per år."
-
-#, python-brace-format
-msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "Det minste beløpet du kan gi en annen bruker er {0}. For å minimere gebyrene krever vi at du overfører minst {1} om gangen (pengene blir oppbevart i Liberapay-lommeboken din og overført til andre på lønningsdagen)."
+msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
+msgstr ""
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."

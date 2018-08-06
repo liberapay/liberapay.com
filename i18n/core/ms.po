@@ -1534,8 +1534,8 @@ msgstr "Soalan Kerap Ditanya"
 msgid "What payment methods are available?"
 msgstr "Kaedah pembayaran apa yang ada?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires (in euros) and direct debits (SEPA only). More options will be added in the future."
-msgstr "Pada waktu ini, kami menerima kebanyakan kad kredit dan debit (VISA dan MasterCard), dan juga pindah kawat bank (dalam mata wang Euro) serta debit terus (SEPA sahaja). Lebih banyak pilihan akan ditambah pada masa hadapan."
+msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Bagaimanakah derma berulang dilakukan?"
@@ -1820,27 +1820,15 @@ msgid "You give {0} per week."
 msgstr "Anda memberi {0} setiap minggu."
 
 #, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "Anda mempunyai {0} dalam dompet Liberapay anda."
+msgid "You have {n} donation awaiting payment."
+msgid_plural "You have {n} donations awaiting payment."
+msgstr[0] ""
+msgstr[1] ""
 
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Derma anda hanya disumbangkan untuk seminggu sahaja lagi."
-msgstr[1] "Derma anda disumbangkan untuk {n} minggu lagi."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Derma anda dalam mata wang {currency} hanya disumbangkan untuk seminggu sahaja lagi."
-msgstr[1] "Derma anda dalam mata wang {currency} disumbangkan untuk {n} minggu lagi."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Anda perlu pindahkan wang ke dompet anda untuk terus menyumbang derma anda."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Anda perlu pindahkan wang ke dompet anda untuk terus menyumbang derma anda dalam mata wang {currency}."
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1862,6 +1850,9 @@ msgstr "Diubah"
 msgid "Active?"
 msgstr "Aktif?"
 
+msgid "No: donations to teams are currently inoperative"
+msgstr ""
+
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Tidak: penerima derma belum menetapkan kaedah pembayaran"
 
@@ -1874,8 +1865,8 @@ msgstr "Tidak: akaun penerima derma ditutup"
 msgid "No: the recipient no longer accepts donations"
 msgstr "Tidak: penerima derma sudah berhenti menerima derma"
 
-msgid "No: insufficient funds"
-msgstr "Tidak: wang tidak cukup"
+msgid "No: awaiting payment"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "Dibatalkan Baru-baru Ini"
@@ -1885,6 +1876,114 @@ msgstr "dalam 30 hari lepas"
 
 msgid "Cancelled"
 msgstr "Dibatalkan"
+
+#, python-brace-format
+msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr "'{0}' bukanlah jumlah yang diterima (antara {1} hingga {2} sahaja)"
+
+msgid "This donation is not active."
+msgstr ""
+
+msgid "Funding your donations"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {charge_amount} was successful."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment failed. Error message: “{0}”"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr "Kad Kredit/Debit"
+
+msgid "Easy and instantaneous"
+msgstr "Senang dan pantas"
+
+msgid "Eurozone only"
+msgstr "Zon Eropah sahaja"
+
+msgid "Best for regular payments"
+msgstr "Terbaik untuk pembayaran biasa"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
+msgstr ""
+
+msgid "Please select or input a payment amount:"
+msgstr ""
+
+msgid "(not recommended, high fee percentage)"
+msgstr ""
+
+msgid "(okay, moderate fee percentage)"
+msgstr ""
+
+msgid "(recommended, low fee percentage)"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {n} week."
+msgid_plural "Next payment in {n} weeks."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Next payment in {n} month."
+msgid_plural "Next payment in {n} months."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Next payment in {n} year."
+msgid_plural "Next payment in {n} years."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Custom amount (min={0}, max={1})"
+msgstr "Jumlah sendiri (antara {0} hingga {1} sahaja)"
+
+#, python-brace-format
+msgid "We will charge your {brand} card (last four digits: {last4})."
+msgstr ""
+
+msgid "Use another card"
+msgstr ""
+
+msgid "Please input your card number:"
+msgstr ""
+
+#, python-brace-format
+msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
+msgstr ""
+
+msgid "Remember the card number for next time"
+msgstr "Ingat nombor kad untuk urusan di lain hari"
+
+msgid "Initiate the payment"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Adakah anda pasti anda ingin menukar jenis akaun anda? Atas sebab undang-undang kami perlu mencipta akaun baru untuk anda dalam sistem rakan pembayaran kami, dan pindahkan wang dari akaun lama anda."
@@ -2584,20 +2683,33 @@ msgid "We don't allow adding money when your donations are already funded by you
 msgstr "Kami tidak membenarkan penambahan wang apabila pendermaan anda mendapat dana daripada pendapatan anda. Sekiranya ini menjadi masalah kepada anda sila hantar emel penjelasan ke support@liberapay.com."
 
 #, python-brace-format
+msgid "Your donations are only funded for another week."
+msgid_plural "Your donations are funded for another {n} weeks."
+msgstr[0] "Derma anda hanya disumbangkan untuk seminggu sahaja lagi."
+msgstr[1] "Derma anda disumbangkan untuk {n} minggu lagi."
+
+#, python-brace-format
+msgid "Your donations in {currency} are only funded for another week."
+msgid_plural "Your donations in {currency} are funded for another {n} weeks."
+msgstr[0] "Derma anda dalam mata wang {currency} hanya disumbangkan untuk seminggu sahaja lagi."
+msgstr[1] "Derma anda dalam mata wang {currency} disumbangkan untuk {n} minggu lagi."
+
+msgid "You need to transfer money to your wallet to fund your donations."
+msgstr "Anda perlu pindahkan wang ke dompet anda untuk terus menyumbang derma anda."
+
+#, python-brace-format
+msgid "You need to transfer money to your wallet to fund your donations in {currency}."
+msgstr "Anda perlu pindahkan wang ke dompet anda untuk terus menyumbang derma anda dalam mata wang {currency}."
+
+#, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
 msgstr "Anda mempunyai pembayaran {payment_method} belum selesai sebanyak {money_amount}. {link_open}Maklumat lanjut{link_close}"
 
 msgid "Please choose a payment method to add money:"
 msgstr "Sila pilih kaedah pembayaran untuk menambah wang:"
 
-msgid "Credit/Debit Card"
-msgstr "Kad Kredit/Debit"
-
 msgid "Currently unavailable"
 msgstr "Belum ada ketika ini"
-
-msgid "Easy and instantaneous"
-msgstr "Senang dan pantas"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2615,12 +2727,6 @@ msgstr "Lebih murah¹ tetapi menyusahkan"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Caj perkhidmatan: {0}%"
-
-msgid "Eurozone only"
-msgstr "Zon Eropah sahaja"
-
-msgid "Best for regular payments"
-msgstr "Terbaik untuk pembayaran biasa"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Anda masih belum menetapkan sebarang derma, setelah anda tetapkan anda akan diminta menambah wang ke akaun anda."
@@ -2643,10 +2749,6 @@ msgstr "Emel telah dihantar."
 
 msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
 msgstr "Kenapa anda cuba untuk masukkan lebih banyak wang ke dalam dompet anda? Sila hubungi support@liberapay.com jika anda mempunyai alasan munasabah."
-
-#, python-brace-format
-msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
-msgstr "'{0}' bukanlah jumlah yang diterima (antara {1} hingga {2} sahaja)"
 
 msgid "This bank wire has been canceled."
 msgstr "Pindahan kawat bank ini telah pun dibatalkan."
@@ -2704,10 +2806,6 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} bulan"
 msgstr[1] "{n} bulan"
-
-#, python-brace-format
-msgid "Custom amount (min={0}, max={1})"
-msgstr "Jumlah sendiri (antara {0} hingga {1} sahaja)"
 
 msgid "The provided postal address is incomplete."
 msgstr "Alamat surat-menyurat yang anda berikan tidak lengkap."
@@ -2784,9 +2882,6 @@ msgstr "Kod pengesahan, selalunya 3 digit terletak di bahagian belakang kad"
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
 msgstr "Kod pengesahan ini kelihatan tidak sah, adakah anda pasti anda tidak membuat kesilapan?"
 
-msgid "Remember the card number for next time"
-msgstr "Ingat nombor kad untuk urusan di lain hari"
-
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
 msgstr "Data kad anda dihantar terus kepada sistem rakan pembayaran kami melalui sambungan tersulit."
 
@@ -2841,6 +2936,10 @@ msgstr "{0} telah diambil daripada dompet Liberapay anda. Jika pindahan berjaya,
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
 msgstr "Cubaan menghantar {0} ke akaun bank anda telah gagal. Mesej ralat: {1}"
+
+#, python-brace-format
+msgid "You have {0} in your Liberapay wallet."
+msgstr "Anda mempunyai {0} dalam dompet Liberapay anda."
 
 msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
 msgstr "Dukacitanya, anda tidak boleh mengeluarkan wang tersebut lagi, ia masih dalam kuarantin."
@@ -3086,51 +3185,19 @@ msgstr "Perjanjian derma disambungkan kepada akaun di platform lain (cth. {platf
 msgid "Which currencies are supported?"
 msgstr "Mata wang mana yang boleh digunakan?"
 
-msgid "We currently support most credit and debit cards (VISA and MasterCard), as well as bank wires and direct debits (SEPA only). More options will be added in the future."
-msgstr "Pada waktu ini, kami menyokong kebanyakan kad kredit dan debit (VISA dan MasterCard), dan juga pindah kawat bank dan debit terus (akaun SEPA sahaja). Lebih banyak pilihan akan ditambah pada masa hadapan."
-
 msgid "What are the payment processing fees?"
 msgstr "Apakah caj pemprosesan pembayaran?"
 
-msgid "The fees depend on the payment method as well as the currency."
-msgstr "Caj tersebut bergantung kepada kaedah pembayaran dan juga mata wang dipilih."
-
-msgid "When adding money into Liberapay the fees are:"
-msgstr "Apabila menambah wang masuk ke Liberapay:"
-
-#, python-brace-format
-msgid "{0}% + {1}"
-msgstr "{0}% + {1}"
-
-msgid "Bank wire"
-msgstr "Pindah kawat bank"
-
-#, python-brace-format
-msgid "{0}%"
-msgstr "{0}%"
-
-msgid "Direct debit"
-msgstr "Debit terus"
-
-msgid "not supported"
-msgstr "tidak disokong"
-
-msgid "The fees listed above are only those from our payment processors, your bank can also charge you for each transaction, especially international ones. We have no control or visibility over your bank's fees."
-msgstr "Caj yang disenaraikan hanyalah caj dikenakan oleh pihak pemproses pembayaran kami, bank anda juga boleh mengecaj anda untuk setiap transaksi, terutamanya untuk kegunaan antarabangsa. Kami tidak tahu dan tidak boleh mengawal caj yang dikenakan oleh bank anda."
-
-msgid "There are no fees for transfers between Liberapay users."
-msgstr "Tidak ada caj untuk pindahan wang antara pengguna Liberapay."
+#
+msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+msgstr ""
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Adakah terdapatnya jumlah minimum atau maksimum saya boleh beri atau terima?"
 
 #, python-brace-format
-msgid "There are no restrictions on the total amount you can give or receive, but for legal reasons you will need to provide identity documents if you give more than {0}, or receive more than {1}, per year."
-msgstr "Tidak ada had untuk jumlah anda boleh beri atau terima, tetapi atas alasan keselamatan anda perlu sediakan dokumen identiti sekiranya anda memberi lebih dari {0}, atau menerima lebih dari {1}, setahun."
-
-#, python-brace-format
-msgid "The minimum you can give any user is {0}. To minimize processing fees, we charge your credit card at least {1} at a time (the money is stored in your Liberapay wallet and transferred to others during Payday)."
-msgstr "Jumlah minimum anda boleh beri kepada mana-mana pengguna ialah {0}. Untuk meminimumkan caj pemprosesan, kami hanya mengecaj kad kredit anda paling kurang {1} pada satu-satu masa (wang disimpan dalam dompet Liberapay anda dan dipindahkan kepada pengguna yang anda beri wang ketika Hari Bayaran)."
+msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
+msgstr ""
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
