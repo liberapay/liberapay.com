@@ -24,6 +24,11 @@ subhead = _("Payment")
 % block content
     <p>{{ _("This page allows you to manage your payment methods.") }}</p>
 
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "Donors do not need to connect any payment account below, they are only "
+        "necessary to receive money."
+    ) }}</p>
+
     % include "templates/sandbox-warning.html"
 
     <h3>Stripe</h3>
