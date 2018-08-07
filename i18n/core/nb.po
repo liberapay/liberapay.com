@@ -82,39 +82,39 @@ msgstr "- {0}: {1}"
 
 #, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
-msgstr ""
+msgstr "Din Liberapay-inntekt beløper seg til omtrent {money_amount} per uke"
 
 #, python-brace-format
 msgid "Your Liberapay income is {money_amount} this week"
-msgstr ""
+msgstr "Din Liberapay-inntekt er {money_amount} denne uken"
 
 msgid "Here is the breakdown of your income this week:"
-msgstr ""
+msgstr "Her har du en lønningsoversikt for denne uken:"
 
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
 msgid_plural "Personal donations: {money_amount} from {n} donors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Personlige donasjoner: {money_amount} fra én donor."
+msgstr[1] "Personlige donasjoner: {money_amount} fra {n} donorer."
 
 msgid "Personal donations: none."
-msgstr ""
+msgstr "Personlige donasjoner: Ingen."
 
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] ""
+msgstr[0] "Donasjoner for din rolle i {team_name}-laget: {money_amount}fra {n} donor."
 msgstr[1] ""
 
 msgid "Donations through teams: none (you are not a member of any team)."
-msgstr ""
+msgstr "Donasjoner gjennom lag: Ingen (du er ikke medlem av noen lag)."
 
 msgid "NB: Donations through Liberapay are now paid in advance instead of being transferred weekly. The numbers above match what you would have received this week under the old system."
 msgstr ""
 
 #, python-brace-format
 msgid "You have {money_amount} in your Mangopay wallet."
-msgstr ""
+msgstr "Du har {money_amount} i din Mangopay-lommebook."
 
 msgid "Withdraw money"
 msgstr "Ta ut penger"
@@ -720,7 +720,7 @@ msgstr "Denne betalingsmetoden er ikke tilgjengelig. Beklager bryderiet."
 
 #, python-brace-format
 msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr ""
+msgstr "Innkommende betalinger er for tiden avskrudd. Du kan lese {link_start}denne bloggposten{link_end}for å finne ut hvorfor."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1171,7 +1171,7 @@ msgid "Receiving"
 msgstr "Mottatt"
 
 msgid "Payment"
-msgstr ""
+msgstr "Betaling"
 
 msgid "Wallet"
 msgstr "Lommebok"
@@ -1820,13 +1820,13 @@ msgstr "Du gir {0} per uke."
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har {n} donasjon som venter på betaling."
+msgstr[1] "Du har {n}donasjoner som venter på betaling."
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Forny denne donasjonen"
+msgstr[1] "Forny disse donasjonene"
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1849,7 +1849,7 @@ msgid "Active?"
 msgstr "Aktiv?"
 
 msgid "No: donations to teams are currently inoperative"
-msgstr ""
+msgstr "Nei: Donasjoner til lag er for øyeblikket slått av"
 
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
@@ -1864,7 +1864,7 @@ msgid "No: the recipient no longer accepts donations"
 msgstr "Nei: Mottakerens konto godtar ikke lenger donasjoner"
 
 msgid "No: awaiting payment"
-msgstr ""
+msgstr "Nei: Avventer betaling"
 
 msgid "Recently Cancelled"
 msgstr "Nylig avbrutt"
@@ -1880,24 +1880,24 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "\"{0}\" er ikke et akseptabelt beløp (min={1}, maks={2})"
 
 msgid "This donation is not active."
-msgstr ""
+msgstr "Denne donasjonen er ikke aktiv."
 
 msgid "Funding your donations"
-msgstr ""
+msgstr "Finansiering av dine donasjoner"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr ""
+msgstr "{charge_amount} betalt."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"
-msgstr ""
+msgstr "Betaling mislyktes. Feilmelding: \"{0}\""
 
 msgid "The payment has been initiated."
-msgstr ""
+msgstr "Betalingen har blitt igangsatt."
 
 msgid "Please choose a payment method:"
-msgstr ""
+msgstr "Velg en betalingsmetode:"
 
 msgid "Credit/Debit Card"
 msgstr "Kreditt-/debet-kort"
@@ -1916,14 +1916,14 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr ""
+msgstr "Din betaling av {amount} til {recipient} avventer betaling."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
-msgstr ""
+msgstr "Du kan ikke belastes kun {donation_amount}, minimumsbeløpet er {min_payment_amount}."
 
 msgid "Please select or input a payment amount:"
-msgstr ""
+msgstr "Velg eller skriv inn betalingsbeløp:"
 
 msgid "(not recommended, high fee percentage)"
 msgstr ""
@@ -1937,20 +1937,20 @@ msgstr ""
 #, python-brace-format
 msgid "Next payment in {n} week."
 msgid_plural "Next payment in {n} weeks."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Neste betaling om én uke."
+msgstr[1] "Neste betaling om {n} uker."
 
 #, python-brace-format
 msgid "Next payment in {n} month."
 msgid_plural "Next payment in {n} months."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Neste betaling om én måned."
+msgstr[1] "Neste betaling om {n} måneder."
 
 #, python-brace-format
 msgid "Next payment in {n} year."
 msgid_plural "Next payment in {n} years."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Neste betaling om ett år."
+msgstr[1] "Neste betaling om {n} år."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -1961,10 +1961,10 @@ msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr ""
 
 msgid "Use another card"
-msgstr ""
+msgstr "Bruk et annet kort"
 
 msgid "Please input your card number:"
-msgstr ""
+msgstr "Skriv inn ditt kortnummer:"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
@@ -1974,14 +1974,14 @@ msgid "Remember the card number for next time"
 msgstr "Husk kortnummeret til neste gang"
 
 msgid "Initiate the payment"
-msgstr ""
+msgstr "Igangsett betalingen"
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr ""
 
 msgid "All your donations are funded."
-msgstr ""
+msgstr "Alle dine donasjoner er finansiert."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på at du ønsker å endre din kontotype? Av juridiske hensyn må vi opprette en ny konto for deg i systemet til vår betalingspartner, og overføre pengene fra din nåværende konto."
@@ -2252,15 +2252,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
-msgstr ""
+msgstr "Konto-ID: {0}"
 
 #, python-brace-format
 msgid "Country: {0}"
-msgstr ""
+msgstr "Land: {0}"
 
 #, python-brace-format
 msgid "Currency: {0}"
-msgstr ""
+msgstr "Valuta:"
 
 msgid "This account cannot receive payments."
 msgstr ""
@@ -2328,7 +2328,7 @@ msgid "You can't receive money until you've configured a payment account."
 msgstr ""
 
 msgid "Configure payments"
-msgstr ""
+msgstr "Sett opp betalinger"
 
 msgid "You are not a member of any team."
 msgstr "Du er ikke medlem av noe lag."
@@ -3725,7 +3725,7 @@ msgstr "{0}Fyll ut profilen din{1}."
 
 #, python-brace-format
 msgid "{0}Configure a payment account{1}."
-msgstr ""
+msgstr "{0}Sett opp betalingskonto{1}."
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."

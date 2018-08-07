@@ -1534,7 +1534,7 @@ msgid "What payment methods are available?"
 msgstr "Mitä maksumenetelmiä tuemme?"
 
 msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
-msgstr ""
+msgstr "Tällä hetkellä meillä toimii credit- ja debit -kortit (VISA, MasterCard jne.) SEPA-suoraveloitukset saadaan lähiaikoina toimimaan. Lisää vaihtoehtoja tulee myöhemmin."
 
 msgid "How do recurrent donations work?"
 msgstr "Miten toistuvat lahjoitukset toimivat?"
@@ -1821,13 +1821,13 @@ msgstr "Annat {0} viikoittain."
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sinulla on {n} lahjoitus odottamassa maksua."
+msgstr[1] "Sinulla on {n} lahjoitusta odottamassa maksua."
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Uusi tämä lahjoitus"
+msgstr[1] "Uusi nämä lahjoitukset"
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1850,7 +1850,7 @@ msgid "Active?"
 msgstr "Aktiivinen?"
 
 msgid "No: donations to teams are currently inoperative"
-msgstr ""
+msgstr "Ei: lahjoitukset ryhmille on tällä hetkellä poissa käytöstä"
 
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Ei: vastaanottaja ei ole määritellyt mitään maksumenetelmää"
@@ -1865,7 +1865,7 @@ msgid "No: the recipient no longer accepts donations"
 msgstr "Ei, kohde ei enää ota vastaan lahjoituksia"
 
 msgid "No: awaiting payment"
-msgstr ""
+msgstr "Ei: odottaa maksua"
 
 msgid "Recently Cancelled"
 msgstr "Hiljattain peruutettu"
@@ -1881,24 +1881,24 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "”{0}” ei ole kelvollinen määrä. Sallitut rajat: {1}—{2}"
 
 msgid "This donation is not active."
-msgstr ""
+msgstr "Tämä lahjoitus ei ole aktiivisena."
 
 msgid "Funding your donations"
-msgstr ""
+msgstr "Lahjoitustesi rahoittaminen"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr ""
+msgstr "{charge_amount} maksu onnistui."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"
-msgstr ""
+msgstr "Maksu epäonnistui: Virheilmoitus: ”{0}”"
 
 msgid "The payment has been initiated."
-msgstr ""
+msgstr "Maksutoimenpide on aloitettu."
 
 msgid "Please choose a payment method:"
-msgstr ""
+msgstr "Valitse maksumenetelmä:"
 
 msgid "Credit/Debit Card"
 msgstr "Credit/Debit -kortti"
@@ -1913,45 +1913,45 @@ msgid "Best for regular payments"
 msgstr "Paras säännöllisiin maksuihin"
 
 msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr ""
+msgstr "Tällä hetkellä ei ole mahdollista rahoittaa useita lahjoituksia yhdellä maksulla, joten joudut uudistamaan lahjoituksesi yksitellen. Pahoittelemme tästä aiheuttavaa haittaa."
 
 #, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr ""
+msgstr "{amount} lahjoituksesi vastaanottajalle {recipient} odottaa maksua."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
-msgstr ""
+msgstr "Emme voi veloittaa sinulta vain {donation_amount} summaa. Minimiveloitus on {min_payment_amount}."
 
 msgid "Please select or input a payment amount:"
-msgstr ""
+msgstr "Valitse tai syötä maksun summa:"
 
 msgid "(not recommended, high fee percentage)"
-msgstr ""
+msgstr "(ei suositella korkeiden kulujen takia)"
 
 msgid "(okay, moderate fee percentage)"
-msgstr ""
+msgstr "(kohtuullinen kuluprosentti)"
 
 msgid "(recommended, low fee percentage)"
-msgstr ""
+msgstr "(suositellaan, pienet kulut)"
 
 #, python-brace-format
 msgid "Next payment in {n} week."
 msgid_plural "Next payment in {n} weeks."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Seuraava maksu viikon kuluttua."
+msgstr[1] "Seuraava maksu {n} viikon kuluttua."
 
 #, python-brace-format
 msgid "Next payment in {n} month."
 msgid_plural "Next payment in {n} months."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Seuraava maksu kuukauden kuluttua."
+msgstr[1] "Seuraava maksu {n} kuukauden kuluttua."
 
 #, python-brace-format
 msgid "Next payment in {n} year."
 msgid_plural "Next payment in {n} years."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Seuraava maksu vuoden kuluttua."
+msgstr[1] "Seuraava maksu {n} vuoden kuluttua."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -1959,30 +1959,30 @@ msgstr "Oma määrä ({0}—{1})"
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
-msgstr ""
+msgstr "Maksu veloitetaan {brand}-kortiltasi (viimeiset neljä numeroa: {last4})."
 
 msgid "Use another card"
-msgstr ""
+msgstr "Käytä muuta korttia"
 
 msgid "Please input your card number:"
-msgstr ""
+msgstr "Syötä kortin numero:"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
-msgstr ""
+msgstr "Tiedot lähetetään suoraan maksunkäsittelijällemme ({name}) salatun yhteyden läpi."
 
 msgid "Remember the card number for next time"
 msgstr "Pidä kortin numero muistissa seuraavaa kertaa varten"
 
 msgid "Initiate the payment"
-msgstr ""
+msgstr "Toimeenpane maksu"
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
+msgstr "Lahjoitustasi vastaanottajalle {recipient} ei voida käsitellä juuri nyt, sillä vastaanottajan tili ei ole valmis ottamaan rahaa vastaan."
 
 msgid "All your donations are funded."
-msgstr ""
+msgstr "Kaikki lahjoituksesi ovat rahoitettuina."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Haluatko varmasti muuttaa tilin tyyppiä? Lakiteknisistä syistä meidän pitää tehdä sinulle uusi tili maksukumppanimme järjestelmässä, ja siirtää raha vanhalta tililtäsi."
@@ -3189,14 +3189,14 @@ msgstr "Mitkä ovat rahankäsittelykulut?"
 
 #
 msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
-msgstr ""
+msgstr "Kulut vaihtelevat maksunkäsittelijästä, maksumenetelmästä, maasta ja valuutasta riippuen. Keskimäärin ne jäänevät aina 5 % alle."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Onko vastaanottamisella tai lähettämisellä mitään minimi- tai maksimirajoja?"
 
 #, python-brace-format
 msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
-msgstr ""
+msgstr "Minimi, minkä voit antaa kenellekään, on {0} viikossa, mutta käsittelykulujen minimoimiseksi suosittelemme, että maksat etukäteen useiden viikkojen osuuden."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
