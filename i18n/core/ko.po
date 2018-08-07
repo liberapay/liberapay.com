@@ -21,6 +21,33 @@ msgstr "뭔가 잘못됐나요? 이 이메일에 답변하여 도움을 얻으�
 msgid "Change your email settings"
 msgstr "이메일 설정 변경하기"
 
+#, python-brace-format
+msgid "It's time to renew your donation to {username} on Liberapay"
+msgstr ""
+
+msgid "It's time to renew your donations on Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "You have {n} donation waiting to be renewed:"
+msgid_plural "You have {n} donations waiting to be renewed:"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{amount} to {username}"
+msgstr ""
+
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
+
+msgid "Manage your donations"
+msgstr ""
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "누군가가 Liberapay에서 당신에게 기부하고 싶어합니다"
 
@@ -398,8 +425,8 @@ msgstr "이 오류의 세부 사항이 기록되었습니다. 저희에게 연�
 msgid "When I receive money"
 msgstr "돈을 받을 때"
 
-msgid "When there isn't enough money in my wallet to cover my donations"
-msgstr "지갑에 기부금을 처리할 충분한 금액이 확보되지 않았을 때"
+msgid "When it's time to renew my donations"
+msgstr ""
 
 msgid "When a transfer to my bank account is initiated"
 msgstr "은행 계좌로의 송금이 시작되었을 때"
@@ -1795,10 +1822,6 @@ msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] ""
 
-msgid "Renew this donation"
-msgid_plural "Renew these donations"
-msgstr[0] ""
-
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
 msgstr "당신의 기부는 수입에 의해 충당됩니다: 매주 {income} 만큼 받고, {donations_amount} 만큼 돌려주고 있습니다."
@@ -1883,10 +1906,6 @@ msgid "Best for regular payments"
 msgstr "정기 지불에 가장 좋음"
 
 msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr ""
-
-#, python-brace-format
-msgid "Your donation of {amount} to {recipient} is awaiting payment."
 msgstr ""
 
 #, python-brace-format
@@ -3945,9 +3964,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
-msgstr ""
-
-msgid "Manage your donations"
 msgstr ""
 
 msgid "Email addresses"

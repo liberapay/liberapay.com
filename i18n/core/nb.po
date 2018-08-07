@@ -21,6 +21,35 @@ msgstr "Er det noe som ikke stemmer? Svar på denne e-posten for å få hjelp."
 msgid "Change your email settings"
 msgstr "Endre dine e-postinnstillinger"
 
+#, python-brace-format
+msgid "It's time to renew your donation to {username} on Liberapay"
+msgstr ""
+
+msgid "It's time to renew your donations on Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr "Din betaling av {amount} til {recipient} avventer betaling."
+
+#, python-brace-format
+msgid "You have {n} donation waiting to be renewed:"
+msgid_plural "You have {n} donations waiting to be renewed:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{amount} to {username}"
+msgstr ""
+
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] "Forny denne donasjonen"
+msgstr[1] "Forny disse donasjonene"
+
+msgid "Manage your donations"
+msgstr "Administrer dine donasjoner"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Noen vil donere til deg på Liberapay"
 
@@ -420,8 +449,8 @@ msgstr "Detaljene i denne feilmeldingen har blitt lagret. Legg ved dette feilmel
 msgid "When I receive money"
 msgstr "Når jeg mottar penger"
 
-msgid "When there isn't enough money in my wallet to cover my donations"
-msgstr "Når det ikke er nok penger i lommeboken min til å dekke donasjonene mine"
+msgid "When it's time to renew my donations"
+msgstr ""
 
 msgid "When a transfer to my bank account is initiated"
 msgstr "Når en overføring til bankkontoen min blir iverksatt"
@@ -1823,11 +1852,6 @@ msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "Du har {n} donasjon som venter på betaling."
 msgstr[1] "Du har {n}donasjoner som venter på betaling."
 
-msgid "Renew this donation"
-msgid_plural "Renew these donations"
-msgstr[0] "Forny denne donasjonen"
-msgstr[1] "Forny disse donasjonene"
-
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
 msgstr "Dine donasjoner er finansiert av din inntekt: Du mottar {income} og gir tilbake {donations_amount} (per uke)."
@@ -1913,10 +1937,6 @@ msgstr "Best for vedvarende betalinger"
 
 msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
 msgstr ""
-
-#, python-brace-format
-msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr "Din betaling av {amount} til {recipient} avventer betaling."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -4044,9 +4064,6 @@ msgstr "Din donasjon på {money_amount} per uke til {name} på {platform} har bl
 #, python-brace-format
 msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
 msgstr "Donasjonen din på {money_amount} til {name} på {platform} hver uke ble ikke gjenopprettet fordi {name2} har valgt å ikke motta donasjoner på Liberapay."
-
-msgid "Manage your donations"
-msgstr "Administrer dine donasjoner"
 
 msgid "Email addresses"
 msgstr "E-postadresser"

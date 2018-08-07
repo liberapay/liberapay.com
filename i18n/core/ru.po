@@ -21,6 +21,37 @@ msgstr "Что-то не так? Ответьте на это письмо, чт
 msgid "Change your email settings"
 msgstr "Изменить настройки email"
 
+#, python-brace-format
+msgid "It's time to renew your donation to {username} on Liberapay"
+msgstr ""
+
+msgid "It's time to renew your donations on Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation of {amount} to {recipient} is awaiting payment."
+msgstr ""
+
+#, python-brace-format
+msgid "You have {n} donation waiting to be renewed:"
+msgid_plural "You have {n} donations waiting to be renewed:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{amount} to {username}"
+msgstr ""
+
+msgid "Renew this donation"
+msgid_plural "Renew these donations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Manage your donations"
+msgstr "Управление вашими пожертвованиями"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Кто-то хочет сделать вам пожертвование на Liberapay"
 
@@ -423,8 +454,8 @@ msgstr "Детали этой ошибки были зафиксированы. 
 msgid "When I receive money"
 msgstr "Когда я получаю деньги"
 
-msgid "When there isn't enough money in my wallet to cover my donations"
-msgstr "Когда в моём кошельке недостаточно денег, чтобы иметь возможность делать пожертвования"
+msgid "When it's time to renew my donations"
+msgstr ""
 
 msgid "When a transfer to my bank account is initiated"
 msgstr "Когда инициирован перевод на мой банковский счёт"
@@ -1832,12 +1863,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Renew this donation"
-msgid_plural "Renew these donations"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
 msgstr "Ваши пожертвования обеспечиваются вашим доходом: вы получаете {income} и отдаёте {donations_amount} (в неделю)."
@@ -1922,10 +1947,6 @@ msgid "Best for regular payments"
 msgstr "Лучший вариант для регулярных платежей"
 
 msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr ""
-
-#, python-brace-format
-msgid "Your donation of {amount} to {recipient} is awaiting payment."
 msgstr ""
 
 #, python-brace-format
@@ -4060,9 +4081,6 @@ msgstr "Ваше пожертвование {money_amount} в неделю дл�
 #, python-brace-format
 msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
 msgstr "Ваше пожертвование {money_amount} в неделю для {name} на {platform} не было пересоздано, потому что {name2} отключил получение пожертвований на Liberapay."
-
-msgid "Manage your donations"
-msgstr "Управление вашими пожертвованиями"
 
 msgid "Email addresses"
 msgstr "Адреса электронной почты"
