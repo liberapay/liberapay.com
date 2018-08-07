@@ -113,7 +113,7 @@ SEPA = EUROZONE | set("BG CH CZ DK GB GI HR HU IS LI MC NO PL RO SE".split())
 
 EVENTS = [
     Event('income', 1, _("When I receive money")),
-    Event('low_balance', 2, _("When there isn't enough money in my wallet to cover my donations")),
+    Event('donate_reminder', 2, _("When it's time to renew my donations")),
     Event('withdrawal_created', 4, _("When a transfer to my bank account is initiated")),
     Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
     Event('pledgee_joined', 16, _("When someone I pledge to joins Liberapay")),

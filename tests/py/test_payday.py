@@ -320,6 +320,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.janet.set_tip_to(team, EUR('0.40'))
         self.janet.distribute_balances_to_donees(final_gift=False)
 
+        self.db.run("UPDATE participants SET has_payment_account = true")  # dirty trick
+
         # Preliminary checks
         janet = self.janet.refetch()
         assert janet.balance == 0
@@ -353,7 +355,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
         assert len(transfers) == 4
 
-        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
         assert len(emails) == 2
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
@@ -375,7 +376,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
         assert len(transfers) == 6
 
-        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
         assert len(emails) == 3
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
@@ -383,8 +383,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert emails[1]['to'][0] == 'homer <%s>' % self.homer.email
         assert '0.40' in emails[1]['text']
         assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
-        assert 'top up' in emails[2]['subject']
-        assert '1.00' in emails[2]['text']
+        assert 'renew your donation' in emails[2]['subject']
+        assert '2 donations' in emails[2]['text']
 
 
 class TestPaydayForTeams(FakeTransfersHarness):
@@ -988,20 +988,20 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team.set_take_for(self.david, EUR('0.23'), team)
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
+        self.db.run("UPDATE participants SET has_payment_account = true")  # dirty trick
         Payday.start().run()
         david = self.david.refetch()
         assert david.balance == EUR('4.73')
         janet = self.janet.refetch()
         assert janet.balance == EUR('1.77')
         assert janet.giving == EUR('0.25')
-        self.db.run("UPDATE notifications SET email = true WHERE event = 'low_balance'")  # temporary bypass
         emails = self.get_emails()
         assert len(emails) == 2
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
         assert '4.73' in emails[0]['subject']
         assert emails[1]['to'][0] == 'janet <%s>' % self.janet.email
-        assert 'top up' in emails[1]['subject']
-        assert '1.77' in emails[1]['text']
+        assert 'renew your donation' in emails[1]['subject']
+        assert '3 donations' in emails[1]['text']
 
     def test_log_upload(self):
         payday = Payday.start()
