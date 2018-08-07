@@ -44,6 +44,10 @@ def Bold(value):
     return Wrap(value, BOLD)
 
 
+class Country(str):
+    pass
+
+
 class Currency(str):
     pass
 
@@ -312,6 +316,8 @@ def i_format(loc, s, *a, **kw):
                 c[k] = format_date(o, locale=loc)
             elif isinstance(o, Locale):
                 c[k] = loc.languages.get(o.language) or o.language.upper()
+            elif isinstance(o, Country):
+                c[k] = loc.countries.get(o, o)
             elif isinstance(o, Currency):
                 c[k] = loc.currencies.get(o, o)
             if wrapper:
@@ -461,6 +467,7 @@ def add_helpers_to_context(context, loc):
         escape=_return_,  # to be overriden by renderers
         locale=loc,
         Bold=Bold,
+        Country=Country,
         Currency=Currency,
         Money=Money,
         to_age=to_age,

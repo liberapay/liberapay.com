@@ -113,8 +113,8 @@ if request.method == 'POST':
     if country not in constants.PAYIN_DIRECT_DEBIT_COUNTRIES[currency]:
         raise response.error(400, _(
             "Direct debits in {currency} are not possible from {country}.",
-            currency=locale.currencies.get(currency, currency),
-            country=locale.countries.get(country, country),
+            currency=Currency(currency),
+            country=Country(country),
         ))
 
     mandate = Mandate.get(route.mandate) if route.mandate else None

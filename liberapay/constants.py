@@ -262,6 +262,12 @@ PAYMENT_SLUGS = {
     'mango-cc': 'card',
 }
 
+PAYOUT_COUNTRIES = {
+    'stripe': set("""
+        AT AU BE CA CH DE DK ES FI FR GB HK IE IT JP LU NL NO NZ PT SE SG US
+    """.split()),  # https://stripe.com/global
+}
+
 PERIOD_CONVERSION_RATES = {
     'weekly': Decimal(1),
     'monthly': Decimal(12) / Decimal(52),
