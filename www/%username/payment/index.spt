@@ -1,8 +1,6 @@
-from markupsafe import Markup
+# coding: utf8
 
 from liberapay.utils import get_participant, group_by
-
-CODE = Markup('<code>%s</code>')
 
 [---]
 
@@ -19,10 +17,17 @@ title = participant.username
 subhead = _("Payment")
 
 [---] text/html
+% from "templates/icons.html" import glyphicon
+
 % extends "templates/settings.html"
 
 % block content
     <p>{{ _("This page allows you to manage your payment methods.") }}</p>
+
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "Donors do not need to connect any payment account below, they are only "
+        "necessary to receive money."
+    ) }}</p>
 
     % include "templates/sandbox-warning.html"
 
@@ -39,18 +44,31 @@ subhead = _("Payment")
             <h4>{{ account.id }}</h4>
             % endif
             <p>
-            {{ _("Country: {0}", locale.countries.get(account.country, account.country)) }}<br>
+            {{ _("Country: {0}", Country(account.country)) }}<br>
             % if account.default_currency
-            {{ _("Currency: {0}", locale.currencies.get(account.default_currency, account.default_currency)) }}<br>
+            {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
             % if not account.charges_enabled
-            <span class="text-danger">{{ _("This account cannot receive payments.") }}</span>
+            <span class="text-danger">{{ glyphicon('exclamation-sign') }} {{
+                _("This account cannot receive payments.")
+            }}</span>
             % endif
         </div>
         % endfor
     </div>
     <br>
+    % elif request.country in locale.countries
+        % set country = request.country
+        % if country in constants.PAYOUT_COUNTRIES['stripe']
+            <p class="text-success">{{ glyphicon('ok-sign') }} {{ _(
+                "Available in {country}.", country=Country(country)
+            ) }}</p>
+        % else
+            <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+                "Not available in {country}.", country=Country(country)
+            ) }}</p>
+        % endif
     % endif
 
     <form action="/payment-providers/stripe/connect" method="POST">
@@ -60,4 +78,46 @@ subhead = _("Payment")
             _("Connect {platform_name} account", platform_name='Stripe')
         }}</button>
     </form>
+
+    <br>
+    <h3>PayPal</h3>
+    % set accounts = accounts_by_provider.get('paypal', ())
+    % if accounts
+    <div>
+        % for account in accounts
+        <div class="card card-default">
+            % if account.display_name
+            <h4>{{ account.display_name }}</h4>
+            {{ _("Account ID: {0}", account.id) }}<br>
+            % else
+            <h4>{{ account.id }}</h4>
+            % endif
+            <p>
+            {{ _("Country: {0}", Country(account.country)) }}<br>
+            % if account.default_currency
+            {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
+            % endif
+            </p>
+            % if not account.charges_enabled
+            <span class="text-danger">{{ glyphicon('exclamation-sign') }} {{
+                _("This account cannot receive payments.")
+            }}</span>
+            % endif
+        </div>
+        % endfor
+    </div>
+    <br>
+    % elif request.country in locale.countries
+        % set country = request.country
+        % if country in constants.PAYOUT_COUNTRIES['paypal']
+            <p class="text-success">{{ glyphicon('ok-sign') }} {{ _(
+                "Available in {country}.", country=Country(country)
+            ) }}</p>
+        % else
+            <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+                "Not available in {country}.", country=Country(country)
+            ) }}</p>
+        % endif
+    % endif
+    <p>{{ _("Coming soon…") }}</p>
 % endblock

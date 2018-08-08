@@ -262,6 +262,24 @@ PAYMENT_SLUGS = {
     'mango-cc': 'card',
 }
 
+PAYOUT_COUNTRIES = {
+    'paypal': set("""
+        AD AE AG AI AL AM AN AO AR AT AU AW AZ BA BB BE BF BG BH BI BJ BM BN BO
+        BR BS BT BW BY BZ C2 CA CD CG CH CI CK CL CM CO CR CV CY CZ DE DJ DK DM
+        DO DZ EC EE EG ER ES ET FI FJ FK FM FO FR GA GD GE GF GI GL GM GN GP GR
+        GT GW GY HK HN HR HU ID IE IL IN IS IT JM JO JP KE KG KH KI KM KN KR KW
+        KY KZ LA LC LI LK LS LT LU LV MA MC MD ME MG MH MK ML MN MQ MR MS MT MU
+        MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PL
+        PM PN PT PW PY QA RE RO RS RU RW SA SB SC SE SG SH SI SJ SK SL SM SN SO
+        SR ST SV SZ TC TD TG TH TJ TM TN TO TT TT TT TT TV TW TZ UA UG UK US UY
+        VA VC VE VG VN VU WF WS YE YT ZA ZM ZW
+    """.split()),  # https://www.paypal.com/us/webapps/mpp/country-worldwide
+
+    'stripe': set("""
+        AT AU BE CA CH DE DK ES FI FR GB HK IE IT JP LU NL NO NZ PT SE SG US
+    """.split()),  # https://stripe.com/global
+}
+
 PERIOD_CONVERSION_RATES = {
     'weekly': Decimal(1),
     'monthly': Decimal(12) / Decimal(52),
