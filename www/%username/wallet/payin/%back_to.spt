@@ -3,15 +3,18 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from liberapay.utils import b64decode_s, get_participant, group_by, utcnow
 
-allow_bankwire = website.app_conf.payin_methods.get('bankwire', True)
-allow_card = website.app_conf.payin_methods.get('card', True)
-allow_directdebit = website.app_conf.payin_methods.get('direct-debit', True)
+allow_bankwire = website.app_conf.payin_methods.get('mango-bw', True)
+allow_card = website.app_conf.payin_methods.get('mango-cc', True)
+allow_directdebit = website.app_conf.payin_methods.get('mango-ba', True)
 
 [---]
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
 website.check_payin_allowed(user)
+
+if not allow_bankwire and not allow_card and not allow_directdebit:
+    response.redirect(participant.path('giving/pay/'))
 
 if 'transactionId' in request.qs or 'exchange_id' in request.qs or \
     request.method == 'POST':
