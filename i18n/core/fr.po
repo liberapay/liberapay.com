@@ -30,13 +30,13 @@ msgstr "Le temps est venu de renouveler vos dons sur Liberapay"
 
 #, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr "Votre don de {amount} à {recipient} attend votre paiement."
+msgstr "Votre don de {amount} à {recipient} est en attente de paiement."
 
 #, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
-msgstr[0] "Vous avez {n} don attendant d'être renouvelé :"
-msgstr[1] "Vous avez {n} dons attendant d'être renouvelés :"
+msgstr[0] "Vous avez {n} don en attente de renouvellement :"
+msgstr[1] "Vous avez {n} dons en attente de renouvellement :"
 
 #, python-brace-format
 msgid "{amount} to {username}"
@@ -1849,8 +1849,8 @@ msgstr "Vous donnez {0} par semaine."
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
-msgstr[0] "Vous avez {n} don attendant un paiement."
-msgstr[1] "Vous avez {n} dons attendant un paiement."
+msgstr[0] "Vous avez {n} don en attente de paiement."
+msgstr[1] "Vous avez {n} dons en attente de paiement."
 
 #, python-brace-format
 msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
@@ -1911,7 +1911,7 @@ msgstr "Financer vos dons"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr "Le paiement de {charge_amount} s'est accompli avec succès."
+msgstr "Le paiement de {charge_amount} a été accompli avec succès."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"
@@ -1936,7 +1936,7 @@ msgid "Best for regular payments"
 msgstr "Parfait pour des paiements réguliers"
 
 msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Financer plusieurs dons avec un paiement unique est actuellement impossible, et vous devrez donc renouveler vos dons un par un. Nous nous excusons pour la gêne occasionnée."
+msgstr "Financer plusieurs dons avec un paiement unique est actuellement impossible, vous devrez donc renouveler vos dons un par un. Nous nous excusons pour la gêne occasionnée."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1988,7 +1988,7 @@ msgstr "Veuillez entrer votre numéro de carte :"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
-msgstr "Cette donnée sera envoyée directement à l'opérateur de paiement {name} à travers une connexion cryptée."
+msgstr "Ces données seront envoyées directement à l'opérateur de paiement {name} à travers une connexion chiffrée."
 
 msgid "Remember the card number for next time"
 msgstr "Se rappeler du numéro de carte pour la prochaine fois"
@@ -2270,7 +2270,7 @@ msgid "This page allows you to manage your payment methods."
 msgstr "Cette page vous permet de modifier vos moyens de paiement."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
-msgstr ""
+msgstr "Les donateurs n'ont pas besoin de connecter un compte de paiement ci-dessous, ils ne sont nécessaires que pour recevoir de l'argent."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2289,18 +2289,18 @@ msgstr "Ce compte ne peut pas recevoir de paiements."
 
 #, python-brace-format
 msgid "Available in {country}."
-msgstr ""
+msgstr "Disponible dans votre pays ({country})."
 
 #, python-brace-format
 msgid "Not available in {country}."
-msgstr ""
+msgstr "Indisponible dans votre pays ({country})."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Connecter le compte {platform_name}"
 
 msgid "Coming soon…"
-msgstr ""
+msgstr "Bientôt…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -3229,7 +3229,7 @@ msgstr "Y a-t-il un montant minimum ou maximum que je peux donner ou recevoir ?
 
 #, python-brace-format
 msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
-msgstr "Le minimum que vous pouvez donner à tout utilisateur est de {0} par semaine mais, pour minimiser les frais de traitement, il va vous être demandé de payer pour plusieurs semaines en avance."
+msgstr "Le minimum que vous pouvez donner à un utilisateur est {0} par semaine, mais afin de minimiser les frais de bancaires il vous sera demandé de payer par avance pour plusieurs semaines."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
