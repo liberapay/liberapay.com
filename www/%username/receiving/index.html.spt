@@ -24,15 +24,15 @@ teams = website.db.all("""
 
 % set receiving = participant.receiving
 % if participant == user
-<p>{{ _("You receive {0} per week.", receiving) }}</p>
+<p>{{ _("Donors want to give you {0} per week.", receiving) }}</p>
 % else
-<p>{{ _("{0} receives {1} per week.", participant.username, receiving) }}</p>
+<p>{{ _("Donors want to give {0} {1} per week.", participant.username, receiving) }}</p>
 % endif
 
 % if participant.is_person
 
 % if not participant.has_payment_account
-    <p>{{ _("You can't receive money until you've configured a payment account.") }}</p>
+    <p>{{ _("You can't receive money until you've connected an account to receive.") }}</p>
     <p><a class="btn btn-primary" href="{{ participant.path('payment') }}">{{ _("Configure payments") }}</a></p>
 % elif participant.balance > 0
     <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
