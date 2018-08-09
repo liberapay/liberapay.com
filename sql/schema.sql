@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '74'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '75'::jsonb);
 
 
 -- app configuration
@@ -342,19 +342,22 @@ CREATE TABLE paydays
 -- exchange routes -- how money moves in and out of Liberapay
 
 CREATE TYPE payment_net AS ENUM
-    ('mango-ba', 'mango-bw', 'mango-cc');
+    ('mango-ba', 'mango-bw', 'mango-cc', 'stripe-card');
+
+CREATE TYPE route_status AS ENUM ('pending', 'chargeable', 'consumed', 'failed', 'canceled');
 
 CREATE TABLE exchange_routes
 ( id            serial         PRIMARY KEY
 , participant   bigint         NOT NULL REFERENCES participants
 , network       payment_net    NOT NULL
 , address       text           NOT NULL CHECK (address <> '')
-, error         text           NOT NULL
 , one_off       boolean        NOT NULL
 , remote_user_id   text           NOT NULL
 , ctime            timestamptz    DEFAULT now()
 , mandate          text           CHECK (mandate <> '')
 , currency         currency
+, country          text
+, status           route_status   NOT NULL
 , UNIQUE (participant, network, address)
 , CONSTRAINT currency_chk CHECK ((currency IS NULL) = (network <> 'mango-cc'))
 );
@@ -408,6 +411,7 @@ CREATE TABLE payment_accounts
 , display_name          text
 , token                 json
 , connection_ts         timestamptz     NOT NULL DEFAULT current_timestamp
+, pk                    bigserial       PRIMARY KEY
 , UNIQUE (participant, provider, country, is_current)
 , UNIQUE (provider, id, participant)
 );
@@ -432,6 +436,69 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_has_payment_account
     AFTER INSERT OR UPDATE OR DELETE ON payment_accounts
     FOR EACH ROW EXECUTE PROCEDURE update_has_payment_account();
+
+
+-- payins -- incoming payments that don't go into a donor wallet
+
+CREATE TYPE payin_status AS ENUM (
+    'pre', 'submitting', 'pending', 'succeeded', 'failed'
+);
+
+CREATE TABLE payins
+( id               bigserial         PRIMARY KEY
+, ctime            timestamptz       NOT NULL DEFAULT current_timestamp
+, remote_id        text
+, payer            bigint            NOT NULL REFERENCES participants
+, amount           currency_amount   NOT NULL CHECK (amount > 0)
+, status           payin_status      NOT NULL
+, error            text
+, route            int               NOT NULL REFERENCES exchange_routes
+, amount_settled   currency_amount
+, fee              currency_amount   CHECK (fee >= 0)
+, CONSTRAINT fee_currency_chk CHECK (fee::currency = amount_settled::currency)
+, CONSTRAINT success_chk CHECK (NOT (status = 'succeeded' AND (amount_settled IS NULL OR fee IS NULL)))
+);
+
+CREATE INDEX payins_payer_idx ON payins (payer);
+
+CREATE TABLE payin_events
+( payin          int               NOT NULL REFERENCES payins
+, status         payin_status      NOT NULL
+, error          text
+, timestamp      timestamptz       NOT NULL
+, UNIQUE (payin, status)
+);
+
+
+-- payin transfers -- allocation of incoming payments to one or more recipients
+
+CREATE TYPE payin_transfer_context AS ENUM ('personal-donation', 'team-donation');
+
+CREATE TYPE payin_transfer_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
+
+CREATE TABLE payin_transfers
+( id            serial                   PRIMARY KEY
+, ctime         timestamptz              NOT NULL DEFAULT CURRENT_TIMESTAMP
+, remote_id     text
+, payin         bigint                   NOT NULL REFERENCES payins
+, payer         bigint                   NOT NULL REFERENCES participants
+, recipient     bigint                   NOT NULL REFERENCES participants
+, destination   bigint                   NOT NULL REFERENCES payment_accounts
+, context       payin_transfer_context   NOT NULL
+, status        payin_transfer_status    NOT NULL
+, error         text
+, amount        currency_amount          NOT NULL CHECK (amount > 0)
+, unit_amount   currency_amount
+, n_units       int
+, period        donation_period
+, team          bigint                   REFERENCES participants
+, CONSTRAINT self_chk CHECK (payer <> recipient)
+, CONSTRAINT team_chk CHECK ((context = 'team-donation') = (team IS NOT NULL))
+, CONSTRAINT unit_chk CHECK ((unit_amount IS NULL) = (n_units IS NULL))
+);
+
+CREATE INDEX payin_transfers_payer_idx ON payin_transfers (payer);
+CREATE INDEX payin_transfers_recipient_idx ON payin_transfers (recipient);
 
 
 -- communities -- groups of participants
