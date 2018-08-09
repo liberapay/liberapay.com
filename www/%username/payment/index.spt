@@ -86,23 +86,13 @@ subhead = _("Payment")
     <div>
         % for account in accounts
         <div class="card card-default">
-            % if account.display_name
             <h4>{{ account.display_name }}</h4>
-            {{ _("Account ID: {0}", account.id) }}<br>
-            % else
-            <h4>{{ account.id }}</h4>
-            % endif
             <p>
             {{ _("Country: {0}", Country(account.country)) }}<br>
             % if account.default_currency
             {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
-            % if not account.charges_enabled
-            <span class="text-danger">{{ glyphicon('exclamation-sign') }} {{
-                _("This account cannot receive payments.")
-            }}</span>
-            % endif
         </div>
         % endfor
     </div>
@@ -119,5 +109,12 @@ subhead = _("Payment")
             ) }}</p>
         % endif
     % endif
-    <p>{{ _("Coming soon…") }}</p>
+
+    <form action="/payment-providers/paypal/connect" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
+        <button class="btn btn-{{ 'default' if accounts else 'primary' }}">{{
+            _("Connect {platform_name} account", platform_name='PayPal')
+        }}</button>
+    </form>
 % endblock
