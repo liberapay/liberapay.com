@@ -34,6 +34,23 @@ if mode == 'all':
     participants = website.db.all("""
         SELECT p
              , (SELECT c.name FROM communities c WHERE c.participant = p.id) AS c_name
+             , ( SELECT json_build_object('address', e.address, 'verified', e.verified)
+                   FROM emails e
+                  WHERE e.participant = p.id
+               ORDER BY e.address = p.email DESC NULLS LAST
+                      , e.verified DESC
+                      , e.added_time
+                  LIMIT 1
+               ) AS email
+             , ( SELECT json_agg(json_build_object(
+                            'type', s.type, 'content', s.content, 'lang', s.lang
+                        ))
+                   FROM ( SELECT s.*
+                            FROM statements s
+                           WHERE s.participant = p.id
+                        ORDER BY s.lang, s.type DESC
+                        ) s
+               ) AS statements
              , ( SELECT row_to_json(e)
                    FROM ( SELECT e.*, p2.username AS recorder_name
                             FROM events e
@@ -48,7 +65,7 @@ if mode == 'all':
          WHERE p.id < %s
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
-         LIMIT 150
+         LIMIT 25
     """, (request.qs.get_int('last_showed', float('inf')),))
     last_id = participants[-1][0].id if participants else 0
 else:
@@ -58,6 +75,7 @@ title = "Users Admin"
 
 [---] text/html
 % from 'templates/avatar-url.html' import avatar_img with context
+% from 'templates/icons.html' import fontawesome, glyphicon
 
 % extends "templates/base.html"
 
@@ -65,7 +83,7 @@ title = "Users Admin"
 
 <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-% for p, c_name, last_change in participants
+% for p, c_name, email, statements, last_change in participants
 <div class="row user-admin">
     <div class="col-md-2 mini-user-admin">
         <a href="/{{ p.username }}/">
@@ -74,7 +92,80 @@ title = "Users Admin"
             <div class="age">{{ to_age_str(p.join_time, add_direction=True) if p.join_time }}</div>
         </a>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-6">
+    % set elsewhere = p.get_accounts_elsewhere().values()
+    % if p.status == 'stub'
+        % for account in elsewhere
+            <div class="account">
+                <a class="account-link" href="{{ account.html_url }}">
+                    {{ fontawesome(account.platform) }}
+                    <span class="account-username">{{ account.friendly_name_long }}</span>
+                </a>
+                <br>
+                % if account.description
+                    <section class="profile-statement embedded raw">{{
+                        account.get_excerpt(500)
+                    }}</section>
+                % else
+                    (no description)
+                % endif
+            </div>
+        % else
+            (ghost stub account)
+        % endfor
+    % else
+        % if p.kind != 'community'
+            <p>
+            % if email
+                <strong>Email address:</strong> {{ email.address }}
+                % if email.verified
+                <span class="text-success" title="Verified">{{ glyphicon('ok-sign') }}</span>
+                % else
+                <span class="text-danger" title="Unconfirmed">{{ glyphicon('warning-sign') }}</span>
+                % endif
+            % else
+                <strong>Email address:</strong> none.
+            % endif
+            </p>
+
+        <p><strong>Elsewhere accounts:</strong>
+        % set elsewhere = p.get_accounts_elsewhere().values()
+        % if elsewhere
+            % for account in elsewhere
+                <div class="account">
+                    <a class="account-link" href="{{ account.html_url }}">
+                        {{ fontawesome(account.platform) }}
+                        <span class="account-username">{{ account.friendly_name_long }}</span>
+                    </a>
+                </div>
+            % endfor
+        % else
+            none. <span class="text-danger">{{ glyphicon('warning-sign') }}</span>
+        % endif
+        </p>
+        % endif
+
+        <div><strong>Profile descriptions:</strong>
+        % if statements
+            <br>
+            % for s in statements or ()
+                [<em>{{ locale.languages_2.get(s.lang, s.lang) }} {{ s.type }}</em>]
+                % if s.type in ('profile', 'sidebar')
+                    <section class="profile-statement embedded raw" lang="{{ s.lang }}">{{
+                        s.content
+                    }}</section>
+                % else
+                    {{ s.content }}
+                % endif
+                <br>
+            % endfor
+        % else
+            none. <span class="text-danger">{{ glyphicon('warning-sign') }}</span>
+        % endif
+        </div>
+    % endif
+    </div>
+    <div class="col-md-4">
         <form action="javascript:" method="POST" class="js-submit">
             <input type="hidden" name="p_id" value="{{ p.id }}">
             % for attr in constants.PROFILE_VISIBILITY_ATTRS
