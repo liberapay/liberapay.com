@@ -24,9 +24,9 @@ teams = website.db.all("""
 
 % set receiving = participant.receiving
 % if participant == user
-<p>{{ _("Donors want to give you {0} per week.", receiving) }}</p>
+<p>{{ _("You received {0} for the current week.", receiving) }}</p>
 % else
-<p>{{ _("Donors want to give {0} {1} per week.", participant.username, receiving) }}</p>
+<p>{{ _("{0} received {1} for the current week.", participant.username, receiving) }}</p>
 % endif
 
 % if participant.is_person
