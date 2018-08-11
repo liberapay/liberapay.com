@@ -67,6 +67,7 @@ if request.method == 'POST':
       ORDER BY country = %s DESC
              , default_currency = %s DESC
              , connection_ts
+         LIMIT 1
     """, (beneficiary.id, request.country, payin_currency))
     if not destination:
         raise response.error(400, "payment account not found")
