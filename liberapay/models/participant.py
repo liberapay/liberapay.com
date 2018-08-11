@@ -2184,6 +2184,7 @@ class Participant(Model, MixinTeam):
                      t.paid_in_advance < (t.periodic_amount * 0.75) OR
                      t.paid_in_advance < (t.amount * 4)
                    )
+               AND p.status = 'active'
           ORDER BY (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
         """, (self.id,))]
