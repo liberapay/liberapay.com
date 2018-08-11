@@ -2,13 +2,8 @@
 
 from math import ceil
 
-import stripe
-
-from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.payin.common import prepare_payin, prepare_payin_transfer
-from liberapay.payin.stripe import destination_charge
-from liberapay.utils import get_participant, NS, partition
+from liberapay.utils import get_participant, group_by, NS, partition
 
 ONE_YEAR = {
     'weekly': 52,
@@ -21,128 +16,13 @@ ONE_YEAR = {
 payer = get_participant(state, restrict=True)
 
 if request.method == 'POST':
-    website.check_payin_allowed(user, 'stripe-card')
-
-    body = request.body
-
-    del currency
-    payin_currency = body['currency']
-    if payin_currency not in constants.CURRENCIES:
-        raise response.error(400, "bad `currency` value in request body")
-
-    amount = body['amount']
-    if amount == 'custom':
-        amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
-    else:
-        try:
-            amount = Money(amount, payin_currency)
-        except (InvalidOperation, ValueError):
-            raise InvalidNumber(amount)
-
-    tip = website.db.one("""
-        SELECT t.*, p AS tippee_p
-          FROM tips t
-          JOIN participants p ON p.id = t.tippee
-         WHERE t.tipper = %s
-           AND t.id = %s
-    """, (payer.id, body.get_int('tip')))
-    if not tip:
-        raise response.error(400, "bad `tip` value in request body")
-    beneficiary = tip.tippee_p
-
-    amount_min = max(constants.PAYIN_STRIPE_MIN_POSSIBLE[payin_currency], tip.amount)
-    amount_max = constants.PAYIN_STRIPE_MAX_POSSIBLE[payin_currency]
-    if amount < amount_min or amount > amount_max:
-        raise response.error(400, _(
-            "'{0}' is not an acceptable amount (min={1}, max={2})",
-            amount, amount_min, amount_max
-        ))
-
-    destination = website.db.one("""
-        SELECT *
-          FROM payment_accounts
-         WHERE participant = %s
-           AND provider = 'stripe'
-           AND is_current
-      ORDER BY country = %s DESC
-             , default_currency = %s DESC
-             , connection_ts
-         LIMIT 1
-    """, (beneficiary.id, request.country, payin_currency))
-    if not destination:
-        raise response.error(400, "payment account not found")
-
-    return_url = payer.url('giving/pay/complete')
-    if 'token' in body:
-        one_off = body.get('keep') != 'true'
-
-        owner_address = {
-            k: body.get('owner.address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_STRIPE
-        }
-        if 'line1' not in owner_address:
-            owner_address = None
-
-        token = stripe.Token.retrieve(body['token'])
-        if token.type == 'bank_account':
-            network = 'stripe-ba'
-        elif token.type == 'card':
-            network = 'stripe-card'
-        else:
-            raise response.error(400, "unknown token type")
-
-        source = stripe.Source.create(
-            amount=amount.int().amount if one_off else None,
-            owner={
-                'address': owner_address,
-                'email': payer.email or payer.get_any_email(),
-                'name': body.get('owner.name'),
-            },
-            redirect={'return_url': return_url},
-            token=token.id,
-            type=token.type,
-            usage=('single_use' if one_off else 'reusable'),
-        )
-        customer_id = website.db.one("""
-            SELECT remote_user_id
-              FROM exchange_routes
-             WHERE participant = %s
-               AND network::text LIKE 'stripe-%%'
-             LIMIT 1
-        """, (payer.id,))
-        if customer_id:
-            customer = stripe.Customer.retrieve(customer_id)
-            customer.sources.create(source=source.id)
-            del customer
-        else:
-            customer_id = stripe.Customer.create(
-                email=source.owner.email,
-                source=source.id,
-            ).id
-        source_country = getattr(getattr(source, source.type), 'country', None)
-        source_currency = getattr(getattr(source, source.type), 'currency', None)
-        route = ExchangeRoute.insert(
-            payer, network, source.id, source.status,
-            one_off=one_off, remote_user_id=customer_id,
-            country=source_country, currency=source_currency,
-        )
-    else:
-        route = ExchangeRoute.from_id(payer, body.get_int('route'))
-        if route is None:
-            raise response.error(400, "bad `route` value in request body")
-        source = stripe.Source.retrieve(route.address)
-        route.update_status(source.status)
-
-    payin = prepare_payin(website.db, payer, amount, route)
-    context = 'team-donation' if beneficiary.kind == 'group' else 'personal-donation'
-    prepare_payin_transfer(
-        website.db, payin, beneficiary, destination, context,
-        payin.amount, tip.periodic_amount, tip.period
-    )
-    response.redirect(payer.url('giving/pay/%i' % payin.id))
+    # For backward compatibility
+    response.redirect(payer.url('giving/pay/stripe/'), code=307)
 
 payin_id = request.path['payment_id']
 
 if payin_id == 'complete':
+    # For backward compatibility
     payin = website.db.one("""
         SELECT pi.*
           FROM payin pi
@@ -155,9 +35,10 @@ if payin_id == 'complete':
     """, (payer.id, request.qs['source']))
     if not payin:
         raise response.error(400, "payin not found")
-    response.redirect(payer.path('giving/pay/%i' % payin.id))
+    response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
 
 elif payin_id:
+    # For backward compatibility
     if not payin_id.isdigit():
         raise response.error(404, "invalid payin ID in URL path")
     payin = website.db.one("""
@@ -168,74 +49,33 @@ elif payin_id:
     """, (payin_id, payer.id))
     if not payin:
         raise response.error(404, "unknown payin ID in URL path")
-    if payin.status == 'pre':
-        payin = destination_charge(
-            website.db, payin, payer, statement_descriptor='Liberapay'
-        )
+    response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
 
 tippee_id = request.qs.get_int('beneficiary', default=None)
-if tippee_id:
-    tippee = Participant.from_id(tippee_id)
-    if not tippee:
-        raise response.error(400, "bad `beneficiary` value in querystring")
-    if tippee.status != 'active':
-        raise response.error(400, _("This donation is not active."))
-    tip = NS(payer.get_tip_to(tippee))
-    tip.tippee_p = tippee
-    if tip.amount == 0:
-        raise response.error(400, _("This donation is not active."))
-    donations = [tip]
-else:
-    donations = payer.get_tips_awaiting_renewal()
+donations = payer.get_tips_awaiting_renewal()
 donations, donations_not_fundable = partition(
-    donations, lambda t: t.tippee_p.has_payment_account and not t.tippee_p.is_suspended
+    donations, lambda t: t.payment_accounts and not t.tippee_p.is_suspended
 )
+if tippee_id:
+    donations, other_donations = partition(
+        donations, lambda t: t.tippee == tippee_id
+    )
 
 if donations:
     tip = donations[0]
-    tip_currency = tip.amount.currency
-    tip.min_possible_amount = constants.PAYIN_STRIPE_MIN_POSSIBLE[tip_currency]
-    tip.min_recommended_amount = constants.PAYIN_STRIPE_MIN_RECOMMENDED[tip_currency]
-    tip.low_fee_amount = constants.PAYIN_STRIPE_LOW_FEE[tip_currency]
-    tip.max_possible_amount = constants.PAYIN_STRIPE_MAX_POSSIBLE[tip_currency]
-    min_multiplier = int(ceil(tip.min_possible_amount / tip.periodic_amount))
-    min_recommended_multiplier = int(ceil(tip.min_recommended_amount / tip.periodic_amount))
-    max_recommended_multiplier = min(
-        max(int(ceil(tip.low_fee_amount / tip.periodic_amount)), ONE_YEAR[tip.period]),
-        tip.max_possible_amount // tip.periodic_amount
-    )
-    tip.multipliers = sorted(set((min_multiplier, min_recommended_multiplier, max_recommended_multiplier)))
-
-network = request.qs.get('method', 'stripe-card')
-if network:
-    route = ExchangeRoute.from_network(payer, network)
-    route = route[0] if route else None
-else:
-    route = website.db.one("""
-        SELECT r
-          FROM exchange_routes r
-         WHERE r.participant = %s
-           AND r.status = 'chargeable'
-           AND r.network::text LIKE 'stripe-%%'
-      ORDER BY r.network = 'stripe-ba' DESC
-             , r.id DESC
-         LIMIT 1
-    """, (payer.id,))
-if route:
-    source = stripe.Source.retrieve(route.address)
-    route.update_status(source.status)
-    if not route:
-        response.redirect(request.line.uri)
+    providers = website.db.all("""
+        SELECT DISTINCT a.provider
+          FROM payment_accounts a
+         WHERE a.participant = %s
+           AND a.is_current
+      ORDER BY a.provider DESC
+    """, (tip.tippee,))
+    if len(providers) == 1:
+        response.redirect(payer.path('giving/pay/%s/' % providers[0]) +
+                          ('?beneficiary=%i' % tip.tippee))
 
 if user == payer:
     payer.mark_notifications_as_read('donate_reminder')
-
-# https://stripe.com/docs/security#content-security-policy
-csp = response.headers[b'Content-Security-Policy']
-csp = csp.allow(b'connect-src', b"api.stripe.com")
-csp = csp.allow(b'frame-src', b"js.stripe.com")
-csp = csp.allow(b'script-src', b"js.stripe.com")
-response.headers[b'Content-Security-Policy'] = csp
 
 title = _("Funding your donations")
 
@@ -244,64 +84,9 @@ title = _("Funding your donations")
 
 % block thin_content
 
-% if payin
-    % set status = payin.status
-    % if status == 'succeeded'
-        <div class="alert alert-success">{{ _(
-            "The payment of {charge_amount} was successful.", charge_amount=payin.amount
-        ) }}</div>
-        {#<a class="btn btn-default" href="{{ payer.path('bill/%s' % payin.id) }}">{{
-            _("View Receipt")
-        }}</a>#}
-    % elif status == 'failed'
-        <div class="alert alert-danger">{{ _(
-            "The payment failed. Error message: “{0}”", payin.error
-        ) }}</div>
-    % elif status == 'pending'
-        <div class="alert alert-info">{{ _("The payment has been initiated.") }}</div>
-    % endif
-
-    % if donations
-        <hr>
-    % endif
-% endif
-
 % if donations
 
-% if not (route or network)
-
-    <p>{{ _("Please choose a payment method:") }}</p>
-
-    <div class="row payment-methods">
-    % from "templates/icons.html" import fontawesome
-
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-            <div class="panel-body overlayed">
-                <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
-                <h4>{{ _("Credit/Debit Card") }}</h4>
-                <p>{{ _("Easy and instantaneous") }}</p>
-                <a class="overlay" href="?method=stripe-card"></a>
-            </div></div>
-        </div>
-
-        % set recommended = request.country in constants.PAYIN_DIRECT_DEBIT_COUNTRIES[currency]
-        <div class="col-sm-6">
-            <div class="panel panel-default {{ 'not-recommended' if not recommended }}">
-            <div class="panel-body overlayed">
-                <p class="payment-icon">{{ fontawesome('bank') }}</p>
-                <h4>{{ _("Direct Debit") }}<br><small>{{ _("Eurozone only") }}</small></h4>
-                <p>{{ _("Best for regular payments") }}</p>
-                <a class="overlay" href="?method=stripe-ba"></a>
-            </div>
-            </div>
-        </div>
-
-    </div>
-
-% else
-
-    % if len(donations) > 1 and not payin
+    % if len(donations) > 1
         <p>{{ ngettext(
             "You have {n} donation awaiting payment.",
             "You have {n} donations awaiting payment.",
@@ -315,117 +100,37 @@ title = _("Funding your donations")
         <hr>
     % endif
 
-    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+    <p>{{ _("Please choose a payment method:") }}</p>
 
-    <form action="javascript:" method="POST" id="stripe"
-          data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
-        % set tip = donations[0]
-        <p>{{ _(
-            "Your donation of {amount} to {recipient} is awaiting payment.",
-            amount=tip.periodic_amount, recipient=tip.tippee_p.link()
-        ) }}</p>
-        % if tip.periodic_amount < tip.min_possible_amount
-            <p>{{ _(
-                "We cannot charge you only {donation_amount}, the minimum payment "
-                "amount is {min_payment_amount}.",
-                donation_amount=tip.periodic_amount, min_payment_amount=tip.min_possible_amount
-            ) }}</p>
-        % endif
-        <p>{{ _("Please select or input a payment amount:") }}</p>
-        <fieldset id="amount">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <input type="hidden" name="route" value="{{ route.id or '' }}" />
-            <input type="hidden" name="currency" value="{{ tip.amount.currency }}" />
-            <input type="hidden" name="tip" value="{{ tip.id }}" />
-            <ul class="list-group radio-group">
-            % set show_fee_notice = len(tip.multipliers) > 1 and (tip.periodic_amount * tip.multipliers[0]) < tip.low_fee_amount
-            % for multiplier in tip.multipliers
-                % set charge_amount = tip.periodic_amount * multiplier
-                <li class="list-group-item">
-                <label>
-                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" />
-                    <div class="radio-label">
-                    <h5 class="list-group-item-heading">{{ format_money(charge_amount) }}
-                    % if show_fee_notice
-                    % if charge_amount < tip.min_recommended_amount
-                        <small class="text-warning">{{ _("(not recommended, high fee percentage)") }}</small>
-                    % elif charge_amount < tip.low_fee_amount
-                        <small class="text-info">{{ _("(okay, moderate fee percentage)") }}</small>
-                    % else
-                        <small class="text-success">{{ _("(recommended, low fee percentage)") }}</small>
-                    % endif
-                    % endif
-                    </h5>
-                    <p class="list-group-item-text">{{ ngettext(
-                        "Next payment in {n} week.", "Next payment in {n} weeks.", n=multiplier
-                    ) if tip.period == 'weekly' else ngettext(
-                        "Next payment in {n} month.", "Next payment in {n} months.", n=multiplier
-                    ) if tip.period == 'monthly' else ngettext(
-                        "Next payment in {n} year.", "Next payment in {n} years.", n=multiplier
-                    ) }}</p>
-                    </div>
-                </label>
-                </li>
-            % endfor
-                <li class="list-group-item">
-                <label>
-                    <input type="radio" name="amount" value="custom" class="hidden-xs" />
-                    <div class="radio-label">
-                    <h5 class="list-group-item-heading">{{ _(
-                        "Custom amount (min={0}, max={1})",
-                        max(tip.min_possible_amount, tip.amount),
-                        tip.max_possible_amount,
-                    ) }}</h5>
-                    <div class="input-group">
-                        <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>
-                        <input type="tel" inputmode="decimal" class="form-control amount"
-                               name="amount_custom" placeholder="{{ _('Amount') }}" />
-                    </div>
-                    </div>
-                </label>
-                </li>
-            </ul>
-        </fieldset>
+    <div class="row payment-methods">
+    % from "templates/icons.html" import fontawesome
 
-        % if source
-        <div class="form-group">
-            <p>{{ _(
-                "We will charge your {brand} card (last four digits: {last4}).",
-                brand=source.card.brand, last4=source.card.last4
-            ) }}</p>
-            <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
-                _("Use another card")
-            }}</button>
-            <br><br>
+    % for provider in providers
+        % if provider == 'stripe'
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+            <div class="panel-body overlayed">
+                <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
+                <h4>{{ _("Card") }}</h4>
+                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?method=card"></a>
+            </div></div>
+        </div>
+        % elif provider == 'paypal'
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+            <div class="panel-body overlayed">
+                <p class="payment-icon">{{ fontawesome('paypal') }}</p>
+                <h4>{{ _("PayPal") }}</h4>
+                <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}"></a>
+            </div>
+            </div>
         </div>
         % endif
+    % endfor
+    </div>
 
-        <div id="card-form" class="form-group {{ 'hidden' if source else '' }}">
-            <p>{{ _("Please input your card number:") }}</p>
-            <div id="card-element" class="form-control paragraph"></div>
-            <span id="card-errors" role="alert" class="invalid-msg"></span>
-            <p class="help-block">{{ glyphicon('lock') }} {{ _(
-                "This data will be sent directly to the payment processor "
-                "{name} through an encrypted connection.",
-                name='<a href="https://stripe.com/" target="_blank" rel="noopener noreferrer">Stripe</a>'|safe
-            ) }}</p>
-            <label>
-                <input type="checkbox" name="keep" value="true" checked />
-                {{ _("Remember the card number for next time") }}
-            </label>
-            <br><br>
-        </div>
+% else
 
-        <button class="btn btn-primary btn-lg btn-block">{{ _(
-            "Initiate the payment"
-        ) }}</button>
-    </form>
-
-% endif
-
-% endif
-
-% if not donations
     % if donations_not_fundable
         % if donations
             <hr>
@@ -441,10 +146,7 @@ title = _("Funding your donations")
         <div class="alert alert-success">{{ _("All your donations are funded.") }}</div>
         <a class="btn btn-default" href="{{ payer.path('giving/') }}">{{ _("Manage your donations") }}</a>
     % endif
+
 % endif
 
-% endblock
-
-% block scripts
-    <script src="https://js.stripe.com/v3/"></script>
 % endblock

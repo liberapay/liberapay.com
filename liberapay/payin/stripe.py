@@ -5,7 +5,7 @@ import stripe.error
 
 from ..models.exchange_route import ExchangeRoute
 from ..utils.currencies import Money
-from .common import update_payin
+from .common import update_payin, update_payin_transfer
 
 
 def repr_stripe_error(e):
@@ -69,24 +69,24 @@ def destination_charge(db, payin, payer, statement_descriptor):
 
     if destination:
         tr = stripe.Transfer.retrieve(charge.transfer)
-        reversal = tr.reversals.create(
+        tr.reversals.create(
             amount=bt.fee,
             description="Stripe fee",
             metadata={'payin_id': payin.id},
             idempotency_key='payin_fee_%i' % payin.id,
         )
 
-    r = db.one("""
-        UPDATE payin_transfers
-           SET status = %s
-             , remote_id = %s
-             , amount = %s
-         WHERE payin = %s
-     RETURNING id
-    """, (payin.status, getattr(charge, 'transfer', None), net_amount, payin.id))
-    assert r, locals()
+    status = charge.status
+    error = repr_charge_error(charge)
 
-    return update_payin(
-        db, payin.id, charge.id, charge.status, repr_charge_error(charge),
+    payin = update_payin(
+        db, payin.id, charge.id, status, error,
         amount_settled=amount_settled, fee=fee
     )
+
+    pt_remote_id = getattr(charge, 'transfer', None)
+    pt = update_payin_transfer(
+        db, pt.id, pt_remote_id, status, error, amount=net_amount
+    )
+
+    return payin

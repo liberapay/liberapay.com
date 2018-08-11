@@ -1,0 +1,296 @@
+# coding: utf8
+
+from math import ceil
+
+from mangopay.exceptions import CurrencyMismatch
+
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.models.participant import Participant
+from liberapay.payin.common import prepare_payin, prepare_payin_transfer
+from liberapay.payin.paypal import create_payment, execute_payment, sync_payment
+from liberapay.utils import get_participant, NS, partition
+
+ONE_YEAR = {
+    'weekly': 52,
+    'monthly': 12,
+    'yearly': 1,
+}
+
+[---]
+
+payer = get_participant(state, restrict=True)
+
+del currency
+
+if request.method == 'POST':
+    website.check_payin_allowed(user, 'paypal')
+
+    body = request.body
+
+    payin_currency = body['currency']
+    if payin_currency not in constants.CURRENCIES:
+        raise response.error(400, "bad `currency` value in request body")
+
+    payin_amount = body['amount']
+    if payin_amount == 'custom':
+        payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
+    else:
+        try:
+            payin_amount = Money(payin_amount, payin_currency)
+        except (InvalidOperation, ValueError):
+            raise InvalidNumber(payin_amount)
+
+    tip = website.db.one("""
+        SELECT t.*, p AS tippee_p
+          FROM tips t
+          JOIN participants p ON p.id = t.tippee
+         WHERE t.tipper = %s
+           AND t.id = %s
+    """, (payer.id, body.get_int('tip')))
+    if not tip:
+        raise response.error(400, "bad `tip` value in request body")
+    beneficiary = tip.tippee_p
+
+    amount_min = max(constants.PAYIN_PAYPAL_MIN_ACCEPTABLE[payin_currency], tip.amount)
+    amount_max = constants.PAYIN_PAYPAL_MAX_ACCEPTABLE[payin_currency]
+    if payin_amount < amount_min or payin_amount > amount_max:
+        raise response.error(400, _(
+            "'{0}' is not an acceptable amount (min={1}, max={2})",
+            payin_amount, amount_min, amount_max
+        ))
+
+    destination = website.db.one("""
+        SELECT *
+          FROM payment_accounts
+         WHERE participant = %s
+           AND provider = 'paypal'
+           AND is_current
+      ORDER BY country = %s DESC
+             , default_currency = %s DESC
+             , connection_ts
+         LIMIT 1
+    """, (beneficiary.id, request.country, payin_currency))
+    if not destination:
+        raise response.error(400, "payment account not found")
+
+    route = ExchangeRoute.upsert_generic_route(payer, 'paypal')
+    payin = prepare_payin(website.db, payer, payin_amount, route)
+    context = 'team-donation' if beneficiary.kind == 'group' else 'personal-donation'
+    prepare_payin_transfer(
+        website.db, payin, beneficiary, destination, context,
+        payin.amount, tip.periodic_amount, tip.period
+    )
+    response.redirect(payer.url('giving/pay/paypal/%i' % payin.id))
+
+payin_id = request.path['payin_id']
+
+if payin_id:
+    if not payin_id.isdigit():
+        raise response.error(404, "invalid payin ID in URL path")
+    payin = website.db.one("""
+        SELECT *
+          FROM payins
+         WHERE id = %s
+           AND payer = %s
+    """, (payin_id, payer.id))
+    if not payin:
+        raise response.error(404, "unknown payin ID in URL path")
+    if payin.status == 'pre':
+        return_url = payer.url('giving/pay/paypal/%i' % payin.id)
+        payin = create_payment(website.db, payin, payer, return_url, state)
+    elif payin.status == 'pending':
+        payer_id = request.qs.get('PayerID')
+        if payer_id:
+            payin = execute_payment(website.db, payin, payer_id)
+        else:
+            payin = sync_payment(website.db, payin)
+
+tippee_id = request.qs.get_int('beneficiary', default=None)
+donations = payer.get_tips_awaiting_renewal()
+donations, donations_not_fundable = partition(
+    donations, lambda t: t.payment_accounts and not t.tippee_p.is_suspended
+)
+if tippee_id:
+    donations, other_donations = partition(
+        donations, lambda t: t.tippee == tippee_id
+    )
+donations, non_paypal_donations = partition(
+    donations, lambda t: (
+        'paypal' in set(a['provider'] for a in (t.payment_accounts or ()))
+    )
+)
+
+if donations:
+    tip = donations[0]
+    tip_currency = tip.amount.currency
+    tip.min_acceptable_amount = constants.PAYIN_STRIPE_MIN_ACCEPTABLE[tip_currency]
+    tip.min_recommended_amount = constants.PAYIN_STRIPE_MIN_RECOMMENDED[tip_currency]
+    tip.low_fee_amount = constants.PAYIN_STRIPE_LOW_FEE[tip_currency]
+    tip.max_acceptable_amount = constants.PAYIN_STRIPE_MAX_ACCEPTABLE[tip_currency]
+    min_multiplier = int(ceil(tip.min_acceptable_amount / tip.periodic_amount))
+    min_recommended_multiplier = int(ceil(tip.min_recommended_amount / tip.periodic_amount))
+    max_recommended_multiplier = min(
+        max(int(ceil(tip.low_fee_amount / tip.periodic_amount)), ONE_YEAR[tip.period]),
+        tip.max_acceptable_amount // tip.periodic_amount
+    )
+    tip.multipliers = sorted(set((min_multiplier, min_recommended_multiplier, max_recommended_multiplier)))
+    del min_multiplier, min_recommended_multiplier, max_recommended_multiplier
+
+if user == payer:
+    payer.mark_notifications_as_read('donate_reminder')
+
+title = _("Funding your donations")
+
+[---] text/html
+% extends "templates/base-thin.html"
+
+% block thin_content
+
+% if payin
+    % set status = payin.status
+    % if status == 'succeeded'
+        <div class="alert alert-success">{{ _(
+            "The payment of {charge_amount} was successful.", charge_amount=payin.amount
+        ) }}</div>
+        {#<a class="btn btn-default" href="{{ payer.path('bill/%s' % payin.id) }}">{{
+            _("View Receipt")
+        }}</a>#}
+    % elif status == 'failed'
+        <div class="alert alert-danger">{{ _(
+            "The payment failed. Error message: “{0}”", payin.error
+        ) }}</div>
+    % elif status == 'pending'
+        <div class="alert alert-warning">{{ _("The payment is awaiting your approval.") }}</div>
+    % endif
+
+    % if donations
+        <hr>
+    % endif
+% endif
+
+% if donations
+
+    % if len(donations) > 1 and not payin
+        <p>{{ ngettext(
+            "You have {n} donation awaiting payment.",
+            "You have {n} donations awaiting payment.",
+            n=len(donations)
+        ) }}</p>
+        <p class="alert alert-warning">{{ _(
+            "Funding multiple donations with a single payment is currently not possible, "
+            "so you will have to renew your donations one by one. We apologize for the "
+            "inconvenience."
+        ) }}</p>
+        <hr>
+    % endif
+
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+
+    <form action="" method="POST" id="paypal">
+        % set tip = donations[0]
+        <p>{{ _(
+            "Your donation of {amount} to {recipient} is awaiting payment.",
+            amount=tip.periodic_amount, recipient=tip.tippee_p.link()
+        ) }}</p>
+        % if tip.periodic_amount < tip.min_acceptable_amount
+            <p>{{ _(
+                "We cannot charge you only {donation_amount}, the minimum payment "
+                "amount is {min_payment_amount}.",
+                donation_amount=tip.periodic_amount, min_payment_amount=tip.min_acceptable_amount
+            ) }}</p>
+        % endif
+        <p>{{ _("Please select or input a payment amount:") }}</p>
+        <fieldset id="amount">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="currency" value="{{ tip.amount.currency }}" />
+            <input type="hidden" name="tip" value="{{ tip.id }}" />
+            <ul class="list-group radio-group">
+            % set show_fee_notice = len(tip.multipliers) > 1 and (tip.periodic_amount * tip.multipliers[0]) < tip.low_fee_amount
+            % for multiplier in tip.multipliers
+                % set charge_amount = tip.periodic_amount * multiplier
+                <li class="list-group-item">
+                <label>
+                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" />
+                    <div class="radio-label">
+                    <h5 class="list-group-item-heading">{{ format_money(charge_amount) }}
+                    % if show_fee_notice
+                    % if charge_amount < tip.min_recommended_amount
+                        <small class="text-warning">{{ _("(not recommended, high fee percentage)") }}</small>
+                    % elif charge_amount < tip.low_fee_amount
+                        <small class="text-info">{{ _("(okay, moderate fee percentage)") }}</small>
+                    % else
+                        <small class="text-success">{{ _("(recommended, low fee percentage)") }}</small>
+                    % endif
+                    % endif
+                    </h5>
+                    <p class="list-group-item-text">{{ ngettext(
+                        "Next payment in {n} week.", "Next payment in {n} weeks.", n=multiplier
+                    ) if tip.period == 'weekly' else ngettext(
+                        "Next payment in {n} month.", "Next payment in {n} months.", n=multiplier
+                    ) if tip.period == 'monthly' else ngettext(
+                        "Next payment in {n} year.", "Next payment in {n} years.", n=multiplier
+                    ) }}</p>
+                    </div>
+                </label>
+                </li>
+            % endfor
+                <li class="list-group-item">
+                <label>
+                    <input type="radio" name="amount" value="custom" class="hidden-xs" />
+                    <div class="radio-label">
+                    <h5 class="list-group-item-heading">{{ _(
+                        "Custom amount (min={0}, max={1})",
+                        max(tip.min_acceptable_amount, tip.amount),
+                        tip.max_acceptable_amount,
+                    ) }}</h5>
+                    <div class="input-group">
+                        <div class="input-group-addon">{{ locale.currency_symbols.get(tip_currency, tip_currency) }}</div>
+                        <input type="tel" inputmode="decimal" class="form-control amount"
+                               name="amount_custom" placeholder="{{ _('Amount') }}" />
+                    </div>
+                    </div>
+                </label>
+                </li>
+            </ul>
+        </fieldset>
+
+        <button class="btn btn-primary btn-lg btn-block">{{ _(
+            "Initiate the payment"
+        ) }}</button>
+    </form>
+
+% endif
+
+% if not donations
+    % if donations_not_fundable or other_donations or non_paypal_donations
+        % if donations
+            <hr>
+        % endif
+        % for tip in donations_not_fundable
+        <p>{{ _(
+            "Your donation to {recipient} cannot be processed right now because the "
+            "account of the beneficiary isn't ready to receive money.",
+            recipient=tip.tippee_p.link()
+        ) }}</p>
+        % endfor
+        % if other_donations or non_paypal_donations
+            % if donations_not_fundable
+                <hr>
+            % endif
+            % set n_donations = len(other_donations) + len(non_paypal_donations)
+            <p>{{ ngettext(
+                "You have {n} donation awaiting payment.",
+                "You have {n} donations awaiting payment.",
+                n=n_donations
+            ) }}</p>
+            <a href="{{ payer.path('giving/pay') }}" class="btn btn-primary">{{
+                ngettext("Renew this donation", "Renew these donations", n_donations)
+            }}</a>
+        % endif
+    % else
+        <div class="alert alert-success">{{ _("All your donations are funded.") }}</div>
+        <a class="btn btn-default" href="{{ payer.path('giving/') }}">{{ _("Manage your donations") }}</a>
+    % endif
+% endif
+
+% endblock

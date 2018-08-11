@@ -409,3 +409,13 @@ class PayinsAreDisabled(LazyResponse):
             link_start='[',
             link_end='](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82)'
         )
+
+
+class PaymentError(LazyResponseXXX):
+    code = 500
+    def msg(self, _):
+        return _(
+            "The payment processor {name} returned an error. Please try again "
+            "and contact support@liberapay.com if the problem persists.",
+            name=self.args[0]
+        )
