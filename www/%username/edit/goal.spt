@@ -11,8 +11,9 @@ if request.method == "POST":
         goal = None
     elif goal == "custom":
         goal = request.body["goal_custom"]
-    if goal is not None:
         goal = locale.parse_money_amount(goal, participant.main_currency)
+    else:
+        goal = Money(request.body.get_int("goal"), participant.main_currency).round_down()
     if goal == -1 and not request.body.get("confirmed"):
         msg = _("Warning: Doing this will remove all the tips you are currently receiving."
                 "\n\nThat cannot be undone!")
@@ -68,7 +69,7 @@ subhead = _("Goal")
 
         % if participant.kind != 'group'
         <label>
-            <input type="radio" name="goal" id="goal-0" value="0.00"
+            <input type="radio" name="goal" id="goal-0" value="0"
                    {{ 'checked' if participant.goal == 0 else '' }} />
             {{ PATRON }}
         </label><br>
