@@ -78,15 +78,19 @@ class ExchangeRoute(Model):
         return r
 
     @classmethod
-    def upsert_bankwire_route(cls, participant):
+    def upsert_generic_route(cls, participant, network):
+        if network.startswith('mango-'):
+            remote_user_id = participant.mangopay_user_id
+        elif network == 'paypal':
+            remote_user_id = 'x'
         r = cls.db.one("""
             INSERT INTO exchange_routes AS r
                         (participant, network, address, one_off, status, remote_user_id)
-                 VALUES (%s, 'mango-bw', 'x', false, 'chargeable', %s)
+                 VALUES (%s, %s, 'x', false, 'chargeable', %s)
             ON CONFLICT (participant, network, address) DO UPDATE
                     SET one_off = false  -- dummy update
               RETURNING r
-        """, (participant.id, participant.mangopay_user_id))
+        """, (participant.id, network, remote_user_id))
         r.__dict__['participant'] = participant
         return r
 

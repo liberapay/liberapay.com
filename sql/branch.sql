@@ -4,3 +4,5 @@ INSERT INTO app_conf VALUES
     ('paypal_secret', '"EAStyBaGBZk9MVBGrI_eb4O4iEVFPZcRoIsbKDwv28wxLzroLDKYwCnjZfr_jDoZyDB5epQVrjZraoFY"'::jsonb);
 
 ALTER TABLE payment_accounts ALTER COLUMN charges_enabled DROP NOT NULL;
+
+ALTER TYPE payment_net ADD VALUE IF NOT EXISTS 'paypal';
