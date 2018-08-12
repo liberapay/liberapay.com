@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-08-11 18:37+0000\n"
+"PO-Revision-Date: 2018-08-12 16:20+0000\n"
 "Last-Translator: Jorge Maldonado Ventura <jorgesumle@freakspot.net>\n"
 "Language-Team: Esperanto <https://hosted.weblate.org/projects/liberapay/core/eo/>\n"
 "Language: eo\n"
@@ -1567,7 +1567,7 @@ msgid "What payment methods are available?"
 msgstr "Kiuj pagmetodoj disponeblas?"
 
 msgid "We currently support credit and debit cards (VISA, MasterCard, etc). SEPA direct debits will be operational soon. More options will be added in the future."
-msgstr ""
+msgstr "Ni nune subtenas kredit- kaj debetkartoj (VISA, MasterCard, ktp). SEPA rekta debeto funkcios baldaŭ. Oni aldonos pli opciojn estonte. "
 
 msgid "How do recurrent donations work?"
 msgstr "Kiel periodaj donacoj funkcias?"
@@ -1909,14 +1909,14 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' ne estas akceptebla kvanto (min={1}, max={2})"
 
 msgid "This donation is not active."
-msgstr ""
+msgstr "Ĉi tiu donaco ne estas aktiva."
 
 msgid "Funding your donations"
 msgstr ""
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr ""
+msgstr "La pago de {charge_amount} sukcesis."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"
@@ -1945,37 +1945,37 @@ msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
-msgstr ""
+msgstr "Ni ne povas pagigi al vi nur {donation_amount}, la minimuma pagkiomo estas {min_payment_amount}."
 
 msgid "Please select or input a payment amount:"
-msgstr ""
+msgstr "Bonvolu elekti aŭ enigi pagkiomo:"
 
 msgid "(not recommended, high fee percentage)"
-msgstr ""
+msgstr "(ne rekomendita, alta elcenta kosto)"
 
 msgid "(okay, moderate fee percentage)"
-msgstr ""
+msgstr "(bone, modera elcenta kosto)"
 
 msgid "(recommended, low fee percentage)"
-msgstr ""
+msgstr "(rekomendita, malalta elcenta kosto)"
 
 #, python-brace-format
 msgid "Next payment in {n} week."
 msgid_plural "Next payment in {n} weeks."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sekva pago je {n} semajno."
+msgstr[1] "Sekva pago je {n} semajnoj."
 
 #, python-brace-format
 msgid "Next payment in {n} month."
 msgid_plural "Next payment in {n} months."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sekva pago je {n} semajno."
+msgstr[1] "Sekva pago je {n} monatoj."
 
 #, python-brace-format
 msgid "Next payment in {n} year."
 msgid_plural "Next payment in {n} years."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sekva pago je {n} jaro."
+msgstr[1] "Sekva pago je {n} jaroj."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -1983,30 +1983,30 @@ msgstr "Propra kvanto (minimumo={0}, maksimumo={1})"
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
-msgstr ""
+msgstr "Ni pagigos vian karton de {brand} (lasta kvar ciferoj: {last4})."
 
 msgid "Use another card"
-msgstr ""
+msgstr "Uzu alian karton"
 
 msgid "Please input your card number:"
-msgstr ""
+msgstr "Bonvolu enigi vian kartnombron:"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
-msgstr ""
+msgstr "Oni sendos tiujn ĉi datumojn direkte al la provizanto de pagservo {name} per ĉifrita konekto."
 
 msgid "Remember the card number for next time"
 msgstr "Memori la numeron de karto por la sekva fojo"
 
 msgid "Initiate the payment"
-msgstr ""
+msgstr "Inici la pagon"
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr ""
 
 msgid "All your donations are funded."
-msgstr ""
+msgstr "Ĉiuj viaj donacoj estas financitaj."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Ĉu vi certas, ke vi volas ŝanĝi vian tipon de konto? Pro leĝaj kialoj, ni devos krei novan konton por vi en la sistemo de nia pagpartnero, kaj transdoni la monon el la malnova konto."
@@ -2275,7 +2275,7 @@ msgid "This page allows you to manage your payment methods."
 msgstr "Tiu paĝo ebligas vin prizorgi viajn pagmetodojn."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
-msgstr ""
+msgstr "Donacantoj ne bezonas konekti ian ĉi-suba pagkonton, ili nur estas necesa, por ricevi monon."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2305,7 +2305,7 @@ msgid "Connect {platform_name} account"
 msgstr "Konekti {platform_name} konton"
 
 msgid "Coming soon…"
-msgstr ""
+msgstr "Venonta baldaŭ…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -3225,15 +3225,16 @@ msgid "What are the payment processing fees?"
 msgstr "Kio estas la peradkostoj de la provizantoj de pagservo?"
 
 #
+#, fuzzy
 msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
-msgstr ""
+msgstr "La kostoj varias laŭ provizanto de pagservo, pagmetodo, landoj kaj valutoj. Oni anticipas la mezon infre 5% ĉiukaze."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Ĉu ekzistas minimuma aŭ maksimuma kvanto, kiun mi povas donaci aŭ ricevi?"
 
 #, python-brace-format
 msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
-msgstr ""
+msgstr "La minimumon vi povas doni al iu uzanto estas {0} semajne, sed por malpliigi peradkostojn, oni petos vin pagi por pluraj semajnoj antaŭe."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
