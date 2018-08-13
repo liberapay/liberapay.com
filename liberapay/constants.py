@@ -271,12 +271,14 @@ PAYOUT_COUNTRIES = {
         KY KZ LA LC LI LK LS LT LU LV MA MC MD ME MG MH MK ML MN MQ MR MS MT MU
         MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PL
         PM PN PT PW PY QA RE RO RS RU RW SA SB SC SE SG SH SI SJ SK SL SM SN SO
-        SR ST SV SZ TC TD TG TH TJ TM TN TO TT TT TT TT TV TW TZ UA UG UK US UY
+        SR ST SV SZ TC TD TG TH TJ TM TN TO TT TT TT TT TV TW TZ UA UG GB US UY
         VA VC VE VG VN VU WF WS YE YT ZA ZM ZW
+        PR
     """.split()),  # https://www.paypal.com/us/webapps/mpp/country-worldwide
 
     'stripe': set("""
         AT AU BE CA CH DE DK ES FI FR GB HK IE IT JP LU NL NO NZ PT SE SG US
+        PR
     """.split()),  # https://stripe.com/global
 }
 
