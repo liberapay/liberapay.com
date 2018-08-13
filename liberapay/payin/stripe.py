@@ -38,12 +38,17 @@ def destination_charge(db, payin, payer, statement_descriptor):
     destination = db.one("SELECT id FROM payment_accounts WHERE pk = %s", (pt.destination,))
     amount = payin.amount
     route = ExchangeRoute.from_id(payer, payin.route)
+    if destination == 'acct_1ChyayFk4eGpfLOC':
+        # Stripe rejects the charge if the destination is our own account
+        destination = None
+    else:
+        destination = {'account': destination}
     try:
         charge = stripe.Charge.create(
             amount=amount.int().amount,
             currency=amount.currency.lower(),
             customer=route.remote_user_id,
-            destination={'account': destination},
+            destination=destination,
             metadata={'payin_id': payin.id},
             source=route.address,
             statement_descriptor=statement_descriptor,
@@ -62,13 +67,14 @@ def destination_charge(db, payin, payer, statement_descriptor):
     fee = Money(bt.fee, bt.currency.upper()) / 100
     net_amount = amount_settled - fee
 
-    tr = stripe.Transfer.retrieve(charge.transfer)
-    reversal = tr.reversals.create(
-        amount=bt.fee,
-        description="Stripe fee",
-        metadata={'payin_id': payin.id},
-        idempotency_key='payin_fee_%i' % payin.id,
-    )
+    if destination:
+        tr = stripe.Transfer.retrieve(charge.transfer)
+        reversal = tr.reversals.create(
+            amount=bt.fee,
+            description="Stripe fee",
+            metadata={'payin_id': payin.id},
+            idempotency_key='payin_fee_%i' % payin.id,
+        )
 
     r = db.one("""
         UPDATE payin_transfers
@@ -77,7 +83,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
              , amount = %s
          WHERE payin = %s
      RETURNING id
-    """, (payin.status, charge.transfer, net_amount, payin.id))
+    """, (payin.status, getattr(charge, 'transfer', None), net_amount, payin.id))
     assert r, locals()
 
     return update_payin(
