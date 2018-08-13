@@ -187,7 +187,10 @@ recent = query_cache.one("""
                 </dt>
                 <dd>{{ _(
                     "We currently support processing payments through {payment_processors_list}.",
-                    payment_processors_list=locale.format_list(['PayPal', 'Stripe'])
+                    payment_processors_list=locale.format_list([
+                        '<a href="https://stripe.com/">Stripe</a>'|safe,
+                        '<a href="https://paypal.com/">PayPal</a>'|safe,
+                    ], escape=escape)
                 ) }}</dd>
             </div>
             <div class="col-sm-4">

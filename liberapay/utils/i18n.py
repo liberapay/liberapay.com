@@ -97,18 +97,18 @@ class Locale(babel.core.Locale):
         kw['locale'] = self
         return format_decimal(*a, **kw)
 
-    def format_list(self, l, pattern='standard'):
+    def format_list(self, l, pattern='standard', escape=lambda a: a):
         n = len(l)
         if n > 2:
             last = n - 2
             r = l[0]
             for i, item in enumerate(l[1:]):
-                r = self.list_patterns[pattern][
+                r = escape(self.list_patterns[pattern][
                     'start' if i == 0 else 'end' if i == last else 'middle'
-                ].format(r, item)
+                ]).format(r, item)
             return r
         elif n == 2:
-            return self.list_patterns[pattern]['2'].format(*l)
+            return escape(self.list_patterns[pattern]['2']).format(*l)
         else:
             return l[0] if n == 1 else None
 
