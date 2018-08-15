@@ -982,6 +982,7 @@ class Payday(object):
                         AND COALESCE(tr.team, tr.tippee) = t.tippee
                         AND tr.context IN ('tip', 'take')
                         AND tr.status = 'succeeded'
+                        AND tr.timestamp >= (current_timestamp - interval '9 weeks')
                    )
                AND (
                      SELECT count(*)
