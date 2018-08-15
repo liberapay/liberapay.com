@@ -563,7 +563,7 @@ class Payday(object):
     def transfer_for_real(self, transfers):
         db = self.db
         print("Starting transfers (n=%i)" % len(transfers))
-        msg = "%s transfer #%i (amount=%s in_advance=%s context=%s team=%s tipper_wallet_id=%s tippee_wallet_id=%s)%s"
+        msg = "%s transfer #%i (amount=%s in_advance=%s context=%s team=%s)%s"
         for t in transfers:
             if t.amount:
                 delay = getattr(self, 'transfer_delay', 0)
@@ -573,8 +573,7 @@ class Payday(object):
                 delay = 0
                 action = 'Recording'
                 when = ''
-            log(msg % (action, t.id, t.amount, t.in_advance, t.context, t.team,
-                       t.tipper_wallet_id, t.tippee_wallet_id, when))
+            log(msg % (action, t.id, t.amount, t.in_advance, t.context, t.team, when))
             if delay:
                 sleep(delay)
             if t.in_advance:
@@ -983,6 +982,7 @@ class Payday(object):
                         AND COALESCE(tr.team, tr.tippee) = t.tippee
                         AND tr.context IN ('tip', 'take')
                         AND tr.status = 'succeeded'
+                        AND tr.timestamp >= (current_timestamp - interval '9 weeks')
                    )
                AND (
                      SELECT count(*)
@@ -990,7 +990,7 @@ class Payday(object):
                       WHERE n.participant = t.tipper
                         AND n.event = 'donate_reminder'
                         AND n.is_new
-                   ) < 4
+                   ) < 2
           GROUP BY t.tipper
           ORDER BY t.tipper
         """)
