@@ -990,7 +990,7 @@ class Payday(object):
                       WHERE n.participant = t.tipper
                         AND n.event = 'donate_reminder'
                         AND n.is_new
-                   ) < 4
+                   ) < 2
           GROUP BY t.tipper
           ORDER BY t.tipper
         """)
