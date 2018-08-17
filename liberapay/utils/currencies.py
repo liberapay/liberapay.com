@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from collections import OrderedDict
-from decimal import Decimal, ROUND_DOWN, ROUND_UP
+from collections import defaultdict, OrderedDict
+from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
 from numbers import Number
 import operator
 
@@ -17,7 +17,14 @@ from liberapay.website import website
 def _convert(self, c):
     if self.currency == c:
         return self
-    amount = self.amount * website.currency_exchange_rates[(self.currency, c)]
+    if 'EUR' in (self.currency, c):
+        rate = website.currency_exchange_rates[(self.currency, c)]
+    else:
+        rate = (
+            website.currency_exchange_rates[(self.currency, 'EUR')] *
+            website.currency_exchange_rates[('EUR', c)]
+        )
+    amount = self.amount * rate
     return Money(amount.quantize(D_CENT), c)
 
 def _sum(cls, amounts, currency):
@@ -48,6 +55,17 @@ def _Money_eq(self, other):
         return other.__eq__(self)
     return False
 
+def _Money_round(self, rounding=ROUND_HALF_UP):
+    minimum = Money.minimums[self.currency]
+    return Money(self.amount.quantize(minimum, rounding=rounding), self.currency)
+
+class _Minimums(defaultdict):
+    def __missing__(self, currency):
+        exponent = website.db.one("SELECT get_currency_exponent(%s)", (currency,))
+        minimum = D_CENT if exponent == 2 else Decimal(10) ** (-exponent)
+        self[currency] = minimum
+        return minimum
+
 
 Money.__init__ = _Money_init
 Money.__nonzero__ = Money.__bool__
@@ -58,8 +76,11 @@ Money.__str__ = lambda m: '%(amount)s %(currency)s' % m.__dict__
 Money.__unicode__ = Money.__str__
 Money.convert = _convert
 Money.int = lambda m: Money(int(m.amount * 100), m.currency)
-Money.round_down = lambda m: Money(m.amount.quantize(D_CENT, rounding=ROUND_DOWN), m.currency)
-Money.round_up = lambda m: Money(m.amount.quantize(D_CENT, rounding=ROUND_UP), m.currency)
+Money.minimum = lambda m: Money.minimums[m.currency]
+Money.minimums = _Minimums()
+Money.round = _Money_round
+Money.round_down = lambda m: m.round(ROUND_DOWN)
+Money.round_up = lambda m: m.round(ROUND_UP)
 Money.sum = classmethod(_sum)
 Money.zero = lambda m: Money(D_ZERO, m.currency)
 
