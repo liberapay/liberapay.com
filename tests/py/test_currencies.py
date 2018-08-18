@@ -1,12 +1,14 @@
 from __future__ import division, print_function, unicode_literals
 
+from decimal import Decimal as D
+
 from mock import patch
 
 from liberapay.billing.transactions import swap_currencies, Transfer
 from liberapay.exceptions import NegativeBalance, TransferError
 from liberapay.testing import EUR, USD, Harness, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness, fake_transfer
-from liberapay.utils.currencies import MoneyBasket
+from liberapay.utils.currencies import Money, MoneyBasket
 
 
 class TestCurrencies(Harness):
@@ -18,6 +20,35 @@ class TestCurrencies(Harness):
         assert expected == actual
         actual = original.convert(expected.currency)
         assert expected == actual
+
+    def test_convert_non_euro(self):
+        original = Money('1.00', 'CHF')
+        expected = Money('0.82', 'GBP')
+        actual = self.db.one("SELECT convert(%s, %s)", (original, expected.currency))
+        assert expected == actual
+        actual = original.convert(expected.currency)
+        assert expected == actual
+
+        original = Money('1.20', 'USD')
+        expected = Money('125', 'JPY')
+        actual = self.db.one("SELECT convert(%s, %s)", (original, expected.currency))
+        assert expected == actual
+        actual = original.convert(expected.currency)
+        assert expected == actual
+
+    def test_minimums(self):
+        assert Money.minimums['EUR'] == D('0.01')
+        assert Money.minimums['USD'] == D('0.01')
+        assert Money.minimums['KRW'] == D('1')
+        assert Money.minimums['JPY'] == D('1')
+
+    def test_rounding(self):
+        assert Money('0.001', 'EUR').round() == Money('0.00', 'EUR')
+        assert Money('0.009', 'EUR').round_down() == Money('0.00', 'EUR')
+        assert Money('0.002', 'EUR').round_up() == Money('0.01', 'EUR')
+        assert Money('0.1', 'JPY').round() == Money('0', 'JPY')
+        assert Money('0.9', 'JPY').round_down() == Money('0', 'JPY')
+        assert Money('0.2', 'JPY').round_up() == Money('1', 'JPY')
 
     def test_MoneyBasket_currencies_present(self):
         b = MoneyBasket()
