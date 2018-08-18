@@ -23,7 +23,7 @@ from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
 from environment import Environment, is_yesish
-from mailshake import DummyMailer, SMTPMailer
+from mailshake import AmazonSESMailer, DummyMailer, SMTPMailer
 from mangopay.utils import Money
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
@@ -230,6 +230,7 @@ class AppConf(object):
         s3_secret_key=str,
         s3_region=str,
         s3_payday_logs_bucket=str,
+        ses_region=str,
         send_newsletters_every=int,
         show_sandbox_warning=bool,
         socket_timeout=float,
@@ -318,7 +319,7 @@ def trusted_proxies(app_conf, env, tell_sentry):
         return {'trusted_proxies': []}
 
 
-def mail(app_conf, project_root='.'):
+def mail(app_conf, env, project_root='.'):
     if not app_conf:
         return
     smtp_conf = {
@@ -326,7 +327,15 @@ def mail(app_conf, project_root='.'):
     }
     if smtp_conf:
         smtp_conf.setdefault('timeout', app_conf.socket_timeout)
-    mailer = SMTPMailer(**smtp_conf) if smtp_conf else DummyMailer()
+    if app_conf.ses_region:
+        mailer = AmazonSESMailer(
+            env.aws_access_key_id, env.aws_secret_access_key,
+            region=app_conf.ses_region
+        )
+    elif smtp_conf:
+        mailer = SMTPMailer(**smtp_conf)
+    else:
+        mailer = DummyMailer()
     emails = {}
     emails_dir = project_root+'/emails/'
     i = len(emails_dir)
