@@ -1,6 +1,11 @@
 -- Base types
 
-CREATE TYPE currency AS ENUM ('EUR', 'USD');
+CREATE TYPE currency AS ENUM (
+    'EUR', 'USD',
+    'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
+    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD',
+    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'
+);
 CREATE TYPE currency_amount AS (amount numeric, currency currency);
 
 
@@ -74,8 +79,18 @@ CREATE AGGREGATE sum(currency_amount) (
 
 -- Convenience functions
 
+CREATE FUNCTION get_currency_exponent(currency) RETURNS int AS $$
+    BEGIN RETURN (CASE
+        WHEN $1 IN ('ISK', 'JPY', 'KRW') THEN 0 ELSE 2
+    END); END;
+$$ LANGUAGE plpgsql IMMUTABLE STRICT;
+
 CREATE FUNCTION coalesce_currency_amount(currency_amount, currency) RETURNS currency_amount AS $$
-    BEGIN RETURN (COALESCE($1.amount, '0.00'::numeric), COALESCE($1.currency, $2)); END;
+    DECLARE
+        c currency := COALESCE($1.currency, $2);
+    BEGIN
+        RETURN (COALESCE($1.amount, round(0, get_currency_exponent(c))), c);
+    END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE FUNCTION get_currency(currency_amount) RETURNS currency AS $$
@@ -85,15 +100,15 @@ $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 CREATE CAST (currency_amount as currency) WITH FUNCTION get_currency(currency_amount);
 
 CREATE FUNCTION round(currency_amount) RETURNS currency_amount AS $$
-    BEGIN RETURN (round($1.amount, 2), $1.currency); END;
+    BEGIN RETURN (round($1.amount, get_currency_exponent($1.currency)), $1.currency); END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 
 CREATE FUNCTION zero(currency) RETURNS currency_amount AS $$
-    BEGIN RETURN ('0.00'::numeric, $1); END;
+    BEGIN RETURN (round(0, get_currency_exponent($1)), $1); END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 
 CREATE FUNCTION zero(currency_amount) RETURNS currency_amount AS $$
-    BEGIN RETURN ('0.00'::numeric, $1.currency); END;
+    BEGIN RETURN (round(0, get_currency_exponent($1.currency)), $1.currency); END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 
 
@@ -401,11 +416,26 @@ CREATE FUNCTION convert(currency_amount, currency, boolean) RETURNS currency_amo
         result currency_amount;
     BEGIN
         IF ($1.currency = $2) THEN RETURN $1; END IF;
-        rate := (
-            SELECT r.rate
-              FROM currency_exchange_rates r
-             WHERE r.source_currency = $1.currency
-        );
+        IF ($1.currency = 'EUR' OR $2 = 'EUR') THEN
+            rate := (
+                SELECT r.rate
+                  FROM currency_exchange_rates r
+                 WHERE r.source_currency = $1.currency
+                   AND r.target_currency = $2
+            );
+        ELSE
+            rate := (
+                SELECT r.rate
+                  FROM currency_exchange_rates r
+                 WHERE r.source_currency = $1.currency
+                   AND r.target_currency = 'EUR'
+            ) * (
+                SELECT r.rate
+                  FROM currency_exchange_rates r
+                 WHERE r.source_currency = 'EUR'
+                   AND r.target_currency = $2
+            );
+        END IF;
         IF (rate IS NULL) THEN
             RAISE 'missing exchange rate %->%', $1.currency, $2;
         END IF;

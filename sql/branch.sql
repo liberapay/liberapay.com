@@ -34,7 +34,7 @@ ALTER TYPE currency ADD VALUE IF NOT EXISTS 'ZAR';
 
 
 -- https://en.wikipedia.org/wiki/ISO_4217
-CREATE FUNCTION get_currency_exponent(currency) RETURNS int AS $$
+CREATE OR REPLACE FUNCTION get_currency_exponent(currency) RETURNS int AS $$
     BEGIN RETURN (CASE
         WHEN $1 IN ('ISK', 'JPY', 'KRW') THEN 0 ELSE 2
     END); END;
