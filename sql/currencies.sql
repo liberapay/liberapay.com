@@ -1,5 +1,7 @@
 -- Base types
 
+-- The list below is from https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+-- It includes all the settlement currencies currently supported by Stripe: https://stripe.com/docs/currencies
 CREATE TYPE currency AS ENUM (
     'EUR', 'USD',
     'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
@@ -79,6 +81,7 @@ CREATE AGGREGATE sum(currency_amount) (
 
 -- Convenience functions
 
+-- https://en.wikipedia.org/wiki/ISO_4217
 CREATE FUNCTION get_currency_exponent(currency) RETURNS int AS $$
     BEGIN RETURN (CASE
         WHEN $1 IN ('ISK', 'JPY', 'KRW') THEN 0 ELSE 2
