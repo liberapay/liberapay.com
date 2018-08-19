@@ -8,7 +8,7 @@ from liberapay.models.participant import Participant
 from liberapay.testing import EUR, USD, Harness
 from liberapay.testing.mangopay import FakeTransfersHarness
 from liberapay.utils.history import (
-    get_end_of_period_balances, get_start_of_current_utc_day, get_ledger
+    get_end_of_period_balances, get_start_of_current_utc_day, get_wallet_ledger
 )
 
 
@@ -91,7 +91,7 @@ class TestHistory(FakeTransfersHarness):
                SET timestamp = "timestamp" + interval %(delta)s;
         """, dict(delta=delta))
 
-        totals, start, end, events = get_ledger(self.db, bob, now.year)
+        totals, start, end, events = get_wallet_ledger(self.db, bob, now.year)
         assert totals['kind'] == 'totals'
         assert not totals['regular_donations']['sent']
         assert totals['regular_donations']['received'] == EUR(12)
@@ -104,13 +104,13 @@ class TestHistory(FakeTransfersHarness):
 
         alice = Participant.from_id(alice.id)
         assert alice.balance == 4990
-        totals, start, end, events = get_ledger(self.db, alice, now.year)
+        totals, start, end, events = get_wallet_ledger(self.db, alice, now.year)
         assert totals['regular_donations']['sent'] == EUR(10)
         assert len(events) == 10
 
         carl = Participant.from_id(carl.id)
         assert carl.balance == 0
-        totals, start, end, events = get_ledger(self.db, carl, now.year)
+        totals, start, end, events = get_wallet_ledger(self.db, carl, now.year)
         assert len(events) == 0
 
     def test_iter_payday_events_with_failed_exchanges(self):
@@ -118,7 +118,7 @@ class TestHistory(FakeTransfersHarness):
         self.make_exchange('mango-cc', 50, 0, alice)
         self.make_exchange('mango-cc', 12, 0, alice, status='failed')
         self.make_exchange('mango-ba', -40, 0, alice, status='failed')
-        totals, start, end, events = get_ledger(self.db, alice)
+        totals, start, end, events = get_wallet_ledger(self.db, alice)
         assert len(events) == 5
         assert events[0]['kind'] == 'day-end'
         assert events[0]['balances'] == EUR(50)

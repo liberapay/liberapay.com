@@ -599,7 +599,7 @@ a.dropdown-toggle {
         font-weight: bold;
     }
     tr.zero {
-        .wallet, .fees, .bank {
+        .amount, .wallet, .fees, .bank {
             color: #999;
         }
     }
@@ -914,4 +914,8 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
         font-weight: bold;
         line-height: $font-size-medium * $line-height-base;
     }
+}
+
+.text-info > a {
+    text-decoration: underline;
 }

@@ -4,13 +4,15 @@
     {% set pages = ([
         ('/giving/', _('Giving')),
         ('/receiving/', _('Receiving')),
-        ('/payment/', _('Payment')),
+        ('/ledger/', _('Ledger')),
         ('/wallet/', _('Wallet')),
-        ('/settings/', _('Settings')),
+        ('/payment/', _('Payment')),
         ('/identity', _('Identity')),
+        ('/settings/', _('Settings')),
     ] if participant.mangopay_user_id else [
         ('/giving/', _('Giving')),
         ('/receiving/', _('Receiving')),
+        ('/ledger/', _('Ledger')),
         ('/payment/', _('Payment')),
         ('/settings/', _('Settings')),
     ] if participant.is_person else [

@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from liberapay.utils import get_participant, render
-from liberapay.utils.history import get_ledger
+from liberapay.utils.history import get_wallet_ledger
 
 STATUS_MAP = {
     'failed': 'danger',
@@ -29,7 +29,7 @@ join_time = participant.join_time
 if (year, month) < (join_time.year, join_time.month):
     raise response.error(400, "the requested month predates the account's creation")
 
-ledger = get_ledger(
+ledger = get_wallet_ledger(
     website.db, participant, year, month, reverse=False, minimize=True, past_only=True
 )
 if ledger is None:
