@@ -17,6 +17,14 @@ $$;
 
 DROP FUNCTION update_app_conf(text, jsonb);
 
-INSERT INTO currency_exchange_rates
-     VALUES ('EUR', 'USD', 1.2)
-          , ('USD', 'EUR', 1 / 1.2);
+INSERT INTO currency_exchange_rates VALUES
+    ('EUR', 'USD', 1.2),
+    ('USD', 'EUR', 1 / 1.2),
+    ('EUR', 'CHF', 1.1),
+    ('CHF', 'EUR', 1 / 1.1),
+    ('EUR', 'GBP', 0.9),
+    ('GBP', 'EUR', 1 / 0.9),
+    ('EUR', 'JPY', 125),
+    ('JPY', 'EUR', 1 / 125),
+    ('EUR', 'KRW', 1250),
+    ('KRW', 'EUR', 1 / 1250);
