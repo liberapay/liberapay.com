@@ -15,6 +15,8 @@ if request.method == 'POST' and not payday_is_running:
                   "choose a disbursement method below or contact support.")
     elif disburse_to == 'payout':
         response.redirect(participant.path('wallet/payout/'+b64encode_s(request.path.raw)))
+    elif disburse_to == 'downstream':
+        raise response.error(403, _("This is no longer possible, sorry."))
     else:
         participant.close(disburse_to)
         participant.sign_out(response.headers.cookie)
@@ -38,6 +40,8 @@ title = _("Close Account")
 subhead = participant.username
 
 [---] text/html
+% from "templates/icons.html" import glyphicon
+
 % extends "templates/base.html"
 
 % block content
@@ -73,18 +77,22 @@ subhead = participant.username
         <div class="paragraph">
             <label>
                 <input type="radio" name="disburse_to" value="downstream"
-                       {{ 'disabled' if not participant.giving else '' }} />
+                       disabled />
                 {{ _("Give it to the {0}people I donate to{1}",
                      '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
+                <p class="text-danger">
+                    {{ glyphicon('info-sign') }}
+                    {{ _("This is no longer possible, sorry.") }}
+                </p>
             </label><br>
             % if refundable_balances >= balances
             <label>
-                <input type="radio" name="disburse_to" value="payin-refund" />
+                <input type="radio" name="disburse_to" value="payin-refund" checked />
                 {{ _("Refund it to my card or bank account") }}
             </label><br>
             % else
             <label>
-                <input type="radio" name="disburse_to" value="payout" />
+                <input type="radio" name="disburse_to" value="payout" checked />
                 {{ _("Withdraw it to my bank account") }}
             </label>
             % endif

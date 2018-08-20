@@ -11,6 +11,7 @@ if request.method == 'POST':
     elif disburse_to == 'payin-refund':
         participant.refund_balances()
     elif disburse_to == 'downstream':
+        raise response.error(403, _("This is no longer possible, sorry."))
         participant.distribute_balances_to_donees(final_gift=False)
     else:
         raise response.error(400, "bad `disburse_to` value %r in body" % disburse_to)
@@ -21,6 +22,8 @@ refundable_balances = participant.get_refundable_balances()
 title = _("Emptying your wallet")
 
 [---] text/html
+% from "templates/icons.html" import glyphicon
+
 % extends "templates/base-thin.html"
 
 % block thin_content
@@ -41,18 +44,22 @@ title = _("Emptying your wallet")
             <div class="paragraph">
                 <label>
                     <input type="radio" name="disburse_to" value="downstream"
-                           {{ 'disabled' if not participant.giving else '' }} />
+                           disabled />
                     {{ _("Give it to the {0}people I donate to{1}",
                          '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
+                    <p class="text-danger">
+                        {{ glyphicon('info-sign') }}
+                        {{ _("This is no longer possible, sorry.") }}
+                    </p>
                 </label><br>
                 % if refundable_balances >= balances
                 <label>
-                    <input type="radio" name="disburse_to" value="payin-refund" />
+                    <input type="radio" name="disburse_to" value="payin-refund" checked />
                     {{ _("Refund it to my card or bank account") }}
                 </label><br>
                 % else
                 <label>
-                    <input type="radio" name="disburse_to" value="payout" />
+                    <input type="radio" name="disburse_to" value="payout" checked />
                     {{ _("Withdraw it to my bank account") }}
                 </label>
                 % endif
