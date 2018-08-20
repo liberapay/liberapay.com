@@ -51,16 +51,10 @@ class TestClosing(FakeTransfersHarness):
         assert 'Try Again Later' in body
 
     def test_can_post_to_close_page(self):
-        alice = self.make_participant('alice', balance=EUR(7))
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, EUR('10.00'))
-
-        data = {'disburse_to': 'downstream'}
-        response = self.client.PxST('/alice/settings/close', auth_as=alice, data=data)
+        alice = self.make_participant('alice')
+        response = self.client.PxST('/alice/settings/close', auth_as=alice)
         assert response.code == 302
         assert response.headers[b'Location'] == b'/alice/'
-        assert Participant.from_username('alice').balance == 0
-        assert Participant.from_username('bob').balance == 7
 
     def test_cant_post_to_close_page_during_payday(self):
         Payday.start()
