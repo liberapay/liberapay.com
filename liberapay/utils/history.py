@@ -1,6 +1,7 @@
 from calendar import monthrange
 from collections import namedtuple
 from datetime import datetime, timedelta
+from itertools import chain
 
 from pando import Response
 from pando.utils import utc, utcnow
@@ -111,7 +112,7 @@ def get_end_of_period_balances(db, participant, period_end, today):
     return balances
 
 
-def get_ledger(db, participant, year=None, month=-1, reverse=True, minimize=False, past_only=False):
+def get_wallet_ledger(db, participant, year=None, month=-1, reverse=True, minimize=False, past_only=False):
     """Returns a `Ledger` object representing the participant's account history.
 
     When `year` is `None` the current year is used.
@@ -407,3 +408,89 @@ def export_history(participant, year, mode, key, back_as='namedtuple', require_k
         raise Response(400, "missing `key` parameter")
     else:
         return {k: v() for k, v in out.items()}
+
+
+def get_payin_ledger(db, participant, year=None, month=-1, reverse=True, minimize=False):
+    """Returns a list of events representing the participant's payment history.
+
+    When `year` is `None` the current year is used.
+
+    When `month` is `None` the current month is used,
+    when it's `-1` the returned object includes data for the whole year.
+
+    The `reverse` argument controls the order of the returned entries, when it's
+    `True` the events are in reverse chronological order (most recent first).
+
+    The `minimize` argument controls whether failed payments are skipped or not.
+    """
+    today = get_start_of_current_utc_day()
+    year = year or today.year
+    month = month or today.month
+    if month == -1:
+        period_start = datetime(year, 1, 1, tzinfo=utc)
+        period_end = datetime(year + 1, 1, 1, tzinfo=utc)
+    else:
+        start_day = participant.join_time.day
+        max_month_day = monthrange(year, month)[1]
+        period_start = datetime(year, month, min(start_day, max_month_day), tzinfo=utc)
+        period_end = month_plus_one(year, month, start_day)
+
+    events = list(iter_payin_events(
+        db, participant, period_start, period_end, minimize
+    ))
+    if not reverse:
+        events.reverse()
+    return events
+
+
+def iter_payin_events(db, participant, period_start, period_end, minimize=False):
+    """Yields payment events for the specified participant and time frame.
+    """
+    id = participant.id
+    params = locals()
+    payins = db.all("""
+        SELECT pi.ctime, pi.amount, pi.status, pi.error, pi.amount_settled, pi.fee
+          FROM payins pi
+         WHERE pi.payer = %(id)s
+           AND pi.ctime >= %(period_start)s
+           AND pi.ctime < %(period_end)s
+           AND (pi.status = 'succeeded' OR NOT %(minimize)s)
+    """, params, back_as=dict)
+    outgoing_transfers = db.all("""
+        SELECT tr.ctime, tr.payin, tr.recipient, tr.context, tr.status, tr.error
+             , tr.amount, tr.unit_amount, tr.n_units, tr.period
+             , p.username AS recipient_username, p2.username AS team_name
+          FROM payin_transfers tr
+          JOIN participants p ON p.id = tr.recipient
+     LEFT JOIN participants p2 ON p2.id = tr.team
+         WHERE tr.payer = %(id)s
+           AND tr.ctime >= %(period_start)s
+           AND tr.ctime < %(period_end)s
+           AND (tr.status = 'succeeded' OR NOT %(minimize)s)
+    """, params, back_as=dict)
+    incoming_transfers = db.all("""
+        SELECT tr.ctime, tr.payin, tr.payer, tr.context, tr.status, tr.error
+             , tr.amount, tr.unit_amount, tr.n_units, tr.period
+             , p.username AS payer_username, p2.username AS team_name
+          FROM payin_transfers tr
+          JOIN participants p ON p.id = tr.payer
+     LEFT JOIN participants p2 ON p2.id = tr.team
+         WHERE tr.recipient = %(id)s
+           AND tr.ctime >= %(period_start)s
+           AND tr.ctime < %(period_end)s
+           AND (tr.status = 'succeeded' OR NOT %(minimize)s)
+    """, params, back_as=dict)
+
+    prev_date = None
+    get_timestamp = lambda e: e['ctime']
+    events = sorted(
+        chain(payins, incoming_transfers, outgoing_transfers),
+        key=get_timestamp, reverse=True
+    )
+    for event in events:
+        event_date = event['ctime'].date()
+        if event_date != prev_date:
+            yield dict(kind='day-end', date=event_date)
+            prev_date = event_date
+        event['kind'] = 'payin_transfer' if 'team_name' in event else 'payin'
+        yield event

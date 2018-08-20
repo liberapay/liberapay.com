@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from liberapay.utils import get_participant
-from liberapay.utils.history import get_ledger
+from liberapay.utils.history import get_wallet_ledger
 
 STATUS_MAP = {
     'failed': 'danger',
@@ -42,7 +42,7 @@ if not year:
     """, dict(p_id=participant.id))
     year = last_event_year or current_year
 
-totals, start, end, events = get_ledger(website.db, participant, year)
+totals, start, end, events = get_wallet_ledger(website.db, participant, year)
 years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
@@ -79,6 +79,15 @@ if user.is_admin:
 % if balance > 0
     <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
           >{{ _("Withdraw money") }}</a></p>
+% endif
+
+% if year == 2018
+    <p class="alert alert-warning">{{ _(
+        "This page only shows transactions processed by Mangopay, to view other "
+        "payments {link_start}go to the Ledger page{link_end}."
+        , link_start=('<a href="%s">'|safe) % participant.path('ledger/')
+        , link_end='</a>'|safe
+    ) }}</p>
 % endif
 
 % if user.is_admin
