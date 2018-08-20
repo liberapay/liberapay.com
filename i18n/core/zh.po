@@ -1192,7 +1192,7 @@ msgstr "捐贈"
 msgid "Receiving"
 msgstr "收取"
 
-msgid "Payment"
+msgid "Ledger"
 msgstr ""
 
 msgid "Wallet"
@@ -1201,11 +1201,14 @@ msgstr "錢包"
 msgid "Emptying your wallet"
 msgstr ""
 
-msgid "Settings"
-msgstr "設定"
+msgid "Payment"
+msgstr ""
 
 msgid "Identity"
 msgstr "身份"
+
+msgid "Settings"
+msgstr "設定"
 
 msgid "Emails"
 msgstr "電子郵件"
@@ -2204,6 +2207,65 @@ msgstr "支援的副檔名類型： {0}。 最大檔案大小： {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "我們不會永久地儲存這些文檔，你要自己負責進行歸檔。"
 
+msgid "preparing"
+msgstr "準備"
+
+msgid "pending"
+msgstr "待辦"
+
+msgid "failed"
+msgstr "失敗"
+
+msgid "succeeded"
+msgstr "成功"
+
+msgid "Fees"
+msgstr "手續費"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "錯誤訊息： {0}"
+
+msgid "anonymous donation"
+msgstr "匿名捐款"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "因你在 {0} 團隊的角色，所得到的匿名捐款"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "捐贈給 {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+
+msgid "There were no transactions during this period."
+msgstr "该时段内没有交易。"
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "你未受邀請加入此團隊。"
 
@@ -2538,18 +2600,6 @@ msgstr "導出歷史記錄"
 msgid "awaiting confirmation"
 msgstr "等待確認"
 
-msgid "preparing"
-msgstr "準備"
-
-msgid "pending"
-msgstr "待辦"
-
-msgid "failed"
-msgstr "失敗"
-
-msgid "succeeded"
-msgstr "成功"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "你的帳戶 (exactly: {exact_amounts})大約有 {converted_amount}元。"
@@ -2561,6 +2611,10 @@ msgstr "你的帳戶中有 {money_amount} 錢。"
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "他們的收支為 {0}。"
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "帳戶對帳單"
@@ -2599,9 +2653,6 @@ msgstr[0] "從{n}個組織定期補償{money_amount}的支出"
 msgid "End of day balance"
 msgstr "日末余额"
 
-msgid "Fees"
-msgstr "手續費"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "你應可以銀行的帳戶對帳單上看到總數。"
 
@@ -2628,28 +2679,12 @@ msgstr "提領失敗的退款 (錯誤訊息： {0} )"
 msgid "canceled"
 msgstr "已取消"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "錯誤訊息： {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "因你在 {0} 團隊的角色，所得到的匿名捐款"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
-
 msgid "donation refund"
 msgstr "捐贈退款"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "{link_open}費用的報梢 #{invoice_id}{link_close} 來自 {payer}"
-
-msgid "anonymous donation"
-msgstr "匿名捐款"
 
 msgid "one-off donation from someone closing their account"
 msgstr "來自某位已關閉帳戶者的一次性捐款"
@@ -2670,23 +2705,12 @@ msgstr ""
 msgid "final gift to {0}"
 msgstr "最後禮物給 {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
-
 msgid "refund of anonymous donation"
 msgstr "匿名捐贈的退款"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "費用{link_open}的支付 #{invoice_id}{link_close} 給 {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "捐贈給 {0}"
-
-msgid "There were no transactions during this period."
-msgstr "该时段内没有交易。"
 
 msgid "Adding Money"
 msgstr "充值"

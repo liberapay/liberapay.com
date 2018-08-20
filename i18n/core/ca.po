@@ -1199,8 +1199,8 @@ msgstr "Donatius fets"
 msgid "Receiving"
 msgstr "Donatius rebuts"
 
-msgid "Payment"
-msgstr "Pagament"
+msgid "Ledger"
+msgstr ""
 
 msgid "Wallet"
 msgstr "Cartera"
@@ -1208,11 +1208,14 @@ msgstr "Cartera"
 msgid "Emptying your wallet"
 msgstr "Buidatge de la vostra cartera"
 
-msgid "Settings"
-msgstr "Configuració"
+msgid "Payment"
+msgstr "Pagament"
 
 msgid "Identity"
 msgstr "Identitat"
+
+msgid "Settings"
+msgstr "Configuració"
 
 msgid "Emails"
 msgstr "Correus electrònics"
@@ -2217,6 +2220,68 @@ msgstr "Extensions de fitxer admeses: {0}. Mida de fitxer màxima: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "No emmagatzemem aquests documents per sempre. La vostra responsabilitat és arxivar-los a llarg termini."
 
+msgid "preparing"
+msgstr "s'està preparant"
+
+msgid "pending"
+msgstr "pendent"
+
+msgid "failed"
+msgstr "erroni"
+
+msgid "succeeded"
+msgstr "reeixit"
+
+msgid "Fees"
+msgstr "Comissions"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "missatge d'error: {0}"
+
+msgid "anonymous donation"
+msgstr "donatiu anònim"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "donatiu anònim per al vostre rol en l'equip {0}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donatiu a {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donatiu a {0} pel seu rol a l'equip {1}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n} setmana de {money_amount}"
+msgstr[1] "{n} setmanes de {money_amount}"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "There were no transactions during this period."
+msgstr "No va haver-hi cap transacció en aquest període."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "No esteu convidat a unir-vos a aquest equip."
 
@@ -2553,18 +2618,6 @@ msgstr "Exporta l'historial"
 msgid "awaiting confirmation"
 msgstr "s'està esperant la confirmació"
 
-msgid "preparing"
-msgstr "s'està preparant"
-
-msgid "pending"
-msgstr "pendent"
-
-msgid "failed"
-msgstr "erroni"
-
-msgid "succeeded"
-msgstr "reeixit"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Teniu aproximadament {converted_amount} en el compte (valor exacte: {exact_amounts})."
@@ -2576,6 +2629,10 @@ msgstr "Teniu {money_amount} en el compte."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "El saldo és {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Estat del compte"
@@ -2618,9 +2675,6 @@ msgstr[1] "{money_amount} en reemborsaments de despeses de {n} organitzacions"
 msgid "End of day balance"
 msgstr "Saldo al final del dia"
 
-msgid "Fees"
-msgstr "Comissions"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "La quantitat que hauríeu de veure en l'extracte del compte bancari."
 
@@ -2647,29 +2701,12 @@ msgstr "reemborsament d'un reintegrament fallit (missatge d'error: {0})"
 msgid "canceled"
 msgstr "cancel·lada"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "missatge d'error: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "donatiu anònim per al vostre rol en l'equip {0}"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} setmana de {money_amount}"
-msgstr[1] "{n} setmanes de {money_amount}"
-
 msgid "donation refund"
 msgstr "reemborsament de donatiu"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "reemborsament de {link_open}despesa núm. {invoice_id}{link_close} de {payer}"
-
-msgid "anonymous donation"
-msgstr "donatiu anònim"
 
 msgid "one-off donation from someone closing their account"
 msgstr "un donatiu excepcional d'algú que ha tancat el seu compte"
@@ -2690,23 +2727,12 @@ msgstr "reemborsament de comissions"
 msgid "final gift to {0}"
 msgstr "donatiu final a {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donatiu a {0} pel seu rol a l'equip {1}"
-
 msgid "refund of anonymous donation"
 msgstr "reemborsament d'un donatiu anònim"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "pagament de la {link_open}despesa núm. {invoice_id}{link_close} a {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donatiu a {0}"
-
-msgid "There were no transactions during this period."
-msgstr "No va haver-hi cap transacció en aquest període."
 
 msgid "Adding Money"
 msgstr "Afegir-hi diners"

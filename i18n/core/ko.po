@@ -1173,7 +1173,7 @@ msgstr "기부"
 msgid "Receiving"
 msgstr "수익"
 
-msgid "Payment"
+msgid "Ledger"
 msgstr ""
 
 msgid "Wallet"
@@ -1182,11 +1182,14 @@ msgstr "지갑"
 msgid "Emptying your wallet"
 msgstr "지갑 비우기"
 
-msgid "Settings"
-msgstr "설정"
+msgid "Payment"
+msgstr ""
 
 msgid "Identity"
 msgstr "신원"
+
+msgid "Settings"
+msgstr "설정"
 
 msgid "Emails"
 msgstr "이메일"
@@ -2184,6 +2187,65 @@ msgstr "허용된 파일 확장자: {0}. 최대 파일 사이즈: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "Liberapay는 이 문서를 영원히 보존하지 않습니다. 문서를 장기간 보존하는 것은 사용자의 책임입니다."
 
+msgid "preparing"
+msgstr "진행 전"
+
+msgid "pending"
+msgstr "진행 중"
+
+msgid "failed"
+msgstr "실패"
+
+msgid "succeeded"
+msgstr "성공"
+
+msgid "Fees"
+msgstr "수수료"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "에러 메시지: {0}"
+
+msgid "anonymous donation"
+msgstr "익명 기여"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "{0} 팀에서의 역할에 따른 익명 기여"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "{0} 에게 보내는 기부"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{money_amount}의 {n} 주 분량"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+
+msgid "There were no transactions during this period."
+msgstr "이 기간 중에 거래가 이루어지지 않았습니다."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "이 팀에 가입하도록 초대되지 않았습니다."
 
@@ -2518,18 +2580,6 @@ msgstr "역사 내보내기"
 msgid "awaiting confirmation"
 msgstr "확인 대기 중"
 
-msgid "preparing"
-msgstr "진행 전"
-
-msgid "pending"
-msgstr "진행 중"
-
-msgid "failed"
-msgstr "실패"
-
-msgid "succeeded"
-msgstr "성공"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "현재 계좌에 대략 {converted_amount} 만큼의 금액이 있습니다 (정확히 {exact_amounts} 만큼 있습니다)."
@@ -2541,6 +2591,10 @@ msgstr "현재 계좌에 {money_amount} 만큼이 있습니다."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "잔액은 {0}입니다."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "계정 대차표"
@@ -2579,9 +2633,6 @@ msgstr[0] "{n} 조직으로부터 {money_amount} 만큼 비용 지불 받음"
 msgid "End of day balance"
 msgstr ""
 
-msgid "Fees"
-msgstr "수수료"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "은행 계좌에서 볼 금액."
 
@@ -2608,28 +2659,12 @@ msgstr "실패한 인출에 대한 환불 (에러 메시지: {0})"
 msgid "canceled"
 msgstr "취소됨"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "에러 메시지: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "{0} 팀에서의 역할에 따른 익명 기여"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{money_amount}의 {n} 주 분량"
-
 msgid "donation refund"
 msgstr "기여 환불"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "{payer} 로부터의 {link_open}지출 #{invoice_id}{link_close}에 대한 보상"
-
-msgid "anonymous donation"
-msgstr "익명 기여"
 
 msgid "one-off donation from someone closing their account"
 msgstr "계좌를 폐쇄하는 사람으로부터의 일회성 기부"
@@ -2650,23 +2685,12 @@ msgstr ""
 msgid "final gift to {0}"
 msgstr "{0}에게 보내는 마지막 선물"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
-
 msgid "refund of anonymous donation"
 msgstr "익명 기여의 환불"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{payee}에 대한 {link_open}지출 #{invoice_id}{link_close}에 대한 지불"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "{0} 에게 보내는 기부"
-
-msgid "There were no transactions during this period."
-msgstr "이 기간 중에 거래가 이루어지지 않았습니다."
 
 msgid "Adding Money"
 msgstr "자금 추가"

@@ -1199,8 +1199,8 @@ msgstr "Donando"
 msgid "Receiving"
 msgstr "Recibiendo"
 
-msgid "Payment"
-msgstr "Pago"
+msgid "Ledger"
+msgstr ""
 
 msgid "Wallet"
 msgstr "Cartera"
@@ -1208,11 +1208,14 @@ msgstr "Cartera"
 msgid "Emptying your wallet"
 msgstr "Vaciando tu cartera"
 
-msgid "Settings"
-msgstr "Ajustes"
+msgid "Payment"
+msgstr "Pago"
 
 msgid "Identity"
 msgstr "Identidad"
+
+msgid "Settings"
+msgstr "Ajustes"
 
 msgid "Emails"
 msgstr "Correos electrónicos"
@@ -2217,6 +2220,68 @@ msgstr "Extensiones permitidas: {0}. Tamaño de archivo máximo: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "No almacenaremos estos documentos para siempre, archivarlos a largo plazo es tu responsabilidad."
 
+msgid "preparing"
+msgstr "preparando"
+
+msgid "pending"
+msgstr "pendiente"
+
+msgid "failed"
+msgstr "falló"
+
+msgid "succeeded"
+msgstr "logrado"
+
+msgid "Fees"
+msgstr "Comisiones"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "mensaje de error: {0}"
+
+msgid "anonymous donation"
+msgstr "donación anónima"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "donación anónima por tu papel en el equipo de {0}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donación a {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donación a {0} por su papel en el equipo {1}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n} semana de {money_amount}"
+msgstr[1] "{n} semanas de {money_amount}"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "There were no transactions during this period."
+msgstr "No hubo transacciones durante este periodo."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "No has sido invitado a unirte a este equipo."
 
@@ -2553,18 +2618,6 @@ msgstr "Exportar historial"
 msgid "awaiting confirmation"
 msgstr "esperando confirmación"
 
-msgid "preparing"
-msgstr "preparando"
-
-msgid "pending"
-msgstr "pendiente"
-
-msgid "failed"
-msgstr "falló"
-
-msgid "succeeded"
-msgstr "logrado"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Tienes casi {converted_amount} en tu cuenta (valor preciso: {exact_amounts})."
@@ -2576,6 +2629,10 @@ msgstr "Tienes {money_amount} en tu cuenta."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Su balance es {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Estado de la cuenta"
@@ -2618,9 +2675,6 @@ msgstr[1] "{money_amount} en reembolso de gastos de {n} organizaciones"
 msgid "End of day balance"
 msgstr "Saldo al final de día"
 
-msgid "Fees"
-msgstr "Comisiones"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "La cantidad que deberías ver en el extracto de tu cuenta bancaria."
 
@@ -2647,29 +2701,12 @@ msgstr "restitución de retirada fallida (mensaje de error: {0})"
 msgid "canceled"
 msgstr "cancelado"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "mensaje de error: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "donación anónima por tu papel en el equipo de {0}"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} semana de {money_amount}"
-msgstr[1] "{n} semanas de {money_amount}"
-
 msgid "donation refund"
 msgstr "restitución de donación"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "reembolso del {link_open}gasto #{invoice_id}{link_close} de {payer}"
-
-msgid "anonymous donation"
-msgstr "donación anónima"
 
 msgid "one-off donation from someone closing their account"
 msgstr "donación excepcional de alguien cerrando su cuenta"
@@ -2690,23 +2727,12 @@ msgstr "reembolso de comisión"
 msgid "final gift to {0}"
 msgstr "regalo final a {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donación a {0} por su papel en el equipo {1}"
-
 msgid "refund of anonymous donation"
 msgstr "reembolso de la donación anónima"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "pago del {link_open}gasto #{invoice_id}{link_close} a {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donación a {0}"
-
-msgid "There were no transactions during this period."
-msgstr "No hubo transacciones durante este periodo."
 
 msgid "Adding Money"
 msgstr "Añadir Dinero"

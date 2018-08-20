@@ -1200,8 +1200,8 @@ msgstr "Geven"
 msgid "Receiving"
 msgstr "Ontvangen"
 
-msgid "Payment"
-msgstr "Betaling"
+msgid "Ledger"
+msgstr ""
 
 msgid "Wallet"
 msgstr "Portemonnee"
@@ -1209,11 +1209,14 @@ msgstr "Portemonnee"
 msgid "Emptying your wallet"
 msgstr "Je portemonnee legen"
 
-msgid "Settings"
-msgstr "Instellingen"
+msgid "Payment"
+msgstr "Betaling"
 
 msgid "Identity"
 msgstr "Identiteit"
+
+msgid "Settings"
+msgstr "Instellingen"
 
 msgid "Emails"
 msgstr "E-mails"
@@ -2218,6 +2221,68 @@ msgstr "Toegestane bestandsextensies: {0}. Maximale bestandsgrootte: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "We zullen deze documenten niet eeuwig opslaan, het archiveren op de lange termijn is je eigen verantwoordelijkheid."
 
+msgid "preparing"
+msgstr "voorbereiden"
+
+msgid "pending"
+msgstr "Wachtend"
+
+msgid "failed"
+msgstr "gefaald"
+
+msgid "succeeded"
+msgstr "Gelukt"
+
+msgid "Fees"
+msgstr "Provisie"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "foutmelding: {0}"
+
+msgid "anonymous donation"
+msgstr "anonieme sponsoring"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "anonieme donatie voor jouw rol in het {0} team"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donatie aan {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donatie aan {0} van het {1} team"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n} week van {money_amount}"
+msgstr[1] "{n} weken van {money_amount}"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "There were no transactions during this period."
+msgstr "Er waren geen transacties tijdens deze periode."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Je bent niet uitgenodigd voor dit team."
 
@@ -2554,18 +2619,6 @@ msgstr "Exporteer geschiedenis"
 msgid "awaiting confirmation"
 msgstr "wachtend op bevestiging"
 
-msgid "preparing"
-msgstr "voorbereiden"
-
-msgid "pending"
-msgstr "Wachtend"
-
-msgid "failed"
-msgstr "gefaald"
-
-msgid "succeeded"
-msgstr "Gelukt"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Je hebt ongeveer {converted_amount} in je account (precies: {exact_amounts})."
@@ -2577,6 +2630,10 @@ msgstr "Je hebt {money_amount} in je account."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Hun balans is {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Rekeningoverzicht"
@@ -2619,9 +2676,6 @@ msgstr[1] "{money_amount} in kostenvergoeding van {n} organisaties"
 msgid "End of day balance"
 msgstr "Einde van de dag saldo"
 
-msgid "Fees"
-msgstr "Provisie"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "Het bedrag dat je zou moeten zien op je rekeningoverzicht."
 
@@ -2648,29 +2702,12 @@ msgstr "terugbetaling van de opname is mislukt (foutmelding: {0})"
 msgid "canceled"
 msgstr "geannuleerd"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "foutmelding: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "anonieme donatie voor jouw rol in het {0} team"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} week van {money_amount}"
-msgstr[1] "{n} weken van {money_amount}"
-
 msgid "donation refund"
 msgstr "donatie restitutie"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "vergoeding voor {link_open}kosten #{invoice_id}{link_close} van {payer}"
-
-msgid "anonymous donation"
-msgstr "anonieme sponsoring"
 
 msgid "one-off donation from someone closing their account"
 msgstr "eenmalige laatste donatie van een afgesloten account"
@@ -2691,23 +2728,12 @@ msgstr "terugbetaling van kosten"
 msgid "final gift to {0}"
 msgstr "laatste geschenk aan {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donatie aan {0} van het {1} team"
-
 msgid "refund of anonymous donation"
 msgstr "Terugbetaling van een anoniemedonatie"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "betaling van {link_open}kosten #{invoice_id}{link_close} voor {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donatie aan {0}"
-
-msgid "There were no transactions during this period."
-msgstr "Er waren geen transacties tijdens deze periode."
 
 msgid "Adding Money"
 msgstr "Geld Toevoegen"

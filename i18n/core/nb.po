@@ -1199,8 +1199,8 @@ msgstr "Donert"
 msgid "Receiving"
 msgstr "Mottatt"
 
-msgid "Payment"
-msgstr "Betaling"
+msgid "Ledger"
+msgstr ""
 
 msgid "Wallet"
 msgstr "Lommebok"
@@ -1208,11 +1208,14 @@ msgstr "Lommebok"
 msgid "Emptying your wallet"
 msgstr "Tømmer din lommebo"
 
-msgid "Settings"
-msgstr "Innstillinger"
+msgid "Payment"
+msgstr "Betaling"
 
 msgid "Identity"
 msgstr "Identitet"
+
+msgid "Settings"
+msgstr "Innstillinger"
 
 msgid "Emails"
 msgstr "E-poster"
@@ -2218,6 +2221,68 @@ msgstr "Tillatte filendelser: {0}. Maksimal filstørrelse: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "Vi vil ikke lagre disse dokumentene for alltid, å ta vare på dem på lang sikt er ditt ansvar."
 
+msgid "preparing"
+msgstr "forbereder"
+
+msgid "pending"
+msgstr "ventende"
+
+msgid "failed"
+msgstr "mislykket"
+
+msgid "succeeded"
+msgstr "vellykket"
+
+msgid "Fees"
+msgstr "Gebyrer"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "feilmelding: {0}"
+
+msgid "anonymous donation"
+msgstr "anonymt bidrag"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "anonymt bidrag for din rolle i {0}-laget"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donasjon til {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donasjon til {0} for deres rolle i {1}-laget"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n} uke med {money_amount}"
+msgstr[1] "{n} uker med"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "There were no transactions during this period."
+msgstr "Ingen transaksjoner i denne perioden."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Du er ikke invitert til å ta del i dette laget."
 
@@ -2555,18 +2620,6 @@ msgstr "Eksporter historikk"
 msgid "awaiting confirmation"
 msgstr "ventende bekreftelse"
 
-msgid "preparing"
-msgstr "forbereder"
-
-msgid "pending"
-msgstr "ventende"
-
-msgid "failed"
-msgstr "mislykket"
-
-msgid "succeeded"
-msgstr "vellykket"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Du har omtrent {converted_amount} på kontoen din (nøyaktig: {exact_amounts})."
@@ -2578,6 +2631,10 @@ msgstr "Du har {money_amount} på kontoen din."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Deres kontobalanse er {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Kontosammendrag"
@@ -2620,9 +2677,6 @@ msgstr[1] "{money_amount} i utgiftskompensasjon fra {n} organisasjoner"
 msgid "End of day balance"
 msgstr "Kontobalanse ved dagens slutt"
 
-msgid "Fees"
-msgstr "Gebyrer"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "Beløpet du burde se i ditt bankkontosammendrag."
 
@@ -2649,29 +2703,12 @@ msgstr "tilbakebetaling av mislykket utbetaling (feilmelding: {0})"
 msgid "canceled"
 msgstr "avbrutt"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "feilmelding: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "anonymt bidrag for din rolle i {0}-laget"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} uke med {money_amount}"
-msgstr[1] "{n} uker med"
-
 msgid "donation refund"
 msgstr "donasjonstilbakebetaling"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "refusjon av {link_open}utgift #{invoice_id}{link_close} fra {payer}"
-
-msgid "anonymous donation"
-msgstr "anonymt bidrag"
 
 msgid "one-off donation from someone closing their account"
 msgstr "engangsdonasjon fra noen som stenger kontoen sin"
@@ -2692,23 +2729,12 @@ msgstr "gebyrstilbakebetaling"
 msgid "final gift to {0}"
 msgstr "siste gave til {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donasjon til {0} for deres rolle i {1}-laget"
-
 msgid "refund of anonymous donation"
 msgstr "tilbakebetaling av anonymt bidrag"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "betaling av {link_open}utgift {invoice_id}{link_close} til {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donasjon til {0}"
-
-msgid "There were no transactions during this period."
-msgstr "Ingen transaksjoner i denne perioden."
 
 msgid "Adding Money"
 msgstr "Innskudd av penger"

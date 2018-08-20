@@ -1178,7 +1178,7 @@ msgstr "Adomány"
 msgid "Receiving"
 msgstr "Bevétel"
 
-msgid "Payment"
+msgid "Ledger"
 msgstr ""
 
 msgid "Wallet"
@@ -1187,12 +1187,15 @@ msgstr "Tárca"
 msgid "Emptying your wallet"
 msgstr ""
 
-msgid "Settings"
-msgstr "Beállítások"
+msgid "Payment"
+msgstr ""
 
 #, fuzzy
 msgid "Identity"
 msgstr "Azonosító"
+
+msgid "Settings"
+msgstr "Beállítások"
 
 msgid "Emails"
 msgstr "E-mail-ek"
@@ -2199,6 +2202,65 @@ msgstr "Megengedett fájl kiterjesztések: {0}. Maximum fájl méret: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "Nem fogjuk ezeket a dokumentumokat örökké tárolni, a hosszú távú archiválásuk az Ön felelőssége."
 
+msgid "preparing"
+msgstr "előkészítés"
+
+msgid "pending"
+msgstr "folyamatban"
+
+msgid "failed"
+msgstr "sikertelen"
+
+msgid "succeeded"
+msgstr "sikeres"
+
+msgid "Fees"
+msgstr "Illetékek"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "hiba üzenet: {0}"
+
+msgid "anonymous donation"
+msgstr "névtelen adományozás"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "névtelen adomány az Ön szerepéért a(z) {0} csapatban"
+
+#, fuzzy, python-brace-format
+msgid "donation to {0}"
+msgstr "adomány {0}-nak"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "adomány {0}-nak a(z) {1} csapatban betöltött szerepéért"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+
+msgid "There were no transactions during this period."
+msgstr "Nem voltak átutalások ez idő alatt."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Ön nincs meghívva ebbe a csoportba csatlakozásra."
 
@@ -2534,18 +2596,6 @@ msgstr "Előzmények Exportálása"
 msgid "awaiting confirmation"
 msgstr "várakozás a megerősítésre"
 
-msgid "preparing"
-msgstr "előkészítés"
-
-msgid "pending"
-msgstr "folyamatban"
-
-msgid "failed"
-msgstr "sikertelen"
-
-msgid "succeeded"
-msgstr "sikeres"
-
 #, fuzzy, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Önnek megközelítőleg {converted_amount}-ja van a tárcájában (pontosan: {exact_amounts})."
@@ -2557,6 +2607,10 @@ msgstr "{money_amount} áll rendelkezésére."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Az egyenlegük {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Számlakivonat"
@@ -2595,9 +2649,6 @@ msgstr[0] "{money_amount} költség visszatérítés {n} szervezettől"
 msgid "End of day balance"
 msgstr "Nap végi egyenleg"
 
-msgid "Fees"
-msgstr "Illetékek"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "Az összeg amelyet látnia kell a banki kivonatain."
 
@@ -2624,28 +2675,12 @@ msgstr "sikertelen pénzkivétel visszatérítése (hiba üzenet: {0})"
 msgid "canceled"
 msgstr "megszakítva"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "hiba üzenet: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "névtelen adomány az Ön szerepéért a(z) {0} csapatban"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
-
 msgid "donation refund"
 msgstr "adomány visszatérítés"
 
 #, fuzzy, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "{link_open} költség #{invoice_id}{link_close} visszatérítése {payer}-tól"
-
-msgid "anonymous donation"
-msgstr "névtelen adományozás"
 
 msgid "one-off donation from someone closing their account"
 msgstr "egyszeri adomány valakitől, aki bezárta a fiókját"
@@ -2667,23 +2702,12 @@ msgstr ""
 msgid "final gift to {0}"
 msgstr "végső ajándék {0}-nak"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "adomány {0}-nak a(z) {1} csapatban betöltött szerepéért"
-
 msgid "refund of anonymous donation"
 msgstr "névtelen adomány visszafizetés"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{link_open}költség #{invoice_id}{link_close} fizetése {payee}-nak"
-
-#, fuzzy, python-brace-format
-msgid "donation to {0}"
-msgstr "adomány {0}-nak"
-
-msgid "There were no transactions during this period."
-msgstr "Nem voltak átutalások ez idő alatt."
 
 msgid "Adding Money"
 msgstr "Pénz Hozzáadása"

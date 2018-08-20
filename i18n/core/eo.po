@@ -1202,8 +1202,8 @@ msgstr "Donacado"
 msgid "Receiving"
 msgstr "Ricevado"
 
-msgid "Payment"
-msgstr "Pago"
+msgid "Ledger"
+msgstr ""
 
 msgid "Wallet"
 msgstr "Monujo"
@@ -1211,11 +1211,14 @@ msgstr "Monujo"
 msgid "Emptying your wallet"
 msgstr "Malplenigado de via monujo"
 
-msgid "Settings"
-msgstr "Agordoj"
+msgid "Payment"
+msgstr "Pago"
 
 msgid "Identity"
 msgstr "Identeco"
+
+msgid "Settings"
+msgstr "Agordoj"
 
 msgid "Emails"
 msgstr "Retmesaĝoj"
@@ -2220,6 +2223,68 @@ msgstr "Permesataj dosiersufiksoj: {0}. Maksimuma grandeco: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "Ni ne konservos tiujn dosierojn por ĉiam, arkivi ilin longtempe estu prizorgo de vi."
 
+msgid "preparing"
+msgstr "preparado"
+
+msgid "pending"
+msgstr "atendado de pritrakto"
+
+msgid "failed"
+msgstr "malsukceso"
+
+msgid "succeeded"
+msgstr "sukceso"
+
+msgid "Fees"
+msgstr "Peradkostoj"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "erarmesaĝo: {0}"
+
+msgid "anonymous donation"
+msgstr "sennoma donaco"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "sennoma donaco por via rolo en la teamo {0}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donaco al {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donaco al {0} por ties rolo en la teamo {1}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n} semano de {money_amount}"
+msgstr[1] "{n} semanoj de {money_amount}"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "There were no transactions during this period."
+msgstr "Ne okazis transakcioj en tiu periodo."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Vi ne estas invitita al aliĝi al tiu teamo."
 
@@ -2556,18 +2621,6 @@ msgstr "Eksporti historion"
 msgid "awaiting confirmation"
 msgstr "atendado de konfirmo"
 
-msgid "preparing"
-msgstr "preparado"
-
-msgid "pending"
-msgstr "atendado de pritrakto"
-
-msgid "failed"
-msgstr "malsukceso"
-
-msgid "succeeded"
-msgstr "sukceso"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Vi havas ĉirkaŭ {converted_amount} en via konto (precize: {exact_amounts})."
@@ -2579,6 +2632,10 @@ msgstr "Vi havas {money_amount} en via konto."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Ilia saldo estas {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Bankkonta etato"
@@ -2621,9 +2678,6 @@ msgstr[1] "{money_amount} en kostaj repagoj el {n} organizoj"
 msgid "End of day balance"
 msgstr "Fintaga saldo"
 
-msgid "Fees"
-msgstr "Peradkostoj"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "La kvanto, kiu devus aperi en via bankkonta etato."
 
@@ -2650,29 +2704,12 @@ msgstr "repago de malsukcesa retiro (erarmesaĝo: {0})"
 msgid "canceled"
 msgstr "nuligita"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "erarmesaĝo: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "sennoma donaco por via rolo en la teamo {0}"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} semano de {money_amount}"
-msgstr[1] "{n} semanoj de {money_amount}"
-
 msgid "donation refund"
 msgstr "repago de donaco"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "repago de {link_open}elspezo n-ro {invoice_id}{link_close} el {payer}"
-
-msgid "anonymous donation"
-msgstr "sennoma donaco"
 
 msgid "one-off donation from someone closing their account"
 msgstr "fina donaco de iu, kiu fermas sian konton"
@@ -2693,23 +2730,12 @@ msgstr "senpaga repago"
 msgid "final gift to {0}"
 msgstr "fina donaco al {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donaco al {0} por ties rolo en la teamo {1}"
-
 msgid "refund of anonymous donation"
 msgstr "repago de sennoma donaco"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "pago de {link_open}elspezo n-ro {invoice_id}{link_close} al {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donaco al {0}"
-
-msgid "There were no transactions during this period."
-msgstr "Ne okazis transakcioj en tiu periodo."
 
 msgid "Adding Money"
 msgstr "Aldoni monon"

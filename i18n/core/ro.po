@@ -1187,7 +1187,7 @@ msgstr "Dăruire"
 msgid "Receiving"
 msgstr "Primire"
 
-msgid "Payment"
+msgid "Ledger"
 msgstr ""
 
 msgid "Wallet"
@@ -1196,11 +1196,14 @@ msgstr "Portofel"
 msgid "Emptying your wallet"
 msgstr ""
 
-msgid "Settings"
-msgstr "Configurări"
+msgid "Payment"
+msgstr ""
 
 msgid "Identity"
 msgstr "Identitate"
+
+msgid "Settings"
+msgstr "Configurări"
 
 msgid "Emails"
 msgstr "E-mailuri"
@@ -2212,6 +2215,71 @@ msgstr "Extensii de fișiere permise: {0}. Dimensiunea maximă a fișierelor: {1
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "Noi nu vom stoca aceste documente pentru totdeauna, arhivarea lor pe termen lung este responsabilitatea dumneavoastră."
 
+msgid "preparing"
+msgstr "se pregătește"
+
+msgid "pending"
+msgstr "în curs"
+
+msgid "failed"
+msgstr "eșuată"
+
+msgid "succeeded"
+msgstr "reușită"
+
+msgid "Fees"
+msgstr "Taxe"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "mesaj de eroare: {0}"
+
+msgid "anonymous donation"
+msgstr "donație anonimă"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "donație anonimă pentru rolul dumneavoastră în echipa {0}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donație către {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donație lui {0} pentru rolul în echipa {1}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "There were no transactions during this period."
+msgstr "Nu au fost tranzacții în timpul acestei perioade."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Nu ați fost invitat să vă alăturați acestei echipe."
 
@@ -2550,18 +2618,6 @@ msgstr "Istoric exportări"
 msgid "awaiting confirmation"
 msgstr "așteaptă confirmarea"
 
-msgid "preparing"
-msgstr "se pregătește"
-
-msgid "pending"
-msgstr "în curs"
-
-msgid "failed"
-msgstr "eșuată"
-
-msgid "succeeded"
-msgstr "reușită"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Aveți aproximativ {converted_amount} în contul dumeavoastră (mai exact: {exact_amounts})."
@@ -2573,6 +2629,10 @@ msgstr "Aveți {money_amount} în cont."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Soldul lor este {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Extras de cont"
@@ -2619,9 +2679,6 @@ msgstr[2] "{money_amount} în costuri de restituire de la {n} de organizații"
 msgid "End of day balance"
 msgstr "Balanța de la sfârșitul zilei"
 
-msgid "Fees"
-msgstr "Taxe"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "Suma pe care ar trebui să o vedeți pe extrasul de cont bancar."
 
@@ -2648,30 +2705,12 @@ msgstr "restituirea extragerii eșuate (mesaj de eroare: {0})"
 msgid "canceled"
 msgstr "anulat"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "mesaj de eroare: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "donație anonimă pentru rolul dumneavoastră în echipa {0}"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
 msgid "donation refund"
 msgstr "restituire a donației"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "restituirea {link_open}costului nr.{invoice_id}{link_close} de la {payer}"
-
-msgid "anonymous donation"
-msgstr "donație anonimă"
 
 msgid "one-off donation from someone closing their account"
 msgstr "donație o dată de la cineva care își închide contul"
@@ -2692,23 +2731,12 @@ msgstr ""
 msgid "final gift to {0}"
 msgstr "dar final pentru {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donație lui {0} pentru rolul în echipa {1}"
-
 msgid "refund of anonymous donation"
 msgstr "restituirea donației anonime"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "plata {link_open}costului nr.{invoice_id}{link_close} către {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donație către {0}"
-
-msgid "There were no transactions during this period."
-msgstr "Nu au fost tranzacții în timpul acestei perioade."
 
 msgid "Adding Money"
 msgstr "Adăugarea fondurilor"

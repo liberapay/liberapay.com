@@ -1201,8 +1201,8 @@ msgstr "Pemberian"
 msgid "Receiving"
 msgstr "Penerimaan"
 
-msgid "Payment"
-msgstr "Pembayaran"
+msgid "Ledger"
+msgstr ""
 
 msgid "Wallet"
 msgstr "Dompet"
@@ -1210,11 +1210,14 @@ msgstr "Dompet"
 msgid "Emptying your wallet"
 msgstr "Kosongkan dompet anda"
 
-msgid "Settings"
-msgstr "Tetapan"
+msgid "Payment"
+msgstr "Pembayaran"
 
 msgid "Identity"
 msgstr "Identiti"
+
+msgid "Settings"
+msgstr "Tetapan"
 
 msgid "Emails"
 msgstr "Emel"
@@ -2219,6 +2222,68 @@ msgstr "Sambungan fail dibenarkan: {0}. Saiz fail maksimum: {1}MB."
 msgid "We will not store these documents forever, archiving them for the long term is your responsibility."
 msgstr "Kami tidak akan menyimpan dokumen ini selamanya, mengarkibkan mereka untuk jangka masa lama ialah tanggungjawab anda."
 
+msgid "preparing"
+msgstr "bersedia"
+
+msgid "pending"
+msgstr "belum selesai"
+
+msgid "failed"
+msgstr "gagal"
+
+msgid "succeeded"
+msgstr "berjaya"
+
+msgid "Fees"
+msgstr "Caj perkhidmatan"
+
+msgid "charge"
+msgstr ""
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "mesej ralat: {0}"
+
+msgid "anonymous donation"
+msgstr "pendermaan tanpa nama"
+
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "pendermaan tanpa nama untuk peranan anda dalam kumpulan {0}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "derma kepada {0}"
+
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "derma kepada {0} untuk peranan mereka dalam kumpulan {1}"
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n} minggu dengan jumlah {money_amount}"
+msgstr[1] "{n} minggu dengan jumlah {money_amount}"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "There were no transactions during this period."
+msgstr "Tiada transaksi dibuat pada waktu ini."
+
+#, python-brace-format
+msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
+msgstr ""
+
 msgid "You are not invited to join this team."
 msgstr "Anda tidak diajak untuk sertai kumpulan ini."
 
@@ -2555,18 +2620,6 @@ msgstr "Sejarah Eksport"
 msgid "awaiting confirmation"
 msgstr "menunggu pengesahan"
 
-msgid "preparing"
-msgstr "bersedia"
-
-msgid "pending"
-msgstr "belum selesai"
-
-msgid "failed"
-msgstr "gagal"
-
-msgid "succeeded"
-msgstr "berjaya"
-
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
 msgstr "Anda mempunyai lebih kurang {converted_amount} dalam akaun anda (jumlah tepat: {exact_amounts})."
@@ -2578,6 +2631,10 @@ msgstr "Anda mempunyai {money_amount} dalam akaun anda."
 #, python-brace-format
 msgid "Their balance is {0}."
 msgstr "Baki mereka ialah {0}."
+
+#, python-brace-format
+msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
+msgstr ""
 
 msgid "Account Statement"
 msgstr "Kenyataan Akaun"
@@ -2620,9 +2677,6 @@ msgstr[1] "{money_amount} dalam pembayaran balik perbelanjaan daripada {n} organ
 msgid "End of day balance"
 msgstr "Baki di akhir hari"
 
-msgid "Fees"
-msgstr "Caj perkhidmatan"
-
 msgid "The amount you should see on your bank account statement."
 msgstr "Jumlah yang patut kelihatan dalam penyata akaun bank anda."
 
@@ -2649,29 +2703,12 @@ msgstr "pembayaran balik pengeluaran gagal (mesej ralat: {0})"
 msgid "canceled"
 msgstr "dibatalkan"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "mesej ralat: {0}"
-
-#, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "pendermaan tanpa nama untuk peranan anda dalam kumpulan {0}"
-
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} minggu dengan jumlah {money_amount}"
-msgstr[1] "{n} minggu dengan jumlah {money_amount}"
-
 msgid "donation refund"
 msgstr "pembayaran balik derma"
 
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "pembayaran balik {link_open}perbelanjaan #{invoice_id}{link_close} daripada {payer}"
-
-msgid "anonymous donation"
-msgstr "pendermaan tanpa nama"
 
 msgid "one-off donation from someone closing their account"
 msgstr "pendermaan satu kali daripada seseorang yang menutup akaun mereka"
@@ -2692,23 +2729,12 @@ msgstr "bayar balik caj perkhidmatan"
 msgid "final gift to {0}"
 msgstr "hadiah terakhir kepada {0}"
 
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "derma kepada {0} untuk peranan mereka dalam kumpulan {1}"
-
 msgid "refund of anonymous donation"
 msgstr "pembayaran balik pendermaan tanpa nama"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "pembayaran {link_open}perbelanjaan #{invoice_id}{link_close} kepada {payee}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "derma kepada {0}"
-
-msgid "There were no transactions during this period."
-msgstr "Tiada transaksi dibuat pada waktu ini."
 
 msgid "Adding Money"
 msgstr "Tambah Wang"
