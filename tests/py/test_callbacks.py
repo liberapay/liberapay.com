@@ -5,8 +5,7 @@ from mock import patch
 from mangopay.resources import BankWirePayOut, BankWirePayIn, Dispute, PayIn, Refund
 from mangopay.utils import Reason
 
-from liberapay.billing.payday import Payday
-from liberapay.billing.transactions import Money, record_exchange
+from liberapay.billing.transactions import Money, record_exchange, transfer
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import EUR
@@ -51,8 +50,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         payin = PayIn(tag=str(e_id))
         get_payin.return_value = payin
         # Transfer some of the money to homer
-        self.janet.set_tip_to(self.homer, EUR('3.68'))
-        Payday.start().run()
+        transfer(self.db, self.janet.id, self.homer.id, EUR('3.68'), 'tip')
         # Withdraw some of the money
         self.make_exchange('mango-ba', EUR('-2.68'), 0, self.homer)
         # Add a bit of money that will remain undisputed, to test bundle swapping
@@ -108,8 +106,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
         payin = PayIn(tag=str(e_id))
         get_payin.return_value = payin
         # Transfer some of the money to homer
-        self.janet.set_tip_to(self.homer, EUR('3.68'))
-        Payday.start().run()
+        transfer(self.db, self.janet.id, self.homer.id, EUR('3.68'), 'tip')
         # Withdraw some of the money
         self.make_exchange('mango-ba', EUR('-2.68'), 0, self.homer)
         # Add money that will remain undisputed, to test bundle swapping

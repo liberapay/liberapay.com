@@ -13,6 +13,7 @@ import sys
 from time import sleep
 
 from babel.dates import format_timedelta
+import mangopay
 import pando.utils
 import requests
 
@@ -181,8 +182,14 @@ class Payday(object):
                  , main_currency
                  , accepted_currencies
               FROM participants p
-         LEFT JOIN wallets eur_w ON eur_w.owner = p.id AND eur_w.balance::currency = 'EUR' AND eur_w.is_current
-         LEFT JOIN wallets usd_w ON usd_w.owner = p.id AND usd_w.balance::currency = 'USD' AND usd_w.is_current
+         LEFT JOIN wallets eur_w ON eur_w.owner = p.id
+                                AND eur_w.balance::currency = 'EUR'
+                                AND eur_w.is_current
+                                AND %(use_mangopay)s
+         LEFT JOIN wallets usd_w ON usd_w.owner = p.id
+                                AND usd_w.balance::currency = 'USD'
+                                AND usd_w.is_current
+                                AND %(use_mangopay)s
              WHERE join_time < %(ts_start)s
                AND (mangopay_user_id IS NOT NULL OR kind = 'group')
                AND is_suspended IS NOT true
@@ -343,7 +350,7 @@ class Payday(object):
             END;
         $$ LANGUAGE plpgsql;
 
-        """, dict(ts_start=ts_start))
+        """, dict(ts_start=ts_start, use_mangopay=mangopay.sandbox))
         log("Prepared the DB.")
 
     @staticmethod
