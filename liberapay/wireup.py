@@ -330,7 +330,7 @@ def mail(app_conf, env, project_root='.'):
     if app_conf.ses_region:
         mailer = AmazonSESMailer(
             env.aws_access_key_id, env.aws_secret_access_key,
-            region=app_conf.ses_region
+            region_name=app_conf.ses_region
         )
     elif smtp_conf:
         mailer = SMTPMailer(**smtp_conf)
