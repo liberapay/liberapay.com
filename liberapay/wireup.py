@@ -327,7 +327,7 @@ def mail(app_conf, env, project_root='.'):
     }
     if smtp_conf:
         smtp_conf.setdefault('timeout', app_conf.socket_timeout)
-    if app_conf.ses_region:
+    if getattr(app_conf, 'ses_region', None):
         mailer = AmazonSESMailer(
             env.aws_access_key_id, env.aws_secret_access_key,
             region_name=app_conf.ses_region
