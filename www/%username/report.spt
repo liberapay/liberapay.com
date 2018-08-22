@@ -96,6 +96,19 @@ full_title = _("Report {0}", participant.username)
         "The profil will be reviewed by a moderator. "
     ) }}</p>
 
+    <h4>{{ _("Who are the moderators?") }}</h4>
+    <p>{{ _(
+        "There is ten moderators who have been elected by the ten most funded project on Liberapay. "
+        "This ensure that Liberapay moderation is made by independent people concerned by the plateform safety. "
+    ) }}</p>
+
+    <h4>{{ _("What is the moderating process?") }}</h4>
+    <p>{{ _(
+        "Once at least half of the moderators confirm that the user is suspicious,"
+        "its account is closed and it can not received donation anymore. "
+        "All donations to the user are then cancelled."
+    ) }}</p>
+
 </div>
 </div>
 % endblock
