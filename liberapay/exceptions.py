@@ -380,6 +380,16 @@ class UnableToDistributeBalance(LazyResponse400):
         )
 
 
+class UnableToSendEmail(LazyResponseXXX):
+    code = 500
+    def msg(self, _):
+        return _(
+            "The attempt to send an email to {email_address} failed. Please "
+            "check that the address is valid and retry. If the problem persists "
+            "please contact support@liberapay.com.", email_address=self.args[0]
+        )
+
+
 class PayinMethodIsUnavailable(LazyResponseXXX):
     code = 403
     def msg(self, _):
