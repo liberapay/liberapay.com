@@ -53,6 +53,7 @@ from liberapay.exceptions import (
     TooManyUsernameChanges,
     TransferError,
     UnableToDistributeBalance,
+    UnableToSendEmail,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -911,8 +912,7 @@ class Participant(Model, MixinTeam):
         addr_id = email_row.id
         nonce = email_row.nonce
         link = "{scheme}://{host}/{username}/emails/verify.html?email={addr_id}&nonce={nonce}"
-        r = self.send_email('verification', email, link=link.format(**locals()), old_email=old_email)
-        assert r == 1  # Make sure the verification email was sent
+        self.send_email('verification', email, link=link.format(**locals()), old_email=old_email)
 
         if self.email:
             self.send_email('verification_notice', self.email, new_email=email)
@@ -1047,9 +1047,12 @@ class Participant(Model, MixinTeam):
         message['text'] = render('text/plain', context)
 
         with email_lock:
-            n = website.mailer.send(**message)
+            try:
+                website.mailer.send(**message)
+            except Exception as e:
+                website.tell_sentry(e, {})
+                raise UnableToSendEmail(email)
             website.log_email(message)
-        return n
 
     @classmethod
     def dequeue_emails(cls):
@@ -1084,8 +1087,7 @@ class Participant(Model, MixinTeam):
                     dequeue(msg)
                     continue
                 try:
-                    r = p.send_email(msg.event, email, **d)
-                    assert r == 1
+                    p.send_email(msg.event, email, **d)
                 except Exception as e:
                     website.tell_sentry(e, {})
                 else:
