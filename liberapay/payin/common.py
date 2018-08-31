@@ -1,6 +1,6 @@
 from __future__ import division, print_function, unicode_literals
 
-from ..exceptions import AccountSuspended
+from ..exceptions import AccountSuspended, RecipientAccountSuspended
 from ..models.participant import Participant
 from ..utils.currencies import Money
 
@@ -97,6 +97,10 @@ def prepare_payin_transfer(
 
     """
     assert recipient.id == destination.participant, (recipient, destination)
+
+    if recipient.is_suspended:
+        raise RecipientAccountSuspended()
+
     if unit_amount:
         n_units = int(amount / unit_amount.convert(amount.currency))
     else:

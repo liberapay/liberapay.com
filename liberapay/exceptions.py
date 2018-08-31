@@ -344,6 +344,15 @@ class AccountSuspended(LazyResponseXXX):
         )
 
 
+class RecipientAccountSuspended(LazyResponseXXX):
+    code = 403
+    def msg(self, _):
+        return _(
+            "This payment cannot be processed because the account of the "
+            "recipient is currently suspended."
+        )
+
+
 class TooManyCurrencyChanges(LazyResponseXXX):
     code = 429
     def msg(self, _):
