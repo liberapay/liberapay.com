@@ -7,6 +7,23 @@ ALTER TABLE payment_accounts ALTER COLUMN charges_enabled DROP NOT NULL;
 
 ALTER TYPE payment_net ADD VALUE IF NOT EXISTS 'paypal';
 
+CREATE OR REPLACE FUNCTION update_has_payment_account() RETURNS trigger AS $$
+    DECLARE
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        UPDATE participants
+           SET has_payment_account = (
+                   SELECT count(*)
+                     FROM payment_accounts
+                    WHERE participant = rec.participant
+                      AND is_current IS TRUE
+               ) > 0
+         WHERE id = rec.participant;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE payin_transfer_events
 ( payin_transfer   int               NOT NULL REFERENCES payin_transfers
 , status           payin_status      NOT NULL

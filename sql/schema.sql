@@ -420,7 +420,7 @@ CREATE OR REPLACE FUNCTION update_has_payment_account() RETURNS trigger AS $$
     DECLARE
         rec record;
     BEGIN
-        rec := COALESCE(NEW, OLD);
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
         UPDATE participants
            SET has_payment_account = (
                    SELECT count(*)
