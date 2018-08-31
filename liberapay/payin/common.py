@@ -176,16 +176,21 @@ def update_payin_transfer(
 
         # Recompute the cached `receiving` amount of the donee.
         cursor.run("""
+            WITH our_tips AS (
+                     SELECT t.amount
+                       FROM current_tips t
+                      WHERE t.tippee = %(p_id)s
+                        AND t.amount > 0
+                        AND t.is_funded
+                 )
             UPDATE participants AS p
-               SET receiving = taking + coalesce_currency_amount((
-                       SELECT sum(t.amount, p.main_currency)
-                         FROM current_tips t
-                        WHERE t.tippee = p.id
-                          AND t.amount > 0
-                          AND t.is_funded
-                   ), p.main_currency)
-             WHERE p.id = %s
-        """, (pt.team or pt.recipient,))
+               SET receiving = taking + coalesce_currency_amount(
+                       (SELECT sum(t.amount, p.main_currency) FROM our_tips t),
+                       p.main_currency
+                   )
+                 , npatrons = (SELECT count(*) FROM our_tips)
+             WHERE p.id = %(p_id)s
+        """, dict(p_id=(pt.team or pt.recipient)))
 
         # Recompute the cached `giving` amount of the donor.
         if update_donor:
