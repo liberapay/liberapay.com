@@ -62,7 +62,7 @@ if request.method == 'POST':
         ))
 
     destination = resolve_destination(
-        website.db, beneficiary, 'paypal', request.country, payin_amount
+        website.db, beneficiary, 'paypal', payer, request.country, payin_amount
     )
     route = ExchangeRoute.upsert_generic_route(payer, 'paypal')
     payin = prepare_payin(website.db, payer, payin_amount, route)

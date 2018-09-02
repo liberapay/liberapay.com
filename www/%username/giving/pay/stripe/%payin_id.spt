@@ -62,7 +62,7 @@ if request.method == 'POST':
         ))
 
     destination = resolve_destination(
-        website.db, beneficiary, 'stripe', request.country, amount
+        website.db, beneficiary, 'stripe', payer, request.country, amount
     )
 
     return_url = payer.url('giving/pay/stripe/complete')

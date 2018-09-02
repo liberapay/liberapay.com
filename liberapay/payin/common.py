@@ -1,7 +1,8 @@
 from __future__ import division, print_function, unicode_literals
 
 from ..exceptions import (
-    AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended
+    AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended,
+    NoSelfTipping,
 )
 from ..models.participant import Participant
 from ..utils.currencies import Money
@@ -79,9 +80,11 @@ def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fe
         return payin
 
 
-def resolve_destination(db, tippee, provider, payer_country, payin_amount):
+def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount):
     """ TODO
     """
+    if tippee.id == payer.id:
+        raise NoSelfTipping()
     destination = db.one("""
         SELECT *
           FROM payment_accounts
@@ -133,9 +136,11 @@ def resolve_destination(db, tippee, provider, payer_country, payin_amount):
     """, (tippee.id, provider))
     if not members:
         raise MissingPaymentAccount(tippee)
-    members = sorted(members, key=lambda t: (t.received_sum / t.takes_sum, t.ctime))
+    members = sorted(members, key=lambda t:
+        (int(t.member == payer.id), t.received_sum / t.takes_sum, t.ctime)
+    )
     member = Participant.from_id(members[0].member)
-    return resolve_destination(db, member, provider, payer_country, payin_amount)
+    return resolve_destination(db, member, provider, payer, payer_country, payin_amount)
 
 
 def prepare_payin_transfer(
