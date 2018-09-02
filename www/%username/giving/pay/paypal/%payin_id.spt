@@ -6,7 +6,7 @@ from mangopay.exceptions import CurrencyMismatch
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.payin.common import prepare_payin, prepare_payin_transfer
+from liberapay.payin.common import prepare_payin, prepare_payin_transfer, resolve_destination
 from liberapay.payin.paypal import create_payment, execute_payment, sync_payment
 from liberapay.utils import get_participant, NS, partition
 
@@ -59,20 +59,9 @@ if request.method == 'POST':
             payin_amount, amount_min, amount_max
         ))
 
-    destination = website.db.one("""
-        SELECT *
-          FROM payment_accounts
-         WHERE participant = %s
-           AND provider = 'paypal'
-           AND is_current
-      ORDER BY country = %s DESC
-             , default_currency = %s DESC
-             , connection_ts
-         LIMIT 1
-    """, (beneficiary.id, request.country, payin_currency))
-    if not destination:
-        raise response.error(400, "payment account not found")
-
+    destination = resolve_destination(
+        website.db, beneficiary, 'paypal', request.country, payin_amount
+    )
     route = ExchangeRoute.upsert_generic_route(payer, 'paypal')
     payin = prepare_payin(website.db, payer, payin_amount, route)
     context = 'team-donation' if beneficiary.kind == 'group' else 'personal-donation'

@@ -353,6 +353,16 @@ class RecipientAccountSuspended(LazyResponseXXX):
         )
 
 
+class MissingPaymentAccount(LazyResponseXXX):
+    code = 400
+    def msg(self, _):
+        return _(
+            "Your donation to {recipient} cannot be processed right now because the "
+            "account of the beneficiary isn't ready to receive money.",
+            recipient=self.args[0].username
+        )
+
+
 class TooManyCurrencyChanges(LazyResponseXXX):
     code = 429
     def msg(self, _):

@@ -1,6 +1,8 @@
 from __future__ import division, print_function, unicode_literals
 
-from ..exceptions import AccountSuspended, RecipientAccountSuspended
+from ..exceptions import (
+    AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended
+)
 from ..models.participant import Participant
 from ..utils.currencies import Money
 
@@ -75,6 +77,65 @@ def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fe
         """, (payin_id, status, error))
 
         return payin
+
+
+def resolve_destination(db, tippee, provider, payer_country, payin_amount):
+    """ TODO
+    """
+    destination = db.one("""
+        SELECT *
+          FROM payment_accounts
+         WHERE participant = %s
+           AND provider = %s
+           AND is_current
+      ORDER BY country = %s DESC
+             , default_currency = %s DESC
+             , connection_ts
+         LIMIT 1
+    """, (tippee.id, provider, payer_country, payin_amount.currency))
+    if destination:
+        return destination
+    if tippee.kind != 'group':
+        raise MissingPaymentAccount(tippee)
+    members = db.all("""
+        SELECT t.member
+             , t.ctime
+             , coalesce_currency_amount((
+                   SELECT sum(pt.amount, t.amount::currency)
+                     FROM payin_transfers pt
+                    WHERE pt.recipient = t.member
+                      AND pt.team = t.team
+                      AND pt.context = 'team-donation'
+                      AND pt.status = 'succeeded'
+               ), t.amount::currency) AS received_sum
+             , coalesce_currency_amount((
+                   SELECT sum(t2.amount, t.amount::currency)
+                     FROM ( SELECT ( SELECT t2.amount
+                                       FROM takes t2
+                                      WHERE t2.member = t.member
+                                        AND t2.team = t.team
+                                        AND t2.mtime < payday.ts_start
+                                   ORDER BY t2.mtime DESC
+                                      LIMIT 1
+                                   ) AS amount
+                              FROM paydays payday
+                          ) t2
+               ), t.amount::currency) AS takes_sum
+          FROM current_takes t
+         WHERE t.team = %s
+           AND EXISTS (
+                   SELECT true
+                     FROM payment_accounts a
+                    WHERE a.participant = t.member
+                      AND a.provider = %s
+                      AND a.is_current
+               )
+    """, (tippee.id, provider))
+    if not members:
+        raise MissingPaymentAccount(tippee)
+    members = sorted(members, key=lambda t: (t.received_sum / t.takes_sum, t.ctime))
+    member = Participant.from_id(members[0].member)
+    return resolve_destination(db, member, provider, payer_country, payin_amount)
 
 
 def prepare_payin_transfer(
