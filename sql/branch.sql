@@ -47,16 +47,25 @@ CREATE OR REPLACE FUNCTION update_payment_providers() RETURNS trigger AS $$
     BEGIN
         rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
         UPDATE participants
-           SET payment_providers = (
+           SET payment_providers = coalesce((
                    SELECT sum(DISTINCT array_position(
                                            enum_range(NULL::payment_providers),
                                            provider::payment_providers
                                        ))
                      FROM payment_accounts
-                    WHERE participant = rec.participant
+                    WHERE ( participant = rec.participant OR
+                            participant IN (
+                                SELECT t.member
+                                  FROM current_takes t
+                                 WHERE t.team = rec.participant
+                            )
+                          )
                       AND is_current IS TRUE
-               )
-         WHERE id = rec.participant;
+               ), 0)
+         WHERE id = rec.participant
+            OR id IN (
+                   SELECT t.team FROM current_takes t WHERE t.member = rec.participant
+               );
         RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
