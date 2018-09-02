@@ -54,7 +54,7 @@ elif payin_id:
 tippee_id = request.qs.get_int('beneficiary', default=None)
 donations = payer.get_tips_awaiting_renewal()
 donations, donations_not_fundable = partition(
-    donations, lambda t: t.payment_accounts and not t.tippee_p.is_suspended
+    donations, lambda t: t.tippee_p.payment_providers > 0 and not t.tippee_p.is_suspended
 )
 if tippee_id:
     donations, other_donations = partition(

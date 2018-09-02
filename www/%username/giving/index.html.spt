@@ -163,7 +163,7 @@ if not freeload:
         <tbody>
         % for tip in tips
         % set tippee = tip.tippee_p
-        % set inactive = not tip.has_payment_account or tippee.is_suspended or not tip.is_funded
+        % set inactive = not tip.payment_providers or tippee.is_suspended or not tip.is_funded
         <tr>
             % set username = tippee.username
             <td class="recipient"><a href="/{{ username }}/">{{ username }}</a></td>
@@ -173,7 +173,7 @@ if not freeload:
             <td class="funded {{ 'danger' if inactive else '' }}">
                 % if tip.tippee_p.kind == 'group'
                     {{ _("No: donations to teams are currently inoperative") }}
-                % elif not tip.has_payment_account
+                % elif not tip.payment_providers
                     {{ _("No: the donee hasn't configured any payment method") }}
                 % elif tippee.is_suspended
                     {{ _("No: the donee's account is temporarily suspended") }}

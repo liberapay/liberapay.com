@@ -35,3 +35,39 @@ CREATE TABLE payin_transfer_events
 ALTER TABLE payin_transfers ADD COLUMN fee currency_amount;
 
 ALTER TABLE payins DROP CONSTRAINT success_chk;
+
+ALTER TABLE participants ADD COLUMN payment_providers integer NOT NULL DEFAULT 0;
+UPDATE participants SET payment_providers = 1 WHERE has_payment_account;
+
+CREATE TYPE payment_providers AS ENUM ('stripe', 'paypal');
+
+CREATE OR REPLACE FUNCTION update_payment_providers() RETURNS trigger AS $$
+    DECLARE
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        UPDATE participants
+           SET payment_providers = (
+                   SELECT sum(DISTINCT array_position(
+                                           enum_range(NULL::payment_providers),
+                                           provider::payment_providers
+                                       ))
+                     FROM payment_accounts
+                    WHERE participant = rec.participant
+                      AND is_current IS TRUE
+               )
+         WHERE id = rec.participant;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_payment_providers
+    AFTER INSERT OR UPDATE OR DELETE ON payment_accounts
+    FOR EACH ROW EXECUTE PROCEDURE update_payment_providers();
+
+SELECT 'after deployment';
+
+UPDATE participants SET payment_providers = 1 WHERE has_payment_account;
+DROP TRIGGER update_has_payment_account ON payment_accounts;
+DROP FUNCTION update_has_payment_account();
+ALTER TABLE participants DROP COLUMN has_payment_account;

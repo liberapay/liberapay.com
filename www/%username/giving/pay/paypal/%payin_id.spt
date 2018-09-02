@@ -16,6 +16,8 @@ ONE_YEAR = {
     'yearly': 1,
 }
 
+PAYPAL_BIT = 2
+
 [---]
 
 payer = get_participant(state, restrict=True)
@@ -97,16 +99,14 @@ if payin_id:
 tippee_id = request.qs.get_int('beneficiary', default=None)
 donations = payer.get_tips_awaiting_renewal()
 donations, donations_not_fundable = partition(
-    donations, lambda t: t.payment_accounts and not t.tippee_p.is_suspended
+    donations, lambda t: t.tippee_p.payment_providers > 0 and not t.tippee_p.is_suspended
 )
 if tippee_id:
     donations, other_donations = partition(
         donations, lambda t: t.tippee == tippee_id
     )
 donations, non_paypal_donations = partition(
-    donations, lambda t: (
-        'paypal' in set(a['provider'] for a in (t.payment_accounts or ()))
-    )
+    donations, lambda t: t.tippee_p.payment_providers & PAYPAL_BIT > 0
 )
 
 if donations:

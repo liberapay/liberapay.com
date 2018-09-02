@@ -2139,7 +2139,7 @@ class Participant(Model, MixinTeam):
                      , p AS tippee_p
                      , t.is_funded
                      , t.paid_in_advance
-                     , p.has_payment_account
+                     , p.payment_providers
                      , ( t.paid_in_advance IS NULL OR
                          t.paid_in_advance < (t.periodic_amount * 0.75) OR
                          t.paid_in_advance < (t.amount * 4)
@@ -2178,11 +2178,6 @@ class Participant(Model, MixinTeam):
     def get_tips_awaiting_renewal(self):
         return [NS(r._asdict()) for r in self.db.all("""
             SELECT t.*, p AS tippee_p
-                 , ( SELECT json_agg(a)
-                       FROM payment_accounts a
-                      WHERE a.participant = t.tippee
-                        AND a.is_current
-                   ) AS payment_accounts
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
              WHERE t.tipper = %s
