@@ -731,6 +731,9 @@ msgstr "La transferència de diners ha fallat. Poseu-vos en contacte amb support
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "No esteu autoritzat a fer això perquè el compte està suspès."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ja heu canviat la divisa principal recentment. Torneu a intentar més tard (p. ex. en una setmana) o contacteu amb support@liberapay.com."
 
@@ -756,12 +759,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr "Ens sap greu, però els pagaments entrants ara mateix estan inhabilitats. Podeu llegir {link_start}aquesta entrada del blog{link_end} per a saber-ne els motius."
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "«{0}» no sembla pas un identificador vàlid d'usuari en {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "No sembla que existeixi cap usuari amb nom {0} a {1}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "El nom d'usuari o la contrasenya són incorrectes."
@@ -1906,15 +1926,28 @@ msgstr "en els últims 30 dies"
 msgid "Cancelled"
 msgstr "Cancel·lat"
 
+msgid "Funding your donations"
+msgstr "Finançament dels donatius"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr "Actualment no es possible finançar més d'un donatiu amb un únic pagament. Així que cal que renoveu els donatius un per un. Lamentem les molèsties."
+
+msgid "Please choose a payment method:"
+msgstr "Seleccioneu un mètode de pagament:"
+
+msgid "Card"
+msgstr "Targeta"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "El vostre donatiu a {recipient} no es pot processar correctament perquè el compte del beneficiari no està preparat per a rebre diners."
+
+msgid "All your donations are funded."
+msgstr "Tots els donatius estan finançats."
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "«{0}» no és una quantitat acceptable (mín.={1}, màx.={2})"
-
-msgid "This donation is not active."
-msgstr "Aquest donatiu no és actiu."
-
-msgid "Funding your donations"
-msgstr "Finançament dels donatius"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1924,26 +1957,8 @@ msgstr "El pagament de {charge_amount} s'ha realitzat correctament."
 msgid "The payment failed. Error message: “{0}”"
 msgstr "El pagament ha fallat. El missatge d'error és: «{0}»"
 
-msgid "The payment has been initiated."
-msgstr "El pagament s'ha iniciat."
-
-msgid "Please choose a payment method:"
-msgstr "Seleccioneu un mètode de pagament:"
-
-msgid "Credit/Debit Card"
-msgstr "Targeta de crèdit o dèbit"
-
-msgid "Easy and instantaneous"
-msgstr "Fàcil i instantàni"
-
-msgid "Eurozone only"
-msgstr "Només a la zona euro"
-
-msgid "Best for regular payments"
-msgstr "El millor per als pagaments periòdics"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Actualment no es possible finançar més d'un donatiu amb un únic pagament. Així que cal que renoveu els donatius un per un. Lamentem les molèsties."
+msgid "The payment is awaiting your approval."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1983,6 +1998,24 @@ msgstr[1] "Pagament següent en {n} anys."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Quantitat mínima (mín.={0}, màx.={1})"
 
+msgid "Initiate the payment"
+msgstr "Inicia el pagament"
+
+msgid "The payment has been initiated."
+msgstr "El pagament s'ha iniciat."
+
+msgid "Credit/Debit Card"
+msgstr "Targeta de crèdit o dèbit"
+
+msgid "Easy and instantaneous"
+msgstr "Fàcil i instantàni"
+
+msgid "Eurozone only"
+msgstr "Només a la zona euro"
+
+msgid "Best for regular payments"
+msgstr "El millor per als pagaments periòdics"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Ordenarem un càrrec en la targeta {brand} (últims 4 dígits: {last4})."
@@ -1999,16 +2032,6 @@ msgstr "Les dades s'envien directament al processador de pagaments {name} mitjan
 
 msgid "Remember the card number for next time"
 msgstr "Recorda el número de targeta per a la següent vegada"
-
-msgid "Initiate the payment"
-msgstr "Inicia el pagament"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "El vostre donatiu a {recipient} no es pot processar correctament perquè el compte del beneficiari no està preparat per a rebre diners."
-
-msgid "All your donations are funded."
-msgstr "Tots els donatius estan finançats."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Esteu segur de canviar el tipus de compte? Per raons legals us haurem de crear un compte nou en el sistema de pagaments del nostre soci i fer una transferència dels diners des del compte antic."
@@ -2367,9 +2390,6 @@ msgstr "No disponible a {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Connecta el compte de {platform_name}"
-
-msgid "Coming soon…"
-msgstr "Disponible aviat…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2904,9 +2924,6 @@ msgstr "Adreça desada:"
 
 msgid "Input the billing address"
 msgstr "Introduïu l'adreça de facturació"
-
-msgid "Card"
-msgstr "Targeta"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "Atenció: algunes dades de la targeta semblen incorrectes. Voleu continuar igualment?"

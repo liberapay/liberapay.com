@@ -707,6 +707,9 @@ msgstr "자금 이체가 실패하였습니다. 문제가 지속되면 support@l
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "계정이 현재 정지되어 있기 때문에 이 행위를 할 수 없습니다."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "최근에 주 화폐를 변경하려고 시도하셨습니다, 나중에 (예: 다음 주에) 다시 시도해 보시거나 support@liberapay.com에 연락해 주세요."
 
@@ -732,12 +735,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr ""
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "'{0}'은(는) {platform} 에서 유효한 사용자 ID로 보이지 않습니다."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "{1} 에 {0} 이름을 가진 사용자가 존재하지 않습니다."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "잘못된 계정명 또는 비밀번호."
@@ -1876,15 +1896,28 @@ msgstr "최근 30일 이내에"
 msgid "Cancelled"
 msgstr "취소됨"
 
+msgid "Funding your donations"
+msgstr ""
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Card"
+msgstr "카드"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}'은 허용된 금액이 아닙니다 (최소={1} 최대={2})"
-
-msgid "This donation is not active."
-msgstr ""
-
-msgid "Funding your donations"
-msgstr ""
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1894,25 +1927,7 @@ msgstr ""
 msgid "The payment failed. Error message: “{0}”"
 msgstr ""
 
-msgid "The payment has been initiated."
-msgstr ""
-
-msgid "Please choose a payment method:"
-msgstr ""
-
-msgid "Credit/Debit Card"
-msgstr "신용/직불카드"
-
-msgid "Easy and instantaneous"
-msgstr "쉽고 즉각적입니다"
-
-msgid "Eurozone only"
-msgstr "유로존 전용"
-
-msgid "Best for regular payments"
-msgstr "정기 지불에 가장 좋음"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgid "The payment is awaiting your approval."
 msgstr ""
 
 #, python-brace-format
@@ -1950,6 +1965,24 @@ msgstr[0] ""
 msgid "Custom amount (min={0}, max={1})"
 msgstr "맞춤 금액 (최소={0}, 최대={1})"
 
+msgid "Initiate the payment"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr "신용/직불카드"
+
+msgid "Easy and instantaneous"
+msgstr "쉽고 즉각적입니다"
+
+msgid "Eurozone only"
+msgstr "유로존 전용"
+
+msgid "Best for regular payments"
+msgstr "정기 지불에 가장 좋음"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr ""
@@ -1966,16 +1999,6 @@ msgstr ""
 
 msgid "Remember the card number for next time"
 msgstr "다음 결제를 위해 카드 번호 기억하기"
-
-msgid "Initiate the payment"
-msgstr ""
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
-
-msgid "All your donations are funded."
-msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "계정의 종류를 정말 바꾸시겠습니까? 법적인 이유로 결제 대행사의 시스템에서 새 계정을 생성하고 기존 계정에서 새 계정으로 자금을 이체하게 됩니다."
@@ -2330,9 +2353,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
-msgstr ""
-
-msgid "Coming soon…"
 msgstr ""
 
 #, python-brace-format
@@ -2857,9 +2877,6 @@ msgstr "저장된 주소:"
 
 msgid "Input the billing address"
 msgstr "청구지 주소를 입력하세요"
-
-msgid "Card"
-msgstr "카드"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "경고: 입력한 카드 값 중 일부가 유효하지 않은 것으로 보입니다. 계속할까요?"

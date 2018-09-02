@@ -736,6 +736,9 @@ msgstr "Ospravelňujem sa, ale prevod peňazí zlyhal. Pokiaľ obtiaže pretrvá
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Túto operáciu nesmiete previesť, pretože je váš účet pozastavený."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Nedávno ste zmenili hlavnú menu, prosím skúste neskôr (napríklad za týždeň) alebo kontaktuje support@liberapay.com."
 
@@ -761,12 +764,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr "veľmi sa ospravelňujeme ale prichádzajúce platby sú momentálne vypnuté. Môžete si prečítať {link_start}tento príspevok{link_end} aby ste sa dozvedeli prečo."
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "'{0}' sa nezdá byť platný identifikátor na {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Užívateľ s menom {0} sa nezdá byť v {1}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "Chybné meno alebo heslo."
@@ -1917,15 +1937,28 @@ msgstr "v posledných 30 dňoch"
 msgid "Cancelled"
 msgstr "Zrušené"
 
+msgid "Funding your donations"
+msgstr "Platenie vašich darov"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr "Zaplatenie viacerých darov s jednou platbou nie je momentálne možné, takže musíte obnoviť dary po jednom. Ospravedlňujeme sa za nepríjemnosti."
+
+msgid "Please choose a payment method:"
+msgstr "Prosím zvoľte platobnú metódu:"
+
+msgid "Card"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Váš dar pre {recipient} nemôže byť spracovaný práve teraz pretože účet príjemcu nie je pripravený dostávať peniaze."
+
+msgid "All your donations are funded."
+msgstr "Všetky vaše dary boli zaplatené."
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' nie je prijatelná čiastka (min = {1}, max = {2})"
-
-msgid "This donation is not active."
-msgstr "Tento dar nie je aktívny."
-
-msgid "Funding your donations"
-msgstr "Platenie vašich darov"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1935,26 +1968,8 @@ msgstr "Platba so sumou {charge_amount} bola úspešná."
 msgid "The payment failed. Error message: “{0}”"
 msgstr "Platba zlyhala. Error message: \"{0}\""
 
-msgid "The payment has been initiated."
-msgstr "Platba bola zahájená."
-
-msgid "Please choose a payment method:"
-msgstr "Prosím zvoľte platobnú metódu:"
-
-msgid "Credit/Debit Card"
-msgstr "Kreditná/debetná Karta"
-
-msgid "Easy and instantaneous"
-msgstr "Jednoduché a okamžité"
-
-msgid "Eurozone only"
-msgstr "Iba v Eurozóne"
-
-msgid "Best for regular payments"
-msgstr "Najvhodnejšie pre pravidelné platby"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Zaplatenie viacerých darov s jednou platbou nie je momentálne možné, takže musíte obnoviť dary po jednom. Ospravedlňujeme sa za nepríjemnosti."
+msgid "The payment is awaiting your approval."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1997,6 +2012,24 @@ msgstr[2] "Ďalšia platba v {n} rokoch."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Vlastná čiastka (min = {0}, max = {1})"
 
+msgid "Initiate the payment"
+msgstr "Začnite platbu"
+
+msgid "The payment has been initiated."
+msgstr "Platba bola zahájená."
+
+msgid "Credit/Debit Card"
+msgstr "Kreditná/debetná Karta"
+
+msgid "Easy and instantaneous"
+msgstr "Jednoduché a okamžité"
+
+msgid "Eurozone only"
+msgstr "Iba v Eurozóne"
+
+msgid "Best for regular payments"
+msgstr "Najvhodnejšie pre pravidelné platby"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Zaplatíme vašou {brand} kartou (posledné štvročíslie: {last4})."
@@ -2013,16 +2046,6 @@ msgstr "Dáta budú posielané priamo do platobného systému {name} cez zašifr
 
 msgid "Remember the card number for next time"
 msgstr "Zapamätajte si číslo karty na neskôr"
-
-msgid "Initiate the payment"
-msgstr "Začnite platbu"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Váš dar pre {recipient} nemôže byť spracovaný práve teraz pretože účet príjemcu nie je pripravený dostávať peniaze."
-
-msgid "All your donations are funded."
-msgstr "Všetky vaše dary boli zaplatené."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Ste si istý že chcete zmeniť typ vášho účtu? Kvôli právnym dôvodom vytvoríme nový účet u platobného partnera a pošleme peniaze z vášho starého účtu na nový."
@@ -2384,9 +2407,6 @@ msgstr "Nedostupné v {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Pripojiť {platform_name} účet"
-
-msgid "Coming soon…"
-msgstr "Prichádza čoskoro…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2931,9 +2951,6 @@ msgid "Saved address:"
 msgstr ""
 
 msgid "Input the billing address"
-msgstr ""
-
-msgid "Card"
 msgstr ""
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"

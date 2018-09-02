@@ -732,6 +732,9 @@ msgstr "Anteeksi nyt, mutta rahansiirto epäonnistui. Ota yhteyttä osoitteeseen
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Toimenpide on estetty, koska tilisi toiminta on tällä hetkellä jäädytetty."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Olet hiljattain vaihtanut päävaluuttaasi. Yritä uudelleen myöhemmin (esim. viikossa), tai ota yhteyttä asiakaspalveluun support@liberapay.com (englanniksi)."
 
@@ -757,12 +760,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr "Olemme pahoillamme, mutta maksujen sisäänotto on tällä hetkellä pois käytöstä. Syy selviää lukemalla {link_start}tämä blogikirjoituksemme{link_end}."
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "”{0}” ei vaikuta olevan validi käyttäjätunnus {platform}-palvelussa."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Palvelussa {1} ei näytä olevan käyttäjää nimeltä {0}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "Virheellinen käyttäjätunnus tai salasana."
@@ -1907,15 +1927,28 @@ msgstr "viimeisen 30 päivän aikana"
 msgid "Cancelled"
 msgstr "Peruutettu"
 
+msgid "Funding your donations"
+msgstr "Lahjoitustesi rahoittaminen"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr "Tällä hetkellä ei ole mahdollista rahoittaa useita lahjoituksia yhdellä maksulla, joten joudut uusimaan lahjoituksesi yksitellen. Pahoittelemme tästä aiheuttavaa haittaa."
+
+msgid "Please choose a payment method:"
+msgstr "Valitse maksumenetelmä:"
+
+msgid "Card"
+msgstr "Kortti"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Lahjoitustasi vastaanottajalle {recipient} ei voida käsitellä juuri nyt, sillä vastaanottajan tili ei ole valmis ottamaan rahaa vastaan."
+
+msgid "All your donations are funded."
+msgstr "Kaikki lahjoituksesi ovat rahoitettuina."
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "”{0}” ei ole kelvollinen määrä. Sallitut rajat: {1}—{2}"
-
-msgid "This donation is not active."
-msgstr "Tämä lahjoitus ei ole aktiivisena."
-
-msgid "Funding your donations"
-msgstr "Lahjoitustesi rahoittaminen"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1925,26 +1958,8 @@ msgstr "{charge_amount} maksu onnistui."
 msgid "The payment failed. Error message: “{0}”"
 msgstr "Maksu epäonnistui: Virheilmoitus: ”{0}”"
 
-msgid "The payment has been initiated."
-msgstr "Maksutoimenpide on aloitettu."
-
-msgid "Please choose a payment method:"
-msgstr "Valitse maksumenetelmä:"
-
-msgid "Credit/Debit Card"
-msgstr "Credit/Debit -kortti"
-
-msgid "Easy and instantaneous"
-msgstr "Helppo ja välitön"
-
-msgid "Eurozone only"
-msgstr "Vain euroalue"
-
-msgid "Best for regular payments"
-msgstr "Paras säännöllisiin maksuihin"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Tällä hetkellä ei ole mahdollista rahoittaa useita lahjoituksia yhdellä maksulla, joten joudut uusimaan lahjoituksesi yksitellen. Pahoittelemme tästä aiheuttavaa haittaa."
+msgid "The payment is awaiting your approval."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1984,6 +1999,24 @@ msgstr[1] "Seuraava maksu {n} vuoden kuluttua."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Oma määrä ({0}—{1})"
 
+msgid "Initiate the payment"
+msgstr "Toimeenpane maksu"
+
+msgid "The payment has been initiated."
+msgstr "Maksutoimenpide on aloitettu."
+
+msgid "Credit/Debit Card"
+msgstr "Credit/Debit -kortti"
+
+msgid "Easy and instantaneous"
+msgstr "Helppo ja välitön"
+
+msgid "Eurozone only"
+msgstr "Vain euroalue"
+
+msgid "Best for regular payments"
+msgstr "Paras säännöllisiin maksuihin"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Maksu veloitetaan {brand}-kortiltasi (viimeiset neljä numeroa: {last4})."
@@ -2000,16 +2033,6 @@ msgstr "Tiedot lähetetään suoraan maksunkäsittelijällemme ({name}) salatun 
 
 msgid "Remember the card number for next time"
 msgstr "Pidä kortin numero muistissa seuraavaa kertaa varten"
-
-msgid "Initiate the payment"
-msgstr "Toimeenpane maksu"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Lahjoitustasi vastaanottajalle {recipient} ei voida käsitellä juuri nyt, sillä vastaanottajan tili ei ole valmis ottamaan rahaa vastaan."
-
-msgid "All your donations are funded."
-msgstr "Kaikki lahjoituksesi ovat rahoitettuina."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Haluatko varmasti muuttaa tilin tyyppiä? Lakiteknisistä syistä meidän pitää tehdä sinulle uusi tili maksukumppanimme järjestelmässä, ja siirtää raha vanhalta tililtäsi."
@@ -2368,9 +2391,6 @@ msgstr "Ei ole käytettävissä maassa: {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Yhdistä {platform_name}-tili"
-
-msgid "Coming soon…"
-msgstr "Tulossa pian…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2905,9 +2925,6 @@ msgstr "Tallennettu osoite:"
 
 msgid "Input the billing address"
 msgstr "Syötä laskutusosoite"
-
-msgid "Card"
-msgstr "Kortti"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "Varoitus: osa syöttämistäsi korttitiedoista näyttää virheellisiltä. Jatketaanko silti?"

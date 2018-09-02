@@ -712,6 +712,9 @@ msgstr "Överföringen av pengarna misslyckades tyvärr. Vänligen kontakta supp
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Du har inte tillstånd att göra detta eftersom ditt konto just nu är avstängt."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har redan ändrat din huvudvaluta nyligen, var god försök senare (t.ex. om en vecka) eller kontakta support@liberapay.com."
 
@@ -737,12 +740,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr ""
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "‘{0}’ verkar inte vara ett giltigt användar id på {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Det verkar inte finnas någon användare vid namnet {0} på {1}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "Fel användarnamn eller lösenord."
@@ -1889,15 +1909,28 @@ msgstr "inom de senaste 30 dagarna"
 msgid "Cancelled"
 msgstr "Avbruten"
 
+msgid "Funding your donations"
+msgstr ""
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr ""
+
+msgid "Please choose a payment method:"
+msgstr ""
+
+msgid "Card"
+msgstr "Kort"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
+msgid "All your donations are funded."
+msgstr ""
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' är inte ett acceptabelt belopp (min={1}, max={2})"
-
-msgid "This donation is not active."
-msgstr ""
-
-msgid "Funding your donations"
-msgstr ""
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1907,25 +1940,7 @@ msgstr ""
 msgid "The payment failed. Error message: “{0}”"
 msgstr ""
 
-msgid "The payment has been initiated."
-msgstr ""
-
-msgid "Please choose a payment method:"
-msgstr ""
-
-msgid "Credit/Debit Card"
-msgstr "Kredit- eller debitkort"
-
-msgid "Easy and instantaneous"
-msgstr "Lätt och momentan"
-
-msgid "Eurozone only"
-msgstr "Euroområdet enbart"
-
-msgid "Best for regular payments"
-msgstr "Bäst för reguljära betalningar"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgid "The payment is awaiting your approval."
 msgstr ""
 
 #, python-brace-format
@@ -1966,6 +1981,24 @@ msgstr[1] ""
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Anpassat belopp (min={0}, max={1})"
 
+msgid "Initiate the payment"
+msgstr ""
+
+msgid "The payment has been initiated."
+msgstr ""
+
+msgid "Credit/Debit Card"
+msgstr "Kredit- eller debitkort"
+
+msgid "Easy and instantaneous"
+msgstr "Lätt och momentan"
+
+msgid "Eurozone only"
+msgstr "Euroområdet enbart"
+
+msgid "Best for regular payments"
+msgstr "Bäst för reguljära betalningar"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr ""
@@ -1982,16 +2015,6 @@ msgstr ""
 
 msgid "Remember the card number for next time"
 msgstr "Kom ihåg kortnummret inför nästa gång"
-
-msgid "Initiate the payment"
-msgstr ""
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
-
-msgid "All your donations are funded."
-msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Är du säker på att du vill ändra kontotyp? På grund av lagkrav måste vi skapa ett nytt konto till dig hos vår betaltjänst och föra över pengarna från ditt gamla konto till det nya."
@@ -2349,9 +2372,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
-msgstr ""
-
-msgid "Coming soon…"
 msgstr ""
 
 #, python-brace-format
@@ -2887,9 +2907,6 @@ msgstr ""
 
 msgid "Input the billing address"
 msgstr ""
-
-msgid "Card"
-msgstr "Kort"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "Varning: några av uppgifterna du matat in verkar inte stämma. Fortsätt ändå?"

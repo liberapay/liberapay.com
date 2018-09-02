@@ -731,6 +731,9 @@ msgstr "O dinheiro da transferência falhou, desculpe. Se o problema persistir, 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Não podes fazer isso porque a sua conta está suspenso."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Você já mudou seu tipo de moeda principal recentemente, por favor, tente novamente (Dentro de uma semana) ou contate support@liberapay.com."
 
@@ -756,12 +759,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr "Lamentamos mas os pagamentos estão atualmente desativados. Pode ler {link_start}este blog post{link_end} para saber por quê."
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "\"{0}\" não é um id de usuário válido para {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Parece que não existe um usuário com o nome de {0} no {1}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "Mau nome de usuário ou senha."
@@ -1906,15 +1926,28 @@ msgstr "nos últimos 30 dias"
 msgid "Cancelled"
 msgstr "Cancelado"
 
+msgid "Funding your donations"
+msgstr "Financiamento das suas doações"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr "De momento não é possível financiar múltiplas doações com um pagamento único, por isso terá de renovar as suas doações uma a uma. Pedimos desculpa pelo inconveniente."
+
+msgid "Please choose a payment method:"
+msgstr "Por favor escolha um método de pagamento:"
+
+msgid "Card"
+msgstr "Cartão"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "A sua doação a {recipient} não pode ser processada de momento porque a conta do beneficiário não está pronta para receber dinheiro."
+
+msgid "All your donations are funded."
+msgstr "Todas as suas doações estão financiadas."
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' não é um valor aceitável (min={1}, max={2})"
-
-msgid "This donation is not active."
-msgstr "Esta doação não está ativa."
-
-msgid "Funding your donations"
-msgstr "Financiamento das suas doações"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1924,26 +1957,8 @@ msgstr "O pagamento de {charge_amount} foi bem sucedido."
 msgid "The payment failed. Error message: “{0}”"
 msgstr "O pagamento falhou. Mensagem de erro: \"{0}\""
 
-msgid "The payment has been initiated."
-msgstr "O pagamento foi iniciado."
-
-msgid "Please choose a payment method:"
-msgstr "Por favor escolha um método de pagamento:"
-
-msgid "Credit/Debit Card"
-msgstr "Cartão de crédito/débito"
-
-msgid "Easy and instantaneous"
-msgstr "Fácil e instantânea"
-
-msgid "Eurozone only"
-msgstr "Só zona Euro"
-
-msgid "Best for regular payments"
-msgstr "O melhor para pagamentos regulares"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "De momento não é possível financiar múltiplas doações com um pagamento único, por isso terá de renovar as suas doações uma a uma. Pedimos desculpa pelo inconveniente."
+msgid "The payment is awaiting your approval."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1983,6 +1998,24 @@ msgstr[1] "Próximo pagamento em {n} anos."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Valor personalizado (min={0}, max={1})"
 
+msgid "Initiate the payment"
+msgstr "Iniciar pagamento"
+
+msgid "The payment has been initiated."
+msgstr "O pagamento foi iniciado."
+
+msgid "Credit/Debit Card"
+msgstr "Cartão de crédito/débito"
+
+msgid "Easy and instantaneous"
+msgstr "Fácil e instantânea"
+
+msgid "Eurozone only"
+msgstr "Só zona Euro"
+
+msgid "Best for regular payments"
+msgstr "O melhor para pagamentos regulares"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Vamos cobrar o seu cartão {brand} (quatro últimos dígitos: {last4})."
@@ -1999,16 +2032,6 @@ msgstr "Estes dados serão enviados diretamente para o processador de pagamentos
 
 msgid "Remember the card number for next time"
 msgstr "Lembre-se o número do cartão para a próxima"
-
-msgid "Initiate the payment"
-msgstr "Iniciar pagamento"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "A sua doação a {recipient} não pode ser processada de momento porque a conta do beneficiário não está pronta para receber dinheiro."
-
-msgid "All your donations are funded."
-msgstr "Todas as suas doações estão financiadas."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Tem a certeza que deseja alterar o tipo da sua conta? Por razões legais vamos ter de criar uma conta nova para si no sistema do nosso parceiro de pagamentos e transferir o dinheiro da sua conta antiga."
@@ -2367,9 +2390,6 @@ msgstr "Indisponível no/na/em {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Ligar conta {platform_name}"
-
-msgid "Coming soon…"
-msgstr "Em breve…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2904,9 +2924,6 @@ msgstr "Endereço guardado:"
 
 msgid "Input the billing address"
 msgstr "Insira o endereço de faturação"
-
-msgid "Card"
-msgstr "Cartão"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "Atenção: alguns dos dados do cartão que inseriu parecem ser inválidos. Proceder na mesma?"

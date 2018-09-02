@@ -733,6 +733,9 @@ msgstr "Harap maaf, pindahan wang gagal. Sila hubungi support@liberapay.com jika
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Anda tidak dibenarkan membuat perkara ini kerana akaun anda telah digantung."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Anda telah menukar mata wang utama anda baru-baru ini, sila cuba lagi kemudian (cth. dalam seminggu) atau hubungi support@liberapay.com."
 
@@ -758,12 +761,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr "Harap maaf, bayaran masuk kini tidak boleh dilakukan. Anda boleh membaca {link_start}hantaran blog ini{link_end} untuk ketahui sebabnya."
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "'{0}' tidak nampak seperti pengguna yang sah di {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Tiada pengguna bernama {0} di {1}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "Nama pengguna atau kata laluan salah."
@@ -1908,15 +1928,28 @@ msgstr "dalam 30 hari lepas"
 msgid "Cancelled"
 msgstr "Dibatalkan"
 
+msgid "Funding your donations"
+msgstr "Tambah dana untuk derma"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr "Menambah dana dalam satu pembayaran untuk beberapa derma tidak boleh dilaksanakan ketika ini, jadi anda perlu memperbaharui derma anda satu persatu. Kami memohon maaf atas segala kesulitan."
+
+msgid "Please choose a payment method:"
+msgstr "Sila pilih kaedah pembayaran:"
+
+msgid "Card"
+msgstr "Kad"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Derma anda kepada {recipient} tidak boleh diproses pada waktu ini kerana akaun penerima belum sedia untuk menerima wang."
+
+msgid "All your donations are funded."
+msgstr "Semua derma anda telah disumbangkan."
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' bukanlah jumlah yang diterima (antara {1} hingga {2} sahaja)"
-
-msgid "This donation is not active."
-msgstr "Derma ini tidak aktif."
-
-msgid "Funding your donations"
-msgstr "Tambah dana untuk derma"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1926,26 +1959,8 @@ msgstr "Pembayaran {charge_amount} telah berjaya."
 msgid "The payment failed. Error message: “{0}”"
 msgstr "Pembayaran gagal. Mesej ralat: “{0}”"
 
-msgid "The payment has been initiated."
-msgstr "Pembayaran telah dimulakan."
-
-msgid "Please choose a payment method:"
-msgstr "Sila pilih kaedah pembayaran:"
-
-msgid "Credit/Debit Card"
-msgstr "Kad Kredit/Debit"
-
-msgid "Easy and instantaneous"
-msgstr "Senang dan pantas"
-
-msgid "Eurozone only"
-msgstr "Zon Eropah sahaja"
-
-msgid "Best for regular payments"
-msgstr "Terbaik untuk pembayaran biasa"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Menambah dana dalam satu pembayaran untuk beberapa derma tidak boleh dilaksanakan ketika ini, jadi anda perlu memperbaharui derma anda satu persatu. Kami memohon maaf atas segala kesulitan."
+msgid "The payment is awaiting your approval."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1985,6 +2000,24 @@ msgstr[1] "Pembayaran seterusnya dalam masa {n} tahun."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Jumlah sendiri (antara {0} hingga {1} sahaja)"
 
+msgid "Initiate the payment"
+msgstr "Mulakan pembayaran"
+
+msgid "The payment has been initiated."
+msgstr "Pembayaran telah dimulakan."
+
+msgid "Credit/Debit Card"
+msgstr "Kad Kredit/Debit"
+
+msgid "Easy and instantaneous"
+msgstr "Senang dan pantas"
+
+msgid "Eurozone only"
+msgstr "Zon Eropah sahaja"
+
+msgid "Best for regular payments"
+msgstr "Terbaik untuk pembayaran biasa"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Kami akan mengecaj kad {brand} anda (empat angka terakhir: {last4})."
@@ -2001,16 +2034,6 @@ msgstr "Data ini akan dihantar terus ke pemproses pembayaran {name} melalui samb
 
 msgid "Remember the card number for next time"
 msgstr "Ingat nombor kad untuk urusan di lain hari"
-
-msgid "Initiate the payment"
-msgstr "Mulakan pembayaran"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Derma anda kepada {recipient} tidak boleh diproses pada waktu ini kerana akaun penerima belum sedia untuk menerima wang."
-
-msgid "All your donations are funded."
-msgstr "Semua derma anda telah disumbangkan."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Adakah anda pasti anda ingin menukar jenis akaun anda? Atas sebab undang-undang kami perlu mencipta akaun baru untuk anda dalam sistem rakan pembayaran kami, dan pindahkan wang dari akaun lama anda."
@@ -2369,9 +2392,6 @@ msgstr "Tidak terdapat di {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Kaitkan akaun {platform_name}"
-
-msgid "Coming soon…"
-msgstr "Akan datang…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2906,9 +2926,6 @@ msgstr "Alamat yang disimpan:"
 
 msgid "Input the billing address"
 msgstr "Masukkan alamat bil"
-
-msgid "Card"
-msgstr "Kad"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "Amaran: sesetengah data kad yang anda masukkan kelihatan tidak sah. Teruskan juga?"

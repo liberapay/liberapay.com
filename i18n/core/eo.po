@@ -734,6 +734,9 @@ msgstr "Pardonon, la mona transdono malsukcesis. Bonvolu kontakti support@libera
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Vi ne rajtas fari tion, ĉar via konto estas haltigita."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Vi jam ŝanĝis vian ĉefan valuton lastatempe, bonvolu reprovi poste (ekz. post semajno) aŭ kontakti support@liberapay.com."
 
@@ -759,12 +762,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr "Ni petegas pardonon, sed envenantaj pagmetodoj estas kutime malebligitaj. Vi povas legi {link_start}ĉi tiun blogaĵon{link_end} (nur en angla) por koni kial."
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "Ŝajnas ke '{0}' ne estas valida uzantnumero en {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Ne ekzistas uzanto nomita {0} en {1}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "Malĝusta uzantnomo aŭ pasvorto."
@@ -1909,15 +1929,28 @@ msgstr "ene de la lastaj 30 tagoj"
 msgid "Cancelled"
 msgstr "Nuligita"
 
+msgid "Funding your donations"
+msgstr "Financi viajn donacojn"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr "Financi pluraj donacoj per unu sola pago ne eblas nun, do vi devos refari viajn donacojn unu post unu. Ni pardonpetas por la ĝeno."
+
+msgid "Please choose a payment method:"
+msgstr "Bonvolu elekti pagmetodon:"
+
+msgid "Card"
+msgstr "Karto"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Via donaco al {recipient} ne povas esti traktita nun, ĉar la konto de la ricevanto ne estas preta ricevi monon."
+
+msgid "All your donations are funded."
+msgstr "Ĉiuj viaj donacoj estas financitaj."
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' ne estas akceptebla kvanto (min={1}, max={2})"
-
-msgid "This donation is not active."
-msgstr "Ĉi tiu donaco ne estas aktiva."
-
-msgid "Funding your donations"
-msgstr "Financi viajn donacojn"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1927,26 +1960,8 @@ msgstr "La pago de {charge_amount} sukcesis."
 msgid "The payment failed. Error message: “{0}”"
 msgstr "La pago malsukcesis. Erarmesaĝo: “{0}”"
 
-msgid "The payment has been initiated."
-msgstr "La pagon estis ekita."
-
-msgid "Please choose a payment method:"
-msgstr "Bonvolu elekti pagmetodon:"
-
-msgid "Credit/Debit Card"
-msgstr "Kreditkarto/Debetkarto"
-
-msgid "Easy and instantaneous"
-msgstr "Facila kaj tuja"
-
-msgid "Eurozone only"
-msgstr "Nur en Eŭrozono"
-
-msgid "Best for regular payments"
-msgstr "Plej bona por regulaj pagoj"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Financi pluraj donacoj per unu sola pago ne eblas nun, do vi devos refari viajn donacojn unu post unu. Ni pardonpetas por la ĝeno."
+msgid "The payment is awaiting your approval."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1986,6 +2001,24 @@ msgstr[1] "Sekva pago je {n} jaroj."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Propra kvanto (minimumo={0}, maksimumo={1})"
 
+msgid "Initiate the payment"
+msgstr "Inici la pagon"
+
+msgid "The payment has been initiated."
+msgstr "La pagon estis ekita."
+
+msgid "Credit/Debit Card"
+msgstr "Kreditkarto/Debetkarto"
+
+msgid "Easy and instantaneous"
+msgstr "Facila kaj tuja"
+
+msgid "Eurozone only"
+msgstr "Nur en Eŭrozono"
+
+msgid "Best for regular payments"
+msgstr "Plej bona por regulaj pagoj"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Ni pagigos vian karton de {brand} (lasta kvar ciferoj: {last4})."
@@ -2002,16 +2035,6 @@ msgstr "Oni sendos tiujn ĉi datumojn direkte al la provizanto de pagservo {name
 
 msgid "Remember the card number for next time"
 msgstr "Memori la numeron de karto por la sekva fojo"
-
-msgid "Initiate the payment"
-msgstr "Inici la pagon"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Via donaco al {recipient} ne povas esti traktita nun, ĉar la konto de la ricevanto ne estas preta ricevi monon."
-
-msgid "All your donations are funded."
-msgstr "Ĉiuj viaj donacoj estas financitaj."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Ĉu vi certas, ke vi volas ŝanĝi vian tipon de konto? Pro leĝaj kialoj, ni devos krei novan konton por vi en la sistemo de nia pagpartnero, kaj transdoni la monon el la malnova konto."
@@ -2370,9 +2393,6 @@ msgstr "Maldisponebla en {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Konekti konton de {platform_name}"
-
-msgid "Coming soon…"
-msgstr "Venonta baldaŭ…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2907,9 +2927,6 @@ msgstr "Konservita adreso:"
 
 msgid "Input the billing address"
 msgstr "Aldoni adreson de fakturado"
-
-msgid "Card"
-msgstr "Karto"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "Atenton: kelkaj kartaj informoj, kiujn vi enigis, ŝajnas esti nevalidaj. Ĉu tamen daŭrigi?"

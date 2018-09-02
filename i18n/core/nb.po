@@ -731,6 +731,9 @@ msgstr "Overføringen av pengene mislyktes dessverre. Ta kontakt med support@lib
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Du kan ikke gjøre dette, fordi kontoen din er suspendert inntil videre."
 
+msgid "This payment cannot be processed because the account of the recipient is currently suspended."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du endret nylig hovedvalutaen din, prøv igjen senere (f.eks. neste uke), eller ta kontakt med support@liberapay.com."
 
@@ -756,12 +759,29 @@ msgid "We're very sorry but incoming payments are currently disabled. You can re
 msgstr "Innkommende betalinger er for tiden avskrudd. Du kan lese {link_start}denne bloggposten{link_end}for å finne ut hvorfor."
 
 #, python-brace-format
+msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
+msgstr ""
+
+#, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
 msgstr "\"{0}\" ser ikke ut til å være et gyldig brukernavn på {platform}."
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Det ser ikke ut til å være noen bruker ved navn {0} på {1}."
+
+#, python-brace-format
+msgid "Donation to {username}"
+msgstr ""
+
+msgid "One week of the donation"
+msgstr ""
+
+msgid "One month of the donation"
+msgstr ""
+
+msgid "One year of the donation"
+msgstr ""
 
 msgid "Bad username or password."
 msgstr "Feil brukernavn eller passord."
@@ -1906,15 +1926,28 @@ msgstr "i løpet av de siste 30 dagene"
 msgid "Cancelled"
 msgstr "Avbrutt"
 
+msgid "Funding your donations"
+msgstr "Finansiering av dine donasjoner"
+
+msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+msgstr "Å finansiere flerfoldige donasjoner med én betaling er ikke mulig enda, så du må fornye donasjoner enkeltvis."
+
+msgid "Please choose a payment method:"
+msgstr "Velg en betalingsmetode:"
+
+msgid "Card"
+msgstr "Kort"
+
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Din donasjon til {recipient} kan ikke behandles akkurat nå fordi kontoen til mottakeren ikke er klar til å motta penger."
+
+msgid "All your donations are funded."
+msgstr "Alle dine donasjoner er finansiert."
+
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "\"{0}\" er ikke et akseptabelt beløp (min={1}, maks={2})"
-
-msgid "This donation is not active."
-msgstr "Denne donasjonen er ikke aktiv."
-
-msgid "Funding your donations"
-msgstr "Finansiering av dine donasjoner"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -1924,26 +1957,8 @@ msgstr "{charge_amount} betalt."
 msgid "The payment failed. Error message: “{0}”"
 msgstr "Betaling mislyktes. Feilmelding: \"{0}\""
 
-msgid "The payment has been initiated."
-msgstr "Betalingen har blitt igangsatt."
-
-msgid "Please choose a payment method:"
-msgstr "Velg en betalingsmetode:"
-
-msgid "Credit/Debit Card"
-msgstr "Kreditt-/debet-kort"
-
-msgid "Easy and instantaneous"
-msgstr "Enkelt og øyeblikkelig"
-
-msgid "Eurozone only"
-msgstr "Kun i EØS"
-
-msgid "Best for regular payments"
-msgstr "Best for vedvarende betalinger"
-
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Å finansiere flerfoldige donasjoner med én betaling er ikke mulig enda, så du må fornye donasjoner enkeltvis."
+msgid "The payment is awaiting your approval."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -1983,6 +1998,24 @@ msgstr[1] "Neste betaling om {n} år."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Valgfritt beløp (min={0}, max={1})"
 
+msgid "Initiate the payment"
+msgstr "Igangsett betalingen"
+
+msgid "The payment has been initiated."
+msgstr "Betalingen har blitt igangsatt."
+
+msgid "Credit/Debit Card"
+msgstr "Kreditt-/debet-kort"
+
+msgid "Easy and instantaneous"
+msgstr "Enkelt og øyeblikkelig"
+
+msgid "Eurozone only"
+msgstr "Kun i EØS"
+
+msgid "Best for regular payments"
+msgstr "Best for vedvarende betalinger"
+
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Ditt {brand}-kort vil bli belastet (siste fire siffer: {last4})."
@@ -1999,16 +2032,6 @@ msgstr "Denne dataen vil sendes direkte til betalingspartneren {name} over en kr
 
 msgid "Remember the card number for next time"
 msgstr "Husk kortnummeret til neste gang"
-
-msgid "Initiate the payment"
-msgstr "Igangsett betalingen"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Din donasjon til {recipient} kan ikke behandles akkurat nå fordi kontoen til mottakeren ikke er klar til å motta penger."
-
-msgid "All your donations are funded."
-msgstr "Alle dine donasjoner er finansiert."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på at du ønsker å endre din kontotype? Av juridiske hensyn må vi opprette en ny konto for deg i systemet til vår betalingspartner, og overføre pengene fra din nåværende konto."
@@ -2368,9 +2391,6 @@ msgstr "Ikke tilgjengelig i {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Koble til {platform_name}-kontoen"
-
-msgid "Coming soon…"
-msgstr "Kommer snart…"
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2906,9 +2926,6 @@ msgstr "Lagret adresse:"
 
 msgid "Input the billing address"
 msgstr "Skriv inn fakturaadressen"
-
-msgid "Card"
-msgstr "Kort"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
 msgstr "Advarsel: Noe av kortdataen du har oppgitt later til å være ugyldig. Fortsett uansett?"
