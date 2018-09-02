@@ -230,7 +230,7 @@ def payin_bank_wire(db, participant, debit_amount):
     arrive in the wallet.
     """
 
-    route = ExchangeRoute.upsert_bankwire_route(participant)
+    route = ExchangeRoute.upsert_generic_route(participant, 'mango-bw')
 
     if not isinstance(debit_amount, Money):
         debit_amount = Money(debit_amount, 'EUR')
@@ -272,7 +272,7 @@ def record_unexpected_payin(db, payin):
     participant = Participant.from_mangopay_user_id(payin.AuthorId)
     current_wallet = participant.get_current_wallet(debited_amount.currency)
     assert current_wallet.remote_id == wallet_id
-    route = ExchangeRoute.upsert_bankwire_route(participant)
+    route = ExchangeRoute.upsert_generic_route(participant, 'mango-bw')
     amount = debited_amount - paid_fee
     return db.one("""
         INSERT INTO exchanges

@@ -1,6 +1,6 @@
 from __future__ import division, print_function, unicode_literals
 
-from ..exceptions import AccountSuspended
+from ..exceptions import AccountSuspended, RecipientAccountSuspended
 from ..models.participant import Participant
 from ..utils.currencies import Money
 
@@ -74,58 +74,7 @@ def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fe
             VALUES (%s, %s, %s, current_timestamp)
         """, (payin_id, status, error))
 
-        _propagate_payin_update(cursor, payin)
-
         return payin
-
-
-def _propagate_payin_update(cursor, payin):
-    status = payin.status
-    if status == 'pre':
-        return
-    # Update the statuses of the payin's transfers.
-    payin_transfers = cursor.all("""
-        UPDATE payin_transfers
-           SET status = %s
-         WHERE payin = %s
-     RETURNING *
-    """, (payin.status, payin.id))
-    # If the payment has failed or hasn't been settled yet, then stop here.
-    if status != 'succeeded':
-        return
-    # Increase the `paid_in_advance` values of donations, and recompute the
-    # cached `receiving` amount of each donee.
-    for pt in payin_transfers:
-        r = cursor.one("""
-            WITH current_tip AS (
-                     SELECT id
-                       FROM current_tips
-                      WHERE tipper = %(payer)s
-                        AND tippee = COALESCE(%(team)s, %(recipient)s)
-                 )
-            UPDATE tips
-               SET paid_in_advance = (
-                       coalesce_currency_amount(paid_in_advance, amount::currency) +
-                       convert(%(amount)s, amount::currency)
-                   )
-                 , is_funded = true
-             WHERE id = (SELECT id FROM current_tip)
-         RETURNING paid_in_advance
-        """, pt._asdict())
-        assert r, locals()
-        cursor.run("""
-            UPDATE participants AS p
-               SET receiving = taking + coalesce_currency_amount((
-                       SELECT sum(t.amount, p.main_currency)
-                         FROM current_tips t
-                        WHERE t.tippee = p.id
-                          AND t.amount > 0
-                          AND t.is_funded
-                   ), p.main_currency)
-             WHERE p.id = %s
-        """, (pt.team or pt.recipient,))
-    # Recompute the cached `giving` amount of the donor.
-    Participant.from_id(pt.payer).update_giving(cursor)
 
 
 def prepare_payin_transfer(
@@ -148,6 +97,10 @@ def prepare_payin_transfer(
 
     """
     assert recipient.id == destination.participant, (recipient, destination)
+
+    if recipient.is_suspended:
+        raise RecipientAccountSuspended()
+
     if unit_amount:
         n_units = int(amount / unit_amount.convert(amount.currency))
     else:
@@ -163,3 +116,88 @@ def prepare_payin_transfer(
      RETURNING *
     """, (payin.id, payin.payer, recipient.id, destination.pk, context, amount,
           unit_amount, n_units, period, team))
+
+
+def update_payin_transfer(
+    db, pt_id, remote_id, status, error,
+    amount=None, fee=None, update_donor=True
+):
+    """Update the status and other attributes of a payment.
+
+    Args:
+        pt_id (int): the ID of the payment in our database
+        remote_id (str): the ID of the transfer in the payment processor's database
+        status (str): the new status of the payment
+        error (str): if the payment failed, an error message to show to the payer
+
+    Returns:
+        Record: the row updated in the `payin_transfers` table
+
+    """
+    with db.get_cursor() as cursor:
+        pt = cursor.one("""
+            UPDATE payin_transfers
+               SET status = %(status)s
+                 , error = %(error)s
+                 , remote_id = %(remote_id)s
+                 , amount = COALESCE(%(amount)s, amount)
+                 , fee = COALESCE(%(fee)s, fee)
+             WHERE id = %(pt_id)s
+               AND status <> %(status)s
+         RETURNING *
+        """, locals())
+        if not pt:
+            return cursor.one("SELECT * FROM payins WHERE id = %s", (pt_id,))
+
+        cursor.run("""
+            INSERT INTO payin_transfer_events
+                   (payin_transfer, status, error, timestamp)
+            VALUES (%s, %s, %s, current_timestamp)
+        """, (pt_id, status, error))
+
+        # If the payment has failed or hasn't been settled yet, then stop here.
+        if status != 'succeeded':
+            return pt
+
+        # Increase the `paid_in_advance` value of the donation.
+        paid_in_advance = cursor.one("""
+            WITH current_tip AS (
+                     SELECT id
+                       FROM current_tips
+                      WHERE tipper = %(payer)s
+                        AND tippee = COALESCE(%(team)s, %(recipient)s)
+                 )
+            UPDATE tips
+               SET paid_in_advance = (
+                       coalesce_currency_amount(paid_in_advance, amount::currency) +
+                       convert(%(amount)s, amount::currency)
+                   )
+                 , is_funded = true
+             WHERE id = (SELECT id FROM current_tip)
+         RETURNING paid_in_advance
+        """, pt._asdict())
+        assert paid_in_advance > 0, locals()
+
+        # Recompute the cached `receiving` amount of the donee.
+        cursor.run("""
+            WITH our_tips AS (
+                     SELECT t.amount
+                       FROM current_tips t
+                      WHERE t.tippee = %(p_id)s
+                        AND t.amount > 0
+                        AND t.is_funded
+                 )
+            UPDATE participants AS p
+               SET receiving = taking + coalesce_currency_amount(
+                       (SELECT sum(t.amount, p.main_currency) FROM our_tips t),
+                       p.main_currency
+                   )
+                 , npatrons = (SELECT count(*) FROM our_tips)
+             WHERE p.id = %(p_id)s
+        """, dict(p_id=(pt.team or pt.recipient)))
+
+        # Recompute the cached `giving` amount of the donor.
+        if update_donor:
+            Participant.from_id(pt.payer).update_giving(cursor)
+
+        return pt

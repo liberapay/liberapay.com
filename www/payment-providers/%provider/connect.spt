@@ -1,6 +1,6 @@
 # coding: utf8
 
-from base64 import b32encode
+from base64 import b32encode, b64encode
 from datetime import timedelta
 import json
 from os import urandom
@@ -9,16 +9,40 @@ import requests
 import stripe
 
 from liberapay.exceptions import AuthRequired, LoginRequired
-from liberapay.utils import b64decode_s, b64encode_s
+from liberapay.utils import b64decode_s, b64encode_s, NS
 
-STRIPE_URL = 'https://connect.stripe.com/oauth/authorize?response_type=code&client_id=%s&scope=read_write&state=' % website.app_conf.stripe_connect_id
+OAUTH_QUERYSTRING = '?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}'
+
+paypal_domain = website.app_conf.paypal_domain
+PROVIDERS = {
+    'paypal': NS({
+        'display_name': 'PayPal',
+        'client_id': website.app_conf.paypal_id,
+        'api_headers': {
+            'Content-Type': 'application/json',
+        },
+        'authorize_url': 'https://www.{}/signin/authorize'.format(paypal_domain),
+        'token_url': 'https://api.{}/v1/identity/openidconnect/tokenservice'.format(paypal_domain),
+        'user_info_url': 'https://api.{}/v1/identity/openidconnect/userinfo?schema=openid'.format(paypal_domain),
+        # https://developer.paypal.com/docs/integration/direct/identity/attributes/
+        'scope': 'openid+profile+address+email',
+    }),
+    'stripe': NS({
+        'display_name': 'Stripe',
+        'client_id': website.app_conf.stripe_connect_id,
+        'authorize_url': 'https://connect.stripe.com/oauth/authorize',
+        'token_url': 'https://connect.stripe.com/oauth/token',
+        'scope': 'read_write',
+    }),
+}
+del paypal_domain
 
 [---]
 
-provider = request.path['provider']
-if provider != 'stripe':
+provider_name = request.path['provider']
+provider = PROVIDERS.get(provider_name)
+if not provider:
     raise response.error(404)
-provider_name = 'Stripe'
 
 if user.ANON:
     raise AuthRequired
@@ -27,8 +51,11 @@ if request.method == 'POST':
     back_to = request.body['back_to']
     p_id = request.body.get_int('p_id', default=None)
     query_id = b32encode(urandom(15))
-    url = STRIPE_URL + query_id
-    cookie_name = (provider + '_' + query_id).encode('ascii')
+    redirect_uri = website.canonical_url + request.path.raw
+    url = provider.authorize_url + OAUTH_QUERYSTRING.format(
+        provider.client_id, redirect_uri, provider.scope, query_id
+    )
+    cookie_name = (provider_name + '_' + query_id).encode('ascii')
     cookie_value = b64encode_s(json.dumps([back_to, p_id]))
     response.set_cookie(cookie_name, cookie_value, expires=constants.SESSION_TIMEOUT)
     response.redirect(url)
@@ -38,7 +65,7 @@ elif 'error' in request.qs:
     error_message = request.qs.get('error_message') or request.qs.get('error_description')
     code = 400 if request.qs['error'] == 'access_denied' else 502
     raise response.error(code, _(
-        "{0} returned this error message: {1}", provider_name, error_message
+        "{0} returned this error message: {1}", provider.display_name, error_message
     ))
 
 elif 'state' in request.qs:
@@ -49,7 +76,7 @@ elif 'state' in request.qs:
     query_id = request.qs['state']
 
     # Get the cookie that matches the query id
-    cookie_name = str(provider + '_' + query_id)
+    cookie_name = str(provider_name + '_' + query_id)
     try:
         cookie_value = request.headers.cookie[cookie_name].value
     except KeyError:
@@ -64,23 +91,68 @@ elif 'state' in request.qs:
         raise response.error(403, "can't connect to an account you don't control")
 
     # Request the OAuth token
-    post_data = {
-        "client_secret": website.app_conf.stripe_secret_key,
+    oauth_data = {
         "code": request.qs['code'],
         "grant_type": "authorization_code",
     }
-    stripe_response = requests.post('https://connect.stripe.com/oauth/token', data=post_data)
-    if stripe_response.status_code != 200:
+    if provider_name == 'paypal':
+        headers = dict(provider.api_headers)
+        headers['Authorization'] = 'Basic ' + b64encode(
+            '%s:%s' % (website.app_conf.paypal_id, website.app_conf.paypal_secret)
+        ).decode('ascii')
+        token_response = requests.get(provider.token_url, params=oauth_data, headers=headers)
+    elif provider_name == 'stripe':
+        oauth_data.update(client_secret=website.app_conf.stripe_secret_key)
+        token_response = requests.post(provider.token_url, data=oauth_data)
+    else:
+        raise ValueError(provider_name)
+    if token_response.status_code != 200:
         raise response.error(502, _(
-            "{0} returned an error, please try again later.", provider_name
+            "{0} returned an error, please try again later.", provider.display_name
         ))
-    data_from_stripe = stripe_response.json()
-    if 'stripe_user_id' not in data_from_stripe:
-        raise response.error(502, _(
-            "{0} returned an error, please try again later.", provider_name
-        ))
-    account_id = data_from_stripe['stripe_user_id']
-    account = stripe.Account.retrieve(account_id)
+
+    # Get the account data
+    account_data = dict(p_id=connect_to.id, provider=provider_name)
+    if provider_name == 'paypal':
+        token_response_data = token_response.json()
+        bearer_token = token_response_data['access_token']
+        headers = dict(provider.api_headers)
+        headers['Authorization'] = 'Bearer ' + bearer_token
+        user_info_response = requests.get(provider.user_info_url, headers=headers)
+        if user_info_response.status_code != 200:
+            raise response.error(502, _(
+                "{0} returned an error, please try again later.", provider.display_name
+            ))
+        user_info = user_info_response.json()
+        account_data.update(
+            country=user_info['address']['country'],
+            account_id=user_info['email'],
+            default_currency=None,
+            charges_enabled=None,
+            display_name=user_info['name'],
+            token=token_response_data,
+        )
+    elif provider_name == 'stripe':
+        data_from_stripe = token_response.json()
+        if 'stripe_user_id' not in data_from_stripe:
+            raise response.error(502, _(
+                "{0} returned an error, please try again later.", provider.display_name
+            ))
+        account_id = data_from_stripe['stripe_user_id']
+        account = stripe.Account.retrieve(account_id)
+        account_data.update(
+            country=account.country,
+            account_id=account_id,
+            default_currency=account.default_currency.upper(),
+            charges_enabled=account.charges_enabled,
+            display_name=account.display_name,
+            token=None,
+        )
+    else:
+        raise ValueError(provider_name)
+
+    # Upsert the account in our database
+    account_data['token'] = json.dumps(account_data['token'])
     with website.db.get_cursor() as cursor:
         cursor.run("""
             UPDATE payment_accounts
@@ -92,19 +164,18 @@ elif 'state' in request.qs:
             INSERT INTO payment_accounts
                         (participant, provider, country, id,
                          default_currency, charges_enabled,
-                         display_name)
+                         display_name, token)
                  VALUES (%(p_id)s, %(provider)s, %(country)s, %(account_id)s,
                          %(default_currency)s, %(charges_enabled)s,
-                         %(display_name)s)
+                         %(display_name)s, %(token)s)
             ON CONFLICT (provider, id, participant) DO UPDATE
                     SET is_current = true
                       , country = excluded.country
                       , default_currency = excluded.default_currency
                       , charges_enabled = excluded.charges_enabled
-                      , display_name = excluded.display_name;
-        """, dict(p_id=connect_to.id, provider=provider, country=account.country, account_id=account_id,
-                  default_currency=account.default_currency.upper(), charges_enabled=account.charges_enabled,
-                  display_name=account.display_name))
+                      , display_name = excluded.display_name
+                      , token = excluded.token;
+        """, account_data)
 
     response.erase_cookie(cookie_name)
     response.redirect(back_to)

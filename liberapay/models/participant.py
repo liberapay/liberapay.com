@@ -2178,6 +2178,11 @@ class Participant(Model, MixinTeam):
     def get_tips_awaiting_renewal(self):
         return [NS(r._asdict()) for r in self.db.all("""
             SELECT t.*, p AS tippee_p
+                 , ( SELECT json_agg(a)
+                       FROM payment_accounts a
+                      WHERE a.participant = t.tippee
+                        AND a.is_current
+                   ) AS payment_accounts
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
              WHERE t.tipper = %s
