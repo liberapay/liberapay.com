@@ -1594,6 +1594,13 @@ msgstr "De momento aceitamos cartão de crédito e débito (VISA, MasterCard, et
 msgid "How do recurrent donations work?"
 msgstr "Como doações recorrentes funcionam?"
 
+#, python-brace-format
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
+msgstr "No Liberapay as doações são financiadas com antecedência. Você tem o controlo sobre quanto dinheiro põe e quando. Adicionar mais dinheiro de uma vez resulta numa percentagem mais baixa de {0}taxas de transação{1}."
+
+msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
+msgstr "Quando a sua conta não tiver mais dinheiro para financiar as suas doações, enviamos-lhe uma notificação para que possa adicionar dinheiro novamente. Pode também descontinuar a sua doação."
+
 msgid "Can I make a one-time donation?"
 msgstr "Posso fazer uma doação?"
 
@@ -3311,12 +3318,12 @@ msgstr "Liberapay é uma maneira de doar dinheiro recorrentemente para pessoas c
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
 msgstr "Pagamentos vem sem compromisso. Você não sabe exatamente quem está dando para você, e as doações são tampadas em {0} por semana por doador para amortecer a influência indevida."
 
-msgid "Donations are public. By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
-msgstr "As doações são públicas. Por padrão, o valor total que você dá e a quantidade total que você recebe são públicos (você pode optar por compartilhar esta informação)."
+msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
+msgstr ""
 
 #, python-brace-format
-msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. So, recipients get the full value of the donations, but there are {2}payment processing fees{0} when moving money in or out of Liberapay."
-msgstr "Liberapay não se faz um corte de pagamentos, o serviço é financiado por doações para {1} conta própria {0}. Então, destinatários obter o valor total das doações, mas existem {2} pagamento taxas de processamento {0} quando movimentar o dinheiro dentro ou fora da Liberapay."
+msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
+msgstr ""
 
 #, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
@@ -3338,8 +3345,8 @@ msgstr "Informações legais"
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "Este website é gerido pelo Liberapay, uma organização sem fins lucrativos fundada em 2015 na França (identificador: W144000981)."
 
-msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
-msgstr "O Liberapay é registado como um distribuidor de dinheiro eletrónico na União Europeia. Com a ajuda dos nossos parceiros, monitorizamos transações por possíveis fraudes, lavagem de dinheiro e financiamento de terrorismo, conforme exigido pelas regulações financeiras."
+msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
+msgstr ""
 
 msgid "Postal address:"
 msgstr "Endereço postal:"
@@ -3765,8 +3772,8 @@ msgid "You receive {0} per week."
 msgstr "Você recebe {0} por semana."
 
 #, python-brace-format
-msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
-msgstr "Estão actualmente a recusar doações, você pode alterar esse {0} {1} ao seu perfil."
+msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
+msgstr ""
 
 #, python-brace-format
 msgid "Congratulations, you have reached your goal of receiving {0} per week!"
@@ -3799,33 +3806,34 @@ msgstr "1. Prepare uma doação"
 msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
 msgstr "Encontre alguém a quem queira dar dinheiro, de seguida escolha um valor e uma periodicidade (semanalmente, mensalmente ou anualmente)."
 
-msgid "2. Add money"
-msgstr "2. Adicione dinheiro"
+msgid "2. Fund your donation"
+msgstr ""
 
 #, python-brace-format
-msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr "No Liberapay as doações são financiadas com antecedência. Você tem o controlo sobre quanto dinheiro põe e quando. Adicionar mais dinheiro de uma vez resulta numa percentagem mais baixa de {0}taxas de transação{1}."
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Sending more money at once results in a lower percentage of {0}transaction fees{1}."
+msgstr ""
 
 msgid "3. Keep your donation funded"
 msgstr "3. Mantenha sua doação financiada"
 
-msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
-msgstr "Quando a sua conta não tiver mais dinheiro para financiar as suas doações, enviamos-lhe uma notificação para que possa adicionar dinheiro novamente. Pode também descontinuar a sua doação."
+msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+msgstr ""
 
 msgid "How it works for creators"
 msgstr "Como funciona para criadores"
 
-msgid "1. Create your account"
-msgstr "1. Crie sua conta"
-
-msgid "An email address is all you'll need. No PayPal account required."
-msgstr "Precisa apenas de um endereço de email. Não necessita de uma conta PayPal."
-
-msgid "2. Fill out your profile"
-msgstr "2. Preencha o seu perfil"
+msgid "1. Create your profile"
+msgstr ""
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
 msgstr "Explique o que faz, por que optou por pedir doações, para que vai servir o dinheiro, etc."
+
+msgid "2. Configure payment processing"
+msgstr ""
+
+#, python-brace-format
+msgid "We currently support processing payments through {payment_processors_list}."
+msgstr ""
 
 msgid "3. Reach out to your audience"
 msgstr "3. Chegue ao seu público-alvo"

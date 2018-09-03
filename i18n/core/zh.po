@@ -1585,6 +1585,13 @@ msgstr ""
 msgid "How do recurrent donations work?"
 msgstr "定期捐款是如何進行的？"
 
+#, python-brace-format
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
+msgstr "Liberapay 上的捐款必須事先存放，用戶可以控制在何時、儲值多少錢。一次儲值大筆數額可以減少{0}交易手續費{1}的比率。"
+
+msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
+msgstr "當帳戶中的存款不夠資助你的捐款，我們會透過電子郵件通知你再次加入資金，或是你可以中斷捐款。"
+
 msgid "Can I make a one-time donation?"
 msgstr "我能進行單次捐款嗎？"
 
@@ -3283,12 +3290,12 @@ msgstr "Liberapay是一種持續循環地捐助方式來感謝你所欣賞的工
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
 msgstr "付款沒有附加字串。你不會確定知道誰捐助你，且每位贊助人每週最多只能捐助{0}次，以減少過度影響。"
 
-msgid "Donations are public. By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
-msgstr "捐款是公開的，所有給出以及收取的金額會預設為公開狀態（用戶可以退出分享此資訊公開的設定）。"
+msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
+msgstr ""
 
 #, python-brace-format
-msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. So, recipients get the full value of the donations, but there are {2}payment processing fees{0} when moving money in or out of Liberapay."
-msgstr "Liberapay 不會收取付款的分毫，我們的服務是靠著自身 {1}的帳戶{0}來資 助。因此，收款者可以取得全額的捐款，不過當把錢滙入或滙出Liberapay時，仍然有一筆{2}交易手續費要支付給處理器 {0}。"
+msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
+msgstr ""
 
 #, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
@@ -3310,8 +3317,8 @@ msgstr "法律資訊"
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "這個網站由 Liberapay 負責管理，它是一個 2015 於法國成立的非營利組織 。"
 
-msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
-msgstr "Liberapay 在歐盟註冊登記為電子金流的代理商。 靠著一群企業伙伴的協助，我們可以監控由財務規管單位要求的詐欺、洗錢、恐怖組織金流等非法經濟活動。"
+msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
+msgstr ""
 
 msgid "Postal address:"
 msgstr "郵政地址："
@@ -3729,8 +3736,8 @@ msgid "You receive {0} per week."
 msgstr "你每週收到 {0} 。"
 
 #, python-brace-format
-msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
-msgstr "你目前不接受捐款，你可以在 {0}個人介紹頁{1}更改設定。"
+msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
+msgstr ""
 
 #, python-brace-format
 msgid "Congratulations, you have reached your goal of receiving {0} per week!"
@@ -3763,33 +3770,34 @@ msgstr "1. 設定捐款"
 msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
 msgstr "找到你希望資助的對象，然後選擇合適的金額和週期（每週、每月或每年）。"
 
-msgid "2. Add money"
-msgstr "2. 儲值金錢"
+msgid "2. Fund your donation"
+msgstr ""
 
 #, python-brace-format
-msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr "Liberapay 上的捐款必須事先存放，用戶可以控制在何時、儲值多少錢。一次儲值大筆數額可以減少{0}交易手續費{1}的比率。"
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Sending more money at once results in a lower percentage of {0}transaction fees{1}."
+msgstr ""
 
 msgid "3. Keep your donation funded"
 msgstr "3. 讓你的捐獻有持維資金"
 
-msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
-msgstr "當帳戶中的存款不夠資助你的捐款，我們會透過電子郵件通知你再次加入資金，或是你可以中斷捐款。"
+msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+msgstr ""
 
 msgid "How it works for creators"
 msgstr "它如何為創作者服務"
 
-msgid "1. Create your account"
-msgstr "1. 建立帳戶"
-
-msgid "An email address is all you'll need. No PayPal account required."
-msgstr "只需要一個電子郵件，不要求PayPal。"
-
-msgid "2. Fill out your profile"
-msgstr "2. 填寫你的個人介紹頁"
+msgid "1. Create your profile"
+msgstr ""
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
 msgstr "說明你所作的工作，為何需要別人的捐助，所收款項的用途等等。"
+
+msgid "2. Configure payment processing"
+msgstr ""
+
+#, python-brace-format
+msgid "We currently support processing payments through {payment_processors_list}."
+msgstr ""
 
 msgid "3. Reach out to your audience"
 msgstr "3. 傳達給你的群眾"

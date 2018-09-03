@@ -1595,6 +1595,13 @@ msgstr "Wij ondersteunen momenteel credit card en debitkaarten (VISA, MasterCard
 msgid "How do recurrent donations work?"
 msgstr "Hoe werken periodieke donaties?"
 
+#, python-brace-format
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
+msgstr "Op Liberapay zijn donaties vooruitbetaald. Jij hebt controle over hoeveel geld je overmaakt en wanneer. Wanneer je meer geld tegelijk overmaakt betaal je minder {0}provisie{1}."
+
+msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
+msgstr "Wanneer je account onvoldoende geld bevat om je donaties te voldoen sturen we je een notificatie per e-mail. Dan kan je geld overmaken of de donatie opzeggen."
+
 msgid "Can I make a one-time donation?"
 msgstr "Kan ik een eenmalige donatie doen?"
 
@@ -3312,12 +3319,12 @@ msgstr "Liberapay is een manier om periodiek geld te doneren aan mensen van wie 
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
 msgstr "Betalingen zijn zonder verplichtingen. Om ongepaste beïnvloeding te voorkomen zijn de donaties anoniem en worden ze afgetopt op maximaal {0} per week per sponsor."
 
-msgid "Donations are public. By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
-msgstr "Donaties zijn openbaar. Standaard is het totaal bedrag dat je geeft en het totaal bedrag dat je ontvangt openbaar (je kunt dit ook aanpassen)."
+msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
+msgstr ""
 
 #, python-brace-format
-msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. So, recipients get the full value of the donations, but there are {2}payment processing fees{0} when moving money in or out of Liberapay."
-msgstr "Liberapay ontvangt geen deel van de donaties. Het platform wordt gefinancierd door de donaties op het {1}eigen account{0}. De makers ontvangen dus 100% van de eigen donaties, maar er is wel een {2}provisie{0} voor het overschrijven van en naar Liberapay."
+msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
+msgstr ""
 
 #, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
@@ -3339,8 +3346,8 @@ msgstr "Voorwaarden"
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "Deze website wordt beheerd door Liberapay, een non-profitorganisatie opgericht in 2015 in Frankrijk (W144000981)."
 
-msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
-msgstr "Liberapay is geregistreerd als een distributeur van elektronisch geld in de Europese Unie. Met de hulp van onze partners volgen wij transacties voor mogelijke fraude, witwassen van geld en financiering van terrorisme, zoals vereist door het financiële regels."
+msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
+msgstr ""
 
 msgid "Postal address:"
 msgstr "Postadres:"
@@ -3766,8 +3773,8 @@ msgid "You receive {0} per week."
 msgstr "Je ontvangt {0} per week."
 
 #, python-brace-format
-msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
-msgstr "Je weigert momenteel donaties. Dit kan je aanpassen {0}op je profiel{1}."
+msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
+msgstr ""
 
 #, python-brace-format
 msgid "Congratulations, you have reached your goal of receiving {0} per week!"
@@ -3800,33 +3807,34 @@ msgstr "1. Stel een donatie in"
 msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
 msgstr "Vind iemand die je wilt ondersteunen, kies vervolgens het bedrag en de periode (week, maand of jaar)."
 
-msgid "2. Add money"
-msgstr "2. Maak geld over"
+msgid "2. Fund your donation"
+msgstr ""
 
 #, python-brace-format
-msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr "Op Liberapay zijn donaties vooruitbetaald. Jij hebt controle over hoeveel geld je overmaakt en wanneer. Wanneer je meer geld tegelijk overmaakt betaal je minder {0}provisie{1}."
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Sending more money at once results in a lower percentage of {0}transaction fees{1}."
+msgstr ""
 
 msgid "3. Keep your donation funded"
 msgstr "3. Blijf je doelen financieren"
 
-msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
-msgstr "Wanneer je account onvoldoende geld bevat om je donaties te voldoen sturen we je een notificatie per e-mail. Dan kan je geld overmaken of de donatie opzeggen."
+msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+msgstr ""
 
 msgid "How it works for creators"
 msgstr "Zo werkt het voor makers"
 
-msgid "1. Create your account"
-msgstr "1. Meld je aan"
-
-msgid "An email address is all you'll need. No PayPal account required."
-msgstr "Een e-mailadres is alles wat je nodig hebt. Een PayPal account is niet nodig."
-
-msgid "2. Fill out your profile"
-msgstr "2. Vul je profiel"
+msgid "1. Create your profile"
+msgstr ""
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
 msgstr "Leg uit wat je doet, waarom je kiest voor donaties, waar het geld voor gebruikt wordt, enz."
+
+msgid "2. Configure payment processing"
+msgstr ""
+
+#, python-brace-format
+msgid "We currently support processing payments through {payment_processors_list}."
+msgstr ""
 
 msgid "3. Reach out to your audience"
 msgstr "3. Activeer je publiek"

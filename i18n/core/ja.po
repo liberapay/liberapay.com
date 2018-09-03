@@ -1566,6 +1566,13 @@ msgstr ""
 msgid "How do recurrent donations work?"
 msgstr ""
 
+#, python-brace-format
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
+msgstr ""
+
+msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
+msgstr "アカウントに支援金が不足した場合、私たちがEメールでお知らせします。お金を追加するか、支援を中断してください。"
+
 msgid "Can I make a one-time donation?"
 msgstr ""
 
@@ -3260,11 +3267,11 @@ msgstr ""
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
 msgstr ""
 
-msgid "Donations are public. By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
+msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr ""
 
 #, python-brace-format
-msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. So, recipients get the full value of the donations, but there are {2}payment processing fees{0} when moving money in or out of Liberapay."
+msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
 msgstr ""
 
 #, python-brace-format
@@ -3287,7 +3294,7 @@ msgstr ""
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr ""
 
-msgid "Liberapay is registered as a distributor of e-money in the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing, as required by financial regulations."
+msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr ""
 
 msgid "Postal address:"
@@ -3702,7 +3709,7 @@ msgid "You receive {0} per week."
 msgstr ""
 
 #, python-brace-format
-msgid "You are currently refusing donations, you can change that {0}on your profile{1}."
+msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
 msgstr ""
 
 #, python-brace-format
@@ -3736,33 +3743,34 @@ msgstr ""
 msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
 msgstr "まず支援をしたい相手を見つけましょう。次に金額と期間(週間、月間、年間)を選びます。"
 
-msgid "2. Add money"
+msgid "2. Fund your donation"
 msgstr ""
 
 #, python-brace-format
-msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
+msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Sending more money at once results in a lower percentage of {0}transaction fees{1}."
 msgstr ""
 
 msgid "3. Keep your donation funded"
 msgstr ""
 
-msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
-msgstr "アカウントに支援金が不足した場合、私たちがEメールでお知らせします。お金を追加するか、支援を中断してください。"
+msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+msgstr ""
 
 msgid "How it works for creators"
 msgstr "クリエイターが出来ること"
 
-msgid "1. Create your account"
-msgstr ""
-
-msgid "An email address is all you'll need. No PayPal account required."
-msgstr "必要なのはEメールアドレスだけです。PayPalのアカウントもいりません。"
-
-msgid "2. Fill out your profile"
+msgid "1. Create your profile"
 msgstr ""
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
 msgstr "活動内容、支援を募る理由、支援金の使い道などを説明しましょう。"
+
+msgid "2. Configure payment processing"
+msgstr ""
+
+#, python-brace-format
+msgid "We currently support processing payments through {payment_processors_list}."
+msgstr ""
 
 msgid "3. Reach out to your audience"
 msgstr ""
