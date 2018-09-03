@@ -731,8 +731,9 @@ msgstr "Overføringen av pengene mislyktes dessverre. Ta kontakt med support@lib
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Du kan ikke gjøre dette, fordi kontoen din er suspendert inntil videre."
 
+#, fuzzy
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
-msgstr ""
+msgstr "Betalingen kan ikke behandles fordi mottakerens konto for øyeblikket er utestengt."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du endret nylig hovedvalutaen din, prøv igjen senere (f.eks. neste uke), eller ta kontakt med support@liberapay.com."
@@ -758,9 +759,9 @@ msgstr "Denne betalingsmetoden er ikke tilgjengelig. Beklager bryderiet."
 msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
 msgstr "Innkommende betalinger er for tiden avskrudd. Du kan lese {link_start}denne bloggposten{link_end}for å finne ut hvorfor."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "Betalingsformidleren {name} støtte på en feil. Prøv igjen og kontakt support@liberapay.com hvis problemet vedvarer."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -772,16 +773,16 @@ msgstr "Det ser ikke ut til å være noen bruker ved navn {0} på {1}."
 
 #, python-brace-format
 msgid "Donation to {username}"
-msgstr ""
+msgstr "Donasjon til {username}"
 
 msgid "One week of the donation"
-msgstr ""
+msgstr "Én uke av donasjonen"
 
 msgid "One month of the donation"
-msgstr ""
+msgstr "Én måned av donasjonen"
 
 msgid "One year of the donation"
-msgstr ""
+msgstr "Ett år av donasjonen"
 
 msgid "Bad username or password."
 msgstr "Feil brukernavn eller passord."
@@ -1958,7 +1959,7 @@ msgid "The payment failed. Error message: “{0}”"
 msgstr "Betaling mislyktes. Feilmelding: \"{0}\""
 
 msgid "The payment is awaiting your approval."
-msgstr ""
+msgstr "Betalingen avventer din godkjenning."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
