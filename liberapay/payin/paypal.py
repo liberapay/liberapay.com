@@ -49,10 +49,12 @@ def create_payment(db, payin, payer, return_url, state):
     """
     transfers = db.all("""
         SELECT pt.*
-             , p.username AS recipient_username
+             , recipient.username AS recipient_username
+             , team.username AS team_name
              , a.id AS merchant_id
           FROM payin_transfers pt
-          JOIN participants p ON p.id = pt.recipient
+          JOIN participants recipient ON recipient.id = pt.recipient
+     LEFT JOIN participants team ON team.id = pt.team
           JOIN payment_accounts a ON a.pk = pt.destination
          WHERE pt.payin = %s
       ORDER BY pt.id
@@ -76,9 +78,18 @@ def create_payment(db, payin, payer, return_url, state):
                 "total": str(pt.amount.amount),
                 "currency": pt.amount.currency
             },
-            "description": _("Donation to {username}", username=pt.recipient_username),
+            "description": (
+                _("donation to {0} for their role in the {1} team",
+                  pt.recipient_username, pt.team_name)
+                if pt.team_name else
+                _("donation to {0}", pt.recipient_username)
+            ),
             "invoice_number": str(pt.id),
-            "note_to_payee": "Donation via Liberapay",
+            "note_to_payee": (
+                "donation via Liberapay for your role in the %s team" % pt.team_name
+                if pt.team_name else
+                "donation via Liberapay"
+            ),
             "payee": {
                 "email": pt.merchant_id,
             },
