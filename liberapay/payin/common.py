@@ -81,7 +81,22 @@ def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fe
 
 
 def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount):
-    """ TODO
+    """Figure out where to send a payment.
+
+    Args:
+        tippee (Participant): the intended beneficiary of the payment (can be a team)
+        provider (str): the payment processor ('paypal' or 'stripe')
+        payer (Participant): the user who wants to pay
+        payer_country (str): the country code the money is supposedly coming from
+        payin_amount (Money): the payment amount
+
+    Returns:
+        Record: a row from the `payment_accounts` table
+
+    Raises:
+        MissingPaymentAccount: if no suitable destination has been found
+        NoSelfTipping: if the payer would end up sending money to themself
+
     """
     if tippee.id == payer.id:
         raise NoSelfTipping()
