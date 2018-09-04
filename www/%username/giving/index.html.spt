@@ -36,7 +36,9 @@ ncancelled = len(cancelled_tips) + len(cancelled_pledges)
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
-ntips_awaiting_renewal = sum(t.awaits_renewal for t in tips)
+ntips_awaiting_renewal = sum(
+    1 for t in tips if t.awaits_renewal and t.tippee_p.payment_providers > 0
+)
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
     currency: (
