@@ -2187,7 +2187,21 @@ class Participant(Model, MixinTeam):
                      t.paid_in_advance < (t.amount * 4)
                    )
                AND p.status = 'active'
-          ORDER BY (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM payin_transfers pt
+                        WHERE pt.payer = t.tipper
+                          AND COALESCE(pt.team, pt.recipient) = t.tippee
+                          AND pt.status = 'succeeded'
+                          AND pt.ctime > (current_timestamp - interval '6 hours')
+                        LIMIT 1
+                   )
+          ORDER BY ( SELECT 1
+                       FROM current_takes take
+                      WHERE take.team = t.tippee
+                        AND take.member = t.tipper
+                   ) NULLS FIRST
+                 , (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
         """, (self.id,))]
 
