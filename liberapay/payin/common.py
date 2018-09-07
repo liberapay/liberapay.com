@@ -136,15 +136,20 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                ), 'EUR')) AS received_sum_eur
              , coalesce_currency_amount((
                    SELECT sum(t2.amount, 'EUR')
-                     FROM ( SELECT ( SELECT t2.amount
+                     FROM ( SELECT DISTINCT ON (payday_id) t2.amount
+                              FROM ( SELECT t2.*
+                                          , coalesce((
+                                                SELECT payday.id
+                                                  FROM paydays payday
+                                                 WHERE payday.ts_start > t2.mtime
+                                              ORDER BY payday.id ASC
+                                                 LIMIT 1
+                                            ), -1) AS payday_id
                                        FROM takes t2
-                                      WHERE t2.member = t.member
-                                        AND t2.team = t.team
-                                        AND t2.mtime < payday.ts_start
-                                   ORDER BY t2.mtime DESC
-                                      LIMIT 1
-                                   ) AS amount
-                              FROM paydays payday
+                                      WHERE t2.team = t.team
+                                        AND t2.member = t.member
+                                   ) AS t2
+                          ORDER BY t2.payday_id, t2.member, t2.mtime DESC
                           ) t2
                ), 'EUR') AS takes_sum_eur
           FROM current_takes t
