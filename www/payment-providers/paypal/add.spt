@@ -1,0 +1,68 @@
+from liberapay.exceptions import LoginRequired
+
+[---]
+
+participant = user
+
+if user.ANON:
+    raise LoginRequired
+
+if request.method == 'POST':
+    body = request.body
+    country = body['country']
+    if country not in locale.countries:
+        raise response.error(400, "`country` value %r in body is invalid or non-supported" % country)
+    email_address = body['email']
+    account_data = dict(
+        p_id=participant.id, country=country, account_id=email_address,
+    )
+    with website.db.get_cursor() as cursor:
+        cursor.run("""
+            UPDATE payment_accounts
+               SET is_current = NULL
+             WHERE participant = %(p_id)s
+               AND provider = 'paypal'
+               AND country = %(country)s;
+
+            INSERT INTO payment_accounts
+                        (participant, provider, country, id)
+                 VALUES (%(p_id)s, 'paypal', %(country)s, %(account_id)s)
+            ON CONFLICT (provider, id, participant) DO UPDATE
+                    SET is_current = true
+                      , country = excluded.country
+                      , default_currency = excluded.default_currency
+                      , charges_enabled = excluded.charges_enabled
+                      , display_name = excluded.display_name
+                      , token = excluded.token;
+        """, account_data)
+    response.redirect(participant.path('payment'))
+
+title = _("Connecting a {platform} account", platform='PayPal')
+
+[---] text/html
+% extends "templates/base-thin.html"
+
+% block thin_content
+
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <p>{{ _("Please input the email address and country of the PayPal account you want to connect:") }}</p>
+    <div class="form-group block-labels">
+    <label>
+        <span>{{ _("Email") }}</span>
+        <input class="form-control" name="email" value="{{ participant.email or '' }}" required />
+    </label>
+    <label>
+        <span>{{ _("Country") }}</span>
+        <select name="country" class="form-control" required>
+            <option></option>
+        % for code, name in locale.countries.items()
+            <option value="{{ code }}" {{ 'selected' if code == request.country }}>{{ name }}</option>
+        % endfor
+        </select>
+    </label>
+    </div>
+    <button class="btn btn-primary">{{ _("Proceed") }}</button>
+</form>
+
+% endblock

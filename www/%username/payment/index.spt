@@ -86,7 +86,7 @@ subhead = _("Payment")
     <div>
         % for account in accounts
         <div class="card card-default">
-            <h4>{{ account.display_name }}</h4>
+            <h4>{{ account.id }}</h4>
             <p>
             {{ _("Country: {0}", Country(account.country)) }}<br>
             % if account.default_currency
@@ -110,11 +110,16 @@ subhead = _("Payment")
         % endif
     % endif
 
-    <form action="/payment-providers/paypal/connect" method="POST">
+    <a class="btn btn-{{ 'default' if accounts else 'primary' }}"
+       href="/payment-providers/paypal/add">{{
+        _("Connect {platform_name} account", platform_name='PayPal')
+    }}</a>
+
+    {#<form action="/payment-providers/paypal/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
         <button class="btn btn-{{ 'default' if accounts else 'primary' }}">{{
             _("Connect {platform_name} account", platform_name='PayPal')
         }}</button>
-    </form>
+    </form>#}
 % endblock
