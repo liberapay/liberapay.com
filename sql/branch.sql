@@ -7,23 +7,6 @@ ALTER TABLE payment_accounts ALTER COLUMN charges_enabled DROP NOT NULL;
 
 ALTER TYPE payment_net ADD VALUE IF NOT EXISTS 'paypal';
 
-CREATE OR REPLACE FUNCTION update_has_payment_account() RETURNS trigger AS $$
-    DECLARE
-        rec record;
-    BEGIN
-        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
-        UPDATE participants
-           SET has_payment_account = (
-                   SELECT count(*)
-                     FROM payment_accounts
-                    WHERE participant = rec.participant
-                      AND is_current IS TRUE
-               ) > 0
-         WHERE id = rec.participant;
-        RETURN NULL;
-    END;
-$$ LANGUAGE plpgsql;
-
 CREATE TABLE payin_transfer_events
 ( payin_transfer   int               NOT NULL REFERENCES payin_transfers
 , status           payin_status      NOT NULL
@@ -50,17 +33,17 @@ CREATE OR REPLACE FUNCTION update_payment_providers() RETURNS trigger AS $$
            SET payment_providers = coalesce((
                    SELECT sum(DISTINCT array_position(
                                            enum_range(NULL::payment_providers),
-                                           provider::payment_providers
+                                           a.provider::payment_providers
                                        ))
-                     FROM payment_accounts
-                    WHERE ( participant = rec.participant OR
-                            participant IN (
+                     FROM payment_accounts a
+                    WHERE ( a.participant = rec.participant OR
+                            a.participant IN (
                                 SELECT t.member
                                   FROM current_takes t
                                  WHERE t.team = rec.participant
                             )
                           )
-                      AND is_current IS TRUE
+                      AND a.is_current IS TRUE
                ), 0)
          WHERE id = rec.participant
             OR id IN (
@@ -76,7 +59,9 @@ CREATE TRIGGER update_payment_providers
 
 SELECT 'after deployment';
 
-UPDATE participants SET payment_providers = 1 WHERE has_payment_account;
 DROP TRIGGER update_has_payment_account ON payment_accounts;
 DROP FUNCTION update_has_payment_account();
 ALTER TABLE participants DROP COLUMN has_payment_account;
+
+-- The following dummy operation is to trigger update_payment_providers
+UPDATE payment_accounts SET id = id;
