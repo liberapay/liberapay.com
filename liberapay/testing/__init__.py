@@ -145,6 +145,7 @@ class Harness(unittest.TestCase):
 
 
     def clear_tables(self):
+        tried = set()
         tablenames = self.tablenames[:]
         while tablenames:
             tablename = tablenames.pop()
@@ -155,8 +156,12 @@ class Harness(unittest.TestCase):
                 if not tablenames:
                     raise
                 tablenames.insert(0, tablename)
+                if tuple(tablenames) in tried:
+                    # Stop infinite loop
+                    raise
                 self.tablenames.remove(tablename)
                 self.tablenames.insert(0, tablename)
+                tried.add(tuple(tablenames))
         self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
         self.db.run("ALTER SEQUENCE paydays_id_seq RESTART WITH 1")
 

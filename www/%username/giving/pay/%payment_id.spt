@@ -11,6 +11,10 @@ ONE_YEAR = {
     'yearly': 1,
 }
 
+PAYMENT_PROVIDERS = website.db.one(
+    "SELECT array_to_json(enum_range(NULL::payment_providers))"
+)
+
 [---]
 
 payer = get_participant(state, restrict=True)
@@ -54,7 +58,7 @@ elif payin_id:
 tippee_id = request.qs.get_int('beneficiary', default=None)
 donations = payer.get_tips_awaiting_renewal()
 donations, donations_not_fundable = partition(
-    donations, lambda t: t.payment_accounts and not t.tippee_p.is_suspended
+    donations, lambda t: t.tippee_p.payment_providers > 0 and not t.tippee_p.is_suspended
 )
 if tippee_id:
     donations, other_donations = partition(
@@ -63,13 +67,10 @@ if tippee_id:
 
 if donations:
     tip = donations[0]
-    providers = website.db.all("""
-        SELECT DISTINCT a.provider
-          FROM payment_accounts a
-         WHERE a.participant = %s
-           AND a.is_current
-      ORDER BY a.provider DESC
-    """, (tip.tippee,))
+    providers = [
+        name for bit, name in enumerate(PAYMENT_PROVIDERS, 1)
+        if tip.tippee_p.payment_providers & bit > 0
+    ]
     if len(providers) == 1:
         response.redirect(payer.path('giving/pay/%s/' % providers[0]) +
                           ('?beneficiary=%i' % tip.tippee))

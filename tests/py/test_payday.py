@@ -320,7 +320,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.janet.set_tip_to(team, EUR('0.40'))
         self.janet.distribute_balances_to_donees(final_gift=False)
 
-        self.db.run("UPDATE participants SET has_payment_account = true")  # dirty trick
+        self.db.run("UPDATE participants SET payment_providers = 1")  # dirty trick
 
         # Preliminary checks
         janet = self.janet.refetch()
@@ -988,7 +988,7 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team.set_take_for(self.david, EUR('0.23'), team)
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
-        self.db.run("UPDATE participants SET has_payment_account = true")  # dirty trick
+        self.db.run("UPDATE participants SET payment_providers = 1")  # dirty trick
         Payday.start().run()
         david = self.david.refetch()
         assert david.balance == EUR('4.73')

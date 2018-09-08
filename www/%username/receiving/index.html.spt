@@ -31,7 +31,7 @@ teams = website.db.all("""
 
 % if participant.is_person
 
-% if not participant.has_payment_account
+% if not participant.payment_providers
     <p>{{ _("You can't receive money until you've configured a payment account.") }}</p>
     <p><a class="btn btn-primary" href="{{ participant.path('payment') }}">{{ _("Configure payments") }}</a></p>
 % elif participant.balance > 0

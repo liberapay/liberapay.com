@@ -36,7 +36,9 @@ ncancelled = len(cancelled_tips) + len(cancelled_pledges)
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.amount > 0]
 ntips = len(tips)
-ntips_awaiting_renewal = sum(t.awaits_renewal for t in tips)
+ntips_awaiting_renewal = sum(
+    1 for t in tips if t.awaits_renewal and t.tippee_p.payment_providers > 0
+)
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
     currency: (
@@ -163,7 +165,7 @@ if not freeload:
         <tbody>
         % for tip in tips
         % set tippee = tip.tippee_p
-        % set inactive = not tip.has_payment_account or tippee.is_suspended or not tip.is_funded
+        % set inactive = not tip.payment_providers or tippee.is_suspended or not tip.is_funded
         <tr>
             % set username = tippee.username
             <td class="recipient"><a href="/{{ username }}/">{{ username }}</a></td>
@@ -171,9 +173,7 @@ if not freeload:
             <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
             <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
             <td class="funded {{ 'danger' if inactive else '' }}">
-                % if tip.tippee_p.kind == 'group'
-                    {{ _("No: donations to teams are currently inoperative") }}
-                % elif not tip.has_payment_account
+                % if not tip.payment_providers
                     {{ _("No: the donee hasn't configured any payment method") }}
                 % elif tippee.is_suspended
                     {{ _("No: the donee's account is temporarily suspended") }}

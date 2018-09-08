@@ -2139,7 +2139,7 @@ class Participant(Model, MixinTeam):
                      , p AS tippee_p
                      , t.is_funded
                      , t.paid_in_advance
-                     , p.has_payment_account
+                     , p.payment_providers
                      , ( t.paid_in_advance IS NULL OR
                          t.paid_in_advance < (t.periodic_amount * 0.75) OR
                          t.paid_in_advance < (t.amount * 4)
@@ -2178,11 +2178,6 @@ class Participant(Model, MixinTeam):
     def get_tips_awaiting_renewal(self):
         return [NS(r._asdict()) for r in self.db.all("""
             SELECT t.*, p AS tippee_p
-                 , ( SELECT json_agg(a)
-                       FROM payment_accounts a
-                      WHERE a.participant = t.tippee
-                        AND a.is_current
-                   ) AS payment_accounts
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
              WHERE t.tipper = %s
@@ -2192,7 +2187,21 @@ class Participant(Model, MixinTeam):
                      t.paid_in_advance < (t.amount * 4)
                    )
                AND p.status = 'active'
-          ORDER BY (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM payin_transfers pt
+                        WHERE pt.payer = t.tipper
+                          AND COALESCE(pt.team, pt.recipient) = t.tippee
+                          AND pt.status = 'succeeded'
+                          AND pt.ctime > (current_timestamp - interval '6 hours')
+                        LIMIT 1
+                   )
+          ORDER BY ( SELECT 1
+                       FROM current_takes take
+                      WHERE take.team = t.tippee
+                        AND take.member = t.tipper
+                   ) NULLS FIRST
+                 , (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
         """, (self.id,))]
 

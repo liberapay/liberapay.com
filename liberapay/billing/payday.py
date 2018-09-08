@@ -980,7 +980,7 @@ class Payday(object):
                             )
                         AND p2.status = 'active'
                         AND p2.is_suspended IS NOT true
-                        AND p2.has_payment_account
+                        AND p2.payment_providers > 0
                    ) t
              WHERE EXISTS (
                      SELECT 1

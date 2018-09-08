@@ -6,7 +6,7 @@ import stripe
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.payin.common import prepare_payin, prepare_payin_transfer
+from liberapay.payin.common import prepare_payin, prepare_payin_transfer, resolve_destination
 from liberapay.payin.stripe import destination_charge
 from liberapay.utils import get_participant, NS, partition
 
@@ -15,6 +15,8 @@ ONE_YEAR = {
     'monthly': 12,
     'yearly': 1,
 }
+
+STRIPE_BIT = 1
 
 [---]
 
@@ -59,19 +61,9 @@ if request.method == 'POST':
             amount, amount_min, amount_max
         ))
 
-    destination = website.db.one("""
-        SELECT *
-          FROM payment_accounts
-         WHERE participant = %s
-           AND provider = 'stripe'
-           AND is_current
-      ORDER BY country = %s DESC
-             , default_currency = %s DESC
-             , connection_ts
-         LIMIT 1
-    """, (beneficiary.id, request.country, payin_currency))
-    if not destination:
-        raise response.error(400, "payment account not found")
+    destination = resolve_destination(
+        website.db, beneficiary, 'stripe', payer, request.country, amount
+    )
 
     return_url = payer.url('giving/pay/stripe/complete')
     if 'token' in body:
@@ -177,16 +169,14 @@ elif payin_id:
 tippee_id = request.qs.get_int('beneficiary', default=None)
 donations = payer.get_tips_awaiting_renewal()
 donations, donations_not_fundable = partition(
-    donations, lambda t: t.payment_accounts and not t.tippee_p.is_suspended
+    donations, lambda t: t.tippee_p.payment_providers > 0 and not t.tippee_p.is_suspended
 )
 if tippee_id:
     donations, other_donations = partition(
         donations, lambda t: t.tippee == tippee_id
     )
 donations, non_stripe_donations = partition(
-    donations, lambda t: (
-        'stripe' in set(a['provider'] for a in (t.payment_accounts or ()))
-    )
+    donations, lambda t: t.tippee_p.payment_providers & STRIPE_BIT > 0
 )
 
 if donations:

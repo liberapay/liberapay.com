@@ -1,6 +1,9 @@
 from __future__ import division, print_function, unicode_literals
 
-from ..exceptions import AccountSuspended, RecipientAccountSuspended
+from ..exceptions import (
+    AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended,
+    NoSelfTipping,
+)
 from ..models.participant import Participant
 from ..utils.currencies import Money
 
@@ -75,6 +78,100 @@ def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fe
         """, (payin_id, status, error))
 
         return payin
+
+
+def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount):
+    """Figure out where to send a payment.
+
+    Args:
+        tippee (Participant): the intended beneficiary of the payment (can be a team)
+        provider (str): the payment processor ('paypal' or 'stripe')
+        payer (Participant): the user who wants to pay
+        payer_country (str): the country code the money is supposedly coming from
+        payin_amount (Money): the payment amount
+
+    Returns:
+        Record: a row from the `payment_accounts` table
+
+    Raises:
+        MissingPaymentAccount: if no suitable destination has been found
+        NoSelfTipping: if the payer would end up sending money to themself
+
+    """
+    if tippee.id == payer.id:
+        raise NoSelfTipping()
+    destination = db.one("""
+        SELECT *
+          FROM payment_accounts
+         WHERE participant = %s
+           AND provider = %s
+           AND is_current
+      ORDER BY country = %s DESC
+             , default_currency = %s DESC
+             , connection_ts
+         LIMIT 1
+    """, (tippee.id, provider, payer_country, payin_amount.currency))
+    if destination:
+        return destination
+    if tippee.kind != 'group':
+        raise MissingPaymentAccount(tippee)
+    members = db.all("""
+        SELECT t.member
+             , t.ctime
+             , (coalesce_currency_amount((
+                   SELECT sum(pt.amount, 'EUR')
+                     FROM payin_transfers pt
+                    WHERE pt.recipient = t.member
+                      AND pt.team = t.team
+                      AND pt.context = 'team-donation'
+                      AND pt.status = 'succeeded'
+               ), 'EUR') + coalesce_currency_amount((
+                   SELECT sum(tr.amount, 'EUR')
+                     FROM transfers tr
+                    WHERE tr.tippee = t.member
+                      AND tr.tipper = t.team
+                      AND tr.context IN ('take', 'take-in-advance')
+                      AND tr.status = 'succeeded'
+                      AND tr.virtual IS NOT true
+               ), 'EUR')) AS received_sum_eur
+             , coalesce_currency_amount((
+                   SELECT sum(t2.amount, 'EUR')
+                     FROM ( SELECT DISTINCT ON (payday_id) t2.amount
+                              FROM ( SELECT t2.*
+                                          , coalesce((
+                                                SELECT payday.id
+                                                  FROM paydays payday
+                                                 WHERE payday.ts_start > t2.mtime
+                                              ORDER BY payday.id ASC
+                                                 LIMIT 1
+                                            ), -1) AS payday_id
+                                       FROM takes t2
+                                      WHERE t2.team = t.team
+                                        AND t2.member = t.member
+                                   ) AS t2
+                          ORDER BY t2.payday_id, t2.member, t2.mtime DESC
+                          ) t2
+               ), 'EUR') AS takes_sum_eur
+          FROM current_takes t
+         WHERE t.team = %s
+           AND EXISTS (
+                   SELECT true
+                     FROM payment_accounts a
+                    WHERE a.participant = t.member
+                      AND a.provider = %s
+                      AND a.is_current
+               )
+    """, (tippee.id, provider))
+    if not members:
+        raise MissingPaymentAccount(tippee)
+    payin_amount_eur = payin_amount.convert('EUR')
+    members = sorted(members, key=lambda t: (
+        int(t.member == payer.id),
+        -t.takes_sum_eur / (t.received_sum_eur + payin_amount_eur),
+        t.ctime
+    ))
+    member = Participant.from_id(members[0].member)
+    return resolve_destination(db, member, provider, payer, payer_country, payin_amount)
 
 
 def prepare_payin_transfer(
