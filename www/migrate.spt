@@ -307,7 +307,7 @@ title = _("Migrating from Gratipay")
                 platform=platform
             ) }}</p>
             <ul class="status-list list-yes">
-                <li>{{ _("basic account data (username, avatar, some privacy settings, etc)") }}</li>
+                <li>{{ _("basic account data (username, avatar, some privacy settings, etc.)") }}</li>
                 <li>{{ _("profile descriptions") }}</li>
                 <li>{{ _("teams (we will create them for you)") }}</li>
                 <li>{{ _("ongoing donations (if the donee hasn't joined Liberapay yet a pledge will be created instead)") }}</li>
@@ -318,7 +318,7 @@ title = _("Migrating from Gratipay")
             <ul class="status-list list-no">
                 <li>{{ _("any saved credit card number") }}</li>
                 <li>{{ _("any money currently in the account") }}</li>
-                <li>{{ _("the account's history (ledger, etc)") }}</li>
+                <li>{{ _("the account's history (ledger, etc.)") }}</li>
                 <li>{{ _("any paypal address (our payment processor doesn't support paypal yet)") }}</li>
             </ul>
             % if '@' not in request.body['email_address']
