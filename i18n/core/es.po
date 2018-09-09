@@ -734,6 +734,10 @@ msgstr "No estás autorizado a hacer esto porque tu cuenta está suspendida."
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr "Este pago no puede ser procesado porque la cuenta del receptor está actualmente suspendida."
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Tu donación a {recipient} no puede ser procesada en este momento porque la cuenta del beneficiario no esta lista para recibir dinero."
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ya has cambiado tu moneda principal recientemente, inténtalo de nuevo más tarde (p. ej., en una semana) o contacta support@liberapay.com."
 
@@ -771,8 +775,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "No parece que haya un usuario con nombre {0} en {1}."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr "Donación a {username}"
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donación a {0} por su papel en el equipo {1}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donación a {0}"
 
 msgid "One week of the donation"
 msgstr "Una semana de la donación"
@@ -1478,8 +1486,8 @@ msgstr "Parte real"
 msgid "Update my nominal take"
 msgstr "Actualizar mi parte nominal"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Los ingresos no reclamados permanecen en las carteras de los donantes, no se acumulan en la cuenta del equipo. Dado que los equipos no son entidades legales, no podemos guardar dinero en su nombre."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Sobrante"
@@ -1906,9 +1914,6 @@ msgstr "Modificado"
 msgid "Active?"
 msgstr "¿Activo?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr "No: las donaciones a equipos no son operativas actualmente"
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr "No: el donatario no ha configurado ningún método de pago"
 
@@ -1944,10 +1949,6 @@ msgstr "Elige un método de pago:"
 
 msgid "Card"
 msgstr "Tarjeta"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Tu donación a {recipient} no puede ser procesada en este momento porque la cuenta del beneficiario no esta lista para recibir dinero."
 
 msgid "All your donations are funded."
 msgstr "Todas tus donaciones están financiadas."
@@ -2282,14 +2283,6 @@ msgstr "donación anónima"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "donación anónima por tu papel en el equipo de {0}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donación a {0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donación a {0} por su papel en el equipo {1}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

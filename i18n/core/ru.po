@@ -739,6 +739,10 @@ msgstr "Операция запрещена, потому что ваш акка
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Ваше пожертвование {recipient} не может быть обработана прямо сейчас, так как аккаунт получателя ещё не готов принимать платежи."
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Вы недавно меняли вашу основную валюту, попробуйте ещё раз позже (например, через неделю) или свяжитесь с support@liberapay.com."
 
@@ -776,8 +780,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Не удалось найти пользователя {0} на {1}."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "пожертвование для {0} за роль в команде {1}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "пожертвование для {0}"
 
 msgid "One week of the donation"
 msgstr ""
@@ -1487,8 +1495,8 @@ msgstr "Реальная выручка"
 msgid "Update my nominal take"
 msgstr "Обновить мою номинальную выручку"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Нераспределённый доход остаётся в кошельках жертвователей, он не накапливается на аккаунте команды. Так как команды не являются юридическими лицами, мы не можем хранить деньги на их аккаунтах."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Остаток"
@@ -1917,9 +1925,6 @@ msgstr "Изменено"
 msgid "Active?"
 msgstr "Активно?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr "Нет: пожертвования командам в данный момент не работают"
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Нет: получатель не настроил ни один метод оплаты"
 
@@ -1955,10 +1960,6 @@ msgstr "Выберите способ оплаты:"
 
 msgid "Card"
 msgstr "Карта"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Ваше пожертвование {recipient} не может быть обработана прямо сейчас, так как аккаунт получателя ещё не готов принимать платежи."
 
 msgid "All your donations are funded."
 msgstr "Все ваши пожертвования профинансированы."
@@ -2296,14 +2297,6 @@ msgstr "анонимное пожертвование"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "анонимное пожертвование за вашу роль в команде {0}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "пожертвование для {0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "пожертвование для {0} за роль в команде {1}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

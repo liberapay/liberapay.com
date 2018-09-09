@@ -715,6 +715,10 @@ msgstr "Du har inte tillstånd att göra detta eftersom ditt konto just nu är a
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har redan ändrat din huvudvaluta nyligen, var god försök senare (t.ex. om en vecka) eller kontakta support@liberapay.com."
 
@@ -752,8 +756,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Det verkar inte finnas någon användare vid namnet {0} på {1}."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donation till {0} för deras roll i {1} teamet"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donation till {0}"
 
 msgid "One week of the donation"
 msgstr ""
@@ -1461,8 +1469,8 @@ msgstr "Faktisk Andel"
 msgid "Update my nominal take"
 msgstr "Updatera min nominella andel"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Inkomst utan anspråk stannar i donatorernas plånböcker, den samlas inte i teamets konto. Eftersom teams inte är juridiska personer kan vi inte hålla pengar i deras namn."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Överblivet"
@@ -1889,9 +1897,6 @@ msgstr "Modifierad"
 msgid "Active?"
 msgstr "Aktiv?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr ""
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1927,10 +1932,6 @@ msgstr ""
 
 msgid "Card"
 msgstr "Kort"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
 
 msgid "All your donations are funded."
 msgstr ""
@@ -2265,14 +2266,6 @@ msgstr "anonym donering"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "anonym donation för din roll i {0} teamet"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donation till {0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donation till {0} för deras roll i {1} teamet"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

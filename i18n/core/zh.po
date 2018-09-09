@@ -729,6 +729,10 @@ msgstr "因為你的帳戶目前被停權，所以無法進行這個動作。"
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "你最近變動了主要的貨幣，請稍後（例如一週內）再試或聯絡 support@liberapay.com."
 
@@ -766,8 +770,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "在 {1} 上似乎沒有這名 {0} 用戶。"
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "捐贈給 {0}"
 
 msgid "One week of the donation"
 msgstr ""
@@ -1469,8 +1477,8 @@ msgstr "實際收取"
 msgid "Update my nominal take"
 msgstr "更新我的名目收取資訊"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "無人認領的收入會保留在捐款人的電子錢包裏，它不會累積在團隊的帳戶下。因為團隊不具備合法適格，我們不能讓其名下持有捐款。"
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "餘額"
@@ -1895,9 +1903,6 @@ msgstr "修改"
 msgid "Active?"
 msgstr "活躍的？"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr ""
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1933,10 +1938,6 @@ msgstr ""
 
 msgid "Card"
 msgstr "銀行卡"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
 
 msgid "All your donations are funded."
 msgstr ""
@@ -2269,14 +2270,6 @@ msgstr "匿名捐款"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "因你在 {0} 團隊的角色，所得到的匿名捐款"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "捐贈給 {0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

@@ -715,6 +715,10 @@ msgstr ""
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr ""
 
@@ -752,7 +756,11 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr ""
 
 #, python-brace-format
-msgid "Donation to {username}"
+msgid "donation to {0} for their role in the {1} team"
+msgstr ""
+
+#, python-brace-format
+msgid "donation to {0}"
 msgstr ""
 
 msgid "One week of the donation"
@@ -1461,7 +1469,7 @@ msgstr ""
 msgid "Update my nominal take"
 msgstr ""
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
 msgstr ""
 
 msgid "Leftover"
@@ -1887,9 +1895,6 @@ msgstr ""
 msgid "Active?"
 msgstr ""
 
-msgid "No: donations to teams are currently inoperative"
-msgstr ""
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1924,10 +1929,6 @@ msgid "Please choose a payment method:"
 msgstr ""
 
 msgid "Card"
-msgstr ""
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr ""
 
 msgid "All your donations are funded."
@@ -2262,14 +2263,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
-msgstr ""
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
 msgstr ""
 
 #, python-brace-format

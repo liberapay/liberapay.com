@@ -711,6 +711,10 @@ msgstr "Önnek jelenleg nincs megengedve, hogy ezt tegye, mivel a fiókja jelenl
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ön nemrégiben már megváltoztatta az elsődleges valutáját, kérjük próbálja újra később (pl.: egy hét múlva), vagy írjon a support@liberapay.com e-mail címre."
 
@@ -748,8 +752,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Úgy tűnik nincs {0} nevű felhasználó a(z) {1}-on."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "adomány {0}-nak a(z) {1} csapatban betöltött szerepéért"
+
+#, fuzzy, python-brace-format
+msgid "donation to {0}"
+msgstr "adomány {0}-nak"
 
 msgid "One week of the donation"
 msgstr ""
@@ -1459,9 +1467,8 @@ msgstr "Aktuális Bevétel"
 msgid "Update my nominal take"
 msgstr "A névleges bevételének frissítése"
 
-#, fuzzy
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Megigényeletlen bevétel van a támogatók tárcájában, nem gyarapszik a csapat fiókjában. Mivel a csapatok nem jogi személyek, nem tarthatunk pénzt a nevükben."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Maradék"
@@ -1889,9 +1896,6 @@ msgstr "Módosítva"
 msgid "Active?"
 msgstr "Aktív?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr ""
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1926,10 +1930,6 @@ msgid "Please choose a payment method:"
 msgstr ""
 
 msgid "Card"
-msgstr ""
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr ""
 
 msgid "All your donations are funded."
@@ -2264,14 +2264,6 @@ msgstr "névtelen adományozás"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "névtelen adomány az Ön szerepéért a(z) {0} csapatban"
-
-#, fuzzy, python-brace-format
-msgid "donation to {0}"
-msgstr "adomány {0}-nak"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "adomány {0}-nak a(z) {1} csapatban betöltött szerepéért"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

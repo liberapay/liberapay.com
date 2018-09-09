@@ -710,6 +710,10 @@ msgstr "계정이 현재 정지되어 있기 때문에 이 행위를 할 수 없
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "최근에 주 화폐를 변경하려고 시도하셨습니다, 나중에 (예: 다음 주에) 다시 시도해 보시거나 support@liberapay.com에 연락해 주세요."
 
@@ -747,8 +751,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "{1} 에 {0} 이름을 가진 사용자가 존재하지 않습니다."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "{0} 에게 보내는 기부"
 
 msgid "One week of the donation"
 msgstr ""
@@ -1450,8 +1458,8 @@ msgstr "실제 지분"
 msgid "Update my nominal take"
 msgstr "명목상 수입 업데이트"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "가져가지 않은 지분은 기부자가 그대로 가지고 있게 되며, 팀 계정에 상속되지 않습니다. 팀은 법인이 아니기 때문에, 팀 명의로 자금을 수수할 수 없습니다."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "잔액"
@@ -1876,9 +1884,6 @@ msgstr "수정됨"
 msgid "Active?"
 msgstr "활동 중입니까?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr ""
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr ""
 
@@ -1914,10 +1919,6 @@ msgstr ""
 
 msgid "Card"
 msgstr "카드"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
 
 msgid "All your donations are funded."
 msgstr ""
@@ -2249,14 +2250,6 @@ msgstr "익명 기여"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "{0} 팀에서의 역할에 따른 익명 기여"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "{0} 에게 보내는 기부"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

@@ -736,6 +736,10 @@ msgstr "Anda tidak dibenarkan membuat perkara ini kerana akaun anda telah digant
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr "Pembayaran ini tidak dapat diproses kerana akaun penerima digantung ketika ini."
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Derma anda kepada {recipient} tidak boleh diproses pada waktu ini kerana akaun penerima belum sedia untuk menerima wang."
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Anda telah menukar mata wang utama anda baru-baru ini, sila cuba lagi kemudian (cth. dalam seminggu) atau hubungi support@liberapay.com."
 
@@ -773,8 +777,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Tiada pengguna bernama {0} di {1}."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr "Derma ke {username}"
+msgid "donation to {0} for their role in the {1} team"
+msgstr "derma kepada {0} untuk peranan mereka dalam kumpulan {1}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "derma kepada {0}"
 
 msgid "One week of the donation"
 msgstr "Seminggu derma"
@@ -1480,8 +1488,8 @@ msgstr "Perolehan Sebenar"
 msgid "Update my nominal take"
 msgstr "Kemas kini perolehan nominal saya"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Pendapatan tidak dituntut kekal dalam dompet penderma, ia tidak berakru dalam akaun kumpulan. Oleh kerana kumpulan bukanlah entiti sah, kami tidak boleh memegang wang atas nama mereka."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Baki"
@@ -1908,9 +1916,6 @@ msgstr "Diubah"
 msgid "Active?"
 msgstr "Aktif?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr "Tidak: derma ke kumpulan tidak beroperasi buat masa ini"
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Tidak: penerima derma belum menetapkan kaedah pembayaran"
 
@@ -1946,10 +1951,6 @@ msgstr "Sila pilih kaedah pembayaran:"
 
 msgid "Card"
 msgstr "Kad"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Derma anda kepada {recipient} tidak boleh diproses pada waktu ini kerana akaun penerima belum sedia untuk menerima wang."
 
 msgid "All your donations are funded."
 msgstr "Semua derma anda telah disumbangkan."
@@ -2284,14 +2285,6 @@ msgstr "pendermaan tanpa nama"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "pendermaan tanpa nama untuk peranan anda dalam kumpulan {0}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "derma kepada {0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "derma kepada {0} untuk peranan mereka dalam kumpulan {1}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

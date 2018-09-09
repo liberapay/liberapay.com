@@ -735,6 +735,10 @@ msgstr "Dit is niet toegestaan op jouw account, omdat je momenteel geschorst ben
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr "Deze betaling kan niet worden verwerkt, omdat de rekening van de ontvanger momenteel geschorst is."
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Je donatie aan {recipient} kan op dit moment niet worden verwerkt, omdat de rekening van de begunstigde niet klaar is om geld te ontvangen."
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Je hebt de valuta recent al aangepast, probeer het later opnieuw (bv. in een week) of neemt contact op met support@liberapay.com."
 
@@ -772,8 +776,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Er is geen gebruiker bekend met de naam {0} op {1}."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr "Donatie aan {username}"
+msgid "donation to {0} for their role in the {1} team"
+msgstr "donatie aan {0} van het {1} team"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "donatie aan {0}"
 
 msgid "One week of the donation"
 msgstr "Een week van de donatie"
@@ -1479,8 +1487,8 @@ msgstr "Werkelijk inkomen"
 msgid "Update my nominal take"
 msgstr "Update mijn nominale deel"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Het overgelaten geld blijft in de portemonnees van de sponsors, het wordt niet verzameld op het team account. Teams zijn namelijk geen rechtspersonen en kunnen geen geld houden in hun naam."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Overgelaten geld"
@@ -1907,9 +1915,6 @@ msgstr "Gewijzigd"
 msgid "Active?"
 msgstr "Actief?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr "Nee: donaties aan teams zijn op dit moment niet beschikbaar"
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Nee: de ontvanger heeft geen betaalmethode geconfigureerd"
 
@@ -1945,10 +1950,6 @@ msgstr "Kies a.j.b. een betaalmethode:"
 
 msgid "Card"
 msgstr "Kaart"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Je donatie aan {recipient} kan op dit moment niet worden verwerkt, omdat de rekening van de begunstigde niet klaar is om geld te ontvangen."
 
 msgid "All your donations are funded."
 msgstr "Al je donaties zijn gefinancierd."
@@ -2283,14 +2284,6 @@ msgstr "anonieme sponsoring"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "anonieme donatie voor jouw rol in het {0} team"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "donatie aan {0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "donatie aan {0} van het {1} team"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

@@ -739,6 +739,10 @@ msgstr "Túto operáciu nesmiete previesť, pretože je váš účet pozastaven�
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Váš dar pre {recipient} nemôže byť spracovaný práve teraz pretože účet príjemcu nie je pripravený dostávať peniaze."
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Nedávno ste zmenili hlavnú menu, prosím skúste neskôr (napríklad za týždeň) alebo kontaktuje support@liberapay.com."
 
@@ -776,8 +780,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Užívateľ s menom {0} sa nezdá byť v {1}."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "Dar pre {0} pre och rolu v {1} tíme"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "dar na {0}"
 
 msgid "One week of the donation"
 msgstr ""
@@ -1487,8 +1495,8 @@ msgstr "Skutočný podiel"
 msgid "Update my nominal take"
 msgstr "Upraviť môj normálny podiel"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Nevyzdvyhnuté príjmy zostávajú v peňaženkách darcov, nezostávajú na tímovom účte. Pretože tímy nie sú právnické osoby, nemôžeme držať peniaze ich menom."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Prebytok"
@@ -1917,9 +1925,6 @@ msgstr "Upravené"
 msgid "Active?"
 msgstr "Aktívne?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr "Nie: dary do tímov sú momentálne nefunkčné"
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Nie: príjemca si nenastavil platobnú metódu"
 
@@ -1955,10 +1960,6 @@ msgstr "Prosím zvoľte platobnú metódu:"
 
 msgid "Card"
 msgstr ""
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Váš dar pre {recipient} nemôže byť spracovaný práve teraz pretože účet príjemcu nie je pripravený dostávať peniaze."
 
 msgid "All your donations are funded."
 msgstr "Všetky vaše dary boli zaplatené."
@@ -2296,14 +2297,6 @@ msgstr "anonymné darovanie"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "anonymný dar za vašu rolu v tíme {0}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "dar na {0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "Dar pre {0} pre och rolu v {1} tíme"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"

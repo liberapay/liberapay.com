@@ -735,6 +735,10 @@ msgstr "Toimenpide on estetty, koska tilisi toiminta on tällä hetkellä jääd
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr "Tätä maksua ei voida käsitellä, koska vastaanottajan tili on tällä hetkellä jäädytettynä."
 
+#, python-brace-format
+msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
+msgstr "Lahjoitustasi vastaanottajalle {recipient} ei voida käsitellä juuri nyt, sillä vastaanottajan tili ei ole valmis ottamaan rahaa vastaan."
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Olet hiljattain vaihtanut päävaluuttaasi. Yritä uudelleen myöhemmin (esim. viikossa), tai ota yhteyttä asiakaspalveluun support@liberapay.com (englanniksi)."
 
@@ -772,8 +776,12 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Palvelussa {1} ei näytä olevan käyttäjää nimeltä {0}."
 
 #, python-brace-format
-msgid "Donation to {username}"
-msgstr "Lahjoitus käyttäjälle {username}"
+msgid "donation to {0} for their role in the {1} team"
+msgstr "lahjoitus käyttäjälle {0} roolistaan ryhmässä {1}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "lahjoitus→{0}"
 
 msgid "One week of the donation"
 msgstr "Viikko lahjoituksesta"
@@ -1479,8 +1487,8 @@ msgstr "Todellinen osuus"
 msgid "Update my nominal take"
 msgstr "Päivitä nimellistä osuuttani"
 
-msgid "Unclaimed income stays in the wallets of donors, it does not accrue in the team account. As teams are not legal entities, we cannot hold money in their names."
-msgstr "Lunastamattomat tulot pysyvät lahjoittajien lompakoissa; ne eivät kerry ryhmätilille. Koska ryhmät eivät ole oikeushenkilöitä, emme voi säilyttää rahaa niiden nimissä."
+msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
+msgstr ""
 
 msgid "Leftover"
 msgstr "Jäännös"
@@ -1907,9 +1915,6 @@ msgstr "Muutettu"
 msgid "Active?"
 msgstr "Aktiivinen?"
 
-msgid "No: donations to teams are currently inoperative"
-msgstr "Ei: lahjoitukset ryhmille on tällä hetkellä poissa käytöstä"
-
 msgid "No: the donee hasn't configured any payment method"
 msgstr "Ei: vastaanottaja ei ole määritellyt mitään maksumenetelmää"
 
@@ -1945,10 +1950,6 @@ msgstr "Valitse maksumenetelmä:"
 
 msgid "Card"
 msgstr "Kortti"
-
-#, python-brace-format
-msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr "Lahjoitustasi vastaanottajalle {recipient} ei voida käsitellä juuri nyt, sillä vastaanottajan tili ei ole valmis ottamaan rahaa vastaan."
 
 msgid "All your donations are funded."
 msgstr "Kaikki lahjoituksesi ovat rahoitettuina."
@@ -2283,14 +2284,6 @@ msgstr "nimetön lahjoitus"
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
 msgstr "nimetön lahjoitus roolistasi ryhmässä {0}"
-
-#, python-brace-format
-msgid "donation to {0}"
-msgstr "lahjoitus→{0}"
-
-#, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "lahjoitus käyttäjälle {0} roolistaan ryhmässä {1}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
