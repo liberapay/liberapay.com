@@ -50,7 +50,7 @@ subhead = _("Payment")
             % endif
             </p>
             % if not account.charges_enabled
-            <span class="text-danger">{{ glyphicon('exclamation-sign') }} {{
+            <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("This account cannot receive payments.")
             }}</span>
             % endif
@@ -93,6 +93,11 @@ subhead = _("Payment")
             {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
+            % if not account.verified
+            <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+                _("The email address '{0}' is not verified.", account.id)
+            }}</span>
+            % endif
         </div>
         % endfor
     </div>

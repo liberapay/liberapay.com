@@ -42,16 +42,17 @@ class TestPayins(Harness):
         data.setdefault('id', 'x')
         data.setdefault('default_currency', None)
         data.setdefault('charges_enabled', None)
+        data.setdefault('verified', True)
         data.setdefault('display_name', None)
         data.setdefault('token', None)
         data.update(p_id=participant.id, provider=provider, country=country)
         return self.db.one("""
             INSERT INTO payment_accounts
                         (participant, provider, country, id,
-                         default_currency, charges_enabled,
+                         default_currency, charges_enabled, verified,
                          display_name, token)
                  VALUES (%(p_id)s, %(provider)s, %(country)s, %(id)s,
-                         %(default_currency)s, %(charges_enabled)s,
+                         %(default_currency)s, %(charges_enabled)s, %(verified)s,
                          %(display_name)s, %(token)s)
               RETURNING *
         """, data)

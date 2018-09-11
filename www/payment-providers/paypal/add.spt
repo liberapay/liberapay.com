@@ -13,8 +13,12 @@ if request.method == 'POST':
     if country not in locale.countries:
         raise response.error(400, "`country` value %r in body is invalid or non-supported" % country)
     email_address = body['email']
+    email = participant.get_email(email_address)
+    if not (email and email.verified):
+        participant.add_email(email_address)
     account_data = dict(
         p_id=participant.id, country=country, account_id=email_address,
+        verified=bool(getattr(email, 'verified', None))
     )
     with website.db.get_cursor() as cursor:
         cursor.run("""
@@ -25,8 +29,8 @@ if request.method == 'POST':
                AND country = %(country)s;
 
             INSERT INTO payment_accounts
-                        (participant, provider, country, id)
-                 VALUES (%(p_id)s, 'paypal', %(country)s, %(account_id)s)
+                        (participant, provider, country, id, verified)
+                 VALUES (%(p_id)s, 'paypal', %(country)s, %(account_id)s, %(verified)s)
             ON CONFLICT (provider, id, participant) DO UPDATE
                     SET is_current = true
                       , country = excluded.country

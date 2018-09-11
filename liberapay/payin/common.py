@@ -106,6 +106,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
          WHERE participant = %s
            AND provider = %s
            AND is_current
+           AND verified
       ORDER BY country = %s DESC
              , default_currency = %s DESC
              , connection_ts
@@ -160,6 +161,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                     WHERE a.participant = t.member
                       AND a.provider = %s
                       AND a.is_current
+                      AND a.verified
                )
     """, (tippee.id, provider))
     if not members:

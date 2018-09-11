@@ -44,6 +44,7 @@ CREATE OR REPLACE FUNCTION update_payment_providers() RETURNS trigger AS $$
                             )
                           )
                       AND a.is_current IS TRUE
+                      AND a.verified IS TRUE
                ), 0)
          WHERE id = rec.participant
             OR id IN (
@@ -57,6 +58,8 @@ CREATE TRIGGER update_payment_providers
     AFTER INSERT OR UPDATE OR DELETE ON payment_accounts
     FOR EACH ROW EXECUTE PROCEDURE update_payment_providers();
 
+ALTER TABLE payment_accounts ADD COLUMN verified boolean NOT NULL DEFAULT TRUE;
+
 SELECT 'after deployment';
 
 DROP TRIGGER update_has_payment_account ON payment_accounts;
@@ -65,3 +68,5 @@ ALTER TABLE participants DROP COLUMN has_payment_account;
 
 -- The following dummy operation is to trigger update_payment_providers
 UPDATE payment_accounts SET id = id;
+
+ALTER TABLE payment_accounts ALTER COLUMN verified DROP DEFAULT;
