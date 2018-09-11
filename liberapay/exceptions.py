@@ -149,6 +149,10 @@ class BadEmailAddress(ProblemChangingEmail):
     def msg(self, _):
         return _("'{0}' is not a valid email address.", *self.args)
 
+class BadEmailDomain(ProblemChangingEmail):
+    def msg(self, _):
+        return _("'{domain_name}' is not a valid email domain.", domain_name=self.args[0])
+
 class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
     code = 409
     def msg(self, _):

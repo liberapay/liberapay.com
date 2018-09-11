@@ -26,8 +26,7 @@ import requests
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES, D_UNIT, D_ZERO,
-    DONATION_LIMITS, EMAIL_RE,
-    EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
+    DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
     PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
     PUBLIC_NAME_MAX_SIZE, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
@@ -36,7 +35,6 @@ from liberapay.constants import (
 from liberapay.exceptions import (
     BadAmount,
     BadDonationCurrency,
-    BadEmailAddress,
     BadPasswordSize,
     CannotRemovePrimaryEmail,
     EmailAlreadyAttachedToSelf,
@@ -75,6 +73,7 @@ from liberapay.utils import (
     emails, i18n, markdown,
 )
 from liberapay.utils.currencies import MoneyBasket
+from liberapay.utils.emails import normalize_email_address
 from liberapay.website import website
 
 
@@ -862,14 +861,7 @@ class Participant(Model, MixinTeam):
             Returns the number of emails sent.
         """
 
-        # normalize the address: strip it, then lowercase and encode the domain name
-        email = email.strip()
-        i = email.rfind('@') + 1
-        email = email[:i] + email[i:].lower().encode('idna').decode()
-
-        if not EMAIL_RE.match(email) or len(email) > 320:
-            # The length limit is from https://tools.ietf.org/html/rfc3696#section-3
-            raise BadEmailAddress(email)
+        email = normalize_email_address(email)
 
         # Check that this address isn't already verified
         owner = (cursor or self.db).one("""
