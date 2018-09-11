@@ -107,6 +107,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
            AND provider = %s
            AND is_current
            AND verified
+           AND coalesce(charges_enabled, true)
       ORDER BY country = %s DESC
              , default_currency = %s DESC
              , connection_ts
@@ -159,6 +160,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                       AND a.provider = %s
                       AND a.is_current
                       AND a.verified
+                      AND coalesce(a.charges_enabled, true)
                )
     """, (tippee.id, provider))
     if not members:
