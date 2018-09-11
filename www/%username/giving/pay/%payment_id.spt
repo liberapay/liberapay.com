@@ -71,9 +71,8 @@ if donations:
         name for bit, name in enumerate(PAYMENT_PROVIDERS, 1)
         if tip.tippee_p.payment_providers & bit > 0
     ]
-    if len(providers) == 1:
-        response.redirect(payer.path('giving/pay/%s/' % providers[0]) +
-                          ('?beneficiary=%i' % tip.tippee))
+    if providers == ['paypal']:
+        response.redirect(payer.path('giving/pay/paypal?beneficiary=%i&chosen=false' % tip.tippee))
 
 if user == payer:
     payer.mark_notifications_as_read('donate_reminder')
@@ -104,24 +103,46 @@ title = _("Funding your donations")
     <p>{{ _("Please choose a payment method:") }}</p>
 
     <div class="row payment-methods">
-    % from "templates/icons.html" import fontawesome
+    % from "templates/icons.html" import fontawesome, glyphicon
 
     % for provider in providers
         % if provider == 'stripe'
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="panel panel-default">
             <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
-                <h4>{{ _("Card") }}</h4>
+                <h4>{{ _("Card") }}<br>
+                    <small>Visa, MasterCard, American Express</small>
+                </h4>
                 <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?beneficiary={{ tip.tippee }}&amp;method=card"></a>
             </div></div>
         </div>
+        % set possible = tip.amount.currency == 'EUR'
+        % set warn = request.country not in constants.SEPA
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+            <div class="panel-body overlayed {{ '' if possible else 'not-recommended' }}">
+                <p class="payment-icon">{{ fontawesome('bank') }}</p>
+                <h4>{{ _("Direct Debit") }}<br>
+                    % if not possible
+                    <small>{{ _("Euro donations only") }}</small>
+                    % else
+                    <small class="{{ 'text-warning' if warn else '' }}">{{ _("Euro bank accounts only") }}</small>
+                    % endif
+                </h4>
+                % if possible
+                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?beneficiary={{ tip.tippee }}&amp;method=sdd"></a>
+                % endif
+            </div></div>
+        </div>
         % elif provider == 'paypal'
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="panel panel-default">
             <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('paypal') }}</p>
-                <h4>PayPal</h4>
+                <h4>PayPal<br>
+                    <small class="text-warning">{{ _("Not anonymous") }}</small>
+                </h4>
                 <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?beneficiary={{ tip.tippee }}"></a>
             </div>
             </div>

@@ -20,6 +20,9 @@ Liberapay.stripe_init = function() {
             lineHeight: $container.css('line-height'),
         }
     }};
+    if (element_type == 'iban') {
+        options.supportedCountries = ['SEPA'];
+    }
     var element = elements.create(element_type, options);
     element.mount('#stripe-element');
     var $errorElement = $('#stripe-errors');
@@ -53,10 +56,15 @@ Liberapay.stripe_init = function() {
         e.preventDefault();
         if ($container.parents('.hidden').length > 0) {
             submitting = true;
-            $form.attr('action', '').submit();
+            $form.submit();
             return;
         }
-        stripe.createToken(element).then(Liberapay.wrap(function(result) {
+        var tokenData = {};
+        if (element_type == 'iban') {
+            tokenData.currency = 'EUR';
+            tokenData.account_holder_name = $('#account_holder_name').val();
+        }
+        stripe.createToken(element, tokenData).then(Liberapay.wrap(function(result) {
             if (result.error) {
                 $errorElement.text(result.error.message);
             } else {
@@ -66,8 +74,9 @@ Liberapay.stripe_init = function() {
                 var $hidden_input = $('<input type="hidden" name="token">');
                 $hidden_input.val(result.token.id);
                 $form.append($hidden_input);
-                $form.attr('action', '').submit();
+                $form.submit();
             }
         }));
     }));
+    $form.attr('action', '');
 };
