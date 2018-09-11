@@ -415,8 +415,8 @@ title = _("Funding your donations")
 
         <div id="card-form" class="form-group {{ 'hidden' if source else '' }}">
             <p>{{ _("Please input your card number:") }}</p>
-            <div id="card-element" class="form-control paragraph"></div>
-            <span id="card-errors" role="alert" class="invalid-msg"></span>
+            <div id="stripe-element" data-type="card" class="form-control paragraph"></div>
+            <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             <p class="help-block">{{ glyphicon('lock') }} {{ _(
                 "This data will be sent directly to the payment processor "
                 "{name} through an encrypted connection.",
