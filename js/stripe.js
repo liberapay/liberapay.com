@@ -51,7 +51,6 @@ Liberapay.stripe_init = function() {
                 var $hidden_input = $('<input type="hidden" name="token">');
                 $hidden_input.val(result.token.id);
                 $form.append($hidden_input);
-                console.log($form.serialize());
                 $form.attr('action', '').submit();
             }
         }));
