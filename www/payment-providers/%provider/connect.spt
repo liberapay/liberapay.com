@@ -163,16 +163,17 @@ elif 'state' in request.qs:
 
             INSERT INTO payment_accounts
                         (participant, provider, country, id,
-                         default_currency, charges_enabled,
+                         default_currency, charges_enabled, verified,
                          display_name, token)
                  VALUES (%(p_id)s, %(provider)s, %(country)s, %(account_id)s,
-                         %(default_currency)s, %(charges_enabled)s,
+                         %(default_currency)s, %(charges_enabled)s, true
                          %(display_name)s, %(token)s)
             ON CONFLICT (provider, id, participant) DO UPDATE
                     SET is_current = true
                       , country = excluded.country
                       , default_currency = excluded.default_currency
                       , charges_enabled = excluded.charges_enabled
+                      , verified = true
                       , display_name = excluded.display_name
                       , token = excluded.token;
         """, account_data)
