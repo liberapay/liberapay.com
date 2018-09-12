@@ -64,6 +64,7 @@ class TestEmail(EmailHarness):
             'a\nb@example.net',
             'alice@ex\rample.com',
             '\0bob@example.org',
+            'x' * 309 + '@example.com',
         )
         for blob in bad:
             with self.assertRaises(BadEmailAddress):
