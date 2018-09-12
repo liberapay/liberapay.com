@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
 from dns.exception import DNSException
-import dns.resolver as DNS
+from dns.resolver import Cache, Resolver
 from jinja2 import Environment
 
 from liberapay.constants import EMAIL_RE, JINJA_ENV_COMMON
@@ -38,6 +38,10 @@ def compile_email_spt(fpath):
         env = jinja_env_html if content_type == 'text/html' else jinja_env
         r[key] = SimplateLoader(fpath, tmpl).load(env, fpath)
     return r
+
+
+DNS = Resolver()
+DNS.cache = Cache()
 
 
 def normalize_email_address(email):
