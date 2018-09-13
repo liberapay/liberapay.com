@@ -73,13 +73,17 @@ class TestEmail(EmailHarness):
             assert response.code == 400
 
     def test_participant_cant_add_email_with_bad_domain(self):
-        email = 'alice@example.net'
+        bad = (
+            'alice@example.net',  # no MX record
+            'alice@nonexistent.liberapay.com',  # NXDOMAIN
+        )
         with patch.object(self.website, 'app_conf') as app_conf:
             app_conf.check_email_domains = True
-            with self.assertRaises(BadEmailDomain):
-                self.alice.add_email(email)
-            response = self.hit_email_spt('add-email', email, should_fail=True)
-            assert response.code == 400
+            for email in bad:
+                with self.assertRaises(BadEmailDomain):
+                    self.alice.add_email(email)
+                response = self.hit_email_spt('add-email', email, should_fail=True)
+                assert response.code == 400
 
     def test_verification_link_uses_address_id(self):
         address = 'alice@gratipay.com'
