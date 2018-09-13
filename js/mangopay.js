@@ -198,7 +198,7 @@ var mangoPay = {
                 // Invoke the user supplied success or error handler here
                 success: function(data, xmlhttp) {
 
-                    // Parse API reponse
+                    // Parse API response
                     try {
                        data = JSON.parse(data);
                     }
