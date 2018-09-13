@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '76'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '77'::jsonb);
 
 
 -- app configuration
@@ -77,7 +77,7 @@ CREATE TABLE participants
 
 , public_name           text
 
-, has_payment_account   boolean
+, payment_providers     integer                 NOT NULL DEFAULT 0
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
@@ -342,7 +342,7 @@ CREATE TABLE paydays
 -- exchange routes -- how money moves in and out of Liberapay
 
 CREATE TYPE payment_net AS ENUM
-    ('mango-ba', 'mango-bw', 'mango-cc', 'stripe-card');
+    ('mango-ba', 'mango-bw', 'mango-cc', 'stripe-card', 'paypal');
 
 CREATE TYPE route_status AS ENUM ('pending', 'chargeable', 'consumed', 'failed', 'canceled');
 
@@ -400,42 +400,58 @@ CREATE TABLE exchange_events
 
 -- payment accounts (Stripe, PayPal, etc)
 
+CREATE TYPE payment_providers AS ENUM ('stripe', 'paypal');
+
 CREATE TABLE payment_accounts
 ( participant           bigint          NOT NULL REFERENCES participants
 , provider              text            NOT NULL
 , country               text            NOT NULL
 , id                    text            NOT NULL CHECK (id <> '')
 , is_current            boolean         DEFAULT TRUE CHECK (is_current IS NOT FALSE)
-, charges_enabled       boolean         NOT NULL
+, charges_enabled       boolean
 , default_currency      text
 , display_name          text
 , token                 json
 , connection_ts         timestamptz     NOT NULL DEFAULT current_timestamp
 , pk                    bigserial       PRIMARY KEY
+, verified              boolean         NOT NULL
 , UNIQUE (participant, provider, country, is_current)
 , UNIQUE (provider, id, participant)
 );
 
-CREATE OR REPLACE FUNCTION update_has_payment_account() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION update_payment_providers() RETURNS trigger AS $$
     DECLARE
         rec record;
     BEGIN
         rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
         UPDATE participants
-           SET has_payment_account = (
-                   SELECT count(*)
-                     FROM payment_accounts
-                    WHERE participant = rec.participant
-                      AND is_current IS TRUE
-               ) > 0
-         WHERE id = rec.participant;
+           SET payment_providers = coalesce((
+                   SELECT sum(DISTINCT array_position(
+                                           enum_range(NULL::payment_providers),
+                                           a.provider::payment_providers
+                                       ))
+                     FROM payment_accounts a
+                    WHERE ( a.participant = rec.participant OR
+                            a.participant IN (
+                                SELECT t.member
+                                  FROM current_takes t
+                                 WHERE t.team = rec.participant
+                            )
+                          )
+                      AND a.is_current IS TRUE
+                      AND a.verified IS TRUE
+               ), 0)
+         WHERE id = rec.participant
+            OR id IN (
+                   SELECT t.team FROM current_takes t WHERE t.member = rec.participant
+               );
         RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_has_payment_account
+CREATE TRIGGER update_payment_providers
     AFTER INSERT OR UPDATE OR DELETE ON payment_accounts
-    FOR EACH ROW EXECUTE PROCEDURE update_has_payment_account();
+    FOR EACH ROW EXECUTE PROCEDURE update_payment_providers();
 
 
 -- payins -- incoming payments that don't go into a donor wallet
@@ -456,7 +472,6 @@ CREATE TABLE payins
 , amount_settled   currency_amount
 , fee              currency_amount   CHECK (fee >= 0)
 , CONSTRAINT fee_currency_chk CHECK (fee::currency = amount_settled::currency)
-, CONSTRAINT success_chk CHECK (NOT (status = 'succeeded' AND (amount_settled IS NULL OR fee IS NULL)))
 );
 
 CREATE INDEX payins_payer_idx ON payins (payer);
@@ -492,6 +507,7 @@ CREATE TABLE payin_transfers
 , n_units       int
 , period        donation_period
 , team          bigint                   REFERENCES participants
+, fee           currency_amount
 , CONSTRAINT self_chk CHECK (payer <> recipient)
 , CONSTRAINT team_chk CHECK ((context = 'team-donation') = (team IS NOT NULL))
 , CONSTRAINT unit_chk CHECK ((unit_amount IS NULL) = (n_units IS NULL))
@@ -499,6 +515,14 @@ CREATE TABLE payin_transfers
 
 CREATE INDEX payin_transfers_payer_idx ON payin_transfers (payer);
 CREATE INDEX payin_transfers_recipient_idx ON payin_transfers (recipient);
+
+CREATE TABLE payin_transfer_events
+( payin_transfer   int               NOT NULL REFERENCES payin_transfers
+, status           payin_status      NOT NULL
+, error            text
+, timestamp        timestamptz       NOT NULL
+, UNIQUE (payin_transfer, status)
+);
 
 
 -- communities -- groups of participants
