@@ -2,8 +2,10 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from mock import patch
+
 from liberapay.exceptions import (
-    BadEmailAddress, CannotRemovePrimaryEmail, EmailAlreadyTaken,
+    BadEmailAddress, BadEmailDomain, CannotRemovePrimaryEmail, EmailAlreadyTaken,
     EmailNotVerified, TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
@@ -62,12 +64,26 @@ class TestEmail(EmailHarness):
             'a\nb@example.net',
             'alice@ex\rample.com',
             '\0bob@example.org',
+            'x' * 309 + '@example.com',
         )
         for blob in bad:
             with self.assertRaises(BadEmailAddress):
                 self.alice.add_email(blob)
             response = self.hit_email_spt('add-email', blob, should_fail=True)
             assert response.code == 400
+
+    def test_participant_cant_add_email_with_bad_domain(self):
+        bad = (
+            'alice@example.net',  # no MX record
+            'alice@nonexistent.liberapay.com',  # NXDOMAIN
+        )
+        with patch.object(self.website, 'app_conf') as app_conf:
+            app_conf.check_email_domains = True
+            for email in bad:
+                with self.assertRaises(BadEmailDomain):
+                    self.alice.add_email(email)
+                response = self.hit_email_spt('add-email', email, should_fail=True)
+                assert response.code == 400
 
     def test_verification_link_uses_address_id(self):
         address = 'alice@gratipay.com'

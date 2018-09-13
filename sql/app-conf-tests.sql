@@ -5,6 +5,7 @@ $$ LANGUAGE sql;
 DO $$
 BEGIN
     PERFORM update_app_conf('check_db_every', '0'::jsonb);
+    PERFORM update_app_conf('check_email_domains', 'false'::jsonb);
     PERFORM update_app_conf('clean_up_counters_every', '0'::jsonb);
     PERFORM update_app_conf('dequeue_emails_every', '0'::jsonb);
     PERFORM update_app_conf('payin_methods', '{"*": true}'::jsonb);

@@ -193,6 +193,7 @@ class AppConf(object):
         bountysource_id=None.__class__,
         bountysource_secret=str,
         check_db_every=int,
+        check_email_domains=bool,
         clean_up_counters_every=int,
         dequeue_emails_every=int,
         facebook_callback=str,
