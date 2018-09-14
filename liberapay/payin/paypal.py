@@ -107,7 +107,7 @@ def create_payment(db, payin, payer, return_url, state):
                     "price": str(pt.unit_amount.amount),
                     "currency": pt.unit_amount.currency
                 }]
-            }
+            } if pt.n_units >= 1 else {}
         } for pt in transfers],
         "redirect_urls": {
             "return_url": return_url,
@@ -163,9 +163,11 @@ def execute_payment(db, payin, payer_id):
             pt_remote_id = sale['id']
             pt_status = SALE_STATES_MAP[sale['state']]
             pt_error = sale.get('reason_code')
-            pt_fee = Money(sale['transaction_fee']['value'], sale['transaction_fee']['currency'])
+            pt_fee = sale.get('transaction_fee')
+            if pt_fee:
+                pt_fee = Money(pt_fee['value'], pt_fee['currency'])
             charge_amount = Money(sale['amount']['total'], sale['amount']['currency'])
-            net_amount = charge_amount - pt_fee
+            net_amount = charge_amount - (pt_fee or 0)
             update_payin_transfer(
                 db, pt_id, pt_remote_id, pt_status, pt_error,
                 amount=net_amount, fee=pt_fee

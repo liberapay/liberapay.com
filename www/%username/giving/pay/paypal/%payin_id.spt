@@ -66,10 +66,17 @@ if request.method == 'POST':
     )
     route = ExchangeRoute.upsert_generic_route(payer, 'paypal')
     payin = prepare_payin(website.db, payer, payin_amount, route)
-    context = 'team-donation' if beneficiary.kind == 'group' else 'personal-donation'
+    if beneficiary.kind == 'group':
+        context = 'team-donation'
+        team = beneficiary
+        recipient = Participant.from_id(destination.participant)
+    else:
+        context = 'personal-donation'
+        team = None
+        recipient = beneficiary
     prepare_payin_transfer(
-        website.db, payin, beneficiary, destination, context,
-        payin.amount, tip.periodic_amount, tip.period
+        website.db, payin, recipient, destination, context,
+        payin.amount, tip.periodic_amount, tip.period, team=team.id
     )
     response.redirect(payer.url('giving/pay/paypal/%i' % payin.id))
 
@@ -199,7 +206,7 @@ title = _("Funding your donations")
                 % set charge_amount = tip.periodic_amount * multiplier
                 <li class="list-group-item">
                 <label>
-                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" />
+                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" required />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ format_money(charge_amount) }}
                     % if show_fee_notice
@@ -225,7 +232,7 @@ title = _("Funding your donations")
             % endfor
                 <li class="list-group-item">
                 <label>
-                    <input type="radio" name="amount" value="custom" class="hidden-xs" />
+                    <input type="radio" name="amount" value="custom" class="hidden-xs" required />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ _(
                         "Custom amount (min={0}, max={1})",
