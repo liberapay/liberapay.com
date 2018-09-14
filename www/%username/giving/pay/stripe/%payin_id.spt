@@ -126,10 +126,17 @@ if request.method == 'POST':
         route.update_status(source.status)
 
     payin = prepare_payin(website.db, payer, amount, route)
-    context = 'team-donation' if beneficiary.kind == 'group' else 'personal-donation'
+    if beneficiary.kind == 'group':
+        context = 'team-donation'
+        team = beneficiary
+        recipient = Participant.from_id(destination.participant)
+    else:
+        context = 'personal-donation'
+        team = None
+        recipient = beneficiary
     prepare_payin_transfer(
-        website.db, payin, beneficiary, destination, context,
-        payin.amount, tip.periodic_amount, tip.period
+        website.db, payin, recipient, destination, context,
+        payin.amount, tip.periodic_amount, tip.period, team=team.id
     )
     response.redirect(payer.url('giving/pay/stripe/%i' % payin.id))
 
