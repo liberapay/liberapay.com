@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '77'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '78'::jsonb);
 
 
 -- app configuration
@@ -649,6 +649,20 @@ CREATE TABLE emails
 -- participants. We implement this by using NULL instead of FALSE for the
 -- unverified state, hence the check constraint on verified.
 CREATE UNIQUE INDEX emails_address_verified_key ON emails (lower(address), verified);
+
+CREATE OR REPLACE FUNCTION update_payment_accounts() RETURNS trigger AS $$
+    BEGIN
+        UPDATE payment_accounts
+           SET verified = coalesce(NEW.verified, false)
+         WHERE id = NEW.address
+           AND participant = NEW.participant;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_payment_accounts
+    AFTER INSERT OR UPDATE ON emails
+    FOR EACH ROW EXECUTE PROCEDURE update_payment_accounts();
 
 
 -- profile statements
