@@ -107,7 +107,7 @@ def create_payment(db, payin, payer, return_url, state):
                     "price": str(pt.unit_amount.amount),
                     "currency": pt.unit_amount.currency
                 }]
-            }
+            } if pt.n_units >= 1 else {}
         } for pt in transfers],
         "redirect_urls": {
             "return_url": return_url,
