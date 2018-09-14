@@ -339,7 +339,7 @@ title = _("Funding your donations")
                 % set charge_amount = tip.periodic_amount * multiplier
                 <li class="list-group-item">
                 <label>
-                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" />
+                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" required />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ format_money(charge_amount) }}
                     % if show_fee_notice
@@ -365,7 +365,7 @@ title = _("Funding your donations")
             % endfor
                 <li class="list-group-item">
                 <label>
-                    <input type="radio" name="amount" value="custom" class="hidden-xs" />
+                    <input type="radio" name="amount" value="custom" class="hidden-xs" required />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ _(
                         "Custom amount (min={0}, max={1})",
