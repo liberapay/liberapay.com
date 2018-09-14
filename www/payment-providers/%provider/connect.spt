@@ -166,7 +166,7 @@ elif 'state' in request.qs:
                          default_currency, charges_enabled, verified,
                          display_name, token)
                  VALUES (%(p_id)s, %(provider)s, %(country)s, %(account_id)s,
-                         %(default_currency)s, %(charges_enabled)s, true
+                         %(default_currency)s, %(charges_enabled)s, true,
                          %(display_name)s, %(token)s)
             ON CONFLICT (provider, id, participant) DO UPDATE
                     SET is_current = true
