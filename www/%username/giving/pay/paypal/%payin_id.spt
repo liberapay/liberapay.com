@@ -68,7 +68,7 @@ if request.method == 'POST':
     payin = prepare_payin(website.db, payer, payin_amount, route)
     if beneficiary.kind == 'group':
         context = 'team-donation'
-        team = beneficiary
+        team = beneficiary.id
         recipient = Participant.from_id(destination.participant)
     else:
         context = 'personal-donation'
@@ -76,7 +76,7 @@ if request.method == 'POST':
         recipient = beneficiary
     prepare_payin_transfer(
         website.db, payin, recipient, destination, context,
-        payin.amount, tip.periodic_amount, tip.period, team=team.id
+        payin.amount, tip.periodic_amount, tip.period, team=team
     )
     response.redirect(payer.url('giving/pay/paypal/%i' % payin.id))
 
