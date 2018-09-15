@@ -36,7 +36,7 @@ Note: This webapp is not self-hostable.
 
 You want to chat? [Join us on Gitter](https://gitter.im/liberapay/salon). (If you use IRC, [Gitter has a gateway](https://irc.gitter.im/), and we're also in the #liberapay channel on Freenode.)
 
-Alternatively you can post a message in [our GitHub salon](https://github.com/liberapay/salon).
+Alternatively you can post a message in [our GitHub salon](https://gitlab.com/liberapay/salon).
 
 
 ## Contributing to the translations
@@ -47,7 +47,7 @@ You can help translate Liberapay [via Weblate](https://hosted.weblate.org/engage
 
 [![translation status by language](https://hosted.weblate.org/widgets/liberapay/-/multi-auto.svg)](https://hosted.weblate.org/projects/liberapay/core/?utm_source=widget)
 
-If you have questions about translating Liberapay, you can ask them [in the salon](https://github.com/liberapay/salon/labels/i18n).
+If you have questions about translating Liberapay, you can ask them [in the salon](https://gitlab.com/liberapay/salon/?label_name[]=i18n).
 
 
 ## Contributing to the code
@@ -218,4 +218,4 @@ All arguments are passed to the underlying `py.test` command, so you can use `-x
 
 ## License
 
-[CC0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/) (See [this discussion](https://github.com/liberapay/liberapay.com/issues/564) for details.)
+[CC0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/) (See [this discussion](https://gitlab.com/liberapay/liberapay.com/issues/564) for details.)

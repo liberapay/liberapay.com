@@ -454,7 +454,7 @@ def make_sentry_teller(env):
 
         if isinstance(exception, ValueError):
             if 'cannot contain NUL (0x00) characters' in str(exception):
-                # https://github.com/liberapay/liberapay.com/issues/675
+                # https://gitlab.com/liberapay/liberapay.com/issues/675
                 response = state.get('response') or pando.Response()
                 response.code = 400
                 response.body = str(exception)

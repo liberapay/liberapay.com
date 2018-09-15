@@ -1,0 +1,64 @@
+stages:
+  - python_27
+  - python_36
+  - i18n_test
+
+
+variables:
+  POSTGRES_DB: liberapay_tests
+  POSTGRES_USER: liberapay_tests
+  DATABASE_URL: postgresql://postgres/$POSTGRES_DB?user=$POSTGRES_USER
+
+python_27:
+  stage: python_27
+  image: python:2.7
+  services:
+    - postgres
+  before_script:
+    - apt-get update
+    - apt-get -y install python-pip postgresql-client
+    - pip install tox
+    - ./recreate-schema.sh test
+  cache:
+    paths:
+    - .tox
+  only:
+  - master
+  script:
+    - tox -e py27
+
+python_36:
+  stage: python_36
+  image: python:3.6
+  services:
+    - postgres
+  before_script:
+    - apt-get update
+    - apt-get -y install python-tox python3-pip postgresql-client
+    - ./recreate-schema.sh test
+  cache:
+    paths:
+    - .tox
+  only:
+  - master
+  script:
+    - tox -e py36
+
+i18n_test:
+  stage: i18n_test
+  only: master
+  image: python:3.6
+  services:
+    - postgres
+  before_script:
+    - apt-get update
+    - apt-get -y install python-tox python3-pip postgresql-client
+    - ./recreate-schema.sh test
+    - export LIBERAPAY_I18N_TEST=yes
+  cache:
+    paths:
+    - .tox
+  only:
+  - master
+  script:
+    - tox -e py36
