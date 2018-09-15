@@ -277,6 +277,25 @@ def update_payin_transfer(
         """, pt._asdict())
         assert paid_in_advance > 0, locals()
 
+        # If it's a team donation, increase the `paid_in_advance` value of the take.
+        if pt.context == 'team-donation':
+            paid_in_advance = cursor.one("""
+                WITH current_take AS (
+                         SELECT id
+                           FROM current_takes
+                          WHERE team = %(team)s
+                            AND member = %(recipient)s
+                     )
+                UPDATE takes
+                   SET paid_in_advance = (
+                           coalesce_currency_amount(paid_in_advance, amount::currency) +
+                           convert(%(amount)s, amount::currency)
+                       )
+                 WHERE id = (SELECT id FROM current_take)
+             RETURNING paid_in_advance
+            """, pt._asdict())
+            assert paid_in_advance is not None, locals()
+
         # Recompute the cached `receiving` amount of the donee.
         cursor.run("""
             WITH our_tips AS (

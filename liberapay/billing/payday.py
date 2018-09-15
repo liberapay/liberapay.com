@@ -604,6 +604,19 @@ class Payday(object):
                       FROM current_tip t2
                      WHERE t.id = t2.id;
                 """, t.__dict__)
+                if t.team:
+                    db.run("""
+                        WITH current_take AS (
+                                 SELECT t.id
+                                   FROM current_takes t
+                                  WHERE t.team = %(team)s
+                                    AND t.member = %(tippee)s
+                             )
+                        UPDATE takes t
+                           SET paid_in_advance = (t.paid_in_advance - %(in_advance)s)
+                          FROM current_take t2
+                         WHERE t.id = t2.id;
+                    """, t.__dict__)
             if t.amount:
                 transfer(db, **t.__dict__)
 
