@@ -217,9 +217,8 @@ class Payday(object):
         ALTER TABLE payday_tips ADD COLUMN is_funded boolean;
 
         CREATE TEMPORARY TABLE payday_takes ON COMMIT DROP AS
-            SELECT team, member, amount
-              FROM ( SELECT DISTINCT ON (team, member)
-                            team, member, amount
+            SELECT team, member, amount, paid_in_advance
+              FROM ( SELECT DISTINCT ON (team, member) *
                        FROM takes
                       WHERE mtime < %(ts_start)s
                    ORDER BY team, member, mtime DESC
@@ -377,7 +376,11 @@ class Payday(object):
                SET is_funded = true
              WHERE tippee = %(team_id)s
                AND check_tip_funding(t) IS true
-         RETURNING t.id, t.tipper, t.amount AS full_amount
+         RETURNING t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
+                 , ( SELECT p.balances
+                       FROM payday_participants p
+                      WHERE p.id = t.tipper
+                   ) AS balances
                  , coalesce_currency_amount((
                        SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr
@@ -388,7 +391,8 @@ class Payday(object):
                    ), t.amount::currency) AS past_transfers_sum
         """, args)]
         takes = [NS(t._asdict()) for t in cursor.all("""
-            SELECT t.member, t.amount, p.main_currency, p.accepted_currencies
+            SELECT t.member, t.amount, t.paid_in_advance
+                 , p.main_currency, p.accepted_currencies
               FROM payday_takes t
               JOIN payday_participants p ON p.id = t.member
              WHERE t.team = %(team_id)s;
@@ -417,6 +421,8 @@ class Payday(object):
         takes_ratio = min(fuzzy_income_sum / fuzzy_takes_sum, 1)
         for take in takes:
             take.amount = (take.amount * takes_ratio).round_up()
+            if take.paid_in_advance is None:
+                take.paid_in_advance = take.amount.zero()
             take.accepted_currencies = take.accepted_currencies.split(',')
             for accepted in take.accepted_currencies:
                 skip = (
@@ -486,6 +492,8 @@ class Payday(object):
         # Loop: compute the adjusted donation amounts, and do the transfers
         transfers = []
         for tip in tips:
+            if tip.paid_in_advance is None:
+                tip.paid_in_advance = tip.full_amount.zero()
             if adjust_tips:
                 tip_amount = (tip.amount + tip.leeway * leeway_ratio).round_up()
                 if tip_amount == 0:
@@ -503,12 +511,31 @@ class Payday(object):
             for take in sorted_takes:
                 if take.amount == 0 or tip.tipper == take.member:
                     continue
-                transfer_amount = min(tip.amount, take.amount.convert(tip_currency))
+                fuzzy_take_amount = take.amount.convert(tip_currency)
+                in_advance_amount = min(
+                    tip.amount,
+                    fuzzy_take_amount,
+                    tip.paid_in_advance,
+                    take.paid_in_advance.convert(tip_currency)
+                )
+                on_time_amount = min(
+                    max(tip.amount - in_advance_amount, 0),
+                    max(fuzzy_take_amount - in_advance_amount, 0),
+                    tip.balances[tip_currency],
+                )
+                transfer_amount = in_advance_amount + on_time_amount
+                if transfer_amount == 0:
+                    continue
                 transfers.append(TakeTransfer(tip.tipper, take.member, transfer_amount))
-                if transfer_amount == tip.amount:
-                    take.amount -= transfer_amount.convert(take.amount.currency)
-                else:
+                if transfer_amount == fuzzy_take_amount:
                     take.amount = take.amount.zero()
+                else:
+                    take.amount -= transfer_amount.convert(take.amount.currency)
+                if in_advance_amount:
+                    tip.paid_in_advance -= in_advance_amount
+                    take.paid_in_advance -= in_advance_amount.convert(take.amount.currency)
+                if on_time_amount:
+                    tip.balances -= on_time_amount
                 tip.amount -= transfer_amount
                 if tip.amount == 0:
                     break

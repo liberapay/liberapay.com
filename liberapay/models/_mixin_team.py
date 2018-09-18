@@ -190,7 +190,12 @@ class MixinTeam(object):
         """
         from liberapay.billing.payday import Payday
         tips = [NS(t._asdict()) for t in cursor.all("""
-            SELECT t.id, t.tipper, t.amount AS full_amount
+            SELECT t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
+                 , ( SELECT basket_sum(w.balance)
+                       FROM wallets w
+                      WHERE w.owner = t.tipper
+                        AND w.is_current
+                   ) AS balances
                  , coalesce_currency_amount((
                        SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr
