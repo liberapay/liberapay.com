@@ -97,17 +97,6 @@ def create_payment(db, payin, payer, return_url, state):
                 "allowed_payment_method": "UNRESTRICTED"
             },
             "soft_descriptor": "Liberapay",
-            "item_list": {
-                "items": [{
-                    "name":
-                        _("One week of the donation") if pt.period == 'weekly' else
-                        _("One month of the donation") if pt.period == 'monthly' else
-                        _("One year of the donation"),
-                    "quantity": pt.n_units,
-                    "price": str(pt.unit_amount.amount),
-                    "currency": pt.unit_amount.currency
-                }]
-            } if pt.n_units >= 1 else {}
         } for pt in transfers],
         "redirect_urls": {
             "return_url": return_url,
