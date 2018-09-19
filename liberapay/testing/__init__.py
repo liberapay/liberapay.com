@@ -23,6 +23,11 @@ from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
+from liberapay.payin.common import (
+    prepare_payin, update_payin,
+    resolve_destination,
+    prepare_payin_transfer, update_payin_transfer,
+)
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.vcr import use_cassette
 
@@ -280,6 +285,51 @@ class Harness(unittest.TestCase):
               JOIN participants p ON p.id = w.owner
           GROUP BY p.username
         """))
+
+
+    def make_payin_and_transfer(
+        self, route, tippee, amount, provider,
+        status='succeeded', error=None, payer_country=None,
+        unit_amount=None, period=None
+    ):
+        payer = route.participant
+        payin = prepare_payin(self.db, payer, amount, route)
+        payin = update_payin(self.db, payin.id, 'fake', status, error)
+        destination = resolve_destination(
+            self.db, tippee, provider, payer, payer_country, amount
+        )
+        recipient = Participant.from_id(destination.participant)
+        if tippee.kind == 'group':
+            context = 'team-donation'
+            team = tippee
+        else:
+            context = 'personal-donation'
+            team = None
+        pt = prepare_payin_transfer(
+            self.db, payin, recipient, destination, context, amount,
+            unit_amount, period, team.id
+        )
+        pt = update_payin_transfer(self.db, pt.id, 'fake', status, error)
+        return payin, pt
+
+    def add_payment_account(self, participant, provider, country='FR', **data):
+        data.setdefault('id', 'x')
+        data.setdefault('default_currency', None)
+        data.setdefault('charges_enabled', None)
+        data.setdefault('verified', True)
+        data.setdefault('display_name', None)
+        data.setdefault('token', None)
+        data.update(p_id=participant.id, provider=provider, country=country)
+        return self.db.one("""
+            INSERT INTO payment_accounts
+                        (participant, provider, country, id,
+                         default_currency, charges_enabled, verified,
+                         display_name, token)
+                 VALUES (%(p_id)s, %(provider)s, %(country)s, %(id)s,
+                         %(default_currency)s, %(charges_enabled)s, %(verified)s,
+                         %(display_name)s, %(token)s)
+              RETURNING *
+        """, data)
 
 
 class Foobar(Exception): pass
