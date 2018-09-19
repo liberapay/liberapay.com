@@ -515,8 +515,8 @@ class Payday(object):
                 in_advance_amount = min(
                     tip.amount,
                     fuzzy_take_amount,
-                    tip.paid_in_advance,
-                    take.paid_in_advance.convert(tip_currency)
+                    max(tip.paid_in_advance, 0),
+                    max(take.paid_in_advance.convert(tip_currency), 0),
                 )
                 on_time_amount = min(
                     max(tip.amount - in_advance_amount, 0),
