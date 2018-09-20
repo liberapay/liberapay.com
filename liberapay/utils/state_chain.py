@@ -205,7 +205,7 @@ def bypass_csp_for_form_redirects(response, state, website, request=None):
     if request is None:
         return
     # https://github.com/liberapay/liberapay.com/issues/952
-    if request.method == 'POST' and response.code == 302:
+    if response.code == 302:
         target = response.headers[b'Location']
         is_internal = (
             target[:1] in (b'/', b'.') or
