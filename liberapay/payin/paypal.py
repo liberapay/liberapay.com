@@ -26,6 +26,17 @@ logger = logging.Logger('paypal')
 session = requests.Session()
 
 
+def _extract_error_message(response):
+    try:
+        error = response.json()['message']
+        assert error
+        return error
+    except Exception:
+        error = response.text  # for Sentry
+        logger.debug(error)
+        raise PaymentError('PayPal')
+
+
 def _init_session():
     # TODO switch to bearer tokens to reduce the risk of exposing the long-lived secret
     if 'Authentication' in session.headers:
@@ -109,9 +120,8 @@ def create_payment(db, payin, payer, return_url, state):
     }
     response = _init_session().post(url, json=data, headers=headers)
     if response.status_code != 201:
-        error = response.text  # for Sentry
-        logger.debug(error)
-        raise PaymentError('PayPal', error)
+        error = _extract_error_message(response)
+        return update_payin(db, payin.id, None, 'failed', error)
     payment = response.json()
     status = PAYMENT_STATES_MAP[payment['state']]
     error = payment.get('failure_reason')
@@ -134,9 +144,8 @@ def execute_payment(db, payin, payer_id):
     data = {"payer_id": payer_id}
     response = _init_session().post(url, json=data, headers=headers)
     if response.status_code != 200:
-        error = response.text  # for Sentry
-        logger.debug(error)
-        raise PaymentError('PayPal')
+        error = _extract_error_message(response)
+        return update_payin(db, payin.id, None, 'failed', error)
     payment = response.json()
 
     # Update the payin
