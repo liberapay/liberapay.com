@@ -6,6 +6,7 @@ import mock
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.billing.transactions import create_debt
+from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, USD, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
@@ -897,6 +898,64 @@ class TestPaydayForTeams(FakeTransfersHarness):
         }
         actual = self.get_balances()
         assert expected == actual
+
+    # Takes paid in advance
+    # =====================
+
+    def test_takes_paid_in_advance(self):
+        team = self.make_participant(
+            'team', kind='group', accepted_currencies='EUR,USD'
+        )
+        alice = self.make_participant('alice', main_currency='EUR',
+                                      accepted_currencies='EUR,USD')
+        team.set_take_for(alice, EUR('1.00'), team)
+        bob = self.make_participant('bob', main_currency='USD',
+                                    accepted_currencies='EUR,USD')
+        team.set_take_for(bob, EUR('1.00'), team)
+
+        stripe_account_alice = self.add_payment_account(alice, 'stripe', default_currency='EUR')
+        self.add_payment_account(bob, 'stripe', default_currency='USD')
+
+        carl = self.make_participant('carl')
+        carl.set_tip_to(team, EUR('10'))
+
+        carl_card = ExchangeRoute.insert(
+            carl, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
+        )
+        payin, pt = self.make_payin_and_transfer(carl_card, team, EUR('10'), 'stripe')
+        assert pt.destination == stripe_account_alice.pk
+
+        Payday.start().run()
+
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 1
+        assert transfers[0].virtual is True
+        assert transfers[0].tipper == carl.id
+        assert transfers[0].tippee == alice.id
+        assert transfers[0].amount == EUR('1')
+
+    def test_negative_paid_in_advance(self):
+        team = self.make_participant('team', kind='group')
+        alice = self.make_participant('alice')
+        team.set_take_for(alice, EUR('1.00'), team)
+
+        stripe_account_alice = self.add_payment_account(alice, 'stripe')
+
+        donor = self.make_participant('donor')
+        donor.set_tip_to(team, EUR('5'))
+
+        donor_card = ExchangeRoute.insert(
+            donor, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
+        )
+        payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('10'), 'stripe')
+        assert pt.destination == stripe_account_alice.pk
+
+        self.db.run("UPDATE takes SET paid_in_advance = -paid_in_advance")
+
+        Payday.start().run()
+
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 0
 
 
 class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):

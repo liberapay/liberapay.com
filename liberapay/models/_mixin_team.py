@@ -44,8 +44,8 @@ class MixinTeam(object):
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
             INSERT INTO takes
-                        (ctime, member, team, amount, actual_amount, recorder)
-                 SELECT ctime, member, %(id)s, NULL, NULL, %(id)s
+                        (ctime, member, team, amount, actual_amount, recorder, paid_in_advance)
+                 SELECT ctime, member, %(id)s, NULL, NULL, %(id)s, paid_in_advance
                    FROM current_takes
                   WHERE team=%(id)s
         """, dict(id=self.id))
@@ -131,14 +131,19 @@ class MixinTeam(object):
             # Insert the new take
             cursor.run("""
 
+                WITH old_take AS (
+                         SELECT *
+                           FROM takes
+                          WHERE team = %(team)s
+                            AND member = %(member)s
+                       ORDER BY mtime DESC
+                          LIMIT 1
+                     )
                 INSERT INTO takes
-                            (ctime, member, team, amount, actual_amount, recorder)
+                            (ctime, member, team, amount, actual_amount, recorder, paid_in_advance)
                      SELECT COALESCE((
                                 SELECT ctime
-                                  FROM takes
-                                 WHERE member=%(member)s
-                                   AND team=%(team)s
-                                 LIMIT 1
+                                  FROM old_take
                             ), current_timestamp)
                           , %(member)s
                           , %(team)s
@@ -146,14 +151,11 @@ class MixinTeam(object):
                           , CASE WHEN %(amount)s IS NULL THEN NULL ELSE
                                 COALESCE((
                                     SELECT actual_amount
-                                      FROM takes
-                                     WHERE member=%(member)s
-                                       AND team=%(team)s
-                                  ORDER BY mtime DESC
-                                     LIMIT 1
+                                      FROM old_take
                                 ), empty_currency_basket())
                             END
                           , %(recorder)s
+                          , (SELECT paid_in_advance FROM old_take)
 
             """, dict(member=member.id, team=self.id, amount=take,
                       recorder=recorder.id))
@@ -188,7 +190,12 @@ class MixinTeam(object):
         """
         from liberapay.billing.payday import Payday
         tips = [NS(t._asdict()) for t in cursor.all("""
-            SELECT t.id, t.tipper, t.amount AS full_amount
+            SELECT t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
+                 , ( SELECT basket_sum(w.balance)
+                       FROM wallets w
+                      WHERE w.owner = t.tipper
+                        AND w.is_current
+                   ) AS balances
                  , coalesce_currency_amount((
                        SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr

@@ -698,6 +698,24 @@ def _record_transfer_result(db, t_id, status, error=None):
                  RETURNING paid_in_advance
                 """, locals())
                 assert r, locals()
+                # Update the `takes.paid_in_advance` column
+                if context == 'take-in-advance':
+                    r = c.one("""
+                        WITH current_take AS (
+                                 SELECT id
+                                   FROM current_takes
+                                  WHERE team = %(team)s
+                                    AND member = %(tippee)s
+                             )
+                        UPDATE takes
+                           SET paid_in_advance = (
+                                   coalesce_currency_amount(paid_in_advance, amount::currency) +
+                                   convert(%(amount)s, amount::currency)
+                               )
+                         WHERE id = (SELECT id FROM current_take)
+                     RETURNING paid_in_advance
+                    """, locals())
+                    assert r, locals()
         else:
             # Unlock the bundles
             bundles = c.all("""
