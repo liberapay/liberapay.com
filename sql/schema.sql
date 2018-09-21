@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '78'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '79'::jsonb);
 
 
 -- app configuration
@@ -587,9 +587,13 @@ CREATE TABLE takes
 , amount            currency_amount      DEFAULT NULL
 , recorder          bigint               NOT NULL REFERENCES participants
 , actual_amount     currency_basket
+, paid_in_advance   currency_amount
 , CONSTRAINT not_negative CHECK (amount IS NULL OR amount >= 0)
 , CONSTRAINT null_amounts_chk CHECK ((actual_amount IS NULL) = (amount IS NULL))
+, CONSTRAINT paid_in_advance_currency_chk CHECK (paid_in_advance::currency = amount::currency)
  );
+
+CREATE INDEX takes_team_idx ON takes (team);
 
 CREATE OR REPLACE FUNCTION check_member() RETURNS trigger AS $$
     DECLARE
@@ -610,11 +614,12 @@ CREATE TRIGGER check_member BEFORE INSERT ON takes FOR EACH ROW
     EXECUTE PROCEDURE check_member();
 
 CREATE VIEW current_takes AS
-    SELECT * FROM (
-         SELECT DISTINCT ON (member, team) t.*
-           FROM takes t
-       ORDER BY member, team, mtime DESC
-    ) AS anon WHERE amount IS NOT NULL;
+    SELECT *
+      FROM ( SELECT DISTINCT ON (team, member) t.*
+               FROM takes t
+           ORDER BY team, member, mtime DESC
+           ) AS x
+     WHERE amount IS NOT NULL;
 
 
 -- log of participant events
