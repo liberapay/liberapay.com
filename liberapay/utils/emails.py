@@ -157,10 +157,26 @@ def _handle_ses_notification(msg):
         address = recipient['emailAddress']
         if address[-1] == '>':
             address = address[:-1].rsplit('<', 1)[1]
-        website.db.run("""
+        # Add the address to our blacklist
+        r = website.db.one("""
             INSERT INTO email_blacklist
                         (address, reason, ses_data, report_id)
                  VALUES (%s, %s, %s, %s)
             ON CONFLICT (report_id, address) DO NOTHING
+              RETURNING *
         """, (address, notif_type.lower(), data, report_id))
+        if r is None:
+            # Already done
+            continue
+        # Attempt to notify the user(s)
+        participants = website.db.all("""
+            SELECT p
+              FROM emails e
+              JOIN participants p
+             WHERE lower(e.address) = lower(%s)
+               AND (p.email IS NULL OR lower(p.email) = lower(e.address))
+        """, (address,))
+        for p in participants:
+            p.notify('email_blacklisted', email=False, web=True, type='warning',
+                     blacklisted_address=address, reason=r.reason)
     msg.delete()
