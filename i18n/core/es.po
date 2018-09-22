@@ -2001,8 +2001,15 @@ msgstr[1] "Siguiente pago en {n} años."
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Cantidad personalizada (min={0}, max={1})"
 
+msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
+msgstr ""
+
 msgid "Initiate the payment"
 msgstr "Iniciar el pago"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr ""
 
 msgid "The payment has been initiated."
 msgstr "El pago ha sido iniciado."
@@ -4330,6 +4337,9 @@ msgstr "Introduce la dirección de correo y el país de la cuenta de PayPal que 
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
 msgstr "Se enviará un código de confirmación a esta dirección de correo electrónico, a no ser que ya esté asociado a tu cuenta de Liberapay."
+
+msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
+msgstr ""
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "Lo sentimos, no hemos encontrado nada que coincida con tu búsqueda."
