@@ -34,6 +34,15 @@ jinja_env_html = Environment(
 )
 
 def compile_email_spt(fpath):
+    """Compile an email simplate.
+
+    Args:
+        fpath (str): filesystem path of the simplate to compile
+
+    Returns:
+        dict: the compiled pages of the simplate, keyed by content type (the
+              first page gets the special key `subject`)
+    """
     r = {}
     with open(fpath, 'rb') as f:
         pages = list(split_and_escape(f.read().decode('utf8')))
