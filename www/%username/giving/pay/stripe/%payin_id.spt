@@ -3,11 +3,12 @@
 from math import ceil
 
 import stripe
+import stripe.error
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import prepare_payin, prepare_payin_transfer, resolve_destination
-from liberapay.payin.stripe import destination_charge
+from liberapay.payin.stripe import destination_charge, repr_stripe_error
 from liberapay.utils import get_participant, NS, partition
 
 ONE_YEAR = {
@@ -65,65 +66,72 @@ if request.method == 'POST':
         website.db, beneficiary, 'stripe', payer, request.country, amount
     )
 
-    return_url = payer.url('giving/pay/stripe/complete')
-    if 'token' in body:
-        one_off = body.get('keep') != 'true'
+    try:
+        if 'token' in body:
+            return_url = payer.url('giving/pay/stripe/complete')
+            one_off = body.get('keep') != 'true'
 
-        owner_address = {
-            k: body.get('owner.address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_STRIPE
-        }
-        if 'line1' not in owner_address:
-            owner_address = None
+            owner_address = {
+                k: body.get('owner.address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_STRIPE
+            }
+            if 'line1' not in owner_address:
+                owner_address = None
 
-        token = stripe.Token.retrieve(body['token'])
-        if token.type == 'bank_account':
-            network = 'stripe-ba'
-        elif token.type == 'card':
-            network = 'stripe-card'
+            token = stripe.Token.retrieve(body['token'])
+            if token.type == 'bank_account':
+                network = 'stripe-ba'
+            elif token.type == 'card':
+                network = 'stripe-card'
+            else:
+                raise response.error(400, "unknown token type")
+
+            source = stripe.Source.create(
+                amount=amount.int().amount if one_off else None,
+                owner={
+                    'address': owner_address,
+                    'email': payer.email or payer.get_any_email(),
+                    'name': body.get('owner.name'),
+                },
+                redirect={'return_url': return_url},
+                token=token.id,
+                type=token.type,
+                usage=('single_use' if one_off else 'reusable'),
+            )
+            customer_id = website.db.one("""
+                SELECT remote_user_id
+                  FROM exchange_routes
+                 WHERE participant = %s
+                   AND network::text LIKE 'stripe-%%'
+                 LIMIT 1
+            """, (payer.id,))
+            if customer_id:
+                customer = stripe.Customer.retrieve(customer_id)
+                customer.sources.create(source=source.id)
+                del customer
+            else:
+                customer_id = stripe.Customer.create(
+                    email=source.owner.email,
+                    source=source.id,
+                ).id
+            source_country = getattr(getattr(source, source.type), 'country', None)
+            source_currency = getattr(getattr(source, source.type), 'currency', None)
+            route = ExchangeRoute.insert(
+                payer, network, source.id, source.status,
+                one_off=one_off, remote_user_id=customer_id,
+                country=source_country, currency=source_currency,
+            )
         else:
-            raise response.error(400, "unknown token type")
+            route = ExchangeRoute.from_id(payer, body.get_int('route'))
+            if route is None:
+                raise response.error(400, "bad `route` value in request body")
+            source = stripe.Source.retrieve(route.address)
+            route.update_status(source.status)
 
-        source = stripe.Source.create(
-            amount=amount.int().amount if one_off else None,
-            owner={
-                'address': owner_address,
-                'email': payer.email or payer.get_any_email(),
-                'name': body.get('owner.name'),
-            },
-            redirect={'return_url': return_url},
-            token=token.id,
-            type=token.type,
-            usage=('single_use' if one_off else 'reusable'),
-        )
-        customer_id = website.db.one("""
-            SELECT remote_user_id
-              FROM exchange_routes
-             WHERE participant = %s
-               AND network::text LIKE 'stripe-%%'
-             LIMIT 1
-        """, (payer.id,))
-        if customer_id:
-            customer = stripe.Customer.retrieve(customer_id)
-            customer.sources.create(source=source.id)
-            del customer
-        else:
-            customer_id = stripe.Customer.create(
-                email=source.owner.email,
-                source=source.id,
-            ).id
-        source_country = getattr(getattr(source, source.type), 'country', None)
-        source_currency = getattr(getattr(source, source.type), 'currency', None)
-        route = ExchangeRoute.insert(
-            payer, network, source.id, source.status,
-            one_off=one_off, remote_user_id=customer_id,
-            country=source_country, currency=source_currency,
-        )
-    else:
-        route = ExchangeRoute.from_id(payer, body.get_int('route'))
-        if route is None:
-            raise response.error(400, "bad `route` value in request body")
-        source = stripe.Source.retrieve(route.address)
-        route.update_status(source.status)
+    except stripe.error.StripeError as e:
+        raise response.error(e.http_status, _(
+            "The payment processor {name} returned an error: “{error_message}”.",
+            name='Stripe', error_message=repr_stripe_error(e)
+        ))
 
     payin = prepare_payin(website.db, payer, amount, route)
     if beneficiary.kind == 'group':
