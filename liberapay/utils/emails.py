@@ -7,7 +7,9 @@ from dns.resolver import Cache, Resolver
 from jinja2 import Environment
 
 from liberapay.constants import EMAIL_RE, JINJA_ENV_COMMON
-from liberapay.exceptions import BadEmailAddress, BadEmailDomain
+from liberapay.exceptions import (
+    BadEmailAddress, BadEmailDomain, EmailAddressIsBlacklisted,
+)
 from liberapay.website import website
 
 
@@ -86,3 +88,15 @@ def normalize_email_address(email):
             website.tell_sentry(e, {})
 
     return email
+
+
+def check_email_blacklist(address):
+    """Raises `EmailAddressIsBlacklisted` if the given email address is blacklisted.
+    """
+    r = website.db.one("""
+        SELECT reason, ts
+          FROM email_blacklist
+         WHERE lower(address) = lower(%s)
+    """, (address,))
+    if r:
+        raise EmailAddressIsBlacklisted(address, r.reason, r.ts)

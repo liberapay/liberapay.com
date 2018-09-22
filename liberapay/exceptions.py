@@ -153,6 +153,26 @@ class BadEmailDomain(ProblemChangingEmail):
     def msg(self, _):
         return _("'{domain_name}' is not a valid email domain.", domain_name=self.args[0])
 
+class EmailAddressIsBlacklisted(ProblemChangingEmail):
+    def msg(self, _, to_age):
+        address, reason, ts = self.args
+        if reason == 'bounce':
+            return _(
+                "The email address {email_address} is blacklisted because an "
+                "attempt to send a message to it failed {timedelta} ago. Please "
+                "send an email from that address to support@liberapay.com if "
+                "you want us to remove it from the blacklist.",
+                email_address=address, timedelta=to_age(ts)
+            )
+        else:
+            return _(
+                "The email address {email_address} is blacklisted because of a "
+                "complaint received {timedelta} ago. Please send an email "
+                "from that address to support@liberapay.com if you want us to "
+                "remove it from the blacklist.",
+                email_address=address, timedelta=to_age(ts)
+            )
+
 class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
     code = 409
     def msg(self, _):

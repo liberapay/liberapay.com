@@ -73,7 +73,7 @@ from liberapay.utils import (
     emails, i18n, markdown,
 )
 from liberapay.utils.currencies import MoneyBasket
-from liberapay.utils.emails import normalize_email_address
+from liberapay.utils.emails import check_email_blacklist, normalize_email_address
 from liberapay.website import website
 
 
@@ -1001,6 +1001,7 @@ class Participant(Model, MixinTeam):
                 raise CannotRemovePrimaryEmail()
 
     def send_email(self, spt_name, email, **context):
+        check_email_blacklist(email)
         self.fill_notification_context(context)
         context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
