@@ -918,6 +918,7 @@ class Participant(Model, MixinTeam):
     def update_email(self, email):
         if not getattr(self.get_email(email), 'verified', False):
             raise EmailNotVerified(email)
+        check_email_blacklist(email)
         id = self.id
         with self.db.get_cursor() as c:
             self.add_event(c, 'set_primary_email', email)
