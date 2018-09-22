@@ -37,6 +37,7 @@ from liberapay.exceptions import (
     BadDonationCurrency,
     BadPasswordSize,
     CannotRemovePrimaryEmail,
+    EmailAddressIsBlacklisted,
     EmailAlreadyAttachedToSelf,
     EmailAlreadyTaken,
     EmailNotVerified,
@@ -1058,14 +1059,14 @@ class Participant(Model, MixinTeam):
             SELECT *
               FROM notifications
              WHERE id > %s
-               AND email AND email_sent IS NOT true
+               AND email AND email_sent IS NULL
           ORDER BY id ASC
              LIMIT 60
         """, (last_id,))
-        dequeue = lambda m: cls.db.run(
-            "DELETE FROM notifications WHERE id = %s" if not m.web else
-            "UPDATE notifications SET email_sent = true WHERE id = %s",
-            (m.id,)
+        dequeue = lambda m, sent: cls.db.run(
+            "DELETE FROM notifications WHERE id = %(id)s" if not m.web else
+            "UPDATE notifications SET email_sent = %(sent)s WHERE id = %(id)s",
+            dict(id=m.id, sent=sent)
         )
         last_id = 0
         while True:
@@ -1077,14 +1078,16 @@ class Participant(Model, MixinTeam):
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
                 if not email:
-                    dequeue(msg)
+                    dequeue(msg, False)
                     continue
                 try:
                     p.send_email(msg.event, email, **d)
+                except EmailAddressIsBlacklisted:
+                    dequeue(msg, False)
                 except Exception as e:
                     website.tell_sentry(e, {})
                 else:
-                    dequeue(msg)
+                    dequeue(msg, True)
                 sleep(1)
             last_id = messages[-1].id
 
