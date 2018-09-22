@@ -1,7 +1,11 @@
 from __future__ import unicode_literals
 
+import json
+from time import sleep
+
 from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
+import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, Resolver
 from jinja2 import Environment
@@ -97,6 +101,57 @@ def check_email_blacklist(address):
         SELECT reason, ts
           FROM email_blacklist
          WHERE lower(address) = lower(%s)
+           AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+      ORDER BY ts DESC
+         LIMIT 1
     """, (address,))
     if r:
         raise EmailAddressIsBlacklisted(address, r.reason, r.ts)
+
+
+def handle_email_bounces():
+    """Process SES notifications, fetching them from SQS.
+    """
+    sqs = boto3.resource('sqs', region_name=website.app_conf.ses_region)
+    ses_queue = sqs.Queue(website.app_conf.ses_feedback_queue_url)
+    while True:
+        messages = ses_queue.receive_messages(WaitTimeSeconds=20, MaxNumberOfMessages=10)
+        if not messages:
+            break
+        for msg in messages:
+            try:
+                _handle_ses_notification(msg)
+            except Exception as e:
+                website.tell_sentry(e, {})
+        sleep(1)
+
+
+def _handle_ses_notification(msg):
+    # Doc: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html
+    data = json.loads(json.loads(msg.body)['Message'])
+    notif_type = data['notificationType']
+    if notif_type == 'Bounce':
+        bounce = data['bounce']
+        report_id = bounce['feedbackId']
+        recipients = bounce['bouncedRecipients']
+    elif notif_type == 'Complaint':
+        complaint = data['complaint']
+        report_id = complaint['feedbackId']
+        recipients = complaint['complainedRecipients']
+        complaint_type = complaint['complaintFeedbackType']
+        if complaint_type not in ('abuse', 'fraud'):
+            # We'll figure out how to deal with that when it happens.
+            raise ValueError(complaint_type)
+    else:
+        raise ValueError(notif_type)
+    for recipient in recipients:
+        address = recipient['emailAddress']
+        if address[-1] == '>':
+            address = address[:-1].rsplit('<', 1)[1]
+        website.db.run("""
+            INSERT INTO email_blacklist
+                        (address, reason, ses_data, report_id)
+                 VALUES (%s, %s, %s, %s)
+            ON CONFLICT (report_id, address) DO NOTHING
+        """, (address, notif_type.lower(), data, report_id))
+    msg.delete()

@@ -32,6 +32,7 @@ from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie, urlquote,
 )
 from liberapay.utils.currencies import MoneyBasket, fetch_currency_exchange_rates
+from liberapay.utils.emails import handle_email_bounces
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
     canonize, insert_constants, _dispatch_path_to_filesystem, enforce_rate_limits,
@@ -122,6 +123,8 @@ if conf:
     cron(Daily(hour=16), lambda: fetch_currency_exchange_rates(website.db), True)
     cron(Daily(hour=17), Payday.update_cached_amounts, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)
+    if conf.ses_feedback_queue_url:
+        cron(conf.fetch_email_bounces_every, handle_email_bounces, True)
 
 
 # Website Algorithm
