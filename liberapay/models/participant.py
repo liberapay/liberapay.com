@@ -842,8 +842,12 @@ class Participant(Model, MixinTeam):
             cursor.run("""
                 DELETE FROM emails WHERE participant = %(p_id)s;
                 DELETE FROM events WHERE participant = %(p_id)s;
+                DELETE FROM user_secrets
+                      WHERE participant = %(p_id)s
+                        AND id >= 1
+                        AND mtime <= (current_timestamp - %(SESSION_TIMEOUT)s);
                 DELETE FROM participants WHERE id = %(p_id)s;
-            """, dict(p_id=self.id))
+            """, dict(p_id=self.id, SESSION_TIMEOUT=SESSION_TIMEOUT))
 
 
     # Emails
