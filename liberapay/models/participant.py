@@ -977,10 +977,15 @@ class Participant(Model, MixinTeam):
 
     def get_emails(self):
         return self.db.all("""
-            SELECT *
-              FROM emails
-             WHERE participant=%s
-          ORDER BY id
+            SELECT e.*
+                 , ( SELECT count(b)
+                       FROM email_blacklist b
+                      WHERE lower(b.address) = lower(e.address)
+                        AND (b.ignore_after IS NULL OR b.ignore_after > current_timestamp)
+                   ) > 0 AS blacklisted
+              FROM emails e
+             WHERE e.participant=%s
+          ORDER BY e.id
         """, (self.id,))
 
     def get_any_email(self, cursor=None):
