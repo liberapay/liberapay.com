@@ -37,6 +37,7 @@ from liberapay.exceptions import (
     BadDonationCurrency,
     BadPasswordSize,
     CannotRemovePrimaryEmail,
+    EmailAddressIsBlacklisted,
     EmailAlreadyAttachedToSelf,
     EmailAlreadyTaken,
     EmailNotVerified,
@@ -73,7 +74,7 @@ from liberapay.utils import (
     emails, i18n, markdown,
 )
 from liberapay.utils.currencies import MoneyBasket
-from liberapay.utils.emails import normalize_email_address
+from liberapay.utils.emails import check_email_blacklist, normalize_email_address
 from liberapay.website import website
 
 
@@ -917,6 +918,7 @@ class Participant(Model, MixinTeam):
     def update_email(self, email):
         if not getattr(self.get_email(email), 'verified', False):
             raise EmailNotVerified(email)
+        check_email_blacklist(email)
         id = self.id
         with self.db.get_cursor() as c:
             self.add_event(c, 'set_primary_email', email)
@@ -975,10 +977,15 @@ class Participant(Model, MixinTeam):
 
     def get_emails(self):
         return self.db.all("""
-            SELECT *
-              FROM emails
-             WHERE participant=%s
-          ORDER BY id
+            SELECT e.*
+                 , ( SELECT count(b)
+                       FROM email_blacklist b
+                      WHERE lower(b.address) = lower(e.address)
+                        AND (b.ignore_after IS NULL OR b.ignore_after > current_timestamp)
+                   ) > 0 AS blacklisted
+              FROM emails e
+             WHERE e.participant=%s
+          ORDER BY e.id
         """, (self.id,))
 
     def get_any_email(self, cursor=None):
@@ -1001,6 +1008,7 @@ class Participant(Model, MixinTeam):
                 raise CannotRemovePrimaryEmail()
 
     def send_email(self, spt_name, email, **context):
+        check_email_blacklist(email)
         self.fill_notification_context(context)
         context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
@@ -1057,14 +1065,14 @@ class Participant(Model, MixinTeam):
             SELECT *
               FROM notifications
              WHERE id > %s
-               AND email AND email_sent IS NOT true
+               AND email AND email_sent IS NULL
           ORDER BY id ASC
              LIMIT 60
         """, (last_id,))
-        dequeue = lambda m: cls.db.run(
-            "DELETE FROM notifications WHERE id = %s" if not m.web else
-            "UPDATE notifications SET email_sent = true WHERE id = %s",
-            (m.id,)
+        dequeue = lambda m, sent: cls.db.run(
+            "DELETE FROM notifications WHERE id = %(id)s" if not m.web else
+            "UPDATE notifications SET email_sent = %(sent)s WHERE id = %(id)s",
+            dict(id=m.id, sent=sent)
         )
         last_id = 0
         while True:
@@ -1076,14 +1084,16 @@ class Participant(Model, MixinTeam):
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
                 if not email:
-                    dequeue(msg)
+                    dequeue(msg, False)
                     continue
                 try:
                     p.send_email(msg.event, email, **d)
+                except EmailAddressIsBlacklisted:
+                    dequeue(msg, False)
                 except Exception as e:
                     website.tell_sentry(e, {})
                 else:
-                    dequeue(msg)
+                    dequeue(msg, True)
                 sleep(1)
             last_id = messages[-1].id
 

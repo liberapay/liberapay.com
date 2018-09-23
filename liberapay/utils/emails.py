@@ -1,13 +1,19 @@
 from __future__ import unicode_literals
 
+import json
+from time import sleep
+
 from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
+import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, Resolver
 from jinja2 import Environment
 
 from liberapay.constants import EMAIL_RE, JINJA_ENV_COMMON
-from liberapay.exceptions import BadEmailAddress, BadEmailDomain
+from liberapay.exceptions import (
+    BadEmailAddress, BadEmailDomain, EmailAddressIsBlacklisted,
+)
 from liberapay.website import website
 
 
@@ -28,6 +34,15 @@ jinja_env_html = Environment(
 )
 
 def compile_email_spt(fpath):
+    """Compile an email simplate.
+
+    Args:
+        fpath (str): filesystem path of the simplate to compile
+
+    Returns:
+        dict: the compiled pages of the simplate, keyed by content type (the
+              first page gets the special key `subject`)
+    """
     r = {}
     with open(fpath, 'rb') as f:
         pages = list(split_and_escape(f.read().decode('utf8')))
@@ -86,3 +101,82 @@ def normalize_email_address(email):
             website.tell_sentry(e, {})
 
     return email
+
+
+def check_email_blacklist(address):
+    """Raises `EmailAddressIsBlacklisted` if the given email address is blacklisted.
+    """
+    r = website.db.one("""
+        SELECT reason, ts
+          FROM email_blacklist
+         WHERE lower(address) = lower(%s)
+           AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+      ORDER BY ts DESC
+         LIMIT 1
+    """, (address,))
+    if r:
+        raise EmailAddressIsBlacklisted(address, r.reason, r.ts)
+
+
+def handle_email_bounces():
+    """Process SES notifications, fetching them from SQS.
+    """
+    sqs = boto3.resource('sqs', region_name=website.app_conf.ses_region)
+    ses_queue = sqs.Queue(website.app_conf.ses_feedback_queue_url)
+    while True:
+        messages = ses_queue.receive_messages(WaitTimeSeconds=20, MaxNumberOfMessages=10)
+        if not messages:
+            break
+        for msg in messages:
+            try:
+                _handle_ses_notification(msg)
+            except Exception as e:
+                website.tell_sentry(e, {})
+        sleep(1)
+
+
+def _handle_ses_notification(msg):
+    # Doc: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html
+    data = json.loads(json.loads(msg.body)['Message'])
+    notif_type = data['notificationType']
+    if notif_type == 'Bounce':
+        bounce = data['bounce']
+        report_id = bounce['feedbackId']
+        recipients = bounce['bouncedRecipients']
+    elif notif_type == 'Complaint':
+        complaint = data['complaint']
+        report_id = complaint['feedbackId']
+        recipients = complaint['complainedRecipients']
+        complaint_type = complaint['complaintFeedbackType']
+        if complaint_type not in ('abuse', 'fraud'):
+            # We'll figure out how to deal with that when it happens.
+            raise ValueError(complaint_type)
+    else:
+        raise ValueError(notif_type)
+    for recipient in recipients:
+        address = recipient['emailAddress']
+        if address[-1] == '>':
+            address = address[:-1].rsplit('<', 1)[1]
+        # Add the address to our blacklist
+        r = website.db.one("""
+            INSERT INTO email_blacklist
+                        (address, reason, ses_data, report_id)
+                 VALUES (%s, %s, %s, %s)
+            ON CONFLICT (report_id, address) DO NOTHING
+              RETURNING *
+        """, (address, notif_type.lower(), data, report_id))
+        if r is None:
+            # Already done
+            continue
+        # Attempt to notify the user(s)
+        participants = website.db.all("""
+            SELECT p
+              FROM emails e
+              JOIN participants p
+             WHERE lower(e.address) = lower(%s)
+               AND (p.email IS NULL OR lower(p.email) = lower(e.address))
+        """, (address,))
+        for p in participants:
+            p.notify('email_blacklisted', email=False, web=True, type='warning',
+                     blacklisted_address=address, reason=r.reason)
+    msg.delete()

@@ -175,7 +175,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
             carry_on = body.pop('log-in.carry-on', None)
             if not p and carry_on:
                 p_email = session_p and (
-                    session_p.email or session_p.get_emails()[0].address
+                    session_p.email or session_p.get_any_email()
                 )
                 if p_email != carry_on:
                     state['log-in.carry-on'] = carry_on
