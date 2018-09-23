@@ -17,6 +17,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('facebook_callback', '"http://localhost:8339/on/facebook/associate"'::jsonb),
     ('facebook_id', '"1418954898427187"'::jsonb),
     ('facebook_secret', '"3bcb5dc6ce821e5202870c1e6ef5bbc4"'::jsonb),
+    ('fetch_email_bounces_every', '60'::jsonb),
     ('github_callback', '"http://127.0.0.1:8339/on/github/associate"'::jsonb),
     ('github_id', '"18891d01e40e5aef93b8"'::jsonb),
     ('github_secret', '"46f75669895e96029d57b64832d6f2c8e6291a0e"'::jsonb),

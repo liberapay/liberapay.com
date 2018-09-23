@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '79'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '80'::jsonb);
 
 
 -- app configuration
@@ -670,6 +670,25 @@ CREATE TRIGGER update_payment_accounts
     FOR EACH ROW EXECUTE PROCEDURE update_payment_accounts();
 
 
+-- email addresses blacklist
+
+CREATE TYPE blacklist_reason AS ENUM ('bounce', 'complaint');
+
+CREATE TABLE email_blacklist
+( address        text               NOT NULL
+, ts             timestamptz        NOT NULL DEFAULT current_timestamp
+, reason         blacklist_reason   NOT NULL
+, details        text
+, ses_data       jsonb
+, ignore_after   timestamptz
+, report_id      text
+);
+
+CREATE INDEX email_blacklist_idx ON email_blacklist (lower(address));
+CREATE UNIQUE INDEX email_blacklist_report_key ON email_blacklist (report_id, address)
+    WHERE report_id IS NOT NULL;
+
+
 -- profile statements
 
 CREATE TYPE stmt_type AS ENUM ('profile', 'sidebar', 'subtitle', 'summary');
@@ -711,7 +730,7 @@ CREATE TABLE notifications
 );
 
 CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
-    WHERE (email AND email_sent IS NOT true);
+    WHERE (email AND email_sent IS NULL);
 
 
 -- cache of participant balances at specific times
