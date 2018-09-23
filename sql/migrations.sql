@@ -1799,3 +1799,7 @@ INSERT INTO app_conf VALUES ('fetch_email_bounces_every', '60'::jsonb);
 DROP INDEX queued_emails_idx;
 CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
     WHERE (email AND email_sent IS NULL);
+
+-- migration #81
+DROP INDEX email_blacklist_report_key;
+CREATE UNIQUE INDEX email_blacklist_report_key ON email_blacklist (report_id, address);

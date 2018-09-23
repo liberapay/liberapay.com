@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '80'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '81'::jsonb);
 
 
 -- app configuration
@@ -685,8 +685,7 @@ CREATE TABLE email_blacklist
 );
 
 CREATE INDEX email_blacklist_idx ON email_blacklist (lower(address));
-CREATE UNIQUE INDEX email_blacklist_report_key ON email_blacklist (report_id, address)
-    WHERE report_id IS NOT NULL;
+CREATE UNIQUE INDEX email_blacklist_report_key ON email_blacklist (report_id, address);
 
 
 -- profile statements
