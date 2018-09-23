@@ -164,7 +164,7 @@ def _handle_ses_notification(msg):
                  VALUES (%s, %s, %s, %s)
             ON CONFLICT (report_id, address) DO NOTHING
               RETURNING *
-        """, (address, notif_type.lower(), data, report_id))
+        """, (address, notif_type.lower(), json.dumps(data), report_id))
         if r is None:
             # Already done
             continue
@@ -172,7 +172,7 @@ def _handle_ses_notification(msg):
         participants = website.db.all("""
             SELECT p
               FROM emails e
-              JOIN participants p
+              JOIN participants p ON p.id = e.participant
              WHERE lower(e.address) = lower(%s)
                AND (p.email IS NULL OR lower(p.email) = lower(e.address))
         """, (address,))
