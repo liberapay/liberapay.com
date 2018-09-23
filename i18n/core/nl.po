@@ -51,6 +51,20 @@ msgstr[1] "Vernieuw deze donaties"
 msgid "Manage your donations"
 msgstr "Beheer je donaties"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Beheer je e-mailadressen"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Iemand wil aan je doneren op Liberapay"
 
@@ -635,6 +649,14 @@ msgstr "'{0}' is geen geldig e-mailadres."
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name}\" is geen geldig e-maildomein."
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1784,6 +1806,9 @@ msgid_plural "Email Addresses (Private)"
 msgstr[0] "E-mailadres (privé)"
 msgstr[1] "E-mailadressen (privé)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Primair"
 
@@ -1863,9 +1888,6 @@ msgstr "Controleer alsjeblieft of de link die je geklikt of geplakt hebt niet is
 
 msgid "Password"
 msgstr "Wachtwoord"
-
-msgid "Manage your email addresses"
-msgstr "Beheer je e-mailadressen"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay heeft je steun nodig"

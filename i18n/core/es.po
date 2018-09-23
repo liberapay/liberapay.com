@@ -50,6 +50,20 @@ msgstr[1] "Renovar estas donaciones"
 msgid "Manage your donations"
 msgstr "Gestiona tus donaciones"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Gestiona tus direcciones de correo electrónico"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Alguien quiere hacerte una donación en Liberapay"
 
@@ -634,6 +648,14 @@ msgstr "«{0}» no es una dirección de correo electrónico válida."
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "«{domain_name}» no es un dominio de correo válido."
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1783,6 +1805,9 @@ msgid_plural "Email Addresses (Private)"
 msgstr[0] "Correo electrónico (privado)"
 msgstr[1] "Correos electrónicos (privado)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Principal"
 
@@ -1862,9 +1887,6 @@ msgstr "Revisa que el enlace que has pulsado o copiado y pegado no se ha truncad
 
 msgid "Password"
 msgstr "Contraseña"
-
-msgid "Manage your email addresses"
-msgstr "Gestiona tus direcciones de correo electrónico"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay necesita tu apoyo"

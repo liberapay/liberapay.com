@@ -50,6 +50,20 @@ msgstr[1] "Forny disse donasjonene"
 msgid "Manage your donations"
 msgstr "Administrer dine donasjoner"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Behandle dine e-postadresser"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Noen vil donere til deg på Liberapay"
 
@@ -634,6 +648,14 @@ msgstr "\"{0}\" er ikke en gyldig e-postadresse."
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name} er ikke et gyldig e-postdomene."
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1786,6 +1808,9 @@ msgid_plural "Email Addresses (Private)"
 msgstr[0] "E-postadresse (privat)"
 msgstr[1] "E-postadresser (private)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Hovedadresse"
 
@@ -1865,9 +1890,6 @@ msgstr "Sjekk at lenken du klikket på eller limte inn ikke har blitt forkortet 
 
 msgid "Password"
 msgstr "Passord"
-
-msgid "Manage your email addresses"
-msgstr "Behandle dine e-postadresser"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay trenger din støtte"

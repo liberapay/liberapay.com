@@ -52,6 +52,20 @@ msgstr[2] "Поновити ці пожертвування"
 msgid "Manage your donations"
 msgstr "Керування вашими пожертвуваннями"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Керування адресами електронної пошти"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Хтось бажає зробити Вам пожертвування через Liberapay"
 
@@ -638,6 +652,14 @@ msgstr "'{0}' не є коректною адресою електронної �
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1794,6 +1816,9 @@ msgstr[0] "Адреса електронної пошти (Особиста)"
 msgstr[1] "Адреси електронної пошти (Особисті)"
 msgstr[2] "Адреси електронної пошти (Особистих)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Основна"
 
@@ -1873,9 +1898,6 @@ msgstr "Перевірте, чи посилання, на яке ви натис
 
 msgid "Password"
 msgstr "Пароль"
-
-msgid "Manage your email addresses"
-msgstr "Керування адресами електронної пошти"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay потрібна ваша підтримка"

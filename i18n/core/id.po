@@ -48,6 +48,20 @@ msgstr[0] ""
 msgid "Manage your donations"
 msgstr ""
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr ""
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Seseorang ingin memberikan donasi ke anda melalui Liberapay"
 
@@ -611,6 +625,14 @@ msgstr ""
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1753,6 +1775,9 @@ msgid "Email Address (Private)"
 msgid_plural "Email Addresses (Private)"
 msgstr[0] ""
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr ""
 
@@ -1831,9 +1856,6 @@ msgid "Please check that the link you clicked on or copy-pasted hasn't been trun
 msgstr ""
 
 msgid "Password"
-msgstr ""
-
-msgid "Manage your email addresses"
 msgstr ""
 
 msgid "Liberapay needs your support"

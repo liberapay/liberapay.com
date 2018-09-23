@@ -48,6 +48,20 @@ msgstr[0] "기부금 갱신"
 msgid "Manage your donations"
 msgstr ""
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "이메일 주소 관리"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "누군가가 Liberapay에서 당신에게 기부하고 싶어합니다"
 
@@ -609,6 +623,14 @@ msgstr "'{0}' 은(는) 유효한 이메일 주소가 아닙니다."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1754,6 +1776,9 @@ msgid "Email Address (Private)"
 msgid_plural "Email Addresses (Private)"
 msgstr[0] "이메일 주소 (공개되지 않음)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "기본"
 
@@ -1833,9 +1858,6 @@ msgstr "클릭하거나 복사-붙여넣기 한 링크가 변조되거나 링크
 
 msgid "Password"
 msgstr "비밀번호"
-
-msgid "Manage your email addresses"
-msgstr "이메일 주소 관리"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay는 당신의 도움이 필요합니다"

@@ -50,6 +50,20 @@ msgstr[1] "Rinnova queste donazioni"
 msgid "Manage your donations"
 msgstr "Gestisci le tue donazioni"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Gestisci i tuoi indirizzi e-mail"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Qualcuno ti vuole fare una donazione su Liberapay"
 
@@ -635,6 +649,14 @@ msgstr "\"{0}\" non è un indirizzo e-mail valido."
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "\"{domain_name}\" non è un profilo e-mail valido."
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1784,6 +1806,9 @@ msgid_plural "Email Addresses (Private)"
 msgstr[0] "Indirizzo e-mail (privato)"
 msgstr[1] "Indirizzi e-mail (privati)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Primario"
 
@@ -1863,9 +1888,6 @@ msgstr "Si prega di controllare che il collegamento sul quale hai fatto clic o c
 
 msgid "Password"
 msgstr "Password"
-
-msgid "Manage your email addresses"
-msgstr "Gestisci i tuoi indirizzi e-mail"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay ha bisogno del tuo sostegno"

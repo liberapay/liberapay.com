@@ -52,6 +52,20 @@ msgstr[2] ""
 msgid "Manage your donations"
 msgstr "Adimistrați-vă donațiile"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Administrați-vă adresele de e-mail"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Cineva vrea să vă doneze pe Liberapay"
 
@@ -619,6 +633,14 @@ msgstr "„{0}” nu este o adresă de e-mail validă."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1774,6 +1796,9 @@ msgstr[0] "Adresă e-mail (privată)"
 msgstr[1] "Adrese e-mail (private)"
 msgstr[2] "Adrese de e-mail (private)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Primară"
 
@@ -1853,9 +1878,6 @@ msgstr "Verificați dacă legătura pe care ați apăsat sau ați copiat-o a fos
 
 msgid "Password"
 msgstr "Parolă"
-
-msgid "Manage your email addresses"
-msgstr "Administrați-vă adresele de e-mail"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay are nevoie de sprijinul dumneavoastră"

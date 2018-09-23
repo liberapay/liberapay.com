@@ -53,6 +53,20 @@ msgstr[2] "Wznów te darowizny"
 msgid "Manage your donations"
 msgstr "Zarządzaj swoimi darowiznami"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Zarządzaj swoimi adresami e-mail"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Ktoś chce przekazać Tobie darowiznę na Liberapay"
 
@@ -620,6 +634,14 @@ msgstr "'{0}' jest nie prawidłowym adresem e-mail."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1775,6 +1797,9 @@ msgstr[0] "Adres e-mail (prywatny)"
 msgstr[1] "Adresy e-mail (prywatne)"
 msgstr[2] "Adresy e-mail (prywatne)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Podstawowy"
 
@@ -1854,9 +1879,6 @@ msgstr "Prosimy o sprawdzenie czy odnośnik który kliknąłeś lub wkleiłeś n
 
 msgid "Password"
 msgstr "Hasło"
-
-msgid "Manage your email addresses"
-msgstr "Zarządzaj swoimi adresami e-mail"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay potrzebuje Twojego wsparcia"

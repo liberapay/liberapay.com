@@ -50,6 +50,20 @@ msgstr[1] "Perbaharui derma-derma ini"
 msgid "Manage your donations"
 msgstr "Uruskan derma anda"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Uruskan alamat emel anda"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Seseorang ingin menderma kepada anda menggunakan Liberapay"
 
@@ -636,6 +650,14 @@ msgstr "'{0}' bukan alamat emel yang sah."
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' bukannya domain emel yang sah."
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1785,6 +1807,9 @@ msgid_plural "Email Addresses (Private)"
 msgstr[0] "Alamat Emel (Sulit)"
 msgstr[1] "Alamat Emel (Sulit)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Utama"
 
@@ -1864,9 +1889,6 @@ msgstr "Sila pastikan pautan yang anda klik atau salin-tampal tidak terpotong at
 
 msgid "Password"
 msgstr "Kata laluan"
-
-msgid "Manage your email addresses"
-msgstr "Uruskan alamat emel anda"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay perlukan sokongan anda"

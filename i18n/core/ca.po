@@ -50,6 +50,20 @@ msgstr[1] "Renova aquests donatius"
 msgid "Manage your donations"
 msgstr "Gestioneu els vostres donatius"
 
+msgid "Your email address has been blacklisted"
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+msgid "Manage your email addresses"
+msgstr "Gestioneu les adreces de correu electrònic"
+
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Algú vol fer-vos un donatiu via Liberapay"
 
@@ -634,6 +648,14 @@ msgstr "«{0}» no és una adreça de correu electrònic vàlida."
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "«{domain_name}» no és un domini de correu vàlid."
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
+
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1783,6 +1805,9 @@ msgid_plural "Email Addresses (Private)"
 msgstr[0] "Adreça electrònica (privada)"
 msgstr[1] "Adreces electròniques (privades)"
 
+msgid "Blacklisted"
+msgstr ""
+
 msgid "Primary"
 msgstr "Principal"
 
@@ -1862,9 +1887,6 @@ msgstr "Comproveu que l'enllaç on heu fet clic, o que heu enganxat, no estigui 
 
 msgid "Password"
 msgstr "Contrasenya"
-
-msgid "Manage your email addresses"
-msgstr "Gestioneu les adreces de correu electrònic"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay necessita el vostre suport"
