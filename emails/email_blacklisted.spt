@@ -13,3 +13,6 @@
     "from the blacklist.",
     email_address=blacklisted_address
 ) }}</p>
+
+<p><a href="{{ participant.url('emails/') }}" style="{{ button_style('default') }}">{{
+    _("Manage your email addresses") }}</a></p>
