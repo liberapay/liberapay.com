@@ -31,8 +31,21 @@ Liberapay.stripe_init = function() {
 
     var submitting = false;
     $form.submit(Liberapay.wrap(function(e) {
+        if ($form.data('js-submit-disable')) {
+            e.preventDefault();
+            return false;
+        }
         if (submitting) {
             submitting = false;
+            // Prevent submitting again
+            $form.data('js-submit-disable', true);
+            var $inputs = $form.find(':not(:disabled)');
+            setTimeout(function () { $inputs.prop('disabled', true); }, 100);
+            // Unlock if the user comes back to the page
+            $(window).on('focus pageshow', function () {
+                $form.data('js-submit-disable', false);
+                $inputs.prop('disabled', false);
+            });
             return;
         }
         e.preventDefault();
