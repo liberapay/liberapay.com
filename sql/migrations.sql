@@ -1795,7 +1795,9 @@ CREATE TABLE email_blacklist
 CREATE INDEX email_blacklist_idx ON email_blacklist (lower(address));
 CREATE UNIQUE INDEX email_blacklist_report_key ON email_blacklist (report_id, address)
     WHERE report_id IS NOT NULL;
-INSERT INTO app_conf VALUES ('fetch_email_bounces_every', '60'::jsonb);
+INSERT INTO app_conf VALUES
+    ('fetch_email_bounces_every', '60'::jsonb),
+    ('ses_feedback_queue_url', '""'::jsonb);
 DROP INDEX queued_emails_idx;
 CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
     WHERE (email AND email_sent IS NULL);
