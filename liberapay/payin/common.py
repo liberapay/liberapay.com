@@ -246,7 +246,7 @@ def update_payin_transfer(
          RETURNING *
         """, locals())
         if not pt:
-            return cursor.one("SELECT * FROM payins WHERE id = %s", (pt_id,))
+            return cursor.one("SELECT * FROM payin_transfers WHERE id = %s", (pt_id,))
 
         cursor.run("""
             INSERT INTO payin_transfer_events
