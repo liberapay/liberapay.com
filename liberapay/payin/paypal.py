@@ -18,7 +18,9 @@ PAYMENT_STATES_MAP = {
 SALE_STATES_MAP = {
     'completed': 'succeeded',
     'denied': 'failed',
+    'partially_refunded': 'succeeded',
     'pending': 'pending',
+    'refunded': 'succeeded',
 }
 
 logger = logging.Logger('paypal')
@@ -147,7 +149,12 @@ def execute_payment(db, payin, payer_id):
         error = _extract_error_message(response)
         return update_payin(db, payin.id, None, 'failed', error)
     payment = response.json()
+    return record_payment_result(db, payin, payment)
 
+
+def record_payment_result(db, payin, payment):
+    """Update the status of a payin and its transfers in our database.
+    """
     # Update the payin
     status = PAYMENT_STATES_MAP[payment['state']]
     error = payment.get('failure_reason')
@@ -155,21 +162,22 @@ def execute_payment(db, payin, payer_id):
 
     # Update the payin transfers
     for tr in payment['transactions']:
-        sale = tr.get('related_resources', [{}])[0].get('sale')
-        if sale:
-            pt_id = tr['invoice_number']
-            pt_remote_id = sale['id']
-            pt_status = SALE_STATES_MAP[sale['state']]
-            pt_error = sale.get('reason_code')
-            pt_fee = sale.get('transaction_fee')
-            if pt_fee:
-                pt_fee = Money(pt_fee['value'], pt_fee['currency'])
-            charge_amount = Money(sale['amount']['total'], sale['amount']['currency'])
-            net_amount = charge_amount - (pt_fee or 0)
-            update_payin_transfer(
-                db, pt_id, pt_remote_id, pt_status, pt_error,
-                amount=net_amount, fee=pt_fee
-            )
+        for related_resource in tr.get('related_resources', ()):
+            sale = related_resource.get('sale')
+            if sale:
+                pt_id = tr['invoice_number']
+                pt_remote_id = sale['id']
+                pt_status = SALE_STATES_MAP[sale['state']]
+                pt_error = sale.get('reason_code')
+                pt_fee = sale.get('transaction_fee')
+                if pt_fee:
+                    pt_fee = Money(pt_fee['value'], pt_fee['currency'])
+                charge_amount = Money(sale['amount']['total'], sale['amount']['currency'])
+                net_amount = charge_amount - (pt_fee or 0)
+                update_payin_transfer(
+                    db, pt_id, pt_remote_id, pt_status, pt_error,
+                    amount=net_amount, fee=pt_fee
+                )
 
     return payin
 
@@ -188,6 +196,4 @@ def sync_payment(db, payin):
         logger.debug(error)
         raise PaymentError('PayPal')
     payment = response.json()
-    status = PAYMENT_STATES_MAP[payment['state']]
-    error = payment.get('failure_reason')
-    return update_payin(db, payin.id, payment['id'], status, error)
+    return record_payment_result(db, payin, payment)
