@@ -53,15 +53,15 @@ msgid "Manage your donations"
 msgstr "Spravovať vaše dary"
 
 msgid "Your email address has been blacklisted"
-msgstr ""
+msgstr "Vaša emailová adresa je na čiernej listine"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Na {email_address} už nebudeme posielať emaily, pretože posledné pokusy zlyhali. Prosím pošlite z tejto emailovej adresy email na support@liberapay.com ak ju chete vymazať z čiernej listiny."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Na adresu {email_address} už nebudeme posielať emaily, pretože sme dostali sťažnosť od emailového poskytovateľa. Prosím pošlite email z tejto adresy na support@liberapay.com ak chcete aby sme ju odstránili z čiernej listiny."
 
 msgid "Manage your email addresses"
 msgstr "Spravujte svoje emailové adresy"
@@ -656,11 +656,11 @@ msgstr "'{domain_name}' nie je validná emailová doména."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Emailová adresa {email_address} je v čiernej listine pretože sme sa pokúsili odoslať správu a zlyhalo to pred {timedelta}. Prosím pošlite email z tejto adresy na support@liberapay.com ak chcete aby sme ju odstránili z tejto čienej listiny."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Emailová adresa {email_address} je na čiernej listine lebo sme dostali sťažnosť pred {timedelta}. Prosím pošlite email z tejto adresy na support@liberapay.com ak chcete aby sme ju odstránili z tejto čienej listiny."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1064,7 +1064,7 @@ msgid "Articles of Association"
 msgstr "Stanovy"
 
 msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr ""
+msgstr "Certifikované články spoločnosti, formálne memorandum vydané podnikateľmi v ktorom sa spomína nasledujúca informácia: názov, aktivita, registrovaná adresa, podiel."
 
 msgid "Registration Proof"
 msgstr "Dôkaz registrácie"
@@ -1816,7 +1816,7 @@ msgstr[1] "Emailové adresy (súkromné)"
 msgstr[2] "Emailové adresy (súkromné)"
 
 msgid "Blacklisted"
-msgstr ""
+msgstr "Na čiernej listine"
 
 msgid "Primary"
 msgstr "Hlavné"
@@ -3392,7 +3392,7 @@ msgid "This website is managed by Liberapay, a non-profit organization legally f
 msgstr "Tento web je prevádzkovaný Liberapay, neziskovou organizáciou založenou v roku 2015 a registrovanou vo Francúzku (identifikátor: W144000981)."
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
-msgstr ""
+msgstr "Liberapay je v súlade s zákonmi Európskej Únie. S pomocou našich partnerov monitorujeme transakcie pre možné podvody, pranie peňazí a financovanie terorizmu."
 
 msgid "Postal address:"
 msgstr "Poštová adresa:"
@@ -3549,19 +3549,19 @@ msgid "The nominal takes are the raw numbers that the members input themselves, 
 msgstr "Nominálne podiely sú hruhé čísla, ktoré si členovia nastavujú sami. Skutočné podielu sú počítané v systéme: najprv sa sčítajú nominálne podiely z nich sa vypočíta percento, ktoré prestavuje každý podiel a nakoniec sa vyplatia tieto percentá z dostupného príjmu. Nominálne podiely taktiež pôsobia ako maximálne hodnoty: skutočné podiely nie sú potom vyššie ako nominílne, a to aj v prípade, že je k dispozícií ďalší príjem."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the stability of the team's income."
-msgstr ""
+msgstr "Možno myslíte na to prečo riešime nominálne príjmy ako maximá namiesto jednoduchých percent. Je to pretože mať maximá dovoľuje tímu aby mali nepoužíty zisk (nazvaný \"pozostatok\") a to je dobré vo viacerých smeroch. Poprvé, dáva to tímu takzvaný \"vankúš, ktorý stabilizuje príjem členov tímu. Po druhé, zľahčuje to integráciou nových členov do tímu, pretože ako sa im zvyšuje ich príjem tak to znižuje pozostatok namiesto toho aby menil príjem ostatných členov. Po tretie, dovoľuje nášmu softwaru manipulovať s čiastkami, ktoré posieľajú darcovia, systémom takým aby to balancovalo ich darovanie, čím to robím systém viac férový. Taktiež to povzbudzuje darovanie tímu ktorý už dosiahol ich cieľ, čo stabilizuje príjem tímu."
 
 msgid "Regulation of take amounts"
 msgstr "Odmedzenie čiastky podielu"
 
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Ak je táto možnosť zapnuté pre tím, ich členovia nemôžu zvýšiť príjmy vyššie než je maximum vypočítané na základe nominálnych príjmov od minulého platobného dňa. Tento mechanismus je vymyslený na to by nový ľudia v tímoch nezískavali nevhodný zisk prvé týždne."
 
 msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Limit funguje takto: Vždy môžete zväčšiť váš príjem na 1.00 ak to bolo predtým nižšie, môžete zdvojnásobiť váš príjem oproti minulému týždňu, môžete taktiež získať aj tímové zostatky. Aká koľvek z týchto možností je váš maximálny príjem pre tento týždeň."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr ""
+msgstr "Príjem nie je limitovaný pokiaľ tím má iba jedného člena alebo ak predchádzajúci týždeň boli príjmy nulové (čo je prípad všetkých nových tímov vytvorených po poslednom platobnom výplatnom dni)."
 
 msgid "Removing team membership"
 msgstr "Odstránenie členstva v tíme"
@@ -3675,7 +3675,7 @@ msgid "A repository contains a project's data, for example the source code of an
 msgstr "Repozitár obsahuje dáta projektu, napríklad zdrojový kód aplikácie."
 
 msgid "See the most popular repositories belonging to Liberapay users, and browse lists of repos that you've starred on other platforms."
-msgstr ""
+msgstr "Pozrieť si najviac populárne repozitáre, ktoré patria Liberapay užívateľom a prehliadajte list repozitárov ktoré ste zahviezdičkovali na inej platforme."
 
 msgid "Explore Repositories"
 msgstr "Prehliadať repozitáre"
@@ -3726,13 +3726,13 @@ msgstr "Môžeme vám poradiť komu prispieť, keď pripojíte svoje účty:"
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Najviac populárny repozitár momentálne spojený s vašim Liberapay účtom:"
+msgstr[1] "{n} najviac populárne repozitáre momentálne spojené s vašim Liberapay účtom:"
+msgstr[2] "{n} najviac populárnych repozitárov momentálne spojených s vašim Liberapay účtom:"
 
 #, python-brace-format
 msgid "List of repositories currently linked to a Liberapay account, page {number} of {total}:"
-msgstr ""
+msgstr "Zoznam repozitárov momentálne spojených s Liberapay účtom, strana {number} z {total}:"
 
 #, python-brace-format
 msgid "by {author_name}"
@@ -3745,14 +3745,14 @@ msgid "Browse your favorite repositories"
 msgstr "Prehliadajte vaše obľúbené repozitáre"
 
 msgid "Link your repositories to your profile"
-msgstr ""
+msgstr "Prepojte vaše repozitáre s vašim účtom"
 
 #, python-brace-format
 msgid "The top team on Liberapay is:"
 msgid_plural "The top {n} teams on Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Najpopulárnejší tím na Liberapay je:"
+msgstr[1] "{n} najpopulárnejšie tímy na Liberapay je:"
+msgstr[2] "{n} najpopulárnejšie tímy na Liberapay je:"
 
 #, python-brace-format
 msgid "List of teams on Liberapay, page {number} of {total}:"
@@ -4005,9 +4005,9 @@ msgstr[2] "{n} nových darov bolo začatých posledný mesiac, zvyšujúcich cel
 #, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{n} nový {link_open}prísľub{link_close} bol spravený posledný mesiac, ktorý pridal {money_amount} týždenne čakajú na vyzdvihnute."
+msgstr[1] "{n} nové {link_open}prísľuby{link_close} boli spravené posledný mesiac, ktoré pridali {money_amount} týždenne čakajú na vyzdvihnute."
+msgstr[2] "{n} nových {link_open}prísľubov{link_close} bolo spravených posledný mesiac, ktoré pridali {money_amount} týždenne čakajú na vyzdvihnute."
 
 #, python-brace-format
 msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
@@ -4030,7 +4030,7 @@ msgstr "Prihlásiť sa"
 
 #, python-brace-format
 msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
-msgstr ""
+msgstr "Získanie vašich dát z {platform} zlyhalo (chybový kód {x}). Ak problém pretrváva prosím kontaktujte support@liberapay.com."
 
 msgid "Migrating from Gratipay"
 msgstr "Migrácia z Gratipay"
@@ -4206,271 +4206,271 @@ msgstr "Naozaj ste správcom tímu {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
-msgstr ""
+msgstr "Váš pokus o získanie tohto účtu sa nezdaril, pretože ste prihlásený k {0} ako niekto, kto nie je správca tímu {1}. Prosím odhláste sa a {2}skúste znova{3}."
 
 #, python-brace-format
 msgid "Are you really {0}?"
-msgstr ""
+msgstr "Naozaj ste {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
-msgstr ""
+msgstr "Váš pokus o získanie tohto účtu sa nezdaril, pretože ste prihlásený k {0} ako niekto iný. Prosím odhláste sa a {1}skúste znova{2}."
 
 #, python-brace-format
 msgid "{0} is a private team"
-msgstr ""
+msgstr "{0} je súkromný tím"
 
 #, python-brace-format
 msgid "{0} is a big team"
-msgstr ""
+msgstr "{0} je veľký tím"
 
 #, python-brace-format
 msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} je tím s {n} verejným členom"
+msgstr[1] "{0} je tím s {n} verejnými členmi"
+msgstr[2] "{0} je tím s {n} verejnými členmi"
 
 msgid "Explore unclaimed donations"
-msgstr ""
+msgstr "Prehliadať nepriradené dary"
 
 #, python-brace-format
 msgid "This page is dedicated to the {platform} user {user_name}:"
-msgstr ""
+msgstr "Táto stránka je priradený {platform} používateľovi {user_name}:"
 
 #, python-brace-format
 msgid "Profile on {0}"
-msgstr ""
+msgstr "Profil na {0}"
 
 #, python-brace-format
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
 msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Užívateľ Liberapay sa zaviazal prispieť {0} týždenne pre {1}."
+msgstr[1] "{n} užívatelia Liberapay sa zaviazali prispieť {0} týždenne pre {1}."
+msgstr[2] "{n} užívateľov Liberapay sa zaviazalo prispieť {0} týždenne pre {1}."
 
 #, python-brace-format
 msgid "{0} has opted out of Liberapay"
-msgstr ""
+msgstr "{0} sa rozhodlo nepoužívať Liberapay"
 
 #, python-brace-format
 msgid "If you are an administrator of this {0} team account, you can unlock it to allow people to pledge tips to your team on Liberapay."
-msgstr ""
+msgstr "Pokiaľ ste správcom tohto účtu tímu {0}, môžete ho odomknúť a umožniť ľuďom, aby prispeli vašemu tímu na Liberapay."
 
 #, python-brace-format
 msgid "If you are {username} on {platform}, you can unlock your account to allow people to pledge to donate to you on Liberapay."
-msgstr ""
+msgstr "Pokiaľ ste {username} na {platform}, môžete odomknúť váš účet a umožniť ľuďom, aby vám prispeli na Liberapay."
 
 msgid "Unlock"
-msgstr ""
+msgstr "Odblokovať"
 
 msgid "You can donate directly to the team's members:"
-msgstr ""
+msgstr "Môžete darovať priamo ľuďom v tíme:"
 
 #, python-brace-format
 msgid "{0} declines donations"
-msgstr ""
+msgstr "{0} odmieta dary"
 
 #, python-brace-format
 msgid "{0} accepts donations"
-msgstr ""
+msgstr "{0} prijíma dary"
 
 #, python-brace-format
 msgid "{0} opted out of Liberapay"
-msgstr ""
+msgstr "{0} nechce používať Liberapay"
 
 #, python-brace-format
 msgid "{0} hasn't joined Liberapay yet"
-msgstr ""
+msgstr "{0} ešte nezačal používať Liberapay"
 
 #, python-brace-format
 msgid "Are you {0}?"
-msgstr ""
+msgstr "Ste {0}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
-msgstr ""
+msgstr "Ste správcom tohto účtu tímu {0}? Pripojte ho k vášmu Liberapay účtu."
 
 msgid "Connect team account"
-msgstr ""
+msgstr "Pripojiť tímový účet"
 
 msgid "We never collect money for you unless you join."
-msgstr ""
+msgstr "Nebudeme pre vás vyberať peniaze pokiaľ sa nepripojíte."
 
 #, python-brace-format
 msgid "Connect this {0} account to your Liberapay profile."
-msgstr ""
+msgstr "Pripojte tento účet {0} k vášmu profilu na Liberapay."
 
 msgid "Don't like what you see?"
-msgstr ""
+msgstr "Nepáči sa vám čo vidíte?"
 
 #, python-brace-format
 msgid "If you are an owner of this {0} account, you can explicitly opt out of Liberapay by locking it. We don't allow new pledges to locked accounts."
-msgstr ""
+msgstr "Pokiaľ ste vlastníkom tohto účtu {0}, môžete sa explicitne odhlásiť z Liberapay jeho uzamknutím. Nepovolujeme žiadne nové prisľuby pre uzamknuté účty."
 
 msgid "Lock"
-msgstr ""
+msgstr "Zamknúť"
 
 msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
-msgstr ""
+msgstr "Liberapay je spôsob ako poďakovať a darovať malý týždenný príspevok na podporu obľúbených umelcov, hudobníkov, spisovateľov, programátorov, atď."
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
-msgstr ""
+msgstr "{0} vratil túto chybovú správu: {1}"
 
 msgid "Social Explorer"
-msgstr ""
+msgstr "Prieskumník sociálnych sietí"
 
 #, python-brace-format
 msgid "Note: privacy settings may prevent Liberapay from seeing some of your {0} friends."
-msgstr ""
+msgstr "Poznámka: nastavenie ochrany súkromia môže zabrániť Liberapay vidieť niektorých z vašich priateľov na {0}."
 
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
-msgstr ""
+msgstr "Prosím obnovte pripojenie na {0} pre vyhladávanie priateľ odtiaľ."
 
 msgid "Refresh"
-msgstr ""
+msgstr "Obnoviť"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."
-msgstr ""
+msgstr "Pripojte váš účet na {0} pre nájdenie priateľ odtiaľ."
 
 msgid "No friends found."
-msgstr ""
+msgstr "Neboli nájdený žiadny priatelia."
 
 #, python-brace-format
 msgid "You have {n} friend on {0}."
 msgid_plural "You have {n} friends on {0}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Máte {n} priateľa na {0}."
+msgstr[1] "Máte {n} priateľov na {0}."
+msgstr[2] "Máte {n} priateľov na {0}."
 
 msgid "On Liberapay?"
-msgstr ""
+msgstr "Je na Liberapay?"
 
 msgid "Receives"
-msgstr ""
+msgstr "Dostáva"
 
 msgid "Support"
-msgstr ""
+msgstr "Podpora"
 
 msgid "hidden"
-msgstr ""
+msgstr "skryté"
 
 #, python-brace-format
 msgid "{0} doesn't accept donations"
-msgstr ""
+msgstr "{0} neprijíma príspevky"
 
 msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
-msgstr ""
+msgstr "Adresa, ktorú ste zadali nie je platná: neobsahuje žiadny symbol “@”."
 
 #, python-brace-format
 msgid "'{0}' is not a valid domain name."
-msgstr ""
+msgstr "\"{0}\" nie je platný názov domény."
 
 msgid "Which account?"
-msgstr ""
+msgstr "Ktorý účet?"
 
 #, python-brace-format
 msgid "Please enter the name of the {0} account you would like to connect:"
-msgstr ""
+msgstr "Prosím zadajte názov účtu na {0}, ktorý chcete pripojiť:"
 
 #, python-brace-format
 msgid "{0} username"
-msgstr ""
+msgstr "{0} uživateľské meno"
 
 #, python-brace-format
 msgid "Please enter the address of the {0} account you would like to connect:"
-msgstr ""
+msgstr "Prosím zadajte adresu {0} účtu ak ho chcete pripojiť:"
 
 msgid "Please Confirm"
-msgstr ""
+msgstr "Prosím potvrďte"
 
 #, python-brace-format
 msgid "{0} is connected to {1} on Liberapay. Transfer it?"
-msgstr ""
+msgstr "{0} je pripojený ako {1} na Liberapay. Prajete si účet previesť?"
 
 msgid "How the accounts are now"
-msgstr ""
+msgstr "Ako sú účty teraz"
 
 msgid "How the accounts will be after the transfer"
-msgstr ""
+msgstr "Aké budú účty po prevode"
 
 msgid "Abandoned:"
-msgstr ""
+msgstr "Zrušené:"
 
 msgid "Transfer the account"
-msgstr ""
+msgstr "Previesť účet"
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
-msgstr ""
+msgstr "Pripojiť {platform} účet"
 
 msgid "Please input the email address and country of the PayPal account you want to connect:"
-msgstr ""
+msgstr "Prosím zadajte emailovú adresu a štát PayPal účtu, ktorý chcete pripojiť:"
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr ""
+msgstr "Potvrdzujúci kód bude poslaný na túto emailovú adresu, ak už nie je pripojená s vaším Liberapay účtom."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr ""
+msgstr "Platby PayPal nie sú momentálne anonymné, darca vidí vašu emailovú adresu a vy vydíte ich."
 
 msgid "Sorry, we didn't find anything matching your query."
-msgstr ""
+msgstr "Bohužial sme nenašli žiadnu položku odpovedajúcu dotazu."
 
 msgid "Whose work do you appreciate?"
-msgstr ""
+msgstr "Koho prácu si ceníte?"
 
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nájsť vyhovujúce uživateľské meno"
+msgstr[1] "Nájsť vyhovujúce uživateľské mená"
+msgstr[2] "Nájsť vyhovujúce uživateľské mená"
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nájdený vyhovujúci názov spoločenstva"
+msgstr[1] "Nájdené vyhovujúce názvy spoločenstiev"
+msgstr[2] "Nájdené vyhovujúce názvy spoločenstiev"
 
 #, python-brace-format
 msgid "{n} member"
 msgid_plural "{n} members"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{n} člen"
+msgstr[1] "{n} členovia"
+msgstr[2] "{n} členovia"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nájdený vyhovujúci repozitár"
+msgstr[1] "Nájdené vyhovujúce repozitáre"
+msgstr[2] "Nájdené vyhovujúce repozitáre"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
-msgstr ""
+msgstr "{username} má repozitár nazvaný {repo_name} na ich {platform} účte"
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nájdený vyhovujúci výrok užívateľa"
+msgstr[1] "Nájdené vyhovujúce výroky užívateľa"
+msgstr[2] "Nájdené vyhovujúce výroky užívateľa"
 
 msgid "Didn't find who you were looking for?"
-msgstr ""
+msgstr "Nenašli ste koho ste hľadali?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
-msgstr ""
+msgstr "Môžete taktiež sľúbiť príspevok ľuďom, ktorý sa ešte nepridali na Liberapay:"
 
 msgid "Sign In"
 msgstr "Prihlásiť sa"
 
 msgid "If you already have an account, log in:"
-msgstr ""
+msgstr "Pokiaľ už máte účet, prihláste sa:"
 
 msgid "Otherwise, sign up:"
-msgstr ""
+msgstr "Inak sa registrujte:"
 
 msgid "Sign Out"
 msgstr "Odhlásiť sa"
