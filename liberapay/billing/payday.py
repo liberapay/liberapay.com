@@ -640,7 +640,10 @@ class Payday(object):
                                     AND t.member = %(tippee)s
                              )
                         UPDATE takes t
-                           SET paid_in_advance = (t.paid_in_advance - %(in_advance)s)
+                           SET paid_in_advance = (
+                                   coalesce_currency_amount(t.paid_in_advance, t.amount::currency) -
+                                   convert(%(in_advance)s, t.amount::currency)
+                               )
                           FROM current_take t2
                          WHERE t.id = t2.id;
                     """, t.__dict__)
