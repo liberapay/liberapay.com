@@ -113,7 +113,7 @@ title = _("Funding your donations")
             <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
                 <h4>{{ _("Card") }}</h4>
-                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?method=card"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?beneficiary={{ tip.tippee }}&amp;method=card"></a>
             </div></div>
         </div>
         % elif provider == 'paypal'
@@ -122,7 +122,7 @@ title = _("Funding your donations")
             <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('paypal') }}</p>
                 <h4>PayPal</h4>
-                <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?beneficiary={{ tip.tippee }}"></a>
             </div>
             </div>
         </div>
