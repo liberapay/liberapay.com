@@ -26,3 +26,18 @@
         width: 290px;
     }
 }
+
+@media (max-width: $screen-sm-min) {
+    .card-xs-vanish {
+        border-radius: 0;
+        border-style: dashed;
+        border-width: 1px 0;
+        margin: 1em 0;
+        padding: 1em 0;
+        & + & {
+            border-top-width: 0;
+            margin-top: 0;
+            padding-top: 0;
+        }
+    }
+}
