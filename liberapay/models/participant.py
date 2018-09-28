@@ -659,6 +659,37 @@ class Participant(Model, MixinTeam):
         if balance != 0:
             raise UnableToDistributeBalance(balance)
 
+    def donate_remaining_balances_to_liberapay(self):
+        """Donate what's left in the user's wallets to Liberapay.
+        """
+        LiberapayOrg = self.from_username('LiberapayOrg')
+        tip = self.get_tip_to(LiberapayOrg)
+        if not tip['amount']:
+            Liberapay = self.from_username('Liberapay')
+            tip = self.get_tip_to(Liberapay)
+        if tip['amount']:
+            if tip['tippee'] == Liberapay.id:
+                context = 'take-in-advance'
+                team = Liberapay.id
+            else:
+                context = 'tip-in-advance'
+                team = None
+            unit_amount = tip['amount']
+        else:
+            context = 'final-gift'
+            team = None
+            unit_amount = None
+        from liberapay.billing.transactions import transfer
+        for wallet in self.get_current_wallets():
+            if wallet.balance == 0:
+                continue
+            balance = transfer(
+                self.db, self.id, LiberapayOrg.id, wallet.balance, context,
+                team=team, unit_amount=unit_amount.convert(wallet.balance.currency),
+                tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
+            )[0]
+            self.set_attributes(balance=balance)
+
     def clear_tips_giving(self, cursor):
         """Turn off the renewal of all tips from a given user.
         """
