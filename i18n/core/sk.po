@@ -1912,10 +1912,6 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Okolo Liberapay je veľa práce a stále existuje veľa vecí na vylepšenie, ale naši vývojáry, prekladatelia a ďalší prispievatelia sú finančne podhodnotený a to spomaľuje nás pokrok."
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "Dávate {0} týždenné."
-
-#, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "Máte {n} dar očakávajúci platbu."
@@ -1923,39 +1919,59 @@ msgstr[1] "Máte {n} dary očakávajúcich platbu."
 msgstr[2] "Máte {n} darov očakávajúcich platbu."
 
 #, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Vaše dary sú zaplatené vašim príjmom: dostávate {income} a dávate späť {donations_amount} (za týždeň)."
+msgid "{money_amount}{small}/week{end_small}"
+msgstr ""
 
 #, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Vaše dary sú v {currency} zaplatené vašim príjmom: dostávate {income} a dávate späť {donations_amount} (za týždeň)."
+msgid "{money_amount}{small}/month{end_small}"
+msgstr ""
 
-msgid "Recipient"
-msgstr "Príjemca"
+#, python-brace-format
+msgid "{money_amount}{small}/year{end_small}"
+msgstr ""
 
-msgid "Created"
-msgstr "Vytvorené"
+#, python-brace-format
+msgid "Started {timedelta} ago."
+msgstr ""
 
-msgid "Modified"
-msgstr "Upravené"
+#, python-brace-format
+msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
+msgstr ""
 
-msgid "Active?"
-msgstr "Aktívne?"
+msgid "Inactive because the account of the recipient is blacklisted."
+msgstr ""
 
-msgid "No: the donee hasn't configured any payment method"
-msgstr "Nie: príjemca si nenastavil platobnú metódu"
+msgid "Inactive because the account of the recipient is closed."
+msgstr ""
 
-msgid "No: the donee's account is temporarily suspended"
-msgstr "Nie: účet obdarovaného je dočasne pozastavený"
+msgid "Inactive because the recipient no longer accepts donations."
+msgstr ""
 
-msgid "No: the donee's account is closed"
-msgstr "Nie: príjemcov účet je zatvorený"
+msgid "Active"
+msgstr ""
 
-msgid "No: the recipient no longer accepts donations"
-msgstr "Nie: príjemca nepríjma dary"
+#, python-brace-format
+msgid "Next payment in {timedelta}."
+msgstr ""
 
-msgid "No: awaiting payment"
-msgstr "Nie: očakávame platbu"
+msgid "Renew now"
+msgstr ""
+
+msgid "Awaiting payment."
+msgstr ""
+
+msgid "Renew"
+msgstr ""
+
+msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
+msgstr ""
+
+#, python-brace-format
+msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
+msgstr ""
+
+msgid "Cancel the pledge"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "Nedávno zrušené"
@@ -1963,8 +1979,9 @@ msgstr "Nedávno zrušené"
 msgid "within the last 30 days"
 msgstr "v posledných 30 dňoch"
 
-msgid "Cancelled"
-msgstr "Zrušené"
+#, python-brace-format
+msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
+msgstr ""
 
 msgid "Funding your donations"
 msgstr "Platenie vašich darov"
@@ -2230,6 +2247,9 @@ msgstr "Prijať a zaplatiť"
 msgid "Message: {0}"
 msgstr "Správa: {0}"
 
+msgid "Created"
+msgstr "Vytvorené"
+
 #, python-brace-format
 msgid "Status: {0}"
 msgstr "Stav {0}"
@@ -2453,6 +2473,9 @@ msgstr "Príjemcovia"
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
 msgstr "Peniaze zaplatia dary pre {name} na Liberapay. Tabuľka nižšie zobrazuje dary predtým ako bola platba zahájená ({datetime}, UTC)."
+
+msgid "Recipient"
+msgstr "Príjemca"
 
 msgid "Amount per week"
 msgstr "Čiastka za týždeň"
@@ -2810,6 +2833,14 @@ msgstr "platba {link_open}náklady #{invoice_id}{link_close} pre {payee}"
 
 msgid "Adding Money"
 msgstr "Pridanie peňazí"
+
+#, python-brace-format
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "Vaše dary sú zaplatené vašim príjmom: dostávate {income} a dávate späť {donations_amount} (za týždeň)."
+
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "Vaše dary sú v {currency} zaplatené vašim príjmom: dostávate {income} a dávate späť {donations_amount} (za týždeň)."
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Nedovolujeme pridať peniaze pokiaľ vaše dary už sú zaplatené vašim zárobkom. Ak je toto pre vás problém prosím pošlite email na support@liberapay.com s vyjadrením prečo je to tak."

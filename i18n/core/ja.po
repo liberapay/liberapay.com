@@ -1870,47 +1870,63 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr ""
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr ""
-
-#, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] ""
 
 #, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgid "{money_amount}{small}/week{end_small}"
 msgstr ""
 
 #, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgid "{money_amount}{small}/month{end_small}"
 msgstr ""
 
-msgid "Recipient"
+#, python-brace-format
+msgid "{money_amount}{small}/year{end_small}"
 msgstr ""
 
-msgid "Created"
+#, python-brace-format
+msgid "Started {timedelta} ago."
 msgstr ""
 
-msgid "Modified"
+#, python-brace-format
+msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
 msgstr ""
 
-msgid "Active?"
+msgid "Inactive because the account of the recipient is blacklisted."
 msgstr ""
 
-msgid "No: the donee hasn't configured any payment method"
+msgid "Inactive because the account of the recipient is closed."
 msgstr ""
 
-msgid "No: the donee's account is temporarily suspended"
+msgid "Inactive because the recipient no longer accepts donations."
 msgstr ""
 
-msgid "No: the donee's account is closed"
+msgid "Active"
 msgstr ""
 
-msgid "No: the recipient no longer accepts donations"
+#, python-brace-format
+msgid "Next payment in {timedelta}."
 msgstr ""
 
-msgid "No: awaiting payment"
+msgid "Renew now"
+msgstr ""
+
+msgid "Awaiting payment."
+msgstr ""
+
+msgid "Renew"
+msgstr ""
+
+msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
+msgstr ""
+
+#, python-brace-format
+msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
+msgstr ""
+
+msgid "Cancel the pledge"
 msgstr ""
 
 msgid "Recently Cancelled"
@@ -1919,7 +1935,8 @@ msgstr ""
 msgid "within the last 30 days"
 msgstr ""
 
-msgid "Cancelled"
+#, python-brace-format
+msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
 msgstr ""
 
 msgid "Funding your donations"
@@ -2180,6 +2197,9 @@ msgstr ""
 msgid "Message: {0}"
 msgstr ""
 
+msgid "Created"
+msgstr ""
+
 #, python-brace-format
 msgid "Status: {0}"
 msgstr ""
@@ -2396,6 +2416,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
+msgstr ""
+
+msgid "Recipient"
 msgstr ""
 
 msgid "Amount per week"
@@ -2741,6 +2764,14 @@ msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr ""
 
 msgid "Adding Money"
+msgstr ""
+
+#, python-brace-format
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
 msgstr ""
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."

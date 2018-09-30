@@ -1873,47 +1873,63 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Liberapay 플랫폼을 만드는 작업은 매우 많은 노동력을 필요로 하며 여전히 많은 할 일들이 남아있습니다만 저희의 개발자, 번역자, 그 외 기여자들은 자금이 많이 부족하며 이는 저희의 작업을 지연시키고 있습니다."
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "매주 {0} 만큼을 기부합니다."
-
-#, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] ""
 
 #, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "당신의 기부는 수입에 의해 충당됩니다: 매주 {income} 만큼 받고, {donations_amount} 만큼 돌려주고 있습니다."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "{currency} 로 이루어지는 기부는 수입에 의해 충당됩니다: 매주 {income} 만큼 받고 {donations_amount} 만큼 돌려주고 있습니다."
-
-msgid "Recipient"
-msgstr "받는이"
-
-msgid "Created"
-msgstr "생성됨"
-
-msgid "Modified"
-msgstr "수정됨"
-
-msgid "Active?"
-msgstr "활동 중입니까?"
-
-msgid "No: the donee hasn't configured any payment method"
+msgid "{money_amount}{small}/week{end_small}"
 msgstr ""
 
-msgid "No: the donee's account is temporarily suspended"
-msgstr "아니오: 기부받는 사람의 계정이 일시 정지되었습니다"
+#, python-brace-format
+msgid "{money_amount}{small}/month{end_small}"
+msgstr ""
 
-msgid "No: the donee's account is closed"
-msgstr "아니오: 기부받는 사람의 계정이 닫혔습니다"
+#, python-brace-format
+msgid "{money_amount}{small}/year{end_small}"
+msgstr ""
 
-msgid "No: the recipient no longer accepts donations"
-msgstr "아니오: 받는 사람이 더이상 기부를 받지 않습니다"
+#, python-brace-format
+msgid "Started {timedelta} ago."
+msgstr ""
 
-msgid "No: awaiting payment"
+#, python-brace-format
+msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
+msgstr ""
+
+msgid "Inactive because the account of the recipient is blacklisted."
+msgstr ""
+
+msgid "Inactive because the account of the recipient is closed."
+msgstr ""
+
+msgid "Inactive because the recipient no longer accepts donations."
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {timedelta}."
+msgstr ""
+
+msgid "Renew now"
+msgstr ""
+
+msgid "Awaiting payment."
+msgstr ""
+
+msgid "Renew"
+msgstr ""
+
+msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
+msgstr ""
+
+#, python-brace-format
+msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
+msgstr ""
+
+msgid "Cancel the pledge"
 msgstr ""
 
 msgid "Recently Cancelled"
@@ -1922,8 +1938,9 @@ msgstr "최근 취소됨"
 msgid "within the last 30 days"
 msgstr "최근 30일 이내에"
 
-msgid "Cancelled"
-msgstr "취소됨"
+#, python-brace-format
+msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
+msgstr ""
 
 msgid "Funding your donations"
 msgstr ""
@@ -2183,6 +2200,9 @@ msgstr "승인하고 지불"
 msgid "Message: {0}"
 msgstr "메시지: {0}"
 
+msgid "Created"
+msgstr "생성됨"
+
 #, python-brace-format
 msgid "Status: {0}"
 msgstr "상태: {0}"
@@ -2400,6 +2420,9 @@ msgstr "수령자"
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
 msgstr "Liberapay의 {name}을 기부하게 됩니다. 아래의 표는 거래가 이루어진 시점 ({datetime}, UTC)의 기부를 표시합니다."
+
+msgid "Recipient"
+msgstr "받는이"
 
 msgid "Amount per week"
 msgstr "주당 금액"
@@ -2745,6 +2768,14 @@ msgstr "{payee}에 대한 {link_open}지출 #{invoice_id}{link_close}에 대한 
 
 msgid "Adding Money"
 msgstr "자금 추가"
+
+#, python-brace-format
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "당신의 기부는 수입에 의해 충당됩니다: 매주 {income} 만큼 받고, {donations_amount} 만큼 돌려주고 있습니다."
+
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "{currency} 로 이루어지는 기부는 수입에 의해 충당됩니다: 매주 {income} 만큼 받고 {donations_amount} 만큼 돌려주고 있습니다."
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "당신의 기부금으로 기부할 금액을 전액 충당할 수 있을 때는 추가 입금을 할 수 없습니다. 문제가 있다면 support@liberapay.com에 이유를 설명해 주세요."

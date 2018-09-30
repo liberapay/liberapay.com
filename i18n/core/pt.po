@@ -1902,49 +1902,65 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Construção de Liberapay é um monte de trabalho, ainda há muito a fazer, mas nossos desenvolvedores, tradutores e outros colaboradores são severamente mal pago e está a abrandar nosso progresso."
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "Você doa {0} por semana."
-
-#, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "Tem {n} doação à espera de pagamento."
 msgstr[1] "Tem {n} doações à espera de pagamento."
 
 #, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "As suas doações são financiadas pelo seu rendimento: recebe {income} e retorna {donations_amount} (por semana)."
+msgid "{money_amount}{small}/week{end_small}"
+msgstr ""
 
 #, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "As suas doações em {currency} são financiadas pelo seu rendimento: recebe {income} e retorna {donations_amount} (por semana)."
+msgid "{money_amount}{small}/month{end_small}"
+msgstr ""
 
-msgid "Recipient"
-msgstr "Destinatário"
+#, python-brace-format
+msgid "{money_amount}{small}/year{end_small}"
+msgstr ""
 
-msgid "Created"
-msgstr "Criado"
+#, python-brace-format
+msgid "Started {timedelta} ago."
+msgstr ""
 
-msgid "Modified"
-msgstr "Modificado"
+#, python-brace-format
+msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
+msgstr ""
 
-msgid "Active?"
-msgstr "Ativo?"
+msgid "Inactive because the account of the recipient is blacklisted."
+msgstr ""
 
-msgid "No: the donee hasn't configured any payment method"
-msgstr "Não: o donatário ainda não configurou qualquer método de pagamento"
+msgid "Inactive because the account of the recipient is closed."
+msgstr ""
 
-msgid "No: the donee's account is temporarily suspended"
-msgstr "N: conta o capitão do donatário é suspensa temporariamente"
+msgid "Inactive because the recipient no longer accepts donations."
+msgstr ""
 
-msgid "No: the donee's account is closed"
-msgstr "Não: a conta do donatário está fechada"
+msgid "Active"
+msgstr ""
 
-msgid "No: the recipient no longer accepts donations"
-msgstr "Não: o destinatário não aceita doações"
+#, python-brace-format
+msgid "Next payment in {timedelta}."
+msgstr ""
 
-msgid "No: awaiting payment"
-msgstr "Não: a aguardar pagamento"
+msgid "Renew now"
+msgstr ""
+
+msgid "Awaiting payment."
+msgstr ""
+
+msgid "Renew"
+msgstr ""
+
+msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
+msgstr ""
+
+#, python-brace-format
+msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
+msgstr ""
+
+msgid "Cancel the pledge"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "Recentemente Cancelado"
@@ -1952,8 +1968,9 @@ msgstr "Recentemente Cancelado"
 msgid "within the last 30 days"
 msgstr "nos últimos 30 dias"
 
-msgid "Cancelled"
-msgstr "Cancelado"
+#, python-brace-format
+msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
+msgstr ""
 
 msgid "Funding your donations"
 msgstr "Financiamento das suas doações"
@@ -2216,6 +2233,9 @@ msgstr "Aceitar e Pagar"
 msgid "Message: {0}"
 msgstr "Mensagem: {0}"
 
+msgid "Created"
+msgstr "Criado"
+
 #, python-brace-format
 msgid "Status: {0}"
 msgstr "Estado: {0}"
@@ -2436,6 +2456,9 @@ msgstr "Beneficiários"
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
 msgstr "O dinheiro vai financiar as doações de {name} no Liberapay. A tabela abaixo mostra as doações como elas eram quando o pagamento foi iniciado ({datetime}, UTC)."
+
+msgid "Recipient"
+msgstr "Destinatário"
 
 msgid "Amount per week"
 msgstr "Valor por semana"
@@ -2787,6 +2810,14 @@ msgstr "pagamento de {link_open}despesa #{invoice_id}{link_close} a {payee}"
 
 msgid "Adding Money"
 msgstr "Adição de dinheiro"
+
+#, python-brace-format
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "As suas doações são financiadas pelo seu rendimento: recebe {income} e retorna {donations_amount} (por semana)."
+
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "As suas doações em {currency} são financiadas pelo seu rendimento: recebe {income} e retorna {donations_amount} (por semana)."
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Não permitimos a adição de dinheiro quando as suas doações já são financiadas pelo seu rendimento. Se isto é um problema para si, por favor envie um email para support@liberapay.com a explicar porquê."

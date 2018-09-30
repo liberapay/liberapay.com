@@ -1903,49 +1903,65 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Liberapay-palvelun rakentaminen on työlästä, ja on vielä paljon tehtävää, mutta kehittäjämme, kääntäjämme ja muut osallistujamme eivät saa hommasta paljoakaan rahaa, mikä hidastaa edistymistämme."
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "Annat {0} viikoittain."
-
-#, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "Sinulla on {n} lahjoitus odottamassa maksua."
 msgstr[1] "Sinulla on {n} lahjoitusta odottamassa maksua."
 
 #, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Lahjoituksesi rahoitetaan tuloillasi: Saat {income} ja annat eteenpäin {donations_amount} (viikossa)."
+msgid "{money_amount}{small}/week{end_small}"
+msgstr ""
 
 #, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "{currency}-määräiset lahjoituksesi rahoitetaan tuloillasi: Saat {income} ja annat eteenpäin {donations_amount} (viikossa)."
+msgid "{money_amount}{small}/month{end_small}"
+msgstr ""
 
-msgid "Recipient"
-msgstr "Vastaanottaja"
+#, python-brace-format
+msgid "{money_amount}{small}/year{end_small}"
+msgstr ""
 
-msgid "Created"
-msgstr "Luotu"
+#, python-brace-format
+msgid "Started {timedelta} ago."
+msgstr ""
 
-msgid "Modified"
-msgstr "Muutettu"
+#, python-brace-format
+msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
+msgstr ""
 
-msgid "Active?"
-msgstr "Aktiivinen?"
+msgid "Inactive because the account of the recipient is blacklisted."
+msgstr ""
 
-msgid "No: the donee hasn't configured any payment method"
-msgstr "Ei: vastaanottaja ei ole määritellyt mitään maksumenetelmää"
+msgid "Inactive because the account of the recipient is closed."
+msgstr ""
 
-msgid "No: the donee's account is temporarily suspended"
-msgstr "Ei, vastaanottajan tili on väliaikaisesti jäädytetty"
+msgid "Inactive because the recipient no longer accepts donations."
+msgstr ""
 
-msgid "No: the donee's account is closed"
-msgstr "Ei, vastaanottajan tili on suljettu"
+msgid "Active"
+msgstr ""
 
-msgid "No: the recipient no longer accepts donations"
-msgstr "Ei, kohde ei enää ota vastaan lahjoituksia"
+#, python-brace-format
+msgid "Next payment in {timedelta}."
+msgstr ""
 
-msgid "No: awaiting payment"
-msgstr "Ei: odottaa maksua"
+msgid "Renew now"
+msgstr ""
+
+msgid "Awaiting payment."
+msgstr ""
+
+msgid "Renew"
+msgstr ""
+
+msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
+msgstr ""
+
+#, python-brace-format
+msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
+msgstr ""
+
+msgid "Cancel the pledge"
+msgstr ""
 
 msgid "Recently Cancelled"
 msgstr "Hiljattain peruutettu"
@@ -1953,8 +1969,9 @@ msgstr "Hiljattain peruutettu"
 msgid "within the last 30 days"
 msgstr "viimeisen 30 päivän aikana"
 
-msgid "Cancelled"
-msgstr "Peruutettu"
+#, python-brace-format
+msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
+msgstr ""
 
 msgid "Funding your donations"
 msgstr "Lahjoitustesi rahoittaminen"
@@ -2217,6 +2234,9 @@ msgstr "Hyväksy ja maksa"
 msgid "Message: {0}"
 msgstr "Viesti: {0}"
 
+msgid "Created"
+msgstr "Luotu"
+
 #, python-brace-format
 msgid "Status: {0}"
 msgstr "Tila: {0}"
@@ -2437,6 +2457,9 @@ msgstr "Hyödynsaajat"
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
 msgstr "Summalla rahoitetaan käyttäjän {name} lahjoitukset Liberapay-palvelussa. Allaolevasta taulukosta näkyy lahjoitukset sellaisina kuin ne olivat silloin, kun maksu aloitettiin ({datetime}, UTC)."
+
+msgid "Recipient"
+msgstr "Vastaanottaja"
 
 msgid "Amount per week"
 msgstr "Viikoittainen määrä"
@@ -2788,6 +2811,14 @@ msgstr "{link_open}laskun #{invoice_id}{link_close} maksu käyttäjälle {payee}
 
 msgid "Adding Money"
 msgstr "Rahan lisääminen"
+
+#, python-brace-format
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "Lahjoituksesi rahoitetaan tuloillasi: Saat {income} ja annat eteenpäin {donations_amount} (viikossa)."
+
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "{currency}-määräiset lahjoituksesi rahoitetaan tuloillasi: Saat {income} ja annat eteenpäin {donations_amount} (viikossa)."
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Kun lahjoituksesi saavat katteen jo tuloistasi, emme salli rahan lisäämistä. Jos tämä ei menettele, selitä meille miksi. Sähköposti: support@liberapay.com (englanniksi)."

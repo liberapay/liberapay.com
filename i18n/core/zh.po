@@ -1892,47 +1892,63 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "建置Liberapay要花許多心力，還有許多未竟事宜，但我們的開發人員，翻譯者以及其它的貢獻者卻是幾乎未得到任何報償，這也讓我們的進展慢了下來。"
 
 #, python-brace-format
-msgid "You give {0} per week."
-msgstr "你每週給予 {0} 。"
-
-#, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] ""
 
 #, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "你的捐款來自於你的收入：你（每週）收到{income}，並送出{donations_amount}。"
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "你的{currency}捐款來自於你的收入：你（每週）收到{income}，並送出{donations_amount}。"
-
-msgid "Recipient"
-msgstr "受贈者"
-
-msgid "Created"
-msgstr "已建立"
-
-msgid "Modified"
-msgstr "修改"
-
-msgid "Active?"
-msgstr "活躍的？"
-
-msgid "No: the donee hasn't configured any payment method"
+msgid "{money_amount}{small}/week{end_small}"
 msgstr ""
 
-msgid "No: the donee's account is temporarily suspended"
-msgstr "否： 受贈者的帳戶暫時被停權"
+#, python-brace-format
+msgid "{money_amount}{small}/month{end_small}"
+msgstr ""
 
-msgid "No: the donee's account is closed"
-msgstr "否：受赠者的账户已关闭"
+#, python-brace-format
+msgid "{money_amount}{small}/year{end_small}"
+msgstr ""
 
-msgid "No: the recipient no longer accepts donations"
-msgstr "否：受赠者不再接受捐款"
+#, python-brace-format
+msgid "Started {timedelta} ago."
+msgstr ""
 
-msgid "No: awaiting payment"
+#, python-brace-format
+msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
+msgstr ""
+
+msgid "Inactive because the account of the recipient is blacklisted."
+msgstr ""
+
+msgid "Inactive because the account of the recipient is closed."
+msgstr ""
+
+msgid "Inactive because the recipient no longer accepts donations."
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+#, python-brace-format
+msgid "Next payment in {timedelta}."
+msgstr ""
+
+msgid "Renew now"
+msgstr ""
+
+msgid "Awaiting payment."
+msgstr ""
+
+msgid "Renew"
+msgstr ""
+
+msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
+msgstr ""
+
+#, python-brace-format
+msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
+msgstr ""
+
+msgid "Cancel the pledge"
 msgstr ""
 
 msgid "Recently Cancelled"
@@ -1941,8 +1957,9 @@ msgstr "最近取消"
 msgid "within the last 30 days"
 msgstr "最近30天內"
 
-msgid "Cancelled"
-msgstr "取消"
+#, python-brace-format
+msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
+msgstr ""
 
 msgid "Funding your donations"
 msgstr ""
@@ -2203,6 +2220,9 @@ msgstr "接受並支付"
 msgid "Message: {0}"
 msgstr "訊息： {0}"
 
+msgid "Created"
+msgstr "已建立"
+
 #, python-brace-format
 msgid "Status: {0}"
 msgstr "狀態： {0}"
@@ -2420,6 +2440,9 @@ msgstr "受益人"
 #, python-brace-format
 msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
 msgstr "這筆錢將會用在Liberapay上頭給 {name} 的捐款，下方的表格顯示 ({datetime}, UTC 計時的捐款支付)。"
+
+msgid "Recipient"
+msgstr "受贈者"
 
 msgid "Amount per week"
 msgstr "每週的數量"
@@ -2765,6 +2788,14 @@ msgstr "費用{link_open}的支付 #{invoice_id}{link_close} 給 {payee}"
 
 msgid "Adding Money"
 msgstr "充值"
+
+#, python-brace-format
+msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "你的捐款來自於你的收入：你（每週）收到{income}，並送出{donations_amount}。"
+
+#, python-brace-format
+msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
+msgstr "你的{currency}捐款來自於你的收入：你（每週）收到{income}，並送出{donations_amount}。"
 
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "在你收到的捐助足以被用來捐助他人的情況下我們不允許你向你的帳號充值。若有疑議請聯繫support@liberapay.com解釋原因。"
