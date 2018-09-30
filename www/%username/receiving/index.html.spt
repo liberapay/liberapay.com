@@ -24,17 +24,26 @@ teams = website.db.all("""
 
 % set receiving = participant.receiving
 % if participant == user
-<p>{{ _("You receive {0} per week.", receiving) }}</p>
+    <p>{{ ngettext(
+        "You have {n} active donor who is giving you {money_amount} per week.",
+        "You have {n} active donors giving you a total of {money_amount} per week.",
+        participant.npatrons, money_amount=receiving
+    ) }}</p>
 % else
-<p>{{ _("{0} receives {1} per week.", participant.username, receiving) }}</p>
+    <p>{{ ngettext(
+        "{0} receives {1} per week from {n} patron.",
+        "{0} receives {1} per week from {n} patrons.",
+        participant.npatrons, participant.username, receiving
+    ) }}</p>
 % endif
 
 % if participant.is_person
 
 % if not participant.payment_providers
-    <p>{{ _("You can't receive money until you've configured a payment account.") }}</p>
-    <p><a class="btn btn-primary" href="{{ participant.path('payment') }}">{{ _("Configure payments") }}</a></p>
+    <p>{{ _("You can't receive new donations until you've configured payment processing.") }}</p>
+    <p><a class="btn btn-primary" href="{{ participant.path('payment') }}">{{ _("Configure payment processing") }}</a></p>
 % elif participant.balance > 0
+    <p>{{ _("You have {money_amount} in your Mangopay wallet.", money_amount=participant.balance) }}</p>
     <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
           >{{ _("Withdraw money") }}</a></p>
 % endif
