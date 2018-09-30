@@ -3,6 +3,7 @@
 from base64 import b64encode
 
 from liberapay.exceptions import AuthRequired
+from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant, read_decimal_or_400
 
 _ = lambda a: a
@@ -22,16 +23,25 @@ del _
 
 [-----------------------------------------------------------------------------]
 
-if user.ANON:
-    raise AuthRequired
-
 out = {}
 
 # Get tipper and tippee.
 # ======================
 
-tipper = user
-tippee = get_participant(state, restrict=False, redirect_stub=False)
+direction = request.qs.get('dir', 'to')
+if direction == 'to':
+    if user.ANON:
+        raise AuthRequired
+    tipper = user
+    tippee = get_participant(state, restrict=False, redirect_stub=False)
+elif direction == 'from':
+    tipper = get_participant(state, restrict=True)
+    if request.method == 'POST':
+        tippee = Participant.from_id(request.body.get_int('tippee'))
+    else:
+        tippee = Participant.from_id(request.qs.get_int('tippee'))
+else:
+    raise response.error(400, "bad `direction` value %r in querystring" % direction)
 
 tippee_name = tippee.username
 if tippee.status == 'stub':

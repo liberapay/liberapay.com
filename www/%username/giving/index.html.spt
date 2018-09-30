@@ -68,9 +68,24 @@ if not freeload:
     Liberapay_goal = getattr(Liberapay, 'goal', None)
     Liberapay_tip = participant.get_tip_to(Liberapay or participant)
 
+today = utcnow().date()
+days_till_wednesday = (3 - today.isoweekday()) % 7
+if days_till_wednesday == 0:
+    payday_is_already_done = website.db.one("""
+        SELECT true
+          FROM paydays
+         WHERE ts_start::date = %s
+           AND ts_end > ts_start
+    """, (today,))
+    if payday_is_already_done:
+        days_till_wednesday = 7
+next_payday = today + timedelta(days=days_till_wednesday)
+
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
 
+% from "templates/avatar-url.html" import avatar_img with context
+% from "templates/icons.html" import glyphicon
 % from "templates/your-tip.html" import tip_form with context
 
 % block content
@@ -104,12 +119,9 @@ if not freeload:
 </div>
 % endif
 
-<div class="giving row valign-middle">
-
 % if ntips
-<div class="col-lg-12">
-    <h3>{{ _("Donations") }} (N={{ ntips }})</h3>
-    <p>{{ _("You give {0} per week.", participant.giving) }}</p>
+<div>
+    <h3>{{ _("Donations") }} ({{ ntips }})</h3>
     % if ntips_awaiting_renewal
         <div class="alert alert-warning">
         {{ ngettext(
@@ -124,163 +136,239 @@ if not freeload:
         </div>
     % endif
     % for currency, t in tips_by_currency.items()
-    % set tips, total = t
-    % set currency_name = locale.currencies.get(currency, currency)
-    % if n_tip_currencies > 1
-    <h4>{{ locale.title(currency_name) }} ({{ locale.currency_symbols.get(currency, currency) }})</h4>
-    % endif
-    % set receiving = participant.get_receiving_in(currency)
-    % if receiving > total
-        <p>{{
-            _("Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week).",
-              income=receiving, donations_amount=total) if n_tip_currencies == 1 else
-            _("Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week).",
-              currency=currency_name, income=receiving, donations_amount=total)
-        }}</p>
-    % endif
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="recipient">{{ _("Recipient") }}</th>
-                <th class="amount">{{ _("Amount") }}</th>
-                <th class="ctime">{{ _("Created") }}</th>
-                <th class="mtime">{{ _("Modified") }}</th>
-                <th class="funded">{{ _("Active?") }}</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th></th>
-                <th class="total">{{ _(
-                    "{0} per week ~ {1} per month ~ {2} per year",
-                    total,
-                    total / constants.PERIOD_CONVERSION_RATES['monthly'],
-                    total / constants.PERIOD_CONVERSION_RATES['yearly'],
-                ) }}</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </tfoot>
-        <tbody>
+        % set tips, total = t
+        % set currency_name = locale.currencies.get(currency, currency)
+        % if n_tip_currencies > 1
+        <h4>{{ locale.title(currency_name) }} ({{ locale.currency_symbols.get(currency, currency) }})</h4>
+        % endif
+        <form action="{{ participant.path('tip') }}?dir=from" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="selected_amount" value="0" />
+            <input type="hidden" name="currency" value="{{ currency }}" />
         % for tip in tips
-        % set tippee = tip.tippee_p
-        % set inactive = not tip.payment_providers or tippee.is_suspended or not tip.is_funded
-        <tr>
-            % set username = tippee.username
-            <td class="recipient"><a href="/{{ username }}/">{{ username }}</a></td>
-            <td class="amount">{{ tip_form(tippee=tippee, tip=tip, inline=True) }}</td>
-            <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
-            <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
-            <td class="funded {{ 'danger' if inactive else '' }}">
-                % if not tip.payment_providers
-                    {{ _("No: the donee hasn't configured any payment method") }}
-                % elif tippee.is_suspended
-                    {{ _("No: the donee's account is temporarily suspended") }}
-                % elif tippee.status == 'closed'
-                    {{ _("No: the donee's account is closed") }}
-                % elif not tippee.accepts_tips
-                    {{ _("No: the recipient no longer accepts donations") }}
-                % elif not tip.is_funded
-                    {{ _("No: awaiting payment") }}
+            % set tippee = tip.tippee_p
+            <div class="card card-default card-xs-vanish donation">
+                <div class="recipient">
+                    % set username = tippee.username
+                    <div class="col-1"><a href="/{{ username }}/">{{
+                        avatar_img(tippee, size=72)
+                    }}</a></div>
+                    <div class="col-2">
+                        <a class="username" href="/{{ username }}/">{{ username }}</a>
+                        <div class="line-2">
+                            <span class="amount">{{
+                                _("{money_amount}{small}/week{end_small}",
+                                  money_amount=tip.periodic_amount,
+                                  small='<small>'|safe, end_small='</small>'|safe
+                                  ) if tip.period == 'weekly' else
+                                _("{money_amount}{small}/month{end_small}",
+                                  money_amount=tip.periodic_amount,
+                                  small='<small>'|safe, end_small='</small>'|safe
+                                  ) if tip.period == 'monthly' else
+                                _("{money_amount}{small}/year{end_small}",
+                                  money_amount=tip.periodic_amount,
+                                  small='<small>'|safe, end_small='</small>'|safe
+                                  )
+                            }}</span>
+                            <span class="actions">
+                                <a class="btn btn-default btn-xs" href="{{ tippee.path('donate') }}">{{
+                                    _("Modify")
+                                }}</a>
+                                <button class="btn btn-default btn-xs" name="tippee" value="{{ tip.tippee }}"
+                                        title="{{ _('Stop the donation') }}">
+                                    <span class="text-danger">{{ glyphicon('minus-sign') }}</span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                % if tip.mtime == tip.ctime
+                    <p class="help-block">{{ _(
+                        "Started {timedelta} ago.", timedelta=to_age(tip.ctime)
+                    ) }}</p>
                 % else
-                    {{ _("Yes") }}
+                    <p class="help-block">{{ _(
+                        "Started {start_delta} ago. Modified {mtime_delta} ago.",
+                        start_delta=to_age(tip.ctime), mtime_delta=to_age(tip.mtime)
+                    ) }}</p>
                 % endif
-            </td>
-        </tr>
+                % if tippee.is_suspended
+                    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+                        "Inactive because the account of the recipient is blacklisted."
+                    ) }}</p>
+                % elif tippee.status == 'closed'
+                    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+                        "Inactive because the account of the recipient is closed."
+                    ) }}</p>
+                % elif not tippee.accepts_tips
+                    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+                        "Inactive because the recipient no longer accepts donations."
+                    ) }}</p>
+                % elif tip.paid_in_advance and tip.paid_in_advance >= tip.amount and next_payday > today
+                    <p class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</p>
+                    % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
+                    <p>
+                        {{ _(
+                            "Next payment in {timedelta}.",
+                            timedelta=to_age(next_payday + timedelta(weeks=weeks_remaning - 1))
+                        ) }}
+                        % if weeks_remaning < 4
+                            <a class="btn btn-default btn-xs"
+                               href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
+                               {{ _("Renew now") }}
+                            </a>
+                        % endif
+                    </p>
+                % else
+                    % if tip.payment_providers
+                        <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{
+                            _("Awaiting payment.")
+                        }}</p>
+                        <a class="btn btn-default"
+                           href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
+                           {{ glyphicon('repeat') }} {{ _("Renew") }}
+                        </a>
+                    % else
+                        <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+                            "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
+                        ) }}</p>
+                    % endif
+                % endif
+            </div>
         % endfor
-        </tbody>
-    </table>
+        </form>
+        <p>{{ _(
+            "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year.",
+            total,
+            total / constants.PERIOD_CONVERSION_RATES['monthly'],
+            total / constants.PERIOD_CONVERSION_RATES['yearly'],
+            bold='<strong>'|safe, bold_end='</strong>'|safe
+        ) }}</p>
     % endfor
 </div>
 % endif
 
 % if npledges
-<div class="col-lg-11">
-    <h3>{{ _("Pledges") }} (N={{ npledges }})</h3>
+<div>
+    <h3>{{ _("Pledges") }} ({{ npledges }})</h3>
     % for currency, t in pledges_by_currency.items()
-    % set pledges, total = t
-    % if n_pledge_currencies > 1
-    <h4>{{ locale.title(locale.currencies.get(currency, currency)) }}
-        ({{ locale.currency_symbols.get(currency, currency) }})</h4>
-    % endif
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="recipient">{{ _("Recipient") }}</th>
-                <th class="amount">{{ _("Amount") }}</th>
-                <th class="ctime">{{ _("Created") }}</th>
-                <th class="mtime">{{ _("Modified") }}</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th></th>
-                <th class="total">{{ _(
-                    "{0} per week ~ {1} per month ~ {2} per year",
-                    total,
-                    total / constants.PERIOD_CONVERSION_RATES['monthly'],
-                    total / constants.PERIOD_CONVERSION_RATES['yearly'],
-                ) }}</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </tfoot>
-        <tbody>
+        % set pledges, total = t
+        % if n_pledge_currencies > 1
+        <h4>{{ locale.title(locale.currencies.get(currency, currency)) }}
+            ({{ locale.currency_symbols.get(currency, currency) }})</h4>
+        % endif
+        <form action="{{ participant.path('tip') }}?dir=from" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="selected_amount" value="0" />
+            <input type="hidden" name="currency" value="{{ currency }}" />
         % for tip in pledges
             % set e = tip.e_account
-            <tr>
-                <td class="recipient">
-                    <img class="platform-icon" src="{{ e.platform_data.icon }}" />
-                    <a href="{{ e.liberapay_path }}">{{ e.friendly_name }}</a>
-                </td>
-                <td class="amount">{{ tip_form(tippee=e, tip=tip, inline=True) }}</td>
-                <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
-                <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
-            </tr>
+            <div class="card card-default card-xs-vanish donation">
+                <div class="recipient">
+                    <div class="col-1"><a href="{{ e.liberapay_path }}">{{
+                        avatar_img(e, size=72)
+                    }}</a></div>
+                    <div class="col-2">
+                        <a class="username" href="{{ e.liberapay_path }}">
+                            <img class="platform-icon" src="{{ e.platform_data.icon }}"
+                                 alt="({{ e.platform_data.display_name }})" />
+                            {{ e.friendly_name }}
+                        </a>
+                        <div class="line-2">
+                            <span class="amount">{{
+                                _("{money_amount}{small}/week{end_small}",
+                                  money_amount=tip.periodic_amount,
+                                  small='<small>'|safe, end_small='</small>'|safe
+                                  ) if tip.period == 'weekly' else
+                                _("{money_amount}{small}/month{end_small}",
+                                  money_amount=tip.periodic_amount,
+                                  small='<small>'|safe, end_small='</small>'|safe
+                                  ) if tip.period == 'monthly' else
+                                _("{money_amount}{small}/year{end_small}",
+                                  money_amount=tip.periodic_amount,
+                                  small='<small>'|safe, end_small='</small>'|safe
+                                  )
+                            }}</span>
+                            <span class="actions">
+                                <a class="btn btn-default btn-xs" href="{{ e.liberapay_path }}">{{
+                                    _("Modify")
+                                }}</a>
+                                <button class="btn btn-default btn-xs" name="tippee" value="{{ tip.tippee }}"
+                                        title="{{ _('Cancel the pledge') }}">
+                                    <span class="text-warning">{{ glyphicon('remove') }}</span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                % if tip.mtime == tip.ctime
+                    <p class="help-block">{{ _(
+                        "Started {timedelta} ago.", timedelta=to_age(tip.ctime)
+                    ) }}</p>
+                % else
+                    <p class="help-block">{{ _(
+                        "Started {start_delta} ago. Modified {mtime_delta} ago.",
+                        start_delta=to_age(tip.ctime), mtime_delta=to_age(tip.mtime)
+                    ) }}</p>
+                % endif
+            </div>
         % endfor
-        </tbody>
-    </table>
+        </form>
+        <p>{{ _(
+            "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year.",
+            total,
+            total / constants.PERIOD_CONVERSION_RATES['monthly'],
+            total / constants.PERIOD_CONVERSION_RATES['yearly'],
+            bold='<strong>'|safe, bold_end='</strong>'|safe
+        ) }}</p>
     % endfor
 </div>
 % endif
 
 % if ncancelled
-<div class="col-lg-7">
-    <h3>{{ _("Recently Cancelled") }} (N={{ ncancelled }})
+<div>
+    <h3>{{ _("Recently Cancelled") }} ({{ ncancelled }})
         <small>{{ _("within the last 30 days") }}</small></h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="recipient">{{ _("Recipient") }}</th>
-                <th class="ctime">{{ _("Created") }}</th>
-                <th class="mtime">{{ _("Cancelled") }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            % for tip in cancelled_tips
-            <tr>
-                % set username = tip.tippee_p.username
-                <td class="recipient"><a href="/{{ username }}/">{{ username }}</a></td>
-                <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
-                <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
-            </tr>
-            % endfor
-            % for tip in cancelled_pledges
-            % set e = tip.e_account
-            <tr>
-                <td class="recipient">
-                    <img class="platform-icon" src="{{ e.platform_data.icon }}" />
-                    <a href="{{ e.liberapay_path }}">{{ e.friendly_name }}</a>
-                </td>
-                <td class="ctime">{{ to_age_str(tip.ctime, add_direction=True) }}</td>
-                <td class="mtime">{{ to_age_str(tip.mtime, add_direction=True) }}</td>
-            </tr>
-            % endfor
-        </tbody>
-    </table>
+    % for tip in cancelled_tips
+        % set tippee = tip.tippee_p
+        <div class="card card-default card-xs-vanish donation">
+            <div class="recipient">
+                % set username = tippee.username
+                <div class="col-1"><a href="/{{ username }}/">{{
+                    avatar_img(tippee, size=72)
+                }}</a></div>
+                <div class="col-2">
+                    <a class="username" href="/{{ username }}/">{{ username }}</a>
+                </div>
+            </div>
+            <p class="help-block">{{ _(
+                "Started {start_delta} ago. Stopped {stop_delta} ago.",
+                start_delta=to_age(tip.ctime), stop_delta=to_age(tip.mtime)
+            ) }}</p>
+        </div>
+    % endfor
+    % for tip in cancelled_pledges
+        % set e = tip.e_account
+        <div class="card card-default card-xs-vanish donation">
+            <div class="recipient">
+                <div class="col-1"><a href="{{ e.liberapay_path }}">{{
+                    avatar_img(e, size=72)
+                }}</a></div>
+                <div class="col-2">
+                    <a class="username" href="{{ e.liberapay_path }}">
+                        <img class="platform-icon" src="{{ e.platform_data.icon }}"
+                             alt="({{ e.platform_data.display_name }})" />
+                        {{ e.friendly_name }}
+                    </a>
+                </div>
+            </div>
+            <p class="help-block">{{ _(
+                "Started {start_delta} ago. Stopped {stop_delta} ago.",
+                start_delta=to_age(tip.ctime), stop_delta=to_age(tip.mtime)
+            ) }}</p>
+        </div>
+    % endfor
 </div>
 % endif
 
-</div>
 % endblock
