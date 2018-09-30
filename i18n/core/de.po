@@ -52,15 +52,15 @@ msgid "Manage your donations"
 msgstr "Spenden verwalten"
 
 msgid "Your email address has been blacklisted"
-msgstr ""
+msgstr "Ihre Email-Adresse wurde auf die Schwarze Liste gesetzt"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Wir schicken keine weiteren Emails an Ihre Adresse {email_address}, weil dies beim letzten Versuch gescheitert ist. Bitte schicken Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Schwarzen Liste entfernen wollen."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Wir schicken keine weiteren Emails an Ihre Adresse {email_address}, weil wir eine Beschwerde von Ihrem Email-Anbieter erhalten haben. Bitte sende Sie eine Email von dieser Adresse an support@liberapay.com, wenn diese von der Schwarzen Liste entfernt werden soll."
 
 msgid "Manage your email addresses"
 msgstr "E-Mail-Adressen verwalten"
@@ -648,11 +648,11 @@ msgstr "'{0}' ist keine gültige E-Mail-Adresse."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
-msgstr ""
+msgstr "{domain_name} ist keine gültige Email-Domain."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Die Email-Adresse {email_address} wurde auf die Schwarze Liste gesetzt, weil der Versuch dorthin eine Nachricht zu schicken vor {timedelta} gescheitert ist. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Schwarzen Liste entfernen möchten."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -670,7 +670,7 @@ msgid "You are not allowed to add another email address right now, please try ag
 msgstr "Sie dürfen zurzeit keine weitere E-Mail-Adresse hinzufügen. Bitte versuchen Sie es in ein paar Tagen wieder."
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
-msgstr "Es wurden zu viele Anmeldeversuche von deiner IP-Adresse oder aus deinem Land festgestellt. Bitte versuche es in einer Stunde erneut und melde dich bei support@liberapay.com falls Problem bestehen bleibt."
+msgstr "Es wurden zu viele Anmeldeversuche von Ihrer IP-Adresse oder aus Ihrem Land festgestellt. Bitte versuchen Sie es in einer Stunde erneut und melden sich bei support@liberapay.com, falls das Problem bestehen bleibt."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
 msgstr "Sie haben Ihr Kontingent an E-Mail-Logins für heute aufgebraucht. Bitte versuchen Sie es morgen wieder, oder kontaktieren Sie support@liberapay.com."
@@ -759,7 +759,7 @@ msgid "You are not allowed to do this because your account is currently suspende
 msgstr "Sie können dies nicht tun, weil Ihr Konto zurzeit suspendiert ist."
 
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
-msgstr "Diese Zahlung kann nicht ausgeführt werden. Das Konto des Empfängers ist gesperrt."
+msgstr "Diese Zahlung kann nicht bearbeitet werden, da das Konto des Empfängers derzeit gesperrt ist."
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
@@ -787,7 +787,7 @@ msgstr "Diese Zahlungsmethode ist derzeit leider nicht verfügbar."
 
 #, python-brace-format
 msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr "Es tut uns sehr leid, aber eingehende Zahlungen sind aktuell deaktiviert. Du kannst {link_start}diesen Blogpost{link_end} lesen, um zu erfahren warum."
+msgstr "Es tut uns sehr leid, aber eingehende Zahlungen sind aktuell deaktiviert. Sie können {link_start}diesen Blogpost{link_end} lesen, um zu erfahren warum."
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
@@ -1614,9 +1614,8 @@ msgstr "Häufig gestellte Fragen"
 msgid "What payment methods are available?"
 msgstr "Welche Zahlungsarten sind verfügbar?"
 
-#, fuzzy
 msgid "We currently support most credit and debit cards (Visa, MasterCard, American Express). SEPA direct debits will be operational soon. More options will be added in the future."
-msgstr "Wir unterstützen zur Zeit Kreditkarten und Debitkarten (VISA, MasterCard, etc.).  Lastschrifteinzug über SEPA werden wir bald unterstützen. Weitere Zahlungsmöglichkeiten kommen später."
+msgstr "Wir unterstützen zur Zeit die meisten Kreditkarten und Debitkarten (VISA, MasterCard, American Express). Lastschrifteinzug über SEPA werden wir bald unterstützen. Weitere Zahlungsmöglichkeiten werden in Zukunft hinzukommen."
 
 msgid "How do recurrent donations work?"
 msgstr "Wie funktionieren periodische Spenden?"
@@ -3265,7 +3264,7 @@ msgstr "Internationale Verständigung ist uns wichtig! Unser Dienst kann mit ver
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
-msgstr "Wenn du mehr Details möchtest, die Snowdrift.coop Leute haben {0} eine große Liste{1} der Crowdfunding Plattformen und die Unterschiede zwischen ihnen zusammengestellt."
+msgstr "Wenn Sie mehr darüber erfahren möchten, dann lesen Sie {0}die große Liste{1} der Crowdfunding Plattformen und deren Unterschiede zusammengestellt von Snowdrift.coop."
 
 msgid "Does Liberapay respect financial regulations?"
 msgstr "Achtet Liberapay die Regularien der Finanzbehörden?"
@@ -3338,7 +3337,7 @@ msgid "Payments come with no strings attached. You don't know exactly who is giv
 msgstr "An die Einnahmen sind keine Bedingungen geknüpft. Sie wissen nicht genau, wer an Sie spendet und Spenden sind auf {0} pro Woche und Spender begrenzt, um eine unangemessene Einflussnahme zu verhindern."
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
-msgstr ""
+msgstr "Der gesamte Betrag, den Sie erhalten und spenden, wird unter der Standardeinstellung öffentlich angezeigt. Sie können diese Einstellung allerdings anpassen."
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
@@ -3395,7 +3394,7 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr "Wir tun unser Bestes, um Ihre Privatsphäre zu schützen: Wir versuchen Besucher unserer Webseite nicht zu tracken. Wir bemühen uns nur tatsächlich benötigte personenbezogene Daten zu sammeln und wir verkaufen keine Daten."
 
 msgid "You need to log in to access this page."
-msgstr "Du musst dich einloggen um auf diese Seite zugreifen zu können."
+msgstr "Sie müssen sich einloggen, um auf diese Seite zugreifen zu können."
 
 msgid "Quarantine"
 msgstr "Quarantäne"

@@ -652,11 +652,11 @@ msgstr "'{domain_name}' ne estas valida retpoŝta domajno."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "La retadreso {email_address} estas en nigrolisto ĉar provo sendi retmesaĝon malsukcesis antaŭ {timedelta}. Bonvolu sendi retmesaĝojn per tiu adreso al support@liberapay.com se vi volas ke ni foriĝu ĝin el la nigra listo."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "La retadreso {email_address} estas en nigrolisto pro plendo ricevita antaŭ {timedelta}. Bonvolu sendi retmesaĝojn per tiu adreso al support@liberapay.com se vi volas ke ni foriĝu ĝin el la nigra listo."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1508,7 +1508,7 @@ msgstr "Ĝisdatigi mian nominalan parton"
 
 #, fuzzy
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
-msgstr "Neuzata enspezo ne estos elspezita en la sekvaj semajnoj, ĝi ne kreskas en la teama konto. Teamo ne povas posedi monon, ĉar ĝi ne estas juraĵo."
+msgstr "Neuzata enspezo estos elspezita en la sekvaj semajnoj, ĝi ne kreskas en la teama konto. Teamo ne povas posedi monon, ĉar ĝi ne estas juraĵo."
 
 msgid "Leftover"
 msgstr "Restaĵo"
@@ -1810,7 +1810,7 @@ msgstr[0] "Retadreso (Privata)"
 msgstr[1] "Retadresoj (Privataj)"
 
 msgid "Blacklisted"
-msgstr ""
+msgstr "En nigrolisto"
 
 msgid "Primary"
 msgstr "Ĉefa"
@@ -1897,7 +1897,7 @@ msgstr "Liberapay bezonas vian subtenon"
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
-msgstr "Liberapay ne prenas parton de transdonoj, kaj estas financita nur de donacoj al {0}sia propra konto{1}, bonvolu konsideri kontribui:"
+msgstr "Liberapay ne prenas parton de pagoj, kaj estas financata nur de donacoj al {0}sia propra konto{1}, bonvolu konsideri kontribui:"
 
 msgid "Support Liberapay"
 msgstr "Subteni Liberapay"
@@ -2028,14 +2028,14 @@ msgid "Custom amount (min={0}, max={1})"
 msgstr "Propra kvanto (minimumo={0}, maksimumo={1})"
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr ""
+msgstr "PayPal-pagoj nun ne estas sennomaj, la ricevanto vidos vian nomon kaj retadreson."
 
 msgid "Initiate the payment"
 msgstr "Inici la pagon"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr ""
+msgstr "La provizanto de pagservo {name} respondis eraron: “{error_message}”."
 
 msgid "The payment has been initiated."
 msgstr "La pagon estis ekita."
@@ -2687,7 +2687,7 @@ msgstr "Ilia saldo estas {0}."
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
-msgstr ""
+msgstr "Ĉi tiu pâgo nur montras transakciojn traktitajn de Mangopay, por vidi aliajn pagojn {link_start}iru al la Kontoregistro-paĝo{link_end}."
 
 msgid "Account Statement"
 msgstr "Bankkonta etato"
@@ -3292,7 +3292,7 @@ msgid "Which currencies are supported?"
 msgstr "Kiuj valutoj estas subtenataj?"
 
 msgid "What are the payment processing fees?"
-msgstr "Kio estas la peradkostoj de la provizantoj de pagservo?"
+msgstr "Kiom estas la pago-peradkostoj?"
 
 #
 msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
@@ -3338,13 +3338,12 @@ msgstr "Liberapay estas maniero por periode donaci monon al homoj, kies laboron 
 msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
 msgstr "Pagoj estas sen postuloj. Vi ne povas scii precize kiu donacas al vi, kaj donacoj estas limigataj al {0} semajne fare de ĉiu donacanto, por eviti dependon al sola granda donacanto."
 
-#, fuzzy
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
-msgstr "Defaŭlte la totala kvanto kiu vi donas kaj la totala kvanto kiu vi ricevas estas publikaj (vi povas ...)"
+msgstr "Defaŭlte, la totala kvanto kiun vi donacas kaj la totala kvanto kiun vi ricevas estas publikaj (vi povas elekti la malon)."
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
-msgstr ""
+msgstr "Liberapay ne prenas parton de pagoj, kaj estas financata nur de donacoj al {1}sia propra konto{0}. Tamen estas {2}pago-peradkosto{0}."
 
 #, python-brace-format
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
