@@ -845,6 +845,28 @@ class Payday(object):
              WHERE t.id = t2.id
                AND t.is_funded <> t2.is_funded;
 
+            WITH active_donors AS (
+                     SELECT DISTINCT tr.tipper AS id
+                       FROM transfers tr
+                      WHERE tr.context IN ('tip', 'take')
+                        AND tr.timestamp > (current_timestamp - interval '30 days')
+                        AND tr.status = 'succeeded'
+                      UNION
+                     SELECT DISTINCT pi.payer AS id
+                       FROM payins pi
+                      WHERE pi.ctime > (current_timestamp - interval '30 days')
+                        AND pi.status = 'succeeded'
+                 )
+            UPDATE tips t
+               SET is_funded = t2.is_funded
+              FROM ( SELECT t.id, (t.tipper IN (SELECT ad.id FROM active_donors ad)) AS is_funded
+                       FROM current_tips t
+                       JOIN participants tippee_p ON tippee_p.id = t.tippee
+                      WHERE tippee_p.status = 'stub'
+                   ) t2
+             WHERE t2.id = t.id
+               AND t.is_funded <> t2.is_funded;
+
             UPDATE takes t
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
