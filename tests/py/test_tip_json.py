@@ -22,21 +22,30 @@ class TestTipJson(Harness):
 
         # First, create some test data
         # We need accounts
-        self.make_participant("test_tippee1")
-        self.make_participant("test_tippee2")
-        test_tipper = self.make_participant("test_tipper", balance=EUR(100))
+        tippee1 = self.make_participant("test_tippee1")
+        self.add_payment_account(tippee1, 'stripe')
+        tippee2 = self.make_participant("test_tippee2")
+        self.add_payment_account(tippee2, 'stripe')
+        test_tipper = self.make_participant("test_tipper")
+        card = self.upsert_route(test_tipper, 'stripe-card')
 
         # Then, add a $1.50 and $3.00 tip
         response1 = self.tip(test_tipper, "test_tippee1", "1.00")
+        self.make_payin_and_transfer(card, tippee1, EUR('10'))
         response2 = self.tip(test_tipper, "test_tippee2", "3.00")
+        self.make_payin_and_transfer(card, tippee2, EUR('30'))
+        response3 = self.tip(test_tipper, "test_tippee2", "2.00")
 
         # Confirm we get back the right amounts.
         first_data = json.loads(response1.text)
         second_data = json.loads(response2.text)
+        third_data = json.loads(response3.text)
         assert first_data['amount'] == {"amount": "1.00", "currency": "EUR"}
-        assert first_data['total_giving'] == {"amount": "1.00", "currency": "EUR"}
+        assert first_data['total_giving'] == {"amount": "0.00", "currency": "EUR"}
         assert second_data['amount'] == {"amount": "3.00", "currency": "EUR"}
-        assert second_data['total_giving'] == {"amount": "4.00", "currency": "EUR"}
+        assert second_data['total_giving'] == {"amount": "1.00", "currency": "EUR"}
+        assert third_data['amount'] == {"amount": "2.00", "currency": "EUR"}
+        assert third_data['total_giving'] == {"amount": "3.00", "currency": "EUR"}
 
     def test_set_tip_out_of_range(self):
         self.make_participant("alice")

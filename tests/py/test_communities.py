@@ -4,7 +4,7 @@ import json
 
 from liberapay.exceptions import AuthRequired
 from liberapay.models.community import Community
-from liberapay.testing import EUR, Harness
+from liberapay.testing import Harness
 
 
 class Tests(Harness):
@@ -13,7 +13,7 @@ class Tests(Harness):
         Harness.setUp(self)
 
         # Alice joins a community.
-        self.alice = self.make_participant('alice', balance=EUR(100))
+        self.alice = self.make_participant('alice')
         c = self.alice.create_community('C++')
         self.alice.upsert_community_membership(True, c.id)
 

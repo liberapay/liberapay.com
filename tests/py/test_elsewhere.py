@@ -4,8 +4,10 @@ import json
 
 import mock
 
+from liberapay.billing.payday import Payday
 from liberapay.elsewhere._base import UserInfo
 from liberapay.models.account_elsewhere import AccountElsewhere
+from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import EUR, Harness
 import liberapay.testing.elsewhere as user_info_examples
 from liberapay.utils import b64encode_s
@@ -115,7 +117,17 @@ class TestElsewhere(Harness):
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_page_shows_pledges(self, get_user_info):
         alice = self.make_elsewhere('github', 1, 'alice').participant
-        bob = self.make_participant('bob', balance=EUR(100))
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
+        # bob needs to be an active donor for his pledge to be counted
+        bob.set_tip_to(carl, EUR('1.00'))
+        bob_card = ExchangeRoute.insert(
+            bob, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
+        )
+        self.add_payment_account(carl, 'stripe')
+        self.make_payin_and_transfer(bob_card, carl, EUR('1.00'))
+        Payday.start().run()
+        # okay, let's check
         amount = EUR('14.97')
         bob.set_tip_to(alice, amount)
         assert alice.receiving == amount
