@@ -1041,6 +1041,15 @@ class Payday(object):
                         AND n.event = 'donate_reminder'
                         AND n.is_new
                    ) < 2
+               AND NOT EXISTS (
+                     SELECT 1
+                       FROM payin_transfers pt
+                      WHERE pt.payer = t.tipper
+                        AND COALESCE(pt.team, pt.recipient) = t.tippee
+                        AND pt.context IN ('personal-donation', 'team-donation')
+                        AND pt.status = 'pending'
+                        AND pt.ctime >= (current_timestamp - interval '9 weeks')
+                   )
           GROUP BY t.tipper
           ORDER BY t.tipper
         """)
