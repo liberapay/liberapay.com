@@ -252,7 +252,7 @@ class AccountElsewhere(Model):
         return r
 
     def get_excerpt(self, size=SUMMARY_MAX_SIZE):
-        return excerpt_intro(Markup(self.description).striptags(), size)
+        return excerpt_intro(Markup(self.description or '').striptags(), size)
 
     def save_token(self, token):
         """Saves the given access token in the database.
