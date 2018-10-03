@@ -79,7 +79,7 @@ def create_payment(db, payin, payer, return_url, state):
         "application_context": {
             "brand_name": "Liberapay",
             "locale": locale.language,
-            "landing_page": "Login",
+            "landing_page": "Billing",
             "shipping_preference": "NO_SHIPPING",
             "user_action": "commit",
         },
