@@ -6,6 +6,16 @@ from liberapay.utils import get_participant, group_by
 
 participant = get_participant(state, restrict=True)
 
+if request.method == 'POST':
+    account_pk = request.body.get_int('account_pk')
+    website.db.run("""
+        UPDATE payment_accounts
+           SET is_current = NULL
+         WHERE participant = %s
+           AND pk = %s
+    """, (participant.id, account_pk))
+    response.redirect(request.path.raw)
+
 accounts_by_provider = group_by(website.db.all("""
     SELECT *
       FROM payment_accounts
@@ -34,9 +44,12 @@ subhead = _("Payment")
     <h3>Stripe</h3>
     % set accounts = accounts_by_provider.get('stripe', ())
     % if accounts
-    <div>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % for account in accounts
         <div class="card card-default">
+            <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
+                    title="{{ _('Disconnect') }}">&times;</button>
             % if account.display_name
             <h4>{{ account.display_name }}</h4>
             {{ _("Account ID: {0}", account.id) }}<br>
@@ -56,7 +69,7 @@ subhead = _("Payment")
             % endif
         </div>
         % endfor
-    </div>
+    </form>
     <br>
     % elif request.country in locale.countries
         % set country = request.country
@@ -83,9 +96,12 @@ subhead = _("Payment")
     <h3>PayPal</h3>
     % set accounts = accounts_by_provider.get('paypal', ())
     % if accounts
-    <div>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % for account in accounts
         <div class="card card-default">
+            <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
+                    title="{{ _('Disconnect') }}">&times;</button>
             <h4>{{ account.id }}</h4>
             <p>
             {{ _("Country: {0}", Country(account.country)) }}<br>
@@ -100,7 +116,7 @@ subhead = _("Payment")
             % endif
         </div>
         % endfor
-    </div>
+    </form>
     <br>
     % elif request.country in locale.countries
         % set country = request.country
