@@ -14,19 +14,4 @@
     "by editing your profile accordingly.",
 ) }}</p>
 
-<p><a href="{{ participant.url('edit') }}">{{ _("Edit your profile") }}</a></p>
-
-[---] text/plain
-{{ _(
-    "Someone wants to donate to you on Liberapay, but you need to fill out the "
-    "identity form before we can legally start to collect money for you."
-) }}
-
-{{ _("Fill identity form") }}: {{ participant.url('identity') }}
-
-{{ _(
-    "If you do not wish to receive donations on Liberapay, you can reject them "
-    "by editing your profile accordingly.",
-) }}
-
-{{ _("Edit your profile") }}: {{ participant.url('edit') }}
+<p><a href="{{ participant.url('edit/goal') }}">{{ _("Reject donations") }}</a></p>
