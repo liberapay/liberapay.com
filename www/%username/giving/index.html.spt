@@ -204,7 +204,7 @@ next_payday = today + timedelta(days=days_till_wednesday)
                     <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
                         "Inactive because the recipient no longer accepts donations."
                     ) }}</p>
-                % elif tip.paid_in_advance and tip.paid_in_advance >= tip.amount and next_payday > today
+                % elif tip.paid_in_advance and tip.paid_in_advance >= tip.amount
                     <p class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</p>
                     % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
                     <p>
