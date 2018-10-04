@@ -1135,6 +1135,47 @@ class Payday(object):
             n += 1
         log("Sent %i donate_reminder notifications." % n)
 
+        # Missing payment account notifications
+        n = 0
+        participants = self.db.all("""
+            SELECT p
+              FROM participants p
+             WHERE p.payment_providers = 0
+               AND p.status = 'active'
+               AND p.kind IN ('individual', 'organization')
+               AND (p.goal IS NULL OR p.goal >= 0)
+               AND p.is_suspended IS NOT true
+               AND ( EXISTS (
+                       SELECT 1
+                         FROM current_tips t
+                         JOIN participants tipper ON tipper.id = t.tipper
+                        WHERE t.tippee = p.id
+                          AND t.amount > 0
+                          AND t.renewal_mode > 0
+                          AND (t.paid_in_advance IS NULL OR t.paid_in_advance < t.amount)
+                          AND tipper.email IS NOT NULL
+                          AND tipper.is_suspended IS NOT true
+                   ) OR EXISTS (
+                       SELECT 1
+                         FROM current_takes take
+                         JOIN participants team ON team.id = take.team
+                        WHERE take.member = p.id
+                          AND take.amount > 0
+                          AND team.receiving > 0
+                   ) )
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM notifications n
+                        WHERE n.participant = p.id
+                          AND n.event = 'payment_account_required'
+                          AND n.ts > (current_timestamp - interval '6 months')
+                   )
+        """)
+        for p in participants:
+            p.notify('payment_account_required', force_email=True)
+            n += 1
+        log("Sent %i payment_account_required notifications." % n)
+
 
 def create_payday_issue():
     # Make sure today is payday

@@ -1,0 +1,18 @@
+{{ _("You're missing out on donations through Liberapay") }}
+
+[---] text/html
+<p>{{ _(
+    "Your patrons are currently unable to send you money through Liberapay because "
+    "payment processing isn't set up for your account."
+) }}</p>
+
+<p><a href="{{ participant.url('payment') }}" style="{{ button_style('primary') }}">{{
+    _("Configure payment processing")
+}}</a></p>
+
+<p>{{ _(
+    "If you do not wish to receive donations on Liberapay, you can reject them "
+    "by editing your profile accordingly.",
+) }}</p>
+
+<p><a href="{{ participant.url('edit/goal') }}">{{ _("Reject donations") }}</a></p>
