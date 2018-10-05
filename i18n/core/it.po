@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2018-10-06 08:55+0000\n"
+"Last-Translator: Davide Neri <davnerix@gmail.com>\n"
 "Language-Team: Italian (https://hosted.weblate.org/projects/liberapay/core/it/)\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.2\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -51,15 +54,15 @@ msgid "Manage your donations"
 msgstr "Gestisci le tue donazioni"
 
 msgid "Your email address has been blacklisted"
-msgstr ""
+msgstr "Il tuo indirizzo e-mail è stato inserito nella lista nera"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Non invieremo più e-mail al tuo indirizzo {email_address}, poiché recentemente è fallito un tentativo di invio. Si prega di inviare una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Non invieremo più e-mail al tuo indirizzo {email_address}, poiché abbiamo ricevuto un reclamo dal provider e-mail. Si prega di inviare una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
 
 msgid "Manage your email addresses"
 msgstr "Gestisci i tuoi indirizzi e-mail"
@@ -652,11 +655,11 @@ msgstr "\"{domain_name}\" non è un profilo e-mail valido."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "L'indirizzo e-mail {email_address} è nella lista nera poiché {timedelta} fa è fallito un tentativo di invio. Si prega di inviare una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "L'indirizzo e-mail {email_address} è nella lista nera a causa di un reclamo ricevuto {timedelta} fa. Si prega di inviare una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1807,7 +1810,7 @@ msgstr[0] "Indirizzo e-mail (privato)"
 msgstr[1] "Indirizzi e-mail (privati)"
 
 msgid "Blacklisted"
-msgstr ""
+msgstr "Inserito nella lista nera"
 
 msgid "Primary"
 msgstr "Primario"
@@ -1910,58 +1913,58 @@ msgstr[1] "Hai {n} donazioni in attesa di pagamento."
 
 #, python-brace-format
 msgid "{money_amount}{small}/week{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/settimana{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/mese{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/anno{end_small}"
 
 #, python-brace-format
 msgid "Started {timedelta} ago."
-msgstr ""
+msgstr "Iniziato {timedelta} fa."
 
 #, python-brace-format
 msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
-msgstr ""
+msgstr "Iniziato {start_delta} fa. Modificato {mtime_delta} fa."
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr ""
+msgstr "Inattivo perché il conto del ricevente è nella lista nera."
 
 msgid "Inactive because the account of the recipient is closed."
-msgstr ""
+msgstr "Inattivo perché il conto del ricevente è chiuso."
 
 msgid "Inactive because the recipient no longer accepts donations."
-msgstr ""
+msgstr "Inattivo perché il ricevente non accetta più donazioni."
 
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 #, python-brace-format
 msgid "Next payment in {timedelta}."
-msgstr ""
+msgstr "Prossimo pagamento tra {timedelta}."
 
 msgid "Renew now"
-msgstr ""
+msgstr "Rinnova adesso"
 
 msgid "Awaiting payment."
-msgstr ""
+msgstr "In attesa del pagamento."
 
 msgid "Renew"
-msgstr ""
+msgstr "Rinnova"
 
 msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
-msgstr ""
+msgstr "Non può essere rinnovato perché il conto del ricevente non è pronto per ricevere nuovi pagamenti."
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
-msgstr ""
+msgstr "{bold}Totale:{bold_end}{0} alla settimana ~ {1} al mese ~ {2} all'anno."
 
 msgid "Cancel the pledge"
-msgstr ""
+msgstr "Cancella l'impegno"
 
 msgid "Recently Cancelled"
 msgstr "Cancellati di recente"
@@ -1971,7 +1974,7 @@ msgstr "negli ultimi 30 giorni"
 
 #, python-brace-format
 msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
-msgstr ""
+msgstr "Iniziato {start_delta} fa. Terminato {stop_delta} fa."
 
 msgid "Funding your donations"
 msgstr "Finanziando le tue donazioni"
@@ -2042,14 +2045,14 @@ msgid "Custom amount (min={0}, max={1})"
 msgstr "Ammontare personalizzato (min={0}, max={1})"
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr ""
+msgstr "I pagamenti tramite PayPal al momento non sono anonimi, il ricevente vedrà il tuo nome utente ed il tuo indirizzo e-mail."
 
 msgid "Initiate the payment"
 msgstr "Avvia il pagamento"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr ""
+msgstr "L'elaboratore di pagamenti {name} ha riportato un errore: \"{error_message}\"."
 
 msgid "The payment has been initiated."
 msgstr "Il pagamento è stato avviato."
@@ -4393,7 +4396,7 @@ msgid "A confirmation code will be sent to this email address, unless it's alrea
 msgstr "Un codice di conferma verrà inviato a questo indirizzo e-mail, a meno che non sia già collegato al tuo conto Liberapay."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr ""
+msgstr "I pagamenti tramite PayPal al momento non sono anonimi, i donatori vedranno il tuo indirizzo e-mail, e tu vedrai il loro."
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "Ci dispiace, non abbiamo trovato alcun risultato alla tua ricerca."
