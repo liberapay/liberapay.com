@@ -2,26 +2,26 @@
 
 % block subnav
     {% set pages = ([
-        ('/giving/', _('Giving')),
-        ('/receiving/', _('Receiving')),
-        ('/ledger/', _('Ledger')),
-        ('/wallet/', _('Wallet')),
-        ('/payment/', _('Payment Processors')),
-        ('/identity', _('Identity')),
-        ('/settings/', _('Settings')),
+        ('/giving/', _("Giving")),
+        ('/receiving/', _("Receiving")),
+        ('/ledger/', _("Ledger")),
+        ('/wallet/', _("Wallet")),
+        ('/payment/', _("Payment Processors")),
+        ('/identity', _("Identity")),
+        ('/settings/', _("Settings")),
     ] if participant.mangopay_user_id else [
-        ('/giving/', _('Giving')),
-        ('/receiving/', _('Receiving')),
-        ('/ledger/', _('Ledger')),
-        ('/payment/', _('Payment Processors')),
-        ('/settings/', _('Settings')),
+        ('/giving/', _("Giving")),
+        ('/receiving/', _("Receiving")),
+        ('/ledger/', _("Ledger")),
+        ('/payment/', _("Payment Processors")),
+        ('/settings/', _("Settings")),
     ] if participant.is_person else [
-        ('/receiving/', _('Receiving')),
+        ('/receiving/', _("Receiving")),
     ]) + [
-        ('/emails/', _('Emails')),
-        ('/widgets/', _('Widgets')),
+        ('/emails/', _("Emails")),
+        ('/widgets/', _("Widgets")),
     ] + ([
-        ('/admin', 'Admin')
+        ('/admin', "Admin")
     ] if user.is_admin else []) %}
     % from "templates/nav.html" import nav with context
     <div class="collapse-md">
