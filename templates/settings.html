@@ -6,14 +6,14 @@
         ('/receiving/', _('Receiving')),
         ('/ledger/', _('Ledger')),
         ('/wallet/', _('Wallet')),
-        ('/payment/', _('Payment')),
+        ('/payment/', _('Payment Processors')),
         ('/identity', _('Identity')),
         ('/settings/', _('Settings')),
     ] if participant.mangopay_user_id else [
         ('/giving/', _('Giving')),
         ('/receiving/', _('Receiving')),
         ('/ledger/', _('Ledger')),
-        ('/payment/', _('Payment')),
+        ('/payment/', _('Payment Processors')),
         ('/settings/', _('Settings')),
     ] if participant.is_person else [
         ('/receiving/', _('Receiving')),

@@ -24,7 +24,7 @@ accounts_by_provider = group_by(website.db.all("""
 """, (participant.id,)), lambda a: a.provider)
 
 title = participant.username
-subhead = _("Payment")
+subhead = _("Payment Processors")
 
 [---] text/html
 % from "templates/icons.html" import glyphicon
