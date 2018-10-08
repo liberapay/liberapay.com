@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2018-10-09 14:43+0000\n"
+"Last-Translator: Mikhail Tycmhuk <qlzp2@mail.ru>\n"
 "Language-Team: Russian (https://hosted.weblate.org/projects/liberapay/core/ru/)\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.2.1\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -53,15 +56,15 @@ msgid "Manage your donations"
 msgstr "Управление вашими пожертвованиями"
 
 msgid "Your email address has been blacklisted"
-msgstr ""
+msgstr "Адрес вашей электронной почты был помещён в черный список"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Мы больше не отсылаем письма на ваш адрес {email_address}, потому что недавняя попытка сделать эта не удалась. Отправьте нам письмо с этого адреса на support@liberapay.com, если вы хотите, чтобы мы удалили его из чёрного списка."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Мы больше не будем отправлять письма на ваш адрес {email_address}, потому что мы получили жалобу от почтового провайдера. Отправьте нам письмо с этого адреса на support@liberapay.com, если вы хотите, чтобы мы удалили его из чёрного списка."
 
 msgid "Manage your email addresses"
 msgstr "Управление адресами электронной почты"
@@ -652,15 +655,15 @@ msgstr "'{0}' не является корректным адресом элек
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
-msgstr ""
+msgstr "'{domain_name}' не является допустимым почтовым доменом."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Почтовый адрес {email_address} занесён в чёрный список, потому что попытка отправить письмо на него не удалась{timedelta} назад. Отправьте письмо с этого адреса на support@liberapay.com, если хотите, чтобы мы удалили его из чёрного списка."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Адрес электронной почты {email_address} занесён в черный список из-за жалобы, полученной {timedelta} назад. Отправьте письмо с этого адреса на support@liberapay.com, если хотите, чтобы мы удалили его из чёрного списка."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -763,7 +766,7 @@ msgid "You are not allowed to do this because your account is currently suspende
 msgstr "Операция запрещена, потому что ваш аккаунт деактивирован."
 
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
-msgstr ""
+msgstr "Этот платёж не может быть обработан, потому что аккаунт получателя в данный момент деактивирован."
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
@@ -784,7 +787,7 @@ msgstr "Попытка распределить деньги в вашем ко�
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists please contact support@liberapay.com."
-msgstr ""
+msgstr "Попытка отправки письма на {email_address} не удалась. Проверьте, что адрес корректен и попробуйте снова. Если проблема остаётся, свяжитесь с support@liberapay.com."
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
 msgstr "Этот метод оплаты в данный момент недоступен. Приносим извинения за доставленные неудобства."
@@ -795,7 +798,7 @@ msgstr "Нам очень жаль, но входящие платежи сей�
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "Платёжный оператор {name} возвратил ошибку. Попробуйте снова и свяжитесь с support@liberapay.com, если проблема останется."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
