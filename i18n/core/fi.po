@@ -1258,8 +1258,8 @@ msgstr "Lompakko"
 msgid "Emptying your wallet"
 msgstr "Lompakon tyhjentäminen"
 
-msgid "Payment"
-msgstr "Maksu"
+msgid "Payment Processors"
+msgstr ""
 
 msgid "Identity"
 msgstr "Henkilöllisyys"
@@ -2403,11 +2403,21 @@ msgstr "Merkitse kaikki ilmoitukset luetuiksi"
 msgid "No notifications to show."
 msgstr "Ei näytettäviä ilmoituksia."
 
-msgid "This page allows you to manage your payment methods."
-msgstr "Tällä sivulla voit hallinnoida maksumenetelmiäsi."
+#, python-brace-format
+msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
+msgstr ""
+
+msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
+msgstr ""
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "Maksutilin yhdistäminen (alla) on tarpeen vain mikäli vastaanotat rahaa. Jos vain lahjoitat, voit ohittaa sen kohdan."
+
+msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
+msgstr ""
+
+msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
+msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2435,6 +2445,9 @@ msgstr "Ei ole käytettävissä maassa: {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Yhdistä {platform_name}-tili"
+
+msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
+msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"

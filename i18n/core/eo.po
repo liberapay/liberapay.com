@@ -1260,8 +1260,8 @@ msgstr "Monujo"
 msgid "Emptying your wallet"
 msgstr "Malplenigado de via monujo"
 
-msgid "Payment"
-msgstr "Pago"
+msgid "Payment Processors"
+msgstr ""
 
 msgid "Identity"
 msgstr "Identeco"
@@ -2406,11 +2406,21 @@ msgstr "Marki ĉiujn sciigojn legitaj"
 msgid "No notifications to show."
 msgstr "Neniu sciigo por montri."
 
-msgid "This page allows you to manage your payment methods."
-msgstr "Tiu paĝo ebligas vin prizorgi viajn pagmetodojn."
+#, python-brace-format
+msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
+msgstr ""
+
+msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
+msgstr ""
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "Donacantoj ne bezonas konekti ian ĉi-suba pagkonton, ili nur estas necesa, por ricevi monon."
+
+msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
+msgstr ""
+
+msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
+msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2438,6 +2448,9 @@ msgstr "Maldisponebla en {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Konekti konton de {platform_name}"
+
+msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
+msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"

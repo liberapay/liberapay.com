@@ -1264,8 +1264,8 @@ msgstr "Гаманець"
 msgid "Emptying your wallet"
 msgstr "Очищення гаманця"
 
-msgid "Payment"
-msgstr "Платіж"
+msgid "Payment Processors"
+msgstr ""
 
 msgid "Identity"
 msgstr "Ідентифікація"
@@ -2420,11 +2420,21 @@ msgstr "Відмітити усі повідомлення як прочитан
 msgid "No notifications to show."
 msgstr "Немає сповіщень для показу."
 
-msgid "This page allows you to manage your payment methods."
-msgstr "Ця сторінка дозволяє вам керувати вашими способами оплати."
+#, python-brace-format
+msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
+msgstr ""
+
+msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
+msgstr ""
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "Жертводавцям не потрібно підключати аккаунти платіжних систем наведених нижче, вони потрібни тільки для прийому грошей."
+
+msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
+msgstr ""
+
+msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
+msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2452,6 +2462,9 @@ msgstr "Недоступно в {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Підключити аккаунт {platform_name}"
+
+msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
+msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"

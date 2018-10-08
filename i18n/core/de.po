@@ -1258,8 +1258,8 @@ msgstr "Brieftasche"
 msgid "Emptying your wallet"
 msgstr "Leeren Sie ihr Konto"
 
-msgid "Payment"
-msgstr "Zahlung"
+msgid "Payment Processors"
+msgstr ""
 
 msgid "Identity"
 msgstr "Identität"
@@ -2403,11 +2403,21 @@ msgstr "Alle Benachrichtigungen als gelesen markieren"
 msgid "No notifications to show."
 msgstr "Keine Benachrichtigungen."
 
-msgid "This page allows you to manage your payment methods."
-msgstr "Auf dieser Seite können Sie die Zahlungsmethoden verwalten."
+#, python-brace-format
+msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
+msgstr ""
+
+msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
+msgstr ""
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "Spender müssen kein Auszahlung-Konto unten angeben. Dies ist nur notwendig, um Geld zu erhalten."
+
+msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
+msgstr ""
+
+msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
+msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2435,6 +2445,9 @@ msgstr "Nicht verfügbar in {country}."
 #, python-brace-format
 msgid "Connect {platform_name} account"
 msgstr "Verbinde {platform_name}-Konto"
+
+msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
+msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
