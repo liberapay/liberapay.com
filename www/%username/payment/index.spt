@@ -24,7 +24,7 @@ accounts_by_provider = group_by(website.db.all("""
 """, (participant.id,)), lambda a: a.provider)
 
 title = participant.username
-subhead = _("Payment")
+subhead = _("Payment Processors")
 
 [---] text/html
 % from "templates/icons.html" import glyphicon
@@ -32,16 +32,38 @@ subhead = _("Payment")
 % extends "templates/settings.html"
 
 % block content
-    <p>{{ _("This page allows you to manage your payment methods.") }}</p>
+
+    % if participant.username[0] == '~'
+        <p class="alert alert-warning">{{ _(
+            "You have to {link_open}fill your profile{link_close} before you can "
+            "start to receive donations."
+            , link_open=('<a href="%s">'|safe) % participant.path('edit/username')
+            , link_close='</a>'|safe
+        ) }}</p>
+    % endif
+
+    <p>{{ _(
+        "To receive donations you must connect at least one account from a "
+        "supported payment processor. This page allows you to do so."
+    ) }}</p>
 
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
         "Donors do not need to connect any payment account below, they are only "
         "necessary to receive money."
     ) }}</p>
 
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "We recommend connecting both Stripe and PayPal if they're both available "
+        "in your country."
+    ) }}</p>
+
     % include "templates/sandbox-warning.html"
 
     <h3>Stripe</h3>
+    <p>{{ _(
+        "With Stripe your donors can pay by card directly from the Liberapay "
+        "website. SEPA Direct Debits will also be supported soon."
+    ) }}</p>
     % set accounts = accounts_by_provider.get('stripe', ())
     % if accounts
     <form action="" method="POST">
@@ -94,6 +116,10 @@ subhead = _("Payment")
 
     <br>
     <h3>PayPal</h3>
+    <p>{{ _(
+        "PayPal allows receiving money in many more countries than Stripe, "
+        "but it's not as well integrated into Liberapay."
+    ) }}</p>
     % set accounts = accounts_by_provider.get('paypal', ())
     % if accounts
     <form action="" method="POST">
