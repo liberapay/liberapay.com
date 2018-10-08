@@ -265,9 +265,6 @@ title = _("Funding your donations")
 
 % if not donations
     % if donations_not_fundable or other_donations or non_paypal_donations
-        % if donations
-            <hr>
-        % endif
         % for tip in donations_not_fundable
         <p>{{ _(
             "Your donation to {recipient} cannot be processed right now because the "
