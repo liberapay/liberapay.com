@@ -417,9 +417,25 @@ title = _("Funding your donations")
                 <input type="checkbox" name="keep" value="true" checked />
                 {{ _("Remember the card number for next time") }}
             </label>
-            <br><br>
+            <br>
         </div>
 
+        % if payer.mangopay_user_id
+        <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+            "Liberapay no longer stores money in wallets, the entire amount "
+            "of your payment will go immediately to the {payment_provider} "
+            "account of {recipient_name}.",
+            payment_provider='Stripe', recipient_name=tip.tippee_p.username
+        ) }}</div>
+        % else
+        <div>{{ _(
+            "The entire amount of your payment will go immediately to the "
+            "{payment_provider} account of {recipient_name}.",
+            payment_provider='Stripe', recipient_name=tip.tippee_p.username
+        ) }}</div>
+        % endif
+
+        <br>
         <button class="btn btn-primary btn-lg btn-block">{{ _(
             "Initiate the payment"
         ) }}</button>
