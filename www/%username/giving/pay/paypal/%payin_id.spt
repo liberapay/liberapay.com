@@ -120,9 +120,15 @@ if donations:
     tip = donations[0]
     tip_currency = tip.amount.currency
     tip.min_acceptable_amount = constants.PAYIN_STRIPE_MIN_ACCEPTABLE[tip_currency]
-    tip.min_recommended_amount = constants.PAYIN_STRIPE_MIN_RECOMMENDED[tip_currency]
+    tip.min_recommended_amount = min(
+        constants.PAYIN_STRIPE_MIN_RECOMMENDED[tip_currency],
+        tip.periodic_amount * ONE_YEAR[tip.period] * 12
+    )
     tip.low_fee_amount = constants.PAYIN_STRIPE_LOW_FEE[tip_currency]
-    tip.max_acceptable_amount = constants.PAYIN_STRIPE_MAX_ACCEPTABLE[tip_currency]
+    tip.max_acceptable_amount = min(
+        constants.PAYIN_STRIPE_MAX_ACCEPTABLE[tip_currency],
+        tip.periodic_amount * ONE_YEAR[tip.period] * 12
+    )
     min_multiplier = int(ceil(tip.min_acceptable_amount / tip.periodic_amount))
     min_recommended_multiplier = int(ceil(tip.min_recommended_amount / tip.periodic_amount))
     max_recommended_multiplier = min(
