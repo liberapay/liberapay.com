@@ -233,9 +233,9 @@ PAYIN_DIRECT_DEBIT_TARGET = {
 }
 PAYIN_DIRECT_DEBIT_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
 
-PAYIN_PAYPAL_MIN_ACCEPTABLE = {  # fee > 20%
-    'EUR': Money('1.00', 'EUR'),
-    'USD': Money('1.00', 'USD'),
+PAYIN_PAYPAL_MIN_ACCEPTABLE = {  # fee > 10%
+    'EUR': Money('2.00', 'EUR'),
+    'USD': Money('2.00', 'USD'),
 }
 PAYIN_PAYPAL_MIN_RECOMMENDED = {  # fee < 8%
     'EUR': Money('10.00', 'EUR'),
@@ -250,9 +250,9 @@ PAYIN_PAYPAL_MAX_ACCEPTABLE = {
     'USD': Money('5000.00', 'USD'),
 }
 
-PAYIN_STRIPE_MIN_ACCEPTABLE = {  # fee > 20%
-    'EUR': Money('1.00', 'EUR'),
-    'USD': Money('1.00', 'USD'),
+PAYIN_STRIPE_MIN_ACCEPTABLE = {  # fee > 10%
+    'EUR': Money('2.00', 'EUR'),
+    'USD': Money('2.00', 'USD'),
 }
 PAYIN_STRIPE_MIN_RECOMMENDED = {  # fee < 8%
     'EUR': Money('10.00', 'EUR'),

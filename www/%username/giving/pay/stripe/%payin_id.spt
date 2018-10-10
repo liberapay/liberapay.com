@@ -1,5 +1,6 @@
 # coding: utf8
 
+from datetime import timedelta
 from math import ceil
 
 import stripe
@@ -198,9 +199,15 @@ if donations:
     tip = donations[0]
     tip_currency = tip.amount.currency
     tip.min_acceptable_amount = constants.PAYIN_STRIPE_MIN_ACCEPTABLE[tip_currency]
-    tip.min_recommended_amount = constants.PAYIN_STRIPE_MIN_RECOMMENDED[tip_currency]
+    tip.min_recommended_amount = min(
+        constants.PAYIN_STRIPE_MIN_RECOMMENDED[tip_currency],
+        tip.periodic_amount * ONE_YEAR[tip.period] * 12
+    )
     tip.low_fee_amount = constants.PAYIN_STRIPE_LOW_FEE[tip_currency]
-    tip.max_acceptable_amount = constants.PAYIN_STRIPE_MAX_ACCEPTABLE[tip_currency]
+    tip.max_acceptable_amount = min(
+        constants.PAYIN_STRIPE_MAX_ACCEPTABLE[tip_currency],
+        tip.periodic_amount * ONE_YEAR[tip.period] * 12
+    )
     min_multiplier = int(ceil(tip.min_acceptable_amount / tip.periodic_amount))
     min_recommended_multiplier = int(ceil(tip.min_recommended_amount / tip.periodic_amount))
     max_recommended_multiplier = min(
@@ -361,6 +368,8 @@ title = _("Funding your donations")
                     % endif
                     </h5>
                     <p class="list-group-item-text">{{ ngettext(
+                        "", "Next payment in {n} weeks ({timedelta}).", n=multiplier, timedelta=timedelta(weeks=multiplier)
+                    ) if tip.period == 'weekly' and multiplier > 7 else ngettext(
                         "Next payment in {n} week.", "Next payment in {n} weeks.", n=multiplier
                     ) if tip.period == 'weekly' else ngettext(
                         "Next payment in {n} month.", "Next payment in {n} months.", n=multiplier
@@ -417,9 +426,25 @@ title = _("Funding your donations")
                 <input type="checkbox" name="keep" value="true" checked />
                 {{ _("Remember the card number for next time") }}
             </label>
-            <br><br>
+            <br>
         </div>
 
+        % if payer.mangopay_user_id
+        <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+            "Liberapay no longer stores money in wallets, the entire amount "
+            "of your payment will go immediately to the {payment_provider} "
+            "account of {recipient_name}.",
+            payment_provider='Stripe', recipient_name=tip.tippee_p.username
+        ) }}</div>
+        % else
+        <div>{{ _(
+            "The entire amount of your payment will go immediately to the "
+            "{payment_provider} account of {recipient_name}.",
+            payment_provider='Stripe', recipient_name=tip.tippee_p.username
+        ) }}</div>
+        % endif
+
+        <br>
         <button class="btn btn-primary btn-lg btn-block">{{ _(
             "Initiate the payment"
         ) }}</button>
@@ -431,9 +456,6 @@ title = _("Funding your donations")
 
 % if not donations
     % if donations_not_fundable or other_donations or non_stripe_donations
-        % if donations
-            <hr>
-        % endif
         % for tip in donations_not_fundable
         <p>{{ _(
             "Your donation to {recipient} cannot be processed right now because the "
