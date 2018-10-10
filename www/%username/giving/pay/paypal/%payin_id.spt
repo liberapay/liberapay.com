@@ -1,5 +1,6 @@
 # coding: utf8
 
+from datetime import timedelta
 from math import ceil
 
 from mangopay.exceptions import CurrencyMismatch
@@ -226,6 +227,8 @@ title = _("Funding your donations")
                     % endif
                     </h5>
                     <p class="list-group-item-text">{{ ngettext(
+                        "", "Next payment in {n} weeks ({timedelta}).", n=multiplier, timedelta=timedelta(weeks=multiplier)
+                    ) if tip.period == 'weekly' and multiplier > 7 else ngettext(
                         "Next payment in {n} week.", "Next payment in {n} weeks.", n=multiplier
                     ) if tip.period == 'weekly' else ngettext(
                         "Next payment in {n} month.", "Next payment in {n} months.", n=multiplier
