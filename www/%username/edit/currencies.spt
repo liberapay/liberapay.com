@@ -10,11 +10,14 @@ if request.method == 'POST':
     new_currency = body['main_currency']
     old_currency = participant.main_currency
     change_currency = new_currency != old_currency
-    new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
+    if body.get('accepted_currencies') == '*':
+        new_accepted = None
+    else:
+        new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
+        if new_currency not in new_accepted:
+            raise response.error(400, _("The submitted settings are incoherent."))
     change_policy = new_accepted != participant.accepted_currencies
-    if new_currency not in new_accepted:
-        raise response.error(400, _("The submitted settings are incoherent."))
-    if change_currency or change_policy:
+    if new_accepted is not None and (change_currency or change_policy):
         foreign_donations = website.db.all("""
             SELECT t.*
               FROM current_tips t
@@ -38,9 +41,11 @@ if request.method == 'POST':
             UPDATE participants
                SET accepted_currencies = %s
              WHERE id = %s
-        """, (','.join(new_accepted), participant.id))
+        """, (','.join(new_accepted) if new_accepted else None, participant.id))
         participant.set_attributes(accepted_currencies=new_accepted)
     form_post_success(state)
+
+accept_all = participant._accepted_currencies is None
 
 title = participant.username
 subhead = _("Currencies")
@@ -57,6 +62,12 @@ subhead = _("Currencies")
 
     <p>{{ _("Which currencies should your donors be allowed to send you, and which one do you prefer?") }}</p>
     <table class="table table-condensed">
+    <tr>
+        <td colspan="3"><label>
+            <input type="checkbox" name="accepted_currencies" value="*"
+                   {{ 'checked' if accept_all else '' }} />
+            {{ _("Accept all currencies, including any that we may add in the future.") }}
+        </label></td>
     % for c in constants.CURRENCIES
     <tr>
         <td>
@@ -65,7 +76,7 @@ subhead = _("Currencies")
         </td>
         <td><label>
             <input type="checkbox" name="accepted_currencies:{{ c }}" value="yes"
-                   {{ 'checked' if c in participant.accepted_currencies else '' }} />
+                   {{ 'checked' if accept_all or c in participant.accepted_currencies else '' }} />
             {{ _("accept") }}
         </label></td>
         <td><label>
