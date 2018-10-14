@@ -77,6 +77,14 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 
     <h3>{{ _("Frequently Asked Questions") }}</h3>
 
+    % if len(participant.accepted_currencies) == 1
+    <h4>{{ _("Can I donate in another currency?") }}</h4>
+    <p>{{ _(
+        "No, {username} only accepts payments in {currency}.",
+        username=participant.username, currency=Currency(participant.main_currency)
+    ) }}</p>
+    % endif
+
     <h4>{{ _("What payment methods are available?") }}</h4>
     <p>{{ _(
         "We currently support most credit and debit cards (Visa, MasterCard, American Express). "

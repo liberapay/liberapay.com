@@ -192,7 +192,7 @@ class MoneyBasket(object):
     def __repr__(self):
         return '%s[%s]' % (
             self.__class__.__name__,
-            ', '.join('%s %s' % (a, c) for c, a in self.amounts.items())
+            ', '.join('%s %s' % (a, c) for c, a in self.amounts.items() if a)
         )
 
     def __bool__(self):

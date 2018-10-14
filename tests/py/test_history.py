@@ -5,7 +5,7 @@ import json
 
 from liberapay.billing.payday import Payday
 from liberapay.models.participant import Participant
-from liberapay.testing import EUR, USD, Harness
+from liberapay.testing import EUR, Harness
 from liberapay.testing.mangopay import FakeTransfersHarness
 from liberapay.utils.history import (
     get_end_of_period_balances, get_start_of_current_utc_day, get_wallet_ledger
@@ -136,7 +136,7 @@ class TestHistory(FakeTransfersHarness):
         today = get_start_of_current_utc_day()
         period_end = today.replace(month=1, day=1)
         balances = get_end_of_period_balances(self.db, self.alice, period_end, today)
-        assert list(balances) == [EUR('10.00'), USD('0.00')]
+        assert balances == EUR('10.00')
 
 
 class TestExport(Harness):

@@ -1,9 +1,9 @@
 # coding: utf8
 from __future__ import print_function, unicode_literals
 
-from collections import namedtuple, OrderedDict
+from collections import defaultdict, namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
-from decimal import Decimal, ROUND_UP
+from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
 import re
 
 from jinja2 import StrictUndefined
@@ -47,6 +47,34 @@ class Fees(namedtuple('Fees', ('var', 'fix'))):
         return r[0] if not r[1] else r[1].round_up() if not r[0] else r
 
 
+def to_precision(x, precision, rounding=ROUND_HALF_UP):
+    if not x:
+        return x
+    # round
+    factor = Decimal(10) ** (x.log10().to_integral(ROUND_FLOOR) + 1)
+    r = (x / factor).quantize(Decimal(10) ** -precision, rounding=rounding) * factor
+    # remove trailing zeros
+    r = r.quantize(Decimal(10) ** (int(x.log10()) - precision + 1))
+    return r
+
+
+def convert_symbolic_amount(amount, target_currency, precision=2, rounding=ROUND_HALF_UP):
+    from liberapay.website import website
+    rate = website.currency_exchange_rates[('EUR', target_currency)]
+    return to_precision(amount * rate, precision, rounding)
+
+
+class MoneyAutoConvertDict(defaultdict):
+
+    def __init__(self, *args, **kw):
+        super(MoneyAutoConvertDict, self).__init__(None, *args, **kw)
+
+    def __missing__(self, currency):
+        r = Money(convert_symbolic_amount(self['EUR'].amount, currency, 1), currency)
+        self[currency] = r
+        return r
+
+
 StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
 
 
@@ -64,12 +92,28 @@ AVATAR_SOURCES = (
 
 BIRTHDAY = date(2015, 5, 22)
 
-CURRENCIES = ordered_set(['EUR', 'USD'])
+CURRENCIES = ordered_set([
+    'EUR', 'USD',
+    'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
+    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD',
+    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'
+])
 
 D_CENT = Decimal('0.01')
 D_INF = Decimal('inf')
 D_MAX = Decimal('999999999999.99')
 D_ZERO = Decimal('0.00')
+
+class _DonationLimits(defaultdict):
+    def __missing__(self, currency):
+        r = {
+            period: (
+                Money(convert_symbolic_amount(eur_amounts[0], currency, rounding=ROUND_UP), currency),
+                Money(convert_symbolic_amount(eur_amounts[1], currency, rounding=ROUND_UP), currency)
+            ) for period, eur_amounts in DONATION_LIMITS_EUR_USD.items()
+        }
+        self[currency] = r
+        return r
 
 DONATION_LIMITS_WEEKLY_EUR_USD = (Decimal('0.01'), Decimal('100.00'))
 DONATION_LIMITS_EUR_USD = {
@@ -79,10 +123,10 @@ DONATION_LIMITS_EUR_USD = {
     'yearly': tuple((x * Decimal(52)).quantize(D_CENT)
                     for x in DONATION_LIMITS_WEEKLY_EUR_USD),
 }
-DONATION_LIMITS = {
+DONATION_LIMITS = _DonationLimits(None, {
     'EUR': {k: (Money(v[0], 'EUR'), Money(v[1], 'EUR')) for k, v in DONATION_LIMITS_EUR_USD.items()},
     'USD': {k: (Money(v[0], 'USD'), Money(v[1], 'USD')) for k, v in DONATION_LIMITS_EUR_USD.items()},
-}
+})
 
 DOMAIN_RE = re.compile(r'''
     ^
@@ -232,39 +276,39 @@ PAYIN_DIRECT_DEBIT_TARGET = {
 }
 PAYIN_DIRECT_DEBIT_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
 
-PAYIN_PAYPAL_MIN_ACCEPTABLE = {  # fee > 10%
+PAYIN_PAYPAL_MIN_ACCEPTABLE = MoneyAutoConvertDict({  # fee > 10%
     'EUR': Money('2.00', 'EUR'),
     'USD': Money('2.00', 'USD'),
-}
-PAYIN_PAYPAL_MIN_RECOMMENDED = {  # fee < 8%
+})
+PAYIN_PAYPAL_MIN_RECOMMENDED = MoneyAutoConvertDict({  # fee < 8%
     'EUR': Money('10.00', 'EUR'),
     'USD': Money('12.00', 'USD'),
-}
-PAYIN_PAYPAL_LOW_FEE = {  # fee < 6%
+})
+PAYIN_PAYPAL_LOW_FEE = MoneyAutoConvertDict({  # fee < 6%
     'EUR': Money('40.00', 'EUR'),
     'USD': Money('48.00', 'USD'),
-}
-PAYIN_PAYPAL_MAX_ACCEPTABLE = {
+})
+PAYIN_PAYPAL_MAX_ACCEPTABLE = MoneyAutoConvertDict({
     'EUR': Money('5000.00', 'EUR'),
     'USD': Money('5000.00', 'USD'),
-}
+})
 
-PAYIN_STRIPE_MIN_ACCEPTABLE = {  # fee > 10%
+PAYIN_STRIPE_MIN_ACCEPTABLE = MoneyAutoConvertDict({  # fee > 10%
     'EUR': Money('2.00', 'EUR'),
     'USD': Money('2.00', 'USD'),
-}
-PAYIN_STRIPE_MIN_RECOMMENDED = {  # fee < 8%
+})
+PAYIN_STRIPE_MIN_RECOMMENDED = MoneyAutoConvertDict({  # fee < 8%
     'EUR': Money('10.00', 'EUR'),
     'USD': Money('12.00', 'USD'),
-}
-PAYIN_STRIPE_LOW_FEE = {  # fee < 6%
+})
+PAYIN_STRIPE_LOW_FEE = MoneyAutoConvertDict({  # fee < 6%
     'EUR': Money('40.00', 'EUR'),
     'USD': Money('48.00', 'USD'),
-}
-PAYIN_STRIPE_MAX_ACCEPTABLE = {
+})
+PAYIN_STRIPE_MAX_ACCEPTABLE = MoneyAutoConvertDict({
     'EUR': Money('5000.00', 'EUR'),
     'USD': Money('5000.00', 'USD'),
-}
+})
 
 PAYMENT_METHODS = {
     'mango-ba': _("Direct Debit"),
@@ -366,6 +410,17 @@ def make_standard_tip(label, weekly, currency):
     )
 
 
+class _StandardTips(defaultdict):
+    def __missing__(self, currency):
+        r = [
+            make_standard_tip(
+                label, convert_symbolic_amount(weekly, currency, rounding=ROUND_UP), currency
+            ) for label, weekly in STANDARD_TIPS_EUR_USD
+        ]
+        self[currency] = r
+        return r
+
+
 STANDARD_TIPS_EUR_USD = (
     (_("Symbolic"), Decimal('0.01')),
     (_("Small"), Decimal('0.25')),
@@ -373,10 +428,10 @@ STANDARD_TIPS_EUR_USD = (
     (_("Large"), Decimal('5.00')),
     (_("Maximum"), DONATION_LIMITS_EUR_USD['weekly'][1]),
 )
-STANDARD_TIPS = {
+STANDARD_TIPS = _StandardTips(None, {
     'EUR': [make_standard_tip(label, weekly, 'EUR') for label, weekly in STANDARD_TIPS_EUR_USD],
     'USD': [make_standard_tip(label, weekly, 'USD') for label, weekly in STANDARD_TIPS_EUR_USD],
-}
+})
 
 SUMMARY_MAX_SIZE = 100
 
