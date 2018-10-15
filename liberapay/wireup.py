@@ -691,7 +691,6 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
 
     # Patch the locales to look less formal
     locales['fr'].currency_formats['standard'] = parse_pattern('#,##0.00\u202f\xa4')
-    locales['fr'].currency_symbols['USD'] = '$'
     locales['fr'].currencies['USD'] = 'dollar états-unien'
 
     # Load the markdown files
