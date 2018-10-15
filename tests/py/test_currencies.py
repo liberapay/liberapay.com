@@ -6,7 +6,8 @@ from mock import patch
 
 from liberapay.billing.transactions import swap_currencies, Transfer
 from liberapay.exceptions import NegativeBalance, TransferError
-from liberapay.testing import EUR, USD, Harness, Foobar
+from liberapay.payin.stripe import int_to_Money, Money_to_int
+from liberapay.testing import EUR, JPY, USD, Harness, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness, fake_transfer
 from liberapay.utils.currencies import Money, MoneyBasket
 
@@ -37,10 +38,10 @@ class TestCurrencies(Harness):
         assert expected == actual
 
     def test_minimums(self):
-        assert Money.minimums['EUR'] == D('0.01')
-        assert Money.minimums['USD'] == D('0.01')
-        assert Money.minimums['KRW'] == D('1')
-        assert Money.minimums['JPY'] == D('1')
+        assert Money.MINIMUMS['EUR'].amount == D('0.01')
+        assert Money.MINIMUMS['USD'].amount == D('0.01')
+        assert Money.MINIMUMS['KRW'].amount == D('1')
+        assert Money.MINIMUMS['JPY'].amount == D('1')
 
     def test_rounding(self):
         assert Money('0.001', 'EUR').round() == Money('0.00', 'EUR')
@@ -150,3 +151,22 @@ class TestCurrencySwap(FakeTransfersHarness, MangopayHarness):
             'homer': MoneyBasket(EUR('5.00'), USD('1.00')),
             'david': MoneyBasket(),
         }
+
+
+class TestCurrenciesWithStripe(Harness):
+
+    def test_Money_to_int(self):
+        expected = 101
+        actual = Money_to_int(EUR('1.01'))
+        assert expected == actual
+        expected = 1
+        actual = Money_to_int(JPY('1'))
+        assert expected == actual
+
+    def test_int_to_Money(self):
+        expected = USD('1.02')
+        actual = int_to_Money(102, 'USD')
+        assert expected == actual
+        expected = JPY('1')
+        actual = int_to_Money(1, 'JPY')
+        assert expected == actual

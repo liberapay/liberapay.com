@@ -8,7 +8,6 @@ import unittest
 from os.path import dirname, join, realpath
 
 from aspen import resources
-from mangopay.utils import Money
 from pando.utils import utcnow
 from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
@@ -17,7 +16,7 @@ from liberapay.billing import transactions
 from liberapay.billing.transactions import (
     record_exchange, record_exchange_result, prepare_transfer, _record_transfer_result
 )
-from liberapay.constants import SESSION, ZERO
+from liberapay.constants import SESSION
 from liberapay.elsewhere._base import UserInfo
 from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
@@ -30,6 +29,7 @@ from liberapay.payin.common import (
 )
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.vcr import use_cassette
+from liberapay.utils.currencies import Money
 
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
@@ -39,6 +39,10 @@ PROJECT_ROOT = str(TOP)
 
 def EUR(amount):
     return Money(amount, 'EUR')
+
+
+def JPY(amount):
+    return Money(amount, 'JPY')
 
 
 def USD(amount):
@@ -217,7 +221,7 @@ class Harness(unittest.TestCase):
 
         if is_person and participant.mangopay_user_id:
             wallet_id = kw2.get('mangopay_wallet_id', -participant.id)
-            zero = ZERO[participant.main_currency]
+            zero = Money.ZEROS[participant.main_currency]
             self.db.run("""
                 INSERT INTO wallets
                             (remote_id, balance, owner, remote_owner_id)

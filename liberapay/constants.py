@@ -69,7 +69,6 @@ CURRENCIES = ordered_set(['EUR', 'USD'])
 D_CENT = Decimal('0.01')
 D_INF = Decimal('inf')
 D_MAX = Decimal('999999999999.99')
-D_UNIT = Decimal('1.00')
 D_ZERO = Decimal('0.00')
 
 DONATION_LIMITS_WEEKLY_EUR_USD = (Decimal('0.01'), Decimal('100.00'))
@@ -385,7 +384,5 @@ TAKE_THROTTLING_THRESHOLD = {k: Money('1.00', k) for k in ('EUR', 'USD')}
 
 USERNAME_MAX_SIZE = 32
 USERNAME_SUFFIX_BLACKLIST = set('.txt .html .htm .json .xml'.split())
-
-ZERO = {c: Money(D_ZERO, c) for c in ('EUR', 'USD', None)}
 
 del _

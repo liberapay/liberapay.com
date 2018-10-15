@@ -1,7 +1,7 @@
 # coding: utf8
 from __future__ import division, print_function, unicode_literals
 
-from liberapay.utils.currencies import MoneyBasket
+from liberapay.utils.currencies import Money, MoneyBasket
 
 db = website.db
 db_qc5 = website.db_qc5
@@ -9,7 +9,7 @@ db_qc5 = website.db_qc5
 [--------------------------------------------------------]
 
 title = _("Stats")
-zero = constants.ZERO[currency]
+zero = Money.ZEROS[currency]
 escrow = db_qc5.one("SELECT basket_sum(balance) FROM wallets") or MoneyBasket()
 nusers = db_qc5.one("""
     SELECT count(*)

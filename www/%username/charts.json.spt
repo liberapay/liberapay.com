@@ -11,6 +11,7 @@ this to mean, "no chart."
 """
 
 from liberapay.utils import get_participant
+from liberapay.utils.currencies import Money
 
 [---]
 
@@ -58,7 +59,7 @@ if not transfers:
     raise response.json([])
 
 currency = participant.main_currency
-zero = constants.ZERO[currency]
+zero = Money.ZEROS[currency]
 paydays_i = iter(paydays)
 curpayday = next(paydays_i)
 curpayday['receipts'] = zero
