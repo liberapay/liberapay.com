@@ -24,7 +24,6 @@ from babel.numbers import parse_pattern
 import boto3
 from environment import Environment, is_yesish
 from mailshake import AmazonSESMailer, DummyMailer, SMTPMailer
-from mangopay.utils import Money
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 import raven
@@ -42,7 +41,7 @@ from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
 from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
-from liberapay.utils.currencies import MoneyBasket, get_currency_exchange_rates
+from liberapay.utils.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (

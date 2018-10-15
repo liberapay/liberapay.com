@@ -5,7 +5,6 @@ import string
 import sys
 
 from faker import Factory
-from mangopay.utils import Money
 from psycopg2 import IntegrityError
 
 from liberapay.billing.transactions import (
@@ -14,6 +13,7 @@ from liberapay.billing.transactions import (
 from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models import community
+from liberapay.utils.currencies import Money
 
 
 DONATION_PERIODS = tuple(PERIOD_CONVERSION_RATES.keys())
