@@ -92,12 +92,11 @@ title = _("Frequently Asked Questions")
 </dl>
 <dl class="col-md-6">
 
-    {{ dt(_("Which currencies are supported?"), 'currencies') }}
+    {{ dt(_("Which countries and currencies are supported?"), 'currencies') }}
 
-    <dd>{{ _(
-        "We currently support two currencies: the euro (€) and the US dollar ($). "
-        "We do not handle crypto-currencies like bitcoin."
-    ) }}</dd>
+    <dd><a href="/about/global">{{ _(
+        "See the “{page_name}” page.", page_name=_("Global")
+    ) }}</a></dd>
 
     {{ dt(_("What payment methods are available?"), 'payment-methods') }}
 
