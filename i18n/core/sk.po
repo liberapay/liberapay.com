@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2018-10-17 15:38+0000\n"
+"Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
 "Language-Team: Slovak (https://hosted.weblate.org/projects/liberapay/core/sk/)\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 3.2.1\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -1265,7 +1268,7 @@ msgid "Emptying your wallet"
 msgstr "Vyprázdnite vašu peňaženku"
 
 msgid "Payment Processors"
-msgstr ""
+msgstr "Platobné Systémy"
 
 msgid "Identity"
 msgstr "Identita"
@@ -1920,58 +1923,58 @@ msgstr[2] "Máte {n} darov očakávajúcich platbu."
 
 #, python-brace-format
 msgid "{money_amount}{small}/week{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/týždenne{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/mesačne{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/ročne{end_small}"
 
 #, python-brace-format
 msgid "Started {timedelta} ago."
-msgstr ""
+msgstr "Začatý pred {timedelta}."
 
 #, python-brace-format
 msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
-msgstr ""
+msgstr "Začatý pred {start_delta}. Upravený pred {mtime_delta}."
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr ""
+msgstr "Neaktívny pretože účet adresáta je na čiernej listine."
 
 msgid "Inactive because the account of the recipient is closed."
-msgstr ""
+msgstr "Neaktívny pretože účet adresáta je uzavrený."
 
 msgid "Inactive because the recipient no longer accepts donations."
-msgstr ""
+msgstr "Neaktívny pretože adresát už neprijíma dary."
 
 msgid "Active"
-msgstr ""
+msgstr "Aktívny"
 
 #, python-brace-format
 msgid "Next payment in {timedelta}."
-msgstr ""
+msgstr "Ďalšia platba v {timedelta}."
 
 msgid "Renew now"
-msgstr ""
+msgstr "Obnoviť teraz"
 
 msgid "Awaiting payment."
-msgstr ""
+msgstr "Očakavá platbu."
 
 msgid "Renew"
-msgstr ""
+msgstr "Obnoviť"
 
 msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
-msgstr ""
+msgstr "Nemôže sa obnoviť pretože účet adresáta nie je pripravený prijať ďalšie platby."
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
-msgstr ""
+msgstr "{bold}Celkovo:{bold_end} {0} za týždeň ~ {1} za mesiac ~ {2} za rok."
 
 msgid "Cancel the pledge"
-msgstr ""
+msgstr "Zrušiť prísľub"
 
 msgid "Recently Cancelled"
 msgstr "Nedávno zrušené"
@@ -1981,7 +1984,7 @@ msgstr "v posledných 30 dňoch"
 
 #, python-brace-format
 msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
-msgstr ""
+msgstr "Začaté pred {start_delta}. Zrušené pred {stop_delta}."
 
 msgid "Funding your donations"
 msgstr "Platenie vašich darov"
@@ -2032,9 +2035,9 @@ msgstr "(odporúčané, malé poplatky)"
 #, python-brace-format
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ďalšia platba v {n} týždni ({timedelta})."
+msgstr[1] "Ďalšia platba v {n} týždňoch ({timedelta})."
+msgstr[2] "Ďalšia platba v {n} týždni ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment in {n} week."
@@ -2063,11 +2066,11 @@ msgstr "Vlastná čiastka (min = {0}, max = {1})"
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Liberapay už neukladá peniaze v peňaženke, celá čiastka vašej platby pôjde ihneď na {payment_provider} účet {recipient_name}."
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Celá čiastka vašej platby pôjde ihneď {payment_provider} účet {recipient_name}."
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
 msgstr "PayPal platby nie sú momentálne anonymné, prijímateľ vidí vaše meno a emailovú adresu."
@@ -2436,19 +2439,19 @@ msgstr "Žiadne oznámenia k zobrazeniu."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr ""
+msgstr "Musíte {link_open}vyplniť profil{link_close} predtým ako začnete prijímať dary."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
-msgstr ""
+msgstr "Na prijímanie darov musíte pripojiť aspoň jeden účet od podporovaného platobného systému. Táto stránka vám to dovoluje."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "Darcovia nemusia pripájať žiadny platobný účet, je potrebný iba na prijímanie peňazí."
 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
-msgstr ""
+msgstr "Odporúčame pripojiť Stripe aj PayPal ak sú obidve dostupné vo vašej krajine."
 
 msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
-msgstr ""
+msgstr "So systémom Stripe môžu darcovia platiť kartou priamo cez stráku Liberapay. SEPA priame debetné karty budú podporované čoskoro."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2478,7 +2481,7 @@ msgid "Connect {platform_name} account"
 msgstr "Pripojiť {platform_name} účet"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
-msgstr ""
+msgstr "PayPal dovoľuje prijímanie peňazí vo viac krajinách ako Stripe, ale nie je veľmi dobre integrovaný do Liberapay."
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
