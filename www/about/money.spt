@@ -1,5 +1,6 @@
 # coding: utf8
 [---]
+response.redirect('/about/faq')
 title = _("Money")
 [---] text/html
 % extends "templates/about.html"
@@ -19,35 +20,12 @@ title = _("Money")
 ) }}</p>
 % endif
 
-<h3>{{ _("Chargebacks") }}</h3>
-
-<p>{{ _(
-    "If despite our fraud prevention efforts you receive money whose origin is "
-    "revealed to be fraudulent, it falls on you to pay it back."
-) }}</p>
-
 <h3>{{ _("Safety") }}</h3>
 
 <p>{{ _(
     "We guarantee that the funds you put in our custody will not be lost in "
     "case of bankruptcy, whether it affects us or a third party to whom we "
     "have delegated the custody of the funds."
-) }}</p>
-
-<h3>{{ _("Wallets") }}</h3>
-
-<p>{{ _(
-    "A user's money is held in their wallet. It's like an online bank account, "
-    "but more limited."
-) }}</p>
-
-<h3>{{ _("Payday") }}</h3>
-
-<p>{{ _(
-    "Payday is when donations are actually executed. It's a program ({0}this "
-    "one{1}) that we run every Wednesday.",
-    '<a href="https://github.com/liberapay/liberapay.com/blob/master/liberapay/billing/payday.py">'|safe,
-    '</a>'|safe
 ) }}</p>
 
 </div></div>
