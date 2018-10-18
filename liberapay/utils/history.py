@@ -478,7 +478,7 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
          WHERE tr.recipient = %(id)s
            AND tr.ctime >= %(period_start)s
            AND tr.ctime < %(period_end)s
-           AND (tr.status = 'succeeded' OR NOT %(minimize)s)
+           AND (tr.status = 'succeeded' OR NOT %(minimize)s AND tr.status <> 'pre')
     """, params, back_as=dict)
 
     prev_date = None
