@@ -1261,7 +1261,7 @@ msgid "Emptying your wallet"
 msgstr "Malplenigado de via monujo"
 
 msgid "Payment Processors"
-msgstr ""
+msgstr "Provizantoj de Pagservo"
 
 msgid "Identity"
 msgstr "Identeco"
@@ -1506,7 +1506,6 @@ msgstr "Fakta parto"
 msgid "Update my nominal take"
 msgstr "Ĝisdatigi mian nominalan parton"
 
-#, fuzzy
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
 msgstr "Neuzata enspezo estos elspezita en la sekvaj semajnoj, ĝi ne kreskas en la teama konto. Teamo ne povas posedi monon, ĉar ĝi ne estas juraĵo."
 
@@ -1935,7 +1934,7 @@ msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Neaktiva ĉar la konto de la ricevanto estas en nigrolisto."
 
 msgid "Inactive because the account of the recipient is closed."
-msgstr ""
+msgstr "Neaktiva, ĉar la konto de la ricevanto estas fermita."
 
 msgid "Inactive because the recipient no longer accepts donations."
 msgstr "Neaktiva ĉar la ricevanto ne plu akceptas donacojn."
@@ -2025,8 +2024,8 @@ msgstr "(rekomendita, malalta elcenta kosto)"
 #, python-brace-format
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
+msgstr[1] "Sekva pago post {n} semajnoj ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment in {n} week."
@@ -2052,11 +2051,11 @@ msgstr "Propra kvanto (minimumo={0}, maksimumo={1})"
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Liberapay ne plu konservas monon en monujoj, la tuta kvanto de via pago iros tuj al la {payment_provider}-konto de {recipient_name}."
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "La tuta kvanto de via pago iros tuj al la {payment_provider}-konto de {recipient_name}."
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
 msgstr "PayPal-pagoj nun ne estas sennomaj, la ricevanto vidos vian nomon kaj retadreson."
@@ -2422,19 +2421,19 @@ msgstr "Neniu sciigo por montri."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr ""
+msgstr "Vi devas {link_open}plenigi vian profilon{link_close} antaŭ vi povas ekricevi donacojn."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
-msgstr ""
+msgstr "Por ricevi donacojn vi devas konekti minimume unu konton de subtenita provizanto de pagservo. Vi povas fari tion en ĉi tiu paĝo."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "Donacantoj ne bezonas konekti ian ĉi-suba pagkonton, ili nur estas necesa, por ricevi monon."
 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
-msgstr ""
+msgstr "Ni rekomendas konekti je kaj Stripe kaj PayPal, se ili ambaŭ estas disponebla en via lando."
 
 msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
-msgstr ""
+msgstr "Per Stripe viaj donacantoj povas pagi per karto rekte en la Liberapay-retejo. SEPA Rektaj Debetoj estos ankaŭ subtenitaj baldaŭ."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2464,7 +2463,7 @@ msgid "Connect {platform_name} account"
 msgstr "Konekti konton de {platform_name}"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
-msgstr ""
+msgstr "PayPal permesas ricevi monon en multaj pli landoj ol Stripe, sed ĝi ne estas tiel bone integrita en Liberapay."
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -3889,29 +3888,29 @@ msgstr "2. Financi vian donacon"
 
 #, python-brace-format
 msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Sending more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr ""
+msgstr "En Liberapay donacoj estas antaŭfinancitaj. Vi havas kontrolon de kiom da mono vi enmetas kaj kiam. Sendi pli da mono samtempe rezultas malpli grandan procenton de {0}peradkostoj{1}."
 
 msgid "3. Keep your donation funded"
 msgstr "3. Daŭre financu viajn donacojn"
 
 msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
-msgstr ""
+msgstr "Kiam donacon bezonas esti refarita ni sciigas vin retpoŝte do vi povos financi ĝin denove, aŭ haltigi ĝin."
 
 msgid "How it works for creators"
 msgstr "Kiel tio funkcias por kreantoj"
 
 msgid "1. Create your profile"
-msgstr ""
+msgstr "1. Kreu vian profilon"
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
 msgstr "Klarigu kion vi faras, kial vi decidis peti donacojn, kaj kiel la mono estos uzata, ktp."
 
 msgid "2. Configure payment processing"
-msgstr ""
+msgstr "2. Agordi pagotraktadon"
 
 #, python-brace-format
 msgid "We currently support processing payments through {payment_processors_list}."
-msgstr ""
+msgstr "Ni nuntempe subtenas trakti pagojn per {payment_processors_list}."
 
 msgid "3. Reach out to your audience"
 msgstr "3. Sciigu vian komunumon"
@@ -4066,9 +4065,8 @@ msgstr "Bonvolu konfirmi, ke vi volas ke ni kreu Liberapay-konton por vi kaj enp
 msgid "Here is an overview of what we will import from {platform}:"
 msgstr "Jen superrigardo de tio, kion ni enportos el {platform}:"
 
-#, fuzzy
 msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "bazaj kontdatumoj (uzantnomo, profilbildo, kelkaj privatecaj agordoj, ktp)"
+msgstr "bazaj konto-datumoj (uzantnomo, profilbildo, kelkaj privatecaj agordoj, ktp)"
 
 msgid "profile descriptions"
 msgstr "profilaj priskriboj"
@@ -4096,9 +4094,8 @@ msgstr "konservitaj numeroj de kreditkartoj"
 msgid "any money currently in the account"
 msgstr "la mono, kiu nun estas en la konto"
 
-#, fuzzy
 msgid "the account's history (ledger, etc.)"
-msgstr "la historio de la konto"
+msgstr "la historio de la konto (kontoregistro, ktp.)"
 
 msgid "any paypal address (our payment processor doesn't support paypal yet)"
 msgstr "la PayPal-adresoj (nia provizanto de pagservo ankoraŭ ne subtenas PayPal)"
@@ -4421,10 +4418,10 @@ msgid "Please input the email address and country of the PayPal account you want
 msgstr "Bonvolu enigi la retadreson kaj landon de la PayPal-konto, kiun vi volas konekti:"
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr ""
+msgstr "Konfirma kodo estos sendita al tiu retadreso, krom se ĝi estas jam ligita kun via Liberapay-konto."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr ""
+msgstr "Pagoj per PayPay estas nune ne anonimaj, donacantoj vidos vian retadreson, kaj vi vidos iliajn."
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "Bedaŭrinde, ni trovis nenion, kio kongruas kun via informpeto."
