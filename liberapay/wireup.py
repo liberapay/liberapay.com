@@ -156,14 +156,31 @@ def database(env, tell_sentry):
         pass
 
     def adapt_money_basket(b):
-        return AsIs('(%s,%s)::currency_basket' % (b.amounts['EUR'], b.amounts['USD']))
+        return AsIs(
+            "_wrap_amounts('%s'::jsonb)" %
+            json.dumps({k: str(v) for k, v in b.amounts.items() if v}).replace("'", "''")
+        )
     register_adapter(MoneyBasket, adapt_money_basket)
 
     def cast_currency_basket(v, cursor):
         if v is None:
             return None
-        eur, usd = v[1:-1].split(',')
-        return MoneyBasket(EUR=Decimal(eur), USD=Decimal(usd))
+        parts = v[1:-1].split(',', 2)
+        if len(parts) == 2:
+            eur, usd = parts
+            obj = None
+        else:
+            eur, usd, obj = parts
+        if obj:
+            amounts = json.loads(obj[1:-1].replace('""', '"') if obj[0] == '"' else obj)
+            amounts = {k: Decimal(str(v)) for k, v in amounts.items()}
+        else:
+            amounts = {}
+            if eur:
+                amounts['EUR'] = Decimal(eur)
+            if usd:
+                amounts['USD'] = Decimal(usd)
+        return MoneyBasket(**amounts)
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
         register_type(new_type((oid,), _str('currency_basket'), cast_currency_basket))

@@ -175,7 +175,8 @@ class Payday(object):
                  , username
                  , join_time
                  , ( COALESCE((eur_w.balance).amount, '0.00'),
-                     COALESCE((usd_w.balance).amount, '0.00')
+                     COALESCE((usd_w.balance).amount, '0.00'),
+                     NULL
                    )::currency_basket AS balances
                  , goal
                  , kind
@@ -586,7 +587,7 @@ class Payday(object):
                  , p2.balances
               FROM payday_participants p2
               JOIN participants p ON p.id = p2.id
-             WHERE (p2.balances).EUR < 0 OR (p2.balances).USD < 0
+             WHERE p2.balances->'EUR' < 0 OR p2.balances->'USD' < 0
              LIMIT 1
         """)
         if oops:

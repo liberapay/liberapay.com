@@ -1853,10 +1853,10 @@ class Participant(Model, MixinTeam):
         if currency not in CURRENCIES:
             raise ValueError(currency)
         r += Money((cursor or self.db).one("""
-            SELECT sum((t.actual_amount).{0})
+            SELECT sum(t.actual_amount->%s)
               FROM current_takes t
              WHERE t.member = %s
-        """.format(currency), (self.id,)) or Money.ZEROS[currency].amount, currency)
+        """, (currency, self.id)) or Money.ZEROS[currency].amount, currency)
         return r
 
     def get_exact_receiving(self):
