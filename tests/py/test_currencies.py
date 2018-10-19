@@ -73,6 +73,72 @@ class TestCurrencies(Harness):
         assert not (b >= b2)
 
 
+class TestCurrenciesInDB(Harness):
+
+    def test_parsing_currency_amount(self):
+        expected = EUR('1.23')
+        actual = self.db.one("SELECT %s", (expected,))
+        assert expected == actual
+
+    def test_parsing_currency_basket(self):
+        # Empty basket
+        expected = MoneyBasket()
+        actual = self.db.one("SELECT empty_currency_basket()")
+        assert expected == actual
+        # Non-empty basket
+        expected = MoneyBasket(USD=D('0.88'))
+        actual = self.db.one("SELECT make_currency_basket(('0.88','USD'))")
+        assert expected == actual
+        # Non-empty legacy basket
+        expected = MoneyBasket(EUR=D('3.21'))
+        actual = self.db.one("SELECT ('3.21','0.00',NULL)::currency_basket")
+        assert expected == actual
+
+    def test_add_to_basket(self):
+        # Add to empty basket
+        expected = MoneyBasket(GBP=D('1.05'))
+        actual = self.db.one("SELECT empty_currency_basket() + %s AS x", (expected['GBP'],))
+        assert expected == actual
+        # Add to non-empty sum
+        expected = MoneyBasket(EUR=D('0.33'), USD=D('0.77'))
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected),))
+        assert expected == actual
+
+    def test_merge_two_baskets(self):
+        # Merge empty basket left
+        expected = MoneyBasket(GBP=D('1.05'))
+        actual = self.db.one("SELECT empty_currency_basket() + %s AS x", (expected,))
+        assert expected == actual
+        # Merge empty basket right
+        expected = MoneyBasket(GBP=D('1.06'))
+        actual = self.db.one("SELECT %s + empty_currency_basket() AS x", (expected,))
+        assert expected == actual
+        # Merge non-empty baskets
+        b1 = MoneyBasket(JPY=D('101'))
+        b2 = MoneyBasket(EUR=D('1.02'), JPY=D('101'))
+        expected = b1 + b2
+        actual = self.db.one("SELECT %s + %s AS x", (b1, b2))
+        assert expected == actual
+        # Merge empty legacy basket
+        b1 = MoneyBasket(EUR=D('1.01'))
+        b2 = MoneyBasket(EUR=D('1.02'), JPY=D('45'))
+        expected = b1 + b2
+        actual = self.db.one("""
+            SELECT (%s,'0.00',NULL)::currency_basket + %s AS x
+        """, (b1.amounts['EUR'], b2))
+        assert expected == actual
+
+    def test_basket_sum(self):
+        # Empty sum
+        expected = MoneyBasket()
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(NULL::currency_amount[]) x")
+        assert expected == actual
+        # Non-empty sum
+        expected = MoneyBasket(EUR=D('0.33'), USD=D('0.77'))
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected),))
+        assert expected == actual
+
+
 class TestCurrencySwap(FakeTransfersHarness, MangopayHarness):
 
     @patch('mangopay.resources.TransferRefund.save', autospec=True)
