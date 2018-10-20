@@ -95,15 +95,14 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     <h4>{{ _("How do recurrent donations work?") }}</h4>
     <p>{{ _(
         "On Liberapay donations are funded in advance. You have control over "
-        "how much money you put in and when. Adding more money at once "
+        "how much money you put in and when. Sending more money at once "
         "results in a lower percentage of {0}transaction fees{1}.",
         '<a href="/about/faq#fees">'|safe,
         '</a>'|safe,
     ) }}</p>
     <p>{{ _(
-        "When your account no longer contains enough money to fund your "
-        "donations we send you a notification via email so you can add "
-        "money again. Or you can discontinue your donation."
+        "When a donation needs to be renewed we send you a notification "
+        "via email so that you can fund it again, or discontinue it."
     ) }}</p>
 
     <h4>{{ _("Can I make a one-time donation?") }}</h4>
