@@ -65,6 +65,10 @@
         % if len(accepted_currencies) > 1
             <br>
             <p>{{ ngettext(
+                "Wrong currency? {n} other is supported:",
+                "Wrong currency? {n} others are supported:",
+                n=len(accepted_currencies) - 1, username=tippee_name
+            ) if pledging else ngettext(
                 "Wrong currency? {username} also accepts {n} other:",
                 "Wrong currency? {username} also accepts {n} others:",
                 n=len(accepted_currencies) - 1, username=tippee_name
