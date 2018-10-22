@@ -424,7 +424,10 @@ class Payday(object):
             take.amount = (take.amount * takes_ratio).round_up()
             if take.paid_in_advance is None:
                 take.paid_in_advance = take.amount.zero()
-            take.accepted_currencies = take.accepted_currencies.split(',')
+            if take.accepted_currencies is None:
+                take.accepted_currencies = constants.CURRENCIES
+            else:
+                take.accepted_currencies = take.accepted_currencies.split(',')
             for accepted in take.accepted_currencies:
                 skip = (
                     accepted == take.main_currency or
