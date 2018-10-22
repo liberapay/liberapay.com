@@ -282,9 +282,11 @@ def update_payin_transfer(
             paid_in_advance = cursor.one("""
                 WITH current_take AS (
                          SELECT id
-                           FROM current_takes
+                           FROM takes
                           WHERE team = %(team)s
                             AND member = %(recipient)s
+                       ORDER BY mtime DESC
+                          LIMIT 1
                      )
                 UPDATE takes
                    SET paid_in_advance = (
