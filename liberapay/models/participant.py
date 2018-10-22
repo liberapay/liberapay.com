@@ -90,10 +90,6 @@ class Participant(Model, MixinTeam):
 
     session = None
 
-    def __init__(self, record):
-        super(Participant, self).__init__(record)
-        self.__dict__['_accepted_currencies'] = self.__dict__.pop('accepted_currencies')
-
     def __eq__(self, other):
         if not isinstance(other, Participant):
             return False
@@ -1568,8 +1564,8 @@ class Participant(Model, MixinTeam):
     # ==========
 
     @cached_property
-    def accepted_currencies(self):
-        v = self._accepted_currencies
+    def accepted_currencies_set(self):
+        v = self.accepted_currencies
         return CURRENCIES if v is None else set(v.split(','))
 
     def change_main_currency(self, new_currency, recorder):
@@ -1604,7 +1600,7 @@ class Participant(Model, MixinTeam):
         if isinstance(tip, NS):
             tip = tip.__dict__
         tip_currency = tip['amount'].currency
-        accepted = tippee.accepted_currencies
+        accepted = tippee.accepted_currencies_set
         if tip_currency in accepted:
             return tip_currency, accepted
         else:
@@ -1998,7 +1994,7 @@ class Participant(Model, MixinTeam):
                 raise BadAmount(periodic_amount, period, limits)
             if not tippee.accepts_tips:
                 raise UserDoesntAcceptTips(tippee.username)
-            if amount.currency not in tippee.accepted_currencies:
+            if amount.currency not in tippee.accepted_currencies_set:
                 raise BadDonationCurrency(tippee, amount.currency)
 
         # Insert tip
@@ -2040,7 +2036,7 @@ class Participant(Model, MixinTeam):
     def _zero_tip_dict(tippee, currency=None):
         if not isinstance(tippee, Participant):
             tippee = Participant.from_id(tippee)
-        if not currency or currency not in tippee.accepted_currencies:
+        if not currency or currency not in tippee.accepted_currencies_set:
             currency = tippee.main_currency
         zero = Money.ZEROS[currency]
         return dict(amount=zero, is_funded=False, tippee=tippee.id,

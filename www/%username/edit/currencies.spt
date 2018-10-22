@@ -16,6 +16,7 @@ if request.method == 'POST':
         new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
         if new_currency not in new_accepted:
             raise response.error(400, _("The submitted settings are incoherent."))
+        new_accepted = ','.join(new_accepted)
     change_policy = new_accepted != participant.accepted_currencies
     if new_accepted is not None and (change_currency or change_policy):
         foreign_donations = website.db.all("""
@@ -24,7 +25,7 @@ if request.method == 'POST':
              WHERE t.tippee = %s
                AND t.amount > 0
                AND t.amount::currency NOT IN %s
-        """, (participant.id, tuple(new_accepted)))
+        """, (participant.id, tuple(new_accepted.split(','))))
         if foreign_donations and body.get('confirmed') != 'true':
             back_to = participant.path('edit')
             total = Money.sum((t.amount.convert(new_currency) for t in foreign_donations), new_currency)
@@ -41,11 +42,12 @@ if request.method == 'POST':
             UPDATE participants
                SET accepted_currencies = %s
              WHERE id = %s
-        """, (','.join(new_accepted) if new_accepted else None, participant.id))
+        """, (new_accepted, participant.id))
         participant.set_attributes(accepted_currencies=new_accepted)
+        participant.__dict__.pop('accepted_currencies_set', None)
     form_post_success(state)
 
-accept_all = participant._accepted_currencies is None
+accept_all = participant.accepted_currencies is None
 
 title = participant.username
 subhead = _("Currencies")
@@ -76,7 +78,7 @@ subhead = _("Currencies")
         </td>
         <td><label>
             <input type="checkbox" name="accepted_currencies:{{ c }}" value="yes"
-                   {{ 'checked' if accept_all or c in participant.accepted_currencies else '' }} />
+                   {{ 'checked' if accept_all or c in participant.accepted_currencies_set else '' }} />
             {{ _("accept") }}
         </label></td>
         <td><label>
