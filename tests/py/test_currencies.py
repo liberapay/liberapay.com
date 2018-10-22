@@ -5,6 +5,7 @@ from decimal import Decimal as D
 from mock import patch
 
 from liberapay.billing.transactions import swap_currencies, Transfer
+from liberapay.constants import CURRENCIES
 from liberapay.exceptions import NegativeBalance, TransferError
 from liberapay.payin.stripe import int_to_Money, Money_to_int
 from liberapay.testing import EUR, JPY, USD, Harness, Foobar
@@ -137,6 +138,45 @@ class TestCurrenciesInDB(Harness):
         expected = MoneyBasket(EUR=D('0.33'), USD=D('0.77'))
         actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected),))
         assert expected == actual
+
+
+class TestCurrenciesSimplate(Harness):
+
+    def test_edit_currencies(self):
+        alice = self.make_participant('alice', main_currency='EUR', accepted_currencies='EUR')
+        assert alice.main_currency == 'EUR'
+        assert alice.accepted_currencies == 'EUR'
+        assert alice.accepted_currencies_set == set(['EUR'])
+
+        r = self.client.PxST('/alice/edit/currencies', {
+            'accepted_currencies': '*',
+            'main_currency': 'USD',
+        }, auth_as=alice)
+        assert r.code == 302, r.text
+        alice = alice.refetch()
+        assert alice.main_currency == 'USD'
+        assert alice.accepted_currencies is None
+        assert alice.accepted_currencies_set is CURRENCIES
+
+        r = self.client.PxST('/alice/edit/currencies', {
+            'accepted_currencies:JPY': 'yes',
+            'main_currency': 'JPY',
+        }, auth_as=alice)
+        assert r.code == 302, r.text
+        alice = alice.refetch()
+        assert alice.main_currency == 'JPY'
+        assert alice.accepted_currencies == 'JPY'
+        assert alice.accepted_currencies_set == set(['JPY'])
+
+        r = self.client.PxST('/alice/edit/currencies', {
+            'accepted_currencies:JPY': 'yes',
+            'main_currency': 'KRW',
+        }, auth_as=alice)
+        assert r.code == 400, r.text
+        alice = alice.refetch()
+        assert alice.main_currency == 'JPY'
+        assert alice.accepted_currencies == 'JPY'
+        assert alice.accepted_currencies_set == set(['JPY'])
 
 
 class TestCurrencySwap(FakeTransfersHarness, MangopayHarness):
