@@ -14,9 +14,6 @@ team = get_participant(state, restrict=False)
 if team.kind != 'group':
     raise response.error(404)
 
-if not user.mangopay_user_id:
-    raise response.error(403, _("You can't receive money until you've filled the identity form in your account settings."))
-
 new_currency = request.body.get('currency', team.main_currency)
 if new_currency not in constants.CURRENCIES:
     raise response.error(400, "`currency` value '%s' is invalid or non-supported" % new_currency)
