@@ -841,7 +841,7 @@ class Payday(object):
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
                           , (
-                                SELECT basket_sum(tr.amount)
+                                SELECT basket_sum(tr.amount + tr.in_advance)
                                   FROM payday_transfers tr
                                  WHERE tr.team = t2.team
                                    AND tr.tippee = t2.member
@@ -870,7 +870,7 @@ class Payday(object):
                SET taking = p2.taking
               FROM ( SELECT p2.id
                           , coalesce_currency_amount((
-                                SELECT sum(t.amount, p2.main_currency)
+                                SELECT sum(t.amount + t.in_advance, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context = 'take'
@@ -904,7 +904,7 @@ class Payday(object):
                                  WHERE t.tippee = p2.id
                                    AND t.is_funded
                             ) - (
-                                SELECT basket_sum(t.amount)
+                                SELECT basket_sum(t.amount + t.in_advance)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                     OR t.team = p2.id
