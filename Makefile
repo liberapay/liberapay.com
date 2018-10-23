@@ -81,6 +81,7 @@ pytest-re: env
 	@$(MAKE) --no-print-directory pyflakes
 
 pytest-i18n-browse: env
+	@if [ -f sql/branch.sql ]; then $(MAKE) --no-print-directory test-schema; fi
 	PYTHONPATH=. LIBERAPAY_I18N_TEST=yes $(py_test) -k TestTranslations ./tests/py/
 
 _i18n_extract: env
