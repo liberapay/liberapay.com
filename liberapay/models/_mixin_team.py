@@ -155,7 +155,10 @@ class MixinTeam(object):
                                 ), empty_currency_basket())
                             END
                           , %(recorder)s
-                          , (SELECT paid_in_advance FROM old_take)
+                          , ( SELECT convert(
+                                  paid_in_advance,
+                                  COALESCE(%(amount)s::currency, paid_in_advance::currency)
+                              ) FROM old_take )
 
             """, dict(member=member.id, team=self.id, amount=take,
                       recorder=recorder.id))
