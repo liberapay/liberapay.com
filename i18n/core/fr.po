@@ -1175,8 +1175,8 @@ msgstr "Voir la répartition du revenu"
 msgid "Introduction"
 msgstr "Introduction"
 
-msgid "Money"
-msgstr "Gestion des fonds"
+msgid "Global"
+msgstr ""
 
 msgid "Teams"
 msgstr "Équipes"
@@ -1530,6 +1530,21 @@ msgstr "Vous donnez actuellement {0} par semaine à {1}. Vous pouvez sélectionn
 msgid "Please select or input an amount:"
 msgstr "Veuillez sélectionner ou entrer un montant :"
 
+#, python-brace-format
+msgid "Wrong currency? {n} other is supported:"
+msgid_plural "Wrong currency? {n} others are supported:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Wrong currency? {username} also accepts {n} other:"
+msgid_plural "Wrong currency? {username} also accepts {n} others:"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Switch"
+msgstr "Changer"
+
 msgid "Amount"
 msgstr "Montant"
 
@@ -1610,21 +1625,34 @@ msgstr "Nous avons confirmé, par un processus de vérification automatique, que
 msgid "Frequently Asked Questions"
 msgstr "Foire Aux Questions"
 
+msgid "Can I donate in another currency?"
+msgstr ""
+
+#, python-brace-format
+msgid "No, {username} only accepts payments in {currency}."
+msgstr ""
+
 msgid "What payment methods are available?"
 msgstr "Quels moyens de paiement sont acceptés ?"
 
-msgid "We currently support most credit and debit cards (Visa, MasterCard, American Express). SEPA direct debits will be operational soon. More options will be added in the future."
-msgstr "Nous supportons actuellement la plupart des cartes de crédit et de débit (Visa, MasterCard, American Express). Les prélèvements SEPA seront bientôt opérationnels. D'autres options seront ajoutées à l'avenir."
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express)."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal. You can pay with a credit or debit card even if you don't have a PayPal account."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or through PayPal."
+msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Comment les dons récurrents fonctionnent-ils ?"
-
-#, python-brace-format
-msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Adding more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr "Sur Liberapay les dons sont financés à l'avance. Vous avez le contrôle sur le dépôt d'argent, vous choisissez quand et combien. Mettre plus d'argent en une fois permet de réduire le pourcentage de {0}frais de transactions{1}."
-
-msgid "When your account no longer contains enough money to fund your donations we send you a notification via email so you can add money again. Or you can discontinue your donation."
-msgstr "Lorsque votre compte ne contient plus assez d'argent pour financer vos dons, nous vous enverrons une notification par courriel afin que vous puissiez ajouter de l'argent à nouveau. Ou vous pouvez mettre fin à votre don."
 
 msgid "Can I make a one-time donation?"
 msgstr "Puis-je faire un don non récurrent ?"
@@ -1669,14 +1697,21 @@ msgstr "Vous recevez actuellement l'équivalent de {money_amount} par semaine de
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Quelles sont les devises que vos donateurs peuvent utiliser, et laquelle préférez-vous ?"
 
+msgid "Accept all currencies, including any that we may add in the future."
+msgstr ""
+
 msgid "accept"
 msgstr "accepter"
 
 msgid "prefer"
 msgstr "préférer"
 
-msgid "Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors."
-msgstr "Accepter les devises étrangères peut compliquer les choses pour vous, mais les refuser peut décourager certains donateurs."
+msgid "Accepting foreign currencies can increase your income by convincing people in other countries to donate to you, but international payments usually result in a higher percentage of fees, and fluctuations in exchange rates can lessen the stability of your income."
+msgstr ""
+
+#, python-brace-format
+msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
+msgstr ""
 
 msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
@@ -1765,9 +1800,6 @@ msgstr "Aperçu"
 
 msgid "Switch to another language:"
 msgstr "Passer à une autre langue :"
-
-msgid "Switch"
-msgstr "Changer"
 
 msgid "Username"
 msgstr "Nom d'utilisateur"
@@ -2139,9 +2171,6 @@ msgstr "Répartition du revenu"
 #, python-brace-format
 msgid "{0} receives {1} per week"
 msgstr "{0} reçoit {1} par semaine"
-
-msgid "You can't receive money until you've filled the identity form in your account settings."
-msgstr "Vous ne pouvez pas recevoir d'argent tant que vous n'avez pas rempli le formulaire d'identité (dans les paramètres de votre compte)."
 
 #, python-brace-format
 msgid "You are not a member of the {0} team."
@@ -3300,8 +3329,8 @@ msgstr "Liberapay se finance {0}sur Liberapay{1}."
 msgid "Who can use Liberapay?"
 msgstr "Qui peut utiliser Liberapay ?"
 
-msgid "In theory, anyone who has a bank account. In practice, payments may not work depending on where you live. Please contact us if you encounter any problems."
-msgstr "En théorie, toute personne ayant un compte bancaire. En pratique, les paiements peuvent échouer selon où vous habitez. Veuillez nous contacter si vous rencontrez des problèmes."
+msgid "Liberapay can be used by anyone who wishes to fund their work by collecting recurrent donations."
+msgstr ""
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
 msgstr "Liberapay est conçu pour un financement stable à long terme et ne gère donc que les dons récurrents."
@@ -3343,8 +3372,15 @@ msgstr "Comment sais-je que mes promesses de dons ne seront pas récupérées pa
 msgid "A pledge is linked to an account on another platform (e.g. {platform}) and it can only be claimed by someone who controls this account."
 msgstr "Une promesse de don est liée à un compte sur une autre plateforme (par exemple {platform}) et elle ne peut être activée que par une personne qui contrôle ce compte."
 
-msgid "Which currencies are supported?"
-msgstr "Quelles monnaies sont gérées ?"
+msgid "Which countries and currencies are supported?"
+msgstr ""
+
+#, python-brace-format
+msgid "See the “{page_name}” page."
+msgstr ""
+
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, and in the near future SEPA Direct Debits will be too. If a payment is through PayPal, then it's also possible to pay with most credit and debit cards even without having a PayPal account, and in other ways for users who do have a PayPal account."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "Quels sont les frais de paiement ?"
@@ -3352,6 +3388,12 @@ msgstr "Quels sont les frais de paiement ?"
 #
 msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
 msgstr "Les frais varient pour chaque opérateur de paiement, méthode de paiement, pays, et devises. La moyenne prévue est en dessous de 5% dans tous les cas."
+
+msgid "How are chargebacks handled?"
+msgstr ""
+
+msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
+msgstr "Si malgré nos efforts de lutte contre la fraude vous recevez de l'argent dont l'origine est frauduleuse, il vous incombe de le rembourser."
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "Y a-t-il un montant minimum ou maximum que je peux donner ou recevoir ?"
@@ -3376,12 +3418,40 @@ msgstr "Les dons effectués via Liberapay sont-ils déductibles des impôts ?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probablement pas, mais cela dépend des règles fiscales de votre pays."
 
+msgid "What are wallets?"
+msgstr ""
+
+msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
+msgstr ""
+
+msgid "What is “payday”?"
+msgstr ""
+
+#, python-brace-format
+msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
+msgstr ""
+
 msgid "You can get updates from us on the following social networks:"
 msgstr "Vous pouvez nous suivre sur les réseaux sociaux suivants :"
 
 #, python-brace-format
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr "Vous pouvez aussi suivre (en anglais) {1}le développement du logiciel Liberapay{0}, les {2}aventures de l'association Liberapay{0}, et les {3}discussions générales de l'équipe Liberapay{0}."
+
+#, python-brace-format
+msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
+msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
+msgid_plural "Donations can be in any of these {n} currencies:"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Each creator can select which of these currencies to accept."
+msgstr ""
 
 msgid "What is Liberapay?"
 msgstr "Qu'est-ce que Liberapay ?"
@@ -3453,36 +3523,20 @@ msgstr "Nous faisons de notre mieux pour protéger la vie privée de chacun : no
 msgid "You need to log in to access this page."
 msgstr "Vous devez vous identifier pour accéder à cette page."
 
+msgid "Money"
+msgstr "Gestion des fonds"
+
 msgid "Quarantine"
 msgstr "Quarantaine"
 
 msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
 msgstr "Concrètement, il vous faudra attendre la fin de la période de quarantaine pour transférer de l'argent de Liberapay vers votre compte bancaire."
 
-msgid "Chargebacks"
-msgstr "Remboursements"
-
-msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
-msgstr "Si malgré nos efforts de lutte contre la fraude vous recevez de l'argent dont l'origine est frauduleuse, il vous incombe de le rembourser."
-
 msgid "Safety"
 msgstr "Sûreté"
 
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "Nous garantissons que les fonds dont nous avons la charge ne seront pas perdus en cas de banqueroute, qu'elle nous affecte nous-même ou un tiers auquel nous aurions délégué la garde des fonds."
-
-msgid "Wallets"
-msgstr "Portefeuilles"
-
-msgid "A user's money is held in their wallet. It's like an online bank account, but more limited."
-msgstr "L'argent d'un utilisateur est conservé dans son portefeuille. C'est comme un compte bancaire en ligne, mais plus limité."
-
-msgid "Payday"
-msgstr "Jour de paie"
-
-#, python-brace-format
-msgid "Payday is when donations are actually executed. It's a program ({0}this one{1}) that we run every Wednesday."
-msgstr "« Payday » est le nom du programme qui effectue les dons entre les utilisateurs chaque mercredi ({0}code source{1})."
 
 #, python-brace-format
 msgid "Liberapay was launched {0} ago and has {1} users."
@@ -3958,8 +4012,11 @@ msgstr[1] "Les descriptions de votre profil et autres textes peuvent être publi
 msgid "Multiple currencies"
 msgstr "Plusieurs devises"
 
-msgid "We currently support two currencies: the euro (€) and the US dollar ($). We do not handle crypto-currencies like bitcoin."
-msgstr "Notre logiciel gère actuellement deux devises : l'euro (€) et le dollar états-unien ($). Nous ne gérons pas les crypto-monnaies comme bitcoin."
+#, python-brace-format
+msgid "<unused singular (hash=d7eb0321bb92dea0812fa5ea0d629633)>"
+msgid_plural "Liberapay's first currency was the Euro, then the US Dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Integrations"
 msgstr "Intégrations"
