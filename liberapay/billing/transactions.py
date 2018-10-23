@@ -30,6 +30,12 @@ from liberapay.utils import group_by, NS
 QUARANTINE = '%s days' % QUARANTINE.days
 
 
+def Money_to_cents(m):
+    r = Money(currency=m.currency)
+    r.amount = int(m.amount * 100)
+    return r
+
+
 def repr_error(o):
     r = o.ResultCode
     if r == '000000':
@@ -98,9 +104,9 @@ def payout(db, route, amount, ignore_high_fee=False):
     e_id = record_exchange(db, route, -credit_amount, fee, vat, participant, 'pre').id
     payout = BankWirePayOut()
     payout.AuthorId = participant.mangopay_user_id
-    payout.DebitedFunds = amount.int()
+    payout.DebitedFunds = Money_to_cents(amount)
     payout.DebitedWalletId = participant.get_current_wallet(amount.currency).remote_id
-    payout.Fees = fee.int()
+    payout.Fees = Money_to_cents(fee)
     payout.BankAccountId = route.address
     payout.BankWireRef = str(e_id)
     payout.Tag = str(e_id)
@@ -139,11 +145,11 @@ def charge(db, route, amount, return_url, billing_address=None):
     if billing_address:
         payin.Billing = {'Address': billing_address}
     payin.CreditedWalletId = wallet.remote_id
-    payin.DebitedFunds = charge_amount.int()
+    payin.DebitedFunds = Money_to_cents(charge_amount)
     payin.CardId = route.address
     payin.SecureMode = 'FORCE'
     payin.SecureModeReturnURL = return_url
-    payin.Fees = fee.int()
+    payin.Fees = Money_to_cents(fee)
     payin.Tag = str(e_id)
     try:
         test_hook()
@@ -207,9 +213,9 @@ def execute_direct_debit(db, exchange, route):
     payin = DirectDebitDirectPayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = exchange.wallet_id
-    payin.DebitedFunds = debit_amount.int()
+    payin.DebitedFunds = Money_to_cents(debit_amount)
     payin.MandateId = route.mandate
-    payin.Fees = fee.int()
+    payin.Fees = Money_to_cents(fee)
     payin.Tag = str(e_id)
     try:
         test_hook()
@@ -241,8 +247,8 @@ def payin_bank_wire(db, participant, debit_amount):
     payin = BankWirePayIn()
     payin.AuthorId = participant.mangopay_user_id
     payin.CreditedWalletId = wallet.remote_id
-    payin.DeclaredDebitedFunds = debit_amount.int()
-    payin.DeclaredFees = fee.int()
+    payin.DeclaredDebitedFunds = Money_to_cents(debit_amount)
+    payin.DeclaredFees = Money_to_cents(fee)
     payin.Tag = str(e_id)
     try:
         test_hook()
@@ -505,7 +511,7 @@ def transfer(db, tipper, tippee, amount, context, **kw):
     tr.AuthorId = tipper_wallet.remote_owner_id
     tr.CreditedUserId = tippee_wallet.remote_owner_id
     tr.CreditedWalletId = wallet_to
-    tr.DebitedFunds = amount.int()
+    tr.DebitedFunds = Money_to_cents(amount)
     tr.DebitedWalletId = wallet_from
     tr.Fees = Money(0, amount.currency)
     tr.Tag = str(t_id)
@@ -611,7 +617,7 @@ def initiate_transfer(db, t_id):
     tr.AuthorId = tipper_wallet.remote_owner_id
     tr.CreditedUserId = tippee_wallet.remote_owner_id
     tr.CreditedWalletId = tippee_wallet.remote_id
-    tr.DebitedFunds = amount.int()
+    tr.DebitedFunds = Money_to_cents(amount)
     tr.DebitedWalletId = tipper_wallet.remote_id
     tr.Fees = Money(0, amount.currency)
     tr.Tag = str(t_id)
@@ -774,8 +780,8 @@ def refund_payin(db, exchange, amount, participant):
     m_refund = PayInRefund(payin_id=exchange.remote_id)
     m_refund.AuthorId = wallet.remote_owner_id
     m_refund.Tag = str(e_refund.id)
-    m_refund.DebitedFunds = amount.int()
-    m_refund.Fees = -fee.int()
+    m_refund.DebitedFunds = Money_to_cents(amount)
+    m_refund.Fees = -Money_to_cents(fee)
     try:
         m_refund.save()
     except Exception as e:
@@ -926,8 +932,8 @@ def refund_disputed_payin(db, exchange, create_debts=False, refund_fee=False, dr
     m_refund = PayInRefund(payin_id=exchange.remote_id)
     m_refund.AuthorId = wallet.remote_owner_id
     m_refund.Tag = str(e_refund.id)
-    m_refund.DebitedFunds = amount.int()
-    m_refund.Fees = -fee.int()
+    m_refund.DebitedFunds = Money_to_cents(amount)
+    m_refund.Fees = -Money_to_cents(fee)
     try:
         m_refund.save()
     except Exception as e:
@@ -1020,7 +1026,7 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     tr.AuthorId = original_owner.mangopay_user_id
     tr.CreditedUserId = chargebacks_account.mangopay_user_id
     tr.CreditedWalletId = to_wallet
-    tr.DebitedFunds = exchange.amount.int()
+    tr.DebitedFunds = Money_to_cents(exchange.amount)
     tr.DebitedWalletId = from_wallet
     tr.Fees = Money(0, currency)
     tr.RepudiationId = repudiation_id

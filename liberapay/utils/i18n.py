@@ -20,13 +20,12 @@ from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
 )
 import jinja2.ext
-from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utcnow
 
 from liberapay.constants import CURRENCIES, D_MAX
 from liberapay.exceptions import AmbiguousNumber, InvalidNumber
-from liberapay.utils.currencies import MoneyBasket
+from liberapay.utils.currencies import Money, MoneyBasket
 from liberapay.website import website
 
 

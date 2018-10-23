@@ -77,25 +77,45 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 
     <h3>{{ _("Frequently Asked Questions") }}</h3>
 
+    % if len(participant.accepted_currencies_set) == 1
+    <h4>{{ _("Can I donate in another currency?") }}</h4>
+    <p>{{ _(
+        "No, {username} only accepts payments in {currency}.",
+        username=participant.username, currency=Currency(participant.main_currency)
+    ) }}</p>
+    % endif
+
     <h4>{{ _("What payment methods are available?") }}</h4>
     <p>{{ _(
-        "We currently support most credit and debit cards (Visa, MasterCard, American Express). "
-        "SEPA direct debits will be operational soon. More options will be "
-        "added in the future."
+        "{username} hasn't configured any payment method yet, so your donation "
+        "cannot actually be processed right now. We will notify you when payment "
+        "becomes possible.",
+        username=participant.username
+    ) if participant.payment_providers == 0 else _(
+        "Donations to {username} can be paid using a credit or debit card "
+        "(Visa, MasterCard, American Express).",
+        username=participant.username
+    ) if participant.payment_providers == 1 else _(
+        "Donations to {username} are processed through PayPal. You can pay with "
+        "a credit or debit card even if you don't have a PayPal account.",
+        username=participant.username
+    ) if participant.payment_providers == 2 else _(
+        "Donations to {username} can be paid using a credit or debit card "
+        "(Visa, MasterCard, American Express), or through PayPal.",
+        username=participant.username
     ) }}</p>
 
     <h4>{{ _("How do recurrent donations work?") }}</h4>
     <p>{{ _(
         "On Liberapay donations are funded in advance. You have control over "
-        "how much money you put in and when. Adding more money at once "
+        "how much money you put in and when. Sending more money at once "
         "results in a lower percentage of {0}transaction fees{1}.",
         '<a href="/about/faq#fees">'|safe,
         '</a>'|safe,
     ) }}</p>
     <p>{{ _(
-        "When your account no longer contains enough money to fund your "
-        "donations we send you a notification via email so you can add "
-        "money again. Or you can discontinue your donation."
+        "When a donation needs to be renewed we send you a notification "
+        "via email so that you can fund it again, or discontinue it."
     ) }}</p>
 
     <h4>{{ _("Can I make a one-time donation?") }}</h4>

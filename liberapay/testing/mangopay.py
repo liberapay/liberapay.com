@@ -8,10 +8,10 @@ from mangopay.resources import (
 import mock
 import requests
 
-from liberapay.constants import ZERO
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import Harness
 from liberapay.testing.vcr import use_cassette
+from liberapay.utils.currencies import Money
 
 
 class MangopayHarness(Harness):
@@ -46,7 +46,7 @@ def fake_transfer(tr):
 
 
 def fake_wallet(w):
-    w.Balance = ZERO[w.Currency]
+    w.Balance = Money.ZEROS[w.Currency]
     w.Id = -next(FakeTransfersHarness.wallet_id_serial)
 
 

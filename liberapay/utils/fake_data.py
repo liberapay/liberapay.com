@@ -5,7 +5,6 @@ import string
 import sys
 
 from faker import Factory
-from mangopay.utils import Money
 from psycopg2 import IntegrityError
 
 from liberapay.billing.transactions import (
@@ -14,6 +13,7 @@ from liberapay.billing.transactions import (
 from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models import community
+from liberapay.utils.currencies import Money, MoneyBasket
 
 
 DONATION_PERIODS = tuple(PERIOD_CONVERSION_RATES.keys())
@@ -284,7 +284,7 @@ def populate_db(website, num_participants=100, num_tips=200, num_teams=5, num_tr
             'nparticipants': len(week_participants),
             'ntippers': len(tippers),
             'nactive': len(actives),
-            'transfer_volume': '(%s,0.00)' % sum(x.amount.amount for x in week_transfers),
+            'transfer_volume': MoneyBasket(x.amount for x in week_transfers),
             'public_log': '',
         }
         _fake_thing(db, "paydays", **payday)

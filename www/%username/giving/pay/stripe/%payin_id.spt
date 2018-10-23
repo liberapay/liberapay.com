@@ -9,7 +9,7 @@ import stripe.error
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import prepare_payin, prepare_payin_transfer, resolve_destination
-from liberapay.payin.stripe import destination_charge, repr_stripe_error
+from liberapay.payin.stripe import destination_charge, Money_to_int, repr_stripe_error
 from liberapay.utils import get_participant, NS, partition
 
 ONE_YEAR = {
@@ -87,7 +87,7 @@ if request.method == 'POST':
                 raise response.error(400, "unknown token type")
 
             source = stripe.Source.create(
-                amount=amount.int().amount if one_off else None,
+                amount=Money_to_int(amount) if one_off else None,
                 owner={
                     'address': owner_address,
                     'email': payer.email or payer.get_any_email(),

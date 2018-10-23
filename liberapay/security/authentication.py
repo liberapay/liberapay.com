@@ -28,7 +28,7 @@ class _ANON(object):
     def get_currencies_for(self, tippee, tip):
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
-        return tip['amount'].currency, tippee.accepted_currencies
+        return tip['amount'].currency, tippee.accepted_currencies_set
 
 
 ANON = _ANON()

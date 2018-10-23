@@ -175,7 +175,8 @@ class Payday(object):
                  , username
                  , join_time
                  , ( COALESCE((eur_w.balance).amount, '0.00'),
-                     COALESCE((usd_w.balance).amount, '0.00')
+                     COALESCE((usd_w.balance).amount, '0.00'),
+                     NULL
                    )::currency_basket AS balances
                  , goal
                  , kind
@@ -423,7 +424,10 @@ class Payday(object):
             take.amount = (take.amount * takes_ratio).round_up()
             if take.paid_in_advance is None:
                 take.paid_in_advance = take.amount.zero()
-            take.accepted_currencies = take.accepted_currencies.split(',')
+            if take.accepted_currencies is None:
+                take.accepted_currencies = constants.CURRENCIES
+            else:
+                take.accepted_currencies = take.accepted_currencies.split(',')
             for accepted in take.accepted_currencies:
                 skip = (
                     accepted == take.main_currency or
@@ -586,7 +590,7 @@ class Payday(object):
                  , p2.balances
               FROM payday_participants p2
               JOIN participants p ON p.id = p2.id
-             WHERE (p2.balances).EUR < 0 OR (p2.balances).USD < 0
+             WHERE p2.balances->'EUR' < 0 OR p2.balances->'USD' < 0
              LIMIT 1
         """)
         if oops:

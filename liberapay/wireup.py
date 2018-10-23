@@ -24,7 +24,6 @@ from babel.numbers import parse_pattern
 import boto3
 from environment import Environment, is_yesish
 from mailshake import AmazonSESMailer, DummyMailer, SMTPMailer
-from mangopay.utils import Money
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 import raven
@@ -42,7 +41,7 @@ from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
 from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
-from liberapay.utils.currencies import MoneyBasket, get_currency_exchange_rates
+from liberapay.utils.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.i18n import (
@@ -157,14 +156,31 @@ def database(env, tell_sentry):
         pass
 
     def adapt_money_basket(b):
-        return AsIs('(%s,%s)::currency_basket' % (b.amounts['EUR'], b.amounts['USD']))
+        return AsIs(
+            "_wrap_amounts('%s'::jsonb)" %
+            json.dumps({k: str(v) for k, v in b.amounts.items() if v}).replace("'", "''")
+        )
     register_adapter(MoneyBasket, adapt_money_basket)
 
     def cast_currency_basket(v, cursor):
         if v is None:
             return None
-        eur, usd = v[1:-1].split(',')
-        return MoneyBasket(EUR=Decimal(eur), USD=Decimal(usd))
+        parts = v[1:-1].split(',', 2)
+        if len(parts) == 2:
+            eur, usd = parts
+            obj = None
+        else:
+            eur, usd, obj = parts
+        if obj:
+            amounts = json.loads(obj[1:-1].replace('""', '"') if obj[0] == '"' else obj)
+            amounts = {k: Decimal(str(v)) for k, v in amounts.items()}
+        else:
+            amounts = {}
+            if eur:
+                amounts['EUR'] = Decimal(eur)
+            if usd:
+                amounts['USD'] = Decimal(usd)
+        return MoneyBasket(**amounts)
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
         register_type(new_type((oid,), _str('currency_basket'), cast_currency_basket))
@@ -691,7 +707,6 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
 
     # Patch the locales to look less formal
     locales['fr'].currency_formats['standard'] = parse_pattern('#,##0.00\u202f\xa4')
-    locales['fr'].currency_symbols['USD'] = '$'
     locales['fr'].currencies['USD'] = 'dollar états-unien'
 
     # Load the markdown files

@@ -12,7 +12,6 @@ from six.moves import builtins
 import aspen
 import aspen.http.mapping
 from aspen.request_processor.dispatcher import DispatchResult, DispatchStatus
-from mangopay.utils import Money
 import pando
 from pando import json
 from pando.algorithms.website import fill_response_with_output
@@ -31,7 +30,7 @@ from liberapay.security import authentication, csrf, set_default_security_header
 from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie, urlquote,
 )
-from liberapay.utils.currencies import MoneyBasket, fetch_currency_exchange_rates
+from liberapay.utils.currencies import Money, MoneyBasket, fetch_currency_exchange_rates
 from liberapay.utils.emails import handle_email_bounces
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,

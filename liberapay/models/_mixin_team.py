@@ -7,7 +7,7 @@ from __future__ import division, print_function, unicode_literals
 from collections import OrderedDict
 from statistics import median
 
-from liberapay.constants import ZERO, TAKE_THROTTLING_THRESHOLD
+from liberapay.constants import TAKE_THROTTLING_THRESHOLD
 from liberapay.utils import NS, group_by
 from liberapay.utils.currencies import Money, MoneyBasket
 
@@ -39,7 +39,7 @@ class MixinTeam(object):
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, ZERO[member.main_currency], self, cursor=cursor)
+        self.set_take_for(member, Money.ZEROS[member.main_currency], self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
@@ -95,7 +95,7 @@ class MixinTeam(object):
         leftover, or last week's median take, or one currency unit (e.g. €1.00).
         """
         nonzero_last_week = [a.convert(currency).amount for a in last_week.values() if a]
-        member_last_week = last_week.get(member_id, ZERO[currency]).convert(currency)
+        member_last_week = last_week.get(member_id, Money.ZEROS[currency]).convert(currency)
         return max(
             member_last_week * 2,
             member_last_week + last_week.initial_leftover.fuzzy_sum(currency),
@@ -289,7 +289,7 @@ class MixinTeam(object):
         compute_max = self.throttle_takes and nmembers > 1 and last_week.sum
         members = OrderedDict()
         members.leftover = self.leftover
-        zero = ZERO[self.main_currency]
+        zero = Money.ZEROS[self.main_currency]
         for take in takes:
             member = {}
             m_id = member['id'] = take['member_id']

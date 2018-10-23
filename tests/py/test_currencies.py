@@ -5,8 +5,10 @@ from decimal import Decimal as D
 from mock import patch
 
 from liberapay.billing.transactions import swap_currencies, Transfer
+from liberapay.constants import CURRENCIES
 from liberapay.exceptions import NegativeBalance, TransferError
-from liberapay.testing import EUR, USD, Harness, Foobar
+from liberapay.payin.stripe import int_to_Money, Money_to_int
+from liberapay.testing import EUR, JPY, USD, Harness, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness, fake_transfer
 from liberapay.utils.currencies import Money, MoneyBasket
 
@@ -37,10 +39,10 @@ class TestCurrencies(Harness):
         assert expected == actual
 
     def test_minimums(self):
-        assert Money.minimums['EUR'] == D('0.01')
-        assert Money.minimums['USD'] == D('0.01')
-        assert Money.minimums['KRW'] == D('1')
-        assert Money.minimums['JPY'] == D('1')
+        assert Money.MINIMUMS['EUR'].amount == D('0.01')
+        assert Money.MINIMUMS['USD'].amount == D('0.01')
+        assert Money.MINIMUMS['KRW'].amount == D('1')
+        assert Money.MINIMUMS['JPY'].amount == D('1')
 
     def test_rounding(self):
         assert Money('0.001', 'EUR').round() == Money('0.00', 'EUR')
@@ -70,6 +72,111 @@ class TestCurrencies(Harness):
         b = MoneyBasket()
         b2 = MoneyBasket(EUR=1, USD=1)
         assert not (b >= b2)
+
+
+class TestCurrenciesInDB(Harness):
+
+    def test_parsing_currency_amount(self):
+        expected = EUR('1.23')
+        actual = self.db.one("SELECT %s", (expected,))
+        assert expected == actual
+
+    def test_parsing_currency_basket(self):
+        # Empty basket
+        expected = MoneyBasket()
+        actual = self.db.one("SELECT empty_currency_basket()")
+        assert expected == actual
+        # Non-empty basket
+        expected = MoneyBasket(USD=D('0.88'))
+        actual = self.db.one("SELECT make_currency_basket(('0.88','USD'))")
+        assert expected == actual
+        # Non-empty legacy basket
+        expected = MoneyBasket(EUR=D('3.21'))
+        actual = self.db.one("SELECT ('3.21','0.00',NULL)::currency_basket")
+        assert expected == actual
+
+    def test_add_to_basket(self):
+        # Add to empty basket
+        expected = MoneyBasket(GBP=D('1.05'))
+        actual = self.db.one("SELECT empty_currency_basket() + %s AS x", (expected['GBP'],))
+        assert expected == actual
+        # Add to non-empty sum
+        expected = MoneyBasket(EUR=D('0.33'), USD=D('0.77'))
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected),))
+        assert expected == actual
+
+    def test_merge_two_baskets(self):
+        # Merge empty basket left
+        expected = MoneyBasket(GBP=D('1.05'))
+        actual = self.db.one("SELECT empty_currency_basket() + %s AS x", (expected,))
+        assert expected == actual
+        # Merge empty basket right
+        expected = MoneyBasket(GBP=D('1.06'))
+        actual = self.db.one("SELECT %s + empty_currency_basket() AS x", (expected,))
+        assert expected == actual
+        # Merge non-empty baskets
+        b1 = MoneyBasket(JPY=D('101'))
+        b2 = MoneyBasket(EUR=D('1.02'), JPY=D('101'))
+        expected = b1 + b2
+        actual = self.db.one("SELECT %s + %s AS x", (b1, b2))
+        assert expected == actual
+        # Merge empty legacy basket
+        b1 = MoneyBasket(EUR=D('1.01'))
+        b2 = MoneyBasket(EUR=D('1.02'), JPY=D('45'))
+        expected = b1 + b2
+        actual = self.db.one("""
+            SELECT (%s,'0.00',NULL)::currency_basket + %s AS x
+        """, (b1.amounts['EUR'], b2))
+        assert expected == actual
+
+    def test_basket_sum(self):
+        # Empty sum
+        expected = MoneyBasket()
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(NULL::currency_amount[]) x")
+        assert expected == actual
+        # Non-empty sum
+        expected = MoneyBasket(EUR=D('0.33'), USD=D('0.77'))
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected),))
+        assert expected == actual
+
+
+class TestCurrenciesSimplate(Harness):
+
+    def test_edit_currencies(self):
+        alice = self.make_participant('alice', main_currency='EUR', accepted_currencies='EUR')
+        assert alice.main_currency == 'EUR'
+        assert alice.accepted_currencies == 'EUR'
+        assert alice.accepted_currencies_set == set(['EUR'])
+
+        r = self.client.PxST('/alice/edit/currencies', {
+            'accepted_currencies': '*',
+            'main_currency': 'USD',
+        }, auth_as=alice)
+        assert r.code == 302, r.text
+        alice = alice.refetch()
+        assert alice.main_currency == 'USD'
+        assert alice.accepted_currencies is None
+        assert alice.accepted_currencies_set is CURRENCIES
+
+        r = self.client.PxST('/alice/edit/currencies', {
+            'accepted_currencies:JPY': 'yes',
+            'main_currency': 'JPY',
+        }, auth_as=alice)
+        assert r.code == 302, r.text
+        alice = alice.refetch()
+        assert alice.main_currency == 'JPY'
+        assert alice.accepted_currencies == 'JPY'
+        assert alice.accepted_currencies_set == set(['JPY'])
+
+        r = self.client.PxST('/alice/edit/currencies', {
+            'accepted_currencies:JPY': 'yes',
+            'main_currency': 'KRW',
+        }, auth_as=alice)
+        assert r.code == 400, r.text
+        alice = alice.refetch()
+        assert alice.main_currency == 'JPY'
+        assert alice.accepted_currencies == 'JPY'
+        assert alice.accepted_currencies_set == set(['JPY'])
 
 
 class TestCurrencySwap(FakeTransfersHarness, MangopayHarness):
@@ -150,3 +257,22 @@ class TestCurrencySwap(FakeTransfersHarness, MangopayHarness):
             'homer': MoneyBasket(EUR('5.00'), USD('1.00')),
             'david': MoneyBasket(),
         }
+
+
+class TestCurrenciesWithStripe(Harness):
+
+    def test_Money_to_int(self):
+        expected = 101
+        actual = Money_to_int(EUR('1.01'))
+        assert expected == actual
+        expected = 1
+        actual = Money_to_int(JPY('1'))
+        assert expected == actual
+
+    def test_int_to_Money(self):
+        expected = USD('1.02')
+        actual = int_to_Money(102, 'USD')
+        assert expected == actual
+        expected = JPY('1')
+        actual = int_to_Money(1, 'JPY')
+        assert expected == actual

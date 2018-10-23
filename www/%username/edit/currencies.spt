@@ -10,18 +10,22 @@ if request.method == 'POST':
     new_currency = body['main_currency']
     old_currency = participant.main_currency
     change_currency = new_currency != old_currency
-    new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
+    if body.get('accepted_currencies') == '*':
+        new_accepted = None
+    else:
+        new_accepted = [c for c in constants.CURRENCIES if body.get('accepted_currencies:' + c) == 'yes']
+        if new_currency not in new_accepted:
+            raise response.error(400, _("The submitted settings are incoherent."))
+        new_accepted = ','.join(new_accepted)
     change_policy = new_accepted != participant.accepted_currencies
-    if new_currency not in new_accepted:
-        raise response.error(400, _("The submitted settings are incoherent."))
-    if change_currency or change_policy:
+    if new_accepted is not None and (change_currency or change_policy):
         foreign_donations = website.db.all("""
             SELECT t.*
               FROM current_tips t
              WHERE t.tippee = %s
                AND t.amount > 0
                AND t.amount::currency NOT IN %s
-        """, (participant.id, tuple(new_accepted)))
+        """, (participant.id, tuple(new_accepted.split(','))))
         if foreign_donations and body.get('confirmed') != 'true':
             back_to = participant.path('edit')
             total = Money.sum((t.amount.convert(new_currency) for t in foreign_donations), new_currency)
@@ -38,14 +42,19 @@ if request.method == 'POST':
             UPDATE participants
                SET accepted_currencies = %s
              WHERE id = %s
-        """, (','.join(new_accepted), participant.id))
+        """, (new_accepted, participant.id))
         participant.set_attributes(accepted_currencies=new_accepted)
+        participant.__dict__.pop('accepted_currencies_set', None)
     form_post_success(state)
+
+accept_all = participant.accepted_currencies is None
 
 title = participant.username
 subhead = _("Currencies")
 
 [---] text/html
+% from "templates/icons.html" import glyphicon
+
 % extends "templates/profile-edit.html"
 
 % block form
@@ -55,6 +64,12 @@ subhead = _("Currencies")
 
     <p>{{ _("Which currencies should your donors be allowed to send you, and which one do you prefer?") }}</p>
     <table class="table table-condensed">
+    <tr>
+        <td colspan="3"><label>
+            <input type="checkbox" name="accepted_currencies" value="*"
+                   {{ 'checked' if accept_all else '' }} />
+            {{ _("Accept all currencies, including any that we may add in the future.") }}
+        </label></td>
     % for c in constants.CURRENCIES
     <tr>
         <td>
@@ -63,7 +78,7 @@ subhead = _("Currencies")
         </td>
         <td><label>
             <input type="checkbox" name="accepted_currencies:{{ c }}" value="yes"
-                   {{ 'checked' if c in participant.accepted_currencies else '' }} />
+                   {{ 'checked' if accept_all or c in participant.accepted_currencies_set else '' }} />
             {{ _("accept") }}
         </label></td>
         <td><label>
@@ -75,9 +90,27 @@ subhead = _("Currencies")
     % endfor
     </table>
 
-    <p>{{ _("Accepting foreign currencies can complicate things for you, but rejecting them can discourage some donors.") }}</p>
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "Accepting foreign currencies can increase your income by convincing "
+        "people in other countries to donate to you, but international payments "
+        "usually result in a higher percentage of fees, and fluctuations in "
+        "exchange rates can lessen the stability of your income."
+    ) }}</p>
 
-    <button class="save btn btn-success">{{ _("Save") }}</button>
+    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+        "Stripe automatically converts funds into your main currency, but by "
+        "default PayPal holds payments in foreign currencies until you tell it "
+        "what to do. If you have a Business PayPal account you can choose to "
+        "automatically convert all incoming payments in foreign currencies to "
+        "your main currency. This option is currently located in the "
+        "“{link_open}Preferences for receiving payments{link_close}” page.",
+        link_open='<a href="https://www.paypal.com/businessmanage/preferences/payments"'
+                    ' target="_blank" rel="noopener noreferrer">'|safe,
+        link_close='</a>'|safe
+    ) }}</p>
+
+    <br>
+    <button class="save btn btn-lg btn-success">{{ _("Save") }}</button>
 </form>
 
 % endblock

@@ -19,15 +19,12 @@ title = _("Frequently Asked Questions")
              '</a>'|safe) }}</dd>
 
 
-    <!--
     {{ dt(_("Who can use Liberapay?"), 'who-can-use') }}
 
     <dd>{{ _(
-        "In theory, anyone who has a bank account. In practice, payments may not "
-        "work depending on where you live. Please contact us if you encounter any "
-        "problems."
+        "Liberapay can be used by anyone who wishes to fund their work by "
+        "collecting recurrent donations."
     ) }}</dd>
-    -->
 
 
     {{ dt(_("Can I make a one-time donation?"), 'one-time-gift') }}
@@ -92,26 +89,39 @@ title = _("Frequently Asked Questions")
 </dl>
 <dl class="col-md-6">
 
-    {{ dt(_("Which currencies are supported?"), 'currencies') }}
+    {{ dt(_("Which countries and currencies are supported?"), 'currencies') }}
 
-    <dd>{{ _(
-        "We currently support two currencies: the euro (€) and the US dollar ($). "
-        "We do not handle crypto-currencies like bitcoin."
-    ) }}</dd>
+    <dd><a href="/about/global">{{ _(
+        "See the “{page_name}” page.", page_name=_("Global")
+    ) }}</a></dd>
+
 
     {{ dt(_("What payment methods are available?"), 'payment-methods') }}
 
     <dd>{{ _(
-        "We currently support most credit and debit cards (Visa, MasterCard, American Express). "
-        "SEPA direct debits will be operational soon. More options will be "
-        "added in the future."
+        "The available payment methods depend on which payment processors are "
+        "supported by the recipient. If a payment is processed by Stripe, then "
+        "most credit and debit cards (Visa, MasterCard, American Express) are "
+        "accepted, and in the near future SEPA Direct Debits will be too. If "
+        "a payment is through PayPal, then it's also possible to pay with most "
+        "credit and debit cards even without having a PayPal account, and in "
+        "other ways for users who do have a PayPal account."
     ) }}</dd>
+
 
     {{ dt(_("What are the payment processing fees?"), 'fees') }}
 
     <dd>{{ _(
         "The fees vary by payment processor, payment method, countries and "
         "currencies. The average is expected to be below 5% in all cases."
+    ) }}</dd>
+
+
+    {{ dt(_("How are chargebacks handled?"), 'chargebacks') }}
+
+    <dd>{{ _(
+        "If despite our fraud prevention efforts you receive money whose origin is "
+        "revealed to be fraudulent, it falls on you to pay it back."
     ) }}</dd>
 
 
@@ -140,6 +150,25 @@ title = _("Frequently Asked Questions")
     {{ dt(_("Are donations through Liberapay tax-deductible?"), 'tax-deductible') }}
 
     <dd>{{ _("Probably not, but it depends on the tax rules of your country.") }}</dd>
+
+
+    {{ dt(_("What are wallets?"), 'wallets') }}
+
+    <dd>{{ _(
+        "Liberapay used to hold the funds of donors in wallets, but we no longer do "
+        "that. Instead the full amount of a donation is immediately transferred to "
+        "the recipient."
+    ) }}</dd>
+
+
+    {{ dt(_("What is “payday”?"), 'payday') }}
+
+    <p>{{ _(
+        "Payday is a program ({0}this one{1}) that we run every Wednesday. It "
+        "executes donations and notifies donors and recipients.",
+        '<a href="https://github.com/liberapay/liberapay.com/blob/master/liberapay/billing/payday.py">'|safe,
+        '</a>'|safe
+    ) }}</p>
 
 </dl>
 </div>

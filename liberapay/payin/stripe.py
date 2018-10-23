@@ -1,11 +1,32 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from decimal import Decimal
+
 import stripe
 import stripe.error
 
 from ..models.exchange_route import ExchangeRoute
 from ..utils.currencies import Money
 from .common import update_payin, update_payin_transfer
+
+
+# https://stripe.com/docs/currencies#presentment-currencies
+ZERO_DECIMAL_CURRENCIES = """
+    BIF CLP DJF GNF JPY KMF KRW MGA PYG RWF UGX VND VUV XAF XOF XPF
+""".split()
+
+
+def int_to_Money(amount, currency):
+    currency = currency.upper()
+    if currency in ZERO_DECIMAL_CURRENCIES:
+        return Money(Decimal(amount), currency)
+    return Money(Decimal(amount) / 100, currency)
+
+
+def Money_to_int(m):
+    if m.currency in ZERO_DECIMAL_CURRENCIES:
+        return int(m.amount)
+    return int(m.amount * 100)
 
 
 def repr_stripe_error(e):
@@ -45,7 +66,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
         destination = {'account': destination}
     try:
         charge = stripe.Charge.create(
-            amount=amount.int().amount,
+            amount=Money_to_int(amount),
             currency=amount.currency.lower(),
             customer=route.remote_user_id,
             destination=destination,
@@ -63,8 +84,8 @@ def destination_charge(db, payin, payer, statement_descriptor):
         return update_payin(db, payin.id, '', 'failed', str(e))
 
     bt = charge.balance_transaction
-    amount_settled = Money(bt.amount, bt.currency.upper()) / 100
-    fee = Money(bt.fee, bt.currency.upper()) / 100
+    amount_settled = int_to_Money(bt.amount, bt.currency)
+    fee = int_to_Money(bt.fee, bt.currency)
     net_amount = amount_settled - fee
 
     if destination:

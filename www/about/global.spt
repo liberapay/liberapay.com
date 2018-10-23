@@ -1,0 +1,34 @@
+[---]
+title = _("Global")
+[---] text/html
+% extends "templates/about.html"
+% block content
+
+<p>{{ ngettext(
+    "",
+    "Liberapay is available to creators in {stripe_link_open}{n} countries "
+    "through Stripe{link_close} and {paypal_link_open}more than 200 countries "
+    "through PayPal{link_close}.",
+    n=len(constants.PAYOUT_COUNTRIES['stripe']),
+    stripe_link_open='<a href="https://stripe.com/global">'|safe,
+    paypal_link_open='<a href="https://www.paypal.com/webapps/mpp/country-worldwide">'|safe,
+    link_close='</a>'|safe
+) }}</p>
+
+<p>{{ ngettext(
+    "",
+    "Donations can be in any of these {n} currencies:",
+    n=len(constants.CURRENCIES)
+) }}</p>
+
+<ul class="columns-sm-2 columns-md-3">
+% for c in constants.CURRENCIES
+    <li>{{ locale.title(locale.currencies.get(c, c)) }} ({{ c }})</li>
+% endfor
+</ul>
+
+<p>{{ _(
+    "Each creator can select which of these currencies to accept."
+) }}</p>
+
+% endblock

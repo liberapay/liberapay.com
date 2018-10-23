@@ -4,7 +4,6 @@ from __future__ import print_function, unicode_literals
 
 from six.moves.http_cookies import SimpleCookie
 
-from mangopay.utils import Money
 import pytest
 
 from liberapay.constants import SESSION, SESSION_REFRESH
@@ -22,6 +21,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.testing import EUR, USD, Harness
+from liberapay.utils.currencies import Money
 
 
 class TestNeedConfirmation(Harness):

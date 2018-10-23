@@ -269,14 +269,19 @@ recent = query_cache.one("""
             </div>
             <div class="col-sm-4">
                 <dt>
-                    <sub><span class="fa fa-eur" aria-hidden="true"></span></sub>
-                    <sup><span class="fa fa-usd" aria-hidden="true"></span></sup>
+                    <sub><span class="fa fa-usd" aria-hidden="true"></span></sub>
+                    <sup><span class="fa fa-eur" aria-hidden="true"></span></sup>
+                    <sup><span class="fa fa-gbp" aria-hidden="true"></span></sup>
+                    <sub><span class="fa fa-jpy" aria-hidden="true"></span></sub>
                     <br>
-                    {{ _("Multiple currencies") }}
+                    <a href="/about/currencies">{{ _("Multiple currencies") }}</a>
                 </dt>
-                <dd>{{ _(
-                    "We currently support two currencies: the euro (€) and the US dollar ($). "
-                    "We do not handle crypto-currencies like bitcoin."
+                <dd>{{ ngettext(
+                    "",
+                    "Liberapay's first currency was the Euro, then the US Dollar "
+                    "was added, and now we support a total of {n} currencies. "
+                    "However, we do not handle any crypto-currency.",
+                    n=len(constants.CURRENCIES)
                 ) }}</dd>
             </div>
         </dl>

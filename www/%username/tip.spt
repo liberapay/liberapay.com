@@ -53,7 +53,7 @@ if tippee.status == 'stub':
 
 if request.method == 'POST':
     currency = request.body.get('currency', 'EUR')
-    if currency not in constants.STANDARD_TIPS:
+    if currency not in constants.CURRENCIES:
         raise response.error(400, "`currency` value in body is invalid or non-supported")
     amount = request.body.get('selected_amount')
     if amount and amount != 'custom':

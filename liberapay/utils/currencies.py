@@ -10,11 +10,11 @@ from mangopay.utils import Money
 import requests
 import xmltodict
 
-from liberapay.constants import CURRENCIES, D_CENT, D_ZERO, ZERO
+from liberapay.constants import CURRENCIES, D_CENT, D_ZERO
 from liberapay.website import website
 
 
-def _convert(self, c):
+def _convert(self, c, rounding=ROUND_HALF_UP):
     if self.currency == c:
         return self
     if 'EUR' in (self.currency, c):
@@ -25,17 +25,17 @@ def _convert(self, c):
             website.currency_exchange_rates[('EUR', c)]
         )
     amount = self.amount * rate
-    return Money(amount.quantize(D_CENT), c)
+    return Money(amount, c, rounding=rounding)
 
 def _sum(cls, amounts, currency):
-    a = ZERO[currency].amount
+    a = Money.ZEROS[currency].amount
     for m in amounts:
         if m.currency != currency:
             raise CurrencyMismatch(m.currency, currency, 'sum')
         a += m.amount
     return cls(a, currency)
 
-def _Money_init(self, amount=D_ZERO, currency=None):
+def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
     if not isinstance(amount, Decimal):
         amount = Decimal(str(amount))
         # Why `str(amount)`? Because:
@@ -43,6 +43,9 @@ def _Money_init(self, amount=D_ZERO, currency=None):
         # Decimal('0.2300000000000000099920072216264088638126850128173828125')
         # >>> Decimal(str(0.23))
         # Decimal('0.23')
+    if rounding is not None:
+        minimum = Money.MINIMUMS[currency].amount
+        amount = amount.quantize(minimum, rounding=rounding)
     self.amount = amount
     self.currency = currency
 
@@ -56,15 +59,21 @@ def _Money_eq(self, other):
     return False
 
 def _Money_round(self, rounding=ROUND_HALF_UP):
-    minimum = Money.minimums[self.currency]
-    return Money(self.amount.quantize(minimum, rounding=rounding), self.currency)
+    return Money(self.amount, self.currency, rounding=rounding)
 
 class _Minimums(defaultdict):
     def __missing__(self, currency):
         exponent = website.db.one("SELECT get_currency_exponent(%s)", (currency,))
-        minimum = D_CENT if exponent == 2 else Decimal(10) ** (-exponent)
+        minimum = Money((D_CENT if exponent == 2 else Decimal(10) ** (-exponent)), currency)
         self[currency] = minimum
         return minimum
+
+class _Zeros(defaultdict):
+    def __missing__(self, currency):
+        minimum = Money.MINIMUMS[currency].amount
+        zero = Money((D_ZERO if minimum is D_CENT else minimum - minimum), currency)
+        self[currency] = zero
+        return zero
 
 
 Money.__init__ = _Money_init
@@ -75,21 +84,22 @@ Money.__repr__ = lambda m: '<Money "%s">' % m
 Money.__str__ = lambda m: '%(amount)s %(currency)s' % m.__dict__
 Money.__unicode__ = Money.__str__
 Money.convert = _convert
-Money.int = lambda m: Money(int(m.amount * 100), m.currency)
-Money.minimum = lambda m: Money.minimums[m.currency]
-Money.minimums = _Minimums()
+Money.minimum = lambda m: Money.MINIMUMS[m.currency]
+Money.MINIMUMS = _Minimums()
 Money.round = _Money_round
 Money.round_down = lambda m: m.round(ROUND_DOWN)
 Money.round_up = lambda m: m.round(ROUND_UP)
 Money.sum = classmethod(_sum)
-Money.zero = lambda m: Money(D_ZERO, m.currency)
+Money.zero = lambda m: Money.ZEROS[m.currency]
+Money.ZEROS = _Zeros()
 
 
 class MoneyBasket(object):
 
     def __init__(self, *args, **decimals):
         self.amounts = OrderedDict(
-            (currency, decimals.get(currency, D_ZERO)) for currency in CURRENCIES
+            (currency, decimals.get(currency, Money.ZEROS[currency].amount))
+            for currency in CURRENCIES
         )
         for arg in args:
             if isinstance(arg, Money):
@@ -182,7 +192,7 @@ class MoneyBasket(object):
     def __repr__(self):
         return '%s[%s]' % (
             self.__class__.__name__,
-            ', '.join('%s %s' % (a, c) for c, a in self.amounts.items())
+            ', '.join('%s %s' % (a, c) for c, a in self.amounts.items() if a)
         )
 
     def __bool__(self):
@@ -207,7 +217,7 @@ class MoneyBasket(object):
         return [k for k, v in self.amounts.items() if v > 0]
 
     def fuzzy_sum(self, currency, rounding=ROUND_UP):
-        a = ZERO[currency].amount
+        a = Money.ZEROS[currency].amount
         fuzzy = False
         for m in self:
             if m.currency == currency:
@@ -215,7 +225,7 @@ class MoneyBasket(object):
             elif m.amount:
                 a += m.amount * website.currency_exchange_rates[(m.currency, currency)]
                 fuzzy = True
-        r = Money(a.quantize(D_CENT, rounding=rounding), currency)
+        r = Money(a, currency, rounding=rounding)
         r.fuzzy = fuzzy
         return r
 
