@@ -2300,8 +2300,12 @@ class Participant(Model, MixinTeam):
                          periodic_amount, is_funded, paid_in_advance)
                  SELECT DISTINCT ON (tipper)
                         ctime, tipper, %(live)s AS tippee, amount, period,
-                        periodic_amount, is_funded, paid_in_advance
-                   FROM temp_tips
+                        periodic_amount, is_funded,
+                        ( SELECT sum(t2.paid_in_advance, t.amount::currency)
+                            FROM temp_tips t2
+                           WHERE t2.tipper = t.tipper
+                        ) AS paid_in_advance
+                   FROM temp_tips t
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
                 AND NOT (tipper = %(dead)s OR tipper = %(live)s)
