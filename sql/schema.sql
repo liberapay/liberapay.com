@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '81'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '82'::jsonb);
 
 
 -- app configuration
@@ -324,16 +324,16 @@ CREATE TABLE paydays
 , ntippees              bigint           NOT NULL DEFAULT 0
 , ntips                 bigint           NOT NULL DEFAULT 0
 , ntransfers            bigint           NOT NULL DEFAULT 0
-, transfer_volume       currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
+, transfer_volume       currency_basket  NOT NULL DEFAULT empty_currency_basket()
 , ntakes                bigint           NOT NULL DEFAULT 0
-, take_volume           currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
+, take_volume           currency_basket  NOT NULL DEFAULT empty_currency_basket()
 , nactive               bigint           NOT NULL DEFAULT 0
 , nusers                bigint           NOT NULL DEFAULT 0
-, week_deposits         currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
-, week_withdrawals      currency_basket  NOT NULL DEFAULT ('0.00', '0.00')
-, transfer_volume_refunded   currency_basket   DEFAULT ('0.00', '0.00')
-, week_deposits_refunded     currency_basket   DEFAULT ('0.00', '0.00')
-, week_withdrawals_refunded  currency_basket   DEFAULT ('0.00', '0.00')
+, week_deposits         currency_basket  NOT NULL DEFAULT empty_currency_basket()
+, week_withdrawals      currency_basket  NOT NULL DEFAULT empty_currency_basket()
+, transfer_volume_refunded   currency_basket   DEFAULT empty_currency_basket()
+, week_deposits_refunded     currency_basket   DEFAULT empty_currency_basket()
+, week_withdrawals_refunded  currency_basket   DEFAULT empty_currency_basket()
 , stage                 int              DEFAULT 1
 , public_log            text             NOT NULL
  );
