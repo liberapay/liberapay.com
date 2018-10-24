@@ -278,7 +278,7 @@ recent = query_cache.one("""
                 </dt>
                 <dd>{{ ngettext(
                     "",
-                    "Liberapay's first currency was the Euro, then the US Dollar "
+                    "Liberapay's first currency was the euro, then the US dollar "
                     "was added, and now we support a total of {n} currencies. "
                     "However, we do not handle any crypto-currency.",
                     n=len(constants.CURRENCIES)
