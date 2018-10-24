@@ -1909,7 +1909,7 @@ class Participant(Model, MixinTeam):
         giving = (cursor or self.db).one("""
             UPDATE participants p
                SET giving = coalesce_currency_amount((
-                     SELECT sum(t.amount, %(currency)s)
+                     SELECT sum(t.amount, p.main_currency)
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
                       WHERE t.tipper = %(id)s
@@ -1926,7 +1926,7 @@ class Participant(Model, MixinTeam):
                    ), p.main_currency)
              WHERE p.id = %(id)s
          RETURNING giving
-        """, dict(id=self.id, currency=self.main_currency))
+        """, dict(id=self.id))
         self.set_attributes(giving=giving)
 
         return updated
@@ -2300,8 +2300,12 @@ class Participant(Model, MixinTeam):
                          periodic_amount, is_funded, paid_in_advance)
                  SELECT DISTINCT ON (tipper)
                         ctime, tipper, %(live)s AS tippee, amount, period,
-                        periodic_amount, is_funded, paid_in_advance
-                   FROM temp_tips
+                        periodic_amount, is_funded,
+                        ( SELECT sum(t2.paid_in_advance, t.amount::currency)
+                            FROM temp_tips t2
+                           WHERE t2.tipper = t.tipper
+                        ) AS paid_in_advance
+                   FROM temp_tips t
                   WHERE (tippee = %(dead)s OR tippee = %(live)s)
                         -- Include tips *to* either the dead or live account.
                 AND NOT (tipper = %(dead)s OR tipper = %(live)s)
