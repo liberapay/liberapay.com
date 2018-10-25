@@ -64,7 +64,8 @@ limited = getattr(platform, 'api_friends_limited', False)
 % block content
 
 % if user.ANON
-<p>{% include "templates/sign-in-link.html" %}</p>
+    % from "templates/sign-in-link.html" import sign_in_link with context
+    <p>{{ sign_in_link() }}</p>
 % elif need_reconnect
 <div class="paragraph">
     <p>{{ _(

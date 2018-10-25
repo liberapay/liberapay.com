@@ -27,7 +27,7 @@
     % endif
     {% block head %}{% endblock %}
 </head>
-% from "templates/icons.html" import fontawesome, glyphicon, icon_span
+% from "templates/icons.html" import fontawesome, glyphicon
 % from 'templates/nav.html' import nav, nav_about, nav_explore with context
 % from 'templates/search.html' import search_form with context
 <body id="{{ page_id or '' }}">
@@ -62,8 +62,8 @@
             % if not user.ANON
                 % include "templates/navbar-logged-in.html"
             % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
-                % set sign_in_icon = icon_span('glyphicon glyphicon-log-in')
-                <li>{% include "templates/sign-in-link.html" %}</li>
+                % from "templates/sign-in-link.html" import sign_in_link with context
+                <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
             % endif
             </ul>
             <div class="collapse navbar-collapse navbar-left" id="navbar-liberapay-collapse">
