@@ -227,7 +227,7 @@ class Payday(object):
                    ORDER BY team, member, mtime DESC
                    ) t
              WHERE t.amount IS NOT NULL
-               AND t.amount > 0
+               AND t.amount <> 0
                AND t.team IN (SELECT id FROM payday_participants)
                AND t.member IN (SELECT id FROM payday_participants);
 
@@ -418,11 +418,23 @@ class Payday(object):
         total_income = MoneyBasket(t.full_amount for t in tips)
         if total_income == 0:
             return (), total_income
-        takes = [t for t in takes if t.amount > 0]
-        total_takes = MoneyBasket(t.amount for t in takes)
-        if total_takes == 0:
+        takes = [t for t in takes if t.amount != 0]
+        if not takes:
             return (), total_income
         fuzzy_income_sum = total_income.fuzzy_sum(ref_currency)
+        manual_takes = [t for t in takes if t.amount > 0]
+        if manual_takes:
+            manual_takes_sum = MoneyBasket(t.amount for t in manual_takes)
+            auto_take = fuzzy_income_sum - manual_takes_sum.fuzzy_sum(ref_currency)
+            if auto_take < 0:
+                auto_take = auto_take.zero()
+        else:
+            auto_take = fuzzy_income_sum
+        for take in takes:
+            if take.amount < 0:
+                take.amount = auto_take.convert(take.amount.currency)
+            assert take.amount >= 0
+        total_takes = MoneyBasket(t.amount for t in takes)
         fuzzy_takes_sum = total_takes.fuzzy_sum(ref_currency)
         tips_by_currency = group_by(tips, lambda t: t.full_amount.currency)
         takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
