@@ -192,7 +192,6 @@ class Payday(object):
                                 AND usd_w.is_current
                                 AND %(use_mangopay)s
              WHERE join_time < %(ts_start)s
-               AND (mangopay_user_id IS NOT NULL OR kind = 'group')
                AND is_suspended IS NOT true
                AND status = 'active'
           ORDER BY join_time;
