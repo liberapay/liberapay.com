@@ -1,3 +1,11 @@
-<a href="/sign-in?back_to={{ urlquote(request.line.uri) }}" rel="nofollow"
-   {% if request.method not in ('GET', 'HEAD') %} target="_blank" {% endif %}
-   >{{ sign_in_icon or '' }}<span class="text">{{ _("Log In or Create Account") }}</span></a>
+% from "templates/icons.html" import icon_span
+
+% macro sign_in_link(icon_cls='', btn_cls='link')
+    <form action="/sign-in" method="GET" {% if request.method not in ('GET', 'HEAD')
+          %} target="_blank" {% endif %}>
+        <button class="{{ btn_cls }}" name="back_to" value="{{ request.line.uri }}">
+            {{- icon_span(icon_cls) if icon_cls else '' -}}
+            <span class="text">{{ _("Log In or Create Account") }}</span>
+        </button>
+    </form>
+% endmacro
