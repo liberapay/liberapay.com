@@ -158,21 +158,25 @@ class Tests2(Harness):
         r = self.client.GET('/assets/base.css')
         assert csrf.CSRF_TOKEN not in r.headers.cookie
 
-    def test_check_token_validates_good_token(self):
+    def test_reject_forgeries_accepts_good_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'
-        assert csrf._check_token(token) is True
+        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        assert state['csrf_token'] == token
 
-    def test_check_token_rejects_overlong_token(self):
+    def test_reject_forgeries_rejects_overlong_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeefffff'
-        assert csrf._check_token(token) is False
+        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        assert state['csrf_token'] != token
 
-    def test_check_token_rejects_underlong_token(self):
+    def test_reject_forgeries_rejects_underlong_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeefff'
-        assert csrf._check_token(token) is False
+        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        assert state['csrf_token'] != token
 
-    def test_check_token_rejects_goofy_token(self):
+    def test_reject_forgeries_accepts_token_with_non_base64_chars(self):
         token = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
-        assert csrf._check_token(token) is False
+        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        assert state['csrf_token'] == token
 
     def test_malformed_body(self):
         r = self.client.POST('/', body=b'\0', content_type=b'application/x-www-form-urlencoded')

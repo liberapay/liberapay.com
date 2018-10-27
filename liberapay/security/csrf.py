@@ -10,7 +10,6 @@ See also:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import timedelta
-import re
 
 from pando.exceptions import UnknownBodyType
 
@@ -21,10 +20,6 @@ TOKEN_LENGTH = 32
 CSRF_TOKEN = str('csrf_token')  # bytes in python2, unicode in python3
 CSRF_TIMEOUT = timedelta(days=7)
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'TRACE'}
-
-_get_new_token = lambda: get_random_string(TOKEN_LENGTH)
-_token_re = re.compile(r'^[a-zA-Z0-9+/]{%d}$' % TOKEN_LENGTH)
-_check_token = lambda t: bool(_token_re.match(t))
 
 
 def reject_forgeries(state, request, response, website, _):
@@ -44,10 +39,10 @@ def reject_forgeries(state, request, response, website, _):
     except KeyError:
         cookie_token = None
 
-    if cookie_token and _check_token(cookie_token):
+    if cookie_token and len(cookie_token) == TOKEN_LENGTH:
         state['csrf_token'] = cookie_token
     else:
-        state['csrf_token'] = _get_new_token()
+        state['csrf_token'] = get_random_string(TOKEN_LENGTH)
 
     if request.line.method in SAFE_METHODS:
         # Assume that methods defined as 'safe' by RFC7231 don't need protection.
