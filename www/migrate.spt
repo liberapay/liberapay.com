@@ -45,11 +45,11 @@ elif step == '2':
             r = requests.post(
                 gratipay_migrate_url % (body['username'],),
                 data={
-                    'csrf_token': csrf_token,
+                    'csrf_token': 'ThisIsATokenThatIsThirtyTwoBytes',
                     'secret': website.env.secret_for_gratipay,
                 },
                 cookies={
-                    'csrf_token': csrf_token,
+                    'csrf_token': 'ThisIsATokenThatIsThirtyTwoBytes',
                     'session': body['session_token'],
                 }
             )

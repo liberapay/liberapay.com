@@ -184,6 +184,7 @@ algorithm.functions = [
     canonize,
     algorithm['extract_accept_header'],
     set_default_security_headers,
+    csrf.add_csrf_token_to_state,
     set_up_i18n,
     insert_constants,
     authentication.start_user_as_anon,
