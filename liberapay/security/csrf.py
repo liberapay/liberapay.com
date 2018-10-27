@@ -23,7 +23,7 @@ CSRF_TIMEOUT = timedelta(days=7)
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'TRACE'}
 
 _get_new_token = lambda: get_random_string(TOKEN_LENGTH)
-_token_re = re.compile(r'^[a-zA-Z0-9]{%d}$' % TOKEN_LENGTH)
+_token_re = re.compile(r'^[a-zA-Z0-9+/]{%d}$' % TOKEN_LENGTH)
 _check_token = lambda t: bool(_token_re.match(t))
 
 
