@@ -1,3 +1,5 @@
+BEGIN;
+
 UPDATE elsewhere
    SET extra_info = (
            extra_info::jsonb - 'events_url' - 'followers_url' - 'following_url'
@@ -6,3 +8,10 @@ UPDATE elsewhere
        )::json
  WHERE platform = 'github'
    AND json_typeof(extra_info) = 'object';
+
+UPDATE elsewhere
+   SET extra_info = (extra_info::jsonb - 'entities' - 'status')::json
+ WHERE platform = 'twitter'
+   AND json_typeof(extra_info) = 'object';
+
+END;
