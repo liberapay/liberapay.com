@@ -223,7 +223,7 @@ class MoneyBasket(object):
             if m.currency == currency:
                 a += m.amount
             elif m.amount:
-                a += m.amount * website.currency_exchange_rates[(m.currency, currency)]
+                a += m.convert(currency, rounding=None).amount
                 fuzzy = True
         r = Money(a, currency, rounding=rounding)
         r.fuzzy = fuzzy
