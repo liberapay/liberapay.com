@@ -44,6 +44,7 @@ class GitHub(PlatformOAuth2):
     x_avatar_url = key('avatar_url')
     x_is_team = key('type', clean=lambda t: t.lower() == 'organization')
     x_description = key('bio')
+    x_extra_info_drop = drop_keys(lambda k: k.endswith('_url'))
 
     # Repo info extractors
     x_repo_id = key('id')
