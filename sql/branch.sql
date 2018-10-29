@@ -10,7 +10,7 @@ UPDATE elsewhere
    AND json_typeof(extra_info) = 'object';
 
 UPDATE elsewhere
-   SET extra_info = (extra_info::jsonb - 'entities' - 'status')::json
+   SET extra_info = (extra_info::jsonb - 'id_str' - 'entities' - 'status')::json
  WHERE platform = 'twitter'
    AND json_typeof(extra_info) = 'object';
 

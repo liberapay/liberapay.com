@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from liberapay.elsewhere._base import PlatformOAuth1
-from liberapay.elsewhere._extractors import key, not_available
+from liberapay.elsewhere._extractors import drop_keys, key, not_available
 from liberapay.elsewhere._paginators import query_param_paginator
 
 
@@ -29,7 +29,7 @@ class Twitter(PlatformOAuth1):
     ratelimit_headers_prefix = 'x-rate-limit-'
 
     # User info extractors
-    x_user_id = key('id')
+    x_user_id = key('id_str')
     x_user_name = key('screen_name')
     x_display_name = key('name')
     x_email = not_available
@@ -37,3 +37,4 @@ class Twitter(PlatformOAuth1):
                        clean=lambda v: v.replace('_normal.', '.'))
     x_friends_count = key('friends_count')
     x_description = key('description')
+    x_extra_info_drop = drop_keys('id')
