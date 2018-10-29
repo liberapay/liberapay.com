@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '82'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '83'::jsonb);
 
 
 -- app configuration
@@ -646,8 +646,9 @@ CREATE TABLE emails
 , added_time        timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , verified_time     timestamptz
 , participant       bigint         NOT NULL REFERENCES participants
-, UNIQUE (participant, address)
  );
+
+CREATE UNIQUE INDEX emails_participant_address_key ON emails (participant, lower(address));
 
 -- A verified email address can't be linked to multiple participants.
 -- However, an *un*verified address *can* be linked to multiple

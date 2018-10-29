@@ -1949,3 +1949,8 @@ UPDATE participants
    SET accepted_currencies = NULL
  WHERE status = 'stub'
    AND accepted_currencies IS NOT NULL;
+
+-- migration #83
+L'affichage étendu est utilisé automatiquement.
+ALTER TABLE emails DROP CONSTRAINT emails_participant_address_key;
+CREATE UNIQUE INDEX emails_participant_address_key ON emails (participant, lower(address));
