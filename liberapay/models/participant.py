@@ -882,8 +882,9 @@ class Participant(Model, MixinTeam):
                 INSERT INTO emails AS e
                             (address, nonce, added_time, participant)
                      VALUES (%s, %s, current_timestamp, %s)
-                ON CONFLICT (participant, address) DO UPDATE
+                ON CONFLICT (participant, lower(address)) DO UPDATE
                         SET added_time = excluded.added_time
+                          , address = excluded.address
                       WHERE e.verified IS NULL
                   RETURNING *
             """, (email, str(uuid.uuid4()), self.id))

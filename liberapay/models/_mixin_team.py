@@ -7,6 +7,8 @@ from __future__ import division, print_function, unicode_literals
 from collections import OrderedDict
 from statistics import median
 
+import mangopay
+
 from liberapay.constants import TAKE_THROTTLING_THRESHOLD
 from liberapay.utils import NS, group_by
 from liberapay.utils.currencies import Money, MoneyBasket
@@ -198,6 +200,7 @@ class MixinTeam(object):
                        FROM wallets w
                       WHERE w.owner = t.tipper
                         AND w.is_current
+                        AND %(use_mangopay)s
                    ) AS balances
                  , coalesce_currency_amount((
                        SELECT sum(tr.amount, t.amount::currency)
@@ -212,7 +215,7 @@ class MixinTeam(object):
              WHERE t.tippee = %(team_id)s
                AND t.is_funded
                AND p.is_suspended IS NOT true
-        """, dict(team_id=self.id))]
+        """, dict(team_id=self.id, use_mangopay=mangopay.sandbox))]
         takes = [NS(r._asdict()) for r in (cursor or self.db).all("""
             SELECT t.*, p.main_currency, p.accepted_currencies
               FROM current_takes t
