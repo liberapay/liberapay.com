@@ -130,29 +130,26 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                    SELECT sum(tr.amount, 'EUR')
                      FROM transfers tr
                     WHERE tr.tippee = t.member
-                      AND tr.tipper = t.team
+                      AND tr.team = t.team
                       AND tr.context IN ('take', 'take-in-advance')
                       AND tr.status = 'succeeded'
                       AND tr.virtual IS NOT true
                ), 'EUR')) AS received_sum_eur
-             , coalesce_currency_amount((
+             , (convert(t.amount, 'EUR') + coalesce_currency_amount((
                    SELECT sum(t2.amount, 'EUR')
-                     FROM ( SELECT DISTINCT ON (payday_id) t2.amount
-                              FROM ( SELECT t2.*
-                                          , coalesce((
-                                                SELECT payday.id
-                                                  FROM paydays payday
-                                                 WHERE payday.ts_start > t2.mtime
-                                              ORDER BY payday.id ASC
-                                                 LIMIT 1
-                                            ), -1) AS payday_id
+                     FROM ( SELECT ( SELECT t2.amount
                                        FROM takes t2
-                                      WHERE t2.team = t.team
-                                        AND t2.member = t.member
-                                   ) AS t2
-                          ORDER BY t2.payday_id, t2.member, t2.mtime DESC
+                                      WHERE t2.member = t.member
+                                        AND t2.team = t.team
+                                        AND t2.mtime < coalesce(
+                                                payday.ts_start, current_timestamp
+                                            )
+                                   ORDER BY t2.mtime DESC
+                                      LIMIT 1
+                                   ) AS amount
+                              FROM paydays payday
                           ) t2
-               ), 'EUR') AS takes_sum_eur
+               ), 'EUR')) AS takes_sum_eur
           FROM current_takes t
          WHERE t.team = %s
            AND EXISTS (
