@@ -27,13 +27,13 @@ teams = website.db.all("""
     <p>{{ ngettext(
         "You have {n} active donor who is giving you {money_amount} per week.",
         "You have {n} active donors giving you a total of {money_amount} per week.",
-        participant.npatrons, money_amount=receiving
+        participant.npatrons + participant.nteampatrons, money_amount=receiving
     ) }}</p>
 % else
     <p>{{ ngettext(
         "{0} receives {1} per week from {n} patron.",
         "{0} receives {1} per week from {n} patrons.",
-        participant.npatrons, participant.username, receiving
+        participant.npatrons + participant.nteampatrons, participant.username, receiving
     ) }}</p>
 % endif
 
