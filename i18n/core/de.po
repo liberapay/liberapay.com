@@ -2546,15 +2546,11 @@ msgstr "Transaktions-ID: {0}"
 msgid "This document is not an invoice."
 msgstr "Dieses Dokument ist keine Rechnung."
 
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} erhält {1} pro Woche."
+msgid "You can't receive new donations until you've configured payment processing."
+msgstr ""
 
-msgid "You can't receive money until you've configured a payment account."
-msgstr "Sie können kein Geld empfangen bis Sie eine Zahlungsmethode eingestellt haben."
-
-msgid "Configure payments"
-msgstr "Zahlungen konfigurieren"
+msgid "Configure payment processing"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "Sie sind nicht Mitglied eines Teams."
@@ -3904,8 +3900,10 @@ msgid "Create your account"
 msgstr "Erstellen Sie Ihr Konto"
 
 #, python-brace-format
-msgid "You receive {0} per week."
-msgstr "Sie erhalten {0} pro Woche."
+msgid "You have {n} active donor who is giving you {money_amount} per week."
+msgid_plural "You have {n} active donors giving you a total of {money_amount} per week."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."

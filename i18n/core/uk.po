@@ -2565,15 +2565,11 @@ msgstr "ID транзакції: {0}"
 msgid "This document is not an invoice."
 msgstr "Цей документ не є рахунком."
 
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} отримує {1} в тиждень."
+msgid "You can't receive new donations until you've configured payment processing."
+msgstr ""
 
-msgid "You can't receive money until you've configured a payment account."
-msgstr "Ви не можете отримувати гроші, поки ви не налаштуєте рахунок для платежів."
-
-msgid "Configure payments"
-msgstr "Налаштувати платежі"
+msgid "Configure payment processing"
+msgstr ""
 
 msgid "You are not a member of any team."
 msgstr "Ви не перебуваєте в жодній команді."
@@ -3947,8 +3943,11 @@ msgid "Create your account"
 msgstr "Створити аккаунт"
 
 #, python-brace-format
-msgid "You receive {0} per week."
-msgstr "Ви отримуєте {0} в тиждень."
+msgid "You have {n} active donor who is giving you {money_amount} per week."
+msgid_plural "You have {n} active donors giving you a total of {money_amount} per week."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."

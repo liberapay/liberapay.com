@@ -2528,14 +2528,10 @@ msgstr "Transaktionsid: {0}"
 msgid "This document is not an invoice."
 msgstr "Detta dokument är inte en faktura."
 
-#, python-brace-format
-msgid "{0} receives {1} per week."
-msgstr "{0} tar emot {1} per vecka."
-
-msgid "You can't receive money until you've configured a payment account."
+msgid "You can't receive new donations until you've configured payment processing."
 msgstr ""
 
-msgid "Configure payments"
+msgid "Configure payment processing"
 msgstr ""
 
 msgid "You are not a member of any team."
@@ -3884,8 +3880,10 @@ msgid "Create your account"
 msgstr "Skapa ett konto"
 
 #, python-brace-format
-msgid "You receive {0} per week."
-msgstr "Du mottar {0} per vecka."
+msgid "You have {n} active donor who is giving you {money_amount} per week."
+msgid_plural "You have {n} active donors giving you a total of {money_amount} per week."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
