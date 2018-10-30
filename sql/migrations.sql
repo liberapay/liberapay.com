@@ -1951,6 +1951,19 @@ UPDATE participants
    AND accepted_currencies IS NOT NULL;
 
 -- migration #83
-L'affichage étendu est utilisé automatiquement.
 ALTER TABLE emails DROP CONSTRAINT emails_participant_address_key;
 CREATE UNIQUE INDEX emails_participant_address_key ON emails (participant, lower(address));
+
+-- migration #84
+UPDATE elsewhere
+   SET extra_info = (
+           extra_info::jsonb - 'events_url' - 'followers_url' - 'following_url'
+           - 'gists_url' - 'html_url' - 'organizations_url' - 'received_events_url'
+           - 'repos_url' - 'starred_url' - 'subscriptions_url'
+       )::json
+ WHERE platform = 'github'
+   AND json_typeof(extra_info) = 'object';
+UPDATE elsewhere
+   SET extra_info = (extra_info::jsonb - 'id_str' - 'entities' - 'status')::json
+ WHERE platform = 'twitter'
+   AND json_typeof(extra_info) = 'object';
