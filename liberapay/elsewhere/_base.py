@@ -246,6 +246,8 @@ class Platform(object):
         r.is_team = self.x_is_team(r, info, False)
         r.description = self.x_description(r, info, None)
         r.extra_info = info
+        if hasattr(self, 'x_extra_info_drop'):
+            self.x_extra_info_drop(r.extra_info)
         return r
 
     def get_team_members(self, account, domain, page_url=None):
