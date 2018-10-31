@@ -393,7 +393,6 @@ input.search {
     padding-bottom: 1em;
 }
 .mini-user-admin {
-    border-right: 1px solid #ddd;
     text-align: center;
     .avatar-cutter-120 {
         display: inline-block;
@@ -493,6 +492,13 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
     font-family: $font-family-serif;
     h1, h2, h3, h4 {
         color: #956410;
+    }
+    &.embedded {
+        border-left: 2px solid $gray-lighter;
+        padding-left: 2ex;
+    }
+    &.raw {
+        white-space: pre-line;
     }
 }
 section.community-sidebar {
