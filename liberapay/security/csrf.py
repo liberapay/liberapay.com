@@ -10,7 +10,6 @@ See also:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import timedelta
-import re
 
 from pando.exceptions import UnknownBodyType
 
@@ -22,61 +21,60 @@ CSRF_TOKEN = str('csrf_token')  # bytes in python2, unicode in python3
 CSRF_TIMEOUT = timedelta(days=7)
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'TRACE'}
 
-_get_new_token = lambda: get_random_string(TOKEN_LENGTH)
-_token_re = re.compile(r'^[a-zA-Z0-9]{%d}$' % TOKEN_LENGTH)
-_sanitize_token = lambda t: t if _token_re.match(t) else None
 
-
-def extract_token_from_cookie(request):
-    """Given a Request object, return a csrf_token.
-    """
-
+def reject_forgeries(state, request, response, website, _):
+    request_path = request.path.raw
     off = (
-        # Turn off CSRF protection on assets, to avoid busting the cache.
-        request.path.raw.startswith('/assets/') or
-        # Turn off CSRF protection on callbacks, so they can receive POST requests.
-        request.path.raw.startswith('/callbacks/') or
-        # Turn off CSRF when using HTTP auth, so API users can use POST and others.
-        b'Authorization' in request.headers
+        # Don't generate CSRF tokens for assets, to avoid busting the cache.
+        request_path.startswith('/assets/') or
+        # Don't generate or check CSRF tokens for callbacks, it's not necessary.
+        request_path.startswith('/callbacks/')
     )
-
     if off:
-        token = None
-    else:
-        try:
-            token = request.headers.cookie[CSRF_TOKEN].value
-        except KeyError:
-            token = _get_new_token()
-        else:
-            token = _sanitize_token(token) or _get_new_token()
-
-    return {'csrf_token': token}
-
-
-def reject_forgeries(request, response, csrf_token):
-    if csrf_token is None or (request.path.raw == '/migrate' and not request.qs):
-        # CSRF protection is turned off for this request
         return
 
-    # Assume that anything not defined as 'safe' by RFC7231 needs protection.
-    if request.line.method not in SAFE_METHODS:
+    # Get token from cookies.
+    try:
+        cookie_token = request.headers.cookie[CSRF_TOKEN].value
+    except KeyError:
+        cookie_token = None
 
-        # Check non-cookie token for match.
-        second_token = ""
-        if request.line.method == "POST":
-            try:
-                if isinstance(request.body, dict):
-                    second_token = request.body.get('csrf_token', '')
-            except UnknownBodyType:
-                pass
+    if cookie_token and len(cookie_token) == TOKEN_LENGTH:
+        state['csrf_token'] = cookie_token
+    else:
+        state['csrf_token'] = get_random_string(TOKEN_LENGTH)
 
-        if second_token == "":
-            # Fall back to X-CSRF-TOKEN, to make things easier for AJAX,
-            # and possible for PUT/DELETE.
-            second_token = request.headers.get(b'X-CSRF-TOKEN', b'').decode('ascii', 'replace')
+    if request.line.method in SAFE_METHODS:
+        # Assume that methods defined as 'safe' by RFC7231 don't need protection.
+        return
+    elif request_path == '/migrate' and not request.qs:
+        # CSRF protection is turned off for this request.
+        return
+    elif not cookie_token:
+        raise response.error(403, _(
+            "A security check has failed. Please make sure your browser is "
+            "configured to allow cookies for {domain}, then try again.",
+            domain=website.canonical_host
+        ))
 
-        if not constant_time_compare(second_token, csrf_token):
-            raise response.error(403, "Bad CSRF cookie")
+    # Check non-cookie token for match.
+    second_token = ""
+    if request.line.method == "POST":
+        try:
+            if isinstance(request.body, dict):
+                second_token = request.body.get('csrf_token', '')
+        except UnknownBodyType:
+            pass
+
+    if second_token == "":
+        # Fall back to X-CSRF-TOKEN, to make things easier for AJAX,
+        # and possible for PUT/DELETE.
+        second_token = request.headers.get(b'X-CSRF-TOKEN', b'').decode('ascii', 'replace')
+        if not second_token:
+            raise response.error(403, "The X-CSRF-TOKEN header is missing.")
+
+    if not constant_time_compare(second_token, state['csrf_token']):
+        raise response.error(403, "The anti-CSRF tokens don't match.")
 
 
 def add_token_to_response(response, csrf_token=None):

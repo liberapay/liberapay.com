@@ -1,49 +1,26 @@
 """
-Copied from Django
+Originally copied from Django
 """
 from __future__ import unicode_literals
 
-import hashlib
-import random
-import string
-import time
+from binascii import b2a_base64
+from os import urandom
 
 
-# Use the system PRNG if possible
-try:
-    random = random.SystemRandom()
-    using_sysrandom = True
-except NotImplementedError:
-    import warnings
-    warnings.warn('A secure pseudo-random number generator is not available '
-                  'on your system. Falling back to Mersenne Twister.')
-    using_sysrandom = False
-
-
-pool = string.digits + string.ascii_letters + string.punctuation
-UNSECURE_RANDOM_STRING = "".join([random.choice(pool) for i in range(64)])
-
-
-def get_random_string(length=12,
-                      allowed_chars='abcdefghijklmnopqrstuvwxyz'
-                                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'):
+def get_random_string(length=32, altchars=None):
     """
     Returns a securely generated random string.
 
-    The default length of 12 with the a-z, A-Z, 0-9 character set returns
-    a 71-bit value. log_2((26+26+10)^12) =~ 71 bits
+    Args:
+        length (int): the number of base64 characters to return
+        altchars (bytes): optional replacement characters for `+` and `/`, e.g. b'-_'
+
+    The default length (32) returns a value with 192 bits of entropy (log(64**32, 2)).
     """
-    if not using_sysrandom:
-        # This is ugly, and a hack, but it makes things better than
-        # the alternative of predictability. This re-seeds the PRNG
-        # using a value that is hard for an attacker to predict, every
-        # time a random string is required. This may change the
-        # properties of the chosen random sequence slightly, but this
-        # is better than absolute predictability.
-        random.seed(hashlib.sha256(
-            "%s%s%s" % (random.getstate(), time.time(), UNSECURE_RANDOM_STRING)
-        ).digest())
-    return ''.join([random.choice(allowed_chars) for i in range(length)])
+    token = b2a_base64(urandom(length * 6 // 8 + 1))[:length]
+    if altchars:
+        token = token.replace(b'+', altchars[0]).replace(b'/', altchars[1])
+    return token if str is bytes else token.decode('ascii')
 
 
 def constant_time_compare(val1, val2):
