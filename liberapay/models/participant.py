@@ -2566,11 +2566,17 @@ class Participant(Model, MixinTeam):
 
         return output
 
-    def path(self, path):
-        return '/%s/%s' % (self.username, path)
+    def path(self, path, query=''):
+        if query:
+            assert '?' not in path
+            if isinstance(query, dict):
+                query = '?' + urlencode(query)
+            else:
+                assert query[0] == '?'
+        return '/%s/%s%s' % (self.username, path, query)
 
     def link(self, path='', query=''):
-        return HTML_A % (self.url(path, query), self.username)
+        return HTML_A % (self.path(path, query), self.username)
 
     @property
     def is_person(self):
