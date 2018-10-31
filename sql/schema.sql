@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '84'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '85'::jsonb);
 
 
 -- app configuration
@@ -419,7 +419,7 @@ CREATE TABLE payment_accounts
 , UNIQUE (provider, id, participant)
 );
 
-CREATE OR REPLACE FUNCTION update_payment_providers() RETURNS trigger AS $$
+CREATE FUNCTION update_payment_providers() RETURNS trigger AS $$
     DECLARE
         rec record;
     BEGIN
@@ -440,6 +440,7 @@ CREATE OR REPLACE FUNCTION update_payment_providers() RETURNS trigger AS $$
                           )
                       AND a.is_current IS TRUE
                       AND a.verified IS TRUE
+                      AND coalesce(a.charges_enabled, true)
                ), 0)
          WHERE id = rec.participant
             OR id IN (
