@@ -175,6 +175,10 @@ class Locale(babel.core.Locale):
             kw.setdefault('granularity', 'day')
         return format_timedelta(to_age(o), locale=self, **kw)
 
+    @property
+    def subdomain(self):
+        return 'zh' if self.language == 'zh_Hant' else self.language
+
 
 ALIASES = {k: v.lower() for k, v in babel.core.LOCALE_ALIASES.items()}
 ALIASES_R = {v: k for k, v in ALIASES.items()}
