@@ -682,10 +682,13 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     loc_url = canonical_scheme+'://%s.'+canonical_host
     domain, port = (canonical_host.split(':') + [None])[:2]
     port = int(port) if port else socket.getservbyname(canonical_scheme, 'tcp')
-    subdomains = {k: loc_url % k for k in locales if resolve(k + '.' + domain, port)}
+    subdomains = {
+        l.subdomain: loc_url % l.subdomain for l in locales.values()
+        if resolve(l.subdomain + '.' + domain, port)
+    }
     lang_list = sorted(
         (
-            (l.completion, l.language, l.language_name.title(), loc_url % l.language)
+            (l.completion, l.language, l.language_name.title(), loc_url % l.subdomain)
             for l in set(locales.values()) if l.completion > 0.5
         ),
         key=lambda t: (-t[0], t[1]),
