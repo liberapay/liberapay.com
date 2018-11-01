@@ -35,3 +35,11 @@ class Tests(Harness):
     def test_parse_money_amount_rejects_ambiguous_numbers(self):
         with self.assertRaises(AmbiguousNumber):
             LOCALE_EN.parse_money_amount("10,00", 'EUR')
+
+    def test_chinese_visitor_gets_chinese_locale(self):
+        state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh', want='state')
+        assert state['locale'] == self.website.locales['zh']
+        state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh_Hans', want='state')
+        assert state['locale'] == self.website.locales['zh']
+        state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh-CN', want='state')
+        assert state['locale'] == self.website.locales['zh']
