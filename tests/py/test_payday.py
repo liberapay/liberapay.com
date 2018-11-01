@@ -118,9 +118,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert carl.receiving == EUR('0.00')
             assert carl.npatrons == 0
             assert carl.nteampatrons == 0
-            assert dana.receiving == EUR('3.00')
+            assert dana.receiving == EUR('3.49')
             assert dana.npatrons == 1
-            assert dana.nteampatrons == 0
+            assert dana.nteampatrons == 1
             assert emma.receiving == EUR('0.50')
             assert emma.npatrons == 1
             assert emma.nteampatrons == 0
@@ -135,7 +135,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             team2 = Participant.from_username('team2')
             assert team2.receiving == EUR('0.49')
             assert team2.npatrons == 1
-            assert team2.leftover == EUR('0.49')
+            assert team2.leftover == EUR('0.00')
 
             janet = self.janet.refetch()
             assert janet.giving == 0

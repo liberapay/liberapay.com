@@ -41,7 +41,7 @@ class MixinTeam(object):
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, Money.ZEROS[member.main_currency], self, cursor=cursor)
+        self.set_take_for(member, Money(-1, member.main_currency), self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
