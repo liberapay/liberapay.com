@@ -134,9 +134,11 @@ class TestCurrenciesInDB(Harness):
         expected = MoneyBasket()
         actual = self.db.one("SELECT basket_sum(x) FROM unnest(NULL::currency_amount[]) x")
         assert expected == actual
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(ARRAY[NULL]::currency_amount[]) x")
+        assert expected == actual
         # Non-empty sum
         expected = MoneyBasket(EUR=D('0.33'), USD=D('0.77'))
-        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected),))
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected) + [None],))
         assert expected == actual
 
     def test_sums(self):
