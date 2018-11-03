@@ -51,7 +51,7 @@ def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
 
 def _Money_eq(self, other):
     if isinstance(other, self.__class__):
-        return self.__dict__ == other.__dict__
+        return self.amount == other.amount and self.currency == other.currency
     if isinstance(other, (Decimal, Number)):
         return self.amount == other
     if isinstance(other, MoneyBasket):

@@ -134,10 +134,34 @@ class TestCurrenciesInDB(Harness):
         expected = MoneyBasket()
         actual = self.db.one("SELECT basket_sum(x) FROM unnest(NULL::currency_amount[]) x")
         assert expected == actual
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(ARRAY[NULL]::currency_amount[]) x")
+        assert expected == actual
         # Non-empty sum
         expected = MoneyBasket(EUR=D('0.33'), USD=D('0.77'))
-        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected),))
+        actual = self.db.one("SELECT basket_sum(x) FROM unnest(%s) x", (list(expected) + [None],))
         assert expected == actual
+
+    def test_sums(self):
+        # Empty sum
+        actual = self.db.one("SELECT sum(x) FROM unnest(NULL::currency_amount[]) x")
+        assert actual is None
+        actual = self.db.one("SELECT sum(x) FROM unnest(ARRAY[NULL]::currency_amount[]) x")
+        assert actual is None
+        # Empty fuzzy sum
+        actual = self.db.one("SELECT sum(x, 'EUR') FROM unnest(NULL::currency_amount[]) x")
+        assert actual is None
+        actual = self.db.one("SELECT sum(x, 'EUR') FROM unnest(ARRAY[NULL]::currency_amount[]) x")
+        assert actual is None
+        # Single-currency sum
+        amounts = [JPY('133'), JPY('977')]
+        expected = sum(amounts)
+        actual = self.db.one("SELECT sum(x, 'JPY') FROM unnest(%s) x", (amounts + [None],))
+        assert expected == actual
+        # Fuzzy sum
+        amounts = [EUR('0.50'), USD('1.20')]
+        expected = MoneyBasket(*amounts).fuzzy_sum('EUR')
+        actual = self.db.one("SELECT sum(x, 'EUR') FROM unnest(%s) x", (amounts + [None],))
+        assert expected == actual, (expected.__dict__, actual.__dict__)
 
 
 class TestCurrenciesSimplate(Harness):
