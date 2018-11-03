@@ -91,7 +91,7 @@ Liberapay.charts.make = function(series, $container) {
             bar.append(shaded);
 
             var xTick = $('<span>').addClass('x-tick');
-            xTick.text(point.xText || index+skip+1).attr('title', point.xTitle);
+            xTick.text(point.date);
             bar.append(xTick);
 
             // Display a max flag (only once)
