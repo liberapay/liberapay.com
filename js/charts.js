@@ -1,32 +1,35 @@
 Liberapay.charts = {};
 
 Liberapay.charts.init = function() {
-    $('[data-charts]').click(function() {
-        this.disabled = true;
-        Liberapay.charts.load($(this).data('charts'), this);
-    });
-    $('[data-charts-autoload]').each(function() {
-        Liberapay.charts.load($(this).data('charts-autoload'));
+    $('[data-charts]').each(function () {
+        var url = $(this).data('charts');
+        if (this.tagName == 'BUTTON') {
+            var $container = $($(this).data('charts-container'));
+            $(this).click(function() {
+                $(this).attr('disabled', '').prop('disabled');
+                Liberapay.charts.load(url, $container);
+            });
+        } else {
+            Liberapay.charts.load(url, $(this));
+        }
     });
 }
 
-Liberapay.charts.load = function(url, button) {
+Liberapay.charts.load = function(url, $container) {
     jQuery.get(url, function(series) {
         $(function() {
-            Liberapay.charts.make(series, button);
+            Liberapay.charts.make(series, $container);
         });
     }).fail(Liberapay.error);
 }
 
-Liberapay.charts.make = function(series, button) {
+Liberapay.charts.make = function(series, $container) {
     if (series.length) {
         $('.chart-wrapper').show();
-    } else if (button && $(button).data('msg-empty')) {
-        var $btn = $(button);
-        $btn.attr('disabled', '').prop('disabled');
-        $btn.after($('<span>').text(' '+$btn.data('msg-empty')));
-        return;
     } else {
+        if (!!$container.data('msg-empty')) {
+            $container.append($('<span>').text(' '+$container.data('msg-empty')));
+        }
         return;
     }
 
