@@ -1,5 +1,6 @@
 .chart-wrapper {
     display: none;
+    overflow: hidden;
 
     $chart-bar-color: #9ea0ff;
     $chart-numbers-color: #444;
@@ -27,8 +28,10 @@
         bottom: -17px;
         right: 0;
         padding: 3px 1px 0 0;
-        border: 1px solid $chart-numbers-color;
-        border-style: none solid none none;
+        border-color: transparent;
+        border-right-color: $chart-numbers-color;
+        border-style: solid;
+        border-width: 0 1px;
         color: $chart-numbers-color;
         background: white;
         white-space: nowrap;
@@ -44,6 +47,19 @@
         border: 2px solid $chart-numbers-color;
         border-radius: 4px 0 0 4px;
         padding: 2px 3px;
+    }
+    .bar.left {
+        span.y-label {
+            border-radius: 0 4px 4px 0;
+            left: 0;
+            right: auto;
+        }
+        span.x-tick {
+            border-left-color: $chart-numbers-color;
+            border-right-color: transparent;
+            left: 0;
+            right: auto;
+        }
     }
     .bar:not(.flagged):not(.max):not(:hover) span {
         display: none;

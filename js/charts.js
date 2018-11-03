@@ -88,6 +88,9 @@ Liberapay.charts.make = function(series, $container) {
             var bar = $('<div>').addClass('bar');
             var shaded = $('<div>').addClass('shaded');
             shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
+            if (index < series.length / 2) {
+                bar.addClass('left');
+            }
             bar.append(shaded);
 
             var xTick = $('<span>').addClass('x-tick');
