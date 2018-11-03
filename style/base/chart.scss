@@ -64,6 +64,26 @@
     .bar:not(.flagged):not(.max):not(:hover) span {
         display: none;
     }
+    .bar:hover span {
+        z-index: 10000;
+    }
+    .bar:hover span.x-tick {
+        // Mask the other ticks
+        &::before, &::after {
+            background: #fff;
+            bottom: 0;
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 10000px;
+        }
+        &::before {
+            left: -10001px;  // The extra pixel is for the border.
+        }
+        &::after {
+            right: -10001px;
+        }
+    }
     .x-axis {
         text-align: center;
         padding-top: 14pt;
