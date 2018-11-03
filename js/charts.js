@@ -100,7 +100,7 @@ Liberapay.charts.make = function(series, $container) {
             // Display a max flag (only once)
             if (y === maxes[chart_index] && !chart.data('max-applied')) {
                 bar.addClass('flagged');
-                chart.data('max-applied', true)
+                chart.data('max-applied', true);
             }
 
             bar.css('width', W);
