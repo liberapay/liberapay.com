@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-11-02 15:51+0000\n"
-"Last-Translator: jxt <chihsun.tsai@gmail.com>\n"
+"PO-Revision-Date: 2018-11-03 15:44+0000\n"
+"Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Traditional Chinese <https://hosted.weblate.org/projects/liberapay/core/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
@@ -1707,7 +1707,7 @@ msgstr "接受外幣可以提高收入說服其它國家的人捐款支助，不
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr "Stripe 可自動將基金轉成您主動使用的貨幣，而 PayPal 除非有明白告之則預設為外幣支付。如果是商務級 PayPal 帳戶則可選擇自動將收入支付的外幣轉成主要使用貨幣。此選項目前放在{link_open}收款頁的偏好設定{link_open}之下。"
+msgstr "Stripe 可自動將基金轉成您主動使用的貨幣，而 PayPal 除非有明白告之則預設為外幣支付。如果是商務級 PayPal 帳戶則可選擇自動將收入支付的外幣轉成主要使用貨幣。此選項目前放在{link_open}收款頁的偏好設定{link_close}之下。"
 
 msgid ""
 "Warning: Doing this will remove all the tips you are currently receiving.\n"
@@ -3412,7 +3412,7 @@ msgstr "你也可以追踪{1}Liberapay 軟體{0}的開發進展， {2}了解Libe
 #, python-brace-format
 msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
 msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] "{stripe_link_open}{n}國家的創作者可以透過 Stripe{link_close}使用 Liberapay，另有超過{paypal_link_open} 200 個國家支援 PayPal{link_close}."
+msgstr[0] "{stripe_link_open}{n}國家的創作者可以透過 Stripe{link_close}使用 Liberapay，另有超過{paypal_link_open} 200 個國家支援 PayPal{link_close}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
@@ -3680,7 +3680,7 @@ msgstr[0] "以下為{n}個隨機的擁有{0}帳號的Liberapay用戶"
 #, python-brace-format
 msgid "<unused singular (hash=fa66aed7cc36b8a0d266394a9f2b8fef)>"
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] "本頁以新舊順序顯示{n}個擁有{0}帳號的Liberapay用戶。"
+msgstr[0] "本頁以新舊順序顯示{n}個擁有{0}帳號的 Liberapay 使用者。"
 
 #, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
@@ -3970,7 +3970,7 @@ msgstr[0] "它目前亦正被翻譯成{n}種不同的語言（{link_open}您也�
 #, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
 msgid_plural "Your profile descriptions and other texts can be published in up to {n} languages."
-msgstr[0] "您的个人资料说明和其他文字可以以 {n} 种语言发布。"
+msgstr[0] "您的個人檔案描述與其他文字將以多達{n}種語言發佈。"
 
 msgid "Multiple currencies"
 msgstr "多種貨幣"
@@ -3978,7 +3978,7 @@ msgstr "多種貨幣"
 #, python-brace-format
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
-msgstr[0] "Liberapay 一開始以歐元為主，之後加入美元，目前已支援{n}種貨幣，但尚無處理加密貨幣。"
+msgstr[0] "Liberapay 一開始以歐元為主，之後加入美元，目前已支援{n}種貨幣，但還不能處理加密貨幣。"
 
 msgid "Integrations"
 msgstr "集成"
@@ -3986,7 +3986,7 @@ msgstr "集成"
 #, python-brace-format
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
-msgstr[0] "您可以在 {platform1} ，{platform2} ，{platform3} 和 {n} 个其他平台上链接到您自己的个人资料。"
+msgstr[0] "您可以在 {platform1} ，{platform2} ，{platform3} 和 {n} 個其他平臺上連結自己的個人檔案。"
 
 #, python-brace-format
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
@@ -4022,17 +4022,17 @@ msgstr "最近活動"
 #, python-brace-format
 msgid "<unused singular (hash=4f244253609169be367af59d103aa723)>"
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] "上一個月有{n}個用戶被註冊。最近一個是在{0}前註冊的。"
+msgstr[0] "上一個月有{n}個使用者被註冊。最近一個是在{0}前註冊的。"
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] "上個月有{n}個新捐款被發起，每週全部資助提高了{money_amount} 。"
+msgstr[0] "上個月有{n}個新捐款被發起，每週全部資助提高了{money_amount}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "上個月新增{n}個 {link_open}捐款承諾{link_close} , 可請求的捐款需求每週增加了 {money_amount}。"
+msgstr[0] "上個月新增{n}個 {link_open}捐款承諾{link_close}，可請求的捐款需求每週增加了 {money_amount}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
