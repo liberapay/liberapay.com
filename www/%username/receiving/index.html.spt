@@ -109,4 +109,22 @@ teams = website.db.all("""
 </div>
 </div>
 % endif
+
+<h3>{{ _("History") }}</h3>
+<noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
+<div data-charts="{{ participant.path('charts.json') }}" data-msg-empty="{{ _('No data to show.') }}">
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h4>{{ _("Income Per Week (in {currency})", currency=Currency(participant.main_currency)) }}</h4>
+        <div class="chart" data-chart="receipts"></div>
+        <div class="x-axis"></div>
+    </div>
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h4>{{ _("Number of Patrons Per Week") }}</h4>
+        <div class="chart" data-chart="npatrons"></div>
+        <div class="x-axis"></div>
+    </div>
+</div>
+
 % endblock
