@@ -22,18 +22,18 @@ teams = website.db.all("""
 % from "templates/team-members.html" import team_takes_table with context
 % block content
 
-% set receiving = participant.receiving
+% set p = participant
 % if participant == user
     <p>{{ ngettext(
         "You have {n} active donor who is giving you {money_amount} per week.",
         "You have {n} active donors giving you a total of {money_amount} per week.",
-        participant.npatrons + participant.nteampatrons, money_amount=receiving
+        p.npatrons + p.nteampatrons, money_amount=p.receiving
     ) }}</p>
 % else
     <p>{{ ngettext(
         "{0} receives {1} per week from {n} patron.",
         "{0} receives {1} per week from {n} patrons.",
-        participant.npatrons + participant.nteampatrons, participant.username, receiving
+        p.npatrons + p.nteampatrons, p.username, p.receiving
     ) }}</p>
 % endif
 
@@ -50,6 +50,19 @@ teams = website.db.all("""
 
 <h3 id="teams">{{ _("Teams") }}</h3>
 % if teams
+    % if p.npatrons and p.nteampatrons
+        <p>{{ _(
+            "Donations through teams make up {income_percent} of your income "
+            "({team_income} of {total_income}) and {patrons_percent} of your "
+            "donors ({nteampatrons} of {npatrons}).",
+            income_percent=locale.format_percent(p.taking / p.receiving),
+            team_income=p.taking,
+            total_income=p.receiving,
+            patrons_percent=locale.format_percent(p.nteampatrons / (p.npatrons + p.nteampatrons)),
+            nteampatrons=p.nteampatrons,
+            npatrons=p.npatrons + p.nteampatrons
+        ) }}</p>
+    % endif
     % for team in teams
         <h4>{{ team.username }}
             <a href="/{{ team.username }}/membership/leave?back_to={{ urlquote(request.line.uri) }}"
