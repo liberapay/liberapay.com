@@ -117,7 +117,7 @@ def out():
     % if last_payday
     <noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
 
-    <div class="row" data-charts-autoload="/about/charts.json">
+    <div class="row" data-charts="/about/charts.json">
         <div class="chart-wrapper col-md-6">
             <a name="users"></a>
             <h3>{{ _("Open Accounts") }}</h3>

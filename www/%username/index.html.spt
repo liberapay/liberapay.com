@@ -107,23 +107,23 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
         <button class="btn btn-default" type="button"
                 data-charts="{{ participant.path('charts.json') }}"
-                data-msg-empty="{{ _('No data to show.') }}">{{
+                data-charts-container="#charts-container">{{
             _("View income history")
         }}</button>
         <noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
 
-        <div>
+        <div id="charts-container" data-msg-empty="{{ _('No data to show.') }}">
             <div class="chart-wrapper">
                 <a name="gifts"></a>
                 <h4>{{ _("Euros Received Per Week") }}</h4>
                 <div class="chart" data-chart="receipts"></div>
-                <div class="x-axis">{{ _("weeks") }}</div>
+                <div class="x-axis"></div>
             </div>
             <div class="chart-wrapper">
                 <a name="gifts"></a>
                 <h4>{{ _("Number of Patrons Per Week") }}</h4>
                 <div class="chart" data-chart="npatrons"></div>
-                <div class="x-axis">{{ _("weeks") }}</div>
+                <div class="x-axis"></div>
             </div>
         </div>
     % endif

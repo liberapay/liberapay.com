@@ -1,32 +1,35 @@
 Liberapay.charts = {};
 
 Liberapay.charts.init = function() {
-    $('[data-charts]').click(function() {
-        this.disabled = true;
-        Liberapay.charts.load($(this).data('charts'), this);
-    });
-    $('[data-charts-autoload]').each(function() {
-        Liberapay.charts.load($(this).data('charts-autoload'));
+    $('[data-charts]').each(function () {
+        var url = $(this).data('charts');
+        if (this.tagName == 'BUTTON') {
+            var $container = $($(this).data('charts-container'));
+            $(this).click(function() {
+                $(this).attr('disabled', '').prop('disabled');
+                Liberapay.charts.load(url, $container);
+            });
+        } else {
+            Liberapay.charts.load(url, $(this));
+        }
     });
 }
 
-Liberapay.charts.load = function(url, button) {
+Liberapay.charts.load = function(url, $container) {
     jQuery.get(url, function(series) {
         $(function() {
-            Liberapay.charts.make(series, button);
+            Liberapay.charts.make(series, $container);
         });
     }).fail(Liberapay.error);
 }
 
-Liberapay.charts.make = function(series, button) {
+Liberapay.charts.make = function(series, $container) {
     if (series.length) {
         $('.chart-wrapper').show();
-    } else if (button && $(button).data('msg-empty')) {
-        var $btn = $(button);
-        $btn.attr('disabled', '').prop('disabled');
-        $btn.after($('<span>').text(' '+$btn.data('msg-empty')));
-        return;
     } else {
+        if (!!$container.data('msg-empty')) {
+            $container.append($('<span>').text(' '+$container.data('msg-empty')));
+        }
         return;
     }
 
@@ -85,16 +88,19 @@ Liberapay.charts.make = function(series, button) {
             var bar = $('<div>').addClass('bar');
             var shaded = $('<div>').addClass('shaded');
             shaded.html('<span class="y-label">'+ y.toFixed() +'</span>');
+            if (index < series.length / 2) {
+                bar.addClass('left');
+            }
             bar.append(shaded);
 
             var xTick = $('<span>').addClass('x-tick');
-            xTick.text(point.xText || index+skip+1).attr('title', point.xTitle);
+            xTick.text(point.date);
             bar.append(xTick);
 
             // Display a max flag (only once)
             if (y === maxes[chart_index] && !chart.data('max-applied')) {
                 bar.addClass('flagged');
-                chart.data('max-applied', true)
+                chart.data('max-applied', true);
             }
 
             bar.css('width', W);

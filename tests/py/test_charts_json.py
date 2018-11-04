@@ -3,8 +3,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 import json
 
-from pando.utils import utcnow
-
 from liberapay.billing.payday import Payday
 from liberapay.testing import EUR
 from liberapay.testing.mangopay import FakeTransfersHarness
@@ -151,7 +149,6 @@ class TestChartsJson(FakeTransfersHarness):
             "nusers": '4',
             "week_deposits": zero,
             "week_withdrawals": zero,
-            "xTitle": utcnow().strftime('%Y-%m-%d'),
         }
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]
         assert actual == expected
