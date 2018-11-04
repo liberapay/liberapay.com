@@ -10,11 +10,11 @@ title = participant.username
 subhead = _("Receiving")
 
 teams = website.db.all("""
-    SELECT p.*::participants
-      FROM current_takes x
-      JOIN participants p ON p.id = x.team
-     WHERE member=%s
-  ORDER BY x.amount DESC
+    SELECT p
+      FROM current_takes t
+      JOIN participants p ON p.id = t.team
+     WHERE t.member = %s
+  ORDER BY t.amount DESC
 """, (participant.id,))
 
 [-----------------------------------------------------------------------------]
