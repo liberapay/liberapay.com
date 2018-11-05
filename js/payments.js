@@ -161,6 +161,9 @@ Liberapay.payments.ba.submit = function () {
             maxdigits && length > maxdigits ||
             mindigits && length < mindigits) {
             invalids++;
+            Liberapay.forms.setInvalid($input, true);
+        } else {
+            Liberapay.forms.setInvalid($input, false);
         }
     });
 
