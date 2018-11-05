@@ -17,9 +17,34 @@ teams = website.db.all("""
   ORDER BY t.amount DESC
 """, (participant.id,))
 
+recent_donation_changes = website.db.all("""
+    SELECT t.mtime, t.amount AS new_amount, old_t.amount AS old_amount
+      FROM ( SELECT DISTINCT ON (tipper, mtime) t.*
+               FROM tips t
+              WHERE t.tippee = %(p_id)s
+                AND t.mtime > current_timestamp - interval '30 days'
+           ORDER BY t.tipper, t.mtime DESC
+              LIMIT 10
+           ) t
+ LEFT JOIN LATERAL (
+             SELECT old_t.*
+               FROM tips old_t
+              WHERE old_t.tipper = t.tipper
+                AND old_t.tippee = t.tippee
+                AND old_t.mtime < t.mtime
+           ORDER BY old_t.mtime DESC
+              LIMIT 1
+           ) old_t ON true
+     WHERE (old_t.amount IS NULL OR old_t.amount <> t.amount)
+  ORDER BY t.mtime DESC
+""", dict(p_id=participant.id))
+
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
+
+% from "templates/icons.html" import glyphicon with context
 % from "templates/team-members.html" import team_takes_table with context
+
 % block content
 
 % set p = participant
@@ -86,8 +111,53 @@ teams = website.db.all("""
 % endif
 
 % if participant.receiving > participant.taking
-% set tip_distribution = participant.get_tip_distribution()[0]
 <h3>{{ _("Details of Donations") }}</h3>
+% if participant.taking
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "This section doesn't include data on donations through teams, it only "
+        "shows the donations that you receive personally."
+    ) }}</p>
+% endif
+
+<h4>{{ _("Recent Changes") }}</h4>
+% for change in recent_donation_changes
+    <span class="text-muted">{{ locale.format_date(change.mtime.date(), format='short_yearless') }}</span>
+    &nbsp;
+    % if change.old_amount is none
+        <span class="text-info symbol">+</span>
+        &nbsp;
+        {{ _(
+            "A new donation of {amount} per week has been created.",
+            amount=change.new_amount
+        ) }}
+    % else
+        % if change.new_amount == 0
+            <span class="text-danger symbol">✖</span> &nbsp;
+            {{ _(
+                "A donation of {amount} per week has been stopped.",
+                amount=change.old_amount
+            ) }}
+        % elif change.new_amount > change.old_amount.convert(change.new_amount.currency)
+            <span class="text-success symbol">↗</span> &nbsp;
+            {{ _(
+                "A donation has been raised from {old_amount} to {new_amount} per week.",
+                old_amount=change.old_amount, new_amount=change.new_amount
+            ) }}
+        % else
+            <span class="text-danger symbol">↘</span> &nbsp;
+            {{ _(
+                "A donation has been lowered from {old_amount} per week to {new_amount}.",
+                old_amount=change.old_amount, new_amount=change.new_amount
+            ) }}
+        % endif
+    % endif
+    <br>
+% else
+    <p>{{ _("Nothing to show.") }}</p>
+% endfor
+
+% set tip_distribution = participant.get_tip_distribution()[0]
+<h4>{{ _("Stats") }}</h4>
 <div class="row">
 <div class="col-md-10 col-lg-8">
     <p>{{ _("The table below lists the donations you receive, grouped by amount.") }}</p>
