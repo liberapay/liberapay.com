@@ -303,7 +303,6 @@ def update_payin_transfer(
                      SELECT t.amount
                        FROM current_tips t
                       WHERE t.tippee = %(p_id)s
-                        AND t.amount > 0
                         AND t.is_funded
                  )
             UPDATE participants AS p

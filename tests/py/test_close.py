@@ -99,14 +99,14 @@ class TestClosing(FakeTransfersHarness):
         assert Participant.from_id(carl.id).balance == EUR('0.00')
         assert Participant.from_id(alice.id).balance == EUR('0.00')
 
-    def test_dbtd_skips_zero_tips(self):
+    def test_dbtd_skips_stopped_tips(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        alice.set_tip_to(bob, EUR('0.00'))
+        alice.set_tip_to(bob, EUR('1.00'))
+        alice.stop_tip_to(bob)
         alice.set_tip_to(carl, EUR('2.00'))
         alice.distribute_balances_to_donees()
-        assert self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (bob.id,)) == 1
         assert Participant.from_username('bob').balance == EUR('0.00')
         assert Participant.from_username('carl').balance == EUR('10.00')
         assert Participant.from_username('alice').balance == EUR('0.00')
@@ -165,7 +165,7 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice')
         alice.set_tip_to(self.make_participant('bob'), EUR('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tipper=%s AND amount > 0",
+                                    "WHERE tipper=%s AND renewal_mode > 0",
                                     (alice.id,))
         assert ntips() == 1
         with self.db.get_cursor() as cursor:
@@ -199,7 +199,7 @@ class TestClosing(FakeTransfersHarness):
         alice.set_tip_to(self.make_participant('evelyn'), EUR('1.00'))
         alice.set_tip_to(self.make_participant('francis'), EUR('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tipper=%s AND amount > 0",
+                                    "WHERE tipper=%s AND renewal_mode > 0",
                                     (alice.id,))
         assert ntips() == 5
         with self.db.get_cursor() as cursor:
@@ -213,14 +213,14 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice')
         self.make_participant('bob').set_tip_to(alice, EUR('1.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tippee=%s AND amount > 0",
+                                    "WHERE tippee=%s AND renewal_mode > 0",
                                     (alice.id,))
         assert ntips() == 1
         with self.db.get_cursor() as cursor:
             alice.clear_tips_receiving(cursor)
         assert ntips() == 0
 
-    def test_ctr_doesnt_duplicate_zero_tips(self):
+    def test_ctr_doesnt_duplicate_stopped_tips(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         bob.set_tip_to(alice, EUR('1.00'))
@@ -231,7 +231,7 @@ class TestClosing(FakeTransfersHarness):
             alice.clear_tips_receiving(cursor)
         assert ntips() == 2
 
-    def test_ctr_doesnt_zero_when_theres_no_tip(self):
+    def test_ctr_doesnt_insert_when_theres_no_tip(self):
         alice = self.make_participant('alice')
         ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (alice.id,))
         assert ntips() == 0
@@ -247,7 +247,7 @@ class TestClosing(FakeTransfersHarness):
         self.make_participant('evelyn').set_tip_to(alice, EUR('4.00'))
         self.make_participant('francis').set_tip_to(alice, EUR('5.00'))
         ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tippee=%s AND amount > 0",
+                                    "WHERE tippee=%s AND renewal_mode > 0",
                                     (alice.id,))
         assert ntips() == 5
         with self.db.get_cursor() as cursor:

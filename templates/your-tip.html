@@ -7,7 +7,7 @@
     % if request.qs.get('currency') in accepted_currencies
         % set new_currency = request.qs['currency']
     % endif
-    % set currency_mismatch = tip.amount > 0 and tip_currency not in accepted_currencies
+    % set currency_mismatch = tip_currency not in accepted_currencies
     % if inline
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
@@ -24,17 +24,17 @@
         % endif
         {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch,
                      accepted_currencies=accepted_currencies) }}
-        <button class="btn btn-{{ 'primary' if tip.amount > 0 else 'donate' }}
+        <button class="btn btn-{{ 'primary' if tip.renewal_mode > 0 else 'donate' }}
                        btn-sm" {{ disabled }}>{{
-            _("Modify") if tip.amount > 0 else _("Pledge") if pledging else _("Donate")
+            _("Modify") if tip.renewal_mode > 0 else _("Pledge") if pledging else _("Donate")
         }}</button>
-        % if tip.amount > 0
+        % if tip.renewal_mode > 0
         &nbsp;&nbsp;
         <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Stop") }}</button>
         % endif
     </form>
     % else
-        % if tip.amount > 0
+        % if tip.renewal_mode > 0
             % if currency_mismatch
             <p class="alert alert-warning">{{ _(
                 "You are currently donating {money_amount} per week to {name}, but "
@@ -176,12 +176,12 @@
         </li>
     </ul>
     <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
-        _("Modify the donation") if tip.amount > 0 else
+        _("Modify the donation") if tip.renewal_mode > 0 else
         _("Next step →") if user.ANON else
         _("Pledge") if pledging else
         _("Donate")
     }}</button>
-    % if tip.amount > 0
+    % if tip.renewal_mode > 0
     <br>
     <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{ _("Stop the donation") }}</button>
     % endif

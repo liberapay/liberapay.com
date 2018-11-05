@@ -35,7 +35,7 @@ else:
     tips, pledges = participant.get_giving_details()
     out = []
     for tip in tips:
-        if tip.amount == 0:
+        if tip.renewal_mode <= 0:
             continue
         tippee = tip.tippee_p
         out.append({
@@ -52,7 +52,7 @@ else:
             "mtime": tip.mtime,
         })
     for tip in pledges:
-        if tip.amount == 0:
+        if tip.renewal_mode <= 0:
             continue
         e = tip.e_account
         tippee = e.participant

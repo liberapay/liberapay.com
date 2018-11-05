@@ -18,7 +18,8 @@ teams = website.db.all("""
 """, (participant.id,))
 
 recent_donation_changes = website.db.all("""
-    SELECT t.mtime, t.amount AS new_amount, old_t.amount AS old_amount
+    SELECT t.mtime, t.amount AS new_amount, t.renewal_mode AS new_renewal_mode
+         , old_t.amount AS old_amount
       FROM ( SELECT DISTINCT ON (tipper, mtime) t.*
                FROM tips t
               WHERE t.tippee = %(p_id)s
@@ -35,7 +36,8 @@ recent_donation_changes = website.db.all("""
            ORDER BY old_t.mtime DESC
               LIMIT 1
            ) old_t ON true
-     WHERE (old_t.amount IS NULL OR old_t.amount <> t.amount)
+     WHERE ( old_t.amount IS NULL OR old_t.amount <> t.amount OR
+             old_t.renewal_mode <> t.renewal_mode )
   ORDER BY t.mtime DESC
 """, dict(p_id=participant.id))
 
@@ -131,7 +133,7 @@ recent_donation_changes = website.db.all("""
             amount=change.new_amount
         ) }}
     % else
-        % if change.new_amount == 0
+        % if change.new_renewal_mode <= 0
             <span class="text-danger symbol">✖</span> &nbsp;
             {{ _(
                 "A donation of {amount} per week has been stopped.",

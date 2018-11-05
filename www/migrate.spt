@@ -158,6 +158,8 @@ elif step == '2':
                     continue
                 if tippee.accepts_tips:
                     amount = Money(pi['amount'], 'USD')
+                    if amount == 0:
+                        continue
                     if 'USD' not in tippee.accepted_currencies_set:
                         amount = amount.convert(tippee.main_currency)
                     d = p.set_tip_to(tippee, amount)

@@ -201,6 +201,7 @@ class Payday(object):
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT t.id, t.tipper, t.tippee, t.amount, (p2.kind = 'group') AS to_team
                  , coalesce_currency_amount(t.paid_in_advance, t.amount::currency) AS paid_in_advance
+                 , t.renewal_mode
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -208,8 +209,7 @@ class Payday(object):
                    ) t
               JOIN payday_participants p ON p.id = t.tipper
               JOIN payday_participants p2 ON p2.id = t.tippee
-             WHERE t.amount > 0
-               AND (p2.goal IS NULL or p2.goal >= 0)
+             WHERE (p2.goal IS NULL or p2.goal >= 0)
           ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
@@ -282,6 +282,9 @@ class Payday(object):
                         END IF;
                         transfer_amount := transfer_amount - in_advance;
                     END IF;
+                    IF (tip.renewal_mode <= 0) THEN
+                        transfer_amount := zero(transfer_amount);
+                    END IF;
                 END IF;
 
                 UPDATE payday_participants
@@ -309,6 +312,9 @@ class Payday(object):
                 IF ($1.is_funded IS true) THEN RETURN NULL; END IF;
                 okay := $1.paid_in_advance >= $1.amount;
                 IF (okay IS NOT true) THEN
+                    IF ($1.renewal_mode <= 0) THEN
+                        RETURN false;
+                    END IF;
                     tipper_balances := (
                         SELECT balances
                           FROM payday_participants p
@@ -1020,7 +1026,7 @@ class Payday(object):
                      SELECT t.*, p2.username AS tippee_username
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
-                      WHERE t.amount > 0
+                      WHERE t.renewal_mode > 0
                         AND ( t.paid_in_advance IS NULL OR
                               t.paid_in_advance < t.amount
                             )
