@@ -1143,15 +1143,6 @@ msgstr "Название организации"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Я согласен с {0}условиями использования MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "В данный момент в вашем профиле показаны следующие репозитории:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Мы можем импортировать список репозиториев вашей команды отсюда:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Мы можем импортировать список ваших репозиториев отсюда:"
-
 msgid "username"
 msgstr "имя пользователя"
 
@@ -1775,6 +1766,42 @@ msgstr "Сохранить изменения"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Ссылка на профили Liberapay осуществляется с разрешения администрации сайта."
 
+msgid "Your profile has been updated."
+msgstr "Профиль обновлён."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "У вас нет аккаунтов {platform}, подключённых к вашему профилю."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Подключить аккаунт {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Мы нашли {n} репозиторий в вашем аккаунте на {platform}, {time} назад."
+msgstr[1] "Мы нашли {n} репозитория в вашем аккаунте на {platform}, {time} назад."
+msgstr[2] "Список из {n} репозиториев был импортирован из вашего аккаунта {platform}, {time} назад."
+
+msgid "No repositories found."
+msgstr "Репозитории не найдены."
+
+msgid "Next Page →"
+msgstr "Следующая страница →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "В данный момент в вашем профиле показаны следующие репозитории:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Мы можем импортировать список репозиториев вашей команды отсюда:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Мы можем импортировать список ваших репозиториев отсюда:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Также можно импортировать список репозиториев ваших команд:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Отправленное описание слишком длинное ({0} > {1})."
@@ -2219,17 +2246,14 @@ msgstr "История"
 msgid "{0} joined {1} ago."
 msgstr "{0} присоединился {1} назад."
 
-msgid "No data to show."
-msgstr "Нет данных для отображения."
-
 msgid "View income history"
 msgstr "Просмотреть историю доходов"
 
+msgid "No data to show."
+msgstr "Нет данных для отображения."
+
 msgid "Euros Received Per Week"
 msgstr "Получено евро в неделю"
-
-msgid "weeks"
-msgstr "недели"
 
 msgid "Number of Patrons Per Week"
 msgstr "Количество спонсоров в неделю"
@@ -2600,37 +2624,6 @@ msgstr "{x_percent} пожертвований"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} общего дохода"
-
-msgid "Your profile has been updated."
-msgstr "Профиль обновлён."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Репозитории {username}"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Также можно импортировать список репозиториев ваших команд:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "У вас нет аккаунтов {platform}, подключённых к вашему профилю."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Подключить аккаунт {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Мы нашли {n} репозиторий в вашем аккаунте на {platform}, {time} назад."
-msgstr[1] "Мы нашли {n} репозитория в вашем аккаунте на {platform}, {time} назад."
-msgstr[2] "Список из {n} репозиториев был импортирован из вашего аккаунта {platform}, {time} назад."
-
-msgid "No repositories found."
-msgstr "Репозитории не найдены."
-
-msgid "Next Page →"
-msgstr "Следующая страница →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3607,6 +3600,9 @@ msgstr "Открытые аккаунты"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Количество открытых личных аккаунтов и аккаунтов организаций на Liberapay"
+
+msgid "weeks"
+msgstr "недели"
 
 msgid "Active Users"
 msgstr "Активные пользователи"

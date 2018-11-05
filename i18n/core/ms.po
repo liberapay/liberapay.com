@@ -1138,15 +1138,6 @@ msgstr "Nama Organisasi"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Saya bersetuju dengan {0}Syarat Perkhidmatan MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Repositori berikut sedang dipaparkan pada profil anda:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Kami boleh mengimport senarai repositori kumpulan anda dari:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Kami boleh mengimport senarai repositori anda dari:"
-
 msgid "username"
 msgstr "nama pengguna"
 
@@ -1766,6 +1757,41 @@ msgstr "Simpan"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Perujukan profil Liberapay bergantung kepada kelulusan pentadbir."
 
+msgid "Your profile has been updated."
+msgstr "Profil anda telah dikemaskini."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Anda tidak mengaitkan akaun {platform} kepada profil anda."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Kaitkan akaun {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Kami jumpa {n} repositori dalam akaun {platform}, {time} yang lalu."
+msgstr[1] "Senarai {n} repositori telah diimport daripada akaun {platform} anda, {time} yang lalu."
+
+msgid "No repositories found."
+msgstr "Tiada repositori dijumpai."
+
+msgid "Next Page →"
+msgstr "Halaman Seterusnya →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Repositori berikut sedang dipaparkan pada profil anda:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Kami boleh mengimport senarai repositori kumpulan anda dari:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Kami boleh mengimport senarai repositori anda dari:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Kami juga boleh mengimport senarai repositori untuk kumpulan anda:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Ringkasan yang dihantar terlalu panjang ({0} > {1})."
@@ -2204,17 +2230,14 @@ msgstr "Sejarah"
 msgid "{0} joined {1} ago."
 msgstr "{0} sertai {1} yang lalu."
 
-msgid "No data to show."
-msgstr "Tiada data untuk ditunjukkan."
-
 msgid "View income history"
 msgstr "Lihat sejarah pendapatan"
 
+msgid "No data to show."
+msgstr "Tiada data untuk ditunjukkan."
+
 msgid "Euros Received Per Week"
 msgstr "Euro Diterima Setiap Minggu"
-
-msgid "weeks"
-msgstr "minggu"
 
 msgid "Number of Patrons Per Week"
 msgstr "Jumlah Penderma Setiap Minggu"
@@ -2582,36 +2605,6 @@ msgstr "{x_percent} daripada derma"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} daripada jumlah pendapatan"
-
-msgid "Your profile has been updated."
-msgstr "Profil anda telah dikemaskini."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Repositori {username}"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Kami juga boleh mengimport senarai repositori untuk kumpulan anda:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Anda tidak mengaitkan akaun {platform} kepada profil anda."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Kaitkan akaun {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Kami jumpa {n} repositori dalam akaun {platform}, {time} yang lalu."
-msgstr[1] "Senarai {n} repositori telah diimport daripada akaun {platform} anda, {time} yang lalu."
-
-msgid "No repositories found."
-msgstr "Tiada repositori dijumpai."
-
-msgid "Next Page →"
-msgstr "Halaman Seterusnya →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3575,6 +3568,9 @@ msgstr "Akaun Terbuka"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Jumlah akaun individu dan organisasi terbuka di Liberapay"
+
+msgid "weeks"
+msgstr "minggu"
 
 msgid "Active Users"
 msgstr "Pengguna Aktif"

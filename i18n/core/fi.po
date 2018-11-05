@@ -1137,15 +1137,6 @@ msgstr "Järjestön nimi"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Hyväksyn {0}MangoPayn palvelusäännöt{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Seuraavat repositoriot näytetään tällä hetkellä profiilissasi:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Voimme ladata ryhmäsi repositoriolistan näistä:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Voimme ladata repositoriolistasi näistä:"
-
 msgid "username"
 msgstr "käyttäjätunnus"
 
@@ -1765,6 +1756,41 @@ msgstr "Talleta muutokset"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Liberapay-profiileihin viittaaminen riippuu ylläpitäjän hyväksynnästä."
 
+msgid "Your profile has been updated."
+msgstr "Profiilisi on päivitetty."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Profiiliisi ei ole liitetty yhtään {platform}-tunnusta."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Liitä {0}-tili"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Löysimme {n} repositorion {platform}-tililtäsi, {time} sitten."
+msgstr[1] "Toimme {n} repositoriota {platform}-tililtäsi, {time} sitten."
+
+msgid "No repositories found."
+msgstr "Repositorioita ei löytynyt."
+
+msgid "Next Page →"
+msgstr "Seuraava sivu →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Seuraavat repositoriot näytetään tällä hetkellä profiilissasi:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Voimme ladata ryhmäsi repositoriolistan näistä:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Voimme ladata repositoriolistasi näistä:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Voimme myös noutaa repositoriolistat ryhmistäsi:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Syötetty tiivistelmä on liian pitkä ({0} > {1})."
@@ -2203,17 +2229,14 @@ msgstr "Historia"
 msgid "{0} joined {1} ago."
 msgstr "{0} liittyi {1} sitten."
 
-msgid "No data to show."
-msgstr "Ei näytettäviä tietoja."
-
 msgid "View income history"
 msgstr "Näytä tulohistoria"
 
+msgid "No data to show."
+msgstr "Ei näytettäviä tietoja."
+
 msgid "Euros Received Per Week"
 msgstr "Euroa vastaanotettu viikossa"
-
-msgid "weeks"
-msgstr "viikko"
 
 msgid "Number of Patrons Per Week"
 msgstr "Tukijoita viikossa"
@@ -2581,36 +2604,6 @@ msgstr "{x_percent} lahjoituksista"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} kokonaistuloista"
-
-msgid "Your profile has been updated."
-msgstr "Profiilisi on päivitetty."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Käyttäjän {username} repositoriot"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Voimme myös noutaa repositoriolistat ryhmistäsi:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Profiiliisi ei ole liitetty yhtään {platform}-tunnusta."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Liitä {0}-tili"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Löysimme {n} repositorion {platform}-tililtäsi, {time} sitten."
-msgstr[1] "Toimme {n} repositoriota {platform}-tililtäsi, {time} sitten."
-
-msgid "No repositories found."
-msgstr "Repositorioita ei löytynyt."
-
-msgid "Next Page →"
-msgstr "Seuraava sivu →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3574,6 +3567,9 @@ msgstr "Avoimet tilit"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Avointen yksilö- ja yhteisötilien määrä Liberapay-palvelussa"
+
+msgid "weeks"
+msgstr "viikko"
 
 msgid "Active Users"
 msgstr "Aktiivikäyttäjiä"

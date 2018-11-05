@@ -1125,15 +1125,6 @@ msgstr "Nazwa organizacji"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Akceptuję {0}warunki korzystania z usługi MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Następujące repozytoria są aktualnie wyświetlane na Twoim profilu:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Możemy zaimportować listę repozytoriów Twojego zespołu z:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Możemy zaimportować listę Twoich repozytoriów z:"
-
 msgid "username"
 msgstr "Nazwa użytkownika"
 
@@ -1757,6 +1748,42 @@ msgstr "Zapisz zmiany"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Możliwość linkowania do profilów Liberapay leży w gestii administratora."
 
+msgid "Your profile has been updated."
+msgstr "Twój profil został zaktualizowany."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Żadne konto sieci {platform} nie zostało połączone z Twoim profilem."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Połącz konto z serwisu {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Znaleźliśmy {n} repozytorium na Twoim koncie w serwisie {platform}, {time} temu."
+msgstr[1] "Znaleźliśmy {n} repozytoria na Twoim koncie w serwisie {platform}, {time} temu."
+msgstr[2] "Znaleźliśmy {n} repozytoriów na Twoim koncie w serwisie {platform}, {time} temu."
+
+msgid "No repositories found."
+msgstr "Nie znaleziono żadnych repozytoriów."
+
+msgid "Next Page →"
+msgstr "Następna strona →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Następujące repozytoria są aktualnie wyświetlane na Twoim profilu:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Możemy zaimportować listę repozytoriów Twojego zespołu z:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Możemy zaimportować listę Twoich repozytoriów z:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Możemy także zaimportować listy repozytoriów dla Twoich zespołów:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Przesłane podsumowanie jest zbyt długie ({0} > {1})."
@@ -2201,17 +2228,14 @@ msgstr "Historia"
 msgid "{0} joined {1} ago."
 msgstr "{0} dołączył {1} temu."
 
-msgid "No data to show."
-msgstr "Brak danych do pokazania."
-
 msgid "View income history"
 msgstr "Wyświetl historię przychodu"
 
+msgid "No data to show."
+msgstr "Brak danych do pokazania."
+
 msgid "Euros Received Per Week"
 msgstr "Liczba euro otrzymanych tygodniowo"
-
-msgid "weeks"
-msgstr "tygodnie"
 
 msgid "Number of Patrons Per Week"
 msgstr "Liczba patronów tygodniowo"
@@ -2582,37 +2606,6 @@ msgstr "{x_percent} wszystkich dotacji"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} całkowitego przychodu"
-
-msgid "Your profile has been updated."
-msgstr "Twój profil został zaktualizowany."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Repozytoria użytkownika {username}"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Możemy także zaimportować listy repozytoriów dla Twoich zespołów:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Żadne konto sieci {platform} nie zostało połączone z Twoim profilem."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Połącz konto z serwisu {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Znaleźliśmy {n} repozytorium na Twoim koncie w serwisie {platform}, {time} temu."
-msgstr[1] "Znaleźliśmy {n} repozytoria na Twoim koncie w serwisie {platform}, {time} temu."
-msgstr[2] "Znaleźliśmy {n} repozytoriów na Twoim koncie w serwisie {platform}, {time} temu."
-
-msgid "No repositories found."
-msgstr "Nie znaleziono żadnych repozytoriów."
-
-msgid "Next Page →"
-msgstr "Następna strona →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3589,6 +3582,9 @@ msgstr "Otwarte konta"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Liczba otwartych kont osobistych i organizacji na Liberapay"
+
+msgid "weeks"
+msgstr "tygodnie"
 
 msgid "Active Users"
 msgstr "Aktywni użytkownicy"

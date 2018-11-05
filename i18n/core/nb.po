@@ -1137,15 +1137,6 @@ msgstr "Organisasjonsnavn"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Jeg godtar {0}MangoPays brukervilkår{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Følgende pakkebrønner vises nå på din profil:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "En liste over ditt lags pakkebrønner kan importeres fra:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "En liste av dine pakkebrønner kan importeres fra:"
-
 msgid "username"
 msgstr "brukernavn"
 
@@ -1767,6 +1758,41 @@ msgstr "Lagre endringer"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Referering av Liberapay-profiler krever administratorgodkjennelse."
 
+msgid "Your profile has been updated."
+msgstr "Profilen din har blitt oppdatert."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Du har ikke noen {platform}-konto tilsluttet din konto."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Koble til {0}-konto"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Fant {n}-pakkebrønn i din {platform}-konto, for {time} siden."
+msgstr[1] "En liste med {n}-pakkebrønner har blitt importert fra din {platform}-konto, for {time} siden."
+
+msgid "No repositories found."
+msgstr "Ingen pakkebrønner funnet."
+
+msgid "Next Page →"
+msgstr "Neste side →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Følgende pakkebrønner vises nå på din profil:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "En liste over ditt lags pakkebrønner kan importeres fra:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "En liste av dine pakkebrønner kan importeres fra:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Lister over pakkebrønner fra lagene dine kan også importeres:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Innsendt sammendrag er for langt ({0} > {1})."
@@ -2206,17 +2232,14 @@ msgstr "Historikk"
 msgid "{0} joined {1} ago."
 msgstr "{0} registrerte seg for {1} siden."
 
-msgid "No data to show."
-msgstr "Ingen data å vise."
-
 msgid "View income history"
 msgstr "Vis inntektshistorikk"
 
+msgid "No data to show."
+msgstr "Ingen data å vise."
+
 msgid "Euros Received Per Week"
 msgstr "Euro mottatt i uken"
-
-msgid "weeks"
-msgstr "uker"
 
 msgid "Number of Patrons Per Week"
 msgstr "Ukentlig antall givere"
@@ -2585,36 +2608,6 @@ msgstr "{x_percent} av donasjoner"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} av total inntekt"
-
-msgid "Your profile has been updated."
-msgstr "Profilen din har blitt oppdatert."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "{username} sine pakkebrønner"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Lister over pakkebrønner fra lagene dine kan også importeres:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Du har ikke noen {platform}-konto tilsluttet din konto."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Koble til {0}-konto"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Fant {n}-pakkebrønn i din {platform}-konto, for {time} siden."
-msgstr[1] "En liste med {n}-pakkebrønner har blitt importert fra din {platform}-konto, for {time} siden."
-
-msgid "No repositories found."
-msgstr "Ingen pakkebrønner funnet."
-
-msgid "Next Page →"
-msgstr "Neste side →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3587,6 +3580,9 @@ msgstr "Åpne kontoer"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Antall åpne person- og organisasjons-kontoer på Liberapay"
+
+msgid "weeks"
+msgstr "uker"
 
 msgid "Active Users"
 msgstr "Aktive brukere"

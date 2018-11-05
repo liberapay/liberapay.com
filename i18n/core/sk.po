@@ -1143,15 +1143,6 @@ msgstr "Názov organizácie"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Súhlasím s {0}podmienkami služby MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Nasledujúce repozitáre sú aktuálne zobrazené na vašom profile:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Môžeme importovať zoznam repozitárov vašeho tímu z:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Môžeme importovať vaše repoziráte z:"
-
 msgid "username"
 msgstr "užívateľské meno"
 
@@ -1775,6 +1766,42 @@ msgstr "Uložiť zmeny"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Odkazovanie Liberapay profilov podlieha schváleniu správcom."
 
+msgid "Your profile has been updated."
+msgstr "Váš profil bol aktualizovaný."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "K vášmu profilu nemáte pripojený žiadny účet {platform}."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Pripojiť účet {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Našli sme {n} repozitár na vašom {platform} účte, pred {time}."
+msgstr[1] "Našli sme {n} repozitáre na vašom {platform} účte, pred {time}."
+msgstr[2] "Našli sme {n} repozitárov na vašom {platform} účte, pred {time}."
+
+msgid "No repositories found."
+msgstr "Neboli nájdené žiadne repozitáre."
+
+msgid "Next Page →"
+msgstr "Ďalšia stránka →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Nasledujúce repozitáre sú aktuálne zobrazené na vašom profile:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Môžeme importovať zoznam repozitárov vašeho tímu z:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Môžeme importovať vaše repoziráte z:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Môžeme taktiež importovať zoznam repositárov od vašich tímov:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Zadané vyjadrenie je príliš dlhé ({0} > {1})."
@@ -2219,17 +2246,14 @@ msgstr "História"
 msgid "{0} joined {1} ago."
 msgstr "{0} sa pridal pred {1}."
 
-msgid "No data to show."
-msgstr "nie je čo zobraziť."
-
 msgid "View income history"
 msgstr "Zobraziť históriu príjmov"
 
+msgid "No data to show."
+msgstr "nie je čo zobraziť."
+
 msgid "Euros Received Per Week"
 msgstr "Euro prijaté týždenne"
-
-msgid "weeks"
-msgstr "týždne"
 
 msgid "Number of Patrons Per Week"
 msgstr "Počet patrónov týždenne"
@@ -2600,37 +2624,6 @@ msgstr "{x_percent} príspevku"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} celkového príjmu"
-
-msgid "Your profile has been updated."
-msgstr "Váš profil bol aktualizovaný."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Repozitáre uživateľa {username}"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Môžeme taktiež importovať zoznam repositárov od vašich tímov:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "K vášmu profilu nemáte pripojený žiadny účet {platform}."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Pripojiť účet {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Našli sme {n} repozitár na vašom {platform} účte, pred {time}."
-msgstr[1] "Našli sme {n} repozitáre na vašom {platform} účte, pred {time}."
-msgstr[2] "Našli sme {n} repozitárov na vašom {platform} účte, pred {time}."
-
-msgid "No repositories found."
-msgstr "Neboli nájdené žiadne repozitáre."
-
-msgid "Next Page →"
-msgstr "Ďalšia stránka →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3608,6 +3601,9 @@ msgstr "Otvorené účty"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Počet otvorených účtov organizácii a jednotlivcov na Liberapay"
+
+msgid "weeks"
+msgstr "týždne"
 
 msgid "Active Users"
 msgstr "Aktívny užívatelia"

@@ -1118,15 +1118,6 @@ msgstr "Organisationsnamn"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Jag accepterar {0}MangoPay's Användarvillkor{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "De följande repositories visas just nu på din profil:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Vi kan importera en lista över ditt teams repositories från:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Vi kan importera en lista över dina repositories från:"
-
 msgid "username"
 msgstr "användarnamn"
 
@@ -1747,6 +1738,41 @@ msgstr "Spara ändringar"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Referering till Liberapay profiler är föremål för administrativt godkännande."
 
+msgid "Your profile has been updated."
+msgstr "Din profil har uppdaterats."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Vi har inte någet {platform} konto anslutet till din profil."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Anslut {0} konto"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Vi hittade {n} källkodsarkiv i ditt {platform}-konto, {time} ago."
+msgstr[1] "En lista av {n} källkodsarkiv har blivit importerade från ditt {platform}-konto, {time} ago."
+
+msgid "No repositories found."
+msgstr "Inga källkodsarkiv funna."
+
+msgid "Next Page →"
+msgstr "Nästa Sida →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "De följande repositories visas just nu på din profil:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Vi kan importera en lista över ditt teams repositories från:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Vi kan importera en lista över dina repositories från:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Vi kan också importera listor av källkodsarkiv (repositories) för dina teams:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Den inlämnade sammanfattningen är för lång ({0} > {1})."
@@ -2185,17 +2211,14 @@ msgstr "Historik"
 msgid "{0} joined {1} ago."
 msgstr "{0} gick med {1} sedan."
 
-msgid "No data to show."
-msgstr "Ingen data att visa."
-
 msgid "View income history"
 msgstr "Visa inkomst historik"
 
+msgid "No data to show."
+msgstr "Ingen data att visa."
+
 msgid "Euros Received Per Week"
 msgstr "Euros Mottagna Per Vecka"
-
-msgid "weeks"
-msgstr "veckor"
 
 msgid "Number of Patrons Per Week"
 msgstr "Antal Bidragsgivare Per Vecka"
@@ -2563,36 +2586,6 @@ msgstr "{x_percent} av donationer"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} av total inkomst"
-
-msgid "Your profile has been updated."
-msgstr "Din profil har uppdaterats."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "{username}s repositories"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Vi kan också importera listor av källkodsarkiv (repositories) för dina teams:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Vi har inte någet {platform} konto anslutet till din profil."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Anslut {0} konto"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Vi hittade {n} källkodsarkiv i ditt {platform}-konto, {time} ago."
-msgstr[1] "En lista av {n} källkodsarkiv har blivit importerade från ditt {platform}-konto, {time} ago."
-
-msgid "No repositories found."
-msgstr "Inga källkodsarkiv funna."
-
-msgid "Next Page →"
-msgstr "Nästa Sida →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3555,6 +3548,9 @@ msgstr "Öppna konton"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr ""
+
+msgid "weeks"
+msgstr "veckor"
 
 msgid "Active Users"
 msgstr "Aktiva användare"

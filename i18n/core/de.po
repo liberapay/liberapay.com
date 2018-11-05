@@ -1137,15 +1137,6 @@ msgstr "Name der Organisation"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Ich stimme den Nutzungsbedingungen von {0}MangoPay{1} zu"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Die folgenden Repositorys werden zurzeit auf Ihrem Profil angezeigt:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Wir können eine Liste von Repositorys Ihres Team importieren von:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Wir können eine Liste Ihrer Repositorys importieren von:"
-
 msgid "username"
 msgstr "Benutzername"
 
@@ -1765,6 +1756,41 @@ msgstr "Speichern"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Das Referenzieren von Profilen auf Liberapay benötigt die Freigabe durch einen Administrator."
 
+msgid "Your profile has been updated."
+msgstr "Ihr Profil wurde aktualisiert."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Sie haben kein {platform}-Konto mit Ihrem Profil verknüpft."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Verknüpfe ein {0}-Konto"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Wir haben {n} Repository in Ihrem {platform}-Konto gefunden, vor {time}."
+msgstr[1] "Wir haben {n} Repositorys in Ihrem {platform}-Konto gefunden, vor {time}."
+
+msgid "No repositories found."
+msgstr "Keine Repositorys gefunden."
+
+msgid "Next Page →"
+msgstr "Nächste Seite →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Die folgenden Repositorys werden zurzeit auf Ihrem Profil angezeigt:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Wir können eine Liste von Repositorys Ihres Team importieren von:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Wir können eine Liste Ihrer Repositorys importieren von:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Wir können auch Listen der Repositorys Ihrer Teams importieren:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Die eingereichte Zusammenfassung ist zu lang ({0} > {1})."
@@ -2203,17 +2229,14 @@ msgstr "Verlauf"
 msgid "{0} joined {1} ago."
 msgstr "{0} ist vor {1} beigetreten."
 
-msgid "No data to show."
-msgstr "Keine Daten zu zeigen."
-
 msgid "View income history"
 msgstr "Einkommensverlauf anzeigen"
 
+msgid "No data to show."
+msgstr "Keine Daten zu zeigen."
+
 msgid "Euros Received Per Week"
 msgstr "Einnahmen pro Woche (in Euro)"
-
-msgid "weeks"
-msgstr "Wochen"
 
 msgid "Number of Patrons Per Week"
 msgstr "Anzahl Unterstützer/-innen pro Woche"
@@ -2581,36 +2604,6 @@ msgstr "{x_percent} der Spenden"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} der gesamten Einnahmen"
-
-msgid "Your profile has been updated."
-msgstr "Ihr Profil wurde aktualisiert."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "{username}s Repositorys"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Wir können auch Listen der Repositorys Ihrer Teams importieren:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Sie haben kein {platform}-Konto mit Ihrem Profil verknüpft."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Verknüpfe ein {0}-Konto"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Wir haben {n} Repository in Ihrem {platform}-Konto gefunden, vor {time}."
-msgstr[1] "Wir haben {n} Repositorys in Ihrem {platform}-Konto gefunden, vor {time}."
-
-msgid "No repositories found."
-msgstr "Keine Repositorys gefunden."
-
-msgid "Next Page →"
-msgstr "Nächste Seite →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3574,6 +3567,9 @@ msgstr "Offene Konten"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Anzahl der offenen Konten von Personen und Organisationen auf Liberapay"
+
+msgid "weeks"
+msgstr "Wochen"
 
 msgid "Active Users"
 msgstr "Aktive Nutzer"

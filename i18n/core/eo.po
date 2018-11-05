@@ -1139,15 +1139,6 @@ msgstr "Organiza nomo"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Mi konsentas kun la {0}uzkondiĉoj de MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "La jenaj deponejoj estas nun montrataj en via profilo:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Ni povas enporti liston de la deponejoj de via teamo el:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Ni povas enporti liston de viaj deponejoj el:"
-
 msgid "username"
 msgstr "uzantnomo"
 
@@ -1767,6 +1758,41 @@ msgstr "Konservi ŝanĝojn"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Referencado de Liberapay-profiloj postulas aprobon de administranto."
 
+msgid "Your profile has been updated."
+msgstr "Via profilo estis ĝisdatigita."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Vi ne havas konton en {platform}, kiu estas ligita al via profilo."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Konekti konton en {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Ni trovis {n} deponejon en via konto en {platform}, antaŭ {time}."
+msgstr[1] "Listo de {n} deponejoj estis enportita el via konto en {platform}, antaŭ {time}."
+
+msgid "No repositories found."
+msgstr "Neniu deponejo trovita."
+
+msgid "Next Page →"
+msgstr "Sekva paĝo →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "La jenaj deponejoj estas nun montrataj en via profilo:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Ni povas enporti liston de la deponejoj de via teamo el:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Ni povas enporti liston de viaj deponejoj el:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Ni ankaŭ povas enporti listojn de deponejoj por viaj teamoj:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "La sendita resumo estas tro longa ({0} > {1})."
@@ -2205,17 +2231,14 @@ msgstr "Historio"
 msgid "{0} joined {1} ago."
 msgstr "{0} aliĝis antaŭ {1}."
 
-msgid "No data to show."
-msgstr "Ne troviĝas datumoj por montri."
-
 msgid "View income history"
 msgstr "Vidi enspezan historion"
 
+msgid "No data to show."
+msgstr "Ne troviĝas datumoj por montri."
+
 msgid "Euros Received Per Week"
 msgstr "Eŭroj ricevitaj semajne"
-
-msgid "weeks"
-msgstr "semajnoj"
 
 msgid "Number of Patrons Per Week"
 msgstr "Nombro de donacantoj semajne"
@@ -2583,36 +2606,6 @@ msgstr "{x_percent} de la donacoj"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} de la tuta enspezo"
-
-msgid "Your profile has been updated."
-msgstr "Via profilo estis ĝisdatigita."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Deponejoj de {username}"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Ni ankaŭ povas enporti listojn de deponejoj por viaj teamoj:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Vi ne havas konton en {platform}, kiu estas ligita al via profilo."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Konekti konton en {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Ni trovis {n} deponejon en via konto en {platform}, antaŭ {time}."
-msgstr[1] "Listo de {n} deponejoj estis enportita el via konto en {platform}, antaŭ {time}."
-
-msgid "No repositories found."
-msgstr "Neniu deponejo trovita."
-
-msgid "Next Page →"
-msgstr "Sekva paĝo →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3575,6 +3568,9 @@ msgstr "Malfermitaj kontoj"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Nombro de Liberapay-kontoj malfermitaj, kiuj apartenas al unuopuloj aŭ organizoj"
+
+msgid "weeks"
+msgstr "semajnoj"
 
 msgid "Active Users"
 msgstr "Aktivaj uzantoj"

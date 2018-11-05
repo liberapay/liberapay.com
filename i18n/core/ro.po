@@ -1124,15 +1124,6 @@ msgstr "Numele organizației"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Sunt de acord cu {0}condițiile serviciului MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Următoarele depozite sunt afișate momentan pe profilul dumneavoastră:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Putem importa o listă cu depozitele echipei dumneavoastră de la:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Putem importa o listă cu depozitele dumneavoastră de la:"
-
 msgid "username"
 msgstr "nume de utilizator"
 
@@ -1756,6 +1747,42 @@ msgstr "Salvează schimbările"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Procesul de referință al profilelor Liberapay este supusă aprobării administratorilor."
 
+msgid "Your profile has been updated."
+msgstr "Profilul dumeavoastră a fost actualizat."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Nu aveți niciun cont pe {platform} conectat la profilul dumneavoastră."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Conectează contul {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Am găsit {n} depozit în contul dumneavoastră de pe {platform}, acum {time}."
+msgstr[1] "O listă a {n} depozite a fost importată din contul de pe {platform} acum {time}."
+msgstr[2] "O listă a {n} de depozite a fost importată din contul de pe {platform} acum {time}."
+
+msgid "No repositories found."
+msgstr "Niciun depozit găsit."
+
+msgid "Next Page →"
+msgstr "Pagina următoare →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Următoarele depozite sunt afișate momentan pe profilul dumneavoastră:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Putem importa o listă cu depozitele echipei dumneavoastră de la:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Putem importa o listă cu depozitele dumneavoastră de la:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Putem de asemenea importa liste cu depozitele echipelor dumneavoastră:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Sumarul trimis este prea lung ({0} > {1})."
@@ -2200,17 +2227,14 @@ msgstr "Istoric"
 msgid "{0} joined {1} ago."
 msgstr "{0} s-a alăturat acum {1}."
 
-msgid "No data to show."
-msgstr "Nu există date de afișat."
-
 msgid "View income history"
 msgstr "Vizualizează istoricul venitului"
 
+msgid "No data to show."
+msgstr "Nu există date de afișat."
+
 msgid "Euros Received Per Week"
 msgstr "Euro primiți pe săptămână"
-
-msgid "weeks"
-msgstr "săptămâni"
 
 msgid "Number of Patrons Per Week"
 msgstr "Număr de susținători pe săptămână"
@@ -2581,37 +2605,6 @@ msgstr "{x_percent} din donații"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} din venitul total"
-
-msgid "Your profile has been updated."
-msgstr "Profilul dumeavoastră a fost actualizat."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Depozitele lui {username}"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Putem de asemenea importa liste cu depozitele echipelor dumneavoastră:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Nu aveți niciun cont pe {platform} conectat la profilul dumneavoastră."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Conectează contul {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Am găsit {n} depozit în contul dumneavoastră de pe {platform}, acum {time}."
-msgstr[1] "O listă a {n} depozite a fost importată din contul de pe {platform} acum {time}."
-msgstr[2] "O listă a {n} de depozite a fost importată din contul de pe {platform} acum {time}."
-
-msgid "No repositories found."
-msgstr "Niciun depozit găsit."
-
-msgid "Next Page →"
-msgstr "Pagina următoare →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3587,6 +3580,9 @@ msgstr "Conturi deschise"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Număr de conturi individuale și organizaționale deschise pe Liberapay"
+
+msgid "weeks"
+msgstr "săptămâni"
 
 msgid "Active Users"
 msgstr "Utilizatori activi"

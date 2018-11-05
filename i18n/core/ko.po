@@ -1110,15 +1110,6 @@ msgstr "조직 이름"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "{0}MangoPay 이용약관에 동의합니다.{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "다음 저장소가 현재 당신의 프로필에 표시되고 있습니다:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "다음 사이트에서 팀의 저장소를 들여올 수 있습니다:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "다음 사이트에서 당신의 저장소를 들여올 수 있습니다:"
-
 msgid "username"
 msgstr "사용자 이름"
 
@@ -1734,6 +1725,40 @@ msgstr "바뀐 내용 저장"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
+msgid "Your profile has been updated."
+msgstr "프로필이 업데이트되었습니다."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "프로필에 연결된 {platform} 계정이 존재하지 않습니다."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "{0} 계정 연결하기"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "{n} 개의 저장소를 {platform} 계정에서 {time} 전에 들여왔습니다."
+
+msgid "No repositories found."
+msgstr "저장소를 찾을 수 없습니다."
+
+msgid "Next Page →"
+msgstr "다음 페이지 →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "다음 저장소가 현재 당신의 프로필에 표시되고 있습니다:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "다음 사이트에서 팀의 저장소를 들여올 수 있습니다:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "다음 사이트에서 당신의 저장소를 들여올 수 있습니다:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "팀의 저장소를 불러올 수 있습니다:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "제출된 설명이 너무 깁니다 ({0} > {1})."
@@ -2166,17 +2191,14 @@ msgstr "역사"
 msgid "{0} joined {1} ago."
 msgstr "{0} 님은 {1} 전에 가입했습니다."
 
-msgid "No data to show."
-msgstr "보여줄 데이터가 없습니다."
-
 msgid "View income history"
 msgstr "수익 기록 보기"
 
+msgid "No data to show."
+msgstr "보여줄 데이터가 없습니다."
+
 msgid "Euros Received Per Week"
 msgstr "매주 받는 유로"
-
-msgid "weeks"
-msgstr "주"
 
 msgid "Number of Patrons Per Week"
 msgstr "주간 후원자 수"
@@ -2541,35 +2563,6 @@ msgstr "전체 기부 금액의 {x_percent}"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "전체 수입의 {x_percent}"
-
-msgid "Your profile has been updated."
-msgstr "프로필이 업데이트되었습니다."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "{username} 님의 저장소"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "팀의 저장소를 불러올 수 있습니다:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "프로필에 연결된 {platform} 계정이 존재하지 않습니다."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "{0} 계정 연결하기"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "{n} 개의 저장소를 {platform} 계정에서 {time} 전에 들여왔습니다."
-
-msgid "No repositories found."
-msgstr "저장소를 찾을 수 없습니다."
-
-msgid "Next Page →"
-msgstr "다음 페이지 →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3519,6 +3512,9 @@ msgstr "열린 계정"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Liberapay에 열린 개인 및 조직 계정"
+
+msgid "weeks"
+msgstr "주"
 
 msgid "Active Users"
 msgstr "활성 사용자"

@@ -1136,15 +1136,6 @@ msgstr "Nom de l'organisation"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "J'accepte les {0}conditions d'utilisation de MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Les dépôts ci-dessous sont actuellement affichés sur votre profil :"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Nous pouvons importer une liste des dépôts de votre équipe à partir de :"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Nous pouvons importer une liste de vos dépôts à partir de :"
-
 msgid "username"
 msgstr "Nom d'utilisateur"
 
@@ -1764,6 +1755,41 @@ msgstr "Enregistrer"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*Le référencement des profils Liberapay est soumis à l'approbation des administrateurs."
 
+msgid "Your profile has been updated."
+msgstr "Votre profil a été mis à jour."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Vous n'avez aucun compte {platform} connecté à votre profil."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Connecter un compte {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Nous avons trouvé {n} dépôt dans votre compte {platform}, il y a {time}."
+msgstr[1] "Une liste de {n} dépôts a été importée à partir de votre compte {platform}, il y a {time}."
+
+msgid "No repositories found."
+msgstr "Aucun dépôt n'a été trouvé."
+
+msgid "Next Page →"
+msgstr "Page suivante →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Les dépôts ci-dessous sont actuellement affichés sur votre profil :"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Nous pouvons importer une liste des dépôts de votre équipe à partir de :"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Nous pouvons importer une liste de vos dépôts à partir de :"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Nous pouvons aussi importer les dépôts de vos équipes :"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Le résumé est trop long ({0} > {1})."
@@ -2202,17 +2228,14 @@ msgstr "Historique"
 msgid "{0} joined {1} ago."
 msgstr "{0} a rejoint Liberapay il y a {1}."
 
-msgid "No data to show."
-msgstr "Pas de données à afficher."
-
 msgid "View income history"
 msgstr "Voir l'historique de revenu"
 
+msgid "No data to show."
+msgstr "Pas de données à afficher."
+
 msgid "Euros Received Per Week"
 msgstr "Euros reçus par semaine"
-
-msgid "weeks"
-msgstr "semaines"
 
 msgid "Number of Patrons Per Week"
 msgstr "Nombre de donateurs par semaine"
@@ -2580,36 +2603,6 @@ msgstr "{x_percent} des dons"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} du revenu total"
-
-msgid "Your profile has been updated."
-msgstr "Votre profil a été mis à jour."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "{username} - Dépôts"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Nous pouvons aussi importer les dépôts de vos équipes :"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Vous n'avez aucun compte {platform} connecté à votre profil."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Connecter un compte {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Nous avons trouvé {n} dépôt dans votre compte {platform}, il y a {time}."
-msgstr[1] "Une liste de {n} dépôts a été importée à partir de votre compte {platform}, il y a {time}."
-
-msgid "No repositories found."
-msgstr "Aucun dépôt n'a été trouvé."
-
-msgid "Next Page →"
-msgstr "Page suivante →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3573,6 +3566,9 @@ msgstr "Comptes ouverts"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Nombre de comptes Liberapay ouverts appartenant à des individus ou organisations"
+
+msgid "weeks"
+msgstr "semaines"
 
 msgid "Active Users"
 msgstr "Utilisateurs actifs"

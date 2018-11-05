@@ -1136,15 +1136,6 @@ msgstr "Nom de l'organització"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Accepto les {0}Condicions de servei de MangoPay{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Actualment, es mostren els dipòsits següents al vostre perfil:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Podem importar una llista dels dipòsits del vostre equip des de:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Podem importar una llista dels vostres dipòsits des de:"
-
 msgid "username"
 msgstr "nom d'usuari"
 
@@ -1764,6 +1755,41 @@ msgstr "Desa els canvis"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*La referència dels perfils de Liberapay està subjecta a l'aprovació dels administradors."
 
+msgid "Your profile has been updated."
+msgstr "S'ha actualitzat el vostre perfil."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "No teniu cap compte a {platform} associat al vostre perfil."
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Associa un compte de {0}"
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Hem trobat {n} repositori en el vostre compte de {platform}, fa {time}."
+msgstr[1] "Hem importat {n} repositoris del vostre compte de {platform}, fa {time}."
+
+msgid "No repositories found."
+msgstr "No s'ha trobat cap repositori."
+
+msgid "Next Page →"
+msgstr "Pàgina següent →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Actualment, es mostren els dipòsits següents al vostre perfil:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Podem importar una llista dels dipòsits del vostre equip des de:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Podem importar una llista dels vostres dipòsits des de:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "També podem importar les llistes de repositoris dels equips on participeu:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "El resum és massa llarg ({0} > {1})."
@@ -2202,17 +2228,14 @@ msgstr "Historial"
 msgid "{0} joined {1} ago."
 msgstr "{0} es va unir fa {1}."
 
-msgid "No data to show."
-msgstr "No hi ha dades per a mostrar."
-
 msgid "View income history"
 msgstr "Mostra l'historial d'ingressos"
 
+msgid "No data to show."
+msgstr "No hi ha dades per a mostrar."
+
 msgid "Euros Received Per Week"
 msgstr "Euros rebuts setmanalment"
-
-msgid "weeks"
-msgstr "setmanes"
 
 msgid "Number of Patrons Per Week"
 msgstr "Nombre de mecenes setmanals"
@@ -2580,36 +2603,6 @@ msgstr "{x_percent} dels donatius"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} dels ingressos totals"
-
-msgid "Your profile has been updated."
-msgstr "S'ha actualitzat el vostre perfil."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "Repositoris de {username}"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "També podem importar les llistes de repositoris dels equips on participeu:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "No teniu cap compte a {platform} associat al vostre perfil."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Associa un compte de {0}"
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Hem trobat {n} repositori en el vostre compte de {platform}, fa {time}."
-msgstr[1] "Hem importat {n} repositoris del vostre compte de {platform}, fa {time}."
-
-msgid "No repositories found."
-msgstr "No s'ha trobat cap repositori."
-
-msgid "Next Page →"
-msgstr "Pàgina següent →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3573,6 +3566,9 @@ msgstr "Comptes oberts"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "El nombre de comptes de persones i organitzacions obertes en Liberapay"
+
+msgid "weeks"
+msgstr "setmanes"
 
 msgid "Active Users"
 msgstr "Usuaris actius"

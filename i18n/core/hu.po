@@ -1113,15 +1113,6 @@ msgstr "Szervezet Neve"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Elfogadom a {0}MangoPay felhasználási feltételeit{1}"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "Jelenleg a következő tárolók jelennek meg az Ön adatlapján:"
-
-msgid "We can import a list of your team's repositories from:"
-msgstr "Készíthetünk Önnek egy listát a csapatának tárolóiból, innen:"
-
-msgid "We can import a list of your repositories from:"
-msgstr "Készíthetünk Önnek egy listát a tárolóiból, innen:"
-
 msgid "username"
 msgstr "felhasználónév"
 
@@ -1745,6 +1736,40 @@ msgstr "Módosítások mentése"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr "*A Liberapay profilok ajánlása adminisztrátori jóváhagyás tárgyát képezik."
 
+msgid "Your profile has been updated."
+msgstr "Az Ön adatlapja frissítve lett."
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr "Önnek nincs {platform} fiókja csatolva az adatlapjához."
+
+#, fuzzy, python-brace-format
+msgid "Connect {0} account"
+msgstr "{0} fiók csatolása"
+
+#, fuzzy, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] "Importálva lett egy {n} darab tárolóról készült lista az Ön {platform} fiókjából, {time}-cel ezelőtt."
+
+msgid "No repositories found."
+msgstr "Nincs találat tárolókra."
+
+msgid "Next Page →"
+msgstr "Következő Oldal →"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "Jelenleg a következő tárolók jelennek meg az Ön adatlapján:"
+
+msgid "We can import a list of your team's repositories from:"
+msgstr "Készíthetünk Önnek egy listát a csapatának tárolóiból, innen:"
+
+msgid "We can import a list of your repositories from:"
+msgstr "Készíthetünk Önnek egy listát a tárolóiból, innen:"
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr "Importálhatjuk Önnek a csapatai tárolóinak a listáját is:"
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "A beküldött összefoglaló túl hosszú ({0} > {1})."
@@ -2179,18 +2204,14 @@ msgstr "Előzmények"
 msgid "{0} joined {1} ago."
 msgstr "{0} csatlakozott {1} ideje."
 
-msgid "No data to show."
-msgstr "Nincs megjeleníthető adat."
-
 msgid "View income history"
 msgstr "Bevételi előzmények megtekintése"
 
+msgid "No data to show."
+msgstr "Nincs megjeleníthető adat."
+
 msgid "Euros Received Per Week"
 msgstr "Euró Bevétele Hetente"
-
-#, fuzzy
-msgid "weeks"
-msgstr "hét"
 
 msgid "Number of Patrons Per Week"
 msgstr "Támogatók Száma Hetente"
@@ -2555,35 +2576,6 @@ msgstr "Az adományok {x_percent}-a"
 #, fuzzy, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "A teljes bevétel {x_percent}-a"
-
-msgid "Your profile has been updated."
-msgstr "Az Ön adatlapja frissítve lett."
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "{username} Tárolói"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr "Importálhatjuk Önnek a csapatai tárolóinak a listáját is:"
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr "Önnek nincs {platform} fiókja csatolva az adatlapjához."
-
-#, fuzzy, python-brace-format
-msgid "Connect {0} account"
-msgstr "{0} fiók csatolása"
-
-#, fuzzy, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Importálva lett egy {n} darab tárolóról készült lista az Ön {platform} fiókjából, {time}-cel ezelőtt."
-
-msgid "No repositories found."
-msgstr "Nincs találat tárolókra."
-
-msgid "Next Page →"
-msgstr "Következő Oldal →"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3535,6 +3527,10 @@ msgstr ""
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr ""
+
+#, fuzzy
+msgid "weeks"
+msgstr "hét"
 
 msgid "Active Users"
 msgstr ""

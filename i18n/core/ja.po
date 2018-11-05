@@ -1110,15 +1110,6 @@ msgstr "組織名"
 msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "{0}MangoPay の利用規約{1}に同意します"
 
-msgid "The following repositories are currently displayed on your profile:"
-msgstr "現在以下のリポジトリがプロフィールに表示されています："
-
-msgid "We can import a list of your team's repositories from:"
-msgstr ""
-
-msgid "We can import a list of your repositories from:"
-msgstr ""
-
 msgid "username"
 msgstr "ユーザー名"
 
@@ -1731,6 +1722,40 @@ msgstr "変更を保存"
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
+msgid "Your profile has been updated."
+msgstr ""
+
+#, python-brace-format
+msgid "You don't have any {platform} account connected to your profile."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr ""
+
+#, python-brace-format
+msgid "We found {n} repository in your {platform} account, {time} ago."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgstr[0] ""
+
+msgid "No repositories found."
+msgstr "リポジトリが見つかりませんでした。"
+
+msgid "Next Page →"
+msgstr "次のページ→"
+
+msgid "The following repositories are currently displayed on your profile:"
+msgstr "現在以下のリポジトリがプロフィールに表示されています："
+
+msgid "We can import a list of your team's repositories from:"
+msgstr ""
+
+msgid "We can import a list of your repositories from:"
+msgstr ""
+
+msgid "We can also import lists of repositories for your teams:"
+msgstr ""
+
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr ""
@@ -2163,17 +2188,14 @@ msgstr "履歴"
 msgid "{0} joined {1} ago."
 msgstr "{0} は {1}前に参加しました。"
 
-msgid "No data to show."
-msgstr "表示できるデータはありません。"
-
 msgid "View income history"
 msgstr "収入履歴を表示"
 
+msgid "No data to show."
+msgstr "表示できるデータはありません。"
+
 msgid "Euros Received Per Week"
 msgstr "1 週間あたりに受け取ったユーロ"
-
-msgid "weeks"
-msgstr "週"
 
 msgid "Number of Patrons Per Week"
 msgstr "1 週間あたりのパトロンの数"
@@ -2538,35 +2560,6 @@ msgstr ""
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr ""
-
-msgid "Your profile has been updated."
-msgstr ""
-
-#, python-brace-format
-msgid "{username}'s Repositories"
-msgstr "{username} のリポジトリ"
-
-msgid "We can also import lists of repositories for your teams:"
-msgstr ""
-
-#, python-brace-format
-msgid "You don't have any {platform} account connected to your profile."
-msgstr ""
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr ""
-
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] ""
-
-msgid "No repositories found."
-msgstr "リポジトリが見つかりませんでした。"
-
-msgid "Next Page →"
-msgstr "次のページ→"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3516,6 +3509,9 @@ msgstr "利用されているアカウント"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Liberapay において利用されている個人または組織アカウントの数"
+
+msgid "weeks"
+msgstr "週"
 
 msgid "Active Users"
 msgstr "アクティブなユーザー"
