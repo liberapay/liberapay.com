@@ -11,6 +11,9 @@ Liberapay.forms.focusInvalid = function($form) {
 
 Liberapay.forms.setInvalid = function($input, invalid) {
     $input.toggleClass('invalid', invalid);
+    if (!!$input.attr('title') && $input.nextAll('.invalid-msg').length == 0) {
+        $input.after($('<span class="invalid-msg">').text($input.attr('title')));
+    }
 };
 
 Liberapay.forms.setValidity = function($input, validity) {

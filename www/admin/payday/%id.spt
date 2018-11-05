@@ -153,6 +153,13 @@ if request.method == 'POST':
         if not payday_needs_to_run and not override_checks:
             raise response.error(403, "it's not time to run payday")
         p_id = last_payday.id + 1 if last_payday else 1
+        if override_checks:
+            website.db.run("""
+                INSERT INTO paydays
+                            (id, public_log, ts_start)
+                     VALUES (%s, 'none', NULL)
+                ON CONFLICT (id) DO NOTHING
+            """, (p_id,))
     log_file = open(payday_log_path(p_id)+'.part', 'a')
     exec_payday(log_file)
     response.redirect('/admin/payday/%s' % p_id)

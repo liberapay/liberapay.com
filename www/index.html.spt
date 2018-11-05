@@ -105,7 +105,7 @@ recent = query_cache.one("""
             <p><a href="/{{ user.username }}/receiving/">{{ ngettext(
                 "You have {n} active donor who is giving you {money_amount} per week.",
                 "You have {n} active donors giving you a total of {money_amount} per week.",
-                user.npatrons, money_amount=user.receiving
+                user.npatrons + user.nteampatrons, money_amount=user.receiving
             ) }}</a></p>
 
             % if not user.accepts_tips
