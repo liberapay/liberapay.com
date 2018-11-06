@@ -10,30 +10,55 @@ title = participant.username
 subhead = _("Receiving")
 
 teams = website.db.all("""
-    SELECT p.*::participants
-      FROM current_takes x
-      JOIN participants p ON p.id = x.team
-     WHERE member=%s
-  ORDER BY x.amount DESC
+    SELECT p
+      FROM current_takes t
+      JOIN participants p ON p.id = t.team
+     WHERE t.member = %s
+  ORDER BY t.amount DESC
 """, (participant.id,))
+
+recent_donation_changes = website.db.all("""
+    SELECT t.mtime, t.amount AS new_amount, old_t.amount AS old_amount
+      FROM ( SELECT DISTINCT ON (tipper, mtime) t.*
+               FROM tips t
+              WHERE t.tippee = %(p_id)s
+                AND t.mtime > current_timestamp - interval '30 days'
+           ORDER BY t.tipper, t.mtime DESC
+              LIMIT 10
+           ) t
+ LEFT JOIN LATERAL (
+             SELECT old_t.*
+               FROM tips old_t
+              WHERE old_t.tipper = t.tipper
+                AND old_t.tippee = t.tippee
+                AND old_t.mtime < t.mtime
+           ORDER BY old_t.mtime DESC
+              LIMIT 1
+           ) old_t ON true
+     WHERE (old_t.amount IS NULL OR old_t.amount <> t.amount)
+  ORDER BY t.mtime DESC
+""", dict(p_id=participant.id))
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
+
+% from "templates/icons.html" import glyphicon with context
 % from "templates/team-members.html" import team_takes_table with context
+
 % block content
 
-% set receiving = participant.receiving
+% set p = participant
 % if participant == user
     <p>{{ ngettext(
         "You have {n} active donor who is giving you {money_amount} per week.",
         "You have {n} active donors giving you a total of {money_amount} per week.",
-        participant.npatrons + participant.nteampatrons, money_amount=receiving
+        p.npatrons + p.nteampatrons, money_amount=p.receiving
     ) }}</p>
 % else
     <p>{{ ngettext(
         "{0} receives {1} per week from {n} patron.",
         "{0} receives {1} per week from {n} patrons.",
-        participant.npatrons + participant.nteampatrons, participant.username, receiving
+        p.npatrons + p.nteampatrons, p.username, p.receiving
     ) }}</p>
 % endif
 
@@ -50,6 +75,19 @@ teams = website.db.all("""
 
 <h3 id="teams">{{ _("Teams") }}</h3>
 % if teams
+    % if p.npatrons and p.nteampatrons
+        <p>{{ _(
+            "Donations through teams make up {income_percent} of your income "
+            "({team_income} of {total_income}) and {patrons_percent} of your "
+            "donors ({nteampatrons} of {npatrons}).",
+            income_percent=locale.format_percent(p.taking / p.receiving),
+            team_income=p.taking,
+            total_income=p.receiving,
+            patrons_percent=locale.format_percent(p.nteampatrons / (p.npatrons + p.nteampatrons)),
+            nteampatrons=p.nteampatrons,
+            npatrons=p.npatrons + p.nteampatrons
+        ) }}</p>
+    % endif
     % for team in teams
         <h4>{{ team.username }}
             <a href="/{{ team.username }}/membership/leave?back_to={{ urlquote(request.line.uri) }}"
@@ -65,6 +103,7 @@ teams = website.db.all("""
 % endif
 <p>
     <a class="btn btn-default" href="/about/teams">{{ _("About teams") }}</a>
+    &nbsp;&nbsp;
     <a class="btn btn-default" href="/explore/teams/">{{ _("Explore teams") }}</a>
 </p>
 <br>
@@ -72,8 +111,53 @@ teams = website.db.all("""
 % endif
 
 % if participant.receiving > participant.taking
-% set tip_distribution = participant.get_tip_distribution()[0]
 <h3>{{ _("Details of Donations") }}</h3>
+% if participant.taking
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "This section doesn't include data on donations through teams, it only "
+        "shows the donations that you receive personally."
+    ) }}</p>
+% endif
+
+<h4>{{ _("Recent Changes") }}</h4>
+% for change in recent_donation_changes
+    <span class="text-muted">{{ locale.format_date(change.mtime.date(), format='short_yearless') }}</span>
+    &nbsp;
+    % if change.old_amount is none
+        <span class="text-info symbol">+</span>
+        &nbsp;
+        {{ _(
+            "A new donation of {amount} per week has been created.",
+            amount=change.new_amount
+        ) }}
+    % else
+        % if change.new_amount == 0
+            <span class="text-danger symbol">✖</span> &nbsp;
+            {{ _(
+                "A donation of {amount} per week has been stopped.",
+                amount=change.old_amount
+            ) }}
+        % elif change.new_amount > change.old_amount.convert(change.new_amount.currency)
+            <span class="text-success symbol">↗</span> &nbsp;
+            {{ _(
+                "A donation has been raised from {old_amount} to {new_amount} per week.",
+                old_amount=change.old_amount, new_amount=change.new_amount
+            ) }}
+        % else
+            <span class="text-danger symbol">↘</span> &nbsp;
+            {{ _(
+                "A donation has been lowered from {old_amount} per week to {new_amount}.",
+                old_amount=change.old_amount, new_amount=change.new_amount
+            ) }}
+        % endif
+    % endif
+    <br>
+% else
+    <p>{{ _("Nothing to show.") }}</p>
+% endfor
+
+% set tip_distribution = participant.get_tip_distribution()[0]
+<h4>{{ _("Stats") }}</h4>
 <div class="row">
 <div class="col-md-10 col-lg-8">
     <p>{{ _("The table below lists the donations you receive, grouped by amount.") }}</p>
@@ -109,4 +193,22 @@ teams = website.db.all("""
 </div>
 </div>
 % endif
+
+<h3>{{ _("History") }}</h3>
+<noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
+<div data-charts="{{ participant.path('charts.json') }}" data-msg-empty="{{ _('No data to show.') }}">
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h4>{{ _("Income Per Week (in {currency})", currency=Currency(participant.main_currency)) }}</h4>
+        <div class="chart" data-chart="receipts"></div>
+        <div class="x-axis"></div>
+    </div>
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h4>{{ _("Number of Patrons Per Week") }}</h4>
+        <div class="chart" data-chart="npatrons"></div>
+        <div class="x-axis"></div>
+    </div>
+</div>
+
 % endblock
