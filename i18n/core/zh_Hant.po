@@ -2558,11 +2558,37 @@ msgstr "你必須設定支付方法才能收取新的捐款。"
 msgid "Configure payment processing"
 msgstr "設定付款方法"
 
+#, python-brace-format
+msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
+msgstr ""
+
 msgid "You are not a member of any team."
 msgstr "你並不是任何團隊的成員。"
 
 msgid "Details of Donations"
 msgstr "捐款的詳細資訊"
+
+msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
+msgstr ""
+
+msgid "Recent Changes"
+msgstr ""
+
+#, python-brace-format
+msgid "A new donation of {amount} per week has been created."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation of {amount} per week has been stopped."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been raised from {old_amount} to {new_amount} per week."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been lowered from {old_amount} per week to {new_amount}."
+msgstr ""
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "下列表格列出了您收到的捐款，以數額分類。"
@@ -2583,6 +2609,10 @@ msgstr "{x_percent} 的捐款"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} 的總收入"
+
+#, python-brace-format
+msgid "Income Per Week (in {currency})"
+msgstr ""
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"

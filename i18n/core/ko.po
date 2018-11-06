@@ -2538,11 +2538,37 @@ msgstr ""
 msgid "Configure payment processing"
 msgstr ""
 
+#, python-brace-format
+msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
+msgstr ""
+
 msgid "You are not a member of any team."
 msgstr "어떤 팀에도 소속되어 있지 않습니다."
 
 msgid "Details of Donations"
 msgstr "상세 기부 내역"
+
+msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
+msgstr ""
+
+msgid "Recent Changes"
+msgstr ""
+
+#, python-brace-format
+msgid "A new donation of {amount} per week has been created."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation of {amount} per week has been stopped."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been raised from {old_amount} to {new_amount} per week."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been lowered from {old_amount} per week to {new_amount}."
+msgstr ""
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "아래 표는 금액별로 묶은 기부 내역입니다."
@@ -2563,6 +2589,10 @@ msgstr "전체 기부 금액의 {x_percent}"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "전체 수입의 {x_percent}"
+
+#, python-brace-format
+msgid "Income Per Week (in {currency})"
+msgstr ""
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"

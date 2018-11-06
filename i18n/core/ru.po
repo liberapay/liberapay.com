@@ -2599,11 +2599,37 @@ msgstr ""
 msgid "Configure payment processing"
 msgstr ""
 
+#, python-brace-format
+msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
+msgstr ""
+
 msgid "You are not a member of any team."
 msgstr "Вы не состоите ни в одной команде."
 
 msgid "Details of Donations"
 msgstr "Подробности пожертвований"
+
+msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
+msgstr ""
+
+msgid "Recent Changes"
+msgstr ""
+
+#, python-brace-format
+msgid "A new donation of {amount} per week has been created."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation of {amount} per week has been stopped."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been raised from {old_amount} to {new_amount} per week."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been lowered from {old_amount} per week to {new_amount}."
+msgstr ""
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "В таблице ниже показаны пожертвования, которые вы получили, сгруппированные по величине пожертвования."
@@ -2624,6 +2650,10 @@ msgstr "{x_percent} пожертвований"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} общего дохода"
+
+#, python-brace-format
+msgid "Income Per Week (in {currency})"
+msgstr ""
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"

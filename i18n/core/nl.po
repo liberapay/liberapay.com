@@ -2579,11 +2579,37 @@ msgstr "Je kunt geen nieuwe donaties ontvangen totdat je de betalingsverwerking 
 msgid "Configure payment processing"
 msgstr "Configureer betalingsverwerking"
 
+#, python-brace-format
+msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
+msgstr ""
+
 msgid "You are not a member of any team."
 msgstr "Je bent geen lid van een team."
 
 msgid "Details of Donations"
 msgstr "Details van de donaties"
+
+msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
+msgstr ""
+
+msgid "Recent Changes"
+msgstr ""
+
+#, python-brace-format
+msgid "A new donation of {amount} per week has been created."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation of {amount} per week has been stopped."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been raised from {old_amount} to {new_amount} per week."
+msgstr ""
+
+#, python-brace-format
+msgid "A donation has been lowered from {old_amount} per week to {new_amount}."
+msgstr ""
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "De tabel hieronder bevat een overzicht van de donaties die je ontvangt, gegroepeerd per hoeveelheid."
@@ -2604,6 +2630,10 @@ msgstr "{x_percent} van donaties"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} van totale inkomsten"
+
+#, python-brace-format
+msgid "Income Per Week (in {currency})"
+msgstr ""
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
