@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2018-11-07 11:43+0000\n"
+"Last-Translator: Lorem Ipsum <aditoo@seznam.cz>\n"
 "Language-Team: Czech (https://hosted.weblate.org/projects/liberapay/core/cs/)\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 3.3-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -16,7 +19,7 @@ msgid "Greetings,"
 msgstr "Vítej,"
 
 msgid "Something not right? Reply to this email for help."
-msgstr "Něco není v pořádku? Odpovězte na tento mail a poradíme vám."
+msgstr "Něco není v pořádku? Odpovězte na tento e-mail a poradíme vám."
 
 msgid "Change your email settings"
 msgstr "Změnit nastavení e-mailu"
@@ -57,14 +60,14 @@ msgstr "Vaše e-mailová adresa byla přidána na černou listinu"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Již nebudeme posílat e-maily na adresu {email_address}, protože nedávný pokus o odeslání neuspěl. Pokud chcete tuto adresu odstranit z černé listiny, pošlete nám z té adresy e-mail na adresu support@liberapay.com."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Již nebudeme posílat e-maily na adresu {email_address}, protože jsme obdrželi stížnost od e-mailového poskytovatele. Pokud chcete tuto adresu odstranit z černé listiny, pošlete nám z té adresy e-mail na adresu support@liberapay.com."
 
 msgid "Manage your email addresses"
-msgstr "Spravujte svoje emailové adresy"
+msgstr "Spravovat vaše e-mailové adresy"
 
 msgid "Someone wants to donate to you on Liberapay"
 msgstr "Někdo vám chce přispět na Liberapay"
@@ -128,11 +131,11 @@ msgstr "- {0}: {1}"
 
 #, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
-msgstr ""
+msgstr "Váš příjem na Liberapay je tento týden přibližně {money_amount}"
 
 #, python-brace-format
 msgid "Your Liberapay income is {money_amount} this week"
-msgstr ""
+msgstr "Váš příjem na Liberapay je tento týden{money_amount}"
 
 msgid "Here is the breakdown of your income this week:"
 msgstr ""
@@ -140,12 +143,12 @@ msgstr ""
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
 msgid_plural "Personal donations: {money_amount} from {n} donors."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Osobní příspěvky: {money_amount} od {n} dárce."
+msgstr[1] "Osobní příspěvky: {money_amount} od {n} dárců."
+msgstr[2] "Osobní příspěvky: {money_amount} od {n} dárců."
 
 msgid "Personal donations: none."
-msgstr ""
+msgstr "Osobní příspěvky: žádné."
 
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
@@ -393,7 +396,7 @@ msgid "The team “{0}” has been renamed to “{1}” by {2}."
 msgstr "{2} přejmenoval tým „{0}“ na „{1}“."
 
 msgid "Email address verification - Liberapay"
-msgstr "Ověření emailové adresy - Liberapay"
+msgstr "Ověření e-mailové adresy - Liberapay"
 
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
@@ -411,7 +414,7 @@ msgid "Please note that the verification code contained in this message is only 
 msgstr "Prosím uvědomte si, že ověřovací kód obsažený v této zprávě platí jenom {time_interval}."
 
 msgid "Follow this link to validate your email address:"
-msgstr "Pro ověření vaší emailové adresy otevřete následující odkaz:"
+msgstr "Pro ověření vaší e-mailové adresy otevřete následující odkaz:"
 
 #, python-brace-format
 msgid "Connecting {0} to {1} on Liberapay"
@@ -419,7 +422,7 @@ msgstr "Připojení {0} k {1} na Liberapay"
 
 #, python-brace-format
 msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Propojujeme {0} k Liberapay účtu {1}. Toto oznámení je zasláno na {2}, protože to je hlavní uložená e-mailová adresa."
+msgstr "Propojujeme {0} s účtem Liberapay {1}. Toto oznámení je zasláno na {2}, protože to je hlavní uložená e-mailová adresa."
 
 msgid "Withdrawal initiated"
 msgstr "Výběr zahájen"
@@ -564,7 +567,7 @@ msgstr "example@mastodon.social"
 
 #, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
-msgstr "Opravdu je {0} {1} server? Právě teď se tak nechová."
+msgstr "Opravdu je {0} server {1}? Právě teď se tak nechová."
 
 msgid "You need to sign in first"
 msgstr "Nejdřív se musíte přihlásit"
@@ -580,19 +583,19 @@ msgstr "Musíte zadat uživatelské jméno!"
 
 #, python-brace-format
 msgid "The username '{0}' is too long."
-msgstr "Uživatelské jméno '{0}' je moc dlouhé."
+msgstr "Uživatelské jméno „{0}“ je moc dlouhé."
 
 #, python-brace-format
 msgid "The username '{0}' contains invalid characters."
-msgstr "Uživatelské jméno '{0}' obsahuje neplatné znaky."
+msgstr "Uživatelské jméno „{0}“ obsahuje neplatné znaky."
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
-msgstr "Uživatelské jméno '{0}' je zakázáno."
+msgstr "Uživatelské jméno „{0}“ je zakázáno."
 
 #, python-brace-format
 msgid "The username '{0}' is already taken."
-msgstr "Uživatelské jméno '{0}' je již zabráno."
+msgstr "Uživatelské jméno „{0}“ je již zabráno."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -618,18 +621,18 @@ msgid "{0} is already connected to a different Liberapay account."
 msgstr "{0} je již připojen k jinému účtu na Liberapay."
 
 msgid "You cannot remove your primary email address."
-msgstr "Nemůžete odebrat hlavní emailovou adresu."
+msgstr "Nemůžete odebrat hlavní e-mailovou adresu."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
-msgstr "Emailová adresa '{0}' nebyla ověřena."
+msgstr "E-mailová adresa „{0}“ nebyla ověřena."
 
 msgid "You've reached the maximum number of email addresses we allow."
 msgstr "Dosáhli jste nejvyšší počet e-mailových adres, které umožňujeme."
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
-msgstr "'{0}' není platnou emailovou adresou."
+msgstr "„{0}“ není platnou emailovou adresou."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -637,11 +640,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "E-mailová adresa {email_address}je na černé listině kvůli neúspěšnému pokusu o odeslání zprávy před {timedelta}. Pokud chcete tuto adresu odstranit z černé listiny, pošlete nám z té adresy e-mail na adresu support@liberapay.com."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "E-mailová adresa {email_address}je na černé listině kvůli stížnosi obdržené před {timedelta}. Pokud chcete tuto adresu odstranit z černé listiny, pošlete nám z té adresy e-mail na adresu support@liberapay.com."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1862,7 +1865,7 @@ msgstr[1] "Emailové adresy (soukromé)"
 msgstr[2] "Emailové adresy (soukromé)"
 
 msgid "Blacklisted"
-msgstr ""
+msgstr "Na černé listině"
 
 msgid "Primary"
 msgstr "Hlavní"
@@ -1985,7 +1988,7 @@ msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
 msgstr ""
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr ""
+msgstr "Neaktivní, protože účet příjemce je na černé listině."
 
 msgid "Inactive because the account of the recipient is closed."
 msgstr ""
@@ -4559,9 +4562,9 @@ msgstr "Jejichž práce si ceníte?"
 
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
-msgstr[0] "Nalézt odpovídající uživatelské jméno"
-msgstr[1] "Nalézt odpovídající uživatelské jméno"
-msgstr[2] "Nalézt odpovídající uživatelské jméno"
+msgstr[0] "Nalezeno odpovídající uživatelské jméno"
+msgstr[1] "Nalezena odpovídající uživatelská jména"
+msgstr[2] "Nalezena odpovídající uživatelská jména"
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
@@ -4573,7 +4576,7 @@ msgstr[2] "Nalezeny odpovídající názvy společenství"
 msgid "{n} member"
 msgid_plural "{n} members"
 msgstr[0] "{n} člen"
-msgstr[1] "{n} členi"
+msgstr[1] "{n} členové"
 msgstr[2] "{n} členů"
 
 msgid "Found a matching repository"
@@ -4588,12 +4591,12 @@ msgstr "{username} má repozitář s názvem {repo_name} na svém účtu {platfo
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
-msgstr[0] "Nalézt odpovídající příkaz user"
-msgstr[1] "Nalézt odpovídající příkaz user"
-msgstr[2] "Nalézt odpovídající příkaz user"
+msgstr[0] "Nalezeno odpovídající uživatelské prohlášení"
+msgstr[1] "Nalezena odpovídající uživatelská prohlášení"
+msgstr[2] "Nalezena odpovídající uživatelská prohlášení"
 
 msgid "Didn't find who you were looking for?"
-msgstr "Nenašli jste kdo jste hledali?"
+msgstr "Nenašli jste, koho jste hledali?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
 msgstr "Můžete také slíbit příspěvek lidem, kteří se ještě nepřidali na Liberapay:"
