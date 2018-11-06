@@ -338,6 +338,27 @@ next_payday = today + timedelta(days=days_till_wednesday)
                 }}</a></div>
                 <div class="col-2">
                     <a class="username" href="/{{ username }}/">{{ username }}</a>
+                    <div class="line-2">
+                        <span class="amount">{{
+                            _("{money_amount}{small}/week{end_small}",
+                              money_amount=tip.periodic_amount,
+                              small='<small>'|safe, end_small='</small>'|safe
+                              ) if tip.period == 'weekly' else
+                            _("{money_amount}{small}/month{end_small}",
+                              money_amount=tip.periodic_amount,
+                              small='<small>'|safe, end_small='</small>'|safe
+                              ) if tip.period == 'monthly' else
+                            _("{money_amount}{small}/year{end_small}",
+                              money_amount=tip.periodic_amount,
+                              small='<small>'|safe, end_small='</small>'|safe
+                              )
+                        }}</span>
+                        <span class="actions">
+                            <a class="btn btn-default btn-xs" href="{{ tippee.path('donate') }}">{{
+                                _("Restart")
+                            }}</a>
+                        </span>
+                    </div>
                 </div>
             </div>
             <p class="help-block">{{ _(
@@ -359,6 +380,27 @@ next_payday = today + timedelta(days=days_till_wednesday)
                              alt="({{ e.platform_data.display_name }})" />
                         {{ e.friendly_name }}
                     </a>
+                    <div class="line-2">
+                        <span class="amount">{{
+                            _("{money_amount}{small}/week{end_small}",
+                              money_amount=tip.periodic_amount,
+                              small='<small>'|safe, end_small='</small>'|safe
+                              ) if tip.period == 'weekly' else
+                            _("{money_amount}{small}/month{end_small}",
+                              money_amount=tip.periodic_amount,
+                              small='<small>'|safe, end_small='</small>'|safe
+                              ) if tip.period == 'monthly' else
+                            _("{money_amount}{small}/year{end_small}",
+                              money_amount=tip.periodic_amount,
+                              small='<small>'|safe, end_small='</small>'|safe
+                              )
+                        }}</span>
+                        <span class="actions">
+                            <a class="btn btn-default btn-xs" href="{{ e.liberapay_path }}">{{
+                                _("Restart")
+                            }}</a>
+                        </span>
+                    </div>
                 </div>
             </div>
             <p class="help-block">{{ _(
