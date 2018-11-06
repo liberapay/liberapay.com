@@ -201,7 +201,7 @@ class Payday(object):
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT t.id, t.tipper, t.tippee, t.amount, (p2.kind = 'group') AS to_team
                  , coalesce_currency_amount(t.paid_in_advance, t.amount::currency) AS paid_in_advance
-                 , t.renewal_mode
+                 , (t.renewal_mode > 0 AND (p2.goal IS NULL OR p2.goal >= 0)) AS process_real_transfers
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -209,7 +209,7 @@ class Payday(object):
                    ) t
               JOIN payday_participants p ON p.id = t.tipper
               JOIN payday_participants p2 ON p2.id = t.tippee
-             WHERE (p2.goal IS NULL or p2.goal >= 0)
+             WHERE (p2.goal IS NULL OR p2.goal >= 0 OR t.paid_in_advance > t.amount)
           ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
@@ -282,7 +282,7 @@ class Payday(object):
                         END IF;
                         transfer_amount := transfer_amount - in_advance;
                     END IF;
-                    IF (tip.renewal_mode <= 0) THEN
+                    IF (NOT tip.process_real_transfers) THEN
                         transfer_amount := zero(transfer_amount);
                     END IF;
                 END IF;
@@ -312,7 +312,7 @@ class Payday(object):
                 IF ($1.is_funded IS true) THEN RETURN NULL; END IF;
                 okay := $1.paid_in_advance >= $1.amount;
                 IF (okay IS NOT true) THEN
-                    IF ($1.renewal_mode <= 0) THEN
+                    IF (NOT $1.process_real_transfers) THEN
                         RETURN false;
                     END IF;
                     tipper_balances := (
@@ -990,6 +990,8 @@ class Payday(object):
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
             p = Participant.from_id(tippee_id)
+            if not p.accepts_tips:
+                continue
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
             by_team = {k: (MoneyBasket(t['amount'] for t in v), len(set(t['tipper'] for t in v)))
@@ -1033,6 +1035,7 @@ class Payday(object):
                         AND p2.status = 'active'
                         AND p2.is_suspended IS NOT true
                         AND p2.payment_providers > 0
+                        AND (p2.goal IS NULL OR p2.goal >= 0)
                    ) t
              WHERE EXISTS (
                      SELECT 1
