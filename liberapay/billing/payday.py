@@ -174,6 +174,7 @@ class Payday(object):
             SELECT id
                  , username
                  , join_time
+                 , status
                  , ( COALESCE((eur_w.balance).amount, '0.00'),
                      COALESCE((usd_w.balance).amount, '0.00'),
                      NULL
@@ -193,7 +194,7 @@ class Payday(object):
                                 AND %(use_mangopay)s
              WHERE join_time < %(ts_start)s
                AND is_suspended IS NOT true
-               AND status = 'active'
+               AND status <> 'stub'
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
@@ -201,7 +202,9 @@ class Payday(object):
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT t.id, t.tipper, t.tippee, t.amount, (p2.kind = 'group') AS to_team
                  , coalesce_currency_amount(t.paid_in_advance, t.amount::currency) AS paid_in_advance
-                 , (t.renewal_mode > 0 AND (p2.goal IS NULL OR p2.goal >= 0)) AS process_real_transfers
+                 , ( t.renewal_mode > 0 AND (p2.goal IS NULL OR p2.goal >= 0) AND
+                     p.status = 'active' AND p2.status = 'active'
+                   ) AS process_real_transfers
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s

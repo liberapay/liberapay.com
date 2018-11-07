@@ -145,7 +145,7 @@ class TestChartsJson(FakeTransfersHarness):
             "date": today(),
             "transfer_volume": {'amount': '3.00', 'currency': 'EUR'},
             "nactive": '3',
-            "nparticipants": '4',
+            "nparticipants": '5',
             "nusers": '4',
             "week_deposits": zero,
             "week_withdrawals": zero,
