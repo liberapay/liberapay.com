@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '86'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '87'::jsonb);
 
 
 -- app configuration
@@ -205,8 +205,10 @@ CREATE TABLE tips
 , amount            currency_amount   NOT NULL CHECK (amount >= 0)
 , is_funded         boolean           NOT NULL DEFAULT false
 , period            donation_period   NOT NULL
-, periodic_amount   currency_amount   NOT NULL
+, periodic_amount   currency_amount   NOT NULL CHECK (periodic_amount > 0)
 , paid_in_advance   currency_amount
+, renewal_mode      int               NOT NULL DEFAULT 1
+  -- 0 means no renewal, 1 means manual renewal, 2 means automatic renewal (not implemented yet)
 , CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
 , CONSTRAINT paid_in_advance_currency_chk CHECK (paid_in_advance::currency = amount::currency)
  );
