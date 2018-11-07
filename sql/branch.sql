@@ -11,6 +11,12 @@ CREATE VIEW current_tips AS
       FROM tips
   ORDER BY tipper, tippee, mtime DESC;
 
+END;
+
+SELECT 'after deployment';
+
+BEGIN;
+
 CREATE FUNCTION get_previous_tip(t tips) RETURNS tips AS $$
     SELECT old_t.*
       FROM tips old_t
