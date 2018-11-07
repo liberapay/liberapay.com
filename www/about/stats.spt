@@ -102,7 +102,7 @@ def out():
     <p>
         {{ _(
             "The last payday was {0} ago and transferred {1} between {2} users.",
-            to_age(last_payday.ts_start), transfer_volume, nactive
+            to_age(last_payday.ts_start), transfer_volume.fuzzy_sum(currency), nactive
         ) }}<br />
         {{ _("{0} participants gave money.", ngivers) }}<br />
         {{ _("{0} received money.", nreceivers) }}<br />

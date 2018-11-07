@@ -71,7 +71,10 @@
             % else
                 <td class="{{ 'text-'+cell_cls }}">{{ format_money(nominal_take) }}</td>
             % endif
-            <td>{{ locale.format_money_basket(member.actual_amount) }}</td>
+            % set fuzzy_take = member.actual_amount.fuzzy_sum(nominal_take.currency)
+            <td{% if fuzzy_take.fuzzy %} title="{{ locale.format_money_basket(member.actual_amount) }}"{% endif %}>{{
+                '~' if fuzzy_take.fuzzy else '' }}{{ locale.format_money(fuzzy_take)
+            }}</td>
         </tr>
         % endfor
         <tr class="leftover">
@@ -83,8 +86,11 @@
                 ) }}">{{ _("Leftover") }}</span></td>
             <td></td>
             <td></td>
-            <td class="{{ 'info' if members.leftover else '' }}"
-                >{{ locale.format_money_basket(members.leftover) }}</td>
+            % set fuzzy_leftover = members.leftover.fuzzy_sum(team.main_currency)
+            <td class="{{ 'info' if members.leftover else '' }}"{% if fuzzy_leftover.fuzzy
+             %} title="{{ locale.format_money_basket(members.leftover) }}"{% endif %}>{{
+                '~' if fuzzy_leftover.fuzzy else '' }}{{ locale.format_money(fuzzy_leftover)
+            }}</td>
         </tr>
       </tbody>
     </table>
