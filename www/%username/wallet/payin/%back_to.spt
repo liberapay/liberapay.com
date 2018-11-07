@@ -32,7 +32,7 @@ currencies = website.db.all("""
     SELECT DISTINCT amount::currency
       FROM current_tips
      WHERE tipper = %s
-       AND amount > 0
+       AND renewal_mode > 0
 """, (participant.id,))
 n_currencies = len(currencies)
 pending_payins = website.db.all("""

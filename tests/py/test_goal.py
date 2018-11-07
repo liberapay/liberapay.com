@@ -18,10 +18,6 @@ class Tests(Harness):
             raise r
         return r
 
-    def test_changing_to_minus_1_asks_confirmation(self):
-        r = self.client.PxST('/alice/edit/goal', {'goal': '-1'}, auth_as=self.alice)
-        assert "Warning: Doing this will remove all the tips you are currently receiving." in r.text
-
     def test_wonky_custom_amounts_are_rejected(self):
         r = self.change_goal("custom", ",100,100.0")
         assert r.code == 400

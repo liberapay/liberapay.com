@@ -59,7 +59,7 @@ tips = website.db.all("""
            ) t
       JOIN participants p ON p.id = t.tippee
      WHERE t.amount::currency = %s
-       AND t.amount > 0
+       AND t.renewal_mode > 0
        AND p.status <> 'stub'
 """, (participant.id, exchange.timestamp, currency))
 

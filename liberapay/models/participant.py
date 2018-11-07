@@ -565,6 +565,7 @@ class Participant(Model, MixinTeam):
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
              WHERE tipper = %s
+               AND renewal_mode > 0
                AND p.status = 'active'
                AND (p.mangopay_user_id IS NOT NULL OR kind = 'group')
                AND p.is_suspended IS NOT TRUE
@@ -659,22 +660,21 @@ class Participant(Model, MixinTeam):
             raise UnableToDistributeBalance(balance)
 
     def clear_tips_giving(self, cursor):
-        """Zero out tips from a given user.
+        """Turn off the renewal of all tips from a given user.
         """
         tippees = cursor.all("""
-
-            SELECT ( SELECT p.*::participants
-                       FROM participants p
-                      WHERE p.id=t.tippee
-                    ) AS tippee
-                 , t.amount
-              FROM current_tips t
-             WHERE tipper = %s
-               AND amount > 0
-
+            INSERT INTO tips
+                      ( ctime, tipper, tippee, amount, period, periodic_amount
+                      , paid_in_advance, is_funded, renewal_mode )
+                 SELECT ctime, tipper, tippee, amount, period, periodic_amount
+                      , paid_in_advance, is_funded, 0
+                   FROM current_tips
+                  WHERE tipper = %s
+                    AND renewal_mode > 0
+              RETURNING ( SELECT p FROM participants p WHERE p.id = tippee ) AS tippee
         """, (self.id,))
-        for tippee, amount in tippees:
-            self.set_tip_to(tippee, amount.zero(), update_self=False, cursor=cursor)
+        for tippee in tippees:
+            tippee.update_receiving(cursor=cursor)
 
     def clear_tips_receiving(self, cursor):
         """Zero out tips to a given user.
@@ -1799,7 +1799,6 @@ class Participant(Model, MixinTeam):
                       FROM current_tips t
                       JOIN participants p ON p.id = t.tipper
                      WHERE t.tippee = %s
-                       AND t.amount > 0
                 """, (self.id,))
                 for tipper in tippers:
                     tipper.update_giving(cursor=c)
@@ -1880,7 +1879,6 @@ class Participant(Model, MixinTeam):
               FROM current_tips t
               JOIN participants p2 ON p2.id = t.tippee
              WHERE t.tipper = %s
-               AND t.amount > 0
           ORDER BY ( p2.status = 'active' AND
                      (p2.goal IS NULL OR p2.goal >= 0) AND
                      (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
@@ -1896,7 +1894,7 @@ class Participant(Model, MixinTeam):
             for tip in (t for t in tips if t.amount.currency == currency):
                 if tip.amount <= (tip.paid_in_advance or 0):
                     is_funded = True
-                elif tip.amount > fake_balance:
+                elif tip.renewal_mode <= 0 or tip.amount > fake_balance:
                     is_funded = False
                 else:
                     fake_balance -= tip.amount
@@ -1918,7 +1916,6 @@ class Participant(Model, MixinTeam):
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
                       WHERE t.tipper = %(id)s
-                        AND t.amount > 0
                         AND ( p2.status = 'active' AND
                               (p2.goal IS NULL OR p2.goal >= 0) AND
                               (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group') AND
@@ -1946,7 +1943,6 @@ class Participant(Model, MixinTeam):
                          SELECT amount
                            FROM current_tips
                           WHERE tippee = %(id)s
-                            AND amount > 0
                             AND is_funded
                      )
                 UPDATE participants p
@@ -1990,6 +1986,9 @@ class Participant(Model, MixinTeam):
 
         if self.id == tippee.id:
             raise NoSelfTipping
+
+        if periodic_amount == 0:
+            return self.stop_tip_to(tippee, cursor=cursor)
 
         amount = (periodic_amount * PERIOD_CONVERSION_RATES[period]).round_down()
 
@@ -2045,7 +2044,32 @@ class Participant(Model, MixinTeam):
             currency = tippee.main_currency
         zero = Money.ZEROS[currency]
         return dict(amount=zero, is_funded=False, tippee=tippee.id,
-                    period='weekly', periodic_amount=zero)
+                    period='weekly', periodic_amount=zero, renewal_mode=0)
+
+
+    def stop_tip_to(self, tippee, cursor=None):
+        t = (cursor or self.db).one("""
+            INSERT INTO tips
+                      ( ctime, tipper, tippee, amount, period, periodic_amount
+                      , paid_in_advance, is_funded, renewal_mode )
+                 SELECT ctime, tipper, tippee, amount, period, periodic_amount
+                      , paid_in_advance, is_funded, 0
+                   FROM current_tips
+                  WHERE tipper = %(tipper)s
+                    AND tippee = %(tippee)s
+                    AND renewal_mode > 0
+              RETURNING *
+                      , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
+        """, dict(tipper=self.id, tippee=tippee.id))
+        if not t:
+            return
+        if t.amount > (t.paid_in_advance or 0):
+            # Update giving amount of tipper
+            self.update_giving(cursor)
+            # Update receiving amount of tippee
+            tippee.update_receiving(cursor)
+        return t._asdict()
+
 
 
     def get_tip_to(self, tippee, currency=None):
@@ -2100,8 +2124,7 @@ class Participant(Model, MixinTeam):
                    ORDER BY tipper
                           , mtime DESC
                     ) AS foo
-             WHERE amount > 0
-               AND is_funded
+             WHERE is_funded
           GROUP BY amount
           ORDER BY (amount).amount
         """, (self.id,))
@@ -2142,6 +2165,7 @@ class Participant(Model, MixinTeam):
                      , p AS tippee_p
                      , t.is_funded
                      , t.paid_in_advance
+                     , t.renewal_mode
                      , p.payment_providers
                      , ( t.paid_in_advance IS NULL OR
                          t.paid_in_advance < (t.periodic_amount * 0.75) OR
@@ -2165,6 +2189,7 @@ class Participant(Model, MixinTeam):
                      , tippee
                      , t.ctime
                      , t.mtime
+                     , t.renewal_mode
                      , (e, p)::elsewhere_with_participant AS e_account
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
@@ -2184,7 +2209,7 @@ class Participant(Model, MixinTeam):
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
              WHERE t.tipper = %s
-               AND t.amount > 0
+               AND t.renewal_mode > 0
                AND ( t.paid_in_advance IS NULL OR
                      t.paid_in_advance < (t.periodic_amount * 0.75) OR
                      t.paid_in_advance < (t.amount * 4)
@@ -2291,7 +2316,7 @@ class Participant(Model, MixinTeam):
                 SELECT *
                   FROM current_tips
                  WHERE (tippee = %(dead)s OR tippee = %(live)s)
-                   AND amount > 0;
+                   AND renewal_mode > 0;
         """
 
         CONSOLIDATE_TIPS_RECEIVING = """
@@ -2301,12 +2326,13 @@ class Participant(Model, MixinTeam):
             -- sum the amounts to prevent the new one from being above the
             -- maximum allowed.
             INSERT INTO tips
-                        (ctime, tipper, tippee, amount, period,
-                         periodic_amount, is_funded, paid_in_advance)
+                      ( ctime, tipper, tippee, amount, period
+                      , periodic_amount, is_funded, renewal_mode
+                      , paid_in_advance )
                  SELECT DISTINCT ON (tipper)
-                        ctime, tipper, %(live)s AS tippee, amount, period,
-                        periodic_amount, is_funded,
-                        ( SELECT sum(t2.paid_in_advance, t.amount::currency)
+                        ctime, tipper, %(live)s AS tippee, amount, period
+                      , periodic_amount, is_funded, renewal_mode
+                      , ( SELECT sum(t2.paid_in_advance, t.amount::currency)
                             FROM temp_tips t2
                            WHERE t2.tipper = t.tipper
                         ) AS paid_in_advance
@@ -2320,10 +2346,15 @@ class Participant(Model, MixinTeam):
         """
 
         ZERO_OUT_OLD_TIPS_RECEIVING = """
-            INSERT INTO tips (ctime, tipper, tippee, amount, period, periodic_amount)
-                SELECT ctime, tipper, tippee, zero(amount), period, zero(periodic_amount)
-                  FROM temp_tips
-                 WHERE tippee=%s
+            INSERT INTO tips
+                      ( ctime, tipper, tippee, amount, period, periodic_amount
+                      , paid_in_advance, is_funded, renewal_mode )
+                 SELECT ctime, tipper, tippee, amount, period, periodic_amount
+                      , NULL, false, 0
+                   FROM temp_tips
+                  WHERE tippee = %(dead)s
+                    AND ( coalesce_currency_amount(paid_in_advance, amount::currency) > 0 OR
+                          renewal_mode > 0 )
         """
 
         with self.db.get_cursor() as cursor:
@@ -2393,10 +2424,10 @@ class Participant(Model, MixinTeam):
 
             # Turn pledges into actual tips
             if old_tips:
-                x, y = self.id, other.id
-                cursor.run(CREATE_TEMP_TABLE_FOR_TIPS, dict(live=x, dead=y))
-                cursor.run(CONSOLIDATE_TIPS_RECEIVING, dict(live=x, dead=y))
-                cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, (other.id,))
+                params = dict(live=self.id, dead=other.id)
+                cursor.run(CREATE_TEMP_TABLE_FOR_TIPS, params)
+                cursor.run(CONSOLIDATE_TIPS_RECEIVING, params)
+                cursor.run(ZERO_OUT_OLD_TIPS_RECEIVING, params)
 
             # Try to delete the stub account, or prevent new pledges to it
             if not other_is_a_real_participant:

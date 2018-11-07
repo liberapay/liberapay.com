@@ -14,13 +14,8 @@ if request.method == "POST":
         goal = locale.parse_money_amount(goal, participant.main_currency)
     else:
         goal = Money(request.body.get_int("goal"), participant.main_currency).round_down()
-    if goal == -1 and not request.body.get("confirmed"):
-        msg = _("Warning: Doing this will remove all the tips you are currently receiving."
-                "\n\nThat cannot be undone!")
-        response.render('templates/confirm.spt', state, msg=msg, back_to=request.path.raw)
-    else:
-        participant.update_goal(goal)
-        form_post_success(state)
+    participant.update_goal(goal)
+    form_post_success(state)
 
 if participant.kind == 'individual':
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")

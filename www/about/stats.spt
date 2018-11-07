@@ -23,7 +23,7 @@ tips_stats = db_qc5.one("""
       FROM current_tips
       JOIN participants p ON p.id = tipper
       JOIN participants p2 ON p2.id = tippee
-     WHERE amount > 0
+     WHERE renewal_mode > 0
        AND is_funded
        AND p.status = 'active'
        AND p2.status = 'active'
@@ -34,11 +34,11 @@ total_backed_tips = (getattr(tips_stats, 'sum', None) or zero).round_up()
 
 average_tippees = int(db_qc5.one("""\
     SELECT round(avg(ntippees))
-      FROM ( SELECT count(tippee) as NTIPPEES
+      FROM ( SELECT count(tippee) as ntippees
                FROM current_tips
                JOIN participants p ON p.id = tipper
                JOIN participants p2 on p2.id = tippee
-              WHERE amount > 0
+              WHERE renewal_mode > 0
                 AND is_funded
                 AND p.status = 'active'
                 AND p2.status = 'active'
@@ -51,7 +51,7 @@ TIP_DISTRIBUTION = """
       FROM current_tips
       JOIN participants p ON p.id = tipper
       JOIN participants p2 on p2.id = tippee
-     WHERE amount > 0
+     WHERE renewal_mode > 0
        AND is_funded
        AND p.status = 'active'
        AND p2.status = 'active'

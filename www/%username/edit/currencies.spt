@@ -23,7 +23,7 @@ if request.method == 'POST':
             SELECT t.*
               FROM current_tips t
              WHERE t.tippee = %s
-               AND t.amount > 0
+               AND t.is_funded
                AND t.amount::currency NOT IN %s
         """, (participant.id, tuple(new_accepted.split(','))))
         if foreign_donations and body.get('confirmed') != 'true':

@@ -69,7 +69,7 @@ if request.method == 'POST':
         else:
             raise response.error(400, _("The donation amount is missing."))
     out = tipper.set_tip_to(tippee, amount, period)
-    if out['amount'] == 0:
+    if out['renewal_mode'] == 0:
         out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
     else:
         messages = PLEDGE_MESSAGES if out['is_pledge'] else DONATION_MESSAGES
@@ -87,15 +87,9 @@ if request.method == 'POST':
 else:
     out = tipper.get_tip_to(tippee)
 
-amount = out['amount']
-total_giving = tipper.giving
-total_receiving = tipper.receiving
-
-out["amount"] = amount
 out["npatrons"] = tippee.npatrons
-out["tippee_id"] = tippee.id
-out["total_giving"] = total_giving
-out["total_receiving"] = total_receiving
+out["total_giving"] = tipper.giving
+out["total_receiving"] = tipper.receiving
 
 if not tippee.hide_receiving:
     total_receiving_tippee = tippee.receiving

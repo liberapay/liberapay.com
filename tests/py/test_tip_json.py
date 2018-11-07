@@ -79,7 +79,7 @@ class TestTipJson(Harness):
         response = self.tip(bob, alice.participant.username, "0.00")
         data = json.loads(response.text)
         assert response.code == 200
-        assert data['amount'] == {"amount": "0.00", "currency": "EUR"}
+        assert data['renewal_mode'] == 0
         assert "alice" in data['msg']
 
     def test_set_tip_standard_amount(self):

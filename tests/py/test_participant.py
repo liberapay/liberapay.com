@@ -63,7 +63,7 @@ class TestTakeOver(Harness):
         alice.take_over(bob, have_confirmation=True)
         self.db.self_check()
 
-    def test_do_not_take_over_zero_tips_receiving(self):
+    def test_do_not_take_over_stopped_tips_receiving(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         carl = self.make_elsewhere('twitter', 3, 'carl')
@@ -81,7 +81,7 @@ class TestTakeOver(Harness):
         alice.set_tip_to(bob, EUR('1.00'))  # funded
         alice.set_tip_to(carl.participant, EUR('5.00'))  # not funded
         bob.take_over(carl, have_confirmation=True)
-        tips = self.db.all("select * from tips where amount > 0 order by id asc")
+        tips = self.db.all("select * from tips where renewal_mode > 0 order by id asc")
         assert len(tips) == 3
         assert tips[-1].amount == 5
         assert tips[-1].is_funded is False

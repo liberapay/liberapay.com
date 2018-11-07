@@ -174,6 +174,7 @@ class Payday(object):
             SELECT id
                  , username
                  , join_time
+                 , status
                  , ( COALESCE((eur_w.balance).amount, '0.00'),
                      COALESCE((usd_w.balance).amount, '0.00'),
                      NULL
@@ -193,7 +194,7 @@ class Payday(object):
                                 AND %(use_mangopay)s
              WHERE join_time < %(ts_start)s
                AND is_suspended IS NOT true
-               AND status = 'active'
+               AND status <> 'stub'
           ORDER BY join_time;
 
         CREATE UNIQUE INDEX ON payday_participants (id);
@@ -201,6 +202,9 @@ class Payday(object):
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT t.id, t.tipper, t.tippee, t.amount, (p2.kind = 'group') AS to_team
                  , coalesce_currency_amount(t.paid_in_advance, t.amount::currency) AS paid_in_advance
+                 , ( t.renewal_mode > 0 AND (p2.goal IS NULL OR p2.goal >= 0) AND
+                     p.status = 'active' AND p2.status = 'active'
+                   ) AS process_real_transfers
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -208,8 +212,7 @@ class Payday(object):
                    ) t
               JOIN payday_participants p ON p.id = t.tipper
               JOIN payday_participants p2 ON p2.id = t.tippee
-             WHERE t.amount > 0
-               AND (p2.goal IS NULL or p2.goal >= 0)
+             WHERE (p2.goal IS NULL OR p2.goal >= 0 OR t.paid_in_advance > t.amount)
           ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
@@ -282,6 +285,9 @@ class Payday(object):
                         END IF;
                         transfer_amount := transfer_amount - in_advance;
                     END IF;
+                    IF (NOT tip.process_real_transfers) THEN
+                        transfer_amount := zero(transfer_amount);
+                    END IF;
                 END IF;
 
                 UPDATE payday_participants
@@ -309,6 +315,9 @@ class Payday(object):
                 IF ($1.is_funded IS true) THEN RETURN NULL; END IF;
                 okay := $1.paid_in_advance >= $1.amount;
                 IF (okay IS NOT true) THEN
+                    IF (NOT $1.process_real_transfers) THEN
+                        RETURN false;
+                    END IF;
                     tipper_balances := (
                         SELECT balances
                           FROM payday_participants p
@@ -984,6 +993,8 @@ class Payday(object):
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
             p = Participant.from_id(tippee_id)
+            if not p.accepts_tips:
+                continue
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
             by_team = {k: (MoneyBasket(t['amount'] for t in v), len(set(t['tipper'] for t in v)))
@@ -1020,13 +1031,14 @@ class Payday(object):
                      SELECT t.*, p2.username AS tippee_username
                        FROM current_tips t
                        JOIN participants p2 ON p2.id = t.tippee
-                      WHERE t.amount > 0
+                      WHERE t.renewal_mode > 0
                         AND ( t.paid_in_advance IS NULL OR
                               t.paid_in_advance < t.amount
                             )
                         AND p2.status = 'active'
                         AND p2.is_suspended IS NOT true
                         AND p2.payment_providers > 0
+                        AND (p2.goal IS NULL OR p2.goal >= 0)
                    ) t
              WHERE EXISTS (
                      SELECT 1

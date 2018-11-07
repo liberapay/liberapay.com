@@ -38,7 +38,6 @@ recent = query_cache.one("""
                FROM current_tips t
                JOIN participants p ON p.id = t.tippee
               WHERE t.ctime > (now() - INTERVAL '30 days')
-                AND t.amount > 0
                 AND t.is_funded
          )
        , _donations AS (SELECT * FROM _tips WHERE status = 'active')
