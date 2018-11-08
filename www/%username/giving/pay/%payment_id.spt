@@ -21,7 +21,7 @@ payer = get_participant(state, restrict=True)
 
 if request.method == 'POST':
     # For backward compatibility
-    response.redirect(payer.url('giving/pay/stripe/'), code=307)
+    response.redirect(payer.path('giving/pay/stripe/'), code=307)
 
 payin_id = request.path['payment_id']
 
