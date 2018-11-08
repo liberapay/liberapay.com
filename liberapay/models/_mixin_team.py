@@ -222,7 +222,6 @@ class MixinTeam(object):
               JOIN participants p ON p.id = t.member
              WHERE t.team = %s
                AND p.is_suspended IS NOT true
-               AND p.mangopay_user_id IS NOT NULL
         """, (self.id,))]
         # Recompute the takes
         transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)

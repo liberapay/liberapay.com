@@ -1922,7 +1922,6 @@ class Participant(Model, MixinTeam):
                       WHERE t.tipper = %(id)s
                         AND ( p2.status = 'active' AND
                               (p2.goal IS NULL OR p2.goal >= 0) AND
-                              (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group') AND
                               t.is_funded
                               OR
                               coalesce_currency_amount(
