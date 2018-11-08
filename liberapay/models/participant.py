@@ -737,8 +737,7 @@ class Participant(Model, MixinTeam):
                    );
 
             UPDATE participants
-               SET goal=NULL
-                 , avatar_url=NULL
+               SET avatar_url=NULL
                  , avatar_src=NULL
                  , avatar_email=NULL
                  , public_name=NULL
@@ -1459,7 +1458,7 @@ class Participant(Model, MixinTeam):
 
     @property
     def accepts_tips(self):
-        return (self.goal is None) or (self.goal >= 0)
+        return self.status != 'closed' and ((self.goal is None) or (self.goal >= 0))
 
 
     # Communities
@@ -1813,19 +1812,24 @@ class Participant(Model, MixinTeam):
 
     def update_status(self, status, cursor=None):
         with self.db.get_cursor(cursor) as c:
-            goal = 'goal'
+            goal = None
             if status == 'closed':
-                goal = '(-1, main_currency)'
+                goal = Money(-1, self.main_currency)
             elif status == 'active':
-                goal = 'NULL'
+                last_goal = self.get_last_event_of_type('set_goal')
+                if last_goal and last_goal.payload:
+                    try:
+                        goal = Money.parse(last_goal.payload)
+                    except Exception as e:
+                        website.tell_sentry(e, {})
             r = c.one("""
                 UPDATE participants
                    SET status = %(status)s
                      , join_time = COALESCE(join_time, CURRENT_TIMESTAMP)
-                     , goal = {0}
+                     , goal = convert(%(goal)s, main_currency)
                  WHERE id=%(id)s
              RETURNING status, join_time, goal
-            """.format(goal), dict(id=self.id, status=status))
+            """, dict(id=self.id, status=status, goal=goal))
             self.set_attributes(**r._asdict())
             self.add_event(c, 'set_status', status)
             if not self.accepts_tips:

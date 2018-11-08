@@ -993,7 +993,7 @@ class Payday(object):
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
             p = Participant.from_id(tippee_id)
-            if not p.accepts_tips:
+            if p.status != 'active' or not p.accepts_tips:
                 continue
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
