@@ -114,12 +114,13 @@ title = _("Teams")
 ) }}</p>
 
 <p>{{ _(
-    "The limit works like this: you can always increase your take to 1.00 if it "
-    "was below that, you can double your take compared to the previous week, "
+    "The limit works like this: you can always increase your take to {amount} if "
+    "it was below that, you can double your take compared to the previous week, "
     "you can raise your take to claim the team's leftover income, and you can "
     "bring your take up to the level of the median take in the previous payday. "
     "Whichever of these possibilities results in the highest amount is your "
-    "maximum take for the week."
+    "maximum take for the week.",
+    amount=constants.TAKE_THROTTLING_THRESHOLD[currency]
 ) }}</p>
 
 <p>{{ _(

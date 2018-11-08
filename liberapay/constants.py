@@ -434,7 +434,9 @@ STANDARD_TIPS = _StandardTips(None, {
 
 SUMMARY_MAX_SIZE = 100
 
-TAKE_THROTTLING_THRESHOLD = {k: Money('1.00', k) for k in ('EUR', 'USD')}
+TAKE_THROTTLING_THRESHOLD = MoneyAutoConvertDict(
+    {k: Money('1.00', k) for k in ('EUR', 'USD')}
+)
 
 USERNAME_MAX_SIZE = 32
 USERNAME_SUFFIX_BLACKLIST = set('.txt .html .htm .json .xml'.split())
