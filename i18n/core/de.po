@@ -829,7 +829,7 @@ msgstr "Dieser Login-Link ist abgelaufen oder ungültig."
 
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
-msgstr ""
+msgstr "Eine Sicherheitsüberprüfung schlug fehl. Bitte stellen Sie sicher, dass Ihr Browser Cookies von {domain} erlaubt und versuchen Sie es erneut.."
 
 msgid "You are not authorized to access this page."
 msgstr "Sie sind nicht berechtigt, diese Seite aufzurufen."
@@ -1172,7 +1172,7 @@ msgid "Introduction"
 msgstr "Einführung"
 
 msgid "Global"
-msgstr ""
+msgstr "Weltweit"
 
 msgid "Teams"
 msgstr "Teams"
@@ -1529,14 +1529,14 @@ msgstr "Bitte geben Sie einen Betrag ein:"
 #, python-brace-format
 msgid "Wrong currency? {n} other is supported:"
 msgid_plural "Wrong currency? {n} others are supported:"
-msgstr[0] "Falsche Währung? {n} andere wird unterstützt:"
-msgstr[1] "Falsche Währung? {n} andere wird unterstützt:"
+msgstr[0] "Falsche Währung? {n} andere verfügbare:"
+msgstr[1] "Falsche Währungen? {n} andere verfügbare:"
 
 #, python-brace-format
 msgid "Wrong currency? {username} also accepts {n} other:"
 msgid_plural "Wrong currency? {username} also accepts {n} others:"
 msgstr[0] "Falsche Währung? {username} akzeptiert auch {n} andere:"
-msgstr[1] "Falsche Währung? {username} akzeptiert auch {n} andere:"
+msgstr[1] "Falsche Währungen? {username} akzeptiert auch {n} andere:"
 
 msgid "Switch"
 msgstr "Wechseln"
@@ -1622,7 +1622,7 @@ msgid "Frequently Asked Questions"
 msgstr "Häufig gestellte Fragen"
 
 msgid "Can I donate in another currency?"
-msgstr ""
+msgstr "Kann ich in einer anderen Währung spenden?"
 
 #, python-brace-format
 msgid "No, {username} only accepts payments in {currency}."
@@ -1633,7 +1633,7 @@ msgstr "Welche Zahlungsarten sind verfügbar?"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
+msgstr "{username} hat bisher keine Zahlungsmethode eingestellt, weshalb Ihre Spende derzeit nicht verarbeitet werden kann. Wir werden Sie informieren, sobald Zahlungen möglich sind."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express)."
@@ -1641,11 +1641,11 @@ msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte (Visa, M
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal. You can pay with a credit or debit card even if you don't have a PayPal account."
-msgstr ""
+msgstr "Spenden an {username} werden durch PayPal abgewickelt. Sie können mit Kredit- oder Debitkarte zahlen, auch wenn Sie kein PayPal-Konto haben."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or through PayPal."
-msgstr ""
+msgstr "Spenden an {username} können per Kredit- und Debitkarte bezahlt werden (Visa, MasterCard, American Express) oder über PayPal."
 
 msgid "How do recurrent donations work?"
 msgstr "Wie funktionieren periodische Spenden?"
@@ -1694,7 +1694,7 @@ msgid "Which currencies should your donors be allowed to send you, and which one
 msgstr "Welche Währungen dürfen die Unterstützer Ihnen zusenden und welche Währung bevorzugen Sie?"
 
 msgid "Accept all currencies, including any that we may add in the future."
-msgstr ""
+msgstr "Akzeptiere alle Währungen einschließlich jeder, die wir in der Zukunft noch hinzufügen."
 
 msgid "accept"
 msgstr "akzeptieren"
@@ -1703,11 +1703,11 @@ msgid "prefer"
 msgstr "bevorzugt"
 
 msgid "Accepting foreign currencies can increase your income by convincing people in other countries to donate to you, but international payments usually result in a higher percentage of fees, and fluctuations in exchange rates can lessen the stability of your income."
-msgstr ""
+msgstr "Wenn Sie ausländische Währungen akzeptieren, kann das Ihr Spendenaufkommen erhöhen, da Sie Menschen aus anderen Ländern überzeugen könne für Sie zu spenden. Jedoch führen internationale Zahlungen für gewöhnlich zu höheren Gebühren und Wechselkursschwankungen können die Stabilität Ihres Spendenaufkommen verringern."
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr ""
+msgstr "Stripe wechselt Zahlung automatisch in Ihre Hauptwährung. PayPal behält Zahlungen in Fremdwährungen ein, bis Sie entscheiden was mit diesen zu tun ist. Wenn Sie ein Geschäftskonto bei PayPal besitzen, dann werden eingehende Zahlungen automatisch getauscht. Die Einstellung befindet sich unter den \"{link_open}Einstellungen zum Empfangen von Zahlungen{link_close}\"."
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Ich bin dankbar für Spenden, habe aber kein spezifisches Spendenziel."
@@ -2023,7 +2023,7 @@ msgid "within the last 30 days"
 msgstr "innerhalb der letzten 30 Tage"
 
 msgid "Restart"
-msgstr ""
+msgstr "Neustart"
 
 #, python-brace-format
 msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
@@ -2568,14 +2568,14 @@ msgid "This document is not an invoice."
 msgstr "Dieses Dokument ist keine Rechnung."
 
 msgid "You can't receive new donations until you've configured payment processing."
-msgstr ""
+msgstr "Sie können erst neue Spenden erhalten, wenn Sie einen Zahlungsdienstleister konfigurieren."
 
 msgid "Configure payment processing"
-msgstr ""
+msgstr "Zahlungsabwicklung konfigurieren"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
-msgstr ""
+msgstr "Spenden durch Teams machen einen Anteil von {income_percent} deines Einkommens ({team_income} von {total_income}) und {patrons_percent} von deinen Spendern ({nteampatrons} von {npatrons}) aus."
 
 msgid "You are not a member of any team."
 msgstr "Sie sind nicht Mitglied eines Teams."
@@ -2584,26 +2584,26 @@ msgid "Details of Donations"
 msgstr "Spendendetails"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
-msgstr ""
+msgstr "Diese Sektion enthält keine Daten aus Spenden durch Teams. Sie zeigt nur Spenden, die du persönlich bekommst."
 
 msgid "Recent Changes"
-msgstr ""
+msgstr "Kürzliche Änderungen"
 
 #, python-brace-format
 msgid "A new donation of {amount} per week has been created."
-msgstr ""
+msgstr "Eine neue Spende von {amount} pro Woche wurde erstellt."
 
 #, python-brace-format
 msgid "A donation of {amount} per week has been stopped."
-msgstr ""
+msgstr "Eine Spende von {amount} pro Woche wurde beendet."
 
 #, python-brace-format
 msgid "A donation has been raised from {old_amount} to {new_amount} per week."
-msgstr ""
+msgstr "Eine Spende wurde von {old_amount} auf {new_amount} pro Woche erhöht."
 
 #, python-brace-format
 msgid "A donation has been lowered from {old_amount} per week to {new_amount}."
-msgstr ""
+msgstr "Eine Spende wurde von {old_amount} auf {new_amount} pro Woche verringert."
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "Die Tabelle unten listet Ihre Spenden nach Betrag gruppiert auf."
@@ -2627,7 +2627,7 @@ msgstr "{x_percent} der gesamten Einnahmen"
 
 #, python-brace-format
 msgid "Income Per Week (in {currency})"
-msgstr ""
+msgstr "Einkommen pro Woche (in {currency})"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
@@ -3348,7 +3348,7 @@ msgid "Who can use Liberapay?"
 msgstr "Wer kann Liberapay nutzen?"
 
 msgid "Liberapay can be used by anyone who wishes to fund their work by collecting recurrent donations."
-msgstr ""
+msgstr "Liberapay kann von jedem verwendet werden, der seine Arbeit durch sammeln von wiederkehrenden Spenden finanzieren möchte."
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
 msgstr "Liberapay wurde entwickelt um eine langfristige, planbare Finanzierung zu ermöglichen und unterstützt deshalb nur wiederkehrende Spenden."
@@ -3391,14 +3391,15 @@ msgid "A pledge is linked to an account on another platform (e.g. {platform}) an
 msgstr "Eine versprochene Spende ist an ein Konto auf einer anderen Plattform (z.B. {platform}) geknüpft. Sie kann nur von dem eingefordert werden, der dieses Konto besitzt."
 
 msgid "Which countries and currencies are supported?"
-msgstr ""
+msgstr "Welche Länder und Währungen werden unterstützt?"
 
 #, python-brace-format
 msgid "See the “{page_name}” page."
-msgstr ""
+msgstr "Siehe die Seite \"{page_name}\"."
 
+#, fuzzy
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, and in the near future SEPA Direct Debits will be too. If a payment is through PayPal, then it's also possible to pay with most credit and debit cards even without having a PayPal account, and in other ways for users who do have a PayPal account."
-msgstr ""
+msgstr "Die verfügbaren Zahlungsmethoden hängen davon ab, welchen Zahlungsverarbeiter der Empfänger unterstützt. Wenn eine Zahlung von Stripe verarbeitet wird, werden die meisten Kredit- und Debitkarten (Visa, MasterCard, American Express) akzeptiert - in naher Zukunft auch SEPA-Lastschriften. Wenn eine Zahlung durch PayPal verarbeitet wird, ist es auch möglich mit den meisten Kredit- und Debitkarten zu bezahlen ohne ein PayPal-Konto zu haben und ansonsten aber auch mittels PayPal-Konto."
 
 msgid "What are the payment processing fees?"
 msgstr "Wie hoch sind die Gebühren zur Bearbeitung einer Zahlung?"
@@ -3407,8 +3408,9 @@ msgstr "Wie hoch sind die Gebühren zur Bearbeitung einer Zahlung?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
 msgstr "Die Gebühren unterscheiden sich je nach Zahlungsdienstleister, Bezahlmethode, Land und Währung. Im Durchschnitt sind sie unter 5%."
 
+#, fuzzy
 msgid "How are chargebacks handled?"
-msgstr ""
+msgstr "Wie werden Rückbuchungen behandelt?"
 
 msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
 msgstr "Wenn Sie, trotz unserer Bemühungen Betrug zu verhindern, widerrechtlich Geld erhalten, dann ist es an Ihnen dieses zurück zu zahlen."
@@ -3436,14 +3438,15 @@ msgstr "Sind Spenden durch Liberapay steuerlich absetzbar?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Wahrscheinlich nicht, aber das hängt von den steuerlichen Regeln Ihres Landes hab."
 
+#, fuzzy
 msgid "What are wallets?"
-msgstr ""
+msgstr "Was sind Wallets?"
 
 msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr ""
+msgstr "Liberapay hielt die Spendengelder in Wallets bereit, doch tun wir dies nicht mehr. Der Gesamtbetrag der Spende wird nun sofort an den Empfänger überwiesen."
 
 msgid "What is “payday”?"
-msgstr ""
+msgstr "Was ist \"Zahltag\"?"
 
 #, python-brace-format
 msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
@@ -3465,11 +3468,11 @@ msgstr[1] ""
 #, python-brace-format
 msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
 msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Spenden können in dieser Währung sein:"
+msgstr[1] "Spenden können in diesen Währungen sein:"
 
 msgid "Each creator can select which of these currencies to accept."
-msgstr ""
+msgstr "Jeder Erzeuger kann auswählen, welche dieser Währungen akzeptiert werden."
 
 msgid "What is Liberapay?"
 msgstr "Was ist Liberapay?"
@@ -3677,10 +3680,10 @@ msgid "Kicking a member out of a team is not implemented yet. Please contact sup
 msgstr "Ein Mitglied aus einem Team zu werfen ist noch nicht implementiert. Bitte kontaktieren Sie den Support mit Beweisen, die zeigen, dass ein Konsens unter den anderen Mitgliedern besteht."
 
 msgid "Closing a team account"
-msgstr ""
+msgstr "Team-Konto schließen"
 
 msgid "A team account is automatically closed when its last member leaves."
-msgstr ""
+msgstr "Ein Teamkonto wird automatisch geschlossen, wenn sein letztes Mitglied geht."
 
 #, python-brace-format
 msgid "Last changed {timedelta} ago by {username}."
@@ -3926,8 +3929,8 @@ msgstr "Erstellen Sie Ihr Konto"
 #, python-brace-format
 msgid "You have {n} active donor who is giving you {money_amount} per week."
 msgid_plural "You have {n} active donors giving you a total of {money_amount} per week."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du hast {n} aktiven Spender, der dir {money_amount} pro Woche gibt."
+msgstr[1] "Du hast {n} aktive Spender, die dir {money_amount} pro Woche geben."
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
@@ -4501,13 +4504,13 @@ msgid "Connecting a {platform} account"
 msgstr "Verknüpfung mit {platform}-Konto"
 
 msgid "Please input the email address and country of the PayPal account you want to connect:"
-msgstr ""
+msgstr "Bitte gib die E-Mail-Adresse und das Land des PayPal-Kontos ein, das du verbinden möchtest:"
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr ""
+msgstr "An diese E-Mail-Adresse wird ein Bestätigungscode gesendet, sofern er nicht bereits mit Ihrem Liberapay-Konto verknüpft ist."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr ""
+msgstr "PayPal-Zahlungen sind derzeit nicht anonym, Spender sehen Ihre E-Mail-Adresse und Sie sehen deren."
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "Es tut uns leid, wir konnten keine Übereinstimmungen mit Ihrer Suchanfrage finden."
