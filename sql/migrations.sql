@@ -2085,3 +2085,8 @@ UPDATE tips AS t
  WHERE t.amount = 0;
 DROP FUNCTION get_previous_tip(tips);
 ALTER TABLE tips ADD CONSTRAINT tips_periodic_amount_check CHECK (periodic_amount > 0);
+
+-- migration #88
+UPDATE participants
+   SET goal = (-1,main_currency)::currency_amount
+ WHERE status = 'closed';
