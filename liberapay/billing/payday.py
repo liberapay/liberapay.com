@@ -993,12 +993,16 @@ class Payday(object):
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
             p = Participant.from_id(tippee_id)
-            if not p.accepts_tips:
+            if p.status != 'active' or not p.accepts_tips:
                 continue
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
-            by_team = {k: (MoneyBasket(t['amount'] for t in v), len(set(t['tipper'] for t in v)))
-                       for k, v in group_by(transfers, 'team').items()}
+            by_team = {
+                k: (
+                    MoneyBasket(t['amount'] for t in v).fuzzy_sum(p.main_currency),
+                    len(set(t['tipper'] for t in v))
+                ) for k, v in group_by(transfers, 'team').items()
+            }
             total = sum((t[0] for t in by_team.values()), MoneyBasket())
             nothing = (MoneyBasket(), 0)
             personal, personal_npatrons = by_team.pop(None, nothing)

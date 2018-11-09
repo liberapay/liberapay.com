@@ -23,7 +23,7 @@ with website.db.get_cursor() as cursor:
                    GROUP BY team
                     ) AS t
               JOIN participants p ON p.id = t.id
-             WHERE (p.goal >= 0 OR p.goal IS NULL)
+             WHERE p.status = 'active'
                AND p.hide_from_lists = 0;
 
         SELECT count(1) FROM teams;

@@ -147,7 +147,7 @@ if request.method == 'POST':
         website.db, payin, recipient, destination, context,
         payin.amount, tip.periodic_amount, tip.period, team=team
     )
-    response.redirect(payer.url('giving/pay/stripe/%i' % payin.id))
+    response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
 
 payin_id = request.path['payin_id']
 

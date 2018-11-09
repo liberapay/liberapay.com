@@ -260,7 +260,6 @@ class TestClosing(FakeTransfersHarness):
     def test_epi_deletes_personal_information(self):
         alice = self.make_participant(
             'alice',
-            goal=EUR(100),
             hide_giving=True,
             hide_receiving=True,
             avatar_url='img-url',
@@ -273,7 +272,6 @@ class TestClosing(FakeTransfersHarness):
         new_alice = Participant.from_username('alice')
 
         assert alice.get_statement(['en']) == (None, None)
-        assert alice.goal == new_alice.goal == None
         assert alice.hide_giving == new_alice.hide_giving == True
         assert alice.hide_receiving == new_alice.hide_receiving == True
         assert alice.avatar_url == new_alice.avatar_url == None
@@ -317,10 +315,36 @@ class TestClosing(FakeTransfersHarness):
 
         alice = alice.refetch()
         assert alice.get_statement(['en']) == (None, None)
-        assert alice.goal == None
+        assert alice.goal == EUR(-1)
         assert alice.avatar_url == None
         assert alice.email == 'alice@example.com'
         emails = alice.get_emails()
         assert len(emails) == 1
         assert emails[0].address == 'alice@example.com'
         assert emails[0].verified
+
+
+    def test_reopening_closed_account(self):
+        alice = self.make_participant(
+            'alice',
+            hide_giving=True,
+            hide_receiving=True,
+            avatar_url='img-url',
+            email='alice@example.com',
+        )
+        alice.update_goal(EUR(100))
+        alice.upsert_statement('en', 'not forgetting to be awesome!')
+        alice.add_email('alice@example.net')
+
+        alice.close(None)
+        alice.update_status('active')
+        new_alice = Participant.from_username('alice')
+
+        assert alice.get_statement(['en']).content
+        assert alice.goal == new_alice.goal == EUR(100)
+        assert alice.hide_giving == new_alice.hide_giving == True
+        assert alice.hide_receiving == new_alice.hide_receiving == True
+        assert alice.avatar_url == new_alice.avatar_url == 'img-url'
+        assert alice.email == new_alice.email
+        emails = alice.get_emails()
+        assert len(emails) == 2

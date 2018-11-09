@@ -58,6 +58,15 @@ def _Money_eq(self, other):
         return other.__eq__(self)
     return False
 
+def _Money_parse(cls, amount_str, default_currency='EUR'):
+    split_str = amount_str.split()
+    if len(split_str) == 2:
+        return Money(*split_str)
+    elif len(split_str) == 1:
+        return Money(split_str, default_currency)
+    else:
+        raise ValueError("%r is not a valid money amount" % amount_str)
+
 def _Money_round(self, rounding=ROUND_HALF_UP):
     return Money(self.amount, self.currency, rounding=rounding)
 
@@ -86,6 +95,7 @@ Money.__unicode__ = Money.__str__
 Money.convert = _convert
 Money.minimum = lambda m: Money.MINIMUMS[m.currency]
 Money.MINIMUMS = _Minimums()
+Money.parse = classmethod(_Money_parse)
 Money.round = _Money_round
 Money.round_down = lambda m: m.round(ROUND_DOWN)
 Money.round_up = lambda m: m.round(ROUND_UP)

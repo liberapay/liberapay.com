@@ -81,7 +81,7 @@ class MixinTeam(object):
 
         """, (self.id,)) if t.amount)
         takes.sum = MoneyBasket(takes.values())
-        takes.initial_leftover = self.get_exact_receiving() - takes.sum
+        takes.initial_leftover = self.receiving - takes.sum.fuzzy_sum(self.main_currency)
         return takes
 
     def get_take_for(self, member):
@@ -100,7 +100,7 @@ class MixinTeam(object):
         member_last_week = last_week.get(member_id, Money.ZEROS[currency]).convert(currency)
         return max(
             member_last_week * 2,
-            member_last_week + last_week.initial_leftover.fuzzy_sum(currency),
+            member_last_week + last_week.initial_leftover.convert(currency),
             Money(median(nonzero_last_week or (0,)), currency),
             TAKE_THROTTLING_THRESHOLD[currency]
         )
@@ -222,7 +222,6 @@ class MixinTeam(object):
               JOIN participants p ON p.id = t.member
              WHERE t.team = %s
                AND p.is_suspended IS NOT true
-               AND p.mangopay_user_id IS NOT NULL
         """, (self.id,))]
         # Recompute the takes
         transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
