@@ -179,6 +179,10 @@ FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 
 HTML_A = Markup('<a href="%s">%s</a>')
 
+IDENTITY_FIELDS = set("""
+    birthdate name nationality organization_name postal_address
+""".split())
+
 INVOICE_DOC_MAX_SIZE = 5000000
 INVOICE_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'png']
 INVOICE_DOCS_LIMIT = 10
@@ -337,6 +341,9 @@ PERIOD_CONVERSION_RATES = {
 POSTAL_ADDRESS_KEYS = (
     'AddressLine1', 'AddressLine2', 'City', 'Region', 'PostalCode', 'Country'
 )
+POSTAL_ADDRESS_KEYS_LIBERAPAY = (
+    'country', 'region', 'city', 'postal_code', 'local_address'
+)
 POSTAL_ADDRESS_KEYS_STRIPE = (
     'line1', 'line2', 'city', 'state', 'postal_code', 'country'
 )
@@ -369,6 +376,7 @@ RATE_LIMITS = {
     'check_password': (25, 60*60*24*7),  # 25 per week
     'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
     'http-unsafe.user': (10, 10),  # 10 per 10 seconds
+    'insert_identity': (7, 60*60*24*7),  # 7 per week
     'log-in.country': (10, 60),  # 10 per minute per country
     'log-in.email': (10, 60*60*24),  # 10 per day
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day

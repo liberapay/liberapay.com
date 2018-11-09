@@ -508,6 +508,17 @@ def check_address(addr):
     return True
 
 
+def check_address_v2(addr):
+    for k in ('country', 'city', 'postal_code', 'local_address'):
+        if not addr.get(k):
+            return False
+    if addr['country'] == 'US' and not addr.get('region'):
+        # FIXME This is simplistic, `region` can be required in other countries too.
+        # Related: https://github.com/liberapay/liberapay.com/issues/1056
+        return False
+    return True
+
+
 def mkdir_p(path):
     try:
         os.makedirs(path)

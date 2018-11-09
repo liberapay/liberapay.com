@@ -1,4 +1,11 @@
 
+input.form-control[type="date"] {
+    // Override some of Bootstrap's styles for `.form-control`
+    padding-bottom: 0;
+    padding-top: 0;
+    width: auto;
+}
+
 .input-group-btn > select.btn {
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -64,6 +71,9 @@ label:not([for]) {
 .block-labels label {
     display: block;
     margin-bottom: 15px;
+}
+.block-labels.max-width-500 {
+    max-width: 500px;
 }
 
 .btn-block + p {

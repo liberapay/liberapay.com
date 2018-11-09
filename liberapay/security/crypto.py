@@ -17,6 +17,10 @@ from ..models.encrypted import Encrypted
 from ..website import website
 
 
+# Prevent https://github.com/agronholm/cbor2/issues/37
+cbor2.encoder.default_encoders.pop(date)
+
+
 def get_random_string(length=32, altchars=None) -> str:
     """
     Returns a securely generated random string.

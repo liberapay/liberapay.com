@@ -42,3 +42,48 @@
     </label><br>
 
 % endmacro
+
+% macro postal_address_form_v2(prefix='postal_address', saved=None, country=None, required=True)
+
+    % set required = 'required' if required else ''
+
+    <label>
+        <span>{{ _("Country") }}</span>
+        <select name="{{ prefix }}.country" class="form-control country" {{ required }}>
+            <option></option>
+            % set country = country or saved.country
+            % for code, name in locale.countries.items()
+                <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
+            % endfor
+        </select>
+    </label>
+
+    <label>
+        <span>{{ _("Region (state, province, island…)") }}</span>
+        <input name="{{ prefix }}.region" class="form-control" maxlength=100
+               value="{{ saved.region or '' }}" />
+        <p class="help-block">{{ _(
+            "You can leave this field empty if your country doesn't use regions in postal addresses."
+        ) }}</p>
+    </label>
+
+    <label>
+        <span>{{ _("City") }}</span>
+        <input name="{{ prefix }}.city" class="form-control" {{ required }} maxlength=100
+               value="{{ saved.city or '' }}" />
+    </label>
+
+    <label>
+        <span>{{ _("Postal code") }}</span>
+        <input name="{{ prefix }}.postal_code" class="form-control" {{ required }} maxlength=50
+               size=6 value="{{ saved.postal_code or '' }}" />
+    </label>
+
+    <label>
+        <span>{{ _("Address within the city") }}</span>
+        <textarea name="{{ prefix }}.local_address" class="form-control" {{ required }} rows=2 maxlength=200>{{
+            saved.local_address
+        }}</textarea>
+    </label>
+
+% endmacro

@@ -2442,6 +2442,29 @@ class Participant(Model, MixinTeam):
         return mangopay.resources.User.get(self.mangopay_user_id)
 
 
+    # Identity (v2)
+    # =============
+
+    def get_current_identity(self):
+        encrypted = self.db.one("""
+            SELECT info
+              FROM identities
+             WHERE participant = %s
+          ORDER BY ctime DESC
+             LIMIT 1
+        """, (self.id,))
+        if encrypted is None:
+            return None
+        return encrypted.decrypt()
+
+    def insert_identity(self, info):
+        self.db.run("""
+            INSERT INTO identities
+                        (participant, info)
+                 VALUES (%s, %s)
+        """, (self.id, website.cryptograph.encrypt_dict(info)))
+
+
     # Accounts Elsewhere
     # ==================
 

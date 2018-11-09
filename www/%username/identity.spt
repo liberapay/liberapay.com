@@ -1,16 +1,9 @@
 from datetime import date
 
-from mangopay.resources import LegalUser, NaturalUser, User, Wallet
-from mangopay.utils import Address
+from pando.utils import utcnow
 
-from liberapay.billing.transactions import repr_exception, transfer, APIError
-from liberapay.constants import KYC_DOCS_EXTS_STR
-from liberapay.utils import check_address, get_participant, group_by
-
-KEYS_NATURAL = 'FirstName LastName CountryOfResidence Nationality Birthday'.split()
-KEYS_LEGAL = ['Name', 'LegalPersonType'] + ['LegalRepresentative'+k for k in KEYS_NATURAL]
-KEYS_NATURAL_L2 = 'Occupation IncomeRange Address'.split()
-KEYS_LEGAL_L2 = 'HeadquartersAddress LegalRepresentativeEmail LegalRepresentativeAddress'.split()
+from liberapay.exceptions import TooManyAttempts
+from liberapay.utils import check_address_v2, form_post_success, get_participant
 
 [---]
 request.allow('GET', 'POST')
@@ -20,190 +13,73 @@ if participant.kind not in ('individual', 'organization'):
     raise response.error(403)
 
 title = participant.username
-error, success = '', ''
+error = ''
 
 if request.method == 'POST':
     body = request.body
+    v1_form = (
+        'CountryOfResidence' in body or 'LegalPersonType' in body or
+        'IncomeRange' in body or 'LegalRepresentativeEmail' in body
+    )
+    if v1_form:
+        raise response.redirect(participant.path('identity-v1'), code=307)
 
-    confirmed = body.get('confirmed')
-    level = body.get('level') or '1'
+    new_kind = 'organization' if body.get('organization_name') else 'individual'
 
-    account = participant.get_mangopay_account()
-    last_change = None
-    new_kind = participant.kind
-    old_account = None
-
-    if level == '1':
-        new_kind = 'organization' if 'LegalPersonType' in body else 'individual'
-        if new_kind != participant.kind:
-            if participant.balance and not confirmed:
-                confirm = _(
-                    "Are you sure you want to change the type of your account? For legal "
-                    "reasons we will have to create a new account for you in our payment "
-                    "partner's system, and transfer the money from your old account."
-                )
-                response.render('templates/confirm.spt', state, msg=confirm, back_to='')
-            payday_is_running = website.db.one("""
-                SELECT ts_start FROM paydays WHERE ts_start > ts_end
-            """) is not None
-            if payday_is_running:
-                msg = _(
-                    "We can't change the type of your account during payday, please "
-                    "try again in a few minutes."
-                )
-                response.render('templates/retry-later.spt', state, msg=msg)
-            old_account = account
-            account = NaturalUser() if new_kind == 'individual' else LegalUser()
-            last_change = participant.get_last_event_of_type('mangopay-account-change')
-            if last_change:
-                assert last_change.payload['old_user_type'] == account.PersonType
-                account = User.get(last_change.payload['old_user_id'])
-        if body.get('organization') == 'yes':
-            for k in KEYS_NATURAL:
-                body['LegalRepresentative'+k] = body.pop(k, None)
-
-    if not account:
-        account = NaturalUser() if participant.kind == 'individual' else LegalUser()
-
-    if isinstance(account, NaturalUser):
-        keys = KEYS_NATURAL_L2 if level == '2' else KEYS_NATURAL
-    else:
-        keys = KEYS_LEGAL_L2 if level == '2' else KEYS_LEGAL
-
-    if account.Id and account.kyc_level != 'LIGHT' and not confirmed:
-        confirm = _(
-            "Are you sure you want to change your identity information? If you "
-            "do, you may have to go through the identity verification process "
-            "again."
-        )
-        response.render('templates/confirm.spt', state, msg=confirm, back_to='', cls='warning')
-
-    if not account.Tag:
-        account.Tag = website.canonical_url + '/~%i/' % participant.id
-
-    account.Email = participant.email or participant.get_any_email()
-
-    for k in keys:
-        v = body.get(k)
-        if k.endswith('Address'):
-            v = {k2: body[k + '.' + k2] for k2 in constants.POSTAL_ADDRESS_KEYS}
-            if not check_address(v):
-                error = _("You haven't filled all the required fields.")
-                break
-        elif k.endswith('Birthday') and v:
+    identity = {}
+    for k in constants.IDENTITY_FIELDS:
+        v = body.get(k, '')
+        if k == 'postal_address':
+            v = {k2: body[k + '.' + k2].strip() for k2 in constants.POSTAL_ADDRESS_KEYS_LIBERAPAY}
+            if v['city'] or v['postal_code'] or v['local_address']:
+                if not check_address_v2(v):
+                    error = _("The provided postal address is incomplete.")
+                else:
+                    newlines = v['local_address'].count('\n')
+                    if newlines > 1:
+                        error = "`local_address` value contains too many newlines (%i > %i)" % (newlines, 1)
+            for subkey, subvalue in v.items():
+                if len(subvalue) > 200:
+                    error = "`%s` value is too long (%i > %i)" % (subkey, len(subvalue), 200)
+        elif k == 'birthdate' and v:
             try:
                 year, month, day = map(int, v.split('-'))
                 # the above raises ValueError if the number of parts isn't 3
                 # or if any part isn't an integer
-                v = date(year, month, day)
+                v = date(year, month, day).isoformat()
             except ValueError:
                 error = _("Invalid date of birth.")
-                continue
-        if v or v == 0:
-            setattr(account, k, v)
-        else:
-            error = _("You haven't filled all the required fields.")
-            break
+        elif len(v) > 200:
+            error = "`%s` value is too long (%i > %i)" % (k, len(v), 200)
+        identity[k] = v
 
     if not error:
-        try:
-            if account.Id:
-                for k, v in list(account.get_field_dict().items()):
-                    if isinstance(v, Address) and not getattr(v, 'country', None):
-                        setattr(account, k, None)
-            if old_account:
-                if old_account.PersonType == 'NATURAL':
-                    if old_account.Address.country:
-                        account.LegalRepresentativeAddress = old_account.Address
-                else:
-                    if old_account.LegalRepresentativeAddress.country:
-                        account.Address = old_account.LegalRepresentativeAddress
-                account.save()
-                r = website.db.one("""
+        website.db.hit_rate_limit('insert_identity', participant.id, TooManyAttempts)
+        participant.insert_identity(identity)
+        if new_kind != participant.kind:
+            with website.db.get_cursor() as cursor:
+                cursor.run("""
                     UPDATE participants
                        SET kind = %s
-                         , mangopay_user_id = %s
                      WHERE id = %s
-                       AND mangopay_user_id = %s
-                 RETURNING kind, mangopay_user_id
-                """, (new_kind, account.Id, participant.id, old_account.Id))
-                if not r:
-                    raise response.error(409, "race condition")
-                participant.set_attributes(**r._asdict())
-                participant.add_event(website.db, 'mangopay-account-change', {
-                    'old_user_id': old_account.Id,
-                    'old_user_type': old_account.PersonType,
-                })
-                # Invalidate exchange routes
-                routes = website.db.all("""
-                    SELECT r
-                      FROM exchange_routes r
-                     WHERE participant = %s
-                       AND status = 'chargeable'
-                """, (participant.id,))
-                for route in routes:
-                    route.invalidate()
-                # Transfer the money
-                old_wallets = website.db.all("""
-                    UPDATE wallets
-                       SET is_current = null
-                     WHERE remote_owner_id = %s
-                 RETURNING *
-                """, (old_account.Id,))
-                website.db.run("""
-                    UPDATE wallets
-                       SET is_current = true
-                     WHERE remote_owner_id = %s
-                """, (account.Id,))
-                for w in (w for w in old_wallets if w.balance):
-                    transfer(
-                        website.db, participant.id, participant.id, w.balance,
-                        'account-switch', tipper_mango_id=old_account.Id,
-                        tipper_wallet_id=w.remote_id,
-                        tippee_mango_id=account.Id,
-                    )
-                success = _("Your identity information has been updated.")
-            elif account.Id:
-                account.save()
-                success = _("Your identity information has been updated.")
-            elif body.get('terms') == 'agree':
-                account.save()
-                r = website.db.one("""
-                    UPDATE participants
-                       SET mangopay_user_id = %s
-                         , kind = %s
-                     WHERE id = %s
-                       AND mangopay_user_id IS NULL
-                 RETURNING mangopay_user_id, kind
-                """, (account.Id, new_kind, participant.id))
-                if not r:
-                    raise response.error(409, "race condition")
-                participant.set_attributes(**r._asdict())
-                participant.mark_notifications_as_read('identity_required')
-                success = _("Your identity information has been registered.")
-            else:
-                error = _("You have to agree to MangoPay's Terms of Service.")
-        except APIError as err:
-            error = repr_exception(err)
-            website.tell_sentry(err, state)
+                """, (new_kind, participant.id))
+                participant.add_event(cursor, 'set_kind', new_kind)
+            participant.set_attributes(kind=new_kind)
+        success = _("Your identity information has been updated.")
+        form_post_success(state, msg=success)
 
     if error and request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
         raise response.error(400, error)
 
-else:
-    account = participant.get_mangopay_account()
+elif participant.mangopay_user_id and participant.balance:
+    raise response.redirect(participant.path('identity-v1'))
 
-if account and account.Id:
-    already_uploaded = [doc for doc in account.documents.all() if doc.status != 'CREATED']
-    already_uploaded = sorted(already_uploaded, key=lambda doc: -int(doc.id))
-    already_uploaded = group_by(already_uploaded, 'type', attr=True)
 else:
-    already_uploaded = {}
-
-[---] application/json
-{"msg": success}
+    identity = participant.get_current_identity()
 
 [---] text/html
+% from "templates/identity.html" import identity_form with context
+
 % extends "templates/settings.html"
 
 % block content
@@ -212,58 +88,26 @@ else:
 
     % if error
     <div class="alert alert-danger">{{ error }}</div>
-    % elif success
-    <div class="alert alert-success">{{ success }}</div>
+    % elif 'success' in request.qs
+    <div class="alert alert-success">{{ b64decode_s(request.qs.pop('success')) }}</div>
     % else
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
     % endif
 
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
-    % include "templates/identity-form.html"
-
-    <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
-
-</form>
-% if account and account.Id
-<br><hr>
-<form action="javascript:" method="POST" id="identity-form-2"
-      data-upload-url="{{ participant.path('identity-docs') }}"
-      data-allowed-extensions="{{ KYC_DOCS_EXTS_STR }}"
-      data-doc-max-size="{{ constants.KYC_DOC_MAX_SIZE }}"
-      >
-
-    <h2>{{ _("Level 2") }}</h2>
-
-    % if account.kyc_level == 'REGULAR'
-        <p class="alert alert-success">{{ _(
-            "You have completed the identity verification process, the amount of "
-            "money you can give and receive per year is no longer limited."
-        ) }}</p>
-    % endif
-
     <p>{{ _(
-        "If you give more than {0} in a year, or receive more than {1} in a year, "
-        "or if your account shows signs of suspicious activity, then you will have "
-        "to provide additional information:"
-        , constants.KYC_PAYIN_YEARLY_THRESHOLD
-        , constants.KYC_PAYOUT_YEARLY_THRESHOLD
+        "This page allows you to view and modify the identity information "
+        "attached to your account. Only authorized personnel can access this "
+        "information, we do not show it to other users or anyone else unless "
+        "required by law or if you instruct us to."
     ) }}</p>
 
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    <input type="hidden" name="level" value="2" />
+    {{ identity_form(identity, constants.IDENTITY_FIELDS, required=False) }}
 
-    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
-
-    % include "templates/identity-form-2.html"
-
-    <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
+    <br>
+    <button class="btn btn-primary btn-lg" type="submit">{{ _("Save") }}</button>
 
 </form>
-% endif
 </div>
-% endblock
-
-% block scripts
-<script src="{{ website.asset('fine-uploader/all.fine-uploader.min.js') }}"></script>
 % endblock
