@@ -3659,8 +3659,9 @@ msgstr "Regulación del importe de las partes"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Cuando esta característica está habilitada para un equipo, sus miembros no pueden aumentar sus partes más de un máximo calculado en base a las partes nominales en el momento del anterior día de pago. Este mecanismo está pensado para animar a invitar a unirse al equipo a nuevos contribuidores, al garantizar que ellos no tomarán una parte desproporcionada de los ingresos durante las primeras semanas."
 
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "El límite funciona así: siempre puedes aumentar tu parte a 1.00 si estaba más baja, puedes doblar la parte en comparación a la semana anterior, puedes aumentar la parte al reclamar los restos de los ingresos del equipo y puedes aumentar tu parte hasta el nivel de la parte media en el día de pago anterior. Cualquiera de estas posibilidades que resulte en la cantidad más alta es tu máxima parte para la semana."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "El límite funciona así: siempre puedes aumentar tu parte a {amount} si estaba más baja, puedes doblar la parte en comparación a la semana anterior, puedes aumentar la parte al reclamar los restos de los ingresos del equipo y puedes aumentar tu parte hasta el nivel de la parte media en el día de pago anterior. Cualquiera de estas posibilidades que resulte en la cantidad más alta es tu máxima parte para la semana."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "Las partes no están limitadas si el equipo tiene solo un miembro o si las partes de la semana anterior estaban todas a cero (que es el caso para cualquier nuevo equipo que haya sido creado después del día de pago más reciente)."
@@ -4106,8 +4107,8 @@ msgstr[0] "<singular sin usar (hash=ac451209b33be4d9667ad1626138debd)>"
 msgstr[1] "{n} nuevas {link_open}promesas{link_close} han sido realizadas en el pasado mes, sumando {money_amount} de donaciones semanales esperando a ser reclamadas."
 
 #, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
 msgstr[0] "<singular sin usar (hash=d75fb4039659890366270f5c2f3af63a)>"
 msgstr[1] "{money_amount} fueron transferidos la semana pasada entre {n} usuarios."
 

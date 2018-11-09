@@ -3694,8 +3694,9 @@ msgstr "Odmedzenie čiastky podielu"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Ak je táto možnosť zapnuté pre tím, ich členovia nemôžu zvýšiť príjmy vyššie než je maximum vypočítané na základe nominálnych príjmov od minulého platobného dňa. Tento mechanismus je vymyslený na to by nový ľudia v tímoch nezískavali nevhodný zisk prvé týždne."
 
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limit funguje takto: Vždy môžete zväčšiť váš príjem na 1.00 ak to bolo predtým nižšie, môžete zdvojnásobiť váš príjem oproti minulému týždňu, môžete taktiež získať aj tímové zostatky. Aká koľvek z týchto možností je váš maximálny príjem pre tento týždeň."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "Limit funguje takto: Vždy môžete zväčšiť váš príjem na {amount} ak to bolo predtým nižšie, môžete zdvojnásobiť váš príjem oproti minulému týždňu, môžete taktiež získať aj tímové zostatky. Aká koľvek z týchto možností je váš maximálny príjem pre tento týždeň."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "Príjem nie je limitovaný pokiaľ tím má iba jedného člena alebo ak predchádzajúci týždeň boli príjmy nulové (čo je prípad všetkých nových tímov vytvorených po poslednom platobnom výplatnom dni)."
@@ -4160,8 +4161,8 @@ msgstr[1] "{n} nové {link_open}prísľuby{link_close} boli spravené posledný 
 msgstr[2] "{n} nových {link_open}prísľubov{link_close} bolo spravených posledný mesiac, ktoré pridali {money_amount} týždenne čakajú na vyzdvihnute."
 
 #, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
 msgstr[0] "Medzi {n} užívateľom bolo minulý týždeň prevedených {money_amount}."
 msgstr[1] "Medzi {n} užívateľmi bolo minulý týždeň prevedených {money_amount}."
 msgstr[2] "Medzi {n} užívateľmi bolo minulý týždeň prevedených {money_amount}."

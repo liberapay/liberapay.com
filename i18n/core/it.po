@@ -3660,8 +3660,9 @@ msgstr "Regolazione dell'ammontare delle quote"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Quando questa funzionalità è attiva per una squadra, i suoi membri non possono aumentare le loro quote più di un massimo calcolato sulla base della quota nominale nel periodo del giorno di paga precedente. Questo meccanismo è studiato per incoraggiare l'invito di nuovi membri ad unirsi alla squadra, garantendo che essi non possano ricevere una quota spropositata dei guadagni nelle loro prime settimane."
 
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Il limite funziona così: puoi sempre aumentare la tua quota fino a 1.00 se era inferiore, puoi raddoppiare la tua quota rispetto alla settimana precedente, puoi aumentare la tua quota per prelevare dall'avanzo dei guadagni della squadra, e puoi portare la tua quota al livello della quota mediana del giorno di paga precedente. La tua quota massima per la settimana è pari all'opzione tra queste che produce la somma più elevata."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "Il limite funziona così: puoi sempre aumentare la tua quota fino a {amount} se era inferiore, puoi raddoppiare la tua quota rispetto alla settimana precedente, puoi aumentare la tua quota per prelevare dall'avanzo dei guadagni della squadra, e puoi portare la tua quota al livello della quota mediana del giorno di paga precedente. La tua quota massima per la settimana è pari all'opzione tra queste che produce la somma più elevata."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "Le quote non sono limitate se la squadra ha un solo membro, o se le quote della settimana precedente erano tutte pari a zero (il caso in cui una squadra viene fondata appena dopo il giorno paga)."
@@ -4107,9 +4108,9 @@ msgstr[0] "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgstr[1] "Nel mese scorso sono stati creati {n} nuovi {link_open}impegni a donare{link_close}, aggiungendo {money_amount} di donazioni settimanali in attesa di essere riscosse."
 
 #, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
+msgstr[0] "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
 msgstr[1] "La scorsa settimana sono stati trasferiti {money_amount} fra {n} utenti."
 
 msgid "More stats"

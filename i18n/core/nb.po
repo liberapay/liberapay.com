@@ -3678,9 +3678,9 @@ msgstr "Regulering av andelsmengder"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Når denne funksjonen er påslått for et lag, kan dets medlemmer ikke heve deres andel høyere end et maksimumstak, beregnet på grunnlag av de nominelle andeler, på tidspunktet for forrige betalingsdag. Denne mekanismen er ment å oppfordre nye bidragsydere i å delta i laget, ved å forsikre at de ikke tar en uforholdsmessig andel av inntekten i løpet av deres første uker."
 
-#, fuzzy
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Grensen virker på følgende måte: Du kan alltid øke din andel til 1,00 hvis den var under det. Du kan fordoble din andel i forhold til foregående uke, du kan heve din andel for at heve lagets resterende inntekt, og du kan bringe din andel til nivået for median-andelen for forrige betalingsdag. Den av de mulighetene som resulterer i det høyeste beløpet utgjør din maksimale inntekt for uken."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "Grensen virker på følgende måte: Du kan alltid øke din andel til {amount} hvis den var under det. Du kan fordoble din andel i forhold til foregående uke, du kan heve din andel for at heve lagets resterende inntekt, og du kan bringe din andel til nivået for median-andelen for forrige betalingsdag. Den av de mulighetene som resulterer i det høyeste beløpet utgjør din maksimale inntekt for uken."
 
 #, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
@@ -4136,9 +4136,9 @@ msgstr[0] "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgstr[1] "{n} nye {link_open}donasjonstilbud{link_close} har blitt gjort den siste måneden, noe som legger {money_amount} i den ukentlige donasjonspotten til innkassering."
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
+msgstr[0] "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
 msgstr[1] "{money_amount} ble overført sist uke, mellom {n} brukere."
 
 msgid "More stats"

@@ -3660,8 +3660,9 @@ msgstr "Regulering van het inkomen"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Wanneer deze functies is ingeschakeld voor het team kunnen de leden hun deel niet vehogen boven het maximum wat is berekend op basis van het nominale deel van de vorige betaaldag. Dit mechansime is bedoeld om nieuwe leden te stimuleren zich aan te sluiten en dat ze vervolgens geen disproportioneel van het inkomen kunnen nemen in hun eerste weken."
 
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Het limiet werkt als volgt: je kan altijd je deel naar 1.00 verhogen als het hieronder zat, je kan je deel verdubbelen vergeleken met vorige week, je kan je deel verhogen om het team overgebleven inkomen op te nemen en je kan je deel verhogen tot de mediaan van delen van de vorige betaaldag. Welke van deze mogelijkheden leidt tot het hoogste bedrag bepaald je maximum voor de week."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "Het limiet werkt als volgt: je kan altijd je deel naar {amount} verhogen als het hieronder zat, je kan je deel verdubbelen vergeleken met vorige week, je kan je deel verhogen om het team overgebleven inkomen op te nemen en je kan je deel verhogen tot de mediaan van delen van de vorige betaaldag. Welke van deze mogelijkheden leidt tot het hoogste bedrag bepaald je maximum voor de week."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "Inkomensdelen zijn niet gelimiteerd als het team slechts één lid heeft of als vorige week de delen allemaal nul waren (wat het geval is voor een nieuw team dat is ontstaan na de laatste betaaldag)."
@@ -4107,8 +4108,8 @@ msgstr[0] "{n} nieuwe {link_open}toezegging{link_close}, met een waarde van {mon
 msgstr[1] "{n} nieuwe {link_open}toezeggingen{link_close}, met een waarde van {money_amount} aan wekelijkse donaties, zijn er gemaakt afgelopen maand."
 
 #, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
 msgstr[0] "{money_amount} is er overgemaakt door {n} mens afgelopen week."
 msgstr[1] "{money_amount} is er overgemaakt door {n} mensen afgelopen week."
 

@@ -3659,8 +3659,9 @@ msgstr "Regulació del repartiment de diners"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Si activeu aquesta característica en un equip, els membres poden augmentar la fracció respectiva per sobre d'un màxim calculat a partir a la fracció nominal del moment del dia de pagaments anterior. Aquest mecanisme està pensat per a animar a convidar col·laboradors nous a unir-se a l'equip, assegurant que rebran una fracció desproporcionada en les primeres setmanes."
 
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "El límit funciona així: sempre podeu incrementar la vostra fracció 1,00 si era inferior a això; podeu doblar la vostra fracció en comparació a la setmana anterior; podeu incrementar la vostra fracció per a reclamar el romanent d'ingressos de l'equip; i podeu augmentar la vostra fracció a la fracció mitjana del dia de paga anterior. La quantitat més ala de qualsevol d'aquestes possibilitats és la vostra fracció màxima per a la setmana."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "El límit funciona així: sempre podeu incrementar la vostra fracció {amount} si era inferior a això; podeu doblar la vostra fracció en comparació a la setmana anterior; podeu incrementar la vostra fracció per a reclamar el romanent d'ingressos de l'equip; i podeu augmentar la vostra fracció a la fracció mitjana del dia de paga anterior. La quantitat més ala de qualsevol d'aquestes possibilitats és la vostra fracció màxima per a la setmana."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "Les fraccions no estan limitades si l'equip només té un únic membre, o si les fraccions de la setmana anterior foren totes zero (aquest és el cas de qualsevol equip nou que s'ha creat després del dia de paga més recent)."
@@ -4106,9 +4107,9 @@ msgstr[0] "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgstr[1] "Durant el mes passat es van fer {n} {link_open}compromisos{link_close}.  Això acumula {money_amount} de donatius setmanals pendents que els reclamin."
 
 #, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
-msgstr[0] "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
+msgstr[0] "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
 msgstr[1] "La setmana passada es van transferir {money_amount} entre {n} usuaris."
 
 msgid "More stats"

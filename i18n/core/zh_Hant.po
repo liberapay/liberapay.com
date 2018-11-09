@@ -3625,8 +3625,9 @@ msgstr "收取數額的規定"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "當該功能對一個團隊啟用，團隊成員無法使他們的分成高於靠在前一個捐款日的名目收取計算出來的最大值。這個功能是為了邀請更多的志願者加入團隊並且保障他們不會在前幾週拿到不成比例的收入。"
 
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "這個限額是這樣的：若低於該值，你可以將你的分成提高至1.00，你可以使你之後的分成翻倍，你可以提高分成來領取團隊的閒錢，且你可以將分成提高到上一個捐款日的中位數。以上情況中收入最高者就是你的本週最大分成。"
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "這個限額是這樣的：若低於該值，你可以將你的分成提高至{amount}，你可以使你之後的分成翻倍，你可以提高分成來領取團隊的閒錢，且你可以將分成提高到上一個捐款日的中位數。以上情況中收入最高者就是你的本週最大分成。"
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "若這個團隊只有一個成員，或是前一週的分成均為零（對於在最近一次捐款日之後創建的團隊），分成沒有限制。"
@@ -4053,8 +4054,8 @@ msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past 
 msgstr[0] "上個月新增{n}個 {link_open}捐款承諾{link_close}，可請求的捐款需求每週增加了 {money_amount}。"
 
 #, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
 msgstr[0] "上週有{money_amount} 在 {n} 個用戶之間流轉。"
 
 msgid "More stats"

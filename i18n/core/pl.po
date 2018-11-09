@@ -3675,8 +3675,9 @@ msgstr "Regulacja wysokości poboru"
 msgid "When this feature is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Gdy tak funkcja jest włączona dla danego zespołu, jego członkowie nie mogą zwiększyć ich poborów na wyższe niż maksima wyliczone na podstawie nominalnych poborów z czasu poprzedniego dnia wypłaty (payday). Mechanizm ten ma za zadanie zachęcać do zapraszania nowych osób wnoszących wkład do dołączenia do zespołu, pilnując by nie pobierali nieproporcjonalnie wysokiej części przychodu zespołu w ciągu pierwszych tygodni ich członkostwa."
 
-msgid "The limit works like this: you can always increase your take to 1.00 if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limit ten działa następująco: zawsze możesz zwiększyć swój pobór do 1.00 jeśli był od tego mniejszy, podwoić swój pobór w stosunku do poprzedniego tygodnia, zwiększyć swój pobór by wziąć pozostałość przychodu zespołu, jak i zwiększyć swój pobór do poziomu mediany poboru z ostatniego dnia wypłaty (payday). Możliwość która w Twoim przypadku da w rezultacie najwyższą wartość będzie Twoim maksymalnym poborem podczas aktualnego tygodnia."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr "Limit ten działa następująco: zawsze możesz zwiększyć swój pobór do {amount} jeśli był od tego mniejszy, podwoić swój pobór w stosunku do poprzedniego tygodnia, zwiększyć swój pobór by wziąć pozostałość przychodu zespołu, jak i zwiększyć swój pobór do poziomu mediany poboru z ostatniego dnia wypłaty (payday). Możliwość która w Twoim przypadku da w rezultacie najwyższą wartość będzie Twoim maksymalnym poborem podczas aktualnego tygodnia."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "Pobory nie są limitowane gdy zespół składa się z tylko jednego członka lub gdy pobory z ostatniego tygodnia wynosiły zero (co ma miejsce w przypadku nowych zespołów, które zostały stworzone po ostatnim dniu wypłaty, znanym także jako payday)."
@@ -4141,8 +4142,8 @@ msgstr[1] "{n} nowe {link_open}deklaracje{link_close} zostały złożone w ciąg
 msgstr[2] "{n} nowych {link_open}deklaracji{link_close} zostało złożonych w ciągu ostatniego miesiąca, dodając {money_amount} do puli tygodniowych darowizn, które czekają na wzięcie."
 
 #, python-brace-format
-msgid "<unused singular (hash=d75fb4039659890366270f5c2f3af63a)>"
-msgid_plural "{money_amount} were transferred last week between {n} users."
+msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
+msgid_plural "{money_amount} was transferred last week between {n} users."
 msgstr[0] "{money_amount} zostało przekazane w ciągu ostatniego tygodnia pomiędzy {n} użytkownikami."
 msgstr[1] "{money_amount} zostały przekazane w ciągu ostatniego tygodnia pomiędzy {n} użytkownikami."
 msgstr[2] "{money_amount} zostało przekazanych w ciągu ostatniego tygodnia pomiędzy {n} użytkownikami."
