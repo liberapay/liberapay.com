@@ -21,11 +21,11 @@ yesno () {
 }
 
 read_after () {
-    while read -r line; do [ "$line" = "$1" ] && break; done; cat
+    while read -r; do [ "$REPLY" = "$1" ] && break; done; cat
 }
 
 read_until () {
-    while read -r line; do [ "$line" = "$1" ] && break || echo "$line"; done
+    while read -r; do [ "$REPLY" = "$1" ] && break || printf '%s\n' "$REPLY"; done
 }
 
 require () {
