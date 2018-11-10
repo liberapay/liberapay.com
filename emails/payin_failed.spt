@@ -1,0 +1,15 @@
+{{ _("Your payment has failed") }}
+
+[---] text/html
+<p>{{ _(
+    "The payment of {money_amount} through Liberapay that was initiated on {date} has failed.",
+    money_amount=payin.amount, date=payin.ctime.date(),
+) }}</p>
+
+<p>{{ _("The error message provided by the payment processor {provider} is:", provider=provider) }}</p>
+
+<pre>{{ payin.error }}</pre>
+
+<p>{{ _("You can try again, possibly with another payment method, by clicking on the link below:") }}</p>
+
+<p><a href="{{ participant.url('giving/pay') }}">{{ _("Try again") }}</a></p>
