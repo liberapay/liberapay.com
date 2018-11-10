@@ -132,3 +132,32 @@ class Tests2(Harness):
         assert isinstance(r, EmailAlreadyAttachedToSelf)
         t = Participant.from_username('Team')
         assert not t
+
+    def test_payment_providers_of_team(self):
+        # 1. Test when the creator doesn't have any connected payment account.
+        alice = self.make_participant('alice')
+        data = {'name': 'Team1'}
+        r = self.client.PxST('/about/teams', data, auth_as=alice)
+        assert r.code == 302
+        team = Participant.from_username(data['name'])
+        assert team.payment_providers == 0
+
+        # 2. Test when the creator has connected a PayPal account.
+        self.add_payment_account(alice, 'paypal')
+        data = {'name': 'Team2'}
+        r = self.client.PxST('/about/teams', data, auth_as=alice)
+        assert r.code == 302
+        team = Participant.from_username(data['name'])
+        assert team.payment_providers == 2
+
+        # 3. Test after adding a member with a connected Stripe account.
+        bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
+        team.add_member(bob)
+        team = team.refetch()
+        assert team.payment_providers == 3
+
+        # 4. Test after the creator leaves.
+        team.set_take_for(alice, None, alice)
+        team = team.refetch()
+        assert team.payment_providers == 1
