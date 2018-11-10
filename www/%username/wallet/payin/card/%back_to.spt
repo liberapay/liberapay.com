@@ -188,7 +188,7 @@ title = _("Adding Money")
             _("The attempt to take {0} from your credit card has failed. Error message: {1}", exchange.amount + exchange.fee, exchange.note)
         }}</div>
         % if success
-        <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View Receipt") }}</a>
+        <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View receipt") }}</a>
         % endif
     % endif
 
