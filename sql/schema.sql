@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '88'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '89'::jsonb);
 
 
 -- app configuration
@@ -421,41 +421,6 @@ CREATE TABLE payment_accounts
 , UNIQUE (provider, id, participant)
 );
 
-CREATE FUNCTION update_payment_providers() RETURNS trigger AS $$
-    DECLARE
-        rec record;
-    BEGIN
-        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
-        UPDATE participants
-           SET payment_providers = coalesce((
-                   SELECT sum(DISTINCT array_position(
-                                           enum_range(NULL::payment_providers),
-                                           a.provider::payment_providers
-                                       ))
-                     FROM payment_accounts a
-                    WHERE ( a.participant = rec.participant OR
-                            a.participant IN (
-                                SELECT t.member
-                                  FROM current_takes t
-                                 WHERE t.team = rec.participant
-                            )
-                          )
-                      AND a.is_current IS TRUE
-                      AND a.verified IS TRUE
-                      AND coalesce(a.charges_enabled, true)
-               ), 0)
-         WHERE id = rec.participant
-            OR id IN (
-                   SELECT t.team FROM current_takes t WHERE t.member = rec.participant
-               );
-        RETURN NULL;
-    END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_payment_providers
-    AFTER INSERT OR UPDATE OR DELETE ON payment_accounts
-    FOR EACH ROW EXECUTE PROCEDURE update_payment_providers();
-
 
 -- payins -- incoming payments that don't go into a donor wallet
 
@@ -623,6 +588,61 @@ CREATE VIEW current_takes AS
            ORDER BY team, member, mtime DESC
            ) AS x
      WHERE amount IS NOT NULL;
+
+CREATE FUNCTION compute_payment_providers(bigint) RETURNS bigint AS $$
+    SELECT coalesce((
+        SELECT sum(DISTINCT array_position(
+                                enum_range(NULL::payment_providers),
+                                a.provider::payment_providers
+                            ))
+          FROM payment_accounts a
+         WHERE ( a.participant = $1 OR
+                 a.participant IN (
+                     SELECT t.member
+                       FROM current_takes t
+                      WHERE t.team = $1
+                 )
+               )
+           AND a.is_current IS TRUE
+           AND a.verified IS TRUE
+           AND coalesce(a.charges_enabled, true)
+    ), 0);
+$$ LANGUAGE SQL STRICT;
+
+CREATE FUNCTION update_payment_providers() RETURNS trigger AS $$
+    DECLARE
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        UPDATE participants
+           SET payment_providers = compute_payment_providers(rec.participant)
+         WHERE id = rec.participant
+            OR id IN (
+                   SELECT t.team FROM current_takes t WHERE t.member = rec.participant
+               );
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_payment_providers
+    AFTER INSERT OR UPDATE OR DELETE ON payment_accounts
+    FOR EACH ROW EXECUTE PROCEDURE update_payment_providers();
+
+CREATE FUNCTION update_team_payment_providers() RETURNS trigger AS $$
+    DECLARE
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        UPDATE participants
+           SET payment_providers = compute_payment_providers(rec.team)
+         WHERE id = rec.team;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_team_payment_providers
+    AFTER INSERT OR DELETE ON takes
+    FOR EACH ROW EXECUTE PROCEDURE update_team_payment_providers();
 
 
 -- log of participant events
