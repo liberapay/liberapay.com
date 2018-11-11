@@ -73,7 +73,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
         <span>{{ _("Send me notifications via email:") }}</span><br>
         <div class="checkbox">
         % for event in EVENTS.values()
-        % if event.title != "obsolete"
+        % if not event.name.startswith('withdrawal_') or participant.balance > 0
         <label>
             <input name="{{ event.name }}" type="checkbox" {{ 'checked' if participant.email_notif_bits.__and__(event.bit) else '' }} />
             {{ _(event.title) }}

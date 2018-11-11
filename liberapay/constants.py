@@ -160,11 +160,6 @@ EVENTS = [
     Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
     Event('pledgee_joined', 16, _("When someone I pledge to joins Liberapay")),
     Event('team_invite', 32, _("When someone invites me to join a team")),
-    Event('payin_bankwire_failed', 64, "obsolete"),
-    Event('payin_bankwire_succeeded', 128, "obsolete"),
-    Event('payin_bankwire_expired', 256, "obsolete"),
-    Event('payin_directdebit_failed', 512, "obsolete"),
-    Event('payin_directdebit_succeeded', 1024, "obsolete"),
     Event('payin_failed', 2**11, _("When a payment I initiated fails")),
     Event('payin_succeeded', 2**12, _("When a payment I initiated succeeds")),
 ]
