@@ -154,7 +154,7 @@ EUROZONE = set("AT BE CY DE EE ES FI FR GR IE IT LT LU LV MT NL PT SI SK".split(
 SEPA = EUROZONE | set("BG CH CZ DK GB GI HR HU IS LI MC NO PL RO SE".split())
 
 EVENTS = [
-    Event('income', 1, _("When I receive money")),
+    Event('income', 1, _("Every week as long as I am receiving donations")),
     Event('donate_reminder', 2, _("When it's time to renew my donations")),
     Event('withdrawal_created', 4, _("When a transfer to my bank account is initiated")),
     Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
