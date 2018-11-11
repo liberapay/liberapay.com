@@ -254,6 +254,7 @@ class AppConf(object):
         ses_feedback_queue_url=str,
         ses_region=str,
         send_newsletters_every=int,
+        sepa_creditor_identifier=str,
         show_sandbox_warning=bool,
         socket_timeout=float,
         smtp_host=str,

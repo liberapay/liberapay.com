@@ -9,6 +9,7 @@ import stripe.error
 
 from ..models.exchange_route import ExchangeRoute
 from ..utils.currencies import Money
+from ..website import website
 from .common import update_payin, update_payin_transfer
 
 
@@ -85,9 +86,21 @@ def destination_charge(db, payin, payer, statement_descriptor):
     except stripe.error.StripeError as e:
         return update_payin(db, payin.id, '', 'failed', repr_stripe_error(e))
     except Exception as e:
-        from liberapay.website import website
         website.tell_sentry(e, {})
         return update_payin(db, payin.id, '', 'failed', str(e))
+    if route.network == 'stripe-sdd' and payin.status == 'pending':
+        sepa_debit = stripe.Source.retrieve(route.address).sepa_debit
+        payer.notify(
+            'payin_sdd_created',
+            payin_amount=payin.amount,
+            bank_name=sepa_debit.bank_name,
+            partial_bank_account_number=get_partial_iban(sepa_debit),
+            mandate_url=sepa_debit.mandate_url,
+            mandate_id=sepa_debit.mandate_reference,
+            mandate_creation_date=route.ctime.date(),
+            creditor_identifier=website.app_conf.sepa_creditor_identifier,
+            statement_descriptor=charge.statement_descriptor,
+        )
     return settle_destination_charge(db, payin, charge, pt)
 
 

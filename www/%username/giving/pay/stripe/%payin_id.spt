@@ -185,7 +185,8 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     if payin.status == 'pre':
         payin = destination_charge(
-            website.db, payin, payer, statement_descriptor='Liberapay'
+            website.db, payin, payer,
+            statement_descriptor=('Liberapay %i' % payin.id)
         )
 
 tippee_id = request.qs.get_int('beneficiary', default=None)
