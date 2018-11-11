@@ -831,7 +831,13 @@ span.help-title {
     .payment-icon {
         font-size: 2em;
     }
-    small.text-warning {
+    .muted {
+        color: #888;
+        .payment-icon {
+            color: #ccc;
+        }
+    }
+    small.text-warning, small.text-danger {
         font-size: $font-size-medium;
         font-weight: bold;
         line-height: $font-size-medium * $line-height-base;

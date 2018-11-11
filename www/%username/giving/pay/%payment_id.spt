@@ -15,6 +15,10 @@ PAYMENT_PROVIDERS = website.db.one(
     "SELECT array_to_json(enum_range(NULL::payment_providers))"
 )
 
+allow_stripe_card = website.app_conf.payin_methods.get('stripe-card', True)
+allow_stripe_sdd = website.app_conf.payin_methods.get('stripe-sdd', True)
+allow_paypal = website.app_conf.payin_methods.get('paypal', True)
+
 [---]
 
 payer = get_participant(state, restrict=True)
@@ -108,24 +112,32 @@ title = _("Funding your donations")
     % for provider in providers
         % if provider == 'stripe'
         <div class="col-sm-6">
-            <div class="panel panel-default">
+            <div class="panel panel-default {{ '' if allow_stripe_card else 'muted' }}">
             <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
                 <h4>{{ _("Card") }}<br>
+                    % if not allow_stripe_card
+                    <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % else
                     <small>Visa, MasterCard, American Express</small>
+                    % endif
                 </h4>
+                % if allow_stripe_card
                 <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?beneficiary={{ tip.tippee }}&amp;method=card"></a>
+                % endif
             </div></div>
         </div>
-        % set possible = tip.amount.currency == 'EUR'
+        % set possible = allow_stripe_sdd and tip.amount.currency == 'EUR'
         % set warn = request.country not in constants.SEPA
         <div class="col-sm-6">
-            <div class="panel panel-default">
-            <div class="panel-body overlayed {{ '' if possible else 'not-recommended' }}">
+            <div class="panel panel-default {{ '' if possible else 'muted' }}">
+            <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('bank') }}</p>
                 <h4>{{ _("Direct Debit") }}<br>
-                    % if not possible
-                    <small>{{ _("Euro donations only") }}</small>
+                    % if not allow_stripe_sdd
+                    <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % elif tip.amount.currency != 'EUR'
+                    <small class="text-warning">{{ _("Euro donations only") }}</small>
                     % else
                     <small class="{{ 'text-warning' if warn else '' }}">{{ _("Euro bank accounts only") }}</small>
                     % endif
@@ -137,13 +149,19 @@ title = _("Funding your donations")
         </div>
         % elif provider == 'paypal'
         <div class="col-sm-6">
-            <div class="panel panel-default">
+            <div class="panel panel-default {{ '' if allow_paypal else 'muted' }}">
             <div class="panel-body overlayed">
                 <p class="payment-icon">{{ fontawesome('paypal') }}</p>
                 <h4>PayPal<br>
+                    % if not allow_paypal
+                    <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % else
                     <small class="text-warning">{{ _("Not anonymous") }}</small>
+                    % endif
                 </h4>
+                % if allow_paypal
                 <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?beneficiary={{ tip.tippee }}"></a>
+                % endif
             </div>
             </div>
         </div>
