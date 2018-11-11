@@ -128,10 +128,16 @@ title = _("Adding Money")
     % set direct_debit_available = currency in constants.FEE_PAYIN_DIRECT_DEBIT
 
         <div class="col-sm-6">
-            <div class="panel panel-default {{ 'not-recommended' if not allow_card else '' }}">
+            <div class="panel panel-default {{ '' if allow_card else 'muted' }}">
             <div class="panel-body {{ 'overlayed' if allow_card else '' }}">
                 <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
-                <h4>{{ _("Credit/Debit Card") }}<br><small>{{ "Visa / Mastercard / CB" if allow_card else _("Currently unavailable") }}</small></h4>
+                <h4>{{ _("Credit/Debit Card") }}<br>
+                    % if allow_card
+                    <small>Visa / Mastercard / CB</small>
+                    % else
+                    <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % endif
+                </h4>
                 <p>
                     {{ _("Easy and instantaneous") }}<br>
                     {{ _("Fees: {0}% + {1}", *constants.FEE_PAYIN_CARD[currency].with_vat) }}
@@ -141,11 +147,16 @@ title = _("Adding Money")
         </div>
 
         <div class="col-sm-6">
-            <div class="panel panel-default {{ 'not-recommended' if not allow_bankwire else '' }}">
+            <div class="panel panel-default {{ '' if allow_bankwire else 'muted' }}">
             <div class="panel-body {{ 'overlayed' if allow_bankwire else '' }}">
                 <p class="payment-icon">{{ fontawesome('bank') }}</p>
                 <h4>{{ _("Bank Wire") }}<br>
-                    <small>{{ _("To an account in Europe") if allow_bankwire else _("Currently unavailable") }}</small></h4>
+                    % if allow_bankwire
+                    <small>{{ _("To an account in Europe") }}</small>
+                    % else
+                    <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % endif
+                </h4>
                 <p>
                     {{ _("Cheapest for small amounts¹") if direct_debit_available else
                        _("Cheaper¹ but cumbersome") }}<br>
@@ -159,10 +170,16 @@ title = _("Adding Money")
         % if direct_debit_available
         % set recommended = request.country in constants.PAYIN_DIRECT_DEBIT_COUNTRIES[currency]
         <div class="col-sm-6">
-            <div class="panel panel-default {{ 'not-recommended' if not recommended or not allow_directdebit }}">
+            <div class="panel panel-default {{ '' if recommended and allow_directdebit else 'muted' }}">
             <div class="panel-body {{ 'overlayed' if allow_directdebit else '' }}">
                 <p class="payment-icon">{{ fontawesome('exchange') }}</p>
-                <h4>{{ _("Direct Debit") }}<br><small>{{ _("Eurozone only") if allow_directdebit else _("Currently unavailable") }}</small></h4>
+                <h4>{{ _("Direct Debit") }}<br>
+                    % if allow_directdebit
+                    <small class="{{ '' if recommended else 'text-warning' }}">{{ _("Euro bank accounts only") }}</small>
+                    % else
+                    <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % endif
+                </h4>
                 <p>
                     {{ _("Best for regular payments") }}<br>
                     {{ _("Fee: {0}", constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat) }}
