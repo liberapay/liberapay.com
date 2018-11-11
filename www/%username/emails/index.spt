@@ -89,6 +89,12 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
         % endfor
         </div>
         <button class="btn btn-default">{{ _("Save changes") }}</button>
+        <br><br>
+        <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+            "Some types of notifications cannot be turned off, so they are not "
+            "listed above. For example you will always be notified when we are "
+            "preparing to debit your bank account."
+        ) }}</p>
     </form>
 
     <br>
