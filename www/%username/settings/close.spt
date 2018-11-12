@@ -17,6 +17,8 @@ if request.method == 'POST' and not payday_is_running:
         response.redirect(participant.path('wallet/payout/'+b64encode_s(request.path.raw)))
     elif disburse_to == 'downstream':
         raise response.error(403, _("This is no longer possible, sorry."))
+    elif disburse_to == 'liberapay':
+        participant.donate_remaining_balances_to_liberapay()
     else:
         participant.close(disburse_to)
         participant.sign_out(response.headers.cookie)
@@ -85,14 +87,22 @@ subhead = participant.username
                     {{ _("This is no longer possible, sorry.") }}
                 </p>
             </label><br>
+            <label>
+                <input type="radio" name="disburse_to" value="liberapay" />
+                {{ _("Donate it to Liberapay") }}
+                <p class="text-info">
+                    {{ glyphicon('info-sign') }}
+                    {{ _("This option is recommended for small amounts.") }}
+                </p>
+            </label><br>
             % if refundable_balances >= balances
             <label>
-                <input type="radio" name="disburse_to" value="payin-refund" checked />
+                <input type="radio" name="disburse_to" value="payin-refund" />
                 {{ _("Refund it to my card or bank account") }}
             </label><br>
             % else
             <label>
-                <input type="radio" name="disburse_to" value="payout" checked />
+                <input type="radio" name="disburse_to" value="payout" />
                 {{ _("Withdraw it to my bank account") }}
             </label>
             % endif
