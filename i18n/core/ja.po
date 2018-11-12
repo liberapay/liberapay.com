@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-11-12 14:30+0000\n"
-"Last-Translator: rt <libera_knabino@tutanota.com>\n"
+"PO-Revision-Date: 2018-11-12 14:37+0000\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -56,11 +56,11 @@ msgstr "お使いのメールアドレスはブラックリストに含まれて
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "私たちはこれ以上あなたのアドレス {email_address} にメールを送信しません。最近の送信の試みが失敗しているためです。ブラックリストからそのアドレスを削除したい場合は、そのアドレスから support@liberapay.com にメールを送信してください。"
+msgstr "私たちはこれ以上お使いのアドレス {email_address} にメールを送信しません。最近の送信の試みが失敗しているためです。ブラックリストからそのアドレスを削除したい場合は、そのアドレスから support@liberapay.com にメールを送信してください。"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "私たちはこれ以上あなたのアドレス{email_address}にメールを送信しません。メールプロバイダから苦情を受け取ったためです。ブラックリストからそのアドレスを削除したい場合は、そのアドレスからsupport@liberapay.comにメールを送信してください。"
+msgstr "私たちはこれ以上お使いのアドレス {email_address} にメールを送信しません。メールプロバイダから苦情を受け取ったためです。ブラックリストからそのアドレスを削除したい場合は、そのアドレスから support@liberapay.com にメールを送信してください。"
 
 msgid "Manage your email addresses"
 msgstr "メールアドレスを管理"
@@ -98,15 +98,15 @@ msgstr "どのチームのメンバーでもないため、チームに参加す
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "あなたがメンバーである{n}チームにおけるあなたの役割に対し、あなたに金銭は支払われません。"
+msgstr[0] "所属する {n} チームでの役割に対して、あなたに金銭は支払われませんでした。"
 
 #, python-brace-format
 msgid "{0} was given to you for your role in the {1} team."
-msgstr "{1} チームでの役割のために、{0} が寄付されました。"
+msgstr "{1} チームでの役割に対して、{0} が寄付されました。"
 
 #, python-brace-format
 msgid "{0} was given to you for your roles in the following teams:"
-msgstr "以下のチームでの役割のために、{0} が寄付されました："
+msgstr "以下のチームでの役割に対して、{0} が寄付されました："
 
 #, python-brace-format
 msgid "{0}: {1}"
@@ -145,7 +145,7 @@ msgstr "個人的な寄付：ありません。"
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] "{team_name} チームでの役割のための寄付：{n} 人の寄贈者から {money_amount}。"
+msgstr[0] "{team_name} チームでの役割に対する寄付：{n} 人の寄贈者から {money_amount}。"
 
 msgid "Donations through teams: none (you are not a member of any team)."
 msgstr "チームを通じての寄付：ありません（どのチームのメンバーでもありません）。"
@@ -2356,7 +2356,7 @@ msgstr "匿名の寄付"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
-msgstr ""
+msgstr "{0} チームでの役割に対する匿名の寄付"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
