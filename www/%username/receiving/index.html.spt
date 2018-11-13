@@ -113,7 +113,7 @@ recent_donation_changes = website.db.all("""
 % endif
 
 % if participant.receiving > participant.taking
-<h3>{{ _("Details of Donations") }}</h3>
+<h3>{{ _("Details of Individual Donations") }}</h3>
 % if participant.taking
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
         "This section doesn't include data on donations through teams, it only "
