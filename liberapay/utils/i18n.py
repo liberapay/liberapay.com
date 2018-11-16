@@ -256,6 +256,8 @@ _ = lambda a: a
 HTTP_ERRORS = {
     403: _("Forbidden"),
     404: _("Not Found"),
+    409: _("Conflict"),
+    410: _("Gone"),
     429: _("Too Many Requests"),
     500: _("Internal Server Error"),
     502: _("Upstream Error"),
