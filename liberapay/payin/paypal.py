@@ -73,7 +73,7 @@ def create_payment(db, payin, payer, return_url, state):
       ORDER BY pt.id
     """, (payin.id,))
     assert transfers
-    locale, _ = state['locale'], state['_']
+    locale, _, ngettext = state['locale'], state['_'], state['ngettext']
     data = {
         "intent": "sale",
         "application_context": {
@@ -96,7 +96,19 @@ def create_payment(db, payin, payer, return_url, state):
                   pt.recipient_username, pt.team_name)
                 if pt.team_name else
                 _("donation to {0}", pt.recipient_username)
-            ),
+            ) + ' | ' + (ngettext(
+                "{n} week of {money_amount}",
+                "{n} weeks of {money_amount}",
+                n=pt.n_units, money_amount=pt.unit_amount
+            ) if pt.period == 'weekly' else ngettext(
+                "{n} month of {money_amount}",
+                "{n} months of {money_amount}",
+                n=pt.n_units, money_amount=pt.unit_amount
+            ) if pt.period == 'monthly' else ngettext(
+                "{n} year of {money_amount}",
+                "{n} years of {money_amount}",
+                n=pt.n_units, money_amount=pt.unit_amount
+            )),
             "invoice_number": str(pt.id),
             "note_to_payee": (
                 "donation via Liberapay for your role in the %s team" % pt.team_name
