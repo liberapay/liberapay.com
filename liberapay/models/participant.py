@@ -663,9 +663,9 @@ class Participant(Model, MixinTeam):
         """Donate what's left in the user's wallets to Liberapay.
         """
         LiberapayOrg = self.from_username('LiberapayOrg')
+        Liberapay = self.from_username('Liberapay')
         tip = self.get_tip_to(LiberapayOrg)
         if not tip['amount']:
-            Liberapay = self.from_username('Liberapay')
             tip = self.get_tip_to(Liberapay)
         if tip['amount']:
             if tip['tippee'] == Liberapay.id:
