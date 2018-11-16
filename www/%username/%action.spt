@@ -7,12 +7,11 @@ from liberapay.utils import get_participant
 
 [---]
 
-publisher = get_participant(state, restrict=False)
-
 action = request.path['action']
-
 if action not in ('subscribe', 'unsubscribe'):
     raise response.error(404)
+
+publisher = get_participant(state, restrict=False)
 
 subscribe = action == 'subscribe'
 subscriber = user
@@ -59,14 +58,12 @@ else:
         % if subscribe
             <h4>{{ _("Subscribe to updates from {0}?", publisher.username) }}</h4>
             <button class="btn btn-lg btn-primary">{{ _("Subscribe") }}</button>
-            <br><br>
-            <a class="btn btn-default" href="{{ back_to }}">{{ _("← Go back") }}</a>
         % else
             <h4>{{ _("Please confirm") }}</h4>
             <button class="btn btn-lg btn-warning">{{ _("Unsubscribe") }}</button>
-            <br><br>
-            <a class="btn btn-default" href="{{ back_to }}">{{ _("← Go back") }}</a>
         % endif
+        <br><br>
+        <a class="btn btn-default" href="{{ back_to }}">{{ _("← Go back") }}</a>
     </form>
 % endblock
 
