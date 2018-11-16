@@ -69,6 +69,8 @@ if request.method == 'POST':
         else:
             raise response.error(400, _("The donation amount is missing."))
     out = tipper.set_tip_to(tippee, amount, period)
+    if not out:
+        raise response.error(400, _("This donation doesn't exist or has already been stopped."))
     if out['renewal_mode'] == 0:
         out["msg"] = _("Your donation to {0} has been stopped.", tippee_name)
     else:

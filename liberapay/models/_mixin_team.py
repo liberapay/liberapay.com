@@ -293,7 +293,7 @@ class MixinTeam(object):
         last_week = self.get_takes_last_week()
         compute_max = self.throttle_takes and nmembers > 1 and last_week.sum
         members = OrderedDict()
-        members.leftover = self.leftover
+        members.leftover = self.leftover or MoneyBasket()
         zero = Money.ZEROS[self.main_currency]
         for take in takes:
             member = {}

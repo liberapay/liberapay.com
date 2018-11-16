@@ -62,6 +62,13 @@ pledges_by_currency = {
 del pledges
 n_pledge_currencies = len(tips_by_currency)
 
+has_pending_transfer = set(website.db.all("""
+    SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
+      FROM payin_transfers pt
+     WHERE pt.payer = %s
+       AND pt.status = 'pending'
+""", (participant.id,)))
+
 if not freeload:
     Liberapay = Participant.from_username('Liberapay')
     Liberapay_goal = getattr(Liberapay, 'goal', None)
@@ -219,7 +226,12 @@ next_payday = today + timedelta(days=days_till_wednesday)
                         % endif
                     </p>
                 % else
-                    % if tip.payment_providers
+                    % if tip.tippee in has_pending_transfer
+                        <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+                            _("Pending payment completion.")
+                        }}</p>
+                        <br>
+                    % elif tip.payment_providers
                         <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{
                             _("Awaiting payment.")
                         }}</p>
