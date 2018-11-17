@@ -55,6 +55,11 @@ subhead = _("Avatar")
        {{ glyphicon('info-sign') }}
        <span>{{ _("What is Libravatar?") }}</span>
     </a>
+    <br><br>
+    <button class="btn btn-default" data-action="reload" type="button">
+       {{ glyphicon('refresh') }} <span>{{ _("Refresh") }}</span>
+    </button>
+    <noscript><span class="text-danger">{{ _("JavaScript is required") }}</span></noscript>
     </div>
     </div>
     % endif

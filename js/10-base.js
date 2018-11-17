@@ -100,6 +100,10 @@ Liberapay.init = function() {
     $('[data-email-reveal]').one('click', function () {
         $(this).html($(this).data('email-reveal'));
     });
+
+    $('button[data-action="reload"]').on('click', function() {
+        location.reload();
+    });
 };
 
 $(function(){ Liberapay.init(); });
