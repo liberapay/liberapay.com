@@ -5,7 +5,6 @@ Handles HTTP caching.
 import atexit
 from hashlib import md5
 import os
-from os import stat
 from tempfile import mkstemp
 
 from aspen import resources
@@ -53,14 +52,11 @@ def clean_assets(www_root):
 def asset_etag(path):
     if path.endswith('.spt'):
         return ''
-    mtime = stat(path).st_mtime
     if path in ETAGS:
-        h, cached_mtime = ETAGS[path]
-        if cached_mtime == mtime:
-            return h
+        return ETAGS[path]
     with open(path, 'rb') as f:
         h = b64encode_s(md5(f.read()).digest())
-    ETAGS[path] = (h, mtime)
+    ETAGS[path] = h
     return h
 
 
