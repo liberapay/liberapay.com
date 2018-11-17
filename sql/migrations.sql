@@ -2143,3 +2143,61 @@ UPDATE participants
    SET payment_providers = compute_payment_providers(id)
  WHERE kind = 'group'
    AND payment_providers <> compute_payment_providers(id);
+
+-- migration #90
+CREATE OR REPLACE FUNCTION update_community_nmembers() RETURNS trigger AS $$
+    DECLARE
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        UPDATE communities
+           SET nmembers = (
+                   SELECT count(*)
+                     FROM community_memberships m
+                    WHERE m.community = rec.community
+                      AND m.is_on
+               )
+         WHERE id = rec.community;
+        RETURN rec;
+    END;
+$$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION update_nsubscribers() RETURNS trigger AS $$
+    DECLARE
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        UPDATE participants
+           SET nsubscribers = (
+                   SELECT count(*)
+                     FROM subscriptions s
+                    WHERE s.publisher = rec.publisher
+                      AND s.is_on
+               )
+         WHERE id = rec.publisher;
+        RETURN rec;
+    END;
+$$ LANGUAGE plpgsql;
+DROP TRIGGER update_community_nmembers ON community_memberships;
+CREATE TRIGGER update_community_nmembers
+    AFTER INSERT OR UPDATE OR DELETE ON community_memberships
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_community_nmembers();
+DROP TRIGGER update_nsubscribers ON subscriptions;
+CREATE TRIGGER update_nsubscribers
+    AFTER INSERT OR UPDATE OR DELETE ON subscriptions
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_nsubscribers();
+UPDATE communities AS c
+   SET nmembers = (
+           SELECT count(*)
+             FROM community_memberships m
+            WHERE m.community = c.id
+              AND m.is_on
+       );
+UPDATE participants AS p
+   SET nsubscribers = (
+           SELECT count(*)
+             FROM subscriptions s
+            WHERE s.publisher = p.id
+              AND s.is_on
+       );

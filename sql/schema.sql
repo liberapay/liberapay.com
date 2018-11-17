@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '89'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '90'::jsonb);
 
 
 -- app configuration
@@ -520,7 +520,7 @@ CREATE TABLE community_memberships
 );
 
 CREATE TRIGGER update_community_nmembers
-    BEFORE INSERT OR UPDATE OR DELETE ON community_memberships
+    AFTER INSERT OR UPDATE OR DELETE ON community_memberships
     FOR EACH ROW
     EXECUTE PROCEDURE update_community_nmembers();
 
@@ -539,7 +539,7 @@ CREATE TABLE subscriptions
 );
 
 CREATE TRIGGER update_nsubscribers
-    BEFORE INSERT OR UPDATE OR DELETE ON subscriptions
+    AFTER INSERT OR UPDATE OR DELETE ON subscriptions
     FOR EACH ROW
     EXECUTE PROCEDURE update_nsubscribers();
 
