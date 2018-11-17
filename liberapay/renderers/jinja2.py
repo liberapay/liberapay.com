@@ -29,7 +29,7 @@ class Factory(base.Factory):
             'default_env': base.Environment(loader=loader, **JINJA_ENV_COMMON),
             'htmlescaped_env': base.Environment(
                 loader=loader,
-                autoescape=True, extensions=['jinja2.ext.autoescape'],
+                autoescape=True,
                 **JINJA_ENV_COMMON
             ),
         }
