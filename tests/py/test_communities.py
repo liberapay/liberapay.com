@@ -65,12 +65,20 @@ class TestCommunityActions(Harness):
         assert response.code == 404
 
     def test_subscribe_and_unsubscribe(self):
-        response = self.client.POST('/for/test/subscribe', auth_as=self.bob,
-                                    xhr=True)
+        # Subscribe
+        response = self.client.POST('/for/test/subscribe', auth_as=self.bob, xhr=True)
         assert response.code == 200
+        p = self.community.participant.refetch()
+        assert p.nsubscribers == 1
 
+        # Subscribe again, shouldn't do anything
+        response = self.client.POST('/for/test/subscribe', auth_as=self.bob, xhr=True)
+        assert response.code == 200
+        p = self.community.participant.refetch()
+        assert p.nsubscribers == 1
+
+        # Unsubscribe
         self.client.POST('/for/test/unsubscribe', auth_as=self.bob, xhr=True)
-
         communities = self.bob.get_communities()
         assert len(communities) == 0
 
