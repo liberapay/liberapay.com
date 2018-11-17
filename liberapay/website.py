@@ -62,3 +62,26 @@ if env.missing:
 
 website = Website()
 website.env = env
+
+
+# Common Jinja configuration
+# ==========================
+
+class CustomUndefined(StrictUndefined):
+    __bool__ = __nonzero__ = lambda self: False
+
+    def __str__(self):
+        try:
+            self._fail_with_undefined_error()
+        except Exception as e:
+            website.tell_sentry(e, {})
+        return ''
+
+    __unicode__ = __str__
+
+
+JINJA_ENV_COMMON = dict(
+    trim_blocks=True, lstrip_blocks=True,
+    line_statement_prefix='%',
+    # undefined=CustomUndefined,
+)

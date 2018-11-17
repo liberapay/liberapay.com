@@ -6,7 +6,6 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
 import re
 
-from jinja2 import StrictUndefined
 from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utc
@@ -14,19 +13,6 @@ from pando.utils import utc
 
 def ordered_set(keys):
     return OrderedDict((k, None) for k in keys)
-
-
-class CustomUndefined(StrictUndefined):
-    __bool__ = __nonzero__ = lambda self: False
-
-    def __str__(self):
-        try:
-            self._fail_with_undefined_error()
-        except Exception as e:
-            self._tell_sentry(e, {})
-        return ''
-
-    __unicode__ = __str__
 
 
 def check_bits(bits):
@@ -210,12 +196,6 @@ INVOICE_STATUSES = {
     'paid': _("Paid"),
     'rejected': _("Rejected"),
 }
-
-JINJA_ENV_COMMON = dict(
-    trim_blocks=True, lstrip_blocks=True,
-    line_statement_prefix='%',
-    # undefined=CustomUndefined,
-)
 
 # https://docs.mangopay.com/api-references/kyc-rules/
 KYC_DOC_MAX_SIZE = 7000000

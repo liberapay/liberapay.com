@@ -31,7 +31,6 @@ import sass
 from liberapay import elsewhere
 import liberapay.billing.payday
 import liberapay.billing.watcher
-from liberapay.constants import CustomUndefined
 from liberapay.exceptions import NeedDatabase
 from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
 from liberapay.models.community import _Community, Community
@@ -49,6 +48,7 @@ from liberapay.utils.i18n import (
 )
 from liberapay.utils.query_cache import QueryCache
 from liberapay.version import get_version
+from liberapay.website import CustomUndefined
 
 
 def canonical(env):
