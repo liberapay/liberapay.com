@@ -83,5 +83,6 @@ class CustomUndefined(StrictUndefined):
 JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
+    auto_reload=env.aspen_changes_reload,
     # undefined=CustomUndefined,
 )
