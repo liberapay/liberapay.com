@@ -332,7 +332,7 @@ def i_format(loc, s, *a, **kw):
 
 def get_text(state, loc, s, *a, **kw):
     escape = state['escape']
-    msg = loc.catalog.get(s)
+    msg = loc.catalog._messages.get(s)
     s2 = None
     if msg:
         s2 = msg.string
@@ -340,7 +340,7 @@ def get_text(state, loc, s, *a, **kw):
             s2 = s2[0]
     if not s2:
         s2 = s
-        if loc != LOCALE_EN:
+        if loc is not LOCALE_EN:
             loc = LOCALE_EN
             state['partial_translation'] = True
     if a or kw:
@@ -356,7 +356,7 @@ def n_get_text(state, loc, s, p, n, *a, **kw):
     escape = state['escape']
     n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
     n = n or 0
-    msg = loc.catalog.get((s, p) if s else p)
+    msg = loc.catalog._messages.get(s if s else p)
     s2 = None
     if msg:
         try:
@@ -365,7 +365,7 @@ def n_get_text(state, loc, s, p, n, *a, **kw):
             website.tell_sentry(e, state)
     if not s2:
         s2 = s if n == 1 else p
-        if loc != LOCALE_EN:
+        if loc is not LOCALE_EN:
             loc = LOCALE_EN
             state['partial_translation'] = True
     kw['n'] = format_number(n, locale=loc) or n
