@@ -9,7 +9,7 @@ from liberapay.utils.i18n import HTTP_ERRORS
 
 sentry_ident = state.get('sentry_ident')
 code = response.code
-msg = _(HTTP_ERRORS.get(code, status_strings.get(code, '')))
+msg = _(HTTP_ERRORS[code]) if code in HTTP_ERRORS else status_strings.get(code, '')
 try:
     assert msg
 except Exception as e:
