@@ -154,17 +154,14 @@ EUROZONE = set("AT BE CY DE EE ES FI FR GR IE IT LT LU LV MT NL PT SI SK".split(
 SEPA = EUROZONE | set("BG CH CZ DK GB GI HR HU IS LI MC NO PL RO SE".split())
 
 EVENTS = [
-    Event('income', 1, _("When I receive money")),
+    Event('income', 1, _("Every week as long as I am receiving donations")),
     Event('donate_reminder', 2, _("When it's time to renew my donations")),
     Event('withdrawal_created', 4, _("When a transfer to my bank account is initiated")),
     Event('withdrawal_failed', 8, _("When a transfer to my bank account fails")),
     Event('pledgee_joined', 16, _("When someone I pledge to joins Liberapay")),
     Event('team_invite', 32, _("When someone invites me to join a team")),
-    Event('payin_bankwire_failed', 64, _("When a bank wire transfer to my Liberapay wallet fails")),
-    Event('payin_bankwire_succeeded', 128, _("When a bank wire transfer to my Liberapay wallet succeeds")),
-    Event('payin_bankwire_expired', 256, _("When a bank wire transfer to my Liberapay wallet expires")),
-    Event('payin_directdebit_failed', 512, _("When a direct debit from my bank account fails")),
-    Event('payin_directdebit_succeeded', 1024, _("When a direct debit from my bank account succeeds")),
+    Event('payin_failed', 2**11, _("When a payment I initiated fails")),
+    Event('payin_succeeded', 2**12, _("When a payment I initiated succeeds")),
 ]
 check_bits([e.bit for e in EVENTS])
 EVENTS = OrderedDict((e.name, e) for e in EVENTS)

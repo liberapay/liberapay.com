@@ -8,20 +8,25 @@ Liberapay.stripe_init = function() {
         $btn.parent().addClass('hidden');
     });
 
-    var $cardElement = $('#card-element');
+    var $container = $('#stripe-element');
     var stripe = Stripe($form.data('stripe-pk'));
     var elements = stripe.elements();
-    var card = elements.create('card', {style: {
+    var element_type = $container.data('type');
+    var options = {style: {
         base: {
-            color: $cardElement.css('color'),
-            fontFamily: $cardElement.css('font-family'),
-            fontSize: $cardElement.css('font-size'),
-            lineHeight: $cardElement.css('line-height'),
+            color: $container.css('color'),
+            fontFamily: $container.css('font-family'),
+            fontSize: $container.css('font-size'),
+            lineHeight: $container.css('line-height'),
         }
-    }});
-    card.mount('#card-element');
-    var $errorElement = $('#card-errors');
-    card.addEventListener('change', function(event) {
+    }};
+    if (element_type == 'iban') {
+        options.supportedCountries = ['SEPA'];
+    }
+    var element = elements.create(element_type, options);
+    element.mount('#stripe-element');
+    var $errorElement = $('#stripe-errors');
+    element.addEventListener('change', function(event) {
         if (event.error) {
             $errorElement.text(event.error.message);
         } else {
@@ -49,12 +54,17 @@ Liberapay.stripe_init = function() {
             return;
         }
         e.preventDefault();
-        if ($cardElement.parents('.hidden').length > 0) {
+        if ($container.parents('.hidden').length > 0) {
             submitting = true;
-            $form.attr('action', '').submit();
+            $form.submit();
             return;
         }
-        stripe.createToken(card).then(Liberapay.wrap(function(result) {
+        var tokenData = {};
+        if (element_type == 'iban') {
+            tokenData.currency = 'EUR';
+            tokenData.account_holder_name = $('#account_holder_name').val();
+        }
+        stripe.createToken(element, tokenData).then(Liberapay.wrap(function(result) {
             if (result.error) {
                 $errorElement.text(result.error.message);
             } else {
@@ -64,8 +74,9 @@ Liberapay.stripe_init = function() {
                 var $hidden_input = $('<input type="hidden" name="token">');
                 $hidden_input.val(result.token.id);
                 $form.append($hidden_input);
-                $form.attr('action', '').submit();
+                $form.submit();
             }
         }));
     }));
+    $form.attr('action', '');
 };

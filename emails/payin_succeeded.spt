@@ -1,0 +1,11 @@
+{{ _("Your payment has succeeded") }}
+
+[---] text/html
+<p>{{ _(
+    "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded.",
+    money_amount=payin.amount, date=payin.ctime.date(),
+) }}</p>
+
+<p>{{ _("Thank you for this donation!") }}</p>
+
+{#<p><a href="{{ participant.url('bill/%s' % payin.id) }}">{{ _("View receipt") }}</a></p>#}

@@ -831,6 +831,17 @@ span.help-title {
     .payment-icon {
         font-size: 2em;
     }
+    .muted {
+        color: #888;
+        .payment-icon {
+            color: #ccc;
+        }
+    }
+    small.text-warning, small.text-danger {
+        font-size: $font-size-medium;
+        font-weight: bold;
+        line-height: $font-size-medium * $line-height-base;
+    }
 }
 
 @media (max-width: $screen-sm-min - 1) {
@@ -911,19 +922,6 @@ ul.status-list > li.not-ok-warning::before {
 ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
     color: $state-danger-text;
     content: '\e014';
-}
-
-.not-recommended {
-    color: #888;
-    .payment-icon {
-        color: #ccc;
-    }
-    small {
-        color: $state-danger-text;
-        font-size: $font-size-medium;
-        font-weight: bold;
-        line-height: $font-size-medium * $line-height-base;
-    }
 }
 
 .text-info > a {

@@ -203,7 +203,7 @@ title = _("Adding Money")
               exchange.amount + exchange.fee) + ' ' + _(str(exchange.note))
         }}</div>
         % if exchange.status == 'succeeded'
-        <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View Receipt") }}</a>
+        <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View receipt") }}</a>
         % elif exchange.status == 'created'
         <div class="alert alert-info">{{ _(
             "Direct debits take approximately 4 business days to complete."

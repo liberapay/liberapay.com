@@ -9,7 +9,9 @@ import stripe.error
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import prepare_payin, prepare_payin_transfer, resolve_destination
-from liberapay.payin.stripe import destination_charge, Money_to_int, repr_stripe_error
+from liberapay.payin.stripe import (
+    destination_charge, get_partial_iban, Money_to_int, repr_stripe_error
+)
 from liberapay.utils import get_participant, NS, partition
 
 ONE_YEAR = {
@@ -26,8 +28,10 @@ payer = get_participant(state, restrict=True)
 
 del currency
 
+payment_method = request.qs.get('method', 'card')
+
 if request.method == 'POST':
-    website.check_payin_allowed(user, 'stripe-card')
+    website.check_payin_allowed(user, 'stripe-' + payment_method)
 
     body = request.body
 
@@ -80,9 +84,11 @@ if request.method == 'POST':
 
             token = stripe.Token.retrieve(body['token'])
             if token.type == 'bank_account':
-                network = 'stripe-ba'
+                network = 'stripe-sdd'
+                source_type = 'sepa_debit'
             elif token.type == 'card':
                 network = 'stripe-card'
+                source_type = 'card'
             else:
                 raise response.error(400, "unknown token type")
 
@@ -95,7 +101,7 @@ if request.method == 'POST':
                 },
                 redirect={'return_url': return_url},
                 token=token.id,
-                type=token.type,
+                type=source_type,
                 usage=('single_use' if one_off else 'reusable'),
             )
             customer_id = website.db.one("""
@@ -179,7 +185,8 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     if payin.status == 'pre':
         payin = destination_charge(
-            website.db, payin, payer, statement_descriptor='Liberapay'
+            website.db, payin, payer,
+            statement_descriptor=('Liberapay %i' % payin.id)
         )
 
 tippee_id = request.qs.get_int('beneficiary', default=None)
@@ -217,9 +224,8 @@ if donations:
     tip.multipliers = sorted(set((min_multiplier, min_recommended_multiplier, max_recommended_multiplier)))
     del min_multiplier, min_recommended_multiplier, max_recommended_multiplier
 
-network = 'stripe-' + request.qs.get('method', 'card')
-if network:
-    route = ExchangeRoute.from_network(payer, network)
+if payment_method:
+    route = ExchangeRoute.from_network(payer, 'stripe-' + payment_method)
     route = route[0] if route else None
 else:
     route = website.db.one("""
@@ -228,15 +234,19 @@ else:
          WHERE r.participant = %s
            AND r.status = 'chargeable'
            AND r.network::text LIKE 'stripe-%%'
-      ORDER BY r.network = 'stripe-ba' DESC
+      ORDER BY r.network = 'stripe-sdd' DESC
              , r.id DESC
          LIMIT 1
     """, (payer.id,))
+    route = None
 if route:
+    payment_method = route.network.split('-', 1)[-1]
     source = stripe.Source.retrieve(route.address)
     route.update_status(source.status)
     if not route:
         response.redirect(request.line.uri)
+if not payment_method:
+    response.redirect(payer.path('giving/pay'))
 
 if user == payer:
     payer.mark_notifications_as_read('donate_reminder')
@@ -262,7 +272,7 @@ title = _("Funding your donations")
             "The payment of {charge_amount} was successful.", charge_amount=payin.amount
         ) }}</div>
         {#<a class="btn btn-default" href="{{ payer.path('bill/%s' % payin.id) }}">{{
-            _("View Receipt")
+            _("View receipt")
         }}</a>#}
     % elif status == 'failed'
         <div class="alert alert-danger">{{ _(
@@ -278,39 +288,6 @@ title = _("Funding your donations")
 % endif
 
 % if donations
-
-% if not (route or network)
-
-    <p>{{ _("Please choose a payment method:") }}</p>
-
-    <div class="row payment-methods">
-    % from "templates/icons.html" import fontawesome
-
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-            <div class="panel-body overlayed">
-                <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
-                <h4>{{ _("Credit/Debit Card") }}</h4>
-                <p>{{ _("Easy and instantaneous") }}</p>
-                <a class="overlay" href="?method=stripe-card"></a>
-            </div></div>
-        </div>
-
-        % set recommended = request.country in constants.PAYIN_DIRECT_DEBIT_COUNTRIES[tip_currency]
-        <div class="col-sm-6">
-            <div class="panel panel-default {{ 'not-recommended' if not recommended }}">
-            <div class="panel-body overlayed">
-                <p class="payment-icon">{{ fontawesome('bank') }}</p>
-                <h4>{{ _("Direct Debit") }}<br><small>{{ _("Eurozone only") }}</small></h4>
-                <p>{{ _("Best for regular payments") }}</p>
-                <a class="overlay" href="?method=stripe-ba"></a>
-            </div>
-            </div>
-        </div>
-
-    </div>
-
-% else
 
     % if len(donations) > 1 and not payin
         <p>{{ ngettext(
@@ -402,6 +379,7 @@ title = _("Funding your donations")
 
         % if source
         <div class="form-group">
+            % if source.type == 'card'
             <p>{{ _(
                 "We will charge your {brand} card (last four digits: {last4}).",
                 brand=source.card.brand, last4=source.card.last4
@@ -409,14 +387,25 @@ title = _("Funding your donations")
             <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
                 _("Use another card")
             }}</button>
+            % elif source.type == 'sepa_debit'
+            <p>{{ _(
+                "We will charge your {bank_name} account ({partial_account_number}).",
+                bank_name=source.sepa_debit.bank_name,
+                partial_account_number=get_partial_iban(source.sepa_debit)
+            ) }}</p>
+            <button class="btn btn-default btn-sm" type="button" data-modify="#iban-form">{{
+                _("Use another bank account")
+            }}</button>
+            % endif
             <br><br>
         </div>
         % endif
 
-        <div id="card-form" class="form-group {{ 'hidden' if source else '' }}">
+        % if payment_method == 'card'
+        <fieldset id="card-form" class="form-group {{ 'hidden' if source else '' }}">
             <p>{{ _("Please input your card number:") }}</p>
-            <div id="card-element" class="form-control paragraph"></div>
-            <span id="card-errors" role="alert" class="invalid-msg"></span>
+            <div id="stripe-element" data-type="card" class="form-control paragraph"></div>
+            <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             <p class="help-block">{{ glyphicon('lock') }} {{ _(
                 "This data will be sent directly to the payment processor "
                 "{name} through an encrypted connection.",
@@ -424,10 +413,37 @@ title = _("Funding your donations")
             ) }}</p>
             <label>
                 <input type="checkbox" name="keep" value="true" checked />
-                {{ _("Remember the card number for next time") }}
+                {{ _("Remember the number for next time") }}
+            </label>
+            <br><br>
+        </fieldset>
+        % elif payment_method == 'sdd'
+        <fieldset id="iban-form" class="form-group {{ 'hidden' if source else '' }}">
+            <p>{{ _(
+                "Please input your name and your IBAN (International Bank Account Number):"
+            ) }}</p>
+            <input id="account_holder_name" autocomplete="name" required minlength=3
+                   class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
+            <div id="stripe-element" data-type="iban" class="form-control paragraph"></div>
+            <span id="stripe-errors" role="alert" class="invalid-msg"></span>
+            <p class="help-block">{{ _(
+                "By providing your IBAN and confirming this payment, you are authorizing "
+                "{platform} and {provider}, our payment service provider, to send instructions "
+                "to your bank to debit your account and your bank to debit your account in "
+                "accordance with those instructions. You are entitled to a refund from your "
+                "bank under the terms and conditions of your agreement with your bank. "
+                "A refund must be claimed within 8 weeks starting from the date on which "
+                "your account was debited.",
+                platform='Liberapay',
+                provider='<a href="https://stripe.com/" target="_blank" rel="noopener noreferrer">Stripe</a>'|safe
+            ) }}</p>
+            <label>
+                <input type="checkbox" name="keep" value="true" checked />
+                {{ _("Remember the number for next time") }}
             </label>
             <br>
-        </div>
+        </fieldset>
+        % endif
 
         % if payer.mangopay_user_id
         <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
@@ -450,11 +466,8 @@ title = _("Funding your donations")
         ) }}</button>
     </form>
 
-% endif
+% else
 
-% endif
-
-% if not donations
     % if donations_not_fundable or other_donations or non_stripe_donations
         % for tip in donations_not_fundable
         <p>{{ _(
@@ -481,6 +494,7 @@ title = _("Funding your donations")
         <div class="alert alert-success">{{ _("All your donations are funded.") }}</div>
         <a class="btn btn-default" href="{{ payer.path('giving/') }}">{{ _("Manage your donations") }}</a>
     % endif
+
 % endif
 
 % endblock

@@ -1,0 +1,45 @@
+from datetime import timedelta
+
+import stripe
+
+from liberapay.payin.stripe import (
+    int_to_Money, repr_charge_error, settle_destination_charge
+)
+from liberapay.utils import utcnow
+
+SIX_HOURS = timedelta(hours=6)
+PRODUCTION = website.env.instance_type == 'production'
+
+[---]
+
+request.allow('POST')
+payload = request.raw_body
+sig = request.headers[b'Stripe-Signature'].decode('ascii', 'replace')
+try:
+    event = stripe.Webhook.construct_event(
+        payload, sig, website.app_conf.stripe_callback_secret
+    )
+except ValueError as e:
+    raise response.error(400, str(e))
+except stripe.error.SignatureVerificationError:
+    raise response.error(403, "invalid signature")
+
+if event.livemode != PRODUCTION:
+    raise response.error(400, "environment mismatch")
+
+event_object_type, status = event.type.rsplit('.', 1)
+
+if event_object_type == 'charge':
+    charge = event.object
+    payin_id = charge.metadata['payin_id']
+    payin = website.db.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
+    pt = website.db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin_id,))
+    payin = settle_destination_charge(website.db, payin, charge, pt)
+    if payin.status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
+        p.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
+
+else:
+    raise response.error(500, "unknown event object type %r" % event_object_type)
+
+[---] text/plain
+OK
