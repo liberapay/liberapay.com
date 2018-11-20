@@ -365,6 +365,45 @@ msgstr "De automatisch incasso voor je Liberapay-portemonnee is mislukt"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "De automatisch incasso voor je Liberapay-portemonnee is gelukt"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} van {1} is lid geworden van Liberapay!"
@@ -461,8 +500,8 @@ msgstr "Het lijkt erop dat je een bug hebt gevonden! Sorry voor het ongemak, we 
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "De details van deze fout werden geregistreerd. Als je beslist om contact met ons op te nemen, vermeld alstublieft dan de volgende foutcode in je bericht: {0}."
 
-msgid "When I receive money"
-msgstr "Als ik geld ontvang"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr "Wanneer het tijd is om mijn donaties te vernieuwen"
@@ -479,20 +518,11 @@ msgstr "Als iemand aan wie ik een donatie heb toegezegd zich aanmeld op Liberapa
 msgid "When someone invites me to join a team"
 msgstr "Als iemand me uitnodigt voor een team"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "Wanneer een overschrijving naar mijn Liberapay-portemonnee mislukt"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "Wanneer een overschrijving naar mijn Liberapay-portemonnee slaagt"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "Als een bankoverschrijving naar mijn Liberapay-portemonnee verloopt"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "Wanneer de automatische incasso van mijn bankrekening mislukt"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "Wanneer de automatische incasso van mijn bankrekening slaagt"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Onkostennota"
@@ -1670,6 +1700,9 @@ msgstr "Wijzig je Libravatar"
 msgid "What is Libravatar?"
 msgstr "Wat is Libravatar?"
 
+msgid "Refresh"
+msgstr "Vernieuwen"
+
 msgid "Avatar source"
 msgstr "Avatar bron"
 
@@ -2040,6 +2073,18 @@ msgstr "Kies a.j.b. een betaalmethode:"
 msgid "Card"
 msgstr "Kaart"
 
+msgid "Currently unavailable"
+msgstr "Momenteel niet beschikbaar"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "Al je donaties zijn gefinancierd."
 
@@ -2123,24 +2168,19 @@ msgstr "De betalingsverwerker {name} geeft een fout: \"{error_message}\"."
 msgid "The payment has been initiated."
 msgstr "De betaling is geïnitieerd."
 
-msgid "Credit/Debit Card"
-msgstr "Creditcard/betaalkaart"
-
-msgid "Easy and instantaneous"
-msgstr "Gemakkelijk en direct"
-
-msgid "Eurozone only"
-msgstr "Alleen eurozone"
-
-msgid "Best for regular payments"
-msgstr "Beste voor regelmatige betalingen"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Wij zullen het bedrag van je {brand} kaart berekenen (laatste vier cijfers: {last4})."
 
 msgid "Use another card"
 msgstr "Een andere kaart gebruiken"
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
+msgstr ""
 
 msgid "Please input your card number:"
 msgstr "Voer a.j.b. je kaartnummer in:"
@@ -2151,6 +2191,19 @@ msgstr "Deze gegevens worden via een versleutelde verbinding rechtstreeks naar d
 
 msgid "Remember the card number for next time"
 msgstr "Vergeet niet het kaartnummer voor de volgende keer"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Weet je zeker dat je het type account wilt wijzigen? Om juridische redenen moeten we een nieuw account voor je aanmaken bij onze betalingspartner en het geld overmaken van je oude account."
@@ -2940,8 +2993,11 @@ msgstr "Je hebt een {payment_method} betaling van {money_amount} in behandeling.
 msgid "Please choose a payment method to add money:"
 msgstr "Kies een betaalmethode om geld toe te voegen:"
 
-msgid "Currently unavailable"
-msgstr "Momenteel niet beschikbaar"
+msgid "Credit/Debit Card"
+msgstr "Creditcard/betaalkaart"
+
+msgid "Easy and instantaneous"
+msgstr "Gemakkelijk en direct"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2959,6 +3015,9 @@ msgstr "Goedkoper maar lastiger"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Provisie: {0}%"
+
+msgid "Best for regular payments"
+msgstr "Beste voor regelmatige betalingen"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Je hebt nog geen donaties ingesteld. Zodra je dat doet wordt je gevraagd om geld toe te voegen aan je account."
@@ -3049,9 +3108,6 @@ msgstr "{0} is opgenomen van je creditcard, {1} ging naar je Liberapay-portemonn
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "De poging om {0} op te nemen van je creditcard is mislukt. Foutmelding: {1}"
-
-msgid "View Receipt"
-msgstr "Bekijk je ontvangstbewijs"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4442,9 +4498,6 @@ msgstr "Let op: privacyinstellingen kunnen voorkomen dat Liberapay je {0} vriend
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Vernieuw je {0} verbinding om je vrienden te vinden."
-
-msgid "Refresh"
-msgstr "Vernieuwen"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."

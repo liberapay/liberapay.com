@@ -364,6 +364,45 @@ msgstr "El pago domiciliado a tu cartera de Liberapay ha fallado"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "El pago domiciliado a tu cartera de Liberapay se ha realizado con éxito"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "¡{0} de {1} se ha unido a Liberapay!"
@@ -460,8 +499,8 @@ msgstr "¡Parece que has encontrado un error! Perdona por la inconveniencia, ¡l
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Los detalles de este error han sido registrados. Si decides contactarnos, incluye el siguiente código identificativo de error en tu mensaje: {0}."
 
-msgid "When I receive money"
-msgstr "Cuando reciba el dinero"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr "Cuando es hora de renovar mis donaciones"
@@ -478,20 +517,11 @@ msgstr "Cuando alguien a quien he mostrado voluntad de financiar se una a Libera
 msgid "When someone invites me to join a team"
 msgstr "Cuando alguien me invite a unirme a un equipo"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "Cuando una transferencia bancaria a mi cuenta de Liberapay falle"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "Cuando una transferencia bancaria a mi cuenta de Liberapay se realice correctamente"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "Cuando expire una transferencia bancaria a mi cartera de Liberapay"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "Cuando un pago domiciliado desde mi cuenta bancaria falle"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "Cuando un pago domiciliado desde mi cuenta bancaria se realice con éxito"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Informe de gastos"
@@ -1669,6 +1699,9 @@ msgstr "Modificar tu Libravatar"
 msgid "What is Libravatar?"
 msgstr "¿Qué es Libravatar?"
 
+msgid "Refresh"
+msgstr "Recargar"
+
 msgid "Avatar source"
 msgstr "Origen del avatar"
 
@@ -2039,6 +2072,18 @@ msgstr "Elige un método de pago:"
 msgid "Card"
 msgstr "Tarjeta"
 
+msgid "Currently unavailable"
+msgstr "Actualmente no disponible"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "Todas tus donaciones están financiadas."
 
@@ -2122,24 +2167,19 @@ msgstr "El procesador de pagos {name} devolvió un error: «{error_message}»."
 msgid "The payment has been initiated."
 msgstr "El pago ha sido iniciado."
 
-msgid "Credit/Debit Card"
-msgstr "Tarjeta de crédito/débito"
-
-msgid "Easy and instantaneous"
-msgstr "Fácil e instantánea"
-
-msgid "Eurozone only"
-msgstr "Solo eurozona"
-
-msgid "Best for regular payments"
-msgstr "Más adecuado para pagos regulares"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Cobraremos a tu tarjeta de {brand} (últimos cuatro dígitos: {last4})."
 
 msgid "Use another card"
 msgstr "Usar otra tarjeta"
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
+msgstr ""
 
 msgid "Please input your card number:"
 msgstr "Por favor, introduce tu número de tarjeta:"
@@ -2150,6 +2190,19 @@ msgstr "Estos datos se enviarán directamente al procesador de pagos {name} a tr
 
 msgid "Remember the card number for next time"
 msgstr "Recordar el número de la tarjeta para la próxima vez"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "¿Estás seguro de que quieres cambiar el tipo de tu cuenta? Por razones legales tendremos que crear una nueva cuenta para ti en nuestro sistema de pagos asociado, y transferir el dinero desde tu vieja cuenta."
@@ -2939,8 +2992,11 @@ msgstr "Tienes un pago del tipo {payment_method} pendiente de {money_amount}. {l
 msgid "Please choose a payment method to add money:"
 msgstr "Selecciona un método de pago para añadir dinero:"
 
-msgid "Currently unavailable"
-msgstr "Actualmente no disponible"
+msgid "Credit/Debit Card"
+msgstr "Tarjeta de crédito/débito"
+
+msgid "Easy and instantaneous"
+msgstr "Fácil e instantánea"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2958,6 +3014,9 @@ msgstr "Más barato¹ pero engorroso"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Comisión: {0}%"
+
+msgid "Best for regular payments"
+msgstr "Más adecuado para pagos regulares"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "No has configurado ninguna donación aún. Una vez que lo hagas se te pedirá que añadas dinero a tu cuenta."
@@ -3048,9 +3107,6 @@ msgstr "{0} han sido tomados de tu tarjeta de crédito, {1} han ido a tu cartera
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "El intento de tomar {0} de tu tarjeta de crédito ha fallado. Mensaje de error: {1}"
-
-msgid "View Receipt"
-msgstr "Ver recibo"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4441,9 +4497,6 @@ msgstr "Nota: Los ajustes de privacidad pueden impedir a Liberapay ver a algunos
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Por favor, recarga tu conexión de {0} para encontrar tus amigos de allí."
-
-msgid "Refresh"
-msgstr "Recargar"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."

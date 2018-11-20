@@ -360,6 +360,45 @@ msgstr "銀行無法順利自動撥款到你的 Liberapay 錢包"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "銀行已順利自動撥款到你的 Liberapay 錢包"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} 來自{1} 已加入 Liberapay！"
@@ -456,8 +495,8 @@ msgstr "看來你發現了系統上的一個問題！抱歉造成不便，我們
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "該錯誤的詳細信息已紀錄。若希望聯繫我們，請在來信中提供以下的錯誤辨識碼：{0}。"
 
-msgid "When I receive money"
-msgstr "當我收到錢款"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr "到須更新捐款的時間"
@@ -474,20 +513,11 @@ msgstr "當我想捐款的對象加入了 Liberapay"
 msgid "When someone invites me to join a team"
 msgstr "當有人邀請我加入某個團隊"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "當銀行無法成功地匯款到我的 Liberapay 電子錢包"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "當銀行成功地匯款到我的 Liberapay 電子錢包"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "當到我的 Liberapay 電子錢包的銀行匯款過期"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "當銀行無法成功地自動撥款到我的 Liberapay 電子錢包"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "當銀行成功地自動撥款到我的 Liberapay 電子錢包"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "費用報告"
@@ -1659,6 +1689,9 @@ msgstr "修改你的 Librapay 頭像"
 msgid "What is Libravatar?"
 msgstr "什麼是Libravatar？"
 
+msgid "Refresh"
+msgstr "重新整理"
+
 msgid "Avatar source"
 msgstr "大頭像來源"
 
@@ -2026,6 +2059,18 @@ msgstr "請選擇支付方式："
 msgid "Card"
 msgstr "銀行卡"
 
+msgid "Currently unavailable"
+msgstr "目前無法使用"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "您全部的捐款已資助。"
 
@@ -2105,24 +2150,19 @@ msgstr "{name}支付方式傳回出錯訊息：\"{error_message}\"。"
 msgid "The payment has been initiated."
 msgstr "此支付已被啟動。"
 
-msgid "Credit/Debit Card"
-msgstr "信用卡/ 簽帳金融卡"
-
-msgid "Easy and instantaneous"
-msgstr "簡單與即時"
-
-msgid "Eurozone only"
-msgstr "限於歐元區"
-
-msgid "Best for regular payments"
-msgstr "定期付款的最佳方案"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "我們將會從您的{brand}卡片(末四碼為:{last4})扣款。"
 
 msgid "Use another card"
 msgstr "使用另一張卡片"
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
+msgstr ""
 
 msgid "Please input your card number:"
 msgstr "請輸入卡號："
@@ -2133,6 +2173,19 @@ msgstr "這個資料會透過加密連線直接送到付款處理商{name}。"
 
 msgid "Remember the card number for next time"
 msgstr "記住卡號以利下回使用"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "你確定切換帳戶種類？由於法律原因我們會在支付夥伴的系統中重新註冊帳號，並將錢從舊帳號中轉移出來。"
@@ -2912,8 +2965,11 @@ msgstr "你有要給{money_amount}待處理的 {payment_method} 付款，{link_o
 msgid "Please choose a payment method to add money:"
 msgstr "請挑選付款方式來增加金額："
 
-msgid "Currently unavailable"
-msgstr "目前無法使用"
+msgid "Credit/Debit Card"
+msgstr "信用卡/ 簽帳金融卡"
+
+msgid "Easy and instantaneous"
+msgstr "簡單與即時"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2931,6 +2987,9 @@ msgstr "更便宜但麻煩"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "手續費： {0}%"
+
+msgid "Best for regular payments"
+msgstr "定期付款的最佳方案"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "你尚未設定任何捐贈，一旦你進行了捐款，你就會被要求在帳戶裏儲值金額。"
@@ -3018,9 +3077,6 @@ msgstr "{0} 已從你的信用卡扣除，其中 {1} 已轉入到你的Liberapay
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "欲從你的信用卡請款 {0} 失敗，錯誤訊息： {1}"
-
-msgid "View Receipt"
-msgstr "檢視收據"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4383,9 +4439,6 @@ msgstr "注意： 隱私設定可能會阻止Liberapay 看見某些你的 {0} �
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "請更新你的 {0} 連結以在此找到你的朋友。"
-
-msgid "Refresh"
-msgstr "重新整理"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."

@@ -364,6 +364,45 @@ msgstr "Den direkte debit betaling til din Liberapay tegnebog mislykkedes"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Den direkte debit betaling til din Liberapay tegnebog lykkedes"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} fra {1} har tilsluttet sig Liberapay!"
@@ -460,8 +499,8 @@ msgstr "Det ser ud til at du har fundet en fejl i vores program! Undskyld ulejli
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "denne fejls detaljer er blevet gemt. Hvis du beslutter dig for at kontakte os så vær sød at vedlægge følgende fejlidentifikationskode i din meddelelse: {0}."
 
-msgid "When I receive money"
-msgstr "Når jeg modtager penge"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr ""
@@ -478,20 +517,11 @@ msgstr "Når nogen jeg har givet et donationstilbud melder sig ind i Liberapay"
 msgid "When someone invites me to join a team"
 msgstr "Når nogen invitere mig til at tilslutte mig et team"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "Når en bankoverførsel til min Liberapay-tegnebog mislykkes"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "Når en bankoverførsel til min Liberapay-tegnebog lykkedes"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "Når en bankoverførsel til min Liberapay-tegnebog udløber"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "Når en direkte debit fra min bankkonto mislykkedes"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "Når en direkte debit fra min bankkonto lykkedes"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Udgift rapport"
@@ -1669,6 +1699,9 @@ msgstr "Modificer din Libravatar"
 msgid "What is Libravatar?"
 msgstr "Hvad er Libravatar?"
 
+msgid "Refresh"
+msgstr "Opdater"
+
 msgid "Avatar source"
 msgstr "Avatar kilde"
 
@@ -2039,6 +2072,18 @@ msgstr ""
 msgid "Card"
 msgstr "Kort"
 
+msgid "Currently unavailable"
+msgstr "Ikke tilgængelig i øjeblikket"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr ""
 
@@ -2122,23 +2167,18 @@ msgstr ""
 msgid "The payment has been initiated."
 msgstr ""
 
-msgid "Credit/Debit Card"
-msgstr "Kredit/debit-kort"
-
-msgid "Easy and instantaneous"
-msgstr "Nemt og umiddelbart"
-
-msgid "Eurozone only"
-msgstr "Kun Euro-zone"
-
-msgid "Best for regular payments"
-msgstr "Bedst for almindelige betalinger"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr ""
 
 msgid "Use another card"
+msgstr ""
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
 msgstr ""
 
 msgid "Please input your card number:"
@@ -2150,6 +2190,19 @@ msgstr ""
 
 msgid "Remember the card number for next time"
 msgstr "Husk kort-nummeret til næste gang"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på du vil ændre typen af din konto? På grund af juridiske grunde bliver vi nød til at oprette en ny konto på dine vegne hos vores partners betalingssystem og overføre pengene fra din gamle konto."
@@ -2939,8 +2992,11 @@ msgstr "Du har en ventende {payment_method} betaling på {money_amount}. {link_o
 msgid "Please choose a payment method to add money:"
 msgstr "Vælg venligst en betalingsmetode for at tilføje penge:"
 
-msgid "Currently unavailable"
-msgstr "Ikke tilgængelig i øjeblikket"
+msgid "Credit/Debit Card"
+msgstr "Kredit/debit-kort"
+
+msgid "Easy and instantaneous"
+msgstr "Nemt og umiddelbart"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2958,6 +3014,9 @@ msgstr "Billigere¹ men besværlig"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Gebyr: {0}%"
+
+msgid "Best for regular payments"
+msgstr "Bedst for almindelige betalinger"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Du har ikke oprettet nogen donationer endnu, når du har vil du blive husket på at tilføje penge til din konto."
@@ -3048,9 +3107,6 @@ msgstr "{0} er blevet hævet på dit kreditkort, {1} gik til din Liberapay tegne
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "Forsøget på at hæve {0} fra dit kreditkort fejlede. Fejlmeddelelse : {1}"
-
-msgid "View Receipt"
-msgstr "Se Kvittering"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4443,9 +4499,6 @@ msgstr "Bemærk: Beskyttelse af personlige oplysninger kan forhindre Liberapay i
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Opdater din {0} forbindelse for at finde dine venner derfra."
-
-msgid "Refresh"
-msgstr "Opdater"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."

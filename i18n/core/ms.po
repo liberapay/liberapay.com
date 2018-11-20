@@ -364,6 +364,45 @@ msgstr "Bayaran debit terus ke dompet Liberapay anda telah gagal"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Bayaran debit terus ke dompet Liberapay anda telah berjaya"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} dari {1} telah sertai Liberapay!"
@@ -462,8 +501,8 @@ msgstr "Nampaknya anda telah jumpa pepijat! Maaf atas segala kesulitan, kami aka
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Perincian ralat ini telah direkodkan. Jika anda memutuskan untuk menghubungi kami sila sertakan kod pengenalan ralat berikut di dalam mesej anda: {0}."
 
-msgid "When I receive money"
-msgstr "Apabila saya menerima wang"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr "Apabila tiba masa untuk memperbaharui derma-derma saya"
@@ -480,20 +519,11 @@ msgstr "Apabila seseorang yang saya janjikan derma sertai Liberapay"
 msgid "When someone invites me to join a team"
 msgstr "Apabila seseorang mengajak saya untuk menyertai kumpulan"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "Apabila pindah kawat bank ke dompet Liberapay saya gagal"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "Apabila pindah kawat bank ke dompet Liberapay saya berjaya"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "Apabila pindah kawat bank ke dompet Liberapay saya tamat tempoh"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "Apabila debit terus dari akaun bank saya gagal"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "Apabila debit terus dari akaun bank saya berjaya"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Laporan Perbelanjaan"
@@ -1671,6 +1701,9 @@ msgstr "Ubah Libravatar anda"
 msgid "What is Libravatar?"
 msgstr "Apakah itu Libravatar?"
 
+msgid "Refresh"
+msgstr "Segar semula"
+
 msgid "Avatar source"
 msgstr "Sumber avatar"
 
@@ -2041,6 +2074,18 @@ msgstr "Sila pilih kaedah pembayaran:"
 msgid "Card"
 msgstr "Kad"
 
+msgid "Currently unavailable"
+msgstr "Belum ada ketika ini"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "Semua derma anda telah disumbangkan."
 
@@ -2124,24 +2169,19 @@ msgstr "Pemprosesan pembayaran {name} mengembalikan ralat: “{error_message}”
 msgid "The payment has been initiated."
 msgstr "Pembayaran telah dimulakan."
 
-msgid "Credit/Debit Card"
-msgstr "Kad Kredit/Debit"
-
-msgid "Easy and instantaneous"
-msgstr "Senang dan pantas"
-
-msgid "Eurozone only"
-msgstr "Zon Eropah sahaja"
-
-msgid "Best for regular payments"
-msgstr "Terbaik untuk pembayaran biasa"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Kami akan mengecaj kad {brand} anda (empat angka terakhir: {last4})."
 
 msgid "Use another card"
 msgstr "Gunakan kad lain"
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
+msgstr ""
 
 msgid "Please input your card number:"
 msgstr "Sila masukkan nombor kad anda:"
@@ -2152,6 +2192,19 @@ msgstr "Data ini akan dihantar terus ke pemproses pembayaran {name} melalui samb
 
 msgid "Remember the card number for next time"
 msgstr "Ingat nombor kad untuk urusan di lain hari"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Adakah anda pasti anda ingin menukar jenis akaun anda? Atas sebab undang-undang kami perlu mencipta akaun baru untuk anda dalam sistem rakan pembayaran kami, dan pindahkan wang dari akaun lama anda."
@@ -2941,8 +2994,11 @@ msgstr "Anda mempunyai pembayaran {payment_method} belum selesai sebanyak {money
 msgid "Please choose a payment method to add money:"
 msgstr "Sila pilih kaedah pembayaran untuk menambah wang:"
 
-msgid "Currently unavailable"
-msgstr "Belum ada ketika ini"
+msgid "Credit/Debit Card"
+msgstr "Kad Kredit/Debit"
+
+msgid "Easy and instantaneous"
+msgstr "Senang dan pantas"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2960,6 +3016,9 @@ msgstr "Lebih murah¹ tetapi menyusahkan"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Caj perkhidmatan: {0}%"
+
+msgid "Best for regular payments"
+msgstr "Terbaik untuk pembayaran biasa"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Anda masih belum menetapkan sebarang derma, setelah anda tetapkan anda akan diminta menambah wang ke akaun anda."
@@ -3050,9 +3109,6 @@ msgstr "{0} telah diambil daripada kad kredit anda, {1} masuk ke dompet Liberapa
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "Cubaan untuk mengambil {0} daripada kad kredit anda telah gagal. Mesej ralat: {1}"
-
-msgid "View Receipt"
-msgstr "Lihat Resit"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4443,9 +4499,6 @@ msgstr "Nota: tetapan privasi mungkin menyekat Liberapay daripada melihat sesete
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Sila segarkan semula perkaitan {0} anda untuk mencari rakan anda dari sana."
-
-msgid "Refresh"
-msgstr "Segar semula"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."

@@ -365,6 +365,45 @@ msgstr "Suoraveloitus Liberapay-lompakkoosi on epäonnistunut"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Suoraveloitus Liberapay-lompakkoosi on onnistunut"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0}, maasta/paikasta/palvelusta {1}, liittyi Liberapay-palveluun!"
@@ -461,8 +500,8 @@ msgstr "Taisit löytää bugin! Pahoittelemme häiriötä. Korjaamme sen mahdoll
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Virheen tiedot on tallennettu. Jos haluat ottaa meihin yhteyttä, sisällytä viestissäsi tämä virhetunniste: {0}."
 
-msgid "When I receive money"
-msgstr "Kun rahaa saapuu"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr "Kun on aika uusia lahjoitukset"
@@ -479,20 +518,11 @@ msgstr "Kun joku, jolle olen tehnyt lahjoituslupauksen, liittyy Liberapay-palvel
 msgid "When someone invites me to join a team"
 msgstr "Kun joku kutsuu liittymään ryhmään"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "Kun pankkisiirto Liberapay-lompakkoon epäonnistuu"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "Kun pankkisiirto Liberapay-lompakkoon onnistuu"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "Kun pankkisiirto Liberapay-lompakkoon vanhenee"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "Kun suoraveloitus pankkitililtä epäonnistuu"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "Kun suoraveloitus pankkitililtä onnistuu"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Kustannusraportti"
@@ -1670,6 +1700,9 @@ msgstr "Muuta Libravatariasi"
 msgid "What is Libravatar?"
 msgstr "Mikä on Libravatar?"
 
+msgid "Refresh"
+msgstr "Päivitä"
+
 msgid "Avatar source"
 msgstr "Avatarin lähde"
 
@@ -2040,6 +2073,18 @@ msgstr "Valitse maksumenetelmä:"
 msgid "Card"
 msgstr "Kortti"
 
+msgid "Currently unavailable"
+msgstr "Tällä hetkellä ei käytettävissä"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "Kaikki lahjoituksesi ovat rahoitettuina."
 
@@ -2123,24 +2168,19 @@ msgstr "Maksunkäsittelijä {name} palautti virheen: ”{error_message}”."
 msgid "The payment has been initiated."
 msgstr "Maksutoimenpide on aloitettu."
 
-msgid "Credit/Debit Card"
-msgstr "Credit/Debit -kortti"
-
-msgid "Easy and instantaneous"
-msgstr "Helppo ja välitön"
-
-msgid "Eurozone only"
-msgstr "Vain euroalue"
-
-msgid "Best for regular payments"
-msgstr "Paras säännöllisiin maksuihin"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Maksu veloitetaan {brand}-kortiltasi (viimeiset neljä numeroa: {last4})."
 
 msgid "Use another card"
 msgstr "Käytä muuta korttia"
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
+msgstr ""
 
 msgid "Please input your card number:"
 msgstr "Syötä kortin numero:"
@@ -2151,6 +2191,19 @@ msgstr "Tiedot lähetetään suoraan maksunkäsittelijällemme ({name}) salatun 
 
 msgid "Remember the card number for next time"
 msgstr "Pidä kortin numero muistissa seuraavaa kertaa varten"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Haluatko varmasti muuttaa tilin tyyppiä? Lakiteknisistä syistä meidän pitää tehdä sinulle uusi tili maksukumppanimme järjestelmässä, ja siirtää raha vanhalta tililtäsi."
@@ -2940,8 +2993,11 @@ msgstr "Sinulla on jonossa {money_amount} arvoinen {payment_method}-maksu. {link
 msgid "Please choose a payment method to add money:"
 msgstr "Valitse maksumenetelmä rahan lisäämiseksi:"
 
-msgid "Currently unavailable"
-msgstr "Tällä hetkellä ei käytettävissä"
+msgid "Credit/Debit Card"
+msgstr "Credit/Debit -kortti"
+
+msgid "Easy and instantaneous"
+msgstr "Helppo ja välitön"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2959,6 +3015,9 @@ msgstr "Halvempi¹ mutta kömpelö"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Kulut: {0} %"
+
+msgid "Best for regular payments"
+msgstr "Paras säännöllisiin maksuihin"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Et ole vielä päättänyt lahjoittaa kenellekään. Sitten kun lahjoitat, sinua pyydetään lisäämään rahaa tilillesi."
@@ -3049,9 +3108,6 @@ msgstr "{0} nostettiin luottokortillasi. {1} meni Liberapay-lompakkoosi, ja {2} 
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "Yritys nostaa {0} luottokortiltasi on epäonnistunut. Virheilmoitus: {1}"
-
-msgid "View Receipt"
-msgstr "Näytä kuitti"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4442,9 +4498,6 @@ msgstr "Huom: yksityisyysasetukset voivat estää Liberapay-palvelua näkemäst�
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Päivitä yhteytesi {0} -palveluun löytääksesi ystäväsi sieltä."
-
-msgid "Refresh"
-msgstr "Päivitä"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."

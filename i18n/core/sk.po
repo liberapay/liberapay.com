@@ -369,6 +369,45 @@ msgstr "Priama platba kartou do vašej Liberapay peňaženky zlyhala"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Priama platba kartou do vašej Liberapad peňaženky bola úspešná"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} z {1} sa práve pridal/a na Liberapay!"
@@ -465,8 +504,8 @@ msgstr "Vyzerá to tak, že ste našli chybu! Ospravedlňujeme sa za nepríjemno
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Podrobnosti o vašej chybe boli zaznamenané. Pokiaľ sa rozhodnete nás kontaktovať, zahrnte prosím nasledujúci chybový kód vo vašej správe: {0}."
 
-msgid "When I receive money"
-msgstr "Keď dostanem peniaze"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr "Keď bude čas na obnovenie mojich darov"
@@ -483,20 +522,11 @@ msgstr "Keď sa pridá na Liberapay niekto, komu som sľúbil príspevok"
 msgid "When someone invites me to join a team"
 msgstr "Keď ma niekto pozýva ku pripojeniu do tímu"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "Keď zlyhá bankový prevod do peňaženky Liberapay"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "Keď bude bankový prevod úspešný do peňaženky Liberapay"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "Keď vyprší bankový prevod na moju Liberapay peňaženku"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "Keď sa nepodarí priame inkaso z môjho bankového účtu"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "Keď sa podarí priame inkaso z môjho bankového účtu"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Vyúčtovanie"
@@ -1680,6 +1710,9 @@ msgstr "Upravte svôj avatar"
 msgid "What is Libravatar?"
 msgstr "Čo je Libravatar?"
 
+msgid "Refresh"
+msgstr "Obnoviť"
+
 msgid "Avatar source"
 msgstr "Zdroj avatara"
 
@@ -2053,6 +2086,18 @@ msgstr "Prosím zvoľte platobnú metódu:"
 msgid "Card"
 msgstr "Karta"
 
+msgid "Currently unavailable"
+msgstr "Momentálne nedostupné"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "Všetky vaše dary boli zaplatené."
 
@@ -2140,24 +2185,19 @@ msgstr "Platobný systém {name} vrátil chybu: \"{error_message}\"."
 msgid "The payment has been initiated."
 msgstr "Platba bola zahájená."
 
-msgid "Credit/Debit Card"
-msgstr "Kreditná/debetná Karta"
-
-msgid "Easy and instantaneous"
-msgstr "Jednoduché a okamžité"
-
-msgid "Eurozone only"
-msgstr "Iba v Eurozóne"
-
-msgid "Best for regular payments"
-msgstr "Najvhodnejšie pre pravidelné platby"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Zaplatíme vašou {brand} kartou (posledné štvročíslie: {last4})."
 
 msgid "Use another card"
 msgstr "Použiť inú kartu"
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
+msgstr ""
 
 msgid "Please input your card number:"
 msgstr "Prosím vpíšte číslo karty:"
@@ -2168,6 +2208,19 @@ msgstr "Dáta budú posielané priamo do platobného systému {name} cez zašifr
 
 msgid "Remember the card number for next time"
 msgstr "Zapamätajte si číslo karty na neskôr"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Ste si istý že chcete zmeniť typ vášho účtu? Kvôli právnym dôvodom vytvoríme nový účet u platobného partnera a pošleme peniaze z vášho starého účtu na nový."
@@ -2967,8 +3020,11 @@ msgstr "Máte očakavajúcu {payment_method} platbu na {money_amount}. {link_ope
 msgid "Please choose a payment method to add money:"
 msgstr "Prosím zvoľte platobnú metódu pre pridanie peňazí:"
 
-msgid "Currently unavailable"
-msgstr "Momentálne nedostupné"
+msgid "Credit/Debit Card"
+msgstr "Kreditná/debetná Karta"
+
+msgid "Easy and instantaneous"
+msgstr "Jednoduché a okamžité"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2986,6 +3042,9 @@ msgstr "Lacnejšie¹ ale ťažkopádne"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Poplatok: {0}%"
+
+msgid "Best for regular payments"
+msgstr "Najvhodnejšie pre pravidelné platby"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Ešte ste nenastavili žiadne príspevky, ale akonáhle to urobíte, budete vyzvaný k prevodu peňazí na váš účet."
@@ -3079,9 +3138,6 @@ msgstr "{0} bolo prevedené z vašej platobnej karty, {1} odišlo do peňaženky
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "Zlyhal pokus o prevod {0} z vašej platobnej karty. Chybová správa: {1}"
-
-msgid "View Receipt"
-msgstr "Zobraziť účtenku"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4500,9 +4556,6 @@ msgstr "Poznámka: nastavenie ochrany súkromia môže zabrániť Liberapay vidi
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Prosím obnovte pripojenie na {0} pre vyhladávanie priateľ odtiaľ."
-
-msgid "Refresh"
-msgstr "Obnoviť"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."

@@ -365,6 +365,45 @@ msgstr "La rekta debeto al via Liberapay-monujo malsukcesis"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "La rekta debeto al via Liberapay-monujo sukcesis"
 
+msgid "Your payment has failed"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The error message provided by the payment processor {provider} is:"
+msgstr ""
+
+msgid "Your bank account is going to be debited"
+msgstr ""
+
+#, python-brace-format
+msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+#, python-brace-format
+msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
+msgstr ""
+
+msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
+msgstr ""
+
+#, python-brace-format
+msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
+msgstr ""
+
+msgid "Your payment has succeeded"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+msgstr ""
+
+msgid "Thank you for this donation!"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} el {1} ĵus aliĝis al Liberapay!"
@@ -461,8 +500,8 @@ msgstr "Ŝajne vi trovis cimon! Pardonon pro la ĝeno, ni forigos ĝin plej frue
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "La detaloj de tiu eraro estis registritaj. Se vi decidas kontakti nin, bonvolu aldoni la jenan erar-identigkodon al via mesaĝo: {0}."
 
-msgid "When I receive money"
-msgstr "Kiam mi ricevas monon"
+msgid "Every week as long as I am receiving donations"
+msgstr ""
 
 msgid "When it's time to renew my donations"
 msgstr "Kiam tempas refari miajn donacojn"
@@ -479,20 +518,11 @@ msgstr "Kiam iu, al kiu mi promesis monon aliĝas al Liberapay"
 msgid "When someone invites me to join a team"
 msgstr "Kiam iu invitas min aliĝi al teamo"
 
-msgid "When a bank wire transfer to my Liberapay wallet fails"
-msgstr "Kiam transdono al mia Liberapay-monujo malsukcesas"
+msgid "When a payment I initiated fails"
+msgstr ""
 
-msgid "When a bank wire transfer to my Liberapay wallet succeeds"
-msgstr "Kiam transdono al mia Liberapay-monujo sukcesas"
-
-msgid "When a bank wire transfer to my Liberapay wallet expires"
-msgstr "Kiam transdono al mia Liberapay-monujo eksvalidiĝas"
-
-msgid "When a direct debit from my bank account fails"
-msgstr "Kiam rekta debeto el mia bankkonto malsukcesas"
-
-msgid "When a direct debit from my bank account succeeds"
-msgstr "Kiam rekta debeto el mia bankkonto sukcesas"
+msgid "When a payment I initiated succeeds"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Elspeza raporto"
@@ -1672,6 +1702,9 @@ msgstr "Ŝanĝi vian Libravatar"
 msgid "What is Libravatar?"
 msgstr "Kio estas Libravatar?"
 
+msgid "Refresh"
+msgstr "Aktualigi"
+
 msgid "Avatar source"
 msgstr "Profilbilda fonto"
 
@@ -2042,6 +2075,18 @@ msgstr "Bonvolu elekti pagmetodon:"
 msgid "Card"
 msgstr "Karto"
 
+msgid "Currently unavailable"
+msgstr "Nuntempe maldisponebla"
+
+msgid "Euro donations only"
+msgstr ""
+
+msgid "Euro bank accounts only"
+msgstr ""
+
+msgid "Not anonymous"
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "Ĉiuj viaj donacoj estas financitaj."
 
@@ -2125,24 +2170,19 @@ msgstr "La provizanto de pagservo {name} respondis eraron: “{error_message}”
 msgid "The payment has been initiated."
 msgstr "La pagon estis ekita."
 
-msgid "Credit/Debit Card"
-msgstr "Kreditkarto/Debetkarto"
-
-msgid "Easy and instantaneous"
-msgstr "Facila kaj tuja"
-
-msgid "Eurozone only"
-msgstr "Nur en Eŭrozono"
-
-msgid "Best for regular payments"
-msgstr "Plej bona por regulaj pagoj"
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Ni pagigos vian karton de {brand} (lasta kvar ciferoj: {last4})."
 
 msgid "Use another card"
 msgstr "Uzu alian karton"
+
+#, python-brace-format
+msgid "We will charge your {bank_name} account ({partial_account_number})."
+msgstr ""
+
+msgid "Use another bank account"
+msgstr ""
 
 msgid "Please input your card number:"
 msgstr "Bonvolu enigi vian kartnombron:"
@@ -2153,6 +2193,19 @@ msgstr "Oni sendos tiujn ĉi datumojn direkte al la provizanto de pagservo {name
 
 msgid "Remember the card number for next time"
 msgstr "Memori la numeron de karto por la sekva fojo"
+
+msgid "Please input your name and your IBAN (International Bank Account Number):"
+msgstr ""
+
+msgid "Jane Doe"
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Remember the bank account number for future payments"
+msgstr ""
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Ĉu vi certas, ke vi volas ŝanĝi vian tipon de konto? Pro leĝaj kialoj, ni devos krei novan konton por vi en la sistemo de nia pagpartnero, kaj transdoni la monon el la malnova konto."
@@ -2942,8 +2995,11 @@ msgstr "Vi havas pagon per {payment_method}, kiu atendas pritraktadon por {money
 msgid "Please choose a payment method to add money:"
 msgstr "Bonvolu elekti pagmetodon por aldoni monon:"
 
-msgid "Currently unavailable"
-msgstr "Nuntempe maldisponebla"
+msgid "Credit/Debit Card"
+msgstr "Kreditkarto/Debetkarto"
+
+msgid "Easy and instantaneous"
+msgstr "Facila kaj tuja"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
@@ -2961,6 +3017,9 @@ msgstr "Malpli kosta¹, sed malpli oportuna"
 #, python-brace-format
 msgid "Fee: {0}%"
 msgstr "Peradkosto: {0}%"
+
+msgid "Best for regular payments"
+msgstr "Plej bona por regulaj pagoj"
 
 msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
 msgstr "Vi ankoraŭ ne agordis donacon, kiam vi faros tion, vi estos petita aldoni monon al via konto."
@@ -3051,9 +3110,6 @@ msgstr "{0} estis prenita(j) el via kreditkarto, {1} iris al via Liberapay-monuj
 #, python-brace-format
 msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
 msgstr "La provo preni {0} el via kreditkarto malsukcesis. Erarmesaĝo: {1}"
-
-msgid "View Receipt"
-msgstr "Vidi kvitancon"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
@@ -4443,9 +4499,6 @@ msgstr "Noto: privatecaj agordoj povas preventi Liberapay vidi kelkajn el viaj a
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
 msgstr "Bonvolu aktualigi vian konekton al {0} por trovi viajn amikojn de tie."
-
-msgid "Refresh"
-msgstr "Aktualigi"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."
