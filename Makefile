@@ -84,6 +84,9 @@ pytest-i18n-browse: env
 	@if [ -f sql/branch.sql ]; then $(MAKE) --no-print-directory test-schema; fi
 	PYTHONPATH=. LIBERAPAY_I18N_TEST=yes $(py_test) -k TestTranslations ./tests/py/
 
+pytest-profiling: env
+	PYTHONPATH=. LIBERAPAY_PROFILING=yes $(py_test) -k $${k-TestPerformance} --profile-svg ./tests/py/
+
 _i18n_extract: env
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot --sort-by-file _i18n_warning.html emails liberapay templates www *.spt
 	@PYTHONPATH=. $(env_bin)/python liberapay/utils/i18n.py po-reflag i18n/core.pot

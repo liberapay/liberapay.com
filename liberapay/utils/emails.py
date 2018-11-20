@@ -10,11 +10,11 @@ from dns.exception import DNSException
 from dns.resolver import Cache, Resolver
 from jinja2 import Environment
 
-from liberapay.constants import EMAIL_RE, JINJA_ENV_COMMON
+from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
     BadEmailAddress, BadEmailDomain, EmailAddressIsBlacklisted,
 )
-from liberapay.website import website
+from liberapay.website import website, JINJA_ENV_COMMON
 
 
 (

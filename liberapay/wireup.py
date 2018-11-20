@@ -22,7 +22,6 @@ import pando
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
-from environment import Environment, is_yesish
 from mailshake import AmazonSESMailer, DummyMailer, SMTPMailer
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
@@ -32,7 +31,6 @@ import sass
 from liberapay import elsewhere
 import liberapay.billing.payday
 import liberapay.billing.watcher
-from liberapay.constants import CustomUndefined
 from liberapay.exceptions import NeedDatabase
 from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
 from liberapay.models.community import _Community, Community
@@ -50,6 +48,7 @@ from liberapay.utils.i18n import (
 )
 from liberapay.utils.query_cache import QueryCache
 from liberapay.version import get_version
+from liberapay.website import CustomUndefined
 
 
 def canonical(env):
@@ -746,55 +745,6 @@ def asset_url_generator(env, asset_url, tell_sentry, www_root):
     return {'asset': asset}
 
 
-def env():
-    env = Environment(
-        ASPEN_PROJECT_ROOT=str,
-        AWS_ACCESS_KEY_ID=str,
-        AWS_SECRET_ACCESS_KEY=str,
-        DATABASE_URL=str,
-        DATABASE_MAXCONN=int,
-        CANONICAL_HOST=str,
-        CANONICAL_SCHEME=str,
-        COMPRESS_ASSETS=is_yesish,
-        CSP_EXTRA=str,
-        SENTRY_DSN=str,
-        SENTRY_RERAISE=is_yesish,
-        LOG_DIR=str,
-        KEEP_PAYDAY_LOGS=is_yesish,
-        LOGGING_LEVEL=str,
-        CACHE_STATIC=is_yesish,
-        CLEAN_ASSETS=is_yesish,
-        RUN_CRON_JOBS=is_yesish,
-        OVERRIDE_PAYDAY_CHECKS=is_yesish,
-        OVERRIDE_QUERY_CACHE=is_yesish,
-        GRATIPAY_BASE_URL=str,
-        SECRET_FOR_GRATIPAY=str,
-        INSTANCE_TYPE=str,
-    )
-
-    logging.basicConfig(level=getattr(logging, env.logging_level.upper()))
-
-    if env.log_dir[:1] == '$':
-        var_name = env.log_dir[1:]
-        env.log_dir = os.environ.get(var_name)
-        if env.log_dir is None:
-            env.missing.append(var_name+' (referenced by LOG_DIR)')
-
-    if env.malformed:
-        plural = len(env.malformed) != 1 and 's' or ''
-        print("=" * 42)
-        print("Malformed environment variable%s:" % plural)
-        for key, err in env.malformed:
-            print("  {} ({})".format(key, err))
-
-    if env.missing:
-        plural = len(env.missing) != 1 and 's' or ''
-        keys = ', '.join([key for key in env.missing])
-        print("Missing envvar{}: {}.".format(plural, keys))
-
-    return {'env': env}
-
-
 def load_scss_variables(project_root):
     """Build a dict representing the `style/variables.scss` file.
     """
@@ -824,13 +774,11 @@ def currency_exchange_rates(db):
 
 
 minimal_algorithm = Algorithm(
-    env,
     make_sentry_teller,
     database,
 )
 
 full_algorithm = Algorithm(
-    env,
     make_sentry_teller,
     database,
     canonical,

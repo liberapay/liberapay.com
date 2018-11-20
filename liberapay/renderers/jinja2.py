@@ -2,7 +2,7 @@ import aspen_jinja2_renderer as base
 
 from markupsafe import escape as htmlescape
 
-from liberapay.constants import JINJA_ENV_COMMON
+from liberapay.website import JINJA_ENV_COMMON
 
 
 class Renderer(base.Renderer):
@@ -29,7 +29,7 @@ class Factory(base.Factory):
             'default_env': base.Environment(loader=loader, **JINJA_ENV_COMMON),
             'htmlescaped_env': base.Environment(
                 loader=loader,
-                autoescape=True, extensions=['jinja2.ext.autoescape'],
+                autoescape=True,
                 **JINJA_ENV_COMMON
             ),
         }
