@@ -92,10 +92,10 @@ def create_payment(db, payin, payer, return_url, state):
                 "currency": pt.amount.currency
             },
             "description": (
-                _("donation to {0} for their role in the {1} team",
-                  pt.recipient_username, pt.team_name)
+                _("Liberapay donation to {username} (team {team_name})",
+                  username=pt.recipient_username, team_name=pt.team_name)
                 if pt.team_name else
-                _("donation to {0}", pt.recipient_username)
+                _("Liberapay donation to {username}", username=pt.recipient_username)
             ) + ' | ' + (ngettext(
                 "{n} week of {money_amount}",
                 "{n} weeks of {money_amount}",
@@ -110,11 +110,6 @@ def create_payment(db, payin, payer, return_url, state):
                 n=pt.n_units, money_amount=pt.unit_amount
             )),
             "invoice_number": str(pt.id),
-            "note_to_payee": (
-                "donation via Liberapay for your role in the %s team" % pt.team_name
-                if pt.team_name else
-                "donation via Liberapay"
-            ),
             "payee": {
                 "email": pt.merchant_id,
             },
