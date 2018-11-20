@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-11-20 09:00+0000\n"
+"PO-Revision-Date: 2018-11-21 11:00+0000\n"
 "Last-Translator: jxt <chihsun.tsai@gmail.com>\n"
 "Language-Team: Traditional Chinese <https://hosted.weblate.org/projects/liberapay/core/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -367,36 +367,36 @@ msgstr "支付未能順利完成"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
-msgstr ""
+msgstr "透過 Liberapay 在{date}啟動的{money_amount}捐款無法順利完成支付。"
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr ""
+msgstr "付款處理服務商{provider}所提供的錯誤訊息如下："
 
 msgid "Your bank account is going to be debited"
 msgstr "您的銀行帳戶將會被扣款"
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "我們已直接自您的{bank_name}戶頭扣款{money_amount}({partial_account_number})。"
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr ""
+msgstr "本操作的執行乃基於您在{acceptance_date} 簽署的 {link_start}義務{mandate_id}{link_end}，同意授權 Liberapay (SEPA creditor{creditor_identifier})傳送指示給銀行可自您的帳戶扣款。"
 
 msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
-msgstr ""
+msgstr "若未授權同意此筆支付，請立即通知我們好在銀行扣款前取消此交易。"
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
-msgstr ""
+msgstr "一旦此筆付款已被受理，它會在銀行記錄上顯示成\"{descriptor}\"。"
 
 msgid "Your payment has succeeded"
 msgstr "您的捐款支付已順利完成"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr ""
+msgstr "透過 LiberaPay 在{date}發動的捐款已成功完成支付。"
 
 msgid "Thank you for this donation!"
 msgstr "感謝您的捐款！"
@@ -498,7 +498,7 @@ msgid "The details of this error have been recorded. If you decide to contact us
 msgstr "該錯誤的詳細信息已紀錄。若希望聯繫我們，請在來信中提供以下的錯誤辨識碼：{0}。"
 
 msgid "Every week as long as I am receiving donations"
-msgstr ""
+msgstr "只要我每週收取捐款"
 
 msgid "When it's time to renew my donations"
 msgstr "到須更新捐款的時間"
@@ -516,7 +516,7 @@ msgid "When someone invites me to join a team"
 msgstr "當有人邀請我加入某個團隊"
 
 msgid "When a payment I initiated fails"
-msgstr ""
+msgstr "當我發動的一筆捐款無法順利支付"
 
 msgid "When a payment I initiated succeeds"
 msgstr "當我所發動的一筆捐款成功支付"
@@ -2184,7 +2184,7 @@ msgstr "無名氏"
 
 #, python-brace-format
 msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "提供 IBAN 資訊和確認這筆支付，您授權我方的支付服務商{platform}和{provider}，依照這些同意指示向銀行要求從您的戶頭扣款。基於和銀行的服務條約，您有權要求返還扣款。退款要求必須在扣款日八週內提出。"
 
 msgid "Remember the bank account number for future payments"
 msgstr "記住此銀行帳戶資訊便於未來的支付用"
