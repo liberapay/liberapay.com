@@ -72,6 +72,86 @@ class Locale(babel.core.Locale):
                 '{0}{2};{1}{2}'.format(plus_sign, minus_sign, delta_p)
             )
 
+    def _(self, state, s, *a, **kw):
+        escape = state['escape']
+        msg = self.catalog._messages.get(s)
+        s2 = None
+        if msg:
+            s2 = msg.string
+            if isinstance(s2, tuple):
+                s2 = s2[0]
+        if not s2:
+            s2 = s
+            if self is not LOCALE_EN:
+                self = LOCALE_EN
+                state['partial_translation'] = True
+        if a or kw:
+            try:
+                return self.format(escape(_decode(s2)), *a, **kw)
+            except Exception as e:
+                website.tell_sentry(e, state)
+                return LOCALE_EN.format(escape(_decode(s)), *a, **kw)
+        return escape(s2)
+
+    def ngettext(self, state, s, p, n, *a, **kw):
+        escape = state['escape']
+        n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
+        n = n or 0
+        msg = self.catalog._messages.get(s if s else p)
+        s2 = None
+        if msg:
+            try:
+                s2 = msg.string[self.catalog.plural_func(n)]
+            except Exception as e:
+                website.tell_sentry(e, state)
+        if not s2:
+            s2 = s if n == 1 else p
+            if self is not LOCALE_EN:
+                self = LOCALE_EN
+                state['partial_translation'] = True
+        kw['n'] = format_number(n, locale=self) or n
+        if wrapper:
+            kw['n'] = wrapper % kw['n']
+        try:
+            return self.format(escape(_decode(s2)), *a, **kw)
+        except Exception as e:
+            website.tell_sentry(e, state)
+            return LOCALE_EN.format(escape(_decode(s if n == 1 else p)), *a, **kw)
+
+    def format(self, s, *a, **kw):
+        if a:
+            a = list(a)
+        for c, f in [(a, enumerate), (kw, dict.items)]:
+            for k, o in f(c):
+                o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
+                if isinstance(o, text_type):
+                    pass
+                elif isinstance(o, Decimal):
+                    c[k] = format_decimal(o, locale=self)
+                elif isinstance(o, int):
+                    c[k] = format_number(o, locale=self)
+                elif isinstance(o, Money):
+                    c[k] = self.format_money(o)
+                elif isinstance(o, MoneyBasket):
+                    c[k] = self.format_money_basket(o)
+                elif isinstance(o, Age):
+                    c[k] = format_timedelta(o, locale=self, **o.format_args)
+                elif isinstance(o, timedelta):
+                    c[k] = format_timedelta(o, locale=self)
+                elif isinstance(o, datetime):
+                    c[k] = format_datetime(o, locale=self)
+                elif isinstance(o, date):
+                    c[k] = format_date(o, locale=self)
+                elif isinstance(o, Locale):
+                    c[k] = self.languages.get(o.language) or o.language.upper()
+                elif isinstance(o, Country):
+                    c[k] = self.countries.get(o, o)
+                elif isinstance(o, Currency):
+                    c[k] = self.currencies.get(o, o)
+                if wrapper:
+                    c[k] = wrapper % (c[k],)
+        return s.format(*a, **kw)
+
     def format_money(self, m, format=None, trailing_zeroes=True):
         s = format_currency(m.amount, m.currency, format, locale=self)
         if not trailing_zeroes:
@@ -265,89 +345,6 @@ def _decode(o):
     return o.decode('ascii') if isinstance(o, bytes) else o
 
 
-def i_format(loc, s, *a, **kw):
-    if a:
-        a = list(a)
-    for c, f in [(a, enumerate), (kw, dict.items)]:
-        for k, o in f(c):
-            o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
-            if isinstance(o, text_type):
-                pass
-            elif isinstance(o, Decimal):
-                c[k] = format_decimal(o, locale=loc)
-            elif isinstance(o, int):
-                c[k] = format_number(o, locale=loc)
-            elif isinstance(o, Money):
-                c[k] = loc.format_money(o)
-            elif isinstance(o, MoneyBasket):
-                c[k] = loc.format_money_basket(o)
-            elif isinstance(o, Age):
-                c[k] = format_timedelta(o, locale=loc, **o.format_args)
-            elif isinstance(o, timedelta):
-                c[k] = format_timedelta(o, locale=loc)
-            elif isinstance(o, datetime):
-                c[k] = format_datetime(o, locale=loc)
-            elif isinstance(o, date):
-                c[k] = format_date(o, locale=loc)
-            elif isinstance(o, Locale):
-                c[k] = loc.languages.get(o.language) or o.language.upper()
-            elif isinstance(o, Country):
-                c[k] = loc.countries.get(o, o)
-            elif isinstance(o, Currency):
-                c[k] = loc.currencies.get(o, o)
-            if wrapper:
-                c[k] = wrapper % (c[k],)
-    return s.format(*a, **kw)
-
-
-def get_text(state, loc, s, *a, **kw):
-    escape = state['escape']
-    msg = loc.catalog._messages.get(s)
-    s2 = None
-    if msg:
-        s2 = msg.string
-        if isinstance(s2, tuple):
-            s2 = s2[0]
-    if not s2:
-        s2 = s
-        if loc is not LOCALE_EN:
-            loc = LOCALE_EN
-            state['partial_translation'] = True
-    if a or kw:
-        try:
-            return i_format(loc, escape(_decode(s2)), *a, **kw)
-        except Exception as e:
-            website.tell_sentry(e, state)
-            return i_format(LOCALE_EN, escape(_decode(s)), *a, **kw)
-    return escape(s2)
-
-
-def n_get_text(state, loc, s, p, n, *a, **kw):
-    escape = state['escape']
-    n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
-    n = n or 0
-    msg = loc.catalog._messages.get(s if s else p)
-    s2 = None
-    if msg:
-        try:
-            s2 = msg.string[loc.catalog.plural_func(n)]
-        except Exception as e:
-            website.tell_sentry(e, state)
-    if not s2:
-        s2 = s if n == 1 else p
-        if loc is not LOCALE_EN:
-            loc = LOCALE_EN
-            state['partial_translation'] = True
-    kw['n'] = format_number(n, locale=loc) or n
-    if wrapper:
-        kw['n'] = wrapper % kw['n']
-    try:
-        return i_format(loc, escape(_decode(s2)), *a, **kw)
-    except Exception as e:
-        website.tell_sentry(e, state)
-        return i_format(LOCALE_EN, escape(_decode(s if n == 1 else p)), *a, **kw)
-
-
 def getdoc(state, name):
     versions = state['website'].docs[name]
     for lang in state['request'].accept_langs:
@@ -446,8 +443,8 @@ def add_helpers_to_context(context, loc):
         Currency=Currency,
         Money=Money,
         to_age=to_age,
-        _=lambda s, *a, **kw: get_text(context, kw.pop('loc', loc), s, *a, **kw),
-        ngettext=lambda *a, **kw: n_get_text(context, kw.pop('loc', loc), *a, **kw),
+        _=lambda s, *a, **kw: loc._(context, s, *a, **kw),
+        ngettext=lambda *a, **kw: loc.ngettext(context, *a, **kw),
         format_date=loc.format_date,
         format_datetime=loc.format_datetime,
         format_decimal=loc.format_decimal,
