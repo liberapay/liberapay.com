@@ -15,8 +15,9 @@ class Tests(Harness):
 
     def make_team(self, username=TEAM, **kw):
         team = self.make_participant(username, kind='group', **kw)
-        if Participant.from_username('Daddy Warbucks') is None:
-            self.warbucks = self.make_participant('Daddy Warbucks', balance=EUR(1000))
+        if not getattr(self, 'warbucks', None):
+            self.warbucks = self.make_participant('Daddy Warbucks')
+            self.warbucks_card = self.upsert_route(self.warbucks, 'stripe-card')
         self.warbucks.set_tip_to(team, EUR('100'))
         return team
 
@@ -33,6 +34,8 @@ class Tests(Harness):
     def make_team_member(self, team, username, **kw):
         user = self.make_participant(username, **kw)
         team.add_member(user)
+        self.add_payment_account(user, 'stripe')
+        self.make_payin_and_transfer(self.warbucks_card, team, EUR('500'))
         return user
 
     def take_last_week(self, team, member, amount, actual_amount=None):
@@ -128,6 +131,7 @@ class Tests(Harness):
         assert alice.taking == 42
         assert alice.receiving == 42
         self.warbucks.set_tip_to(alice, EUR('10.00'))
+        self.make_payin_and_transfer(self.warbucks_card, alice, EUR('10.00'))
         assert alice.taking == 42
         assert alice.receiving == 52
         self.warbucks.set_tip_to(team, EUR('50.00'))
@@ -171,7 +175,7 @@ class Tests(Harness):
         assert alice.receiving == alice.taking == 40
 
         for m in team.get_members().values():
-            assert m['nominal_take'] == m['actual_amount'].amounts['EUR']
+            assert m['nominal_take'] == m['actual_amount']['EUR']
 
     def test_changes_to_others_take_can_increase_members_take(self):
         team, alice, bob = self.make_team_of_two()

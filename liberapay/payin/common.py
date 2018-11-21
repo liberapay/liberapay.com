@@ -169,6 +169,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
     members = sorted(members, key=lambda t: (
         int(t.member == payer.id),
         -t.takes_sum_eur / (t.received_sum_eur + payin_amount_eur),
+        t.received_sum_eur,
         t.ctime
     ))
     member = Participant.from_id(members[0].member)

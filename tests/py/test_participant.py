@@ -75,16 +75,20 @@ class TestTakeOver(Harness):
         self.db.self_check()
 
     def test_consolidated_tips_receiving(self):
-        alice = self.make_participant('alice', balance=EUR(1))
+        alice = self.make_participant('alice')
+        alice_card = self.upsert_route(alice, 'stripe-card')
         bob = self.make_participant('bob', elsewhere='twitter')
         carl = self.make_elsewhere('github', -1, 'carl')
-        alice.set_tip_to(bob, EUR('1.00'))  # funded
-        alice.set_tip_to(carl.participant, EUR('5.00'))  # not funded
+        self.add_payment_account(bob, 'stripe')
+        alice.set_tip_to(bob, EUR('1.00'))
+        self.make_payin_and_transfer(alice_card, bob, EUR('10'))
+        alice.set_tip_to(carl.participant, EUR('5.00'))
         bob.take_over(carl, have_confirmation=True)
         tips = self.db.all("select * from tips where renewal_mode > 0 order by id asc")
         assert len(tips) == 3
         assert tips[-1].amount == 5
-        assert tips[-1].is_funded is False
+        assert tips[-1].paid_in_advance == EUR('10')
+        assert tips[-1].is_funded is True
         self.db.self_check()
 
     def test_idempotent(self):
@@ -264,15 +268,14 @@ class Tests(Harness):
     # set_tip_to - stt
 
     def test_stt_sets_tip_to(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         bob = self.make_stub()
         alice.set_tip_to(bob, EUR('1.00'))
-
         actual = alice.get_tip_to(bob)['amount']
         assert actual == EUR('1.00')
 
     def test_stt_works_for_pledges(self):
-        alice = self.make_participant('alice', balance=EUR(1))
+        alice = self.make_participant('alice')
         bob = self.make_stub()
         t = alice.set_tip_to(bob, EUR('10.00'))
         assert isinstance(t, dict)
@@ -283,11 +286,11 @@ class Tests(Harness):
         assert t['first_time_tipper'] is True
 
     def test_stt_works_for_donations(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         t = alice.set_tip_to(bob, EUR('1.00'))
         assert t['amount'] == 1
-        assert t['is_funded'] is True
+        assert t['is_funded'] is False
         assert t['is_pledge'] is False
         assert t['first_time_tipper'] is True
 
@@ -308,7 +311,7 @@ class Tests(Harness):
         assert t['amount'] == EUR('100.00')
 
     def test_stt_returns_False_for_second_time_tipper(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, EUR('1.00'))
         actual = alice.set_tip_to(bob, EUR('2.00'))
@@ -316,12 +319,12 @@ class Tests(Harness):
         assert actual['first_time_tipper'] is False
 
     def test_stt_doesnt_allow_self_tipping(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         with pytest.raises(NoSelfTipping):
             alice.set_tip_to(alice, EUR('10.00'))
 
     def test_stt_doesnt_allow_just_any_ole_amount(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         bob = self.make_participant('bob')
 
         with self.assertRaises(BadAmount) as cm:
@@ -349,26 +352,29 @@ class Tests(Harness):
         assert actual == expected
 
     def test_stt_fails_to_tip_unknown_people(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         with pytest.raises(NoTippee):
             alice.set_tip_to('bob', EUR('1.00'))
 
     # giving, npatrons and receiving
 
     def test_only_funded_tips_count(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         bob = self.make_participant('bob')
-        carl = self.make_participant('carl', route_status='canceled')
+        carl = self.make_participant('carl')
         dana = self.make_participant('dana')
+        alice_card = self.upsert_route(alice, 'stripe-card')
         alice.set_tip_to(dana, EUR('3.00'))
+        self.make_payin_and_transfer(alice_card, dana, EUR('15.00'))
         alice.set_tip_to(bob, EUR('6.00'))
+        self.make_payin_and_transfer(alice_card, bob, EUR('30.00'))
         bob.set_tip_to(alice, EUR('5.00'))
         bob.set_tip_to(dana, EUR('2.00'))
         carl.set_tip_to(dana, EUR('2.08'))
 
         assert alice.giving == EUR('9.00')
-        assert alice.receiving == EUR('5.00')
-        assert bob.giving == EUR('5.00')
+        assert alice.receiving == EUR('0.00')
+        assert bob.giving == EUR('0.00')
         assert bob.receiving == EUR('6.00')
         assert carl.giving == EUR('0.00')
         assert carl.receiving == EUR('0.00')
@@ -376,31 +382,40 @@ class Tests(Harness):
         assert dana.npatrons == 1
 
         funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
-        assert funded_tips == [3, 6, 5]
+        assert funded_tips == [3, 6]
 
     def test_only_latest_tip_counts(self):
-        alice = self.make_participant('alice', balance=EUR(100))
-        bob = self.make_participant('bob', balance=EUR(100))
+        alice = self.make_participant('alice')
+        alice_card = self.upsert_route(alice, 'stripe-card')
+        bob = self.make_participant('bob')
+        bob_card = self.upsert_route(bob, 'stripe-card')
         carl = self.make_participant('carl')
         alice.set_tip_to(carl, EUR('12.00'))
         alice.set_tip_to(carl, EUR('3.00'))
+        self.make_payin_and_transfer(alice_card, carl, EUR('30.00'))
         bob.set_tip_to(carl, EUR('2.00'))
+        self.make_payin_and_transfer(bob_card, carl, EUR('20.00'))
         bob.set_tip_to(carl, EUR('0.00'))
         assert alice.giving == EUR('3.00')
-        assert bob.giving == EUR('0.00')
-        assert carl.receiving == EUR('3.00')
-        assert carl.npatrons == 1
+        assert bob.giving == EUR('2.00')
+        assert carl.receiving == EUR('5.00')
+        assert carl.npatrons == 2
 
-    def test_receiving_includes_taking_when_updated_from_set_tip_to(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+    def test_receiving_includes_taking(self):
+        alice = self.make_participant('alice')
+        alice_card = self.upsert_route(alice, 'stripe-card')
         bob = self.make_participant('bob', taking=EUR('42.00'))
         alice.set_tip_to(bob, EUR('3.00'))
+        self.make_payin_and_transfer(alice_card, bob, EUR('30.00'))
         assert Participant.from_username('bob').receiving == bob.receiving == EUR('45.00')
 
     def test_receiving_is_zero_for_patrons(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
+        alice_card = self.upsert_route(alice, 'stripe-card')
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         alice.set_tip_to(bob, EUR('3.00'))
+        self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
 
         bob.update_goal(EUR('-1'))
         assert bob.receiving == 0
@@ -411,7 +426,7 @@ class Tests(Harness):
     # pledging
 
     def test_cant_pledge_to_locked_accounts(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         bob = self.make_stub(goal=EUR(-1))
         with self.assertRaises(UserDoesntAcceptTips):
             alice.set_tip_to(bob, EUR('3.00'))

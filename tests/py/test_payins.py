@@ -66,13 +66,13 @@ class TestPayins(Harness):
         alice_card = ExchangeRoute.insert(
             alice, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
         )
-        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'), 'stripe')
+        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'))
         assert pt.destination == stripe_account_carl.pk
-        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('1'), 'stripe')
+        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('1'))
         assert pt.destination == stripe_account_bob.pk
-        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('4'), 'stripe')
+        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('4'))
         assert pt.destination == stripe_account_carl.pk
-        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('10'), 'stripe')
+        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('10'))
         assert pt.destination == stripe_account_carl.pk
-        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'), 'stripe')
+        payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'))
         assert pt.destination == stripe_account_bob.pk

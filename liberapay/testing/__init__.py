@@ -18,6 +18,7 @@ from liberapay.billing.transactions import (
 )
 from liberapay.constants import SESSION
 from liberapay.elsewhere._base import UserInfo
+from liberapay.exceptions import MissingPaymentAccount
 from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
@@ -185,7 +186,7 @@ class Harness(unittest.TestCase):
         platform = kw.pop('elsewhere', 'github')
         domain = kw.pop('domain', '')
         kw2 = {}
-        for key in ('route_status', 'balance', 'mangopay_wallet_id'):
+        for key in ('balance', 'mangopay_wallet_id'):
             if key in kw:
                 kw2[key] = kw.pop(key)
 
@@ -234,11 +235,6 @@ class Harness(unittest.TestCase):
                             (participant, address, verified, verified_time)
                      VALUES (%s, %s, true, now())
             """, (participant.id, kw['email']))
-        if 'route_status' in kw2:
-            ExchangeRoute.insert(
-                participant, 'mango-cc', '-1', kw2['route_status'],
-                currency=participant.main_currency
-            )
         if 'balance' in kw2 and kw2['balance'] != 0:
             self.make_exchange('mango-cc', kw2['balance'], 0, participant)
 
@@ -292,28 +288,36 @@ class Harness(unittest.TestCase):
 
 
     def make_payin_and_transfer(
-        self, route, tippee, amount, provider,
+        self, route, tippee, amount,
         status='succeeded', error=None, payer_country=None,
         unit_amount=None, period=None
     ):
         payer = route.participant
         payin = prepare_payin(self.db, payer, amount, route)
         payin = update_payin(self.db, payin.id, 'fake', status, error)
-        destination = resolve_destination(
-            self.db, tippee, provider, payer, payer_country, amount
-        )
+        provider = route.network.split('-', 1)[0]
+        try:
+            destination = resolve_destination(
+                self.db, tippee, provider, payer, payer_country, amount
+            )
+        except MissingPaymentAccount as e:
+            destination = self.add_payment_account(e.args[0], provider)
         recipient = Participant.from_id(destination.participant)
         if tippee.kind == 'group':
             context = 'team-donation'
-            team = tippee
+            team = tippee.id
         else:
             context = 'personal-donation'
             team = None
         pt = prepare_payin_transfer(
             self.db, payin, recipient, destination, context, amount,
-            unit_amount, period, team.id
+            unit_amount, period, team
         )
         pt = update_payin_transfer(self.db, pt.id, 'fake', status, error)
+        payer.update_giving()
+        tippee.update_receiving()
+        if team:
+            recipient.update_receiving()
         return payin, pt
 
     def add_payment_account(self, participant, provider, country='FR', **data):
@@ -334,6 +338,21 @@ class Harness(unittest.TestCase):
                          %(display_name)s, %(token)s)
               RETURNING *
         """, data)
+
+    def upsert_route(self, participant, network,
+                     status='chargeable', one_off=False, remote_user_id='x'):
+        r = self.db.one("""
+            INSERT INTO exchange_routes AS r
+                        (participant, network, address, status, one_off, remote_user_id)
+                 VALUES (%s, %s, 'x', %s, %s, %s)
+            ON CONFLICT (participant, network, address) DO UPDATE
+                    SET status = excluded.status
+                      , one_off = excluded.one_off
+                      , remote_user_id = excluded.remote_user_id
+              RETURNING r
+        """, (participant.id, network, status, one_off, remote_user_id))
+        r.__dict__['participant'] = participant
+        return r
 
 
 class Foobar(Exception): pass

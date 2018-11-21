@@ -8,10 +8,12 @@ from liberapay.testing import EUR, Harness
 class Tests(Harness):
 
     def test_anonymous(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
+        alice_card = self.upsert_route(alice, 'stripe-card')
         bob = self.make_participant('bob')
-
+        self.add_payment_account(bob, 'stripe')
         alice.set_tip_to(bob, EUR('1.00'))
+        self.make_payin_and_transfer(alice_card, bob, EUR('10'))
 
         data = json.loads(self.client.GET('/bob/public.json').text)
         assert data['receiving'] == {"amount": "1.00", "currency": "EUR"}

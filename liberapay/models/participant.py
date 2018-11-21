@@ -1900,7 +1900,7 @@ class Participant(Model, MixinTeam):
     def update_giving(self, cursor=None):
         # Update is_funded on tips
         tips = (cursor or self.db).all("""
-            SELECT t.*
+            SELECT t.*, p2.status AS tippee_status
               FROM current_tips t
               JOIN participants p2 ON p2.id = t.tippee
              WHERE t.tipper = %s
@@ -1910,28 +1910,34 @@ class Participant(Model, MixinTeam):
                    ) DESC
                  , p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
+        has_donated_recently = (cursor or self.db).one("""
+            SELECT DISTINCT tr.tipper AS x
+              FROM transfers tr
+             WHERE tr.tipper = %(p_id)s
+               AND tr.context IN ('tip', 'take')
+               AND tr.timestamp > (current_timestamp - interval '30 days')
+               AND tr.status = 'succeeded'
+             UNION
+            SELECT DISTINCT pi.payer AS x
+              FROM payins pi
+             WHERE pi.payer = %(p_id)s
+               AND pi.ctime > (current_timestamp - interval '30 days')
+               AND pi.status = 'succeeded'
+        """, dict(p_id=self.id)) is not None
         updated = []
-        currencies = set(t.amount.currency for t in tips)
-        balances = {w.balance.currency: w.balance for w in self.get_current_wallets(cursor)}
-        for currency in currencies:
-            fake_balance = balances.get(currency, Money.ZEROS[currency])
-            fake_balance += self.get_receiving_in(currency, cursor)
-            for tip in (t for t in tips if t.amount.currency == currency):
-                if tip.amount <= (tip.paid_in_advance or 0):
-                    is_funded = True
-                elif tip.renewal_mode <= 0 or tip.amount > fake_balance:
-                    is_funded = False
-                else:
-                    fake_balance -= tip.amount
-                    is_funded = True
-                if tip.is_funded == is_funded:
-                    continue
-                updated.append((cursor or self.db).one("""
-                    UPDATE tips
-                       SET is_funded = %s
-                     WHERE id = %s
-                 RETURNING *
-                """, (is_funded, tip.id)))
+        for tip in tips:
+            if tip.tippee_status == 'stub':
+                is_funded = has_donated_recently
+            else:
+                is_funded = tip.amount <= (tip.paid_in_advance or 0)
+            if tip.is_funded == is_funded:
+                continue
+            updated.append((cursor or self.db).one("""
+                UPDATE tips
+                   SET is_funded = %s
+                 WHERE id = %s
+             RETURNING *
+            """, (is_funded, tip.id)))
 
         # Update giving on participant
         giving = (cursor or self.db).one("""
@@ -1944,10 +1950,6 @@ class Participant(Model, MixinTeam):
                         AND ( p2.status = 'active' AND
                               (p2.goal IS NULL OR p2.goal >= 0) AND
                               t.is_funded
-                              OR
-                              coalesce_currency_amount(
-                                  t.paid_in_advance, t.amount::currency
-                              ) >= t.amount
                             )
                    ), p.main_currency)
              WHERE p.id = %(id)s
