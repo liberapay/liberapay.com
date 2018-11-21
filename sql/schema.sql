@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '90'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '91'::jsonb);
 
 
 -- app configuration
@@ -344,7 +344,7 @@ CREATE TABLE paydays
 -- exchange routes -- how money moves in and out of Liberapay
 
 CREATE TYPE payment_net AS ENUM
-    ('mango-ba', 'mango-bw', 'mango-cc', 'stripe-card', 'paypal');
+    ('mango-ba', 'mango-bw', 'mango-cc', 'stripe-card', 'paypal', 'stripe-sdd');
 
 CREATE TYPE route_status AS ENUM ('pending', 'chargeable', 'consumed', 'failed', 'canceled');
 
