@@ -11,9 +11,9 @@ from liberapay.billing.transactions import (
 )
 from liberapay.constants import FEE_PAYIN_CARD, PAYIN_CARD_MIN
 from liberapay.exceptions import InvalidNumber, Redirect
+from liberapay.i18n.currencies import Money
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import b64decode_s, check_address, get_participant, is_card_expired
-from liberapay.utils.i18n import Money
 
 [---]
 

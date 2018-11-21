@@ -32,6 +32,11 @@ from liberapay import elsewhere
 import liberapay.billing.payday
 import liberapay.billing.watcher
 from liberapay.exceptions import NeedDatabase
+from liberapay.i18n.base import (
+    ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES, Locale, make_sorted_dict
+)
+from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_rates
+from liberapay.i18n.plural_rules import get_function_from_rule
 from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
 from liberapay.models.community import _Community, Community
 from liberapay.models.exchange_route import ExchangeRoute
@@ -39,13 +44,8 @@ from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
 from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
-from liberapay.utils.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
-from liberapay.utils.i18n import (
-    ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES, Locale,
-    get_function_from_rule, make_sorted_dict
-)
 from liberapay.utils.query_cache import QueryCache
 from liberapay.version import get_version
 from liberapay.website import CustomUndefined

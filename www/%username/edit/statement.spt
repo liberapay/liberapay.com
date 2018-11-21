@@ -1,7 +1,7 @@
 # coding: utf8
 
+from liberapay.i18n.base import LANGUAGES_2, get_lang_options
 from liberapay.utils import excerpt_intro, form_post_success, get_participant, markdown
-from liberapay.utils.i18n import LANGUAGES_2, get_lang_options
 
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)

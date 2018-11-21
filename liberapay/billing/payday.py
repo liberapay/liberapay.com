@@ -20,9 +20,9 @@ import requests
 from liberapay import constants
 from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
+from liberapay.i18n.currencies import MoneyBasket
 from liberapay.models.participant import Participant
 from liberapay.utils import NS, group_by
-from liberapay.utils.currencies import MoneyBasket
 from liberapay.website import website
 
 

@@ -5,7 +5,7 @@ import logging
 import requests
 
 from ..exceptions import PaymentError
-from ..utils.currencies import Money
+from ..i18n.currencies import Money
 from ..website import website
 from .common import update_payin, update_payin_transfer
 

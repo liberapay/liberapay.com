@@ -6,8 +6,8 @@ from itertools import chain
 from pando import Response
 from pando.utils import utc, utcnow
 
+from ..i18n.currencies import MoneyBasket
 from ..website import website
-from .currencies import MoneyBasket
 from . import group_by
 
 

@@ -6,12 +6,12 @@ import mock
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.billing.transactions import create_debt
+from liberapay.i18n.currencies import MoneyBasket
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, USD, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils.currencies import MoneyBasket
 
 
 class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):

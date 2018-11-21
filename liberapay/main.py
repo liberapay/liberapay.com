@@ -21,15 +21,16 @@ from liberapay import utils, wireup
 from liberapay.billing.payday import Payday, create_payday_issue
 from liberapay.cron import Cron, Daily, Weekly
 from liberapay.exceptions import PayinMethodIsUnavailable, PayinsAreDisabled
+from liberapay.i18n.base import add_currency_to_state, set_up_i18n
+from liberapay.i18n.currencies import Money, MoneyBasket, fetch_currency_exchange_rates
 from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
-    b64decode_s, b64encode_s, erase_cookie, http_caching, i18n, set_cookie, urlquote,
+    b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie, urlquote,
 )
-from liberapay.utils.currencies import Money, MoneyBasket, fetch_currency_exchange_rates
 from liberapay.utils.emails import handle_email_bounces
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
@@ -141,12 +142,12 @@ algorithm.functions = [
 
     canonize,
     set_default_security_headers,
-    i18n.set_up_i18n,
+    set_up_i18n,
     insert_constants,
     authentication.start_user_as_anon,
     csrf.reject_forgeries,
     authentication.authenticate_user_if_possible,
-    i18n.add_currency_to_state,
+    add_currency_to_state,
 
     _dispatch_path_to_filesystem,
     algorithm['handle_dispatch_exception'],

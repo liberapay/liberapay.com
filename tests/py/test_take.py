@@ -3,9 +3,9 @@ from __future__ import unicode_literals
 from psycopg2 import InternalError
 
 from liberapay.billing.payday import Payday
-from liberapay.testing import EUR, USD, Harness
+from liberapay.i18n.currencies import MoneyBasket
 from liberapay.models.participant import Participant
-from liberapay.utils.currencies import MoneyBasket
+from liberapay.testing import EUR, USD, Harness
 
 
 TEAM = 'A Team'

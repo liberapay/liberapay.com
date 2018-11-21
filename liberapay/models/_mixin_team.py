@@ -10,8 +10,8 @@ from statistics import median
 import mangopay
 
 from liberapay.constants import TAKE_THROTTLING_THRESHOLD
+from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.utils import NS, group_by
-from liberapay.utils.currencies import Money, MoneyBasket
 
 
 class MemberLimitReached(Exception): pass

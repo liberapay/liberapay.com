@@ -65,15 +65,16 @@ from liberapay.exceptions import (
     ValueContainsForbiddenCharacters,
     VerificationEmailAlreadySent,
 )
+from liberapay.i18n import base as i18n
+from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     NS, deserialize, erase_cookie, serialize, set_cookie, urlquote,
-    emails, i18n, markdown,
+    emails, markdown,
 )
-from liberapay.utils.currencies import Money, MoneyBasket
 from liberapay.utils.emails import check_email_blacklist, normalize_email_address
 from liberapay.website import website
 

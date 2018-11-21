@@ -1,7 +1,7 @@
 [extractors]
-jinja2_custom = liberapay.utils.i18n:extract_jinja2_custom
-python_custom = liberapay.utils.i18n:extract_python_custom
-spt = liberapay.utils.i18n:extract_spt
+jinja2_custom = liberapay.i18n.extract:extract_jinja2_custom
+python_custom = liberapay.i18n.extract:extract_python_custom
+spt = liberapay.i18n.extract:extract_spt
 
 [python_custom: **.py]
 [jinja2_custom: **.html]

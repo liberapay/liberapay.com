@@ -2,7 +2,7 @@ import os
 
 from markupsafe import Markup
 
-from liberapay.utils.i18n import getdoc
+from liberapay.i18n.base import getdoc
 
 MANGOPAY_TERMS = Markup().join(
     Markup('<li><a href="%s">%s</a></li>') % (website.asset('mangopay/'+f), f)

@@ -4,29 +4,23 @@ from __future__ import print_function, unicode_literals
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
-from hashlib import md5
-from io import BytesIO
-import re
 from unicodedata import combining, normalize
 
 from six import text_type
 
-from aspen.simplates.pagination import parse_specline, split_and_escape
 import babel.core
 from babel.dates import format_date, format_datetime, format_timedelta
-from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
 from babel.numbers import (
     format_currency, format_decimal, format_number, format_percent,
 )
-import jinja2.ext
 from markupsafe import Markup
 from pando.utils import utcnow
 
-from liberapay.constants import CURRENCIES, D_MAX
-from liberapay.exceptions import AmbiguousNumber, InvalidNumber
-from liberapay.utils.currencies import Money, MoneyBasket
-from liberapay.website import website
+from ..constants import CURRENCIES, D_MAX
+from ..exceptions import AmbiguousNumber, InvalidNumber
+from ..website import website
+from .currencies import Money, MoneyBasket
 
 
 def LegacyMoney(o):
@@ -267,30 +261,6 @@ HTTP_ERRORS = {
 del _
 
 
-ternary_re = re.compile(r'^(.+?) *\? *(.+?) *: *(.+?)$')
-and_re = re.compile(r' *&& *')
-or_re = re.compile(r' *\|\| *')
-
-
-def strip_parentheses(s):
-    s = s.strip()
-    if s[:1] == '(' and s[-1:] == ')':
-        s = s[1:-1].strip()
-    return s
-
-
-def ternary_sub(m):
-    g1, g2, g3 = m.groups()
-    return '%s if %s else %s' % (g2, g1, ternary_re.sub(ternary_sub, strip_parentheses(g3)))
-
-
-def get_function_from_rule(rule):
-    rule = ternary_re.sub(ternary_sub, strip_parentheses(rule))
-    rule = and_re.sub(' and ', rule)
-    rule = or_re.sub(' or ', rule)
-    return eval('lambda n: ' + rule, {'__builtins__': {}})
-
-
 def _decode(o):
     return o.decode('ascii') if isinstance(o, bytes) else o
 
@@ -501,70 +471,3 @@ def add_currency_to_state(request, user):
         return {'currency': user.main_currency}
     else:
         return {'currency': CURRENCIES_MAP.get(request.country) or 'EUR'}
-
-
-def extract_custom(extractor, *args, **kw):
-    for match in extractor(*args, **kw):
-        msg = match[2]
-        if isinstance(msg, tuple) and msg[0] == '':
-            unused = "<unused singular (hash=%s)>" % md5(msg[1]).hexdigest()
-            msg = (unused, msg[1], msg[2])
-            match = (match[0], match[1], msg, match[3])
-        yield match
-
-
-def extract_jinja2_custom(*args, **kw):
-    return extract_custom(jinja2.ext.babel_extract, *args, **kw)
-
-
-def extract_python_custom(*args, **kw):
-    return extract_custom(extract_python, *args, **kw)
-
-
-def extract_spt(fileobj, *args, **kw):
-    pages = list(split_and_escape(fileobj.read().decode('utf8')))
-    npages = len(pages)
-    for i, page in enumerate(pages, 1):
-        f = BytesIO(b'\n' * page.offset + page.content.encode('utf8'))
-        content_type, renderer = parse_specline(page.header)
-        extractor = None
-        python_page = i < 3 and i < npages and not page.header
-        json_page = renderer == 'json_dump'
-        if python_page or json_page:
-            extractor = extract_python_custom
-        else:
-            extractor = extract_jinja2_custom
-        if extractor:
-            for match in extractor(f, *args, **kw):
-                yield match
-
-
-if __name__ == '__main__':
-    import sys
-
-    from babel.messages.pofile import read_po, write_po
-
-    if sys.argv[1] == 'po-reflag':
-        # This adds the `python-brace-format` flag to messages that contain braces
-        # https://github.com/python-babel/babel/issues/333
-        pot_path = sys.argv[2]
-        print('rewriting PO template file', pot_path)
-        # read PO file
-        with open(pot_path, 'rb') as pot:
-            catalog = read_po(pot)
-        # tweak message flags
-        for m in catalog:
-            msg = m.id
-            contains_brace = any(
-                '{' in s for s in (msg if isinstance(msg, tuple) else (msg,))
-            )
-            if contains_brace:
-                m.flags.add('python-brace-format')
-            m.flags.discard('python-format')
-        # write back
-        with open(pot_path, 'wb') as pot:
-            write_po(pot, catalog, width=0)
-
-    else:
-        print("unknown command")
-        raise SystemExit(1)

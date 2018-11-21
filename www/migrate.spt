@@ -4,9 +4,9 @@ import requests
 
 from liberapay.elsewhere._base import UserInfo
 from liberapay.exceptions import LoginRequired, UsernameAlreadyTaken
+from liberapay.i18n.base import SEARCH_CONFS
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation, Participant
-from liberapay.utils.i18n import SEARCH_CONFS
 
 pledge_platforms = {'github', 'twitter'}
 

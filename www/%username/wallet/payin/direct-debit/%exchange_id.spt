@@ -12,11 +12,11 @@ from liberapay.billing.transactions import (
 )
 from liberapay.constants import FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN
 from liberapay.exceptions import InvalidNumber
+from liberapay.i18n.currencies import Money
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import (
     b64decode_s, get_owner_address, get_owner_name, get_participant, obfuscate
 )
-from liberapay.utils.i18n import Money
 
 # https://docs.mangopay.com/endpoints/v2.01/mandates#e231_create-a-mandate
 MANDATE_LANGS = {'en', 'fr', 'nl', 'de', 'es', 'it', 'pl'}

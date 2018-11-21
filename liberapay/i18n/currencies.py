@@ -10,8 +10,8 @@ from mangopay.utils import Money
 import requests
 import xmltodict
 
-from liberapay.constants import CURRENCIES, D_CENT, D_ZERO
-from liberapay.website import website
+from ..constants import CURRENCIES, D_CENT, D_ZERO
+from ..website import website
 
 
 def _convert(self, c, rounding=ROUND_HALF_UP):
