@@ -808,12 +808,27 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Úgy tűnik nincs {0} nevű felhasználó a(z) {1}-on."
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "adomány {0}-nak a(z) {1} csapatban betöltött szerepéért"
+msgid "Liberapay donation to {username} (team {team_name})"
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "donation to {0}"
-msgstr "adomány {0}-nak"
+#, python-brace-format
+msgid "Liberapay donation to {username}"
+msgstr ""
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
 
 msgid "Bad username or password."
 msgstr "Hibás felhasználónév vagy jelszó."
@@ -2419,20 +2434,13 @@ msgstr "névtelen adományozás"
 msgid "anonymous donation for your role in the {0} team"
 msgstr "névtelen adomány az Ön szerepéért a(z) {0} csapatban"
 
-#, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
+#, fuzzy, python-brace-format
+msgid "donation to {0}"
+msgstr "adomány {0}-nak"
 
 #, python-brace-format
-msgid "{n} month of {money_amount}"
-msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "{n} year of {money_amount}"
-msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "adomány {0}-nak a(z) {1} csapatban betöltött szerepéért"
 
 msgid "There were no transactions during this period."
 msgstr "Nem voltak átutalások ez idő alatt."

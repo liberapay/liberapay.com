@@ -831,12 +831,30 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Parece que não existe um usuário com o nome de {0} no {1}."
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "doação a {0} pelo seu papel na equipa {1}"
+msgid "Liberapay donation to {username} (team {team_name})"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "doação para {0}"
+msgid "Liberapay donation to {username}"
+msgstr ""
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n}semana de {money_amount}"
+msgstr[1] "{n} semanas de {money_amount}"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] "{n} mês de {money_amount}"
+msgstr[1] "{n} meses de {money_amount}"
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] "{n} ano de {money_amount}"
+msgstr[1] "{n} anos de {money_amount}"
 
 msgid "Bad username or password."
 msgstr "Nome de utilizador ou palavra-passe incorretos."
@@ -2445,22 +2463,12 @@ msgid "anonymous donation for your role in the {0} team"
 msgstr "doação anónima pelo seu papel na equipa {0}"
 
 #, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n}semana de {money_amount}"
-msgstr[1] "{n} semanas de {money_amount}"
+msgid "donation to {0}"
+msgstr "doação para {0}"
 
 #, python-brace-format
-msgid "{n} month of {money_amount}"
-msgid_plural "{n} months of {money_amount}"
-msgstr[0] "{n} mês de {money_amount}"
-msgstr[1] "{n} meses de {money_amount}"
-
-#, python-brace-format
-msgid "{n} year of {money_amount}"
-msgid_plural "{n} years of {money_amount}"
-msgstr[0] "{n} ano de {money_amount}"
-msgstr[1] "{n} anos de {money_amount}"
+msgid "donation to {0} for their role in the {1} team"
+msgstr "doação a {0} pelo seu papel na equipa {1}"
 
 msgid "There were no transactions during this period."
 msgstr "Não houve transações durante este período."

@@ -807,12 +807,27 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "{1} 에 {0} 이름을 가진 사용자가 존재하지 않습니다."
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
+msgid "Liberapay donation to {username} (team {team_name})"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "{0} 에게 보내는 기부"
+msgid "Liberapay donation to {username}"
+msgstr ""
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{money_amount}의 {n} 주 분량"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
 
 msgid "Bad username or password."
 msgstr "잘못된 계정명 또는 비밀번호."
@@ -2408,19 +2423,12 @@ msgid "anonymous donation for your role in the {0} team"
 msgstr "{0} 팀에서의 역할에 따른 익명 기여"
 
 #, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{money_amount}의 {n} 주 분량"
+msgid "donation to {0}"
+msgstr "{0} 에게 보내는 기부"
 
 #, python-brace-format
-msgid "{n} month of {money_amount}"
-msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "{n} year of {money_amount}"
-msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
 
 msgid "There were no transactions during this period."
 msgstr "이 기간 중에 거래가 이루어지지 않았습니다."

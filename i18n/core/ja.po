@@ -807,12 +807,27 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr ""
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
+msgid "Liberapay donation to {username} (team {team_name})"
 msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "{0} への寄付"
+msgid "Liberapay donation to {username}"
+msgstr ""
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] ""
 
 msgid "Bad username or password."
 msgstr "ユーザー名またはパスワードが間違っています。"
@@ -2408,19 +2423,12 @@ msgid "anonymous donation for your role in the {0} team"
 msgstr "{0} チームでの役割に対する匿名の寄付"
 
 #, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
+msgid "donation to {0}"
+msgstr "{0} への寄付"
 
 #, python-brace-format
-msgid "{n} month of {money_amount}"
-msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "{n} year of {money_amount}"
-msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
+msgid "donation to {0} for their role in the {1} team"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "この期間中に取引はありませんでした。"

@@ -827,12 +827,27 @@ msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "在 {1} 上似乎沒有這名 {0} 用戶。"
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
+msgid "Liberapay donation to {username} (team {team_name})"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "捐贈給 {0}"
+msgid "Liberapay donation to {username}"
+msgstr ""
+
+#, python-brace-format
+msgid "{n} week of {money_amount}"
+msgid_plural "{n} weeks of {money_amount}"
+msgstr[0] "{n} 週的 {money_amount}"
+
+#, python-brace-format
+msgid "{n} month of {money_amount}"
+msgid_plural "{n} months of {money_amount}"
+msgstr[0] "{n}月的 {money_amount}"
+
+#, python-brace-format
+msgid "{n} year of {money_amount}"
+msgid_plural "{n} years of {money_amount}"
+msgstr[0] "{n}年的 {money_amount}"
 
 msgid "Bad username or password."
 msgstr "錯誤的用戶名稱或是密碼不符。"
@@ -2428,19 +2443,12 @@ msgid "anonymous donation for your role in the {0} team"
 msgstr "因你在 {0} 團隊的角色，所得到的匿名捐款"
 
 #, python-brace-format
-msgid "{n} week of {money_amount}"
-msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{n} 週的 {money_amount}"
+msgid "donation to {0}"
+msgstr "捐贈給 {0}"
 
 #, python-brace-format
-msgid "{n} month of {money_amount}"
-msgid_plural "{n} months of {money_amount}"
-msgstr[0] "{n}月的 {money_amount}"
-
-#, python-brace-format
-msgid "{n} year of {money_amount}"
-msgid_plural "{n} years of {money_amount}"
-msgstr[0] "{n}年的 {money_amount}"
+msgid "donation to {0} for their role in the {1} team"
+msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
 
 msgid "There were no transactions during this period."
 msgstr "该时段内没有交易。"
