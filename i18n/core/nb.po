@@ -364,44 +364,48 @@ msgstr "Den direkte debetbetalingen til Liberapay-lommeboken din mislyktes"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Penger ble overført til Liberapay-lommeboken din via direkte debetoverføring"
 
+#, fuzzy
 msgid "Your payment has failed"
-msgstr ""
+msgstr "Din betaling mislyktes"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
-msgstr ""
+msgstr "Betalingen på {money_amount} gjennom Liberapay som ble igangsatt på {date} har mislyktes."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr ""
+msgstr "Feilmeldingen fra betalingsformidleren {provider} er:"
 
+#, fuzzy
 msgid "Your bank account is going to be debited"
-msgstr ""
+msgstr "Din bankkonto vil bli debitert"
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "En direktedebitering av {money_amount} fra din {bank_name}-konto {partial_account_number} har blitt igangsatt)."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr ""
+msgstr "Operasjonen blir utført basert på {link_start}mandatet{mandate_id}{link_end} du signerte {acceptance_date}, noe som lar Liberapay (SEPA-kreditor {creditor_identifier}) å sende instruks til din bank om debitering av din konto og din bank om å debitere din konto i henhold til disse instruksjonene."
 
+#, fuzzy
 msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
-msgstr ""
+msgstr "Hvis du ikke autoriserer denne betalingen, fortell oss om det umiddelbart slik at vi kan avbryte den før din konto debiteres."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
-msgstr ""
+msgstr "Når denne betalingen har blitt behandlet bør den fremtre på din betalingsoversikt som \"{descriptor}\"."
 
+#, fuzzy
 msgid "Your payment has succeeded"
-msgstr ""
+msgstr "Betaling utført"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr ""
+msgstr "Betalingen på {money_amount} gjennom Liberapay som ble igangsatt på {date} har blitt utført."
 
 msgid "Thank you for this donation!"
-msgstr ""
+msgstr "Takk for denne donasjonen."
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -500,7 +504,7 @@ msgid "The details of this error have been recorded. If you decide to contact us
 msgstr "Detaljene i denne feilmeldingen har blitt lagret. Legg ved dette feilmeldingsnummeret hvis du velger å kontakte oss: {0}."
 
 msgid "Every week as long as I am receiving donations"
-msgstr ""
+msgstr "Hver uke så lenge jeg mottar donasjoner"
 
 msgid "When it's time to renew my donations"
 msgstr "Når det er på tide å fornye donasjonene mine"
@@ -518,10 +522,10 @@ msgid "When someone invites me to join a team"
 msgstr "Når noen inviterer meg til i bli med i et leg"
 
 msgid "When a payment I initiated fails"
-msgstr ""
+msgstr "Når en betaling jeg har igangsatt mislykkes"
 
 msgid "When a payment I initiated succeeds"
-msgstr ""
+msgstr "Når en betaling jeg har igangsatt overføres"
 
 msgid "Expense Report"
 msgstr "Utgiftsrapport"
@@ -833,11 +837,11 @@ msgstr "Det ser ikke ut til å være noen bruker ved navn {0} på {1}."
 
 #, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
-msgstr ""
+msgstr "Liberapay-donasjon til {username} (lag {team_name})"
 
 #, python-brace-format
 msgid "Liberapay donation to {username}"
-msgstr ""
+msgstr "Liberapay-donasjon til {username}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
@@ -2098,14 +2102,16 @@ msgstr "Kort"
 msgid "Currently unavailable"
 msgstr "Ikke tilgjengelig nå"
 
+#, fuzzy
 msgid "Euro donations only"
-msgstr ""
+msgstr "Kun Euro-donasjoner"
 
+#, fuzzy
 msgid "Euro bank accounts only"
-msgstr ""
+msgstr "Kun Euro-bankkontoer"
 
 msgid "Not anonymous"
-msgstr ""
+msgstr "Ikke anonym"
 
 msgid "All your donations are funded."
 msgstr "Alle dine donasjoner er finansiert."
@@ -2197,12 +2203,12 @@ msgstr "Ditt {brand}-kort vil bli belastet (siste fire siffer: {last4})."
 msgid "Use another card"
 msgstr "Bruk et annet kort"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "We will charge your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "Din {bank_name}-konto {partial_account_number} vil belastes."
 
 msgid "Use another bank account"
-msgstr ""
+msgstr "Bruk en annen bankkonto"
 
 msgid "Please input your card number:"
 msgstr "Skriv inn ditt kortnummer:"
@@ -2215,17 +2221,18 @@ msgid "Remember the card number for next time"
 msgstr "Husk kortnummeret til neste gang"
 
 msgid "Please input your name and your IBAN (International Bank Account Number):"
-msgstr ""
+msgstr "Skriv inn ditt navn og din IBAN (Internasjonalt bankkontonummer):"
 
 msgid "Jane Doe"
-msgstr ""
+msgstr "Ola Nordmann"
 
 #, python-brace-format
 msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "Ved å oppgi din IBAN, og bekrefte denne betalinger, godkjenner du {platform} og {provider}, vår betalingstjenestetilbyder, å sende deg instruksjoner til din bank for å debitere din konto og din bank til å debitere din konto, i henhold til disse instruksjonene. Du har krav på erstatning fra din bank i henhold til vilkår betingelser for avtalen med din bank. En erstatning må kreves innen åtte uker fra din bankkonto ble debitert."
 
+#, fuzzy
 msgid "Remember the bank account number for future payments"
-msgstr ""
+msgstr "Husk dette bankkontonummeret for fremtidige betalinger."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på at du ønsker å endre din kontotype? Av juridiske hensyn må vi opprette en ny konto for deg i systemet til vår betalingspartner, og overføre pengene fra din nåværende konto."
@@ -2556,7 +2563,7 @@ msgid "We recommend connecting both Stripe and PayPal if they're both available 
 msgstr "Det anbefales på koble til både Stripe og PayPal hvis begge deler er tilgjengelig i ditt land."
 
 msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
-msgstr "Med Stripe kan donorer betale per kort direkte fra Liberapay-nettsiden. SEPA direkte debet vil også støttes snart."
+msgstr "Med Stripe kan donorer betale per kort direkte fra Liberapay-nettsiden. SEPA direkte debit vil også støttes snart."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3189,7 +3196,7 @@ msgstr "Direkte debitering i {currency} er ikke tilgjengelig fra {country}."
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} ble debetert fra bankkontoen din, {1} tilfalt Liberapay-lommeboken din, og {2} ble betalt i gebyrer."
+msgstr "{0} ble debitert fra bankkontoen din, {1} tilfalt Liberapay-lommeboken din, og {2} ble betalt i gebyrer."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
