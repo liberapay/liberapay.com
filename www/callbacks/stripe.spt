@@ -30,7 +30,7 @@ if event.livemode != PRODUCTION:
 event_object_type, status = event.type.rsplit('.', 1)
 
 if event_object_type == 'charge':
-    charge = event.object
+    charge = event.data.object
     payin_id = charge.metadata['payin_id']
     payin = website.db.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
     pt = website.db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin_id,))
