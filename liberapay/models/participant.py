@@ -685,7 +685,7 @@ class Participant(Model, MixinTeam):
                 continue
             balance = transfer(
                 self.db, self.id, LiberapayOrg.id, wallet.balance, context,
-                team=team, unit_amount=unit_amount.convert(wallet.balance.currency),
+                team=team, unit_amount=unit_amount.convert(wallet.balance.currency) if unit_amount else None,
                 tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
             )[0]
             self.set_attributes(balance=balance)

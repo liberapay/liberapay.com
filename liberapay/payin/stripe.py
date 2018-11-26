@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from decimal import Decimal
 
+from six import text_type
+
 import stripe
 import stripe.error
 
@@ -107,13 +109,15 @@ def destination_charge(db, payin, payer, statement_descriptor):
 def settle_destination_charge(db, payin, charge, pt):
     """Record the result of a charge, and recover the fee.
     """
-    if charge.balance_transaction:
+    if getattr(charge, 'balance_transaction', None):
         bt = charge.balance_transaction
+        if isinstance(bt, text_type):
+            bt = stripe.BalanceTransaction.retrieve(bt)
         amount_settled = int_to_Money(bt.amount, bt.currency)
         fee = int_to_Money(bt.fee, bt.currency)
         net_amount = amount_settled - fee
 
-        if charge.transfer:
+        if getattr(charge, 'transfer', None):
             tr = stripe.Transfer.retrieve(charge.transfer)
             if tr.amount_reversed == 0:
                 tr.reversals.create(
