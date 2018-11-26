@@ -32,7 +32,14 @@ event_object_type, status = event.type.rsplit('.', 1)
 if event_object_type == 'charge':
     charge = event.data.object
     payin_id = charge.metadata['payin_id']
-    payin = website.db.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
+    payin = website.db.one("""
+        SELECT *
+          FROM payins
+         WHERE id = %s
+           AND remote_id = %s
+    """, (payin_id, charge.id))
+    if not payin:
+        raise response.error(400, "payin not found")
     pt = website.db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin_id,))
     payin = settle_destination_charge(website.db, payin, charge, pt)
     if payin.status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
