@@ -36,11 +36,11 @@ def Bold(value):
 
 
 class Country(str):
-    pass
+    __slots__ = ()
 
 
 class Currency(str):
-    pass
+    __slots__ = ()
 
 
 class Age(timedelta):
