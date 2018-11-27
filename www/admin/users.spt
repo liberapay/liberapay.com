@@ -89,7 +89,7 @@ title = "Users Admin"
         <a href="/{{ p.username }}/">
             <div class="name">{{ c_name if c_name else p.username }}<br>({{ p.kind }}, {{ p.status }})</div>
             {{ avatar_img(p, size=120) }}
-            <div class="age">{{ to_age_str(p.join_time, add_direction=True) if p.join_time }}</div>
+            <div class="age">{{ locale.format_timedelta(to_age(p.join_time), add_direction=True) if p.join_time }}</div>
         </a>
     </div>
     <div class="col-md-6">

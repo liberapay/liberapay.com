@@ -53,7 +53,7 @@ output.body = render(globals(), allow_partial_i18n=False)
         <div class="col-xs-6">
             <h1>
                 {{ _("Account Statement") }}<br>
-                <small>{{ format_date(start['date'], 'long') }} → {{ format_date(end['date'], 'long') }}</small>
+                <small>{{ locale.format_date(start['date'], 'long') }} → {{ locale.format_date(end['date'], 'long') }}</small>
             </h1>
             <p class="text-muted">{{ _("Account number: {0}", participant.id) }}</p>
         </div>
@@ -184,9 +184,9 @@ output.body = render(globals(), allow_partial_i18n=False)
                 &mdash; {{ _("Fee: {0}", event['fee']).lower() }}
             % endif
             </td>
-            <td>{{ format_money(abs(event['wallet_delta'])) if event['wallet_delta'] < 0 else '' }}</td>
-            <td>{{ format_money(event['wallet_delta']) if event['wallet_delta'] > 0 else '' }}</td>
-            <td>{{ format_date(event['date'], 'short_yearless') }}</td>
+            <td>{{ locale.format_money(abs(event['wallet_delta'])) if event['wallet_delta'] < 0 else '' }}</td>
+            <td>{{ locale.format_money(event['wallet_delta']) if event['wallet_delta'] > 0 else '' }}</td>
+            <td>{{ locale.format_date(event['date'], 'short_yearless') }}</td>
         </tr>
         % elif event['kind'] == 'transfer'
         <tr>
@@ -277,9 +277,9 @@ output.body = render(globals(), allow_partial_i18n=False)
                 % endif
             % endif
             </td>
-            <td>{{ format_money(abs(event['wallet_delta'])) if event['wallet_delta'] < 0 else '' }}</td>
-            <td>{{ format_money(event['wallet_delta']) if event['wallet_delta'] > 0 else '' }}</td>
-            <td>{{ format_date(event['date'], 'short_yearless') }}</td>
+            <td>{{ locale.format_money(abs(event['wallet_delta'])) if event['wallet_delta'] < 0 else '' }}</td>
+            <td>{{ locale.format_money(event['wallet_delta']) if event['wallet_delta'] > 0 else '' }}</td>
+            <td>{{ locale.format_date(event['date'], 'short_yearless') }}</td>
         </tr>
         % endif
     % endfor
@@ -293,7 +293,7 @@ output.body = render(globals(), allow_partial_i18n=False)
         <p>{{ _("Account balance: {0}", start['balances']) }}</p>
     % endif
     <footer>
-        <div>{{ format_date(today, 'long') }}</div>
+        <div>{{ locale.format_date(today, 'long') }}</div>
         <div><em>This document is not official, it's only a prototype.</em></div>
         <div></div>
     </footer>

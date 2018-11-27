@@ -244,11 +244,6 @@ class Locale(babel.core.Locale):
     def title(s):
         return s[0].upper() + s[1:] if s and s[0].islower() else s
 
-    def to_age_str(self, o, **kw):
-        if not isinstance(o, datetime):
-            kw.setdefault('granularity', 'day')
-        return format_timedelta(to_age(o), locale=self, **kw)
-
     @property
     def subdomain(self):
         return 'zh' if self.language == 'zh_Hant' else self.language
@@ -438,22 +433,9 @@ def add_helpers_to_context(context, loc):
     context.update(
         escape=_return_,  # to be overriden by renderers
         locale=loc,
-        Bold=Bold,
-        Country=Country,
-        Currency=Currency,
         Money=Money,
-        to_age=to_age,
         _=lambda s, *a, **kw: loc._(context, s, *a, **kw),
         ngettext=lambda *a, **kw: loc.ngettext(context, *a, **kw),
-        format_date=loc.format_date,
-        format_datetime=loc.format_datetime,
-        format_decimal=loc.format_decimal,
-        format_list=loc.format_list,
-        format_money=loc.format_money,
-        format_money_delta=loc.format_money_delta,
-        format_number=loc.format_number,
-        format_percent=loc.format_percent,
-        to_age_str=loc.to_age_str,
     )
 
 

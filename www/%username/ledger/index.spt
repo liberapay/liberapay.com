@@ -70,7 +70,7 @@ if participant.join_time:
 % for event in events
     % if event['kind'] == 'day-end'
     <tr class="day-open">
-        <td class="date">{{ format_date(event['date'], 'long') }}</td>
+        <td class="date">{{ locale.format_date(event['date'], 'long') }}</td>
         <td class="amount"></td>
         <td class="fees"></td>
     </tr>
@@ -86,8 +86,8 @@ if participant.join_time:
             &mdash; {{ _("error message: {0}", event['error']) }}
         % endif
         </td>
-        <td class="amount">{{ format_money(event['amount']) }}</td>
-        <td class="fees">{{ format_money(event['fee']) if event['fee'] else '' }}</td>
+        <td class="amount">{{ locale.format_money(event['amount']) }}</td>
+        <td class="fees">{{ locale.format_money(event['fee']) if event['fee'] else '' }}</td>
     </tr>
     % elif event['kind'] == 'payin_transfer'
     <tr class="{{ 'zero' if event['status'] == 'failed' }}">
@@ -139,8 +139,8 @@ if participant.join_time:
             % endif
         % endif
         </td>
-        <td class="amount">{{ format_money(event['amount']) }}</td>
-        <td class="fees">{{ format_money(event['fee']) if event['fee'] else '' }}</td>
+        <td class="amount">{{ locale.format_money(event['amount']) }}</td>
+        <td class="fees">{{ locale.format_money(event['fee']) if event['fee'] else '' }}</td>
     </tr>
     % endif
 % endfor

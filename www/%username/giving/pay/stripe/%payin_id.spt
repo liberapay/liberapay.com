@@ -333,7 +333,7 @@ title = _("Funding your donations")
                 <label>
                     <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" required />
                     <div class="radio-label">
-                    <h5 class="list-group-item-heading">{{ format_money(charge_amount) }}
+                    <h5 class="list-group-item-heading">{{ locale.format_money(charge_amount) }}
                     % if show_fee_notice
                     % if charge_amount < tip.min_recommended_amount
                         <small class="text-warning">{{ _("(not recommended, high fee percentage)") }}</small>

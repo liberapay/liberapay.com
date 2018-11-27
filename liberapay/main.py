@@ -21,7 +21,9 @@ from liberapay import utils, wireup
 from liberapay.billing.payday import Payday, create_payday_issue
 from liberapay.cron import Cron, Daily, Weekly
 from liberapay.exceptions import PayinMethodIsUnavailable, PayinsAreDisabled
-from liberapay.i18n.base import add_currency_to_state, set_up_i18n
+from liberapay.i18n.base import (
+    Bold, Country, Currency, add_currency_to_state, set_up_i18n, to_age
+)
 from liberapay.i18n.currencies import Money, MoneyBasket, fetch_currency_exchange_rates
 from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
@@ -71,9 +73,13 @@ website.renderer_factories['jinja2'].Renderer.global_context['str'] = text_type
 website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_* renderers.
     'assert': _assert,
+    'Bold': Bold,
     'Community': Community,
+    'Country': Country,
+    'Currency': Currency,
     'b64decode_s': b64decode_s,
     'b64encode_s': b64encode_s,
+    'to_age': to_age,
     'to_javascript': utils.to_javascript,
     'urlquote': urlquote,
 })
