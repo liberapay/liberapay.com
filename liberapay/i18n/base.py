@@ -126,22 +126,22 @@ class Locale(babel.core.Locale):
                 o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
                 if isinstance(o, text_type):
                     pass
-                elif isinstance(o, Decimal):
+                elif isinstance(o, (Decimal, int)):
                     c[k] = format_decimal(o, locale=self)
-                elif isinstance(o, int):
-                    c[k] = format_number(o, locale=self)
                 elif isinstance(o, Money):
                     c[k] = self.format_money(o)
                 elif isinstance(o, MoneyBasket):
                     c[k] = self.format_money_basket(o)
-                elif isinstance(o, Age):
-                    c[k] = format_timedelta(o, locale=self, **o.format_args)
                 elif isinstance(o, timedelta):
-                    c[k] = format_timedelta(o, locale=self)
-                elif isinstance(o, datetime):
-                    c[k] = format_datetime(o, locale=self)
+                    if type(o) is Age:
+                        c[k] = format_timedelta(o, locale=self, **o.format_args)
+                    else:
+                        c[k] = format_timedelta(o, locale=self)
                 elif isinstance(o, date):
-                    c[k] = format_date(o, locale=self)
+                    if isinstance(o, datetime):
+                        c[k] = format_datetime(o, locale=self)
+                    else:
+                        c[k] = format_date(o, locale=self)
                 elif isinstance(o, Locale):
                     c[k] = self.languages.get(o.language) or o.language.upper()
                 elif isinstance(o, Country):
