@@ -11,9 +11,7 @@ from six import text_type
 import babel.core
 from babel.dates import format_date, format_datetime, format_timedelta
 from babel.messages.pofile import Catalog
-from babel.numbers import (
-    format_currency, format_decimal, format_number, format_percent,
-)
+from babel.numbers import format_currency, format_decimal, format_percent
 from markupsafe import Markup
 from pando.utils import utcnow
 
@@ -109,7 +107,7 @@ class Locale(babel.core.Locale):
             if self is not LOCALE_EN:
                 self = LOCALE_EN
                 state['partial_translation'] = True
-        kw['n'] = format_number(n, locale=self) or n
+        kw['n'] = format_decimal(n, locale=self) or n
         if wrapper:
             kw['n'] = wrapper % kw['n']
         try:
@@ -203,9 +201,6 @@ class Locale(babel.core.Locale):
             money.amount, money.currency, *a,
             format=self.currency_delta_pattern, locale=self
         )
-
-    def format_number(self, *a):
-        return format_number(*a, locale=self)
 
     def format_percent(self, *a):
         return format_percent(*a, locale=self)

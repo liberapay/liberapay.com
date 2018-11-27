@@ -30,7 +30,7 @@
     <div class="numbers">
         <dl>
             <dt>{{ _("Patrons") }}</dt>
-            <dd>{{ locale.format_number(participant.npatrons + participant.nteampatrons) }}</dd>
+            <dd>{{ locale.format_decimal(participant.npatrons + participant.nteampatrons) }}</dd>
         </dl>
         % if not participant.hide_receiving
         <dl>
@@ -42,7 +42,7 @@
         % if nmembers
         <dl>
             <dt>{{ _("Members") }}</dt>
-            <dd>{{ locale.format_number(nmembers) }}</dd>
+            <dd>{{ locale.format_decimal(nmembers) }}</dd>
         </dl>
         % endif
     </div>
@@ -63,7 +63,7 @@
         <div class="numbers">
             <dl>
                 <dt>{{ _("Pledges") }}</dt>
-                <dd>{{ locale.format_number(p.npatrons) }}</dd>
+                <dd>{{ locale.format_decimal(p.npatrons) }}</dd>
             </dl>
             % if not p.hide_receiving
             <dl>
