@@ -3,8 +3,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from liberapay.exceptions import AmbiguousNumber, InvalidNumber
+from liberapay.i18n.base import LOCALE_EN, Money
 from liberapay.testing import Harness
-from liberapay.utils.i18n import LOCALE_EN, Money
 
 
 class Tests(Harness):

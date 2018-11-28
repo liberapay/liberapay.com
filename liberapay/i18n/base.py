@@ -4,29 +4,21 @@ from __future__ import print_function, unicode_literals
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
-from hashlib import md5
-from io import BytesIO
-import re
 from unicodedata import combining, normalize
 
 from six import text_type
 
-from aspen.simplates.pagination import parse_specline, split_and_escape
 import babel.core
 from babel.dates import format_date, format_datetime, format_timedelta
-from babel.messages.extract import extract_python
 from babel.messages.pofile import Catalog
-from babel.numbers import (
-    format_currency, format_decimal, format_number, format_percent,
-)
-import jinja2.ext
+from babel.numbers import format_currency, format_decimal, format_percent
 from markupsafe import Markup
 from pando.utils import utcnow
 
-from liberapay.constants import CURRENCIES, D_MAX
-from liberapay.exceptions import AmbiguousNumber, InvalidNumber
-from liberapay.utils.currencies import Money, MoneyBasket
-from liberapay.website import website
+from ..constants import CURRENCIES, D_MAX
+from ..exceptions import AmbiguousNumber, InvalidNumber
+from ..website import website
+from .currencies import Money, MoneyBasket
 
 
 def LegacyMoney(o):
@@ -44,11 +36,11 @@ def Bold(value):
 
 
 class Country(str):
-    pass
+    __slots__ = ()
 
 
 class Currency(str):
-    pass
+    __slots__ = ()
 
 
 class Age(timedelta):
@@ -77,6 +69,86 @@ class Locale(babel.core.Locale):
             self.currency_delta_pattern = (
                 '{0}{2};{1}{2}'.format(plus_sign, minus_sign, delta_p)
             )
+
+    def _(self, state, s, *a, **kw):
+        escape = state['escape']
+        msg = self.catalog._messages.get(s)
+        s2 = None
+        if msg:
+            s2 = msg.string
+            if isinstance(s2, tuple):
+                s2 = s2[0]
+        if not s2:
+            s2 = s
+            if self is not LOCALE_EN:
+                self = LOCALE_EN
+                state['partial_translation'] = True
+        if a or kw:
+            try:
+                return self.format(escape(_decode(s2)), *a, **kw)
+            except Exception as e:
+                website.tell_sentry(e, state)
+                return LOCALE_EN.format(escape(_decode(s)), *a, **kw)
+        return escape(s2)
+
+    def ngettext(self, state, s, p, n, *a, **kw):
+        escape = state['escape']
+        n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
+        n = n or 0
+        msg = self.catalog._messages.get(s if s else p)
+        s2 = None
+        if msg:
+            try:
+                s2 = msg.string[self.catalog.plural_func(n)]
+            except Exception as e:
+                website.tell_sentry(e, state)
+        if not s2:
+            s2 = s if n == 1 else p
+            if self is not LOCALE_EN:
+                self = LOCALE_EN
+                state['partial_translation'] = True
+        kw['n'] = format_decimal(n, locale=self) or n
+        if wrapper:
+            kw['n'] = wrapper % kw['n']
+        try:
+            return self.format(escape(_decode(s2)), *a, **kw)
+        except Exception as e:
+            website.tell_sentry(e, state)
+            return LOCALE_EN.format(escape(_decode(s if n == 1 else p)), *a, **kw)
+
+    def format(self, s, *a, **kw):
+        if a:
+            a = list(a)
+        for c, f in [(a, enumerate), (kw, dict.items)]:
+            for k, o in f(c):
+                o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
+                if isinstance(o, text_type):
+                    pass
+                elif isinstance(o, (Decimal, int)):
+                    c[k] = format_decimal(o, locale=self)
+                elif isinstance(o, Money):
+                    c[k] = self.format_money(o)
+                elif isinstance(o, MoneyBasket):
+                    c[k] = self.format_money_basket(o)
+                elif isinstance(o, timedelta):
+                    if type(o) is Age:
+                        c[k] = format_timedelta(o, locale=self, **o.format_args)
+                    else:
+                        c[k] = format_timedelta(o, locale=self)
+                elif isinstance(o, date):
+                    if isinstance(o, datetime):
+                        c[k] = format_datetime(o, locale=self)
+                    else:
+                        c[k] = format_date(o, locale=self)
+                elif isinstance(o, Locale):
+                    c[k] = self.languages.get(o.language) or o.language.upper()
+                elif isinstance(o, Country):
+                    c[k] = self.countries.get(o, o)
+                elif isinstance(o, Currency):
+                    c[k] = self.currencies.get(o, o)
+                if wrapper:
+                    c[k] = wrapper % (c[k],)
+        return s.format(*a, **kw)
 
     def format_money(self, m, format=None, trailing_zeroes=True):
         s = format_currency(m.amount, m.currency, format, locale=self)
@@ -130,9 +202,6 @@ class Locale(babel.core.Locale):
             format=self.currency_delta_pattern, locale=self
         )
 
-    def format_number(self, *a):
-        return format_number(*a, locale=self)
-
     def format_percent(self, *a):
         return format_percent(*a, locale=self)
 
@@ -169,11 +238,6 @@ class Locale(babel.core.Locale):
     @staticmethod
     def title(s):
         return s[0].upper() + s[1:] if s and s[0].islower() else s
-
-    def to_age_str(self, o, **kw):
-        if not isinstance(o, datetime):
-            kw.setdefault('granularity', 'day')
-        return format_timedelta(to_age(o), locale=self, **kw)
 
     @property
     def subdomain(self):
@@ -267,115 +331,8 @@ HTTP_ERRORS = {
 del _
 
 
-ternary_re = re.compile(r'^(.+?) *\? *(.+?) *: *(.+?)$')
-and_re = re.compile(r' *&& *')
-or_re = re.compile(r' *\|\| *')
-
-
-def strip_parentheses(s):
-    s = s.strip()
-    if s[:1] == '(' and s[-1:] == ')':
-        s = s[1:-1].strip()
-    return s
-
-
-def ternary_sub(m):
-    g1, g2, g3 = m.groups()
-    return '%s if %s else %s' % (g2, g1, ternary_re.sub(ternary_sub, strip_parentheses(g3)))
-
-
-def get_function_from_rule(rule):
-    rule = ternary_re.sub(ternary_sub, strip_parentheses(rule))
-    rule = and_re.sub(' and ', rule)
-    rule = or_re.sub(' or ', rule)
-    return eval('lambda n: ' + rule, {'__builtins__': {}})
-
-
 def _decode(o):
     return o.decode('ascii') if isinstance(o, bytes) else o
-
-
-def i_format(loc, s, *a, **kw):
-    if a:
-        a = list(a)
-    for c, f in [(a, enumerate), (kw, dict.items)]:
-        for k, o in f(c):
-            o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
-            if isinstance(o, text_type):
-                pass
-            elif isinstance(o, Decimal):
-                c[k] = format_decimal(o, locale=loc)
-            elif isinstance(o, int):
-                c[k] = format_number(o, locale=loc)
-            elif isinstance(o, Money):
-                c[k] = loc.format_money(o)
-            elif isinstance(o, MoneyBasket):
-                c[k] = loc.format_money_basket(o)
-            elif isinstance(o, Age):
-                c[k] = format_timedelta(o, locale=loc, **o.format_args)
-            elif isinstance(o, timedelta):
-                c[k] = format_timedelta(o, locale=loc)
-            elif isinstance(o, datetime):
-                c[k] = format_datetime(o, locale=loc)
-            elif isinstance(o, date):
-                c[k] = format_date(o, locale=loc)
-            elif isinstance(o, Locale):
-                c[k] = loc.languages.get(o.language) or o.language.upper()
-            elif isinstance(o, Country):
-                c[k] = loc.countries.get(o, o)
-            elif isinstance(o, Currency):
-                c[k] = loc.currencies.get(o, o)
-            if wrapper:
-                c[k] = wrapper % (c[k],)
-    return s.format(*a, **kw)
-
-
-def get_text(state, loc, s, *a, **kw):
-    escape = state['escape']
-    msg = loc.catalog._messages.get(s)
-    s2 = None
-    if msg:
-        s2 = msg.string
-        if isinstance(s2, tuple):
-            s2 = s2[0]
-    if not s2:
-        s2 = s
-        if loc is not LOCALE_EN:
-            loc = LOCALE_EN
-            state['partial_translation'] = True
-    if a or kw:
-        try:
-            return i_format(loc, escape(_decode(s2)), *a, **kw)
-        except Exception as e:
-            website.tell_sentry(e, state)
-            return i_format(LOCALE_EN, escape(_decode(s)), *a, **kw)
-    return escape(s2)
-
-
-def n_get_text(state, loc, s, p, n, *a, **kw):
-    escape = state['escape']
-    n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
-    n = n or 0
-    msg = loc.catalog._messages.get(s if s else p)
-    s2 = None
-    if msg:
-        try:
-            s2 = msg.string[loc.catalog.plural_func(n)]
-        except Exception as e:
-            website.tell_sentry(e, state)
-    if not s2:
-        s2 = s if n == 1 else p
-        if loc is not LOCALE_EN:
-            loc = LOCALE_EN
-            state['partial_translation'] = True
-    kw['n'] = format_number(n, locale=loc) or n
-    if wrapper:
-        kw['n'] = wrapper % kw['n']
-    try:
-        return i_format(loc, escape(_decode(s2)), *a, **kw)
-    except Exception as e:
-        website.tell_sentry(e, state)
-        return i_format(LOCALE_EN, escape(_decode(s if n == 1 else p)), *a, **kw)
 
 
 def getdoc(state, name):
@@ -471,22 +428,9 @@ def add_helpers_to_context(context, loc):
     context.update(
         escape=_return_,  # to be overriden by renderers
         locale=loc,
-        Bold=Bold,
-        Country=Country,
-        Currency=Currency,
         Money=Money,
-        to_age=to_age,
-        _=lambda s, *a, **kw: get_text(context, kw.pop('loc', loc), s, *a, **kw),
-        ngettext=lambda *a, **kw: n_get_text(context, kw.pop('loc', loc), *a, **kw),
-        format_date=loc.format_date,
-        format_datetime=loc.format_datetime,
-        format_decimal=loc.format_decimal,
-        format_list=loc.format_list,
-        format_money=loc.format_money,
-        format_money_delta=loc.format_money_delta,
-        format_number=loc.format_number,
-        format_percent=loc.format_percent,
-        to_age_str=loc.to_age_str,
+        _=lambda s, *a, **kw: loc._(context, s, *a, **kw),
+        ngettext=lambda *a, **kw: loc.ngettext(context, *a, **kw),
     )
 
 
@@ -501,70 +445,3 @@ def add_currency_to_state(request, user):
         return {'currency': user.main_currency}
     else:
         return {'currency': CURRENCIES_MAP.get(request.country) or 'EUR'}
-
-
-def extract_custom(extractor, *args, **kw):
-    for match in extractor(*args, **kw):
-        msg = match[2]
-        if isinstance(msg, tuple) and msg[0] == '':
-            unused = "<unused singular (hash=%s)>" % md5(msg[1]).hexdigest()
-            msg = (unused, msg[1], msg[2])
-            match = (match[0], match[1], msg, match[3])
-        yield match
-
-
-def extract_jinja2_custom(*args, **kw):
-    return extract_custom(jinja2.ext.babel_extract, *args, **kw)
-
-
-def extract_python_custom(*args, **kw):
-    return extract_custom(extract_python, *args, **kw)
-
-
-def extract_spt(fileobj, *args, **kw):
-    pages = list(split_and_escape(fileobj.read().decode('utf8')))
-    npages = len(pages)
-    for i, page in enumerate(pages, 1):
-        f = BytesIO(b'\n' * page.offset + page.content.encode('utf8'))
-        content_type, renderer = parse_specline(page.header)
-        extractor = None
-        python_page = i < 3 and i < npages and not page.header
-        json_page = renderer == 'json_dump'
-        if python_page or json_page:
-            extractor = extract_python_custom
-        else:
-            extractor = extract_jinja2_custom
-        if extractor:
-            for match in extractor(f, *args, **kw):
-                yield match
-
-
-if __name__ == '__main__':
-    import sys
-
-    from babel.messages.pofile import read_po, write_po
-
-    if sys.argv[1] == 'po-reflag':
-        # This adds the `python-brace-format` flag to messages that contain braces
-        # https://github.com/python-babel/babel/issues/333
-        pot_path = sys.argv[2]
-        print('rewriting PO template file', pot_path)
-        # read PO file
-        with open(pot_path, 'rb') as pot:
-            catalog = read_po(pot)
-        # tweak message flags
-        for m in catalog:
-            msg = m.id
-            contains_brace = any(
-                '{' in s for s in (msg if isinstance(msg, tuple) else (msg,))
-            )
-            if contains_brace:
-                m.flags.add('python-brace-format')
-            m.flags.discard('python-format')
-        # write back
-        with open(pot_path, 'wb') as pot:
-            write_po(pot, catalog, width=0)
-
-    else:
-        print("unknown command")
-        raise SystemExit(1)

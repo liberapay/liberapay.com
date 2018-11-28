@@ -11,9 +11,9 @@ from liberapay.billing.transactions import (
     record_exchange_result, lock_bundles, _record_transfer_result
 )
 from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
+from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models import community
-from liberapay.utils.currencies import Money, MoneyBasket
 
 
 DONATION_PERIODS = tuple(PERIOD_CONVERSION_RATES.keys())

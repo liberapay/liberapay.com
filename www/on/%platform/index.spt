@@ -105,7 +105,7 @@ limited = getattr(platform, 'api_friends_limited', False)
     <tr class="{{ 'info' if p.join_time and p.accepts_tips else '' }}">
         <td><a href="/on/{{ platform.name }}/{{ friend.liberapay_slug }}/">{{ friend.friendly_name }}</a></td>
         <td>{{ _("Yes") if p.join_time else _("No") }}</td>
-        <td>{{ _('hidden') if p.hide_receiving else p.receiving and format_money(p.receiving) or '0' }}</td>
+        <td>{{ _('hidden') if p.hide_receiving else p.receiving and locale.format_money(p.receiving) or '0' }}</td>
         <td>{{ tip_form(tippee=tippee, inline=True) if p.accepts_tips else
                _("{0} doesn't accept donations", friend.friendly_name) }}</td>
     </tr>

@@ -89,7 +89,7 @@ pytest-profiling: env
 
 _i18n_extract: env
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot --sort-by-file _i18n_warning.html emails liberapay templates www *.spt
-	@PYTHONPATH=. $(env_bin)/python liberapay/utils/i18n.py po-reflag i18n/core.pot
+	@PYTHONPATH=. $(env_bin)/python cli/po-tools.py reflag i18n/core.pot
 	@for f in i18n/*/*.po; do \
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
 	done

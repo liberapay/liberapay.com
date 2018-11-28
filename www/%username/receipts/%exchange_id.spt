@@ -105,7 +105,7 @@ output.body = render(globals(), allow_partial_i18n=False)
     % for tip in tips
         <tr>
             <td><a href="{{ website.canonical_url }}/{{ tip.username }}">{{ tip.username }}</a>
-            <td class="text-right">{{ format_money(tip.amount) }}
+            <td class="text-right">{{ locale.format_money(tip.amount) }}
         </tr>
     % endfor
     </table>
@@ -127,7 +127,7 @@ output.body = render(globals(), allow_partial_i18n=False)
     {{ _("Transaction ID: {0}", str(exchange.id)) }}<br>
 
     <footer>
-        <div>{{ format_date(today) }}</div>
+        <div>{{ locale.format_date(today) }}</div>
         <div><em>{{ _("This document is not an invoice.") }}</em></div>
         <div></div>
     </footer>

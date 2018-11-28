@@ -218,7 +218,7 @@ if user.is_admin:
     % if event['kind'] == 'day-end'
     <tr class="day-open">
         <td class="date">
-            {{ format_date(event['date'], 'long') }}
+            {{ locale.format_date(event['date'], 'long') }}
             % if event['payday_number']
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif
@@ -232,7 +232,7 @@ if user.is_admin:
         % set n = len(wallet_deltas.currencies_present)
         % for delta in wallet_deltas
             % if delta.amount or n == 0 and delta.currency == participant.main_currency
-                {{ format_money_delta(delta) }}
+                {{ locale.format_money_delta(delta) }}
             % endif
         % endfor
         % endif
@@ -268,9 +268,9 @@ if user.is_admin:
             % endif
         % endif
         </td>
-        <td class="wallet">{{ format_money_delta(event['wallet_delta'] or event['amount']) }}</td>
-        <td class="fees">{{ format_money(event['fee']) }}</td>
-        <td class="bank">{{ format_money_delta(event['bank_delta']) }}</td>
+        <td class="wallet">{{ locale.format_money_delta(event['wallet_delta'] or event['amount']) }}</td>
+        <td class="fees">{{ locale.format_money(event['fee']) }}</td>
+        <td class="bank">{{ locale.format_money_delta(event['bank_delta']) }}</td>
     </tr>
     % elif event['kind'] == 'transfer'
     <tr class="{{ 'zero' if not event['wallet_delta'] }}">
@@ -378,7 +378,7 @@ if user.is_admin:
             % endif
         % endif
         </td>
-        <td class="wallet">{{ format_money_delta(event['amount']) }}</td>
+        <td class="wallet">{{ locale.format_money_delta(event['amount']) }}</td>
         <td class="fees"></td>
         <td class="bank"></td>
 

@@ -19,6 +19,7 @@ from liberapay.billing.transactions import (
 from liberapay.constants import SESSION
 from liberapay.elsewhere._base import UserInfo
 from liberapay.exceptions import MissingPaymentAccount
+from liberapay.i18n.currencies import Money
 from liberapay.main import website
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
@@ -30,7 +31,6 @@ from liberapay.payin.common import (
 )
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.vcr import use_cassette
-from liberapay.utils.currencies import Money
 
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))

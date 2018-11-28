@@ -33,7 +33,7 @@
         % for member in members.values()
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
-            <td>{{ format_money(member.last_week) }}</td>
+            <td>{{ locale.format_money(member.last_week) }}</td>
             % set nominal_take = member.nominal_take
             % set cell_cls = get_cls(member) if nominal_take != member.last_week else ''
             % if member.id == user.id
@@ -60,7 +60,7 @@
                                 <div class="input-group-addon">{{ locale.currency_symbols.get(take_currency, take_currency) }}</div>
                                 <input type="hidden" name="currency" value="{{ take_currency }}" />
                             % endif
-                            <input class="form-control" name="take" value="{{ format_decimal(nominal_take.amount, '#,##0.00') }}" />
+                            <input class="form-control" name="take" value="{{ locale.format_decimal(nominal_take.amount, '#,##0.00') }}" />
                             <div class="input-group-btn">
                                 <button class="btn btn-default" title="{{ _('Update my nominal take') }}"
                                     ><i class="fa fa-edit"></i></button>
@@ -69,7 +69,7 @@
                     </form>
                 </td>
             % else
-                <td class="{{ 'text-'+cell_cls }}">{{ format_money(nominal_take) }}</td>
+                <td class="{{ 'text-'+cell_cls }}">{{ locale.format_money(nominal_take) }}</td>
             % endif
             % set fuzzy_take = member.actual_amount.fuzzy_sum(nominal_take.currency)
             <td{% if fuzzy_take.fuzzy %} title="{{ locale.format_money_basket(member.actual_amount) }}"{% endif %}>{{

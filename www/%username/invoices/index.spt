@@ -31,7 +31,7 @@ title = _("Invoices - {username}", username=participant.username)
 % for i in invoices
     <p>
         <a href="{{ participant.path('invoices/%i' % i.id) }}">{{ i.description }}</a>
-        &mdash; {{ _(constants.INVOICE_STATUSES[i.status]) }} ({{ format_date(i.mtime, 'long') }})
+        &mdash; {{ _(constants.INVOICE_STATUSES[i.status]) }} ({{ locale.format_date(i.mtime, 'long') }})
     </p>
 % else
     <p>{{ _("Nothing to show.") }}</p>

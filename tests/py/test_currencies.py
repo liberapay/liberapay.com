@@ -7,10 +7,10 @@ from mock import patch
 from liberapay.billing.transactions import swap_currencies, Transfer
 from liberapay.constants import CURRENCIES
 from liberapay.exceptions import NegativeBalance, TransferError
+from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.payin.stripe import int_to_Money, Money_to_int
 from liberapay.testing import EUR, JPY, USD, Harness, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness, fake_transfer
-from liberapay.utils.currencies import Money, MoneyBasket
 
 
 class TestCurrencies(Harness):

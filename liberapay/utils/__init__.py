@@ -27,7 +27,7 @@ from liberapay.elsewhere._paginators import _modify_query
 from liberapay.elsewhere._utils import urlquote
 from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired, InvalidNumber
 from liberapay.models.community import Community
-from liberapay.utils.i18n import LOCALE_EN, add_helpers_to_context
+from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
 from liberapay.website import website
 
 

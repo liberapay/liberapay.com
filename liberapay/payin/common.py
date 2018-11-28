@@ -4,8 +4,8 @@ from ..exceptions import (
     AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended,
     NoSelfTipping,
 )
+from ..i18n.currencies import Money
 from ..models.participant import Participant
-from ..utils.currencies import Money
 
 
 def prepare_payin(db, payer, amount, route):

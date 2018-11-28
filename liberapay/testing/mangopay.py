@@ -8,10 +8,10 @@ from mangopay.resources import (
 import mock
 import requests
 
+from liberapay.i18n.currencies import Money
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import Harness
 from liberapay.testing.vcr import use_cassette
-from liberapay.utils.currencies import Money
 
 
 class MangopayHarness(Harness):

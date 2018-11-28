@@ -1,7 +1,7 @@
 from markupsafe import Markup
 
+from liberapay.i18n.base import Wrap
 from liberapay.utils import get_participant
-from liberapay.utils.i18n import Wrap
 
 span_open, span_close, br = Markup('<br><span style="font-size: 125%%">'), Markup('</span>'), Markup('<br>')
 

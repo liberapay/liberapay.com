@@ -9,8 +9,8 @@ from six import text_type
 import stripe
 import stripe.error
 
+from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
-from ..utils.currencies import Money
 from ..website import website
 from .common import update_payin, update_payin_transfer
 

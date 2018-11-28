@@ -9,8 +9,8 @@ from liberapay.billing.fees import upcharge_bank_wire
 from liberapay.billing.transactions import cancel_bank_wire_payin, payin_bank_wire
 from liberapay.constants import EVENTS, PAYIN_BANK_WIRE_MIN
 from liberapay.exceptions import InvalidNumber
+from liberapay.i18n.currencies import Money
 from liberapay.utils import b64decode_s, get_participant
-from liberapay.utils.i18n import Money
 
 NOTIF_BIT_FAIL = EVENTS['payin_failed'].bit
 NOTIF_BIT_SUCC = EVENTS['payin_succeeded'].bit

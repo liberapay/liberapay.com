@@ -172,21 +172,21 @@ recent_donation_changes = website.db.all("""
         </tr>
         % for amount, ncontributors, summed, summed_converted, pcontributors, psummed in tip_distribution
         <tr>
-            <td class="number">{{ format_money(amount) }}</td>
+            <td class="number">{{ locale.format_money(amount) }}</td>
             <td class="number">{{ ncontributors }}</td>
-            <td class="number">{{ format_money(summed) }}
+            <td class="number">{{ locale.format_money(summed) }}
                 % if summed_converted != summed
-                    <br><small>~ {{ format_money(summed_converted) }}</small>
+                    <br><small>~ {{ locale.format_money(summed_converted) }}</small>
                 % endif
             </td>
             <td class="percentages">
                 <div class="wrapper">
                 <span class="bar width-{{ int(pcontributors * 100) }}"></span>
-                {{- _("{x_percent} of donations", x_percent=format_percent(pcontributors)) }}
+                {{- _("{x_percent} of donations", x_percent=locale.format_percent(pcontributors)) }}
                 </div>
                 <div class="wrapper">
                 <span class="green bar width-{{ int(psummed * 100) }}"></span>
-                {{- _("{x_percent} of total income", x_percent=format_percent(psummed)) }}
+                {{- _("{x_percent} of total income", x_percent=locale.format_percent(psummed)) }}
                 </div>
             </td>
         </tr>

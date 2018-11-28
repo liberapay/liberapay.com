@@ -175,7 +175,7 @@ title = _("Withdrawing Money")
         <input type="hidden" name="route_id" value="{{ routes[0].id if routes else '' }}" />
         <input type="hidden" name="currency" value="{{ currency }}" />
         <div class="input-group">
-            <input name="amount" value="{{ format_decimal(recommended_withdrawal) }}"
+            <input name="amount" value="{{ locale.format_decimal(recommended_withdrawal) }}"
                    type="tel" inputmode="decimal"
                    class="form-control" size=6 required />
             <div class="input-group-addon">{{ locale.currency_symbols.get(currency, currency) }}</div>

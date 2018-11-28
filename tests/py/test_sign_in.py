@@ -10,10 +10,10 @@ from six.moves.http_cookies import SimpleCookie
 from babel.messages.catalog import Message
 
 from liberapay.constants import SESSION
+from liberapay.i18n.base import LOCALES
 from liberapay.models.participant import Participant
 from liberapay.testing import postgres_readonly
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils.i18n import LOCALES
 
 
 password = 'password'
