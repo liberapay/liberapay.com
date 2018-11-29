@@ -341,15 +341,15 @@ msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Liberapay ウォレットへの口座自動振替による支払いが成功しました"
 
 msgid "Your payment has failed"
-msgstr ""
+msgstr "支払いに失敗しました"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
-msgstr ""
+msgstr "{date} に開始された Liberapay を通じての {money_amount} の支払いに失敗しました。"
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr ""
+msgstr "支払い処理装置 {provider} によって出力されたエラーメッセージは以下の通りです："
 
 msgid "Your bank account is going to be debited"
 msgstr ""
@@ -370,14 +370,14 @@ msgid "Once this payment has been processed it should appear on your bank statem
 msgstr ""
 
 msgid "Your payment has succeeded"
-msgstr ""
+msgstr "支払いに成功しました"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr ""
+msgstr "{date} に開始された Liberapay を通じての {money_amount} の支払いに成功しました。"
 
 msgid "Thank you for this donation!"
-msgstr ""
+msgstr "寄付していただき、ありがとうございます！"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -635,7 +635,7 @@ msgstr "値 '{0}' には以下の使用できない文字列が含まれてい�
 
 #, python-brace-format
 msgid "{0} is already connected to a different Liberapay account."
-msgstr "{0} はすでに別の Liberapay アカウントに接続されています。"
+msgstr "{0} はすでに別の Liberapay アカウントに連携されています。"
 
 msgid "You cannot remove your primary email address."
 msgstr "メインのメールアドレスは削除できません。"
@@ -991,7 +991,7 @@ msgid "This is not supported yet"
 msgstr "これはまだサポートされていません"
 
 msgid "Connect"
-msgstr "接続"
+msgstr "連携"
 
 msgid "Drop files here"
 msgstr "ここにファイルをドロップしてください"
@@ -1254,7 +1254,7 @@ msgstr "別の言語に変更"
 
 #, python-brace-format
 msgid "({x_percent} translated)"
-msgstr "（{x_percent} が翻訳されています）"
+msgstr "（{x_percent} 翻訳済み）"
 
 msgid "Help us translate Liberapay"
 msgstr "Liberapay の翻訳を手伝う"
@@ -1441,10 +1441,10 @@ msgstr "寄付"
 
 #, python-brace-format
 msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "{platform} はデータへのアクセスの要求を拒否しました。お使いの {platform} アカウントを再接続することで問題が解決する可能性があります。"
+msgstr "{platform} はデータへのアクセスの要求を拒否しました。お使いの {platform} アカウントを再連携することで問題が解決する可能性があります。"
 
 msgid "Reconnect"
-msgstr "再接続"
+msgstr "再連携"
 
 msgid "(fork)"
 msgstr "（フォーク）"
@@ -1746,7 +1746,7 @@ msgid "Our goal is to receive {0}"
 msgstr "{0}を受け取ることが目標です"
 
 msgid "Your privacy settings have been changed."
-msgstr "プライバシー設定が変更されました。"
+msgstr "プライバシー設定を変更しました。"
 
 msgid "Admin override is on.*"
 msgstr ""
@@ -1758,15 +1758,15 @@ msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
 
 msgid "Your profile has been updated."
-msgstr ""
+msgstr "プロフィールをアップデートしました。"
 
 #, python-brace-format
 msgid "You don't have any {platform} account connected to your profile."
-msgstr ""
+msgstr "{platform} アカウントはご自身のプロフィールに連携されていません。"
 
 #, python-brace-format
 msgid "Connect {0} account"
-msgstr ""
+msgstr "{0} アカウントを連携"
 
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {time} ago."
@@ -1924,7 +1924,7 @@ msgid "Address Taken"
 msgstr "このメールアドレスは使用済みです"
 
 msgid "This email address is already connected to a different Liberapay account."
-msgstr "このメールアドレスは別の Liberapay アカウントにすでに接続されています。"
+msgstr "このメールアドレスはすでに別の Liberapay アカウントに連携されています。"
 
 msgid "Already Verified"
 msgstr "すでに認証済みです"
@@ -2507,7 +2507,7 @@ msgid "Donors do not need to connect any payment account below, they are only ne
 msgstr ""
 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
-msgstr "お住いの国において Stripe と PayPal が共に利用可能な場合は、両方を接続することを推奨します。"
+msgstr "お住いの国において Stripe と PayPal が共に利用可能な場合は、両方を連携することを推奨します。"
 
 msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
 msgstr ""
@@ -2670,7 +2670,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your {platform} account needs to be reconnected."
-msgstr ""
+msgstr "お使いの {platform} アカウントは再連携の必要があります。"
 
 #, python-brace-format
 msgid "You have starred {n} repository on {platform}."
@@ -4300,7 +4300,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
-msgstr ""
+msgstr "本当に {0} チームの管理者ですか？"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
@@ -4308,7 +4308,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Are you really {0}?"
-msgstr "あなたは本当に{0}ですか？"
+msgstr "本当に {0} ですか？"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
@@ -4363,19 +4363,19 @@ msgstr "チームのメンバーに直接寄付することができます："
 
 #, python-brace-format
 msgid "{0} declines donations"
-msgstr ""
+msgstr "{0} は寄付を辞退しています"
 
 #, python-brace-format
 msgid "{0} accepts donations"
-msgstr ""
+msgstr "{0} は寄付を受け入れています"
 
 #, python-brace-format
 msgid "{0} opted out of Liberapay"
-msgstr ""
+msgstr "{0} は Liberapay をオプトアウトしています"
 
 #, python-brace-format
 msgid "{0} hasn't joined Liberapay yet"
-msgstr ""
+msgstr "{0} はまだ Liberapay に参加していません"
 
 #, python-brace-format
 msgid "Are you {0}?"
@@ -4383,17 +4383,17 @@ msgstr "{0} ですか？"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
-msgstr ""
+msgstr "{0} チームアカウントの管理者ですか？そのアカウントをお使いの Liberapay アカウントに連携しましょう。"
 
 msgid "Connect team account"
-msgstr ""
+msgstr "チームアカウントを接続"
 
 msgid "We never collect money for you unless you join."
 msgstr "参加しない限り集金することはありません。"
 
 #, python-brace-format
 msgid "Connect this {0} account to your Liberapay profile."
-msgstr ""
+msgstr "この {0} アカウントをご自身の Liberapay プロフィールに接続します。"
 
 msgid "Don't like what you see?"
 msgstr ""
@@ -4410,7 +4410,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
-msgstr ""
+msgstr "{0} は以下のエラーメッセージを出力しました：{1}"
 
 msgid "Social Explorer"
 msgstr "ソーシャルエクスプローラー"
@@ -4421,11 +4421,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "Please refresh your {0} connection to find your friends from there."
-msgstr ""
+msgstr "友達を見つけるには、{0} との連携を更新してください。"
 
 #, python-brace-format
 msgid "Connect your {0} account to find your friends from there."
-msgstr ""
+msgstr "お使いの {0} アカウントを連携して、友達を見つけましょう。"
 
 msgid "No friends found."
 msgstr "知り合いが見つかりません。"
@@ -4452,18 +4452,18 @@ msgid "{0} doesn't accept donations"
 msgstr "{0} は寄付を承認していません"
 
 msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
-msgstr ""
+msgstr "指定されたアドレスは有効ではありません。“@\"（アットマーク）記号が含まれていません。"
 
 #, python-brace-format
 msgid "'{0}' is not a valid domain name."
-msgstr ""
+msgstr "'{0}' は有効なドメイン名ではありません。"
 
 msgid "Which account?"
 msgstr ""
 
 #, python-brace-format
 msgid "Please enter the name of the {0} account you would like to connect:"
-msgstr ""
+msgstr "連携したい {0} アカウントの名前を入力してください。"
 
 #, python-brace-format
 msgid "{0} username"
@@ -4471,7 +4471,7 @@ msgstr "{0} ユーザー名"
 
 #, python-brace-format
 msgid "Please enter the address of the {0} account you would like to connect:"
-msgstr ""
+msgstr "連携したい {0} アカウントのアドレスを入力してください。"
 
 msgid "Please Confirm"
 msgstr "確認してください"
@@ -4494,13 +4494,13 @@ msgstr "アカウントを移行"
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
-msgstr "{platform} アカウントを接続しています"
+msgstr "{platform} アカウントを連携しています"
 
 msgid "Please input the email address and country of the PayPal account you want to connect:"
-msgstr ""
+msgstr "メールアドレスと、接続したい PayPal アカウントの国を入力してください。"
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr ""
+msgstr "すでにお使いの Liberapay アカウントに接続されている場合を除き、このメールアドレスに確認コードを送信します。"
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
 msgstr ""
