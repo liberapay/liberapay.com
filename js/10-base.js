@@ -1,6 +1,9 @@
 Liberapay.getCookie = function(key) {
     var o = new RegExp("(?:^|; ?)" + escape(key) + "=([^;]+)").exec(document.cookie);
-    return o && unescape(o[1]);
+    if (!o) return null;
+    var value = o[1];
+    if (value.charAt(0) === '"') value = value.slice(1, -1);
+    return unescape(value);
 }
 
 Liberapay.init = function() {
