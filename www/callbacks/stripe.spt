@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import stripe
 
+from liberapay.models.participant import Participant
 from liberapay.payin.stripe import (
     int_to_Money, repr_charge_error, settle_destination_charge
 )
@@ -43,7 +44,8 @@ if event_object_type == 'charge':
     pt = website.db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin_id,))
     payin = settle_destination_charge(website.db, payin, charge, pt)
     if payin.status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
-        p.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
+        payer = Participant.from_id(payin.payer)
+        payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
 
 else:
     raise response.error(500, "unknown event object type %r" % event_object_type)
