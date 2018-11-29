@@ -161,6 +161,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                ), 'EUR')) AS takes_sum_eur
           FROM current_takes t
          WHERE t.team = %s
+           AND t.amount <> 0
            AND EXISTS (
                    SELECT true
                      FROM payment_accounts a
