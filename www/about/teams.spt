@@ -103,10 +103,20 @@ title = _("Teams")
     "team's income."
 ) }}</p>
 
+<h4>{{ _("Automatic takes") }}</h4>
+
+<p>{{ _(
+    "By default all team members have their take set to the special value "
+    "'auto', which corresponds to an equal share of the leftover. In other "
+    "words, the members who set their takes explicitly get funded first, then "
+    "whatever's left is distributed in equal amounts to the members who have "
+    "automatic takes."
+) }}</p>
+
 <h4 id="throttling">{{ _("Regulation of take amounts") }}</h4>
 
 <p>{{ _(
-    "When this feature is enabled for a team, its members can't raise their "
+    "When “take throttling” is enabled for a team, its members can't raise their "
     "takes higher than a maximum computed on the basis of the nominal takes at "
     "the time of the previous payday. This mechanism is meant to encourage "
     "inviting new contributors to join the team, by ensuring that they won't "
