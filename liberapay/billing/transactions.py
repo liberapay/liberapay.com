@@ -1182,6 +1182,7 @@ def sync_with_mangopay(db):
     """We can get out of sync with MangoPay if record_exchange_result wasn't
     completed. This is where we fix that.
     """
+    print("Syncing with Mangopay...")
     check_db(db)
 
     exchanges = db.all("""

@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
+from time import sleep
 
 import requests
 
@@ -204,3 +205,20 @@ def sync_payment(db, payin):
         raise PaymentError('PayPal')
     payment = response.json()
     return record_payment_result(db, payin, payment)
+
+
+def sync_all_pending_payments(db):
+    """Calls `sync_payment` for every pending payment.
+    """
+    payins = db.all("""
+        SELECT pi.*
+          FROM payins pi
+          JOIN payin_transfers pt ON pt.payin = pi.id
+          JOIN exchange_routes r ON r.id = pi.route
+         WHERE pt.status = 'pending'
+           AND r.network = 'paypal'
+    """)
+    print("Syncing %i pending PayPal payments..." % len(payins))
+    for payin in payins:
+        sync_payment(db, payin)
+        sleep(0.2)

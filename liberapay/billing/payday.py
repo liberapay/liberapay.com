@@ -1176,6 +1176,7 @@ def exec_payday(log_file):  # pragma: no cover
 def main(override_payday_checks=False):
     from liberapay.billing.transactions import sync_with_mangopay
     from liberapay.main import website
+    from liberapay.payin import paypal
 
     # https://github.com/liberapay/salon/issues/19#issuecomment-191230689
     from liberapay.billing.payday import Payday
@@ -1194,6 +1195,7 @@ def main(override_payday_checks=False):
     with website.db.lock('payday', blocking=False):
         try:
             sync_with_mangopay(website.db)
+            paypal.sync_all_pending_payments(website.db)
             Payday.start().run(website.env.log_dir, website.env.keep_payday_logs)
         except KeyboardInterrupt:  # pragma: no cover
             pass
