@@ -250,7 +250,7 @@ class Platform(object):
             self.x_extra_info_drop(r.extra_info)
         return r
 
-    def get_team_members(self, account, domain, page_url=None):
+    def get_team_members(self, account, page_url=None):
         """Given an AccountElsewhere, return its membership list from the API.
         """
         if not page_url:
@@ -258,6 +258,7 @@ class Platform(object):
                 user_id=urlquote(account.user_id),
                 user_name=urlquote(account.user_name or ''),
             )
+        domain = account.domain
         r = self.api_get(domain, page_url)
         members, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         members = [self.extract_user_info(m, domain) for m in members]
