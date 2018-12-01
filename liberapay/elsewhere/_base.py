@@ -327,6 +327,8 @@ class Platform(object):
         r.slug = self.x_repo_slug(r, info)
         r.remote_id = str(self.x_repo_id(r, info))
         r.owner_id = self.x_repo_owner_id(r, info, None)
+        if r.owner_id is not None:
+            r.owner_id = str(r.owner_id)
         r.description = self.x_repo_description(r, info, None)
         r.last_update = self.x_repo_last_update(r, info, None)
         if r.last_update:
@@ -347,6 +349,15 @@ class Platform(object):
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
+        if repos and repos[0].owner_id != account.user_id:
+            # https://hackerone.com/reports/452920
+            from liberapay.models.account_elsewhere import UnableToRefreshAccount
+            try:
+                account = account.refresh_user_info()
+            except UnableToRefreshAccount:
+                raise TokenExpiredError()
+            # Note: we can't pass the page_url below, because it contains the old user_name
+            return self.get_repos(account, page_url=None, sess=sess)
         if count == -1 and hasattr(self, 'x_repos_count'):
             count = self.x_repos_count(None, account.extra_info, -1)
         return repos, count, pages_urls
