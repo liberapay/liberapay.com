@@ -68,7 +68,8 @@ class BrowseTestHarness(MangopayHarness):
 
     def browse(self, **kw):
         for url in self.urls:
-            url = url.replace('/%exchange_id', '/%s' % self.exchange_id)
+            if url.endswith('/%exchange_id'):
+                continue
             url = url.replace('/team/invoices/%invoice_id', '/org/invoices/%s' % self.invoice_id)
             url = url.replace('/%invoice_id', '/%s' % self.invoice_id)
             assert '/%' not in url
@@ -128,6 +129,13 @@ class TestPages(BrowseTestHarness):
         bob.set_tip_to(self.david, EUR('1.00'))
         self.david.set_tip_to(bob, EUR('0.50'))
         self.browse(auth_as=self.david)
+
+    @patch('mangopay.resources.PayIn.get')
+    def test_admin_can_browse(self, get_payin):
+        get_payin.return_value = DirectPayIn()
+        self.browse_setup()
+        admin = self.make_participant('admin', privileges=1)
+        self.browse(auth_as=admin)
 
     def test_homepage_in_all_supported_langs(self):
         self.make_participant('alice')

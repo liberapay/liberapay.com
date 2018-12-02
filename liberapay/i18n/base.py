@@ -131,10 +131,7 @@ class Locale(babel.core.Locale):
                 elif isinstance(o, MoneyBasket):
                     c[k] = self.format_money_basket(o)
                 elif isinstance(o, timedelta):
-                    if type(o) is Age:
-                        c[k] = format_timedelta(o, locale=self, **o.format_args)
-                    else:
-                        c[k] = format_timedelta(o, locale=self)
+                    c[k] = self.format_timedelta(o)
                 elif isinstance(o, date):
                     if isinstance(o, datetime):
                         c[k] = format_datetime(o, locale=self)
@@ -204,6 +201,11 @@ class Locale(babel.core.Locale):
 
     def format_percent(self, *a):
         return format_percent(*a, locale=self)
+
+    def format_timedelta(self, o, **kw):
+        if type(o) is Age:
+            kw.update(o.format_args)
+        return format_timedelta(o, locale=self, **kw)
 
     def parse_money_amount(self, string, currency, maximum=D_MAX):
         group_symbol = self.number_symbols['group']

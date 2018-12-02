@@ -324,7 +324,6 @@ interactions:
       last-modified: ['Mon, 22 Feb 2016 18:29:18 GMT']
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
-      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
@@ -355,7 +354,6 @@ interactions:
       etag: [W/"496ed98f124d8727ef173afda0aee82a"]
       status: [200 OK]
       strict-transport-security: [max-age=31536000; includeSubdomains; preload]
-      transfer-encoding: [chunked]
       vary: [Accept, Accept-Encoding]
     status: {code: 200, message: OK}
 - request:
@@ -671,5 +669,157 @@ interactions:
       content-type: [application/json; charset=utf-8]
       expires: ['-1']
       pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.github.com/user/1?client_id=18891d01e40e5aef93b8&client_secret=46f75669895e96029d57b64832d6f2c8e6291a0e
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA5WUzW6cMBSFXyXyemYMZGbaWIraRdNdq0aZ/iibkTEOODK2ZRuiKcq79xhIk86i
+        Eissc7/jw/U9DETbWhnCSGsfbVtasiKqIixfEWMreUxr8uXT7f7Hr69aPN5c4z3veeT+2HmNd02M
+        LjBKp82QbWoVm67sgvTCmihN3Ajb0o7mH/rrLejaz/wojY0zHadmiYmDTqCv3prY6rOTpwPH6te6
+        B6u1fQJ7bvM/8vQvBFfTWpl6uQCggdrYSPQI9p/TR6sQF1kZgYGmB+4gSQT03MtqiZ0ZgZknAx8D
+        9dLZUasrg/DKRWXNIlv/gBCyvuZG/eaLhQAG8MnQIgMjAFD2mKxF5EQM1HnVc3FKbfBSSNWjp8vV
+        zlCIxZOTGOjvuPHUYRXlkVdtitYD10EiT7xNBQfbXnzzMkRr1j+lx8WgHMPruDkRZjqtV6REKOds
+        IVrRths3ExhpEGnYQWkrxs6j9I6bi8+eG6GCSBmWLVcpnmA/zqmYoUZ5yUsNK/NZyr4sXVdqJY5T
+        j9ke/4B5Z5xGwvbFSy4QLMKKvNhdvUkK/hpABOQjesojji+y7N06z9ZFdsh2rNiy/Ooe7jpXva3J
+        348120ORs+0ly3f35PkP1glsEpkEAAA=
+    headers:
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, Location, Retry-After, X-GitHub-OTP,
+          X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+          X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type']
+      cache-control: ['public, max-age=60, s-maxage=60']
+      content-encoding: [gzip]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: [W/"cd13232e67208e2a0b31e0d6282c4b0b"]
+      last-modified: ['Wed, 24 Oct 2018 21:43:15 GMT']
+      referrer-policy: ['origin-when-cross-origin, strict-origin-when-cross-origin']
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      vary: [Accept]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.github.com/user/4?client_id=18891d01e40e5aef93b8&client_secret=46f75669895e96029d57b64832d6f2c8e6291a0e
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA5VU0W6bMBT9lcjPSQwk7VKkqnuYKlXTJlXLpq4vkTEuuDU2sg0RRf33HQPLukh9
+        4Alzfc+5J4d70hNlCqlJSo4dZ96RJZE5SbdLok0uDuFMvn25v/z18F3x5/tr3LOWeWYPjVW4K72v
+        XUrpWHTRupC+bLLGCcuN9kL7NTcVbej2pr3eAl3YCT9Qo3DGU8uJYsSBx9GTtNJX6mzwOG9oPrU9
+        GaXMEchzkR+T0xMGksaz1MVsPDA9Nb4U8AfS38IPls7PETL09zQ8YH9gcLDbinyGmAkBKUcNFT21
+        ojYDVZM5bmXtpdFzRP2HA4+xBdPylc3lAS6sWJAzZ/zQD5xosVBzgCOgp7WVLeNdsMAKLmQLO2eT
+        nSHB5btaYIt/4lMHc6UXB5ZXIU5PTDmBELEqNPwWZZOzxVfmX9GHXa2Z7lDfS5WL5eJO8zXqGaI4
+        RQqJ6gbMCyBhuXGtDAKK74aWH0wvbi3TXDpugi8VkyGNYwI+F+F1QpXSCpYpqNCNUhgizd9j3WRK
+        8sNobprE0ZJMpWEHSfrpAqV/wUivosvNu3QMfxMc9B5uMo/5SRTtVlG8ipN9dJFudulm8wh5TZ2/
+        74l3qzheJVf7GA3bNIkeydsfklphtYgEAAA=
+    headers:
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, Location, Retry-After, X-GitHub-OTP,
+          X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+          X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type']
+      cache-control: ['public, max-age=60, s-maxage=60']
+      content-encoding: [gzip]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: [W/"4968f462b512e67cc7e95910074f3a44"]
+      last-modified: ['Thu, 29 Nov 2018 18:34:20 GMT']
+      referrer-policy: ['origin-when-cross-origin, strict-origin-when-cross-origin']
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      vary: [Accept]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717489/KYC/documents
+  response:
+    body: {string: !!python/unicode '[]'}
+    headers:
+      cache-control: [no-cache]
+      cf-ray: [4825a306bd2aa8bd-CDG]
+      content-length: ['2']
+      content-type: [application/json; charset=utf-8]
+      expect-ct: ['max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"']
+      expires: ['-1']
+      link: ['<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717489/KYC/documents?page=1&per_page=10>;
+          rel="first",<https://api.sandbox.mangopay.com/v2.01/liberapay-dev/users/20717489/KYC/documents?page=1&per_page=10>;
+          rel="last"']
+      pragma: [no-cache]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.github.com/users/liberapay?client_id=18891d01e40e5aef93b8&client_secret=46f75669895e96029d57b64832d6f2c8e6291a0e
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA51UTW/cIBT8L5x3g0Fx2kWqesnHpWkue2j3ssI2sWkwID68cq389z5jb+TsoZL3
+        ZEBv5g3DGw9ImVpqxJCShXDc8h5tkKwQIzS/y7LdboO0qcRxPELP9w/9y9uuP9DHyH/ZpnpSXfHn
+        of+5/316vn/LAco7Hrg7RqegvgnBeobxdOjJTS1DE4vohSuNDkKHm9K0OOJzs+/dt1sgqd1Mk7rC
+        wQWdlTPTBAc6j5f6m9CqCwlT51S/rHw1SpkT4C8V/7cF/oCBtmktdX0NBcAGbEIjwDK4xvt4eenD
+        SjkJMuDxAw81knh4BCeqdZJmEAg6adAyYCesSWyx8KWTNkijV0r7BAUq42qu5V9+BRVAPTCMolaK
+        SBCAig5GbiV2wgzYOtnxsh/tcKIUsgN3r+G7AANd6K2AMX9ZODN6LoM48qodw/nKlRcQRN6OhT8W
+        SYV5tlz3iOmo1AYVkOZF7j4mPc09kCpTJufP9aLlEoI6gRvpBC8UtJjJpDkvbSyULI+Tjwz+CfNB
+        GjzEsnMKIEiLHQx32pXAG8AuHkAbzUi+zfItpXtC2e0XRu8OoCza6lPN1y0h24zsSc4oZTk5oPd/
+        wTDZS6wEAAA=
+    headers:
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, Location, Retry-After, X-GitHub-OTP,
+          X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+          X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type']
+      cache-control: ['public, max-age=60, s-maxage=60']
+      content-encoding: [gzip]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: [W/"6e1a52b1dcfe342a68ba6b775e411934"]
+      last-modified: ['Thu, 01 Nov 2018 15:22:51 GMT']
+      referrer-policy: ['origin-when-cross-origin, strict-origin-when-cross-origin']
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      vary: [Accept]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.github.com/orgs/liberapay/public_members?client_id=18891d01e40e5aef93b8&client_secret=46f75669895e96029d57b64832d6f2c8e6291a0e
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA62VXW+bMBSG/wvXUU0+6EikaKpGLmk0aZ02TVPkgAPuiI2MoWqj/vcdPhwgW1IZ
+        c5XIOu/jF8Mj/zpZCY8os1bWF5xQxnNrYtHQWk1d257PJhbjIdmVC5bvfb3//uMxCZ43C997ePOj
+        9RqGcYElFrtcJDATS5lmK4TqxWx+F1EZ5/s8IyLgTBIm7wJ+RDmq8Z+L9QIQkWgg1T6wcAFLacOp
+        wwDLUNs2lsfkYvt612q6nTvwJOEvkL3segOPziFoVf+nLNIHQOiEuIwJHBTUfy8fmmZSq0oVOKHy
+        B15Iicjg4AUJdeo0ESjzwqDHCQmS8oqV77NA0FRSzrRq9YIA4iLCjL5hbRAEM8iXhbQKVAEIkgI+
+        L61knTihVNACB6/lMQgSEFrAmerTLqIAk68pgQ/6Cd54ecJUkh0Oj6VsB5xk5H3SkS/GLMIBh7nK
+        PsedOkv7in7TrbeZbr89fKTf7Lp+Nd/Ev7bwBwK2g3oGNjkDBfsEIwcVykxCRRnRwjOy6+8gDRVJ
+        20MVHCCiio5kYtukZ7GeiptwWxBxgLtCyejay+XMXV6xES7DP47/HDkwPvgyrDYw0LFX+raQvVEt
+        JdvkcCn/YZho2YEZidnhjKdmF2oqZ4elq2cnqi9oJzyOor02BpJKQfbHPG4MdT/Zjru4/7+g0dz3
+        nhaP3s/h12XDN/Cz7XtbznZOy8wmNlzLPsDESUUyElJBxrPxTDRVUYF0PVQ5fQlVchwD2x66+v3+
+        C2NVtEEtDgAA
+    headers:
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['ETag, Link, Location, Retry-After, X-GitHub-OTP,
+          X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes,
+          X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type']
+      cache-control: ['public, max-age=60, s-maxage=60']
+      content-encoding: [gzip]
+      content-security-policy: [default-src 'none']
+      content-type: [application/json; charset=utf-8]
+      etag: [W/"74ddeae18901f3d8c105b164eca8d397"]
+      referrer-policy: ['origin-when-cross-origin, strict-origin-when-cross-origin']
+      status: [200 OK]
+      strict-transport-security: [max-age=31536000; includeSubdomains; preload]
+      vary: [Accept]
     status: {code: 200, message: OK}
 version: 1
