@@ -123,40 +123,45 @@ class AccountElsewhere(Model):
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
 
-        try:
-            # Try to insert the account
-            # We do this with a transaction so that if the insert fails, the
-            # participant we reserved for them is rolled back as well.
-            with cls.db.get_cursor() as cursor:
-                account = cursor.one("""
-                    WITH p AS (
-                             INSERT INTO participants DEFAULT VALUES RETURNING id
-                         )
-                    INSERT INTO elsewhere
-                                (participant, {0})
-                         VALUES ((SELECT id FROM p), {1})
-                      RETURNING elsewhere.*::elsewhere_with_participant
-                """.format(cols, placeholders), vals)
-        except IntegrityError:
-            # The account is already in the DB, update it instead
-            if i.user_name and i.user_id:
-                # Set user_id if it was missing
-                cls.db.run("""
-                    UPDATE elsewhere
-                       SET user_id = %s
-                     WHERE platform=%s AND domain=%s AND lower(user_name)=%s
-                       AND user_id IS NULL
-                """, (i.user_id, i.platform, i.domain, i.user_name.lower()))
-            elif not i.user_id:
-                return cls._from_thing('user_name', i.platform, i.user_name, i.domain)
-            account = cls.db.one("""
+        def update():
+            return cls.db.one("""
                 UPDATE elsewhere
                    SET ({0}) = ({1})
                  WHERE platform=%s AND domain=%s AND user_id=%s
              RETURNING elsewhere.*::elsewhere_with_participant
             """.format(cols, placeholders), vals+(i.platform, i.domain, i.user_id))
-            if not account:
-                raise
+
+        account = update() if i.user_id else None
+        if not account:
+            try:
+                # Try to insert the account
+                # We do this with a transaction so that if the insert fails, the
+                # participant we reserved for them is rolled back as well.
+                with cls.db.get_cursor() as cursor:
+                    account = cursor.one("""
+                        WITH p AS (
+                                 INSERT INTO participants DEFAULT VALUES RETURNING id
+                             )
+                        INSERT INTO elsewhere
+                                    (participant, {0})
+                             VALUES ((SELECT id FROM p), {1})
+                          RETURNING elsewhere.*::elsewhere_with_participant
+                    """.format(cols, placeholders), vals)
+            except IntegrityError:
+                # The account is already in the DB, update it instead
+                if i.user_name and i.user_id:
+                    # Set user_id if it was missing
+                    cls.db.run("""
+                        UPDATE elsewhere
+                           SET user_id = %s
+                         WHERE platform=%s AND domain=%s AND lower(user_name)=%s
+                           AND user_id IS NULL
+                    """, (i.user_id, i.platform, i.domain, i.user_name.lower()))
+                elif not i.user_id:
+                    return cls._from_thing('user_name', i.platform, i.user_name, i.domain)
+                account = update()
+                if not account:
+                    raise
 
         # Return account after propagating avatar_url to participant
         account.participant.update_avatar()
