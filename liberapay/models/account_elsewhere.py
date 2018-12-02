@@ -123,6 +123,19 @@ class AccountElsewhere(Model):
         cols = ', '.join(cols)
         placeholders = ', '.join(['%s']*len(vals))
 
+        def update():
+            return cls.db.one("""
+                UPDATE elsewhere
+                   SET ({0}) = ({1})
+                 WHERE platform=%s AND domain=%s AND user_id=%s
+             RETURNING elsewhere.*::elsewhere_with_participant
+            """.format(cols, placeholders), vals+(i.platform, i.domain, i.user_id))
+
+        account = update() if i.user_id else None
+        if account:
+            account.participant.update_avatar()
+            return account
+
         try:
             # Try to insert the account
             # We do this with a transaction so that if the insert fails, the
@@ -149,12 +162,7 @@ class AccountElsewhere(Model):
                 """, (i.user_id, i.platform, i.domain, i.user_name.lower()))
             elif not i.user_id:
                 return cls._from_thing('user_name', i.platform, i.user_name, i.domain)
-            account = cls.db.one("""
-                UPDATE elsewhere
-                   SET ({0}) = ({1})
-                 WHERE platform=%s AND domain=%s AND user_id=%s
-             RETURNING elsewhere.*::elsewhere_with_participant
-            """.format(cols, placeholders), vals+(i.platform, i.domain, i.user_id))
+            account = update()
             if not account:
                 raise
 
