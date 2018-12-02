@@ -341,7 +341,7 @@ class Platform(object):
             self.x_repo_extra_info_drop(r.extra_info)
         return r
 
-    def get_repos(self, account, page_url=None, sess=None):
+    def get_repos(self, account, page_url=None, sess=None, refresh=True):
         if not page_url:
             page_url = self.api_repos_path.format(
                 user_id=urlquote(account.user_id),
@@ -352,13 +352,15 @@ class Platform(object):
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
         if repos and repos[0].owner_id != account.user_id:
             # https://hackerone.com/reports/452920
+            if not refresh:
+                raise TokenExpiredError()
             from liberapay.models.account_elsewhere import UnableToRefreshAccount
             try:
                 account = account.refresh_user_info()
             except UnableToRefreshAccount:
                 raise TokenExpiredError()
             # Note: we can't pass the page_url below, because it contains the old user_name
-            return self.get_repos(account, page_url=None, sess=sess)
+            return self.get_repos(account, page_url=None, sess=sess, refresh=False)
         if count == -1 and hasattr(self, 'x_repos_count'):
             count = self.x_repos_count(None, account.extra_info, -1)
         return repos, count, pages_urls
