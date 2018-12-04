@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2018-12-04 14:53+0000\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.4-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -267,10 +270,10 @@ msgid "The password of your Liberapay account is weak"
 msgstr "お使いの Liberapay アカウントのパスワードは脆弱です"
 
 msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
-msgstr "お使いのパスワードがよく使われるものであることを検出しました。パスワードは漏洩したデータベースで何度も確認されたものです。そのため、非常に危険な状態です。"
+msgstr "お使いのパスワードがよく使われるものであることを検出しました。お使いのパスワードは、情報漏洩したデータベースで何度も確認されたものです。そのため、非常に危険な状態です。"
 
 msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr ""
+msgstr "お使いのパスワードが危険にさらされていることを検知しました。お使いのパスワードは、一回以上の情報漏洩において確認されたものです。"
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -281,7 +284,7 @@ msgstr "Liberapay ウォレットに銀行振込"
 
 #, python-brace-format
 msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr ""
+msgstr "資金提供を受ける準備が整いました。あなたからのお金であることを識別できるよう、以下の参照コードを使用し、次の口座に正確な {0} をお送りください。"
 
 msgid "IBAN (International Bank Account Number)"
 msgstr "IBAN（国際銀行勘定番号）"
@@ -352,22 +355,22 @@ msgid "The error message provided by the payment processor {provider} is:"
 msgstr "支払い処理装置 {provider} によって出力されたエラーメッセージは以下の通りです："
 
 msgid "Your bank account is going to be debited"
-msgstr ""
+msgstr "お使いの銀行口座において引き落としが開始されます"
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "{bank_name} のお使いの口座（{partial_account_number}）からの {money_amount} の引き落としを開始しました。"
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr ""
 
 msgid "If you did not authorize this payment please tell us immediately so that we can cancel it before your account is debited."
-msgstr ""
+msgstr "この支払いをご自身では認証していない場合は、口座から引き落とされる前に取り消しできるよう、直ちにお知らせください。"
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
-msgstr ""
+msgstr "この支払いが処理されると、お手持ちの通帳（取引明細書）に \"{descriptor}\" と記載されるはずです。"
 
 msgid "Your payment has succeeded"
 msgstr "支払いに成功しました"
@@ -665,7 +668,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
-msgstr "メールアドレス {0} はすでにお使いのアカウントと連携されています。"
+msgstr "メールアドレス {0} はすでにお使いのアカウントに連携されています。"
 
 #, python-brace-format
 msgid "A verification email has already been sent to {email_address} recently."
@@ -3811,7 +3814,7 @@ msgid "Explore Repositories"
 msgstr "リポジトリを探す"
 
 msgid "Browse the accounts that Liberapay users have on other platforms. Find your contacts by connecting your own accounts."
-msgstr "他のプラットフォーム上におけるLiberapayユーザーのアカウントを閲覧しましょう。ご自身のアカウントを連携させて連絡先を見つけましょう。"
+msgstr "他のプラットフォーム上における Liberapay ユーザーのアカウントを閲覧しましょう。ご自身のアカウントを連携させて連絡先を見つけましょう。"
 
 msgid "Explore Social Networks"
 msgstr "ソーシャルネットワークを探す"
@@ -4233,26 +4236,26 @@ msgstr[0] "{n} のその他のアカウントがインポートされました�
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "{elsewhere_platform} アカウント\"{account_name}\"は Liberapay のプロフィールにリンクされました。"
+msgstr "{elsewhere_platform} アカウント \"{account_name}\" は Liberapay のプロフィールにリンクされました。"
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "{elsewhere_platform} アカウント\"{account_name}\"はすでに Liberapay のプロフィールにリンクされています。"
+msgstr "{elsewhere_platform} アカウント \"{account_name}\" はすでに Liberapay のプロフィールにリンクされています。"
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "別の{elsewhere_platform} アカウントがすでにリンクされているため、{elsewhere_platform} アカウント\"{account_name}\"を Liberapay のプロフィールにリンクできませんでした。"
+msgstr "別の {elsewhere_platform} アカウントがすでにリンクされているため、{elsewhere_platform} アカウント \"{account_name}\" を Liberapay のプロフィールにリンクできませんでした。"
 
 #, python-brace-format
 msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "別のアカウントがすでにリンクされているため、{elsewhere_platform} アカウント\"{account_name}\"を Liberapay のプロフィールにリンクできませんでした。"
+msgstr "別のアカウントがすでにリンクされているため、{elsewhere_platform} アカウント \"{account_name}\" を Liberapay のプロフィールにリンクできませんでした。"
 
 msgid "Manage this team"
 msgstr "このチームを管理"
 
 #, python-brace-format
 msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "\"{0}\"という名前のアカウントがすでに存在するため、このチームは再作成されませんでした。"
+msgstr "\"{0}\" という名前のアカウントがすでに存在するため、このチームは再作成されませんでした。"
 
 msgid "No teams were imported."
 msgstr "チームはインポートされませんでした。"
