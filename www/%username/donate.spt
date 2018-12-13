@@ -8,6 +8,26 @@ if participant.goal == -1:
 
 full_title = _("Donate to {0} via Liberapay", participant.username)
 
+accepts_summary = _(
+        "{username} hasn't configured any payment method yet, so your donation "
+        "cannot actually be processed right now. We will notify you when payment "
+        "becomes possible.",
+        username=participant.username
+    ) if participant.payment_providers == 0 else _(
+        "Donations to {username} can be paid using a credit or debit card "
+        "(Visa, MasterCard, American Express), or by direct debit of a Euro "
+        "bank account (for donations in Euro only).",
+        username=participant.username
+    ) if participant.payment_providers == 1 else _(
+        "Donations to {username} are processed through PayPal.",
+        username=participant.username
+    ) if participant.payment_providers == 2 else _(
+        "Donations to {username} can be paid using: a credit or debit card "
+        "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
+        "Debit), or a PayPal account.",
+        username=participant.username
+    )
+
 [---] text/html
 % extends "templates/profile-base.html"
 
@@ -86,25 +106,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     % endif
 
     <h4>{{ _("What payment methods are available?") }}</h4>
-    <p>{{ _(
-        "{username} hasn't configured any payment method yet, so your donation "
-        "cannot actually be processed right now. We will notify you when payment "
-        "becomes possible.",
-        username=participant.username
-    ) if participant.payment_providers == 0 else _(
-        "Donations to {username} can be paid using a credit or debit card "
-        "(Visa, MasterCard, American Express), or by direct debit of a Euro "
-        "bank account (for donations in Euro only).",
-        username=participant.username
-    ) if participant.payment_providers == 1 else _(
-        "Donations to {username} are processed through PayPal.",
-        username=participant.username
-    ) if participant.payment_providers == 2 else _(
-        "Donations to {username} can be paid using: a credit or debit card "
-        "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
-        "Debit), or a PayPal account.",
-        username=participant.username
-    ) }}</p>
+    <p>{{ accepts_summary }}</p>
 
     <h4>{{ _("How do recurrent donations work?") }}</h4>
     <p>{{ _(

@@ -1,3 +1,5 @@
+% from "templates/icons.html" import fontawesome
+
 % macro tip_form(tippee, tip=None, inline=False, disabled='')
     % set pledging = tippee.__class__.__name__ == 'AccountElsewhere'
     % set tippee_name = tippee.friendly_name if pledging else tippee.username
@@ -175,7 +177,19 @@
         </label>
         </li>
     </ul>
-    <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
+    <button class="btn btn-primary btn-lg btn-block" title="{{ accepts_summary }}" {{ disabled }}>
+        %if participant.payment_providers == 0 
+                {{ _(fontawesome('ban')) }}
+        %elif participant.payment_providers == 1
+                {{ fontawesome('credit-card') }}
+        %elif participant.payment_providers == 2
+                {{ fontawesome('paypal') }}
+        %else
+                {{ fontawesome('credit-card') }}
+                {{ fontawesome('bank') }}
+                {{ fontawesome('paypal') }}
+        %endif   
+        {{
         _("Modify the donation") if tip.renewal_mode > 0 else
         _("Next step →") if user.ANON else
         _("Pledge") if pledging else

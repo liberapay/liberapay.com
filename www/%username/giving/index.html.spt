@@ -238,9 +238,39 @@ next_payday = today + timedelta(days=days_till_wednesday)
                         <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{
                             _("Awaiting payment.")
                         }}</p>
+                        
+                        % set accepts_summary = _(
+                                "{username} hasn't configured any payment method yet, so your donation "
+                                "cannot actually be processed right now. We will notify you when payment "
+                                "becomes possible.",
+                                username=tippee.username
+                            ) if tippee.payment_providers == 0 else _(
+                                "Donations to {username} can be paid using a credit or debit card "
+                                "(Visa, MasterCard, American Express), or by direct debit of a Euro "
+                                "bank account (for donations in Euro only).",
+                                username=tippee.username
+                            ) if tippee.payment_providers == 1 else _(
+                                "Donations to {username} are processed through PayPal.",
+                                username=tippee.username
+                            ) if tippee.payment_providers == 2 else _(
+                                "Donations to {username} can be paid using: a credit or debit card "
+                                "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
+                                "Debit), or a PayPal account.",
+                                username=tippee.username
+                            )                        
+                                                
                         <a class="btn btn-default"
-                           href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
-                           {{ glyphicon('repeat') }} {{ _("Renew") }}
+                           href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}" title="{{ accepts_summary }}">
+                            %if tippee.payment_providers == 1
+                                {{ fontawesome('credit-card') }}
+                            %elif tippee.payment_providers == 2
+                                {{ fontawesome('paypal') }}
+                            %else
+                                {{ fontawesome('credit-card') }}
+                                {{ fontawesome('bank') }}
+                                {{ fontawesome('paypal') }}
+                            %endif   
+                            {{ _("Renew") }}
                         </a>
                     % else
                         <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(

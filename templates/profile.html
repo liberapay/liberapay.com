@@ -1,6 +1,7 @@
 % extends "templates/profile-base.html"
 
 % from 'templates/avatar-url.html' import avatar_img with context
+% from "templates/icons.html" import fontawesome
 
 {% block head_alternates %}{% endblock %}
 
@@ -98,9 +99,20 @@
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
                             _("Donating ({amount})", amount=tip.amount)
                         }}</a>
-                    % else
-                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">
-                            {{ _("Donate") }}
+                    % else                    
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}" title="{{ accepts_summary }}">
+                            %if participant.payment_providers == 0 
+                                 {{ _(fontawesome('ban')) }}
+                            %elif participant.payment_providers == 1
+                                 {{ fontawesome('credit-card') }}
+                            %elif participant.payment_providers == 2
+                                 {{ fontawesome('paypal') }}
+                            %else
+                                 {{ fontawesome('credit-card') }}
+                                 {{ fontawesome('bank') }}
+                                 {{ fontawesome('paypal') }}
+                            %endif  
+                            {{ _("Donate") }} 
                         </a>
                     % endif
                 </div>
