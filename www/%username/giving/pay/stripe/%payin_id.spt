@@ -102,7 +102,7 @@ if request.method == 'POST':
                 redirect={'return_url': return_url},
                 token=token.id,
                 type=source_type,
-                usage=('single_use' if one_off else 'reusable'),
+                usage=('single_use' if one_off and source_type == 'card' else 'reusable'),
             )
             customer_id = website.db.one("""
                 SELECT remote_user_id
