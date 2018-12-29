@@ -68,7 +68,7 @@ class Tests(Harness):
         b_team = self.make_participant('B-Team', kind='group')
         self.a_team.invite(self.bob, self.alice)
 
-        # Chech that bob can't use the invite from A-Team to join B-Team
+        # Check that bob can't use the invite from A-Team to join B-Team
         r = self.client.PxST('/B-Team/membership/accept', auth_as=self.bob)
         assert r.code == 403
         assert 'not invited' in r.text
