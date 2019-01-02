@@ -381,7 +381,7 @@ msgstr "Θα υπάρξει χρέωση στον τραπεζικό σας λο
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "Έχουμε αρχίσει την διαδικασία άμεσης χρέωσης του ποσού {money_amount} από τον λογαριασμό σου ({partial_account_number})στην τράπεζα  {bank_name}."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
@@ -399,10 +399,10 @@ msgstr "Η πληρωμή σας ήταν επιτυχής"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr ""
+msgstr "Η πληρωμή {money_amount} μέσω Liberapay που είχε ξεκινήσει στις {date} έχει επιτύχει."
 
 msgid "Thank you for this donation!"
-msgstr ""
+msgstr "Ευχαριστούμε για αυτή τη δωρεά!"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -501,7 +501,7 @@ msgid "The details of this error have been recorded. If you decide to contact us
 msgstr "Οι λεπτομέρειες αυτού του σφάλματος έχουν καταγραφεί. Αν αποφασίσεις να επικοινωνήσεις μαζί μας παρακαλούμε να συμπεριλάβεις στο μήνυμά σου τον κωδικό αναγνώρισης σφάλματος που ακολουθεί: {0}."
 
 msgid "Every week as long as I am receiving donations"
-msgstr ""
+msgstr "Kάθε βδομάδα εφόσον λαμβάνω δωρεές"
 
 msgid "When it's time to renew my donations"
 msgstr "Όταν θα έρθει η ώρα να ανανεώσω τις δωρεές μου"
@@ -519,10 +519,10 @@ msgid "When someone invites me to join a team"
 msgstr "Όταν κάποιος με προσκαλεί να ενταχτώ σε μια ομάδα"
 
 msgid "When a payment I initiated fails"
-msgstr ""
+msgstr "Όταν μια πληρωμή που έχει ξεκινήσει αποτυγχάνει"
 
 msgid "When a payment I initiated succeeds"
-msgstr ""
+msgstr "Όταν μια πληρωμή που έχω ξεκινήσει επιτυγχάνει"
 
 msgid "Expense Report"
 msgstr "Αναφορά Εξόδων"
@@ -830,10 +830,10 @@ msgid "Not Found"
 msgstr "Δε βρέθηκε"
 
 msgid "Conflict"
-msgstr ""
+msgstr "Σύγκρουση"
 
 msgid "Gone"
-msgstr ""
+msgstr "'Εφυγε"
 
 msgid "Too Many Requests"
 msgstr "Πάρα πολλά αιτήματα"
@@ -860,11 +860,11 @@ msgstr "Δε φαίνεται να υπάρχει χρήστης με το όν�
 
 #, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
-msgstr ""
+msgstr "Δωρεά Liberapay σε {username} (ομάδα {team_name})"
 
 #, python-brace-format
 msgid "Liberapay donation to {username}"
-msgstr ""
+msgstr "Δωρεά Liberapay σε {username}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
@@ -1663,30 +1663,30 @@ msgid "Frequently Asked Questions"
 msgstr "Συχνές ερωτήσεις (FAQ)"
 
 msgid "Can I donate in another currency?"
-msgstr ""
+msgstr "Μπορώ να δωρίσω σε άλλο νόμισμα;"
 
 #, python-brace-format
 msgid "No, {username} only accepts payments in {currency}."
-msgstr ""
+msgstr "Όχι, ο/η {username} δέχεται μόνο πληρωμές σε {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Ποιες μέθοδοι πληρωμής είναι διαθέσιμες;"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
+msgstr "Ο/Η {username} δεν έχει ορίσει κάποια μέθοδο πληρωμής ακόμη, οπότε η δωρεά σου δεν μπορεί να τύχει επεξεργασίας τώρα. Θα σε ενημερώσουμε όταν η πληρωμή είναι διαθέσιμη."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express)."
-msgstr ""
+msgstr "Οι δωρεές σε {username} μπορούν να πληρωθούν χρησιμοποιώντας χρεωστική ή πιστωτική κάρτα (Visa, MasterCard, American Express)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal. You can pay with a credit or debit card even if you don't have a PayPal account."
-msgstr ""
+msgstr "Οι δωρεές σε {username} επεξεργάζονται μέσω PayPal. Μπορείς να πληρώσεις με χρεωστική ή πιστωτική κάρτα ακόμη και αν δεν έχεις λογαριασμό στο PayPal."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or through PayPal."
-msgstr ""
+msgstr "Οι δωρεές σε {username} μπορούν να πληρωθούν χρησιμοποιώντας μια χρωστική ή πιστωτική κάρτα  (Visa, MasterCard, American Express), ή μέσω PayPal."
 
 msgid "How do recurrent donations work?"
 msgstr "Πώς λειτουργούν οι επαναλαμβανόμενες δωρεές;"
@@ -1719,7 +1719,7 @@ msgid "What is Libravatar?"
 msgstr "Τι είναι το Libravatar;"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Ανανέωση"
 
 msgid "Avatar source"
 msgstr "Πηγή Άβαταρ"
@@ -1738,7 +1738,7 @@ msgid "Which currencies should your donors be allowed to send you, and which one
 msgstr "Ποια νομίσματα θα πρέπει να σας στέλνουν οι δωρητές σας και ποιο προτιμάτε;"
 
 msgid "Accept all currencies, including any that we may add in the future."
-msgstr ""
+msgstr "Αποδοχή όλων των νομισμάτων, συμπεριλαμβανομένων όσων μπορεί να προσθέσουμε στο μέλλον."
 
 msgid "accept"
 msgstr "αποδοχή"
