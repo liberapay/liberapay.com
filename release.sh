@@ -57,7 +57,7 @@ branch_after=sql/branch-after.sql
 branch_before=sql/branch-before.sql
 if [ -e sql/branch.sql ]; then
     if [ "$(git show :sql/branch.sql)" != "$(<sql/branch.sql)" ]; then
-        echo "sql/branch.sql has been modifed" && exit 1
+        echo "sql/branch.sql has been modified" && exit 1
     fi
 
     schema_version_re="('schema_version',) +'([0-9]+)'"

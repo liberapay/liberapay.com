@@ -428,7 +428,7 @@ def _return_(a):
 
 def add_helpers_to_context(context, loc):
     context.update(
-        escape=_return_,  # to be overriden by renderers
+        escape=_return_,  # to be overridden by renderers
         locale=loc,
         Money=Money,
         _=lambda s, *a, **kw: loc._(context, s, *a, **kw),
