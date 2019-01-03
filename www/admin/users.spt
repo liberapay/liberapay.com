@@ -15,7 +15,7 @@ if not user.is_admin:
 
 if request.method == 'POST':
     event_data = {}
-    p = Participant.from_id(request.body['p_id'])
+    p = Participant.from_id(request.body.get_int('p_id'))
     updated = 0
     for attr in constants.PROFILE_VISIBILITY_ATTRS:
         value = request.body.get(attr)
@@ -27,6 +27,24 @@ if request.method == 'POST':
             event_data[attr] = value == 'on'
     if event_data:
         p.add_event(website.db, 'visibility_override', event_data, user.id)
+
+    if 'is_suspended' in request.body:
+        new_value = request.body['is_suspended']
+        if new_value == 'null':
+            new_value = None
+        else:
+            new_value = new_value == 'on'
+        r = website.db.one("""
+            UPDATE participants
+               SET is_suspended = %(new_value)s
+             WHERE id = %(p_id)s
+               AND is_suspended IS NOT %(new_value)s
+         RETURNING id
+        """, dict(p_id=p.id, new_value=new_value))
+        if r:
+            updated += 1
+            p.add_event(website.db, 'is_suspended', new_value, user.id)
+
     raise response.json({'msg': "Done, %i bits have been updated." % updated})
 
 mode = request.qs.get('mode', 'all')
@@ -56,11 +74,11 @@ if mode == 'all':
                             FROM events e
                        LEFT JOIN participants p2 ON p2.id = e.recorder
                            WHERE e.participant = p.id
-                             AND e.type = 'visibility_override'
+                             AND e.type IN ('is_suspended', 'visibility_override')
                         ORDER BY ts DESC
                            LIMIT 1
                         ) e
-               ) as last_change
+               ) AS last_change
           FROM participants p
          WHERE p.id < %s
            AND (p.status <> 'stub' OR p.receiving > 0)
@@ -168,6 +186,24 @@ title = "Users Admin"
     <div class="col-md-4">
         <form action="javascript:" method="POST" class="js-submit">
             <input type="hidden" name="p_id" value="{{ p.id }}">
+            <div class="form-group">
+                Does this account look fraudulent?<br>
+                <label>
+                    <input type="radio" name="is_suspended" value="on" {{
+                           'checked' if p.is_suspended == True else '' }} />
+                    Yes, block payments!
+                </label> &nbsp;&nbsp;
+                <label>
+                    <input type="radio" name="is_suspended" value="off" {{
+                           'checked' if p.is_suspended == False else '' }} />
+                    No
+                </label> &nbsp;&nbsp;
+                <label>
+                    <input type="radio" name="is_suspended" value="null" />
+                    Unsure
+                </label>
+            </div>
+            <div class="form-group">
             % for attr in constants.PROFILE_VISIBILITY_ATTRS
                 % set value = getattr(p, attr)
                 <label>
@@ -176,6 +212,7 @@ title = "Users Admin"
                 </label>
                 <br>
             % endfor
+            </div>
             <button class="btn btn-warning">{{ _("Save") }}</button>
         </form>
         <br>
