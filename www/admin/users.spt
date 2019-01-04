@@ -165,6 +165,10 @@ title = "Users Admin"
             {{ avatar_img(p, size=120) }}
             <div class="age">{{ locale.format_timedelta(to_age(p.join_time), add_direction=True) if p.join_time }}</div>
         </a>
+        % if p.status != 'stub' and p.is_person
+        <br>
+        <a class="btn btn-default btn-sm" href="{{ p.path('ledger') }}">Go to ledger</a>
+        % endif
     </div>
     <div class="col-md-6">
     % set elsewhere = p.get_accounts_elsewhere().values()
