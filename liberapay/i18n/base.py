@@ -9,7 +9,7 @@ from unicodedata import combining, normalize
 from six import text_type
 
 import babel.core
-from babel.dates import format_date, format_datetime, format_timedelta
+from babel.dates import format_date, format_datetime, format_time, format_timedelta
 from babel.messages.pofile import Catalog
 from babel.numbers import format_currency, format_decimal, format_percent
 from markupsafe import Markup
@@ -201,6 +201,9 @@ class Locale(babel.core.Locale):
 
     def format_percent(self, *a):
         return format_percent(*a, locale=self)
+
+    def format_time(self, t, format='medium'):
+        return format_time(t, format=format, locale=self)
 
     def format_timedelta(self, o, **kw):
         if type(o) is Age:

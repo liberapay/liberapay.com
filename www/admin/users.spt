@@ -47,6 +47,7 @@ if request.method == 'POST':
 
     raise response.json({'msg': "Done, %i bits have been updated." % updated})
 
+last_showed = request.qs.get_int('last_showed', float('inf'))
 mode = request.qs.get('mode', 'all')
 if mode == 'all':
     participants = website.db.all("""
@@ -84,16 +85,64 @@ if mode == 'all':
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
          LIMIT 25
-    """, (request.qs.get_int('last_showed', float('inf')),))
-    last_id = participants[-1][0].id if participants else 0
+    """, (last_showed,))
+elif mode == 'new_recipients':
+    participants = website.db.all("""
+        SELECT p
+             , ( SELECT json_build_object('address', e.address, 'verified', e.verified)
+                   FROM emails e
+                  WHERE e.participant = p.id
+               ORDER BY e.address = p.email DESC NULLS LAST
+                      , e.verified DESC
+                      , e.added_time
+                  LIMIT 1
+               ) AS email
+             , ( SELECT json_agg(json_build_object(
+                            'type', s.type, 'content', s.content, 'lang', s.lang
+                        ))
+                   FROM ( SELECT s.*
+                            FROM statements s
+                           WHERE s.participant = p.id
+                        ORDER BY s.lang, s.type DESC
+                        ) s
+               ) AS statements
+             , ( SELECT row_to_json(e)
+                   FROM ( SELECT e.*, p2.username AS recorder_name
+                            FROM events e
+                       LEFT JOIN participants p2 ON p2.id = e.recorder
+                           WHERE e.participant = p.id
+                             AND e.type IN ('is_suspended', 'visibility_override')
+                        ORDER BY ts DESC
+                           LIMIT 1
+                        ) e
+               ) AS last_change
+             , json_agg(json_build_object(
+                   'amount', pt.amount, 'context', pt.context, 'ctime', date_trunc('second', pt.ctime),
+                   'payer', pt.payer, 'payer_name', payer.username,
+                   'team', pt.team, 'team_name', team.username,
+                   'status', pt.status
+               ) ORDER BY pt.ctime DESC) AS payments
+          FROM payin_transfers pt
+          JOIN participants p ON p.id = pt.recipient
+          JOIN participants payer ON payer.id = pt.payer
+     LEFT JOIN participants team ON team.id = pt.team
+         WHERE p.id < %s
+           AND p.is_suspended IS NULL
+      GROUP BY p.id
+      ORDER BY p.id DESC
+         LIMIT 25
+    """, (last_showed,))
 else:
     raise response.error(400, "unknown `mode` value %r in querystring" % mode)
+
+last_id = participants[-1][0].id if participants else 0
 
 title = "Users Admin"
 
 [---] text/html
 % from 'templates/avatar-url.html' import avatar_img with context
 % from 'templates/icons.html' import fontawesome, glyphicon
+% from 'templates/nav.html' import querystring_nav
 
 % extends "templates/base.html"
 
@@ -101,11 +150,18 @@ title = "Users Admin"
 
 <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-% for p, c_name, email, statements, last_change in participants
+<ul class="nav nav-pills">{{ querystring_nav('mode', [
+    ('all', "All"),
+    ('new_recipients', "New Recipients"),
+], mode) }}</ul>
+<br><br>
+
+% for row in participants
+% set p = row.p
 <div class="row user-admin">
     <div class="col-md-2 mini-user-admin">
         <a href="/{{ p.username }}/">
-            <div class="name">{{ c_name if c_name else p.username }}<br>({{ p.kind }}, {{ p.status }})</div>
+            <div class="name">{{ row.c_name or p.username }}<br>({{ p.kind }}, {{ p.status }})</div>
             {{ avatar_img(p, size=120) }}
             <div class="age">{{ locale.format_timedelta(to_age(p.join_time), add_direction=True) if p.join_time }}</div>
         </a>
@@ -134,9 +190,9 @@ title = "Users Admin"
     % else
         % if p.kind != 'community'
             <p>
-            % if email
-                <strong>Email address:</strong> {{ email.address }}
-                % if email.verified
+            % if row.email
+                <strong>Email address:</strong> {{ row.email.address }}
+                % if row.email.verified
                 <span class="text-success" title="Verified">{{ glyphicon('ok-sign') }}</span>
                 % else
                 <span class="text-danger" title="Unconfirmed">{{ glyphicon('warning-sign') }}</span>
@@ -163,10 +219,31 @@ title = "Users Admin"
         </p>
         % endif
 
+        % if row.payments
+        <p><strong>Incoming payments:</strong><br>
+            % for pt in row.payments
+                <span class="glyphicon glyphicon-{{
+                          'ok-circle' if pt.status == 'succeeded' else
+                          'remove-circle text-danger' if pt.status == 'failed' else
+                          'time text-muted'
+                      }}" title="{{ pt.status }}"></span>&nbsp;
+                {{ locale.format_money(Money(**pt.amount)) }}
+                from <a href="/~{{ pt.payer }}/">{{ pt.payer_name }}</a>
+                % set ctime = parse_date(pt.ctime)
+                on {{ locale.format_date(ctime, 'short_yearless') }}
+                at {{ locale.format_time(ctime) }}
+                % if pt.team
+                through team <a href="/~{{ pt.team }}/">{{ pt.team_name }}</a>
+                % endif
+                <br>
+            % endfor
+        </p>
+        % endif
+
         <div><strong>Profile descriptions:</strong>
-        % if statements
+        % if row.statements
             <br>
-            % for s in statements or ()
+            % for s in row.statements or ()
                 [<em>{{ locale.languages_2.get(s.lang, s.lang) }} {{ s.type }}</em>]
                 % if s.type in ('profile', 'sidebar')
                     <section class="profile-statement embedded raw" lang="{{ s.lang }}">{{
@@ -216,20 +293,22 @@ title = "Users Admin"
             <button class="btn btn-warning">{{ _("Save") }}</button>
         </form>
         <br>
-        % if last_change
+        % if row.last_change
         <span class="text-muted">{{ _(
             "Last changed {timedelta} ago by {username}.",
-            username=last_change.recorder_name,
-            timedelta=to_age(parse_date(last_change.ts))
+            username=row.last_change.recorder_name,
+            timedelta=to_age(parse_date(row.last_change.ts))
         ) }}</span>
         % endif
     </div>
 </div>
 <br>
+% else
+<p>Nothing to show.</p>
 % endfor
 
 % if last_id > 1
-<a class="btn btn-default btn-lg" href="?last_showed={{ last_id }}">{{ _("Next") }} →</a>
+<a class="btn btn-default btn-lg" href="{{ request.qs.derive(last_showed=last_id) }}">{{ _("Next") }} →</a>
 % endif
 
 % endblock

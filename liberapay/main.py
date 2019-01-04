@@ -7,7 +7,7 @@ import string
 from threading import Timer
 
 from six import text_type
-from six.moves import builtins
+from six.moves import builtins, urllib
 
 import aspen
 import aspen.http.mapping
@@ -217,6 +217,15 @@ Morsel._reserved[str('samesite')] = str('SameSite')
 if hasattr(aspen.http.mapping.Mapping, 'get_int'):
     raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
 aspen.http.mapping.Mapping.get_int = utils.get_int
+
+if hasattr(aspen.http.request.Querystring, 'derive'):
+    raise Warning('aspen.http.request.Querystring.derive() already exists')
+def _Querystring_derive(self, **kw):
+    new_qs = aspen.http.mapping.Mapping(self)
+    for k, v in kw.items():
+        new_qs[k] = v
+    return '?' + urllib.parse.urlencode(new_qs, doseq=True)
+aspen.http.request.Querystring.derive = _Querystring_derive
 
 if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
