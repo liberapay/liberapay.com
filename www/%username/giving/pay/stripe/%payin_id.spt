@@ -234,6 +234,7 @@ else:
          WHERE r.participant = %s
            AND r.status = 'chargeable'
            AND r.network::text LIKE 'stripe-%%'
+           AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
       ORDER BY r.network = 'stripe-sdd' DESC
              , r.id DESC
          LIMIT 1

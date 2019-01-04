@@ -40,6 +40,7 @@ class ExchangeRoute(Model):
                AND network::text = %(network)s
                AND status = 'chargeable'
                AND COALESCE(currency::text, '') = COALESCE(%(currency)s::text, '')
+               AND (one_off IS FALSE OR ctime > (current_timestamp - interval '6 hours'))
           ORDER BY r.id DESC
         """, locals())
         for route in r:

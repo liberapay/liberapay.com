@@ -51,6 +51,7 @@ else:
            AND remote_user_id = %s
            AND network = 'mango-ba'
            AND status = 'chargeable'
+           AND (one_off IS FALSE OR ctime > (current_timestamp - interval '6 hours'))
       ORDER BY id = %s DESC, mandate IS NOT NULL DESC, id DESC
          LIMIT 1
     """, (participant.id, participant.mangopay_user_id, route_id))
