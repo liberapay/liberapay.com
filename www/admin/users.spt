@@ -121,13 +121,17 @@ elif mode == 'new_recipients':
                    'payer', pt.payer, 'payer_name', payer.username,
                    'team', pt.team, 'team_name', team.username,
                    'status', pt.status
-               ) ORDER BY pt.ctime DESC) AS payments
-          FROM payin_transfers pt
+               ) ORDER BY pt.row_number) AS payments
+          FROM ( SELECT pt.*
+                      , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC)
+                   FROM payin_transfers pt
+               ) pt
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
          WHERE p.id < %s
            AND p.is_suspended IS NULL
+           AND pt.row_number <= 20
       GROUP BY p.id
       ORDER BY p.id DESC
          LIMIT 25
