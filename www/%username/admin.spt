@@ -23,10 +23,28 @@ events = website.db.all("""
 % extends "templates/settings.html"
 % block content
 
-<h3>Profile visibility</h3>
+<h3>Admin flags</h3>
 
 <form action="javascript:/admin/users" method="POST" class="js-submit" data-on-success="reload">
     <input type="hidden" name="p_id" value="{{ participant.id }}">
+    <div class="form-group">
+        Does this account look fraudulent?<br>
+        <label>
+            <input type="radio" name="is_suspended" value="on" {{
+                   'checked' if participant.is_suspended == True else '' }} />
+            Yes, block payments!
+        </label> &nbsp;&nbsp;
+        <label>
+            <input type="radio" name="is_suspended" value="off" {{
+                   'checked' if participant.is_suspended == False else '' }} />
+            No
+        </label> &nbsp;&nbsp;
+        <label>
+            <input type="radio" name="is_suspended" value="null" />
+            Unsure
+        </label>
+    </div>
+    <div class="form-group">
     % for attr in constants.PROFILE_VISIBILITY_ATTRS
         % set value = getattr(participant, attr)
         <label>
@@ -35,6 +53,7 @@ events = website.db.all("""
         </label>
         <br>
     % endfor
+    </div>
     <button class="btn btn-warning">{{ _("Save") }}</button>
 </form>
 
