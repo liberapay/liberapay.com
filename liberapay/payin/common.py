@@ -77,6 +77,14 @@ def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fe
             VALUES (%s, %s, %s, current_timestamp)
         """, (payin_id, status, error))
 
+        if payin.status in ('pending', 'succeeded'):
+            cursor.run("""
+                UPDATE exchange_routes
+                   SET status = 'consumed'
+                 WHERE id = %s
+                   AND one_off IS TRUE
+            """, (payin.route,))
+
         return payin
 
 
