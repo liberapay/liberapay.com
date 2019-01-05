@@ -260,7 +260,7 @@ class TestConfirmTakeOver(Harness):
         response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob,
                                     cookies=self.connect_cookie)
         assert response.code == 302
-        assert response.headers[b'Location'] == b'/bob/edit'
+        assert response.headers[b'Location'].endswith(b'/bob/edit/elsewhere')
 
 
 class TestFriendFinder(Harness):
