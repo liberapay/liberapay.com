@@ -214,7 +214,15 @@ next_payday = today + timedelta(days=days_till_wednesday)
                         "Inactive because the recipient no longer accepts donations."
                     ) }}</p>
                 % elif tip.paid_in_advance and tip.paid_in_advance >= tip.amount
-                    <p class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</p>
+                    <p>
+                        <span class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</span>
+                        &nbsp;&nbsp;
+                        % if tip.renewal_mode == 2
+                            {{ glyphicon('repeat') }} {{ _("Automatic renewal") }}
+                        % else
+                            {{ glyphicon('user') }} {{ _("Manual renewal") }}
+                        % endif
+                    </p>
                     % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
                     <p>
                         % set delta = timedelta(weeks=weeks_remaning - 1)
