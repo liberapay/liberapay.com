@@ -28,6 +28,7 @@ from liberapay.elsewhere._utils import urlquote
 from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired, InvalidNumber
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
+from liberapay.security.csrf import SAFE_METHODS
 from liberapay.website import website
 
 
@@ -85,18 +86,17 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
             """, (participant.id,))
             raise response.redirect('/for/%s' % c_name)
 
-    if redirect_canon and request.method in ('GET', 'HEAD'):
+    if redirect_canon and request.method in SAFE_METHODS:
         if slug != participant.username:
             canon = '/' + participant.username + request.line.uri[len(slug)+1:]
             raise response.redirect(canon)
 
     status = participant.status
     if status == 'closed':
-        if user.is_admin:
-            return participant
-        state['closed_account'] = participant
-        response.html_template = 'templates/account-closed.html'
-        raise response.error(410)
+        if not user.is_admin:
+            state['closed_account'] = participant
+            response.html_template = 'templates/account-closed.html'
+            raise response.error(410)
     elif status == 'stub':
         if redirect_stub:
             to = participant.resolve_stub()
@@ -109,7 +109,9 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         if participant != user:
             if allow_member and participant.kind == 'group' and user.member_of(participant):
                 pass
-            elif not user.is_admin:
+            elif user.is_admin:
+                log_admin_request(user, participant, request)
+            else:
                 raise response.error(403, _("You are not authorized to access this page."))
 
     if block_suspended_user and participant.is_suspended and participant == user:
@@ -137,11 +139,29 @@ def get_community(state, restrict=False):
     if restrict:
         if user.ANON:
             raise LoginRequired
-        if user.id != c.creator and not user.is_admin:
-            _ = state['_']
-            raise response.error(403, _("You are not authorized to access this page."))
+        if user.id != c.creator:
+            if user.is_admin:
+                log_admin_request(user, c.participant, request)
+            else:
+                _ = state['_']
+                raise response.error(403, _("You are not authorized to access this page."))
 
     return c
+
+
+def log_admin_request(admin, participant, request):
+    if request.method not in SAFE_METHODS:
+        action_data = {
+            'method': request.method,
+            'path': request.path.raw,
+            'qs': dict(request.qs),
+            'body': {
+                k: (v[0] if len(v) == 1 else v)
+                for k, v in request.body.items()
+                if k != 'csrf_token'
+            },
+        }
+        participant.add_event(website.db, 'admin_request', action_data, admin.id)
 
 
 def look_up_redirections(request, response):

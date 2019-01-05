@@ -2,7 +2,7 @@
 
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
-from liberapay.utils import build_s3_object_url, get_participant, markdown
+from liberapay.utils import build_s3_object_url, get_participant, log_admin_request, markdown
 
 [---]
 
@@ -31,16 +31,22 @@ else:
     addressee = participant
     sender = user if user.id == invoice.sender else Participant.from_id(invoice.sender)
 
-if invoice.status == 'pre' and user != sender and not user.is_admin:
-    raise response.error(404)
+if invoice.status == 'pre' and user != sender:
+    if user.is_admin:
+        log_admin_request(user, addressee, request)
+    else:
+        raise response.error(404)
 
 if request.method == 'POST':
     if user.ANON:
         raise LoginRequired
     action = request.body['action']
     if action == 'download-file':
-        if user not in (sender, addressee) and not user.is_admin:
-            raise response.error(403, _("Invoice documents are private."))
+        if user not in (sender, addressee):
+            if user.is_admin:
+                log_admin_request(user, addressee, request)
+            else:
+                raise response.error(403, _("Invoice documents are private."))
         name = request.body['name']
         if name not in invoice.documents:
             raise response.error(400, "bad `name` value")
