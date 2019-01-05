@@ -68,7 +68,8 @@ if request.method == 'POST':
             amount = locale.parse_money_amount(amount, currency)
         else:
             raise response.error(400, _("The donation amount is missing."))
-    out = tipper.set_tip_to(tippee, amount, period)
+    renewal_mode = request.body.get_int('renewal_mode', default=1, minimum=1, maximum=2)
+    out = tipper.set_tip_to(tippee, amount, period, renewal_mode=renewal_mode)
     if not out:
         raise response.error(400, _("This donation doesn't exist or has already been stopped."))
     if out['renewal_mode'] == 0:

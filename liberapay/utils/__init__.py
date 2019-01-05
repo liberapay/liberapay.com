@@ -464,7 +464,7 @@ def build_s3_object_url(key):
 NO_DEFAULT = object()
 
 
-def get_int(d, k, default=NO_DEFAULT, minimum=None):
+def get_int(d, k, default=NO_DEFAULT, minimum=None, maximum=None):
     try:
         r = d[k]
     except (KeyError, Response):
@@ -477,6 +477,8 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None):
         raise Response().error(400, "`%s` value %r is not a valid integer" % (k, r))
     if minimum is not None and r < minimum:
         raise Response().error(400, "`%s` value %r is less than %i" % (k, r, minimum))
+    if maximum is not None and r > maximum:
+        raise Response().error(400, "`%s` value %r is greater than %i" % (k, r, maximum))
     return r
 
 
