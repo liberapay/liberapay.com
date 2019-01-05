@@ -80,6 +80,27 @@ def create_source_from_token(token_id, one_off, amount, owner_info, return_url):
     )
 
 
+def charge(db, payin, payer):
+    """Initiate the Charge for the given payin.
+
+    Returns the update payin.
+
+    """
+    n_transfers = db.one("""
+        SELECT count(*)
+          FROM payin_transfers pt
+         WHERE pt.payin = %(payin)s
+    """, dict(payin=payin.id))
+    if n_transfers == 1:
+        return destination_charge(
+            db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
+        )
+    else:
+        return charge_and_transfer(
+            db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
+        )
+
+
 def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=None):
     """Create a standalone Charge then multiple Transfers.
 

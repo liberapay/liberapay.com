@@ -1076,7 +1076,7 @@ class Payday(object):
             n += 1
         log("Sent %i income notifications." % n)
 
-        # Donation renewal notifications
+        # Donation renewal reminders
         n = 0
         participants = self.db.all("""
             SELECT (SELECT p FROM participants p WHERE p.id = t.tipper) AS p
@@ -1087,7 +1087,7 @@ class Payday(object):
                      SELECT t.*, tippee_p.username AS tippee_username
                        FROM current_tips t
                        JOIN participants tippee_p ON tippee_p.id = t.tippee
-                      WHERE t.renewal_mode > 0
+                      WHERE t.renewal_mode = 1
                         AND ( t.paid_in_advance IS NULL OR
                               t.paid_in_advance < t.amount
                             )

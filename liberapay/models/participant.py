@@ -1306,6 +1306,7 @@ class Participant(Model, MixinTeam):
                 break
             for msg in messages:
                 d = deserialize(msg.context)
+                d['notification_ts'] = msg.ts
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
                 if not email:
@@ -1446,6 +1447,7 @@ class Participant(Model, MixinTeam):
 
     def fill_notification_context(self, context):
         context.update(aspen_jinja2_renderer.Renderer.global_context)
+        context['website'] = website
         context['participant'] = self
         context['username'] = self.username
         context['button_style'] = lambda variant: (
@@ -1486,6 +1488,7 @@ class Participant(Model, MixinTeam):
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)
+                context['notification_ts'] = ts
                 spt = website.emails[event]
                 subject = spt['subject'].render(context).strip()
                 html = spt['text/html'].render(context).strip()

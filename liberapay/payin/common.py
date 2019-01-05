@@ -17,13 +17,16 @@ from ..utils import group_by
 Donation = namedtuple('Donation', 'amount recipient destination')
 
 
-def prepare_payin(db, payer, amount, route):
+def prepare_payin(db, payer, amount, route, off_session=False):
     """Prepare to charge a user.
 
     Args:
         payer (Participant): the user who will be charged
         amount (Money): the presentment amount of the charge
         route (ExchangeRoute): the payment instrument to charge
+        off_session (bool):
+            `True` means that the payment is being initiated because it was scheduled,
+            `False` means that the payer has initiated the operation just now
 
     Returns:
         Record: the row created in the `payins` table
@@ -42,10 +45,10 @@ def prepare_payin(db, payer, amount, route):
     with db.get_cursor() as cursor:
         payin = cursor.one("""
             INSERT INTO payins
-                   (payer, amount, route, status)
-            VALUES (%s, %s, %s, 'pre')
+                   (payer, amount, route, status, off_session)
+            VALUES (%s, %s, %s, 'pre', %s)
          RETURNING *
-        """, (payer.id, amount, route.id))
+        """, (payer.id, amount, route.id, off_session))
         cursor.run("""
             INSERT INTO payin_events
                    (payin, status, error, timestamp)

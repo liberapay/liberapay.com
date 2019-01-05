@@ -13,8 +13,7 @@ from liberapay.payin.common import (
 )
 from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import (
-    charge_and_transfer, create_source_from_token, destination_charge,
-    repr_stripe_error, settle_payin,
+    charge, create_source_from_token, repr_stripe_error, settle_payin,
 )
 from liberapay.utils import get_participant
 
@@ -142,11 +141,6 @@ elif payin_id:
         raise response.error(404, "invalid payin ID in URL path")
     payin = website.db.one("""
         SELECT *
-             , ( SELECT count(*)
-                   FROM payin_transfers pt
-                   JOIN payment_accounts a ON a.pk = pt.destination
-                  WHERE pt.payin = %(payin)s
-               ) AS n_transfers
           FROM payins
          WHERE id = %(payin)s
            AND payer = %(payer)s
@@ -155,16 +149,7 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     try:
         if payin.status == 'pre':
-            if payin.n_transfers == 1:
-                payin = destination_charge(
-                    website.db, payin, payer,
-                    statement_descriptor=('Liberapay %i' % payin.id)
-                )
-            else:
-                payin = charge_and_transfer(
-                    website.db, payin, payer,
-                    statement_descriptor=('Liberapay %i' % payin.id)
-                )
+            payin = charge(website.db, payin, payer)
         elif payin.status == 'awaiting_payer_action':
             payin = settle_payin(website.db, payin)
     except NextAction as act:
