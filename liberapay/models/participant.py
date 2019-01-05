@@ -2334,7 +2334,7 @@ class Participant(Model, MixinTeam):
                 self.recompute_actual_takes(c)
 
 
-    def set_tip_to(self, tippee, periodic_amount, period='weekly',
+    def set_tip_to(self, tippee, periodic_amount, period='weekly', renewal_mode=1,
                    update_self=True, update_tippee=True, cursor=None):
         """Given a Participant or username, and amount as str, returns a dict.
 
@@ -2385,18 +2385,20 @@ class Participant(Model, MixinTeam):
                         AND tippee=%(tippee)s
                  )
             INSERT INTO tips
-                        (ctime, tipper, tippee, amount, period, periodic_amount, paid_in_advance)
+                        ( ctime, tipper, tippee, amount, period, periodic_amount
+                        , paid_in_advance
+                        , renewal_mode )
                  VALUES ( COALESCE((SELECT ctime FROM current_tip), CURRENT_TIMESTAMP)
                         , %(tipper)s, %(tippee)s, %(amount)s, %(period)s, %(periodic_amount)s
                         , (SELECT convert(paid_in_advance, %(currency)s) FROM current_tip)
-                         )
+                        , %(renewal_mode)s )
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
         """, dict(
             tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
-            period=period, periodic_amount=periodic_amount,
+            period=period, periodic_amount=periodic_amount, renewal_mode=renewal_mode,
         ), back_as='Object')
 
         if update_self:
