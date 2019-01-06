@@ -2247,7 +2247,7 @@ class Participant(Model, MixinTeam):
                          FROM payin_transfers pt
                         WHERE pt.payer = t.tipper
                           AND COALESCE(pt.team, pt.recipient) = t.tippee
-                          AND pt.status = 'succeeded'
+                          AND pt.status <> 'failed'
                           AND pt.ctime > (current_timestamp - interval '6 hours')
                         LIMIT 1
                    )
