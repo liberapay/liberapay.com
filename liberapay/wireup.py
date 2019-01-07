@@ -142,6 +142,10 @@ def database(env, tell_sentry):
         db.register_model(model)
     liberapay.billing.payday.Payday.db = db
 
+    def adapt_set(s):
+        return adapt(tuple(s))
+    register_adapter(set, adapt_set)
+
     def adapt_money(m):
         return AsIs('(%s,%s)::currency_amount' % (adapt(m.amount), adapt(m.currency)))
     register_adapter(Money, adapt_money)

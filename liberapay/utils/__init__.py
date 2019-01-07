@@ -477,6 +477,20 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None):
     return r
 
 
+def parse_list(mapping, k, cast, default=NO_DEFAULT, sep=','):
+    try:
+        r = mapping[k].split(sep)
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    try:
+        r = [cast(v) for v in r]
+    except (ValueError, TypeError):
+        raise Response().error(400, "`%s` value %r is invalid" % (k, mapping[k]))
+    return r
+
+
 def parse_int(o, **kw):
     try:
         return int(o)

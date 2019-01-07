@@ -1,15 +1,10 @@
 # coding: utf8
 
+from functools import reduce
 from math import ceil
 
 from liberapay.models.participant import Participant
 from liberapay.utils import get_participant, group_by, NS, partition
-
-ONE_YEAR = {
-    'weekly': 52,
-    'monthly': 12,
-    'yearly': 1,
-}
 
 PAYMENT_PROVIDERS = website.db.one(
     "SELECT array_to_json(enum_range(NULL::payment_providers))"
@@ -59,24 +54,52 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
 
-tippee_id = request.qs.get_int('beneficiary', default=None)
-donations = payer.get_tips_awaiting_renewal()
-donations, donations_not_fundable = partition(
-    donations, lambda t: t.tippee_p.payment_providers > 0 and not t.tippee_p.is_suspended
-)
-if tippee_id:
-    donations, other_donations = partition(
-        donations, lambda t: t.tippee == tippee_id
-    )
+donation_groups, n_fundable = payer.get_tips_awaiting_renewal()
+n_payments = len(donation_groups['fundable'])
 
-if donations:
-    tip = donations[0]
-    providers = [
-        name for bit, name in enumerate(PAYMENT_PROVIDERS, 1)
-        if tip.tippee_p.payment_providers & bit > 0
-    ]
-    if providers == ['paypal']:
-        response.redirect(payer.path('giving/pay/paypal?beneficiary=%i&chosen=false' % tip.tippee))
+payment = None
+tippee_id = request.qs.get_int('beneficiary', default=None)
+if tippee_id:
+    tippee = Participant.from_id(tippee_id)
+    tip = NS(payer.get_tip_to(tippee))
+    if tip.renewal_mode == 0:
+        raise response.error(400, _(
+            "You are not donating to {username}.", username=tippee.username
+        ))
+    tip.tippee_p = tippee
+    if tip.tippee_p.payment_providers:
+        payment = NS()
+        payment.tips = (tip,)
+        payment.currency = tip.amount.currency
+        payment.providers = [
+            name for i, name in enumerate(PAYMENT_PROVIDERS)
+            if tip.tippee_p.payment_providers & 2**i > 0
+        ]
+    else:
+        donations_not_fundable = [tip]
+
+else:
+    donations_not_fundable = donation_groups['no_provider'] + donation_groups['suspended']
+    self_donations = donation_groups['self_donation']
+    if n_payments:
+        payment = NS()
+        payment.tips = donation_groups['fundable'][0]
+        payment.currency = payment.tips[0].amount.currency
+        _provider_bits = reduce(
+            int.__and__, (tip.tippee_p.payment_providers for tip in payment.tips)
+        )
+        payment.providers = [
+            name for i, name in enumerate(PAYMENT_PROVIDERS)
+            if _provider_bits & 2**i > 0
+        ]
+        if len(payment.tips) > 1 and 'paypal' in payment.providers:
+            # We don't support one-to-many through PayPal yet.
+            payment.providers.pop('paypal')
+        del _provider_bits
+
+if payment:
+    payment.beneficiary = 'beneficiary=' + ','.join(str(t.tippee) for t in payment.tips)
+    payment.recipient_links = [tip.tippee_p.link() for tip in payment.tips]
 
 if user == payer:
     payer.mark_notifications_as_read('donate_reminder')
@@ -84,32 +107,56 @@ if user == payer:
 title = _("Funding your donations")
 
 [---] text/html
+% from "templates/icons.html" import fontawesome, glyphicon
 % extends "templates/base-thin.html"
 
 % block thin_content
 
-% if donations
+% if payment
 
-    % if len(donations) > 1
+    % if n_fundable > 1
         <p>{{ ngettext(
             "You have {n} donation awaiting payment.",
             "You have {n} donations awaiting payment.",
-            n=len(donations)
+            n=n_fundable
         ) }}</p>
-        <p class="alert alert-warning">{{ _(
-            "Funding multiple donations with a single payment is currently not possible, "
-            "so you will have to renew your donations one by one. We apologize for the "
-            "inconvenience."
+        % if n_payments > 1
+        <p class="alert alert-warning">{{ ngettext(
+            "",
+            "Due to legal and technical limitations we are currently unable to process "
+            "all your donations as a single payment. Instead you will have to make {n} "
+            "separate payments. We apologize for the inconvenience.",
+            n=n_payments
         ) }}</p>
+        % else
+        <p class="text-success">{{ glyphicon('ok') }} &nbsp;{{ _(
+            "We are able to group these donations into a single payment."
+        ) }}</p>
+        % endif
         <hr>
     % endif
 
+    % if len(payment.recipient_links) == 1
+        <p>{{ _(
+            "Your donation of {amount} to {recipient} is awaiting payment.",
+            amount=payment.tips[0].periodic_amount, recipient=payment.recipient_links[0]
+        ) }}</p>
+    % else
+        <p>{{ _(
+            "Your donations to {recipients} are awaiting payment.",
+            recipients=payment.recipient_links
+        ) }}</p>
+    % endif
+
+    % if payment.providers == ['paypal']
+    <p>{{ _("For now this donation can only be renewed externally through PayPal.") }}</p>
+    % else
     <p>{{ _("Please choose a payment method:") }}</p>
+    % endif
 
     <div class="row payment-methods">
-    % from "templates/icons.html" import fontawesome, glyphicon
 
-    % for provider in providers
+    % for provider in payment.providers
         % if provider == 'stripe'
         <div class="col-sm-6">
             <div class="panel panel-default {{ '' if allow_stripe_card else 'muted' }}">
@@ -123,11 +170,11 @@ title = _("Funding your donations")
                     % endif
                 </h4>
                 % if allow_stripe_card
-                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?beneficiary={{ tip.tippee }}&amp;method=card"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?{{ payment.beneficiary }}&amp;method=card"></a>
                 % endif
             </div></div>
         </div>
-        % set possible = allow_stripe_sdd and tip.amount.currency == 'EUR'
+        % set possible = allow_stripe_sdd and payment.currency == 'EUR'
         % set warn = request.country not in constants.SEPA
         <div class="col-sm-6">
             <div class="panel panel-default {{ '' if possible else 'muted' }}">
@@ -136,14 +183,14 @@ title = _("Funding your donations")
                 <h4>{{ _("Direct Debit") }}<br>
                     % if not allow_stripe_sdd
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
-                    % elif tip.amount.currency != 'EUR'
+                    % elif payment.currency != 'EUR'
                     <small class="text-warning">{{ _("Euro donations only") }}</small>
                     % else
                     <small class="{{ 'text-warning' if warn else '' }}">{{ _("Euro bank accounts only") }}</small>
                     % endif
                 </h4>
                 % if possible
-                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?beneficiary={{ tip.tippee }}&amp;method=sdd"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?{{ payment.beneficiary }}&amp;method=sdd"></a>
                 % endif
             </div></div>
         </div>
@@ -160,7 +207,7 @@ title = _("Funding your donations")
                     % endif
                 </h4>
                 % if allow_paypal
-                <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?beneficiary={{ tip.tippee }}"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?{{ payment.beneficiary }}"></a>
                 % endif
             </div>
             </div>
@@ -171,15 +218,19 @@ title = _("Funding your donations")
 
 % else
 
-    % if donations_not_fundable
-        % if donations
-            <hr>
-        % endif
+    % if donations_not_fundable or self_donations
         % for tip in donations_not_fundable
         <p>{{ _(
             "Your donation to {recipient} cannot be processed right now because the "
             "account of the beneficiary isn't ready to receive money.",
             recipient=tip.tippee_p.link()
+        ) }}</p>
+        % endfor
+        % for tip in self_donations
+        <p>{{ _(
+            "Your donation to {team} cannot be processed because it would be "
+            "sending money to yourself.",
+            team=tip.tippee_p.link()
         ) }}</p>
         % endfor
     % else

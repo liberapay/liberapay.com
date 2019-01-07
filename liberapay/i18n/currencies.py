@@ -56,6 +56,9 @@ def _Money_eq(self, other):
         return other.__eq__(self)
     return False
 
+def _Money_hash(self):
+    return hash((self.currency, self.amount))
+
 def _Money_parse(cls, amount_str, default_currency='EUR'):
     split_str = amount_str.split()
     if len(split_str) == 2:
@@ -86,6 +89,7 @@ class _Zeros(defaultdict):
 Money.__init__ = _Money_init
 Money.__nonzero__ = Money.__bool__
 Money.__eq__ = _Money_eq
+Money.__hash__ = _Money_hash
 Money.__iter__ = lambda m: iter((m.amount, m.currency))
 Money.__repr__ = lambda m: '<Money "%s">' % m
 Money.__str__ = lambda m: '%(amount)s %(currency)s' % m.__dict__

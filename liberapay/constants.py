@@ -314,6 +314,18 @@ PAYOUT_COUNTRIES = {
     """.split()),  # https://stripe.com/global
 }
 
+PERIOD_CONVERSION_MAP = {
+    ('weekly', 'weekly'): Decimal(1),
+    ('monthly', 'weekly'): Decimal(12) / Decimal(52),
+    ('yearly', 'weekly'): Decimal(1) / Decimal(52),
+    ('weekly', 'monthly'): Decimal(52) / Decimal(12),
+    ('monthly', 'monthly'): Decimal(1),
+    ('yearly', 'monthly'): Decimal(1) / Decimal(12),
+    ('weekly', 'yearly'): Decimal(52),
+    ('monthly', 'yearly'): Decimal(12),
+    ('yearly', 'yearly'): Decimal(1),
+}
+
 PERIOD_CONVERSION_RATES = {
     'weekly': Decimal(1),
     'monthly': Decimal(12) / Decimal(52),

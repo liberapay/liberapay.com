@@ -221,6 +221,10 @@ if hasattr(aspen.http.mapping.Mapping, 'get_int'):
     raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
 aspen.http.mapping.Mapping.get_int = utils.get_int
 
+if hasattr(aspen.http.mapping.Mapping, 'parse_list'):
+    raise Warning('aspen.http.mapping.Mapping.parse_list() already exists')
+aspen.http.mapping.Mapping.parse_list = utils.parse_list
+
 if hasattr(aspen.http.request.Querystring, 'derive'):
     raise Warning('aspen.http.request.Querystring.derive() already exists')
 def _Querystring_derive(self, **kw):
