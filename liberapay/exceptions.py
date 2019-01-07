@@ -415,6 +415,14 @@ class TooManyRequests(LazyResponseXXX):
         )
 
 
+class TooManyAdminActions(Response):
+    def __init__(self, *args, **kw):
+        Response.__init__(self, 429, (
+            "You have consumed your quota of admin actions. This isn't supposed "
+            "to happen."
+        ))
+
+
 class UnableToDistributeBalance(LazyResponse400):
     def msg(self, _):
         return _(
