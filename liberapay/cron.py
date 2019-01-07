@@ -32,7 +32,7 @@ class Cron(object):
                 while True:
                     now = datetime.utcnow()
                     then = now.replace(hour=period.hour, minute=10, second=0)
-                    days = (now.isoweekday() - period.weekday) % 7
+                    days = (period.weekday - now.isoweekday()) % 7
                     if days:
                         then += timedelta(days=days)
                     seconds = (then - now).total_seconds()
