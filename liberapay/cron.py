@@ -21,7 +21,7 @@ class Cron(object):
         self.exclusive_jobs = []
 
     def __call__(self, period, func, exclusive=False):
-        if not self.website.env.run_cron_jobs:
+        if not self.website.env.run_cron_jobs or not period:
             return
         if exclusive and not self.has_lock:
             self.exclusive_jobs.append((period, func))
@@ -32,7 +32,7 @@ class Cron(object):
                 while True:
                     now = datetime.utcnow()
                     then = now.replace(hour=period.hour, minute=10, second=0)
-                    days = (now.isoweekday() - period.weekday) % 7
+                    days = (period.weekday - now.isoweekday()) % 7
                     if days:
                         then += timedelta(days=days)
                     seconds = (then - now).total_seconds()
