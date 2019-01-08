@@ -25,7 +25,9 @@ from postgres.cursors import SimpleCursorBase
 
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.elsewhere._utils import urlquote
-from liberapay.exceptions import AccountSuspended, AuthRequired, LoginRequired, InvalidNumber
+from liberapay.exceptions import (
+    AccountSuspended, AuthRequired, LoginRequired, InvalidNumber, TooManyAdminActions
+)
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
 from liberapay.security.csrf import SAFE_METHODS
@@ -151,6 +153,7 @@ def get_community(state, restrict=False):
 
 def log_admin_request(admin, participant, request):
     if request.method not in SAFE_METHODS:
+        website.db.hit_rate_limit('admin.http-unsafe', admin.id, TooManyAdminActions)
         action_data = {
             'method': request.method,
             'path': request.path.raw,
