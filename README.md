@@ -169,7 +169,7 @@ PostgreSQL is designed to prevent data loss, so by default it does a lot of sync
 
 ### Tinkering with payments
 
-We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to modify that part of the code you'll need the [MangoPay API documentation](https://docs.mangopay.com/api-references/).
+Liberapay was built on top of [MangoPay](https://www.mangopay.com/) for payments, however they [kicked us out](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82) so we've shifted to integrating with multiple payment processors. We currently support [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/). Support for Mangopay hasn't been completely removed yet.
 
 ### Modifying python dependencies
 
