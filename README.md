@@ -110,9 +110,13 @@ Once you've installed everything and set up the database, you can run the app:
 
 It should now be accessible at [http://localhost:8339/](http://localhost:8339/).
 
-You can create some fake users to make it look more like the real site:
+By default there are no users. You can create accounts like you would on the real website, and if you want you can also create a bunch of fake users (but they're not great):
 
     make data
+
+To grant admin permissions to an account, modify the database like so:
+
+    psql liberapay -c "update participants set privileges = 1 where username = 'account-username'"
 
 #### Payday
 
