@@ -110,9 +110,13 @@ Once you've installed everything and set up the database, you can run the app:
 
 It should now be accessible at [http://localhost:8339/](http://localhost:8339/).
 
-You can create some fake users to make it look more like the real site:
+By default there are no users. You can create accounts like you would on the real website, and if you want you can also create a bunch of fake users (but they're not great):
 
     make data
+
+To grant admin permissions to an account, modify the database like so:
+
+    psql liberapay -c "update participants set privileges = 1 where username = 'account-username'"
 
 #### Payday
 
@@ -165,7 +169,7 @@ PostgreSQL is designed to prevent data loss, so by default it does a lot of sync
 
 ### Tinkering with payments
 
-We depend on [MangoPay](https://www.mangopay.com/) for payments. If you want to modify that part of the code you'll need the [MangoPay API documentation](https://docs.mangopay.com/api-references/).
+Liberapay was built on top of [MangoPay](https://www.mangopay.com/) for payments, however they [kicked us out](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82) so we've shifted to integrating with multiple payment processors. We currently support [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/). Support for Mangopay hasn't been completely removed yet.
 
 ### Modifying python dependencies
 
