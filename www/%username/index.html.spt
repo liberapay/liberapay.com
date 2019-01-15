@@ -103,7 +103,11 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if show_income
         <h3>{{ _("History") }}</h3>
 
-        <p>{{ _("{0} joined {1} ago.", participant.username, to_age(participant.join_time)) }}</p>
+        <p>{{ _(
+            "{username} joined {timespan_ago}.",
+            username=participant.username,
+            timespan_ago=to_age(participant.join_time, add_direction=True)
+        ) }}</p>
 
         <button class="btn btn-default" type="button"
                 data-charts="{{ participant.path('charts.json') }}"

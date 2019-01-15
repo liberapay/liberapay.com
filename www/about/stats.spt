@@ -93,16 +93,22 @@ def out():
 
 % block content
 
-    <p>{{ _("Liberapay was launched {0} ago and has {1} users.",
-            to_age(constants.LAUNCH_TIME), nusers) }}</p>
+    <p>{{ ngettext(
+        "Liberapay was launched {timespan_ago} and has {n} user.",
+        "Liberapay was launched {timespan_ago} and has {n} users.",
+        n=nusers, timespan_ago=to_age(constants.LAUNCH_TIME, add_direction=True)
+    ) }}</p>
 
     <p>{{ _("{0} is escrowed within Liberapay.", escrow) }}</p>
 
     % if last_payday
     <p>
-        {{ _(
-            "The last payday was {0} ago and transferred {1} between {2} users.",
-            to_age(last_payday.ts_start), transfer_volume.fuzzy_sum(currency), nactive
+        {{ ngettext(
+            "",
+            "The last payday was {timespan_ago} and transferred {money_amount} between {n} users.",
+            n=nactive,
+            timespan_ago=to_age(last_payday.ts_start, add_direction=True),
+            money_amount=transfer_volume.fuzzy_sum(currency),
         ) }}<br />
         {{ _("{0} participants gave money.", ngivers) }}<br />
         {{ _("{0} received money.", nreceivers) }}<br />

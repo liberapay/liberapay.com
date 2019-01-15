@@ -99,9 +99,10 @@ subhead = _("Repositories")
     % else
         <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
         <p>{{ ngettext(
-            "We found {n} repository in your {platform} account, {time} ago.",
-            "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-            , n=total_count, platform=platform.display_name, time=to_age(last_fetch.ts)
+            "We found {n} repository in your {platform} account, {timespan_ago}.",
+            "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}.",
+            n=total_count, platform=platform.display_name,
+            timespan_ago=to_age(last_fetch.ts, add_direction=True)
         ) }}</p>
         <form action="javascript:" class="js-submit" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />

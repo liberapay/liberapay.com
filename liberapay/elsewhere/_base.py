@@ -155,7 +155,10 @@ class Platform(object):
             limit, remaining, reset = self.get_ratelimit_headers(response)
             def msg(_, to_age):
                 if remaining == 0 and reset:
-                    return _("You've consumed your quota of requests, you can try again in {0}.", to_age(reset))
+                    return _(
+                        "You've consumed your quota of requests, you can try again {in_N_minutes}.",
+                        in_N_minutes=to_age(reset, add_direction=True)
+                    )
                 else:
                     return _("You're making requests too fast, please try again later.")
             raise LazyResponse(status, msg)

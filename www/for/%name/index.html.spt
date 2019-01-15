@@ -53,9 +53,9 @@ title = pretty_name = community.pretty_name
     </h2>
 
     <p>{{ ngettext(
-        "This community was created {0} ago and has {n} member.",
-        "This community was created {0} ago and has {n} members.",
-        community.nmembers, to_age(community.ctime)
+        "This community was created {timespan_ago} and has {n} member.",
+        "This community was created {timespan_ago} and has {n} members.",
+        community.nmembers, timespan_ago=to_age(community.ctime, add_direction=True)
     ) }}</p>
 
     <p>{{ _(
