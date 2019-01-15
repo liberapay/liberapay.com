@@ -133,7 +133,7 @@ elif mode == 'new_recipients':
            AND p.is_suspended IS NULL
            AND pt.row_number <= 20
       GROUP BY p.id
-      ORDER BY p.id DESC
+      ORDER BY min(pt.ctime) DESC
          LIMIT 25
     """, (last_showed,))
 else:
