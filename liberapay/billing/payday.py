@@ -813,6 +813,13 @@ class Payday(object):
                         WHERE amount < 0
                           AND refunded
                    )
+                 , week_payins = (
+                       SELECT basket_sum(pi.amount)
+                         FROM payins pi
+                        WHERE pi.ctime < %(ts_start)s
+                          AND pi.ctime >= %(previous_ts_start)s
+                          AND pi.status = 'succeeded'
+                   )
              WHERE id = %(payday_id)s
 
         """, locals())
