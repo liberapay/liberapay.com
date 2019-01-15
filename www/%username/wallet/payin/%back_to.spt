@@ -26,7 +26,7 @@ if 'transactionId' in request.qs or 'exchange_id' in request.qs or \
 
 selected_currency = request.qs.get('currency')
 if selected_currency and selected_currency not in constants.CURRENCIES:
-    raise response.error(400, "`currency` value in querystring is invalid or non-supported")
+    raise response.invalid_input(selected_currency, 'currency', 'querystring')
 
 currencies = website.db.all("""
     SELECT DISTINCT amount::currency

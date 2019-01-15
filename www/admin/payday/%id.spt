@@ -138,7 +138,7 @@ else:
 if request.method == 'POST':
     action = request.body['action']
     if action not in ('run_payday', 'rerun_payday'):
-        raise response.error(400, "bad action")
+        raise response.invalid_input(action, 'action', 'body')
     rerun = action == 'rerun_payday'
     if rerun:
         if not last_payday:

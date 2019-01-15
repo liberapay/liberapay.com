@@ -11,7 +11,7 @@ if request.method == 'POST':
     body = request.body
     country = body['country']
     if country not in locale.countries:
-        raise response.error(400, "`country` value %r in body is invalid or non-supported" % country)
+        raise response.invalid_input(country, 'country', 'body')
     email_address = body['email']
     email = participant.get_email(email_address)
     if not (email and email.verified):

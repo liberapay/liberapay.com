@@ -209,7 +209,7 @@ class TestConfirmTakeOver(Harness):
 
         response = self.client.GxT(url, auth_as=self.bob)
         assert response.code == 400
-        assert 'bad connect token' in response.text
+        assert response.text.endswith(' value None in request cookies is invalid or unsupported')
 
         response = self.client.GET(url, auth_as=self.bob, cookies=self.connect_cookie)
         assert response.code == 200
@@ -223,7 +223,7 @@ class TestConfirmTakeOver(Harness):
 
         response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob)
         assert response.code == 400
-        assert 'bad connect token' in response.text
+        assert response.text.endswith(' value None in request cookies is invalid or unsupported')
 
         response = self.client.PxST('/on/take-over.html', data=data, auth_as=self.bob,
                                     cookies=self.connect_cookie)

@@ -2,7 +2,7 @@
 platform = request.qs.get('platform')
 if platform:
     if not website.platforms.get(platform):
-        raise response.error(400, "unknown platform")
+        raise response.invalid_input(platform, 'platform', 'querystring')
     user_name = request.qs.get('user_name')
     if user_name:
         response.redirect('/on/%s/%s/' % (platform, user_name))

@@ -13,7 +13,7 @@ body = request.body
 p_id = get_int(body, 'p_id', None)
 participant = Participant.from_id(p_id) if p_id else user
 if not participant:
-    raise response.error(400, 'bad p_id')
+    raise response.invalid_input(p_id, 'p_id', 'body')
 
 if body['should_transfer'] != 'yes':
     response.redirect(participant.path('edit'))
@@ -24,11 +24,12 @@ if not user.controls(participant):
 account_id = get_int(body, 'account_id', None)
 account = AccountElsewhere.from_id(account_id) if account_id else None
 if not account:
-    raise response.error(400, 'bad account_id "%s"' % account_id)
+    raise response.invalid_input(account_id, 'account_id', 'body')
 
-token = request.headers.cookie.get('connect_%s' % account_id)
+cookie_name = 'connect_%s' % account_id
+token = request.headers.cookie.get(cookie_name)
 if not token or not account.check_connect_token(token.value):
-    raise response.error(400, 'bad connect token "%s"' % token)
+    raise response.invalid_input(token, cookie_name, 'cookies')
 
 account.save_connect_token(None, None)
 

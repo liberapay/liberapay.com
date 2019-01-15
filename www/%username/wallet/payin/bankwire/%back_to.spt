@@ -48,7 +48,7 @@ if request.method == 'POST' and 'action' in request.body:
         cancel_bank_wire_payin(website.db, exchange, payin, participant)
         response.redirect(request.line.uri)
     else:
-        raise response.error(400, "bad `action` value '%s' in body" % action)
+        raise response.invalid_input(action, 'action', 'body')
 
 exchange, payin = None, None
 if 'exchange_id' in request.qs:
@@ -62,7 +62,7 @@ if exchange:
 if request.method == 'POST':
     currency = request.body.get('currency', currency)
 if currency not in PAYIN_BANK_WIRE_MIN:
-    raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
+    raise response.invalid_input(currency, 'currency', 'body or querystring')
 
 funded = float('inf')
 balance = participant.get_balance_in(currency)

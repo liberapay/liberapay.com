@@ -107,13 +107,13 @@ def sign_in_with_form_data(body, state):
         response = state['response']
         kind = body.pop('sign-in.kind', 'individual')
         if kind not in ('individual', 'organization'):
-            raise response.error(400, 'bad kind')
+            raise response.invalid_input(kind, 'sign-in.kind', 'body')
         email = body.pop('sign-in.email')
         if not email:
             raise response.error(400, 'email is required')
         currency = body.pop('sign-in.currency', 'EUR')
         if currency not in CURRENCIES:
-            raise response.error(400, "`currency` value '%s' is invalid of non-supported" % currency)
+            raise response.invalid_input(currency, 'sign-in.currency', 'body')
         password = body.pop('sign-in.password', None)
         if password:
             l = len(password)

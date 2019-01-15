@@ -34,11 +34,11 @@ account = None
 if platform:
     order = request.qs.get('order') or 'any'
     if order not in ('any', 'random', 'latest'):
-        raise response.error(400, "bad order")
+        raise response.invalid_input(order, 'order', 'querystring')
 
     limit = min(request.qs.get_int('limit', 18), 60)
     if limit not in (18, 60):
-        raise response.error(400, "bad `limit` value in querystring")
+        raise response.invalid_input(limit, 'limit', 'querystring')
     last_shown = request.qs.get_int('last_shown', INF)
 
     def get_participants(random):

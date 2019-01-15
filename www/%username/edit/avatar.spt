@@ -9,7 +9,7 @@ if request.method == 'POST':
     src, email = request.body['src'], request.body.get('email') or None
 
     if src not in constants.AVATAR_SOURCES:
-        raise response.error(400, 'bad src')
+        raise response.invalid_input(src, 'src', 'body')
 
     website.db.run("""
         UPDATE participants SET avatar_email = %s WHERE id = %s

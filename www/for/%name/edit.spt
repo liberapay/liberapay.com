@@ -9,7 +9,7 @@ if request.method == 'POST':
     body = request.body
     lang, subtitle, sidebar = body['lang'], body['subtitle'], body['sidebar']
     if lang not in LANGUAGES_2:
-        raise response.error(400, "unknown lang")
+        raise response.invalid_input(lang, 'lang', 'body')
     if len(subtitle) > c.subtitle_maxlength:
         raise response.error(400, "subtitle too long")
     if len(sidebar) > c.sidebar_maxlength:

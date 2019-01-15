@@ -16,7 +16,7 @@ if request.method == 'POST':
     elif disburse_to == 'liberapay':
         participant.donate_remaining_balances_to_liberapay()
     else:
-        raise response.error(400, "bad `disburse_to` value %r in body" % disburse_to)
+        raise response.invalid_input(disburse_to, 'disburse_to', 'body')
 
 balances = participant.get_balances()
 refundable_balances = participant.get_refundable_balances()

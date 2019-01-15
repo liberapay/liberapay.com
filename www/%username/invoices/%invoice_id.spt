@@ -49,7 +49,7 @@ if request.method == 'POST':
                 raise response.error(403, _("Invoice documents are private."))
         name = request.body['name']
         if name not in invoice.documents:
-            raise response.error(400, "bad `name` value")
+            raise response.invalid_input(name, 'name', 'body')
         key = 'invoice_docs/%i/%s' % (invoice.id, name)
         response.redirect(build_s3_object_url(key))
     if action in ('send', 'cancel'):
@@ -59,7 +59,7 @@ if request.method == 'POST':
         new_status = action + 'ed'
         allowed_user_id = invoice.addressee
     else:
-        response.error(400, "bad `action` value")
+        response.invalid_input(action, 'action', 'body')
     if user.id != allowed_user_id:
         raise response.error(403)
     if action in ('reject', 'retract'):

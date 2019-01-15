@@ -97,7 +97,7 @@ elif action == 'refuse':
     response.redirect('/')
 
 else:
-    raise response.error(400, "bad action")
+    raise response.invalid_input(action, 'action', 'path')
 
 back_to = request.qs.get('back_to') or (team.path('income/') if action == 'accept' else '/')
 if not confirm:

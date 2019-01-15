@@ -42,7 +42,7 @@ if exchange:
 if request.method == 'POST':
     currency = request.body.get('currency', currency)
 if currency not in PAYIN_CARD_MIN:
-    raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
+    raise response.invalid_input(currency, 'currency', 'body or querystring')
 
 if exchange:
     route = ExchangeRoute.from_id(participant, exchange.route)

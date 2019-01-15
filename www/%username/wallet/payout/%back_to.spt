@@ -26,7 +26,7 @@ currency = request.qs.get('currency')
 if request.method == 'POST':
     currency = request.body.get('currency', currency or state['currency'])
 if currency is not None and currency not in constants.CURRENCIES:
-    raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
+    raise response.invalid_input(currency, 'currency', 'body')
 
 if request.method == 'POST':
     amount = locale.parse_money_amount(request.body['amount'], currency)

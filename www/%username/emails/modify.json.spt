@@ -24,7 +24,7 @@ elif 'remove' in body:
 elif 'set_email_lang' in body:
     email_lang = body['set_email_lang']
     if email_lang not in website.locales:
-        raise response.error(400, "bad `set_email_lang` value '%s' in body" % email_lang)
+        raise response.invalid_input(email_lang, 'set_email_lang', 'body')
     participant.set_email_lang(email_lang)
 else:
     raise response.error(400, 'nothing to do')
