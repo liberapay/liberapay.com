@@ -130,5 +130,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
                 <div class="x-axis"></div>
             </div>
         </div>
+    % else
+        <p>{{ _("{username} does not disclose how much they receive through Liberapay.") }}</p>
     % endif
 % endblock
