@@ -100,15 +100,15 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % include "templates/community-listing.html"
     % endif
 
+    <h3>{{ _("History") }}</h3>
+
+    <p>{{ _(
+        "{username} joined {timespan_ago}.",
+        username=participant.username,
+        timespan_ago=to_age(participant.join_time, add_direction=True)
+    ) }}</p>
+
     % if show_income
-        <h3>{{ _("History") }}</h3>
-
-        <p>{{ _(
-            "{username} joined {timespan_ago}.",
-            username=participant.username,
-            timespan_ago=to_age(participant.join_time, add_direction=True)
-        ) }}</p>
-
         <button class="btn btn-default" type="button"
                 data-charts="{{ participant.path('charts.json') }}"
                 data-charts-container="#charts-container">{{
