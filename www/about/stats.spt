@@ -110,9 +110,13 @@ def out():
             timespan_ago=to_age(last_payday.ts_start, add_direction=True),
             money_amount=transfer_volume.fuzzy_sum(currency),
         ) }}<br />
-        {{ _("{0} participants gave money.", ngivers) }}<br />
-        {{ _("{0} received money.", nreceivers) }}<br />
-        {{ _("{0} did both.", noverlap) }}
+        {{ ngettext("{n} participant gave money.", "{n} participants gave money.", ngivers) }}<br />
+        {{ ngettext("{n} participant received money.", "{n} participants received money.", nreceivers) }}<br />
+        {{ ngettext(
+            "{n} participant was both a donor and a recipient.",
+            "{n} participants were both donors and recipients.",
+            noverlap
+        ) }}
     </p>
     % endif
 
