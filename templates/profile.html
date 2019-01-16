@@ -27,10 +27,16 @@
                 {{ avatar_img(participant, size=120) }}
 
                 % if participant.join_time
-                <p class="join-time">{{ _('Joined {0} ago.', to_age(participant.join_time)) }}</p>
+                <p class="join-time">{{ _(
+                    "Joined {timespan_ago}.",
+                    timespan_ago=to_age(participant.join_time, add_direction=True)
+                ) }}</p>
                 % endif
                 % if participant.status == 'closed'
-                <p>{{ _('Closed {0} ago.', to_age(participant.closed_time)) }}</p>
+                <p>{{ _(
+                    "Closed {timespan_ago}.",
+                    timespan_ago=to_age(participant.closed_time, add_direction=True)
+                ) }}</p>
                 % endif
             </div>
 

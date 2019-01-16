@@ -190,12 +190,13 @@ next_payday = today + timedelta(days=days_till_wednesday)
                 </div>
                 % if tip.mtime == tip.ctime
                     <p class="help-block">{{ _(
-                        "Started {timedelta} ago.", timedelta=to_age(tip.ctime)
+                        "Started {timespan_ago}.", timespan_ago=to_age(tip.ctime, add_direction=True)
                     ) }}</p>
                 % else
                     <p class="help-block">{{ _(
-                        "Started {start_delta} ago. Modified {mtime_delta} ago.",
-                        start_delta=to_age(tip.ctime), mtime_delta=to_age(tip.mtime)
+                        "Started {timespan_ago_1}. Modified {timespan_ago_2}.",
+                        timespan_ago_1=to_age(tip.ctime, add_direction=True),
+                        timespan_ago_2=to_age(tip.mtime, add_direction=True)
                     ) }}</p>
                 % endif
                 % if tippee.is_suspended
@@ -214,9 +215,10 @@ next_payday = today + timedelta(days=days_till_wednesday)
                     <p class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</p>
                     % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
                     <p>
+                        % set delta = timedelta(weeks=weeks_remaning - 1)
                         {{ _(
-                            "Next payment in {timedelta}.",
-                            timedelta=to_age(next_payday + timedelta(weeks=weeks_remaning - 1))
+                            "Next payment {in_N_weeks_months_or_years}.",
+                            in_N_weeks_months_or_years=to_age(next_payday + delta, add_direction=True)
                         ) }}
                         % if weeks_remaning < 4
                             <a class="btn btn-default btn-xs"
@@ -314,12 +316,13 @@ next_payday = today + timedelta(days=days_till_wednesday)
                 </div>
                 % if tip.mtime == tip.ctime
                     <p class="help-block">{{ _(
-                        "Started {timedelta} ago.", timedelta=to_age(tip.ctime)
+                        "Started {timespan_ago}.", timespan_ago=to_age(tip.ctime, add_direction=True)
                     ) }}</p>
                 % else
                     <p class="help-block">{{ _(
-                        "Started {start_delta} ago. Modified {mtime_delta} ago.",
-                        start_delta=to_age(tip.ctime), mtime_delta=to_age(tip.mtime)
+                        "Started {timespan_ago_1}. Modified {timespan_ago_2}.",
+                        timespan_ago_1=to_age(tip.ctime, add_direction=True),
+                        timespan_ago_2=to_age(tip.mtime, add_direction=True)
                     ) }}</p>
                 % endif
             </div>
@@ -374,8 +377,9 @@ next_payday = today + timedelta(days=days_till_wednesday)
                 </div>
             </div>
             <p class="help-block">{{ _(
-                "Started {start_delta} ago. Stopped {stop_delta} ago.",
-                start_delta=to_age(tip.ctime), stop_delta=to_age(tip.mtime)
+                "Started {timespan_ago_1}. Stopped {timespan_ago_2}.",
+                timespan_ago_1=to_age(tip.ctime, add_direction=True),
+                timespan_ago_2=to_age(tip.mtime, add_direction=True)
             ) }}</p>
         </div>
     % endfor
@@ -416,8 +420,9 @@ next_payday = today + timedelta(days=days_till_wednesday)
                 </div>
             </div>
             <p class="help-block">{{ _(
-                "Started {start_delta} ago. Stopped {stop_delta} ago.",
-                start_delta=to_age(tip.ctime), stop_delta=to_age(tip.mtime)
+                "Started {timespan_ago_1}. Stopped {timespan_ago_2}.",
+                timespan_ago_1=to_age(tip.ctime, add_direction=True),
+                timespan_ago_2=to_age(tip.mtime, add_direction=True)
             ) }}</p>
         </div>
     % endfor

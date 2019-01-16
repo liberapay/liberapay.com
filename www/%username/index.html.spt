@@ -100,11 +100,15 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % include "templates/community-listing.html"
     % endif
 
+    <h3>{{ _("History") }}</h3>
+
+    <p>{{ _(
+        "{username} joined {timespan_ago}.",
+        username=participant.username,
+        timespan_ago=to_age(participant.join_time, add_direction=True)
+    ) }}</p>
+
     % if show_income
-        <h3>{{ _("History") }}</h3>
-
-        <p>{{ _("{0} joined {1} ago.", participant.username, to_age(participant.join_time)) }}</p>
-
         <button class="btn btn-default" type="button"
                 data-charts="{{ participant.path('charts.json') }}"
                 data-charts-container="#charts-container">{{
@@ -126,5 +130,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
                 <div class="x-axis"></div>
             </div>
         </div>
+    % else
+        <p>{{ _("{username} does not disclose how much they receive through Liberapay.") }}</p>
     % endif
 % endblock

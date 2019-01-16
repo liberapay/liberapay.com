@@ -5,7 +5,7 @@ from datetime import timedelta
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
-from liberapay.utils import b64encode_s, get_participant, utcnow
+from liberapay.utils import b64encode_s, get_participant
 
 ONE_WEEK = timedelta(days=7)
 
@@ -56,16 +56,16 @@ if action == 'invite':
         raise response.error(400, _("You can't invite an inactive user to join a team."))
     invite = get_invite(team, invitee)
     if invite:
-        invite_age = utcnow() - invite.ts
+        invite_age = to_age(invite.ts, add_direction=True)
         if invite.type == 'invite' and invite_age < ONE_WEEK:
             raise response.error(400, _(
-                "{0} has already been invited to join this team {1} ago.",
-                invitee.username, invite_age
+                "{username} has already been invited to join this team {timespan_ago}.",
+                username=invitee.username, timespan_ago=invite_age
             ))
         elif invite.type == 'invite_refuse' and invite_age < ONE_WEEK:
             raise response.error(400, _(
-                "{0} has already refused to join this team {1} ago.",
-                invitee.username, invite_age
+                "{username} has already refused to join this team {timespan_ago}.",
+                username=invitee.username, timespan_ago=invite_age
             ))
     if not invitee.member_of(team):
         team.invite(invitee, user)

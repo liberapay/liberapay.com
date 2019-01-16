@@ -159,18 +159,18 @@ class EmailAddressIsBlacklisted(ProblemChangingEmail):
         if reason == 'bounce':
             return _(
                 "The email address {email_address} is blacklisted because an "
-                "attempt to send a message to it failed {timedelta} ago. Please "
+                "attempt to send a message to it failed {timespan_ago}. Please "
                 "send an email from that address to support@liberapay.com if "
                 "you want us to remove it from the blacklist.",
-                email_address=address, timedelta=to_age(ts)
+                email_address=address, timespan_ago=to_age(ts, add_direction=True)
             )
         else:
             return _(
                 "The email address {email_address} is blacklisted because of a "
-                "complaint received {timedelta} ago. Please send an email "
+                "complaint received {timespan_ago}. Please send an email "
                 "from that address to support@liberapay.com if you want us to "
                 "remove it from the blacklist.",
-                email_address=address, timedelta=to_age(ts)
+                email_address=address, timespan_ago=to_age(ts, add_direction=True)
             )
 
 class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
