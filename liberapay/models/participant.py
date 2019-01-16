@@ -2245,9 +2245,12 @@ class Participant(Model, MixinTeam):
                AND NOT EXISTS (
                        SELECT 1
                          FROM payin_transfers pt
+                         JOIN payins pi ON pi.id = pt.payin
+                         JOIN exchange_routes r ON r.id = pi.route
                         WHERE pt.payer = t.tipper
                           AND COALESCE(pt.team, pt.recipient) = t.tippee
-                          AND pt.status <> 'failed'
+                          AND ( r.network = 'stripe-sdd' AND pi.status = 'pending' OR
+                                r.network <> 'stripe-sdd' AND pi.status = 'succeeded' )
                           AND pt.ctime > (current_timestamp - interval '6 hours')
                         LIMIT 1
                    )
