@@ -568,9 +568,9 @@ msgstr "고액"
 msgid "Maximum"
 msgstr "최대 금액"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "요청 허용량을 초과했습니다. {0} 후에 다시 시도할 수 있습니다."
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "요청 허용량을 초과했습니다. {in_N_minutes}에 다시 시도할 수 있습니다."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "요청을 너무 빠르게 하고 있습니다, 잠시 후에 시도해 주세요."
@@ -656,11 +656,11 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr ""
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1399,13 +1399,13 @@ msgstr "수입: {0}/주"
 msgid "Mission accomplished!"
 msgstr "목표 달성!"
 
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "{0} 전에 가입함."
+#, fuzzy, python-brace-format
+msgid "Joined {timespan_ago}."
+msgstr "{timespan_ago}에 가입함."
 
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "{0} 전에 닫힘."
+#, fuzzy, python-brace-format
+msgid "Closed {timespan_ago}."
+msgstr "{timespan_ago}에 닫힘."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1452,9 +1452,9 @@ msgstr "(포크)"
 msgid "Updated this week"
 msgstr "이 주에 업데이트됨"
 
-#, python-brace-format
-msgid "Updated {0} ago"
-msgstr "{0} 에 업데이트됨"
+#, fuzzy, python-brace-format
+msgid "Updated {timespan_ago}"
+msgstr "{timespan_ago} 에 업데이트됨"
 
 msgid "Unlist"
 msgstr "리스트 해제"
@@ -1768,10 +1768,10 @@ msgstr "프로필에 연결된 {platform} 계정이 존재하지 않습니다."
 msgid "Connect {0} account"
 msgstr "{0} 계정 연결하기"
 
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "{n} 개의 저장소를 {platform} 계정에서 {time} 전에 들여왔습니다."
+#, fuzzy, python-brace-format
+msgid "We found {n} repository in your {platform} account, {timespan_ago}."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
+msgstr[0] "{n} 개의 저장소를 {platform} 계정에서 {timespan_ago}에 들여왔습니다."
 
 msgid "No repositories found."
 msgstr "저장소를 찾을 수 없습니다."
@@ -1984,11 +1984,11 @@ msgid "{money_amount}{small}/year{end_small}"
 msgstr ""
 
 #, python-brace-format
-msgid "Started {timedelta} ago."
+msgid "Started {timespan_ago}."
 msgstr ""
 
 #, python-brace-format
-msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
+msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr ""
 
 msgid "Inactive because the account of the recipient is blacklisted."
@@ -2004,7 +2004,7 @@ msgid "Active"
 msgstr ""
 
 #, python-brace-format
-msgid "Next payment in {timedelta}."
+msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr ""
 
 msgid "Renew now"
@@ -2039,7 +2039,7 @@ msgid "Restart"
 msgstr ""
 
 #, python-brace-format
-msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
+msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr ""
 
 msgid "Funding your donations"
@@ -2248,9 +2248,9 @@ msgstr "고치기"
 msgid "History"
 msgstr "역사"
 
-#, python-brace-format
-msgid "{0} joined {1} ago."
-msgstr "{0} 님은 {1} 전에 가입했습니다."
+#, fuzzy, python-brace-format
+msgid "{username} joined {timespan_ago}."
+msgstr "{username} 님은 {timespan_ago}에 가입했습니다."
 
 msgid "View income history"
 msgstr "수익 기록 보기"
@@ -2263,6 +2263,10 @@ msgstr "매주 받는 유로"
 
 msgid "Number of Patrons Per Week"
 msgstr "주간 후원자 수"
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr ""
 
 msgid "Invoice documents are private."
 msgstr "청구서 문서는 비공개입니다."
@@ -2458,13 +2462,13 @@ msgstr "팀은 팀에 가입할 수 없습니다"
 msgid "You can't invite an inactive user to join a team."
 msgstr "비활성화된 사용자를 팀에 초대할 수 없습니다."
 
-#, python-brace-format
-msgid "{0} has already been invited to join this team {1} ago."
-msgstr "{0} 님은 이미 {1} 전에 팀에 초대되었습니다."
+#, fuzzy, python-brace-format
+msgid "{username} has already been invited to join this team {timespan_ago}."
+msgstr "{username} 님은 이미 {timespan_ago}에 팀에 초대되었습니다."
 
-#, python-brace-format
-msgid "{0} has already refused to join this team {1} ago."
-msgstr "{0} 님은 이미 {1} 전에 팀 초대를 거절했습니다."
+#, fuzzy, python-brace-format
+msgid "{username} has already refused to join this team {timespan_ago}."
+msgstr "{username} 님은 이미 {timespan_ago}에 팀 초대를 거절했습니다."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3584,29 +3588,34 @@ msgstr "안전"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "저희의 보호 하에 있는 자금은 저희 또는 저희의 자금을 위탁받은 제3자가 파산하더라도 안전함을 보증합니다."
 
-#, python-brace-format
-msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay는 {0} 전에 설립되었고 {1} 명의 사용자가 있습니다."
+#, fuzzy, python-brace-format
+msgid "Liberapay was launched {timespan_ago} and has {n} user."
+msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
+msgstr[0] "Liberapay는 {timespan_ago}에 설립되었고 {n} 명의 사용자가 있습니다."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} 만큼이 Liberapay에 에스크로 되어 있습니다."
 
-#, python-brace-format
-msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr "가장 최근의 주간 지불일은 {0} 전이었으며 {2} 사용자 간에 {1} 만큼 이체되었습니다."
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
+msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
+msgstr[0] "가장 최근의 주간 지불일은 {timespan_ago}이었으며 {money_amount} 사용자 간에 {n} 만큼 이체되었습니다."
+
+#, fuzzy, python-brace-format
+msgid "{n} participant gave money."
+msgid_plural "{n} participants gave money."
+msgstr[0] "{n} 사용자가 기부에 참여하였습니다."
 
 #, python-brace-format
-msgid "{0} participants gave money."
-msgstr "{0} 사용자가 기부에 참여하였습니다."
+msgid "{n} participant received money."
+msgid_plural "{n} participants received money."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} received money."
-msgstr "{0} 사용자가 기부받았습니다."
-
-#, python-brace-format
-msgid "{0} did both."
-msgstr "{0} 사용자는 둘 다 했습니다."
+msgid "{n} participant was both a donor and a recipient."
+msgid_plural "{n} participants were both donors and recipients."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3714,7 +3723,7 @@ msgid "A team account is automatically closed when its last member leaves."
 msgstr ""
 
 #, python-brace-format
-msgid "Last changed {timedelta} ago by {username}."
+msgid "Last changed {timespan_ago} by {username}."
 msgstr ""
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
@@ -3895,8 +3904,8 @@ msgid "Sidebar text"
 msgstr ""
 
 #, python-brace-format
-msgid "This community was created {0} ago and has {n} member."
-msgid_plural "This community was created {0} ago and has {n} members."
+msgid "This community was created {timespan_ago} and has {n} member."
+msgid_plural "This community was created {timespan_ago} and has {n} members."
 msgstr[0] ""
 
 #, python-brace-format
@@ -4102,8 +4111,8 @@ msgid "Recent Activity"
 msgstr "최근 활동"
 
 #, python-brace-format
-msgid "<unused singular (hash=4f244253609169be367af59d103aa723)>"
-msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
+msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
+msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
 msgstr[0] ""
 
 #, python-brace-format

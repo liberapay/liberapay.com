@@ -569,7 +569,7 @@ msgid "Maximum"
 msgstr "最大"
 
 #, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr ""
 
 msgid "You're making requests too fast, please try again later."
@@ -656,11 +656,11 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' は有効なメールアドレスのドメインではありません。"
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1399,13 +1399,13 @@ msgstr "収入：{0}/週"
 msgid "Mission accomplished!"
 msgstr "目標を達成しました！"
 
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "{0}前に参加しました。"
+#, fuzzy, python-brace-format
+msgid "Joined {timespan_ago}."
+msgstr "{timespan_ago}前に参加しました。"
 
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "{0}前に削除されました。"
+#, fuzzy, python-brace-format
+msgid "Closed {timespan_ago}."
+msgstr "{timespan_ago}前に削除されました。"
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1452,9 +1452,9 @@ msgstr "（フォーク）"
 msgid "Updated this week"
 msgstr "今週更新"
 
-#, python-brace-format
-msgid "Updated {0} ago"
-msgstr "{0}前に更新"
+#, fuzzy, python-brace-format
+msgid "Updated {timespan_ago}"
+msgstr "{timespan_ago}前に更新"
 
 msgid "Unlist"
 msgstr "リストから削除"
@@ -1769,8 +1769,8 @@ msgid "Connect {0} account"
 msgstr "{0} アカウントを連携"
 
 #, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
+msgid "We found {n} repository in your {platform} account, {timespan_ago}."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
 msgstr[0] ""
 
 msgid "No repositories found."
@@ -1983,13 +1983,13 @@ msgstr "{money_amount}{small}/月{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/年{end_small}"
 
-#, python-brace-format
-msgid "Started {timedelta} ago."
-msgstr "{timedelta}前に開始しました。"
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago}."
+msgstr "{timespan_ago}前に開始しました。"
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
-msgstr "{start_delta}前に開始しました。{mtime_delta}前に変更されました。"
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
+msgstr "{timespan_ago_1}前に開始しました。{timespan_ago_2}前に変更されました。"
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr ""
@@ -2004,7 +2004,7 @@ msgid "Active"
 msgstr "アクティブ"
 
 #, python-brace-format
-msgid "Next payment in {timedelta}."
+msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr ""
 
 msgid "Renew now"
@@ -2038,9 +2038,9 @@ msgstr ""
 msgid "Restart"
 msgstr ""
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
-msgstr "{start_delta}前に開始しました。{stop_delta}前に停止しました。"
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
+msgstr "{timespan_ago_1}前に開始しました。{timespan_ago_2}前に停止しました。"
 
 msgid "Funding your donations"
 msgstr ""
@@ -2248,9 +2248,9 @@ msgstr "編集"
 msgid "History"
 msgstr "履歴"
 
-#, python-brace-format
-msgid "{0} joined {1} ago."
-msgstr "{0} は {1}前に参加しました。"
+#, fuzzy, python-brace-format
+msgid "{username} joined {timespan_ago}."
+msgstr "{username} は {timespan_ago}前に参加しました。"
 
 msgid "View income history"
 msgstr "収入履歴を表示"
@@ -2263,6 +2263,10 @@ msgstr "1 週間あたりに受け取ったユーロ"
 
 msgid "Number of Patrons Per Week"
 msgstr "1 週間あたりのパトロンの数"
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr ""
 
 msgid "Invoice documents are private."
 msgstr ""
@@ -2458,13 +2462,13 @@ msgstr "チームが別のチームに参加することはできません"
 msgid "You can't invite an inactive user to join a team."
 msgstr "非アクティブなユーザーを招待してチームに参加してもらうことはできません。"
 
-#, python-brace-format
-msgid "{0} has already been invited to join this team {1} ago."
-msgstr "{0} は {1}前にすでにこのチームに入るように招待されています。"
+#, fuzzy, python-brace-format
+msgid "{username} has already been invited to join this team {timespan_ago}."
+msgstr "{username} は {timespan_ago}前にすでにこのチームに入るように招待されています。"
 
-#, python-brace-format
-msgid "{0} has already refused to join this team {1} ago."
-msgstr "{0} は {1}前にすでにこのチームに入るのを拒否しています。"
+#, fuzzy, python-brace-format
+msgid "{username} has already refused to join this team {timespan_ago}."
+msgstr "{username} は {timespan_ago}前にすでにこのチームに入るのを拒否しています。"
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3584,29 +3588,34 @@ msgstr "安全"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr ""
 
-#, python-brace-format
-msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay は {0}前に開始され、現在のユーザー数は {1} 人です。"
+#, fuzzy, python-brace-format
+msgid "Liberapay was launched {timespan_ago} and has {n} user."
+msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
+msgstr[0] "Liberapay は {timespan_ago}前に開始され、現在のユーザー数は {n} 人です。"
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} が Liberapay 内で取引されています。"
 
 #, python-brace-format
-msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr ""
+msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
+msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} participants gave money."
-msgstr ""
+msgid "{n} participant gave money."
+msgid_plural "{n} participants gave money."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} received money."
-msgstr ""
+msgid "{n} participant received money."
+msgid_plural "{n} participants received money."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} did both."
-msgstr ""
+msgid "{n} participant was both a donor and a recipient."
+msgid_plural "{n} participants were both donors and recipients."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3713,9 +3722,9 @@ msgstr "チームアカウントを削除する"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "チームアカウントは、最後のメンバーが離脱すると自動的に削除されます。"
 
-#, python-brace-format
-msgid "Last changed {timedelta} ago by {username}."
-msgstr "直近の変更は {username} によって{timedelta} 前に行われました。"
+#, fuzzy, python-brace-format
+msgid "Last changed {timespan_ago} by {username}."
+msgstr "直近の変更は {timespan_ago} によって{username} 前に行われました。"
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "コミュニティーはあなたが気にしているものに取り組む人たちを見つけることを可能にします。彼らの広報を定期購読して情報をいつでも入手することもできます。"
@@ -3894,10 +3903,10 @@ msgstr "{0} のコミュニティー設定"
 msgid "Sidebar text"
 msgstr "サイドバーテキスト"
 
-#, python-brace-format
-msgid "This community was created {0} ago and has {n} member."
-msgid_plural "This community was created {0} ago and has {n} members."
-msgstr[0] "このコミュニティーは {0}前に作成され、{n} 人のメンバーがいます。"
+#, fuzzy, python-brace-format
+msgid "This community was created {timespan_ago} and has {n} member."
+msgid_plural "This community was created {timespan_ago} and has {n} members."
+msgstr[0] "このコミュニティーは {timespan_ago}前に作成され、{n} 人のメンバーがいます。"
 
 #, python-brace-format
 msgid ""
@@ -4101,10 +4110,10 @@ msgstr "Liberapay は以下のオープンソースサービス上のスポン�
 msgid "Recent Activity"
 msgstr "最近の活動"
 
-#, python-brace-format
-msgid "<unused singular (hash=4f244253609169be367af59d103aa723)>"
-msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] "過去 1 か月で {n} のユーザーアカウントが作成されました。直近の作成は {0}前です。"
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
+msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
+msgstr[0] "過去 1 か月で {n} のユーザーアカウントが作成されました。直近の作成は {timespan_ago}前です。"
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
