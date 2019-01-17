@@ -133,7 +133,7 @@ elif mode == 'new_recipients':
            AND p.is_suspended IS NULL
            AND pt.row_number <= 20
       GROUP BY p.id
-      ORDER BY p.id DESC
+      ORDER BY min(pt.ctime) DESC
          LIMIT 25
     """, (last_showed,))
 else:
@@ -303,9 +303,9 @@ title = "Users Admin"
         <br>
         % if row.last_change
         <span class="text-muted">{{ _(
-            "Last changed {timedelta} ago by {username}.",
+            "Last changed {timespan_ago} by {username}.",
             username=row.last_change.recorder_name,
-            timedelta=to_age(parse_date(row.last_change.ts))
+            timespan_ago=to_age(parse_date(row.last_change.ts), add_direction=True)
         ) }}</span>
         % endif
     </div>

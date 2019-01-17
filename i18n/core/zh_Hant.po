@@ -394,7 +394,7 @@ msgstr "您的捐款支付已順利完成"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr "透過 LiberaPay 在{date}發動的捐款已成功完成支付。"
+msgstr "{money_amount} 透過 LiberaPay 在 {date} 發動的捐款已成功完成支付。"
 
 msgid "Thank you for this donation!"
 msgstr "感謝您的捐款！"
@@ -588,9 +588,9 @@ msgstr "大"
 msgid "Maximum"
 msgstr "最大"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "你已用完請求的額度，可在 {0} 後重試。"
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "你已用完請求的額度，可在 {in_N_minutes} 後重試。"
 
 msgid "You're making requests too fast, please try again later."
 msgstr "你所作的請求太快了，請稍後再試一次。"
@@ -675,13 +675,13 @@ msgstr "'{0}' 不是一個有效的電子郵件地址。"
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' 為無效的電郵地址。"
 
-#, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "電郵{email_address} 遭到封鎖，{timedelta} 傳送的信件失敗。若想自封鎖黑名單除名，請用原信箱來信到 support@liberapay.com。"
+#, fuzzy, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr "電郵{email_address} 遭到封鎖，{timespan_ago} 傳送的信件失敗。若想自封鎖黑名單除名，請用原信箱來信到 support@liberapay.com。"
 
-#, python-brace-format
-msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "因{timedelta}收到抱怨信，電郵信箱 {email_address} 己遭封鎖。如想自信件黑名單除名，可利用原信箱寄信到support@liberapay.com。"
+#, fuzzy, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr "因{email_address}收到抱怨信，電郵信箱 {timespan_ago} 己遭封鎖。如想自信件黑名單除名，可利用原信箱寄信到support@liberapay.com。"
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1419,13 +1419,13 @@ msgstr "收入: {0} /每週"
 msgid "Mission accomplished!"
 msgstr "達成任務！"
 
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "{0} 之前加入。"
+#, fuzzy, python-brace-format
+msgid "Joined {timespan_ago}."
+msgstr "{timespan_ago} 之前加入。"
 
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "{0} 前關閉。"
+#, fuzzy, python-brace-format
+msgid "Closed {timespan_ago}."
+msgstr "{timespan_ago} 關閉。"
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1472,9 +1472,9 @@ msgstr "（分支）"
 msgid "Updated this week"
 msgstr "本週更新"
 
-#, python-brace-format
-msgid "Updated {0} ago"
-msgstr "{0}前更新"
+#, fuzzy, python-brace-format
+msgid "Updated {timespan_ago}"
+msgstr "{timespan_ago}更新"
 
 msgid "Unlist"
 msgstr "刪除"
@@ -1788,10 +1788,10 @@ msgstr "你沒有任何{platform}帳戶已經連結到你的個人檔案。"
 msgid "Connect {0} account"
 msgstr "連結{0}帳戶"
 
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "在{time}前，一個{n}個代碼庫的列表已從你的{platform}帳號成功導入。"
+#, fuzzy, python-brace-format
+msgid "We found {n} repository in your {platform} account, {timespan_ago}."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
+msgstr[0] "在{n}前，一個{platform}個代碼庫的列表已從你的{timespan_ago}帳號成功導入。"
 
 msgid "No repositories found."
 msgstr "未找到代碼庫。"
@@ -2003,13 +2003,13 @@ msgstr "{money_amount}{small}/月{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/年{end_small}"
 
-#, python-brace-format
-msgid "Started {timedelta} ago."
-msgstr "自 {timedelta} 開始。"
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago}."
+msgstr "自 {timespan_ago} 開始。"
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
-msgstr "始於{start_delta}，{mtime_delta}修改。"
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
+msgstr "始於{timespan_ago_1}，{timespan_ago_2}修改。"
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "由於收款人的帳戶遭封鎖而無動靜。"
@@ -2023,9 +2023,9 @@ msgstr "由於收款人不再接受捐款故無動靜。"
 msgid "Active"
 msgstr "活躍"
 
-#, python-brace-format
-msgid "Next payment in {timedelta}."
-msgstr "下次付款時間在{timedelta}。"
+#, fuzzy, python-brace-format
+msgid "Next payment {in_N_weeks_months_or_years}."
+msgstr "下次付款時間在{in_N_weeks_months_or_years}。"
 
 msgid "Renew now"
 msgstr "立即更新"
@@ -2058,9 +2058,9 @@ msgstr "最近30天內"
 msgid "Restart"
 msgstr "重新開始"
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
-msgstr "始於 {start_delta} ，止於 {stop_delta}。"
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
+msgstr "始於 {timespan_ago_1} ，止於 {timespan_ago_2}。"
 
 msgid "Funding your donations"
 msgstr "資助您的捐款"
@@ -2268,9 +2268,9 @@ msgstr "編輯"
 msgid "History"
 msgstr "記錄"
 
-#, python-brace-format
-msgid "{0} joined {1} ago."
-msgstr "{0}於{1}前加入。"
+#, fuzzy, python-brace-format
+msgid "{username} joined {timespan_ago}."
+msgstr "{username}於{timespan_ago}加入。"
 
 msgid "View income history"
 msgstr "檢視過去收入狀況"
@@ -2283,6 +2283,10 @@ msgstr "每週收到的歐元"
 
 msgid "Number of Patrons Per Week"
 msgstr "每週贊助人的數目"
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr ""
 
 msgid "Invoice documents are private."
 msgstr "發票文件為私密。"
@@ -2478,13 +2482,13 @@ msgstr "團隊不能加入團隊"
 msgid "You can't invite an inactive user to join a team."
 msgstr "你不能邀請一個未激活的用戶加入團隊。"
 
-#, python-brace-format
-msgid "{0} has already been invited to join this team {1} ago."
-msgstr "{0} 之前已被邀請加入{1} 團隊。"
+#, fuzzy, python-brace-format
+msgid "{username} has already been invited to join this team {timespan_ago}."
+msgstr "{username} 之前已被邀請加入{timespan_ago} 團隊。"
 
-#, python-brace-format
-msgid "{0} has already refused to join this team {1} ago."
-msgstr "{0} 之前已拒絕加入 {1} 團隊。"
+#, fuzzy, python-brace-format
+msgid "{username} has already refused to join this team {timespan_ago}."
+msgstr "{username} 之前已拒絕加入 {timespan_ago} 團隊。"
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -2622,7 +2626,7 @@ msgstr "你必須設定支付方法才能收取新的捐款。"
 msgid "Configure payment processing"
 msgstr "設定付款方法"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "透過團隊獲的捐款佔總收入的{income_percent}({total_income}當中的{team_income})，捐款者當中的{patrons_percent}({npatrons}的{nteampatrons})。"
 
@@ -3604,29 +3608,34 @@ msgstr "安全性"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "我們保證你存放的基金在我們的監管下不會因為破產而遭到損失，無論破產有沒有影響到我們或是我們所委託代理監管基金的第三方。"
 
-#, python-brace-format
-msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay 於 {0} 年前啟動，目前有 {1} 用戶。"
+#, fuzzy, python-brace-format
+msgid "Liberapay was launched {timespan_ago} and has {n} user."
+msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
+msgstr[0] "Liberapay 於 {timespan_ago} 年前啟動，目前有 {n} 用戶。"
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} 目前在Liberapay保管。"
 
-#, python-brace-format
-msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr "最近一次付款日是 {0} 前， 完成了{1} {2} 用戶之間的轉帳。"
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
+msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
+msgstr[0] "最近一次付款日是 {timespan_ago}， 完成了{money_amount} {n} 用戶之間的轉帳。"
+
+#, fuzzy, python-brace-format
+msgid "{n} participant gave money."
+msgid_plural "{n} participants gave money."
+msgstr[0] "{n} 參與者給出錢。"
 
 #, python-brace-format
-msgid "{0} participants gave money."
-msgstr "{0} 參與者給出錢。"
+msgid "{n} participant received money."
+msgid_plural "{n} participants received money."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} received money."
-msgstr "{0} 收取錢。"
-
-#, python-brace-format
-msgid "{0} did both."
-msgstr "{0} 兩者都有。"
+msgid "{n} participant was both a donor and a recipient."
+msgid_plural "{n} participants were both donors and recipients."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3733,9 +3742,9 @@ msgstr "關閉團隊帳戶"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "若最後一名成員退出則團隊帳戶會自動關閉。"
 
-#, python-brace-format
-msgid "Last changed {timedelta} ago by {username}."
-msgstr "最後由{username}於{timedelta}前更新。"
+#, fuzzy, python-brace-format
+msgid "Last changed {timespan_ago} by {username}."
+msgstr "最後由{timespan_ago}於{username}前更新。"
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "社區社群可讓人找尋一些感興趣關心的事務。你也可以訂閱他們的電子報來掌握其資訊。"
@@ -3914,10 +3923,10 @@ msgstr "{0} 社群設定"
 msgid "Sidebar text"
 msgstr "側邊欄的文字"
 
-#, python-brace-format
-msgid "This community was created {0} ago and has {n} member."
-msgid_plural "This community was created {0} ago and has {n} members."
-msgstr[0] "這個建立於 {0} 前的社群現在有 {n} 成員。"
+#, fuzzy, python-brace-format
+msgid "This community was created {timespan_ago} and has {n} member."
+msgid_plural "This community was created {timespan_ago} and has {n} members."
+msgstr[0] "這個建立於 {timespan_ago} 的社群現在有 {n} 成員。"
 
 #, python-brace-format
 msgid ""
@@ -4123,10 +4132,10 @@ msgstr "Liberapay從在以下開源平台上贊助的帳號中獲益："
 msgid "Recent Activity"
 msgstr "最近活動"
 
-#, python-brace-format
-msgid "<unused singular (hash=4f244253609169be367af59d103aa723)>"
-msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] "上一個月有{n}個使用者被註冊。最近一個是在{0}前註冊的。"
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
+msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
+msgstr[0] "上一個月有{n}個使用者被註冊。最近一個是在{timespan_ago}註冊的。"
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"

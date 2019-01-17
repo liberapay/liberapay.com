@@ -569,9 +569,9 @@ msgstr "Nagy"
 msgid "Maximum"
 msgstr "Maximális"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "Ön elérte a kérési korlátját, újra próbálhatja {0} múlva."
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Ön elérte a kérési korlátját, újra próbálhatja {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Túl gyorsan tesz kéréseket, kérjük próbálja később."
@@ -657,11 +657,11 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr ""
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr ""
 
 #, python-brace-format
@@ -1407,12 +1407,12 @@ msgid "Mission accomplished!"
 msgstr "Küldetés teljesítve!"
 
 #, fuzzy, python-brace-format
-msgid "Joined {0} ago."
-msgstr "Csatlakozott {0} ezelőtt."
+msgid "Joined {timespan_ago}."
+msgstr "Csatlakozott {timespan_ago}."
 
 #, fuzzy, python-brace-format
-msgid "Closed {0} ago."
-msgstr "Zárt {0} ezelőtt."
+msgid "Closed {timespan_ago}."
+msgstr "Zárt {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1461,8 +1461,8 @@ msgid "Updated this week"
 msgstr "Frissítve ezen a héten"
 
 #, fuzzy, python-brace-format
-msgid "Updated {0} ago"
-msgstr "Frissítve {0} ezelőtt"
+msgid "Updated {timespan_ago}"
+msgstr "Frissítve {timespan_ago}"
 
 msgid "Unlist"
 msgstr "Eltávolítás a listáról"
@@ -1780,9 +1780,9 @@ msgid "Connect {0} account"
 msgstr "{0} fiók csatolása"
 
 #, fuzzy, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Importálva lett egy {n} darab tárolóról készült lista az Ön {platform} fiókjából, {time}-cel ezelőtt."
+msgid "We found {n} repository in your {platform} account, {timespan_ago}."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
+msgstr[0] "Importálva lett egy {n} darab tárolóról készült lista az Ön {platform} fiókjából, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "Nincs találat tárolókra."
@@ -1996,11 +1996,11 @@ msgid "{money_amount}{small}/year{end_small}"
 msgstr ""
 
 #, python-brace-format
-msgid "Started {timedelta} ago."
+msgid "Started {timespan_ago}."
 msgstr ""
 
 #, python-brace-format
-msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
+msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr ""
 
 msgid "Inactive because the account of the recipient is blacklisted."
@@ -2016,7 +2016,7 @@ msgid "Active"
 msgstr ""
 
 #, python-brace-format
-msgid "Next payment in {timedelta}."
+msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr ""
 
 msgid "Renew now"
@@ -2051,7 +2051,7 @@ msgid "Restart"
 msgstr ""
 
 #, python-brace-format
-msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
+msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr ""
 
 msgid "Funding your donations"
@@ -2261,8 +2261,8 @@ msgid "History"
 msgstr "Előzmények"
 
 #, fuzzy, python-brace-format
-msgid "{0} joined {1} ago."
-msgstr "{0} csatlakozott {1} ideje."
+msgid "{username} joined {timespan_ago}."
+msgstr "{username} csatlakozott {timespan_ago} ideje."
 
 msgid "View income history"
 msgstr "Bevételi előzmények megtekintése"
@@ -2275,6 +2275,10 @@ msgstr "Euró Bevétele Hetente"
 
 msgid "Number of Patrons Per Week"
 msgstr "Támogatók Száma Hetente"
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr ""
 
 msgid "Invoice documents are private."
 msgstr "A számlázási dokumentumok privátak."
@@ -2471,12 +2475,12 @@ msgid "You can't invite an inactive user to join a team."
 msgstr "Nem lehet inaktív felhasználót meghívni egy csoportba."
 
 #, fuzzy, python-brace-format
-msgid "{0} has already been invited to join this team {1} ago."
-msgstr "{0} már meg lett hívva, hogy csatlakozzon ehhez a csoporthoz {1} óta."
+msgid "{username} has already been invited to join this team {timespan_ago}."
+msgstr "{username} már meg lett hívva, hogy csatlakozzon ehhez a csoporthoz {timespan_ago}."
 
 #, fuzzy, python-brace-format
-msgid "{0} has already refused to join this team {1} ago."
-msgstr "{0} már elutasította a csatlakozást ehhez a csoporthoz {1} óta."
+msgid "{username} has already refused to join this team {timespan_ago}."
+msgstr "{username} már elutasította a csatlakozást ehhez a csoporthoz {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3599,28 +3603,33 @@ msgid "We guarantee that the funds you put in our custody will not be lost in ca
 msgstr ""
 
 #, python-brace-format
-msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr ""
+msgid "Liberapay was launched {timespan_ago} and has {n} user."
+msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr ""
 
 #, python-brace-format
-msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr ""
+msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
+msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} participants gave money."
-msgstr ""
+msgid "{n} participant gave money."
+msgid_plural "{n} participants gave money."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} received money."
-msgstr ""
+msgid "{n} participant received money."
+msgid_plural "{n} participants received money."
+msgstr[0] ""
 
 #, python-brace-format
-msgid "{0} did both."
-msgstr ""
+msgid "{n} participant was both a donor and a recipient."
+msgid_plural "{n} participants were both donors and recipients."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3729,7 +3738,7 @@ msgid "A team account is automatically closed when its last member leaves."
 msgstr ""
 
 #, python-brace-format
-msgid "Last changed {timedelta} ago by {username}."
+msgid "Last changed {timespan_ago} by {username}."
 msgstr ""
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
@@ -3910,8 +3919,8 @@ msgid "Sidebar text"
 msgstr ""
 
 #, python-brace-format
-msgid "This community was created {0} ago and has {n} member."
-msgid_plural "This community was created {0} ago and has {n} members."
+msgid "This community was created {timespan_ago} and has {n} member."
+msgid_plural "This community was created {timespan_ago} and has {n} members."
 msgstr[0] ""
 
 #, python-brace-format
@@ -4117,8 +4126,8 @@ msgid "Recent Activity"
 msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=4f244253609169be367af59d103aa723)>"
-msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
+msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
+msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
 msgstr[0] ""
 
 #, python-brace-format

@@ -44,6 +44,10 @@ def canonize(request, website):
     This is a Pando state chain function to ensure that requests are served on a
     certain root URL, even if multiple domains point to the application.
     """
+    try:
+        request.hostname = host = request.headers[b'Host'].decode('idna')
+    except UnicodeDecodeError:
+        request.hostname = host = ''
     if request.path.raw.startswith('/callbacks/'):
         # Don't redirect callbacks
         if request.path.raw[-1] == '/':
@@ -55,13 +59,9 @@ def canonize(request, website):
             new_uri = urlunsplit((scheme, netloc, path, query, fragment))
             request.line = Line(l.method.raw, new_uri, l.version.raw)
         return
-    scheme = request.headers.get(b'X-Forwarded-Proto', b'http')
-    try:
-        request.hostname = host = request.headers[b'Host'].decode('idna')
-    except UnicodeDecodeError:
-        request.hostname = host = ''
     canonical_host = website.canonical_host
     canonical_scheme = website.canonical_scheme
+    scheme = request.headers.get(b'X-Forwarded-Proto', b'http')
     bad_scheme = scheme.decode('ascii', 'replace') != canonical_scheme
     bad_host = False
     if canonical_host:

@@ -593,9 +593,9 @@ msgstr "Groß"
 msgid "Maximum"
 msgstr "Maximal"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "Sie haben Ihr Kontingent an Anfragen verbraucht. Sie können es in {0} erneut versuchen."
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Sie haben Ihr Kontingent an Anfragen verbraucht. Sie können es {in_N_minutes} erneut versuchen."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Ihre Anfragen erfolgen zu schnell, bitte versuchen Sie es später noch einmal."
@@ -680,13 +680,13 @@ msgstr "'{0}' ist keine gültige E-Mail-Adresse."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name} ist keine gültige Maildomain."
 
-#, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Die Email-Adresse {email_address} wurde auf die Sperrliste gesetzt, weil der Versuch dorthin eine Nachricht zu schicken vor {timedelta} gescheitert ist. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Sperrliste entfernen möchten."
+#, fuzzy, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr "Die Email-Adresse {email_address} wurde auf die Sperrliste gesetzt, weil der Versuch dorthin eine Nachricht zu schicken {timespan_ago} gescheitert ist. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Sperrliste entfernen möchten."
 
-#, python-brace-format
-msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Die Email-Adresse {email_address} wurde auf die Sperrliste gesetzt auf Grund einer Beschwerde vor {timedelta}. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Sperrliste entfernen möchten."
+#, fuzzy, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr "Die Email-Adresse {email_address} wurde auf die Sperrliste gesetzt auf Grund einer Beschwerde {timespan_ago}. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Sperrliste entfernen möchten."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1429,13 +1429,13 @@ msgstr "Einnahmen: {0}/Woche"
 msgid "Mission accomplished!"
 msgstr "Ziel erreicht!"
 
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "Registriert vor {0}."
+#, fuzzy, python-brace-format
+msgid "Joined {timespan_ago}."
+msgstr "Registriert {timespan_ago}."
 
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "Geschlossen seit {0}."
+#, fuzzy, python-brace-format
+msgid "Closed {timespan_ago}."
+msgstr "Geschlossen seit {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1484,9 +1484,9 @@ msgstr "(Fork)"
 msgid "Updated this week"
 msgstr "Diese Woche aktualisiert"
 
-#, python-brace-format
-msgid "Updated {0} ago"
-msgstr "Vor {0} aktualisiert"
+#, fuzzy, python-brace-format
+msgid "Updated {timespan_ago}"
+msgstr "{timespan_ago} aktualisiert"
 
 msgid "Unlist"
 msgstr "Von der Liste entfernen"
@@ -1802,11 +1802,11 @@ msgstr "Sie haben kein {platform}-Konto mit Ihrem Profil verknüpft."
 msgid "Connect {0} account"
 msgstr "Verknüpfe ein {0}-Konto"
 
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "Wir haben {n} Repository in Ihrem {platform}-Konto gefunden, vor {time}."
-msgstr[1] "Wir haben {n} Repositorys in Ihrem {platform}-Konto gefunden, vor {time}."
+#, fuzzy, python-brace-format
+msgid "We found {n} repository in your {platform} account, {timespan_ago}."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
+msgstr[0] "Wir haben {n} Repository in Ihrem {platform}-Konto gefunden, {timespan_ago}."
+msgstr[1] "Wir haben {n} Repositorys in Ihrem {platform}-Konto gefunden, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "Keine Repositorys gefunden."
@@ -2020,13 +2020,13 @@ msgstr "{money_amount}{small}/Monat{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/Jahr{end_small}"
 
-#, python-brace-format
-msgid "Started {timedelta} ago."
-msgstr "Begonnen vor {timedelta}."
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago}."
+msgstr "Begonnen {timespan_ago}."
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
-msgstr "Begonnen vor {start_delta}. Geändert vor {mtime_delta}."
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
+msgstr "Begonnen {timespan_ago_1}. Geändert {timespan_ago_2}."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inaktiv, weil das Konto des Empfängers auf der Sperrliste ist."
@@ -2040,9 +2040,9 @@ msgstr "Inaktiv, weil der Empfänger keine Spenden mehr akzeptiert."
 msgid "Active"
 msgstr "Aktiv"
 
-#, python-brace-format
-msgid "Next payment in {timedelta}."
-msgstr "Nächste Zahlung in {timedelta}."
+#, fuzzy, python-brace-format
+msgid "Next payment {in_N_weeks_months_or_years}."
+msgstr "Nächste Zahlung {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Jetzt erneuern"
@@ -2075,9 +2075,9 @@ msgstr "innerhalb der letzten 30 Tage"
 msgid "Restart"
 msgstr "Neustart"
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
-msgstr "Begonnen vor {start_delta}. Beendet vor {stop_delta}."
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
+msgstr "Begonnen {timespan_ago_1}. Beendet {timespan_ago_2}."
 
 msgid "Funding your donations"
 msgstr "Ihre Spenden finanzieren"
@@ -2289,9 +2289,9 @@ msgstr "Bearbeiten"
 msgid "History"
 msgstr "Verlauf"
 
-#, python-brace-format
-msgid "{0} joined {1} ago."
-msgstr "{0} ist vor {1} beigetreten."
+#, fuzzy, python-brace-format
+msgid "{username} joined {timespan_ago}."
+msgstr "{username} ist {timespan_ago} beigetreten."
 
 msgid "View income history"
 msgstr "Einkommensverlauf anzeigen"
@@ -2304,6 +2304,10 @@ msgstr "Einnahmen pro Woche (in Euro)"
 
 msgid "Number of Patrons Per Week"
 msgstr "Anzahl Unterstützer/-innen pro Woche"
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr ""
 
 msgid "Invoice documents are private."
 msgstr "Rechnungsdokumente sind privat."
@@ -2499,13 +2503,13 @@ msgstr "Ein Team kann keinem Team beitreten"
 msgid "You can't invite an inactive user to join a team."
 msgstr "Sie können nicht einen inaktiven Benutzer einladen, einem Team beizutreten."
 
-#, python-brace-format
-msgid "{0} has already been invited to join this team {1} ago."
-msgstr "{0} wurde bereits vor {1} eingeladen diesem Team beizutreten."
+#, fuzzy, python-brace-format
+msgid "{username} has already been invited to join this team {timespan_ago}."
+msgstr "{username} wurde bereits {timespan_ago} eingeladen diesem Team beizutreten."
 
-#, python-brace-format
-msgid "{0} has already refused to join this team {1} ago."
-msgstr "{0} hat es vor {1} bereits abgelehnt diesem Team beizutreten."
+#, fuzzy, python-brace-format
+msgid "{username} has already refused to join this team {timespan_ago}."
+msgstr "{username} hat es {timespan_ago} bereits abgelehnt diesem Team beizutreten."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3638,29 +3642,39 @@ msgstr "Sicherheit"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "Wir garantieren, dass die Gelder, die Sie in unsere Obhut legen, nicht durch Insolvenzen verloren gehen. Unabhängig davon, ob es unsere Insolvenz oder die Dritter ist."
 
-#, python-brace-format
-msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay wurde vor {0} gegründet und hat {1} Benutzer."
+#, fuzzy, python-brace-format
+msgid "Liberapay was launched {timespan_ago} and has {n} user."
+msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
+msgstr[0] "Liberapay wurde {timespan_ago} gegründet und hat {n} Benutzer."
+msgstr[1] "Liberapay wurde {timespan_ago} gegründet und hat {n} Benutzer."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} werden von Liberapay treuhänderisch verwaltet."
 
-#, python-brace-format
-msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr "Der letzte Zahltag war vor {0} und es wurden {1} zwischen {2} Benutzern gespendet."
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
+msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
+msgstr[0] "Der letzte Zahltag war {timespan_ago} und es wurden {money_amount} zwischen {n} Benutzern gespendet."
+msgstr[1] "Der letzte Zahltag war {timespan_ago} und es wurden {money_amount} zwischen {n} Benutzern gespendet."
+
+#, fuzzy, python-brace-format
+msgid "{n} participant gave money."
+msgid_plural "{n} participants gave money."
+msgstr[0] "{n} Nutzer haben Geld gespendet."
+msgstr[1] "{n} Nutzer haben Geld gespendet."
 
 #, python-brace-format
-msgid "{0} participants gave money."
-msgstr "{0} Nutzer haben Geld gespendet."
+msgid "{n} participant received money."
+msgid_plural "{n} participants received money."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
-msgid "{0} received money."
-msgstr "{0} Nutzer haben Geld erhalten."
-
-#, python-brace-format
-msgid "{0} did both."
-msgstr "{0} Nutzer haben Geld gespendet und erhalten."
+msgid "{n} participant was both a donor and a recipient."
+msgid_plural "{n} participants were both donors and recipients."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3768,9 +3782,9 @@ msgstr "Team-Konto schließen"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Ein Teamkonto wird automatisch geschlossen, wenn sein letztes Mitglied geht."
 
-#, python-brace-format
-msgid "Last changed {timedelta} ago by {username}."
-msgstr "Zuletzt vor {timedelta} verändert durch {username}."
+#, fuzzy, python-brace-format
+msgid "Last changed {timespan_ago} by {username}."
+msgstr "Zuletzt {timespan_ago} verändert durch {username}."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "Gemeinschaften helfen Ihnen Menschen zu finden, die an Dingen arbeiten, die Sie interessieren. Sie können auch Newsletter abonnieren um auf dem Laufenden zu bleiben."
@@ -3956,11 +3970,11 @@ msgstr "{0} Einstellungen für Gemeinschaften"
 msgid "Sidebar text"
 msgstr "Text in der Seitenleiste"
 
-#, python-brace-format
-msgid "This community was created {0} ago and has {n} member."
-msgid_plural "This community was created {0} ago and has {n} members."
-msgstr[0] "Diese Gemeinschaft entstand vor {0} und hat {n} Mitglied."
-msgstr[1] "Diese Gemeinschaft entstand vor {0} und hat {n} Mitglieder."
+#, fuzzy, python-brace-format
+msgid "This community was created {timespan_ago} and has {n} member."
+msgid_plural "This community was created {timespan_ago} and has {n} members."
+msgstr[0] "Diese Gemeinschaft entstand {timespan_ago} und hat {n} Mitglied."
+msgstr[1] "Diese Gemeinschaft entstand {timespan_ago} und hat {n} Mitglieder."
 
 #, python-brace-format
 msgid ""
@@ -4176,11 +4190,11 @@ msgstr "Liberapay nutzt gesponserte Konten bei den folgenden Open-Source-Dienste
 msgid "Recent Activity"
 msgstr "Letzte Aktivitäten"
 
-#, python-brace-format
-msgid "<unused singular (hash=4f244253609169be367af59d103aa723)>"
-msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] "{n} Nutzerkonto wurden im vergangenen Monat angelegt. Das war vor {0}."
-msgstr[1] "{n} Nutzerkonten wurden im vergangenen Monat angelegt. Das letzte wurde vor {0} angelegt."
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
+msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
+msgstr[0] "{n} Nutzerkonto wurden im vergangenen Monat angelegt. Das war {timespan_ago}."
+msgstr[1] "{n} Nutzerkonten wurden im vergangenen Monat angelegt. Das letzte wurde {timespan_ago} angelegt."
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"

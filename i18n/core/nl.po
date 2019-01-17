@@ -593,9 +593,9 @@ msgstr "Groot"
 msgid "Maximum"
 msgstr "Maximaal"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again in {0}."
-msgstr "Je hebt je verzoeksquotum bereikt, je kan opnieuw proberen over {0}."
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Je hebt je verzoeksquotum bereikt, je kan opnieuw proberen {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Je maakt te snel verzoeken, probeer het later opnieuw."
@@ -680,13 +680,13 @@ msgstr "'{0}' is geen geldig e-mailadres."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name}\" is geen geldig e-maildomein."
 
-#, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Het e-mailadres {email_address} staat op de zwarte lijst omdat een poging om een bericht naar dit adres te sturen {timedelta} geleden is mislukt. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
+#, fuzzy, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr "Het e-mailadres {email_address} staat op de zwarte lijst omdat een poging om een bericht naar dit adres te sturen {timespan_ago} is mislukt. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
 
-#, python-brace-format
-msgid "The email address {email_address} is blacklisted because of a complaint received {timedelta} ago. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Het e-mailadres {email_address} staat op een zwarte lijst vanwege een klacht die {timedelta} geleden is ontvangen. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
+#, fuzzy, python-brace-format
+msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
+msgstr "Het e-mailadres {email_address} staat op een zwarte lijst vanwege een klacht die {timespan_ago} is ontvangen. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1429,13 +1429,13 @@ msgstr "Inkomen: {0}/week"
 msgid "Mission accomplished!"
 msgstr "Doel gehaald!"
 
-#, python-brace-format
-msgid "Joined {0} ago."
-msgstr "{0} geleden aangemeld."
+#, fuzzy, python-brace-format
+msgid "Joined {timespan_ago}."
+msgstr "{timespan_ago} aangemeld."
 
-#, python-brace-format
-msgid "Closed {0} ago."
-msgstr "Gesloten {0} geleden."
+#, fuzzy, python-brace-format
+msgid "Closed {timespan_ago}."
+msgstr "Gesloten {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1484,9 +1484,9 @@ msgstr "(fork)"
 msgid "Updated this week"
 msgstr "Deze week bijgewerkt"
 
-#, python-brace-format
-msgid "Updated {0} ago"
-msgstr "Bijgewerkt {0} geleden"
+#, fuzzy, python-brace-format
+msgid "Updated {timespan_ago}"
+msgstr "Bijgewerkt {timespan_ago}"
 
 msgid "Unlist"
 msgstr "Niet vermelden"
@@ -1802,11 +1802,11 @@ msgstr "Je hebt nog geen {platform} account aan je profiel verbonden."
 msgid "Connect {0} account"
 msgstr "Verbind je {0} account"
 
-#, python-brace-format
-msgid "We found {n} repository in your {platform} account, {time} ago."
-msgid_plural "A list of {n} repositories has been imported from your {platform} account, {time} ago."
-msgstr[0] "We vonden {n} repository op je {platform}-account, {time} geleden."
-msgstr[1] "Een lijst van {n} repositories is geïmporteerd van je {platform}-account, {time} geleden."
+#, fuzzy, python-brace-format
+msgid "We found {n} repository in your {platform} account, {timespan_ago}."
+msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
+msgstr[0] "We vonden {n} repository op je {platform}-account, {timespan_ago}."
+msgstr[1] "Een lijst van {n} repositories is geïmporteerd van je {platform}-account, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "Geen repositories gevonden."
@@ -2020,13 +2020,13 @@ msgstr "{money_amount}{small}/maand{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/jaar{end_small}"
 
-#, python-brace-format
-msgid "Started {timedelta} ago."
-msgstr "Gestart {timedelta} geleden."
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago}."
+msgstr "Gestart {timespan_ago}."
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Modified {mtime_delta} ago."
-msgstr "Gestart {start_delta} geleden. Aangepast {mtime_delta} geleden."
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
+msgstr "Gestart {timespan_ago_1}. Aangepast {timespan_ago_2}."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inactief omdat de rekening van de ontvanger op de zwarte lijst staat."
@@ -2040,9 +2040,9 @@ msgstr "Inactief omdat de ontvanger geen donaties meer accepteert."
 msgid "Active"
 msgstr "Actief"
 
-#, python-brace-format
-msgid "Next payment in {timedelta}."
-msgstr "Volgende betaling in {timedelta}."
+#, fuzzy, python-brace-format
+msgid "Next payment {in_N_weeks_months_or_years}."
+msgstr "Volgende betaling {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Nu vernieuwen"
@@ -2075,9 +2075,9 @@ msgstr "in de afgelopen 30 dagen"
 msgid "Restart"
 msgstr "Opnieuw starten"
 
-#, python-brace-format
-msgid "Started {start_delta} ago. Stopped {stop_delta} ago."
-msgstr "Gestart {start_delta} geleden. Gestopt {stop_delta} geleden."
+#, fuzzy, python-brace-format
+msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
+msgstr "Gestart {timespan_ago_1}. Gestopt {timespan_ago_2}."
 
 msgid "Funding your donations"
 msgstr "Financiering van je donaties"
@@ -2289,9 +2289,9 @@ msgstr "Bewerk"
 msgid "History"
 msgstr "Geschiedenis"
 
-#, python-brace-format
-msgid "{0} joined {1} ago."
-msgstr "{0} werd {1} geleden lid."
+#, fuzzy, python-brace-format
+msgid "{username} joined {timespan_ago}."
+msgstr "{username} werd {timespan_ago} lid."
 
 msgid "View income history"
 msgstr "Bekijk de inkomensontwikkeling"
@@ -2304,6 +2304,10 @@ msgstr "Euro's ontvangen per week"
 
 msgid "Number of Patrons Per Week"
 msgstr "Aantal sponsors per week"
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr ""
 
 msgid "Invoice documents are private."
 msgstr "Factuurdocumenten zijn privé."
@@ -2499,13 +2503,13 @@ msgstr "Een team kan niet deelnemen aan een team"
 msgid "You can't invite an inactive user to join a team."
 msgstr "Je kunt geen inactieve gebruiker uitnodigen voor een team."
 
-#, python-brace-format
-msgid "{0} has already been invited to join this team {1} ago."
-msgstr "{0} is al uitgenodigd om dit team te versterken {1} geleden."
+#, fuzzy, python-brace-format
+msgid "{username} has already been invited to join this team {timespan_ago}."
+msgstr "{username} is al uitgenodigd om dit team te versterken {timespan_ago}."
 
-#, python-brace-format
-msgid "{0} has already refused to join this team {1} ago."
-msgstr "{0} heeft al geweigerd om dit team te versterken {1} geleden."
+#, fuzzy, python-brace-format
+msgid "{username} has already refused to join this team {timespan_ago}."
+msgstr "{username} heeft al geweigerd om dit team te versterken {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3638,29 +3642,39 @@ msgstr "Veiligheid"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "Wij garanderen dat de middelen die je bij ons in bewaring brengt niet verloren gaan in geval van faillissement van ons of een derde partij aan wie we de bewaring van de fondsen hebben gedelegeerd."
 
-#, python-brace-format
-msgid "Liberapay was launched {0} ago and has {1} users."
-msgstr "Liberapay werd {0} geleden gelanceerd en heeft {1} accounts."
+#, fuzzy, python-brace-format
+msgid "Liberapay was launched {timespan_ago} and has {n} user."
+msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
+msgstr[0] "Liberapay werd {timespan_ago} gelanceerd en heeft {n} accounts."
+msgstr[1] "Liberapay werd {timespan_ago} gelanceerd en heeft {n} accounts."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "Momenteel is er {0} beschikbaar op Liberapay."
 
-#, python-brace-format
-msgid "The last payday was {0} ago and transferred {1} between {2} users."
-msgstr "De laatste betaaldag was {0} geleden. Er is toen {1} overgemaakt tussen {2} mensen."
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
+msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
+msgstr[0] "De laatste betaaldag was {timespan_ago}. Er is toen {money_amount} overgemaakt tussen {n} mensen."
+msgstr[1] "De laatste betaaldag was {timespan_ago}. Er is toen {money_amount} overgemaakt tussen {n} mensen."
+
+#, fuzzy, python-brace-format
+msgid "{n} participant gave money."
+msgid_plural "{n} participants gave money."
+msgstr[0] "{n} mensen gaven geld."
+msgstr[1] "{n} mensen gaven geld."
 
 #, python-brace-format
-msgid "{0} participants gave money."
-msgstr "{0} mensen gaven geld."
+msgid "{n} participant received money."
+msgid_plural "{n} participants received money."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
-msgid "{0} received money."
-msgstr "{0} ontvingen geld."
-
-#, python-brace-format
-msgid "{0} did both."
-msgstr "{0} deden beide."
+msgid "{n} participant was both a donor and a recipient."
+msgid_plural "{n} participants were both donors and recipients."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3768,9 +3782,9 @@ msgstr "Een teamaccount sluiten"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Een teamaccount wordt automatisch gesloten wanneer het laatste lid vertrekt."
 
-#, python-brace-format
-msgid "Last changed {timedelta} ago by {username}."
-msgstr "Laatst gewijzigd {timedelta} geleden door {username}."
+#, fuzzy, python-brace-format
+msgid "Last changed {timespan_ago} by {username}."
+msgstr "Laatst gewijzigd {timespan_ago} door {username}."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "In een gemeenschap vind je mensen die aan een onderwerp werken waar jij om geeft. Abonneer je op een gemeenschapnieuwsbrief en blijf op de hoogte."
@@ -3956,11 +3970,11 @@ msgstr "{0} gemeenschap instellingen"
 msgid "Sidebar text"
 msgstr "Sidebar tekst"
 
-#, python-brace-format
-msgid "This community was created {0} ago and has {n} member."
-msgid_plural "This community was created {0} ago and has {n} members."
-msgstr[0] "Deze gemeenschap is {0} geleden opgericht en heeft {n} geen lid."
-msgstr[1] "Deze gemeenschap is {0} geleden opgericht en heeft {n} leden."
+#, fuzzy, python-brace-format
+msgid "This community was created {timespan_ago} and has {n} member."
+msgid_plural "This community was created {timespan_ago} and has {n} members."
+msgstr[0] "Deze gemeenschap is {timespan_ago} opgericht en heeft {n} geen lid."
+msgstr[1] "Deze gemeenschap is {timespan_ago} opgericht en heeft {n} leden."
 
 #, python-brace-format
 msgid ""
@@ -4174,11 +4188,11 @@ msgstr "Liberapay maakt gebruik van gesponsorde accounts op de volgende opensour
 msgid "Recent Activity"
 msgstr "Recente activiteiten"
 
-#, python-brace-format
-msgid "<unused singular (hash=4f244253609169be367af59d103aa723)>"
-msgid_plural "{n} user accounts have been created in the past month. The most recent was {0} ago."
-msgstr[0] "{n} nieuw account is er aangemaakt afgelopen maand. De meeste recente was {0} geleden."
-msgstr[1] "{n} nieuwe accounts zijn er aangemaakt afgelopen maand. De meeste recente was {0} geleden."
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
+msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
+msgstr[0] "{n} nieuw account is er aangemaakt afgelopen maand. De meeste recente was {timespan_ago}."
+msgstr[1] "{n} nieuwe accounts zijn er aangemaakt afgelopen maand. De meeste recente was {timespan_ago}."
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"

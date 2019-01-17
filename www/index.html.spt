@@ -366,8 +366,8 @@ recent = query_cache.one("""
         % if recent.n_users > 1
         <p>{{ glyphicon('user') }} <span>{{ ngettext(
             "",
-            "{n} user accounts have been created in the past month. The most recent was {0} ago.",
-            recent.n_users, to_age(recent.newest_user_ts)
+            "{n} user accounts have been created in the past month. The most recent was {timespan_ago}.",
+            recent.n_users, timespan_ago=to_age(recent.newest_user_ts, add_direction=True)
         ) }}</span></p>
         % endif
         % if recent.n_donations > 1
