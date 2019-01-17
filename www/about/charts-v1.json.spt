@@ -2,10 +2,6 @@ query_cache = website.db_qc5
 
 [---]
 
-currency = request.qs.get('currency', 'EUR')
-if currency not in constants.CURRENCIES:
-    raise response.error(400, "`currency` value %r is invalid or unsupported" % currency)
-
 charts = [r._asdict() for r in query_cache.all("""\
 
     SELECT ts_start::date           AS date
@@ -13,18 +9,16 @@ charts = [r._asdict() for r in query_cache.all("""\
          , nusers::text
          , nactive::text
          , transfer_volume
-         , coalesce(week_payins, week_deposits) AS week_payins
+         , week_deposits
+         , week_withdrawals
       FROM paydays p
      WHERE stage IS NULL
   ORDER BY ts_start DESC
 
 """)]
 for c in charts:
-    for k in ('transfer_volume', 'week_payins'):
-        if c[k] is None:
-            c[k] = Money.ZEROS[currency]
-        else:
-            c[k] = c[k].fuzzy_sum(currency)
+    for k in ('transfer_volume', 'week_deposits', 'week_withdrawals'):
+        c[k] = c[k].fuzzy_sum('EUR')
 
 response.headers[b"Access-Control-Allow-Origin"] = b"*"
 

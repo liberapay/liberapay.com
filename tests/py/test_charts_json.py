@@ -147,8 +147,7 @@ class TestChartsJson(FakeTransfersHarness):
             "nactive": '3',
             "nparticipants": '5',
             "nusers": '4',
-            "week_deposits": zero,
-            "week_withdrawals": zero,
+            "week_payins": zero,
         }
         actual = json.loads(self.client.GET('/about/charts.json').text)[0]
         assert actual == expected
