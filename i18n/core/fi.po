@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Finnish "
-"<https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2019-01-17 11:07+0000\n"
+"Last-Translator: Joel Yliluoma <bisqwit@iki.fi>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.4-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -593,7 +595,7 @@ msgstr "Suuri"
 msgid "Maximum"
 msgstr "Mittava"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr "Olet tehnyt liian paljon palvelupyyntöjä; voit yrittää uudestaan vasta {in_N_minutes}."
 
@@ -680,13 +682,13 @@ msgstr "”{0}” ei ole kelpuutettu sähköpostiosoite."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "Sähköpostidomainia ’{domain_name}’ ei hyväksytä."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Sähköpostiosoite {email_address} on sulkulistalla, koska yritys lähettää viesti sinne epäonnistui {timespan_ago}. Jos haluat osoitteen pois sulkulistalta, lähetä kyseistä osoitettasi käyttäen sähköpostia osoitteeseen support@liberapay.com."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Sähköpostiosoite {email_address} on sulkulistalla, koska saimme valituksen osoitetta koskien {timespan_ago}. Jos haluat osoitteen pois sulkulistalta, lähetä kyseistä osoitettasi käyttäen sähköpostia osoitteeseen support@liberapay.com."
+msgstr "Sähköpostiosoite {email_address} on sulkulistalla, saamastamme valituksesta johtuen {timespan_ago}. Jos haluat osoitteen pois sulkulistalta, lähetä kyseistä osoitettasi käyttäen sähköpostia osoitteeseen support@liberapay.com."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1429,11 +1431,11 @@ msgstr "Tulot: {0} viikossa"
 msgid "Mission accomplished!"
 msgstr "Päämäärä on saavutettu!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
 msgstr "Liittynyt {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Suljettu {timespan_ago}."
 
@@ -1484,7 +1486,7 @@ msgstr "(haara)"
 msgid "Updated this week"
 msgstr "Päivitetty tällä viikolla"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Päivitetty {timespan_ago}"
 
@@ -2020,11 +2022,11 @@ msgstr "{money_amount}{small}/kuukausi{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/vuosi{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Aloitettu {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Aloitettu {timespan_ago_1}. Muutettu {timespan_ago_2}."
 
@@ -2040,7 +2042,7 @@ msgstr "Poissa toiminnasta, koska vastaanottaja ei enää ota vastaan lahjoituks
 msgid "Active"
 msgstr "Aktiivinen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr "Seuraava maksu {in_N_weeks_months_or_years}."
 
@@ -2075,7 +2077,7 @@ msgstr "viimeisen 30 päivän aikana"
 msgid "Restart"
 msgstr "Käynnistä uudelleen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Alkoi {timespan_ago_1}. Loppui {timespan_ago_2}."
 
@@ -2289,7 +2291,7 @@ msgstr "Muokkaa"
 msgid "History"
 msgstr "Historia"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} liittyi {timespan_ago}."
 
@@ -2307,7 +2309,7 @@ msgstr "Tukijoita viikossa"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} ei paljasta Liberapay-tulojaan."
 
 msgid "Invoice documents are private."
 msgstr "Tulodokumentit ovat yksityisiä."
@@ -2503,11 +2505,11 @@ msgstr "Ryhmä ei voi olla ryhmän jäsen"
 msgid "You can't invite an inactive user to join a team."
 msgstr "Et voi kutsua ei-aktiivista käyttäjää ryhmään."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
 msgstr "{username} on jo kutsuttu ryhmään {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
 msgstr "{username} on jo kieltäytynyt liittymästä ryhmään {timespan_ago}."
 
@@ -3782,7 +3784,7 @@ msgstr "Ryhmätilin sulkeminen"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Ryhmätili sulkeutuu automaattisesti silloin, kun sen viimeinen jäsen eroaa ryhmästä."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
 msgstr "Viimeksi päivittänyt {timespan_ago} {username}."
 
