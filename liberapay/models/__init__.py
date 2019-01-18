@@ -332,7 +332,7 @@ def acquire_db_lock(db, lock_name, blocking=True):
         finally:
             try:
                 cursor.run("SELECT pg_advisory_unlock(%s)", (lock_id,))
-            except:
+            except Exception:
                 pass
 
 DB.lock = acquire_db_lock
@@ -345,7 +345,7 @@ if __name__ == '__main__':
     print('Checking DB...')
     try:
         db.self_check()
-    except:
+    except Exception:
         traceback.print_exc()
         r = input('The DB self-check failed, proceed anyway? (y/N) ')
         if r != 'y':
