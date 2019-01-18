@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Finnish "
-"<https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2019-01-19 05:21+0000\n"
+"Last-Translator: Joel Yliluoma <bisqwit@iki.fi>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.4-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -1802,7 +1804,7 @@ msgstr "Profiiliisi ei ole liitetty yhtään {platform}-tunnusta."
 msgid "Connect {0} account"
 msgstr "Liitä {0}-tili"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
 msgstr[0] "Löysimme {n} repositorion {platform}-tililtäsi, {timespan_ago}."
@@ -3642,39 +3644,39 @@ msgstr "Turvallisuus"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "Takaamme, että rahat, jotka panet haltuumme, eivät häviä konkurssin tapauksessa, riippumatta siitä koskeeko se meitä tai kolmatta osapuolta, jolle olemme delegoineet rahojen sijoituksen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] "Liberapay starttasi {timespan_ago} ja siinä on {n} käyttäjää."
+msgstr[0] "Liberapay starttasi {timespan_ago} ja siinä on {n} käyttäjä."
 msgstr[1] "Liberapay starttasi {timespan_ago} ja siinä on {n} käyttäjää."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "Liberapay-palvelun haltuun uskottu rahamäärä on {0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] "Viimeisin Maksupäivä oli {timespan_ago}, ja siinä siirrettiin {money_amount} käyttäjän välillä yhteensä {n}."
-msgstr[1] "Viimeisin Maksupäivä oli {timespan_ago}, ja siinä siirrettiin {money_amount} käyttäjän välillä yhteensä {n}."
+msgstr[0] "mörgö"
+msgstr[1] "Viimeisin maksupäivä oli {timespan_ago}, ja siinä siirrettiin {n} käyttäjän välillä yhteensä {money_amount}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] "{n} osallistujaa antoi rahaa."
+msgstr[0] "{n} osallistuja antoi rahaa."
 msgstr[1] "{n} osallistujaa antoi rahaa."
 
 #, python-brace-format
 msgid "{n} participant received money."
 msgid_plural "{n} participants received money."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} osallistuja vastaanotti rahaa."
+msgstr[1] "{n} osallistujaa vastaanotti rahaa."
 
 #, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} osallistuja oli sekä lahjoittaja että vastaanottaja."
+msgstr[1] "{n} osallistujaa olivat sekä lahjoittajia että vastaanottajia."
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3716,18 +3718,18 @@ msgid "Money moved out of Liberapay"
 msgstr "Liberapay-palvelusta nostetun rahan määrä"
 
 msgid "Weekly Donations"
-msgstr ""
+msgstr "Viikottaiset lahjoitukset"
 
 #, python-brace-format
 msgid "The sum of active donations for each week, expressed in {currency}."
-msgstr ""
+msgstr "Aktiivisten lahjoitusten summa viikoittain {currency}-määräisenä."
 
 msgid "Donor Debits"
-msgstr ""
+msgstr "Suoraveloituslahjoitukset"
 
 #, python-brace-format
 msgid "The sum of charges processed during each week, expressed in {currency}."
-msgstr ""
+msgstr "Viikoittainen kulujen summa {currency}-määräisenä."
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
 msgstr "Liberapay-palvelussa ”Ryhmä” on keino hallinnoida lahjoituksia useilta lahjoittajilta useille kohteille. Lahjoittajat valitsevat, paljonko antavat, ja ryhmän jäsenet päättävät keskenään miten raha jaetaan. Liberapay laskee ja suorittaa siirrot lahjoittajilta vastaanottajille."
@@ -3984,7 +3986,7 @@ msgstr "{0}-yhteisön asetukset"
 msgid "Sidebar text"
 msgstr "Sivupalkkiteksti"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
 msgstr[0] "Yhteisö on luotu {timespan_ago} ja siinä on {n} jäsen."
