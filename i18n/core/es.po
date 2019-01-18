@@ -592,9 +592,9 @@ msgstr "Grande"
 msgid "Maximum"
 msgstr "Máxima"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Has consumido el límite de peticiones, puedes intentarlo de nuevo {in_N_minutes}."
+msgstr "Has consumido tu límite de peticiones, puedes intentarlo de nuevo {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Estás haciendo peticiones con demasiada rapidez. Inténtalo de nuevo más tarde."
@@ -679,13 +679,13 @@ msgstr "«{0}» no es una dirección de correo electrónico válida."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "«{domain_name}» no es un dominio de correo válido."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "La dirección de correo {email_address} está en la lista negra porque un intento de enviar un mensaje fallo {timespan_ago}. Por favor, envía un correo desde esa dirección a support@liberapay.com si quieres que lo eliminemos de la lista negra."
+msgstr "La dirección de correo {email_address} está en la lista negra porque un intento de enviar un mensaje a esta falló {timespan_ago}. Por favor, envía un correo desde esa dirección a support@liberapay.com si quieres que lo eliminemos de la lista negra."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "La dirección de correo {email_address} está en una lista negra por una queja recibida {timespan_ago}. Por favor, envía un correo desde esa dirección a support@liberapay.com si quieres que lo quitemos de la lista negra."
+msgstr "La dirección de correo {email_address} está en una lista negra por una queja recibida {timespan_ago}. Por favor, envía un correo desde esa dirección a support@liberapay.com si quieres que la quitemos de la lista negra."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1428,11 +1428,11 @@ msgstr "Ingresos: {0} / semana"
 msgid "Mission accomplished!"
 msgstr "¡Misión cumplida!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
-msgstr "Usuario desde {timespan_ago}."
+msgstr "Se unió hace {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Cerrado {timespan_ago}."
 
@@ -1483,7 +1483,7 @@ msgstr "(fork)"
 msgid "Updated this week"
 msgstr "Actualizada esta semana"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Actualizada {timespan_ago}"
 
@@ -2019,11 +2019,11 @@ msgstr "{money_amount}{small}/mes{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/año{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Comenzó {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Iniciado {timespan_ago_1}. Modificado {timespan_ago_2}."
 
@@ -2039,7 +2039,7 @@ msgstr "Inactivo porque la cuenta del receptor ya no acepta donaciones."
 msgid "Active"
 msgstr "Activo"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr "Siguiente pago {in_N_weeks_months_or_years}."
 
@@ -2074,7 +2074,7 @@ msgstr "en los últimos 30 días"
 msgid "Restart"
 msgstr "Reiniciar"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Iniciado {timespan_ago_1}. Detenido {timespan_ago_2}."
 
@@ -2288,7 +2288,7 @@ msgstr "Editar"
 msgid "History"
 msgstr "Historial"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} se unió {timespan_ago}."
 
@@ -2306,7 +2306,7 @@ msgstr "Número de Mecenas Por Semana"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} no revela cuánto recibe a través de Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Los documentos de facturas son privados."
@@ -2502,11 +2502,11 @@ msgstr "Un equipo no puede unirse a un equipo"
 msgid "You can't invite an inactive user to join a team."
 msgstr "No se puede invitar a un usuario inactivo unirse a un equipo."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
 msgstr "Ya se invitó a {username} a unirse a este equipo {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
 msgstr "{username} ya se negó a unirse a este equipo {timespan_ago}."
 
@@ -3781,7 +3781,7 @@ msgstr "Cerrando una cuenta de equipo"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "La cuenta de equipo se cierra automáticamente cuando su último miembro se marcha."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
 msgstr "Último cambio {timespan_ago} por {username}."
 
@@ -4187,7 +4187,7 @@ msgstr "Liberapay se beneficia de cuentas patrocinadas de los siguientes servici
 msgid "Recent Activity"
 msgstr "Actividad Reciente"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
 msgstr[0] "<singular sin usar (hash=8f25a32cb396bbc6c1d75477de7f1941)>"

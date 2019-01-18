@@ -593,9 +593,9 @@ msgstr "Groot"
 msgid "Maximum"
 msgstr "Maximaal"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Je hebt je verzoeksquotum bereikt, je kan opnieuw proberen {in_N_minutes}."
+msgstr "Je hebt je maximum aantal verzoeken bereikt, je kan het opnieuw proberen over {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Je maakt te snel verzoeken, probeer het later opnieuw."
@@ -680,11 +680,11 @@ msgstr "'{0}' is geen geldig e-mailadres."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name}\" is geen geldig e-maildomein."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Het e-mailadres {email_address} staat op de zwarte lijst omdat een poging om een bericht naar dit adres te sturen {timespan_ago} is mislukt. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
+msgstr "Het e-mailadres {email_address} staat op de zwarte lijst, omdat een poging om een bericht naar dit adres te sturen mislukte {timespan_ago}. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Het e-mailadres {email_address} staat op een zwarte lijst vanwege een klacht die {timespan_ago} is ontvangen. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
 
@@ -1429,13 +1429,13 @@ msgstr "Inkomen: {0}/week"
 msgid "Mission accomplished!"
 msgstr "Doel gehaald!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
-msgstr "{timespan_ago} aangemeld."
+msgstr "Geregisteerd {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
-msgstr "Gesloten {timespan_ago}."
+msgstr "Gestopt {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1484,9 +1484,9 @@ msgstr "(fork)"
 msgid "Updated this week"
 msgstr "Deze week bijgewerkt"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
-msgstr "Bijgewerkt {timespan_ago}"
+msgstr "Vernieuwd {timespan_ago}"
 
 msgid "Unlist"
 msgstr "Niet vermelden"
@@ -2020,11 +2020,11 @@ msgstr "{money_amount}{small}/maand{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/jaar{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Gestart {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Gestart {timespan_ago_1}. Aangepast {timespan_ago_2}."
 
@@ -2040,7 +2040,7 @@ msgstr "Inactief omdat de ontvanger geen donaties meer accepteert."
 msgid "Active"
 msgstr "Actief"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr "Volgende betaling {in_N_weeks_months_or_years}."
 
@@ -2075,7 +2075,7 @@ msgstr "in de afgelopen 30 dagen"
 msgid "Restart"
 msgstr "Opnieuw starten"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Gestart {timespan_ago_1}. Gestopt {timespan_ago_2}."
 
@@ -2307,7 +2307,7 @@ msgstr "Aantal sponsors per week"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} maakt niet bekend hoeveel ze ontvangen via Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Factuurdocumenten zijn privé."
@@ -3673,8 +3673,8 @@ msgstr[1] ""
 #, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} deelnemer was zowel donor als ontvanger."
+msgstr[1] "{n} deelnemers waren zowel donor als ontvanger."
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
