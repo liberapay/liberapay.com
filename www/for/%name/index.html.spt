@@ -10,7 +10,7 @@ participant = community.participant  # used by profile-base.html
 limit = min(request.qs.get_int('limit', 18), 60)
 offset = request.qs.get_int('offset', 0)
 if limit not in (18, 60):
-    raise response.error(400, "bad `limit` value in querystring")
+    raise response.invalid_input(limit, 'limit', 'querystring')
 
 members = query_cache.all("""
     SELECT p

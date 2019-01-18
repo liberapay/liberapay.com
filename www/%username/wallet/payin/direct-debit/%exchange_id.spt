@@ -56,7 +56,7 @@ else:
          LIMIT 1
     """, (participant.id, participant.mangopay_user_id, route_id))
     if route_id and not route:
-        raise response.error(400, "bad `route_id` value '%s' in body" % route_id)
+        raise response.invalid_input(route_id, 'route_id', 'body')
 if route is not None:
     route.__dict__['participant'] = participant
 
@@ -66,7 +66,7 @@ if exchange:
 if request.method == 'POST':
     currency = request.body.get('currency', currency)
 if currency not in PAYIN_DIRECT_DEBIT_MIN:
-    raise response.error(400, "`currency` value '%s' is invalid or non-supported" % currency)
+    raise response.invalid_input(currency, 'currency', 'body or querystring')
 
 funded = float('inf')
 balance = participant.get_balance_in(currency)

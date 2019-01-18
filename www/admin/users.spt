@@ -137,7 +137,7 @@ elif mode == 'new_recipients':
          LIMIT 25
     """, (last_showed,))
 else:
-    raise response.error(400, "unknown `mode` value %r in querystring" % mode)
+    raise response.invalid_input(mode, 'mode', 'querystring')
 
 last_id = participants[-1][0].id if participants else 0
 

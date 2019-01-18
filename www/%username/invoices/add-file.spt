@@ -36,10 +36,10 @@ invoice = website.db.one("""
 """, (invoice_id, user.id))
 
 if not invoice:
-    raise response.error(400, "bad `X-Invoice-Id` value")
+    raise response.invalid_input(invoice_id, 'X-Invoice-Id', 'headers')
 
 if invoice.status != 'pre':
-    raise response.error(400, "This invoice has already been submitted.")
+    raise response.error(409, "This invoice has already been submitted.")
 
 body = request.body
 step = request.qs['step']
@@ -85,7 +85,7 @@ if step == 'sign':
     sig_key = hmac.new(sig_key, aws4_request, sha256).digest()
     signature = hmac.new(sig_key, policy, sha256).hexdigest()
     if name in invoice.documents and invoice.documents[name]['status'] == 'uploaded':
-        raise response.error(400, "The file `%s` has already been uploaded." % name)
+        raise response.error(409, "The file `%s` has already been uploaded." % name)
     file_attrs = {
         'status': 'pre',
     }

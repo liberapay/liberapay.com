@@ -37,7 +37,7 @@ try:
         doc.save()
         r = {"success": True}
     else:
-        raise response.error(400, "bad `action` value (in body)")
+        raise response.invalid_input(action, 'action', 'body')
 except APIError as err:
     error = repr_exception(err)
     website.tell_sentry(err, state)

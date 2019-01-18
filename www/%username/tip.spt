@@ -41,7 +41,7 @@ elif direction == 'from':
     else:
         tippee = Participant.from_id(request.qs.get_int('tippee'))
 else:
-    raise response.error(400, "bad `direction` value %r in querystring" % direction)
+    raise response.invalid_input(direction, 'direction', 'querystring')
 
 tippee_name = tippee.username
 if tippee.status == 'stub':
@@ -54,7 +54,7 @@ if tippee.status == 'stub':
 if request.method == 'POST':
     currency = request.body.get('currency', 'EUR')
     if currency not in constants.CURRENCIES:
-        raise response.error(400, "`currency` value in body is invalid or non-supported")
+        raise response.invalid_input(currency, 'currency', 'body')
     amount = request.body.get('selected_amount')
     if amount and amount != 'custom':
         period = 'weekly'
@@ -62,7 +62,7 @@ if request.method == 'POST':
     else:
         period = request.body['period']
         if period not in constants.PERIOD_CONVERSION_RATES:
-            raise response.error(400, "bad 'period' value '%s'" % period)
+            raise response.invalid_input(period, 'period', 'body')
         amount = request.body.get('amount')
         if amount:
             amount = locale.parse_money_amount(amount, currency)

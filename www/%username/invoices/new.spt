@@ -28,9 +28,9 @@ if invoice_id:
            AND sender = %s
     """, (invoice_id, user.id))
     if not invoice:
-        raise response.error(400, "bad `id` (in querystring)")
+        raise response.invalid_input(invoice_id, 'id', 'querystring')
     if invoice.status != 'pre':
-        raise response.error(400, "This invoice has already been submitted.")
+        raise response.error(409, "This invoice has already been submitted.")
     already_uploaded = [
         {
             'name': name.replace('%20', ' '),
@@ -46,10 +46,10 @@ if request.method == 'POST':
     body = request.body
     invoice_nature = body['nature']
     if invoice_nature != 'expense':
-        raise response.error(400, "bad `nature` value (in POST data)")
+        raise response.invalid_input(invoice_nature, 'nature', 'body')
     currency = body['currency']
     if currency not in constants.CURRENCIES:
-        raise response.error(400, "`currency` value in body is invalid or non-supported")
+        raise response.invalid_input(currency, 'currency', 'body')
     amount = locale.parse_money_amount(body['amount'], currency)
     if amount <= 0:
         raise response.error(400, "`amount` must be greater than 0")
@@ -73,7 +73,7 @@ if request.method == 'POST':
          RETURNING id
         """, (invoice_nature, amount, description, details, invoice.id))
         if not invoice_id:
-            response.error(400, "bad `id` (in querystring)")
+            response.invalid_input(invoice_id, 'id', 'querystring')
     else:
         invoice_id = website.db.one("""
             INSERT INTO invoices

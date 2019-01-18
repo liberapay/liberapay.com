@@ -25,11 +25,11 @@ if subscription_id and token:
          WHERE id = %s
     """, (subscription_id,))
     if subscription.publisher != publisher.id:
-        raise response.error(400, "bad `id` in querystring")
+        raise response.invalid_input(subscription_id, 'id', 'querystring')
     if constant_time_compare(subscription.token, token):
         subscriber = Participant.from_id(subscription.subscriber)
     else:
-        raise response.error(400, "bad `token` in querystring")
+        raise response.invalid_input(token, 'token', 'querystring')
 
 if request.method == 'POST':
     if subscriber.ANON:

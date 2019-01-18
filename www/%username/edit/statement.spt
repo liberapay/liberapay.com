@@ -12,7 +12,7 @@ if request.method == 'POST':
     statement = request.body['statement']
 
     if lang not in LANGUAGES_2:
-        raise response.error(400, "unknown lang")
+        raise response.invalid_input(lang, 'lang', 'body')
 
     if len(summary) > constants.SUMMARY_MAX_SIZE:
         raise response.error(400, _(
@@ -29,7 +29,7 @@ else:
     lang = request.qs.get('lang')
     if lang:
         if lang not in LANGUAGES_2:
-            raise response.error(400, "unknown lang")
+            raise response.invalid_input(lang, 'lang', 'querystring')
         statement = participant.get_statement(lang)
     else:
         statement, lang = participant.get_statement(request.accept_langs)

@@ -12,7 +12,7 @@ if request.method == 'POST':
     body = request.body
     lang = body['lang']
     if lang not in LANGUAGES_2 and lang != 'mul':
-        raise response.error(400, "unknown lang")
+        raise response.invalid_input(lang, 'lang', 'body')
     c = user.create_community(body['name'], lang=lang)
     response.redirect('/for/'+c.name+'/edit')
 else:

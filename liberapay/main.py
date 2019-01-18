@@ -1,3 +1,5 @@
+# coding: utf8
+
 from __future__ import division
 
 from ipaddress import ip_address
@@ -282,6 +284,18 @@ def _error(self, code, msg=''):
     self.body = msg
     raise self
 pando.Response.error = _error
+
+if hasattr(pando.Response, 'invalid_input'):
+    raise Warning('pando.Response.invalid_input() already exists')
+def _invalid_input(self, input_value, input_name, input_location, code=400,
+                   msg="`%s` value %s in request %s is invalid or unsupported"):
+    self.code = code
+    input_value = repr(input_value)
+    if len(input_value) > 50:
+        input_value = input_value[:24] + u'[…]' + input_value[-24:]
+    self.body = msg % (input_name, input_value, input_location)
+    raise self
+pando.Response.invalid_input = _invalid_input
 
 if hasattr(pando.Response, 'success'):
     raise Warning('pando.Response.success() already exists')

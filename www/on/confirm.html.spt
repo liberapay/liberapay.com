@@ -9,13 +9,16 @@ if user.ANON:
 
 account_id, p_id = request.qs.get_int('id'), request.qs.get_int('p_id', None)
 account = AccountElsewhere.from_id(account_id)
-token = request.headers.cookie.get('connect_%s' % account_id)
+if not account:
+    raise response.invalid_input(account_id, 'id', 'querystring')
+cookie_name = 'connect_%s' % account_id
+token = request.headers.cookie.get(cookie_name)
 if not token or not account.check_connect_token(token.value):
-    raise response.error(400, 'bad connect token "%s"' % token)
+    raise response.invalid_input(token, cookie_name, 'cookies')
 
 p = Participant.from_id(p_id) if p_id else user
 if not p:
-    raise response.error(400, 'bad p_id')
+    raise response.invalid_input(p_id, 'p_id', 'querystring')
 
 other = account.participant
 user_accounts_dict = p.get_accounts_elsewhere()

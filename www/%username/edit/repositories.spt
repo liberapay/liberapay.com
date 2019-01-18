@@ -19,7 +19,7 @@ if request.method == 'POST':
             try:
                 repo_id = int(k.split(':', 1)[-1])
             except ValueError:
-                raise response.error(400, "bad key '%s'" % k)
+                raise response.error(400, "bad key '%s' in request body" % k)
             v = v[-1] if isinstance(v, list) else v
             show = v == 'on'
             website.db.run("""

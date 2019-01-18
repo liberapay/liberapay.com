@@ -4,7 +4,7 @@ query_cache = website.db_qc5
 
 currency = request.qs.get('currency', 'EUR')
 if currency not in constants.CURRENCIES:
-    raise response.error(400, "`currency` value %r is invalid or unsupported" % currency)
+    raise response.invalid_input(currency, 'currency', 'querystring')
 
 charts = [r._asdict() for r in query_cache.all("""\
 

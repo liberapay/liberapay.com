@@ -19,7 +19,7 @@ if request.method == 'POST':
         one = {"username": tip['username']}
         currency = tip.get('currency', 'EUR')
         if currency not in constants.CURRENCIES:
-            raise response.error(400,"`currency` value '%s' in body is invalid or non-supported" % currency)
+            raise response.invalid_input(currency, 'currency', 'body')
         try:
             amount = locale.parse_money_amount(tip['amount'], currency)
             amount = participant.set_tip_to(
