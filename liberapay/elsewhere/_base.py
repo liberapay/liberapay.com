@@ -220,8 +220,14 @@ class Platform(object):
         """
         r = UserInfo(platform=self.name)
         info = self.x_user_info(r, info, info)
-        if not info:
+        if info is None:
             return
+        if type(info) is list:
+            if len(info) != 1:
+                if not info:
+                    return
+                raise ValueError("got a list with more than one element: %r" % info)
+            info = info[0]
         r.domain = self.x_domain(r, info, '')
         assert r.domain is not None
         if not self.single_domain:

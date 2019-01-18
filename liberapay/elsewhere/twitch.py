@@ -33,7 +33,7 @@ class Twitch(PlatformOAuth2):
     # This endpoint only returns user IDs, not a list of user info objects
 
     # User info extractors
-    x_user_info = key('data', clean=lambda o: o[0] if isinstance(o, list) and len(o) == 1 else o)
+    x_user_info = key('data')
     x_user_id = key('id')
     x_user_name = key('login')
     x_display_name = key('display_name')
