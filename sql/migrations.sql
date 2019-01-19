@@ -2207,3 +2207,19 @@ ALTER TYPE payment_net ADD VALUE IF NOT EXISTS 'stripe-sdd';
 UPDATE participants
    SET email_notif_bits = email_notif_bits | 64 | 128 | 256 | 512 | 1024
  WHERE email_notif_bits <> (email_notif_bits | 64 | 128 | 256 | 512 | 1024);
+
+-- migration #92
+ALTER TABLE paydays ADD COLUMN week_payins currency_basket;
+UPDATE paydays AS payday
+   SET week_payins = (
+           SELECT basket_sum(pi.amount)
+             FROM payins pi
+            WHERE pi.ctime >= (
+                      SELECT previous_payday.ts_start
+                        FROM paydays previous_payday
+                       WHERE previous_payday.id = payday.id - 1
+                  )
+              AND pi.ctime < payday.ts_start
+              AND pi.status = 'succeeded'
+       )
+ WHERE id >= 132;
