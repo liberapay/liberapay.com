@@ -132,7 +132,7 @@ elif step == '2':
                                 platform = getattr(website.platforms, d['platform'])
                                 e = platform.get_user_info('', 'user_id', d['user_id'])
                                 break
-                            except:
+                            except Exception:
                                 continue
                         if not e:
                             continue

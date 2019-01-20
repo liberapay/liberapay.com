@@ -23,13 +23,13 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert lock  # sanity check
             with self.assertRaises(AssertionError) as cm:
                 main()
-            assert cm.exception.msg == "failed to acquire the payday lock"
+            assert cm.exception.args[0] == "failed to acquire the payday lock"
 
         main()
 
         with self.assertRaises(AssertionError) as cm:
             main()
-        assert cm.exception.msg == "payday has already been run this week"
+        assert cm.exception.args[0] == "payday has already been run this week"
 
         admin = self.make_participant('admin', privileges=1)
         r = self.client.PxST('/admin/payday', data={'action': 'run_payday'}, auth_as=admin)

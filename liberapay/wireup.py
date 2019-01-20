@@ -429,7 +429,7 @@ def make_sentry_teller(env):
             release = get_version()
             if '-' in release:
                 release = None
-        except:
+        except Exception:
             release = None
         sentry = raven.Client(
             env.sentry_dsn,

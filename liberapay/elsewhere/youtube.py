@@ -33,7 +33,7 @@ class Youtube(PlatformOAuth2):
     api_search_path = '/search?part=snippet&type=channel&q={query}'
 
     # User info extractors
-    x_user_info = key('items', clean=lambda o: o[0] if isinstance(o, list) and len(o) == 1 else o)
+    x_user_info = key('items')
     x_user_id = any_key(('snippet', 'resourceId', 'channelId'), 'id')
     x_display_name = any_key(('snippet', 'title'))
     x_avatar_url = any_key(('snippet', 'thumbnails', 'medium', 'url'))

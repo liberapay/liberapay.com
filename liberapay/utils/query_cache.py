@@ -172,7 +172,7 @@ class QueryCache(object):
                     if process is not None:
                         entry.result = process(entry.result)
                     entry.exc = None
-                except:
+                except Exception:
                     entry.result = None
                     entry.exc = (
                         FormattingError(traceback.format_exc()),

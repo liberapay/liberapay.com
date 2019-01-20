@@ -41,7 +41,7 @@ def rm_f(*paths):
     for path in paths:
         try:
             os.unlink(path)
-        except:
+        except Exception:
             pass
 
 
