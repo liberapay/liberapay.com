@@ -5,6 +5,10 @@ import threading
 from time import sleep
 
 
+CRON_ENCORE = 'CRON_ENCORE'
+CRON_STOP = 'CRON_STOP'
+
+
 logger = logging.getLogger('liberapay.cron')
 
 
@@ -66,13 +70,29 @@ class Cron(object):
                     else:
                         # success, sleep until tomorrow
                         sleep(3600 * 23)
-            else:
-                assert period >= 1
+            elif period == 'once':
                 while True:
                     try:
-                        func()
+                        r = func()
                     except Exception as e:
                         self.website.tell_sentry(e, {})
+                    else:
+                        if r is CRON_ENCORE:
+                            sleep(2)
+                            continue
+                    return
+            else:
+                while True:
+                    try:
+                        r = func()
+                    except Exception as e:
+                        self.website.tell_sentry(e, {})
+                    else:
+                        if r is CRON_ENCORE:
+                            sleep(2)
+                            continue
+                        if r is CRON_STOP:
+                            return
                     sleep(period)
         t = threading.Thread(target=f)
         t.daemon = True
