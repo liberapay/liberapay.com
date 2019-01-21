@@ -57,6 +57,11 @@ run: env
 py: env
 	PYTHONPATH=. $(with_local_env) $(env_py) -i $${main-liberapay/main.py}
 
+shell: py
+
+test-shell: env
+	PYTHONPATH=. $(with_tests_env) $(env_py) -i $${main-liberapay/main.py}
+
 test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 
