@@ -1,7 +1,6 @@
 from calendar import monthrange
 from collections import namedtuple
 from datetime import datetime, timedelta
-from itertools import chain
 
 from pando import Response
 from pando.utils import utc, utcnow
@@ -438,9 +437,11 @@ def get_payin_ledger(db, participant, year=None, month=-1, reverse=True, minimiz
     events = list(iter_payin_events(
         db, participant, period_start, period_end, minimize
     ))
-    if not reverse:
+    totals = events.pop()
+    assert totals['kind'] == 'totals'
+    if reverse:
         events.reverse()
-    return events
+    return events, totals
 
 
 def iter_payin_events(db, participant, period_start, period_end, minimize=False):
@@ -482,15 +483,31 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     """, params, back_as=dict)
 
     prev_date = None
+    totals = {'received': {}, 'sent': {}}
     get_timestamp = lambda e: e['ctime']
-    events = sorted(
-        chain(payins, incoming_transfers, outgoing_transfers),
-        key=get_timestamp, reverse=True
-    )
+    events = payins + incoming_transfers + outgoing_transfers
+    events.sort(key=get_timestamp)
     for event in events:
         event_date = event['ctime'].date()
         if event_date != prev_date:
-            yield dict(kind='day-end', date=event_date)
+            if prev_date:
+                yield dict(kind='day-end', date=prev_date)
+            for by_month in totals.values():
+                if event_date.month not in by_month:
+                    by_month[event_date.month] = MoneyBasket()
+            yield dict(kind='day-start', date=event_date)
             prev_date = event_date
-        event['kind'] = 'payin_transfer' if 'team_name' in event else 'payin'
+        if 'team_name' in event:
+            event['kind'] = 'payin_transfer'
+            if 'payer_username' in event and event['status'] == 'succeeded':
+                totals['received'][event_date.month] += event['amount']
+        else:
+            event['kind'] = 'payin'
+            if event['status'] == 'succeeded':
+                totals['sent'][event_date.month] += event['amount']
         yield event
+
+    if events:
+        yield dict(kind='day-end', date=event_date)
+
+    yield dict(kind='totals', **totals)

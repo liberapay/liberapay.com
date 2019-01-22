@@ -36,7 +36,7 @@ if not year:
     """, dict(p_id=participant.id))
     year = last_event_year or current_year
 
-events = get_payin_ledger(website.db, participant, year)
+events, totals = get_payin_ledger(website.db, participant, year)
 years = []
 if participant.join_time:
     years = list(range(current_year, max(participant.join_time.year, 2018) - 1, -1))
@@ -52,9 +52,47 @@ if participant.join_time:
         <li class="{{ 'active' if y == year }}"><a href="?year={{ y }}">{{ y }}</a></li>
     % endfor
 </ul>
+<br>
 % endif
 
-<br>
+% if totals
+    % set total_received_by_month = totals['received']
+    % set total_sent_by_month = totals['sent']
+    % set received_sum = sum(total_received_by_month.values())
+    % set sent_sum = sum(total_sent_by_month.values())
+    % if (received_sum or sent_sum) and participant.mangopay_user_id
+        <p class="text-warning">{{ _(
+            "The totals below don't include donations through the old wallet system. "
+            "You can find those in {link_start}your Wallet page{link_end}.",
+            link_start=('<a href="%s">'|safe) % participant.path('wallet/', {'year': year}),
+            link_end='</a>'|safe
+        ) }}</p>
+    % endif
+    % if received_sum
+        <p>{{ _("Total money received: {0}", received_sum) }}</p>
+        % if len(total_received_by_month) > 1
+        <ul>
+        % for month, money_basket in sorted(total_received_by_month.items(), reverse=True)
+            <li>{{ _("{0}: {1}", locale.months['format']['wide'][month], money_basket) }}</li>
+        % endfor
+        </ul>
+        % endif
+    % endif
+    % if sent_sum
+        <p>{{ _("Total money sent: {0}", sum(total_sent_by_month.values())) }}</p>
+        % if len(total_sent_by_month) > 1
+        <ul>
+        % for month, money_basket in sorted(total_sent_by_month.items(), reverse=True)
+            <li>{{ _("{0}: {1}", locale.months['format']['wide'][month], money_basket) }}</li>
+        % endfor
+        </ul>
+        % endif
+    % endif
+    % if received_sum or sent_sum
+        <br>
+    % endif
+% endif
+
 <div class="row">
 <div class="col-lg-10">
 % if events
