@@ -2429,6 +2429,18 @@ msgstr "失敗"
 msgid "succeeded"
 msgstr "成功"
 
+#, python-brace-format
+msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "Total money received: {0}"
+msgstr "收款總額：{0}"
+
+#, python-brace-format
+msgid "Total money sent: {0}"
+msgstr "付款總額：{0}"
+
 msgid "Fees"
 msgstr "手續費"
 
@@ -2847,10 +2859,6 @@ msgid "Account Statement"
 msgstr "帳戶對帳單"
 
 #, python-brace-format
-msgid "Total money sent: {0}"
-msgstr "付款總額：{0}"
-
-#, python-brace-format
 msgid "{money_amount} in recurrent donations to {n} person"
 msgid_plural "{money_amount} in recurrent donations to {n} people"
 msgstr[0] "向{n}人定期捐款{money_amount}"
@@ -2862,10 +2870,6 @@ msgstr "導出為CSV檔"
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
 msgstr[0] "向{n}人的支出補償{money_amount}"
-
-#, python-brace-format
-msgid "Total money received: {0}"
-msgstr "收款總額：{0}"
 
 #, python-brace-format
 msgid "{money_amount} in recurrent donations from {n} donor"
