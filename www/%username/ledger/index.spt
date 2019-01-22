@@ -60,7 +60,7 @@ if participant.join_time:
     % set total_sent_by_month = totals['sent']
     % set received_sum = sum(total_received_by_month.values())
     % set sent_sum = sum(total_sent_by_month.values())
-    % if (received_sum or sent_sum) and participant.mangopay_user_id
+    % if (received_sum or sent_sum) and participant.mangopay_user_id and year == 2018
         <p class="text-warning">{{ _(
             "The totals below don't include donations through the old wallet system. "
             "You can find those in {link_start}your Wallet page{link_end}.",
