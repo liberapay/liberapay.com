@@ -323,6 +323,9 @@ if user.is_admin:
                 {{ _("currency exchange") }}
             % elif context == 'fee-refund'
                 {{ _("fee refund") }}
+            % elif context == 'indirect-payout'
+                indirect payout for
+                <a href="/{{ event['username'] }}/{{ subpath }}">{{ event['username'] }}</a>
             % endif
         % else
             % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
@@ -366,6 +369,8 @@ if user.is_admin:
                 {{ _("currency exchange") }}
             % elif context == 'fee-refund'
                 {{ _("fee refund") }}
+            % elif context == 'indirect-payout'
+                indirect withdrawal
             % endif
         % endif
         % if event['status'] != 'succeeded'
