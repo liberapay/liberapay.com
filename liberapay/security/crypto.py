@@ -82,7 +82,7 @@ class Cryptograph(object):
     def __init__(self):
         if website.env.aws_secret_access_key:
             sm = self.secrets_manager = boto3.client('secretsmanager', region_name='eu-west-1')
-            secret = sm.get_secret_value('Fernet')
+            secret = sm.get_secret_value(SecretId='Fernet')
             rotation_start = secret['CreatedDate'].date()
             keys = secret['SecretString'].split()
         else:
@@ -150,7 +150,7 @@ class Cryptograph(object):
         """
         keys = b' '.join([Fernet.generate_key()] + self.fernet_keys).decode()
         if self.secrets_manager:
-            self.secrets_manager.update_secret('Fernet', SecretString=keys)
+            self.secrets_manager.update_secret(SecretId='Fernet', SecretString=keys)
         else:
             keys = utcnow().date().isoformat() + ' ' + keys
             print("No secrets manager, updating the key storage is up to you.")
