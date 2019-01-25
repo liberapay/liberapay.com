@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '92'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '93'::jsonb);
 
 
 -- app configuration
@@ -942,6 +942,24 @@ CREATE TABLE user_secrets
 , mtime         timestamptz   NOT NULL DEFAULT current_timestamp
 , UNIQUE (participant, id)
 );
+
+
+-- encrypted identity data
+
+CREATE TYPE encryption_scheme AS ENUM ('fernet');
+
+CREATE TYPE encrypted AS (
+    scheme encryption_scheme, payload bytea, ts timestamptz
+);
+
+CREATE TABLE identities
+( id               bigserial     PRIMARY KEY
+, ctime            timestamptz   NOT NULL DEFAULT current_timestamp
+, participant      bigint        NOT NULL REFERENCES participants
+, info             encrypted     NOT NULL
+);
+
+CREATE UNIQUE INDEX ON identities (participant, ctime DESC);
 
 
 -- composite types, keep this at the end of the file
