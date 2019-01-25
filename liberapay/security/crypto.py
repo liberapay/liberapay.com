@@ -81,7 +81,7 @@ class Cryptograph(object):
 
     def __init__(self):
         if website.env.aws_secret_access_key:
-            sm = self.secrets_manager = boto3.client('secretsmanager')
+            sm = self.secrets_manager = boto3.client('secretsmanager', region_name='eu-west-1')
             secret = sm.get_secret_value('Fernet')
             rotation_start = secret['CreatedDate'].date()
             keys = secret['SecretString'].split()
