@@ -18,11 +18,11 @@ from six import text_type as str
 from six.moves.urllib.request import urlretrieve
 
 from algorithm import Algorithm
-import pando
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
 from mailshake import AmazonSESMailer, DummyMailer, SMTPMailer
+import pando
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 import raven
@@ -39,10 +39,12 @@ from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_
 from liberapay.i18n.plural_rules import get_function_from_rule
 from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
 from liberapay.models.community import _Community, Community
+from liberapay.models.encrypted import Encrypted
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.models import DB
+from liberapay.security.crypto import Cryptograph
 from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
@@ -107,6 +109,10 @@ def csp(canonical_host, canonical_scheme, env):
     return {'csp': CSP(csp)}
 
 
+def crypto():
+    return {'cryptograph': Cryptograph()}
+
+
 class NoDB(object):
 
     def __getattr__(self, attr):
@@ -136,7 +142,7 @@ def database(env, tell_sentry):
 
     models = (
         _AccountElsewhere, AccountElsewhere, _Community, Community,
-        ExchangeRoute, Participant, Repository,
+        Encrypted, ExchangeRoute, Participant, Repository,
     )
     for model in models:
         db.register_model(model)
@@ -780,6 +786,7 @@ minimal_algorithm = Algorithm(
 
 full_algorithm = Algorithm(
     make_sentry_teller,
+    crypto,
     database,
     canonical,
     csp,

@@ -132,6 +132,8 @@ if conf:
     if conf.ses_feedback_queue_url:
         cron(conf.fetch_email_bounces_every, handle_email_bounces, True)
 
+    cron('once', website.cryptograph.rotate_stored_data, True)
+
 
 # Website Algorithm
 # =================
