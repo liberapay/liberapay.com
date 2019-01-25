@@ -1,7 +1,8 @@
 % set CLASSES = ('info', 'success', 'warning', 'danger')
 
 % macro get_cls(m)
-    {{ CLASSES[min(max(int(m['nominal_take'] / (m['last_week'].convert(m['nominal_take'].currency) or 1) * 2 - 1), 0), 3)] }}
+    {{ 'info' if m['last_week'] is none else
+       CLASSES[min(max(int(m['nominal_take'] / (m['last_week'].convert(m['nominal_take'].currency) or 1) * 2 - 1), 0), 3)] }}
 % endmacro
 
 % macro team_takes_table(team, cls='')
@@ -33,7 +34,7 @@
         % for member in members.values()
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
-            <td>{{ locale.format_money(member.last_week) }}</td>
+            <td>{{ _("n/a") if member.last_week is none else locale.format_money(member.last_week) }}</td>
             % set nominal_take = member.nominal_take
             % set cell_cls = get_cls(member) if nominal_take != member.last_week else ''
             % if member.id == user.id
@@ -60,7 +61,9 @@
                                 <div class="input-group-addon">{{ locale.currency_symbols.get(take_currency, take_currency) }}</div>
                                 <input type="hidden" name="currency" value="{{ take_currency }}" />
                             % endif
-                            <input class="form-control" name="take" value="{{ locale.format_decimal(nominal_take.amount, '#,##0.00') }}" />
+                            <input class="form-control" name="take" value="{{
+                                locale.format_decimal(nominal_take.amount, '#,##0.00') if nominal_take.amount >= 0 else ''
+                            }}" placeholder="auto" />
                             <div class="input-group-btn">
                                 <button class="btn btn-default" title="{{ _('Update my nominal take') }}"
                                     ><i class="fa fa-edit"></i></button>
@@ -68,6 +71,8 @@
                         </div>
                     </form>
                 </td>
+            % elif nominal_take.amount == -1
+                <td class="{{ 'text-'+cell_cls }}">{{ _("auto") }}</td>
             % else
                 <td class="{{ 'text-'+cell_cls }}">{{ locale.format_money(nominal_take) }}</td>
             % endif

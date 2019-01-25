@@ -161,6 +161,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                ), 'EUR')) AS takes_sum_eur
           FROM current_takes t
          WHERE t.team = %s
+           AND t.amount <> 0
            AND EXISTS (
                    SELECT true
                      FROM payment_accounts a
@@ -174,9 +175,10 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
     if not members:
         raise MissingPaymentAccount(tippee)
     payin_amount_eur = payin_amount.convert('EUR')
+    zero_eur = Money.ZEROS['EUR']
     members = sorted(members, key=lambda t: (
         int(t.member == payer.id),
-        -t.takes_sum_eur / (t.received_sum_eur + payin_amount_eur),
+        -max(t.takes_sum_eur, zero_eur) / (t.received_sum_eur + payin_amount_eur),
         t.received_sum_eur,
         t.ctime
     ))

@@ -2,6 +2,7 @@ from __future__ import division, print_function, unicode_literals
 
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import LoginRequired
+from liberapay.i18n.currencies import Money
 from liberapay.utils import b64encode_s, get_participant
 
 [---]
@@ -17,16 +18,20 @@ if team.kind != 'group':
 new_currency = request.body.get('currency', team.main_currency)
 if new_currency not in constants.CURRENCIES:
     raise response.invalid_input(new_currency, 'currency', 'body')
-take = locale.parse_money_amount(request.body['take'], new_currency)
-if take < 0:
-    raise response.error(400, "bad take: negative amounts are not allowed")
+take = request.body['take']
+if take in {'', 'auto'}:
+    take = Money(-1, new_currency)
+else:
+    take = locale.parse_money_amount(take, new_currency)
+    if take < 0:
+        raise response.error(400, "bad take: negative amounts are not allowed")
 new_take = team.set_take_for(user, take, user)
 if new_take is None:
     raise response.error(403, _("You are not a member of the {0} team.", team.username))
 if new_take < take:
     msg = _("Your take is now {0} (you can't go higher this week).", new_take)
 else:
-    msg = _("Your take is now {0}.", new_take)
+    msg = _("Your take is now {0}.", "'auto'" if new_take < 0 else new_take)
 
 back_to = request.qs.get('back_to') or team.path('income/')
 back_to = _modify_query(back_to, 'success', b64encode_s(msg))

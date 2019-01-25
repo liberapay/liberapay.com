@@ -41,7 +41,7 @@ class MixinTeam(object):
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, Money.ZEROS[member.main_currency], self, cursor=cursor)
+        self.set_take_for(member, Money(-1, member.main_currency), self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
@@ -68,7 +68,7 @@ class MixinTeam(object):
         assert self.kind == 'group'
         takes = OrderedDict((t.member, t.amount) for t in self.db.all("""
 
-            SELECT DISTINCT ON (member) member, amount, mtime
+            SELECT DISTINCT ON (member) member, amount
               FROM takes
              WHERE team=%s
                AND mtime < (
@@ -80,7 +80,8 @@ class MixinTeam(object):
           ORDER BY member, mtime DESC
 
         """, (self.id,)) if t.amount)
-        takes.sum = MoneyBasket(takes.values())
+        takes.nonzero = any(amount != 0 for amount in takes.values())
+        takes.sum = MoneyBasket(amount for amount in takes.values() if amount > 0)
         takes.initial_leftover = self.receiving - takes.sum.fuzzy_sum(self.main_currency)
         return takes
 
@@ -124,7 +125,7 @@ class MixinTeam(object):
             if take and check_max and self.throttle_takes and self.nmembers > 1:
                 if take > TAKE_THROTTLING_THRESHOLD[take.currency]:
                     last_week = self.get_takes_last_week()
-                    if last_week.sum:
+                    if last_week.nonzero:
                         max_this_week = self.compute_max_this_week(
                             member.id, last_week, take.currency
                         )
@@ -291,17 +292,16 @@ class MixinTeam(object):
         takes = self.get_current_takes()
         nmembers = len(takes)
         last_week = self.get_takes_last_week()
-        compute_max = self.throttle_takes and nmembers > 1 and last_week.sum
+        compute_max = self.throttle_takes and nmembers > 1 and last_week.nonzero
         members = OrderedDict()
         members.leftover = self.leftover or MoneyBasket()
-        zero = Money.ZEROS[self.main_currency]
         for take in takes:
             member = {}
             m_id = member['id'] = take['member_id']
             member['username'] = take['member_name']
             member['nominal_take'] = take['amount']
             member['actual_amount'] = take['actual_amount']
-            member['last_week'] = last_week.get(m_id, zero)
+            member['last_week'] = last_week.get(m_id)
             if compute_max:
                 x = self.compute_max_this_week(m_id, last_week, take['amount'].currency)
             else:
