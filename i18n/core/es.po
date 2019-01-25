@@ -1801,11 +1801,11 @@ msgstr "No tienes ninguna cuenta de {platform} conectada a tu perfil."
 msgid "Connect {0} account"
 msgstr "Conectar cuenta de {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
-msgstr[0] "Hemos encontrado {n} repositorio en tu cuenta de {platform} {timespan_ago}."
-msgstr[1] "Una lista de {n} repositorios han sido importados desde tu cuenta de {platform} {timespan_ago}."
+msgstr[0] "Hemos encontrado {n} repositorio en tu cuenta de {platform}, {timespan_ago}."
+msgstr[1] "Se ha importado una lista de {n} repositorios desde tu cuenta de {platform}, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "No se encontraron repositorios."
@@ -2451,7 +2451,7 @@ msgstr "logrado"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
-msgstr ""
+msgstr "Los totales de abajo no incluyen las donaciones a través del viejo sistema de cartera. Puedes encontrar estas en {link_start}tu página de Cartera{link_end}."
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -3645,26 +3645,26 @@ msgstr "Seguridad"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "Te garantizamos que los fondos que pones bajo nuestra custodia no se perderán en caso de quiebra, ya nos afecte a nosotros o a una tercera parte a la que hemos delegado la custodia de los fondos."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] "Liberapay fue lanzado {timespan_ago} y tiene {n} usuarios."
-msgstr[1] "Liberapay fue lanzado {timespan_ago} y tiene {n} usuarios."
+msgstr[0] "Liberapay fue fundado {timespan_ago} y tiene {n} usuario."
+msgstr[1] "Liberapay fue fundado {timespan_ago} y tiene {n} usuarios."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} están en custodia dentro de Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] "El último día de pago fue {timespan_ago} y transfirió {money_amount} entre {n} usuarios."
+msgstr[0] "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgstr[1] "El último día de pago fue {timespan_ago} y transfirió {money_amount} entre {n} usuarios."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] "{n} participante dieron dinero."
+msgstr[0] "{n} participante dio dinero."
 msgstr[1] "{n} participantes dieron dinero."
 
 #, python-brace-format
@@ -3676,8 +3676,8 @@ msgstr[1] "{n} participantes han recibido dinero."
 #, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} participante era tanto donante como receptor."
+msgstr[1] "{n} participantes eran tanto donantes como receptores."
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3719,14 +3719,14 @@ msgid "Money moved out of Liberapay"
 msgstr "Dinero sacado de Liberapay"
 
 msgid "Weekly Donations"
-msgstr ""
+msgstr "Donaciones Semanales"
 
 #, python-brace-format
 msgid "The sum of active donations for each week, expressed in {currency}."
 msgstr "La suma de las donaciones activas para cada semana, expresada en {currency}."
 
 msgid "Donor Debits"
-msgstr ""
+msgstr "Cargos de los donantes"
 
 #, python-brace-format
 msgid "The sum of charges processed during each week, expressed in {currency}."
@@ -3987,7 +3987,7 @@ msgstr "{0} ajustes de la comunidad"
 msgid "Sidebar text"
 msgstr "Texto para recuadro"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
 msgstr[0] "Esta comunidad fue creada {timespan_ago} y tiene {n} miembro."
