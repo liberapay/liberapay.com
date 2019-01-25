@@ -11,8 +11,6 @@ from ..exceptions import (
     NoSelfTipping,
 )
 from ..i18n.currencies import Money, MoneyBasket
-from ..models.exchange_route import ExchangeRoute
-from ..models.participant import Participant
 from ..utils import group_by
 
 
@@ -123,8 +121,8 @@ def adjust_payin_transfers(db, payin, net_amount):
         net_amount (Money): the amount of money available to transfer
 
     """
-    payer = Participant.from_id(payin.payer)
-    route = ExchangeRoute.from_id(payer, payin.route)
+    payer = db.Participant.from_id(payin.payer)
+    route = db.ExchangeRoute.from_id(payer, payin.route)
     provider = route.network.split('-', 1)[0]
     payer_country = route.country
     # We have to update the transfer amounts in a single transaction to
@@ -157,7 +155,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                 tip = payer.get_tip_to(team)
                 try:
                     team_donations = resolve_team_donation(
-                        cursor, team, provider, payer, payer_country,
+                        db, team, provider, payer, payer_country,
                         prorated_amount, tip.amount
                     )
                 except (MissingPaymentAccount, NoSelfTipping):
@@ -357,13 +355,13 @@ def resolve_team_donation(
                 return [
                     Donation(
                         t.resolved_amount,
-                        Participant.from_id(t.member),
+                        db.Participant.from_id(t.member),
                         sepa_accounts[t.member]
                     )
                     for t in selected_takes if t.resolved_amount != 0
                 ]
     # Fall back to sending the entire donation to the member who "needs" it most.
-    member = Participant.from_id(members[0].member)
+    member = db.Participant.from_id(members[0].member)
     account = resolve_destination(db, member, provider, payer, payer_country, payment_amount)
     return [Donation(payment_amount, member, account)]
 
@@ -635,7 +633,7 @@ def update_payin_transfer(
 
         # Recompute the cached `giving` amount of the donor.
         if update_donor:
-            Participant.from_id(pt.payer).update_giving(cursor)
+            db.Participant.from_id(pt.payer).update_giving(cursor)
 
         return pt
 
@@ -714,7 +712,7 @@ def record_payin_refund(
     )
     if notify:
         payin = db.one("SELECT * FROM payins WHERE id = %s", (refund.payin,))
-        payer = Participant.from_id(payin.payer)
+        payer = db.Participant.from_id(payin.payer)
         payer.notify(
             'payin_refund_initiated',
             payin_amount=payin.amount,

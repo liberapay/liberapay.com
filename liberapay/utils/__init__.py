@@ -59,17 +59,16 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         raise response.error(404)
 
     if participant is None:
-        from liberapay.models.participant import Participant  # avoid circular import
         if type(value) is int:
-            participant = Participant.from_id(value, _raise=False)
+            participant = website.db.Participant.from_id(value, _raise=False)
         else:
-            participant = Participant.from_username(value)
+            participant = website.db.Participant.from_username(value)
         if participant is None:
             if type(value) is str:
                 look_up_redirections(request, response)
             raise response.error(404)
         elif participant.kind == 'community':
-            c_name = Participant.db.one("""
+            c_name = website.db.one("""
                 SELECT name
                   FROM communities
                  WHERE participant = %s

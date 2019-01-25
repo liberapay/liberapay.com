@@ -17,7 +17,6 @@ from liberapay import constants
 from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.i18n.currencies import MoneyBasket
-from liberapay.models.participant import Participant
 from liberapay.utils import group_by
 from liberapay.website import website
 
@@ -1045,7 +1044,7 @@ class Payday(object):
           ORDER BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
-            p = Participant.from_id(tippee_id)
+            p = self.db.Participant.from_id(tippee_id)
             if p.status != 'active' or not p.accepts_tips:
                 continue
             for t in transfers:
