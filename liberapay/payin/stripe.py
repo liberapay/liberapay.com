@@ -90,10 +90,12 @@ def destination_charge(db, payin, payer, statement_descriptor):
     except Exception as e:
         website.tell_sentry(e, {})
         return update_payin(db, payin.id, '', 'failed', str(e))
-    if route.network == 'stripe-sdd' and payin.status == 'pending':
+    payin = settle_destination_charge(db, payin, charge, pt)
+    if route.network == 'stripe-sdd' and payin.status != 'failed':
         sepa_debit = stripe.Source.retrieve(route.address).sepa_debit
         payer.notify(
             'payin_sdd_created',
+            force_email=True,
             payin_amount=payin.amount,
             bank_name=sepa_debit.bank_name,
             partial_bank_account_number=get_partial_iban(sepa_debit),
@@ -103,7 +105,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
             creditor_identifier=website.app_conf.sepa_creditor_identifier,
             statement_descriptor=charge.statement_descriptor,
         )
-    return settle_destination_charge(db, payin, charge, pt)
+    return payin
 
 
 def settle_destination_charge(db, payin, charge, pt):
