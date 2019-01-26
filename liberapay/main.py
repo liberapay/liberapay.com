@@ -235,7 +235,8 @@ if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
 def _source(self):
     def f():
-        addr = ip_address(self.environ[b'REMOTE_ADDR'].decode('ascii'))
+        addr = self.environ.get('REMOTE_ADDR') or self.environ[b'REMOTE_ADDR']
+        addr = ip_address(addr.decode('ascii') if type(addr) is bytes else addr)
         trusted_proxies = getattr(self.website, 'trusted_proxies', None)
         forwarded_for = self.headers.get(b'X-Forwarded-For')
         self.__dict__['bypasses_proxy'] = bool(trusted_proxies)

@@ -1,4 +1,4 @@
-python := "$(shell { command -v python2.7 || command -v python; } 2>/dev/null)"
+python := "$(shell { command -v python3.6 || command -v python; } 2>/dev/null)"
 install_where := $(shell $(python) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')")
 
 # Set the relative path to installed binaries under the project virtualenv.
@@ -27,7 +27,7 @@ env: requirements*.txt
 
 rehash-requirements:
 	for f in requirements*.txt; do \
-	    sed -r -e '/^ +--hash/d' -e 's/\\$$//' $$f | xargs ./env/bin/hashin -r $$f -p 2.7 -p 3.6; \
+	    sed -r -e '/^ +--hash/d' -e 's/\\$$//' $$f | xargs ./env/bin/hashin -r $$f -p 3.4 -p 3.6; \
 	done
 
 clean:
