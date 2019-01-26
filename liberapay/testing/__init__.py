@@ -320,9 +320,12 @@ class Harness(unittest.TestCase):
         return payin, pt
 
     def add_payment_account(self, participant, provider, country='FR', **data):
-        data.setdefault('id', 'x')
+        if provider == 'paypal':
+            data.setdefault('id', participant.email or participant.username)
+        else:
+            data.setdefault('id', 'acct_1ChyayFk4eGpfLOC')
         data.setdefault('default_currency', None)
-        data.setdefault('charges_enabled', None)
+        data.setdefault('charges_enabled', True)
         data.setdefault('verified', True)
         data.setdefault('display_name', None)
         data.setdefault('token', None)

@@ -19,6 +19,6 @@ INSERT INTO currency_exchange_rates VALUES
     ('EUR', 'GBP', 0.9),
     ('GBP', 'EUR', 1 / 0.9),
     ('EUR', 'JPY', 125),
-    ('JPY', 'EUR', 1 / 125),
+    ('JPY', 'EUR', 1 / 125.0),
     ('EUR', 'KRW', 1250),
-    ('KRW', 'EUR', 1 / 1250);
+    ('KRW', 'EUR', 1 / 1250.0);
