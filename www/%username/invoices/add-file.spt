@@ -4,9 +4,7 @@ from base64 import b64encode
 from hashlib import sha256
 import hmac
 import json
-
-from six import text_type as str
-from six.moves.urllib.parse import urlsplit
+from urllib.parse import urlsplit
 
 from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
 from liberapay.exceptions import AuthRequired

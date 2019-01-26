@@ -3,9 +3,8 @@
 from __future__ import division, print_function, unicode_literals
 
 from email.utils import parsedate
+from http.cookies import SimpleCookie
 from time import gmtime
-
-from six.moves.http_cookies import SimpleCookie
 
 from babel.messages.catalog import Message
 
@@ -40,10 +39,10 @@ class TestLogIn(EmailHarness):
         # Basic checks
         assert r.code == 302
         p.extend_session_lifetime(1)  # trick to get p.session
-        expected = str('%i:%i:%s') % (p.id, p.session.id, p.session.secret)
+        expected = '%i:%i:%s' % (p.id, p.session.id, p.session.secret)
         sess_cookie = r.headers.cookie[SESSION]
         assert sess_cookie.value == expected
-        expires = sess_cookie[str('expires')]
+        expires = sess_cookie['expires']
         assert expires.endswith(' GMT')
         assert parsedate(expires) > gmtime()
         # More thorough check

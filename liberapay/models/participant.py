@@ -9,9 +9,8 @@ from os import urandom
 from threading import Lock
 from time import sleep
 import unicodedata
+from urllib.parse import urlencode
 import uuid
-
-from six.moves.urllib.parse import urlencode
 
 import aspen_jinja2_renderer
 from cached_property import cached_property

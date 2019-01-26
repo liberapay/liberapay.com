@@ -2,7 +2,7 @@
 
 from __future__ import print_function, unicode_literals
 
-from six.moves.http_cookies import SimpleCookie
+from http.cookies import SimpleCookie
 
 import pytest
 

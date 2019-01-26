@@ -2,8 +2,7 @@ from __future__ import print_function, unicode_literals
 
 import socket
 import string
-
-from six.moves.urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from aspen.exceptions import NegotiationFailure, NotFound, RedirectFromSlashless, UnindexedDirectory
 from aspen.request_processor.algorithm import dispatch_path_to_filesystem

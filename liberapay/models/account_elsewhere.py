@@ -2,10 +2,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from datetime import timedelta
 import json
+from urllib.parse import urlsplit, urlunsplit
 import uuid
 import xml.etree.ElementTree as ET
-
-from six.moves.urllib.parse import urlsplit, urlunsplit
 
 from markupsafe import Markup
 from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError

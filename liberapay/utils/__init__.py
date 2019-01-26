@@ -15,8 +15,7 @@ import os
 import pickle
 import re
 import socket
-
-from six import PY3
+from urllib.parse import quote as urlquote
 
 from pando import Response, json
 from pando.utils import to_rfc822, utcnow
@@ -24,7 +23,6 @@ from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
 from liberapay.elsewhere._paginators import _modify_query
-from liberapay.elsewhere._utils import urlquote
 from liberapay.exceptions import (
     AccountSuspended, AuthRequired, LoginRequired, InvalidNumber, TooManyAdminActions
 )
@@ -231,7 +229,7 @@ def b64encode_s(s):
         except UnicodeError:
             prefix = b'.'
     r = prefix + b64encode(s, b'-_').replace(b'=', b'~')
-    return r.decode('ascii') if PY3 else r
+    return r.decode('ascii')
 
 
 def _execute(this, sql, params=[]):
@@ -307,32 +305,26 @@ def obfuscate(n, x, y):
     return n[:x] + 'x'*len(n[x:y]) + n[y:]
 
 
-def ensure_str(s):
-    if isinstance(s, str):
-        return s
-    return s.decode('ascii') if isinstance(s, bytes) else s.encode('ascii')
-
-
 def set_cookie(cookies, key, value, expires=None, httponly=True, path='/', samesite='lax'):
-    key = ensure_str(key)
-    cookies[key] = ensure_str(value)
+    key = key
+    cookies[key] = value
     cookie = cookies[key]
     if expires:
         if isinstance(expires, timedelta):
             expires += utcnow()
         if isinstance(expires, datetime):
             expires = to_rfc822(expires)
-        cookie[str('expires')] = ensure_str(expires)
+        cookie['expires'] = expires
     if httponly:
-        cookie[str('httponly')] = True
+        cookie['httponly'] = True
     if path:
-        cookie[str('path')] = ensure_str(path)
+        cookie['path'] = path
     if samesite:
-        cookie[str('samesite')] = ensure_str(samesite)
+        cookie['samesite'] = samesite
     if website.cookie_domain:
-        cookie[str('domain')] = ensure_str(website.cookie_domain)
+        cookie['domain'] = website.cookie_domain
     if website.canonical_scheme == 'https':
-        cookie[str('secure')] = True
+        cookie['secure'] = True
 
 
 def erase_cookie(cookies, key, **kw):

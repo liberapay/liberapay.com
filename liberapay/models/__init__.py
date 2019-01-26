@@ -5,8 +5,6 @@ import re
 import sys
 import traceback
 
-from six.moves import input
-
 from postgres import Postgres
 from postgres.cursors import SimpleCursorBase
 from psycopg2 import IntegrityError, ProgrammingError

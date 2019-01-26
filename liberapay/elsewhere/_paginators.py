@@ -4,11 +4,7 @@ from __future__ import unicode_literals
 
 from functools import reduce
 from operator import getitem
-try:
-    from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
-except ImportError:
-    from urllib import urlencode
-    from urlparse import parse_qs, urlsplit, urlunsplit
+from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
 
 def _modify_query(url, key, value):

@@ -1,7 +1,7 @@
 """Defines website authentication helpers.
 """
 
-from six.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 
 from pando import Response
 

@@ -61,7 +61,7 @@ test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 
 pyflakes: env
-	$(env_bin)/flake8 app.py liberapay tests
+	$(env_bin)/python -m flake8 app.py liberapay tests
 
 test: test-schema pytest
 tests: test

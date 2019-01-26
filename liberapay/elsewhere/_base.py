@@ -4,10 +4,7 @@ from datetime import datetime
 import hashlib
 import json
 import logging
-try:
-    from urllib.parse import urlsplit
-except ImportError:
-    from urlparse import urlsplit
+from urllib.parse import quote as urlquote, urlsplit
 import xml.etree.ElementTree as ET
 
 from babel.dates import format_timedelta
@@ -22,7 +19,6 @@ from liberapay.website import website
 
 from ._exceptions import BadUserId, UserNotFound
 from ._extractors import not_available
-from ._utils import urlquote
 
 
 logger = logging.getLogger('liberapay.elsewhere')
