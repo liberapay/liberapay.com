@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-01-26 08:22+0000\n"
+"PO-Revision-Date: 2019-01-27 08:59+0000\n"
 "Last-Translator: Davide Neri <davnerix@gmail.com>\n"
 "Language-Team: Italian (https://hosted.weblate.org/projects/liberapay/core/it/)\n"
 "Language: it\n"
@@ -3736,11 +3736,11 @@ msgid "The sum of active donations for each week, expressed in {currency}."
 msgstr "La domma delle donazioni attive per ciascuna settimana, espresse in {currency}."
 
 msgid "Donor Debits"
-msgstr ""
+msgstr "Addebiti dei donatori"
 
 #, python-brace-format
 msgid "The sum of charges processed during each week, expressed in {currency}."
-msgstr ""
+msgstr "Il totale di transazioni gestite durante ciascuna settimana, espresso in {currency}."
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
 msgstr "Una squadra Liberapay coordina le donazioni provenienti da donatori multipli a più riceventi. I donatori scelgono quanto vogliono donare, i riceventi decidono come suddividere il denaro, Liberapay calcola ed esegue i trasferimenti da donatori a riceventi."
@@ -3778,17 +3778,16 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr "Potresti chiederti perché trattiamo le quote nominali come massimali invece di semplici percentuali. Questo è perché avere dei massimali permette alle squadre di avere guadagni inutilizzati (chiamati \"avanzo\"), e ciò è un bene per diversi motivi. Innanzitutto, crea un \"cuscino\" che stabilizza i guadagni dei membri della squadra. Come secondo motivo, facilita l'integrazione di nuovi membri in una squadra, perché all'aumentare delle loro quote si riduce l'avanzo invece di intaccare i guadagni degli altri membri. Come terzo motivo, permette al nostro software di regolare le somme che i donatori trasferiscono effettivamente ai membri della squadra in modo da bilanciare i contributi dei donatori nel tempo, rendendo il sistema più equo. Infine, incoraggia a donare ad una squadra anche se ha già raggiunto il suo obiettivo di finanziamento, che è positivo per la stabilità dei guadagni della squadra."
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "Quote automatiche"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr ""
+msgstr "L'azione predefinita è che tutti i membri hanno le loro quote impostante su uno speciale valore \"automatico\", che corrisponde ad una parte uguale del rimanente. In altre parole, i membri che indicano esplicitamente le loro quote vendono finanziati per primi, poi ciò che rimane viene distribuito in parti uguali ai membri che hanno quote automatiche."
 
 msgid "Regulation of take amounts"
 msgstr "Regolazione dell'ammontare delle quote"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Quando questa funzionalità è attiva per una squadra, i suoi membri non possono aumentare le loro quote più di un massimo calcolato sulla base della quota nominale nel periodo del giorno di paga precedente. Questo meccanismo è studiato per incoraggiare l'invito di nuovi membri ad unirsi alla squadra, garantendo che essi non possano ricevere una quota spropositata dei guadagni nelle loro prime settimane."
+msgstr "Quando la funzionalità \"limite della quota\" è attiva per una squadra, i suoi membri non possono aumentare le loro quote più di un massimo calcolato sulla base della quota nominale nel periodo del giorno di paga precedente. Questo meccanismo è studiato per incoraggiare l'invito di nuovi membri ad unirsi alla squadra, garantendo che essi non possano ricevere una quota spropositata dei guadagni nelle loro prime settimane."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
