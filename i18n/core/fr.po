@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2019-01-27 08:59+0000\n"
+"Last-Translator: Olivier Humbert <trebmuh@tuxfamily.org>\n"
 "Language-Team: French (https://hosted.weblate.org/projects/liberapay/core/fr/)\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.5-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -1556,7 +1559,7 @@ msgid "Update my nominal take"
 msgstr "Modifier ma part nominale"
 
 msgid "auto"
-msgstr ""
+msgstr "auto"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
 msgstr "Les revenus inutilisés seront utilisés dans les semaines suivantes, ils ne s'accumulent pas dans le compte de l'équipe. Une équipe ne peut pas posséder de l'argent parce qu'elle n'est pas une entité juridique."
@@ -3774,17 +3777,16 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr "Vous vous demandez peut-être pourquoi nous traitons les parts nominales comme des maximums au lieu de les utiliser comme simples pourcentages. La raison est que les maximums permettent à une équipe d'avoir une partie de revenu inutilisée (appelée « restant ») et que l'existence de celle-ci a plusieurs avantages. Premièrement, cela stabilise les revenus des membres de l'équipe en agissant comme un amortisseur. Deuxièmement, cela facilite l'intégration de nouveau membres dans une équipe, car quand ils augmentent leurs parts ils piochent dans le revenu inutilisé au lieu de diminuer les revenus des autres membres. Troisièmement, cela permet à notre logiciel d'ajuster les montants que les donateurs transfèrent réellement aux membres de l'équipe, d'une façon qui équilibre les contributions des donateurs au fil du temps, ce qui rend le système plus juste. Enfin, cela encourage les dons aux équipes même quand leurs objectifs de financement sont déjà atteints, ce qui est bon pour la stabilité des revenus."
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "Montants automatiques"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr ""
+msgstr "Par défaut, tous les membres de l'équipe ont leur part paramétrée à la valeur spéciale 'auto', qui correspond à une part égale de ce qu'il reste. En d'autres termes, les membres qui paramètrent manuellement leurs prises reçoivent un financement en premier, puis ce qui reste est distribué en montants égaux aux membres qui ont des montants automatiques."
 
 msgid "Regulation of take amounts"
 msgstr "Régulation des montants des parts"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Quand cette fonctionnalité est activée pour une équipe, les membres ne peuvent pas augmenter leurs parts au-dessus d'un maximum basé sur les montants des parts tels qu'ils étaient au précédent jour de paie. Ce mécanisme est conçu pour encourager à systématiquement inviter les nouveaux contributeurs à rejoindre l'équipe en garantissant qu'ils ne pourront pas prendre une part disproportionnée du revenu de l'équipe."
+msgstr "Quand cette fonctionnalité est activée pour une équipe, ses membres ne peuvent pas augmenter leurs montants au-dessus d'un maximum calculé sur la base des montants nominaux tels qu'ils étaient au précédent jour de paie. Ce mécanisme est conçu pour encourager à systématiquement inviter les nouveaux contributeurs à rejoindre l'équipe en garantissant qu'ils ne pourront pas prendre une part disproportionnée du revenu de l'équipe dans les premières semaines."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
