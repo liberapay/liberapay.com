@@ -4,7 +4,7 @@ import stripe
 
 from liberapay.models.participant import Participant
 from liberapay.payin.stripe import (
-    int_to_Money, repr_charge_error, settle_destination_charge
+    int_to_Money, repr_charge_error, settle_charge
 )
 from liberapay.utils import utcnow
 
@@ -41,8 +41,7 @@ if event_object_type == 'charge':
     """, (payin_id, charge.id))
     if not payin:
         raise response.error(400, "payin not found")
-    pt = website.db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin_id,))
-    payin = settle_destination_charge(website.db, payin, charge, pt)
+    payin = settle_charge(website.db, payin, charge)
     if payin.status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
         payer = Participant.from_id(payin.payer)
         payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
