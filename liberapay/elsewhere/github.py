@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from liberapay.elsewhere._base import PlatformOAuth2
 from liberapay.elsewhere._exceptions import CantReadMembership
 from liberapay.elsewhere._extractors import key, drop_keys

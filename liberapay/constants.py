@@ -1,6 +1,3 @@
-# coding: utf8
-from __future__ import print_function, unicode_literals
-
 from collections import defaultdict, namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP

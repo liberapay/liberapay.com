@@ -1,6 +1,3 @@
-# encoding: utf8
-from __future__ import print_function, unicode_literals
-
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation

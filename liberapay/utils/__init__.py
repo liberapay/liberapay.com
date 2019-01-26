@@ -1,7 +1,3 @@
-# encoding: utf8
-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from base64 import b64decode, b64encode
 from binascii import hexlify, unhexlify
 from datetime import date, datetime, timedelta

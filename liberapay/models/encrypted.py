@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from postgres.orm import Model
 from psycopg2.extensions import adapt, AsIs
 

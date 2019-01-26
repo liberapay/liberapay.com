@@ -1,5 +1,3 @@
-from __future__ import print_function, unicode_literals
-
 from liberapay.utils import fake_data
 from liberapay.testing import Harness
 

@@ -1,7 +1,3 @@
-# coding: utf8
-
-from __future__ import division
-
 import builtins
 from ipaddress import ip_address
 import os

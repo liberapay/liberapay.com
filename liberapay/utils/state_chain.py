@@ -1,5 +1,3 @@
-from __future__ import print_function, unicode_literals
-
 import socket
 import string
 from urllib.parse import urlsplit, urlunsplit

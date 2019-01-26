@@ -1,5 +1,3 @@
-from __future__ import print_function, unicode_literals
-
 from dependency_injection import resolve_dependencies
 from pando import Response
 

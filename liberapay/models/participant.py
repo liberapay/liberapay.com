@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 from base64 import b64decode, b64encode
 from datetime import timedelta
 from decimal import Decimal

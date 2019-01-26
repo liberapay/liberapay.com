@@ -1,7 +1,3 @@
-# coding: utf8
-
-from __future__ import division, print_function, unicode_literals
-
 from collections import namedtuple
 from datetime import date
 from decimal import Decimal, ROUND_UP

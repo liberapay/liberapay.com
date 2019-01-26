@@ -3,8 +3,6 @@
 To avoid circular imports this module should not import any other liberapay submodule.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import logging
 import os
 

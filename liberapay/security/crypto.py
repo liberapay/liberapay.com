@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 from binascii import b2a_base64
 from collections import OrderedDict
 from datetime import date, timedelta

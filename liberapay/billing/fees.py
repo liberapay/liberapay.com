@@ -1,6 +1,5 @@
 """Functions to compute transaction fees.
 """
-from __future__ import division, print_function, unicode_literals
 
 from mangopay.utils import Money
 

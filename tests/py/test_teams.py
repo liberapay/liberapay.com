@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from liberapay.exceptions import EmailAlreadyAttachedToSelf, EmailAlreadyTaken
 from liberapay.models._mixin_team import InactiveParticipantAdded
 from liberapay.models.participant import Participant

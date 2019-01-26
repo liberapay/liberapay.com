@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 from datetime import datetime
 import hashlib
 import json

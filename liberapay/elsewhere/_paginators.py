@@ -1,6 +1,5 @@
 """Helper functions to handle pagination of API responses
 """
-from __future__ import unicode_literals
 
 from functools import reduce
 from operator import getitem

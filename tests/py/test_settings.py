@@ -1,6 +1,3 @@
-# coding: utf8
-from __future__ import print_function, unicode_literals
-
 from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
 from liberapay.testing import Harness
 from liberapay.models.participant import Participant

@@ -1,5 +1,3 @@
-from __future__ import print_function, unicode_literals
-
 import sys
 
 from babel.messages.pofile import read_po, write_po

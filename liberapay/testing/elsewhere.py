@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # flake8: noqa
 
 """
@@ -7,8 +6,6 @@ Examples of data returned by the APIs of the elsewhere platforms.
 They are wrapped in lambdas to prevent tests from persistently modifying the
 data.
 """
-
-from __future__ import unicode_literals
 
 import xml.etree.ElementTree as ET
 

@@ -1,6 +1,5 @@
 """Helper functions to extract data from API responses
 """
-from __future__ import unicode_literals
 
 from functools import reduce
 import json
