@@ -54,6 +54,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('s3_secret_key', '""'::jsonb),
     ('s3_region', '"eu-west-1"'::jsonb),
     ('send_newsletters_every', '60'::jsonb),
+    ('sepa_creditor_identifier', '"FR65ZZZ858BF1"'::jsonb),
     ('ses_feedback_queue_url', '""'::jsonb),
     ('show_sandbox_warning', 'true'::jsonb),
     ('socket_timeout', '10.0'::jsonb),
