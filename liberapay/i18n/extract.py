@@ -12,7 +12,7 @@ def extract_custom(extractor, *args, **kw):
     for match in extractor(*args, **kw):
         msg = match[2]
         if isinstance(msg, tuple) and msg[0] == '':
-            unused = "<unused singular (hash=%s)>" % md5(msg[1]).hexdigest()
+            unused = "<unused singular (hash=%s)>" % md5(msg[1].encode('utf8')).hexdigest()
             msg = (unused, msg[1], msg[2])
             match = (match[0], match[1], msg, match[3])
         yield match
