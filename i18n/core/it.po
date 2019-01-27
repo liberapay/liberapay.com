@@ -593,7 +593,7 @@ msgstr "Grande"
 msgid "Maximum"
 msgstr "Massimo"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr "Hai esaurito le richieste a tua disposizione, puoi riprovare {in_N_minutes}."
 
@@ -680,11 +680,11 @@ msgstr "\"{0}\" non è un indirizzo e-mail valido."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "\"{domain_name}\" non è un profilo e-mail valido."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "L'indirizzo e-mail {email_address} è nella lista nera poiché {timespan_ago} è fallito un tentativo di invio. Si prega di inviare una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
+msgstr "L'indirizzo e-mail {email_address} è nella lista nera poiché {timespan_ago} è fallito un tentativo di inviare un messaggio verso di esso. Si prega di inviare una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "L'indirizzo e-mail {email_address} è nella lista nera a causa di un reclamo ricevuto {timespan_ago}. Si prega di inviare una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
 
@@ -1429,11 +1429,11 @@ msgstr "Guadagni: {0} / Settimana"
 msgid "Mission accomplished!"
 msgstr "Missione compiuta!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
 msgstr "Iscritto {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Chiuso {timespan_ago}."
 
@@ -1484,7 +1484,7 @@ msgstr "(ramo)"
 msgid "Updated this week"
 msgstr "Aggiornato questa settimana"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Aggiornato {timespan_ago}"
 
@@ -1551,13 +1551,13 @@ msgid "Actual Take"
 msgstr "Quota effettiva"
 
 msgid "n/a"
-msgstr ""
+msgstr "non disponibile"
 
 msgid "Update my nominal take"
 msgstr "Aggiorna la mia quota nominale"
 
 msgid "auto"
-msgstr ""
+msgstr "automatico"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
 msgstr "I guadagni inutilizzati verranno consumati nelle settimane successive, non si accumulano nel conto della squadra. Una squadra non può possedere denaro poiché non è un'entità giuridica."
@@ -1808,7 +1808,7 @@ msgstr "Non hai alcun profilo {platform} associato al tuo profilo."
 msgid "Connect {0} account"
 msgstr "Associa profilo {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
 msgstr[0] "Abbiamo trovato {n} repository nel tuo profilo {platform}, {timespan_ago}."
@@ -2026,11 +2026,11 @@ msgstr "{money_amount}{small}/mese{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/anno{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Iniziato {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Iniziato {timespan_ago_1}. Modificato {timespan_ago_2}."
 
@@ -2046,7 +2046,7 @@ msgstr "Inattivo perché il ricevente non accetta più donazioni."
 msgid "Active"
 msgstr "Attivo"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr "Prossimo pagamento {in_N_weeks_months_or_years}."
 
@@ -2081,7 +2081,7 @@ msgstr "negli ultimi 30 giorni"
 msgid "Restart"
 msgstr "Riavvia"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Iniziato {timespan_ago_1}. Terminato {timespan_ago_2}."
 
@@ -2295,9 +2295,9 @@ msgstr "Modifica"
 msgid "History"
 msgstr "Cronologia"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
-msgstr "{username} si è unito {timespan_ago}."
+msgstr "{username} si è iscritto {timespan_ago}."
 
 msgid "View income history"
 msgstr "Visualizza la cronologia dei guadagni"
@@ -2313,7 +2313,7 @@ msgstr "Numero di donatori ogni settimana"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} non rende pubblico quanto denaro riceve tramite Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Le fatture sono private."
@@ -2458,7 +2458,7 @@ msgstr "riuscito"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
-msgstr ""
+msgstr "I totali qui sotto non includono le donazioni tramite il vecchio sistema a portafoglio. Puoi trovarle nella {link_start}pagina del tuo Portafoglio{link_end}."
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -2521,11 +2521,11 @@ msgstr "Una squadra non può unirsi ad una squadra"
 msgid "You can't invite an inactive user to join a team."
 msgstr "Non si può invitare un utente inattivo ad entrare in una squadra."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
 msgstr "{username} è già stato invitato/a a partecipare a questa squadra {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
 msgstr "{username} ha già rifiutato di unirsi a questa squadra {timespan_ago}."
 
@@ -3652,39 +3652,39 @@ msgstr "Sicurezza"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "Garantiamo che i fondi dati in nostra custodia non saranno persi in caso di bancarotta, anche nel caso in cui influenzi noi o terze parti che hanno in custodia i fondi."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] "Liberapay è stato lanciato {timespan_ago} e ha {n} utenti."
+msgstr[0] "Liberapay è stato lanciato {timespan_ago} e ha {n} utente."
 msgstr[1] "Liberapay è stato lanciato {timespan_ago} e ha {n} utenti."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} è depositato in garanzia all'interno di Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] "L'ultimo giorno di paga è stato {timespan_ago} e ha trasferito {money_amount} tra {n} utenti."
+msgstr[0] "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgstr[1] "L'ultimo giorno di paga è stato {timespan_ago} e ha trasferito {money_amount} tra {n} utenti."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] "{n} partecipanti hanno donato denaro."
+msgstr[0] "{n} partecipante ha donato denaro."
 msgstr[1] "{n} partecipanti hanno donato denaro."
 
 #, python-brace-format
 msgid "{n} participant received money."
 msgid_plural "{n} participants received money."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} partecipante ha ricevuto denaro."
+msgstr[1] "{n} partecipanti hanno ricevuto denaro."
 
 #, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} partecipante era sia donatore che beneficiario."
+msgstr[1] "{n} partecipanti erano sia donatori che beneficiari."
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -3726,18 +3726,18 @@ msgid "Money moved out of Liberapay"
 msgstr "Denaro trasferito fuori da Liberapay"
 
 msgid "Weekly Donations"
-msgstr ""
+msgstr "Donazioni settimanali"
 
 #, python-brace-format
 msgid "The sum of active donations for each week, expressed in {currency}."
-msgstr ""
+msgstr "La domma delle donazioni attive per ciascuna settimana, espresse in {currency}."
 
 msgid "Donor Debits"
-msgstr ""
+msgstr "Addebiti dei donatori"
 
 #, python-brace-format
 msgid "The sum of charges processed during each week, expressed in {currency}."
-msgstr ""
+msgstr "Il totale di transazioni gestite durante ciascuna settimana, espresso in {currency}."
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
 msgstr "Una squadra Liberapay coordina le donazioni provenienti da donatori multipli a più riceventi. I donatori scelgono quanto vogliono donare, i riceventi decidono come suddividere il denaro, Liberapay calcola ed esegue i trasferimenti da donatori a riceventi."
@@ -3775,17 +3775,16 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr "Potresti chiederti perché trattiamo le quote nominali come massimali invece di semplici percentuali. Questo è perché avere dei massimali permette alle squadre di avere guadagni inutilizzati (chiamati \"avanzo\"), e ciò è un bene per diversi motivi. Innanzitutto, crea un \"cuscino\" che stabilizza i guadagni dei membri della squadra. Come secondo motivo, facilita l'integrazione di nuovi membri in una squadra, perché all'aumentare delle loro quote si riduce l'avanzo invece di intaccare i guadagni degli altri membri. Come terzo motivo, permette al nostro software di regolare le somme che i donatori trasferiscono effettivamente ai membri della squadra in modo da bilanciare i contributi dei donatori nel tempo, rendendo il sistema più equo. Infine, incoraggia a donare ad una squadra anche se ha già raggiunto il suo obiettivo di finanziamento, che è positivo per la stabilità dei guadagni della squadra."
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "Quote automatiche"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr ""
+msgstr "L'azione predefinita è che tutti i membri hanno le loro quote impostante su uno speciale valore \"automatico\", che corrisponde ad una parte uguale del rimanente. In altre parole, i membri che indicano esplicitamente le loro quote vendono finanziati per primi, poi ciò che rimane viene distribuito in parti uguali ai membri che hanno quote automatiche."
 
 msgid "Regulation of take amounts"
 msgstr "Regolazione dell'ammontare delle quote"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Quando questa funzionalità è attiva per una squadra, i suoi membri non possono aumentare le loro quote più di un massimo calcolato sulla base della quota nominale nel periodo del giorno di paga precedente. Questo meccanismo è studiato per incoraggiare l'invito di nuovi membri ad unirsi alla squadra, garantendo che essi non possano ricevere una quota spropositata dei guadagni nelle loro prime settimane."
+msgstr "Quando la funzionalità \"limite della quota\" è attiva per una squadra, i suoi membri non possono aumentare le loro quote più di un massimo calcolato sulla base della quota nominale nel periodo del giorno di paga precedente. Questo meccanismo è studiato per incoraggiare l'invito di nuovi membri ad unirsi alla squadra, garantendo che essi non possano ricevere una quota spropositata dei guadagni nelle loro prime settimane."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
@@ -3813,7 +3812,7 @@ msgstr "Chiudere il conto di una squadra"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "Il conto di una squadra viene chiuso automaticamente quando l'ultimo membro se ne va."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
 msgstr "Ultima modifica {timespan_ago} da parte di {username}."
 
@@ -4001,7 +4000,7 @@ msgstr "Impostazioni comunità {0}"
 msgid "Sidebar text"
 msgstr "Testo barra laterale"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
 msgstr[0] "Questa comunità è stata creata {timespan_ago} e ha {n} membro."
@@ -4219,7 +4218,7 @@ msgstr "Liberapay beneficia di account sponsorizzati sui seguenti servizi open s
 msgid "Recent Activity"
 msgstr "Attività recente"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
 msgstr[0] "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
