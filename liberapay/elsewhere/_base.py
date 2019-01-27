@@ -176,9 +176,12 @@ class Platform(object):
             reset = response.headers.get(prefix+'reset')
 
             try:
-                limit, remaining, reset = int(limit), int(remaining), int(reset)
-                reset = datetime.fromtimestamp(reset, tz=utc)
-            except (TypeError, ValueError):
+                limit, remaining = int(limit), int(remaining)
+                if reset.isdigit():
+                    reset = datetime.fromtimestamp(int(reset), tz=utc)
+                else:
+                    reset = parse_date(reset)
+            except (OverflowError, TypeError, ValueError):
                 d = dict(limit=limit, remaining=remaining, reset=reset)
                 url = response.request.url.split('?', 1)[0]
                 logger.warning('Got weird rate headers from <%s>: %s' % (url, d))
