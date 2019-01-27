@@ -663,12 +663,15 @@ class Participant(Model, MixinTeam):
     def donate_remaining_balances_to_liberapay(self):
         """Donate what's left in the user's wallets to Liberapay.
         """
+        self.transfer_remaining_balances_to_liberapay(donate=True)
+
+    def transfer_remaining_balances_to_liberapay(self, donate=False):
         LiberapayOrg = self.from_username('LiberapayOrg')
         Liberapay = self.from_username('Liberapay')
         tip = self.get_tip_to(LiberapayOrg)
         if not tip['amount']:
             tip = self.get_tip_to(Liberapay)
-        if tip['amount']:
+        if tip['amount'] and donate:
             if tip['tippee'] == Liberapay.id:
                 context = 'take-in-advance'
                 team = Liberapay.id
@@ -677,7 +680,7 @@ class Participant(Model, MixinTeam):
                 team = None
             unit_amount = tip['amount']
         else:
-            context = 'final-gift'
+            context = 'final-gift' if donate else 'indirect-payout'
             team = None
             unit_amount = None
         from liberapay.billing.transactions import transfer

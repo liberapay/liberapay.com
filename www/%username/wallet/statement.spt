@@ -232,6 +232,8 @@ output.body = render(globals(), allow_partial_i18n=False)
                     {{ _("currency exchange") }}
                 % elif context == 'fee-refund'
                     {{ _("fee refund") }}
+                % elif context == 'indirect-payout'
+                    indirect payout for {{ event['username'] }}
                 % endif
             % else
                 % set to = event['username']
@@ -274,6 +276,8 @@ output.body = render(globals(), allow_partial_i18n=False)
                     {{ _("currency exchange") }}
                 % elif context == 'fee-refund'
                     {{ _("fee refund") }}
+                % elif context == 'indirect-payout'
+                    {{ _("withdrawal") }}
                 % endif
             % endif
             </td>
