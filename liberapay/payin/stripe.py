@@ -97,7 +97,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
             'payin_sdd_created',
             force_email=True,
             payin_amount=payin.amount,
-            bank_name=sepa_debit.bank_name,
+            bank_name=getattr(sepa_debit, 'bank_name', None),
             partial_bank_account_number=get_partial_iban(sepa_debit),
             mandate_url=sepa_debit.mandate_url,
             mandate_id=sepa_debit.mandate_reference,
