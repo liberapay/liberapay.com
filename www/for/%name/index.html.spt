@@ -21,9 +21,11 @@ members = query_cache.all("""
            ORDER BY s.lang = %s DESC, s.id
               LIMIT 1
            ) AS summary
-      FROM participants p
-      JOIN community_memberships cc ON cc.participant = p.id AND cc.community = %s
-     WHERE cc.is_on
+      FROM community_memberships cc
+      JOIN participants p ON p.id = cc.participant
+     WHERE cc.community = %s
+       AND cc.is_on
+       AND p.hide_from_lists = 0
   ORDER BY cc.ctime DESC
      LIMIT %s
     OFFSET %s
