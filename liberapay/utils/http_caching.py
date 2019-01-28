@@ -77,7 +77,7 @@ def try_to_serve_304(dispatch_result, request, response, etag):
         # This is a request for a dynamic resource.
         return
 
-    qs_etag = request.line.uri.querystring.get('etag')
+    qs_etag = request.qs.get('etag')
     if qs_etag and qs_etag != etag:
         # Don't serve one version of a file as if it were another.
         raise response.error(410)
@@ -115,7 +115,7 @@ def add_caching_to_response(response, request=None, etag=None):
     # https://developers.google.com/speed/docs/best-practices/caching
     response.headers[b'Etag'] = etag.encode('ascii')
 
-    if request.line.uri.querystring.get('etag'):
+    if request.qs.get('etag'):
         # We can cache "indefinitely" when the querystring contains the etag.
         response.headers[b'Cache-Control'] = b'public, max-age=31536000'
     else:

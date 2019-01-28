@@ -44,7 +44,7 @@ def reject_forgeries(state, request, response, website, _):
     else:
         state['csrf_token'] = get_random_string(TOKEN_LENGTH)
 
-    if request.line.method in SAFE_METHODS:
+    if request.method in SAFE_METHODS:
         # Assume that methods defined as 'safe' by RFC7231 don't need protection.
         return
     elif request_path == '/migrate' and not request.qs:
@@ -59,7 +59,7 @@ def reject_forgeries(state, request, response, website, _):
 
     # Check non-cookie token for match.
     second_token = ""
-    if request.line.method == "POST":
+    if request.method == "POST":
         try:
             if isinstance(request.body, dict):
                 second_token = request.body.get('csrf_token', '')

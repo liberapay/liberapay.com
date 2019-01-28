@@ -295,7 +295,7 @@ class AccountElsewhere(Model):
 
 
 def get_account_elsewhere(website, state, api_lookup=True):
-    path = state['request'].line.uri.path
+    path = state['request'].path
     response = state['response']
     platform = website.platforms.get(path['platform'])
     if platform is None:

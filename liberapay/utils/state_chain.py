@@ -5,23 +5,21 @@ import string
 
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
-from aspen.exceptions import NegotiationFailure
-from aspen.http.request import Path
+from aspen.exceptions import NegotiationFailure, NotFound, RedirectFromSlashless, UnindexedDirectory
 from aspen.request_processor.algorithm import dispatch_path_to_filesystem
-from aspen.request_processor.dispatcher import NotFound, RedirectFromSlashless, UnindexedDirectory
 from pando import Response
-from pando.http.request import Line
+from pando.http.request import Line, Path
 from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
 from ..exceptions import LazyResponse, TooManyRequests
+from ..security.csrf import SAFE_METHODS
 from . import urlquote
 
 
-def attach_environ_to_request(environ, request, website):
+def attach_environ_to_request(environ, request):
     request.country = request.headers.get('CF-IPCountry')
     request.environ = environ
-    request.website = website
 
 
 def create_response_object(request, website):
@@ -79,11 +77,11 @@ def canonize(request, website):
             bad_host = True
     if bad_scheme or bad_host:
         url = '%s://%s' % (canonical_scheme, canonical_host if bad_host else host)
-        if request.line.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
+        if request.method in SAFE_METHODS:
             # Redirect to a particular path for idempotent methods.
-            url += request.line.uri.path.raw
+            url += request.line.uri.path.decoded
             if request.line.uri.querystring:
-                url += '?' + request.line.uri.querystring.raw
+                url += '?' + request.line.uri.querystring.decoded
         else:
             # For non-idempotent methods, redirect to homepage.
             url += '/'
@@ -115,25 +113,25 @@ def _dispatch_path_to_filesystem(website, request=None):
     except UnindexedDirectory:
         raise
     except NotFound:
-        raw_path = getattr(path, 'raw', '')
+        raw_path = path.decoded
         if len(raw_path) < 3 or raw_path[-1] != '/' or raw_path[-2] == '/':
             raise
-        path = Path(raw_path[:-1])
+        path = Path(raw_path[:-1].encode('ascii'))
         if '.' in path.parts[-1]:
             # Don't dispatch `/foo.html/` to a `/foo.html` file
             raise
         r = dispatch_path_to_filesystem(
-            request_processor=request_processor, path=path, querystring=qs
+            request_processor=request_processor, path=path.mapping, querystring=qs
         )
         r['path'] = request.line.uri.path = path
         request.canonical_path = raw_path
         return r
     except RedirectFromSlashless as exception:
-        path = urlquote(exception.message, string.punctuation)
+        path = urlquote(exception.message, string.punctuation).encode('ascii')
         path = request.line.uri.path = Path(path)
-        request.canonical_path = path.raw
+        request.canonical_path = path.decoded
         r = dispatch_path_to_filesystem(
-            request_processor=request_processor, path=path, querystring=qs
+            request_processor=request_processor, path=path.mapping, querystring=qs
         )
         r['path'] = path
         return r

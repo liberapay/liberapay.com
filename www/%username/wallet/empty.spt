@@ -7,7 +7,7 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     disburse_to = request.body['disburse_to']
     if disburse_to == 'payout':
-        response.redirect(participant.path('wallet/payout/'+b64encode_s(request.line.uri)))
+        response.redirect(participant.path('wallet/payout/'+b64encode_s(request.line.uri.decoded)))
     elif disburse_to == 'payin-refund':
         participant.refund_balances()
     elif disburse_to == 'downstream':

@@ -11,7 +11,7 @@
     % if inline
     <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
+        <input type="hidden" name="back_to" value="{{ request.line.uri.decoded }}" />
         % if currency_mismatch
             <p class="text-warning small">{{ _(
                 "You are currently donating {money_amount} per week to {name}, "

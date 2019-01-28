@@ -506,7 +506,7 @@ def make_sentry_teller(env):
                     user_data['ip_address'] = str(request.source)
                     sentry_data['request'] = {
                         'method': request.method,
-                        'url': request.line.uri,
+                        'url': request.line.uri.decoded,
                         'headers': {
                             k: b', '.join(v) for k, v in request.headers.items()
                             if k != b'Cookie'

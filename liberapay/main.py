@@ -16,7 +16,7 @@ import aspen.http.mapping
 from aspen.request_processor.dispatcher import DispatchResult, DispatchStatus
 import pando
 from pando import json
-from pando.algorithms.website import fill_response_with_output
+from pando.state_chain import render_response
 from pando.utils import maybe_encode
 
 from liberapay import utils, wireup
@@ -96,8 +96,14 @@ del website.body_parsers[website.media_type_json]
 # Wireup Algorithm
 # ================
 
-website.__dict__.update(wireup.full_algorithm.run(**website.__dict__))
-website.__dict__.pop('state')
+attributes_before = set(website.__dict__.keys())
+d = wireup.full_algorithm.run(**website.__dict__)
+d.pop('chain', None)
+d.pop('exception', None)
+d.pop('state', None)
+for k, v in d.items():
+    if k not in attributes_before:
+        website.__dict__[k] = v
 env = website.env
 tell_sentry = website.tell_sentry
 
@@ -139,12 +145,11 @@ if conf:
 # =================
 
 noop = lambda: None
-algorithm = website.algorithm
+algorithm = website.state_chain
 algorithm.functions = [
     algorithm['parse_environ_into_request'],
     attach_environ_to_request,
     algorithm['insert_variables_for_aspen'],
-    algorithm['parse_body_into_request'],
     algorithm['raise_200_for_OPTIONS'],
     create_response_object,
 
@@ -167,10 +172,8 @@ algorithm.functions = [
 
     enforce_rate_limits,
 
-    algorithm['apply_typecasters_to_path'],
     algorithm['load_resource_from_filesystem'],
-    algorithm['render_resource'],
-    algorithm['fill_response_with_output'],
+    algorithm['render_response'],
     handle_negotiation_exception,
 
     tell_sentry,
@@ -348,8 +351,8 @@ def _render(response, path, state, **extra):
             DispatchStatus.okay, path, {}, "Response.render()", {}, False
         )
     request_processor = state['request_processor']
-    output = aspen.resources.get(request_processor, path).render(state)
-    fill_response_with_output(output, response, request_processor)
+    resource = aspen.resources.get(request_processor, path)
+    render_response(state, resource, response, request_processor)
     raise response
 pando.Response.render = _render
 

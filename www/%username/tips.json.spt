@@ -10,7 +10,7 @@ if user != participant:
 if request.method == 'POST':
     out = []
     try:
-        new_tips = json.loads(request.raw_body)
+        new_tips = json.loads(request.body_bytes)
     except Exception as e:
         raise response.error(400, str(e))
     seen = set()

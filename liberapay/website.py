@@ -14,8 +14,10 @@ from pando.website import Website
 
 
 env = Environment(
-    ASPEN_CHANGES_RELOAD=is_yesish,
+    ASPEN_CHANGES_RELOAD=str,
     ASPEN_PROJECT_ROOT=str,
+    ASPEN_SHOW_TRACEBACKS=str,
+    ASPEN_WWW_ROOT=str,
     AWS_ACCESS_KEY_ID=str,
     AWS_SECRET_ACCESS_KEY=str,
     DATABASE_URL=str,
@@ -60,7 +62,12 @@ if env.missing:
     print("Missing envvar{}: {}.".format(plural, keys))
 
 
-website = Website()
+website = Website(
+    changes_reload=env.aspen_changes_reload,
+    project_root=env.aspen_project_root,
+    show_tracebacks=env.aspen_show_tracebacks,
+    www_root=env.aspen_www_root,
+)
 website.env = env
 
 
