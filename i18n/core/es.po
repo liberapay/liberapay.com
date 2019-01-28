@@ -384,14 +384,14 @@ msgstr "Hemos iniciado un pago domiciliado de {money_amount} de tu cuenta ({part
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Hemos iniciado un pago domiciliado de {money_amount} desde tu cuenta bancaria ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Esta operación se está realizando basándose en {link_start}el mandato {mandate_id}{link_end} que firmaste el {acceptance_date}, autorizando a Liberapay (acreedor SEPA {creditor_identifier}) para enviar instrucciones a tu banco para adeudar tu cuenta, y a tu banco para adeudar tu cuenta de acuerdo con esas instrucciones."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Si no autorizaste este pago, háznoslo saber, lo devolveremos."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -1554,7 +1554,7 @@ msgid "Actual Take"
 msgstr "Parte real"
 
 msgid "n/a"
-msgstr ""
+msgstr "N/A"
 
 msgid "Update my nominal take"
 msgstr "Actualizar mi parte nominal"
@@ -3778,18 +3778,16 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr "Puede que te preguntes por qué tratamos las partes nominales como máximos en vez de como simples porcentajes. Es porque tener máximos permite a un equipo tener ganancias sin usar (el llamado «sobrante»), y eso es bueno en varios aspectos. Primero, proporciona un «cojín» que estabiliza las ganancias de los miembros del equipo. Segundo, facilita la integración de nuevos miembros en un equipo, porque a medida que aumentan sus partes, reducen el sobrante en vez de afectar a las ganancias de los otros miembros. Tercero, permite a nuestro software ajustar las cantidades que los donantes transfieren a los miembros del equipo, de forma que equilibra las contribuciones de los donantes en el tiempo, haciendo así el sistema más justo. Finalmente, alienta a donar a equipos incluso si ya han alcanzado su meta, lo cual es bueno para la estabilidad de los ingresos de los equipos."
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "Reparto nominal automático"
 
-#, fuzzy
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr "Por defecto, todos los miembros de un equipo tienen sus tomas con el valor especial «auto», que se corresponde a una distribución equitativa del resto. En otras palabras, los miembros que seleccionen sus tomas explícitamente son financiados primero, después lo que quede se distribuye en cantidades iguales a los miembros que tienen tomas automáticas."
+msgstr "Por defecto, todos los miembros de un equipo tienen sus partes nominales con el valor especial «auto», que se corresponde a una distribución equitativa del resto. En otras palabras, los miembros que seleccionen sus tomas explícitamente son financiados primero, después lo que quede se distribuye en cantidades iguales a los miembros que tienen el reparto nominal automático."
 
 msgid "Regulation of take amounts"
 msgstr "Regulación del importe de las partes"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Cuando esta característica está habilitada para un equipo, sus miembros no pueden aumentar sus partes más de un máximo calculado en base a las partes nominales en el momento del anterior día de pago. Este mecanismo está pensado para animar a invitar a unirse al equipo a nuevos contribuidores, al garantizar que ellos no tomarán una parte desproporcionada de los ingresos durante las primeras semanas."
+msgstr "Cuando «regulador de parte nominal» está habilitado para un equipo, sus miembros no pueden aumentar sus partes más de un máximo calculado en base a las partes nominales en el momento del anterior día de pago. Este mecanismo está pensado para animar a invitar a unirse al equipo a nuevos contribuidores, garantizando que estos no tomarán una parte desproporcionada de los ingresos durante las primeras semanas."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."

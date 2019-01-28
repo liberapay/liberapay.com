@@ -384,14 +384,14 @@ msgstr "Kami telah memulakan debit terus sebanyak {money_amount} daripada akaun 
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Kami telah memulakan debit terus sebanyak {money_amount} daripada akaun bank anda ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Operasi ini sedang dijalankan berdasarkan {link_start}mandat {mandate_id}{link_end} yang anda tandatangan pada {acceptance_date}, membenarkan Liberapay (kreditor SEPA {creditor_identifier}) untuk menghantar arahan kepada bank anda untuk mendebitkan akaun anda dan untuk bank anda mendebitkan akaun anda mengikut arahan tersebut."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Jika anda tidak membenarkan pembayaran ini sila beritahu kami, kami akan memulangkannya semula."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -1556,13 +1556,13 @@ msgid "Actual Take"
 msgstr "Perolehan Sebenar"
 
 msgid "n/a"
-msgstr ""
+msgstr "tiada"
 
 msgid "Update my nominal take"
 msgstr "Kemas kini perolehan nominal saya"
 
 msgid "auto"
-msgstr ""
+msgstr "auto"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
 msgstr "Baki pendapatan sesuatu minggu akan digunakan pada minggu berikutnya, ia tidak akru dalam akaun kumpulan. Sebuah kumpulan tidak boleh memiliki wang sendiri kerana ia bukan entiti yang sah."
@@ -3780,17 +3780,16 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr "Anda mungkin pelik kenapa kami melayan perolehan nominal sebagai jumlah maksimum dan bukannya peratusan biasa. Ianya kerana dengan adanya nilai maksimum, ia membenarkan kumpulan untuk mempunyai pendapatan tidak digunakan (dipanggil “baki”), dan ia mempunyai pelbagai kebaikan. Pertamanya, ia menyediakan “kusyen” yang menstabilkan pendapatan ahli kumpulan. Keduanya, ia memudahkan penyepaduan ahli baru ke dalam kumpulan, kerana apabila jumlah ahli meningkat maka baki tersebut digunakan dahulu sebelum ia memberi kesan kepada pendapatan ahli lain. Ketiganya, ia membenarkan perisian kami untuk melaras jumlah penderma yang sebenarnya menderma kepada ahli-ahli kumpulan, dalam cara yang menyeimbangkan sumbangan penderma mengikut masa, lalu membuatkan sistem menjadi lebih adil. Akhirnya, ia menggalakkan pendermaan kepada kumpulan walaupun mereka telah mencapai matlamat dana, yang mana ianya bagus untuk kestabilan pendapatan kumpulan."
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "Perolehan automatik"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr ""
+msgstr "Secara asalnya semua ahli kumpulan ditetapkan perolehan kepada nilai khas 'auto', yang bersamaan dengan pembahagian sama rata dari baki. Dalam erti kata lain, ahli yang menetapkan perolehan mereka secara khususnya memperolehnya dahulu, kemudian bakinya dibahagikan sama rata kepada ahli yang mengenakan perolehan automatik."
 
 msgid "Regulation of take amounts"
 msgstr "Kawalan jumlah perolehan"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Apabila sifat ini dibolehkan penggunaan dalam kumpulan, ahlinya tidak boleh menaikkan perolehan mereka melampaui jumlah maksimum yang dikira berdasarkan asas perolehan nominal dari hari bayaran sebelumnya. Mekanisme ini bertujuan untuk menggalakkan penyumbang baru sertai kumpulan tersebut, dengan memastikan mereka tidak mengambil bahagian yang tidak seimbang daripada jumlah pendapatan dalam minggu-minggu awal mereka sertai kumpulan tersebut."
+msgstr "Apabila “pendikit perolehan” ini dibolehkan penggunaan dalam kumpulan, ahlinya tidak boleh menaikkan perolehan mereka melampaui jumlah maksimum yang dikira berdasarkan asas perolehan nominal pada hari bayaran sebelumnya. Mekanisme ini bertujuan untuk menggalakkan penyumbang baru sertai kumpulan tersebut, dengan memastikan mereka tidak mengambil bahagian yang tidak seimbang daripada jumlah pendapatan dalam minggu-minggu awal mereka sertai kumpulan tersebut."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
