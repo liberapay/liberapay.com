@@ -659,7 +659,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             if not (len(parts) == 2 and parts[1] == "po"):
                 continue
             lang = parts[0]
-            with open(os.path.join(localeDir, file)) as f:
+            with open(os.path.join(localeDir, file), 'rb') as f:
                 l = locales[lang.lower()] = Locale(lang)
                 c = l.catalog = read_po(f)
                 share_source_strings(c, source_strings)
