@@ -197,3 +197,23 @@ class Tests2(Harness):
     def test_null_byte_results_in_400(self):
         r = self.client.GET('/foo%00', raise_immediately=False)
         assert r.code == 400, r.text
+
+    def test_unicode_path_is_okay(self):
+        r = self.client.GET('/about/%C3%A9', raise_immediately=False)
+        assert r.code == 404, r.text
+        r = self.client.GET('/about/é'.encode('utf8'), raise_immediately=False)
+        assert r.code == 404, r.text
+        r = self.client.GET('', PATH_INFO='/about/%C3%A9', raise_immediately=False)
+        assert r.code == 404, r.text
+        r = self.client.GET('', PATH_INFO='/about/é', raise_immediately=False)
+        assert r.code == 404, r.text
+
+    def test_unicode_querystring_is_okay(self):
+        r = self.client.GET('/', QUERY_STRING=b'%C3%A9=%C3%A9', raise_immediately=False)
+        assert r.code == 200, r.text
+        r = self.client.GET('/', QUERY_STRING='é=é'.encode('utf8'), raise_immediately=False)
+        assert r.code == 200, r.text
+        r = self.client.GET('/', QUERY_STRING='%C3%A9=%C3%A9', raise_immediately=False)
+        assert r.code == 200, r.text
+        r = self.client.GET('/', QUERY_STRING='é=é', raise_immediately=False)
+        assert r.code == 200, r.text
