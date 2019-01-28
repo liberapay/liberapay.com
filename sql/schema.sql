@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '94'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '95'::jsonb);
 
 
 -- app configuration
@@ -281,7 +281,7 @@ $$ LANGUAGE SQL STRICT;
 
 CREATE TYPE transfer_context AS ENUM (
     'tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt', 'account-switch', 'swap',
-    'tip-in-advance', 'take-in-advance', 'fee-refund'
+    'tip-in-advance', 'take-in-advance', 'fee-refund', 'indirect-payout'
 );
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');

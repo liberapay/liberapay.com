@@ -2250,3 +2250,6 @@ UPDATE takes AS t
           WHERE t2.mtime = t2.ctime
        ) t2
  WHERE t.id = t2.id;
+
+-- migration #95
+ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'indirect-payout';
