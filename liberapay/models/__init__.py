@@ -1,11 +1,7 @@
-from __future__ import print_function
-
 from contextlib import contextmanager
 import re
 import sys
 import traceback
-
-from six.moves import input
 
 from postgres import Postgres
 from postgres.cursors import SimpleCursorBase

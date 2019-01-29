@@ -1,14 +1,8 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from binascii import hexlify
 import hashlib
 import os
 from time import time
-try:
-    from urllib.parse import parse_qs, urlencode, urlparse
-except ImportError:
-    from urllib import urlencode
-    from urlparse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlencode, urlparse
 
 import requests
 

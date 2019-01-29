@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from mangopay.resources import Card, Mandate
 from postgres.orm import Model
 

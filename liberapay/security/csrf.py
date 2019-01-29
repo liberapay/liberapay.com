@@ -7,7 +7,6 @@ See also:
     https://github.com/gratipay/gratipay.com/issues/88
 
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 from datetime import timedelta
 
@@ -17,7 +16,7 @@ from .crypto import constant_time_compare, get_random_string
 
 
 TOKEN_LENGTH = 32
-CSRF_TOKEN = str('csrf_token')  # bytes in python2, unicode in python3
+CSRF_TOKEN = 'csrf_token'
 CSRF_TIMEOUT = timedelta(days=7)
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'TRACE'}
 

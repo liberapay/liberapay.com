@@ -1,6 +1,3 @@
-# coding: utf8
-from __future__ import print_function, unicode_literals
-
 from collections import defaultdict, namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
@@ -373,7 +370,7 @@ RATE_LIMITS = {
     'sign-up.ip-version': (15, 5*60),  # 15 per 5 minutes per IP version
 }
 
-SESSION = str('session')  # bytes in python2, unicode in python3
+SESSION = 'session'
 SESSION_REFRESH = timedelta(hours=1)
 SESSION_TIMEOUT = timedelta(hours=6)
 

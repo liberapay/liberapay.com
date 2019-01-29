@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from collections import defaultdict, OrderedDict
 from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
 from numbers import Number

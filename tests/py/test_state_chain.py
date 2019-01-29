@@ -1,7 +1,3 @@
-# coding: utf8
-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import json
 
 from pando.http.request import Request
@@ -19,7 +15,7 @@ class Tests(Harness):
         self.client.website.canonical_scheme = 'https'
         self.client.website.canonical_host = 'example.com'
         self._cookie_domain = self.client.website.cookie_domain
-        self.client.website.cookie_domain = b'.example.com'
+        self.client.website.cookie_domain = '.example.com'
 
     def tearDown(self):
         Harness.tearDown(self)
@@ -90,11 +86,11 @@ class Tests(Harness):
         )
         assert r.code == 200
         cookie = r.headers.cookie[csrf.CSRF_TOKEN]
-        assert cookie[str('domain')] == str('.example.com')
-        assert cookie[str('expires')][-4:] == str(' GMT')
-        assert cookie[str('path')] == str('/')
-        assert cookie[str('secure')] is True
-        assert cookie[str('samesite')] == str('lax')
+        assert cookie['domain'] == '.example.com'
+        assert cookie['expires'][-4:] == ' GMT'
+        assert cookie['path'] == '/'
+        assert cookie['secure'] is True
+        assert cookie['samesite'] == 'lax'
 
 
 class Tests2(Harness):

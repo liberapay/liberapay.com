@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from liberapay.exceptions import MissingPaymentAccount
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_destination

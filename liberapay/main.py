@@ -1,15 +1,10 @@
-# coding: utf8
-
-from __future__ import division
-
+import builtins
 from ipaddress import ip_address
 import os
 import signal
 import string
 from threading import Timer
-
-from six import text_type
-from six.moves import builtins, urllib
+import urllib
 
 import aspen
 import aspen.http.mapping
@@ -71,7 +66,6 @@ def _assert(x):
     return x
 
 website.renderer_factories['jinja2'].Renderer.global_context.update(builtins.__dict__)
-website.renderer_factories['jinja2'].Renderer.global_context['str'] = text_type
 website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_* renderers.
     'assert': _assert,
@@ -213,9 +207,9 @@ Website.check_payin_allowed = check_payin_allowed
 # Monkey patch python's stdlib
 # ============================
 
-from six.moves.http_cookies import Morsel
+from http.cookies import Morsel
 
-Morsel._reserved[str('samesite')] = str('SameSite')
+Morsel._reserved['samesite'] = 'SameSite'
 
 
 # Monkey patch aspen and pando

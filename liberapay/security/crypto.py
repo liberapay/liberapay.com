@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 from binascii import b2a_base64
 from collections import OrderedDict
 from datetime import date, timedelta
@@ -19,7 +17,7 @@ from ..models.encrypted import Encrypted
 from ..website import website
 
 
-def get_random_string(length=32, altchars=None):
+def get_random_string(length=32, altchars=None) -> str:
     """
     Returns a securely generated random string.
 
@@ -32,10 +30,10 @@ def get_random_string(length=32, altchars=None):
     token = b2a_base64(urandom(length * 6 // 8 + 1))[:length]
     if altchars:
         token = token.replace(b'+', altchars[0]).replace(b'/', altchars[1])
-    return token if str is bytes else token.decode('ascii')
+    return token.decode('ascii')
 
 
-def constant_time_compare(val1, val2):
+def constant_time_compare(val1, val2) -> bool:
     """
     Returns True if the two strings are equal, False otherwise.
 

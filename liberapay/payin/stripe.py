@@ -1,10 +1,4 @@
-# coding: utf8
-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from decimal import Decimal
-
-from six import text_type
 
 import stripe
 import stripe.error
@@ -113,7 +107,7 @@ def settle_destination_charge(db, payin, charge, pt):
     """
     if getattr(charge, 'balance_transaction', None):
         bt = charge.balance_transaction
-        if isinstance(bt, text_type):
+        if isinstance(bt, str):
             bt = stripe.BalanceTransaction.retrieve(bt)
         amount_settled = int_to_Money(bt.amount, bt.currency)
         fee = int_to_Money(bt.fee, bt.currency)

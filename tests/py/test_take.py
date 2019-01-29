@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from psycopg2 import InternalError
 
 from liberapay.billing.payday import Payday

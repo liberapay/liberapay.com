@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 
 def set_default_security_headers(website, response, request=None):
     # Allow CORS for assets

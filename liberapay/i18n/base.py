@@ -1,12 +1,7 @@
-# encoding: utf8
-from __future__ import print_function, unicode_literals
-
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from unicodedata import combining, normalize
-
-from six import text_type
 
 import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
@@ -85,10 +80,10 @@ class Locale(babel.core.Locale):
                 state['partial_translation'] = True
         if a or kw:
             try:
-                return self.format(escape(_decode(s2)), *a, **kw)
+                return self.format(escape(s2), *a, **kw)
             except Exception as e:
                 website.tell_sentry(e, state)
-                return LOCALE_EN.format(escape(_decode(s)), *a, **kw)
+                return LOCALE_EN.format(escape(s), *a, **kw)
         return escape(s2)
 
     def ngettext(self, state, s, p, n, *a, **kw):
@@ -111,10 +106,10 @@ class Locale(babel.core.Locale):
         if wrapper:
             kw['n'] = wrapper % kw['n']
         try:
-            return self.format(escape(_decode(s2)), *a, **kw)
+            return self.format(escape(s2), *a, **kw)
         except Exception as e:
             website.tell_sentry(e, state)
-            return LOCALE_EN.format(escape(_decode(s if n == 1 else p)), *a, **kw)
+            return LOCALE_EN.format(escape(s if n == 1 else p), *a, **kw)
 
     def format(self, s, *a, **kw):
         if a:
@@ -122,7 +117,7 @@ class Locale(babel.core.Locale):
         for c, f in [(a, enumerate), (kw, dict.items)]:
             for k, o in f(c):
                 o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
-                if isinstance(o, text_type):
+                if isinstance(o, str):
                     pass
                 elif isinstance(o, (Decimal, int)):
                     c[k] = format_decimal(o, locale=self)
@@ -336,10 +331,6 @@ HTTP_ERRORS = {
 del _
 
 
-def _decode(o):
-    return o.decode('ascii') if isinstance(o, bytes) else o
-
-
 def getdoc(state, name):
     versions = state['website'].docs[name]
     for lang in state['request'].accept_langs:
@@ -443,7 +434,7 @@ def add_currency_to_state(request, user):
     qs_currency = request.qs.get('currency')
     if qs_currency in CURRENCIES:
         return {'currency': qs_currency}
-    cookie = request.headers.cookie.get(str('currency'))
+    cookie = request.headers.cookie.get('currency')
     if cookie and cookie.value in CURRENCIES:
         return {'currency': cookie.value}
     if user:

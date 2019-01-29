@@ -1,6 +1,5 @@
 """Functions for moving money into, out of, or between wallets.
 """
-from __future__ import division, print_function, unicode_literals
 
 from decimal import Decimal
 from time import sleep

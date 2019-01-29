@@ -1,6 +1,3 @@
-# coding: utf8
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from decimal import Decimal
 from ipaddress import ip_network
 import json
@@ -12,10 +9,7 @@ import signal
 from subprocess import call
 from time import time
 import traceback
-
-_str = str
-from six import text_type as str
-from six.moves.urllib.request import urlretrieve
+from urllib.request import urlretrieve
 
 from algorithm import Algorithm
 from babel.messages.pofile import read_po
@@ -60,7 +54,7 @@ def canonical(env):
     if canonical_host:
         canonical_url = '%s://%s' % (canonical_scheme, canonical_host)
         if ':' not in canonical_host:
-            cookie_domain = ('.' + canonical_host).encode('ascii')
+            cookie_domain = '.' + canonical_host
     else:
         canonical_url = ''
     asset_url = canonical_url+'/assets/'
@@ -156,7 +150,7 @@ def database(env, tell_sentry):
         return None if v in (None, '(,)') else Money(*v[1:-1].split(','))
     try:
         oid = db.one("SELECT 'currency_amount'::regtype::oid")
-        register_type(new_type((oid,), _str('currency_amount'), cast_currency_amount))
+        register_type(new_type((oid,), 'currency_amount', cast_currency_amount))
     except psycopg2.ProgrammingError:
         pass
 
@@ -188,7 +182,7 @@ def database(env, tell_sentry):
         return MoneyBasket(**amounts)
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
-        register_type(new_type((oid,), _str('currency_basket'), cast_currency_basket))
+        register_type(new_type((oid,), 'currency_basket', cast_currency_basket))
     except psycopg2.ProgrammingError:
         pass
 

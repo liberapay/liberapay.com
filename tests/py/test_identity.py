@@ -1,7 +1,3 @@
-# coding: utf8
-
-from __future__ import print_function, unicode_literals
-
 from liberapay.billing.transactions import charge, create_wallet
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import EUR, Harness

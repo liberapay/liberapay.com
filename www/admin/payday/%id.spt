@@ -160,8 +160,8 @@ if request.method == 'POST':
                      VALUES (%s, 'none', NULL)
                 ON CONFLICT (id) DO NOTHING
             """, (p_id,))
-    log_file = open(payday_log_path(p_id)+'.part', 'a')
-    exec_payday(log_file)
+    with open(payday_log_path(p_id)+'.part', 'a') as log_file:
+        exec_payday(log_file)
     response.redirect('/admin/payday/%s' % p_id)
 
 [---] text/html

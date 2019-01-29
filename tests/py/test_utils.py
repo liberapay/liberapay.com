@@ -1,7 +1,3 @@
-# coding: utf8
-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from datetime import datetime
 from datetime import timedelta
 
@@ -181,10 +177,10 @@ class Tests(Harness):
 
     def test_b64encode_s_replaces_slash_with_underscore(self):
         # TheEnter?prise => VGhlRW50ZXI/cHJpc2U=
-        assert b64encode_s('TheEnter?prise') == str('VGhlRW50ZXI_cHJpc2U~')
+        assert b64encode_s('TheEnter?prise') == 'VGhlRW50ZXI_cHJpc2U~'
 
     def test_b64encode_s_replaces_equals_with_tilde(self):
-        assert b64encode_s('TheEnterprise') == str('VGhlRW50ZXJwcmlzZQ~~')
+        assert b64encode_s('TheEnterprise') == 'VGhlRW50ZXJwcmlzZQ~~'
 
     def test_b64decode_s_decodes(self):
         assert b64decode_s('VGhlRW50ZXI_cHJpc2U~') == 'TheEnter?prise'
@@ -196,15 +192,6 @@ class Tests(Harness):
 
     def test_b64decode_s_returns_default_if_passed_on_error(self):
         assert b64decode_s('abcd', default='error') == 'error'
-
-    # urlquote
-    # ========
-
-    def test_urlquote_handles_unicode(self):
-        from liberapay.elsewhere._utils import urlquote, urlquote_plus
-        assert urlquote('é') == '%C3%A9'
-        assert urlquote('foo é', ' ') == 'foo %C3%A9'
-        assert urlquote_plus('€ €') == '%E2%82%AC+%E2%82%AC'
 
     # CSP
     # ===
