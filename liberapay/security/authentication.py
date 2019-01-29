@@ -148,7 +148,7 @@ def start_user_as_anon():
 def authenticate_user_if_possible(request, response, state, user, _):
     """This signs the user in.
     """
-    if request.line.uri.startswith('/assets/'):
+    if request.line.uri.startswith(b'/assets/'):
         return
 
     if not state['website'].db:
@@ -167,7 +167,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
                 state['user'] = p
     session_p, p = p, None
     session_suffix = ''
-    redirect_url = request.line.uri
+    redirect_url = request.line.uri.decoded
     if request.method == 'POST':
         body = _get_body(request)
         if body:
@@ -207,7 +207,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
 def add_auth_to_response(response, request=None, user=ANON):
     if request is None:
         return  # early parsing must've failed
-    if request.line.uri.startswith('/assets/'):
+    if request.line.uri.startswith(b'/assets/'):
         return  # assets never get auth headers
 
     if SESSION in request.headers.cookie:

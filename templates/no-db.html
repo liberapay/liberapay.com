@@ -5,9 +5,9 @@
 <p>{{ _("Please try again in a few minutes.") }}</p>
 
 % if request.method == 'GET'
-    <a class="btn btn-primary" href="{{ request.line.uri }}">{{ _("Try again") }}</a>
+    <a class="btn btn-primary" href="{{ request.line.uri.decoded }}">{{ _("Try again") }}</a>
 % elif request.method == 'POST'
-    <form action="{{ request.line.uri }}" method="POST">
+    <form action="{{ request.line.uri.decoded }}" method="POST">
         % include "templates/form-repost.html"
         <button class="btn btn-primary">{{ _("Try again") }}</button>
     </form>

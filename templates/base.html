@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="{{ website.asset('forkawesome/1.0.11/css/fork-awesome.min.css') }}" type="text/css">
     % block head_alternates
     % if request.method in ('GET', 'HEAD') and response.code == 200
-        <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri }}" />
+        <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri.decoded }}" />
         % for l_completion, l_code, l_name, l_url in website.lang_list
-            <link rel="alternate" hreflang="{{ l_code }}" href="{{ l_url }}{{ request.line.uri }}" />
+            <link rel="alternate" hreflang="{{ l_code }}" href="{{ l_url }}{{ request.line.uri.decoded }}" />
         % endfor
     % endif
     % endblock

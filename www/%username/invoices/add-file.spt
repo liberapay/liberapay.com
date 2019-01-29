@@ -46,8 +46,6 @@ step = request.qs['step']
 
 result = {}
 
-print(request.raw_body)
-
 if step == 'sign':
     n_docs = sum(1 for d in invoice.documents.values() if d['status'] in ('uploaded', 'pre'))
     if n_docs >= constants.INVOICE_DOCS_LIMIT:

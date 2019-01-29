@@ -1,6 +1,6 @@
 <form action="/sign-out.html" method="POST"
       {% if request.method not in ('GET', 'HEAD') %} target="_blank" {% endif %}>
-    <input name="back_to" type="hidden" value="{{ request.line.uri }}" />
+    <input name="back_to" type="hidden" value="{{ request.line.uri.decoded }}" />
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
     <button class="btn navbar-btn" type="submit">
         <span class="glyphicon glyphicon-log-out"></span>

@@ -14,7 +14,7 @@ PRODUCTION = website.env.instance_type == 'production'
 [---]
 
 request.allow('POST')
-payload = request.raw_body
+payload = request.body_bytes
 sig = request.headers[b'Stripe-Signature'].decode('ascii', 'replace')
 try:
     event = stripe.Webhook.construct_event(

@@ -56,7 +56,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     request = state['request']
     response = state['response']
     user = state['user']
-    slug = request.line.uri.path['username']
+    slug = request.path['username']
     _ = state['_']
 
     if restrict and user.ANON:
@@ -90,7 +90,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
 
     if redirect_canon and request.method in SAFE_METHODS:
         if slug != participant.username:
-            canon = '/' + participant.username + request.line.uri[len(slug)+1:]
+            canon = '/' + participant.username + request.line.uri.decoded[len(slug)+1:]
             raise response.redirect(canon)
 
     status = participant.status
@@ -132,7 +132,7 @@ def get_community(state, restrict=False):
         if not c:
             response.redirect('/for/new?name=' + urlquote(name))
         if c.name != name:
-            response.redirect('/for/' + c.name + request.line.uri[5+len(name):])
+            response.redirect('/for/' + c.name + request.line.uri.decoded[5+len(name):])
     elif not c:
         raise response.error(404)
     elif user.ANON:

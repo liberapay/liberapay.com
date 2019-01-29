@@ -7,7 +7,7 @@
     <form action="/{{ participant.username }}/edit/communities" method="POST"
           class="js-submit" data-on-success="fadeOut:li">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <input type="hidden" name="back_to" value="{{ request.line.uri }}#communities">
+        <input type="hidden" name="back_to" value="{{ request.line.uri.decoded }}#communities">
 % endif
     <ul class="communities memberships">
         % for community in communities
