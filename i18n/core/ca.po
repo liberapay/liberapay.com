@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2019-01-29 13:29+0000\n"
+"Last-Translator: Simó Albert i Beltran <sim6@probeta.net>\n"
 "Language-Team: Catalan (https://hosted.weblate.org/projects/liberapay/core/ca/)\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.5-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -382,16 +385,17 @@ msgstr "Es girarà un càrrec a dèbit del vostre compte bancari"
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Hem iniciat un càrrec a dèbit directe de {money_amount} del vostre compte {bank_name} ({partial_account_number})."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Hem realitzat un cobrament domiciliat de {money_amount} des de la teva compte bancaria ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Aquesta operació s'ha fet en base al {link_start}manament {mandate_id}{link_end} que vau signar en data {acceptance_date}, autoritzant al Liberapay (creditor SEPA {creditor_identifier}) a enviar instruccions al vostre banc per a carregar-vos al compte, i al vostre banc  per a carregar al vostre compte segons aquestes instruccions."
 
+#, fuzzy
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Si no vas autoritzar aquest pagament, si us plau, fes-nos-ho saber, realitzarem una devolució."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -1554,13 +1558,13 @@ msgid "Actual Take"
 msgstr "Fracció real"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/d"
 
 msgid "Update my nominal take"
 msgstr "Actualitza la meva fracció nominal"
 
 msgid "auto"
-msgstr ""
+msgstr "automàtic"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
 msgstr "Els ingressos no usats es gastaran en les setmanes següents, no s'acumulen en el compte d'equip. Un equip no pot posseir diners perquè no és una entitat legalment constituïda."
@@ -3778,7 +3782,7 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr "Potser us pregunteu per què tractem les fraccions nominals com a màxims en comptes de com simples percentatges. Això és perquè tenir màxims permet a un equip de tenir ingressos sense usar (anomenat «romanent») i això és bo per diferents motius. Primer, proporciona un «coixí» que estabilitza els ingressos dels membres de l'equip. Segon, facilita la integració de membres nous en l'equip, perquè en augmentar la seva fracció es redueix el romanent en comptes d'afectar els ingressos dels altres membres. Tercer, permet al nostre programa d'ajustar les quantitats que els donants transfereixen als membres de l'equip, de manera que en el temps equilibra les contribucions dels donants, fent que el sistema més just. Finalment, encoratja fer donatius a un equip fins i tot si ja han assolit el seu objectiu de finançament, i això és bo per a l'estabilitat dels ingressos de l'equip."
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "Repartiments automàtics"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
 msgstr ""
