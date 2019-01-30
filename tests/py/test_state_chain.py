@@ -195,25 +195,19 @@ class Tests2(Harness):
         assert r.code == 400, r.text
 
     def test_quoted_unicode_path_is_okay(self):
-        r = self.client.GET('/about/%C3%A9', raise_immediately=False)
-        assert r.code == 404, r.text
         r = self.client.GET('', PATH_INFO='/about/%C3%A9', raise_immediately=False)
         assert r.code == 404, r.text
 
     def test_unquoted_unicode_path_is_okay(self):
-        r = self.client.GET('/about/é'.encode('utf8'), raise_immediately=False)
-        assert r.code == 404, r.text
-        r = self.client.GET('', PATH_INFO='/about/é', raise_immediately=False)
+        path = '/about/é'.encode('utf8').decode('latin1')
+        r = self.client.GET('', PATH_INFO=path, raise_immediately=False)
         assert r.code == 404, r.text
 
     def test_quoted_unicode_querystring_is_okay(self):
-        r = self.client.GET('/', QUERY_STRING=b'%C3%A9=%C3%A9', raise_immediately=False)
-        assert r.code == 200, r.text
         r = self.client.GET('/', QUERY_STRING='%C3%A9=%C3%A9', raise_immediately=False)
         assert r.code == 200, r.text
 
     def test_unquoted_unicode_querystring_is_okay(self):
-        r = self.client.GET('/', QUERY_STRING='é=é'.encode('utf8'), raise_immediately=False)
-        assert r.code == 200, r.text
-        r = self.client.GET('/', QUERY_STRING='é=é', raise_immediately=False)
+        qs = 'é=é'.encode('utf8').decode('latin1')
+        r = self.client.GET('/', QUERY_STRING=qs, raise_immediately=False)
         assert r.code == 200, r.text

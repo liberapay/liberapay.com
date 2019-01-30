@@ -372,22 +372,16 @@ pando.Response.text = property(_decode_body)
 # The monkey-patch below is only for Pando 0.45, it should be removed after that
 def make_franken_uri(path, qs):
     if path:
-        try:
-            if type(path) is bytes:
-                path.decode('ascii')
-            else:
-                path = path.encode('ascii')
-        except UnicodeError:
-            path = urlquote(path, '%/').encode('ascii')
+        if type(path) is bytes:
+            path = urlquote(path, string.punctuation).encode('ascii')
+        else:
+            path = urlquote(path, string.punctuation, 'latin1').encode('ascii')
 
     if qs:
-        try:
-            if type(qs) is bytes:
-                qs.decode('ascii')
-            else:
-                qs = qs.encode('ascii')
-        except UnicodeError:
-            qs = urlquote_plus(qs, '%=&').encode('ascii')
+        if type(qs) is bytes:
+            qs = urlquote_plus(qs, string.punctuation).encode('ascii')
+        else:
+            qs = urlquote_plus(qs, string.punctuation, 'latin1').encode('ascii')
         qs = b'?' + qs
 
     return path + qs
