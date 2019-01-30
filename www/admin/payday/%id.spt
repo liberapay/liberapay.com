@@ -40,7 +40,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
         lines = f.readlines(maxlen)
         if file_is_partial and lines and lines[-1][-1:] != b'\n':
             lines = lines[:-1]
-        data = ''.join(lines)
+        data = b''.join(lines)
     l = len(data)
     last_pos = first_pos + l - 1
     if file_is_partial or first_pos > 0 or last_pos < os.fstat(f.fileno()).st_size - 1:
