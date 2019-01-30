@@ -50,12 +50,12 @@ if user.ANON:
 if request.method == 'POST':
     back_to = request.body['back_to']
     p_id = request.body.get_int('p_id', default=None)
-    query_id = b32encode(urandom(15))
+    query_id = b32encode(urandom(15)).decode('ascii')
     redirect_uri = website.canonical_url + request.path.raw
     url = provider.authorize_url + OAUTH_QUERYSTRING.format(
         provider.client_id, redirect_uri, provider.scope, query_id
     )
-    cookie_name = (provider_name + '_' + query_id).encode('ascii')
+    cookie_name = provider_name + '_' + query_id
     cookie_value = b64encode_s(json.dumps([back_to, p_id]))
     response.set_cookie(cookie_name, cookie_value, expires=constants.SESSION_TIMEOUT)
     response.redirect(url)
