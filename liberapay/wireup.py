@@ -502,7 +502,8 @@ def make_sentry_teller(env):
                         'method': request.method,
                         'url': request.line.uri.decoded,
                         'headers': {
-                            k: b', '.join(v) for k, v in request.headers.items()
+                            k.decode('ascii', 'repr'): b', '.join(v).decode('ascii', 'repr')
+                            for k, v in request.headers.items()
                             if k != b'Cookie'
                         },
                     }
