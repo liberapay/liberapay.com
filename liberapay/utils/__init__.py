@@ -301,24 +301,30 @@ def obfuscate(n, x, y):
     return n[:x] + 'x'*len(n[x:y]) + n[y:]
 
 
+def ensure_str(s):
+    if isinstance(s, str):
+        return s
+    return s.decode('ascii') if isinstance(s, bytes) else s.encode('ascii')
+
+
 def set_cookie(cookies, key, value, expires=None, httponly=True, path='/', samesite='lax'):
-    key = key
-    cookies[key] = value
+    key = ensure_str(key)
+    cookies[key] = ensure_str(value)
     cookie = cookies[key]
     if expires:
         if isinstance(expires, timedelta):
             expires += utcnow()
         if isinstance(expires, datetime):
             expires = to_rfc822(expires)
-        cookie['expires'] = expires
+        cookie['expires'] = ensure_str(expires)
     if httponly:
         cookie['httponly'] = True
     if path:
-        cookie['path'] = path
+        cookie['path'] = ensure_str(path)
     if samesite:
-        cookie['samesite'] = samesite
+        cookie['samesite'] = ensure_str(samesite)
     if website.cookie_domain:
-        cookie['domain'] = website.cookie_domain
+        cookie['domain'] = ensure_str(website.cookie_domain)
     if website.canonical_scheme == 'https':
         cookie['secure'] = True
 
