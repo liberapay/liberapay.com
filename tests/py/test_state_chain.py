@@ -2,7 +2,6 @@ import json
 
 from pando.http.request import Request
 from pando.http.response import Response
-import pytest
 
 from liberapay.security import csrf
 from liberapay.testing import Harness
@@ -201,9 +200,7 @@ class Tests2(Harness):
         r = self.client.GET('', PATH_INFO='/about/%C3%A9', raise_immediately=False)
         assert r.code == 404, r.text
 
-    @pytest.mark.xfail
     def test_unquoted_unicode_path_is_okay(self):
-        # These fail because of bugs in Pando
         r = self.client.GET('/about/é'.encode('utf8'), raise_immediately=False)
         assert r.code == 404, r.text
         r = self.client.GET('', PATH_INFO='/about/é', raise_immediately=False)
@@ -215,9 +212,7 @@ class Tests2(Harness):
         r = self.client.GET('/', QUERY_STRING='%C3%A9=%C3%A9', raise_immediately=False)
         assert r.code == 200, r.text
 
-    @pytest.mark.xfail
     def test_unquoted_unicode_querystring_is_okay(self):
-        # These fail because of bugs in Pando
         r = self.client.GET('/', QUERY_STRING='é=é'.encode('utf8'), raise_immediately=False)
         assert r.code == 200, r.text
         r = self.client.GET('/', QUERY_STRING='é=é', raise_immediately=False)

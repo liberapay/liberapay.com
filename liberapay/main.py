@@ -4,7 +4,7 @@ import os
 import signal
 import string
 from threading import Timer
-import urllib
+from urllib.parse import quote as urlquote, quote_plus as urlquote_plus, urlencode
 
 import aspen
 import aspen.http.mapping
@@ -28,7 +28,7 @@ from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
-    b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie, urlquote,
+    b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
 )
 from liberapay.utils.emails import handle_email_bounces
 from liberapay.utils.state_chain import (
@@ -225,7 +225,7 @@ def _Querystring_derive(self, **kw):
     new_qs = aspen.http.mapping.Mapping(self)
     for k, v in kw.items():
         new_qs[k] = v
-    return '?' + urllib.parse.urlencode(new_qs, doseq=True)
+    return '?' + urlencode(new_qs, doseq=True)
 aspen.http.request.Querystring.derive = _Querystring_derive
 
 if hasattr(pando.http.request.Request, 'source'):
@@ -368,3 +368,27 @@ def _decode_body(self):
     body = self.body
     return body.decode('utf8') if isinstance(body, bytes) else body
 pando.Response.text = property(_decode_body)
+
+# The monkey-patch below is only for Pando 0.45, it should be removed after that
+def make_franken_uri(path, qs):
+    if path:
+        try:
+            if type(path) is bytes:
+                path.decode('ascii')
+            else:
+                path = path.encode('ascii')
+        except UnicodeError:
+            path = urlquote(path, '%/').encode('ascii')
+
+    if qs:
+        try:
+            if type(qs) is bytes:
+                qs.decode('ascii')
+            else:
+                qs = qs.encode('ascii')
+        except UnicodeError:
+            qs = urlquote_plus(qs, '%=&').encode('ascii')
+        qs = b'?' + qs
+
+    return path + qs
+pando.http.request.make_franken_uri = make_franken_uri
