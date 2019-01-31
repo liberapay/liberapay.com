@@ -1027,6 +1027,7 @@ class Payday(object):
                AND context IN ('tip', 'take', 'final-gift')
                AND status = 'succeeded'
           GROUP BY tippee
+          ORDER BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
             p = Participant.from_id(tippee_id)
