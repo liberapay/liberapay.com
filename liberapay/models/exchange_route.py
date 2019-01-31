@@ -1,6 +1,8 @@
 from mangopay.resources import Card, Mandate
 from postgres.orm import Model
 
+from ..exceptions import InvalidId
+
 
 class ExchangeRoute(Model):
 
@@ -12,15 +14,17 @@ class ExchangeRoute(Model):
     __nonzero__ = __bool__
 
     @classmethod
-    def from_id(cls, participant, id):
+    def from_id(cls, participant, id, _raise=True):
         route = cls.db.one("""
             SELECT r
               FROM exchange_routes r
              WHERE r.id = %(r_id)s
                AND r.participant = %(p_id)s
         """, dict(r_id=id, p_id=participant.id))
-        if route:
+        if route is not None:
             route.__dict__['participant'] = participant
+        elif _raise:
+            raise InvalidId(id, cls.__name__)
         return route
 
     @classmethod

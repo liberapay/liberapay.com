@@ -5,6 +5,7 @@ import pytest
 from liberapay.constants import SESSION, SESSION_REFRESH
 from liberapay.exceptions import (
     BadAmount,
+    InvalidId,
     NoSelfTipping,
     NoTippee,
     NonexistingElsewhere,
@@ -241,12 +242,12 @@ class Tests(Harness):
     # from_id
 
     def test_bad_id(self):
-        p = Participant.from_id(1786541)
-        assert not p
+        with self.assertRaises(InvalidId):
+            Participant.from_id(1786541)
 
     def test_null_id(self):
-        p = Participant.from_id(None)
-        assert not p
+        with self.assertRaises(InvalidId):
+            Participant.from_id(None)
 
     def test_good_id(self):
         alice = self.make_participant('alice')
@@ -258,8 +259,6 @@ class Tests(Harness):
     def test_bad_username(self):
         p = Participant.from_username('deadbeef')
         assert not p
-
-    # id
 
     # set_tip_to - stt
 

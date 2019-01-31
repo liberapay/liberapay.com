@@ -8,7 +8,7 @@ if user.ANON:
     raise LoginRequired
 
 account_id, p_id = request.qs.get_int('id'), request.qs.get_int('p_id', None)
-account = AccountElsewhere.from_id(account_id)
+account = AccountElsewhere.from_id(account_id, _raise=False)
 if not account:
     raise response.invalid_input(account_id, 'id', 'querystring')
 cookie_name = 'connect_%s' % account_id
@@ -16,7 +16,7 @@ token = request.headers.cookie.get(cookie_name)
 if not token or not account.check_connect_token(token.value):
     raise response.invalid_input(token, cookie_name, 'cookies')
 
-p = Participant.from_id(p_id) if p_id else user
+p = Participant.from_id(p_id, _raise=False) if p_id else user
 if not p:
     raise response.invalid_input(p_id, 'p_id', 'querystring')
 
