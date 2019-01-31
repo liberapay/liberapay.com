@@ -34,7 +34,11 @@
         % for member in members.values()
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
-            <td>{{ _("n/a") if member.last_week is none else locale.format_money(member.last_week) }}</td>
+            <td>{{
+                _("n/a") if member.last_week is none else
+                _("auto") if member.last_week.amount == -1 else
+                locale.format_money(member.last_week)
+            }}</td>
             % set nominal_take = member.nominal_take
             % set cell_cls = get_cls(member) if nominal_take != member.last_week else ''
             % if member.id == user.id

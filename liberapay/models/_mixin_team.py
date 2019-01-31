@@ -76,7 +76,7 @@ class MixinTeam(object):
                    )
           ORDER BY member, mtime DESC
 
-        """, (self.id,)) if t.amount)
+        """, (self.id,)) if t.amount is not None)
         takes.nonzero = any(amount != 0 for amount in takes.values())
         takes.sum = MoneyBasket(amount for amount in takes.values() if amount > 0)
         takes.initial_leftover = self.receiving - takes.sum.fuzzy_sum(self.main_currency)
