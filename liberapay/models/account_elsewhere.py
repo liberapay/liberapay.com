@@ -11,12 +11,13 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-from liberapay.constants import AVATAR_QUERY, RATE_LIMITS, SUMMARY_MAX_SIZE
-from liberapay.cron import logger
-from liberapay.elsewhere._exceptions import BadUserId, UserNotFound
-from liberapay.security.crypto import constant_time_compare
-from liberapay.utils import excerpt_intro
-from liberapay.website import website
+from ..constants import AVATAR_QUERY, RATE_LIMITS, SUMMARY_MAX_SIZE
+from ..cron import logger
+from ..elsewhere._exceptions import BadUserId, UserNotFound
+from ..exceptions import InvalidId
+from ..security.crypto import constant_time_compare
+from ..utils import excerpt_intro
+from ..website import website
 
 
 CONNECT_TOKEN_TIMEOUT = timedelta(hours=24)
@@ -46,14 +47,17 @@ class AccountElsewhere(Model):
     # ============
 
     @classmethod
-    def from_id(cls, id):
+    def from_id(cls, id, _raise=True):
         """Return an existing AccountElsewhere based on id.
         """
-        return cls.db.one("""
+        r = cls.db.one("""
             SELECT elsewhere.*::elsewhere_with_participant
               FROM elsewhere
              WHERE id = %s
         """, (id,))
+        if r is None and _raise:
+            raise InvalidId(id, cls.__name__)
+        return r
 
     @classmethod
     def _from_thing(cls, thing, platform, value, domain):

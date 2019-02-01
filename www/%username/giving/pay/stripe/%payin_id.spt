@@ -128,7 +128,7 @@ if request.method == 'POST':
                 country=source_country, currency=source_currency,
             )
         else:
-            route = ExchangeRoute.from_id(payer, body.get_int('route'))
+            route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
                 raise response.invalid_input(body.get('route'), 'route', 'body')
             source = stripe.Source.retrieve(route.address)

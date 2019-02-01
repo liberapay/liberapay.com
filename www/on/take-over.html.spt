@@ -11,7 +11,7 @@ request.allow('POST')
 body = request.body
 
 p_id = get_int(body, 'p_id', None)
-participant = Participant.from_id(p_id) if p_id else user
+participant = Participant.from_id(p_id, _raise=False) if p_id else user
 if not participant:
     raise response.invalid_input(p_id, 'p_id', 'body')
 
@@ -22,7 +22,7 @@ if not user.controls(participant):
     raise LoginRequired
 
 account_id = get_int(body, 'account_id', None)
-account = AccountElsewhere.from_id(account_id) if account_id else None
+account = AccountElsewhere.from_id(account_id, _raise=False) if account_id else None
 if not account:
     raise response.invalid_input(account_id, 'account_id', 'body')
 

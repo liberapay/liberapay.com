@@ -9,6 +9,15 @@ class Redirect(Exception):
         self.url = url
 
 
+class InvalidId(Response):
+
+    def __init__(self, id, class_name):
+        Response.__init__(self, 400, "Invalid %s ID: %r" % (class_name, id))
+
+    def __str__(self):
+        return self.body
+
+
 class LazyResponse(Response):
 
     def __init__(self, code, lazy_body, **kw):

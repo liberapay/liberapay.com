@@ -38,6 +38,7 @@ from liberapay.exceptions import (
     EmailAlreadyAttachedToSelf,
     EmailAlreadyTaken,
     EmailNotVerified,
+    InvalidId,
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
@@ -172,10 +173,13 @@ class Participant(Model, MixinTeam):
         return t
 
     @classmethod
-    def from_id(cls, id):
+    def from_id(cls, id, _raise=True):
         """Return an existing participant based on id.
         """
-        return cls.db.one("SELECT p FROM participants p WHERE id = %s", (id,))
+        r = cls.db.one("SELECT p FROM participants p WHERE id = %s", (id,))
+        if r is None and _raise:
+            raise InvalidId(id, cls.__name__)
+        return r
 
     @classmethod
     def from_username(cls, username, id_only=False):
