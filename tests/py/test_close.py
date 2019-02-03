@@ -27,7 +27,7 @@ class TestClosing(FakeTransfersHarness):
 
         alice.close('downstream')
 
-        assert carl.get_tip_to(alice)['amount'] == EUR(2)
+        assert carl.get_tip_to(alice).amount == EUR(2)
         assert alice.balance == 0
         assert len(team.get_current_takes()) == 1
 

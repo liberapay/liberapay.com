@@ -19,6 +19,7 @@ from liberapay.exceptions import (
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.testing import EUR, USD, Harness
+from liberapay.utils import Object
 
 
 class TestNeedConfirmation(Harness):
@@ -183,7 +184,7 @@ class TestStub(Harness):
     def test_getting_tips_not_made(self):
         expected = EUR('0.00')
         user2 = self.make_participant('user2')
-        actual = self.stub.get_tip_to(user2)['amount']
+        actual = self.stub.get_tip_to(user2).amount
         assert actual == expected
 
 
@@ -257,15 +258,15 @@ class Tests(Harness):
         alice = self.make_participant('alice')
         bob = self.make_stub()
         alice.set_tip_to(bob, EUR('1.00'))
-        actual = alice.get_tip_to(bob)['amount']
+        actual = alice.get_tip_to(bob).amount
         assert actual == EUR('1.00')
 
     def test_stt_works_for_pledges(self):
         alice = self.make_participant('alice')
         bob = self.make_stub()
         t = alice.set_tip_to(bob, EUR('10.00'))
-        assert isinstance(t, dict)
-        assert isinstance(t['amount'], Money)
+        assert type(t) is Object
+        assert isinstance(t.amount, Money)
         assert t['amount'] == EUR(10)
         assert t['is_funded'] is False
         assert t['is_pledge'] is True

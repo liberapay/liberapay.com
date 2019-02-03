@@ -9,6 +9,7 @@ from operator import getitem
 import os
 import re
 import socket
+from types import SimpleNamespace
 from urllib.parse import quote as urlquote
 
 from pando import Response, json
@@ -28,6 +29,29 @@ from liberapay.utils import cbor
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
+
+
+class Object(SimpleNamespace):
+    """
+    A namespace that supports both attribute-style and dict-style lookups and
+    assignments. This is similar to a JavaScript object, hence the name.
+    """
+
+    def __init__(self, *d, **kw):
+        self.__dict__.update(*d, **kw)
+
+    def __contains__(self, key):
+        return key in self.__dict__
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def __setitem__(self, key, value):
+        self.__dict__[key] = value
+
+    def _asdict(self):
+        # For compatibility with namedtuple classes
+        return self.__dict__.copy()
 
 
 def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,

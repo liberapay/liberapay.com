@@ -96,7 +96,7 @@
                 <div class="flex-col expand-xs text-center-xs">
                     % set tip = user.get_tip_to(participant)
                     % set donate_path = participant.path('donate')
-                    % if tip['renewal_mode'] > 0
+                    % if tip.renewal_mode > 0
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
                             _("Donating ({amount})", amount=tip.amount)
                         }}</a>
