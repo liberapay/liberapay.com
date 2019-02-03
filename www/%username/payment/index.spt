@@ -61,8 +61,9 @@ subhead = _("Payment Processors")
 
     <h3>Stripe</h3>
     <p>{{ _(
-        "With Stripe your donors can pay by card directly from the Liberapay "
-        "website. SEPA Direct Debits will also be supported soon."
+        "With Stripe your donors can pay by card or direct debit directly from the "
+        "Liberapay website. (Direct debits are currently only supported from Euro "
+        "bank accounts.)"
     ) }}</p>
     % set accounts = accounts_by_provider.get('stripe', ())
     % if accounts
