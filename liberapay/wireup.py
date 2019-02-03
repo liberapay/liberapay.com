@@ -31,13 +31,13 @@ from liberapay.i18n.base import (
 )
 from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.i18n.plural_rules import get_function_from_rule
+from liberapay.models import DB, MutableRowCursor
 from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
 from liberapay.models.community import _Community, Community
 from liberapay.models.encrypted import Encrypted
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
-from liberapay.models import DB
 from liberapay.security.crypto import Cryptograph
 from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
 from liberapay.utils.emails import compile_email_spt
@@ -123,7 +123,7 @@ def database(env, tell_sentry):
     dburl = env.database_url
     maxconn = env.database_maxconn
     try:
-        db = DB(dburl, maxconn=maxconn)
+        db = DB(dburl, maxconn=maxconn, cursor_factory=MutableRowCursor)
     except psycopg2.OperationalError as e:
         tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()

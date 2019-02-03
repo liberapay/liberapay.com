@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from operator import itemgetter
 import re
 import sys
 import traceback
@@ -6,9 +7,110 @@ import traceback
 from postgres import Postgres
 from postgres.cursors import SimpleCursorBase
 from psycopg2 import IntegrityError, ProgrammingError
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT, cursor as _cursor
 
 from liberapay.constants import RATE_LIMITS
+
+
+itemgetter0 = itemgetter(0)
+
+
+class MutableRowCursor(SimpleCursorBase, _cursor):
+    """A cursor subclass that returns `MutableRow` objects.
+    """
+
+    def fetchone(self):
+        t = _cursor.fetchone(self)
+        if t is not None:
+            return MutableRow(self.description, t)
+
+    def fetchmany(self, size=None):
+        ts = _cursor.fetchmany(self, size)
+        cols = self.description
+        return [MutableRow(cols, t) for t in ts]
+
+    def fetchall(self):
+        ts = _cursor.fetchall(self)
+        cols = self.description
+        return [MutableRow(cols, t) for t in ts]
+
+    def __iter__(self):
+        it = _cursor.__iter__(self)
+        get_next = it.__next__
+        try:
+            t = get_next()
+        except StopIteration:
+            return
+        cols = self.description
+        yield MutableRow(cols, t)
+        while 1:
+            try:
+                yield MutableRow(cols, get_next())
+            except StopIteration:
+                return
+
+
+class MutableRow:
+    """A flexible and mutable row type.
+
+    The rows support both dict-style and attribute-style lookups and assignments,
+    in addition to index-based lookups.
+    """
+
+    __slots__ = ('_cols', '__dict__')
+
+    def __init__(self, cols, values):
+        self._cols = cols
+        self.__dict__.update(zip(map(itemgetter0, cols), values))
+
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return self.__dict__[self._cols[key][0]]
+        else:
+            return self.__dict__[key]
+
+    def __setitem__(self, key, value):
+        if isinstance(key, int):
+            raise ValueError('%r (index-based assignments are not allowed)' % key)
+        self.__dict__[key] = value
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.__dict__ == self.__dict__
+        elif isinstance(other, tuple):
+            return len(self.__dict__) == len(self._cols) and other == tuple(self)
+        return False
+
+    def __iter__(self):
+        return (self.__dict__[col[0]] for col in self._cols)
+
+    def __len__(self):
+        return len(self._cols)
+
+    def __repr__(self):
+        col_indexes = {name: i for i, name in enumerate(self._cols)}
+        after = len(self._cols)
+        key = lambda t: (col_indexes.get(t[0], after), t[0])
+        return 'Row(%s)' % (
+            ', '.join(map('%s=%r'.__mod__, sorted(self.__dict__.items(), key=key)))
+        )
+
+    def __getstate__(self):
+        # Note that we only save the column names
+        return tuple(map(itemgetter0, self._cols)), self.__dict__.copy()
+
+    def __setstate__(self, data):
+        self._cols = tuple((col_name,) for col_name in data[0])
+        self.__dict__.update(data[1])
+
+    @property
+    def _fields(self):
+        # For compatibility with namedtuple classes
+        return tuple(map(itemgetter0, self._cols))
+
+    def _asdict(self):
+        # For compatibility with namedtuple classes
+        return self.__dict__.copy()
 
 
 @contextmanager

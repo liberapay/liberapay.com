@@ -386,7 +386,7 @@ def find_files(directory, pattern):
 
 def serialize(context):
     for k, v in context.items():
-        if str(type(v)) == "<class 'psycopg2.extras.Record'>":
+        if callable(getattr(v, '_asdict', None)):
             context[k] = v._asdict()
     return b'\\x' + hexlify(cbor.dumps(context, canonical=True))
 
