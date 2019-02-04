@@ -23,6 +23,8 @@ if platform_name:
     sess = account.get_auth_session() if account else None
     if sess:
         page_url = b64decode_s(request.qs.get('page', ''))
+        if page_url and page_url[:1] != '/':
+            raise response.invalid_input(page_url, 'page', 'querystring')
         try:
             r = platform.get_starred_repos(account, page_url=page_url, sess=sess)
         except (InvalidGrantError, TokenExpiredError):

@@ -23,6 +23,8 @@ allow_pledges = not locked and (not is_team or allow_team_connect)
 
 if is_team:
     page_url = b64decode_s(request.qs.get('page', ''))
+    if page_url and page_url[:1] != '/':
+        raise response.invalid_input(page_url, 'page', 'querystring')
     members, nmembers, pages_urls = platform.get_team_members(account, page_url)
     members = AccountElsewhere.get_many(platform.name, members)
     if not members:

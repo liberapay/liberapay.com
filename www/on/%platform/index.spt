@@ -26,6 +26,8 @@ if account:
     sess = account.get_auth_session()
     if sess:
         page_url = b64decode_s(request.qs.get('page', ''))
+        if page_url and page_url[:1] != '/':
+            raise response.invalid_input(page_url, 'page', 'querystring')
         try:
             friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
         except (InvalidGrantError, TokenExpiredError):
