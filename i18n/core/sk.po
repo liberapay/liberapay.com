@@ -1700,16 +1700,16 @@ msgstr "Aké platobné metódy sú k dispozícii?"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} nemá nastavený spôsob platby, takže Váš dar sa momentálne nedá spracovať. Oznámime Vám, keď bude platba možná."
 
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express)."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
 msgstr "Dary pre {username} možu byť zaplatené prostredníctvom debetnej karty (Visa, MasterCard, American Express)."
 
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal. You can pay with a credit or debit card even if you don't have a PayPal account."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
 msgstr "Dary pre {username} sú vykonané cez PayPal. Môžte platiť aj prostredníctvom kreditnej alebo debetnej karty ak nemáte PayPal účet."
 
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or through PayPal."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Dary pre {username} sa dajú zaplatiť pomocou kreditnej alebo debetnej karty (Visa, MasterCard, American Express) alebo prostredníctvom PayPal."
 
 msgid "How do recurrent donations work?"
@@ -2597,7 +2597,8 @@ msgstr "Darcovia nemusia pripájať žiadny platobný účet, je potrebný iba n
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Odporúčame pripojiť Stripe aj PayPal ak sú obidve dostupné vo vašej krajine."
 
-msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
+#, fuzzy
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
 msgstr "So systémom Stripe môžu darcovia platiť kartou priamo cez stráku Liberapay. SEPA priame debetné karty budú podporované čoskoro."
 
 #, python-brace-format
@@ -3527,7 +3528,8 @@ msgstr "Ktoré krajiny a meny sú podporované?"
 msgid "See the “{page_name}” page."
 msgstr "Viď stranu \"{page_name}\"."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, and in the near future SEPA Direct Debits will be too. If a payment is through PayPal, then it's also possible to pay with most credit and debit cards even without having a PayPal account, and in other ways for users who do have a PayPal account."
+#, fuzzy
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
 msgstr "Dostupné spôsoby platby závisia od toho, ktoré platby spracováva príjemca. Ak je platba spracovaná spoločnosťou Stripe, väčšina kreditných a debetných kariet (Visa, MasterCard, American Express) sa akceptuje a v blízkej budúcnosti bude aj SEPA Direct Debits. Ak je platba cez službu PayPal, je možné platiť aj väčšinou kreditných a debetných kariet bez toho, aby ste mali účet PayPal a iným spôsobom pre používateľov, ktorí majú účet PayPal."
 
 msgid "What are the payment processing fees?"

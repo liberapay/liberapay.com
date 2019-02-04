@@ -1656,16 +1656,16 @@ msgstr "Metode pembayaran apa yang tersedia?"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} belum mengkonfigurasi metode pembayaran apapun, jadi donasi anda tidak dapat diproses saat ini. Kami akan memberitahukan kepada anda kapan pembayaran dapat dilaksanakan."
 
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express)."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
 msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express)."
 
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal. You can pay with a credit or debit card even if you don't have a PayPal account."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
 msgstr "Donasi ke {username} diproses melalui PayPal. Anda dapat membayar dengan kartu kredit atau kartu debit meski anda tidak memiliki akun PayPal."
 
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or through PayPal."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atu kartu debit (Visa, MasterCard, American Express),  atau melalui PayPal."
 
 msgid "How do recurrent donations work?"
@@ -2541,7 +2541,8 @@ msgstr "Pemberi donasi tidak perlu untuk terhubung dengan akun pembayaran di baw
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Kami menyarankan untuk menghubungkan baik Stripe maupun PayPal jika keduanya tersedia di negara anda."
 
-msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
+#, fuzzy
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
 msgstr "Dengan Stripe pemberi donasi kepada anda dapat membayar denga kartu secara langsung dari Leberapay website. Debit Langsung SEPA juga akan segera didukung."
 
 #, python-brace-format

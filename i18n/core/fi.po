@@ -1686,16 +1686,16 @@ msgstr "Mitä maksumenetelmiä tuemme?"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} ei ole vielä määrittänyt maksumenetelmiä, joten lahjoitustasi ei voida käsitellä nyt. Ilmoitamme, kun maksaminen mahdollistuu."
 
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express)."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
 msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express)."
 
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal. You can pay with a credit or debit card even if you don't have a PayPal account."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
 msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta. Voit myös maksaa luottokortilla, vaikka sinulla ei olisi PayPal-tilä."
 
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or through PayPal."
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express) tai PayPalin kautta."
 
 msgid "How do recurrent donations work?"
@@ -2576,7 +2576,8 @@ msgstr "Maksutilin yhdistäminen (alla) on tarpeen vain mikäli vastaanotat raha
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Suosittelemme sekä Stripen että PayPalin yhdistämistä, mikäli molemmat ovat käytettävissä maassasi."
 
-msgid "With Stripe your donors can pay by card directly from the Liberapay website. SEPA Direct Debits will also be supported soon."
+#, fuzzy
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
 msgstr "Stripellä lahjoittajat voivat maksaa suoraan kortilla Liberapay-sivuston kautta. SEPA-suoraveloitukset ovat myös pian mahdollisia."
 
 #, python-brace-format
@@ -3497,7 +3498,8 @@ msgstr "Mitä maita ja valuuttoja tuetaan?"
 msgid "See the “{page_name}” page."
 msgstr "Katso “{page_name}” -sivu."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, and in the near future SEPA Direct Debits will be too. If a payment is through PayPal, then it's also possible to pay with most credit and debit cards even without having a PayPal account, and in other ways for users who do have a PayPal account."
+#, fuzzy
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
 msgstr "Käytettävissä olevat maksumenetelmät riippuvat siitä, mitä maksunkäsittelijöitä vastaanottaja tukee. Jos maksunkäsittelijä on Stripe, hyväksytään useimmat luottokortit (Visa, MasterCard, American Express), ja lähitulevaisuudessa SEPA-suoraveloituksetkin ovat mahdollisia. Jos maksunkäsittelijä on PayPal, silloinkin on mahdollista maksaa luottokortein jopa ilman PayPal-tiliä, sekä muilla PayPal-tilien mahdollistamilla tavoilla."
 
 msgid "What are the payment processing fees?"
