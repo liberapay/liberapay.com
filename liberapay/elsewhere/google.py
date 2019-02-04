@@ -18,8 +18,8 @@ class Google(PlatformOAuth2):
     auth_url = 'https://accounts.google.com/o/oauth2/auth?access_type=offline&include_granted_scopes=true'
     access_token_url = 'https://accounts.google.com/o/oauth2/token'
     # https://developers.google.com/identity/protocols/googlescopes
-    oauth_default_scope = ['https://www.googleapis.com/auth/userinfo.profile',
-                           'https://www.googleapis.com/auth/contacts.readonly']
+    oauth_default_scope = ['https://www.googleapis.com/auth/userinfo.profile']
+    oauth_friends_scope = 'https://www.googleapis.com/auth/contacts.readonly'
 
     # https://developers.google.com/people/api/rest/v1/people/get
     person_fields = 'personFields=names,nicknames,photos,taglines'

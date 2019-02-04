@@ -1,4 +1,4 @@
-% macro auth_button(platform, action, user_id='', user_id_type=None, btn_cls='btn btn-primary', participant=None)
+% macro auth_button(platform, action, user_id='', user_id_type=None, btn_cls='btn btn-primary', participant=None, extra_scopes=())
     <form action="/on/{{ platform }}/redirect" method="post"
           class="auth-button {{ platform }}">
         <input type="hidden" name="action" value="{{ action }}" />
@@ -9,6 +9,9 @@
         <input type="hidden" name="user_id_type" value="{{ user_id_type }}" />
         % endif
         <input type="hidden" name="p_id" value="{{ participant and participant.id or '' }}" />
+        % if any(extra_scopes)
+        <input type="hidden" name="extra_scopes" value="{{ ' '.join(filter(None, extra_scopes)) }}" />
+        % endif
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <button class="{{ btn_cls }}">{{ caller() }}</button>
     </form>

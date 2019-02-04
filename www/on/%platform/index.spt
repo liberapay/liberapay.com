@@ -74,7 +74,7 @@ limited = getattr(platform, 'api_friends_limited', False)
         "Please refresh your {0} connection to find your friends from there.",
         platform.display_name
     ) }}</p>
-    % call auth_button(platform.name, 'connect')
+    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_friends_scope])
         {{ _("Refresh") }}
     % endcall
 </div>
@@ -84,7 +84,7 @@ limited = getattr(platform, 'api_friends_limited', False)
         "Connect your {0} account to find your friends from there.",
         platform.display_name
     ) }}</p>
-    % call auth_button(platform.name, 'connect')
+    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_friends_scope])
         {{ _("Connect") }}
     % endcall
 </div>
