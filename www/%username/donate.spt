@@ -93,15 +93,16 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
         username=participant.username
     ) if participant.payment_providers == 0 else _(
         "Donations to {username} can be paid using a credit or debit card "
-        "(Visa, MasterCard, American Express).",
+        "(Visa, MasterCard, American Express), or by direct debit of a Euro "
+        "bank account (for donations in Euro only).",
         username=participant.username
     ) if participant.payment_providers == 1 else _(
-        "Donations to {username} are processed through PayPal. You can pay with "
-        "a credit or debit card even if you don't have a PayPal account.",
+        "Donations to {username} are processed through PayPal.",
         username=participant.username
     ) if participant.payment_providers == 2 else _(
-        "Donations to {username} can be paid using a credit or debit card "
-        "(Visa, MasterCard, American Express), or through PayPal.",
+        "Donations to {username} can be paid using: a credit or debit card "
+        "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
+        "Debit), or a PayPal account.",
         username=participant.username
     ) }}</p>
 
