@@ -29,12 +29,13 @@ abandoned_account = user_accounts_dict.get(account.platform, None)
 title = _("Please Confirm")
 
 [--------]
+% from 'templates/elsewhere.html' import platform_icon
 
 % extends "templates/base.html"
 % block content
 <div class="on-confirm">
 
-    <p><img class="platform-icon" src="{{ account.platform_data.icon }}" />
+    <p>{{ platform_icon(account.platform_data) }}
     {{ _("{0} is connected to {1} on Liberapay. Transfer it?",
          '<span class="highlight">%s</span>'|safe % account.friendly_name,
          ('<a href="/{0}/">{0}</a>'|safe).format(other.username)) }}
@@ -46,21 +47,21 @@ title = _("Please Confirm")
         <div class="col-sm-4">
             <b>{{ p.username }}</b><br />
             % for account in user_accounts
-                <img src="{{ account.platform_data.icon }}"
-                     alt="{{ account.platform }}"
-                     class="platform-icon" />
+                {{ platform_icon(account.platform_data) }}
+                <span class="sr-only">{{ account.platform_data.display_name }}:</span>
                 {{ account.friendly_name }}<br />
+            % else
+                <p class="text-muted">{{ _("No connected accounts.") }}</p>
             % endfor
         </div>
         <div class="col-sm-4 other">
             <b>{{ other.username }}</b><br />
             % for other_account in other_accounts
-                <img src="{{ other_account.platform_data.icon }}"
-                     alt="{{ other_account.platform }}"
-                     class="platform-icon" />
-                <span class="{{ 'highlight' if other_account.platform == account.platform else '' }}">
-                    {{ other_account.friendly_name }}<br />
-                </span>
+                {{ platform_icon(other_account.platform_data) }}
+                <span class="sr-only">{{ other_account.platform_data.display_name }}:</span>
+                <span class="{{ 'highlight' if other_account.platform == account.platform else '' }}">{{
+                    other_account.friendly_name
+                }}</span><br />
             % endfor
         </div>
     </div>
@@ -74,17 +75,16 @@ title = _("Please Confirm")
             % for user_account in user_accounts
                 % if user_account != abandoned_account
                 <span class="account-elsewhere">
-                    <img src="{{ user_account.platform_data.icon }}"
-                         alt="{{ user_account.platform }}"
-                         class="platform-icon" />
+                    {{ platform_icon(user_account.platform_data) }}
+                    <span class="sr-only">{{ user_account.platform_data.display_name }}:</span>
                     {{ user_account.friendly_name }}<br />
                 </span>
                 % endif
             % endfor
 
             <span class="account-elsewhere">
-                <img src="{{ account.platform_data.icon }}" alt="{{ account.platform }}"
-                    class="platform-icon" />
+                {{ platform_icon(account.platform_data) }}
+                <span class="sr-only">{{ account.platform_data.display_name }}:</span>
                 <span class="highlight">
                     {{ account.friendly_name }}<br />
                 </span>
@@ -95,9 +95,8 @@ title = _("Please Confirm")
             % for other_account in other_accounts
                 % if other_account.platform != account.platform
                     <span class="account-elsewhere">
-                        <img src="{{ other_account.platform_data.icon }}"
-                             alt="{{ other_account.platform }}"
-                             class="platform-icon" />
+                        {{ platform_icon(other_account.platform_data) }}
+                        <span class="sr-only">{{ other_account.platform_data.display_name }}:</span>
                         {{ other_account.friendly_name }}<br />
                     </span>
                 % endif
@@ -107,7 +106,8 @@ title = _("Please Confirm")
         <div class="col-sm-4 abandoned">
             {{ _("Abandoned:") }}<br/>
             <span class="account-elsewhere">
-                <img src="{{ abandoned_account.platform_data.icon }}" />
+                {{ platform_icon(abandoned_account.platform_data) }}
+                <span class="sr-only">{{ abandoned_account.platform_data.display_name }}:</span>
                 {{ abandoned_account.friendly_name }}<br />
             </span>
         </div>

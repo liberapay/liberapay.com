@@ -47,6 +47,7 @@ class RepoInfo(object):
 
 class Platform(object):
 
+    fontawesome_name = None
     has_teams = False
     optional_user_name = False
     single_domain = True

@@ -91,6 +91,7 @@ next_payday = today + timedelta(days=days_till_wednesday)
 % extends "templates/settings.html"
 
 % from "templates/avatar-url.html" import avatar_img with context
+% from 'templates/elsewhere.html' import platform_icon
 % from "templates/icons.html" import glyphicon
 % from "templates/your-tip.html" import tip_form with context
 
@@ -283,9 +284,9 @@ next_payday = today + timedelta(days=days_till_wednesday)
                     }}</a></div>
                     <div class="col-2">
                         <a class="username" href="{{ e.liberapay_path }}">
-                            <img class="platform-icon" src="{{ e.platform_data.icon }}"
-                                 alt="({{ e.platform_data.display_name }})" />
+                            {{ platform_icon(e.platform_data) }}
                             {{ e.friendly_name }}
+                            <span class="sr-only">({{ e.platform_data.display_name }})</span>
                         </a>
                         <div class="line-2">
                             <span class="amount">{{
@@ -392,9 +393,9 @@ next_payday = today + timedelta(days=days_till_wednesday)
                 }}</a></div>
                 <div class="col-2">
                     <a class="username" href="{{ e.liberapay_path }}">
-                        <img class="platform-icon" src="{{ e.platform_data.icon }}"
-                             alt="({{ e.platform_data.display_name }})" />
+                        {{ platform_icon(e.platform_data) }}
                         {{ e.friendly_name }}
+                        <span class="sr-only">({{ e.platform_data.display_name }})</span>
                     </a>
                     <div class="line-2">
                         <span class="amount">{{

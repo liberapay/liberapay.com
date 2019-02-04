@@ -8,6 +8,7 @@ class Facebook(PlatformOAuth2):
     # Platform attributes
     name = 'facebook'
     display_name = 'Facebook'
+    fontawesome_name = 'facebook-square'
     account_url = 'https://www.facebook.com/app_scoped_user_id/{user_id}/'
     optional_user_name = True
 

@@ -8,6 +8,7 @@ class GitLab(PlatformOAuth2):
     # Platform attributes
     name = 'gitlab'
     display_name = 'GitLab'
+    fontawesome_name = name
     account_url = 'https://gitlab.com/u/{user_name}'
     repo_url = 'https://gitlab.com/{slug}'
     has_teams = True

@@ -10,6 +10,7 @@ class Google(PlatformOAuth2):
     # Platform attributes
     name = 'google'
     display_name = 'Google'
+    fontawesome_name = name
     account_url = None
     optional_user_name = True
 
