@@ -64,15 +64,22 @@ if is_team:
     <div class="panel panel-default profile-box">
         <div class="panel-body">
             <div class="avatar-col">
-                <a href="{{ account.html_url}}">{{ avatar_img(account, size=120) }}</a>
+                <a class="account-link" href="{{ account.html_url}}">{{
+                    avatar_img(account, size=120)
+                }}</a>
             </div>
             <div class="col-right">
                 % set summary = account.get_excerpt(150)
                 % if summary
                 <p class="summary">{{ summary }}</p>
+                % else
+                <p><i class="text-muted">{{ _("No description available.") }}</i></p>
                 % endif
-                <a href="{{ account.html_url}}">
-                    <span class="fa fa-external-link" aria-hidden="true"></span> {{ _("Profile on {0}", platform.display_name) }}</a>
+                % if platform.account_url
+                <a class="account-link" href="{{ account.html_url }}">
+                    <span class="fa fa-external-link" aria-hidden="true"></span>
+                    {{ _("Profile on {0}", platform.display_name) }}</a>
+                % endif
             </div>
         </div>
     </div>

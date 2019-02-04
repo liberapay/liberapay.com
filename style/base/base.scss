@@ -170,6 +170,11 @@ button.close {
 img.account-type {
     height: 32px;
 }
+a.account-link[href="#not-available"] {
+    color: inherit;
+    cursor: default;
+    pointer-events: none;
+}
 
 .panel-body {
     .avatar-col {

@@ -9,7 +9,7 @@ from babel.dates import format_timedelta
 from dateutil.parser import parse as parse_date
 from pando import Response
 from pando.utils import utc
-from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
+from oauthlib.oauth2 import BackendApplicationClient, InvalidGrantError, TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.exceptions import LazyResponse
@@ -145,6 +145,9 @@ class Platform(object):
         if status == 401 and is_user_session:
             # https://tools.ietf.org/html/rfc5849#section-3.2
             raise TokenExpiredError
+        if status == 403 and is_user_session:
+            # Assume that a 403 means we need more permissions (OAuth2 scopes)
+            raise InvalidGrantError
         if status == 429 and is_user_session:
             limit, remaining, reset = self.get_ratelimit_headers(response)
             def msg(_, to_age):

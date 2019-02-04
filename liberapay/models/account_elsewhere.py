@@ -235,7 +235,7 @@ class AccountElsewhere(Model):
             user_name=self.user_name,
             user_name_lower=(self.user_name or '').lower(),
             platform_data=self.platform_data
-        )
+        ) if self.platform_data.account_url else '#not-available'
 
     @property
     def friendly_name(self):
