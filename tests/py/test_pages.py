@@ -43,6 +43,7 @@ class BrowseTestHarness(MangopayHarness):
                      .replace('/%payment_id', '/') \
                      .replace('/%payin_id', '/') \
                      .replace('/payday/%id', '/payday/') \
+                     .replace('/alternatives/%platform', '/alternatives') \
                      .replace('/%type', '/receiving.js')
             urls[url.replace('/%username/', '/david/')] = None
             urls[url.replace('/%username/', '/team/')] = None

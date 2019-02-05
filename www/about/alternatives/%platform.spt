@@ -1,0 +1,57 @@
+from collections import OrderedDict
+from itertools import chain
+
+PLATFORM_NAMES = ['', 'Flattr', 'Open Collective', 'Patreon']
+PLATFORM_SLUGS = OrderedDict((name.replace(' ', '').lower(), name) for name in PLATFORM_NAMES)
+NAV_ITEMS = [
+    ('/' + slug, name) for slug, name in PLATFORM_SLUGS.items() if slug
+]
+
+[---]
+
+platform_slug = request.path['platform']
+if platform_slug not in PLATFORM_SLUGS:
+    if platform_slug.lower() in PLATFORM_SLUGS:
+        raise response.redirect('/about/alternatives/' + platform_slug.lower())
+    raise response.error(404)
+platform_name = PLATFORM_SLUGS[platform_slug]
+
+if platform_name:
+    title = platform_name
+    full_title = _("{platform1} versus {platform2} - A comparison",
+                   platform1=platform_name, platform2='Liberapay')
+else:
+    title = _("Alternatives")
+
+[---] text/html
+% extends "templates/about.html"
+% from "templates/nav.html" import nav with context
+
+% block content
+
+<br>
+<ul class="nav nav-pills">{{ nav(chain(
+    (('/', _("Overview")),),
+    NAV_ITEMS
+), base='/about/alternatives') }}</ul>
+<br>
+
+% if not platform_slug
+
+    <p>TODO</p>
+
+% elif platform_slug == 'flattr'
+
+    <p>TODO</p>
+
+% elif platform_slug == 'opencollective'
+
+    <p>TODO</p>
+
+% elif platform_slug == 'patreon'
+
+    <p>TODO</p>
+
+% endif
+
+% endblock
