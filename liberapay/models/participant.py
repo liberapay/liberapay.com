@@ -12,6 +12,7 @@ import uuid
 
 import aspen_jinja2_renderer
 from cached_property import cached_property
+from dateutil.parser import parse as parse_date
 from html2text import html2text
 import mangopay
 from markupsafe import escape as htmlescape
@@ -1144,7 +1145,7 @@ class Participant(Model, MixinTeam):
     # Notifications
     # =============
 
-    def notify(self, event, force_email=False, email=True, web=True, **context):
+    def notify(self, event, force_email=False, email=True, web=True, idem_key=None, **context):
         if email and not force_email:
             bit = EVENTS.get(event.split('~', 1)[0]).bit
             email = self.email_notif_bits & bit > 0
@@ -1152,8 +1153,8 @@ class Participant(Model, MixinTeam):
         context = serialize(context)
         n_id = self.db.one("""
             INSERT INTO notifications
-                        (participant, event, context, web, email)
-                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s)
+                        (participant, event, context, web, email, idem_key)
+                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(idem_key)s)
               RETURNING id;
         """, locals())
         if not web:
@@ -1280,14 +1281,50 @@ class Participant(Model, MixinTeam):
                 website.tell_sentry(e, state)
         return r
 
-    def notify_patrons(self, elsewhere, tips):
+    @classmethod
+    def notify_patrons(cls):
+        grouped_tips = cls.db.all("""
+            SELECT event.payload AS takeover, json_agg(tip) AS tips
+              FROM current_tips tip
+              JOIN participants tippee ON tippee.id = tip.tippee
+              JOIN events event ON event.participant = tip.tippee
+                               AND event.type = 'take-over'
+             WHERE tip.renewal_mode > 0
+               AND tip.paid_in_advance IS NULL
+               AND tippee.payment_providers > 0
+               AND EXISTS (
+                       SELECT 1
+                         FROM tips old_tip
+                        WHERE old_tip.tipper = tip.tipper
+                          AND old_tip.tippee = (event.payload->>'owner')::int
+                   )
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM notifications n
+                        WHERE n.participant = tip.tipper
+                          AND n.event = 'pledgee_joined~v2'
+                          AND n.idem_key = event.payload->>'owner'
+                   )
+          GROUP BY event.payload
+        """)
+        for takeover, tips in grouped_tips:
+            elsewhere = AccountElsewhere._from_thing(
+                'user_id',
+                takeover['platform'], takeover['user_id'], takeover['domain']
+            )
+            cls._notify_patrons(elsewhere, tips)
+
+    @classmethod
+    def _notify_patrons(cls, elsewhere, tips):
+        assert elsewhere.participant.payment_providers > 0
         for t in tips:
-            Participant.from_id(t.tipper).notify(
+            Participant.from_id(t['tipper']).notify(
                 'pledgee_joined~v2',
+                idem_key=str(elsewhere.participant.id),
                 user_name=elsewhere.user_name,
                 platform=elsewhere.platform_data.display_name,
-                pledge_date=t.ctime.date(),
-                periodic_amount=t.periodic_amount,
+                pledge_date=parse_date(t['ctime']).date(),
+                periodic_amount=Money(**t['periodic_amount']),
                 elsewhere_profile_url=elsewhere.html_url,
                 join_time=elsewhere.participant.join_time,
                 liberapay_profile_url=elsewhere.participant.url(),
@@ -2486,9 +2523,6 @@ class Participant(Model, MixinTeam):
             self.add_event(cursor, 'take-over', dict(
                 platform=platform, domain=domain, user_id=user_id, owner=other.id
             ))
-
-        if old_tips:
-            self.notify_patrons(elsewhere, tips=old_tips)
 
         self.update_avatar()
 

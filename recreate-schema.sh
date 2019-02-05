@@ -23,6 +23,11 @@ echo
 psql "$DATABASE_URL" < sql/recreate-schema.sql
 
 echo "=============================================================================="
+echo "Applying sql/app-conf-defaults.sql ... "
+echo
+psql "$DATABASE_URL" < sql/app-conf-defaults.sql
+
+echo "=============================================================================="
 echo "Looking for sql/branch.sql ..."
 echo
 
@@ -32,11 +37,6 @@ else
     echo "None found. That's cool. You only need a sql/branch.sql file if you want to "
     echo "include schema changes with your pull request."
 fi
-
-echo "=============================================================================="
-echo "Applying sql/app-conf-defaults.sql ... "
-echo
-psql "$DATABASE_URL" < sql/app-conf-defaults.sql
 
 if [ "${1-}" = "test" ]; then
     echo "=============================================================================="
