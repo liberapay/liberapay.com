@@ -1283,11 +1283,16 @@ class Participant(Model, MixinTeam):
     def notify_patrons(self, elsewhere, tips):
         for t in tips:
             Participant.from_id(t.tipper).notify(
-                'pledgee_joined',
+                'pledgee_joined~v2',
                 user_name=elsewhere.user_name,
                 platform=elsewhere.platform_data.display_name,
-                amount=t.amount,
-                profile_url=elsewhere.liberapay_url,
+                pledge_date=t.ctime.date(),
+                periodic_amount=t.periodic_amount,
+                elsewhere_profile_url=elsewhere.html_url,
+                join_time=elsewhere.participant.join_time,
+                liberapay_profile_url=elsewhere.participant.url(),
+                liberapay_username=elsewhere.participant.username,
+                tippee_id=elsewhere.participant.id,
             )
 
 
