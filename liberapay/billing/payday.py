@@ -874,13 +874,30 @@ class Payday(object):
                  )
             UPDATE tips t
                SET is_funded = t2.is_funded
-              FROM ( SELECT t.id, (t.tipper IN (SELECT ad.id FROM active_donors ad)) AS is_funded
-                       FROM current_tips t
-                       JOIN participants tippee_p ON tippee_p.id = t.tippee
+              FROM ( SELECT t2.id, (t2.tipper IN (SELECT ad.id FROM active_donors ad)) AS is_funded
+                       FROM current_tips t2
+                       JOIN participants tippee_p ON tippee_p.id = t2.tippee
                       WHERE tippee_p.status = 'stub'
                    ) t2
              WHERE t2.id = t.id
                AND t.is_funded <> t2.is_funded;
+
+            UPDATE participants p
+               SET receiving = p2.receiving
+              FROM ( SELECT p2.id
+                          , coalesce_currency_amount(
+                                sum(t.amount, p2.main_currency),
+                                p2.main_currency
+                            ) AS receiving
+                       FROM current_tips t
+                       JOIN participants p2 ON p2.id = t.tippee
+                      WHERE p2.status = 'stub'
+                        AND t.is_funded
+                   GROUP BY p2.id
+                   ) p2
+             WHERE p.id = p2.id
+               AND p.receiving <> p2.receiving
+               AND p.status = 'stub';
 
             UPDATE takes t
                SET actual_amount = t2.actual_amount

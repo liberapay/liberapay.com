@@ -377,6 +377,7 @@ class Platform(object):
                 user_id=urlquote(account.user_id),
                 user_name=urlquote(account.user_name or ''),
             )
+        assert page_url[:1] == '/'
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]

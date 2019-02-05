@@ -54,7 +54,7 @@ except TokenRequestDenied as e:
     raise response.error(502, _("{0} returned an error, please try again later.",
                           platform.display_name))
 except OAuth2Error as e:
-    raise response.error(502, e.message)
+    raise response.error(502, str(e))
 
 # Get the user's info from the platform's API and upsert it in the DB
 account = AccountElsewhere.upsert(platform.get_user_self_info(domain, sess))
