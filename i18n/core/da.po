@@ -137,8 +137,8 @@ msgstr "Her er oversigten over din indkomst denne uge:"
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
 msgid_plural "Personal donations: {money_amount} from {n} donors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Personlige donationer: {money_amount} fra {n} donor."
+msgstr[1] "Personlige donationer: {money_amount} fra {n} donorer."
 
 msgid "Personal donations: none."
 msgstr "Personlige donationer: ingen."
@@ -146,8 +146,8 @@ msgstr "Personlige donationer: ingen."
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Donationer for din rolle i {team_name} teamet: {money_amount} fra {n} donor."
+msgstr[1] "Donationer for din rolle i {team_name} teamet: {money_amount} fra {n} donorer."
 
 msgid "Donations through teams: none (you are not a member of any team)."
 msgstr "Donationer fra teams: ingen (du er ikke medlem af noget team)."
@@ -384,14 +384,14 @@ msgstr "Vi har indledt en direkte debitering af {money_amount} fra din {bank_nam
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Vi har indledt en direkte debitering af {money_amount} fra din bankkonto ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Denne handling udføres baseret på {link_start}mandatet{mandate_id}{link_end} som du underskrev {acceptance_date}, og derved godkendte Liberapay (SEPA kreditor {creditor_identifier}) til at sende instruktioner til din bank for at debitere din konto og din bank at debitere din konto i overensstemmelse med disse instruktioner."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Hvis du ikke autoriserede denne betaling, så kontakt os og vi refunderer det."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -504,7 +504,7 @@ msgid "The details of this error have been recorded. If you decide to contact us
 msgstr "denne fejls detaljer er blevet gemt. Hvis du beslutter dig for at kontakte os så vær sød at vedlægge følgende fejlidentifikationskode i din meddelelse: {0}."
 
 msgid "Every week as long as I am receiving donations"
-msgstr ""
+msgstr "Hver uge så længe jeg modtager donationer"
 
 msgid "When it's time to renew my donations"
 msgstr "Når det er tid til at forny mine donationer"
@@ -522,10 +522,10 @@ msgid "When someone invites me to join a team"
 msgstr "Når nogen invitere mig til at tilslutte mig et team"
 
 msgid "When a payment I initiated fails"
-msgstr ""
+msgstr "Når en betaling jeg har igangsat mislykkes"
 
 msgid "When a payment I initiated succeeds"
-msgstr ""
+msgstr "Når en betaling jeg har igangsat lykkes"
 
 msgid "Expense Report"
 msgstr "Udgift rapport"
@@ -596,9 +596,9 @@ msgstr "Stor"
 msgid "Maximum"
 msgstr "maksimum"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Du har brugt din forespørgsel-quota, du kan prøve igen {in_N_minutes}."
+msgstr "Du har brugt din forespørgsels-quota, du kan prøve igen {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Du laver forespørgsler for hurtigt, prøv igen senere."
@@ -681,15 +681,15 @@ msgstr "'{0}' er ikke en gyldig e-mailadresse."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
-msgstr ""
+msgstr "{domain_name} er ikke et gyldigt email-domæne."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "E-mail-adressen {email_address} er sortlistet, fordi et forsøg på at sende en besked til det mislykkedes {timespan_ago}. Send venligst en mail fra den pågældende adresse til support@liberapay.com, hvis du vil have, at vi fjerner den fra den sorte liste."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "E-mail-adressen {email_address} er sortlistet, fordi en klage blev modtaget {timespan_ago}. Send venligst en mail fra den pågældende adresse til support@liberapay.com, hvis du vil have, at vi fjerner den fra den sorte liste."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -792,11 +792,11 @@ msgid "You are not allowed to do this because your account is currently suspende
 msgstr "Du kan ikke gøre dette da din konto er suspenderet for nuværende."
 
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
-msgstr ""
+msgstr "Denne betaling kan ikke behandles, fordi modtagerens konto er suspenderet."
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
+msgstr "Din donation til {recipient} kan ikke behandles lige nu, fordi modtagerens konto ikke er klar til at modtage penge."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har allerede ændret din møntfod for nylig. Prøv igen senere (d.v.s. om en uge) eller kontakt support@liberapay.com."
@@ -813,7 +813,7 @@ msgstr "Forsøget på at fordele alle pengene i din tegnebog mislykkedes: {money
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists please contact support@liberapay.com."
-msgstr ""
+msgstr "Forsøget på at sende en email til {email_address} mislykkedes. Kontroller, at adressen er gyldig, og prøv igen. Hvis problemet fortsætter kontakt venligst support@liberapay.com."
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
 msgstr "Denne betalingsmetode er i øjeblikket utilgængelig. Vi beklager ulejligheden."
@@ -824,7 +824,7 @@ msgstr "Vi beklager, men indgående betalinger er i øjeblikket deaktiveret. Du 
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "Betalingsprocessoren {name} returnerede en fejl. Prøv igen og kontakt support@liberapay.com, hvis problemet fortsætter."
 
 msgid "Forbidden"
 msgstr "Ingen adgang"
@@ -833,10 +833,10 @@ msgid "Not Found"
 msgstr "Ikke fundet"
 
 msgid "Conflict"
-msgstr ""
+msgstr "Konflikt"
 
 msgid "Gone"
-msgstr ""
+msgstr "Forsvundet"
 
 msgid "Too Many Requests"
 msgstr "For mange forespørgsler"
@@ -863,11 +863,11 @@ msgstr "Der ser ikke ud til at være en bruger ved navn {0} på {1}."
 
 #, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
-msgstr ""
+msgstr "Liberapay donation til {username} (team {team_name})"
 
 #, python-brace-format
 msgid "Liberapay donation to {username}"
-msgstr ""
+msgstr "Liberapay donation til {username}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
@@ -878,14 +878,14 @@ msgstr[1] "{n} uger á {money_amount}"
 #, python-brace-format
 msgid "{n} month of {money_amount}"
 msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} måned a{money_amount}"
+msgstr[1] "{n} måneder a {money_amount}"
 
 #, python-brace-format
 msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} år a {money_amount}"
+msgstr[1] "{n} år a {money_amount}"
 
 msgid "Bad username or password."
 msgstr "Forkert brugernavn eller adgangskode."
@@ -907,7 +907,7 @@ msgstr "Dette login er udløbet eller ugyldigt."
 
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
-msgstr ""
+msgstr "En sikkerhedskontrol er mislykket. Sørg for at din browser er konfigureret til at tillade cookies til {domain}, og prøv igen."
 
 msgid "You are not authorized to access this page."
 msgstr "Du har ikke tilladelse til at åbne denne side."
@@ -1229,7 +1229,7 @@ msgid "Introduction"
 msgstr "Introduktion"
 
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 msgid "Teams"
 msgstr "Team"
@@ -1302,7 +1302,7 @@ msgid "Receiving"
 msgstr "Modtaget"
 
 msgid "Ledger"
-msgstr ""
+msgstr "Bogføring"
 
 msgid "Wallet"
 msgstr "Tegnebog"
@@ -1311,7 +1311,7 @@ msgid "Emptying your wallet"
 msgstr "Tøm din tegnebog"
 
 msgid "Payment Processors"
-msgstr ""
+msgstr "Betalingsprocessor"
 
 msgid "Identity"
 msgstr "Identitet"
@@ -1432,11 +1432,11 @@ msgstr "indkomst: {0}/uge"
 msgid "Mission accomplished!"
 msgstr "Missionen er lykkedes!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
-msgstr "tilsluttede sig {timespan_ago}."
+msgstr "Tilsluttede sig {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Lukket {timespan_ago}."
 
@@ -1487,7 +1487,7 @@ msgstr "(forgrene)"
 msgid "Updated this week"
 msgstr "Opdateret denne uge"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Opdateret {timespan_ago}"
 
@@ -1554,16 +1554,16 @@ msgid "Actual Take"
 msgstr "Faktiske Udbytte"
 
 msgid "n/a"
-msgstr ""
+msgstr "ikke tilgængelig"
 
 msgid "auto"
-msgstr ""
+msgstr "auto"
 
 msgid "Update my nominal take"
 msgstr "Opdater mit nominelle udbytte"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
-msgstr ""
+msgstr "Ubrugt indkomst vil blive brugt i løbet af de følgende uger, det akkumuleres ikke på teamkontoen. Et team kan ikke eje penge, fordi det ikke er en juridisk enhed."
 
 msgid "Leftover"
 msgstr "Overskydende"
@@ -1592,14 +1592,14 @@ msgstr "Venligst vælg eller indtast et beløb:"
 #, python-brace-format
 msgid "Wrong currency? {n} other is supported:"
 msgid_plural "Wrong currency? {n} others are supported:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Forkert møntfod? {n} anden er understøttet:"
+msgstr[1] "Forkert møntfod? {n} andre er understøttet:"
 
 #, python-brace-format
 msgid "Wrong currency? {username} also accepts {n} other:"
 msgid_plural "Wrong currency? {username} also accepts {n} others:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Forkert møntfod? {username} accepterer også {n} anden:"
+msgstr[1] "Forkert møntfod? {username} accepterer også {n} andre:"
 
 msgid "Switch"
 msgstr "Skift"
@@ -1672,30 +1672,30 @@ msgid "Frequently Asked Questions"
 msgstr "Ofte Spurgte Spørgsmål"
 
 msgid "Can I donate in another currency?"
-msgstr ""
+msgstr "Kan jeg donere i en anden møntfod?"
 
 #, python-brace-format
 msgid "No, {username} only accepts payments in {currency}."
-msgstr ""
+msgstr "Nej, {username} accepterer kun betalinger i {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Hvilke betalingsmetoder er tilgængelige?"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
+msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
+msgstr "Donationer til {username} kan betales ved hjælp af et kredit- eller betalingskort (Visa, MasterCard, American Express) eller ved direkte debitering af en Euro bankkonto (kun til donationer i Euro)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr ""
+msgstr "Donationer til {username} bliver håndteret gennem PayPal."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort (Visa, MasterCard, American Express), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
 
 msgid "How do recurrent donations work?"
 msgstr "Hvordan virker gentagne bidrag?"
@@ -1747,7 +1747,7 @@ msgid "Which currencies should your donors be allowed to send you, and which one
 msgstr "Hvilke valutaer skal dine donorer have lov til at sende dig, og hvilken foretrækker du?"
 
 msgid "Accept all currencies, including any that we may add in the future."
-msgstr ""
+msgstr "Accepter alle valutaer, herunder alt, hvad vi kan tilføje i fremtiden."
 
 msgid "accept"
 msgstr "accepter"
@@ -1756,11 +1756,11 @@ msgid "prefer"
 msgstr "foretræk"
 
 msgid "Accepting foreign currencies can increase your income by convincing people in other countries to donate to you, but international payments usually result in a higher percentage of fees, and fluctuations in exchange rates can lessen the stability of your income."
-msgstr ""
+msgstr "At acceptere udenlandske valutaer kan øge din indkomst ved at overbevise folk i andre lande om at donere til dig, men internationale betalinger medfører normalt en højere procentdel af gebyrer, og svingninger i valutakurser kan mindske stabiliteten af din indkomst."
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr ""
+msgstr "Stripe konverterer automatisk penge til din hovedvaluta, men som standard tilbageholder PayPal betalinger i fremmed valuta, indtil du fortæller dem hvad der skal gøre. Hvis du har en PayPal-konto, kan du vælge at automatisk konvertere alle indgående betalinger i fremmed valuta til din hovedvaluta. Denne indstilling findes i øjeblikket på siden “{link_open}Præferencer for modtagelse af betalinger {link_close}”."
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Jeg er taknemmelig for gaver, men har ikke et specifikt finansieringsmål."
@@ -1811,11 +1811,11 @@ msgstr "Du har ingen {platform} konti, tilknyttet din profil."
 msgid "Connect {0} account"
 msgstr "Tilknyt {0} konto"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
-msgstr[0] "Vi fandt {n} Arkiv i dine {platform} konto, {timespan_ago}."
-msgstr[1] "En liste af {n} arkiver, er blevet hentet fra din {platform} konto, {timespan_ago}."
+msgstr[0] "Vi fandt {n} arkiv i dine {platform} konto, {timespan_ago}."
+msgstr[1] "En liste af {n} arkiver, er blevet importeret fra din {platform} konto, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "Ingen arkiver fundet."
@@ -1916,7 +1916,7 @@ msgstr[0] "E-mailadresse (Privat)"
 msgstr[1] "E-mailadresser (Privat)"
 
 msgid "Blacklisted"
-msgstr ""
+msgstr "Sortlistet"
 
 msgid "Primary"
 msgstr "Primære"
@@ -2014,66 +2014,66 @@ msgstr "Arbejdet med at skabe Liberapay er omfattende, og der er stadig meget de
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har {n} donation der venter på betaling."
+msgstr[1] "Du har {n} donationer der venter på betaling."
 
 #, python-brace-format
 msgid "{money_amount}{small}/week{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/uge{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/måned{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/år{end_small}"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
-msgstr ""
+msgstr "Begyndt {timespan_ago}."
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
-msgstr ""
+msgstr "Begyndt {timespan_ago_1}. Modificeret {timespan_ago_2}."
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr ""
+msgstr "Inaktiv, fordi modtagerens konto er sortlistet."
 
 msgid "Inactive because the account of the recipient is closed."
-msgstr ""
+msgstr "Inaktiv, fordi modtagerens konto er lukket."
 
 msgid "Inactive because the recipient no longer accepts donations."
-msgstr ""
+msgstr "Inaktiv, fordi modtagerens konto ikke længere accepterer donationer."
 
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Næste betaling {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
-msgstr ""
+msgstr "Forny nu"
 
 msgid "Pending payment completion."
-msgstr ""
+msgstr "Afventer afslutning af betaling."
 
 msgid "Awaiting payment."
-msgstr ""
+msgstr "Venter på betaling."
 
 msgid "Renew"
-msgstr ""
+msgstr "Forny"
 
 msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
-msgstr ""
+msgstr "Kan ikke fornys, fordi modtagerens konto ikke er klar til at modtage nye betalinger."
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
-msgstr ""
+msgstr "{bold}Total:{bold_end}{0} pr. uge ~{1} pr. måned ~{2} pr. år."
 
 msgid "Cancel the pledge"
-msgstr ""
+msgstr "annuller donationstilbuddet"
 
 msgid "Recently Cancelled"
 msgstr "Annulleret for nylig"
@@ -2082,20 +2082,20 @@ msgid "within the last 30 days"
 msgstr "inden for de sidste 30 dage"
 
 msgid "Restart"
-msgstr ""
+msgstr "Genstart"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
-msgstr ""
+msgstr "Begyndt {timespan_ago_1}. Stoppet {timespan_ago_2}."
 
 msgid "Funding your donations"
-msgstr ""
+msgstr "Financier dine donationer"
 
 msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr ""
+msgstr "Det er i øjeblikket ikke muligt at finansiere flere donationer med en enkelt betaling, så du skal forny dine donationer en efter en. Vi beklager ulejligheden."
 
 msgid "Please choose a payment method:"
-msgstr ""
+msgstr "Vælg venligst en betalingsmetode:"
 
 msgid "Card"
 msgstr "Kort"
@@ -2104,16 +2104,16 @@ msgid "Currently unavailable"
 msgstr "Ikke tilgængelig i øjeblikket"
 
 msgid "Euro donations only"
-msgstr ""
+msgstr "Kun Euro donationer"
 
 msgid "Euro bank accounts only"
-msgstr ""
+msgstr "Kun Euro-bankkontoer"
 
 msgid "Not anonymous"
-msgstr ""
+msgstr "Ikke anonym"
 
 msgid "All your donations are funded."
-msgstr ""
+msgstr "Alle dine donationer er finansieret."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2121,7 +2121,7 @@ msgstr "'{0}' er ikke et accepteret beløb (min={1}, max={2})"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr ""
+msgstr "Betalingen af {charge_amount} var en succes."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"

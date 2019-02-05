@@ -1686,17 +1686,17 @@ msgstr "Mitä maksumenetelmiä tuemme?"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} ei ole vielä määrittänyt maksumenetelmiä, joten lahjoitustasi ei voida käsitellä nyt. Ilmoitamme, kun maksaminen mahdollistuu."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express)."
+msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express) tai suoraveloituksella eurooppalaiselta pankkitililtä (vain euromääräiset lahjoitukset)."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta. Voit myös maksaa luottokortilla, vaikka sinulla ei olisi PayPal-tilä."
+msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express) tai PayPalin kautta."
+msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express), SEPA-suoraveloituksella euromääräiseltä pankkitililtä tai PayPalin kautta."
 
 msgid "How do recurrent donations work?"
 msgstr "Miten toistuvat lahjoitukset toimivat?"
@@ -2576,9 +2576,8 @@ msgstr "Maksutilin yhdistäminen (alla) on tarpeen vain mikäli vastaanotat raha
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Suosittelemme sekä Stripen että PayPalin yhdistämistä, mikäli molemmat ovat käytettävissä maassasi."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Stripellä lahjoittajat voivat maksaa suoraan kortilla Liberapay-sivuston kautta. SEPA-suoraveloitukset ovat myös pian mahdollisia."
+msgstr "Stripellä lahjoittajat voivat maksaa suoraan kortilla Liberapay-sivuston kautta. (SEPA-suoraveloitukset ovat mahdollisia vain Euro-pankkitilien kanssa.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3498,9 +3497,8 @@ msgstr "Mitä maita ja valuuttoja tuetaan?"
 msgid "See the “{page_name}” page."
 msgstr "Katso “{page_name}” -sivu."
 
-#, fuzzy
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Käytettävissä olevat maksumenetelmät riippuvat siitä, mitä maksunkäsittelijöitä vastaanottaja tukee. Jos maksunkäsittelijä on Stripe, hyväksytään useimmat luottokortit (Visa, MasterCard, American Express), ja lähitulevaisuudessa SEPA-suoraveloituksetkin ovat mahdollisia. Jos maksunkäsittelijä on PayPal, silloinkin on mahdollista maksaa luottokortein jopa ilman PayPal-tiliä, sekä muilla PayPal-tilien mahdollistamilla tavoilla."
+msgstr "Käytettävissä olevat maksumenetelmät riippuvat siitä, mitä maksunkäsittelijöitä vastaanottaja tukee. Jos maksunkäsittelijä on Stripe, hyväksytään useimmat luottokortit (Visa, MasterCard, American Express), sekä SEPA-suoraveloitukset (vain euro-lahjoitukset). Mikäli maksunkäsittelijä on PayPal, silloinkin on mahdollista maksaa eri tavoin, mutta tällöin lahjoittajalla tulee olla Paypal-tili, tai tämän täytyy luoda sellainen."
 
 msgid "What are the payment processing fees?"
 msgstr "Mitkä ovat rahankäsittelykulut?"
