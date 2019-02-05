@@ -48,7 +48,10 @@ if user_id:
 
 team = not p.ANON and p.kind != 'individual' and hasattr(platform, 'is_team_member')
 if user_id or (not team and platform.single_domain) or action != 'connect':
-    url, query_id, query_data = platform.get_auth_url(domain, user=user)
+    extra_scopes = body.get('extra_scopes', '').split()
+    url, query_id, query_data = platform.get_auth_url(
+        domain, extra_scopes=extra_scopes, user=user
+    )
 
     cookie_name = platform.name+'_'+domain+('_' if domain else '')+query_id
     cookie_value = b64encode_s(json.dumps([query_data, action, then, user_id, p_id]))

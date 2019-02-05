@@ -8,6 +8,7 @@ class Twitch(PlatformOAuth2):
     # Platform attributes
     name = 'twitch'
     display_name = 'Twitch'
+    fontawesome_name = name
     account_url = 'https://twitch.tv/{user_name}'
     user_type = 'channel'
 

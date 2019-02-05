@@ -265,30 +265,47 @@ facebook = lambda: {
 }
 
 google = lambda: {
-    "kind": "plus#person",
-    "displayName": "Paul Kuruvilla",
-    "name": {
-        "givenName": "Paul",
-        "familyName": "Kuruvilla"
-    },
-    "language": "en",
-    "isPlusUser": True,
-    "url": "https://plus.google.com/+PaulKuruvilla",
-    "gender": "male",
-    "image": {
-        "url": "https://lh6.googleusercontent.com/-IVBSagxBYtI/AAAAAAAAAAI/AAAAAAAAAPM/M6QeFhQ3DWs/photo.jpg?sz=50",
-        "isDefault": False
-    },
-    "birthday": "1993-07-25",
-    "id": "103133617858201182649",
-    "etag": "\"L2Xbn8bDuSErT6QA3PEQiwYKQxM/0daBZaquM1pvzmFAQ_Z-Mp5CUok\"",
-    "verified": False,
-    "circledByCount": 255,
-    "emails": [{
-        "type": "account",
-        "value": "rohitpaulk@live.com"
-    }],
-    "objectType": "person"
+    "resourceName": "people/110791859286178226496",
+    "etag": "%EgkBAj0DBgo1Ny4aDAECAwQFBgcICQoLDCIMVXJJdG5BdEg2eXc9",
+    "names": [
+        {
+            "metadata": {
+                "primary": True,
+                "source": {
+                    "type": "PROFILE",
+                    "id": "110791859286178226496"
+                }
+            },
+            "displayName": "Arthur Panda",
+            "familyName": "Panda",
+            "givenName": "Arthur",
+            "displayNameLastFirst": "Panda, Arthur"
+        }
+    ],
+    "nicknames": [
+        {
+            "metadata": {
+                "primary": True,
+                "source": {
+                    "type": "PROFILE",
+                    "id": "110791859286178226496"
+                }
+            },
+            "value": "Changaco"
+        }
+    ],
+    "photos": [
+        {
+            "metadata": {
+                "primary": True,
+                "source": {
+                    "type": "PROFILE",
+                    "id": "110791859286178226496"
+                }
+            },
+            "url": "https://lh6.googleusercontent.com/-JMfIhnfsuPw/AAAAAAAAAAI/AAAAAAAAABY/M5ldFOyJAPs/s100/photo.jpg"
+        }
+    ]
 }
 
 twitch = lambda: {

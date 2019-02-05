@@ -9,7 +9,7 @@ from babel.dates import format_timedelta
 from dateutil.parser import parse as parse_date
 from pando import Response
 from pando.utils import utc
-from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
+from oauthlib.oauth2 import BackendApplicationClient, InvalidGrantError, TokenExpiredError
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.exceptions import LazyResponse
@@ -47,6 +47,7 @@ class RepoInfo(object):
 
 class Platform(object):
 
+    fontawesome_name = None
     has_teams = False
     optional_user_name = False
     single_domain = True
@@ -145,6 +146,9 @@ class Platform(object):
         if status == 401 and is_user_session:
             # https://tools.ietf.org/html/rfc5849#section-3.2
             raise TokenExpiredError
+        if status == 403 and is_user_session:
+            # Assume that a 403 means we need more permissions (OAuth2 scopes)
+            raise InvalidGrantError
         if status == 429 and is_user_session:
             limit, remaining, reset = self.get_ratelimit_headers(response)
             def msg(_, to_age):
@@ -463,9 +467,9 @@ class PlatformOAuth1(Platform):
 
 class PlatformOAuth2(Platform):
 
-    oauth_default_scope = None
+    oauth_default_scope = []
     oauth_email_scope = None
-    oauth_payment_scope = None
+    oauth_friends_scope = ''
 
     can_auth_with_client_credentials = None
 
@@ -492,7 +496,8 @@ class PlatformOAuth2(Platform):
         else:
             return self.get_auth_session(domain)
 
-    def get_auth_session(self, domain, state=None, token=None, token_updater=None):
+    def get_auth_session(self, domain, state=None, token=None, token_updater=None,
+                         extra_scopes=[]):
         callback_url = self.callback_url.format(domain=domain)
         client_id, client_secret = self.get_credentials(domain)
         credentials = dict(client_id=client_id, client_secret=client_secret)
@@ -503,11 +508,11 @@ class PlatformOAuth2(Platform):
         return self.session_class(
             client_id, state=state, token=token, token_updater=token_updater,
             auto_refresh_url=refresh_url, auto_refresh_kwargs=credentials,
-            redirect_uri=callback_url, scope=self.oauth_default_scope
+            redirect_uri=callback_url, scope=self.oauth_default_scope + extra_scopes
         )
 
-    def get_auth_url(self, domain, **kw):
-        sess = self.get_auth_session(domain)
+    def get_auth_url(self, domain, extra_scopes=[], **kw):
+        sess = self.get_auth_session(domain, extra_scopes=extra_scopes)
         url, state = sess.authorization_url(self.auth_url.format(domain=domain))
         return url, state, ''
 

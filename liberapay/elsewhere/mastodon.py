@@ -14,6 +14,7 @@ class Mastodon(PlatformOAuth2):
     # Platform attributes
     name = 'mastodon'
     display_name = 'Mastodon'
+    fontawesome_name = name
     account_url = 'https://{domain}/@{user_name}'
     single_domain = False
 

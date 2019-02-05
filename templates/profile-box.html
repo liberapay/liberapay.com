@@ -1,4 +1,5 @@
 % from 'templates/avatar-url.html' import avatar_img with context
+% from 'templates/elsewhere.html' import platform_icon
 
 % macro profile_box_embedded_wrapper(participant, path)
 <div class="inline-box">
@@ -54,8 +55,9 @@
         % set p = e.participant
 
         <h4><a href="{{ path }}">
-            <img class="platform-icon" src="{{ e.platform_data.icon }}" />
+            {{ platform_icon(e.platform_data) }}
             <span>{{ e.friendly_name }}</span>
+            <span class="sr-only">({{ e.platform_data.display_name }})</span>
         </a></h4>
 
         <p class="summary">{{ e.get_excerpt() or '' }}</p>

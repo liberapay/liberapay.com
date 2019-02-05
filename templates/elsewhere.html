@@ -5,12 +5,13 @@
     <div class="account">
         % if account
             <a class="account-link" rel="me" href="{{ account.html_url }}">
-                <img class="account-type" src="{{ platform.logo }}" />
+                {{ platform_logo(platform) }}
+                <span class="sr-only">{{ platform.display_name }}:</span>
                 <span class="account-username">{{ account.friendly_name_long }}</span>
             </a>
         % else
             <span class="account-link">
-                <img class="account-type" src="{{ platform.logo }}" />
+                {{ platform_logo(platform) }}
                 <span class="account-username">{{ platform.display_name }}</span>
             </span>
         % endif
@@ -36,4 +37,20 @@
             % endif
         % endif
     </div>
+% endmacro
+
+% macro platform_icon(platform)
+    % if platform.fontawesome_name
+        <i class="platform-icon fa fa-{{ platform.fontawesome_name }} fa-brand-color" aria-hidden="true"></i>
+    % else
+        <img class="platform-icon" src="{{ platform.icon }}" aria-hidden="true" />
+    % endif
+% endmacro
+
+% macro platform_logo(platform)
+    % if platform.fontawesome_name
+        <i class="account-type fa fa-{{ platform.fontawesome_name }} fa-brand-color" aria-hidden="true"></i>
+    % else
+        <img class="account-type" src="{{ platform.logo }}" aria-hidden="true" />
+    % endif
 % endmacro
