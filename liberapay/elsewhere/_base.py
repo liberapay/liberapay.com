@@ -22,6 +22,19 @@ from ._extractors import not_available
 logger = logging.getLogger('liberapay.elsewhere')
 
 
+class APIEndpoint(str):
+
+    use_session = True
+
+    def __new__(cls, path, **attrs):
+        self = str.__new__(cls, path)
+        self.__dict__.update(attrs)
+        return self
+
+    def __init__(self, path, **attrs):
+        pass
+
+
 class UserInfo(object):
     """A simple container for a user's info.
 
@@ -63,6 +76,8 @@ class Platform(object):
     x_avatar_url = not_available
     x_is_team = not_available
     x_description = not_available
+
+    x_repo_owner_id = not_available
 
     required_attrs = ('account_url', 'display_name', 'name')
 
@@ -357,10 +372,12 @@ class Platform(object):
                 user_id=urlquote(account.user_id),
                 user_name=urlquote(account.user_name or ''),
             )
+        if not getattr(self.api_repos_path, 'use_session', True):
+            sess = None
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
-        if repos and repos[0].owner_id != account.user_id:
+        if '{user_name}' in self.api_repos_path and repos and repos[0].owner_id != account.user_id:
             # https://hackerone.com/reports/452920
             if not refresh:
                 raise TokenExpiredError()
@@ -382,6 +399,8 @@ class Platform(object):
                 user_name=urlquote(account.user_name or ''),
             )
         assert page_url[:1] == '/'
+        if not getattr(self.api_starred_path, 'use_session', True):
+            sess = None
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]

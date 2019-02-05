@@ -1,4 +1,4 @@
-from liberapay.elsewhere._base import PlatformOAuth2
+from liberapay.elsewhere._base import APIEndpoint, PlatformOAuth2
 from liberapay.elsewhere._extractors import key
 from liberapay.elsewhere._paginators import header_links_paginator
 
@@ -18,8 +18,6 @@ class GitLab(PlatformOAuth2):
     auth_url = 'https://gitlab.com/oauth/authorize'
     access_token_url = 'https://gitlab.com/oauth/token'
     oauth_default_scope = ['read_user']
-    # The `read_user` scope doesn't let us see the user's public repositories.
-    # See https://github.com/liberapay/liberapay.com/issues/892
 
     # can_auth_with_client_credentials = True
     # https://gitlab.com/gitlab-org/gitlab-ce/issues/13795
@@ -33,8 +31,14 @@ class GitLab(PlatformOAuth2):
     api_user_name_info_path = '/users?username={user_name}'
     api_user_self_info_path = '/user'
     api_team_members_path = '/groups/{user_name}/members'
-    api_repos_path = '/projects?owned=true&visibility=public&order_by=last_activity_at&per_page=100'
-    api_starred_path = '/projects?starred=true&visibility=public'
+    api_repos_path = APIEndpoint(
+        '/users/{user_id}/projects?owned=true&visibility=public&order_by=last_activity_at&per_page=100',
+        use_session=False
+    )
+    api_starred_path = APIEndpoint(
+        '/users/{user_id}/projects?starred=true&visibility=public',
+        use_session=False
+    )
 
     # User info extractors
     x_user_id = key('id')
@@ -52,4 +56,3 @@ class GitLab(PlatformOAuth2):
     x_repo_last_update = key('last_activity_at')
     x_repo_is_fork = key('forked_from_project', clean=bool)
     x_repo_stars_count = key('star_count')
-    x_repo_owner_id = key('owner', clean=lambda d: d['id'])
