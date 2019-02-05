@@ -470,7 +470,6 @@ class PlatformOAuth2(Platform):
     oauth_default_scope = []
     oauth_email_scope = None
     oauth_friends_scope = ''
-    oauth_payment_scope = None
 
     can_auth_with_client_credentials = None
 
