@@ -101,8 +101,7 @@ if [ -e sql/branch.sql ]; then
     echo "Done. sql/schema.sql seems to be okay."
 
     # Commit changes
-    git add sql/{schema,migrations,app-conf-*}.sql
-    git commit -m "merge branch.sql"
+    git commit -m "merge branch.sql" -- sql/
 
     # Deployment stages
     echo "Splitting $branch_c in two..."
