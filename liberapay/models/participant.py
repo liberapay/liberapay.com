@@ -1287,16 +1287,22 @@ class Participant(Model, MixinTeam):
             SELECT event.payload AS takeover, json_agg(tip) AS tips
               FROM current_tips tip
               JOIN participants tippee ON tippee.id = tip.tippee
+              JOIN participants tipper ON tipper.id = tip.tipper
               JOIN events event ON event.participant = tip.tippee
                                AND event.type = 'take-over'
              WHERE tip.renewal_mode > 0
                AND tip.paid_in_advance IS NULL
                AND tippee.payment_providers > 0
+               AND tippee.join_time >= (current_date - interval '30 days')
+               AND tippee.is_suspended IS NOT TRUE
+               AND tipper.is_suspended IS NOT TRUE
                AND EXISTS (
                        SELECT 1
                          FROM tips old_tip
+                         JOIN participants old_tippee ON old_tippee.id = old_tip.tippee
                         WHERE old_tip.tipper = tip.tipper
                           AND old_tip.tippee = (event.payload->>'owner')::int
+                          AND old_tippee.status = 'stub'
                    )
                AND NOT EXISTS (
                        SELECT 1
