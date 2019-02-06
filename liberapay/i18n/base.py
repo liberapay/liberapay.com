@@ -184,14 +184,14 @@ class Locale(babel.core.Locale):
             last = n - 2
             r = l[0]
             for i, item in enumerate(l[1:]):
-                r = escape(self.list_patterns[pattern][
+                r = self.format(escape(self.list_patterns[pattern][
                     'start' if i == 0 else 'end' if i == last else 'middle'
-                ]).format(r, item)
+                ]), r, item)
             return r
         elif n == 2:
-            return escape(self.list_patterns[pattern]['2']).format(*l)
+            return self.format(escape(self.list_patterns[pattern]['2']), *l)
         else:
-            return l[0] if n == 1 else None
+            return self.format(escape('{0}'), l[0]) if n == 1 else None
 
     def format_money_basket(self, basket, sep=','):
         if basket is None:
