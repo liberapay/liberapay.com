@@ -267,7 +267,7 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
-"Vores betalingsprocessor (Mangopay) smider os ud, så vi anbefaler at du {link1_start}tømmer din konto{link_end} før 26. juli.\n"
+"Vores Betalingsformidleren (Mangopay) smider os ud, så vi anbefaler at du {link1_start}tømmer din konto{link_end} før 26. juli.\n"
 "\n"
 "Ved at klikke på linket ovenfor kommer du til en ny side med titlen \"Tøm din tegnebog\" hvor du kan vælge mellem to muligheder.\n"
 "\n"
@@ -281,7 +281,7 @@ msgstr ""
 "\n"
 "Hvis du modtager donationer på Liberapay, kan du vente en uge før du trækker din indkomst tilbage for at give dine lånere en chance for at overføre de resterende donationer fra deres tegnebøger til din.\n"
 "\n"
-"Vi informerer dig så snart integrationen af en ny betalingsprocessor er færdig, og fortæller dig om der er noget du skal gøre for at begynde at modtage donationer på Liberapay igen.\n"
+"Vi informerer dig så snart integrationen af en ny Betalingsformidleren er færdig, og fortæller dig om der er noget du skal gøre for at begynde at modtage donationer på Liberapay igen.\n"
 "\n"
 "Hvis du er medlem af et team, skal du sørge for at din modtage-profil er sat og opdateret. Du kan gøre det fra {link2_start}din \"Modtaget\"-side{link_end}.\n"
 "\n"
@@ -373,7 +373,7 @@ msgstr "Betalingen af {money_amount} gennem Liberapay der blev påbegyndt den {d
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr "Fejlmeddelelsen fra betalingsprocessoren {provider} er:"
+msgstr "Fejlmeddelelsen fra Betalingsformidleren {provider} er:"
 
 msgid "Your bank account is going to be debited"
 msgstr "Din bankkonto vil blive debiteret"
@@ -824,7 +824,7 @@ msgstr "Vi beklager, men indgående betalinger er i øjeblikket deaktiveret. Du 
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
-msgstr "Betalingsprocessoren {name} returnerede en fejl. Prøv igen og kontakt support@liberapay.com, hvis problemet fortsætter."
+msgstr "Betalingsformidleren {name} returnerede en fejl. Prøv igen og kontakt support@liberapay.com, hvis problemet fortsætter."
 
 msgid "Forbidden"
 msgstr "Ingen adgang"
@@ -2125,50 +2125,50 @@ msgstr "Betalingen af {charge_amount} var en succes."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"
-msgstr ""
+msgstr "Betalingen mislykkedes. Fejl meddelelse: “{0}”"
 
 msgid "The payment is awaiting your approval."
-msgstr ""
+msgstr "Betalingen afventer din godkendelse."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
-msgstr ""
+msgstr "Vi kan ikke opkræve kun {donation_amount} fra dig. Minimumsbeløbet er {min_payment_amount}."
 
 msgid "Please select or input a payment amount:"
-msgstr ""
+msgstr "Vælg venligst eller indtast et betalingsbeløb:"
 
 msgid "(not recommended, high fee percentage)"
-msgstr ""
+msgstr "(anbefales ikke, høj gebyrprocent)"
 
 msgid "(okay, moderate fee percentage)"
-msgstr ""
+msgstr "(okay, moderat gebyrprocent)"
 
 msgid "(recommended, low fee percentage)"
-msgstr ""
+msgstr "(anbefalet, lav gebyrprocent)"
 
 #, python-brace-format
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
+msgstr[1] "Næste betaling om {n} uger ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment in {n} week."
 msgid_plural "Next payment in {n} weeks."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Næste betaling om {n} uge."
+msgstr[1] "Næste betaling om {n} uger."
 
 #, python-brace-format
 msgid "Next payment in {n} month."
 msgid_plural "Next payment in {n} months."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Næste betaling om {n} måned."
+msgstr[1] "Næste betaling om {n} måneder."
 
 #, python-brace-format
 msgid "Next payment in {n} year."
 msgid_plural "Next payment in {n} years."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Næste betaling om {n} år."
+msgstr[1] "Næste betaling om {n} år."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -2176,24 +2176,24 @@ msgstr "Valgfrit beløb (min={0}, max={1})"
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Liberapay opbevarer ikke længere penge i tegnebøger. Hele betalingsbeløbet går straks til {payment_provider}-kontoen for {recipient_name}."
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Hele betalingsbeløbet går straks til {payment_provider}-kontoen for {recipient_name}."
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr ""
+msgstr "PayPal-betalinger er for øjeblikket ikke anonyme. Modtageren vil se dit navn og din e-mail-adresse."
 
 msgid "Initiate the payment"
-msgstr ""
+msgstr "Påbegynd betalingen"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr ""
+msgstr "Betalingsformidleren {name} returnerede en fejl:  “{error_message} “."
 
 msgid "The payment has been initiated."
-msgstr ""
+msgstr "Betalingen er blevet påbegyndt."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2214,7 +2214,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
-msgstr ""
+msgstr "Disse data vil blive sendt direkte til betalingsformidleren {name} gennem en krypteret forbindelse."
 
 msgid "Remember the card number for next time"
 msgstr "Husk kort-nummeret til næste gang"
@@ -2567,7 +2567,7 @@ msgid "You have to {link_open}fill your profile{link_close} before you can start
 msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
-msgstr ""
+msgstr "For at modtage donationer er du nødt til at forbinde mindst en konto fra en understøttet betalingsformidler. Denne side tillader dig at gøre netop det."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr ""
@@ -3090,7 +3090,7 @@ msgstr "Forespørgsel i gang, vent venligst …"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "At tilføje penge til Liberapay via bankoverførsel kræver et gebyr på {0}% til dem der står for betalingsoverførslerne."
+msgstr "At tilføje penge til Liberapay via bankoverførsel kræver et gebyr på {0}% til vores betalingsformidler."
 
 msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
 msgstr "Penge sendt via bankoverførsel kommer ikke straks, men de fleste overførsler er afsluttet indenfor 4 hverdage."
@@ -3503,7 +3503,7 @@ msgstr "Hvad er overførselsgebyrerne?"
 
 #
 msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
-msgstr ""
+msgstr "Gebyrerne varierer efter betalingsformidler, betalingsmetode, land og valuta. Forvent at det i gennemsnit drejer sig om under 5%."
 
 msgid "How are chargebacks handled?"
 msgstr ""
@@ -4315,7 +4315,7 @@ msgid "the account's history (ledger, etc.)"
 msgstr "konto historie (regnskab, etc.)"
 
 msgid "any paypal address (our payment processor doesn't support paypal yet)"
-msgstr "PayPal adresse (vores betalingsproces understøtter endnu ikke PayPal)"
+msgstr "PayPal adresse (vores betalingsformidler understøtter endnu ikke PayPal)"
 
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
