@@ -6,7 +6,9 @@ from liberapay.billing.payday import Payday
 from liberapay.elsewhere._base import UserInfo
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.models.participant import Participant
 from liberapay.testing import EUR, Harness
+from liberapay.testing.emails import EmailHarness
 import liberapay.testing.elsewhere as user_info_examples
 from liberapay.utils import b64encode_s
 
@@ -18,7 +20,7 @@ def get_user_info_example(platform_name):
     return '', r
 
 
-class TestElsewhere(Harness):
+class TestElsewhere(EmailHarness):
 
     def test_associate_csrf(self):
         response = self.client.GxT('/on/github/associate?state=49b7c66246c7')
@@ -188,6 +190,33 @@ class TestElsewhere(Harness):
         self.make_participant('alice', elsewhere='github')
         response = self.client.GxT('/on/github/alice/public.json')
         assert response.code == 302
+
+    def test_patrons_are_notified_after_pledgee_joins(self):
+        self.bob = self.make_participant('bob', email='bob@example.com')
+        self.dan = self.make_participant('dan', email='dan@example.com')
+        self.alice = self.make_participant('alice', email='alice@example.com')
+
+        dan_twitter = self.make_elsewhere('twitter', 1, 'dan')
+
+        self.alice.set_tip_to(self.dan, EUR('100'))  # Alice shouldn't receive an email.
+        self.bob.set_tip_to(dan_twitter, EUR('100'))  # Bob should receive an email.
+
+        self.dan.take_over(dan_twitter, have_confirmation=True)
+
+        # dan hasn't connected any payment account yet, so there shouldn't be a notification
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 0
+
+        # add a payment account and check again
+        self.add_payment_account(self.dan, 'stripe')
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 1
+        last_email = self.get_last_email()
+        assert last_email['to'][0] == 'bob <bob@example.com>'
+        assert "to dan" in last_email['text']
+        assert "Change your email settings" in last_email['text']
 
 
 class TestConfirmTakeOver(Harness):

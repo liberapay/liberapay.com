@@ -1,0 +1,19 @@
+{{ _("{user_name} from {platform} has joined Liberapay!", user_name=user_name, platform=platform) }}
+
+[---] text/html
+<p>{{ _(
+    "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay.",
+    date=pledge_date, money_amount=periodic_amount,
+    user_name=('<a href="{0}">{1}</a>'|safe).format(elsewhere_profile_url, user_name) if elsewhere_profile_url else user_name
+) }}</p>
+<p>{{ _(
+    "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:",
+    platform=platform, user_name=user_name, time_ago=to_age(join_time, add_direction=True),
+    liberapay_username=('<a href="{0}">{1}</a>'|safe).format(liberapay_profile_url, liberapay_username)
+) }}</p>
+<p><a href="{{ participant.url('giving/pay?beneficiary=%i' % tippee_id) }}" style="{{ button_style('primary') }}">{{
+    _("Donate to {0}", liberapay_username)
+}}</a></p>
+<p><a href="{{ participant.url('giving/') }}" style="{{ button_style('default') }}">{{
+    _("Manage your donations")
+}}</a></p>
