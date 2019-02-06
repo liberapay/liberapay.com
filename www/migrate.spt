@@ -321,7 +321,6 @@ title = _("Migrating from Gratipay")
                 <li>{{ _("any saved credit card number") }}</li>
                 <li>{{ _("any money currently in the account") }}</li>
                 <li>{{ _("the account's history (ledger, etc.)") }}</li>
-                <li>{{ _("any paypal address (our payment processor doesn't support paypal yet)") }}</li>
             </ul>
             % if '@' not in request.body['email_address']
                 <p>{{ _("Please input an email address (your {platform} account doesn't have a primary one):", platform=platform) }}</p>
