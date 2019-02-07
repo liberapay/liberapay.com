@@ -11,7 +11,6 @@ INSERT INTO app_conf (key, value) VALUES
     ('bountysource_id', 'null'::jsonb),
     ('bountysource_secret', '""'::jsonb),
     ('check_email_domains', 'true'::jsonb),
-    ('clean_up_counters_every', '3600'::jsonb),
     ('cron_intervals', jsonb_build_object(
         'check_db', 600,
         'clean_up_counters', 3600,
