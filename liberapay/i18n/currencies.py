@@ -1,5 +1,5 @@
 from collections import defaultdict, OrderedDict
-from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
+from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
 from numbers import Number
 import operator
 
@@ -8,7 +8,8 @@ from mangopay.utils import Money
 import requests
 import xmltodict
 
-from ..constants import CURRENCIES, D_CENT, D_ZERO
+from ..constants import CURRENCIES, D_CENT, D_ZERO, D_MAX
+from ..exceptions import InvalidNumber
 from ..website import website
 
 
@@ -35,7 +36,10 @@ def _sum(cls, amounts, currency):
 
 def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
     if not isinstance(amount, Decimal):
-        amount = Decimal(str(amount))
+        try:
+            amount = Decimal(str(amount))
+        except InvalidOperation:
+            raise InvalidNumber(amount)
         # Why `str(amount)`? Because:
         # >>> Decimal(0.23)
         # Decimal('0.2300000000000000099920072216264088638126850128173828125')
@@ -43,7 +47,12 @@ def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
         # Decimal('0.23')
     if rounding is not None:
         minimum = Money.MINIMUMS[currency].amount
-        amount = amount.quantize(minimum, rounding=rounding)
+        try:
+            amount = amount.quantize(minimum, rounding=rounding)
+        except InvalidOperation:
+            raise InvalidNumber(amount)
+    if amount > D_MAX:
+        raise InvalidNumber(amount)
     self.amount = amount
     self.currency = currency
 

@@ -32,10 +32,7 @@ if request.method == 'POST':
     if payin_amount == 'custom':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
-        try:
-            payin_amount = Money(payin_amount, payin_currency)
-        except (InvalidOperation, ValueError):
-            raise InvalidNumber(payin_amount)
+        payin_amount = Money(payin_amount, payin_currency)
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p

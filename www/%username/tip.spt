@@ -4,7 +4,7 @@ from base64 import b64encode
 
 from liberapay.exceptions import AuthRequired
 from liberapay.models.participant import Participant
-from liberapay.utils import b64encode_s, get_participant, read_decimal_or_400
+from liberapay.utils import b64encode_s, get_participant
 
 _ = lambda a: a
 DONATION_MESSAGES = {
@@ -58,7 +58,7 @@ if request.method == 'POST':
     amount = request.body.get('selected_amount')
     if amount and amount != 'custom':
         period = 'weekly'
-        amount = Money(read_decimal_or_400(amount), currency)
+        amount = Money(amount, currency)
     else:
         period = request.body['period']
         if period not in constants.PERIOD_CONVERSION_RATES:

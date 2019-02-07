@@ -1,6 +1,6 @@
 # coding: utf8
 
-from decimal import Decimal as D, InvalidOperation, ROUND_UP
+from decimal import Decimal as D, ROUND_UP
 
 from mangopay.resources import BankAccount, Mandate
 
@@ -10,7 +10,6 @@ from liberapay.billing.transactions import (
     repr_error, repr_exception,
 )
 from liberapay.constants import FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN
-from liberapay.exceptions import InvalidNumber
 from liberapay.i18n.currencies import Money
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import (
@@ -98,10 +97,7 @@ if request.method == 'POST':
     if amount == 'custom':
         amount = locale.parse_money_amount(request.body['amount_custom'], currency)
     else:
-        try:
-            amount = Money(amount, currency)
-        except (InvalidOperation, ValueError):
-            raise InvalidNumber(amount)
+        amount = Money(amount, currency)
     if amount < amount_min or amount > amount_max:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",
