@@ -1,6 +1,7 @@
 # coding: utf8
 
 from datetime import timedelta
+from decimal import ROUND_HALF_UP
 from math import floor
 
 from liberapay.models.exchange_route import ExchangeRoute
@@ -32,7 +33,7 @@ if request.method == 'POST':
     if payin_amount == 'custom':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
-        payin_amount = Money(payin_amount, payin_currency)
+        payin_amount = Money(payin_amount, payin_currency, rounding=ROUND_HALF_UP)
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p
@@ -120,7 +121,6 @@ if tippees:
     payment.recipient_names = [tip.tippee_p.username for tip in tips]
     payment.tips = tips
     payment.tip_ids = ','.join(str(tip.id) for tip in tips)
-    payment.one_weeks_worth = sum(tip.amount for tip in tips)
     payment.period = set(tip.period for tip in tips)
     payment.period = (
         tuple(payment.period)[0] if len(payment.period) == 1 else
@@ -130,32 +130,55 @@ if tippees:
     CONVERSION_MAP = constants.PERIOD_CONVERSION_MAP
     payment.one_periods_worth = sum(
         tip.periodic_amount * CONVERSION_MAP[(tip.period, payment.period)] for tip in tips
-    )
-    one_years_worth = sum(
+    ).round()
+    payment.one_weeks_worth = sum(tip.amount for tip in tips).round()
+    payment.one_years_worth = sum(
         tip.periodic_amount * CONVERSION_MAP[(tip.period, 'yearly')] for tip in tips
-    )
-    twelve_years_worth = one_years_worth * 12
+    ).round()
+    payment.twelve_years_worth = payment.one_years_worth * 12
+    if payment.period == 'weekly':
+        payment.one_months_worth = (payment.one_weeks_worth * 4).round()
+    elif payment.period == 'monthly':
+        payment.one_months_worth = payment.one_periods_worth
+    else:
+        payment.one_months_worth = (payment.one_years_worth / 12).round()
     payment.min_acceptable_amount = max(
         constants.PAYIN_PAYPAL_MIN_ACCEPTABLE[payment_currency],
         payment.one_weeks_worth
     )
-    payment.min_recommended_amount = min(
+    payment.moderate_fee_amount = max(
         constants.PAYIN_PAYPAL_MIN_RECOMMENDED[payment_currency],
-        twelve_years_worth
+        payment.one_weeks_worth
     )
     payment.low_fee_amount = constants.PAYIN_PAYPAL_LOW_FEE[payment_currency]
     payment.max_acceptable_amount = min(
         constants.PAYIN_PAYPAL_MAX_ACCEPTABLE[payment_currency],
-        twelve_years_worth
+        payment.twelve_years_worth
     )
-    payment.max_recommended_amount = min(
-        max(payment.low_fee_amount, one_years_worth),
-        payment.max_acceptable_amount
-    )
-    payment.amounts = sorted(set((
+    payment.min_proposed_amount = max(
         payment.min_acceptable_amount,
-        payment.min_recommended_amount,
-        payment.max_recommended_amount,
+        payment.one_months_worth
+    )
+    payment.moderate_proposed_amount = min(
+        max(payment.moderate_fee_amount, payment.one_months_worth),
+        payment.twelve_years_worth
+    )
+    periodic_amounts = [
+        payment.one_months_worth,
+        (payment.one_years_worth / 4).round(),
+        (payment.one_years_worth / 2).round(),
+        payment.one_years_worth,
+    ]
+    recommended_amounts = [
+        a for a in periodic_amounts
+        if a >= payment.low_fee_amount and
+           a >= payment.moderate_proposed_amount * 2 and
+           a <= payment.max_acceptable_amount
+    ]
+    payment.amounts = sorted(set((
+        payment.min_proposed_amount,
+        payment.moderate_proposed_amount,
+        *recommended_amounts
     )))
     del tips
 
@@ -242,7 +265,7 @@ title = _("Funding your donations")
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ locale.format_money(charge_amount) }}
                     % if show_fee_notice
-                    % if charge_amount < payment.min_recommended_amount
+                    % if charge_amount < payment.moderate_fee_amount
                         <small class="text-warning">{{ _("(not recommended, high fee percentage)") }}</small>
                     % elif charge_amount < payment.low_fee_amount
                         <small class="text-info">{{ _("(okay, moderate fee percentage)") }}</small>
