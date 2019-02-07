@@ -16,6 +16,10 @@ from ..website import website
 from .currencies import Money, MoneyBasket
 
 
+def no_escape(s):
+    return s
+
+
 def LegacyMoney(o):
     return o if isinstance(o, (Money, MoneyBasket)) else Money(o, 'EUR')
 
@@ -38,6 +42,14 @@ class Currency(str):
     __slots__ = ()
 
 
+class List(list):
+    __slots__ = ('pattern',)
+
+    def __init__(self, iterable, pattern='standard'):
+        list.__init__(self, iterable)
+        self.pattern = pattern
+
+
 class Age(timedelta):
 
     def __new__(cls, *a, **kw):
@@ -47,6 +59,8 @@ class Age(timedelta):
 
 
 class Locale(babel.core.Locale):
+
+    List = List
 
     def __init__(self, *a, **kw):
         super(Locale, self).__init__(*a, **kw)
@@ -138,6 +152,10 @@ class Locale(babel.core.Locale):
                     c[k] = self.countries.get(o, o)
                 elif isinstance(o, Currency):
                     c[k] = self.currencies.get(o, o)
+                elif isinstance(o, list):
+                    escape = getattr(s.__class__, 'escape', no_escape)
+                    pattern = getattr(o, 'pattern', 'standard')
+                    c[k] = self.format_list(o, pattern, escape)
                 if wrapper:
                     c[k] = wrapper % (c[k],)
         return s.format(*a, **kw)
@@ -160,20 +178,20 @@ class Locale(babel.core.Locale):
         kw['locale'] = self
         return format_decimal(*a, **kw)
 
-    def format_list(self, l, pattern='standard', escape=lambda a: a):
+    def format_list(self, l, pattern='standard', escape=no_escape):
         n = len(l)
         if n > 2:
             last = n - 2
             r = l[0]
             for i, item in enumerate(l[1:]):
-                r = escape(self.list_patterns[pattern][
+                r = self.format(escape(self.list_patterns[pattern][
                     'start' if i == 0 else 'end' if i == last else 'middle'
-                ]).format(r, item)
+                ]), r, item)
             return r
         elif n == 2:
-            return escape(self.list_patterns[pattern]['2']).format(*l)
+            return self.format(escape(self.list_patterns[pattern]['2']), *l)
         else:
-            return l[0] if n == 1 else None
+            return self.format(escape('{0}'), l[0]) if n == 1 else None
 
     def format_money_basket(self, basket, sep=','):
         if basket is None:

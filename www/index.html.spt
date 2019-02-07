@@ -188,10 +188,10 @@ recent = query_cache.one("""
                 </dt>
                 <dd>{{ _(
                     "We currently support processing payments through {payment_processors_list}.",
-                    payment_processors_list=locale.format_list([
+                    payment_processors_list=[
                         '<a href="https://stripe.com/">Stripe</a>'|safe,
                         '<a href="https://paypal.com/">PayPal</a>'|safe,
-                    ], escape=escape)
+                    ]
                 ) }}</dd>
             </div>
             <div class="col-sm-4">
@@ -303,7 +303,7 @@ recent = query_cache.one("""
                 ) }}
                 {{ _(
                     "You can also easily list on your profile the repositories you contribute to on {platforms_list}.",
-                    platforms_list=locale.format_list(platforms_with_repos)
+                    platforms_list=platforms_with_repos
                 ) }}
                 </dd>
             </div>

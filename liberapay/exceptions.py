@@ -127,7 +127,7 @@ class ValueContainsForbiddenCharacters(LazyResponse400):
     def msg(self, _, locale):
         return _(
             "The value '{0}' contains the following forbidden characters: {1}.",
-            self.args[0], locale.format_list(["'%s'" % c for c in self.args[1]])
+            self.args[0], ["'%s'" % c for c in self.args[1]]
         )
 
 
@@ -341,7 +341,7 @@ class AmbiguousNumber(LazyResponse400):
             return _(
                 '"{0}" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?',
                 self.ambiguous_string,
-                list_of_suggestions=locale.format_list(self.suggestions, 'or')
+                list_of_suggestions=locale.List(self.suggestions, 'or')
             )
         else:
             return _('"{0}" is not a properly formatted number.', self.ambiguous_string)
