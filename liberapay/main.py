@@ -342,6 +342,13 @@ def _redirect(response, url, code=302, trusted_url=True):
     raise response
 pando.Response.redirect = _redirect
 
+if hasattr(pando.Response, 'refresh'):
+    raise Warning('pando.Response.refresh() already exists')
+def _refresh(response, state, **extra):
+    # https://en.wikipedia.org/wiki/Meta_refresh
+    raise response.render('templates/refresh.spt', state, **extra)
+pando.Response.refresh = _refresh
+
 if hasattr(pando.Response, 'render'):
     raise Warning('pando.Response.render() already exists')
 def _render(response, path, state, **extra):

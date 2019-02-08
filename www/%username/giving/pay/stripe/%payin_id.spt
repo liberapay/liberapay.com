@@ -155,7 +155,8 @@ if request.method == 'POST':
             tr_amount, tip.periodic_amount, tip.period, team=team
         )
 
-    response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
+    msg = _("Request in progress, please wait…")
+    response.refresh(state, url=payer.path('giving/pay/stripe/%i' % payin.id), msg=msg)
 
 payin_id = request.path['payin_id']
 
