@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from itertools import chain
 
-PLATFORM_NAMES = ['', 'Flattr', 'Open Collective', 'Patreon']
+PLATFORM_NAMES = ['', 'Flattr', 'Open Collective', 'Patreon', 'Tipeee']
 PLATFORM_SLUGS = OrderedDict((name.replace(' ', '').lower(), name) for name in PLATFORM_NAMES)
 NAV_ITEMS = [
     ('/' + slug, name) for slug, name in PLATFORM_SLUGS.items() if slug
@@ -49,6 +49,10 @@ else:
     <p>TODO</p>
 
 % elif platform_slug == 'patreon'
+
+    <p>TODO</p>
+
+% elif platform_slug == 'tipeee'
 
     <p>TODO</p>
 
