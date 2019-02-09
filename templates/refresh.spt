@@ -1,13 +1,50 @@
+# coding: utf8
 [---]
-response.code = 200
-target = response.headers.pop(b'Location').decode()
+
+if url:
+    refresh_header = b'%i;url=%s' % (state.get('interval', 0), response.encode_url(url))
+    msg = state.get('msg') or _("Redirecting…")
+else:
+    refresh_header = b'%i' % interval
+    assert msg
+response.headers[b'Refresh'] = refresh_header
+
 [---] text/html
 <!DOCTYPE html>
-<html>
+<html lang="{{ locale.language }}">
 <head>
-    <meta http-equiv="refresh" content="0;url={{ target }}">
+    <title>Liberapay</title>
+    <meta http-equiv="refresh" content="{{ refresh_header.decode('ascii') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset('forkawesome/1.0.11/css/fork-awesome.min.css') }}" type="text/css">
+    <meta name="theme-color" content="#f6c915">
 </head>
 <body>
-    <a href="{{ target }}">Redirecting...</a>
+    <nav class="navbar navbar-liberapay navbar-static-top" id="navbar" aria-hidden="true">
+        <div class="container">
+            <ul class="nav navbar-nav">
+                <li><a class="navbar-brand"><i class="fa fa-liberapay"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="main">
+        <div class="container text-center">
+            <br>
+            <p class="text-info font-lg">{{ msg }}</p>
+            % if url
+            <br>
+            <p class="text-muted">{{ _(
+                "If you're using an exotic browser and nothing is happening, "
+                "then {link_start}click on this link to proceed{link_end}.",
+                link_start=('<a href="%s">'|safe) % url,
+                link_end='</a>'|safe
+            ) }}</p>
+            % endif
+        </div>
+    </div>
 </body>
 </html>

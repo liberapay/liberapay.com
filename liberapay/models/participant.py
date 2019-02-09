@@ -27,7 +27,7 @@ from liberapay.constants import (
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
     PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
-    PUBLIC_NAME_MAX_SIZE, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
+    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
@@ -2283,7 +2283,21 @@ class Participant(Model, MixinTeam):
         return tips, pledges
 
     def get_tips_awaiting_renewal(self):
-        return [NS(r._asdict()) for r in self.db.all("""
+        """Fetch a list of the user's donations that need to be renewed, and
+        determine if some of them can be grouped into a single charge.
+
+        Stripe is working on lifting the "same region" limitation of one-to-many
+        payments, so eventually we'll be able to group all Stripe payments.
+
+        Returns a dict of the donations grouped by status:
+
+        - 'fundable': renewable donations grouped into lists (one per payment)
+        - 'no_provider': the tippee hasn't connected any payment account
+        - 'self_donation': the donor is the only fundable member of the tippee's team
+        - 'suspended': the tippee's account is suspended
+
+        """
+        tips = self.db.all("""
             SELECT t.*, p AS tippee_p
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
@@ -2313,7 +2327,62 @@ class Participant(Model, MixinTeam):
                    ) NULLS FIRST
                  , (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
-        """, (self.id,))]
+        """, (self.id,))
+        groups = {k: [] for k in (
+            'no_provider', 'suspended', 'fundable', 'self_donation'
+        )}
+        n_fundable = 0
+        stripe_europe = []
+        for tip in tips:
+            tippee_p = tip.tippee_p
+            if tippee_p.payment_providers == 0:
+                groups['no_provider'].append(tip)
+            elif tippee_p.is_suspended:
+                groups['suspended'].append(tip)
+            elif tippee_p.kind == 'group':
+                can_donate = self.db.one("""
+                    SELECT true
+                      FROM current_takes t
+                      JOIN participants p ON p.id = t.member
+                     WHERE t.team = %s
+                       AND t.member <> %s
+                     LIMIT 1
+                """, (tippee_p.id, self.id))
+                if can_donate:
+                    n_fundable += 1
+                    groups['fundable'].append((tip,))
+                else:
+                    groups['self_donation'].append(tip)
+            else:
+                n_fundable += 1
+                if tippee_p.payment_providers & 1 == 1:
+                    in_sepa = self.db.one("""
+                        SELECT true
+                          FROM payment_accounts a
+                         WHERE a.participant = %(tippee)s
+                           AND a.provider = 'stripe'
+                           AND a.is_current
+                           AND a.country IN %(SEPA)s
+                         LIMIT 1
+                    """, dict(tippee=tip.tippee, SEPA=SEPA))
+                    if in_sepa:
+                        if not stripe_europe:
+                            groups['fundable'].append(stripe_europe)
+                        stripe_europe.append(tip)
+                    else:
+                        groups['fundable'].append((tip,))
+                else:
+                    groups['fundable'].append((tip,))
+        return groups, n_fundable
+
+    def get_tips_to(self, tippee_ids):
+        return self.db.all("""
+            SELECT t.*, p AS tippee_p
+              FROM current_tips t
+              JOIN participants p ON p.id = t.tippee
+             WHERE t.tipper = %s
+               AND t.tippee IN %s
+        """, (self.id, tuple(tippee_ids)))
 
     def get_tips_receiving(self):
         return self.db.all("""

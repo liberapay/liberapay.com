@@ -1,24 +1,21 @@
 # coding: utf8
 
 from datetime import timedelta
-from math import ceil
+from decimal import ROUND_HALF_UP
+from math import floor
 
 import stripe
 import stripe.error
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.payin.common import prepare_payin, prepare_payin_transfer, resolve_destination
-from liberapay.payin.stripe import (
-    destination_charge, get_partial_iban, Money_to_int, repr_stripe_error
+from liberapay.payin.common import (
+    prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_destination
 )
-from liberapay.utils import get_participant, NS, partition
-
-ONE_YEAR = {
-    'weekly': 52,
-    'monthly': 12,
-    'yearly': 1,
-}
+from liberapay.payin.stripe import (
+    charge_and_transfer, destination_charge, get_partial_iban, Money_to_int, repr_stripe_error
+)
+from liberapay.utils import get_participant, NS
 
 STRIPE_BIT = 1
 
@@ -39,37 +36,32 @@ if request.method == 'POST':
     if payin_currency not in constants.CURRENCIES:
         raise response.invalid_input(payin_currency, 'currency', 'body')
 
-    amount = body['amount']
-    if amount == 'custom':
-        amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
+    payin_amount = body['amount']
+    if payin_amount == 'custom':
+        payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
-        try:
-            amount = Money(amount, payin_currency)
-        except (InvalidOperation, ValueError):
-            raise InvalidNumber(amount)
+        payin_amount = Money(payin_amount, payin_currency, rounding=ROUND_HALF_UP)
 
-    tip = website.db.one("""
+    tips = website.db.all("""
         SELECT t.*, p AS tippee_p
           FROM tips t
           JOIN participants p ON p.id = t.tippee
          WHERE t.tipper = %s
-           AND t.id = %s
-    """, (payer.id, body.get_int('tip')))
-    if not tip:
-        raise response.invalid_input(body.get('tip'), 'tip', 'body')
-    beneficiary = tip.tippee_p
+           AND t.id IN %s
+           AND p.payment_providers & %s > 0
+      ORDER BY t.id
+    """, (payer.id, set(body.parse_list('tips', int)), STRIPE_BIT))
+    if not tips:
+        raise response.invalid_input(body.get('tips'), 'tips', 'body')
 
-    amount_min = max(constants.PAYIN_STRIPE_MIN_ACCEPTABLE[payin_currency], tip.amount)
+    tips_weekly_sum = Money.sum((tip.amount for tip in tips), payin_currency)
+    amount_min = max(constants.PAYIN_STRIPE_MIN_ACCEPTABLE[payin_currency], tips_weekly_sum)
     amount_max = constants.PAYIN_STRIPE_MAX_ACCEPTABLE[payin_currency]
-    if amount < amount_min or amount > amount_max:
+    if payin_amount < amount_min or payin_amount > amount_max:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",
-            amount, amount_min, amount_max
+            payin_amount, amount_min, amount_max
         ))
-
-    destination = resolve_destination(
-        website.db, beneficiary, 'stripe', payer, request.country, amount
-    )
 
     try:
         if 'token' in body:
@@ -140,20 +132,31 @@ if request.method == 'POST':
             name='Stripe', error_message=repr_stripe_error(e)
         ))
 
-    payin = prepare_payin(website.db, payer, amount, route)
-    if beneficiary.kind == 'group':
-        context = 'team-donation'
-        team = beneficiary.id
-        recipient = Participant.from_id(destination.participant)
-    else:
-        context = 'personal-donation'
-        team = None
-        recipient = beneficiary
-    prepare_payin_transfer(
-        website.db, payin, recipient, destination, context,
-        payin.amount, tip.periodic_amount, tip.period, team=team
+    transfer_amounts = resolve_amounts(
+        payin_amount, {tip.id: tip.amount for tip in tips}
     )
-    response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
+    payin = prepare_payin(website.db, payer, payin_amount, route)
+    for tip in tips:
+        beneficiary = tip.tippee_p
+        tr_amount = transfer_amounts[tip.id]
+        destination = resolve_destination(
+            website.db, beneficiary, 'stripe', payer, request.country, tr_amount
+        )
+        if beneficiary.kind == 'group':
+            context = 'team-donation'
+            team = beneficiary.id
+            recipient = Participant.from_id(destination.participant)
+        else:
+            context = 'personal-donation'
+            team = None
+            recipient = beneficiary
+        prepare_payin_transfer(
+            website.db, payin, recipient, destination, context,
+            tr_amount, tip.periodic_amount, tip.period, team=team
+        )
+
+    msg = _("Request in progress, please wait…")
+    response.refresh(state, url=payer.path('giving/pay/stripe/%i' % payin.id), msg=msg)
 
 payin_id = request.path['payin_id']
 
@@ -177,52 +180,106 @@ elif payin_id:
         raise response.error(404, "invalid payin ID in URL path")
     payin = website.db.one("""
         SELECT *
+             , ( SELECT count(*)
+                   FROM payin_transfers pt
+                   JOIN payment_accounts a ON a.pk = pt.destination
+                  WHERE pt.payin = %(payin)s
+               ) AS n_transfers
           FROM payins
-         WHERE id = %s
-           AND payer = %s
-    """, (payin_id, payer.id))
+         WHERE id = %(payin)s
+           AND payer = %(payer)s
+    """, dict(payin=payin_id, payer=payer.id))
     if not payin:
         raise response.error(404, "unknown payin ID in URL path")
     if payin.status == 'pre':
-        payin = destination_charge(
-            website.db, payin, payer,
-            statement_descriptor=('Liberapay %i' % payin.id)
-        )
+        if payin.n_transfers == 1:
+            payin = destination_charge(
+                website.db, payin, payer,
+                statement_descriptor=('Liberapay %i' % payin.id)
+            )
+        else:
+            payin = charge_and_transfer(
+                website.db, payin, payer,
+                statement_descriptor=('Liberapay %i' % payin.id)
+            )
 
-tippee_id = request.qs.get_int('beneficiary', default=None)
-donations = payer.get_tips_awaiting_renewal()
-donations, donations_not_fundable = partition(
-    donations, lambda t: t.tippee_p.payment_providers > 0 and not t.tippee_p.is_suspended
-)
-if tippee_id:
-    donations, other_donations = partition(
-        donations, lambda t: t.tippee == tippee_id
+tippees = request.qs.parse_list('beneficiary', int, default=None)
+if tippees:
+    tips = [
+        tip for tip in payer.get_tips_to(tippees)
+        if tip.tippee_p.payment_providers & STRIPE_BIT > 0
+    ]
+    if not tips:
+        raise response.invalid_input(tippees, 'beneficiary', 'querystring')
+    payment_currency = tips[0].amount.currency
+    payment = NS()
+    payment.recipient_links = [tip.tippee_p.link() for tip in tips]
+    payment.recipient_names = [tip.tippee_p.username for tip in tips]
+    payment.tips = tips
+    payment.tip_ids = ','.join(str(tip.id) for tip in tips)
+    payment.period = set(tip.period for tip in tips)
+    payment.period = (
+        tuple(payment.period)[0] if len(payment.period) == 1 else
+        'monthly' if 'monthly' in payment.period else
+        'weekly'
     )
-donations, non_stripe_donations = partition(
-    donations, lambda t: t.tippee_p.payment_providers & STRIPE_BIT > 0
-)
+    CONVERSION_MAP = constants.PERIOD_CONVERSION_MAP
+    payment.one_periods_worth = sum(
+        tip.periodic_amount * CONVERSION_MAP[(tip.period, payment.period)] for tip in tips
+    ).round()
+    payment.one_weeks_worth = sum(tip.amount for tip in tips).round()
+    payment.one_years_worth = sum(
+        tip.periodic_amount * CONVERSION_MAP[(tip.period, 'yearly')] for tip in tips
+    ).round()
+    payment.twelve_years_worth = payment.one_years_worth * 12
+    if payment.period == 'weekly':
+        payment.one_months_worth = (payment.one_weeks_worth * 4).round()
+    elif payment.period == 'monthly':
+        payment.one_months_worth = payment.one_periods_worth
+    else:
+        payment.one_months_worth = (payment.one_years_worth / 12).round()
+    payment.min_acceptable_amount = max(
+        constants.PAYIN_STRIPE_MIN_ACCEPTABLE[payment_currency],
+        payment.one_weeks_worth
+    )
+    payment.moderate_fee_amount = max(
+        constants.PAYIN_STRIPE_MIN_RECOMMENDED[payment_currency],
+        payment.one_weeks_worth
+    )
+    payment.low_fee_amount = constants.PAYIN_STRIPE_LOW_FEE[payment_currency]
+    payment.max_acceptable_amount = min(
+        constants.PAYIN_STRIPE_MAX_ACCEPTABLE[payment_currency],
+        payment.twelve_years_worth
+    )
+    payment.min_proposed_amount = max(
+        payment.min_acceptable_amount,
+        payment.one_months_worth
+    )
+    payment.moderate_proposed_amount = min(
+        max(payment.moderate_fee_amount, payment.one_months_worth),
+        payment.twelve_years_worth
+    )
+    periodic_amounts = [
+        payment.one_months_worth,
+        (payment.one_years_worth / 4).round(),
+        (payment.one_years_worth / 2).round(),
+        payment.one_years_worth,
+    ]
+    recommended_amounts = [
+        a for a in periodic_amounts
+        if a >= payment.low_fee_amount and
+           a >= payment.moderate_proposed_amount * 2 and
+           a <= payment.max_acceptable_amount
+    ]
+    payment.amounts = sorted(set((
+        payment.min_proposed_amount,
+        payment.moderate_proposed_amount,
+        *recommended_amounts
+    )))
+    del tips
 
-if donations:
-    tip = donations[0]
-    tip_currency = tip.amount.currency
-    tip.min_acceptable_amount = constants.PAYIN_STRIPE_MIN_ACCEPTABLE[tip_currency]
-    tip.min_recommended_amount = min(
-        constants.PAYIN_STRIPE_MIN_RECOMMENDED[tip_currency],
-        tip.periodic_amount * ONE_YEAR[tip.period] * 12
-    )
-    tip.low_fee_amount = constants.PAYIN_STRIPE_LOW_FEE[tip_currency]
-    tip.max_acceptable_amount = min(
-        constants.PAYIN_STRIPE_MAX_ACCEPTABLE[tip_currency],
-        tip.periodic_amount * ONE_YEAR[tip.period] * 12
-    )
-    min_multiplier = int(ceil(tip.min_acceptable_amount / tip.periodic_amount))
-    min_recommended_multiplier = int(ceil(tip.min_recommended_amount / tip.periodic_amount))
-    max_recommended_multiplier = min(
-        max(int(ceil(tip.low_fee_amount / tip.periodic_amount)), ONE_YEAR[tip.period]),
-        tip.max_acceptable_amount // tip.periodic_amount
-    )
-    tip.multipliers = sorted(set((min_multiplier, min_recommended_multiplier, max_recommended_multiplier)))
-    del min_multiplier, min_recommended_multiplier, max_recommended_multiplier
+elif not payin_id:
+    response.redirect(payer.path('giving/pay'))
 
 if payment_method:
     route = ExchangeRoute.from_network(payer, 'stripe-' + payment_method)
@@ -283,75 +340,80 @@ title = _("Funding your donations")
         <div class="alert alert-info">{{ _("The payment has been initiated.") }}</div>
     % endif
 
-    % if donations
-        <hr>
-    % endif
-% endif
-
-% if donations
-
-    % if len(donations) > 1 and not payin
+    <hr>
+    % set n_fundable = payer.get_tips_awaiting_renewal()[1]
+    % if n_fundable
         <p>{{ ngettext(
-            "You have {n} donation awaiting payment.",
-            "You have {n} donations awaiting payment.",
-            n=len(donations)
+            "You have {n} other donation awaiting payment.",
+            "You have {n} other donations awaiting payment.",
+            n=n_fundable
         ) }}</p>
-        <p class="alert alert-warning">{{ _(
-            "Funding multiple donations with a single payment is currently not possible, "
-            "so you will have to renew your donations one by one. We apologize for the "
-            "inconvenience."
-        ) }}</p>
-        <hr>
+        <a href="{{ payer.path('giving/pay') }}" class="btn btn-primary">{{
+            ngettext("Renew this donation", "Renew these donations", n_fundable)
+        }}</a>
+    % else
+        <p>{{ _("You don't have any other donation awaiting payment at this time.") }}</p>
+        <a class="btn btn-default" href="{{ payer.path('giving/') }}">{{ _("Manage your donations") }}</a>
     % endif
+
+% else
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     <form action="javascript:" method="POST" id="stripe"
           data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
-        % set tip = donations[0]
-        <p>{{ _(
-            "Your donation of {amount} to {recipient} is awaiting payment.",
-            amount=tip.periodic_amount, recipient=tip.tippee_p.link()
-        ) }}</p>
-        % if tip.periodic_amount < tip.min_acceptable_amount
+        % if len(payment.recipient_links) == 1
+            <p>{{ _(
+                "Your donation of {amount} to {recipient} is awaiting payment.",
+                amount=payment.tips[0].periodic_amount,
+                recipient=payment.recipient_links[0]
+            ) }}</p>
+        % else
+            <p>{{ _(
+                "Your donations to {recipients} are awaiting payment.",
+                recipients=payment.recipient_links
+            ) }}</p>
+        % endif
+        % if payment.one_periods_worth < payment.min_acceptable_amount
             <p>{{ _(
                 "We cannot charge you only {donation_amount}, the minimum payment "
                 "amount is {min_payment_amount}.",
-                donation_amount=tip.periodic_amount, min_payment_amount=tip.min_acceptable_amount
+                donation_amount=payment.one_periods_worth,
+                min_payment_amount=payment.min_acceptable_amount
             ) }}</p>
         % endif
         <p>{{ _("Please select or input a payment amount:") }}</p>
         <fieldset id="amount">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="route" value="{{ route.id or '' }}" />
-            <input type="hidden" name="currency" value="{{ tip.amount.currency }}" />
-            <input type="hidden" name="tip" value="{{ tip.id }}" />
+            <input type="hidden" name="currency" value="{{ payment_currency }}" />
+            <input type="hidden" name="tips" value="{{ payment.tip_ids }}" />
             <ul class="list-group radio-group">
-            % set show_fee_notice = len(tip.multipliers) > 1 and (tip.periodic_amount * tip.multipliers[0]) < tip.low_fee_amount
-            % for multiplier in tip.multipliers
-                % set charge_amount = tip.periodic_amount * multiplier
+            % set show_fee_notice = len(payment.amounts) > 1 and payment.amounts[0] < payment.low_fee_amount
+            % for charge_amount in payment.amounts
                 <li class="list-group-item">
                 <label>
                     <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" required />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ locale.format_money(charge_amount) }}
                     % if show_fee_notice
-                    % if charge_amount < tip.min_recommended_amount
+                    % if charge_amount < payment.moderate_fee_amount
                         <small class="text-warning">{{ _("(not recommended, high fee percentage)") }}</small>
-                    % elif charge_amount < tip.low_fee_amount
+                    % elif charge_amount < payment.low_fee_amount
                         <small class="text-info">{{ _("(okay, moderate fee percentage)") }}</small>
                     % else
                         <small class="text-success">{{ _("(recommended, low fee percentage)") }}</small>
                     % endif
                     % endif
                     </h5>
+                    % set multiplier = int(floor(charge_amount / payment.one_periods_worth))
                     <p class="list-group-item-text">{{ ngettext(
-                        "", "Next payment in {n} weeks ({timedelta}).", n=multiplier, timedelta=timedelta(weeks=int(multiplier))
-                    ) if tip.period == 'weekly' and multiplier > 7 else ngettext(
+                        "", "Next payment in {n} weeks ({timedelta}).", n=multiplier, timedelta=timedelta(weeks=multiplier)
+                    ) if payment.period == 'weekly' and multiplier > 7 else ngettext(
                         "Next payment in {n} week.", "Next payment in {n} weeks.", n=multiplier
-                    ) if tip.period == 'weekly' else ngettext(
+                    ) if payment.period == 'weekly' else ngettext(
                         "Next payment in {n} month.", "Next payment in {n} months.", n=multiplier
-                    ) if tip.period == 'monthly' else ngettext(
+                    ) if payment.period == 'monthly' else ngettext(
                         "Next payment in {n} year.", "Next payment in {n} years.", n=multiplier
                     ) }}</p>
                     </div>
@@ -364,11 +426,13 @@ title = _("Funding your donations")
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ _(
                         "Custom amount (min={0}, max={1})",
-                        max(tip.min_acceptable_amount, tip.amount),
-                        tip.max_acceptable_amount,
+                        payment.min_acceptable_amount,
+                        payment.max_acceptable_amount,
                     ) }}</h5>
                     <div class="input-group">
-                        <div class="input-group-addon">{{ locale.currency_symbols.get(tip_currency, tip_currency) }}</div>
+                        <div class="input-group-addon">{{
+                            locale.currency_symbols.get(payment_currency, payment_currency)
+                        }}</div>
                         <input type="tel" inputmode="decimal" class="form-control amount"
                                name="amount_custom" placeholder="{{ _('Amount') }}" />
                     </div>
@@ -446,18 +510,24 @@ title = _("Funding your donations")
         </fieldset>
         % endif
 
-        % if payer.mangopay_user_id
+        % if len(payment.recipient_names) > 1
+        <div>{{ _(
+            "The entire amount of your payment will go immediately to the "
+            "{payment_provider} accounts of {recipient_names}.",
+            payment_provider='Stripe', recipient_names=payment.recipient_names
+        ) }}</div>
+        % elif payer.mangopay_user_id
         <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
             "Liberapay no longer stores money in wallets, the entire amount "
             "of your payment will go immediately to the {payment_provider} "
             "account of {recipient_name}.",
-            payment_provider='Stripe', recipient_name=tip.tippee_p.username
+            payment_provider='Stripe', recipient_name=payment.recipient_names[0]
         ) }}</div>
         % else
         <div>{{ _(
             "The entire amount of your payment will go immediately to the "
             "{payment_provider} account of {recipient_name}.",
-            payment_provider='Stripe', recipient_name=tip.tippee_p.username
+            payment_provider='Stripe', recipient_name=payment.recipient_names[0]
         ) }}</div>
         % endif
 
@@ -466,35 +536,6 @@ title = _("Funding your donations")
             "Initiate the payment"
         ) }}</button>
     </form>
-
-% else
-
-    % if donations_not_fundable or other_donations or non_stripe_donations
-        % for tip in donations_not_fundable
-        <p>{{ _(
-            "Your donation to {recipient} cannot be processed right now because the "
-            "account of the beneficiary isn't ready to receive money.",
-            recipient=tip.tippee_p.link()
-        ) }}</p>
-        % endfor
-        % if other_donations or non_stripe_donations
-            % if donations_not_fundable
-                <hr>
-            % endif
-            % set n_donations = len(other_donations) + len(non_paypal_donations)
-            <p>{{ ngettext(
-                "You have {n} donation awaiting payment.",
-                "You have {n} donations awaiting payment.",
-                n=n_donations
-            ) }}</p>
-            <a href="{{ payer.path('giving/pay') }}" class="btn btn-primary">{{
-                ngettext("Renew this donation", "Renew these donations", n_donations)
-            }}</a>
-        % endif
-    % else
-        <div class="alert alert-success">{{ _("All your donations are funded.") }}</div>
-        <a class="btn btn-default" href="{{ payer.path('giving/') }}">{{ _("Manage your donations") }}</a>
-    % endif
 
 % endif
 

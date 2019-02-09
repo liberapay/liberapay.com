@@ -211,8 +211,10 @@ def bypass_csp_for_form_redirects(response, state, website, request=None):
         if is_internal:
             # Not an external redirect
             return
+        response.code = 200
+        url = response.headers.pop(b'Location').decode('ascii')
         try:
-            response.render('templates/refresh.spt', state)
+            response.refresh(state, interval=0, url=url)
         except Response:
             pass
 

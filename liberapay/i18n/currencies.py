@@ -1,5 +1,5 @@
 from collections import defaultdict, OrderedDict
-from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
+from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
 from numbers import Number
 import operator
 
@@ -8,7 +8,8 @@ from mangopay.utils import Money
 import requests
 import xmltodict
 
-from ..constants import CURRENCIES, D_CENT, D_ZERO
+from ..constants import CURRENCIES, D_CENT, D_ZERO, D_MAX
+from ..exceptions import InvalidNumber
 from ..website import website
 
 
@@ -35,7 +36,10 @@ def _sum(cls, amounts, currency):
 
 def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
     if not isinstance(amount, Decimal):
-        amount = Decimal(str(amount))
+        try:
+            amount = Decimal(str(amount))
+        except InvalidOperation:
+            raise InvalidNumber(amount)
         # Why `str(amount)`? Because:
         # >>> Decimal(0.23)
         # Decimal('0.2300000000000000099920072216264088638126850128173828125')
@@ -43,7 +47,12 @@ def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
         # Decimal('0.23')
     if rounding is not None:
         minimum = Money.MINIMUMS[currency].amount
-        amount = amount.quantize(minimum, rounding=rounding)
+        try:
+            amount = amount.quantize(minimum, rounding=rounding)
+        except InvalidOperation:
+            raise InvalidNumber(amount)
+    if amount > D_MAX:
+        raise InvalidNumber(amount)
     self.amount = amount
     self.currency = currency
 
@@ -55,6 +64,9 @@ def _Money_eq(self, other):
     if isinstance(other, MoneyBasket):
         return other.__eq__(self)
     return False
+
+def _Money_hash(self):
+    return hash((self.currency, self.amount))
 
 def _Money_parse(cls, amount_str, default_currency='EUR'):
     split_str = amount_str.split()
@@ -86,6 +98,7 @@ class _Zeros(defaultdict):
 Money.__init__ = _Money_init
 Money.__nonzero__ = Money.__bool__
 Money.__eq__ = _Money_eq
+Money.__hash__ = _Money_hash
 Money.__iter__ = lambda m: iter((m.amount, m.currency))
 Money.__repr__ = lambda m: '<Money "%s">' % m
 Money.__str__ = lambda m: '%(amount)s %(currency)s' % m.__dict__

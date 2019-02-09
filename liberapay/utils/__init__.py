@@ -1,7 +1,6 @@
 from base64 import b64decode, b64encode
 from binascii import hexlify, unhexlify
 from datetime import date, datetime, timedelta
-from decimal import Decimal, InvalidOperation
 import errno
 import fnmatch
 from hashlib import sha256
@@ -20,7 +19,7 @@ from postgres.cursors import SimpleCursorBase
 
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import (
-    AccountSuspended, AuthRequired, LoginRequired, InvalidNumber, TooManyAdminActions
+    AccountSuspended, AuthRequired, LoginRequired, TooManyAdminActions
 )
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
@@ -477,6 +476,20 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None):
     return r
 
 
+def parse_list(mapping, k, cast, default=NO_DEFAULT, sep=','):
+    try:
+        r = mapping[k].split(sep)
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    try:
+        r = [cast(v) for v in r]
+    except (ValueError, TypeError):
+        raise Response().error(400, "`%s` value %r is invalid" % (k, mapping[k]))
+    return r
+
+
 def parse_int(o, **kw):
     try:
         return int(o)
@@ -484,13 +497,6 @@ def parse_int(o, **kw):
         if 'default' in kw:
             return kw['default']
         raise Response().error(400, "%r is not a valid integer" % o)
-
-
-def read_decimal_or_400(s):
-    try:
-        return Decimal(s)
-    except (InvalidOperation, ValueError):
-        raise InvalidNumber(s)
 
 
 def check_address(addr):

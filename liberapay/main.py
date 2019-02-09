@@ -221,6 +221,10 @@ if hasattr(aspen.http.mapping.Mapping, 'get_int'):
     raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
 aspen.http.mapping.Mapping.get_int = utils.get_int
 
+if hasattr(aspen.http.mapping.Mapping, 'parse_list'):
+    raise Warning('aspen.http.mapping.Mapping.parse_list() already exists')
+aspen.http.mapping.Mapping.parse_list = utils.parse_list
+
 if hasattr(aspen.http.request.Querystring, 'derive'):
     raise Warning('aspen.http.request.Querystring.derive() already exists')
 def _Querystring_derive(self, **kw):
@@ -337,6 +341,13 @@ def _redirect(response, url, code=302, trusted_url=True):
     response.headers[b'Location'] = response.encode_url(url)
     raise response
 pando.Response.redirect = _redirect
+
+if hasattr(pando.Response, 'refresh'):
+    raise Warning('pando.Response.refresh() already exists')
+def _refresh(response, state, **extra):
+    # https://en.wikipedia.org/wiki/Meta_refresh
+    raise response.render('templates/refresh.spt', state, **extra)
+pando.Response.refresh = _refresh
 
 if hasattr(pando.Response, 'render'):
     raise Warning('pando.Response.render() already exists')

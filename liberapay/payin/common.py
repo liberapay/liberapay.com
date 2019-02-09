@@ -184,6 +184,37 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
     return resolve_destination(db, member, provider, payer, payer_country, payin_amount)
 
 
+def resolve_amounts(available_amount, naive_transfer_amounts):
+    """Compute transfer amounts.
+
+    Args:
+        available_amount (Money):
+            the payin amount to split into transfer amounts
+        naive_transfer_amounts (Dict[Any, Money]):
+            a map of transfer IDs (or tip IDs) to transfer amounts
+
+    Returns a copy of `naive_transfer_amounts` with updated values.
+    """
+    naive_sum = Money.sum(naive_transfer_amounts.values(), available_amount.currency)
+    ratio = available_amount / naive_sum
+    min_transfer_amount = Money.MINIMUMS[available_amount.currency]
+    r = {}
+    amount_left = available_amount
+    for key, naive_amount in naive_transfer_amounts.items():
+        assert amount_left >= min_transfer_amount
+        r[key] = max((naive_amount * ratio).round(), min_transfer_amount)
+        amount_left -= r[key]
+    if amount_left > 0:
+        # Deal with rounding error
+        for key, amount in naive_transfer_amounts.items():
+            r[key] += min_transfer_amount
+            amount_left -= min_transfer_amount
+            if amount_left == 0:
+                break
+    assert amount_left == 0, '%r != 0' % amount_left
+    return r
+
+
 def prepare_payin_transfer(
     db, payin, recipient, destination, context, amount,
     unit_amount=None, period=None, team=None
