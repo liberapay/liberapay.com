@@ -1473,6 +1473,13 @@ msgstr "A(z) {platform} visszautasította a kérésünket, hogy hozzáférjünk 
 msgid "Reconnect"
 msgstr "Újrakapcsolódás"
 
+msgid "Redirecting…"
+msgstr ""
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr ""
+
 #, fuzzy
 msgid "(fork)"
 msgstr "(származtatás)"
@@ -2076,10 +2083,26 @@ msgstr ""
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr ""
 
+#, python-brace-format
+msgid "You are not donating to {username}."
+msgstr ""
+
 msgid "Funding your donations"
 msgstr ""
 
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
+#, python-brace-format
+msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
+msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
+msgstr[0] ""
+
+msgid "We are able to group these donations into a single payment."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donations to {recipients} are awaiting payment."
+msgstr ""
+
+msgid "For now this donation can only be renewed externally through PayPal."
 msgstr ""
 
 msgid "Please choose a payment method:"
@@ -2100,11 +2123,18 @@ msgstr ""
 msgid "Not anonymous"
 msgstr ""
 
+#, python-brace-format
+msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
+msgstr ""
+
+msgid "Request in progress, please wait…"
 msgstr ""
 
 #, python-brace-format
@@ -2116,6 +2146,14 @@ msgid "The payment failed. Error message: “{0}”"
 msgstr ""
 
 msgid "The payment is awaiting your approval."
+msgstr ""
+
+#, python-brace-format
+msgid "You have {n} other donation awaiting payment."
+msgid_plural "You have {n} other donations awaiting payment."
+msgstr[0] ""
+
+msgid "You don't have any other donation awaiting payment at this time."
 msgstr ""
 
 #, python-brace-format
@@ -2156,6 +2194,10 @@ msgstr[0] ""
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
+msgstr ""
+
+#, python-brace-format
+msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr ""
 
 #, python-brace-format
@@ -3062,9 +3104,6 @@ msgid "You have disabled some or all email notifications about bank wires."
 msgstr ""
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr ""
-
-msgid "Request in progress, please wait…"
 msgstr ""
 
 #, python-brace-format

@@ -1498,6 +1498,13 @@ msgstr "{platform} ha rifiutato la nostra richiesta di accesso ai tuoi dati. Ric
 msgid "Reconnect"
 msgstr "Ricollega"
 
+msgid "Redirecting…"
+msgstr ""
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr ""
+
 msgid "(fork)"
 msgstr "(ramo)"
 
@@ -2101,11 +2108,28 @@ msgstr "Riavvia"
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Iniziato {timespan_ago_1}. Terminato {timespan_ago_2}."
 
+#, python-brace-format
+msgid "You are not donating to {username}."
+msgstr ""
+
 msgid "Funding your donations"
 msgstr "Finanziando le tue donazioni"
 
-msgid "Funding multiple donations with a single payment is currently not possible, so you will have to renew your donations one by one. We apologize for the inconvenience."
-msgstr "Finanziare più donazioni con un singolo pagamento non è attualmente possibile, perciò dovrai rinnovare le tua donazioni una ad una. Ci scusiamo per l'inconveniente."
+#, python-brace-format
+msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
+msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "We are able to group these donations into a single payment."
+msgstr ""
+
+#, python-brace-format
+msgid "Your donations to {recipients} are awaiting payment."
+msgstr ""
+
+msgid "For now this donation can only be renewed externally through PayPal."
+msgstr ""
 
 msgid "Please choose a payment method:"
 msgstr "Si prega di scegliere un metodo di pagamento:"
@@ -2125,12 +2149,19 @@ msgstr "Solo conti bancari in euro"
 msgid "Not anonymous"
 msgstr "Non anonimo"
 
+#, python-brace-format
+msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
+msgstr ""
+
 msgid "All your donations are funded."
 msgstr "Tutte le tue donazioni sono finanziate."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "\"{0}\" non è una somma accettabile (min={1}, max={2})"
+
+msgid "Request in progress, please wait…"
+msgstr "Richiesta in corso, attendere prego …"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -2142,6 +2173,15 @@ msgstr "Il pagamento non è riuscito. Messaggio di errore: \"{0}\""
 
 msgid "The payment is awaiting your approval."
 msgstr "Il pagamento è in attesa della tua approvazione."
+
+#, python-brace-format
+msgid "You have {n} other donation awaiting payment."
+msgid_plural "You have {n} other donations awaiting payment."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "You don't have any other donation awaiting payment at this time."
+msgstr ""
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -2186,6 +2226,10 @@ msgstr[1] "Prossimo pagamento tra {n} anni."
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Ammontare personalizzato (min={0}, max={1})"
+
+#, python-brace-format
+msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
+msgstr ""
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
@@ -3097,9 +3141,6 @@ msgstr "Hai disabilitato alcune o tutte le notifiche e-mail riguardo i bonifici 
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
 msgstr "Hai cambiato idea? Elimina il pagamento per evitare di ricevere una notifica di avvertimento il prossimo mese:"
-
-msgid "Request in progress, please wait…"
-msgstr "Richiesta in corso, attendere prego …"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
