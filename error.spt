@@ -28,7 +28,7 @@ if code == 500 and not err:
     % if response.html_template
         % include response.html_template
     % else
-        % if code > 400 and code < 499
+        % if code >= 400 and code <= 499
             % if code == 404
                 <p>{{ _(
                     "The page you requested could not be found. This is probably not our fault. "
