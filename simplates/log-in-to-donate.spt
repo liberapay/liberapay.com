@@ -1,0 +1,105 @@
+[---]
+[---] text/html
+% set no_navbar_sign_in = True
+
+% extends "templates/layouts/base-thin.html"
+
+% block thin_content
+% if state.get('log-in.error')
+    <p class="alert alert-danger">{{ state['log-in.error'] }}</p>
+% endif
+
+% if state.get('log-in.email-sent-to')
+
+    % set email = state['log-in.email-sent-to']
+    <div class="alert alert-success">
+        <p>{{ _(
+            "We've sent you a single-use login link. Check your inbox, open the "
+            "provided link in a new tab, then come back to this page and click on "
+            "the button below to carry on with what you wanted to do."
+        ) }}</p>
+
+        <br>
+        <form action="" method="POST">
+            % include "templates/form-repost.html"
+            <input type="hidden" name="log-in.carry-on" value="{{ email }}" />
+            <button class="btn btn-success">{{ _("Carry on") }}</button>
+        </form>
+    </div>
+
+% elif state.get('log-in.carry-on')
+
+    % set email = state['log-in.carry-on']
+    <div class="alert alert-danger">
+        <p>{{ _("You're still not logged in as {0}.", email) }}</p>
+
+        <br>
+        <form action="" method="POST">
+            % include "templates/form-repost.html"
+            <input type="hidden" name="log-in.carry-on" value="{{ email }}" />
+            <button class="btn btn-primary">{{ _("Try again") }}</button>
+        </form>
+    </div>
+
+% elif request.body.get('log-in.new_user') == 'no'
+
+    % set email = request.body.pop('log-in.id')
+
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+
+        <p>{{ _("Please fill in your password to log in directly:") }}</p>
+        <input name="log-in.id" value="{{ email }}"
+               aria-hidden="true" class="out-of-sight" tabindex="-1" />
+        <div class="form-group">
+            <input name="log-in.password" class="form-control"
+                   type="password" autocomplete="current-password"
+                   placeholder="{{ _('Password') }}" required />
+        </div>
+        <button class="btn btn-primary">{{ _("Log in") }}</button>
+    </form>
+
+    <hr>
+
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="log-in.id" value="{{ email }}" />
+        <p>{{ _("Or log in via email if you've lost your password:") }}</p>
+        <button class="btn btn-primary" name="log-in.via-email" value="yes">{{ _(
+            "Log in via email"
+        ) }}</button>
+    </form>
+
+% else
+
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+
+        <p>{{ _("Please input your email address:") }}</p>
+        <div>
+            <input name="log-in.id" autocomplete="email" class="form-control"
+                   required placeholder="{{ _('Email address') }}" />
+        </div>
+
+        <br>
+        <p>{{ _("and select the appropriate option:") }}</p>
+        <div class="line-height-150">
+            <label>
+                <input type="radio" name="log-in.new_user" value="yes" required />
+                <span>{{ _(
+                    "I am a new user, and I accept the {link_start}terms of service{link_end}."
+                    , link_start='<a href="/about/legal#terms" target="_blank">'|safe, link_end='</a>'|safe
+                ) }}</span>
+            </label><br>
+            <label>
+                <input type="radio" name="log-in.new_user" value="no" required />
+                <span>{{ _("I have used Liberapay before.") }}</span>
+            </label>
+        </div>
+
+        <br>
+        <button class="btn btn-primary btn-lg">{{ _("Proceed") }}</button>
+    </form>
+
+% endif
+% endblock

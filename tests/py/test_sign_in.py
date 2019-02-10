@@ -38,7 +38,7 @@ class TestLogIn(EmailHarness):
 
     def check_login(self, r, p):
         # Basic checks
-        assert r.code == 302
+        assert r.code == 302, r.text
         session = self.db.one("""
             SELECT id, secret, mtime
               FROM user_secrets

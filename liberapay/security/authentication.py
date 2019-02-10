@@ -53,9 +53,10 @@ def _get_body(request):
 
 def sign_in_with_form_data(body, state):
     p = None
-    _, website = state['_'], state['website']
+    _, response, website = state['_'], state['response'], state['website']
+    new_user = body.get('log-in.new_user')
 
-    if body.get('log-in.id'):
+    if body.get('log-in.id') and new_user != 'yes':
         request = state['request']
         src_addr, src_country = request.source, request.country
         input_id = body['log-in.id'].strip()
@@ -89,9 +90,6 @@ def sign_in_with_form_data(body, state):
                 except Exception as e:
                     website.tell_sentry(e, state)
         elif id_type == 'email':
-            website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
-            website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)
-            website.db.hit_rate_limit('log-in.email.country', src_country, TooManyLogInAttempts)
             email = input_id
             p = Participant.from_email(email)
             if p and p.kind == 'group':
@@ -100,6 +98,11 @@ def sign_in_with_form_data(body, state):
                     email
                 )
             elif p:
+                if new_user == 'no' and body.get('log-in.via-email') != 'yes' and p.has_password:
+                    raise response.render('simplates/log-in-to-donate.spt', state)
+                website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
+                website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)
+                website.db.hit_rate_limit('log-in.email.country', src_country, TooManyLogInAttempts)
                 if not p.get_email(email).verified:
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
@@ -117,13 +120,12 @@ def sign_in_with_form_data(body, state):
             state['log-in.error'] = _("\"{0}\" is not a valid email address.", input_id)
             return
 
-    elif 'sign-in.email' in body:
-        response = state['response']
+    elif 'sign-in.email' in body or new_user == 'yes':
         # Check the submitted data
         kind = body.pop('sign-in.kind', 'individual')
         if kind not in ('individual', 'organization'):
             raise response.invalid_input(kind, 'sign-in.kind', 'body')
-        email = body['sign-in.email']
+        email = body.get('sign-in.email') or body.get('log-in.id')
         if not email:
             raise response.error(400, 'email is required')
         email = normalize_and_check_email_address(email, state)
@@ -208,12 +210,16 @@ def sign_in_with_form_data(body, state):
             p.check_password(password, context='login')
         p.authenticated = True
         p.sign_in(response.headers.cookie, token=session_token, suffix='.in')
+
+    if p:
         # We're done, we can clean up the body now
-        body.pop('sign-in.email')
-        body.pop('sign-in.currency', None)
-        body.pop('sign-in.password', None)
-        body.pop('sign-in.username', None)
-        body.pop('sign-in.token', None)
+        body.popall('sign-in.email', None)
+        body.popall('sign-in.currency', None)
+        body.popall('sign-in.password', None)
+        body.popall('sign-in.username', None)
+        body.popall('sign-in.token', None)
+        body.popall('log-in.id', None)
+        body.popall('log-in.new_user', None)
 
     return p
 

@@ -1,8 +1,6 @@
 """Get or change the authenticated user's tip to this person.
 """
-from base64 import b64encode
 
-from liberapay.exceptions import AuthRequired
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant
 
@@ -30,8 +28,8 @@ out = {}
 
 direction = request.qs.get('dir', 'to')
 if direction == 'to':
-    if user.ANON:
-        raise AuthRequired
+    if user.ANON and request.method == 'POST':
+        raise response.render('simplates/log-in-to-donate.spt', state)
     tipper = user
     tippee = get_participant(state, restrict=False, redirect_stub=False)
 elif direction == 'from':
@@ -98,8 +96,9 @@ else:
     out = tipper.get_tip_to(tippee)
 
 out["npatrons"] = tippee.npatrons
-out["total_giving"] = tipper.giving
-out["total_receiving"] = tipper.receiving
+if tipper:
+    out["total_giving"] = tipper.giving
+    out["total_receiving"] = tipper.receiving
 
 if not tippee.hide_receiving:
     total_receiving_tippee = tippee.receiving
