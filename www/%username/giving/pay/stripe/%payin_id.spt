@@ -468,7 +468,9 @@ title = _("Funding your donations")
 
         % if payment_method == 'card'
         <fieldset id="card-form" class="form-group {{ 'hidden' if source else '' }}">
-            <p>{{ _("Please input your card number:") }}</p>
+            <p>{{ _("Please input your name and card number:") }}</p>
+            <input name="owner.name" autocomplete="name" required minlength=3
+                   class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
             <div id="stripe-element" data-type="card" class="form-control paragraph"></div>
             <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             <p class="help-block">{{ glyphicon('lock') }} {{ _(
@@ -487,7 +489,7 @@ title = _("Funding your donations")
             <p>{{ _(
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>
-            <input id="account_holder_name" autocomplete="name" required minlength=3
+            <input name="owner.name" autocomplete="name" required minlength=3
                    class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
             <div id="stripe-element" data-type="iban" class="form-control paragraph"></div>
             <span id="stripe-errors" role="alert" class="invalid-msg"></span>
