@@ -28,6 +28,8 @@ if code == 500 and not err:
     % if response.html_template
         % include response.html_template
     % else
+        <p>{{ msg }}</p>
+
         % if code >= 400 and code <= 499
             % if code == 404
                 <p>{{ _(
@@ -45,8 +47,9 @@ if code == 500 and not err:
                     '<a href="https://github.com/liberapay/liberapay.com/issues">'|safe
                 ) }}</p>
             % endif
-        %else
-            <p>{{ msg }}</p>
+        %endif
+
+        % if err
             % if website.show_tracebacks
                 <pre>{{ err }}</pre>
             % else
