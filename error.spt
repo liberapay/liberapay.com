@@ -28,12 +28,32 @@ if code == 500 and not err:
     % if response.html_template
         % include response.html_template
     % else
-        <p>{{ msg }}</p>
-        % if website.show_tracebacks
-        <pre>{{ err }}</pre>
-        % else
-        <div class="alert alert-danger">{{ err }}</div>
+        % if code > 400 and code < 499
+            % if code == 404
+                <p>{{ _(
+                    "The page you requested could not be found. This is probably not our fault. "
+                    "If you think it is, {1}open an issue{0} or send us an email.",
+                    '</a>'|safe,
+                    '<a href="https://github.com/liberapay/liberapay.com/issues">'|safe
+                ) }}</p>
+            % else
+                <p>{{ _(
+                    "Your request cannot be filled for some reason. This is probably due to "
+                    "your browser sending us a malformed request. If you think the error lays with us, "
+                    "{1}open an issue{0} or send us an email.",
+                    '</a>'|safe,
+                    '<a href="https://github.com/liberapay/liberapay.com/issues">'|safe
+                ) }}</p>
+            % endif
+        %else
+            <p>{{ msg }}</p>
+            % if website.show_tracebacks
+                <pre>{{ err }}</pre>
+            % else
+                <div class="alert alert-danger">{{ err }}</div>
+            % endif
         % endif
+
         % if sentry_ident
             <p>{{ _(
                 "The details of this error have been recorded. If you decide to contact us "
