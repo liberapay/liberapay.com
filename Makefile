@@ -1,4 +1,4 @@
-python := "$(shell { command -v python3.6 || command -v python; } 2>/dev/null)"
+python := "$(shell { command -v python3.6 || command -v python3.7; } 2>/dev/null)"
 install_where := $(shell $(python) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')")
 
 # Set the relative path to installed binaries under the project virtualenv.
