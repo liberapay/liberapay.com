@@ -182,7 +182,9 @@ def settle_charge_and_transfers(db, payin, charge):
         (pt.amount for pt in payin_transfers), payin.amount.currency
     )
     assert payin_transfers_sum == payin.amount
-    transfer_amounts = {pt.id: pt.amount for pt in payin_transfers}
+    transfer_amounts = {
+        pt.id: pt.amount.convert(amount_settled.currency) for pt in payin_transfers
+    }
     if net_amount is not None:
         transfer_amounts = resolve_amounts(net_amount, transfer_amounts)
     for pt in payin_transfers:

@@ -200,9 +200,9 @@ def resolve_amounts(available_amount, naive_transfer_amounts):
     min_transfer_amount = Money.MINIMUMS[available_amount.currency]
     r = {}
     amount_left = available_amount
-    for key, naive_amount in naive_transfer_amounts.items():
+    for key, naive_amount in sorted(naive_transfer_amounts.items()):
         assert amount_left >= min_transfer_amount
-        r[key] = max((naive_amount * ratio).round(), min_transfer_amount)
+        r[key] = min((naive_amount * ratio).round_up(), amount_left)
         amount_left -= r[key]
     if amount_left > 0:
         # Deal with rounding error
