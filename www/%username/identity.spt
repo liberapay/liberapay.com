@@ -15,6 +15,8 @@ if participant.kind not in ('individual', 'organization'):
 title = participant.username
 error = ''
 
+identity = participant.get_current_identity()
+
 if request.method == 'POST':
     body = request.body
     v1_form = (
@@ -71,11 +73,8 @@ if request.method == 'POST':
     if error and request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
         raise response.error(400, error)
 
-elif participant.mangopay_user_id and participant.balance:
+elif participant.mangopay_user_id and (participant.balance or not identity):
     raise response.redirect(participant.path('identity-v1'))
-
-else:
-    identity = participant.get_current_identity()
 
 [---] text/html
 % from "templates/identity.html" import identity_form with context

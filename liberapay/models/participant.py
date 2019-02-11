@@ -2464,6 +2464,61 @@ class Participant(Model, MixinTeam):
                  VALUES (%s, %s)
         """, (self.id, website.cryptograph.encrypt_dict(info)))
 
+    @classmethod
+    def migrate_identities(cls):
+        participants = cls.db.all("""
+            SELECT p.id
+              FROM participants p
+             WHERE p.mangopay_user_id IS NOT NULL
+               AND p.balance = 0
+               AND p.status = 'active'
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM identities i
+                        WHERE i.participant = p.id
+                   )
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM exchanges e
+                        WHERE e.participant = p.id
+                          AND e.amount < 0
+                          AND e.timestamp > (current_timestamp - interval '7 days')
+                   )
+          ORDER BY p.id
+             LIMIT 20
+        """)
+        for p_id in participants:
+            sleep(1)
+            p = cls.from_id(p_id)
+            mp_account = p.get_mangopay_account()
+            individual = mp_account.PersonType == 'NATURAL'
+            prefix = '' if individual else 'LegalRepresentative'
+            addr = getattr(
+                mp_account,
+                'Address' if individual else 'HeadquartersAddress'
+            )
+            p.insert_identity({
+                'birthdate': getattr(mp_account, prefix + 'Birthday').isoformat(),
+                'name': ' '.join((
+                    getattr(mp_account, prefix + 'FirstName'),
+                    getattr(mp_account, prefix + 'LastName'),
+                )),
+                'nationality': getattr(mp_account, prefix + 'Nationality'),
+                'organization_name': '' if individual else mp_account.Name,
+                'postal_address': {
+                    'country': (
+                        addr.Country or
+                        getattr(mp_account, prefix + 'CountryOfResidence')
+                    ),
+                    'region': addr.Region,
+                    'city': addr.City,
+                    'postal_code': addr.PostalCode,
+                    'local_address': '\n'.join(filter(None, (
+                        addr.AddressLine1, addr.AddressLine2
+                    ))),
+                },
+            })
+
 
     # Accounts Elsewhere
     # ==================

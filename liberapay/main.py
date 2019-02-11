@@ -132,6 +132,7 @@ if conf:
     cron(Daily(hour=17), Payday.update_cached_amounts, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)
     cron(intervals.get('notify_patrons', 120), Participant.notify_patrons, True)
+    cron(intervals.get('migrate_identities', 120), Participant.migrate_identities, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
 
