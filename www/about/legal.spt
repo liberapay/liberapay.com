@@ -49,21 +49,22 @@ Amazon Data Services Ireland Ltd<br>Burlington Plaza, Burlington Road<br>Dublin 
 
 {{ getdoc(state, "terms") }}
 
+<h3 id="privacy">{{ _("Privacy Policy") }}</h3>
+
+<p>{{ _("We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone.") }}</p>
+
 % if user and user.mangopay_user_id
-<h3 id="mangopay-terms">{{ _("Terms of Use of the MangoPay Electronic Money") }}</h3>
+<h3 id="mangopay-terms">MangoPay</h3>
 
 <p>{{ _(
-    "{0} is our payments partner, you have to accept their terms of service to "
-    "be able to fully use Liberapay.",
+    "{0} was Liberapay's initial payment partner, but they quit on us in 2018. "
+    "Below are copies of the contract you had to accept in order to send or "
+    "receive money through Liberapay prior to August 2018: ",
     '<a href="https://www.mangopay.com/legal-notices/">MangoPay</a>'|safe
 ) }}</p>
 
 <ul>{{ MANGOPAY_TERMS }}</ul>
 % endif
-
-<h3 id="privacy">{{ _("Privacy Policy") }}</h3>
-
-<p>{{ _("We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone.") }}</p>
 
 </div></div>
 % endblock
