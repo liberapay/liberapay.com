@@ -121,19 +121,19 @@ conf = website.app_conf
 if conf:
     intervals = conf.cron_intervals
     cron = Cron(website)
-    cron(intervals['check_db'], website.db.self_check, True)
-    cron(intervals['dequeue_emails'], Participant.dequeue_emails, True)
-    cron(intervals['send_newsletters'], Participant.send_newsletters, True)
-    cron(intervals['refetch_elsewhere_data'], refetch_elsewhere_data, True)
-    cron(intervals['refetch_repos'], refetch_repos, True)
+    cron(intervals.get('check_db', 600), website.db.self_check, True)
+    cron(intervals.get('dequeue_emails', 60), Participant.dequeue_emails, True)
+    cron(intervals.get('send_newsletters', 60), Participant.send_newsletters, True)
+    cron(intervals.get('refetch_elsewhere_data', 120), refetch_elsewhere_data, True)
+    cron(intervals.get('refetch_repos', 60), refetch_repos, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
-    cron(intervals['clean_up_counters'], website.db.clean_up_counters, True)
+    cron(intervals.get('clean_up_counters', 3600), website.db.clean_up_counters, True)
     cron(Daily(hour=16), lambda: fetch_currency_exchange_rates(website.db), True)
     cron(Daily(hour=17), Payday.update_cached_amounts, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)
-    cron(intervals['notify_patrons'], Participant.notify_patrons, True)
+    cron(intervals.get('notify_patrons', 120), Participant.notify_patrons, True)
     if conf.ses_feedback_queue_url:
-        cron(intervals['fetch_email_bounces'], handle_email_bounces, True)
+        cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
 
     cron('once', website.cryptograph.rotate_stored_data, True)
 

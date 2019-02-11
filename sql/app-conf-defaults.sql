@@ -11,16 +11,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('bountysource_id', 'null'::jsonb),
     ('bountysource_secret', '""'::jsonb),
     ('check_email_domains', 'true'::jsonb),
-    ('cron_intervals', jsonb_build_object(
-        'check_db', 600,
-        'clean_up_counters', 3600,
-        'dequeue_emails', 60,
-        'fetch_email_bounces', 60,
-        'notify_patrons', 120,
-        'refetch_elsewhere_data', 120,
-        'refetch_repos', 60,
-        'send_newsletters', 60
-    )),
+    ('cron_intervals', jsonb_build_object()),
     ('facebook_callback', '"http://localhost:8339/on/facebook/associate"'::jsonb),
     ('facebook_id', '"1418954898427187"'::jsonb),
     ('facebook_secret', '"3bcb5dc6ce821e5202870c1e6ef5bbc4"'::jsonb),
