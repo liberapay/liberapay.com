@@ -147,9 +147,9 @@ def settle_charge(db, payin, charge):
     """
     if charge.destination:
         pt = db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin.id,))
-        settle_destination_charge(db, payin, charge, pt)
+        return settle_destination_charge(db, payin, charge, pt)
     else:
-        settle_charge_and_transfers(db, payin, charge)
+        return settle_charge_and_transfers(db, payin, charge)
 
 
 def settle_charge_and_transfers(db, payin, charge):
