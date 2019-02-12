@@ -4,7 +4,7 @@ import os
 import signal
 import string
 from threading import Timer
-from urllib.parse import quote as urlquote, quote_plus as urlquote_plus, urlencode
+from urllib.parse import quote as urlquote, urlencode
 
 import aspen
 import aspen.http.mapping
@@ -381,21 +381,3 @@ def _decode_body(self):
     body = self.body
     return body.decode('utf8') if isinstance(body, bytes) else body
 pando.Response.text = property(_decode_body)
-
-# The monkey-patch below is only for Pando 0.45, it should be removed after that
-def make_franken_uri(path, qs):
-    if path:
-        if type(path) is bytes:
-            path = urlquote(path, string.punctuation).encode('ascii')
-        else:
-            path = urlquote(path, string.punctuation, 'latin1').encode('ascii')
-
-    if qs:
-        if type(qs) is bytes:
-            qs = urlquote_plus(qs, string.punctuation).encode('ascii')
-        else:
-            qs = urlquote_plus(qs, string.punctuation, 'latin1').encode('ascii')
-        qs = b'?' + qs
-
-    return path + qs
-pando.http.request.make_franken_uri = make_franken_uri

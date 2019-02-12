@@ -1,17 +1,15 @@
-pando==0.45 \
-    --hash=sha256:1bed5520f0707ee162477d16dec61319a717e3d95ae562d473bdd6e0f4252fd8 \
-    --hash=sha256:fb10434a441728cb61b38a2ce7fc1aaf57333821cd26993a40a6750605a382fe
-
-    algorithm==1.2.0 \
-        --hash=sha256:1f2f8623988d8555132790f703f9b3576cd89f382e6a97496bde056b57c3ab57 \
-        --hash=sha256:4e302db4538afeedd56e453b1c73baddcd4d446673c03d71484edd62653c9686
-
-        dependency_injection==1.1.0 \
-            --hash=sha256:5c4c0d5d1e37339b9965d4cebbfaadabf04839389e2de19bc0ba18e83270a202
+pando==0.46 \
+    --hash=sha256:52a6be1777b065e699709a8d0ab0c16ba1a49b451255e49cc3fd552aa7f51c78 \
+    --hash=sha256:c017f0b62fbed20d3ac4cac1236072398a9a97ce71a388789a4a33c8a921418f
 
     aspen==1.0rc3 \
         --hash=sha256:cfceede0417ed20ba7e33fa68cbab9a96060e5f425c1f61370ddb5934536d4e4 \
         --hash=sha256:14b8760f4f6f9c0f3d72b3827988486aba5473faaa71d50f16001d1e38f1fb3f
+
+        # `algorithm` will either be dropped or replaced with `state-chain` in a future release of Aspen
+        algorithm==1.2.0 \
+            --hash=sha256:1f2f8623988d8555132790f703f9b3576cd89f382e6a97496bde056b57c3ab57 \
+            --hash=sha256:4e302db4538afeedd56e453b1c73baddcd4d446673c03d71484edd62653c9686
 
         python-mimeparse==1.6.0 \
             --hash=sha256:76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78 \
@@ -23,6 +21,14 @@ pando==0.45 \
     first==2.0.1 \
         --hash=sha256:41d5b64e70507d0c3ca742d68010a76060eea8a3d863e9b5130ab11a4a91aa0e \
         --hash=sha256:3bb3de3582cb27071cfb514f00ed784dc444b7f96dc21e140de65fe00585c95e
+
+    state-chain==1.3.0 \
+        --hash=sha256:1a8ff44d7e31469b17fe285829cc56791b7c08aa9792d57bfc7d10771d2972c0 \
+        --hash=sha256:48367168afe31b83c98b14a91eb6e13ed2ac6b1540daf38035b54d5834f364e8
+
+        dependency_injection==1.2.0 \
+            --hash=sha256:10f8b2ef483a5a91e97144b0db9042270f218325e0a3d6cb78e3ad9cda7bcc79 \
+            --hash=sha256:ff80737dd4aa50b25c41f32882c7391d2c435a3ccec119413e9b8d9e2a03e27f
 
 aspen-jinja2==0.5 \
     --hash=sha256:b199d34d84cfaab3f5a94c3e28fa04bd453950f7c1187ff92e9fbf2319e1e1fa \
